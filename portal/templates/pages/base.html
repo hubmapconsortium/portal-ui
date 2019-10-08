@@ -1,6 +1,15 @@
 <!doctype html>
 <title>{% block title %}{% endblock %} | HuBMAP</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<nav class="no-format">
+  <ul>
+    <li><a href="{{ url_for('main.home') }}">HuBMAP</a></li>
+    <li><a href="{{ url_for('main.browse', type='donor') }}">Donors</a></li>
+    <li><a href="{{ url_for('main.browse', type='sample') }}">Samples</a></li>
+    <li><a href="{{ url_for('main.browse', type='dataset') }}">Datasets</a></li>
+    <li><a href="{{ url_for('main.help') }}">Help</a></li>
+  </ul>
+</nav>
 <header class="no-content">
   {% block header %}{% endblock %}
 </header>
