@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, abort
-from jinja2 import TemplateNotFound
+
 
 blueprint = Blueprint('main', __name__, template_folder='templates')
 
 types = ['donor', 'sample', 'dataset']
+
 
 @blueprint.route('/')
 def home():
