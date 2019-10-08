@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <header>
   {% block header %}{% endblock %}
-</header
+</header>
 {% for message in get_flashed_messages() %}
   <div class="flash">{{ message }}</div>
 {% endfor %}
