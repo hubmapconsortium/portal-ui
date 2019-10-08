@@ -4,5 +4,8 @@ Flask for HuBMAP Data Portal front end
 ## Getting started
 After checking out the project:
 ```
-$ pip install -r requirements.txt
+pip install -r requirements.txt
+export FLASK_APP=portal
+export FLASK_ENV=development
+flask run
 ```
