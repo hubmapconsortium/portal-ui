@@ -11,12 +11,12 @@ def index():
 
 @blueprint.route('/browse/<type>')
 def browse(type):
-    return render_template('pages/browse.html')
+    return render_template('pages/browse.html', type=type)
 
 
 @blueprint.route('/browse/<type>/<id>')
 def details(type, id):
-    return render_template('pages/details.html')
+    return render_template('pages/details.html', type=type, id=id)
 
 
 @blueprint.route('/help')

@@ -9,3 +9,4 @@ export FLASK_APP=portal
 export FLASK_ENV=development
 flask run
 ```
+Then visit [localhost:5000](http://localhost:5000)
