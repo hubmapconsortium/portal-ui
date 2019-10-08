@@ -1,0 +1,39 @@
+.no-content {
+  background-color: pink;
+  border: 4px solid;
+  border-image: repeating-linear-gradient(
+    -45deg,
+    pink, pink 1px,
+    white 1px, white 2px
+  ) 4;
+}
+
+.fill-content {
+  background-color: lightgrey;
+  border: 4px solid;
+  border-image: repeating-linear-gradient(
+    -45deg,
+    lightgrey, lightgrey 1px,
+    white 1px, white 2px
+  ) 4;
+}
+
+.no-format {
+  border: 4px solid;
+  border-image: repeating-linear-gradient(
+    -45deg,
+    pink, pink 1px,
+    white 1px, white 2px
+  ) 4;
+  background-color: white;
+}
+
+.fill-format {
+  border: 4px solid;
+  border-image: repeating-linear-gradient(
+    -45deg,
+    lightgrey, lightgrey 1px,
+    white 1px, white 2px
+  ) 4;
+  background-color: white;
+}
