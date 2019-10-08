@@ -6,7 +6,7 @@ blueprint = Blueprint('main', __name__, template_folder='templates')
 types = ['donor', 'sample', 'dataset']
 
 @blueprint.route('/')
-def index():
+def home():
     return render_template('pages/index.html')
 
 
