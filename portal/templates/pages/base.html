@@ -1,12 +1,9 @@
 <!doctype html>
 <title>{% block title %}{% endblock %} | HuBMAP</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<header>
+<header class="todo-content">
   {% block header %}{% endblock %}
 </header>
-{% for message in get_flashed_messages() %}
-  <div class="flash">{{ message }}</div>
-{% endfor %}
-<section>
+<section class="todo-content">
   {% block content %}{% endblock %}
 </section>
