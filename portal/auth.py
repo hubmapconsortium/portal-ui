@@ -1,8 +1,8 @@
-from flask import url_for, redirect
+from flask import url_for, flash, redirect
 from authlib.flask.client import OAuth
 
 # A Blueprint doesn't quite work here:
-# oauth needs to access app.config, which isn't available.
+# oauth needs to access app.config, which isn't yet available.
 
 
 def add_auth(app):
@@ -21,7 +21,7 @@ def add_auth(app):
         return oauth.globus.authorize_redirect(redirect_uri)
 
     # Redirect URL is registered with Globus:
-    # Hostname and path are required to exactly match their records,
+    # Hostname and path are required to exactly match what is on record,
     # so we can't change this without re-registering.
     @app.route('/auth/complete/globus/')
     def complete():
@@ -29,4 +29,5 @@ def add_auth(app):
         # resp = oauth.globus.get('user')
         # profile = resp.json()
         # do something with the token and profile
+        flash('You were successfully logged in')
         return redirect('/')
