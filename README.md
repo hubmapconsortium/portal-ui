@@ -7,9 +7,12 @@ After checking out the project:
 pip install -r requirements.txt
 export FLASK_APP=portal
 export FLASK_ENV=development
-flask run
+flask run --port 8000
 ```
-Then visit [localhost:5000](http://localhost:5000)
+(Port is only required because our test account with Globus
+expects the redirect after login to be port 8000.)
+
+Then visit [localhost:8000](http://localhost:8000)
 
 ## Contributing
 Do your work in a feature branch from master. To run tests locally:
