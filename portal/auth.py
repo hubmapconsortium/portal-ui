@@ -29,5 +29,5 @@ def add_auth(app):
         # resp = oauth.globus.get('user')
         # profile = resp.json()
         # do something with the token and profile
-        flash('You were successfully logged in')
+        flash('You were successfully logged in!')
         return redirect('/')
