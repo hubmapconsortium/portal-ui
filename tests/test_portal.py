@@ -42,3 +42,11 @@ def test_404(client):
 def test_404_browse(client):
     response = client.get('/browse/no-such-type')
     assert response.status == '404 NOT FOUND'
+
+
+def test_login(client):
+    response = client.get('/auth/login')
+    assert response.status == '302 FOUND'
+    assert response.location.startswith(
+        'https://auth.globus.org/v2/oauth2/authorize'
+    )

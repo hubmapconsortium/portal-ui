@@ -10,5 +10,5 @@ flake8
 end flake8
 
 start pytest
-pytest --verbose
+pytest -vv
 end pytest

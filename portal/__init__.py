@@ -1,6 +1,6 @@
 from flask import Flask
 
-from . import main
+from . import main, auth
 
 
 def create_app(test_config=None):
@@ -18,5 +18,6 @@ def create_app(test_config=None):
         app.config.from_mapping(test_config)
 
     app.register_blueprint(main.blueprint)
+    auth.add_auth(app)
 
     return app
