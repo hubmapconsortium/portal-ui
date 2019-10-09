@@ -29,7 +29,6 @@ def create_app(test_config=None):
         state='placeholder'
     )
 
-
     @app.route('/auth/login')
     def login():
         redirect_uri = url_for('complete', _external=True)
