@@ -1,0 +1,36 @@
+from urllib.parse import quote_plus
+
+import requests
+
+# Hopefully soon, generate API client code from OpenAPI:
+# https://github.com/hubmapconsortium/hubmap-data-portal/issues/179
+
+
+class ApiClient():
+    def __init__(self, url_base):
+        self.url_base = url_base
+
+    def get_entity_types(self):
+        # NOTE: Not called right now, but tested by test_api.py.
+        response = requests.get(f'{self.url_base}/entities')
+        return response.json()['entity_types']
+
+    def get_entity(self, uuid):
+        return {}
+        # TODO?:
+        # response = requests.get(f'{self.url_base}/entities/{quote_plus(uuid)}')
+        # return response.json()
+
+    def get_donor_uuids(self, user=None):
+        pass
+        # TODO?:
+        # if user:
+        #     response = requests.get(
+        #         f'{self.url_base}/entities/donors/created-by/{quote_plus(user)}'
+        #     )
+        # else:
+        #     response = requests.get(f'{self.url_base}/entities/donors')
+        # return response.json()['uuids']
+
+
+# TODO: More functions
