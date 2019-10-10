@@ -4,11 +4,11 @@
 
 <nav class="no-format">
   <ul>
-    <li><a href="{{ url_for('main.home') }}">HuBMAP</a></li>
-    <li><a href="{{ url_for('main.browse', type='donor') }}">Donors</a>
-        | <a href="{{ url_for('main.browse', type='sample') }}">Samples</a>
-        | <a href="{{ url_for('main.browse', type='dataset') }}">Datasets</a></li>
-    <li><a href="{{ url_for('main.help') }}">Help</a></li>
+    <li><a href="{{ url_for('routes.home') }}">HuBMAP</a></li>
+    <li><a href="{{ url_for('routes.browse', type='donor') }}">Donors</a>
+        | <a href="{{ url_for('routes.browse', type='sample') }}">Samples</a>
+        | <a href="{{ url_for('routes.browse', type='dataset') }}">Datasets</a></li>
+    <li><a href="{{ url_for('routes.help') }}">Help</a></li>
     <li><a href="{{ url_for('login') }}">Login</a></li>
   </ul>
 </nav>

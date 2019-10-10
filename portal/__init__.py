@@ -1,6 +1,6 @@
 from flask import Flask
 
-from . import main, auth
+from . import routes, auth
 
 
 def create_app(test_config=None):
@@ -17,7 +17,7 @@ def create_app(test_config=None):
         # Load the test config if passed in:
         app.config.from_mapping(test_config)
 
-    app.register_blueprint(main.blueprint)
+    app.register_blueprint(routes.blueprint)
     auth.add_auth(app)
 
     return app

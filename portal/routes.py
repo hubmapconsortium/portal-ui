@@ -1,7 +1,10 @@
 from flask import Blueprint, render_template, abort
 
+from .api.client import ApiClient
+from .render import dict_as_html
 
-blueprint = Blueprint('main', __name__, template_folder='templates')
+
+blueprint = Blueprint('routes', __name__, template_folder='templates')
 
 types = ['donor', 'sample', 'dataset']
 
@@ -22,7 +25,10 @@ def browse(type):
 def details(type, id):
     if type not in types:
         abort(404)
-    return render_template('pages/details.html', type=type, id=id)
+    client = ApiClient('TODO: base url from config')
+    details = client.get_entity(id)
+    details_html = dict_as_html(details)
+    return render_template('pages/details.html', type=type, id=id, details_html=details_html)
 
 
 @blueprint.route('/help')
