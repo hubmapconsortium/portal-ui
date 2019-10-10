@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, abort
 
 from .api.client import ApiClient
+from .render import dict_as_html
 
 
 blueprint = Blueprint('main', __name__, template_folder='templates')
@@ -26,7 +27,8 @@ def details(type, id):
         abort(404)
     client = ApiClient('TODO: base url from config')
     details = client.get_entity(id)
-    return render_template('pages/details.html', type=type, id=id, details=details)
+    details_html = dict_as_html(details)
+    return render_template('pages/details.html', type=type, id=id, details_html=details_html)
 
 
 @blueprint.route('/help')
