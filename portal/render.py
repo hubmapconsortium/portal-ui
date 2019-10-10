@@ -22,7 +22,7 @@ def dict_as_html(input_dict, tagtext=None):
                                         with tag('td'):
                                             dict_as_html(item, (doc, tag, text))
                         else:
-                            text(', '.join(value))
+                            text(', '.join([str(i) for i in value]))
                     elif type(value) == dict:
                         dict_as_html(value, (doc, tag, text))
                     else:
