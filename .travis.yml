@@ -2,6 +2,6 @@ language: python
 python:
   - '3.6'
 cache: pip
-# pip install happens inside quick-start.sh, inside.sh, to make sure it really works.
+# pip install happens inside quick-start.sh, inside test.sh, to make sure it really works.
 script:
   - ./test.sh
