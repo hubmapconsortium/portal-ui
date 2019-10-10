@@ -21,6 +21,8 @@ echo 'Server starts up, and homepage returns 200.'
 end quick-start
 
 start flake8
+# Unit tests require dev dependencies beyond what quick-start provides.
+pip install -r requirements-dev.txt > /dev/null
 flake8
 end flake8
 

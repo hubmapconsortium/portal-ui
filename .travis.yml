@@ -2,8 +2,6 @@ language: python
 python:
   - '3.6'
 cache: pip
-install:
-  - pip install -r requirements.txt
-  - pip install -r requirements-dev.txt
+# pip install happens inside quick-start.sh, inside.sh, to make sure it really works.
 script:
   - ./test.sh
