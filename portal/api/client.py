@@ -16,7 +16,16 @@ class ApiClient():
         return response.json()['entity_types']
 
     def get_entity(self, uuid):
-        return {}
+        return {
+          'title': 'Entirely fake entity',
+          'date-published': '2020-01-01',
+          'authors': ['Austen, Jane', 'Basho', 'Carroll, Lewis'],
+          'Planets and Moons': [
+            { 'planet': 'Earth', 'moons': ['Luna'] },
+            { 'planet': 'Mars', 'moons': ['Phobos', 'Deimos'] },
+          ],
+          'credits': { 'Catering': 'Clover', 'Dolly Grip': 'ABC', 'Gaffer': 'XYZ' },
+        };
         # TODO?:
         # response = requests.get(f'{self.url_base}/entities/{quote_plus(uuid)}')
         # return response.json()

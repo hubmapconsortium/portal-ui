@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, abort
 
+from .api.client import ApiClient
+
 
 blueprint = Blueprint('main', __name__, template_folder='templates')
 
@@ -22,7 +24,9 @@ def browse(type):
 def details(type, id):
     if type not in types:
         abort(404)
-    return render_template('pages/details.html', type=type, id=id)
+    client = ApiClient('TODO: base url from config')
+    details = client.get_entity(id)
+    return render_template('pages/details.html', type=type, id=id, details=details)
 
 
 @blueprint.route('/help')
