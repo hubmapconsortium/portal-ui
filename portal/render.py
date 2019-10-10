@@ -1,8 +1,12 @@
 from yattag import Doc
 
 
-def dict_as_html(input_dict):
-    doc, tag, text = Doc().tagtext()
+def dict_as_html(input_dict, tagtext=None):
+    '''
+    Render input_dict as an html table.
+    Provide tagtext when recursing, to continue using an existing builder.
+    '''
+    doc, tag, text = tagtext or Doc().tagtext()
 
     with tag('table'):
         for key, value in input_dict.items():
@@ -14,12 +18,13 @@ def dict_as_html(input_dict):
                         if any(type(i) == dict for i in value):
                             with tag('table'):
                                 for item in value:
-                                    with tag('td'):
-                                        text('TODO: recurse')
+                                    with tag('tr'):
+                                        with tag('td'):
+                                            dict_as_html(item, (doc, tag, text))
                         else:
                             text(', '.join(value))
                     elif type(value) == dict:
-                        text('TODO: recurse')
+                        dict_as_html(value, (doc, tag, text))
                     else:
                         text(value)
 
