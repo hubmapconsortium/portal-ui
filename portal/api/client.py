@@ -1,5 +1,3 @@
-from urllib.parse import quote_plus
-
 import requests
 
 # Hopefully soon, generate API client code from OpenAPI:
@@ -17,15 +15,15 @@ class ApiClient():
 
     def get_entity(self, uuid):
         return {
-          'title': 'Entirely fake entity',
-          'date-published': '2020-01-01',
-          'authors': ['Austen, Jane', 'Basho', 'Carroll, Lewis'],
-          'Planets and Moons': [
-            { 'planet': 'Earth', 'moons': ['Luna'] },
-            { 'planet': 'Mars', 'moons': ['Phobos', 'Deimos'] },
-          ],
-          'credits': { 'Catering': 'Clover', 'Dolly Grip': 'ABC', 'Gaffer': 'XYZ' },
-        };
+            'title': 'Entirely fake entity',
+            'date-published': '2020-01-01',
+            'authors': ['Austen, Jane', 'Basho', 'Carroll, Lewis'],
+            'Planets and Moons': [
+                {'planet': 'Earth', 'moons': ['Luna']},
+                {'planet': 'Mars', 'moons': ['Phobos', 'Deimos']},
+            ],
+            'credits': {'Catering': 'Clover', 'Dolly Grip': 'ABC', 'Gaffer': 'XYZ'}
+        }
         # TODO?:
         # response = requests.get(f'{self.url_base}/entities/{quote_plus(uuid)}')
         # return response.json()

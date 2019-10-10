@@ -5,8 +5,7 @@ from .render import dict_as_html
 
 
 io_pairs = [
-    ({'a': 1},
-'''
+    ({'a': 1}, '''
 <table>
   <tr>
     <td>a</td>
@@ -14,8 +13,7 @@ io_pairs = [
   </tr>
 </table>
 '''),
-    ({'a': [1, 2]},
-'''
+    ({'a': [1, 2]}, '''
 <table>
   <tr>
     <td>a</td>
@@ -23,8 +21,7 @@ io_pairs = [
   </tr>
 </table>
 '''),
-    ({'a': {'b': 'c'}},
-'''
+    ({'a': {'b': 'c'}}, '''
 <table>
   <tr>
     <td>a</td>
@@ -40,6 +37,7 @@ io_pairs = [
 </table>
 ''')
 ]
+
 
 @pytest.mark.parametrize('io_pair', io_pairs)
 def test_dict_as_html(io_pair):
