@@ -4,7 +4,7 @@ from .api.client import ApiClient
 from .render import dict_as_html
 
 
-blueprint = Blueprint('main', __name__, template_folder='templates')
+blueprint = Blueprint('routes', __name__, template_folder='templates')
 
 types = ['donor', 'sample', 'dataset']
 
