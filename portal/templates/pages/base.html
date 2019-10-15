@@ -1,34 +1,47 @@
 <!doctype html>
-<title>{% block title %}{% endblock %} | HuBMAP</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<nav class="no-format">
-  <ul>
-    <li><a href="{{ url_for('routes.home') }}">HuBMAP</a></li>
-    <li><a href="{{ url_for('routes.browse', type='donor') }}">Donors</a>
-        | <a href="{{ url_for('routes.browse', type='sample') }}">Samples</a>
-        | <a href="{{ url_for('routes.browse', type='dataset') }}">Datasets</a></li>
-    <li><a href="{{ url_for('routes.help') }}">Help</a></li>
-    <li><a href="{{ url_for('login') }}">Login</a></li>
-  </ul>
-</nav>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-<header class="no-content">
-  {% block header %}{% endblock %}
-</header>
+    <title>{% block title %}{% endblock %} | HuBMAP</title>
+  </head>
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <section class="no-content">
+  <body>
+    <nav class="no-format">
       <ul>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
+        <li><a href="{{ url_for('routes.home') }}">HuBMAP</a></li>
+        <li><a href="{{ url_for('routes.browse', type='donor') }}">Donors</a>
+            | <a href="{{ url_for('routes.browse', type='sample') }}">Samples</a>
+            | <a href="{{ url_for('routes.browse', type='dataset') }}">Datasets</a></li>
+        <li><a href="{{ url_for('routes.help') }}">Help</a></li>
+        <li><a href="{{ url_for('login') }}">Login</a></li>
       </ul>
-    </section>
-  {% endif %}
-{% endwith %}
+    </nav>
 
-<section class="no-content">
-  {% block content %}{% endblock %}
-</section>
+    <header class="no-content">
+      {% block header %}{% endblock %}
+    </header>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <section class="no-content">
+          <ul>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+    {% endwith %}
+
+    <section class="no-content">
+      {% block content %}{% endblock %}
+    </section>
+  </body>
+</html>
