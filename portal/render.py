@@ -8,18 +8,25 @@ def dict_as_html(input_dict, tagtext=None):
     '''
     doc, tag, text = tagtext or Doc().tagtext()
 
-    with tag('table', klass='table table-bordered'):
+    def table():
+        return tag('table', klass='table table-bordered')
+    def tr():
+        return tag('tr')
+    def td():
+        return tag('td')
+
+    with table():
         for key, value in input_dict.items():
-            with tag('tr'):
-                with tag('td'):
+            with tr():
+                with td():
                     text(key)
-                with tag('td'):
+                with td():
                     if type(value) == list:
                         if any(type(i) == dict for i in value):
-                            with tag('table'):
+                            with table():
                                 for item in value:
-                                    with tag('tr'):
-                                        with tag('td'):
+                                    with tr():
+                                        with td():
                                             dict_as_html(item, (doc, tag, text))
                         else:
                             text(', '.join([str(i) for i in value]))
