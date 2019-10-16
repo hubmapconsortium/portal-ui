@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.2 - in progress
+- Start applying Bootstrap styles.
+
 ## [0.0.1](https://github.com/hubmapconsortium/flask-data-portal/tree/v0.0.1) - 2019-10-11
 ### Added
 - Simple flask app with minimal routes. Test that known routes are 200, unknown are 404.
