@@ -1,0 +1,16 @@
+<div class="d-flex flex-column flex-sm-row align-items-center p-3 px-sm-4 mb-3 bg-white border-bottom shadow-sm">
+  <a class="my-0 mr-sm-auto p-2 text-dark {{ 'font-weight-bold' if request.path == '/' else '' }}"
+     href="{{ url_for('routes.home') }}">HuBMAP</a>
+  <nav class="my-2 my-md-0 mr-md-3">
+    {% for path, name in [
+        (url_for('routes.browse', type='donor'), 'Donors'),
+        (url_for('routes.browse', type='sample'), 'Samples'),
+        (url_for('routes.browse', type='dataset'), 'Datasets'),
+        (url_for('routes.help'), 'Help'),
+       ] %}
+       <a class="p-2 text-dark {{ 'font-weight-bold' if request.path == path else '' }}"
+          href="{{ path }}">{{ name }}</a>
+    {% endfor %}
+  </nav>
+  <a class="btn btn-outline-primary" href="{{ url_for('login') }}">Login</a>
+</div>
