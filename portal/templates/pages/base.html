@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='todo-styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
 
     <title>{% block title %}{% endblock %} | HuBMAP</title>
   </head>
@@ -15,24 +16,30 @@
   <body>
     {% include 'fragments/banner-top.html' %}
 
-    <header class="no-content">
-      {% block header %}{% endblock %}
-    </header>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <header class="no-content no-format">
+            {% block header %}{% endblock %}
+          </header>
 
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <section class="no-content">
-          <ul>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-          </ul>
-        </section>
-      {% endif %}
-    {% endwith %}
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <section class="no-content">
+                <ul>
+                  {% for message in messages %}
+                    <li>{{ message }}</li>
+                  {% endfor %}
+                </ul>
+              </section>
+            {% endif %}
+          {% endwith %}
 
-    <section class="no-content">
-      {% block content %}{% endblock %}
-    </section>
+          <section>
+            {% block content %}{% endblock %}
+          </section>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
