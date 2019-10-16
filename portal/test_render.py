@@ -37,6 +37,14 @@ io_pairs = [
     </td>
   </tr>
 </table>
+'''),
+    ({'a': [1, {'X', 'Y'}]}, '''
+<table>
+  <tr>
+    <td>a</td>
+    <td>1, {'Y', 'X'}</td>
+  </tr>
+</table>
 ''')
 ]
 
