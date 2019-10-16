@@ -8,7 +8,7 @@ def dict_as_html(input_dict, tagtext=None):
     '''
     doc, tag, text = tagtext or Doc().tagtext()
 
-    with tag('table'):
+    with tag('table', klass='table table-bordered'):
         for key, value in input_dict.items():
             with tag('tr'):
                 with tag('td'):
