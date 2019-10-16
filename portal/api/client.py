@@ -13,6 +13,22 @@ class ApiClient():
         response = requests.get(f'{self.url_base}/entities')
         return response.json()['entity_types']
 
+    def get_entities(self, type):
+        return [
+            {
+                'type': type,
+                'uuid': 'abc-123'
+            },
+            {
+                'type': type,
+                'uuid': 'ijk-345'
+            },
+            {
+                'type': type,
+                'uuid': 'xyz-789'
+            }
+        ]
+
     def get_entity(self, uuid):
         return {
             'title': 'Entirely fake entity',

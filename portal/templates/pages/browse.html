@@ -5,7 +5,14 @@
 {% endblock %}
 
 {% block content %}
-<div class="no-content no-format">
-TODO: Browse content: {{ type }}
+<div class="no-content">
+  <table class="table table-bordered table-sm">
+    {% for entity in entities %}
+      <tr>
+        <td>{{ entity['type'] }}</td>
+        <td><a href="{{ url_for('routes.details', type=entity['type'], uuid=entity['uuid']) }}">{{ entity['uuid'] }}</a></td>
+      </tr>
+    {% endfor %}
+  <table>
 </div>
 {% endblock %}
