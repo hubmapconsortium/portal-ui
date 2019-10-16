@@ -15,24 +15,26 @@
   <body>
     {% include 'fragments/banner-top.html' %}
 
-    <header class="no-content">
-      {% block header %}{% endblock %}
-    </header>
+    <div class="container-fluid">
+      <header class="no-content">
+        {% block header %}{% endblock %}
+      </header>
 
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <section class="no-content">
-          <ul>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-          </ul>
-        </section>
-      {% endif %}
-    {% endwith %}
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <section class="no-content">
+            <ul>
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          </section>
+        {% endif %}
+      {% endwith %}
 
-    <section>
-      {% block content %}{% endblock %}
-    </section>
+      <section>
+        {% block content %}{% endblock %}
+      </section>
+    </div>
   </body>
 </html>
