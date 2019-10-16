@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from yattag import indent
 
@@ -41,5 +43,7 @@ io_pairs = [
 
 @pytest.mark.parametrize('io_pair', io_pairs)
 def test_dict_as_html(io_pair):
-    (input, output) = io_pair
-    assert indent(dict_as_html(input)) == output.strip()
+    (input_dict, expected_output_html) = io_pair
+    # CSS classes make output harder to read, obscure the structural issues which are the focus.
+    no_class_html = re.sub(r'\s*class="[^"]*"\s*', '', dict_as_html(input_dict))
+    assert indent(no_class_html) == expected_output_html.strip()

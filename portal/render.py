@@ -10,10 +10,13 @@ def dict_as_html(input_dict, tagtext=None):
 
     def table():
         return tag('table', klass='table table-bordered table-sm')
+
     def tr():
         return tag('tr')
+
     def td_key():
         return tag('td', klass='td-key')
+
     def td_value():
         return tag('td', klass='td-value')
 
