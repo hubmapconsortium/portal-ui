@@ -18,7 +18,9 @@ def home():
 def browse(type):
     if type not in types:
         abort(404)
-    return render_template('pages/browse.html', type=type)
+    client = ApiClient('TODO: base url from config')
+    entities = client.get_entities(type)
+    return render_template('pages/browse.html', type=type, entities=entities)
 
 
 @blueprint.route('/browse/<type>/<id>')
