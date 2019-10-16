@@ -1,0 +1,13 @@
+table .td-key
+{
+  width:auto;
+  text-align:right;
+  white-space: nowrap
+}
+table .td-value {
+  width: 100%
+}
+table .table {
+  margin-bottom: 0;
+
+}
