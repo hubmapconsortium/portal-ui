@@ -1,9 +1,9 @@
 from yattag import Doc
 
 
-def dict_as_html(input_dict, tagtext=None):
+def object_as_html(input_object, tagtext=None):
     '''
-    Render input_dict as an html table.
+    Render input_object as an html table.
     Provide tagtext when recursing, to continue using an existing builder.
     '''
     doc, tag, text = tagtext or Doc().tagtext()
@@ -20,24 +20,24 @@ def dict_as_html(input_dict, tagtext=None):
     def td_value():
         return tag('td', klass='td-value')
 
-    with table():
-        for key, value in input_dict.items():
-            with tr():
-                with td_key():
-                    text(key)
-                with td_value():
-                    if type(value) == list:
-                        if any(type(i) == dict for i in value):
-                            with table():
-                                for item in value:
-                                    with tr():
-                                        with td_value():
-                                            dict_as_html(item, (doc, tag, text))
-                        else:
-                            text(', '.join([str(i) for i in value]))
-                    elif type(value) == dict:
-                        dict_as_html(value, (doc, tag, text))
-                    else:
-                        text(value)
+    if type(input_object) == list:
+        if all(type(i) == str for i in input_object):
+            text(', '.join([str(i) for i in input_object]))
+        else:
+            with table():
+                for item in input_object:
+                    with tr():
+                        with td_value():
+                            object_as_html(item, (doc, tag, text))
+    elif type(input_object) == dict:
+        with table():
+            for key, value in input_object.items():
+                with tr():
+                    with td_key():
+                        text(key)
+                    with td_value():
+                        object_as_html(value, (doc, tag, text))
+    else:
+        text(input_object)
 
     return doc.getvalue()
