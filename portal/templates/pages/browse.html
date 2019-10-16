@@ -10,7 +10,7 @@
     {% for entity in entities %}
       <tr>
         <td>{{ entity['type'] }}</td>
-        <td><a href="{{ url_for('routes.details', type=entity['type'], id=entity['uuid']) }}">{{ entity['uuid'] }}</a></td>
+        <td><a href="{{ url_for('routes.details', type=entity['type'], uuid=entity['uuid']) }}">{{ entity['uuid'] }}</a></td>
       </tr>
     {% endfor %}
   <table>
