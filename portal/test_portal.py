@@ -28,10 +28,12 @@ def to_xml(html):
         re.sub(r'<!doctype html>', '', html)
     )
 
+
 def test_to_xml():
     html = '<!doctype html><html><meta XYZ></html>'
     xml = '<html><meta XYZ/></html>'
     assert to_xml(html) == xml
+
 
 @pytest.mark.parametrize('path', [
     '/',
@@ -48,6 +50,7 @@ def test_200_page(client, path):
     except ParseError as e:
         numbered = '\n'.join([f'{n+1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
         raise Exception(f'{e.msg}\n{numbered}')
+
 
 @pytest.mark.parametrize('path', [
     '/no-page-here',
