@@ -1,3 +1,7 @@
+import re
+import xml.etree.ElementTree as ET
+from xml.etree.ElementTree import ParseError
+
 import pytest
 
 import portal
@@ -14,6 +18,21 @@ def client():
         yield client
 
 
+def to_xml(html):
+    '''
+    Ad-hoc regexes, so we can check for missing or mismatched tags.
+    '''
+    return re.sub(
+        r'(<meta[^>]+)>',
+        r'\1/>',
+        re.sub(r'<!doctype html>', '', html)
+    )
+
+def test_to_xml():
+    html = '<!doctype html><html><meta XYZ></html>'
+    xml = '<html><meta XYZ/></html>'
+    assert to_xml(html) == xml
+
 @pytest.mark.parametrize('path', [
     '/',
     '/browse/dataset',
@@ -23,7 +42,10 @@ def client():
 def test_200_page(client, path):
     response = client.get(path)
     assert response.status == '200 OK'
-
+    try:
+        ET.fromstring(to_xml(response.data.decode('utf8')))
+    except ParseError as e:
+        assert dir(e) == []
 
 @pytest.mark.parametrize('path', [
     '/no-page-here',
