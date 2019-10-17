@@ -14,33 +14,23 @@ def client():
         yield client
 
 
-def test_home(client):
-    response = client.get('/')
+@pytest.mark.parametrize('path', [
+    '/',
+    '/browse/dataset',
+    '/browse/dataset/1',
+    '/help'
+])
+def test_200_page(client, path):
+    response = client.get(path)
     assert response.status == '200 OK'
 
 
-def test_browse(client):
-    response = client.get('/browse/dataset')
-    assert response.status == '200 OK'
-
-
-def test_details(client):
-    response = client.get('/browse/dataset/1')
-    assert response.status == '200 OK'
-
-
-def test_help(client):
-    response = client.get('/help')
-    assert response.status == '200 OK'
-
-
-def test_404(client):
-    response = client.get('/no-page-here')
-    assert response.status == '404 NOT FOUND'
-
-
-def test_404_browse(client):
-    response = client.get('/browse/no-such-type')
+@pytest.mark.parametrize('path', [
+    '/no-page-here',
+    '/browse/no-such-type'
+])
+def test_404_page(client, path):
+    response = client.get(path)
     assert response.status == '404 NOT FOUND'
 
 
