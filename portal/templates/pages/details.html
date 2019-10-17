@@ -1,7 +1,7 @@
 {% extends 'pages/base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Details {{ type }}{% endblock %}</h1>
+{% block title %}
+  <h1 class="no-content">{% block title_text %}Details {{ type }}{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}

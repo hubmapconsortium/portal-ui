@@ -1,12 +1,14 @@
 {% extends 'pages/base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Home{% endblock %}</h1>
+{% block title %}
+  <h1>{% block title_text %}Welcome to HuBMAP{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-<div class="no-content no-format">
-  <p>TODO: Home content</p>
-  <p><a href="/browse/sample/asdf">Mock details page</a>
-</div>
+<p>Show all:<p>
+<ul>
+  <li><a href="{{ url_for('routes.browse', type='donor') }}">Donors</a></li>
+  <li><a href="{{ url_for('routes.browse', type='sample') }}">Samples</a></li>
+  <li><a href="{{ url_for('routes.browse', type='dataset') }}">Datasets</a></li>
+</ul>
 {% endblock %}
