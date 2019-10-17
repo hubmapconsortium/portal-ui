@@ -11,18 +11,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='sticky-footer.css') }}">
 
-    <title>{% block title %}{% endblock %} | HuBMAP</title>
+    <title>{% block title_text %}{% endblock %} | HuBMAP</title>
   </head>
 
   <body>
     {% include 'fragments/header.html' %}
 
     <div class="container-fluid">
-      <div class="row">
+      <div class="row p-2">
         <div class="col">
-          <header class="no-content no-format">
-            {% block header %}{% endblock %}
-          </header>
+          {% block title %}{% endblock %}
 
           {% with messages = get_flashed_messages() %}
             {% if messages %}
