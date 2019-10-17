@@ -1,5 +1,5 @@
-# flask-data-portal
-Flask for HuBMAP Data Portal front end
+# portal-ui
+HuBMAP Data Portal front end
 
 ## Get started
 After checking out the project, cd-ing into it, and setting up a Python3 virtual environment,
