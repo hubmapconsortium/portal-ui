@@ -23,7 +23,7 @@ def to_xml(html):
     Ad-hoc regexes, so we can check for missing or mismatched tags.
     '''
     return re.sub(
-        r'(<meta[^>]+)>',
+        r'(<(meta|link|br)[^>]+)>',
         r'\1/>',
         re.sub(r'<!doctype html>', '', html)
     )
@@ -42,10 +42,12 @@ def test_to_xml():
 def test_200_page(client, path):
     response = client.get(path)
     assert response.status == '200 OK'
+    xml = to_xml(response.data.decode('utf8'))
     try:
-        ET.fromstring(to_xml(response.data.decode('utf8')))
+        ET.fromstring(xml)
     except ParseError as e:
-        assert dir(e) == []
+        numbered = '\n'.join([f'{n+1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
+        raise Exception(f'{e.msg}\n{numbered}')
 
 @pytest.mark.parametrize('path', [
     '/no-page-here',
