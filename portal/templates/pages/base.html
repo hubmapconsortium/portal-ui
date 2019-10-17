@@ -15,7 +15,7 @@
   </head>
 
   <body>
-    {% include 'fragments/banner-top.html' %}
+    {% include 'fragments/header.html' %}
 
     <div class="container-fluid">
       <div class="row">
@@ -43,12 +43,6 @@
       </div>
     </div>
 
-    <footer class="footer bg-light border-top shadow-sm">
-      <div class="container">
-        <div class="row justify-content-center">
-          <span class="text-muted">Human BioMolecular Atlas Program: Supported by the NIH Common Fund.</span>
-        </div>
-      </div>
-    </footer>
+    {% include 'fragments/footer.html' %}
   </body>
 </html>
