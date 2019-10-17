@@ -65,9 +65,10 @@ io_pairs = [
 ]
 
 
-@pytest.mark.parametrize('io_pair', io_pairs)
-def test_object_as_html(io_pair):
-    (input_object, expected_output_html) = io_pair
-    # CSS classes make output harder to read, obscure the structural issues which are the focus.
+@pytest.mark.parametrize(
+    'input_object,expected_output_html', io_pairs,
+    ids=lambda val: str(val) if type(val) == dict else '')
+def test_object_as_html(input_object, expected_output_html):
+    # Remove CSS classes to make it easier to read/compare.
     no_class_html = re.sub(r'\s*class="[^"]*"\s*', '', object_as_html(input_object))
     assert indent(no_class_html) == expected_output_html.strip()
