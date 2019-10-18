@@ -35,7 +35,10 @@ def details(type, uuid):
     client = ApiClient('TODO: base url from config')
     details = client.get_entity(uuid)
     details_html = object_as_html(details)
-    return render_template('pages/details.html', types=types, type=type, uuid=uuid, details_html=details_html)
+    return render_template(
+        'pages/details.html',
+        types=types, type=type, uuid=uuid, details_html=details_html
+    )
 
 
 @blueprint.route('/help')
