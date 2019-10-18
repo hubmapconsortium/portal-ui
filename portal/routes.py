@@ -6,12 +6,17 @@ from .render import object_as_html
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
 
-types = ['donor', 'sample', 'dataset']
+types = {
+    'donor': {'display_name': 'Donors', 'in_header': True},
+    'sample': {'display_name': 'Samples', 'in_header': True},
+    'dataset': {'display_name': 'Datasets', 'in_header': True},
+    'file': {'display_name': 'Files', 'in_header': False}
+}
 
 
 @blueprint.route('/')
 def home():
-    return render_template('pages/index.html')
+    return render_template('pages/index.html', types=types)
 
 
 @blueprint.route('/browse/<type>')
@@ -20,7 +25,7 @@ def browse(type):
         abort(404)
     client = ApiClient('TODO: base url from config')
     entities = client.get_entities(type)
-    return render_template('pages/browse.html', type=type, entities=entities)
+    return render_template('pages/browse.html', types=types, type=type, entities=entities)
 
 
 @blueprint.route('/browse/<type>/<uuid>')
@@ -30,9 +35,13 @@ def details(type, uuid):
     client = ApiClient('TODO: base url from config')
     details = client.get_entity(uuid)
     details_html = object_as_html(details)
-    return render_template('pages/details.html', type=type, uuid=uuid, details_html=details_html)
+    if type in {'file'}:  # TODO: As we have other specializations, add them here.
+        template = f'pages/details/details_{type}.html'
+    else:
+        template = f'pages/details/details_base.html'
+    return render_template(template, types=types, type=type, uuid=uuid, details_html=details_html)
 
 
 @blueprint.route('/help')
 def help():
-    return render_template('pages/help.html')
+    return render_template('pages/help.html', types=types)

@@ -6,6 +6,8 @@ import pytest
 
 import portal
 
+from .routes import types
+
 
 @pytest.fixture
 def client():
@@ -35,12 +37,12 @@ def test_to_xml():
     assert to_xml(html) == xml
 
 
-@pytest.mark.parametrize('path', [
-    '/',
-    '/browse/dataset',
-    '/browse/dataset/1',
-    '/help'
-])
+@pytest.mark.parametrize(
+    'path',
+    ['/', '/help']
+    + [f'/browse/{t}' for t in types]
+    + [f'/browse/{t}/fake-uuid' for t in types]
+)
 def test_200_page(client, path):
     response = client.get(path)
     assert response.status == '200 OK'

@@ -6,6 +6,8 @@
 
 {% block content %}
 <div class="no-content">
-  {{ details_html|safe }}
+  {% block metadata_dump %}
+    {{ details_html|safe }}
+  {% endblock %}
 </div>
 {% endblock %}

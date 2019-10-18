@@ -4,6 +4,7 @@
 - Start applying Bootstrap styles.
 - Add a minimalist browse page and homepage.
 - Check that tags are balanced.
+- Add a "File" page; Start specializing the details pages.
 
 ## [0.0.1](https://github.com/hubmapconsortium/flask-data-portal/tree/v0.0.1) - 2019-10-11
 ### Added

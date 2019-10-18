@@ -7,8 +7,8 @@
 {% block content %}
 <p>Show all:</p>
 <ul>
-  <li><a href="{{ url_for('routes.browse', type='donor') }}">Donors</a></li>
-  <li><a href="{{ url_for('routes.browse', type='sample') }}">Samples</a></li>
-  <li><a href="{{ url_for('routes.browse', type='dataset') }}">Datasets</a></li>
+  {% for type, props in types.items() %}
+    <li><a href="{{ url_for('routes.browse', type=type) }}">{{ props['display_name'] }}</a></li>
+  {% endfor %}
 </ul>
 {% endblock %}
