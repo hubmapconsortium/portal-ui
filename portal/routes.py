@@ -35,10 +35,11 @@ def details(type, uuid):
     client = ApiClient('TODO: base url from config')
     details = client.get_entity(uuid)
     details_html = object_as_html(details)
-    return render_template(
-        'pages/details.html',
-        types=types, type=type, uuid=uuid, details_html=details_html
-    )
+    if type in {'file'}:  # TODO: As we have other specializations, add them here.
+        template = f'pages/details/details_{type}.html'
+    else:
+        template = f'pages/details/details_base.html'
+    return render_template(template, types=types, type=type, uuid=uuid, details_html=details_html)
 
 
 @blueprint.route('/help')
