@@ -2,7 +2,8 @@
 
 ## 0.0.2 - in progress
 - Start applying Bootstrap styles.
-- Add a minimalist browse page.
+- Add a minimalist browse page and homepage.
+- Check that tags are balanced.
 
 ## [0.0.1](https://github.com/hubmapconsortium/flask-data-portal/tree/v0.0.1) - 2019-10-11
 ### Added
