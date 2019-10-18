@@ -6,12 +6,17 @@ from .render import object_as_html
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
 
-types = ['donor', 'sample', 'dataset']
+types = [
+    ('donor', 'Donors'),
+    ('sample', 'Samples'),
+    ('dataset', 'Datasets'),
+    ('file', 'Files')
+]
 
 
 @blueprint.route('/')
 def home():
-    return render_template('pages/index.html')
+    return render_template('pages/index.html', types=types)
 
 
 @blueprint.route('/browse/<type>')
