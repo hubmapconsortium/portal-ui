@@ -21,7 +21,7 @@ def home():
 
 @blueprint.route('/browse/<type>')
 def browse(type):
-    if type not in types.keys():
+    if type not in types:
         abort(404)
     client = ApiClient('TODO: base url from config')
     entities = client.get_entities(type)
@@ -30,7 +30,7 @@ def browse(type):
 
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
-    if type not in types.keys():
+    if type not in types:
         abort(404)
     client = ApiClient('TODO: base url from config')
     details = client.get_entity(uuid)
