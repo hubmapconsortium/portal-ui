@@ -29,3 +29,8 @@ end flake8
 start pytest
 pytest -vv
 end pytest
+
+start changelog
+diff CHANGELOG.md <(curl https://raw.githubusercontent.com/hubmapconsortium/portal-ui/master/CHANGELOG.md) \
+  && die 'Update CHANGELOG.md'
+end changelog
