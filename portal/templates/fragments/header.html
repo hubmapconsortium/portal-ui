@@ -3,9 +3,12 @@
   <a class="my-0 mr-sm-auto p-2 text-dark {{ 'font-weight-bold' if request.path == home_path else '' }}"
      href="{{ home_path }}">HuBMAP</a>
   <nav class="my-2 my-md-0 mr-md-3">
-    {% for type, display_name in types %}
-      <a class="p-2 text-dark {{ 'font-weight-bold' if request.path == path else '' }}"
-         href="{{ url_for('routes.browse', type=type) }}">{{ display_name }}</a>
+    {% for type, props in types.items() %}
+      {% if props['in_header'] %}
+        {% set type_path = url_for('routes.browse', type=type) %}
+        <a class="p-2 text-dark {{ 'font-weight-bold' if request.path == type_path else '' }}"
+           href="{{ type_path }}">{{ props['display_name'] }}</a>
+      {% endif %}
     {% endfor %}
     {% set help_path = url_for('routes.help') %}
     <a class="p-2 text-dark {{ 'font-weight-bold' if request.path == help_path else '' }}"
