@@ -37,7 +37,8 @@ def test_to_xml():
     assert to_xml(html) == xml
 
 
-@pytest.mark.parametrize('path',
+@pytest.mark.parametrize(
+    'path',
     ['/', '/help']
     + [f'/browse/{t}' for t in types.keys()]
     + [f'/browse/{t}/fake-uuid' for t in types.keys()]
