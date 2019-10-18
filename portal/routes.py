@@ -21,11 +21,11 @@ def home():
 
 @blueprint.route('/browse/<type>')
 def browse(type):
-    if type not in types:
+    if type not in [t[0] for t in types]:
         abort(404)
     client = ApiClient('TODO: base url from config')
     entities = client.get_entities(type)
-    return render_template('pages/browse.html', type=type, entities=entities)
+    return render_template('pages/browse.html', types=types, type=type, entities=entities)
 
 
 @blueprint.route('/browse/<type>/<uuid>')
@@ -35,9 +35,9 @@ def details(type, uuid):
     client = ApiClient('TODO: base url from config')
     details = client.get_entity(uuid)
     details_html = object_as_html(details)
-    return render_template('pages/details.html', type=type, uuid=uuid, details_html=details_html)
+    return render_template('pages/details.html', types=types, type=type, uuid=uuid, details_html=details_html)
 
 
 @blueprint.route('/help')
 def help():
-    return render_template('pages/help.html')
+    return render_template('pages/help.html', types=types)
