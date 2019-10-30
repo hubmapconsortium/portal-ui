@@ -38,11 +38,20 @@ class ApiClient():
                 {'planet': 'Earth', 'moons': ['Luna']},
                 {'planet': 'Mars', 'moons': ['Phobos', 'Deimos']},
             ],
-            'credits': {'Catering': 'Clover', 'Dolly Grip': 'ABC', 'Gaffer': 'XYZ'}
+            'credits': {'Catering': 'Clover', 'Dolly Grip': 'ABC', 'Gaffer': 'XYZ'},
+            'contributor_id': '1234',
+            'tmc': 'The best TMC!',
+            'project': 'The best project!',
+            'submission_date': '2001-01-01',
+            'internal_release_date': '2001-01-02',
+            'public_release_date': '2001-01-03',
         }
-        # TODO?:
-        # response = requests.get(f'{self.url_base}/entities/{quote_plus(uuid)}')
-        # return response.json()
+
+    def get_contributor(self, id):
+        return {
+            'name': 'Santa Claus',
+            'affiliation': 'North Pole'
+        }
 
     def get_donor_uuids(self, user=None):
         pass
