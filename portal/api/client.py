@@ -55,5 +55,29 @@ class ApiClient():
         #     response = requests.get(f'{self.url_base}/entities/donors')
         # return response.json()['uuids']
 
+    def get_provenance(self, uuid):
+        return {
+          'prefix': { 'hubmap': 'https://hubmapconsortium.org' },
+          'entity': {
+            'ex:input': { 'prov:label': 'bedfile' },
+            'ex:output': { 'prov:label': 'beddbfile' },
+          },
+          'activity': {
+            'ex:run': { 'prov:label': 'bedtobeddb' },
+          },
+          'wasGeneratedBy': {
+            '_:1': {
+              'prov:activity': 'ex:run',
+              'prov:entity': 'ex:output',
+            },
+          },
+          'used': {
+            '_:2': {
+              'prov:activity': 'ex:run',
+              'prov:entity': 'ex:input',
+            },
+          },
+        }
+
 
 # TODO: More functions

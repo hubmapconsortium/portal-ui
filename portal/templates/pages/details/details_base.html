@@ -22,28 +22,6 @@
   <script src="https://unpkg.com/@hubmap/prov-vis@v0.0.1/umd/@hubmap/prov-vis.min.js"></script>
 
   <script>
-    // TODO: Inject JSON here.
-    hubmapProvVis.renderProvVis('prov-vis', {
-      prefix: { hubmap: 'https://hubmapconsortium.org' },
-      entity: {
-        'ex:input': { 'prov:label': 'bedfile' },
-        'ex:output': { 'prov:label': 'beddbfile' },
-      },
-      activity: {
-        'ex:run': { 'prov:label': 'bedtobeddb' },
-      },
-      wasGeneratedBy: {
-        '_:1': {
-          'prov:activity': 'ex:run',
-          'prov:entity': 'ex:output',
-        },
-      },
-      used: {
-        '_:2': {
-          'prov:activity': 'ex:run',
-          'prov:entity': 'ex:input',
-        },
-      },
-    });
+    hubmapProvVis.renderProvVis('prov-vis', {{ provenance|tojson }});
   </script>
 {% endblock %}
