@@ -1,13 +1,49 @@
 {% extends 'pages/base.html' %}
 
+{% block extra_stylesheets %}
+  <link rel="stylesheet" href="https://unpkg.com/@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css">
+{% endblock %}
+
 {% block title %}
   <h1 class="no-content">{% block title_text %}Details {{ type }}{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-<div class="no-content">
-  {% block metadata_dump %}
-    {{ details_html|safe }}
-  {% endblock %}
-</div>
+  <div class="no-content">
+    {% block details_base_content %}
+      {{ details_html|safe }}
+      <div id="prov-vis">Provenance placeholder</div>
+    {% endblock %}
+  </div>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/@hubmap/prov-vis@v0.0.1/umd/@hubmap/prov-vis.min.js"></script>
+
+  <script>
+    // TODO: Inject JSON here.
+    hubmapProvVis.renderProvVis('prov-vis', {
+      prefix: { hubmap: 'https://hubmapconsortium.org' },
+      entity: {
+        'ex:input': { 'prov:label': 'bedfile' },
+        'ex:output': { 'prov:label': 'beddbfile' },
+      },
+      activity: {
+        'ex:run': { 'prov:label': 'bedtobeddb' },
+      },
+      wasGeneratedBy: {
+        '_:1': {
+          'prov:activity': 'ex:run',
+          'prov:entity': 'ex:output',
+        },
+      },
+      used: {
+        '_:2': {
+          'prov:activity': 'ex:run',
+          'prov:entity': 'ex:input',
+        },
+      },
+    });
+  </script>
 {% endblock %}
