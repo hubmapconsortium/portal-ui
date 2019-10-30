@@ -11,7 +11,28 @@
 {% block content %}
   <div class="no-content">
     {% block details_base_content %}
+      <dl>
+        <dt>Contributor</dt>
+        <dd>{{ contributor['name'] }}, {{ contributor['affiliation'] }}</dd>
+
+        <dt>TMC</dt>
+        <dd>{{ entity['tmc'] }}</dd>
+
+        <dt>Project</dt>
+        <dd>{{ entity['project'] }}</dd>
+
+        <dt>Submission date</dt>
+        <dd>{{ entity['submission_date'] }}</dd>
+
+        <dt>Internal release date</dt>
+        <dd>{{ entity['internal_release_date'] }}</dd>
+
+        <dt>Public release date</dt>
+        <dd>{{ entity['public_release_date'] }}</dd>
+      </dl>
+
       {{ details_html|safe }}
+
       <div id="prov-vis">Provenance placeholder</div>
     {% endblock %}
   </div>

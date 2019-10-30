@@ -6,6 +6,7 @@
 - Check that tags are balanced.
 - Add a "File" page; Start specializing the details pages.
 - Add provenance to fake UI, and add it to details page.
+- Add fake contribution info to the details page.
 
 ## [0.0.1](https://github.com/hubmapconsortium/flask-data-portal/tree/v0.0.1) - 2019-10-11
 ### Added

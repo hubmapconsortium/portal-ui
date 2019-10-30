@@ -34,7 +34,10 @@ def details(type, uuid):
         abort(404)
     client = ApiClient('TODO: base url from config')
 
-    details_html = object_as_html(client.get_entity(uuid))
+    entity = client.get_entity(uuid)
+    contributor = client.get_contributor(entity['contributor_id'])
+
+    details_html = object_as_html(entity)
     provenance = client.get_provenance(uuid)
 
     if type in {'file'}:  # TODO: As we have other specializations, add them here.
@@ -43,6 +46,7 @@ def details(type, uuid):
         template = f'pages/details/details_base.html'
     return render_template(
         template, types=types, type=type, uuid=uuid,
+        entity=entity, contributor=contributor,
         details_html=details_html,
         provenance=provenance
     )
