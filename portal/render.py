@@ -20,8 +20,8 @@ def object_as_html(input_object, tagtext=None):
     def td_value():
         return tag('td', klass='td-value')
 
-    if type(input_object) == list:
-        if all(type(i) == str for i in input_object):
+    if isinstance(input_object, list):
+        if all(isinstance(i, str) for i in input_object):
             text(', '.join([str(i) for i in input_object]))
         else:
             with table():
@@ -29,7 +29,7 @@ def object_as_html(input_object, tagtext=None):
                     with tr():
                         with td_value():
                             object_as_html(item, (doc, tag, text))
-    elif type(input_object) == dict:
+    elif isinstance(input_object, dict):
         with table():
             for key, value in input_object.items():
                 with tr():
