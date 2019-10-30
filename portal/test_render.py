@@ -67,7 +67,7 @@ io_pairs = [
 
 @pytest.mark.parametrize(
     'input_object,expected_output_html', io_pairs,
-    ids=lambda val: str(val) if type(val) == dict else '')
+    ids=lambda val: str(val) if isinstance(val, dict) else '')
 def test_object_as_html(input_object, expected_output_html):
     # Remove CSS classes to make it easier to read/compare.
     no_class_html = re.sub(r'\s*class="[^"]*"\s*', '', object_as_html(input_object))

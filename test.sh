@@ -23,7 +23,7 @@ end quick-start
 start flake8
 # Unit tests require dev dependencies beyond what quick-start provides.
 pip install -r requirements-dev.txt > /dev/null
-flake8
+flake8 || die 'Try "autopep8 --in-place --aggressive -r ."'
 end flake8
 
 start pytest
