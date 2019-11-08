@@ -12,6 +12,7 @@ export OAUTHLIB_INSECURE_TRANSPORT=1
 # These are only for development:
 export GLOBUS_CLIENT_ID='12518f0d-4594-4632-8c4c-a6839024d238',
 export GLOBUS_CLIENT_SECRET='gEfGGE09nMMjwZxWafL+2/M3UqcGl9czSL72H+O1xuU=',
+export GLOBUS_REDIRECT='/auth/complete/globus/'
 
 # Port is required because our test account with Globus
 # expects the redirect after login to be port 8000.
