@@ -24,9 +24,9 @@
   </nav>
 
   {% if is_authenticated %}
-    <a class="btn btn-outline-primary" href="{{ url_for('routes.logout') }}">Logout</a>
+    <a class="btn btn-outline-primary" href="{{ url_for('routes_auth.logout') }}">Logout</a>
   {% else %}
-    <a class="btn btn-outline-primary" href="{{ url_for('routes.login') }}">Login</a>
+    <a class="btn btn-outline-primary" href="{{ url_for('routes_auth.login') }}">Login</a>
   {% endif %}
 
 </div>
