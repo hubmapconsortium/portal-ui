@@ -64,7 +64,7 @@ def test_404_page(client, path):
 
 
 def test_login(client):
-    response = client.get('/auth/login')
+    response = client.get('/login')
     assert response.status == '302 FOUND'
     assert response.location.startswith(
         'https://auth.globus.org/v2/oauth2/authorize'

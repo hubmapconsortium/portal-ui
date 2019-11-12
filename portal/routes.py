@@ -15,7 +15,7 @@ types = {
 
 
 @blueprint.route('/')
-def home():
+def index():
     return render_template('pages/index.html', types=types)
 
 
