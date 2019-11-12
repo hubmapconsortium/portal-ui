@@ -10,7 +10,7 @@ start quick-start
 PID=$!
 TRIES=0
 MAX_TRIES=5
-until curl --silent --fail http://localhost:8000; do
+until curl --silent --fail http://localhost:5000; do
   [ ${TRIES} -gt ${MAX_TRIES} ] && die 'Server did not come up'
   printf '.'
   sleep 1
