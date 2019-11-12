@@ -3,9 +3,9 @@
   {% set default_class='p-2 text-dark' %}
   {% set active_class='font-weight-bold' %}
 
-  {% set home_path = url_for('routes.home') %}
-  <a class="my-0 mr-sm-auto {{ default_class }} {{ active_class if request.path == home_path else '' }}"
-     href="{{ home_path }}">HuBMAP</a>
+  {% set index_path = url_for('routes.index') %}
+  <a class="my-0 mr-sm-auto {{ default_class }} {{ active_class if request.path == index_path else '' }}"
+     href="{{ index_path }}">HuBMAP</a>
 
   <nav class="my-2 my-md-0 mr-md-3">
     {% for type, props in types.items() %}

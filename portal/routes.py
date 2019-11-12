@@ -17,7 +17,7 @@ types = {
 
 
 @blueprint.route('/')
-def home():
+def index():
     return render_template('pages/index.html', types=types)
 
 
@@ -99,7 +99,7 @@ def login():
             tokens=tokens.by_resource_server,
             is_authenticated=True
         )
-        return redirect(url_for('routes.home'))
+        return redirect(url_for('routes.index'))
 
 
 @blueprint.route('/logout')
@@ -120,7 +120,7 @@ def logout():
     session.clear()
 
     # the return redirection location to give to Globus AUth
-    redirect_uri = url_for('routes.home', _external=True)
+    redirect_uri = url_for('routes.index', _external=True)
 
     # build the logout URI with query params
     # there is no tool to help build this (yet!)
