@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, abort, request, redirect, session
+from flask import Blueprint, current_app, render_template, url_for, abort, request, redirect, session
+
+import globus_sdk
 
 from .api.client import ApiClient
 from .render import object_as_html
@@ -60,7 +62,7 @@ def help():
 
 def load_app_client():
     return globus_sdk.ConfidentialAppAuthClient(
-        app.config['APP_CLIENT_ID'], app.config['APP_CLIENT_SECRET'])
+        current_app.config['APP_CLIENT_ID'], current_app.config['APP_CLIENT_SECRET'])
 
 
 @blueprint.route('/login')
@@ -75,7 +77,7 @@ def login():
          param
     """
     # the redirect URI, as a complete URI (not relative path)
-    redirect_uri = url_for('login', _external=True)
+    redirect_uri = url_for('routes.login', _external=True)
 
     client = load_app_client()
     client.oauth2_start_flow(redirect_uri)
@@ -97,7 +99,7 @@ def login():
             tokens=tokens.by_resource_server,
             is_authenticated=True
         )
-        return redirect(url_for('home'))
+        return redirect(url_for('routes.home'))
 
 
 @blueprint.route('/logout')
@@ -118,15 +120,15 @@ def logout():
     session.clear()
 
     # the return redirection location to give to Globus AUth
-    redirect_uri = url_for('index', _external=True)
+    redirect_uri = url_for('routes.home', _external=True)
 
     # build the logout URI with query params
     # there is no tool to help build this (yet!)
     globus_logout_url = (
         'https://auth.globus.org/v2/web/logout' +
-        '?client={}'.format(app.config['PORTAL_CLIENT_ID']) +
+        '?client={}'.format(current_app.config['APP_CLIENT_ID']) +
         '&redirect_uri={}'.format(redirect_uri) +
-        '&redirect_name=Globus Example App')
+        '&redirect_name=HuBMAP Portal')
 
     # Redirect the user to the Globus Auth logout page
     return redirect(globus_logout_url)
