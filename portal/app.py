@@ -1,69 +1,28 @@
-from flask import Blueprint, render_template, abort, request, redirect, session
+#!/usr/bin/env python
 
-from .api.client import ApiClient
-from .render import object_as_html
+from flask import Flask, url_for, session, redirect, request
+import globus_sdk
 
-
-blueprint = Blueprint('routes', __name__, template_folder='templates')
-
-types = {
-    'donor': {'display_name': 'Donors', 'in_header': True},
-    'sample': {'display_name': 'Samples', 'in_header': True},
-    'dataset': {'display_name': 'Datasets', 'in_header': True},
-    'file': {'display_name': 'Files', 'in_header': False}
-}
-
-
-@blueprint.route('/')
-def home():
-    return render_template('pages/index.html', types=types)
-
-
-@blueprint.route('/browse/<type>')
-def browse(type):
-    if type not in types:
-        abort(404)
-    client = ApiClient('TODO: base url from config')
-    entities = client.get_entities(type)
-    return render_template('pages/browse.html', types=types, type=type, entities=entities)
-
-
-@blueprint.route('/browse/<type>/<uuid>')
-def details(type, uuid):
-    if type not in types:
-        abort(404)
-    client = ApiClient('TODO: base url from config')
-
-    entity = client.get_entity(uuid)
-    contributor = client.get_contributor(entity['contributor_id'])
-
-    details_html = object_as_html(entity)
-    provenance = client.get_provenance(uuid)
-
-    if type in {'file'}:  # TODO: As we have other specializations, add them here.
-        template = f'pages/details/details_{type}.html'
-    else:
-        template = f'pages/details/details_base.html'
-    return render_template(
-        template, types=types, type=type, uuid=uuid,
-        entity=entity, contributor=contributor,
-        details_html=details_html,
-        provenance=provenance
-    )
-
-
-@blueprint.route('/help')
-def help():
-    return render_template('pages/help.html', types=types)
-
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_pyfile('app.conf')
 
 
 def load_app_client():
     return globus_sdk.ConfidentialAppAuthClient(
         app.config['APP_CLIENT_ID'], app.config['APP_CLIENT_SECRET'])
 
+@app.route('/')
+def index():
+    """
+    This could be any page you like, rendered by Flask.
+    For this simple example, it will either redirect you to login, or print
+    a simple message.
+    """
+    if not session.get('is_authenticated'):
+        return redirect(url_for('login'))
+    return "You are successfully logged in!"
 
-@blueprint.route('/login')
+@app.route('/login')
 def login():
     """
     Login via Globus Auth.
@@ -97,10 +56,10 @@ def login():
             tokens=tokens.by_resource_server,
             is_authenticated=True
         )
-        return redirect(url_for('home'))
+        return redirect(url_for('index'))
 
 
-@blueprint.route('/logout')
+@app.route('/logout')
 def logout():
     """
     - Revoke the tokens with Globus Auth.
@@ -130,3 +89,7 @@ def logout():
 
     # Redirect the user to the Globus Auth logout page
     return redirect(globus_logout_url)
+
+# actually run the app if this is called as a script
+if __name__ == '__main__':
+    app.run()
