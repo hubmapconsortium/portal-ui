@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, current_app, session
 
 from .api.client import ApiClient
 from .render import object_as_html
@@ -23,7 +23,7 @@ def index():
 def browse(type):
     if type not in types:
         abort(404)
-    client = ApiClient('TODO: base url from config')
+    client = ApiClient(current_app.config['ENTITY_API_BASE'], session['nexus_token'])
     entities = client.get_entities(type)
     return render_template('pages/browse.html', types=types, type=type, entities=entities)
 

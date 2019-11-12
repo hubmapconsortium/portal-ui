@@ -1,12 +1,18 @@
+from collections import namedtuple
+
 import requests
 
 # Hopefully soon, generate API client code from OpenAPI:
 # https://github.com/hubmapconsortium/hubmap-data-portal/issues/179
 
 
+Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
+
+
 class ApiClient():
-    def __init__(self, url_base):
+    def __init__(self, url_base, nexus_token):
         self.url_base = url_base
+        self.nexus_token = nexus_token
 
     def get_entity_types(self):
         # NOTE: Not called right now, but tested by test_api.py.
@@ -14,20 +20,12 @@ class ApiClient():
         return response.json()['entity_types']
 
     def get_entities(self, type):
-        return [
-            {
-                'type': type,
-                'uuid': 'abc-123'
-            },
-            {
-                'type': type,
-                'uuid': 'ijk-345'
-            },
-            {
-                'type': type,
-                'uuid': 'xyz-789'
-            }
-        ]
+        headers = {'Authorization': 'Bearer ' + self.nexus_token}
+        response = requests.get(
+            f'{self.url_base}/entities/types/{type}',
+            headers=headers
+        )
+        return [Entity(uuid, type) for uuid in response.json()['uuids']]
 
     def get_entity(self, uuid):
         return {

@@ -53,7 +53,8 @@ def login():
     # and can start the process of exchanging an auth code for a token.
     code = request.args.get('code')
     tokens = client.oauth2_exchange_code_for_tokens(code)
-    nexus_token = tokens['nexus.api.globus.org']['access_token']
+    # The repr is deceptive: Looks like a dict, but direct access not possible.
+    nexus_token = tokens.by_resource_server['nexus.api.globus.org']['access_token']
 
     session.update(
         nexus_token=nexus_token,
