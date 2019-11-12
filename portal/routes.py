@@ -1,6 +1,4 @@
-from flask import Blueprint, current_app, render_template, url_for, abort, request, redirect, session
-
-import globus_sdk
+from flask import Blueprint, render_template, abort
 
 from .api.client import ApiClient
 from .render import object_as_html
