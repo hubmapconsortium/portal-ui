@@ -28,15 +28,14 @@ def login():
          code from Globus Auth to exchange for tokens, encoded in a query
          param
     """
-    # the redirect URI, as a complete URI (not relative path)
+    # The redirect URI, as a complete URI (not relative path)
     redirect_uri = url_for('routes_auth.login', _external=True)
 
     client = load_app_client()
     client.oauth2_start_flow(redirect_uri)
 
     # If there's no "code" query string parameter, we're in this route
-    # starting a Globus Auth login flow.
-    # Redirect out to Globus Auth
+    # starting a Globus Auth login flow; Redirect out to Globus Auth:
     if 'code' not in request.args:
         auth_uri = client.oauth2_get_authorize_url()
         return redirect(auth_uri)
@@ -46,7 +45,6 @@ def login():
     code = request.args.get('code')
     tokens = client.oauth2_exchange_code_for_tokens(code)
 
-    # store the resulting tokens in the session
     session.update(
         tokens=tokens.by_resource_server,
         is_authenticated=True
@@ -71,21 +69,10 @@ def logout():
     # Destroy the session state
     session.clear()
 
-    # the return redirection location to give to Globus AUth
     redirect_uri = url_for('routes.index', _external=True)
-
-    # build the logout URI with query params
-    # there is no tool to help build this (yet!)
-    globus_logout_url = (
-        'https://auth.globus.org/v2/web/logout' +
-        '?client={}'.format(current_app.config['APP_CLIENT_ID']) +
-        '&redirect_uri={}'.format(redirect_uri) +
-        '&redirect_name=HuBMAP Portal')
     globus_logout_url = 'https://auth.globus.org/v2/web/logout?' + urlencode({
         'client': current_app.config['APP_CLIENT_ID'],
         'redirect_uri': redirect_uri,
         'redirect_name': 'HuBMAP Portal'
     })
-
-    # Redirect the user to the Globus Auth logout page
     return redirect(globus_logout_url)
