@@ -14,36 +14,26 @@ class ApiClient():
         self.url_base = url_base
         self.nexus_token = nexus_token
 
+    def _request(self, path):
+        headers = {'Authorization': 'Bearer ' + self.nexus_token}
+        response = requests.get(
+            f'{self.url_base}{path}',
+            headers=headers
+        )
+        return response.json()
+
     def get_entity_types(self):
         # NOTE: Not called right now, but tested by test_api.py.
         response = requests.get(f'{self.url_base}/entities')
         return response.json()['entity_types']
 
     def get_entities(self, type):
-        headers = {'Authorization': 'Bearer ' + self.nexus_token}
-        response = requests.get(
-            f'{self.url_base}/entities/types/{type}',
-            headers=headers
-        )
-        return [Entity(uuid, type) for uuid in response.json()['uuids']]
+        response = self._request(f'/entities/types/{type}')
+        return [Entity(uuid, type) for uuid in response['uuids']]
 
     def get_entity(self, uuid):
-        return {
-            'title': 'Entirely fake entity',
-            'date-published': '2020-01-01',
-            'authors': ['Austen, Jane', 'Basho', 'Carroll, Lewis'],
-            'Planets and Moons': [
-                {'planet': 'Earth', 'moons': ['Luna']},
-                {'planet': 'Mars', 'moons': ['Phobos', 'Deimos']},
-            ],
-            'credits': {'Catering': 'Clover', 'Dolly Grip': 'ABC', 'Gaffer': 'XYZ'},
-            'contributor_id': '1234',
-            'tmc': 'The best TMC!',
-            'project': 'The best project!',
-            'submission_date': '2001-01-01',
-            'internal_release_date': '2001-01-02',
-            'public_release_date': '2001-01-03',
-        }
+        response = self._request(f'/entities/{uuid}')
+        return response
 
     def get_contributor(self, id):
         return {

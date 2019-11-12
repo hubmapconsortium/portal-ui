@@ -11,6 +11,7 @@
 {% block content %}
   <div class="no-content">
     {% block details_base_content %}
+      {#
       <dl>
         <dt>Contributor</dt>
         <dd>{{ contributor['name'] }}, {{ contributor['affiliation'] }}</dd>
@@ -30,14 +31,18 @@
         <dt>Public release date</dt>
         <dd>{{ entity['public_release_date'] }}</dd>
       </dl>
+      #}
 
       {{ details_html|safe }}
 
+      {#
       <div id="prov-vis">Provenance placeholder</div>
+      #}
     {% endblock %}
   </div>
 {% endblock %}
 
+{#
 {% block extra_scripts %}
   <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/@hubmap/prov-vis@v0.0.1/umd/@hubmap/prov-vis.min.js"></script>
@@ -46,3 +51,4 @@
     hubmapProvVis.renderProvVis('prov-vis', {{ provenance|tojson }});
   </script>
 {% endblock %}
+#}
