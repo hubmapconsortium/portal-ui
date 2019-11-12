@@ -23,6 +23,10 @@
        href="{{ help_path }}">Help</a>
   </nav>
 
-  <a class="btn btn-outline-primary" href="{{ url_for('routes.login') }}">Login</a>
+  {% if is_authenticated %}
+    <a class="btn btn-outline-primary" href="{{ url_for('routes.logout') }}">Logout</a>
+  {% else %}
+    <a class="btn btn-outline-primary" href="{{ url_for('routes.login') }}">Login</a>
+  {% endif %}
 
 </div>
