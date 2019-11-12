@@ -1,6 +1,12 @@
+from urllib.parse import urlencode
+
 from flask import Blueprint, current_app, url_for, request, redirect, session
 
 import globus_sdk
+
+
+# This is mostly copy-and-paste from
+# https://globus-sdk-python.readthedocs.io/en/stable/examples/three_legged_oauth/
 
 
 blueprint = Blueprint('routes_auth', __name__, template_folder='templates')
@@ -34,18 +40,18 @@ def login():
     if 'code' not in request.args:
         auth_uri = client.oauth2_get_authorize_url()
         return redirect(auth_uri)
+
     # If we do have a "code" param, we're coming back from Globus Auth
     # and can start the process of exchanging an auth code for a token.
-    else:
-        code = request.args.get('code')
-        tokens = client.oauth2_exchange_code_for_tokens(code)
+    code = request.args.get('code')
+    tokens = client.oauth2_exchange_code_for_tokens(code)
 
-        # store the resulting tokens in the session
-        session.update(
-            tokens=tokens.by_resource_server,
-            is_authenticated=True
-        )
-        return redirect(url_for('routes.index'))
+    # store the resulting tokens in the session
+    session.update(
+        tokens=tokens.by_resource_server,
+        is_authenticated=True
+    )
+    return redirect(url_for('routes.index'))
 
 
 @blueprint.route('/logout')
@@ -75,6 +81,11 @@ def logout():
         '?client={}'.format(current_app.config['APP_CLIENT_ID']) +
         '&redirect_uri={}'.format(redirect_uri) +
         '&redirect_name=HuBMAP Portal')
+    globus_logout_url = 'https://auth.globus.org/v2/web/logout?' + urlencode({
+        'client': current_app.config['APP_CLIENT_ID'],
+        'redirect_uri': redirect_uri,
+        'redirect_name': 'HuBMAP Portal'
+    })
 
     # Redirect the user to the Globus Auth logout page
     return redirect(globus_logout_url)
