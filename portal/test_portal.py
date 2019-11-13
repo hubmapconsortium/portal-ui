@@ -3,7 +3,6 @@ import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
 
 import pytest
-# import requests
 
 import portal
 
@@ -40,14 +39,29 @@ def test_to_xml():
     assert to_xml(html) == xml
 
 
+def mock_get(path, **kwargs):
+    class MockResponse():
+        def json(self):
+            return {
+                # Any particular real response would only have one of these.
+                'entity_node': {
+                    'provenance_create_timestamp': '100000',
+                    'provenance_modified_timestamp': '100000',
+                },
+                'provenance_data': '{"agent": "", "prefix": {}}',
+                'uuids': []
+            }
+    return MockResponse()
+
+
 @pytest.mark.parametrize(
     'path',
     ['/', '/help']
     + [f'/browse/{t}' for t in types]
-    # + [f'/browse/{t}/fake-uuid' for t in types]
+    + [f'/browse/{t}/fake-uuid' for t in types]
 )
 def test_200_page(client, path, mocker):
-    mocker.patch('requests.get')
+    mocker.patch('requests.get', side_effect=mock_get)
     response = client.get(path)
     assert response.status == '200 OK'
     xml = to_xml(response.data.decode('utf8'))
