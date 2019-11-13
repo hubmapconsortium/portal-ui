@@ -34,11 +34,12 @@ def browse(type):
 def details(type, uuid):
     if type not in types:
         abort(404)
-    entity = _get_client().get_entity(uuid)
+    client = _get_client()
+    entity = client.get_entity(uuid)
     # contributor = client.get_contributor(entity['contributor_id'])
 
     details_html = object_as_html(entity)
-    # provenance = client.get_provenance(uuid)
+    provenance = client.get_provenance(uuid)
 
     # if type in {'file'}:  # TODO: As we have other specializations, add them here.
     #     template = f'pages/details/details_{type}.html'
@@ -49,7 +50,7 @@ def details(type, uuid):
         entity=entity,
         # contributor=contributor,
         details_html=details_html,
-        # provenance=provenance
+        provenance=provenance
     )
 
 

@@ -35,14 +35,11 @@
 
       {{ details_html|safe }}
 
-      {#
       <div id="prov-vis">Provenance placeholder</div>
-      #}
     {% endblock %}
   </div>
 {% endblock %}
 
-{#
 {% block extra_scripts %}
   <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/@hubmap/prov-vis@v0.0.1/umd/@hubmap/prov-vis.min.js"></script>
@@ -51,4 +48,3 @@
     hubmapProvVis.renderProvVis('prov-vis', {{ provenance|tojson }});
   </script>
 {% endblock %}
-#}

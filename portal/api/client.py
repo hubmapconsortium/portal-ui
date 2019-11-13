@@ -1,4 +1,5 @@
 from collections import namedtuple
+import json
 
 import requests
 
@@ -53,28 +54,14 @@ class ApiClient():
         # return response.json()['uuids']
 
     def get_provenance(self, uuid):
-        return {
-            'prefix': {'hubmap': 'https://hubmapconsortium.org'},
-            'entity': {
-                'ex:input': {'prov:label': 'bedfile'},
-                'ex:output': {'prov:label': 'beddbfile'},
-            },
-            'activity': {
-                'ex:run': {'prov:label': 'bedtobeddb'},
-            },
-            'wasGeneratedBy': {
-                '_:1': {
-                    'prov:activity': 'ex:run',
-                    'prov:entity': 'ex:output',
-                },
-            },
-            'used': {
-                '_:2': {
-                    'prov:activity': 'ex:run',
-                    'prov:entity': 'ex:input',
-                },
-            },
-        }
+        response = self._request(f'/entities/{uuid}/provenance')
+        provenance = json.loads(response['provenance_data'])
+
+        # TODO: These should not be needed with next update to NPM.
+        del provenance['agent']
+        provenance['prefix']['hubmap'] = 'https://hubmapconsortium.org'
+        
+        return provenance
 
 
 # TODO: More functions
