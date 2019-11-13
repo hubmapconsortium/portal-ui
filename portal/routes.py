@@ -42,10 +42,10 @@ def details(type, uuid):
     details_html = object_as_html(entity)
     provenance = client.get_provenance(uuid)
 
-    # if type in {'file'}:  # TODO: As we have other specializations, add them here.
-    #     template = f'pages/details/details_{type}.html'
-    # else:
-    template = f'pages/details/details_base.html'
+    if type in {'file'}:  # TODO: As we have other specializations, add them here.
+        template = f'pages/details/details_{type}.html'
+    else:
+        template = f'pages/details/details_base.html'
     return render_template(
         template, types=types, type=type, uuid=uuid,
         entity=entity,
