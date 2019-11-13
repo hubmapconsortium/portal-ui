@@ -37,7 +37,6 @@ def details(type, uuid):
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
-    # contributor = client.get_contributor(entity['contributor_id'])
 
     details_html = object_as_html(entity)
     provenance = client.get_provenance(uuid)
@@ -49,7 +48,6 @@ def details(type, uuid):
     return render_template(
         template, types=types, type=type, uuid=uuid,
         entity=entity,
-        # contributor=contributor,
         details_html=details_html,
         provenance=provenance
     )
