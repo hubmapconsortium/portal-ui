@@ -45,23 +45,6 @@ class ApiClient():
         entity['modified'] = _format_timestamp(entity['provenance_modified_timestamp'])
         return response['entity_node']
 
-    def get_contributor(self, id):
-        return {
-            'name': 'Santa Claus',
-            'affiliation': 'North Pole'
-        }
-
-    def get_donor_uuids(self, user=None):
-        pass
-        # TODO?:
-        # if user:
-        #     response = requests.get(
-        #         f'{self.url_base}/entities/donors/created-by/{quote_plus(user)}'
-        #     )
-        # else:
-        #     response = requests.get(f'{self.url_base}/entities/donors')
-        # return response.json()['uuids']
-
     def get_provenance(self, uuid):
         response = self._request(f'/entities/{uuid}/provenance')
         provenance = json.loads(response['provenance_data'])
