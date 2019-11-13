@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
 
 import pytest
-import requests
+# import requests
 
 import portal
 
@@ -44,7 +44,7 @@ def test_to_xml():
     'path',
     ['/', '/help']
     + [f'/browse/{t}' for t in types]
-    + [f'/browse/{t}/fake-uuid' for t in types]
+    # + [f'/browse/{t}/fake-uuid' for t in types]
 )
 def test_200_page(client, path, mocker):
     mocker.patch('requests.get')
