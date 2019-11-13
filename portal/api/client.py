@@ -1,5 +1,6 @@
 from collections import namedtuple
 import json
+from datetime import datetime
 
 import requests
 
@@ -9,6 +10,8 @@ import requests
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
+def _format_timestamp(ts):
+    return datetime.utcfromtimestamp(int(ts)/1000).strftime('%Y-%m-%d %H:%M:%S')
 
 class ApiClient():
     def __init__(self, url_base, nexus_token):
@@ -34,6 +37,10 @@ class ApiClient():
 
     def get_entity(self, uuid):
         response = self._request(f'/entities/{uuid}')
+        entity = response['entity_node']
+        # TODO: Move this into object
+        entity['created'] = _format_timestamp(entity['provenance_create_timestamp'])
+        entity['modified'] = _format_timestamp(entity['provenance_modified_timestamp'])
         return response['entity_node']
 
     def get_contributor(self, id):
@@ -60,7 +67,7 @@ class ApiClient():
         # TODO: These should not be needed with next update to NPM.
         del provenance['agent']
         provenance['prefix']['hubmap'] = 'https://hubmapconsortium.org'
-        
+
         return provenance
 
 
