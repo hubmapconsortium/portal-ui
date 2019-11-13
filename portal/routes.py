@@ -17,6 +17,7 @@ types = {
 def _get_client():
     return ApiClient(current_app.config['ENTITY_API_BASE'], session['nexus_token'])
 
+
 @blueprint.route('/')
 def index():
     return render_template('pages/index.html', types=types)
