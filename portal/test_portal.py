@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
 
 import pytest
+import requests
 
 import portal
 
@@ -14,6 +15,8 @@ def client():
     app = portal.create_app()
     app.config['TESTING'] = True
     with app.test_client() as client:
+        with client.session_transaction() as session:
+            session['nexus_token'] = '{}'
         with app.app_context():
             pass
             # Do any necessary initializations here.
@@ -43,7 +46,8 @@ def test_to_xml():
     + [f'/browse/{t}' for t in types]
     + [f'/browse/{t}/fake-uuid' for t in types]
 )
-def test_200_page(client, path):
+def test_200_page(client, path, mocker):
+    mocker.patch('requests.get')
     response = client.get(path)
     assert response.status == '200 OK'
     xml = to_xml(response.data.decode('utf8'))
