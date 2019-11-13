@@ -9,29 +9,24 @@
 {% endblock %}
 
 {% block content %}
-  <div class="no-content">
+  <div class="no-format">
     {% block details_base_content %}
-      {#
       <dl>
         <dt>Contributor</dt>
-        <dd>{{ contributor['name'] }}, {{ contributor['affiliation'] }}</dd>
+        <dd>{{ entity['provenance_user_displayname'] }}</dd>
 
-        <dt>TMC</dt>
-        <dd>{{ entity['tmc'] }}</dd>
+        <dt>Email</dt>
+        <dd>{{ entity['provenance_user_email'] }}</dd>
 
-        <dt>Project</dt>
-        <dd>{{ entity['project'] }}</dd>
+        <dt>Group</dt>
+        <dd>{{ entity['provenance_group_name'] }}</dd>
 
-        <dt>Submission date</dt>
-        <dd>{{ entity['submission_date'] }}</dd>
+        <dt>Created</dt>
+        <dd>{{ entity['provenance_create_timestamp'] }}</dd>
 
-        <dt>Internal release date</dt>
-        <dd>{{ entity['internal_release_date'] }}</dd>
-
-        <dt>Public release date</dt>
-        <dd>{{ entity['public_release_date'] }}</dd>
+        <dt>Modified</dt>
+        <dd>{{ entity['provenance_modified_timestamp'] }}</dd>
       </dl>
-      #}
 
       {{ details_html|safe }}
 
