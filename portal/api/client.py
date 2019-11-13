@@ -33,7 +33,7 @@ class ApiClient():
 
     def get_entity(self, uuid):
         response = self._request(f'/entities/{uuid}')
-        return response
+        return response['entity_node']
 
     def get_contributor(self, id):
         return {
