@@ -2,7 +2,8 @@
 
 ## in progress
 ### Added
-- Globus login/logout
+- Globus login/logout.
+- Hit the real API.
 
 ## [0.0.2](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.2) - 2019-10-30
 ### Added

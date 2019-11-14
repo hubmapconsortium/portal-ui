@@ -14,6 +14,8 @@ def client():
     app = portal.create_app()
     app.config['TESTING'] = True
     with app.test_client() as client:
+        with client.session_transaction() as session:
+            session['nexus_token'] = '{}'
         with app.app_context():
             pass
             # Do any necessary initializations here.
@@ -37,13 +39,29 @@ def test_to_xml():
     assert to_xml(html) == xml
 
 
+def mock_get(path, **kwargs):
+    class MockResponse():
+        def json(self):
+            return {
+                # Any particular real response would only have one of these.
+                'entity_node': {
+                    'provenance_create_timestamp': '100000',
+                    'provenance_modified_timestamp': '100000',
+                },
+                'provenance_data': '{"agent": "", "prefix": {}}',
+                'uuids': []
+            }
+    return MockResponse()
+
+
 @pytest.mark.parametrize(
     'path',
     ['/', '/help']
     + [f'/browse/{t}' for t in types]
     + [f'/browse/{t}/fake-uuid' for t in types]
 )
-def test_200_page(client, path):
+def test_200_page(client, path, mocker):
+    mocker.patch('requests.get', side_effect=mock_get)
     response = client.get(path)
     assert response.status == '200 OK'
     xml = to_xml(response.data.decode('utf8'))

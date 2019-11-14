@@ -9,8 +9,8 @@
   <table class="table table-bordered table-sm">
     {% for entity in entities %}
       <tr>
-        <td>{{ entity['type'] }}</td>
-        <td><a href="{{ url_for('routes.details', type=entity['type'], uuid=entity['uuid']) }}">{{ entity['uuid'] }}</a></td>
+        <td>{{ entity.uuid }}</td>
+        <td><a href="{{ url_for('routes.details', type=entity.type, uuid=entity.uuid) }}">{{ entity.name }}</a></td>
       </tr>
     {% endfor %}
   </table>

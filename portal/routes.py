@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, current_app, session
 
 from .api.client import ApiClient
 from .render import object_as_html
@@ -14,6 +14,10 @@ types = {
 }
 
 
+def _get_client():
+    return ApiClient(current_app.config['ENTITY_API_BASE'], session['nexus_token'])
+
+
 @blueprint.route('/')
 def index():
     return render_template('pages/index.html', types=types)
@@ -23,8 +27,7 @@ def index():
 def browse(type):
     if type not in types:
         abort(404)
-    client = ApiClient('TODO: base url from config')
-    entities = client.get_entities(type)
+    entities = _get_client().get_entities(type)
     return render_template('pages/browse.html', types=types, type=type, entities=entities)
 
 
@@ -32,10 +35,8 @@ def browse(type):
 def details(type, uuid):
     if type not in types:
         abort(404)
-    client = ApiClient('TODO: base url from config')
-
+    client = _get_client()
     entity = client.get_entity(uuid)
-    contributor = client.get_contributor(entity['contributor_id'])
 
     details_html = object_as_html(entity)
     provenance = client.get_provenance(uuid)
@@ -46,7 +47,7 @@ def details(type, uuid):
         template = f'pages/details/details_base.html'
     return render_template(
         template, types=types, type=type, uuid=uuid,
-        entity=entity, contributor=contributor,
+        entity=entity,
         details_html=details_html,
         provenance=provenance
     )

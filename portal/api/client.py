@@ -1,12 +1,32 @@
+from collections import namedtuple
+import json
+from datetime import datetime
+
 import requests
 
 # Hopefully soon, generate API client code from OpenAPI:
 # https://github.com/hubmapconsortium/hubmap-data-portal/issues/179
 
 
+Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
+
+
+def _format_timestamp(ts):
+    return datetime.utcfromtimestamp(int(ts) / 1000).strftime('%Y-%m-%d %H:%M:%S')
+
+
 class ApiClient():
-    def __init__(self, url_base):
+    def __init__(self, url_base, nexus_token):
         self.url_base = url_base
+        self.nexus_token = nexus_token
+
+    def _request(self, path):
+        headers = {'Authorization': 'Bearer ' + self.nexus_token}
+        response = requests.get(
+            f'{self.url_base}{path}',
+            headers=headers
+        )
+        return response.json()
 
     def get_entity_types(self):
         # NOTE: Not called right now, but tested by test_api.py.
@@ -14,79 +34,26 @@ class ApiClient():
         return response.json()['entity_types']
 
     def get_entities(self, type):
-        return [
-            {
-                'type': type,
-                'uuid': 'abc-123'
-            },
-            {
-                'type': type,
-                'uuid': 'ijk-345'
-            },
-            {
-                'type': type,
-                'uuid': 'xyz-789'
-            }
-        ]
+        response = self._request(f'/entities/types/{type}')
+        return [Entity(uuid, type) for uuid in response['uuids']]
 
     def get_entity(self, uuid):
-        return {
-            'title': 'Entirely fake entity',
-            'date-published': '2020-01-01',
-            'authors': ['Austen, Jane', 'Basho', 'Carroll, Lewis'],
-            'Planets and Moons': [
-                {'planet': 'Earth', 'moons': ['Luna']},
-                {'planet': 'Mars', 'moons': ['Phobos', 'Deimos']},
-            ],
-            'credits': {'Catering': 'Clover', 'Dolly Grip': 'ABC', 'Gaffer': 'XYZ'},
-            'contributor_id': '1234',
-            'tmc': 'The best TMC!',
-            'project': 'The best project!',
-            'submission_date': '2001-01-01',
-            'internal_release_date': '2001-01-02',
-            'public_release_date': '2001-01-03',
-        }
-
-    def get_contributor(self, id):
-        return {
-            'name': 'Santa Claus',
-            'affiliation': 'North Pole'
-        }
-
-    def get_donor_uuids(self, user=None):
-        pass
-        # TODO?:
-        # if user:
-        #     response = requests.get(
-        #         f'{self.url_base}/entities/donors/created-by/{quote_plus(user)}'
-        #     )
-        # else:
-        #     response = requests.get(f'{self.url_base}/entities/donors')
-        # return response.json()['uuids']
+        response = self._request(f'/entities/{uuid}')
+        entity = response['entity_node']
+        # TODO: Move this into object
+        entity['created'] = _format_timestamp(entity['provenance_create_timestamp'])
+        entity['modified'] = _format_timestamp(entity['provenance_modified_timestamp'])
+        return response['entity_node']
 
     def get_provenance(self, uuid):
-        return {
-            'prefix': {'hubmap': 'https://hubmapconsortium.org'},
-            'entity': {
-                'ex:input': {'prov:label': 'bedfile'},
-                'ex:output': {'prov:label': 'beddbfile'},
-            },
-            'activity': {
-                'ex:run': {'prov:label': 'bedtobeddb'},
-            },
-            'wasGeneratedBy': {
-                '_:1': {
-                    'prov:activity': 'ex:run',
-                    'prov:entity': 'ex:output',
-                },
-            },
-            'used': {
-                '_:2': {
-                    'prov:activity': 'ex:run',
-                    'prov:entity': 'ex:input',
-                },
-            },
-        }
+        response = self._request(f'/entities/{uuid}/provenance')
+        provenance = json.loads(response['provenance_data'])
+
+        # TODO: These should not be needed with next update to NPM.
+        del provenance['agent']
+        provenance['prefix']['hubmap'] = 'https://hubmapconsortium.org'
+
+        return provenance
 
 
 # TODO: More functions
