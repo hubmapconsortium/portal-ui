@@ -75,14 +75,13 @@ def logout():
     # Revoke the tokens with Globus Auth
     try:
         tokens = session['tokens']
-    except Exception as e:
+    except Exception:
         # TODO: After leaving it logged for several hours, my tokens had expired,
         # but I was still logged in. Is this the best fix?
         tokens = {}
     for token in (token_info['access_token']
                   for token_info in tokens.values()):
         client.oauth2_revoke_token(token)
-
 
     # Destroy the session state
     session.clear()
