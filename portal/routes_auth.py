@@ -77,7 +77,8 @@ def logout():
         tokens = session['tokens']
     except Exception:
         # TODO: After leaving it logged for several hours, my tokens had expired,
-        # but I was still logged in. Is this the best fix?
+        # but I was still logged in. Is this the best fix
+        # https://github.com/hubmapconsortium/portal-ui/issues/54
         tokens = {}
     for token in (token_info['access_token']
                   for token_info in tokens.values()):

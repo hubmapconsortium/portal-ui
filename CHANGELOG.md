@@ -2,7 +2,7 @@
 
 ## in progress
 ### Added
-- Globus login/logout.
+- Globus login/logout. Handle expired tokens.
 - Hit the real API.
 
 ## [0.0.2](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.2) - 2019-10-30
