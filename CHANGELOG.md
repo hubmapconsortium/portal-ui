@@ -4,6 +4,7 @@
 ### Added
 - Globus login/logout. Handle expired tokens.
 - Hit the real API.
+- Add a Vitessce hello-world to each details page.
 
 ## [0.0.2](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.2) - 2019-10-30
 ### Added
