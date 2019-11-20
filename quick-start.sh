@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit
 
-pip install -r requirements.txt > /dev/null
+pip install -r app/requirements.txt > /dev/null
 
 [ -d app/instance ] || \
   mkdir app/instance; cp example-app.conf app/instance/app.conf; \
