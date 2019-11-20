@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from flask import Flask, session
 
 from . import routes, routes_auth
@@ -16,3 +18,6 @@ def create_app():
         }
 
     return app
+
+
+app = create_app()
