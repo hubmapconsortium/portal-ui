@@ -4,7 +4,7 @@ set -o errexit
 IMAGE_NAME=hubmap:portal-ui
 CONTAINER_NAME=hubmap-portal-ui
 CONF_PATH=app/instance/app.conf
-PORT=8080
+PORT=5000
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
 docker build --tag $IMAGE_NAME .
