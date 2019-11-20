@@ -11,6 +11,7 @@ docker build --tag $IMAGE_NAME .
 docker run -d \
   --name $CONTAINER_NAME \
   -p $PORT:80 \
+  -e FLASK_ENV=development \
   --mount type=bind,source="$(pwd)"/"$CONF_PATH",target=/"$CONF_PATH" \
   $IMAGE_NAME
 
