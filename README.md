@@ -9,11 +9,8 @@ and visit [localhost:5000](http://localhost:5000).
 
 ## Docker
 The base image in the Dockerfile is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package). To build and run:
-```
-docker build --tag hubmap:portal-ui .
-docker run -d --name portal-ui -p 8080:80 hubmap:portal-ui
-docker logs portal-ui
-docker ps -qa | xargs docker rm
+```sh
+./docker.sh
 ```
 
 ## Contribute
