@@ -4,8 +4,17 @@ HuBMAP Data Portal front end
 ## Get started
 After checking out the project, cd-ing into it, and setting up a Python3 virtual environment,
 run [`quick-start.sh`](quick-start.sh),
-update `instance/app.conf` with the Globus client ID and client secret,
+update `app/instance/app.conf` with the Globus client ID and client secret,
 and visit [localhost:5000](http://localhost:5000).
+
+## Docker
+The base image in the Dockerfile is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package). To build and run:
+```
+docker build --tag hubmap:portal-ui .
+docker run -d --name portal-ui -p 8080:80 hubmap:portal-ui
+docker logs portal-ui
+docker ps -qa | xargs docker rm
+```
 
 ## Contribute
 Do your work in a feature branch from master. To run tests locally:
