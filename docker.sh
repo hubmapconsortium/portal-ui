@@ -7,7 +7,7 @@ CONF_PATH=app/instance/app.conf
 PORT=5000
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
-docker build --tag $IMAGE_NAME .
+docker build --tag $IMAGE_NAME app
 docker run -d \
   --name $CONTAINER_NAME \
   -p $PORT:80 \
