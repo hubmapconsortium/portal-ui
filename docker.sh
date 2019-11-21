@@ -5,7 +5,8 @@ die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
 IMAGE_NAME=hubmap:portal-ui
 CONTAINER_NAME=hubmap-portal-ui
-CONF_PATH=app/instance/app.conf
+CONTEXT=context
+CONF_PATH=$CONTEXT/instance/app.conf
 PORT=$1
 
 [ -z "$PORT" ] && die "Usage: $0 PORT
@@ -15,12 +16,12 @@ Copy example-app.conf and fill in blanks."
 
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
-docker build --tag $IMAGE_NAME app
+docker build --tag $IMAGE_NAME $CONTEXT
 docker run -d \
   --name $CONTAINER_NAME \
   -p $PORT:80 \
   -e FLASK_ENV=development \
-  --mount type=bind,source="$(pwd)"/"$CONF_PATH",target=/"$CONF_PATH" \
+  --mount type=bind,source="$(pwd)"/"$CONF_PATH",target=/app/instance/app.conf \
   $IMAGE_NAME
 
 echo
