@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 set -o errexit
 
+die() { set +v; echo "$*" 1>&2 ; exit 1; }
+
 IMAGE_NAME=hubmap:portal-ui
 CONTAINER_NAME=hubmap-portal-ui
 CONF_PATH=app/instance/app.conf
 PORT=5000
+
+[ -e $CONF_PATH ] || die "No $CONF_PATH: Copy example-app.conf and fill in blanks."
+
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
 docker build --tag $IMAGE_NAME app
