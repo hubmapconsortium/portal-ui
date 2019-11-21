@@ -24,9 +24,12 @@ docker run -d \
   --mount type=bind,source="$(pwd)"/"$CONF_PATH",target=/app/instance/app.conf \
   $IMAGE_NAME
 
-echo
+green=`tput setaf 2`
+reset=`tput sgr0`
+
+echo $green
 echo "To visit:   http://localhost:$PORT/"
 echo "To connect: docker exec -it $CONTAINER_NAME /bin/bash"
-echo
+echo $reset
 
 docker logs --follow $CONTAINER_NAME
