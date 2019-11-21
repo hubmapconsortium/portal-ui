@@ -4,14 +4,13 @@ from xml.etree.ElementTree import ParseError
 
 import pytest
 
-import portal
-
+from .main import create_app
 from .routes import types
 
 
 @pytest.fixture
 def client():
-    app = portal.create_app()
+    app = create_app()
     app.config['TESTING'] = True
     with app.test_client() as client:
         with client.session_transaction() as session:

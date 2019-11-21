@@ -1,6 +1,6 @@
 import requests
 
-from portal.api.client import ApiClient, _format_timestamp
+from .client import ApiClient, _format_timestamp
 
 
 def test_api_get_entity_types(mocker):
