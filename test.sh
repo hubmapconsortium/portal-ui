@@ -30,9 +30,13 @@ start pytest
 pytest -vv
 end pytest
 
-start docker
-./docker.sh 5001
-end docker
+if [ -z "TRAVIS_PULL_REQUEST_BRANCH" ]; then
+  echo 'To save time, skip docker until PR.'
+else
+  start docker
+  ./docker.sh 5001
+  end docker
+fi
 
 start changelog
 diff CHANGELOG.md <(curl https://raw.githubusercontent.com/hubmapconsortium/portal-ui/master/CHANGELOG.md) \
