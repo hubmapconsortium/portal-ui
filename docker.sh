@@ -8,8 +8,9 @@ CONTAINER_NAME=hubmap-portal-ui
 CONTEXT=context
 CONF_PATH=$CONTEXT/instance/app.conf
 PORT=$1
+FOLLOW=$2
 
-[ -z "$PORT" ] && die "Usage: $0 PORT
+[ -z "$PORT" ] && die "Usage: $0 PORT [--follow]
 Requires port number."
 [ -e "$CONF_PATH" ] || die "No $CONF_PATH
 Copy example-app.conf and fill in blanks."
@@ -32,4 +33,7 @@ echo "To visit:   http://localhost:$PORT/"
 echo "To connect: docker exec -it $CONTAINER_NAME /bin/bash"
 echo $reset
 
-docker logs --follow $CONTAINER_NAME
+if [ "$FOLLOW" == "--follow" ]; then
+  docker logs --follow $CONTAINER_NAME
+  # This continues to run.
+fi
