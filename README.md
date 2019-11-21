@@ -10,7 +10,7 @@ and visit [localhost:5000](http://localhost:5000).
 ## Docker
 The base image in the Dockerfile is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package). To build and run:
 ```sh
-./docker.sh 5000
+./docker.sh 5000 --follow
 ```
 
 ## Contribute

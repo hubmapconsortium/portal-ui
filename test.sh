@@ -22,13 +22,21 @@ end quick-start
 
 start flake8
 # Unit tests require dev dependencies beyond what quick-start provides.
-pip install -r app/requirements-dev.txt > /dev/null
+pip install -r context/requirements-dev.txt > /dev/null
 flake8 || die 'Try "autopep8 --in-place --aggressive -r ."'
 end flake8
 
 start pytest
 pytest -vv
 end pytest
+
+if [ -z "TRAVIS_PULL_REQUEST_BRANCH" ]; then
+  echo 'To save time, skip docker until PR.'
+else
+  start docker
+  ./docker.sh 5001
+  end docker
+fi
 
 start changelog
 diff CHANGELOG.md <(curl https://raw.githubusercontent.com/hubmapconsortium/portal-ui/master/CHANGELOG.md) \
