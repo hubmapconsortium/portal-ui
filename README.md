@@ -10,28 +10,12 @@ and visit [localhost:5000](http://localhost:5000).
 ## Docker
 The base image in the Dockerfile is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package). To build and run:
 ```sh
-./docker.sh 5000 --follow
+./docker.sh 5001 --follow
 ```
-
-## Contribute
-Do your work in a feature branch from master. To run tests locally:
-```sh
-pip install -r requirements-dev.txt
-./test.sh
-```
-When you're ready, make a PR on github.
 
 ## Tag and release
-Git tags are used to pin versions for Docker builds.
-First, checkout and pull the latest `master`.
+To tag a new version for github and [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
+increment `VERSION` and run:
 ```sh
-git checkout master
-git pull
-```
-Double check that this version of the code works,
-and that [`CHANGELOG.md`](CHANGELOG.md) is up to date.
-Then create a tag, and push:
-```sh
-git tag v0.0.x
-git push origin --tags
+./push.sh
 ```
