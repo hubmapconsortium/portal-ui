@@ -7,7 +7,15 @@
 {% endblock %}
 
 {% block title %}
-  <h1>{% block title_text %}{{ entity['description'] }}{% endblock %}</h1>
+  <div class="row">
+    <div class="col">
+      <h1>{% block title_text %}{{ entity['description'] }}{% endblock %}</h1>
+    </div>
+    <div class="col">
+      <div>Type: {{ type }}</div>
+      <h2>{{ entity['display_doi'] }}</h2>
+    </div>
+  </div>
 {% endblock %}
 
 {% block content %}
@@ -33,7 +41,7 @@
         </dl>
       </div>
     </div>
-    
+
     {{ details_html|safe }}
 
     <div id="prov-vis">Provenance placeholder</div>
