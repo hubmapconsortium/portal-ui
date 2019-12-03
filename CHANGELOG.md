@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.0.4
+## 0.0.4 - In progress
 ### Added
 - Globus login/logout. Handle expired tokens.
 - Hit the real API.

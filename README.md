@@ -3,8 +3,9 @@ HuBMAP Data Portal front end
 
 ## Get started
 After checking out the project, cd-ing into it, and setting up a Python3 virtual environment,
-run [`quick-start.sh`](quick-start.sh),
-update `app/instance/app.conf` with the Globus client ID and client secret,
+run `quick-start.sh`,
+update `app.conf` with the Globus client ID and client secret,
+run `quick-start.sh` again,
 and visit [localhost:5000](http://localhost:5000).
 
 ## Docker
