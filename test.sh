@@ -6,8 +6,10 @@ end() { echo travis_fold':'end:$1; }
 die() { set +v; echo "$*" 1>&2 ; sleep 1; exit 1; }
 
 start quick-start
-./quick-start.sh &
-PID=$!
+if [ ! -z "$TRAVIS" ]; then
+  ./quick-start.sh || sed -i 's/TODO/FAKE/' context/instance/app.conf
+  ./quick-start.sh &
+fi
 TRIES=0
 MAX_TRIES=5
 until curl --silent --fail http://localhost:5000; do
@@ -16,7 +18,6 @@ until curl --silent --fail http://localhost:5000; do
   sleep 1
   TRIES=$(($TRIES+1))
 done
-kill -9 $PID # Unit tests should not depend on running server.
 echo 'Server starts up, and homepage returns 200.'
 end quick-start
 
