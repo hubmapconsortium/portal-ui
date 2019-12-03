@@ -11,28 +11,34 @@
 {% endblock %}
 
 {% block content %}
-  <div class="no-format">
-    {% block details_base_content %}
-      <dl>
-        <dt>Contributor</dt>
-        <dd>{{ entity['provenance_user_displayname'] }} ({{ entity['provenance_user_email'] }})</dd>
+  {% block details_base_content %}
+    <div class="row">
+      <div class="col">
+        <dl>
+          <dt>Contributor</dt>
+          <dd>{{ entity['provenance_user_displayname'] }} ({{ entity['provenance_user_email'] }})</dd>
 
-        <dt>Group</dt>
-        <dd>{{ entity['provenance_group_name'] }}</dd>
+          <dt>Group</dt>
+          <dd>{{ entity['provenance_group_name'] }}</dd>
+        </dl>
+      </div>
 
-        <dt>Created</dt>
-        <dd>{{ entity['created'] }}</dd>
+      <div class="col">
+        <dl>
+          <dt>Created</dt>
+          <dd>{{ entity['created'] }}</dd>
 
-        <dt>Modified</dt>
-        <dd>{{ entity['modified'] }}</dd>
-      </dl>
+          <dt>Modified</dt>
+          <dd>{{ entity['modified'] }}</dd>
+        </dl>
+      </div>
+    </div>
+    
+    {{ details_html|safe }}
 
-      {{ details_html|safe }}
-
-      <div id="prov-vis">Provenance placeholder</div>
-      <div id="vitessce">Vitessce placeholder</div>
-    {% endblock %}
-  </div>
+    <div id="prov-vis">Provenance placeholder</div>
+    <div id="vitessce">Vitessce placeholder</div>
+  {% endblock %}
 {% endblock %}
 
 {% block extra_scripts %}
