@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block title %}
-  <h1 class="no-content">{% block title_text %}Details {{ type }}{% endblock %}</h1>
+  <h1>{% block title_text %}{{ entity['description'] }}{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -15,10 +15,7 @@
     {% block details_base_content %}
       <dl>
         <dt>Contributor</dt>
-        <dd>{{ entity['provenance_user_displayname'] }}</dd>
-
-        <dt>Email</dt>
-        <dd>{{ entity['provenance_user_email'] }}</dd>
+        <dd>{{ entity['provenance_user_displayname'] }} ({{ entity['provenance_user_email'] }})</dd>
 
         <dt>Group</dt>
         <dd>{{ entity['provenance_group_name'] }}</dd>
