@@ -1,6 +1,6 @@
 import re
 from glob import glob
-from os.path import realpath, dirname
+from os.path import dirname
 
 from flask import Blueprint, render_template, request
 import mistune
@@ -8,6 +8,7 @@ import mistune
 from .config import types
 
 blueprint = Blueprint('routes_markdown', __name__, template_folder='templates')
+
 
 def title_from_md(md):
     return re.search(r'^#+\s+(\S.*)', md, re.MULTILINE)[1]
@@ -18,7 +19,12 @@ def markdown_view():
         content_md = md_file.read()
     title = title_from_md(content_md)
     content_html = mistune.markdown(content_md)
-    return render_template('pages/markdown.html', types=types, title=title, content_html=content_html)
+    return render_template(
+        'pages/markdown.html',
+        types=types,
+        title=title,
+        content_html=content_html
+    )
 
 
 app_dir = dirname(__file__)
