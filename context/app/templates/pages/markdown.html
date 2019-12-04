@@ -1,8 +1,8 @@
 {% extends 'pages/base.html' %}
 
-{% block title %}
-  <h1>{% block title_text %}{{ title }}{% endblock %}</h1>
-{% endblock %}
+{% block title_text %}{{ title }}{% endblock %}
+
+{% block title %}<!-- Title, if any, is in content_html. -->{% endblock %}
 
 {% block content %}
 {{ content_html|safe }}
