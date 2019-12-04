@@ -45,8 +45,3 @@ def details(type, uuid):
         details_html=details_html,
         provenance=provenance
     )
-
-
-@blueprint.route('/help')
-def help():
-    return render_template('pages/help.html', types=types)

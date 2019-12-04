@@ -18,7 +18,7 @@
       {% endif %}
     {% endfor %}
 
-    {% set help_path = url_for('routes.help') %}
+    {% set help_path = '/help' %}
     <a class="{{ default_class }} {{ active_class if request.path == help_path else '' }}"
        href="{{ help_path }}">Help</a>
   </nav>

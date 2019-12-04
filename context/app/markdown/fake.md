@@ -1,3 +1,0 @@
-# Howdy!
-
-*Content!*
