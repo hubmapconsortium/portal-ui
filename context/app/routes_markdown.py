@@ -10,14 +10,14 @@ from .config import types
 blueprint = Blueprint('routes_markdown', __name__, template_folder='templates')
 
 
-def title_from_md(md):
-    return re.search(r'^#+\s+(\S.*)', md, re.MULTILINE)[1]
+def _title_from_md(md):
+    return re.search(r'^#+\s(.*)', md, re.MULTILINE)[1].strip()
 
 
 def markdown_view():
     with open(dirname(__file__) + '/markdown/' + request.path + '.md') as md_file:
         content_md = md_file.read()
-    title = title_from_md(content_md)
+    title = _title_from_md(content_md)
     content_html = mistune.markdown(content_md)
     return render_template(
         'pages/markdown.html',
