@@ -2,16 +2,10 @@ from flask import Blueprint, render_template, abort, current_app, session
 
 from .api.client import ApiClient
 from .render import object_as_html
+from .config import types
 
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
-
-types = {
-    'donor': {'display_name': 'Donors', 'in_header': True},
-    'sample': {'display_name': 'Samples', 'in_header': True},
-    'dataset': {'display_name': 'Datasets', 'in_header': True},
-    'file': {'display_name': 'Files', 'in_header': False}
-}
 
 
 def _get_client():
