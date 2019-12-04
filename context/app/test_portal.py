@@ -5,7 +5,7 @@ from xml.etree.ElementTree import ParseError
 import pytest
 
 from .main import create_app
-from .routes import types
+from .config import types
 
 
 @pytest.fixture

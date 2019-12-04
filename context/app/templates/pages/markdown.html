@@ -1,0 +1,9 @@
+{% extends 'pages/base.html' %}
+
+{% block title_text %}{{ title }}{% endblock %}
+
+{% block title %}<!-- Title, if any, is in content_html. -->{% endblock %}
+
+{% block content %}
+{{ content_html|safe }}
+{% endblock %}
