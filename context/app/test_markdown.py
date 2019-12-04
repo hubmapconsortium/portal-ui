@@ -1,5 +1,3 @@
-import pytest
-
 from .routes_markdown import _title_from_md
 
 
