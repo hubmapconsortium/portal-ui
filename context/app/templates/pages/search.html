@@ -1,5 +1,9 @@
 {% extends 'pages/base.html' %}
 
+{% block extra_stylesheets %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/searchkit/2.0.0/theme.css">
+{% endblock %}
+
 {% block title %}
   <h1 class="no-content">{% block title_text %}Search{% endblock %}</h1>
 {% endblock %}
