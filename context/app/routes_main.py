@@ -54,6 +54,7 @@ def details(type, uuid):
         provenance=provenance
     )
 
+
 @blueprint.route('/search')
 def search():
     return render_template('pages/search.html', types=types)

@@ -61,30 +61,30 @@ class ApiClient():
     def get_provenance(self, uuid):
         if self.is_mock:
             return {
-              'prefix': {
-                'ex': 'http://example.com#',
-                'prov': 'http://www.w3.org/ns/prov#',
-                'hubmap': 'https://hubmapconsortium.org'
-              },
-              'entity': {
-                'ex:input': { 'prov:label': 'Input', 'ex:note': 'Begins here...' },
-                'ex:output': { 'prov:label': 'Output', 'ex:note': '... and ends here.' },
-              },
-              'activity': {
-                'ex:process': { 'prov:label': 'Process' },
-              },
-              'wasGeneratedBy': {
-                '_:1': {
-                  'prov:activity': 'ex:process',
-                  'prov:entity': 'ex:output',
+                'prefix': {
+                    'ex': 'http://example.com#',
+                    'prov': 'http://www.w3.org/ns/prov#',
+                    'hubmap': 'https://hubmapconsortium.org'
                 },
-              },
-              'used': {
-                '_:2': {
-                  'prov:activity': 'ex:process',
-                  'prov:entity': 'ex:input',
+                'entity': {
+                    'ex:input': {'prov:label': 'Input', 'ex:note': 'Begins here...'},
+                    'ex:output': {'prov:label': 'Output', 'ex:note': '... and ends here.'},
                 },
-              },
+                'activity': {
+                    'ex:process': {'prov:label': 'Process'},
+                },
+                'wasGeneratedBy': {
+                    '_:1': {
+                        'prov:activity': 'ex:process',
+                        'prov:entity': 'ex:output',
+                    },
+                },
+                'used': {
+                    '_:2': {
+                        'prov:activity': 'ex:process',
+                        'prov:entity': 'ex:input',
+                    },
+                },
             }
         response = self._request(f'/entities/{uuid}/provenance')
         provenance = json.loads(response['provenance_data'])
