@@ -4,6 +4,10 @@
 ### Added
 - Format details page headers.
 - Support markdown pages.
+- Add Searchkit.
+- Config option to use mock API responses.
+### Removed
+- Removed "TODO" styles, for now.
 
 ## [0.0.4](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.4) - 2019-11-22
 ### Added
