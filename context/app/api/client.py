@@ -16,9 +16,10 @@ def _format_timestamp(ts):
 
 
 class ApiClient():
-    def __init__(self, url_base, nexus_token):
+    def __init__(self, url_base, nexus_token, mock=False):
         self.url_base = url_base
         self.nexus_token = nexus_token
+        self.mock = mock
 
     def _request(self, path):
         headers = {'Authorization': 'Bearer ' + self.nexus_token}
@@ -34,10 +35,22 @@ class ApiClient():
         return response.json()['entity_types']
 
     def get_entities(self, type):
+        if self.mock:
+            return [Entity(uuid, type) for uuid in range(10)]
         response = self._request(f'/entities/types/{type}')
         return [Entity(uuid, type) for uuid in response['uuids']]
 
     def get_entity(self, uuid):
+        if self.mock:
+            return {
+                'created': '2020-01-01 00:00:00',
+                'modified': '2020-01-01 00:00:00',
+                'provenance_user_displayname': 'Chuck McCallum',
+                'provenance_user_email': 'mccalluc@example.com',
+                'provenance_group_name': 'Mock Group',
+                'display_doi': 'abcd-1234',
+                'description': 'Mock Entity'
+            }
         response = self._request(f'/entities/{uuid}')
         entity = response['entity_node']
         # TODO: Move this into object
@@ -46,6 +59,10 @@ class ApiClient():
         return response['entity_node']
 
     def get_provenance(self, uuid):
+        if self.mock:
+            return {
+
+            }
         response = self._request(f'/entities/{uuid}/provenance')
         provenance = json.loads(response['provenance_data'])
 
