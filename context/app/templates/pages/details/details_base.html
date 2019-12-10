@@ -2,7 +2,7 @@
 
 {% block extra_stylesheets %}
   <link rel="stylesheet" href="https://unpkg.com/@hms-dbmi-bgm/react-workflow-viz@0.1.0/dist/react-workflow-viz.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/vitessce@0.0.18/umd/main.84366ff2.css">
+  <link rel="stylesheet" href="https://unpkg.com/vitessce@0.0.19/umd/main.css">
 
 {% endblock %}
 
@@ -52,7 +52,7 @@
 {% block extra_scripts %}
   <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/@hubmap/prov-vis@v0.0.1/umd/@hubmap/prov-vis.min.js"></script>
-  <script src="https://unpkg.com/vitessce@0.0.18/umd/vitessce.min.js"></script>
+  <script src="https://unpkg.com/vitessce@0.0.19/umd/vitessce.min.js"></script>
 
   <script>
     hubmapProvVis.renderProvVis('prov-vis', {{ provenance|tojson }});

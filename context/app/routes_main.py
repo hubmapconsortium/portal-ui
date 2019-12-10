@@ -9,7 +9,15 @@ blueprint = Blueprint('routes', __name__, template_folder='templates')
 
 
 def _get_client():
-    return ApiClient(current_app.config['ENTITY_API_BASE'], session['nexus_token'])
+    try:
+        is_mock = current_app.config['IS_MOCK']
+    except KeyError:
+        is_mock = False
+    return ApiClient(
+        current_app.config['ENTITY_API_BASE'],
+        session['nexus_token'],
+        is_mock=is_mock
+    )
 
 
 @blueprint.route('/')
@@ -45,3 +53,8 @@ def details(type, uuid):
         details_html=details_html,
         provenance=provenance
     )
+
+
+@blueprint.route('/search')
+def search():
+    return render_template('pages/search.html', types=types)
