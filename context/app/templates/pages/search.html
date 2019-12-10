@@ -1,0 +1,58 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}
+  <h1 class="no-content">{% block title_text %}Search{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div id="search"></div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/@hubmap/portal-search@v0.0.2/umd/@hubmap/portal-search.min.js"></script>
+
+  <script>
+    hubmapPortalSearch.renderSearch(
+      // ID of element to replace with search component:
+      'search',
+      {
+        // Elasticsearch instance to hit with queries:
+        apiUrl: 'http://demo.searchkit.co/api/movies/',
+        // Fields to search, and whether they have extra weight:
+        prefixQueryFields: ['actors^1','type^2','languages','title^10'],
+        // Prefix for details links:
+        detailsUrlPrefix: 'https://www.imdb.com/title/',
+        // Search results field which will be appended to detailsUrlPrefix:
+        idField: 'imdbId',
+        // Search results fields to display in table:
+        resultFields: ['title', 'actors'],
+        // Default hitsPerPage is 10:
+        hitsPerPage: 5,
+        // Sidebar facet configuration;
+        // "type" should be one of the filters described here:
+        // http://docs.searchkit.co/stable/components/navigation/
+        filters: [
+          {
+            type: 'HierarchicalMenuFilter',
+            props: {
+              id: 'categories',
+              fields: ['type.raw', 'genres.raw'],
+              title: 'Categories',
+            },
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
+              id: 'actors',
+              title: 'Actors',
+              field: 'actors.raw',
+              operator: 'AND',
+              size: 10
+            },
+          }
+        ]
+      }
+    );
+  </script>
+{% endblock %}

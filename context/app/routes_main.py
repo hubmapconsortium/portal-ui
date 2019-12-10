@@ -53,3 +53,7 @@ def details(type, uuid):
         details_html=details_html,
         provenance=provenance
     )
+
+@blueprint.route('/search')
+def search():
+    return render_template('pages/search.html', types=types)
