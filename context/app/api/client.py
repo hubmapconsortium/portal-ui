@@ -16,10 +16,10 @@ def _format_timestamp(ts):
 
 
 class ApiClient():
-    def __init__(self, url_base, nexus_token, mock=False):
+    def __init__(self, url_base, nexus_token, is_mock=False):
         self.url_base = url_base
         self.nexus_token = nexus_token
-        self.mock = mock
+        self.is_mock = is_mock
 
     def _request(self, path):
         headers = {'Authorization': 'Bearer ' + self.nexus_token}
@@ -35,13 +35,13 @@ class ApiClient():
         return response.json()['entity_types']
 
     def get_entities(self, type):
-        if self.mock:
+        if self.is_mock:
             return [Entity(uuid, type) for uuid in range(10)]
         response = self._request(f'/entities/types/{type}')
         return [Entity(uuid, type) for uuid in response['uuids']]
 
     def get_entity(self, uuid):
-        if self.mock:
+        if self.is_mock:
             return {
                 'created': '2020-01-01 00:00:00',
                 'modified': '2020-01-01 00:00:00',
@@ -59,7 +59,7 @@ class ApiClient():
         return response['entity_node']
 
     def get_provenance(self, uuid):
-        if self.mock:
+        if self.is_mock:
             return {
               'prefix': {
                 'ex': 'http://example.com#',

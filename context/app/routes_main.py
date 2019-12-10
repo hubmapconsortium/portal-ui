@@ -9,7 +9,15 @@ blueprint = Blueprint('routes', __name__, template_folder='templates')
 
 
 def _get_client():
-    return ApiClient(current_app.config['ENTITY_API_BASE'], session['nexus_token'], mock=True)
+    try:
+        is_mock = current_app.config['IS_MOCK']
+    except KeyError:
+        is_mock = False
+    return ApiClient(
+        current_app.config['ENTITY_API_BASE'],
+        session['nexus_token'],
+        is_mock=is_mock
+    )
 
 
 @blueprint.route('/')
