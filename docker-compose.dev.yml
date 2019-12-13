@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  
+  portal-ui:
+    build: ./context
+    # Build the image with name and tag
+    image: portal-ui:1.0
+    hostname: portal-ui
+    container_name: portal-ui
+    # Map host machine port 8686 to container port 80
+    ports:
+      - "8686:80"
+    volumes:
+      # Mount the app config to container in order to keep it outside of the image
+      - "./context/instance/app.conf:/app/instance/app.conf"
+    networks:
+      - hubmap
+
+networks:
+  hubmap:
