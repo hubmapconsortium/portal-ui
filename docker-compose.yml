@@ -8,18 +8,15 @@ services:
     image: portal-ui:1.0
     hostname: portal-ui
     container_name: portal-ui
-    networks:
-      - gateway_hubmap
     # Avoid accidentally creating zombie processes
     init: true
     # Specifying a restart policy to avoid downtime
     restart: always
-    # Map host machine port 8686to container port 80
-    ports:
-      - "8686:80"
     volumes:
       # Mount the app config to container in order to keep it outside of the image
       - "./context/instance/app.conf:/app/instance/app.conf"
+    networks:
+      - gateway_hubmap
 
 networks:
   # This is the network created by gateway to enable communicaton between multiple docker-compose projects
