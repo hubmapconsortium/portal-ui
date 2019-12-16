@@ -7,11 +7,13 @@ from .render import object_as_html
 
 
 io_pairs = [
-    ({'a': 1}, '''
+    ({'protocol': 'no-validity-check'}, '''
 <table>
   <tr>
-    <td>a</td>
-    <td>1</td>
+    <td>protocol</td>
+    <td>
+      <a href="no-validity-check">no-validity-check</a>
+    </td>
   </tr>
 </table>
 '''),
