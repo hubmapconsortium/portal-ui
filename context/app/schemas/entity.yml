@@ -4,4 +4,5 @@ title: portal-ui entity validation
 type: object
 properties:
   protocol:
-    type: number # TODO: String, http or https
+    type: string
+    pattern: '^https?://'
