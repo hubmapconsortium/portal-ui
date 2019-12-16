@@ -1,11 +1,12 @@
 {% with messages = get_flashed_messages() %}
   {% if messages %}
-    <section class="no-content">
+    <div class="alert alert-warning" role="alert">
+      <h4 class="alert-heading">Warning!</h4>
       <ul>
         {% for message in messages %}
           <li>{{ message }}</li>
         {% endfor %}
       </ul>
-    </section>
+    </div>
   {% endif %}
 {% endwith %}
