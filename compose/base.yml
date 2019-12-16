@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+
+  portal-ui:
+    image: hubmap/portal-ui:v0.0.4
+    hostname: portal-ui
+    container_name: portal-ui
+    volumes:
+      # Mount the app config to container in order to keep it outside of the image
+      - "./context/instance/app.conf:/app/instance/app.conf"

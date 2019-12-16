@@ -1,6 +1,6 @@
 # Docker Compose
 
-We first need to [install docker compose](https://docs.docker.com/compose/install/).
+We first need to [install Docker Compose](https://docs.docker.com/compose/install/).
 
 To start up the container with Dicker Compose:
 
