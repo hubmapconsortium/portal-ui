@@ -3,7 +3,7 @@ import re
 import pytest
 from yattag import indent
 
-from .render import object_as_html
+from .render_utils import object_as_html
 
 
 io_pairs = [

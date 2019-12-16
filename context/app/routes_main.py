@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, abort, current_app, session
 
 from .api.client import ApiClient
-from .render import object_as_html
+from .render_utils import object_as_html
 from .config import types
 
 
