@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+
+  portal-ui:
+    # Avoid accidentally creating zombie processes
+    init: true
+    # Specifying a restart policy to avoid downtime
+    restart: always
+    networks:
+      - gateway_hubmap
+
+networks:
+  # This is the network created by gateway to enable communicaton between multiple docker-compose projects
+  gateway_hubmap:
+    external: true

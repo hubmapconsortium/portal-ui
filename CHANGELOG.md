@@ -6,6 +6,7 @@
 - Support markdown pages.
 - Add Searchkit.
 - Config option to use mock API responses.
+- Docker compose configuration.
 ### Removed
 - Removed "TODO" styles, for now.
 

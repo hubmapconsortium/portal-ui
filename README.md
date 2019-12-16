@@ -8,6 +8,9 @@ To build and run:
 ```
 You will need globus keys to login to the demo. The base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
 
+Docker compose configurations for testing and production environments
+are also [checked in](compose/).
+
 ## Development
 After checking out the project, cd-ing into it, and setting up a Python3 virtual environment,
 run `quick-start.sh`,
@@ -32,4 +35,3 @@ Javascript / React UI components:
 Preprocessing:
 - [`portal-containers`](https://github.com/hubmapconsortium/portal-containers): Docker containers for visualization preprocessing.
 - [`airflow-dev`](https://github.com/hubmapconsortium/airflow-dev): CWL pipelines wrapping those Docker containers.
-

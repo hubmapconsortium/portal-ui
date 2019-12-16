@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+
+  portal-ui:
+    ports:
+      - "8686:80"
+    networks:
+      - hubmap
+
+networks:
+  hubmap:
