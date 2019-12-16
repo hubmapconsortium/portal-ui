@@ -1,11 +1,9 @@
 version: "3.7"
 
 services:
-  
+
   portal-ui:
-    build: ./context
-    # Build the image with name and tag
-    image: portal-ui:1.0
+    image: hubmap/portal-ui:v0.0.4
     hostname: portal-ui
     container_name: portal-ui
     # Avoid accidentally creating zombie processes
