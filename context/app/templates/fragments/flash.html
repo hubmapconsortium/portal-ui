@@ -1,10 +1,18 @@
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
+{% with errors = get_flashed_messages() %}
+  {% if errors %}
     <div class="alert alert-warning" role="alert">
       <h4 class="alert-heading">Warning!</h4>
       <ul>
-        {% for message in messages %}
-          <li>{{ message }}</li>
+        {% for error in errors %}
+          <li>
+            {{ error.message }};
+            <!-- Details: {{ error.__str__().replace('->', '=>') | safe }} -->
+            {% if "does not match '^https?://'" in error.message %}
+              <a href="https://github.com/hubmapconsortium/entity-api/issues/18">
+                Known issue.
+              </a>
+            {% endif %}
+          </li>
         {% endfor %}
       </ul>
     </div>
