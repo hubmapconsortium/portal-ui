@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.6 - in progress
+### Added
+- Make protocols.io links work.
+
 ## [v0.0.5](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.5) - 2019-12-16
 ### Added
 - Format details page headers.
