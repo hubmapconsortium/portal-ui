@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, current_app, session
+from flask import Blueprint, render_template, abort, current_app, session, flash
 
 from .api.client import ApiClient
 from .render_utils import object_as_html
@@ -39,6 +39,7 @@ def details(type, uuid):
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
+    flash('woah!')
 
     details_html = object_as_html(entity)
     provenance = client.get_provenance(uuid)

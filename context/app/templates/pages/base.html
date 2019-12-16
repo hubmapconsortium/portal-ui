@@ -20,20 +20,8 @@
     <div class="container-fluid">
       <div class="row p-2">
         <div class="col">
+          {% include 'fragments/flash.html' %}
           {% block title %}{% endblock %}
-
-          {% with messages = get_flashed_messages() %}
-            {% if messages %}
-              <section class="no-content">
-                <ul>
-                  {% for message in messages %}
-                    <li>{{ message }}</li>
-                  {% endfor %}
-                </ul>
-              </section>
-            {% endif %}
-          {% endwith %}
-
           <section>
             {% block content %}{% endblock %}
           </section>
