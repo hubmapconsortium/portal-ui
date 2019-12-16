@@ -1,5 +1,8 @@
 from flask import Blueprint, render_template, abort, current_app, session, flash
 
+from jsonschema import validate, ValidationError
+from yaml import load as load_yaml
+
 from .api.client import ApiClient
 from .render_utils import object_as_html
 from .config import types
@@ -38,8 +41,14 @@ def details(type, uuid):
     if type not in types:
         abort(404)
     client = _get_client()
+
     entity = client.get_entity(uuid)
-    flash('woah!')
+    entity_schema = load_yaml(open(current_app.root_path + '/schemas/entity.yml'))
+
+    try:
+        validate(entity, entity_schema)
+    except ValidationError as error:
+        flash(error)
 
     details_html = object_as_html(entity)
     provenance = client.get_provenance(uuid)
