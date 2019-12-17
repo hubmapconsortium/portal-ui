@@ -1,0 +1,8 @@
+$schema: http://json-schema.org/draft-07/schema#
+$id: https://github.com/hubmapconsortium/portal-ui/#entity"
+title: portal-ui entity validation
+type: object
+properties:
+  protocol:
+    type: string
+    pattern: '^https?://'
