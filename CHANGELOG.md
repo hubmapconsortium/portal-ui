@@ -1,8 +1,10 @@
 # Changelog
 
 ## v0.0.6 - in progress
+### Added
+- Make protocols.io links work.
 ### Changed
-- Fixed Docker Compose.
+- Clarify deployment process.
 
 ## [v0.0.5](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.5) - 2019-12-16
 ### Added

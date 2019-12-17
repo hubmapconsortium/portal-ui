@@ -1,7 +1,10 @@
 from yattag import Doc
 
 
-def object_as_html(input_object, tagtext=None):
+link_fields = ['protocol']
+
+
+def object_as_html(input_object, tagtext=None, is_link=False):
     '''
     Render input_object as an html table.
     Provide tagtext when recursing, to continue using an existing builder.
@@ -36,7 +39,14 @@ def object_as_html(input_object, tagtext=None):
                     with td_key():
                         text(key)
                     with td_value():
-                        object_as_html(value, (doc, tag, text))
+                        object_as_html(
+                            value,
+                            (doc, tag, text),
+                            is_link=(key in link_fields)
+                        )
+    elif is_link:
+        with tag('a', href=input_object):
+            text(input_object)
     else:
         text(input_object)
 
