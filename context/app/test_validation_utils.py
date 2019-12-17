@@ -1,6 +1,3 @@
-import pytest
-import flask
-
 from unittest.mock import MagicMock
 
 from .validation_utils import for_each_validation_error
@@ -29,7 +26,7 @@ def test_single_error():
 def test_called_without_url():
     def callback(error):
         assert error.message == "'required_1' is a required property"
-        assert error.issue_url == None
+        assert error.issue_url is None
     for_each_validation_error(
         {},
         {'required': ['required_1']},

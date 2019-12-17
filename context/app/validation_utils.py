@@ -1,5 +1,3 @@
-from flask import flash
-
 import jsonschema
 
 
