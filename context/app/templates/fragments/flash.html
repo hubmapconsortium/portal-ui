@@ -5,9 +5,11 @@
       <ul>
         {% for error in errors %}
           <li>
-            {{ error.message }}
+            {{ error.message }}.
             <!-- Details: {{ error.__str__().replace('->', '=>') | safe }} -->
-            <a href="{{ error.issue_url }}">Known issue</a>
+            {% if error.issue_url %}
+              <a href="{{ error.issue_url }}">Known issue.</a>
+            {% endif %}
           </li>
         {% endfor %}
       </ul>
