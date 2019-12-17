@@ -46,6 +46,12 @@ def details(type, uuid):
     entity_schema = load_yaml(open(current_app.root_path + '/schemas/entity.yml'))
     validator = jsonschema.Draft7Validator(entity_schema)
     for error in validator.iter_errors(entity):
+        schema_cursor = entity_schema
+        path = list(error.schema_path)
+        path[-1] = path[-1] + '_TODO'
+        for path_component in path:
+            schema_cursor = schema_cursor[path_component]
+        error.issue_url = schema_cursor
         flash(error)
 
     details_html = object_as_html(entity)

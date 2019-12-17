@@ -3,21 +3,27 @@
 # to get development started. When it is in OpenAPI,
 # this should be deleted. https://github.com/hubmapconsortium/entity-api/issues/6
 
+# NOTE: The *_TODO fields are accessed programmatically,
+# so when there is a failure we can give more information in the UI.
+
 $schema: http://json-schema.org/draft-07/schema#
 $id: https://github.com/hubmapconsortium/portal-ui/#entity"
 title: portal-ui entity validation
 type: object
+
+required_TODO: https://github.com/hubmapconsortium/entity-api/issues/17
 required:
-  # https://github.com/hubmapconsortium/entity-api/issues/17
   - doi_suffix
   - display_id
+
 properties:
   protocol:
-    # TODO: Fix API: https://github.com/hubmapconsortium/entity-api/issues/18
     type: string
+    pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/18
     pattern: '^https?://'
+
 patternProperties:
   '(^|_)uuid$':
-    # TODO: Fix API: https://github.com/hubmapconsortium/entity-api/issues/20
     type: string
+    pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/20
     pattern: '^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$'

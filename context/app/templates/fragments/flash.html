@@ -5,13 +5,9 @@
       <ul>
         {% for error in errors %}
           <li>
-            {{ error.message }};
+            {{ error.message }}
             <!-- Details: {{ error.__str__().replace('->', '=>') | safe }} -->
-            {% if "does not match '^https?://'" in error.message %}
-              <a href="https://github.com/hubmapconsortium/entity-api/issues/18">
-                Known issue.
-              </a>
-            {% endif %}
+            <a href="{{ error.issue_url }}">Known issue</a>
           </li>
         {% endfor %}
       </ul>
