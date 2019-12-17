@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, abort, current_app, session, flash
 
-from jsonschema import validate, ValidationError
+import jsonschema
 from yaml import load as load_yaml
 
 from .api.client import ApiClient
@@ -44,10 +44,8 @@ def details(type, uuid):
 
     entity = client.get_entity(uuid)
     entity_schema = load_yaml(open(current_app.root_path + '/schemas/entity.yml'))
-
-    try:
-        validate(entity, entity_schema)
-    except ValidationError as error:
+    validator = jsonschema.Draft7Validator(entity_schema)
+    for error in validator.iter_errors(entity):
         flash(error)
 
     details_html = object_as_html(entity)
