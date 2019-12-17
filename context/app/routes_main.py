@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, abort, current_app, session, flash
 
-from yaml import load as load_yaml
+from yaml import safe_load as load_yaml
 
 from .api.client import ApiClient
 from .render_utils import object_as_html
