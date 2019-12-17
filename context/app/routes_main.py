@@ -36,17 +36,10 @@ def browse(type):
     return render_template('pages/browse.html', types=types, type=type, entities=entities)
 
 
-@blueprint.route('/browse/<type>/<uuid>')
-def details(type, uuid):
-    if type not in types:
-        abort(404)
-    client = _get_client()
-
-    entity = client.get_entity(uuid)
-    entity_schema = load_yaml(open(current_app.root_path + '/schemas/entity.yml'))
-    validator = jsonschema.Draft7Validator(entity_schema)
+def flash_errors(entity, schema):
+    validator = jsonschema.Draft7Validator(schema)
     for error in validator.iter_errors(entity):
-        schema_cursor = entity_schema
+        schema_cursor = schema
         path = list(error.schema_path)
         path[-1] = path[-1] + '_TODO'
         for path_component in path:
@@ -57,6 +50,17 @@ def details(type, uuid):
                 break
         error.issue_url = schema_cursor
         flash(error)
+
+
+@blueprint.route('/browse/<type>/<uuid>')
+def details(type, uuid):
+    if type not in types:
+        abort(404)
+    client = _get_client()
+
+    entity = client.get_entity(uuid)
+    entity_schema = load_yaml(open(current_app.root_path + '/schemas/entity.yml'))
+    flash_errors(entity, entity_schema)
 
     details_html = object_as_html(entity)
     provenance = client.get_provenance(uuid)

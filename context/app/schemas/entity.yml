@@ -5,6 +5,7 @@
 
 # NOTE: The *_TODO fields are accessed programmatically,
 # so when there is a failure we can give more information in the UI.
+# They should be Github issue URLs.
 
 $schema: http://json-schema.org/draft-07/schema#
 $id: https://github.com/hubmapconsortium/portal-ui/#entity"
