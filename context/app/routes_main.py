@@ -1,11 +1,11 @@
-from flask import Blueprint, render_template, abort, current_app, session, flash
+from flask import Blueprint, render_template, abort, current_app, session
 
-import jsonschema
 from yaml import load as load_yaml
 
 from .api.client import ApiClient
 from .render_utils import object_as_html
 from .config import types
+from .validation_utils import flash_validation_errors
 
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
@@ -36,22 +36,6 @@ def browse(type):
     return render_template('pages/browse.html', types=types, type=type, entities=entities)
 
 
-def flash_errors(entity, schema):
-    validator = jsonschema.Draft7Validator(schema)
-    for error in validator.iter_errors(entity):
-        schema_cursor = schema
-        path = list(error.schema_path)
-        path[-1] = path[-1] + '_TODO'
-        for path_component in path:
-            if path_component in schema_cursor:
-                schema_cursor = schema_cursor[path_component]
-            else:
-                schema_cursor = None
-                break
-        error.issue_url = schema_cursor
-        flash(error)
-
-
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
     if type not in types:
@@ -60,7 +44,7 @@ def details(type, uuid):
 
     entity = client.get_entity(uuid)
     entity_schema = load_yaml(open(current_app.root_path + '/schemas/entity.yml'))
-    flash_errors(entity, entity_schema)
+    flash_validation_errors(entity, entity_schema)
 
     details_html = object_as_html(entity)
     provenance = client.get_provenance(uuid)
