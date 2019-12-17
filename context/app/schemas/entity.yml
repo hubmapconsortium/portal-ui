@@ -1,8 +1,18 @@
+# TODO: Eventually, this should be documented in the OpenAPI,
+# and enforced by the server... but working here for now
+# to get development started. When it is in OpenAPI,
+# this should be deleted. https://github.com/hubmapconsortium/entity-api/issues/6
+
 $schema: http://json-schema.org/draft-07/schema#
 $id: https://github.com/hubmapconsortium/portal-ui/#entity"
 title: portal-ui entity validation
 type: object
 properties:
   protocol:
+    # TODO: Fix API: https://github.com/hubmapconsortium/entity-api/issues/18
     type: string
     pattern: '^https?://'
+patternProperties:
+  '(^|_)uuid$':
+    type: string
+    pattern: '^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$'
