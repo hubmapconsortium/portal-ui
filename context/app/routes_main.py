@@ -1,11 +1,11 @@
-from flask import Blueprint, render_template, abort, current_app, session
+from flask import Blueprint, render_template, abort, current_app, session, flash
 
 from yaml import load as load_yaml
 
 from .api.client import ApiClient
 from .render_utils import object_as_html
 from .config import types
-from .validation_utils import flash_validation_errors
+from .validation_utils import for_each_validation_error
 
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
@@ -44,7 +44,7 @@ def details(type, uuid):
 
     entity = client.get_entity(uuid)
     entity_schema = load_yaml(open(current_app.root_path + '/schemas/entity.yml'))
-    flash_validation_errors(entity, entity_schema)
+    for_each_validation_error(entity, entity_schema, flash)
 
     details_html = object_as_html(entity)
     provenance = client.get_provenance(uuid)

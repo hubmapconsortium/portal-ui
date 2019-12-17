@@ -3,9 +3,9 @@ from flask import flash
 import jsonschema
 
 
-def flash_validation_errors(entity, schema):
+def for_each_validation_error(data, schema, callable):
     validator = jsonschema.Draft7Validator(schema)
-    for error in validator.iter_errors(entity):
+    for error in validator.iter_errors(data):
         schema_cursor = schema
         path = list(error.schema_path)
         path[-1] = path[-1] + '_TODO'
@@ -16,4 +16,4 @@ def flash_validation_errors(entity, schema):
                 schema_cursor = None
                 break
         error.issue_url = schema_cursor
-        flash(error)
+        callable(error)
