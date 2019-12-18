@@ -43,7 +43,9 @@ def details(type, uuid):
     client = _get_client()
 
     entity = client.get_entity(uuid)
-    entity_schema = load_yaml(open(current_app.root_path + '/schemas/entity.yml'))
+    # TODO: This doesn't need to be reloaded per request.
+    with open(current_app.root_path + '/schemas/entity.yml') as entity_schema_file:
+        entity_schema = load_yaml(entity_schema_file)
     for_each_validation_error(entity, entity_schema, flash)
 
     details_html = object_as_html(entity)
