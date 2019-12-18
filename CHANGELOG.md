@@ -5,6 +5,8 @@
 - Make protocols.io links work.
 - Github issues can be referenced in the schema, and if there is a related failure,
 a link will be given in the UI.
+### Changed
+- Clarify deployment process.
 
 ## [v0.0.5](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.5) - 2019-12-16
 ### Added
