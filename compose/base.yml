@@ -3,7 +3,7 @@ version: "3.7"
 services:
 
   portal-ui:
-    image: hubmap/portal-ui:v0.0.5
+    image: hubmap/portal-ui:v0.0.6
     hostname: portal-ui
     container_name: portal-ui
     volumes:
