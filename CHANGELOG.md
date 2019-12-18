@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.0.6 - in progress
+## v0.0.6 - In progress
 ### Added
 - Make protocols.io links work.
 ### Changed
