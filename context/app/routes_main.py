@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, abort, current_app, session, flash
 
-from jsonschema import validate, ValidationError
-from yaml import load as load_yaml
+from yaml import safe_load as load_yaml
 
 from .api.client import ApiClient
 from .render_utils import object_as_html
 from .config import types
+from .validation_utils import for_each_validation_error
 
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
@@ -43,12 +43,10 @@ def details(type, uuid):
     client = _get_client()
 
     entity = client.get_entity(uuid)
-    entity_schema = load_yaml(open(current_app.root_path + '/schemas/entity.yml'))
-
-    try:
-        validate(entity, entity_schema)
-    except ValidationError as error:
-        flash(error)
+    # TODO: This doesn't need to be reloaded per request.
+    with open(current_app.root_path + '/schemas/entity.yml') as entity_schema_file:
+        entity_schema = load_yaml(entity_schema_file)
+    for_each_validation_error(entity, entity_schema, flash)
 
     details_html = object_as_html(entity)
     provenance = client.get_provenance(uuid)

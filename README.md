@@ -18,12 +18,16 @@ update `app.conf` with the Globus client ID and client secret,
 run `quick-start.sh` again,
 and visit [localhost:5000](http://localhost:5000).
 
-## Tag and release
+## Tag, release, and deployment
 To tag a new version for github and [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
-increment `VERSION` and run:
+checkout a release branch, increment `VERSION` and run:
 ```sh
 ./push.sh
 ```
+
+If this should be deployed publicly, make `@yuanzhou` a reviewer on the PR,
+so he knows a new version is available.
+
 
 ## Related projects and dependencies
 
