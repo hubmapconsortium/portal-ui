@@ -3,6 +3,8 @@
 ## v0.0.6 - in progress
 ### Added
 - Make protocols.io links work.
+- Github issues can be referenced in the schema, and if there is a related failure,
+a link will be given in the UI.
 ### Changed
 - Clarify deployment process.
 
