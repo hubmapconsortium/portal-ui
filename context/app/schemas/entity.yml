@@ -19,6 +19,22 @@ required:
 
 additionalProperties: false
 
+definitions:
+  uuid:
+    type: string
+    pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/20
+    pattern: '^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$'
+
+  time_stamp:
+    # TODO: Set lower bound.
+    type: integer
+
+  date_time:
+    # NOTE: These are added to the response by the portal-ui client.
+    type: string
+    pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/20
+    pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
+
 properties:
   created:
     ref: '#/definitions/date_time'
@@ -128,20 +144,3 @@ properties:
 
   uuid:
     ref: '#/definitions/uuid'
-
-
-definitions:
-  uuid:
-    type: string
-    pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/20
-    pattern: '^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$'
-
-  time_stamp:
-    # TODO: Set lower bound.
-    type: integer
-
-  date_time:
-    # NOTE: These are added to the response by the portal-ui client.
-    type: string
-    pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/20
-    pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
