@@ -60,7 +60,7 @@ def login():
         nexus_token=nexus_token,
         is_authenticated=True
     )
-    return redirect(url_for('routes.index'), _external=True)
+    return redirect(url_for('routes.index', _external=True))
 
 
 @blueprint.route('/logout')
