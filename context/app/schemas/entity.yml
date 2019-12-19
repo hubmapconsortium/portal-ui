@@ -28,3 +28,7 @@ patternProperties:
     type: string
     pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/20
     pattern: '^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$'
+
+  '_timestamp':
+    # TODO: Set lower bound.
+    type: number
