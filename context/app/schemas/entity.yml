@@ -29,6 +29,17 @@ properties:
       - Sample
       - Donor
 
+  sample_count:
+    type: integer
+
+  specimen_type:
+    enum:
+      - fresh_frozen_section_slide
+
+  protocols:
+    type_TODO: asdf
+    type: object
+
 patternProperties:
   '(^|_)uuid$':
     type: string
@@ -37,4 +48,4 @@ patternProperties:
 
   '_timestamp':
     # TODO: Set lower bound.
-    type: number
+    type: integer
