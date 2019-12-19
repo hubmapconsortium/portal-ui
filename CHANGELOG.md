@@ -2,11 +2,11 @@
 
 ## v0.0.7 - In progress
 ### Added
-- Link to JSON from details.
+- Link to JSON from details
+- Added many more rules to schema.
 ### Changed
 - Fix redirect problem.
 - Better documentation for IS_MOCK config option.
-- Expand schema to cover more documents.
 
 ## [v0.0.6](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.6) - 2019-12-18
 ### Added
