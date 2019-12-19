@@ -1,6 +1,9 @@
 # Changelog
 
 ## v0.0.7 - In progress
+### Changed
+- Fix redirect problem.
+- Better documentation for IS_MOCK config option.
 
 ## [v0.0.6](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.6) - 2019-12-18
 ### Added
