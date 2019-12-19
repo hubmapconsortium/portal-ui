@@ -16,7 +16,7 @@ def _format_timestamp(ts):
 
 
 class ApiClient():
-    def __init__(self, url_base, nexus_token, is_mock=False):
+    def __init__(self, url_base=None, nexus_token=None, is_mock=False):
         self.url_base = url_base
         self.nexus_token = nexus_token
         self.is_mock = is_mock
