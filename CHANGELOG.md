@@ -1,6 +1,8 @@
 # Changelog
 
 ## v0.0.7 - In progress
+### Added
+- Link to JSON from details.
 ### Changed
 - Fix redirect problem.
 - Better documentation for IS_MOCK config option.
