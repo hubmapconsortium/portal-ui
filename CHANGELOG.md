@@ -4,6 +4,7 @@
 ### Changed
 - Fix redirect problem.
 - Better documentation for IS_MOCK config option.
+- Expand schema to cover more documents.
 
 ## [v0.0.6](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.6) - 2019-12-18
 ### Added

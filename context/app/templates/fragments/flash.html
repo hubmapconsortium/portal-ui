@@ -4,13 +4,37 @@
       <h4 class="alert-heading">Warning!</h4>
       <ul>
         {% for error in errors %}
-          <li>
-            {{ error.message }}.
-            <!-- Details: {{ error.__str__().replace('->', '=>') | safe }} -->
-            {% if error.issue_url %}
+         {% if not error.issue_url %}
+           <li>
+             {{ error.message }}.
+             <!-- Details: {{ error.__str__().replace('->', '=>') | safe }} -->
+             Unexpected bug!
+             {% set base = 'https://github.com/hubmapconsortium/' %}
+             {% set title = 'Validation failure' %}
+             {% set body = '''At {}
+we have this validation error:
+```
+{}
+```
+             '''.format(request.path, error.__str__())
+             %}
+             File an issue:
+             <a href="{{ base }}entity-api/issues/new?title={{ title | urlencode }}&body={{ body | urlencode}}">entity-api</a>
+             or
+             <a href="{{ base }}portal-ui/issues/new?title={{ title | urlencode }}&body={{ body | urlencode}}">portal-ui</a>.
+           </li>
+         {% endif %}
+       {% endfor %}
+      </ul>
+      <ul>
+        {% for error in errors %}
+          {% if error.issue_url %}
+            <li>
+              {{ error.message }}.
+              <!-- Details: {{ error.__str__().replace('->', '=>') | safe }} -->
               <a href="{{ error.issue_url }}">Known issue.</a>
-            {% endif %}
-          </li>
+            </li>
+          {% endif %}
         {% endfor %}
       </ul>
     </div>
