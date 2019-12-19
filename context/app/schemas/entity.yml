@@ -23,6 +23,12 @@ properties:
     pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/18
     pattern: '^https?://'
 
+  entitytype:
+    # TODO: This should be "entity_type": https://github.com/hubmapconsortium/entity-api/issues/24
+    enum:
+      - Sample
+      - Donor
+
 patternProperties:
   '(^|_)uuid$':
     type: string

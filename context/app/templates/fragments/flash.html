@@ -9,6 +9,22 @@
             <!-- Details: {{ error.__str__().replace('->', '=>') | safe }} -->
             {% if error.issue_url %}
               <a href="{{ error.issue_url }}">Known issue.</a>
+            {% else %}
+              Unexpected bug!
+              {% set base = 'https://github.com/hubmapconsortium/' %}
+              {% set title = 'Validation failure' %}
+              {% set body = '''At {}
+we have this validation error:
+```
+{}
+```
+              '''.format(request.path, error.__str__())
+              %}
+              File an issue:
+              <a href="{{ base }}entity-api/issues/new?title={{ title | urlencode }}&body={{ body | urlencode}}">entity-api</a>
+              or
+              <a href="{{ base }}portal-ui/issues/new?title={{ title | urlencode }}&body={{ body | urlencode}}">portal-ui</a>.
+
             {% endif %}
           </li>
         {% endfor %}
