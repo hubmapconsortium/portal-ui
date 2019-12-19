@@ -39,7 +39,11 @@
           <dt>Modified</dt>
           <dd>{{ entity['modified'] }}</dd>
         </dl>
-        <p><a href="{{ url_for('routes.details_json', type=type, uuid=entity.uuid) }}">Raw JSON</a></p>
+        <!--
+          WARNING: UUID in API response seems to be wrong.
+          https://github.com/hubmapconsortium/entity-api/issues/19
+        -->
+        <p><a href="{{ url_for('routes.details_json', type=type, uuid=uuid) }}">Raw JSON</a></p>
       </div>
     </div>
 
