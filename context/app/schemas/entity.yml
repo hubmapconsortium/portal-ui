@@ -47,7 +47,9 @@ properties:
   lab_tissue_id:
     type: string
 
-  # TODO: What are these? Do we need both?
+  # TODO: What are these? Do we need all of them?
+  metadata:
+    type: string
   metadata_file:
     type: array
   metadatas:
@@ -101,6 +103,7 @@ properties:
     enum:
       - fresh_frozen_section_slide
       - fresh_frozen_tissue
+      - ffpe_block
 
   user_group_uuid:
     ref: '#/definitions/uuid'
