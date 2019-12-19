@@ -63,6 +63,16 @@ def details(type, uuid):
     )
 
 
+@blueprint.route('/browse/<type>/<uuid>.json')
+def details_json(type, uuid):
+    if type not in types:
+        abort(404)
+    client = _get_client()
+
+    entity = client.get_entity(uuid)
+    return entity
+
+
 @blueprint.route('/search')
 def search():
     return render_template('pages/search.html', types=types)
