@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.0.6 - In progress
+## v0.0.7 - In progress
+
+## [v0.0.6](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.6) - 2019-12-18
 ### Added
 - Make protocols.io links work.
 - Github issues can be referenced in the schema, and if there is a related failure,
