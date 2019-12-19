@@ -17,11 +17,20 @@ required:
   - doi_suffix
   - display_id
 
+additionalProperties: false
+
 properties:
-  protocol:
+  created:
+    ref: '#/definitions/date_time'
+
+  description:
     type: string
-    pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/18
-    pattern: '^https?://'
+
+  display_doi:
+    type: string
+
+  doi:
+    type: string
 
   entitytype:
     # TODO: This should be "entity_type": https://github.com/hubmapconsortium/entity-api/issues/24
@@ -29,23 +38,89 @@ properties:
       - Sample
       - Donor
 
+  hubmap_identifier:
+    type: string
+
+  image_file_metadata:
+    type: array
+
+  lab_tissue_id:
+    type: string
+
+  # TODO: What are these? Do we need both?
+  metadata_file:
+    type: array
+  metadatas:
+    type: array
+
+  modified:
+    ref: '#/definitions/date_time'
+
+  # TODO: What is this?
+  organ_other:
+    type: string
+
+  # TODO: Do we need all of these?
+  protocol:
+    type: string
+    pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/18
+    pattern: '^https?://'
+  protocols:
+    type: array
+  protocol_file:
+    type: string
+
+  provenance_create_timestamp:
+    ref: '#/definitions/time_stamp'
+
+  provenance_group_name:
+    type: string
+
+  provenance_group_uuid:
+    ref: '#/definitions/uuid'
+
+  provenance_modified_timestamp:
+    ref: '#/definitions/time_stamp'
+
+  provenance_user_displayname:
+    type: string
+
+  provenance_user_email:
+    type: string
+
+  provenance_user_sub:
+    type: string
+
   sample_count:
     type: integer
+
+  source_uuid:
+    type: string
 
   specimen_type:
     enum:
       - fresh_frozen_section_slide
+      - fresh_frozen_tissue
 
-  protocols:
-    type_TODO: asdf
-    type: object
+  user_group_uuid:
+    ref: '#/definitions/uuid'
 
-patternProperties:
-  '(^|_)uuid$':
+  uuid:
+    ref: '#/definitions/uuid'
+
+
+definitions:
+  uuid:
     type: string
     pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/20
     pattern: '^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$'
 
-  '_timestamp':
+  time_stamp:
     # TODO: Set lower bound.
     type: integer
+
+  date_time:
+    # NOTE: These are added to the response by the portal-ui client.
+    type: string
+    pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/20
+    pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
