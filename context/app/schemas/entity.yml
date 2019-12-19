@@ -42,23 +42,34 @@ properties:
     type: string
 
   image_file_metadata:
+    type_TODO: https://github.com/hubmapconsortium/entity-api/issues/14
     type: array
 
+  lab_donor_id:
+    type: string
+
   lab_tissue_id:
+    type: string
+
+  label:
     type: string
 
   # TODO: What are these? Do we need all of them?
   metadata:
     type: string
   metadata_file:
+    type_TODO: https://github.com/hubmapconsortium/entity-api/issues/14
     type: array
   metadatas:
+    type_TODO: https://github.com/hubmapconsortium/entity-api/issues/14
     type: array
 
   modified:
     ref: '#/definitions/date_time'
 
-  # TODO: What is this?
+  # TODO: What are these? Should they be enums?
+  organ:
+    type: string
   organ_other:
     type: string
 
@@ -68,8 +79,10 @@ properties:
     pattern_TODO: https://github.com/hubmapconsortium/entity-api/issues/18
     pattern: '^https?://'
   protocols:
+    type_TODO: https://github.com/hubmapconsortium/entity-api/issues/14
     type: array
   protocol_file:
+    type_TODO: https://github.com/hubmapconsortium/entity-api/issues/14
     type: string
 
   provenance_create_timestamp:
@@ -93,7 +106,11 @@ properties:
   provenance_user_sub:
     type: string
 
+  reference_uuid:
+    ref: '#/definitions/uuid'
+
   sample_count:
+    type_TODO: https://github.com/hubmapconsortium/entity-api/issues/25
     type: integer
 
   source_uuid:
@@ -104,6 +121,7 @@ properties:
       - fresh_frozen_section_slide
       - fresh_frozen_tissue
       - ffpe_block
+      - organ
 
   user_group_uuid:
     ref: '#/definitions/uuid'
