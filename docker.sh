@@ -10,8 +10,8 @@ CONF_PATH=$CONTEXT/instance/app.conf
 PORT=$1
 FOLLOW=$2
 
-[ -z "$PORT" ] && die "Usage: $0 PORT [--follow]
-Requires port number."
+[ "$PORT" = 5000 ] || [ "$PORT" = 5001 ] || die "Usage: $0 PORT [--follow]
+Requires port; On localhost must be 5000 or 5001 to match Globus whitelist."
 [ -e "$CONF_PATH" ] || die "No $CONF_PATH
 Copy example-app.conf and fill in blanks."
 
