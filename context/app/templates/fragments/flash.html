@@ -19,9 +19,9 @@ we have this validation error:
              '''.format(request.path, error.__str__())
              %}
              File an issue:
-             <a href="{{ base }}entity-api/issues/new?title={{ title | urlencode }}&body={{ body | urlencode}}">entity-api</a>
+             <a href="{{ base }}entity-api/issues/new?title={{ title | urlencode }}&amp;body={{ body | urlencode }}">entity-api</a>
              or
-             <a href="{{ base }}portal-ui/issues/new?title={{ title | urlencode }}&body={{ body | urlencode}}">portal-ui</a>.
+             <a href="{{ base }}portal-ui/issues/new?title={{ title | urlencode }}&amp;body={{ body | urlencode }}">portal-ui</a>.
            </li>
          {% endif %}
        {% endfor %}
