@@ -2,6 +2,8 @@ from collections import namedtuple
 import json
 from datetime import datetime
 
+from flask import abort, current_app
+
 import requests
 
 # Hopefully soon, generate API client code from OpenAPI:
@@ -16,7 +18,7 @@ def _format_timestamp(ts):
 
 
 class ApiClient():
-    def __init__(self, url_base, nexus_token, is_mock=False):
+    def __init__(self, url_base=None, nexus_token=None, is_mock=False):
         self.url_base = url_base
         self.nexus_token = nexus_token
         self.is_mock = is_mock
@@ -27,6 +29,13 @@ class ApiClient():
             f'{self.url_base}{path}',
             headers=headers
         )
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as error:
+            current_app.logger.info(error.response.text)
+            if error.response.status_code == 400:
+                abort(400)
+            raise
         return response.json()
 
     def get_entity_types(self):

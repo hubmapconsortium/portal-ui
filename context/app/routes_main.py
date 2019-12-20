@@ -16,10 +16,13 @@ def _get_client():
         is_mock = current_app.config['IS_MOCK']
     except KeyError:
         is_mock = False
+    if is_mock:
+        return ApiClient(is_mock=is_mock)
+    if 'nexus_token' not in session:
+        abort(403)
     return ApiClient(
         current_app.config['ENTITY_API_BASE'],
-        session['nexus_token'],
-        is_mock=is_mock
+        session['nexus_token']
     )
 
 

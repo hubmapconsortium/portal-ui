@@ -1,0 +1,15 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}
+  <h1>{% block title_text %}403: Access Denied{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<p>
+  Access denied: For now, you need to
+  <a href="{{ url_for('routes_auth.login') }}">login</a>
+  to access this resource.
+  <a href="https://github.com/hubmapconsortium/entity-api/issues/26">Eventually</a>
+  most resources will be available without login.
+</p>
+{% endblock %}
