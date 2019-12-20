@@ -34,19 +34,13 @@ properties:
   uuid: {}
 required:
   - created
-  #- description
   - display_doi
   - doi
   - entitytype
   - hubmap_identifier
-  # - image_file_metadata
-  # - lab_donor_id
   - label
-  # - metadata_file
   - metadatas
   - modified
-  # - protocol
-  # - protocol_file
   - provenance_create_timestamp
   - provenance_group_name
   - provenance_group_uuid
@@ -55,5 +49,4 @@ required:
   - provenance_user_email
   - provenance_user_sub
   - reference_uuid
-  #- user_group_uuid
   - uuid

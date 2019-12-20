@@ -4,6 +4,7 @@ We validate each document against two separate schemas:
 `entity.yml`, and an entity type specific schema.
 The later schema only enforces the set of properties,
 while `entity.yml` defines the structure of each property.
+(I am not sure this is best for the long term, but it works for now.)
 
 We take this approach because JSON Schema doesn't really accommodate
 a strict object-oriented approach.
