@@ -50,6 +50,7 @@ def mock_get(path, **kwargs):
                 'provenance_data': '{"agent": "", "prefix": {}}',
                 'uuids': []
             }
+
         def raise_for_status(self):
             pass
     return MockResponse()
