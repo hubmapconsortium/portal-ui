@@ -2,6 +2,8 @@ from collections import namedtuple
 import json
 from datetime import datetime
 
+from flask import abort, current_app
+
 import requests
 
 # Hopefully soon, generate API client code from OpenAPI:
@@ -27,7 +29,13 @@ class ApiClient():
             f'{self.url_base}{path}',
             headers=headers
         )
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as error:
+            current_app.logger.info(error.response.text)
+            if error.response.status_code == 400:
+                abort(400)
+            raise
         return response.json()
 
     def get_entity_types(self):

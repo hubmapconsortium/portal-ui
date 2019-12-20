@@ -4,6 +4,7 @@
 ### Added
 - Link to JSON from details
 - Added many more rules to schema.
+- Pretty, human readable error pages.
 ### Changed
 - Fix redirect problem.
 - Better documentation for IS_MOCK config option.

@@ -1,0 +1,11 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}
+  <h1>{% block title_text %}400: Bad Request{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<p>
+  Bad request: The HuBMAP API could not satisfy this request.
+</p>
+{% endblock %}
