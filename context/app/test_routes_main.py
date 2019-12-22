@@ -1,6 +1,7 @@
 import re
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
+import json
 
 import pytest
 
@@ -62,7 +63,7 @@ def mock_get(path, **kwargs):
     + [f'/browse/{t}' for t in types]
     + [f'/browse/{t}/fake-uuid' for t in types]
 )
-def test_200_page(client, path, mocker):
+def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_get)
     response = client.get(path)
     assert response.status == '200 OK'
@@ -74,10 +75,22 @@ def test_200_page(client, path, mocker):
         raise Exception(f'{e.msg}\n{numbered}')
 
 
+@pytest.mark.parametrize(
+    'path',
+    [f'/browse/{t}/fake-uuid.json' for t in types]
+)
+def test_200_json_page(client, path, mocker):
+    mocker.patch('requests.get', side_effect=mock_get)
+    response = client.get(path)
+    assert response.status == '200 OK'
+    json.loads(response.data.decode('utf8'))
+
+
 @pytest.mark.parametrize('path', [
     '/no-page-here',
-    '/browse/no-such-type'
-])
+    '/browse/no-such-type']
+    + [f'/browse/{t}/fake-uuid.fake' for t in types]
+)
 def test_404_page(client, path):
     response = client.get(path)
     assert response.status == '404 NOT FOUND'
