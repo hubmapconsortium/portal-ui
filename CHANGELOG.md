@@ -2,7 +2,7 @@
 
 ## v0.0.7 - In progress
 ### Added
-- Link to JSON from details
+- Link to JSON from details, and test.
 - Added many more rules to schema, and confirm that fields present are appropriate for type.
 - Pretty, human readable error pages.
 ### Changed

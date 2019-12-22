@@ -69,9 +69,11 @@ def details(type, uuid):
     )
 
 
-@blueprint.route('/browse/<type>/<uuid>.json')
-def details_json(type, uuid):
+@blueprint.route('/browse/<type>/<uuid>.<ext>')
+def details_ext(type, uuid, ext):
     if type not in types:
+        abort(404)
+    if ext != 'json':
         abort(404)
     client = _get_client()
 
