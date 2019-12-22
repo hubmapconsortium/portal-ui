@@ -62,7 +62,7 @@ def mock_get(path, **kwargs):
     + [f'/browse/{t}' for t in types]
     + [f'/browse/{t}/fake-uuid' for t in types]
 )
-def test_200_page(client, path, mocker):
+def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_get)
     response = client.get(path)
     assert response.status == '200 OK'
@@ -72,6 +72,16 @@ def test_200_page(client, path, mocker):
     except ParseError as e:
         numbered = '\n'.join([f'{n+1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
         raise Exception(f'{e.msg}\n{numbered}')
+
+
+@pytest.mark.parametrize(
+    'path',
+    [f'/browse/{t}/fake-uuid.json' for t in types]
+)
+def test_200_json_page(client, path, mocker):
+    mocker.patch('requests.get', side_effect=mock_get)
+    response = client.get(path)
+    assert response.status == '200 OK'
 
 
 @pytest.mark.parametrize('path', [
