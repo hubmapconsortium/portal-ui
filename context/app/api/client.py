@@ -27,7 +27,8 @@ class ApiClient():
         headers = {'Authorization': 'Bearer ' + self.nexus_token}
         response = requests.get(
             f'{self.url_base}{path}',
-            headers=headers
+            headers=headers,
+            timeout=current_app.config['ENTITY_API_TIMEOUT']
         )
         try:
             response.raise_for_status()
