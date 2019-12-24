@@ -50,3 +50,15 @@ def test_404_html_page(client, path):
     assert response.status == '404 NOT FOUND'
     assert_is_valid_html(response)
     assert '404: Not Found' in response.data.decode('utf8')
+
+
+def mock_timeout_get(path, **kwargs):
+    raise requests.exceptions.ConnectTimeout()
+
+
+def test_504_html_page(client, mocker):
+    mocker.patch('requests.get', side_effect=mock_timeout_get)
+    response = client.get('/browse/donor')
+    assert response.status == '504 GATEWAY TIMEOUT'
+    assert_is_valid_html(response)
+    assert '504: Gateway Timeout' in response.data.decode('utf8')
