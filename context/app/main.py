@@ -17,6 +17,10 @@ def access_denied(e):
     '''A 403 probably means Globus login is required.'''
     return render_template('errors/403.html', types={}), 403
 
+def gateway_timeout(e):
+    '''A 504 means the API has timed out.'''
+    return render_template('errors/504.html', types={}), 504
+
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -30,6 +34,7 @@ def create_app():
     app.register_error_handler(400, bad_request)
     app.register_error_handler(404, not_found)
     app.register_error_handler(403, access_denied)
+    app.register_error_handler(504, gateway_timeout)
 
     @app.context_processor
     def inject_template_globals():

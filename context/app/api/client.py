@@ -31,7 +31,8 @@ class ApiClient():
                 headers=headers,
                 timeout=current_app.config['ENTITY_API_TIMEOUT']
             )
-        except requests.exceptions.ConnectTimeout:
+        except requests.exceptions.ConnectTimeout as error:
+            current_app.logger.info(error)
             abort(504)
         try:
             response.raise_for_status()
