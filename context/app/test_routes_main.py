@@ -16,9 +16,6 @@ def client():
     with app.test_client() as client:
         with client.session_transaction() as session:
             session['nexus_token'] = '{}'
-        with app.app_context():
-            pass
-            # Do any necessary initializations here.
         yield client
 
 
@@ -57,6 +54,15 @@ def mock_get(path, **kwargs):
     return MockResponse()
 
 
+def assert_is_valid_html(response):
+    xml = to_xml(response.data.decode('utf8'))
+    try:
+        ET.fromstring(xml)
+    except ParseError as e:
+        numbered = '\n'.join([f'{n+1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
+        raise Exception(f'{e.msg}\n{numbered}')
+
+
 @pytest.mark.parametrize(
     'path',
     ['/', '/help']
@@ -67,12 +73,7 @@ def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_get)
     response = client.get(path)
     assert response.status == '200 OK'
-    xml = to_xml(response.data.decode('utf8'))
-    try:
-        ET.fromstring(xml)
-    except ParseError as e:
-        numbered = '\n'.join([f'{n+1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
-        raise Exception(f'{e.msg}\n{numbered}')
+    assert_is_valid_html(response)
 
 
 @pytest.mark.parametrize(
@@ -84,16 +85,6 @@ def test_200_json_page(client, path, mocker):
     response = client.get(path)
     assert response.status == '200 OK'
     json.loads(response.data.decode('utf8'))
-
-
-@pytest.mark.parametrize('path', [
-    '/no-page-here',
-    '/browse/no-such-type']
-    + [f'/browse/{t}/fake-uuid.fake' for t in types]
-)
-def test_404_page(client, path):
-    response = client.get(path)
-    assert response.status == '404 NOT FOUND'
 
 
 def test_login(client):

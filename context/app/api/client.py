@@ -25,10 +25,15 @@ class ApiClient():
 
     def _request(self, path):
         headers = {'Authorization': 'Bearer ' + self.nexus_token}
-        response = requests.get(
-            f'{self.url_base}{path}',
-            headers=headers
-        )
+        try:
+            response = requests.get(
+                f'{self.url_base}{path}',
+                headers=headers,
+                timeout=current_app.config['ENTITY_API_TIMEOUT']
+            )
+        except requests.exceptions.ConnectTimeout as error:
+            current_app.logger.info(error)
+            abort(504)
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as error:
