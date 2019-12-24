@@ -99,6 +99,7 @@ def test_404_html_page(client, path):
     response = client.get(path)
     assert response.status == '404 NOT FOUND'
     assert_is_valid_html(response)
+    assert '404: Not Found' in response.data.decode('utf8')
 
 
 @pytest.fixture
@@ -117,6 +118,7 @@ def test_403_html_page(client_not_logged_in):
     response = client_not_logged_in.get('/browse/donor')
     assert response.status == '403 FORBIDDEN'
     assert_is_valid_html(response)
+    assert '403: Access Denied' in response.data.decode('utf8')
 
 
 def test_login(client):
