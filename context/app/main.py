@@ -1,6 +1,6 @@
 from flask import Flask, session, render_template
 
-from . import routes_main, routes_auth, routes_markdown
+from . import routes_main, routes_auth, routes_markdown, default_config
 
 
 def bad_request(e):
@@ -20,6 +20,7 @@ def access_denied(e):
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
+    app.config.from_object(default_config.DefaultConfig)
     app.config.from_pyfile('app.conf')
 
     app.register_blueprint(routes_main.blueprint)
