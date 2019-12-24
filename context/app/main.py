@@ -17,6 +17,7 @@ def access_denied(e):
     '''A 403 probably means Globus login is required.'''
     return render_template('errors/403.html', types={}), 403
 
+
 def gateway_timeout(e):
     '''A 504 means the API has timed out.'''
     return render_template('errors/504.html', types={}), 504
