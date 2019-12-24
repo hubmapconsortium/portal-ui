@@ -101,6 +101,24 @@ def test_404_html_page(client, path):
     assert_is_valid_html(response)
 
 
+@pytest.fixture
+def client_not_logged_in():
+    app = create_app()
+    app.config['TESTING'] = True
+    with app.test_client() as client:
+        # No nexus_token!
+        with app.app_context():
+            pass
+            # Do any necessary initializations here.
+        yield client
+
+
+def test_403_html_page(client_not_logged_in):
+    response = client_not_logged_in.get('/browse/donor')
+    assert response.status == '403 FORBIDDEN'
+    assert_is_valid_html(response)
+
+
 def test_login(client):
     response = client.get('/login')
     assert response.status == '302 FOUND'
