@@ -16,9 +16,6 @@ def client():
     with app.test_client() as client:
         with client.session_transaction() as session:
             session['nexus_token'] = '{}'
-        with app.app_context():
-            pass
-            # Do any necessary initializations here.
         yield client
 
 
@@ -108,9 +105,6 @@ def client_not_logged_in():
     app.config['TESTING'] = True
     with app.test_client() as client:
         # No nexus_token!
-        with app.app_context():
-            pass
-            # Do any necessary initializations here.
         yield client
 
 
