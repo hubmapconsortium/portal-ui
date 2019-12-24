@@ -6,16 +6,22 @@ from .config import types
 from .test_routes_main import client, assert_is_valid_html
 
 
-@pytest.mark.parametrize('path', [
-    '/no-page-here',
-    '/browse/no-such-type']
-    + [f'/browse/{t}/fake-uuid.fake' for t in types]
-)
-def test_404_html_page(client, path):
-    response = client.get(path)
-    assert response.status == '404 NOT FOUND'
+def mock_get_400(path, **kwargs):
+    class MockResponse():
+        def __init__(self):
+            self.status_code = 400
+            self.text = 'Logger call requires this'
+        def raise_for_status(self):
+            raise requests.exceptions.HTTPError(response=self)
+    return MockResponse()
+
+
+def test_400_html_page(client, mocker):
+    mocker.patch('requests.get', side_effect=mock_get_400)
+    response = client.get('/browse/donor')
+    assert response.status == '400 BAD REQUEST'
     assert_is_valid_html(response)
-    assert '404: Not Found' in response.data.decode('utf8')
+    assert '400: Bad Request' in response.data.decode('utf8')
 
 
 @pytest.fixture
@@ -34,19 +40,13 @@ def test_403_html_page(client_not_logged_in):
     assert '403: Access Denied' in response.data.decode('utf8')
 
 
-def mock_get_400(path, **kwargs):
-    class MockResponse():
-        def __init__(self):
-            self.status_code = 400
-            self.text = 'Logger call requires this'
-        def raise_for_status(self):
-            raise requests.exceptions.HTTPError(response=self)
-    return MockResponse()
-
-
-def test_400_html_page(client, mocker):
-    mocker.patch('requests.get', side_effect=mock_get_400)
-    response = client.get('/browse/donor')
-    assert response.status == '400 BAD REQUEST'
+@pytest.mark.parametrize('path', [
+    '/no-page-here',
+    '/browse/no-such-type']
+    + [f'/browse/{t}/fake-uuid.fake' for t in types]
+)
+def test_404_html_page(client, path):
+    response = client.get(path)
+    assert response.status == '404 NOT FOUND'
     assert_is_valid_html(response)
-    assert '400: Bad Request' in response.data.decode('utf8')
+    assert '404: Not Found' in response.data.decode('utf8')
