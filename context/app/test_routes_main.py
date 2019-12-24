@@ -87,8 +87,6 @@ def test_200_json_page(client, path, mocker):
     json.loads(response.data.decode('utf8'))
 
 
-
-
 def test_login(client):
     response = client.get('/login')
     assert response.status == '302 FOUND'

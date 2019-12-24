@@ -3,7 +3,17 @@ import requests
 
 from .main import create_app
 from .config import types
-from .test_routes_main import client, assert_is_valid_html
+from .test_routes_main import assert_is_valid_html
+
+
+@pytest.fixture
+def client():
+    app = create_app()
+    app.config['TESTING'] = True
+    with app.test_client() as client:
+        with client.session_transaction() as session:
+            session['nexus_token'] = '{}'
+        yield client
 
 
 def mock_get_400(path, **kwargs):
@@ -11,6 +21,7 @@ def mock_get_400(path, **kwargs):
         def __init__(self):
             self.status_code = 400
             self.text = 'Logger call requires this'
+
         def raise_for_status(self):
             raise requests.exceptions.HTTPError(response=self)
     return MockResponse()
