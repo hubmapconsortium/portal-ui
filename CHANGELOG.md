@@ -4,7 +4,7 @@
 ### Added
 - Link to JSON from details, and test.
 - Added many more rules to schema, and confirm that fields present are appropriate for type.
-- Pretty, human readable error pages.
+- Nice human readable error pages for 400, 403, 404, and 504.
 ### Changed
 - Fix redirect problem.
 - Better documentation for IS_MOCK config option.
