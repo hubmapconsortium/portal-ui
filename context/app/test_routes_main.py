@@ -57,6 +57,15 @@ def mock_get(path, **kwargs):
     return MockResponse()
 
 
+def assert_is_valid_html(response):
+    xml = to_xml(response.data.decode('utf8'))
+    try:
+        ET.fromstring(xml)
+    except ParseError as e:
+        numbered = '\n'.join([f'{n+1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
+        raise Exception(f'{e.msg}\n{numbered}')
+
+
 @pytest.mark.parametrize(
     'path',
     ['/', '/help']
@@ -67,12 +76,7 @@ def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_get)
     response = client.get(path)
     assert response.status == '200 OK'
-    xml = to_xml(response.data.decode('utf8'))
-    try:
-        ET.fromstring(xml)
-    except ParseError as e:
-        numbered = '\n'.join([f'{n+1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
-        raise Exception(f'{e.msg}\n{numbered}')
+    assert_is_valid_html(response)
 
 
 @pytest.mark.parametrize(
@@ -91,9 +95,10 @@ def test_200_json_page(client, path, mocker):
     '/browse/no-such-type']
     + [f'/browse/{t}/fake-uuid.fake' for t in types]
 )
-def test_404_page(client, path):
+def test_404_html_page(client, path):
     response = client.get(path)
     assert response.status == '404 NOT FOUND'
+    assert_is_valid_html(response)
 
 
 def test_login(client):
