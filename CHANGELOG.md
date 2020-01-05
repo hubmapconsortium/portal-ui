@@ -9,6 +9,7 @@
 - Fix redirect problem.
 - Better documentation for IS_MOCK config option.
 - Post-merge Travis runs were failing; fixed now.
+- Fix docker.sh by being tighter about routing for markdown pages.
 
 ## [v0.0.6](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.6) - 2019-12-18
 ### Added

@@ -5,20 +5,25 @@ start() { echo travis_fold':'start:$1; echo $1; }
 end() { echo travis_fold':'end:$1; }
 die() { set +v; echo "$*" 1>&2 ; sleep 1; exit 1; }
 
+server_up() {
+  TRIES=0
+  MAX_TRIES=10
+  URL=http://localhost:$1
+  until curl --silent --fail $URL; do
+    [ ${TRIES} -gt ${MAX_TRIES} ] && die 'Server did not come up'
+    printf '.'
+    sleep 1
+    TRIES=$(($TRIES+1))
+  done
+  echo "Server starts up, and $URL returns 200."
+}
+
 start quick-start
 if [ ! -z "$TRAVIS" ]; then
   ./quick-start.sh || sed -i 's/TODO/FAKE/' context/instance/app.conf
-  ./quick-start.sh &
 fi
-TRIES=0
-MAX_TRIES=5
-until curl --silent --fail http://localhost:5000; do
-  [ ${TRIES} -gt ${MAX_TRIES} ] && die 'Server did not come up'
-  printf '.'
-  sleep 1
-  TRIES=$(($TRIES+1))
-done
-echo 'Server starts up, and homepage returns 200.'
+./quick-start.sh &
+server_up 5000
 end quick-start
 
 start flake8
@@ -33,6 +38,7 @@ end pytest
 
 start docker
 ./docker.sh 5001
+server_up 5001
 end docker
 
 start changelog
