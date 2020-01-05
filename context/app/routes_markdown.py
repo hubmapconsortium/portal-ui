@@ -31,7 +31,7 @@ def markdown_view():
 
 
 app_dir = dirname(__file__)
-for f in glob(app_dir + '/**/*.md', recursive=True):
+for f in glob(app_dir + '/markdown/**/*.md', recursive=True):
     route = f.replace(app_dir + '/markdown', '').replace('.md', '')
     # This is equivalent to adding multiple @route decorators.
     markdown_route = blueprint.route(route)(markdown_view)
