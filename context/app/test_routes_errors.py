@@ -26,7 +26,7 @@ def mock_get_400(path, **kwargs):
             raise requests.exceptions.HTTPError(response=self)
     return MockResponse()
 
-
+# TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
 # def test_400_html_page(client, mocker):
 #     mocker.patch('requests.get', side_effect=mock_get_400)
 #     response = client.get('/browse/donor')
@@ -43,7 +43,7 @@ def client_not_logged_in():
         # No nexus_token!
         yield client
 
-
+# TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
 # def test_403_html_page(client_not_logged_in):
 #     response = client_not_logged_in.get('/browse/donor')
 #     assert response.status == '403 FORBIDDEN'
@@ -66,7 +66,7 @@ def test_404_html_page(client, path):
 def mock_timeout_get(path, **kwargs):
     raise requests.exceptions.ConnectTimeout()
 
-
+# TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
 # def test_504_html_page(client, mocker):
 #     mocker.patch('requests.get', side_effect=mock_timeout_get)
 #     response = client.get('/browse/donor')
