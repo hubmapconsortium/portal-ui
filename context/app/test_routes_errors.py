@@ -6,6 +6,15 @@ from .config import types
 from .test_routes_main import assert_is_valid_html
 
 
+def test_not_mock():
+    '''With IS_MOCK enabled in instance/app.conf,
+    HTTP requests are not actually made,
+    so patches to requests.get have no effect.
+    To fix this: Comment out the IS_MOCK line
+    in instance/app.conf.'''
+    assert 'IS_MOCK' not in create_app().config
+
+
 @pytest.fixture
 def client():
     app = create_app()
@@ -26,7 +35,7 @@ def mock_get_400(path, **kwargs):
             raise requests.exceptions.HTTPError(response=self)
     return MockResponse()
 
-# TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
+
 def test_400_html_page(client, mocker):
     mocker.patch('requests.get', side_effect=mock_get_400)
     response = client.get('/browse/donor')
@@ -43,7 +52,7 @@ def client_not_logged_in():
         # No nexus_token!
         yield client
 
-# TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
+
 def test_403_html_page(client_not_logged_in):
     response = client_not_logged_in.get('/browse/donor')
     assert response.status == '403 FORBIDDEN'
@@ -66,7 +75,7 @@ def test_404_html_page(client, path):
 def mock_timeout_get(path, **kwargs):
     raise requests.exceptions.ConnectTimeout()
 
-# TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
+
 def test_504_html_page(client, mocker):
     mocker.patch('requests.get', side_effect=mock_timeout_get)
     response = client.get('/browse/donor')
