@@ -6,6 +6,7 @@
 - Added many more rules to schema, and confirm that fields present are appropriate for type.
 - Nice human readable error pages for 400, 403, 404, and 504.
 - More realistic Vitessce demo, using the Mermaid data.
+- Better labels on prov nodes, and handle clicks.
 ### Changed
 - Fix redirect problem.
 - Better documentation for IS_MOCK config option.
