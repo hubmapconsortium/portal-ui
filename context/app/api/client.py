@@ -38,8 +38,12 @@ class ApiClient():
             response.raise_for_status()
         except requests.exceptions.HTTPError as error:
             current_app.logger.info(error.response.text)
-            if error.response.status_code == 400:
-                abort(400)
+            status = error.response.status_code
+            if status in [400, 404]:
+                # The same 404 page will be returned,
+                # whether it's a missing route in portal-ui,
+                # or a missing entity in the API.
+                abort(status)
             raise
         return response.json()
 
