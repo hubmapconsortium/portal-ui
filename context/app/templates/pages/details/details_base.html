@@ -75,7 +75,18 @@
           return entity ? `${entity['prov:type']} - ${entity['prov:label']}` : id;
         },
         renderDetailPane: (prov) => {
-          return React.createElement('pre', null, 'Hello!');
+          return React.createElement('table', {className: 'table table-bordered table-sm'},
+            React.createElement('tr', null,
+              [
+                React.createElement('td', {className: 'td-key'},
+                  'key'
+                ),
+                React.createElement('td', {className: 'td-value'},
+                  JSON.stringify(prov, null, 2)
+                )
+              ]
+            )
+          );
         }
       }
     );
