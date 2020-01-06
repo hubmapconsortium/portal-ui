@@ -74,7 +74,9 @@
           // Fallback to ID, if needed. https://github.com/hubmapconsortium/prov-vis/issues/15
           return entity ? `${entity['prov:type']} - ${entity['prov:label']}` : id;
         },
-        renderDetailPane: (prov) => {}
+        renderDetailPane: (prov) => {
+          return React.createElement('pre', null, 'Hello!');
+        }
       }
     );
     vitessce.validateAndRender(
