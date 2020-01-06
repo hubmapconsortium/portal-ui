@@ -23,10 +23,14 @@ def gateway_timeout(e):
     return render_template('errors/504.html', types={}), 504
 
 
-def create_app():
+def create_app(testing=False):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(default_config.DefaultConfig)
-    app.config.from_pyfile('app.conf')
+    if testing:
+        app.config['TESTING'] = True
+    else:
+        # We should not load the gitignored app.conf during tests.
+        app.config.from_pyfile('app.conf')
 
     app.register_blueprint(routes_main.blueprint)
     app.register_blueprint(routes_auth.blueprint)
