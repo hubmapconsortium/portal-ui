@@ -79,7 +79,11 @@
             ['prov:type', 'hubmap:uuid', 'prov:generatedAtTime'].map(
               field => React.createElement('tr', null, [
                 React.createElement('td', {className: 'td-key'}, field),
-                React.createElement('td', {className: 'td-value'}, prov[field])
+                React.createElement('td', {className: 'td-value'},
+                  field === 'hubmap:uuid'
+                    ? 'Link to ' + prov[field]
+                    : prov[field]
+                  )
               ])
             )
           );
