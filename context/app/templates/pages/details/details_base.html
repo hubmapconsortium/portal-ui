@@ -75,13 +75,16 @@
           return entity ? `${entity['prov:type']} - ${entity['prov:label']}` : id;
         },
         renderDetailPane: (prov) => {
-          return React.createElement('table', {className: 'table table-bordered table-sm'},
+          function create(tag, props, children) {
+            return React.createElement(tag, props, children);
+          }
+          return create('table', {className: 'table table-bordered table-sm'},
             ['prov:type', 'hubmap:uuid', 'prov:generatedAtTime'].map(
-              field => React.createElement('tr', null, [
-                React.createElement('td', {className: 'td-key'}, field),
-                React.createElement('td', {className: 'td-value'},
+              field => create('tr', null, [
+                create('td', {className: 'td-key'}, field),
+                create('td', {className: 'td-value'},
                   field === 'hubmap:uuid'
-                    ? 'Link to ' + prov[field]
+                    ? create('a', {href: prov[field]}, prov[field])
                     : prov[field]
                   )
               ])
