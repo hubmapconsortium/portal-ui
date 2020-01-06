@@ -27,12 +27,12 @@ def mock_get_400(path, **kwargs):
     return MockResponse()
 
 # TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
-# def test_400_html_page(client, mocker):
-#     mocker.patch('requests.get', side_effect=mock_get_400)
-#     response = client.get('/browse/donor')
-#     assert response.status == '400 BAD REQUEST'
-#     assert_is_valid_html(response)
-#     assert '400: Bad Request' in response.data.decode('utf8')
+def test_400_html_page(client, mocker):
+    mocker.patch('requests.get', side_effect=mock_get_400)
+    response = client.get('/browse/donor')
+    assert response.status == '400 BAD REQUEST'
+    assert_is_valid_html(response)
+    assert '400: Bad Request' in response.data.decode('utf8')
 
 
 @pytest.fixture
@@ -44,11 +44,11 @@ def client_not_logged_in():
         yield client
 
 # TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
-# def test_403_html_page(client_not_logged_in):
-#     response = client_not_logged_in.get('/browse/donor')
-#     assert response.status == '403 FORBIDDEN'
-#     assert_is_valid_html(response)
-#     assert '403: Access Denied' in response.data.decode('utf8')
+def test_403_html_page(client_not_logged_in):
+    response = client_not_logged_in.get('/browse/donor')
+    assert response.status == '403 FORBIDDEN'
+    assert_is_valid_html(response)
+    assert '403: Access Denied' in response.data.decode('utf8')
 
 
 @pytest.mark.parametrize('path', [
@@ -67,9 +67,9 @@ def mock_timeout_get(path, **kwargs):
     raise requests.exceptions.ConnectTimeout()
 
 # TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
-# def test_504_html_page(client, mocker):
-#     mocker.patch('requests.get', side_effect=mock_timeout_get)
-#     response = client.get('/browse/donor')
-#     assert response.status == '504 GATEWAY TIMEOUT'
-#     assert_is_valid_html(response)
-#     assert '504: Gateway Timeout' in response.data.decode('utf8')
+def test_504_html_page(client, mocker):
+    mocker.patch('requests.get', side_effect=mock_timeout_get)
+    response = client.get('/browse/donor')
+    assert response.status == '504 GATEWAY TIMEOUT'
+    assert_is_valid_html(response)
+    assert '504: Gateway Timeout' in response.data.decode('utf8')
