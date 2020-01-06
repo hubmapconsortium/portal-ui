@@ -8,8 +8,10 @@ from .test_routes_main import assert_is_valid_html
 
 @pytest.fixture
 def client():
-    app = create_app()
-    app.config['TESTING'] = True
+    app = create_app(testing=True)
+    # gitignored instance/app.conf should not be read during tests:
+    # We should just get the default config.
+    assert 'IS_MOCK' not in app.config
     with app.test_client() as client:
         with client.session_transaction() as session:
             session['nexus_token'] = '{}'
@@ -26,29 +28,28 @@ def mock_get_400(path, **kwargs):
             raise requests.exceptions.HTTPError(response=self)
     return MockResponse()
 
-# TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
-# def test_400_html_page(client, mocker):
-#     mocker.patch('requests.get', side_effect=mock_get_400)
-#     response = client.get('/browse/donor')
-#     assert response.status == '400 BAD REQUEST'
-#     assert_is_valid_html(response)
-#     assert '400: Bad Request' in response.data.decode('utf8')
+
+def test_400_html_page(client, mocker):
+    mocker.patch('requests.get', side_effect=mock_get_400)
+    response = client.get('/browse/donor')
+    assert response.status == '400 BAD REQUEST'
+    assert_is_valid_html(response)
+    assert '400: Bad Request' in response.data.decode('utf8')
 
 
 @pytest.fixture
 def client_not_logged_in():
-    app = create_app()
-    app.config['TESTING'] = True
+    app = create_app(testing=True)
     with app.test_client() as client:
         # No nexus_token!
         yield client
 
-# TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
-# def test_403_html_page(client_not_logged_in):
-#     response = client_not_logged_in.get('/browse/donor')
-#     assert response.status == '403 FORBIDDEN'
-#     assert_is_valid_html(response)
-#     assert '403: Access Denied' in response.data.decode('utf8')
+
+def test_403_html_page(client_not_logged_in):
+    response = client_not_logged_in.get('/browse/donor')
+    assert response.status == '403 FORBIDDEN'
+    assert_is_valid_html(response)
+    assert '403: Access Denied' in response.data.decode('utf8')
 
 
 @pytest.mark.parametrize('path', [
@@ -66,10 +67,10 @@ def test_404_html_page(client, path):
 def mock_timeout_get(path, **kwargs):
     raise requests.exceptions.ConnectTimeout()
 
-# TODO: https://github.com/hubmapconsortium/portal-ui/issues/102
-# def test_504_html_page(client, mocker):
-#     mocker.patch('requests.get', side_effect=mock_timeout_get)
-#     response = client.get('/browse/donor')
-#     assert response.status == '504 GATEWAY TIMEOUT'
-#     assert_is_valid_html(response)
-#     assert '504: Gateway Timeout' in response.data.decode('utf8')
+
+def test_504_html_page(client, mocker):
+    mocker.patch('requests.get', side_effect=mock_timeout_get)
+    response = client.get('/browse/donor')
+    assert response.status == '504 GATEWAY TIMEOUT'
+    assert_is_valid_html(response)
+    assert '504: Gateway Timeout' in response.data.decode('utf8')
