@@ -2,7 +2,7 @@
 
 ## v0.0.8 - In progress
 ### Changed
-- Get the Docker Compose to better emulate the production environment.
+- Get Globus login redirect working with Docker Compose reverse proxy.
 
 ## [v0.0.7](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.7) - 2020-01-08
 ### Added
