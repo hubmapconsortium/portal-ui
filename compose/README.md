@@ -10,6 +10,8 @@ We first need to [install Docker Compose](https://docs.docker.com/compose/instal
 
 ### Local dev deployment
 
+First, confirm that nothing is already running on http://localhost:5000/.
+
 You'll need a configuration file in place at `context/instance/app.conf`:
 Globus access requires a secret key, so this is not checked in:
 Instead ask another developer to share theirs.
@@ -21,7 +23,7 @@ docker-compose -f base.yml -f dev.yml up
 ````
 
 You will see the logs of the containers in stdout.
-Once it's ready, you'll be able to access the portal at  http://localhost:5000/.
+Once it's ready, you'll be able to access the portal at http://localhost:5000/.
 If you want to run the container in background:
 
 ````
