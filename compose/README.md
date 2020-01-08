@@ -4,7 +4,9 @@ This directory is used for deploying the portal-ui with docker-compose. The `dev
 
 We first need to [install Docker Compose](https://docs.docker.com/compose/install/).
 
-## Local dev
+## Deployments
+
+### Local dev deployment
 
 You'll need a configuration file in place at `context/instance/app.conf`:
 Globus access requires a secret key, so this is not checked in:
@@ -28,11 +30,15 @@ To safely stop the active container:
 docker-compose -f base.yml -f dev.yml stop
 ````
 
-## Deployment on HuBMAP testing server
+### HuBMAP testing server deployment
 
-For testing deployment, the [HuBMAP Gateway](https://github.com/hubmapconsortium/gateway.git) handles the SSL certificates and domain name. All the requests to `https://portal.test.hubmapconsortium.org/` will be send to the Gateway's nginx, then proxied to the `portal-ui` container where another nginx listens on port 80.
+For testing deployment, the [HuBMAP Gateway](https://github.com/hubmapconsortium/gateway.git) handles the SSL certificates and domain name. All the requests to `https://portal.test.hubmapconsortium.org/` will be sent to the Gateway's nginx, then proxied to the `portal-ui` container where another nginx listens on port 80.
 
 Uncomment one of the `SERVER_NAME` lines in app.conf: With an explicit `SERVER_NAME`,
 it will not work on localhost, but it is required for deployments.
 
 Starting and stopping the container in the testing environment is similar to the local dev, just replace `dev.yml` with `test.yml`.
+
+### HuBMAP production server deployment
+
+*TODO*
