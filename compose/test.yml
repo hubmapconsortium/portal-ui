@@ -3,6 +3,7 @@ version: "3.7"
 services:
 
   portal-ui:
+    image: hubmap/portal-ui:v0.0.7
     # Avoid accidentally creating zombie processes
     init: true
     # Specifying a restart policy to avoid downtime
