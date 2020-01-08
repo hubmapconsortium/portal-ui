@@ -8,7 +8,7 @@ To build and run:
 ```
 You will need globus keys to login to the demo. The base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
 
-Docker compose configurations for testing and production environments
+Docker compose configurations for local dev and test environments
 are also [checked in](compose/).
 
 ## Development
