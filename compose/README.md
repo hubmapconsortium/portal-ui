@@ -42,9 +42,6 @@ For testing deployment, the [HuBMAP Gateway](https://github.com/hubmapconsortium
 All the requests to `https://portal.test.hubmapconsortium.org/` will be sent to the Gateway's nginx,
 then proxied to the `portal-ui` container where another nginx listens on port 80.
 
-Uncomment one of the `SERVER_NAME` lines in app.conf:
-With an explicit `SERVER_NAME`, it will not work on localhost, but it is required for deployments.
-
 Starting and stopping the container in the testing environment is similar to the local dev, just replace `dev.yml` with `test.yml`.
 
 ### HuBMAP production server deployment
