@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.0.7 - In progress
+## v0.0.8 - In progress
+
+## [v0.0.7](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.7) - 2020-01-08
 ### Added
 - Link to JSON from details, and test.
 - Added many more rules to schema, and confirm that fields present are appropriate for type.
