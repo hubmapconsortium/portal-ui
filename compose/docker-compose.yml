@@ -4,8 +4,6 @@ services:
 
   portal-ui:
     build: ../context
-    hostname: portal-ui
-    container_name: portal-ui
     volumes:
       # Mount the app config in container to keep it outside the image.
       - "../context/instance/app.conf:/app/instance/app.conf"
@@ -22,8 +20,6 @@ services:
     networks:
       - hubmap
     image: nginx:1.17.6
-    hostname: nginx
-    container_name: nginx
     volumes:
       - "./nginx.conf:/etc/nginx/nginx.conf"
 
