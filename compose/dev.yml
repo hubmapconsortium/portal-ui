@@ -4,15 +4,20 @@ services:
 
   portal-ui:
     build: ../context
+    hostname: portal-ui
+    container_name: portal-ui
+    volumes:
+      # Mount the app config in container to keep it outside the image.
+      - "../context/instance/app.conf:/app/instance/app.conf"
     ports:
       - "80:80"
     networks:
       - hubmap
 
   nginx:
-    # In test and prod, the nginx reverse proxy is provided by the gateway.
+    # In production, the nginx reverse proxy is provided by the gateway.
     ports:
-      # Map port 5000 on host machine to 80 on container
+      # Map port 5000 on localhost to 80 on container
       - "5000:80"
     networks:
       - hubmap

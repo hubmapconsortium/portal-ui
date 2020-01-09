@@ -1,15 +1,20 @@
 # portal-ui
-HuBMAP Data Portal front end
+HuBMAP Data Portal:
+This is a Flask app, using React on the front end,
+and relying on the [HuBMAP Entity API](https://github.com/hubmapconsortium/entity-api) in the back,
+wrapped in a Docker container for deployment using Docker Compose.
+
+Deployed at:
+- [portal.test.hubmapconsortium.org](https://portal.test.hubmapconsortium.org/)
 
 ## Local demo using Docker
 To build and run:
 ```sh
 ./docker.sh 5001 --follow
 ```
-You will need globus keys to login to the demo. The base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
+You will need Globus keys to login to the demo. The base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
 
-Docker compose configurations for local dev and test environments
-are also [checked in](compose/).
+A [simple demonstration](compose/) of how the NGINX reverse proxy works in Docker Compose.
 
 ## Development
 After checking out the project, cd-ing into it, and setting up a Python3 virtual environment,
