@@ -14,8 +14,9 @@ You'll need:
 - Valid Globus credentials in `context/instance/app.conf`.
 - Nothing already using port 5000.
 
-With that ready, just run:
+With that ready:
 ````
-docker-compose -f compose/dev.yml up
+cd compose
+docker-compose up
 ````
 and the portal will be available at http://localhost:5000/, behind the reverse proxy.
