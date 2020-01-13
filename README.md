@@ -24,8 +24,10 @@ run `quick-start.sh` again,
 and visit [localhost:5000](http://localhost:5000).
 
 ## Tag, release, and deployment
-To tag a new version for github and [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
-checkout a release branch, increment `VERSION` and run:
+To tag a new version for github and
+[dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
+checkout a release branch, increment `VERSION`,
+update `compose/test.yml` to match, and run:
 ```sh
 ./push.sh
 ```

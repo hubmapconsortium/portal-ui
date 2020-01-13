@@ -1,6 +1,8 @@
 # Reverse Proxy with Docker Compose
 
-This provides a local demonstration of how the NGINX reverse proxy works in production.
+The `test.yml` here is used to deploy to [portal.test.hubmapconsortium.org](https://portal.test.hubmapconsortium.org/).
+
+The `docker-compose.yml` provides a local demonstration of how the NGINX reverse proxy works in real deployments.
 The important part is this line in `nginx.conf`:
 ```
 proxy_set_header  Host $http_host;
