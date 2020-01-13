@@ -3,11 +3,21 @@ version: "3.7"
 services:
 
   portal-ui:
+    hostname: portal-ui
+    container_name: portal-ui
+    # Incrementing this? Make @yuanzhou a reviewer on the PR.
     image: hubmap/portal-ui:v0.0.7
+
+    # Mount the app config in container to keep it outside the image.
+    volumes:
+      - "../context/instance/app.conf:/app/instance/app.conf"
+
     # Avoid accidentally creating zombie processes
     init: true
+
     # Specifying a restart policy to avoid downtime
     restart: always
+
     networks:
       - gateway_hubmap
 
