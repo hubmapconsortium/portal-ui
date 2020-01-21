@@ -73,55 +73,161 @@ def details(type, uuid):
 def _make_vitessce_conf():
     # TODO: Generate this from the API response.
     return {
-        'description': 'Multiplexed imaging of high-density libraries of RNAs '
-                       'with MERFISH and expansion microscopy',
-        'layers': [
-            {
-                'name': 'cells',
-                'type': 'CELLS',
-                'url': 'https://s3.amazonaws.com/vitessce-data/0.0.18/'
-                       'reorganize_folders/wang/wang.cells.json'
-            },
-            {
-                'name': 'molecules',
-                'type': 'MOLECULES',
-                'url': 'https://s3.amazonaws.com/vitessce-data/0.0.18/'
-                       'reorganize_folders/wang/wang.molecules.json'
-            },
-            {
-                'name': 'genes',
-                'type': 'GENES',
-                'url': 'https://s3.amazonaws.com/vitessce-data/0.0.18/'
-                       'reorganize_folders/wang/wang.genes.json'
-            }
-        ],
-        'name': 'Wang',
-        'responsiveLayout': {
-            'columns': {
-                '600': [0, 4, 6],
-                '800': [0, 6, 8],
-                '1000': [0, 8, 10],
-                '1200': [0, 10, 12],
-                '1400': [0, 12, 14]
-            },
-            'components': [
-                {
-                    'component': 'spatial',
-                    'props': {
-                        'view': {
-                            'zoom': -1,
-                            'target': [0, 0, 0]
-                        },
-                        'moleculeRadius': 2
-                    },
-                    'x': 0, 'y': 0, 'h': 2
-                },
-                {
-                    'component': 'genes',
-                    'x': 1, 'y': 0, 'h': 2
-                }
-            ]
+      "description": "Spatial organization of the somatosensory cortex revealed by cyclic smFISH",
+      "layers": [
+        {
+          "name": "cells",
+          "type": "CELLS",
+          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.cells.json"
+        },
+        {
+          "name": "clusters",
+          "type": "CLUSTERS",
+          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.clusters.json"
+        },
+        {
+          "name": "factors",
+          "type": "FACTORS",
+          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.factors.json"
+        },
+        {
+          "name": "genes",
+          "type": "GENES",
+          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.genes.json"
+        },
+        {
+          "name": "images",
+          "type": "IMAGES",
+          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.images.json"
+        },
+        {
+          "name": "molecules",
+          "type": "MOLECULES",
+          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.molecules.json"
+        },
+        {
+          "name": "neighborhoods",
+          "type": "NEIGHBORHOODS",
+          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.neighborhoods.json"
         }
+      ],
+      "name": "Linnarsson",
+      "responsiveLayout": {
+        "columns": {
+          "900": [
+            0,
+            3,
+            5,
+            7,
+            9
+          ],
+          "1100": [
+            0,
+            3,
+            6,
+            9,
+            11
+          ],
+          "1300": [
+            0,
+            3,
+            7,
+            11,
+            13
+          ],
+          "1500": [
+            0,
+            3,
+            8,
+            13,
+            15
+          ]
+        },
+        "components": [
+          {
+            "component": "description",
+            "props": {
+              "description": "Linnarsson: Spatial organization of the somatosensory cortex revealed by cyclic smFISH"
+            },
+            "x": 0,
+            "y": 0
+          },
+          {
+            "component": "cellSets",
+            "props": {
+              "datasetId": "linnarsson-2018"
+            },
+            "x": 0,
+            "y": 1,
+            "h": 3
+          },
+          {
+            "component": "status",
+            "x": 0,
+            "y": 4
+          },
+          {
+            "component": "spatial",
+            "props": {
+              "view": {
+                "zoom": -6.5,
+                "target": [
+                  16000,
+                  20000,
+                  0
+                ]
+              }
+            },
+            "x": 1,
+            "y": 0,
+            "h": 4
+          },
+          {
+            "component": "scatterplot",
+            "props": {
+              "mapping": "PCA"
+            },
+            "x": 2,
+            "y": 0,
+            "h": 2
+          },
+          {
+            "component": "scatterplot",
+            "props": {
+              "mapping": "t-SNE",
+              "view": {
+                "zoom": 0.75,
+                "target": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "x": 2,
+            "y": 2,
+            "h": 2
+          },
+          {
+            "component": "factors",
+            "x": 3,
+            "y": 0,
+            "h": 2
+          },
+          {
+            "component": "genes",
+            "x": 3,
+            "y": 2,
+            "h": 2
+          },
+          {
+            "component": "heatmap",
+            "x": 1,
+            "y": 4,
+            "w": 3
+          }
+        ]
+      }
     }
 
 
