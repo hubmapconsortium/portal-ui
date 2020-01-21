@@ -73,36 +73,38 @@ def details(type, uuid):
 def _make_vitessce_conf():
     # TODO: Generate this from the API response.
     return {
-          "description": "Spatial organization of the somatosensory cortex revealed by cyclic smFISH",
-          "layers": [
+        "description": "Linnarsson",
+        "layers": [
             {
-              "name": "cells",
-              "type": "CELLS",
-              "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.cells.json"
+                "name": "cells",
+                "type": "CELLS",
+                "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/"
+                        "master_release/linnarsson/linnarsson.cells.json"
             },
             {
-              "name": "genes",
-              "type": "GENES",
-              "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.genes.json"
+                "name": "genes",
+                "type": "GENES",
+                "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/"
+                        "master_release/linnarsson/linnarsson.genes.json"
             },
-          ],
-          "name": "Linnarsson",
-          "staticLayout": [
-          {
-            "component": "scatterplot",
-            "props": {
-              "mapping": "t-SNE",
-              "view": {
-                "zoom": 0.75,
-                "target": [0, 0, 0]
-              }
+        ],
+        "name": "Linnarsson",
+        "staticLayout": [
+            {
+                "component": "scatterplot",
+                "props": {
+                    "mapping": "t-SNE",
+                    "view": {
+                        "zoom": 0.75,
+                        "target": [0, 0, 0]
+                    }
+                },
+                "x": 0, "y": 0, "w": 8, "h": 2
             },
-            "x": 0, "y": 0, "w": 8, "h": 2
-          },
-          {
-            "component": "genes",
-            "x": 8, "y": 2, "w": 4, "h": 2
-          }
+            {
+                "component": "genes",
+                "x": 8, "y": 2, "w": 4, "h": 2
+            }
         ]
     }
 
