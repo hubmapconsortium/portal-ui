@@ -73,94 +73,37 @@ def details(type, uuid):
 def _make_vitessce_conf():
     # TODO: Generate this from the API response.
     return {
-      "description": "Spatial organization of the somatosensory cortex revealed by cyclic smFISH",
-      "layers": [
-        {
-          "name": "cells",
-          "type": "CELLS",
-          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.cells.json"
-        },
-        {
-          "name": "factors",
-          "type": "FACTORS",
-          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.factors.json"
-        },
-        {
-          "name": "genes",
-          "type": "GENES",
-          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.genes.json"
-        },
-        {
-          "name": "images",
-          "type": "IMAGES",
-          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.images.json"
-        },
-        {
-          "name": "molecules",
-          "type": "MOLECULES",
-          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.molecules.json"
-        },
-      ],
-      "name": "Linnarsson",
-      "responsiveLayout": {
-        "columns": {
-          "900": [
-            0,
-            3,
-            5,
-            7,
-            9
-          ]
-        },
-        "components": [
-
-          {
-            "component": "spatial",
-            "props": {
-              "view": {
-                "zoom": -6.5,
-                "target": [
-                  16000,
-                  20000,
-                  0
-                ]
-              }
+          "description": "Spatial organization of the somatosensory cortex revealed by cyclic smFISH",
+          "layers": [
+            {
+              "name": "cells",
+              "type": "CELLS",
+              "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.cells.json"
             },
-            "x": 1,
-            "y": 0,
-            "h": 4
-          },
+            {
+              "name": "genes",
+              "type": "GENES",
+              "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.genes.json"
+            },
+          ],
+          "name": "Linnarsson",
+          "staticLayout": [
           {
             "component": "scatterplot",
             "props": {
               "mapping": "t-SNE",
               "view": {
                 "zoom": 0.75,
-                "target": [
-                  0,
-                  0,
-                  0
-                ]
+                "target": [0, 0, 0]
               }
             },
-            "x": 2,
-            "y": 2,
-            "h": 2
-          },
-          {
-            "component": "factors",
-            "x": 3,
-            "y": 0,
-            "h": 2
+            "x": 0, "y": 0, "w": 8, "h": 2
           },
           {
             "component": "genes",
-            "x": 3,
-            "y": 2,
-            "h": 2
+            "x": 8, "y": 2, "w": 4, "h": 2
           }
         ]
-      }
     }
 
 
