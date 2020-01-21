@@ -81,11 +81,6 @@ def _make_vitessce_conf():
           "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.cells.json"
         },
         {
-          "name": "clusters",
-          "type": "CLUSTERS",
-          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.clusters.json"
-        },
-        {
           "name": "factors",
           "type": "FACTORS",
           "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.factors.json"
@@ -105,11 +100,6 @@ def _make_vitessce_conf():
           "type": "MOLECULES",
           "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.molecules.json"
         },
-        {
-          "name": "neighborhoods",
-          "type": "NEIGHBORHOODS",
-          "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/master_release/linnarsson/linnarsson.neighborhoods.json"
-        }
       ],
       "name": "Linnarsson",
       "responsiveLayout": {
@@ -120,52 +110,10 @@ def _make_vitessce_conf():
             5,
             7,
             9
-          ],
-          "1100": [
-            0,
-            3,
-            6,
-            9,
-            11
-          ],
-          "1300": [
-            0,
-            3,
-            7,
-            11,
-            13
-          ],
-          "1500": [
-            0,
-            3,
-            8,
-            13,
-            15
           ]
         },
         "components": [
-          {
-            "component": "description",
-            "props": {
-              "description": "Linnarsson: Spatial organization of the somatosensory cortex revealed by cyclic smFISH"
-            },
-            "x": 0,
-            "y": 0
-          },
-          {
-            "component": "cellSets",
-            "props": {
-              "datasetId": "linnarsson-2018"
-            },
-            "x": 0,
-            "y": 1,
-            "h": 3
-          },
-          {
-            "component": "status",
-            "x": 0,
-            "y": 4
-          },
+
           {
             "component": "spatial",
             "props": {
@@ -181,15 +129,6 @@ def _make_vitessce_conf():
             "x": 1,
             "y": 0,
             "h": 4
-          },
-          {
-            "component": "scatterplot",
-            "props": {
-              "mapping": "PCA"
-            },
-            "x": 2,
-            "y": 0,
-            "h": 2
           },
           {
             "component": "scatterplot",
@@ -219,12 +158,6 @@ def _make_vitessce_conf():
             "x": 3,
             "y": 2,
             "h": 2
-          },
-          {
-            "component": "heatmap",
-            "x": 1,
-            "y": 4,
-            "w": 3
           }
         ]
       }
