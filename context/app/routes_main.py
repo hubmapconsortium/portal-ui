@@ -73,55 +73,39 @@ def details(type, uuid):
 def _make_vitessce_conf():
     # TODO: Generate this from the API response.
     return {
-        'description': 'Multiplexed imaging of high-density libraries of RNAs '
-                       'with MERFISH and expansion microscopy',
-        'layers': [
+        "description": "Linnarsson",
+        "layers": [
             {
-                'name': 'cells',
-                'type': 'CELLS',
-                'url': 'https://s3.amazonaws.com/vitessce-data/0.0.18/'
-                       'reorganize_folders/wang/wang.cells.json'
+                "name": "cells",
+                "type": "CELLS",
+                "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/"
+                        "master_release/linnarsson/linnarsson.cells.json"
             },
             {
-                'name': 'molecules',
-                'type': 'MOLECULES',
-                'url': 'https://s3.amazonaws.com/vitessce-data/0.0.18/'
-                       'reorganize_folders/wang/wang.molecules.json'
+                "name": "genes",
+                "type": "GENES",
+                "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/"
+                        "master_release/linnarsson/linnarsson.genes.json"
             },
-            {
-                'name': 'genes',
-                'type': 'GENES',
-                'url': 'https://s3.amazonaws.com/vitessce-data/0.0.18/'
-                       'reorganize_folders/wang/wang.genes.json'
-            }
         ],
-        'name': 'Wang',
-        'responsiveLayout': {
-            'columns': {
-                '600': [0, 4, 6],
-                '800': [0, 6, 8],
-                '1000': [0, 8, 10],
-                '1200': [0, 10, 12],
-                '1400': [0, 12, 14]
-            },
-            'components': [
-                {
-                    'component': 'spatial',
-                    'props': {
-                        'view': {
-                            'zoom': -1,
-                            'target': [0, 0, 0]
-                        },
-                        'moleculeRadius': 2
-                    },
-                    'x': 0, 'y': 0, 'h': 2
+        "name": "Linnarsson",
+        "staticLayout": [
+            {
+                "component": "scatterplot",
+                "props": {
+                    "mapping": "t-SNE",
+                    "view": {
+                        "zoom": 0.75,
+                        "target": [0, 0, 0]
+                    }
                 },
-                {
-                    'component': 'genes',
-                    'x': 1, 'y': 0, 'h': 2
-                }
-            ]
-        }
+                "x": 0, "y": 0, "w": 8, "h": 2
+            },
+            {
+                "component": "genes",
+                "x": 8, "y": 2, "w": 4, "h": 2
+            }
+        ]
     }
 
 
