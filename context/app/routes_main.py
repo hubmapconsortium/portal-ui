@@ -78,14 +78,7 @@ def _make_vitessce_conf():
             {
                 "name": "cells",
                 "type": "CELLS",
-                "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/"
-                        "master_release/linnarsson/linnarsson.cells.json"
-            },
-            {
-                "name": "genes",
-                "type": "GENES",
-                "url": "https://s3.amazonaws.com/vitessce-data/0.0.20/"
-                        "master_release/linnarsson/linnarsson.genes.json"
+                "url": "https://assets.test.hubmapconsortium.org/linnarsson.cells.json"
             },
         ],
         "name": "Linnarsson",
@@ -99,12 +92,8 @@ def _make_vitessce_conf():
                         "target": [0, 0, 0]
                     }
                 },
-                "x": 0, "y": 0, "w": 8, "h": 2
+                "x": 0, "y": 0, "w": 12, "h": 2
             },
-            {
-                "component": "genes",
-                "x": 8, "y": 2, "w": 4, "h": 2
-            }
         ]
     }
 
