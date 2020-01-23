@@ -39,6 +39,7 @@ end pytest
 start docker
 ./docker.sh 5001
 server_up 5001
+npm install
 npm run cypress:run
 end docker
 
