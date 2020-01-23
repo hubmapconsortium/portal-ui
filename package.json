@@ -2,9 +2,12 @@
   "name": "portal-ui",
   "dependencies": {},
   "devDependencies": {
-    "cypress": "^3.6.1",
-    "wait-on": "^3.2.0"
+    "cypress": "^3.6.1"
   },
   "license": "MIT",
-  "repository": "https://github.com/hubmapconsortium/portal-ui/"
+  "repository": "https://github.com/hubmapconsortium/portal-ui/",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
+  }
 }
