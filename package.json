@@ -1,0 +1,10 @@
+{
+  "name": "portal-ui",
+  "dependencies": {},
+  "devDependencies": {
+    "cypress": "^3.6.1",
+    "wait-on": "^3.2.0"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/hubmapconsortium/portal-ui/"
+}
