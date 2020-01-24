@@ -1,4 +1,11 @@
 describe('portal-ui', () => {
+  it('has nice 404', () => {
+    // Homepage
+    cy.visit('/no-such-page', {failOnStatusCode: false});
+    cy.contains('404: Not Found');
+    cy.contains('If this page should exist');
+  });
+
   it('works', () => {
     // Homepage
     cy.visit('/');
