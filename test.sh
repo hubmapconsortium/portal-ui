@@ -10,7 +10,7 @@ server_up() {
   MAX_TRIES=10
   URL=http://localhost:$1
   until curl --silent --fail $URL; do
-    [ ${TRIES} -gt ${MAX_TRIES} ] && die 'Server did not come up'
+    [ ${TRIES} -gt ${MAX_TRIES} ] && die "Server not running at $URL"
     printf '.'
     sleep 1
     TRIES=$(($TRIES+1))
