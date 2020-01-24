@@ -6,7 +6,7 @@ describe('portal-ui', () => {
   });
 
   it('works', () => {
-    cy.visit('http://localhost:5001/');
+    cy.visit('/');
     cy.contains('Welcome to HuBMAP');
   });
 });
