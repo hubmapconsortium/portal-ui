@@ -7,9 +7,6 @@ from flask import abort, current_app
 from datauri import DataURI
 import requests
 
-# Hopefully soon, generate API client code from OpenAPI:
-# https://github.com/hubmapconsortium/hubmap-data-portal/issues/179
-
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
