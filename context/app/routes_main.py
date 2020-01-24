@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, abort, current_app, session, flash
 
 from yaml import safe_load as load_yaml
+from datauri import DataURI
+import json
 
 from .api.client import ApiClient
 from .render_utils import object_as_html
@@ -72,13 +74,18 @@ def details(type, uuid):
 
 def _make_vitessce_conf():
     # TODO: Generate this from the API response.
+    cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
+    cellsDataUri = DataURI.make(
+        'text/plain', charset='us-ascii', base64=True, data=cellsData
+    )
+
     return {
         "description": "Linnarsson",
         "layers": [
             {
                 "name": "cells",
                 "type": "CELLS",
-                "url": "https://assets.test.hubmapconsortium.org/linnarsson.cells.json"
+                "url": cellsDataUri
             },
         ],
         "name": "Linnarsson",

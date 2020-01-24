@@ -5,3 +5,4 @@ yattag==1.12.2
 mistune==0.8.4
 jsonschema==3.2.0
 pyyaml==5.2
+python-datauri==0.2.8

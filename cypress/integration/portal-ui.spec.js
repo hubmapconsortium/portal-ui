@@ -16,9 +16,8 @@ describe('portal-ui', () => {
     // Provenance
     cy.contains('undefined - Input');
     // Vitessce
-    // TODO: Mock Files-API response and test Vitessce.
-    // cy.contains('Scatterplot (t-SNE)')
-    // cy.contains('4839 cells');
+    cy.contains('Scatterplot (t-SNE)')
+    cy.contains('1 cells');
 
     // Samples browse
     cy.contains('Samples').click();
