@@ -1,10 +1,4 @@
 describe('portal-ui', () => {
-  beforeEach(() => {
-    // Any request we do not explicitly route will return 404,
-    // so we won't end up depending on outside resources by accident.
-    cy.server({ force404: true });
-  });
-
   it('works', () => {
     // Homepage
     cy.visit('/');
@@ -39,6 +33,7 @@ describe('portal-ui', () => {
     cy.contains('TODO: Say something helpful here!');
 
     // Login
-    // cy.contains('Login').click();
+    cy.contains('Login');
+    // Don't click! We shouldn't depend on Globus in tests.
   });
 });
