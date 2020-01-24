@@ -4,6 +4,7 @@ from datetime import datetime
 
 from flask import abort, current_app
 
+from datauri import DataURI
 import requests
 
 # Hopefully soon, generate API client code from OpenAPI:
@@ -113,41 +114,39 @@ class ApiClient():
 
         return provenance
 
+    def get_vitessce_conf(self):
+        if self.is_mock:
+            cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
+            cellsUri = DataURI.make(
+                'text/plain', charset='us-ascii', base64=True, data=cellsData
+            )
+        else:
+            # TODO: Hit File API
+            cellsUri = 'https://assets.test.hubmapconsortium.org/linnarsson.cells.json'
 
-
-def get_vitessce_conf():
-    if self.is_mock:
-        cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
-        cellsUri = DataURI.make(
-            'text/plain', charset='us-ascii', base64=True, data=cellsData
-        )
-    else:
-        # TODO: Hit File API
-        cellsUri = 'https://assets.test.hubmapconsortium.org/linnarsson.cells.json'
-
-    return {
-        "description": "Linnarsson",
-        "layers": [
-            {
-                "name": "cells",
-                "type": "CELLS",
-                "url": cellsUri
-            },
-        ],
-        "name": "Linnarsson",
-        "staticLayout": [
-            {
-                "component": "scatterplot",
-                "props": {
-                    "mapping": "t-SNE",
-                    "view": {
-                        "zoom": 0.75,
-                        "target": [0, 0, 0]
-                    }
+        return {
+            "description": "Linnarsson",
+            "layers": [
+                {
+                    "name": "cells",
+                    "type": "CELLS",
+                    "url": cellsUri
                 },
-                "x": 0, "y": 0, "w": 12, "h": 2
-            },
-        ]
-    }
+            ],
+            "name": "Linnarsson",
+            "staticLayout": [
+                {
+                    "component": "scatterplot",
+                    "props": {
+                        "mapping": "t-SNE",
+                        "view": {
+                            "zoom": 0.75,
+                            "target": [0, 0, 0]
+                        }
+                    },
+                    "x": 0, "y": 0, "w": 12, "h": 2
+                },
+            ]
+        }
 
-# TODO: More functions
+    # TODO: More functions
