@@ -7,7 +7,7 @@ die() { set +v; echo "$*" 1>&2 ; sleep 1; exit 1; }
 
 server_up() {
   TRIES=0
-  MAX_TRIES=30
+  MAX_TRIES=60
   URL=http://localhost:$1
   until curl --silent --fail $URL; do
     [ ${TRIES} -gt ${MAX_TRIES} ] && die "Server not running at $URL"
