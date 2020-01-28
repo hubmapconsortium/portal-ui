@@ -4,6 +4,7 @@
 ### Changed
 - Demonstrate Docker Compose reverse proxy.
 - Simplify Vitessce demo to just a scatterplot with data from HuBMAP.
+- Add Cypress.io tests.
 
 ## [v0.0.7](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.7) - 2020-01-08
 ### Added

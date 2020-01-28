@@ -1,0 +1,13 @@
+{
+  "name": "portal-ui",
+  "dependencies": {},
+  "devDependencies": {
+    "cypress": "^3.6.1"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/hubmapconsortium/portal-ui/",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
+  }
+}

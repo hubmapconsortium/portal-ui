@@ -25,6 +25,11 @@ update `app.conf` with the Globus client ID and client secret,
 run `quick-start.sh` again,
 and visit [localhost:5000](http://localhost:5000).
 
+## Testing
+[`test.sh`](test.sh) wraps all the tests and is run on Travis.
+Low-level unit tests are in python (`pytest -vv`),
+while end-to-end tests use [Cypress](https://docs.cypress.io/guides/overview/why-cypress.html) (`npm run cypress:open`).
+
 ## Tag, release, and deployment
 To tag a new version for github and
 [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
