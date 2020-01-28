@@ -6,7 +6,7 @@ describe('portal-ui', () => {
     cy.contains('If this page should exist');
   });
 
-  it('works', () => {
+  it('handles click-through', () => {
     // Homepage
     cy.visit('/');
     cy.contains('Welcome to HuBMAP');
