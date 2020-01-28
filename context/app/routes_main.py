@@ -66,36 +66,8 @@ def details(type, uuid):
         entity=entity,
         details_html=details_html,
         provenance=provenance,
-        vitessce_conf=_make_vitessce_conf()
+        vitessce_conf=client.get_vitessce_conf()
     )
-
-
-def _make_vitessce_conf():
-    # TODO: Generate this from the API response.
-    return {
-        "description": "Linnarsson",
-        "layers": [
-            {
-                "name": "cells",
-                "type": "CELLS",
-                "url": "https://assets.test.hubmapconsortium.org/linnarsson.cells.json"
-            },
-        ],
-        "name": "Linnarsson",
-        "staticLayout": [
-            {
-                "component": "scatterplot",
-                "props": {
-                    "mapping": "t-SNE",
-                    "view": {
-                        "zoom": 0.75,
-                        "target": [0, 0, 0]
-                    }
-                },
-                "x": 0, "y": 0, "w": 12, "h": 2
-            },
-        ]
-    }
 
 
 @blueprint.route('/browse/<type>/<uuid>.<ext>')
