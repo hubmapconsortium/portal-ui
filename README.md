@@ -3,9 +3,11 @@ HuBMAP Data Portal:
 This is a Flask app, using React on the front end,
 and relying on the [HuBMAP Entity API](https://github.com/hubmapconsortium/entity-api) in the back,
 wrapped in a Docker container for deployment using Docker Compose.
+It is deployed at [portal.test.hubmapconsortium.org](https://portal.test.hubmapconsortium.org/)
 
-Deployed at:
-- [portal.test.hubmapconsortium.org](https://portal.test.hubmapconsortium.org/)
+The Data Portal depends, directly or indirectly, on many other HuBMAP repos:
+
+[![Repo diagram](https://docs.google.com/drawings/d/e/2PACX-1vQ1ISVanilVt3vewU6tekVirOxPpTsKMS3zXa8tL0J5JjdT9zS9adgXivm1ZcXxoyC_lctIlHVYhJuI/pub?w=922&amp;h=408)](https://docs.google.com/drawings/d/1q0IvliNTX0Xo9EzHTAoRZ2x1gatG_n0gOoLN7uVMJ4o/edit)
 
 ## Local demo using Docker
 To build and run:
