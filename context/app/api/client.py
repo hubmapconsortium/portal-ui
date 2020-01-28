@@ -145,5 +145,3 @@ class ApiClient():
                 },
             ]
         }
-
-    # TODO: More functions
