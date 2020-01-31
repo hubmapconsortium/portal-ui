@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.0.8 - In progress
+## v0.0.9 - In progress
+
+## [v0.0.8](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.8) - 2020/01/31
 ### Changed
 - Demonstrate Docker Compose reverse proxy.
 - Simplify Vitessce demo to just a scatterplot with data from HuBMAP.

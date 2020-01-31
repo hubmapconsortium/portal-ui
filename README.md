@@ -34,10 +34,13 @@ while end-to-end tests use [Cypress](https://docs.cypress.io/guides/overview/why
 To tag a new version for github and
 [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
 checkout a release branch, increment `VERSION`,
-update `compose/test.yml` to match, and run:
+update `compose/test.yml` to match,
+commit these changes, and run:
 ```sh
 ./push.sh
 ```
+Update the CHANGELOG, adding the date for the current release,
+and stubbing the new "in progress" release.
 
 If this should be deployed publicly, make `@yuanzhou` a reviewer on the PR,
 so he knows a new version is available.
