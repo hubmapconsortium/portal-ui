@@ -39,6 +39,8 @@ commit these changes, and run:
 ```sh
 ./push.sh
 ```
+Update the CHANGELOG, adding the date for the current release,
+and stubbing the new "in progress" release.
 
 If this should be deployed publicly, make `@yuanzhou` a reviewer on the PR,
 so he knows a new version is available.
