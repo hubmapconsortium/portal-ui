@@ -117,12 +117,13 @@ class ApiClient():
             cellsUri = DataURI.make(
                 'text/plain', charset='us-ascii', base64=True, data=cellsData
             )
+            token = 'fake-token'
         else:
             # TODO: Hit File API
             cellsUri = 'https://assets.test.hubmapconsortium.org/' \
                 '686cd8e0c2a9fa2dc1a321330158dcd7/umap/' \
                 'cluster_marker_genes/cluster_marker_genes.json'
-
+            token = self.nexus_token
         return {
             "description": "DEMO",
             "layers": [
@@ -132,7 +133,7 @@ class ApiClient():
                     "url": cellsUri,
                     "requestInit": {
                         "headers": {
-                            'Authorization': 'Bearer ' + self.nexus_token
+                            'Authorization': 'Bearer ' + token
                         }
                     }
                 },

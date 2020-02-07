@@ -23,7 +23,7 @@ describe('portal-ui', () => {
     // Provenance
     cy.contains('undefined - Input');
     // Vitessce
-    cy.contains('Scatterplot (t-SNE)')
+    cy.contains('Scatterplot (UMAP)')
     cy.contains('1 cells');
 
     // Samples browse
