@@ -119,7 +119,9 @@ class ApiClient():
             )
         else:
             # TODO: Hit File API
-            cellsUri = 'https://assets.test.hubmapconsortium.org/686cd8e0c2a9fa2dc1a321330158dcd7/umap/cluster_marker_genes/cluster_marker_genes.json'
+            cellsUri = 'https://assets.test.hubmapconsortium.org/' \
+                '686cd8e0c2a9fa2dc1a321330158dcd7/umap/' \
+                'cluster_marker_genes/cluster_marker_genes.json'
 
         return {
             "description": "DEMO",
