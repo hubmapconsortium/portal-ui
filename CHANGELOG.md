@@ -1,6 +1,8 @@
 # Changelog
 
 ## v0.0.9 - In progress
+### Added
+- Demo of end-to-end UMAP scatterplot.
 
 ## [v0.0.8](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.8) - 2020/01/31
 ### Changed
