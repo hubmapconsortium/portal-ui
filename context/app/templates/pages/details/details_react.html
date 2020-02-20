@@ -1,0 +1,22 @@
+{% extends 'pages/base_react.html' %}
+{% block extra_stylesheets %}
+  <!-- TODO: Reference your CSS. -->
+{% endblock %}
+
+{% block title_text %}
+  {{ title_text }}
+{% endblock %}
+
+{% block content %}
+  <div id="target" />
+{% endblock %}
+
+{% block extra_scripts %}
+  <!-- TODO: Reference your JS. -->
+  <script src="https://unpkg.com/..../umd/.....min.js"></script>
+  <!-- TODO: Render your component. -->
+  <script>
+    const reactElement = React.createElement(component, props);
+    ReactDOM.render(reactElement, document.getElementById('target'));
+  </script>
+{% endblock %}
