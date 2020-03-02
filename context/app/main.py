@@ -18,6 +18,11 @@ def access_denied(e):
     return render_template('errors/403.html', types={}), 403
 
 
+def unauthorized(e):
+    '''A 401 probably means Globus credentials have expired.'''
+    return render_template('errors/401.html', types={}), 401
+
+
 def gateway_timeout(e):
     '''A 504 means the API has timed out.'''
     return render_template('errors/504.html', types={}), 504
@@ -37,6 +42,7 @@ def create_app(testing=False):
     app.register_blueprint(routes_markdown.blueprint)
 
     app.register_error_handler(400, bad_request)
+    app.register_error_handler(401, unauthorized)
     app.register_error_handler(404, not_found)
     app.register_error_handler(403, access_denied)
     app.register_error_handler(504, gateway_timeout)
