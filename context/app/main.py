@@ -20,6 +20,9 @@ def access_denied(e):
 
 def unauthorized(e):
     '''A 401 probably means Globus credentials have expired.'''
+    # Go ahead and clear the flask session for the user.
+    # Without this, the button still says "Logout", as if they were still logged in.
+    session.clear()
     return render_template('errors/401.html', types={}), 401
 
 
