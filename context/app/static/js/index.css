@@ -1,0 +1,21 @@
+body {
+    left: 20px;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.navLink {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.navLink:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
