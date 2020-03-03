@@ -79,41 +79,46 @@ class ApiClient():
         return response['entity_node']
 
     def get_provenance(self, uuid):
-        if self.is_mock:
-            return {
-                'prefix': {
-                    'ex': 'http://example.com#',
-                    'prov': 'http://www.w3.org/ns/prov#',
-                    'hubmap': 'https://hubmapconsortium.org'
-                },
-                'entity': {
-                    'ex:input': {'prov:label': 'Input', 'ex:note': 'Begins here...'},
-                    'ex:output': {'prov:label': 'Output', 'ex:note': '... and ends here.'},
-                },
-                'activity': {
-                    'ex:process': {'prov:label': 'Process'},
-                },
-                'wasGeneratedBy': {
-                    '_:1': {
-                        'prov:activity': 'ex:process',
-                        'prov:entity': 'ex:output',
-                    },
-                },
-                'used': {
-                    '_:2': {
-                        'prov:activity': 'ex:process',
-                        'prov:entity': 'ex:input',
-                    },
-                },
-            }
-        response = self._request(f'/entities/{uuid}/provenance')
-        provenance = json.loads(response['provenance_data'])
+        # TODO: When the API is fixed, only use this when is_mock.
 
-        # TODO: These should not be needed with next update to NPM.
-        del provenance['agent']
-        provenance['prefix']['hubmap'] = 'https://hubmapconsortium.org'
+        # if self.is_mock:
+        return {
+            'prefix': {
+                'ex': 'http://example.com#',
+                'prov': 'http://www.w3.org/ns/prov#',
+                'hubmap': 'https://hubmapconsortium.org'
+            },
+            'entity': {
+                'ex:input': {'prov:label': 'Input', 'ex:note': 'Begins here...'},
+                'ex:output': {'prov:label': 'Output', 'ex:note': '... and ends here.'},
+            },
+            'activity': {
+                'ex:process': {'prov:label': 'Process'},
+            },
+            'wasGeneratedBy': {
+                '_:1': {
+                    'prov:activity': 'ex:process',
+                    'prov:entity': 'ex:output',
+                },
+            },
+            'used': {
+                '_:2': {
+                    'prov:activity': 'ex:process',
+                    'prov:entity': 'ex:input',
+                },
+            },
+        }
 
-        return provenance
+        # TODO: continued from above.
+
+        # response = self._request(f'/entities/{uuid}/provenance')
+        # provenance = json.loads(response['provenance_data'])
+        #
+        # # TODO: These should not be needed with next update to NPM.
+        # del provenance['agent']
+        # provenance['prefix']['hubmap'] = 'https://hubmapconsortium.org'
+        #
+        # return provenance
 
     def get_vitessce_conf(self):
         if self.is_mock:
