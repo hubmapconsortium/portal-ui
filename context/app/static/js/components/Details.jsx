@@ -13,13 +13,11 @@ import Typography from "@material-ui/core/Typography";
 import VisTabs from './VisTabs';
 
 export default function Details(props) {
-  const assayMetaData = props.data;
-  console.log(assayMetaData);
-  // RawJson will need to be adjusted
+  const assayMetaData = props.assayJSON;
+  const provData = props.provJSON;
   let jsonList = Object.keys(assayMetaData).map((keyName)=> {
     return (<li key={keyName}>{keyName}: {assayMetaData[keyName]}</li>);
   });
-  console.log(jsonList);
   return (
     <Container maxWidth="lg">
       <ExpansionPanel defaultExpanded={true}>
@@ -96,11 +94,11 @@ export default function Details(props) {
           </ul>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      {/*<Box mt={2}>*/}
-      {/*  <Paper>*/}
-      {/*    <VisTabs/>*/}
-      {/*  </Paper>*/}
-      {/*</Box>*/}
+      <Box mt={2}>
+        <Paper>
+          <VisTabs provData={provData}/>
+        </Paper>
+      </Box>
     </Container>
   )
 };

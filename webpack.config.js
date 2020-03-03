@@ -21,13 +21,27 @@ const config = {
         exclude: /node_modules/,
       },
       {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
         test: /\.html$/,
         use: [
           {
             loader: "html-loader"
           }
         ]
-      }]
+      },
+      {
+        test: /\.(ttf|eot|woff|woff2)$/,
+        use: {
+          loader: "file-loader",
+          options: {
+            name: "/fonts/[name].[ext]",
+          },
+        },
+      },
+    ]
   }
 };
 module.exports = config;

@@ -15,31 +15,25 @@
   </head>
 
   <body>
-    {% include 'fragments/header.html' %}
-
-    <div class="container-fluid">
-      <div class="row p-2">
-        <div class="col" id="content">
-          <div id="react-content"></div>
-          {% include 'fragments/flash.html' %}
-          {% block title %}{% endblock %}
-          <section>
-            {% block content %}{% endblock %}
-          </section>
-        </div>
-      </div>
-    </div>
+  <div id="react-content"></div>
+<!--    {% include 'fragments/header.html' %}-->
+<!--    <div class="container-fluid">-->
+<!--      <div class="row p-2">-->
+<!--        <div class="col" id="content">-->
+      {% include 'fragments/flash.html' %}
+      {% block title %}{% endblock %}
+      <section>
+        {% block content %}{% endblock %}
+      </section>
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
     {% include 'fragments/footer.html' %}
 
     {% block extra_scripts %}
     <!-- TODO: Reference your JS. -->
     <script src="{{ url_for('static', filename='public/bundle.js') }}"></script>
-    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-<!--    <script>-->
-<!--      const reactElement = React.createElement(component, props);-->
-<!--      ReactDOM.render(reactElement, document.getElementById('target'));-->
-<!--    </script>-->
     {% endblock %}
   </body>
 </html>
