@@ -42,6 +42,10 @@ class ApiClient():
                 # whether it's a missing route in portal-ui,
                 # or a missing entity in the API.
                 abort(status)
+            if status in [401]:
+                # I believe we have 401 errors when the globus credentials
+                # have expired, but are still in the flask session.
+                abort(status)
             raise
         return response.json()
 
