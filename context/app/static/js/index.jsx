@@ -1,5 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Home from "./components/Home";
+import './index.css';
+import App from './App';
+import Header from './header';
+import Details from './components/Details';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './theme';
 
-ReactDOM.render(<Home/>, document.getElementById("react-content"));
+ReactDOM.render(
+  <ThemeProvider theme={theme}>
+    <CssBaseline />
+    <Header />
+    <App />
+  </ThemeProvider>, document.getElementById('react-content'));
