@@ -6,7 +6,10 @@
 
 {% block content %}
 <p>
-  Unauthorized: Your credentials have expired;
-  Please login again.
+  Unauthorized: Either your credentials have expired, or they were never granted.
 </p>
+<ul>
+  <li>If you have used the HuBMAP Portal before, then <a href="/logout">logout</a> and log back in.</li>
+  <li>If you have not used the HuBMAP Portal before, then <a href="https://profile.hubmapconsortium.org/">create an account</a>.</li>
+</ul>
 {% endblock %}
