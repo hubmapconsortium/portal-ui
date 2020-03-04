@@ -1,0 +1,11 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}
+  <h1>{% block title_text %}401: Unauthorized{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<p>
+  Unauthorized: Your credentials have expired. Please <a href="/logout">logout</a> and log back in.
+</p>
+{% endblock %}

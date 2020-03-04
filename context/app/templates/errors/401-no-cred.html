@@ -1,0 +1,11 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}
+  <h1>{% block title_text %}401: Unauthorized{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<p>
+  Unauthorized: You have not been granted credentials. Please <a href="https://profile.hubmapconsortium.org/">create an account</a>.
+</p>
+{% endblock %}
