@@ -2,7 +2,7 @@ from collections import namedtuple
 import json
 from datetime import datetime
 
-from flask import abort, current_app
+from flask import abort, current_app, session
 
 from datauri import DataURI
 import requests
@@ -15,11 +15,53 @@ def _format_timestamp(ts):
     return datetime.utcfromtimestamp(int(ts) / 1000).strftime('%Y-%m-%d %H:%M:%S')
 
 
+def get_client():
+    try:
+        is_mock = current_app.config['IS_MOCK']
+    except KeyError:
+        is_mock = False
+    if is_mock:
+        return ApiClient(is_mock=is_mock)
+    if 'nexus_token' not in session:
+        abort(403)
+    return ApiClient(
+        current_app.config['ENTITY_API_BASE'],
+        session['nexus_token']
+    )
+
+
 class ApiClient():
     def __init__(self, url_base=None, nexus_token=None, is_mock=False):
         self.url_base = url_base
         self.nexus_token = nexus_token
         self.is_mock = is_mock
+
+    def has_read_privs(self):
+        if self.is_mock:
+            return True
+        if 'nexus_token' not in session:
+            abort(403)
+        # Mostly copy-and-paste from
+        # https://github.com/hubmapconsortium/commons/blob/dc69f4/hubmap_commons/hm_auth.py#L347-L355
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + session['nexus_token']
+        }
+        params = {
+            'fields': 'id,name,description',
+            # I'm not sure what these do, and if they are necessary:
+            'for_all_identities': 'false',
+            'my_statuses': 'active'
+        }
+        response = requests.get(
+            'https://nexus.api.globusonline.org/groups',
+            headers=headers,
+            params=params)
+        if response.status_code != 200:
+            abort(500)
+        groups = response.json()
+        return any([group['name'] == 'HuBMAP-read' for group in groups])
 
     def _request(self, path):
         headers = {'Authorization': 'Bearer ' + self.nexus_token}

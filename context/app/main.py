@@ -1,6 +1,7 @@
 from flask import Flask, session, render_template
 
 from . import routes_main, routes_auth, routes_markdown, default_config
+from .api.client import get_client
 
 
 def bad_request(e):
@@ -20,26 +21,7 @@ def access_denied(e):
 
 def unauthorized(e):
     '''A 401 means Globus credentials have expired, or they were never granted.'''
-    if 'nexus_token' not in session:
-        abort(403)
-    # Mostly copy-and-paste from https://github.com/hubmapconsortium/commons/blob/dc69f4/hubmap_commons/hm_auth.py#L347-L355
-    headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + session['nexus_token']
-    }
-    params = {
-        'fields': 'id,name,description',
-        # I'm not sure what these do, and if they are necessary:
-        'for_all_identities': 'false',
-        'my_statuses': 'active'
-    }
-    response = requests.get('https://nexus.api.globusonline.org/groups', headers=headers, params=params)
-    if response.status_code != 200:
-        abort(500)
-    groups = response.json()
-    has_read_privs = any([group['name'] == 'HuBMAP-read' for group in groups])
-    if has_read_privs:
+    if get_client().has_read_privs():
         return render_template('errors/401-expired-cred.html', types={}), 401
     return render_template('errors/401-no-cred.html', types={}), 401
 

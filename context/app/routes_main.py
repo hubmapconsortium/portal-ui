@@ -1,29 +1,14 @@
-from flask import Blueprint, render_template, abort, current_app, session, flash
+from flask import Blueprint, render_template, abort, current_app, flash
 
 from yaml import safe_load as load_yaml
 
-from .api.client import ApiClient
+from .api.client import get_client
 from .render_utils import object_as_html
 from .config import types
 from .validation_utils import for_each_validation_error
 
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
-
-
-def _get_client():
-    try:
-        is_mock = current_app.config['IS_MOCK']
-    except KeyError:
-        is_mock = False
-    if is_mock:
-        return ApiClient(is_mock=is_mock)
-    if 'nexus_token' not in session:
-        abort(403)
-    return ApiClient(
-        current_app.config['ENTITY_API_BASE'],
-        session['nexus_token']
-    )
 
 
 @blueprint.route('/')
@@ -35,7 +20,7 @@ def index():
 def browse(type):
     if type not in types:
         abort(404)
-    entities = _get_client().get_entities(type)
+    entities = get_client().get_entities(type)
     return render_template('pages/browse.html', types=types, type=type, entities=entities)
 
 
@@ -43,7 +28,7 @@ def browse(type):
 def details(type, uuid):
     if type not in types:
         abort(404)
-    client = _get_client()
+    client = get_client()
 
     entity = client.get_entity(uuid)
     # TODO: These schemas don't need to be reloaded per request.
@@ -76,7 +61,7 @@ def details_ext(type, uuid, ext):
         abort(404)
     if ext != 'json':
         abort(404)
-    client = _get_client()
+    client = get_client()
 
     entity = client.get_entity(uuid)
     return entity
