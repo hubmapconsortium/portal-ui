@@ -1,0 +1,11 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+<div id="react-details-content"></div>
+
+<script>
+  const dataJSON = {{ entity | tojson }};
+  const provenanceJSON = {{ provenance | tojson }};
+  const vitJSON = {{ vitessce_conf | tojson }};
+</script>
+{% endblock %}
