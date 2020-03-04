@@ -37,25 +37,6 @@ def test_400_html_page(client, mocker):
     assert '400: Bad Request' in response.data.decode('utf8')
 
 
-def mock_get_401(path, **kwargs):
-    class MockResponse():
-        def __init__(self):
-            self.status_code = 401
-            self.text = 'Logger call requires this'
-
-        def raise_for_status(self):
-            raise requests.exceptions.HTTPError(response=self)
-    return MockResponse()
-
-
-def test_401_html_page(client, mocker):
-    mocker.patch('requests.get', side_effect=mock_get_401)
-    response = client.get('/browse/donor')
-    assert response.status == '401 UNAUTHORIZED'
-    assert_is_valid_html(response)
-    assert '401: Unauthorized' in response.data.decode('utf8')
-
-
 @pytest.fixture
 def client_not_logged_in():
     app = create_app(testing=True)
