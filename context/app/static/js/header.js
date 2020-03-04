@@ -4,11 +4,16 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { Container } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import LoginLink from "./components/LoginLink";
 
 import { useStyles } from './styles';
 
 export default function Header() {
   const classes = useStyles();
+  let loginLink = <a href={"/login"} className="navLink"> Login </a>;
+  if (isLoggedIn) {
+    loginLink = <a href={"/logout"} className="navLink"> Logout </a>;
+  }
 
   return (
     <AppBar className={classes.MuiAppBar} position="sticky" elevation={0}>
@@ -37,15 +42,8 @@ export default function Header() {
             </a>
           </Button>
           <Button>
-            <a href={"/login"} className="navLink">
-              Login
-            </a>
+            { loginLink }
           </Button>
-          {/*<Button>*/}
-          {/*  <a href={"/logout"}>*/}
-          {/*    Logout*/}
-          {/*  </a>*/}
-          {/*</Button>*/}
         </Toolbar>
       </Container>
     </AppBar>

@@ -9,7 +9,7 @@ const config = {
     publicPath: resolve('../context/app/static/public'),
   },
   resolve: {
-    extensions: ['.js','.jsx','.css']
+    extensions: ['.js','.jsx','.css', 'scss']
   },
   module: {
     rules: [
@@ -40,6 +40,10 @@ const config = {
             name: "/fonts/[name].[ext]",
           },
         },
+      },
+      {
+        test: /\.svg$/,
+        use: { loader: "svg-loader" },
       },
     ]
   }

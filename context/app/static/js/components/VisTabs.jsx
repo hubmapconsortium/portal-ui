@@ -72,7 +72,9 @@ export default function VisTabs (props) {
         <Tab label="Provenance " {...a11yProps(1)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        Place Holder of Vitsecce
+        <span id={"vit-grid"}>
+          Vit Place Holder
+        </span>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <span id={"prov-vis"}>

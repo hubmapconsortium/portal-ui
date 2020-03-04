@@ -15,6 +15,7 @@ import VisTabs from './VisTabs';
 export default function Details(props) {
   const assayMetaData = props.assayJSON;
   const provData = props.provJSON;
+  const vitData = props.vitJSON;
   let jsonList = Object.keys(assayMetaData).map((keyName)=> {
     return (<li key={keyName}>{keyName}: {assayMetaData[keyName]}</li>);
   });
@@ -96,7 +97,7 @@ export default function Details(props) {
       </ExpansionPanel>
       <Box mt={2}>
         <Paper>
-          <VisTabs provData={provData}/>
+          <VisTabs provData={provData} vitData={vitData}/>
         </Paper>
       </Box>
     </Container>

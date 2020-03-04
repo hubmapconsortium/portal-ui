@@ -4,14 +4,11 @@ import ReactDOM from 'react-dom';
 import Details from './components/Details'
 
 export default function App(props) {
-  console.log(props);
-  let viewID = "react-details-content";
-  function getViewComponent () {
-    if (window.location.pathname.indexOf('browse/dataset') > -1) {
-      return <Details data={dataJson}/>
-    }
-    return <div></div>;
+  if (window.location.pathname.indexOf('browse/dataset/') > -1) {
+    return ReactDOM.render(
+      <Details assayJSON={dataJSON} provJSON={provenanceJSON} vitJSON={vitJSON}/>,
+      document.getElementById("react-details-content")
+    );
   }
-
-  return ReactDOM.render(getViewComponent(), document.getElementById("react-details-content"));
+  return null;
 };
