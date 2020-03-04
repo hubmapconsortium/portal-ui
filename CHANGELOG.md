@@ -3,6 +3,8 @@
 ## v0.0.10 - in progress
 ### Added
 - Handle 401, when Globus token has expired, or was never granted, but Flask session is active.
+### Changed
+- Use mock for Prov, until API is fixed.
 
 ## [v0.0.9](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.9) - 2020/02/07
 ### Added
