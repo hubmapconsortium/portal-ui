@@ -6,10 +6,9 @@ import Container from "@material-ui/core/Container";
 export default function NoticeAlert(props) {
   const errorMsgs = props.errors;
   let generateErrorList = () => {
-    let errorList = [];
     return errorMsgs.map((errorObj, ind) => {
       let template = <li key={ind}>{errorObj.message}. <a href={errorObj.issue_url}> Known Issue.</a></li>;
-      if (errorObj.issue_url.length) {
+      if (!errorObj.issue_url.length) {
         const base = 'https://github.com/hubmapconsortium/';
         const title = encodeURIComponent('Validation failure');
         const body = encodeURIComponent(`We have this validation error: ${errorObj.traceback}`);
