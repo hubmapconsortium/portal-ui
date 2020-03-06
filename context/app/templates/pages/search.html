@@ -22,37 +22,147 @@
       'search',
       {
         // Elasticsearch instance to hit with queries:
-        apiUrl: 'http://demo.searchkit.co/api/movies/',
+        apiUrl: 'https://search-hubmap-entity-es-dev-zhdpuhhf2vjpvqfq7zmn2gdgqq.us-east-1.es.amazonaws.com/entities/',
         // Fields to search, and whether they have extra weight:
-        prefixQueryFields: ['actors^1','type^2','languages','title^10'],
+        prefixQueryFields: ['description'],
         // Prefix for details links:
-        detailsUrlPrefix: 'https://www.imdb.com/title/',
+        detailsUrlPrefix: '/details/',
         // Search results field which will be appended to detailsUrlPrefix:
-        idField: 'imdbId',
+        idField: 'id',
         // Search results fields to display in table:
-        resultFields: ['title', 'actors'],
+        resultFields: ['hubmap_identifier', 'display_doi', 'description', 'entitytype'],
         // Default hitsPerPage is 10:
-        hitsPerPage: 5,
+        hitsPerPage: 20,
         // Sidebar facet configuration;
         // "type" should be one of the filters described here:
         // http://docs.searchkit.co/stable/components/navigation/
         filters: [
           {
-            type: 'HierarchicalMenuFilter',
+            type: 'RefinementListFilter',
             props: {
-              id: 'categories',
-              fields: ['type.raw', 'genres.raw'],
-              title: 'Categories',
-            },
+              // TODO: Only on some records. Should be on all?
+              // https://github.com/hubmapconsortium/search-api/issues/13
+              id: 'status',
+              title: 'Status',
+              field: 'status.keyword',
+              operator: 'OR',
+              size: 5
+            }
           },
           {
             type: 'RefinementListFilter',
             props: {
-              id: 'actors',
-              title: 'Actors',
-              field: 'actors.raw',
-              operator: 'AND',
-              size: 10
+              // TODO: Only on some records. Should be on all?
+              // https://github.com/hubmapconsortium/search-api/issues/13
+              id: 'specimen_type',
+              title: 'Specimen Type',
+              field: 'specimen_type_display_name.keyword',
+              operator: 'OR',
+              size: 5
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
+              // TODO: Only on some records. Should be on all?
+              // https://github.com/hubmapconsortium/search-api/issues/13
+              id: 'phi',
+              title: 'Contains Sequences',
+              field: 'phi.keyword',
+              operator: 'OR'
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
+              // TODO: Only on some records. Should be on all?
+              // https://github.com/hubmapconsortium/search-api/issues/13
+              id: 'phi',
+              title: 'Contains Sequences',
+              field: 'phi.keyword',
+              operator: 'OR'
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
+              id: 'tmc',
+              title: 'TMC',
+              field: 'provenance_group_name.keyword',
+              operator: 'OR',
+              size: 5,
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
+              id: 'entity_type',
+              title: 'Entity Type',
+              field: 'entitytype.keyword',
+              operator: 'OR'
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
+              id: 'access_group',
+              title: 'Access Group',
+              field: 'access_group.keyword',
+              operator: 'OR',
+              translations: {
+                Readonly: "Read only"
+              }
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
+              id: 'organ',
+              title: 'Organ',
+              field: 'organ.keyword',
+              operator: 'OR',
+              size: 5,
+              translations: {
+                // Copied from:
+                // https://github.com/hubmapconsortium/ingest-ui/blob/master/src/ingest-ui/src/constants.jsx
+                BL: "Bladder",
+                BR: "Brain",
+                LB: "Bronchus (Left)",
+                RB: "Bronchus (Right)",
+                HT: "Heart",
+                LK: "Kidney (Left)",
+                RK: "Kidney (Right)",
+                LI: "Large Intestine",
+                LV: "Liver",
+                LL: "Lung (Left)",
+                RL: "Lung (Right)",
+                LY01: "Lymph Node 01",
+                LY02: "Lymph Node 02",
+                LY03: "Lymph Node 03",
+                LY04: "Lymph Node 04",
+                LY05: "Lymph Node 05",
+                LY06: "Lymph Node 06",
+                LY07: "Lymph Node 07",
+                LY08: "Lymph Node 08",
+                LY09: "Lymph Node 09",
+                LY10: "Lymph Node 10",
+                LY11: "Lymph Node 11",
+                LY12: "Lymph Node 12",
+                LY13: "Lymph Node 13",
+                LY14: "Lymph Node 14",
+                LY15: "Lymph Node 15",
+                LY16: "Lymph Node 16",
+                LY17: "Lymph Node 17",
+                LY18: "Lymph Node 18",
+                LY19: "Lymph Node 19",
+                LY20: "Lymph Node 20",
+                SI: "Small Intestine",
+                SP: "Spleen",
+                TH: "Thymus",
+                TR: "Trachea",
+                UR: "Ureter",
+                OT: "Other"
+              }
             },
           }
         ]
