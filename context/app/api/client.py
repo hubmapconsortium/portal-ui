@@ -81,44 +81,41 @@ class ApiClient():
     def get_provenance(self, uuid):
         # TODO: When the API is fixed, only use this when is_mock.
 
-        # if self.is_mock:
-        return {
-            'prefix': {
-                'ex': 'http://example.com#',
-                'prov': 'http://www.w3.org/ns/prov#',
-                'hubmap': 'https://hubmapconsortium.org'
-            },
-            'entity': {
-                'ex:input': {'prov:label': 'Input', 'ex:note': 'Begins here...'},
-                'ex:output': {'prov:label': 'Output', 'ex:note': '... and ends here.'},
-            },
-            'activity': {
-                'ex:process': {'prov:label': 'Process'},
-            },
-            'wasGeneratedBy': {
-                '_:1': {
-                    'prov:activity': 'ex:process',
-                    'prov:entity': 'ex:output',
+        if self.is_mock:
+            return {
+                'prefix': {
+                    'ex': 'http://example.com#',
+                    'prov': 'http://www.w3.org/ns/prov#',
+                    'hubmap': 'https://hubmapconsortium.org'
                 },
-            },
-            'used': {
-                '_:2': {
-                    'prov:activity': 'ex:process',
-                    'prov:entity': 'ex:input',
+                'entity': {
+                    'ex:input': {'prov:label': 'Input', 'ex:note': 'Begins here...'},
+                    'ex:output': {'prov:label': 'Output', 'ex:note': '... and ends here.'},
                 },
-            },
-        }
+                'activity': {
+                    'ex:process': {'prov:label': 'Process'},
+                },
+                'wasGeneratedBy': {
+                    '_:1': {
+                        'prov:activity': 'ex:process',
+                        'prov:entity': 'ex:output',
+                    },
+                },
+                'used': {
+                    '_:2': {
+                        'prov:activity': 'ex:process',
+                        'prov:entity': 'ex:input',
+                    },
+                },
+            }
 
-        # TODO: continued from above.
+        provenance = self._request(f'/entities/{uuid}/provenance')
 
-        # response = self._request(f'/entities/{uuid}/provenance')
-        # provenance = json.loads(response['provenance_data'])
-        #
-        # # TODO: These should not be needed with next update to NPM.
-        # del provenance['agent']
-        # provenance['prefix']['hubmap'] = 'https://hubmapconsortium.org'
-        #
-        # return provenance
+        # TODO: These should not be needed with next update to NPM.
+        del provenance['agent']
+        provenance['prefix']['hubmap'] = 'https://hubmapconsortium.org'
+
+        return provenance
 
     def get_vitessce_conf(self):
         if self.is_mock:
