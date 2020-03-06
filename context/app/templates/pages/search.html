@@ -30,7 +30,7 @@
         // Search results field which will be appended to detailsUrlPrefix:
         idField: 'id',
         // Search results fields to display in table:
-        resultFields: ['display_doi', 'description'],
+        resultFields: ['hubmap_identifier', 'display_doi', 'description', 'entitytype'],
         // Default hitsPerPage is 10:
         hitsPerPage: 20,
         // Sidebar facet configuration;
@@ -40,9 +40,18 @@
           {
             type: 'RefinementListFilter',
             props: {
-              id: 'data_types',
-              title: 'Data Type',
-              field: 'data_types.keyword',
+              id: 'tmc',
+              title: 'TMC',
+              field: 'provenance_group_name.keyword',
+              operator: 'OR'
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
+              id: 'entity_type',
+              title: 'Entity Type',
+              field: 'entitytype.keyword',
               operator: 'OR'
             }
           },
