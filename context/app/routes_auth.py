@@ -1,6 +1,6 @@
 from urllib.parse import urlencode
 
-from flask import Blueprint, current_app, url_for, request, redirect, session
+from flask import Blueprint, current_app, url_for, request, redirect, render_template, session
 import requests
 import globus_sdk
 
@@ -88,6 +88,7 @@ def login():
 
     # Globus institution login worked, but user does not have HuBMAP group!
     return render_template('errors/401-no-hubmap-group.html'), 401
+
 
 @blueprint.route('/logout')
 def logout():
