@@ -40,10 +40,57 @@
           {
             type: 'RefinementListFilter',
             props: {
+              // TODO: Only on some records. Should be on all?
+              // https://github.com/hubmapconsortium/search-api/issues/13
+              id: 'status',
+              title: 'Status',
+              field: 'status.keyword',
+              operator: 'OR',
+              size: 5
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
+              // TODO: Only on some records. Should be on all?
+              // https://github.com/hubmapconsortium/search-api/issues/13
+              id: 'specimen_type',
+              title: 'Specimen Type',
+              field: 'specimen_type_display_name.keyword',
+              operator: 'OR',
+              size: 5
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
+              // TODO: Only on some records. Should be on all?
+              // https://github.com/hubmapconsortium/search-api/issues/13
+              id: 'phi',
+              title: 'Contains Sequences',
+              field: 'phi.keyword',
+              operator: 'OR'
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
+              // TODO: Only on some records. Should be on all?
+              // https://github.com/hubmapconsortium/search-api/issues/13
+              id: 'phi',
+              title: 'Contains Sequences',
+              field: 'phi.keyword',
+              operator: 'OR'
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
               id: 'tmc',
               title: 'TMC',
               field: 'provenance_group_name.keyword',
-              operator: 'OR'
+              operator: 'OR',
+              size: 5,
             }
           },
           {
