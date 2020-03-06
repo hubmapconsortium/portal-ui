@@ -85,16 +85,6 @@ export default function Details(props) {
           </Grid>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-          Raw Json
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <ul>
-            { jsonList }
-          </ul>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
       <Box mt={2}>
         <Paper>
           <VisTabs provData={provData} vitData={vitData}/>

@@ -2,13 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Details from './components/Details'
+import NoticeAlert from "./components/NoticeAlert";
 
 export default function App(props) {
+  const template = (
+    <div>
+      <NoticeAlert errors={errorJSON}/>
+      <Details assayJSON={dataJSON} provJSON={provenanceJSON} vitJSON={vitJSON}/>
+    </div>
+  );
   if (window.location.pathname.indexOf('browse/dataset/') > -1) {
-    return ReactDOM.render(
-      <Details assayJSON={dataJSON} provJSON={provenanceJSON} vitJSON={vitJSON}/>,
-      document.getElementById("react-details-content")
-    );
+    return ReactDOM.render(template, document.getElementById("react-details-content"));
   }
   return null;
 };

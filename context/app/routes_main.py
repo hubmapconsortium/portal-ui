@@ -55,15 +55,25 @@ def details(type, uuid):
     for_each_validation_error(entity, type_schema, flash)
 
     provenance = client.get_provenance(uuid)
+    flashed_messages = []
+    errors = get_flashed_messages()
+
+    for error in errors:
+        error_obj = {
+            'message': error.message,
+            'issue_url': error.issue_url,
+            'traceback': error.__str__()
+        }
+        flashed_messages.append(error_obj)
 
     if 'react' in request.args:
         template = f'pages/details/details_react.html'
         props = {
             # Subject to change!
-            'flashed_messages': get_flashed_messages(),
+            'flashed_messages': flashed_messages,
             'entity': entity,
             'provenance': provenance,
-            'vitessce_conf': client.get_vitessce_conf()
+            'vitessce_conf': client.get_vitessce_conf(),
         }
         return render_template(
             template, type=type, uuid=uuid,
@@ -100,3 +110,4 @@ def details_ext(type, uuid, ext):
 @blueprint.route('/search')
 def search():
     return render_template('pages/search.html', types=types)
+
