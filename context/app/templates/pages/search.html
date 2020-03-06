@@ -40,12 +40,26 @@
           {
             type: 'RefinementListFilter',
             props: {
+              id: 'access_group',
+              title: 'Access Group',
+              field: 'access_group.keyword',
+              operator: 'OR',
+              translations: {
+                Readonly: "Read only"
+              }
+            }
+          },
+          {
+            type: 'RefinementListFilter',
+            props: {
               id: 'organ',
               title: 'Organ',
               field: 'organ.keyword',
-              operator: 'AND',
-              size: 10,
+              operator: 'OR',
+              size: 5,
               translations: {
+                // Copied from:
+                // https://github.com/hubmapconsortium/ingest-ui/blob/master/src/ingest-ui/src/constants.jsx
                 BL: "Bladder",
                 BR: "Brain",
                 LB: "Bronchus (Left)",
