@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.0.10 - in progress
+## v0.0.10 - In progress
 ### Added
 - Handle 401, when Globus token has expired, but Flask session is still active.
 - After login, check groups membership and 401 if not in HuBMAP.
