@@ -38,19 +38,11 @@
         // http://docs.searchkit.co/stable/components/navigation/
         filters: [
           {
-            type: 'HierarchicalMenuFilter',
-            props: {
-              id: 'categories',
-              fields: ['type.raw', 'genres.raw'],
-              title: 'Categories',
-            },
-          },
-          {
             type: 'RefinementListFilter',
             props: {
-              id: 'actors',
-              title: 'Actors',
-              field: 'actors.raw',
+              id: 'organ',
+              title: 'Organ',
+              field: 'organ.keyword',
               operator: 'AND',
               size: 10
             },
