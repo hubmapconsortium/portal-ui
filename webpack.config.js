@@ -9,7 +9,7 @@ const config = {
     publicPath: resolve('../context/app/static/public'),
   },
   resolve: {
-    extensions: ['.js','.jsx','.css', 'scss']
+    extensions: ['.js','.jsx','.css', '.woff', '.woff2', '.svg']
   },
   module: {
     rules: [
@@ -35,7 +35,7 @@ const config = {
       {
         test: /\.(ttf|eot|woff|woff2)$/,
         use: {
-          loader: "file-loader",
+          loader: "url-loader",
           options: {
             name: "/fonts/[name].[ext]",
           },

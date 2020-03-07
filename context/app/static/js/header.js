@@ -2,9 +2,8 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { Container } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
-import LoginLink from "./components/LoginLink";
 
 import { useStyles } from './styles';
 

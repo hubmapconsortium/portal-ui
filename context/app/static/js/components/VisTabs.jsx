@@ -77,7 +77,7 @@ export default function VisTabs (props) {
         </span>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <span id={"prov-vis"}>
+        <span id={"prov-vis-react"}>
           <ProvGraph provData={provData}></ProvGraph>
         </span>
       </TabPanel>

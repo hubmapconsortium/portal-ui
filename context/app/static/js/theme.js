@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import "typeface-inter"
+import "typeface-inter";
 
 // default HuBMAP color and font theme
 const theme = createMuiTheme({

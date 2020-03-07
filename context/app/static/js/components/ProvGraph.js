@@ -6,7 +6,7 @@ export default function ProvGraph (props) {
   const provJSON = props.provData;
 
   const runRenderProvVis = () => hubmapProvVis.renderProvVis(
-    'prov-vis',
+    'prov-vis-react',
     provJSON,
     {
       getNameForActivity: (id, prov) => {
