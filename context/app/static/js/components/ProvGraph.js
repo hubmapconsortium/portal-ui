@@ -1,5 +1,4 @@
 import React from 'react';
-
 import hubmapProvVis from '@hubmap/prov-vis';
 
 export default function ProvGraph (props) {
