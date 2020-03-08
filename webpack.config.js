@@ -43,7 +43,7 @@ const config = {
       },
       {
         test: /\.svg$/,
-        use: { loader: "svg-loader" },
+        use: { loader: "@svgr/webpack" },
       },
     ]
   }
