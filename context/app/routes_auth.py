@@ -1,7 +1,7 @@
 from urllib.parse import urlencode
 
-from flask import Blueprint, current_app, url_for, request, redirect, session
-
+from flask import Blueprint, current_app, url_for, request, redirect, render_template, session
+import requests
 import globus_sdk
 
 
@@ -15,6 +15,29 @@ blueprint = Blueprint('routes_auth', __name__, template_folder='templates')
 def load_app_client():
     return globus_sdk.ConfidentialAppAuthClient(
         current_app.config['APP_CLIENT_ID'], current_app.config['APP_CLIENT_SECRET'])
+
+
+def has_hubmap_group(nexus_token):
+    # Mostly copy-and-paste from
+    # https://github.com/hubmapconsortium/commons/blob/dc69f4/hubmap_commons/hm_auth.py#L347-L355
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + nexus_token
+    }
+    params = {
+        'fields': 'id,name,description',
+        # I'm not sure what these do, and if they are necessary:
+        'for_all_identities': 'false',
+        'my_statuses': 'active'
+    }
+    response = requests.get(
+        'https://nexus.api.globusonline.org/groups',
+        headers=headers,
+        params=params)
+    response.raise_for_status()
+    groups = response.json()
+    return any([group['name'] == 'HuBMAP-read' for group in groups])
 
 
 @blueprint.route('/login')
@@ -56,11 +79,15 @@ def login():
     # The repr is deceptive: Looks like a dict, but direct access not possible.
     nexus_token = tokens.by_resource_server['nexus.api.globus.org']['access_token']
 
-    session.update(
-        nexus_token=nexus_token,
-        is_authenticated=True
-    )
-    return redirect(url_for('routes.index', _external=True))
+    if has_hubmap_group(nexus_token):
+        session.update(
+            nexus_token=nexus_token,
+            is_authenticated=True
+        )
+        return redirect(url_for('routes.index', _external=True))
+
+    # Globus institution login worked, but user does not have HuBMAP group!
+    return render_template('errors/401-no-hubmap-group.html'), 401
 
 
 @blueprint.route('/logout')

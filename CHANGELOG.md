@@ -1,6 +1,15 @@
 # Changelog
 
-## v0.0.10 - in progress
+## v0.0.11 - In progress
+### Added
+- Hit Elasticsearch instance and start configuring facets.
+
+## [v0.0.10](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.10) - 2020/03/06
+### Added
+- Handle 401, when Globus token has expired, but Flask session is still active.
+- After login, check groups membership and 401 if not in HuBMAP.
+### Changed
+- Use API the right way and fix prov-vis.
 
 ## [v0.0.9](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.9) - 2020/02/07
 ### Added

@@ -42,6 +42,10 @@ class ApiClient():
                 # whether it's a missing route in portal-ui,
                 # or a missing entity in the API.
                 abort(status)
+            if status in [401]:
+                # I believe we have 401 errors when the globus credentials
+                # have expired, but are still in the flask session.
+                abort(status)
             raise
         return response.json()
 
@@ -75,6 +79,8 @@ class ApiClient():
         return response['entity_node']
 
     def get_provenance(self, uuid):
+        # TODO: When the API is fixed, only use this when is_mock.
+
         if self.is_mock:
             return {
                 'prefix': {
@@ -102,8 +108,8 @@ class ApiClient():
                     },
                 },
             }
-        response = self._request(f'/entities/{uuid}/provenance')
-        provenance = json.loads(response['provenance_data'])
+
+        provenance = self._request(f'/entities/{uuid}/provenance')
 
         # TODO: These should not be needed with next update to NPM.
         del provenance['agent']

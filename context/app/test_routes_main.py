@@ -38,15 +38,24 @@ def test_to_xml():
 def mock_get(path, **kwargs):
     class MockResponse():
         def json(self):
-            return {
-                # Any particular real response would only have one of these.
-                'entity_node': {
-                    'provenance_create_timestamp': '100000',
-                    'provenance_modified_timestamp': '100000',
-                },
-                'provenance_data': '{"agent": "", "prefix": {}}',
-                'uuids': []
-            }
+            if path.endswith('/provenance'):
+                return {
+                    'agent': '',
+                    'prefix': {}
+                }
+            elif path.endswith('fake-uuid'):
+                return {
+                    'entity_node': {
+                        'provenance_create_timestamp': '100000',
+                        'provenance_modified_timestamp': '100000',
+                    }
+                }
+            elif '/types/' in path:
+                return {
+                    'uuids': []
+                }
+            else:
+                raise Exception('No mock for:', path)
 
         def raise_for_status(self):
             pass
