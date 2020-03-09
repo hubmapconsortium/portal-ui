@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, abort, current_app, session, flash, request, get_flashed_messages
+from flask import (Blueprint, render_template, abort, current_app,
+session, flash, request, get_flashed_messages)
 
 from yaml import safe_load as load_yaml
 
@@ -110,4 +111,3 @@ def details_ext(type, uuid, ext):
 @blueprint.route('/search')
 def search():
     return render_template('pages/search.html', types=types)
-
