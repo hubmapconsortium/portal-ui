@@ -1,7 +1,6 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
-import { makeStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import { useStyles } from '../styles';
 import ProvGraph from './ProvGraph';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -24,30 +23,6 @@ function TabPanel(props) {
   );
 }
 
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `vertical-tab-${index}`,
-    'aria-controls': `vertical-tabpanel-${index}`,
-  };
-}
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-    height: 224,
-  },
-  tabs: {
-    borderRight: `1px solid ${theme.palette.divider}`,
-  },
-}));
-
 export default function VisTabs (props) {
   const provData = props.provData;
   const classes = useStyles();
@@ -58,17 +33,22 @@ export default function VisTabs (props) {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.tabsRoot}>
       <Tabs
         orientation="vertical"
         variant="scrollable"
         value={value}
         onChange={handleChange}
-        aria-label="Vertical tabs example"
-        className={classes.tabs}
-      >
-        <Tab label="Visualizations" {...a11yProps(0)} />
-        <Tab label="Provenance " {...a11yProps(1)} />
+        aria-label="Detail View Tabs"
+        className={classes.tabs}>
+        <Tab
+          label="Visualizations"
+          id="vertical-tab-0"
+          aria-controls="vertical-tabpanel-0"/>
+        <Tab
+          label="Provenance"
+          id="vertical-tab-1"
+          aria-controls="vertical-tabpanel-1"/>
       </Tabs>
       <TabPanel value={value} index={0}>
         <span id={"vit-grid"}>

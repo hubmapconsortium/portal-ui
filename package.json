@@ -27,7 +27,7 @@
   "scripts": {
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "build": "webpack --progress --mode production",
-    "dev-build": "webpack --progress --mode development ./context/app/static/js/index.jsx -o ./context/app/static/public/bundle.js"
+    "build": "webpack --progress --mode production ./context/app/static/js/index.jsx -o ./context/app/static/public/bundle.js",
+    "dev-build": "webpack --progress --mode development ./context/app/static/js/index.jsx -o ./context/app/static/public/bundle.js  --progress --profile --colors"
   }
 }
