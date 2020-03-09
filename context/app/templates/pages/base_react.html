@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{{ url_for('static', filename='titles.css') }}">
@@ -13,17 +13,16 @@
         isLoggedIn = true;
       {% endif %}
     </script>
-</head>
+  </head>
 
-<body>
-<div id="react-content"></div>
-{% block title %}{% endblock %}
-<section>
-    {% block content %}{% endblock %}
-</section>
+  <body>
+    <div id="react-content"></div>
+    <section>
+      {% block content %}{% endblock %}
+    </section>
 
-{% block extra_scripts %}
-<script src="{{ url_for('static', filename='public/bundle.js') }}"></script>
-{% endblock %}
-</body>
+    {% block extra_scripts %}
+      <script src="{{ url_for('static', filename='public/bundle.js') }}"></script>
+    {% endblock %}
+  </body>
 </html>
