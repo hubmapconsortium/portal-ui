@@ -1,18 +1,17 @@
 {% extends 'pages/base_react.html' %}
 
 {% block extra_stylesheets %}
-<link rel="stylesheet" href="https://unpkg.com/@hms-dbmi-bgm/react-workflow-viz@0.1.0/dist/react-workflow-viz.min.css">
-
+    <link rel="stylesheet" href="https://unpkg.com/@hms-dbmi-bgm/react-workflow-viz@0.1.0/dist/react-workflow-viz.min.css">
 {% endblock %}
 
 {% block content %}
-<div id="react-details-content"></div>
+    <div id="react-details-content"></div>
 
-<script>
-  const dataJSON = {{ props.entity | tojson }};
-  const provenanceJSON = {{ props.provenance | tojson }};
-  const vitJSON = {{ props.vitessce_conf | tojson }};
-  const errorJSON = {{ props.flashed_messages | tojson}};
-
-</script>
+    <script>
+      const dataJSON = {{ props.entity | tojson }};
+      const provenanceJSON = {{ props.provenance | tojson }};
+      const vitJSON = {{ props.vitessce_conf | tojson }};
+      const errorJSON = {{ props.flashed_messages | tojson}};
+    </script>
 {% endblock %}
+

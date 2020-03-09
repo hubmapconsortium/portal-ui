@@ -60,12 +60,9 @@ def details(type, uuid):
     errors = get_flashed_messages()
 
     for error in errors:
-        error_obj = {
-            'message': error.message,
-            'issue_url': error.issue_url,
-            'traceback': error.__str__()
-        }
-        flashed_messages.append(error_obj)
+        flashed_messages.append({'message': error.message,
+                                 'issue_url': error.issue_url,
+                                 'traceback': error.__str__()})
 
     if 'react' in request.args:
         template = f'pages/details/details_react.html'
