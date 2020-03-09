@@ -19,7 +19,7 @@ export default function Details(props) {
   return (
     <Container maxWidth="lg">
       <ExpansionPanel defaultExpanded={true}>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="Details Panel" id="details-header">
           <Box className={"expansion-header"}> { assayMetaData.description } </Box>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
