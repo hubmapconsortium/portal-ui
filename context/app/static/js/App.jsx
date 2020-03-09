@@ -4,6 +4,7 @@ import Details from './components/Details'
 import NoticeAlert from "./components/NoticeAlert";
 
 export default function App(props) {
+  // Temp routing solution for showing the correct react component.
   const template = (
     <div>
       <NoticeAlert errors={errorJSON}/>

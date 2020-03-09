@@ -20,82 +20,82 @@
 
 {% block content %}
 {% block details_base_content %}
-<div class="row">
-  <div class="col">
-    <dl>
-      <dt>Contributor</dt>
-      <dd>{{ entity['provenance_user_displayname'] }} ({{ entity['provenance_user_email'] }})</dd>
+  <div class="row">
+    <div class="col">
+      <dl>
+        <dt>Contributor</dt>
+        <dd>{{ entity['provenance_user_displayname'] }} ({{ entity['provenance_user_email'] }})</dd>
 
-      <dt>Group</dt>
-      <dd>{{ entity['provenance_group_name'] }}</dd>
-    </dl>
+        <dt>Group</dt>
+        <dd>{{ entity['provenance_group_name'] }}</dd>
+      </dl>
+    </div>
+
+    <div class="col">
+      <dl>
+        <dt>Created</dt>
+        <dd>{{ entity['created'] }}</dd>
+
+        <dt>Modified</dt>
+        <dd>{{ entity['modified'] }}</dd>
+      </dl>
+      <!--
+        WARNING: UUID in API response seems to be wrong.
+        https://github.com/hubmapconsortium/entity-api/issues/19
+      -->
+      <p><a href="{{ url_for('routes.details_ext', type=type, uuid=uuid, ext='json') }}">Raw JSON</a></p>
+    </div>
   </div>
 
-  <div class="col">
-    <dl>
-      <dt>Created</dt>
-      <dd>{{ entity['created'] }}</dd>
+  {{ details_html|safe }}
 
-      <dt>Modified</dt>
-      <dd>{{ entity['modified'] }}</dd>
-    </dl>
-    <!--
-      WARNING: UUID in API response seems to be wrong.
-      https://github.com/hubmapconsortium/entity-api/issues/19
-    -->
-    <p><a href="{{ url_for('routes.details_ext', type=type, uuid=uuid, ext='json') }}">Raw JSON</a></p>
-  </div>
-</div>
+  <div id="prov-vis">Provenance placeholder</div>
+  <div id="vitessce">Vitessce placeholder</div>
+  {% endblock %}
+  {% endblock %}
 
-{{ details_html|safe }}
-
-<div id="prov-vis">Provenance placeholder</div>
-<div id="vitessce">Vitessce placeholder</div>
-{% endblock %}
-{% endblock %}
-
-{% block extra_scripts %}
-  <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/@hubmap/prov-vis@v0.0.2/umd/@hubmap/prov-vis.min.js"></script>
-  <script src="https://unpkg.com/vitessce@0.0.24/umd/vitessce.min.js"></script>
-<script>
-  hubmapProvVis.renderProvVis(
-          'prov-vis',
-          {{ provenance|tojson }},
-  {
-    getNameForActivity: (id, prov) => {
-      const activity = prov.activity[id];
-      return `${activity['prov:type']} - ${activity['prov:label']}`;
+  {% block extra_scripts %}
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/@hubmap/prov-vis@v0.0.2/umd/@hubmap/prov-vis.min.js"></script>
+    <script src="https://unpkg.com/vitessce@0.0.24/umd/vitessce.min.js"></script>
+  <script>
+    hubmapProvVis.renderProvVis(
+            'prov-vis',
+            {{ provenance|tojson }},
+    {
+      getNameForActivity: (id, prov) => {
+        const activity = prov.activity[id];
+        return `${activity['prov:type']} - ${activity['prov:label']}`;
+      },
+              getNameForEntity: (id, prov) => {
+      const entity = prov.entity[id];
+      // NOTE: The initial entity node was not included in the sample data;
+      // Fallback to ID, if needed. https://github.com/hubmapconsortium/prov-vis/issues/15
+      return entity ? `${entity['prov:type']} - ${entity['prov:label']}` : id;
     },
-            getNameForEntity: (id, prov) => {
-    const entity = prov.entity[id];
-    // NOTE: The initial entity node was not included in the sample data;
-    // Fallback to ID, if needed. https://github.com/hubmapconsortium/prov-vis/issues/15
-    return entity ? `${entity['prov:type']} - ${entity['prov:label']}` : id;
-  },
-          renderDetailPane: (prov) => {
-    function create(tag, props, children) {
-      return React.createElement(tag, props, children);
+            renderDetailPane: (prov) => {
+      function create(tag, props, children) {
+        return React.createElement(tag, props, children);
+      }
+      return create('table', {className: 'table table-bordered table-sm'},
+              ['prov:type', 'hubmap:uuid', 'prov:generatedAtTime'].map(
+                      field => create('tr', null, [
+                        create('td', {className: 'td-key'}, field),
+                        create('td', {className: 'td-value'},
+                                field === 'hubmap:uuid'
+                                        ? create('a', {href: prov[field]}, prov[field])
+                                        : prov[field]
+                        )
+                      ])
+              )
+      );
     }
-    return create('table', {className: 'table table-bordered table-sm'},
-            ['prov:type', 'hubmap:uuid', 'prov:generatedAtTime'].map(
-                    field => create('tr', null, [
-                      create('td', {className: 'td-key'}, field),
-                      create('td', {className: 'td-value'},
-                              field === 'hubmap:uuid'
-                                      ? create('a', {href: prov[field]}, prov[field])
-                                      : prov[field]
-                      )
-                    ])
-            )
+    }
     );
-  }
-  }
-  );
-  vitessce.validateAndRender(
-          {{ vitessce_conf|tojson }},
-  'vitessce', // Target ID
-          100 // Row-height in grid
-  );
-</script>
+    vitessce.validateAndRender(
+            {{ vitessce_conf|tojson }},
+    'vitessce', // Target ID
+            100 // Row-height in grid
+    );
+  </script>
 {% endblock %}

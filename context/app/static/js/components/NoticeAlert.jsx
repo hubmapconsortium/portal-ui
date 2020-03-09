@@ -4,9 +4,8 @@ import AlertTitle from "@material-ui/lab/AlertTitle";
 import Container from "@material-ui/core/Container";
 
 export default function NoticeAlert(props) {
-  const errorMsgs = props.errors;
-  let generateErrorList = () => {
-    return errorMsgs.map((errorObj, ind) => {
+  const generateErrorList = () => {
+    return props.errors.map((errorObj, ind) => {
       let template = <li key={ind}>{errorObj.message}. <a href={errorObj.issue_url}> Known Issue.</a></li>;
       if (!errorObj.issue_url.length) {
         const base = 'https://github.com/hubmapconsortium/';

@@ -1,5 +1,5 @@
 from flask import (Blueprint, render_template, abort, current_app,
-session, flash, request, get_flashed_messages)
+                   session, flash, request, get_flashed_messages)
 
 from yaml import safe_load as load_yaml
 
@@ -70,7 +70,6 @@ def details(type, uuid):
     if 'react' in request.args:
         template = f'pages/details/details_react.html'
         props = {
-            # Subject to change!
             'flashed_messages': flashed_messages,
             'entity': entity,
             'provenance': provenance,

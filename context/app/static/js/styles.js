@@ -7,13 +7,13 @@ export const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
+  tabs: {
+    borderRight: `1px solid ${theme.palette.divider}`,
+  },
   tabsRoot: {
     backgroundColor: theme.palette.background.paper,
     flexGrow: 1,
     display: 'flex',
-  },
-  tabs: {
-    borderRight: `1px solid ${theme.palette.divider}`,
   },
   title: {
     flexGrow: 1,
