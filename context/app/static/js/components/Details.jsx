@@ -1,26 +1,25 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Container from '@material-ui/core/Container';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Link from "@material-ui/core/Link";
+import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Typography from "@material-ui/core/Typography";
+import Typography from '@material-ui/core/Typography';
 import VisTabs from './VisTabs';
 
 export default function Details(props) {
-  const assayMetaData = props.assayJSON;
-  const provData = props.provJSON;
-  const vitData = props.vitJSON;
+  const { assayMetaData, provData, vitData } = props;
+
   return (
     <Container maxWidth="lg">
-      <ExpansionPanel defaultExpanded={true}>
+      <ExpansionPanel defaultExpanded="true">
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="Details Panel" id="details-header">
-          <Box className={"expansion-header"}> { assayMetaData.description } </Box>
+          <Box className="expansion-header">{assayMetaData.description}</Box>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Grid container spacing={3} justify="flex-start" direction="row" alignItems="flex-start">
@@ -28,19 +27,19 @@ export default function Details(props) {
               <ul>
                 <li>
                   <Box mb={2} mt={0}>
-                    <span className={'list-header'}> Contributor </span> <br/>
+                    <span className="list-header">Contributor</span><br />
                     {assayMetaData.provenance_user_displayname}
                   </Box>
                 </li>
                 <li>
                   <Box mb={2} mt={0}>
-                    <span className={'list-header'}> Group </span> <br/>
+                    <span className="list-header">Group</span><br />
                     {assayMetaData.provenance_group_name}
                   </Box>
                 </li>
                 <li>
                   <Box mb={2} mt={0}>
-                    <span className={'list-header'}> Type </span> <br/>
+                    <span className="list-header">Type</span><br />
                     Assay
                   </Box>
                 </li>
@@ -50,19 +49,19 @@ export default function Details(props) {
               <ul>
                 <li>
                   <Box mb={2} mt={0}>
-                    <span className={'list-header'}> Assay ID </span> <br/>
+                    <span className="list-header">Assay ID</span><br />
                     {assayMetaData.display_doi}
                   </Box>
                 </li>
                 <li>
                   <Box mb={2} mt={0}>
-                    <span className={'list-header'}> Created </span> <br/>
+                    <span className="list-header">Created</span><br />
                     {assayMetaData.created}
                   </Box>
                 </li>
                 <li>
                   <Box mb={2} mt={0}>
-                    <span className={'list-header'}> Modified </span> <br/>
+                    <span className="list-header">Modified</span><br />
                     {assayMetaData.modified}
                   </Box>
                 </li>
@@ -85,9 +84,9 @@ export default function Details(props) {
       </ExpansionPanel>
       <Box mt={2}>
         <Paper>
-          <VisTabs provData={provData} vitData={vitData}/>
+          <VisTabs provData={provData} vitData={vitData} />
         </Paper>
       </Box>
     </Container>
-  )
-};
+  );
+}

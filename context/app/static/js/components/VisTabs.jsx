@@ -1,13 +1,15 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
-import { useStyles } from '../styles';
-import ProvGraph from './ProvGraph';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
+import ProvGraph from './ProvGraph';
+import { useStyles } from '../styles';
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const {
+    children, value, index,
+  } = props;
 
   return (
     <Typography
@@ -16,15 +18,14 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
-      {...other}
     >
       {value === index && <Box p={3}>{children}</Box>}
     </Typography>
   );
 }
 
-export default function VisTabs (props) {
-  const provData = props.provData;
+export default function VisTabs(props) {
+  const { provData } = props;
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -40,26 +41,29 @@ export default function VisTabs (props) {
         value={value}
         onChange={handleChange}
         aria-label="Detail View Tabs"
-        className={classes.tabs}>
+        className={classes.tabs}
+      >
         <Tab
           label="Visualizations"
           id="vertical-tab-0"
-          aria-controls="vertical-tabpanel-0"/>
+          aria-controls="vertical-tabpanel-0"
+        />
         <Tab
           label="Provenance"
           id="vertical-tab-1"
-          aria-controls="vertical-tabpanel-1"/>
+          aria-controls="vertical-tabpanel-1"
+        />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <span id={"vit-grid"}>
+        <span id="vit-grid">
           Vit Place Holder
         </span>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <span id={"prov-vis-react"}>
-          <ProvGraph provData={provData}></ProvGraph>
+        <span id="prov-vis-react">
+          <ProvGraph provData={provData} />
         </span>
       </TabPanel>
     </div>
   );
-};
+}

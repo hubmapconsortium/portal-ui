@@ -8,10 +8,7 @@
     <div id="react-details-content"></div>
 
     <script>
-      const dataJSON = {{ props.entity | tojson }};
-      const provenanceJSON = {{ props.provenance | tojson }};
-      const vitJSON = {{ props.vitessce_conf | tojson }};
-      const errorJSON = {{ props.flashed_messages | tojson}};
+      const props = {{ props | tojson }};
     </script>
 {% endblock %}
 

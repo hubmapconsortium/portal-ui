@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import "typeface-inter";
+import 'typeface-inter';
 
 // default HuBMAP color and font theme
 const theme = createMuiTheme({
@@ -20,60 +20,60 @@ const theme = createMuiTheme({
       main: '#3781D1',
     },
     success: {
-      main: '#6C8938' //'#9BC551'
+      main: '#6C8938', // '#9BC551'
     },
-    type: "light"
+    type: 'light',
   },
   typography: {
-    fontFamily: "Inter, Helvetica, Arial, sans-serif",
+    fontFamily: 'Inter, Helvetica, Arial, sans-serif',
     h1: {
       fontWeight: 300,
-      fontSize: '2.6rem'
+      fontSize: '2.6rem',
     },
     h2: {
       fontWeight: 300,
-      fontSize: '2.3rem'
+      fontSize: '2.3rem',
     },
     h3: {
       fontWeight: 300,
-      fontSize: '2rem'
+      fontSize: '2rem',
     },
     h4: {
       fontWeight: 300,
-      fontSize: '1.6rem'
+      fontSize: '1.6rem',
     },
     h5: {
       fontWeight: 300,
-      fontSize: '1.3rem'
+      fontSize: '1.3rem',
     },
     h6: {
       fontWeight: 300,
-      fontSize: '1rem'
+      fontSize: '1rem',
     },
     subtitle1: {
       fontWeight: 500,
-      color: "#444a65",
-      fontSize: '1.1rem'
+      color: '#444a65',
+      fontSize: '1.1rem',
     },
     subtitle2: {
       fontWeight: 500,
-      color: "#444a65"
+      color: '#444a65',
     },
     body1: {
-      fontSize: '0.95rem'
+      fontSize: '0.95rem',
     },
     body2: {
-      fontSize: '0.8rem'
+      fontSize: '0.8rem',
     },
     button: {
       fontWeight: 500,
-      textTransform: 'capitalize'
-    }
+      textTransform: 'capitalize',
+    },
 
   },
   shape: {
-    borderRadius: 2
-  }
+    borderRadius: 2,
+  },
 });
 
 export default theme;

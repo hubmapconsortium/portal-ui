@@ -1,12 +1,12 @@
 import React from 'react';
 import hubmapProvVis from '@hubmap/prov-vis';
 
-export default function ProvGraph (props) {
-  const provJSON = props.provData;
+export default function ProvGraph(props) {
+  const provData = props;
 
   const runRenderProvVis = () => hubmapProvVis.renderProvVis(
     'prov-vis-react',
-    provJSON,
+    provData,
     {
       getNameForActivity: (id, prov) => {
         const activity = prov.activity[id];
@@ -19,23 +19,23 @@ export default function ProvGraph (props) {
         return entity ? `${entity['prov:type']} - ${entity['prov:label']}` : id;
       },
       renderDetailPane: (prov) => {
-        function create(tag, props, children) {
+        function create(tag, props, children) { // eslint-disable-line no-shadow
           return React.createElement(tag, props, children);
         }
 
         return create(
           'table',
-          {className: 'table table-bordered table-sm'},
-          ['prov:type', 'hubmap:uuid', 'prov:generatedAtTime'].map(field => create('tr', null, [
-              create('td', {className: 'td-key'}, field),
-              create('td', {className: 'td-value'},
-                field === 'hubmap:uuid'
-                  ? create('a', {href: prov[field]}, prov[field])
-                  : prov[field]
-              )
-            ]))
+          { className: 'table table-bordered table-sm' },
+          ['prov:type', 'hubmap:uuid', 'prov:generatedAtTime'].map((field) => create('tr', null, [
+            create('td', { className: 'td-key' }, field),
+            create('td', { className: 'td-value' },
+              field === 'hubmap:uuid'
+                ? create('a', { href: prov[field] }, prov[field])
+                : prov[field]),
+          ])),
         );
       },
-  });
+    },
+  );
   return setTimeout(runRenderProvVis, 0);
-};
+}
