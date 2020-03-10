@@ -14,6 +14,17 @@ const config = {
   module: {
     rules: [
       {
+        enforce: 'pre',
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+        options: {
+          emitError: true,
+          emitWarning: true,
+          configFile: "./.eslintrc.yml"
+        }
+      },
+      {
         test: /\.jsx?/,
         use: {
           loader: 'babel-loader',
