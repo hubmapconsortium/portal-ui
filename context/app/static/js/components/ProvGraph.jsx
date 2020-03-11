@@ -2,7 +2,7 @@ import React from 'react';
 import hubmapProvVis from '@hubmap/prov-vis';
 
 export default function ProvGraph(props) {
-  const provData = props;
+  const { provData } = props;
   const runRenderProvVis = () => hubmapProvVis.renderProvVis(
     'prov-vis-react',
     provData,

@@ -20,10 +20,16 @@ A [simple demonstration](compose/) of how the NGINX reverse proxy works in Docke
 
 ## Development
 After checking out the project, cd-ing into it, and setting up a Python3 virtual environment,
+run npm install
+Note: Error with @hubmap-prov-vis dependency. Manually add
+the schema.json until [this issue is resolved.](https://github.com/hubmapconsortium/portal-ui/issues/139)
+run npm run dev-build
 run `quick-start.sh`,
 update `app.conf` with the Globus client ID and client secret,
 run `quick-start.sh` again,
 and visit [localhost:5000](http://localhost:5000).
+visit [React - DataSet 1 detail page](http://localhost:5000/browse/dataset/0?react) 
+
 
 ## Testing
 [`test.sh`](test.sh) wraps all the tests and is run on Travis.
