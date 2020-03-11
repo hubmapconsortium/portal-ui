@@ -14,16 +14,14 @@ import VisTabs from './VisTabs';
 
 export default function Details(props) {
   const { assayMetaData, provData, vitData } = props;
-  const generateListTemplate = (header, description) => {
-    return (
-      <li>
-        <Box mb={2} mt={0}>
-          <span className="list-header">header</span><br />
-          {description}
-        </Box>
-      </li>
-    )
-  };
+  const generateListTemplate = (header, description) => (
+    <li>
+      <Box mb={2} mt={0}>
+        <span className="list-header">header</span><br />
+        {description}
+      </Box>
+    </li>
+  );
 
   return (
     <Container maxWidth="lg">
@@ -49,7 +47,7 @@ export default function Details(props) {
               </ul>
             </Grid>
             <Grid item xs={12}>
-              {/* Update breadcrumb with links to parent donors and samples. */}
+              {/* TODO: Update breadcrumb with links to parent donors and samples. */}
               <Breadcrumbs aria-label="breadcrumb">
                 <Link color="inherit" href="/donor">
                   Mock Donor ID 567

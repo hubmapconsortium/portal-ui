@@ -8,9 +8,9 @@
 
     <title>{% block title_text %}{% endblock %} | HuBMAP</title>
     <script>
-      let isLoggedIn = false;
+      let isAuthenticated = false;
       {% if is_authenticated %}
-        isLoggedIn = true;
+        isAuthenticated = true;
       {% endif %}
     </script>
   </head>

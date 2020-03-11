@@ -11,7 +11,7 @@ import { useStyles } from './styles';
 export default function Header() {
   const classes = useStyles();
   let loginLink = <a href="/login" className="navLink"> Login </a>;
-  if (isLoggedIn) { // eslint-disable-line no-undef
+  if (isAuthenticated) { // eslint-disable-line no-undef
     loginLink = <a href="/logout" className="navLink"> Logout </a>;
   }
 
