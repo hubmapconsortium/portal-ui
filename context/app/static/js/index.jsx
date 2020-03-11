@@ -12,6 +12,6 @@ ReactDOM.render(
     <CssBaseline />
     <Header />
     {/* eslint-disable-next-line no-undef */}
-    <App props={props} />
+    <App flaskData={flaskData} />
   </ThemeProvider>, document.getElementById('react-content'),
 );

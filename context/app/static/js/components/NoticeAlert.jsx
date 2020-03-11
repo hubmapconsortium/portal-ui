@@ -10,13 +10,17 @@ export default function NoticeAlert(props) {
         <a href={errorObj.issue_url}>Known Issue.</a>
       </li>
     );
-    if (!errorObj.issue_url.length) {
+    if (errorObj.issue_url.length) {
       const base = 'https://github.com/hubmapconsortium/';
       const title = encodeURIComponent('Validation failure');
-      const body = encodeURIComponent(`We have this validation error: ${errorObj.traceback}`);
+      let body = encodeURIComponent(`We have this validation error: ${errorObj.traceback}`);
+      if (body.length > 1500) {
+        body = `Note, traceback has been trimmed to 1500 chars./n ${body.slice(1500)}`;
+      }
+      // Body trim is a quick fix to avoid 414 error (2000 char limit).
       template = (
         <li key={`${ind + 1}-error-msg`}>{errorObj.message} Unexpected bug!  File an issue:&nbsp;
-          <a href={`${base}entity-api/issues/new?title=${title}&amp;body=${body}`}>entity-api</a>
+          <a href={`${base}entity-api/issues/new?title=${title}&amp;body=${body.slice(1500)}`}>entity-api</a>
             &nbsp; or &nbsp;
           <a href={`${base}portal-ui/issues/new?title=${title}&amp;body=${body}`}>portal-ui</a>.
         </li>

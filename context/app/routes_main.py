@@ -75,7 +75,7 @@ def details(type, uuid):
         return render_template(
             template, type=type, uuid=uuid,
             title_text='TODO: title_text',
-            props=props
+            flask_data=props
         )
 
     details_html = object_as_html(entity)

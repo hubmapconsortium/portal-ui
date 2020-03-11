@@ -14,10 +14,21 @@ import VisTabs from './VisTabs';
 
 export default function Details(props) {
   const { assayMetaData, provData, vitData } = props;
+  const generateListTemplate = (header, description) => {
+    return (
+      <li>
+        <Box mb={2} mt={0}>
+          <span className="list-header">header</span><br />
+          {description}
+        </Box>
+      </li>
+    )
+  };
 
   return (
     <Container maxWidth="lg">
-      <ExpansionPanel defaultExpanded="true">
+      {/* eslint-disable-next-line react/jsx-boolean-value */}
+      <ExpansionPanel defaultExpanded={true}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="Details Panel" id="details-header">
           <Box className="expansion-header">{assayMetaData.description}</Box>
         </ExpansionPanelSummary>
@@ -25,46 +36,16 @@ export default function Details(props) {
           <Grid container spacing={3} justify="flex-start" direction="row" alignItems="flex-start">
             <Grid item xs>
               <ul>
-                <li>
-                  <Box mb={2} mt={0}>
-                    <span className="list-header">Contributor</span><br />
-                    {assayMetaData.provenance_user_displayname}
-                  </Box>
-                </li>
-                <li>
-                  <Box mb={2} mt={0}>
-                    <span className="list-header">Group</span><br />
-                    {assayMetaData.provenance_group_name}
-                  </Box>
-                </li>
-                <li>
-                  <Box mb={2} mt={0}>
-                    <span className="list-header">Type</span><br />
-                    Assay
-                  </Box>
-                </li>
+                {generateListTemplate('Contributor', assayMetaData.provenance_user_displayname)}
+                {generateListTemplate('Group', assayMetaData.provenance_group_name)}
+                {generateListTemplate('Type', 'Assay')}
               </ul>
             </Grid>
             <Grid item xs>
               <ul>
-                <li>
-                  <Box mb={2} mt={0}>
-                    <span className="list-header">Assay ID</span><br />
-                    {assayMetaData.display_doi}
-                  </Box>
-                </li>
-                <li>
-                  <Box mb={2} mt={0}>
-                    <span className="list-header">Created</span><br />
-                    {assayMetaData.created}
-                  </Box>
-                </li>
-                <li>
-                  <Box mb={2} mt={0}>
-                    <span className="list-header">Modified</span><br />
-                    {assayMetaData.modified}
-                  </Box>
-                </li>
+                {generateListTemplate('Assay ID', assayMetaData.display_doi)}
+                {generateListTemplate('Created', assayMetaData.created)}
+                {generateListTemplate('Modified', 'modified')}
               </ul>
             </Grid>
             <Grid item xs={12}>
