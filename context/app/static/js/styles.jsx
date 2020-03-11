@@ -7,6 +7,7 @@ export const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
+  // tabs and tabsRoot extends beyond the portal-ui style guide. Pulled from materials-ui example.
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
   },
