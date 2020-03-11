@@ -17,7 +17,7 @@ export default function Details(props) {
   const generateListTemplate = (header, description) => (
     <li>
       <Box mb={2} mt={0}>
-        <span className="list-header">header</span><br />
+        <span className="list-header">{header}</span><br />
         {description}
       </Box>
     </li>
