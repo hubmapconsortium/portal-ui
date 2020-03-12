@@ -19,7 +19,7 @@ You will need Globus keys to login to the demo. The base image is based on [this
 A [simple demonstration](compose/) of how the NGINX reverse proxy works in Docker Compose.
 
 ## Development
-After checking out the project, cd-ing into it, and setting up a Python3 virtual environment,
+After checking out the project, cd-ing into it, and setting up a Python3.7 virtual environment,
 run `quick-start.sh`,
 update `app.conf` with the Globus client ID and client secret,
 run `quick-start.sh` again,
