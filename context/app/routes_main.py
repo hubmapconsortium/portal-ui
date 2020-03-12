@@ -84,4 +84,8 @@ def details_ext(type, uuid, ext):
 
 @blueprint.route('/search')
 def search():
-    return render_template('pages/search.html', types=types)
+    return render_template(
+        'pages/search.html',
+        types=types,
+        elasticsearch_endpoint=current_app.config['ENTITY_API_BASE']
+    )
