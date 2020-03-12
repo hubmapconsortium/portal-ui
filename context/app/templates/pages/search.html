@@ -22,7 +22,7 @@
       'search',
       {
         // Elasticsearch instance to hit with queries:
-        apiUrl: 'https://search-hubmap-entity-es-dev-zhdpuhhf2vjpvqfq7zmn2gdgqq.us-east-1.es.amazonaws.com/entities/',
+        apiUrl: '{{ elasticsearch_endpoint }}',
         // Fields to search, and whether they have extra weight:
         prefixQueryFields: ['description'],
         // Prefix for details links:
