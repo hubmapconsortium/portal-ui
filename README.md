@@ -21,7 +21,7 @@ A [simple demonstration](compose/) of how the NGINX reverse proxy works in Docke
 ## Development
 After checking out the project, cd-ing into it, and setting up a Python3.7 virtual environment,
 run `quick-start.sh`,
-update `app.conf` with the Globus client ID and client secret,
+update `app.conf` with the Globus client ID and client secret, and the Elasticsearch endpoint,
 run `quick-start.sh` again,
 and visit [localhost:5000](http://localhost:5000).
 
