@@ -75,17 +75,6 @@
           {
             type: 'RefinementListFilter',
             props: {
-              // TODO: Only on some records. Should be on all?
-              // https://github.com/hubmapconsortium/search-api/issues/13
-              id: 'phi',
-              title: 'Contains Sequences',
-              field: 'phi.keyword',
-              operator: 'OR'
-            }
-          },
-          {
-            type: 'RefinementListFilter',
-            props: {
               id: 'tmc',
               title: 'TMC',
               field: 'provenance_group_name.keyword',
