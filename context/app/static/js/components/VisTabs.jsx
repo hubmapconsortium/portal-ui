@@ -42,6 +42,7 @@ export default function VisTabs(props) {
         onChange={handleChange}
         aria-label="Detail View Tabs"
         className={classes.tabs}
+        indicatorColor="secondary"
       >
         <Tab
           label="Visualizations"
