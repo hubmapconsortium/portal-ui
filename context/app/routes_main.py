@@ -87,5 +87,8 @@ def search():
     return render_template(
         'pages/search.html',
         types=types,
-        elasticsearch_endpoint=current_app.config['ELASTICSEARCH_ENDPOINT']
+        elasticsearch_endpoint=(
+            current_app.config['ELASTICSEARCH_HOST']
+            + current_app.config['ELASTICSEARCH_INDEX']
+        )
     )
