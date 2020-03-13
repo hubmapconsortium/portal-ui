@@ -36,33 +36,6 @@ def test_to_xml():
     assert to_xml(html) == xml
 
 
-def mock_get(path, **kwargs):
-    class MockResponse():
-        def json(self):
-            if path.endswith('/provenance'):
-                return {
-                    'agent': '',
-                    'prefix': {}
-                }
-            elif path.endswith('fake-uuid'):
-                return {
-                    'entity_node': {
-                        'provenance_create_timestamp': '100000',
-                        'provenance_modified_timestamp': '100000',
-                    }
-                }
-            elif '/types/' in path:
-                return {
-                    'uuids': []
-                }
-            else:
-                raise Exception('No mock for:', path)
-
-        def raise_for_status(self):
-            pass
-    return MockResponse()
-
-
 def assert_is_valid_html(response):
     xml = to_xml(response.data.decode('utf8'))
     try:
@@ -70,19 +43,6 @@ def assert_is_valid_html(response):
     except ParseError as e:
         numbered = '\n'.join([f'{n+1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
         raise Exception(f'{e.msg}\n{numbered}')
-
-
-@pytest.mark.parametrize(
-    'path',
-    ['/', '/help']
-    + [f'/browse/{t}' for t in types]
-    + [f'/browse/{t}/fake-uuid' for t in types]
-)
-def test_200_html_page(client, path, mocker):
-    mocker.patch('requests.get', side_effect=mock_get)
-    response = client.get(path)
-    assert response.status == '200 OK'
-    assert_is_valid_html(response)
 
 
 class MockSearch():
@@ -102,6 +62,19 @@ class MockResponse():
             'provenance_create_timestamp': '100000',
             'provenance_modified_timestamp': '100000',
         }
+
+
+@pytest.mark.parametrize(
+    'path',
+    ['/', '/help']
+    + [f'/browse/{t}' for t in types]
+    + [f'/browse/{t}/fake-uuid' for t in types]
+)
+def test_200_html_page(client, path, mocker):
+    mocker.patch.object(api_client, 'Search', MockSearch)
+    response = client.get(path)
+    assert response.status == '200 OK'
+    assert_is_valid_html(response)
 
 
 @pytest.mark.parametrize(
