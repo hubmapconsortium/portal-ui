@@ -1,0 +1,30 @@
+body {
+    left: 20px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.navLink {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.navLink:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+.list-header {
+    font-weight: bolder;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.expansion-header {
+    font-weight: bolder;
+    font-size: 2.6rem;
+}

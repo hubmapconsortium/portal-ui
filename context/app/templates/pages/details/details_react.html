@@ -1,0 +1,14 @@
+{% extends 'pages/base_react.html' %}
+
+{% block extra_stylesheets %}
+    <link rel="stylesheet" href="https://unpkg.com/@hms-dbmi-bgm/react-workflow-viz@0.1.0/dist/react-workflow-viz.min.css">
+{% endblock %}
+
+{% block content %}
+    <div id="react-details-content"></div>
+
+    <script>
+      const flaskData = {{ flask_data | tojson }};
+    </script>
+{% endblock %}
+

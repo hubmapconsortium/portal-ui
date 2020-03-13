@@ -20,10 +20,16 @@ A [simple demonstration](compose/) of how the NGINX reverse proxy works in Docke
 
 ## Development
 After checking out the project, cd-ing into it, and setting up a Python3.7 virtual environment,
-run `quick-start.sh`,
-update `app.conf` with the Globus client ID and client secret, and the Elasticsearch endpoint,
-run `quick-start.sh` again,
-and visit [localhost:5000](http://localhost:5000).
+- `npm install`
+- `wget https://raw.githubusercontent.com/hubmapconsortium/prov-vis/master/src/schema.json -O node_modules/@hubmap/prov-vis/es/schema.json`
+- (Note: Error with @hubmap-prov-vis dependency. Manually add
+the schema.json until [this issue is resolved](https://github.com/hubmapconsortium/portal-ui/issues/139).)
+- `npm run dev-build`
+- `./quick-start.sh`,
+- update `app.conf` with the Globus client ID and client secret, and the Elasticsearch endpoint,
+- `./quick-start.sh` again,
+and visit [localhost:5000](http://localhost:5000), or append `?react`
+to a `/dataset` url to see the React version.
 
 ## Testing
 [`test.sh`](test.sh) wraps all the tests and is run on Travis.
