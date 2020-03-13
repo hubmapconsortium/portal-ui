@@ -68,8 +68,10 @@ def mock_get(path, **kwargs):
 class MockSearch():
     def __init__(self, **kwargs):
         pass
+
     def query(self, search, **kwargs):
         pass
+
     def execute(self):
         return [MockResponse()]
 
@@ -77,6 +79,7 @@ class MockSearch():
 class MockResponse():
     def __init__(self):
         pass
+
     def to_dict(self):
         return {
             'provenance_create_timestamp': '100000',
