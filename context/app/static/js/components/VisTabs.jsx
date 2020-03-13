@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import ProvGraph from './ProvGraph';
 import { useStyles } from '../styles';
 
-function ToggleTabPanel(props) {
+function TabPanel(props) {
   const {
     children, value, index,
   } = props;
@@ -27,10 +27,10 @@ function ToggleTabPanel(props) {
 export default function VisTabs(props) {
   const { provData } = props;
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [open, setOpen] = React.useState(0);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setOpen(newValue);
   };
 
   return (
@@ -38,7 +38,7 @@ export default function VisTabs(props) {
       <Tabs
         orientation="vertical"
         variant="scrollable"
-        value={value}
+        value={open}
         onChange={handleChange}
         aria-label="Detail View Tabs"
         className={classes.tabs}
@@ -55,16 +55,16 @@ export default function VisTabs(props) {
           aria-controls="vertical-tabpanel-1"
         />
       </Tabs>
-      <ToggleTabPanel value={value} index={0}>
+      <TabPanel value={open} index={0}>
         <span id="vit-grid">
           Vit Place Holder
         </span>
-      </ToggleTabPanel>
-      <ToggleTabPanel value={value} index={1}>
+      </TabPanel>
+      <TabPanel value={open} index={1}>
         <span id="prov-vis-react">
           <ProvGraph provData={provData} />
         </span>
-      </ToggleTabPanel>
+      </TabPanel>
     </div>
   );
 }
