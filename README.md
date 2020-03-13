@@ -20,15 +20,16 @@ A [simple demonstration](compose/) of how the NGINX reverse proxy works in Docke
 
 ## Development
 After checking out the project, cd-ing into it, and setting up a Python3 virtual environment,
-run npm install
-Note: Error with @hubmap-prov-vis dependency. Manually add
-the schema.json until [this issue is resolved.](https://github.com/hubmapconsortium/portal-ui/issues/139)
-run npm run dev-build
-run `quick-start.sh`,
-update `app.conf` with the Globus client ID and client secret,
-run `quick-start.sh` again,
-and visit [localhost:5000](http://localhost:5000).
-visit [React - DataSet 1 detail page](http://localhost:5000/browse/dataset/0?react) 
+- `npm install`
+- `wget https://raw.githubusercontent.com/hubmapconsortium/prov-vis/master/src/schema.json -O node_modules/@hubmap/prov-vis/es/schema.json`
+- (Note: Error with @hubmap-prov-vis dependency. Manually add
+the schema.json until [this issue is resolved](https://github.com/hubmapconsortium/portal-ui/issues/139).)
+- `npm run dev-build`
+- `./quick-start.sh`,
+- update `app.conf` with the Globus client ID and client secret,
+- `./quick-start.sh` again,
+and visit [localhost:5000](http://localhost:5000), or append `?react`
+to a `/dataset` url to see the React version.
 
 
 ## Testing
