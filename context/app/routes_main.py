@@ -60,9 +60,10 @@ def details(type, uuid):
     errors = get_flashed_messages()
 
     for error in errors:
+        # Traceback trim is a quick fix for https://github.com/hubmapconsortium/portal-ui/issues/145.
         flashed_messages.append({'message': error.message,
                                  'issue_url': error.issue_url,
-                                 'traceback': error.__str__()})
+                                 'traceback': error.__str__()[0:1500]})
 
     if 'react' in request.args:
         template = f'pages/details/details_react.html'
