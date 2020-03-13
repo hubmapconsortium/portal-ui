@@ -45,6 +45,33 @@ def assert_is_valid_html(response):
         raise Exception(f'{e.msg}\n{numbered}')
 
 
+def mock_get(path, **kwargs):
+    class MockResponse():
+        def json(self):
+            if path.endswith('/provenance'):
+                return {
+                    'agent': '',
+                    'prefix': {}
+                }
+            elif path.endswith('fake-uuid'):
+                return {
+                    'entity_node': {
+                        'provenance_create_timestamp': '100000',
+                        'provenance_modified_timestamp': '100000',
+                    }
+                }
+            elif '/types/' in path:
+                return {
+                    'uuids': []
+                }
+            else:
+                raise Exception('No mock for:', path)
+
+        def raise_for_status(self):
+            pass
+    return MockResponse()
+
+
 class MockSearch():
     def __init__(self, **kwargs):
         pass
@@ -71,6 +98,7 @@ class MockResponse():
     + [f'/browse/{t}/fake-uuid' for t in types]
 )
 def test_200_html_page(client, path, mocker):
+    mocker.patch('requests.get', side_effect=mock_get)
     mocker.patch.object(api_client, 'Search', MockSearch)
     response = client.get(path)
     assert response.status == '200 OK'
