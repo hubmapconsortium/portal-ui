@@ -74,6 +74,8 @@ class ApiClient():
                 'description': 'Mock Entity'
             }
         es_client = Elasticsearch([current_app.config['ELASTICSEARCH_HOST']])
+        # TODO: If we can have the UUID as the Elasticsearch _id,
+        # this can be simplified: https://github.com/hubmapconsortium/search-api/issues/23
         search = Search(using=es_client, index=current_app.config['ELASTICSEARCH_INDEX'])
         search.query('match', uuid=uuid)
         response = search.execute()
