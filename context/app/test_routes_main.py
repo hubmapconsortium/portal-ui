@@ -53,13 +53,6 @@ def mock_get(path, **kwargs):
                     'agent': '',
                     'prefix': {}
                 }
-            elif path.endswith('fake-uuid'):
-                return {
-                    'entity_node': {
-                        'provenance_create_timestamp': '100000',
-                        'provenance_modified_timestamp': '100000',
-                    }
-                }
             elif '/types/' in path:
                 return {
                     'uuids': []
