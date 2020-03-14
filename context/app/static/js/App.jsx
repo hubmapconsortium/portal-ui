@@ -34,7 +34,6 @@ export default function App(props) {
       <Header />
       <div className="main-content">
         {getComponentView()}
-        <div className="push" /> {/* for the sticky footer */}
       </div>
       <Footer />
     </ThemeProvider>
