@@ -10,11 +10,11 @@ describe('portal-ui', () => {
     // Homepage
     cy.visit('/');
     cy.contains('Welcome to HuBMAP');
-    cy.contains('Human BioMolecular Atlas Program (HuBMAP): Supported by the NIH Common Fund.');
+    cy.contains('Human BioMolecular Atlas Program');
 
     // Donors browse
     cy.contains('Donors').click();
-    cy.contains('Browse donor')
+    cy.contains('Browse donor');
 
     // Donors details
     cy.contains('TODO: name').click();
@@ -23,7 +23,7 @@ describe('portal-ui', () => {
     // Provenance
     cy.contains('undefined - Input');
     // Vitessce
-    cy.contains('Scatterplot (UMAP)')
+    cy.contains('Scatterplot (UMAP)');
     cy.contains('1 cells');
 
     // Samples browse
