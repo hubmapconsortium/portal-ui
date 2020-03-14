@@ -35,6 +35,10 @@ li {
     min-height: calc(100vh - 120px);
 }
 
+.container-lg {
+    max-width: 1240px;
+}
+
 .footer {
     height: 60px;
     width: 100%;
