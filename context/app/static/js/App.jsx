@@ -5,6 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from './theme';
 import Details from './components/Details';
 import NoticeAlert from './components/NoticeAlert';
+import Footer from './footer';
 import Header from './header';
 
 export default function App(props) {
@@ -31,7 +32,11 @@ export default function App(props) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header />
-      {getComponentView()}
+      <div className="main-content">
+        {getComponentView()}
+        <div className="push" /> {/* for the sticky footer */}
+      </div>
+      <Footer />
     </ThemeProvider>
   );
 }
