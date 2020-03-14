@@ -12,7 +12,7 @@ export default function Footer() {
       <Typography variant="body2" color="textSecondary" align="center">
         {'Copyright © '}
         <Hyperlink color="inherit" href="https://hubmapconsortium.org">
-          Human BioMolecular Atlas Program (HuBMAP)
+          Human BioMolecular Atlas Program (HuBMAP): Supported by the NIH Common Fund.
         </Hyperlink>{' '}
         {new Date().getFullYear()}
         {'. All rights reserved.'}
