@@ -10,7 +10,7 @@ describe('portal-ui', () => {
     // Homepage
     cy.visit('/');
     cy.contains('Welcome to HuBMAP');
-    cy.contains('Human BioMolecular Atlas Program');
+    // cy.contains('Human BioMolecular Atlas Program');
 
     // Donors browse
     cy.contains('Donors').click();
