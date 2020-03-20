@@ -4,6 +4,8 @@ from datetime import datetime
 
 from flask import abort, current_app
 
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 from datauri import DataURI
 import requests
 
@@ -71,12 +73,16 @@ class ApiClient():
                 'display_doi': 'abcd-1234',
                 'description': 'Mock Entity'
             }
-        response = self._request(f'/entities/{uuid}')
-        entity = response['entity_node']
-        # TODO: Move this into object
+        es_client = Elasticsearch([current_app.config['ELASTICSEARCH_HOST']])
+        # TODO: If we can have the UUID as the Elasticsearch _id,
+        # this can be simplified: https://github.com/hubmapconsortium/search-api/issues/23
+        search = Search(using=es_client, index=current_app.config['ELASTICSEARCH_INDEX'])
+        search.query('match', uuid=uuid)
+        response = search.execute()
+        entity = response[0].to_dict()
         entity['created'] = _format_timestamp(entity['provenance_create_timestamp'])
         entity['modified'] = _format_timestamp(entity['provenance_modified_timestamp'])
-        return response['entity_node']
+        return entity
 
     def get_provenance(self, uuid):
         # TODO: When the API is fixed, only use this when is_mock.

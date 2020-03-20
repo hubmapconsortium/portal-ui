@@ -7,6 +7,7 @@ import pytest
 
 from .main import create_app
 from .config import types
+from .api import client as api_client
 
 
 @pytest.fixture
@@ -35,6 +36,15 @@ def test_to_xml():
     assert to_xml(html) == xml
 
 
+def assert_is_valid_html(response):
+    xml = to_xml(response.data.decode('utf8'))
+    try:
+        ET.fromstring(xml)
+    except ParseError as e:
+        numbered = '\n'.join([f'{n+1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
+        raise Exception(f'{e.msg}\n{numbered}')
+
+
 def mock_get(path, **kwargs):
     class MockResponse():
         def json(self):
@@ -42,13 +52,6 @@ def mock_get(path, **kwargs):
                 return {
                     'agent': '',
                     'prefix': {}
-                }
-            elif path.endswith('fake-uuid'):
-                return {
-                    'entity_node': {
-                        'provenance_create_timestamp': '100000',
-                        'provenance_modified_timestamp': '100000',
-                    }
                 }
             elif '/types/' in path:
                 return {
@@ -62,13 +65,26 @@ def mock_get(path, **kwargs):
     return MockResponse()
 
 
-def assert_is_valid_html(response):
-    xml = to_xml(response.data.decode('utf8'))
-    try:
-        ET.fromstring(xml)
-    except ParseError as e:
-        numbered = '\n'.join([f'{n+1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
-        raise Exception(f'{e.msg}\n{numbered}')
+class MockSearch():
+    def __init__(self, **kwargs):
+        pass
+
+    def query(self, search, **kwargs):
+        pass
+
+    def execute(self):
+        return [MockResponse()]
+
+
+class MockResponse():
+    def __init__(self):
+        pass
+
+    def to_dict(self):
+        return {
+            'provenance_create_timestamp': '100000',
+            'provenance_modified_timestamp': '100000',
+        }
 
 
 @pytest.mark.parametrize(
@@ -79,6 +95,7 @@ def assert_is_valid_html(response):
 )
 def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_get)
+    mocker.patch.object(api_client, 'Search', MockSearch)
     response = client.get(path)
     assert response.status == '200 OK'
     assert_is_valid_html(response)
@@ -89,7 +106,7 @@ def test_200_html_page(client, path, mocker):
     [f'/browse/{t}/fake-uuid.json' for t in types]
 )
 def test_200_json_page(client, path, mocker):
-    mocker.patch('requests.get', side_effect=mock_get)
+    mocker.patch.object(api_client, 'Search', MockSearch)
     response = client.get(path)
     assert response.status == '200 OK'
     json.loads(response.data.decode('utf8'))

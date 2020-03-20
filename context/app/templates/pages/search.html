@@ -26,9 +26,9 @@
         // Fields to search, and whether they have extra weight:
         prefixQueryFields: ['description'],
         // Prefix for details links:
-        detailsUrlPrefix: '/details/',
+        detailsUrlPrefix: '/browse/dataset/', // TODO: Make this different for different datasets.
         // Search results field which will be appended to detailsUrlPrefix:
-        idField: 'id',
+        idField: 'uuid',
         // Search results fields to display in table:
         resultFields: ['hubmap_identifier', 'display_doi', 'description', 'entitytype'],
         // Default hitsPerPage is 10:
@@ -59,17 +59,6 @@
               field: 'specimen_type_display_name.keyword',
               operator: 'OR',
               size: 5
-            }
-          },
-          {
-            type: 'RefinementListFilter',
-            props: {
-              // TODO: Only on some records. Should be on all?
-              // https://github.com/hubmapconsortium/search-api/issues/13
-              id: 'phi',
-              title: 'Contains Sequences',
-              field: 'phi.keyword',
-              operator: 'OR'
             }
           },
           {
