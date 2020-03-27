@@ -5,8 +5,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from './theme';
 import Details from './components/Details';
 import NoticeAlert from './components/NoticeAlert';
-import Footer from './footer';
-import Header from './header';
+import Footer from './Footer';
+import Header from './Header';
 
 export default function App(props) {
   const { flaskData } = props;

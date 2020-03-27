@@ -6,8 +6,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from './theme';
 import './index.css';
 import App from './App';
-import Footer from './footer';
-import Header from './header';
+import Footer from './Footer';
+import Header from './Header';
 
 if (window.location.search.indexOf('react') > -1) {
   ReactDOM.render( // eslint-disable-next-line no-undef
