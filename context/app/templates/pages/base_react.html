@@ -17,6 +17,8 @@
       {% block content %}{% endblock %}
     </section>
 
-    <script src="{{ url_for('static', filename='public/bundle.js') }}"></script>
+    {% block extra_scripts %}
+      <script src="{{ url_for('static', filename='public/bundle.js') }}"></script>
+    {% endblock %}
   </body>
 </html>
