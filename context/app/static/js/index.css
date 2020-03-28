@@ -1,3 +1,7 @@
+:root {
+    --foot-height: 60px;
+    --header-height: 60px;
+}
 body {
     left: 20px;
     -webkit-font-smoothing: antialiased;
@@ -32,7 +36,7 @@ li {
 
 /* https://css-tricks.com/couple-takes-sticky-footer/ */
 .main-content {
-    min-height: calc(100vh - 120px);
+    min-height: calc(100vh - var(--foot-height)- var(--header-height));
 }
 
 .container-lg {
@@ -40,7 +44,7 @@ li {
 }
 
 .footer {
-    height: 60px;
+    height: var(--foot-height);
     width: 100%;
-    line-height: 60px; /* Vertically center the text there */
+    line-height: var(--foot-height); /* Vertically center the text there */
 }

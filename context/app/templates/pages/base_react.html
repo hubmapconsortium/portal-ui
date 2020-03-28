@@ -7,10 +7,7 @@
 
     <title>{% block title_text %}{% endblock %} | HuBMAP</title>
     <script>
-      let isAuthenticated = false;
-      {% if is_authenticated %}
-        isAuthenticated = true;
-      {% endif %}
+      const isAuthenticated = {{ 'true' if is_authenticated else 'false' }};
     </script>
   </head>
 
@@ -20,8 +17,6 @@
       {% block content %}{% endblock %}
     </section>
 
-    {% block extra_scripts %}
-      <script src="{{ url_for('static', filename='public/bundle.js') }}"></script>
-    {% endblock %}
+    <script src="{{ url_for('static', filename='public/bundle.js') }}"></script>
   </body>
 </html>
