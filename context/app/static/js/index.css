@@ -43,10 +43,6 @@ li {
     max-width: 1240px;
 }
 
-.container-full {
-    width: 100vw;
-}
-
 .footer {
     height: var(--foot-height);
     width: 100%;
