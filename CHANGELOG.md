@@ -5,6 +5,7 @@
 - Hit Elasticsearch instance and start configuring facets.
 - Add react, webpack, eslint, and styling dependencies.
 - Make the Elasticsearch endpoint part of the config.
+- Fix capitalization of group.
 
 ## [v0.0.10](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.10) - 2020/03/06
 ### Added
