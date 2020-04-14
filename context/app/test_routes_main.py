@@ -7,7 +7,6 @@ import pytest
 
 from .main import create_app
 from .config import types
-from .api import client as api_client
 
 
 @pytest.fixture
