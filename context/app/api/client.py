@@ -73,13 +73,29 @@ class ApiClient():
                 'display_doi': 'abcd-1234',
                 'description': 'Mock Entity'
             }
-        es_client = Elasticsearch([current_app.config['ELASTICSEARCH_HOST']])
-        # TODO: If we can have the UUID as the Elasticsearch _id,
-        # this can be simplified: https://github.com/hubmapconsortium/search-api/issues/23
-        search = Search(using=es_client, index=current_app.config['ELASTICSEARCH_INDEX'])
-        search.query('match', uuid=uuid)
-        response = search.execute()
-        entity = response[0].to_dict()
+
+        query = {
+            'query': {
+                'match': {
+                    'uuid': uuid
+                }
+            }
+        }
+        response = requests.post(
+            current_app.config['ELASTICSEARCH_ENDPOINT'],
+            json=query,
+            headers={'Authorization': 'Bearer ' + self.nexus_token})
+
+        hits = response.json()['hits']['hits']
+
+        if len(hits) == 0:
+            abort(404)
+        if len(hits) > 1:
+            # In the search-api, we could avoid this:
+            # https://github.com/hubmapconsortium/search-api/issues/23
+            raise Exception(f'UUID not unique; got {len(hits)} matches')
+        entity = hits[0]['_source']
+
         entity['created'] = _format_timestamp(entity['provenance_create_timestamp'])
         entity['modified'] = _format_timestamp(entity['provenance_modified_timestamp'])
         return entity
