@@ -4,8 +4,9 @@
 ### Added
 - Hit Elasticsearch instance and start configuring facets.
 - Add react, webpack, eslint, and styling dependencies.
-- Make the Elasticsearch endpoint part of the config.
+- Make the Elasticsearch endpoint part of the config; Make it a single setting.
 - Make the HuBMAP-Read group ID a part of the config.
+- Use Elasticsearch to read single records.
 
 ## [v0.0.10](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.10) - 2020/03/06
 ### Added

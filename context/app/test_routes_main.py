@@ -7,7 +7,6 @@ import pytest
 
 from .main import create_app
 from .config import types
-from .api import client as api_client
 
 
 @pytest.fixture
@@ -65,26 +64,26 @@ def mock_get(path, **kwargs):
     return MockResponse()
 
 
-class MockSearch():
-    def __init__(self, **kwargs):
-        pass
+def mock_post(path, **kwargs):
+    class MockResponse():
+        def json(self):
+            return {
+                'hits': {
+                    'hits': [
+                        {
+                            '_source': {
+                                # Minimal properties.
+                                'provenance_create_timestamp': '100000',
+                                'provenance_modified_timestamp': '100000'
+                            }
+                        }
+                    ]
+                }
+            }
 
-    def query(self, search, **kwargs):
-        pass
-
-    def execute(self):
-        return [MockResponse()]
-
-
-class MockResponse():
-    def __init__(self):
-        pass
-
-    def to_dict(self):
-        return {
-            'provenance_create_timestamp': '100000',
-            'provenance_modified_timestamp': '100000',
-        }
+        def raise_for_status(self):
+            pass
+    return MockResponse()
 
 
 @pytest.mark.parametrize(
@@ -95,7 +94,7 @@ class MockResponse():
 )
 def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_get)
-    mocker.patch.object(api_client, 'Search', MockSearch)
+    mocker.patch('requests.post', side_effect=mock_post)
     response = client.get(path)
     assert response.status == '200 OK'
     assert_is_valid_html(response)
@@ -106,7 +105,7 @@ def test_200_html_page(client, path, mocker):
     [f'/browse/{t}/fake-uuid.json' for t in types]
 )
 def test_200_json_page(client, path, mocker):
-    mocker.patch.object(api_client, 'Search', MockSearch)
+    mocker.patch('requests.post', side_effect=mock_post)
     response = client.get(path)
     assert response.status == '200 OK'
     json.loads(response.data.decode('utf8'))
