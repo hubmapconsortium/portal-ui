@@ -4,8 +4,6 @@ from datetime import datetime
 
 from flask import abort, current_app
 
-from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search
 from datauri import DataURI
 import requests
 
