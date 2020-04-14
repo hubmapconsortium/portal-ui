@@ -37,7 +37,7 @@ def has_hubmap_group(nexus_token):
         params=params)
     response.raise_for_status()
     groups = response.json()
-    return any([group['name'] == 'HuBMAP-read' for group in groups])
+    return any([group['id'] == current_app.config['GROUP_ID'] for group in groups])
 
 
 @blueprint.route('/login')
