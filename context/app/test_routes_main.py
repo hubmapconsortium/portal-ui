@@ -71,7 +71,13 @@ def mock_post(path, **kwargs):
             return {
                 'hits': {
                     'hits': [
-                        # TODO: Minimal properties.
+                        {
+                            '_source': {
+                                # Minimal properties.
+                                'provenance_create_timestamp': '100000',
+                                'provenance_modified_timestamp': '100000'
+                            }
+                        }
                     ]
                 }
             }
