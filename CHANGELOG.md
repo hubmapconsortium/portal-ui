@@ -7,6 +7,7 @@
 - Make the Elasticsearch endpoint part of the config; Make it a single setting.
 - Make the HuBMAP-Read group ID a part of the config.
 - Use Elasticsearch to read single records.
+- Use the HuBMAP API ES instance for client-side faceted search, too.
 
 ## [v0.0.10](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.10) - 2020/03/06
 ### Added
