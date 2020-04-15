@@ -22,6 +22,9 @@ class ApiClient():
         self.is_mock = is_mock
 
     def _request(self, path):
+        # TODO: If we get everythin via Elasticsearch,
+        # this won't be necessary going forward.
+        # If we do end up keeping it, we should clean up the copy and paste.
         headers = {'Authorization': 'Bearer ' + self.nexus_token}
         try:
             response = requests.get(
@@ -29,6 +32,31 @@ class ApiClient():
                 headers=headers,
                 timeout=current_app.config['ENTITY_API_TIMEOUT']
             )
+        except requests.exceptions.ConnectTimeout as error:
+            current_app.logger.info(error)
+            abort(504)
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as error:
+            current_app.logger.info(error.response.text)
+            status = error.response.status_code
+            if status in [400, 404]:
+                # The same 404 page will be returned,
+                # whether it's a missing route in portal-ui,
+                # or a missing entity in the API.
+                abort(status)
+            if status in [401]:
+                # I believe we have 401 errors when the globus credentials
+                # have expired, but are still in the flask session.
+                abort(status)
+            raise
+        return response.json()
+
+    def _post_check_errors(self, url, json):
+        try:
+            response = requests.post(
+                url, json=json,
+                headers={'Authorization': 'Bearer ' + self.nexus_token})
         except requests.exceptions.ConnectTimeout as error:
             current_app.logger.info(error)
             abort(504)
@@ -79,12 +107,11 @@ class ApiClient():
                 }
             }
         }
-        response = requests.post(
+        response_json = self._post_check_errors(
             current_app.config['ELASTICSEARCH_ENDPOINT'],
-            json=query,
-            headers={'Authorization': 'Bearer ' + self.nexus_token})
+            json=query)
 
-        hits = response.json()['hits']['hits']
+        hits = response_json['hits']['hits']
 
         if len(hits) == 0:
             abort(404)
