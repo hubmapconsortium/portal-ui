@@ -18,7 +18,7 @@ def client():
         yield client
 
 
-def mock_get_400(path, **kwargs):
+def mock_post_400(path, **kwargs):
     class MockResponse():
         def __init__(self):
             self.status_code = 400
@@ -30,14 +30,14 @@ def mock_get_400(path, **kwargs):
 
 
 def test_400_html_page(client, mocker):
-    mocker.patch('requests.get', side_effect=mock_get_400)
-    response = client.get('/')
+    mocker.patch('requests.post', side_effect=mock_post_400)
+    response = client.get('/browse/donor/FAKE')
     assert response.status == '400 BAD REQUEST'
     assert_is_valid_html(response)
     assert '400: Bad Request' in response.data.decode('utf8')
 
 
-def mock_get_401(path, **kwargs):
+def mock_post_401(path, **kwargs):
     class MockResponse():
         def __init__(self):
             self.status_code = 401
@@ -49,8 +49,8 @@ def mock_get_401(path, **kwargs):
 
 
 def test_401_html_page(client, mocker):
-    mocker.patch('requests.get', side_effect=mock_get_401)
-    response = client.get('/')
+    mocker.patch('requests.post', side_effect=mock_post_401)
+    response = client.get('/browse/donor/FAKE')
     assert response.status == '401 UNAUTHORIZED'
     assert_is_valid_html(response)
     assert '401: Unauthorized' in response.data.decode('utf8')
@@ -65,7 +65,7 @@ def client_not_logged_in():
 
 
 def test_403_html_page(client_not_logged_in):
-    response = client_not_logged_in.get('/')
+    response = client_not_logged_in.get('/browse/donor/FAKE')
     assert response.status == '403 FORBIDDEN'
     assert_is_valid_html(response)
     assert '403: Access Denied' in response.data.decode('utf8')
