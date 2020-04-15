@@ -21,14 +21,11 @@ class ApiClient():
         self.nexus_token = nexus_token
         self.is_mock = is_mock
 
-    def _request(self, path):
-        headers = {'Authorization': 'Bearer ' + self.nexus_token}
+    def _post_check_errors(self, url, json):
         try:
-            response = requests.get(
-                f'{self.url_base}{path}',
-                headers=headers,
-                timeout=current_app.config['ENTITY_API_TIMEOUT']
-            )
+            response = requests.post(
+                url, json=json,
+                headers={'Authorization': 'Bearer ' + self.nexus_token})
         except requests.exceptions.ConnectTimeout as error:
             current_app.logger.info(error)
             abort(504)
@@ -79,12 +76,11 @@ class ApiClient():
                 }
             }
         }
-        response = requests.post(
+        response_json = self._post_check_errors(
             current_app.config['ELASTICSEARCH_ENDPOINT'],
-            json=query,
-            headers={'Authorization': 'Bearer ' + self.nexus_token})
+            json=query)
 
-        hits = response.json()['hits']['hits']
+        hits = response_json['hits']['hits']
 
         if len(hits) == 0:
             abort(404)
