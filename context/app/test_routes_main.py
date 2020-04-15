@@ -89,7 +89,6 @@ def mock_post(path, **kwargs):
 @pytest.mark.parametrize(
     'path',
     ['/', '/help']
-    + [f'/browse/{t}' for t in types]
     + [f'/browse/{t}/fake-uuid' for t in types]
 )
 def test_200_html_page(client, path, mocker):

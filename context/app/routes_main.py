@@ -32,14 +32,6 @@ def index():
     return render_template('pages/index.html', types=types)
 
 
-@blueprint.route('/browse/<type>')
-def browse(type):
-    if type not in types:
-        abort(404)
-    entities = _get_client().get_entities(type)
-    return render_template('pages/browse.html', types=types, type=type, entities=entities)
-
-
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
     if type not in types:

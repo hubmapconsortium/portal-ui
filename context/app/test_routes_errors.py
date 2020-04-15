@@ -31,7 +31,7 @@ def mock_get_400(path, **kwargs):
 
 def test_400_html_page(client, mocker):
     mocker.patch('requests.get', side_effect=mock_get_400)
-    response = client.get('/browse/donor')
+    response = client.get('/')
     assert response.status == '400 BAD REQUEST'
     assert_is_valid_html(response)
     assert '400: Bad Request' in response.data.decode('utf8')
@@ -50,7 +50,7 @@ def mock_get_401(path, **kwargs):
 
 def test_401_html_page(client, mocker):
     mocker.patch('requests.get', side_effect=mock_get_401)
-    response = client.get('/browse/donor')
+    response = client.get('/')
     assert response.status == '401 UNAUTHORIZED'
     assert_is_valid_html(response)
     assert '401: Unauthorized' in response.data.decode('utf8')
@@ -65,15 +65,14 @@ def client_not_logged_in():
 
 
 def test_403_html_page(client_not_logged_in):
-    response = client_not_logged_in.get('/browse/donor')
+    response = client_not_logged_in.get('/')
     assert response.status == '403 FORBIDDEN'
     assert_is_valid_html(response)
     assert '403: Access Denied' in response.data.decode('utf8')
 
 
 @pytest.mark.parametrize('path', [
-    '/no-page-here',
-    '/browse/no-such-type']
+    '/no-page-here']
     + [f'/browse/{t}/fake-uuid.fake' for t in types]
 )
 def test_404_html_page(client, path):
@@ -89,7 +88,7 @@ def mock_timeout_get(path, **kwargs):
 
 def test_504_html_page(client, mocker):
     mocker.patch('requests.get', side_effect=mock_timeout_get)
-    response = client.get('/browse/donor')
+    response = client.get('/')
     assert response.status == '504 GATEWAY TIMEOUT'
     assert_is_valid_html(response)
     assert '504: Gateway Timeout' in response.data.decode('utf8')
