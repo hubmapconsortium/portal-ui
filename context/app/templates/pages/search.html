@@ -14,7 +14,7 @@
 
 {% block extra_scripts %}
 <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/@hubmap/portal-search@v0.0.2/umd/@hubmap/portal-search.min.js"></script>
+<script src="https://unpkg.com/@hubmap/portal-search@v0.0.4/umd/@hubmap/portal-search.min.js"></script>
 
   <script>
     hubmapPortalSearch.renderSearch(
@@ -23,6 +23,13 @@
       {
         // Elasticsearch instance to hit with queries:
         apiUrl: '{{ elasticsearch_endpoint }}',
+        // The default behavior is to add a "_search" path.
+        // We don't want that.
+        searchUrlPath: '',
+        // Pass Globus token:
+        httpHeaders: {
+          'Authorization': '{{ authorization_header_value }}'
+        },
         // Fields to search, and whether they have extra weight:
         prefixQueryFields: ['description'],
         // Prefix for details links:
