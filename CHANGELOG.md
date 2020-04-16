@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.0.11 - In progress
+## v0.0.12 - In progress
+
+## [v0.0.11](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.11) - 2020/04/16
 ### Added
 - Hit Elasticsearch instance and start configuring facets.
 - Add react, webpack, eslint, and styling dependencies.
