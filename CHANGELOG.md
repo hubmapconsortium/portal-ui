@@ -7,7 +7,7 @@
 - Hit Elasticsearch instance and start configuring facets. 
 - Add react, webpack, eslint, and styling dependencies.
 - Make the Elasticsearch endpoint part of the config; Make it a single setting.
-- Make the HuBMAP-Read group ID a part of the config.
+- Make the HuBMAP-Read group ID part of the config.
 - Use Elasticsearch to read single records.
 - Use the HuBMAP API ES instance for client-side faceted search, too.
 
