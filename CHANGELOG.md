@@ -1,10 +1,12 @@
 # Changelog
 
 ## v0.0.12 - In progress
+### Changed
+- Remove actual endpoint from default_config.py: This must be provided during deployment.
 
 ## [v0.0.11](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.11) - 2020/04/16
 ### Added
-- Hit Elasticsearch instance and start configuring facets. 
+- Hit Elasticsearch instance and start configuring facets.
 - Add react, webpack, eslint, and styling dependencies.
 - Make the Elasticsearch endpoint part of the config; Make it a single setting.
 - Make the HuBMAP-Read group ID part of the config.
