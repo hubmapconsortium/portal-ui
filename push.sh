@@ -9,7 +9,7 @@ VERSION_IN_CHANGELOG="$VERSION - In progress"
 grep "$VERSION_IN_CHANGELOG" CHANGELOG.md || die "Missing from CHANGELOG.md: '$VERSION_IN_CHANGELOG'"
 
 IMAGE_NAME=hubmap/portal-ui:$VERSION
-grep "$IMAGE_NAME" compose/test.yml || die "Update compose/test.yml: $IMAGE_NAME"
+grep "$IMAGE_NAME" compose/hubmap.yml || die "Update compose/hubmap.yml: $IMAGE_NAME"
 
 git tag $VERSION
 git push origin --tags

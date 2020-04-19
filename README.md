@@ -40,7 +40,7 @@ while end-to-end tests use [Cypress](https://docs.cypress.io/guides/overview/why
 To tag a new version for github and
 [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
 checkout a release branch, increment `VERSION`,
-update `compose/test.yml` to match,
+update `compose/hubmap.yml` to match,
 commit these changes, and run:
 ```sh
 ./push.sh
