@@ -3,6 +3,7 @@
 ## v0.0.12 - In progress
 ### Changed
 - Rename Docker Compose config.
+- Remove actual endpoint from default_config.py: This must be provided during deployment.
 
 ## [v0.0.11](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.11) - 2020/04/16
 ### Added
