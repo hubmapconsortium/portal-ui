@@ -4,6 +4,7 @@
 ### Changed
 - Rename Docker Compose config.
 - Remove actual endpoint from default_config.py: This must be provided during deployment.
+- Fix react to show content on details pages.
 
 ## [v0.0.11](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.11) - 2020/04/16
 ### Added

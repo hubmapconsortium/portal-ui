@@ -33,7 +33,7 @@ export default function Header() {
           </Button>
           <Button>
             <a href="/browse/dataset" className="navLink">
-              Assays
+              Datasets
             </a>
           </Button>
           <Button>
