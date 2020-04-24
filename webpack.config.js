@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const resolve = require('path').resolve;
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 const config = {
   entry: './context/app/static/js/index.jsx',
@@ -57,6 +58,9 @@ const config = {
         use: { loader: "@svgr/webpack" },
       },
     ]
-  }
+  },
+  plugins: [
+    new FaviconsWebpackPlugin('./context/app/static/favicon.ico')
+  ]
 };
 module.exports = config;
