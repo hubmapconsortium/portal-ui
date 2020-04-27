@@ -34,9 +34,14 @@ li {
     font-size: 2.6rem;
 }
 
-/* https://css-tricks.com/couple-takes-sticky-footer/ */
-.main-content {
-    min-height: calc(100vh - var(--foot-height)- var(--header-height));
+.page-layout {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.main-content{
+    flex-grow: 1;
 }
 
 .container-lg {

@@ -8,6 +8,7 @@ import NoticeAlert from './components/NoticeAlert';
 import Footer from './Footer';
 import Header from './Header';
 
+
 export default function App(props) {
   const { flaskData } = props;
 
@@ -31,11 +32,13 @@ export default function App(props) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Header />
-      <div className="main-content">
-        {getComponentView()}
+      <div className="page-layout">
+        <Header />
+        <div className="main-content">
+          {getComponentView()}
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </ThemeProvider>
   );
 }
