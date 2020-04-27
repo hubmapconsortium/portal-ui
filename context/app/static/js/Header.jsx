@@ -22,17 +22,17 @@ export default function Header() {
           <a href="/"><HubmapLogo className={classes.hubmaptypeLight} aria-label="HubMAP logo" /></a>
           <Typography variant="h5" className={classes.title} />
           <Button>
-            <a href="/browse/donor" className="navLink">
+            <a href="search?entity_type[0]=Donor" className="navLink">
               Donors
             </a>
           </Button>
           <Button>
-            <a href="/browse/sample" className="navLink">
+            <a href="/search?entity_type[0]=Sample" className="navLink">
               Samples
             </a>
           </Button>
           <Button>
-            <a href="/browse/dataset" className="navLink">
+            <a href="/search?entity_type[0]=Dataset" className="navLink">
               Datasets
             </a>
           </Button>
