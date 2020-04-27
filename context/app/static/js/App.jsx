@@ -32,13 +32,11 @@ export default function App(props) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <div className="page-layout">
-        <Header />
-        <div className="main-content">
-          {getComponentView()}
-        </div>
-        <Footer />
+      <Header />
+      <div className="main-content">
+        {getComponentView()}
       </div>
+      <Footer />
     </ThemeProvider>
   );
 }

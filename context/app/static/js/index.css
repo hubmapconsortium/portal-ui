@@ -6,7 +6,9 @@ body {
     left: 20px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    height: 100%;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
 .navLink {
@@ -32,12 +34,6 @@ li {
 .expansion-header {
     font-weight: bolder;
     font-size: 2.6rem;
-}
-
-.page-layout {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
 }
 
 .main-content{
