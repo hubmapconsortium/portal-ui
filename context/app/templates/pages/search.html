@@ -17,18 +17,6 @@
 <script src="https://unpkg.com/@hubmap/portal-search@v0.0.4/umd/@hubmap/portal-search.min.js"></script>
 
   <script>
-    // From https://www.quirksmode.org/js/cookies.html
-    function readCookie(name) {
-      var nameEQ = name + "=";
-      var ca = document.cookie.split(';');
-      for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-      }
-      return null;
-    }
-
     hubmapPortalSearch.renderSearch(
       // ID of element to replace with search component:
       'search',
