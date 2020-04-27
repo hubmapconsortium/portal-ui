@@ -23,6 +23,11 @@ export default function Header() {
           <Typography variant="h5" className={classes.title} />
           {['Donor', 'Sample', 'Dataset'].map((type) => <Button><a href={`search?entity_type[0]=${type}`} className="navLink">{`${type}s`}</a></Button>) }
           <Button>
+            <a href="https://hubmapconsortium.github.io/ccf-ui/home" target="_blank" rel="noopener noreferrer" className="navLink">
+              CCF
+            </a>
+          </Button>
+          <Button>
             <a href="/help" className="navLink">
               Help
             </a>
