@@ -6,7 +6,7 @@ services:
     hostname: portal-ui
     container_name: portal-ui
     # Incrementing this? Make @yuanzhou a reviewer on the PR.
-    image: hubmap/portal-ui:v0.0.10
+    image: hubmap/portal-ui:v0.0.11
 
     # Mount the app config in container to keep it outside the image.
     volumes:

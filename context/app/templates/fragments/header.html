@@ -8,14 +8,10 @@
      href="{{ index_path }}">HuBMAP</a>
 
   <nav class="my-2 my-md-0 mr-md-3">
-    {% for type, props in types.items() %}
-      {% if props['in_header'] %}
-
-        {% set type_path = url_for('routes.browse', type=type) %}
-        <a class="{{ default_class }} {{ active_class if request.path == type_path else '' }}"
-           href="{{ type_path }}">{{ props['display_name'] }}</a>
-
-      {% endif %}
+    {% for type in ['Donor', 'Sample', 'Dataset'] %}
+      {% set search_path='/search?entity_type[0]=' + type %}
+      <a class="{{ default_class }}"
+           href="{{ search_path }}">{{ type }}s</a>
     {% endfor %}
 
     {% set help_path = '/help' %}

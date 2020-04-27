@@ -22,6 +22,9 @@ class ApiClient():
         self.is_mock = is_mock
 
     def _request(self, path):
+        # TODO: If we get everythin via Elasticsearch,
+        # this won't be necessary going forward.
+        # If we do end up keeping it, we should clean up the copy and paste.
         headers = {'Authorization': 'Bearer ' + self.nexus_token}
         try:
             response = requests.get(
@@ -29,6 +32,31 @@ class ApiClient():
                 headers=headers,
                 timeout=current_app.config['ENTITY_API_TIMEOUT']
             )
+        except requests.exceptions.ConnectTimeout as error:
+            current_app.logger.info(error)
+            abort(504)
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as error:
+            current_app.logger.info(error.response.text)
+            status = error.response.status_code
+            if status in [400, 404]:
+                # The same 404 page will be returned,
+                # whether it's a missing route in portal-ui,
+                # or a missing entity in the API.
+                abort(status)
+            if status in [401]:
+                # I believe we have 401 errors when the globus credentials
+                # have expired, but are still in the flask session.
+                abort(status)
+            raise
+        return response.json()
+
+    def _post_check_errors(self, url, json):
+        try:
+            response = requests.post(
+                url, json=json,
+                headers={'Authorization': 'Bearer ' + self.nexus_token})
         except requests.exceptions.ConnectTimeout as error:
             current_app.logger.info(error)
             abort(504)
@@ -71,12 +99,31 @@ class ApiClient():
                 'display_doi': 'abcd-1234',
                 'description': 'Mock Entity'
             }
-        response = self._request(f'/entities/{uuid}')
-        entity = response['entity_node']
-        # TODO: Move this into object
+
+        query = {
+            'query': {
+                'match': {
+                    'uuid': uuid
+                }
+            }
+        }
+        response_json = self._post_check_errors(
+            current_app.config['ELASTICSEARCH_ENDPOINT'],
+            json=query)
+
+        hits = response_json['hits']['hits']
+
+        if len(hits) == 0:
+            abort(404)
+        if len(hits) > 1:
+            # In the search-api, we could avoid this:
+            # https://github.com/hubmapconsortium/search-api/issues/23
+            raise Exception(f'UUID not unique; got {len(hits)} matches')
+        entity = hits[0]['_source']
+
         entity['created'] = _format_timestamp(entity['provenance_create_timestamp'])
         entity['modified'] = _format_timestamp(entity['provenance_modified_timestamp'])
-        return response['entity_node']
+        return entity
 
     def get_provenance(self, uuid):
         # TODO: When the API is fixed, only use this when is_mock.

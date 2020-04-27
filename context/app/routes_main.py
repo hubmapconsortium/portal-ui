@@ -32,14 +32,6 @@ def index():
     return render_template('pages/index.html', types=types)
 
 
-@blueprint.route('/browse/<type>')
-def browse(type):
-    if type not in types:
-        abort(404)
-    entities = _get_client().get_entities(type)
-    return render_template('pages/browse.html', types=types, type=type, entities=entities)
-
-
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
     if type not in types:
@@ -107,8 +99,12 @@ def details_ext(type, uuid, ext):
 
 @blueprint.route('/search')
 def search():
+    if 'nexus_token' not in session:
+        # TODO: Not needed in the long term?
+        # https://github.com/hubmapconsortium/search-api/issues/30
+        abort(403)
     return render_template(
         'pages/search.html',
         types=types,
-        elasticsearch_endpoint=current_app.config['ENTITY_API_BASE']
+        elasticsearch_endpoint=current_app.config['ELASTICSEARCH_ENDPOINT']
     )

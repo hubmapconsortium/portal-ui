@@ -1,6 +1,8 @@
 from urllib.parse import urlencode
 
-from flask import Blueprint, current_app, url_for, request, redirect, render_template, session
+from flask import (
+    Blueprint, make_response, current_app, url_for,
+    request, redirect, render_template, session)
 import requests
 import globus_sdk
 
@@ -37,7 +39,7 @@ def has_hubmap_group(nexus_token):
         params=params)
     response.raise_for_status()
     groups = response.json()
-    return any([group['name'] == 'HuBMAP-read' for group in groups])
+    return any([group['id'] == current_app.config['GROUP_ID'] for group in groups])
 
 
 @blueprint.route('/login')
@@ -84,7 +86,10 @@ def login():
             nexus_token=nexus_token,
             is_authenticated=True
         )
-        return redirect(url_for('routes.index', _external=True))
+        response = make_response(
+            redirect(url_for('routes.index', _external=True)))
+        response.set_cookie('nexus_token', nexus_token)
+        return response
 
     # Globus institution login worked, but user does not have HuBMAP group!
     return render_template('errors/401-no-hubmap-group.html'), 401

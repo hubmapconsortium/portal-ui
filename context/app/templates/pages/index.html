@@ -3,12 +3,3 @@
 {% block title %}
   <h1>{% block title_text %}Welcome to HuBMAP{% endblock %}</h1>
 {% endblock %}
-
-{% block content %}
-<p>Show all:</p>
-<ul>
-  {% for type, props in types.items() %}
-    <li><a href="{{ url_for('routes.browse', type=type) }}">{{ props['display_name'] }}</a></li>
-  {% endfor %}
-</ul>
-{% endblock %}

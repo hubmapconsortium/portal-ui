@@ -1,10 +1,20 @@
 # Changelog
 
-## v0.0.11 - In progress
+## v0.0.12 - In progress
+### Changed
+- Rename Docker Compose config.
+- Remove actual endpoint from default_config.py: This must be provided during deployment.
+- Fix react to show content on details pages.
+- Use cookie for search.
+
+## [v0.0.11](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.11) - 2020/04/16
 ### Added
 - Hit Elasticsearch instance and start configuring facets.
 - Add react, webpack, eslint, and styling dependencies.
-- Make the Elasticsearch endpoint part of the config.
+- Make the Elasticsearch endpoint part of the config; Make it a single setting.
+- Make the HuBMAP-Read group ID part of the config.
+- Use Elasticsearch to read single records.
+- Use the HuBMAP API ES instance for client-side faceted search, too.
 
 ## [v0.0.10](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.10) - 2020/03/06
 ### Added

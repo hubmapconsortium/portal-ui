@@ -14,7 +14,7 @@ export default function App(props) {
 
   const getComponentView = () => {
     // Temp routing solution for showing the correct react component.
-    if (window.location.pathname.indexOf('browse/dataset/') > -1) {
+    if (window.location.pathname.indexOf('browse/') > -1) {
       return (
         <span>
           <NoticeAlert errors={flaskData.flashed_messages} />
