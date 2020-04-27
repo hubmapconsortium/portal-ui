@@ -106,6 +106,5 @@ def search():
     return render_template(
         'pages/search.html',
         types=types,
-        elasticsearch_endpoint=current_app.config['ELASTICSEARCH_ENDPOINT'],
-        authorization_header_value=f'Bearer {session["nexus_token"]}'
+        elasticsearch_endpoint=current_app.config['ELASTICSEARCH_ENDPOINT']
     )
