@@ -28,7 +28,7 @@
         searchUrlPath: '',
         // Pass Globus token:
         httpHeaders: {
-          'Authorization': '{{ authorization_header_value }}'
+          'Authorization': 'Bearer ' + readCookie('nexus_token')
         },
         // Fields to search, and whether they have extra weight:
         prefixQueryFields: ['description'],
@@ -94,7 +94,7 @@
             props: {
               id: 'entity_type',
               title: 'Entity Type',
-              field: 'entitytype.keyword',
+              field: 'entity_type.keyword',
               operator: 'OR'
             }
           },

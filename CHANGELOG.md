@@ -7,6 +7,9 @@
 - Rename Docker Compose config.
 - Remove actual endpoint from default_config.py: This must be provided during deployment.
 - Fix react to show content on details pages.
+- Use cookie for search.
+- Add react header and footer
+- Tweak to accommodate new ES document structure.
 
 ## [v0.0.11](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.11) - 2020/04/16
 ### Added

@@ -10,8 +10,16 @@ describe('portal-ui', () => {
     // Homepage
     cy.visit('/');
     cy.contains('Welcome to HuBMAP');
-    cy.contains('Human BioMolecular Atlas Program: Supported by the NIH Common Fund.');
+    cy.contains('Human BioMolecular Atlas Program (HuBMAP)');
 
+    // Donors
+    cy.contains('Donors');
+    // Samples
+    cy.contains('Samples');
+    // Datasets
+    cy.contains('Datasets');
+    // CCF-UI
+    cy.contains('CCF-UI');
     // Help
     cy.contains('Help').click();
     cy.contains('TODO: Say something helpful here!');
