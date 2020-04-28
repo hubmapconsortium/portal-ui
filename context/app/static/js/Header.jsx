@@ -25,7 +25,11 @@ export default function Header() {
           {['Donor', 'Sample', 'Dataset'].map((type) => <Button key={type}><a href={`search?entity_type[0]=${type}`} className="navLink">{`${type}s`}</a></Button>) }
           <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
             <Button>
-              <a href="https://hubmapconsortium.github.io/ccf-ui/home" target="_blank" rel="noopener noreferrer" className="navLink">
+              <a
+                href="https://hubmapconsortium.github.io/ccf-ui/home"
+                target="_blank" // eslint-disable-line react/jsx-no-target-blank
+                className="navLink"
+              >
                 CCF-UI
               </a>
             </Button>
