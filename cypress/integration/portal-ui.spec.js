@@ -12,29 +12,14 @@ describe('portal-ui', () => {
     cy.contains('Welcome to HuBMAP');
     cy.contains('Human BioMolecular Atlas Program (HuBMAP)');
 
-    // Donors browse
-    cy.contains('Donors').click();
-    cy.contains('Browse donor');
-
-    // Donors details
-    cy.contains('TODO: name').click();
-    cy.contains('Warning!');
-    cy.contains('Mock Entity');
-    // Provenance
-    cy.contains('undefined - Input');
-    // Vitessce
-    cy.contains('Scatterplot (UMAP)');
-    cy.contains('1 cells');
-
-    // Samples browse
-    cy.contains('Samples').click();
-    cy.contains('Browse sample');
-
-    // Sample details
-    cy.contains('TODO: name').click();
-    cy.contains('Warning!');
-    cy.contains('Mock Entity');
-
+    // Donors
+    cy.contains('Donors');
+    // Samples
+    cy.contains('Samples');
+    // Datasets
+    cy.contains('Datasets');
+    // CCF-UI
+    cy.contains('CCF-UI');
     // Help
     cy.contains('Help').click();
     cy.contains('TODO: Say something helpful here!');
