@@ -21,7 +21,7 @@ export default function Header() {
         <Toolbar>
           <a href="/"><HubmapLogo className={classes.hubmaptypeLight} aria-label="HubMAP logo" /></a>
           <Typography variant="h5" className={classes.title} />
-          {['Donor', 'Sample', 'Dataset'].map((type) => <Button><a href={`search?entity_type[0]=${type}`} className="navLink">{`${type}s`}</a></Button>) }
+          {['Donor', 'Sample', 'Dataset'].map((type) => <Button key={type}><a href={`search?entity_type[0]=${type}`} className="navLink">{`${type}s`}</a></Button>) }
           <Button>
             <a href="/help" className="navLink">
               Help
