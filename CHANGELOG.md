@@ -8,6 +8,7 @@
 - Use cookie for search.
 - Add react header and footer
 - Tweak to accommodate new ES document structure.
+- Make header links relative to root
 
 ## [v0.0.11](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.11) - 2020/04/16
 ### Added
