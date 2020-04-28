@@ -18,6 +18,7 @@ fi
 
 grep 'TODO' "$APP_CONF" && die "Replace 'TODO' in $APP_CONF."
 
-npm install # So Cypress works out of the box.
+npm install
+npm run dev-build
 
 FLASK_ENV=development FLASK_APP="$CONTEXT/app/main.py" python -m flask run

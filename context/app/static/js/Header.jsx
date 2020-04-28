@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
 import HubmapLogo from './hubmap_logo.svg';
 
 import { useStyles } from './styles';
@@ -21,21 +22,14 @@ export default function Header() {
         <Toolbar>
           <a href="/"><HubmapLogo className={classes.hubmaptypeLight} aria-label="HubMAP logo" /></a>
           <Typography variant="h5" className={classes.title} />
-          <Button>
-            <a href="/browse/donor" className="navLink">
-              Donors
-            </a>
-          </Button>
-          <Button>
-            <a href="/browse/sample" className="navLink">
-              Samples
-            </a>
-          </Button>
-          <Button>
-            <a href="/browse/dataset" className="navLink">
-              Datasets
-            </a>
-          </Button>
+          {['Donor', 'Sample', 'Dataset'].map((type) => <Button key={type}><a href={`search?entity_type[0]=${type}`} className="navLink">{`${type}s`}</a></Button>) }
+          <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
+            <Button>
+              <a href="https://hubmapconsortium.github.io/ccf-ui/home" target="_blank" rel="noopener noreferrer" className="navLink">
+                CCF-UI
+              </a>
+            </Button>
+          </Tooltip>
           <Button>
             <a href="/help" className="navLink">
               Help

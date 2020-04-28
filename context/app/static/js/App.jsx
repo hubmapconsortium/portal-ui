@@ -5,7 +5,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from './theme';
 import Details from './components/Details';
 import NoticeAlert from './components/NoticeAlert';
-import Header from './header';
+import Footer from './Footer';
+import Header from './Header';
+
 
 export default function App(props) {
   const { flaskData } = props;
@@ -31,7 +33,10 @@ export default function App(props) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header />
-      {getComponentView()}
+      <div className="main-content">
+        {getComponentView()}
+      </div>
+      <Footer />
     </ThemeProvider>
   );
 }
