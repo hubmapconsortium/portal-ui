@@ -22,7 +22,7 @@ export default function Header() {
         <Toolbar>
           <a href="/"><HubmapLogo className={classes.hubmaptypeLight} aria-label="HubMAP logo" /></a>
           <Typography variant="h5" className={classes.title} />
-          {['Donor', 'Sample', 'Dataset'].map((type) => <Button key={type}><a href={`search?entity_type[0]=${type}`} className="navLink">{`${type}s`}</a></Button>) }
+          {['Donor', 'Sample', 'Dataset'].map((type) => <Button key={type}><a href={`/search?entity_type[0]=${type}`} className="navLink">{`${type}s`}</a></Button>) }
           <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
             <Button>
               <a href="https://hubmapconsortium.github.io/ccf-ui/home" target="_blank" rel="noopener noreferrer" className="navLink">
