@@ -2,7 +2,7 @@
 
 ## v0.0.12 - In progress
 ### Added
-- Added favicon
+- Added favicon, just as Django asset.
 ### Changed
 - Rename Docker Compose config.
 - Remove actual endpoint from default_config.py: This must be provided during deployment.
