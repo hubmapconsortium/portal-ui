@@ -11,6 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import VisTabs from './VisTabs';
+import RecursiveList from './RecursiveList';
 
 export default function Details(props) {
   const { assayMetaData, provData, vitData } = props;
@@ -61,6 +62,7 @@ export default function Details(props) {
           </Grid>
         </ExpansionPanelDetails>
       </ExpansionPanel>
+      <RecursiveList property={assayMetaData} propertyName="Root Property" isRoot />
       <Box mt={2}>
         <Paper>
           <VisTabs provData={provData} vitData={vitData} />
