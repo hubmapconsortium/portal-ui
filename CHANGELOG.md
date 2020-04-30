@@ -1,8 +1,9 @@
 # Changelog
 
-## v0.0.12 - In progress
-### Added
-- Added favicon, just as Django asset.
+## v0.0.13 - in progress
+- Added favicon
+
+## [v0.0.12](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.12) - 2020/04/28
 ### Changed
 - Rename Docker Compose config.
 - Remove actual endpoint from default_config.py: This must be provided during deployment.
