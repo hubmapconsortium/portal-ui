@@ -1,15 +1,11 @@
 import React from 'react';
-/* import { makeStyles } from '@material-ui/core/styles'; */
 import styled from 'styled-components';
-/*
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText'; */
+import DataPanel from './DataPanel';
+import RecursiveListLeaf from './RecursiveListLeaf';
+import { isEmptyArrayOrObject } from '../helpers/functions';
 
 const RecursivePropertyContainer = styled.div`
-  padding-top: 5px;
-  padding-left: 3px;
-  margin-left: 10px;
+  margin-top: 5px;
   font-size: 16px;
 `;
 
@@ -18,35 +14,60 @@ const PropertyName = styled.span`
   font-size: 1rem;
 `;
 
+function isLeaf(property) {
+  return (typeof property === 'number' || typeof property === 'string' || typeof property === 'boolean' || isEmptyArrayOrObject(property));
+}
 
-export default function RecursiveList(props) {
+function RecursiveList(props) {
   const {
-    property, propertyName, excludeBottomBorder, isRoot,
+    property, propertyName, excludeBottomBorder, isRoot, isRootChild,
   } = props;
 
+
   return (
+    /* eslint-disable no-nested-ternary */
     <RecursivePropertyContainer excludeBottomBorder={excludeBottomBorder}>
-      { property ? ( // eslint-disable-line no-nested-ternary
-        (typeof property === 'number' || typeof property === 'string' || typeof property === 'boolean')
+      { property ? (
+        isLeaf(property)
           ? (
-            <>
-              <PropertyName> {propertyName}: </PropertyName>
-              {property.toString()}
-            </>
+            <RecursiveListLeaf
+              property={property}
+              propertyName={propertyName}
+              isRootChild={isRootChild}
+            />
           ) : (
-            <>
-              {!isRoot && <PropertyName> {propertyName}: </PropertyName>}
-              {Object.values(property).map((objProperty, index, { length }) => (
-                <RecursiveList
+            isRootChild
+              ? (
+                <DataPanel propertyName={propertyName} isRootChild={isRootChild}>
+                  {Object.values(property).map((objProperty, index, { length }) => (
+                    <RecursiveList
+                    // eslint-disable-next-line react/no-array-index-key
+                      key={index}
+                      property={objProperty}
+                      propertyName={Object.getOwnPropertyNames(property)[index]}
+                      excludeBottomBorder={index === length - 1}
+                    />
+                  )) }
+                </DataPanel>
+              ) : (
+                <>
+                  {!isRoot && <PropertyName> {propertyName}: </PropertyName>}
+                  {Object.values(property).map((objProperty, index, { length }) => (
+                    <RecursiveList
                   // eslint-disable-next-line react/no-array-index-key
-                  key={index}
-                  property={objProperty}
-                  propertyName={Object.getOwnPropertyNames(property)[index]}
-                  excludeBottomBorder={index === length - 1}
-                />
-              )) }
-            </>
-          )) : (<PropertyName> {propertyName}: </PropertyName>)}
+                      key={index}
+                      property={objProperty}
+                      propertyName={Object.getOwnPropertyNames(property)[index]}
+                      excludeBottomBorder={index === length - 1}
+                      isRootChild={isRoot}
+                    />
+                  )) }
+                </>
+              )
+          )) : (<RecursiveListLeaf property="" propertyName={propertyName} isRootChild={isRoot} />)}
     </RecursivePropertyContainer>
   );
+  /* eslint-disable no-nested-ternary */
 }
+
+export default RecursiveList;
