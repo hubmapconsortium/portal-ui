@@ -57,31 +57,17 @@ def details(type, uuid):
                                  'issue_url': error.issue_url,
                                  'traceback': error.__str__()[0:1500]})
 
-    if 'react' in request.args:
-        template = f'pages/details/details_react.html'
-        props = {
-            'flashed_messages': flashed_messages,
-            'entity': entity,
-            'provenance': provenance,
-            'vitessce_conf': client.get_vitessce_conf(),
-        }
-        return render_template(
-            template, type=type, uuid=uuid,
-            title_text='TODO: title_text',
-            flask_data=props
-        )
-
-    details_html = object_as_html(entity)
-    if type in {'file'}:  # TODO: As we have other specializations, add them here.
-        template = f'pages/details/details_{type}.html'
-    else:
-        template = f'pages/details/details_base.html'
+    template = f'pages/details/details_react.html'
+    props = {
+        'flashed_messages': flashed_messages,
+        'entity': entity,
+        'provenance': provenance,
+        'vitessce_conf': client.get_vitessce_conf(),
+    }
     return render_template(
-        template, types=types, type=type, uuid=uuid,
-        entity=entity,
-        details_html=details_html,
-        provenance=provenance,
-        vitessce_conf=client.get_vitessce_conf()
+        template, type=type, uuid=uuid,
+        title_text='TODO: title_text',
+        flask_data=props
     )
 
 
