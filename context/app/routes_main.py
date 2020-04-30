@@ -57,7 +57,7 @@ def details(type, uuid):
                                  'issue_url': error.issue_url,
                                  'traceback': error.__str__()[0:1500]})
 
-    template = f'pages/details/details_react.html'
+    template = f'pages/details_react.html'
     props = {
         'flashed_messages': flashed_messages,
         'entity': entity,
