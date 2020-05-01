@@ -1,15 +1,12 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Container from '@material-ui/core/Container';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import VisTabs from './VisTabs';
 import RecursiveList from './RecursiveList';
 
@@ -46,18 +43,6 @@ export default function Details(props) {
                 {generateListTemplate('Created', assayMetaData.created)}
                 {generateListTemplate('Modified', 'modified')}
               </ul>
-            </Grid>
-            <Grid item xs={12}>
-              {/* TODO: Update breadcrumb with links to parent donors and samples. */}
-              <Breadcrumbs aria-label="breadcrumb">
-                <Link color="inherit" href="/donor">
-                  Mock Donor ID 567
-                </Link>
-                <Link color="inherit" href="/sample">
-                  Mock Sample ID 32546
-                </Link>
-                <Typography color="textPrimary">{assayMetaData.assay_id}</Typography>
-              </Breadcrumbs>
             </Grid>
           </Grid>
         </ExpansionPanelDetails>
