@@ -1,6 +1,10 @@
 # Reverse Proxy with Docker Compose
 
-The `hubmap.yml` here is used to deploy to [portal.test.hubmapconsortium.org](https://portal.test.hubmapconsortium.org/); The other files are just for demonstration.
+The `hubmap.yml` here is used to deploy to
+[portal.test.hubmapconsortium.org](https://portal.test.hubmapconsortium.org/),
+[portal.dev.hubmapconsortium.org](https://portal.dev.hubmapconsortium.org/),
+and [portal.hubmapconsortium.org](https://portal.hubmapconsortium.org/);
+The other files are just for demonstration.
 
 The `docker-compose.yml` here provides a local demonstration of how the NGINX reverse proxy works in real deployments.
 (The *real* NGINX configuration for deployment is [here](https://github.com/hubmapconsortium/gateway/blob/master/nginx/conf.d-test/portal-ui.conf).)
