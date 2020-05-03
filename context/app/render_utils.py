@@ -47,6 +47,8 @@ def object_as_html(input_object, tagtext=None, is_link=False):
     elif is_link:
         with tag('a', href=input_object):
             text(input_object)
+    elif input_object is None:
+        pass
     else:
         text(input_object)
 
