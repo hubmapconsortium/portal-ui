@@ -1,6 +1,9 @@
 # Changelog
 
-## v0.0.13 - In progress
+## v0.0.14 - In progress
+
+## [v0.0.13](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.13) - 2020/05/03
+### Added
 - Added favicon
 
 ## [v0.0.12](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.12) - 2020/04/28
