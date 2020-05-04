@@ -1,10 +1,9 @@
 from flask import (Blueprint, render_template, abort, current_app,
-                   session, flash, request, get_flashed_messages)
+                   session, flash, get_flashed_messages)
 
 from yaml import safe_load as load_yaml
 
 from .api.client import ApiClient
-from .render_utils import object_as_html
 from .config import types
 from .validation_utils import for_each_validation_error
 
