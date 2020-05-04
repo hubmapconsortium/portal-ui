@@ -26,22 +26,22 @@ export default function Details(props) {
       {/* eslint-disable-next-line react/jsx-boolean-value */}
       <ExpansionPanel defaultExpanded={true}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="Details Panel" id="details-header">
-          <Box className="expansion-header">{assayMetaData.description}</Box>
+          <Box className="expansion-header">{assayMetaData.description || assayMetaData.display_doi}</Box>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Grid container spacing={3} justify="flex-start" direction="row" alignItems="flex-start">
             <Grid item xs>
               <ul>
-                {generateListTemplate('Contributor', assayMetaData.provenance_user_displayname)}
-                {generateListTemplate('Group', assayMetaData.provenance_group_name)}
-                {generateListTemplate('Type', 'Assay')}
+                {generateListTemplate('Contributor', assayMetaData.created_by_user_displayname)}
+                {generateListTemplate('Group', assayMetaData.group_name)}
+                {generateListTemplate('Type', assayMetaData.entity_type)}
               </ul>
             </Grid>
             <Grid item xs>
               <ul>
                 {generateListTemplate('Assay ID', assayMetaData.display_doi)}
-                {generateListTemplate('Created', assayMetaData.created)}
-                {generateListTemplate('Modified', 'modified')}
+                {generateListTemplate('Created', new Date(assayMetaData.create_timestamp).toDateString())}
+                {generateListTemplate('Modified', new Date(assayMetaData.last_modified_timestamp).toDateString()) }
               </ul>
             </Grid>
           </Grid>
