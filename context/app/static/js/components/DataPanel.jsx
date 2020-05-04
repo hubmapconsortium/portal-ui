@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -11,7 +12,7 @@ const FlexContainer = styled.div`
     flex-direction: column;
 `;
 
-export default function DataPanel(props) {
+function DataPanel(props) {
   const { propertyName, isRootChild, children } = props;
   return (
     <ExpansionPanel>
@@ -30,3 +31,15 @@ export default function DataPanel(props) {
     </ExpansionPanel>
   );
 }
+
+DataPanel.propTypes = {
+  propertyName: PropTypes.string.isRequired,
+  isRootChild: PropTypes.bool,
+  children: PropTypes.node.isRequired,
+};
+
+DataPanel.defaultProps = {
+  isRootChild: false,
+};
+
+export default DataPanel;

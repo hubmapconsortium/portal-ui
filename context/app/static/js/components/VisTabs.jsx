@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -26,7 +27,7 @@ function TabPanel(props) {
   );
 }
 
-export default function VisTabs(props) {
+function VisTabs(props) {
   const { provData } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(0);
@@ -83,3 +84,9 @@ export default function VisTabs(props) {
     </div>
   );
 }
+
+VisTabs.propTypes = {
+  provData: PropTypes.objectOf(PropTypes.object).isRequired,
+};
+
+export default VisTabs;

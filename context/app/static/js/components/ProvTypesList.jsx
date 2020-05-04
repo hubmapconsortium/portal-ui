@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -9,7 +10,7 @@ function ListItemLink(props) {
   return <ListItem button component="a" {...props} />;
 }
 
-export default function ProvTable(props) {
+function ProvTable(props) {
   const { data } = props;
 
   return (
@@ -22,3 +23,9 @@ export default function ProvTable(props) {
     </List>
   );
 }
+
+ProvTable.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+export default ProvTable;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Divider from '@material-ui/core/Divider';
 import ProvTypesList from './ProvTypesList';
@@ -9,7 +10,7 @@ const FlexContainer = styled.div`
     justify-content:space-around;
 `;
 
-export default function ProvTable(props) {
+function ProvTable(props) {
   const { provData, typesToSplit } = props;
 
   const types = Object.values(provData.entity).reduce((acc, item) => {
@@ -33,3 +34,10 @@ export default function ProvTable(props) {
     </FlexContainer>
   );
 }
+
+ProvTable.propTypes = {
+  provData: PropTypes.objectOf(PropTypes.object).isRequired,
+  typesToSplit: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+export default ProvTable;

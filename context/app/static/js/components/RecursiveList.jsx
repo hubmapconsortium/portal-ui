@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import DataPanel from './DataPanel';
 import RecursiveListLeaf from './RecursiveListLeaf';
@@ -20,13 +21,13 @@ function isLeaf(property) {
 
 function RecursiveList(props) {
   const {
-    property, propertyName, excludeBottomBorder, isRoot, isRootChild,
+    property, propertyName, isRoot, isRootChild,
   } = props;
 
 
   return (
     /* eslint-disable no-nested-ternary */
-    <RecursivePropertyContainer excludeBottomBorder={excludeBottomBorder}>
+    <RecursivePropertyContainer>
       { property ? (
         isLeaf(property)
           ? (
@@ -39,26 +40,24 @@ function RecursiveList(props) {
             isRootChild
               ? (
                 <DataPanel propertyName={propertyName} isRootChild={isRootChild}>
-                  {Object.values(property).map((objProperty, index, { length }) => (
+                  {Object.values(property).map((objProperty, index) => (
                     <RecursiveList
                     // eslint-disable-next-line react/no-array-index-key
                       key={index}
                       property={objProperty}
                       propertyName={Object.getOwnPropertyNames(property)[index]}
-                      excludeBottomBorder={index === length - 1}
                     />
                   )) }
                 </DataPanel>
               ) : (
                 <>
                   {!isRoot && <PropertyName> {propertyName}: </PropertyName>}
-                  {Object.values(property).map((objProperty, index, { length }) => (
+                  {Object.values(property).map((objProperty, index) => (
                     <RecursiveList
                   // eslint-disable-next-line react/no-array-index-key
                       key={index}
                       property={objProperty}
                       propertyName={Object.getOwnPropertyNames(property)[index]}
-                      excludeBottomBorder={index === length - 1}
                       isRootChild={isRoot}
                     />
                   )) }
@@ -69,5 +68,16 @@ function RecursiveList(props) {
   );
   /* eslint-disable no-nested-ternary */
 }
+
+RecursiveList.propTypes = {
+  propertyName: PropTypes.string.isRequired,
+  isRoot: PropTypes.bool,
+  isRootChild: PropTypes.bool,
+};
+
+RecursiveList.defaultProps = {
+  isRoot: false,
+  isRootChild: false,
+};
 
 export default RecursiveList;

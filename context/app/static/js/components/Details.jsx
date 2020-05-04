@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -10,7 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import VisTabs from './VisTabs';
 import RecursiveList from './RecursiveList';
 
-export default function Details(props) {
+function Details(props) {
   const { assayMetaData, provData, vitData } = props;
   const generateListTemplate = (header, description) => (
     <li>
@@ -56,3 +57,13 @@ export default function Details(props) {
     </Container>
   );
 }
+
+Details.propTypes = {
+  /* eslint-disable react/forbid-prop-types */
+  assayMetaData: PropTypes.object.isRequired,
+  provData: PropTypes.object.isRequired,
+  vitData: PropTypes.object.isRequired,
+  /* eslint-disable react/forbid-prop-types */
+};
+
+export default Details;

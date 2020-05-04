@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { isEmptyArrayOrObject } from '../helpers/functions';
 
@@ -19,7 +20,7 @@ function replaceUnderscore(str) {
   return str.replace(/_/g, ' ');
 }
 
-export default function PanelTitle(props) {
+function PanelTitle(props) {
   const {
     propertyName, property, isRootChild, isDataPanelTitle,
   } = props;
@@ -35,3 +36,17 @@ export default function PanelTitle(props) {
     </>
   );
 }
+
+PanelTitle.propTypes = {
+  propertyName: PropTypes.string.isRequired,
+  isRootChild: PropTypes.bool,
+  isDataPanelTitle: PropTypes.bool,
+
+};
+
+PanelTitle.defaultProps = {
+  isRootChild: false,
+  isDataPanelTitle: false,
+};
+
+export default PanelTitle;
