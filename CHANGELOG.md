@@ -1,7 +1,15 @@
 # Changelog
 
 ## v0.0.13 - in progress
+### Added
 - Added favicon
+- Add provenance table to details
+- Add expansion panels for details data
+- Add prop types checks to components
+### Changed
+- Make details page react by default
+- Remove unused templates
+- Fix data in details top title panel
 
 ## [v0.0.12](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.12) - 2020/04/28
 ### Changed
