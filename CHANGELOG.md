@@ -1,8 +1,9 @@
 # Changelog
 
-## v0.0.12 - In progress
-### Added
+## v0.0.13 - in progress
 - Added favicon
+
+## [v0.0.12](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.12) - 2020/04/28
 ### Changed
 - Rename Docker Compose config.
 - Remove actual endpoint from default_config.py: This must be provided during deployment.
@@ -10,7 +11,8 @@
 - Use cookie for search.
 - Add react header and footer
 - Tweak to accommodate new ES document structure.
-- Make header links relative to root
+- Make header links relative to root.
+- Update facets to reflect current index structure.
 
 ## [v0.0.11](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.11) - 2020/04/16
 ### Added

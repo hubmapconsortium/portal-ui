@@ -6,7 +6,7 @@ die() { set +v; echo "$*" 1>&2 ; exit 1; }
 IMAGE_NAME=hubmap/portal-ui
 CONTAINER_NAME=hubmap-portal-ui
 CONTEXT=context
-CONF_PATH=example-app.conf
+CONF_PATH=context/instance/app.conf
 PORT=$1
 FOLLOW=$2
 
@@ -24,7 +24,6 @@ docker build --tag $IMAGE_NAME $CONTEXT
 docker run -d \
   --name $CONTAINER_NAME \
   -p $PORT:80 \
-  -e FLASK_ENV=development \
   --mount type=bind,source="$(pwd)"/"$CONF_PATH",target=/app/instance/app.conf \
   $IMAGE_NAME
 
