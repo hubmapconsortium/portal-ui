@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { isEmptyArrayOrObject } from '../helpers/functions';
 
 /* eslint-disable no-confusing-arrow */
@@ -12,9 +12,14 @@ const PropertyName = styled.span`
 
 const Property = styled.span`
   font-size: ${(props) => (props.isRootChild ? '1.1rem' : '1rem')};
-  margin-left: 5px;
 `;
-/* eslint-disable no-confusing-arrow */
+/* eslint-enable no-confusing-arrow */
+
+const PanelWrap = styled.div`
+  ${(props) => !props.isRootChild && css`
+    margin-left: 15px;
+  `}
+`;
 
 function replaceUnderscore(str) {
   return str.replace(/_/g, ' ');
@@ -25,7 +30,7 @@ function PanelTitle(props) {
     propertyName, property, isRootChild, isDataPanelTitle,
   } = props;
   return (
-    <>
+    <PanelWrap isRootChild={isRootChild}>
       <PropertyName isRootChild={isRootChild}>
         {replaceUnderscore(propertyName)}
         {!isDataPanelTitle && <>: </> }
@@ -33,7 +38,7 @@ function PanelTitle(props) {
       {property && !isEmptyArrayOrObject(property) && (
         <Property isRootChild={isRootChild}>{property}</Property>
       )}
-    </>
+    </PanelWrap>
   );
 }
 

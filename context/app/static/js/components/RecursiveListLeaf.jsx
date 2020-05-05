@@ -10,6 +10,7 @@ const StyledPaper = styled(Paper)`
   padding: 0px 24px;
   display: flex;
   align-items: center;
+  margin-top: 5px;
 `;
 
 function RecursiveListLeaf(props) {
