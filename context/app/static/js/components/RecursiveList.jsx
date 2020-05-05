@@ -1,23 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import DataPanel from './DataPanel';
 import RecursiveListLeaf from './RecursiveListLeaf';
-import { isEmptyArrayOrObject, replaceUnderscore } from '../helpers/functions';
+import { isEmptyArrayOrObject } from '../helpers/functions';
+import PanelTitle from './PanelTitle';
 
-const RecursivePropertyContainer = styled.div`
-  margin-top: 5px;
-  font-size: 16px;
-`;
-
-const PropertyName = styled.span`
-  font-weight: bolder;
-  font-size: 1rem;
-`;
 
 function isLeaf(property) {
   return (new Set(['number', 'string', 'boolean']).has(typeof property) || isEmptyArrayOrObject(property));
 }
+
 
 function MappedList(props) {
   const { property, isRoot } = props;
@@ -31,6 +24,11 @@ function MappedList(props) {
     />
   )));
 }
+
+const IndentedContainer = styled.div`
+  margin: 10px 0px 0px 15px;
+`;
+
 function RecursiveList(props) {
   const {
     property, propertyName, isRoot, isRootChild, isArray,
@@ -49,7 +47,7 @@ function RecursiveList(props) {
   }
 
   return (
-    <RecursivePropertyContainer>
+    <div>
       {
         isRootChild
           ? (
@@ -59,12 +57,14 @@ function RecursiveList(props) {
           ) : (
             <>
               {!(isRoot || isArray)
-              && <PropertyName> {replaceUnderscore(propertyName)}: </PropertyName>}
-              <MappedList property={property} isRoot={isRoot} />
+              && <PanelTitle propertyName={propertyName} />}
+              <IndentedContainer>
+                <MappedList property={property} isRoot={isRoot} />
+              </IndentedContainer>
             </>
           )
         }
-    </RecursivePropertyContainer>
+    </div>
   );
 }
 

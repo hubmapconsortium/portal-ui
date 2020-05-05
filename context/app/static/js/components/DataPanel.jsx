@@ -8,27 +8,33 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PanelTitle from './PanelTitle';
 
 const FlexContainer = styled.div`
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+`;
+
+const PanelWrap = styled.div`
+  margin-top: 5px;
 `;
 
 function DataPanel(props) {
   const { propertyName, isRootChild, children } = props;
   return (
-    <ExpansionPanel>
-      <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="Details Panel"
-        id="details-header"
-      >
-        <PanelTitle propertyName={propertyName} isRootChild={isRootChild} isDataPanelTitle />
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-        <FlexContainer>
-          {children}
-        </FlexContainer>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+    <PanelWrap>
+      <ExpansionPanel>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="Details Panel"
+          id="details-header"
+        >
+          <PanelTitle propertyName={propertyName} isRootChild={isRootChild} isDataPanelTitle />
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <FlexContainer>
+            {children}
+          </FlexContainer>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+    </PanelWrap>
   );
 }
 

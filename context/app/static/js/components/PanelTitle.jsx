@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { isEmptyArrayOrObject, replaceUnderscore } from '../helpers/functions';
 
 
@@ -16,18 +16,13 @@ const Property = styled.span`
 `;
 /* eslint-enable no-confusing-arrow */
 
-const PanelWrap = styled.div`
-  ${(props) => !props.isRootChild && css`
-    margin-left: 15px;
-  `}
-`;
 
 function PanelTitle(props) {
   const {
     propertyName, property, isRootChild, isDataPanelTitle,
   } = props;
   return (
-    <PanelWrap isRootChild={isRootChild}>
+    <div>
       <PropertyName isRootChild={isRootChild}>
         {replaceUnderscore(propertyName)}
         {!isDataPanelTitle && <>: </> }
@@ -35,7 +30,7 @@ function PanelTitle(props) {
       {property && !isEmptyArrayOrObject(property) && (
         <Property isRootChild={isRootChild}>{property}</Property>
       )}
-    </PanelWrap>
+    </div>
   );
 }
 
