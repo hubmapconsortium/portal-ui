@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import DataPanel from './DataPanel';
 import RecursiveListLeaf from './RecursiveListLeaf';
-import { isEmptyArrayOrObject } from '../helpers/functions';
+import { isEmptyArrayOrObject, replaceUnderscore } from '../helpers/functions';
 
 const RecursivePropertyContainer = styled.div`
   margin-top: 5px;
@@ -57,7 +57,7 @@ function RecursiveList(props) {
             </DataPanel>
           ) : (
             <>
-              {!isRoot && <PropertyName> {propertyName}: </PropertyName>}
+              {!isRoot && <PropertyName> {replaceUnderscore(propertyName)}: </PropertyName>}
               <MappedList property={property} isRoot={isRoot} />
             </>
           )
