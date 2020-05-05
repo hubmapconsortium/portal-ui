@@ -48,8 +48,7 @@ commit these changes, and run:
 Update the CHANGELOG, adding the date for the current release,
 and stubbing the new "in progress" release.
 
-If this should be deployed publicly, make `@yuanzhou` a reviewer on the PR,
-so he knows a new version is available.
+TODO: We will hear from Bill about how we can deploy our images.
 
 
 ## Related projects and dependencies
