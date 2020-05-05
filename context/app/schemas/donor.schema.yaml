@@ -1,0 +1,82 @@
+additionalProperties: false
+properties:
+  access_group:
+    description: TODO
+  ancestor_ids:
+    description: TODO
+  ancestors:
+    description: TODO
+  create_timestamp:
+    description: The data/time when the entity was created
+  created_by_user_displayname:
+    description: The name of the person who registered/created the Entity.
+  created_by_user_email:
+    description: The email address of the person who registerd/created the Entity.
+  creation_action:
+    description: The action that created this this Entity
+  descendant_ids:
+    description: TODO
+  descendants:
+    description: TODO
+  description:
+    description: A description of the Entity, hand entered into the UI
+  display_doi:
+    description: HuBMAP id generated at the same time as and associated directly with
+      the UUID for the Entity.  This ID can be used when registering an object with
+      the DOI System.
+  entity_type:
+    description: The entity type.
+    enum:
+    - Dataset
+    - Donor
+    - Sample
+  group_name:
+    description: The name of the lab/TMC/TTD/RTI where the Entity was registered.
+  group_uuid:
+    description: A UUID associated with the lab/TMC/TTD/RTI where the Entity was registered.
+  hubmap_display_id:
+    description: 'HuBMAP id used internal to the Consortium, generated at the same
+      time as and associated directly with the UUID for the Entity.  The id is built
+      on the the id from the parent object.  Format explained here: https://docs.google.com/document/d/1DjHgmqWF1VA5-3mfzLFNfabbzmc8KLSG9xWx1DDLlzo/'
+  lab_donor_id:
+    description: An donor id specific to the lab where the tissue was procured.
+  lab_name:
+    description: A lab specific label/name assigned to a donor by the lab during registration
+      of the donor.
+  last_modified_timestamp:
+    description: The date/time when the entity was last updatedl
+  metadata:
+    description: Metadata associated with the Entity. Formated in JSON. Donor metadata
+      is transformed from files uploaded into the Ingest UI.  Sample metadata will
+      be transformed from files uploaded into the Ingest UI.  Dataset metadata will
+      be transformed from the HIVE specified .tsv file provided with data uploads
+      and/or extraction from data or metadata files provided in the data upload.
+  portal_metadata_upload_files:
+    description: An array of information about metadata files uploaded via the Tissue
+      Registration UI
+  portal_uploaded_image_files:
+    description: An array of information about image files uploaded during donor or
+      tissue registration via the Tissue Registration UI
+  portal_uploaded_protocol_files:
+    description: An array of information about files uploaded through the Donor/Tissue
+      Registration UI donor selection criteria or tissue procurement protocols.
+  protocol_url:
+    description: The url to the protocols.io instance describing donor selection criteria,
+      tissue procurement protocols and or data generation/derivation details.
+  uuid:
+    description: The HuBMAP auto-generated UUID for the Entity
+required:
+- create_timestamp
+- created_by_user_displayname
+- created_by_user_email
+- entity_type
+- group_name
+- group_uuid
+- last_modified_timestamp
+- uuid
+- access_group
+- ancestor_ids
+- ancestors
+- descendant_ids
+- descendants
+type: object

@@ -1,8 +1,8 @@
 # Changelog
 
-## v0.0.13 - in progress
+## v0.0.14 - In progress
 ### Added
-- Added favicon.
+- Redirect to the correct entity type, if we've landed on the wrong one.
 - Add provenance table to details.
 - Add expansion panels for details data.
 - Add prop types checks to components.
@@ -11,6 +11,11 @@
 - Remove unused templates.
 - Fix data in details top title panel.
 - Remove breadcrumbs links from details top title panel.
+
+## [v0.0.13](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.13) - 2020/05/03
+### Added
+- Added favicon
+- Copy-and-paste new schemas... and we have fewer errors!
 
 ## [v0.0.12](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.12) - 2020/04/28
 ### Changed

@@ -8,11 +8,13 @@ VERSION=`cat VERSION`
 VERSION_IN_CHANGELOG="$VERSION - In progress"
 grep "$VERSION_IN_CHANGELOG" CHANGELOG.md || die "Missing from CHANGELOG.md: '$VERSION_IN_CHANGELOG'"
 
-IMAGE_NAME=hubmap/portal-ui:$VERSION
-grep "$IMAGE_NAME" compose/hubmap.yml || die "Update compose/hubmap.yml: $IMAGE_NAME"
+VERSION_IMAGE_NAME=hubmap/portal-ui:$VERSION
+LATEST_IMAGE_NAME=hubmap/portal-ui:latest
 
 git tag $VERSION
 git push origin --tags
 
-docker build --tag $IMAGE_NAME context
-docker push $IMAGE_NAME
+docker build --tag $VERSION_IMAGE_NAME context
+docker tag $VERSION_IMAGE_NAME $LATEST_IMAGE_NAME
+docker push $VERSION_IMAGE_NAME
+docker push $LATEST_IMAGE_NAME

@@ -1,5 +1,6 @@
 from flask import (Blueprint, render_template, abort, current_app,
-                   session, flash, get_flashed_messages)
+                   session, flash, request, get_flashed_messages,
+                   redirect, url_for)
 
 from yaml import safe_load as load_yaml
 
@@ -38,11 +39,12 @@ def details(type, uuid):
     client = _get_client()
 
     entity = client.get_entity(uuid)
+    actual_type = entity['entity_type'].lower()
+    if type != actual_type:
+        return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
+
     # TODO: These schemas don't need to be reloaded per request.
-    with open(current_app.root_path + '/schemas/entity.yml') as entity_schema_file:
-        entity_schema = load_yaml(entity_schema_file)
-    for_each_validation_error(entity, entity_schema, flash)
-    with open(current_app.root_path + f'/schemas/{type}.yml') as type_schema_file:
+    with open(current_app.root_path + f'/schemas/{type}.schema.yaml') as type_schema_file:
         type_schema = load_yaml(type_schema_file)
     for_each_validation_error(entity, type_schema, flash)
 
