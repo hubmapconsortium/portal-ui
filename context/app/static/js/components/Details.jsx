@@ -63,7 +63,7 @@ Details.propTypes = {
   assayMetaData: PropTypes.object.isRequired,
   provData: PropTypes.object.isRequired,
   vitData: PropTypes.object.isRequired,
-  /* eslint-enable */
+  /* eslint-enable react/forbid-prop-types */
 };
 
 export default Details;
