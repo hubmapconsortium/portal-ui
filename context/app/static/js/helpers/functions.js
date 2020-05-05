@@ -7,3 +7,7 @@ export function isEmptyArrayOrObject(val) {
   }
   return false;
 }
+
+export function replaceUnderscore(str) {
+  return str.replace(/_/g, ' ');
+}

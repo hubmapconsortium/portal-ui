@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
-import { isEmptyArrayOrObject } from '../helpers/functions';
+import { isEmptyArrayOrObject, replaceUnderscore } from '../helpers/functions';
+
 
 /* eslint-disable no-confusing-arrow */
 const PropertyName = styled.span`
@@ -20,10 +21,6 @@ const PanelWrap = styled.div`
     margin-left: 15px;
   `}
 `;
-
-function replaceUnderscore(str) {
-  return str.replace(/_/g, ' ');
-}
 
 function PanelTitle(props) {
   const {
