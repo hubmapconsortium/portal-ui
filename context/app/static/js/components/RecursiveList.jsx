@@ -16,7 +16,7 @@ const PropertyName = styled.span`
 `;
 
 function isLeaf(property) {
-  return (typeof property === 'number' || typeof property === 'string' || typeof property === 'boolean' || isEmptyArrayOrObject(property));
+  return ( new Set(['number', 'string', 'boolean']).has(typeof property) || isEmptyArrayOrObject(property));
 }
 
 function RecursiveList(props) {
