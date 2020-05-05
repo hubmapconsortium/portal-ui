@@ -54,7 +54,7 @@ def mock_get(path, **kwargs):
                 }
             elif '/types/' in path:
                 return {
-                    'uuids': []
+                    'entity_type': 'Donor'
                 }
             else:
                 raise Exception('No mock for:', path)
@@ -64,7 +64,7 @@ def mock_get(path, **kwargs):
     return MockResponse()
 
 
-def mock_post(path, **kwargs):
+def mock_search_donor_post(path, **kwargs):
     class MockResponse():
         def json(self):
             return {
@@ -73,6 +73,7 @@ def mock_post(path, **kwargs):
                         {
                             '_source': {
                                 # Minimal properties.
+                                'entity_type': 'Donor',
                                 'provenance_create_timestamp': '100000',
                                 'provenance_modified_timestamp': '100000'
                             }
@@ -88,12 +89,11 @@ def mock_post(path, **kwargs):
 
 @pytest.mark.parametrize(
     'path',
-    ['/', '/help']
-    + [f'/browse/{t}/fake-uuid' for t in types]
+    ['/', '/help', '/browse/donor/fake-uuid']
 )
 def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_get)
-    mocker.patch('requests.post', side_effect=mock_post)
+    mocker.patch('requests.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '200 OK'
     assert_is_valid_html(response)
@@ -101,13 +101,33 @@ def test_200_html_page(client, path, mocker):
 
 @pytest.mark.parametrize(
     'path',
+    ['/browse/sample/fake-uuid', '/browse/dataset/fake-uuid']
+)
+def test_302_details_page(client, path, mocker):
+    mocker.patch('requests.post', side_effect=mock_search_donor_post)
+    response = client.get(path)
+    assert response.status == '302 FOUND'
+
+
+@pytest.mark.parametrize(
+    'path',
+    ['/browse/no-such-type/fake-uuid']
+)
+def test_404_details_page(client, path, mocker):
+    mocker.patch('requests.post', side_effect=mock_search_donor_post)
+    response = client.get(path)
+    assert response.status == '404 NOT FOUND'
+
+
+@pytest.mark.parametrize(
+    'path',
     [f'/browse/{t}/fake-uuid.json' for t in types]
 )
 def test_200_json_page(client, path, mocker):
-    mocker.patch('requests.post', side_effect=mock_post)
+    mocker.patch('requests.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '200 OK'
-    json.loads(response.data.decode('utf8'))
+    assert type(json.loads(response.data.decode('utf8'))) == dict
 
 
 def test_login(client):
