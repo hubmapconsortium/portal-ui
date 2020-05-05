@@ -1,0 +1,520 @@
+additionalProperties: false
+properties:
+  access_group:
+    description: TODO
+  ancestor_ids:
+    description: TODO
+  ancestors:
+    description: TODO
+  contains_human_genetic_sequences:
+    description: true if the data contains human gene sequence information, false
+      otherwise
+  create_timestamp:
+    description: The data/time when the entity was created
+  created_by_user_displayname:
+    description: The name of the person who registered/created the Entity.
+  created_by_user_email:
+    description: The email address of the person who registerd/created the Entity.
+  creation_action:
+    description: The action that created this this Entity
+  data_types:
+    description: 'TODO: An array of data/assay types contained in the Dataset.  Allowable
+      values here: https://docs.google.com/spreadsheets/d/1L8mfs767Z5ZGnZ92UJySlHxprraSariH1dU45g6jphE/edit'
+  descendant_ids:
+    description: TODO
+  descendants:
+    description: TODO
+  description:
+    description: A description of the Entity, hand entered into the UI
+  display_doi:
+    description: HuBMAP id generated at the same time as and associated directly with
+      the UUID for the Entity.  This ID can be used when registering an object with
+      the DOI System.
+  donor:
+    additionalProperties: false
+    properties:
+      create_timestamp:
+        description: The data/time when the entity was created
+      created_by_user_displayname:
+        description: The name of the person who registered/created the Entity.
+      created_by_user_email:
+        description: The email address of the person who registerd/created the Entity.
+      creation_action:
+        description: The action that created this this Entity
+      description:
+        description: A description of the Entity, hand entered into the UI
+      display_doi:
+        description: HuBMAP id generated at the same time as and associated directly
+          with the UUID for the Entity.  This ID can be used when registering an object
+          with the DOI System.
+      entity_type:
+        description: The entity type.
+        enum:
+        - Dataset
+        - Donor
+        - Sample
+      group_name:
+        description: The name of the lab/TMC/TTD/RTI where the Entity was registered.
+      group_uuid:
+        description: A UUID associated with the lab/TMC/TTD/RTI where the Entity was
+          registered.
+      hubmap_display_id:
+        description: 'HuBMAP id used internal to the Consortium, generated at the
+          same time as and associated directly with the UUID for the Entity.  The
+          id is built on the the id from the parent object.  Format explained here:
+          https://docs.google.com/document/d/1DjHgmqWF1VA5-3mfzLFNfabbzmc8KLSG9xWx1DDLlzo/'
+      lab_donor_id:
+        description: An donor id specific to the lab where the tissue was procured.
+      lab_name:
+        description: A lab specific label/name assigned to a donor by the lab during
+          registration of the donor.
+      last_modified_timestamp:
+        description: The date/time when the entity was last updatedl
+      metadata:
+        description: Metadata associated with the Entity. Formated in JSON. Donor
+          metadata is transformed from files uploaded into the Ingest UI.  Sample
+          metadata will be transformed from files uploaded into the Ingest UI.  Dataset
+          metadata will be transformed from the HIVE specified .tsv file provided
+          with data uploads and/or extraction from data or metadata files provided
+          in the data upload.
+      portal_metadata_upload_files:
+        description: An array of information about metadata files uploaded via the
+          Tissue Registration UI
+      portal_uploaded_image_files:
+        description: An array of information about image files uploaded during donor
+          or tissue registration via the Tissue Registration UI
+      portal_uploaded_protocol_files:
+        description: An array of information about files uploaded through the Donor/Tissue
+          Registration UI donor selection criteria or tissue procurement protocols.
+      protocol_url:
+        description: The url to the protocols.io instance describing donor selection
+          criteria, tissue procurement protocols and or data generation/derivation
+          details.
+      uuid:
+        description: The HuBMAP auto-generated UUID for the Entity
+    required:
+    - create_timestamp
+    - created_by_user_displayname
+    - created_by_user_email
+    - entity_type
+    - group_name
+    - group_uuid
+    - last_modified_timestamp
+    - uuid
+    type: object
+  entity_type:
+    description: The entity type.
+    enum:
+    - Dataset
+    - Donor
+    - Sample
+  files:
+    description: An array of information about the files contained in the dataset.
+  group_name:
+    description: The name of the lab/TMC/TTD/RTI where the Entity was registered.
+  group_uuid:
+    description: A UUID associated with the lab/TMC/TTD/RTI where the Entity was registered.
+  last_modified_timestamp:
+    description: The date/time when the entity was last updatedl
+  metadata:
+    description: Metadata associated with the Entity. Formated in JSON. Donor metadata
+      is transformed from files uploaded into the Ingest UI.  Sample metadata will
+      be transformed from files uploaded into the Ingest UI.  Dataset metadata will
+      be transformed from the HIVE specified .tsv file provided with data uploads
+      and/or extraction from data or metadata files provided in the data upload.
+  name:
+    description: The name of a dataset as entered into the Ingest UI
+  origin_sample:
+    additionalProperties: false
+    properties:
+      create_timestamp:
+        description: The data/time when the entity was created
+      created_by_user_displayname:
+        description: The name of the person who registered/created the Entity.
+      created_by_user_email:
+        description: The email address of the person who registerd/created the Entity.
+      creation_action:
+        description: The action that created this this Entity
+      description:
+        description: A description of the Entity, hand entered into the UI
+      display_doi:
+        description: HuBMAP id generated at the same time as and associated directly
+          with the UUID for the Entity.  This ID can be used when registering an object
+          with the DOI System.
+      donor:
+        description: The ancestor Donor at the top of the provenance chain for the
+          Entity.  This contains, in JSON, the full Entity information for the Donor.
+      entity_type:
+        description: The entity type.
+        enum:
+        - Dataset
+        - Donor
+        - Sample
+      group_name:
+        description: The name of the lab/TMC/TTD/RTI where the Entity was registered.
+      group_uuid:
+        description: A UUID associated with the lab/TMC/TTD/RTI where the Entity was
+          registered.
+      hubmap_display_id:
+        description: 'HuBMAP id used internal to the Consortium, generated at the
+          same time as and associated directly with the UUID for the Entity.  The
+          id is built on the the id from the parent object.  Format explained here:
+          https://docs.google.com/document/d/1DjHgmqWF1VA5-3mfzLFNfabbzmc8KLSG9xWx1DDLlzo/'
+      lab_tissue_sample_id:
+        description: An id specific to the lab where the tissue was processed.
+      last_modified_timestamp:
+        description: The date/time when the entity was last updatedl
+      metadata:
+        description: Metadata associated with the Entity. Formated in JSON. Donor
+          metadata is transformed from files uploaded into the Ingest UI.  Sample
+          metadata will be transformed from files uploaded into the Ingest UI.  Dataset
+          metadata will be transformed from the HIVE specified .tsv file provided
+          with data uploads and/or extraction from data or metadata files provided
+          in the data upload.
+      organ:
+        description: 'The organ type when specimen_type == organ.  Allowable values
+          here: https://docs.google.com/spreadsheets/d/1L8mfs767Z5ZGnZ92UJySlHxprraSariH1dU45g6jphE/edit'
+        enum:
+        - BL
+        - BR
+        - HT
+        - LB
+        - LI
+        - LK
+        - LL
+        - LV
+        - LY01
+        - LY02
+        - LY03
+        - LY04
+        - LY05
+        - LY06
+        - LY07
+        - LY08
+        - LY09
+        - LY10
+        - LY11
+        - LY12
+        - LY13
+        - LY14
+        - LY15
+        - LY16
+        - LY17
+        - LY18
+        - LY19
+        - LY20
+        - OT
+        - RB
+        - RK
+        - RL
+        - SI
+        - SP
+        - TH
+        - TR
+        - UR
+      organ_other:
+        description: If organ type == other, the organ name is specified in this field
+      origin_sample:
+        description: The tissue sample directly below Donor (should usually be an
+          organ) at the top of the provenance chain for the Entity. This conntains,
+          in JSON, the full Entity information for the Sample.
+      portal_metadata_upload_files:
+        description: An array of information about metadata files uploaded via the
+          Tissue Registration UI
+      portal_uploaded_image_files:
+        description: An array of information about image files uploaded during donor
+          or tissue registration via the Tissue Registration UI
+      portal_uploaded_protocol_files:
+        description: An array of information about files uploaded through the Donor/Tissue
+          Registration UI donor selection criteria or tissue procurement protocols.
+      protocol_url:
+        description: The url to the protocols.io instance describing donor selection
+          criteria, tissue procurement protocols and or data generation/derivation
+          details.
+      rui_location:
+        description: Location information of where the tissue sample came from in
+          the organ that the tissue was sourced from.  Specified in JSON, as outputed
+          from the RUI tool.
+      specimen_type:
+        description: 'For Sample entities, the type of tissue specimen.  Allowable
+          values here: https://docs.google.com/spreadsheets/d/1L8mfs767Z5ZGnZ92UJySlHxprraSariH1dU45g6jphE/edit'
+        enum:
+        - atacseq
+        - biopsy
+        - blood
+        - cell_lysate
+        - clarity_hydrogel
+        - codex
+        - cryosections_curls_from_fresh_frozen_oct
+        - cryosections_curls_rnalater
+        - ffpe_block
+        - ffpe_slide
+        - fixed_frozen_section_slide
+        - fixed_tissue_piece
+        - flash_frozen_liquid_nitrogen
+        - formalin_fixed_oct_block
+        - fresh_frozen_oct_block
+        - fresh_frozen_section_slide
+        - fresh_frozen_tissue
+        - fresh_frozen_tissue_section
+        - fresh_tissue
+        - frozen_cell_pellet_buffy_coat
+        - gdna
+        - module
+        - nuclei
+        - nuclei_rnalater
+        - organ
+        - organ_piece
+        - other
+        - pbmc
+        - pfa_fixed_frozen_oct_block
+        - plasma
+        - protein
+        - ran_poly_a_enriched
+        - rna_total
+        - rnalater_treated_and_stored
+        - rnaseq
+        - scatacseq
+        - scrnaseq
+        - segment
+        - seqfish
+        - serum
+        - single_cell_cryopreserved
+        - snatacseq
+        - snrnaseq
+        - tissue_lysate
+        - wgs
+      specimen_type_other:
+        description: If specimen_type == other, the specimen type name is specified
+          in this field
+      uuid:
+        description: The HuBMAP auto-generated UUID for the Entity
+      visit:
+        description: The clinical visit specifier of when a piece of tissue was procured.  This
+          is hand entered via the Tissue Registration UI at the time of tissue registration.
+    required:
+    - create_timestamp
+    - created_by_user_displayname
+    - created_by_user_email
+    - entity_type
+    - group_name
+    - group_uuid
+    - last_modified_timestamp
+    - specimen_type
+    - uuid
+    type: object
+  source_sample:
+    items:
+      additionalProperties: false
+      properties:
+        create_timestamp:
+          description: The data/time when the entity was created
+        created_by_user_displayname:
+          description: The name of the person who registered/created the Entity.
+        created_by_user_email:
+          description: The email address of the person who registerd/created the Entity.
+        creation_action:
+          description: The action that created this this Entity
+        description:
+          description: A description of the Entity, hand entered into the UI
+        display_doi:
+          description: HuBMAP id generated at the same time as and associated directly
+            with the UUID for the Entity.  This ID can be used when registering an
+            object with the DOI System.
+        donor:
+          description: The ancestor Donor at the top of the provenance chain for the
+            Entity.  This contains, in JSON, the full Entity information for the Donor.
+        entity_type:
+          description: The entity type.
+          enum:
+          - Dataset
+          - Donor
+          - Sample
+        group_name:
+          description: The name of the lab/TMC/TTD/RTI where the Entity was registered.
+        group_uuid:
+          description: A UUID associated with the lab/TMC/TTD/RTI where the Entity
+            was registered.
+        hubmap_display_id:
+          description: 'HuBMAP id used internal to the Consortium, generated at the
+            same time as and associated directly with the UUID for the Entity.  The
+            id is built on the the id from the parent object.  Format explained here:
+            https://docs.google.com/document/d/1DjHgmqWF1VA5-3mfzLFNfabbzmc8KLSG9xWx1DDLlzo/'
+        lab_tissue_sample_id:
+          description: An id specific to the lab where the tissue was processed.
+        last_modified_timestamp:
+          description: The date/time when the entity was last updatedl
+        metadata:
+          description: Metadata associated with the Entity. Formated in JSON. Donor
+            metadata is transformed from files uploaded into the Ingest UI.  Sample
+            metadata will be transformed from files uploaded into the Ingest UI.  Dataset
+            metadata will be transformed from the HIVE specified .tsv file provided
+            with data uploads and/or extraction from data or metadata files provided
+            in the data upload.
+        organ:
+          description: 'The organ type when specimen_type == organ.  Allowable values
+            here: https://docs.google.com/spreadsheets/d/1L8mfs767Z5ZGnZ92UJySlHxprraSariH1dU45g6jphE/edit'
+          enum:
+          - BL
+          - BR
+          - HT
+          - LB
+          - LI
+          - LK
+          - LL
+          - LV
+          - LY01
+          - LY02
+          - LY03
+          - LY04
+          - LY05
+          - LY06
+          - LY07
+          - LY08
+          - LY09
+          - LY10
+          - LY11
+          - LY12
+          - LY13
+          - LY14
+          - LY15
+          - LY16
+          - LY17
+          - LY18
+          - LY19
+          - LY20
+          - OT
+          - RB
+          - RK
+          - RL
+          - SI
+          - SP
+          - TH
+          - TR
+          - UR
+        organ_other:
+          description: If organ type == other, the organ name is specified in this
+            field
+        origin_sample:
+          description: The tissue sample directly below Donor (should usually be an
+            organ) at the top of the provenance chain for the Entity. This conntains,
+            in JSON, the full Entity information for the Sample.
+        portal_metadata_upload_files:
+          description: An array of information about metadata files uploaded via the
+            Tissue Registration UI
+        portal_uploaded_image_files:
+          description: An array of information about image files uploaded during donor
+            or tissue registration via the Tissue Registration UI
+        portal_uploaded_protocol_files:
+          description: An array of information about files uploaded through the Donor/Tissue
+            Registration UI donor selection criteria or tissue procurement protocols.
+        protocol_url:
+          description: The url to the protocols.io instance describing donor selection
+            criteria, tissue procurement protocols and or data generation/derivation
+            details.
+        rui_location:
+          description: Location information of where the tissue sample came from in
+            the organ that the tissue was sourced from.  Specified in JSON, as outputed
+            from the RUI tool.
+        specimen_type:
+          description: 'For Sample entities, the type of tissue specimen.  Allowable
+            values here: https://docs.google.com/spreadsheets/d/1L8mfs767Z5ZGnZ92UJySlHxprraSariH1dU45g6jphE/edit'
+          enum:
+          - atacseq
+          - biopsy
+          - blood
+          - cell_lysate
+          - clarity_hydrogel
+          - codex
+          - cryosections_curls_from_fresh_frozen_oct
+          - cryosections_curls_rnalater
+          - ffpe_block
+          - ffpe_slide
+          - fixed_frozen_section_slide
+          - fixed_tissue_piece
+          - flash_frozen_liquid_nitrogen
+          - formalin_fixed_oct_block
+          - fresh_frozen_oct_block
+          - fresh_frozen_section_slide
+          - fresh_frozen_tissue
+          - fresh_frozen_tissue_section
+          - fresh_tissue
+          - frozen_cell_pellet_buffy_coat
+          - gdna
+          - module
+          - nuclei
+          - nuclei_rnalater
+          - organ
+          - organ_piece
+          - other
+          - pbmc
+          - pfa_fixed_frozen_oct_block
+          - plasma
+          - protein
+          - ran_poly_a_enriched
+          - rna_total
+          - rnalater_treated_and_stored
+          - rnaseq
+          - scatacseq
+          - scrnaseq
+          - segment
+          - seqfish
+          - serum
+          - single_cell_cryopreserved
+          - snatacseq
+          - snrnaseq
+          - tissue_lysate
+          - wgs
+        specimen_type_other:
+          description: If specimen_type == other, the specimen type name is specified
+            in this field
+        uuid:
+          description: The HuBMAP auto-generated UUID for the Entity
+        visit:
+          description: The clinical visit specifier of when a piece of tissue was
+            procured.  This is hand entered via the Tissue Registration UI at the
+            time of tissue registration.
+      required:
+      - create_timestamp
+      - created_by_user_displayname
+      - created_by_user_email
+      - entity_type
+      - group_name
+      - group_uuid
+      - last_modified_timestamp
+      - specimen_type
+      - uuid
+      type: object
+    type: array
+  status:
+    description: 'The status of a Dataset. Allowable values listed here: https://docs.google.com/spreadsheets/d/1L8mfs767Z5ZGnZ92UJySlHxprraSariH1dU45g6jphE/edit'
+    enum:
+    - DEPRECATED
+    - ERROR
+    - HOLD
+    - INVALID
+    - LOCKED
+    - NEW
+    - PROCESSING
+    - PUBLISHED
+    - QA
+    - REOPENED
+    - UNPUBLISHED
+  uuid:
+    description: The HuBMAP auto-generated UUID for the Entity
+required:
+- contains_human_genetic_sequences
+- create_timestamp
+- created_by_user_displayname
+- created_by_user_email
+- entity_type
+- group_name
+- group_uuid
+- last_modified_timestamp
+- uuid
+- access_group
+- ancestor_ids
+- ancestors
+- descendant_ids
+- descendants
+type: object
