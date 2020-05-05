@@ -47,18 +47,10 @@ def assert_is_valid_html(response):
 def mock_get(path, **kwargs):
     class MockResponse():
         def json(self):
-            if path.endswith('/provenance'):
-                return {
-                    'agent': '',
-                    'prefix': {}
-                }
-            elif '/types/' in path:
-                return {
-                    'entity_type': 'Donor'
-                }
-            else:
-                raise Exception('No mock for:', path)
-
+            return {
+                'agent': '',
+                'prefix': {}
+            }
         def raise_for_status(self):
             pass
     return MockResponse()
