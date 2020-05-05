@@ -27,12 +27,13 @@ function MappedList(props) {
       property={childProperty}
       propertyName={Object.getOwnPropertyNames(property)[index]}
       isRootChild={isRoot}
+      isArray={property.constructor.name === 'Array'}
     />
   )));
 }
 function RecursiveList(props) {
   const {
-    property, propertyName, isRoot, isRootChild,
+    property, propertyName, isRoot, isRootChild, isArray,
   } = props;
 
   if (!property) return (<RecursiveListLeaf property="" propertyName={propertyName} isRootChild={isRoot} />);
@@ -57,7 +58,8 @@ function RecursiveList(props) {
             </DataPanel>
           ) : (
             <>
-              {!isRoot && <PropertyName> {replaceUnderscore(propertyName)}: </PropertyName>}
+              {!(isRoot || isArray)
+              && <PropertyName> {replaceUnderscore(propertyName)}: </PropertyName>}
               <MappedList property={property} isRoot={isRoot} />
             </>
           )
@@ -70,11 +72,13 @@ RecursiveList.propTypes = {
   propertyName: PropTypes.string.isRequired,
   isRoot: PropTypes.bool,
   isRootChild: PropTypes.bool,
+  isArray: PropTypes.bool,
 };
 
 RecursiveList.defaultProps = {
   isRoot: false,
   isRootChild: false,
+  isArray: false,
 };
 
 export default RecursiveList;
