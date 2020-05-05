@@ -16,57 +16,54 @@ const PropertyName = styled.span`
 `;
 
 function isLeaf(property) {
-  return ( new Set(['number', 'string', 'boolean']).has(typeof property) || isEmptyArrayOrObject(property));
+  return (new Set(['number', 'string', 'boolean']).has(typeof property) || isEmptyArrayOrObject(property));
 }
 
+function MappedList(props) {
+  const { property, isRoot } = props;
+  return (Object.values(property).map((childProperty, index) => (
+    <RecursiveList
+      key={Object.getOwnPropertyNames(property)[index]}
+      property={childProperty}
+      propertyName={Object.getOwnPropertyNames(property)[index]}
+      isRootChild={isRoot}
+    />
+  )));
+}
 function RecursiveList(props) {
   const {
     property, propertyName, isRoot, isRootChild,
   } = props;
 
+  if (!property) return (<RecursiveListLeaf property="" propertyName={propertyName} isRootChild={isRoot} />);
+
+  if (isLeaf(property)) {
+    return (
+      <RecursiveListLeaf
+        property={property}
+        propertyName={propertyName}
+        isRootChild={isRootChild}
+      />
+    );
+  }
 
   return (
-    /* eslint-disable no-nested-ternary */
     <RecursivePropertyContainer>
-      { property ? (
-        isLeaf(property)
+      {
+        isRootChild
           ? (
-            <RecursiveListLeaf
-              property={property}
-              propertyName={propertyName}
-              isRootChild={isRootChild}
-            />
+            <DataPanel propertyName={propertyName} isRootChild={isRootChild}>
+              <MappedList property={property} />
+            </DataPanel>
           ) : (
-            isRootChild
-              ? (
-                <DataPanel propertyName={propertyName} isRootChild={isRootChild}>
-                  {Object.values(property).map((objProperty, index) => (
-                    <RecursiveList
-                    // eslint-disable-next-line react/no-array-index-key
-                      key={index}
-                      property={objProperty}
-                      propertyName={Object.getOwnPropertyNames(property)[index]}
-                    />
-                  )) }
-                </DataPanel>
-              ) : (
-                <>
-                  {!isRoot && <PropertyName> {propertyName}: </PropertyName>}
-                  {Object.values(property).map((objProperty, index) => (
-                    <RecursiveList
-                  // eslint-disable-next-line react/no-array-index-key
-                      key={index}
-                      property={objProperty}
-                      propertyName={Object.getOwnPropertyNames(property)[index]}
-                      isRootChild={isRoot}
-                    />
-                  )) }
-                </>
-              )
-          )) : (<RecursiveListLeaf property="" propertyName={propertyName} isRootChild={isRoot} />)}
+            <>
+              {!isRoot && <PropertyName> {propertyName}: </PropertyName>}
+              <MappedList property={property} isRoot={isRoot} />
+            </>
+          )
+        }
     </RecursivePropertyContainer>
   );
-  /* eslint-disable no-nested-ternary */
 }
 
 RecursiveList.propTypes = {
