@@ -1,5 +1,5 @@
 from flask import (Blueprint, render_template, abort, current_app,
-                   session, flash, request, get_flashed_messages,
+                   session, flash, get_flashed_messages,
                    redirect, url_for)
 
 from yaml import safe_load as load_yaml
