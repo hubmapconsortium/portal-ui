@@ -44,7 +44,7 @@ def assert_is_valid_html(response):
         raise Exception(f'{e.msg}\n{numbered}')
 
 
-def mock_get(path, **kwargs):
+def mock_prov_get(path, **kwargs):
     class MockResponse():
         def json(self):
             return {
@@ -84,7 +84,7 @@ def mock_search_donor_post(path, **kwargs):
     ['/', '/help', '/browse/donor/fake-uuid']
 )
 def test_200_html_page(client, path, mocker):
-    mocker.patch('requests.get', side_effect=mock_get)
+    mocker.patch('requests.get', side_effect=mock_prov_get)
     mocker.patch('requests.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '200 OK'
