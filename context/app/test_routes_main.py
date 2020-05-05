@@ -51,6 +51,7 @@ def mock_prov_get(path, **kwargs):
                 'agent': '',
                 'prefix': {}
             }
+
         def raise_for_status(self):
             pass
     return MockResponse()
