@@ -3,6 +3,7 @@
 ## v0.0.14 - In progress
 ### Added
 - Redirect to the correct entity type, if we've landed on the wrong one.
+- Limit Flask session to just one hour to avoid problems with Globus tokens expiring.
 
 ## [v0.0.13](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.13) - 2020/05/03
 ### Added
