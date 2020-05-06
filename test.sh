@@ -40,7 +40,9 @@ end pytest
 start docker
 ./docker.sh 5001
 server_up 5001
+cd context
 npm run cypress:run
+cd ../
 end docker
 
 start changelog
