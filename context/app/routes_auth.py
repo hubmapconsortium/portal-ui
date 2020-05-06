@@ -79,7 +79,10 @@ def login():
     code = request.args.get('code')
     tokens = client.oauth2_exchange_code_for_tokens(code)
     # The repr is deceptive: Looks like a dict, but direct access not possible.
-    nexus_token = tokens.by_resource_server['nexus.api.globus.org']['access_token']
+
+    token_object = tokens.by_resource_server['nexus.api.globus.org']
+    nexus_token = token_object['access_token']
+    expires_at_seconds = token_object['expires_at_seconds']
 
     if not has_hubmap_group(nexus_token):
         # Globus institution login worked, but user does not have HuBMAP group!
