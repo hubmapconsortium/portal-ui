@@ -18,7 +18,7 @@ fi
 
 grep 'TODO' "$APP_CONF" && die "Replace 'TODO' in $APP_CONF."
 
-npm install
-npm run dev-build
+cd $CONTEXT && npm install && npm run dev-build
+cd ../
 
 FLASK_ENV=development FLASK_APP="$CONTEXT/app/main.py" python -m flask run
