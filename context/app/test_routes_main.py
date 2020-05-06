@@ -120,7 +120,7 @@ def test_200_json_page(client, path, mocker):
     mocker.patch('requests.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '200 OK'
-    assert type(json.loads(response.data.decode('utf8'))) == dict
+    assert isinstance(json.loads(response.data.decode('utf8')), dict)
 
 
 def test_login(client):
