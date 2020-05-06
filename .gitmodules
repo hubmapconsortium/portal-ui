@@ -1,0 +1,3 @@
+[submodule "context/ingest-validation-tools"]
+	path = context/ingest-validation-tools
+	url = https://github.com/hubmapconsortium/ingest-validation-tools.git
