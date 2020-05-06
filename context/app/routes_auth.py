@@ -90,11 +90,15 @@ def login():
 
     session.update(
         nexus_token=nexus_token,
-        is_authenticated=True
-    )
+        is_authenticated=True)
+        # Would like to set an expiration on the session like I set on
+        # the cookie, but the lifetime of sessions is a global config.
     response = make_response(
         redirect(url_for('routes.index', _external=True)))
-    response.set_cookie('nexus_token', nexus_token)
+    response.set_cookie(
+        key='nexus_token',
+        value=nexus_token,
+        expires=expires_at_seconds)
     return response
 
 
