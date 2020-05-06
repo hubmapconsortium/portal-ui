@@ -1,4 +1,9 @@
+from datetime import timedelta
+
+
 class DefaultConfig(object):
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=60)
+
     ENTITY_API_TIMEOUT = 5
     ENTITY_API_BASE = 'should-be-overridden'
 
