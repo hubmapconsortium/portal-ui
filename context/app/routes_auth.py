@@ -81,18 +81,18 @@ def login():
     # The repr is deceptive: Looks like a dict, but direct access not possible.
     nexus_token = tokens.by_resource_server['nexus.api.globus.org']['access_token']
 
-    if has_hubmap_group(nexus_token):
-        session.update(
-            nexus_token=nexus_token,
-            is_authenticated=True
-        )
-        response = make_response(
-            redirect(url_for('routes.index', _external=True)))
-        response.set_cookie('nexus_token', nexus_token)
-        return response
+    if not has_hubmap_group(nexus_token):
+        # Globus institution login worked, but user does not have HuBMAP group!
+        return render_template('errors/401-no-hubmap-group.html'), 401
 
-    # Globus institution login worked, but user does not have HuBMAP group!
-    return render_template('errors/401-no-hubmap-group.html'), 401
+    session.update(
+        nexus_token=nexus_token,
+        is_authenticated=True
+    )
+    response = make_response(
+        redirect(url_for('routes.index', _external=True)))
+    response.set_cookie('nexus_token', nexus_token)
+    return response
 
 
 @blueprint.route('/logout')
