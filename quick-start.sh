@@ -6,6 +6,13 @@ die() { set +v; echo "$*" 1>&2 ; exit 1; }
 CONTEXT=context
 pip install -r $CONTEXT/requirements.txt > /dev/null
 
+cd context/app/schemas
+REPO=https://raw.githubusercontent.com/hubmapconsortium/search-schema
+wget -N $REPO/master/data/schemas/{dataset,donor,sample}.schema.yaml
+# -N Clobbers the old version.
+cd -
+git diff --quiet || die "Commit latest schema versions."
+
 APP_INSTANCE="$CONTEXT/instance"
 APP_CONF="$APP_INSTANCE/app.conf"
 

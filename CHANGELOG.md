@@ -1,7 +1,13 @@
 # Changelog
 
-## v0.0.13 - in progress
+## v0.0.14 - In progress
+### Added
+- Redirect to the correct entity type, if we've landed on the wrong one.
+
+## [v0.0.13](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.13) - 2020/05/03
+### Added
 - Added favicon
+- Copy-and-paste new schemas... and we have fewer errors!
 
 ## [v0.0.12](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.12) - 2020/04/28
 ### Changed
