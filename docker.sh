@@ -15,11 +15,6 @@ Requires port; On localhost must be 5000 or 5001 to match Globus whitelist."
 [ -e "$CONF_PATH" ] || die "No $CONF_PATH
 Copy example-app.conf and fill in blanks."
 
-cd context
-npm run prepublish 
-npm run build
-cd ../
-
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
 docker build --tag $IMAGE_NAME $CONTEXT
