@@ -2,6 +2,6 @@
 **/app.conf
 **/instance/
 **/node_modules/
-**/public/
-**/cypress/
+app/static/public/
+cypress/
 cypress.json
