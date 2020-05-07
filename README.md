@@ -68,8 +68,9 @@ commit these changes, and run:
 Update the CHANGELOG, adding the date for the current release,
 and stubbing the new "in progress" release.
 
-TODO: We will hear from Bill about how we can deploy our images.
-
+With a new `latest` Docker image, to redeploy either
+`dev` or `test` use `./redeploy.sh`.
+(PSC folks will need your ssh public key.)
 
 ## Related projects and dependencies
 
