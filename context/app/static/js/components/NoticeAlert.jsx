@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import Collapse from '@material-ui/core/Collapse';
 import Container from '@material-ui/core/Container';
 
-export default function NoticeAlert(props) {
+function NoticeAlert(props) {
   const [open, setOpen] = React.useState(true);
   const generateErrorList = () => props.errors.map((errorObj, ind) => {
     if (errorObj.issue_url) {
@@ -43,3 +44,9 @@ export default function NoticeAlert(props) {
     </Container>
   );
 }
+
+NoticeAlert.propTypes = {
+  errors: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+export default NoticeAlert;

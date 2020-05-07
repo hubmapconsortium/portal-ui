@@ -9,7 +9,7 @@ import App from './App';
 import Footer from './Footer';
 import Header from './Header';
 
-if (window.location.search.indexOf('react') > -1) {
+if (window.location.href.search('/browse/') > -1) {
   ReactDOM.render( // eslint-disable-next-line no-undef
     <App flaskData={flaskData} />,
     document.getElementById('react-content'),
