@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from flask import (Blueprint, render_template, abort, current_app,
                    session, flash, get_flashed_messages,
                    redirect, url_for)
@@ -44,7 +46,10 @@ def details(type, uuid):
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
     # TODO: These schemas don't need to be reloaded per request.
-    with open(current_app.root_path + f'/schemas/{type}.schema.yaml') as type_schema_file:
+    schema_path = (
+        Path(current_app.root_path).parent / 'search-schema' / 'data'
+        / 'schemas' / f'{type}.schema.yaml')
+    with open(schema_path) as type_schema_file:
         type_schema = load_yaml(type_schema_file)
     for_each_validation_error(entity, type_schema, flash)
 

@@ -3,6 +3,7 @@
 ## v0.0.14 - In progress
 ### Added
 - Redirect to the correct entity type, if we've landed on the wrong one.
+- Add git submodules for search-schema and ingest-validation-tools.
 - Add `ASSETS_ENDPOINT` to app.conf.
 - Add static/public to dockerignore
 - Add stage to dockerfile to build static
