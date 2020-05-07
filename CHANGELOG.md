@@ -17,7 +17,8 @@
 - Remove unused templates.
 - Fix data in details top title panel.
 - Remove breadcrumbs links from details top title panel.
-- Moved files needed to build static inside context
+- Moved files needed to build static inside context.
+- Fix NoticeAlert to only display when errors exist.
 
 ## [v0.0.13](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.13) - 2020/05/03
 ### Added
