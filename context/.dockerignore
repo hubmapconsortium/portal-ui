@@ -1,3 +1,7 @@
 # Be careful that credentials in development environment do not leak into image!
 **/app.conf
 **/instance/
+**/node_modules/
+app/static/public/
+cypress/
+cypress.json

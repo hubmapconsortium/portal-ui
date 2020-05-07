@@ -5,8 +5,10 @@
     "@material-ui/core": "^4.9.4",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",
+    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "styled-components": "^5.1.0",
     "typeface-inter": "^3.12.0"
   },
   "devDependencies": {
@@ -38,7 +40,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "prepublish": "wget https://raw.githubusercontent.com/hubmapconsortium/prov-vis/master/src/schema.json && mv schema.json ./node_modules/@hubmap/prov-vis/es",
-    "build": "webpack --progress --mode production ./context/app/static/js/index.jsx -o ./context/app/static/public/bundle.js",
-    "dev-build": "webpack --progress --mode development ./context/app/static/js/index.jsx -o ./context/app/static/public/bundle.js  --progress --profile --colors"
+    "build": "webpack --progress --mode production ./app/static/js/index.jsx -o ./app/static/public/bundle.js",
+    "dev-build": "webpack --progress --mode development ./app/static/js/index.jsx -o ./app/static/public/bundle.js  --progress --profile --colors"
   }
 }
