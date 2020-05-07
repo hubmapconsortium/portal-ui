@@ -20,7 +20,7 @@ echo 'stopping...'
 docker-compose -f hubmap.yml down
 echo 'portal running?' `docker ps | grep portal`
 echo 'starting...'
-docker-compose -f hubmap.yml up -d
+docker-compose pull && docker-compose -f hubmap.yml up -d
 echo 'portal running?' `docker ps | grep portal`
 EOF
 
