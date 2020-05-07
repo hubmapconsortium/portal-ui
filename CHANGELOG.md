@@ -18,6 +18,7 @@
 - Fix data in details top title panel.
 - Remove breadcrumbs links from details top title panel.
 - Moved files needed to build static inside context
+- Fix VisTabs panel overflow
 
 ## [v0.0.13](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.13) - 2020/05/03
 ### Added
