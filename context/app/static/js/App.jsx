@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -9,7 +10,7 @@ import Footer from './Footer';
 import Header from './Header';
 
 
-export default function App(props) {
+function App(props) {
   const { flaskData } = props;
 
   const getComponentView = () => {
@@ -40,3 +41,14 @@ export default function App(props) {
     </ThemeProvider>
   );
 }
+
+App.propTypes = {
+  flaskData: PropTypes.exact({
+    entity: PropTypes.object,
+    flashed_messages: PropTypes.array,
+    provenance: PropTypes.object,
+    vitessce_conf: PropTypes.object,
+  }).isRequired,
+};
+
+export default App;

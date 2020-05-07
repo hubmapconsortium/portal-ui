@@ -29,8 +29,9 @@ end quick-start
 start flake8
 # Unit tests require dev dependencies beyond what quick-start provides.
 pip install -r context/requirements-dev.txt > /dev/null
-# With the addition
-flake8 || die 'Try "autopep8 --in-place --aggressive -r . --exclude node_modules"'
+EXCLUDE=node_modules,ingest-validation-tools,search-schema
+flake8 --exclude=$EXCLUDE \
+  || die "Try: autopep8 --in-place --aggressive -r . --exclude $EXCLUDE"
 end flake8
 
 start pytest
@@ -40,7 +41,7 @@ end pytest
 start docker
 ./docker.sh 5001
 server_up 5001
-npm run cypress:run
+cd context && npm run cypress:run && cd -
 end docker
 
 start changelog

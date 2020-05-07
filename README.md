@@ -9,6 +9,26 @@ The Data Portal depends, directly or indirectly, on many other HuBMAP repos:
 
 [![Repo diagram](https://docs.google.com/drawings/d/e/2PACX-1vQ1ISVanilVt3vewU6tekVirOxPpTsKMS3zXa8tL0J5JjdT9zS9adgXivm1ZcXxoyC_lctIlHVYhJuI/pub?w=922&amp;h=408)](https://docs.google.com/drawings/d/1q0IvliNTX0Xo9EzHTAoRZ2x1gatG_n0gOoLN7uVMJ4o/edit)
 
+## Checkout
+
+Because we're using git submodules, a couple additional steps are needed with checkout:
+```
+git clone https://github.com/hubmapconsortium/portal-ui.git
+git submodule init
+git submodule update
+```
+
+Git does not update submodules on pull by default...
+but you can make it the default:
+```
+git config --global submodule.recurse true # Run this once...
+git pull                                   # Now pulls submodules!
+```
+
+If you need to work on the code in a submodule, I would encourage you to do that
+in a separate top-level checkout. You certainly can push changes from inside
+a submodule, but it just gets more confusing.
+
 ## Local demo using Docker
 To build and run:
 ```sh
@@ -48,8 +68,9 @@ commit these changes, and run:
 Update the CHANGELOG, adding the date for the current release,
 and stubbing the new "in progress" release.
 
-TODO: We will hear from Bill about how we can deploy our images.
-
+With a new `latest` Docker image, to redeploy either
+`dev` or `test` use `./redeploy.sh`.
+(PSC folks will need your ssh public key.)
 
 ## Related projects and dependencies
 
