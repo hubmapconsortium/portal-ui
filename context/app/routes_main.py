@@ -38,6 +38,8 @@ def index():
 def details(type, uuid):
     if type not in types:
         abort(404)
+    if 'nexus_token' not in session:
+        abort(403)
     client = _get_client()
 
     entity = client.get_entity(uuid)
@@ -83,6 +85,8 @@ def details_ext(type, uuid, ext):
         abort(404)
     if ext != 'json':
         abort(404)
+    if 'nexus_token' not in session:
+        abort(403)
     client = _get_client()
 
     entity = client.get_entity(uuid)
@@ -92,8 +96,6 @@ def details_ext(type, uuid, ext):
 @blueprint.route('/search')
 def search():
     if 'nexus_token' not in session:
-        # TODO: Not needed in the long term?
-        # https://github.com/hubmapconsortium/search-api/issues/30
         abort(403)
     return render_template(
         'pages/search.html',

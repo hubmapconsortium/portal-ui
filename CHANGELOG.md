@@ -3,6 +3,7 @@
 ## v0.0.14 - In progress
 ### Added
 - Redirect to the correct entity type, if we've landed on the wrong one.
+- Limit Flask session to just one hour to avoid problems with Globus tokens expiring.
 - Redeploy script.
 - Add git submodules for search-schema and ingest-validation-tools.
 - Add `ASSETS_ENDPOINT` to app.conf.

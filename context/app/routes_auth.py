@@ -79,20 +79,27 @@ def login():
     code = request.args.get('code')
     tokens = client.oauth2_exchange_code_for_tokens(code)
     # The repr is deceptive: Looks like a dict, but direct access not possible.
-    nexus_token = tokens.by_resource_server['nexus.api.globus.org']['access_token']
 
-    if has_hubmap_group(nexus_token):
-        session.update(
-            nexus_token=nexus_token,
-            is_authenticated=True
-        )
-        response = make_response(
-            redirect(url_for('routes.index', _external=True)))
-        response.set_cookie('nexus_token', nexus_token)
-        return response
+    token_object = tokens.by_resource_server['nexus.api.globus.org']
+    nexus_token = token_object['access_token']
+    expires_at_seconds = token_object['expires_at_seconds']
 
-    # Globus institution login worked, but user does not have HuBMAP group!
-    return render_template('errors/401-no-hubmap-group.html'), 401
+    if not has_hubmap_group(nexus_token):
+        # Globus institution login worked, but user does not have HuBMAP group!
+        return render_template('errors/401-no-hubmap-group.html'), 401
+
+    session.update(
+        nexus_token=nexus_token,
+        is_authenticated=True)
+    # Would like to set an expiration on the session like I set on
+    # the cookie, but the lifetime of sessions is a global config.
+    response = make_response(
+        redirect(url_for('routes.index', _external=True)))
+    response.set_cookie(
+        key='nexus_token',
+        value=nexus_token,
+        expires=expires_at_seconds)
+    return response
 
 
 @blueprint.route('/logout')
@@ -108,9 +115,8 @@ def logout():
     try:
         tokens = session['tokens']
     except Exception:
-        # TODO: After leaving it logged for several hours, my tokens had expired,
-        # but I was still logged in. Is this the best fix
-        # https://github.com/hubmapconsortium/portal-ui/issues/54
+        # May have only hit this because of weird state during development,
+        # but if there are no tokens, there's nothing to revoke.
         tokens = {}
     for token in (token_info['access_token']
                   for token_info in tokens.values()):
