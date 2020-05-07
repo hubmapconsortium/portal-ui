@@ -34,7 +34,7 @@ function RecursiveList(props) {
     property, propertyName, isRoot, isRootChild, isArray, isIndexZero,
   } = props;
 
-  if (!property) return (<RecursiveListLeaf property="" propertyName={propertyName} isRootChild={isRoot} />);
+  if (!property) return (<RecursiveListLeaf property="" propertyName={propertyName} isRootChild={isRootChild} />);
 
   if (isLeaf(property)) {
     return (
