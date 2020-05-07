@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.0.14 - In progress
+## v0.0.15 - In progress
 ### Added
 - Redirect to the correct entity type, if we've landed on the wrong one.
 - Limit Flask session to just one hour to avoid problems with Globus tokens expiring.
@@ -18,6 +18,8 @@
 - Fix data in details top title panel.
 - Remove breadcrumbs links from details top title panel.
 - Moved files needed to build static inside context
+
+## v0.0.14 - Mistake
 
 ## [v0.0.13](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.13) - 2020/05/03
 ### Added
