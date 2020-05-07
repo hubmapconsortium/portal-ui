@@ -4,6 +4,7 @@ import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
+import vitessce from 'vitessce';
 import ProvGraph from './ProvGraph';
 import ProvTable from './ProvTable';
 import { useStyles } from '../styles';
@@ -28,14 +29,13 @@ function TabPanel(props) {
 }
 
 function VisTabs(props) {
-  const { provData } = props;
+  const { provData, vitData } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setOpen(newValue);
   };
-
   return (
     <div className={classes.tabsRoot}>
       <Tabs
@@ -64,8 +64,13 @@ function VisTabs(props) {
         />
       </Tabs>
       <TabPanel value={open} index={0}>
-        <span id="vit-grid">
-          Vit Place Holder
+        <span id="vitessce">
+          { vitessce.validateAndRender(
+            vitData,
+            'vitessce',
+            500,
+            'light',
+          ) }
         </span>
       </TabPanel>
       <TabPanel value={open} index={1}>

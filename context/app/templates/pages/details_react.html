@@ -2,11 +2,13 @@
 
 {% block extra_stylesheets %}
     <link rel="stylesheet" href="https://unpkg.com/@hms-dbmi-bgm/react-workflow-viz@0.1.0/dist/react-workflow-viz.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/vitessce@0.1.1/build-lib/umd/production/static/css/index.css">
+
 {% endblock %}
 
 {% block content %}
     <div id="react-details-content"></div>
-
+    <div id="vitessce"></div>
     <script>
       const flaskData = {{ flask_data | tojson }};
     </script>
