@@ -2,6 +2,7 @@ FROM node:12.16.3-alpine as builder
 WORKDIR /work
 COPY . .
 RUN npm install
+# TODO: Get rid of prepublish... wget the prov-vis schema shouldn't be necessary. See PR #232.
 RUN npm run prepublish
 RUN npm run build
 
