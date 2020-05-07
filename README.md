@@ -18,9 +18,11 @@ git submodule init
 git submodule update
 ```
 
-Pulling updates into submodules is also slightly more complicated:
+Git does not update submodules on pull by default...
+but you can make it the default:
 ```
-git pull --recurse-submodules
+git config --global submodule.recurse true # Run this once...
+git pull                                   # Now pulls submodules!
 ```
 
 If you need to work on the code in a submodule, I would encourage you to do that
