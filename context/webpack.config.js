@@ -1,15 +1,14 @@
-const webpack = require('webpack');
-const resolve = require('path').resolve;
+const { resolve } = require('path');
 
 const config = {
-  entry: './context/app/static/js/index.jsx',
-  output:{
-    path: resolve('../context/app/static/public'),
+  entry: './app/static/js/index.jsx',
+  output: {
+    path: resolve('./app/static/public'),
     filename: 'bundle.js',
-    publicPath: resolve('../context/app/static/public'),
+    publicPath: resolve('../app/static/public'),
   },
   resolve: {
-    extensions: ['.js','.jsx','.css', '.woff', '.woff2', '.svg']
+    extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg'],
   },
   module: {
     rules: [
@@ -21,8 +20,8 @@ const config = {
         options: {
           emitError: true,
           emitWarning: true,
-          configFile: "./.eslintrc.yml"
-        }
+          configFile: './.eslintrc.yml',
+        },
       },
       {
         test: /\.jsx?/,
@@ -39,24 +38,24 @@ const config = {
         test: /\.html$/,
         use: [
           {
-            loader: "html-loader"
-          }
-        ]
+            loader: 'html-loader',
+          },
+        ],
       },
       {
         test: /\.(ttf|eot|woff|woff2)$/,
         use: {
-          loader: "url-loader",
+          loader: 'url-loader',
           options: {
-            name: "/fonts/[name].[ext]",
+            name: '/fonts/[name].[ext]',
           },
         },
       },
       {
         test: /\.svg$/,
-        use: { loader: "@svgr/webpack" },
+        use: { loader: '@svgr/webpack' },
       },
-    ]
-  }
+    ],
+  },
 };
 module.exports = config;

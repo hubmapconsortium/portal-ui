@@ -4,6 +4,17 @@
 ### Added
 - Redirect to the correct entity type, if we've landed on the wrong one.
 - Add `ASSETS_ENDPOINT` to app.conf.
+- Add static/public to dockerignore
+- Add stage to dockerfile to build static
+### Changed
+- Add provenance table to details.
+- Add expansion panels for details data.
+- Add prop types checks to components.
+- Make details page react by default.
+- Remove unused templates.
+- Fix data in details top title panel.
+- Remove breadcrumbs links from details top title panel.
+- Moved files needed to build static inside context
 
 ## [v0.0.13](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.13) - 2020/05/03
 ### Added

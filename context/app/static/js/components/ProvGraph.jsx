@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import hubmapProvVis from '@hubmap/prov-vis';
 
-export default function ProvGraph(props) {
+function ProvGraph(props) {
   const { provData } = props;
   const runRenderProvVis = () => hubmapProvVis.renderProvVis(
     'prov-vis-react',
@@ -38,3 +39,9 @@ export default function ProvGraph(props) {
   );
   return setTimeout(runRenderProvVis, 0);
 }
+
+ProvGraph.propTypes = {
+  provData: PropTypes.objectOf(PropTypes.object).isRequired,
+};
+
+export default ProvGraph;
