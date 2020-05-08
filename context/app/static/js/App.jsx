@@ -17,7 +17,7 @@ function App(props) {
       <CssBaseline />
       <Header />
       <div className="main-content">
-        <Routes flaskData={flaskData} />
+        <Routes flaskData={flaskData || {}} />
       </div>
       <Footer />
     </ThemeProvider>

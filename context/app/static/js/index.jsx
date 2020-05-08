@@ -14,6 +14,11 @@ if (window.location.href.search('/browse/') > -1) {
     <App flaskData={flaskData} />,
     document.getElementById('react-content'),
   );
+} else if (window.location.pathname === '/') {
+  ReactDOM.render(
+    <App />,
+    document.getElementById('react-content'),
+  );
 } else { // temp solution to integrate react header and footer
   ReactDOM.render( // eslint-disable-next-line no-undef
     <ThemeProvider theme={theme}>

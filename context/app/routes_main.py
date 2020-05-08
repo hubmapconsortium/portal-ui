@@ -31,7 +31,7 @@ def _get_client():
 
 @blueprint.route('/')
 def index():
-    return render_template('pages/index.html', types=types)
+    return render_template('pages/base_react.html', types=types)
 
 
 @blueprint.route('/browse/<type>/<uuid>')

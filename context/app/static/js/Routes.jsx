@@ -2,6 +2,7 @@
 import React from 'react';
 import NoticeAlert from './components/NoticeAlert';
 import Details from './components/Details';
+import Home from './components/Home';
 
 function Routes(props) {
   const { flaskData } = props;
@@ -20,6 +21,12 @@ function Routes(props) {
           vitData={vitessce_conf}
         />
       </>
+    );
+  }
+
+  if (path === '/') {
+    return (
+      <Home />
     );
   }
 }
