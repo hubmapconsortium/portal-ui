@@ -2,6 +2,7 @@
 
 ## v0.0.16 - In progress
 ### Changed
+- Fix VisTabs panel overflow
 - Fix NoticeAlert to only display when errors exist.
 
 ## [v0.0.15](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.15) - 2020/05/07
