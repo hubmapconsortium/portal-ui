@@ -10,14 +10,14 @@ import Header from './Header';
 
 
 function App(props) {
-  const { flaskData } = props;
+  const { flaskData = {} } = props;
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header />
       <div className="main-content">
-        <Routes flaskData={flaskData || {}} />
+        <Routes flaskData={flaskData} />
       </div>
       <Footer />
     </ThemeProvider>
