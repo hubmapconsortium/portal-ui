@@ -31,12 +31,10 @@ export const useStyles = makeStyles((theme) => ({
     height: '40px',
   },
   tabPanels: {
-    flexGrow: 1,
-    display: 'flex',
+    width: 'calc(100% - 160px)',
   },
   tabPanelBoxes: {
     display: 'flex',
     flexDirection: 'column',
-    flexGrow: 1,
   },
 }));

@@ -26,7 +26,7 @@ function MappedList(props) {
 }
 
 const IndentedContainer = styled.div`
-  margin: 5px 0px 5px 15px;
+  margin: ${(props) => (props.isRoot ? '5px 0px 5px 0px' : '5px 0px 5px 15px')};
 `;
 
 function RecursiveList(props) {
@@ -34,7 +34,7 @@ function RecursiveList(props) {
     property, propertyName, isRoot, isRootChild, isArray, isIndexZero,
   } = props;
 
-  if (!property) return (<RecursiveListLeaf property="" propertyName={propertyName} isRootChild={isRoot} />);
+  if (!property) return (<RecursiveListLeaf property="" propertyName={propertyName} isRootChild={isRootChild} />);
 
   if (isLeaf(property)) {
     return (
@@ -59,7 +59,7 @@ function RecursiveList(props) {
               {!(isRoot || isArray)
               && <PanelTitle propertyName={propertyName} />}
               {isArray && !isIndexZero && <Divider />}
-              <IndentedContainer>
+              <IndentedContainer isRoot={isRoot}>
                 <MappedList property={property} isRoot={isRoot} />
               </IndentedContainer>
             </>

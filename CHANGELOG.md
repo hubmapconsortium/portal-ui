@@ -1,6 +1,8 @@
 # Changelog
 
 ## v0.0.16 - In progress
+### Changed
+- Fix VisTabs panel overflow
 
 ## [v0.0.15](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.15) - 2020/05/07
 ### Added

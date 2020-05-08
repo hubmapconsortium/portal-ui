@@ -63,12 +63,12 @@ function VisTabs(props) {
           aria-controls="vertical-tabpanel-1"
         />
       </Tabs>
-      <TabPanel value={open} index={0}>
+      <TabPanel value={open} className={classes.tabPanels} index={0}>
         <span id="vit-grid">
           Vit Place Holder
         </span>
       </TabPanel>
-      <TabPanel value={open} index={1}>
+      <TabPanel value={open} className={classes.tabPanels} index={1}>
         <span id="prov-vis-react">
           <ProvGraph provData={provData} />
         </span>
