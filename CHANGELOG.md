@@ -3,6 +3,7 @@
 ## v0.0.16 - In progress
 ### Changed
 - Fix VisTabs panel overflow
+- Fix NoticeAlert to only display when errors exist.
 
 ## [v0.0.15](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.15) - 2020/05/07
 ### Added
@@ -21,7 +22,7 @@
 - Remove unused templates.
 - Fix data in details top title panel.
 - Remove breadcrumbs links from details top title panel.
-- Moved files needed to build static inside context
+- Moved files needed to build static inside context.
 
 ## v0.0.14 - Mistake
 
