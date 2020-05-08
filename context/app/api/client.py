@@ -1,19 +1,50 @@
 from collections import namedtuple
 import json
 from datetime import datetime
+import urllib
+from pathlib import Path
 
 from flask import abort, current_app
 
 from datauri import DataURI
 import requests
 
-
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
+
+SCATTERPLOT = {
+    "layers": [],
+    "name": "NAME",
+    "staticLayout": [
+        {
+            "component": "scatterplot",
+            "props": {
+                # Need to get a better name but for now, this is fine.
+                "mapping": "UMAP",
+                "view": {
+                    "zoom": 4,
+                    "target": [0, 0, 0]
+                }
+            },
+            "x": 0, "y": 0, "w": 12, "h": 2
+        },
+    ]
+}
+
+
+ASSAY_CONF_LOOKUP = {
+    "salmon_rnaseq_10x": {
+        "base_conf": SCATTERPLOT,
+        "files_conf": [
+            { "rel_path": "dim_reduced_clustered/dim_reduced_clustered.json", "type": "CELLS" }, 
+            # { "rel_path": "cluster-marker-genes/cluster_marker_genes.json", "type": "FACTORS" }
+        ]
+    }
+}
+
 
 
 def _format_timestamp(ts):
     return datetime.utcfromtimestamp(int(ts) / 1000).strftime('%Y-%m-%d %H:%M:%S')
-
 
 class ApiClient():
     def __init__(self, url_base=None, nexus_token=None, is_mock=False):
@@ -165,20 +196,16 @@ class ApiClient():
 
         return provenance
 
-    def get_vitessce_conf(self):
+    def get_vitessce_conf(self, entity):
+        if("files" not in entity or "data_types" not in entity):
+            return {}
         if self.is_mock:
             cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
             cellsUri = DataURI.make(
                 'text/plain', charset='us-ascii', base64=True, data=cellsData
             )
             token = 'fake-token'
-        else:
-            # TODO: Hit File API
-            cellsUri = 'https://assets.test.hubmapconsortium.org/' \
-                '686cd8e0c2a9fa2dc1a321330158dcd7/umap/' \
-                'cluster_marker_genes/cluster_marker_genes.json'
-            token = self.nexus_token
-        return {
+            return {
             "description": "DEMO",
             "layers": [
                 {
@@ -207,3 +234,40 @@ class ApiClient():
                 },
             ]
         }
+        else:
+            return self._build_vitessce_conf(entity)
+    
+    def _build_assets_url(self, rel_path, uuid):
+        base_url = urllib.parse.urljoin(
+            current_app.config['ASSETS_ENDPOINT'], 
+            str(Path(uuid) / Path(rel_path)) 
+        )
+        # token_param = urllib.parse.urlencode({"token": self.nexus_token})
+        return base_url
+
+    def _build_layer_conf(self, file, uuid, assay_type):
+        return {
+            "type": file["type"],
+            "url": self._build_assets_url(file["rel_path"], uuid),
+            "name": file["type"].lower(),
+            "requestInit": {
+                "headers": {
+                    'Authorization': 'Bearer ' + self.nexus_token
+                }
+            }
+        }
+
+    def _build_vitessce_conf(self, entity):
+        # Can there be more than one of these?  This seems like a fine default for now.
+        assay_type = entity["data_types"][0]
+        uuid = entity["uuid"]
+
+        conf = ASSAY_CONF_LOOKUP[assay_type]["base_conf"]
+        files = ASSAY_CONF_LOOKUP[assay_type]["files_conf"]
+
+        layers = [self._build_layer_conf(file, uuid, assay_type) for file in files]
+
+        conf["layers"] = layers
+        conf["name"] = assay_type
+
+        return conf

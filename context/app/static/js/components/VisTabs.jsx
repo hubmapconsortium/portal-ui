@@ -64,8 +64,9 @@ function VisTabs(props) {
         />
       </Tabs>
       <TabPanel value={open} index={0}>
-        <span id="vitessce">
-          { vitessce.validateAndRender(
+        <span id="vit-grid">
+          { Object.keys(vitData).length > 0
+          && vitessce.validateAndRender(
             vitData,
             'vitessce',
             500,
