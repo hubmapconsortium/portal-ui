@@ -1,9 +1,13 @@
 # Changelog
 
 ## v0.0.16 - In progress
+### Added
+- Different search configs for different types.
 ### Changed
 - Fix VisTabs panel overflow
 - Fix NoticeAlert to only display when errors exist.
+### Removed
+- Removed old code to dump to nested tables.
 
 ## [v0.0.15](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.15) - 2020/05/07
 ### Added
