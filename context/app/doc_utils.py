@@ -19,7 +19,7 @@ def get_submission_field_descriptions(entity_type):
     '''
     yaml_path = _get_ingest_docs_path() / entity_type / 'unified.yaml'
     unified = load_yaml(yaml_path.read_text())
-    return {props['name']:props['description'] for props in unified['fields']}
+    return {props['name']: props['description'] for props in unified['fields']}
 
 
 def get_submission_instructions_md(entity_type):
@@ -44,7 +44,6 @@ def get_submission_template_tsv(entity_type):
     ).read_text()
 
 
-
 def get_search_api_field_descriptions():
     '''
     >>> descriptions = get_search_api_field_descriptions()
@@ -53,7 +52,7 @@ def get_search_api_field_descriptions():
 
     '''
     yaml_path = (Path(__file__).parent.parent / 'search-schema'
-        / 'data' / 'definitions.yaml')
+                 / 'data' / 'definitions.yaml')
     definitions = load_yaml(yaml_path.read_text())
     return {
         name: props['description']
