@@ -6,8 +6,15 @@
 ### Changed
 - Fix VisTabs panel overflow
 - Fix NoticeAlert to only display when errors exist.
+- Moved react routes to own component.
+- Make Webpack handle source maps, sass files and environment variables.
+- Move unpkg dependencies to node_modules.
+- Move Search and Home into App.
+- Upgrade webpack.
 ### Removed
 - Removed old code to dump to nested tables.
+- Remove unused fragments templates.
+- Remove unused stylesheets.
 
 ## [v0.0.15](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.15) - 2020/05/07
 ### Added
