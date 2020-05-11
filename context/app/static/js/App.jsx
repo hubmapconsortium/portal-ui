@@ -10,7 +10,7 @@ import Header from './Header';
 
 
 function App(props) {
-  const { flaskData = {} } = props;
+  const { flaskData } = props;
 
   return (
     <ThemeProvider theme={theme}>
@@ -30,7 +30,11 @@ App.propTypes = {
     flashed_messages: PropTypes.array,
     provenance: PropTypes.object,
     vitessce_conf: PropTypes.object,
-  }).isRequired,
+  }),
+};
+
+App.defaultProps = {
+  flaskData: {},
 };
 
 export default App;
