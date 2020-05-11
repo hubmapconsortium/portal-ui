@@ -4,7 +4,7 @@ import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
-import vitessce from 'vitessce';
+import { Vitessce } from 'vitessce';
 import ProvGraph from './ProvGraph';
 import ProvTable from './ProvTable';
 import { useStyles } from '../styles';
@@ -13,20 +13,23 @@ function TabPanel(props) {
   const {
     children, value, index, className, boxClasses,
   } = props;
-
   return (
-    <Typography
-      className={className}
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-    >
-      {value === index && <Box className={boxClasses} p={3}>{children}</Box>}
-    </Typography>
+    value === index
+      && (
+        <Typography
+          className={className}
+          component="div"
+          role="tabpanel"
+          hidden={value !== index}
+          id={`vertical-tabpanel-${index}`}
+          aria-labelledby={`vertical-tab-${index}`}
+        >
+          <Box className={boxClasses} p={3}>{children}</Box>
+        </Typography>
+      )
   );
 }
+
 
 function VisTabs(props) {
   const { provData, vitData } = props;
@@ -34,6 +37,8 @@ function VisTabs(props) {
   const [open, setOpen] = React.useState(0);
 
   const handleChange = (event, newValue) => {
+    // eslint-disable-next-line
+    console.log(event, newValue)
     setOpen(newValue);
   };
   return (
@@ -63,16 +68,13 @@ function VisTabs(props) {
           aria-controls="vertical-tabpanel-1"
         />
       </Tabs>
-      <TabPanel value={open} index={0}>
-        <span id="vit-grid">
-          { Object.keys(vitData).length > 0
-          && vitessce.validateAndRender(
-            vitData,
-            'vitessce',
-            500,
-            'light',
-          ) }
-        </span>
+      <TabPanel
+        value={open}
+        index={0}
+        className={classes.tabPanels}
+        boxClasses={classes.tabPanelBoxes}
+      >
+        {'name' in vitData ? <Vitessce config={vitData} rowHeight={200} theme="light" /> : null}
       </TabPanel>
       <TabPanel value={open} index={1}>
         <span id="prov-vis-react">
@@ -85,7 +87,10 @@ function VisTabs(props) {
         boxClasses={classes.tabPanelBoxes}
         index={2}
       >
-        <ProvTable provData={provData} typesToSplit={['Donor', 'Sample', 'Dataset']} />
+        <ProvTable
+          provData={provData}
+          typesToSplit={['Donor', 'Sample', 'Dataset']}
+        />
       </TabPanel>
     </div>
   );
