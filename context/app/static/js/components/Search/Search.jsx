@@ -123,8 +123,6 @@ const searchProps = {
   httpHeaders: {
     Authorization: `Bearer ${readCookie('nexus_token')}`,
   },
-  // Fields to search, and whether they have extra weight:
-  prefixQueryFields: ['description'],
   // Prefix for details links:
   detailsUrlPrefix: `/browse/${type || 'dataset'}/`,
   // Search results field which will be appended to detailsUrlPrefix:
