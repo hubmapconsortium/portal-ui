@@ -1,6 +1,8 @@
 # Changelog
 
 ## v0.0.16 - In progress
+### Added
+- Different search configs for different types.
 ### Changed
 - Fix VisTabs panel overflow
 - Fix NoticeAlert to only display when errors exist.
