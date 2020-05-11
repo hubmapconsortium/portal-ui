@@ -98,7 +98,7 @@ def search():
     if 'nexus_token' not in session:
         abort(403)
     return render_template(
-        'pages/search.html',
+        'pages/base_react.html',
         types=types,
         elasticsearch_endpoint=current_app.config['ELASTICSEARCH_ENDPOINT']
     )
