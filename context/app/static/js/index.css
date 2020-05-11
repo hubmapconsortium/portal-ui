@@ -6,9 +6,6 @@ body {
     left: 20px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
 }
 
 .navLink {
@@ -38,6 +35,12 @@ li {
 
 .main-content{
     flex-grow: 1;
+}
+
+#react-content{
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
 .container-lg {
