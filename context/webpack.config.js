@@ -17,6 +17,7 @@ const config = {
     filename: 'bundle.js',
     publicPath: resolve('../app/static/public'),
   },
+  devtool: 'nosources-source-map',
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg'],
   },
@@ -32,6 +33,11 @@ const config = {
           emitWarning: true,
           configFile: './.eslintrc.yml',
         },
+      },
+      {
+        test: /\.js$/,
+        use: ['source-map-loader'],
+        enforce: 'pre',
       },
       {
         test: /\.jsx?/,
