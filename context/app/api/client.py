@@ -34,18 +34,18 @@ IMAGING = {
     "name": 'CODEX',
     "layers": [],
     "staticLayout": [
-      { "component": 'layerController', "x": 0, "y": 0, "w": 3, "h": 6 },
+      { "component": 'layerController', "x": 0, "y": 0, "w": 4, "h": 6 },
       {
         "component": 'spatial',
         "props": {
           "view": {
-            "zoom": -3,
+            "zoom": -1,
             "target": [512, 512, 0],
           },
         },
-        "x": 3,
+        "x": 4,
         "y": 0,
-        "w": 9,
+        "w": 8,
         "h": 6,
       },
     ],
@@ -64,7 +64,7 @@ ASSAY_CONF_LOOKUP = {
         "base_conf": IMAGING,
         "files_conf": [
             # Hardcoded for now only one tile.
-            {"rel_path": "output/extract/expressions/ome-tiff/R003_X004_Y006.ome.tiff", "type": "RASTER"}
+            {"rel_path": "output/extract/expressions/ome-tiff/R002_X002_Y002.ome.tiff", "type": "RASTER"}
         ]
     }
 }
@@ -276,12 +276,16 @@ class ApiClient():
     
     def _build_image_layer_datauri(self, rel_path, uuid):
         image_layer = {}
-        image_layer['name'] = uuid
-        image_layer['type'] = 'RASTER'
-        image_layer['url'] = self._build_assets_url(rel_path, uuid)
-        image_layer['metadata'] = {}
+        schema = {}
+        schema['name'] = 'CODEX'
+        schema['type'] = 'ome-tiff'
+        schema['url'] = self._build_assets_url(rel_path, uuid)
+        schema['metadata'] = {}
+        schema['metadata']['omeTiffOffsetsUrl'] = self._build_assets_url('ppneorh7/R002_X002_Y002.offsets.json', uuid)
+        image_layer['images'] = [schema]
+        image_layer['schema_version'] = '0.0.1'
         return DataURI.make(
-            'text/plain', charset='us-ascii', base64=True, data=image_layer
+            'text/plain', charset='us-ascii', base64=True, data= json.dumps(image_layer)
         )
 
     def _build_layer_conf(self, file, uuid, assay_type):
@@ -297,7 +301,6 @@ class ApiClient():
         # Can there be more than one of these?  This seems like a fine default for now.
         assay_type = entity["data_types"][0]
         uuid = entity["uuid"]
-
         conf = ASSAY_CONF_LOOKUP[assay_type]["base_conf"]
         files = ASSAY_CONF_LOOKUP[assay_type]["files_conf"]
 
@@ -305,5 +308,4 @@ class ApiClient():
 
         conf["layers"] = layers
         conf["name"] = uuid
-
         return conf

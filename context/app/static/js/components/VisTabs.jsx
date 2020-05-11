@@ -8,6 +8,7 @@ import { Vitessce } from 'vitessce';
 import ProvGraph from './ProvGraph';
 import ProvTable from './ProvTable';
 import { useStyles } from '../styles';
+import 'vitessce/build-lib/es/production/static/css/index.css';
 
 function TabPanel(props) {
   const {
