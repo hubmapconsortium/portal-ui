@@ -1,7 +1,14 @@
 import React from 'react';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+
 
 function Home() {
-  return (<h1>Welcome to HuBMAP React</h1>);
+  return (
+    <Container>
+      <Typography component="h1" variant="h1">Welcome to HuBMAP</Typography>
+    </Container>
+  );
 }
 
 export default Home;
