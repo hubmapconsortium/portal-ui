@@ -9,12 +9,14 @@ import App from './App';
 import Footer from './Footer';
 import Header from './Header';
 
-if (window.location.href.search('/browse/') > -1) {
+const urlPath = window.location.pathname;
+
+if (urlPath.indexOf('/browse') > -1) {
   ReactDOM.render( // eslint-disable-next-line no-undef
     <App flaskData={flaskData} />,
     document.getElementById('react-content'),
   );
-} else if (window.location.pathname === '/') {
+} else if (urlPath === '/' || (urlPath.indexOf('/search') > -1)) {
   ReactDOM.render(
     <App />,
     document.getElementById('react-content'),
