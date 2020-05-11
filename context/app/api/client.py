@@ -18,7 +18,7 @@ SCATTERPLOT = {
         {
             "component": "scatterplot",
             "props": {
-                # Need to get a better name but for now, this is fine.
+                # Need to get a better name/way to handle this but for now, this is fine.
                 "mapping": "UMAP",
                 "view": {
                     "zoom": 4,
@@ -30,6 +30,27 @@ SCATTERPLOT = {
     ]
 }
 
+IMAGING = {
+    "name": 'CODEX',
+    "layers": [],
+    "staticLayout": [
+      { "component": 'layerController', "x": 0, "y": 0, "w": 3, "h": 6 },
+      {
+        "component": 'spatial',
+        "props": {
+          "view": {
+            "zoom": -3,
+            "target": [512, 512, 0],
+          },
+        },
+        "x": 3,
+        "y": 0,
+        "w": 9,
+        "h": 6,
+      },
+    ],
+}
+
 
 ASSAY_CONF_LOOKUP = {
     "salmon_rnaseq_10x": {
@@ -38,9 +59,17 @@ ASSAY_CONF_LOOKUP = {
             { "rel_path": "dim_reduced_clustered/dim_reduced_clustered.json", "type": "CELLS" }, 
             # { "rel_path": "cluster-marker-genes/cluster_marker_genes.json", "type": "FACTORS" }
         ]
+    },
+    "codex_cytokit": {
+        "base_conf": IMAGING,
+        "files_conf": [
+            # Hardcoded for now only one tile.
+            {"rel_path": "output/extract/expressions/ome-tiff/R003_X004_Y006.ome.tiff", "type": "RASTER"}
+        ]
     }
 }
 
+IMAGE_ASSAYS = ["codex_cytokit"]
 
 
 def _format_timestamp(ts):
@@ -242,19 +271,26 @@ class ApiClient():
             current_app.config['ASSETS_ENDPOINT'], 
             str(Path(uuid) / Path(rel_path)) 
         )
-        # token_param = urllib.parse.urlencode({"token": self.nexus_token})
-        return base_url
+        token_param = urllib.parse.urlencode({"token": self.nexus_token})
+        return base_url + '?' + token_param
+    
+    def _build_image_layer_datauri(self, rel_path, uuid):
+        image_layer = {}
+        image_layer['name'] = uuid
+        image_layer['type'] = 'RASTER'
+        image_layer['url'] = self._build_assets_url(rel_path, uuid)
+        image_layer['metadata'] = {}
+        return DataURI.make(
+            'text/plain', charset='us-ascii', base64=True, data=image_layer
+        )
 
     def _build_layer_conf(self, file, uuid, assay_type):
         return {
             "type": file["type"],
-            "url": self._build_assets_url(file["rel_path"], uuid),
+            "url": self._build_assets_url(file["rel_path"], uuid) 
+                if assay_type not in IMAGE_ASSAYS 
+                else self._build_image_layer_datauri(file["rel_path"], uuid),
             "name": file["type"].lower(),
-            "requestInit": {
-                "headers": {
-                    'Authorization': 'Bearer ' + self.nexus_token
-                }
-            }
         }
 
     def _build_vitessce_conf(self, entity):
@@ -268,6 +304,6 @@ class ApiClient():
         layers = [self._build_layer_conf(file, uuid, assay_type) for file in files]
 
         conf["layers"] = layers
-        conf["name"] = assay_type
+        conf["name"] = uuid
 
         return conf
