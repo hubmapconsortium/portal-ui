@@ -2,6 +2,8 @@ import React from 'react';
 import PortalSearch from '@hubmap/portal-search';
 import Container from '@material-ui/core/Container';
 import { readCookie } from '../../helpers/functions';
+import 'searchkit/theming/theme.scss';
+import './Search.css';
 
 const searchProps = {
   // Elasticsearch instance to hit with queries:
