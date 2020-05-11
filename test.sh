@@ -35,7 +35,7 @@ flake8 --exclude=$EXCLUDE \
 end flake8
 
 start pytest
-pytest -vv
+pytest -vv --ignore=node_modules
 end pytest
 
 start docker
