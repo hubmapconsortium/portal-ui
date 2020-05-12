@@ -4,10 +4,11 @@
 ### Added
 - Different search configs for different types.
 ### Changed
-- Fix VisTabs panel overflow
+- Fix VisTabs panel overflow.
 - Fix NoticeAlert to only display when errors exist.
 - Move assay type to subheader instead of inline in ProvTable.
 - Move ProvTable below title panel in Details.
+- Fix NoticeAlert conditional causing a '0' to be rendered.
 ### Removed
 - Removed old code to dump to nested tables.
 - Remove vitessce from VisTabs.
