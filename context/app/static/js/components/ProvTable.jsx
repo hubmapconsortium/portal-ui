@@ -29,7 +29,7 @@ function ProvTable(props) {
     <FlexContainer>
       <List>
         {types[0].map((item) => (
-          <ListItemLink key={item['hubmap:uuid']} href={`/browse/dataset/${item['hubmap:uuid']}`}>
+          <ListItemLink key={item['hubmap:uuid']} href={`/browse/donor/${item['hubmap:uuid']}`}>
             <ListItemText primary={`${item['prov:type']}: ${item['hubmap:displayDOI']}`} />
           </ListItemLink>
         ))}
@@ -39,7 +39,7 @@ function ProvTable(props) {
         {
           types[1]
             ? types[1].map((item) => (
-              <ListItemLink key={item['hubmap:uuid']} href={`/browse/dataset/${item['hubmap:uuid']}`}>
+              <ListItemLink key={item['hubmap:uuid']} href={`/browse/sample/${item['hubmap:uuid']}`}>
                 <ListItemText primary={`${item['prov:type']}: ${item['hubmap:displayDOI']}`} />
               </ListItemLink>
             ))
