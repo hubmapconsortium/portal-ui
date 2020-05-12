@@ -4,7 +4,7 @@
 ### Added
 - Different search configs for different types.
 ### Changed
-- Fix VisTabs panel overflow
+- Fix VisTabs panel overflow.
 - Fix NoticeAlert to only display when errors exist.
 - Moved react routes to own component.
 - Make Webpack handle source maps and sassfiles
@@ -12,8 +12,12 @@
 - Move Search and Home into App.
 - Upgrade webpack.
 - Pass api endpoints into App from flask.
+- Move assay type to subheader instead of inline in ProvTable.
+- Move ProvTable below title panel in Details.
+- Fix NoticeAlert conditional causing a '0' to be rendered.
 ### Removed
 - Removed old code to dump to nested tables.
+- Remove vitessce from VisTabs.
 - Remove unused fragments templates.
 - Remove unused stylesheets.
 
