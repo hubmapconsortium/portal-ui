@@ -13,7 +13,7 @@ function ListItemLink(props) {
 }
 
 function ProvTable(props) {
-  const { typeData } = props;
+  const { typeData, current } = props;
   return (
     <List subheader={(
       <ListSubheader component="div">
@@ -23,7 +23,7 @@ function ProvTable(props) {
     >
       <Divider />
       {typeData.map((item) => (
-        <ListItemLink key={item['hubmap:uuid']} href={`/browse/dataset/${item['hubmap:uuid']}`} >
+        <ListItemLink key={item['hubmap:uuid']} href={`/browse/dataset/${item['hubmap:uuid']}`} disabled={current === item['hubmap:uuid']}>
           <ListItemText primary={item['hubmap:displayDOI']} />
         </ListItemLink>
       ))}
