@@ -1,14 +1,4 @@
-const webpack = require('webpack');
-const dotenv = require('dotenv');
 const { resolve } = require('path');
-
-const fileEnv = dotenv.config({ path: './instance/app.conf' }).parsed;
-
-const envKeys = Object.keys(fileEnv).reduce((prev, next) => {
-  // eslint-disable-next-line no-param-reassign
-  prev[`process.env.${next}`] = JSON.stringify(fileEnv[next]);
-  return prev;
-}, {});
 
 const config = {
   entry: './app/static/js/index.jsx',
@@ -81,8 +71,5 @@ const config = {
       },
     ],
   },
-  plugins: [
-    new webpack.DefinePlugin(envKeys),
-  ],
 };
 module.exports = config;
