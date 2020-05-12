@@ -12,7 +12,7 @@ import requests
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
-## HARDCODED CODEX OFFSETS PATH AND TILE VALUES ##
+# Hardcoded CODEX offsets and tile path.
 CODEX_OFFSETS_PATH = 'ppneorh7'
 CODEX_TILE_PATH = 'output/extract/expressions/ome-tiff'
 # Hardocde just looking at a few tiles.
@@ -301,7 +301,9 @@ class ApiClient():
     def _build_image_layer_datauri(self, rel_path, uuid):
         image_layer = {}
         image_paths = [
-            str(rel_path).replace('#CODEX_TILE#', f'R{str(r).zfill(3)}_X{str(x).zfill(3)}_Y{str(y).zfill(3)}') for (r, x, y) in itertools.product(*[R_VALS, X_VALS, Y_VALS])
+            str(rel_path).replace(
+                '#CODEX_TILE#', f'R{str(r).zfill(3)}_X{str(x).zfill(3)}_Y{str(y).zfill(3)}'
+            ) for (r, x, y) in itertools.product(*[R_VALS, X_VALS, Y_VALS])
         ]
         image_layer['images'] = [self._build_image_schema(
             image_path, uuid) for image_path in image_paths]
