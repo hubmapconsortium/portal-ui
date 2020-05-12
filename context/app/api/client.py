@@ -1,4 +1,4 @@
-from collections import namedtuple
+'from collections import namedtuple
 import json
 from datetime import datetime
 import urllib
@@ -24,64 +24,64 @@ R_VALS = list(range(3))
 R_VALS.remove(0)
 
 SCATTERPLOT = {
-    "layers": [],
-    "name": "NAME",
-    "staticLayout": [
+    'layers': [],
+    'name': 'NAME',
+    'staticLayout': [
         {
-            "component": "scatterplot",
-            "props": {
+            'component': 'scatterplot',
+            'props': {
                 # Need to get a better name/way to handle this but for now, this is fine.
-                "mapping": "UMAP",
-                "view": {
-                    "zoom": 4,
-                    "target": [0, 0, 0]
+                'mapping': 'UMAP',
+                'view': {
+                    'zoom': 4,
+                    'target': [0, 0, 0]
                 }
             },
-            "x": 0, "y": 0, "w": 12, "h": 2
+            'x': 0, 'y': 0, 'w': 12, 'h': 2
         },
     ]
 }
 
 IMAGING = {
-    "name": 'NAME',
-    "layers": [],
-    "staticLayout": [
-        {"component": 'layerController', "x": 0, "y": 0, "w": 4, "h": 6},
+    'name': 'NAME',
+    'layers': [],
+    'staticLayout': [
+        {'component': 'layerController', 'x': 0, 'y': 0, 'w': 4, 'h': 6},
         {
-            "component": 'spatial',
-            "props": {
-                "view": {
-                    "zoom": -1,
-                    "target": [512, 512, 0],
+            'component': 'spatial',
+            'props': {
+                'view': {
+                    'zoom': -1,
+                    'target': [512, 512, 0],
                 },
             },
-            "x": 4,
-            "y": 0,
-            "w": 8,
-            "h": 6,
+            'x': 4,
+            'y': 0,
+            'w': 8,
+            'h': 6,
         },
     ],
 }
 
 
 ASSAY_CONF_LOOKUP = {
-    "salmon_rnaseq_10x": {
-        "base_conf": SCATTERPLOT,
-        "files_conf": [
-            {"rel_path": "dim_reduced_clustered/dim_reduced_clustered.json", "type": "CELLS"},
-            # { "rel_path": "cluster-marker-genes/cluster_marker_genes.json", "type": "FACTORS" }
+    'salmon_rnaseq_10x': {
+        'base_conf': SCATTERPLOT,
+        'files_conf': [
+            {'rel_path': 'dim_reduced_clustered/dim_reduced_clustered.json', 'type': 'CELLS'},
+            # { 'rel_path': 'cluster-marker-genes/cluster_marker_genes.json', 'type': 'FACTORS' }
         ]
     },
-    "codex_cytokit": {
-        "base_conf": IMAGING,
-        "files_conf": [
+    'codex_cytokit': {
+        'base_conf': IMAGING,
+        'files_conf': [
             # Hardcoded for now only one tile.
-            {"rel_path": Path(CODEX_TILE_PATH) / Path(f'#CODEX_TILE#.ome.tiff'), "type": "RASTER"}
+            {'rel_path': Path(CODEX_TILE_PATH) / Path(f'#CODEX_TILE#.ome.tiff'), 'type': 'RASTER'}
         ]
     }
 }
 
-IMAGE_ASSAYS = ["codex_cytokit"]
+IMAGE_ASSAYS = ['codex_cytokit']
 
 
 def _format_timestamp(ts):
@@ -239,7 +239,7 @@ class ApiClient():
         return provenance
 
     def get_vitessce_conf(self, entity):
-        if("files" not in entity or "data_types" not in entity):
+        if('files' not in entity or 'data_types' not in entity):
             return {}
         if self.is_mock:
             cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
@@ -248,31 +248,31 @@ class ApiClient():
             )
             token = 'fake-token'
             return {
-                "description": "DEMO",
-                "layers": [
+                'description': 'DEMO',
+                'layers': [
                     {
-                        "name": "cells",
-                        "type": "CELLS",
-                        "url": cellsUri,
-                        "requestInit": {
-                            "headers": {
+                        'name': 'cells',
+                        'type': 'CELLS',
+                        'url': cellsUri,
+                        'requestInit': {
+                            'headers': {
                                 'Authorization': 'Bearer ' + token
                             }
                         }
                     },
                 ],
-                "name": "Linnarsson",
-                "staticLayout": [
+                'name': 'Linnarsson',
+                'staticLayout': [
                     {
-                        "component": "scatterplot",
-                        "props": {
-                            "mapping": "UMAP",
-                            "view": {
-                                "zoom": 4,
-                                "target": [0, 0, 0]
+                        'component': 'scatterplot',
+                        'props': {
+                            'mapping': 'UMAP',
+                            'view': {
+                                'zoom': 4,
+                                'target': [0, 0, 0]
                             }
                         },
-                        "x": 0, "y": 0, "w": 12, "h": 2
+                        'x': 0, 'y': 0, 'w': 12, 'h': 2
                     },
                 ]
             }
@@ -284,7 +284,7 @@ class ApiClient():
             current_app.config['ASSETS_ENDPOINT'],
             str(Path(uuid) / Path(rel_path))
         )
-        token_param = urllib.parse.urlencode({"token": self.nexus_token})
+        token_param = urllib.parse.urlencode({'token': self.nexus_token})
         return base_url + '?' + token_param
 
     def _build_image_schema(self, rel_path, uuid):
@@ -314,22 +314,23 @@ class ApiClient():
 
     def _build_layer_conf(self, file, uuid, assay_type):
         return {
-            "type": file["type"],
-            "url": self._build_assets_url(file["rel_path"], uuid)
+            'type': file['type'],
+            'url': self._build_assets_url(file['rel_path'], uuid)
             if assay_type not in IMAGE_ASSAYS
-            else self._build_image_layer_datauri(file["rel_path"], uuid),
-            "name": file["type"].lower(),
+            else self._build_image_layer_datauri(file['rel_path'], uuid),
+            'name': file['type'].lower(),
         }
 
     def _build_vitessce_conf(self, entity):
         # Can there be more than one of these?  This seems like a fine default for now.
-        assay_type = entity["data_types"][0]
-        uuid = entity["uuid"]
-        conf = ASSAY_CONF_LOOKUP[assay_type]["base_conf"]
-        files = ASSAY_CONF_LOOKUP[assay_type]["files_conf"]
+        assay_type = entity['data_types'][0]
+        uuid = entity['uuid']
+        conf = ASSAY_CONF_LOOKUP[assay_type]['base_conf']
+        files = ASSAY_CONF_LOOKUP[assay_type]['files_conf']
         layers = [self._build_layer_conf(file, uuid, assay_type) for file in files]
 
-        conf["layers"] = layers
-        conf["name"] = uuid
+        conf['layers'] = layers
+        conf['name'] = uuid
         print(entity)
         return conf
+'
