@@ -7,10 +7,11 @@
 - Fix VisTabs panel overflow
 - Fix NoticeAlert to only display when errors exist.
 - Moved react routes to own component.
-- Make Webpack handle source maps, sass files and environment variables.
+- Make Webpack handle source maps and sassfiles
 - Move unpkg dependencies to node_modules.
 - Move Search and Home into App.
 - Upgrade webpack.
+- Pass api endpoints into App from flask.
 ### Removed
 - Removed old code to dump to nested tables.
 - Remove unused fragments templates.
