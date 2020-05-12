@@ -6,9 +6,12 @@
 ### Changed
 - Fix VisTabs panel overflow.
 - Fix NoticeAlert to only display when errors exist.
+- Move assay type to subheader instead of inline in ProvTable.
+- Move ProvTable below title panel in Details.
 - Fix NoticeAlert conditional causing a '0' to be rendered.
 ### Removed
 - Removed old code to dump to nested tables.
+- Remove vitessce from VisTabs.
 
 ## [v0.0.15](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.15) - 2020/05/07
 ### Added
