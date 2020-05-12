@@ -14,7 +14,11 @@
   <body>
     <div id="react-content"></div>
     <section>
-      {% block content %}{% endblock %}
+      {% block content %}
+      <script>
+        const flaskData = {{ flask_data | tojson }};
+      </script>
+      {% endblock %}
     </section>
 
     {% block extra_scripts %}
