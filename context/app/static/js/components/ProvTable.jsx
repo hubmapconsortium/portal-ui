@@ -11,7 +11,7 @@ const FlexContainer = styled.div`
 `;
 
 function ProvTable(props) {
-  const { provData, typesToSplit } = props;
+  const { provData, assayMetaData, typesToSplit } = props;
 
   const types = Object.values(provData.entity).reduce((acc, item) => {
     acc[typesToSplit.indexOf(item['prov:type'])].push(item);
@@ -24,7 +24,7 @@ function ProvTable(props) {
         type && type.length
           ? (
             <React.Fragment key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
-              <ProvTypesList data={type} />{
+              <ProvTypesList typeData={type} current={assayMetaData.uuid} />{
                 // eslint-disable-next-line react/no-array-index-key
                 i < (types.length - 1) && <Divider key={`provenance-table-divider-${i}`} orientation="vertical" flexItem />
                 }
