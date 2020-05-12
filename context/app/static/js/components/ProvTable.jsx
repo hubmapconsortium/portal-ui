@@ -43,7 +43,11 @@ function ProvTable(props) {
                 <ListItemText primary={`${item['prov:type']}: ${item['hubmap:displayDOI']}`} />
               </ListItemLink>
             ))
-            : 'TODO'
+            : (
+              <ListItemLink href="/search/TODO">
+                <ListItemText primary="Related Samples" />
+              </ListItemLink>
+            )
         }
       </List>
       <Divider orientation="vertical" flexItem />
@@ -55,7 +59,11 @@ function ProvTable(props) {
                 <ListItemText primary={`${item['prov:type']}: ${item['hubmap:displayDOI']}`} />
               </ListItemLink>
             ))
-            : 'TODO'
+            : (
+              <ListItemLink href="/search/TODO">
+                <ListItemText primary="Related Datasets" />
+              </ListItemLink>
+            )
         }
       </List>
     </FlexContainer>
