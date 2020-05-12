@@ -48,39 +48,30 @@ function VisTabs(props) {
         indicatorColor="secondary"
       >
         <Tab
-          label="Visualizations"
+          label="Table"
           id="vertical-tab-0"
           aria-controls="vertical-tabpanel-0"
         />
         <Tab
-          label="Provenance Chart"
-          id="vertical-tab-1"
-          aria-controls="vertical-tabpanel-1"
-        />
-        <Tab
-          label="Provenance Table"
+          label="Graph"
           id="vertical-tab-1"
           aria-controls="vertical-tabpanel-1"
         />
       </Tabs>
-      <TabPanel value={open} className={classes.tabPanels} index={0}>
-        <span id="vit-grid">
-          Vit Place Holder
-        </span>
+      <TabPanel
+        value={open}
+        className={classes.tabPanels}
+        boxClasses={classes.tabPanelBoxes}
+        index={0}
+      >
+        <ProvTable provData={provData} typesToSplit={['Donor', 'Sample', 'Dataset']} />
       </TabPanel>
       <TabPanel value={open} className={classes.tabPanels} index={1}>
         <span id="prov-vis-react">
           <ProvGraph provData={provData} />
         </span>
       </TabPanel>
-      <TabPanel
-        value={open}
-        className={classes.tabPanels}
-        boxClasses={classes.tabPanelBoxes}
-        index={2}
-      >
-        <ProvTable provData={provData} typesToSplit={['Donor', 'Sample', 'Dataset']} />
-      </TabPanel>
+
     </div>
   );
 }
