@@ -11,14 +11,13 @@ import Header from './Header';
 
 const urlPath = window.location.pathname;
 
-if (urlPath.indexOf('/browse') > -1) {
+const isRoute = (route) => urlPath.startsWith(route);
+
+const availableRoutes = ['/browse', '/search'];
+
+if (urlPath === '/' || availableRoutes.some(isRoute)) {
   ReactDOM.render( // eslint-disable-next-line no-undef
     <App flaskData={flaskData} />,
-    document.getElementById('react-content'),
-  );
-} else if (urlPath === '/' || (urlPath.indexOf('/search') > -1)) {
-  ReactDOM.render(
-    <App />,
     document.getElementById('react-content'),
   );
 } else { // temp solution to integrate react header and footer
