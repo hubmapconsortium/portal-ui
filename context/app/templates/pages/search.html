@@ -21,6 +21,26 @@
       {
         type: 'RefinementListFilter',
         props: {
+          id: 'organ',
+          title: 'Organ',
+          field: 'origin_sample.organ.keyword',
+          operator: 'OR',
+          size: 5
+        }
+      },
+      {
+        type: 'RefinementListFilter',
+        props: {
+          id: 'specimen_type',
+          title: 'specimen_type',
+          field: 'specimen_type.keyword',
+          operator: 'OR',
+          size: 5
+        }
+      },
+      {
+        type: 'RefinementListFilter',
+        props: {
           id: 'created_by_user_displayname',
           title: 'Creator',
           field: 'created_by_user_displayname.keyword',
