@@ -1,4 +1,4 @@
-'from collections import namedtuple
+from collections import namedtuple
 import json
 from datetime import datetime
 import urllib
@@ -333,4 +333,3 @@ class ApiClient():
         conf['name'] = uuid
         print(entity)
         return conf
-'
