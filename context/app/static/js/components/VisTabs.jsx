@@ -33,7 +33,7 @@ function TabPanel(props) {
 
 
 function VisTabs(props) {
-  const { provData, vitData } = props;
+  const { provData, assayMetadata, vitData } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(0);
 
@@ -52,45 +52,43 @@ function VisTabs(props) {
         indicatorColor="secondary"
       >
         <Tab
-          label="Visualizations"
+          label="Vitessce"
           id="vertical-tab-0"
           aria-controls="vertical-tabpanel-0"
         />
         <Tab
-          label="Provenance Chart"
+          label="Table"
           id="vertical-tab-1"
           aria-controls="vertical-tabpanel-1"
         />
         <Tab
-          label="Provenance Table"
-          id="vertical-tab-1"
-          aria-controls="vertical-tabpanel-1"
+          label="Graph"
+          id="vertical-tab-2"
+          aria-controls="vertical-tabpanel-2"
         />
       </Tabs>
       <TabPanel
         value={open}
-        index={0}
         className={classes.tabPanels}
         boxClasses={classes.tabPanelBoxes}
+        index={0}
       >
-        {'name' in vitData ? <Vitessce config={vitData} rowHeight={200} theme="light" /> : null}
-      </TabPanel>
-      <TabPanel value={open} index={1}>
-        <span id="prov-vis-react">
-          <ProvGraph provData={provData} />
-        </span>
+        <Vitessce rowHeight={100} config={vitData} theme="light" />
       </TabPanel>
       <TabPanel
         value={open}
         className={classes.tabPanels}
         boxClasses={classes.tabPanelBoxes}
-        index={2}
+        index={1}
       >
-        <ProvTable
-          provData={provData}
-          typesToSplit={['Donor', 'Sample', 'Dataset']}
-        />
+        <ProvTable provData={provData} assayMetadata={assayMetadata} typesToSplit={['Donor', 'Sample', 'Dataset']} />
       </TabPanel>
+      <TabPanel value={open} className={classes.tabPanels} index={2}>
+        <span id="prov-vis-react">
+          <ProvGraph provData={provData} />
+        </span>
+      </TabPanel>
+
     </div>
   );
 }

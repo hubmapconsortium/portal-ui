@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -12,17 +13,21 @@ import Header from './Header';
 
 function App(props) {
   const { flaskData } = props;
+  const {
+    flashed_messages, entity, provenance, vitessce_conf,
+  } = flaskData;
 
   const getComponentView = () => {
     // Temp routing solution for showing the correct react component.
     if (window.location.pathname.indexOf('browse/') > -1) {
       return (
         <span>
-          <NoticeAlert errors={flaskData.flashed_messages} />
+          {flashed_messages && flashed_messages.length
+            ? <NoticeAlert errors={flashed_messages} /> : null}
           <Details
-            assayMetaData={flaskData.entity}
-            provData={flaskData.provenance}
-            vitData={flaskData.vitessce_conf}
+            assayMetadata={entity}
+            provData={provenance}
+            vitData={vitessce_conf}
           />
         </span>
       );

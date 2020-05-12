@@ -12,7 +12,7 @@ import VisTabs from './VisTabs';
 import RecursiveList from './RecursiveList';
 
 function Details(props) {
-  const { assayMetaData, provData, vitData } = props;
+  const { assayMetadata, provData, vitData } = props;
   const generateListTemplate = (header, description) => (
     <li>
       <Box mb={2} mt={0}>
@@ -27,42 +27,41 @@ function Details(props) {
       {/* eslint-disable-next-line react/jsx-boolean-value */}
       <ExpansionPanel defaultExpanded={true}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="Details Panel" id="details-header">
-          <Box className="expansion-header">{assayMetaData.description || assayMetaData.display_doi}</Box>
+          <Box className="expansion-header">{assayMetadata.description || assayMetadata.display_doi}</Box>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Grid container spacing={3} justify="flex-start" direction="row" alignItems="flex-start">
             <Grid item xs>
               <ul>
-                {generateListTemplate('Contributor', assayMetaData.created_by_user_displayname)}
-                {generateListTemplate('Group', assayMetaData.group_name)}
-                {generateListTemplate('Type', assayMetaData.entity_type)}
+                {generateListTemplate('Contributor', assayMetadata.created_by_user_displayname)}
+                {generateListTemplate('Group', assayMetadata.group_name)}
+                {generateListTemplate('Type', assayMetadata.entity_type)}
               </ul>
             </Grid>
             <Grid item xs>
               <ul>
-                {generateListTemplate('Assay ID', assayMetaData.display_doi)}
-                {generateListTemplate('Created', new Date(assayMetaData.create_timestamp).toDateString())}
-                {generateListTemplate('Modified', new Date(assayMetaData.last_modified_timestamp).toDateString()) }
+                {generateListTemplate('Assay ID', assayMetadata.display_doi)}
+                {generateListTemplate('Created', new Date(assayMetadata.create_timestamp).toDateString())}
+                {generateListTemplate('Modified', new Date(assayMetadata.last_modified_timestamp).toDateString()) }
               </ul>
             </Grid>
           </Grid>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      <RecursiveList property={assayMetaData} propertyName="Root Property" isRoot />
-      <Box mt={2}>
+      <Box mt={2} mb={2}>
         <Paper>
-          <VisTabs provData={provData} vitData={vitData} />
+          <VisTabs provData={provData} assayMetadata={assayMetadata} vitData={vitData} />
         </Paper>
       </Box>
+      <RecursiveList property={assayMetadata} propertyName="Root Property" isRoot />
     </Container>
   );
 }
 
 Details.propTypes = {
   /* eslint-disable react/forbid-prop-types */
-  assayMetaData: PropTypes.object.isRequired,
+  assayMetadata: PropTypes.object.isRequired,
   provData: PropTypes.object.isRequired,
-  vitData: PropTypes.object.isRequired,
   /* eslint-enable react/forbid-prop-types */
 };
 

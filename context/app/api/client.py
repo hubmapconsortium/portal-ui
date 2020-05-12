@@ -331,5 +331,4 @@ class ApiClient():
 
         conf['layers'] = layers
         conf['name'] = uuid
-        print(entity)
         return conf

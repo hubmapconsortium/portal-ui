@@ -1,6 +1,19 @@
 # Changelog
 
-## v0.0.14 - In progress
+## v0.0.16 - In progress
+### Added
+- Different search configs for different types.
+### Changed
+- Fix VisTabs panel overflow.
+- Fix NoticeAlert to only display when errors exist.
+- Move assay type to subheader instead of inline in ProvTable.
+- Move ProvTable below title panel in Details.
+- Fix NoticeAlert conditional causing a '0' to be rendered.
+### Removed
+- Removed old code to dump to nested tables.
+- Remove vitessce from VisTabs.
+
+## [v0.0.15](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.15) - 2020/05/07
 ### Added
 - Redirect to the correct entity type, if we've landed on the wrong one.
 - Limit Flask session to just one hour to avoid problems with Globus tokens expiring.
@@ -17,7 +30,9 @@
 - Remove unused templates.
 - Fix data in details top title panel.
 - Remove breadcrumbs links from details top title panel.
-- Moved files needed to build static inside context
+- Moved files needed to build static inside context.
+
+## v0.0.14 - Mistake
 
 ## [v0.0.13](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.13) - 2020/05/03
 ### Added
