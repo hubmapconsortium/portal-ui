@@ -19,7 +19,7 @@ function Routes(props) {
         {flashed_messages && flashed_messages.length
           ? <NoticeAlert errors={flashed_messages} /> : null}
         <Details
-          assayMetaData={entity}
+          assayMetadata={entity}
           provData={provenance}
           vitData={vitessce_conf}
         />
