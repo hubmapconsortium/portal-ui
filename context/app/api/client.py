@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 import urllib
 from pathlib import Path
+import itertools
 
 from flask import abort, current_app
 
@@ -10,6 +11,17 @@ from datauri import DataURI
 import requests
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
+
+## HARDCODED CODEX OFFSETS PATH AND TILE VALUES ##
+CODEX_OFFSETS_PATH = 'ppneorh7'
+CODEX_TILE_PATH = 'output/extract/expressions/ome-tiff'
+# Hardocde just looking at a few tiles.
+X_VALS = list(range(3))
+X_VALS.remove(0)
+Y_VALS = list(range(3))
+Y_VALS.remove(0)
+R_VALS = list(range(3))
+R_VALS.remove(0)
 
 SCATTERPLOT = {
     "layers": [],
@@ -31,7 +43,7 @@ SCATTERPLOT = {
 }
 
 IMAGING = {
-    "name": 'CODEX',
+    "name": 'NAME',
     "layers": [],
     "staticLayout": [
       { "component": 'layerController', "x": 0, "y": 0, "w": 4, "h": 6 },
@@ -64,7 +76,7 @@ ASSAY_CONF_LOOKUP = {
         "base_conf": IMAGING,
         "files_conf": [
             # Hardcoded for now only one tile.
-            {"rel_path": "output/extract/expressions/ome-tiff/R002_X002_Y002.ome.tiff", "type": "RASTER"}
+            {"rel_path": Path(CODEX_TILE_PATH) / Path(f'#CODEX_TILE#.ome.tiff'), "type": "RASTER"}
         ]
     }
 }
@@ -273,16 +285,23 @@ class ApiClient():
         )
         token_param = urllib.parse.urlencode({"token": self.nexus_token})
         return base_url + '?' + token_param
-    
-    def _build_image_layer_datauri(self, rel_path, uuid):
-        image_layer = {}
+
+    def _build_image_schema(self, rel_path, uuid):
         schema = {}
-        schema['name'] = 'CODEX'
+        schema['name'] = Path(rel_path).name
         schema['type'] = 'ome-tiff'
         schema['url'] = self._build_assets_url(rel_path, uuid)
         schema['metadata'] = {}
-        schema['metadata']['omeTiffOffsetsUrl'] = self._build_assets_url('ppneorh7/R002_X002_Y002.offsets.json', uuid)
-        image_layer['images'] = [schema]
+        offsets_path = Path(CODEX_OFFSETS_PATH) / Path(Path(rel_path).name.replace('ome.tiff', 'offsets.json'))
+        schema['metadata']['omeTiffOffsetsUrl'] = self._build_assets_url(str(offsets_path), uuid)
+        return schema
+    
+    def _build_image_layer_datauri(self, rel_path, uuid):
+        image_layer = {}
+        image_paths = [
+            str(rel_path).replace('#CODEX_TILE#', f'R{str(r).zfill(3)}_X{str(x).zfill(3)}_Y{str(y).zfill(3)}') for (r, x, y) in itertools.product(*[R_VALS, X_VALS, Y_VALS])
+        ]
+        image_layer['images'] = [self._build_image_schema(image_path, uuid) for image_path in image_paths]
         image_layer['schema_version'] = '0.0.1'
         return DataURI.make(
             'text/plain', charset='us-ascii', base64=True, data= json.dumps(image_layer)
@@ -303,9 +322,9 @@ class ApiClient():
         uuid = entity["uuid"]
         conf = ASSAY_CONF_LOOKUP[assay_type]["base_conf"]
         files = ASSAY_CONF_LOOKUP[assay_type]["files_conf"]
-
         layers = [self._build_layer_conf(file, uuid, assay_type) for file in files]
 
         conf["layers"] = layers
         conf["name"] = uuid
+        print(entity)
         return conf
