@@ -28,7 +28,7 @@ function TabPanel(props) {
 }
 
 function VisTabs(props) {
-  const { provData, assayMetaData } = props;
+  const { provData, assayMetadata } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(0);
 
@@ -64,7 +64,7 @@ function VisTabs(props) {
         boxClasses={classes.tabPanelBoxes}
         index={0}
       >
-        <ProvTable provData={provData} assayMetaData={assayMetaData} typesToSplit={['Donor', 'Sample', 'Dataset']} />
+        <ProvTable provData={provData} assayMetadata={assayMetadata} typesToSplit={['Donor', 'Sample', 'Dataset']} />
       </TabPanel>
       <TabPanel value={open} className={classes.tabPanels} index={1}>
         <span id="prov-vis-react">

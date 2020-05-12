@@ -24,7 +24,7 @@ function App(props) {
         <span>
           {flashed_messages && flashed_messages.length && <NoticeAlert errors={flashed_messages} />}
           <Details
-            assayMetaData={entity}
+            assayMetadata={entity}
             provData={provenance}
             vitData={vitessce_conf}
           />
