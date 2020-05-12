@@ -5,6 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Divider from '@material-ui/core/Divider';
+import styled from 'styled-components';
 
 
 function ListItemLink(props) {
@@ -12,13 +13,17 @@ function ListItemLink(props) {
   return <ListItem button component="a" {...props} />;
 }
 
+const CenteredListSubheader = styled(ListSubheader)`
+  text-align: center;
+`;
+
 function ProvTable(props) {
   const { typeData, current } = props;
   return (
     <List subheader={(
-      <ListSubheader component="div">
+      <CenteredListSubheader component="div">
         {typeData[0]['prov:type']}
-      </ListSubheader>
+      </CenteredListSubheader>
     )}
     >
       <Divider />
