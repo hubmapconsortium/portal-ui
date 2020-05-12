@@ -13,8 +13,6 @@ from .validation_utils import for_each_validation_error
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
 
-core_props = {'endpoints': {'elasticsearch_endpoint':current_app.config['ELASTICSEARCH_ENDPOINT']}}
-
 def _get_client():
     try:
         is_mock = current_app.config['IS_MOCK']
@@ -32,6 +30,7 @@ def _get_client():
 
 @blueprint.route('/')
 def index():
+    core_props = {'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']}}
     return render_template('pages/base_react.html', types=types, flask_data=core_props)
 
 
@@ -67,16 +66,18 @@ def details(type, uuid):
                                  'traceback': error.__str__()[0:1500]})
 
     template = f'pages/base_react.html'
-    props = core_props.update({
+    core_props = {'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']}}
+    core_props.update({
         'flashed_messages': flashed_messages,
         'entity': entity,
         'provenance': provenance,
         'vitessce_conf': client.get_vitessce_conf(),
     })
     return render_template(
-        template, type=type, uuid=uuid,
-        title_text='TODO: title_text',
-        flask_data=props
+        template, 
+        type=type, 
+        uuid=uuid,
+        flask_data=core_props
     )
 
 
@@ -96,10 +97,11 @@ def details_ext(type, uuid, ext):
 
 @blueprint.route('/search')
 def search():
+    core_props = {'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']}}
     if 'nexus_token' not in session:
         abort(403)
     return render_template(
         'pages/base_react.html',
         types=types,
-        flask_data= core_props,
+        flask_data=core_props
     )
