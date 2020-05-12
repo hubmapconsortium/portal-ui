@@ -38,8 +38,6 @@ function VisTabs(props) {
   const [open, setOpen] = React.useState(0);
 
   const handleChange = (event, newValue) => {
-    // eslint-disable-next-line
-    console.log(event, newValue)
     setOpen(newValue);
   };
   return (
