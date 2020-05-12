@@ -13,6 +13,7 @@ from .validation_utils import for_each_validation_error
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
 
+
 def _get_client():
     try:
         is_mock = current_app.config['IS_MOCK']
@@ -74,8 +75,8 @@ def details(type, uuid):
         'vitessce_conf': client.get_vitessce_conf(),
     })
     return render_template(
-        template, 
-        type=type, 
+        template,
+        type=type,
         uuid=uuid,
         flask_data=core_props
     )
