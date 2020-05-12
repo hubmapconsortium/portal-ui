@@ -22,7 +22,8 @@ function App(props) {
     if (window.location.pathname.indexOf('browse/') > -1) {
       return (
         <span>
-          {flashed_messages && flashed_messages.length && <NoticeAlert errors={flashed_messages} />}
+          {flashed_messages && flashed_messages.length
+            ? <NoticeAlert errors={flashed_messages} /> : null}
           <Details
             assayMetadata={entity}
             provData={provenance}
