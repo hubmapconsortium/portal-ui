@@ -11,7 +11,6 @@ import Header from './Header';
 
 function App(props) {
   const { flaskData } = props;
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -30,6 +29,7 @@ App.propTypes = {
     flashed_messages: PropTypes.array,
     provenance: PropTypes.object,
     vitessce_conf: PropTypes.object,
+    endpoints: PropTypes.object,
   }),
 };
 
