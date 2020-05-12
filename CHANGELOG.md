@@ -6,6 +6,7 @@
 ### Changed
 - Fix VisTabs panel overflow
 - Fix NoticeAlert to only display when errors exist.
+- Move assay type to subheader instead of inline in ProvTable.
 ### Removed
 - Removed old code to dump to nested tables.
 
