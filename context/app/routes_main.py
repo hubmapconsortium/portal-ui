@@ -13,6 +13,7 @@ from .validation_utils import for_each_validation_error
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
 
+core_props = {'endpoints': {'elasticsearch_endpoint':current_app.config['ELASTICSEARCH_ENDPOINT']}}
 
 def _get_client():
     try:
@@ -31,7 +32,7 @@ def _get_client():
 
 @blueprint.route('/')
 def index():
-    return render_template('pages/base_react.html', types=types)
+    return render_template('pages/base_react.html', types=types, flask_data=core_props)
 
 
 @blueprint.route('/browse/<type>/<uuid>')
@@ -65,13 +66,13 @@ def details(type, uuid):
                                  'issue_url': error.issue_url,
                                  'traceback': error.__str__()[0:1500]})
 
-    template = f'pages/details_react.html'
-    props = {
+    template = f'pages/base_react.html'
+    props = core_props.update({
         'flashed_messages': flashed_messages,
         'entity': entity,
         'provenance': provenance,
         'vitessce_conf': client.get_vitessce_conf(),
-    }
+    })
     return render_template(
         template, type=type, uuid=uuid,
         title_text='TODO: title_text',
@@ -100,5 +101,5 @@ def search():
     return render_template(
         'pages/base_react.html',
         types=types,
-        elasticsearch_endpoint=current_app.config['ELASTICSEARCH_ENDPOINT']
+        flask_data= core_props,
     )
