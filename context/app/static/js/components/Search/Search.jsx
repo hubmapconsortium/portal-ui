@@ -114,8 +114,6 @@ const resultFieldsByType = {
 const type = (new URL(document.location).searchParams.get('entity_type[0]') || '').toLowerCase();
 
 const searchProps = {
-  // Elasticsearch instance to hit with queries:
-  apiUrl: process.env.ELASTICSEARCH_ENDPOINT,
   // The default behavior is to add a "_search" path.
   // We don't want that.
   searchUrlPath: '',
@@ -137,11 +135,13 @@ const searchProps = {
   filters: filtersByType[type],
 };
 
-function Search() {
+function Search(props) {
+  const { esEndpoint } = props;
+  const allProps = Object.assign(searchProps, { apiUrl: esEndpoint });
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Container maxWidth="lg">
-      <PortalSearch.Search {...searchProps} />
+      <PortalSearch.Search {...allProps} />
     </Container>
   );
 /* eslint-enable react/jsx-props-no-spreading */
