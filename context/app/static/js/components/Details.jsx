@@ -48,12 +48,12 @@ function Details(props) {
           </Grid>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      <RecursiveList property={assayMetaData} propertyName="Root Property" isRoot />
-      <Box mt={2}>
+      <Box mt={2} mb={2}>
         <Paper>
           <VisTabs provData={provData} vitData={vitData} />
         </Paper>
       </Box>
+      <RecursiveList property={assayMetaData} propertyName="Root Property" isRoot />
     </Container>
   );
 }
