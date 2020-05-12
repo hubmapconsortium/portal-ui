@@ -12,7 +12,7 @@ import VisTabs from './VisTabs';
 import RecursiveList from './RecursiveList';
 
 function Details(props) {
-  const { assayMetaData, provData, vitData } = props;
+  const { assayMetaData, provData } = props;
   const generateListTemplate = (header, description) => (
     <li>
       <Box mb={2} mt={0}>
@@ -50,7 +50,7 @@ function Details(props) {
       </ExpansionPanel>
       <Box mt={2} mb={2}>
         <Paper>
-          <VisTabs provData={provData} vitData={vitData} />
+          <VisTabs provData={provData} assayMetaData={assayMetaData} />
         </Paper>
       </Box>
       <RecursiveList property={assayMetaData} propertyName="Root Property" isRoot />
@@ -62,7 +62,6 @@ Details.propTypes = {
   /* eslint-disable react/forbid-prop-types */
   assayMetaData: PropTypes.object.isRequired,
   provData: PropTypes.object.isRequired,
-  vitData: PropTypes.object.isRequired,
   /* eslint-enable react/forbid-prop-types */
 };
 
