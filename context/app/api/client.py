@@ -239,7 +239,8 @@ class ApiClient():
         return provenance
 
     def get_vitessce_conf(self, entity):
-        if('files' not in entity or 'data_types' not in entity):
+        if ('files' not in entity or 'data_types' not in entity):
+            # Would a default no-viz config be better?
             return {}
         if self.is_mock:
             cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
@@ -305,8 +306,9 @@ class ApiClient():
                 '#CODEX_TILE#', f'R{str(r).zfill(3)}_X{str(x).zfill(3)}_Y{str(y).zfill(3)}'
             ) for (r, x, y) in itertools.product(*[R_VALS, X_VALS, Y_VALS])
         ]
-        image_layer['images'] = [self._build_image_schema(
-            image_path, uuid) for image_path in image_paths]
+        image_layer['images'] = [
+            self._build_image_schema(image_path, uuid) for image_path in image_paths
+        ]
         image_layer['schema_version'] = '0.0.1'
         return DataURI.make(
             'text/plain', charset='us-ascii', base64=True, data=json.dumps(image_layer)
@@ -316,8 +318,8 @@ class ApiClient():
         return {
             'type': file['type'],
             'url': self._build_assets_url(file['rel_path'], uuid)
-            if assay_type not in IMAGE_ASSAYS
-            else self._build_image_layer_datauri(file['rel_path'], uuid),
+                if assay_type not in IMAGE_ASSAYS
+                else self._build_image_layer_datauri(file['rel_path'], uuid),
             'name': file['type'].lower(),
         }
 
