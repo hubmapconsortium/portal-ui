@@ -19,6 +19,7 @@
 - Move ProvTable below title panel in Details.
 - Fix NoticeAlert conditional causing a '0' to be rendered.
 ### Removed
+- "Layout" from Search... just added border we didn't need.
 - Removed old code to dump to nested tables.
 - Remove vitessce from VisTabs.
 - Remove unused fragments templates.
