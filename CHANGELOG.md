@@ -2,10 +2,12 @@
 
 ## v0.0.16 - In progress
 ### Added
+- Hide entity_type facet.
 - Different search configs for different types.
 - Add data visualization in Vitessce for scRNASEQ and CODEX.
 - Link to derived Samples and Datasets.
 ### Changed
+- Use the code that had been in portal-search directly.
 - Fix VisTabs panel overflow.
 - Fix NoticeAlert to only display when errors exist.
 - Moved react routes to own component.
