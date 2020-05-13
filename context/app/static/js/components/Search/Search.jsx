@@ -1,5 +1,6 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 import PortalSearch from '../PortalSearch/PortalSearch';
 import { readCookie } from '../../helpers/functions';
 import 'searchkit/theming/theme.scss';
@@ -121,7 +122,8 @@ const resultFieldsByType = {
   sample: ['description', 'status', 'entity_type'],
   dataset: ['description', 'status', 'entity_type'],
 };
-const type = (new URL(document.location).searchParams.get('entity_type[0]') || '').toLowerCase();
+const typeUC = (new URL(document.location).searchParams.get('entity_type[0]') || '');
+const type = typeUC.toLowerCase();
 
 const searchProps = {
   // The default behavior is to add a "_search" path.
@@ -152,6 +154,7 @@ function Search(props) {
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Container maxWidth="lg">
+      <Typography component="h1" variant="h1">{typeUC}s</Typography>
       <PortalSearch {...allProps} />
     </Container>
   );
