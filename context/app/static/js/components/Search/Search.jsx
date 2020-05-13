@@ -147,6 +147,7 @@ const searchProps = {
       defaultOption: false,
     },
   ],
+  hiddenFilterIds: ['entity_type'],
 };
 
 function Search(props) {
