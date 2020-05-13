@@ -2,6 +2,7 @@
 
 ## v0.0.16 - In progress
 ### Added
+- Hide entity_type facet.
 - Different search configs for different types.
 ### Changed
 - Use the code that had been in portal-search directly.

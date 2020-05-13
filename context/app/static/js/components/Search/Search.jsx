@@ -133,6 +133,7 @@ const searchProps = {
   // "type" should be one of the filters described here:
   // http://docs.searchkit.co/stable/components/navigation/
   filters: filtersByType[type],
+  hiddenFilterIds: ['entity_type'],
 };
 
 function Search(props) {
