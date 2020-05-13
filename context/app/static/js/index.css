@@ -40,6 +40,12 @@ li {
     flex-grow: 1;
 }
 
+#react-content{
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
 .container-lg {
     max-width: 1240px;
 }
