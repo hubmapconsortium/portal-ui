@@ -28,7 +28,7 @@ function TabPanel(props) {
 }
 
 function VisTabs(props) {
-  const { provData } = props;
+  const { uuid, provData } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(0);
 
@@ -79,13 +79,14 @@ function VisTabs(props) {
         boxClasses={classes.tabPanelBoxes}
         index={2}
       >
-        <ProvTable provData={provData} typesToSplit={['Donor', 'Sample', 'Dataset']} />
+        <ProvTable uuid={uuid} provData={provData} typesToSplit={['Donor', 'Sample', 'Dataset']} />
       </TabPanel>
     </div>
   );
 }
 
 VisTabs.propTypes = {
+  uuid: PropTypes.string.isRequired,
   provData: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 

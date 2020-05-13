@@ -18,7 +18,7 @@ function ListItemLink(props) {
 }
 
 function ProvTable(props) {
-  const { provData, typesToSplit } = props;
+  const { uuid, provData, typesToSplit } = props;
 
   const types = Object.values(provData.entity).reduce((acc, item) => {
     acc[typesToSplit.indexOf(item['prov:type'])].push(item);
@@ -44,7 +44,7 @@ function ProvTable(props) {
               </ListItemLink>
             ))
             : (
-              <ListItemLink href="/search/TODO">
+              <ListItemLink href={`/search?ancestor_id[0]=${uuid}&entity_type[0]=Sample`}>
                 <ListItemText primary="Related Samples" />
               </ListItemLink>
             )
@@ -60,7 +60,7 @@ function ProvTable(props) {
               </ListItemLink>
             ))
             : (
-              <ListItemLink href="/search/TODO">
+              <ListItemLink href={`/search?ancestor_id[0]=${uuid}&entity_type[0]=Dataset`}>
                 <ListItemText primary="Related Datasets" />
               </ListItemLink>
             )
@@ -71,6 +71,7 @@ function ProvTable(props) {
 }
 
 ProvTable.propTypes = {
+  uuid: PropTypes.string.isRequired,
   provData: PropTypes.objectOf(PropTypes.object).isRequired,
   typesToSplit: PropTypes.arrayOf(PropTypes.string).isRequired,
 };

@@ -51,7 +51,7 @@ function Details(props) {
       <RecursiveList property={assayMetaData} propertyName="Root Property" isRoot />
       <Box mt={2}>
         <Paper>
-          <VisTabs provData={provData} vitData={vitData} />
+          <VisTabs uuid={assayMetaData.uuid} provData={provData} vitData={vitData} />
         </Paper>
       </Box>
     </Container>
