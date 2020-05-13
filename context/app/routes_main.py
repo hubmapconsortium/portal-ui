@@ -31,7 +31,8 @@ def _get_client():
 
 @blueprint.route('/')
 def index():
-    return render_template('pages/index.html', types=types)
+    core_props = {'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']}}
+    return render_template('pages/base_react.html', types=types, flask_data=core_props)
 
 
 @blueprint.route('/browse/<type>/<uuid>')
@@ -65,17 +66,19 @@ def details(type, uuid):
                                  'issue_url': error.issue_url,
                                  'traceback': error.__str__()[0:1500]})
 
-    template = f'pages/details_react.html'
-    props = {
+    template = f'pages/base_react.html'
+    core_props = {'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']}}
+    core_props.update({
         'flashed_messages': flashed_messages,
         'entity': entity,
         'provenance': provenance,
         'vitessce_conf': client.get_vitessce_conf(),
-    }
+    })
     return render_template(
-        template, type=type, uuid=uuid,
-        title_text='TODO: title_text',
-        flask_data=props
+        template,
+        type=type,
+        uuid=uuid,
+        flask_data=core_props
     )
 
 
@@ -95,10 +98,11 @@ def details_ext(type, uuid, ext):
 
 @blueprint.route('/search')
 def search():
+    core_props = {'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']}}
     if 'nexus_token' not in session:
         abort(403)
     return render_template(
-        'pages/search.html',
+        'pages/base_react.html',
         types=types,
-        elasticsearch_endpoint=current_app.config['ELASTICSEARCH_ENDPOINT']
+        flask_data=core_props
     )
