@@ -1,6 +1,6 @@
 import React from 'react';
-import PortalSearch from '@hubmap/portal-search';
 import Container from '@material-ui/core/Container';
+import PortalSearch from '../PortalSearch/PortalSearch';
 import { readCookie } from '../../helpers/functions';
 import 'searchkit/theming/theme.scss';
 import './Search.css';
@@ -141,7 +141,7 @@ function Search(props) {
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Container maxWidth="lg">
-      <PortalSearch.Search {...allProps} />
+      <PortalSearch {...allProps} />
     </Container>
   );
 /* eslint-enable react/jsx-props-no-spreading */
