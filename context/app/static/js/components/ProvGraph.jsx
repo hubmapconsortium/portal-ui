@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import hubmapProvVis from '@hubmap/prov-vis';
+import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 
 function ProvGraph(props) {
   const { provData } = props;

@@ -9,7 +9,13 @@ import App from './App';
 import Footer from './Footer';
 import Header from './Header';
 
-if (window.location.href.search('/browse/') > -1) {
+const urlPath = window.location.pathname;
+
+const isRoute = (route) => urlPath.startsWith(route);
+
+const availableRoutes = ['/browse', '/search'];
+
+if (urlPath === '/' || availableRoutes.some(isRoute)) {
   ReactDOM.render( // eslint-disable-next-line no-undef
     <App flaskData={flaskData} />,
     document.getElementById('react-content'),
