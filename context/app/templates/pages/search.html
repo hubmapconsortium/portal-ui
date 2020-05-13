@@ -18,6 +18,16 @@
 
   <script>
     const commonFilters = [
+    {
+        type: 'RefinementListFilter',
+        props: {
+          id: 'ancestor_id',
+          title: 'Ancestor UUID',
+          field: 'ancestor_ids.keyword',
+          operator: 'OR',
+          size: 5
+        }
+      },
       {
         type: 'RefinementListFilter',
         props: {
