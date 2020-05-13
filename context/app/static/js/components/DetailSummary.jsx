@@ -45,10 +45,10 @@ function AssaySpecificItem(props) {
 }
 
 function DateItem(props) {
-  const { children } = props;
+  const { children, label } = props;
   return (
     <StyledTypography variant="body1" ml={1}>
-      <LightText> Modified: </LightText> {new Date(children).toDateString()}
+      <LightText>{label}</LightText> {new Date(children).toDateString()}
     </StyledTypography>
   );
 }
@@ -85,8 +85,8 @@ function DetailSummary(props) {
             ? (<AssaySpecificItem>{status}</AssaySpecificItem>) : null}
         </FlexContainer>
         <FlexItemRight>
-          <DateItem>{create_timestamp}</DateItem>
-          <DateItem>{last_modified_timestamp}</DateItem>
+          <DateItem label="Created: ">{create_timestamp}</DateItem>
+          <DateItem label="Modified: ">{last_modified_timestamp}</DateItem>
           <StyledDivider orientation="vertical" flexItem />
           <StyledLink
             href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
