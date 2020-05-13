@@ -101,7 +101,6 @@ function DetailSummary(props) {
       </FlexContainer>
       <Divider />
       {description && description.length ? <StyledTypography variant="body1" mt={1}>{description}</StyledTypography> : null}
-      <Divider />
     </>
   );
 }
