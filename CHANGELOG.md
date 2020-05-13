@@ -4,6 +4,7 @@
 ### Added
 - Different search configs for different types.
 - Add data visualization in Vitessce for scRNASEQ and CODEX.
+- Link to derived Samples and Datasets.
 ### Changed
 - Fix VisTabs panel overflow.
 - Fix NoticeAlert to only display when errors exist.
