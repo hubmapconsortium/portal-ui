@@ -64,7 +64,7 @@ function DetailSummary(props) {
     description,
     organ_type,
     specimen_type,
-    data_type,
+    data_types,
     status,
   } = assayMetadata;
 
@@ -79,8 +79,8 @@ function DetailSummary(props) {
             ? (<AssaySpecificItem>{organ_type}</AssaySpecificItem>) : null}
           {specimen_type && specimen_type.length
             ? (<AssaySpecificItem>{specimen_type}</AssaySpecificItem>) : null}
-          {data_type && data_type.length
-            ? (<AssaySpecificItem>{data_type}</AssaySpecificItem>) : null}
+          {data_types && data_types.length
+            ? (<AssaySpecificItem>{data_types[0]}</AssaySpecificItem>) : null}
           {status && status.length
             ? (<AssaySpecificItem>{status}</AssaySpecificItem>) : null}
         </FlexContainer>
