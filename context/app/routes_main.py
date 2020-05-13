@@ -98,13 +98,17 @@ def details_ext(type, uuid, ext):
 
 @blueprint.route('/search')
 def search():
-    core_props = {'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']}}
     entity_type = request.args.get('entity_type[0]')
+    title = f'{entity_type}s' if entity_type else 'Search'
+    core_props = {
+        'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']},
+        'title': title
+    }
     if 'nexus_token' not in session:
         abort(403)
     return render_template(
         'pages/base_react.html',
-        title=f'{entity_type}s' if entity_type else 'Search',
+        title=title,
         types=types,
         flask_data=core_props
     )

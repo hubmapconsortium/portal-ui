@@ -122,8 +122,7 @@ const resultFieldsByType = {
   sample: ['description', 'status', 'entity_type'],
   dataset: ['description', 'status', 'entity_type'],
 };
-const typeUC = (new URL(document.location).searchParams.get('entity_type[0]') || '');
-const type = typeUC.toLowerCase();
+const type = (new URL(document.location).searchParams.get('entity_type[0]') || '').toLowerCase();
 
 const searchProps = {
   // The default behavior is to add a "_search" path.
@@ -149,12 +148,12 @@ const searchProps = {
 };
 
 function Search(props) {
-  const { esEndpoint } = props;
+  const { title, esEndpoint } = props;
   const allProps = Object.assign(searchProps, { apiUrl: esEndpoint });
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Container maxWidth="lg">
-      <Typography component="h1" variant="h1">{typeUC}s</Typography>
+      <Typography component="h1" variant="h1">{title}</Typography>
       <PortalSearch {...allProps} />
     </Container>
   );
