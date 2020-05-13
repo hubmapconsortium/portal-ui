@@ -5,6 +5,7 @@
 - Hide entity_type facet.
 - Different search configs for different types.
 - Link to derived Samples and Datasets.
+- Title on search page.
 ### Changed
 - Use the code that had been in portal-search directly.
 - Fix VisTabs panel overflow.
