@@ -318,8 +318,8 @@ class ApiClient():
         return {
             'type': file['type'],
             'url': self._build_assets_url(file['rel_path'], uuid)
-                if assay_type not in IMAGE_ASSAYS
-                else self._build_image_layer_datauri(file['rel_path'], uuid),
+            if assay_type not in IMAGE_ASSAYS
+            else self._build_image_layer_datauri(file['rel_path'], uuid),
             'name': file['type'].lower(),
         }
 
