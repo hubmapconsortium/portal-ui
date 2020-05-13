@@ -4,6 +4,7 @@
 ### Added
 - Different search configs for different types.
 ### Changed
+- Use the code that had been in portal-search directly.
 - Fix VisTabs panel overflow.
 - Fix NoticeAlert to only display when errors exist.
 - Moved react routes to own component.
