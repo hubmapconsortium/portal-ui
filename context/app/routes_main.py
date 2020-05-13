@@ -103,6 +103,7 @@ def search():
         abort(403)
     return render_template(
         'pages/base_react.html',
+        title='Search!',
         types=types,
         flask_data=core_props
     )
