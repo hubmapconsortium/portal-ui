@@ -15,19 +15,16 @@ function TabPanel(props) {
     children, value, index, className, boxClasses,
   } = props;
   return (
-    value === index
-      && (
-        <Typography
-          className={className}
-          component="div"
-          role="tabpanel"
-          hidden={value !== index}
-          id={`vertical-tabpanel-${index}`}
-          aria-labelledby={`vertical-tab-${index}`}
-        >
-          <Box className={boxClasses} p={3}>{children}</Box>
-        </Typography>
-      )
+    <Typography
+      className={className}
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+    >
+      {value === index && <Box className={boxClasses} p={3}>{children}</Box>}
+    </Typography>
   );
 }
 
