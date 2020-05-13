@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from flask import (Blueprint, render_template, abort, current_app,
-                   session, flash, get_flashed_messages,
+                   session, flash, get_flashed_messages, request,
                    redirect, url_for)
 
 from yaml import safe_load as load_yaml
@@ -99,11 +99,12 @@ def details_ext(type, uuid, ext):
 @blueprint.route('/search')
 def search():
     core_props = {'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']}}
+    entity_type = request.args.get('entity_type[0]')
     if 'nexus_token' not in session:
         abort(403)
     return render_template(
         'pages/base_react.html',
-        title='Search!',
+        title=f'{entity_type}s' if entity_type else 'Search',
         types=types,
         flask_data=core_props
     )
