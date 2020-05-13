@@ -42,6 +42,7 @@ function Routes(props) {
 
 Routes.propTypes = {
   flaskData: PropTypes.exact({
+    title: PropTypes.string,
     entity: PropTypes.object,
     flashed_messages: PropTypes.array,
     provenance: PropTypes.object,
