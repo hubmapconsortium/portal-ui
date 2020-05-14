@@ -1,5 +1,4 @@
 from .vitessce import Vitessce
-from ..main import create_app
 
 TEST_ENTITY_CODEX = {"data_types": ["codex_cytokit"], "uuid": "uuid"}
 
@@ -50,10 +49,6 @@ def test_build_layer_conf():
     conf = vitessce.conf
     layer = conf["layers"][0]
     vitessce_component = conf["staticLayout"][0]["component"]
-    assert (
-        layer["url"]
-        == f"https://example.com/uuid/dim_reduced_clustered/dim_reduced_clustered.json?token={TEST_NEXUS_TOKEN}"
-    )
     assert layer["type"] == "CELLS"
     assert layer["name"] == "cells"
     assert vitessce_component == "scatterplot"

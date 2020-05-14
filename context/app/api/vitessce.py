@@ -47,7 +47,7 @@ IMAGING = {
         {"component": "layerController", "x": 0, "y": 0, "w": 4, "h": 6},
         {
             "component": "spatial",
-            "props": {"view": {},},
+            "props": {"view": {}, },
             "x": 4,
             "y": 0,
             "w": 8,
@@ -71,7 +71,7 @@ ASSAY_CONF_LOOKUP = {
     },
     "codex_cytokit": {
         "base_conf": IMAGING,
-        "view": {"zoom": -1.5, "target": [600, 600, 0],},
+        "view": {"zoom": -1.5, "target": [600, 600, 0], },
         "files_conf": [
             # Hardcoded for now only one tile.
             {
