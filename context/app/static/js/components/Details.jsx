@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import VisTabs from './VisTabs';
 import RecursiveList from './RecursiveList';
 import DetailSummary from './DetailSummary';
+import DetailAttribution from './DetailAttribution';
 
 function Details(props) {
   const { assayMetadata, provData } = props;
@@ -13,6 +14,7 @@ function Details(props) {
   return (
     <Container maxWidth="lg">
       <DetailSummary assayMetadata={assayMetadata} />
+      <DetailAttribution assayMetadata={assayMetadata} />
       <Box mt={2} mb={2}>
         <Paper>
           <VisTabs provData={provData} assayMetadata={assayMetadata} />
