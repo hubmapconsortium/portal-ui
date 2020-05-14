@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
-
+import Paper from '@material-ui/core/Paper';
 
 const LightText = styled.span`
   color: rgba(0, 0, 0, 0.54);
@@ -35,13 +35,13 @@ function DetailAttribution(props) {
     <>
       <Typography variant="h3" component="h2">Attribution</Typography>
       <Divider />
-      <div>
+      <Paper>
         <Typography variant="body1">{group_name}</Typography>
         <AttributionItem label="Created by: ">{created_by_user_displayname}</AttributionItem>
         <AttributionItem label="Email: ">
           <StyledLink href={`mailto:${created_by_user_email}`}>{created_by_user_email}</StyledLink>
         </AttributionItem>
-      </div>
+      </Paper>
     </>
   );
 }
