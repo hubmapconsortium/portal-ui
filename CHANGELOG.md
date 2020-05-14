@@ -1,9 +1,17 @@
 # Changelog
 
-## v0.0.16 - In progress
+## v0.0.17 - In progress
 ### Added
+- Python util to pull data from submodules.
+
+## v0.0.16 - 2020-05-13
+### Added
+- Sort by last_modified.
+- Hide entity_type facet.
 - Different search configs for different types.
+- Link to derived Samples and Datasets.
 ### Changed
+- Use the code that had been in portal-search directly.
 - Fix VisTabs panel overflow.
 - Fix NoticeAlert to only display when errors exist.
 - Moved react routes to own component.

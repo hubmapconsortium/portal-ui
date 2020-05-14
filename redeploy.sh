@@ -16,15 +16,21 @@ echo 'whoami?' `whoami`
 
 cd /home/centos/hubmap/portal-ui/compose
 echo 'portal running?' `docker ps | grep portal-ui`
+
 echo 'stopping...'
 docker-compose -f hubmap.yml down
 echo 'portal running?' `docker ps | grep portal-ui`
+
+echo 'removing old "latest"...'
+# Unless we clear it, Docker will think it already has the image.
+docker rmi hubmap/portal-ui:latest
+
 echo 'starting...'
-docker-compose pull && docker-compose -f hubmap.yml up -d
+docker-compose -f hubmap.yml up -d
 echo 'portal running?' `docker ps | grep portal-ui`
 
 # TODO: Move VERSION into context, and cat it.
-docker exec -it portal-ui cat requirements.txt
+docker exec -it portal-ui cat package.json
 
 EOF
 

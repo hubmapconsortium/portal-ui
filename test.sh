@@ -34,6 +34,12 @@ flake8 --exclude=$EXCLUDE \
   || die "Try: autopep8 --in-place --aggressive -r . --exclude $EXCLUDE"
 end flake8
 
+start doctests
+python -m doctest context/app/doc_utils.py
+# TODO: Get doctests working more generally.
+# find context/app | grep '\.py$' | xargs python -m doctest
+end doctests
+
 start pytest
 pytest -vv --ignore=context/node_modules/
 end pytest

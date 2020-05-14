@@ -1,11 +1,21 @@
 import React from 'react';
-import PortalSearch from '@hubmap/portal-search';
 import Container from '@material-ui/core/Container';
+import PortalSearch from '../PortalSearch/PortalSearch';
 import { readCookie } from '../../helpers/functions';
 import 'searchkit/theming/theme.scss';
 import './Search.css';
 
 const commonFilters = [
+  {
+    type: 'RefinementListFilter',
+    props: {
+      id: 'ancestor_id',
+      title: 'Ancestor UUID',
+      field: 'ancestor_ids.keyword',
+      operator: 'OR',
+      size: 5,
+    },
+  },
   {
     type: 'RefinementListFilter',
     props: {
@@ -133,6 +143,21 @@ const searchProps = {
   // "type" should be one of the filters described here:
   // http://docs.searchkit.co/stable/components/navigation/
   filters: filtersByType[type],
+  sortOptions: [
+    {
+      label: 'Newest',
+      field: 'last_modified_timestamp',
+      order: 'desc',
+      defaultOption: true,
+    },
+    {
+      label: 'Oldest',
+      field: 'last_modified_timestamp',
+      order: 'asc',
+      defaultOption: false,
+    },
+  ],
+  hiddenFilterIds: ['entity_type'],
 };
 
 function Search(props) {
@@ -141,7 +166,7 @@ function Search(props) {
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Container maxWidth="lg">
-      <PortalSearch.Search {...allProps} />
+      <PortalSearch {...allProps} />
     </Container>
   );
 /* eslint-enable react/jsx-props-no-spreading */
