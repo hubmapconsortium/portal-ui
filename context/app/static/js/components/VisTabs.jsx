@@ -70,7 +70,9 @@ function VisTabs(props) {
         boxClasses={classes.tabPanelBoxes}
         index={0}
       >
-        <Vitessce rowHeight={150} config={vitData} theme="light" />
+        {'name' in vitData
+          ? <Vitessce rowHeight={150} config={vitData} theme="light" />
+          : null}
       </TabPanel>
       <TabPanel
         value={open}
