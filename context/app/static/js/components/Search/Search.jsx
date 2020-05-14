@@ -5,21 +5,10 @@ import { readCookie } from '../../helpers/functions';
 import 'searchkit/theming/theme.scss';
 import './Search.css';
 
-import donorConfig from './donorConfig';
-import sampleConfig from './sampleConfig';
-import datasetConfig from './datasetConfig';
+import { donorConfig, sampleConfig, datasetConfig } from './config';
+import { filter } from './utils';
 
-const baseFilters = [{
-  // This is hidden in the UI, but used to create links for provenance.
-  type: 'RefinementListFilter',
-  props: {
-    id: 'ancestor_id',
-    title: 'Ancestor UUID',
-    field: 'ancestor_ids.keyword',
-    operator: 'OR',
-    size: 5,
-  },
-}];
+const baseFilters = [filter('ancestor_id', 'Ancestor ID')];
 
 const filtersByType = {
   '': baseFilters,
