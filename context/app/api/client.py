@@ -1,88 +1,14 @@
 from collections import namedtuple
 import json
 from datetime import datetime
-import urllib
-from pathlib import Path
-import itertools
-
-from flask import abort, current_app
 
 from datauri import DataURI
+from flask import abort, current_app
 import requests
 
+from .vitessce import Vitessce
+
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
-
-# Hardcoded CODEX offsets and tile path.
-CODEX_OFFSETS_PATH = 'ppneorh7'
-CODEX_TILE_PATH = 'output/extract/expressions/ome-tiff'
-# Hardocde just looking at a few tiles.
-X_VALS = list(range(3))
-X_VALS.remove(0)
-Y_VALS = list(range(3))
-Y_VALS.remove(0)
-R_VALS = list(range(3))
-R_VALS.remove(0)
-
-SCATTERPLOT = {
-    'layers': [],
-    'name': 'NAME',
-    'staticLayout': [
-        {
-            'component': 'scatterplot',
-            'props': {
-                # Need to get a better name/way to handle this but for now, this is fine.
-                'mapping': 'UMAP',
-                'view': {
-                    'zoom': 4,
-                    'target': [0, 0, 0]
-                }
-            },
-            'x': 0, 'y': 0, 'w': 12, 'h': 2
-        },
-    ]
-}
-
-IMAGING = {
-    'name': 'NAME',
-    'layers': [],
-    'staticLayout': [
-        {'component': 'layerController', 'x': 0, 'y': 0, 'w': 4, 'h': 6},
-        {
-            'component': 'spatial',
-            'props': {
-                'view': {
-                    'zoom': -1,
-                    'target': [512, 512, 0],
-                },
-            },
-            'x': 4,
-            'y': 0,
-            'w': 8,
-            'h': 6,
-        },
-    ],
-}
-
-
-ASSAY_CONF_LOOKUP = {
-    'salmon_rnaseq_10x': {
-        'base_conf': SCATTERPLOT,
-        'files_conf': [
-            {'rel_path': 'dim_reduced_clustered/dim_reduced_clustered.json', 'type': 'CELLS'},
-            # { 'rel_path': 'cluster-marker-genes/cluster_marker_genes.json', 'type': 'FACTORS' }
-        ]
-    },
-    'codex_cytokit': {
-        'base_conf': IMAGING,
-        'files_conf': [
-            # Hardcoded for now only one tile.
-            {'rel_path': Path(CODEX_TILE_PATH) / Path(f'#CODEX_TILE#.ome.tiff'), 'type': 'RASTER'}
-        ]
-    }
-}
-
-IMAGE_ASSAYS = ['codex_cytokit']
-
 
 def _format_timestamp(ts):
     return datetime.utcfromtimestamp(int(ts) / 1000).strftime('%Y-%m-%d %H:%M:%S')
@@ -278,59 +204,5 @@ class ApiClient():
                 ]
             }
         else:
-            return self._build_vitessce_conf(entity)
-
-    def _build_assets_url(self, rel_path, uuid):
-        base_url = urllib.parse.urljoin(
-            current_app.config['ASSETS_ENDPOINT'],
-            str(Path(uuid) / Path(rel_path))
-        )
-        token_param = urllib.parse.urlencode({'token': self.nexus_token})
-        return base_url + '?' + token_param
-
-    def _build_image_schema(self, rel_path, uuid):
-        schema = {}
-        schema['name'] = Path(rel_path).name
-        schema['type'] = 'ome-tiff'
-        schema['url'] = self._build_assets_url(rel_path, uuid)
-        schema['metadata'] = {}
-        offsets_path = Path(CODEX_OFFSETS_PATH) / \
-            Path(Path(rel_path).name.replace('ome.tiff', 'offsets.json'))
-        schema['metadata']['omeTiffOffsetsUrl'] = self._build_assets_url(str(offsets_path), uuid)
-        return schema
-
-    def _build_image_layer_datauri(self, rel_path, uuid):
-        image_layer = {}
-        image_paths = [
-            str(rel_path).replace(
-                '#CODEX_TILE#', f'R{str(r).zfill(3)}_X{str(x).zfill(3)}_Y{str(y).zfill(3)}'
-            ) for (r, x, y) in itertools.product(*[R_VALS, X_VALS, Y_VALS])
-        ]
-        image_layer['images'] = [
-            self._build_image_schema(image_path, uuid) for image_path in image_paths
-        ]
-        image_layer['schema_version'] = '0.0.1'
-        return DataURI.make(
-            'text/plain', charset='us-ascii', base64=True, data=json.dumps(image_layer)
-        )
-
-    def _build_layer_conf(self, file, uuid, assay_type):
-        return {
-            'type': file['type'],
-            'url': self._build_assets_url(file['rel_path'], uuid)
-            if assay_type not in IMAGE_ASSAYS
-            else self._build_image_layer_datauri(file['rel_path'], uuid),
-            'name': file['type'].lower(),
-        }
-
-    def _build_vitessce_conf(self, entity):
-        # Can there be more than one of these?  This seems like a fine default for now.
-        assay_type = entity['data_types'][0]
-        uuid = entity['uuid']
-        conf = ASSAY_CONF_LOOKUP[assay_type]['base_conf']
-        files = ASSAY_CONF_LOOKUP[assay_type]['files_conf']
-        layers = [self._build_layer_conf(file, uuid, assay_type) for file in files]
-
-        conf['layers'] = layers
-        conf['name'] = uuid
-        return conf
+            vitessce = Vitessce(entity=entity, nexus_token=self.nexus_token)
+            return vitessce.conf
