@@ -1,4 +1,4 @@
-import { filter } from './utils';
+import { filter, organFilter, specimenTypeFilter } from './utils';
 
 export const datasetConfig = {
   filters: [
@@ -6,7 +6,7 @@ export const datasetConfig = {
     filter('data_types', 'Data types'),
     filter('donor.group_name', 'Group'),
     filter('created_by_user_displayname', 'Creator'),
-    filter('source_sample.specimen_type', 'Specimen type'),
+    specimenTypeFilter('source_sample.specimen_type'),
     filter('status', 'Status'),
   ],
   fields: ['description', 'status', 'entity_type'],
@@ -22,8 +22,8 @@ export const donorConfig = {
 
 export const sampleConfig = {
   filters: [
-    filter('origin_sample.organ', 'Organ'),
-    filter('specimen_type', 'Specimen Type'),
+    organFilter('origin_sample.organ'),
+    specimenTypeFilter('specimen_type'),
     filter('donor.group_name', 'Group'),
     filter('created_by_user_displayname', 'Creator'),
   ],
