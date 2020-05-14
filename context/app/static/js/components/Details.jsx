@@ -9,6 +9,7 @@ import RecursiveList from './RecursiveList';
 import DetailSummary from './DetailSummary';
 import DetailAttribution from './DetailAttribution';
 import DetailProtocol from './DetailProtocols';
+import DetailMetadata from './DetailMetadata';
 
 function Details(props) {
   const { assayMetadata, provData } = props;
@@ -18,6 +19,7 @@ function Details(props) {
     <Container maxWidth="lg">
       <DetailSummary assayMetadata={assayMetadata} />
       <DetailAttribution assayMetadata={assayMetadata} />
+      <DetailMetadata />
       {portal_uploaded_protocol_files ? <DetailProtocol assayMetadata={assayMetadata} /> : null}
       <Box mt={2} mb={2}>
         <Paper>
