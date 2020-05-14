@@ -1,11 +1,13 @@
+import { filter } from './utils';
+
 export default {
   filters: [
     {
       type: 'RefinementListFilter',
       props: {
-        id: 'created_by_user_displayname',
-        title: 'Creator',
-        field: 'created_by_user_displayname.keyword',
+        id: 'origin_sample_organ',
+        title: 'Organ',
+        field: 'origin_sample.organ.keyword',
         operator: 'OR',
         size: 5,
       },
@@ -13,9 +15,9 @@ export default {
     {
       type: 'RefinementListFilter',
       props: {
-        id: 'data_types', // Not working?
-        title: 'Data type',
-        field: 'data_types.keyword',
+        id: 'specimen_type',
+        title: 'Specimen Type',
+        field: 'specimen_type.keyword',
         operator: 'OR',
         size: 5,
       },
@@ -23,7 +25,7 @@ export default {
     {
       type: 'RefinementListFilter',
       props: {
-        id: 'donor_group',
+        id: 'donor_group_name',
         title: 'Group',
         field: 'donor.group_name.keyword',
         operator: 'OR',
@@ -33,19 +35,9 @@ export default {
     {
       type: 'RefinementListFilter',
       props: {
-        id: 'source_sample_specimen_type',
-        title: 'Specimen type',
-        field: 'source_sample.specimen_type.keyword',
-        operator: 'OR',
-        size: 5,
-      },
-    },
-    {
-      type: 'RefinementListFilter',
-      props: {
-        id: 'status',
-        title: 'Status',
-        field: 'status.keyword',
+        id: 'created_by_user_displayname',
+        title: 'Creator',
+        field: 'created_by_user_displayname.keyword',
         operator: 'OR',
         size: 5,
       },
