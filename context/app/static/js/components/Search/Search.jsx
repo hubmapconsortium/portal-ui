@@ -133,6 +133,20 @@ const searchProps = {
   // "type" should be one of the filters described here:
   // http://docs.searchkit.co/stable/components/navigation/
   filters: filtersByType[type],
+  sortOptions: [
+    {
+      label: 'Newest',
+      field: 'last_modified_timestamp',
+      order: 'desc',
+      defaultOption: true,
+    },
+    {
+      label: 'Oldest',
+      field: 'last_modified_timestamp',
+      order: 'asc',
+      defaultOption: false,
+    },
+  ],
   hiddenFilterIds: ['entity_type'],
 };
 
