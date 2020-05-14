@@ -14,6 +14,10 @@ const StyledLink = styled(Link)`
   color: #3781D1;
 `;
 
+const StyledPaper = styled(Paper)`
+  padding: 20px 40px 20px 40px;
+`;
+
 function AttributionItem(props) {
   const { children, label } = props;
   return (
@@ -35,13 +39,13 @@ function DetailAttribution(props) {
     <>
       <Typography variant="h3" component="h2">Attribution</Typography>
       <Divider />
-      <Paper>
+      <StyledPaper>
         <Typography variant="body1">{group_name}</Typography>
         <AttributionItem label="Created by: ">{created_by_user_displayname}</AttributionItem>
         <AttributionItem label="Email: ">
           <StyledLink href={`mailto:${created_by_user_email}`}>{created_by_user_email}</StyledLink>
         </AttributionItem>
-      </Paper>
+      </StyledPaper>
     </>
   );
 }

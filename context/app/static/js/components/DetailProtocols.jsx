@@ -18,6 +18,9 @@ const StyledLink = styled(Link)`
   color: #3781D1;
 `;
 
+const StyledPaper = styled(Paper)`
+  padding: 20px 40px 20px 40px;
+`;
 
 function ProtocolItem(props) {
   const { children, label } = props;
@@ -36,7 +39,7 @@ function DetailProtocols(props) {
     <div>
       <Typography variant="h3" component="h2">Protocols</Typography>
       <Divider />
-      <Paper>
+      <StyledPaper>
         {portal_uploaded_protocol_files.map((protocol, i) => (
           <>
             {i !== 0 ? <Divider /> : null}
@@ -54,7 +57,7 @@ function DetailProtocols(props) {
             </ProtocolItem>
           </>
         ))}
-      </Paper>
+      </StyledPaper>
     </div>
   );
 }
