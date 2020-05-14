@@ -1,11 +1,33 @@
 # Changelog
 
-## v0.0.16 - In progress
+## v0.0.17 - In progress
 ### Added
 - Python util to pull data from submodules.
+
+## v0.0.16 - 2020-05-13
+### Added
+- Sort by last_modified.
+- Hide entity_type facet.
+- Different search configs for different types.
+- Link to derived Samples and Datasets.
 ### Changed
-- Fix VisTabs panel overflow
+- Use the code that had been in portal-search directly.
+- Fix VisTabs panel overflow.
 - Fix NoticeAlert to only display when errors exist.
+- Moved react routes to own component.
+- Make Webpack handle source maps and sassfiles
+- Move unpkg dependencies to node_modules.
+- Move Search and Home into App.
+- Upgrade webpack.
+- Pass api endpoints into App from flask.
+- Move assay type to subheader instead of inline in ProvTable.
+- Move ProvTable below title panel in Details.
+- Fix NoticeAlert conditional causing a '0' to be rendered.
+### Removed
+- Removed old code to dump to nested tables.
+- Remove vitessce from VisTabs.
+- Remove unused fragments templates.
+- Remove unused stylesheets.
 
 ## [v0.0.15](https://github.com/hubmapconsortium/portal-ui/tree/v0.0.15) - 2020/05/07
 ### Added

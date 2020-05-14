@@ -41,7 +41,7 @@ python -m doctest context/app/doc_utils.py
 end doctests
 
 start pytest
-pytest -vv
+pytest -vv --ignore=context/node_modules/
 end pytest
 
 start docker

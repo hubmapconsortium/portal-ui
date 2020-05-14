@@ -1,8 +1,20 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
-import ProvTypesList from './ProvTypesList';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+
+function ListItemLink(props) {
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return <ListItem button component="a" {...props} />;
+}
+const CenteredListSubheader = styled(ListSubheader)`
+  text-align: center;
+`;
 
 const FlexContainer = styled.div`
     display: flex;
@@ -11,33 +23,55 @@ const FlexContainer = styled.div`
 `;
 
 function ProvTable(props) {
-  const { provData, typesToSplit } = props;
+  const { provData, assayMetadata, typesToSplit } = props;
+  const { uuid } = assayMetadata;
 
   const types = Object.values(provData.entity).reduce((acc, item) => {
     acc[typesToSplit.indexOf(item['prov:type'])].push(item);
     return acc;
-  }, [[], [], []]).filter((arr) => arr.length > 0);
+  }, [[], [], []]);
 
   return (
     <FlexContainer>
       {types.map((type, i) => (
-        type && type.length
-          ? (
-            <React.Fragment key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
-              <ProvTypesList data={type} />{
-                // eslint-disable-next-line react/no-array-index-key
-                i < (types.length - 1) && <Divider key={`provenance-table-divider-${i}`} orientation="vertical" flexItem />
-                }
-            </React.Fragment>
-          )
-          : (null)))}
+        <React.Fragment key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
+          <List
+            subheader={(
+              <CenteredListSubheader component="div">
+                {typesToSplit[i]}
+              </CenteredListSubheader>
+          )}
+          >
+            <Divider />
+            {
+          type && type.length
+            ? (
+              type.map((item) => (
+                <ListItemLink key={item['hubmap:uuid']} href={`/browse/dataset/${item['hubmap:uuid']}`} disabled={uuid === item['hubmap:uuid']}>
+                  <ListItemText primary={item['hubmap:displayDOI']} />
+                </ListItemLink>
+              ))
+            )
+            : (
+              <ListItemLink href={`/search?ancestor_id[0]=${uuid}&entity_type[0]=${typesToSplit[i]}`}>
+                <ListItemText primary={`Related ${typesToSplit[i]}s`} />
+              </ListItemLink>
+            )
+        }
+          </List>
+          {i < (types.length - 1) && <Divider orientation="vertical" flexItem />}
+        </React.Fragment>
+      ))}
     </FlexContainer>
   );
 }
 
 ProvTable.propTypes = {
+  /* eslint-disable react/forbid-prop-types */
+  assayMetadata: PropTypes.object.isRequired,
   provData: PropTypes.objectOf(PropTypes.object).isRequired,
   typesToSplit: PropTypes.arrayOf(PropTypes.string).isRequired,
+  /* eslint-enable react/forbid-prop-types */
 };
 
 export default ProvTable;
