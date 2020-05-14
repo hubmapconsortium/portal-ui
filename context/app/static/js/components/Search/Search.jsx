@@ -9,11 +9,23 @@ import donorConfig from './donorConfig';
 import sampleConfig from './sampleConfig';
 import datasetConfig from './datasetConfig';
 
+const baseFilters = [{
+  // This is hidden in the UI, but used to create links for provenance.
+  type: 'RefinementListFilter',
+  props: {
+    id: 'ancestor_id',
+    title: 'Ancestor UUID',
+    field: 'ancestor_ids.keyword',
+    operator: 'OR',
+    size: 5,
+  },
+}];
+
 const filtersByType = {
-  '': [],
-  donor: donorConfig.filters,
-  sample: sampleConfig.filters,
-  dataset: datasetConfig.filters,
+  '': baseFilters,
+  donor: donorConfig.filters.concat(baseFilters),
+  sample: sampleConfig.filters.concat(baseFilters),
+  dataset: datasetConfig.filters.concat(baseFilters),
 };
 
 const resultFieldsByType = {
