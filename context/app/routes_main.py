@@ -42,7 +42,6 @@ def details(type, uuid):
     if 'nexus_token' not in session:
         abort(403)
     client = _get_client()
-
     entity = client.get_entity(uuid)
     actual_type = entity['entity_type'].lower()
     if type != actual_type:
@@ -72,7 +71,7 @@ def details(type, uuid):
         'flashed_messages': flashed_messages,
         'entity': entity,
         'provenance': provenance,
-        'vitessce_conf': client.get_vitessce_conf(),
+        'vitessce_conf': client.get_vitessce_conf(entity)
     })
     return render_template(
         template,

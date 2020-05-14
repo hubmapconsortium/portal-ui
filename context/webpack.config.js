@@ -7,7 +7,6 @@ const config = {
     filename: 'bundle.js',
     publicPath: resolve('../app/static/public'),
   },
-  devtool: 'nosources-source-map',
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg'],
   },
@@ -72,4 +71,6 @@ const config = {
     ],
   },
 };
-module.exports = config;
+module.exports = (env, argv) => {
+  return argv.mode === 'development' ? { ...config, devtool: 'nosources-source-map' } : { ...config, devtool: 'cheap-source-map' }
+};

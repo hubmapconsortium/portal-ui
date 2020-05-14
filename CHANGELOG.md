@@ -9,6 +9,7 @@
 - Sort by last_modified.
 - Hide entity_type facet.
 - Different search configs for different types.
+- Add data visualization in Vitessce for scRNASEQ and CODEX.
 - Link to derived Samples and Datasets.
 ### Changed
 - Use the code that had been in portal-search directly.
