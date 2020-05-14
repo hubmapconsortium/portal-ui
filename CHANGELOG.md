@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.0.16 - In progress
+## v0.0.17 - In progress
+
+## v0.0.16 - 2020-05-13
 ### Added
 - Sort by last_modified.
 - Hide entity_type facet.
