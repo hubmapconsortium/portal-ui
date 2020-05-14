@@ -10,6 +10,7 @@ from .vitessce import Vitessce
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
+
 def _format_timestamp(ts):
     return datetime.utcfromtimestamp(int(ts) / 1000).strftime('%Y-%m-%d %H:%M:%S')
 
