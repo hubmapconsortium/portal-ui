@@ -80,7 +80,7 @@ function DetailSummary(props) {
           {specimen_type && specimen_type.length
             ? (<AssaySpecificItem>{specimen_type}</AssaySpecificItem>) : null}
           {data_types && data_types.length
-            ? (<AssaySpecificItem>{data_types.join(' / ')}</AssaySpecificItem>) : null}
+            ? (<AssaySpecificItem>{data_types.constructor.name === 'Array' ? data_types.join(' / ') : data_types}</AssaySpecificItem>) : null}
           {status && status.length
             ? (<AssaySpecificItem>{status}</AssaySpecificItem>) : null}
         </FlexContainer>
