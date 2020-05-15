@@ -19,7 +19,7 @@ function DebugItem(props) {
   );
 }
 
-function makeTableComponent(fields, detailsUrlPrefix, idField) {
+function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
   return function ResultsTable(props) {
     const { hits } = props;
     /* eslint-disable no-underscore-dangle */
@@ -27,13 +27,13 @@ function makeTableComponent(fields, detailsUrlPrefix, idField) {
       <table className="sk-table sk-table-striped" style={{ width: '100%' }}>
         <thead>
           <tr>
-            {fields.map((field) => <th key={field}>{field}</th>)}
+            {resultFields.map((field) => <th key={field}>{field}</th>)}
           </tr>
         </thead>
         <tbody>
           {hits.map((hit) => (
             <tr key={hit._id}>
-              {fields.map(
+              {resultFields.map(
                 (field) => (
                   <td key={field}>
                     <a
@@ -112,9 +112,7 @@ export default function (props) {
     /* eslint-disable react/jsx-props-no-spreading */
     return (
       <div style={style}>
-        <Filter
-          {...def.props}
-        />
+        <Filter {...def.props}/>
       </div>
     );
     /* eslint-enable */
