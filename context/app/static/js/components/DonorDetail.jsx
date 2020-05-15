@@ -29,7 +29,7 @@ function DonorDetail(props) {
         ? <NoticeAlert errors={flashed_messages} /> : null}
       <SpacedContainer maxWidth="lg">
         <DetailSummary assayMetadata={assayMetadata} />
-        <DetailMetadata />
+        <DetailMetadata assayMetadata={assayMetadata} />
         <DetailAttribution assayMetadata={assayMetadata} />
         <VisTabs provData={provData} assayMetadata={assayMetadata} />
         {portal_uploaded_protocol_files || protocol_url
