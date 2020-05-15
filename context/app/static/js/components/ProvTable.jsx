@@ -37,7 +37,7 @@ function ProvTable(props) {
         <React.Fragment key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
           <List
             subheader={(
-              <CenteredListSubheader component="div">
+              <CenteredListSubheader component="div" color="primary">
                 {typesToSplit[i]}
               </CenteredListSubheader>
           )}
@@ -54,7 +54,7 @@ function ProvTable(props) {
             )
             : (
               <ListItemLink href={`/search?ancestor_id[0]=${uuid}&entity_type[0]=${typesToSplit[i]}`}>
-                <ListItemText primary={`Related ${typesToSplit[i]}s`} />
+                <ListItemText primary={`Derived ${typesToSplit[i]}s`} />
               </ListItemLink>
             )
         }
