@@ -97,7 +97,6 @@ function DetailSummary(props) {
           <StyledLink
             href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
             variant="body1"
-            component="button"
             target="_blank"
             ml={1}
           >
