@@ -4,9 +4,10 @@ import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
+import SectionHeader from './SectionHeader';
 
 const LightText = styled.span`
-  color: rgba(0, 0, 0, 0.54);
+  color: #444A65;
 `;
 
 const StyledLink = styled(Link)`
@@ -25,7 +26,6 @@ function AttributionItem(props) {
     </Typography>
   );
 }
-
 function DetailAttribution(props) {
   const { assayMetadata } = props;
   const {
@@ -35,8 +35,8 @@ function DetailAttribution(props) {
   } = assayMetadata;
 
   return (
-    <>
-      <Typography variant="h3" component="h2">Attribution</Typography>
+    <div>
+      <SectionHeader variant="h3" component="h2">Attribution</SectionHeader>
       <StyledPaper>
         <Typography variant="body1">{group_name}</Typography>
         <AttributionItem label="Created by: ">{created_by_user_displayname}</AttributionItem>
@@ -44,7 +44,7 @@ function DetailAttribution(props) {
           <StyledLink href={`mailto:${created_by_user_email}`}>{created_by_user_email}</StyledLink>
         </AttributionItem>
       </StyledPaper>
-    </>
+    </div>
   );
 }
 
