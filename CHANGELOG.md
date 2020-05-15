@@ -1,6 +1,8 @@
 # Changelog
 
 ## v0.0.18 - In progress
+### Added
+- Get favicons on React pages.
 ### Changed
 - Upgrade Vitessce to 0.1.3 to fix small bugs and add description for tiff.
 
