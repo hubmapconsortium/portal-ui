@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import SectionHeader from './SectionHeader';
 import SectionItem from './SectionItem';
+import SectionContainer from './SectionContainer';
 
 const StyledTypography = styled(Typography)`
   margin: 2px 0px 2px 0px;
@@ -55,12 +56,12 @@ function SampleItems(props) {
 function DetailMetadata(props) {
   const { entityType } = props;
   return (
-    <div>
+    <SectionContainer>
       <SectionHeader variant="h3" component="h2">Metadata</SectionHeader>
       <FlexPaper>
         {entityType === 'Donor' ? <DonorItems {...props} /> : <SampleItems {...props} />}
       </FlexPaper>
-    </div>
+    </SectionContainer>
   );
 }
 

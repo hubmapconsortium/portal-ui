@@ -9,6 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import SectionHeader from './SectionHeader';
+import SectionContainer from './SectionContainer';
 
 const StyledTableContainer = styled(TableContainer)`
   max-height: 364px;
@@ -24,7 +25,7 @@ function DetailMetadataTable(props) {
 
   const rows = Object.entries(tableData).map((entry) => ({ key: entry[0], value: entry[1] }));
   return (
-    <div>
+    <SectionContainer>
       <SectionHeader variant="h3" component="h2">Metadata</SectionHeader>
       <Paper>
         <StyledTableContainer>
@@ -53,7 +54,7 @@ function DetailMetadataTable(props) {
           </Table>
         </StyledTableContainer>
       </Paper>
-    </div>
+    </SectionContainer>
   );
 }
 

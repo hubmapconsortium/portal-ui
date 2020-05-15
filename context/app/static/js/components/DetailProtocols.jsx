@@ -7,6 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import SectionHeader from './SectionHeader';
 import SectionItem from './SectionItem';
+import SectionContainer from './SectionContainer';
 
 const StyledTypography = styled(Typography)`
   margin: 2px 0px 2px 0px;
@@ -39,7 +40,7 @@ function DetailProtocols(props) {
   const { assayMetadata } = props;
   const { protocol_url, portal_uploaded_protocol_files } = assayMetadata;
   return (
-    <div>
+    <SectionContainer>
       <SectionHeader variant="h3" component="h2">Protocols</SectionHeader>
       <Divider />
       <StyledPaper>
@@ -54,7 +55,7 @@ function DetailProtocols(props) {
           </React.Fragment>
         ))}
       </StyledPaper>
-    </div>
+    </SectionContainer>
   );
 }
 

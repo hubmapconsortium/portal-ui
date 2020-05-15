@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import SectionHeader from './SectionHeader';
 import SectionItem from './SectionItem';
 import SummaryItem from './SummaryItem';
+import SectionContainer from './SectionContainer';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -45,7 +46,6 @@ const StyledPaper = styled(Paper)`
   padding: 15px 40px 15px 15px;
 `;
 
-
 function DetailSummary(props) {
   const { assayMetadata, children } = props;
   const {
@@ -60,7 +60,7 @@ function DetailSummary(props) {
 
 
   return (
-    <div>
+    <SectionContainer>
       <Typography variant="h4" component="h1" color="primary">{entity_type}</Typography>
       <FlexContainer>
         <ColumnContainer>
@@ -97,7 +97,7 @@ function DetailSummary(props) {
           <SectionItem label="Modification Date">{new Date(last_modified_timestamp).toDateString()}</SectionItem>
         </FlexColumnRight>
       </StyledPaper>
-    </div>
+    </SectionContainer>
   );
 }
 

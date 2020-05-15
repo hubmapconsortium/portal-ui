@@ -9,6 +9,7 @@ import ProvGraph from './ProvGraph';
 import ProvTable from './ProvTable';
 import { useStyles } from '../styles';
 import SectionHeader from './SectionHeader';
+import SectionContainer from './SectionContainer';
 
 function TabPanel(props) {
   const {
@@ -38,7 +39,7 @@ function VisTabs(props) {
     setOpen(newValue);
   };
   return (
-    <div>
+    <SectionContainer>
       <SectionHeader variant="h3" component="h2">Provenance</SectionHeader>
       <Paper className={classes.tabsRoot}>
         <Tabs
@@ -76,7 +77,7 @@ function VisTabs(props) {
         </TabPanel>
 
       </Paper>
-    </div>
+    </SectionContainer>
   );
 }
 

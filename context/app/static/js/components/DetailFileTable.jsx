@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Link from '@material-ui/core/Link';
 import SectionHeader from './SectionHeader';
+import SectionContainer from './SectionContainer';
 import { readCookie } from '../helpers/functions';
 
 const StyledTableContainer = styled(TableContainer)`
@@ -29,7 +30,7 @@ function DetailFileTable(props) {
   const { files: rows, assetsEndpoint, uuid } = props;
   const cook = readCookie('nexus_token');
   return (
-    <div>
+    <SectionContainer>
       <SectionHeader variant="h3" component="h2">Files</SectionHeader>
       <Paper>
         <StyledTableContainer>
@@ -65,7 +66,7 @@ function DetailFileTable(props) {
           </Table>
         </StyledTableContainer>
       </Paper>
-    </div>
+    </SectionContainer>
   );
 }
 
