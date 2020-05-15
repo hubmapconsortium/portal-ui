@@ -71,7 +71,7 @@ function VisTabs(props) {
         index={0}
       >
         {'name' in vitData
-          ? <Vitessce rowHeight={75} config={vitData} theme="light" />
+          ? <Vitessce rowHeight={100} config={vitData} theme="light" />
           : null}
       </TabPanel>
       <TabPanel
