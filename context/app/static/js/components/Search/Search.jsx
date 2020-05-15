@@ -28,7 +28,6 @@ const resultFieldsByType = {
   dataset: datasetConfig.fields,
 };
 const type = (new URL(document.location).searchParams.get('entity_type[0]') || '').toLowerCase();
-console.log(type, resultFieldsByType); // eslint-disable-line
 
 const searchProps = {
   // The default behavior is to add a "_search" path.
@@ -64,7 +63,7 @@ const searchProps = {
       defaultOption: false,
     },
   ],
-  hiddenFilterIds: ['entity_type'],
+  hiddenFilterIds: baseFilters.map((filterDef) => filterDef.id),
 };
 
 function Search(props) {

@@ -1,4 +1,4 @@
-import { filter, organFilter, specimenTypeFilter } from './utils';
+import { filter, field, organFilter, specimenTypeFilter } from './utils';
 
 
 export const donorConfig = {
@@ -6,7 +6,14 @@ export const donorConfig = {
     filter('created_by_user_displayname', 'Creator'),
     filter('group_name', 'Group'),
   ],
-  fields: ['display_doi', 'group_name', 'age', 'bmi', 'gender', 'description'],
+  fields: [
+    field('display_doi', 'ID'),
+    field('group_name', 'Group'),
+    field('age', 'Age'),
+    field('bmi', 'BMI'),
+    field('gender', 'Gender'),
+    field('description', 'Description'),
+  ],
 };
 
 export const sampleConfig = {
@@ -16,7 +23,12 @@ export const sampleConfig = {
     filter('donor.group_name', 'Group'),
     filter('created_by_user_displayname', 'Creator'),
   ],
-  fields: ['display_doi', 'donor.group_name', 'specimen_type', 'origin_sample.organ'],
+  fields: [
+    field('display_doi', 'ID'),
+    field('donor.group_name', 'Group'),
+    field('specimen_type', 'Speciment Type'),
+    field('origin_sample.organ', 'Organ'),
+  ],
 };
 
 export const datasetConfig = {
@@ -28,5 +40,11 @@ export const datasetConfig = {
     specimenTypeFilter('source_sample.specimen_type'),
     filter('status', 'Status'),
   ],
-  fields: ['display_doi', 'donor.group_name', 'data_types', 'origin_sample.organ', 'status'],
+  fields: [
+    field('display_doi', 'ID'),
+    field('donor.group_name', 'Group'),
+    field('data_types', 'Data Types'),
+    field('origin_sample.organ', 'Organ'),
+    field('status', 'Status'),
+  ]
 };
