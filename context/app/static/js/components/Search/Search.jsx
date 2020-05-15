@@ -9,7 +9,10 @@ import './Search.css';
 import { donorConfig, sampleConfig, datasetConfig } from './config';
 import { filter } from './utils';
 
-const baseFilters = [filter('ancestor_id', 'Ancestor ID')];
+const baseFilters = [
+  filter('ancestor_id', 'Ancestor ID'),
+  filter('entity_type', 'Entity Type'),
+];
 
 const filtersByType = {
   '': baseFilters,
