@@ -3,6 +3,8 @@
 ## v0.0.17 - In progress
 ### Added
 - Python util to pull data from submodules.
+### Changed
+- Fix Vitessce sizing bug.
 
 ## v0.0.16 - 2020-05-13
 ### Added
