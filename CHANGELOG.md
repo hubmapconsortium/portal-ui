@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.0.17 - In progress
+## v0.0.18 - In progress
+
+## v0.0.17 - 2020-05-15
 ### Added
 - Python util to pull data from submodules.
 ### Changed
