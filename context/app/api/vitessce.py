@@ -12,11 +12,11 @@ from flask import current_app
 CODEX_OFFSETS_PATH = "ppneorh7"
 CODEX_TILE_PATH = "output/extract/expressions/ome-tiff"
 # Hardocde just looking at a few tiles.
-X_VALS = list(range(3))
+X_VALS = list(range(7))
 X_VALS.remove(0)
-Y_VALS = list(range(3))
+Y_VALS = list(range(9))
 Y_VALS.remove(0)
-R_VALS = list(range(3))
+R_VALS = list(range(4))
 R_VALS.remove(0)
 
 # END: Only for Demo! #
@@ -44,7 +44,8 @@ IMAGING = {
     "name": "NAME",
     "layers": [],
     "staticLayout": [
-        {"component": "layerController", "x": 0, "y": 0, "w": 4, "h": 6},
+        {"component": "layerController", "x": 0, "y": 0, "w": 4, "h": 4},
+        {"component": "description", "x": 0, "y": 4, "w": 4, "h": 2},
         {
             "component": "spatial",
             "props": {"view": {}, },
@@ -265,7 +266,7 @@ class Vitessce:
 
         if self.assay_type not in IMAGE_ASSAYS:
             return conf
-        conf["staticLayout"][1]["props"]["view"] = ASSAY_CONF_LOOKUP[self.assay_type][
+        conf["staticLayout"][2]["props"]["view"] = ASSAY_CONF_LOOKUP[self.assay_type][
             "view"
         ]
         return conf
