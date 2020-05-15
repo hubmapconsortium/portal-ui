@@ -1,6 +1,8 @@
 # Changelog
 
 ## v0.0.18 - In progress
+### Added
+- Get favicons on React pages.
 
 ## v0.0.17 - 2020-05-15
 ### Added
