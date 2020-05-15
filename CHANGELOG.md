@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.18 - In progress
+### Changed
+- Make search columns appropriate to type.
+
 ## v0.0.17 - In progress
 ### Added
 - Python util to pull data from submodules.

@@ -19,12 +19,13 @@ const filtersByType = {
 };
 
 const resultFieldsByType = {
-  '': ['description', 'status', 'entity_type'],
+  '': ['status', 'entity_type'],
   donor: donorConfig.fields,
   sample: sampleConfig.fields,
   dataset: datasetConfig.fields,
 };
 const type = (new URL(document.location).searchParams.get('entity_type[0]') || '').toLowerCase();
+console.log(type, resultFieldsByType); // eslint-disable-line
 
 const searchProps = {
   // The default behavior is to add a "_search" path.
