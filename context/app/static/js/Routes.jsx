@@ -5,6 +5,7 @@ import NoticeAlert from './components/NoticeAlert';
 import Details from './components/Details';
 import Home from './components/Home';
 import Search from './components/Search/Search';
+import DonorDetail from './components/DonorDetail';
 
 function Routes(props) {
   const { flaskData } = props;
@@ -14,6 +15,16 @@ function Routes(props) {
   const urlPath = window.location.pathname;
 
   if (urlPath.startsWith('/browse')) {
+    if (urlPath.startsWith('/browse/donor/')) {
+      return (
+        <DonorDetail
+          assayMetadata={entity}
+          provData={provenance}
+          vitData={vitessce_conf}
+          flashed_messages={flashed_messages}
+        />
+      );
+    }
     return (
       <>
         {flashed_messages && flashed_messages.length
