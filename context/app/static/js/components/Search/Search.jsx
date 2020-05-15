@@ -1,5 +1,6 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 import PortalSearch from '../PortalSearch/PortalSearch';
 import { readCookie } from '../../helpers/functions';
 import 'searchkit/theming/theme.scss';
@@ -161,11 +162,12 @@ const searchProps = {
 };
 
 function Search(props) {
-  const { esEndpoint } = props;
+  const { title, esEndpoint } = props;
   const allProps = Object.assign(searchProps, { apiUrl: esEndpoint });
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Container maxWidth="lg">
+      <Typography component="h1" variant="h1">{title}</Typography>
       <PortalSearch {...allProps} />
     </Container>
   );

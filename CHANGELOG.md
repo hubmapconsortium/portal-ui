@@ -11,6 +11,7 @@
 - Different search configs for different types.
 - Add data visualization in Vitessce for scRNASEQ and CODEX.
 - Link to derived Samples and Datasets.
+- Title on search page.
 ### Changed
 - Use the code that had been in portal-search directly.
 - Fix VisTabs panel overflow.
