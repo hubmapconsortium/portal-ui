@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
-import NoticeAlert from './components/NoticeAlert';
-import Details from './components/Details';
 import Home from './components/Home';
 import Search from './components/Search/Search';
 import DonorDetail from './components/DonorDetail';
+import SampleDetail from './components/SampleDetail';
+import DatasetDetail from './components/DatasetDetail';
 
 function Routes(props) {
   const { flaskData } = props;
@@ -14,27 +14,36 @@ function Routes(props) {
   } = flaskData;
   const urlPath = window.location.pathname;
 
-  if (urlPath.startsWith('/browse')) {
-    if (urlPath.startsWith('/browse/donor/')) {
-      return (
-        <DonorDetail
-          assayMetadata={entity}
-          provData={provenance}
-          vitData={vitessce_conf}
-          flashed_messages={flashed_messages}
-        />
-      );
-    }
+  if (urlPath.startsWith('/browse/donor/')) {
     return (
-      <>
-        {flashed_messages && flashed_messages.length
-          ? <NoticeAlert errors={flashed_messages} /> : null}
-        <Details
-          assayMetadata={entity}
-          provData={provenance}
-          vitData={vitessce_conf}
-        />
-      </>
+      <DonorDetail
+        assayMetadata={entity}
+        provData={provenance}
+        vitData={vitessce_conf}
+        flashed_messages={flashed_messages}
+      />
+    );
+  }
+  if (urlPath.startsWith('/browse/sample/')) {
+    return (
+      <SampleDetail
+        assayMetadata={entity}
+        provData={provenance}
+        vitData={vitessce_conf}
+        flashed_messages={flashed_messages}
+      />
+    );
+  }
+
+  if (urlPath.startsWith('/browse/dataset/')) {
+    return (
+      <DatasetDetail
+        assayMetadata={entity}
+        provData={provenance}
+        vitData={vitessce_conf}
+        flashed_messages={flashed_messages}
+        assetsEndpoint={endpoints.assetsEndpoint}
+      />
     );
   }
 
