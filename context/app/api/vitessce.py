@@ -34,8 +34,11 @@ SCATTERPLOT = {
             },
             "x": 0,
             "y": 0,
-            "w": 12,
+            "w": 10,
             "h": 6,
+        },
+         {
+            "component": "factors", "x": 10, "y": 0, "w": 2, "h": 6,
         },
     ],
 }
@@ -63,11 +66,10 @@ ASSAY_CONF_LOOKUP = {
         "base_conf": SCATTERPLOT,
         "files_conf": [
             {
-                "rel_path": "dim_reduced_clustered/dim_reduced_clustered.json",
+                "rel_path": "cluster-marker-genes/output/cluster_marker_genes.cells.json",
                 "type": "CELLS",
             },
-            # This doesn't exist right now.
-            # { 'rel_path': 'cluster-marker-genes/cluster_marker_genes.json', 'type': 'FACTORS' }
+            { 'rel_path': 'cluster-marker-genes/output/cluster_marker_genes.factors.json', 'type': 'FACTORS' }
         ],
     },
     "codex_cytokit": {
@@ -83,7 +85,9 @@ ASSAY_CONF_LOOKUP = {
     },
 }
 
-IMAGE_ASSAYS = ["codex_cytokit"]
+CODEX_ASSAY = "codex_cytokit"
+
+IMAGE_ASSAYS = [CODEX_ASSAY]
 
 MOCK_URL = "https://example.com"
 
@@ -101,7 +105,8 @@ class Vitessce:
         self.uuid = entity["uuid"]
         self.nexus_token = nexus_token
         self.is_mock = is_mock
-        self.conf = None
+        self.entity = entity
+        self.conf = {}
         self._build_vitessce_conf()
 
     def _build_vitessce_conf(self):
@@ -135,11 +140,21 @@ class Vitessce:
         }
 
         """
-
-        conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
+        if self.assay_type not in ASSAY_CONF_LOOKUP:
+          return {}
         files = ASSAY_CONF_LOOKUP[self.assay_type]["files_conf"]
+        file_paths_expected = [file['rel_path'] for file in files]
+        file_paths_found = [file['rel_path'] for file in self.entity['files']]
+        # Codex assay needs to be built up.  
+        # We need a better way to handle it but for now, this is ok.
+        if self.assay_type != CODEX_ASSAY:
+            # We need to check that the files we expect actually exist.
+            # This is due to the volatility of the datasets.
+            if not set(file_paths_expected).issubset(set(file_paths_found)):
+                return {}
+        conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
         layers = [
-            self._build_layer_conf(file, self.uuid, self.assay_type) for file in files
+            self._build_layer_conf(file) for file in files
         ]
 
         conf["layers"] = layers
@@ -148,8 +163,9 @@ class Vitessce:
         conf = self._replace_view(conf)
 
         self.conf = conf
+        return conf
 
-    def _build_layer_conf(self, file, uuid, assay_type):
+    def _build_layer_conf(self, file):
         """Build each layer in the layers section.
 
         returns e.g
@@ -163,13 +179,13 @@ class Vitessce:
 
         return {
             "type": file["type"],
-            "url": self._build_assets_url(file["rel_path"], uuid)
-            if assay_type not in IMAGE_ASSAYS
-            else self._build_image_layer_datauri(file["rel_path"], uuid),
+            "url": self._build_assets_url(file["rel_path"])
+            if self.assay_type not in IMAGE_ASSAYS
+            else self._build_image_layer_datauri(file["rel_path"]),
             "name": file["type"].lower(),
         }
 
-    def _build_image_layer_datauri(self, rel_path, uuid):
+    def _build_image_layer_datauri(self, rel_path):
         """
         Specifically for the RASTERS schema, we need to build a DataURI of the schema because
         it contains a URL for a file whose location is unknown until pipelines have been run.
@@ -206,14 +222,14 @@ class Vitessce:
             for (r, x, y) in itertools.product(*[R_VALS, X_VALS, Y_VALS])
         ]
         image_layer["images"] = [
-            self._build_image_schema(image_path, uuid) for image_path in image_paths
+            self._build_image_schema(image_path) for image_path in image_paths
         ]
         image_layer["schema_version"] = "0.0.1"
         return DataURI.make(
             "text/plain", charset="us-ascii", base64=True, data=json.dumps(image_layer)
         )
 
-    def _build_image_schema(self, rel_path, uuid):
+    def _build_image_schema(self, rel_path):
         """
         Builds the 'images' sections of the RASTER schema.
 
@@ -230,17 +246,15 @@ class Vitessce:
         schema = {}
         schema["name"] = Path(rel_path).name
         schema["type"] = "ome-tiff"
-        schema["url"] = self._build_assets_url(rel_path, uuid)
+        schema["url"] = self._build_assets_url(rel_path)
         schema["metadata"] = {}
         offsets_path = Path(CODEX_OFFSETS_PATH) / Path(
             Path(rel_path).name.replace("ome.tiff", "offsets.json")
         )
-        schema["metadata"]["omeTiffOffsetsUrl"] = self._build_assets_url(
-            str(offsets_path), uuid
-        )
+        schema["metadata"]["omeTiffOffsetsUrl"] = self._build_assets_url(str(offsets_path))
         return schema
 
-    def _build_assets_url(self, rel_path, uuid):
+    def _build_assets_url(self, rel_path):
         """
       Create a url for an asset.
 
@@ -254,7 +268,7 @@ class Vitessce:
         else:
             assets_endpoint = MOCK_URL
         base_url = urllib.parse.urljoin(
-            assets_endpoint, str(Path(uuid) / Path(rel_path))
+            assets_endpoint, str(Path(self.uuid) / Path(rel_path))
         )
         token_param = urllib.parse.urlencode({"token": self.nexus_token})
         return base_url + "?" + token_param

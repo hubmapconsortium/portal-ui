@@ -3,6 +3,7 @@
 ## v0.0.18 - In progress
 ### Changed
 - Upgrade Vitessce to 0.1.3 to fix small bugs and add description for tiff.
+- Change scRNASEQ file searching.
 
 ## v0.0.17 - 2020-05-15
 ### Added
