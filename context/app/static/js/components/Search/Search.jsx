@@ -63,7 +63,7 @@ const searchProps = {
       defaultOption: false,
     },
   ],
-  hiddenFilterIds: baseFilters.map((filterDef) => filterDef.id),
+  hiddenFilterIds: baseFilters.map((filterDef) => filterDef.props.id),
 };
 
 function Search(props) {
