@@ -1,9 +1,7 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
 import VisTabs from './VisTabs';
 import RecursiveList from './RecursiveList';
 import DetailSummary from './DetailSummary';
@@ -13,19 +11,16 @@ import DetailMetadata from './DetailMetadata';
 
 function Details(props) {
   const { assayMetadata, provData } = props;
-  const { portal_uploaded_protocol_files } = assayMetadata;
+  const { protocol_url, portal_uploaded_protocol_files } = assayMetadata;
 
   return (
     <Container maxWidth="lg">
       <DetailSummary assayMetadata={assayMetadata} />
       <DetailAttribution assayMetadata={assayMetadata} />
       <DetailMetadata />
-      {portal_uploaded_protocol_files ? <DetailProtocol assayMetadata={assayMetadata} /> : null}
-      <Box mt={2} mb={2}>
-        <Paper>
-          <VisTabs provData={provData} assayMetadata={assayMetadata} />
-        </Paper>
-      </Box>
+      {portal_uploaded_protocol_files || protocol_url
+        ? <DetailProtocol assayMetadata={assayMetadata} /> : null}
+      <VisTabs provData={provData} assayMetadata={assayMetadata} />
       <RecursiveList property={assayMetadata} propertyName="Root Property" isRoot />
     </Container>
   );
