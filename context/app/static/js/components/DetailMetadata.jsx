@@ -28,12 +28,13 @@ function MetadataItem(props) {
 }
 
 function DonorItems(props) {
-  const { genderFinding, currentAge, bodyMassIndex } = props;
+  const { metadata } = props;
+
   return (
     <>
-      <MetadataItem label="Gender Finding" value={genderFinding} />
-      <MetadataItem label="Current Chronological Age" ml={1} value={currentAge} />
-      <MetadataItem label="Body Mass Index" ml={1} value={bodyMassIndex} />
+      <MetadataItem label="Gender Finding" value={metadata['Gender finding']} />
+      <MetadataItem label="Current Chronological Age" ml={1} value={metadata['Current chronological age']} />
+      <MetadataItem label="Body Mass Index" ml={1} value={metadata['Body mass index']} />
     </>
   );
 }
@@ -57,7 +58,7 @@ function DetailMetadata(props) {
     <div>
       <SectionHeader variant="h3" component="h2">Metadata</SectionHeader>
       <FlexPaper>
-        {entityType === 'donor' ? <DonorItems {...props} /> : <SampleItems {...props} />}
+        {entityType === 'Donor' ? <DonorItems {...props} /> : <SampleItems {...props} />}
       </FlexPaper>
     </div>
   );
