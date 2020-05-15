@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import styled from 'styled-components';
@@ -24,7 +25,7 @@ const FlexContainer = styled.div`
 
 function ProvTable(props) {
   const { provData, assayMetadata, typesToSplit } = props;
-  const { uuid } = assayMetadata;
+  const { uuid, entity_type } = assayMetadata;
 
   const types = Object.values(provData.entity).reduce((acc, item) => {
     acc[typesToSplit.indexOf(item['prov:type'])].push(item);
@@ -57,6 +58,14 @@ function ProvTable(props) {
                 <ListItemText primary={`Derived ${typesToSplit[i]}s`} />
               </ListItemLink>
             )
+        }
+            {
+          typesToSplit[i] === entity_type && type !== 'Donor'
+            ? (
+              <ListItemLink href={`/search?ancestor_id[0]=${uuid}&entity_type[0]=${typesToSplit[i]}`}>
+                <ListItemText primary={`Derived ${typesToSplit[i]}s`} />
+              </ListItemLink>
+            ) : null
         }
           </List>
           {i < (types.length - 1) && <Divider orientation="vertical" flexItem />}
