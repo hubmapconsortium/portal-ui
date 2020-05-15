@@ -31,7 +31,8 @@ def _get_client():
 
 @blueprint.route('/')
 def index():
-    core_props = {'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']}}
+    core_props = {'endpoints': {
+        'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'], 'assetsEndpoint': current_app.config['ASSETS_ENDPOINT']}}
     return render_template('pages/base_react.html', types=types, flask_data=core_props)
 
 
@@ -67,7 +68,8 @@ def details(type, uuid):
                                  'traceback': error.__str__()[0:1500]})
 
     template = f'pages/base_react.html'
-    core_props = {'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']}}
+    core_props = {'endpoints': {
+        'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'], 'assetsEndpoint': current_app.config['ASSETS_ENDPOINT']}}
     core_props.update({
         'flashed_messages': flashed_messages,
         'entity': entity,
@@ -98,11 +100,12 @@ def details_ext(type, uuid, ext):
 
 @blueprint.route('/search')
 def search():
-    core_props = {'endpoints': {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']}}
+    core_props = {'endpoints':
+    {'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'], 'assetsEndpoint': current_app.config['ASSETS_ENDPOINT']}}
     if 'nexus_token' not in session:
         abort(403)
     return render_template(
         'pages/base_react.html',
-        types=types,
-        flask_data=core_props
+        types = types,
+        flask_data = core_props
     )
