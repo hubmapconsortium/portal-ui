@@ -32,7 +32,7 @@ def _get_client():
 @blueprint.route('/')
 def index():
     core_props = {'endpoints': {
-        'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'], 
+        'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'],
         'assetsEndpoint': current_app.config['ASSETS_ENDPOINT']}}
     return render_template('pages/base_react.html', types=types, flask_data=core_props)
 
@@ -69,7 +69,7 @@ def details(type, uuid):
 
     template = f'pages/base_react.html'
     core_props = {'endpoints': {
-        'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'], 
+        'esEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'],
         'assetsEndpoint': current_app.config['ASSETS_ENDPOINT']}}
     core_props.update({
         'flashed_messages': flashed_messages,
