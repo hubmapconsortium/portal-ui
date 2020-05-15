@@ -14,7 +14,6 @@ function TabPanel(props) {
   const {
     children, value, index, className, boxClasses,
   } = props;
-
   return (
     <Typography
       className={className}
@@ -29,6 +28,7 @@ function TabPanel(props) {
   );
 }
 
+
 function VisTabs(props) {
   const { provData, assayMetadata } = props;
   const classes = useStyles();
@@ -37,7 +37,6 @@ function VisTabs(props) {
   const handleChange = (event, newValue) => {
     setOpen(newValue);
   };
-
   return (
     <div>
       <SectionHeader variant="h3" component="h2">Provenance</SectionHeader>

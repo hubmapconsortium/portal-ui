@@ -5,7 +5,7 @@ import {
   LayoutResults, SortingSelector,
   ActionBar, ActionBarRow, SelectedFilters,
   NoHits, HitsStats,
-  Hits, Layout, LayoutBody, SideBar, Pagination,
+  Hits, LayoutBody, SideBar, Pagination,
 } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
 import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
@@ -122,47 +122,45 @@ export default function (props) {
 
   return (
     <SearchkitProvider searchkit={searchkit}>
-      <Layout>
-        <LayoutBody>
-          <SideBar>
-            <SearchBox
-              autofocus
-              searchOnChange
-              prefixQueryFields={prefixQueryFields}
-            />
-            {filterElements}
-          </SideBar>
-          <LayoutResults>
-            <ActionBar>
-              <ActionBarRow>
-                <HitsStats translations={{
-                  'hitstats.results_found': '{hitCount} results found',
-                }}
-                />
-                <MaskedSelectedFilters />
-                <SortingSelector options={sortOptions} />
-              </ActionBarRow>
-            </ActionBar>
-            {debug && (
-            <Hits
-              mod="sk-hits-list"
-              hitsPerPage={hitsPerPage}
-              itemComponent={DebugItem}
-              sourceFilter={resultFieldsPlusId}
-            />
-            )}
+      <LayoutBody>
+        <SideBar>
+          <SearchBox
+            autofocus
+            searchOnChange
+            prefixQueryFields={prefixQueryFields}
+          />
+          {filterElements}
+        </SideBar>
+        <LayoutResults>
+          <ActionBar>
+            <ActionBarRow>
+              <HitsStats translations={{
+                'hitstats.results_found': '{hitCount} results found',
+              }}
+              />
+              <MaskedSelectedFilters />
+              <SortingSelector options={sortOptions} />
+            </ActionBarRow>
+          </ActionBar>
+          {debug && (
+          <Hits
+            mod="sk-hits-list"
+            hitsPerPage={hitsPerPage}
+            itemComponent={DebugItem}
+            sourceFilter={resultFieldsPlusId}
+          />
+          )}
 
-            <Hits
-              mod="sk-hits-list"
-              hitsPerPage={hitsPerPage}
-              listComponent={makeTableComponent(resultFields, detailsUrlPrefix, idField)}
-              sourceFilter={resultFieldsPlusId}
-            />
-            <NoHits />
-            <Pagination showNumbers />
-          </LayoutResults>
-        </LayoutBody>
-      </Layout>
+          <Hits
+            mod="sk-hits-list"
+            hitsPerPage={hitsPerPage}
+            listComponent={makeTableComponent(resultFields, detailsUrlPrefix, idField)}
+            sourceFilter={resultFieldsPlusId}
+          />
+          <NoHits />
+          <Pagination showNumbers />
+        </LayoutResults>
+      </LayoutBody>
     </SearchkitProvider>
   );
 }

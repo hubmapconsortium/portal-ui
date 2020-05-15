@@ -1,15 +1,25 @@
 # Changelog
 
-## v0.0.17 - In progress
+## v0.0.18 - In progress
+### Added
+- Get favicons on React pages.
+### Changed
+- Upgrade Vitessce to 0.1.3 to fix small bugs and add description for tiff.
+
+## v0.0.17 - 2020-05-15
 ### Added
 - Python util to pull data from submodules.
+### Changed
+- Fix Vitessce sizing bug.
 
 ## v0.0.16 - 2020-05-13
 ### Added
 - Sort by last_modified.
 - Hide entity_type facet.
 - Different search configs for different types.
+- Add data visualization in Vitessce for scRNASEQ and CODEX.
 - Link to derived Samples and Datasets.
+- Title on search page.
 ### Changed
 - Use the code that had been in portal-search directly.
 - Fix VisTabs panel overflow.
@@ -24,6 +34,7 @@
 - Move ProvTable below title panel in Details.
 - Fix NoticeAlert conditional causing a '0' to be rendered.
 ### Removed
+- "Layout" from Search... just added border we didn't need.
 - Removed old code to dump to nested tables.
 - Remove vitessce from VisTabs.
 - Remove unused fragments templates.

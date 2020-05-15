@@ -1,5 +1,6 @@
 FROM node:12.16.3-alpine as builder
 WORKDIR /work
+RUN apk add --no-cache python git
 COPY . .
 RUN npm install
 # TODO: Get rid of prepublish... wget the prov-vis schema shouldn't be necessary. See PR #232.
