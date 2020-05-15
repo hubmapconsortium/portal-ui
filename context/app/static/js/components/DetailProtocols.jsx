@@ -20,6 +20,21 @@ const StyledPaper = styled(Paper)`
   padding: 20px 40px 20px 40px;
 `;
 
+function ProtocolLink(props) {
+  const { protocolUrl: url } = props;
+  return (
+    <SectionItem label="Protocol URL">
+      <StyledTypography variant="body1">
+        {url ? (
+          <StyledLink href={`https://${url}`} target="_blank" rel="noopener noreferrer">
+            {url}
+          </StyledLink>
+        ) : 'No URL Available'}
+      </StyledTypography>
+    </SectionItem>
+  );
+}
+
 function DetailProtocols(props) {
   const { assayMetadata } = props;
   const { protocol_url, portal_uploaded_protocol_files } = assayMetadata;
@@ -28,31 +43,15 @@ function DetailProtocols(props) {
       <SectionHeader variant="h3" component="h2">Protocols</SectionHeader>
       <Divider />
       <StyledPaper>
-        <SectionItem label="Protocol URL">
-          <StyledTypography variant="body1">
-            {protocol_url ? (
-              <StyledLink href={`https://${protocol_url}`} target="_blank" rel="noopener noreferrer">
-                {protocol_url}
-              </StyledLink>
-            ) : 'No File Available'}
-          </StyledTypography>
-        </SectionItem>
+        <ProtocolLink protocolUrl={protocol_url} />
         {portal_uploaded_protocol_files && portal_uploaded_protocol_files.map((protocol, i) => (
-          <>
+          <React.Fragment key={protocol}>
             {i !== 0 || protocol_url ? <Divider /> : null}
-            <SectionItem label="Protocol URL">
-              <StyledTypography variant="body1">
-                {protocol.protocol_doi ? (
-                  <StyledLink href={`https://${protocol.protocol_doi}`} target="_blank" rel="noopener noreferrer">
-                    {protocol.protocol_doi}
-                  </StyledLink>
-                ) : 'No File Available'}
-              </StyledTypography>
-            </SectionItem>
+            <ProtocolLink protocolUrl={protocol.protocol_doi} />
             <SectionItem label="Image Files">
               <StyledTypography variant="body1">{protocol.protocol_file || 'No File Available'}</StyledTypography>
             </SectionItem>
-          </>
+          </React.Fragment>
         ))}
       </StyledPaper>
     </div>
