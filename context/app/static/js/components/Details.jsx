@@ -12,7 +12,7 @@ import VisTabs from './VisTabs';
 import RecursiveList from './RecursiveList';
 
 function Details(props) {
-  const { assayMetadata, provData } = props;
+  const { assayMetadata, provData, vitData } = props;
   const generateListTemplate = (header, description) => (
     <li>
       <Box mb={2} mt={0}>
@@ -50,7 +50,7 @@ function Details(props) {
       </ExpansionPanel>
       <Box mt={2} mb={2}>
         <Paper>
-          <VisTabs provData={provData} assayMetadata={assayMetadata} />
+          <VisTabs provData={provData} assayMetadata={assayMetadata} vitData={vitData} />
         </Paper>
       </Box>
       <RecursiveList property={assayMetadata} propertyName="Root Property" isRoot />

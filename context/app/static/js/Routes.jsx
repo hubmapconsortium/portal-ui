@@ -9,7 +9,7 @@ import Search from './components/Search/Search';
 function Routes(props) {
   const { flaskData } = props;
   const {
-    flashed_messages, entity, provenance, vitessce_conf, endpoints,
+    flashed_messages, entity, provenance, vitessce_conf, endpoints, title,
   } = flaskData;
   const urlPath = window.location.pathname;
 
@@ -35,13 +35,14 @@ function Routes(props) {
 
   if (urlPath.startsWith('/search')) {
     return (
-      <Search esEndpoint={endpoints.esEndpoint} />
+      <Search esEndpoint={endpoints.esEndpoint} title={title} />
     );
   }
 }
 
 Routes.propTypes = {
   flaskData: PropTypes.exact({
+    title: PropTypes.string,
     entity: PropTypes.object,
     flashed_messages: PropTypes.array,
     provenance: PropTypes.object,

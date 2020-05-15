@@ -2,11 +2,11 @@ from collections import namedtuple
 import json
 from datetime import datetime
 
-from flask import abort, current_app
-
 from datauri import DataURI
+from flask import abort, current_app
 import requests
 
+from .vitessce import Vitessce
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
@@ -165,45 +165,45 @@ class ApiClient():
 
         return provenance
 
-    def get_vitessce_conf(self):
+    def get_vitessce_conf(self, entity):
+        if ('files' not in entity or 'data_types' not in entity):
+            # Would a default no-viz config be better?
+            return {}
         if self.is_mock:
             cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
             cellsUri = DataURI.make(
                 'text/plain', charset='us-ascii', base64=True, data=cellsData
             )
             token = 'fake-token'
-        else:
-            # TODO: Hit File API
-            cellsUri = 'https://assets.test.hubmapconsortium.org/' \
-                '686cd8e0c2a9fa2dc1a321330158dcd7/umap/' \
-                'cluster_marker_genes/cluster_marker_genes.json'
-            token = self.nexus_token
-        return {
-            "description": "DEMO",
-            "layers": [
-                {
-                    "name": "cells",
-                    "type": "CELLS",
-                    "url": cellsUri,
-                    "requestInit": {
-                        "headers": {
-                            'Authorization': 'Bearer ' + token
-                        }
-                    }
-                },
-            ],
-            "name": "Linnarsson",
-            "staticLayout": [
-                {
-                    "component": "scatterplot",
-                    "props": {
-                        "mapping": "UMAP",
-                        "view": {
-                            "zoom": 4,
-                            "target": [0, 0, 0]
+            return {
+                'description': 'DEMO',
+                'layers': [
+                    {
+                        'name': 'cells',
+                        'type': 'CELLS',
+                        'url': cellsUri,
+                        'requestInit': {
+                            'headers': {
+                                'Authorization': 'Bearer ' + token
+                            }
                         }
                     },
-                    "x": 0, "y": 0, "w": 12, "h": 2
-                },
-            ]
-        }
+                ],
+                'name': 'Linnarsson',
+                'staticLayout': [
+                    {
+                        'component': 'scatterplot',
+                        'props': {
+                            'mapping': 'UMAP',
+                            'view': {
+                                'zoom': 4,
+                                'target': [0, 0, 0]
+                            }
+                        },
+                        'x': 0, 'y': 0, 'w': 12, 'h': 2
+                    },
+                ]
+            }
+        else:
+            vitessce = Vitessce(entity=entity, nexus_token=self.nexus_token)
+            return vitessce.conf

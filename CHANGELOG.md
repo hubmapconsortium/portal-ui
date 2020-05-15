@@ -4,13 +4,17 @@
 ### Added
 - Python util to pull data from submodules.
 - Appropriate facets for different types.
+### Changed
+- Fix Vitessce sizing bug.
 
 ## v0.0.16 - 2020-05-13
 ### Added
 - Sort by last_modified.
 - Hide entity_type facet.
 - Different search configs for different types.
+- Add data visualization in Vitessce for scRNASEQ and CODEX.
 - Link to derived Samples and Datasets.
+- Title on search page.
 ### Changed
 - Use the code that had been in portal-search directly.
 - Fix VisTabs panel overflow.
@@ -25,6 +29,7 @@
 - Move ProvTable below title panel in Details.
 - Fix NoticeAlert conditional causing a '0' to be rendered.
 ### Removed
+- "Layout" from Search... just added border we didn't need.
 - Removed old code to dump to nested tables.
 - Remove vitessce from VisTabs.
 - Remove unused fragments templates.
