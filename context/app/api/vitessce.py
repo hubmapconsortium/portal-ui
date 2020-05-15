@@ -37,9 +37,7 @@ SCATTERPLOT = {
             "w": 10,
             "h": 6,
         },
-         {
-            "component": "factors", "x": 10, "y": 0, "w": 2, "h": 6,
-        },
+        {"component": "factors", "x": 10, "y": 0, "w": 2, "h": 6, },
     ],
 }
 
@@ -69,7 +67,10 @@ ASSAY_CONF_LOOKUP = {
                 "rel_path": "cluster-marker-genes/output/cluster_marker_genes.cells.json",
                 "type": "CELLS",
             },
-            { 'rel_path': 'cluster-marker-genes/output/cluster_marker_genes.factors.json', 'type': 'FACTORS' }
+            {
+                "rel_path": "cluster-marker-genes/output/cluster_marker_genes.factors.json",
+                "type": "FACTORS",
+            },
         ],
     },
     "codex_cytokit": {
@@ -141,11 +142,11 @@ class Vitessce:
 
         """
         if self.assay_type not in ASSAY_CONF_LOOKUP:
-          return {}
+            return {}
         files = ASSAY_CONF_LOOKUP[self.assay_type]["files_conf"]
-        file_paths_expected = [file['rel_path'] for file in files]
-        file_paths_found = [file['rel_path'] for file in self.entity['files']]
-        # Codex assay needs to be built up.  
+        file_paths_expected = [file["rel_path"] for file in files]
+        file_paths_found = [file["rel_path"] for file in self.entity["files"]]
+        # Codex assay needs to be built up.
         # We need a better way to handle it but for now, this is ok.
         if self.assay_type != CODEX_ASSAY:
             # We need to check that the files we expect actually exist.
@@ -153,9 +154,7 @@ class Vitessce:
             if not set(file_paths_expected).issubset(set(file_paths_found)):
                 return {}
         conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
-        layers = [
-            self._build_layer_conf(file) for file in files
-        ]
+        layers = [self._build_layer_conf(file) for file in files]
 
         conf["layers"] = layers
         conf["name"] = self.uuid
@@ -251,7 +250,9 @@ class Vitessce:
         offsets_path = Path(CODEX_OFFSETS_PATH) / Path(
             Path(rel_path).name.replace("ome.tiff", "offsets.json")
         )
-        schema["metadata"]["omeTiffOffsetsUrl"] = self._build_assets_url(str(offsets_path))
+        schema["metadata"]["omeTiffOffsetsUrl"] = self._build_assets_url(
+            str(offsets_path)
+        )
         return schema
 
     def _build_assets_url(self, rel_path):
