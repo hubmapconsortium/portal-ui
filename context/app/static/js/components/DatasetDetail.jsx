@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import { Vitessce } from 'vitessce';
 import VisTabs from './VisTabs';
 import DetailSummary from './DetailSummary';
 import DetailAttribution from './DetailAttribution';
@@ -11,6 +12,7 @@ import DetailProtocol from './DetailProtocols';
 import NoticeAlert from './NoticeAlert';
 import DetailMetadataTable from './DetailMetadataTable';
 import DetailFileTable from './DetailFileTable';
+import 'vitessce/build-lib/es/production/static/css/index.css';
 
 const FlexContainer = styled(Container)`
     flex-grow: 1;
@@ -57,6 +59,7 @@ function DatasetDetail(props) {
   const {
     assayMetadata,
     provData,
+    vitData,
     flashed_messages,
     assetsEndpoint,
   } = props;
@@ -72,6 +75,9 @@ function DatasetDetail(props) {
         <DetailSummary assayMetadata={assayMetadata}>
           <SummaryData data_types={data_types} origin_sample={origin_sample} />
         </DetailSummary>
+        {'name' in vitData
+          ? <Vitessce rowHeight={100} config={vitData} theme="light" />
+          : null}
         <DetailAttribution assayMetadata={assayMetadata} />
         <VisTabs provData={provData} assayMetadata={assayMetadata} />
         {portal_uploaded_protocol_files || protocol_url
