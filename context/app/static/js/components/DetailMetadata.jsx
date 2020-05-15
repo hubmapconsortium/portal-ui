@@ -39,10 +39,12 @@ function DonorItems(props) {
 }
 
 function SampleItems(props) {
-  const { organType, specimenType, tissueLocation } = props;
+  const {
+    organ, origin_sample: { organ: originOrgan }, specimenType, tissueLocation,
+  } = props;
   return (
     <>
-      <MetadataItem label="Organ Type" value={organType} />
+      <MetadataItem label="Organ Type" value={organ || originOrgan} />
       <MetadataItem label="Specimen Type" ml={1} value={specimenType} />
       <MetadataItem label="Tissue Location" ml={1} value={tissueLocation} />
     </>

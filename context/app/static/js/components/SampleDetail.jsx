@@ -53,7 +53,7 @@ function SampleDetail(props) {
         <DetailSummary assayMetadata={assayMetadata}>
           <SummaryData organ={organ} specimen_type={specimen_type} origin_sample={origin_sample} />
         </DetailSummary>
-        <DetailMetadata organ={organ} specimenType={specimen_type} />
+        <DetailMetadata organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
         <DetailAttribution assayMetadata={assayMetadata} />
         <VisTabs provData={provData} assayMetadata={assayMetadata} />
         {portal_uploaded_protocol_files || protocol_url
