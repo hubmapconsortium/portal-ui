@@ -2,11 +2,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import SectionHeader from './SectionHeader';
 import SectionItem from './SectionItem';
+import SummaryItem from './SummaryItem';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -21,6 +21,10 @@ const FlexItemRight = styled.div`
   margin-left: auto;
 `;
 
+const FlexItemBottomRight = styled(FlexItemRight)`
+  align-items: flex-end;
+`;
+
 const FlexColumnRight = styled(FlexItemRight)`
     flex-direction: column;
     justify-content: space-evenly;
@@ -33,15 +37,6 @@ const StyledTypography = styled(Typography)`
 
 const StyledLink = styled(Link)`
   color: #3781D1;
-  align-self: flex-end;
-`;
-
-const StyledDivider = styled(Divider)`
-  margin-left: 5px;
-  margin-right: 5px;
-  height: 90%;
-  background-color: #444A65;
-  align-self:center;
 `;
 
 const StyledPaper = styled(Paper)`
@@ -50,18 +45,9 @@ const StyledPaper = styled(Paper)`
   padding: 15px 40px 15px 15px;
 `;
 
-function AssaySpecificItem(props) {
-  const { children } = props;
-  return (
-    <>
-      <StyledDivider orientation="vertical" flexItem />
-      <Typography variant="body1">{children}</Typography>
-    </>
-  );
-}
 
 function DetailSummary(props) {
-  const { assayMetadata } = props;
+  const { assayMetadata, children } = props;
   const {
     display_doi,
     entity_type,
@@ -69,9 +55,6 @@ function DetailSummary(props) {
     last_modified_timestamp,
     uuid,
     description,
-    organ_type,
-    specimen_type,
-    data_types,
     status,
   } = assayMetadata;
 
@@ -82,18 +65,20 @@ function DetailSummary(props) {
       <FlexContainer>
         <ColumnContainer>
           <SectionHeader variant="h1" component="h2">{display_doi}</SectionHeader>
-          <FlexContainer>
-            {organ_type && organ_type.length
-              ? (<AssaySpecificItem>{organ_type}</AssaySpecificItem>) : null}
-            {specimen_type && specimen_type.length
-              ? (<AssaySpecificItem>{specimen_type}</AssaySpecificItem>) : null}
-            {data_types && data_types.length
-              ? (<AssaySpecificItem>{data_types.constructor.name === 'Array' ? data_types.join(' / ') : data_types}</AssaySpecificItem>) : null}
-            {status && status.length
-              ? (<AssaySpecificItem>{status}</AssaySpecificItem>) : null}
-          </FlexContainer>
+          {entity_type !== 'Donor'
+            ? (
+              <FlexContainer>
+                {children}
+              </FlexContainer>
+            ) : null}
         </ColumnContainer>
-        <FlexItemRight>
+        <FlexItemBottomRight>
+          {status && status.length
+            ? (
+              <FlexContainer>
+                <SummaryItem>{status}</SummaryItem>
+              </FlexContainer>
+            ) : null}
           <StyledLink
             href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
             variant="body1"
@@ -102,7 +87,7 @@ function DetailSummary(props) {
           >
             JSON
           </StyledLink>
-        </FlexItemRight>
+        </FlexItemBottomRight>
       </FlexContainer>
 
       <StyledPaper>
