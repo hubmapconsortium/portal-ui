@@ -49,7 +49,7 @@ function DetailFileTable(props) {
                 <TableRow>
                   <TableCell>
                     <StyledLink
-                      href={`${assetsEndpoint}/${uuid}/${row.rel_path}?token=${cook}`}
+                      href={`${assetsEndpoint}/${uuid}/${row.rel_path}?token=${token}`}
                       variant="body1"
                       target="_blank"
                       rel="noopener noreferrer"
