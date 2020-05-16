@@ -19,6 +19,20 @@ function DebugItem(props) {
   );
 }
 
+function getByPath(nested, path) {
+  let current = nested;
+  const pathEls = path.split('.');
+  while (pathEls.length) {
+    const nextEl = pathEls.shift();
+    if (typeof current === 'object' && nextEl in current) {
+      current = current[nextEl];
+    } else {
+      return null;
+    }
+  }
+  return current;
+}
+
 function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
   return function ResultsTable(props) {
     const { hits } = props;
@@ -40,7 +54,7 @@ function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
                       href={detailsUrlPrefix + hit._source[idField]}
                       style={{ display: 'block' }}
                     >
-                      {hit._source[field.id]}
+                      {getByPath(hit._source, field.id)}
                     </a>
                   </td>
                 ),
