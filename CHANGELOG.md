@@ -6,6 +6,12 @@
 
 ## v0.0.17 - In progress
 ### Added
+- Get favicons on React pages.
+### Changed
+- Upgrade Vitessce to 0.1.3 to fix small bugs and add description for tiff.
+
+## v0.0.17 - 2020-05-15
+### Added
 - Python util to pull data from submodules.
 - Appropriate facets for different types.
 ### Changed
