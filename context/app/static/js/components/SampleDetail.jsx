@@ -3,13 +3,13 @@ import React from 'react';
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import VisTabs from './VisTabs';
-import DetailSummary from './DetailSummary';
-import DetailAttribution from './DetailAttribution';
-import DetailProtocol from './DetailProtocols';
-import DetailMetadata from './DetailMetadata';
+import ProvTabs from './Detail/ProvTabs';
+import Summary from './Detail/Summary';
+import Attribution from './Detail/Attribution';
+import Protocol from './Detail/Protocol';
+import Metadata from './Detail/Metadata';
 import NoticeAlert from './NoticeAlert';
-import SummaryItem from './SummaryItem';
+import SummaryItem from './Detail/SummaryItem';
 
 const FlexContainer = styled(Container)`
     flex-grow: 1;
@@ -50,14 +50,14 @@ function SampleDetail(props) {
       {flashed_messages && flashed_messages.length
         ? <NoticeAlert errors={flashed_messages} /> : null}
       <SpacedContainer maxWidth="lg">
-        <DetailSummary assayMetadata={assayMetadata}>
+        <Summary assayMetadata={assayMetadata}>
           <SummaryData organ={organ} specimen_type={specimen_type} origin_sample={origin_sample} />
-        </DetailSummary>
-        <DetailMetadata organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
-        <DetailAttribution assayMetadata={assayMetadata} />
-        <VisTabs provData={provData} assayMetadata={assayMetadata} />
+        </Summary>
+        <Metadata organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
+        <Attribution assayMetadata={assayMetadata} />
+        <ProvTabs provData={provData} assayMetadata={assayMetadata} />
         {portal_uploaded_protocol_files || protocol_url
-          ? <DetailProtocol assayMetadata={assayMetadata} /> : null}
+          ? <Protocol assayMetadata={assayMetadata} /> : null}
       </SpacedContainer>
     </FlexContainer>
   );

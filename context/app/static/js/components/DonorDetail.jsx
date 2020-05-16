@@ -2,11 +2,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
-import VisTabs from './VisTabs';
-import DetailSummary from './DetailSummary';
-import DetailAttribution from './DetailAttribution';
-import DetailProtocol from './DetailProtocols';
-import DetailMetadata from './DetailMetadata';
+import ProvTabs from './Detail/ProvTabs';
+import Summary from './Detail/Summary';
+import Attribution from './Detail/Attribution';
+import Protocol from './Detail/Protocol';
+import Metadata from './Detail/Metadata';
 import NoticeAlert from './NoticeAlert';
 
 const FlexContainer = styled(Container)`
@@ -46,12 +46,12 @@ function DonorDetail(props) {
       {flashed_messages && flashed_messages.length
         ? <NoticeAlert errors={flashed_messages} /> : null}
       <SpacedContainer maxWidth="lg">
-        <DetailSummary assayMetadata={assayMetadata} />
-        <DetailMetadata entityType={assayMetadata.entity_type} metadata={donorMetadata} />
-        <DetailAttribution assayMetadata={assayMetadata} />
-        <VisTabs provData={provData} assayMetadata={assayMetadata} />
+        <Summary assayMetadata={assayMetadata} />
+        <Metadata entityType={assayMetadata.entity_type} metadata={donorMetadata} />
+        <Attribution assayMetadata={assayMetadata} />
+        <ProvTabs provData={provData} assayMetadata={assayMetadata} />
         {portal_uploaded_protocol_files || protocol_url
-          ? <DetailProtocol assayMetadata={assayMetadata} /> : null}
+          ? <Protocol assayMetadata={assayMetadata} /> : null}
       </SpacedContainer>
     </FlexContainer>
   );

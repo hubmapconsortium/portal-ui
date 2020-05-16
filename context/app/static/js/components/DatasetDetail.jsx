@@ -5,13 +5,13 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { Vitessce } from 'vitessce';
-import VisTabs from './VisTabs';
-import DetailSummary from './DetailSummary';
-import DetailAttribution from './DetailAttribution';
-import DetailProtocol from './DetailProtocols';
+import ProvTabs from './Detail/ProvTabs';
+import Summary from './Detail/Summary';
+import Attribution from './Detail/Attribution';
+import Protocol from './Detail/Protocol';
 import NoticeAlert from './NoticeAlert';
-import DetailMetadataTable from './DetailMetadataTable';
-import DetailFileTable from './DetailFileTable';
+import MetadataTable from './Detail/MetadataTable';
+import FileTable from './Detail/FileTable';
 import 'vitessce/build-lib/es/production/static/css/index.css';
 
 const FlexContainer = styled(Container)`
@@ -72,22 +72,22 @@ function DatasetDetail(props) {
         ? <NoticeAlert errors={flashed_messages} />
         : null}
       <SpacedContainer maxWidth="lg">
-        <DetailSummary assayMetadata={assayMetadata}>
+        <Summary assayMetadata={assayMetadata}>
           <SummaryData data_types={data_types} origin_sample={origin_sample} />
-        </DetailSummary>
+        </Summary>
         {'name' in vitData
           ? <Vitessce rowHeight={100} config={vitData} theme="light" />
           : null}
-        <DetailAttribution assayMetadata={assayMetadata} />
-        <VisTabs provData={provData} assayMetadata={assayMetadata} />
+        <Attribution assayMetadata={assayMetadata} />
+        <ProvTabs provData={provData} assayMetadata={assayMetadata} />
         {portal_uploaded_protocol_files || protocol_url
-          ? <DetailProtocol assayMetadata={assayMetadata} />
+          ? <Protocol assayMetadata={assayMetadata} />
           : null}
         {metadata.metadata
-          ? <DetailMetadataTable metadata={metadata.metadata} />
+          ? <MetadataTable metadata={metadata.metadata} />
           : null}
         {files
-          ? <DetailFileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />
+          ? <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />
           : null}
       </SpacedContainer>
     </FlexContainer>
