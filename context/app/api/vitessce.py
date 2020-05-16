@@ -21,6 +21,8 @@ R_VALS.remove(0)
 
 # END: Only for Demo! #
 
+SCRNASEQ_BASE_PATH = 'cluster-marker-genes/output/cluster_marker_genes'
+
 SCATTERPLOT = {
     "layers": [],
     "name": "NAME",
@@ -64,11 +66,11 @@ ASSAY_CONF_LOOKUP = {
         "base_conf": SCATTERPLOT,
         "files_conf": [
             {
-                "rel_path": "cluster-marker-genes/output/cluster_marker_genes.cells.json",
+                "rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json",
                 "type": "CELLS",
             },
             {
-                "rel_path": "cluster-marker-genes/output/cluster_marker_genes.factors.json",
+                "rel_path": f"{SCRNASEQ_BASE_PATH}.factors.json",
                 "type": "FACTORS",
             },
         ],
@@ -152,6 +154,7 @@ class Vitessce:
             # We need to check that the files we expect actually exist.
             # This is due to the volatility of the datasets.
             if not set(file_paths_expected).issubset(set(file_paths_found)):
+                current_app.logger.info(f'Files for assay "{self.assay_type}" uuid "{self.uuid}" not found as expected.')
                 return {}
         conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
         layers = [self._build_layer_conf(file) for file in files]
@@ -269,7 +272,7 @@ class Vitessce:
         else:
             assets_endpoint = MOCK_URL
         base_url = urllib.parse.urljoin(
-            assets_endpoint, str(Path(self.uuid) / Path(rel_path))
+            assets_endpoint, f'{self.uuid}/{rel_path}'
         )
         token_param = urllib.parse.urlencode({"token": self.nexus_token})
         return base_url + "?" + token_param
