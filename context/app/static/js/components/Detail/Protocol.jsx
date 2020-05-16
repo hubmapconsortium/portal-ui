@@ -27,7 +27,7 @@ function ProtocolLink(props) {
     <SectionItem label="Protocol URL">
       <StyledTypography variant="body1">
         {urlMinusProtocol ? (
-          <StyledLink href={`https://${urlMinusProtocol}`} target="_blank" rel="noopener noreferrer">
+          <StyledLink href={`https://${encodeURI(urlMinusProtocol)}`} target="_blank" rel="noopener noreferrer">
             {urlMinusProtocol}
           </StyledLink>
         ) : 'No URL Available'}
