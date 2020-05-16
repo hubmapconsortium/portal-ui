@@ -28,7 +28,7 @@ const columns = [
 
 function DetailFileTable(props) {
   const { files: rows, assetsEndpoint, uuid } = props;
-  const cook = readCookie('nexus_token');
+  const token = readCookie('nexus_token');
   return (
     <SectionContainer>
       <SectionHeader variant="h3" component="h2">Files</SectionHeader>
