@@ -55,7 +55,7 @@ function Routes(props) {
 
   if (urlPath.startsWith('/search')) {
     return (
-      <Search esEndpoint={endpoints.esEndpoint} title={title} />
+      <Search esEndpoint={endpoints.elasticsearchEndpoint} title={title} />
     );
   }
 }

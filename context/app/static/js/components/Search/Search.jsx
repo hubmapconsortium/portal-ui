@@ -162,8 +162,8 @@ const searchProps = {
 };
 
 function Search(props) {
-  const { title, esEndpoint } = props;
-  const allProps = Object.assign(searchProps, { apiUrl: esEndpoint });
+  const { title, elasticsearchEndpoint } = props;
+  const allProps = Object.assign(searchProps, { apiUrl: elasticsearchEndpoint });
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Container maxWidth="lg">
