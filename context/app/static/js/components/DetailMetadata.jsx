@@ -40,6 +40,7 @@ function DonorItems(props) {
   );
 }
 
+// TODO: Update tissue location with real data once it's in a consumable structure
 function SampleItems(props) {
   const {
     organ, origin_sample: { organ: originOrgan }, specimenType, tissueLocation,
