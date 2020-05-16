@@ -9,6 +9,7 @@
 ## v0.0.17 - 2020-05-15
 ### Added
 - Python util to pull data from submodules.
+- Appropriate facets for different types.
 ### Changed
 - Fix Vitessce sizing bug.
 
