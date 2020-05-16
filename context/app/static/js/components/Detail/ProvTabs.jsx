@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ProvGraph from './ProvGraph';
 import ProvTable from './ProvTable';
-import { useStyles } from '../styles';
+import { useStyles } from '../../styles';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
 
@@ -30,7 +30,7 @@ function TabPanel(props) {
 }
 
 
-function VisTabs(props) {
+function ProvTabs(props) {
   const { provData, assayMetadata } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(0);
@@ -81,8 +81,8 @@ function VisTabs(props) {
   );
 }
 
-VisTabs.propTypes = {
+ProvTabs.propTypes = {
   provData: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
-export default VisTabs;
+export default ProvTabs;
