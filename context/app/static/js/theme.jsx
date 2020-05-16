@@ -27,15 +27,15 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: 'Inter, Helvetica, Arial, sans-serif',
     h1: {
-      fontWeight: 300,
+      fontWeight: 400,
       fontSize: '2.6rem',
     },
     h2: {
-      fontWeight: 300,
+      fontWeight: 400,
       fontSize: '2.3rem',
     },
     h3: {
-      fontWeight: 300,
+      fontWeight: 400,
       fontSize: '2rem',
     },
     h4: {
