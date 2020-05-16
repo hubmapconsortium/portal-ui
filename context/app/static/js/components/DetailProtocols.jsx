@@ -22,13 +22,13 @@ const StyledPaper = styled(Paper)`
 `;
 
 function ProtocolLink(props) {
-  const { protocolUrl: url } = props;
+  const { protocolUrl: urlMinusProtocol } = props;
   return (
     <SectionItem label="Protocol URL">
       <StyledTypography variant="body1">
-        {url ? (
-          <StyledLink href={`https://${url}`} target="_blank" rel="noopener noreferrer">
-            {url}
+        {urlMinusProtocol ? (
+          <StyledLink href={`https://${urlMinusProtocol}`} target="_blank" rel="noopener noreferrer">
+            {urlMinusProtocol}
           </StyledLink>
         ) : 'No URL Available'}
       </StyledTypography>
