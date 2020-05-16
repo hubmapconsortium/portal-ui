@@ -36,7 +36,7 @@ function ProtocolLink(props) {
   );
 }
 
-function DetailProtocols(props) {
+function Protocol(props) {
   const { assayMetadata } = props;
   const { protocol_url, portal_uploaded_protocol_files } = assayMetadata;
   return (
@@ -59,4 +59,4 @@ function DetailProtocols(props) {
   );
 }
 
-export default DetailProtocols;
+export default Protocol;

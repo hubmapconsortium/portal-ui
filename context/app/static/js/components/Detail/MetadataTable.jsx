@@ -20,7 +20,7 @@ const columns = [
   { id: 'value', label: 'Value' }];
 
 
-function DetailMetadataTable(props) {
+function MetadataTable(props) {
   const { metadata: tableData } = props;
 
   const rows = Object.entries(tableData).map((entry) => ({ key: entry[0], value: entry[1] }));
@@ -58,4 +58,4 @@ function DetailMetadataTable(props) {
   );
 }
 
-export default DetailMetadataTable;
+export default MetadataTable;

@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Link from '@material-ui/core/Link';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
-import { readCookie } from '../helpers/functions';
+import { readCookie } from '../../helpers/functions';
 
 const StyledTableContainer = styled(TableContainer)`
   max-height: 231px;
@@ -26,7 +26,7 @@ const columns = [
   { id: 'type', label: 'Type' }];
 
 
-function DetailFileTable(props) {
+function FileTable(props) {
   const { files: rows, assetsEndpoint, uuid } = props;
   const token = readCookie('nexus_token');
   return (
@@ -70,4 +70,4 @@ function DetailFileTable(props) {
   );
 }
 
-export default DetailFileTable;
+export default FileTable;

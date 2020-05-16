@@ -54,7 +54,7 @@ function SampleItems(props) {
   );
 }
 
-function DetailMetadata(props) {
+function Metadata(props) {
   const { entityType } = props;
   return (
     <SectionContainer>
@@ -66,4 +66,4 @@ function DetailMetadata(props) {
   );
 }
 
-export default DetailMetadata;
+export default Metadata;

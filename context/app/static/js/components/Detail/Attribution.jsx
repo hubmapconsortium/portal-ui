@@ -27,7 +27,7 @@ function AttributionItem(props) {
     </Typography>
   );
 }
-function DetailAttribution(props) {
+function Attribution(props) {
   const { assayMetadata } = props;
   const {
     group_name,
@@ -49,4 +49,4 @@ function DetailAttribution(props) {
   );
 }
 
-export default DetailAttribution;
+export default Attribution;

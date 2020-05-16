@@ -46,7 +46,7 @@ const StyledPaper = styled(Paper)`
   padding: 15px 40px 15px 15px;
 `;
 
-function DetailSummary(props) {
+function Summary(props) {
   const { assayMetadata, children } = props;
   const {
     display_doi,
@@ -101,4 +101,4 @@ function DetailSummary(props) {
   );
 }
 
-export default DetailSummary;
+export default Summary;
