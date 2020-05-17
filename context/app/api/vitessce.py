@@ -39,7 +39,7 @@ SCATTERPLOT = {
             "w": 10,
             "h": 6,
         },
-        {"component": "factors", "x": 10, "y": 0, "w": 2, "h": 6,},
+        {"component": "factors", "x": 10, "y": 0, "w": 2, "h": 6, },
     ],
 }
 
@@ -51,7 +51,7 @@ IMAGING = {
         {"component": "description", "x": 0, "y": 4, "w": 4, "h": 2},
         {
             "component": "spatial",
-            "props": {"view": {},},
+            "props": {"view": {}, },
             "x": 4,
             "y": 0,
             "w": 8,
@@ -65,13 +65,13 @@ ASSAY_CONF_LOOKUP = {
     "salmon_rnaseq_10x": {
         "base_conf": SCATTERPLOT,
         "files_conf": [
-            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json", "type": "CELLS",},
-            {"rel_path": f"{SCRNASEQ_BASE_PATH}.factors.json", "type": "FACTORS",},
+            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json", "type": "CELLS", },
+            {"rel_path": f"{SCRNASEQ_BASE_PATH}.factors.json", "type": "FACTORS", },
         ],
     },
     "codex_cytokit": {
         "base_conf": IMAGING,
-        "view": {"zoom": -1.5, "target": [600, 600, 0],},
+        "view": {"zoom": -1.5, "target": [600, 600, 0], },
         "files_conf": [
             # Hardcoded for now only one tile.
             {
@@ -150,7 +150,8 @@ class Vitessce:
             if not set(file_paths_expected).issubset(set(file_paths_found)):
                 if not self.is_mock:
                     current_app.logger.info(
-                        f'Files for assay "{self.assay_type}" uuid "{self.uuid}" not found as expected.'
+                        f'Files for assay "{self.assay_type}" '
+                        'uuid "{self.uuid}" not found as expected.'
                     )
                 return {}
         conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
