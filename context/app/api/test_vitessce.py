@@ -1,8 +1,28 @@
 from .vitessce import Vitessce
 
-TEST_ENTITY_CODEX = {"data_types": ["codex_cytokit"], "uuid": "uuid"}
+TEST_ENTITY_CODEX = {
+    "data_types": ["codex_cytokit"],
+    "uuid": "uuid",
+    "files": [{"rel_path": "codex/path/codex.ome.tiff"}, ],
+}
 
-TEST_ENTITY_RNASEQ = {"data_types": ["salmon_rnaseq_10x"], "uuid": "uuid"}
+TEST_ENTITY_RNASEQ = {
+    "data_types": ["salmon_rnaseq_10x"],
+    "uuid": "uuid",
+    "files": [
+        {"rel_path": "cluster-marker-genes/output/cluster_marker_genes.cells.json"},
+        {"rel_path": "cluster-marker-genes/output/cluster_marker_genes.factors.json"},
+    ],
+}
+
+TEST_ENTITY_RNASEQ_EMPTY = {
+    "data_types": ["salmon_rnaseq_10x"],
+    "uuid": "uuid",
+    "files": [
+        {"rel_path": "bad/output/cluster_marker_genes.cells.json"},
+        {"rel_path": "bad/output/cluster_marker_genes.factors.json"},
+    ],
+}
 
 TEST_NEXUS_TOKEN = "nexus_token"
 
@@ -17,7 +37,7 @@ def test_build_image_schema():
     vitessce = Vitessce(
         entity=TEST_ENTITY_CODEX, nexus_token=TEST_NEXUS_TOKEN, is_mock=True
     )
-    schema = vitessce._build_image_schema(rel_path=TEST_PATH_TIFF, uuid=TEST_UUID)
+    schema = vitessce._build_image_schema(rel_path=TEST_PATH_TIFF)
     assert schema["name"] == "example.ome.tiff"
     assert (
         schema["url"]
@@ -34,7 +54,7 @@ def test_build_assets_url():
     vitessce = Vitessce(
         entity=TEST_ENTITY_CODEX, nexus_token=TEST_NEXUS_TOKEN, is_mock=True
     )
-    url = vitessce._build_assets_url(rel_path=TEST_PATH_TIFF, uuid=TEST_UUID)
+    url = vitessce._build_assets_url(rel_path=TEST_PATH_TIFF)
     assert (
         url
         == f"https://example.com/uuid/path/to/example.ome.tiff?token={TEST_NEXUS_TOKEN}"
@@ -52,3 +72,12 @@ def test_build_layer_conf():
     assert layer["type"] == "CELLS"
     assert layer["name"] == "cells"
     assert vitessce_component == "scatterplot"
+
+
+def test_build_layer_conf_empty():
+    vitessce = Vitessce(
+        entity=TEST_ENTITY_RNASEQ_EMPTY, nexus_token=TEST_NEXUS_TOKEN, is_mock=True
+    )
+    vitessce._build_vitessce_conf()
+    conf = vitessce.conf
+    assert conf == {}
