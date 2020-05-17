@@ -21,7 +21,7 @@ R_VALS.remove(0)
 
 # END: Only for Demo! #
 
-SCRNASEQ_BASE_PATH = 'cluster-marker-genes/output/cluster_marker_genes'
+SCRNASEQ_BASE_PATH = "cluster-marker-genes/output/cluster_marker_genes"
 
 SCATTERPLOT = {
     "layers": [],
@@ -39,7 +39,7 @@ SCATTERPLOT = {
             "w": 10,
             "h": 6,
         },
-        {"component": "factors", "x": 10, "y": 0, "w": 2, "h": 6, },
+        {"component": "factors", "x": 10, "y": 0, "w": 2, "h": 6,},
     ],
 }
 
@@ -51,7 +51,7 @@ IMAGING = {
         {"component": "description", "x": 0, "y": 4, "w": 4, "h": 2},
         {
             "component": "spatial",
-            "props": {"view": {}, },
+            "props": {"view": {},},
             "x": 4,
             "y": 0,
             "w": 8,
@@ -65,19 +65,13 @@ ASSAY_CONF_LOOKUP = {
     "salmon_rnaseq_10x": {
         "base_conf": SCATTERPLOT,
         "files_conf": [
-            {
-                "rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json",
-                "type": "CELLS",
-            },
-            {
-                "rel_path": f"{SCRNASEQ_BASE_PATH}.factors.json",
-                "type": "FACTORS",
-            },
+            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json", "type": "CELLS",},
+            {"rel_path": f"{SCRNASEQ_BASE_PATH}.factors.json", "type": "FACTORS",},
         ],
     },
     "codex_cytokit": {
         "base_conf": IMAGING,
-        "view": {"zoom": -1.5, "target": [600, 600, 0], },
+        "view": {"zoom": -1.5, "target": [600, 600, 0],},
         "files_conf": [
             # Hardcoded for now only one tile.
             {
@@ -154,7 +148,10 @@ class Vitessce:
             # We need to check that the files we expect actually exist.
             # This is due to the volatility of the datasets.
             if not set(file_paths_expected).issubset(set(file_paths_found)):
-                current_app.logger.info(f'Files for assay "{self.assay_type}" uuid "{self.uuid}" not found as expected.')
+                if not self.is_mock:
+                    current_app.logger.info(
+                        f'Files for assay "{self.assay_type}" uuid "{self.uuid}" not found as expected.'
+                    )
                 return {}
         conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
         layers = [self._build_layer_conf(file) for file in files]
@@ -271,9 +268,7 @@ class Vitessce:
             assets_endpoint = current_app.config["ASSETS_ENDPOINT"]
         else:
             assets_endpoint = MOCK_URL
-        base_url = urllib.parse.urljoin(
-            assets_endpoint, f'{self.uuid}/{rel_path}'
-        )
+        base_url = urllib.parse.urljoin(assets_endpoint, f"{self.uuid}/{rel_path}")
         token_param = urllib.parse.urlencode({"token": self.nexus_token})
         return base_url + "?" + token_param
 
