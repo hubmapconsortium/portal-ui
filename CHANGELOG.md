@@ -9,6 +9,7 @@
 
 ### Changed
 
+- Move VERSION down to the static directory, with a symlink in the original location.
 - Upgrade Vitessce to 0.1.3 to fix small bugs and add description for tiff.
 - Change scRNASEQ file searching.
 - Separate detail pages by entity and update design.
