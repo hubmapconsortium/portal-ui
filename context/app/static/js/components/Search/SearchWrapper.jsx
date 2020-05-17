@@ -20,7 +20,8 @@ function DebugItem(props) {
   );
 }
 
-function getByPath(nested, path) {
+function getByPath(nested, field) {
+  const path = field.id;
   let current = nested;
   const pathEls = path.split('.');
   while (pathEls.length) {
@@ -55,7 +56,7 @@ function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
                       href={detailsUrlPrefix + hit._source[idField]}
                       style={{ display: 'block' }}
                     >
-                      {getByPath(hit._source, field.id)}
+                      {getByPath(hit._source, field)}
                     </a>
                   </td>
                 ),
