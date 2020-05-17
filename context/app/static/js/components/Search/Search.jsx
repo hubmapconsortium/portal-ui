@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import PortalSearch from '../PortalSearch/PortalSearch';
+import SearchWrapper from './SearchWrapper';
 import { readCookie } from '../../helpers/functions';
 import 'searchkit/theming/theme.scss';
 import './Search.css';
@@ -73,7 +73,7 @@ function Search(props) {
   return (
     <Container maxWidth="lg">
       <Typography component="h1" variant="h1">{title}</Typography>
-      <PortalSearch {...allProps} />
+      <SearchWrapper {...allProps} />
     </Container>
   );
 /* eslint-enable react/jsx-props-no-spreading */
