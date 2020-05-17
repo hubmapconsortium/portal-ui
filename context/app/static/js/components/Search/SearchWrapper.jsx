@@ -107,11 +107,9 @@ function makeMaskedSelectedFiltersComponent(hiddenFilterIds) {
 
 function SearchWrapper(props) {
   const {
-    apiUrl, prefixQueryFields, filters, detailsUrlPrefix,
+    apiUrl, filters, detailsUrlPrefix,
     idField, resultFields, hitsPerPage, debug, httpHeaders,
-    sortOptions,
-    hiddenFilterIds,
-    searchUrlPath,
+    sortOptions, hiddenFilterIds, searchUrlPath,
   } = props;
   const resultFieldIds = (resultFields.map((field) => field.id)).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
@@ -138,7 +136,6 @@ function SearchWrapper(props) {
           <SearchBox
             autofocus
             searchOnChange
-            prefixQueryFields={prefixQueryFields}
           />
           {filterElements}
         </SideBar>
@@ -178,13 +175,12 @@ function SearchWrapper(props) {
 
 SearchWrapper.propTypes = {
   apiUrl: PropTypes.string.isRequired,
-  prefixQueryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   filters: PropTypes.arrayOf(PropTypes.object).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
-  resultFields: PropTypes.arrayOf(PropTypes.string).isRequired,
+  resultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
-  debug: PropTypes.bool.isRequired,
+  debug: PropTypes.bool,
   httpHeaders: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   sortOptions: PropTypes.arrayOf(PropTypes.object),
   hiddenFilterIds: PropTypes.arrayOf(PropTypes.string),
@@ -192,6 +188,7 @@ SearchWrapper.propTypes = {
 };
 
 SearchWrapper.defaultProps = {
+  debug: false,
   sortOptions: [{
     label: 'Relevance',
     field: '_score',
