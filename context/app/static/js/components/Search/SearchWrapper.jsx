@@ -68,24 +68,8 @@ function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
   };
 }
 
-
-function SearchWrapper(props) {
-  const {
-    apiUrl, prefixQueryFields, filters, detailsUrlPrefix,
-    idField, resultFields, hitsPerPage, debug, httpHeaders,
-    sortOptions = [{
-      label: 'Relevance',
-      field: '_score',
-      order: 'desc',
-      defaultOption: true,
-    }],
-    hiddenFilterIds = [],
-    searchUrlPath = '_search',
-  } = props;
-  const resultFieldIds = (resultFields.map((field) => field.id)).concat(idField);
-  const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
-
-  function MaskedSelectedFilters() {
+function makeMaskedSelectedFiltersComponent(hiddenFilterIds) {
+  return () => {
     const SelectedFilter = (filterProps) => {
       const style = hiddenFilterIds.indexOf(filterProps.filterId) === -1
         ? {} : { display: 'None' };
@@ -117,7 +101,24 @@ function SearchWrapper(props) {
       /* eslint-enable */
     };
     return <SelectedFilters itemComponent={SelectedFilter} />;
-  }
+  };
+}
+
+function SearchWrapper(props) {
+  const {
+    apiUrl, prefixQueryFields, filters, detailsUrlPrefix,
+    idField, resultFields, hitsPerPage, debug, httpHeaders,
+    sortOptions = [{
+      label: 'Relevance',
+      field: '_score',
+      order: 'desc',
+      defaultOption: true,
+    }],
+    hiddenFilterIds = [],
+    searchUrlPath = '_search',
+  } = props;
+  const resultFieldIds = (resultFields.map((field) => field.id)).concat(idField);
+  const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 
   const filterElements = filters.map((def) => {
     const Filter = filterTypes[def.type];
@@ -131,6 +132,8 @@ function SearchWrapper(props) {
     );
     /* eslint-enable */
   });
+
+  const MaskedSelectedFilters = makeMaskedSelectedFiltersComponent(hiddenFilterIds);
 
   return (
     <SearchkitProvider searchkit={searchkit}>
