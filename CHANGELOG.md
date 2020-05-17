@@ -6,6 +6,7 @@
 
 - Make search columns appropriate to type.
 - Get favicons on React pages.
+- Call to action on home page.
 
 ### Changed
 
