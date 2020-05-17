@@ -1,4 +1,8 @@
-import { filter, field, organFilter, specimenTypeFilter } from './utils';
+import {
+  filter, field,
+  organFilter, specimenTypeFilter,
+  organField, specimenTypeField
+} from './utils';
 
 
 export const donorConfig = {
@@ -26,8 +30,8 @@ export const sampleConfig = {
   fields: [
     field('display_doi', 'ID'),
     field('donor.group_name', 'Group'),
-    field('specimen_type', 'Speciment Type'),
-    field('origin_sample.organ', 'Organ'),
+    specimenTypeField('specimen_type', 'Speciment Type'),
+    organField('origin_sample.organ', 'Organ'),
   ],
 };
 
@@ -44,7 +48,7 @@ export const datasetConfig = {
     field('display_doi', 'ID'),
     field('donor.group_name', 'Group'),
     field('data_types', 'Data Types'),
-    field('origin_sample.organ', 'Organ'),
+    organField('origin_sample.organ', 'Organ'),
     field('status', 'Status'),
   ]
 };

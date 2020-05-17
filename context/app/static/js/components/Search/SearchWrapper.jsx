@@ -32,6 +32,9 @@ function getByPath(nested, field) {
       return null;
     }
   }
+  if ('translations' in field) {
+    return field.translations[current];
+  }
   return current;
 }
 
