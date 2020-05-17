@@ -1,40 +1,28 @@
 import fromEntries from 'fromentries';
 import searchDefinitions from '../../../../../search-schema/data/definitions.yaml';
 
-const organTranslations = fromEntries(
+export const organTranslations = fromEntries(
   Object.entries(
     searchDefinitions.enums.organ_types
   ).map((entry) => [entry[0], entry[1].description])
 );
 
-const specimenTypeTranslations = fromEntries(
+export const specimenTypeTranslations = fromEntries(
   Object.entries(
     searchDefinitions.enums.tissue_sample_types
   ).map((entry) => [entry[0], entry[1].description])
 );
 
 
-export function field(id, name) {
-  return {
+export function field(id, name, translations) {
+  const def = {
     id: id,
     name: name,
-  };
-}
-
-export function organField(id, name) {
-  return {
-    id: id,
-    name: name,
-    translations: organTranslations
-  };
-}
-
-export function specimenTypeField(id, name) {
-  return {
-    id: id,
-    name: name,
-    translations: specimenTypeTranslations
-  };
+  }
+  if (translations) {
+    def.translations = translations;
+  }
+  return def;
 }
 
 export function filter(id, name) {
