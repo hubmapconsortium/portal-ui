@@ -5,6 +5,7 @@
 ### Added
 
 - Get favicons on React pages.
+- Call to action on home page.
 
 ### Changed
 
