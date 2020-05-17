@@ -69,7 +69,7 @@ function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
 }
 
 
-export default function (props) {
+function SearchWrapper(props) {
   const {
     apiUrl, prefixQueryFields, filters, detailsUrlPrefix,
     idField, resultFields, hitsPerPage, debug, httpHeaders,
@@ -176,3 +176,5 @@ export default function (props) {
     </SearchkitProvider>
   );
 }
+
+export default SearchWrapper;
