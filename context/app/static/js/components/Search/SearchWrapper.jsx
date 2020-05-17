@@ -181,7 +181,7 @@ SearchWrapper.propTypes = {
   resultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
   debug: PropTypes.bool,
-  httpHeaders: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  httpHeaders: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   sortOptions: PropTypes.arrayOf(PropTypes.object),
   hiddenFilterIds: PropTypes.arrayOf(PropTypes.string),
   searchUrlPath: PropTypes.string,
@@ -197,6 +197,7 @@ SearchWrapper.defaultProps = {
   }],
   hiddenFilterIds: [],
   searchUrlPath: '_search',
+  httpHeaders: {}
 };
 
 export default SearchWrapper;
