@@ -198,6 +198,7 @@ SearchWrapper.propTypes = {
   resultFields: PropTypes.arrayOf(PropTypes.exact({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    translations: PropTypes.objectOf(PropTypes.string),
   })).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
   debug: PropTypes.bool,
