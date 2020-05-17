@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
   SearchkitManager, SearchkitProvider, SearchBox,
@@ -108,14 +109,9 @@ function SearchWrapper(props) {
   const {
     apiUrl, prefixQueryFields, filters, detailsUrlPrefix,
     idField, resultFields, hitsPerPage, debug, httpHeaders,
-    sortOptions = [{
-      label: 'Relevance',
-      field: '_score',
-      order: 'desc',
-      defaultOption: true,
-    }],
-    hiddenFilterIds = [],
-    searchUrlPath = '_search',
+    sortOptions,
+    hiddenFilterIds,
+    searchUrlPath,
   } = props;
   const resultFieldIds = (resultFields.map((field) => field.id)).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
@@ -179,5 +175,31 @@ function SearchWrapper(props) {
     </SearchkitProvider>
   );
 }
+
+SearchWrapper.propTypes = {
+  apiUrl: PropTypes.string.isRequired,
+  prefixQueryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
+  filters: PropTypes.arrayOf(PropTypes.object).isRequired,
+  detailsUrlPrefix: PropTypes.string.isRequired,
+  idField: PropTypes.string.isRequired,
+  resultFields: PropTypes.arrayOf(PropTypes.string).isRequired,
+  hitsPerPage: PropTypes.number.isRequired,
+  debug: PropTypes.bool.isRequired,
+  httpHeaders: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  sortOptions: PropTypes.arrayOf(PropTypes.object),
+  hiddenFilterIds: PropTypes.arrayOf(PropTypes.string),
+  searchUrlPath: PropTypes.string,
+};
+
+SearchWrapper.defaultProps = {
+  sortOptions: [{
+    label: 'Relevance',
+    field: '_score',
+    order: 'desc',
+    defaultOption: true,
+  }],
+  hiddenFilterIds: [],
+  searchUrlPath: '_search',
+};
 
 export default SearchWrapper;
