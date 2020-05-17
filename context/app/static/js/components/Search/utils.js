@@ -1,3 +1,6 @@
+import fromEntries from 'fromentries';
+import searchDefinitions from '../../../../../search-schema/data/definitions.yaml';
+
 export function field(id, name) {
   return {
     id: id,
@@ -19,6 +22,12 @@ export function filter(id, name) {
 }
 
 export function organFilter(id) {
+  const organTranslations = fromEntries(
+    Object.entries(
+      searchDefinitions.enums.organ_types
+    ).map((entry) => [entry[0], entry[1].description])
+  )
+
   return {
     type: 'RefinementListFilter',
     props: {
@@ -27,46 +36,7 @@ export function organFilter(id) {
       field: `${id}.keyword`,
       operator: 'OR',
       size: 5,
-      translations: {
-        // From search-schema:
-        BL: 'Bladder',
-        BR: 'Brain',
-        LB: 'Bronchus (Left)',
-        RB: 'Bronchus (Right)',
-        HT: 'Heart',
-        LK: 'Kidney (Left)',
-        RK: 'Kidney (Right)',
-        LI: 'Large Intestine',
-        LV: 'Liver',
-        LL: 'Lung (Left)',
-        RL: 'Lung (Right)',
-        LY01: 'Lymph Node 01',
-        LY02: 'Lymph Node 02',
-        LY03: 'Lymph Node 03',
-        LY04: 'Lymph Node 04',
-        LY05: 'Lymph Node 05',
-        LY06: 'Lymph Node 06',
-        LY07: 'Lymph Node 07',
-        LY08: 'Lymph Node 08',
-        LY09: 'Lymph Node 09',
-        LY10: 'Lymph Node 10',
-        LY11: 'Lymph Node 11',
-        LY12: 'Lymph Node 12',
-        LY13: 'Lymph Node 13',
-        LY14: 'Lymph Node 14',
-        LY15: 'Lymph Node 15',
-        LY16: 'Lymph Node 16',
-        LY17: 'Lymph Node 17',
-        LY18: 'Lymph Node 18',
-        LY19: 'Lymph Node 19',
-        LY20: 'Lymph Node 20',
-        SI: 'Small Intestine',
-        SP: 'Spleen',
-        TH: 'Thymus',
-        TR: 'Trachea',
-        UR: 'Ureter',
-        OT: 'Other'
-      }
+      translations: organTranslations,
     }
   };
 }

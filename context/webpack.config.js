@@ -8,7 +8,7 @@ const config = {
     publicPath: resolve('../app/static/public'),
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg'],
+    extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml'],
   },
   module: {
     rules: [
@@ -68,6 +68,11 @@ const config = {
         test: /\.svg$/,
         use: { loader: '@svgr/webpack' },
       },
+      {
+        test: /\.ya?ml$/,
+        type: 'json', // Required by Webpack v4
+        use: 'yaml-loader'
+      }
     ],
   },
 };
