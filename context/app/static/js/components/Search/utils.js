@@ -1,3 +1,10 @@
+export function field(id, name) {
+  return {
+    id: id,
+    name: name,
+  };
+}
+
 export function filter(id, name) {
   return {
     type: 'RefinementListFilter',

@@ -1,9 +1,10 @@
 # Changelog
 
-## v0.0.18 - In progress
+## v0.0.17 - In progress
 
 ### Added
 
+- Make search columns appropriate to type.
 - Get favicons on React pages.
 
 ### Changed

@@ -19,7 +19,21 @@ function DebugItem(props) {
   );
 }
 
-function makeTableComponent(fields, detailsUrlPrefix, idField) {
+function getByPath(nested, path) {
+  let current = nested;
+  const pathEls = path.split('.');
+  while (pathEls.length) {
+    const nextEl = pathEls.shift();
+    if (typeof current === 'object' && nextEl in current) {
+      current = current[nextEl];
+    } else {
+      return null;
+    }
+  }
+  return current;
+}
+
+function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
   return function ResultsTable(props) {
     const { hits } = props;
     /* eslint-disable no-underscore-dangle */
@@ -27,20 +41,20 @@ function makeTableComponent(fields, detailsUrlPrefix, idField) {
       <table className="sk-table sk-table-striped" style={{ width: '100%' }}>
         <thead>
           <tr>
-            {fields.map((field) => <th key={field}>{field}</th>)}
+            {resultFields.map((field) => <th key={field.id}>{field.name}</th>)}
           </tr>
         </thead>
         <tbody>
           {hits.map((hit) => (
             <tr key={hit._id}>
-              {fields.map(
+              {resultFields.map(
                 (field) => (
-                  <td key={field}>
+                  <td key={field.id}>
                     <a
                       href={detailsUrlPrefix + hit._source[idField]}
                       style={{ display: 'block' }}
                     >
-                      {hit._source[field]}
+                      {getByPath(hit._source, field.id)}
                     </a>
                   </td>
                 ),
@@ -68,7 +82,7 @@ export default function (props) {
     hiddenFilterIds = [],
     searchUrlPath = '_search',
   } = props;
-  const resultFieldsPlusId = [...resultFields, idField];
+  const resultFieldIds = (resultFields.map((field) => field.id)).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 
   function MaskedSelectedFilters() {
@@ -112,9 +126,7 @@ export default function (props) {
     /* eslint-disable react/jsx-props-no-spreading */
     return (
       <div style={style}>
-        <Filter
-          {...def.props}
-        />
+        <Filter {...def.props} />
       </div>
     );
     /* eslint-enable */
@@ -147,7 +159,7 @@ export default function (props) {
             mod="sk-hits-list"
             hitsPerPage={hitsPerPage}
             itemComponent={DebugItem}
-            sourceFilter={resultFieldsPlusId}
+            sourceFilter={resultFieldIds}
           />
           )}
 
@@ -155,7 +167,7 @@ export default function (props) {
             mod="sk-hits-list"
             hitsPerPage={hitsPerPage}
             listComponent={makeTableComponent(resultFields, detailsUrlPrefix, idField)}
-            sourceFilter={resultFieldsPlusId}
+            sourceFilter={resultFieldIds}
           />
           <NoHits />
           <Pagination showNumbers />

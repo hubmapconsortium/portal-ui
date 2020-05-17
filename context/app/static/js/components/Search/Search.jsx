@@ -9,7 +9,10 @@ import './Search.css';
 import { donorConfig, sampleConfig, datasetConfig } from './config';
 import { filter } from './utils';
 
-const baseFilters = [filter('ancestor_id', 'Ancestor ID')];
+const baseFilters = [
+  filter('ancestor_id', 'Ancestor ID'),
+  filter('entity_type', 'Entity Type'),
+];
 
 const filtersByType = {
   '': baseFilters,
@@ -19,7 +22,7 @@ const filtersByType = {
 };
 
 const resultFieldsByType = {
-  '': ['description', 'status', 'entity_type'],
+  '': ['status', 'entity_type'],
   donor: donorConfig.fields,
   sample: sampleConfig.fields,
   dataset: datasetConfig.fields,
@@ -60,7 +63,7 @@ const searchProps = {
       defaultOption: false,
     },
   ],
-  hiddenFilterIds: ['entity_type'],
+  hiddenFilterIds: baseFilters.map((filterDef) => filterDef.props.id),
 };
 
 function Search(props) {
