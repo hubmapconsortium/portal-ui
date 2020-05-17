@@ -4,6 +4,7 @@
 
 ### Added
 
+- PropTypes on WrappedSearch.
 - Make search columns appropriate to type.
 - Get favicons on React pages.
 

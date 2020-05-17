@@ -175,14 +175,35 @@ function SearchWrapper(props) {
 
 SearchWrapper.propTypes = {
   apiUrl: PropTypes.string.isRequired,
-  filters: PropTypes.arrayOf(PropTypes.object).isRequired,
+  filters: PropTypes.arrayOf(PropTypes.exact({
+    type: PropTypes.oneOf([
+      // Expand as needed; Starting small to catch typos.
+      'RefinementListFilter',
+    ]).isRequired,
+    props: PropTypes.exact({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      field: PropTypes.string.isRequired,
+      operator: PropTypes.string.isRequired,
+      size: PropTypes.number.isRequired,
+      translations: PropTypes.objectOf(PropTypes.string),
+    }),
+  })).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
-  resultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  resultFields: PropTypes.arrayOf(PropTypes.exact({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
   debug: PropTypes.bool,
-  httpHeaders: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  sortOptions: PropTypes.arrayOf(PropTypes.object),
+  httpHeaders: PropTypes.objectOf(PropTypes.string),
+  sortOptions: PropTypes.arrayOf(PropTypes.exact({
+    label: PropTypes.string.isRequired,
+    field: PropTypes.string.isRequired,
+    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    defaultOption: PropTypes.bool.isRequired,
+  })),
   hiddenFilterIds: PropTypes.arrayOf(PropTypes.string),
   searchUrlPath: PropTypes.string,
 };
@@ -197,7 +218,7 @@ SearchWrapper.defaultProps = {
   }],
   hiddenFilterIds: [],
   searchUrlPath: '_search',
-  httpHeaders: {}
+  httpHeaders: {},
 };
 
 export default SearchWrapper;
