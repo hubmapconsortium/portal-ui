@@ -11,7 +11,7 @@ function Home() {
       <Typography component="h2" variant="h5">
         Browse our <Link href="/search?entity_type[0]=Donor">donors</Link>
         , <Link href="/search?entity_type[0]=Sample">samples</Link>
-        , or <Link href="/search?entity_type[0]=Dataset">datasets</Link>
+        , or <Link href="/search?entity_type[0]=Dataset">datasets</Link>.
       </Typography>
     </Container>
   );
