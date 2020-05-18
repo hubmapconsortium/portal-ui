@@ -2,6 +2,10 @@
 
 ## v0.0.19 - In Progress
 
+### Added
+
+- Only validate if in development.
+
 ### Changed
 
 - Fix derived searches.

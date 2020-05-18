@@ -1,4 +1,5 @@
 from pathlib import Path
+from os import environ
 
 from flask import (Blueprint, render_template, abort, current_app,
                    session, flash, get_flashed_messages, request,
@@ -49,13 +50,14 @@ def details(type, uuid):
     if type != actual_type:
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
-    # TODO: These schemas don't need to be reloaded per request.
-    schema_path = (
-        Path(current_app.root_path).parent / 'search-schema' / 'data'
-        / 'schemas' / f'{type}.schema.yaml')
-    with open(schema_path) as type_schema_file:
-        type_schema = load_yaml(type_schema_file)
-    for_each_validation_error(entity, type_schema, flash)
+    if 'FLASK_ENV' in environ and environ['FLASK_ENV'] == 'development':
+        # TODO: These schemas don't need to be reloaded per request.
+        schema_path = (
+            Path(current_app.root_path).parent / 'search-schema' / 'data'
+            / 'schemas' / f'{type}.schema.yaml')
+        with open(schema_path) as type_schema_file:
+            type_schema = load_yaml(type_schema_file)
+        for_each_validation_error(entity, type_schema, flash)
 
     provenance = client.get_provenance(uuid)
     flashed_messages = []
