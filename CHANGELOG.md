@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.0.19 - In Progress
+## v0.0.19 - In progress
 
 ### Added
 
