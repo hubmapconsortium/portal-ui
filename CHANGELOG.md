@@ -1,6 +1,10 @@
 # Changelog
 
-## v0.0.17 - In progress
+## v0.0.19 - In Progress
+
+...
+
+## v0.0.18 - 2020-05-18
 
 ### Added
 
@@ -17,6 +21,7 @@
 - Change scRNASEQ file searching.
 - Separate detail pages by entity and update design.
 - Display provenance table links for samples and datasets.
+
 ## v0.0.17 - 2020-05-15
 
 ### Added
