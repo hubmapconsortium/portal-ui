@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { Vitessce } from 'vitessce';
 import ProvTabs from './Detail/ProvTabs';
 import Summary from './Detail/Summary';
 import Attribution from './Detail/Attribution';
@@ -12,6 +11,7 @@ import Protocol from './Detail/Protocol';
 import NoticeAlert from './NoticeAlert';
 import MetadataTable from './Detail/MetadataTable';
 import FileTable from './Detail/FileTable';
+import Visualization from './Detail/Visualization';
 import 'vitessce/build-lib/es/production/static/css/index.css';
 
 const FlexContainer = styled(Container)`
@@ -76,7 +76,7 @@ function DatasetDetail(props) {
           <SummaryData data_types={data_types} origin_sample={origin_sample} />
         </Summary>
         {'name' in vitData
-          ? <Vitessce rowHeight={100} config={vitData} theme="light" />
+          ? <Visualization vitData={vitData} />
           : null}
         <Attribution assayMetadata={assayMetadata} />
         <ProvTabs provData={provData} assayMetadata={assayMetadata} />
