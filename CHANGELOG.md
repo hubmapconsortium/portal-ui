@@ -8,6 +8,8 @@
 - Move vitessce into visualization section.
 - Fix material-ui style conflicts with vitessce.
 - Fix sample organ logic.
+- Increase max height for detail file table.
+- Make detail section padding uniform.
 
 ## v0.0.18 - 2020-05-18
 
