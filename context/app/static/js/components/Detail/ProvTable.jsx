@@ -54,7 +54,7 @@ function ProvTable(props) {
               ))
             )
             : (
-              <ListItemLink href={`/search?ancestor_id[0]=${uuid}&entity_type[0]=${typesToSplit[i]}`}>
+              <ListItemLink href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${typesToSplit[i]}`}>
                 <ListItemText primary={`Derived ${typesToSplit[i]}s`} />
               </ListItemLink>
             )
@@ -62,7 +62,7 @@ function ProvTable(props) {
             {
           typesToSplit[i] === entity_type && entity_type !== 'Donor'
             ? (
-              <ListItemLink href={`/search?ancestor_id[0]=${uuid}&entity_type[0]=${typesToSplit[i]}`}>
+              <ListItemLink href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${typesToSplit[i]}`}>
                 <ListItemText primary={`Derived ${typesToSplit[i]}s`} />
               </ListItemLink>
             ) : null

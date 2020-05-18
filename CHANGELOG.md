@@ -3,6 +3,8 @@
 ## v0.0.19 - In Progress
 
 ### Changed
+
+- Fix derived searches.
 - Move vitessce into visualization section.
 - Fix material-ui style conflicts with vitessce.
 
