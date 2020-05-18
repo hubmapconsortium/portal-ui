@@ -13,7 +13,7 @@ import SectionContainer from './SectionContainer';
 import { readCookie } from '../../helpers/functions';
 
 const StyledTableContainer = styled(TableContainer)`
-  max-height: 231px;
+  max-height: 600px;
 `;
 
 const StyledLink = styled(Link)`
