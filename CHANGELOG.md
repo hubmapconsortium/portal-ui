@@ -4,6 +4,8 @@
 
 ### Added
 
+- PropTypes on WrappedSearch.
+- Translate result columns as well as filters.
 - Make search columns appropriate to type.
 - Get favicons on React pages.
 - Call to action on home page.
