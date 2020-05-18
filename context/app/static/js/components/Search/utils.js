@@ -25,8 +25,8 @@ export function field(id, name, translations) {
   return def;
 }
 
-export function filter(id, name) {
-  return {
+export function filter(id, name, translations) {
+  const def = {
     type: 'RefinementListFilter',
     props: {
       id: id,
@@ -36,32 +36,8 @@ export function filter(id, name) {
       size: 5,
     },
   };
-}
-
-export function organFilter(id) {
-  return {
-    type: 'RefinementListFilter',
-    props: {
-      id: id,
-      title: 'Organ',
-      field: `${id}.keyword`,
-      operator: 'OR',
-      size: 5,
-      translations: organTranslations,
-    }
-  };
-}
-
-export function specimenTypeFilter(id){
-  return {
-    type: 'RefinementListFilter',
-    props: {
-      id: id,
-      title: 'Specimen Type',
-      field: `${id}.keyword`,
-      operator: 'OR',
-      size: 5,
-      translations: specimenTypeTranslations,
-    }
-  };
+  if (translations) {
+    def.props.translations = translations;
+  }
+  return def;
 }
