@@ -50,7 +50,7 @@ def details(type, uuid):
     if type != actual_type:
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
-    if environ['FLASK_ENV'] == 'development':
+    if 'FLASK_ENV' in environ and environ['FLASK_ENV'] == 'development':
         # TODO: These schemas don't need to be reloaded per request.
         schema_path = (
             Path(current_app.root_path).parent / 'search-schema' / 'data'
