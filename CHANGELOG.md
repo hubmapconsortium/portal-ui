@@ -2,7 +2,8 @@
 
 ## v0.0.19 - In Progress
 
-...
+### Changed
+- Move vitessce into visualization section.
 
 ## v0.0.18 - 2020-05-18
 
