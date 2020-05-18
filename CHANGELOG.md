@@ -14,7 +14,7 @@
 - Upgrade Vitessce to 0.1.3 to fix small bugs and add description for tiff.
 - Change scRNASEQ file searching.
 - Separate detail pages by entity and update design.
-
+- Display provenance table links for samples and datasets.
 ## v0.0.17 - 2020-05-15
 
 ### Added
