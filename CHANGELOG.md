@@ -5,6 +5,7 @@
 ### Changed
 
 - Fix derived searches.
+- Fix material-ui style conflicts with vitessce.
 
 ## v0.0.18 - 2020-05-18
 
