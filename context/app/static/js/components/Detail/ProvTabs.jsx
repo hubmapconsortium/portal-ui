@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
@@ -10,6 +11,10 @@ import ProvTable from './ProvTable';
 import { useStyles } from '../../styles';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
+
+const StyledTab = styled(Tab)`
+ min-height:72px;
+`;
 
 function TabPanel(props) {
   const {
@@ -43,20 +48,20 @@ function ProvTabs(props) {
       <SectionHeader variant="h3" component="h2">Provenance</SectionHeader>
       <Paper className={classes.tabsRoot}>
         <Tabs
-          orientation="vertical"
-          variant="scrollable"
+          variant="standard"
           value={open}
           onChange={handleChange}
           aria-label="Detail View Tabs"
           className={classes.tabs}
-          indicatorColor="secondary"
+          tabColor="inherit"
+          TabIndicatorProps={{ style: { backgroundColor: '#9CB965' } }}
         >
-          <Tab
+          <StyledTab
             label="Table"
             id="vertical-tab-0"
             aria-controls="vertical-tabpanel-0"
           />
-          <Tab
+          <StyledTab
             label="Graph"
             id="vertical-tab-1"
             aria-controls="vertical-tabpanel-1"

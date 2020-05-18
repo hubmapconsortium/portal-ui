@@ -9,12 +9,12 @@ export const useStyles = makeStyles((theme) => ({
   },
   // tab classes extends beyond the portal-ui style guide. Pulled from materials-ui example.
   tabs: {
-    borderRight: `1px solid ${theme.palette.divider}`,
+    boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.2), 0px 4px 5px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.14)',
+    backgroundColor: theme.palette.primary.main,
+    color: '#FFFFFF',
   },
   tabsRoot: {
     backgroundColor: theme.palette.background.paper,
-    flexGrow: 1,
-    display: 'flex',
   },
   title: {
     flexGrow: 1,
@@ -31,7 +31,7 @@ export const useStyles = makeStyles((theme) => ({
     height: '40px',
   },
   tabPanels: {
-    width: 'calc(100% - 160px)',
+    width: '100%',
   },
   tabPanelBoxes: {
     display: 'flex',
