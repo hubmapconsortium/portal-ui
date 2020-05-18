@@ -5,6 +5,7 @@
 ### Changed
 - Move vitessce into visualization section.
 - Fix material-ui style conflicts with vitessce.
+- Make detail section padding uniform.
 
 ## v0.0.18 - 2020-05-18
 
