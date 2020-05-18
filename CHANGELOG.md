@@ -1,11 +1,11 @@
 # Changelog
 
-## v0.0.17 - In progress
+## v0.0.19 - In Progress
 
 ### Changed
 - Fix material-ui style conflicts with vitessce.
 
-## v0.0.17 - 2020-05-18
+## v0.0.18 - 2020-05-18
 
 ### Added
 
@@ -14,8 +14,6 @@
 - Make search columns appropriate to type.
 - Get favicons on React pages.
 - Call to action on home page.
-- Python util to pull data from submodules.
-- Appropriate facets for different types.
 
 ### Changed
 
@@ -24,6 +22,16 @@
 - Change scRNASEQ file searching.
 - Separate detail pages by entity and update design.
 - Display provenance table links for samples and datasets.
+
+## v0.0.17 - 2020-05-15
+
+### Added
+
+- Python util to pull data from submodules.
+- Appropriate facets for different types.
+
+### Changed
+
 - Fix Vitessce sizing bug.
 
 ## v0.0.16 - 2020-05-13
