@@ -39,7 +39,6 @@ export const datasetConfig = {
     filter('created_by_user_displayname', 'Creator'),
     filter('data_types', 'Data types'),
     filter('donor.group_name', 'Group'),
-    filter('created_by_user_displayname', 'Creator'),
     filter('source_sample.specimen_type', 'Specimen Type', specimenTypeTranslations),
     filter('status', 'Status'),
   ],
