@@ -27,7 +27,7 @@ function SummaryData(props) {
     <>
       {organ && organ.length
         ? (<SummaryItem>{organ}</SummaryItem>) : null}
-      {origin_sample.organ && origin_sample.organ.length
+      {origin_sample.organ && origin_sample.organ.length && !organ
         ? (<SummaryItem>{origin_sample.organ}</SummaryItem>) : null}
       {specimen_type && specimen_type.length
         ? (<Typography variant="body1">{specimen_type}</Typography>) : null}
