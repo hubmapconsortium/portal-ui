@@ -2,7 +2,11 @@
 
 ## v0.0.20 - In progress
 
-...
+### Added
+- Dataset status icon.
+
+### Changed
+- Make theme accessible from styled components.
 
 ## v0.0.19 - 2020-05-18
 
