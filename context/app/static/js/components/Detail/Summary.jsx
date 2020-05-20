@@ -8,27 +8,32 @@ import SectionHeader from './SectionHeader';
 import SectionItem from './SectionItem';
 import SummaryItem from './SummaryItem';
 import SectionContainer from './SectionContainer';
+import StatusIcon from './StatusIcon';
 
 const FlexContainer = styled.div`
   display: flex;
 `;
 
-const ColumnContainer = styled(FlexContainer)`
+const FlexCenterAlign = styled(FlexContainer)`
+  align-items: center;
+`;
+
+const FlexColumn = styled(FlexContainer)`
   flex-direction: column;
 `;
 
-const FlexItemRight = styled.div`
+const FlexRight = styled.div`
   display: flex;
   margin-left: auto;
 `;
 
-const FlexItemBottomRight = styled(FlexItemRight)`
+const FlexBottomRight = styled(FlexRight)`
   align-items: flex-end;
 `;
 
-const FlexColumnRight = styled(FlexItemRight)`
-    flex-direction: column;
-    justify-content: space-evenly;
+const FlexColumnRight = styled(FlexRight)`
+  flex-direction: column;
+  justify-content: space-evenly;
 `;
 
 const StyledTypography = styled(Typography)`
@@ -63,7 +68,7 @@ function Summary(props) {
     <SectionContainer>
       <Typography variant="h4" component="h1" color="primary">{entity_type}</Typography>
       <FlexContainer>
-        <ColumnContainer>
+        <FlexColumn>
           <SectionHeader variant="h1" component="h2">{display_doi}</SectionHeader>
           {entity_type !== 'Donor'
             ? (
@@ -71,13 +76,14 @@ function Summary(props) {
                 {children}
               </FlexContainer>
             ) : null}
-        </ColumnContainer>
-        <FlexItemBottomRight>
+        </FlexColumn>
+        <FlexBottomRight>
           {status && status.length
             ? (
-              <FlexContainer>
+              <FlexCenterAlign>
+                <StatusIcon status={status} />
                 <SummaryItem>{status}</SummaryItem>
-              </FlexContainer>
+              </FlexCenterAlign>
             ) : null}
           <StyledLink
             href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
@@ -85,9 +91,9 @@ function Summary(props) {
             target="_blank"
             ml={1}
           >
-            JSON
+            View JSON
           </StyledLink>
-        </FlexItemBottomRight>
+        </FlexBottomRight>
       </FlexContainer>
 
       <StyledPaper>
