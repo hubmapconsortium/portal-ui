@@ -23,3 +23,21 @@ export function readCookie(name) {
   }
   return null;
 }
+
+export function throttle(fn, wait) {
+  let previouslyRun;
+  let queuedToRun;
+
+  return function invokeFn(...args) {
+    const now = Date.now();
+
+    queuedToRun = clearTimeout(queuedToRun);
+
+    if (!previouslyRun || (now - previouslyRun >= wait)) {
+      fn(...args);
+      previouslyRun = now;
+    } else {
+      queuedToRun = setTimeout(invokeFn.bind(null, ...args), wait - (now - previouslyRun));
+    }
+  };
+}
