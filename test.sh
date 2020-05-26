@@ -49,10 +49,3 @@ start docker
 server_up 5001
 cd context && npm run cypress:run && cd -
 end docker
-
-start changelog
-if [ "$TRAVIS_BRANCH" != 'master' ]; then
-  diff CHANGELOG.md <(curl https://raw.githubusercontent.com/hubmapconsortium/portal-ui/master/CHANGELOG.md) \
-    && die 'Update CHANGELOG.md'
-fi
-end changelog

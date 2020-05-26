@@ -51,6 +51,9 @@ the schema.json until [this issue is resolved](https://github.com/hubmapconsorti
 and visit [localhost:5000](http://localhost:5000), or append `?react`
 to a `/dataset` url to see the React version.
 
+Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
+These are concatenated by push.sh.
+
 ## Testing
 [`test.sh`](test.sh) wraps all the tests and is run on Travis.
 Low-level unit tests are in python (`pytest -vv`),
@@ -63,8 +66,6 @@ checkout a release branch, increment `VERSION`, commit, and run:
 ```sh
 ./push.sh
 ```
-Update the CHANGELOG, adding the date for the current release,
-and stubbing the new "in progress" release.
 
 With a new `latest` Docker image, to redeploy either
 `dev` or `test` use `./redeploy.sh`.
