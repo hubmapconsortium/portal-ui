@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import Collapse from '@material-ui/core/Collapse';
-import Container from '@material-ui/core/Container';
 
 function NoticeAlert(props) {
   const [open, setOpen] = React.useState(true);
@@ -32,7 +31,7 @@ function NoticeAlert(props) {
   });
 
   return (
-    <Container maxWidth="lg">
+    <div>
       <Collapse in={open}>
         <Alert severity="warning" onClose={() => { setOpen(false); }}>
           <AlertTitle> Warning!</AlertTitle>
@@ -41,7 +40,7 @@ function NoticeAlert(props) {
           </ul>
         </Alert>
       </Collapse>
-    </Container>
+    </div>
   );
 }
 
