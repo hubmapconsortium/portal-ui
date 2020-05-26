@@ -16,13 +16,12 @@ Fill in as much as seems useful:
 **Expected behavior**
 
 **Screenshots**
-If applicable.
 
-**Environment:**
+**Environment**
  - Browser:
  - Browser version:
  - Portal version: `/static/VERSION`
 
-**Best guesses:**
+**Best guesses**
  - Relevant repos:
  - Developers to involve:

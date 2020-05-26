@@ -2,7 +2,9 @@
 
 ## v0.0.20 - In progress
 
-...
+### Added
+
+- Triage issue template.
 
 ## v0.0.19 - 2020-05-18
 
