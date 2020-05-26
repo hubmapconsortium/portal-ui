@@ -6,6 +6,10 @@
 
 - Triage issue template.
 
+### Changed
+
+- Use webpack aliasing to shorten relative path.
+
 ## v0.0.19 - 2020-05-18
 
 ### Added
