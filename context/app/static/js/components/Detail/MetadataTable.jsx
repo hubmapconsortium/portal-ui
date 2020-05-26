@@ -25,7 +25,7 @@ function MetadataTable(props) {
 
   const rows = Object.entries(tableData).map((entry) => ({ key: entry[0], value: entry[1] }));
   return (
-    <SectionContainer>
+    <SectionContainer id="metadata-table">
       <SectionHeader variant="h3" component="h2">Metadata</SectionHeader>
       <Paper>
         <StyledTableContainer>

@@ -57,7 +57,7 @@ function SampleItems(props) {
 function Metadata(props) {
   const { entityType } = props;
   return (
-    <SectionContainer>
+    <SectionContainer id="metadata">
       <SectionHeader variant="h3" component="h2">Metadata</SectionHeader>
       <FlexPaper>
         {entityType === 'Donor' ? <DonorItems {...props} /> : <SampleItems {...props} />}

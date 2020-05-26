@@ -36,7 +36,7 @@ function Attribution(props) {
   } = assayMetadata;
 
   return (
-    <SectionContainer>
+    <SectionContainer id="attribution">
       <SectionHeader variant="h3" component="h2">Attribution</SectionHeader>
       <StyledPaper>
         <Typography variant="body1">{group_name}</Typography>
