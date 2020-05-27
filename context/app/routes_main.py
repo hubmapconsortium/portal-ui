@@ -34,7 +34,8 @@ def _get_client():
 def index():
     core_props = {'endpoints': {
         'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'],
-        'assetsEndpoint': current_app.config['ASSETS_ENDPOINT']}}
+        'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
+        'entityEndpoint': current_app.config['ENTITY_API_BASE']}}
     return render_template('pages/base_react.html', types=types, flask_data=core_props)
 
 

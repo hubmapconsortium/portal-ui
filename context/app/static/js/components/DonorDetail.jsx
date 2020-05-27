@@ -33,7 +33,7 @@ function getDonorMetadata(metadata) {
 
 function DonorDetail(props) {
   const {
-    assayMetadata, flashed_messages,
+    assayMetadata, flashed_messages, entityEndpoint,
   } = props;
   const {
     uuid, protocol_url, portal_uploaded_protocol_files, metadata,
@@ -51,7 +51,11 @@ function DonorDetail(props) {
         <Summary assayMetadata={assayMetadata} />
         <Metadata entityType={assayMetadata.entity_type} metadata={donorMetadata} />
         <Attribution assayMetadata={assayMetadata} />
-        <ProvTabs uuid={uuid} assayMetadata={assayMetadata} />
+        <ProvTabs
+          uuid={uuid}
+          assayMetadata={assayMetadata}
+          entityEndpoint={entityEndpoint}
+        />
         {portal_uploaded_protocol_files || protocol_url
           ? <Protocol assayMetadata={assayMetadata} /> : null}
       </SpacedContainer>

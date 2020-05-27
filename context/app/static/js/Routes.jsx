@@ -10,7 +10,7 @@ import DatasetDetail from './components/DatasetDetail';
 function Routes(props) {
   const { flaskData } = props;
   const {
-    flashed_messages, entity, vitessce_conf, endpoints, title,
+    flashed_messages, entity, vitessce_conf, endpoints, title, entityEndpoint,
   } = flaskData;
   const urlPath = window.location.pathname;
 
@@ -20,6 +20,7 @@ function Routes(props) {
         assayMetadata={entity}
         vitData={vitessce_conf}
         flashed_messages={flashed_messages}
+        entityEndpoint={entityEndpoint}
       />
     );
   }
@@ -29,6 +30,7 @@ function Routes(props) {
         assayMetadata={entity}
         vitData={vitessce_conf}
         flashed_messages={flashed_messages}
+        entityEndpoint={entityEndpoint}
       />
     );
   }
@@ -40,6 +42,7 @@ function Routes(props) {
         vitData={vitessce_conf}
         flashed_messages={flashed_messages}
         assetsEndpoint={endpoints.assetsEndpoint}
+        entityEndpoint={entityEndpoint}
       />
     );
   }

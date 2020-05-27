@@ -36,7 +36,7 @@ function SummaryData(props) {
 }
 
 function SampleDetail(props) {
-  const { assayMetadata, flashed_messages } = props;
+  const { assayMetadata, flashed_messages, entityEndpoint } = props;
   const {
     uuid,
     protocol_url,
@@ -56,7 +56,11 @@ function SampleDetail(props) {
         </Summary>
         <Metadata organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
         <Attribution assayMetadata={assayMetadata} />
-        <ProvTabs uuid={uuid} assayMetadata={assayMetadata} />
+        <ProvTabs
+          uuid={uuid}
+          assayMetadata={assayMetadata}
+          entityEndpoint={entityEndpoint}
+        />
         {portal_uploaded_protocol_files || protocol_url
           ? <Protocol assayMetadata={assayMetadata} /> : null}
       </SpacedContainer>
