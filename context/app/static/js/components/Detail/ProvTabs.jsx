@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { useStyles } from '../../styles';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
+import { readCookie } from '../../helpers/functions';
 
 const StyledTab = styled(Tab)`
  min-height:72px;
@@ -73,7 +74,8 @@ function ProvTabs(props) {
           boxClasses={classes.tabPanelBoxes}
           index={0}
         >
-          TODO: UUID={uuid}
+          TODO: UUID={uuid}<br />
+          token: {readCookie('nexus_token')}
           {/* <ProvTable
                  provData={provData}
                  assayMetadata={assayMetadata}
