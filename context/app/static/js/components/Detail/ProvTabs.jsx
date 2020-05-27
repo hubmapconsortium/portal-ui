@@ -6,8 +6,8 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import ProvGraph from './ProvGraph';
-import ProvTable from './ProvTable';
+// import ProvGraph from './ProvGraph';
+// import ProvTable from './ProvTable';
 import { useStyles } from '../../styles';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
@@ -36,7 +36,7 @@ function TabPanel(props) {
 
 
 function ProvTabs(props) {
-  const { provData, assayMetadata } = props;
+  const { uuid /* assayMetadata */ } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(0);
 
@@ -73,11 +73,16 @@ function ProvTabs(props) {
           boxClasses={classes.tabPanelBoxes}
           index={0}
         >
-          <ProvTable provData={provData} assayMetadata={assayMetadata} typesToSplit={['Donor', 'Sample', 'Dataset']} />
+          TODO: UUID={uuid}
+          {/* <ProvTable
+                 provData={provData}
+                 assayMetadata={assayMetadata}
+                 typesToSplit={['Donor', 'Sample', 'Dataset']}
+              /> */}
         </TabPanel>
         <TabPanel value={open} className={classes.tabPanels} index={1}>
           <span id="prov-vis-react">
-            <ProvGraph provData={provData} />
+            {/* <ProvGraph provData={provData} /> */}
           </span>
         </TabPanel>
 
@@ -87,7 +92,7 @@ function ProvTabs(props) {
 }
 
 ProvTabs.propTypes = {
-  provData: PropTypes.objectOf(PropTypes.object).isRequired,
+  uuid: PropTypes.string.isRequired,
 };
 
 export default ProvTabs;

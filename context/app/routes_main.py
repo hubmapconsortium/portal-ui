@@ -59,7 +59,6 @@ def details(type, uuid):
             type_schema = load_yaml(type_schema_file)
         for_each_validation_error(entity, type_schema, flash)
 
-    provenance = client.get_provenance(uuid)
     flashed_messages = []
     errors = get_flashed_messages()
 
@@ -76,7 +75,6 @@ def details(type, uuid):
     core_props.update({
         'flashed_messages': flashed_messages,
         'entity': entity,
-        'provenance': provenance,
         'vitessce_conf': client.get_vitessce_conf(entity)
     })
     return render_template(

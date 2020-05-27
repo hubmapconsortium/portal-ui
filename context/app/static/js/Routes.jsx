@@ -10,7 +10,7 @@ import DatasetDetail from './components/DatasetDetail';
 function Routes(props) {
   const { flaskData } = props;
   const {
-    flashed_messages, entity, provenance, vitessce_conf, endpoints, title,
+    flashed_messages, entity, vitessce_conf, endpoints, title,
   } = flaskData;
   const urlPath = window.location.pathname;
 
@@ -18,7 +18,6 @@ function Routes(props) {
     return (
       <DonorDetail
         assayMetadata={entity}
-        provData={provenance}
         vitData={vitessce_conf}
         flashed_messages={flashed_messages}
       />
@@ -28,7 +27,6 @@ function Routes(props) {
     return (
       <SampleDetail
         assayMetadata={entity}
-        provData={provenance}
         vitData={vitessce_conf}
         flashed_messages={flashed_messages}
       />
@@ -39,7 +37,6 @@ function Routes(props) {
     return (
       <DatasetDetail
         assayMetadata={entity}
-        provData={provenance}
         vitData={vitessce_conf}
         flashed_messages={flashed_messages}
         assetsEndpoint={endpoints.assetsEndpoint}
@@ -65,7 +62,6 @@ Routes.propTypes = {
     title: PropTypes.string,
     entity: PropTypes.object,
     flashed_messages: PropTypes.array,
-    provenance: PropTypes.object,
     vitessce_conf: PropTypes.object,
     endpoints: PropTypes.object,
   }),

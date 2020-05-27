@@ -58,7 +58,6 @@ function SummaryData(props) {
 function DatasetDetail(props) {
   const {
     assayMetadata,
-    provData,
     vitData,
     flashed_messages,
     assetsEndpoint,
@@ -79,7 +78,7 @@ function DatasetDetail(props) {
           ? <Visualization vitData={vitData} />
           : null}
         <Attribution assayMetadata={assayMetadata} />
-        <ProvTabs provData={provData} assayMetadata={assayMetadata} />
+        <ProvTabs uuid={uuid} assayMetadata={assayMetadata} />
         {portal_uploaded_protocol_files || protocol_url
           ? <Protocol assayMetadata={assayMetadata} />
           : null}

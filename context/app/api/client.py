@@ -121,49 +121,14 @@ class ApiClient():
             raise Exception(f'UUID not unique; got {len(hits)} matches')
         entity = hits[0]['_source']
 
+        if 'metadata' not in entity:
+            entity['metadata'] = {}
+
         # TODO: Reenable with new document structure.
         # entity['created'] = _format_timestamp(entity['provenance_create_timestamp'])
         # entity['modified'] = _format_timestamp(entity['provenance_modified_timestamp'])
         return entity
 
-    def get_provenance(self, uuid):
-        # TODO: When the API is fixed, only use this when is_mock.
-
-        if self.is_mock:
-            return {
-                'prefix': {
-                    'ex': 'http://example.com#',
-                    'prov': 'http://www.w3.org/ns/prov#',
-                    'hubmap': 'https://hubmapconsortium.org'
-                },
-                'entity': {
-                    'ex:input': {'prov:label': 'Input', 'ex:note': 'Begins here...'},
-                    'ex:output': {'prov:label': 'Output', 'ex:note': '... and ends here.'},
-                },
-                'activity': {
-                    'ex:process': {'prov:label': 'Process'},
-                },
-                'wasGeneratedBy': {
-                    '_:1': {
-                        'prov:activity': 'ex:process',
-                        'prov:entity': 'ex:output',
-                    },
-                },
-                'used': {
-                    '_:2': {
-                        'prov:activity': 'ex:process',
-                        'prov:entity': 'ex:input',
-                    },
-                },
-            }
-
-        provenance = self._request(f'/entities/{uuid}/provenance')
-
-        # TODO: These should not be needed with next update to NPM.
-        del provenance['agent']
-        provenance['prefix']['hubmap'] = 'https://hubmapconsortium.org'
-
-        return provenance
 
     def get_vitessce_conf(self, entity):
         if ('files' not in entity or 'data_types' not in entity):
