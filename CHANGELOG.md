@@ -5,6 +5,7 @@
 ### Added
 
 - Triage issue template.
+- Dag provenance to dataset detail page.
 
 ## v0.0.19 - 2020-05-18
 
