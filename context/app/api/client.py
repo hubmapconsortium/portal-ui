@@ -121,9 +121,6 @@ class ApiClient():
             raise Exception(f'UUID not unique; got {len(hits)} matches')
         entity = hits[0]['_source']
 
-        if 'metadata' not in entity:
-            entity['metadata'] = {}
-
         # TODO: Reenable with new document structure.
         # entity['created'] = _format_timestamp(entity['provenance_create_timestamp'])
         # entity['modified'] = _format_timestamp(entity['provenance_modified_timestamp'])
