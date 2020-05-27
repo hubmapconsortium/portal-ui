@@ -2,7 +2,8 @@
 
 ## v0.0.21 - In progress
 
-...
+### Added
+- Table of contents in detail pages.
 
 ## v0.0.20 - 2020-05-27
 
