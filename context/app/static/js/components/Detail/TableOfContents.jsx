@@ -27,7 +27,7 @@ const StyledItemLink = styled(Link)`
   &:hover {
     border-left: 3px solid #C4C4C4;
   }
-  ${(props) => props.active
+  ${(props) => props.$isCurrentSection
     && css`
     color: #3781D1;
     border-left: 3px solid #C4C4C4;
@@ -36,7 +36,7 @@ const StyledItemLink = styled(Link)`
 
 function ItemLink(props) {
   const {
-    item, currentSection, handleClick, active,
+    item, currentSection, handleClick,
   } = props;
   return (
     <StyledItemLink
@@ -45,7 +45,7 @@ function ItemLink(props) {
       href={`#${item.hash}`}
       underline="none"
       onClick={handleClick(item.hash)}
-      active={active}
+      $isCurrentSection={currentSection === item.hash}
     >
       {item.text}
     </StyledItemLink>
@@ -170,7 +170,6 @@ function TableOfContents(props) {
                     item={item}
                     currentSection={currentSection}
                     handleClick={handleClick}
-                    active={currentSection === item.hash}
                   />
                 </li>
               ))}
