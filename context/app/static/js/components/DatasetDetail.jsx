@@ -12,6 +12,7 @@ import NoticeAlert from './NoticeAlert';
 import MetadataTable from './Detail/MetadataTable';
 import FileTable from './Detail/FileTable';
 import Visualization from './Detail/Visualization';
+import DagProv from './Detail/DagProv';
 import 'vitessce/build-lib/es/production/static/css/index.css';
 
 const FlexContainer = styled(Container)`
@@ -83,11 +84,19 @@ function DatasetDetail(props) {
         {portal_uploaded_protocol_files || protocol_url
           ? <Protocol assayMetadata={assayMetadata} />
           : null}
-        {metadata.metadata
+        {metadata && metadata.metadata
           ? <MetadataTable metadata={metadata.metadata} />
           : null}
         {files
           ? <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />
+          : null}
+        {metadata && (metadata.dag_provenance_list || metadata.dag_provenance)
+          ? (
+            <DagProv
+              dagListData={metadata.dag_provenance_list}
+              dagData={metadata.dag_provenance}
+            />
+          )
           : null}
       </SpacedContainer>
     </FlexContainer>

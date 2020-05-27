@@ -1,12 +1,23 @@
 # Changelog
 
-## v0.0.20 - In progress
+## v0.0.21 - In progress
 
 ### Added
 - Dataset status icon.
 
 ### Changed
 - Make theme accessible from styled components.
+
+## v0.0.20 - 2020-05-27
+
+### Added
+
+- Triage issue template.
+- Dag provenance to dataset detail page.
+
+### Changed
+
+- Use webpack aliasing to shorten relative path.
 
 ## v0.0.19 - 2020-05-18
 

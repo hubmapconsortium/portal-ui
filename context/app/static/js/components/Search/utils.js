@@ -1,5 +1,5 @@
 import fromEntries from 'fromentries';
-import searchDefinitions from '../../../../../search-schema/data/definitions.yaml';
+import searchDefinitions from 'search-schema-definitions';
 
 export const organTranslations = fromEntries(
   Object.entries(
