@@ -30,12 +30,17 @@ def _get_client():
     )
 
 
-@blueprint.route('/')
-def index():
-    core_props = {'endpoints': {
+def _get_endpoints():
+    return {
         'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'],
         'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
-        'entityEndpoint': current_app.config['ENTITY_API_BASE']}}
+        'entityEndpoint': current_app.config['ENTITY_API_BASE']
+    }
+
+
+@blueprint.route('/')
+def index():
+    core_props = {'endpoints': _get_endpoints()}
     return render_template('pages/base_react.html', types=types, flask_data=core_props)
 
 
@@ -70,9 +75,7 @@ def details(type, uuid):
                                  'traceback': error.__str__()[0:1500]})
 
     template = f'pages/base_react.html'
-    core_props = {'endpoints': {
-        'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'],
-        'assetsEndpoint': current_app.config['ASSETS_ENDPOINT']}}
+    core_props = {'endpoints': _get_endpoints()}
     core_props.update({
         'flashed_messages': flashed_messages,
         'entity': entity,
@@ -105,8 +108,7 @@ def search():
     entity_type = request.args.get('entity_type[0]')
     title = f'{entity_type}s' if entity_type else 'Search'
     core_props = {
-        'endpoints': {'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'],
-                      'assetsEndpoint': current_app.config['ASSETS_ENDPOINT']},
+        'endpoints': _get_endpoints(),
         'title': title
     }
     if 'nexus_token' not in session:
