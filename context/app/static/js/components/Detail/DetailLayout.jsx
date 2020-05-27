@@ -24,6 +24,7 @@ function DetailLayout(props) {
     displayMetadata,
     displayMetadataTable,
     displayFiles,
+    displayDag,
     flashed_messages,
     children,
   } = props;
@@ -38,6 +39,7 @@ function DetailLayout(props) {
       ['protocol', { text: 'Protocol', hash: 'protocol' }],
       ['metadataTable', { text: 'Metadata', hash: 'metadata-table' }],
       ['files', { text: 'Files', hash: 'files' }],
+      ['dagProv', { text: 'DAG Provenance', hash: 'dag-provenance' }],
     ]);
     if (!displayMetadata) {
       sections.delete('metadata');
@@ -54,6 +56,9 @@ function DetailLayout(props) {
     }
     if (!displayFiles) {
       sections.delete('files');
+    }
+    if (!displayDag) {
+      sections.delete('dagProv');
     }
     return sections;
   };
