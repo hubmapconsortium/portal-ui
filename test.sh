@@ -51,7 +51,9 @@ cd context && npm run cypress:run && cd -
 end docker
 
 start changelog
-git diff --summary master \
-  | grep '^ create' | grep 'CHANGELOG-' \
-  || die 'Add a CHANGELOG-something.md'
+if [ "$TRAVIS_BRANCH" != 'master' ]; then
+  git diff --summary master \
+    | grep '^ create' | grep 'CHANGELOG-' \
+    || die 'Add a CHANGELOG-something.md'
+fi
 end changelog
