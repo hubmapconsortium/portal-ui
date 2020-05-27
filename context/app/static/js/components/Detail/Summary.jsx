@@ -78,7 +78,7 @@ function Summary(props) {
             ) : null}
         </FlexColumn>
         <FlexBottomRight>
-          {status && status.length
+          {entity_type === 'Dataset' && status && status.length
             ? (
               <FlexCenterAlign>
                 <StatusIcon status={status} />
