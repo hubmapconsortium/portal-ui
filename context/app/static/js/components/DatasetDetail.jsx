@@ -59,10 +59,10 @@ function SummaryData(props) {
 function DatasetDetail(props) {
   const {
     assayMetadata,
-    provData,
     vitData,
     flashed_messages,
     assetsEndpoint,
+    entityEndpoint,
   } = props;
   const {
     protocol_url, portal_uploaded_protocol_files, metadata, files, uuid, data_types, origin_sample,
@@ -80,7 +80,11 @@ function DatasetDetail(props) {
           ? <Visualization vitData={vitData} />
           : null}
         <Attribution assayMetadata={assayMetadata} />
-        <ProvTabs provData={provData} assayMetadata={assayMetadata} />
+        <ProvTabs
+          uuid={uuid}
+          assayMetadata={assayMetadata}
+          entityEndpoint={entityEndpoint}
+        />
         {portal_uploaded_protocol_files || protocol_url
           ? <Protocol assayMetadata={assayMetadata} />
           : null}

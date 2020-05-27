@@ -34,7 +34,6 @@ App.propTypes = {
     title: PropTypes.string,
     entity: PropTypes.object,
     flashed_messages: PropTypes.array,
-    provenance: PropTypes.object,
     vitessce_conf: PropTypes.object,
     endpoints: PropTypes.object,
   }),
