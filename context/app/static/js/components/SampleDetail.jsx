@@ -25,7 +25,7 @@ function SummaryData(props) {
 }
 
 function SampleDetail(props) {
-  const { assayMetadata, provData } = props;
+  const { assayMetadata, provData, flashed_messages } = props;
   const {
     protocol_url,
     portal_uploaded_protocol_files,
@@ -37,7 +37,7 @@ function SampleDetail(props) {
   const displayProtocol = (portal_uploaded_protocol_files || protocol_url);
 
   return (
-    <DetailLayout displayProtocol displayMetadata>
+    <DetailLayout displayProtocol displayMetadata flashed_messages={flashed_messages}>
       <Summary assayMetadata={assayMetadata}>
         <SummaryData organ={organ} specimen_type={specimen_type} origin_sample={origin_sample} />
       </Summary>

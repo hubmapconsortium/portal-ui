@@ -49,6 +49,7 @@ function DatasetDetail(props) {
     provData,
     vitData,
     assetsEndpoint,
+    flashed_messages,
   } = props;
   const {
     protocol_url,
@@ -73,6 +74,7 @@ function DatasetDetail(props) {
       displayMetadataTable={displayMetadataTable}
       displayFiles={displayFiles}
       displayDag={displayDag}
+      flashed_messages={flashed_messages}
     >
       <Summary assayMetadata={assayMetadata}>
         <SummaryData data_types={data_types} origin_sample={origin_sample} />
