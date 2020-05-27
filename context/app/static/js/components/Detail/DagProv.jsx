@@ -63,7 +63,7 @@ function DagProv(props) {
   // eslint-disable-next-line no-console
   console.log(dagData);
   return (
-    <SectionContainer>
+    <SectionContainer id="dag-provenance">
       <SectionHeader variant="h3" component="h2">DAG Provenance</SectionHeader>
       <PaddedPaper>
         {dagListData && <DagList dagListData={dagListData} />}
