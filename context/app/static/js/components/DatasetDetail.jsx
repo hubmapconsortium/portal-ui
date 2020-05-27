@@ -72,6 +72,7 @@ function DatasetDetail(props) {
       displayProtocol={displayProtocol}
       displayMetadataTable={displayMetadataTable}
       displayFiles={displayFiles}
+      displayDag={displayDag}
     >
       <Summary assayMetadata={assayMetadata}>
         <SummaryData data_types={data_types} origin_sample={origin_sample} />
