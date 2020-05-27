@@ -6,8 +6,8 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-// import ProvGraph from './ProvGraph';
-// import ProvTable from './ProvTable';
+import ProvGraph from './ProvGraph';
+import ProvTable from './ProvTable';
 import { useStyles } from '../../styles';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
@@ -37,7 +37,7 @@ function TabPanel(props) {
 
 
 function ProvTabs(props) {
-  const { uuid /* assayMetadata */ } = props;
+  const { uuid, assayMetadata, entityEndpoint } = props;
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(0);
@@ -45,14 +45,33 @@ function ProvTabs(props) {
     setOpen(newValue);
   };
 
-  const [provData, setProvData] = React.useState(null);
+  const [provData, setProvData] = React.useState({
+    entity: [],
+  });
   React.useEffect(() => {
-    setProvData({
-      todo: 'Make API fetch!',
-      token: readCookie('nexus_token'),
-      uuid,
-    });
-  }, [uuid]);
+    fetch(
+      `${entityEndpoint}/entities/${uuid}/provenance`,
+      {
+        headers: {
+          Authorization: `Bearer ${readCookie('nexus_token')}`,
+        },
+      },
+    )
+      .then((response) => {
+        if (!response.ok) {
+          console.error('Prov API failed', response);
+          return null;
+        }
+        return response.json();
+      })
+      .then(
+        (responseProvData) => {
+          if (responseProvData) {
+            setProvData(responseProvData);
+          }
+        },
+      );
+  }, [entityEndpoint, uuid]);
 
   return (
     <SectionContainer>
@@ -84,18 +103,15 @@ function ProvTabs(props) {
           boxClasses={classes.tabPanelBoxes}
           index={0}
         >
-          TODO: UUID={uuid}<br />
-          token: {readCookie('nexus_token')}<br />
-          provData: {JSON.stringify(provData)}
-          {/* <ProvTable
-                 provData={provData}
-                 assayMetadata={assayMetadata}
-                 typesToSplit={['Donor', 'Sample', 'Dataset']}
-              /> */}
+          <ProvTable
+            provData={provData}
+            assayMetadata={assayMetadata}
+            typesToSplit={['Donor', 'Sample', 'Dataset']}
+          />
         </TabPanel>
         <TabPanel value={open} className={classes.tabPanels} index={1}>
           <span id="prov-vis-react">
-            {/* <ProvGraph provData={provData} /> */}
+            <ProvGraph provData={provData} />
           </span>
         </TabPanel>
 
