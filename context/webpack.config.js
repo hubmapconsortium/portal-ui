@@ -9,6 +9,9 @@ const config = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml'],
+    alias: {
+      'search-schema-definitions$': resolve('./search-schema/data/definitions.yaml'),
+    }
   },
   module: {
     rules: [
