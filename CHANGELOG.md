@@ -1,6 +1,10 @@
 # Changelog
 
-## v0.0.20 - In progress
+## v0.0.21 - In progress
+
+...
+
+## v0.0.20 - 2020-05-27
 
 ### Added
 
