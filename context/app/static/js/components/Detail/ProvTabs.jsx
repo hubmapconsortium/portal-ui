@@ -45,9 +45,7 @@ function ProvTabs(props) {
     setOpen(newValue);
   };
 
-  const [provData, setProvData] = React.useState({
-    entity: [],
-  });
+  const [provData, setProvData] = React.useState(null);
   React.useEffect(() => {
     fetch(
       `${entityEndpoint}/entities/${uuid}/provenance`,
@@ -66,9 +64,7 @@ function ProvTabs(props) {
       })
       .then(
         (responseProvData) => {
-          if (responseProvData) {
-            setProvData(responseProvData);
-          }
+          setProvData(responseProvData);
         },
       );
   }, [entityEndpoint, uuid]);
@@ -97,24 +93,29 @@ function ProvTabs(props) {
             aria-controls="vertical-tabpanel-1"
           />
         </Tabs>
-        <TabPanel
-          value={open}
-          className={classes.tabPanels}
-          boxClasses={classes.tabPanelBoxes}
-          index={0}
-        >
-          <ProvTable
-            provData={provData}
-            assayMetadata={assayMetadata}
-            typesToSplit={['Donor', 'Sample', 'Dataset']}
-          />
-        </TabPanel>
-        <TabPanel value={open} className={classes.tabPanels} index={1}>
-          <span id="prov-vis-react">
-            <ProvGraph provData={provData} />
-          </span>
-        </TabPanel>
-
+        {
+          provData && (
+            <>
+              <TabPanel
+                value={open}
+                className={classes.tabPanels}
+                boxClasses={classes.tabPanelBoxes}
+                index={0}
+              >
+                <ProvTable
+                  provData={provData}
+                  assayMetadata={assayMetadata}
+                  typesToSplit={['Donor', 'Sample', 'Dataset']}
+                />
+              </TabPanel>
+              <TabPanel value={open} className={classes.tabPanels} index={1}>
+                <span id="prov-vis-react">
+                  <ProvGraph provData={provData} />
+                </span>
+              </TabPanel>
+            </>
+          )
+        }
       </Paper>
     </SectionContainer>
   );
