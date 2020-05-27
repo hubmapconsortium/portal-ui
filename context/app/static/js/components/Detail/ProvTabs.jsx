@@ -39,11 +39,21 @@ function TabPanel(props) {
 function ProvTabs(props) {
   const { uuid /* assayMetadata */ } = props;
   const classes = useStyles();
-  const [open, setOpen] = React.useState(0);
 
+  const [open, setOpen] = React.useState(0);
   const handleChange = (event, newValue) => {
     setOpen(newValue);
   };
+
+  const [provData, setProvData] = React.useState(null);
+  React.useEffect(() => {
+    setProvData({
+      todo: 'Make API fetch!',
+      token: readCookie('nexus_token'),
+      uuid,
+    });
+  }, [uuid]);
+
   return (
     <SectionContainer>
       <SectionHeader variant="h3" component="h2">Provenance</SectionHeader>
@@ -75,7 +85,8 @@ function ProvTabs(props) {
           index={0}
         >
           TODO: UUID={uuid}<br />
-          token: {readCookie('nexus_token')}
+          token: {readCookie('nexus_token')}<br />
+          provData: {JSON.stringify(provData)}
           {/* <ProvTable
                  provData={provData}
                  assayMetadata={assayMetadata}
