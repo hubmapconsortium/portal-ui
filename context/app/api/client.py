@@ -129,7 +129,6 @@ class ApiClient():
         # entity['modified'] = _format_timestamp(entity['provenance_modified_timestamp'])
         return entity
 
-
     def get_vitessce_conf(self, entity):
         if ('files' not in entity or 'data_types' not in entity):
             # Would a default no-viz config be better?
