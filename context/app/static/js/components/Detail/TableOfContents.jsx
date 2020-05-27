@@ -107,13 +107,6 @@ function TableOfContents(props) {
     for (let i = itemsWithNodeRef.current.length - 1; i >= 0; i -= 1) {
       const item = itemsWithNodeRef.current[i];
 
-      // If the user has scrolled to bottom of page, set active to last item
-      if (d.scrollTop + window.innerHeight
-        >= d.offsetHeight) {
-        active = itemsWithNodeRef.current[itemsWithNodeRef.current.length - 1];
-        break;
-      }
-
       if (
         item.node
         && item.node.offsetTop
