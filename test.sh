@@ -49,3 +49,9 @@ start docker
 server_up 5001
 cd context && npm run cypress:run && cd -
 end docker
+
+start changelog
+git diff --summary master \
+  | grep '^ create' | grep 'CHANGELOG-' \
+  || die 'Add a CHANGELOG-something.md'
+end changelog
