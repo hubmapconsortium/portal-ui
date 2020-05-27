@@ -11,6 +11,7 @@ import MetadataTable from './Detail/MetadataTable';
 import FileTable from './Detail/FileTable';
 import Visualization from './Detail/Visualization';
 import DetailLayout from './Detail/DetailLayout';
+import DagProv from './Detail/DagProv';
 
 const StyledDivider = styled(Divider)`
   margin-left: 5px;
@@ -63,6 +64,7 @@ function DatasetDetail(props) {
   const displayProtocol = (portal_uploaded_protocol_files || protocol_url);
   const displayMetadataTable = (metadata && metadata.metadata);
   const displayFiles = (files && files.length);
+  const displayDag = (metadata && (metadata.dag_provenance || metadata.dag_provenance_list));
 
   return (
     <DetailLayout
@@ -80,6 +82,8 @@ function DatasetDetail(props) {
       {displayProtocol && <Protocol assayMetadata={assayMetadata} />}
       {displayMetadataTable && <MetadataTable metadata={metadata.metadata} />}
       {displayFiles && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}
+      {displayDag
+      && <DagProv dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />}
     </DetailLayout>
   );
 }
