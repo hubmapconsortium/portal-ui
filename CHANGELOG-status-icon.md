@@ -1,0 +1,2 @@
+- Make theme accessible from styled components.
+- Add dataset detail status icon.
