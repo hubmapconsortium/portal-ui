@@ -8,18 +8,20 @@ git diff --quiet || die 'Uncommitted changes: Stash or commit before push.'
 diff VERSION <(curl -s https://raw.githubusercontent.com/hubmapconsortium/portal-ui/master/context/app/static/VERSION) \
   && die 'Update VERSION and commit.'
 
-(
-  echo '##' `cat VERSION` - `date +"%F"`
-  echo
-  cat CHANGELOG-*.md
-  echo
-  echo
-  cat CHANGELOG.md
-) > CHANGELOG.md.new
-mv CHANGELOG.md.new CHANGELOG.md
-git rm CHANGELOG-*.md || echo 'No files to remove; CHANGELOG.md may be messy.'
-git add .
-git commit -m 'Update CHANGELOG'
+if ls CHANGELOG-*.md; then
+  (
+    echo '##' `cat VERSION` - `date +"%F"`
+    echo
+    cat CHANGELOG-*.md
+    echo
+    echo
+    cat CHANGELOG.md
+  ) > CHANGELOG.md.new
+  mv CHANGELOG.md.new CHANGELOG.md
+  git rm CHANGELOG-*.md
+  git add .
+  git commit -m 'Update CHANGELOG'
+fi
 
 VERSION=`cat VERSION`
 VERSION_IMAGE_NAME=hubmap/portal-ui:$VERSION
