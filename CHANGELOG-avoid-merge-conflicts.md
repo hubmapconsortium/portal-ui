@@ -1,0 +1,1 @@
+- Concatenate separate files to build changelog on release; This will help us minimize merge conflicts

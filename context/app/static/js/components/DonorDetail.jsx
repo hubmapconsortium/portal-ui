@@ -33,9 +33,11 @@ function getDonorMetadata(metadata) {
 
 function DonorDetail(props) {
   const {
-    assayMetadata, provData, flashed_messages,
+    assayMetadata, flashed_messages, entityEndpoint,
   } = props;
-  const { protocol_url, portal_uploaded_protocol_files, metadata } = assayMetadata;
+  const {
+    uuid, protocol_url, portal_uploaded_protocol_files, metadata,
+  } = assayMetadata;
 
   // eslint-disable-next-line
   const donorMetadata = metadata && metadata.hasOwnProperty('organ_donor_data')
@@ -49,7 +51,11 @@ function DonorDetail(props) {
         <Summary assayMetadata={assayMetadata} />
         <Metadata entityType={assayMetadata.entity_type} metadata={donorMetadata} />
         <Attribution assayMetadata={assayMetadata} />
-        <ProvTabs provData={provData} assayMetadata={assayMetadata} />
+        <ProvTabs
+          uuid={uuid}
+          assayMetadata={assayMetadata}
+          entityEndpoint={entityEndpoint}
+        />
         {portal_uploaded_protocol_files || protocol_url
           ? <Protocol assayMetadata={assayMetadata} /> : null}
       </SpacedContainer>

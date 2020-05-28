@@ -19,6 +19,10 @@
 
 - Use webpack aliasing to shorten relative path.
 
+### Changed
+
+- Make Prov API request from client-side instead of server-side.
+
 ## v0.0.19 - 2020-05-18
 
 ### Added
