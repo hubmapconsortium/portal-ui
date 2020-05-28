@@ -6,27 +6,21 @@ import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
+import SectionItem from './SectionItem';
 
-const LightText = styled.span`
-  color: #444A65;
+const StyledTypography = styled(Typography)`
+  margin: 2px 0px 2px 0px;
 `;
-
 const StyledLink = styled(Link)`
   color: #3781D1;
 `;
 
-const StyledPaper = styled(Paper)`
-  padding: 20px 40px 20px 40px;
+const FlexPaper = styled(Paper)`
+  display: flex;
+  padding: 30px 40px 30px 40px;
 `;
 
-function AttributionItem(props) {
-  const { children, label } = props;
-  return (
-    <Typography variant="body1">
-      <LightText>{label}</LightText>{children}
-    </Typography>
-  );
-}
+
 function Attribution(props) {
   const { assayMetadata } = props;
   const {
@@ -38,13 +32,15 @@ function Attribution(props) {
   return (
     <SectionContainer id="attribution">
       <SectionHeader variant="h3" component="h2">Attribution</SectionHeader>
-      <StyledPaper>
-        <Typography variant="body1">{group_name}</Typography>
-        <AttributionItem label="Created by: ">{created_by_user_displayname}</AttributionItem>
-        <AttributionItem label="Email: ">
-          <StyledLink href={`mailto:${created_by_user_email}`}>{created_by_user_email}</StyledLink>
-        </AttributionItem>
-      </StyledPaper>
+      <FlexPaper>
+        <SectionItem label="Center">
+          <StyledTypography variant="body1">{group_name}</StyledTypography>
+        </SectionItem>
+        <SectionItem label="Creator" ml={1}>
+          <StyledTypography variant="body1">{created_by_user_displayname}</StyledTypography>
+          <StyledLink href={`mailto:${encodeURI(created_by_user_email)}`}>{created_by_user_email}</StyledLink>
+        </SectionItem>
+      </FlexPaper>
     </SectionContainer>
   );
 }
