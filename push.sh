@@ -13,6 +13,7 @@ diff VERSION <(curl -s https://raw.githubusercontent.com/hubmapconsortium/portal
   echo
   cat CHANGELOG-*.md
   echo
+  echo
   cat CHANGELOG.md
 ) > CHANGELOG.md.new
 mv CHANGELOG.md.new CHANGELOG.md
@@ -20,6 +21,7 @@ git rm CHANGELOG-*.md
 git add .
 git commit -m 'Update CHANGELOG'
 
+VERSION=`cat VERSION`
 VERSION_IMAGE_NAME=hubmap/portal-ui:$VERSION
 LATEST_IMAGE_NAME=hubmap/portal-ui:latest
 

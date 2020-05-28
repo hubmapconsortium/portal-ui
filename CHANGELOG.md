@@ -3,6 +3,7 @@
 - Concatenate separate files to build changelog on release; This will help us minimize merge conflicts
 - Make theme accessible from styled components.
 - Add dataset detail status icon.- Add detail table of contents.
+
 ## v0.0.20 - 2020-05-27
 
 ### Added
