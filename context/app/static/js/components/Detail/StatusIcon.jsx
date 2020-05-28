@@ -26,6 +26,7 @@ function getColor(status) {
     return 'success';
   }
 
+  console.warn('Invalid status', status);
   return null;
 }
 
