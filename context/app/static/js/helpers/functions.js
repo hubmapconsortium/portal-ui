@@ -8,8 +8,12 @@ export function isEmptyArrayOrObject(val) {
   return false;
 }
 
-export function replaceUnderscore(str) {
-  return str.replace(/_/g, ' ');
+export function capitalizeString(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+export function replaceUnderscore(s) {
+  return s.replace(/_/g, ' ');
 }
 
 export function readCookie(name) {
