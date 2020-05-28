@@ -61,7 +61,7 @@ function DatasetDetail(props) {
     origin_sample,
   } = assayMetadata;
 
-  const shouldDisplay = {
+  const shouldDisplaySection = {
     vizualization: 'name' in vitData,
     protocols: (portal_uploaded_protocol_files || protocol_url),
     metadataTable: (metadata && metadata.metadata),
@@ -70,22 +70,22 @@ function DatasetDetail(props) {
   };
 
   return (
-    <DetailLayout shouldDisplay={shouldDisplay} flashed_messages={flashed_messages}>
+    <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
       <Summary assayMetadata={assayMetadata}>
         <SummaryData data_types={data_types} origin_sample={origin_sample} />
       </Summary>
-      {shouldDisplay.vizualization && <Visualization vitData={vitData} />}
+      {shouldDisplaySection.vizualization && <Visualization vitData={vitData} />}
       <Attribution assayMetadata={assayMetadata} />
       <ProvTabs
         uuid={uuid}
         assayMetadata={assayMetadata}
         entityEndpoint={entityEndpoint}
       />
-      {shouldDisplay.protocols && <Protocol assayMetadata={assayMetadata} />}
-      {shouldDisplay.metadataTable && <MetadataTable metadata={metadata.metadata} />}
-      {shouldDisplay.files
+      {shouldDisplaySection.protocols && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} />}
+      {shouldDisplaySection.files
       && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}
-      {shouldDisplay.dagProv
+      {shouldDisplaySection.dagProv
       && <DagProv dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />}
     </DetailLayout>
   );

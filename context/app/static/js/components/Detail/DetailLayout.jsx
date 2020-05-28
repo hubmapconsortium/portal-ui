@@ -42,7 +42,7 @@ function testAndDeleteFromObject(toDelete, obj, test) {
 
 function DetailLayout(props) {
   const {
-    shouldDisplay,
+    shouldDisplaySection,
     flashed_messages,
     children,
   } = props;
@@ -51,7 +51,7 @@ function DetailLayout(props) {
     const sections = new Map(getPossibleSections());
     const sectionsToTest = ['metadata', 'visualization', 'protocols', 'metadataTable', 'files', 'dagProv'];
     sectionsToTest.forEach(
-      (section) => testAndDeleteFromObject(section, sections, !shouldDisplay[section]),
+      (section) => testAndDeleteFromObject(section, sections, !shouldDisplaySection[section]),
     );
     return sections;
   };

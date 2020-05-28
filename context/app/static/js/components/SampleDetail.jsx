@@ -35,13 +35,13 @@ function SampleDetail(props) {
     origin_sample,
   } = assayMetadata;
 
-  const shouldDisplay = {
+  const shouldDisplaySection = {
     protocols: (portal_uploaded_protocol_files || protocol_url),
     metadata: true,
   };
 
   return (
-    <DetailLayout shouldDisplay={shouldDisplay} flashed_messages={flashed_messages}>
+    <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
       <Summary assayMetadata={assayMetadata}>
         <SummaryData organ={organ} specimen_type={specimen_type} origin_sample={origin_sample} />
       </Summary>
@@ -52,7 +52,7 @@ function SampleDetail(props) {
         assayMetadata={assayMetadata}
         entityEndpoint={entityEndpoint}
       />
-      {shouldDisplay.protocols && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplaySection.protocols && <Protocol assayMetadata={assayMetadata} />}
     </DetailLayout>
   );
 }
