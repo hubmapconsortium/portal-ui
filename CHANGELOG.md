@@ -1,4 +1,8 @@
-# Changelog
+## v0.0.21 - 2020-05-28
+
+- Concatenate separate files to build changelog on release; This will help us minimize merge conflicts
+- Make theme accessible from styled components.
+- Add dataset detail status icon.- Add detail table of contents.
 
 ## v0.0.20 - 2020-05-27
 
@@ -10,9 +14,6 @@
 ### Changed
 
 - Use webpack aliasing to shorten relative path.
-
-### Changed
-
 - Make Prov API request from client-side instead of server-side.
 
 ## v0.0.19 - 2020-05-18
