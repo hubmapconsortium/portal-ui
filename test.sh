@@ -18,6 +18,16 @@ server_up() {
   echo "Server starts up, and $URL returns 200."
 }
 
+start changelog
+if [ "$TRAVIS_BRANCH" != 'master' ]; then
+  git remote set-branches --add origin master
+  git fetch
+  git diff --summary origin/master \
+    | grep '^ create' | grep 'CHANGELOG-' \
+    || die 'Add a CHANGELOG-something.md'
+fi
+end changelog
+
 start quick-start
 if [ ! -z "$TRAVIS" ]; then
   ./quick-start.sh || sed -i 's/TODO/FAKE/' context/instance/app.conf
@@ -49,10 +59,3 @@ start docker
 server_up 5001
 cd context && npm run cypress:run && cd -
 end docker
-
-start changelog
-if [ "$TRAVIS_BRANCH" != 'master' ]; then
-  diff CHANGELOG.md <(curl https://raw.githubusercontent.com/hubmapconsortium/portal-ui/master/CHANGELOG.md) \
-    && die 'Update CHANGELOG.md'
-fi
-end changelog

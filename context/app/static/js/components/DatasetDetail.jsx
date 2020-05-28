@@ -46,10 +46,10 @@ function SummaryData(props) {
 function DatasetDetail(props) {
   const {
     assayMetadata,
-    provData,
     vitData,
     assetsEndpoint,
     flashed_messages,
+    entityEndpoint,
   } = props;
   const {
     protocol_url,
@@ -70,16 +70,17 @@ function DatasetDetail(props) {
   };
 
   return (
-    <DetailLayout
-      shouldDisplay={shouldDisplay}
-      flashed_messages={flashed_messages}
-    >
+    <DetailLayout shouldDisplay={shouldDisplay} flashed_messages={flashed_messages}>
       <Summary assayMetadata={assayMetadata}>
         <SummaryData data_types={data_types} origin_sample={origin_sample} />
       </Summary>
       {shouldDisplay.viz && <Visualization vitData={vitData} />}
       <Attribution assayMetadata={assayMetadata} />
-      <ProvTabs provData={provData} assayMetadata={assayMetadata} />
+      <ProvTabs
+        uuid={uuid}
+        assayMetadata={assayMetadata}
+        entityEndpoint={entityEndpoint}
+      />
       {shouldDisplay.protocol && <Protocol assayMetadata={assayMetadata} />}
       {shouldDisplay.metadataTable && <MetadataTable metadata={metadata.metadata} />}
       {shouldDisplay.files

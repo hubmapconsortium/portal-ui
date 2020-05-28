@@ -11,6 +11,7 @@ import ProvTable from './ProvTable';
 import { useStyles } from '../../styles';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
+import { readCookie } from '../../helpers/functions';
 
 const StyledTab = styled(Tab)`
  min-height:72px;
@@ -36,13 +37,35 @@ function TabPanel(props) {
 
 
 function ProvTabs(props) {
-  const { provData, assayMetadata } = props;
+  const { uuid, assayMetadata, entityEndpoint } = props;
   const classes = useStyles();
-  const [open, setOpen] = React.useState(0);
 
+  const [open, setOpen] = React.useState(0);
   const handleChange = (event, newValue) => {
     setOpen(newValue);
   };
+
+  const [provData, setProvData] = React.useState(null);
+  React.useEffect(() => {
+    async function getAndSetProvData() {
+      const response = await fetch(
+        `${entityEndpoint}/entities/${uuid}/provenance`,
+        {
+          headers: {
+            Authorization: `Bearer ${readCookie('nexus_token')}`,
+          },
+        },
+      );
+      if (!response.ok) {
+        console.error('Prov API failed', response);
+        return;
+      }
+      const responseProvData = await response.json();
+      setProvData(responseProvData);
+    }
+    getAndSetProvData();
+  }, [entityEndpoint, uuid]);
+
   return (
     <SectionContainer id="provenance">
       <SectionHeader variant="h3" component="h2">Provenance</SectionHeader>
@@ -67,27 +90,36 @@ function ProvTabs(props) {
             aria-controls="vertical-tabpanel-1"
           />
         </Tabs>
-        <TabPanel
-          value={open}
-          className={classes.tabPanels}
-          boxClasses={classes.tabPanelBoxes}
-          index={0}
-        >
-          <ProvTable provData={provData} assayMetadata={assayMetadata} typesToSplit={['Donor', 'Sample', 'Dataset']} />
-        </TabPanel>
-        <TabPanel value={open} className={classes.tabPanels} index={1}>
-          <span id="prov-vis-react">
-            <ProvGraph provData={provData} />
-          </span>
-        </TabPanel>
-
+        {
+          provData && (
+            <>
+              <TabPanel
+                value={open}
+                className={classes.tabPanels}
+                boxClasses={classes.tabPanelBoxes}
+                index={0}
+              >
+                <ProvTable
+                  provData={provData}
+                  assayMetadata={assayMetadata}
+                  typesToSplit={['Donor', 'Sample', 'Dataset']}
+                />
+              </TabPanel>
+              <TabPanel value={open} className={classes.tabPanels} index={1}>
+                <span id="prov-vis-react">
+                  <ProvGraph provData={provData} />
+                </span>
+              </TabPanel>
+            </>
+          )
+        }
       </Paper>
     </SectionContainer>
   );
 }
 
 ProvTabs.propTypes = {
-  provData: PropTypes.objectOf(PropTypes.object).isRequired,
+  uuid: PropTypes.string.isRequired,
 };
 
 export default ProvTabs;
