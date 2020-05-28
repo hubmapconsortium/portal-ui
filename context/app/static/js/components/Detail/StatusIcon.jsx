@@ -27,7 +27,7 @@ function getColor(status) {
   }
 
   console.warn('Invalid status', status);
-  return null;
+  return 'error';
 }
 
 function StatusIcon(props) {
