@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import NoticeAlert from '../NoticeAlert';
 import TableOfContents from './TableOfContents';
+import { capitalizeString } from '../../helpers/functions';
 
 const FlexColumn = styled.div`
   flex-grow: 1;
@@ -17,6 +18,28 @@ const FlexRow = styled.div`
   justify-content: center;
 `;
 
+function getSectionFromString(s) {
+  if (s === 'metadataTable') {
+    return [s, { text: 'Metadata', hash: 'metadata-table' }];
+  }
+  if (s === 'dagProv') {
+    return [s, { text: 'DAG Provenance', hash: 'dag-provenance' }];
+  }
+  return [s, { text: capitalizeString(s), hash: s }];
+}
+
+function getPossibleSections() {
+  return ['summary', 'metadata', 'visualization', 'attribution', 'provenance', 'protocols', 'metadataTable', 'files', 'dagProv'].map((s) => (
+    getSectionFromString(s)
+  ));
+}
+
+function testAndDeleteFromObject(toDelete, obj, test) {
+  if (test) {
+    obj.delete(toDelete);
+  }
+}
+
 function DetailLayout(props) {
   const {
     shouldDisplay,
@@ -25,36 +48,11 @@ function DetailLayout(props) {
   } = props;
 
   const getSections = () => {
-    const sections = new Map([
-      ['summary', { text: 'Summary', hash: 'summary' }],
-      ['metadata', { text: 'Metadata', hash: 'metadata' }],
-      ['visualization', { text: 'Visualization', hash: 'visualization' }],
-      ['attribution', { text: 'Attribution', hash: 'attribution' }],
-      ['provenance', { text: 'Provenance', hash: 'provenance' }],
-      ['protocols', { text: 'Protocols', hash: 'protocols' }],
-      ['metadataTable', { text: 'Metadata', hash: 'metadata-table' }],
-      ['files', { text: 'Files', hash: 'files' }],
-      ['dagProv', { text: 'DAG Provenance', hash: 'dag-provenance' }],
-    ]);
-    if (!shouldDisplay.metadata) {
-      sections.delete('metadata');
-    }
-    if (!shouldDisplay.viz) {
-      sections.delete('visualization');
-    }
-    if (!shouldDisplay.protocol) {
-      sections.delete('protocols');
-    }
-
-    if (!shouldDisplay.metadataTable) {
-      sections.delete('metadataTable');
-    }
-    if (!shouldDisplay.files) {
-      sections.delete('files');
-    }
-    if (!shouldDisplay.dag) {
-      sections.delete('dagProv');
-    }
+    const sections = new Map(getPossibleSections());
+    const sectionsToTest = ['metadata', 'visualization', 'protocols', 'metadataTable', 'files', 'dagProv'];
+    sectionsToTest.forEach(
+      (section) => testAndDeleteFromObject(section, sections, !shouldDisplay[section]),
+    );
     return sections;
   };
 

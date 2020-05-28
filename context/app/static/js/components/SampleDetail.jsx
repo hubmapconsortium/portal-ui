@@ -36,7 +36,7 @@ function SampleDetail(props) {
   } = assayMetadata;
 
   const shouldDisplay = {
-    protocol: (portal_uploaded_protocol_files || protocol_url),
+    protocols: (portal_uploaded_protocol_files || protocol_url),
     metadata: true,
   };
 
@@ -52,7 +52,7 @@ function SampleDetail(props) {
         assayMetadata={assayMetadata}
         entityEndpoint={entityEndpoint}
       />
-      {shouldDisplay.protocol && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplay.protocols && <Protocol assayMetadata={assayMetadata} />}
     </DetailLayout>
   );
 }

@@ -28,7 +28,7 @@ function DonorDetail(props) {
   } = assayMetadata;
 
   const shouldDisplay = {
-    protocol: (portal_uploaded_protocol_files || protocol_url),
+    protocols: (portal_uploaded_protocol_files || protocol_url),
     metadata: true,
   };
 
@@ -46,7 +46,7 @@ function DonorDetail(props) {
         assayMetadata={assayMetadata}
         entityEndpoint={entityEndpoint}
       />
-      {shouldDisplay.protocol && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplay.protocols && <Protocol assayMetadata={assayMetadata} />}
     </DetailLayout>
   );
 }
