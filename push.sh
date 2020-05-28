@@ -17,7 +17,7 @@ diff VERSION <(curl -s https://raw.githubusercontent.com/hubmapconsortium/portal
   cat CHANGELOG.md
 ) > CHANGELOG.md.new
 mv CHANGELOG.md.new CHANGELOG.md
-git rm CHANGELOG-*.md
+git rm CHANGELOG-*.md || echo 'No files to remove; CHANGELOG.md may be messy.'
 git add .
 git commit -m 'Update CHANGELOG'
 
