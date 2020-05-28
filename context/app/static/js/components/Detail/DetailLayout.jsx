@@ -31,7 +31,7 @@ function DetailLayout(props) {
       ['visualization', { text: 'Visualization', hash: 'visualization' }],
       ['attribution', { text: 'Attribution', hash: 'attribution' }],
       ['provenance', { text: 'Provenance', hash: 'provenance' }],
-      ['protocol', { text: 'Protocol', hash: 'protocol' }],
+      ['protocols', { text: 'Protocols', hash: 'protocols' }],
       ['metadataTable', { text: 'Metadata', hash: 'metadata-table' }],
       ['files', { text: 'Files', hash: 'files' }],
       ['dagProv', { text: 'DAG Provenance', hash: 'dag-provenance' }],
@@ -43,7 +43,7 @@ function DetailLayout(props) {
       sections.delete('visualization');
     }
     if (!shouldDisplay.protocol) {
-      sections.delete('protocol');
+      sections.delete('protocols');
     }
 
     if (!shouldDisplay.metadataTable) {
