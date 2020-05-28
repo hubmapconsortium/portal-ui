@@ -30,7 +30,7 @@ function FileTable(props) {
   const { files: rows, assetsEndpoint, uuid } = props;
   const token = readCookie('nexus_token');
   return (
-    <SectionContainer>
+    <SectionContainer id="files">
       <SectionHeader variant="h3" component="h2">Files</SectionHeader>
       <Paper>
         <StyledTableContainer>

@@ -67,7 +67,7 @@ function ProvTabs(props) {
   }, [entityEndpoint, uuid]);
 
   return (
-    <SectionContainer>
+    <SectionContainer id="provenance">
       <SectionHeader variant="h3" component="h2">Provenance</SectionHeader>
       <Paper className={classes.tabsRoot}>
         <Tabs

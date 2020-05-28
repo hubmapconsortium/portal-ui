@@ -8,8 +8,12 @@ export function isEmptyArrayOrObject(val) {
   return false;
 }
 
-export function replaceUnderscore(str) {
-  return str.replace(/_/g, ' ');
+export function capitalizeString(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+export function replaceUnderscore(s) {
+  return s.replace(/_/g, ' ');
 }
 
 export function readCookie(name) {
@@ -22,4 +26,22 @@ export function readCookie(name) {
     if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
   }
   return null;
+}
+
+export function throttle(fn, wait) {
+  let previouslyRun;
+  let queuedToRun;
+
+  return function invokeFn(...args) {
+    const now = Date.now();
+
+    queuedToRun = clearTimeout(queuedToRun);
+
+    if (!previouslyRun || (now - previouslyRun >= wait)) {
+      fn(...args);
+      previouslyRun = now;
+    } else {
+      queuedToRun = setTimeout(invokeFn.bind(null, ...args), wait - (now - previouslyRun));
+    }
+  };
 }

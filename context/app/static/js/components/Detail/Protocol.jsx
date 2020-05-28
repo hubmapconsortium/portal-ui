@@ -40,7 +40,7 @@ function Protocol(props) {
   const { assayMetadata } = props;
   const { protocol_url, portal_uploaded_protocol_files } = assayMetadata;
   return (
-    <SectionContainer>
+    <SectionContainer id="protocols">
       <SectionHeader variant="h3" component="h2">Protocols</SectionHeader>
       <Divider />
       <StyledPaper>

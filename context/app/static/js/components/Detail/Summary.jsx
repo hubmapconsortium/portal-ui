@@ -65,7 +65,7 @@ function Summary(props) {
 
 
   return (
-    <SectionContainer>
+    <SectionContainer id="summary">
       <Typography variant="h4" component="h1" color="primary">{entity_type}</Typography>
       <FlexContainer>
         <FlexColumn>

@@ -1,25 +1,14 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import ProvTabs from './Detail/ProvTabs';
 import Summary from './Detail/Summary';
 import Attribution from './Detail/Attribution';
 import Protocol from './Detail/Protocol';
 import Metadata from './Detail/Metadata';
-import NoticeAlert from './NoticeAlert';
 import SummaryItem from './Detail/SummaryItem';
+import DetailLayout from './Detail/DetailLayout';
 
-const FlexContainer = styled(Container)`
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-`;
-
-const SpacedContainer = styled(FlexContainer)`
-    justify-content: space-evenly;
-`;
 
 function SummaryData(props) {
   const { organ, origin_sample, specimen_type } = props;
@@ -46,25 +35,25 @@ function SampleDetail(props) {
     origin_sample,
   } = assayMetadata;
 
+  const shouldDisplaySection = {
+    protocols: (portal_uploaded_protocol_files || protocol_url),
+    metadata: true,
+  };
+
   return (
-    <FlexContainer>
-      {flashed_messages && flashed_messages.length
-        ? <NoticeAlert errors={flashed_messages} /> : null}
-      <SpacedContainer maxWidth="lg">
-        <Summary assayMetadata={assayMetadata}>
-          <SummaryData organ={organ} specimen_type={specimen_type} origin_sample={origin_sample} />
-        </Summary>
-        <Metadata organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
-        <Attribution assayMetadata={assayMetadata} />
-        <ProvTabs
-          uuid={uuid}
-          assayMetadata={assayMetadata}
-          entityEndpoint={entityEndpoint}
-        />
-        {portal_uploaded_protocol_files || protocol_url
-          ? <Protocol assayMetadata={assayMetadata} /> : null}
-      </SpacedContainer>
-    </FlexContainer>
+    <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
+      <Summary assayMetadata={assayMetadata}>
+        <SummaryData organ={organ} specimen_type={specimen_type} origin_sample={origin_sample} />
+      </Summary>
+      <Metadata organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
+      <Attribution assayMetadata={assayMetadata} />
+      <ProvTabs
+        uuid={uuid}
+        assayMetadata={assayMetadata}
+        entityEndpoint={entityEndpoint}
+      />
+      {shouldDisplaySection.protocols && <Protocol assayMetadata={assayMetadata} />}
+    </DetailLayout>
   );
 }
 

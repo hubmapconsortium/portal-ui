@@ -1,29 +1,17 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ProvTabs from './Detail/ProvTabs';
 import Summary from './Detail/Summary';
 import Attribution from './Detail/Attribution';
 import Protocol from './Detail/Protocol';
-import NoticeAlert from './NoticeAlert';
 import MetadataTable from './Detail/MetadataTable';
 import FileTable from './Detail/FileTable';
 import Visualization from './Detail/Visualization';
+import DetailLayout from './Detail/DetailLayout';
 import DagProv from './Detail/DagProv';
-import 'vitessce/build-lib/es/production/static/css/index.css';
-
-const FlexContainer = styled(Container)`
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-`;
-
-const SpacedContainer = styled(FlexContainer)`
-    justify-content: space-evenly;
-`;
 
 const StyledDivider = styled(Divider)`
   margin-left: 5px;
@@ -32,7 +20,6 @@ const StyledDivider = styled(Divider)`
   background-color: #444A65;
   align-self:center;
 `;
-
 
 function AssaySpecificItem(props) {
   const { children } = props;
@@ -48,10 +35,10 @@ function SummaryData(props) {
   const { data_types, origin_sample } = props;
   return (
     <>
-      {data_types && data_types.length
-        ? (<AssaySpecificItem>{data_types.constructor.name === 'Array' ? data_types.join(' / ') : data_types}</AssaySpecificItem>) : null}
-      {origin_sample.organ && origin_sample.organ.length
-        ? (<Typography variant="body1">{origin_sample.organ}</Typography>) : null}
+      {(data_types && data_types.length)
+      && <AssaySpecificItem>{data_types.constructor.name === 'Array' ? data_types.join(' / ') : data_types}</AssaySpecificItem>}
+      {(origin_sample.organ && origin_sample.organ.length)
+      && <Typography variant="body1">{origin_sample.organ}</Typography>}
     </>
   );
 }
@@ -60,50 +47,47 @@ function DatasetDetail(props) {
   const {
     assayMetadata,
     vitData,
-    flashed_messages,
     assetsEndpoint,
+    flashed_messages,
     entityEndpoint,
   } = props;
   const {
-    protocol_url, portal_uploaded_protocol_files, metadata, files, uuid, data_types, origin_sample,
+    protocol_url,
+    portal_uploaded_protocol_files,
+    metadata,
+    files,
+    uuid,
+    data_types,
+    origin_sample,
   } = assayMetadata;
+
+  const shouldDisplaySection = {
+    vizualization: 'name' in vitData,
+    protocols: (portal_uploaded_protocol_files || protocol_url),
+    metadataTable: (metadata && metadata.metadata),
+    files: (files && files.length),
+    dagProv: (metadata && (metadata.dag_provenance || metadata.dag_provenance_list)),
+  };
+
   return (
-    <FlexContainer>
-      {flashed_messages && flashed_messages.length
-        ? <NoticeAlert errors={flashed_messages} />
-        : null}
-      <SpacedContainer maxWidth="lg">
-        <Summary assayMetadata={assayMetadata}>
-          <SummaryData data_types={data_types} origin_sample={origin_sample} />
-        </Summary>
-        {'name' in vitData
-          ? <Visualization vitData={vitData} />
-          : null}
-        <Attribution assayMetadata={assayMetadata} />
-        <ProvTabs
-          uuid={uuid}
-          assayMetadata={assayMetadata}
-          entityEndpoint={entityEndpoint}
-        />
-        {portal_uploaded_protocol_files || protocol_url
-          ? <Protocol assayMetadata={assayMetadata} />
-          : null}
-        {metadata && metadata.metadata
-          ? <MetadataTable metadata={metadata.metadata} />
-          : null}
-        {files
-          ? <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />
-          : null}
-        {metadata && (metadata.dag_provenance_list || metadata.dag_provenance)
-          ? (
-            <DagProv
-              dagListData={metadata.dag_provenance_list}
-              dagData={metadata.dag_provenance}
-            />
-          )
-          : null}
-      </SpacedContainer>
-    </FlexContainer>
+    <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
+      <Summary assayMetadata={assayMetadata}>
+        <SummaryData data_types={data_types} origin_sample={origin_sample} />
+      </Summary>
+      {shouldDisplaySection.vizualization && <Visualization vitData={vitData} />}
+      <Attribution assayMetadata={assayMetadata} />
+      <ProvTabs
+        uuid={uuid}
+        assayMetadata={assayMetadata}
+        entityEndpoint={entityEndpoint}
+      />
+      {shouldDisplaySection.protocols && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} />}
+      {shouldDisplaySection.files
+      && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}
+      {shouldDisplaySection.dagProv
+      && <DagProv dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />}
+    </DetailLayout>
   );
 }
 
