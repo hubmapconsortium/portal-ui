@@ -35,7 +35,6 @@ function StatusIcon(props) {
   const status = irregularCaseStatus.toUpperCase();
   const color = getColor(status);
 
-
   return (<ColoredStatusIcon $iconColor={color} />);
 }
 
