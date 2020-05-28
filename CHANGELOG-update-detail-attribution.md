@@ -1,0 +1,1 @@
+- Update detail attribution page per v2 design.
