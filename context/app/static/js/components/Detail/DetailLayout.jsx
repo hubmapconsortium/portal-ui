@@ -19,12 +19,7 @@ const FlexRow = styled.div`
 
 function DetailLayout(props) {
   const {
-    displayViz,
-    displayProtocol,
-    displayMetadata,
-    displayMetadataTable,
-    displayFiles,
-    displayDag,
+    shouldDisplay,
     flashed_messages,
     children,
   } = props;
@@ -41,23 +36,23 @@ function DetailLayout(props) {
       ['files', { text: 'Files', hash: 'files' }],
       ['dagProv', { text: 'DAG Provenance', hash: 'dag-provenance' }],
     ]);
-    if (!displayMetadata) {
+    if (!shouldDisplay.metadata) {
       sections.delete('metadata');
     }
-    if (!displayViz) {
+    if (!shouldDisplay.viz) {
       sections.delete('visualization');
     }
-    if (!displayProtocol) {
+    if (!shouldDisplay.protocol) {
       sections.delete('protocol');
     }
 
-    if (!displayMetadataTable) {
+    if (!shouldDisplay.metadataTable) {
       sections.delete('metadataTable');
     }
-    if (!displayFiles) {
+    if (!shouldDisplay.files) {
       sections.delete('files');
     }
-    if (!displayDag) {
+    if (!shouldDisplay.dag) {
       sections.delete('dagProv');
     }
     return sections;

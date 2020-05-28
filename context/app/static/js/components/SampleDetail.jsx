@@ -34,17 +34,20 @@ function SampleDetail(props) {
     origin_sample,
   } = assayMetadata;
 
-  const displayProtocol = (portal_uploaded_protocol_files || protocol_url);
+  const shouldDisplay = {
+    protocol: (portal_uploaded_protocol_files || protocol_url),
+    metadata: true,
+  };
 
   return (
-    <DetailLayout displayProtocol displayMetadata flashed_messages={flashed_messages}>
+    <DetailLayout shouldDisplay={shouldDisplay} flashed_messages={flashed_messages}>
       <Summary assayMetadata={assayMetadata}>
         <SummaryData organ={organ} specimen_type={specimen_type} origin_sample={origin_sample} />
       </Summary>
       <Metadata organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
       <Attribution assayMetadata={assayMetadata} />
       <ProvTabs provData={provData} assayMetadata={assayMetadata} />
-      {displayProtocol && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplay.protocol && <Protocol assayMetadata={assayMetadata} />}
     </DetailLayout>
   );
 }

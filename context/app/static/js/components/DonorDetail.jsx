@@ -25,19 +25,22 @@ function DonorDetail(props) {
   } = props;
   const { protocol_url, portal_uploaded_protocol_files, metadata } = assayMetadata;
 
-  const displayProtocol = (portal_uploaded_protocol_files || protocol_url);
+  const shouldDisplay = {
+    protocol: (portal_uploaded_protocol_files || protocol_url),
+    metadata: true,
+  };
 
   // eslint-disable-next-line
   const donorMetadata = metadata && metadata.hasOwnProperty('organ_donor_data')
     ? getDonorMetadata(metadata.organ_donor_data) : {};
 
   return (
-    <DetailLayout displayProtocol displayMetadata flashed_messages={flashed_messages}>
+    <DetailLayout shouldDisplay={shouldDisplay} flashed_messages={flashed_messages}>
       <Summary assayMetadata={assayMetadata} />
       <Metadata entityType={assayMetadata.entity_type} metadata={donorMetadata} />
       <Attribution assayMetadata={assayMetadata} />
       <ProvTabs provData={provData} assayMetadata={assayMetadata} />
-      {displayProtocol && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplay.protocol && <Protocol assayMetadata={assayMetadata} />}
     </DetailLayout>
   );
 }

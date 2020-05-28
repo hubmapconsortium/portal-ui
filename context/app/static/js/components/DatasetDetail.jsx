@@ -61,31 +61,30 @@ function DatasetDetail(props) {
     origin_sample,
   } = assayMetadata;
 
-  const displayViz = 'name' in vitData;
-  const displayProtocol = (portal_uploaded_protocol_files || protocol_url);
-  const displayMetadataTable = (metadata && metadata.metadata);
-  const displayFiles = (files && files.length);
-  const displayDag = (metadata && (metadata.dag_provenance || metadata.dag_provenance_list));
+  const shouldDisplay = {
+    viz: 'name' in vitData,
+    protocol: (portal_uploaded_protocol_files || protocol_url),
+    metadataTable: (metadata && metadata.metadata),
+    files: (files && files.length),
+    dag: (metadata && (metadata.dag_provenance || metadata.dag_provenance_list)),
+  };
 
   return (
     <DetailLayout
-      displayViz={displayViz}
-      displayProtocol={displayProtocol}
-      displayMetadataTable={displayMetadataTable}
-      displayFiles={displayFiles}
-      displayDag={displayDag}
+      shouldDisplay={shouldDisplay}
       flashed_messages={flashed_messages}
     >
       <Summary assayMetadata={assayMetadata}>
         <SummaryData data_types={data_types} origin_sample={origin_sample} />
       </Summary>
-      {displayViz && <Visualization vitData={vitData} />}
+      {shouldDisplay.viz && <Visualization vitData={vitData} />}
       <Attribution assayMetadata={assayMetadata} />
       <ProvTabs provData={provData} assayMetadata={assayMetadata} />
-      {displayProtocol && <Protocol assayMetadata={assayMetadata} />}
-      {displayMetadataTable && <MetadataTable metadata={metadata.metadata} />}
-      {displayFiles && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}
-      {displayDag
+      {shouldDisplay.protocol && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplay.metadataTable && <MetadataTable metadata={metadata.metadata} />}
+      {shouldDisplay.files
+      && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}
+      {shouldDisplay.dag
       && <DagProv dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />}
     </DetailLayout>
   );
