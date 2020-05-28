@@ -24,7 +24,7 @@ function DetailLayout(props) {
     children,
   } = props;
 
-  const updateSections = () => {
+  const getSections = () => {
     const sections = new Map([
       ['summary', { text: 'Summary', hash: 'summary' }],
       ['metadata', { text: 'Metadata', hash: 'metadata' }],
@@ -58,7 +58,7 @@ function DetailLayout(props) {
     return sections;
   };
 
-  const sections = updateSections();
+  const sections = getSections();
 
   return (
     <FlexRow>
