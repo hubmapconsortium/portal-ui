@@ -15,7 +15,7 @@ const StyledTypography = styled(Typography)`
 `;
 
 const StyledLink = styled(Link)`
-  color: #3781D1;
+  color: ${(props) => props.theme.palette.link.main};
 `;
 
 const StyledPaper = styled(Paper)`
