@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -19,7 +20,6 @@ const FlexPaper = styled(Paper)`
   display: flex;
   padding: 30px 40px 30px 40px;
 `;
-
 
 function Attribution(props) {
   const {
@@ -43,5 +43,11 @@ function Attribution(props) {
     </SectionContainer>
   );
 }
+
+Attribution.propTypes = {
+  group_name: PropTypes.string.isRequired,
+  created_by_user_displayname: PropTypes.string.isRequired,
+  created_by_user_email: PropTypes.string.isRequired,
+};
 
 export default Attribution;
