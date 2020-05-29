@@ -50,4 +50,4 @@ Attribution.propTypes = {
   created_by_user_email: PropTypes.string.isRequired,
 };
 
-export default Attribution;
+export default React.memo(Attribution);
