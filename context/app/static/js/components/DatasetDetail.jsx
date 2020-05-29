@@ -88,7 +88,13 @@ function DatasetDetail(props) {
         assayMetadata={assayMetadata}
         entityEndpoint={entityEndpoint}
       />
-      {shouldDisplaySection.protocols && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplaySection.protocols
+      && (
+      <Protocol
+        protocol_url={protocol_url}
+        portal_uploaded_protocol_files={portal_uploaded_protocol_files}
+      />
+      )}
       {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} />}
       {shouldDisplaySection.files
       && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}

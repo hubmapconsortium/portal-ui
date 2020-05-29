@@ -37,8 +37,8 @@ function ProtocolLink(props) {
 }
 
 function Protocol(props) {
-  const { assayMetadata } = props;
-  const { protocol_url, portal_uploaded_protocol_files } = assayMetadata;
+  const { protocol_url, portal_uploaded_protocol_files } = props;
+
   return (
     <SectionContainer id="protocols">
       <SectionHeader variant="h3" component="h2">Protocols</SectionHeader>
