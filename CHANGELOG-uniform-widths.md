@@ -1,0 +1,1 @@
+- Make max widths for content uniform.
