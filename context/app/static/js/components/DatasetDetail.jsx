@@ -59,6 +59,9 @@ function DatasetDetail(props) {
     uuid,
     data_types,
     origin_sample,
+    group_name,
+    created_by_user_displayname,
+    created_by_user_email,
   } = assayMetadata;
 
   const shouldDisplaySection = {
@@ -75,7 +78,11 @@ function DatasetDetail(props) {
         <SummaryData data_types={data_types} origin_sample={origin_sample} />
       </Summary>
       {shouldDisplaySection.vizualization && <Visualization vitData={vitData} />}
-      <Attribution assayMetadata={assayMetadata} />
+      <Attribution
+        group_name={group_name}
+        created_by_user_displayname={created_by_user_displayname}
+        created_by_user_email={created_by_user_email}
+      />
       <ProvTabs
         uuid={uuid}
         assayMetadata={assayMetadata}

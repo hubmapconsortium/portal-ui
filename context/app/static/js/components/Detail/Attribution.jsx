@@ -22,12 +22,11 @@ const FlexPaper = styled(Paper)`
 
 
 function Attribution(props) {
-  const { assayMetadata } = props;
   const {
     group_name,
     created_by_user_displayname,
     created_by_user_email,
-  } = assayMetadata;
+  } = props;
 
   return (
     <SectionContainer id="attribution">

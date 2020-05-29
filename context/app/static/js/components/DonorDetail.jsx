@@ -24,7 +24,12 @@ function DonorDetail(props) {
     assayMetadata, flashed_messages, entityEndpoint,
   } = props;
   const {
-    uuid, protocol_url, portal_uploaded_protocol_files, metadata,
+    uuid, protocol_url,
+    portal_uploaded_protocol_files,
+    metadata,
+    group_name,
+    created_by_user_displayname,
+    created_by_user_email,
   } = assayMetadata;
 
   const shouldDisplaySection = {
@@ -40,7 +45,11 @@ function DonorDetail(props) {
     <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
       <Summary assayMetadata={assayMetadata} />
       <Metadata entityType={assayMetadata.entity_type} metadata={donorMetadata} />
-      <Attribution assayMetadata={assayMetadata} />
+      <Attribution
+        group_name={group_name}
+        created_by_user_displayname={created_by_user_displayname}
+        created_by_user_email={created_by_user_email}
+      />
       <ProvTabs
         uuid={uuid}
         assayMetadata={assayMetadata}
