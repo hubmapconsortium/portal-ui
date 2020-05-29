@@ -1,4 +1,4 @@
-const { resolve } = require('path');
+const { resolve, join } = require('path');
 
 const config = {
   entry: './app/static/js/index.jsx',
@@ -74,11 +74,24 @@ const config = {
       {
         test: /\.ya?ml$/,
         type: 'json', // Required by Webpack v4
-        use: 'yaml-loader'
-      }
+        use: 'yaml-loader',
+      },
     ],
   },
+  devServer: {
+    contentBase: join(__dirname, './app'),
+    publicPath: '/static/public/',
+    port: 5001,
+    compress: true,
+    stats: 'minimal',
+    proxy: {
+      '!(/static/public//**/**.*)': {
+        target: 'http://localhost:5000/',
+      },
+    },
+  },
 };
+
 module.exports = (env, argv) => {
-  return argv.mode === 'development' ? { ...config, devtool: 'nosources-source-map' } : { ...config, devtool: 'cheap-source-map' }
+  return argv.mode === 'development' ? { ...config, devtool: 'nosources-source-map' } : { ...config, devtool: 'cheap-source-map' };
 };
