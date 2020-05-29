@@ -59,4 +59,4 @@ function Protocol(props) {
   );
 }
 
-export default Protocol;
+export default React.memo(Protocol);
