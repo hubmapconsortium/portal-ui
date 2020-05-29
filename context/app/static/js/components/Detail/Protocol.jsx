@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -58,5 +59,15 @@ function Protocol(props) {
     </SectionContainer>
   );
 }
+
+Protocol.propTypes = {
+  protocol_url: PropTypes.string,
+  portal_uploaded_protocol_files: PropTypes.arrayOf(PropTypes.object),
+};
+
+Protocol.defaultProps = {
+  protocol_url: '',
+  portal_uploaded_protocol_files: [],
+};
 
 export default React.memo(Protocol);
