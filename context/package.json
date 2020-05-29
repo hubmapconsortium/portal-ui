@@ -40,6 +40,7 @@
     "url-loader": "^3.0.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0",
     "yaml-loader": "^0.6.0"
   },
   "license": "MIT",
@@ -49,6 +50,7 @@
     "cypress:run": "cypress run",
     "prepublish": "wget https://raw.githubusercontent.com/hubmapconsortium/prov-vis/master/src/schema.json && mv schema.json ./node_modules/@hubmap/prov-vis/es",
     "build": "webpack --progress --mode production ./app/static/js/index.jsx -o ./app/static/public/bundle.js",
-    "dev-build": "webpack --progress --mode development ./app/static/js/index.jsx -o ./app/static/public/bundle.js  --progress --profile --colors"
+    "dev-build": "webpack --progress --mode development ./app/static/js/index.jsx -o ./app/static/public/bundle.js  --progress --profile --colors",
+    "dev-server": "webpack-dev-server --hot --mode development"
   }
 }
