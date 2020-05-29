@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import styled from 'styled-components';
+import Container from '@material-ui/core/Container';
 import NoticeAlert from '../NoticeAlert';
 import TableOfContents from './TableOfContents';
 import { capitalizeString } from '../../helpers/functions';
@@ -9,10 +10,9 @@ const FlexColumn = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-width: 1280px;
 `;
 
-const FlexRow = styled.div`
+const FlexRow = styled(Container)`
   flex-grow: 1;
   display: flex;
   justify-content: center;
