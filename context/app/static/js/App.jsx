@@ -3,6 +3,7 @@ import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from '@material-ui/core/Container';
 
 import theme from './theme';
 import Routes from './Routes';
@@ -23,7 +24,9 @@ function App(props) {
           <CssBaseline />
           <Header />
           <div className="main-content">
-            <Routes flaskData={flaskData} />
+            <Container maxWidth="lg">
+              <Routes flaskData={flaskData} />
+            </Container>
           </div>
           <Footer />
         </ThemeProvider>

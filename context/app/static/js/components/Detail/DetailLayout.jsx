@@ -9,7 +9,6 @@ const FlexColumn = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-width: 1280px;
 `;
 
 const FlexRow = styled.div`
