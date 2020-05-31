@@ -35,9 +35,9 @@ function SummaryData(props) {
   const { data_types, origin_sample } = props;
   return (
     <>
-      {(data_types && data_types.length)
+      {(data_types && data_types.length > 0)
       && <AssaySpecificItem>{data_types.constructor.name === 'Array' ? data_types.join(' / ') : data_types}</AssaySpecificItem>}
-      {(origin_sample.organ && origin_sample.organ.length)
+      {(origin_sample.organ && origin_sample.organ.length > 0)
       && <Typography variant="body1">{origin_sample.organ}</Typography>}
     </>
   );
@@ -65,7 +65,7 @@ function DatasetDetail(props) {
     vizualization: 'name' in vitData,
     protocols: (portal_uploaded_protocol_files || protocol_url),
     metadataTable: (metadata && metadata.metadata),
-    files: (files && files.length),
+    files: (files && files.length > 0),
     dagProv: (metadata && (metadata.dag_provenance || metadata.dag_provenance_list)),
   };
 

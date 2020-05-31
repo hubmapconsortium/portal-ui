@@ -62,7 +62,8 @@ function DetailLayout(props) {
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
       <FlexColumn maxWidth="lg">
-        {(flashed_messages && flashed_messages.length) && <NoticeAlert errors={flashed_messages} />}
+        {flashed_messages && flashed_messages.length > 0
+        && <NoticeAlert errors={flashed_messages} />}
         {children}
       </FlexColumn>
     </FlexRow>
