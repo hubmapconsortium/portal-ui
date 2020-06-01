@@ -17,7 +17,7 @@ const config = {
     rules: [
       {
         enforce: 'pre',
-        test: /\.jsx$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'eslint-loader',
         options: {
@@ -32,7 +32,7 @@ const config = {
         enforce: 'pre',
       },
       {
-        test: /\.jsx?/,
+        test: /\.(js|jsx)$/,
         use: {
           loader: 'babel-loader',
         },
