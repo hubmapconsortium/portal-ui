@@ -2,7 +2,6 @@
 const merge = require('webpack-merge');
 const WebpackBundleAnalyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const Visualizer = require('webpack-visualizer-plugin');
-const common = require('./webpack.common');
 const envConfig = require('./webpack.prod');
 
 const addOns = {
@@ -16,4 +15,4 @@ const addOns = {
   ],
 };
 
-module.exports = merge(common, envConfig, addOns);
+module.exports = merge(envConfig, addOns);
