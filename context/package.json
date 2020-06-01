@@ -53,6 +53,6 @@
     "cypress:run": "cypress run",
     "prepublish": "wget https://raw.githubusercontent.com/hubmapconsortium/prov-vis/master/src/schema.json && mv schema.json ./node_modules/@hubmap/prov-vis/es",
     "build": "webpack --progress --config build-utils/webpack.prod.js",
-    "dev-server": "webpack-dev-server --config built-utils/webpack.dev.js --hot"
+    "dev-server": "webpack-dev-server --config build-utils/webpack.dev.js --hot"
   }
 }
