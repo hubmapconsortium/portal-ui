@@ -19,7 +19,7 @@ export default function Header() {
   return (
     <AppBar className={classes.MuiAppBar} position="sticky" elevation={0}>
       <Container maxWidth="lg">
-        <Toolbar>
+        <Toolbar disableGutters>
           <a href="/"><HubmapLogo className={classes.hubmaptypeLight} aria-label="HubMAP logo" /></a>
           <Typography variant="h5" className={classes.title} />
           {['Donor', 'Sample', 'Dataset'].map((type) => <Button key={type}><a href={`/search?entity_type[0]=${type}`} className="navLink">{`${type}s`}</a></Button>) }

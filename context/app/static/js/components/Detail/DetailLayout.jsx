@@ -9,7 +9,6 @@ const FlexColumn = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-width: 1280px;
 `;
 
 const FlexRow = styled.div`
@@ -62,7 +61,8 @@ function DetailLayout(props) {
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
       <FlexColumn maxWidth="lg">
-        {(flashed_messages && flashed_messages.length) && <NoticeAlert errors={flashed_messages} />}
+        {flashed_messages && flashed_messages.length > 0
+        && <NoticeAlert errors={flashed_messages} />}
         {children}
       </FlexColumn>
     </FlexRow>

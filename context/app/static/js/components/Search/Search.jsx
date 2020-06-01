@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import SearchWrapper from './SearchWrapper';
 import { readCookie } from '../../helpers/functions';
@@ -71,10 +70,10 @@ function Search(props) {
   const allProps = Object.assign(searchProps, { apiUrl: elasticsearchEndpoint });
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <Container maxWidth="lg">
+    <>
       <Typography component="h1" variant="h1">{title}</Typography>
       <SearchWrapper {...allProps} />
-    </Container>
+    </>
   );
 /* eslint-enable react/jsx-props-no-spreading */
 }

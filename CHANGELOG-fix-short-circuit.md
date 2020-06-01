@@ -1,0 +1,1 @@
+- Make short circuit length checks evaluate to booleans.
