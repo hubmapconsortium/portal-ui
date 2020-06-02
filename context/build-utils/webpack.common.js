@@ -11,6 +11,7 @@ const config = {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml'],
     alias: {
       'search-schema-definitions$': resolve('./search-schema/data/definitions.yaml'),
+      'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
     },
   },
   module: {
