@@ -17,6 +17,11 @@ const FlexPaper = styled(Paper)`
   padding: 30px 40px 30px 40px;
 `;
 
+function getDonorMetadataValue(metadata, key) {
+  return metadata && Object.prototype.hasOwnProperty.call(metadata, key)
+    ? `${metadata[key].value} ${metadata[key].units}` : '';
+}
+
 function MetadataItem(props) {
   const { label, value, ml } = props;
   return (
@@ -31,19 +36,21 @@ function MetadataItem(props) {
 function DonorItems(props) {
   const { metadata } = props;
 
+  const ageValue = getDonorMetadataValue(metadata, 'Current chronological age');
+  const bmiValue = getDonorMetadataValue(metadata, 'Body mass index');
+
   return (
     <>
       <MetadataItem label="Gender Finding" value={metadata['Gender finding']} />
       <MetadataItem
         label="Current Chronological Age"
         ml={1}
-        value={`${metadata['Current chronological age'].value} ${metadata['Current chronological age'].units}`}
+        value={ageValue}
       />
       <MetadataItem
         label="Body Mass Index"
         ml={1}
-        value={`${metadata['Body mass index'].value}
-        ${metadata['Body mass index'].units}`}
+        value={bmiValue}
       />
     </>
   );
