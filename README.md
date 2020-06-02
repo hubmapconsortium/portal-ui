@@ -60,7 +60,6 @@ The script will generate two files, report.html and stats.html, inside the publi
 Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
 These are concatenated by push.sh.
 
-
 ## Testing
 [`test.sh`](test.sh) wraps all the tests and is run on Travis.
 Low-level unit tests are in python (`pytest -vv`),
