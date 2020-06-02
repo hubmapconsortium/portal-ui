@@ -36,6 +36,7 @@ function DonorItems(props) {
       <MetadataItem label="Gender Finding" value={metadata['Gender finding']} />
       <MetadataItem label="Current Chronological Age" ml={1} value={metadata['Current chronological age']} />
       <MetadataItem label="Body Mass Index" ml={1} value={metadata['Body mass index']} />
+      <MetadataItem label="Racial Group" ml={1} value={metadata['Racial group']} />
     </>
   );
 }
