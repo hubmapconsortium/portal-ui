@@ -44,6 +44,17 @@ def index():
     return render_template('pages/base_react.html', types=types, flask_data=core_props)
 
 
+@blueprint.route('/ccf-eui')
+def ccf_eui():
+    if 'nexus_token' not in session:
+        abort(403)
+    return render_template(
+        'pages/ccf-eui.html',
+        config=current_app.config,
+        nexus_token=session['nexus_token']
+    )
+
+
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
     if type not in types:
