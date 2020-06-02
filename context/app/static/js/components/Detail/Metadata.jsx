@@ -52,6 +52,7 @@ function DonorItems(props) {
         ml={1}
         value={bmiValue}
       />
+      <MetadataItem label="Racial Group" ml={1} value={metadata['Racial group']} />
     </>
   );
 }
