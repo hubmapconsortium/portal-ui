@@ -100,13 +100,7 @@ class ApiClient():
                 'description': 'Mock Entity'
             }
 
-        query = {
-            'query': {
-                'match': {
-                    'uuid': uuid
-                }
-            }
-        }
+        query = {'query': {'ids': {'values': [uuid]}}}
         response_json = self._post_check_errors(
             current_app.config['ELASTICSEARCH_ENDPOINT'],
             json=query)
