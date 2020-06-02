@@ -50,7 +50,7 @@ the schema.json until [this issue is resolved](https://github.com/hubmapconsorti
 
 ### Development servers
 The webpack dev server serves all files within the public directory and provides hot module replacement for the react application.
-The flask server serves the template files and all other files not inside the public directory.
+The webpack dev server proxies all requests outside of those for files in the public directory to the flask server.
 
 ### Webpack bundle inspection
 To view visualizations of the production webpack bundle run `npm run build:analyze`.
