@@ -48,8 +48,18 @@ the schema.json until [this issue is resolved](https://github.com/hubmapconsorti
 - update `app.conf` with the Globus client ID and client secret, and the Elasticsearch endpoint,
 - `./dev-start.sh` to run the webpack dev and flask servers and visit [localhost:5001](http://localhost:5001).
 
+### Development servers
+The webpack dev server serves all files within the public directory and provides hot module replacement for the react application.
+The flask server serves the template files and all other files not inside the public directory.
+
+### Webpack bundle inspection
+To view visualizations of the production webpack bundle run `npm run build:analyze`.
+The script will generate two files, report.html and stats.html, inside the public directory each showing a different visual representation of the bundle.
+
+### Changelog files
 Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
 These are concatenated by push.sh.
+
 
 ## Testing
 [`test.sh`](test.sh) wraps all the tests and is run on Travis.
