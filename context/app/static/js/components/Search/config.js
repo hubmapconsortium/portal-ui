@@ -48,5 +48,5 @@ export const datasetConfig = {
     field('data_types', 'Data Types'),
     field('origin_sample.organ', 'Organ', organTranslations),
     field('status', 'Status'),
-  ]
+  ],
 };
