@@ -39,6 +39,8 @@ You will need Globus keys to login to the demo. The base image is based on [this
 A [simple demonstration](compose/) of how the NGINX reverse proxy works in Docker Compose.
 
 ## Development
+Please install both eslint and prettier plugins for your IDE of choice.
+
 After checking out the project, cd-ing into it, and setting up a Python3.7 virtual environment,
 - `npm install`
 - `wget https://raw.githubusercontent.com/hubmapconsortium/prov-vis/master/src/schema.json -O node_modules/@hubmap/prov-vis/es/schema.json`
