@@ -1,1 +1,0 @@
-- Use the Elasticsearch `_id` field, whose uniqueness is assured.

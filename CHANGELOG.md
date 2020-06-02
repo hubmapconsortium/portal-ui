@@ -1,3 +1,9 @@
+## v0.0.22 - 2020-06-02
+
+- Make short circuit length checks evaluate to booleans.- Bump the ingest-validation-tools to add a mapping from metadata fields to descriptions.
+- Make max width for content uniform.- Update detail attribution page per v2 design.- Use the Elasticsearch `_id` field, whose uniqueness is assured.
+
+
 ## v0.0.21 - 2020-05-28
 
 - Concatenate separate files to build changelog on release; This will help us minimize merge conflicts
