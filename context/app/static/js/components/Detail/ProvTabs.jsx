@@ -91,7 +91,7 @@ function ProvTabs(props) {
         >
           <StyledTab label="Table" id="tab-0" aria-controls="tabpanel-0" />
           <StyledTab label="Graph" id="tab-1" aria-controls="tabpanel-1" />
-          {shouldDisplayDag && <StyledTab label="Analysis" id="tab-2" aria-controls="tabpanel-2" />}
+          {shouldDisplayDag && <StyledTab label="Analysis Details" id="tab-2" aria-controls="tabpanel-2" />}
         </Tabs>
         {provData && (
           <>
