@@ -7,7 +7,6 @@ extends:
 parser: "babel-eslint"
 plugins:
   - react
-  - prettier
 settings:
   react:
     version: detect
@@ -18,4 +17,3 @@ rules:
   react/jsx-one-expression-per-line: [0]  # Makes punctuation after tab awkward.
   react/prop-types: [0]
   import/prefer-default-export: [0]  # Hit eslint error: SyntaxError: Unexpected token, expected {
-  prettier/prettier: ["error"]
