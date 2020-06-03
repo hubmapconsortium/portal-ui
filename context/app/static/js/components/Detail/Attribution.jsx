@@ -13,7 +13,7 @@ const StyledTypography = styled(Typography)`
   margin: 2px 0px 2px 0px;
 `;
 const StyledLink = styled(Link)`
-  color: #3781d1;
+  color: ${(props) => props.theme.palette.link.main};
 `;
 
 const FlexPaper = styled(Paper)`
