@@ -18,57 +18,59 @@ const CenteredListSubheader = styled(ListSubheader)`
 `;
 
 const FlexContainer = styled.div`
-    display: flex;
-    flex-grow: 1;
-    justify-content:space-around;
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-around;
 `;
 
 function ProvTable(props) {
   const { provData, assayMetadata, typesToSplit } = props;
   const { uuid, entity_type } = assayMetadata;
 
-  const types = Object.values(provData.entity).reduce((acc, item) => {
-    acc[typesToSplit.indexOf(item['prov:type'])].push(item);
-    return acc;
-  }, [[], [], []]);
+  const types = Object.values(provData.entity).reduce(
+    (acc, item) => {
+      acc[typesToSplit.indexOf(item['prov:type'])].push(item);
+      return acc;
+    },
+    [[], [], []],
+  );
 
   return (
     <FlexContainer>
       {types.map((type, i) => (
         <React.Fragment key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
           <List
+            /* eslint-disable prettier/prettier */
             subheader={(
               <CenteredListSubheader component="div" color="primary">
                 {typesToSplit[i]}
               </CenteredListSubheader>
-          )}
+            )}
+            /* eslint-enable prettier/prettier */
           >
             <Divider />
-            {
-          type && type.length
-            ? (
+            {type && type.length ? (
               type.map((item) => (
-                <ListItemLink key={item['hubmap:uuid']} href={`/browse/dataset/${item['hubmap:uuid']}`} disabled={uuid === item['hubmap:uuid']}>
+                <ListItemLink
+                  key={item['hubmap:uuid']}
+                  href={`/browse/dataset/${item['hubmap:uuid']}`}
+                  disabled={uuid === item['hubmap:uuid']}
+                >
                   <ListItemText primary={item['hubmap:displayDOI']} />
                 </ListItemLink>
               ))
-            )
-            : (
+            ) : (
               <ListItemLink href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${typesToSplit[i]}`}>
                 <ListItemText primary={`Derived ${typesToSplit[i]}s`} />
               </ListItemLink>
-            )
-        }
-            {
-          typesToSplit[i] === entity_type && entity_type !== 'Donor'
-            ? (
+            )}
+            {typesToSplit[i] === entity_type && entity_type !== 'Donor' ? (
               <ListItemLink href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${typesToSplit[i]}`}>
                 <ListItemText primary={`Derived ${typesToSplit[i]}s`} />
               </ListItemLink>
-            ) : null
-        }
+            ) : null}
           </List>
-          {i < (types.length - 1) && <Divider orientation="vertical" flexItem />}
+          {i < types.length - 1 && <Divider orientation="vertical" flexItem />}
         </React.Fragment>
       ))}
     </FlexContainer>

@@ -9,9 +9,7 @@ import DatasetDetail from './components/DatasetDetail';
 
 function Routes(props) {
   const { flaskData } = props;
-  const {
-    flashed_messages, entity, vitessce_conf, endpoints, title,
-  } = flaskData;
+  const { flashed_messages, entity, vitessce_conf, endpoints, title } = flaskData;
   const urlPath = window.location.pathname;
 
   if (urlPath.startsWith('/browse/donor/')) {
@@ -48,15 +46,11 @@ function Routes(props) {
   }
 
   if (urlPath === '/') {
-    return (
-      <Home />
-    );
+    return <Home />;
   }
 
   if (urlPath.startsWith('/search')) {
-    return (
-      <Search elasticsearchEndpoint={endpoints.elasticsearchEndpoint} title={title} />
-    );
+    return <Search elasticsearchEndpoint={endpoints.elasticsearchEndpoint} title={title} />;
   }
 }
 
