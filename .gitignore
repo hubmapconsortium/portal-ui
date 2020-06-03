@@ -110,6 +110,7 @@ venv.bak/
 # vscode
 .vscode/*
 !.vscode/settings.json
+!.vscode/extensions.json
 
 # public
 context/app/static/public
