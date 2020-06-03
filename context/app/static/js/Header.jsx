@@ -26,7 +26,7 @@ export default function Header() {
           <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
             <Button>
               <a href="/ccf-eui" target="_blank" rel="noopener noreferrer" className="navLink">
-                CCF-UI
+                CCF
               </a>
             </Button>
           </Tooltip>
