@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
@@ -32,5 +33,14 @@ function DagProv(props) {
     </>
   );
 }
+DagProv.propTypes = {
+  dagListData: PropTypes.arrayOf(
+    PropTypes.shape({
+      hash: PropTypes.string,
+      name: PropTypes.string,
+      origin: PropTypes.string,
+    }),
+  ).isRequired,
+};
 
 export default DagProv;
