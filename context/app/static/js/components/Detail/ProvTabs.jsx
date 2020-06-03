@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -8,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ProvGraph from './ProvGraph';
 import ProvTable from './ProvTable';
+import DagProv from './DagProv';
 import { useStyles } from '../../styles';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
@@ -39,12 +41,16 @@ function TabPanel(props) {
 
 function ProvTabs(props) {
   const { uuid, assayMetadata, entityEndpoint } = props;
+  const { metadata, entity_type } = assayMetadata;
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(0);
   const handleChange = (event, newValue) => {
     setOpen(newValue);
   };
+
+  // eslint-disable-next-line no-prototype-builtins
+  const shouldDisplayDag = entity_type === 'Dataset' && metadata && metadata.hasOwnProperty('dag_provenance_list');
 
   const [provData, setProvData] = React.useState(null);
   React.useEffect(() => {
@@ -81,6 +87,7 @@ function ProvTabs(props) {
         >
           <StyledTab label="Table" id="vertical-tab-0" aria-controls="vertical-tabpanel-0" />
           <StyledTab label="Graph" id="vertical-tab-1" aria-controls="vertical-tabpanel-1" />
+          {shouldDisplayDag && <StyledTab label="Analysis" id="vertical-tab-1" aria-controls="vertical-tabpanel-1" />}
         </Tabs>
         {provData && (
           <>
@@ -95,6 +102,11 @@ function ProvTabs(props) {
               <span id="prov-vis-react">
                 <ProvGraph provData={provData} />
               </span>
+            </TabPanel>
+            <TabPanel value={open} className={classes.tabPanels} index={2}>
+              {shouldDisplayDag && (
+                <DagProv dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />
+              )}
             </TabPanel>
           </>
         )}
