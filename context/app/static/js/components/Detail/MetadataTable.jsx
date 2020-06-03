@@ -8,6 +8,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+// TODO: Why does eslint complain about this, but not about utils.js?
+// eslint-disable-next-line import/no-unresolved
+import metadataFieldDescriptions from 'metadata-field-descriptions';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
 
@@ -22,7 +25,6 @@ const columns = [
 
 function MetadataTable(props) {
   const { metadata: tableData } = props;
-
   const rows = Object.entries(tableData).map((entry) => ({ key: entry[0], value: entry[1] }));
   return (
     <SectionContainer id="metadata-table">
@@ -44,7 +46,7 @@ function MetadataTable(props) {
             <TableBody>
               {rows.map((row) => (
                 <TableRow>
-                  <TableCell>{row.key}</TableCell>
+                  <TableCell>{row.key}: {metadataFieldDescriptions[row.key]}</TableCell>
                   <TableCell>{row.value}</TableCell>
                 </TableRow>
               ))}

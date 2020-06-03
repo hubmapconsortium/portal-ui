@@ -12,7 +12,7 @@ function getDonorMetadata(metadata) {
     if (['Gender finding', 'Racial group'].includes(d.grouping_concept_preferred_term)) {
       acc[d.grouping_concept_preferred_term] = d.preferred_term;
     } else {
-      acc[d.grouping_concept_preferred_term] = d.data_value;
+      acc[d.grouping_concept_preferred_term] = { value: d.data_value, units: d.units };
     }
     return acc;
   }, {});
