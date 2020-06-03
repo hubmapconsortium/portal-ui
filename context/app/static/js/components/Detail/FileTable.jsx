@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -69,5 +70,17 @@ function FileTable(props) {
     </SectionContainer>
   );
 }
+
+FileTable.propTypes = {
+  files: PropTypes.arrayOf(
+    PropTypes.shape({
+      rel_path: PropTypes.string,
+      size: PropTypes.number,
+      type: PropTypes.string,
+    }),
+  ).isRequired,
+  assetsEndpoint: PropTypes.string.isRequired,
+  uuid: PropTypes.string.isRequired,
+};
 
 export default FileTable;
