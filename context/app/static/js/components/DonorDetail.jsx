@@ -28,10 +28,10 @@ function DonorDetail(props) {
     metadata: true,
   };
 
-  // eslint-disable-next-line
-  const donorMetadata = metadata && metadata.hasOwnProperty('organ_donor_data')
-    ? getDonorMetadata(metadata.organ_donor_data) : {};
-
+  /* eslint-disable no-prototype-builtins */
+  const donorMetadata =
+    metadata && metadata.hasOwnProperty('organ_donor_data') ? getDonorMetadata(metadata.organ_donor_data) : {};
+  /* eslint-enable no-prototype-builtins */
   return (
     <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
       <Summary assayMetadata={assayMetadata} />
