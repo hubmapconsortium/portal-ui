@@ -42,12 +42,12 @@ const StyledTypography = styled(Typography)`
 `;
 
 const StyledLink = styled(Link)`
-  color: #3781D1;
+  color: #3781d1;
 `;
 
 const StyledPaper = styled(Paper)`
-  display:flex;
-  min-height:155px;
+  display: flex;
+  min-height: 155px;
   padding: 30px 40px 30px 40px;
 `;
 
@@ -63,41 +63,35 @@ function Summary(props) {
     status,
   } = assayMetadata;
 
-
   return (
     <SectionContainer id="summary">
-      <Typography variant="h4" component="h1" color="primary">{entity_type}</Typography>
+      <Typography variant="h4" component="h1" color="primary">
+        {entity_type}
+      </Typography>
       <FlexContainer>
         <FlexColumn>
-          <SectionHeader variant="h1" component="h2">{display_doi}</SectionHeader>
-          {entity_type !== 'Donor'
-            ? (
-              <FlexContainer>
-                {children}
-              </FlexContainer>
-            ) : null}
+          <SectionHeader variant="h1" component="h2">
+            {display_doi}
+          </SectionHeader>
+          {entity_type !== 'Donor' ? <FlexContainer>{children}</FlexContainer> : null}
         </FlexColumn>
         <FlexBottomRight>
-          {entity_type === 'Dataset' && status && status.length
-            ? (
-              <FlexCenterAlign>
-                <StatusIcon status={status} />
-                <SummaryItem>{status}</SummaryItem>
-              </FlexCenterAlign>
-            ) : null}
-          <StyledLink
-            href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
-            variant="body1"
-            target="_blank"
-            ml={1}
-          >
+          {entity_type === 'Dataset' && status && status.length ? (
+            <FlexCenterAlign>
+              <StatusIcon status={status} />
+              <SummaryItem>{status}</SummaryItem>
+            </FlexCenterAlign>
+          ) : null}
+          <StyledLink href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} variant="body1" target="_blank" ml={1}>
             View JSON
           </StyledLink>
         </FlexBottomRight>
       </FlexContainer>
 
       <StyledPaper>
-        <StyledTypography variant="body1" mt={1}>{description || 'No description defined'}</StyledTypography>
+        <StyledTypography variant="body1" mt={1}>
+          {description || 'No description defined'}
+        </StyledTypography>
         <FlexColumnRight>
           <SectionItem label="Creation Date">{new Date(create_timestamp).toDateString()}</SectionItem>
           <SectionItem label="Modification Date">{new Date(last_modified_timestamp).toDateString()}</SectionItem>

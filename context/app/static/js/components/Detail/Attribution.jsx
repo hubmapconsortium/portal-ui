@@ -13,7 +13,7 @@ const StyledTypography = styled(Typography)`
   margin: 2px 0px 2px 0px;
 `;
 const StyledLink = styled(Link)`
-  color: #3781D1;
+  color: #3781d1;
 `;
 
 const FlexPaper = styled(Paper)`
@@ -22,15 +22,13 @@ const FlexPaper = styled(Paper)`
 `;
 
 function Attribution(props) {
-  const {
-    group_name,
-    created_by_user_displayname,
-    created_by_user_email,
-  } = props;
+  const { group_name, created_by_user_displayname, created_by_user_email } = props;
 
   return (
     <SectionContainer id="attribution">
-      <SectionHeader variant="h3" component="h2">Attribution</SectionHeader>
+      <SectionHeader variant="h3" component="h2">
+        Attribution
+      </SectionHeader>
       <FlexPaper>
         <SectionItem label="Center">
           <StyledTypography variant="body1">{group_name}</StyledTypography>

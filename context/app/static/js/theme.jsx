@@ -72,7 +72,6 @@ const theme = createMuiTheme({
       fontWeight: 500,
       textTransform: 'capitalize',
     },
-
   },
   shape: {
     borderRadius: 2,

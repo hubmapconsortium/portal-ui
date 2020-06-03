@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import SearchWrapper from './SearchWrapper';
 import { readCookie } from '../../helpers/functions';
@@ -7,12 +6,10 @@ import 'searchkit/theming/theme.scss';
 import './Search.css';
 
 import { donorConfig, sampleConfig, datasetConfig } from './config';
+// eslint-disable-next-line import/named
 import { filter } from './utils';
 
-const baseFilters = [
-  filter('ancestor_ids', 'Ancestor ID'),
-  filter('entity_type', 'Entity Type'),
-];
+const baseFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
 
 const filtersByType = {
   '': baseFilters,
@@ -71,12 +68,14 @@ function Search(props) {
   const allProps = Object.assign(searchProps, { apiUrl: elasticsearchEndpoint });
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <Container maxWidth="lg">
-      <Typography component="h1" variant="h1">{title}</Typography>
+    <>
+      <Typography component="h1" variant="h1">
+        {title}
+      </Typography>
       <SearchWrapper {...allProps} />
-    </Container>
+    </>
   );
-/* eslint-enable react/jsx-props-no-spreading */
+  /* eslint-enable react/jsx-props-no-spreading */
 }
 
 export default Search;

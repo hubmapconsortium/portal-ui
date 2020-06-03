@@ -21,15 +21,20 @@ function DagList(props) {
   const { dagListData } = props;
   return (
     <>
-      <Typography variant="h5" component="h3" color="primary">dag_provenance_list</Typography>
+      <Typography variant="h5" component="h3" color="primary">
+        dag_provenance_list
+      </Typography>
       <List>
         {dagListData.map((item, i) => (
           <React.Fragment key={`dag-provenance-list-item${i}`}>
             {i !== 0 && <Divider />}
             <li>
-              {Object.entries(item).map(
-                ([key, value]) => (<Typography key={key} variant="body1"><ListKey>{key}: </ListKey>{value}</Typography>),
-              )}
+              {Object.entries(item).map(([key, value]) => (
+                <Typography key={key} variant="body1">
+                  <ListKey>{key}: </ListKey>
+                  {value}
+                </Typography>
+              ))}
             </li>
           </React.Fragment>
         ))}
@@ -42,13 +47,18 @@ function Dag(props) {
   const { dagData } = props;
   return (
     <>
-      <Typography variant="h5" component="h3" color="primary">dag_provenance</Typography>
+      <Typography variant="h5" component="h3" color="primary">
+        dag_provenance
+      </Typography>
       <List>
         {Object.entries(dagData).map(([key, value], i) => (
           <React.Fragment key={`dag-provenance-item${i}`}>
             {i !== 0 && <Divider key={`dag-provenance-divider${i}`} />}
             <li>
-              <Typography key={key} variant="body1"><ListKey>{key}: </ListKey>{value}</Typography>
+              <Typography key={key} variant="body1">
+                <ListKey>{key}: </ListKey>
+                {value}
+              </Typography>
             </li>
           </React.Fragment>
         ))}
@@ -64,7 +74,9 @@ function DagProv(props) {
   console.log(dagData);
   return (
     <SectionContainer id="dag-provenance">
-      <SectionHeader variant="h3" component="h2">DAG Provenance</SectionHeader>
+      <SectionHeader variant="h3" component="h2">
+        DAG Provenance
+      </SectionHeader>
       <PaddedPaper>
         {dagListData && <DagList dagListData={dagListData} />}
         {dagData && <Dag dagData={dagData} />}

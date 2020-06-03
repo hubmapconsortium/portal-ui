@@ -8,6 +8,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+// TODO: Why does eslint complain about this, but not about utils.js?
+// eslint-disable-next-line import/no-unresolved
+import metadataFieldDescriptions from 'metadata-field-descriptions';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
 
@@ -17,27 +20,24 @@ const StyledTableContainer = styled(TableContainer)`
 
 const columns = [
   { id: 'key', label: 'Key' },
-  { id: 'value', label: 'Value' }];
-
+  { id: 'value', label: 'Value' },
+];
 
 function MetadataTable(props) {
   const { metadata: tableData } = props;
-
   const rows = Object.entries(tableData).map((entry) => ({ key: entry[0], value: entry[1] }));
   return (
     <SectionContainer id="metadata-table">
-      <SectionHeader variant="h3" component="h2">Metadata</SectionHeader>
+      <SectionHeader variant="h3" component="h2">
+        Metadata
+      </SectionHeader>
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
+                  <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
                     {column.label}
                   </TableCell>
                 ))}
@@ -46,7 +46,9 @@ function MetadataTable(props) {
             <TableBody>
               {rows.map((row) => (
                 <TableRow>
-                  <TableCell>{row.key}</TableCell>
+                  <TableCell>
+                    {row.key}: {metadataFieldDescriptions[row.key]}
+                  </TableCell>
                   <TableCell>{row.value}</TableCell>
                 </TableRow>
               ))}

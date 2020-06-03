@@ -16,12 +16,15 @@ const isRoute = (route) => urlPath.startsWith(route);
 const availableRoutes = ['/browse', '/search'];
 
 if (urlPath === '/' || availableRoutes.some(isRoute)) {
-  ReactDOM.render( // eslint-disable-next-line no-undef
+  ReactDOM.render(
+    // eslint-disable-next-line no-undef
     <App flaskData={flaskData} />,
     document.getElementById('react-content'),
   );
-} else { // temp solution to integrate react header and footer
-  ReactDOM.render( // eslint-disable-next-line no-undef
+} else {
+  // temp solution to integrate react header and footer
+  ReactDOM.render(
+    // eslint-disable-next-line no-undef
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header />

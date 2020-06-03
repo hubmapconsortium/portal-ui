@@ -9,17 +9,15 @@ import Metadata from './Detail/Metadata';
 import SummaryItem from './Detail/SummaryItem';
 import DetailLayout from './Detail/DetailLayout';
 
-
 function SummaryData(props) {
   const { organ, origin_sample, specimen_type } = props;
   return (
     <>
-      {organ && organ.length
-        ? (<SummaryItem>{organ}</SummaryItem>) : null}
-      {origin_sample.organ && origin_sample.organ.length && !organ
-        ? (<SummaryItem>{origin_sample.organ}</SummaryItem>) : null}
-      {specimen_type && specimen_type.length
-        ? (<Typography variant="body1">{specimen_type}</Typography>) : null}
+      {organ && organ.length > 0 && <SummaryItem>{organ}</SummaryItem>}
+      {origin_sample.organ && origin_sample.organ.length > 0 && !organ && (
+        <SummaryItem>{origin_sample.organ}</SummaryItem>
+      )}
+      {specimen_type && specimen_type.length > 0 && <Typography variant="body1">{specimen_type}</Typography>}
     </>
   );
 }
@@ -39,7 +37,7 @@ function SampleDetail(props) {
   } = assayMetadata;
 
   const shouldDisplaySection = {
-    protocols: (portal_uploaded_protocol_files || protocol_url),
+    protocols: portal_uploaded_protocol_files || protocol_url,
     metadata: true,
   };
 
@@ -54,17 +52,9 @@ function SampleDetail(props) {
         created_by_user_displayname={created_by_user_displayname}
         created_by_user_email={created_by_user_email}
       />
-      <ProvTabs
-        uuid={uuid}
-        assayMetadata={assayMetadata}
-        entityEndpoint={entityEndpoint}
-      />
-      {shouldDisplaySection.protocols
-      && (
-      <Protocol
-        protocol_url={protocol_url}
-        portal_uploaded_protocol_files={portal_uploaded_protocol_files}
-      />
+      <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
+      {shouldDisplaySection.protocols && (
+        <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
       )}
     </DetailLayout>
   );

@@ -12,7 +12,7 @@ function getDonorMetadata(metadata) {
     if (['Gender finding', 'Racial group'].includes(d.grouping_concept_preferred_term)) {
       acc[d.grouping_concept_preferred_term] = d.preferred_term;
     } else {
-      acc[d.grouping_concept_preferred_term] = d.data_value;
+      acc[d.grouping_concept_preferred_term] = { value: d.data_value, units: d.units };
     }
     return acc;
   }, {});
@@ -20,11 +20,10 @@ function getDonorMetadata(metadata) {
 }
 
 function DonorDetail(props) {
+  const { assayMetadata, flashed_messages, entityEndpoint } = props;
   const {
-    assayMetadata, flashed_messages, entityEndpoint,
-  } = props;
-  const {
-    uuid, protocol_url,
+    uuid,
+    protocol_url,
     portal_uploaded_protocol_files,
     metadata,
     group_name,
@@ -33,14 +32,14 @@ function DonorDetail(props) {
   } = assayMetadata;
 
   const shouldDisplaySection = {
-    protocols: (portal_uploaded_protocol_files || protocol_url),
+    protocols: portal_uploaded_protocol_files || protocol_url,
     metadata: true,
   };
 
-  // eslint-disable-next-line
-  const donorMetadata = metadata && metadata.hasOwnProperty('organ_donor_data')
-    ? getDonorMetadata(metadata.organ_donor_data) : {};
-
+  /* eslint-disable no-prototype-builtins */
+  const donorMetadata =
+    metadata && metadata.hasOwnProperty('organ_donor_data') ? getDonorMetadata(metadata.organ_donor_data) : {};
+  /* eslint-enable no-prototype-builtins */
   return (
     <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
       <Summary assayMetadata={assayMetadata} />
@@ -50,17 +49,9 @@ function DonorDetail(props) {
         created_by_user_displayname={created_by_user_displayname}
         created_by_user_email={created_by_user_email}
       />
-      <ProvTabs
-        uuid={uuid}
-        assayMetadata={assayMetadata}
-        entityEndpoint={entityEndpoint}
-      />
-      {shouldDisplaySection.protocols
-      && (
-      <Protocol
-        protocol_url={protocol_url}
-        portal_uploaded_protocol_files={portal_uploaded_protocol_files}
-      />
+      <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
+      {shouldDisplaySection.protocols && (
+        <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
       )}
     </DetailLayout>
   );

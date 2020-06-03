@@ -37,7 +37,7 @@ export function throttle(fn, wait) {
 
     queuedToRun = clearTimeout(queuedToRun);
 
-    if (!previouslyRun || (now - previouslyRun >= wait)) {
+    if (!previouslyRun || now - previouslyRun >= wait) {
       fn(...args);
       previouslyRun = now;
     } else {

@@ -5,10 +5,8 @@ import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 
 function ProvGraph(props) {
   const { provData } = props;
-  const runRenderProvVis = () => hubmapProvVis.renderProvVis(
-    'prov-vis-react',
-    provData,
-    {
+  const runRenderProvVis = () =>
+    hubmapProvVis.renderProvVis('prov-vis-react', provData, {
       getNameForActivity: (id, prov) => {
         const activity = prov.activity[id];
         return `${activity['prov:type']} - ${activity['prov:label']}`;
@@ -20,24 +18,27 @@ function ProvGraph(props) {
         return entity ? `${entity['prov:type']} - ${entity['prov:label']}` : id;
       },
       renderDetailPane: (prov) => {
-        function create(tag, props, children) { // eslint-disable-line no-shadow
+        // eslint-disable-next-line no-shadow
+        function create(tag, props, children) {
           return React.createElement(tag, props, children);
         }
 
         return create(
           'table',
           { className: 'table table-bordered table-sm' },
-          ['prov:type', 'hubmap:uuid', 'prov:generatedAtTime'].map((field) => create('tr', null, [
-            create('td', { className: 'td-key' }, field),
-            create('td', { className: 'td-value' },
-              field === 'hubmap:uuid'
-                ? create('a', { href: prov[field] }, prov[field])
-                : prov[field]),
-          ])),
+          ['prov:type', 'hubmap:uuid', 'prov:generatedAtTime'].map((field) =>
+            create('tr', null, [
+              create('td', { className: 'td-key' }, field),
+              create(
+                'td',
+                { className: 'td-value' },
+                field === 'hubmap:uuid' ? create('a', { href: prov[field] }, prov[field]) : prov[field],
+              ),
+            ]),
+          ),
         );
       },
-    },
-  );
+    });
   return setTimeout(runRenderProvVis, 0);
 }
 
