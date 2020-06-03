@@ -46,7 +46,9 @@ function MetadataTable(props) {
             <TableBody>
               {rows.map((row) => (
                 <TableRow>
-                  <TableCell>{row.key}: {metadataFieldDescriptions[row.key]}</TableCell>
+                  <TableCell>
+                    {row.key}: {metadataFieldDescriptions[row.key]}
+                  </TableCell>
                   <TableCell>{row.value}</TableCell>
                 </TableRow>
               ))}
