@@ -4,7 +4,6 @@ import Hyperlink from '@material-ui/core/Link';
 import { useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-
 export default function Footer() {
   const theme = useTheme();
   return (

@@ -1,14 +1,8 @@
-import {
-  filter, field,
-  organTranslations, specimenTypeTranslations,
-} from './utils';
-
+// eslint-disable-next-line import/named
+import { filter, field, organTranslations, specimenTypeTranslations } from './utils';
 
 export const donorConfig = {
-  filters: [
-    filter('created_by_user_displayname', 'Creator'),
-    filter('group_name', 'Group'),
-  ],
+  filters: [filter('created_by_user_displayname', 'Creator'), filter('group_name', 'Group')],
   fields: [
     field('display_doi', 'ID'),
     field('group_name', 'Group'),
@@ -48,5 +42,5 @@ export const datasetConfig = {
     field('data_types', 'Data Types'),
     field('origin_sample.organ', 'Organ', organTranslations),
     field('status', 'Status'),
-  ]
+  ],
 };

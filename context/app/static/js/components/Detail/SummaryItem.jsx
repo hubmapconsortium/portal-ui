@@ -7,8 +7,8 @@ const VerticalDivider = styled(Divider)`
   margin-left: 5px;
   margin-right: 5px;
   height: 15px;
-  background-color: #444A65;
-  align-self:center;
+  background-color: #444a65;
+  align-self: center;
 `;
 
 function SummaryItem(props) {

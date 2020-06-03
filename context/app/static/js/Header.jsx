@@ -11,21 +11,43 @@ import { useStyles } from './styles';
 
 export default function Header() {
   const classes = useStyles();
-  let loginLink = <a href="/login" className="navLink"> Login </a>;
-  if (isAuthenticated) { // eslint-disable-line no-undef
-    loginLink = <a href="/logout" className="navLink"> Logout </a>;
+  let loginLink = (
+    <a href="/login" className="navLink">
+      {' '}
+      Login{' '}
+    </a>
+  );
+  // eslint-disable-next-line no-undef
+  if (isAuthenticated) {
+    loginLink = (
+      <a href="/logout" className="navLink">
+        {' '}
+        Logout{' '}
+      </a>
+    );
   }
 
   return (
     <AppBar className={classes.MuiAppBar} position="sticky" elevation={0}>
       <Container maxWidth="lg">
         <Toolbar disableGutters>
-          <a href="/"><HubmapLogo className={classes.hubmaptypeLight} aria-label="HubMAP logo" /></a>
+          <a href="/">
+            <HubmapLogo className={classes.hubmaptypeLight} aria-label="HubMAP logo" />
+          </a>
           <Typography variant="h5" className={classes.title} />
-          {['Donor', 'Sample', 'Dataset'].map((type) => <Button key={type}><a href={`/search?entity_type[0]=${type}`} className="navLink">{`${type}s`}</a></Button>) }
+          {['Donor', 'Sample', 'Dataset'].map((type) => (
+            <Button key={type}>
+              <a href={`/search?entity_type[0]=${type}`} className="navLink">{`${type}s`}</a>
+            </Button>
+          ))}
           <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
             <Button>
-              <a href="https://hubmapconsortium.github.io/ccf-ui/home" target="_blank" rel="noopener noreferrer" className="navLink">
+              <a
+                href="https://hubmapconsortium.github.io/ccf-ui/home"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="navLink"
+              >
                 CCF-UI
               </a>
             </Button>
@@ -35,9 +57,7 @@ export default function Header() {
               Help
             </a>
           </Button>
-          <Button>
-            {loginLink}
-          </Button>
+          <Button>{loginLink}</Button>
         </Toolbar>
       </Container>
     </AppBar>

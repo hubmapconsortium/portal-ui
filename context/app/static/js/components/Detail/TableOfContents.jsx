@@ -21,24 +21,23 @@ const TableTitle = styled(Typography)`
 `;
 
 const StyledItemLink = styled(Link)`
-  font-size: .8125rem;
+  font-size: 0.8125rem;
   line-height: 2;
   padding-left: 4px;
   border-left: 3px solid transparent;
   &:hover {
-    border-left: 3px solid #C4C4C4;
+    border-left: 3px solid #c4c4c4;
   }
-  ${(props) => props.$isCurrentSection
-    && css`
-    color: #3781D1;
-    border-left: 3px solid #C4C4C4;
-  `};
+  ${(props) =>
+    props.$isCurrentSection &&
+    css`
+      color: #3781d1;
+      border-left: 3px solid #c4c4c4;
+    `};
 `;
 
 function ItemLink(props) {
-  const {
-    item, currentSection, handleClick,
-  } = props;
+  const { item, currentSection, handleClick } = props;
   return (
     <StyledItemLink
       display="block"
@@ -66,10 +65,7 @@ function getItemsClient(headings) {
 }
 
 function useThrottledOnScroll(callback, delay) {
-  const throttledCallback = React.useMemo(() => (callback ? throttle(callback, delay) : null), [
-    callback,
-    delay,
-  ]);
+  const throttledCallback = React.useMemo(() => (callback ? throttle(callback, delay) : null), [callback, delay]);
 
   React.useEffect(() => {
     if (throttledCallback === null) {
@@ -82,7 +78,6 @@ function useThrottledOnScroll(callback, delay) {
     };
   }, [throttledCallback]);
 }
-
 
 function TableOfContents(props) {
   const { items } = props;
@@ -108,11 +103,7 @@ function TableOfContents(props) {
     for (let i = itemsWithNodeRef.current.length - 1; i >= 0; i -= 1) {
       const item = itemsWithNodeRef.current[i];
 
-      if (
-        item.node
-        && item.node.offsetTop
-        < (d.scrollTop + d.clientHeight / 8)
-      ) {
+      if (item.node && item.node.offsetTop < d.scrollTop + d.clientHeight / 8) {
         active = item;
         break;
       }
@@ -123,17 +114,16 @@ function TableOfContents(props) {
     }
   }, [currentSection]);
 
-
   useThrottledOnScroll(items.length > 0 ? findActiveIndex : null, 200);
 
   const handleClick = (hash) => (event) => {
     if (
-      event.defaultPrevented
-      || event.button !== 0
-      || event.metaKey
-      || event.ctrlKey
-      || event.altKey
-      || event.shiftKey
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.altKey ||
+      event.shiftKey
     ) {
       return;
     }
@@ -161,17 +151,11 @@ function TableOfContents(props) {
       <StickyNav>
         {items.length > 0 ? (
           <>
-            <TableTitle>
-              Sections
-            </TableTitle>
+            <TableTitle>Sections</TableTitle>
             <List component="ul">
               {items.map((item) => (
                 <li key={item.text}>
-                  <ItemLink
-                    item={item}
-                    currentSection={currentSection}
-                    handleClick={handleClick}
-                  />
+                  <ItemLink item={item} currentSection={currentSection} handleClick={handleClick} />
                 </li>
               ))}
             </List>
@@ -185,6 +169,5 @@ function TableOfContents(props) {
 TableOfContents.propTypes = {
   items: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
 };
-
 
 export default TableOfContents;

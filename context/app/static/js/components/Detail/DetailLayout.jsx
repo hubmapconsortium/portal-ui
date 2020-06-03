@@ -29,9 +29,17 @@ function getSectionFromString(s) {
 }
 
 function getPossibleSections() {
-  return ['summary', 'metadata', 'visualization', 'attribution', 'provenance', 'protocols', 'metadataTable', 'files', 'dagProv'].map((s) => (
-    getSectionFromString(s)
-  ));
+  return [
+    'summary',
+    'metadata',
+    'visualization',
+    'attribution',
+    'provenance',
+    'protocols',
+    'metadataTable',
+    'files',
+    'dagProv',
+  ].map((s) => getSectionFromString(s));
 }
 
 function testAndDeleteFromObject(toDelete, obj, test) {
@@ -41,18 +49,12 @@ function testAndDeleteFromObject(toDelete, obj, test) {
 }
 
 function DetailLayout(props) {
-  const {
-    shouldDisplaySection,
-    flashed_messages,
-    children,
-  } = props;
+  const { shouldDisplaySection, flashed_messages, children } = props;
 
   const getSections = () => {
     const sections = new Map(getPossibleSections());
     const sectionsToTest = ['metadata', 'visualization', 'protocols', 'metadataTable', 'files', 'dagProv'];
-    sectionsToTest.forEach(
-      (section) => testAndDeleteFromObject(section, sections, !shouldDisplaySection[section]),
-    );
+    sectionsToTest.forEach((section) => testAndDeleteFromObject(section, sections, !shouldDisplaySection[section]));
     return sections;
   };
 
@@ -62,8 +64,7 @@ function DetailLayout(props) {
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
       <FlexColumn maxWidth="lg">
-        {flashed_messages && flashed_messages.length > 0
-        && <NoticeAlert errors={flashed_messages} />}
+        {flashed_messages && flashed_messages.length > 0 && <NoticeAlert errors={flashed_messages} />}
         {children}
       </FlexColumn>
     </FlexRow>
