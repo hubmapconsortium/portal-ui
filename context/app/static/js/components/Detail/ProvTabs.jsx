@@ -31,8 +31,8 @@ function TabPanel(props) {
       component="div"
       role="tabpanel"
       hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
     >
       {value === index && (
         <PaddedBox $pad={pad} className={boxClasses}>
@@ -89,9 +89,9 @@ function ProvTabs(props) {
           tabColor="inherit"
           TabIndicatorProps={{ style: { backgroundColor: '#9CB965' } }}
         >
-          <StyledTab label="Table" id="vertical-tab-0" aria-controls="vertical-tabpanel-0" />
-          <StyledTab label="Graph" id="vertical-tab-1" aria-controls="vertical-tabpanel-1" />
-          {shouldDisplayDag && <StyledTab label="Analysis" id="vertical-tab-2" aria-controls="vertical-tabpanel-2" />}
+          <StyledTab label="Table" id="tab-0" aria-controls="tabpanel-0" />
+          <StyledTab label="Graph" id="tab-1" aria-controls="tabpanel-1" />
+          {shouldDisplayDag && <StyledTab label="Analysis" id="tab-2" aria-controls="tabpanel-2" />}
         </Tabs>
         {provData && (
           <>
