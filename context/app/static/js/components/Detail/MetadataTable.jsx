@@ -21,6 +21,7 @@ const StyledTableContainer = styled(TableContainer)`
 const columns = [
   { id: 'key', label: 'Key' },
   { id: 'value', label: 'Value' },
+  { id: 'description', label: 'Description' },
 ];
 
 function MetadataTable(props) {
@@ -37,19 +38,16 @@ function MetadataTable(props) {
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
-                  <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
-                    {column.label}
-                  </TableCell>
+                  <TableCell key={column.id}>{column.label}</TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row) => (
                 <TableRow>
-                  <TableCell>
-                    {row.key}: {metadataFieldDescriptions[row.key]}
-                  </TableCell>
+                  <TableCell>{row.key}</TableCell>
                   <TableCell>{row.value}</TableCell>
+                  <TableCell>{metadataFieldDescriptions[row.key]}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
