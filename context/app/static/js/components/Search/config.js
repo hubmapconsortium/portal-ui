@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/named
 import { filter, field, organTranslations, specimenTypeTranslations } from './utils';
 
 export const donorConfig = {

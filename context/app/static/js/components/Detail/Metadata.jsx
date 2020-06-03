@@ -19,7 +19,8 @@ const FlexPaper = styled(Paper)`
 
 function getDonorMetadataValue(metadata, key) {
   return metadata && Object.prototype.hasOwnProperty.call(metadata, key)
-    ? `${metadata[key].value} ${metadata[key].units}` : '';
+    ? `${metadata[key].value} ${metadata[key].units}`
+    : '';
 }
 
 function MetadataItem(props) {
@@ -40,16 +41,8 @@ function DonorItems(props) {
   return (
     <>
       <MetadataItem label="Gender Finding" value={metadata['Gender finding']} />
-      <MetadataItem
-        label="Current Chronological Age"
-        ml={1}
-        value={ageValue}
-      />
-      <MetadataItem
-        label="Body Mass Index"
-        ml={1}
-        value={bmiValue}
-      />
+      <MetadataItem label="Current Chronological Age" ml={1} value={ageValue} />
+      <MetadataItem label="Body Mass Index" ml={1} value={bmiValue} />
       <MetadataItem label="Racial Group" ml={1} value={metadata['Racial group']} />
     </>
   );

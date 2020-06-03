@@ -6,6 +6,7 @@ import 'searchkit/theming/theme.scss';
 import './Search.css';
 
 import { donorConfig, sampleConfig, datasetConfig } from './config';
+// eslint-disable-next-line import/named
 import { filter } from './utils';
 
 const baseFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
