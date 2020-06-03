@@ -8,10 +8,7 @@ import './Search.css';
 import { donorConfig, sampleConfig, datasetConfig } from './config';
 import { filter } from './utils';
 
-const baseFilters = [
-  filter('ancestor_ids', 'Ancestor ID'),
-  filter('entity_type', 'Entity Type'),
-];
+const baseFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
 
 const filtersByType = {
   '': baseFilters,
@@ -71,11 +68,13 @@ function Search(props) {
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <>
-      <Typography component="h1" variant="h1">{title}</Typography>
+      <Typography component="h1" variant="h1">
+        {title}
+      </Typography>
       <SearchWrapper {...allProps} />
     </>
   );
-/* eslint-enable react/jsx-props-no-spreading */
+  /* eslint-enable react/jsx-props-no-spreading */
 }
 
 export default Search;

@@ -20,15 +20,11 @@ function getDonorMetadata(metadata) {
 }
 
 function DonorDetail(props) {
-  const {
-    assayMetadata, flashed_messages, entityEndpoint,
-  } = props;
-  const {
-    uuid, protocol_url, portal_uploaded_protocol_files, metadata,
-  } = assayMetadata;
+  const { assayMetadata, flashed_messages, entityEndpoint } = props;
+  const { uuid, protocol_url, portal_uploaded_protocol_files, metadata } = assayMetadata;
 
   const shouldDisplaySection = {
-    protocols: (portal_uploaded_protocol_files || protocol_url),
+    protocols: portal_uploaded_protocol_files || protocol_url,
     metadata: true,
   };
 
@@ -41,11 +37,7 @@ function DonorDetail(props) {
       <Summary assayMetadata={assayMetadata} />
       <Metadata entityType={assayMetadata.entity_type} metadata={donorMetadata} />
       <Attribution assayMetadata={assayMetadata} />
-      <ProvTabs
-        uuid={uuid}
-        assayMetadata={assayMetadata}
-        entityEndpoint={entityEndpoint}
-      />
+      <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
       {shouldDisplaySection.protocols && <Protocol assayMetadata={assayMetadata} />}
     </DetailLayout>
   );

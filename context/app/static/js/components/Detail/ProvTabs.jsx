@@ -14,13 +14,11 @@ import SectionContainer from './SectionContainer';
 import { readCookie } from '../../helpers/functions';
 
 const StyledTab = styled(Tab)`
- min-height:72px;
+  min-height: 72px;
 `;
 
 function TabPanel(props) {
-  const {
-    children, value, index, className, boxClasses,
-  } = props;
+  const { children, value, index, className, boxClasses } = props;
   return (
     <Typography
       className={className}
@@ -30,11 +28,14 @@ function TabPanel(props) {
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
     >
-      {value === index && <Box className={boxClasses} p={3}>{children}</Box>}
+      {value === index && (
+        <Box className={boxClasses} p={3}>
+          {children}
+        </Box>
+      )}
     </Typography>
   );
 }
-
 
 function ProvTabs(props) {
   const { uuid, assayMetadata, entityEndpoint } = props;
@@ -48,14 +49,11 @@ function ProvTabs(props) {
   const [provData, setProvData] = React.useState(null);
   React.useEffect(() => {
     async function getAndSetProvData() {
-      const response = await fetch(
-        `${entityEndpoint}/entities/${uuid}/provenance`,
-        {
-          headers: {
-            Authorization: `Bearer ${readCookie('nexus_token')}`,
-          },
+      const response = await fetch(`${entityEndpoint}/entities/${uuid}/provenance`, {
+        headers: {
+          Authorization: `Bearer ${readCookie('nexus_token')}`,
         },
-      );
+      });
       if (!response.ok) {
         console.error('Prov API failed', response);
         return;
@@ -68,7 +66,9 @@ function ProvTabs(props) {
 
   return (
     <SectionContainer id="provenance">
-      <SectionHeader variant="h3" component="h2">Provenance</SectionHeader>
+      <SectionHeader variant="h3" component="h2">
+        Provenance
+      </SectionHeader>
       <Paper className={classes.tabsRoot}>
         <Tabs
           variant="standard"
@@ -79,40 +79,25 @@ function ProvTabs(props) {
           tabColor="inherit"
           TabIndicatorProps={{ style: { backgroundColor: '#9CB965' } }}
         >
-          <StyledTab
-            label="Table"
-            id="vertical-tab-0"
-            aria-controls="vertical-tabpanel-0"
-          />
-          <StyledTab
-            label="Graph"
-            id="vertical-tab-1"
-            aria-controls="vertical-tabpanel-1"
-          />
+          <StyledTab label="Table" id="vertical-tab-0" aria-controls="vertical-tabpanel-0" />
+          <StyledTab label="Graph" id="vertical-tab-1" aria-controls="vertical-tabpanel-1" />
         </Tabs>
-        {
-          provData && (
-            <>
-              <TabPanel
-                value={open}
-                className={classes.tabPanels}
-                boxClasses={classes.tabPanelBoxes}
-                index={0}
-              >
-                <ProvTable
-                  provData={provData}
-                  assayMetadata={assayMetadata}
-                  typesToSplit={['Donor', 'Sample', 'Dataset']}
-                />
-              </TabPanel>
-              <TabPanel value={open} className={classes.tabPanels} index={1}>
-                <span id="prov-vis-react">
-                  <ProvGraph provData={provData} />
-                </span>
-              </TabPanel>
-            </>
-          )
-        }
+        {provData && (
+          <>
+            <TabPanel value={open} className={classes.tabPanels} boxClasses={classes.tabPanelBoxes} index={0}>
+              <ProvTable
+                provData={provData}
+                assayMetadata={assayMetadata}
+                typesToSplit={['Donor', 'Sample', 'Dataset']}
+              />
+            </TabPanel>
+            <TabPanel value={open} className={classes.tabPanels} index={1}>
+              <span id="prov-vis-react">
+                <ProvGraph provData={provData} />
+              </span>
+            </TabPanel>
+          </>
+        )}
       </Paper>
     </SectionContainer>
   );

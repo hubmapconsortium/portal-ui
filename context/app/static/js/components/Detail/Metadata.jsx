@@ -21,9 +21,7 @@ function MetadataItem(props) {
   const { label, value, ml } = props;
   return (
     <SectionItem label={label} ml={ml}>
-      <StyledTypography variant="body1">
-        {value || `${label} not defined`}
-      </StyledTypography>
+      <StyledTypography variant="body1">{value || `${label} not defined`}</StyledTypography>
     </SectionItem>
   );
 }
@@ -43,7 +41,10 @@ function DonorItems(props) {
 // TODO: Update tissue location with real data once it's in a consumable structure
 function SampleItems(props) {
   const {
-    organ, origin_sample: { organ: originOrgan }, specimenType, tissueLocation,
+    organ,
+    origin_sample: { organ: originOrgan },
+    specimenType,
+    tissueLocation,
   } = props;
   return (
     <>
@@ -58,10 +59,10 @@ function Metadata(props) {
   const { entityType } = props;
   return (
     <SectionContainer id="metadata">
-      <SectionHeader variant="h3" component="h2">Metadata</SectionHeader>
-      <FlexPaper>
-        {entityType === 'Donor' ? <DonorItems {...props} /> : <SampleItems {...props} />}
-      </FlexPaper>
+      <SectionHeader variant="h3" component="h2">
+        Metadata
+      </SectionHeader>
+      <FlexPaper>{entityType === 'Donor' ? <DonorItems {...props} /> : <SampleItems {...props} />}</FlexPaper>
     </SectionContainer>
   );
 }
