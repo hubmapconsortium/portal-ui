@@ -19,6 +19,10 @@ const StyledTab = styled(Tab)`
   min-height: 72px;
 `;
 
+const PaddedBox = styled(Box)`
+  padding: 30px 40px 30px 40px;
+`;
+
 function TabPanel(props) {
   const { children, value, index, className, boxClasses } = props;
   return (
@@ -30,11 +34,7 @@ function TabPanel(props) {
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
     >
-      {value === index && (
-        <Box className={boxClasses} p={3}>
-          {children}
-        </Box>
-      )}
+      {value === index && <PaddedBox className={boxClasses}>{children}</PaddedBox>}
     </Typography>
   );
 }
