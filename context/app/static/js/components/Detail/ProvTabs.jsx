@@ -20,11 +20,11 @@ const StyledTab = styled(Tab)`
 `;
 
 const PaddedBox = styled(Box)`
-  padding: 30px 40px 30px 40px;
+  padding: ${(props) => (props.$pad ? '30px 40px' : '0px')};
 `;
 
 function TabPanel(props) {
-  const { children, value, index, className, boxClasses } = props;
+  const { children, value, index, className, boxClasses, pad } = props;
   return (
     <Typography
       className={className}
@@ -34,7 +34,11 @@ function TabPanel(props) {
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
     >
-      {value === index && <PaddedBox className={boxClasses}>{children}</PaddedBox>}
+      {value === index && (
+        <PaddedBox $pad={pad} className={boxClasses}>
+          {children}
+        </PaddedBox>
+      )}
     </Typography>
   );
 }
@@ -91,7 +95,7 @@ function ProvTabs(props) {
         </Tabs>
         {provData && (
           <>
-            <TabPanel value={open} className={classes.tabPanels} boxClasses={classes.tabPanelBoxes} index={0}>
+            <TabPanel value={open} className={classes.tabPanels} boxClasses={classes.tabPanelBoxes} index={0} pad={1}>
               <ProvTable
                 provData={provData}
                 assayMetadata={assayMetadata}
@@ -103,7 +107,7 @@ function ProvTabs(props) {
                 <ProvGraph provData={provData} />
               </span>
             </TabPanel>
-            <TabPanel value={open} className={classes.tabPanels} index={2}>
+            <TabPanel value={open} className={classes.tabPanels} index={2} pad={1}>
               {shouldDisplayDag && (
                 <DagProv dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />
               )}
