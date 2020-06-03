@@ -7,7 +7,8 @@ import Link from '@material-ui/core/Link';
 import { throttle } from '../../helpers/functions';
 
 const TableContainer = styled.div`
-  margin-right: 75px;
+  margin-right: 70px;
+  width: 80px;
 `;
 
 const StickyNav = styled.nav`
