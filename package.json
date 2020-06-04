@@ -1,0 +1,23 @@
+{
+  "name": "portal-ui-tests",
+  "version": "0.0.1",
+  "description": "This segregates the test-only dependencies from those required for the build.",
+  "main": "index.js",
+  "dependencies": {
+    "cypress": "^4.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hubmapconsortium/portal-ui.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hubmapconsortium/portal-ui/issues"
+  },
+  "homepage": "https://github.com/hubmapconsortium/portal-ui#readme"
+}
