@@ -23,6 +23,15 @@ const FlexContainer = styled.div`
   justify-content: space-around;
 `;
 
+function DerivedLink(props) {
+  const { uuid, type } = props;
+  return (
+    <ListItemLink href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${type}`}>
+      <ListItemText primary={`Derived ${type}s`} />
+    </ListItemLink>
+  );
+}
+
 function ProvTable(props) {
   const { provData, uuid, entity_type, typesToSplit } = props;
 
@@ -59,15 +68,11 @@ function ProvTable(props) {
                 </ListItemLink>
               ))
             ) : (
-              <ListItemLink href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${typesToSplit[i]}`}>
-                <ListItemText primary={`Derived ${typesToSplit[i]}s`} />
-              </ListItemLink>
+              <DerivedLink uuid={uuid} type={typesToSplit[i]} />
             )}
-            {typesToSplit[i] === entity_type && entity_type !== 'Donor' ? (
-              <ListItemLink href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${typesToSplit[i]}`}>
-                <ListItemText primary={`Derived ${typesToSplit[i]}s`} />
-              </ListItemLink>
-            ) : null}
+            {typesToSplit[i] === entity_type && entity_type !== 'Donor' && (
+              <DerivedLink uuid={uuid} type={typesToSplit[i]} />
+            )}
           </List>
           {i < types.length - 1 && <Divider orientation="vertical" flexItem />}
         </React.Fragment>
