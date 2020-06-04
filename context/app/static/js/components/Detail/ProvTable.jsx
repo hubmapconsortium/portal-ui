@@ -24,8 +24,7 @@ const FlexContainer = styled.div`
 `;
 
 function ProvTable(props) {
-  const { provData, assayMetadata, typesToSplit } = props;
-  const { uuid, entity_type } = assayMetadata;
+  const { provData, uuid, entity_type, typesToSplit } = props;
 
   const types = Object.values(provData.entity).reduce(
     (acc, item) => {
@@ -78,11 +77,10 @@ function ProvTable(props) {
 }
 
 ProvTable.propTypes = {
-  /* eslint-disable react/forbid-prop-types */
-  assayMetadata: PropTypes.object.isRequired,
+  uuid: PropTypes.string.isRequired,
+  entity_type: PropTypes.string.isRequired,
   provData: PropTypes.objectOf(PropTypes.object).isRequired,
   typesToSplit: PropTypes.arrayOf(PropTypes.string).isRequired,
-  /* eslint-enable react/forbid-prop-types */
 };
 
 export default ProvTable;
