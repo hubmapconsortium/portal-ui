@@ -14,20 +14,6 @@ import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
 import { readCookie } from '../../helpers/functions';
 
-const StyledTab = styled(Tab)`
-  min-height: 72px;
-`;
-
-const StyledTabs = styled(Tabs)`
-  box-shadow: '0px 1px 10px rgba(0, 0, 0, 0.2), 0px 4px 5px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.14)';
-  background-color: ${(props) => props.theme.palette.primary.main};
-  color: #ffffff;
-`;
-
-const PaddedBox = styled(Box)`
-  padding: ${(props) => (props.$pad ? '30px 40px' : '0px')};
-`;
-
 function TabPanel(props) {
   const { children, value, index, className, boxClasses, pad } = props;
   return (
@@ -52,6 +38,20 @@ const StyledTabPanel = styled(TabPanel)`
   width: 100%;
 `;
 
+const StyledTab = styled(Tab)`
+  min-height: 72px;
+`;
+
+const StyledTabs = styled(Tabs)`
+  box-shadow: '0px 1px 10px rgba(0, 0, 0, 0.2), 0px 4px 5px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.14)';
+  background-color: ${(props) => props.theme.palette.primary.main};
+  color: #ffffff;
+`;
+
+const PaddedBox = styled(Box)`
+  padding: ${(props) => (props.$pad ? '30px 40px' : '0px')};
+`;
+
 function ProvTabs(props) {
   const { uuid, assayMetadata, entityEndpoint } = props;
   const { metadata, entity_type } = assayMetadata;
@@ -61,8 +61,8 @@ function ProvTabs(props) {
     setOpen(newValue);
   };
 
-  // eslint-disable-next-line no-prototype-builtins
-  const shouldDisplayDag = entity_type === 'Dataset' && metadata && metadata.hasOwnProperty('dag_provenance_list');
+  const shouldDisplayDag =
+    entity_type === 'Dataset' && metadata && Object.prototype.hasOwnProperty.call(metadata, 'dag_provenance_list');
 
   const [provData, setProvData] = React.useState(null);
   React.useEffect(() => {
