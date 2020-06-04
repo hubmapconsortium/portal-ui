@@ -12,7 +12,8 @@ if ls CHANGELOG-*.md; then
   (
     echo '##' `cat VERSION` - `date +"%F"`
     echo
-    cat CHANGELOG-*.md
+    # "-l" chomps and adds newline.
+    perl -lpe '' CHANGELOG-*.md
     echo
     echo
     cat CHANGELOG.md
