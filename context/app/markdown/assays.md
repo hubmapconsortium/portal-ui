@@ -15,6 +15,8 @@ While bulk ATACseq (_Assay for Transposase-Accessible Chromatin_) resolves the _
 Codex is a strategy for conducting highly multiplexed microscopy of fluorescent-dye-labeled antigens. In brief, antibodies to antigens of interest are barcoded with unique oligonucleotide sequences. A complementary oligonucleotide sequence tagged with a fluorescent probe hybridizes to each antibody barcode allowing visualization of the targeted antigen. The fluorophores are then stripped from the tissue and the process is repeated allowing up to 50 protein targets to be visualized within a single tissue section. 
 
 
+<a name="IMC"></a>
+
 ## Image Mass Cytometry (IMC)
 
 Imaging Mass Cytometry combines standard immunohistochemistry with CyTOF mass cytometry to resolve the cellular localization of up to 40 proteins in a tissue sample.  Multiplexing of dozens of proteins is possible because the antibodies are tagged with rare-earth metal isotopes of defined atomic mass rather than fluorophores, which are subject to spectral signal overlap. High-resolution laser ablation of tissue stained with these antibody-metal conjugates generates clouds of tissue particles which are atomized, ionized, and detected in a time-of-flight mass cytometer. Signals are then plotted against the coordinates of each single laser shot to synthesize one image per mass channel with high-dimensional images produced by overlaying images from multiple channels.
