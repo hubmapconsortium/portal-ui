@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import ProvGraph from './ProvGraph';
 import ProvTable from './ProvTable';
 import DagProv from './DagProv';
-import { useStyles } from '../../styles';
 import SectionHeader from './SectionHeader';
 import SectionContainer from './SectionContainer';
 import { readCookie } from '../../helpers/functions';
@@ -56,7 +55,6 @@ const StyledTabPanel = styled(TabPanel)`
 function ProvTabs(props) {
   const { uuid, assayMetadata, entityEndpoint } = props;
   const { metadata, entity_type } = assayMetadata;
-  const classes = useStyles();
 
   const [open, setOpen] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -103,7 +101,7 @@ function ProvTabs(props) {
         </StyledTabs>
         {provData && (
           <>
-            <StyledTabPanel value={open} boxClasses={classes.tabPanelBoxes} index={0} pad={1}>
+            <StyledTabPanel value={open} index={0} pad={1}>
               <ProvTable
                 provData={provData}
                 uuid={uuid}

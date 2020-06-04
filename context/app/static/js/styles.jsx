@@ -21,8 +21,4 @@ export const useStyles = makeStyles((theme) => ({
     strokeWidth: '1px',
     height: '40px',
   },
-  tabPanelBoxes: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
 }));
