@@ -19,6 +19,12 @@ const StyledTab = styled(Tab)`
   min-height: 72px;
 `;
 
+const StyledTabs = styled(Tabs)`
+  box-shadow: '0px 1px 10px rgba(0, 0, 0, 0.2), 0px 4px 5px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.14)';
+  background-color: ${(props) => props.theme.palette.primary.main};
+  color: #ffffff;
+`;
+
 const PaddedBox = styled(Box)`
   padding: ${(props) => (props.$pad ? '30px 40px' : '0px')};
 `;
@@ -42,6 +48,10 @@ function TabPanel(props) {
     </Typography>
   );
 }
+
+const StyledTabPanel = styled(TabPanel)`
+  width: 100%;
+`;
 
 function ProvTabs(props) {
   const { uuid, assayMetadata, entityEndpoint } = props;
@@ -79,39 +89,38 @@ function ProvTabs(props) {
       <SectionHeader variant="h3" component="h2">
         Provenance
       </SectionHeader>
-      <Paper className={classes.tabsRoot}>
-        <Tabs
+      <Paper>
+        <StyledTabs
           variant="standard"
           value={open}
           onChange={handleChange}
           aria-label="Detail View Tabs"
-          className={classes.tabs}
           TabIndicatorProps={{ style: { backgroundColor: '#9CB965' } }}
         >
           <StyledTab label="Table" id="tab-0" aria-controls="tabpanel-0" />
           <StyledTab label="Graph" id="tab-1" aria-controls="tabpanel-1" />
           {shouldDisplayDag && <StyledTab label="Analysis Details" id="tab-2" aria-controls="tabpanel-2" />}
-        </Tabs>
+        </StyledTabs>
         {provData && (
           <>
-            <TabPanel value={open} className={classes.tabPanels} boxClasses={classes.tabPanelBoxes} index={0} pad={1}>
+            <StyledTabPanel value={open} boxClasses={classes.tabPanelBoxes} index={0} pad={1}>
               <ProvTable
                 provData={provData}
                 uuid={uuid}
                 entity_type={entity_type}
                 typesToSplit={['Donor', 'Sample', 'Dataset']}
               />
-            </TabPanel>
-            <TabPanel value={open} className={classes.tabPanels} index={1}>
+            </StyledTabPanel>
+            <StyledTabPanel value={open} index={1}>
               <span id="prov-vis-react">
                 <ProvGraph provData={provData} />
               </span>
-            </TabPanel>
-            <TabPanel value={open} className={classes.tabPanels} index={2} pad={1}>
+            </StyledTabPanel>
+            <StyledTabPanel value={open} index={2} pad={1}>
               {shouldDisplayDag && (
                 <DagProv dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />
               )}
-            </TabPanel>
+            </StyledTabPanel>
           </>
         )}
       </Paper>
