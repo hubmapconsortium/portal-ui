@@ -1,4 +1,6 @@
 const { resolve } = require('path');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const config = {
   entry: './app/static/js/index.jsx',
@@ -53,11 +55,7 @@ const config = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(ttf|eot|woff|woff2)$/,
@@ -79,6 +77,7 @@ const config = {
       },
     ],
   },
+  plugins: [new CleanWebpackPlugin()],
 };
 
 module.exports = config;
