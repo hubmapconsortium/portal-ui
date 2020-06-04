@@ -1,9 +1,8 @@
 # portal-ui
 HuBMAP Data Portal:
-This is a Flask app, using React on the front end,
-and relying on the [HuBMAP Entity API](https://github.com/hubmapconsortium/entity-api) in the back,
+This is a Flask app, using React on the front end and primarily Elasticsearch on the back end,
 wrapped in a Docker container for deployment using Docker Compose.
-It is deployed at [portal.test.hubmapconsortium.org](https://portal.test.hubmapconsortium.org/)
+It is deployed at [portal.hubmapconsortium.org](https://portal.hubmapconsortium.org/)
 
 The Data Portal depends, directly or indirectly, on many other HuBMAP repos:
 
