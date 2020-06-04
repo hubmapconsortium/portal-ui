@@ -17,30 +17,30 @@ const StyledTableContainer = styled(TableContainer)`
 `;
 
 const StyledLink = styled(Link)`
-  color: #3781D1;
+  color: #3781d1;
 `;
 
 const columns = [
   { id: 'rel_path', label: 'File' },
   { id: 'size', label: 'File Size' },
-  { id: 'type', label: 'Type' }];
-
+  { id: 'type', label: 'Type' },
+];
 
 function FileTable(props) {
   const { files: rows, assetsEndpoint, uuid } = props;
   const token = readCookie('nexus_token');
   return (
     <SectionContainer id="files">
-      <SectionHeader variant="h3" component="h2">Files</SectionHeader>
+      <SectionHeader variant="h3" component="h2">
+        Files
+      </SectionHeader>
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
-                  <TableCell key={column.id}>
-                    {column.label}
-                  </TableCell>
+                  <TableCell key={column.id}>{column.label}</TableCell>
                 ))}
               </TableRow>
             </TableHead>

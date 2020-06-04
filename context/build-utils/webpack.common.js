@@ -12,13 +12,13 @@ const config = {
     alias: {
       'search-schema-definitions$': resolve('./search-schema/data/definitions.yaml'),
       'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
-    }
+    },
   },
   module: {
     rules: [
       {
         enforce: 'pre',
-        test: /\.jsx$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'eslint-loader',
         options: {
@@ -33,7 +33,7 @@ const config = {
         enforce: 'pre',
       },
       {
-        test: /\.jsx?/,
+        test: /\.(js|jsx)$/,
         use: {
           loader: 'babel-loader',
         },
@@ -75,11 +75,10 @@ const config = {
       {
         test: /\.ya?ml$/,
         type: 'json', // Required by Webpack v4
-        use: 'yaml-loader'
-      }
+        use: 'yaml-loader',
+      },
     ],
   },
 };
-module.exports = (env, argv) => {
-  return argv.mode === 'development' ? { ...config, devtool: 'nosources-source-map' } : { ...config, devtool: 'cheap-source-map' }
-};
+
+module.exports = config;

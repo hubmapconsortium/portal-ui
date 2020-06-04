@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -o errexit
+trap "kill 0" EXIT
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
@@ -18,6 +19,7 @@ fi
 
 grep 'TODO' "$APP_CONF" && die "Replace 'TODO' in $APP_CONF."
 
-cd $CONTEXT && npm install && npm run build:dev && cd -
+FLASK_ENV=development FLASK_APP="$CONTEXT/app/main.py" python -m flask run &
+cd $CONTEXT && npm install && npm run dev-server &
 
-FLASK_ENV=development FLASK_APP="$CONTEXT/app/main.py" python -m flask run
+wait

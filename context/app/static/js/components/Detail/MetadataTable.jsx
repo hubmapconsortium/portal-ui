@@ -20,36 +20,34 @@ const StyledTableContainer = styled(TableContainer)`
 
 const columns = [
   { id: 'key', label: 'Key' },
-  { id: 'value', label: 'Value' }];
-
+  { id: 'value', label: 'Value' },
+  { id: 'description', label: 'Description' },
+];
 
 function MetadataTable(props) {
   const { metadata: tableData } = props;
   const rows = Object.entries(tableData).map((entry) => ({ key: entry[0], value: entry[1] }));
   return (
     <SectionContainer id="metadata-table">
-      <SectionHeader variant="h3" component="h2">Metadata</SectionHeader>
+      <SectionHeader variant="h3" component="h2">
+        Metadata
+      </SectionHeader>
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
+                  <TableCell key={column.id}>{column.label}</TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row) => (
                 <TableRow>
-                  <TableCell>{row.key}: {metadataFieldDescriptions[row.key]}</TableCell>
+                  <TableCell>{row.key}</TableCell>
                   <TableCell>{row.value}</TableCell>
+                  <TableCell>{metadataFieldDescriptions[row.key]}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -20,32 +20,24 @@ function getDonorMetadata(metadata) {
 }
 
 function DonorDetail(props) {
-  const {
-    assayMetadata, flashed_messages, entityEndpoint,
-  } = props;
-  const {
-    uuid, protocol_url, portal_uploaded_protocol_files, metadata,
-  } = assayMetadata;
+  const { assayMetadata, flashed_messages, entityEndpoint } = props;
+  const { uuid, protocol_url, portal_uploaded_protocol_files, metadata } = assayMetadata;
 
   const shouldDisplaySection = {
-    protocols: (portal_uploaded_protocol_files || protocol_url),
+    protocols: portal_uploaded_protocol_files || protocol_url,
     metadata: true,
   };
 
-  // eslint-disable-next-line
-  const donorMetadata = metadata && metadata.hasOwnProperty('organ_donor_data')
-    ? getDonorMetadata(metadata.organ_donor_data) : {};
-
+  /* eslint-disable no-prototype-builtins */
+  const donorMetadata =
+    metadata && metadata.hasOwnProperty('organ_donor_data') ? getDonorMetadata(metadata.organ_donor_data) : {};
+  /* eslint-enable no-prototype-builtins */
   return (
     <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
       <Summary assayMetadata={assayMetadata} />
       <Metadata entityType={assayMetadata.entity_type} metadata={donorMetadata} />
       <Attribution assayMetadata={assayMetadata} />
-      <ProvTabs
-        uuid={uuid}
-        assayMetadata={assayMetadata}
-        entityEndpoint={entityEndpoint}
-      />
+      <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
       {shouldDisplaySection.protocols && <Protocol assayMetadata={assayMetadata} />}
     </DetailLayout>
   );

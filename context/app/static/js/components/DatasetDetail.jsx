@@ -11,14 +11,13 @@ import MetadataTable from './Detail/MetadataTable';
 import FileTable from './Detail/FileTable';
 import Visualization from './Detail/Visualization';
 import DetailLayout from './Detail/DetailLayout';
-import DagProv from './Detail/DagProv';
 
 const StyledDivider = styled(Divider)`
   margin-left: 5px;
   margin-right: 5px;
   height: 15px;
-  background-color: #444A65;
-  align-self:center;
+  background-color: #444a65;
+  align-self: center;
 `;
 
 function AssaySpecificItem(props) {
@@ -35,22 +34,20 @@ function SummaryData(props) {
   const { data_types, origin_sample } = props;
   return (
     <>
-      {(data_types && data_types.length > 0)
-      && <AssaySpecificItem>{data_types.constructor.name === 'Array' ? data_types.join(' / ') : data_types}</AssaySpecificItem>}
-      {(origin_sample.organ && origin_sample.organ.length > 0)
-      && <Typography variant="body1">{origin_sample.organ}</Typography>}
+      {data_types && data_types.length > 0 && (
+        <AssaySpecificItem>
+          {data_types.constructor.name === 'Array' ? data_types.join(' / ') : data_types}
+        </AssaySpecificItem>
+      )}
+      {origin_sample.organ && origin_sample.organ.length > 0 && (
+        <Typography variant="body1">{origin_sample.organ}</Typography>
+      )}
     </>
   );
 }
 
 function DatasetDetail(props) {
-  const {
-    assayMetadata,
-    vitData,
-    assetsEndpoint,
-    flashed_messages,
-    entityEndpoint,
-  } = props;
+  const { assayMetadata, vitData, assetsEndpoint, flashed_messages, entityEndpoint } = props;
   const {
     protocol_url,
     portal_uploaded_protocol_files,
@@ -63,10 +60,9 @@ function DatasetDetail(props) {
 
   const shouldDisplaySection = {
     vizualization: 'name' in vitData,
-    protocols: (portal_uploaded_protocol_files || protocol_url),
-    metadataTable: (metadata && metadata.metadata),
-    files: (files && files.length > 0),
-    dagProv: (metadata && (metadata.dag_provenance || metadata.dag_provenance_list)),
+    protocols: portal_uploaded_protocol_files || protocol_url,
+    metadataTable: metadata && metadata.metadata,
+    files: files && files.length > 0,
   };
 
   return (
@@ -76,17 +72,10 @@ function DatasetDetail(props) {
       </Summary>
       {shouldDisplaySection.vizualization && <Visualization vitData={vitData} />}
       <Attribution assayMetadata={assayMetadata} />
-      <ProvTabs
-        uuid={uuid}
-        assayMetadata={assayMetadata}
-        entityEndpoint={entityEndpoint}
-      />
+      <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
       {shouldDisplaySection.protocols && <Protocol assayMetadata={assayMetadata} />}
       {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} />}
-      {shouldDisplaySection.files
-      && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}
-      {shouldDisplaySection.dagProv
-      && <DagProv dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />}
+      {shouldDisplaySection.files && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}
     </DetailLayout>
   );
 }
