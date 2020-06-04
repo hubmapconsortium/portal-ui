@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable camelcase */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
@@ -76,5 +77,9 @@ function Metadata(props) {
     </SectionContainer>
   );
 }
+
+Metadata.propTypes = {
+  entityType: PropTypes.string.isRequired,
+};
 
 export default Metadata;
