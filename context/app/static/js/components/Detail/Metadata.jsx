@@ -67,19 +67,19 @@ function SampleItems(props) {
 }
 
 function Metadata(props) {
-  const { entityType } = props;
+  const { entity_type } = props;
   return (
     <SectionContainer id="metadata">
       <SectionHeader variant="h3" component="h2">
         Metadata
       </SectionHeader>
-      <FlexPaper>{entityType === 'Donor' ? <DonorItems {...props} /> : <SampleItems {...props} />}</FlexPaper>
+      <FlexPaper>{entity_type === 'Donor' ? <DonorItems {...props} /> : <SampleItems {...props} />}</FlexPaper>
     </SectionContainer>
   );
 }
 
 Metadata.propTypes = {
-  entityType: PropTypes.string.isRequired,
+  entity_type: PropTypes.string.isRequired,
 };
 
 export default Metadata;

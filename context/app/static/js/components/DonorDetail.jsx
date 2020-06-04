@@ -55,7 +55,7 @@ function DonorDetail(props) {
         last_modified_timestamp={last_modified_timestamp}
         description={description}
       />
-      <Metadata entityType={assayMetadata.entity_type} metadata={donorMetadata} />
+      <Metadata entity_type={entity_type} metadata={donorMetadata} />
       <Attribution
         group_name={group_name}
         created_by_user_displayname={created_by_user_displayname}

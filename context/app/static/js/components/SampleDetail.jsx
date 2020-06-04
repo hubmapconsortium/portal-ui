@@ -58,7 +58,7 @@ function SampleDetail(props) {
       >
         <SummaryData organ={organ} specimen_type={specimen_type} origin_sample={origin_sample} />
       </Summary>
-      <Metadata organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
+      <Metadata entity_type={entity_type} organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
       <Attribution
         group_name={group_name}
         created_by_user_displayname={created_by_user_displayname}
