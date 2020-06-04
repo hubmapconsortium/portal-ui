@@ -32,7 +32,7 @@ function DonorDetail(props) {
   } = assayMetadata;
 
   const shouldDisplaySection = {
-    protocols: portal_uploaded_protocol_files || protocol_url,
+    protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
     metadata: true,
   };
 

@@ -63,7 +63,7 @@ function DatasetDetail(props) {
 
   const shouldDisplaySection = {
     vizualization: 'name' in vitData,
-    protocols: portal_uploaded_protocol_files || protocol_url,
+    protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
     metadataTable: metadata && Object.prototype.hasOwnProperty.call(metadata, 'metadata'),
     files: files && files.length > 0,
   };
