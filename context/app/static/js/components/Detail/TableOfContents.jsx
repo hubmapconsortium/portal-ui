@@ -31,7 +31,7 @@ const StyledItemLink = styled(Link)`
   ${(props) =>
     props.$isCurrentSection &&
     css`
-      color: #3781d1;
+      color: ${props.theme.palette.link.main};
       border-left: 3px solid #c4c4c4;
     `};
 `;
