@@ -73,15 +73,15 @@ function Summary(props) {
           <SectionHeader variant="h1" component="h2">
             {display_doi}
           </SectionHeader>
-          {entity_type !== 'Donor' ? <FlexContainer>{children}</FlexContainer> : null}
+          {entity_type !== 'Donor' && <FlexContainer>{children}</FlexContainer>}
         </FlexColumn>
         <FlexBottomRight>
-          {entity_type === 'Dataset' && status && status.length ? (
+          {entity_type === 'Dataset' && status && status.length > 0 && (
             <FlexCenterAlign>
               <StatusIcon status={status} />
               <SummaryItem>{status}</SummaryItem>
             </FlexCenterAlign>
-          ) : null}
+          )}
           <JsonLink href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} variant="body1" target="_blank" ml={1}>
             View JSON
           </JsonLink>
