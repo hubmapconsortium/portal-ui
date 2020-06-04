@@ -1,5 +1,10 @@
 # HuBMAP Assays
 
+<!--
+Anchors are based on the codes here:
+https://github.com/hubmapconsortium/search-schema/blob/master/data/definitions/enums/assay_types.tsv
+-->
+
 <a name="AF"></a>
 
 ## Autofluorescence Microscopy
@@ -7,12 +12,17 @@
 Autofluorescence microscopy exploits endogenous fluorescence in a biological tissue to capture an image. The image can then be used to integrate other images from multiple modalities and to align tissues within a 3D experiment. Autofluorescence microscopy requires no sample preparation and can be performed on any fluorescence microscope. 
 
 
+<a name="sciATACseq"></a>
+<a name="ATACseq-bulk"></a>
+<a name="snATACseq"></a>
+
 ## Assay for Transposase-Accessible Chromatin (ATACseq)    
 
 While bulk ATACseq (_Assay for Transposase-Accessible Chromatin_) resolves the _average_ of chromatin architecture in cells comprising a tissue sample, single-cell ATACseq employs per-cell and per-molecule barcoding to enable single-cell resolution of chromatin architecture. The ATACseq assay itself is the same for bulk and single-cell templates. ATAC-seq employs a genetically engineered Tn5 transposase that inserts sequencing adapters into accessible regions on the chromatin surface. Analysis of the sequences derived from the Tn5 sequencing adapters allows identification of those regions of the chromatin located on the cell-state-specific surface of the chromatin.
 
 
 <a name="CODEX"></a>
+<a name="codex_cytokit"></a>
 
 ## Co-detection by indexing (CODEX)
 
@@ -26,16 +36,17 @@ Codex is a strategy for conducting highly multiplexed microscopy of fluorescent-
 Imaging Mass Cytometry combines standard immunohistochemistry with CyTOF mass cytometry to resolve the cellular localization of up to 40 proteins in a tissue sample.  Multiplexing of dozens of proteins is possible because the antibodies are tagged with rare-earth metal isotopes of defined atomic mass rather than fluorophores, which are subject to spectral signal overlap. High-resolution laser ablation of tissue stained with these antibody-metal conjugates generates clouds of tissue particles which are atomized, ionized, and detected in a time-of-flight mass cytometer. Signals are then plotted against the coordinates of each single laser shot to synthesize one image per mass channel with high-dimensional images produced by overlaying images from multiple channels.
 
 
+<a name="TMT-LC-MS"></a>
+<a name="Targeted-Shotgun-LC-MS"></a>
 <a name="LC-MS-untargeted"></a>
-<a name="LC-MS"></a>
 
 ## Liquid Chromatography Mass Spectrometry (LC-MS)
 
 Coupling of liquid chromatography (LC) to mass spectrometry (MS) has become an indispensable technique for analyzing complex mixtures of biomolecules. Chromatography is a technique for separation of molecules based on their interactions with a stationary phase and a mobile phase of flowing solvent. For example, in reversed-phase chromatography, the stationary phase is commonly composed of hydrophobic C18-functionalized silica particles that are packed into a column while the mobile phase is composed of a hydrophilic solution. Based on differences in hydrophobicity, biomolecules partition differently between the stationary and mobile phases. Consequently, biomolecules elute off of a column at different times. Mass spectrometry measures the molecular weights of eluted biomolecules via detection of gas-phase ions. To obtain the masses of eluted biomolecules via mass spectrometry, solution-phase biomolecules are most commonly converted to gas-phase ions via electrospray ionization in which a high voltage is applied to the liquid coming out of the column.
 
 
-<a name="IMS_NegMode"></a>
-<a name="IMS_PosMode"></a>
+<a name="MALDI-IMS-neg"></a>
+<a name="MALDI-IMS-pos"></a>
 
 ## Matrix Assisted Laser Desorption/Ionization Imaging Mass Spectrometry (MALDI-IMS)    
 
@@ -49,10 +60,18 @@ Matrix-assisted laser desorption/ionization (_MALDI_) imaging mass spectrometry 
 MxIF is used to visualize the distribution of multiple protein antigens in an intact tissue section by labeling them with fluorophore-tagged antibodies. Tagged antibodies are iteratively incubated with a tissue section, visualized with a fluorescence microscope and then stripped.
 
 
+<a name="scRNA-Seq-10x"></a>
+<a name="bulk-RNA"></a>
+<a name="sciRNAseq"></a>
+<a name="snRNAseq"></a>
+<a name="salmon_rnaseq_10x"></a>
+
 ## RNA Sequencing (RNAseq)    
 
 While bulk RNAseq elucidates the average gene expression profile in cells comprising a tissue sample, single-cell RNAseq employs per-cell and per-molecule barcoding to enable single-cell resolution of the gene expression profile. The RNAseq assay itself is the same for bulk and single-cell templates. Evaluation of the total gene expression profile of a biological sample is referred to as “transcriptomics”. Genes are transcribed in response to some signal(s) to generate certain gene products (proteins) required by the cell. Transcribed RNA then undergoes processing (_addition of a poly-A tail, 5’-capping, exon splicing_) to generate messenger RNA (_mRNA_), which is exported from the nucleus to the cytoplasm for translation into the corresponding encoded protein. The derived sequences of each mRNA transcript are aligned against a reference genome to establish the identity of the corresponding gene. Since each mRNA molecule represents a single gene transcript, the total mRNA-count aligning to a gene represents the expression profile for that gene.
 
+
+<a name="seqFish"></a>
 
 ## Sequencing by Fluorescence In-Situ Hybridization (seqFISH)    
 
@@ -65,6 +84,8 @@ seqFISH technology allows multiplex in situ imaging of mRNA within cells using b
 
 Stained microscopy employs histological stains such as H&E or PAS to improve resolution and contrast for visualization of anatomical structures such as tubules or glomeruli. 
 
+
+<a name="WGS"></a>
 
 ## Whole Genome Sequencing (WGS)    
 Whole genome sequencing (_WGS_) measures the genome-wide nucleotide sequence in a biological sample. Generally, the purpose is to screen the entire genome for all sequence variations (_against a reference sequence_) such as benign sequence variants (_SNPs_) or candidate pathogenic mutations. Examples of sequence variants include chromosomal rearrangements, nucleotide substitutions, deletions or insertions. An example use case would be a genome-wide search for somatic mutations (_cancer-causing mutations that arose in a somatic cell, as opposed to arising in a germline cell_) by comparing DNA sequence in a patient’s tumor cells to that in the same patient’s healthy cells.
