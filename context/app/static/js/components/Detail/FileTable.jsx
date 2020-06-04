@@ -18,7 +18,7 @@ const StyledTableContainer = styled(TableContainer)`
 `;
 
 const StyledLink = styled(Link)`
-  color: #3781d1;
+  color: ${(props) => props.theme.palette.info.main};
 `;
 
 const columns = [
