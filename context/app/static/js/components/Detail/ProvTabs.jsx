@@ -86,7 +86,6 @@ function ProvTabs(props) {
           onChange={handleChange}
           aria-label="Detail View Tabs"
           className={classes.tabs}
-          tabColor="inherit"
           TabIndicatorProps={{ style: { backgroundColor: '#9CB965' } }}
         >
           <StyledTab label="Table" id="tab-0" aria-controls="tabpanel-0" />
