@@ -22,9 +22,6 @@ const theme = createMuiTheme({
     success: {
       main: '#6C8938', // '#9BC551'
     },
-    link: {
-      main: '#3781D1',
-    },
     type: 'light',
   },
   typography: {
