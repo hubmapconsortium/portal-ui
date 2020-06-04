@@ -75,7 +75,7 @@ function DetailLayout(props) {
 DetailLayout.propTypes = {
   shouldDisplaySection: PropTypes.objectOf(PropTypes.bool).isRequired,
   flashed_messages: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
-  children: PropTypes.element.isRequired,
+  children: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.element, PropTypes.bool])).isRequired,
 };
 
 DetailLayout.defaultProps = {
