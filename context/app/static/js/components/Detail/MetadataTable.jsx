@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -44,7 +45,7 @@ function MetadataTable(props) {
             </TableHead>
             <TableBody>
               {rows.map((row) => (
-                <TableRow>
+                <TableRow key={row.key}>
                   <TableCell>{row.key}</TableCell>
                   <TableCell>{row.value}</TableCell>
                   <TableCell>{metadataFieldDescriptions[row.key]}</TableCell>
@@ -57,5 +58,9 @@ function MetadataTable(props) {
     </SectionContainer>
   );
 }
+
+MetadataTable.propTypes = {
+  metadata: PropTypes.objectOf(PropTypes.string).isRequired,
+};
 
 export default MetadataTable;
