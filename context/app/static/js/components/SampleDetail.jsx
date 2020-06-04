@@ -34,6 +34,11 @@ function SampleDetail(props) {
     group_name,
     created_by_user_displayname,
     created_by_user_email,
+    display_doi,
+    entity_type,
+    create_timestamp,
+    last_modified_timestamp,
+    description,
   } = assayMetadata;
 
   const shouldDisplaySection = {
@@ -43,7 +48,14 @@ function SampleDetail(props) {
 
   return (
     <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
-      <Summary assayMetadata={assayMetadata}>
+      <Summary
+        uuid={uuid}
+        entity_type={entity_type}
+        display_doi={display_doi}
+        create_timestamp={create_timestamp}
+        last_modified_timestamp={last_modified_timestamp}
+        description={description}
+      >
         <SummaryData organ={organ} specimen_type={specimen_type} origin_sample={origin_sample} />
       </Summary>
       <Metadata organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />

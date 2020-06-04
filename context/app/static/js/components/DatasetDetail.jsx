@@ -59,6 +59,12 @@ function DatasetDetail(props) {
     group_name,
     created_by_user_displayname,
     created_by_user_email,
+    display_doi,
+    entity_type,
+    create_timestamp,
+    last_modified_timestamp,
+    description,
+    status,
   } = assayMetadata;
 
   const shouldDisplaySection = {
@@ -70,7 +76,15 @@ function DatasetDetail(props) {
 
   return (
     <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
-      <Summary assayMetadata={assayMetadata}>
+      <Summary
+        uuid={uuid}
+        entity_type={entity_type}
+        display_doi={display_doi}
+        create_timestamp={create_timestamp}
+        last_modified_timestamp={last_modified_timestamp}
+        description={description}
+        status={status}
+      >
         <SummaryData data_types={data_types} origin_sample={origin_sample} />
       </Summary>
       {shouldDisplaySection.vizualization && <Visualization vitData={vitData} />}

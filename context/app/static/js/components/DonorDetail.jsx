@@ -29,6 +29,11 @@ function DonorDetail(props) {
     group_name,
     created_by_user_displayname,
     created_by_user_email,
+    display_doi,
+    entity_type,
+    create_timestamp,
+    last_modified_timestamp,
+    description,
   } = assayMetadata;
 
   const shouldDisplaySection = {
@@ -42,7 +47,14 @@ function DonorDetail(props) {
   /* eslint-enable no-prototype-builtins */
   return (
     <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
-      <Summary assayMetadata={assayMetadata} />
+      <Summary
+        uuid={uuid}
+        entity_type={entity_type}
+        display_doi={display_doi}
+        create_timestamp={create_timestamp}
+        last_modified_timestamp={last_modified_timestamp}
+        description={description}
+      />
       <Metadata entityType={assayMetadata.entity_type} metadata={donorMetadata} />
       <Attribution
         group_name={group_name}

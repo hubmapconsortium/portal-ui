@@ -41,8 +41,8 @@ const StyledTypography = styled(Typography)`
   margin-top: ${(props) => (props.mt ? '5px' : '0px')};
 `;
 
-const StyledLink = styled(Link)`
-  color: #3781d1;
+const JsonLink = styled(Link)`
+  color: ${(props) => props.theme.palette.link.main};
 `;
 
 const StyledPaper = styled(Paper)`
@@ -52,7 +52,6 @@ const StyledPaper = styled(Paper)`
 `;
 
 function Summary(props) {
-  const { assayMetadata, children } = props;
   const {
     display_doi,
     entity_type,
@@ -61,7 +60,8 @@ function Summary(props) {
     uuid,
     description,
     status,
-  } = assayMetadata;
+    children,
+  } = props;
 
   return (
     <SectionContainer id="summary">
@@ -82,9 +82,9 @@ function Summary(props) {
               <SummaryItem>{status}</SummaryItem>
             </FlexCenterAlign>
           ) : null}
-          <StyledLink href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} variant="body1" target="_blank" ml={1}>
+          <JsonLink href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} variant="body1" target="_blank" ml={1}>
             View JSON
-          </StyledLink>
+          </JsonLink>
         </FlexBottomRight>
       </FlexContainer>
 
