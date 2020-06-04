@@ -32,11 +32,12 @@ function AssaySpecificItem(props) {
 
 function SummaryData(props) {
   const { data_types, origin_sample } = props;
+  const data_types_string = data_types.constructor.name === 'Array' ? data_types.join(' / ') : data_types;
   return (
     <>
       {data_types && data_types.length > 0 && (
         <AssaySpecificItem>
-          {data_types.constructor.name === 'Array' ? data_types.join(' / ') : data_types}
+          <a href={`/assays#${data_types_string}`}>{data_types_string}</a>
         </AssaySpecificItem>
       )}
       {origin_sample.organ && origin_sample.organ.length > 0 && (
