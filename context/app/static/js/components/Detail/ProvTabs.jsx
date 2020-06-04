@@ -98,7 +98,8 @@ function ProvTabs(props) {
             <TabPanel value={open} className={classes.tabPanels} boxClasses={classes.tabPanelBoxes} index={0} pad={1}>
               <ProvTable
                 provData={provData}
-                assayMetadata={assayMetadata}
+                uuid={uuid}
+                entity_type={entity_type}
                 typesToSplit={['Donor', 'Sample', 'Dataset']}
               />
             </TabPanel>
