@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ProvTabs from './Detail/ProvTabs';
 import Summary from './Detail/Summary';
-import Attribution from './Detail/Attribution';
+import Attribution from './Detail/Attribution/Attribution';
 import Protocol from './Detail/Protocol';
 import MetadataTable from './Detail/MetadataTable';
 import FileTable from './Detail/FileTable';

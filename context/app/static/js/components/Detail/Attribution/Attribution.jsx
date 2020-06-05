@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import SectionHeader from './SectionHeader';
-import SectionContainer from './SectionContainer';
-import SectionItem from './SectionItem';
+import SectionHeader from '../SectionHeader';
+import SectionContainer from '../SectionContainer';
+import SectionItem from '../SectionItem';
 
 const StyledTypography = styled(Typography)`
   margin: 2px 0px 2px 0px;
