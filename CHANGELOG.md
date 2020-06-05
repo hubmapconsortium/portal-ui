@@ -1,3 +1,8 @@
+## v0.0.24 - 2020-06-05
+
+- Integrate CCF-EUI.
+- Add clean-webpack-plugin to webpack common config.
+
 ## v0.0.23 - 2020-06-04
 
 - Move dag provenance to provenance tabs.
