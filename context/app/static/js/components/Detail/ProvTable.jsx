@@ -5,13 +5,13 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import Button from '@material-ui/core/Button';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 
 function ListItemLink(props) {
   // eslint-disable-next-line react/jsx-props-no-spreading
-  return <ListItem button component="a" {...props} />;
+  return <Button component="a" variant="text" {...props} />;
 }
 const CenteredListSubheader = styled(ListSubheader)`
   text-align: center;
@@ -21,6 +21,11 @@ const FlexContainer = styled.div`
   display: flex;
   flex-grow: 1;
   justify-content: space-around;
+`;
+
+const ListColumn = styled(List)`
+  display: flex;
+  flex-direction: column;
 `;
 
 function DerivedLink(props) {
@@ -47,7 +52,7 @@ function ProvTable(props) {
     <FlexContainer>
       {types.map((type, i) => (
         <React.Fragment key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
-          <List
+          <ListColumn
             /* eslint-disable prettier/prettier */
             subheader={(
               <CenteredListSubheader component="div" color="primary">
@@ -73,7 +78,7 @@ function ProvTable(props) {
             {typesToSplit[i] === entity_type && entity_type !== 'Donor' && (
               <DerivedLink uuid={uuid} type={typesToSplit[i]} />
             )}
-          </List>
+          </ListColumn>
           {i < types.length - 1 && <Divider orientation="vertical" flexItem />}
         </React.Fragment>
       ))}
