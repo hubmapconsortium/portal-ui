@@ -1,1 +1,0 @@
-- Make metadata table description its own column.

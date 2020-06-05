@@ -1,3 +1,15 @@
+## v0.0.23 - 2020-06-04
+
+- Move dag provenance to provenance tabs.
+- Add donor metadata units where applicable.
+- Add racial group to donor metadata.
+- Fix prov graph width.
+- Make metadata table description its own column.
+- Add prettier formatter.
+- Add webpack dev server.
+- Split webpack config into separate files for each env.
+- Add webpack bundle analyzer/visualizer.
+
 ## v0.0.22 - 2020-06-02
 
 - Make short circuit length checks evaluate to booleans.

@@ -1,4 +1,6 @@
 const { resolve } = require('path');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const config = {
   entry: './app/static/js/index.jsx',
@@ -75,6 +77,7 @@ const config = {
       },
     ],
   },
+  plugins: [new CleanWebpackPlugin()],
 };
 
 module.exports = config;

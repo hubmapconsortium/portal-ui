@@ -42,13 +42,8 @@ export default function Header() {
           ))}
           <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
             <Button>
-              <a
-                href="https://hubmapconsortium.github.io/ccf-ui/home"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="navLink"
-              >
-                CCF-UI
+              <a href="/ccf-eui" target="_blank" rel="noopener noreferrer" className="navLink">
+                CCF
               </a>
             </Button>
           </Tooltip>
