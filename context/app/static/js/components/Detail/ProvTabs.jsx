@@ -2,7 +2,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { useTheme } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -57,8 +56,6 @@ function ProvTabs(props) {
   const { uuid, assayMetadata, entityEndpoint } = props;
   const { metadata, entity_type } = assayMetadata;
 
-  const theme = useTheme();
-
   const [open, setOpen] = React.useState(0);
   const handleChange = (event, newValue) => {
     setOpen(newValue);
@@ -96,7 +93,7 @@ function ProvTabs(props) {
           value={open}
           onChange={handleChange}
           aria-label="Detail View Tabs"
-          TabIndicatorProps={{ style: { backgroundColor: theme.palette.success.main } }}
+          TabIndicatorProps={{ style: { backgroundColor: '#9CB965' } }}
         >
           <StyledTab label="Table" id="tab-0" aria-controls="tabpanel-0" />
           <StyledTab label="Graph" id="tab-1" aria-controls="tabpanel-1" />
