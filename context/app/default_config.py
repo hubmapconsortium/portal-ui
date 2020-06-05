@@ -14,7 +14,8 @@ class DefaultConfig(object):
 
     GROUP_ID = 'should-be-overridden'
 
-    ELASTICSEARCH_ENDPOINT = 'should-be-overridden'
+    CCF_ELASTICSEARCH_ENDPOINT = 'should-be-overridden'
+    PORTAL_ELASTICSEARCH_ENDPOINT = 'should-be-overridden'
     ASSETS_ENDPOINT = 'should-be-overridden'
 
     SECRET_KEY = 'should-be-overridden'

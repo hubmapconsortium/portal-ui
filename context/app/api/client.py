@@ -102,7 +102,7 @@ class ApiClient():
 
         query = {'query': {'ids': {'values': [uuid]}}}
         response_json = self._post_check_errors(
-            current_app.config['ELASTICSEARCH_ENDPOINT'],
+            current_app.config['PORTAL_ELASTICSEARCH_ENDPOINT'],
             json=query)
 
         hits = response_json['hits']['hits']
