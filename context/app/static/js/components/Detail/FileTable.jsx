@@ -47,7 +47,7 @@ function FileTable(props) {
             </TableHead>
             <TableBody>
               {rows.map((row) => (
-                <TableRow>
+                <TableRow key={row.rel_path}>
                   <TableCell>
                     <StyledLink
                       href={`${assetsEndpoint}/${uuid}/${row.rel_path}?token=${token}`}
