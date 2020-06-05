@@ -1,0 +1,2 @@
+- Refactor and fix minor issues in detail components.
+- Install and setup jest and react-testing-library.
