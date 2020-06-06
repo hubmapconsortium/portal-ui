@@ -1,23 +1,10 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import NoticeAlert from '../NoticeAlert';
-import TableOfContents from './TableOfContents';
-import { capitalizeString } from '../../helpers/functions';
-
-const FlexColumn = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  width: calc(100% - 150px);
-`;
-
-const FlexRow = styled.div`
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-`;
+import NoticeAlert from '../../NoticeAlert';
+import TableOfContents from '../TableOfContents';
+import { FlexColumn, FlexRow } from './style';
+import { capitalizeString } from '../../../helpers/functions';
 
 function getSectionFromString(s) {
   if (s === 'metadataTable') {
