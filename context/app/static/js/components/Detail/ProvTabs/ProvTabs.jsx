@@ -1,56 +1,14 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import Box from '@material-ui/core/Box';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import ProvGraph from './ProvGraph';
-import ProvTable from './ProvTable';
-import DagProv from './DagProv';
-import SectionHeader from './SectionHeader';
-import SectionContainer from './SectionContainer';
-import { readCookie } from '../../helpers/functions';
-
-function TabPanel(props) {
-  const { children, value, index, className, boxClasses, pad } = props;
-  return (
-    <Typography
-      className={className}
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
-    >
-      {value === index && (
-        <PaddedBox $pad={pad} className={boxClasses}>
-          {children}
-        </PaddedBox>
-      )}
-    </Typography>
-  );
-}
-
-const StyledTabPanel = styled(TabPanel)`
-  width: 100%;
-`;
-
-const StyledTab = styled(Tab)`
-  min-height: 72px;
-`;
-
-const StyledTabs = styled(Tabs)`
-  box-shadow: '0px 1px 10px rgba(0, 0, 0, 0.2), 0px 4px 5px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.14)';
-  background-color: ${(props) => props.theme.palette.primary.main};
-  color: #ffffff;
-`;
-
-const PaddedBox = styled(Box)`
-  padding: ${(props) => (props.$pad ? '30px 40px' : '0px')};
-`;
+import { StyledTab, StyledTabs, StyledTabPanel } from './style';
+import ProvGraph from '../ProvGraph';
+import ProvTable from '../ProvTable';
+import DagProv from '../DagProv';
+import SectionHeader from '../SectionHeader';
+import SectionContainer from '../SectionContainer';
+import { readCookie } from '../../../helpers/functions';
 
 function ProvTabs(props) {
   const { uuid, assayMetadata, entityEndpoint } = props;
