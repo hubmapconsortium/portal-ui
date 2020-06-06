@@ -1,32 +1,16 @@
 /* eslint-disable camelcase */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
 import Button from '@material-ui/core/Button';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
+import { CenteredListSubheader, FlexContainer, ListColumn } from './style';
 
 function ListItemLink(props) {
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <Button component="a" variant="text" {...props} />;
 }
-const CenteredListSubheader = styled(ListSubheader)`
-  text-align: center;
-`;
-
-const FlexContainer = styled.div`
-  display: flex;
-  flex-grow: 1;
-  justify-content: space-around;
-`;
-
-const ListColumn = styled(List)`
-  display: flex;
-  flex-direction: column;
-`;
 
 function DerivedLink(props) {
   const { uuid, type } = props;
