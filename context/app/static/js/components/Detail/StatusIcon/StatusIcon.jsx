@@ -1,13 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import LensIcon from '@material-ui/icons/Lens';
-
-const ColoredStatusIcon = styled(LensIcon)`
-  color: ${(props) => props.theme.palette[props.$iconColor].main};
-  font-size: 16px;
-  margin-right: 3px;
-`;
+import { ColoredStatusIcon } from './style';
 
 function getColor(status) {
   if (['NEW', 'REOPENED', 'QA', 'LOCKED', 'PROCESSING', 'HOLD'].includes(status)) {
