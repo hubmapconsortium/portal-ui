@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Home from './components/Home';
 import Search from './components/Search/Search';
-import DonorDetail from './components/DonorDetail';
-import SampleDetail from './components/SampleDetail';
-import DatasetDetail from './components/DatasetDetail';
+import Donor from './components/Detail/Donor';
+import Sample from './components/Detail/Sample';
+import Dataset from './components/Detail/Dataset';
 
 function Routes(props) {
   const { flaskData } = props;
@@ -14,7 +14,7 @@ function Routes(props) {
 
   if (urlPath.startsWith('/browse/donor/')) {
     return (
-      <DonorDetail
+      <Donor
         assayMetadata={entity}
         vitData={vitessce_conf}
         flashed_messages={flashed_messages}
@@ -24,7 +24,7 @@ function Routes(props) {
   }
   if (urlPath.startsWith('/browse/sample/')) {
     return (
-      <SampleDetail
+      <Sample
         assayMetadata={entity}
         vitData={vitessce_conf}
         flashed_messages={flashed_messages}
@@ -35,7 +35,7 @@ function Routes(props) {
 
   if (urlPath.startsWith('/browse/dataset/')) {
     return (
-      <DatasetDetail
+      <Dataset
         assayMetadata={entity}
         vitData={vitessce_conf}
         flashed_messages={flashed_messages}
