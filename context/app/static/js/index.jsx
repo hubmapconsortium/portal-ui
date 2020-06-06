@@ -6,7 +6,7 @@ import 'typeface-inter';
 
 import theme from './theme';
 import './index.css';
-import App from './App';
+import App from './components/App';
 import Footer from './Footer';
 import Header from './Header';
 

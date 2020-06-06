@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Home from './components/Home';
-import Search from './components/Search/Search';
-import Donor from './components/Detail/Donor';
-import Sample from './components/Detail/Sample';
-import Dataset from './components/Detail/Dataset';
+import Home from './Home';
+import Search from './Search/Search';
+import Donor from './Detail/Donor';
+import Sample from './Detail/Sample';
+import Dataset from './Detail/Dataset';
 
 function Routes(props) {
   const { flaskData } = props;
