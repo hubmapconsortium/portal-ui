@@ -1,40 +1,8 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
-import Link from '@material-ui/core/Link';
-import { throttle } from '../../helpers/functions';
-
-const TableContainer = styled.div`
-  margin-right: 70px;
-  width: 80px;
-`;
-
-const StickyNav = styled.nav`
-  position: sticky;
-  top 70px;
-`;
-
-const TableTitle = styled(Typography)`
-  margin-left: 7px;
-`;
-
-const StyledItemLink = styled(Link)`
-  font-size: 0.8125rem;
-  line-height: 2;
-  padding-left: 4px;
-  border-left: 3px solid transparent;
-  &:hover {
-    border-left: 3px solid #c4c4c4;
-  }
-  ${(props) =>
-    props.$isCurrentSection &&
-    css`
-      color: ${props.theme.palette.info.main};
-      border-left: 3px solid #c4c4c4;
-    `};
-`;
+import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
+import { throttle } from '../../../helpers/functions';
 
 function ItemLink(props) {
   const { item, currentSection, handleClick } = props;
