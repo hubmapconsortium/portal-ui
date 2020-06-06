@@ -128,6 +128,10 @@ function ProvTabs(props) {
 
 ProvTabs.propTypes = {
   uuid: PropTypes.string.isRequired,
+  assayMetadata: PropTypes.objectOf(
+    PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string, PropTypes.number]),
+  ).isRequired,
+  entityEndpoint: PropTypes.string.isRequired,
 };
 
 export default ProvTabs;
