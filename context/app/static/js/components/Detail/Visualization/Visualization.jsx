@@ -1,8 +1,8 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import { Vitessce } from 'vitessce';
-import SectionHeader from './SectionHeader';
-import SectionContainer from './SectionContainer';
+import SectionHeader from '../SectionHeader';
+import SectionContainer from '../SectionContainer';
 import 'vitessce/build-lib/es/production/static/css/index.css';
 
 function Visualization(props) {
