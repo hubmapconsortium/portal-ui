@@ -5,9 +5,9 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
-import HubmapLogo from './hubmap_logo.svg';
+import HubmapLogo from '../hubmap_logo.svg';
 
-import { useStyles } from './styles';
+import { useStyles } from '../styles';
 
 export default function Header() {
   const classes = useStyles();
