@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import ProvTabs from './Detail/ProvTabs';
-import Summary from './Detail/Summary';
-import Attribution from './Detail/Attribution';
-import Protocol from './Detail/Protocol';
-import Metadata from './Detail/Metadata';
-import DetailLayout from './Detail/DetailLayout';
+import ProvTabs from '../ProvTabs';
+import Summary from '../Summary';
+import Attribution from '../Attribution';
+import Protocol from '../Protocol';
+import Metadata from '../Metadata';
+import DetailLayout from '../DetailLayout';
 
 function getDonorMetadata(metadata) {
   const donorMetadata = metadata.reduce((acc, d) => {
