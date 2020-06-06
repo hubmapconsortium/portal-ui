@@ -1,24 +1,15 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import ProvTabs from './Detail/ProvTabs';
-import Summary from './Detail/Summary';
-import Attribution from './Detail/Attribution';
-import Protocol from './Detail/Protocol';
-import MetadataTable from './Detail/MetadataTable';
-import FileTable from './Detail/FileTable';
-import Visualization from './Detail/Visualization';
-import DetailLayout from './Detail/DetailLayout';
-
-const StyledDivider = styled(Divider)`
-  margin-left: 5px;
-  margin-right: 5px;
-  height: 15px;
-  background-color: #444a65;
-  align-self: center;
-`;
+import { StyledDivider } from './style';
+import ProvTabs from '../ProvTabs';
+import Summary from '../Summary';
+import Attribution from '../Attribution';
+import Protocol from '../Protocol';
+import MetadataTable from '../MetadataTable';
+import FileTable from '../FileTable';
+import Visualization from '../Visualization';
+import DetailLayout from '../DetailLayout';
 
 function AssaySpecificItem(props) {
   const { children } = props;
