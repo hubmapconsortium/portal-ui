@@ -1,13 +1,13 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import ProvTabs from './Detail/ProvTabs';
-import Summary from './Detail/Summary';
-import Attribution from './Detail/Attribution';
-import Protocol from './Detail/Protocol';
-import Metadata from './Detail/Metadata';
-import SummaryItem from './Detail/SummaryItem';
-import DetailLayout from './Detail/DetailLayout';
+import ProvTabs from '../ProvTabs';
+import Summary from '../Summary';
+import Attribution from '../Attribution';
+import Protocol from '../Protocol';
+import Metadata from '../Metadata';
+import SummaryItem from '../SummaryItem';
+import DetailLayout from '../DetailLayout';
 
 function SummaryData(props) {
   const { organ, origin_sample, specimen_type } = props;
