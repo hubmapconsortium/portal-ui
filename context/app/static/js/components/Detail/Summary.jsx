@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -100,5 +101,22 @@ function Summary(props) {
     </SectionContainer>
   );
 }
+
+Summary.propTypes = {
+  display_doi: PropTypes.string.isRequired,
+  entity_type: PropTypes.string.isRequired,
+  create_timestamp: PropTypes.number.isRequired,
+  last_modified_timestamp: PropTypes.number.isRequired,
+  uuid: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  status: PropTypes.string,
+  children: PropTypes.element,
+};
+
+Summary.defaultProps = {
+  description: '',
+  status: '',
+  children: undefined,
+};
 
 export default Summary;
