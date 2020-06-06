@@ -3,7 +3,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import ProvTabs from './Detail/ProvTabs';
 import Summary from './Detail/Summary';
-import Attribution from './Detail/Attribution/Attribution';
+import Attribution from './Detail/Attribution';
 import Protocol from './Detail/Protocol';
 import Metadata from './Detail/Metadata';
 import SummaryItem from './Detail/SummaryItem';
