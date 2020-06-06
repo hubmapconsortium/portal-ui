@@ -1,15 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-
-const ListKey = styled.span`
-  font-weight: bold;
-  margin-right: 4px;
-`;
+import { ListKey } from './style';
 
 function DagProv(props) {
   const { dagListData } = props;
