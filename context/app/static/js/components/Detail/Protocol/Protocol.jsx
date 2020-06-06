@@ -1,26 +1,11 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import SectionHeader from './SectionHeader';
-import SectionItem from './SectionItem';
-import SectionContainer from './SectionContainer';
-
-const StyledTypography = styled(Typography)`
-  margin: 2px 0px 2px 0px;
-`;
-
-const StyledLink = styled(Link)`
-  color: ${(props) => props.theme.palette.info.main};
-`;
-
-const StyledPaper = styled(Paper)`
-  padding: 20px 40px 20px 40px;
-`;
+import { StyledTypography, StyledLink, StyledPaper } from './style';
+import SectionHeader from '../SectionHeader';
+import SectionItem from '../SectionItem';
+import SectionContainer from '../SectionContainer';
 
 function ProtocolLink(props) {
   const { protocolUrl: urlMinusProtocol } = props;
