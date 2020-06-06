@@ -2,21 +2,10 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import SectionHeader from './SectionHeader';
-import SectionItem from './SectionItem';
-import SectionContainer from './SectionContainer';
-
-const StyledTypography = styled(Typography)`
-  margin: 2px 0px 2px 0px;
-`;
-
-const FlexPaper = styled(Paper)`
-  display: flex;
-  padding: 30px 40px 30px 40px;
-`;
+import { StyledTypography, FlexPaper } from './style';
+import SectionHeader from '../SectionHeader';
+import SectionItem from '../SectionItem';
+import SectionContainer from '../SectionContainer';
 
 function getDonorMetadataValue(metadata, key) {
   return metadata && Object.prototype.hasOwnProperty.call(metadata, key)
