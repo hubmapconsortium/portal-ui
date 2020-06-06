@@ -1,25 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Link from '@material-ui/core/Link';
-import SectionHeader from './SectionHeader';
-import SectionContainer from './SectionContainer';
-import { readCookie } from '../../helpers/functions';
-
-const StyledTableContainer = styled(TableContainer)`
-  max-height: 600px;
-`;
-
-const StyledLink = styled(Link)`
-  color: ${(props) => props.theme.palette.info.main};
-`;
+import { StyledTableContainer, StyledLink } from './style';
+import SectionHeader from '../SectionHeader';
+import SectionContainer from '../SectionContainer';
+import { readCookie } from '../../../helpers/functions';
 
 const columns = [
   { id: 'rel_path', label: 'File' },
