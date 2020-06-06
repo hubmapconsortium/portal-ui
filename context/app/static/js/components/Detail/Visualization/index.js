@@ -1,3 +1,3 @@
 import Visualization from './Visualization';
 
-export { Visualization };
+export default Visualization;
