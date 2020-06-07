@@ -12,6 +12,7 @@ const generateClassName = createGenerateClassName({
 
 function Providers(props) {
   const { children } = props;
+  // injectFirst ensures styled-components takes priority over mui for styling
   return (
     <StylesProvider generateClassName={generateClassName} injectFirst>
       <MuiThemeProvider theme={theme}>

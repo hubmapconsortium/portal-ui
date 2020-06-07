@@ -19,8 +19,7 @@ function ProvTabs(props) {
     setOpen(newValue);
   };
 
-  const shouldDisplayDag =
-    entity_type === 'Dataset' && metadata && Object.prototype.hasOwnProperty.call(metadata, 'dag_provenance_list');
+  const shouldDisplayDag = entity_type === 'Dataset' && metadata && 'dag_provenance_list' in metadata;
 
   const [provData, setProvData] = React.useState(null);
   React.useEffect(() => {
@@ -86,9 +85,8 @@ function ProvTabs(props) {
 
 ProvTabs.propTypes = {
   uuid: PropTypes.string.isRequired,
-  assayMetadata: PropTypes.objectOf(
-    PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string, PropTypes.number]),
-  ).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  assayMetadata: PropTypes.object.isRequired,
   entityEndpoint: PropTypes.string.isRequired,
 };
 

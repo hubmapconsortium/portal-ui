@@ -8,9 +8,7 @@ import SectionItem from '../SectionItem';
 import SectionContainer from '../SectionContainer';
 
 function getDonorMetadataValue(metadata, key) {
-  return metadata && Object.prototype.hasOwnProperty.call(metadata, key)
-    ? `${metadata[key].value} ${metadata[key].units}`
-    : '';
+  return metadata && key in metadata ? `${metadata[key].value} ${metadata[key].units}` : '';
 }
 
 function MetadataItem(props) {

@@ -30,7 +30,7 @@ function DagProv(props) {
 }
 DagProv.propTypes = {
   dagListData: PropTypes.arrayOf(
-    PropTypes.shape({
+    PropTypes.exact({
       hash: PropTypes.string,
       name: PropTypes.string,
       origin: PropTypes.string,
