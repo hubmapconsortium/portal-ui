@@ -61,8 +61,7 @@ function ProvTabs(props) {
     setOpen(newValue);
   };
 
-  const shouldDisplayDag =
-    entity_type === 'Dataset' && metadata && Object.prototype.hasOwnProperty.call(metadata, 'dag_provenance_list');
+  const shouldDisplayDag = entity_type === 'Dataset' && metadata && 'dag_provenance_list' in metadata;
 
   const [provData, setProvData] = React.useState(null);
   React.useEffect(() => {

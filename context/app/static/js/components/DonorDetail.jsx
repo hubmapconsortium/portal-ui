@@ -41,10 +41,7 @@ function DonorDetail(props) {
     metadata: true,
   };
 
-  const donorMetadata =
-    metadata && Object.prototype.hasOwnProperty.call(metadata, 'organ_donor_data')
-      ? getDonorMetadata(metadata.organ_donor_data)
-      : {};
+  const donorMetadata = metadata && 'organ_donor_data' in metadata ? getDonorMetadata(metadata.organ_donor_data) : {};
 
   return (
     <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
