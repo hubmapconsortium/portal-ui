@@ -53,13 +53,11 @@ function ProvTable(props) {
       {types.map((type, i) => (
         <React.Fragment key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
           <ListColumn
-            /* eslint-disable prettier/prettier */
-            subheader={(
+            subheader={
               <CenteredListSubheader component="div" color="primary">
                 {typesToSplit[i]}
               </CenteredListSubheader>
-            )}
-            /* eslint-enable prettier/prettier */
+            }
           >
             <Divider />
             {type && type.length ? (
