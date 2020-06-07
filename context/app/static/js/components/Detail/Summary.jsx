@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -41,8 +42,8 @@ const StyledTypography = styled(Typography)`
   margin-top: ${(props) => (props.mt ? '5px' : '0px')};
 `;
 
-const StyledLink = styled(Link)`
-  color: #3781d1;
+const JsonLink = styled(Link)`
+  color: ${(props) => props.theme.palette.info.main};
 `;
 
 const StyledPaper = styled(Paper)`
@@ -52,7 +53,6 @@ const StyledPaper = styled(Paper)`
 `;
 
 function Summary(props) {
-  const { assayMetadata, children } = props;
   const {
     display_doi,
     entity_type,
@@ -61,7 +61,8 @@ function Summary(props) {
     uuid,
     description,
     status,
-  } = assayMetadata;
+    children,
+  } = props;
 
   return (
     <SectionContainer id="summary">
@@ -73,18 +74,18 @@ function Summary(props) {
           <SectionHeader variant="h1" component="h2">
             {display_doi}
           </SectionHeader>
-          {entity_type !== 'Donor' ? <FlexContainer>{children}</FlexContainer> : null}
+          {entity_type !== 'Donor' && <FlexContainer>{children}</FlexContainer>}
         </FlexColumn>
         <FlexBottomRight>
-          {entity_type === 'Dataset' && status && status.length ? (
+          {entity_type === 'Dataset' && status && status.length > 0 && (
             <FlexCenterAlign>
               <StatusIcon status={status} />
               <SummaryItem>{status}</SummaryItem>
             </FlexCenterAlign>
-          ) : null}
-          <StyledLink href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} variant="body1" target="_blank" ml={1}>
+          )}
+          <JsonLink href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} variant="body1" target="_blank" ml={1}>
             View JSON
-          </StyledLink>
+          </JsonLink>
         </FlexBottomRight>
       </FlexContainer>
 
@@ -100,5 +101,22 @@ function Summary(props) {
     </SectionContainer>
   );
 }
+
+Summary.propTypes = {
+  display_doi: PropTypes.string.isRequired,
+  entity_type: PropTypes.string.isRequired,
+  create_timestamp: PropTypes.number.isRequired,
+  last_modified_timestamp: PropTypes.number.isRequired,
+  uuid: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  status: PropTypes.string,
+  children: PropTypes.element,
+};
+
+Summary.defaultProps = {
+  description: '',
+  status: '',
+  children: undefined,
+};
 
 export default Summary;

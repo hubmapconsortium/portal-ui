@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -17,7 +18,7 @@ const StyledTableContainer = styled(TableContainer)`
 `;
 
 const StyledLink = styled(Link)`
-  color: #3781d1;
+  color: ${(props) => props.theme.palette.info.main};
 `;
 
 const columns = [
@@ -46,7 +47,7 @@ function FileTable(props) {
             </TableHead>
             <TableBody>
               {rows.map((row) => (
-                <TableRow>
+                <TableRow key={row.rel_path}>
                   <TableCell>
                     <StyledLink
                       href={`${assetsEndpoint}/${uuid}/${row.rel_path}?token=${token}`}
@@ -69,5 +70,17 @@ function FileTable(props) {
     </SectionContainer>
   );
 }
+
+FileTable.propTypes = {
+  files: PropTypes.arrayOf(
+    PropTypes.shape({
+      rel_path: PropTypes.string,
+      size: PropTypes.number,
+      type: PropTypes.string,
+    }),
+  ).isRequired,
+  assetsEndpoint: PropTypes.string.isRequired,
+  uuid: PropTypes.string.isRequired,
+};
 
 export default FileTable;

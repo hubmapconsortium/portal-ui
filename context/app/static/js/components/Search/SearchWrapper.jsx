@@ -127,7 +127,7 @@ function SearchWrapper(props) {
     const style = hiddenFilterIds.indexOf(def.props.id) === -1 ? {} : { display: 'None' };
     /* eslint-disable react/jsx-props-no-spreading */
     return (
-      <div style={style}>
+      <div key={def.props.id} style={style}>
         <Filter {...def.props} />
       </div>
     );

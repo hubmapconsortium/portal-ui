@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ProvTabs from './Detail/ProvTabs';
 import Summary from './Detail/Summary';
-import Attribution from './Detail/Attribution';
+import Attribution from './Detail/Attribution/Attribution';
 import Protocol from './Detail/Protocol';
 import MetadataTable from './Detail/MetadataTable';
 import FileTable from './Detail/FileTable';
@@ -56,24 +56,47 @@ function DatasetDetail(props) {
     uuid,
     data_types,
     origin_sample,
+    group_name,
+    created_by_user_displayname,
+    created_by_user_email,
+    display_doi,
+    entity_type,
+    create_timestamp,
+    last_modified_timestamp,
+    description,
+    status,
   } = assayMetadata;
 
   const shouldDisplaySection = {
     vizualization: 'name' in vitData,
-    protocols: portal_uploaded_protocol_files || protocol_url,
-    metadataTable: metadata && metadata.metadata,
+    protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
+    metadataTable: metadata && 'metadata' in metadata,
     files: files && files.length > 0,
   };
 
   return (
     <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
-      <Summary assayMetadata={assayMetadata}>
+      <Summary
+        uuid={uuid}
+        entity_type={entity_type}
+        display_doi={display_doi}
+        create_timestamp={create_timestamp}
+        last_modified_timestamp={last_modified_timestamp}
+        description={description}
+        status={status}
+      >
         <SummaryData data_types={data_types} origin_sample={origin_sample} />
       </Summary>
       {shouldDisplaySection.vizualization && <Visualization vitData={vitData} />}
-      <Attribution assayMetadata={assayMetadata} />
+      <Attribution
+        group_name={group_name}
+        created_by_user_displayname={created_by_user_displayname}
+        created_by_user_email={created_by_user_email}
+      />
       <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
-      {shouldDisplaySection.protocols && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplaySection.protocols && (
+        <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
+      )}
       {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} />}
       {shouldDisplaySection.files && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}
     </DetailLayout>

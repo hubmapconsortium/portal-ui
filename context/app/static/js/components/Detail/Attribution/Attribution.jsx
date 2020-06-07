@@ -1,18 +1,19 @@
 /* eslint-disable camelcase */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import SectionHeader from './SectionHeader';
-import SectionContainer from './SectionContainer';
-import SectionItem from './SectionItem';
+import SectionHeader from '../SectionHeader';
+import SectionContainer from '../SectionContainer';
+import SectionItem from '../SectionItem';
 
 const StyledTypography = styled(Typography)`
   margin: 2px 0px 2px 0px;
 `;
 const StyledLink = styled(Link)`
-  color: #3781d1;
+  color: ${(props) => props.theme.palette.info.main};
 `;
 
 const FlexPaper = styled(Paper)`
@@ -21,8 +22,7 @@ const FlexPaper = styled(Paper)`
 `;
 
 function Attribution(props) {
-  const { assayMetadata } = props;
-  const { group_name, created_by_user_displayname, created_by_user_email } = assayMetadata;
+  const { group_name, created_by_user_displayname, created_by_user_email } = props;
 
   return (
     <SectionContainer id="attribution">
@@ -42,4 +42,10 @@ function Attribution(props) {
   );
 }
 
-export default Attribution;
+Attribution.propTypes = {
+  group_name: PropTypes.string.isRequired,
+  created_by_user_displayname: PropTypes.string.isRequired,
+  created_by_user_email: PropTypes.string.isRequired,
+};
+
+export default React.memo(Attribution);

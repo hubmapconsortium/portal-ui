@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable camelcase */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
@@ -18,9 +19,7 @@ const FlexPaper = styled(Paper)`
 `;
 
 function getDonorMetadataValue(metadata, key) {
-  return metadata && Object.prototype.hasOwnProperty.call(metadata, key)
-    ? `${metadata[key].value} ${metadata[key].units}`
-    : '';
+  return metadata && key in metadata ? `${metadata[key].value} ${metadata[key].units}` : '';
 }
 
 function MetadataItem(props) {
@@ -66,15 +65,19 @@ function SampleItems(props) {
 }
 
 function Metadata(props) {
-  const { entityType } = props;
+  const { entity_type } = props;
   return (
     <SectionContainer id="metadata">
       <SectionHeader variant="h3" component="h2">
         Metadata
       </SectionHeader>
-      <FlexPaper>{entityType === 'Donor' ? <DonorItems {...props} /> : <SampleItems {...props} />}</FlexPaper>
+      <FlexPaper>{entity_type === 'Donor' ? <DonorItems {...props} /> : <SampleItems {...props} />}</FlexPaper>
     </SectionContainer>
   );
 }
+
+Metadata.propTypes = {
+  entity_type: PropTypes.string.isRequired,
+};
 
 export default Metadata;

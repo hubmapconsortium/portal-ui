@@ -2,7 +2,7 @@
 import React from 'react';
 import ProvTabs from './Detail/ProvTabs';
 import Summary from './Detail/Summary';
-import Attribution from './Detail/Attribution';
+import Attribution from './Detail/Attribution/Attribution';
 import Protocol from './Detail/Protocol';
 import Metadata from './Detail/Metadata';
 import DetailLayout from './Detail/DetailLayout';
@@ -21,24 +21,48 @@ function getDonorMetadata(metadata) {
 
 function DonorDetail(props) {
   const { assayMetadata, flashed_messages, entityEndpoint } = props;
-  const { uuid, protocol_url, portal_uploaded_protocol_files, metadata } = assayMetadata;
+  const {
+    uuid,
+    protocol_url,
+    portal_uploaded_protocol_files,
+    metadata,
+    group_name,
+    created_by_user_displayname,
+    created_by_user_email,
+    display_doi,
+    entity_type,
+    create_timestamp,
+    last_modified_timestamp,
+    description,
+  } = assayMetadata;
 
   const shouldDisplaySection = {
-    protocols: portal_uploaded_protocol_files || protocol_url,
+    protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
     metadata: true,
   };
 
-  /* eslint-disable no-prototype-builtins */
-  const donorMetadata =
-    metadata && metadata.hasOwnProperty('organ_donor_data') ? getDonorMetadata(metadata.organ_donor_data) : {};
-  /* eslint-enable no-prototype-builtins */
+  const donorMetadata = metadata && 'organ_donor_data' in metadata ? getDonorMetadata(metadata.organ_donor_data) : {};
+
   return (
     <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
-      <Summary assayMetadata={assayMetadata} />
-      <Metadata entityType={assayMetadata.entity_type} metadata={donorMetadata} />
-      <Attribution assayMetadata={assayMetadata} />
+      <Summary
+        uuid={uuid}
+        entity_type={entity_type}
+        display_doi={display_doi}
+        create_timestamp={create_timestamp}
+        last_modified_timestamp={last_modified_timestamp}
+        description={description}
+      />
+      <Metadata entity_type={entity_type} metadata={donorMetadata} />
+      <Attribution
+        group_name={group_name}
+        created_by_user_displayname={created_by_user_displayname}
+        created_by_user_email={created_by_user_email}
+      />
       <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
-      {shouldDisplaySection.protocols && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplaySection.protocols && (
+        <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
+      )}
     </DetailLayout>
   );
 }

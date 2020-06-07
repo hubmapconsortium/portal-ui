@@ -3,7 +3,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import ProvTabs from './Detail/ProvTabs';
 import Summary from './Detail/Summary';
-import Attribution from './Detail/Attribution';
+import Attribution from './Detail/Attribution/Attribution';
 import Protocol from './Detail/Protocol';
 import Metadata from './Detail/Metadata';
 import SummaryItem from './Detail/SummaryItem';
@@ -24,22 +24,50 @@ function SummaryData(props) {
 
 function SampleDetail(props) {
   const { assayMetadata, flashed_messages, entityEndpoint } = props;
-  const { uuid, protocol_url, portal_uploaded_protocol_files, organ, specimen_type, origin_sample } = assayMetadata;
+  const {
+    uuid,
+    protocol_url,
+    portal_uploaded_protocol_files,
+    organ,
+    specimen_type,
+    origin_sample,
+    group_name,
+    created_by_user_displayname,
+    created_by_user_email,
+    display_doi,
+    entity_type,
+    create_timestamp,
+    last_modified_timestamp,
+    description,
+  } = assayMetadata;
 
   const shouldDisplaySection = {
-    protocols: portal_uploaded_protocol_files || protocol_url,
+    protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
     metadata: true,
   };
 
   return (
     <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
-      <Summary assayMetadata={assayMetadata}>
+      <Summary
+        uuid={uuid}
+        entity_type={entity_type}
+        display_doi={display_doi}
+        create_timestamp={create_timestamp}
+        last_modified_timestamp={last_modified_timestamp}
+        description={description}
+      >
         <SummaryData organ={organ} specimen_type={specimen_type} origin_sample={origin_sample} />
       </Summary>
-      <Metadata organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
-      <Attribution assayMetadata={assayMetadata} />
+      <Metadata entity_type={entity_type} organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
+      <Attribution
+        group_name={group_name}
+        created_by_user_displayname={created_by_user_displayname}
+        created_by_user_email={created_by_user_email}
+      />
       <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
-      {shouldDisplaySection.protocols && <Protocol assayMetadata={assayMetadata} />}
+      {shouldDisplaySection.protocols && (
+        <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
+      )}
     </DetailLayout>
   );
 }

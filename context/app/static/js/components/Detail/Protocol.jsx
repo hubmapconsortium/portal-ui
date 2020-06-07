@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -14,7 +15,7 @@ const StyledTypography = styled(Typography)`
 `;
 
 const StyledLink = styled(Link)`
-  color: #3781d1;
+  color: ${(props) => props.theme.palette.info.main};
 `;
 
 const StyledPaper = styled(Paper)`
@@ -39,8 +40,8 @@ function ProtocolLink(props) {
 }
 
 function Protocol(props) {
-  const { assayMetadata } = props;
-  const { protocol_url, portal_uploaded_protocol_files } = assayMetadata;
+  const { protocol_url, portal_uploaded_protocol_files } = props;
+
   return (
     <SectionContainer id="protocols">
       <SectionHeader variant="h3" component="h2">
@@ -64,4 +65,14 @@ function Protocol(props) {
   );
 }
 
-export default Protocol;
+Protocol.propTypes = {
+  protocol_url: PropTypes.string,
+  portal_uploaded_protocol_files: PropTypes.arrayOf(PropTypes.object),
+};
+
+Protocol.defaultProps = {
+  protocol_url: '',
+  portal_uploaded_protocol_files: [],
+};
+
+export default React.memo(Protocol);

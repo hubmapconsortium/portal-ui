@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import NoticeAlert from '../NoticeAlert';
 import TableOfContents from './TableOfContents';
@@ -70,5 +71,15 @@ function DetailLayout(props) {
     </FlexRow>
   );
 }
+
+DetailLayout.propTypes = {
+  shouldDisplaySection: PropTypes.objectOf(PropTypes.bool).isRequired,
+  flashed_messages: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
+  children: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.element, PropTypes.bool])).isRequired,
+};
+
+DetailLayout.defaultProps = {
+  flashed_messages: [],
+};
 
 export default DetailLayout;
