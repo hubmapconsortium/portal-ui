@@ -16,7 +16,7 @@ class DefaultConfig(object):
 
     PORTAL_INDEX_PATH = ''  # TODO: 'portal/'
     CCF_INDEX_PATH = ''  # TODO: 'search/'
-    
+
     ELASTICSEARCH_ENDPOINT = 'should-be-overridden'
     ASSETS_ENDPOINT = 'should-be-overridden'
 
