@@ -1,5 +1,4 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import 'typeface-inter';
 
 // default HuBMAP color and font theme
 const theme = createMuiTheme({
@@ -21,6 +20,9 @@ const theme = createMuiTheme({
     },
     success: {
       main: '#6C8938', // '#9BC551'
+    },
+    action: {
+      disabled: 'rgba(0,0,0, 0.38)',
     },
     type: 'light',
   },

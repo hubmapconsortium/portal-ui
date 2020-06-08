@@ -19,7 +19,7 @@ describe('portal-ui', () => {
     // Datasets
     cy.contains('Datasets');
     // CCF-UI
-    cy.contains('CCF-UI');
+    cy.contains('CCF');
     // Help
     cy.contains('Help').click();
     cy.contains('TODO: Say something helpful here!');
