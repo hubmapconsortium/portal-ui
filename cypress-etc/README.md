@@ -1,0 +1,1 @@
+There isn't a good mechanism to distinguish test-only dependencies from those necessary for the build. Cypress is pretty big, and so to speed up the build, Cypress and its tests will be in this separate directory.

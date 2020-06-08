@@ -21,7 +21,7 @@
     window.dbOptions = {
       hubmapDataService: 'search-api',
       hubmapPortalUrl: '{{ url_root }}',
-      hubmapDataUrl: '{{ config['ELASTICSEARCH_ENDPOINT'] }}',
+      hubmapDataUrl: '{{ config['ELASTICSEARCH_ENDPOINT'] + current_app.config['CCF_INDEX_PATH'] }}',
       hubmapAssetsUrl: '{{ config['ASSETS_ENDPOINT'] }}',
       hubmapToken: '{{ nexus_token }}'
     };
