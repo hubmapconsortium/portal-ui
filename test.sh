@@ -29,9 +29,6 @@ fi
 end changelog
 
 start dev-start
-if [ ! -z "$TRAVIS" ]; then
-  ./dev-start.sh || sed -i 's/TODO/FAKE/' context/instance/app.conf
-fi
 ./dev-start.sh &
 server_up 5001
 end dev-start
