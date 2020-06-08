@@ -1,0 +1,1 @@
+- Insure that changelog is written with a NL between each concatenated file.
