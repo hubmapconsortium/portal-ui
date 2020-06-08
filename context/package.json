@@ -52,8 +52,6 @@
   "license": "MIT",
   "repository": "https://github.com/hubmapconsortium/portal-ui/",
   "scripts": {
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
     "prepublish": "wget https://raw.githubusercontent.com/hubmapconsortium/prov-vis/master/src/schema.json && mv schema.json ./node_modules/@hubmap/prov-vis/es",
     "build": "webpack --progress --config build-utils/webpack.prod.js",
     "build:dev": "webpack --progress --profile --colors --config build-utils/webpack.dev.js",
