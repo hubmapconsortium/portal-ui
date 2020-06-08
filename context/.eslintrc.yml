@@ -4,6 +4,7 @@ extends:
   - plugin:react/recommended
   - airbnb
   - plugin:prettier/recommended
+  - prettier/react
 parser: "babel-eslint"
 plugins:
   - react

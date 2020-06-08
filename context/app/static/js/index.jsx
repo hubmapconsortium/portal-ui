@@ -2,12 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import 'typeface-inter';
 
 import theme from './theme';
 import './index.css';
-import App from './App';
-import Footer from './Footer';
-import Header from './Header';
+import App from './components/App';
+import Footer from './components/Footer';
+import Header from './components/Header';
 
 const urlPath = window.location.pathname;
 
