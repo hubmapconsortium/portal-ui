@@ -3,8 +3,6 @@ WORKDIR /work
 RUN apk add --no-cache python git
 COPY . .
 RUN npm install
-# TODO: Get rid of prepublish... wget the prov-vis schema shouldn't be necessary. See PR #232.
-RUN npm run prepublish
 RUN npm run build
 
 FROM tiangolo/uwsgi-nginx-flask:python3.7
