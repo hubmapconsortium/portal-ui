@@ -1,25 +1,10 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
+import { StyledTypography, StyledLink, FlexPaper } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
 import SectionItem from '../SectionItem';
-
-const StyledTypography = styled(Typography)`
-  margin: 2px 0px 2px 0px;
-`;
-const StyledLink = styled(Link)`
-  color: ${(props) => props.theme.palette.info.main};
-`;
-
-const FlexPaper = styled(Paper)`
-  display: flex;
-  padding: 30px 40px 30px 40px;
-`;
 
 function Attribution(props) {
   const { group_name, created_by_user_displayname, created_by_user_email } = props;
