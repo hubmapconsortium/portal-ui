@@ -51,6 +51,7 @@ def ccf_eui():
     return render_template(
         'pages/ccf-eui.html',
         config=current_app.config,
+        url_root=request.url_root,
         nexus_token=session['nexus_token']
     )
 
