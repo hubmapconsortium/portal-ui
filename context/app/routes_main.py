@@ -96,6 +96,7 @@ def details(type, uuid):
         template,
         type=type,
         uuid=uuid,
+        title=f'{entity["display_doi"]} | {type}',
         flask_data=core_props
     )
 
