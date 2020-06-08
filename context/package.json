@@ -2,7 +2,7 @@
   "name": "portal-ui",
   "dependencies": {
     "@hms-dbmi-bgm/react-workflow-viz": "^0.1.4",
-    "@hubmap/prov-vis": "0.0.4",
+    "@hubmap/prov-vis": "0.0.2",
     "@material-ui/core": "^4.9.4",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",
@@ -64,6 +64,7 @@
   "scripts": {
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
+    "prepublish": "wget https://raw.githubusercontent.com/hubmapconsortium/prov-vis/master/src/schema.json && mv schema.json ./node_modules/@hubmap/prov-vis/es",
     "build": "webpack --progress --config build-utils/webpack.prod.js",
     "build:dev": "webpack --progress --profile --colors --config build-utils/webpack.dev.js",
     "build:analyze": "webpack --progress --config build-utils/webpack.analyze.js",
