@@ -90,8 +90,8 @@ With a new `latest` Docker image, to redeploy either
 Javascript / React UI components:
 - [`vitessce`](https://github.com/hubmapconsortium/vitessce): Visual integration tool for exploration of spatial single-cell experiments. Built on top of [deck.gl](https://deck.gl/).
 - [`prov-vis`](https://github.com/hubmapconsortium/prov-vis): Wrapper for [`4dn-dcic/react-workflow-viz`](https://github.com/4dn-dcic/react-workflow-viz) provenance visualization.
-- [`portal-search`](https://github.com/hubmapconsortium/portal-search/): A simple, opinionated wrapper for [Searchkit](http://www.searchkit.co/) offering facetted search.
 
 Preprocessing:
 - [`portal-containers`](https://github.com/hubmapconsortium/portal-containers): Docker containers for visualization preprocessing.
 - [`airflow-dev`](https://github.com/hubmapconsortium/airflow-dev): CWL pipelines wrapping those Docker containers.
+- [`search-api`](https://github.com/hubmapconsortium/search-api/tree/master/src/elasticsearch/addl_index_transformations): The Elasticsearch index the portal uses clean up the raw Neo4J export.

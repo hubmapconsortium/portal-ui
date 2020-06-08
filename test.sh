@@ -28,16 +28,16 @@ if [ "$TRAVIS_BRANCH" != 'master' ]; then
 fi
 end changelog
 
-start quick-start
+start dev-start
 if [ ! -z "$TRAVIS" ]; then
-  ./quick-start.sh || sed -i 's/TODO/FAKE/' context/instance/app.conf
+  ./dev-start.sh || sed -i 's/TODO/FAKE/' context/instance/app.conf
 fi
-./quick-start.sh &
-server_up 5000
-end quick-start
+./dev-start.sh &
+server_up 5001
+end dev-start
 
 start flake8
-# Unit tests require dev dependencies beyond what quick-start provides.
+# Unit tests require dev dependencies beyond what dev-start provides.
 pip install -r context/requirements-dev.txt > /dev/null
 EXCLUDE=node_modules,ingest-validation-tools,search-schema
 flake8 --exclude=$EXCLUDE \
@@ -49,7 +49,7 @@ pytest -vv --ignore=context/node_modules/
 end pytest
 
 start docker
-./docker.sh 5001
-server_up 5001
+./docker.sh 5002
+server_up 5002
 cd context && npm run cypress:run && cd -
 end docker
