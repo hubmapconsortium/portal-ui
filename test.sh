@@ -30,7 +30,10 @@ end changelog
 
 start dev-start
 ./dev-start.sh &
+server_up 5000
 server_up 5001
+pkill flask
+pkill webpack
 end dev-start
 
 start flake8
@@ -46,7 +49,7 @@ pytest -vv --ignore=context/node_modules/
 end pytest
 
 start docker
-./docker.sh 5002
-server_up 5002
+./docker.sh 5000
+server_up 5000
 cd context && npm run cypress:run && cd -
 end docker
