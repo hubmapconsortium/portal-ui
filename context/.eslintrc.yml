@@ -3,6 +3,8 @@ extends:
   - eslint:recommended
   - plugin:react/recommended
   - airbnb
+  - plugin:jest-dom/recommended
+  - plugin:testing-library/recommended
   - plugin:prettier/recommended
   - prettier/react
 parser: "babel-eslint"
