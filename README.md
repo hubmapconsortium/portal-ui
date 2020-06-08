@@ -76,7 +76,8 @@ while end-to-end tests use [Cypress](https://docs.cypress.io/guides/overview/why
 ## Tag, release, and deployment
 To tag a new version for github and
 [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
-checkout a release branch, increment `VERSION`, commit, and run:
+checkout a branch with `release` in the name (to keep Travis happy),
+increment `VERSION`, commit, and run:
 ```sh
 ./push.sh
 ```
