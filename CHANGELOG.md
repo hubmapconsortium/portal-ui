@@ -13,6 +13,7 @@
 - Include DOI and type in tab title.
 - Pull latest field descriptions.
 
+
 ## v0.0.24 - 2020-06-05
 
 - Integrate CCF-EUI.
