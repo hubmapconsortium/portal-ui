@@ -14,7 +14,8 @@ blueprint = Blueprint('routes_markdown', __name__, template_folder='templates')
 
 
 def _title_from_md(md):
-    return re.search(r'^#+\s(.*)', md, re.MULTILINE)[1].strip()
+    h1_matches = re.search(r'^#+\s(.*)', md, re.MULTILINE)
+    return h1_matches[1].strip() if h1_matches else '(no title)'
 
 
 def markdown_view():
