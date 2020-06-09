@@ -1,0 +1,1 @@
+- Fix bug in our template for the CCF.
