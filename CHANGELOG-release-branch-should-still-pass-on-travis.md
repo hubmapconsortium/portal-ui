@@ -1,1 +1,0 @@
-- Release branches were failing because there were not CHANGELOG-*.md.
