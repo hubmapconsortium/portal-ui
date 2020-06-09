@@ -37,6 +37,7 @@ def to_xml(html):
         r'(<(meta|link|br|base)[^>]+)>',
         r'\1/>', html)
     for attr in ['async', 'nomodule', 'defer']:
+        # Since the targets overlap, we need to run sub multiple times.
         html = re.sub(
             r'(<script [^>]*)(' + attr + r')([^=])',
             r'\1\2="true"\3', html)
