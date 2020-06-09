@@ -1,10 +1,16 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
+import styled from 'styled-components';
 import { Vitessce } from 'vitessce';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
-import 'vitessce/build-lib/es/production/static/css/index.css';
+import 'vitessce/dist/es/production/static/css/index.css';
 
+const HEIGHT = 600;
+
+const VitessceContainer = styled.div`
+  height: ${HEIGHT}px;
+`;
 function Visualization(props) {
   const { vitData } = props;
 
@@ -14,7 +20,9 @@ function Visualization(props) {
         Visualization
       </SectionHeader>
       <Paper>
-        <Vitessce rowHeight={100} config={vitData} theme="light" />
+        <VitessceContainer>
+          <Vitessce height={HEIGHT} config={vitData} theme="light" />
+        </VitessceContainer>
       </Paper>
     </SectionContainer>
   );

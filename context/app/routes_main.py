@@ -1,5 +1,6 @@
 from pathlib import Path
 from os import environ
+from os.path import dirname
 
 from flask import (Blueprint, render_template, abort, current_app,
                    session, flash, get_flashed_messages, request,
@@ -128,5 +129,27 @@ def search():
         'pages/base_react.html',
         title=title,
         types=types,
+        flask_data=core_props
+    )
+
+@blueprint.route('/showcase/<name>')
+def showcase_view(name):
+    with open(dirname(__file__) + '/showcase/' + name + '.yaml') as yaml_file:
+        showcase = load_yaml(yaml_file)
+    title = showcase['title']
+    vitessce_conf = showcase['vitessce_conf']
+    core_props = {
+        'title': title,
+        'vitessce_conf': vitessce_conf,
+        'entity': {
+            'description': showcase['description'],
+            'group_name': showcase['group_name'],
+            'created_by_user_displayname': showcase['created_by_user_displayname'],
+            'created_by_user_email': showcase['created_by_user_email'],
+        },
+    }
+    return render_template(
+        'pages/base_react.html',
+        title='showcase',
         flask_data=core_props
     )
