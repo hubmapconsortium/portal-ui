@@ -28,7 +28,6 @@
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.4.2",
-    "cypress": "^3.6.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.11.0",
@@ -62,8 +61,6 @@
   "license": "MIT",
   "repository": "https://github.com/hubmapconsortium/portal-ui/",
   "scripts": {
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
     "prepublish": "wget https://raw.githubusercontent.com/hubmapconsortium/prov-vis/master/src/schema.json && mv schema.json ./node_modules/@hubmap/prov-vis/es",
     "build": "webpack --progress --config build-utils/webpack.prod.js",
     "build:dev": "webpack --progress --profile --colors --config build-utils/webpack.dev.js",
