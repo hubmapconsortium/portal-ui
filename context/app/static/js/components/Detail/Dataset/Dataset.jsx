@@ -60,7 +60,7 @@ function DatasetDetail(props) {
   } = assayMetadata;
 
   const shouldDisplaySection = {
-    vizualization: 'name' in vitData,
+    visualization: 'name' in vitData,
     protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
     metadataTable: metadata && 'metadata' in metadata,
     files: files && files.length > 0,
@@ -79,7 +79,7 @@ function DatasetDetail(props) {
       >
         <SummaryData data_types={data_types} origin_sample={origin_sample} />
       </Summary>
-      {shouldDisplaySection.vizualization && <Visualization vitData={vitData} />}
+      {shouldDisplaySection.visualization && <Visualization vitData={vitData} />}
       <Attribution
         group_name={group_name}
         created_by_user_displayname={created_by_user_displayname}
