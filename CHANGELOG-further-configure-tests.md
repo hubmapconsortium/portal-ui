@@ -1,0 +1,2 @@
+- Further configure jest and react-testing-library.
+- Add mock service worker to mock responses. 
