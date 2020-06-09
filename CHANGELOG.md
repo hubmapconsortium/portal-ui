@@ -1,3 +1,8 @@
+## v0.0.25.1 - 2020-06-09
+
+- Fix bug in our template for the CCF.
+
+
 ## v0.0.25 - 2020-06-09
 
 - Add a Markdown page listing the assays, and add anchors based on the types Bill tells me we will see on Prod.
