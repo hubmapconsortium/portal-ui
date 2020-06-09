@@ -1,3 +1,19 @@
+## v0.0.25 - 2020-06-09
+
+- Add a Markdown page listing the assays, and add anchors based on the types Bill tells me we will see on Prod.
+- Pull cypress into its own space so the docker build won't require it.
+- Provide PORTAL_INDEX_PATH and CCF_INDEX_PATH, so we can hit the separated indexes, when available.
+- Overhaul react file structure.
+- Add Markdown from Peter Kant.
+- Extend prettier/react in eslint config.
+- Insure that changelog is written with a NL between each concatenated file.
+- Refactor and fix minor issues in detail components.
+- Install and setup jest and react-testing-library.
+- Release branches were failing because there were not CHANGELOG-*.md.
+- Include DOI and type in tab title.
+- Pull latest field descriptions.
+
+
 ## v0.0.24 - 2020-06-05
 
 - Integrate CCF-EUI.
