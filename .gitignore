@@ -114,3 +114,6 @@ venv.bak/
 
 # public
 context/app/static/public
+
+# scratch
+/scratch
