@@ -1,1 +1,0 @@
-- Extend prettier/react in eslint config.
