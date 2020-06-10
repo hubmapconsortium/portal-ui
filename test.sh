@@ -19,7 +19,7 @@ server_up() {
 }
 
 start changelog
-if [ "$TRAVIS_BRANCH" != 'master' ]; then
+if [ "$TRAVIS_BRANCH" != 'master' ] && [[ "$TRAVIS_BRANCH" != *'release'* ]]; then
   git remote set-branches --add origin master
   git fetch
   git diff --summary origin/master \
@@ -45,11 +45,10 @@ flake8 --exclude=$EXCLUDE \
 end flake8
 
 start pytest
-pytest -vv --ignore=context/node_modules/
+pytest
 end pytest
 
 start docker
-./docker.sh 5000
-server_up 5000
-cd context && npm run cypress:run && cd -
+./docker.sh 5001
+cypress-etc/test.sh
 end docker

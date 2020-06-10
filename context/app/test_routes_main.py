@@ -68,7 +68,8 @@ def mock_search_donor_post(path, **kwargs):
                                 # Minimal properties.
                                 'entity_type': 'Donor',
                                 'provenance_create_timestamp': '100000',
-                                'provenance_modified_timestamp': '100000'
+                                'provenance_modified_timestamp': '100000',
+                                'display_doi': 'HBM:12345'
                             }
                         }
                     ]
@@ -82,7 +83,7 @@ def mock_search_donor_post(path, **kwargs):
 
 @pytest.mark.parametrize(
     'path',
-    ['/', '/help', '/browse/donor/fake-uuid']
+    ['/', '/help', '/browse/donor/fake-uuid', '/VERSION']
 )
 def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_prov_get)
