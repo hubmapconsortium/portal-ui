@@ -150,6 +150,6 @@ def showcase_view(name):
     }
     return render_template(
         'pages/base_react.html',
-        title='showcase',
+        title='Showcase',
         flask_data=core_props
     )

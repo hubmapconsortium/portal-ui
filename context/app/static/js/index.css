@@ -1,63 +1,69 @@
 :root {
-    --foot-height: 60px;
-    --header-height: 60px;
+  --foot-height: 60px;
+  --header-height: 60px;
 }
 
 html {
-    scroll-padding-top: calc(var(--header-height) + 10px);
+  scroll-padding-top: calc(var(--header-height) + 10px);
 }
 
 body {
-    left: 20px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
+  left: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 .navLink {
-    color: #ffffff;
-    text-decoration: none;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.navLinkDropDown {
+  color: #000000;
+  text-decoration: none;
+  margin-top: 10px;
 }
 
 .navLink:hover {
-    color: #ffffff;
-    text-decoration: none;
+  color: #ffffff;
+  text-decoration: none;
 }
 
 li {
-    list-style: none;
+  list-style: none;
 }
 
 .list-header {
-    font-weight: bolder;
-    font-size: 1rem;
-    text-align: left;
+  font-weight: bolder;
+  font-size: 1rem;
+  text-align: left;
 }
 
 .expansion-header {
-    font-weight: bolder;
-    font-size: 2.6rem;
+  font-weight: bolder;
+  font-size: 2.6rem;
 }
 
-.main-content{
-    flex-grow: 1;
-    display:flex;
+.main-content {
+  flex-grow: 1;
+  display: flex;
 }
 
-#react-content{
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
+#react-content {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 .container-lg {
-    max-width: 1240px;
+  max-width: 1240px;
 }
 
 .footer {
-    height: var(--foot-height);
-    width: 100%;
-    line-height: var(--foot-height); /* Vertically center the text there */
+  height: var(--foot-height);
+  width: 100%;
+  line-height: var(--foot-height); /* Vertically center the text there */
 }
