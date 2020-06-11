@@ -14,6 +14,7 @@ const config = {
     alias: {
       'search-schema-definitions$': resolve('./search-schema/data/definitions.yaml'),
       'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
+      helpers: resolve(__dirname, '../app/static/js/helpers/'),
     },
   },
   module: {
