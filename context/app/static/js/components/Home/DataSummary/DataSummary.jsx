@@ -18,4 +18,4 @@ function DataSummary(props) {
   );
 }
 
-export default DataSummary;
+export default React.memo(DataSummary);
