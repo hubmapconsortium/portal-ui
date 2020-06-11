@@ -5,8 +5,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { StyledAppBar, HubmapLogo, Spacer, HeaderButton, Link } from './style';
-import Menu from './Menu';
-import LoginButton from './LoginButton';
+import Menu from '../Menu';
+import LoginButton from '../LoginButton';
 
 export default function Header() {
   const theme = useTheme();

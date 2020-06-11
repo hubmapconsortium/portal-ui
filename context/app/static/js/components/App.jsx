@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import Providers from './Providers';
 import Routes from './Routes';
 import Footer from './Footer';
-import Header from './Header';
+import { Header } from './Header';
 
 function App(props) {
   const { flaskData } = props;

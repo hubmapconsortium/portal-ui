@@ -8,7 +8,7 @@ import theme from './theme';
 import './index.css';
 import App from './components/App';
 import Footer from './components/Footer';
-import Header from './components/Header';
+import { Header } from './components/Header';
 
 const urlPath = window.location.pathname;
 
