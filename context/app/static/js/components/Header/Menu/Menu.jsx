@@ -25,6 +25,14 @@ function Menu() {
             <a href={`/search?entity_type[0]=${type}`}>{`${type}s`}</a>
           </MenuItem>
         ))}
+        <MenuItem>
+          <a href="/ccf-eui" target="_blank" rel="noopener noreferrer">
+            CCF
+          </a>
+        </MenuItem>
+        <MenuItem>
+          <a href="/help">Help</a>
+        </MenuItem>
       </MaterialMenu>
     </>
   );
