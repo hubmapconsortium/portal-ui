@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 const WhiteButton = styled(Button)`
   width: 136px;
   background-color: #ffffff;
+  margin-left: 10px;
 `;
 
 const Link = styled.a`
