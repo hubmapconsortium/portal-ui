@@ -1,10 +1,11 @@
 import React from 'react';
+import AppBar from '@material-ui/core/AppBar';
 import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { StyledAppBar, HubmapLogo, Spacer, HeaderButton, Link } from './style';
+import { HubmapLogo, Spacer, HeaderButton, Link } from './style';
 import Menu from '../Menu';
 import LoginButton from '../LoginButton';
 
@@ -13,7 +14,7 @@ export default function Header() {
   const dontDisplayMenu = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
-    <StyledAppBar position="sticky" elevation={0}>
+    <AppBar position="sticky" elevation={0}>
       <Container maxWidth="lg">
         <Toolbar disableGutters>
           {!dontDisplayMenu && <Menu />}
@@ -47,6 +48,6 @@ export default function Header() {
           <LoginButton isAuthenticated={isAuthenticated} />
         </Toolbar>
       </Container>
-    </StyledAppBar>
+    </AppBar>
   );
 }

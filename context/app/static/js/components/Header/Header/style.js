@@ -1,11 +1,6 @@
 import styled from 'styled-components';
-import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Logo from './hubmap_logo.svg';
-
-const StyledAppBar = styled(AppBar)`
-  margin-bottom: 16px;
-`;
 
 const HubmapLogo = styled(Logo)`
   margin-right: 10px;
@@ -25,4 +20,4 @@ const Link = styled.a`
   color: #ffffff;
 `;
 
-export { StyledAppBar, HubmapLogo, Spacer, HeaderButton, Link };
+export { HubmapLogo, Spacer, HeaderButton, Link };
