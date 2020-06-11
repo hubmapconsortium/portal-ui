@@ -42,6 +42,7 @@ export default function Header() {
               </HeaderButton>
             </>
           )}
+          {!dontDisplayMenu && <Spacer />}
           {/* eslint-disable-next-line no-undef */}
           <LoginButton isAuthenticated={isAuthenticated} />
         </Toolbar>
