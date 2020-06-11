@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
+import Container from '@material-ui/core/Container';
 import Home from './Home/Home';
 import Search from './Search/Search';
 import Donor from './Detail/Donor';
@@ -14,34 +15,40 @@ function Routes(props) {
 
   if (urlPath.startsWith('/browse/donor/')) {
     return (
-      <Donor
-        assayMetadata={entity}
-        vitData={vitessce_conf}
-        flashed_messages={flashed_messages}
-        entityEndpoint={endpoints.entityEndpoint}
-      />
+      <Container maxWidth="lg">
+        <Donor
+          assayMetadata={entity}
+          vitData={vitessce_conf}
+          flashed_messages={flashed_messages}
+          entityEndpoint={endpoints.entityEndpoint}
+        />
+      </Container>
     );
   }
   if (urlPath.startsWith('/browse/sample/')) {
     return (
-      <Sample
-        assayMetadata={entity}
-        vitData={vitessce_conf}
-        flashed_messages={flashed_messages}
-        entityEndpoint={endpoints.entityEndpoint}
-      />
+      <Container maxWidth="lg">
+        <Sample
+          assayMetadata={entity}
+          vitData={vitessce_conf}
+          flashed_messages={flashed_messages}
+          entityEndpoint={endpoints.entityEndpoint}
+        />
+      </Container>
     );
   }
 
   if (urlPath.startsWith('/browse/dataset/')) {
     return (
-      <Dataset
-        assayMetadata={entity}
-        vitData={vitessce_conf}
-        flashed_messages={flashed_messages}
-        assetsEndpoint={endpoints.assetsEndpoint}
-        entityEndpoint={endpoints.entityEndpoint}
-      />
+      <Container maxWidth="lg">
+        <Dataset
+          assayMetadata={entity}
+          vitData={vitessce_conf}
+          flashed_messages={flashed_messages}
+          assetsEndpoint={endpoints.assetsEndpoint}
+          entityEndpoint={endpoints.entityEndpoint}
+        />
+      </Container>
     );
   }
 
@@ -50,7 +57,11 @@ function Routes(props) {
   }
 
   if (urlPath.startsWith('/search')) {
-    return <Search elasticsearchEndpoint={endpoints.elasticsearchEndpoint} title={title} />;
+    return (
+      <Container maxWidth="lg">
+        <Search elasticsearchEndpoint={endpoints.elasticsearchEndpoint} title={title} />
+      </Container>
+    );
   }
 }
 
