@@ -10,7 +10,7 @@ import LoginButton from '../LoginButton';
 
 export default function Header() {
   const theme = useTheme();
-  const dontDisplayMenu = useMediaQuery(theme.breakpoints.up('sm'));
+  const dontDisplayMenu = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
     <StyledAppBar position="sticky" elevation={0}>
