@@ -1,7 +1,7 @@
 import React from 'react';
 import { Background, StyledContainer, MainText, Title } from './style';
 
-function AboutBanner() {
+function About() {
   return (
     <Background>
       <StyledContainer>
@@ -18,4 +18,4 @@ function AboutBanner() {
   );
 }
 
-export default AboutBanner;
+export default About;
