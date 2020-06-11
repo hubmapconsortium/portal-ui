@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import BubbleChartIcon from '@material-ui/icons/BubbleChart';
 import PersonIcon from '@material-ui/icons/Person';
@@ -17,5 +18,14 @@ function DataSummary(props) {
     </FlexRow>
   );
 }
+
+DataSummary.propTypes = {
+  summaryData: PropTypes.exact({
+    datasetCount: PropTypes.number,
+    sampleCount: PropTypes.number,
+    donorCount: PropTypes.number,
+    centerCount: PropTypes.number,
+  }).isRequired,
+};
 
 export default React.memo(DataSummary);

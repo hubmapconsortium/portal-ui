@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { FlexRow, StyledTypography } from './style';
 
 function DataSummaryItem(props) {
@@ -16,5 +17,11 @@ function DataSummaryItem(props) {
     </FlexRow>
   );
 }
+
+DataSummaryItem.propTypes = {
+  value: PropTypes.number.isRequired,
+  Icon: PropTypes.element.isRequired,
+  label: PropTypes.string.isRequired,
+};
 
 export default React.memo(DataSummaryItem);
