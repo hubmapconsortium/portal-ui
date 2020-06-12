@@ -24,6 +24,9 @@ const theme = createMuiTheme({
     action: {
       disabled: 'rgba(0,0,0, 0.38)',
     },
+    transparentGray: {
+      main: 'rgba(144, 144, 144, 0.1)',
+    },
     type: 'light',
   },
   typography: {
