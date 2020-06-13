@@ -32,4 +32,37 @@ const ExpandableDiv = styled.div`
   }
 `;
 
-export { headerFixedHeight, vitessceFixedHeight, StyledSectionContainer, ExpandButton, TopSnackbar, ExpandableDiv };
+const FlexContainer = styled.div`
+  display: flex;
+`;
+
+const FlexRight = styled.div`
+  display: flex;
+  margin-left: auto;
+`;
+
+const FlexBottomRight = styled(FlexRight)`
+  align-items: flex-end;
+`;
+
+const StyledFooterText = styled.p`
+  line-height: 1.5;
+  font-size: 0.75rem;
+  margin: 0;
+
+  > a {
+    font-size: 0.75rem;
+  }
+`;
+
+export {
+  headerFixedHeight,
+  vitessceFixedHeight,
+  StyledSectionContainer,
+  ExpandButton,
+  TopSnackbar,
+  ExpandableDiv,
+  FlexContainer,
+  FlexBottomRight,
+  StyledFooterText,
+};

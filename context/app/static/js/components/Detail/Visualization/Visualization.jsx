@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import Paper from '@material-ui/core/Paper';
 import { Vitessce } from 'vitessce';
+import Paper from '@material-ui/core/Paper';
+import Link from '@material-ui/core/Link';
+import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import SectionHeader from '../SectionHeader';
-import { vitessceFixedHeight, StyledSectionContainer, ExpandButton, TopSnackbar, ExpandableDiv } from './style';
+import {
+  vitessceFixedHeight,
+  StyledSectionContainer,
+  ExpandButton,
+  TopSnackbar,
+  ExpandableDiv,
+  FlexContainer,
+  FlexBottomRight,
+  StyledFooterText,
+} from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
 function Visualization(props) {
@@ -37,7 +48,9 @@ function Visualization(props) {
     <StyledSectionContainer id="visualization">
       <SectionHeader variant="h3" component="h2">
         Visualization
-        <ExpandButton onClick={handleExpand}>Expand</ExpandButton>
+        <ExpandButton onClick={handleExpand}>
+          <ZoomOutMapIcon />
+        </ExpandButton>
       </SectionHeader>
       <Paper>
         <ExpandableDiv $isExpanded={isExpanded}>
@@ -54,6 +67,16 @@ function Visualization(props) {
           <Vitessce config={vitData} theme="light" height={isExpanded ? null : vitessceFixedHeight} />
         </ExpandableDiv>
       </Paper>
+      <FlexContainer>
+        <FlexBottomRight>
+          <StyledFooterText>
+            Powered by&nbsp;
+            <Link href="http://vitessce.io" variant="body1" target="_blank">
+              Vitessce
+            </Link>
+          </StyledFooterText>
+        </FlexBottomRight>
+      </FlexContainer>
     </StyledSectionContainer>
   );
 }
