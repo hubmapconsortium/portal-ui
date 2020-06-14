@@ -45,7 +45,7 @@ const FlexBottomRight = styled(FlexRight)`
   align-items: flex-end;
 `;
 
-const StyledFooterText = styled.p`
+const StyledFooterText = styled(Typography)`
   line-height: 1.5;
   font-size: 0.75rem;
   margin: 0;
