@@ -23,7 +23,7 @@ const ExpandableDiv = styled.div`
   left: ${(props) => (props.$isExpanded ? '0' : 'auto')};
   position: ${(props) => (props.$isExpanded ? 'fixed' : 'relative')};
   height: ${(props) => (props.$isExpanded ? `calc(100vh - ${headerFixedHeight}px)` : `${vitessceFixedHeight}px`)};
-  width: ${(props) => (props.$isExpanded ? '100%' : '100%')};
+  width: 100%;
   overflow-y: hidden;
   .vitessce-container {
     display: block;
