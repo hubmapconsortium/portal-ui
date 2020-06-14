@@ -1,6 +1,0 @@
-- Enable free-text search. Caveats: 
-  - Values represented with abbreviations will not be searchable until we have our own index up which expands them.
-  - Only searching the column fields right now. Searching all fields could be done by:
-    - Listing every single field in the config here.
-    - Using ES mapping to copy fields during indexing. (https://github.com/hubmapconsortium/search-api/issues/63)
-    - Doing it explicitly in the code which constructs our index.
