@@ -29,6 +29,7 @@ const Background = styled.div`
 const StyledContainer = styled(Container)`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 `;
 
 const StyledImage = styled.img`
