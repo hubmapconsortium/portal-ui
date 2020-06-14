@@ -49,10 +49,6 @@ const FlexBottomRight = styled(FlexRight)`
 const StyledFooterText = styled(Typography)`
   line-height: 1.5;
   margin: 0;
-
-  > a {
-    font-size: 0.75rem;
-  }
 `;
 
 export {
