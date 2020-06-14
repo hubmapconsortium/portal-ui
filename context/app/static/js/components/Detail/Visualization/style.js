@@ -25,7 +25,8 @@ const ExpandableDiv = styled.div`
   position: ${(props) => (props.$isExpanded ? 'fixed' : 'relative')};
   height: ${(props) => (props.$isExpanded ? `calc(100vh - ${headerFixedHeight}px)` : `${vitessceFixedHeight}px`)};
   width: 100%;
-  overflow-y: hidden;
+  overflow: hidden;
+  background-color: white;
   .vitessce-container {
     display: block;
     height: ${(props) => (props.$isExpanded ? `calc(100vh - ${headerFixedHeight}px)` : 'auto')};
@@ -33,21 +34,10 @@ const ExpandableDiv = styled.div`
   }
 `;
 
-const FlexContainer = styled.div`
-  display: flex;
-`;
-
-const FlexRight = styled.div`
-  display: flex;
-  margin-left: auto;
-`;
-
-const FlexBottomRight = styled(FlexRight)`
-  align-items: flex-end;
-`;
-
 const StyledFooterText = styled(Typography)`
   line-height: 1.5;
+  text-align: right;
+  width: 100%;
   margin: 0;
 `;
 
@@ -58,7 +48,5 @@ export {
   ExpandButton,
   TopSnackbar,
   ExpandableDiv,
-  FlexContainer,
-  FlexBottomRight,
   StyledFooterText,
 };

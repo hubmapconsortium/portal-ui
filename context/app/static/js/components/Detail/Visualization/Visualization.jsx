@@ -10,8 +10,6 @@ import {
   ExpandButton,
   TopSnackbar,
   ExpandableDiv,
-  FlexContainer,
-  FlexBottomRight,
   StyledFooterText,
 } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
@@ -67,16 +65,12 @@ function Visualization(props) {
           <Vitessce config={vitData} theme="light" height={isExpanded ? null : vitessceFixedHeight} />
         </ExpandableDiv>
       </Paper>
-      <FlexContainer>
-        <FlexBottomRight>
-          <StyledFooterText variant="body2">
-            Powered by&nbsp;
-            <Link href="http://vitessce.io" target="_blank">
-              Vitessce
-            </Link>
-          </StyledFooterText>
-        </FlexBottomRight>
-      </FlexContainer>
+      <StyledFooterText variant="body2">
+        Powered by&nbsp;
+        <Link href="http://vitessce.io" target="_blank" rel="noreferrer">
+          Vitessce
+        </Link>
+      </StyledFooterText>
     </StyledSectionContainer>
   );
 }
