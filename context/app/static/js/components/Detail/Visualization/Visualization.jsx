@@ -69,9 +69,9 @@ function Visualization(props) {
       </Paper>
       <FlexContainer>
         <FlexBottomRight>
-          <StyledFooterText>
+          <StyledFooterText variant="body2">
             Powered by&nbsp;
-            <Link href="http://vitessce.io" variant="body1" target="_blank">
+            <Link href="http://vitessce.io" target="_blank">
               Vitessce
             </Link>
           </StyledFooterText>
