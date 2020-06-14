@@ -1,1 +1,0 @@
-- Provide hubmapPortalUrl to CCF.

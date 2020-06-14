@@ -1,1 +1,0 @@
-- Add the CCF page to python tests.

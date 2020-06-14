@@ -1,1 +1,0 @@
-- Fix errors displaying Visualization in table of contents.
