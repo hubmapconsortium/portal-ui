@@ -1,22 +1,29 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+import Container from '@material-ui/core/Container';
+import DataSummary from '../DataSummary';
+import Title from '../Title';
+import About from '../About';
+import Workflow from '../Workflow';
+import DataUseGuidelines from '../DataUseGuidelines';
+import Associations from '../Associations';
+import TwitterTimeline from '../TwitterTimeline';
+import { Flex } from './style';
 
 function Home() {
   return (
-    <>
-      <Typography component="h1" variant="h1">
-        Welcome to HuBMAP
-      </Typography>
-      <Typography component="h2" variant="h5">
-        {'Browse our '}
-        <Link href="/search?entity_type[0]=Donor">donors</Link>
-        {', '}
-        <Link href="/search?entity_type[0]=Sample">samples</Link>
-        {', or '}
-        <Link href="/search?entity_type[0]=Dataset">datasets</Link>.
-      </Typography>
-    </>
+    <Flex>
+      <Container maxWidth="lg">
+        <DataSummary summaryData={{ datasetCount: 242, sampleCount: 129, donorCount: 27, centerCount: 8 }} />
+        <Title />
+      </Container>
+      <About />
+      <Container maxWidth="lg">
+        <Workflow />
+        <DataUseGuidelines />
+        <TwitterTimeline />
+      </Container>
+      <Associations />
+    </Flex>
   );
 }
 
