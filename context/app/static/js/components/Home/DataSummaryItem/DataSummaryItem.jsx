@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FlexRow, StyledTypography } from './style';
 
 function DataSummaryItem(props) {
-  const { value, Icon, label } = props;
+  const { value, icon: Icon, label } = props;
 
   return (
     <FlexRow>
@@ -20,7 +20,8 @@ function DataSummaryItem(props) {
 
 DataSummaryItem.propTypes = {
   value: PropTypes.number.isRequired,
-  Icon: PropTypes.element.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  icon: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,
 };
 

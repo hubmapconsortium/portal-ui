@@ -13,10 +13,10 @@ function DataSummary(props) {
   return (
     <Wrapper>
       <FlexRow>
-        <DataSummaryItem Icon={BarChartIcon} label="Datasets" value={summaryData.datasetCount} />
-        <DataSummaryItem Icon={BubbleChartIcon} label="Samples" value={summaryData.sampleCount} />
-        <DataSummaryItem Icon={PersonIcon} label="Donors" value={summaryData.donorCount} />
-        <DataSummaryItem Icon={AccountBalanceIcon} label="Centers" value={summaryData.centerCount} />
+        <DataSummaryItem icon={BarChartIcon} label="Datasets" value={summaryData.datasetCount} />
+        <DataSummaryItem icon={BubbleChartIcon} label="Samples" value={summaryData.sampleCount} />
+        <DataSummaryItem icon={PersonIcon} label="Donors" value={summaryData.donorCount} />
+        <DataSummaryItem icon={AccountBalanceIcon} label="Centers" value={summaryData.centerCount} />
       </FlexRow>
       <Title />
     </Wrapper>
