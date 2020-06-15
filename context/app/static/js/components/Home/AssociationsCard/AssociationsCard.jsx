@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { Card, StyledLink } from './style';
 
@@ -20,4 +21,16 @@ function AssociationsCard(props) {
   );
 }
 
-export default AssociationsCard;
+AssociationsCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
+  children: PropTypes.element.isRequired,
+  mb: PropTypes.number,
+};
+
+AssociationsCard.defaultProps = {
+  mb: 0,
+};
+
+export default React.memo(AssociationsCard);
