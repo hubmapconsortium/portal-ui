@@ -13,6 +13,10 @@ const Card = styled(Paper)`
     width: 400px;
     height: 250px;
   }
+
+  @media (min-width: ${(props) => props.theme.breakpoints.values.lg}px) {
+    margin-bottom: 0px;
+  }
 `;
 
 const StyledLink = styled(Link)`
