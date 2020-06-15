@@ -9,7 +9,14 @@ import SectionHeader from '../Detail/SectionHeader';
 import SectionItem from '../Detail/SectionItem';
 import SectionContainer from '../Detail/SectionContainer';
 import { FlexRow, FlexColumn } from '../Detail/DetailLayout/style';
-import { FlexColumnRight, StyledPaper } from '../Detail/Summary/style';
+import { StyledPaper } from '../Detail/Summary/style';
+
+const FlexColumnRight = styled.div`
+  display: flex;
+  margin-left: auto;
+  flex-direction: column;
+  justify-content: start;
+`;
 
 const StyledTypography = styled(Typography)`
   margin-bottom: ${(props) => (props.mb ? '5px' : '0px')};
@@ -47,9 +54,7 @@ function Showcase(props) {
         </SectionHeader>
 
         <StyledPaper>
-          <StyledTypography variant="body1" mt={1}>
-            {description}
-          </StyledTypography>
+          <StyledTypography variant="body1" dangerouslySetInnerHTML={{ __html: description }} />
           <StyledDivider orientation="vertical" flexItem />
           <FlexColumnRight>
             <StyledTypography variant="subtitle1" mb={1}>

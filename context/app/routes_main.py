@@ -7,6 +7,8 @@ from flask import (Blueprint, render_template, abort, current_app,
                    redirect, url_for)
 
 from yaml import safe_load as load_yaml
+import markdown
+import frontmatter
 
 from .api.client import ApiClient
 from .config import types
@@ -134,18 +136,18 @@ def search():
 
 @blueprint.route('/showcase/<name>')
 def showcase_view(name):
-    with open(dirname(__file__) + '/showcase/' + name + '.yaml') as yaml_file:
-        showcase = load_yaml(yaml_file)
-    title = showcase['title']
-    vitessce_conf = showcase['vitessce_conf']
+    filename = dirname(__file__) + '/showcase/' + name + '.md'
+    showcase_metadata = frontmatter.load(filename).metadata
+    content_md = frontmatter.load(filename).content
+    print(markdown.markdown(content_md))
     core_props = {
-        'title': title,
-        'vitessce_conf': vitessce_conf,
+        'title': showcase_metadata['title'],
+        'vitessce_conf': showcase_metadata['vitessce_conf'],
         'entity': {
-            'description': showcase['description'],
-            'group_name': showcase['group_name'],
-            'created_by_user_displayname': showcase['created_by_user_displayname'],
-            'created_by_user_email': showcase['created_by_user_email'],
+            'description': markdown.markdown(content_md),
+            'group_name': showcase_metadata['group_name'],
+            'created_by_user_displayname': showcase_metadata['created_by_user_displayname'],
+            'created_by_user_email': showcase_metadata['created_by_user_email'],
         },
     }
     return render_template(
@@ -153,3 +155,4 @@ def showcase_view(name):
         title='Showcase',
         flask_data=core_props
     )
+
