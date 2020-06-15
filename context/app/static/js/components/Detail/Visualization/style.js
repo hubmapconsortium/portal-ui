@@ -41,9 +41,15 @@ const StyledFooterText = styled(Typography)`
   margin: 0;
 `;
 
+const bodyExpandedCSS = `
+  body {
+    overflow: hidden;
+  }
+`;
+
 export {
-  headerFixedHeight,
   vitessceFixedHeight,
+  bodyExpandedCSS,
   StyledSectionContainer,
   ExpandButton,
   TopSnackbar,

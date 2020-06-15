@@ -6,6 +6,7 @@ import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import SectionHeader from '../SectionHeader';
 import {
   vitessceFixedHeight,
+  bodyExpandedCSS,
   StyledSectionContainer,
   ExpandButton,
   TopSnackbar,
@@ -71,6 +72,7 @@ function Visualization(props) {
           Vitessce
         </Link>
       </StyledFooterText>
+      <style type="text/css">{isExpanded ? bodyExpandedCSS : null}</style>
     </StyledSectionContainer>
   );
 }
