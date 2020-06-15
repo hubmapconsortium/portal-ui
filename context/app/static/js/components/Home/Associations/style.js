@@ -5,6 +5,8 @@ import HPersonLogo from 'images/hubmap-person.svg';
 import HTextLogo from 'images/hubmap-logo.svg';
 /* eslint-enable import/no-unresolved */
 
+const logoHeight = '100px';
+
 const Flex = styled.div`
   display: flex;
   align-items: center;
@@ -13,7 +15,7 @@ const Flex = styled.div`
 `;
 
 const PersonLogo = styled(HPersonLogo)`
-  height: 100px;
+  height: ${logoHeight};
 `;
 
 const TextLogo = styled(HTextLogo)`
@@ -40,8 +42,8 @@ const StyledContainer = styled(Container)`
 `;
 
 const StyledImage = styled.img`
-  height: 100px;
-  width: 100px;
+  height: ${logoHeight};
+  width: ${logoHeight};
   align-self: center;
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
 `;
