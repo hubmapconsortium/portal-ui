@@ -3,9 +3,9 @@ import Typography from '@material-ui/core/Typography';
 import { Card, StyledLink } from './style';
 
 function AssociationsCard(props) {
-  const { title, text, link, children } = props;
+  const { title, text, link, children, mb } = props;
   return (
-    <Card>
+    <Card mb={mb}>
       {children}
       <Typography variant="h5" component="h4">
         {title}

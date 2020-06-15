@@ -20,12 +20,14 @@ function Associations() {
         <AssociationsCard
           title="HuBMAP Consortium"
           text="Members of the HuBMAP Consortium are developing the tools to create an open, global atlas of the human body at the..."
+          mb={1}
         >
           <HubmapLogos />
         </AssociationsCard>
         <AssociationsCard
           title="NIH Common Fund"
           text="The NIH Common Fund is a component of the NIH budget which is managed by the Office of Strategic Communication..."
+          mb={1}
         >
           <StyledImage src={NihLogo} alt="NIH Logo" />
         </AssociationsCard>

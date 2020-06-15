@@ -3,12 +3,16 @@ import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 
 const Card = styled(Paper)`
-  width: 400px;
-  height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: ${(props) => props.theme.spacing(1, 2)};
+  margin-bottom: ${(props) => (props.mb ? `${props.theme.spacing(2)}px` : '0px')};
+
+  @media (min-width: ${(props) => props.theme.breakpoints.values.sm}px) {
+    width: 400px;
+    height: 250px;
+  }
 `;
 
 const StyledLink = styled(Link)`
