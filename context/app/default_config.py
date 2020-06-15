@@ -14,8 +14,8 @@ class DefaultConfig(object):
 
     GROUP_ID = 'should-be-overridden'
 
-    PORTAL_INDEX_PATH = ''  # TODO: 'portal/'
-    CCF_INDEX_PATH = ''  # TODO: 'search/'
+    PORTAL_INDEX_PATH = '/entities/search'  # TODO: '/portal/search'
+    CCF_INDEX_PATH = '/entities/search'
 
     ELASTICSEARCH_ENDPOINT = 'should-be-overridden'
     ASSETS_ENDPOINT = 'should-be-overridden'
