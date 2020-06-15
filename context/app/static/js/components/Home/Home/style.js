@@ -19,8 +19,12 @@ const LowerInnerGrid = styled(Container)`
   grid-area: inner;
   display: grid;
   grid-gap: ${(props) => props.theme.spacing(3)}px;
-  grid-template-columns: 3fr 1fr;
-  grid-template-areas: 'workflow timeline' 'guidelines timeline';
+  grid-template-areas: 'workflow' 'guidelines' 'timeline';
+
+  @media (min-width: ${(props) => props.theme.breakpoints.md}px) {
+    grid-template-columns: 3fr 1fr;
+    grid-template-areas: 'workflow timeline' 'guidelines timeline';
+  }
 `;
 
 export { OuterGrid, UpperInnerGrid, LowerInnerGrid };
