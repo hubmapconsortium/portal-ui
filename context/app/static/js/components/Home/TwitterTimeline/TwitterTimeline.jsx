@@ -4,10 +4,9 @@ import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import { Wrapper } from './style';
 
 function TwitterTimeline() {
-  // const theme = useTheme();
   return (
     <Wrapper>
-      <TwitterTimelineEmbed sourceType="profile" screenName="_hubmap" options={{ height: 624 }} transparent />
+      <TwitterTimelineEmbed sourceType="profile" screenName="_hubmap" transparent autoHeight />
     </Wrapper>
   );
 }
