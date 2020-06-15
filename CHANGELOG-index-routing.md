@@ -1,0 +1,1 @@
+- Take advantage of Elasticsearch index routing.
