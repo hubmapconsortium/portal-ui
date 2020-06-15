@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
 const Background = styled.div`
+  grid-area: guidelines;
   background-color: ${(props) => props.theme.palette.transparentGray.main};
   padding: ${(props) => props.theme.spacing(2, 1)};
 `;

@@ -22,6 +22,7 @@ const TextLogo = styled(HTextLogo)`
 `;
 
 const Background = styled.div`
+  grid-area: associations;
   background-color: ${(props) => props.theme.palette.transparentGray.main};
   padding: ${(props) => props.theme.spacing(2, 1)};
 `;

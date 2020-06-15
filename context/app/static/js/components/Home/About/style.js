@@ -3,8 +3,8 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
 const Background = styled.div`
+  grid-area: about;
   background-color: ${(props) => props.theme.palette.primary.main};
-  width: 100%;
 `;
 
 const StyledContainer = styled(Container)`

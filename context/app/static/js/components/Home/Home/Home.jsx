@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
 import DataSummary from '../DataSummary';
 import Title from '../Title';
 import About from '../About';
@@ -7,23 +6,23 @@ import Workflow from '../Workflow';
 import DataUseGuidelines from '../DataUseGuidelines';
 import Associations from '../Associations';
 import TwitterTimeline from '../TwitterTimeline';
-import { Flex } from './style';
+import { OuterGrid, InnerGrid, SummaryContainer } from './style';
 
 function Home() {
   return (
-    <Flex>
-      <Container maxWidth="lg">
+    <OuterGrid>
+      <SummaryContainer maxWidth="lg">
         <DataSummary summaryData={{ datasetCount: 242, sampleCount: 129, donorCount: 27, centerCount: 8 }} />
         <Title />
-      </Container>
+      </SummaryContainer>
       <About />
-      <Container maxWidth="lg">
+      <InnerGrid maxWidth="lg">
         <Workflow />
         <DataUseGuidelines />
         <TwitterTimeline />
-      </Container>
+      </InnerGrid>
       <Associations />
-    </Flex>
+    </OuterGrid>
   );
 }
 
