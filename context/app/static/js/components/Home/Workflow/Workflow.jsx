@@ -25,7 +25,7 @@ function Workflow() {
     <Flex>
       <WorkflowItem
         text="The HuBMAP Tissue Mapping Centers generate and submit data."
-        Link={
+        link={
           <StyledLink
             variant="body1"
             href="https://ingest.hubmapconsortium.org/"
@@ -35,19 +35,19 @@ function Workflow() {
             Help contribute data
           </StyledLink>
         }
-        Icon={AccountBalanceIcon}
+        icon={AccountBalanceIcon}
       />
       <ArrowIcon />
-      <WorkflowItem text="The HuBMAP Portal Team curates, processes, and releases the data." Icon={DescriptionIcon} />
+      <WorkflowItem text="The HuBMAP Portal Team curates, processes, and releases the data." icon={DescriptionIcon} />
       <ArrowIcon />
       <WorkflowItem
         text="Anyone can discover, visualize, and download data."
-        Link={
+        link={
           <StyledLink variant="body1" href="/search?entity_type[0]=Dataset">
             Start Searching
           </StyledLink>
         }
-        Icon={SearchIcon}
+        icon={SearchIcon}
       />
     </Flex>
   );
