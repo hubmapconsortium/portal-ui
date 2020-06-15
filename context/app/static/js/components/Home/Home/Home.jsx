@@ -1,26 +1,30 @@
 import React from 'react';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import DataSummary from '../DataSummary';
-import Title from '../Title';
 import About from '../About';
 import Workflow from '../Workflow';
 import DataUseGuidelines from '../DataUseGuidelines';
 import Associations from '../Associations';
 import TwitterTimeline from '../TwitterTimeline';
-import { OuterGrid, InnerGrid, SummaryContainer } from './style';
+import BarChart from '../BarChart';
+import { OuterGrid, UpperInnerGrid, LowerInnerGrid } from './style';
 
 function Home() {
+  const theme = useTheme();
+  const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <OuterGrid>
-      <SummaryContainer maxWidth="lg">
+      <UpperInnerGrid maxWidth="lg">
         <DataSummary summaryData={{ datasetCount: 242, sampleCount: 129, donorCount: 27, centerCount: 8 }} />
-        <Title />
-      </SummaryContainer>
+        {isLargerThanMd && <BarChart />}
+      </UpperInnerGrid>
       <About />
-      <InnerGrid maxWidth="lg">
+      <LowerInnerGrid maxWidth="lg">
         <Workflow />
         <DataUseGuidelines />
         <TwitterTimeline />
-      </InnerGrid>
+      </LowerInnerGrid>
       <Associations />
     </OuterGrid>
   );

@@ -8,11 +8,14 @@ const OuterGrid = styled.div`
   grid-template-areas: 'summary' 'about' 'inner' 'associations';
 `;
 
-const SummaryContainer = styled(Container)`
+const UpperInnerGrid = styled(Container)`
   grid-area: summary;
+  display: grid;
+  grid-gap: ${(props) => props.theme.spacing(3)}px;
+  grid-template-areas: 'data' 'bar';
 `;
 
-const InnerGrid = styled(Container)`
+const LowerInnerGrid = styled(Container)`
   grid-area: inner;
   display: grid;
   grid-gap: ${(props) => props.theme.spacing(3)}px;
@@ -20,4 +23,4 @@ const InnerGrid = styled(Container)`
   grid-template-areas: 'workflow timeline' 'guidelines timeline';
 `;
 
-export { OuterGrid, SummaryContainer, InnerGrid };
+export { OuterGrid, UpperInnerGrid, LowerInnerGrid };
