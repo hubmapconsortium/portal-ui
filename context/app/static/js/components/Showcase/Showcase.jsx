@@ -22,7 +22,7 @@ function ShowcaseLayout(props) {
 function Showcase(props) {
   const { vitData, title, assayMetadata } = props;
 
-  const { group_name, created_by_user_displayname, created_by_user_email, description } = assayMetadata;
+  const { group_name, created_by_user_displayname, created_by_user_email, description_html } = assayMetadata;
 
   return (
     <ShowcaseLayout>
@@ -35,7 +35,7 @@ function Showcase(props) {
         </SectionHeader>
 
         <StyledPaper>
-          <Typography variant="body1" dangerouslySetInnerHTML={{ __html: description }} />
+          <Typography variant="body1" dangerouslySetInnerHTML={{ __html: description_html }} />
           <StyledDivider orientation="vertical" flexItem />
           <FlexColumnRight>
             <StyledTypography variant="subtitle1" mb={1}>

@@ -147,7 +147,7 @@ def showcase_view(name):
         'title': showcase_metadata['title'],
         'vitessce_conf': showcase_metadata['vitessce_conf'],
         'entity': {
-            'description': markdown.markdown(content_md),
+            'description_html': markdown.markdown(content_md),
             'group_name': showcase_metadata['group_name'],
             'created_by_user_displayname': showcase_metadata['created_by_user_displayname'],
             'created_by_user_email': showcase_metadata['created_by_user_email'],
