@@ -76,6 +76,13 @@ These are concatenated by push.sh.
 Low-level unit tests are in python (`pytest -vv`),
 while end-to-end tests use [Cypress](https://docs.cypress.io/guides/overview/why-cypress.html) (`npm run cypress:open`).
 
+## Linting
+In the `context/` directory, the following command can be run to allow eslint to fix problems:
+
+```sh
+npm run lint-fix
+```
+
 ## Tag, release, and deployment
 To tag a new version for github and
 [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
