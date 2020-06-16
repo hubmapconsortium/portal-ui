@@ -10,7 +10,7 @@ export const FlexColumnRight = styled.div`
 `;
 
 export const StyledTypography = styled(Typography)`
-  margin-bottom: ${(props) => (props.mb ? '5px' : '0px')};
+  margin-bottom: ${(props) => props.theme.spacing(1)}px;
 `;
 
 export const StyledDivider = styled(Divider)`

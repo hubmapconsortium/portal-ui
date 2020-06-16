@@ -38,9 +38,7 @@ function Showcase(props) {
           <Typography variant="body1" dangerouslySetInnerHTML={{ __html: description_html }} />
           <StyledDivider orientation="vertical" flexItem />
           <FlexColumnRight>
-            <StyledTypography variant="subtitle1" mb={1}>
-              Creator
-            </StyledTypography>
+            <StyledTypography variant="subtitle1">Creator</StyledTypography>
             <SectionItem label="Center">{group_name}</SectionItem>
             <SectionItem label="Email">{created_by_user_email}</SectionItem>
             <SectionItem label="Name">{created_by_user_displayname}</SectionItem>
