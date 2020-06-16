@@ -9,9 +9,8 @@ describe('portal-ui', () => {
   it('handles click-through', () => {
     // Homepage
     cy.visit('/');
-    cy.contains('Welcome to HuBMAP');
-    cy.contains('Human BioMolecular Atlas Program (HuBMAP)');
-
+    cy.contains('Human Biomolecular Atlas Program');
+  
     // Donors
     cy.contains('Donors');
     // Samples
