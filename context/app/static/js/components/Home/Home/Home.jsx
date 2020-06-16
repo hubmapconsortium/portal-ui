@@ -16,7 +16,7 @@ function Home() {
   return (
     <OuterGrid>
       <UpperInnerGrid maxWidth="lg">
-        <DataSummary summaryData={{ datasetCount: 242, sampleCount: 129, donorCount: 27, centerCount: 8 }} />
+        <DataSummary summaryData={{ datasetCount: 0, sampleCount: 0, donorCount: 0, centerCount: 0 }} />
         {isLargerThanMd && <BarChart />}
       </UpperInnerGrid>
       <About />
