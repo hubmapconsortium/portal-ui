@@ -41,6 +41,7 @@ vitessce_conf: {
   ]
 }
 ---
+<!-- TODO: Get a real description. -->
 # Spraggins Showcase Header
 High Bit Depth (uint16) Multiplex Immunofluorescence Imaging
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit pellentesque pretium. 
