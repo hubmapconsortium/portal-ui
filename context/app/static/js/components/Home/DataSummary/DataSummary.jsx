@@ -25,10 +25,10 @@ function DataSummary(props) {
 
 DataSummary.propTypes = {
   summaryData: PropTypes.exact({
-    datasetCount: PropTypes.number,
-    sampleCount: PropTypes.number,
-    donorCount: PropTypes.number,
-    centerCount: PropTypes.number,
+    datasetCount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    sampleCount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    donorCount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    centerCount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }).isRequired,
 };
 

@@ -19,7 +19,7 @@ function DataSummaryItem(props) {
 }
 
 DataSummaryItem.propTypes = {
-  value: PropTypes.number.isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   icon: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,

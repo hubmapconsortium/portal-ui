@@ -53,7 +53,7 @@ function Routes(props) {
   }
 
   if (urlPath === '/') {
-    return <Home />;
+    return <Home elasticsearchEndpoint={endpoints.elasticsearchEndpoint} />;
   }
 
   if (urlPath.startsWith('/search')) {
