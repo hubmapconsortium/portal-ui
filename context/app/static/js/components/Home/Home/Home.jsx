@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-// eslint-disable-next-line import/no-unresolved
 import DataSummary from '../DataSummary';
 import About from '../About';
 import Workflow from '../Workflow';
