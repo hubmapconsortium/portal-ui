@@ -37,8 +37,6 @@ const ExpandableDiv = styled.div`
 const StyledFooterText = styled(Typography)`
   line-height: 1.5;
   text-align: right;
-  width: 100%;
-  margin: 0;
 `;
 
 const bodyExpandedCSS = `
