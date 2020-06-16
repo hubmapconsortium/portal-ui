@@ -20,8 +20,6 @@ const FlexColumnRight = styled.div`
 
 const StyledTypography = styled(Typography)`
   margin-bottom: ${(props) => (props.mb ? '5px' : '0px')};
-  margin-left: ${(props) => (props.ml ? '10px' : '0px')};
-  margin-top: ${(props) => (props.mt ? '5px' : '0px')};
 `;
 
 const StyledDivider = styled(Divider)`
@@ -54,7 +52,7 @@ function Showcase(props) {
         </SectionHeader>
 
         <StyledPaper>
-          <StyledTypography variant="body1" dangerouslySetInnerHTML={{ __html: description }} />
+          <Typography variant="body1" dangerouslySetInnerHTML={{ __html: description }} />
           <StyledDivider orientation="vertical" flexItem />
           <FlexColumnRight>
             <StyledTypography variant="subtitle1" mb={1}>

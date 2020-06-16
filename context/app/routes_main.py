@@ -142,7 +142,6 @@ def showcase_view(name):
     filename = dirname(__file__) + '/showcase/' + name + '.md'
     showcase_metadata = frontmatter.load(filename).metadata
     content_md = frontmatter.load(filename).content
-    print(markdown.markdown(content_md))
     core_props = {
         'title': showcase_metadata['title'],
         'vitessce_conf': showcase_metadata['vitessce_conf'],
