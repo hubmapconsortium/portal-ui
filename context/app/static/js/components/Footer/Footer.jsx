@@ -1,22 +1,22 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Hyperlink from '@material-ui/core/Link';
-import { useTheme } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import { Flex } from './style';
 
 export default function Footer() {
-  const theme = useTheme();
   return (
-    <Grid container justify="center" item xs={12} style={{ padding: theme.spacing(2) }}>
-      <Typography variant="body2" color="textSecondary" align="center">
+    <Flex maxWidth="lg">
+      <Typography variant="body2" color="secondary">
         {'Copyright © '}
-        <Hyperlink color="inherit" href="https://hubmapconsortium.org">
+        <Hyperlink color="inherit" href="https://hubmapconsortium.org" target="_blank" rel="noopener noreferrer">
           Human BioMolecular Atlas Program (HuBMAP)
         </Hyperlink>{' '}
         {new Date().getFullYear()}
         {'. All rights reserved. '}
+      </Typography>
+      <Typography variant="body2" color="secondary">
         Supported by the NIH Common Fund.
       </Typography>
-    </Grid>
+    </Flex>
   );
 }
