@@ -10,7 +10,7 @@ module.exports = {
     'metadata-field-descriptions$': '<rootDir>/ingest-validation-tools/docs/field-descriptions.yaml',
   },
   transform: {
-    '^.+\\.[t|j]sx?$': 'babel-jest',
+    '^.+\\.jsx?$': 'babel-jest',
     '^.+\\.ya?ml$': '<rootDir>/test-utils/loaders/ymlLoader.js',
   },
 };
