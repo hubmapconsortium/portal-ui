@@ -1,3 +1,35 @@
+## v0.0.26 - 2020-06-14
+
+- Add the CCF page to python tests.
+- Fix bug in our template for the CCF.
+- Fix errors displaying Visualization in table of contents.
+- Enable free-text search. Caveats: 
+  - Values represented with abbreviations will not be searchable until we have our own index up which expands them.
+  - Only searching the column fields right now. Searching all fields could be done by:
+    - Listing every single field in the config here.
+    - Using ES mapping to copy fields during indexing. (https://github.com/hubmapconsortium/search-api/issues/63)
+    - Doing it explicitly in the code which constructs our index.
+- Provide hubmapPortalUrl to CCF.
+- Make VERSION a MD file: Easy to remember path, ("/VERSION") and it doesn't try to download the file. Downside: No URL to curl that just returns the VERSION without anything else... but we could add a raw MD handler, if needed.
+- Get doctests working in Python.
+
+
+## v0.0.25 - 2020-06-09
+
+- Add a Markdown page listing the assays, and add anchors based on the types Bill tells me we will see on Prod.
+- Pull cypress into its own space so the docker build won't require it.
+- Provide PORTAL_INDEX_PATH and CCF_INDEX_PATH, so we can hit the separated indexes, when available.
+- Overhaul react file structure.
+- Add Markdown from Peter Kant.
+- Extend prettier/react in eslint config.
+- Insure that changelog is written with a NL between each concatenated file.
+- Refactor and fix minor issues in detail components.
+- Install and setup jest and react-testing-library.
+- Release branches were failing because there were not CHANGELOG-*.md.
+- Include DOI and type in tab title.
+- Pull latest field descriptions.
+
+
 ## v0.0.24 - 2020-06-05
 
 - Integrate CCF-EUI.

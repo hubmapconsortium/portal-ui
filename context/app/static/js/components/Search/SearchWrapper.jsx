@@ -118,6 +118,7 @@ function SearchWrapper(props) {
     sortOptions,
     hiddenFilterIds,
     searchUrlPath,
+    queryFields,
   } = props;
   const resultFieldIds = resultFields.map((field) => field.id).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
@@ -138,7 +139,7 @@ function SearchWrapper(props) {
     <SearchkitProvider searchkit={searchkit}>
       <LayoutBody>
         <SideBar>
-          <SearchBox autofocus searchOnChange />
+          <SearchBox autofocus queryFields={queryFields} />
           {filterElements}
         </SideBar>
         <LayoutResults>
@@ -216,6 +217,7 @@ SearchWrapper.propTypes = {
   ),
   hiddenFilterIds: PropTypes.arrayOf(PropTypes.string),
   searchUrlPath: PropTypes.string,
+  queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 SearchWrapper.defaultProps = {

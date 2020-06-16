@@ -1,5 +1,5 @@
 cypress/screenshots/
-node_modules/
+**/node_modules/
 **/.DS_Store
 
 # Byte-compiled / optimized / DLL files
@@ -93,6 +93,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.envrc
 
 # Spyder project settings
 .spyderproject
@@ -114,3 +115,6 @@ venv.bak/
 
 # public
 context/app/static/public
+
+# scratch
+/scratch

@@ -21,18 +21,27 @@ def client():
 def to_xml(html):
     '''
     Ad-hoc regexes, so we can check for missing or mismatched tags.
+    >>> to_xml('<!doctype html><html><meta XYZ></html>')
+    '<html><meta XYZ/></html>'
+
+    >>> to_xml('<script async></script><script defer ></script>')
+    '<script async="true"></script><script defer="true" ></script>'
+
+    ''
+
     '''
-    return re.sub(
-        r'(<(meta|link|br)[^>]+)>',
-        r'\1/>',
-        re.sub(r'<!doctype html>', '', html)
-    )
-
-
-def test_to_xml():
-    html = '<!doctype html><html><meta XYZ></html>'
-    xml = '<html><meta XYZ/></html>'
-    assert to_xml(html) == xml
+    html = re.sub(
+        r'<!doctype html>',
+        '', html)
+    html = re.sub(
+        r'(<(meta|link|br|base)[^>]+)>',
+        r'\1/>', html)
+    for attr in ['async', 'nomodule', 'defer']:
+        # Since the targets overlap, we need to run sub multiple times.
+        html = re.sub(
+            r'(<script [^>]*)(' + attr + r')([^=])',
+            r'\1\2="true"\3', html)
+    return html
 
 
 def assert_is_valid_html(response):
@@ -68,7 +77,8 @@ def mock_search_donor_post(path, **kwargs):
                                 # Minimal properties.
                                 'entity_type': 'Donor',
                                 'provenance_create_timestamp': '100000',
-                                'provenance_modified_timestamp': '100000'
+                                'provenance_modified_timestamp': '100000',
+                                'display_doi': 'HBM:12345'
                             }
                         }
                     ]
@@ -82,7 +92,7 @@ def mock_search_donor_post(path, **kwargs):
 
 @pytest.mark.parametrize(
     'path',
-    ['/', '/help', '/browse/donor/fake-uuid']
+    ['/', '/help', '/browse/donor/fake-uuid', '/ccf-eui', '/VERSION']
 )
 def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_prov_get)

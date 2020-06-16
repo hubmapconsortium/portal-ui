@@ -35,7 +35,8 @@ def _get_client():
 
 def _get_endpoints():
     return {
-        'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'],
+        'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
+        + current_app.config['PORTAL_INDEX_PATH'],
         'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
         'entityEndpoint': current_app.config['ENTITY_API_BASE']
     }
@@ -54,6 +55,7 @@ def ccf_eui():
     return render_template(
         'pages/ccf-eui.html',
         config=current_app.config,
+        url_root=request.url_root,
         nexus_token=session['nexus_token']
     )
 
@@ -99,6 +101,7 @@ def details(type, uuid):
         template,
         type=type,
         uuid=uuid,
+        title=f'{entity["display_doi"]} | {type.title()}',
         flask_data=core_props
     )
 

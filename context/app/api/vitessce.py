@@ -93,7 +93,7 @@ class Vitessce:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
 
-          >>> vitessce = Vitessce(entity, nexus_token)
+          >> vitessce = Vitessce(entity, nexus_token)
 
         """
 
@@ -109,8 +109,8 @@ class Vitessce:
     def _build_vitessce_conf(self):
         """Vuilding the vitessce configuration.
 
-        >>> vitessce = Vitessce(entity, nexus_token)
-        >>> vitessce.conf
+        >> vitessce = Vitessce(entity, nexus_token)
+        >> vitessce.conf
 
         {
           'name': 'NAME',
