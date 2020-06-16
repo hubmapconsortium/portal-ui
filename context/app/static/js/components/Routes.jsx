@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
-import Home from './Home/Home';
+import { Home } from './Home';
 import Search from './Search/Search';
 import Donor from './Detail/Donor';
 import Sample from './Detail/Sample';
