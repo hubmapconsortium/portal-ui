@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable camelcase */
 import React from 'react';
-import 'whatwg-fetch';
+import 'whatwg-fetch'; // polyfill fetch
 import { render } from 'test-utils/functions';
 import { screen } from '@testing-library/react';
 import mocks from 'test-utils/__mocks__/dataset/requests';
