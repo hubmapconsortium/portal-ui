@@ -1,1 +1,0 @@
-- Adds an "expand" button to expand the Vitessce component to the full window size.
