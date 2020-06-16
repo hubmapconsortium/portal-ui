@@ -1,8 +1,6 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import styled from 'styled-components';
 
 import Visualization from '../Detail/Visualization';
 import SectionHeader from '../Detail/SectionHeader';
@@ -10,22 +8,7 @@ import SectionItem from '../Detail/SectionItem';
 import SectionContainer from '../Detail/SectionContainer';
 import { FlexRow, FlexColumn } from '../Detail/DetailLayout/style';
 import { StyledPaper } from '../Detail/Summary/style';
-
-const FlexColumnRight = styled.div`
-  display: flex;
-  margin-left: auto;
-  flex-direction: column;
-  justify-content: start;
-`;
-
-const StyledTypography = styled(Typography)`
-  margin-bottom: ${(props) => (props.mb ? '5px' : '0px')};
-`;
-
-const StyledDivider = styled(Divider)`
-  margin-left: 10px;
-  margin-right: 10px;
-`;
+import { FlexColumnRight, StyledTypography, StyledDivider } from './style';
 
 function ShowcaseLayout(props) {
   const { children } = props;
