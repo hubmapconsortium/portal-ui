@@ -137,6 +137,7 @@ def search():
         flask_data=core_props
     )
 
+
 @blueprint.route('/showcase/<name>')
 def showcase_view(name):
     filename = dirname(__file__) + '/showcase/' + name + '.md'
@@ -157,4 +158,3 @@ def showcase_view(name):
         title='Showcase',
         flask_data=core_props
     )
-
