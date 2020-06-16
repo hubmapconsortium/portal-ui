@@ -20,6 +20,7 @@
   <script>
     window.dbOptions = {
       hubmapDataService: 'search-api',
+      hubmapPortalUrl: '{{ url_root }}',
       hubmapDataUrl: '{{ config['ELASTICSEARCH_ENDPOINT'] + config['CCF_INDEX_PATH'] }}',
       hubmapAssetsUrl: '{{ config['ASSETS_ENDPOINT'] }}',
       hubmapToken: '{{ nexus_token }}'
@@ -27,7 +28,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&amp;display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
