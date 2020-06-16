@@ -6,6 +6,7 @@ import Search from './Search/Search';
 import Donor from './Detail/Donor';
 import Sample from './Detail/Sample';
 import Dataset from './Detail/Dataset';
+import Showcase from './Showcase/Showcase';
 
 function Routes(props) {
   const { flaskData } = props;
@@ -51,6 +52,10 @@ function Routes(props) {
 
   if (urlPath.startsWith('/search')) {
     return <Search elasticsearchEndpoint={endpoints.elasticsearchEndpoint} title={title} />;
+  }
+
+  if (urlPath.startsWith('/showcase')) {
+    return <Showcase title={title} vitData={vitessce_conf} assayMetadata={entity} />;
   }
 }
 

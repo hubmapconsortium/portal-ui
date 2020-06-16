@@ -1,11 +1,14 @@
 from pathlib import Path
 from os import environ
+from os.path import dirname
 
 from flask import (Blueprint, render_template, abort, current_app,
                    session, flash, get_flashed_messages, request,
                    redirect, url_for)
 
 from yaml import safe_load as load_yaml
+import markdown
+import frontmatter
 
 from .api.client import ApiClient
 from .config import types
@@ -131,5 +134,27 @@ def search():
         'pages/base_react.html',
         title=title,
         types=types,
+        flask_data=core_props
+    )
+
+
+@blueprint.route('/showcase/<name>')
+def showcase_view(name):
+    filename = dirname(__file__) + '/showcase/' + name + '.md'
+    showcase_metadata = frontmatter.load(filename).metadata
+    content_md = frontmatter.load(filename).content
+    core_props = {
+        'title': showcase_metadata['title'],
+        'vitessce_conf': showcase_metadata['vitessce_conf'],
+        'entity': {
+            'description_html': markdown.markdown(content_md),
+            'group_name': showcase_metadata['group_name'],
+            'created_by_user_displayname': showcase_metadata['created_by_user_displayname'],
+            'created_by_user_email': showcase_metadata['created_by_user_email'],
+        },
+    }
+    return render_template(
+        'pages/base_react.html',
+        title='Showcase',
         flask_data=core_props
     )
