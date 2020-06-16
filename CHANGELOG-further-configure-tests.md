@@ -1,0 +1,3 @@
+- Further configure jest and react-testing-library.
+- Add eslint plugins for jest-dom and testing-library.
+- Add mock service worker to mock responses. 
