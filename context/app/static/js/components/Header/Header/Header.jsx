@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -12,12 +12,13 @@ import LoginButton from '../LoginButton';
 function Header() {
   const theme = useTheme();
   const dontDisplayMenu = useMediaQuery(theme.breakpoints.up('md'));
+  const anchorRef = useRef(null);
 
   return (
-    <StyledAppBar position="sticky" elevation={0}>
+    <StyledAppBar position="sticky" ref={anchorRef} elevation={0}>
       <Container maxWidth="lg">
         <Toolbar disableGutters>
-          {!dontDisplayMenu && <Menu />}
+          {!dontDisplayMenu && <Menu anchorRef={anchorRef} />}
           <a href="/">
             <HubmapLogo aria-label="HubMAP logo" />
           </a>
