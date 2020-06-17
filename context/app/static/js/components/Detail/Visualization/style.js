@@ -7,16 +7,37 @@ import SectionContainer from '../SectionContainer';
 const headerFixedHeight = 64;
 const vitessceFixedHeight = 600;
 
+const StyledHeader = styled.div`
+  margin-bottom: 6px;
+`;
+
+const StyledHeaderText = styled(Typography)`
+  margin-bottom: 0;
+  display: inline-block;
+`;
+
+const StyledHeaderRight = styled.div`
+  float: right;
+  display: flex;
+`;
+
 const StyledSectionContainer = styled(SectionContainer)`
   z-index: 3;
 `;
 
 const ExpandButton = styled(Button)`
-  float: right;
+  display: inline-block;
+  margin-left: 0.5rem;
+  svg {
+    vertical-align: middle;
+  }
 `;
 
 const TopSnackbar = styled(Snackbar)`
   top: ${headerFixedHeight + 10}px;
+  & > div {
+    background-color: dimgray;
+  }
 `;
 
 const ExpandableDiv = styled.div`
@@ -24,9 +45,9 @@ const ExpandableDiv = styled.div`
   left: ${(props) => (props.$isExpanded ? '0' : 'auto')};
   position: ${(props) => (props.$isExpanded ? 'fixed' : 'relative')};
   height: ${(props) => (props.$isExpanded ? `calc(100vh - ${headerFixedHeight}px)` : `${vitessceFixedHeight}px`)};
+  background-color: ${(props) => (props.$theme === 'dark' ? '#333333' : '#FFFFFF')};
   width: 100%;
   overflow: hidden;
-  background-color: white;
   .vitessce-container {
     display: block;
     height: ${(props) => (props.$isExpanded ? `calc(100vh - ${headerFixedHeight}px)` : 'auto')};
@@ -49,6 +70,9 @@ export {
   vitessceFixedHeight,
   bodyExpandedCSS,
   StyledSectionContainer,
+  StyledHeader,
+  StyledHeaderText,
+  StyledHeaderRight,
   ExpandButton,
   TopSnackbar,
   ExpandableDiv,

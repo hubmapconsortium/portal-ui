@@ -1,0 +1,1 @@
+- Added a toggle to change the Vitessce theme from `"light"` to `"dark"`.

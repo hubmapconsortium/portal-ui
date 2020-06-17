@@ -3,11 +3,14 @@ import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
-import SectionHeader from '../SectionHeader';
+import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import {
   vitessceFixedHeight,
   bodyExpandedCSS,
   StyledSectionContainer,
+  StyledHeader,
+  StyledHeaderText,
+  StyledHeaderRight,
   ExpandButton,
   TopSnackbar,
   ExpandableDiv,
@@ -20,6 +23,7 @@ function Visualization(props) {
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [vitessceTheme, setVitessceTheme] = useState('light');
 
   function handleExpand() {
     setIsExpanded(true);
@@ -29,6 +33,14 @@ function Visualization(props) {
   function handleCollapse() {
     setIsExpanded(false);
     setIsSnackbarOpen(false);
+  }
+
+  function handleThemeChange(e) {
+    if (e.target.checked) {
+      setVitessceTheme('dark');
+    } else {
+      setVitessceTheme('light');
+    }
   }
 
   useEffect(() => {
@@ -45,14 +57,19 @@ function Visualization(props) {
 
   return (
     <StyledSectionContainer id="visualization">
-      <SectionHeader variant="h3" component="h2">
-        Visualization
-        <ExpandButton onClick={handleExpand}>
-          <ZoomOutMapIcon />
-        </ExpandButton>
-      </SectionHeader>
+      <StyledHeader>
+        <StyledHeaderText variant="h3" component="h2">
+          Visualization
+        </StyledHeaderText>
+        <StyledHeaderRight>
+          <VisualizationThemeSwitch theme={vitessceTheme} onChange={handleThemeChange} />
+          <ExpandButton onClick={handleExpand}>
+            <ZoomOutMapIcon />
+          </ExpandButton>
+        </StyledHeaderRight>
+      </StyledHeader>
       <Paper>
-        <ExpandableDiv $isExpanded={isExpanded}>
+        <ExpandableDiv $isExpanded={isExpanded} $theme={vitessceTheme}>
           <TopSnackbar
             anchorOrigin={{
               vertical: 'top',
@@ -63,7 +80,7 @@ function Visualization(props) {
             onClose={() => setIsSnackbarOpen(false)}
             message="Press [esc] to exit full window."
           />
-          <Vitessce config={vitData} theme="light" height={isExpanded ? null : vitessceFixedHeight} />
+          <Vitessce config={vitData} theme={vitessceTheme} height={isExpanded ? null : vitessceFixedHeight} />
         </ExpandableDiv>
       </Paper>
       <StyledFooterText variant="body2">
