@@ -1,23 +1,14 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
 
 import Visualization from '../Detail/Visualization';
 import SectionHeader from '../Detail/SectionHeader';
 import SectionItem from '../Detail/SectionItem';
 import SectionContainer from '../Detail/SectionContainer';
-import { FlexRow, FlexColumn } from '../Detail/DetailLayout/style';
 import { StyledPaper } from '../Detail/Summary/style';
 import { FlexColumnRight, StyledTypography, StyledDivider } from './style';
-
-function ShowcaseLayout(props) {
-  const { children } = props;
-  return (
-    <FlexRow>
-      <FlexColumn maxWidth="lg">{children}</FlexColumn>
-    </FlexRow>
-  );
-}
 
 function Showcase(props) {
   const { vitData, title, assayMetadata } = props;
@@ -25,7 +16,7 @@ function Showcase(props) {
   const { group_name, created_by_user_displayname, created_by_user_email, description_html } = assayMetadata;
 
   return (
-    <ShowcaseLayout>
+    <Container maxWidth="lg">
       <SectionContainer id="summary">
         <Typography variant="h4" component="h1" color="primary">
           Showcase
@@ -46,7 +37,7 @@ function Showcase(props) {
         </StyledPaper>
       </SectionContainer>
       <Visualization vitData={vitData} />
-    </ShowcaseLayout>
+    </Container>
   );
 }
 
