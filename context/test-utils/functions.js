@@ -2,7 +2,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import { render } from '@testing-library/react';
-import Providers from 'static/js/Providers';
+import Providers from 'components/Providers';
 
 const AllTheProviders = ({ children }) => {
   return <Providers>{children}</Providers>;

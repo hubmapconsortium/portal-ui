@@ -6,3 +6,4 @@ markdown==3.2.2
 jsonschema==3.2.0
 pyyaml==5.2
 python-datauri==0.2.8
+python-frontmatter==0.5.0 

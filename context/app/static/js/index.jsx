@@ -12,7 +12,7 @@ const urlPath = window.location.pathname;
 
 const isRoute = (route) => urlPath.startsWith(route);
 
-const availableRoutes = ['/browse', '/search'];
+const availableRoutes = ['/browse', '/search', '/showcase'];
 
 if (urlPath === '/' || availableRoutes.some(isRoute)) {
   ReactDOM.render(

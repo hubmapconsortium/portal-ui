@@ -1,3 +1,13 @@
+## v0.0.27 - 2020-06-16
+
+- Adds an "expand" button to expand the Vitessce component to the full window size.
+- Further configure jest and react-testing-library.
+- Add eslint plugins for jest-dom and testing-library.
+- Add mock service worker to mock responses. 
+- Take advantage of Elasticsearch index routing.
+- Add showcase page for Spraggins.
+
+
 ## v0.0.26 - 2020-06-14
 
 - Add the CCF page to python tests.
