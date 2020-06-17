@@ -2,7 +2,7 @@ import React from 'react';
 import Switch from '@material-ui/core/Switch';
 import { StyledSwitchGrid, StyledSwitchGridItem } from './style';
 
-function ThemeSwitch(props) {
+function VisualizationThemeSwitch(props) {
   const { theme, onChange } = props;
   return (
     <StyledSwitchGrid component="div" container alignItems="center" spacing={1}>
@@ -25,4 +25,4 @@ function ThemeSwitch(props) {
   );
 }
 
-export default ThemeSwitch;
+export default VisualizationThemeSwitch;

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 import SectionContainer from '../SectionContainer';
@@ -20,15 +19,6 @@ const StyledHeaderText = styled(Typography)`
 const StyledHeaderRight = styled.div`
   float: right;
   display: flex;
-`;
-
-const StyledSwitchGrid = styled(Grid)`
-  flex-wrap: nowrap;
-`;
-const StyledSwitchGridItem = styled(Grid)`
-  label {
-    display: inline-block;
-  }
 `;
 
 const StyledSectionContainer = styled(SectionContainer)`
@@ -83,8 +73,6 @@ export {
   StyledHeader,
   StyledHeaderText,
   StyledHeaderRight,
-  StyledSwitchGrid,
-  StyledSwitchGridItem,
   ExpandButton,
   TopSnackbar,
   ExpandableDiv,

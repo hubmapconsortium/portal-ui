@@ -3,7 +3,7 @@ import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
-import ThemeSwitch from './ThemeSwitch';
+import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import {
   vitessceFixedHeight,
   bodyExpandedCSS,
@@ -62,7 +62,7 @@ function Visualization(props) {
           Visualization
         </StyledHeaderText>
         <StyledHeaderRight>
-          <ThemeSwitch theme={vitessceTheme} onChange={handleThemeChange} />
+          <VisualizationThemeSwitch theme={vitessceTheme} onChange={handleThemeChange} />
           <ExpandButton onClick={handleExpand}>
             <ZoomOutMapIcon />
           </ExpandButton>
