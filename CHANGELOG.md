@@ -1,3 +1,10 @@
+## v0.0.28 - 2020-06-17
+
+- Stub out the docs to be filled in.
+- Fix JS OOM error during build.
+- Make Peter Kant's commitments explicit.
+
+
 ## v0.0.27 - 2020-06-16
 
 - Adds an "expand" button to expand the Vitessce component to the full window size.

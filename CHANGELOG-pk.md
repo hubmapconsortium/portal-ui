@@ -1,1 +1,0 @@
-- Make Peter Kant's commitments explicit.
