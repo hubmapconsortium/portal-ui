@@ -1,10 +1,17 @@
 FROM node:12.16.3-alpine as builder
 WORKDIR /work
 RUN apk add --no-cache python git
-COPY . .
+
+# COPY only what is needed so layers can be cached.
+COPY package.json .
+COPY package-lock.json .
+
 RUN npm install
 # TODO: Get rid of prepublish... wget the prov-vis schema shouldn't be necessary. See PR #232.
 RUN npm run prepublish
+
+COPY . .
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
 
 FROM tiangolo/uwsgi-nginx-flask:python3.7
