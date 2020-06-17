@@ -4,11 +4,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 function ShowcaseLinks() {
   return (
     <>
-      {['Spraggins'].map((showcaseName) => (
-        <MenuItem key={showcaseName}>
-          <a href={`/showcase/${showcaseName.toLowerCase()}`} className="navLinkDropDown">
-            {showcaseName}
-          </a>
+      {['Spraggins'].map((showcaseName, i) => (
+        <MenuItem key={showcaseName} mt={i === 0}>
+          <a href={`/showcase/${showcaseName.toLowerCase()}`}>{showcaseName}</a>
         </MenuItem>
       ))}
     </>
