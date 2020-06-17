@@ -26,10 +26,8 @@ const StyledSwitchGrid = styled(Grid)`
   flex-wrap: nowrap;
 `;
 const StyledSwitchGridItem = styled(Grid)`
-  margin-top: 8px;
   label {
     display: inline-block;
-    margin-top: 2px;
   }
 `;
 

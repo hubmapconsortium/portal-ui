@@ -5,7 +5,7 @@ import { StyledSwitchGrid, StyledSwitchGridItem } from './style';
 function ThemeSwitch(props) {
   const { theme, onChange } = props;
   return (
-    <StyledSwitchGrid component="div" container alignItems="right" spacing={1} noWrap>
+    <StyledSwitchGrid component="div" container alignItems="center" spacing={1}>
       <StyledSwitchGridItem item>
         <label htmlFor="visualization-theme-switch">Light</label>
       </StyledSwitchGridItem>
