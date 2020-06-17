@@ -1,13 +1,13 @@
 import React, { useReducer, useRef } from 'react';
 import Button from '@material-ui/core/Button';
-import Popper from '@material-ui/core/Popper';
-import MenuList from '@material-ui/core/MenuList';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import Paper from '@material-ui/core/Paper';
+import MenuList from '@material-ui/core/MenuList';
 
 import ShowcaseLinks from '../ShowcaseLinks';
+import { OffsetPopper } from './style';
 
 function ShowcaseDropdown() {
   const [open, toggle] = useReducer((v) => !v, false);
@@ -19,7 +19,7 @@ function ShowcaseDropdown() {
         Showcases
         {open ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
       </Button>
-      <Popper open={open} anchorEl={anchorRef.current} placement="bottom-start">
+      <OffsetPopper open={open} anchorEl={anchorRef.current} placement="bottom-start">
         <Paper>
           <ClickAwayListener onClickAway={toggle}>
             <MenuList id="showcase-options">
@@ -27,7 +27,7 @@ function ShowcaseDropdown() {
             </MenuList>
           </ClickAwayListener>
         </Paper>
-      </Popper>
+      </OffsetPopper>
     </>
   );
 }
