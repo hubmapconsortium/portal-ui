@@ -1,12 +1,13 @@
 import React, { useReducer, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import Popper from '@material-ui/core/Popper';
-import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import Paper from '@material-ui/core/Paper';
+
+import ShowcaseLinks from '../ShowcaseLinks';
 
 function ShowcaseDropdown() {
   const [open, toggle] = useReducer((v) => !v, false);
@@ -22,13 +23,7 @@ function ShowcaseDropdown() {
         <Paper>
           <ClickAwayListener onClickAway={toggle}>
             <MenuList id="showcase-options">
-              {['Spraggins'].map((showcaseName) => (
-                <MenuItem dense key={showcaseName}>
-                  <a href={`/showcase/${showcaseName.toLowerCase()}`} className="navLinkDropDown">
-                    {showcaseName}
-                  </a>
-                </MenuItem>
-              ))}
+              <ShowcaseLinks />
             </MenuList>
           </ClickAwayListener>
         </Paper>
