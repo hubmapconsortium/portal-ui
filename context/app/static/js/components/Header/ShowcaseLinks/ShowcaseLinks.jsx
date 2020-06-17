@@ -5,7 +5,7 @@ function ShowcaseLinks() {
   return (
     <>
       {['Spraggins'].map((showcaseName) => (
-        <MenuItem dense key={showcaseName}>
+        <MenuItem key={showcaseName}>
           <a href={`/showcase/${showcaseName.toLowerCase()}`} className="navLinkDropDown">
             {showcaseName}
           </a>
