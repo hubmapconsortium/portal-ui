@@ -5,8 +5,8 @@ import Link from '@material-ui/core/Link';
 function ShowcaseLinks() {
   return (
     <>
-      {['Spraggins'].map((showcaseName, i) => (
-        <MenuItem key={showcaseName} mt={i === 0}>
+      {['Spraggins'].map((showcaseName) => (
+        <MenuItem key={showcaseName}>
           <Link href={`/showcase/${showcaseName.toLowerCase()}`} color="primary" underline="none">
             {showcaseName}
           </Link>
