@@ -16,4 +16,4 @@ function ShowcaseLinks() {
   );
 }
 
-export default ShowcaseLinks;
+export default React.memo(ShowcaseLinks);
