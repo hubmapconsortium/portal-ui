@@ -7,6 +7,7 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { HubmapLogo, Spacer, HeaderButton, Link } from './style';
 import Menu from '../Menu';
+import ShowcaseDropdown from '../ShowcaseDropdown';
 import LoginButton from '../LoginButton';
 
 export default function Header() {
@@ -31,6 +32,7 @@ export default function Header() {
                 ))}
               </div>
               <Spacer />
+              <ShowcaseDropdown />
               <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
                 <HeaderButton>
                   <Link href="/ccf-eui" target="_blank" rel="noopener noreferrer">
