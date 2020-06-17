@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Hyperlink from '@material-ui/core/Link';
 import { Flex } from './style';
 
-export default function Footer() {
+function Footer() {
   return (
     <Flex maxWidth="lg">
       <Typography variant="body2" color="secondary">
@@ -20,3 +20,5 @@ export default function Footer() {
     </Flex>
   );
 }
+
+export default Footer;

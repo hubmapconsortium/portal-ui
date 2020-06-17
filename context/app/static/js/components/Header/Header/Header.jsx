@@ -10,7 +10,7 @@ import Menu from '../Menu';
 import ShowcaseDropdown from '../ShowcaseDropdown';
 import LoginButton from '../LoginButton';
 
-export default function Header() {
+function Header() {
   const theme = useTheme();
   const dontDisplayMenu = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -53,3 +53,5 @@ export default function Header() {
     </AppBar>
   );
 }
+
+export default Header;
