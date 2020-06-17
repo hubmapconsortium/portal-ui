@@ -9,7 +9,7 @@ const FlexRow = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  min-height: 80px;
+  min-height: 50px;
   @media (max-width: ${(props) => props.theme.breakpoints.values.sm}px) {
     flex-direction: column;
   }
