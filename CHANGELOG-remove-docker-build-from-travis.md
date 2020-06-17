@@ -1,0 +1,1 @@
+- Remove Docker build from Travis.

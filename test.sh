@@ -28,13 +28,13 @@ if [ "$TRAVIS_BRANCH" != 'master' ] && [[ "$TRAVIS_BRANCH" != *'release'* ]]; th
 fi
 end changelog
 
-start quick-start
+start cypress
 if [ ! -z "$TRAVIS" ]; then
   ./quick-start.sh || sed -i 's/TODO/FAKE/' context/instance/app.conf
 fi
 ./quick-start.sh &
-server_up 5000
-end quick-start
+cypress-etc/test.sh
+end cypress
 
 start flake8
 # Unit tests require dev dependencies beyond what quick-start provides.
@@ -47,8 +47,3 @@ end flake8
 start pytest
 pytest
 end pytest
-
-start docker
-./docker.sh 5001
-cypress-etc/test.sh
-end docker
