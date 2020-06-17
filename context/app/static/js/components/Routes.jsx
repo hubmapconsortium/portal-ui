@@ -7,7 +7,7 @@ import Search from './Search/Search';
 import Donor from './Detail/Donor';
 import Sample from './Detail/Sample';
 import Dataset from './Detail/Dataset';
-import Showcase from './Showcase/Showcase';
+import Showcase from './Showcase';
 
 function Routes(props) {
   const { flaskData } = props;
