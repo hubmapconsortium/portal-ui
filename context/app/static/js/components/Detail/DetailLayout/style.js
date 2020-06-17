@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 
-const FlexColumn = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+const Content = styled.div`
   width: calc(100% - 150px);
 `;
 
@@ -13,4 +10,4 @@ const FlexRow = styled.div`
   justify-content: center;
 `;
 
-export { FlexColumn, FlexRow };
+export { Content, FlexRow };

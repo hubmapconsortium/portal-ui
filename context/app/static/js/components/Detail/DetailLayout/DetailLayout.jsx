@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NoticeAlert from '../../NoticeAlert';
 import TableOfContents from '../TableOfContents';
-import { FlexColumn, FlexRow } from './style';
+import { Content, FlexRow } from './style';
 import { capitalizeString } from '../../../helpers/functions';
 
 function getSectionFromString(s) {
@@ -51,10 +51,10 @@ function DetailLayout(props) {
   return (
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
-      <FlexColumn maxWidth="lg">
+      <Content>
         {flashed_messages && flashed_messages.length > 0 && <NoticeAlert errors={flashed_messages} />}
         {children}
-      </FlexColumn>
+      </Content>
     </FlexRow>
   );
 }
