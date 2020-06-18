@@ -45,7 +45,7 @@ function Header() {
               </HeaderButton>
             </>
           )}
-          {!dontDisplayMenu && <Spacer />}
+          {shouldDisplayMenu && <Spacer />}
           {/* eslint-disable-next-line no-undef */}
           <LoginButton isAuthenticated={isAuthenticated} />
         </Toolbar>
