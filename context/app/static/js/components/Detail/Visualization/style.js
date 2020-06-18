@@ -23,6 +23,7 @@ const StyledHeaderRight = styled.div`
 
 const StyledSectionContainer = styled(SectionContainer)`
   z-index: 3;
+  position: relative;
 `;
 
 const ExpandButton = styled(Button)`
