@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
+// eslint-disable-next-line import/no-unresolved
+import { capitalizeString } from 'helpers/functions';
 import NoticeAlert from '../../NoticeAlert';
 import TableOfContents from '../TableOfContents';
-import { FlexColumn, FlexRow } from './style';
-import { capitalizeString } from '../../../helpers/functions';
+import { Content, FlexRow } from './style';
 
 function getSectionFromString(s) {
   if (s === 'metadataTable') {
@@ -51,10 +52,10 @@ function DetailLayout(props) {
   return (
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
-      <FlexColumn maxWidth="lg">
+      <Content>
         {flashed_messages && flashed_messages.length > 0 && <NoticeAlert errors={flashed_messages} />}
         {children}
-      </FlexColumn>
+      </Content>
     </FlexRow>
   );
 }
