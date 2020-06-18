@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
+// eslint-disable-next-line import/no-unresolved
+import { capitalizeString } from 'helpers/functions';
 import NoticeAlert from '../../NoticeAlert';
 import TableOfContents from '../TableOfContents';
 import { Content, FlexRow } from './style';
-import { capitalizeString } from '../../../helpers/functions';
 
 function getSectionFromString(s) {
   if (s === 'metadataTable') {
