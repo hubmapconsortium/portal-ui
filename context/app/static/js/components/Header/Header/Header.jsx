@@ -11,7 +11,7 @@ import LoginButton from '../LoginButton';
 
 function Header() {
   const theme = useTheme();
-  const dontDisplayMenu = useMediaQuery(theme.breakpoints.up('md'));
+  const shouldDisplayMenu = !useMediaQuery(theme.breakpoints.up('md'));
   const anchorRef = useRef(null);
 
   return (
