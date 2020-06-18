@@ -1,3 +1,10 @@
+## v0.0.29 - 2020-06-18
+
+- Update home page per design.
+- Add infrastructure documentation.
+- Added a toggle to change the Vitessce theme from `"light"` to `"dark"`.
+
+
 ## v0.0.28 - 2020-06-17
 
 - Stub out the docs to be filled in.
