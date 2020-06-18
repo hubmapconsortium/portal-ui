@@ -18,7 +18,7 @@ function Header() {
     <StyledAppBar position="sticky" ref={anchorRef} elevation={0}>
       <Container maxWidth="lg">
         <Toolbar disableGutters>
-          {!dontDisplayMenu && <Menu anchorRef={anchorRef} />}
+          {shouldDisplayMenu && <Menu anchorRef={anchorRef} />}
           <a href="/">
             <HubmapLogo aria-label="HubMAP logo" />
           </a>
