@@ -22,7 +22,7 @@ function Header() {
           <a href="/">
             <HubmapLogo aria-label="HubMAP logo" />
           </a>
-          {dontDisplayMenu && (
+          {!shouldDisplayMenu && (
             <>
               <div>
                 {['Donor', 'Sample', 'Dataset'].map((type) => (
