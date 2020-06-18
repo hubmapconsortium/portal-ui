@@ -39,7 +39,7 @@ SCATTERPLOT = {
             "w": 10,
             "h": 6,
         },
-        {"component": "factors", "x": 10, "y": 0, "w": 2, "h": 6, },
+        {"component": "cellSets", "x": 10, "y": 0, "w": 2, "h": 6, },
     ],
 }
 
@@ -66,7 +66,7 @@ ASSAY_CONF_LOOKUP = {
         "base_conf": SCATTERPLOT,
         "files_conf": [
             {"rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json", "type": "CELLS", },
-            {"rel_path": f"{SCRNASEQ_BASE_PATH}.factors.json", "type": "FACTORS", },
+            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cell-sets.json", "type": "CELL-SETS", },
         ],
     },
     "codex_cytokit": {
