@@ -1,27 +1,28 @@
 # HuBMAP Portal Documentation
 
 TODO: Peter Kant commits to filling this in.
-- [about](/docs/about)
-- [apis](/docs/apis)
-- [assay/af](/docs/assay/af)
-- [assay/atacseq](/docs/assay/atacseq)
-- [assay/codex](/docs/assay/codex)
-- [assay/imc](/docs/assay/imc)
-- [assay/lcms](/docs/assay/lcms)
-- [assay/maldi-ims](/docs/assay/maldi-ims)
-- [assay/mxif](/docs/assay/mxif)
-- [assay/pas](/docs/assay/pas)
-- [assay/rnaseq](/docs/assay/rnaseq)
-- [assay/seqfish](/docs/assay/seqfish)
-- [assay/wgs](/docs/assay/wgs)
-- [assays](/docs/assays)
-- [consent](/docs/consent)
-- [data-levels](/docs/data-levels)
-- [donor](/docs/donor)
-- [help](/docs/help)
-- [infrastructure](/docs/infrastructure)
-- [interface](/docs/interface)
-- [metadata](/docs/metadata)
-- [pipelines](/docs/pipelines)
-- [release-summer-2020](/docs/release-summer-2020)
-- [sample](/docs/sample)
+
+[about](/docs/about) <br/>
+[apis](/docs/apis) <br/>
+[assay/af](/docs/assay/af) <br/>
+[assay/atacseq](/docs/assay/atacseq) <br/>
+[assay/codex](/docs/assay/codex) <br/>
+[assay/imc](/docs/assay/imc) <br/>
+[assay/lcms](/docs/assay/lcms) <br/>
+[assay/maldi-ims](/docs/assay/maldi-ims) <br/>
+[assay/mxif](/docs/assay/mxif) <br/>
+[assay/pas](/docs/assay/pas) <br/>
+[assay/rnaseq](/docs/assay/rnaseq) <br/>
+[assay/seqfish](/docs/assay/seqfish) <br/>
+[assay/wgs](/docs/assay/wgs) <br/>
+[assays](/docs/assays) <br/>
+[consent](/docs/consent) <br/>
+[data-levels](/docs/data-levels) <br/>
+[donor](/docs/donor) <br/>
+[help](/docs/help) <br/>
+[infrastructure](/docs/infrastructure) <br/>
+[interface](/docs/interface) <br/>
+[metadata](/docs/metadata) <br/>
+[pipelines](/docs/pipelines) <br/>
+[release-summer-2020](/docs/release-summer-2020) <br/>
+[sample](/docs/sample) <br/>
