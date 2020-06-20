@@ -34,7 +34,7 @@ def to_xml(html):
         r'<!doctype html>',
         '', html)
     html = re.sub(
-        r'(<(meta|link|br|base)[^>]+)>',
+        r'(<(meta|link|br|base)[^>]*)>',
         r'\1/>', html)
     for attr in ['async', 'nomodule', 'defer']:
         # Since the targets overlap, we need to run sub multiple times.
