@@ -45,7 +45,12 @@ def _get_endpoints():
 @blueprint.route('/')
 def index():
     core_props = {'endpoints': _get_endpoints()}
-    return render_template('pages/base_react.html', types=types, flask_data=core_props)
+    return render_template(
+        'pages/base_react.html',
+        types=types,
+        flask_data=core_props,
+        title='Welcome'
+    )
 
 
 @blueprint.route('/ccf-eui')
