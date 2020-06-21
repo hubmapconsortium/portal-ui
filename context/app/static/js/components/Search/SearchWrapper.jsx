@@ -150,7 +150,7 @@ function SearchWrapper(props) {
                   'hitstats.results_found': '{hitCount} results found',
                 }}
               />
-              <MaskedSelectedFilters hiddenFilterIds={hiddenFilterIds} />
+              <MaskedSelectedFilters hiddenFilterIds={['entity_type']} />
               <SortingSelector options={sortOptions} />
             </ActionBarRow>
           </ActionBar>
