@@ -109,6 +109,10 @@ def logout():
     - Destroy the session state.
     - Redirect the user to the Globus Auth logout page.
     '''
+    # TODO: Even after logout, the nexus_token cookie persists.
+    # - How do we clear the cookie? Return a self-redirect response to communicate with the browser?
+    # - Why does the cookie work when the token has been revoked?
+
     client = load_app_client()
 
     # Revoke the tokens with Globus Auth

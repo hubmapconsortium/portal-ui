@@ -52,6 +52,13 @@ def create_app(testing=False):
             'is_authenticated': session.get('is_authenticated')
         }
 
+    @app.before_request
+    def set_default_nexus_token():
+        if 'nexus_token' not in session:
+            session.update(
+                nexus_token='',
+                is_authenticated=False)
+
     return app
 
 
