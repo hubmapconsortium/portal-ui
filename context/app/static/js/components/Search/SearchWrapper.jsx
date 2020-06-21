@@ -76,9 +76,13 @@ function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
 }
 
 function MaskedSelectedFilters(props) {
-  const { hiddenFilterIds } = props;
+  const { hiddenFilterIds, hiddenValueFilterIds } = props;
   const SelectedFilter = (filterProps) => {
-    const style = hiddenFilterIds.indexOf(filterProps.filterId) === -1 ? {} : { display: 'None' };
+    const isHidden = hiddenFilterIds.indexOf(filterProps.filterId) !== -1;
+    const isHiddenValue = hiddenValueFilterIds.indexOf(filterProps.filterId) !== -1;
+
+    const style = isHidden && !isHiddenValue ? { display: 'None' } : {};
+
     // Copy and paste from
     // http://docs.searchkit.co/v0.8.3/docs/components/navigation/selected-filters.html
     // plus typo corrections and wrapping div.
@@ -93,7 +97,8 @@ function MaskedSelectedFilters(props) {
           .mix(`selected-filter--${filterProps.filterId}`)}
       >
         <div className={filterProps.bemBlocks.option('name')}>
-          {filterProps.labelKey}: {filterProps.labelValue}
+          {filterProps.labelKey}
+          {!isHiddenValue && `: ${filterProps.labelValue}`}
         </div>
         <div className={filterProps.bemBlocks.option('remove-action')} onClick={filterProps.removeFilter}>
           x
@@ -117,6 +122,7 @@ function SearchWrapper(props) {
     httpHeaders,
     sortOptions,
     hiddenFilterIds,
+    hiddenValueFilterIds,
     searchUrlPath,
     queryFields,
   } = props;
@@ -150,7 +156,7 @@ function SearchWrapper(props) {
                   'hitstats.results_found': '{hitCount} results found',
                 }}
               />
-              <MaskedSelectedFilters hiddenFilterIds={['entity_type']} />
+              <MaskedSelectedFilters hiddenFilterIds={hiddenFilterIds} hiddenValueFilterIds={hiddenValueFilterIds} />
               <SortingSelector options={sortOptions} />
             </ActionBarRow>
           </ActionBar>
@@ -216,6 +222,7 @@ SearchWrapper.propTypes = {
     }),
   ),
   hiddenFilterIds: PropTypes.arrayOf(PropTypes.string),
+  hiddenValueFilterIds: PropTypes.arrayOf(PropTypes.string),
   searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
@@ -231,6 +238,7 @@ SearchWrapper.defaultProps = {
     },
   ],
   hiddenFilterIds: [],
+  hiddenValueFilterIds: [],
   searchUrlPath: '_search',
   httpHeaders: {},
 };
