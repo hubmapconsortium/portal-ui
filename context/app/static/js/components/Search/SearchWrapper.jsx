@@ -184,14 +184,19 @@ SearchWrapper.propTypes = {
       type: PropTypes.oneOf([
         // Expand as needed; Starting small to catch typos.
         'RefinementListFilter',
+        'RangeFilter',
       ]).isRequired,
       props: PropTypes.exact({
+        // This is the union of two distinct prop lists.
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         field: PropTypes.string.isRequired,
-        operator: PropTypes.string.isRequired,
-        size: PropTypes.number.isRequired,
+        operator: PropTypes.string,
+        size: PropTypes.number,
         translations: PropTypes.objectOf(PropTypes.string),
+        min: PropTypes.number,
+        max: PropTypes.number,
+        showHistogram: PropTypes.bool,
       }),
     }),
   ).isRequired,
