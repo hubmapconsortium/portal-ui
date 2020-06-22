@@ -14,6 +14,7 @@ settings:
   react:
     version: detect
 rules:
+  camelcase: [0]  # Preserving original name will make searching across codebase easier.
   no-console: ["error", { allow: ["warn", "error"] }]
   react/jsx-filename-extension: [0]  # Imports don't work if I change extension.
   react/sort-comp: [0]  # Non-alphabetical groupings can make more sense.
