@@ -31,15 +31,10 @@ function DonorItems(props) {
 
 // TODO: Update tissue location with real data once it's in a consumable structure
 function SampleItems(props) {
-  const {
-    organ,
-    origin_sample: { organ: originOrgan },
-    specimenType,
-    tissueLocation,
-  } = props;
+  const { origin_sample, specimenType, tissueLocation } = props;
   return (
     <>
-      <MetadataItem label="Organ Type" value={organ || originOrgan} />
+      <MetadataItem label="Organ Type" value={origin_sample.mapped_organ} />
       <MetadataItem label="Specimen Type" ml={1} value={specimenType} />
       <MetadataItem label="Tissue Location" ml={1} value={tissueLocation} />
     </>
