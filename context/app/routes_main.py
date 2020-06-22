@@ -72,28 +72,9 @@ def details(type, uuid):
     if type != actual_type:
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
-    if 'FLASK_ENV' in environ and environ['FLASK_ENV'] == 'development':
-        # TODO: These schemas don't need to be reloaded per request.
-        schema_path = (
-            Path(current_app.root_path).parent / 'search-schema' / 'data'
-            / 'schemas' / f'{type}.schema.yaml')
-        with open(schema_path) as type_schema_file:
-            type_schema = load_yaml(type_schema_file)
-        for_each_validation_error(entity, type_schema, flash)
-
-    flashed_messages = []
-    errors = get_flashed_messages()
-
-    for error in errors:
-        # Traceback trim is a quick fix https://github.com/hubmapconsortium/portal-ui/issues/145.
-        flashed_messages.append({'message': error.message,
-                                 'issue_url': error.issue_url,
-                                 'traceback': error.__str__()[0:1500]})
-
     template = f'pages/base_react.html'
     core_props = {'endpoints': _get_endpoints()}
     core_props.update({
-        'flashed_messages': flashed_messages,
         'entity': entity,
         'vitessce_conf': client.get_vitessce_conf(entity)
     })
