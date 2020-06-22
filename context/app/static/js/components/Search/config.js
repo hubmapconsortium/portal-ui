@@ -20,16 +20,16 @@ export const donorConfig = {
 
 export const sampleConfig = {
   filters: [
-    filter('origin_sample.organ', 'Organ', organTranslations),
-    filter('specimen_type', 'Specimen Type', specimenTypeTranslations),
+    filter('origin_sample.mapped_organ', 'Organ'),
+    filter('mapped_specimen_type', 'Specimen Type'),
     filter('donor.group_name', 'Group'),
     filter('created_by_user_displayname', 'Creator'),
   ],
   fields: [
     field('display_doi', 'ID'),
     field('donor.group_name', 'Group'),
-    field('specimen_type', 'Speciment Type', specimenTypeTranslations),
-    field('origin_sample.organ', 'Organ', organTranslations),
+    field('mapped_specimen_type', 'Speciment Type'),
+    field('origin_sample.mapped_organ', 'Organ'),
   ],
 };
 
