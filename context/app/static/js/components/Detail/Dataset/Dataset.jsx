@@ -39,7 +39,7 @@ function SummaryData(props) {
 }
 
 function DatasetDetail(props) {
-  const { assayMetadata, vitData, assetsEndpoint, flashed_messages, entityEndpoint } = props;
+  const { assayMetadata, vitData, assetsEndpoint, entityEndpoint } = props;
   const {
     protocol_url,
     portal_uploaded_protocol_files,
@@ -67,7 +67,7 @@ function DatasetDetail(props) {
   };
 
   return (
-    <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
+    <DetailLayout shouldDisplaySection={shouldDisplaySection}>
       <Summary
         uuid={uuid}
         entity_type={entity_type}
