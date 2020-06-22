@@ -6,7 +6,7 @@ function DataSummaryItem(props) {
   const { value, icon: Icon, label, href } = props;
 
   return (
-    <StyledLink href={href}>
+    <StyledLink href={href} underline="none">
       <Icon color="primary" style={{ fontSize: '36px' }} />
       <StyledTypography variant="h4">
         {value} {label}
