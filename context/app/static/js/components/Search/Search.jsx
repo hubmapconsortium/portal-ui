@@ -61,7 +61,7 @@ const searchProps = {
     },
   ],
   hiddenFilterIds: baseFilters.map((filterDef) => filterDef.props.id),
-  queryFields: resultFieldsByType[type].map((field) => field.id),
+  queryFields: ['everything'],
 };
 
 function Search(props) {
