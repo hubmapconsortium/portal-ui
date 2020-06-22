@@ -7,10 +7,6 @@ import SectionHeader from '../SectionHeader';
 import SectionItem from '../SectionItem';
 import SectionContainer from '../SectionContainer';
 
-function getDonorMetadataValue(metadata, key) {
-  return metadata && key in metadata ? `${metadata[key].value} ${metadata[key].units}` : '';
-}
-
 function MetadataItem(props) {
   const { label, value, ml } = props;
   return (
@@ -23,15 +19,12 @@ function MetadataItem(props) {
 function DonorItems(props) {
   const { metadata } = props;
 
-  const ageValue = getDonorMetadataValue(metadata, 'Current chronological age');
-  const bmiValue = getDonorMetadataValue(metadata, 'Body mass index');
-
   return (
     <>
-      <MetadataItem label="Gender Finding" value={metadata['Gender finding']} />
-      <MetadataItem label="Current Chronological Age" ml={1} value={ageValue} />
-      <MetadataItem label="Body Mass Index" ml={1} value={bmiValue} />
-      <MetadataItem label="Racial Group" ml={1} value={metadata['Racial group']} />
+      <MetadataItem label="Gender Finding" value={metadata.gender} />
+      <MetadataItem label="Current Chronological Age" ml={1} value={metadata.age} />
+      <MetadataItem label="Body Mass Index" ml={1} value={metadata.bmi} />
+      <MetadataItem label="Racial Group" ml={1} value={metadata.race} />
     </>
   );
 }
