@@ -14,22 +14,10 @@ function Routes(props) {
   const urlPath = window.location.pathname;
 
   if (urlPath.startsWith('/browse/donor/')) {
-    return (
-      <Donor
-        assayMetadata={entity}
-        vitData={vitessce_conf}
-        entityEndpoint={endpoints.entityEndpoint}
-      />
-    );
+    return <Donor assayMetadata={entity} vitData={vitessce_conf} entityEndpoint={endpoints.entityEndpoint} />;
   }
   if (urlPath.startsWith('/browse/sample/')) {
-    return (
-      <Sample
-        assayMetadata={entity}
-        vitData={vitessce_conf}
-        entityEndpoint={endpoints.entityEndpoint}
-      />
-    );
+    return <Sample assayMetadata={entity} vitData={vitessce_conf} entityEndpoint={endpoints.entityEndpoint} />;
   }
 
   if (urlPath.startsWith('/browse/dataset/')) {
