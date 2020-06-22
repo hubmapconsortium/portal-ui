@@ -2,7 +2,12 @@
 import { filter, field, organTranslations, specimenTypeTranslations } from './utils';
 
 export const donorConfig = {
-  filters: [filter('created_by_user_displayname', 'Creator'), filter('group_name', 'Group')],
+  filters: [
+    filter('created_by_user_displayname', 'Creator'),
+    filter('group_name', 'Group'),
+    filter('mapped_metadata.gender', 'Gender'),
+    filter('mapped_metadata.race', 'Race'),
+  ],
   fields: [
     field('display_doi', 'ID'),
     field('group_name', 'Group'),
