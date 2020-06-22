@@ -13,10 +13,30 @@ function DataSummary(props) {
   return (
     <Wrapper>
       <FlexRow>
-        <DataSummaryItem icon={BarChartIcon} label="Datasets" value={summaryData.datasetCount} />
-        <DataSummaryItem icon={BubbleChartIcon} label="Samples" value={summaryData.sampleCount} />
-        <DataSummaryItem icon={PersonIcon} label="Donors" value={summaryData.donorCount} />
-        <DataSummaryItem icon={AccountBalanceIcon} label="Centers" value={summaryData.centerCount} />
+        <DataSummaryItem
+          icon={BarChartIcon}
+          label="Datasets"
+          value={summaryData.datasetCount}
+          href="/search?entity_type[0]=Dataset"
+        />
+        <DataSummaryItem
+          icon={BubbleChartIcon}
+          label="Samples"
+          value={summaryData.sampleCount}
+          href="/search?entity_type[0]=Sample"
+        />
+        <DataSummaryItem
+          icon={PersonIcon}
+          label="Donors"
+          value={summaryData.donorCount}
+          href="/search?entity_type[0]=Donor"
+        />
+        <DataSummaryItem
+          icon={AccountBalanceIcon}
+          label="Centers"
+          value={summaryData.centerCount}
+          href="/docs/centers" // TODO: This doesn't exist!
+        />
       </FlexRow>
       <Title />
     </Wrapper>
