@@ -6,10 +6,10 @@ export const donorConfig = {
   fields: [
     field('display_doi', 'ID'),
     field('group_name', 'Group'),
-    field('age', 'Age'),
-    field('bmi', 'BMI'),
-    field('gender', 'Gender'),
-    field('description', 'Description'),
+    field('mapped_metadata.age', 'Age'),
+    field('mapped_metadata.bmi', 'BMI'),
+    field('mapped_metadata.gender', 'Gender'),
+    field('mapped_metadata.race', 'Race'),
   ],
 };
 
