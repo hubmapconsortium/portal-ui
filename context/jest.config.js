@@ -6,7 +6,6 @@ module.exports = {
     '^components(.*)$': '<rootDir>/app/static/js/components$1',
     '^static(.*)$': '<rootDir>/app/static/$1',
     '^test-utils(.*)$': '<rootDir>/test-utils$1',
-    'search-schema-definitions$': '<rootDir>/search-schema/data/definitions.yaml',
     'metadata-field-descriptions$': '<rootDir>/ingest-validation-tools/docs/field-descriptions.yaml',
   },
   transform: {

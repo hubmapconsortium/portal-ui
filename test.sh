@@ -39,7 +39,7 @@ end quick-start
 start flake8
 # Unit tests require dev dependencies beyond what quick-start provides.
 pip install -r context/requirements-dev.txt > /dev/null
-EXCLUDE=node_modules,ingest-validation-tools,search-schema
+EXCLUDE=node_modules,ingest-validation-tools
 flake8 --exclude=$EXCLUDE \
   || die "Try: autopep8 --in-place --aggressive -r . --exclude $EXCLUDE"
 end flake8
