@@ -1,18 +1,13 @@
-from pathlib import Path
-from os import environ
 from os.path import dirname
 
 from flask import (Blueprint, render_template, abort, current_app,
-                   session, flash, get_flashed_messages, request,
-                   redirect, url_for)
+                   session, request, redirect, url_for)
 
-from yaml import safe_load as load_yaml
 import markdown
 import frontmatter
 
 from .api.client import ApiClient
 from .config import types
-from .validation_utils import for_each_validation_error
 
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
