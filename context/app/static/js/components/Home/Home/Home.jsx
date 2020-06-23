@@ -7,7 +7,7 @@ import Workflow from '../Workflow';
 import DataUseGuidelines from '../DataUseGuidelines';
 import Associations from '../Associations';
 import TwitterTimeline from '../TwitterTimeline';
-import BarChart from '../BarChart';
+import BarChartWrapper from '../BarChartWrapper';
 import { OuterGrid, UpperInnerGrid, LowerInnerGrid } from './style';
 
 function checkPropReturnValue(prop, obj) {
@@ -69,7 +69,7 @@ function Home(props) {
     <OuterGrid>
       <UpperInnerGrid maxWidth="lg">
         <DataSummary summaryData={summaryData} />
-        {isLargerThanMd && <BarChart />}
+        {isLargerThanMd && <BarChartWrapper />}
       </UpperInnerGrid>
       <About />
       <LowerInnerGrid maxWidth="lg">
