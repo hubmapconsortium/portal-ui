@@ -1,5 +1,6 @@
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+
 import styled from 'styled-components';
 
 export const FlexColumnRight = styled.div`

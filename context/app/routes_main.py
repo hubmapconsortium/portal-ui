@@ -1,18 +1,13 @@
-from pathlib import Path
-from os import environ
 from os.path import dirname
 
 from flask import (Blueprint, render_template, abort, current_app,
-                   session, flash, get_flashed_messages, request,
-                   redirect, url_for)
+                   session, request, redirect, url_for)
 
-from yaml import safe_load as load_yaml
 import markdown
 import frontmatter
 
 from .api.client import ApiClient
 from .config import types
-from .validation_utils import for_each_validation_error
 
 
 blueprint = Blueprint('routes', __name__, template_folder='templates')
@@ -45,18 +40,25 @@ def _get_endpoints():
 @blueprint.route('/')
 def index():
     core_props = {'endpoints': _get_endpoints()}
-    return render_template('pages/base_react.html', types=types, flask_data=core_props)
+    return render_template(
+        'pages/base_react.html',
+        types=types,
+        flask_data=core_props,
+        title='Welcome'
+    )
 
 
 @blueprint.route('/ccf-eui')
 def ccf_eui():
-    if 'nexus_token' not in session:
-        abort(403)
     return render_template(
         'pages/ccf-eui.html',
         config=current_app.config,
         url_root=request.url_root,
-        nexus_token=session['nexus_token']
+        nexus_token=(
+            session['nexus_token']
+            if 'nexus_token' in session
+            else ''
+        )
     )
 
 
@@ -72,28 +74,9 @@ def details(type, uuid):
     if type != actual_type:
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
-    if 'FLASK_ENV' in environ and environ['FLASK_ENV'] == 'development':
-        # TODO: These schemas don't need to be reloaded per request.
-        schema_path = (
-            Path(current_app.root_path).parent / 'search-schema' / 'data'
-            / 'schemas' / f'{type}.schema.yaml')
-        with open(schema_path) as type_schema_file:
-            type_schema = load_yaml(type_schema_file)
-        for_each_validation_error(entity, type_schema, flash)
-
-    flashed_messages = []
-    errors = get_flashed_messages()
-
-    for error in errors:
-        # Traceback trim is a quick fix https://github.com/hubmapconsortium/portal-ui/issues/145.
-        flashed_messages.append({'message': error.message,
-                                 'issue_url': error.issue_url,
-                                 'traceback': error.__str__()[0:1500]})
-
     template = f'pages/base_react.html'
     core_props = {'endpoints': _get_endpoints()}
     core_props.update({
-        'flashed_messages': flashed_messages,
         'entity': entity,
         'vitessce_conf': client.get_vitessce_conf(entity)
     })

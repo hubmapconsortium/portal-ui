@@ -12,8 +12,9 @@ const config = {
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml'],
     alias: {
-      'search-schema-definitions$': resolve('./search-schema/data/definitions.yaml'),
       'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
+      helpers: resolve(__dirname, '../app/static/js/helpers/'),
+      images: resolve(__dirname, '../app/static/images/'),
     },
   },
   module: {
@@ -69,6 +70,10 @@ const config = {
       {
         test: /\.svg$/,
         use: { loader: '@svgr/webpack' },
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [{ loader: 'url-loader' }],
       },
       {
         test: /\.ya?ml$/,

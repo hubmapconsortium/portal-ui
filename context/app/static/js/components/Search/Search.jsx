@@ -60,8 +60,9 @@ const searchProps = {
       defaultOption: false,
     },
   ],
-  hiddenFilterIds: baseFilters.map((filterDef) => filterDef.props.id),
-  queryFields: resultFieldsByType[type].map((field) => field.id),
+  hiddenFilterIds: ['entity_type', 'ancestor_ids'],
+  hiddenValueFilterIds: ['ancestor_ids'],
+  queryFields: ['everything'],
 };
 
 function Search(props) {

@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React from 'react';
 import ProvTabs from '../ProvTabs';
 import Summary from '../Summary';
@@ -8,7 +7,7 @@ import Metadata from '../Metadata';
 import DetailLayout from '../DetailLayout';
 
 function DonorDetail(props) {
-  const { assayMetadata, flashed_messages, entityEndpoint } = props;
+  const { assayMetadata, entityEndpoint } = props;
   const {
     uuid,
     protocol_url,
@@ -30,7 +29,7 @@ function DonorDetail(props) {
   };
 
   return (
-    <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
+    <DetailLayout shouldDisplaySection={shouldDisplaySection}>
       <Summary
         uuid={uuid}
         entity_type={entity_type}

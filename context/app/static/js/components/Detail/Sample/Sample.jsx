@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import ProvTabs from '../ProvTabs';
@@ -10,7 +9,7 @@ import SummaryItem from '../SummaryItem';
 import DetailLayout from '../DetailLayout';
 
 function SampleDetail(props) {
-  const { assayMetadata, flashed_messages, entityEndpoint } = props;
+  const { assayMetadata, entityEndpoint } = props;
   const {
     uuid,
     protocol_url,
@@ -33,7 +32,7 @@ function SampleDetail(props) {
   };
 
   return (
-    <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
+    <DetailLayout shouldDisplaySection={shouldDisplaySection}>
       <Summary
         uuid={uuid}
         entity_type={entity_type}

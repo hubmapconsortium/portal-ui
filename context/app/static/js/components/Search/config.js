@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { filter, rangeFilter, field, organTranslations, specimenTypeTranslations } from './utils';
+import { filter, rangeFilter, field } from './utils';
 
 export const donorConfig = {
   filters: [
@@ -40,14 +40,14 @@ export const datasetConfig = {
     filter('created_by_user_displayname', 'Creator'),
     filter('data_types', 'Data types'),
     filter('donor.group_name', 'Group'),
-    filter('source_sample.specimen_type', 'Specimen Type', specimenTypeTranslations),
-    filter('status', 'Status'),
+    filter('source_sample.mapped_specimen_type', 'Specimen Type'),
+    filter('mapped_status', 'Status'),
   ],
   fields: [
     field('display_doi', 'ID'),
     field('donor.group_name', 'Group'),
     field('data_types', 'Data Types'),
-    field('origin_sample.organ', 'Organ', organTranslations),
-    field('status', 'Status'),
+    field('origin_sample.mapped_organ', 'Organ'),
+    field('mapped_status', 'Status'),
   ],
 };
