@@ -21,6 +21,8 @@ function useWindowSize() {
 
     return () => {
       window.removeEventListener('resize', debouncedHandleResize);
+
+      // ensure debounced func is not run for unmounted component
       debouncedHandleResize.cancel();
     };
   }, []);
