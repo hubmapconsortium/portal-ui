@@ -71,6 +71,7 @@ function BarChartWrapper(props) {
     domainColor: 'lightgray',
     tickColor: 'lightgray',
     gridColor: 'lightgray',
+    labelFontWeight: 300,
   };
 
   const partialSpec = {
@@ -112,6 +113,7 @@ function BarChartWrapper(props) {
           baseline: 'middle',
           dy: -6,
           fontSize: 12,
+          fontWeight: 300,
         },
         encoding: {
           text: { field: 'doc_count', type: 'quantitative' },
