@@ -6,22 +6,22 @@ import BarChart from '../BarChart';
 import { Wrapper } from './style';
 
 const dummyData = [
-  { doc_count: 5, key: 'AF-bulk' },
-  { doc_count: 10, key: 'ATACseq-bulk' },
-  { doc_count: 22, key: 'MxIF' },
-  { doc_count: 31, key: 'CODEX' },
-  { doc_count: 2, key: 'IMC' },
-  { doc_count: 14, key: 'MALDI-IMS-neg' },
-  { doc_count: 19, key: 'MALDI-IMS-pos' },
-  { doc_count: 7, key: 'PAS' },
-  { doc_count: 23, key: 'bulk-RNA' },
-  { doc_count: 4, key: 'SNAREseq' },
-  { doc_count: 29, key: 'TMT-LC-MS' },
-  { doc_count: 7, key: 'Targeted-Shotgun-LC-MS' },
-  { doc_count: 12, key: 'LC-MS-untargeted' },
-  { doc_count: 22, key: 'WGS' },
-  { doc_count: 16, key: 'scRNA-Seq-10x' },
-  { doc_count: 8, key: 'sciATACseq' },
+  { doc_count: 50, key: 'FAKE-AF-bulk' },
+  { doc_count: 50, key: 'FAKE-ATACseq-bulk' },
+  { doc_count: 50, key: 'FAKE-MxIF' },
+  { doc_count: 40, key: 'FAKE-CODEX' },
+  { doc_count: 40, key: 'FAKE-IMC' },
+  { doc_count: 40, key: 'FAKE-MALDI-IMS-neg' },
+  { doc_count: 30, key: 'FAKE-MALDI-IMS-pos' },
+  { doc_count: 30, key: 'FAKE-PAS' },
+  { doc_count: 30, key: 'FAKE-bulk-RNA' },
+  { doc_count: 20, key: 'FAKE-SNAREseq' },
+  { doc_count: 20, key: 'FAKE-TMT-LC-MS' },
+  { doc_count: 20, key: 'FAKE-Targeted-Shotgun-LC-MS' },
+  { doc_count: 10, key: 'FAKE-LC-MS-untargeted' },
+  { doc_count: 10, key: 'FAKE-WGS' },
+  { doc_count: 10, key: 'FAKE-scRNA-Seq-10x' },
+  { doc_count: 0, key: 'FAKE-sciATACseq' },
 ];
 
 function getChartDimensions(windowWidth) {
