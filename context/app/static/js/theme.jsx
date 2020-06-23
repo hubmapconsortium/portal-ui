@@ -20,6 +20,7 @@ const theme = createMuiTheme({
     },
     success: {
       main: '#6C8938', // '#9BC551'
+      light: '#9CB965',
     },
     action: {
       disabled: 'rgba(0,0,0, 0.38)',
