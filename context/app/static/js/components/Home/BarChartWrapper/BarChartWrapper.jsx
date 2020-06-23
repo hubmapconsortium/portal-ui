@@ -7,7 +7,7 @@ import BarChart from '../BarChart';
 import { Wrapper } from './style';
 
 const dummyData = [
-  { doc_count: 50, key: 'FAKE-AF-bulk' },
+  { doc_count: 51, key: 'FAKE-AF-bulk' },
   { doc_count: 50, key: 'FAKE-ATACseq-bulk' },
   { doc_count: 50, key: 'FAKE-MxIF' },
   { doc_count: 40, key: 'FAKE-CODEX' },
@@ -22,7 +22,7 @@ const dummyData = [
   { doc_count: 10, key: 'FAKE-LC-MS-untargeted' },
   { doc_count: 10, key: 'FAKE-WGS' },
   { doc_count: 10, key: 'FAKE-scRNA-Seq-10x' },
-  { doc_count: 0, key: 'FAKE-sciATACseq' },
+  { doc_count: 5, key: 'FAKE-sciATACseq' },
 ];
 
 function getChartDimensions(windowWidth) {
