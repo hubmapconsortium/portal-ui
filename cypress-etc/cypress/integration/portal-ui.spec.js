@@ -25,9 +25,9 @@ describe('portal-ui', () => {
       cy.contains('CCF');
       // Showcases
       cy.contains('Showcases')
-      // Help
-      cy.contains('Help').click();
-      cy.contains('TODO: Say something helpful here!');
+      // Docs
+      cy.contains('Documentation').click();
+      cy.contains('HuBMAP Portal Documentation');
 
       // Login
       cy.contains('Login');
