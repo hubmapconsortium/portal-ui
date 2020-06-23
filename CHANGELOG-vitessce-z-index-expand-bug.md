@@ -1,1 +1,0 @@
-- Fixed a bug on expansion of Vitessce due to `z-index` not being taken into account without `position: relative` as well.

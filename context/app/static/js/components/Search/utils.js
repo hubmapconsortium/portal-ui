@@ -1,15 +1,3 @@
-import fromEntries from 'fromentries';
-// eslint-disable-next-line import/no-unresolved
-import searchDefinitions from 'search-schema-definitions';
-
-export const organTranslations = fromEntries(
-  Object.entries(searchDefinitions.enums.organ_types).map((entry) => [entry[0], entry[1].description]),
-);
-
-export const specimenTypeTranslations = fromEntries(
-  Object.entries(searchDefinitions.enums.tissue_sample_types).map((entry) => [entry[0], entry[1].description]),
-);
-
 export function field(id, name, translations) {
   const def = {
     id,
@@ -36,4 +24,18 @@ export function filter(id, name, translations) {
     def.props.translations = translations;
   }
   return def;
+}
+
+export function rangeFilter(id, name, min, max) {
+  return {
+    type: 'RangeFilter',
+    props: {
+      id,
+      title: name,
+      field: id,
+      min,
+      max,
+      showHistogram: true,
+    },
+  };
 }

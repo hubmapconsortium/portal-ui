@@ -1,3 +1,22 @@
+## v0.0.30 - 2020-06-23
+
+- Disable eslint camelcase rule.
+- Fix links to documentation.
+- Move docs down a level, to keep top-level namespace clean.
+- Support free-text search, using the "everything" field we create at index time.
+- Make the header icon stats into.
+- Add histogram selectors for Age and BMI.
+- No login required for CCF.
+- Fix pagination by updating searchkit.
+- Get rid of search-schema submodule: We are giving up on validation, and the mappings are handled at index-time.
+- Get rid of excess space at top of search page.
+- Show ancestor constraint.
+- Point to the `portal` index.
+- Fixed a bug on expansion of Vitessce due to `z-index` not being taken into account without `position: relative` as well.
+- Add "Welcome" so it's not just "| HuBMAP".
+
+
+
 ## v0.0.29 - 2020-06-18
 
 - Update home page per design.

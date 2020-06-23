@@ -34,7 +34,7 @@ def to_xml(html):
         r'<!doctype html>',
         '', html)
     html = re.sub(
-        r'(<(meta|link|br|base)[^>]+)>',
+        r'(<(meta|link|br|base)[^>]*)>',
         r'\1/>', html)
     for attr in ['async', 'nomodule', 'defer']:
         # Since the targets overlap, we need to run sub multiple times.
@@ -92,7 +92,7 @@ def mock_search_donor_post(path, **kwargs):
 
 @pytest.mark.parametrize(
     'path',
-    ['/', '/help', '/browse/donor/fake-uuid', '/ccf-eui', '/VERSION', '/showcase/spraggins']
+    ['/', '/browse/donor/fake-uuid', '/ccf-eui', '/docs', '/VERSION', '/showcase/spraggins']
 )
 def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_prov_get)

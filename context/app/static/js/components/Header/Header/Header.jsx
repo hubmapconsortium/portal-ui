@@ -41,7 +41,7 @@ function Header() {
                 </HeaderButton>
               </Tooltip>
               <HeaderButton>
-                <Link href="/help">Help</Link>
+                <Link href="/docs">Documentation</Link>
               </HeaderButton>
             </>
           )}

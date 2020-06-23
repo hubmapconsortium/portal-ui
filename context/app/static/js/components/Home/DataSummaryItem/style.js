@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 
-const FlexRow = styled.div`
+const StyledTypography = styled(Typography)`
+  margin-left: ${(props) => props.theme.spacing(1)}px;
+`;
+
+const StyledLink = styled(Link)`
   display: flex;
 
   @media (max-width: ${(props) => props.theme.breakpoints.values.md}px) {
@@ -9,8 +14,4 @@ const FlexRow = styled.div`
   }
 `;
 
-const StyledTypography = styled(Typography)`
-  margin-left: ${(props) => props.theme.spacing(1)}px;
-`;
-
-export { FlexRow, StyledTypography };
+export { StyledTypography, StyledLink };
