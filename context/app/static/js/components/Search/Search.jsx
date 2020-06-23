@@ -2,8 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import SearchWrapper from './SearchWrapper';
 import { readCookie } from '../../helpers/functions';
-import 'searchkit/theming/theme.scss';
-import './Search.css';
+import './Search.scss';
 
 import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named
