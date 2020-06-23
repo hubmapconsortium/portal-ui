@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-const Placeholder = styled.div`
+const Wrapper = styled.div`
   grid-area: bar;
-  height: 750px;
+  margin: ${(props) => props.theme.spacing(2)}px 0px;
 `;
 
-export { Placeholder };
+export { Wrapper };
