@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
 // eslint-disable-next-line import/no-unresolved
 import useWindowSize from 'hooks/useWindowSize';
@@ -130,5 +131,9 @@ function BarChartWrapper(props) {
     </Wrapper>
   );
 }
+
+BarChartWrapper.propTypes = {
+  elasticsearchEndpoint: PropTypes.string.isRequired,
+};
 
 export default BarChartWrapper;
