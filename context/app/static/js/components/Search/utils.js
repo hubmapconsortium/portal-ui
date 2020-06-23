@@ -25,3 +25,17 @@ export function filter(id, name, translations) {
   }
   return def;
 }
+
+export function rangeFilter(id, name, min, max) {
+  return {
+    type: 'RangeFilter',
+    props: {
+      id,
+      title: name,
+      field: id,
+      min,
+      max,
+      showHistogram: true,
+    },
+  };
+}
