@@ -21,8 +21,8 @@ function DataUseGuidelines() {
       </MainText>
       <MainText mt={2}>
         Please direct any questions to{' '}
-        <StyledLink variant="body1" href="https://hubmapconsortium.org/" target="_blank" rel="noopener noreferrer">
-          link
+        <StyledLink variant="body1" href="mailto:help@hubmapconsortium.org">
+          help@hubmapconsortium.org
         </StyledLink>
         .
       </MainText>
