@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -35,27 +35,19 @@ function MetadataTable(props) {
     { id: 'description', label: 'Description' },
   ];
 
-  const tableRows = useMemo(
-    () =>
-      Object.entries(tableData).map((entry) => ({
-        key: entry[0],
-        value: entry[1],
-        description: metadataFieldDescriptions[entry[0]],
-      })),
-    [tableData],
-  );
+  const tableRows = Object.entries(tableData).map((entry) => ({
+    key: entry[0],
+    value: entry[1],
+    description: metadataFieldDescriptions[entry[0]],
+  }));
 
-  const downloadUrl = useMemo(
-    () =>
-      createDownloadUrl(
-        tableToDelimitedString(
-          tableRows,
-          columns.map((col) => col.label),
-          '\t',
-        ),
-        'text/tab-separated-values',
-      ),
-    [tableRows, columns],
+  const downloadUrl = createDownloadUrl(
+    tableToDelimitedString(
+      tableRows,
+      columns.map((col) => col.label),
+      '\t',
+    ),
+    'text/tab-separated-values',
   );
 
   return (
@@ -99,4 +91,4 @@ MetadataTable.propTypes = {
   display_doi: PropTypes.string.isRequired,
 };
 
-export default MetadataTable;
+export default React.memo(MetadataTable);
