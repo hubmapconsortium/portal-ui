@@ -27,7 +27,7 @@ function SummaryData(props) {
     <>
       {data_types && data_types.length > 0 && (
         <AssaySpecificItem>
-          <a href={`/assays#${data_types_string}`}>{data_types_string}</a>
+          <a href={`/docs/assays#${data_types_string}`}>{data_types_string}</a>
         </AssaySpecificItem>
       )}
       <Typography variant="body1">{origin_sample.mapped_organ}</Typography>
