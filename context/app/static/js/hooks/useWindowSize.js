@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 // eslint-disable-next-line import/no-unresolved
-import { debounce } from 'helpers/functions';
+import debounce from 'lodash/debounce';
 
 function useWindowSize() {
   function getDimensions() {
@@ -15,11 +15,14 @@ function useWindowSize() {
     function handleResize() {
       setDimensions(getDimensions());
     }
-    const debouncedHandleResize = debounce(handleResize, 1000);
+    const debouncedHandleResize = debounce(handleResize, 500, { trailing: true });
 
     window.addEventListener('resize', debouncedHandleResize);
 
-    return () => window.removeEventListener('resize', debouncedHandleResize);
+    return () => {
+      window.removeEventListener('resize', debouncedHandleResize);
+      debouncedHandleResize.cancel();
+    };
   }, []);
   return dimensions;
 }
