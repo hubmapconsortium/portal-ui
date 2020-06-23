@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Container from '@material-ui/core/Container';
 import Providers from './Providers';
 import Routes from './Routes';
 import Footer from './Footer';
-import Header from './Header';
+import { Header } from './Header';
 
 function App(props) {
   const { flaskData } = props;
@@ -12,9 +11,7 @@ function App(props) {
     <Providers>
       <Header />
       <div className="main-content">
-        <Container maxWidth="lg">
-          <Routes flaskData={flaskData} />
-        </Container>
+        <Routes flaskData={flaskData} />
       </div>
       <Footer />
     </Providers>

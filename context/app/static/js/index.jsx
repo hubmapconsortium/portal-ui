@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import 'typeface-inter';
 
-import theme from './theme';
 import './index.css';
 import App from './components/App';
+import Providers from './components/Providers';
 import Footer from './components/Footer';
-import Header from './components/Header';
+import { Header } from './components/Header';
 
 const urlPath = window.location.pathname;
 
@@ -25,18 +23,15 @@ if (urlPath === '/' || availableRoutes.some(isRoute)) {
 } else {
   // temp solution to integrate react header and footer
   ReactDOM.render(
-    // eslint-disable-next-line no-undef
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <Providers>
       <Header />
-    </ThemeProvider>,
+    </Providers>,
     document.getElementById('react-header'),
   );
   ReactDOM.render(
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <Providers>
       <Footer />
-    </ThemeProvider>,
+    </Providers>,
     document.getElementById('react-footer'),
   );
 }

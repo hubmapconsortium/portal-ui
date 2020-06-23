@@ -40,18 +40,25 @@ def _get_endpoints():
 @blueprint.route('/')
 def index():
     core_props = {'endpoints': _get_endpoints()}
-    return render_template('pages/base_react.html', types=types, flask_data=core_props)
+    return render_template(
+        'pages/base_react.html',
+        types=types,
+        flask_data=core_props,
+        title='Welcome'
+    )
 
 
 @blueprint.route('/ccf-eui')
 def ccf_eui():
-    if 'nexus_token' not in session:
-        abort(403)
     return render_template(
         'pages/ccf-eui.html',
         config=current_app.config,
         url_root=request.url_root,
-        nexus_token=session['nexus_token']
+        nexus_token=(
+            session['nexus_token']
+            if 'nexus_token' in session
+            else ''
+        )
     )
 
 

@@ -1,9 +1,9 @@
-/* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
+// eslint-disable-next-line import/no-unresolved
+import { capitalizeString } from 'helpers/functions';
 import TableOfContents from '../TableOfContents';
-import { FlexColumn, FlexRow } from './style';
-import { capitalizeString } from '../../../helpers/functions';
+import { Content, FlexRow } from './style';
 
 function getSectionFromString(s) {
   if (s === 'metadataTable') {
@@ -50,7 +50,7 @@ function DetailLayout(props) {
   return (
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
-      <FlexColumn maxWidth="lg">{children}</FlexColumn>
+      <Content>{children}</Content>
     </FlexRow>
   );
 }

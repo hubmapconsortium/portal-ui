@@ -1,0 +1,1 @@
+- Get rid of excess space at top of search page.

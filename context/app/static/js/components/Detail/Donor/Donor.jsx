@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React from 'react';
 import ProvTabs from '../ProvTabs';
 import Summary from '../Summary';
