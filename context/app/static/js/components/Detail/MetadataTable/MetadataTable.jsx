@@ -96,6 +96,7 @@ function MetadataTable(props) {
 
 MetadataTable.propTypes = {
   metadata: PropTypes.objectOf(PropTypes.string).isRequired,
+  display_doi: PropTypes.string.isRequired,
 };
 
 export default MetadataTable;
