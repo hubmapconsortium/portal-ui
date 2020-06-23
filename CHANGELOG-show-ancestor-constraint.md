@@ -1,1 +1,0 @@
-- Show ancestor constraint.

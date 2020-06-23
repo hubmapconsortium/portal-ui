@@ -1,1 +1,0 @@
-- Get rid of search-schema submodule: We are giving up on validation, and the mappings are handled at index-time.

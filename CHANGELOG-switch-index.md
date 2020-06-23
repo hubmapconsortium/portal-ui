@@ -1,1 +1,0 @@
-- Point to the `portal` index.

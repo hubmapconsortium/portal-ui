@@ -1,1 +1,0 @@
-- Move docs down a level, to keep top-level namespace clean.

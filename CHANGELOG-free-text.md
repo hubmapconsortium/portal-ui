@@ -1,1 +1,0 @@
-- Support free-text search, using the "everything" field we create at index time.
