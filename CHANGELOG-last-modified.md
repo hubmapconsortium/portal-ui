@@ -1,0 +1,1 @@
+- Add last modified column to search results.

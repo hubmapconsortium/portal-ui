@@ -17,6 +17,7 @@ export const donorConfig = {
     field('mapped_metadata.bmi', 'BMI'),
     field('mapped_metadata.gender', 'Gender'),
     field('mapped_metadata.race', 'Race'),
+    field('mapped_last_modified_timestamp', 'Last Modified'),
   ],
 };
 
@@ -32,6 +33,7 @@ export const sampleConfig = {
     field('donor.group_name', 'Group'),
     field('mapped_specimen_type', 'Speciment Type'),
     field('origin_sample.mapped_organ', 'Organ'),
+    field('mapped_last_modified_timestamp', 'Last Modified'),
   ],
 };
 
@@ -49,5 +51,6 @@ export const datasetConfig = {
     field('data_types', 'Data Types'),
     field('origin_sample.mapped_organ', 'Organ'),
     field('mapped_status', 'Status'),
+    field('mapped_last_modified_timestamp', 'Last Modified'),
   ],
 };
