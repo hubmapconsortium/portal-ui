@@ -40,3 +40,9 @@ li {
   width: 100%;
   line-height: var(--foot-height); /* Vertically center the text there */
 }
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}
