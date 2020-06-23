@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -13,12 +13,6 @@ import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { StyledTableContainer, DownloadIcon, Flex } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
-
-const columns = [
-  { id: 'key', label: 'Key' },
-  { id: 'value', label: 'Value' },
-  { id: 'description', label: 'Description' },
-];
 
 function tableToDelimitedString(rows, colNames, d) {
   const str = rows.reduce((acc, row) => {
@@ -35,23 +29,34 @@ function createDownloadUrl(fileStr, fileType) {
 function MetadataTable(props) {
   const { metadata: tableData, display_doi } = props;
 
-  const [tableRows, setTableRows] = useState([]);
-  const [downloadUrl, setDownloadUrl] = useState('');
+  const columns = [
+    { id: 'key', label: 'Key' },
+    { id: 'value', label: 'Value' },
+    { id: 'description', label: 'Description' },
+  ];
 
-  useEffect(() => {
-    const rows = Object.entries(tableData).map((entry) => ({
-      key: entry[0],
-      value: entry[1],
-      description: metadataFieldDescriptions[entry[0]],
-    }));
-    const fileStr = tableToDelimitedString(
-      rows,
-      columns.map((col) => col.label),
-      '\t',
-    );
-    setDownloadUrl(createDownloadUrl(fileStr, 'text/tab-separated-values'));
-    setTableRows(rows);
-  }, [tableData]);
+  const tableRows = useMemo(
+    () =>
+      Object.entries(tableData).map((entry) => ({
+        key: entry[0],
+        value: entry[1],
+        description: metadataFieldDescriptions[entry[0]],
+      })),
+    [tableData],
+  );
+
+  const downloadUrl = useMemo(
+    () =>
+      createDownloadUrl(
+        tableToDelimitedString(
+          tableRows,
+          columns.map((col) => col.label),
+          '\t',
+        ),
+        'text/tab-separated-values',
+      ),
+    [tableRows, columns],
+  );
 
   return (
     <SectionContainer id="metadata-table">
