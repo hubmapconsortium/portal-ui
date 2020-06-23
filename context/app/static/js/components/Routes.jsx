@@ -10,30 +10,20 @@ import Showcase from './Showcase';
 
 function Routes(props) {
   const { flaskData } = props;
-  const { flashed_messages, entity, vitessce_conf, endpoints, title } = flaskData;
+  const { entity, vitessce_conf, endpoints, title } = flaskData;
   const urlPath = window.location.pathname;
 
   if (urlPath.startsWith('/browse/donor/')) {
     return (
       <Container maxWidth="lg">
-        <Donor
-          assayMetadata={entity}
-          vitData={vitessce_conf}
-          flashed_messages={flashed_messages}
-          entityEndpoint={endpoints.entityEndpoint}
-        />
+        <Donor assayMetadata={entity} vitData={vitessce_conf} entityEndpoint={endpoints.entityEndpoint} />
       </Container>
     );
   }
   if (urlPath.startsWith('/browse/sample/')) {
     return (
       <Container maxWidth="lg">
-        <Sample
-          assayMetadata={entity}
-          vitData={vitessce_conf}
-          flashed_messages={flashed_messages}
-          entityEndpoint={endpoints.entityEndpoint}
-        />
+        <Sample assayMetadata={entity} vitData={vitessce_conf} entityEndpoint={endpoints.entityEndpoint} />
       </Container>
     );
   }
@@ -44,7 +34,6 @@ function Routes(props) {
         <Dataset
           assayMetadata={entity}
           vitData={vitessce_conf}
-          flashed_messages={flashed_messages}
           assetsEndpoint={endpoints.assetsEndpoint}
           entityEndpoint={endpoints.entityEndpoint}
         />
@@ -73,7 +62,6 @@ Routes.propTypes = {
   flaskData: PropTypes.exact({
     title: PropTypes.string,
     entity: PropTypes.object,
-    flashed_messages: PropTypes.array,
     vitessce_conf: PropTypes.object,
     endpoints: PropTypes.object,
   }),

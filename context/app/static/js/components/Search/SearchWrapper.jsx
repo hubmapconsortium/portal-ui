@@ -183,24 +183,32 @@ function SearchWrapper(props) {
   );
 }
 
+const refinementListPropTypes = {
+  type: PropTypes.oneOf(['RefinementListFilter']).isRequired,
+  props: PropTypes.exact({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    field: PropTypes.string.isRequired,
+    operator: PropTypes.string.isRequired,
+    size: PropTypes.number.isRequired,
+  }),
+};
+
+const rangeFilterPropTypes = {
+  type: PropTypes.oneOf(['RangeFilter']).isRequired,
+  props: PropTypes.exact({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    field: PropTypes.string.isRequired,
+    min: PropTypes.number.isRequired,
+    max: PropTypes.number.isRequired,
+    showHistogram: PropTypes.bool.isRequired,
+  }),
+};
+
 SearchWrapper.propTypes = {
   apiUrl: PropTypes.string.isRequired,
-  filters: PropTypes.arrayOf(
-    PropTypes.exact({
-      type: PropTypes.oneOf([
-        // Expand as needed; Starting small to catch typos.
-        'RefinementListFilter',
-      ]).isRequired,
-      props: PropTypes.exact({
-        id: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
-        field: PropTypes.string.isRequired,
-        operator: PropTypes.string.isRequired,
-        size: PropTypes.number.isRequired,
-        translations: PropTypes.objectOf(PropTypes.string),
-      }),
-    }),
-  ).isRequired,
+  filters: PropTypes.arrayOf(PropTypes.oneOfType([refinementListPropTypes, rangeFilterPropTypes])).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
   resultFields: PropTypes.arrayOf(

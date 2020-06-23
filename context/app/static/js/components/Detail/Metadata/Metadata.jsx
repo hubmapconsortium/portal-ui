@@ -6,10 +6,6 @@ import SectionHeader from '../SectionHeader';
 import SectionItem from '../SectionItem';
 import SectionContainer from '../SectionContainer';
 
-function getDonorMetadataValue(metadata, key) {
-  return metadata && key in metadata ? `${metadata[key].value} ${metadata[key].units}` : '';
-}
-
 function MetadataItem(props) {
   const { label, value, ml } = props;
   return (
@@ -22,30 +18,22 @@ function MetadataItem(props) {
 function DonorItems(props) {
   const { metadata } = props;
 
-  const ageValue = getDonorMetadataValue(metadata, 'Current chronological age');
-  const bmiValue = getDonorMetadataValue(metadata, 'Body mass index');
-
   return (
     <>
-      <MetadataItem label="Gender Finding" value={metadata['Gender finding']} />
-      <MetadataItem label="Current Chronological Age" ml={1} value={ageValue} />
-      <MetadataItem label="Body Mass Index" ml={1} value={bmiValue} />
-      <MetadataItem label="Racial Group" ml={1} value={metadata['Racial group']} />
+      <MetadataItem label="Gender Finding" value={metadata.gender} />
+      <MetadataItem label="Current Chronological Age" ml={1} value={metadata.age} />
+      <MetadataItem label="Body Mass Index" ml={1} value={metadata.bmi} />
+      <MetadataItem label="Racial Group" ml={1} value={metadata.race} />
     </>
   );
 }
 
 // TODO: Update tissue location with real data once it's in a consumable structure
 function SampleItems(props) {
-  const {
-    organ,
-    origin_sample: { organ: originOrgan },
-    specimenType,
-    tissueLocation,
-  } = props;
+  const { origin_sample, specimenType, tissueLocation } = props;
   return (
     <>
-      <MetadataItem label="Organ Type" value={organ || originOrgan} />
+      <MetadataItem label="Organ Type" value={origin_sample.mapped_organ} />
       <MetadataItem label="Specimen Type" ml={1} value={specimenType} />
       <MetadataItem label="Tissue Location" ml={1} value={tissueLocation} />
     </>
