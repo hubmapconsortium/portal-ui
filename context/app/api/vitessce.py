@@ -195,14 +195,14 @@ class Vitessce:
                     print(file_paths_expected)
                     matching_assay_conf = assay_conf
 
-        if matching_assay_conf == None:
+        if matching_assay_conf is None:
             if not self.is_mock:
                 current_app.logger.info(
                     f'Files for assay "{self.assay_type}" '
                     'uuid "{self.uuid}" not found as expected.'
                 )
             return {}
-        
+
         files = matching_assay_conf["files_conf"]
         conf = matching_assay_conf["base_conf"]
         layers = [self._build_layer_conf(file) for file in files]
