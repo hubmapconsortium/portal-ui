@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useTheme } from '@material-ui/core/styles';
 // eslint-disable-next-line import/no-unresolved
 import useWindowSize from 'hooks/useWindowSize';
+import theme from '../../../theme';
 import BarChart from '../BarChart';
 import { Wrapper } from './style';
 
@@ -25,18 +25,88 @@ const dummyData = [
   { doc_count: 5, key: 'FAKE-sciATACseq' },
 ];
 
-function getChartDimensions(windowWidth) {
-  const containerWidth = Math.min(windowWidth, 1200);
-  const chartWidth = containerWidth - 200;
-  return { width: chartWidth, height: chartWidth * 0.6 };
+const sharedAxisSpec = {
+  titleFontWeight: 300,
+  titleFontSize: 12,
+  domainColor: 'lightgray',
+  tickColor: 'lightgray',
+  gridColor: 'lightgray',
+  labelFontWeight: 300,
+};
+
+const partialSpec = {
+  autosize: {
+    type: 'fit',
+    contains: 'padding',
+  },
+  encoding: {
+    x: {
+      field: 'key',
+      type: 'ordinal',
+      axis: {
+        labelAngle: '-75',
+        ticks: true,
+        labelOverlap: true,
+        ...sharedAxisSpec,
+      },
+      scale: { paddingInner: 0.4 },
+      title: 'ASSAY TYPE',
+      sort: '-y',
+    },
+    y: {
+      field: 'doc_count',
+      type: 'quantitative',
+      axis: {
+        tickCount: 6,
+        labelFontSize: 12,
+        titlePadding: theme.spacing(2),
+        ...sharedAxisSpec,
+      },
+      title: 'DATASETS',
+    },
+  },
+  config: { background: theme.palette.background.main, bar: { color: theme.palette.success.light } },
+  layer: [
+    {
+      mark: 'bar',
+    },
+    {
+      mark: {
+        type: 'text',
+        align: 'center',
+        baseline: 'middle',
+        dy: -6,
+        fontSize: 12,
+        fontWeight: 300,
+      },
+      encoding: {
+        text: { field: 'doc_count', type: 'quantitative' },
+      },
+    },
+  ],
+};
+
+function getChartDimensions(windowDimensions) {
+  const { height: windowHeight, width: windowWidth } = windowDimensions;
+  const chartWidth = Math.min(windowWidth, 1050);
+  // minimum of 75% of chart width or window height - (header + header margin + content above + grid spacing + own margins - amount react vega adds)
+  const chartHeight = Math.min(chartWidth * 0.75, windowHeight - (64 + 16 + 127 + 24 + 5));
+
+  return { width: chartWidth, height: chartHeight };
 }
 
 function BarChartWrapper(props) {
   const { elasticsearchEndpoint } = props;
 
+  const [spec, setSpec] = useState({});
+  const windowDimensions = useWindowSize();
+
+  useEffect(() => {
+    const dims = getChartDimensions(windowDimensions);
+    setSpec({ ...partialSpec, ...dims });
+  }, [windowDimensions]);
+
   const [assayTypesData, setAssayTypesData] = useState(dummyData);
-  const windowWidth = useWindowSize().width;
-  const { width, height } = getChartDimensions(windowWidth);
 
   useEffect(() => {
     async function getAssayTypesData() {
@@ -63,67 +133,6 @@ function BarChartWrapper(props) {
     }
     getAssayTypesData();
   }, [elasticsearchEndpoint]);
-
-  const theme = useTheme();
-
-  const sharedAxisSpec = {
-    titleFontWeight: 300,
-    titleFontSize: 12,
-    domainColor: 'lightgray',
-    tickColor: 'lightgray',
-    gridColor: 'lightgray',
-    labelFontWeight: 300,
-  };
-
-  const partialSpec = {
-    encoding: {
-      x: {
-        field: 'key',
-        type: 'ordinal',
-        axis: {
-          labelAngle: '-75',
-          ticks: true,
-          labelOverlap: true,
-          ...sharedAxisSpec,
-        },
-        scale: { paddingInner: 0.4 },
-        title: 'ASSAY TYPE',
-        sort: '-y',
-      },
-      y: {
-        field: 'doc_count',
-        type: 'quantitative',
-        axis: {
-          tickCount: 6,
-          labelFontSize: 12,
-          titlePadding: theme.spacing(2),
-          ...sharedAxisSpec,
-        },
-        title: 'DATASETS',
-      },
-    },
-    config: { background: theme.palette.background.main, bar: { color: theme.palette.success.light } },
-    layer: [
-      {
-        mark: 'bar',
-      },
-      {
-        mark: {
-          type: 'text',
-          align: 'center',
-          baseline: 'middle',
-          dy: -6,
-          fontSize: 12,
-          fontWeight: 300,
-        },
-        encoding: {
-          text: { field: 'doc_count', type: 'quantitative' },
-        },
-      },
-    ],
-  };
-
-  const spec = { ...partialSpec, width, height };
 
   return (
     <Wrapper>
