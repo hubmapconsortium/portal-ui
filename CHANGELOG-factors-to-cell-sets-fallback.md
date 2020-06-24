@@ -1,0 +1,1 @@
+- Added logic to allow a temporary fallback to the `factors` component and `factors.json` file when `cell-sets.json` does not yet exist, due to the dataset being processed prior to the introduction of the `cell-sets.json` file.
