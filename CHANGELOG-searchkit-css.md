@@ -1,0 +1,1 @@
+- Allow us to override searchkit SCSS variables.
