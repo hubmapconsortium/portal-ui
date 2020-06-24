@@ -15,3 +15,8 @@ The HuBMAP Portal software architecture centers on microservices that communicat
 ![Microservice architecture for HuBMAP data ingest. Requests are issued from the Internet (globe icon) to either the Ingest UI (user interface) or the API gateways, which run on both on-prem and public cloud resources. The Ingest API, which currently runs on-prem to mount the HuBMAP File Store with maximum efficiency, is the central microservice for ingesting data and derived data into HuBMAP. It calls the UUID, Search & Index, Ontology, and Entity APIs, which together interface to graph, relational, and Elasticsearch databases. The Ingest API also executes quality control (QC) pipelines to promote high quality and usability of HuBMAP data.](https://lh6.googleusercontent.com/6W9DvwcZAh-QUyz_B7ybyT9A8TgQpHqAITQCgLT9YVRvtaAvqFo1UsMO7Nar5dI8tE-N2sLE5t02TciJc3f6Kj2eNeqqB3GaboGZwSpJ0z0WcbDgRKs4f3do9SQTm-_mjcM3dTW6)
 
 For additional information about HuBMAP's technical infrastructure, please contact [Nick Nystrom](mailto:nystrom@psc.edu).
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbMTg4MDcxOTY3MywtMTA5MjI5NDAxMSwxMj
+U0ODc4ODM4LC0xNTA0Nzk1NTE0LC01NDA1NTE0MDMsLTIzMDIy
+MzE0NywtMjA4ODc0NjYxMiw3MzA5OTgxMTZdfQ==
+-->
