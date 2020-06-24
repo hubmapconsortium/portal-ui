@@ -16,6 +16,7 @@ const UpperInnerGrid = styled(Container)`
   grid-template-areas: 'data' 'bar';
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     min-height: calc(100vh - 88px);
+    grid-template-rows: auto 1fr;
   }
 `;
 
