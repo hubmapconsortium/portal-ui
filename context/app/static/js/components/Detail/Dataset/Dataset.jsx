@@ -86,7 +86,7 @@ function DatasetDetail(props) {
       {shouldDisplaySection.protocols && (
         <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
       )}
-      {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} />}
+      {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
       {shouldDisplaySection.files && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}
     </DetailLayout>
   );
