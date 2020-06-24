@@ -43,6 +43,11 @@ function GlobusLink(props) {
   return globusUrlText.url ? <Link href={globusUrlText.url}>View in Globus File Browser</Link> : globusUrlText.text;
 }
 
+GlobusLink.propTypes = {
+  entityEndpoint: PropTypes.string.isRequired,
+  uuid: PropTypes.string.isRequired,
+};
+
 function FileTable(props) {
   const { files: rows, assetsEndpoint, uuid, entityEndpoint } = props;
   const token = readCookie('nexus_token');
