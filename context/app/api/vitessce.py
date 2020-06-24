@@ -36,10 +36,10 @@ SCATTERPLOT = {
             },
             "x": 0,
             "y": 0,
-            "w": 10,
+            "w": 9,
             "h": 6,
         },
-        {"component": "cellSets", "x": 10, "y": 0, "w": 2, "h": 6, },
+        {"component": "cellSets", "x": 9, "y": 0, "w": 3, "h": 6, },
     ],
 }
 
