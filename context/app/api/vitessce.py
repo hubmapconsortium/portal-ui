@@ -330,7 +330,9 @@ class Vitessce:
 
         if self.assay_type not in IMAGE_ASSAYS:
             return conf
-        conf["staticLayout"][2]["props"]["view"] = ASSAY_CONF_LOOKUP[self.assay_type][
+        # TODO(mark): Remove the [0] below to select the first matching assay conf,
+        # once assay conf fallbacks are no longer needed.
+        conf["staticLayout"][2]["props"]["view"] = ASSAY_CONF_LOOKUP[self.assay_type][0][
             "view"
         ]
         return conf
