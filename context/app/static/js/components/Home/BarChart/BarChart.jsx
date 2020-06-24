@@ -12,6 +12,7 @@ function BarChart(props) {
 BarChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.exact({ doc_count: PropTypes.number, key: PropTypes.string })).isRequired,
   spec: PropTypes.exact({
+    autosize: PropTypes.object,
     encoding: PropTypes.object,
     config: PropTypes.object,
     layer: PropTypes.array,
