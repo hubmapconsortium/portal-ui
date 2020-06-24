@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-// eslint-disable-next-line import/no-unresolved
+/* eslint-disable import/no-unresolved */
 import useWindowSize from 'hooks/useWindowSize';
-import theme from '../../../theme';
+import theme from 'theme';
+/* eslint-enable */
 import BarChart from '../BarChart';
 import { Wrapper } from './style';
 
