@@ -91,4 +91,4 @@ MetadataTable.propTypes = {
   display_doi: PropTypes.string.isRequired,
 };
 
-export default React.memo(MetadataTable);
+export default MetadataTable;
