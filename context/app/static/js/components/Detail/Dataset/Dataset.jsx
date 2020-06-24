@@ -27,18 +27,16 @@ function SummaryData(props) {
     <>
       {data_types && data_types.length > 0 && (
         <AssaySpecificItem>
-          <a href={`/assays#${data_types_string}`}>{data_types_string}</a>
+          <a href={`/docs/assays#${data_types_string}`}>{data_types_string}</a>
         </AssaySpecificItem>
       )}
-      {origin_sample.organ && origin_sample.organ.length > 0 && (
-        <Typography variant="body1">{origin_sample.organ}</Typography>
-      )}
+      <Typography variant="body1">{origin_sample.mapped_organ}</Typography>
     </>
   );
 }
 
 function DatasetDetail(props) {
-  const { assayMetadata, vitData, assetsEndpoint, flashed_messages, entityEndpoint } = props;
+  const { assayMetadata, vitData, assetsEndpoint, entityEndpoint } = props;
   const {
     protocol_url,
     portal_uploaded_protocol_files,
@@ -66,7 +64,7 @@ function DatasetDetail(props) {
   };
 
   return (
-    <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
+    <DetailLayout shouldDisplaySection={shouldDisplaySection}>
       <Summary
         uuid={uuid}
         entity_type={entity_type}

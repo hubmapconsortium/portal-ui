@@ -62,7 +62,7 @@ const searchProps = {
   ],
   hiddenFilterIds: ['entity_type', 'ancestor_ids'],
   hiddenValueFilterIds: ['ancestor_ids'],
-  queryFields: resultFieldsByType[type].map((field) => field.id),
+  queryFields: ['everything'],
 };
 
 function Search(props) {

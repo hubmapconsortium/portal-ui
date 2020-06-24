@@ -8,27 +8,13 @@ import Metadata from '../Metadata';
 import SummaryItem from '../SummaryItem';
 import DetailLayout from '../DetailLayout';
 
-function SummaryData(props) {
-  const { organ, origin_sample, specimen_type } = props;
-  return (
-    <>
-      {organ && organ.length > 0 && <SummaryItem>{organ}</SummaryItem>}
-      {origin_sample.organ && origin_sample.organ.length > 0 && !organ && (
-        <SummaryItem>{origin_sample.organ}</SummaryItem>
-      )}
-      {specimen_type && specimen_type.length > 0 && <Typography variant="body1">{specimen_type}</Typography>}
-    </>
-  );
-}
-
 function SampleDetail(props) {
-  const { assayMetadata, flashed_messages, entityEndpoint } = props;
+  const { assayMetadata, entityEndpoint } = props;
   const {
     uuid,
     protocol_url,
     portal_uploaded_protocol_files,
-    organ,
-    specimen_type,
+    mapped_specimen_type,
     origin_sample,
     group_name,
     created_by_user_displayname,
@@ -46,7 +32,7 @@ function SampleDetail(props) {
   };
 
   return (
-    <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
+    <DetailLayout shouldDisplaySection={shouldDisplaySection}>
       <Summary
         uuid={uuid}
         entity_type={entity_type}
@@ -55,9 +41,10 @@ function SampleDetail(props) {
         last_modified_timestamp={last_modified_timestamp}
         description={description}
       >
-        <SummaryData organ={organ} specimen_type={specimen_type} origin_sample={origin_sample} />
+        <SummaryItem>{origin_sample.mapped_organ}</SummaryItem>
+        <Typography variant="body1">{mapped_specimen_type}</Typography>
       </Summary>
-      <Metadata entity_type={entity_type} organ={organ} specimenType={specimen_type} origin_sample={origin_sample} />
+      <Metadata entity_type={entity_type} specimenType={mapped_specimen_type} origin_sample={origin_sample} />
       <Attribution
         group_name={group_name}
         created_by_user_displayname={created_by_user_displayname}

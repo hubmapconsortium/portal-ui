@@ -1,1 +1,0 @@
-- Fix pagination by updating searchkit.

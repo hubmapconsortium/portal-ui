@@ -35,7 +35,7 @@ function DataSummary(props) {
           icon={AccountBalanceIcon}
           label="Centers"
           value={summaryData.centerCount}
-          href="/docs/centers" // TODO: This doesn't exist!
+          href="https://hubmapconsortium.org/funded-research-tmc/"
         />
       </FlexRow>
       <Title />
