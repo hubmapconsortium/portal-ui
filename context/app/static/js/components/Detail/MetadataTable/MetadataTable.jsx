@@ -8,23 +8,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 // TODO: Why does eslint complain about this, but not about utils.js?
-// eslint-disable-next-line import/no-unresolved
+/* eslint-disable import/no-unresolved */
 import metadataFieldDescriptions from 'metadata-field-descriptions';
+import { tableToDelimitedString, createDownloadUrl } from 'helpers/functions';
+/* eslint-enable */
 import { StyledTableContainer, DownloadIcon, Flex } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
-
-function tableToDelimitedString(rows, colNames, d) {
-  const str = rows.reduce((acc, row) => {
-    const rowStr = Object.values(row).join(d);
-    return acc.concat('\n', rowStr);
-  }, colNames.join(d));
-  return str;
-}
-
-function createDownloadUrl(fileStr, fileType) {
-  return window.URL.createObjectURL(new Blob([fileStr], { type: fileType }));
-}
 
 function MetadataTable(props) {
   const { metadata: tableData, display_doi } = props;
