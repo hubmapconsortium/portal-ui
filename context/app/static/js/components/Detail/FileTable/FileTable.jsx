@@ -20,9 +20,9 @@ const columns = [
 
 function GlobusLink(props) {
   const { uuid, entityEndpoint } = props;
-  const [globusUrl, setGlobusUrl] = React.useState(null);
+  const [globusUrlText, setGlobusUrlText] = React.useState({ url: null, text: 'Please wait...' });
   React.useEffect(() => {
-    async function getAndSetGlobusUrl() {
+    async function getAndSetGlobusUrlText() {
       const response = await fetch(`${entityEndpoint}/entities/dataset/${uuid}`, {
         headers: {
           Authorization: `Bearer ${readCookie('nexus_token')}`,
@@ -30,16 +30,17 @@ function GlobusLink(props) {
       });
       if (!response.ok) {
         console.error('Entities API failed', response);
+        setGlobusUrlText({ url: null, text: `Globus File Browser: ${response.status}: ${response.statusText}` });
         return;
       }
       // TODO: I have never gotten a non-401 response, so I'm not sure this works.
-      const responseGlobusUrl = await response.json();
-      setGlobusUrl(responseGlobusUrl);
+      const responseGlobusUrl = await response.text();
+      setGlobusUrlText({ url: responseGlobusUrl, text: 'View in Globus File Browser' });
     }
-    getAndSetGlobusUrl();
+    getAndSetGlobusUrlText();
   }, [entityEndpoint, uuid]);
 
-  return globusUrl && <Link href={globusUrl}>View in Globus File Browser</Link>;
+  return globusUrlText.url ? <Link href={globusUrlText.url}>View in Globus File Browser</Link> : globusUrlText.text;
 }
 
 function FileTable(props) {
