@@ -23,7 +23,7 @@ function GlobusLink(props) {
   const [globusUrlText, setGlobusUrlText] = React.useState({ url: null, text: 'Please wait...' });
   React.useEffect(() => {
     async function getAndSetGlobusUrlText() {
-      const response = await fetch(`${entityEndpoint}/entities/dataset/${uuid}`, {
+      const response = await fetch(`${entityEndpoint}/entities/dataset/globus-url/${uuid}`, {
         headers: {
           Authorization: `Bearer ${readCookie('nexus_token')}`,
         },
