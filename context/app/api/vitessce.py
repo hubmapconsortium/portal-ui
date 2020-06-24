@@ -43,6 +43,33 @@ SCATTERPLOT = {
     ],
 }
 
+# TODO(mark): This is swaps out the "cellSets" component for the "factors" component.
+# This is meant to be a temporary fallback to show clusters when the cell-sets.json
+# file is not available, since the portal-containers have always produced factors.json
+# files, so if data was processed before the addition of cell-sets.json, then the
+# cell-sets.json file will not exist, but factors.json will exist.
+# Once we can verify that all datasets have been re-processed and a cell-sets.json file
+# exists, this fallback view config can be removed.
+SCATTERPLOT_FALLBACK = {
+    "layers": [],
+    "name": "NAME",
+    "staticLayout": [
+        {
+            "component": "scatterplot",
+            "props": {
+                # Need to get a better name/way to handle this but for now, this is fine.
+                "mapping": "UMAP",
+                "view": {"zoom": 4, "target": [0, 0, 0]},
+            },
+            "x": 0,
+            "y": 0,
+            "w": 9,
+            "h": 6,
+        },
+        {"component": "factors", "x": 9, "y": 0, "w": 3, "h": 6, },
+    ],
+}
+
 IMAGING = {
     "name": "NAME",
     "layers": [],
@@ -62,24 +89,35 @@ IMAGING = {
 
 
 ASSAY_CONF_LOOKUP = {
-    "salmon_rnaseq_10x": {
-        "base_conf": SCATTERPLOT,
-        "files_conf": [
-            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json", "type": "CELLS", },
-            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cell-sets.json", "type": "CELL-SETS", },
-        ],
-    },
-    "codex_cytokit": {
-        "base_conf": IMAGING,
-        "view": {"zoom": -1.5, "target": [600, 600, 0], },
-        "files_conf": [
-            # Hardcoded for now only one tile.
-            {
-                "rel_path": Path(CODEX_TILE_PATH) / Path(f"#CODEX_TILE#.ome.tiff"),
-                "type": "RASTER",
-            }
-        ],
-    },
+    "salmon_rnaseq_10x": [
+        {
+            "base_conf": SCATTERPLOT,
+            "files_conf": [
+                {"rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json", "type": "CELLS", },
+                {"rel_path": f"{SCRNASEQ_BASE_PATH}.cell-sets.json", "type": "CELL-SETS", },
+            ],
+        },
+        {
+            "base_conf": SCATTERPLOT_FALLBACK,
+            "files_conf": [
+                {"rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json", "type": "CELLS", },
+                {"rel_path": f"{SCRNASEQ_BASE_PATH}.factors.json", "type": "FACTORS", },
+            ],
+        }
+    ],
+    "codex_cytokit": [
+        {
+            "base_conf": IMAGING,
+            "view": {"zoom": -1.5, "target": [600, 600, 0], },
+            "files_conf": [
+                # Hardcoded for now only one tile.
+                {
+                    "rel_path": Path(CODEX_TILE_PATH) / Path(f"#CODEX_TILE#.ome.tiff"),
+                    "type": "RASTER",
+                }
+            ],
+        }
+    ],
 }
 
 CODEX_ASSAY = "codex_cytokit"
@@ -139,22 +177,34 @@ class Vitessce:
         """
         if self.assay_type not in ASSAY_CONF_LOOKUP:
             return {}
-        files = ASSAY_CONF_LOOKUP[self.assay_type]["files_conf"]
-        file_paths_expected = [file["rel_path"] for file in files]
-        file_paths_found = [file["rel_path"] for file in self.entity["files"]]
-        # Codex assay needs to be built up.
-        # We need a better way to handle it but for now, this is ok.
-        if self.assay_type != CODEX_ASSAY:
-            # We need to check that the files we expect actually exist.
-            # This is due to the volatility of the datasets.
-            if not set(file_paths_expected).issubset(set(file_paths_found)):
-                if not self.is_mock:
-                    current_app.logger.info(
-                        f'Files for assay "{self.assay_type}" '
-                        'uuid "{self.uuid}" not found as expected.'
-                    )
-                return {}
-        conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
+        matching_assay_conf = None
+        # TODO(mark): Remove this loop when there is no longer a need for the
+        # "fallback" assay type for datasets with factors.json but not cell-sets.json.
+        for assay_conf in ASSAY_CONF_LOOKUP[self.assay_type]:
+            files = assay_conf["files_conf"]
+            file_paths_expected = [file["rel_path"] for file in files]
+            file_paths_found = [file["rel_path"] for file in self.entity["files"]]
+            # Codex assay needs to be built up.
+            # We need a better way to handle it but for now, this is ok.
+            if self.assay_type == CODEX_ASSAY:
+                matching_assay_conf = assay_conf
+            else:
+                # We need to check that the files we expect actually exist.
+                # This is due to the volatility of the datasets.
+                if set(file_paths_expected).issubset(set(file_paths_found)):
+                    print(file_paths_expected)
+                    matching_assay_conf = assay_conf
+
+        if matching_assay_conf == None:
+            if not self.is_mock:
+                current_app.logger.info(
+                    f'Files for assay "{self.assay_type}" '
+                    'uuid "{self.uuid}" not found as expected.'
+                )
+            return {}
+        
+        files = matching_assay_conf["files_conf"]
+        conf = matching_assay_conf["base_conf"]
         layers = [self._build_layer_conf(file) for file in files]
 
         conf["layers"] = layers
