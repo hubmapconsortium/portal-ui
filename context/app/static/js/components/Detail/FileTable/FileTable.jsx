@@ -52,36 +52,38 @@ function FileTable(props) {
       </SectionHeader>
       <Paper>
         <GlobusLink entityEndpoint={entityEndpoint} uuid={uuid} />
-        <StyledTableContainer>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell key={column.id}>{column.label}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.rel_path}>
-                  <TableCell>
-                    <StyledLink
-                      href={`${assetsEndpoint}/${uuid}/${row.rel_path}?token=${token}`}
-                      variant="body1"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      download
-                    >
-                      {row.rel_path}
-                    </StyledLink>
-                  </TableCell>
-                  <TableCell>{row.size}</TableCell>
-                  <TableCell>{row.type}</TableCell>
+        {Boolean(rows.length) && (
+          <StyledTableContainer>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell key={column.id}>{column.label}</TableCell>
+                  ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </StyledTableContainer>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow key={row.rel_path}>
+                    <TableCell>
+                      <StyledLink
+                        href={`${assetsEndpoint}/${uuid}/${row.rel_path}?token=${token}`}
+                        variant="body1"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                      >
+                        {row.rel_path}
+                      </StyledLink>
+                    </TableCell>
+                    <TableCell>{row.size}</TableCell>
+                    <TableCell>{row.type}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </StyledTableContainer>
+        )}
       </Paper>
     </SectionContainer>
   );
@@ -94,9 +96,13 @@ FileTable.propTypes = {
       size: PropTypes.number,
       type: PropTypes.string,
     }),
-  ).isRequired,
+  ),
   assetsEndpoint: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
+};
+
+FileTable.defaultProps = {
+  files: [],
 };
 
 export default FileTable;
