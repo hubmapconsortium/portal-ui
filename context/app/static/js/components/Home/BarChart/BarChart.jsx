@@ -90,7 +90,6 @@ const partialSpec = {
 function BarChart(props) {
   const { elasticsearchEndpoint } = props;
   const [assayTypesData, setAssayTypesData] = useState(dummyData);
-  const windowDimensions = useWindowSize();
 
   useEffect(() => {
     async function getAssayTypesData() {
@@ -118,6 +117,7 @@ function BarChart(props) {
     getAssayTypesData();
   }, [elasticsearchEndpoint]);
 
+  const windowDimensions = useWindowSize();
   const [spec, setSpec] = useState({});
   const [style, setStyle] = useState({});
 
