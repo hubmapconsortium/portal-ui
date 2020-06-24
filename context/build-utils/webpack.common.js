@@ -16,6 +16,7 @@ const config = {
       helpers: resolve(__dirname, '../app/static/js/helpers/'),
       hooks: resolve(__dirname, '../app/static/js/hooks/'),
       images: resolve(__dirname, '../app/static/images/'),
+      theme$: resolve(__dirname, '../app/static/js/theme.jsx'),
     },
   },
   module: {
