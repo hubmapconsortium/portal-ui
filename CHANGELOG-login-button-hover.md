@@ -1,0 +1,1 @@
+- Update hover state for login button.
