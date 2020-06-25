@@ -69,7 +69,7 @@ function Home(props) {
     <OuterGrid>
       <UpperInnerGrid maxWidth="lg">
         <DataSummary summaryData={summaryData} />
-        {isLargerThanMd && <BarChart />}
+        {isLargerThanMd && <BarChart elasticsearchEndpoint={elasticsearchEndpoint} />}
       </UpperInnerGrid>
       <About />
       <LowerInnerGrid maxWidth="lg">

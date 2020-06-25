@@ -1,0 +1,2 @@
+- Add vega-lite bar chart to home page.
+- Add hooks dir.

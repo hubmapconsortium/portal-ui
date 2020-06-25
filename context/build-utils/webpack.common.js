@@ -14,7 +14,9 @@ const config = {
     alias: {
       'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
       helpers: resolve(__dirname, '../app/static/js/helpers/'),
+      hooks: resolve(__dirname, '../app/static/js/hooks/'),
       images: resolve(__dirname, '../app/static/images/'),
+      theme$: resolve(__dirname, '../app/static/js/theme.jsx'),
     },
   },
   module: {
