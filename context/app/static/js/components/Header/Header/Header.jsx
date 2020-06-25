@@ -30,6 +30,9 @@ function Header() {
                     <Link href={`/search?entity_type[0]=${type}`}>{`${type}s`}</Link>
                   </HeaderButton>
                 ))}
+                <HeaderButton>
+                  <Link href="/collections">Collections</Link>
+                </HeaderButton>
               </div>
               <Spacer />
               <ShowcaseDropdown />
