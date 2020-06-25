@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { StyledDivider } from './style';
@@ -28,18 +27,16 @@ function SummaryData(props) {
     <>
       {data_types && data_types.length > 0 && (
         <AssaySpecificItem>
-          <a href={`/assays#${data_types_string}`}>{data_types_string}</a>
+          <a href={`/docs/assays#${data_types_string}`}>{data_types_string}</a>
         </AssaySpecificItem>
       )}
-      {origin_sample.organ && origin_sample.organ.length > 0 && (
-        <Typography variant="body1">{origin_sample.organ}</Typography>
-      )}
+      <Typography variant="body1">{origin_sample.mapped_organ}</Typography>
     </>
   );
 }
 
 function DatasetDetail(props) {
-  const { assayMetadata, vitData, assetsEndpoint, flashed_messages, entityEndpoint } = props;
+  const { assayMetadata, vitData, assetsEndpoint, entityEndpoint } = props;
   const {
     protocol_url,
     portal_uploaded_protocol_files,
@@ -63,11 +60,10 @@ function DatasetDetail(props) {
     visualization: 'name' in vitData,
     protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
     metadataTable: metadata && 'metadata' in metadata,
-    files: files && files.length > 0,
   };
 
   return (
-    <DetailLayout shouldDisplaySection={shouldDisplaySection} flashed_messages={flashed_messages}>
+    <DetailLayout shouldDisplaySection={shouldDisplaySection}>
       <Summary
         uuid={uuid}
         entity_type={entity_type}
@@ -89,8 +85,8 @@ function DatasetDetail(props) {
       {shouldDisplaySection.protocols && (
         <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
       )}
-      {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} />}
-      {shouldDisplaySection.files && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}
+      {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
+      <FileTable files={files} assetsEndpoint={assetsEndpoint} entityEndpoint={entityEndpoint} uuid={uuid} />
     </DetailLayout>
   );
 }

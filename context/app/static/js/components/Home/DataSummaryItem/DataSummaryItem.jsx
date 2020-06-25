@@ -1,20 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FlexRow, StyledTypography } from './style';
+import { StyledTypography, StyledLink } from './style';
 
 function DataSummaryItem(props) {
-  const { value, icon: Icon, label } = props;
+  const { value, icon: Icon, label, href } = props;
 
   return (
-    <FlexRow>
+    <StyledLink href={href} underline="none">
       <Icon color="primary" style={{ fontSize: '36px' }} />
-      <StyledTypography component="p" variant="h4">
-        {value}
+      <StyledTypography variant="h4">
+        {value} {label}
       </StyledTypography>
-      <StyledTypography component="p" variant="h4" color="secondary">
-        {label}
-      </StyledTypography>
-    </FlexRow>
+    </StyledLink>
   );
 }
 

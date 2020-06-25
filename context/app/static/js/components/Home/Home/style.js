@@ -8,11 +8,16 @@ const OuterGrid = styled.div`
   grid-template-areas: 'summary' 'about' 'inner' 'associations';
 `;
 
+// 88px = height + margin of header
 const UpperInnerGrid = styled(Container)`
   grid-area: summary;
   display: grid;
   grid-gap: ${(props) => props.theme.spacing(3)}px;
   grid-template-areas: 'data' 'bar';
+  @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
+    min-height: calc(100vh - 88px);
+    grid-template-rows: auto 1fr;
+  }
 `;
 
 const LowerInnerGrid = styled(Container)`

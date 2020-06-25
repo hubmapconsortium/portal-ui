@@ -1,5 +1,4 @@
 /* eslint-disable import/no-unresolved */
-/* eslint-disable camelcase */
 import React from 'react';
 import { render } from 'test-utils/functions';
 import Attribution from './Attribution';

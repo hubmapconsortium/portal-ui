@@ -45,3 +45,15 @@ export function throttle(fn, wait) {
     }
   };
 }
+
+export function tableToDelimitedString(rows, colNames, d) {
+  const str = rows.reduce((acc, row) => {
+    const rowStr = Object.values(row).join(d);
+    return acc.concat('\n', rowStr);
+  }, colNames.join(d));
+  return str;
+}
+
+export function createDownloadUrl(fileStr, fileType) {
+  return window.URL.createObjectURL(new Blob([fileStr], { type: fileType }));
+}
