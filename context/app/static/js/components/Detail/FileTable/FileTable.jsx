@@ -6,10 +6,10 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Link } from '@material-ui/core';
 import { StyledTableContainer, StyledLink } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
+import GlobusLink from '../GlobusLink';
 import { readCookie } from '../../../helpers/functions';
 
 const columns = [
@@ -17,36 +17,6 @@ const columns = [
   { id: 'size', label: 'File Size' },
   { id: 'type', label: 'Type' },
 ];
-
-function GlobusLink(props) {
-  const { uuid, entityEndpoint } = props;
-  const [globusUrlText, setGlobusUrlText] = React.useState({ url: null, text: 'Please wait...' });
-  React.useEffect(() => {
-    async function getAndSetGlobusUrlText() {
-      const response = await fetch(`${entityEndpoint}/entities/dataset/globus-url/${uuid}`, {
-        headers: {
-          Authorization: `Bearer ${readCookie('nexus_token')}`,
-        },
-      });
-      if (!response.ok) {
-        console.error('Entities API failed', response);
-        setGlobusUrlText({ url: null, text: `Globus File Browser: ${response.status}: ${response.statusText}` });
-        return;
-      }
-      // TODO: I have never gotten a non-401 response, so I'm not sure this works.
-      const responseGlobusUrl = await response.text();
-      setGlobusUrlText({ url: responseGlobusUrl, text: 'View in Globus File Browser' });
-    }
-    getAndSetGlobusUrlText();
-  }, [entityEndpoint, uuid]);
-
-  return globusUrlText.url ? <Link href={globusUrlText.url}>View in Globus File Browser</Link> : globusUrlText.text;
-}
-
-GlobusLink.propTypes = {
-  entityEndpoint: PropTypes.string.isRequired,
-  uuid: PropTypes.string.isRequired,
-};
 
 function FileTable(props) {
   const { files: rows, assetsEndpoint, uuid, entityEndpoint } = props;
