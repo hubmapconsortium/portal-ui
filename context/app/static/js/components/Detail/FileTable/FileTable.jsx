@@ -26,8 +26,8 @@ function FileTable(props) {
       <SectionHeader variant="h3" component="h2">
         Files
       </SectionHeader>
+      <GlobusLink entityEndpoint={entityEndpoint} uuid={uuid} />
       <Paper>
-        <GlobusLink entityEndpoint={entityEndpoint} uuid={uuid} />
         {Boolean(rows.length) && (
           <StyledTableContainer>
             <Table stickyHeader>

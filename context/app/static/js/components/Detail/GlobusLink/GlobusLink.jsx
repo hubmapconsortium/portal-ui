@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@material-ui/core';
 import { readCookie } from '../../../helpers/functions';
+import { StyledButton } from './style';
 
 function GlobusLink(props) {
   const { uuid, entityEndpoint } = props;
@@ -25,7 +26,13 @@ function GlobusLink(props) {
     getAndSetGlobusUrlText();
   }, [entityEndpoint, uuid]);
 
-  return globusUrlText.url ? <Link href={globusUrlText.url}>View in Globus File Browser</Link> : globusUrlText.text;
+  return globusUrlText.url ? (
+    <StyledButton>
+      <Link href={globusUrlText.url}>View in Globus File Browser</Link>
+    </StyledButton>
+  ) : (
+    globusUrlText.text
+  );
 }
 
 GlobusLink.propTypes = {
