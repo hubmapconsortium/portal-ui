@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+// eslint-disable-next-line import/no-unresolved
+import { readCookie } from 'helpers/functions';
 import Card from '../Card';
 
 function Collections(props) {
@@ -10,6 +12,7 @@ function Collections(props) {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${readCookie('nexus_token')}`,
         },
       });
       if (!response.ok) {
