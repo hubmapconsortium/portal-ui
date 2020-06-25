@@ -57,7 +57,7 @@ function DatasetDetail(props) {
   } = assayMetadata;
 
   const shouldDisplaySection = {
-    visualization: 'name' in vitData,
+    visualization: 'name' in vitData || 'name' in vitData[0],
     protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
     metadataTable: metadata && 'metadata' in metadata,
   };

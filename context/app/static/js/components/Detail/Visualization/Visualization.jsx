@@ -80,7 +80,7 @@ function Visualization(props) {
             onClose={() => setIsSnackbarOpen(false)}
             message="Press [esc] to exit full window."
           />
-          <Vitessce config={vitData} theme={vitessceTheme} height={isExpanded ? null : vitessceFixedHeight} />
+          <Vitessce config={vitData[0]} theme={vitessceTheme} height={isExpanded ? null : vitessceFixedHeight} />
         </ExpandableDiv>
       </Paper>
       <StyledFooterText variant="body2">

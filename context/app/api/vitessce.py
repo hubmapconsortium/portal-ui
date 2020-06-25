@@ -3,21 +3,16 @@ from pathlib import Path
 import json
 import itertools
 from datauri import DataURI
+import re
 
 from flask import current_app
 
 # TODO: Only for Demo! #
 
 # Hardcoded CODEX offsets and tile path.
-CODEX_OFFSETS_PATH = "ppneorh7"
+CODEX_OFFSETS_PATH = "output_offsets"
 CODEX_TILE_PATH = "output/extract/expressions/ome-tiff"
-# Hardocde just looking at a few tiles.
-X_VALS = list(range(7))
-X_VALS.remove(0)
-Y_VALS = list(range(9))
-Y_VALS.remove(0)
-R_VALS = list(range(4))
-R_VALS.remove(0)
+CODDEX_SPRM_PATH = 'output_json'
 
 # END: Only for Demo! #
 
@@ -47,16 +42,20 @@ IMAGING = {
     "name": "NAME",
     "layers": [],
     "staticLayout": [
-        {"component": "layerController", "x": 0, "y": 0, "w": 4, "h": 4},
-        {"component": "description", "x": 0, "y": 4, "w": 4, "h": 2},
+        {"component": "layerController", "x": 0, "y": 0, "w": 2, "h": 4},
+        {"component": "description", "x": 0, "y": 4, "w": 2, "h": 2},
         {
             "component": "spatial",
             "props": {"view": {}, },
-            "x": 4,
+            "x": 2,
             "y": 0,
             "w": 8,
-            "h": 6,
+            "h": 4,
         },
+        {"component": "factors", "x": 10, "y": 2, "w": 2, "h": 2},
+        {"component": "genes", "x": 10, "y": 0, "w": 2, "h": 2},
+        {"component": "heatmap", "x": 2, "y": 4, "w": 10, "h": 2},
+
     ],
 }
 
@@ -75,8 +74,24 @@ ASSAY_CONF_LOOKUP = {
         "files_conf": [
             # Hardcoded for now only one tile.
             {
-                "rel_path": Path(CODEX_TILE_PATH) / Path(f"#CODEX_TILE#.ome.tiff"),
+                "rel_path": str(Path(CODEX_TILE_PATH) / '#TILE#.ome.tiff'),
                 "type": "RASTER",
+            },
+            {
+                "rel_path": str(Path(CODDEX_SPRM_PATH) / '#TILE#.cells.json'),
+                "type": "CELLS",
+            },
+            {
+                "rel_path": str(Path(CODDEX_SPRM_PATH) / '#TILE#.factors.json'),
+                "type": "FACTORS",
+            },
+            {
+                "rel_path": str(Path(CODDEX_SPRM_PATH) / '#TILE#.genes.json'),
+                "type": "GENES",
+            },
+            {
+                "rel_path": str(Path(CODDEX_SPRM_PATH) / '#TILE#.clusters.json'),
+                "type": "CLUSTERS",
             }
         ],
     },
@@ -85,9 +100,14 @@ ASSAY_CONF_LOOKUP = {
 CODEX_ASSAY = "codex_cytokit"
 
 IMAGE_ASSAYS = [CODEX_ASSAY]
+TILED_ASSAYS = [CODEX_ASSAY]
+
+TILE_REGEX = '.*(R(\\d+)_X(\\d+)_Y(\\d+)).*'
 
 MOCK_URL = "https://example.com"
 
+def _get_tiles(files):
+    return list(set([re.match(TILE_REGEX, file).group(1) for file in files if re.match(TILE_REGEX, file)]))
 
 class Vitessce:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
@@ -142,9 +162,10 @@ class Vitessce:
         files = ASSAY_CONF_LOOKUP[self.assay_type]["files_conf"]
         file_paths_expected = [file["rel_path"] for file in files]
         file_paths_found = [file["rel_path"] for file in self.entity["files"]]
-        # Codex assay needs to be built up.
-        # We need a better way to handle it but for now, this is ok.
-        if self.assay_type != CODEX_ASSAY:
+        print([file for file in file_paths_found if 'offsets' in file])
+        conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
+        # Codex and other tiled assays needs to be built up based on their input tiles.
+        if self.assay_type not in TILED_ASSAYS:
             # We need to check that the files we expect actually exist.
             # This is due to the volatility of the datasets.
             if not set(file_paths_expected).issubset(set(file_paths_found)):
@@ -154,18 +175,27 @@ class Vitessce:
                         'uuid "{self.uuid}" not found as expected.'
                     )
                 return {}
-        conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
-        layers = [self._build_layer_conf(file) for file in files]
+            layers = [self._build_layer_conf(file) for file in files]
+            conf["layers"] = layers
+            conf["name"] = self.uuid
+            conf = self._replace_view(conf)
+            self.conf = conf
+            return conf
+        else:
+            found_tiles = _get_tiles(file_paths_found)
+            confs = []
+            for tile in found_tiles:
+                new_conf = conf
+                layers = [self._build_layer_conf(file, tile) for file in files]
+                new_conf["layers"] = layers
+                new_conf["name"] = self.uuid
+                new_conf = self._replace_view(new_conf)
+                confs += [new_conf]
+            self.conf = confs
+            return confs
+                
 
-        conf["layers"] = layers
-        conf["name"] = self.uuid
-
-        conf = self._replace_view(conf)
-
-        self.conf = conf
-        return conf
-
-    def _build_layer_conf(self, file):
+    def _build_layer_conf(self, file, tile = ''):
         """Build each layer in the layers section.
 
         returns e.g
@@ -179,9 +209,9 @@ class Vitessce:
 
         return {
             "type": file["type"],
-            "url": self._build_assets_url(file["rel_path"])
-            if self.assay_type not in IMAGE_ASSAYS
-            else self._build_image_layer_datauri(file["rel_path"]),
+            "url": self._build_assets_url(file["rel_path"].replace('#TILE#', tile))
+            if file['type'] != 'RASTER'
+            else self._build_image_layer_datauri(file["rel_path"].replace('#TILE#', tile)),
             "name": file["type"].lower(),
         }
 
@@ -213,18 +243,8 @@ class Vitessce:
         """
 
         image_layer = {}
-        # For CODEX replace the tiles. Otherwise this next line does nothing.
-        image_paths = [
-            str(rel_path).replace(
-                "#CODEX_TILE#",
-                f"R{str(r).zfill(3)}_X{str(x).zfill(3)}_Y{str(y).zfill(3)}",
-            )
-            for (r, x, y) in itertools.product(*[R_VALS, X_VALS, Y_VALS])
-        ]
-        image_layer["images"] = [
-            self._build_image_schema(image_path) for image_path in image_paths
-        ]
-        image_layer["schema_version"] = "0.0.1"
+        image_layer["images"] = [self._build_image_schema(rel_path)]
+        image_layer["schemaVersion"] = "0.0.2"
         return DataURI.make(
             "text/plain", charset="us-ascii", base64=True, data=json.dumps(image_layer)
         )
@@ -284,3 +304,4 @@ class Vitessce:
             "view"
         ]
         return conf
+
