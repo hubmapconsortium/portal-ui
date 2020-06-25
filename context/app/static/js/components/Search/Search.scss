@@ -1,0 +1,8 @@
+// For example: This makes the "View all" links red.
+// $sk-action-text-color: red;
+
+@import "~searchkit/theming/theme.scss";
+
+.sk-layout__body {
+    margin: 0px;
+}

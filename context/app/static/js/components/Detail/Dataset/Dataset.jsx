@@ -60,7 +60,6 @@ function DatasetDetail(props) {
     visualization: 'name' in vitData,
     protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
     metadataTable: metadata && 'metadata' in metadata,
-    files: files && files.length > 0,
   };
 
   return (
@@ -86,8 +85,8 @@ function DatasetDetail(props) {
       {shouldDisplaySection.protocols && (
         <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
       )}
-      {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} />}
-      {shouldDisplaySection.files && <FileTable files={files} assetsEndpoint={assetsEndpoint} uuid={uuid} />}
+      {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
+      <FileTable files={files} assetsEndpoint={assetsEndpoint} entityEndpoint={entityEndpoint} uuid={uuid} />
     </DetailLayout>
   );
 }

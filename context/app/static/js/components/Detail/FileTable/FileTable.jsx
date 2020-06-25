@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { StyledTableContainer, StyledLink } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
+import GlobusLink from '../GlobusLink';
 import { readCookie } from '../../../helpers/functions';
 
 const columns = [
@@ -18,44 +19,47 @@ const columns = [
 ];
 
 function FileTable(props) {
-  const { files: rows, assetsEndpoint, uuid } = props;
+  const { files: rows, assetsEndpoint, uuid, entityEndpoint } = props;
   const token = readCookie('nexus_token');
   return (
     <SectionContainer id="files">
       <SectionHeader variant="h3" component="h2">
         Files
       </SectionHeader>
+      <GlobusLink entityEndpoint={entityEndpoint} uuid={uuid} />
       <Paper>
-        <StyledTableContainer>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell key={column.id}>{column.label}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.rel_path}>
-                  <TableCell>
-                    <StyledLink
-                      href={`${assetsEndpoint}/${uuid}/${row.rel_path}?token=${token}`}
-                      variant="body1"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      download
-                    >
-                      {row.rel_path}
-                    </StyledLink>
-                  </TableCell>
-                  <TableCell>{row.size}</TableCell>
-                  <TableCell>{row.type}</TableCell>
+        {Boolean(rows.length) && (
+          <StyledTableContainer>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell key={column.id}>{column.label}</TableCell>
+                  ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </StyledTableContainer>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow key={row.rel_path}>
+                    <TableCell>
+                      <StyledLink
+                        href={`${assetsEndpoint}/${uuid}/${row.rel_path}?token=${token}`}
+                        variant="body1"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                      >
+                        {row.rel_path}
+                      </StyledLink>
+                    </TableCell>
+                    <TableCell>{row.size}</TableCell>
+                    <TableCell>{row.type}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </StyledTableContainer>
+        )}
       </Paper>
     </SectionContainer>
   );
@@ -68,9 +72,13 @@ FileTable.propTypes = {
       size: PropTypes.number,
       type: PropTypes.string,
     }),
-  ).isRequired,
+  ),
   assetsEndpoint: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
+};
+
+FileTable.defaultProps = {
+  files: [],
 };
 
 export default FileTable;
