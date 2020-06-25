@@ -1,1 +1,0 @@
-- Add mailto link on homepage.

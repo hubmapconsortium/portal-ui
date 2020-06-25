@@ -1,3 +1,17 @@
+## v0.0.31 - 2020-06-25
+
+- Add button to download dataset metadata table.
+- Switch to using `cell-sets.json` files with the `cellSets` Vitessce component, rather than `factors.json` files with the `factors` component.
+- Link to globus file browser.
+- Add vega-lite bar chart to home page.
+- Add hooks dir.
+- Add last modified column to search results.
+- Add mailto link on homepage.
+- Update with the latest docs from the google drive.
+- Allow us to override searchkit SCSS variables.
+- Update submodule.
+
+
 ## v0.0.30 - 2020-06-23
 
 - Disable eslint camelcase rule.
