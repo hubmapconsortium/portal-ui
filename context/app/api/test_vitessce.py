@@ -11,7 +11,7 @@ TEST_ENTITY_RNASEQ = {
     "uuid": "uuid",
     "files": [
         {"rel_path": "cluster-marker-genes/output/cluster_marker_genes.cells.json"},
-        {"rel_path": "cluster-marker-genes/output/cluster_marker_genes.factors.json"},
+        {"rel_path": "cluster-marker-genes/output/cluster_marker_genes.cell-sets.json"},
     ],
 }
 
@@ -20,7 +20,7 @@ TEST_ENTITY_RNASEQ_EMPTY = {
     "uuid": "uuid",
     "files": [
         {"rel_path": "bad/output/cluster_marker_genes.cells.json"},
-        {"rel_path": "bad/output/cluster_marker_genes.factors.json"},
+        {"rel_path": "bad/output/cluster_marker_genes.cell-sets.json"},
     ],
 }
 
