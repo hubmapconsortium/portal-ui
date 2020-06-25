@@ -1,0 +1,1 @@
+- Set intial bar chart data to empty array.
