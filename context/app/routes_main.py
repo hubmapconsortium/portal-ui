@@ -142,6 +142,7 @@ def showcase_view(name):
         flask_data=core_props
     )
 
+
 @blueprint.route('/collections')
 def collections():
     core_props = {
