@@ -4,6 +4,7 @@ import json
 import itertools
 from datauri import DataURI
 import re
+import copy
 
 from flask import current_app
 
@@ -162,7 +163,6 @@ class Vitessce:
         files = ASSAY_CONF_LOOKUP[self.assay_type]["files_conf"]
         file_paths_expected = [file["rel_path"] for file in files]
         file_paths_found = [file["rel_path"] for file in self.entity["files"]]
-        print([file for file in file_paths_found if 'offsets' in file])
         conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
         # Codex and other tiled assays needs to be built up based on their input tiles.
         if self.assay_type not in TILED_ASSAYS:
@@ -184,11 +184,11 @@ class Vitessce:
         else:
             found_tiles = _get_tiles(file_paths_found)
             confs = []
-            for tile in found_tiles:
-                new_conf = conf
+            for tile in sorted(found_tiles):
+                new_conf = copy.deepcopy(conf)
                 layers = [self._build_layer_conf(file, tile) for file in files]
                 new_conf["layers"] = layers
-                new_conf["name"] = self.uuid
+                new_conf["name"] = tile
                 new_conf = self._replace_view(new_conf)
                 confs += [new_conf]
             self.conf = confs

@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer, useRef } from 'react';
 import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import Popper from '@material-ui/core/Popper';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
+
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import {
   vitessceFixedHeight,
@@ -15,6 +22,7 @@ import {
   TopSnackbar,
   ExpandableDiv,
   StyledFooterText,
+  SelectionButton,
 } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
@@ -24,6 +32,9 @@ function Visualization(props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [vitessceTheme, setVitessceTheme] = useState('light');
+  const [vitessceSelection, setVitessceSelection] = useState(0);
+  const [open, toggle] = useReducer((v) => !v, false);
+  const anchorRef = useRef(null);
 
   function handleExpand() {
     setIsExpanded(true);
@@ -54,7 +65,6 @@ function Visualization(props) {
       window.removeEventListener('keydown', onKeydown);
     };
   }, []);
-
   return (
     <StyledSectionContainer id="visualization">
       <StyledHeader>
@@ -62,6 +72,26 @@ function Visualization(props) {
           Visualization
         </StyledHeaderText>
         <StyledHeaderRight>
+          {Array.isArray(vitData) ? (
+            <>
+              <SelectionButton ref={anchorRef} onClick={toggle} style={{ color: 'black' }}>
+                Selection {open ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
+              </SelectionButton>
+              <Popper open={open} anchorEl={anchorRef.current} placement="top-end">
+                <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+                  <ClickAwayListener onClickAway={toggle}>
+                    <MenuList id="showcase-options">
+                      {vitData.map(({ name }, i) => (
+                        <MenuItem onClick={() => setVitessceSelection(i)} key={name}>
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Popper>
+            </>
+          ) : null}
           <VisualizationThemeSwitch theme={vitessceTheme} onChange={handleThemeChange} />
           <ExpandButton onClick={handleExpand}>
             <ZoomOutMapIcon />
@@ -80,7 +110,11 @@ function Visualization(props) {
             onClose={() => setIsSnackbarOpen(false)}
             message="Press [esc] to exit full window."
           />
-          <Vitessce config={vitData[0]} theme={vitessceTheme} height={isExpanded ? null : vitessceFixedHeight} />
+          <Vitessce
+            config={vitData[vitessceSelection] || vitData}
+            theme={vitessceTheme}
+            height={isExpanded ? null : vitessceFixedHeight}
+          />
         </ExpandableDiv>
       </Paper>
       <StyledFooterText variant="body2">

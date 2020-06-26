@@ -34,6 +34,10 @@ const ExpandButton = styled(Button)`
   }
 `;
 
+const SelectionButton = styled(Button)`
+  margin-right: 0.5rem;
+`;
+
 const TopSnackbar = styled(Snackbar)`
   top: ${headerFixedHeight + 10}px;
   & > div {
@@ -78,4 +82,5 @@ export {
   TopSnackbar,
   ExpandableDiv,
   StyledFooterText,
+  SelectionButton,
 };
