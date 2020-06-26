@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// eslint-disable-next-line import/no-unresolved
-import { readCookie } from 'helpers/functions';
 import Card from '../Card';
 
 function Collections(props) {
