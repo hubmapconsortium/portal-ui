@@ -13,7 +13,7 @@ const ScrollBox = styled(Paper)`
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     flex-grow: 1;
     overflow-y: scroll;
-    margin: ${(props) => props.theme.spacing(1)}px 0px;
+    margin-top: ${(props) => props.theme.spacing(1)}px 0px;
   }
 `;
 
