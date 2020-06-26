@@ -137,9 +137,8 @@ def logout():
     # Destroy the session state
     session.clear()
 
-    kwargs = { redirect_to_globus_param: True }
+    kwargs = {redirect_to_globus_param: True}
     response = make_response(
         redirect(url_for('routes_auth.logout', _external=True, **kwargs)))
     response.delete_cookie(key='nexus_token')
     return response
-
