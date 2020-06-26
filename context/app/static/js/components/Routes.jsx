@@ -8,6 +8,7 @@ import Sample from './Detail/Sample';
 import Dataset from './Detail/Dataset';
 import Showcase from './Showcase';
 import Collections from './Collections';
+import Markdown from './Markdown';
 
 function Routes(props) {
   const { flaskData } = props;
@@ -65,6 +66,14 @@ function Routes(props) {
       </Container>
     );
   }
+
+  if ('markdown' in flaskData) {
+    return (
+      <Container maxWidth="lg">
+        <Markdown markdown={flaskData.markdown} />
+      </Container>
+    );
+  }
 }
 
 Routes.propTypes = {
@@ -73,6 +82,7 @@ Routes.propTypes = {
     entity: PropTypes.object,
     vitessce_conf: PropTypes.object,
     endpoints: PropTypes.object,
+    markdown: PropTypes.string,
   }),
 };
 

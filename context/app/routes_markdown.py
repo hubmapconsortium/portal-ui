@@ -3,7 +3,6 @@ from glob import glob
 from os.path import dirname
 
 from flask import Blueprint, render_template, request
-import markdown
 
 from .config import types
 
@@ -30,12 +29,10 @@ def markdown_view():
     with open(dirname(__file__) + '/markdown/' + request.path + '.md') as md_file:
         content_md = md_file.read()
     title = _title_from_md(content_md)
-    content_html = markdown.markdown(content_md)
     return render_template(
-        'pages/markdown.html',
-        types=types,
-        title=title,
-        content_html=content_html
+        'pages/base_react.html',
+        flask_data={'markdown': content_md},
+        title=title
     )
 
 
