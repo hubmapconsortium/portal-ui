@@ -144,8 +144,6 @@ def showcase_view(name):
 
 @blueprint.route('/collections')
 def collections():
-    if 'nexus_token' not in session:
-        abort(403)
     core_props = {
         'endpoints': _get_endpoints(),
     }
