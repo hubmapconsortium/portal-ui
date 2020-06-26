@@ -58,18 +58,20 @@ const theme = createMuiTheme({
     },
     subtitle1: {
       fontWeight: 500,
-      color: '#444a65',
       fontSize: '1.1rem',
     },
     subtitle2: {
       fontWeight: 500,
-      color: '#444a65',
     },
     body1: {
       fontSize: '0.95rem',
     },
     body2: {
       fontSize: '0.8rem',
+    },
+    caption: {
+      fontSize: '12px',
+      fontWeight: 300,
     },
     button: {
       fontWeight: 500,
