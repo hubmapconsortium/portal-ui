@@ -10,10 +10,6 @@ function Collections(props) {
     async function getAllCollections() {
       const response = await fetch(`${entityEndpoint}/collections`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${readCookie('nexus_token')}`,
-        },
       });
       if (!response.ok) {
         console.error('Search API failed', response);
