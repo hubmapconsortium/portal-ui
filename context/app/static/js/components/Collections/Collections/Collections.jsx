@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Panel from '../Panel';
+import { PageWrapper, ScrollBox } from './style';
 
 function Collections(props) {
   const { entityEndpoint } = props;
@@ -21,15 +22,20 @@ function Collections(props) {
   }, [entityEndpoint]);
 
   return (
-    <div>
-      <Typography variant="h1" component="h1">
+    <PageWrapper>
+      <Typography variant="h2" component="h1">
         Collections
       </Typography>
       <Typography variant="subtitle1" color="primary">
-        {collectionsData && `${collectionsData.length + 1} Collections`}
+        {collectionsData && `${collectionsData.length} Collections`}
       </Typography>
-      {collectionsData && collectionsData.map((col) => <Panel key={col.uuid} data={col} />)}
-    </div>
+      <ScrollBox>
+        {collectionsData &&
+          collectionsData.map((col) => (
+            <Panel key={col.uuid} name={col.name} dataset_uuids={col.dataset_uuids} doi_id={col.doi_id} />
+          ))}
+      </ScrollBox>
+    </PageWrapper>
   );
 }
 
