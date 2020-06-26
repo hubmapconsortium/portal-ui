@@ -31,6 +31,9 @@ function Menu(props) {
                 <Link href={`/search?entity_type[0]=${type}`} color="primary" underline="none">{`${type}s`}</Link>
               </MenuItem>
             ))}
+            <MenuItem>
+              <Link href="/collections">Collections</Link>
+            </MenuItem>
             <ShowcaseMenuItem onClick={toggleShowcase}>
               Showcases
               {openShowcase ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
