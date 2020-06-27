@@ -141,3 +141,15 @@ def showcase_view(name):
         title='Showcase',
         flask_data=core_props
     )
+
+
+@blueprint.route('/collections')
+def collections():
+    core_props = {
+        'endpoints': _get_endpoints(),
+    }
+    return render_template(
+        'pages/base_react.html',
+        title='Collections',
+        flask_data=core_props
+    )

@@ -7,6 +7,7 @@ import Donor from './Detail/Donor';
 import Sample from './Detail/Sample';
 import Dataset from './Detail/Dataset';
 import Showcase from './Showcase';
+import Collections from './Collections';
 
 function Routes(props) {
   const { flaskData } = props;
@@ -55,6 +56,14 @@ function Routes(props) {
 
   if (urlPath.startsWith('/showcase')) {
     return <Showcase title={title} vitData={vitessce_conf} assayMetadata={entity} />;
+  }
+
+  if (urlPath.startsWith('/collections')) {
+    return (
+      <Container maxWidth="lg">
+        <Collections entityEndpoint={endpoints.entityEndpoint} />
+      </Container>
+    );
   }
 }
 
