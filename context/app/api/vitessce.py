@@ -53,7 +53,7 @@ IMAGING = {
             "w": 8,
             "h": 4,
         },
-        {"component": "factors", "x": 10, "y": 2, "w": 2, "h": 2},
+        {"component": "cellSets", "x": 10, "y": 2, "w": 2, "h": 2},
         {"component": "genes", "x": 10, "y": 0, "w": 2, "h": 2},
         {"component": "heatmap", "x": 2, "y": 4, "w": 10, "h": 2},
 
@@ -83,8 +83,8 @@ ASSAY_CONF_LOOKUP = {
                 "type": "CELLS",
             },
             {
-                "rel_path": str(Path(CODDEX_SPRM_PATH) / '#TILE#.factors.json'),
-                "type": "FACTORS",
+                "rel_path": str(Path(CODDEX_SPRM_PATH) / '#TILE#.cell-sets.json'),
+                "type": "CELL-SETS",
             },
             {
                 "rel_path": str(Path(CODDEX_SPRM_PATH) / '#TILE#.genes.json'),
