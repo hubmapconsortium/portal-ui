@@ -78,7 +78,6 @@ class ApiClient():
         return response.json()
 
     def _get_check_errors(self, url):
-        print(url)
         try:
             response = requests.get(
                 url,
