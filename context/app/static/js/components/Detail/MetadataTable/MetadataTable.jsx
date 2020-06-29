@@ -12,7 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { tableToDelimitedString, createDownloadUrl } from 'helpers/functions';
 /* eslint-enable */
-import { StyledTableContainer, DownloadIcon, Flex } from './style';
+import { StyledTableContainer, DownloadIcon, Flex, HeaderCell } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
 
@@ -56,7 +56,7 @@ function MetadataTable(props) {
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
-                  <TableCell key={column.id}>{column.label}</TableCell>
+                  <HeaderCell key={column.id}>{column.label}</HeaderCell>
                 ))}
               </TableRow>
             </TableHead>
