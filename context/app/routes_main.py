@@ -62,6 +62,18 @@ def ccf_eui():
     )
 
 
+@blueprint.route('/browse/collection/<uuid>')
+def collections_details(uuid):
+    template = f'pages/base_react.html'
+    core_props = {'endpoints': _get_endpoints(), 'uuid': uuid}
+    return render_template(
+        template,
+        uuid=uuid,
+        title='Collection Detail',
+        flask_data=core_props
+    )
+
+
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
     if type not in types:
