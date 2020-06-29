@@ -65,6 +65,7 @@ const theme = createMuiTheme({
     },
     subtitle2: {
       fontWeight: 500,
+      fontiSize: '0.875rem',
     },
     body1: {
       fontSize: '0.95rem',
