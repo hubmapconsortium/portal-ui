@@ -27,11 +27,15 @@ function Summary(props) {
     description,
     status,
     children,
+    collectionName,
   } = props;
+
+  const createdDate = create_timestamp ? new Date(create_timestamp).toDateString() : 'Undefined';
+  const modifiedDate = last_modified_timestamp ? new Date(last_modified_timestamp).toDateString() : 'Undefined';
 
   return (
     <SectionContainer id="summary">
-      <Typography variant="h4" component="h1" color="primary">
+      <Typography variant="subtitle1" color="primary">
         {entity_type}
       </Typography>
       <FlexContainer>
@@ -55,12 +59,16 @@ function Summary(props) {
       </FlexContainer>
 
       <StyledPaper>
-        <StyledTypography variant="body1" mt={1}>
-          {description || 'No description defined'}
-        </StyledTypography>
+        <div>
+          {collectionName && <Typography variant="subtitle1">{collectionName}</Typography>}
+          <StyledTypography variant="body1" mt={1}>
+            {description || 'No description defined'}
+          </StyledTypography>
+        </div>
+
         <FlexColumnRight>
-          <SectionItem label="Creation Date">{new Date(create_timestamp).toDateString()}</SectionItem>
-          <SectionItem label="Modification Date">{new Date(last_modified_timestamp).toDateString()}</SectionItem>
+          <SectionItem label="Creation Date">{createdDate}</SectionItem>
+          <SectionItem label="Modification Date">{modifiedDate}</SectionItem>
         </FlexColumnRight>
       </StyledPaper>
     </SectionContainer>
