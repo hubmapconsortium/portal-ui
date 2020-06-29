@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { readCookie } from 'helpers/functions';
 
+import Summary from '../Summary';
+
 function Collection(props) {
   const { entityEndpoint, uuid } = props;
   const [collectionData, setCollectionData] = useState();
@@ -28,7 +30,19 @@ function Collection(props) {
     getAllCollections();
   }, [entityEndpoint, uuid]);
 
-  return <div>{collectionData && collectionData.uuid}</div>;
+  return (
+    <div>
+      {collectionData && (
+        <Summary
+          uuid={collectionData.uuid}
+          entity_type={collectionData.entitytype}
+          display_doi={collectionData.display_doi}
+          collectionName={collectionData.name}
+          description={collectionData.description}
+        />
+      )}
+    </div>
+  );
 }
 
 export default Collection;
