@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { readCookie } from 'helpers/functions';
 
 import Summary from '../Summary';
+import CollectionDatasetsTable from '../CollectionDatasetsTable';
 
 function Collection(props) {
   const { entityEndpoint, uuid } = props;
@@ -33,13 +34,16 @@ function Collection(props) {
   return (
     <div>
       {collectionData && (
-        <Summary
-          uuid={collectionData.uuid}
-          entity_type={collectionData.entitytype}
-          display_doi={collectionData.display_doi}
-          collectionName={collectionData.name}
-          description={collectionData.description}
-        />
+        <>
+          <Summary
+            uuid={collectionData.uuid}
+            entity_type={collectionData.entitytype}
+            display_doi={collectionData.display_doi}
+            collectionName={collectionData.name}
+            description={collectionData.description}
+          />
+          <CollectionDatasetsTable datasets={collectionData.items} />
+        </>
       )}
     </div>
   );
