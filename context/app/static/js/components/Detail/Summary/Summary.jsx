@@ -60,7 +60,11 @@ function Summary(props) {
 
       <StyledPaper>
         <div>
-          {collectionName && <Typography variant="subtitle1">{collectionName}</Typography>}
+          {collectionName && (
+            <Typography color="primary" variant="subtitle1">
+              {collectionName}
+            </Typography>
+          )}
           <StyledTypography variant="body1" mt={1}>
             {description || 'No description defined'}
           </StyledTypography>
