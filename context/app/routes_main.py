@@ -20,8 +20,6 @@ def _get_client():
         is_mock = False
     if is_mock:
         return ApiClient(is_mock=is_mock)
-    if 'nexus_token' not in session:
-        abort(403)
     return ApiClient(
         current_app.config['ENTITY_API_BASE'],
         session['nexus_token']
@@ -66,8 +64,6 @@ def ccf_eui():
 def details(type, uuid):
     if type not in types:
         abort(404)
-    if 'nexus_token' not in session:
-        abort(403)
     client = _get_client()
     entity = client.get_entity(uuid)
     actual_type = entity['entity_type'].lower()
@@ -95,8 +91,6 @@ def details_ext(type, uuid, ext):
         abort(404)
     if ext != 'json':
         abort(404)
-    if 'nexus_token' not in session:
-        abort(403)
     client = _get_client()
 
     entity = client.get_entity(uuid)
@@ -111,8 +105,6 @@ def search():
         'endpoints': _get_endpoints(),
         'title': title
     }
-    if 'nexus_token' not in session:
-        abort(403)
     return render_template(
         'pages/base_react.html',
         title=title,

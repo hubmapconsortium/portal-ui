@@ -13,11 +13,6 @@ def not_found(e):
     return render_template('errors/404.html', types={}), 404
 
 
-def access_denied(e):
-    '''A 403 probably means Globus login is required.'''
-    return render_template('errors/403.html', types={}), 403
-
-
 def unauthorized(e):
     '''A 401 probably means Globus credentials have expired.'''
     # Go ahead and clear the flask session for the user.
@@ -49,7 +44,6 @@ def create_app(testing=False):
     app.register_error_handler(400, bad_request)
     app.register_error_handler(401, unauthorized)
     app.register_error_handler(404, not_found)
-    app.register_error_handler(403, access_denied)
     app.register_error_handler(504, gateway_timeout)
 
     @app.context_processor
@@ -57,6 +51,13 @@ def create_app(testing=False):
         return {
             'is_authenticated': session.get('is_authenticated')
         }
+
+    @app.before_request
+    def set_default_nexus_token():
+        if 'nexus_token' not in session:
+            session.update(
+                nexus_token='',
+                is_authenticated=False)
 
     return app
 
