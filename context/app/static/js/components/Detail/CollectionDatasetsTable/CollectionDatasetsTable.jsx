@@ -40,7 +40,7 @@ function CollectionDatasetsTable(props) {
         Datasets
       </SectionHeader>
       <Typography variant="subtitle1" color="primary">
-        {tableRows.length} Collections
+        {tableRows.length} Datasets
       </Typography>
       <Paper>
         <StyledTableContainer>
