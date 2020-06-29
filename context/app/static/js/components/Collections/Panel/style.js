@@ -3,9 +3,13 @@ import Typography from '@material-ui/core/Typography';
 
 const PanelWrapper = styled.div`
   padding: 15px 20px;
-  border-bottom: 2px solid ${(props) => props.theme.palette.collectionsDivider.main};
+  border-bottom: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
   display: flex;
   flex-direction: column;
+
+  &:hover {
+    background-color: rgb(0, 0, 0, 0.08);
+  }
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     flex-direction: row;
     justify-content: space-between;
