@@ -32,7 +32,13 @@ function Collections(props) {
       <ScrollBox>
         {collectionsData &&
           collectionsData.map((col) => (
-            <Panel key={col.uuid} name={col.name} dataset_uuids={col.dataset_uuids} doi_id={col.doi_id} />
+            <Panel
+              key={col.uuid}
+              name={col.name}
+              dataset_uuids={col.dataset_uuids}
+              doi_id={col.doi_id}
+              uuid={col.uuid}
+            />
           ))}
       </ScrollBox>
     </PageWrapper>

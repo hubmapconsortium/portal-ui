@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 
+const Link = styled.a`
+  text-decoration: inherit;
+  color: inherit;
+`;
+
 const PanelWrapper = styled.div`
   padding: 15px 20px;
   border-bottom: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
@@ -20,4 +25,4 @@ const Name = styled(Typography)`
   word-wrap: break-word;
 `;
 
-export { PanelWrapper, Name };
+export { Link, PanelWrapper, Name };
