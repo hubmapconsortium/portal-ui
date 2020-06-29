@@ -1,0 +1,1 @@
+- Upgrade Vitessce to 0.1.7 to fix Safari issues.
