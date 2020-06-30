@@ -17,8 +17,8 @@ import SectionContainer from '../SectionContainer';
 
 const useTooltipStyles = makeStyles((theme) => ({
   tooltip: {
-    backgroundColor: theme.palette.primary.main,
-    borderRadius: '1rem',
+    backgroundColor: theme.palette.secondary.main,
+    borderRadius: '0.4rem',
   },
 }));
 
