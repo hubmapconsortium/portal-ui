@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import { LightBlueLink } from 'shared-styles/Links';
 import { readCookie } from 'helpers/functions';
@@ -53,5 +54,10 @@ function Collection(props) {
     </div>
   );
 }
+
+Collection.propTypes = {
+  entityEndpoint: PropTypes.string.isRequired,
+  uuid: PropTypes.string.isRequired,
+};
 
 export default Collection;
