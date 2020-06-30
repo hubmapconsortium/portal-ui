@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import hubmapProvVis from '@hubmap/prov-vis';
+import { StyledTypography, StyledLink, FlexPaper } from './style';
+import SectionItem from '../SectionItem';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 
 function ProvGraph(props) {
@@ -20,22 +22,19 @@ function ProvGraph(props) {
       renderDetailPane: (prov) => {
         const href = `/browse/${prov['prov:type'].toLowerCase()}/${prov['hubmap:uuid']}`;
         return (
-          <table>
-            <tr>
-              <td>Type</td>
-              <td>{prov['prov:type']}</td>
-            </tr>
-            <tr>
-              <td>ID</td>
-              <td>
-                <a href={href}>{prov['hubmap:displayDOI']}</a>
-              </td>
-            </tr>
-            <tr>
-              <td>Created</td>
-              <td>{prov['prov:generatedAtTime']}</td>
-            </tr>
-          </table>
+          <FlexPaper>
+            <SectionItem label="Type">
+              <StyledTypography variant="body1">{prov['prov:type']}</StyledTypography>
+            </SectionItem>
+            <SectionItem label="ID" ml>
+              <StyledTypography variant="body1">
+                <StyledLink href={href}>{prov['hubmap:displayDOI']}</StyledLink>
+              </StyledTypography>
+            </SectionItem>
+            <SectionItem label="Created" ml>
+              <StyledTypography variant="body1">{prov['prov:generatedAtTime']}</StyledTypography>
+            </SectionItem>
+          </FlexPaper>
         );
       },
     });
