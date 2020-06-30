@@ -25,8 +25,6 @@ function Collection(props) {
         return;
       }
       const data = await response.json();
-      // eslint-disable-next-line no-console
-      console.log(data);
       setCollectionData(data);
     }
     getAllCollections();
