@@ -18,24 +18,23 @@ function ProvGraph(props) {
         return entity ? `${entity['prov:type']} - ${entity['hubmap:displayDOI']}` : id;
       },
       renderDetailPane: (prov) => {
-        // eslint-disable-next-line no-shadow
-        function create(tag, props, children) {
-          return React.createElement(tag, props, children);
-        }
-
-        return create(
-          'table',
-          { className: 'table table-bordered table-sm' },
-          ['prov:type', 'hubmap:uuid', 'prov:generatedAtTime'].map((field) =>
-            create('tr', null, [
-              create('td', { className: 'td-key' }, field),
-              create(
-                'td',
-                { className: 'td-value' },
-                field === 'hubmap:uuid' ? create('a', { href: prov[field] }, prov[field]) : prov[field],
-              ),
-            ]),
-          ),
+        return (
+          <table>
+            <tr>
+              <td>Type</td>
+              <td>{prov['prov:type']}</td>
+            </tr>
+            <tr>
+              <td>ID</td>
+              <td>
+                <a href={`/browse/dataset/${prov['hubmap:uuid']}`}>{prov['hubmap:displayDOI']}</a>
+              </td>
+            </tr>
+            <tr>
+              <td>Created</td>
+              <td>{prov['prov:generatedAtTime']}</td>
+            </tr>
+          </table>
         );
       },
     });
