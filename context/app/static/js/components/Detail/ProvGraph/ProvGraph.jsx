@@ -18,6 +18,7 @@ function ProvGraph(props) {
         return entity ? `${entity['prov:type']} - ${entity['hubmap:displayDOI']}` : id;
       },
       renderDetailPane: (prov) => {
+        const href = `/browse/${prov['prov:type'].toLowerCase()}/${prov['hubmap:uuid']}`;
         return (
           <table>
             <tr>
@@ -27,7 +28,7 @@ function ProvGraph(props) {
             <tr>
               <td>ID</td>
               <td>
-                <a href={`/browse/dataset/${prov['hubmap:uuid']}`}>{prov['hubmap:displayDOI']}</a>
+                <a href={href}>{prov['hubmap:displayDOI']}</a>
               </td>
             </tr>
             <tr>
