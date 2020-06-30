@@ -19,8 +19,8 @@ function CollectionDatasetsTable(props) {
     { id: '', label: 'Organ Type' },
     { id: 'assayTypesString', label: 'Assay Types' },
     { id: 'modifiedDate', label: 'Last Modified' },
-    { id: 'properties.status', label: 'Status' },
     { id: 'properties.creator_name', label: 'Creator' },
+    { id: 'properties.status', label: 'Status' },
   ];
 
   const tableRows = datasets.reduce((rows, dataset) => {
@@ -63,8 +63,8 @@ function CollectionDatasetsTable(props) {
                   <TableCell />
                   <TableCell>{row.assayTypesString}</TableCell>
                   <TableCell>{row.modifiedDate}</TableCell>
-                  <TableCell>{row.properties.status}</TableCell>
                   <TableCell>{row.properties.creator_name}</TableCell>
+                  <TableCell>{row.properties.status}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
