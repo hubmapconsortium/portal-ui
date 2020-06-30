@@ -16,7 +16,7 @@ function CollectionDatasetsTable(props) {
 
   const columns = [
     { id: 'display_doi', label: 'HuBMAP ID' },
-    { id: '', label: 'Organ Type' },
+    { id: 'organ', label: 'Organ' },
     { id: 'assayTypesString', label: 'Assay Types' },
     { id: 'modifiedDate', label: 'Last Modified' },
     { id: 'properties.creator_name', label: 'Creator' },
