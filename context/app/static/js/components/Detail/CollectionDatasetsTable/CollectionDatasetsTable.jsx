@@ -25,9 +25,13 @@ function CollectionDatasetsTable(props) {
 
   const tableRows = datasets.reduce((rows, dataset) => {
     if (dataset.entitytype === 'Dataset') {
+      const formattedData = {};
+      if ('data_types' in dataset.properties) {
+        Object.assign(formattedData, { assayTypesString: dataset.properties.data_types.join(', ') });
+      }
       rows.push({
         ...dataset,
-        assayTypesString: dataset.properties.data_types.join(', '),
+        ...formattedData,
         modifiedDate: new Date(dataset.properties.provenance_modified_timestamp).toDateString(),
       });
     }
