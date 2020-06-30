@@ -1,37 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { LightBlueLink } from 'shared-styles/Links';
-import { readCookie } from 'helpers/functions';
 import Summary from '../Summary';
 import CollectionDatasetsTable from '../CollectionDatasetsTable';
 import CollectionCreatorsTable from '../CollectionCreatorsTable';
 
 function Collection(props) {
-  const { entityEndpoint, uuid } = props;
-  const [collectionData, setCollectionData] = useState();
-  useEffect(() => {
-    async function getAllCollections() {
-      const nexus_token = readCookie('nexus_token');
-      const requestInit = nexus_token
-        ? {
-            headers: {
-              Authorization: `Bearer ${nexus_token}`,
-            },
-          }
-        : {};
-      const response = await fetch(`${entityEndpoint}/collections/${uuid}`, requestInit);
-      if (!response.ok) {
-        console.error('Entity API failed', response);
-        return;
-      }
-      const data = await response.json();
-      setCollectionData(data);
-    }
-    getAllCollections();
-  }, [entityEndpoint, uuid]);
-
-  // TODO replace doi placeholder link
+  const { collection: collectionData } = props;
   return (
     <div>
       {collectionData && (
@@ -56,8 +32,8 @@ function Collection(props) {
 }
 
 Collection.propTypes = {
-  entityEndpoint: PropTypes.string.isRequired,
-  uuid: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  collection: PropTypes.object.isRequired,
 };
 
 export default Collection;

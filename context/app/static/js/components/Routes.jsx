@@ -9,7 +9,7 @@ import { Collections } from './Collections';
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, endpoints, title, uuid } = flaskData;
+  const { entity, vitessce_conf, endpoints, title, collection } = flaskData;
   const urlPath = window.location.pathname;
 
   if (urlPath.startsWith('/browse/donor/')) {
@@ -67,7 +67,7 @@ function Routes(props) {
   if (urlPath.startsWith('/browse/collection/')) {
     return (
       <Container maxWidth="lg">
-        <Collection entityEndpoint={endpoints.entityEndpoint} uuid={uuid} />
+        <Collection entityEndpoint={endpoints.entityEndpoint} collection={collection} />
       </Container>
     );
   }
@@ -79,7 +79,7 @@ Routes.propTypes = {
     entity: PropTypes.object,
     vitessce_conf: PropTypes.object,
     endpoints: PropTypes.object,
-    uuid: PropTypes.string,
+    collection: PropTypes.object,
   }),
 };
 
