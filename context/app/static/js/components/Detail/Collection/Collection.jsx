@@ -4,6 +4,7 @@ import { readCookie } from 'helpers/functions';
 
 import Summary from '../Summary';
 import CollectionDatasetsTable from '../CollectionDatasetsTable';
+import CollectionCreatorsTable from '../CollectionCreatorsTable';
 
 function Collection(props) {
   const { entityEndpoint, uuid } = props;
@@ -43,6 +44,7 @@ function Collection(props) {
             description={collectionData.description}
           />
           <CollectionDatasetsTable datasets={collectionData.items} />
+          <CollectionCreatorsTable creators={collectionData.creators} />
         </>
       )}
     </div>
