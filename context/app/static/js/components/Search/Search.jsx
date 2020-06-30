@@ -66,6 +66,7 @@ const searchProps = {
   hiddenFilterIds: ['entity_type', 'ancestor_ids'],
   hiddenValueFilterIds: ['ancestor_ids'],
   queryFields: ['everything'],
+  isLoggedIn: Boolean(nexus_token),
 };
 
 function Search(props) {

@@ -125,6 +125,7 @@ function SearchWrapper(props) {
     hiddenValueFilterIds,
     searchUrlPath,
     queryFields,
+    isLoggedIn,
   } = props;
   const resultFieldIds = resultFields.map((field) => field.id).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
@@ -175,7 +176,11 @@ function SearchWrapper(props) {
             listComponent={makeTableComponent(resultFields, detailsUrlPrefix, idField)}
             sourceFilter={resultFieldIds}
           />
-          <NoHits />
+          <NoHits
+            translations={{
+              'NoHits.NoResultsFound': `No results found. ${isLoggedIn ? '' : 'Login to view more results.'}`,
+            }}
+          />
           <Pagination showNumbers />
         </LayoutResults>
       </LayoutBody>
@@ -233,6 +238,7 @@ SearchWrapper.propTypes = {
   hiddenValueFilterIds: PropTypes.arrayOf(PropTypes.string),
   searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
+  isLoggedIn: PropTypes.bool,
 };
 
 SearchWrapper.defaultProps = {
@@ -249,6 +255,7 @@ SearchWrapper.defaultProps = {
   hiddenValueFilterIds: [],
   searchUrlPath: '_search',
   httpHeaders: {},
+  isLoggedIn: false,
 };
 
 export default SearchWrapper;
