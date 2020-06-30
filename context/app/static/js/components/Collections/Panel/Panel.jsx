@@ -28,7 +28,7 @@ Panel.propTypes = {
   name: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
   doi_id: PropTypes.string.isRequired,
-  dataset_uuids: PropTypes.arrayOf([PropTypes.string]).isRequired,
+  dataset_uuids: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default Panel;
