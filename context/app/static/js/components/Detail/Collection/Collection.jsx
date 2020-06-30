@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-// eslint-disable-next-line import/no-unresolved
-import { readCookie } from 'helpers/functions';
 
+import { LightBlueLink } from 'shared-styles/Links';
+import { readCookie } from 'helpers/functions';
 import Summary from '../Summary';
 import CollectionDatasetsTable from '../CollectionDatasetsTable';
 import CollectionCreatorsTable from '../CollectionCreatorsTable';
@@ -32,6 +32,7 @@ function Collection(props) {
     getAllCollections();
   }, [entityEndpoint, uuid]);
 
+  // TODO replace doi placeholder link
   return (
     <div>
       {collectionData && (
@@ -42,7 +43,11 @@ function Collection(props) {
             display_doi={collectionData.display_doi}
             collectionName={collectionData.name}
             description={collectionData.description}
-          />
+          >
+            <LightBlueLink href="https://www.doi.org" target="_blank" rel="noopener noreferrer" variant="body1">
+              doi.org
+            </LightBlueLink>
+          </Summary>
           {'items' in collectionData && <CollectionDatasetsTable datasets={collectionData.items} />}
           {'creators' in collectionData && <CollectionCreatorsTable creators={collectionData.creators} />}
         </>
