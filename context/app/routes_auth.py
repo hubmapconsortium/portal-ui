@@ -107,8 +107,20 @@ def logout():
     '''
     - Revoke the tokens with Globus Auth.
     - Destroy the session state.
-    - Redirect the user to the Globus Auth logout page.
+    - Delete cookie, and return a redirect response.
+    - And when redirect returns, redirect again to the Globus Auth logout page.
     '''
+    redirect_to_globus_param = 'redirect_to_globus'
+
+    if redirect_to_globus_param in request.args:
+        redirect_uri = url_for('routes.index', _external=True)
+        globus_logout_url = 'https://auth.globus.org/v2/web/logout?' + urlencode({
+            'client': current_app.config['APP_CLIENT_ID'],
+            'redirect_uri': redirect_uri,
+            'redirect_name': 'HuBMAP Portal'
+        })
+        return redirect(globus_logout_url)
+
     client = load_app_client()
 
     # Revoke the tokens with Globus Auth
@@ -125,10 +137,8 @@ def logout():
     # Destroy the session state
     session.clear()
 
-    redirect_uri = url_for('routes.index', _external=True)
-    globus_logout_url = 'https://auth.globus.org/v2/web/logout?' + urlencode({
-        'client': current_app.config['APP_CLIENT_ID'],
-        'redirect_uri': redirect_uri,
-        'redirect_name': 'HuBMAP Portal'
-    })
-    return redirect(globus_logout_url)
+    kwargs = {redirect_to_globus_param: True}
+    response = make_response(
+        redirect(url_for('routes_auth.logout', _external=True, **kwargs)))
+    response.delete_cookie(key='nexus_token')
+    return response

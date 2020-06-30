@@ -1,3 +1,12 @@
+## v0.0.32 - 2020-06-29
+
+-Add basic collections page to demonstrate api response.
+- Set intial bar chart data to empty array.
+- Upgrade Vitessce to 0.1.7 to fix Safari issues.
+- Update hover state for login button.
+- No login required on any page.
+
+
 ## v0.0.31 - 2020-06-25
 
 - Add button to download dataset metadata table.

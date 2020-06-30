@@ -64,13 +64,6 @@ def client_not_logged_in():
         yield client
 
 
-def test_403_html_page(client_not_logged_in):
-    response = client_not_logged_in.get('/browse/donor/FAKE')
-    assert response.status == '403 FORBIDDEN'
-    assert_is_valid_html(response)
-    assert '403: Access Denied' in response.data.decode('utf8')
-
-
 @pytest.mark.parametrize('path', [
     '/no-page-here']
     + [f'/browse/{t}/fake-uuid.fake' for t in types]

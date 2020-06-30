@@ -23,11 +23,15 @@ function ProvTabs(props) {
   const [provData, setProvData] = React.useState(null);
   React.useEffect(() => {
     async function getAndSetProvData() {
-      const response = await fetch(`${entityEndpoint}/entities/${uuid}/provenance`, {
-        headers: {
-          Authorization: `Bearer ${readCookie('nexus_token')}`,
-        },
-      });
+      const nexus_token = readCookie('nexus_token');
+      const requestInit = nexus_token
+        ? {
+            headers: {
+              Authorization: `Bearer ${nexus_token}`,
+            },
+          }
+        : {};
+      const response = await fetch(`${entityEndpoint}/entities/${uuid}/provenance`, requestInit);
       if (!response.ok) {
         console.error('Prov API failed', response);
         return;
