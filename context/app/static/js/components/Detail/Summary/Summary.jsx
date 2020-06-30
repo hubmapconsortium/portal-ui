@@ -82,8 +82,8 @@ function Summary(props) {
 Summary.propTypes = {
   display_doi: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
-  create_timestamp: PropTypes.number.isRequired,
-  last_modified_timestamp: PropTypes.number.isRequired,
+  create_timestamp: PropTypes.number,
+  last_modified_timestamp: PropTypes.number,
   uuid: PropTypes.string.isRequired,
   description: PropTypes.string,
   status: PropTypes.string,
@@ -91,6 +91,8 @@ Summary.propTypes = {
 };
 
 Summary.defaultProps = {
+  create_timestamp: undefined,
+  last_modified_timestamp: undefined,
   description: '',
   status: '',
   children: undefined,
