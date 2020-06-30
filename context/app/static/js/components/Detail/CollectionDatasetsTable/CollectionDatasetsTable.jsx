@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import Typography from '@material-ui/core/Typography';
@@ -79,5 +80,9 @@ function CollectionDatasetsTable(props) {
     </SectionContainer>
   );
 }
+
+CollectionDatasetsTable.propTypes = {
+  datasets: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default CollectionDatasetsTable;

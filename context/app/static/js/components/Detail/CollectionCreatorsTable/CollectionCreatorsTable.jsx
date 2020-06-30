@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
@@ -76,5 +77,9 @@ function CollectionCreatorsTable(props) {
     </SectionContainer>
   );
 }
+
+CollectionCreatorsTable.propTypes = {
+  creators: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default CollectionCreatorsTable;
