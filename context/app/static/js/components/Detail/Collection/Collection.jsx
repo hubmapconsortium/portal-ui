@@ -43,8 +43,8 @@ function Collection(props) {
             collectionName={collectionData.name}
             description={collectionData.description}
           />
-          <CollectionDatasetsTable datasets={collectionData.items} />
-          <CollectionCreatorsTable creators={collectionData.creators} />
+          {'items' in collectionData && <CollectionDatasetsTable datasets={collectionData.items} />}
+          {'creators' in collectionData && <CollectionCreatorsTable creators={collectionData.creators} />}
         </>
       )}
     </div>
