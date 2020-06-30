@@ -1,5 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import Typography from '@material-ui/core/Typography';
 import { Link, PanelWrapper, Name } from './style';
 
@@ -21,5 +23,12 @@ function Panel(props) {
     </Link>
   );
 }
+
+Panel.propTypes = {
+  name: PropTypes.string.isRequired,
+  uuid: PropTypes.string.isRequired,
+  doi_id: PropTypes.string.isRequired,
+  dataset_uuids: PropTypes.arrayOf([PropTypes.string]).isRequired,
+};
 
 export default Panel;
