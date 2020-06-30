@@ -7,12 +7,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
-// TODO: Why does eslint complain about this, but not about utils.js?
-/* eslint-disable import/no-unresolved */
 import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { tableToDelimitedString, createDownloadUrl } from 'helpers/functions';
-/* eslint-enable */
-import { StyledTableContainer, DownloadIcon, Flex, HeaderCell } from './style';
+import { StyledTableContainer, HeaderCell } from 'shared-styles/Table';
+import { DownloadIcon, Flex } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
 
@@ -51,7 +49,7 @@ function MetadataTable(props) {
         </IconButton>
       </Flex>
       <Paper>
-        <StyledTableContainer>
+        <StyledTableContainer $maxHeight={364}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>

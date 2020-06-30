@@ -7,7 +7,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import { StyledTableContainer, HeaderCell, StyledLink } from './style';
+import { StyledTableContainer, HeaderCell } from 'shared-styles/Table';
+import { StyledLink } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
 
@@ -47,7 +48,7 @@ function CollectionDatasetsTable(props) {
         {tableRows.length} Datasets
       </Typography>
       <Paper>
-        <StyledTableContainer>
+        <StyledTableContainer $maxHeight={312}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>

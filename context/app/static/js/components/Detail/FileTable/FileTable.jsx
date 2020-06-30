@@ -6,11 +6,13 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { StyledTableContainer, StyledLink, HeaderCell } from './style';
+
+import { readCookie } from 'helpers/functions';
+import { StyledTableContainer, HeaderCell } from 'shared-styles/Table';
+import { StyledLink } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
 import GlobusLink from '../GlobusLink';
-import { readCookie } from '../../../helpers/functions';
 
 const columns = [
   { id: 'rel_path', label: 'File' },
@@ -29,7 +31,7 @@ function FileTable(props) {
       <GlobusLink entityEndpoint={entityEndpoint} uuid={uuid} />
       <Paper>
         {Boolean(rows.length) && (
-          <StyledTableContainer>
+          <StyledTableContainer $maxHeight={600}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>

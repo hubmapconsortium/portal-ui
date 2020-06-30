@@ -1,23 +1,9 @@
 import styled from 'styled-components';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableCell from '@material-ui/core/TableCell';
 import Link from '@material-ui/core/Link';
 import InfoIcon from '@material-ui/icons/Info';
+import { HeaderCell } from 'shared-styles/Table';
 
-const StyledTableContainer = styled(TableContainer)`
-  max-height: 312px;
-
-  th {
-    background-color: #ffffff;
-  }
-`;
-
-const HeaderCell = styled(TableCell)`
-  font-size: ${(props) => props.theme.typography.subtitle2.fontSize};
-  font-weight: ${(props) => props.theme.typography.subtitle2.fontWeight};
-`;
-
-const HeaderIconCell = styled(TableCell)`
+const HeaderIconCell = styled(HeaderCell)`
   font-size: ${(props) => props.theme.typography.subtitle2.fontSize};
   font-weight: ${(props) => props.theme.typography.subtitle2.fontWeight};
   display: flex;
@@ -33,4 +19,4 @@ const StyledInfoIcon = styled(InfoIcon)`
   font-size: 1rem;
 `;
 
-export { StyledTableContainer, HeaderCell, HeaderIconCell, StyledLink, StyledInfoIcon };
+export { HeaderIconCell, StyledLink, StyledInfoIcon };

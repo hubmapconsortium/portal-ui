@@ -9,7 +9,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { StyledTableContainer, HeaderCell, HeaderIconCell, StyledLink, StyledInfoIcon } from './style';
+import { StyledTableContainer, HeaderCell } from 'shared-styles/Table';
+import { HeaderIconCell, StyledLink, StyledInfoIcon } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
 
@@ -36,7 +37,7 @@ function CollectionCreatorsTable(props) {
         Creators
       </SectionHeader>
       <Paper>
-        <StyledTableContainer>
+        <StyledTableContainer $maxHeight={312}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
