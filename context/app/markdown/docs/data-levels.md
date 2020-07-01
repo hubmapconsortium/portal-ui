@@ -74,8 +74,3 @@ Any dataset status covers both data and metadata.
 |Published|The data has been published after successful automated tests, post-processing and manual curation **(sign-off status has to be 1)**|
 |Invalid|Data will never be published. After manual curation it was decided that the data will not be released. **(sign-off status has to be 0)**|
 |Withdrawn|Data has been withdrawn after being published. **(sign-off status has to be 1)**|
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1MzE0MzU5ODYsLTEwNzU0NjI1MTYsND
-IxOTUxMTE4LDM0MDgwNDg0LDEzOTcxODYyOCwtOTM3NDY1NDI5
-LDE1MzYzMTYwMDksMTQ1OTYxNjU3N119
--->
