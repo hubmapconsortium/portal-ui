@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-const ColumnListItem = styled.li`
+const StyledListItem = styled.li`
+  padding: ${(props) => props.theme.spacing(1)}px 0px;
   display: flex;
-  flex-direction: column;
 `;
 
-export { ColumnListItem };
+export { StyledListItem };

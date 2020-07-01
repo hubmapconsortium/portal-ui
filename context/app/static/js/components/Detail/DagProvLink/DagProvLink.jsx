@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { LightBlueLink } from 'shared-styles/Links';
+import { CwlIcon, FlexLightBlueLink, StyledSpan } from './style';
 
 function DagProvLink(props) {
   const { data } = props;
@@ -15,9 +16,12 @@ function DagProvLink(props) {
         {githubUrl}
       </LightBlueLink>
       {'name' in data && (
-        <LightBlueLink href={cwlUrl} target="_blank" rel="noopener noreferrer">
-          {cwlUrl}
-        </LightBlueLink>
+        <>
+          <StyledSpan>: Open in</StyledSpan>
+          <FlexLightBlueLink href={cwlUrl} target="_blank" rel="noopener noreferrer">
+            CWL Viewer <CwlIcon />
+          </FlexLightBlueLink>
+        </>
       )}
     </>
   );

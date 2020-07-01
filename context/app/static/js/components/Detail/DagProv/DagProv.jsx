@@ -5,7 +5,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 
 import DagProvLink from '../DagProvLink';
-import { ColumnListItem } from './style';
+import { StyledListItem } from './style';
 
 function DagProv(props) {
   const { dagListData } = props;
@@ -15,9 +15,9 @@ function DagProv(props) {
         {dagListData.map((item, i) => (
           <React.Fragment key={`dag-provenance-list-item${i}`}>
             {i !== 0 && <Divider />}
-            <ColumnListItem>
+            <StyledListItem>
               <DagProvLink data={item} />
-            </ColumnListItem>
+            </StyledListItem>
           </React.Fragment>
         ))}
       </List>
