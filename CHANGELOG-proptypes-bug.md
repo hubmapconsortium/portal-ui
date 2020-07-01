@@ -1,1 +1,0 @@
-- Fix bug in the proptypes for Search which was giving load-time error messages.
