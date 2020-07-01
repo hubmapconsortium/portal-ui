@@ -20,7 +20,6 @@ function ProvAnalysisDetails(props) {
           </React.Fragment>
         ))}
       </List>
-    </>
   );
 }
 ProvAnalysisDetails.propTypes = {
