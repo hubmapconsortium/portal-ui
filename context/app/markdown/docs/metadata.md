@@ -5,7 +5,7 @@ HuBMAP metadata documentation and submission specifications
 ## Donor
 Donor Specification
 
-Donor specififcation pending from Jonathan Silverstein.
+TODO: Donor specification pending from Jonathan Silverstein.
 
 ## Sample
 - [Specification](https://github.com/hubmapconsortium/ingest-validation-tools/blob/master/docs/sample/README.md)
