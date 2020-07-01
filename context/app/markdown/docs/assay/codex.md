@@ -1,14 +1,14 @@
-### HuBMAP CODEX Data
+# HuBMAP CODEX Data
 
-**Last Updated:** 6/1/2020
+### **Last Updated:** 6/1/2020
 
-**Overview:** 
+## **Overview:** 
 This document details CODEX data states, metadata fields, file structure, QA/QC thresholds, and data processing.
 
-**Description:** 
+## **Description:** 
 CODEX is a strategy for generating highly multiplexed images of fluorescently-labeled antigens. In brief, antibodies to antigens of interest are labeled with antigen-specific oligonucleotide barcodes. The barcoded antibodies are then applied to a tissue sample where they bind to target antigens. Complementary oligonucleotide probes tagged with fluorophores are then applied to the tissue sample, one antigen-specific probe at a time, allowing hybridization to the barcodes on the target antibodies. An image is captured, the probes are washed off and the process is repeated. Up to 50 protein targets are interrogated, one imaging cycle at a time, allowing generation of a composite image of up to 50 protein targets within a single tissue section.
 
-**Definitions:** 
+## **Definitions:** 
 There are a variety of terms used in this document that may not be familiar to all HubMap users. The following figures illustrate several of these terms:
 
   
@@ -39,7 +39,7 @@ There are a variety of terms used in this document that may not be familiar to a
 
 *Figure 6:* Example defined plane (left) with example imaged z planes (right).
 
-**HuBMAP CODEX Data States (Levels):**
+## **HuBMAP CODEX Data States (Levels):**
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF
@@ -50,7 +50,7 @@ There are a variety of terms used in this document that may not be familiar to a
 **HuBMAP Metadata:** 
 All HuBMAP CODEX data will have searchable metadata fields. This metadata field schema now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/codex)  where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
 
-**Associated JSON Files**
+## **Associated JSON Files**
 In addition, all HuBMAP CODEX data will have an associated json file which may contain the following additional metadata fields:
 
 |**Field** |  **Definition**| **Example**
@@ -117,7 +117,7 @@ In addition, all HuBMAP CODEX data will have an associated json file which may c
 
 *Antibody Metadata: Each TMC will provide a file listing each antibody name, respective cycle and channel. This metadata file will then inform later processes at the HIVE and be used for labeling. Further, we aim to curate the final antibody list with expert interpretation of redundant names to make antibodies and markers a searchable criteria within the HuBMAP database.*
 
-**HuBMAP CODEX Raw File Structure**
+## **HuBMAP CODEX Raw File Structure**
 1.  The general structure of the level 0 (raw) data produced by the Akoya software (UFL, Vanderbilt) and Stanford software is shown in the image below. If the HandEstain field in Experiment.json in Stanford CODEX data is true, then we will have additional folders just for the HandE cycle named as “HandE_reg1” and so on. These have to be treated as separate cycles.
     
 Other differences between CODEX software at Stanford versus Akoya proprietary software are documented [here](https://drive.google.com/open?id=1ff7iHRxkiV-DcvznFTCc1sgS_78tHKcm0ohYhv7jLjQ).
@@ -138,7 +138,7 @@ The exact same data from Stanford is also available in an image sequence format,
 University of Florida| drv_*| https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FUniversity%20of%20Florida%20TMC%2F03043e079260d180099579045f16cd53%2F
 
 
-**HuBMAP QA/QC of raw (state0) data files:**
+## **HuBMAP QA/QC of raw (state0) data files:**
 1.  Files submitted by the TMC’s will be validated by the TMC in the following steps:
     A) Checked for zero length files
     B) The number of (raw) folders should be equal to the number of cycles * number of regions of interest
@@ -250,10 +250,10 @@ On the right, there are four cropped images displayed in the original, full reso
     
 5.  Open the generated channelnames_report.csv file and add TRUE/FALSE tags to each channel separated with a coma (if using text editors) or to the consecutive column if using *“Excel/LibreOffice”.*
 
-**CODEX Data Processing by the HIVE**
+## **CODEX Data Processing by the HIVE:**
 Please see the HIVE CODEX data processing pipeline [documentation](https://docs.google.com/document/d/1CYYSXPQjwdbvmvZaEcsi_2udvDfGEZrMyh4yFnm4p3M/edit#heading=h.81csfz5mmze1).
 
-**Terms defined in this document:**
+## **Terms defined in this document:**
 |**Term** |  **Definition**
 |--|--|
 |  Intensity| Detector Counts| 
@@ -277,13 +277,6 @@ Please see the HIVE CODEX data processing pipeline [documentation](https://docs.
 | Field of View| Angle through which light can reach the detector. Available imaging area without stage movement.| 
 | Background Subtraction| Subtraction of autofluorescence intensity from total intensity.| 
 
-**For Additional Help:** Please contact: [Marda Jorgensen](mailto:marda@ufl.edu) & [Vishal Venkataraaman](mailto:vgautham@stanford.edu).
+## **For Additional Help:** 
+Please contact: [Marda Jorgensen](mailto:marda@ufl.edu) & [Vishal Venkataraaman](mailto:vgautham@stanford.edu).
 
-
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMzQ0OTEwNzY2LDEwMzU2MDAwNDIsLTIwMD
-Y3NjkwMDUsLTE1ODQ1NjA1ODcsLTExNDczMTQ2MDMsLTE5ODAz
-NDc2ODMsMTg3NzIzODE5MiwtMTU4NDUwNTk1OSwtODQwNjgyOT
-kwLC0xMTM3NzY0NzMyLC0yMDg4NzQ2NjEyLDczMDk5ODExNl19
-
--->

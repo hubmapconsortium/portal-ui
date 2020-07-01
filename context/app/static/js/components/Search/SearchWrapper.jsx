@@ -188,7 +188,7 @@ function SearchWrapper(props) {
   );
 }
 
-const refinementListPropTypes = {
+const refinementListPropTypes = PropTypes.exact({
   type: PropTypes.oneOf(['RefinementListFilter']).isRequired,
   props: PropTypes.exact({
     id: PropTypes.string.isRequired,
@@ -197,9 +197,9 @@ const refinementListPropTypes = {
     operator: PropTypes.string.isRequired,
     size: PropTypes.number.isRequired,
   }),
-};
+});
 
-const rangeFilterPropTypes = {
+const rangeFilterPropTypes = PropTypes.exact({
   type: PropTypes.oneOf(['RangeFilter']).isRequired,
   props: PropTypes.exact({
     id: PropTypes.string.isRequired,
@@ -209,7 +209,7 @@ const rangeFilterPropTypes = {
     max: PropTypes.number.isRequired,
     showHistogram: PropTypes.bool.isRequired,
   }),
-};
+});
 
 SearchWrapper.propTypes = {
   apiUrl: PropTypes.string.isRequired,
