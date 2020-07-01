@@ -19,6 +19,16 @@ HuBMAP single-cell RNA-seq data sets are processed with a two-stage pipeline, us
 The HuBMAP Consortium uses a three-stage pipeline for scATAC-seq data sets, composed of [SnapTools](https://github.com/r3fang/SnapTools), [SnapATAC](https://github.com/r3fang/SnapATAC), and [chromVAR](https://bioconductor.org/packages/release/bioc/html/chromVAR.html). This pipeline is written in CWL, calling command-line tools encapsulated in Docker containers.
 - [Git Hub](https://github.com/hubmapconsortium/sc-atac-seq-pipeline)
 
+
+### [Bulk RNA sequencing](https://docs.google.com/document/d/1DIQJBM5icoKNEfafQA6Aaio2sAjui3NfO1fkMAThdOU/edit?usp=sharing)
+HuBMAP single-cell RNA-seq data sets are processed using [Salmon](https://combine-lab.github.io/salmon/) for transcript quantification. This pipeline is implemented in CWL, calling command-line tools encapsulated in Docker containers.
+- [Git Hub](https://github.com/hubmapconsortium/salmon-rnaseq)
+
+
+### [Bulk ATAC-seq](https://docs.google.com/document/d/1Jwm5V-A3j1fynriwo9Ec9QWEODovR14zUmaaUNf1Pq0/edit?usp=sharing)**
+The HuBMAP Consortium uses a two-stage pipeline for scATAC-seq data sets, composed of [SnapTools](https://github.com/r3fang/SnapTools) and [MACS2](https://github.com/macs3-project/MACS) This pipeline is written in CWL, calling command-line tools encapsulated in Docker containers.
+- [Git Hub](https://github.com/hubmapconsortium/sc-atac-seq-pipeline)
+
 <!--stackedit_data:
 eyJoaXN0b3J5IjpbMjQ0OTM4MzEwLDIyNzUxMzg1OCwtMjA2Mz
 A1NDIzMCwtMTI0OTE4NDk3NSwxOTk0NjM3Miw3MjM4Nzg5NDEs
