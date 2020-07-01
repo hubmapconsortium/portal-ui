@@ -15,7 +15,7 @@ Access
 
 Search & View
 - Sequencing, Microscopy & Mass Spectrometry imaging data
-- Spatial common coordinate framework data for select Kidney datasets
+- Spatial common coordinate framework data for select Kidney and Spleen datasets
 - Faceted search for select metadata fields
 - Cell naming future functionality showcase
 
@@ -26,9 +26,4 @@ Analysis & Infrastructure
 ### Future Releases
 Our next portal release will focus on sharing of new modalities and enhancements for use of existing modalities.  We are targeting additional organ spatial data as well as integrated analyses focused on cell naming.
 
->To request a feature for a future Portal release, please contact help@hubmapconsortium.org and share your ideas.
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMzY4MjcyNDAzLDY2OTUwNTg3NSwtNzA2MT
-QzOTc0LDE1Mjg4NzkwNywyMDQwMTgxMzcwLDMxOTYzMTY4NSwt
-MTA4Njc3MzM0MV19
--->
+>To request a feature for a future Portal release, please contact [help@hubmapconsortium.org](mailto:help@hubmapconsortium.org) and share your ideas.
