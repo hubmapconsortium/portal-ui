@@ -20,4 +20,4 @@
 
 ---
 - [Help](/docs/help)
---FAQs - Coming Soon!
+- FAQs - Coming Soon!
