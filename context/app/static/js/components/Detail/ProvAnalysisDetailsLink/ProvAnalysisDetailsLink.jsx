@@ -3,7 +3,7 @@ import React from 'react';
 import { LightBlueLink } from 'shared-styles/Links';
 import { CwlIcon, FlexLightBlueLink, StyledSpan } from './style';
 
-function DagProvLink(props) {
+function ProvAnalysisDetailsLink(props) {
   const { data } = props;
 
   const trimmedOrigin = data.origin.split('.').slice(0, -1).join('.');
@@ -27,4 +27,4 @@ function DagProvLink(props) {
   );
 }
 
-export default DagProvLink;
+export default ProvAnalysisDetailsLink;

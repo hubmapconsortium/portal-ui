@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 
-import DagProvLink from '../DagProvLink';
+import ProvAnalysisDetailsLink from '../ProvAnalysisDetailsLink';
 import { StyledListItem } from './style';
 
-function DagProv(props) {
+function ProvAnalysisDetails(props) {
   const { dagListData } = props;
   return (
     <>
@@ -16,7 +16,7 @@ function DagProv(props) {
           <React.Fragment key={`dag-provenance-list-item${i}`}>
             {i !== 0 && <Divider />}
             <StyledListItem>
-              <DagProvLink data={item} />
+              <ProvAnalysisDetailsLink data={item} />
             </StyledListItem>
           </React.Fragment>
         ))}
@@ -24,7 +24,7 @@ function DagProv(props) {
     </>
   );
 }
-DagProv.propTypes = {
+ProvAnalysisDetails.propTypes = {
   dagListData: PropTypes.arrayOf(
     PropTypes.exact({
       hash: PropTypes.string,
@@ -34,4 +34,4 @@ DagProv.propTypes = {
   ).isRequired,
 };
 
-export default DagProv;
+export default ProvAnalysisDetails;
