@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-const ListKey = styled.span`
-  font-weight: bold;
-  margin-right: 4px;
+const ColumnListItem = styled.li`
+  display: flex;
+  flex-direction: column;
 `;
 
-export { ListKey };
+export { ColumnListItem };

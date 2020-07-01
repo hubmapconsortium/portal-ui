@@ -2,9 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { ListKey } from './style';
+
+import DagProvLink from '../DagProvLink';
+import { ColumnListItem } from './style';
 
 function DagProv(props) {
   const { dagListData } = props;
@@ -14,14 +15,9 @@ function DagProv(props) {
         {dagListData.map((item, i) => (
           <React.Fragment key={`dag-provenance-list-item${i}`}>
             {i !== 0 && <Divider />}
-            <li>
-              {Object.entries(item).map(([key, value]) => (
-                <Typography key={key} variant="body1">
-                  <ListKey>{key}: </ListKey>
-                  {value}
-                </Typography>
-              ))}
-            </li>
+            <ColumnListItem>
+              <DagProvLink data={item} />
+            </ColumnListItem>
           </React.Fragment>
         ))}
       </List>
