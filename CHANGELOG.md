@@ -1,3 +1,14 @@
+## v0.0.33 - 2020-07-01
+
+- Update collections page and add colletion detail.
+- Add shared-styles dir.
+- Add eslint plugins to resolve webpack aliases.
+- Lots of markdown.
+- If not logged in, will append: "Login to view more results."
+- Fix bug in the proptypes for Search which was giving load-time error messages.
+- Update provvis node-hover UI.
+
+
 ## v0.0.32 - 2020-06-29
 
 -Add basic collections page to demonstrate api response.

@@ -1,3 +1,0 @@
-- Update collections page and add colletion detail.
-- Add shared-styles dir.
-- Add eslint plugins to resolve webpack aliases.
