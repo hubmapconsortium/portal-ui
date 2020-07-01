@@ -1,1 +1,3 @@
-TODO: Peter Kant commits to filling this in.
+# Donor Metadata
+
+TODO: Donor Metadata documentation / specification to be provided by Jonathan Silverstein.
