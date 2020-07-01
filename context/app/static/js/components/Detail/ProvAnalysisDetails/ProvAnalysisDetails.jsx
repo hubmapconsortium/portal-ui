@@ -26,7 +26,7 @@ function ProvAnalysisDetails(props) {
 }
 ProvAnalysisDetails.propTypes = {
   dagListData: PropTypes.arrayOf(
-    PropTypes.exact({
+    PropTypes.shape({
       hash: PropTypes.string,
       name: PropTypes.string,
       origin: PropTypes.string,

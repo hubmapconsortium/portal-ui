@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { LightBlueLink } from 'shared-styles/Links';
 import { CwlIcon, FlexLightBlueLink, StyledSpan } from './style';
@@ -26,5 +27,13 @@ function ProvAnalysisDetailsLink(props) {
     </>
   );
 }
+
+ProvAnalysisDetailsLink.propTypes = {
+  data: PropTypes.shape({
+    hash: PropTypes.string,
+    name: PropTypes.string,
+    origin: PropTypes.string,
+  }).isRequired,
+};
 
 export default ProvAnalysisDetailsLink;
