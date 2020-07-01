@@ -18,6 +18,7 @@ import {
   StyledHeader,
   StyledHeaderText,
   StyledHeaderRight,
+  StyledHeaderLeft,
   ExpandButton,
   TopSnackbar,
   ExpandableDiv,
@@ -25,6 +26,88 @@ import {
   SelectionButton,
 } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
+
+// const vitData1 = {
+//   layers: [
+//     {
+//       name: 'cells',
+//       type: 'CELLS',
+//       url:
+//         'https://assets.test.hubmapconsortium.org/c4eeeb906ce756650245f04c2ad12754/cluster-marker-genes/output/cluster_marker_genes.cells.json?token=Agkjr0pwew57l40am2J06Evg9Knw8onDjBywMx8kKXOQ1VxzzYFOCO8qGmeO9pjQkPdMX0qnqzPrBjfjdjBWNtvzkX',
+//     },
+//     {
+//       name: 'cell-sets',
+//       type: 'CELL-SETS',
+//       url:
+//         'https://assets.test.hubmapconsortium.org/c4eeeb906ce756650245f04c2ad12754/cluster-marker-genes/output/cluster_marker_genes.cell-sets.json?token=Agkjr0pwew57l40am2J06Evg9Knw8onDjBywMx8kKXOQ1VxzzYFOCO8qGmeO9pjQkPdMX0qnqzPrBjfjdjBWNtvzkX',
+//     },
+//   ],
+//   name: 'c4eeeb906ce756650245f04c2ad12754',
+//   staticLayout: [
+//     {
+//       component: 'scatterplot',
+//       h: 6,
+//       props: {
+//         mapping: 'UMAP',
+//         view: {
+//           target: [0, 0, 0],
+//           zoom: 4,
+//         },
+//       },
+//       w: 9,
+//       x: 0,
+//       y: 0,
+//     },
+//     {
+//       component: 'cellSets',
+//       h: 6,
+//       w: 3,
+//       x: 9,
+//       y: 0,
+//     },
+//   ],
+// };
+
+// const vitData2 = {
+//   layers: [
+//     {
+//       name: 'cells',
+//       type: 'CELLS',
+//       url:
+//         'https://assets.test.hubmapconsortium.org/196f0d0603f8a7a41646e42b0093c56b/cluster-marker-genes/output/cluster_marker_genes.cells.json?token=Agkjr0pwew57l40am2J06Evg9Knw8onDjBywMx8kKXOQ1VxzzYFOCO8qGmeO9pjQkPdMX0qnqzPrBjfjdjBWNtvzkX',
+//     },
+//     {
+//       name: 'cell-sets',
+//       type: 'CELL-SETS',
+//       url:
+//         'https://assets.test.hubmapconsortium.org/196f0d0603f8a7a41646e42b0093c56b/cluster-marker-genes/output/cluster_marker_genes.cell-sets.json?token=Agkjr0pwew57l40am2J06Evg9Knw8onDjBywMx8kKXOQ1VxzzYFOCO8qGmeO9pjQkPdMX0qnqzPrBjfjdjBWNtvzkX',
+//     },
+//   ],
+//   name: '196f0d0603f8a7a41646e42b0093c56b',
+//   staticLayout: [
+//     {
+//       component: 'scatterplot',
+//       h: 6,
+//       props: {
+//         mapping: 'UMAP',
+//         view: {
+//           target: [0, 0, 0],
+//           zoom: 4,
+//         },
+//       },
+//       w: 9,
+//       x: 0,
+//       y: 0,
+//     },
+//     {
+//       component: 'cellSets',
+//       h: 6,
+//       w: 3,
+//       x: 9,
+//       y: 0,
+//     },
+//   ],
+// };
 
 function Visualization(props) {
   const { vitData } = props;
@@ -68,16 +151,16 @@ function Visualization(props) {
   return (
     <StyledSectionContainer id="visualization">
       <StyledHeader>
-        <StyledHeaderText variant="h3" component="h2">
-          Visualization
-        </StyledHeaderText>
-        <StyledHeaderRight>
+        <StyledHeaderLeft>
+          <StyledHeaderText variant="h3" component="h2">
+            Visualization
+          </StyledHeaderText>
           {Array.isArray(vitData) ? (
             <>
-              <SelectionButton ref={anchorRef} onClick={toggle} style={{ color: 'black' }}>
-                Selection {open ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
+              <SelectionButton ref={anchorRef} onClick={toggle}>
+                Selection {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
               </SelectionButton>
-              <Popper open={open} anchorEl={anchorRef.current} placement="top-end">
+              <Popper open={open} anchorEl={anchorRef.current} placement="top-end" style={{ zIndex: 50 }}>
                 <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                   <ClickAwayListener onClickAway={toggle}>
                     <MenuList id="showcase-options">
@@ -92,6 +175,8 @@ function Visualization(props) {
               </Popper>
             </>
           ) : null}
+        </StyledHeaderLeft>
+        <StyledHeaderRight>
           <VisualizationThemeSwitch theme={vitessceTheme} onChange={handleThemeChange} />
           <ExpandButton onClick={handleExpand}>
             <ZoomOutMapIcon />
