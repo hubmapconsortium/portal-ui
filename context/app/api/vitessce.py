@@ -1,7 +1,6 @@
 import urllib
 from pathlib import Path
 import json
-import itertools
 from datauri import DataURI
 import re
 import copy
@@ -13,7 +12,7 @@ from flask import current_app
 # Hardcoded CODEX offsets and tile path.
 CODEX_OFFSETS_PATH = "output_offsets"
 CODEX_TILE_PATH = "output/extract/expressions/ome-tiff"
-CODDEX_SPRM_PATH = 'output_json'
+CODDEX_SPRM_PATH = "output_json"
 
 # END: Only for Demo! #
 
@@ -35,7 +34,7 @@ SCATTERPLOT = {
             "w": 9,
             "h": 6,
         },
-        {"component": "cellSets", "x": 9, "y": 0, "w": 3, "h": 6, },
+        {"component": "cellSets", "x": 9, "y": 0, "w": 3, "h": 6},
     ],
 }
 
@@ -47,7 +46,7 @@ IMAGING = {
         {"component": "description", "x": 0, "y": 4, "w": 4, "h": 2},
         {
             "component": "spatial",
-            "props": {"view": {}, },
+            "props": {"view": {}},
             "x": 4,
             "y": 0,
             "w": 6,
@@ -56,7 +55,6 @@ IMAGING = {
         {"component": "cellSets", "x": 10, "y": 2, "w": 2, "h": 2},
         {"component": "genes", "x": 10, "y": 0, "w": 2, "h": 2},
         {"component": "heatmap", "x": 4, "y": 4, "w": 8, "h": 2},
-
     ],
 }
 
@@ -65,35 +63,35 @@ ASSAY_CONF_LOOKUP = {
     "salmon_rnaseq_10x": {
         "base_conf": SCATTERPLOT,
         "files_conf": [
-            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json", "type": "CELLS", },
-            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cell-sets.json", "type": "CELL-SETS", },
+            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json", "type": "CELLS"},
+            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cell-sets.json", "type": "CELL-SETS"},
         ],
     },
     "codex_cytokit": {
         "base_conf": IMAGING,
-        "view": {"zoom": -1.5, "target": [600, 600, 0], },
+        "view": {"zoom": -1.5, "target": [600, 600, 0]},
         "files_conf": [
             # Hardcoded for now only one tile.
             {
-                "rel_path": str(Path(CODEX_TILE_PATH) / '#TILE#.ome.tiff'),
+                "rel_path": str(Path(CODEX_TILE_PATH) / "#TILE#.ome.tiff"),
                 "type": "RASTER",
             },
             {
-                "rel_path": str(Path(CODDEX_SPRM_PATH) / '#TILE#.cells.json'),
+                "rel_path": str(Path(CODDEX_SPRM_PATH) / "#TILE#.cells.json"),
                 "type": "CELLS",
             },
             {
-                "rel_path": str(Path(CODDEX_SPRM_PATH) / '#TILE#.cell-sets.json'),
+                "rel_path": str(Path(CODDEX_SPRM_PATH) / "#TILE#.cell-sets.json"),
                 "type": "CELL-SETS",
             },
             {
-                "rel_path": str(Path(CODDEX_SPRM_PATH) / '#TILE#.genes.json'),
+                "rel_path": str(Path(CODDEX_SPRM_PATH) / "#TILE#.genes.json"),
                 "type": "GENES",
             },
             {
-                "rel_path": str(Path(CODDEX_SPRM_PATH) / '#TILE#.clusters.json'),
+                "rel_path": str(Path(CODDEX_SPRM_PATH) / "#TILE#.clusters.json"),
                 "type": "CLUSTERS",
-            }
+            },
         ],
     },
 }
@@ -103,12 +101,22 @@ CODEX_ASSAY = "codex_cytokit"
 IMAGE_ASSAYS = [CODEX_ASSAY]
 TILED_ASSAYS = [CODEX_ASSAY]
 
-TILE_REGEX = '.*(R(\\d+)_X(\\d+)_Y(\\d+)).*'
+TILE_REGEX = ".*(R(\\d+)_X(\\d+)_Y(\\d+)).*"
 
 MOCK_URL = "https://example.com"
 
+
 def _get_tiles(files):
-    return list(set([re.match(TILE_REGEX, file).group(1) for file in files if re.match(TILE_REGEX, file)]))
+    return list(
+        set(
+            [
+                re.match(TILE_REGEX, file).group(1)
+                for file in files
+                if re.match(TILE_REGEX, file)
+            ]
+        )
+    )
+
 
 class Vitessce:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
@@ -193,9 +201,8 @@ class Vitessce:
                 confs += [new_conf]
             self.conf = confs
             return confs
-                
 
-    def _build_layer_conf(self, file, tile = ''):
+    def _build_layer_conf(self, file, tile=""):
         """Build each layer in the layers section.
 
         returns e.g
@@ -209,9 +216,11 @@ class Vitessce:
 
         return {
             "type": file["type"],
-            "url": self._build_assets_url(file["rel_path"].replace('#TILE#', tile))
-            if file['type'] != 'RASTER'
-            else self._build_image_layer_datauri(file["rel_path"].replace('#TILE#', tile)),
+            "url": self._build_assets_url(file["rel_path"].replace("#TILE#", tile))
+            if file["type"] != "RASTER"
+            else self._build_image_layer_datauri(
+                file["rel_path"].replace("#TILE#", tile)
+            ),
             "name": file["type"].lower(),
         }
 
@@ -304,4 +313,3 @@ class Vitessce:
             "view"
         ]
         return conf
-
