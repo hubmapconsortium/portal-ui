@@ -16,7 +16,7 @@ TODO: Donor specification pending from Jonathan Silverstein.
 
 |Assay|Document|Specification|Contact|
 |--|--|--|--|
-|AF (Autofluorescence)|[Document](GitHubMDFileLink)|[Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)|
+|AF (Autofluorescence)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/af)|[Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)|
 |Antibody-based MxIF (Multiplexed Immunofluorescence)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/mixif)|[Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)|
 |ATACseq (bulk)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkatacseq)|[Blue Lake](mailto:b1lake@eng.ucsd.edu)|
 |CODEX | [Document](GitHubMDFileLink)| [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/codex)|[Vishal Venkataraaman](mailto:vgautham@stanford.edu)|
