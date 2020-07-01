@@ -24,6 +24,7 @@ App.propTypes = {
     entity: PropTypes.object,
     vitessce_conf: PropTypes.object,
     endpoints: PropTypes.object,
+    collection: PropTypes.object,
   }),
 };
 

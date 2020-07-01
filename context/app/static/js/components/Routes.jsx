@@ -3,15 +3,13 @@ import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import { Home } from './Home';
 import Search from './Search/Search';
-import Donor from './Detail/Donor';
-import Sample from './Detail/Sample';
-import Dataset from './Detail/Dataset';
+import { Donor, Sample, Dataset, Collection } from './Detail';
 import Showcase from './Showcase';
-import Collections from './Collections';
+import { Collections } from './Collections';
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, endpoints, title } = flaskData;
+  const { entity, vitessce_conf, endpoints, title, collection } = flaskData;
   const urlPath = window.location.pathname;
 
   if (urlPath.startsWith('/browse/donor/')) {
@@ -58,10 +56,18 @@ function Routes(props) {
     return <Showcase title={title} vitData={vitessce_conf} assayMetadata={entity} />;
   }
 
-  if (urlPath.startsWith('/collections')) {
+  if (urlPath === '/collections') {
     return (
       <Container maxWidth="lg">
         <Collections entityEndpoint={endpoints.entityEndpoint} />
+      </Container>
+    );
+  }
+
+  if (urlPath.startsWith('/browse/collection/')) {
+    return (
+      <Container maxWidth="lg">
+        <Collection entityEndpoint={endpoints.entityEndpoint} collection={collection} />
       </Container>
     );
   }
@@ -73,6 +79,7 @@ Routes.propTypes = {
     entity: PropTypes.object,
     vitessce_conf: PropTypes.object,
     endpoints: PropTypes.object,
+    collection: PropTypes.object,
   }),
 };
 

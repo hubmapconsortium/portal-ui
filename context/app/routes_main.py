@@ -60,6 +60,30 @@ def ccf_eui():
     )
 
 
+@blueprint.route('/browse/collection/<uuid>')
+def collection_details(uuid):
+    client = _get_client()
+    collection = client.get_collection(uuid)
+    core_props = {'endpoints': _get_endpoints(), 'collection': collection}
+    template = f'pages/base_react.html'
+    return render_template(
+        template,
+        uuid=uuid,
+        title=f'{collection["display_doi"]} | Collection',
+        flask_data=core_props
+    )
+
+
+@blueprint.route('/browse/collection/<uuid>.<ext>')
+def collection_details_ext(uuid, ext):
+    if ext != 'json':
+        abort(404)
+    client = _get_client()
+
+    collection = client.get_collection(uuid)
+    return collection
+
+
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
     if type not in types:
