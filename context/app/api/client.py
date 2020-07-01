@@ -52,10 +52,10 @@ class ApiClient():
             raise
         return response.json()
 
-    def _post_check_errors(self, url, json):
+    def _get_check_errors(self, url):
         try:
-            response = requests.post(
-                url, json=json,
+            response = requests.get(
+                url,
                 headers={'Authorization': 'Bearer ' + self.nexus_token})
         except requests.exceptions.ConnectTimeout as error:
             current_app.logger.info(error)
@@ -77,10 +77,10 @@ class ApiClient():
             raise
         return response.json()
 
-    def _get_check_errors(self, url):
+    def _post_check_errors(self, url, json):
         try:
-            response = requests.get(
-                url,
+            response = requests.post(
+                url, json=json,
                 headers={'Authorization': 'Bearer ' + self.nexus_token})
         except requests.exceptions.ConnectTimeout as error:
             current_app.logger.info(error)
@@ -147,8 +147,8 @@ class ApiClient():
         return entity
 
     def get_collection(self, uuid):
-        url = f"{current_app.config['ENTITY_API_BASE']}/collections/{uuid}"
-        response_json = self._get_check_errors(url)
+        path = f"{current_app.config['ENTITY_API_BASE']}/collections/{uuid}"
+        response_json = self._get_check_errors(path)
         return response_json
 
     def get_vitessce_conf(self, entity):

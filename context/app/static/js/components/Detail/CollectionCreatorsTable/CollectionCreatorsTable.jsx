@@ -55,7 +55,7 @@ function CollectionCreatorsTable(props) {
             </TableHead>
             <TableBody>
               {tableRows.map((row) => (
-                <TableRow key={row.name}>
+                <TableRow key={row.orcid_id}>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.affiliation}</TableCell>
                   <TableCell>

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 
+// 88px = header height + header margin, 60px = footer height
 const PageWrapper = styled.div`
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     height: calc(100vh - 88px - 60px);
