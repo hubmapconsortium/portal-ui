@@ -25,7 +25,7 @@ function FileBrowser(props) {
         if (i < levels.length - 1) {
           // eslint-disable-next-line no-param-reassign
           prev[path] = prev[path] || {}; // if level exists do not change, else add empty object at level
-          return prev;
+          return prev[path];
         }
 
         // level is file
@@ -34,18 +34,18 @@ function FileBrowser(props) {
         if (path in prev && 'files' in prev[path]) {
           // eslint-disable-next-line no-param-reassign
           prev[path].files.push(file); // push file into existing array
-          return prev;
+          return prev[path];
         }
 
         // level exists
         if (path in prev) {
           Object.assign(prev[path], { files: [file] });
-          return prev;
+          return prev[path];
         }
 
         // eslint-disable-next-line no-param-reassign
         prev[path] = { files: [file] };
-        return prev;
+        return prev[path];
       }, treePath);
     });
     setFileTree(treePath);
