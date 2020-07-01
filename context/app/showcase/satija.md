@@ -46,17 +46,4 @@ vitessce_conf: {
 <!-- TODO: Get a real description. -->
 # Satija Showcase Header
 Hierarchical Cell Type Annotations for Spleen Dataset
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit pellentesque pretium. 
-Nulla id arcu vestibulum, congue erat vel, hendrerit turpis. Maecenas scelerisque nibh in imperdiet pretium. 
-Etiam tortor erat, placerat eu felis non, vulputate fringilla metus. 
-Nunc vitae lectus eget elit faucibus porta vel eget nibh. Nam pulvinar egestas eros, a cursus purus malesuada at. 
-Sed diam nulla, molestie ac arcu non, maximus porta sapien. Quisque tincidunt, odio eu tristique tempor, nunc est tincidunt mauris, et consequat nibh augue vel justo. 
-Nunc mattis vel nibh ut molestie.
-
-## Subheader
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit pellentesque pretium. 
-Nulla id arcu vestibulum, congue erat vel, hendrerit turpis. Maecenas scelerisque nibh in imperdiet pretium. 
-Etiam tortor erat, placerat eu felis non, vulputate fringilla metus. 
-Nunc vitae lectus eget elit faucibus porta vel eget nibh. Nam pulvinar egestas eros, a cursus purus malesuada at. 
-Sed diam nulla, molestie ac arcu non, maximus porta sapien. Quisque tincidunt, odio eu tristique tempor, nunc est tincidunt mauris, et consequat nibh augue vel justo. 
-Nunc mattis vel nibh ut molestie.
+https://satijalab.org
