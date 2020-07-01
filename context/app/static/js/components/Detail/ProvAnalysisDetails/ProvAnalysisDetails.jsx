@@ -10,7 +10,6 @@ import { StyledListItem } from './style';
 function ProvAnalysisDetails(props) {
   const { dagListData } = props;
   return (
-    <>
       <List>
         {dagListData.map((item, i) => (
           <React.Fragment key={`dag-provenance-list-item${i}`}>
