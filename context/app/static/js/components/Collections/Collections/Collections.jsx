@@ -7,7 +7,7 @@ import { PageWrapper, ScrollBox } from './style';
 
 function Collections(props) {
   const { entityEndpoint } = props;
-  const [collectionsData, setCollectionsData] = useState();
+  const [collectionsData, setCollectionsData] = useState([]);
   useEffect(() => {
     async function getAllCollections() {
       const response = await fetch(`${entityEndpoint}/collections`, {
@@ -29,10 +29,10 @@ function Collections(props) {
         Collections
       </Typography>
       <Typography variant="subtitle1" color="primary">
-        {collectionsData && `${collectionsData.length} Collections`}
+        {collectionsData.length > 0 && `${collectionsData.length} Collections`}
       </Typography>
       <ScrollBox>
-        {collectionsData &&
+        {collectionsData.length > 0 &&
           collectionsData.map((col) => (
             <Panel
               key={col.uuid}
