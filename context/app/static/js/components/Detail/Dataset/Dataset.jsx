@@ -9,6 +9,7 @@ import MetadataTable from '../MetadataTable';
 import FileTable from '../FileTable';
 import Visualization from '../Visualization';
 import DetailLayout from '../DetailLayout';
+import FileBrowser from '../FileBrowser';
 
 function AssaySpecificItem(props) {
   const { children } = props;
@@ -87,6 +88,7 @@ function DatasetDetail(props) {
       )}
       {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
       <FileTable files={files} assetsEndpoint={assetsEndpoint} entityEndpoint={entityEndpoint} uuid={uuid} />
+      <FileBrowser files={files} />
     </DetailLayout>
   );
 }
