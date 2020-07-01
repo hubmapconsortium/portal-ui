@@ -8,7 +8,7 @@
 - [2020 Summer Release](/docs/release-summer-2020)
 
 ---
-- [Data States](/docs/data-levels)
+- [Data States](/docs/data-states)
 - [Metadata](/docs/metadata)
 - [Assays](/docs/assays)
 - [Pipelines](/docs/pipelines)
