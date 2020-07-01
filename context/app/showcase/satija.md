@@ -38,14 +38,7 @@ vitessce_conf: {
             "x": 7,
             "y": 0,
             "w": 5,
-            "h": 1
-        },
-        {
-            "component": "cellSetSizes",
-            "x": 7,
-            "y": 1,
-            "w": 5,
-            "h": 1
+            "h": 2
         }
     ]
 }
