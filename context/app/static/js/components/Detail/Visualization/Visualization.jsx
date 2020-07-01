@@ -158,7 +158,7 @@ function Visualization(props) {
           {Array.isArray(vitData) ? (
             <>
               <SelectionButton ref={anchorRef} onClick={toggle}>
-                Selection {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                Select Tile {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
               </SelectionButton>
               <Popper open={open} anchorEl={anchorRef.current} placement="top-end" style={{ zIndex: 50 }}>
                 <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
