@@ -52,6 +52,31 @@ class ApiClient():
             raise
         return response.json()
 
+    def _get_check_errors(self, url):
+        try:
+            response = requests.get(
+                url,
+                headers={'Authorization': 'Bearer ' + self.nexus_token})
+        except requests.exceptions.ConnectTimeout as error:
+            current_app.logger.info(error)
+            abort(504)
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as error:
+            current_app.logger.info(error.response.text)
+            status = error.response.status_code
+            if status in [400, 404]:
+                # The same 404 page will be returned,
+                # whether it's a missing route in portal-ui,
+                # or a missing entity in the API.
+                abort(status)
+            if status in [401]:
+                # I believe we have 401 errors when the globus credentials
+                # have expired, but are still in the flask session.
+                abort(status)
+            raise
+        return response.json()
+
     def _post_check_errors(self, url, json):
         try:
             response = requests.post(
@@ -123,7 +148,7 @@ class ApiClient():
 
     def get_collection(self, uuid):
         path = f"{current_app.config['ENTITY_API_BASE']}/collections/{uuid}"
-        response_json = self._request(path)
+        response_json = self._get_check_errors(path)
         return response_json
 
     def get_vitessce_conf(self, entity):
