@@ -17,7 +17,7 @@ TODO: Peter Kant commits to filling this in.
 [assay/wgs](/docs/assay/wgs) <br>
 [assays](/docs/assays) <br>
 [consent](/docs/consent) <br>
-[data-levels](/docs/data-levels) <br>
+[data-states](/docs/data-states) <br>
 [donor](/docs/donor) <br>
 [help](/docs/help) <br>
 [infrastructure](/docs/infrastructure) <br>
