@@ -25,7 +25,7 @@ HuBMAP single-cell RNA-seq data sets are processed using [Salmon](https://combin
 - [Git Hub](https://github.com/hubmapconsortium/salmon-rnaseq)
 
 
-### [Bulk ATAC-seq](https://docs.google.com/document/d/1Jwm5V-A3j1fynriwo9Ec9QWEODovR14zUmaaUNf1Pq0/edit?usp=sharing)**
+### [Bulk ATAC-seq](https://docs.google.com/document/d/1Jwm5V-A3j1fynriwo9Ec9QWEODovR14zUmaaUNf1Pq0/edit?usp=sharing)
 The HuBMAP Consortium uses a two-stage pipeline for scATAC-seq data sets, composed of [SnapTools](https://github.com/r3fang/SnapTools) and [MACS2](https://github.com/macs3-project/MACS) This pipeline is written in CWL, calling command-line tools encapsulated in Docker containers.
 - [Git Hub](https://github.com/hubmapconsortium/sc-atac-seq-pipeline)
 
