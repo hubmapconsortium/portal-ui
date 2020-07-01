@@ -1,0 +1,1 @@
+Update Vitessce to handle changing multiple sources from SPRM and Showcase.
