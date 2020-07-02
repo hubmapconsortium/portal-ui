@@ -67,11 +67,11 @@ Line 3 begins with a '+' character and is optionally followed by the same sequen
 
 Line 4 encodes the quality values for the bases in Line 2.
 
-## **HuBMAP QA/QC of raw (state0) data files:**
+## HuBMAP QA/QC of raw (state0) data files:
 The bolded steps below constitute a series of standard RNA-seq data analysis workflow.
 
 
-### **Pre-alignment QC with FastQC **
+### Pre-alignment QC with FastQC 
 [http://www.bioinformatics.babraham.ac.uk/projects/fastqc/](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/):
 ![](https://lh5.googleusercontent.com/QcjPsyXMsxYbtFCVU-MSRj_WfkfW6fR3gRIJUWp9MtA6-kOsdZ1qM6XOjBBdKy9ytkJ1mij1ZG7S841IkLqYUh5ueUMmeK0Fyhq5Ye00e1_ZX6FoPtpuJYQFbgqJMmVbMs4ZGQo)
 
