@@ -121,7 +121,7 @@ In addition, all HuBMAP seq data will have an associated json file which may con
 
 
 ## **HuBMAP seqFISH Raw File Structure**
-1.  # The general structure of the stage 0 (raw) data produced by seqFISH shown in the image below.
+1.  The general structure of the stage 0 (raw) data produced by seqFISH shown in the image below.
 ![](https://lh6.googleusercontent.com/vTtZ9ef0WRV0jLuWmU7RjglIIMZPPvGcze9lnMQbdd-G7wdbxyvqNhRq7DfciuZ2qmslwVbSBqOVtMr8VlgiU4JQaFr5_2Lw4oKTtlcbAuO5_1mSVMeHLrrXGNKO_OAlqfg3upU)
 
 2.  Segmentation files in the processed data contributed by the TMC’s can be found in the following locations:  
