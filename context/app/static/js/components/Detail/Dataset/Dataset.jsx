@@ -79,7 +79,7 @@ function DatasetDetail(props) {
           description={description}
           status={status}
         >
-          <SummaryData data_types={data_types} origin_sample={origin_sample} />
+          <SummaryData data_types={data_types || []} origin_sample={origin_sample} />
         </Summary>
         {shouldDisplaySection.visualization && <Visualization vitData={vitData} />}
         <Attribution
