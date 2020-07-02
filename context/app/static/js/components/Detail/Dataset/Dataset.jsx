@@ -1,14 +1,18 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+
 import { StyledDivider } from './style';
 import ProvTabs from '../ProvTabs';
 import Summary from '../Summary';
 import Attribution from '../Attribution';
 import Protocol from '../Protocol';
 import MetadataTable from '../MetadataTable';
-import FileTable from '../FileTable';
 import Visualization from '../Visualization';
 import DetailLayout from '../DetailLayout';
+import Files from '../Files';
+
+// TODO use this context for components other than FileBrowser
+import DatasetContext from './context';
 
 function AssaySpecificItem(props) {
   const { children } = props;
@@ -60,34 +64,37 @@ function DatasetDetail(props) {
     visualization: 'name' in vitData,
     protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
     metadataTable: metadata && 'metadata' in metadata,
+    files: true,
   };
 
   return (
-    <DetailLayout shouldDisplaySection={shouldDisplaySection}>
-      <Summary
-        uuid={uuid}
-        entity_type={entity_type}
-        display_doi={display_doi}
-        create_timestamp={create_timestamp}
-        last_modified_timestamp={last_modified_timestamp}
-        description={description}
-        status={status}
-      >
-        <SummaryData data_types={data_types} origin_sample={origin_sample} />
-      </Summary>
-      {shouldDisplaySection.visualization && <Visualization vitData={vitData} />}
-      <Attribution
-        group_name={group_name}
-        created_by_user_displayname={created_by_user_displayname}
-        created_by_user_email={created_by_user_email}
-      />
-      <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
-      {shouldDisplaySection.protocols && (
-        <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
-      )}
-      {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
-      <FileTable files={files} assetsEndpoint={assetsEndpoint} entityEndpoint={entityEndpoint} uuid={uuid} />
-    </DetailLayout>
+    <DatasetContext.Provider value={{ assetsEndpoint, uuid }}>
+      <DetailLayout shouldDisplaySection={shouldDisplaySection}>
+        <Summary
+          uuid={uuid}
+          entity_type={entity_type}
+          display_doi={display_doi}
+          create_timestamp={create_timestamp}
+          last_modified_timestamp={last_modified_timestamp}
+          description={description}
+          status={status}
+        >
+          <SummaryData data_types={data_types} origin_sample={origin_sample} />
+        </Summary>
+        {shouldDisplaySection.visualization && <Visualization vitData={vitData} />}
+        <Attribution
+          group_name={group_name}
+          created_by_user_displayname={created_by_user_displayname}
+          created_by_user_email={created_by_user_email}
+        />
+        <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
+        {shouldDisplaySection.protocols && (
+          <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
+        )}
+        {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
+        <Files files={files} entityEndpoint={entityEndpoint} uuid={uuid} />
+      </DetailLayout>
+    </DatasetContext.Provider>
   );
 }
 

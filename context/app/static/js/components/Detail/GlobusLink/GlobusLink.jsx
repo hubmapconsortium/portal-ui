@@ -5,7 +5,7 @@ import { readCookie } from '../../../helpers/functions';
 import { StyledButton } from './style';
 
 function GlobusLink(props) {
-  const { uuid, entityEndpoint } = props;
+  const { uuid, entityEndpoint, fileBrowserDisplayed } = props;
   const [globusUrlText, setGlobusUrlText] = React.useState({ url: null, text: 'Please wait...' });
   React.useEffect(() => {
     async function getAndSetGlobusUrlText() {
@@ -27,7 +27,7 @@ function GlobusLink(props) {
   }, [entityEndpoint, uuid]);
 
   return globusUrlText.url ? (
-    <StyledButton>
+    <StyledButton $fileBrowserDisplayed={fileBrowserDisplayed}>
       <Link href={globusUrlText.url}>View in Globus File Browser</Link>
     </StyledButton>
   ) : (
