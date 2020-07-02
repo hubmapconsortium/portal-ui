@@ -5,20 +5,12 @@ import { Home } from './Home';
 import Search from './Search/Search';
 import { Donor, Sample, Dataset, Collection } from './Detail';
 import Showcase from './Showcase';
-<<<<<<< HEAD
-import Collections from './Collections';
+import { Collections } from './Collections';
 import Markdown from './Markdown';
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, endpoints, title, markdown } = flaskData;
-=======
-import { Collections } from './Collections';
-
-function Routes(props) {
-  const { flaskData } = props;
-  const { entity, vitessce_conf, endpoints, title, collection } = flaskData;
->>>>>>> master
+  const { entity, vitessce_conf, endpoints, title, markdown, collection } = flaskData;
   const urlPath = window.location.pathname;
 
   if (urlPath.startsWith('/browse/donor/')) {
@@ -86,7 +78,7 @@ function Routes(props) {
       <Container maxWidth="lg">
         <Markdown markdown={markdown} />
       </Container>
-    )
+    );
   }
 }
 
