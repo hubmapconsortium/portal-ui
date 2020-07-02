@@ -73,6 +73,6 @@ Assay metadata, which is described in the [Assay Metadata Submission Format](htt
     
 -   Level 4: Supplementary information such a QC report or information that is unique to a lab, not required for reproducibility or is otherwise not relevant for outside groups. This information is submitted in the form of a single file, a ZIP archive containing multiple files, or a directory of files. There is no formatting requirement (although formats readable with common tools such as text editors are preferable over proprietary binary formats).
 
-Here is a link to the CODEX metadata fields, required input and descriptions: 
+As an example, here is a link to the CODEX metadata fields, required input and descriptions: 
 **![example assay metadata for CODEX](https://github.com/hubmapconsortium/ingest-validation-tools/blob/master/docs/codex/README.md)**
 
