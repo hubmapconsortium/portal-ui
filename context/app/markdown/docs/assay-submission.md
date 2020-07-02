@@ -30,9 +30,8 @@ Level 2
 Level 3
 Level 4
 Example for CODEX Data
-We have prepared a sample spreadsheet (with mostly fictional data) for a submission of a single CODEX data set that illustrates how the definitions below would be implemented.
 
-https://docs.google.com/spreadsheets/d/1GaBbtXb0jWCcx_G0RWrBp3ME4yyqglGbQJGC6xCkkHs/edit#gid=1784808680 
+
 Format Definition (here: “CODEX”)
 Tissue Reference Section
 This section links back to the tissue that the assay was executed on. The donor ID is redundant but can be used for sanity checks against the tissue ID.
@@ -154,25 +153,4 @@ Output Reference Section
 data_path
 Description: Relative path to file or directory with instrument data. Downstream processing will depend on filename extension conventions. Required.
 Allowed Values: Path required to exist on Globus, and should be distinct from any metadata_path or other data_path. All the files of a submission should be covered by exactly one metadata_path or data_path.
-Appendix: Implementation for HuBMAP Data Portal
-The required columns and allowed values will be defined by a set of JSON schema, e.g. checked into the ingest-pipeline repository. From those we will generate human-readable documentation (which will replace this document) and TSV templates. Each type of assay will have its own template, so the schema will have some means of indicating which attribute goes with which assay type.
 
-Allowed values should be defined via controlled vocabularies or ontologies.
-
-The cidc-schemas project may provide some of the functionality we need, though it might not handle sub-typed schema like we will have.
-
-Submissions will be TSV using UTF-8. TSV because that is easier to hand edit than CSV and UTF-8 because some personnel names include non-ASCII characters. 
-
-On ingest, the TSV will be translated to nested JSON: JSON schema doesn't adhere to an OO model, so a single flat space of attributes which can be extended in different directions is difficult to validate. There will be additional, programmatic checks:
-Are the referenced HuBMAP IDs valid?
-Do metadata_path and data_path point to valid files in the submission?
-Are all files in the submission covered, and none of them are referenced multiple times?
-Do the Level 2 and Level 3 attributes match the provided assay_type and assay_category (these are Level 1 attributes)
-
-If validation fails, error messages will indicate the coordinates of the error relative to the spreadsheet (i.e., rows and columns) and ideally suggest how the errors could be fixed.
-
-Before being passed to Neo4J to be loaded into the provenance graph, and eventually to Elasticsearch, the JSON will go through a second transform. This transform will
-Treat each line in the TSV as its own record.
-Flatten the nested structure that was used for validation.
-Flatten down the provenance chain, so an assay record will also have information about the donor and sample it comes from.
-Include the provenance as an additional attribute, along with metadata coming from the submission event itself. (The newly generated ID, the submitter, the datetime of submission.)
