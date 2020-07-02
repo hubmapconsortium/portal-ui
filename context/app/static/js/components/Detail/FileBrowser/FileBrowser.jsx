@@ -15,7 +15,7 @@ function FileBrowser(props) {
       const levels = f.rel_path.split('/');
       const file = levels.pop();
 
-      const fileObj = { file, fullPath: f.rel_path };
+      const fileObj = { file, fullPath: f.rel_path, description: f.description, edam_term: f.edam_term, size: f.size };
 
       if (levels.length === 0) {
         if ('files' in treePath) {
