@@ -1,0 +1,1 @@
+- Upgrade Vitessce to `v1.0.8`.
