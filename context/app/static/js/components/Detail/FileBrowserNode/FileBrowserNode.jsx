@@ -5,20 +5,20 @@ import FileBrowserFile from '../FileBrowserFile';
 import { Column } from './style';
 
 function FileBrowserNode(props) {
-  const { fileSubTree, level } = props;
+  const { fileSubTree, depth } = props;
   return Object.entries(fileSubTree).map(([k, v]) => {
     if (k === 'files') {
       return (
-        <Column key={`${k}-${level}`}>
+        <Column key={`${k}-${depth}`}>
           {v.map((file) => (
-            <FileBrowserFile key={file.fullPath} fileObj={file} level={level} />
+            <FileBrowserFile key={file.fullPath} fileObj={file} depth={depth} />
           ))}
         </Column>
       );
     }
     return (
-      <FileBrowserDirectory key={`${k}-${level}`} dirName={k.slice(0, -1)} level={level}>
-        <FileBrowserNode fileSubTree={v} level={level + 1} />
+      <FileBrowserDirectory key={`${k}-${depth}`} dirName={k.slice(0, -1)} depth={depth}>
+        <FileBrowserNode fileSubTree={v} depth={depth + 1} />
       </FileBrowserDirectory>
     );
   });

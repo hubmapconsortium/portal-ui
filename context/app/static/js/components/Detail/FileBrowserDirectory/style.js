@@ -3,7 +3,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 
 const Directory = styled.div`
-  padding: 10px 0px 10px ${(props) => props.theme.spacing(props.$level * 1.5) + props.theme.spacing(3)}px;
+  padding: 10px 0px 10px ${(props) => props.theme.spacing(props.$depth * 1.5) + props.theme.spacing(3)}px;
   border-bottom: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
   font-size: ${(props) => props.theme.typography.body1.fontSize};
   cursor: pointer;

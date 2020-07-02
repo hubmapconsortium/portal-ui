@@ -9,13 +9,13 @@ import DatasetContext from '../Dataset/context';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
 
 function FileBrowserFile(props) {
-  const { fileObj, level } = props;
+  const { fileObj, depth } = props;
   const { assetsEndpoint, uuid } = useContext(DatasetContext);
   const token = readCookie('nexus_token');
   const classes = useRoundedSecondaryTooltipStyles();
   return (
     <StyledDiv>
-      <IndentedDiv $level={level}>
+      <IndentedDiv $depth={depth}>
         <StyledFileIcon color="primary" />
         <LightBlueLink
           href={`${assetsEndpoint}/${uuid}/${fileObj.fullPath}?token=${token}`}

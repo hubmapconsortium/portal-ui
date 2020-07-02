@@ -8,12 +8,12 @@ function FileBrowser(props) {
   useEffect(() => {
     const treePath = {};
     files.forEach((f) => {
-      const levels = f.rel_path.split('/');
-      const file = levels.pop();
+      const dirs = f.rel_path.split('/');
+      const file = dirs.pop();
 
       const fileObj = { file, fullPath: f.rel_path, description: f.description, edam_term: f.edam_term, size: f.size };
 
-      if (levels.length === 0) {
+      if (dirs.length === 0) {
         if ('files' in treePath) {
           treePath.files.push(fileObj);
         } else {
@@ -22,26 +22,26 @@ function FileBrowser(props) {
         return;
       }
 
-      levels.reduce((prev, lvl, i) => {
+      dirs.reduce((prev, lvl, i) => {
         const path = `${lvl}/`;
-        // level is sub dir
+        // dir is sub dir
 
-        if (i < levels.length - 1) {
+        if (i < dirs.length - 1) {
           // eslint-disable-next-line no-param-reassign
           prev[path] = prev[path] || {}; // if level exists do not change, else add empty object at level
           return prev[path];
         }
 
-        // level is file
+        // dir is leaf
 
-        // level exists and files object exists within
+        // dir already exists and files object already exists within
         if (path in prev && 'files' in prev[path]) {
           // eslint-disable-next-line no-param-reassign
           prev[path].files.push(fileObj); // push file into existing array
           return prev[path];
         }
 
-        // level exists
+        // dir already exists
         if (path in prev) {
           Object.assign(prev[path], { files: [fileObj] });
           return prev[path];
@@ -57,7 +57,7 @@ function FileBrowser(props) {
 
   return (
     <ScrollPaper>
-      <FileBrowserNode fileSubTree={fileTree} level={0} />
+      <FileBrowserNode fileSubTree={fileTree} depth={0} />
     </ScrollPaper>
   );
 }
