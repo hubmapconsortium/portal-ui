@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { LightBlueLink } from 'shared-styles/Links';
+import Typography from '@material-ui/core/Typography';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import InfoIcon from '@material-ui/icons/Info';
 
-const StyledTypography = styled(LightBlueLink)`
-  text-decoration: none;
-  padding: 10px 0px 10px ${(props) => props.theme.spacing((props.$level + 2) * 1.5)}px;
+const StyledDiv = styled.div`
   border-bottom: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
 
   &:hover {
@@ -12,8 +11,25 @@ const StyledTypography = styled(LightBlueLink)`
   }
 `;
 
-const StyledFileIcon = styled(InsertDriveFileIcon)`
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+const IndentedDiv = styled.div`
+  padding: 10px ${(props) => props.theme.spacing(3)}px;
+  margin-left: ${(props) => props.theme.spacing(props.$level * 1.5)}px;
+  display: flex;
+  align-items: center;
 `;
 
-export { StyledTypography, StyledFileIcon };
+const StyledFileIcon = styled(InsertDriveFileIcon)`
+  margin-right: ${(props) => props.theme.spacing(1)}px;
+  font-size: ${(props) => props.theme.typography.body1.fontSize}px;
+`;
+
+const FileSize = styled(Typography)`
+  margin-left: ${(props) => props.theme.spacing(1)}px;
+`;
+
+const StyledInfoIcon = styled(InfoIcon)`
+  margin-left: ${(props) => props.theme.spacing(1)}px;
+  font-size: 1rem;
+`;
+
+export { StyledDiv, IndentedDiv, StyledFileIcon, FileSize, StyledInfoIcon };
