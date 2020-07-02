@@ -172,6 +172,8 @@ For the commercial version, the document is structured as following:
 *Empty channel* indicates a channel (wavelength) that was not used to target a marker during a specific cycle.
 
 Each cycle is formed from N number of channels. For each dataset, information regarding the number of cycles that were acquired through each channel will be available in the experiment.json file:
+<br><br>
+
 **![](https://lh4.googleusercontent.com/HNpVApDXXGiQvkeEK8xDAxyy6duSetS5Hc9aHQVbaofd7V_pyOPVqWOsa8cYPKsglQF6js669YgkjjxIRnKnPZocPhG-yZw2ytlb7FUPor1i-JPut3K_nFbqXPp8woD9YJvTyubu)**
 
 *How to read channelnames_report:*
@@ -190,14 +192,20 @@ Using commercial version:
 2.  Generate the Report ppt file by enabling the option at the prompt (add image)
  **![](https://lh6.googleusercontent.com/o_gu3Rdk8LEYfnNIsgRNVc3B5R1vL9ZMcIK5X_L8i7HXcrD5OjfdB0Ly2zsQhpZoWvvu-SgfMRNk3d8UIa-7wJZKq130VSg6LVvBqdIbFnGWQyKCknPGth6Ck2FH9rqM4Ptlzlfj)**
 
-The Akoya integrated processing step* [https://help.codex.bio/codex/processor/user-instructions/image-analysis-report](https://help.codex.bio/codex/processor/user-instructions/image-analysis-report)​ produces an Image Analysis Report for each region acquired that provides the following documentation:
+The Akoya integrated processing step* [https://help.codex.bio/codex/processor/user-instructions/image-analysis-report](https://help.codex.bio/codex/processor/user-instructions/image-analysis-report) produces an Image Analysis Report for each region acquired that provides the following documentation:
+<br><br>
 **![](https://lh3.googleusercontent.com/xQNmmUCy09LcKyp4WexCIhpoNi-VojYN4Vm8rr2QHsdcYkrJg1Vgs_Nlp8o-S5eTBsWd_t4CvayUvf_791h_-3feaYrvDWLMmRSNxdN9HEWaY1wpgdeOMDmwSVDUZ5R3nQXiYC-6)**
 **![](https://lh4.googleusercontent.com/E0OehUKsXaw14YmwSBn6cYO3XqCcAAjuDYTKoCBpkYzCOfZO4GVx9eJd49pPVZYsS9tNN3EQsitc8lMtAbUlbbnoQQPSBO4G58ctilIljDsWdeJNnfkhsqU35ZyO8PVee0FP43xF)**
 **![](https://lh3.googleusercontent.com/-kK2XRFJ0dMjLmDc5qelOQHAWBrMh7GG734e5epsjDgCTfqwNy824gHpdYZQdPK2g1drSnhdsiIuSvy7_Ra1ezVEuKMBuQvl2Rwxa21iFftnj2sI89YXMh4tC2NjxClBsFzzjbQi)**
+
+<br><br>
 A histogram and sample image is generated for every acquired channel. Each row is a cycle, containing its corresponding channels. Top-left image and histogram is always the first cycle, first channel. Image and histogram to their right is the same cycle, second channel.
 
 The displayed image is a full-resolution cropped image that has the greatest standard deviation among those sampled. Each image may be of different location within the region, depending on the expression pattern. For example, cropped images for DAPI cycles 2 and 3 below differ in their sampling location.
+<br><br><br>
+
 **![](https://lh4.googleusercontent.com/IpSNTYOmk9QpFWqRf28xWq-eKgok0mFiJtlP1WVZLKWxJaRHeUQBubMqiaj3wOV5ZiGhA5lY99tBZbg4jxMqfKfTtLbXRAC97K63b67JZK4Dvps72WqnpqKOowxZyg5Z3QTgcc_Z)**
+<br><br>
 (Magenta) A single cycle. (Cyan) Full-resolution cropped image. (Purple) Histogram.
 
 The histogram displays pixel frequency of signal intensities found within the region image. The horizontal intensity axis covers the 16-bit range (0 ~ 65535), while the vertical frequency axis auto-scales to the number of pixels found. Frequency is in logarithmic scale to better represent lower frequencies that correspond to biomarker signal.
@@ -236,6 +244,7 @@ These values can be used as a basic guideline to image quality of each biomarker
 A detailed slide for each marker acquired is also provided. The left-hand side contains image information identical to those shown in the histogram and summary slides.
 
 **![](https://lh6.googleusercontent.com/461JZ0K3CXEepXS39ihKs_okNvu3Zm6bDZz0gHoD0EQsnOeAytNu71lEErxUiEs3rfx6rylITWXmbq5kXP1hXjj2t5vB-uBfdk7XXDiJgKGOfpbfgIUa0wP_NIYfBY_e8lQEPSRe)**
+<br> <br>
 The main image in the center is the region image scaled for best fit and viewing on 4K displays (i.e. scaled to 288 ppi). This image is not in its original resolution and should not be used for detailed analysis.
 
 (Magenta) Image information. (Cyan) Region image. (Purple) Cropped images.
@@ -249,9 +258,6 @@ On the right, there are four cropped images displayed in the original, full reso
 4.  Compare these images to validation staining patterns for the same antibody in the same tissue type. The patterns should follow correct cell type localization for the target marker. Failure is indicated by a FALSE designation in the channelnames_report.csv for that specific antibody.
     
 5.  Open the generated channelnames_report.csv file and add TRUE/FALSE tags to each channel separated with a coma (if using text editors) or to the consecutive column if using *“Excel/LibreOffice”.*
-
-## **CODEX Data Processing by the HIVE:**
-Please see the HIVE CODEX data processing pipeline [documentation](https://docs.google.com/document/d/1CYYSXPQjwdbvmvZaEcsi_2udvDfGEZrMyh4yFnm4p3M/edit#heading=h.81csfz5mmze1).
 
 ## **Terms defined in this document:**
 |**Term** |  **Definition**
