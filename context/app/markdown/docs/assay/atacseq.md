@@ -24,6 +24,8 @@ In contrast to droplet barcoding methods, [SPLiT-Seq](https://science.sciencemag
 (Note: combinatorial index  barcoding assays have the prefix “sci-” rather than “sc”, which generally indicates standard droplet-based barcoding).
 
 ![](https://lh6.googleusercontent.com/BoAzThqGRpbYQ-VhVfz4y8p4K8u-0v0eBBjo28QEuR0i59EjAIziRhsevO0vEj1ANfg6S-ZviHPav-JPcS-0KsD6iOZbqQMFzUejqufUw5I3C7IMSK5xs3GDqT30gPt2J0h2h_w)
+
+
 *Figure 2:* Diagram of the combinatorial index barcoding process.
 
 ## **Definitions:** 
@@ -61,9 +63,6 @@ The HuBMAP project provides data to the public in a variety of data states. A da
 | 5 |  Annotation files: cell by gene matrix, Motif analysis, dimensionality reduction, clustering, transcription factor enrichment for one cell vs. rest |  .csv
 
 ## **HuBMAP Metadata:** 
-All HuBMAP data will have searchable metadata fields: [Levels documentation](https://docs.google.com/document/d/1g82GpCpFDKew60XzAO4Siaw3ZXJjwsaCpgPwhqQZxIY/edit#heading=h.d2xv5n06iyn)
-
-
 The scATCseq metadata.tsv now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq) where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
 
 The bulkATACseq metadata.tsv now resides at this [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkatacseq) link.
