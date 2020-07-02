@@ -6,10 +6,11 @@ import Search from './Search/Search';
 import { Donor, Sample, Dataset, Collection } from './Detail';
 import Showcase from './Showcase';
 import { Collections } from './Collections';
+import Markdown from './Markdown';
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, endpoints, title, collection } = flaskData;
+  const { entity, vitessce_conf, endpoints, title, markdown, collection } = flaskData;
   const urlPath = window.location.pathname;
 
   if (urlPath.startsWith('/browse/donor/')) {
@@ -53,7 +54,7 @@ function Routes(props) {
   }
 
   if (urlPath.startsWith('/showcase')) {
-    return <Showcase title={title} vitData={vitessce_conf} assayMetadata={entity} />;
+    return <Showcase title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />;
   }
 
   if (urlPath === '/collections') {
@@ -71,6 +72,14 @@ function Routes(props) {
       </Container>
     );
   }
+
+  if ('markdown' in flaskData) {
+    return (
+      <Container maxWidth="lg">
+        <Markdown markdown={markdown} />
+      </Container>
+    );
+  }
 }
 
 Routes.propTypes = {
@@ -79,6 +88,7 @@ Routes.propTypes = {
     entity: PropTypes.object,
     vitessce_conf: PropTypes.object,
     endpoints: PropTypes.object,
+    markdown: PropTypes.string,
     collection: PropTypes.object,
   }),
 };
