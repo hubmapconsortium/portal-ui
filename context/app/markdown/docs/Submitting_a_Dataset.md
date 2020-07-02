@@ -13,14 +13,14 @@ If multiple datasets have been generated with the same assay_type, they may be s
 
 Each **metadata directory**  contains optional relevant unstructured metadata files for a single dataset (*eg. QC reports, instrument metadata in a json, csv, txt, xml. etc*) .
 
-**![](https://lh6.googleusercontent.com/oTMFZ1Ukpm--Hm5cem06er_6Ug90im0Nv3-pibF7HYVpxxEUJZBpQ3uy5wbsibns-YazqcNRIkDTXcu4MXColWZvnmcunbr_Xbz-f243YlMlgnSVv4CrfOxKG8BXd9r15gLFr26e)**
+**![Figure 1: Example of an assay metadata.tsv](https://lh6.googleusercontent.com/oTMFZ1Ukpm--Hm5cem06er_6Ug90im0Nv3-pibF7HYVpxxEUJZBpQ3uy5wbsibns-YazqcNRIkDTXcu4MXColWZvnmcunbr_Xbz-f243YlMlgnSVv4CrfOxKG8BXd9r15gLFr26e)**
 *Figure 1: An assay-type specific assay metadata.tsv lists datasets in the submission directory for that assay-type. Datasets are listed one per row. The data_path fields point to the corresponding dataset directories in the data submission directory. The optional metadata_path fields point to the corresponding metadata directories.*
 
 
 
 Figure 2 below shows the general directory structure of a data submission. Note that a **data submission directory** may contain multiple **data directories** and **metadata directories**, each directory corresponding to one dataset/row in a single assay-specific assay **metadata.tsv**.
 
-**![](https://lh6.googleusercontent.com/cnO7dibs46ta7cwL0mjSUoi8R9at_DZmFwcKz3x9JAN-IeQsfaPSM2FyBllZfJiYYJCuYrnj_PGRcQYQLCxQqoKTVSHW6RBW8_joogOyH0JyIYvW9jxqXiup0Td86N06JaPDdQFM)**
+**![Figure 2: General directory structure](https://lh6.googleusercontent.com/cnO7dibs46ta7cwL0mjSUoi8R9at_DZmFwcKz3x9JAN-IeQsfaPSM2FyBllZfJiYYJCuYrnj_PGRcQYQLCxQqoKTVSHW6RBW8_joogOyH0JyIYvW9jxqXiup0Td86N06JaPDdQFM)**
 *Figure 2: A data submission directory may contain multiple datasets for multiple assay-types. Each dataset is provided in a corresponding data directory with optional metadata provided in a corresponding metadata directory. Each assay-specific metadata.tsv (eg.codex_metadata.tsv, maldi_metadata.tsv) in the dataset submission directory lists the corresponding datasets.*
 
 
@@ -58,8 +58,8 @@ HuBMAP supports 3 categories of assays : mass spectrometry, imaging and nucleoti
 -   WGS
 
 ### Assay Metadata
-Data centers provide the following 4 data types for each data submission to HubMAP:
-**![](https://lh4.googleusercontent.com/roCn5JFuGk3-tTn-n8wPL8cCOQ07t7vCZMyxuPI92LgDCIBFV4LPhKAIGgrL66b9XvuR45eeaAy9474jbfABdEoOVKam6hC0fBTshzNz0CMUaAOYhrfL3d3nsQN0VVbvV3KMMGVE)**
+Data centers provide the following 4 data types (Figure 3)for each data submission to HubMAP:
+**![Figure 3: Four datatypes in HuBMAP](https://lh4.googleusercontent.com/roCn5JFuGk3-tTn-n8wPL8cCOQ07t7vCZMyxuPI92LgDCIBFV4LPhKAIGgrL66b9XvuR45eeaAy9474jbfABdEoOVKam6hC0fBTshzNz0CMUaAOYhrfL3d3nsQN0VVbvV3KMMGVE)**
 
 Assay metadata, which is described in the [Assay Metadata Submission Format](https://docs.google.com/document/d/1g82GpCpFDKew60XzAO4Siaw3ZXJjwsaCpgPwhqQZxIY/edit#heading=h.qeehtnf68fas) document, is divided into 4 levels:
 
