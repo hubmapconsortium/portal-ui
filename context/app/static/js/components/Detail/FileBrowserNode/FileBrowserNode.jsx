@@ -1,22 +1,27 @@
 import React from 'react';
 
+import FileBrowserDirectory from '../FileBrowserDirectory';
+import FileBrowserFile from '../FileBrowserFile';
+import { Column } from './style';
+
 function FileBrowserNode(props) {
-  const { fileSubTree } = props;
+  const { fileSubTree, level } = props;
   return Object.entries(fileSubTree).map(([k, v]) => {
-    if ('files' in v) {
+    if (k === 'files') {
       return (
-        <div>
-          <p>{k}</p>
-          <FileBrowserNode fileSubTree={v} />
-        </div>
+        <Column>
+          {v.map((file) => (
+            <FileBrowserFile fileObj={file} level={level} />
+          ))}
+        </Column>
       );
     }
     return (
-      <>
-        {v.map((file) => (
-          <div>{file.file}</div>
-        ))}
-      </>
+      <div>
+        <FileBrowserDirectory dirName={k.slice(0, -1)} level={level}>
+          <FileBrowserNode fileSubTree={v} level={level + 1} />
+        </FileBrowserDirectory>
+      </div>
     );
   });
 }
