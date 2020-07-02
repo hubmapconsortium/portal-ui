@@ -38,7 +38,14 @@ vitessce_conf: {
             "x": 7,
             "y": 0,
             "w": 5,
-            "h": 2
+            "h": 1
+        },
+        {
+            "component": "cellSetSizes",
+            "x": 7,
+            "y": 1,
+            "w": 5,
+            "h": 1
         }
     ]
 }
@@ -46,4 +53,3 @@ vitessce_conf: {
 <!-- TODO: Get a real description. -->
 # Satija Showcase Header
 Hierarchical Cell Type Annotations for Spleen Dataset
-https://satijalab.org
