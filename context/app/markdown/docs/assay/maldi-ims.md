@@ -78,7 +78,7 @@ To monitor MALDI and mass analyzer performance, laser spot size and signal inten
 ## **Terms defined in this document:** 
 
 |**IMS Tags**|  **Description**|
-|--|--|--|
+|--|--|
 |neg|negative ionization mode|
 |pos|positive ionization mode|
 |imzML|imzML file format|

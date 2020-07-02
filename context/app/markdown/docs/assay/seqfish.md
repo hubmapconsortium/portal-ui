@@ -15,6 +15,7 @@ seqFISH technology allows in situ imaging of multiple mRNAs using barcoding and 
 *Figure 1:* Each mRNA is barcoded with a combination of 3 barcode regions, numbered I-III (region IV is used for error correction). In turn, each barcode region is decoded by hybridization of 1 of 20 possible readout barcodes per channel (203 = 8000 unique barcodes per channel) X 3 channels (24,000 unique barcodes). The complete barcode for each mRNA is deduced from the sequence of readout barcodes for regions I-III.
 
 ![](https://lh3.googleusercontent.com/oHCVhh_9ZeoqRhEcflRjARPAdtxRCs1-lC2W4X_WNX-fBFYDC0tbkL2hDrrXVvvUGc0BVF-0eaYoi4jr0XRNz_QbcrDB4UWQjSnIHQNrtxkS97ZBnKQkkfYilBaGxOFzz6CFh-s)
+<br><br>
 *Figure 2:* Pseudocolor.
 
 Decoding a barcode region: The readout-probes are labeled with one of 3 fluorescent tags: Alexa Fluor 488, Cy3b and Alexa Fluor 647. Twenty mRNA readout-probes are designed for each barcode region for each fluorophore channel. When employing 3 fluorophore channels, a total of 60 readout-probes (mRNAs) can be screened per decoding cycle. Readout-probes are hybridized and imaged one probe at a time such that each of the 20 readout-probes can then be assigned a unique pseudocolor (Figure 2) reflecting the hybridization-step order, as shown in Figure 3 below. Pseudocolor is a proxy for hybridization-step-order, a number from 1-20.
@@ -121,7 +122,7 @@ In addition, all HuBMAP seq data will have an associated json file which may con
 
 
 ## **HuBMAP seqFISH Raw File Structure**
-1.  The general structure of the stage 0 (raw) data produced by seqFISH shown in the image below.
+1. The general structure of the stage 0 (raw) data produced by seqFISH shown in the image below.
 ![](https://lh6.googleusercontent.com/vTtZ9ef0WRV0jLuWmU7RjglIIMZPPvGcze9lnMQbdd-G7wdbxyvqNhRq7DfciuZ2qmslwVbSBqOVtMr8VlgiU4JQaFr5_2Lw4oKTtlcbAuO5_1mSVMeHLrrXGNKO_OAlqfg3upU)
 
 2.  Segmentation files in the processed data contributed by the TMC’s can be found in the following locations:  

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -11,16 +10,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { StyledTableContainer, HeaderCell } from 'shared-styles/Table';
+import { useRoundedSecondaryTooltipStyles } from 'shared-styles/Tooltips';
 import { HeaderIconCell, StyledLink, StyledInfoIcon } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
-
-const useTooltipStyles = makeStyles((theme) => ({
-  tooltip: {
-    backgroundColor: theme.palette.secondary.main,
-    borderRadius: '0.4rem',
-  },
-}));
 
 function CollectionCreatorsTable(props) {
   const { creators: tableRows } = props;
@@ -30,7 +23,7 @@ function CollectionCreatorsTable(props) {
     { id: 'affiliation', label: 'Affiliation' },
   ];
 
-  const classes = useTooltipStyles();
+  const classes = useRoundedSecondaryTooltipStyles();
 
   return (
     <SectionContainer id="datasets-table">

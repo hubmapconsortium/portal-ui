@@ -43,7 +43,7 @@ This metadata schema is now available in Github for download. Any further edits 
 ## **Associated Metadata files:**
 |**Metadata File Name** |  **File Type**| **Field** | **Definition**
 |--|--|--|--|
-|  OME-TIFF | Format: OME-TIFF| SchemaType|Metadata schema type
+|  OME-TIFF | OME-TIFF| SchemaType|Metadata schema type
 |  | | SchemaVersionMajor|Metadata schema version - major
 |  | | SchemaVersionMinor|Metadata schema version - minor
 |  | | Name|Name of the microscopy image

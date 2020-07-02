@@ -1,6 +1,6 @@
 
 
-# **HuBMAP PAS Stained Microscopy **
+# **HuBMAP PAS Stained Microscopy**
 
 ### **Last Updated:** 6/15/2020
 

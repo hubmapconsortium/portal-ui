@@ -9,7 +9,6 @@ This document details bulk and single-cell RNA-sequence assays, data states, met
 
 Much of this document was created utilizing this resource [https://arxiv.org/pdf/1910.14623.pdf](https://arxiv.org/pdf/1910.14623.pdf)
 
-Sister document for ATAC-Seq data [draft_single_cell_ATAC_SEQUENCE_Doc_For_Release](https://docs.google.com/document/d/1Lrzruebio9nUusaFSJQlZGANkRjS5lrJmk4W0sSj_xM/edit#)
 *![](https://lh5.googleusercontent.com/5e3FPyttKr6eSpLYdj_shX9OrZ0n3woJuZxGScLoHG8X2b5fjPHzdYp1HcoeYKelVlKx9OM9idTrd7pOsPbjl5M36UcQVxaIHMAKnde6e6kKs5jwak6cBg2zS9qTp9mr0iUR-TQD)*
 
 ## **Description:** 
@@ -66,10 +65,6 @@ Cells are fixed and permeabilized with methanol (alternatively, cells are lysed 
     
 -   Level 4: This is information that might be unique to a lab or is not required for reproducibility or is otherwise not relevant for outside groups. This information is submitted in the form of a single file, a ZIP archive containing multiple files, or a directory of files. There is no formatting requirement (although formats readable with common tools such as text editors are preferable over proprietary binary formats).
     
-## **Associated Files**
- 
-All HuBMAP data will have searchable metadata fields. [Example Ingest Form.](https://docs.google.com/spreadsheets/d/1cbUvVFA3zaMNBUdciQxCihFLc6tZ6NQM43bJvlr7A70/edit#gid=1970171321)
-
 ### *Single Cell - specific Metadata Fields*
 This metadata field schema now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scrnaseq) where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
 
