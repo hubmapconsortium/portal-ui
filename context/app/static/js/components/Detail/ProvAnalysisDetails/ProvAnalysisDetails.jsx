@@ -10,16 +10,16 @@ import { StyledListItem } from './style';
 function ProvAnalysisDetails(props) {
   const { dagListData } = props;
   return (
-      <List>
-        {dagListData.map((item, i) => (
-          <React.Fragment key={`dag-provenance-list-item${i}`}>
-            {i !== 0 && <Divider />}
-            <StyledListItem>
-              <ProvAnalysisDetailsLink data={item} />
-            </StyledListItem>
-          </React.Fragment>
-        ))}
-      </List>
+    <List>
+      {dagListData.map((item, i) => (
+        <React.Fragment key={`dag-provenance-list-item${i}`}>
+          {i !== 0 && <Divider />}
+          <StyledListItem>
+            <ProvAnalysisDetailsLink data={item} />
+          </StyledListItem>
+        </React.Fragment>
+      ))}
+    </List>
   );
 }
 ProvAnalysisDetails.propTypes = {
