@@ -26,7 +26,7 @@ In contrast to droplet barcoding methods, [SPLiT-Seq](https://science.sciencemag
 ![](https://lh6.googleusercontent.com/BoAzThqGRpbYQ-VhVfz4y8p4K8u-0v0eBBjo28QEuR0i59EjAIziRhsevO0vEj1ANfg6S-ZviHPav-JPcS-0KsD6iOZbqQMFzUejqufUw5I3C7IMSK5xs3GDqT30gPt2J0h2h_w)
 
 
-<br><br>*Figure 2:* Diagram of the combinatorial index barcoding process.
+*Figure 2:* Diagram of the combinatorial index barcoding process.
 
 ## **Definitions:** 
 Some terms in this document may not be familiar to all HubMap users. The following table lists several:
