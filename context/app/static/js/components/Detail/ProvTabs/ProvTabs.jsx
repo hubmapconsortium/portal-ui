@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import { StyledTab, StyledTabs, StyledTabPanel } from './style';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
-import DagProv from '../DagProv';
+import ProvAnalysisDetails from '../ProvAnalysisDetails';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
 import { readCookie } from '../../../helpers/functions';
@@ -76,7 +76,7 @@ function ProvTabs(props) {
             </StyledTabPanel>
             <StyledTabPanel value={open} index={2} pad={1}>
               {shouldDisplayDag && (
-                <DagProv dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />
+                <ProvAnalysisDetails dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />
               )}
             </StyledTabPanel>
           </>
