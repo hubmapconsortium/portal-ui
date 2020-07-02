@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import FileBrowserNode from '../FileBrowserNode';
 
 function FileBrowser(props) {
   const { files } = props;
@@ -9,11 +10,13 @@ function FileBrowser(props) {
       const levels = f.rel_path.split('/');
       const file = levels.pop();
 
+      const fileObj = { file, fullPath: f.rel_path };
+
       if (levels.length === 0) {
         if ('files' in treePath) {
-          treePath.files.push(file);
+          treePath.files.push(fileObj);
         } else {
-          treePath.files = [file];
+          treePath.files = [fileObj];
         }
         return;
       }
@@ -33,18 +36,18 @@ function FileBrowser(props) {
         // level exists and files object exists within
         if (path in prev && 'files' in prev[path]) {
           // eslint-disable-next-line no-param-reassign
-          prev[path].files.push(file); // push file into existing array
+          prev[path].files.push(fileObj); // push file into existing array
           return prev[path];
         }
 
         // level exists
         if (path in prev) {
-          Object.assign(prev[path], { files: [file] });
+          Object.assign(prev[path], { files: [fileObj] });
           return prev[path];
         }
 
         // eslint-disable-next-line no-param-reassign
-        prev[path] = { files: [file] };
+        prev[path] = { files: [fileObj] };
         return prev[path];
       }, treePath);
     });
@@ -53,7 +56,11 @@ function FileBrowser(props) {
 
   // eslint-disable-next-line no-console
   console.log(fileTree);
-  return <div>FileBrowser</div>;
+  return (
+    <div>
+      <FileBrowserNode fileSubTree={fileTree} />
+    </div>
+  );
 }
 
 export default FileBrowser;
