@@ -9,19 +9,17 @@ function FileBrowserNode(props) {
   return Object.entries(fileSubTree).map(([k, v]) => {
     if (k === 'files') {
       return (
-        <Column>
+        <Column key={`${k}-${level}`}>
           {v.map((file) => (
-            <FileBrowserFile fileObj={file} level={level} />
+            <FileBrowserFile key={file.fullPath} fileObj={file} level={level} />
           ))}
         </Column>
       );
     }
     return (
-      <div>
-        <FileBrowserDirectory dirName={k.slice(0, -1)} level={level}>
-          <FileBrowserNode fileSubTree={v} level={level + 1} />
-        </FileBrowserDirectory>
-      </div>
+      <FileBrowserDirectory key={`${k}-${level}`} dirName={k.slice(0, -1)} level={level}>
+        <FileBrowserNode fileSubTree={v} level={level + 1} />
+      </FileBrowserDirectory>
     );
   });
 }
