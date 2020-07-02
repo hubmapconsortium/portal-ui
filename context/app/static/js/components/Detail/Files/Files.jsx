@@ -13,7 +13,7 @@ function Files(props) {
         Files
       </SectionHeader>
       {files && <FileBrowser files={files} />}
-      <GlobusLink entityEndpoint={entityEndpoint} uuid={uuid} />
+      <GlobusLink entityEndpoint={entityEndpoint} uuid={uuid} fileBrowserDisplayed={files !== undefined} />
     </SectionContainer>
   );
 }
