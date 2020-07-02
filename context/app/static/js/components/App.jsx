@@ -25,6 +25,7 @@ App.propTypes = {
     vitessce_conf: PropTypes.object,
     endpoints: PropTypes.object,
     markdown: PropTypes.string,
+    collection: PropTypes.object,
   }),
 };
 

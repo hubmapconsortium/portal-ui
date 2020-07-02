@@ -28,6 +28,9 @@ const theme = createMuiTheme({
     transparentGray: {
       main: 'rgba(144, 144, 144, 0.1)',
     },
+    collectionsDivider: {
+      main: 'rgba(0, 0, 0, 0.12)',
+    },
     type: 'light',
   },
   typography: {
@@ -58,18 +61,21 @@ const theme = createMuiTheme({
     },
     subtitle1: {
       fontWeight: 500,
-      color: '#444a65',
-      fontSize: '1.1rem',
+      fontSize: '1rem',
     },
     subtitle2: {
       fontWeight: 500,
-      color: '#444a65',
+      fontiSize: '0.875rem',
     },
     body1: {
       fontSize: '0.95rem',
     },
     body2: {
       fontSize: '0.8rem',
+    },
+    caption: {
+      fontSize: '0.75rem',
+      fontWeight: 300,
     },
     button: {
       fontWeight: 500,
