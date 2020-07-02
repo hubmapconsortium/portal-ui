@@ -7,14 +7,10 @@ import copy
 
 from flask import current_app
 
-# TODO: Only for Demo! #
-
 # Hardcoded CODEX offsets and tile path.
 CODEX_OFFSETS_PATH = "output_offsets"
 CODEX_TILE_PATH = "output/extract/expressions/ome-tiff"
 CODDEX_SPRM_PATH = "output_json"
-
-# END: Only for Demo! #
 
 SCRNASEQ_BASE_PATH = "cluster-marker-genes/output/cluster_marker_genes"
 
