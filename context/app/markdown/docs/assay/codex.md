@@ -250,9 +250,6 @@ On the right, there are four cropped images displayed in the original, full reso
     
 5.  Open the generated channelnames_report.csv file and add TRUE/FALSE tags to each channel separated with a coma (if using text editors) or to the consecutive column if using *“Excel/LibreOffice”.*
 
-## **CODEX Data Processing by the HIVE:**
-Please see the HIVE CODEX data processing pipeline [documentation](https://docs.google.com/document/d/1CYYSXPQjwdbvmvZaEcsi_2udvDfGEZrMyh4yFnm4p3M/edit#heading=h.81csfz5mmze1).
-
 ## **Terms defined in this document:**
 |**Term** |  **Definition**
 |--|--|
