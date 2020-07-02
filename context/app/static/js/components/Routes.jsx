@@ -12,7 +12,7 @@ import Markdown from './Markdown';
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, endpoints, title } = flaskData;
+  const { entity, vitessce_conf, endpoints, title, markdown } = flaskData;
   const urlPath = window.location.pathname;
 
   if (urlPath.startsWith('/browse/donor/')) {
@@ -70,7 +70,7 @@ function Routes(props) {
   if ('markdown' in flaskData) {
     return (
       <Container maxWidth="lg">
-        <Markdown markdown={flaskData.markdown} />
+        <Markdown markdown={markdown} />
       </Container>
     );
   }
