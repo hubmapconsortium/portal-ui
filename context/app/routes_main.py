@@ -3,7 +3,6 @@ from os.path import dirname
 from flask import (Blueprint, render_template, abort, current_app,
                    session, request, redirect, url_for)
 
-import markdown
 import frontmatter
 
 from .api.client import ApiClient
@@ -140,13 +139,14 @@ def search():
 @blueprint.route('/showcase/<name>')
 def showcase_view(name):
     filename = dirname(__file__) + '/showcase/' + name + '.md'
-    showcase_metadata = frontmatter.load(filename).metadata
-    content_md = frontmatter.load(filename).content
+    metadata_content = frontmatter.load(filename)
+    showcase_metadata = metadata_content.metadata
+    markdown = metadata_content.content
     core_props = {
         'title': showcase_metadata['title'],
         'vitessce_conf': showcase_metadata['vitessce_conf'],
+        'markdown': markdown,
         'entity': {
-            'description_html': markdown.markdown(content_md),
             'group_name': showcase_metadata['group_name'],
             'created_by_user_displayname': showcase_metadata['created_by_user_displayname'],
             'created_by_user_email': showcase_metadata['created_by_user_email'],

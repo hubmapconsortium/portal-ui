@@ -54,7 +54,7 @@ function Routes(props) {
   }
 
   if (urlPath.startsWith('/showcase')) {
-    return <Showcase title={title} vitData={vitessce_conf} assayMetadata={entity} />;
+    return <Showcase title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />;
   }
 
   if (urlPath === '/collections') {
