@@ -18,7 +18,7 @@ function FileBrowserFile(props) {
       <IndentedDiv $depth={depth}>
         <StyledFileIcon color="primary" />
         <LightBlueLink
-          href={`${assetsEndpoint}/${uuid}/${fileObj.fullPath}?token=${token}`}
+          href={`${assetsEndpoint}/${uuid}/${fileObj.rel_path}?token=${token}`}
           variant="body1"
           target="_blank"
           rel="noopener noreferrer"

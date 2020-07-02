@@ -11,7 +11,7 @@ function FileBrowserNode(props) {
       return (
         <Column key={`${k}-${depth}`}>
           {v.map((file) => (
-            <FileBrowserFile key={file.fullPath} fileObj={file} depth={depth} />
+            <FileBrowserFile key={file.rel_path} fileObj={file} depth={depth} />
           ))}
         </Column>
       );
