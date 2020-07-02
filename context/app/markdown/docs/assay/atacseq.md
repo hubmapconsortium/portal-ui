@@ -104,7 +104,6 @@ Snareseq-Transcriptomic, Dataset ID: HBM926.LQPP.353 (BUKMAP_20190529A_SNARE2-R)
 Snareseq-Epigenomic, Dataset ID: HBM283.TSZC.443 (BUKMAP_20190529A_SNARE2-AC)
 
 The general format of the sequence files are...
-<br>
 ![](https://lh3.googleusercontent.com/mX9ICqLoPas2gCJJoKzwkoACdP-D5v7EFnN_u-yiYzYRn9MjxNm3UipDAu88s4y-ueYDZ-ywl1hcP09WmN_pn7dckU0_YU6in6B8n9WvltbchFNYhQD8I7erCss7W3XVUQAKUOA)
 
 ## **HuBMAP QA/QC of raw (state0) data files:**
