@@ -4,8 +4,6 @@ from os.path import dirname
 
 from flask import Blueprint, render_template, request
 
-from .config import types
-
 # NOTE: A better approach might be to look again at the handful of libraries
 # that handle this, or to pre-render everything when flask starts.
 
