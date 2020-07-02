@@ -71,7 +71,7 @@ def test_build_layer_conf():
     vitessce_component = conf["staticLayout"][0]["component"]
     assert layer["type"] == "CELLS"
     assert layer["name"] == "cells"
-    assert vitessce_component == "scatterplot"
+    assert vitessce_component == "cellSets"
 
 
 def test_build_layer_conf_empty():
