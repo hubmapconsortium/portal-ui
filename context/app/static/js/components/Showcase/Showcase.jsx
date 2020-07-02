@@ -1,6 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import ReactMarkdown from 'react-markdown';
 
 import Visualization from '../Detail/Visualization';
 import SectionHeader from '../Detail/SectionHeader';
@@ -10,9 +11,9 @@ import { StyledPaper } from '../Detail/Summary/style';
 import { FlexColumnRight, StyledTypography, StyledDivider } from './style';
 
 function Showcase(props) {
-  const { vitData, title, assayMetadata } = props;
+  const { vitData, title, assayMetadata, markdown } = props;
 
-  const { group_name, created_by_user_displayname, created_by_user_email, description_html } = assayMetadata;
+  const { group_name, created_by_user_displayname, created_by_user_email } = assayMetadata;
 
   return (
     <Container maxWidth="lg">
@@ -25,7 +26,9 @@ function Showcase(props) {
         </SectionHeader>
 
         <StyledPaper>
-          <Typography variant="body1" dangerouslySetInnerHTML={{ __html: description_html }} />
+          <Typography variant="body1">
+            <ReactMarkdown source={markdown} />
+          </Typography>
           <StyledDivider orientation="vertical" flexItem />
           <FlexColumnRight>
             <StyledTypography variant="subtitle1">Creator</StyledTypography>
