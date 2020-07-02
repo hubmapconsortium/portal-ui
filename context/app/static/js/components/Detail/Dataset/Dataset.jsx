@@ -9,7 +9,7 @@ import Protocol from '../Protocol';
 import MetadataTable from '../MetadataTable';
 import Visualization from '../Visualization';
 import DetailLayout from '../DetailLayout';
-import FileBrowser from '../FileBrowser';
+import Files from '../Files';
 
 // TODO use this context for components other than FileBrowser
 import DatasetContext from './context';
@@ -64,7 +64,7 @@ function DatasetDetail(props) {
     visualization: 'name' in vitData,
     protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
     metadataTable: metadata && 'metadata' in metadata,
-    files: 'files' in assayMetadata,
+    files: true,
   };
 
   return (
@@ -92,7 +92,7 @@ function DatasetDetail(props) {
           <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
         )}
         {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
-        {shouldDisplaySection.files && <FileBrowser files={files} entityEndpoint={entityEndpoint} uuid={uuid} />}
+        <Files files={files} entityEndpoint={entityEndpoint} uuid={uuid} />
       </DetailLayout>
     </DatasetContext.Provider>
   );

@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
-
-import SectionHeader from '../SectionHeader';
-import SectionContainer from '../SectionContainer';
-import GlobusLink from '../GlobusLink';
 import FileBrowserNode from '../FileBrowserNode';
 import { ScrollPaper } from './style';
 
 function FileBrowser(props) {
-  const { files, entityEndpoint, uuid } = props;
+  const { files } = props;
   const [fileTree, setFileTree] = useState({});
   useEffect(() => {
     const treePath = {};
@@ -60,15 +56,9 @@ function FileBrowser(props) {
   }, [files]);
 
   return (
-    <SectionContainer id="files">
-      <SectionHeader variant="h3" component="h2">
-        Files
-      </SectionHeader>
-      <ScrollPaper>
-        <FileBrowserNode fileSubTree={fileTree} level={0} />
-      </ScrollPaper>
-      <GlobusLink entityEndpoint={entityEndpoint} uuid={uuid} />
-    </SectionContainer>
+    <ScrollPaper>
+      <FileBrowserNode fileSubTree={fileTree} level={0} />
+    </ScrollPaper>
   );
 }
 
