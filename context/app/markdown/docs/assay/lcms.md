@@ -12,9 +12,9 @@ Coupling of liquid chromatography (LC) to mass spectrometry (MS) has become an i
 **![](https://lh3.googleusercontent.com/U6NqmB-BleXGCTMlUwEFxnEp37iEVIvGi4HBmrKIOOhwSgYyHX5iS3MOtRcVzWaRLbkEcXHcUaeyXVbtRSgdOue_80Mf9R0ItmAPO-ObPS38E94A-HKeLBqJIWQqOkQXrsucFWJm)**
 *Figure 1.* A visual depiction of the general sample preparation procedures for LC-MS assays.
 
-**Definitions:** 
 
-**HuBMAP CODEX Data States (Levels):**
+
+## **HuBMAP CODEX Data States (Levels):**
 The HuBMAP project provides data to the public in a variety of data states, which denote the amount of processing that has been done to the data. The data states for RNA seq data provided by the HuBMAP project are listed below:
 |**Data State** |  **Description**| **LC/MS File Format** | 
 |--|--|--|
