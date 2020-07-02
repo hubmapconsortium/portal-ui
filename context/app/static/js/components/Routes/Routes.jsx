@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
-import { Home } from './Home';
-import Search from './Search/Search';
-import { Donor, Sample, Dataset, Collection } from './Detail';
-import Showcase from './Showcase';
-import { Collections } from './Collections';
-import Markdown from './Markdown';
+import { Home } from '../Home';
+import Search from '../Search/Search';
+import { Donor, Sample, Dataset, Collection } from '../Detail';
+import Showcase from '../Showcase';
+import { Collections } from '../Collections';
+import Markdown from '../Markdown';
 
 function Routes(props) {
   const { flaskData } = props;
@@ -42,8 +42,7 @@ function Routes(props) {
   }
 
   if (urlPath === '/') {
-    throw Error('foo!');
-    // return <Home elasticsearchEndpoint={endpoints.elasticsearchEndpoint} />;
+    return <Home elasticsearchEndpoint={endpoints.elasticsearchEndpoint} />;
   }
 
   if (urlPath.startsWith('/search')) {
@@ -72,6 +71,10 @@ function Routes(props) {
         <Collection entityEndpoint={endpoints.entityEndpoint} collection={collection} />
       </Container>
     );
+  }
+
+  if (urlPath === '/client-side-error') {
+    throw Error('Intentional client-side-error');
   }
 
   if ('markdown' in flaskData) {

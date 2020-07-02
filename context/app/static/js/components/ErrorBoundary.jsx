@@ -1,10 +1,11 @@
 import React from 'react';
-import { None } from 'vega';
+import Container from '@material-ui/core/Container';
+import Paper from '@material-ui/core/Paper';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: None };
+    this.state = { hasError: false, error: null };
   }
 
   static getDerivedStateFromError(error) {
@@ -20,14 +21,17 @@ class ErrorBoundary extends React.Component {
     const { hasError, error } = this.state;
     if (hasError) {
       return (
-        <>
-          <h1>Error</h1>
-          <p>
-            Please provide this information to <a href="mailto:help@hubmapconsortium.org">help@hubmapconsortium.org</a>:
-          </p>
-          <p>URL: {String(document.location)}</p>
-          <p>Error: {error}</p>
-        </>
+        <Container>
+          <Paper>
+            <h1>Error</h1>
+            <p>
+              Please provide this information to{' '}
+              <a href="mailto:help@hubmapconsortium.org">help@hubmapconsortium.org</a>:
+            </p>
+            <p>URL: {String(document.location)}</p>
+            <p>Error: {String(error)}</p>
+          </Paper>
+        </Container>
       );
     }
     const { children } = this.props;
