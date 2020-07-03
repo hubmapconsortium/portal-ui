@@ -16,7 +16,3 @@
 ---
 - [APIs](/docs/apis)
 - [Infrastructure](/docs/infrastructure)
-
----
-- [Help](/docs/help)
-- FAQs - Coming Soon!
