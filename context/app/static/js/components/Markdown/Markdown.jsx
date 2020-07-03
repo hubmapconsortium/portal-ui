@@ -2,10 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
 
+import { StyledPaper } from './style';
+
 function Markdown(props) {
   const { markdown } = props;
 
-  return <ReactMarkdown source={markdown} />;
+  return (
+    <StyledPaper>
+      <ReactMarkdown source={markdown} />
+    </StyledPaper>
+  );
 }
 
 Markdown.propTypes = {
