@@ -32,9 +32,10 @@ function SummaryData(props) {
     <>
       {data_types && data_types.length > 0 && (
         <AssaySpecificItem>
-          {data_types_array.map((data_type) => (
-            <a href={`/docs/assays#${data_type}`}>{data_type}</a>
-          ))}
+          {data_types_array.map((data_type, i) => [
+            i > 0 && ' / ',
+            <a href={`/docs/assays#${data_type}`}>{data_type}</a>,
+          ])}
         </AssaySpecificItem>
       )}
       <Typography variant="body1">{origin_sample.mapped_organ}</Typography>
