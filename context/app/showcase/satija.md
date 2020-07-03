@@ -21,20 +21,6 @@ vitessce_conf: [
         "public": true,
         "staticLayout": [
             {
-                "component": "scatterplot",
-                "props": {
-                    "mapping": "UMAP",
-                    "view": {
-                        "zoom": 4,
-                        "target": [8, 8, 0]
-                    }
-                },
-                "x": 0,
-                "y": 0,
-                "w": 7,
-                "h": 2
-            },
-            {
                 "component": "cellSets",
                 "x": 7,
                 "y": 0,
@@ -47,6 +33,20 @@ vitessce_conf: [
                 "y": 1,
                 "w": 5,
                 "h": 1
+            },
+            {
+                "component": "scatterplot",
+                "props": {
+                    "mapping": "UMAP",
+                    "view": {
+                        "zoom": 4,
+                        "target": [8, 8, 0]
+                    }
+                },
+                "x": 0,
+                "y": 0,
+                "w": 7,
+                "h": 2
             }
         ]
     },
@@ -67,20 +67,6 @@ vitessce_conf: [
         "public": true,
         "staticLayout": [
             {
-                "component": "scatterplot",
-                "props": {
-                    "mapping": "UMAP",
-                    "view": {
-                        "zoom": 4,
-                        "target": [8, 8, 0]
-                    }
-                },
-                "x": 0,
-                "y": 0,
-                "w": 7,
-                "h": 2
-            },
-            {
                 "component": "cellSets",
                 "x": 7,
                 "y": 0,
@@ -93,6 +79,20 @@ vitessce_conf: [
                 "y": 1,
                 "w": 5,
                 "h": 1
+            },
+            {
+                "component": "scatterplot",
+                "props": {
+                    "mapping": "UMAP",
+                    "view": {
+                        "zoom": 4,
+                        "target": [8, 8, 0]
+                    }
+                },
+                "x": 0,
+                "y": 0,
+                "w": 7,
+                "h": 2
             }
         ]
     },
@@ -113,20 +113,6 @@ vitessce_conf: [
         "public": true,
         "staticLayout": [
             {
-                "component": "scatterplot",
-                "props": {
-                    "mapping": "UMAP",
-                    "view": {
-                        "zoom": 4,
-                        "target": [8, 8, 0]
-                    }
-                },
-                "x": 0,
-                "y": 0,
-                "w": 7,
-                "h": 2
-            },
-            {
                 "component": "cellSets",
                 "x": 7,
                 "y": 0,
@@ -139,6 +125,20 @@ vitessce_conf: [
                 "y": 1,
                 "w": 5,
                 "h": 1
+            },
+            {
+                "component": "scatterplot",
+                "props": {
+                    "mapping": "UMAP",
+                    "view": {
+                        "zoom": 4,
+                        "target": [8, 8, 0]
+                    }
+                },
+                "x": 0,
+                "y": 0,
+                "w": 7,
+                "h": 2
             }
         ]
     },
@@ -159,20 +159,6 @@ vitessce_conf: [
         "public": true,
         "staticLayout": [
             {
-                "component": "scatterplot",
-                "props": {
-                    "mapping": "UMAP",
-                    "view": {
-                        "zoom": 4,
-                        "target": [8, 8, 0]
-                    }
-                },
-                "x": 0,
-                "y": 0,
-                "w": 7,
-                "h": 2
-            },
-            {
                 "component": "cellSets",
                 "x": 7,
                 "y": 0,
@@ -185,6 +171,20 @@ vitessce_conf: [
                 "y": 1,
                 "w": 5,
                 "h": 1
+            },
+            {
+                "component": "scatterplot",
+                "props": {
+                    "mapping": "UMAP",
+                    "view": {
+                        "zoom": 4,
+                        "target": [8, 8, 0]
+                    }
+                },
+                "x": 0,
+                "y": 0,
+                "w": 7,
+                "h": 2
             }
         ]
     },
@@ -205,20 +205,6 @@ vitessce_conf: [
         "public": true,
         "staticLayout": [
             {
-                "component": "scatterplot",
-                "props": {
-                    "mapping": "UMAP",
-                    "view": {
-                        "zoom": 4,
-                        "target": [8, 8, 0]
-                    }
-                },
-                "x": 0,
-                "y": 0,
-                "w": 7,
-                "h": 2
-            },
-            {
                 "component": "cellSets",
                 "x": 7,
                 "y": 0,
@@ -231,6 +217,20 @@ vitessce_conf: [
                 "y": 1,
                 "w": 5,
                 "h": 1
+            },
+            {
+                "component": "scatterplot",
+                "props": {
+                    "mapping": "UMAP",
+                    "view": {
+                        "zoom": 4,
+                        "target": [8, 8, 0]
+                    }
+                },
+                "x": 0,
+                "y": 0,
+                "w": 7,
+                "h": 2
             }
         ]
     }
