@@ -28,10 +28,10 @@ VERSION=`cat VERSION`
 VERSION_IMAGE_NAME=hubmap/portal-ui:$VERSION
 LATEST_IMAGE_NAME=hubmap/portal-ui:latest
 
-git tag $VERSION
-git push origin --tags
-
 docker build --tag $VERSION_IMAGE_NAME context
 docker tag $VERSION_IMAGE_NAME $LATEST_IMAGE_NAME
 docker push $VERSION_IMAGE_NAME
 docker push $LATEST_IMAGE_NAME
+
+git tag $VERSION
+git push origin --tags
