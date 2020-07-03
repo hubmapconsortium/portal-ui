@@ -23,7 +23,10 @@ const resultFieldsByType = {
   sample: sampleConfig.fields,
   dataset: datasetConfig.fields,
 };
-const type = (new URL(document.location).searchParams.get('entity_type[0]') || '').toLowerCase();
+
+const { searchParams } = new URL(document.location);
+const type = (searchParams.get('entity_type[0]') || '').toLowerCase();
+const hasAncestorParam = searchParams.has('ancestor_ids[0]');
 
 const nexus_token = readCookie('nexus_token');
 const httpHeaders = nexus_token
@@ -72,12 +75,14 @@ const searchProps = {
 function Search(props) {
   const { title, elasticsearchEndpoint } = props;
   const allProps = Object.assign(searchProps, { apiUrl: elasticsearchEndpoint });
+
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <>
       <Typography component="h1" variant="h1">
         {title}
       </Typography>
+      {hasAncestorParam && <Typography component="h2">Limited by ancestor</Typography>}
       <SearchWrapper {...allProps} />
     </>
   );
