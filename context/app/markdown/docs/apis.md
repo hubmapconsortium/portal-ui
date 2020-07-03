@@ -43,17 +43,6 @@ Examples of Entity endpoints are as follows:
 
 ### Common Coordinate Framework (CCF) Registration User Interface (RUI) and Exploration User Interface (EUI) API
 A specification and set of web service calls to return information about CCF-mapped data
-[GitHub](https://github.com/hubmapconsortium/ccf-data-api)
-[Smart API](https://smart-api.info/ui/d1f33c1a75e9dcda984194e4d8cea7d8)
 
-### [Interface transformation API]
-[Ilan/Nils/Chuck: insert text here]
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyMzc3MTU4MjUsLTE0ODgyODI4NjQsLT
-E5NDE3NTYzODYsLTE2ODk1MTg0MDEsLTE1MTA1Nzc0MDUsNTAw
-NzcxNTM4LC00ODU0NDA1NCw0ODYwMDE4NzUsOTc5NzQwMDYwLC
-02MDc2MjEyMTUsLTM3NTkzMzE4NiwtMTM0Mzg4MTc5NCw1OTkz
-NDUzNCwtMTQxMTUyMDY5MCwxNDA0MDIzODc5LC0xMzYzMjg4Mj
-MzLC0yNTE3MjU0MjMsLTExOTcxNTY4NjQsLTU5MjE1MTE2MSw5
-MTM4Mjg1NjFdfQ==
--->
+- [GitHub](https://github.com/hubmapconsortium/ccf-data-api)
+- [Smart API](https://smart-api.info/ui/d1f33c1a75e9dcda984194e4d8cea7d8)

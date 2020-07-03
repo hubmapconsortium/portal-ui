@@ -27,6 +27,7 @@ const FlexBottomRight = styled(FlexRight)`
 const FlexColumnRight = styled(FlexRight)`
   flex-direction: column;
   justify-content: space-evenly;
+  white-space: nowrap;
 `;
 
 const StyledTypography = styled(Typography)`

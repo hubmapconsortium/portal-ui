@@ -3,7 +3,6 @@ from os.path import dirname
 from flask import (Blueprint, render_template, abort, current_app,
                    session, request, redirect, url_for)
 
-import markdown
 import frontmatter
 
 from .api.client import ApiClient
@@ -20,8 +19,6 @@ def _get_client():
         is_mock = False
     if is_mock:
         return ApiClient(is_mock=is_mock)
-    if 'nexus_token' not in session:
-        abort(403)
     return ApiClient(
         current_app.config['ENTITY_API_BASE'],
         session['nexus_token']
@@ -62,12 +59,34 @@ def ccf_eui():
     )
 
 
+@blueprint.route('/browse/collection/<uuid>')
+def collection_details(uuid):
+    client = _get_client()
+    collection = client.get_collection(uuid)
+    core_props = {'endpoints': _get_endpoints(), 'collection': collection}
+    template = f'pages/base_react.html'
+    return render_template(
+        template,
+        uuid=uuid,
+        title=f'{collection["display_doi"]} | Collection',
+        flask_data=core_props
+    )
+
+
+@blueprint.route('/browse/collection/<uuid>.<ext>')
+def collection_details_ext(uuid, ext):
+    if ext != 'json':
+        abort(404)
+    client = _get_client()
+
+    collection = client.get_collection(uuid)
+    return collection
+
+
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
     if type not in types:
         abort(404)
-    if 'nexus_token' not in session:
-        abort(403)
     client = _get_client()
     entity = client.get_entity(uuid)
     actual_type = entity['entity_type'].lower()
@@ -95,8 +114,6 @@ def details_ext(type, uuid, ext):
         abort(404)
     if ext != 'json':
         abort(404)
-    if 'nexus_token' not in session:
-        abort(403)
     client = _get_client()
 
     entity = client.get_entity(uuid)
@@ -111,8 +128,6 @@ def search():
         'endpoints': _get_endpoints(),
         'title': title
     }
-    if 'nexus_token' not in session:
-        abort(403)
     return render_template(
         'pages/base_react.html',
         title=title,
@@ -124,13 +139,14 @@ def search():
 @blueprint.route('/showcase/<name>')
 def showcase_view(name):
     filename = dirname(__file__) + '/showcase/' + name + '.md'
-    showcase_metadata = frontmatter.load(filename).metadata
-    content_md = frontmatter.load(filename).content
+    metadata_content = frontmatter.load(filename)
+    showcase_metadata = metadata_content.metadata
+    markdown = metadata_content.content
     core_props = {
         'title': showcase_metadata['title'],
         'vitessce_conf': showcase_metadata['vitessce_conf'],
+        'markdown': markdown,
         'entity': {
-            'description_html': markdown.markdown(content_md),
             'group_name': showcase_metadata['group_name'],
             'created_by_user_displayname': showcase_metadata['created_by_user_displayname'],
             'created_by_user_email': showcase_metadata['created_by_user_email'],

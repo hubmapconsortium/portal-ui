@@ -1,0 +1,1 @@
+- Do the git tag only after a successful Docker build.

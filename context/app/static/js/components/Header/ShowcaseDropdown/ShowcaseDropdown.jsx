@@ -17,7 +17,7 @@ function ShowcaseDropdown() {
     <>
       <Button ref={anchorRef} onClick={toggle} style={{ color: 'white' }}>
         Showcases
-        {open ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
+        {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </Button>
       <OffsetPopper open={open} anchorEl={anchorRef.current} placement="bottom-start">
         <Paper>

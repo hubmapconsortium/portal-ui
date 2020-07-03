@@ -7,12 +7,17 @@ extends:
   - plugin:testing-library/recommended
   - plugin:prettier/recommended
   - prettier/react
+  - plugin:import/errors
+  - plugin:import/warnings
 parser: "babel-eslint"
 plugins:
   - react
 settings:
   react:
     version: detect
+  import/resolver:
+    webpack:
+      config: './build-utils/webpack.common.js'
 rules:
   camelcase: [0]  # Preserving original name will make searching across codebase easier.
   no-console: ["error", { allow: ["warn", "error"] }]

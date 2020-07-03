@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Card from '../Card';
+import PropTypes from 'prop-types';
+
+import Typography from '@material-ui/core/Typography';
+import Panel from '../Panel';
+import { PageWrapper, ScrollBox } from './style';
 
 function Collections(props) {
   const { entityEndpoint } = props;
@@ -20,12 +24,31 @@ function Collections(props) {
   }, [entityEndpoint]);
 
   return (
-    <div>
-      {collectionsData.map((col) => (
-        <Card key={col.uuid} data={col} />
-      ))}
-    </div>
+    <PageWrapper>
+      <Typography variant="h2" component="h1">
+        Collections
+      </Typography>
+      <Typography variant="subtitle1" color="primary">
+        {collectionsData.length > 0 && `${collectionsData.length} Collections`}
+      </Typography>
+      <ScrollBox>
+        {collectionsData.length > 0 &&
+          collectionsData.map((col) => (
+            <Panel
+              key={col.uuid}
+              name={col.name}
+              dataset_uuids={col.dataset_uuids}
+              doi_id={col.doi_id}
+              uuid={col.uuid}
+            />
+          ))}
+      </ScrollBox>
+    </PageWrapper>
   );
 }
+
+Collections.propTypes = {
+  entityEndpoint: PropTypes.string.isRequired,
+};
 
 export default Collections;
