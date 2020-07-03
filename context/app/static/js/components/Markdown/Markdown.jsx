@@ -9,7 +9,7 @@ function Markdown(props) {
 
   return (
     <StyledPaper>
-      <ReactMarkdown source={markdown} />
+      <ReactMarkdown source={markdown} escapeHtml={false} />
     </StyledPaper>
   );
 }
