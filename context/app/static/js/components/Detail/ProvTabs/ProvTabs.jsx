@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import { StyledTab, StyledTabs, StyledTabPanel } from './style';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
-import DagProv from '../DagProv';
+import ProvAnalysisDetails from '../ProvAnalysisDetails';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
 import { readCookie } from '../../../helpers/functions';
@@ -23,11 +23,15 @@ function ProvTabs(props) {
   const [provData, setProvData] = React.useState(null);
   React.useEffect(() => {
     async function getAndSetProvData() {
-      const response = await fetch(`${entityEndpoint}/entities/${uuid}/provenance`, {
-        headers: {
-          Authorization: `Bearer ${readCookie('nexus_token')}`,
-        },
-      });
+      const nexus_token = readCookie('nexus_token');
+      const requestInit = nexus_token
+        ? {
+            headers: {
+              Authorization: `Bearer ${nexus_token}`,
+            },
+          }
+        : {};
+      const response = await fetch(`${entityEndpoint}/entities/${uuid}/provenance`, requestInit);
       if (!response.ok) {
         console.error('Prov API failed', response);
         return;
@@ -72,7 +76,7 @@ function ProvTabs(props) {
             </StyledTabPanel>
             <StyledTabPanel value={open} index={2} pad={1}>
               {shouldDisplayDag && (
-                <DagProv dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />
+                <ProvAnalysisDetails dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />
               )}
             </StyledTabPanel>
           </>

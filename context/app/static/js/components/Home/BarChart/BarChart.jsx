@@ -89,7 +89,7 @@ const partialSpec = {
 
 function BarChart(props) {
   const { elasticsearchEndpoint } = props;
-  const [assayTypesData, setAssayTypesData] = useState(dummyData);
+  const [assayTypesData, setAssayTypesData] = useState([]);
 
   useEffect(() => {
     async function getAssayTypesData() {
@@ -112,7 +112,11 @@ function BarChart(props) {
       const data = await response.json();
       const { buckets } = data.aggregations.data_types;
 
-      if (buckets.length > 0) setAssayTypesData(buckets);
+      if (buckets.length > 0) {
+        setAssayTypesData(buckets);
+      } else {
+        setAssayTypesData(dummyData);
+      }
     }
     getAssayTypesData();
   }, [elasticsearchEndpoint]);

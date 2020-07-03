@@ -117,4 +117,8 @@ venv.bak/
 context/app/static/public
 
 # scratch
+
+# pycharm
+.idea/
+
 /scratch

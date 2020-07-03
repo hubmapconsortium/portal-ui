@@ -1,5 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const { resolve } = require('path');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const config = {
@@ -17,6 +17,7 @@ const config = {
       hooks: resolve(__dirname, '../app/static/js/hooks/'),
       images: resolve(__dirname, '../app/static/images/'),
       theme$: resolve(__dirname, '../app/static/js/theme.jsx'),
+      'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
     },
   },
   module: {

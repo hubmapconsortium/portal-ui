@@ -25,14 +25,18 @@ const resultFieldsByType = {
 };
 const type = (new URL(document.location).searchParams.get('entity_type[0]') || '').toLowerCase();
 
+const nexus_token = readCookie('nexus_token');
+const httpHeaders = nexus_token
+  ? {
+      Authorization: `Bearer ${nexus_token}`,
+    }
+  : {};
 const searchProps = {
   // The default behavior is to add a "_search" path.
   // We don't want that.
   searchUrlPath: '',
   // Pass Globus token:
-  httpHeaders: {
-    Authorization: `Bearer ${readCookie('nexus_token')}`,
-  },
+  httpHeaders,
   // Prefix for details links:
   detailsUrlPrefix: `/browse/${type || 'dataset'}/`,
   // Search results field which will be appended to detailsUrlPrefix:
@@ -62,6 +66,7 @@ const searchProps = {
   hiddenFilterIds: ['entity_type', 'ancestor_ids'],
   hiddenValueFilterIds: ['ancestor_ids'],
   queryFields: ['everything'],
+  isLoggedIn: Boolean(nexus_token),
 };
 
 function Search(props) {
