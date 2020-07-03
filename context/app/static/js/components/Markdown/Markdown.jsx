@@ -8,6 +8,7 @@ function Markdown(props) {
   const { markdown } = props;
 
   return (
+    // Turn off escapeHtml so that <a name="assay"> comes through.
     <StyledPaper>
       <ReactMarkdown source={markdown} escapeHtml={false} />
     </StyledPaper>
