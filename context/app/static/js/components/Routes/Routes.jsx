@@ -90,7 +90,7 @@ Routes.propTypes = {
   flaskData: PropTypes.exact({
     title: PropTypes.string,
     entity: PropTypes.object,
-    vitessce_conf: PropTypes.object,
+    vitessce_conf: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
     endpoints: PropTypes.object,
     markdown: PropTypes.string,
     collection: PropTypes.object,
