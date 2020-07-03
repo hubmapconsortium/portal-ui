@@ -236,6 +236,7 @@ vitessce_conf: [
     }
 ]
 ---
-<!-- TODO: Get a real description. -->
 # Satija Showcase Header
 Hierarchical Cell Type Annotations for Spleen Dataset
+
+<!-- TODO: Get a real description. -->
