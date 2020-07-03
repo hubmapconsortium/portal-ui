@@ -44,8 +44,6 @@ const ExpandButton = styled(Button)`
 
 const SelectionButton = styled(Button)`
   color: black;
-  padding-left: 0;
-  text-align: left;
 `;
 
 const TopSnackbar = styled(Snackbar)`
