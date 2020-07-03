@@ -31,7 +31,7 @@ function getTileOrDatasetString(vitData) {
   // If the name of a configuration includes the tiled name, return 'Tile'; else return 'Dataset.'
   if (Array.isArray(vitData)) {
     const firstEntry = vitData[0];
-    const regex = new RegExp('.*(R(\\d+)_X(\\d+)_Y(\\d+)).*');
+    const regex = new RegExp(/R\d+_X\d+_Y\d+/);
     return regex.test(firstEntry.name) ? 'Tile' : 'Dataset';
   }
   return null;

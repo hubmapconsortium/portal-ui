@@ -67,7 +67,6 @@ ASSAY_CONF_LOOKUP = {
         "base_conf": IMAGING,
         "view": {"zoom": -1.5, "target": [600, 600, 0]},
         "files_conf": [
-            # Hardcoded for now only one tile.
             {
                 "rel_path": str(Path(CODEX_TILE_PATH) / "#TILE#.ome.tiff"),
                 "type": "RASTER",
@@ -97,7 +96,7 @@ CODEX_ASSAY = "codex_cytokit"
 IMAGE_ASSAYS = [CODEX_ASSAY]
 TILED_ASSAYS = [CODEX_ASSAY]
 
-TILE_REGEX = ".*(R(\\d+)_X(\\d+)_Y(\\d+)).*"
+TILE_REGEX = r"R\d+_X\d+_Y\d+"
 
 MOCK_URL = "https://example.com"
 
@@ -106,9 +105,9 @@ def _get_tiles(files):
     return list(
         set(
             [
-                re.match(TILE_REGEX, file).group(1)
-                for file in files
-                if re.match(TILE_REGEX, file)
+                match[0]
+                for match in set(re.search(TILE_REGEX, file) for file in files)
+                if match
             ]
         )
     )
