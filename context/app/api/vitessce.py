@@ -38,17 +38,17 @@ IMAGING = {
     "name": "NAME",
     "layers": [],
     "staticLayout": [
-        {"component": "layerController", "x": 0, "y": 0, "w": 4, "h": 4},
-        {"component": "description", "x": 0, "y": 4, "w": 4, "h": 2},
-        {"component": "cellSets", "x": 10, "y": 2, "w": 2, "h": 2},
+        {"component": "layerController", "x": 0, "y": 0, "w": 3, "h": 4},
+        {"component": "description", "x": 0, "y": 4, "w": 3, "h": 2},
+        {"component": "cellSets", "x": 10, "y": 2, "w": 2, "h": 4},
         {"component": "genes", "x": 10, "y": 0, "w": 2, "h": 2},
-        {"component": "heatmap", "x": 4, "y": 4, "w": 8, "h": 2},
+        {"component": "heatmap", "x": 3, "y": 4, "w": 7, "h": 2},
         {
             "component": "spatial",
             "props": {"view": {}},
-            "x": 4,
+            "x": 3,
             "y": 0,
-            "w": 6,
+            "w": 7,
             "h": 4,
         },
     ],
@@ -305,7 +305,7 @@ class Vitessce:
 
         if self.assay_type not in IMAGE_ASSAYS:
             return conf
-        conf["staticLayout"][2]["props"]["view"] = ASSAY_CONF_LOOKUP[self.assay_type][
+        conf["staticLayout"][-1]["props"]["view"] = ASSAY_CONF_LOOKUP[self.assay_type][
             "view"
         ]
         return conf
