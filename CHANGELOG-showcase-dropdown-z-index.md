@@ -1,2 +1,0 @@
-- Added a z-index of `5` to the `ShowcaseDropdown` styles to allow it to be rendered above the `Visualization` component.
-- Changed the `ShowcaseDropdown` arrow icon behavior (point down when closed, point up when open).

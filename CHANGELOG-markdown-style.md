@@ -1,2 +1,0 @@
-- Put markdown content on a sheet.
-- Limit width of images.

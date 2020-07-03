@@ -1,2 +1,0 @@
-- Rename DagProv component to ProvAnalysisDetails.
-- Add links to ProvAnalysisDetails.
