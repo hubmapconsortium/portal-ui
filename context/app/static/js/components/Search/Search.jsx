@@ -7,6 +7,7 @@ import './Search.scss';
 import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named
 import { filter } from './utils';
+import AncestorNote from './AncestorNote';
 
 const baseFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
 
@@ -67,7 +68,6 @@ const searchProps = {
     },
   ],
   hiddenFilterIds: ['entity_type', 'ancestor_ids'],
-  hiddenValueFilterIds: ['ancestor_ids'],
   queryFields: ['everything'],
   isLoggedIn: Boolean(nexus_token),
 };
@@ -83,7 +83,7 @@ function Search(props) {
       <Typography component="h1" variant="h1">
         {title}
       </Typography>
-      {hasAncestorParam && <Typography component="h2">Limited by ancestor</Typography>}
+      {hasAncestorParam && <AncestorNote uuid={searchParams.get('ancestor_ids[0]')} />}
       {wrappedSearch}
     </>
   );
