@@ -76,17 +76,17 @@ function Search(props) {
   const { title, elasticsearchEndpoint } = props;
   const allProps = Object.assign(searchProps, { apiUrl: elasticsearchEndpoint });
 
-  /* eslint-disable react/jsx-props-no-spreading */
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  const wrappedSearch = <SearchWrapper {...allProps} />;
   return (
     <>
       <Typography component="h1" variant="h1">
         {title}
       </Typography>
       {hasAncestorParam && <Typography component="h2">Limited by ancestor</Typography>}
-      <SearchWrapper {...allProps} />
+      {wrappedSearch}
     </>
   );
-  /* eslint-enable react/jsx-props-no-spreading */
 }
 
 export default Search;
