@@ -5,6 +5,16 @@ const StyledPaper = styled(Paper)`
   & img {
     max-width: 100%;
   }
+
+  & table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+  }
+  & th,
+  td {
+    border: 1px solid grey;
+  }
+
   padding: 30px 40px 30px 40px;
 `;
 // TODO: Copied and pasted the padding.
