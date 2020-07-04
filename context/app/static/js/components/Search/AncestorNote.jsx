@@ -27,18 +27,18 @@ function AncestorNote(props) {
     }
     getAndSetAncestor();
   }, [elasticsearchEndpoint, uuid]);
-  return (
-    <Typography component="h2">
-      {ancestor ? (
-        <>
-          Derived from {ancestor.entity_type}{' '}
-          <a href={`/browse/${ancestor.entity_type}/${ancestor.uuid}`}>{ancestor.display_doi}</a>
-        </>
-      ) : (
-        '...'
-      )}
-    </Typography>
-  );
+
+  let message = '...';
+  if (ancestor) {
+    const { entity_type, uuid: ancestorUUID, display_doi } = ancestor;
+    const lcType = entity_type.toLowerCase();
+    message = (
+      <>
+        Derived from {lcType} <a href={`/browse/${lcType}/${ancestorUUID}`}>{display_doi}</a>
+      </>
+    );
+  }
+  return <Typography component="h2">{message}</Typography>;
 }
 
 export default AncestorNote;
