@@ -7,7 +7,7 @@ import './Search.scss';
 import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named
 import { filter } from './utils';
-import AncestorNote from './AncestorNote';
+import AncestorNote, { LookupEntity } from './AncestorNote';
 
 const baseFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
 
@@ -84,7 +84,9 @@ function Search(props) {
         {title}
       </Typography>
       {hasAncestorParam && (
-        <AncestorNote uuid={searchParams.get('ancestor_ids[0]')} elasticsearchEndpoint={elasticsearchEndpoint} />
+        <LookupEntity uuid={searchParams.get('ancestor_ids[0]')} elasticsearchEndpoint={elasticsearchEndpoint}>
+          <AncestorNote />
+        </LookupEntity>
       )}
       {wrappedSearch}
     </>

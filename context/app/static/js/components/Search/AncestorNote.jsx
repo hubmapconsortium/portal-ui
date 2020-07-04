@@ -2,11 +2,11 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { readCookie } from '../../helpers/functions';
 
-function AncestorNote(props) {
+function LookupEntity(props) {
   const { uuid, elasticsearchEndpoint } = props;
-  const [ancestor, setAncestor] = React.useState(undefined);
+  const [entity, setEntity] = React.useState(undefined);
   React.useEffect(() => {
-    async function getAndSetAncestor() {
+    async function getAndSetEntity() {
       const nexus_token = readCookie('nexus_token');
       const response = await fetch(elasticsearchEndpoint, {
         method: 'POST',
@@ -22,23 +22,30 @@ function AncestorNote(props) {
       }
       const results = await response.json();
       // eslint-disable-next-line no-underscore-dangle
-      const entity = results.hits.hits[0]._source;
-      setAncestor(entity);
+      const resultEntity = results.hits.hits[0]._source;
+      setEntity(resultEntity);
     }
-    getAndSetAncestor();
+    getAndSetEntity();
   }, [elasticsearchEndpoint, uuid]);
 
+  return React.cloneElement(props.children, { entity });
+}
+
+function AncestorNote(props) {
+  const { entity } = props;
+
   let message = '...';
-  if (ancestor) {
-    const { entity_type, uuid: ancestorUUID, display_doi } = ancestor;
+  if (entity) {
+    const { entity_type, uuid, display_doi } = entity;
     const lcType = entity_type.toLowerCase();
     message = (
       <>
-        Derived from {lcType} <a href={`/browse/${lcType}/${ancestorUUID}`}>{display_doi}</a>
+        Derived from {lcType} <a href={`/browse/${lcType}/${uuid}`}>{display_doi}</a>
       </>
     );
   }
   return <Typography component="h2">{message}</Typography>;
 }
 
+export { LookupEntity };
 export default AncestorNote;
