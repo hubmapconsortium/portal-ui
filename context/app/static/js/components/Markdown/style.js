@@ -26,8 +26,8 @@ const StyledPaper = styled(Paper)`
     padding-left: 1em;
   }
 
-  ul {
-    list-style: square outside none;
+  li {
+    list-style: square;
   }
 `;
 
