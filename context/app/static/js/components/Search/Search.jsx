@@ -83,7 +83,9 @@ function Search(props) {
       <Typography component="h1" variant="h1">
         {title}
       </Typography>
-      {hasAncestorParam && <AncestorNote uuid={searchParams.get('ancestor_ids[0]')} />}
+      {hasAncestorParam && (
+        <AncestorNote uuid={searchParams.get('ancestor_ids[0]')} elasticsearchEndpoint={elasticsearchEndpoint} />
+      )}
       {wrappedSearch}
     </>
   );
