@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { readCookie } from './functions';
 
 function LookupEntity(props) {
@@ -29,5 +30,10 @@ function LookupEntity(props) {
 
   return React.cloneElement(props.children, { entity });
 }
+
+LookupEntity.propTypes = {
+  uuid: PropTypes.string.isRequired,
+  elasticsearchEndpoint: PropTypes.string.isRequired,
+};
 
 export default LookupEntity;
