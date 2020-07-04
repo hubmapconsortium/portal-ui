@@ -1,0 +1,1 @@
+- In search table, split array fields.
