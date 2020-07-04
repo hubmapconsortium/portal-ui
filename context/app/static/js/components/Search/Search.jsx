@@ -7,7 +7,8 @@ import './Search.scss';
 import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named
 import { filter } from './utils';
-import AncestorNote, { LookupEntity } from './AncestorNote';
+import AncestorNote from './AncestorNote';
+import LookupEntity from '../../helpers/LookupEntity';
 
 const baseFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
 
