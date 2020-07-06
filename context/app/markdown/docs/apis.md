@@ -34,7 +34,8 @@ Examples of Entity endpoints are as follows:
    data for entity
 
 **Figure 3.**
-![An example HuBMAP entity graph consisting of a donor, organ, blocks, tissue slices, data and derived data from a pipeline. In general, a donor and organ are required in the provenance hierarchy where tissue samples (such as blocks and samples) can be organized based on several different tissue sample types.](https://drive.google.com/file/d/14aAyTItvm3teFB5jUX5TVGRpW4oit99b/view?usp=sharing)
+![An example HuBMAP entity graph consisting of a donor, organ, blocks, tissue slices, data and derived data from a pipeline. In general, a donor and organ are required in the provenance hierarchy where tissue samples (such as blocks and samples) can be organized based on several different tissue sample types.](
+https://lh5.googleusercontent.com/5Tjhe0890IqLijpiHJISbFLa2mixR7ojoH7yub_gxh5Iw-wE6L9RSzFzWQkBpM9UfbevJ8By3wkIeOI-_6QJ=w1919-h943)
 
 - [GitHub](https://github.com/hubmapconsortium/entity-api) 
 - [Smart API](https://smart-api.info/ui/0065e419668f3336a40d1f5ab89c6ba3)
