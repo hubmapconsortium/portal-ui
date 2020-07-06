@@ -26,12 +26,16 @@ function AssaySpecificItem(props) {
 
 function SummaryData(props) {
   const { data_types, origin_sample } = props;
-  const data_types_string = data_types.constructor.name === 'Array' ? data_types.join(' / ') : data_types;
+  // TODO: ES should consistenty return array. Waiting for reindex.
+  const data_types_array = data_types.constructor.name === 'Array' ? data_types : [data_types];
   return (
     <>
       {data_types && data_types.length > 0 && (
         <AssaySpecificItem>
-          <a href={`/docs/assays#${data_types_string}`}>{data_types_string}</a>
+          {data_types_array.map((data_type, i) => [
+            i > 0 && ' / ',
+            <a href={`/docs/assays#${data_type}`}>{data_type}</a>,
+          ])}
         </AssaySpecificItem>
       )}
       <Typography variant="body1">{origin_sample.mapped_organ}</Typography>
