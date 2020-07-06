@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
-import ToggleButton from '@material-ui/lab/ToggleButton';
 import SectionContainer from '../SectionContainer';
 
 const headerFixedHeight = 64;
@@ -31,15 +30,6 @@ const ExpandButton = styled(Button)`
   display: inline-block;
   background-color: #ffffff;
   margin-left: 0.5rem;
-  svg {
-    vertical-align: middle;
-  }
-`;
-
-const StyledToggleButton = styled(ToggleButton)`
-  display: inline-block;
-  background-color: #ffffff;
-  border: 0px;
   svg {
     vertical-align: middle;
   }
@@ -95,5 +85,4 @@ export {
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
-  StyledToggleButton,
 };

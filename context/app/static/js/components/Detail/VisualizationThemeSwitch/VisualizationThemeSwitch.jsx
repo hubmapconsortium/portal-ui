@@ -1,0 +1,23 @@
+import React from 'react';
+import WbSunnyIcon from '@material-ui/icons/WbSunny';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+
+import { StyledToggleButton } from './style';
+import 'vitessce/dist/es/production/static/css/index.css';
+
+function VisualizationThemeSwitch(props) {
+  const { theme, onChange } = props;
+  return (
+    <ToggleButtonGroup value={theme} exclusive onChange={onChange} size="small">
+      <StyledToggleButton disableRipple value="light">
+        <WbSunnyIcon color={theme === 'light' ? 'primary' : 'secondary'} />
+      </StyledToggleButton>
+      <StyledToggleButton disableRipple value="dark">
+        <Brightness2Icon color={theme !== 'light' ? 'primary' : 'secondary'} />
+      </StyledToggleButton>
+    </ToggleButtonGroup>
+  );
+}
+
+export default VisualizationThemeSwitch;

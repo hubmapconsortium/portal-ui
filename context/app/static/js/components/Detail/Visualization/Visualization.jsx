@@ -9,10 +9,8 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
-import WbSunnyIcon from '@material-ui/icons/WbSunny';
-import Brightness2Icon from '@material-ui/icons/Brightness2';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
+import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import {
   vitessceFixedHeight,
   bodyExpandedCSS,
@@ -25,7 +23,6 @@ import {
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
-  StyledToggleButton,
 } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
@@ -67,19 +64,7 @@ function Visualization(props) {
           Visualization
         </StyledHeaderText>
         <StyledHeaderRight>
-          <ToggleButtonGroup
-            value={vitessceTheme}
-            exclusive
-            onChange={(e, theme) => setVitessceTheme(theme)}
-            size="small"
-          >
-            <StyledToggleButton disableRipple value="light">
-              <WbSunnyIcon color={vitessceTheme === 'light' ? 'primary' : 'secondary'} />
-            </StyledToggleButton>
-            <StyledToggleButton disableRipple value="dark">
-              <Brightness2Icon color={vitessceTheme !== 'light' ? 'primary' : 'secondary'} />
-            </StyledToggleButton>
-          </ToggleButtonGroup>
+          <VisualizationThemeSwitch theme={vitessceTheme} onChange={(e, theme) => setVitessceTheme(theme)} />
           <ExpandButton size="small" onClick={handleExpand} variant="contained" disableElevation>
             <ZoomOutMapIcon color="primary" />
           </ExpandButton>
