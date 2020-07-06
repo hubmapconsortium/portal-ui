@@ -16,14 +16,24 @@ function Routes(props) {
   if (urlPath.startsWith('/browse/donor/')) {
     return (
       <Container maxWidth="lg">
-        <Donor assayMetadata={entity} vitData={vitessce_conf} entityEndpoint={endpoints.entityEndpoint} />
+        <Donor
+          assayMetadata={entity}
+          vitData={vitessce_conf}
+          entityEndpoint={endpoints.entityEndpoint}
+          elasticsearchEndpoint={endpoints.elasticsearchEndpoint}
+        />
       </Container>
     );
   }
   if (urlPath.startsWith('/browse/sample/')) {
     return (
       <Container maxWidth="lg">
-        <Sample assayMetadata={entity} vitData={vitessce_conf} entityEndpoint={endpoints.entityEndpoint} />
+        <Sample
+          assayMetadata={entity}
+          vitData={vitessce_conf}
+          entityEndpoint={endpoints.entityEndpoint}
+          elasticsearchEndpoint={endpoints.elasticsearchEndpoint}
+        />
       </Container>
     );
   }
@@ -36,6 +46,7 @@ function Routes(props) {
           vitData={vitessce_conf}
           assetsEndpoint={endpoints.assetsEndpoint}
           entityEndpoint={endpoints.entityEndpoint}
+          elasticsearchEndpoint={endpoints.elasticsearchEndpoint}
         />
       </Container>
     );

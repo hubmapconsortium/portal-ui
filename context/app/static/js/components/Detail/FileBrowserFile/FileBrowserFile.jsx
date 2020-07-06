@@ -5,12 +5,12 @@ import { readCookie } from 'helpers/functions';
 
 import { LightBlueLink } from 'shared-styles/Links';
 import { useRoundedSecondaryTooltipStyles } from 'shared-styles/Tooltips';
-import DatasetContext from '../Dataset/context';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
+import DetailContext from '../context';
 
 function FileBrowserFile(props) {
   const { fileObj, depth } = props;
-  const { assetsEndpoint, uuid } = useContext(DatasetContext);
+  const { assetsEndpoint, uuid } = useContext(DetailContext);
   const token = readCookie('nexus_token');
   const classes = useRoundedSecondaryTooltipStyles();
   return (
