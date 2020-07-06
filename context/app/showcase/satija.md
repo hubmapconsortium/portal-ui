@@ -5,7 +5,7 @@ created_by_user_displayname: Rahul Satija
 created_by_user_email: rsatija@nygenome.org
 vitessce_conf: [
     {
-        "name": "2dca1bf5832a4102ba780e9e54f6c350",
+        "name": "HBM336.FWTN.636",
         "layers": [
             {
                 "name": "cells",
@@ -51,7 +51,7 @@ vitessce_conf: [
         ]
     },
     {
-        "name": "7fd04d1aba61c35843dd2eb6a19d2545",
+        "name": "HBM984.GRBB.858",
         "layers": [
             {
                 "name": "cells",
@@ -97,7 +97,7 @@ vitessce_conf: [
         ]
     },
     {
-        "name": "8a238da50c0c0436510b857c21e4e792",
+        "name": "HBM556.QMSM.776",
         "layers": [
             {
                 "name": "cells",
@@ -143,7 +143,7 @@ vitessce_conf: [
         ]
     },
     {
-        "name": "3683b49e27133c064ccbd59ff9723e7c",
+        "name": "HBM472.NTNN.543",
         "layers": [
             {
                 "name": "cells",
@@ -189,7 +189,7 @@ vitessce_conf: [
         ]
     },
     {
-        "name": "ed8a4dbbb1554a5e3227d6dfb2368828",
+        "name": "HBM396.RPRR.624",
         "layers": [
             {
                 "name": "cells",
