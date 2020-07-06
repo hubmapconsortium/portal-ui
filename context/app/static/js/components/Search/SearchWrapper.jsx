@@ -40,6 +40,9 @@ function getByPath(nested, field) {
   if ('translations' in field) {
     return field.translations[current];
   }
+  if (Array.isArray(current)) {
+    return current.join(' / ');
+  }
   return current;
 }
 
