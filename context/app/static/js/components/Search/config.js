@@ -1,5 +1,7 @@
+import { TermQuery } from 'searchkit'; // eslint-disable-line import/no-duplicates
+
 // eslint-disable-next-line import/named
-import { filter, rangeFilter, field } from './utils';
+import { filter, rangeFilter, checkboxFilter, field } from './utils';
 
 export const donorConfig = {
   filters: [
@@ -39,6 +41,7 @@ export const sampleConfig = {
 
 export const datasetConfig = {
   filters: [
+    checkboxFilter('is_stanford', 'Is Stanford?', TermQuery('donor.group_name.keyword', 'Stanford TMC')),
     filter('created_by_user_displayname', 'Creator'),
     filter('data_types', 'Data types'),
     filter('donor.group_name', 'Group'),
