@@ -1,3 +1,21 @@
+## v0.0.34 - 2020-07-03
+
+- Rename DagProv component to ProvAnalysisDetails.
+- Add links to ProvAnalysisDetails.
+- Added a new showcase for the spleen cell type annotation dataset from the Satija Lab at NYGC, with data from UF.
+- Add dataset file browser.
+- Add an Error Boundary about routes.
+- Fix errors when dataset doesn't have a data_types field.
+- Do the git tag only after a successful Docker build.
+- Put markdown content on a sheet.
+- Limit width of images.
+- Render markdown in React.
+- Added a z-index of `5` to the `ShowcaseDropdown` styles to allow it to be rendered above the `Visualization` component.
+- Changed the `ShowcaseDropdown` arrow icon behavior (point down when closed, point up when open).
+- Upgrade Vitessce to `v1.0.8`.
+Update Vitessce to handle changing multiple sources from SPRM and Showcase.
+
+
 ## v0.0.33 - 2020-07-01
 
 - Update collections page and add colletion detail.

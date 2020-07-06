@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
-import { Home } from './Home';
-import Search from './Search/Search';
-import { Donor, Sample, Dataset, Collection } from './Detail';
-import Showcase from './Showcase';
-import { Collections } from './Collections';
-import Markdown from './Markdown';
+import { Home } from '../Home';
+import Search from '../Search/Search';
+import { Donor, Sample, Dataset, Collection } from '../Detail';
+import Showcase from '../Showcase';
+import { Collections } from '../Collections';
+import Markdown from '../Markdown';
 
 function Routes(props) {
   const { flaskData } = props;
@@ -73,6 +73,10 @@ function Routes(props) {
     );
   }
 
+  if (urlPath === '/client-side-error') {
+    throw Error('Intentional client-side-error');
+  }
+
   if ('markdown' in flaskData) {
     return (
       <Container maxWidth="lg">
@@ -86,7 +90,7 @@ Routes.propTypes = {
   flaskData: PropTypes.exact({
     title: PropTypes.string,
     entity: PropTypes.object,
-    vitessce_conf: PropTypes.object,
+    vitessce_conf: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
     endpoints: PropTypes.object,
     markdown: PropTypes.string,
     collection: PropTypes.object,

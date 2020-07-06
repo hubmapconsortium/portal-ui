@@ -40,6 +40,9 @@ function getByPath(nested, field) {
   if ('translations' in field) {
     return field.translations[current];
   }
+  if (Array.isArray(current)) {
+    return current.join(' / ');
+  }
   return current;
 }
 
@@ -76,12 +79,11 @@ function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
 }
 
 function MaskedSelectedFilters(props) {
-  const { hiddenFilterIds, hiddenValueFilterIds } = props;
+  const { hiddenFilterIds } = props;
   const SelectedFilter = (filterProps) => {
     const isHidden = hiddenFilterIds.indexOf(filterProps.filterId) !== -1;
-    const isHiddenValue = hiddenValueFilterIds.indexOf(filterProps.filterId) !== -1;
 
-    const style = isHidden && !isHiddenValue ? { display: 'None' } : {};
+    const style = isHidden ? { display: 'None' } : {};
 
     // Copy and paste from
     // http://docs.searchkit.co/v0.8.3/docs/components/navigation/selected-filters.html
@@ -97,8 +99,7 @@ function MaskedSelectedFilters(props) {
           .mix(`selected-filter--${filterProps.filterId}`)}
       >
         <div className={filterProps.bemBlocks.option('name')}>
-          {filterProps.labelKey}
-          {!isHiddenValue && `: ${filterProps.labelValue}`}
+          {`${filterProps.labelKey}: ${filterProps.labelValue}`}
         </div>
         <div className={filterProps.bemBlocks.option('remove-action')} onClick={filterProps.removeFilter}>
           x
@@ -122,7 +123,6 @@ function SearchWrapper(props) {
     httpHeaders,
     sortOptions,
     hiddenFilterIds,
-    hiddenValueFilterIds,
     searchUrlPath,
     queryFields,
     isLoggedIn,
@@ -157,7 +157,7 @@ function SearchWrapper(props) {
                   'hitstats.results_found': '{hitCount} results found',
                 }}
               />
-              <MaskedSelectedFilters hiddenFilterIds={hiddenFilterIds} hiddenValueFilterIds={hiddenValueFilterIds} />
+              <MaskedSelectedFilters hiddenFilterIds={hiddenFilterIds} />
               <SortingSelector options={sortOptions} />
             </ActionBarRow>
           </ActionBar>
@@ -235,7 +235,6 @@ SearchWrapper.propTypes = {
     }),
   ),
   hiddenFilterIds: PropTypes.arrayOf(PropTypes.string),
-  hiddenValueFilterIds: PropTypes.arrayOf(PropTypes.string),
   searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   isLoggedIn: PropTypes.bool,
@@ -252,7 +251,6 @@ SearchWrapper.defaultProps = {
     },
   ],
   hiddenFilterIds: [],
-  hiddenValueFilterIds: [],
   searchUrlPath: '_search',
   httpHeaders: {},
   isLoggedIn: false,

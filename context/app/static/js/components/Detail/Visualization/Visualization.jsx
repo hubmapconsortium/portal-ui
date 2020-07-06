@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer, useRef } from 'react';
 import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import Popper from '@material-ui/core/Popper';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
+
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import {
   vitessceFixedHeight,
@@ -11,12 +18,24 @@ import {
   StyledHeader,
   StyledHeaderText,
   StyledHeaderRight,
+  StyledHeaderLeft,
   ExpandButton,
   TopSnackbar,
   ExpandableDiv,
   StyledFooterText,
+  SelectionButton,
 } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
+
+function getTileOrDatasetString(vitData) {
+  // If the name of a configuration includes the tiled name, return 'Tile'; else return 'Dataset.'
+  if (Array.isArray(vitData)) {
+    const firstEntry = vitData[0];
+    const regex = new RegExp(/R\d+_X\d+_Y\d+/);
+    return regex.test(firstEntry.name) ? 'Tile' : 'Dataset';
+  }
+  return null;
+}
 
 function Visualization(props) {
   const { vitData } = props;
@@ -24,6 +43,9 @@ function Visualization(props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [vitessceTheme, setVitessceTheme] = useState('light');
+  const [vitessceSelection, setVitessceSelection] = useState(0);
+  const [open, toggle] = useReducer((v) => !v, false);
+  const anchorRef = useRef(null);
 
   function handleExpand() {
     setIsExpanded(true);
@@ -54,13 +76,34 @@ function Visualization(props) {
       window.removeEventListener('keydown', onKeydown);
     };
   }, []);
-
   return (
     <StyledSectionContainer id="visualization">
       <StyledHeader>
-        <StyledHeaderText variant="h3" component="h2">
-          Visualization
-        </StyledHeaderText>
+        <StyledHeaderLeft>
+          <StyledHeaderText variant="h3" component="h2">
+            Visualization
+          </StyledHeaderText>
+          {Array.isArray(vitData) ? (
+            <>
+              <SelectionButton ref={anchorRef} onClick={toggle}>
+                Select {getTileOrDatasetString(vitData)} {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+              </SelectionButton>
+              <Popper open={open} anchorEl={anchorRef.current} placement="top-end" style={{ zIndex: 50 }}>
+                <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+                  <ClickAwayListener onClickAway={toggle}>
+                    <MenuList id="showcase-options">
+                      {vitData.map(({ name }, i) => (
+                        <MenuItem onClick={() => setVitessceSelection(i)} key={name}>
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Popper>
+            </>
+          ) : null}
+        </StyledHeaderLeft>
         <StyledHeaderRight>
           <VisualizationThemeSwitch theme={vitessceTheme} onChange={handleThemeChange} />
           <ExpandButton onClick={handleExpand}>
@@ -80,7 +123,11 @@ function Visualization(props) {
             onClose={() => setIsSnackbarOpen(false)}
             message="Press [esc] to exit full window."
           />
-          <Vitessce config={vitData} theme={vitessceTheme} height={isExpanded ? null : vitessceFixedHeight} />
+          <Vitessce
+            config={vitData[vitessceSelection] || vitData}
+            theme={vitessceTheme}
+            height={isExpanded ? null : vitessceFixedHeight}
+          />
         </ExpandableDiv>
       </Paper>
       <StyledFooterText variant="body2">

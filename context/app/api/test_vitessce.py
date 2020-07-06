@@ -46,7 +46,7 @@ def test_build_image_schema():
     assert schema["type"] == "ome-tiff"
     assert (
         schema["metadata"]["omeTiffOffsetsUrl"]
-        == f"https://example.com/uuid/ppneorh7/example.offsets.json?token={TEST_NEXUS_TOKEN}"
+        == f"https://example.com/uuid/output_offsets/example.offsets.json?token={TEST_NEXUS_TOKEN}"
     )
 
 
@@ -71,7 +71,7 @@ def test_build_layer_conf():
     vitessce_component = conf["staticLayout"][0]["component"]
     assert layer["type"] == "CELLS"
     assert layer["name"] == "cells"
-    assert vitessce_component == "scatterplot"
+    assert vitessce_component == "cellSets"
 
 
 def test_build_layer_conf_empty():

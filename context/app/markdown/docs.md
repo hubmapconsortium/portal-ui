@@ -14,10 +14,7 @@
 - [Pipelines](/docs/pipelines)
 
 ---
-- [Interface](/docs/interface)
 - [APIs](/docs/apis)
 - [Infrastructure](/docs/infrastructure)
-
----
+- [Submission](/doc/submission)
 - [Help](/docs/help)
-- FAQs - Coming Soon!

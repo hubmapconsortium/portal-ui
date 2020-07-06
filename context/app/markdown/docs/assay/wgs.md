@@ -1,11 +1,11 @@
-# **HuBMAP Whole Genome Sequencing (WGS)**
+# HuBMAP Whole Genome Sequencing (WGS)
 
-### **Last Updated:** 6/23/2020
+### Last Updated 6/23/2020
 
-## **Overview:** 
+## Overview 
 This document details bulk whole genome sequencing assays, data states, metadata fields, file structure, QA/QC thresholds, and data processing.
 
-## **Description:** 
+## Description
 Whole genome sequencing (WGS) measures the genome-wide nucleotide sequence in a biological sample. Generally, the purpose is to screen the entire genome for all sequence variations (*against a reference sequence*) such as benign sequence variants (SNPs) or candidate pathogenic mutations. Examples of sequence variants include chromosomal rearrangements, nucleotide substitutions, deletions or insertions. An example use case would be a genome-wide search for somatic mutations (cancer-causing mutations that arose in a somatic cell, as opposed to a germline cell) by comparing DNA sequence in a patient’s tumor cells to that in the same patient’s healthy cells. *See Appendix 1, below, for more detailed description.*
 
   
@@ -13,7 +13,7 @@ Whole genome sequencing (WGS) measures the genome-wide nucleotide sequence in a 
 ![](https://lh4.googleusercontent.com/vpKbmRtSoa9HGuqAFkIhvWgA3-vTD-MiqnREuLLlrsTpBoVwjwx5JwEiDQbGmw5_aWTeuw015KPXhl3JBikr-CkGdDR5GzLIcbZN4kgQnK60JNl2YZ-3nlNJ0uOnTqvKy2BPfg4)
 
 
-## **HuBMAP Whole Genome Sequencing Data States (Levels):**
+## HuBMAP Whole Genome Sequencing Data States (Levels)
 The HuBMAP project provides data to the public in a variety of data states, which denote the amount of processing that has been done to the data. The data states for WGS seq data provided by the HuBMAP project are listed below:
 
 |**Data State** |  **Description**| **Example File Type** | 
@@ -36,7 +36,7 @@ All HuBMAP data will have searchable metadata fields.
   
 [Github link](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/wgs) to metadata.tsv: fieldnames, descriptions & required formats. Any modifications to the WGS metadata.tsv must be made through Github and only with sequencing DRT team approval.
 
-## **Values to be produced by HIVE Pipeline:**
+## Values to be produced by HIVE Pipeline
 |**Level** |  **Field**| **Definition** | **Valid Values** | **Purpose**
 |--|--|--|--|--|
 |  na | data_analysis_protocols_io_doi| Link to the protocol document describing how the HIVE or TMC is processing the data|
@@ -48,7 +48,7 @@ All HuBMAP data will have searchable metadata fields.
 |  na | percent_unique_mapped_reads| When a set of reads are aligned with a genome, some will map in multiple locations. This indicates the percentage of reads that mapped to only one location on the genome| [0-1]| QA/QC
 
 
-## **HuBMAP WGS Sequence Raw File Structure**
+## HuBMAP WGS Sequence Raw File Structure
 The raw sequencing data is recorded in a FASTQ file which contains sequenced reads and corresponding sequencing quality information. Every read in FASTQ format is stored in four lines as follows
 
 @HWI-ST1276:71:C1162ACXX:1:1101:1208:2458 1:N:0:CGATGT
@@ -67,11 +67,11 @@ Line 3 begins with a '+' character and is optionally followed by the same sequen
 
 Line 4 encodes the quality values for the bases in Line 2.
 
-## **HuBMAP QA/QC of raw (state0) data files:**
+## HuBMAP QA/QC of raw (state0) data files
 The bolded steps below constitute a series of standard RNA-seq data analysis workflow.
 
 
-### **Pre-alignment QC with FastQC **
+### Pre-alignment QC with FastQC 
 [http://www.bioinformatics.babraham.ac.uk/projects/fastqc/](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/):
 ![](https://lh5.googleusercontent.com/QcjPsyXMsxYbtFCVU-MSRj_WfkfW6fR3gRIJUWp9MtA6-kOsdZ1qM6XOjBBdKy9ytkJ1mij1ZG7S841IkLqYUh5ueUMmeK0Fyhq5Ye00e1_ZX6FoPtpuJYQFbgqJMmVbMs4ZGQo)
 
@@ -84,7 +84,7 @@ The bolded steps below constitute a series of standard RNA-seq data analysis wor
 |  k-mer_overrepresentation |20 (accuracy rate 99%)
 | contamination_of_primers_and_adapters_in_sequencing_data || Library specific data on adapters need to be provided to the read-trimming tool like trimmomatic *(Bioinformatics. 2014 Aug 1; 30(15):2114-20.).*
 
-## **Terms defined in this document:**
+## Terms defined in this document
 Base quality scores: prediction of the probability of an error in base calling
 GC content: Percentage of bases that are either guanine (G) or cytosine (C)
 K-mer overrepresentation: Overrepresented k-mer sequences in a sequencing library
@@ -118,5 +118,5 @@ New England Biosciences (NEB) whole genome sequencing library preparation kit is
 
 This protocol adheres to the [MINSEQE](http://fged.org/projects/minseqe/) standards put forward by the Functional Genomics Data Society ([FGED](http://fged.org/projects/minseqe/)).
 
-## **For Additional Help:** 
+## For Additional Help
 Please contact: [Aaron Horning](mailto:ahorning@stanford.edu)
