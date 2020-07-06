@@ -25,7 +25,6 @@ function ConditionalLink(props) {
         agreeToDUA(window.confirm('Agree to Data Use Agreement?'));
       }}
       variant="body1"
-      downloadvariant="body1"
       underline="none"
     >
       {children}
