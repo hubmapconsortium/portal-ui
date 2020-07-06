@@ -1,19 +1,19 @@
 
 
-# **Image_Mass_Cytometry (IMC)**
+# Image_Mass_Cytometry (IMC)
 
-### **Last Updated:** 6/22/2020
+### Last Updated 6/22/2020
 
-## **Overview:** 
+## Overview
 This document describes Imaging Mass Cytometry technology, generated data files & data levels, file structure, metadata fields, QA/QC thresholds, and HIVE data processing.
 
-## **Description:** 
+## Description
 [Imaging Mass Cytometry](http://www.bodenmillerlab.com/research-2/imaging-mass-cytometry/) combines standard immunohistochemistry with CyTOF mass cytometry to resolve the cellular localization of up to 40 proteins in a tissue sample. Multiplexing of dozens of proteins is possible because the antibodies are tagged with rare-earth metal isotopes of defined atomic mass rather than fluorophores which are subject to spectral signal overlap. High-resolution laser ablation of tissue stained with these antibody-metal conjugates generates clouds of tissue particles which are atomized, ionized, and detected in a time-of-flight mass cytometer. Signals are then plotted against the coordinates of each single laser shot to synthesize one image per mass channel, with high-dimensional images produced by overlaying images from multiple channels.
 ![](https://lh6.googleusercontent.com/ox0uDpu8JTG8Ovwiuwfp1EvWBM7oq6ambvhbmMM0A-M7gppofNs3PaNiFuCq-JA93D-aSfwwTGKnzax-aiDV_khQbQJLYakui3vdvFBp-L1rDlfyegAl7Eq60dJ5pBpDD8YApg0)
 
 *Figure 1.*  from [Giesen et al., Nature Methods, 2014 Apr;11(4):417-22)](https://www.nature.com/articles/nmeth.2869)
 
-## **Definitions:** 
+## Definitions
 The following is a table of terms relevant to understanding IMC data:
 
 |**Term** |  **Definition**
@@ -29,14 +29,14 @@ The following is a table of terms relevant to understanding IMC data:
 |  ROI| Region of Interest - User defined imaging area.| 
 |  Pixel| Each pixel in an IMC image corresponds to a single laser shot and is the smallest component of that image.| 
 
-## **HuBMAP IMC Data States (Levels):**
+## HuBMAP IMC Data States (Levels)
 |**Data Levels** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: Image stacks for each region of interest containing all channel images.| OME, TIFF
 | 1 |  Segmented data: Single cell data extracted after segmentation.|  CSV, TIFF
 | 2 |  Annotated data (Cells and Structures): Interpretation of marker expression profiles enabled the assignment of cell types to clusters.|  PNG, PDF
 
-## **HuBMAP Metadata:** 
+## HuBMAP Metadata: 
 All HuBMAP IMC data will have searchable metadata fields. The metadata.tsv is available for download from [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/imc) where the descriptions and required field input formats can be found
 
 In addition, all HuBMAP IMC data will have an associated “acquisition_metadata.csv” file containing the following additional metadata fields:
@@ -57,7 +57,7 @@ In addition, all HuBMAP IMC data will have an associated “acquisition_metadata
 |  “ROIStartYPosUm”| Start Y-coordinates of the region of interest (µm). Note: This value must be divided by 1000 to correct for a bug (missing decimal point) in the Fluidigm software.|
 |  “Template”| Name of imported csv equivalent file specifying the antibody panel used for tissue staining.|
 
-## **HuBMAP IMC Raw File Structure:**
+## HuBMAP IMC Raw File Structure
 1.  *HuBMAP IMC Raw File Structure*
     A schematic of the general structure of the stage 0 (raw) data produced by the fluidigm software is shown below:
 ![](https://lh3.googleusercontent.com/Cv5xsGl9_tP2aoDD963MjNu-SViqg2a-iVpxAzk6o3IjlQnO-LtEu257NyIr1ZwA52cs8StTHUEL8CAJG9WoqnhN26MdcL5ivAhW6ALMR1t8wMglWyYUHEJPPobr0bSVEdpyfRI)
@@ -70,7 +70,7 @@ In addition, all HuBMAP IMC data will have an associated “acquisition_metadata
 Classified cell types projected onto images for each measured region of each tissue type | ClusterDisplay_*| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/Mapping/| 
 Plots of data: tSNE, heatmap of marker expression per cluster and density plots of marker intensity | 20191128_HubMAP__PhenoGraph_tsne_M.png 20191128_HubMAP__heatmap.pdf 20191128_HubMAP__histogram_sample.png| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/processed/
 
-## **HuBMAP QA/QC of raw (state0) data files:**
+## HuBMAP QA/QC of raw (state0) data files
 1.  Raw data (level 0) QC
     - Basic image quality control by visual inspection of images. Software used: MCD Viewer (fluidigm),histoCAT++, version 2.2 ([http://www.bodenmillerlab.com/research-2/histocal-2/](http://www.bodenmillerlab.com/research-2/histocal-2/)) or FIJI, v1.53a.
     -  Each antibody was assigned a pass/fail score per tissue type, which can be found in the channelnames_report.csv file. Pass/fail is determined by visual inspection of the images generated, Staining must be present in at least one ROI, distinguishable form background and produce the expected pattern for the target tissue type.
@@ -81,7 +81,7 @@ Plots of data: tSNE, heatmap of marker expression per cluster and density plots 
 
 3.  Annotated cell data (level 2) QC - After clustering, clusters were assigned to cell types based on marker expression. In order to ensure correct cell type assignment, the custom package cytomapper ([https://github.com/BodenmillerGroup/cytomapper](https://github.com/BodenmillerGroup/cytomapper)) was used to overlay cell masks onto raw IMC images and visualise the expression of different markers. This allowed us to visually verify that a particular cell cluster was in fact the correct cell type, based on coexpression of other informative markers.
 
-## **IMC Data Processing by the Bodenmiller IMC Lab:**
+## IMC Data Processing by the Bodenmiller IMC Lab
 -   Data preprocessing performed according to the Bodenmiller IMC Segmentation Pipeline ([https://github.com/BodenmillerGroup/ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline)). The major steps are described below.
     
 
@@ -97,5 +97,5 @@ Plots of data: tSNE, heatmap of marker expression per cluster and density plots 
     
 -   Single cell information can then be imported into R for downstream analysis, including dimensionality reduction (tSNE, UMAP), clustering (PhenoGraph) and cell type annotation.
 
-## **For Additional Help:** 
+## For Additional Help 
 Please contact: [Marda Jorgensen](mailto:marda@ufl.edu) & [Vishal Venkataraaman](mailto:vgautham@stanford.edu).
