@@ -1,1 +1,0 @@
-- Still waiting for the index that would map abbreviations to full names, but this makes sure the link targets are rendered, and datasets with multiple types can link to each.
