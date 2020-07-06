@@ -61,7 +61,7 @@ HuBMAP supports 3 categories of assays : mass spectrometry, imaging and nucleoti
 Data centers provide the following 4 data types (Figure 3)for each data submission to HubMAP:
 **![Figure 3: Four datatypes in HuBMAP](https://lh4.googleusercontent.com/roCn5JFuGk3-tTn-n8wPL8cCOQ07t7vCZMyxuPI92LgDCIBFV4LPhKAIGgrL66b9XvuR45eeaAy9474jbfABdEoOVKam6hC0fBTshzNz0CMUaAOYhrfL3d3nsQN0VVbvV3KMMGVE)**
 
-Assay metadata, which is described in the [Assay Metadata Submission Format](https://docs.google.com/document/d/1g82GpCpFDKew60XzAO4Siaw3ZXJjwsaCpgPwhqQZxIY/edit#heading=h.qeehtnf68fas) document, is divided into 4 levels:
+*Figure 3: Assay metadata, which is described in the [Assay Metadata Submission Format](https://docs.google.com/document/d/1g82GpCpFDKew60XzAO4Siaw3ZXJjwsaCpgPwhqQZxIY/edit#heading=h.qeehtnf68fas) document, is divided into 4 levels.*
 
 ### Definition of assay metadata levels
 
