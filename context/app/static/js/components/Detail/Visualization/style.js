@@ -8,7 +8,7 @@ const headerFixedHeight = 64;
 const vitessceFixedHeight = 600;
 
 const StyledHeader = styled.div`
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 `;
 
 const StyledHeaderText = styled(Typography)`
@@ -36,7 +36,7 @@ const ExpandButton = styled(Button)`
 `;
 
 const SelectionButton = styled(Button)`
-  margin-left: 0.5rem;
+  margin-left: ${(props) => props.theme.spacing(1)}px;
   color: white;
 `;
 
