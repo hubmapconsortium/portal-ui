@@ -1,16 +1,16 @@
 
 
-# **HuBMAP PAS Stained Microscopy**
+# HuBMAP PAS Stained Microscopy
 
-### **Last Updated:** 6/15/2020
+### Last Updated 6/15/2020
 
-## **Overview:** 
+## Overview
 This document details stained microscopy data states, metadata fields, file structure, QA/QC thresholds, and data processing.
 
-## **Description:** 
+## Description
 Stained microscopy employs histological stains such as H&E or PAS to improve resolution and contrast for visualization of physiological structures such as tubules or glomeruli.
 
-## **Definitions:** 
+## Definitions
 There are a variety of terms used in this document that may not be familiar to all researchers wanting to make use of the HubMap data. The following figures illustrate several of these terms:
 ![](https://lh6.googleusercontent.com/3DVOL8i-fUSpBqGpmlEyKWt38V-IuPI4lxBqDWQS5rl-9cBC5z2ePmNhUsMzYWndTEu1bnimcQMiujfOkLw6kYeH9qoXNJ2dpU2IMie-fey-xsMQN9Fd5tjSOlPep_zT6HC4wf_j)  
   
@@ -33,7 +33,7 @@ There are a variety of terms used in this document that may not be familiar to a
 
 *Figure 5:* Example defined plane (left) with example imaged z planes (right).
 
-## **HuBMAP Stained Microscopy Data States (Levels):**
+## HuBMAP Stained Microscopy Data States (Levels)
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| SCN, TIFF
@@ -41,10 +41,10 @@ There are a variety of terms used in this document that may not be familiar to a
 | 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF
 | 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG
 
-## **HuBMAP Metadata:** 
+## HuBMAP Metadata
 This metadata schema is now available in Github for download. Any further edits can be made through consultation with the HuBMAP team who will request changes through [Github.](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/stained)
 
-## **Associated Metadata files:**
+## Associated Metadata files
 |**Metadata File Name** |  **File Type**| **Field** | **Definition**
 |--|--|--|--|
 | Instrument Metadata |XML | SchemaType|Metadata schema type
@@ -73,7 +73,7 @@ This metadata schema is now available in Github for download. Any further edits 
 |  | | tissue_object_size_z|Size of the z-dimension of the tissue sample
 |  | | section_number|Tissue Section number. Each section is 10µm thick.
 
-## **HuBMAP PAS File Structure**
+## HuBMAP PAS File Structure
 
     DR_reformat….
     /LC Data
@@ -97,7 +97,7 @@ This metadata schema is now available in Github for download. Any further edits 
     /VAN000*-*K-**-**-PAS_meta_unregistered.xml
     /VAN000*-*K-**-**-PAS_unregistered.czi
 
-## **Terms defined in this document**
+## Terms defined in this document
 |**Term** |  **Definition**
 |--|--|
 |  Intensity| Detector Counts| 
@@ -116,5 +116,5 @@ This metadata schema is now available in Github for download. Any further edits 
 | Pixel| How close two objects can be and still be differentiated within an image. This is generally dependent upon the diffraction limit of light and the microscope objective.| 
 | Field of View| Angle through which light can reach the detector. Available imaging area without stage movement.| 
 
-## **For Additional Help:** 
+## For Additional Help
 Please contact:[Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu) 
