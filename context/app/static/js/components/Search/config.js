@@ -1,4 +1,4 @@
-import { TermQuery } from 'searchkit'; // eslint-disable-line import/no-duplicates
+import { ExistsQuery } from 'searchkit';
 
 // eslint-disable-next-line import/named
 import { filter, rangeFilter, checkboxFilter, field } from './utils';
@@ -41,12 +41,12 @@ export const sampleConfig = {
 
 export const datasetConfig = {
   filters: [
-    checkboxFilter('is_stanford', 'Is Stanford?', TermQuery('donor.group_name.keyword', 'Stanford TMC')),
     filter('created_by_user_displayname', 'Creator'),
     filter('data_types', 'Data types'),
     filter('donor.group_name', 'Group'),
     filter('source_sample.mapped_specimen_type', 'Specimen Type'),
     filter('mapped_status', 'Status'),
+    checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),
   ],
   fields: [
     field('display_doi', 'ID'),

@@ -47,7 +47,7 @@ export function checkboxFilter(id, name, filter) {
     props: {
       id,
       title: name,
-      label: name,
+      label: 'True',
       filter,
     },
   };
