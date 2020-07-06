@@ -3,6 +3,7 @@
 HuBMAP metadata documentation and submission specifications
 
 ## Donor
+
 Donor Specification
 
 TODO: Donor specification pending from Jonathan Silverstein.
@@ -14,26 +15,66 @@ TODO: Donor specification pending from Jonathan Silverstein.
 
 ## Assay
 
-|Assay|Document|Specification|Contact|
-|--|--|--|--|
-|AF (Autofluorescence)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/af)|[Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)|
-|Antibody-based MxIF (Multiplexed Immunofluorescence)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/mixif)|[Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)|
-|ATACseq (bulk)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkatacseq)|[Blue Lake](mailto:b1lake@eng.ucsd.edu)|
-|CODEX | [Document](GitHubMDFileLink)| [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/codex)|[Vishal Venkataraaman](mailto:vgautham@stanford.edu)|
-|IMC (Imaging Mass Cytometry) |[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/imc)|[Michelle Daniel](mailto:michelle.daniel@uzh.ch)|
-|MALDI-IMS (neg and pos modes - Matrix Assisted Laser Desorption Ionization Imaging Mass Spectrometry)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/maldiims)|[Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)|
-|PAS (histological stain)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/stained)|[Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)|
-|RNAseq (bulk)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkrnaseq)|[Stephanie Nevins](mailto:snevins@stanford.edu)|
-|sciATAseq|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)|[Dana L Jackson](mailto:danaj77@uw.edu)|
-|sciRNAseq|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scrnaseq)|[Dana L Jackson](mailto:danaj77@uw.edu)|
-|scRNAseq / 10Xgenomics|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scrnaseq)|[Maigan Brusko](mailto:maigan@ufl.edu)|
-|SeqFISH|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/seqfish)|[Nico Pierson](mailto:nicogpt@caltech.edu)|
-|Shotgun LC-MS (targeted, lipidomics)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms)|[Kevin Contrepois](mailto:kcontrep@stanford.edu)|
-|SNAREseq (ATAC)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)|[Blue Lake](mailto:b1lake@eng.ucsd.edu)|
-|SNAREseq (RNA)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)|[Blue Lake](mailto:b1lake@eng.ucsd.edu)|
-|snATACseq|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)|[Blue Lake](mailto:b1lake@eng.ucsd.edu)|
-|snRNAseq|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scrnaseq)|[Stephanie Nevins](mailto:snevins@stanford.edu)|
-|TMT LC-MS (proteomics)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms)|[Lihua Jiang](mailto:lihuaj@stanford.edu)|
-|Untargeted LC-MS (eg: LC-MS/MS-proteomics)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms)|[Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)|
-|Untargeted LC-MS (metabolomics)|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms)|[Kevin Contrepois](mailto:kcontrep@stanford.edu)|
-|WGS|[Document](GitHubMDFileLink)|[Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/wgs)|[Aaron Horning](mailto:ahorning@stanford.edu)|
+- [AF (Autofluorescence)](/docs/assay/af)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/af)
+  - Contact: [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)
+- [Antibody-based MxIF (Multiplexed Immunofluorescence)](/docs/assay/mxif)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/mixif)
+  - Contact: [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)
+- [ATACseq (bulk)](/docs/assay/atacseq)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkatacseq)
+  - Contact: [Blue Lake](mailto:b1lake@eng.ucsd.edu)
+- [CODEX](/docs/assay/codex)
+  -  [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/codex)
+  - Contact: [Vishal Venkataraaman](mailto:vgautham@stanford.edu)
+- [IMC (Imaging Mass Cytometry) ](/docs/assay/imc)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/imc)
+  - Contact: [Michelle Daniel](mailto:michelle.daniel@uzh.ch)
+- [MALDI-IMS (neg and pos modes - Matrix Assisted Laser Desorption Ionization Imaging Mass Spectrometry)](/docs/assay/maldi-ims)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/maldiims)
+  - Contact: [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)
+- [PAS (histological stain)](/docs/assay/pas)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/stained)
+  - Contact: [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)
+- [RNAseq (bulk)](/docs/assay/rnaseq)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkrnaseq)
+  - Contact: [Stephanie Nevins](mailto:snevins@stanford.edu)
+- sciATAseq
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)
+  - Contact: [Dana L Jackson](mailto:danaj77@uw.edu)
+- sciRNAseq
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scrnaseq)
+  - Contact: [Dana L Jackson](mailto:danaj77@uw.edu)
+- scRNAseq / 10Xgenomics
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scrnaseq)
+  - Contact: [Maigan Brusko](mailto:maigan@ufl.edu)
+- [SeqFISH](/docs/assay/seqfish)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/seqfish)
+  - Contact: [Nico Pierson](mailto:nicogpt@caltech.edu)
+- Shotgun LC-MS (targeted, lipidomics)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms)
+  - Contact: [Kevin Contrepois](mailto:kcontrep@stanford.edu)
+- SNAREseq (ATAC)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)
+  - Contact: [Blue Lake](mailto:b1lake@eng.ucsd.edu)
+- SNAREseq (RNA)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)
+  - Contact: [Blue Lake](mailto:b1lake@eng.ucsd.edu)
+- snATACseq
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)
+  - Contact: [Blue Lake](mailto:b1lake@eng.ucsd.edu)
+- snRNAseq
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scrnaseq)
+  - Contact: [Stephanie Nevins](mailto:snevins@stanford.edu)
+- TMT LC-MS (proteomics)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms)
+  - Contact: [Lihua Jiang](mailto:lihuaj@stanford.edu)
+- [Untargeted LC-MS (eg: LC-MS/MS-proteomics)](/docs/assay/lcms)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms)
+  - Contact: [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu)
+- [Untargeted LC-MS (metabolomics)](/docs/assay/lcms)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms)
+  - Contact: [Kevin Contrepois](mailto:kcontrep@stanford.edu)
+- [WGS](/docs/assay/wgs)
+  - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/wgs)
+  - Contact: [Aaron Horning](mailto:ahorning@stanford.edu)
