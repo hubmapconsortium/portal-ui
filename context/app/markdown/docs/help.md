@@ -7,7 +7,7 @@ Users can register or search for donors, donor organs and tissues through the *H
 - *Register or search for assay data:*
 Users can enter or search for HuBMAP data through the *HuBMAP Data Ingest* system. Data may be filtered by the organization that generated the data and/or by keywords.
 
-**How to** [Submit a Dataset to HuBMAP](https://github.com/hubmapconsortium/portal-ui/blob/master/context/app/markdown/docs/Submitting_a_Dataset.md).
+**How to** [Submit a Dataset to HuBMAP](/docs/submission).
 This document covers the following topics:
 
 - *Required components and general structure of a data submission directory*
