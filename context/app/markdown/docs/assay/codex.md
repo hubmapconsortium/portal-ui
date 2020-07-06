@@ -1,14 +1,14 @@
 # HuBMAP CODEX Data
 
-### **Last Updated:** 6/1/2020
+### Last Updated: 6/1/2020
 
-## **Overview:** 
+## Overview
 This document details CODEX data states, metadata fields, file structure, QA/QC thresholds, and data processing.
 
-## **Description:** 
+## Description
 CODEX is a strategy for generating highly multiplexed images of fluorescently-labeled antigens. In brief, antibodies to antigens of interest are labeled with antigen-specific oligonucleotide barcodes. The barcoded antibodies are then applied to a tissue sample where they bind to target antigens. Complementary oligonucleotide probes tagged with fluorophores are then applied to the tissue sample, one antigen-specific probe at a time, allowing hybridization to the barcodes on the target antibodies. An image is captured, the probes are washed off and the process is repeated. Up to 50 protein targets are interrogated, one imaging cycle at a time, allowing generation of a composite image of up to 50 protein targets within a single tissue section.
 
-## **Definitions:** 
+## Definitions
 There are a variety of terms used in this document that may not be familiar to all HubMap users. The following figures illustrate several of these terms:
 
   
@@ -39,7 +39,7 @@ There are a variety of terms used in this document that may not be familiar to a
 
 *Figure 6:* Example defined plane (left) with example imaged z planes (right).
 
-## **HuBMAP CODEX Data States (Levels):**
+## HuBMAP CODEX Data States (Levels)
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF
@@ -47,77 +47,78 @@ There are a variety of terms used in this document that may not be familiar to a
 | 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF
 | 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG
 
-**HuBMAP Metadata:** 
+## HuBMAP Metadata
 All HuBMAP CODEX data will have searchable metadata fields. This metadata field schema now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/codex)  where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
 
-## **Associated JSON Files**
+## Associated JSON Files
 In addition, all HuBMAP CODEX data will have an associated json file which may contain the following additional metadata fields:
 
-|**Field** |  **Definition**| **Example**
+|**Field** |  **Definition**| **Example**|
 |--|--|--|
-|  "version"| Software version used| standalone-1.6.0.16 
-|  "name"| Descriptive name assigned to the data| drv_CX_19-004_LN_R1
-|  "dateProcessed"| Date of experiment| 2020-01-06T10:38:03.257-05:00[America/New_York]
-|  "path"| Local file path in experimenter's lab indicating where the raw (state 0) data produced was saved by the instrument. Generally not important.| "G:\\SHARE\\HuBMAP\\Codex_dataset\\src_CX_19-004_LN_R1
-|  "outputPath"| Local file path in experimenter's lab indicating where the processed (state > 0) data was saved. Generally this field is not important.| G:\\SHARE\\HuBMAP\\Codex_dataset\\drv_CX_19-004_LN_R1
-|  "objectiveType"| Brand/specification of the microscope objective lens being used| air
-|  "magnification"| Microscope objective lens magnification (e.g. 20x)| 20
-|  "aperture"| Numerical aperture of the lens| 0.75
-|  "xyResolution"| Spatial resolution (minimum distance that can be resolved by the microscope), typically in nanometers.| 377.4463383838384
-|  "zPitch"| Distance between Z planes (typically µm)| 1500.0
-|  "wavelengths"| Excitation wavelength in nanometers (energy of light used for given channel). One value per channel.| [ 358, 488, 550, 650 ]
-|  "bitness"| Bit depth of each channel| 16
-|  "numRegions"| How many separate regions are being imaged| 1
-|  "numCycles"| How many fluorescent stain-strip cycles are included in the run| 9
-|  "numTiles"| Number x direction tiles times number of y direction tiles (area in number of tiles to be collected)| 25
-|  "numZPlanes"| Number x direction tiles times number of y direction tiles (area in number of tiles to be collected)| 20
-|  "numOriginalPlanes"| How many user-defined z-planes were entered in the Akoya software. Generally the same as numZPlanes.| 20
-|  "numChannels"| Number of fluorescent channels imaged during each cycle.| 4
-|  "regionWidth"| Number of horizontal tiles across the region collected| 5
-|  "regionHeight"| Number of vertical tiles across region collected| 5
-|  "tileWidth"| Tile horizontal size (field of view)| 1920
-|  "tileHeight"| Tile vertical size (field of view)| 1440
-|  "tileOverlapX"| Percent of overlap between tiles in x dimension. (e.g., 30% overlap)| 0.3
-|  "tileOverlapY"| Percent of overlap between tiles in y dimension. (e.g., 30% overlap)| 0.3
-|  "tilingMode"| Pattern of stage movement of microscope while acquiring tiles.| snakeRows
-|  "backgroundSubtractionMode"| Method used to subtract the background fluorescence from stained images| auto
-|  "driftCompReferenceCycle"| Cycle used for drift correction in imaging. Some datasets show this as "referenceCycle"| 2
-|  "driftCompReferenceChannel"| Channel used for drift correction in imaging. Some datasets show this as "referenceChannel".| 1
-|  "bestFocusReferenceCycle"| **Cycle used for z-focus selection in imaging| 2
-|  "bestFocusReferenceChannel"| Channel used for z-focus selection in imagingIntensity| Detector Counts| 1
-|  "numSubTiles"| Number of tiles within a tile (generally one for HuBMAP data)| 1
-|  "focusingOffset"| User defined linear offset of the computationally determined focus z-plane.| 0
-|  "useBackgroundSubtraction"| Was computational background subtraction processing used| true
-|  "useDeconvolution"| Was computational deconvolution processing used| true
-|  "useExtendedDepthOfField"| Was extended depth of field used| true
-|  "useShadingCorrection"| Was shading correction used| true
-|  "use3dDriftCompensation"| Was 3D (z-plane) drift compensation used| true
-|  "useBleachMinimizingCrop"| Was bleach minimizing crop used| false
-|  "useBlindDeconvolution"| Was blind deconvolution used| false
-|  "useDiagnosticMode"| Was diagnostic mode used| true
-|  "multipointMode"| Was multipoint microscope focus mode used| false
-|  "HandEstain"| Was H and E stain mode used| false
-|  "channelNames"| The microscope-defined names of the fluorophore| channelNamesArray[ ]
-|  "channelNamesArray"| List of stains, See right.| [ "DAPI-01","Blank", "Blank", "Blank", "DAPI-02", "CD31", "CD8", "CD45", "DAPI-03", "CD20","Ki67", "CD3e" ]
-|  "exposureTimes"| Length of time (usually in milliseconds) the tile is exposed to excitation light.| exposureTimesArray [ ]
-|  "numerical_aperture"| The objective numerical aperture| 0.75
-|  "z_pitch"| Spacing between each z-plane in microns| 0.0
-|  "region_names"| List: user-defined names of regions| [ "reg1" ]
-|  "regldx"| List: numerical index of the region| [ 1 ]
-|  "cycle_lower_limit"| Lowest cycle recorded|  1
-|  "cycle_upper_limit"| Highest cycle recorded|9
-|  "region_width"| Number of tiles in the X-dimension| 5
-|  "region_height"| Number of tiles in the Y-dimension| 5
-|  "num_z_planes"| Number of Z-planes| 20
-|  "tile_width"| Number of pixels in the X-dimension| 1344
-|  "tile_height"| Number of pixels in the Y-dimension| 1007
-|  "tile_overlap_X"| Pixel overlap in the X direction| 576
-|  "tile_overlap_Y"| Pixel overlap in the Y direction| 432
-|  *antibody_metadata*| *Pointer to a table of antibody target proteins, names,  IDs, with the corresponding cycles and channels.*| *Such as: Ab1_targetProtein, Ab1_name,ID_#,cycle_#,channel_#; Ab2_targetProtein, Ab2_name,ID_#,cycle_#,channel_#; Ab3_name,ID_#,cycle_#,channel_#*
+|  "version"| Software version used| standalone-1.6.0.16 |
+|  "name"| Descriptive name assigned to the data| drv_CX_19-004_LN_R1|
+|  "dateProcessed"| Date of experiment| 2020-01-06T10:38:03.257-05:00[America/New_York]|
+|  "path"| Local file path in experimenter's lab indicating where the raw (state 0) data produced was saved by the instrument. Generally not important.| "G:\\SHARE\\HuBMAP\\Codex_dataset\\src_CX_19-004_LN_R1 |
+|  "outputPath"| Local file path in experimenter's lab indicating where the processed (state > 0) data was saved. Generally this field is not important.| G:\\SHARE\\HuBMAP\\Codex_dataset\\drv_CX_19-004_LN_R1 |
+|  "objectiveType"| Brand/specification of the microscope objective lens being used| air |
+|  "magnification"| Microscope objective lens magnification (e.g. 20x)| 20 |
+|  "aperture"| Numerical aperture of the lens| 0.75 |
+|  "xyResolution"| Spatial resolution (minimum distance that can be resolved by the microscope), typically in nanometers.| 377.4463383838384 |
+|  "zPitch"| Distance between Z planes (typically µm)| 1500.0 |
+|  "wavelengths"| Excitation wavelength in nanometers (energy of light used for given channel). One value per channel.| [ 358, 488, 550, 650 ] |
+|  "bitness"| Bit depth of each channel| 16 |
+|  "numRegions"| How many separate regions are being imaged| 1 |
+|  "numCycles"| How many fluorescent stain-strip cycles are included in the run| 9 |
+|  "numTiles"| Number x direction tiles times number of y direction tiles (area in number of tiles to be collected)| 25 |
+|  "numZPlanes"| Number x direction tiles times number of y direction tiles (area in number of tiles to be collected)| 20 |
+|  "numOriginalPlanes"| How many user-defined z-planes were entered in the Akoya software. Generally the same as numZPlanes.| 20 |
+|  "numChannels"| Number of fluorescent channels imaged during each cycle.| 4 |
+|  "regionWidth"| Number of horizontal tiles across the region collected| 5 |
+|  "regionHeight"| Number of vertical tiles across region collected| 5 |
+|  "tileWidth"| Tile horizontal size (field of view)| 1920 |
+|  "tileHeight"| Tile vertical size (field of view)| 1440 |
+|  "tileOverlapX"| Percent of overlap between tiles in x dimension. (e.g., 30% overlap)| 0.3 |
+|  "tileOverlapY"| Percent of overlap between tiles in y dimension. (e.g., 30% overlap)| 0.3 |
+|  "tilingMode"| Pattern of stage movement of microscope while acquiring tiles.| snakeRows |
+|  "backgroundSubtractionMode"| Method used to subtract the background fluorescence from stained images| auto |
+|  "driftCompReferenceCycle"| Cycle used for drift correction in imaging. Some datasets show this as "referenceCycle"| 2 |
+|  "driftCompReferenceChannel"| Channel used for drift correction in imaging. Some datasets show this as "referenceChannel".| 1 |
+|  "bestFocusReferenceCycle"| Cycle used for z-focus selection in imaging| 2 |
+|  "bestFocusReferenceChannel"| Channel used for z-focus selection in imagingIntensity| Detector Counts| 1 |
+|  "numSubTiles"| Number of tiles within a tile (generally one for HuBMAP data)| 1 |
+|  "focusingOffset"| User defined linear offset of the computationally determined focus z-plane.| 0 |
+|  "useBackgroundSubtraction"| Was computational background subtraction processing used| true |
+|  "useDeconvolution"| Was computational deconvolution processing used| true |
+|  "useExtendedDepthOfField"| Was extended depth of field used| true |
+|  "useShadingCorrection"| Was shading correction used| true |
+|  "use3dDriftCompensation"| Was 3D (z-plane) drift compensation used| true |
+|  "useBleachMinimizingCrop"| Was bleach minimizing crop used| false |
+|  "useBlindDeconvolution"| Was blind deconvolution used| false |
+|  "useDiagnosticMode"| Was diagnostic mode used| true |
+|  "multipointMode"| Was multipoint microscope focus mode used| false |
+|  "HandEstain"| Was H and E stain mode used| false |
+|  "channelNames"| The microscope-defined names of the fluorophore| channelNamesArray[ ] |
+|  "channelNamesArray"| List of stains, See right.| [ "DAPI-01","Blank", "Blank", "Blank", "DAPI-02", "CD31", "CD8", "CD45", "DAPI-03", "CD20","Ki67", "CD3e" ] |
+|  "exposureTimes"| Length of time (usually in milliseconds) the tile is exposed to excitation light.| exposureTimesArray [ ] |
+|  "numerical_aperture"| The objective numerical aperture| 0.75 |
+|  "z_pitch"| Spacing between each z-plane in microns| 0.0 |
+|  "region_names"| List: user-defined names of regions| [ "reg1" ] |
+|  "regldx"| List: numerical index of the region| [ 1 ] |
+|  "cycle_lower_limit"| Lowest cycle recorded|  1 |
+|  "cycle_upper_limit"| Highest cycle recorded| 9 |
+|  "region_width"| Number of tiles in the X-dimension| 5 |
+|  "region_height"| Number of tiles in the Y-dimension| 5 |
+|  "num_z_planes"| Number of Z-planes| 20 |
+|  "tile_width"| Number of pixels in the X-dimension| 1344 |
+|  "tile_height"| Number of pixels in the Y-dimension| 1007 |
+|  "tile_overlap_X"| Pixel overlap in the X direction| 576 |
+|  "tile_overlap_Y"| Pixel overlap in the Y direction| 432 |
+|  antibody_metadata | Pointer to a table of antibody target proteins, names,  IDs, with the corresponding cycles and channels. | Such as: Ab1_targetProtein, Ab1_name,ID_#,cycle_#,channel_#; Ab2_targetProtein, Ab2_name,ID_#,cycle_#,channel_#; Ab3_name,ID_#,cycle_#,channel_# |
 
-*Antibody Metadata: Each TMC will provide a file listing each antibody name, respective cycle and channel. This metadata file will then inform later processes at the HIVE and be used for labeling. Further, we aim to curate the final antibody list with expert interpretation of redundant names to make antibodies and markers a searchable criteria within the HuBMAP database.*
+### Antibody Metadata
+Each TMC will provide a file listing each antibody name, respective cycle and channel. This metadata file will then inform later processes at the HIVE and be used for labeling. Further, we aim to curate the final antibody list with expert interpretation of redundant names to make antibodies and markers a searchable criteria within the HuBMAP database.
 
-## **HuBMAP CODEX Raw File Structure**
+## HuBMAP CODEX Raw File Structure
 1.  The general structure of the level 0 (raw) data produced by the Akoya software (UFL, Vanderbilt) and Stanford software is shown in the image below. If the HandEstain field in Experiment.json in Stanford CODEX data is true, then we will have additional folders just for the HandE cycle named as “HandE_reg1” and so on. These have to be treated as separate cycles.
     
 Other differences between CODEX software at Stanford versus Akoya proprietary software are documented [here](https://drive.google.com/open?id=1ff7iHRxkiV-DcvznFTCc1sgS_78tHKcm0ohYhv7jLjQ).
@@ -133,12 +134,12 @@ The exact same data from Stanford is also available in an image sequence format,
 
 |**Type of Segmentation/Description** |  **Descriptor (the name should contain the following)**| **Location**
 |--|--|--|
-|  Stanford - cell segmentation| *_processed| https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FStanford%20TMC%2F26191c2719339be0c3fa6dc8a7ba3550%2F20190514_HUBMAP_CL1_processed%2F
-|  Stanford - cell segmentation| *_processed-ImgSeq| https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FStanford%20TMC%2F26191c2719339be0c3fa6dc8a7ba3550%2F20190514_HUBMAP_CL1_processed-ImgSeq%2F| 
-University of Florida| drv_*| https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FUniversity%20of%20Florida%20TMC%2F03043e079260d180099579045f16cd53%2F
+|  Stanford - cell segmentation| *_processed| https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FStanford%20TMC%2F26191c2719339be0c3fa6dc8a7ba3550%2F20190514_HUBMAP_CL1_processed%2F |
+|  Stanford - cell segmentation| *_processed-ImgSeq| https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FStanford%20TMC%2F26191c2719339be0c3fa6dc8a7ba3550%2F20190514_HUBMAP_CL1_processed-ImgSeq%2F  | 
+University of Florida| drv_*| https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FUniversity%20of%20Florida%20TMC%2F03043e079260d180099579045f16cd53%2F |
 
 
-## **HuBMAP QA/QC of raw (state0) data files:**
+## HuBMAP QA/QC of raw (state0) data files
 1.  Files submitted by the TMC’s will be validated by the TMC in the following steps:
     A) Checked for zero length files
     B) The number of (raw) folders should be equal to the number of cycles * number of regions of interest
@@ -159,11 +160,11 @@ For TMCs using the CODEX commercial version, This file can be created by duplica
 
 ![](https://lh3.googleusercontent.com/r_2WwrWttNu5b4eY8i-zuvdShMH0-00mmZ-n3k1wKZES7yuXWEN0HSOBePoyH9mLJug23xYpuyOOehNgdne3Bn6cLO3Mv7GCvyBbD-FooxQuSfXccz3chGWar5ddY4erOv3XjItt)
 
-**![](https://lh6.googleusercontent.com/5OyUoMcIzx9_DwVs2020xthbUPSyZpoD0Xq0iP4XkXGNvo8reTYVozOzQZxF0I9_nOVkY4PKDl92yrqgqJnHytF24MQ3Ut3JAj0kuKFoUnUMQEKOVloac7EGXtq3X0NOSxWDRhC9)**
-*How to read channelnames:*
+![](https://lh6.googleusercontent.com/5OyUoMcIzx9_DwVs2020xthbUPSyZpoD0Xq0iP4XkXGNvo8reTYVozOzQZxF0I9_nOVkY4PKDl92yrqgqJnHytF24MQ3Ut3JAj0kuKFoUnUMQEKOVloac7EGXtq3X0NOSxWDRhC9)
+
+### How to read channelnames
 
 For the commercial version, the document is structured as following:
-
 
 ![](https://lh3.googleusercontent.com/6O6zMI0PWtmiASezKjSD_YAbN-fzAtz7H2gQUs4RWeD1sd3mM4a-ZL2GW59stOV582AdOF8nI79IfCIZAAxCAQspxtLdt1BLY3kPyMhMgKdRJYZKzclhLjnfG9PhCpRKXMXkImMr)
 
@@ -172,32 +173,32 @@ For the commercial version, the document is structured as following:
 *Empty channel* indicates a channel (wavelength) that was not used to target a marker during a specific cycle.
 
 Each cycle is formed from N number of channels. For each dataset, information regarding the number of cycles that were acquired through each channel will be available in the experiment.json file:
-**![](https://lh4.googleusercontent.com/HNpVApDXXGiQvkeEK8xDAxyy6duSetS5Hc9aHQVbaofd7V_pyOPVqWOsa8cYPKsglQF6js669YgkjjxIRnKnPZocPhG-yZw2ytlb7FUPor1i-JPut3K_nFbqXPp8woD9YJvTyubu)**
+![](https://lh4.googleusercontent.com/HNpVApDXXGiQvkeEK8xDAxyy6duSetS5Hc9aHQVbaofd7V_pyOPVqWOsa8cYPKsglQF6js669YgkjjxIRnKnPZocPhG-yZw2ytlb7FUPor1i-JPut3K_nFbqXPp8woD9YJvTyubu)
 
-*How to read channelnames_report:*
-**![](https://lh4.googleusercontent.com/ntf-bUMDwkHF_ad1Mjrj7j49ybdN671eI3u-kxQPVRrQTetv_Hm0DGVJQ59nm8rpMqFIOF-cboxoMCxUpBIf0AuyX8kKDBXlNYZZx55lnireBfZ3qqy1JuVgS1s6r8cFuaeFtmpe)**
+### How to read channelnames_report
+![](https://lh4.googleusercontent.com/ntf-bUMDwkHF_ad1Mjrj7j49ybdN671eI3u-kxQPVRrQTetv_Hm0DGVJQ59nm8rpMqFIOF-cboxoMCxUpBIf0AuyX8kKDBXlNYZZx55lnireBfZ3qqy1JuVgS1s6r8cFuaeFtmpe)
 
 *Same as channelnames.txt.*
 
 *TRUE/FALSE* depending on if the data indicates antibody bound to the correct target protein. This information is specific for tissue samples.
 
-*How to evaluate the channels to create the QA/QC channelnames_report.cvs file:*
+### How to evaluate the channels to create the QA/QC channelnames_report.cvs file
 
 Using commercial version:
 
 1.  Process the data using the commercial available processing tool provided by Akoya.
-**![](https://lh3.googleusercontent.com/TdXb9S_H0e_5gjnEVP0D2kBX39s3DZ7bR1CL9SMTkBwp6omwxM7tFiT54_voUpIoHXcWcPjTJ-JIoQq5mi6WrjS2qLJritRv2N-_eiVBa-kADGDLVR9HUKgJ7HX5gqA5HKf8UfAf)**
+![](https://lh3.googleusercontent.com/TdXb9S_H0e_5gjnEVP0D2kBX39s3DZ7bR1CL9SMTkBwp6omwxM7tFiT54_voUpIoHXcWcPjTJ-JIoQq5mi6WrjS2qLJritRv2N-_eiVBa-kADGDLVR9HUKgJ7HX5gqA5HKf8UfAf)
 2.  Generate the Report ppt file by enabling the option at the prompt (add image)
- **![](https://lh6.googleusercontent.com/o_gu3Rdk8LEYfnNIsgRNVc3B5R1vL9ZMcIK5X_L8i7HXcrD5OjfdB0Ly2zsQhpZoWvvu-SgfMRNk3d8UIa-7wJZKq130VSg6LVvBqdIbFnGWQyKCknPGth6Ck2FH9rqM4Ptlzlfj)**
+![](https://lh6.googleusercontent.com/o_gu3Rdk8LEYfnNIsgRNVc3B5R1vL9ZMcIK5X_L8i7HXcrD5OjfdB0Ly2zsQhpZoWvvu-SgfMRNk3d8UIa-7wJZKq130VSg6LVvBqdIbFnGWQyKCknPGth6Ck2FH9rqM4Ptlzlfj)
 
 The Akoya integrated processing step* [https://help.codex.bio/codex/processor/user-instructions/image-analysis-report](https://help.codex.bio/codex/processor/user-instructions/image-analysis-report)​ produces an Image Analysis Report for each region acquired that provides the following documentation:
-**![](https://lh3.googleusercontent.com/xQNmmUCy09LcKyp4WexCIhpoNi-VojYN4Vm8rr2QHsdcYkrJg1Vgs_Nlp8o-S5eTBsWd_t4CvayUvf_791h_-3feaYrvDWLMmRSNxdN9HEWaY1wpgdeOMDmwSVDUZ5R3nQXiYC-6)**
-**![](https://lh4.googleusercontent.com/E0OehUKsXaw14YmwSBn6cYO3XqCcAAjuDYTKoCBpkYzCOfZO4GVx9eJd49pPVZYsS9tNN3EQsitc8lMtAbUlbbnoQQPSBO4G58ctilIljDsWdeJNnfkhsqU35ZyO8PVee0FP43xF)**
-**![](https://lh3.googleusercontent.com/-kK2XRFJ0dMjLmDc5qelOQHAWBrMh7GG734e5epsjDgCTfqwNy824gHpdYZQdPK2g1drSnhdsiIuSvy7_Ra1ezVEuKMBuQvl2Rwxa21iFftnj2sI89YXMh4tC2NjxClBsFzzjbQi)**
+- ![](https://lh3.googleusercontent.com/xQNmmUCy09LcKyp4WexCIhpoNi-VojYN4Vm8rr2QHsdcYkrJg1Vgs_Nlp8o-S5eTBsWd_t4CvayUvf_791h_-3feaYrvDWLMmRSNxdN9HEWaY1wpgdeOMDmwSVDUZ5R3nQXiYC-6)
+- ![](https://lh4.googleusercontent.com/E0OehUKsXaw14YmwSBn6cYO3XqCcAAjuDYTKoCBpkYzCOfZO4GVx9eJd49pPVZYsS9tNN3EQsitc8lMtAbUlbbnoQQPSBO4G58ctilIljDsWdeJNnfkhsqU35ZyO8PVee0FP43xF)
+- ![](https://lh3.googleusercontent.com/-kK2XRFJ0dMjLmDc5qelOQHAWBrMh7GG734e5epsjDgCTfqwNy824gHpdYZQdPK2g1drSnhdsiIuSvy7_Ra1ezVEuKMBuQvl2Rwxa21iFftnj2sI89YXMh4tC2NjxClBsFzzjbQi)
 A histogram and sample image is generated for every acquired channel. Each row is a cycle, containing its corresponding channels. Top-left image and histogram is always the first cycle, first channel. Image and histogram to their right is the same cycle, second channel.
 
 The displayed image is a full-resolution cropped image that has the greatest standard deviation among those sampled. Each image may be of different location within the region, depending on the expression pattern. For example, cropped images for DAPI cycles 2 and 3 below differ in their sampling location.
-**![](https://lh4.googleusercontent.com/IpSNTYOmk9QpFWqRf28xWq-eKgok0mFiJtlP1WVZLKWxJaRHeUQBubMqiaj3wOV5ZiGhA5lY99tBZbg4jxMqfKfTtLbXRAC97K63b67JZK4Dvps72WqnpqKOowxZyg5Z3QTgcc_Z)**
+![](https://lh4.googleusercontent.com/IpSNTYOmk9QpFWqRf28xWq-eKgok0mFiJtlP1WVZLKWxJaRHeUQBubMqiaj3wOV5ZiGhA5lY99tBZbg4jxMqfKfTtLbXRAC97K63b67JZK4Dvps72WqnpqKOowxZyg5Z3QTgcc_Z)
 (Magenta) A single cycle. (Cyan) Full-resolution cropped image. (Purple) Histogram.
 
 The histogram displays pixel frequency of signal intensities found within the region image. The horizontal intensity axis covers the 16-bit range (0 ~ 65535), while the vertical frequency axis auto-scales to the number of pixels found. Frequency is in logarithmic scale to better represent lower frequencies that correspond to biomarker signal.
@@ -205,11 +206,11 @@ The histogram displays pixel frequency of signal intensities found within the re
 Additionally, all cycles except the first contains two histogram plots. All purple plots are of the first cycle, which can be a reference for comparison, especially if the first cycle contains blank cycles. The legend specifies which biomarker the histogram represents.
 
 A summary section contains basic statistics of biomarker region images. Again, each slide contains four cycles and their corresponding channels. Any non-biomarker channel (i.e. containing "DAPI," "blank" or "empty") will be grayed out.
-**![](https://lh3.googleusercontent.com/k1xa3dbWojRY3n5gmzjZFbQyyLpcQxKeAuNqV3Gn17u_l2dmEzvuBzzk09aYDgRlz-9cTaUvzxUsDJj6-GbC6CgFVT89hjHlvGEX_5GOim5PEd1WSpUiZCIypz93eXlg6v_YU3ta)**
+![](https://lh3.googleusercontent.com/k1xa3dbWojRY3n5gmzjZFbQyyLpcQxKeAuNqV3Gn17u_l2dmEzvuBzzk09aYDgRlz-9cTaUvzxUsDJj6-GbC6CgFVT89hjHlvGEX_5GOim5PEd1WSpUiZCIypz93eXlg6v_YU3ta)
 
 There are 18 columns for each channel. All pixel intensities are in 16-bit ranges (0 ~ 65535).
 
-|**Name** |  **Details**
+|**Name** |  **Details** |
 |--|--|
 |  Reg| Region number| 
 |  Cyc| Cycle number|
@@ -235,7 +236,7 @@ These values can be used as a basic guideline to image quality of each biomarker
 
 A detailed slide for each marker acquired is also provided. The left-hand side contains image information identical to those shown in the histogram and summary slides.
 
-**![](https://lh6.googleusercontent.com/461JZ0K3CXEepXS39ihKs_okNvu3Zm6bDZz0gHoD0EQsnOeAytNu71lEErxUiEs3rfx6rylITWXmbq5kXP1hXjj2t5vB-uBfdk7XXDiJgKGOfpbfgIUa0wP_NIYfBY_e8lQEPSRe)**
+![](https://lh6.googleusercontent.com/461JZ0K3CXEepXS39ihKs_okNvu3Zm6bDZz0gHoD0EQsnOeAytNu71lEErxUiEs3rfx6rylITWXmbq5kXP1hXjj2t5vB-uBfdk7XXDiJgKGOfpbfgIUa0wP_NIYfBY_e8lQEPSRe)
 The main image in the center is the region image scaled for best fit and viewing on 4K displays (i.e. scaled to 288 ppi). This image is not in its original resolution and should not be used for detailed analysis.
 
 (Magenta) Image information. (Cyan) Region image. (Purple) Cropped images.
@@ -245,13 +246,13 @@ On the right, there are four cropped images displayed in the original, full reso
 - This document is useful to generate the QA/QC report for the HuBMAP first data release when commercial Akoya acquiring and processing in employed
 
 3.  Open the report and evaluate the channels based on the SNR, intensity patterns etc.
-4**![](https://lh6.googleusercontent.com/rQZgGijJ4sLjvXe3xAN515C9MeHsRZx7GH3aVNE_WxT3T5UxThemChfHCC1vxpB01oXYoVGZ1A_4V1A6w2U4pxfV4ZKOlpl-Mis0BiaUAKOjpgLda_cs6MwLZhGy2c4r7LscGacN)**
+4 ![](https://lh6.googleusercontent.com/rQZgGijJ4sLjvXe3xAN515C9MeHsRZx7GH3aVNE_WxT3T5UxThemChfHCC1vxpB01oXYoVGZ1A_4V1A6w2U4pxfV4ZKOlpl-Mis0BiaUAKOjpgLda_cs6MwLZhGy2c4r7LscGacN)
 4.  Compare these images to validation staining patterns for the same antibody in the same tissue type. The patterns should follow correct cell type localization for the target marker. Failure is indicated by a FALSE designation in the channelnames_report.csv for that specific antibody.
     
 5.  Open the generated channelnames_report.csv file and add TRUE/FALSE tags to each channel separated with a coma (if using text editors) or to the consecutive column if using *“Excel/LibreOffice”.*
 
-## **Terms defined in this document:**
-|**Term** |  **Definition**
+## Terms defined in this document
+|**Term** |  **Definition** |
 |--|--|
 |  Intensity| Detector Counts| 
 |  Signal| Intensity produced by fluorescence, both endogenous and introduced| 
@@ -274,6 +275,6 @@ On the right, there are four cropped images displayed in the original, full reso
 | Field of View| Angle through which light can reach the detector. Available imaging area without stage movement.| 
 | Background Subtraction| Subtraction of autofluorescence intensity from total intensity.| 
 
-## **For Additional Help:** 
+## For Additional Help
 Please contact: [Marda Jorgensen](mailto:marda@ufl.edu) & [Vishal Venkataraaman](mailto:vgautham@stanford.edu).
 
