@@ -11,7 +11,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import { StyledTableContainer, HeaderCell } from 'shared-styles/Table';
 import { useRoundedSecondaryTooltipStyles } from 'shared-styles/Tooltips';
-import { HeaderIconCell, StyledLink, StyledInfoIcon } from './style';
+import { HeaderIconCell, StyledLink, StyledInfoIcon, CenterAlignedFlexRow } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
 
@@ -39,10 +39,12 @@ function CollectionCreatorsTable(props) {
                   <HeaderCell key={column.id}>{column.label}</HeaderCell>
                 ))}
                 <HeaderIconCell>
-                  ORCID ID
-                  <Tooltip title="Open Researcher and Contributor ID" classes={classes}>
-                    <StyledInfoIcon color="primary" />
-                  </Tooltip>
+                  <CenterAlignedFlexRow>
+                    ORCID ID
+                    <Tooltip title="Open Researcher and Contributor ID" classes={classes}>
+                      <StyledInfoIcon color="primary" />
+                    </Tooltip>
+                  </CenterAlignedFlexRow>
                 </HeaderIconCell>
               </TableRow>
             </TableHead>
