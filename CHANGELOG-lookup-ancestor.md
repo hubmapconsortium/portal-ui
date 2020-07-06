@@ -1,2 +1,0 @@
-- Look up the ancestor on constrained searches to provide more information.
-- Factor this functionality out as a general purpose LookupEntity.

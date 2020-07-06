@@ -1,3 +1,13 @@
+## v0.0.35 - 2020-07-06
+
+- Still waiting for the index that would map abbreviations to full names, but this makes sure the link targets are rendered, and datasets with multiple types can link to each.
+- Look up the ancestor on constrained searches to provide more information.
+- Factor this functionality out as a general purpose LookupEntity.
+- Add basis CSS for markdown content.
+- In search table, split array fields.
+- Remove stub doc pages and fix links.
+
+
 ## v0.0.34 - 2020-07-03
 
 - Rename DagProv component to ProvAnalysisDetails.

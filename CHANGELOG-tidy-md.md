@@ -1,1 +1,0 @@
-- Remove stub doc pages and fix links.
