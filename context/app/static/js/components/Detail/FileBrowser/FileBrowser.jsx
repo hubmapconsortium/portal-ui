@@ -16,7 +16,7 @@ function FileBrowser(props) {
 
   return (
     <ScrollPaper>
-      <FileBrowserNode fileSubTree={fileTree} hasAgreedToDUA={hasAgreedToDUA} aggreeToDUA={agreeToDUA} depth={0} />
+      <FileBrowserNode fileSubTree={fileTree} hasAgreedToDUA={hasAgreedToDUA} agreeToDUA={agreeToDUA} depth={0} />
     </ScrollPaper>
   );
 }

@@ -3,8 +3,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import prettyBytes from 'pretty-bytes';
 import { readCookie } from 'helpers/functions';
 
-import { LightBlueLink } from 'shared-styles/Links';
 import { useRoundedSecondaryTooltipStyles } from 'shared-styles/Tooltips';
+import ConditionalLink from './ConditionalLink';
 import DatasetContext from '../Dataset/context';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
 
@@ -17,16 +17,13 @@ function FileBrowserFile(props) {
     <StyledDiv>
       <IndentedDiv $depth={depth}>
         <StyledFileIcon color="primary" />
-        <LightBlueLink
-          href={hasAgreedToDUA ? `${assetsEndpoint}/${uuid}/${fileObj.rel_path}?token=${token}` : '#TODO'}
-          variant="body1"
-          target="_blank"
-          rel="noopener noreferrer"
-          downloadvariant="body1"
-          underline="none"
+        <ConditionalLink
+          href={`${assetsEndpoint}/${uuid}/${fileObj.rel_path}?token=${token}`}
+          hasAgreedToDUA={hasAgreedToDUA}
+          agreeToDUA={agreeToDUA}
         >
           {fileObj.file}
-        </LightBlueLink>
+        </ConditionalLink>
         <FileSize variant="body1">{prettyBytes(fileObj.size)}</FileSize>
         <Tooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`} classes={classes}>
           <StyledInfoIcon color="primary" />
