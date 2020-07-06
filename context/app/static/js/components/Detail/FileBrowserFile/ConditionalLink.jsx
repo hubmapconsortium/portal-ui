@@ -10,7 +10,7 @@ function ConditionalLink(props) {
         variant="body1"
         target="_blank"
         rel="noopener noreferrer"
-        downloadvariant="body1"
+        download
         underline="none"
         href={href}
       >
