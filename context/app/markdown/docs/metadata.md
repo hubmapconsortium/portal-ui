@@ -6,7 +6,7 @@ HuBMAP metadata documentation and submission specifications
 
 Donor Specification
 
-TODO: Donor specification pending from Jonathan Silverstein.
+- TBD (In process with Jonathan Silverstein)
 
 ## Sample
 - [Specification](https://github.com/hubmapconsortium/ingest-validation-tools/blob/master/docs/sample/README.md)
@@ -39,34 +39,34 @@ TODO: Donor specification pending from Jonathan Silverstein.
 - [RNAseq (bulk)](/docs/assay/rnaseq)
   - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkrnaseq)
   - Contact: [Stephanie Nevins](mailto:snevins@stanford.edu)
-- sciATAseq
+- [sciATAseq](/docs/assay/atacseq)
   - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)
   - Contact: [Dana L Jackson](mailto:danaj77@uw.edu)
-- sciRNAseq
+- [sciRNAseq](/docs/assay/rnaseq)
   - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scrnaseq)
   - Contact: [Dana L Jackson](mailto:danaj77@uw.edu)
-- scRNAseq / 10Xgenomics
+- [scRNAseq / 10Xgenomics](/docs/assay/rnaseq)
   - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scrnaseq)
   - Contact: [Maigan Brusko](mailto:maigan@ufl.edu)
 - [SeqFISH](/docs/assay/seqfish)
   - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/seqfish)
   - Contact: [Nico Pierson](mailto:nicogpt@caltech.edu)
-- Shotgun LC-MS (targeted, lipidomics)
+- [Shotgun LC-MS (targeted, lipidomics)](/docs/assay/lcms)
   - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms)
   - Contact: [Kevin Contrepois](mailto:kcontrep@stanford.edu)
-- SNAREseq (ATAC)
+- [SNAREseq (ATAC)](/docs/assay/atacseq)
   - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)
   - Contact: [Blue Lake](mailto:b1lake@eng.ucsd.edu)
-- SNAREseq (RNA)
+- [SNAREseq (RNA)](/docs/assay/rnaseq)
   - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)
   - Contact: [Blue Lake](mailto:b1lake@eng.ucsd.edu)
-- snATACseq
+- [snATACseq](/docs/assay/atacseq)
   - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq)
   - Contact: [Blue Lake](mailto:b1lake@eng.ucsd.edu)
-- snRNAseq
+- [snRNAseq](/docs/assay/rnaseq)
   - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scrnaseq)
   - Contact: [Stephanie Nevins](mailto:snevins@stanford.edu)
-- TMT LC-MS (proteomics)
+- [TMT LC-MS (proteomics)](/docs/assay/lcms)
   - [Spec](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms)
   - Contact: [Lihua Jiang](mailto:lihuaj@stanford.edu)
 - [Untargeted LC-MS (eg: LC-MS/MS-proteomics)](/docs/assay/lcms)
