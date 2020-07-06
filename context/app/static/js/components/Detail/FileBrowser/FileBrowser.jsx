@@ -7,6 +7,7 @@ import { ScrollPaper } from './style';
 function FileBrowser(props) {
   const { files } = props;
   const [fileTree, setFileTree] = useState({});
+  const [hasAgreedToDUA, agreeToDUA] = useState(false);
 
   useEffect(() => {
     const treePath = relativeFilePathsToTree(files);
@@ -15,7 +16,7 @@ function FileBrowser(props) {
 
   return (
     <ScrollPaper>
-      <FileBrowserNode fileSubTree={fileTree} depth={0} />
+      <FileBrowserNode fileSubTree={fileTree} hasAgreedToDUA={hasAgreedToDUA} aggreeToDUA={agreeToDUA} depth={0} />
     </ScrollPaper>
   );
 }
