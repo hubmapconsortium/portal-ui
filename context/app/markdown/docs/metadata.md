@@ -2,6 +2,12 @@
 
 HuBMAP metadata documentation and submission specifications
 
+## Donor
+
+Donor Specification
+
+TODO: Donor specification pending from Jonathan Silverstein.
+
 ## Sample
 - [Specification](https://github.com/hubmapconsortium/ingest-validation-tools/blob/master/docs/sample/README.md)
 - [Submission form](https://raw.githubusercontent.com/hubmapconsortium/ingest-validation-tools/master/docs/sample/sample-metadata.tsv)
