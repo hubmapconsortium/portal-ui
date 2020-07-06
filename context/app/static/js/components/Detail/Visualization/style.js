@@ -2,20 +2,14 @@ import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
+import ToggleButton from '@material-ui/lab/ToggleButton';
 import SectionContainer from '../SectionContainer';
 
 const headerFixedHeight = 64;
 const vitessceFixedHeight = 600;
 
 const StyledHeader = styled.div`
-  margin-bottom: 6px;
-  display: flex;
-`;
-
-const StyledHeaderLeft = styled.div`
-  margin-bottom: 6px;
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 12px;
 `;
 
 const StyledHeaderText = styled(Typography)`
@@ -24,9 +18,8 @@ const StyledHeaderText = styled(Typography)`
 `;
 
 const StyledHeaderRight = styled.div`
-  margin-left: auto;
+  float: right;
   display: flex;
-  margin-top: 2rem;
 `;
 
 const StyledSectionContainer = styled(SectionContainer)`
@@ -36,14 +29,25 @@ const StyledSectionContainer = styled(SectionContainer)`
 
 const ExpandButton = styled(Button)`
   display: inline-block;
+  background-color: #ffffff;
   margin-left: 0.5rem;
   svg {
     vertical-align: middle;
   }
 `;
 
+const StyledToggleButton = styled(ToggleButton)`
+  display: inline-block;
+  background-color: #ffffff;
+  border: 0px;
+  svg {
+    vertical-align: middle;
+  }
+`;
+
 const SelectionButton = styled(Button)`
-  color: black;
+  margin-left: 0.5rem;
+  color: white;
 `;
 
 const TopSnackbar = styled(Snackbar)`
@@ -86,10 +90,10 @@ export {
   StyledHeader,
   StyledHeaderText,
   StyledHeaderRight,
-  StyledHeaderLeft,
   ExpandButton,
   TopSnackbar,
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
+  StyledToggleButton,
 };
