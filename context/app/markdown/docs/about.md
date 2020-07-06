@@ -6,7 +6,7 @@ The HuBMAP Consortium is developing the tools to create an open, global atlas of
 [Policies](https://hubmapconsortium.org/policies/)
 
 ### Consortium Data Use Agreement (DUA)
-[DUA](https://hubmapconsortium.org/wp-content/uploads/2019/08/DUA_040719_final.pdf)
+[DUA](https://hubmapconsortium.org/wp-content/uploads/2020/06/DUA_FINAL_2020_02_03_for_Signature.pdf)
 
 ### Protected data & access via dbGaP
 [Access dbGaP](https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?page=login) for HuBMAP protected data - please bring along  study ID
@@ -18,9 +18,9 @@ The HuBMAP Consortium is developing the tools to create an open, global atlas of
 ### Contact
 General - help@hubmapconsortium.org
 
-Consortium Leadership
-- Executive Committee Co-Chairs [Jonathan Silverstein](mailto:j.c.s@pitt.edu) & [Mike Snyder](mailto:mpsnyder@stanford.edu)
-- NIH Leadership - [Richard Conroy](mailto:richard.conroy@nih.gov)
+Public Relations / Media - [Robin Scibek](mailto:flaus@psc.edu)
+
+NIH Program - [Richard Conroy](mailto:richard.conroy@nih.gov)
 
 ### Software
 [GitHuB repository](https://github.com/hubmapconsortium)
