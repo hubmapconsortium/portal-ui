@@ -1,14 +1,14 @@
-# **HuBMAP Multiplexed Immunofluorescence (MxIF)**
+# HuBMAP Multiplexed Immunofluorescence (MxIF)
 
-### **Last Updated:** 6/15/2020
+### Last Updated 6/15/2020
 
-## **Overview:** 
+## Overview
 This document details MxIF data states, metadata fields, file structure, QA/QC thresholds, and data processing.
 
-## **Description:** 
+## Description 
 MxIF is used to visualize the distribution of multiple protein antigens in an intact tissue sample by labeling them with fluorescently-tagged antibodies. In brief, tagged antibodies are iteratively incubated with a tissue section, visualized with a fluorescence microscope and then stripped.
 
-## **Definitions:** 
+## Definitions
 There are a variety of terms used in this document that may not be familiar to all researchers wanting to make use of the HubMap data. The following figures illustrate several of these terms:
 
 
@@ -32,7 +32,7 @@ There are a variety of terms used in this document that may not be familiar to a
 
 *Figure 5:* Example defined plane (left) with example imaged z planes (right).
 
-## **HuBMAP CODEX Data States (Levels):**
+## HuBMAP CODEX Data States (Levels)
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF
@@ -40,10 +40,10 @@ There are a variety of terms used in this document that may not be familiar to a
 | 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF
 | 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG
 
-## **HuBMAP Metadata:** 
+## HuBMAP Metadata
 This metadata.tsv schema is now available in Github for download. Any further edits can be made through consultation with the HuBMAP team who will request changes through [Github.](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/mixif)
 
-## **Associated Metadata Files:**
+## Associated Metadata Files
 |**Metadata File Name** |  **File Type**| **Field** | **Definition**
 |--|--|--|--|
 |  OME-TIFF | Format: OME-TIFF| SchemaType|Metadata schema type
@@ -142,7 +142,7 @@ This metadata.tsv schema is now available in Github for download. Any further ed
 | || Cycle_4_Antibody_4_Lot|Cell Lot of Antibody used for Magenta Channel for MxIF Cycle 1
 
 
-## **HuBMAP File Structure**
+## HuBMAP File Structure
 
     DR_reformat….
     /LC Data
@@ -165,7 +165,7 @@ This metadata.tsv schema is now available in Github for download. Any further ed
     /VAN000*-*K-**-**-MxIF_cyc*_meta_unregistered.xml
     /VAN000*-*K-**-**-MxIF_cyc*_unregistered.czi
 
-## **Terms defined in this document:**
+## Terms defined in this document
 |**Term** |  **Definition**
 |--|--|
 |  Intensity| Detector Counts| 
@@ -189,5 +189,5 @@ This metadata.tsv schema is now available in Github for download. Any further ed
 | Field of View| Angle through which light can reach the detector. Available imaging area without stage movement.| 
 | Background Subtraction| Subtraction of autofluorescence intensity from total intensity.| 
 
-## **For Additional Help:**
+## For Additional Help
  Please contact:  [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu) 
