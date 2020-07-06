@@ -1,1 +1,0 @@
-- Fix safari/firefox sticky header issues in the collection creators table.

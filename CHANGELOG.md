@@ -1,3 +1,11 @@
+## v0.0.36 - 2020-07-06
+
+- Reorder search facets.
+- Fix safari/firefox sticky header issues in the collection creators table.
+- Fix documentation links, add title.
+- Changed the `Satija` showcase dropdown option strings to HuBMAP IDs rather than Globus IDs to improve readability.
+
+
 ## v0.0.35 - 2020-07-06
 
 - Still waiting for the index that would map abbreviations to full names, but this makes sure the link targets are rendered, and datasets with multiple types can link to each.
