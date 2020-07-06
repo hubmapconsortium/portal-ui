@@ -1,21 +1,21 @@
 
 
-# **HuBMAP RNAseq**
+# HuBMAP RNAseq
 
-### **Last Updated:** 6/23/2020
+### Last Updated 6/23/2020
 
-## **Overview:** 
+## Overview
 This document details bulk and single-cell RNA-sequence assays, data states, metadata fields, file structure, QA/QC thresholds, and data processing.
 
 Much of this document was created utilizing this resource [https://arxiv.org/pdf/1910.14623.pdf](https://arxiv.org/pdf/1910.14623.pdf)
 
 *![](https://lh5.googleusercontent.com/5e3FPyttKr6eSpLYdj_shX9OrZ0n3woJuZxGScLoHG8X2b5fjPHzdYp1HcoeYKelVlKx9OM9idTrd7pOsPbjl5M36UcQVxaIHMAKnde6e6kKs5jwak6cBg2zS9qTp9mr0iUR-TQD)*
 
-## **Description:** 
+## Description
 While bulk RNAseq elucidates the average gene expression profile in cells comprising a tissue sample, single-cell RNAseq, employs per-cell and per-molecule barcoding to enable single-cell resolution of the gene expression profile. The RNAseq assay itself is the same for bulk and single-cell templates.
 
 
-## **Definitions:** 
+## Definitions
 RNA sequencing reveals the identities and quantities of transcribed genes in a biological sample ([https://en.wikipedia.org/wiki/RNA-Seq](https://en.wikipedia.org/wiki/RNA-Seq)). Evaluation of the total gene expression profile of a biological sample is referred to as “transcriptomics”. Genes are transcribed in response to some signal(s) that the gene products (proteins) are required. Each transcribed RNA transcript then undergoes processing (addition of a poly-A tail, 5’-capping, exon splicing) to generate messenger RNA (mRNA), which is exported from the nucleus to the cytoplasm for translation into the corresponding encoded protein. The derived sequences of each mRNA transcript are aligned against a reference genome to establish the identity of the corresponding gene. Since each mRNA molecule represents a single gene transcript, the total mRNA count aligning to a gene represents the expression profile for that gene.
 
 Gene expression profiling begins with isolation of total RNA from a tissue sample or from individual cells. mRNA is typically purified from total RNA by removal of ribosomal RNA (rRNA). mRNA is further processed for sequencing, as described in a detailed example protocol found in Appendix 1 of this document.
@@ -47,13 +47,13 @@ Cells are fixed and permeabilized with methanol (alternatively, cells are lysed 
 
 ![](https://lh3.googleusercontent.com/eQWEFJmBUX7dcDgN3NfthszCpbCI6026MI8GKuhts58NZTZtGfndIVbBtNFZX_EEHUZ7qVppNLK-hgFUPFkkOpvQe_8ivLwqPpmCZZD9VzhTkSOttSntz_1i-1S3I3k1f4jNlzb9)
 
-## **HuBMAP RNA-Seq Data States:**
+## HuBMAP RNA-Seq Data States
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw data: This is the raw sequence data (unprocessed) generated directly by the sequence instrument in files either with Phred quality scores (fastq)| FASTQ
 | 1 |  Aligned data: SAM files contain sequence data that has been aligned to a reference genome and includes chromosome coordinates. BAM files are compressed binary versions of SAM files. |  SAM, BAM
 
-## **HuBMAP Metadata:** 
+## HuBMAP Metadata
 
 ### *Definition of Metadata Levels*
 
@@ -71,7 +71,7 @@ This metadata field schema now resides in [Github](https://github.com/hubmapcons
 ### *Bulk RNA seq - specific Metadata Fields*
 This metadata field schema now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkrnaseq) where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
 
-## **HuBMAP Single-cell Sequence Raw File Structure:**
+## HuBMAP Single-cell Sequence Raw File Structure
 The raw sequencing data is recorded in a FASTQ file which contains sequenced reads and corresponding sequencing quality information. Every read in FASTQ format is stored in four lines as follows
 
 @HWI-ST1276:71:C1162ACXX:1:1101:1208:2458 1:N:0:CGATGT
@@ -90,7 +90,7 @@ Line 3 begins with a '+' character and is optionally followed by the same sequen
 
 Line 4 encodes the quality values for the bases in Line 2.
 
-## **HuBMAP QA/QC of raw (state0) data files:**
+## HuBMAP QA/QC of raw (state0) data files
 The bolded steps below constitute a series of standard RNA-seq data analysis workflow.
 
 Pre-alignment QC with FastQC [http://www.bioinformatics.babraham.ac.uk/projects/fastqc/](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/):
@@ -106,15 +106,15 @@ Pre-alignment QC with FastQC [http://www.bioinformatics.babraham.ac.uk/projects/
 |  0 |>20 (accuracy rate 99%)| FastQC| FastQC
 |  contamination_of_primers_and_adapters_in_sequencing_data || Library specific data on adapters need to be provided to the read-trimming tool like trimmomatic *(Bioinformatics. 2014 Aug 1; 30(15):2114-20.).*
 
-### *Definition:*
+### *Definition*
 Base quality scores: prediction of the probability of an error in base calling
 
 ### GC content: Percentage of bases that are either guanine (G) or cytosine (C)
 
-### K-mer overrepresentation: 
+### K-mer overrepresentation 
 Overrepresented k-mer sequences in a sequencing library
 
-### *Library-level Alignment QC:*
+### *Library-level Alignment QC*
 Note that this is not per-cell. Trimmed reads are mapped to reference genome.
 
 |**qc_metric** |  **Threshold**| **Method** | 
@@ -146,5 +146,5 @@ The protocol from NEB is summarized as follows and can be found here ([NEBNext®
 
 The detailed assay protocol can be found here: [dx.doi.org/10.17504/protocols.io.bftnjnme](https://dx.doi.org/10.17504/protocols.io.bftnjnme)
 
-## **For Additional Help:** 
+## For Additional Help
 Please contact: [Maigan Brusko](mailto:maigan@ufl.edu)
