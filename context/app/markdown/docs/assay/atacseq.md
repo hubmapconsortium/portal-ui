@@ -1,15 +1,13 @@
 # HuBMAP single cell & bulk ATAC Sequence Data
 
-### **Last Updated:** 6/23/2020
+### Last Updated: 6/23/2020
 
-## **Overview:** 
+## Overview
 This document details data levels, metadata fields, file structure, QA/QC thresholds, and data processing for bulk and single-cell ATAC sequencing assays.
 
-## **Description:** 
+## Description
 While bulk ATACseq (Assay for Transposase-Accessible Chromatin) reveals the average of chromatin architecture for cells comprising a tissue sample, single-cell ATACseq (scATACseq), employs per-cell and per-molecule barcoding to enable single-cell resolution of chromatin architecture. The ATACseq assay itself is the same for bulk and single-cell templates. ATAC-seq employs a genetically engineered Tn5 transposase that inserts sequencing adapters into accessible regions of the chromatin surface. Analysis of the sequences derived from the Tn5 sequencing adapters allows identification of those regions of the chromatin located on the cell-state-specific surface of the chromatin.
 Single cell, single molecule barcoding: This diagram of the [DropSeq](http://mccarrolllab.org/dropseq/) process (droplet barcoding of single cells) from the laboratory of Steve McCarroll at Harvard Medical School illustrates the general strategy for droplet-based barcoding:
-
-  
 
 ![](https://lh4.googleusercontent.com/GGPdys1X_4qmPHwQiaT8GQn5umfUlNAqi4x1Do4xGtsaIv7fakOngbJpYZ6P8Ik_YqPcf-E4nI4_VrGWNVfBu9OSGRCvoisY-N8VDAH61D4NI_JKGHo5C2u8aQG-a82a8TNtqdA)
 
@@ -28,9 +26,9 @@ In contrast to droplet barcoding methods, [SPLiT-Seq](https://science.sciencemag
 
 *Figure 2:* Diagram of the combinatorial index barcoding process.
 
-## **Definitions:** 
+## Definitions
 Some terms in this document may not be familiar to all HubMap users. The following table lists several:
-|**Term** |  **Definition**
+| **Term** | **Definition** |
 |--|--|
 |  UMI| Unique molecular identifier (not used for scATAC-seq)| 
 |  BAM| A Binary sequence alignment/map file. Contains the alignments for all reads against a reference genome. An equivalent text version of this file is called a SAM file.| 
@@ -50,103 +48,96 @@ Some terms in this document may not be familiar to all HubMap users. The followi
 |library_pcr_cycles_for_sample_index|This step adds the Sample Index N barcode shown below in Figure 3. This [reference](https://assets.ctfassets.net/an68im79xiti/7L2MU4QSWfrEgd2h13Efac/d5326fcdc6363aa04e4fdf11b2a1f2f8/CG000209_Chromium_NextGEM_SingleCell_ATAC_ReagentKits_v1.1_UserGuide_RevD.pdf) is from ChromiumNext GEM ATAC sequencing.| 
 
 
-## **HuBMAP ATAC Sequence Data States (Levels):**
+## HuBMAP ATAC Sequence Data States (Levels)
 The HuBMAP project provides data to the public in a variety of data states. A data state describes the amount of processing that has been done to the data. The term “data states” is similar in connotation to the term “data levels” which is used by the genomics community. However a data state will not necessarily imply linear processing of the data. The data states for ATAC seq data provided by the HuBMAP project are listed below:
 
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
-|  0 | Raw data: This is the raw sequence data (unprocessed) generated directly by the sequence instrument in files either with Phred quality scores (fastq)| FASTQ
-| 1 |  Aligned data: SAM files contain sequence data that has been aligned to a reference genome and includes chromosome coordinates. BAM files are compressed binary versions of SAM files | SAM, BAM
-| 2 |  Fragment file: For sc/sciATACseq, this is a compressed file containing the position of each Tn5 integration site in chromatin and the associated cell barcode. |  bgz
-| 3 |  Cell by bin matrix: for each genome bin (non-overlapping window of some number of base pairs, e.g. 1000, 5000, 10000), whether reads from that cell were aligned to that bin |  .csv
-| 4 |  Cell by peak matrix: filtered version of cell by bin matrix, only including bins which are significantly represented in this dataset across all cellsn |  .csv
-| 5 |  Annotation files: cell by gene matrix, Motif analysis, dimensionality reduction, clustering, transcription factor enrichment for one cell vs. rest |  .csv
+|  0 | Raw data: This is the raw sequence data (unprocessed) generated directly by the sequence instrument in files either with Phred quality scores (fastq)| FASTQ |
+| 1 |  Aligned data: SAM files contain sequence data that has been aligned to a reference genome and includes chromosome coordinates. BAM files are compressed binary versions of SAM files | SAM, BAM |
+| 2 |  Fragment file: For sc/sciATACseq, this is a compressed file containing the position of each Tn5 integration site in chromatin and the associated cell barcode. |  bgz |
+| 3 |  Cell by bin matrix: for each genome bin (non-overlapping window of some number of base pairs, e.g. 1000, 5000, 10000), whether reads from that cell were aligned to that bin |  .csv |
+| 4 |  Cell by peak matrix: filtered version of cell by bin matrix, only including bins which are significantly represented in this dataset across all cellsn |  .csv |
+| 5 |  Annotation files: cell by gene matrix, Motif analysis, dimensionality reduction, clustering, transcription factor enrichment for one cell vs. rest |  .csv |
 
-## **HuBMAP Metadata:** 
+## HuBMAP Metadata
 The scATCseq metadata.tsv now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq) where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
 
 The bulkATACseq metadata.tsv now resides at this [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkatacseq) link.
 
 
-## **HuBMAP Single-cell Sequence Raw File Structure**
+## HuBMAP Single-cell Sequence Raw File Structure
 The general folder/file structure of the data in the landing zone is:
 
-*Stanford snATACseq:*
+### Stanford snATACseq
 
 ![](https://lh6.googleusercontent.com/PBGsIlxyfItqprgTn_564mDA-ok-UpVoypbYc4kkDr3js6xt-234cZE_gaVeFO0RJvRlUYmHGb9nD0YKi_fdEW-tkldRJkJY48SlbB2oYkr8Dfp4Vn_0gMN_RZ7Leq-gktstV0I)
 
   
 
-*Stanford bulkATACseq:*
+### Stanford bulkATACseq
 
 ![](https://lh4.googleusercontent.com/bC3qtjDN55CK1xcZPGliZOzwJJUw49tN7bN0-agWOgeqfPfOnZCp9BqqLUGJFXwD0GrzU_diQUIyjSSmwQbiSz9fKDkXNebP5_IT9K2MiWk8GAAFwk40tdtIFY_jNgtuL_LfOhA)
 
   
   
 
-*CalTech sciATACseq:*
+### CalTech sciATACseq
 
 ![](https://lh3.googleusercontent.com/SZwxPujsIYwpndMA83QW3V3pvMx_Ny8m1Z5UO8d-JYTzGiJBCcJo5X25matnZXNSVd5hPP-R75WKB2u_nBlceAcY1lVp7ErbgAxMo7O_pb-T3dRoZY81O-k90moqAz7fhGLjqH4)
 
-  
-  
 
-*UCSD/Wash U: (SNARE-SEQ2)*
+
+### UCSD/Wash U: (SNARE-SEQ2)
 
  
 Snareseq-Transcriptomic, Dataset ID: HBM926.LQPP.353 (BUKMAP_20190529A_SNARE2-R)
 
-  
-
 ![](https://lh6.googleusercontent.com/rIOwykLYQNfF78VKUp9JjU8gwHZ319s8V3QV0AWt8rB2ukNd0XIhAiUPTm74TDpYMlSzWiKGvkSPCZqKskuUltAIF4ZpyUEgkCguA_GP7zds3jojOr_WR6CjudJpkYXe6edbc6k)
 
-  
 Snareseq-Epigenomic, Dataset ID: HBM283.TSZC.443 (BUKMAP_20190529A_SNARE2-AC)
 
 The general format of the sequence files are...
 ![](https://lh3.googleusercontent.com/mX9ICqLoPas2gCJJoKzwkoACdP-D5v7EFnN_u-yiYzYRn9MjxNm3UipDAu88s4y-ueYDZ-ywl1hcP09WmN_pn7dckU0_YU6in6B8n9WvltbchFNYhQD8I7erCss7W3XVUQAKUOA)
 
-## **HuBMAP QA/QC of raw (state0) data files:**
+## HuBMAP QA/QC of raw (state0) data files
 The bolded steps below constitute a series of standard ATAC-seq data analysis workflow.
 
-### *Pre-alignment QC:*
+### Pre-alignment QC:
 The steps involved include:
 |**qc_metric** |  **Threshold**| **Tool** | 
 |--|--|--|
-|  (1)average_base_quality_scores |>20 (accuracy rate 99%)| Something like FastQC
-| (1) gc_content || Something like FastQC
-|  sequence_length |>45 (encode)| Something like FastQC
-| (1) sequence_duplication|| Someting like FastQC
-| (1) k-mer_overrepresentation ||Something like FastQC
-|  (2)contamination_of_primers_and_adapters_in_sequencing_data ||Library specific data on adapters need to be provided to the read-trimming tool like trimmomatic *(Bioinformatics. 2014 Aug 1; 30(15):2114-20.)*.
+| (1)average_base_quality_scores |>20 (accuracy rate 99%)| Something like FastQC |
+| (1) gc_content | - | Something like FastQC |
+| sequence_length | >45 (encode)| Something like FastQC |
+| (1) sequence_duplication| - | Someting like FastQC |
+| (1) k-mer_overrepresentation | - | Something like FastQC |
+| (2)contamination_of_primers_and_adapters_in_sequencing_data | - | Library specific data on adapters need to be provided to the read-trimming tool like trimmomatic *(Bioinformatics. 2014 Aug 1; 30(15):2114-20.)*. |
 
 
 *(1) Computed by the HIVE.
 (2) TMCs will provide this information.*
-Definitions:
 
-*Base quality scores: prediction of the probability of an error in base calling*
-*GC content: Percentage of bases that are either guanine (G) or cytosine (C )*
-*K-mer overrepresentation: Overrepresented k-mer sequences in a sequencing library*
+> **Definitions**:
+> Base quality scores: prediction of the probability of an error in base calling
+> GC content: Percentage of bases that are either guanine (G) or cytosine (C )
+> K-mer overrepresentation: Overrepresented k-mer sequences in a sequencing library
 
-### *Library-level Alignment QC:*
+### Library-level Alignment QC
 Note that this is not per-cell. After read trimming, FastQC can be run again to ensure the successful removal or this is iterated. The output are trimmed-reads. Trimmed reads are mapped to reference genome, using Bowtie2 (with soft-clip strategy).
 
 |**qc_metric** |  **Threshold**| **Method** | 
 |--|--|--|
-|  unique_mapping_percent|Ideally > 95% (Encode) Acceptable > 80% (at least for bulk)| SAMtools/Picard https://www.encodeproject.org/atac-seq/
-|  duplicate_reads_percent || SAMtools/Picard
-|  median_fragment_length |>45 (Encode)| SAMtools/Picard
-|  gc_bias |Biased if variance of GC content is larger than 95% of confidence threshold of the baseline variance| SAMtools/Picard
-|  library_complexity|NRF>0.9, PBC1>0.9, and PBC2>3| https://www.encodeproject.org/data-standards/terms/#library
+|  unique_mapping_percent | Ideally > 95% (Encode) Acceptable > 80% (at least for bulk) | SAMtools/Picard https://www.encodeproject.org/atac-seq/ |
+|  duplicate_reads_percent | - | SAMtools/Picard |
+|  median_fragment_length | >45 (Encode)| SAMtools/Picard |
+|  gc_bias | Biased if variance of GC content is larger than 95% of confidence threshold of the baseline variance | SAMtools/Picard |
+|  library_complexity | NRF>0.9, PBC1>0.9, and PBC2>3 | https://www.encodeproject.org/data-standards/terms/#library |
 
+> Uniquely mapping % – Percentage of reads that map to exactly one location within the reference genome.
+> Duplicated reads % - Percentage of reads that map to the same genomic position and have the same unique molecular identifier (Encode)
 
-*Uniquely mapping % – Percentage of reads that map to exactly one location within the reference genome.*
-*Duplicated reads % - Percentage of reads that map to the same genomic position and have the same unique molecular identifier (Encode)*
-
-  
-
-*Post-alignment processing QC:(see Per cell QC metrics table below)*
+### Post-alignment processing QC (see Per cell QC metrics table below)
 -   Remove duplicated reads
 -   Remove low quality reads
 -   Remove mtDNA reads
@@ -154,13 +145,10 @@ Note that this is not per-cell. After read trimming, FastQC can be run again to 
     
 Once these “complicating” reads are removed. Tools like ATACseqQC/MultiQC (see refs in comment below) provide plots of fragment size distributions with decreasing and periodical peaks corresponding to nucleosome-free regions (NFR < 100bp) etc. There are other details like reads being shifted +4bp and -5bp for positive & negative strands etc. NFRs are interesting because fragments from there are enriched around transcription start sites (TSS) while NBR (nucleosome-bound regions)
 
-  
-
-### *Peak calling QC:*
+### Peak calling QC
 Peaks are accessible regions. And this is a major step in ATAC-seq data analysis. *Unclear whether we are planning to include this step in our standard pipeline* If we are, then the one tool for this is HMMRATAC Nucleic Acids Res. 2019 Sep 19; 47(16):e91.  Others are adaptations of Chip_seq, e.g., ENCODE uses MACS2 which is a count-based peak caller (basically is the read distribution different from a random background?). This is also where we can introduce biological replicates into the data analysis pipeline --- again TMC expert’s should weigh in. Typically one can pool raw reads or combine peaks from individual samples or do more sophisticated statistical models like mixture models.
-
   
-### *Final Step(s):*
+### Final Step(s)
 Interpretation (biological) of the peaks is the natural next step. These are typically done either at the peak or motif (specific sequence on the DNA that binds transcription factors) or nucleosome (typically longer fragments in ATAC-seq correspond to nucleosome fragments) or transcription factor footprint (in ATAC-seq footprint means a pattern where an active transcription factor bind to DNA and prevents Tn5 cleavage within the binding site) levels. Yet other things to be done would be e.g., integrating with RNA-seq data to eventually reconstrust regulatory networks (e.g.).
 
 Files submitted by the TMC’s will be validated in the following ways:
@@ -173,142 +161,112 @@ If files submitted fail this criteria, the recommended action by the HIVE is to 
 
 |**Per cell QC metrics** |  **Threshold Value/Range**| **Notes** | 
 |--|--|--|
-|  nucleosome_signal|> 0.1 = ok >0.2, <10 = good| ratio nucleosome free to mononucleosomal fragments
-|  blacklist_region_fragmentratio |<0.1 = ok <0.05 = good| [https://github.com/Boyle-Lab/Blacklist](https://github.com/Boyle-Lab/Blacklist)
-|  tss_enrichment_score |>2 = ok >6 = good| [https://www.encodeproject.org/data-standards/terms/](https://www.encodeproject.org/data-standards/terms/)
-|  fraction_of_fragments_in_peaks |>0.3 = ok >0.5 = good| peaks called per cluster
-|  total_unique_fragments|>1000 |Total number of unique fragments sequenced for the cell. Includes fragments that do not fall in peaks.
-|  total_number_of_fragments_in_peaks|>500 |similar to scRNA-seq total UMI count.
-|  mitochondrial_fragment_ratio|<0.1 = ok <0.05 = good |similar to total scRNA-seq mito gene UMI count
-|  does_each_cell_have_corresponding_pass_qc_rna_data|True/False|SNARE-seq unique. If each cell have corresponding pass QC RNA data
+|  nucleosome_signal | > 0.1 = ok >0.2, <10 = good | ratio nucleosome free to mononucleosomal fragments |
+|  blacklist_region_fragmentratio | <0.1 = ok <0.05 = good | [https://github.com/Boyle-Lab/Blacklist](https://github.com/Boyle-Lab/Blacklist)|
+|  tss_enrichment_score | >2 = ok >6 = good | [https://www.encodeproject.org/data-standards/terms/](https://www.encodeproject.org/data-standards/terms/) |
+|  fraction_of_fragments_in_peaks | >0.3 = ok >0.5 = good | peaks called per cluster |
+|  total_unique_fragments | >1000 | Total number of unique fragments sequenced for the cell. Includes fragments that do not fall in peaks. |
+|  total_number_of_fragments_in_peaks | >500 | similar to scRNA-seq total UMI count. |
+|  mitochondrial_fragment_ratio | <0.1 = ok <0.05 = good | similar to total scRNA-seq mito gene UMI count |
+|  does_each_cell_have_corresponding_pass_qc_rna_data | True/False | SNARE-seq unique. If each cell have corresponding pass QC RNA data |
 
-## **Questions/Clarifications on experimental design:**
-### *Replicates:*
- Typically this is not done in ATAC-seq expts. Anyone in the group doing it? Even if the answer is no uniformly we should use experimental_design and replicates indicators as metadata. NOTE: the pipeline will have to be modified depending on whether or not this is included.
+## Questions/Clarifications on experimental design
+### Replicates
+Typically this is not done in ATAC-seq expts. Anyone in the group doing it? Even if the answer is no uniformly we should use experimental_design and replicates indicators as metadata. NOTE: the pipeline will have to be modified depending on whether or not this is included.
 
+
+### Controls
+Again this is typically not done. BUT it is possible to replace transposase treatment by something like sonication (a non-specific fragmentation) to detect regions that are more challenging to sequence/align. Even if the answer is no uniformly we should use experimental_design and replicates indicators as metadata. NOTE: the pipeline will have to be modified depending on whether or not this is included.
+
+### PCR amplification
+The typical recommendation here is “few PCR cycles as possible”. I think we should report this as metadata.
   
 
-### *Controls:*
- Again this is typically not done. BUT it is possible to replace transposase treatment by something like sonication (a non-specific fragmentation) to detect regions that are more challenging to sequence/align. Even if the answer is no uniformly we should use experimental_design and replicates indicators as metadata. NOTE: the pipeline will have to be modified depending on whether or not this is included.
-
-  
-
-### *PCR amplification:*
- The typical recommendation here is “few PCR cycles as possible”. I think we should report this as metadata.
-
-  
-
-### *Sequencing depth:*
+### Sequencing depth
 Presume this is already included. For human samples the number I have seen in is 50 million mapped reads/sample. Now this is likely for bulk. This needs to be a metadata and we need to report this as a QC metric.
+ 
 
-  
+### Sequencing mode
+The typical recommendation is to do paired-end sequencing for ATAC-seq. Is anyone not doing this? Even if the answer is no uniformly we should use experimental_design and replicates indicators as metadata.  
 
-### *Sequencing mode:*
-The typical recommendation is to do paired-end sequencing for ATAC-seq. Is anyone not doing this? Even if the answer is no uniformly we should use experimental_design and replicates indicators as metadata.
-
-  
-
-### *Mitochondria:* 
+### Mitochondria
 Are any experimental methods being used (like e.g., in the OMNI-ATAC method) e.g., detergents, to remove mitochondria from samples prior to sequencing. We can potentially future proof by adding this metadata. NOTE: This again is going to affect pipeline choices.
 
-  
-
-### *Algorithms:*
+### Algorithms
  I think it is essential to indicate (include in this document) the parameter settings of the different algorithms used in the pipeline. BOTH from the TMC and the HIVE.
 -   Genome index source: HIVE should identify the source and version number of the genome index (typically people use pre-built reference indexes) … for alignment step the reference sequence needs to be indexed.
 -   Choice of aligner could depend on read length (bwa mem is good for longer reads (>75 bp), bowtie2 might be better for shorter reads although I have not compared comprehensively)
 -   Removing mitochondrial reads/genome: One can remove the mitochondrial reads from the reference genome before aligning (this will make the alignment numbers look bad), or, remove mitochondrial reads after alignment. Which one are we doing?
 -   Will we be performing PCR duplicate removal? Picard’s MarkDuplicates?
 -   Are we removing non-unique alignments? Using samtools?
-    
 
-  
-  
-
-### *Analysis & Files supplied by TMCs:*
+### Analysis & Files supplied by TMCs
 -   Sequence reads supplied: samples sequenced on multiple lanes may have separate files for each lane. Are they concatenated and submitted? IF replicates are used, care must be taken that these are NOT concatenated. These are potentially QC steps that the HIVE can undertake upon submission?
     
-### *Recommendations for pipelines:*
+### Recommendations for pipelines
 -   Do not remove mitochondrial reads
 -   Use constant reference genome and annotation file for all samples
 
-## **Terms defined in this document**
-### *Nucleosome signal* 
+## Terms defined in this document
+### Nucleosome signal
 The ratio of fragments between 147 bp and 294 bp in length (mononucleosome) to fragments < 147 bp (nucleosome-free). This score quantifies the fragment length periodicity characteristic of an ATAC-seq experiment.
 Implementation: [https://github.com/timoast/signac/blob/master/R/preprocessing.R#L587](https://github.com/timoast/signac/blob/master/R/preprocessing.R#L587)
 
-### *Blacklist region fragment ratio*
+### Blacklist region fragment ratio
 The ratio of fragment counts mapping to genomic blacklist regions to the total fragment count for the cell. Genomic blacklist regions are defined as regions in the genome that have anomalous, unstructured, or high signal in sequencing experiments independent of cell line or experiment. These regions are defined here: [https://github.com/Boyle-Lab/Blacklist](https://github.com/Boyle-Lab/Blacklist)
 
-### *Transcriptional start site (TSS) enrichment score*
+### Transcriptional start site (TSS) enrichment score
 From ENCODE: The TSS enrichment calculation is a signal to noise calculation. The reads around a reference set of TSSs are collected to form an aggregate distribution of reads centered on the TSSs and extending to 1000 bp in either direction (for a total of 2000bp). This distribution is then normalized by taking the average read depth in the 100 bps at each of the end flanks of the distribution (for a total of 200bp of averaged data) and calculating a fold change at each position over that average read depth. This means that the flanks should start at 1, and if there is high read signal at transcription start sites (highly open regions of the genome) there should be an increase in signal up to a peak in the middle. We take the signal value at the center of the distribution after this normalization as our TSS enrichment metric
 
 *Note:* ENCODE does not define what the “center of the distribution is”. We can define this as the middle 1000 bp (-500 to +500 centered at the TSS).
 
-### *Single-cell ATAC R implementation:*[https://github.com/timoast/signac/blob/master/R/preprocessing.R#L882](https://github.com/timoast/signac/blob/master/R/preprocessing.R#L882)
+### Single-cell ATAC R implementation
+[https://github.com/timoast/signac/blob/master/R/preprocessing.R#L882](https://github.com/timoast/signac/blob/master/R/preprocessing.R#L882)
 
-### *Bulk ATAC python implementation:*[https://github.com/ENCODE-DCC/atac-seq-pipeline/blob/master/src/encode_task_tss_enrich.py](https://github.com/ENCODE-DCC/atac-seq-pipeline/blob/master/src/encode_task_tss_enrich.py)
+### Bulk ATAC python implementation
+[https://github.com/ENCODE-DCC/atac-seq-pipeline/blob/master/src/encode_task_tss_enrich.py](https://github.com/ENCODE-DCC/atac-seq-pipeline/blob/master/src/encode_task_tss_enrich.py)
 
 Example:
-
 ![](https://lh6.googleusercontent.com/dT8WwwG0W-3iOss6A1bLrHKuPrQCEfZ8Ve4nvKxMf5dnN9woAhp_wHcaO4jEdJHvjSHeH-0mPmiN4WXbfWADRbhlavBaEFJXV9y_OO1mIIcXnNa3_5_j7xjswT0k2op8Y6pHSb0)
 
-### *Fraction of fragments in peaks:*
+### Fraction of fragments in peaks
 The fraction of all fragments sequenced for a cell that intersects an annotated peak.
 
-### *Total number of fragments:*
- The total number of fragments for the cell that mapped to the genome.
+### Total number of fragments
+The total number of fragments for the cell that mapped to the genome.
 
-### *Total number of fragments in peaks:*
+### Total number of fragments in peaks
 The total number of fragments for the cell that fall in an annotated peak.
 
-### *Mitochondrial fragment ratio:*
+### Mitochondrial fragment ratio
 The ratio of fragments mapped to the mitochondrial genome to the total number of mapped fragments for the cell.
 
-### * Ideas for automated scATAC-seq report:
-
+### Ideas for automated scATAC-seq report
 -   Plots of nucleosome fragment length histogram grouped by nucleosome score percentile (ie, 10 plots showing the histogram for groups of cells in the 1st-10th nucleosome score percentile)
-    
-
-Example:![](https://lh6.googleusercontent.com/uGSs3n9-vSrtdII_nhR-FJtEWckpWLEbwM5OIRacTC1SswpsOW15SbMXHPa5vpPydDtiHqZRtdzjC6wqzUwKu0dud4wGlQEgTe8VXUNKWP3C81y6YIX-iR_3IpaxIXv7A3mWmtI)
-
-  
-
--   Plots of TSS site accessibility for cells grouped by TSS enrichment score percentile
-    
 
 Example:
+![](https://lh6.googleusercontent.com/uGSs3n9-vSrtdII_nhR-FJtEWckpWLEbwM5OIRacTC1SswpsOW15SbMXHPa5vpPydDtiHqZRtdzjC6wqzUwKu0dud4wGlQEgTe8VXUNKWP3C81y6YIX-iR_3IpaxIXv7A3mWmtI)
 
+-   Plots of TSS site accessibility for cells grouped by TSS enrichment score percentile
+
+Example:
 ![](https://lh4.googleusercontent.com/vyUQvbL_wnJR2CSud7_Q0uWqeBQ8Oew8XmC7NHJqL5gS4R7qVcVxUpBuW6id3FB4YFU5JizDIUN3TR33IFPKKuorpLJK55TFFO-0DK38jzmCvfh82tJPiAujdLhBjRmBtR8XwUg)
 
 -   Violin plots or boxplots showing distribution of each QC metric for the entire dataset
-    
 
 Example:
-
 ![](https://lh5.googleusercontent.com/Ow5-NN8T16zo4x9H-sSBrAczwntJ1RjXGDOfndmSrfQWfxIw4nMMJ91-5OyFBhFZZJmKPsjScEoUTVt5NwqcKn0wqP-WmtFDpXweif7sBh5S3UxiGFvn9Lut6TW2Bdj_bA9jZi0)
 
 -   Number of cells passing minimum QC threshold recommendations, for each QC metric and for all metrics combined
     
 -   Plot sequencing saturation distribution (histogram of the number of times each fragment was sequenced)
-    
 
 Example:
-
 ![](https://lh5.googleusercontent.com/AIr9T5qaSoHFo1QG3FMQAXElxruCWHqwqVFa5eEhYDGByjDmi0dygH3nxQyBsb1iZ2IlUQ4WrHMmd1SQY5JkoFLwwF2LwfuRED9KBIZdwjcHD9mZfWIf6593etDvyPOAlcqCFnM)
 
 -   Additional QC plots for SNARE-seq: barcodes overlap between ATAC and RNA, example figure below:
-    
-
-  
 
 ![](https://lh6.googleusercontent.com/TFFsi0pXUVuMVAqMLcjj4Z7L_laBrrIyAC8D23cE4BMeXhS4wSKnU4H9Ubryj73WQdyXK8Zg22nYVjrgBx1QAGMCcc8o6CWdItexYEdy67sTHfu2KICH9knnoaNpVJZ2Be99enc)
-
-  
-  
-  
-  
-  
 
 Inputs:
 
@@ -321,9 +279,6 @@ Variable for each dataset:
 -   Count matrix (hdf5 or mtx)
     
 -   Peak bed file
-    
-
-  
 
 Constant for all data:
 
@@ -332,61 +287,48 @@ Constant for all data:
 -   Gene annotations (for TSS enrichment)
     
 -   Blacklist regions
-    
-
   
 
-### *Software:*
-Cellranger-atac
+### Software & Documentation
+#### Cellranger-atac
 Does mapping, some QC (for 10x Genomics scATAC-seq)
+- [https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/what-is-cell-ranger-atac](https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/what-is-cell-ranger-atac)
 
-  
-
-### *Software:* [https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/what-is-cell-ranger-atac](https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/what-is-cell-ranger-atac)
-
-  
-
-### *Signac package*
+#### Signac package
 Calculates QA/QC per-cell metrics, secondary analysis
+-  Documentation [https://satijalab.org/signac/articles/pbmc_vignette.html](https://satijalab.org/signac/articles/pbmc_vignette.html)
 
+#### CRAN
+- https://cran.r-project.org/web/packages/Signac/index.html](https://cran.r-project.org/web/packages/Signac/index.html)
 
-### *Documentation:*[https://satijalab.org/signac/articles/pbmc_vignette.html](https://satijalab.org/signac/articles/pbmc_vignette.html)
+#### Sinto package
+Generate fragment file from BAM file  
 
-### *CRAN:* [https://cran.r-project.org/web/packages/Signac/index.html](https://cran.r-project.org/web/packages/Signac/index.html)
+#### PyPI
+- [https://pypi.org/project/sinto/0.3.3/](https://pypi.org/project/sinto/0.3.3/)
+- Documentation: [https://timoast.github.io/sinto/basic_usage.html#create-scatac-seq-fragments-file](https://timoast.github.io/sinto/basic_usage.html#create-scatac-seq-fragments-file)  
 
-  
-
-### *Sinto package:*
-Generate fragment file from BAM file
-
-  
-
-### *PyPI:* [https://pypi.org/project/sinto/0.3.3/](https://pypi.org/project/sinto/0.3.3/)
-Documentation: [https://timoast.github.io/sinto/basic_usage.html#create-scatac-seq-fragments-file](https://timoast.github.io/sinto/basic_usage.html#create-scatac-seq-fragments-file)
-
-  
-
-### *Snap*
+#### Snap
 Does mapping, QA/QC, secondary analysis. Custom H5 file format.
-[htts://github.com/r3fang/SnapATAC](https://github.com/r3fang/SnapATAC)
-[https://github.com/r3fang/SnapTools](https://github.com/r3fang/SnapTools) (generates inputs)
+- [htts://github.com/r3fang/SnapATAC](https://github.com/r3fang/SnapATAC)
+- [https://github.com/r3fang/SnapTools](https://github.com/r3fang/SnapTools) (generates inputs)
 
 Do aggregated reads from all single cells closely recapitulate the open regions recognized by bulk ATAC-seq (how many cells do we need? 2000–50,000 cells)
 
   
 Benchmark of batch effect measuring methods for scRNA-seq: [https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9)
 
-|**Metadata Element** |  **Potential ValuesDefinition**| **Use case**
+| **Metadata Element** |  **Potential ValuesDefinition**| **Use case** |
 |--|--|--|
-|  Single-cell isolation|{FACS, microfluidics}, {FACS, microfluidics, nanowells}, {FACS}, {Droplet}, {Nanowells}, {None} None is for methods like sci-RNASeq| Batch effects| 
-|  2nd strand synthesis| TSO, {RNase H & DNA pol I}, {PolyA tailing and primer ligation}| | 
-|  Full-length cDNA synthesis?| {Yes}, {No}| | 
-|  Barcode addition| {Library PCR with barcoded primers}, {Barcoded RT primers}, {Barcoded TSOs}, {Barcoded RT primers and library PCR with barcoded primers}, {Ligation of barcoded RT primers}| | 
-|  Pooling before library|  {No}, {Yes}| 
-|  Library amplification| {PCR}, {In vitro transcription},| | 
-|  Gene coverage| {Full-length}, {3’}, {5’}Dn| | 
+|  Single-cell isolation | {FACS, microfluidics}, {FACS, microfluidics, nanowells}, {FACS}, {Droplet}, {Nanowells}, {None} None is for methods like sci-RNASeq | Batch effects| 
+|  2nd strand synthesis | TSO, {RNase H & DNA pol I}, {PolyA tailing and primer ligation} | - |
+|  Full-length cDNA synthesis?| {Yes}, {No}| | - |
+|  Barcode addition| {Library PCR with barcoded primers}, {Barcoded RT primers}, {Barcoded TSOs}, {Barcoded RT primers and library PCR with barcoded primers}, {Ligation of barcoded RT primers}| - | 
+|  Pooling before library | {No}, {Yes}| - |
+|  Library amplification | {PCR}, {In vitro transcription},| - | 
+|  Gene coverage| {Full-length}, {3’}, {5’}Dn | - | 
 
 TSO: template-switching oligonucleotide; FACS: fluorescence-activated cell sorting; PCR: polymerase chain reaction; DNA pol I: DNA polymerase I; cDNA: complimentary DNA; RT: reverse transcription; RNase H: ribuc
 
-## **For Additional Help:**
-Please contact: [Blue Lake](mailto:b1lake@eng.ucsd.edu)
+## For Additional Help
+Please contact [Blue Lake](mailto:b1lake@eng.ucsd.edu)
