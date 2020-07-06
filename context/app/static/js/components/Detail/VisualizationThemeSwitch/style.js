@@ -1,14 +1,13 @@
 import styled from 'styled-components';
-import Grid from '@material-ui/core/Grid';
+import ToggleButton from '@material-ui/lab/ToggleButton';
 
-const StyledSwitchGrid = styled(Grid)`
-  flex-wrap: nowrap;
-  justify-content: center;
-`;
-const StyledSwitchGridItem = styled(Grid)`
-  label {
-    display: inline-block;
+const StyledToggleButton = styled(ToggleButton)`
+  display: inline-block;
+  background-color: #ffffff;
+  border: 0px;
+  svg {
+    vertical-align: middle;
   }
 `;
 
-export { StyledSwitchGrid, StyledSwitchGridItem };
+export { StyledToggleButton };

@@ -1,27 +1,22 @@
 import React from 'react';
-import Switch from '@material-ui/core/Switch';
-import { StyledSwitchGrid, StyledSwitchGridItem } from './style';
+import WbSunnyIcon from '@material-ui/icons/WbSunny';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+
+import { StyledToggleButton } from './style';
+import 'vitessce/dist/es/production/static/css/index.css';
 
 function VisualizationThemeSwitch(props) {
   const { theme, onChange } = props;
   return (
-    <StyledSwitchGrid component="div" container alignItems="center" spacing={1}>
-      <StyledSwitchGridItem item>
-        <label htmlFor="visualization-theme-switch">Light</label>
-      </StyledSwitchGridItem>
-      <StyledSwitchGridItem item>
-        <Switch
-          checked={theme === 'dark'}
-          onChange={onChange}
-          name="visualization-theme-switch"
-          id="visualization-theme-switch"
-          size="small"
-        />
-      </StyledSwitchGridItem>
-      <StyledSwitchGridItem item>
-        <label htmlFor="visualization-theme-switch">Dark</label>
-      </StyledSwitchGridItem>
-    </StyledSwitchGrid>
+    <ToggleButtonGroup value={theme} exclusive onChange={onChange} size="small">
+      <StyledToggleButton disableRipple value="light">
+        <WbSunnyIcon color={theme === 'light' ? 'primary' : 'secondary'} />
+      </StyledToggleButton>
+      <StyledToggleButton disableRipple value="dark">
+        <Brightness2Icon color={theme !== 'light' ? 'primary' : 'secondary'} />
+      </StyledToggleButton>
+    </ToggleButtonGroup>
   );
 }
 
