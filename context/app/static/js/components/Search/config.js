@@ -39,7 +39,7 @@ export const sampleConfig = {
 
 export const datasetConfig = {
   filters: [
-    filter('data_types', 'Data type'),
+    filter('data_types', 'Data Type'),
     filter('origin_sample.mapped_organ', 'Organ'),
     filter('source_sample.mapped_specimen_type', 'Specimen Type'),
     filter('mapped_status', 'Status'),
