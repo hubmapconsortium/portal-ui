@@ -1,13 +1,13 @@
 
 
-# **HuBMAP seqFISH**
+# HuBMAP seqFISH
 
-### **Last Updated:** 6/16/2020
+### Last Updated 6/16/2020
 
-## **Overview:** 
+## Overview 
  This document describes the seqFISH assay, data files & levels, file structure, metadata fields, QA/QC thresholds, and HIVE data processing.
  
-## **Description:** 
+## Description 
 seqFISH technology allows in situ imaging of multiple mRNAs using barcoding and fluorophore-labelled barcode readout-probes. [seqFISH+](https://www.nature.com/articles/s41586-019-1049-y) is a highly-multiplexed version of seqFISH that can resolve the identities and subcellular localization of thousands of gene transcripts. This is accomplished by expanding each standard fluorescent dye to dozens of assigned pseudocolors. The strategy is to first hybridize mRNA barcode probes to each mRNA in situ. Each mRNA barcode probe has 4 barcode regions numbered I-IV, as shown in Figure 1 on the left.
 ![](https://lh5.googleusercontent.com/wzByYYfoyKRTdC19wPEZlXKKHtyyoTXT2RgalNzh34xtPFia6TqjLrvOhsi2u2HFtcNeHAP3hENCe0BoJPn4TMmfg0QOUw9t2PEp3I3NuBfgt39aFk6ted1Gxg9ssuTb0g9OHrc)
 >Each barcode region is decoded through sequential hybridization & imaging of readout-probes, 20 per channel.  Readout-probe signals can then be assigned pseudocolors as proxies for hybridization-step-order.
@@ -28,7 +28,7 @@ Decoding a barcode region: The readout-probes are labeled with one of 3 fluoresc
 
 The complete barcode for each mRNA is deduced from the sequence of pseudocolor numbers for regions I-III (region IV is an additional round used for error correction). A total of 8,000 (203) mRNA barcodes per fluorophore detection channel allows a grand total of 24,000 unique mRNA barcodes to be interrogated. The composite images reveal both the identities and subcellular localization of up to 24,000 mRNA molecules.
 
-## **Definitions:** 
+## Definitions 
 There are a variety of terms used in this document that may not be familiar to all researchers wanting to make use of the HubMap data. The following figures illustrate several of these terms:
 
   
@@ -45,7 +45,7 @@ A single Field of View or tile is imaged over many hybridization rounds with thr
 
 *Figure 5:* Single tile images for one hybridization round, where spots are retrieved in the channels, while the DAPI channel is used for alignment.
 
-## **HuBMAP seqFISH Data States (Levels):**
+## HuBMAP seqFISH Data States (Levels)
 The HuBMAP project provides data levels for each seqFISH experiment.
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
@@ -54,10 +54,10 @@ The HuBMAP project provides data levels for each seqFISH experiment.
 | 2 |  Segmentation:  |  TIFF
 | 3 |  Annotation (Cells and Structures): Interpretation  |  TIFF, ZARR, CSV
 
-## **HuBMAP Metadata:** 
+## HuBMAP Metadata 
 All HuBMAP seqFISH data will have searchable metadata fields. The metadata.tsv can be downloaded from this [Github link](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/seqfish) which also contains field descriptions, and required formats.
 
-## **Associated JSON Files:**
+## Associated JSON Files
 In addition, all HuBMAP seq data will have an associated json file which may contain the following additional metadata fields:
 
 |**Field** |  **Definition**| **Example**
@@ -121,7 +121,7 @@ In addition, all HuBMAP seq data will have an associated json file which may con
 |  "chromatic_aberration_offsets"| Offsets to compensate for chromatic aberration shifts in each channel| [ [ “CH", "X", "Y", "Z" ], [ “1", "1.2323", "-0.5433", "1.2122"], [“2”, "1.032", "-0.7454", "0.742" ], [ "3", "2.322", "-0342", "2.334"] ]
 
 
-## **HuBMAP seqFISH Raw File Structure**
+## HuBMAP seqFISH Raw File Structure
 1. The general structure of the stage 0 (raw) data produced by seqFISH shown in the image below.
 ![](https://lh6.googleusercontent.com/vTtZ9ef0WRV0jLuWmU7RjglIIMZPPvGcze9lnMQbdd-G7wdbxyvqNhRq7DfciuZ2qmslwVbSBqOVtMr8VlgiU4JQaFr5_2Lw4oKTtlcbAuO5_1mSVMeHLrrXGNKO_OAlqfg3upU)
 
@@ -136,7 +136,7 @@ In addition, all HuBMAP seq data will have an associated json file which may con
 |  Cell segmentation mask | *segmentation_mask| Example: [https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FStanford%20TMC%2F26191c2719339be0c3fa6dc8a7ba3550%2F20190514_HUBMAP_CL1_processed%2F](https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FStanford%20TMC%2F26191c2719339be0c3fa6dc8a7ba3550%2F20190514_HUBMAP_CL1_processed%2F)
 |  count_matrix | *count_matrix| Example
 
-## **HuBMAP QA/QC of raw (state0) data files:**
+## HuBMAP QA/QC of raw (state0) data files
 1.  Files submitted by the TMC’s will be validated in the following ways:
    
 - Checked for zero length files
@@ -153,10 +153,10 @@ If files submitted fail this criteria, the recommended action by the HIVE is to 
     
 4.  Calculate signal retention from the first hybridization cycle to the last hybridization cycle. The last cycle will always be used as a repeat of the first cycle. It is recommended that the signal retention for spots stay above 50%.
 
-## **seqFISH Data Processing by the HIVE:**
+## seqFISH Data Processing by the HIVE
 The HuBMAP program is developing a standardized open-source pipeline for seqFISH based assay in the coming year
 
-## **Terms defined in this document**
+## Terms defined in this document
 |**Term** |  **Definition**
 |--|--|
 |  Intensity| Detector Counts| 
@@ -181,5 +181,5 @@ The HuBMAP program is developing a standardized open-source pipeline for seqFISH
 | Field of View| Angle through which light can reach the detector. Available imaging area without stage movement.| 
 | Background Subtraction| Subtraction of autofluorescence intensity from total intensity.| 
 
-## **For Additional Help:** 
+## For Additional Help 
 Please contact:[Nico Pierson](mailto:nicogpt@caltech.edu)
