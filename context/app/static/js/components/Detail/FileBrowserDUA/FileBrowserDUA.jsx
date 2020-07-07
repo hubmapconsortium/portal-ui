@@ -61,7 +61,9 @@ function FileBrowserDUA(props) {
         <Button onClick={handleClose} autoFocus>
           Disagree
         </Button>
-        <Button onClick={handleAgree}>Agree</Button>
+        <Button onClick={handleAgree} disabled={!isChecked}>
+          Agree
+        </Button>
       </DialogActions>
     </Dialog>
   );
