@@ -6,14 +6,7 @@ function ConditionalLink(props) {
   const { hasAgreedToDUA, agreeToDUA, href, children } = props;
   if (hasAgreedToDUA) {
     return (
-      <LightBlueLink
-        variant="body1"
-        target="_blank"
-        rel="noopener noreferrer"
-        download
-        underline="none"
-        href={href}
-      >
+      <LightBlueLink variant="body1" target="_blank" rel="noopener noreferrer" download underline="none" href={href}>
         {children}
       </LightBlueLink>
     );
