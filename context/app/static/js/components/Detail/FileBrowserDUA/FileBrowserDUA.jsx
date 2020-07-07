@@ -4,6 +4,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 function FileBrowserDUA(props) {
   const { isOpen, handleAgree, handleClose } = props;
@@ -39,14 +41,16 @@ function FileBrowserDUA(props) {
             <a href="https://hubmapconsortium.org/policies/">https://hubmapconsortium.org/policies/</a>.
           </p>
         </DialogContentText>
+        <FormControlLabel
+          control={<Checkbox checked={false} onChange={() => {}} />}
+          label="I have read and agree to the above data use guidelines."
+        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary" autoFocus>
+        <Button onClick={handleClose} autoFocus>
           Disagree
         </Button>
-        <Button onClick={handleAgree} color="primary">
-          Agree
-        </Button>
+        <Button onClick={handleAgree}>Agree</Button>
       </DialogActions>
     </Dialog>
   );
