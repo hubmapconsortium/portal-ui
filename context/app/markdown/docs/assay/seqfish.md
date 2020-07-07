@@ -10,40 +10,36 @@
 ## Description 
 seqFISH technology allows in situ imaging of multiple mRNAs using barcoding and fluorophore-labelled barcode readout-probes. [seqFISH+](https://www.nature.com/articles/s41586-019-1049-y) is a highly-multiplexed version of seqFISH that can resolve the identities and subcellular localization of thousands of gene transcripts. This is accomplished by expanding each standard fluorescent dye to dozens of assigned pseudocolors. The strategy is to first hybridize mRNA barcode probes to each mRNA in situ. Each mRNA barcode probe has 4 barcode regions numbered I-IV, as shown in Figure 1 on the left.
 ![](https://lh5.googleusercontent.com/wzByYYfoyKRTdC19wPEZlXKKHtyyoTXT2RgalNzh34xtPFia6TqjLrvOhsi2u2HFtcNeHAP3hENCe0BoJPn4TMmfg0QOUw9t2PEp3I3NuBfgt39aFk6ted1Gxg9ssuTb0g9OHrc)
->Each barcode region is decoded through sequential hybridization & imaging of readout-probes, 20 per channel.  Readout-probe signals can then be assigned pseudocolors as proxies for hybridization-step-order.
 
-*Figure 1:* Each mRNA is barcoded with a combination of 3 barcode regions, numbered I-III (region IV is used for error correction). In turn, each barcode region is decoded by hybridization of 1 of 20 possible readout barcodes per channel (203 = 8000 unique barcodes per channel) X 3 channels (24,000 unique barcodes). The complete barcode for each mRNA is deduced from the sequence of readout barcodes for regions I-III.
+*Figure 1: Each mRNA is barcoded with a combination of 3 barcode regions, numbered I-III (region IV is used for error correction). In turn, each barcode region is decoded by hybridization of 1 of 20 possible readout barcodes per channel (203 = 8000 unique barcodes per channel) X 3 channels (24,000 unique barcodes). The complete barcode for each mRNA is deduced from the sequence of readout barcodes for regions I-III.*
 
-![](https://lh3.googleusercontent.com/oHCVhh_9ZeoqRhEcflRjARPAdtxRCs1-lC2W4X_WNX-fBFYDC0tbkL2hDrrXVvvUGc0BVF-0eaYoi4jr0XRNz_QbcrDB4UWQjSnIHQNrtxkS97ZBnKQkkfYilBaGxOFzz6CFh-s)
-<br><br>
-*Figure 2:* Pseudocolor.
+Each barcode region is decoded through sequential hybridization & imaging of readout-probes, 20 per channel.  Readout-probe signals can then be assigned pseudocolors as proxies for hybridization-step-order.
 
-Decoding a barcode region: The readout-probes are labeled with one of 3 fluorescent tags: Alexa Fluor 488, Cy3b and Alexa Fluor 647. Twenty mRNA readout-probes are designed for each barcode region for each fluorophore channel. When employing 3 fluorophore channels, a total of 60 readout-probes (mRNAs) can be screened per decoding cycle. Readout-probes are hybridized and imaged one probe at a time such that each of the 20 readout-probes can then be assigned a unique pseudocolor (Figure 2) reflecting the hybridization-step order, as shown in Figure 3 below. Pseudocolor is a proxy for hybridization-step-order, a number from 1-20.
+
+Decoding a barcode region: The readout-probes are labeled with one of 3 fluorescent tags: Alexa Fluor 488, Cy3b and Alexa Fluor 647. Twenty mRNA readout-probes are designed for each barcode region for each fluorophore channel. When employing 3 fluorophore channels, a total of 60 readout-probes (mRNAs) can be screened per decoding cycle. Readout-probes are hybridized and imaged one probe at a time such that each of the 20 readout-probes can then be assigned a unique pseudocolor reflecting the hybridization-step order, as shown in Figure 2 below. Pseudocolor is a proxy for hybridization-step-order, a number from 1-20.
 
   
 
 ![](https://lh4.googleusercontent.com/7h0kWTfDYU_4SjiBp7aXGv6rYb7Xpt1tBg3r1opra4FpZ9mPde_nMvNy8QueLyLZOwH0JiJdgRBtUX60f39U6b5K8vYP_lX30CPnEZdDKnqYUXnYE5c3-iJ27KLg4tin1ZxC99o)
 
-*Figure 3.* Each barcode region is decoded by sequential hybridization & imaging of 20 readout-probes. The signal from each readout-probe can then be assigned a unique pseudocolor (a number from 1-20) representing hybridization-step-order.
+*Figure 2. Each barcode region is decoded by sequential hybridization & imaging of 20 readout-probes. The signal from each readout-probe can then be assigned a unique pseudocolor (a number from 1-20) representing hybridization-step-order.*
 
 The complete barcode for each mRNA is deduced from the sequence of pseudocolor numbers for regions I-III (region IV is an additional round used for error correction). A total of 8,000 (203) mRNA barcodes per fluorophore detection channel allows a grand total of 24,000 unique mRNA barcodes to be interrogated. The composite images reveal both the identities and subcellular localization of up to 24,000 mRNA molecules.
 
 ## Definitions 
-There are a variety of terms used in this document that may not be familiar to all researchers wanting to make use of the HubMap data. The following figures illustrate several of these terms:
-
-  
+There are a variety of terms used in this document that may not be familiar to all researchers wanting to make use of the HubMap data. The following figures illustrate several of these terms:  
 
 ![](https://lh6.googleusercontent.com/H_6Z0jlyG_UpvbDpp9F199714CJphXnOGVArCtImsTLkHa06P2A4NmObkHKb72bPd6dZ_czctwgoe5NeV30SuXnafA6QHHywS59agDAQv-dzW_Zs9K5y9muTaoLpj97MFJuxQyE)
 
-*Figure 4:* Slide Explorer Image is the user defined image on the slide.
+*Figure 3: Slide Explorer Image is the user defined image on the slide.*
 
-The user defined slide will have multiple tiles as numbered in Figure 4. Each of these tiles are considered a single Field of View composed of a 2048 by 2048 pixel image. Tiles are selected by the experiment user manually without overlap. The coordinates of these tiles are used as the global reference to assemble all of the spots from each local tile.
+The user defined slide will have multiple tiles as numbered in Figure 3 above. Each of these tiles are considered a single Field of View composed of a 2048 by 2048 pixel image. Tiles are selected by the experiment user manually without overlap. The coordinates of these tiles are used as the global reference to assemble all of the spots from each local tile.
 
-A single Field of View or tile is imaged over many hybridization rounds with three channels for target probes and a final channel of DAPI.
+A single Field of View or tile is imaged over many hybridization rounds with three channels for target probes and a final channel of DAPI (Figure 4).
 
 ![](https://lh3.googleusercontent.com/L-9j4_4GQucGiyvsyKVNJqxVsB1DreP2w-pTU1F-6B4mF2IbEtfXx80Rof0zjNNhV25hs2fdhDqzc1lbuz1uojfDvWOFcsf4X3k3tpdxHSgqki2DDcvVlCURT1fn-2QxlGIPYDs)![](https://lh5.googleusercontent.com/jW-1zdEs49j9TgCRIoGeI7zFu7qW6-gRviMGh7Njg0_M4AxXJh9qCpZFHP_le85Sh6sAsv03ulexL8PzPXHCz5rAje9TsWSNJv3bwQ2PaMIuyX9iF-iWpXZOzHNB8KS3kgXabq0)
 
-*Figure 5:* Single tile images for one hybridization round, where spots are retrieved in the channels, while the DAPI channel is used for alignment.
+*Figure 4: Single tile images for one hybridization round, where spots are retrieved in the channels, while the DAPI channel is used for alignment.*
 
 ## HuBMAP seqFISH Data States (Levels)
 The HuBMAP project provides data levels for each seqFISH experiment.
