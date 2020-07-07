@@ -7,8 +7,9 @@ import FileBrowserDUA from '../FileBrowserDUA';
 
 function FileBrowser(props) {
   const { files } = props;
+  const localStorageKey = 'has_agreed_to_DUA';
   const [fileTree, setFileTree] = useState({});
-  const [hasAgreedToDUA, agreeToDUA] = useState(false);
+  const [hasAgreedToDUA, agreeToDUA] = useState(localStorage.getItem(localStorageKey));
   const [isDialogOpen, setDialogOpen] = React.useState(false);
 
   useEffect(() => {
@@ -18,11 +19,11 @@ function FileBrowser(props) {
 
   function handleDUAAgree() {
     agreeToDUA(true);
+    localStorage.setItem(localStorageKey, true);
     setDialogOpen(false);
   }
 
   function handleDUAClose() {
-    agreeToDUA(false);
     setDialogOpen(false);
   }
 
