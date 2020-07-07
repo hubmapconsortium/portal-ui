@@ -5,7 +5,7 @@ import FileBrowserFile from '../FileBrowserFile';
 import { Column } from './style';
 
 function FileBrowserNode(props) {
-  const { fileSubTree, depth, hasAgreedToDUA, agreeToDUA } = props;
+  const { fileSubTree, depth, hasAgreedToDUA, openDUA } = props;
   return Object.entries(fileSubTree).map(([k, v]) => {
     // if the object contains array of files, display all files
     if (k === 'files') {
@@ -17,7 +17,7 @@ function FileBrowserNode(props) {
               fileObj={file}
               depth={depth}
               hasAgreedToDUA={hasAgreedToDUA}
-              agreeToDUA={agreeToDUA}
+              openDUA={openDUA}
             />
           ))}
         </Column>
@@ -26,7 +26,7 @@ function FileBrowserNode(props) {
     // if the object contains additional directories, display dir and continue down
     return (
       <FileBrowserDirectory key={`${k}-${depth}`} dirName={k.slice(0, -1)} depth={depth}>
-        <FileBrowserNode fileSubTree={v} depth={depth + 1} hasAgreedToDUA={hasAgreedToDUA} agreeToDUA={agreeToDUA} />
+        <FileBrowserNode fileSubTree={v} depth={depth + 1} hasAgreedToDUA={hasAgreedToDUA} openDUA={openDUA} />
       </FileBrowserDirectory>
     );
   });

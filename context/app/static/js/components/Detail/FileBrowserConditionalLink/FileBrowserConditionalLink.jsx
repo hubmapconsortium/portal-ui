@@ -3,7 +3,7 @@ import React from 'react';
 import { StyledLink } from './style';
 
 function ConditionalLink(props) {
-  const { hasAgreedToDUA, agreeToDUA, href, children } = props;
+  const { hasAgreedToDUA, openDUA, href, children } = props;
   if (hasAgreedToDUA) {
     return (
       <StyledLink variant="body1" target="_blank" rel="noopener noreferrer" download underline="none" href={href}>
@@ -14,8 +14,7 @@ function ConditionalLink(props) {
   return (
     <StyledLink
       onClick={() => {
-        // eslint-disable-next-line no-alert
-        agreeToDUA(window.confirm('Agree to Data Use Agreement?'));
+        openDUA();
       }}
       variant="body1"
       underline="none"
