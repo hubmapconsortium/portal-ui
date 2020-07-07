@@ -45,7 +45,7 @@ function ProvTable(props) {
                 uuid={item['hubmap:uuid']}
                 id={item['hubmap:displayDOI']}
                 entityType={item['prov:type']}
-                disabled={uuid === item['hubmap:uuid']}
+                isCurrentEntity={uuid === item['hubmap:uuid']}
               />
             ))
           ) : (

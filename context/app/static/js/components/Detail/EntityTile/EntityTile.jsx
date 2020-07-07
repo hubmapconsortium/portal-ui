@@ -15,18 +15,18 @@ import {
 } from './style';
 
 function EntityTile(props) {
-  const { uuid, entityType, id } = props;
+  const { uuid, entityType, id, isCurrentEntity } = props;
   const { elasticsearchEndpoint } = useContext(DetailContext);
 
   const entityData = useEntityData(uuid, elasticsearchEndpoint);
 
   return entityData ? (
     <a href={`/browse/${entityType.toLowerCase()}/${uuid}`}>
-      <StyledPaper>
+      <StyledPaper $isCurrentEntity={isCurrentEntity}>
         <FixedWidthDiv>
-          {entityType === 'Dataset' && <StyledDatasetIcon color="primary" />}
-          {entityType === 'Donor' && <StyledDonorIcon color="primary" />}
-          {entityType === 'Sample' && <StyledSampleIcon color="primary" />}
+          {entityType === 'Dataset' && <StyledDatasetIcon />}
+          {entityType === 'Donor' && <StyledDonorIcon />}
+          {entityType === 'Sample' && <StyledSampleIcon />}
           <div style={{ minWidth: 0, flexGrow: 1 }}>
             <Typography component="h4" variant="h6">
               {id}
