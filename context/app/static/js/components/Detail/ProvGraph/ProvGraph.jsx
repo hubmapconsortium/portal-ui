@@ -20,20 +20,37 @@ function ProvGraph(props) {
         return entity ? `${entity['prov:type']} - ${entity['hubmap:displayDOI']}` : id;
       },
       renderDetailPane: (prov) => {
-        const href = `/browse/${prov['prov:type'].toLowerCase()}/${prov['hubmap:uuid']}`;
-        return (
-          <FlexPaper>
+        const typeEl =
+          'prov:type' in prov ? (
             <SectionItem label="Type">
               <StyledTypography variant="body1">{prov['prov:type']}</StyledTypography>
             </SectionItem>
+          ) : (
+            <SectionItem label="Type">
+              <StyledTypography variant="body1">Root</StyledTypography>
+            </SectionItem>
+          );
+        const idEl =
+          'prov:type' in prov && ['Donor', 'Sample', 'Dataset'].includes(prov['prov:type']) ? (
             <SectionItem label="ID" ml>
               <StyledTypography variant="body1">
-                <StyledLink href={href}>{prov['hubmap:displayDOI']}</StyledLink>
+                <StyledLink href={`/browse/${prov['prov:type'].toLowerCase()}/${prov['hubmap:uuid']}`}>
+                  {prov['hubmap:displayDOI']}
+                </StyledLink>
               </StyledTypography>
             </SectionItem>
+          ) : null;
+        const createdEl =
+          'prov:generatedAtTime' in prov ? (
             <SectionItem label="Created" ml>
               <StyledTypography variant="body1">{prov['prov:generatedAtTime']}</StyledTypography>
             </SectionItem>
+          ) : null;
+        return (
+          <FlexPaper>
+            {typeEl}
+            {idEl}
+            {createdEl}
           </FlexPaper>
         );
       },
