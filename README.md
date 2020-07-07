@@ -89,6 +89,7 @@ and tag a release for github, just run:
 ```
 ./push.sh
 ```
+and merge the release branch to master in github.
 
 Then, to redeploy `dev` and `test`:
 ```
