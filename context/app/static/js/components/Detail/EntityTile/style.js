@@ -23,9 +23,9 @@ const StyledDonorIcon = styled(DonorIcon)`
 `;
 
 const StyledPaper = styled(Paper)`
-  padding: 10px 10px;
   margin-bottom: ${(props) => props.theme.spacing(3)}px;
   box-shadow: ${(props) => props.theme.shadows[1]};
+
   ${(props) =>
     props.$isCurrentEntity &&
     css`
@@ -36,16 +36,27 @@ const StyledPaper = styled(Paper)`
         color: #ffffff;
       }
     `}
+`;
 
+const HoverOverlay = styled.div`
   &:hover {
     box-shadow: ${(props) => props.theme.shadows[8]};
     background-color: rgba(0, 0, 0, 0.04);
   }
+
+  ${(props) =>
+    props.$isCurrentEntity &&
+    css`
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+      }
+    `}
 `;
 
 const FixedWidthDiv = styled.div`
   display: flex;
   width: 300px;
+  padding: 10px 10px;
 `;
 
 const Flex = styled.div`
@@ -68,6 +79,7 @@ export {
   StyledSampleIcon,
   StyledDonorIcon,
   StyledPaper,
+  HoverOverlay,
   FixedWidthDiv,
   Flex,
   TruncatedTypography,
