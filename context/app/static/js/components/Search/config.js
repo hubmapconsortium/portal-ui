@@ -39,7 +39,7 @@ export const sampleConfig = {
 
 export const datasetConfig = {
   filters: [
-    filter('data_types', 'Data Type'),
+    filter('mapped_data_types', 'Data Type'),
     filter('origin_sample.mapped_organ', 'Organ'),
     filter('source_sample.mapped_specimen_type', 'Specimen Type'),
     filter('mapped_status', 'Status'),
@@ -49,7 +49,7 @@ export const datasetConfig = {
   fields: [
     field('display_doi', 'ID'),
     field('donor.group_name', 'Group'),
-    field('data_types', 'Data Types'),
+    field('mapped_data_types', 'Data Types'),
     field('origin_sample.mapped_organ', 'Organ'),
     field('mapped_status', 'Status'),
     field('mapped_last_modified_timestamp', 'Last Modified'),
