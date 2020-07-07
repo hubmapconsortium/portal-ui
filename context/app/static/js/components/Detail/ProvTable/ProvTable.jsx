@@ -1,10 +1,12 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import ListItemText from '@material-ui/core/ListItemText';
-import { CenteredListSubheader, FlexContainer, ListColumn } from './style';
+import Typography from '@material-ui/core/Typography';
+
+import { FlexContainer } from './style';
+import EntityTile from '../EntityTile';
 
 function ListItemLink(props) {
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -34,34 +36,25 @@ function ProvTable(props) {
   return (
     <FlexContainer>
       {types.map((type, i) => (
-        <React.Fragment key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
-          <ListColumn
-            subheader={
-              <CenteredListSubheader component="div" color="primary">
-                {typesToSplit[i]}
-              </CenteredListSubheader>
-            }
-          >
-            <Divider />
-            {type && type.length ? (
-              type.map((item) => (
-                <ListItemLink
-                  key={item['hubmap:uuid']}
-                  href={`/browse/dataset/${item['hubmap:uuid']}`}
-                  disabled={uuid === item['hubmap:uuid']}
-                >
-                  <ListItemText primary={item['hubmap:displayDOI']} />
-                </ListItemLink>
-              ))
-            ) : (
-              <DerivedLink uuid={uuid} type={typesToSplit[i]} />
-            )}
-            {typesToSplit[i] === entity_type && entity_type !== 'Donor' && (
-              <DerivedLink uuid={uuid} type={typesToSplit[i]} />
-            )}
-          </ListColumn>
-          {i < types.length - 1 && <Divider orientation="vertical" flexItem />}
-        </React.Fragment>
+        <div key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
+          <Typography variant="h5">{typesToSplit[i]}</Typography>
+          {type && type.length ? (
+            type.map((item) => (
+              <EntityTile
+                key={item['hubmap:uuid']}
+                uuid={item['hubmap:uuid']}
+                id={item['hubmap:displayDOI']}
+                entityType={item['prov:type']}
+                disabled={uuid === item['hubmap:uuid']}
+              />
+            ))
+          ) : (
+            <DerivedLink uuid={uuid} type={typesToSplit[i]} />
+          )}
+          {typesToSplit[i] === entity_type && entity_type !== 'Donor' && (
+            <DerivedLink uuid={uuid} type={typesToSplit[i]} />
+          )}
+        </div>
       ))}
     </FlexContainer>
   );
