@@ -3,9 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
 
-import { FlexContainer } from './style';
+import { FlexContainer, EntityColumnTitle } from './style';
 import EntityTile from '../EntityTile';
 
 function ListItemLink(props) {
@@ -37,7 +36,7 @@ function ProvTable(props) {
     <FlexContainer>
       {types.map((type, i) => (
         <div key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
-          <Typography variant="h5">{typesToSplit[i]}</Typography>
+          <EntityColumnTitle variant="h5">{typesToSplit[i]}s</EntityColumnTitle>
           {type && type.length ? (
             type.map((item) => (
               <EntityTile

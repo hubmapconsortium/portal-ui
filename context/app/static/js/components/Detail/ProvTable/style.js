@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Typography from '@material-ui/core/Typography';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -7,4 +8,8 @@ const FlexContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-export { FlexContainer };
+const EntityColumnTitle = styled(Typography)`
+  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+`;
+
+export { FlexContainer, EntityColumnTitle };
