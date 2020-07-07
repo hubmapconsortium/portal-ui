@@ -1,1 +1,2 @@
 - Make the display of the download link conditional on having agreed to the DUA.
+- Use local storage to persist DUA agreement.
