@@ -1,18 +1,18 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { LightBlueLink } from 'shared-styles/Links';
+import { StyledLink } from './style';
 
 function ConditionalLink(props) {
   const { hasAgreedToDUA, agreeToDUA, href, children } = props;
   if (hasAgreedToDUA) {
     return (
-      <LightBlueLink variant="body1" target="_blank" rel="noopener noreferrer" download underline="none" href={href}>
+      <StyledLink variant="body1" target="_blank" rel="noopener noreferrer" download underline="none" href={href}>
         {children}
-      </LightBlueLink>
+      </StyledLink>
     );
   }
   return (
-    <LightBlueLink
+    <StyledLink
       onClick={() => {
         // eslint-disable-next-line no-alert
         agreeToDUA(window.confirm('Agree to Data Use Agreement?'));
@@ -21,7 +21,7 @@ function ConditionalLink(props) {
       underline="none"
     >
       {children}
-    </LightBlueLink>
+    </StyledLink>
   );
 }
 
