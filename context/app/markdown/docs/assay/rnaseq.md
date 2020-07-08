@@ -48,10 +48,11 @@ Cells are fixed and permeabilized with methanol (alternatively, cells are lysed 
 ![](https://lh3.googleusercontent.com/eQWEFJmBUX7dcDgN3NfthszCpbCI6026MI8GKuhts58NZTZtGfndIVbBtNFZX_EEHUZ7qVppNLK-hgFUPFkkOpvQe_8ivLwqPpmCZZD9VzhTkSOttSntz_1i-1S3I3k1f4jNlzb9)
 
 ## HuBMAP RNA-Seq Data States
+
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
-|  0 | Raw data: This is the raw sequence data (unprocessed) generated directly by the sequence instrument in files either with Phred quality scores (fastq)| FASTQ
-| 1 |  Aligned data: SAM files contain sequence data that has been aligned to a reference genome and includes chromosome coordinates. BAM files are compressed binary versions of SAM files. |  SAM, BAM
+|  0 | Raw data: This is the raw sequence data (unprocessed) generated directly by the sequence instrument in files either with Phred quality scores (fastq)| FASTQ|
+| 1 |  Aligned data: SAM files contain sequence data that has been aligned to a reference genome and includes chromosome coordinates. BAM files are compressed binary versions of SAM files. |  SAM, BAM|
 
 ## HuBMAP Metadata
 
@@ -95,16 +96,17 @@ The bolded steps below constitute a series of standard RNA-seq data analysis wor
 
 Pre-alignment QC with FastQC [http://www.bioinformatics.babraham.ac.uk/projects/fastqc/](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/):
 **![](https://lh6.googleusercontent.com/QsiwMxLc4sqev7m2DRAyWLWmV6n-D7XP39-9L83RwxQK-Xy6MxsWkXctkb9yspdCgNyickFX6Ae9QN_-xepigyl7G2vsipMbe4fUSYcwdPPpshUKneEw154vqf4OBD_LT3lr4olF)**
+
 |**qc_metric** |  **Threshold**| **Tool** | 
 |--|--|--|
-|  average_base_quality_scores |>20 (accuracy rate 99%)| FastQC
-|  gc_content || FastQC
-|  sequence_length_distribution |>45 (encode)| FastQC
-|  sequence_duplication|| FastQC
-|  k-mer_overrepresentation |20 (accuracy rate 99%)
-|  0 |>20 (accuracy rate 99%)| FastQC
-|  0 |>20 (accuracy rate 99%)| FastQC| FastQC
-|  contamination_of_primers_and_adapters_in_sequencing_data || Library specific data on adapters need to be provided to the read-trimming tool like trimmomatic *(Bioinformatics. 2014 Aug 1; 30(15):2114-20.).*
+|  average_base_quality_scores |>20 (accuracy rate 99%)| FastQC|
+|  gc_content || FastQC|
+|  sequence_length_distribution |>45 (encode)| FastQC|
+|  sequence_duplication|| FastQC|
+|  k-mer_overrepresentation |20 (accuracy rate 99%)|
+|  0 |>20 (accuracy rate 99%)| FastQC|
+|  0 |>20 (accuracy rate 99%)| FastQC| FastQC|
+|  contamination_of_primers_and_adapters_in_sequencing_data || Library specific data on adapters need to be provided to the read-trimming tool like trimmomatic *(Bioinformatics. 2014 Aug 1; 30(15):2114-20.).*|
 
 ### *Definition*
 Base quality scores: prediction of the probability of an error in base calling
@@ -119,11 +121,11 @@ Note that this is not per-cell. Trimmed reads are mapped to reference genome.
 
 |**qc_metric** |  **Threshold**| **Method** | 
 |--|--|--|
-|  unique_mapping_percent |Ideally > 95% (Encode) Acceptable > 80% (at least for bulk)| SAMtools/Picard
-| duplicate_reads_percent || SAMtools/Picard
-|  fragment_length_distribution |>45 (encode)| SAMtools/Picard
-|  gc_bias |Biased if variance of GC content is larger than 95% of confidence threshold of the baseline variance| SAMtools/Picard
-|  library_complexity |NRF>0.9, PBC1>0.9, and PBC2>3| https://www.encodeproject.org/data-standards/terms/#library
+|  unique_mapping_percent |Ideally > 95% (Encode) Acceptable > 80% (at least for bulk)| SAMtools/Picard|
+| duplicate_reads_percent || SAMtools/Picard|
+|  fragment_length_distribution |>45 (encode)| SAMtools/Picard|
+|  gc_bias |Biased if variance of GC content is larger than 95% of confidence threshold of the baseline variance| SAMtools/Picard|
+|  library_complexity |NRF>0.9, PBC1>0.9, and PBC2>3| https://www.encodeproject.org/data-standards/terms/#library|
 
 ### *Uniquely mapping %* –
 Percentage of reads that map to exactly one location within the reference genome.

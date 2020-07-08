@@ -40,12 +40,13 @@ There are a variety of terms used in this document that may not be familiar to a
 *Figure 6:* Example defined plane (left) with example imaged z planes (right).
 
 ## HuBMAP CODEX Data States (Levels)
+
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
-|  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF
-| 1 |  Processed Microscopy data: Can include stitching, thresholding, background subtraction, z-stack alignment, deconvolution |  CZI, TIFF, OME-TIFF
-| 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF
-| 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG
+|  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF|
+| 1 |  Processed Microscopy data: Can include stitching, thresholding, background subtraction, z-stack alignment, deconvolution |  CZI, TIFF, OME-TIFF|
+| 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF|
+| 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG|
 
 ## HuBMAP Metadata
 All HuBMAP CODEX data will have searchable metadata fields. This metadata field schema now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/codex)  where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
@@ -132,7 +133,7 @@ Other differences between CODEX software at Stanford versus Akoya proprietary so
       
 The exact same data from Stanford is also available in an image sequence format, which stores the data in the same folder structure as Akoya’s format. But we can ignore this processed dataset with image sequence for analysis purposes.
 
-|**Type of Segmentation/Description** |  **Descriptor (the name should contain the following)**| **Location**
+|**Type of Segmentation/Description** |  **Descriptor (the name should contain the following)**| **Location**|
 |--|--|--|
 |  Stanford - cell segmentation| *_processed| https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FStanford%20TMC%2F26191c2719339be0c3fa6dc8a7ba3550%2F20190514_HUBMAP_CL1_processed%2F |
 |  Stanford - cell segmentation| *_processed-ImgSeq| https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FStanford%20TMC%2F26191c2719339be0c3fa6dc8a7ba3550%2F20190514_HUBMAP_CL1_processed-ImgSeq%2F  | 
@@ -198,7 +199,9 @@ The Akoya integrated processing step* [https://help.codex.bio/codex/processor/us
 A histogram and sample image is generated for every acquired channel. Each row is a cycle, containing its corresponding channels. Top-left image and histogram is always the first cycle, first channel. Image and histogram to their right is the same cycle, second channel.
 
 The displayed image is a full-resolution cropped image that has the greatest standard deviation among those sampled. Each image may be of different location within the region, depending on the expression pattern. For example, cropped images for DAPI cycles 2 and 3 below differ in their sampling location.
+
 ![](https://lh4.googleusercontent.com/IpSNTYOmk9QpFWqRf28xWq-eKgok0mFiJtlP1WVZLKWxJaRHeUQBubMqiaj3wOV5ZiGhA5lY99tBZbg4jxMqfKfTtLbXRAC97K63b67JZK4Dvps72WqnpqKOowxZyg5Z3QTgcc_Z)
+
 (Magenta) A single cycle. (Cyan) Full-resolution cropped image. (Purple) Histogram.
 
 The histogram displays pixel frequency of signal intensities found within the region image. The horizontal intensity axis covers the 16-bit range (0 ~ 65535), while the vertical frequency axis auto-scales to the number of pixels found. Frequency is in logarithmic scale to better represent lower frequencies that correspond to biomarker signal.
@@ -206,6 +209,7 @@ The histogram displays pixel frequency of signal intensities found within the re
 Additionally, all cycles except the first contains two histogram plots. All purple plots are of the first cycle, which can be a reference for comparison, especially if the first cycle contains blank cycles. The legend specifies which biomarker the histogram represents.
 
 A summary section contains basic statistics of biomarker region images. Again, each slide contains four cycles and their corresponding channels. Any non-biomarker channel (i.e. containing "DAPI," "blank" or "empty") will be grayed out.
+
 ![](https://lh3.googleusercontent.com/k1xa3dbWojRY3n5gmzjZFbQyyLpcQxKeAuNqV3Gn17u_l2dmEzvuBzzk09aYDgRlz-9cTaUvzxUsDJj6-GbC6CgFVT89hjHlvGEX_5GOim5PEd1WSpUiZCIypz93eXlg6v_YU3ta)
 
 There are 18 columns for each channel. All pixel intensities are in 16-bit ranges (0 ~ 65535).
@@ -252,6 +256,7 @@ On the right, there are four cropped images displayed in the original, full reso
 5.  Open the generated channelnames_report.csv file and add TRUE/FALSE tags to each channel separated with a coma (if using text editors) or to the consecutive column if using *“Excel/LibreOffice”.*
 
 ## Terms defined in this document
+
 |**Term** |  **Definition** |
 |--|--|
 |  Intensity| Detector Counts| 

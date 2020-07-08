@@ -16,7 +16,7 @@ This document describes Imaging Mass Cytometry technology, generated data files 
 ## Definitions
 The following is a table of terms relevant to understanding IMC data:
 
-|**Term** |  **Definition**
+|**Term** |  **Definition**|
 |--|--|
 |  IMC| Imaging Mass Cytometry| 
 |  Conjugated Antibody| An antibody covalently coupled to a metal isotope via a polymer.| 
@@ -30,18 +30,19 @@ The following is a table of terms relevant to understanding IMC data:
 |  Pixel| Each pixel in an IMC image corresponds to a single laser shot and is the smallest component of that image.| 
 
 ## HuBMAP IMC Data States (Levels)
+
 |**Data Levels** |  **Description**| **Example File Type** | 
 |--|--|--|
-|  0 | Raw image data: Image stacks for each region of interest containing all channel images.| OME, TIFF
-| 1 |  Segmented data: Single cell data extracted after segmentation.|  CSV, TIFF
-| 2 |  Annotated data (Cells and Structures): Interpretation of marker expression profiles enabled the assignment of cell types to clusters.|  PNG, PDF
+|  0 | Raw image data: Image stacks for each region of interest containing all channel images.| OME, TIFF|
+| 1 |  Segmented data: Single cell data extracted after segmentation.|  CSV, TIFF|
+| 2 |  Annotated data (Cells and Structures): Interpretation of marker expression profiles enabled the assignment of cell types to clusters.|  PNG, PDF|
 
 ## HuBMAP Metadata: 
 All HuBMAP IMC data will have searchable metadata fields. The metadata.tsv is available for download from [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/imc) where the descriptions and required field input formats can be found
 
 In addition, all HuBMAP IMC data will have an associated “acquisition_metadata.csv” file containing the following additional metadata fields:
 
-|"AblationPower" |  Relative ablation power (arbitrary units).
+|"AblationPower" |  Relative ablation power (arbitrary units).|
 |--|--|
 |  “AfterAblationImageEndOffset”| The number of bytes from the beginning of the MCD file where the respective entity is stored as binary.| 
 |  “AfterAblationImageStartOffset”| The number of bytes from the beginning of the MCD file where the respective entity is stored as binary.| 
@@ -65,10 +66,10 @@ In addition, all HuBMAP IMC data will have an associated “acquisition_metadata
 
 |**Processed Data Loaded** |  **Descriptor (the name should contain the following)**| **Example** | 
 |--|--|--|
-|  QA/QC Pass/Fail Channel Report | channelnames_report.csv| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/
+|  QA/QC Pass/Fail Channel Report | channelnames_report.csv| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/|
 |  CSV file containing all single cell measurements| 20191128_hubMAP__masterfile| /U/University of Florida TMC/256795b18af5b1d318e2326266053f7e/SingleCellData/|  
-Classified cell types projected onto images for each measured region of each tissue type | ClusterDisplay_*| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/Mapping/| 
-Plots of data: tSNE, heatmap of marker expression per cluster and density plots of marker intensity | 20191128_HubMAP__PhenoGraph_tsne_M.png 20191128_HubMAP__heatmap.pdf 20191128_HubMAP__histogram_sample.png| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/processed/
+|Classified cell types projected onto images for each measured region of each tissue type | ClusterDisplay_*| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/Mapping/| 
+|Plots of data: tSNE, heatmap of marker expression per cluster and density plots of marker intensity | 20191128_HubMAP__PhenoGraph_tsne_M.png 20191128_HubMAP__heatmap.pdf 20191128_HubMAP__histogram_sample.png| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/processed/|
 
 ## HuBMAP QA/QC of raw (state0) data files
 1.  Raw data (level 0) QC

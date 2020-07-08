@@ -28,6 +28,7 @@ In contrast to droplet barcoding methods, [SPLiT-Seq](https://science.sciencemag
 
 ## Definitions
 Some terms in this document may not be familiar to all HubMap users. The following table lists several:
+
 | **Term** | **Definition** |
 |--|--|
 |  UMI| Unique molecular identifier (not used for scATAC-seq)| 
@@ -105,6 +106,7 @@ The bolded steps below constitute a series of standard ATAC-seq data analysis wo
 
 ### Pre-alignment QC:
 The steps involved include:
+
 |**qc_metric** |  **Threshold**| **Tool** | 
 |--|--|--|
 | (1)average_base_quality_scores |>20 (accuracy rate 99%)| Something like FastQC |
