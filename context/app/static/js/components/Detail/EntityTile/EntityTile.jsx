@@ -1,8 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import useEntityData from 'hooks/useEntityData';
-import DetailContext from '../context';
 import {
   StyledDatasetIcon,
   StyledSampleIcon,
@@ -16,10 +14,7 @@ import {
 } from './style';
 
 function EntityTile(props) {
-  const { uuid, entityType, id, isCurrentEntity } = props;
-  const { elasticsearchEndpoint } = useContext(DetailContext);
-
-  const entityData = useEntityData(uuid, elasticsearchEndpoint);
+  const { uuid, entityType, id, isCurrentEntity, entityData } = props;
 
   return entityData ? (
     <a href={`/browse/${entityType.toLowerCase()}/${uuid}`}>

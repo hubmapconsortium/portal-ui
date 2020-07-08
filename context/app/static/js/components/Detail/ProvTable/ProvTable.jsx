@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
 import { FlexContainer, FlexColumn, EntityColumnTitle } from './style';
-import EntityTile from '../EntityTile';
+import ProvTableTile from '../ProvTableTile';
 
 function DerivedLink(props) {
   const { uuid, type } = props;
@@ -35,25 +35,29 @@ function ProvTable(props) {
   return (
     <FlexContainer>
       {types.map((type, i) => (
-        <FlexColumn key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
+        <div key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
           <EntityColumnTitle variant="h5">{typesToSplit[i]}s</EntityColumnTitle>
-          {type && type.length ? (
-            type.map((item) => (
-              <EntityTile
-                key={item['hubmap:uuid']}
-                uuid={item['hubmap:uuid']}
-                id={item['hubmap:displayDOI']}
-                entityType={item['prov:type']}
-                isCurrentEntity={uuid === item['hubmap:uuid']}
-              />
-            ))
-          ) : (
-            <DerivedLink uuid={uuid} type={typesToSplit[i]} />
-          )}
-          {typesToSplit[i] === entity_type && entity_type !== 'Donor' && (
-            <DerivedLink uuid={uuid} type={typesToSplit[i]} />
-          )}
-        </FlexColumn>
+          <FlexColumn>
+            {type && type.length ? (
+              type
+                .reverse()
+                .map((item) => (
+                  <ProvTableTile
+                    key={item['hubmap:uuid']}
+                    uuid={item['hubmap:uuid']}
+                    id={item['hubmap:displayDOI']}
+                    entityType={item['prov:type']}
+                    isCurrentEntity={uuid === item['hubmap:uuid']}
+                  />
+                ))
+            ) : (
+              <DerivedLink uuid={uuid} type={typesToSplit[i]} />
+            )}
+            {typesToSplit[i] === entity_type && entity_type !== 'Donor' && (
+              <DerivedLink uuid={uuid} type={typesToSplit[i]} />
+            )}
+          </FlexColumn>
+        </div>
       ))}
     </FlexContainer>
   );
