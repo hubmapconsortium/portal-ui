@@ -1,1 +1,0 @@
-- Fix bugs in node click handling in ProvVis.

@@ -1,1 +1,0 @@
-- Use mapped_data_types in search and details.
