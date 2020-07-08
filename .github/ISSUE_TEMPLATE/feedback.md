@@ -1,9 +1,9 @@
 ---
 name: Feedback
-about: Feedback reported by portal users
+about: Feedback reported by portal users via HuBMAP Help Desk
 title: ''
-labels: UI, feedback
-assignees: ''
+labels: UI, triage
+assignees: mccalluc, tsliaw
 
 ---
 
