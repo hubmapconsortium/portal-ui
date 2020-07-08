@@ -15,13 +15,15 @@ function ProvTableTile(props) {
   return (
     <>
       {entity_type === 'Sample' && isNotSibling && <DownIcon />}
-      <EntityTile
-        uuid={uuid}
-        entity_type={entity_type}
-        id={id}
-        isCurrentEntity={isCurrentEntity}
-        entityData={entityData}
-      />
+      {entityData && (
+        <EntityTile
+          uuid={uuid}
+          entity_type={entity_type}
+          id={id}
+          isCurrentEntity={isCurrentEntity}
+          entityData={entityData}
+        />
+      )}
     </>
   );
 }

@@ -16,7 +16,7 @@ import {
 function EntityTile(props) {
   const { uuid, entity_type, id, isCurrentEntity, entityData } = props;
 
-  return entityData ? (
+  return (
     <a href={`/browse/${entity_type.toLowerCase()}/${uuid}`}>
       <StyledPaper $isCurrentEntity={isCurrentEntity}>
         <HoverOverlay $isCurrentEntity={isCurrentEntity}>
@@ -52,8 +52,6 @@ function EntityTile(props) {
         </HoverOverlay>
       </StyledPaper>
     </a>
-  ) : (
-    <></>
   );
 }
 
