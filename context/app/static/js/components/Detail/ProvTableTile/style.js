@@ -3,7 +3,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 const DownIcon = styled(KeyboardArrowDownIcon)`
   font-size: 2rem;
-  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1)}px;
 `;
 
 export { DownIcon };
