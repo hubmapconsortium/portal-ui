@@ -1,25 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
 
 import { FlexContainer, FlexColumn, EntityColumnTitle } from './style';
 import ProvTableTile from '../ProvTableTile';
-
-function DerivedLink(props) {
-  const { uuid, type } = props;
-  return (
-    <Button
-      component="a"
-      href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${type}`}
-      size="large"
-      color="primary"
-      variant="contained"
-    >
-      View Derived {type}s
-    </Button>
-  );
-}
+import ProvTableDerivedLink from '../ProvTableDerivedLink';
 
 function ProvTable(props) {
   const { uuid, entity_type, typesToSplit, ancestors, assayMetadata } = props;
@@ -52,10 +37,10 @@ function ProvTable(props) {
                 />
               ))
             ) : (
-              <DerivedLink uuid={uuid} type={typesToSplit[i]} />
+              <ProvTableDerivedLink uuid={uuid} type={typesToSplit[i]} />
             )}
             {typesToSplit[i] === entity_type && entity_type !== 'Donor' && (
-              <DerivedLink uuid={uuid} type={typesToSplit[i]} />
+              <ProvTableDerivedLink uuid={uuid} type={typesToSplit[i]} />
             )}
           </FlexColumn>
         </div>
