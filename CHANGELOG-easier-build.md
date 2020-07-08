@@ -1,0 +1,1 @@
+- push.sh now handles steps that were in the readme.

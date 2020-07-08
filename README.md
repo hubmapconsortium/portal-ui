@@ -83,18 +83,20 @@ In the `context/` directory, the following command can be run to allow eslint to
 npm run lint-fix
 ```
 
-## Tag, release, and deployment
-To tag a new version for github and
-[dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
-checkout a branch with `release` in the name (to keep Travis happy),
-increment `VERSION`, commit, and run:
-```sh
+## Buid, tag, and deploy
+To build a new image for [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
+and tag a release for github, just run:
+```
 ./push.sh
 ```
+and merge the release branch to master in github.
 
-With a new `latest` Docker image, to redeploy either
-`dev` or `test` use `./redeploy.sh`.
-(PSC folks will need your ssh public key.)
+Then, to redeploy `dev` and `test`:
+```
+# PSC will need a ssh public key for USERNAME.
+./redeploy.sh $USERNAME dev
+./redeploy.sh $USERNAME test
+```
 
 ## Related projects and dependencies
 
