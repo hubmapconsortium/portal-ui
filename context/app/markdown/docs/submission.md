@@ -1,3 +1,5 @@
+# Dataset Submission
+
 Every dataset submission has two required components and one optional component submitted together in a data submission directory.
 
 #### Required components:
@@ -61,7 +63,7 @@ HuBMAP supports 3 categories of assays : mass spectrometry, imaging and nucleoti
 Data centers provide the following 4 data types (Figure 3)for each data submission to HubMAP:
 **![Figure 3: Four datatypes in HuBMAP](https://lh4.googleusercontent.com/roCn5JFuGk3-tTn-n8wPL8cCOQ07t7vCZMyxuPI92LgDCIBFV4LPhKAIGgrL66b9XvuR45eeaAy9474jbfABdEoOVKam6hC0fBTshzNz0CMUaAOYhrfL3d3nsQN0VVbvV3KMMGVE)**
 
-Assay metadata, which is described in the [Assay Metadata Submission Format](https://docs.google.com/document/d/1g82GpCpFDKew60XzAO4Siaw3ZXJjwsaCpgPwhqQZxIY/edit#heading=h.qeehtnf68fas) document, is divided into 4 levels:
+*Figure 3: Assay metadata, which is described in the [Assay Metadata Submission Format](https://docs.google.com/document/d/1g82GpCpFDKew60XzAO4Siaw3ZXJjwsaCpgPwhqQZxIY/edit#heading=h.qeehtnf68fas) document, is divided into 4 levels.*
 
 ### Definition of assay metadata levels
 
@@ -74,5 +76,5 @@ Assay metadata, which is described in the [Assay Metadata Submission Format](htt
 -   Level 4: Supplementary information such a QC report or information that is unique to a lab, not required for reproducibility or is otherwise not relevant for outside groups. This information is submitted in the form of a single file, a ZIP archive containing multiple files, or a directory of files. There is no formatting requirement (although formats readable with common tools such as text editors are preferable over proprietary binary formats).
 
 As an example, here is a link to the CODEX metadata fields, required input and descriptions: 
-**![example assay metadata for CODEX](https://github.com/hubmapconsortium/ingest-validation-tools/blob/master/docs/codex/README.md)**
+**[example assay metadata for CODEX](https://github.com/hubmapconsortium/ingest-validation-tools/blob/master/docs/codex/README.md)**
 

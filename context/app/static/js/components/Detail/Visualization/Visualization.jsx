@@ -18,7 +18,6 @@ import {
   StyledHeader,
   StyledHeaderText,
   StyledHeaderRight,
-  StyledHeaderLeft,
   ExpandButton,
   TopSnackbar,
   ExpandableDiv,
@@ -26,16 +25,6 @@ import {
   SelectionButton,
 } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
-
-function getTileOrDatasetString(vitData) {
-  // If the name of a configuration includes the tiled name, return 'Tile'; else return 'Dataset.'
-  if (Array.isArray(vitData)) {
-    const firstEntry = vitData[0];
-    const regex = new RegExp(/R\d+_X\d+_Y\d+/);
-    return regex.test(firstEntry.name) ? 'Tile' : 'Dataset';
-  }
-  return null;
-}
 
 function Visualization(props) {
   const { vitData } = props;
@@ -57,14 +46,6 @@ function Visualization(props) {
     setIsSnackbarOpen(false);
   }
 
-  function handleThemeChange(e) {
-    if (e.target.checked) {
-      setVitessceTheme('dark');
-    } else {
-      setVitessceTheme('light');
-    }
-  }
-
   useEffect(() => {
     function onKeydown(event) {
       if (event.key === 'Escape') {
@@ -79,14 +60,25 @@ function Visualization(props) {
   return (
     <StyledSectionContainer id="visualization">
       <StyledHeader>
-        <StyledHeaderLeft>
-          <StyledHeaderText variant="h3" component="h2">
-            Visualization
-          </StyledHeaderText>
+        <StyledHeaderText variant="h3" component="h2">
+          Visualization
+        </StyledHeaderText>
+        <StyledHeaderRight>
+          <VisualizationThemeSwitch theme={vitessceTheme} onChange={(e, theme) => setVitessceTheme(theme)} />
+          <ExpandButton size="small" onClick={handleExpand} variant="contained" disableElevation>
+            <ZoomOutMapIcon color="primary" />
+          </ExpandButton>
           {Array.isArray(vitData) ? (
             <>
-              <SelectionButton ref={anchorRef} onClick={toggle}>
-                Select {getTileOrDatasetString(vitData)} {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+              <SelectionButton
+                ref={anchorRef}
+                style={{ borderRadius: 3 }}
+                onClick={toggle}
+                disableElevation
+                variant="contained"
+                color="primary"
+              >
+                {vitData[vitessceSelection].name} {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
               </SelectionButton>
               <Popper open={open} anchorEl={anchorRef.current} placement="top-end" style={{ zIndex: 50 }}>
                 <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
@@ -103,12 +95,6 @@ function Visualization(props) {
               </Popper>
             </>
           ) : null}
-        </StyledHeaderLeft>
-        <StyledHeaderRight>
-          <VisualizationThemeSwitch theme={vitessceTheme} onChange={handleThemeChange} />
-          <ExpandButton onClick={handleExpand}>
-            <ZoomOutMapIcon />
-          </ExpandButton>
         </StyledHeaderRight>
       </StyledHeader>
       <Paper>

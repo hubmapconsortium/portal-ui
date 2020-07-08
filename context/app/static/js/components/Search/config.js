@@ -3,12 +3,12 @@ import { filter, rangeFilter, field } from './utils';
 
 export const donorConfig = {
   filters: [
-    filter('created_by_user_displayname', 'Creator'),
-    filter('group_name', 'Group'),
     filter('mapped_metadata.gender', 'Gender'),
-    filter('mapped_metadata.race', 'Race'),
     rangeFilter('mapped_metadata.age', 'Age', 0, 100),
+    filter('mapped_metadata.race', 'Race'),
     rangeFilter('mapped_metadata.bmi', 'BMI', 0, 50),
+    filter('group_name', 'Group'),
+    filter('created_by_user_displayname', 'Creator'),
   ],
   fields: [
     field('display_doi', 'ID'),
@@ -39,11 +39,12 @@ export const sampleConfig = {
 
 export const datasetConfig = {
   filters: [
-    filter('created_by_user_displayname', 'Creator'),
-    filter('data_types', 'Data types'),
-    filter('donor.group_name', 'Group'),
+    filter('data_types', 'Data Type'),
+    filter('origin_sample.mapped_organ', 'Organ'),
     filter('source_sample.mapped_specimen_type', 'Specimen Type'),
     filter('mapped_status', 'Status'),
+    filter('donor.group_name', 'Group'),
+    filter('created_by_user_displayname', 'Creator'),
   ],
   fields: [
     field('display_doi', 'ID'),

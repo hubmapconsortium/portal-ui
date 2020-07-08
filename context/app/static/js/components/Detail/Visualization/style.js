@@ -9,13 +9,6 @@ const vitessceFixedHeight = 600;
 
 const StyledHeader = styled.div`
   margin-bottom: 6px;
-  display: flex;
-`;
-
-const StyledHeaderLeft = styled.div`
-  margin-bottom: 6px;
-  display: flex;
-  flex-direction: column;
 `;
 
 const StyledHeaderText = styled(Typography)`
@@ -24,9 +17,8 @@ const StyledHeaderText = styled(Typography)`
 `;
 
 const StyledHeaderRight = styled.div`
-  margin-left: auto;
+  float: right;
   display: flex;
-  margin-top: 2rem;
 `;
 
 const StyledSectionContainer = styled(SectionContainer)`
@@ -36,6 +28,7 @@ const StyledSectionContainer = styled(SectionContainer)`
 
 const ExpandButton = styled(Button)`
   display: inline-block;
+  background-color: #ffffff;
   margin-left: 0.5rem;
   svg {
     vertical-align: middle;
@@ -43,7 +36,8 @@ const ExpandButton = styled(Button)`
 `;
 
 const SelectionButton = styled(Button)`
-  color: black;
+  margin-left: ${(props) => props.theme.spacing(1)}px;
+  color: white;
 `;
 
 const TopSnackbar = styled(Snackbar)`
@@ -86,7 +80,6 @@ export {
   StyledHeader,
   StyledHeaderText,
   StyledHeaderRight,
-  StyledHeaderLeft,
   ExpandButton,
   TopSnackbar,
   ExpandableDiv,

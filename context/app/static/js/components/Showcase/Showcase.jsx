@@ -5,10 +5,9 @@ import ReactMarkdown from 'react-markdown';
 
 import Visualization from '../Detail/Visualization';
 import SectionHeader from '../Detail/SectionHeader';
-import SectionItem from '../Detail/SectionItem';
 import SectionContainer from '../Detail/SectionContainer';
 import { StyledPaper } from '../Detail/Summary/style';
-import { FlexColumnRight, StyledTypography, StyledDivider } from './style';
+import Attribution from '../Detail/Attribution';
 
 function Showcase(props) {
   const { vitData, title, assayMetadata, markdown } = props;
@@ -29,15 +28,13 @@ function Showcase(props) {
           <Typography variant="body1">
             <ReactMarkdown source={markdown} />
           </Typography>
-          <StyledDivider orientation="vertical" flexItem />
-          <FlexColumnRight>
-            <StyledTypography variant="subtitle1">Creator</StyledTypography>
-            <SectionItem label="Center">{group_name}</SectionItem>
-            <SectionItem label="Email">{created_by_user_email}</SectionItem>
-            <SectionItem label="Name">{created_by_user_displayname}</SectionItem>
-          </FlexColumnRight>
         </StyledPaper>
       </SectionContainer>
+      <Attribution
+        group_name={group_name}
+        created_by_user_displayname={created_by_user_displayname}
+        created_by_user_email={created_by_user_email}
+      />
       <Visualization vitData={vitData} />
     </Container>
   );
