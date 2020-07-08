@@ -9,9 +9,9 @@ import ProvTableDerivedLink from '../ProvTableDerivedLink';
 function ProvTable(props) {
   const { uuid, entity_type, typesToSplit, ancestors, assayMetadata } = props;
 
-  ancestors.push(assayMetadata);
+  const entities = [...ancestors, assayMetadata];
 
-  const types = ancestors.reduce(
+  const types = entities.reduce(
     (acc, item) => {
       acc[typesToSplit.indexOf(item.entity_type)].push(item);
       return acc;
