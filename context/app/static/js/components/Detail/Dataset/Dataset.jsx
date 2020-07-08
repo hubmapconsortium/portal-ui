@@ -12,7 +12,7 @@ import DetailLayout from '../DetailLayout';
 import Files from '../Files';
 
 // TODO use this context for components other than FileBrowser
-import DatasetContext from './context';
+import DetailContext from '../context';
 
 function AssaySpecificItem(props) {
   const { children } = props;
@@ -44,7 +44,7 @@ function SummaryData(props) {
 }
 
 function DatasetDetail(props) {
-  const { assayMetadata, vitData, assetsEndpoint, entityEndpoint } = props;
+  const { assayMetadata, vitData, assetsEndpoint, elasticsearchEndpoint, entityEndpoint } = props;
   const {
     protocol_url,
     portal_uploaded_protocol_files,
@@ -72,7 +72,7 @@ function DatasetDetail(props) {
   };
 
   return (
-    <DatasetContext.Provider value={{ assetsEndpoint, uuid }}>
+    <DetailContext.Provider value={{ assetsEndpoint, elasticsearchEndpoint, display_doi, uuid }}>
       <DetailLayout shouldDisplaySection={shouldDisplaySection}>
         <Summary
           uuid={uuid}
@@ -98,7 +98,7 @@ function DatasetDetail(props) {
         {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
         <Files files={files} entityEndpoint={entityEndpoint} uuid={uuid} />
       </DetailLayout>
-    </DatasetContext.Provider>
+    </DetailContext.Provider>
   );
 }
 

@@ -1,31 +1,19 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
-import ListItemText from '@material-ui/core/ListItemText';
-import { CenteredListSubheader, FlexContainer, ListColumn } from './style';
 
-function ListItemLink(props) {
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <Button component="a" variant="text" {...props} />;
-}
-
-function DerivedLink(props) {
-  const { uuid, type } = props;
-  return (
-    <ListItemLink href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${type}`}>
-      <ListItemText primary={`Derived ${type}s`} />
-    </ListItemLink>
-  );
-}
+import { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle } from './style';
+import ProvTableTile from '../ProvTableTile';
+import ProvTableDerivedLink from '../ProvTableDerivedLink';
 
 function ProvTable(props) {
-  const { provData, uuid, entity_type, typesToSplit } = props;
+  const { uuid, entity_type, typesToSplit, ancestors, assayMetadata } = props;
 
-  const types = Object.values(provData.entity).reduce(
+  ancestors.push(assayMetadata);
+
+  const types = ancestors.reduce(
     (acc, item) => {
-      acc[typesToSplit.indexOf(item['prov:type'])].push(item);
+      acc[typesToSplit.indexOf(item.entity_type)].push(item);
       return acc;
     },
     [[], [], []],
@@ -34,34 +22,28 @@ function ProvTable(props) {
   return (
     <FlexContainer>
       {types.map((type, i) => (
-        <React.Fragment key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
-          <ListColumn
-            subheader={
-              <CenteredListSubheader component="div" color="primary">
-                {typesToSplit[i]}
-              </CenteredListSubheader>
-            }
-          >
-            <Divider />
+        <TableColumn key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
+          <EntityColumnTitle variant="h5">{typesToSplit[i]}s</EntityColumnTitle>
+          <FlexColumn>
             {type && type.length ? (
-              type.map((item) => (
-                <ListItemLink
-                  key={item['hubmap:uuid']}
-                  href={`/browse/dataset/${item['hubmap:uuid']}`}
-                  disabled={uuid === item['hubmap:uuid']}
-                >
-                  <ListItemText primary={item['hubmap:displayDOI']} />
-                </ListItemLink>
+              type.map((item, j) => (
+                <ProvTableTile
+                  key={item.uuid}
+                  uuid={item.uuid}
+                  id={item.display_doi}
+                  entity_type={item.entity_type}
+                  isCurrentEntity={uuid === item.uuid}
+                  isNotSibling={j > 0 ? type[j - 1].specimen_type !== item.specimen_type : false}
+                />
               ))
             ) : (
-              <DerivedLink uuid={uuid} type={typesToSplit[i]} />
+              <ProvTableDerivedLink uuid={uuid} type={typesToSplit[i]} />
             )}
             {typesToSplit[i] === entity_type && entity_type !== 'Donor' && (
-              <DerivedLink uuid={uuid} type={typesToSplit[i]} />
+              <ProvTableDerivedLink uuid={uuid} type={typesToSplit[i]} />
             )}
-          </ListColumn>
-          {i < types.length - 1 && <Divider orientation="vertical" flexItem />}
-        </React.Fragment>
+          </FlexColumn>
+        </TableColumn>
       ))}
     </FlexContainer>
   );
@@ -70,8 +52,10 @@ function ProvTable(props) {
 ProvTable.propTypes = {
   uuid: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
-  provData: PropTypes.objectOf(PropTypes.object).isRequired,
   typesToSplit: PropTypes.arrayOf(PropTypes.string).isRequired,
+  ancestors: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  assayMetadata: PropTypes.object.isRequired,
 };
 
 export default ProvTable;

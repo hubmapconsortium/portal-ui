@@ -6,8 +6,10 @@ import Protocol from '../Protocol';
 import Metadata from '../Metadata';
 import DetailLayout from '../DetailLayout';
 
+import DetailContext from '../context';
+
 function DonorDetail(props) {
-  const { assayMetadata, entityEndpoint } = props;
+  const { assayMetadata, entityEndpoint, elasticsearchEndpoint } = props;
   const {
     uuid,
     protocol_url,
@@ -29,26 +31,28 @@ function DonorDetail(props) {
   };
 
   return (
-    <DetailLayout shouldDisplaySection={shouldDisplaySection}>
-      <Summary
-        uuid={uuid}
-        entity_type={entity_type}
-        display_doi={display_doi}
-        create_timestamp={create_timestamp}
-        last_modified_timestamp={last_modified_timestamp}
-        description={description}
-      />
-      {shouldDisplaySection.metadata && <Metadata entity_type={entity_type} metadata={mapped_metadata} />}
-      <Attribution
-        group_name={group_name}
-        created_by_user_displayname={created_by_user_displayname}
-        created_by_user_email={created_by_user_email}
-      />
-      <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
-      {shouldDisplaySection.protocols && (
-        <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
-      )}
-    </DetailLayout>
+    <DetailContext.Provider value={{ elasticsearchEndpoint, display_doi, uuid }}>
+      <DetailLayout shouldDisplaySection={shouldDisplaySection}>
+        <Summary
+          uuid={uuid}
+          entity_type={entity_type}
+          display_doi={display_doi}
+          create_timestamp={create_timestamp}
+          last_modified_timestamp={last_modified_timestamp}
+          description={description}
+        />
+        {shouldDisplaySection.metadata && <Metadata entity_type={entity_type} metadata={mapped_metadata} />}
+        <Attribution
+          group_name={group_name}
+          created_by_user_displayname={created_by_user_displayname}
+          created_by_user_email={created_by_user_email}
+        />
+        <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
+        {shouldDisplaySection.protocols && (
+          <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
+        )}
+      </DetailLayout>
+    </DetailContext.Provider>
   );
 }
 

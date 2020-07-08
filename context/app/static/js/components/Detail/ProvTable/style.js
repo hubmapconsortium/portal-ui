@@ -1,20 +1,26 @@
 import styled from 'styled-components';
-import List from '@material-ui/core/List';
-import ListSubheader from '@material-ui/core/ListSubheader';
-
-const CenteredListSubheader = styled(ListSubheader)`
-  text-align: center;
-`;
+import Typography from '@material-ui/core/Typography';
 
 const FlexContainer = styled.div`
   display: flex;
   flex-grow: 1;
-  justify-content: space-around;
+  justify-content: space-between;
+  flex-wrap: wrap;
 `;
 
-const ListColumn = styled(List)`
+const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
-export { CenteredListSubheader, FlexContainer, ListColumn };
+const EntityColumnTitle = styled(Typography)`
+  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+`;
+
+// 300 = size of tile
+const TableColumn = styled.div`
+  min-width: 300px;
+`;
+
+export { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle };
