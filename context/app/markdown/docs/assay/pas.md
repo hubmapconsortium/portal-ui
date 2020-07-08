@@ -34,6 +34,7 @@ There are a variety of terms used in this document that may not be familiar to a
 *Figure 5:* Example defined plane (left) with example imaged z planes (right).
 
 ## HuBMAP Stained Microscopy Data States (Levels)
+
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| SCN, TIFF
@@ -45,6 +46,7 @@ There are a variety of terms used in this document that may not be familiar to a
 This metadata schema is now available in Github for download. Any further edits can be made through consultation with the HuBMAP team who will request changes through [Github.](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/stained)
 
 ## Associated Metadata files
+
 |**Metadata File Name** |  **File Type**| **Field** | **Definition**
 |--|--|--|--|
 | Instrument Metadata |XML | SchemaType|Metadata schema type
@@ -98,6 +100,7 @@ This metadata schema is now available in Github for download. Any further edits 
     /VAN000*-*K-**-**-PAS_unregistered.czi
 
 ## Terms defined in this document
+
 |**Term** |  **Definition**
 |--|--|
 |  Intensity| Detector Counts| 

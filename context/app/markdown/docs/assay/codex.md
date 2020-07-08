@@ -40,6 +40,7 @@ There are a variety of terms used in this document that may not be familiar to a
 *Figure 6:* Example defined plane (left) with example imaged z planes (right).
 
 ## HuBMAP CODEX Data States (Levels)
+
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF
@@ -252,6 +253,7 @@ On the right, there are four cropped images displayed in the original, full reso
 5.  Open the generated channelnames_report.csv file and add TRUE/FALSE tags to each channel separated with a coma (if using text editors) or to the consecutive column if using *“Excel/LibreOffice”.*
 
 ## Terms defined in this document
+
 |**Term** |  **Definition** |
 |--|--|
 |  Intensity| Detector Counts| 

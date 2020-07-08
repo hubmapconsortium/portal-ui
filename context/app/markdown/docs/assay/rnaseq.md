@@ -48,6 +48,7 @@ Cells are fixed and permeabilized with methanol (alternatively, cells are lysed 
 ![](https://lh3.googleusercontent.com/eQWEFJmBUX7dcDgN3NfthszCpbCI6026MI8GKuhts58NZTZtGfndIVbBtNFZX_EEHUZ7qVppNLK-hgFUPFkkOpvQe_8ivLwqPpmCZZD9VzhTkSOttSntz_1i-1S3I3k1f4jNlzb9)
 
 ## HuBMAP RNA-Seq Data States
+
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw data: This is the raw sequence data (unprocessed) generated directly by the sequence instrument in files either with Phred quality scores (fastq)| FASTQ
@@ -95,6 +96,7 @@ The bolded steps below constitute a series of standard RNA-seq data analysis wor
 
 Pre-alignment QC with FastQC [http://www.bioinformatics.babraham.ac.uk/projects/fastqc/](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/):
 **![](https://lh6.googleusercontent.com/QsiwMxLc4sqev7m2DRAyWLWmV6n-D7XP39-9L83RwxQK-Xy6MxsWkXctkb9yspdCgNyickFX6Ae9QN_-xepigyl7G2vsipMbe4fUSYcwdPPpshUKneEw154vqf4OBD_LT3lr4olF)**
+
 |**qc_metric** |  **Threshold**| **Tool** | 
 |--|--|--|
 |  average_base_quality_scores |>20 (accuracy rate 99%)| FastQC

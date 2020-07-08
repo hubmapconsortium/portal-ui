@@ -37,6 +37,7 @@ All HuBMAP data will have searchable metadata fields.
 [Github link](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/wgs) to metadata.tsv: fieldnames, descriptions & required formats. Any modifications to the WGS metadata.tsv must be made through Github and only with sequencing DRT team approval.
 
 ## Values to be produced by HIVE Pipeline
+
 |**Level** |  **Field**| **Definition** | **Valid Values** | **Purpose**
 |--|--|--|--|--|
 |  na | data_analysis_protocols_io_doi| Link to the protocol document describing how the HIVE or TMC is processing the data|

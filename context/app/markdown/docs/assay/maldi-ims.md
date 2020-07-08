@@ -23,6 +23,7 @@ There are a variety of terms used in this document that may not be familiar to a
 
 
 ## HuBMAP  Data States (Levels)
+
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: This is the data that comes directly off the mass spectrometer without preprocessing; sometimes referred to as raw spectral data.| imzML

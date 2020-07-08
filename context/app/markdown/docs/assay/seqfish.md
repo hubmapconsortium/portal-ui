@@ -43,6 +43,7 @@ A single Field of View or tile is imaged over many hybridization rounds with thr
 
 ## HuBMAP seqFISH Data States (Levels)
 The HuBMAP project provides data levels for each seqFISH experiment.
+
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw | TIFF
@@ -153,7 +154,8 @@ If files submitted fail this criteria, the recommended action by the HIVE is to 
 The HuBMAP program is developing a standardized open-source pipeline for seqFISH based assay in the coming year
 
 ## Terms defined in this document
-|**Term** |  **Definition**
+
+|**Term** |  **Definition**|
 |--|--|
 |  Intensity| Detector Counts| 
 |  Signal| Intensity produced by fluorescence, both endogenous and introduced| 

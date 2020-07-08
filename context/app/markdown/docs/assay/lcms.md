@@ -16,6 +16,7 @@ Coupling of liquid chromatography (LC) to mass spectrometry (MS) has become an i
 
 ## HuBMAP CODEX Data States (Levels)
 The HuBMAP project provides data to the public in a variety of data states, which denote the amount of processing that has been done to the data. The data states for RNA seq data provided by the HuBMAP project are listed below:
+
 |**Data State** |  **Description**| **LC/MS File Format** | 
 |--|--|--|
 |  0 | Raw data: raw MS data from instrument.| Raw, wiff
@@ -74,7 +75,8 @@ Outline of the full ProTeomiX (PTX) Quality Control (QC) Report including metric
 See J. Proteome Res., 2016, 15 (3), pp 777-787. DOI: [10.1021/acs.jproteome.5b00780](https://doi.org/10.1021/acs.jproteome.5b00780) for further details.
 
 ## Terms defined in this document
-|**Term** |  **Definition**
+
+|**Term** |  **Definition**|
 |--|--|
 |  TMT proteomics| To continuously monitor LC and mass analyzer performance, Hela cell tryptic digest was used as a quality control (QC) sample in this protocol. Proteins were extracted in 8M Urea lysis buffer from the Hela cell, then reduced and alkylated with DTT and IAA. After trypsin digestion overnight, peptides were cleaned up and labeled with TMTzero. The labeled peptides were analyzed by the same LC method without fractionation and MS3 instrument method. Chromatograph profile, mass accuracy, number of protein identification and TMT reporter ion intensity for quantitation were monitored to evaluate instruments stability and sensitivity.| 
 |  Lipidomics| After each cleaning (front plate and DMS), more than 24 hours of idling or 3 days of consecutive use, the DMS compensation voltage is tuned using a set of lipid standards (cat# 945 5040141, Sciex). Before each batch, a quick system suitability test (QSST) (cat# 50407, Sciex) is performed to ensure an acceptable limit of detection for each lipid class. A maximum of 46 samples are processed and analyzed per batch. In addition, each batch contains a preparation blank as well as three lipid extracts from a reference plasma sample (QC, cat# 948 4386703, Sciex). Data quality is assessed by counting the number of detected lipid species in each sample (typically >800 lipid species). Also, QC samples should be clustered together as well as samples prepared and analyzed in different batches should be overlaid on a principal component analysis plot.| 

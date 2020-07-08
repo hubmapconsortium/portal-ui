@@ -30,6 +30,7 @@ The following is a table of terms relevant to understanding IMC data:
 |  Pixel| Each pixel in an IMC image corresponds to a single laser shot and is the smallest component of that image.| 
 
 ## HuBMAP IMC Data States (Levels)
+
 |**Data Levels** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: Image stacks for each region of interest containing all channel images.| OME, TIFF
@@ -67,8 +68,8 @@ In addition, all HuBMAP IMC data will have an associated “acquisition_metadata
 |--|--|--|
 |  QA/QC Pass/Fail Channel Report | channelnames_report.csv| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/
 |  CSV file containing all single cell measurements| 20191128_hubMAP__masterfile| /U/University of Florida TMC/256795b18af5b1d318e2326266053f7e/SingleCellData/|  
-Classified cell types projected onto images for each measured region of each tissue type | ClusterDisplay_*| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/Mapping/| 
-Plots of data: tSNE, heatmap of marker expression per cluster and density plots of marker intensity | 20191128_HubMAP__PhenoGraph_tsne_M.png 20191128_HubMAP__heatmap.pdf 20191128_HubMAP__histogram_sample.png| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/processed/
+|Classified cell types projected onto images for each measured region of each tissue type | ClusterDisplay_*| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/Mapping/| 
+|Plots of data: tSNE, heatmap of marker expression per cluster and density plots of marker intensity | 20191128_HubMAP__PhenoGraph_tsne_M.png 20191128_HubMAP__heatmap.pdf 20191128_HubMAP__histogram_sample.png| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/processed/
 
 ## HuBMAP QA/QC of raw (state0) data files
 1.  Raw data (level 0) QC
