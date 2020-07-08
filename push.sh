@@ -40,5 +40,6 @@ docker push $LATEST_IMAGE_NAME
 
 git tag $VERSION
 git push origin --tags
+git push --set-upstream origin $BRANCH
 
 echo "Open a new PR on github with $BRANCH."
