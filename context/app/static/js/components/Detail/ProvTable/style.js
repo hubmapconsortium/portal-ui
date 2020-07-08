@@ -8,8 +8,14 @@ const FlexContainer = styled.div`
   flex-wrap: wrap;
 `;
 
+const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const EntityColumnTitle = styled(Typography)`
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
 `;
 
-export { FlexContainer, EntityColumnTitle };
+export { FlexContainer, FlexColumn, EntityColumnTitle };

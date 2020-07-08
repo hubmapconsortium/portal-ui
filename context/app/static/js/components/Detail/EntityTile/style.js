@@ -53,6 +53,7 @@ const HoverOverlay = styled.div`
     `}
 `;
 
+// Width needs to be defined in px for text-overflow to work
 const FixedWidthDiv = styled.div`
   display: flex;
   width: 300px;

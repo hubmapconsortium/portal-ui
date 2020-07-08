@@ -2,22 +2,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import ListItemText from '@material-ui/core/ListItemText';
 
-import { FlexContainer, EntityColumnTitle } from './style';
+import { FlexContainer, FlexColumn, EntityColumnTitle } from './style';
 import EntityTile from '../EntityTile';
-
-function ListItemLink(props) {
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <Button component="a" variant="text" {...props} />;
-}
 
 function DerivedLink(props) {
   const { uuid, type } = props;
   return (
-    <ListItemLink href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${type}`}>
-      <ListItemText primary={`Derived ${type}s`} />
-    </ListItemLink>
+    <Button
+      component="a"
+      href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${type}`}
+      size="large"
+      color="primary"
+      variant="contained"
+    >
+      View Derived {type}s
+    </Button>
   );
 }
 
@@ -35,7 +35,7 @@ function ProvTable(props) {
   return (
     <FlexContainer>
       {types.map((type, i) => (
-        <div key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
+        <FlexColumn key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
           <EntityColumnTitle variant="h5">{typesToSplit[i]}s</EntityColumnTitle>
           {type && type.length ? (
             type.map((item) => (
@@ -53,7 +53,7 @@ function ProvTable(props) {
           {typesToSplit[i] === entity_type && entity_type !== 'Donor' && (
             <DerivedLink uuid={uuid} type={typesToSplit[i]} />
           )}
-        </div>
+        </FlexColumn>
       ))}
     </FlexContainer>
   );
