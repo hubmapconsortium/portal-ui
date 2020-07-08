@@ -18,4 +18,9 @@ const EntityColumnTitle = styled(Typography)`
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
 `;
 
-export { FlexContainer, FlexColumn, EntityColumnTitle };
+// 300 = size of tile
+const TableColumn = styled.div`
+  min-width: 300px;
+`;
+
+export { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle };

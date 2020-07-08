@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { FlexContainer, FlexColumn, EntityColumnTitle } from './style';
+import { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 
@@ -22,7 +22,7 @@ function ProvTable(props) {
   return (
     <FlexContainer>
       {types.map((type, i) => (
-        <div key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
+        <TableColumn key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
           <EntityColumnTitle variant="h5">{typesToSplit[i]}s</EntityColumnTitle>
           <FlexColumn>
             {type && type.length ? (
@@ -43,7 +43,7 @@ function ProvTable(props) {
               <ProvTableDerivedLink uuid={uuid} type={typesToSplit[i]} />
             )}
           </FlexColumn>
-        </div>
+        </TableColumn>
       ))}
     </FlexContainer>
   );
