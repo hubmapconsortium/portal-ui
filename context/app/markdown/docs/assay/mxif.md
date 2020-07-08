@@ -36,112 +36,112 @@ There are a variety of terms used in this document that may not be familiar to a
 
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
-|  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF
-| 1 |  Processed Microscopy data: Can include stitching, thresholding, background subtraction, z-stack alignment, deconvolution |  CZI, TIFF, OME-TIFF
-| 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF
-| 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG
+|  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF|
+| 1 |  Processed Microscopy data: Can include stitching, thresholding, background subtraction, z-stack alignment, deconvolution |  CZI, TIFF, OME-TIFF|
+| 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF|
+| 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG|
 
 ## HuBMAP Metadata
 This metadata.tsv schema is now available in Github for download. Any further edits can be made through consultation with the HuBMAP team who will request changes through [Github.](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/mixif)
 
 ## Associated Metadata Files
 
-|**Metadata File Name** |  **File Type**| **Field** | **Definition**
+|**Metadata File Name** |  **File Type**| **Field** | **Definition**|
 |--|--|--|--|
-|  OME-TIFF | Format: OME-TIFF| SchemaType|Metadata schema type
-|  | | SchemaVersionMajor|Metadata schema version - major
-|  | | SchemaVersionMinor|Metadata schema version - minor
-|  | | Name|Name of the microscopy image
-|  | | AcquisitionDate|Date and Time of Acquisition
-|  | | PhysicalSizeX|Spatial Resolution in x dimension (Pixel Size)
-|  | | PhysicalSizeY|Spatial Resolution in y dimension (Pixel Size)
-|  | | SizeX|Number of Pixels
-|  | | SizeY|Number of Pixels
-|  | | SizeZ|Number of Pixels
-|  | | Channel:0:0|DAPI Channel
-|  | | Channel:0:1|FITC Channel
-|  | | Channel:0:2|TRITC Channel
-|  | | Channel:0:3|Cy5 Channel
-| Instrument Metadata |XML | SchemaType|Metadata schema type
-|  | | Device|Microscope used
-|  | | TheoreticalTotalMagnification|Objective Magnification 
-|  | | DAPI ExposureTime|Exposure time for DAPI Channel
-|  | | DAPI DyeMaxEmission|DAPI Max Emission
-|  | | DAPI DyeMAxExcitation|DAPI Max Excitation
-|  | | EGFP ExposureTime|Exposure time for EGFP Channel
-|  | | EGFP DyeMaxEmission|EGFP Max Emission
-|  | | EGFP DyeMAxExcitation|EGFP Max Excitation
-|  | | DsRed ExposureTime|Exposure time for DsRed Channel
-|  | | DsRed DyeMaxEmission|DsRed Max Emission
-|  | | DsRed DyeMaExcitation|DsRed Max Excitation
-|  | | Cy5 ExposureTime|Exposure time for Cy5 Channel
-|  | | Cy5 DyeMaxEmission| Cy5 Max Emission
-|  | | Cy5 DyeMaxExcitation|Cy5 Max Excitation
-|  | | Detector ID|Type of Detector/Camera used
-|  | | Intensity|Fluorescence Lamp Intensity
-|CCF Spatial Metadata|JSON| alignment_id | Unique identifier given to each instance of the Registration UI running in a user's web browser
-|  | | alignment_operator_first_name|Person who aligned tissue to CCF-First Name
-|  | | alignment_operator_last_name|Person who aligned tissue to CCF - Last Name
-|  | | alignment_datetime|Date and time tissue was aligned to CCF
-|  | | reference_organ_id|Identifier for the reference organ the sample is registered to
-|  | | tissue_position_mass_point_x|x position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ
-|  | | tissue_position_mass_point_y|y position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ
-|  | | tissue_position_mass_point_z|z position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ
-|  | | tissue_object_rotation_x|Rotation of the tissue sample around the x-axis of its mass point
-|  | | tissue_object_rotation_y|Rotation of the tissue sample around the y-axis of its mass point
-|  | | tissue_object_rotation_z|Rotation of the tissue sample around the z-axis of its mass point
-|  | | tissue_object_size_x|Size of the x-dimension of the tissue sample
-|  | | tissue_object_size_y|Size of the y-dimension of the tissue sample
-|  | | tissue_object_size_z|Size of the z-dimension of the tissue sample
-|  | | section_number|Tissue Section number. Each section is 10µm thick.
-| Antibody Metadata |txt | Cycle_1_Antibody_1|Name of Antigen Labeled in Blue Channel for MxIF Cycle 1
-| || Cycle_1_Antibody_2|Name of Antigen Labeled in Green Channel for MxIF Cycle 1
-| || Cycle_1_Antibody_3|Name of Antigen Labeled in Red Channel for MxIF Cycle 1
-| || Cycle_1_Antibody_4|Name of Antigen Labeled in Magenta Channel for MxIF Cycle 1
-| || Cycle_1_Cell_Type1|Cell Type or Structure Labeled by Antibody or Stain in Blue Channel for MxIF Cycle 1
-| || Cycle_1_Cell_Type2|Cell Type or Structure Labeled by Antibody or Stain in Green Channel for MxIF Cycle 1
-| || Cycle_1_Cell_Type3|Cell Type or Structure Labeled by Antibody or Stain in Red Channel for MxIF Cycle 1
-| || Cycle_1_Cell_Type4|Cell Type or Structure Labeled by Antibody or Stain in Magenta Channel for MxIF Cycle 1
-| || Cycle_1_Antibody_1_Lot|Lot of Antibody used for Blue Channel for MxIF Cycle 1
-| || Cycle_1_Antibody_2_Lot|Lot of Antibody used for Green Channel for MxIF Cycle 1
-| || Cycle_1_Antibody_3_Lot|Lot of Antibody used for Red Channel for MxIF Cycle 1
-| || Cycle_1_Antibody_4_Lot|Lot of Antibody used for Magenta Channel for MxIF Cycle 1
-| || Cycle_2_Antibody_1|Name of Antigen Labeled in Blue Channel for MxIF Cycle 2
-| || Cycle_2_Antibody_2|Name of Antigen Labeled in Green Channel for MxIF Cycle 2
-| || Cycle_2_Antibody_3|Name of Antigen Labeled in Red Channel for MxIF Cycle 2
-| || Cycle_2_Antibody_4|Name of Antigen Labeled in Magenta Channel for MxIF Cycle 2
-| || Cycle_2_Cell_Type1|Cell Type or Structure Labeled by Antibody or Stain in Blue Channel for MxIF Cycle 1
-| || Cycle_2_Cell_Type2|Cell Type or Structure Labeled by Antibody or Stain in Green Channel for MxIF Cycle 1
-| || Cycle_2_Cell_Type3|Cell Type or Structure Labeled by Antibody or Stain in Red Channel for MxIF Cycle 1
-| || Cycle_2_Cell_Type4|Cell Type or Structure Labeled by Antibody or Stain in Magenta Channel for MxIF Cycle 1
-| || Cycle_2_Antibody_1_Lot|Cell Lot of Antibody used for Blue Channel for MxIF Cycle 1
-| || Cycle_2_Antibody_2_Lot|Cell Lot of Antibody used for Green Channel for MxIF Cycle 1
-| || Cycle_2_Antibody_3_Lot|Cell Lot of Antibody used for Red Channel for MxIF Cycle 1
-| || Cycle_2_Antibody_4_Lot|Cell Lot of Antibody used for Magenta Channel for MxIF Cycle 1
-|  | | Cycle_3_Antibody_1|Name of Antigen Labeled in Blue Channel for MxIF Cycle 1
-| || Cycle_3_Antibody_2|Name of Antigen Labeled in Green Channel for MxIF Cycle 1
-| || Cycle_3_Antibody_3|Name of Antigen Labeled in Red Channel for MxIF Cycle 1
-| || Cycle_3_Antibody_4|Name of Antigen Labeled in Magenta Channel for MxIF Cycle 1
-| || Cycle_3_Cell_Type1|Cell Type or Structure Labeled by Antibody or Stain in Blue Channel for MxIF Cycle 1
-| || Cycle_3_Cell_Type2|Cell Type or Structure Labeled by Antibody or Stain in Green Channel for MxIF Cycle 1
-| || Cycle_3_Cell_Type3|Cell Type or Structure Labeled by Antibody or Stain in Red Channel for MxIF Cycle 1
-| || Cycle_3_Cell_Type4|Cell Type or Structure Labeled by Antibody or Stain in Magenta Channel for MxIF Cycle 1
-| || Cycle_3_Antibody_1_Lot|Lot of Antibody used for Blue Channel for MxIF Cycle 1
-| || Cycle_3_Antibody_2_Lot|Lot of Antibody used for Green Channel for MxIF Cycle 1
-| || Cycle_3_Antibody_3_Lot|Lot of Antibody used for Red Channel for MxIF Cycle 1
-| || Cycle_3_Antibody_4_Lot|Lot of Antibody used for Magenta Channel for MxIF Cycle 1
-| || Cycle_4_Antibody_1|Name of Antigen Labeled in Blue Channel for MxIF Cycle 1
-| || Cycle_4_Antibody_2|Name of Antigen Labeled in Green Channel for MxIF Cycle 1
-| || Cycle_4_Antibody_3|Name of Antigen Labeled in Red Channel for MxIF Cycle 1
-| || Cycle_4_Antibody_4|Name of Antigen Labeled in Magenta Channel for MxIF Cycle 1
-| || Cycle_4_Cell_Type1|Cell Type or Structure Labeled by Antibody or Stain in Blue Channel for MxIF Cycle 1
-| || Cycle_4_Cell_Type2|Cell Type or Structure Labeled by Antibody or Stain in Green Channel for MxIF Cycle 1
-| || Cycle_4_Cell_Type3|Cell Type or Structure Labeled by Antibody or Stain in Red Channel for MxIF Cycle 1
-| || Cycle_4_Cell_Type4|Cell Type or Structure Labeled by Antibody or Stain in Magenta Channel for MxIF Cycle 1
-| || Cycle_4_Antibody_1_Lot|Cell Lot of Antibody used for Blue Channel for MxIF Cycle 1
-| || Cycle_4_Antibody_2_Lot|Cell Lot of Antibody used for Green Channel for MxIF Cycle 1
-| || Cycle_4_Antibody_3_Lot|Cell Lot of Antibody used for Red Channel for MxIF Cycle 1
-| || Cycle_4_Antibody_4_Lot|Cell Lot of Antibody used for Magenta Channel for MxIF Cycle 1
+|  OME-TIFF | Format: OME-TIFF| SchemaType|Metadata schema type|
+|  | | SchemaVersionMajor|Metadata schema version - major|
+|  | | SchemaVersionMinor|Metadata schema version - minor|
+|  | | Name|Name of the microscopy image|
+|  | | AcquisitionDate|Date and Time of Acquisition|
+|  | | PhysicalSizeX|Spatial Resolution in x dimension (Pixel Size)|
+|  | | PhysicalSizeY|Spatial Resolution in y dimension (Pixel Size)|
+|  | | SizeX|Number of Pixels|
+|  | | SizeY|Number of Pixels|
+|  | | SizeZ|Number of Pixels|
+|  | | Channel:0:0|DAPI Channel|
+|  | | Channel:0:1|FITC Channel|
+|  | | Channel:0:2|TRITC Channel|
+|  | | Channel:0:3|Cy5 Channel|
+| Instrument Metadata |XML | SchemaType|Metadata schema type|
+|  | | Device|Microscope used|
+|  | | TheoreticalTotalMagnification|Objective Magnification |
+|  | | DAPI ExposureTime|Exposure time for DAPI Channel|
+|  | | DAPI DyeMaxEmission|DAPI Max Emission|
+|  | | DAPI DyeMAxExcitation|DAPI Max Excitation|
+|  | | EGFP ExposureTime|Exposure time for EGFP Channel|
+|  | | EGFP DyeMaxEmission|EGFP Max Emission|
+|  | | EGFP DyeMAxExcitation|EGFP Max Excitation|
+|  | | DsRed ExposureTime|Exposure time for DsRed Channel|
+|  | | DsRed DyeMaxEmission|DsRed Max Emission|
+|  | | DsRed DyeMaExcitation|DsRed Max Excitation|
+|  | | Cy5 ExposureTime|Exposure time for Cy5 Channel|
+|  | | Cy5 DyeMaxEmission| Cy5 Max Emission|
+|  | | Cy5 DyeMaxExcitation|Cy5 Max Excitation|
+|  | | Detector ID|Type of Detector/Camera used|
+|  | | Intensity|Fluorescence Lamp Intensity|
+|CCF Spatial Metadata|JSON| alignment_id | Unique identifier given to each instance of the Registration UI running in a user's web browser|
+|  | | alignment_operator_first_name|Person who aligned tissue to CCF-First Name|
+|  | | alignment_operator_last_name|Person who aligned tissue to CCF - Last Name|
+|  | | alignment_datetime|Date and time tissue was aligned to CCF|
+|  | | reference_organ_id|Identifier for the reference organ the sample is registered to|
+|  | | tissue_position_mass_point_x|x position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ|
+|  | | tissue_position_mass_point_y|y position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ|
+|  | | tissue_position_mass_point_z|z position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ|
+|  | | tissue_object_rotation_x|Rotation of the tissue sample around the x-axis of its mass point|
+|  | | tissue_object_rotation_y|Rotation of the tissue sample around the y-axis of its mass point|
+|  | | tissue_object_rotation_z|Rotation of the tissue sample around the z-axis of its mass point|
+|  | | tissue_object_size_x|Size of the x-dimension of the tissue sample|
+|  | | tissue_object_size_y|Size of the y-dimension of the tissue sample|
+|  | | tissue_object_size_z|Size of the z-dimension of the tissue sample|
+|  | | section_number|Tissue Section number. Each section is 10µm thick.|
+| Antibody Metadata |txt | Cycle_1_Antibody_1|Name of Antigen Labeled in Blue Channel for MxIF Cycle 1|
+| || Cycle_1_Antibody_2|Name of Antigen Labeled in Green Channel for MxIF Cycle 1|
+| || Cycle_1_Antibody_3|Name of Antigen Labeled in Red Channel for MxIF Cycle 1|
+| || Cycle_1_Antibody_4|Name of Antigen Labeled in Magenta Channel for MxIF Cycle 1|
+| || Cycle_1_Cell_Type1|Cell Type or Structure Labeled by Antibody or Stain in Blue Channel for MxIF Cycle 1|
+| || Cycle_1_Cell_Type2|Cell Type or Structure Labeled by Antibody or Stain in Green Channel for MxIF Cycle 1|
+| || Cycle_1_Cell_Type3|Cell Type or Structure Labeled by Antibody or Stain in Red Channel for MxIF Cycle 1|
+| || Cycle_1_Cell_Type4|Cell Type or Structure Labeled by Antibody or Stain in Magenta Channel for MxIF Cycle 1|
+| || Cycle_1_Antibody_1_Lot|Lot of Antibody used for Blue Channel for MxIF Cycle 1|
+| || Cycle_1_Antibody_2_Lot|Lot of Antibody used for Green Channel for MxIF Cycle 1|
+| || Cycle_1_Antibody_3_Lot|Lot of Antibody used for Red Channel for MxIF Cycle 1|
+| || Cycle_1_Antibody_4_Lot|Lot of Antibody used for Magenta Channel for MxIF Cycle 1|
+| || Cycle_2_Antibody_1|Name of Antigen Labeled in Blue Channel for MxIF Cycle 2|
+| || Cycle_2_Antibody_2|Name of Antigen Labeled in Green Channel for MxIF Cycle 2|
+| || Cycle_2_Antibody_3|Name of Antigen Labeled in Red Channel for MxIF Cycle 2|
+| || Cycle_2_Antibody_4|Name of Antigen Labeled in Magenta Channel for MxIF Cycle 2|
+| || Cycle_2_Cell_Type1|Cell Type or Structure Labeled by Antibody or Stain in Blue Channel for MxIF Cycle 1|
+| || Cycle_2_Cell_Type2|Cell Type or Structure Labeled by Antibody or Stain in Green Channel for MxIF Cycle 1|
+| || Cycle_2_Cell_Type3|Cell Type or Structure Labeled by Antibody or Stain in Red Channel for MxIF Cycle 1|
+| || Cycle_2_Cell_Type4|Cell Type or Structure Labeled by Antibody or Stain in Magenta Channel for MxIF Cycle 1|
+| || Cycle_2_Antibody_1_Lot|Cell Lot of Antibody used for Blue Channel for MxIF Cycle 1|
+| || Cycle_2_Antibody_2_Lot|Cell Lot of Antibody used for Green Channel for MxIF Cycle 1|
+| || Cycle_2_Antibody_3_Lot|Cell Lot of Antibody used for Red Channel for MxIF Cycle 1|
+| || Cycle_2_Antibody_4_Lot|Cell Lot of Antibody used for Magenta Channel for MxIF Cycle 1|
+|  | | Cycle_3_Antibody_1|Name of Antigen Labeled in Blue Channel for MxIF Cycle 1|
+| || Cycle_3_Antibody_2|Name of Antigen Labeled in Green Channel for MxIF Cycle 1|
+| || Cycle_3_Antibody_3|Name of Antigen Labeled in Red Channel for MxIF Cycle 1|
+| || Cycle_3_Antibody_4|Name of Antigen Labeled in Magenta Channel for MxIF Cycle 1|
+| || Cycle_3_Cell_Type1|Cell Type or Structure Labeled by Antibody or Stain in Blue Channel for MxIF Cycle 1|
+| || Cycle_3_Cell_Type2|Cell Type or Structure Labeled by Antibody or Stain in Green Channel for MxIF Cycle 1|
+| || Cycle_3_Cell_Type3|Cell Type or Structure Labeled by Antibody or Stain in Red Channel for MxIF Cycle 1|
+| || Cycle_3_Cell_Type4|Cell Type or Structure Labeled by Antibody or Stain in Magenta Channel for MxIF Cycle 1|
+| || Cycle_3_Antibody_1_Lot|Lot of Antibody used for Blue Channel for MxIF Cycle 1|
+| || Cycle_3_Antibody_2_Lot|Lot of Antibody used for Green Channel for MxIF Cycle 1|
+| || Cycle_3_Antibody_3_Lot|Lot of Antibody used for Red Channel for MxIF Cycle 1|
+| || Cycle_3_Antibody_4_Lot|Lot of Antibody used for Magenta Channel for MxIF Cycle 1|
+| || Cycle_4_Antibody_1|Name of Antigen Labeled in Blue Channel for MxIF Cycle 1|
+| || Cycle_4_Antibody_2|Name of Antigen Labeled in Green Channel for MxIF Cycle 1|
+| || Cycle_4_Antibody_3|Name of Antigen Labeled in Red Channel for MxIF Cycle 1|
+| || Cycle_4_Antibody_4|Name of Antigen Labeled in Magenta Channel for MxIF Cycle 1|
+| || Cycle_4_Cell_Type1|Cell Type or Structure Labeled by Antibody or Stain in Blue Channel for MxIF Cycle 1|
+| || Cycle_4_Cell_Type2|Cell Type or Structure Labeled by Antibody or Stain in Green Channel for MxIF Cycle 1|
+| || Cycle_4_Cell_Type3|Cell Type or Structure Labeled by Antibody or Stain in Red Channel for MxIF Cycle 1|
+| || Cycle_4_Cell_Type4|Cell Type or Structure Labeled by Antibody or Stain in Magenta Channel for MxIF Cycle 1|
+| || Cycle_4_Antibody_1_Lot|Cell Lot of Antibody used for Blue Channel for MxIF Cycle 1|
+| || Cycle_4_Antibody_2_Lot|Cell Lot of Antibody used for Green Channel for MxIF Cycle 1|
+| || Cycle_4_Antibody_3_Lot|Cell Lot of Antibody used for Red Channel for MxIF Cycle 1|
+| || Cycle_4_Antibody_4_Lot|Cell Lot of Antibody used for Magenta Channel for MxIF Cycle 1|
 
 
 ## HuBMAP File Structure
@@ -169,7 +169,7 @@ This metadata.tsv schema is now available in Github for download. Any further ed
 
 ## Terms defined in this document
 
-|**Term** |  **Definition**
+|**Term** |  **Definition**|
 |--|--|
 |  Intensity| Detector Counts| 
 |  Signal| Intensity produced by fluorescence, both endogenous and introduced| 

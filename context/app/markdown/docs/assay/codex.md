@@ -43,10 +43,10 @@ There are a variety of terms used in this document that may not be familiar to a
 
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
-|  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF
-| 1 |  Processed Microscopy data: Can include stitching, thresholding, background subtraction, z-stack alignment, deconvolution |  CZI, TIFF, OME-TIFF
-| 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF
-| 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG
+|  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF|
+| 1 |  Processed Microscopy data: Can include stitching, thresholding, background subtraction, z-stack alignment, deconvolution |  CZI, TIFF, OME-TIFF|
+| 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF|
+| 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG|
 
 ## HuBMAP Metadata
 All HuBMAP CODEX data will have searchable metadata fields. This metadata field schema now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/codex)  where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
@@ -133,7 +133,7 @@ Other differences between CODEX software at Stanford versus Akoya proprietary so
       
 The exact same data from Stanford is also available in an image sequence format, which stores the data in the same folder structure as Akoya’s format. But we can ignore this processed dataset with image sequence for analysis purposes.
 
-|**Type of Segmentation/Description** |  **Descriptor (the name should contain the following)**| **Location**
+|**Type of Segmentation/Description** |  **Descriptor (the name should contain the following)**| **Location**|
 |--|--|--|
 |  Stanford - cell segmentation| *_processed| https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FStanford%20TMC%2F26191c2719339be0c3fa6dc8a7ba3550%2F20190514_HUBMAP_CL1_processed%2F |
 |  Stanford - cell segmentation| *_processed-ImgSeq| https://app.globus.org/file-manager?origin_id=28bbb03c-a87d-4dd7-a661-7ea2fb6ea631&origin_path=%2FStanford%20TMC%2F26191c2719339be0c3fa6dc8a7ba3550%2F20190514_HUBMAP_CL1_processed-ImgSeq%2F  | 

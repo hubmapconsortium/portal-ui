@@ -19,8 +19,8 @@ The HuBMAP project provides data to the public in a variety of data states, whic
 
 |**Data State** |  **Description**| **LC/MS File Format** | 
 |--|--|--|
-|  0 | Raw data: raw MS data from instrument.| Raw, wiff
-| 1 |  Txt, tsv, csv: MS intensity (spectral count) + Annotation |  txt, tsv, csv
+|  0 | Raw data: raw MS data from instrument.| Raw, wiff|
+| 1 |  Txt, tsv, csv: MS intensity (spectral count) + Annotation |  txt, tsv, csv|
 
 ## HuBMAP Metadata 
 *Definition of Metadata Levels*

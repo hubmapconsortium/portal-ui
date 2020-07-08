@@ -37,43 +37,43 @@ There are a variety of terms used in this document that may not be familiar to a
 
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
-|  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| SCN, TIFF
-| 1 |  Processed Microscopy data: Can include stitching, thresholding, background subtraction, z-stack alignment, deconvolution |  CZI, TIFF, OME-TIFF
-| 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF
-| 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG
+|  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| SCN, TIFF|
+| 1 |  Processed Microscopy data: Can include stitching, thresholding, background subtraction, z-stack alignment, deconvolution |  CZI, TIFF, OME-TIFF|
+| 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF|
+| 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG|
 
 ## HuBMAP Metadata
 This metadata schema is now available in Github for download. Any further edits can be made through consultation with the HuBMAP team who will request changes through [Github.](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/stained)
 
 ## Associated Metadata files
 
-|**Metadata File Name** |  **File Type**| **Field** | **Definition**
+|**Metadata File Name** |  **File Type**| **Field** | **Definition**|
 |--|--|--|--|
-| Instrument Metadata |XML | SchemaType|Metadata schema type
-|  | | AcquisitionDate|Date and Time of Acqusition
-|  | | ObjectiveSettings|Nominal Magnification
-|  | | PhysicalSizeX|Spatial Resolution in x dimension (Pixel Size)
-|  | | PhysicalSizeY|Spatial Resolution in y dimension (Pixel Size)
-|  | | PhysicalSizeZ|Spatial Resolution in z dimension (Pixel Size)
-|  | | SizeX|Number of pixels in x axis
-|  | | SizeY|Number of pixels in y axis
-|  | | SizeZ|Number of pixels in z axis
-|  | | IlluminationType|Type of light used
-|CCF Spatial Metadata|JSON| alignment_id | Unique identifier given to each instance of the Registration UI running in a user's web browser
-|  | | alignment_operator_first_name|Person who aligned tissue to CCF-First Name
-|  | | alignment_operator_last_name|Person who aligned tissue to CCF - Last Name
-|  | | alignment_datetime|Date and time tissue was aligned to CCF
-|  | | reference_organ_id|Identifier for the reference organ the sample is registered to
-|  | | tissue_position_mass_point_x|x position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ
-|  | | tissue_position_mass_point_y|y position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ
-|  | | tissue_position_mass_point_z|z position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ
-|  | | tissue_object_rotation_x|Rotation of the tissue sample around the x-axis of its mass point
-|  | | tissue_object_rotation_y|Rotation of the tissue sample around the y-axis of its mass point
-|  | | tissue_object_rotation_z|Rotation of the tissue sample around the z-axis of its mass point
-|  | | tissue_object_size_x|Size of the x-dimension of the tissue sample
-|  | | tissue_object_size_y|Size of the y-dimension of the tissue sample
-|  | | tissue_object_size_z|Size of the z-dimension of the tissue sample
-|  | | section_number|Tissue Section number. Each section is 10µm thick.
+| Instrument Metadata |XML | SchemaType|Metadata schema type|
+|  | | AcquisitionDate|Date and Time of Acqusition|
+|  | | ObjectiveSettings|Nominal Magnification|
+|  | | PhysicalSizeX|Spatial Resolution in x dimension (Pixel Size)|
+|  | | PhysicalSizeY|Spatial Resolution in y dimension (Pixel Size)|
+|  | | PhysicalSizeZ|Spatial Resolution in z dimension (Pixel Size)|
+|  | | SizeX|Number of pixels in x axis|
+|  | | SizeY|Number of pixels in y axis|
+|  | | SizeZ|Number of pixels in z axis|
+|  | | IlluminationType|Type of light used|
+|CCF Spatial Metadata|JSON| alignment_id | Unique identifier given to each instance of the Registration UI running in a user's web browser|
+|  | | alignment_operator_first_name|Person who aligned tissue to CCF-First Name|
+|  | | alignment_operator_last_name|Person who aligned tissue to CCF - Last Name|
+|  | | alignment_datetime|Date and time tissue was aligned to CCF|
+|  | | reference_organ_id|Identifier for the reference organ the sample is registered to|
+|  | | tissue_position_mass_point_x|x position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ|
+|  | | tissue_position_mass_point_y|y position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ|
+|  | | tissue_position_mass_point_z|z position of the center of mass of the tissue sample in relation to the 3-D grid wrapped around the reference organ|
+|  | | tissue_object_rotation_x|Rotation of the tissue sample around the x-axis of its mass point|
+|  | | tissue_object_rotation_y|Rotation of the tissue sample around the y-axis of its mass point|
+|  | | tissue_object_rotation_z|Rotation of the tissue sample around the z-axis of its mass point|
+|  | | tissue_object_size_x|Size of the x-dimension of the tissue sample|
+|  | | tissue_object_size_y|Size of the y-dimension of the tissue sample|
+|  | | tissue_object_size_z|Size of the z-dimension of the tissue sample|
+|  | | section_number|Tissue Section number. Each section is 10µm thick.|
 
 ## HuBMAP PAS File Structure
 
@@ -101,7 +101,7 @@ This metadata schema is now available in Github for download. Any further edits 
 
 ## Terms defined in this document
 
-|**Term** |  **Definition**
+|**Term** |  **Definition**|
 |--|--|
 |  Intensity| Detector Counts| 
 |  Signal| Intensity produced by fluorescence, both endogenous and introduced| 

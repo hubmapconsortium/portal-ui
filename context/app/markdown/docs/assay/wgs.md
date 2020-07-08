@@ -18,9 +18,9 @@ The HuBMAP project provides data to the public in a variety of data states, whic
 
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
-|  0 | Raw data: This is the raw sequence data (unprocessed) generated directly by the sequence instrument in files either with Phred quality scores (fastq).| FASTQ
-| 1 | Aligned data: SAM files contain sequence data that has been aligned to a reference genome and includes chromosome coordinates. BAM files are compressed binary versions of SAM files |  SAM, BAM
-| 2 |  Mutations: Variant call format (VCF). |  .vcf
+|  0 | Raw data: This is the raw sequence data (unprocessed) generated directly by the sequence instrument in files either with Phred quality scores (fastq).| FASTQ|
+| 1 | Aligned data: SAM files contain sequence data that has been aligned to a reference genome and includes chromosome coordinates. BAM files are compressed binary versions of SAM files |  SAM, BAM|
+| 2 |  Mutations: Variant call format (VCF). |  .vcf|
 
 ## **HuBMAP Metadata:** 
 -   Level 1: These are attributes that are common to all assays, for example, the type (“CODEX”) and category of assay (“imaging”), a timestamp, and the name of the person who executed the assay.
@@ -38,15 +38,15 @@ All HuBMAP data will have searchable metadata fields.
 
 ## Values to be produced by HIVE Pipeline
 
-|**Level** |  **Field**| **Definition** | **Valid Values** | **Purpose**
+|**Level** |  **Field**| **Definition** | **Valid Values** | **Purpose**|
 |--|--|--|--|--|
 |  na | data_analysis_protocols_io_doi| Link to the protocol document describing how the HIVE or TMC is processing the data|
-|  na | reference_genome| Genome used for alignment| GRCh38 or GRCh37
-|  na | mapping_platform| Software used for quantification| BWA-MEM
+|  na | reference_genome| Genome used for alignment| GRCh38 or GRCh37|
+|  na | mapping_platform| Software used for quantification| BWA-MEM|
 |  na | mapping_version| Version of BWA-MEM used, with HuBMAP-specific modifications|
-|  na | number_of_raw_reads| Raw number of sequencing reads| Numeric Value
-|  na | quality_score| Average phred score of dataset| Numeric Value
-|  na | percent_unique_mapped_reads| When a set of reads are aligned with a genome, some will map in multiple locations. This indicates the percentage of reads that mapped to only one location on the genome| [0-1]| QA/QC
+|  na | number_of_raw_reads| Raw number of sequencing reads| Numeric Value|
+|  na | quality_score| Average phred score of dataset| Numeric Value|
+|  na | percent_unique_mapped_reads| When a set of reads are aligned with a genome, some will map in multiple locations. This indicates the percentage of reads that mapped to only one location on the genome| [0-1]| QA/QC|
 
 
 ## HuBMAP WGS Sequence Raw File Structure
@@ -78,12 +78,12 @@ The bolded steps below constitute a series of standard RNA-seq data analysis wor
 
 |**qc_metric** |  **Threshold**| **Method** | 
 |--|--|--|
-|  average_base_quality_scores |>20 (accuracy rate 99%)| FastQC
-|  gc_content || FastQC
-|  sequence_length_distribution |>45 (encode)| FastQC
-|  sequence_duplication|| FastQC
-|  k-mer_overrepresentation |20 (accuracy rate 99%)
-| contamination_of_primers_and_adapters_in_sequencing_data || Library specific data on adapters need to be provided to the read-trimming tool like trimmomatic *(Bioinformatics. 2014 Aug 1; 30(15):2114-20.).*
+|  average_base_quality_scores |>20 (accuracy rate 99%)| FastQC|
+|  gc_content || FastQC|
+|  sequence_length_distribution |>45 (encode)| FastQC|
+|  sequence_duplication|| FastQC|
+|  k-mer_overrepresentation |20 (accuracy rate 99%)|
+| contamination_of_primers_and_adapters_in_sequencing_data || Library specific data on adapters need to be provided to the read-trimming tool like trimmomatic *(Bioinformatics. 2014 Aug 1; 30(15):2114-20.).*|
 
 ## Terms defined in this document
 Base quality scores: prediction of the probability of an error in base calling
@@ -95,11 +95,11 @@ Note that this is not per-cell. Trimmed reads are mapped to reference genome.
 
 |**qc_metric** |  **Threshold**| **Method** | 
 |--|--|--|
-|  unique_mapping_percent |Ideally > 95% (Encode) Acceptable > 80% (at least for bulk)| SAMtools/Picard
-| duplicate_reads_percent || SAMtools/Picard
-|  fragment_length_distribution |>45 (encode)| SAMtools/Picard
-|  gc_bias |Biased if variance of GC content is larger than 95% of confidence threshold of the baseline variance| SAMtools/Picard
-|  library_complexity |NRF>0.9, PBC1>0.9, and PBC2>3| https://www.encodeproject.org/data-standards/terms/#library
+|  unique_mapping_percent |Ideally > 95% (Encode) Acceptable > 80% (at least for bulk)| SAMtools/Picard|
+| duplicate_reads_percent || SAMtools/Picard|
+|  fragment_length_distribution |>45 (encode)| SAMtools/Picard|
+|  gc_bias |Biased if variance of GC content is larger than 95% of confidence threshold of the baseline variance| SAMtools/Picard|
+|  library_complexity |NRF>0.9, PBC1>0.9, and PBC2>3| https://www.encodeproject.org/data-standards/terms/#library|
 
 *Uniquely mapping %* – Percentage of reads that map to exactly one location within the reference genome.
 
