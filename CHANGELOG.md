@@ -1,3 +1,15 @@
+## v0.0.37 - 2020-07-08
+
+- Make the display of the download link conditional on having agreed to the DUA.
+- Use local storage to persist DUA agreement.
+- push.sh now handles steps that were in the readme.
+- Use mapped_data_types in search and details.
+- Fix MD sytax problems.
+- Add tiles to provenance table.
+- Fix bugs in node click handling in ProvVis.
+- Changed layout of Showcase and Visualization control styling.
+
+
 ## v0.0.36 - 2020-07-06
 
 - Reorder search facets.

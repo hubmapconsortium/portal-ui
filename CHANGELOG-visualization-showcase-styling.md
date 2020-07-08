@@ -1,1 +1,0 @@
-- Changed layout of Showcase and Visualization control styling.
