@@ -22,11 +22,13 @@ function DerivedLink(props) {
 }
 
 function ProvTable(props) {
-  const { provData, uuid, entity_type, typesToSplit } = props;
+  const { uuid, entity_type, typesToSplit, ancestors, assayMetadata } = props;
 
-  const types = Object.values(provData.entity).reduce(
+  ancestors.push(assayMetadata);
+
+  const types = ancestors.reduce(
     (acc, item) => {
-      acc[typesToSplit.indexOf(item['prov:type'])].push(item);
+      acc[typesToSplit.indexOf(item.entity_type)].push(item);
       return acc;
     },
     [[], [], []],
@@ -39,17 +41,16 @@ function ProvTable(props) {
           <EntityColumnTitle variant="h5">{typesToSplit[i]}s</EntityColumnTitle>
           <FlexColumn>
             {type && type.length ? (
-              type
-                .reverse()
-                .map((item) => (
-                  <ProvTableTile
-                    key={item['hubmap:uuid']}
-                    uuid={item['hubmap:uuid']}
-                    id={item['hubmap:displayDOI']}
-                    entityType={item['prov:type']}
-                    isCurrentEntity={uuid === item['hubmap:uuid']}
-                  />
-                ))
+              type.map((item, j) => (
+                <ProvTableTile
+                  key={item.uuid}
+                  uuid={item.uuid}
+                  id={item.display_doi}
+                  entity_type={item.entity_type}
+                  isCurrentEntity={uuid === item.uuid}
+                  isNotSibling={j > 0 ? type[j - 1].specimen_type !== item.specimen_type : false}
+                />
+              ))
             ) : (
               <DerivedLink uuid={uuid} type={typesToSplit[i]} />
             )}
@@ -66,7 +67,6 @@ function ProvTable(props) {
 ProvTable.propTypes = {
   uuid: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
-  provData: PropTypes.objectOf(PropTypes.object).isRequired,
   typesToSplit: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 

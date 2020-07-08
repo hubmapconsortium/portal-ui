@@ -14,16 +14,16 @@ import {
 } from './style';
 
 function EntityTile(props) {
-  const { uuid, entityType, id, isCurrentEntity, entityData } = props;
+  const { uuid, entity_type, id, isCurrentEntity, entityData } = props;
 
   return entityData ? (
-    <a href={`/browse/${entityType.toLowerCase()}/${uuid}`}>
+    <a href={`/browse/${entity_type.toLowerCase()}/${uuid}`}>
       <StyledPaper $isCurrentEntity={isCurrentEntity}>
         <HoverOverlay $isCurrentEntity={isCurrentEntity}>
           <FixedWidthDiv>
-            {entityType === 'Dataset' && <StyledDatasetIcon />}
-            {entityType === 'Donor' && <StyledDonorIcon />}
-            {entityType === 'Sample' && <StyledSampleIcon />}
+            {entity_type === 'Dataset' && <StyledDatasetIcon />}
+            {entity_type === 'Donor' && <StyledDonorIcon />}
+            {entity_type === 'Sample' && <StyledSampleIcon />}
             <div style={{ minWidth: 0, flexGrow: 1 }}>
               <Typography component="h4" variant="h6">
                 {id}
@@ -37,7 +37,7 @@ function EntityTile(props) {
               {'mapped_data_types' in entityData && (
                 <TruncatedTypography variant="body2">{entityData.mapped_data_types.join(', ')}</TruncatedTypography>
               )}
-              {entityType === 'Donor' && 'mapped_metadata' in entityData && (
+              {entity_type === 'Donor' && 'mapped_metadata' in entityData && (
                 <>
                   <Flex>
                     <Typography variant="body2">{entityData.mapped_metadata.gender}</Typography>

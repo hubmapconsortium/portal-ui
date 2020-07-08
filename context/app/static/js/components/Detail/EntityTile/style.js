@@ -23,7 +23,7 @@ const StyledDonorIcon = styled(DonorIcon)`
 `;
 
 const StyledPaper = styled(Paper)`
-  margin-bottom: ${(props) => props.theme.spacing(3)}px;
+  margin-bottom: ${(props) => props.theme.spacing(2)}px;
   box-shadow: ${(props) => props.theme.shadows[1]};
 
   ${(props) =>

@@ -11,7 +11,7 @@ import { readCookie } from '../../../helpers/functions';
 
 function ProvTabs(props) {
   const { uuid, assayMetadata, entityEndpoint } = props;
-  const { metadata, entity_type } = assayMetadata;
+  const { metadata, entity_type, ancestors } = assayMetadata;
 
   const [open, setOpen] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -67,6 +67,8 @@ function ProvTabs(props) {
                 uuid={uuid}
                 entity_type={entity_type}
                 typesToSplit={['Donor', 'Sample', 'Dataset']}
+                ancestors={ancestors}
+                assayMetadata={assayMetadata}
               />
             </StyledTabPanel>
             <StyledTabPanel value={open} index={1}>

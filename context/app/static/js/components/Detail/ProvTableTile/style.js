@@ -1,0 +1,9 @@
+import styled from 'styled-components';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+
+const DownIcon = styled(KeyboardArrowDownIcon)`
+  font-size: 2rem;
+  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+`;
+
+export { DownIcon };
