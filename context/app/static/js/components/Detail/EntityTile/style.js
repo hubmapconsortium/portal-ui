@@ -41,14 +41,14 @@ const StyledPaper = styled(Paper)`
 const HoverOverlay = styled.div`
   &:hover {
     box-shadow: ${(props) => props.theme.shadows[8]};
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: ${(props) => props.theme.palette.whiteHoverOverlay.main};
   }
 
   ${(props) =>
     props.$isCurrentEntity &&
     css`
       &:hover {
-        background-color: rgba(255, 255, 255, 0.08);
+        background-color: ${props.theme.palette.primaryHoverOverlay.main};
       }
     `}
 `;
