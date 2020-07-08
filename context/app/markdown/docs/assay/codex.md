@@ -199,7 +199,9 @@ The Akoya integrated processing step* [https://help.codex.bio/codex/processor/us
 A histogram and sample image is generated for every acquired channel. Each row is a cycle, containing its corresponding channels. Top-left image and histogram is always the first cycle, first channel. Image and histogram to their right is the same cycle, second channel.
 
 The displayed image is a full-resolution cropped image that has the greatest standard deviation among those sampled. Each image may be of different location within the region, depending on the expression pattern. For example, cropped images for DAPI cycles 2 and 3 below differ in their sampling location.
+
 ![](https://lh4.googleusercontent.com/IpSNTYOmk9QpFWqRf28xWq-eKgok0mFiJtlP1WVZLKWxJaRHeUQBubMqiaj3wOV5ZiGhA5lY99tBZbg4jxMqfKfTtLbXRAC97K63b67JZK4Dvps72WqnpqKOowxZyg5Z3QTgcc_Z)
+
 (Magenta) A single cycle. (Cyan) Full-resolution cropped image. (Purple) Histogram.
 
 The histogram displays pixel frequency of signal intensities found within the region image. The horizontal intensity axis covers the 16-bit range (0 ~ 65535), while the vertical frequency axis auto-scales to the number of pixels found. Frequency is in logarithmic scale to better represent lower frequencies that correspond to biomarker signal.
@@ -207,6 +209,7 @@ The histogram displays pixel frequency of signal intensities found within the re
 Additionally, all cycles except the first contains two histogram plots. All purple plots are of the first cycle, which can be a reference for comparison, especially if the first cycle contains blank cycles. The legend specifies which biomarker the histogram represents.
 
 A summary section contains basic statistics of biomarker region images. Again, each slide contains four cycles and their corresponding channels. Any non-biomarker channel (i.e. containing "DAPI," "blank" or "empty") will be grayed out.
+
 ![](https://lh3.googleusercontent.com/k1xa3dbWojRY3n5gmzjZFbQyyLpcQxKeAuNqV3Gn17u_l2dmEzvuBzzk09aYDgRlz-9cTaUvzxUsDJj6-GbC6CgFVT89hjHlvGEX_5GOim5PEd1WSpUiZCIypz93eXlg6v_YU3ta)
 
 There are 18 columns for each channel. All pixel intensities are in 16-bit ranges (0 ~ 65535).
