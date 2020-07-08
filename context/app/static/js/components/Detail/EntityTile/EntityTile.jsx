@@ -7,10 +7,11 @@ import {
   StyledDonorIcon,
   StyledPaper,
   HoverOverlay,
-  FixedWidthDiv,
+  FixedWidthFlex,
   Flex,
   TruncatedTypography,
   StyledDivider,
+  TextSection,
 } from './style';
 
 function EntityTile(props) {
@@ -20,11 +21,11 @@ function EntityTile(props) {
     <a href={`/browse/${entity_type.toLowerCase()}/${uuid}`}>
       <StyledPaper $isCurrentEntity={isCurrentEntity}>
         <HoverOverlay $isCurrentEntity={isCurrentEntity}>
-          <FixedWidthDiv>
+          <FixedWidthFlex>
             {entity_type === 'Dataset' && <StyledDatasetIcon />}
             {entity_type === 'Donor' && <StyledDonorIcon />}
             {entity_type === 'Sample' && <StyledSampleIcon />}
-            <div style={{ minWidth: 0, flexGrow: 1 }}>
+            <TextSection>
               <Typography component="h4" variant="h6">
                 {id}
               </Typography>
@@ -47,8 +48,8 @@ function EntityTile(props) {
                   <TruncatedTypography variant="body2">{entityData.mapped_metadata.race}</TruncatedTypography>
                 </>
               )}
-            </div>
-          </FixedWidthDiv>
+            </TextSection>
+          </FixedWidthFlex>
         </HoverOverlay>
       </StyledPaper>
     </a>

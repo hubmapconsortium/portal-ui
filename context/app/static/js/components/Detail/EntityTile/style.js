@@ -54,7 +54,7 @@ const HoverOverlay = styled.div`
 `;
 
 // Width needs to be defined in px for text-overflow to work
-const FixedWidthDiv = styled.div`
+const FixedWidthFlex = styled.div`
   display: flex;
   width: 300px;
   padding: 10px 10px;
@@ -75,14 +75,20 @@ const StyledDivider = styled(Divider)`
   margin: 0px ${(props) => props.theme.spacing(0.5)}px;
 `;
 
+const TextSection = styled.div`
+  min-width: 0;
+  flex-wrow: 1;
+`;
+
 export {
   StyledDatasetIcon,
   StyledSampleIcon,
   StyledDonorIcon,
   StyledPaper,
   HoverOverlay,
-  FixedWidthDiv,
+  FixedWidthFlex,
   Flex,
   TruncatedTypography,
   StyledDivider,
+  TextSection,
 };
