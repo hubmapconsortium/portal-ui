@@ -68,6 +68,9 @@ ProvTable.propTypes = {
   uuid: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
   typesToSplit: PropTypes.arrayOf(PropTypes.string).isRequired,
+  ancestors: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  assayMetadata: PropTypes.object.isRequired,
 };
 
 export default ProvTable;
