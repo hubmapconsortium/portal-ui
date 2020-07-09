@@ -14,27 +14,22 @@ Stained microscopy employs histological stains such as H&E or PAS to improve res
 There are a variety of terms used in this document that may not be familiar to all researchers wanting to make use of the HubMap data. The following figures illustrate several of these terms:
 ![](https://lh6.googleusercontent.com/3DVOL8i-fUSpBqGpmlEyKWt38V-IuPI4lxBqDWQS5rl-9cBC5z2ePmNhUsMzYWndTEu1bnimcQMiujfOkLw6kYeH9qoXNJ2dpU2IMie-fey-xsMQN9Fd5tjSOlPep_zT6HC4wf_j)  
   
-
-*Figure 1:* Pictorial representation of microscopy terms. The black box is an example slide or cover slip where the sample is located. Blue boxes are examples of “regions” or user defined imaging areas. For instance, if you want to image a specific structure in the tissue, you would designate a “region” over the structure. Red boxes are examples of “tiles” or the microscope “field of view”. The size of the tile is dependent on the microscope set up and objective. Tiles will fill the region. Because the field of view cannot be changed, tiles will overhang from the region, ensuring the entire region is imaged at the expense of extra tiles being acquired.
+*Figure 1: Pictorial representation of microscopy terms. The black box is an example slide or cover slip where the sample is located. Blue boxes are examples of “regions” or user defined imaging areas. For instance, if you want to image a specific structure in the tissue, you would designate a “region” over the structure. Red boxes are examples of “tiles” or the microscope “field of view”. The size of the tile is dependent on the microscope set up and objective. Tiles will fill the region. Because the field of view cannot be changed, tiles will overhang from the region, ensuring the entire region is imaged at the expense of extra tiles being acquired.*
 
 
 ![](https://lh4.googleusercontent.com/6NAJyfQw-QiecucZsFFQUnwYA9Qnopv8Nm5nGpvdN9md7olpmed1GO4zCLhNiQu8iZ3I7qqZCUrgI3IDs31F0L08yI53odBFPrlV3PKn7d9_BsjpenzT7WJV-emA4vuBKWLufJ8p)
-
-*Figure 2:* Images are generally acquired with adjacent tiles overlapping, as indicated by the dark regions in the image on the right above. Overlap enhances alignment of tiles for stitching to create a composite image, as shown in Figure 4 below.
+*Figure 2: Images are generally acquired with adjacent tiles overlapping, as indicated by the dark regions in the image on the right above. Overlap enhances alignment of tiles for stitching to create a composite image, as shown in Figure 4 below.*
 
 
 ![](https://lh4.googleusercontent.com/cSCg2M0Agd3LwVB6P9d4Lmon_UQoYinsjYG4O_HXt84od1zTmAkPAHH12SallVu7atXbGsJz38Y_W_Dv1yueSDNYN4a8ypDBmVd12gVrJ_HGNpMjE4pmYJpfRICcEi3rG3A9E0_C)
-
-*Figure 3:* Images of tiles are captured as the stage moves across the imaged region row by row (left) or via a serpentine (or snake-like) path (right).
+*Figure 3: Images of tiles are captured as the stage moves across the imaged region row by row (left) or via a serpentine (or snake-like) path (right).*
 
 ![](https://lh3.googleusercontent.com/DOfMGg2M7neAXzHThdySavI7dlv1rJl3xSx0vXpMLKDLukl1LD4EWn8_QGJUh07cwkjaeC6QfewI0wBMyE7VCXrNDm_ogCI0ulUhIfU4lt7UglUCCIVb586oTfF4NIpL9XzHcC4W)*Figure 4:* Stitching is the process of aligning and merging neighboring image tiles into a single composite image.
 
 ![](https://lh6.googleusercontent.com/ws1C9nQT8QP5x9pZ5FoNh9LZ7KgGaGP6wZMEwrMwHzWR2tMhA74bneDiHNuLtHGgeElGxLOKGvadUrx2sByfBYxv8-1i_41j-6k_cVhpgQmbIg5rycZaCdimHAkOkQzKWMBT68Q0)
-
-*Figure 5:* Example defined plane (left) with example imaged z planes (right).
+*Figure 5: Example defined plane (left) with example imaged z planes (right).*
 
 ## HuBMAP Stained Microscopy Data States (Levels)
-
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| SCN, TIFF|
@@ -46,7 +41,6 @@ There are a variety of terms used in this document that may not be familiar to a
 This metadata schema is now available in Github for download. Any further edits can be made through consultation with the HuBMAP team who will request changes through [Github.](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/stained)
 
 ## Associated Metadata files
-
 |**Metadata File Name** |  **File Type**| **Field** | **Definition**|
 |--|--|--|--|
 | Instrument Metadata |XML | SchemaType|Metadata schema type|
@@ -75,32 +69,8 @@ This metadata schema is now available in Github for download. Any further edits 
 |  | | tissue_object_size_z|Size of the z-dimension of the tissue sample|
 |  | | section_number|Tissue Section number. Each section is 10µm thick.|
 
-## HuBMAP PAS File Structure
-
-    DR_reformat….
-    /LC Data
-    /metadata
-    /assay
-    PAS.csv
-    /templates
-    /VAN000*-*K-**-**_**
-    /CCF Metadata
-    VAN000*-*K-**-**_ccf_metadata
-    / VAN000*-*K-**-**_**-PAS
-    /processedMicroscopy
-    /VAN000*-*K-**-**-PAS_images
-    VAN000*-*K-**-**-PAS_registered.ome.tiff
-    /VAN000*-*K-**-**- PAS_transformations
-    /transform_00_VAN000*-*K-**-**-PAS_initial.txt
-    /transform_00_VAN000*-*K-**-**-PAS_rigid.txt
-    /transform_00_VAN000*-*K-**-**PAS_append_rigid.txt
-    /transform_01_VAN000*-*K-**-**-PAS_affine.txt
-    /rawMicroscopy
-    /VAN000*-*K-**-**-PAS_meta_unregistered.xml
-    /VAN000*-*K-**-**-PAS_unregistered.czi
 
 ## Terms defined in this document
-
 |**Term** |  **Definition**|
 |--|--|
 |  Intensity| Detector Counts| 
