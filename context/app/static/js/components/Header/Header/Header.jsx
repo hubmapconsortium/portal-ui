@@ -4,10 +4,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { StyledAppBar, HubmapLogo, Spacer, HeaderButton, Link } from './style';
+import { StyledAppBar, HubmapLogo, Spacer, HeaderButton } from './style';
 import Menu from '../Menu';
 import ShowcaseDropdown from '../ShowcaseDropdown';
+import Dropdown from '../Dropdown';
 import LoginButton from '../LoginButton';
+import DocumentationLinks from '../DocumentationLinks';
 
 function Header() {
   const theme = useTheme();
@@ -26,26 +28,24 @@ function Header() {
             <>
               <div>
                 {['Donor', 'Sample', 'Dataset'].map((type) => (
-                  <HeaderButton key={type}>
-                    <Link href={`/search?entity_type[0]=${type}`}>{`${type}s`}</Link>
+                  <HeaderButton key={type} href={`/search?entity_type[0]=${type}`} component="a">
+                    {`${type}s`}
                   </HeaderButton>
                 ))}
-                <HeaderButton>
-                  <Link href="/collections">Collections</Link>
+                <HeaderButton component="a" href="/collections">
+                  Collections
                 </HeaderButton>
               </div>
               <Spacer />
               <ShowcaseDropdown />
               <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
-                <HeaderButton>
-                  <Link href="/ccf-eui" target="_blank" rel="noopener noreferrer">
-                    CCF
-                  </Link>
+                <HeaderButton component="a" href="/ccf-eui" target="_blank" rel="noopener noreferrer">
+                  CCF
                 </HeaderButton>
               </Tooltip>
-              <HeaderButton>
-                <Link href="/docs">Documentation</Link>
-              </HeaderButton>
+              <Dropdown title="Documentation">
+                <DocumentationLinks />
+              </Dropdown>
             </>
           )}
           {shouldDisplayMenu && <Spacer />}
