@@ -1,6 +1,6 @@
 # Frequently Asked Questions
 
-_Placeholder while FAQ is being written._
+Placeholder while FAQ is being written.
 
 ## General Questions
 
