@@ -11,11 +11,14 @@ import Link from '@material-ui/core/Link';
 import { AppBar } from '@material-ui/core';
 
 import ShowcaseLinks from '../ShowcaseLinks';
-import { WidePopper, WidePaper, ShowcaseMenuItem } from './style';
+import DocumentationLinks from '../DocumentationLinks';
+
+import { WidePopper, WidePaper, DropdownMenuItem } from './style';
 
 function Menu(props) {
   const [open, toggle] = useReducer((v) => !v, false);
   const [openShowcase, toggleShowcase] = useReducer((v) => !v, false);
+  const [openDocumentation, toggleDocumentation] = useReducer((v) => !v, false);
   const { anchorRef } = props;
 
   return (
@@ -34,11 +37,16 @@ function Menu(props) {
             <MenuItem>
               <Link href="/collections">Collections</Link>
             </MenuItem>
-            <ShowcaseMenuItem onClick={toggleShowcase}>
+            <DropdownMenuItem onClick={toggleShowcase}>
               Showcases
-              {openShowcase ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
-            </ShowcaseMenuItem>
+              {openShowcase ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+            </DropdownMenuItem>
             {openShowcase && <ShowcaseLinks />}
+            <DropdownMenuItem onClick={toggleDocumentation}>
+              Documentation
+              {openDocumentation ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+            </DropdownMenuItem>
+            {openDocumentation && <DocumentationLinks />}
             <MenuItem>
               <Link href="/ccf-eui" target="_blank" rel="noopener noreferrer" color="primary" underline="none">
                 CCF

@@ -11,8 +11,8 @@ const WidePaper = styled(Paper)`
   width: 100%;
 `;
 
-const ShowcaseMenuItem = styled(MenuItem)`
+const DropdownMenuItem = styled(MenuItem)`
   color: ${(props) => props.theme.palette.primary.main};
 `;
 
-export { WidePopper, WidePaper, ShowcaseMenuItem };
+export { WidePopper, WidePaper, DropdownMenuItem };
