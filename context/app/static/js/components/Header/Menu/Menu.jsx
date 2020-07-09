@@ -6,7 +6,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import MenuList from '@material-ui/core/MenuList';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import { AppBar } from '@material-ui/core';
 
 import ShowcaseLinks from '../ShowcaseLinks';
 import DocumentationLinks from '../DocumentationLinks';
@@ -53,7 +52,7 @@ function Menu(props) {
 }
 
 Menu.propTypes = {
-  anchorRef: PropTypes.shape({ current: PropTypes.instanceOf(AppBar) }).isRequired,
+  anchorRef: PropTypes.shape({ current: PropTypes.object }).isRequired,
 };
 
 export default Menu;

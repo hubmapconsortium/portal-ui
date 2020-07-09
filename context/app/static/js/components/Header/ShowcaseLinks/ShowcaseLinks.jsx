@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import DropdownLink from '../DropdownLink';
 
 function ShowcaseLinks(props) {
@@ -13,5 +14,13 @@ function ShowcaseLinks(props) {
     </>
   );
 }
+
+ShowcaseLinks.propTypes = {
+  isIndented: PropTypes.bool,
+};
+
+ShowcaseLinks.defaultProps = {
+  isIndented: false,
+};
 
 export default React.memo(ShowcaseLinks);

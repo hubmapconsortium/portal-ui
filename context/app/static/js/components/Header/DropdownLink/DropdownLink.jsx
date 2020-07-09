@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Link from '@material-ui/core/Link';
 
 import { StyledMenuItem } from './style';
@@ -12,5 +13,14 @@ function DropdownLink(props) {
     </StyledMenuItem>
   );
 }
+
+DropdownLink.propTypes = {
+  isIndented: PropTypes.bool,
+  children: PropTypes.string.isRequired,
+};
+
+DropdownLink.defaultProps = {
+  isIndented: false,
+};
 
 export default DropdownLink;
