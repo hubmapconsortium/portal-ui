@@ -14,16 +14,10 @@ function DataSummary(props) {
     <Wrapper>
       <FlexRow>
         <DataSummaryItem
-          icon={BarChartIcon}
-          label="Datasets"
-          value={summaryData.datasetCount}
-          href="/search?entity_type[0]=Dataset"
-        />
-        <DataSummaryItem
-          icon={BubbleChartIcon}
-          label="Samples"
-          value={summaryData.sampleCount}
-          href="/search?entity_type[0]=Sample"
+          icon={AccountBalanceIcon}
+          label="Centers"
+          value={summaryData.centerCount}
+          href="https://hubmapconsortium.org/funded-research-tmc/"
         />
         <DataSummaryItem
           icon={PersonIcon}
@@ -31,11 +25,18 @@ function DataSummary(props) {
           value={summaryData.donorCount}
           href="/search?entity_type[0]=Donor"
         />
+
         <DataSummaryItem
-          icon={AccountBalanceIcon}
-          label="Centers"
-          value={summaryData.centerCount}
-          href="https://hubmapconsortium.org/funded-research-tmc/"
+          icon={BubbleChartIcon}
+          label="Samples"
+          value={summaryData.sampleCount}
+          href="/search?entity_type[0]=Sample"
+        />
+        <DataSummaryItem
+          icon={BarChartIcon}
+          label="Datasets"
+          value={summaryData.datasetCount}
+          href="/search?entity_type[0]=Dataset"
         />
       </FlexRow>
       <Title />
