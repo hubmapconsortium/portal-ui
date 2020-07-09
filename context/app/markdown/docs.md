@@ -6,6 +6,7 @@
    * [Contact](mailto:help@hubmapconsortium.org)
 
 - [2020 Summer Release](/docs/release-summer-2020)
+- [Frequently Asked Questions](/docs/faq)
 
 ---
 - [Data States](/docs/data-states)
