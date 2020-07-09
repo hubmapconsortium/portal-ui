@@ -3,6 +3,7 @@ import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useTheme } from '@material-ui/core/styles';
+import Link from '@material-ui/core/Link';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { StyledAppBar, HubmapLogo, Spacer, HeaderButton } from './style';
 import Menu from '../Menu';
@@ -28,18 +29,18 @@ function Header() {
             <>
               <div>
                 {['Donor', 'Sample', 'Dataset'].map((type) => (
-                  <HeaderButton key={type} href={`/search?entity_type[0]=${type}`} component="a">
+                  <HeaderButton key={type} href={`/search?entity_type[0]=${type}`} component={Link}>
                     {`${type}s`}
                   </HeaderButton>
                 ))}
-                <HeaderButton component="a" href="/collections">
+                <HeaderButton component={Link} href="/collections">
                   Collections
                 </HeaderButton>
               </div>
               <Spacer />
               <ShowcaseDropdown />
               <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
-                <HeaderButton component="a" href="/ccf-eui" target="_blank" rel="noopener noreferrer">
+                <HeaderButton component={Link} href="/ccf-eui" target="_blank" rel="noopener noreferrer">
                   CCF
                 </HeaderButton>
               </Tooltip>
