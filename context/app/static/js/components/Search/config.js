@@ -1,15 +1,22 @@
 // eslint-disable-next-line import/named
 import { filter, rangeFilter, field } from './utils';
 
+function makeDonorMetadataFilters(isDonor) {
+  const pathPrefix = isDonor ? '' : 'donor.';
+  const labelPrefix = isDonor ? '' : 'Donor ';
+  return [
+    filter(`${pathPrefix}mapped_metadata.gender`, `${labelPrefix}Gender`),
+    rangeFilter(`${pathPrefix}mapped_metadata.age`, `${labelPrefix}Age`, 0, 100),
+    filter(`${pathPrefix}mapped_metadata.race`, `${labelPrefix}Race`),
+    rangeFilter(`${pathPrefix}mapped_metadata.bmi`, `${labelPrefix}BMI`, 0, 50),
+  ];
+}
+
 export const donorConfig = {
-  filters: [
-    filter('mapped_metadata.gender', 'Gender'),
-    rangeFilter('mapped_metadata.age', 'Age', 0, 100),
-    filter('mapped_metadata.race', 'Race'),
-    rangeFilter('mapped_metadata.bmi', 'BMI', 0, 50),
+  filters: makeDonorMetadataFilters(true).concat([
     filter('group_name', 'Group'),
     filter('created_by_user_displayname', 'Creator'),
-  ],
+  ]),
   fields: [
     field('display_doi', 'ID'),
     field('group_name', 'Group'),
@@ -27,7 +34,7 @@ export const sampleConfig = {
     filter('mapped_specimen_type', 'Specimen Type'),
     filter('donor.group_name', 'Group'),
     filter('created_by_user_displayname', 'Creator'),
-  ],
+  ].concat(makeDonorMetadataFilters(false)),
   fields: [
     field('display_doi', 'ID'),
     field('donor.group_name', 'Group'),
@@ -45,7 +52,7 @@ export const datasetConfig = {
     filter('mapped_status', 'Status'),
     filter('donor.group_name', 'Group'),
     filter('created_by_user_displayname', 'Creator'),
-  ],
+  ].concat(makeDonorMetadataFilters(false)),
   fields: [
     field('display_doi', 'ID'),
     field('donor.group_name', 'Group'),
