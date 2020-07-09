@@ -26,9 +26,7 @@ describe('portal-ui', () => {
       // Showcases
       cy.contains('Showcases')
       // Docs
-      cy.contains('Documentation').click();
-      cy.contains('HuBMAP Portal Documentation');
-
+      cy.contains('Documentation')
       // Login
       cy.contains('Login');
       // Don't click! We shouldn't depend on Globus in tests.
