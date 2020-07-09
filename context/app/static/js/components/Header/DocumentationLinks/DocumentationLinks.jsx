@@ -1,21 +1,18 @@
 import React from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
-import Link from '@material-ui/core/Link';
 
-function DocumentationLinks() {
+import DropdownLink from '../DropdownLink';
+
+function DocumentationLinks(props) {
+  const { isIndented } = props;
   return (
     <>
-      <MenuItem>
-        <Link href="/docs" color="primary" underline="none">
-          Overview
-        </Link>
-      </MenuItem>
+      <DropdownLink href="/docs" color="primary" underline="none" isIndented={isIndented}>
+        Overview
+      </DropdownLink>
       {['FAQ', 'About'].map((name) => (
-        <MenuItem key={name}>
-          <Link href={`/docs/${name.toLowerCase()}`} color="primary" underline="none">
-            {name}
-          </Link>
-        </MenuItem>
+        <DropdownLink href={`/docs/${name.toLowerCase()}`} color="primary" underline="none" isIndented={isIndented}>
+          {name}
+        </DropdownLink>
       ))}
     </>
   );

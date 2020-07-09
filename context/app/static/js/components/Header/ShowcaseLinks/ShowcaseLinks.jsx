@@ -1,16 +1,14 @@
 import React from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
-import Link from '@material-ui/core/Link';
+import DropdownLink from '../DropdownLink';
 
-function ShowcaseLinks() {
+function ShowcaseLinks(props) {
+  const { isIndented } = props;
   return (
     <>
       {['Spraggins', 'Satija'].map((showcaseName) => (
-        <MenuItem key={showcaseName}>
-          <Link href={`/showcase/${showcaseName.toLowerCase()}`} color="primary" underline="none">
-            {showcaseName}
-          </Link>
-        </MenuItem>
+        <DropdownLink key={showcaseName} href={`/showcase/${showcaseName.toLowerCase()}`} isIndented={isIndented}>
+          {showcaseName}
+        </DropdownLink>
       ))}
     </>
   );
