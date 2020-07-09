@@ -13,34 +13,23 @@ There are a variety of terms used in this document that may not be familiar to a
 
   
 ![](https://lh4.googleusercontent.com/fmPzm_f5Mh94hqtEtWfoWVC7Nbo5Nv7gONxsG4h3G4iQ2gcBTlSsak6_CinYRhp4CkDaDKLX2Lwjkouu16z9910Nzz3t2FqHdCcrCr_oQB1UYARvS60Inw6OSZtVUtS47hwuTwgk)  
-  
-*Figure 1:* Pictorial representation of microscopy terms. The black box is an example slide or cover slip where the sample is located. Blue boxes are examples of “regions” or user defined imaging areas. For instance, if you want to image a specific structure in the tissue, you would designate a “region” over the structure. Red boxes are examples of “tiles” or the microscope “field of view”. The size of the tile is dependent on the microscope set up and objective. Tiles will fill the region. Because the field of view cannot be changed, tiles will overhang from the region, ensuring the entire region is imaged at the expense of extra tiles being acquired.
-
-  
+*Figure 1: Pictorial representation of microscopy terms. The black box is an example slide or cover slip where the sample is located. Blue boxes are examples of “regions” or user defined imaging areas. For instance, if you want to image a specific structure in the tissue, you would designate a “region” over the structure. Red boxes are examples of “tiles” or the microscope “field of view”. The size of the tile is dependent on the microscope set up and objective. Tiles will fill the region. Because the field of view cannot be changed, tiles will overhang from the region, ensuring the entire region is imaged at the expense of extra tiles being acquired.*
 
 ![](https://lh5.googleusercontent.com/hyxg9n418nZ2UTTn2qkCQeqr51boQeYNt8YZBKSqkeg9tBZTkDq1L3B4pv2q8mZOheNmoXwaC99DX5yRr3L3y8n7Z5UcbnWzY6lavx_cvwo6kFOky-hPxYXXsoUTckx20pk9xP_k)
-
-*Figure 2:* Images are generally acquired with adjacent tiles overlapping, as indicated by the dark regions in the image on the right above. Overlap enhances alignment of tiles for stitching to create a composite image, as shown in Figure 4 below.
+*Figure 2: Images are generally acquired with adjacent tiles overlapping, as indicated by the dark regions in the image on the right above. Overlap enhances alignment of tiles for stitching to create a composite image, as shown in Figure 4 below.*
 
 ![](https://lh6.googleusercontent.com/5J3sOpr3rp4qDDVUy65ihwr-0CxUn9QbiktX9NDbhs4B-TIwbFrvLBO_HoaYzPxShw89gcrZKu1Y0VGqjrQ-hoeRu1ZisyjqSwRmWrDYMe4PgiXge6JkvhMICne9cvtaAvhWs2S-)
-
-*Figure 3:* Images of tiles are captured as the stage moves across the imaged region row by row (left) or via a serpentine (or snake-like) path (right).
+*Figure 3: Images of tiles are captured as the stage moves across the imaged region row by row (left) or via a serpentine (or snake-like) path (right).*
 
 ![](https://lh5.googleusercontent.com/R9-_sAdib7ZOXEIrM0GOB2fI6ubzfFqaFVhAfiqrK9x_NcTORfrIghEziRLTGffgEox5bWTxu_MmsjMsh2_OyxtyWpOXyxcH2g1bf5Fj5wAwhtvzDPnShc2qoDIOG_cjsibNQ96F)*Figure 4:* Stitching is the process of aligning and merging neighboring image tiles into a single composite image.
 
-  
-  
-
 ![](https://lh3.googleusercontent.com/9oxh-s2k66ISPfBIrN1HLSRViSzhUTaoSVyxTi44nWJsPgdW5WUPbNnFHS73ni-Hk7j-p2J7CqbAmDdJ7TWR4ihFXRvqfWHCW4k0WpeHj_ZwW7IuEnhFb01yHAPW4KY_zbHfKd2L)
-
-*Figure 5:* Segmentation of a microscopy image is performed by an algorithm that predicts edges of structures. Structures may be nuclear membrane, cell membranes or larger structures such as tubules.
+*Figure 5: Segmentation of a microscopy image is performed by an algorithm that predicts edges of structures. Structures may be nuclear membrane, cell membranes or larger structures such as tubules.*
 
 ![](https://lh6.googleusercontent.com/pMolhei09vB8sgCDZl9QtMMnN-mb36MI61PUKG6_qxk0uaNC8KiaMqsrFgRUKBYc68bYT2gi02lbCURya106AZ2n1MF38tK89yxL-syvYwSZhZh00bn1tJoFTEXY1r5H5XqCfll9)
-
-*Figure 6:* Example defined plane (left) with example imaged z planes (right).
+*Figure 6: Example defined plane (left) with example imaged z planes (right).*
 
 ## HuBMAP CODEX Data States (Levels)
-
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF|
@@ -120,16 +109,15 @@ In addition, all HuBMAP CODEX data will have an associated json file which may c
 Each TMC will provide a file listing each antibody name, respective cycle and channel. This metadata file will then inform later processes at the HIVE and be used for labeling. Further, we aim to curate the final antibody list with expert interpretation of redundant names to make antibodies and markers a searchable criteria within the HuBMAP database.
 
 ## HuBMAP CODEX Raw File Structure
-1.  The general structure of the level 0 (raw) data produced by the Akoya software (UFL, Vanderbilt) and Stanford software is shown in the image below. If the HandEstain field in Experiment.json in Stanford CODEX data is true, then we will have additional folders just for the HandE cycle named as “HandE_reg1” and so on. These have to be treated as separate cycles.
+1.  The general structure of the level 0 (raw) data produced by the Akoya software (HuBMAP data generated by UF & Vanderbilt) and Stanford software is shown in the image below. Stanford employs a modified pipeline. If the HandEstain field in Stanford's **Experiment.json** CODEX data is true, then additional folders are generated for the HandE cycle named as “HandE_reg1”. These are treated as separate cycles.
     
-Other differences between CODEX software at Stanford versus Akoya proprietary software are documented [here](https://drive.google.com/open?id=1ff7iHRxkiV-DcvznFTCc1sgS_78tHKcm0ohYhv7jLjQ).
-
-  
+Other differences between CODEX software employed by Stanford versus Akoya proprietary software are documented [here](https://drive.google.com/open?id=1ff7iHRxkiV-DcvznFTCc1sgS_78tHKcm0ohYhv7jLjQ).
+ 
 ![](https://lh3.googleusercontent.com/yFfbx7Mj56uBMOFnxtOwKfaPDfmRo9XWoOXDQcTb9YA_91kv7lKSlyCnKld63N8BaWsCDAH_KDz1R56Gl2p2YYfLkTjZRyvBe_t73punyBWh1Vt96CSFapL8tLZucryeZ1BiIqkU)
 
 2.  Segmentation files in the processed data contributed by the TMC’s can be found in the following locations:  
       
- Stanford cell segmentation results can be found in the location mentioned below. You can see several text files generated per tile named as tilename-compensated.txt and tilename-uncompensated.txt. In addition to that, FCS and CSV files are stored based on the tiles, which are mainly used for analysis. The masks per tile can be found as .pngs which contain the images of cell boundaries.  
+Stanford cell segmentation results can be found in the location mentioned below. You can see several text files generated per tile named as tilename-compensated.txt and tilename-uncompensated.txt. In addition to that, FCS and CSV files are stored based on the tiles, which are mainly used for analysis. The masks per tile can be found as .pngs which contain the images of cell boundaries.  
       
 The exact same data from Stanford is also available in an image sequence format, which stores the data in the same folder structure as Akoya’s format. But we can ignore this processed dataset with image sequence for analysis purposes.
 
@@ -152,19 +140,17 @@ If files fail to meet this validation criteria, they will not be submitted to th
     
 If no blanks have been included within the CODEX dataset, the recommended action by the HIVE is to reject the dataset.
 
-3) After acquisition of the dataset, each TMCs is required to generate a report of the markers used to map the tissue. This report should be provided as a “.csv” file with name channelnames_report. This file follows the following structure:
+3) After acquisition of the dataset, each TMCs is required to generate a report of the markers used to map the tissue. This report should be provided as a “.csv” file named **channelnames_report**. This file follows the following structure:
 
 ![](https://lh4.googleusercontent.com/cbPor-UGSWwl1aXBTszGvYhrd0IfQKtaJkNfm_waTTNqEKSOljHWfFgE3Yarqag1gt880OpwDyKxHwDst-MpDE6AXCrhyugKglfq7xKVgn06fytKDYS8rG_AhGtNki1DWakAFCtJ)
 
-
-For TMCs using the CODEX commercial version, This file can be created by duplicating the file channelnames.txt created during the acquisition of the dataset and adding “_report.csv”
+For TMCs using the CODEX commercial version, This file can be created by duplicating the file **channelnames.txt** created during the acquisition of the dataset and adding **“_report.csv”**.
 
 ![](https://lh3.googleusercontent.com/r_2WwrWttNu5b4eY8i-zuvdShMH0-00mmZ-n3k1wKZES7yuXWEN0HSOBePoyH9mLJug23xYpuyOOehNgdne3Bn6cLO3Mv7GCvyBbD-FooxQuSfXccz3chGWar5ddY4erOv3XjItt)
 
 ![](https://lh6.googleusercontent.com/5OyUoMcIzx9_DwVs2020xthbUPSyZpoD0Xq0iP4XkXGNvo8reTYVozOzQZxF0I9_nOVkY4PKDl92yrqgqJnHytF24MQ3Ut3JAj0kuKFoUnUMQEKOVloac7EGXtq3X0NOSxWDRhC9)
 
 ### How to read channelnames
-
 For the commercial version, the document is structured as following:
 
 ![](https://lh3.googleusercontent.com/6O6zMI0PWtmiASezKjSD_YAbN-fzAtz7H2gQUs4RWeD1sd3mM4a-ZL2GW59stOV582AdOF8nI79IfCIZAAxCAQspxtLdt1BLY3kPyMhMgKdRJYZKzclhLjnfG9PhCpRKXMXkImMr)
@@ -184,18 +170,18 @@ Each cycle is formed from N number of channels. For each dataset, information re
 *TRUE/FALSE* depending on if the data indicates antibody bound to the correct target protein. This information is specific for tissue samples.
 
 ### How to evaluate the channels to create the QA/QC channelnames_report.cvs file
-
 Using commercial version:
 
 1.  Process the data using the commercial available processing tool provided by Akoya.
 ![](https://lh3.googleusercontent.com/TdXb9S_H0e_5gjnEVP0D2kBX39s3DZ7bR1CL9SMTkBwp6omwxM7tFiT54_voUpIoHXcWcPjTJ-JIoQq5mi6WrjS2qLJritRv2N-_eiVBa-kADGDLVR9HUKgJ7HX5gqA5HKf8UfAf)
-2.  Generate the Report ppt file by enabling the option at the prompt (add image)
+2.  Generate the Report ppt file by enabling the option at the prompt.
 ![](https://lh6.googleusercontent.com/o_gu3Rdk8LEYfnNIsgRNVc3B5R1vL9ZMcIK5X_L8i7HXcrD5OjfdB0Ly2zsQhpZoWvvu-SgfMRNk3d8UIa-7wJZKq130VSg6LVvBqdIbFnGWQyKCknPGth6Ck2FH9rqM4Ptlzlfj)
 
-The Akoya integrated processing step* [https://help.codex.bio/codex/processor/user-instructions/image-analysis-report](https://help.codex.bio/codex/processor/user-instructions/image-analysis-report)​ produces an Image Analysis Report for each region acquired that provides the following documentation:
+The Akoya integrated processing step [(go to CODEX help for further information)](https://help.codex.bio/codex/processor/user-instructions/image-analysis-report) produces an **Image Analysis Report** for each region acquired. The report includes the following documentation:
 - ![](https://lh3.googleusercontent.com/xQNmmUCy09LcKyp4WexCIhpoNi-VojYN4Vm8rr2QHsdcYkrJg1Vgs_Nlp8o-S5eTBsWd_t4CvayUvf_791h_-3feaYrvDWLMmRSNxdN9HEWaY1wpgdeOMDmwSVDUZ5R3nQXiYC-6)
 - ![](https://lh4.googleusercontent.com/E0OehUKsXaw14YmwSBn6cYO3XqCcAAjuDYTKoCBpkYzCOfZO4GVx9eJd49pPVZYsS9tNN3EQsitc8lMtAbUlbbnoQQPSBO4G58ctilIljDsWdeJNnfkhsqU35ZyO8PVee0FP43xF)
 - ![](https://lh3.googleusercontent.com/-kK2XRFJ0dMjLmDc5qelOQHAWBrMh7GG734e5epsjDgCTfqwNy824gHpdYZQdPK2g1drSnhdsiIuSvy7_Ra1ezVEuKMBuQvl2Rwxa21iFftnj2sI89YXMh4tC2NjxClBsFzzjbQi)
+
 A histogram and sample image is generated for every acquired channel. Each row is a cycle, containing its corresponding channels. Top-left image and histogram is always the first cycle, first channel. Image and histogram to their right is the same cycle, second channel.
 
 The displayed image is a full-resolution cropped image that has the greatest standard deviation among those sampled. Each image may be of different location within the region, depending on the expression pattern. For example, cropped images for DAPI cycles 2 and 3 below differ in their sampling location.
@@ -208,7 +194,7 @@ The histogram displays pixel frequency of signal intensities found within the re
 
 Additionally, all cycles except the first contains two histogram plots. All purple plots are of the first cycle, which can be a reference for comparison, especially if the first cycle contains blank cycles. The legend specifies which biomarker the histogram represents.
 
-A summary section contains basic statistics of biomarker region images. Again, each slide contains four cycles and their corresponding channels. Any non-biomarker channel (i.e. containing "DAPI," "blank" or "empty") will be grayed out.
+A summary section contains basic statistics of biomarker region images. Each slide contains four cycles and their corresponding channels. Any non-biomarker channel (i.e. containing "DAPI," "blank" or "empty") will be grayed out.
 
 ![](https://lh3.googleusercontent.com/k1xa3dbWojRY3n5gmzjZFbQyyLpcQxKeAuNqV3Gn17u_l2dmEzvuBzzk09aYDgRlz-9cTaUvzxUsDJj6-GbC6CgFVT89hjHlvGEX_5GOim5PEd1WSpUiZCIypz93eXlg6v_YU3ta)
 
@@ -236,7 +222,7 @@ There are 18 columns for each channel. All pixel intensities are in 16-bit range
 |  SNR| **Mean of the signal divided by standard deviation of the noise|
 
 
-These values can be used as a basic guideline to image quality of each biomarker. As the threshold is not adaptive nor trained, the summary information should be considered within context.
+These values can be used to assess image quality of each biomarker. As the threshold is not adaptive nor trained, the summary information should be considered within context.
 
 A detailed slide for each marker acquired is also provided. The left-hand side contains image information identical to those shown in the histogram and summary slides.
 
@@ -247,16 +233,13 @@ The main image in the center is the region image scaled for best fit and viewing
 
 On the right, there are four cropped images displayed in the original, full resolution. Within the whole region, 13 different areas are cropped at full resolution and compared for their intensity standard deviation. The four areas with the highest standard deviations, which often correspond to most contrast and information, are displayed in order.
 
-- This document is useful to generate the QA/QC report for the HuBMAP first data release when commercial Akoya acquiring and processing in employed
-
 3.  Open the report and evaluate the channels based on the SNR, intensity patterns etc.
 4 ![](https://lh6.googleusercontent.com/rQZgGijJ4sLjvXe3xAN515C9MeHsRZx7GH3aVNE_WxT3T5UxThemChfHCC1vxpB01oXYoVGZ1A_4V1A6w2U4pxfV4ZKOlpl-Mis0BiaUAKOjpgLda_cs6MwLZhGy2c4r7LscGacN)
-4.  Compare these images to validation staining patterns for the same antibody in the same tissue type. The patterns should follow correct cell type localization for the target marker. Failure is indicated by a FALSE designation in the channelnames_report.csv for that specific antibody.
+4.  Compare these images to validation staining patterns for the same antibody in the same tissue type. The patterns should follow correct cell type localization for the target marker. Failure is indicated by a FALSE designation in the **channelnames_report.csv** for that specific antibody.
     
-5.  Open the generated channelnames_report.csv file and add TRUE/FALSE tags to each channel separated with a coma (if using text editors) or to the consecutive column if using *“Excel/LibreOffice”.*
+5.  Open the generated **channelnames_report.csv** file and add TRUE/FALSE tags to each channel separated with a coma (if using text editors) or to the consecutive column if using *“Excel/LibreOffice”.*
 
 ## Terms defined in this document
-
 |**Term** |  **Definition** |
 |--|--|
 |  Intensity| Detector Counts| 
