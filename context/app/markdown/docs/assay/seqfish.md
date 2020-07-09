@@ -11,7 +11,7 @@
 seqFISH technology allows in situ imaging of multiple mRNAs using barcoding and fluorophore-labelled barcode readout-probes. [seqFISH+](https://www.nature.com/articles/s41586-019-1049-y) is a highly-multiplexed version of seqFISH that can resolve the identities and subcellular localization of thousands of gene transcripts. This is accomplished by expanding each standard fluorescent dye to dozens of assigned pseudocolors. The strategy is to first hybridize mRNA barcode probes to each mRNA in situ. Each mRNA barcode probe has 4 barcode regions numbered I-IV, as shown in Figure 1 on the left.
 ![](https://lh5.googleusercontent.com/wzByYYfoyKRTdC19wPEZlXKKHtyyoTXT2RgalNzh34xtPFia6TqjLrvOhsi2u2HFtcNeHAP3hENCe0BoJPn4TMmfg0QOUw9t2PEp3I3NuBfgt39aFk6ted1Gxg9ssuTb0g9OHrc)
 
-*Figure 1: Each mRNA is barcoded with a combination of 3 barcode regions, numbered I-III (region IV is used for error correction). In turn, each barcode region is decoded by hybridization of 1 of 20 possible readout barcodes per channel (203 = 8000 unique barcodes per channel) X 3 channels (24,000 unique barcodes). The complete barcode for each mRNA is deduced from the sequence of readout barcodes for regions I-III* [(Eng et al, 2019)](https://www.nature.com/articles/s41586-019-1049-y).
+*Figure 1: Each mRNA is barcoded with a combination of 3 barcode regions, numbered I-III (region IV is used for error correction). In turn, each barcode region is decoded by hybridization of 1 of 20 possible readout barcodes per channel (203 = 8000 unique barcodes per channel) X 3 channels (24,000 unique barcodes). The complete barcode for each mRNA is deduced from the sequence of readout barcodes for regions I-III* [(Eng et al, 2019)](https://www.doi.org/10.1038/s41586-019-1049-y).
 
 Each barcode region is decoded through sequential hybridization & imaging of readout-probes, 20 per channel.  Readout-probe signals can then be assigned pseudocolors as proxies for hybridization-step-order.
 
@@ -22,7 +22,7 @@ Decoding a barcode region: The readout-probes are labeled with one of 3 fluoresc
 
 ![](https://lh4.googleusercontent.com/7h0kWTfDYU_4SjiBp7aXGv6rYb7Xpt1tBg3r1opra4FpZ9mPde_nMvNy8QueLyLZOwH0JiJdgRBtUX60f39U6b5K8vYP_lX30CPnEZdDKnqYUXnYE5c3-iJ27KLg4tin1ZxC99o)
 
-*Figure 2. Each barcode region is decoded by sequential hybridization & imaging of 20 readout-probes. The signal from each readout-probe can then be assigned a unique pseudocolor (a number from 1-20) representing hybridization-step-order.*
+*Figure 2. Each barcode region is decoded by sequential hybridization & imaging of 20 readout-probes. The signal from each readout-probe can then be assigned a unique pseudocolor (a number from 1-20) representing hybridization-step-order* [(Eng et al, 2019)](https://www.doi.org/10.1038/s41586-019-1049-y).
 
 The complete barcode for each mRNA is deduced from the sequence of pseudocolor numbers for regions I-III (region IV is an additional round used for error correction). A total of 8,000 (203) mRNA barcodes per fluorophore detection channel allows a grand total of 24,000 unique mRNA barcodes to be interrogated. The composite images reveal both the identities and subcellular localization of up to 24,000 mRNA molecules.
 
