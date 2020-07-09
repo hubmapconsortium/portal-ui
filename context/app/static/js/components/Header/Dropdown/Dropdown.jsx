@@ -4,6 +4,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import Paper from '@material-ui/core/Paper';
+import MenuList from '@material-ui/core/MenuList';
 
 import { OffsetPopper } from './style';
 
@@ -20,7 +21,9 @@ function Dropdown(props) {
       </Button>
       <OffsetPopper open={open} anchorEl={anchorRef.current} placement="bottom-start">
         <Paper>
-          <ClickAwayListener onClickAway={toggle}>{children}</ClickAwayListener>
+          <ClickAwayListener onClickAway={toggle}>
+            <MenuList>{children}</MenuList>
+          </ClickAwayListener>
         </Paper>
       </OffsetPopper>
     </>
