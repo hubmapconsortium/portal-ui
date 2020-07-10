@@ -42,23 +42,23 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: 'Inter Variable, Helvetica, Arial, sans-serif',
     h1: {
-      fontWeight: 400,
+      fontWeight: 300,
       fontSize: '2.6rem',
     },
     h2: {
-      fontWeight: 400,
+      fontWeight: 300,
       fontSize: '2.3rem',
     },
     h3: {
-      fontWeight: 400,
+      fontWeight: 300,
       fontSize: '2rem',
     },
     h4: {
-      fontWeight: 400,
-      fontSize: '1.5rem',
+      fontWeight: 300,
+      fontSize: '1.6rem',
     },
     h5: {
-      fontWeight: 400,
+      fontWeight: 300,
       fontSize: '1.3rem',
     },
     h6: {
@@ -67,16 +67,18 @@ const theme = createMuiTheme({
     },
     subtitle1: {
       fontWeight: 500,
-      fontSize: '1rem',
+      fontSize: '1.1rem',
     },
     subtitle2: {
       fontWeight: 500,
       fontiSize: '0.875rem',
     },
     body1: {
+      fontWeight: 300,
       fontSize: '0.95rem',
     },
     body2: {
+      fontWeight: 300,
       fontSize: '0.8rem',
     },
     caption: {
@@ -85,6 +87,7 @@ const theme = createMuiTheme({
     },
     button: {
       fontWeight: 500,
+      fontiSize: '0.875rem',
       textTransform: 'capitalize',
     },
   },
