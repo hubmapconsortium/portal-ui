@@ -10,11 +10,12 @@ function DocumentationLinks(props) {
       <DropdownLink href="/docs" isIndented={isIndented}>
         Overview
       </DropdownLink>
-      {['FAQ', 'About'].map((name) => (
-        <DropdownLink key={name} href={`/docs/${name.toLowerCase()}`} isIndented={isIndented}>
-          {name}
-        </DropdownLink>
-      ))}
+      <DropdownLink href="/docs/faq" isIndented={isIndented}>
+        FAQ
+      </DropdownLink>
+      <DropdownLink href="/docs/about" isIndented={isIndented}>
+        About
+      </DropdownLink>
     </>
   );
 }
