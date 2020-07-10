@@ -1,6 +1,6 @@
 
 
-# Image_Mass_Cytometry (IMC)
+# Image Mass Cytometry (IMC)
 
 ### Last Updated 6/22/2020
 
@@ -9,9 +9,10 @@ This document describes Imaging Mass Cytometry technology, generated data files 
 
 ## Description
 [Imaging Mass Cytometry](http://www.bodenmillerlab.com/research-2/imaging-mass-cytometry/) combines standard immunohistochemistry with CyTOF mass cytometry to resolve the cellular localization of up to 40 proteins in a tissue sample. Multiplexing of dozens of proteins is possible because the antibodies are tagged with rare-earth metal isotopes of defined atomic mass rather than fluorophores which are subject to spectral signal overlap. High-resolution laser ablation of tissue stained with these antibody-metal conjugates generates clouds of tissue particles which are atomized, ionized, and detected in a time-of-flight mass cytometer. Signals are then plotted against the coordinates of each single laser shot to synthesize one image per mass channel, with high-dimensional images produced by overlaying images from multiple channels.
-![](https://lh6.googleusercontent.com/ox0uDpu8JTG8Ovwiuwfp1EvWBM7oq6ambvhbmMM0A-M7gppofNs3PaNiFuCq-JA93D-aSfwwTGKnzax-aiDV_khQbQJLYakui3vdvFBp-L1rDlfyegAl7Eq60dJ5pBpDD8YApg0)
 
-*Figure 1.*  from [Giesen et al., Nature Methods, 2014 Apr;11(4):417-22)](https://www.nature.com/articles/nmeth.2869)
+![](https://lh5.googleusercontent.com/I34RfJ663vYs4QaluVMGKgjTR_7-GFYumZPyAtcCXbPFOYgtZCMxverFtcPUrq32VyWQVgKpOPjEAPkUmZYtAM_R2kwznYPHMB1wBLOVQ0UVD-3oKt30iazekMb6KCEXSnDUHGdr)
+
+*Figure 1. Workflow of imaging mass cytometry [(From Giesen et al., 2014)]( https://doi.org/10.1038/nmeth.2869)*.
 
 ## Definitions
 The following is a table of terms relevant to understanding IMC data:
