@@ -11,11 +11,11 @@ function AssociationsCard(props) {
       <Typography variant="h5" component="h4">
         {title}
       </Typography>
-      <Typography variant="body2" color="secondary">
+      <Typography variant="caption" color="secondary">
         {text}
       </Typography>
-      <StyledLink variant="body2" href={link} target="_blank" rel="noopener noreferrer">
-        LEARN MORE
+      <StyledLink variant="button" href={link} target="_blank" rel="noopener noreferrer">
+        Learn More
       </StyledLink>
     </Card>
   );
