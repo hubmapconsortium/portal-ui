@@ -1,1 +1,0 @@
-- Sort entities in provenance table by create_timestamp.
