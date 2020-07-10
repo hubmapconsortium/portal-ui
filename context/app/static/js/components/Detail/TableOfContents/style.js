@@ -17,10 +17,12 @@ const TableTitle = styled(Typography)`
 `;
 
 const StyledItemLink = styled(Link)`
-  font-size: 0.8125rem;
+  font-size: ${(props) => props.theme.typography.body1.fontSize};
   line-height: 2;
   padding-left: 4px;
   border-left: 3px solid transparent;
+  margin-bottom: ${(props) => props.theme.spacing(0.25)}px;
+
   &:hover {
     border-left: 3px solid #c4c4c4;
   }

@@ -41,9 +41,7 @@ function MetadataTable(props) {
   return (
     <SectionContainer id="metadata-table">
       <Flex>
-        <SectionHeader variant="h3" component="h2">
-          Metadata
-        </SectionHeader>
+        <SectionHeader>Metadata</SectionHeader>
         <IconButton href={downloadUrl} download={`${display_doi}.tsv`}>
           <DownloadIcon color="primary" />
         </IconButton>

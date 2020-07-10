@@ -10,10 +10,21 @@ function SectionItem(props) {
   const { children, label, ml } = props;
   return (
     <StyledDiv ml={ml}>
-      <Typography variant="body2" color="primary">
+      <Typography variant="subtitle2" component="h3" color="primary">
         {label}
       </Typography>
-      {children}
+
+      {Array.isArray(children) ? (
+        children.map((child) => (
+          <Typography variant="h6" component="p">
+            {child}
+          </Typography>
+        ))
+      ) : (
+        <Typography variant="h6" component="p">
+          {children}
+        </Typography>
+      )}
     </StyledDiv>
   );
 }

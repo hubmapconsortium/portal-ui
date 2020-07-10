@@ -42,9 +42,7 @@ function CollectionDatasetsTable(props) {
 
   return (
     <SectionContainer id="datasets-table">
-      <SectionHeader variant="h3" component="h2">
-        Datasets
-      </SectionHeader>
+      <SectionHeader>Datasets</SectionHeader>
       <Typography variant="subtitle1" color="primary">
         {tableRows.length} Datasets
       </Typography>

@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { StyledDivider } from './style';
+import { LightBlueLink } from 'shared-styles/Links';
 import ProvTabs from '../ProvTabs';
 import Summary from '../Summary';
 import Attribution from '../Attribution';
@@ -10,19 +10,10 @@ import MetadataTable from '../MetadataTable';
 import Visualization from '../Visualization';
 import DetailLayout from '../DetailLayout';
 import Files from '../Files';
+import SummaryItem from '../SummaryItem';
 
 // TODO use this context for components other than FileBrowser
 import DetailContext from '../context';
-
-function AssaySpecificItem(props) {
-  const { children } = props;
-  return (
-    <>
-      <Typography variant="body1">{children}</Typography>
-      <StyledDivider orientation="vertical" flexItem />
-    </>
-  );
-}
 
 function SummaryData(props) {
   const { data_types, mapped_data_types, origin_sample } = props;
@@ -40,10 +31,17 @@ function SummaryData(props) {
   });
   return (
     <>
-      <AssaySpecificItem>
-        {codesNames.map(({ code, name }, i) => [i > 0 && ' / ', <a href={`/docs/assays#${code}`}>{name}</a>])}
-      </AssaySpecificItem>
-      <Typography variant="body1">{origin_sample.mapped_organ}</Typography>
+      <SummaryItem>
+        {codesNames.map(({ code, name }, i) => [
+          i > 0 && ' / ',
+          <LightBlueLink variant="h6" href={`/docs/assays#${code}`} underline="none">
+            {name}
+          </LightBlueLink>,
+        ])}
+      </SummaryItem>
+      <Typography variant="h6" component="p">
+        {origin_sample.mapped_organ}
+      </Typography>
     </>
   );
 }

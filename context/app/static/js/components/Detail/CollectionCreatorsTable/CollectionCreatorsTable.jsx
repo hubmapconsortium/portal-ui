@@ -27,9 +27,7 @@ function CollectionCreatorsTable(props) {
 
   return (
     <SectionContainer id="datasets-table">
-      <SectionHeader variant="h3" component="h2">
-        Creators
-      </SectionHeader>
+      <SectionHeader>Creators</SectionHeader>
       <Paper>
         <StyledTableContainer $maxHeight={312}>
           <Table stickyHeader>

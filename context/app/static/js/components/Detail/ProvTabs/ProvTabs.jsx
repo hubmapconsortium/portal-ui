@@ -44,9 +44,7 @@ function ProvTabs(props) {
 
   return (
     <SectionContainer id="provenance">
-      <SectionHeader variant="h3" component="h2">
-        Provenance
-      </SectionHeader>
+      <SectionHeader>Provenance</SectionHeader>
       <Paper>
         <StyledTabs
           variant="standard"
