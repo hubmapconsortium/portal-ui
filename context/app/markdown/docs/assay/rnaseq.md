@@ -28,7 +28,8 @@ A visual summary is provided below.
 
 Figure 2: A basic representation of the major steps and considerations in the sequencing of RNA.
 [(Kukurba et al, 2015)](https://doi.org/10.1101/pdb.top084970)
-
+### *Bulk RNAseq*
+For question on bulk RNAseq, contact: [Stephanie Nevins](mailto:snevins@stanford.edu)
 ### *10x Genomics single cell RNASeq* 
 Utilizes a droplet-based emulsion PCR method to encapsulate individual cells with enzyme-containing beads in oil droplets, tagging single cell transcriptomes with UMIs and unique cell barcodes via reverse transcription to cDNA. Tagged transcriptomes are subsequently amplified, sheared to appropriate fragment size, repaired, and ligated with sequencing adapters (illumina) and user-chosen sample index oligos.
 - For questions, contact: [Maigan Brusko](mailto:maigan@ufl.edu)
