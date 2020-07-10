@@ -13,27 +13,21 @@ There are a variety of terms used in this document that may not be familiar to a
 
 
 ![](https://lh5.googleusercontent.com/EouChcXE1SRcI5G5gUpczH7rS8kMwfBGXPnBbi1L5WYIm1BGPT35UbjZ1ByPKPZKUU8_7ttD-n-9FzlGAKyCjm15b9Yz_aD6AK294sNld0dfCmRsOWPab4wxQvV5aYWht-bN62RR)  
-  
-*Figure 1:* Pictorial representation of microscopy terms. The black box is an example slide or cover slip where the sample is located. Blue boxes are examples of “regions” or user defined imaging areas. For instance, if you want to image a specific structure in the tissue, you would designate a “region” over the structure. Red boxes are examples of “tiles” or the microscope “field of view”. The size of the tile is dependent on the microscope set up and objective. Tiles will fill the region. Because the field of view cannot be changed, tiles will overhang from the region, ensuring the entire region is imaged at the expense of extra tiles being acquired.
-
-  
+*Figure 1: Diagrmatic representation of microscopy terms. The black box is an example slide or cover slip where the sample is located. Blue boxes are examples of “regions” or user defined imaging areas. For instance, if you want to image a specific structure in the tissue, you would designate a “region” over the structure. Red boxes are examples of “tiles” or the microscope “field of view”. The size of the tile is dependent on the microscope set up and objective. Tiles will fill the region. Because the field of view cannot be changed, tiles will overhang from the region, ensuring the entire region is imaged at the expense of extra tiles being acquired.*
 
 ![](https://lh6.googleusercontent.com/zzWDhBbViWSQef7-M7ygA-lzLOQ_YcPJ88ofJiNjiz4IHMRRo_EC1U9EeLKpZQ3pdUYQ_3cJfd_IZkvSlBV-lXmcci4rXbmMxc5Sg8HWJ8zSGNXkIq9uMMpW2oUApqvP_WM34My3)
-
-*Figure 2:* Images are generally acquired with adjacent tiles overlapping, as indicated by the dark regions in the image on the right above. Overlap enhances alignment of tiles for stitching to create a composite image, as shown in Figure 4 below.
+*Figure 2: Images are generally acquired with adjacent tiles overlapping, as indicated by the dark regions in the image on the right above. Overlap enhances alignment of tiles for stitching to create a composite image, as shown in Figure 4 below.*
 
 ![](https://lh3.googleusercontent.com/pDRaEsozDX99ncpsTiYnJaVy2SPAh0ECMqhf7Z99-Opv_QBvqUL6pUCbW_XdjwNHBgKNJ1dM5bRIpqNybilELRoQ5SD4MiqO8jEVr1p8aLpXbLYMY_OdOqcpzFyh-G9ziWjwd6MA)
+*Figure 3: Images of tiles are captured as the stage moves across the imaged region row by row (left) or via a serpentine (or snake-like) path (right).*
 
-*Figure 3:* Images of tiles are captured as the stage moves across the imaged region row by row (left) or via a serpentine (or snake-like) path (right).
-
-![](https://lh4.googleusercontent.com/daAZNlhDbX4a465THbi1TcZ2QkwFwy7n1dd3Knb6IanJVIA20XHlEQk-rPrjjf1ymW6QawjAwlSCQt949A47qQOsZ6OGCUpK6eMXiAn6NmbegTt1o7GFGqk5DjsKsCN-ep-Lzj6O)*Figure 4:* Stitching is the process of aligning and merging neighboring image tiles into a single composite image.
+![](https://lh4.googleusercontent.com/daAZNlhDbX4a465THbi1TcZ2QkwFwy7n1dd3Knb6IanJVIA20XHlEQk-rPrjjf1ymW6QawjAwlSCQt949A47qQOsZ6OGCUpK6eMXiAn6NmbegTt1o7GFGqk5DjsKsCN-ep-Lzj6O)
+*Figure 4: Stitching is the process of aligning and merging neighboring image tiles into a single composite image.*
 
 ![](https://lh5.googleusercontent.com/-lifdPvdX5ZB2DPtmCe3MPPeta-7W7H04LiK6P_L-i1VQdE3IzuRwAzSt0cCsaQJWQpAIpXX7YuDmWgZQiNWunaQhPSERz64y-4mxzl4dGdzh2So2bbgQRNZpVZ1BXps0Ckhlcc_)
-
-*Figure 5:* Example defined plane (left) with example imaged z planes (right).
+*Figure 5: Example defined plane (left) with example imaged z planes (right).*
 
 ## HuBMAP CODEX Data States (Levels)
-
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF|
@@ -45,7 +39,6 @@ There are a variety of terms used in this document that may not be familiar to a
 This metadata.tsv schema is now available in Github for download. Any further edits can be made through consultation with the HuBMAP team who will request changes through [Github.](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/mixif)
 
 ## Associated Metadata Files
-
 |**Metadata File Name** |  **File Type**| **Field** | **Definition**|
 |--|--|--|--|
 |  OME-TIFF | Format: OME-TIFF| SchemaType|Metadata schema type|
@@ -143,32 +136,7 @@ This metadata.tsv schema is now available in Github for download. Any further ed
 | || Cycle_4_Antibody_3_Lot|Cell Lot of Antibody used for Red Channel for MxIF Cycle 1|
 | || Cycle_4_Antibody_4_Lot|Cell Lot of Antibody used for Magenta Channel for MxIF Cycle 1|
 
-
-## HuBMAP File Structure
-
-    DR_reformat….
-    /LC Data
-    /metadata
-    /assay
-    MxIF.csv
-    /templates
-    /VAN000*-*K-**-**_**
-    /CCF Metadata
-    VAN000*-*K-**-**_ccf_metadata
-    / VAN000*-*K-**-**_**-MxIF
-    /processedMicroscopy
-    /VAN000*-*K-**-**-MxIF_cycl*_images
-    VAN000*-*K-**-**-MxIF_cyc1_registered.ome.tiff
-    /VAN000*-*K-**-**- MxIF_cycl*_transformations
-    /transform_00_VAN000*-*K-**-*
-    MxIF_cycl*_rigid.txt
-    /transform_01_VAN000*-*K-**-**-MxIF_cycl*_affine.txt
-    /rawMicroscopy
-    /VAN000*-*K-**-**-MxIF_cyc*_meta_unregistered.xml
-    /VAN000*-*K-**-**-MxIF_cyc*_unregistered.czi
-
 ## Terms defined in this document
-
 |**Term** |  **Definition**|
 |--|--|
 |  Intensity| Detector Counts| 
