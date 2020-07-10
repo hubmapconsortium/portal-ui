@@ -31,7 +31,7 @@ There are a variety of terms used in this document that may not be familiar to a
 
 ![](https://lh6.googleusercontent.com/H_6Z0jlyG_UpvbDpp9F199714CJphXnOGVArCtImsTLkHa06P2A4NmObkHKb72bPd6dZ_czctwgoe5NeV30SuXnafA6QHHywS59agDAQv-dzW_Zs9K5y9muTaoLpj97MFJuxQyE)
 
-*Figure 3: Slide Explorer Image is the user defined image on the slide.*
+*Figure 3: Slide Explorer Image is the user defined image on the slide [(Images provided by The Cai Lab)](http://singlecell.caltech.edu/research/index.html).*
 
 The user defined slide will have multiple tiles as numbered in Figure 3 above. Each of these tiles are considered a single Field of View composed of a 2048 by 2048 pixel image. Tiles are selected by the experiment user manually without overlap. The coordinates of these tiles are used as the global reference to assemble all of the spots from each local tile.
 
@@ -39,7 +39,7 @@ A single Field of View or tile is imaged over many hybridization rounds with thr
 
 ![](https://lh3.googleusercontent.com/L-9j4_4GQucGiyvsyKVNJqxVsB1DreP2w-pTU1F-6B4mF2IbEtfXx80Rof0zjNNhV25hs2fdhDqzc1lbuz1uojfDvWOFcsf4X3k3tpdxHSgqki2DDcvVlCURT1fn-2QxlGIPYDs)![](https://lh5.googleusercontent.com/jW-1zdEs49j9TgCRIoGeI7zFu7qW6-gRviMGh7Njg0_M4AxXJh9qCpZFHP_le85Sh6sAsv03ulexL8PzPXHCz5rAje9TsWSNJv3bwQ2PaMIuyX9iF-iWpXZOzHNB8KS3kgXabq0)
 
-*Figure 4: Single tile images for one hybridization round, where spots are retrieved in the channels, while the DAPI channel is used for alignment.*
+*Figure 4: Single tile images for A) one hybridization round, where spots are retrieved in the channels, while B) the DAPI channel is used for alignment [(Images provided by The Cai Lab)](http://singlecell.caltech.edu/research/index.html).*
 
 ## HuBMAP seqFISH Data States (Levels)
 The HuBMAP project provides data levels for each seqFISH experiment.
@@ -180,4 +180,4 @@ The HuBMAP program is developing a standardized open-source pipeline for seqFISH
 | Background Subtraction| Subtraction of autofluorescence intensity from total intensity.| 
 
 ## For Additional Help 
-Please contact:[Nico Pierson](mailto:nicogpt@caltech.edu)
+Please contact: [Nico Pierson](mailto:nicogpt@caltech.edu)
