@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'typeface-inter';
 
 import './index.css';
 import App from './components/App';

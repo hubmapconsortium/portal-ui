@@ -40,7 +40,7 @@ const theme = createMuiTheme({
     type: 'light',
   },
   typography: {
-    fontFamily: 'Inter, Helvetica, Arial, sans-serif',
+    fontFamily: 'Inter Variable, Helvetica, Arial, sans-serif',
     h1: {
       fontWeight: 400,
       fontSize: '2.6rem',

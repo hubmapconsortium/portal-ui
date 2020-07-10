@@ -3,7 +3,9 @@ import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+
 import theme from '../theme';
+import GlobalFonts from '../fonts';
 
 const generateClassName = createGenerateClassName({
   disableGlobal: true,
@@ -15,6 +17,7 @@ function Providers(props) {
   // injectFirst ensures styled-components takes priority over mui for styling
   return (
     <StylesProvider generateClassName={generateClassName} injectFirst>
+      <GlobalFonts />
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
