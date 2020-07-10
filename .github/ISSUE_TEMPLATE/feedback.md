@@ -9,10 +9,7 @@ assignees: mccalluc, tsliaw
 
 ## Feedback
 
-__Submitter Name__:
-
-__Submitter Email__:
-
+__Help Desk Issue Tracker URL__:
 
 __Message__:
 
