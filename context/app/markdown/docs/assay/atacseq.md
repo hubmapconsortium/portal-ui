@@ -63,6 +63,11 @@ The HuBMAP project provides data to the public in a variety of data states. A da
 The scATCseq metadata.tsv now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq) where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
 
 The bulkATACseq metadata.tsv now resides at this [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkatacseq) link.
+The metadata.tsv for single cell ATACseq assays now resides at this link in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq).
+
+For questions about sciATACseq, contact: [Dana L Jackson](mailto:danaj77@uw.edu).
+For questions about snATACseq or SNARE-ATACseq, contact: [Blue Lake](mailto:b1lake@eng.ucsd.edu).
+For questions about bulk ATACseq, contact: [Stephanie Nevins](mailto:snevins@stanford.edu).
 
 
 ## HuBMAP QA/QC of raw (state0) data files
