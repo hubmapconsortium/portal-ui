@@ -9,9 +9,10 @@ import ProvTableDerivedLink from '../ProvTableDerivedLink';
 function ProvTable(props) {
   const { uuid, entity_type, typesToSplit, ancestors, assayMetadata } = props;
 
-  ancestors.push(assayMetadata);
+  // Make a new list rather modifying old one in place: Caused duplication in UI.
+  const entities = [...ancestors, assayMetadata];
 
-  const types = ancestors.reduce(
+  const types = entities.reduce(
     (acc, item) => {
       acc[typesToSplit.indexOf(item.entity_type)].push(item);
       return acc;
