@@ -1,3 +1,12 @@
+## v0.0.38 - 2020-07-10
+
+- Put donor metadata facets on all search pages.
+- Rearrange entity counts on home page.
+- Fix entity tile duplication in the provenance table.
+- Sort entities in provenance table by create_timestamp.
+- Update ingest-validation-tools.
+
+
 ## v0.0.37 - 2020-07-08
 
 - Make the display of the download link conditional on having agreed to the DUA.
