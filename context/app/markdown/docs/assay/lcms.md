@@ -14,7 +14,7 @@ Coupling of liquid chromatography (LC) to mass spectrometry (MS) has become an i
 
 
 
-## HuBMAP CODEX Data States (Levels)
+## HuBMAP Data States (Levels)
 The HuBMAP project provides data to the public in a variety of data states, which denote the amount of processing that has been done to the data. The data states for RNA seq data provided by the HuBMAP project are listed below:
 
 |**Data State** |  **Description**| **LC/MS File Format** | 
@@ -83,4 +83,9 @@ See J. Proteome Res., 2016, 15 (3), pp 777-787. DOI: [10.1021/acs.jproteome.5b00
 |  Metabolomics| After each cleaning (front plate, transfer capillary) that happens approximately every 4 days, mass calibration in positive and negative modes is performed using calibration mixes (cat# 88323, 88324, Thermo). Every 3 months, a more extensive calibration protocol including electronics, ion transfer, quadrupole and orbitrap is performed. Each sample is spiked-in with 15 labeled internal standards that are used to check mass accuracy, retention time and peak shape. Before each batch, the LC-MS system is equilibrated by injecting 6 and 12 pool samples (QC) for RPLC and HILIC, respectively. Signal deviation over time is controlled for by injecting a pool sample every 10 injections. After data processing, QC samples should be clustered together as well as samples prepared and analyzed in different batches should be overlaid on a principal component analysis plot.| 
 
 ## For Additional Help
-Please contact:  [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.Edu) 
+Please contact for general in formation in LC-MS:  [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.edu) 
+For questions about shotgun LC-MS (targeted lipidomics), contact: [Kevin Contrepois](mailto:kcontrep@stanford.edu)
+For questions about TMT LC-MS (proteomics), contact: [Lihua Jiang](mailto:lihuaj@stanford.edu)
+For questions about untargeted LC-MS/MS (untargeted proteomics), contact: [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.edu)
+For questions about untargeted LC-MS (untargeted metabolomics), contact: [Kevin Contrepois](mailto:kcontrep@stanford.edu)
+
