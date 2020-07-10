@@ -40,7 +40,7 @@ Utilizes a droplet-based emulsion PCR method to encapsulate individual cells wit
   
 ### *SNARE-Seq*
 Accessible chromatin in permeabilized nuclei is captured by Tn5 transposase, before droplet generation (DropSeq). Without heating or detergent treatment, binding of transposase to its DNA substrate after transposition maintains contiguity of the original DNA strands, allowing for the co-packaging of accessible genomic sites and mRNA from individual nuclei in the same droplets. A splint oligonucleotide with sequence complementary to the adaptor sequence inserted by transposition (5′ end) and the poly(A) bases (3′ end) allows capture by oligo(dT)-bearing barcoded beads. After encapsulation of nuclei, mRNAs and fragmented chromatin can be released by heating the droplets, allowing access to splint oligonucleotides and adaptor-coated beads with a shared cellular barcode for library construction
-
+For questions, contact: [Blue Lake](mailto:b1lake@eng.ucsd.edu)
 ![](https://lh3.googleusercontent.com/McZ_fPoVZvF_03UJnDpvkkTDsm6lNzSRNV3Y9plA19hHN_8uU8XKJxRbKAaKxJoO74gUPD8d3esZebf7J3r4GYdpz7A3MfafNHWeUbE6yOUoNKpk3M828p8vVvmx71zyDtdlXWME)
 *Figure 4: General workflow for linked single-nucleus transcriptome and chromatin accessibility sequencing of human cell mixtures. a, Workflow of SNARE-seq. b, Aggregate single-nucleus chromatin accessibility profiles.  c, t-SNE visualization of SNARE-seq paired gene expression (upper panel) and chromatin accessibility (lower panel, n=1,047) data from BJ, GM12878, H1 and K562 cell mixture. d, Inter-assay identity agreement reveals consistent linked transcriptome and chromatin accessibility profiles of SNARE-seq data. [(Chen et al., 2019)](https://doi.org/10.1038/s41587-019-0290-0)*.
 
