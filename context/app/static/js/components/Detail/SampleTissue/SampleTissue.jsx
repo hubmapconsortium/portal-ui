@@ -16,7 +16,7 @@ function MetadataItem(props) {
 }
 
 function SampleTissue(props) {
-  const { mapped_organ, specimenType, tissueLocation } = props;
+  const { mapped_organ, mapped_specimen_type, tissueLocation } = props;
   return (
     <SectionContainer id="tissue">
       <SectionHeader variant="h3" component="h2">
@@ -24,7 +24,7 @@ function SampleTissue(props) {
       </SectionHeader>
       <FlexPaper>
         <MetadataItem label="Organ Type" value={mapped_organ} />
-        <MetadataItem label="Specimen Type" ml={1} value={specimenType} />
+        <MetadataItem label="Specimen Type" ml={1} value={mapped_specimen_type} />
         <MetadataItem label="Tissue Location" ml={1} value={tissueLocation} />
       </FlexPaper>
     </SectionContainer>
@@ -33,7 +33,7 @@ function SampleTissue(props) {
 
 SampleTissue.propTypes = {
   mapped_organ: PropTypes.string.isRequired,
-  specimenType: PropTypes.string.isRequired,
+  mapped_specimen_type: PropTypes.string.isRequired,
   tissueLocation: PropTypes.string,
 };
 

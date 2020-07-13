@@ -6,7 +6,7 @@ import Attribution from '../Attribution';
 import Protocol from '../Protocol';
 import SummaryItem from '../SummaryItem';
 import DetailLayout from '../DetailLayout';
-import MetadataTable from '../MetadataTable/MetadataTable';
+import MetadataTable from '../MetadataTable';
 import SampleTissue from '../SampleTissue';
 
 import DetailContext from '../context';
@@ -52,7 +52,7 @@ function SampleDetail(props) {
           <SummaryItem>{mapped_organ}</SummaryItem>
           <Typography variant="body1">{mapped_specimen_type}</Typography>
         </Summary>
-        <SampleTissue specimenType={mapped_specimen_type} mapped_organ={mapped_organ} />
+        <SampleTissue mapped_specimen_type={mapped_specimen_type} mapped_organ={mapped_organ} />
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
