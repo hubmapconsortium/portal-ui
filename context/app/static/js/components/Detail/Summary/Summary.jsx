@@ -1,16 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import {
-  FlexContainer,
-  FlexCenterAlign,
-  FlexColumn,
-  FlexBottomRight,
-  FlexColumnRight,
-  StyledTypography,
-  JsonLink,
-  StyledPaper,
-} from './style';
+
+import { LightBlueLink } from 'shared-styles/Links';
+import { FlexContainer, FlexCenterAlign, FlexColumn, FlexBottomRight, FlexColumnRight, StyledPaper } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionItem from '../SectionItem';
 import SummaryItem from '../SummaryItem';
@@ -35,14 +28,12 @@ function Summary(props) {
 
   return (
     <SectionContainer id="summary">
-      <Typography variant="subtitle1" color="primary">
+      <Typography variant="subtitle1" component="h1" color="primary">
         {entity_type}
       </Typography>
       <FlexContainer>
         <FlexColumn>
-          <SectionHeader variant="h1" component="h2">
-            {display_doi}
-          </SectionHeader>
+          <SectionHeader isSummary>{display_doi}</SectionHeader>
           {entity_type !== 'Donor' && <FlexContainer>{children}</FlexContainer>}
         </FlexColumn>
         <FlexBottomRight>
@@ -52,22 +43,25 @@ function Summary(props) {
               <SummaryItem>{status}</SummaryItem>
             </FlexCenterAlign>
           )}
-          <JsonLink href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} variant="body1" target="_blank" ml={1}>
+          <LightBlueLink
+            href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
+            variant="button"
+            target="_blank"
+            underline="none"
+          >
             View JSON
-          </JsonLink>
+          </LightBlueLink>
         </FlexBottomRight>
       </FlexContainer>
 
       <StyledPaper>
         <div>
           {collectionName && (
-            <Typography color="primary" variant="subtitle1">
+            <Typography color="primary" variant="subtitle1" component="p">
               {collectionName}
             </Typography>
           )}
-          <StyledTypography variant="body1" mt={1}>
-            {description || 'No description defined'}
-          </StyledTypography>
+          <Typography variant="body1">{description || 'No description defined'}</Typography>
         </div>
 
         <FlexColumnRight>

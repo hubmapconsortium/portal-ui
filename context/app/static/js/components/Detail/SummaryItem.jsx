@@ -15,7 +15,9 @@ function SummaryItem(props) {
   const { children } = props;
   return (
     <>
-      <Typography variant="body1">{children}</Typography>
+      <Typography variant="h6" component="p">
+        {children}
+      </Typography>
       <VerticalDivider orientation="vertical" flexItem />
     </>
   );

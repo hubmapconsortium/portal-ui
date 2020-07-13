@@ -45,7 +45,9 @@ function SampleDetail(props) {
           description={description}
         >
           <SummaryItem>{origin_sample.mapped_organ}</SummaryItem>
-          <Typography variant="body1">{mapped_specimen_type}</Typography>
+          <Typography variant="h6" component="p">
+            {mapped_specimen_type}
+          </Typography>
         </Summary>
         <Metadata entity_type={entity_type} specimenType={mapped_specimen_type} origin_sample={origin_sample} />
         <Attribution

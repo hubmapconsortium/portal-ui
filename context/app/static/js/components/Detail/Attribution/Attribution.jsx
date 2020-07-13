@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyledTypography, StyledLink, FlexPaper } from './style';
+
+import { LightBlueLink } from 'shared-styles/Links';
+import { FlexPaper } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
 import SectionItem from '../SectionItem';
@@ -10,16 +12,12 @@ function Attribution(props) {
 
   return (
     <SectionContainer id="attribution">
-      <SectionHeader variant="h3" component="h2">
-        Attribution
-      </SectionHeader>
+      <SectionHeader>Attribution</SectionHeader>
       <FlexPaper>
-        <SectionItem label="Center">
-          <StyledTypography variant="body1">{group_name}</StyledTypography>
-        </SectionItem>
+        <SectionItem label="Center">{group_name}</SectionItem>
         <SectionItem label="Creator" ml={1}>
-          <StyledTypography variant="body1">{created_by_user_displayname}</StyledTypography>
-          <StyledLink href={`mailto:${encodeURI(created_by_user_email)}`}>{created_by_user_email}</StyledLink>
+          {created_by_user_displayname}
+          <LightBlueLink href={`mailto:${encodeURI(created_by_user_email)}`}>{created_by_user_email}</LightBlueLink>
         </SectionItem>
       </FlexPaper>
     </SectionContainer>

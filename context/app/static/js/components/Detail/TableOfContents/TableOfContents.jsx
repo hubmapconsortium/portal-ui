@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
+
+import { throttle } from 'helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
-import { throttle } from '../../../helpers/functions';
 
 function ItemLink(props) {
   const { item, currentSection, handleClick } = props;
@@ -119,7 +120,9 @@ function TableOfContents(props) {
       <StickyNav>
         {items.length > 0 ? (
           <>
-            <TableTitle>Sections</TableTitle>
+            <TableTitle variant="h5" component="h3">
+              Sections
+            </TableTitle>
             <List component="ul">
               {items.map((item) => (
                 <li key={item.text}>
