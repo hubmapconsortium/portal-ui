@@ -115,9 +115,9 @@ Figure 6: Plot of per sequence base quality [(Figure from Babraham Bioinformatic
 |  gc_content || FastQC|
 |  sequence_length_distribution |>45 (encode)| FastQC|
 |  sequence_duplication|| FastQC|
-|  k-mer_overrepresentation |20 (accuracy rate 99%)|
+|  k-mer_overrepresentation |20 (accuracy rate 99%)| |
 |  0 |>20 (accuracy rate 99%)| FastQC|
-|  0 |>20 (accuracy rate 99%)| FastQC| FastQC|
+|  0 |>20 (accuracy rate 99%)| FastQC|
 |  contamination_of_primers_and_adapters_in_sequencing_data || Library specific data on adapters need to be provided to the read-trimming tool like trimmomatic *(Bioinformatics. 2014 Aug 1; 30(15):2114-20.).*|
 
 ### *Definition*
