@@ -34,7 +34,7 @@ function SummaryData(props) {
       <SummaryItem>
         {codesNames.map(({ code, name }, i) => [
           i > 0 && ' / ',
-          <LightBlueLink variant="h6" href={`/docs/assays#${code}`} underline="none">
+          <LightBlueLink key={code} variant="h6" href={`/docs/assays#${code}`} underline="none">
             {name}
           </LightBlueLink>,
         ])}

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
@@ -15,8 +16,8 @@ function SectionItem(props) {
       </Typography>
 
       {Array.isArray(children) ? (
-        children.map((child) => (
-          <Typography variant="h6" component="p">
+        children.map((child, i) => (
+          <Typography key={`value-${i}`} variant="h6" component="p">
             {child}
           </Typography>
         ))
