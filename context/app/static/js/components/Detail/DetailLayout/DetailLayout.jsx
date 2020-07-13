@@ -16,7 +16,7 @@ function getSectionFromString(s) {
 }
 
 function getPossibleSections() {
-  // array order reflects order of table of contents
+  // Array order reflects order of table of contents.
   return [
     'summary',
     'metadata',
