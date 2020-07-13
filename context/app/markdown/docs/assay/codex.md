@@ -47,7 +47,7 @@ In addition, all HuBMAP CODEX data will have an associated json file which may c
 |--|--|--|
 |  "version"| Software version used| standalone-1.6.0.16 |
 |  "name"| Descriptive name assigned to the data| drv_CX_19-004_LN_R1|
-|  "dateProcessed"| Date of experiment| 2020-01-06T10:38:03.257-05:00[America/New_York]|
+|  "dateProcessed"| Date of experiment| 2020-01-06T10:38:03.257-05:00 America/New_York|
 |  "path"| Local file path in experimenter's lab indicating where the raw (state 0) data produced was saved by the instrument. Generally not important.| "G:\\SHARE\\HuBMAP\\Codex_dataset\\src_CX_19-004_LN_R1 |
 |  "outputPath"| Local file path in experimenter's lab indicating where the processed (state > 0) data was saved. Generally this field is not important.| G:\\SHARE\\HuBMAP\\Codex_dataset\\drv_CX_19-004_LN_R1 |
 |  "objectiveType"| Brand/specification of the microscope objective lens being used| air |
@@ -55,7 +55,7 @@ In addition, all HuBMAP CODEX data will have an associated json file which may c
 |  "aperture"| Numerical aperture of the lens| 0.75 |
 |  "xyResolution"| Spatial resolution (minimum distance that can be resolved by the microscope), typically in nanometers.| 377.4463383838384 |
 |  "zPitch"| Distance between Z planes (typically µm)| 1500.0 |
-|  "wavelengths"| Excitation wavelength in nanometers (energy of light used for given channel). One value per channel.| [ 358, 488, 550, 650 ] |
+|  "wavelengths"| Excitation wavelength in nanometers (energy of light used for given channel). One value per channel.|  358, 488, 550, 650  |
 |  "bitness"| Bit depth of each channel| 16 |
 |  "numRegions"| How many separate regions are being imaged| 1 |
 |  "numCycles"| How many fluorescent stain-strip cycles are included in the run| 9 |
@@ -88,12 +88,12 @@ In addition, all HuBMAP CODEX data will have an associated json file which may c
 |  "multipointMode"| Was multipoint microscope focus mode used| false |
 |  "HandEstain"| Was H and E stain mode used| false |
 |  "channelNames"| The microscope-defined names of the fluorophore| channelNamesArray[ ] |
-|  "channelNamesArray"| List of stains, See right.| [ "DAPI-01","Blank", "Blank", "Blank", "DAPI-02", "CD31", "CD8", "CD45", "DAPI-03", "CD20","Ki67", "CD3e" ] |
+|  "channelNamesArray"| List of stains, See right.|  "DAPI-01","Blank", "Blank", "Blank", "DAPI-02", "CD31", "CD8", "CD45", "DAPI-03", "CD20","Ki67", "CD3e"  |
 |  "exposureTimes"| Length of time (usually in milliseconds) the tile is exposed to excitation light.| exposureTimesArray [ ] |
 |  "numerical_aperture"| The objective numerical aperture| 0.75 |
 |  "z_pitch"| Spacing between each z-plane in microns| 0.0 |
-|  "region_names"| List: user-defined names of regions| [ "reg1" ] |
-|  "regldx"| List: numerical index of the region| [ 1 ] |
+|  "region_names"| List: user-defined names of regions|  "reg1"  |
+|  "regldx"| List: numerical index of the region|  1  |
 |  "cycle_lower_limit"| Lowest cycle recorded|  1 |
 |  "cycle_upper_limit"| Highest cycle recorded| 9 |
 |  "region_width"| Number of tiles in the X-dimension| 5 |
