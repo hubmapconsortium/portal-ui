@@ -34,15 +34,9 @@ Examples of Entity endpoints are as follows:
    data for entity
 
 **Figure 3.**
-![An example HuBMAP entity graph consisting of a donor, organ, blocks, tissue slices, data and derived data from a pipeline. In general, a donor and organ are required in the provenance hierarchy where tissue samples (such as blocks and samples) can be organized based on several different tissue sample types.](https://drive.google.com/file/d/14aAyTItvm3teFB5jUX5TVGRpW4oit99b/view?usp=sharing)
+https://drive.google.com/file/d/14aAyTItvm3teFB5jUX5TVGRpW4oit99b/view
+
+An example HuBMAP entity graph consisting of a donor, organ, blocks, tissue slices, data and derived data from a pipeline. In general, a donor and organ are required in the provenance hierarchy where tissue samples (such as blocks and samples) can be organized based on several different tissue sample types.
 
 - [GitHub](https://github.com/hubmapconsortium/entity-api) 
 - [Smart API](https://smart-api.info/ui/0065e419668f3336a40d1f5ab89c6ba3)
-
-
-
-### Common Coordinate Framework (CCF) Registration User Interface (RUI) and Exploration User Interface (EUI) API
-A specification and set of web service calls to return information about CCF-mapped data
-
-- [GitHub](https://github.com/hubmapconsortium/ccf-data-api)
-- [Smart API](https://smart-api.info/ui/d1f33c1a75e9dcda984194e4d8cea7d8)
