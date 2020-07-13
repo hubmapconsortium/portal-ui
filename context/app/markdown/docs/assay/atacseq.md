@@ -10,8 +10,7 @@ While bulk ATACseq (Assay for Transposase-Accessible Chromatin) reveals the aver
 Single cell, single molecule barcoding: This diagram of the [DropSeq](http://mccarrolllab.org/dropseq/) process (droplet barcoding of single cells) from the laboratory of Steve McCarroll at Harvard Medical School illustrates the general strategy for droplet-based barcoding:
 
 ![](https://lh4.googleusercontent.com/GGPdys1X_4qmPHwQiaT8GQn5umfUlNAqi4x1Do4xGtsaIv7fakOngbJpYZ6P8Ik_YqPcf-E4nI4_VrGWNVfBu9OSGRCvoisY-N8VDAH61D4NI_JKGHo5C2u8aQG-a82a8TNtqdA)
-
-*Figure 1:* Diagram of the DROPseq process.
+*Figure 1: Diagram of the DROPseq process [(Macosko et al., 2015)](https://doi.org/10.1016/j.cell.2015.05.002).*
 
 Software packages such as [Seurat](https://satijalab.org/seurat/) are available for single-cell data QC, RNAseq and data exploration.
 
@@ -23,8 +22,7 @@ In contrast to droplet barcoding methods, [SPLiT-Seq](https://science.sciencemag
 
 ![](https://lh6.googleusercontent.com/BoAzThqGRpbYQ-VhVfz4y8p4K8u-0v0eBBjo28QEuR0i59EjAIziRhsevO0vEj1ANfg6S-ZviHPav-JPcS-0KsD6iOZbqQMFzUejqufUw5I3C7IMSK5xs3GDqT30gPt2J0h2h_w)
 
-
-*Figure 2:* Diagram of the combinatorial index barcoding process.
+*Figure 2: Diagram of the combinatorial index barcoding process [(Rosenberg et al., 2018)](https://doi.org/10.1126/science.aam8999)*.
 
 ## Definitions
 Some terms in this document may not be familiar to all HubMap users. The following table lists several:
@@ -42,7 +40,7 @@ Some terms in this document may not be familiar to all HubMap users. The followi
 |  Blacklist region| Region of the genome that accumulates artefactual read enrichment| 
 |  SAM| Sequence Alignment Map File: A text file that describes the output of a program that aligns sequence reads with a reference genome. An equivalent binary version of this file is called a BAM file| 
 |  Phred Score| An instrument-generated quality measure for each base.| 
-|  scATACseq| Single-cell sequencing “Assay for Transposase-Accessible Chromatin”| 
+|  SNARE-ATACseq| Single-cell sequencing “Assay for Transposase-Accessible Chromatin”| 
 |  sciATACseq| Single-cell sequencing with combinatorial indexing “Assay for Transposase-Accessible Chromatin”| 
 |  snATACseq| Single nucleus sequencing “Assay for Transposase-Accessible Chromatin”| 
 |  Bulk ATACseq| | 
@@ -62,44 +60,14 @@ The HuBMAP project provides data to the public in a variety of data states. A da
 | 5 |  Annotation files: cell by gene matrix, Motif analysis, dimensionality reduction, clustering, transcription factor enrichment for one cell vs. rest |  .csv |
 
 ## HuBMAP Metadata
-The scATCseq metadata.tsv now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq) where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
+The scATACseq metadata.tsv now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq) where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
 
 The bulkATACseq metadata.tsv now resides at this [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkatacseq) link.
 
 
-## HuBMAP Single-cell Sequence Raw File Structure
-The general folder/file structure of the data in the landing zone is:
+- For questions about sciATACseq, contact: [Dana L Jackson](mailto:danaj77@uw.edu).
+- For questions about bulk ATACseq, snATACseq or SNARE-ATACseq, contact: [Blue Lake](mailto:b1lake@eng.ucsd.edu).
 
-### Stanford snATACseq
-
-![](https://lh6.googleusercontent.com/PBGsIlxyfItqprgTn_564mDA-ok-UpVoypbYc4kkDr3js6xt-234cZE_gaVeFO0RJvRlUYmHGb9nD0YKi_fdEW-tkldRJkJY48SlbB2oYkr8Dfp4Vn_0gMN_RZ7Leq-gktstV0I)
-
-  
-
-### Stanford bulkATACseq
-
-![](https://lh4.googleusercontent.com/bC3qtjDN55CK1xcZPGliZOzwJJUw49tN7bN0-agWOgeqfPfOnZCp9BqqLUGJFXwD0GrzU_diQUIyjSSmwQbiSz9fKDkXNebP5_IT9K2MiWk8GAAFwk40tdtIFY_jNgtuL_LfOhA)
-
-  
-  
-
-### CalTech sciATACseq
-
-![](https://lh3.googleusercontent.com/SZwxPujsIYwpndMA83QW3V3pvMx_Ny8m1Z5UO8d-JYTzGiJBCcJo5X25matnZXNSVd5hPP-R75WKB2u_nBlceAcY1lVp7ErbgAxMo7O_pb-T3dRoZY81O-k90moqAz7fhGLjqH4)
-
-
-
-### UCSD/Wash U: (SNARE-SEQ2)
-
- 
-Snareseq-Transcriptomic, Dataset ID: HBM926.LQPP.353 (BUKMAP_20190529A_SNARE2-R)
-
-![](https://lh6.googleusercontent.com/rIOwykLYQNfF78VKUp9JjU8gwHZ319s8V3QV0AWt8rB2ukNd0XIhAiUPTm74TDpYMlSzWiKGvkSPCZqKskuUltAIF4ZpyUEgkCguA_GP7zds3jojOr_WR6CjudJpkYXe6edbc6k)
-
-Snareseq-Epigenomic, Dataset ID: HBM283.TSZC.443 (BUKMAP_20190529A_SNARE2-AC)
-
-The general format of the sequence files are...
-![](https://lh3.googleusercontent.com/mX9ICqLoPas2gCJJoKzwkoACdP-D5v7EFnN_u-yiYzYRn9MjxNm3UipDAu88s4y-ueYDZ-ywl1hcP09WmN_pn7dckU0_YU6in6B8n9WvltbchFNYhQD8I7erCss7W3XVUQAKUOA)
 
 ## HuBMAP QA/QC of raw (state0) data files
 The bolded steps below constitute a series of standard ATAC-seq data analysis workflow.
@@ -172,42 +140,6 @@ If files submitted fail this criteria, the recommended action by the HIVE is to 
 |  mitochondrial_fragment_ratio | <0.1 = ok <0.05 = good | similar to total scRNA-seq mito gene UMI count |
 |  does_each_cell_have_corresponding_pass_qc_rna_data | True/False | SNARE-seq unique. If each cell have corresponding pass QC RNA data |
 
-## Questions/Clarifications on experimental design
-### Replicates
-Typically this is not done in ATAC-seq expts. Anyone in the group doing it? Even if the answer is no uniformly we should use experimental_design and replicates indicators as metadata. NOTE: the pipeline will have to be modified depending on whether or not this is included.
-
-
-### Controls
-Again this is typically not done. BUT it is possible to replace transposase treatment by something like sonication (a non-specific fragmentation) to detect regions that are more challenging to sequence/align. Even if the answer is no uniformly we should use experimental_design and replicates indicators as metadata. NOTE: the pipeline will have to be modified depending on whether or not this is included.
-
-### PCR amplification
-The typical recommendation here is “few PCR cycles as possible”. I think we should report this as metadata.
-  
-
-### Sequencing depth
-Presume this is already included. For human samples the number I have seen in is 50 million mapped reads/sample. Now this is likely for bulk. This needs to be a metadata and we need to report this as a QC metric.
- 
-
-### Sequencing mode
-The typical recommendation is to do paired-end sequencing for ATAC-seq. Is anyone not doing this? Even if the answer is no uniformly we should use experimental_design and replicates indicators as metadata.  
-
-### Mitochondria
-Are any experimental methods being used (like e.g., in the OMNI-ATAC method) e.g., detergents, to remove mitochondria from samples prior to sequencing. We can potentially future proof by adding this metadata. NOTE: This again is going to affect pipeline choices.
-
-### Algorithms
- I think it is essential to indicate (include in this document) the parameter settings of the different algorithms used in the pipeline. BOTH from the TMC and the HIVE.
--   Genome index source: HIVE should identify the source and version number of the genome index (typically people use pre-built reference indexes) … for alignment step the reference sequence needs to be indexed.
--   Choice of aligner could depend on read length (bwa mem is good for longer reads (>75 bp), bowtie2 might be better for shorter reads although I have not compared comprehensively)
--   Removing mitochondrial reads/genome: One can remove the mitochondrial reads from the reference genome before aligning (this will make the alignment numbers look bad), or, remove mitochondrial reads after alignment. Which one are we doing?
--   Will we be performing PCR duplicate removal? Picard’s MarkDuplicates?
--   Are we removing non-unique alignments? Using samtools?
-
-### Analysis & Files supplied by TMCs
--   Sequence reads supplied: samples sequenced on multiple lanes may have separate files for each lane. Are they concatenated and submitted? IF replicates are used, care must be taken that these are NOT concatenated. These are potentially QC steps that the HIVE can undertake upon submission?
-    
-### Recommendations for pipelines
--   Do not remove mitochondrial reads
--   Use constant reference genome and annotation file for all samples
 
 ## Terms defined in this document
 ### Nucleosome signal
@@ -242,54 +174,6 @@ The total number of fragments for the cell that fall in an annotated peak.
 
 ### Mitochondrial fragment ratio
 The ratio of fragments mapped to the mitochondrial genome to the total number of mapped fragments for the cell.
-
-### Ideas for automated scATAC-seq report
--   Plots of nucleosome fragment length histogram grouped by nucleosome score percentile (ie, 10 plots showing the histogram for groups of cells in the 1st-10th nucleosome score percentile)
-
-Example:
-![](https://lh6.googleusercontent.com/uGSs3n9-vSrtdII_nhR-FJtEWckpWLEbwM5OIRacTC1SswpsOW15SbMXHPa5vpPydDtiHqZRtdzjC6wqzUwKu0dud4wGlQEgTe8VXUNKWP3C81y6YIX-iR_3IpaxIXv7A3mWmtI)
-
--   Plots of TSS site accessibility for cells grouped by TSS enrichment score percentile
-
-Example:
-![](https://lh4.googleusercontent.com/vyUQvbL_wnJR2CSud7_Q0uWqeBQ8Oew8XmC7NHJqL5gS4R7qVcVxUpBuW6id3FB4YFU5JizDIUN3TR33IFPKKuorpLJK55TFFO-0DK38jzmCvfh82tJPiAujdLhBjRmBtR8XwUg)
-
--   Violin plots or boxplots showing distribution of each QC metric for the entire dataset
-
-Example:
-![](https://lh5.googleusercontent.com/Ow5-NN8T16zo4x9H-sSBrAczwntJ1RjXGDOfndmSrfQWfxIw4nMMJ91-5OyFBhFZZJmKPsjScEoUTVt5NwqcKn0wqP-WmtFDpXweif7sBh5S3UxiGFvn9Lut6TW2Bdj_bA9jZi0)
-
--   Number of cells passing minimum QC threshold recommendations, for each QC metric and for all metrics combined
-    
--   Plot sequencing saturation distribution (histogram of the number of times each fragment was sequenced)
-
-Example:
-![](https://lh5.googleusercontent.com/AIr9T5qaSoHFo1QG3FMQAXElxruCWHqwqVFa5eEhYDGByjDmi0dygH3nxQyBsb1iZ2IlUQ4WrHMmd1SQY5JkoFLwwF2LwfuRED9KBIZdwjcHD9mZfWIf6593etDvyPOAlcqCFnM)
-
--   Additional QC plots for SNARE-seq: barcodes overlap between ATAC and RNA, example figure below:
-
-![](https://lh6.googleusercontent.com/TFFsi0pXUVuMVAqMLcjj4Z7L_laBrrIyAC8D23cE4BMeXhS4wSKnU4H9Ubryj73WQdyXK8Zg22nYVjrgBx1QAGMCcc8o6CWdItexYEdy67sTHfu2KICH9knnoaNpVJZ2Be99enc)
-
-Inputs:
-
-Variable for each dataset:
-
--   BAM file
-    
--   Fragment file with tabix index [https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/output/fragments](https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/output/fragments)
-    
--   Count matrix (hdf5 or mtx)
-    
--   Peak bed file
-
-Constant for all data:
-
--   Genome file
-    
--   Gene annotations (for TSS enrichment)
-    
--   Blacklist regions
-  
 
 ### Software & Documentation
 #### Cellranger-atac

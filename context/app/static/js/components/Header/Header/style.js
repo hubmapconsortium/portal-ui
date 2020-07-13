@@ -20,10 +20,7 @@ const Spacer = styled.div`
 
 const HeaderButton = styled(Button)`
   margin-left: 10px;
-`;
-
-const Link = styled.a`
   color: #ffffff;
 `;
 
-export { StyledAppBar, HubmapLogo, Spacer, HeaderButton, Link };
+export { StyledAppBar, HubmapLogo, Spacer, HeaderButton };

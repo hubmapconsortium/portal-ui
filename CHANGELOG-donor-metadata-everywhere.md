@@ -1,1 +1,0 @@
-- Put donor metadata facets on all search pages.

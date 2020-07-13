@@ -8,11 +8,6 @@ This document details bulk whole genome sequencing assays, data states, metadata
 ## Description
 Whole genome sequencing (WGS) measures the genome-wide nucleotide sequence in a biological sample. Generally, the purpose is to screen the entire genome for all sequence variations (*against a reference sequence*) such as benign sequence variants (SNPs) or candidate pathogenic mutations. Examples of sequence variants include chromosomal rearrangements, nucleotide substitutions, deletions or insertions. An example use case would be a genome-wide search for somatic mutations (cancer-causing mutations that arose in a somatic cell, as opposed to a germline cell) by comparing DNA sequence in a patient’s tumor cells to that in the same patient’s healthy cells. *See Appendix 1, below, for more detailed description.*
 
-  
-
-![](https://lh4.googleusercontent.com/vpKbmRtSoa9HGuqAFkIhvWgA3-vTD-MiqnREuLLlrsTpBoVwjwx5JwEiDQbGmw5_aWTeuw015KPXhl3JBikr-CkGdDR5GzLIcbZN4kgQnK60JNl2YZ-3nlNJ0uOnTqvKy2BPfg4)
-
-
 ## HuBMAP Whole Genome Sequencing Data States (Levels)
 The HuBMAP project provides data to the public in a variety of data states, which denote the amount of processing that has been done to the data. The data states for WGS seq data provided by the HuBMAP project are listed below:
 
@@ -56,16 +51,13 @@ The raw sequencing data is recorded in a FASTQ file which contains sequenced rea
 
 NAAGAACACGTTCGGTCACCTCAGCACACTTGTGAATGTCATGGGATCCAT
 
-+
+\+
 
 #55???BBBBB?BA@DEEFFCFFHHFFCFFHHHHHHHFAE0ECFFD/AEHH
 
 Line 1 begins with a '@' character and is followed by a sequence identifier and an optional description (such as a FASTA title line).
-
 Line 2 is the sequence of the read.
-
 Line 3 begins with a '+' character and is optionally followed by the same sequence identifier (and any description) again.
-
 Line 4 encodes the quality values for the bases in Line 2.
 
 ## HuBMAP QA/QC of raw (state0) data files
@@ -73,8 +65,8 @@ The bolded steps below constitute a series of standard RNA-seq data analysis wor
 
 
 ### Pre-alignment QC with FastQC 
-[http://www.bioinformatics.babraham.ac.uk/projects/fastqc/](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/):
 ![](https://lh5.googleusercontent.com/QcjPsyXMsxYbtFCVU-MSRj_WfkfW6fR3gRIJUWp9MtA6-kOsdZ1qM6XOjBBdKy9ytkJ1mij1ZG7S841IkLqYUh5ueUMmeK0Fyhq5Ye00e1_ZX6FoPtpuJYQFbgqJMmVbMs4ZGQo)
+*Figure 1: Plot of per sequence base quality ([(Figure from Babraham Bioinoformatics)](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)*
 
 |**qc_metric** |  **Threshold**| **Method** | 
 |--|--|--|

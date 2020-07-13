@@ -9,9 +9,10 @@ import ProvTableDerivedLink from '../ProvTableDerivedLink';
 function ProvTable(props) {
   const { uuid, entity_type, typesToSplit, ancestors, assayMetadata } = props;
 
-  ancestors.push(assayMetadata);
+  // Make a new list rather modifying old one in place: Caused duplication in UI.
+  const entities = [...ancestors, assayMetadata];
 
-  const types = ancestors.reduce(
+  const types = entities.reduce(
     (acc, item) => {
       acc[typesToSplit.indexOf(item.entity_type)].push(item);
       return acc;
@@ -26,16 +27,18 @@ function ProvTable(props) {
           <EntityColumnTitle variant="h5">{typesToSplit[i]}s</EntityColumnTitle>
           <FlexColumn>
             {type && type.length ? (
-              type.map((item, j) => (
-                <ProvTableTile
-                  key={item.uuid}
-                  uuid={item.uuid}
-                  id={item.display_doi}
-                  entity_type={item.entity_type}
-                  isCurrentEntity={uuid === item.uuid}
-                  isNotSibling={j > 0 ? type[j - 1].specimen_type !== item.specimen_type : false}
-                />
-              ))
+              type
+                .sort((a, b) => a.create_timestamp - b.create_timestamp)
+                .map((item, j) => (
+                  <ProvTableTile
+                    key={item.uuid}
+                    uuid={item.uuid}
+                    id={item.display_doi}
+                    entity_type={item.entity_type}
+                    isCurrentEntity={uuid === item.uuid}
+                    isNotSibling={j > 0 ? type[j - 1].specimen_type !== item.specimen_type : false}
+                  />
+                ))
             ) : (
               <ProvTableDerivedLink uuid={uuid} type={typesToSplit[i]} />
             )}

@@ -1,4 +1,5 @@
 import React, { useReducer, useRef } from 'react';
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
@@ -6,25 +7,23 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 
-import ShowcaseLinks from '../ShowcaseLinks';
 import { OffsetPopper } from './style';
 
-function ShowcaseDropdown() {
+function Dropdown(props) {
+  const { title, children, menuListId } = props;
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
 
   return (
     <>
       <Button ref={anchorRef} onClick={toggle} style={{ color: 'white' }}>
-        Showcases
+        {title}
         {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </Button>
       <OffsetPopper open={open} anchorEl={anchorRef.current} placement="bottom-start">
         <Paper>
           <ClickAwayListener onClickAway={toggle}>
-            <MenuList id="showcase-options">
-              <ShowcaseLinks />
-            </MenuList>
+            <MenuList id={menuListId}>{children}</MenuList>
           </ClickAwayListener>
         </Paper>
       </OffsetPopper>
@@ -32,4 +31,10 @@ function ShowcaseDropdown() {
   );
 }
 
-export default ShowcaseDropdown;
+Dropdown.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
+  menuListId: PropTypes.string.isRequired,
+};
+
+export default Dropdown;
