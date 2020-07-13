@@ -15,16 +15,11 @@ function SectionItem(props) {
         {label}
       </Typography>
 
-      {Array.isArray(children) ? (
-        children.map((child, i) => (
+      {childrenArray.map((child, i) => (
           <Typography key={`value-${i}`} variant="h6" component="p">
             {child}
           </Typography>
         ))
-      ) : (
-        <Typography variant="h6" component="p">
-          {children}
-        </Typography>
       )}
     </StyledDiv>
   );
