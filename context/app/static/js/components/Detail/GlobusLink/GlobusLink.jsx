@@ -19,19 +19,19 @@ function GlobusLink(props) {
         setGlobusUrlText({ url: null, text: `Globus File Browser: ${response.status}: ${response.statusText}` });
         return;
       }
-      // TODO: I have never gotten a non-401 response, so I'm not sure this works.
       const responseGlobusUrl = await response.text();
-      setGlobusUrlText({ url: responseGlobusUrl, text: 'View in Globus File Browser' });
+      setGlobusUrlText({ url: responseGlobusUrl, text: 'Download from Globus' });
     }
     getAndSetGlobusUrlText();
   }, [entityEndpoint, uuid]);
 
-  return globusUrlText.url ? (
+  const { url, text } = globusUrlText;
+  return url ? (
     <StyledButton $fileBrowserDisplayed={fileBrowserDisplayed}>
-      <Link href={globusUrlText.url}>View in Globus File Browser</Link>
+      <Link href={url}>{text}</Link>
     </StyledButton>
   ) : (
-    globusUrlText.text
+    text
   );
 }
 
