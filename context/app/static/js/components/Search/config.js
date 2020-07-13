@@ -18,7 +18,7 @@ export const donorConfig = {
     filter('created_by_user_displayname', 'Creator'),
   ]),
   fields: [
-    field('display_doi', 'ID'),
+    field('display_doi', 'Donor'),
     field('group_name', 'Group'),
     field('mapped_metadata.age', 'Age'),
     field('mapped_metadata.bmi', 'BMI'),
@@ -36,7 +36,7 @@ export const sampleConfig = {
     filter('created_by_user_displayname', 'Creator'),
   ].concat(makeDonorMetadataFilters(false)),
   fields: [
-    field('display_doi', 'ID'),
+    field('display_doi', 'Sample'),
     field('donor.group_name', 'Group'),
     field('mapped_specimen_type', 'Speciment Type'),
     field('origin_sample.mapped_organ', 'Organ'),
@@ -54,7 +54,7 @@ export const datasetConfig = {
     filter('created_by_user_displayname', 'Creator'),
   ].concat(makeDonorMetadataFilters(false)),
   fields: [
-    field('display_doi', 'ID'),
+    field('display_doi', 'Dataset'),
     field('donor.group_name', 'Group'),
     field('mapped_data_types', 'Data Types'),
     field('origin_sample.mapped_organ', 'Organ'),
