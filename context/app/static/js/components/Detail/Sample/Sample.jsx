@@ -4,9 +4,10 @@ import ProvTabs from '../ProvTabs';
 import Summary from '../Summary';
 import Attribution from '../Attribution';
 import Protocol from '../Protocol';
-import Metadata from '../Metadata';
 import SummaryItem from '../SummaryItem';
 import DetailLayout from '../DetailLayout';
+import MetadataTable from '../MetadataTable/MetadataTable';
+import SampleTissue from '../SampleTissue';
 
 import DetailContext from '../context';
 
@@ -26,11 +27,15 @@ function SampleDetail(props) {
     create_timestamp,
     last_modified_timestamp,
     description,
+    metadata,
   } = assayMetadata;
+
+  const { mapped_organ } = origin_sample;
 
   const shouldDisplaySection = {
     protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
-    metadata: true,
+    tissue: true,
+    metadataTable: 'metadata' in assayMetadata,
   };
 
   return (
@@ -44,10 +49,10 @@ function SampleDetail(props) {
           last_modified_timestamp={last_modified_timestamp}
           description={description}
         >
-          <SummaryItem>{origin_sample.mapped_organ}</SummaryItem>
+          <SummaryItem>{mapped_organ}</SummaryItem>
           <Typography variant="body1">{mapped_specimen_type}</Typography>
         </Summary>
-        <Metadata entity_type={entity_type} specimenType={mapped_specimen_type} origin_sample={origin_sample} />
+        <SampleTissue specimenType={mapped_specimen_type} mapped_organ={mapped_organ} />
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
@@ -57,6 +62,7 @@ function SampleDetail(props) {
         {shouldDisplaySection.protocols && (
           <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
         )}
+        {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata} display_doi={display_doi} />}
       </DetailLayout>
     </DetailContext.Provider>
   );
