@@ -48,29 +48,29 @@ Outline of the full ProTeomiX (PTX) Quality Control (QC) Report including metric
 - 1.1 HeatMap
 - 1.2 Name Mapping
 - 1.3 Metrics
---  1.3.1 PAR: parameters
---   1.3.2 EVD: Top5 Contaminants per Raw file
---   1.3.3 EVD: Contaminants
---   1.3.4 EVD: peptide intensity distribution
---   1.3.5 PG: intensity distribution
---   1.3.6 MSMS: Missed cleavages per Raw file
---  1.3.7 EVD: charge distribution
---   1.3.8 PG: Contaminant per condition
---   1.3.9 MSMSscans: TopN over RT
---   1.3.10 EVD: IDs over RT
---  1.3.11 EVD: Peak width over RT
---   1.3.12 MSMSscans: Ion Injection Time over RT
---   1.3.13 [experimental] MSMSscans: MS/MS intensity
---   1.3.14 EVD: Oversampling (MS/MS counts per 3D-peak)
---   1.3.15 EVD: Uncalibrated mass error
---   1.3.16 EVD: Calibrated mass error
---   1.3.17 MSMS: Fragment mass errors per Raw file
---   1.3.18 SM: MS/MS identified per Raw file
---   1.3.19 MSMSscans: TopN
---   1.3.20 MSMSscans: TopN % identified over N
---   1.3.21 Missing Values Skipped
---   1.3.22 EVD: Peptide ID count
---   1.3.23 EVD: ProteinGroups count
+    - 1.3.1 PAR: parameters
+    - 1.3.2 EVD: Top5 Contaminants per Raw file
+    - 1.3.3 EVD: Contaminants
+    - 1.3.4 EVD: peptide intensity distribution
+    - 1.3.5 PG: intensity distribution
+    - 1.3.6 MSMS: Missed cleavages per Raw file
+    - 1.3.7 EVD: charge distribution
+    - 1.3.8 PG: Contaminant per condition
+    - 1.3.9 MSMSscans: TopN over RT
+    - 1.3.10 EVD: IDs over RT
+    - 1.3.11 EVD: Peak width over RT
+    - 1.3.12 MSMSscans: Ion Injection Time over RT
+    - 1.3.13 [experimental] MSMSscans: MS/MS intensity
+    - 1.3.14 EVD: Oversampling (MS/MS counts per 3D-peak)
+    - 1.3.15 EVD: Uncalibrated mass error
+    - 1.3.16 EVD: Calibrated mass error
+    - 1.3.17 MSMS: Fragment mass errors per Raw file
+    - 1.3.18 SM: MS/MS identified per Raw file
+    - 1.3.19 MSMSscans: TopN
+    - 1.3.20 MSMSscans: TopN % identified over N
+    - 1.3.21 Missing Values Skipped
+    - 1.3.22 EVD: Peptide ID count
+    - 1.3.23 EVD: ProteinGroups count
  
 See J. Proteome Res., 2016, 15 (3), pp 777-787. DOI: [10.1021/acs.jproteome.5b00780](https://doi.org/10.1021/acs.jproteome.5b00780) for further details.
 
