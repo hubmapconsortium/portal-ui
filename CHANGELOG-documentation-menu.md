@@ -1,2 +1,0 @@
-- Change documentation button in nav to a dropdown menu.
-- Make entire nav button a clickable link instead of only the text.
