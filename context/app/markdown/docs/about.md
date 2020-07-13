@@ -1,5 +1,8 @@
-HuBMAP Consortium
--
+
+# About
+
+## HuBMAP Consortium
+
 The HuBMAP Consortium is developing the tools to create an open, global atlas of the human body at the cellular level. These tools and maps will be openly available to accelerate understanding of the relationships between cell and tissue organization and the functional relationships  and human health.
 
 ### Consortium Data access policies & procedures

@@ -1,21 +1,21 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
-import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 import MenuList from '@material-ui/core/MenuList';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import Link from '@material-ui/core/Link';
-import { AppBar } from '@material-ui/core';
 
 import ShowcaseLinks from '../ShowcaseLinks';
-import { WidePopper, WidePaper, ShowcaseMenuItem } from './style';
+import DocumentationLinks from '../DocumentationLinks';
+import { WidePopper, WidePaper, DropdownMenuItem } from './style';
+import DropdownLink from '../DropdownLink';
 
 function Menu(props) {
   const [open, toggle] = useReducer((v) => !v, false);
   const [openShowcase, toggleShowcase] = useReducer((v) => !v, false);
+  const [openDocumentation, toggleDocumentation] = useReducer((v) => !v, false);
   const { anchorRef } = props;
 
   return (
@@ -27,28 +27,23 @@ function Menu(props) {
         <WidePaper>
           <MenuList>
             {['Donor', 'Sample', 'Dataset'].map((type) => (
-              <MenuItem key={type}>
-                <Link href={`/search?entity_type[0]=${type}`} color="primary" underline="none">{`${type}s`}</Link>
-              </MenuItem>
+              <DropdownLink key={type} href={`/search?entity_type[0]=${type}`}>{`${type}s`}</DropdownLink>
             ))}
-            <MenuItem>
-              <Link href="/collections">Collections</Link>
-            </MenuItem>
-            <ShowcaseMenuItem onClick={toggleShowcase}>
+            <DropdownLink href="/collections">Collections</DropdownLink>
+            <DropdownMenuItem onClick={toggleShowcase}>
               Showcases
-              {openShowcase ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
-            </ShowcaseMenuItem>
-            {openShowcase && <ShowcaseLinks />}
-            <MenuItem>
-              <Link href="/ccf-eui" target="_blank" rel="noopener noreferrer" color="primary" underline="none">
-                CCF
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <Link href="/help" color="primary" underline="none">
-                Help
-              </Link>
-            </MenuItem>
+              {openShowcase ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+            </DropdownMenuItem>
+            {openShowcase && <ShowcaseLinks isIndented />}
+            <DropdownMenuItem onClick={toggleDocumentation}>
+              Documentation
+              {openDocumentation ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+            </DropdownMenuItem>
+            {openDocumentation && <DocumentationLinks isIndented />}
+            <DropdownLink href="/ccf-eui" target="_blank" rel="noopener noreferrer">
+              CCF
+            </DropdownLink>
+            <DropdownLink href="/help">Help</DropdownLink>
           </MenuList>
         </WidePaper>
       </WidePopper>
@@ -57,7 +52,7 @@ function Menu(props) {
 }
 
 Menu.propTypes = {
-  anchorRef: PropTypes.shape({ current: PropTypes.instanceOf(AppBar) }).isRequired,
+  anchorRef: PropTypes.shape({ current: PropTypes.object }).isRequired,
 };
 
 export default Menu;
