@@ -16,9 +16,11 @@ function getSectionFromString(s) {
 }
 
 function getPossibleSections() {
+  // array order reflects order of table of contents
   return [
     'summary',
     'metadata',
+    'tissue',
     'visualization',
     'attribution',
     'provenance',
@@ -40,7 +42,8 @@ function DetailLayout(props) {
 
   const getSections = () => {
     const sections = new Map(getPossibleSections());
-    const sectionsToTest = ['metadata', 'visualization', 'protocols', 'metadataTable', 'files', 'dagProv'];
+    // Add sections that are not common to all entity types
+    const sectionsToTest = ['metadata', 'tissue', 'visualization', 'protocols', 'metadataTable', 'files', 'dagProv'];
     sectionsToTest.forEach((section) => testAndDeleteFromObject(section, sections, !shouldDisplaySection[section]));
     return sections;
   };
