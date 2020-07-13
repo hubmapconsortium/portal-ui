@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // eslint-disable-next-line import/named
 import { filter, rangeFilter, field } from './utils';
 
@@ -32,9 +33,10 @@ export const sampleConfig = {
   filters: [
     filter('origin_sample.mapped_organ', 'Organ'),
     filter('mapped_specimen_type', 'Specimen Type'),
+  ].concat(makeDonorMetadataFilters(false)).concat([
     filter('donor.group_name', 'Group'),
     filter('created_by_user_displayname', 'Creator'),
-  ].concat(makeDonorMetadataFilters(false)),
+  ]),
   fields: [
     field('display_doi', 'Sample'),
     field('donor.group_name', 'Group'),
@@ -50,9 +52,10 @@ export const datasetConfig = {
     filter('origin_sample.mapped_organ', 'Organ'),
     filter('source_sample.mapped_specimen_type', 'Specimen Type'),
     filter('mapped_status', 'Status'),
+  ].concat(makeDonorMetadataFilters(false)).concat([
     filter('donor.group_name', 'Group'),
     filter('created_by_user_displayname', 'Creator'),
-  ].concat(makeDonorMetadataFilters(false)),
+  ]),
   fields: [
     field('display_doi', 'Dataset'),
     field('donor.group_name', 'Group'),
