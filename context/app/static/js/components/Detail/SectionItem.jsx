@@ -8,7 +8,8 @@ const StyledDiv = styled.div`
 `;
 
 function SectionItem(props) {
-  const { childrenArray } = Array.isArray(children) ? children : [children];
+  const { children, ml, label } = props;
+  const childrenArray = Array.isArray(children) ? children : [children];
   return (
     <StyledDiv ml={ml}>
       <Typography variant="subtitle2" component="h3" color="primary">
@@ -16,11 +17,10 @@ function SectionItem(props) {
       </Typography>
 
       {childrenArray.map((child, i) => (
-          <Typography key={`value-${i}`} variant="h6" component="p">
-            {child}
-          </Typography>
-        ))
-      )}
+        <Typography key={`value-${i}`} variant="h6" component="p">
+          {child}
+        </Typography>
+      ))}
     </StyledDiv>
   );
 }
