@@ -1,3 +1,12 @@
+## v0.0.39 - 2020-07-13
+
+- Change documentation button in nav to a dropdown menu.
+- Make entire nav button a clickable link instead of only the text.
+- Change globus link text to "Download from Globus"
+
+- Updated the markdown content for the cell type annotation (spleen) showcase
+
+
 ## v0.0.38 - 2020-07-10
 
 - Put donor metadata facets on all search pages.
