@@ -81,7 +81,7 @@ function Search(props) {
   const wrappedSearch = <SearchWrapper {...allProps} />;
   return (
     <>
-      <Typography component="h1" variant="h1">
+      <Typography component="h1" variant="h2">
         {title}
       </Typography>
       {hasAncestorParam && (
