@@ -8,7 +8,7 @@ const StyledDiv = styled.div`
 `;
 
 function SectionItem(props) {
-  const { children, label, ml } = props;
+  const { childrenArray } = Array.isArray(children) ? children : [children];
   return (
     <StyledDiv ml={ml}>
       <Typography variant="subtitle2" component="h3" color="primary">
