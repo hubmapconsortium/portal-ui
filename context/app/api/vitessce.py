@@ -18,7 +18,9 @@ SCATTERPLOT = {
     "layers": [],
     "name": "NAME",
     "staticLayout": [
-        {"component": "cellSets", "x": 9, "y": 0, "w": 3, "h": 6},
+        {"component": "cellSets", "x": 9, "y": 0, "w": 3, "h": 4},
+        {"component": "cellSetSizes", "x": 9, "y": 4, "w": 3, "h": 4},
+        {"component": "status", "x": 9, "y": 8, "w": 3, "h": 2},
         {
             "component": "scatterplot",
             "props": {
@@ -29,7 +31,7 @@ SCATTERPLOT = {
             "x": 0,
             "y": 0,
             "w": 9,
-            "h": 6,
+            "h": 10,
         },
     ],
 }
@@ -40,7 +42,8 @@ IMAGING = {
     "staticLayout": [
         {"component": "layerController", "x": 0, "y": 0, "w": 3, "h": 4},
         {"component": "description", "x": 0, "y": 4, "w": 3, "h": 2},
-        {"component": "cellSets", "x": 10, "y": 2, "w": 2, "h": 4},
+        {"component": "cellSets", "x": 10, "y": 2, "w": 2, "h": 2},
+        {"component": "status", "x": 10, "y": 4, "w": 2, "h": 2},
         {"component": "genes", "x": 10, "y": 0, "w": 2, "h": 2},
         {"component": "heatmap", "x": 3, "y": 4, "w": 7, "h": 2},
         {

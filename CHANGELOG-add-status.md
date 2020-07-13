@@ -1,0 +1,1 @@
+- Added the Vitessce 'status' component into the view configs for codex_cytokit and salmon_rnaseq_10x
