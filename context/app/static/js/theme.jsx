@@ -87,7 +87,7 @@ const theme = createMuiTheme({
     },
     button: {
       fontWeight: 500,
-      fontiSize: '0.875rem',
+      fontSize: '0.875rem',
       textTransform: 'capitalize',
     },
   },
