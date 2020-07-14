@@ -28,11 +28,9 @@
     </div>
     <footer id="react-footer"></footer>
 
-    {% block extra_scripts %}
-
     <script src="{{ url_for('static', filename='public/main.bundle.js') }}"></script>
     <script src="{{ url_for('static', filename='public/vendors.bundle.js') }}"></script>
-    
-    {% endblock %}
+
+    {% block extra_scripts %}{% endblock %}
   </body>
 </html>
