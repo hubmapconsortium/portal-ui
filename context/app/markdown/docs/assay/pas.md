@@ -38,7 +38,7 @@ There are a variety of terms used in this document that may not be familiar to a
 | 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG|
 
 ## HuBMAP Metadata
-This metadata schema is now available in Github for download. Any further edits can be made through consultation with the HuBMAP team who will request changes through [Github.](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/stained)
+This metadata schema is now available in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/stained) for download.
 
 ## Associated Metadata files
 |**Metadata File Name** |  **File Type**| **Field** | **Definition**|
