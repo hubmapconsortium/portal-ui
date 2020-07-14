@@ -8,7 +8,7 @@ const headerFixedHeight = 64;
 const vitessceFixedHeight = 600;
 
 const StyledHeader = styled.div`
-  margin-bottom: 6px;
+  margin-bottom: ${(props) => props.theme.spacing(2)}px;
 `;
 
 const StyledHeaderText = styled(Typography)`
