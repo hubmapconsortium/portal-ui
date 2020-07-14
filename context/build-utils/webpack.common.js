@@ -6,7 +6,7 @@ const config = {
   entry: { main: './app/static/js/index.jsx' },
   output: {
     path: resolve('./app/static/public'),
-    publicPath: `${resolve('./app/static/public')}/`,
+    publicPath: '../static/public/',
     filename: '[name].bundle.js',
     chunkFilename: '[name].bundle.js',
   },
