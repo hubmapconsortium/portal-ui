@@ -3,11 +3,23 @@ const { resolve } = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const config = {
-  entry: './app/static/js/index.jsx',
+  entry: { main: './app/static/js/index.jsx' },
   output: {
     path: resolve('./app/static/public'),
-    filename: 'bundle.js',
-    publicPath: resolve('../app/static/public'),
+    publicPath: `${resolve('/static/public/')}/`,
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].bundle.js',
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: RegExp('/node_modules/'),
+          name: 'vendors',
+          chunks: 'initial',
+        },
+      },
+    },
   },
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml'],

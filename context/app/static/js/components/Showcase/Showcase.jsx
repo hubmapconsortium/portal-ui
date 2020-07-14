@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import ReactMarkdown from 'react-markdown';
 
-import Visualization from '../Detail/Visualization';
+import VisualizationWrapper from '../Detail/VisualizationWrapper';
 import SectionHeader from '../Detail/SectionHeader';
 import SectionContainer from '../Detail/SectionContainer';
 import { StyledPaper } from '../Detail/Summary/style';
@@ -35,7 +35,7 @@ function Showcase(props) {
         created_by_user_displayname={created_by_user_displayname}
         created_by_user_email={created_by_user_email}
       />
-      <Visualization vitData={vitData} />
+      <VisualizationWrapper vitData={vitData} />
     </Container>
   );
 }

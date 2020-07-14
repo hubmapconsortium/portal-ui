@@ -1,0 +1,1 @@
+- Separate vitessce visualization into own bundle chunks and lazy load.

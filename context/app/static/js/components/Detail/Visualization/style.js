@@ -3,15 +3,16 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 import SectionContainer from '../SectionContainer';
+import SectionHeader from '../SectionHeader';
 
 const headerFixedHeight = 64;
 const vitessceFixedHeight = 600;
 
 const StyledHeader = styled.div`
-  margin-bottom: 6px;
+  margin-bottom: ${(props) => props.theme.spacing(2)}px;
 `;
 
-const StyledHeaderText = styled(Typography)`
+const StyledHeaderText = styled(SectionHeader)`
   margin-bottom: 0;
   display: inline-block;
 `;

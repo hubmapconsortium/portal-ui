@@ -28,7 +28,8 @@
     </div>
     <footer id="react-footer"></footer>
 
-    <script src="{{ url_for('static', filename='public/bundle.js') }}"></script>
+    <script src="{{ url_for('static', filename='public/main.bundle.js') }}"></script>
+    <script src="{{ url_for('static', filename='public/vendors.bundle.js') }}"></script>
 
     {% block extra_scripts %}{% endblock %}
   </body>
