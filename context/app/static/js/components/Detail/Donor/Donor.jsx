@@ -3,7 +3,7 @@ import ProvTabs from '../ProvTabs';
 import Summary from '../Summary';
 import Attribution from '../Attribution';
 import Protocol from '../Protocol';
-import Metadata from '../Metadata';
+import DonorMetadata from '../DonorMetadata';
 import DetailLayout from '../DetailLayout';
 
 import DetailContext from '../context';
@@ -41,7 +41,7 @@ function DonorDetail(props) {
           last_modified_timestamp={last_modified_timestamp}
           description={description}
         />
-        {shouldDisplaySection.metadata && <Metadata entity_type={entity_type} metadata={mapped_metadata} />}
+        {shouldDisplaySection.metadata && <DonorMetadata metadata={mapped_metadata} />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
