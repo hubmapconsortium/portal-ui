@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { StyledSectionContainer, StyledHeader, StyledHeaderText } from '../Visualization/style';
+import { VisualizationBackground } from './style';
 
 const Visualization = React.lazy(() => import('../Visualization'));
 
@@ -13,9 +14,13 @@ function VisualizationWrapper(props) {
       fallback={
         <StyledSectionContainer id="visualization">
           <StyledHeader>
-            <StyledHeaderText>Visualization</StyledHeaderText>
+            <StyledHeaderText variant="h4" component="h2">
+              Visualization
+            </StyledHeaderText>
           </StyledHeader>
-          <CircularProgress />
+          <VisualizationBackground>
+            <CircularProgress />
+          </VisualizationBackground>
         </StyledSectionContainer>
       }
     >

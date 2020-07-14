@@ -60,7 +60,9 @@ function Visualization(props) {
   return (
     <StyledSectionContainer id="visualization">
       <StyledHeader>
-        <StyledHeaderText>Visualization</StyledHeaderText>
+        <StyledHeaderText variant="h4" component="h2">
+          Visualization
+        </StyledHeaderText>
         <StyledHeaderRight>
           <VisualizationThemeSwitch theme={vitessceTheme} onChange={(e, theme) => setVitessceTheme(theme)} />
           <ExpandButton size="small" onClick={handleExpand} variant="contained" disableElevation>
