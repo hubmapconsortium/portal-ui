@@ -26,10 +26,7 @@ The HuBMAP project provides data to the public in a variety of data states, whic
     
 -   Level 4: This is information that might be unique to a lab or is not required for reproducibility or is otherwise not relevant for outside groups. This information is submitted in the form of a single file, a ZIP archive containing multiple files, or a directory of files. There is no formatting requirement (although formats readable with common tools such as text editors are preferable over proprietary binary formats).
     
-All HuBMAP data will have searchable metadata fields.
-
-  
-[Github link](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/wgs) to metadata.tsv: fieldnames, descriptions & required formats. Any modifications to the WGS metadata.tsv must be made through Github and only with sequencing DRT team approval.
+All HuBMAP data will have searchable metadata fields. The metadata schema is available in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/wgs) for download.
 
 ## Values to be produced by HIVE Pipeline
 
