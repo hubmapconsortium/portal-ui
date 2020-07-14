@@ -5,6 +5,7 @@ die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
 git diff --quiet || die 'Uncommitted changes: Stash or commit'
 git checkout master
+git pull
 
 perl -i -pne 's/(\d+)$/$1+1/e' context/app/markdown/VERSION.md
 VERSION=`cat VERSION`
@@ -12,6 +13,15 @@ BRANCH="release-$VERSION"
 git checkout -b "$BRANCH"
 git add .
 git commit -m 'Version bump'
+
+git submodule foreach '
+  echo "was:" `git rev-parse HEAD`
+  git checkout master
+  git pull
+  echo "now:" `git rev-parse HEAD`
+'
+git add .
+git commit -m 'Update submodules'
 
 if ls CHANGELOG-*.md; then
   (
