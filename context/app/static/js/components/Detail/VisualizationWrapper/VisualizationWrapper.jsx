@@ -14,9 +14,7 @@ function VisualizationWrapper(props) {
       fallback={
         <StyledSectionContainer id="visualization">
           <StyledHeader>
-            <StyledHeaderText variant="h4" component="h2">
-              Visualization
-            </StyledHeaderText>
+            <StyledHeaderText>Visualization</StyledHeaderText>
           </StyledHeader>
           <VisualizationBackground>
             <CircularProgress />
