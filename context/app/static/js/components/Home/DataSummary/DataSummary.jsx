@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import { DatasetIcon, SampleIcon, DonorIcon } from 'shared-styles/icons';
+import { CenterIcon, DatasetIcon, SampleIcon, DonorIcon } from 'shared-styles/icons';
 import DataSummaryItem from '../DataSummaryItem';
 import Title from '../Title';
 import { Wrapper, FlexRow } from './style';
@@ -12,7 +11,7 @@ function DataSummary(props) {
     <Wrapper>
       <FlexRow>
         <DataSummaryItem
-          icon={AccountBalanceIcon}
+          icon={CenterIcon}
           label="Centers"
           value={summaryData.centerCount}
           href="https://hubmapconsortium.org/funded-research-tmc/"
