@@ -69,7 +69,7 @@ In addition, all HuBMAP seq data will have an associated json file which may con
 |  "aperture"| Numerical aperture of the lens| 1.4|
 |  "xyResolution"| Spatial resolution (minimum distance that can be resolved by the microscope), typically in nanometers.| 110|
 |  "zPitch"| Distance between Z planes (typically µm)| 0.75|
-|  "wavelengths"| Excitation wavelength in nanometers (energy of light used for given channel). One value per channel.| [ 635, 561, 488, 405]|
+|  "wavelengths"| Excitation wavelength in nanometers (energy of light used for given channel). One value per channel.| \[ 635, 561, 488, 405\]|
 |  "bitness"| Bit depth of each channel| 16|
 |  "numCycles"| How many fluorescent stain-strip cycles are included in the run| 9|
 |  "numTiles"| Number x direction tiles times number of y direction tiles (area in number of tiles to be collected)| 25|
@@ -85,8 +85,8 @@ In addition, all HuBMAP seq data will have an associated json file which may con
 |  "backgroundSubtractionMode"| Method used to subtract the background fluorescence from stained images| auto|
 |  "driftCompReferenceCycle"| Cycle used for drift correction in imaging. Some datasets show this as "referenceCycle"| 1|
 |  "driftCompReferenceChannel"| Channel used for drift correction in imaging. Some datasets show this as "referenceChannel".| 1|
-|  "bestFocusReferenceCycle"| **Cycle used for z-focus selection in imaging| 1|
-|  "bestFocusReferenceChannel"| Channel used for z-focus selection in imagingIntensity| Detector Counts| 1|
+|  "bestFocusReferenceCycle"| Cycle used for z-focus selection in imaging| 1|
+|  "bestFocusReferenceChannel"| Channel used for z-focus selection in imagingIntensity| 1|
 |  "numSubTiles"| Number of tiles within a tile (generally one for HuBMAP data)| 1|
 |  "focusingOffset"| User defined linear offset of the computationally determined focus z-plane.| 0|
 |  "useBackgroundSubtraction"| Was computational background subtraction processing used| true|
@@ -99,9 +99,9 @@ In addition, all HuBMAP seq data will have an associated json file which may con
 |  "multipointMode"| Was multipoint microscope focus mode used| false|
 |  "HandEstain"| Was H and E stain mode used| false|
 |  "channelNames"| The microscope-defined names of the fluorophore| channelNamesArray[ ]|
-|  "channelNamesArray"| List of stains, See right.| [ "635", "561," "488," "405" ]|
-|  "exposureTimes"| Length of time (usually in milliseconds) the tile is exposed to excitation light.| exposureTimesArray [ ]|
-|  "exposureTimesArray"| Exposure time for each channel within each cycle| [ [ "Cycle", "CH1", "CH2", "CH3", "CH4" ], [ "1", "1000", "1000", "1000", "700" ], ["2", "1000", "1000", "1000", "700" ], [ "3", "1000", "1000", "1000", "700"] ]|
+|  "channelNamesArray"| List of stains, See right.| \[ "635", "561," "488," "405" ]|
+|  "exposureTimes"| Length of time (usually in milliseconds) the tile is exposed to excitation light.| exposureTimesArray \[ ]|
+|  "exposureTimesArray"| Exposure time for each channel within each cycle| \[ \[ "Cycle", "CH1", "CH2", "CH3", "CH4" ], \[ "1", "1000", "1000", "1000", "700" ], \["2", "1000", "1000", "1000", "700" ], \[ "3", "1000", "1000", "1000", "700"] ]|
 |  "numerical_aperture"| The objective numerical aperture| 0.75|
 |  "z_pitch"| Spacing between each z-plane in microns| 0.75|
 |  "cycle_lower_limit"| Lowest cycle recorded|  1|
@@ -114,8 +114,8 @@ In addition, all HuBMAP seq data will have an associated json file which may con
 |  "dimension_order"| Order of dimensions for OME-TIFF| "XYCZT"|
 |  "global_tile_height"| Number of pixels in the global X-dimension| 32|
 |  "global_tile_width"| Number of pixels in the global Y-dimension| 32|
-|  "offsets"| Alignment offsets for aligning to the reference cycle.| [ [ “FOV”, "CYCLE", "X", "Y", "Z" ], [ “0", “0”, "2.3423", "-0.3234", "1.3234"], ["0", “1”, "2.093", "-0.4554", "1.233" ], [ "0", “2”, "2.434", "-0.0432", "1.342"] ]|
-|  "chromatic_aberration_offsets"| Offsets to compensate for chromatic aberration shifts in each channel| [ [ “CH", "X", "Y", "Z" ], [ “1", "1.2323", "-0.5433", "1.2122"], [“2”, "1.032", "-0.7454", "0.742" ], [ "3", "2.322", "-0342", "2.334"] ]|
+|  "offsets"| Alignment offsets for aligning to the reference cycle.| \[ \[ “FOV”, "CYCLE", "X", "Y", "Z" ], \[ “0", “0”, "2.3423", "-0.3234", "1.3234"], \["0", “1”, "2.093", "-0.4554", "1.233" ], \[ "0", “2”, "2.434", "-0.0432", "1.342"] ]|
+|  "chromatic_aberration_offsets"| Offsets to compensate for chromatic aberration shifts in each channel| \[ \[ “CH", "X", "Y", "Z" ], \[ “1", "1.2323", "-0.5433", "1.2122"], \[“2”, "1.032", "-0.7454", "0.742" ], \[ "3", "2.322", "-0342", "2.334"] ]|
 
 
 ## HuBMAP seqFISH Raw File Structure
