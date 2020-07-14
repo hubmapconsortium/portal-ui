@@ -208,7 +208,7 @@ Benchmark of batch effect measuring methods for scRNA-seq: [https://genomebiolog
 |--|--|--|
 |  Single-cell isolation | {FACS, microfluidics}, {FACS, microfluidics, nanowells}, {FACS}, {Droplet}, {Nanowells}, {None} None is for methods like sci-RNASeq | Batch effects| 
 |  2nd strand synthesis | TSO, {RNase H & DNA pol I}, {PolyA tailing and primer ligation} | - |
-|  Full-length cDNA synthesis?| {Yes}, {No}| | - |
+|  Full-length cDNA synthesis?| {Yes}, {No}| - |
 |  Barcode addition| {Library PCR with barcoded primers}, {Barcoded RT primers}, {Barcoded TSOs}, {Barcoded RT primers and library PCR with barcoded primers}, {Ligation of barcoded RT primers}| - | 
 |  Pooling before library | {No}, {Yes}| - |
 |  Library amplification | {PCR}, {In vitro transcription},| - | 
