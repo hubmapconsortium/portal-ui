@@ -6,6 +6,7 @@ const config = {
   entry: { bundle: './app/static/js/index.jsx' },
   output: {
     path: resolve('./app/static/public'),
+    publicPath: './static/public/',
     filename: '[name].js',
   },
   resolve: {
