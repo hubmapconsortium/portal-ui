@@ -60,7 +60,7 @@ The HuBMAP project provides data to the public in a variety of data states. A da
 | 5 |  Annotation files: cell by gene matrix, Motif analysis, dimensionality reduction, clustering, transcription factor enrichment for one cell vs. rest |  .csv |
 
 ## HuBMAP Metadata
-The scATACseq metadata.tsv now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq) where it can be viewed and downloaded. Any further changes must now be implemented by filing a Github issue for Chuck McCallum.
+The scATACseq metadata.tsv now resides in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/scatacseq) where it can be viewed and downloaded.
 
 The bulkATACseq metadata.tsv now resides at this [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/bulkatacseq) link.
 
