@@ -33,9 +33,9 @@ The HuBMAP project provides data to the public in a variety of data states, whic
 -   Level 4: This is information that might be unique to a lab or is not required for reproducibility or is otherwise not relevant for outside groups. This information is submitted in the form of a single file, a ZIP archive containing multiple files, or a directory of files. There is no formatting requirement (although formats readable with common tools such as text editors are preferable over proprietary binary formats).
     
  ##  Associated Files 
-All HuBMAP data will have searchable metadata fields. [Example Ingest Form.](https://docs.google.com/spreadsheets/d/1cbUvVFA3zaMNBUdciQxCihFLc6tZ6NQM43bJvlr7A70/edit#gid=1970171321)
+All HuBMAP data will have searchable metadata fields. 
 
-[Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms) link to the metadata.tsv, field descriptions and required formats.
+The metadata schema is available in [Github](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/lcms) for download.
 
 ## HuBMAP QA/QC of raw (state0) data files
 *Untargeted Label-free proteomics utilizing MaxQuant*
