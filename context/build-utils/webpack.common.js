@@ -9,6 +9,17 @@ const config = {
     publicPath: `${resolve('/static/public/')}/`,
     filename: '[name].bundle.js',
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: RegExp('/node_modules/'),
+          name: 'vendors',
+          chunks: 'initial',
+        },
+      },
+    },
+  },
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml'],
     alias: {
@@ -86,17 +97,6 @@ const config = {
     ],
   },
   plugins: [new CleanWebpackPlugin()],
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'initial',
-        },
-      },
-    },
-  },
 };
 
 module.exports = config;
