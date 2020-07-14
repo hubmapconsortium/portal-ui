@@ -7,7 +7,7 @@ import Summary from '../Summary';
 import Attribution from '../Attribution';
 import Protocol from '../Protocol';
 import MetadataTable from '../MetadataTable';
-import Visualization from '../Visualization';
+import VisualizationWrapper from '../VisualizationWrapper';
 import DetailLayout from '../DetailLayout';
 import Files from '../Files';
 import SummaryItem from '../SummaryItem';
@@ -94,7 +94,7 @@ function DatasetDetail(props) {
             origin_sample={origin_sample}
           />
         </Summary>
-        {shouldDisplaySection.visualization && <Visualization vitData={vitData} />}
+        {shouldDisplaySection.visualization && <VisualizationWrapper vitData={vitData} />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
