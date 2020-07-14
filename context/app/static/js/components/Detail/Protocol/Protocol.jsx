@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
-import { StyledTypography, StyledLink, StyledPaper } from './style';
+
+import { LightBlueLink } from 'shared-styles/Links';
+import { StyledPaper } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionItem from '../SectionItem';
 import SectionContainer from '../SectionContainer';
@@ -10,15 +12,13 @@ function ProtocolLink(props) {
   const { protocolUrl: urlMinusProtocol } = props;
   return (
     <SectionItem label="Protocol URL">
-      <StyledTypography variant="body1">
-        {urlMinusProtocol ? (
-          <StyledLink href={`https://${encodeURI(urlMinusProtocol)}`} target="_blank" rel="noopener noreferrer">
-            {urlMinusProtocol}
-          </StyledLink>
-        ) : (
-          'No URL Available'
-        )}
-      </StyledTypography>
+      {urlMinusProtocol ? (
+        <LightBlueLink href={`https://${encodeURI(urlMinusProtocol)}`} target="_blank" rel="noopener noreferrer">
+          {urlMinusProtocol}
+        </LightBlueLink>
+      ) : (
+        'No URL Available'
+      )}
     </SectionItem>
   );
 }
@@ -28,9 +28,7 @@ function Protocol(props) {
 
   return (
     <SectionContainer id="protocols">
-      <SectionHeader variant="h3" component="h2">
-        Protocols
-      </SectionHeader>
+      <SectionHeader>Protocols</SectionHeader>
       <Divider />
       <StyledPaper>
         <ProtocolLink protocolUrl={protocol_url} />
@@ -39,9 +37,7 @@ function Protocol(props) {
             <React.Fragment key={protocol}>
               {i !== 0 || protocol_url ? <Divider /> : null}
               <ProtocolLink protocolUrl={protocol.protocol_doi} />
-              <SectionItem label="Image Files">
-                <StyledTypography variant="body1">{protocol.protocol_file || 'No File Available'}</StyledTypography>
-              </SectionItem>
+              <SectionItem label="Image Files">{protocol.protocol_file || 'No File Available'}</SectionItem>
             </React.Fragment>
           ))}
       </StyledPaper>

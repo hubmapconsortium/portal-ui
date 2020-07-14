@@ -1,1 +1,0 @@
-- Updated the markdown content for the cell type annotation (spleen) showcase

@@ -11,25 +11,20 @@ Autofluorescence microscopy exploits endogenous fluorescence in a biological tis
 ## **Definitions:** 
 There are a variety of terms used in this document that may not be familiar to all researchers wanting to make use of the HubMap data. The following figures illustrate several of these terms:
 
-![](https://lh5.googleusercontent.com/kcmAgdCFNvzfAfvkE6qeRig2kb-CQmAfMILcjgSpZyblhGc4lKbj95zEolUEuwiHXO_UPPTFXPWdQvVvi7iWJAsuE-6EhPf9Le35gePMlgIfJpiaskBXqzKWi3xhBkaoWEsrJebu)  
-  
-*Figure 1:* Pictorial representation of microscopy terms. The black box is an example slide or cover slip where the sample is located. Blue boxes are examples of “regions” or user defined imaging areas. For instance, if you want to image a specific structure in the tissue, you would designate a “region” over the structure. Red boxes are examples of “tiles” or the microscope “field of view”. The size of the tile is dependent on the microscope set up and objective. Tiles will fill the region.
-Because the field of view cannot be changed, tiles will overhang from the region, ensuring the entire region is imaged at the expense of extra tiles being acquired.
+![](https://lh5.googleusercontent.com/kcmAgdCFNvzfAfvkE6qeRig2kb-CQmAfMILcjgSpZyblhGc4lKbj95zEolUEuwiHXO_UPPTFXPWdQvVvi7iWJAsuE-6EhPf9Le35gePMlgIfJpiaskBXqzKWi3xhBkaoWEsrJebu)    
+*Figure 1: Pictorial representation of microscopy terms. The black box is an example slide or cover slip where the sample is located. Blue boxes are examples of “regions” or user defined imaging areas. For instance, if you want to image a specific structure in the tissue, you would designate a “region” over the structure. Red boxes are examples of “tiles” or the microscope “field of view”. The size of the tile is dependent on the microscope set up and objective. Tiles will fill the region.
+Because the field of view cannot be changed, tiles will overhang from the region, ensuring the entire region is imaged at the expense of extra tiles being acquired.*
 
 ![](https://lh6.googleusercontent.com/8p8RY_RlzXv9TWpDhtNeD-KFT0-NZivYa_T6EQeg9fhj14Unt64PN7BHzVEaNZbt3TrMtIpwj2LIO-wEfyTr8JXHZqij9-MnVohapA-Zsmz4YfSjLZTs494bKnaug1Ue-pbg02VG)
-
-*Figure 2:* Images are generally acquired with adjacent tiles overlapping, as indicated by the dark regions in the image on the right above. Overlap enhances alignment of tiles for stitching to create a composite image, as shown in Figure 4 below.
+*Figure 2: Images are generally acquired with adjacent tiles overlapping, as indicated by the dark regions in the image on the right above. Overlap enhances alignment of tiles for stitching to create a composite image, as shown in Figure 4 below.*
 
 ![](https://lh5.googleusercontent.com/rp8Sqo0UBFeZxOg6kOb5Z3G-mEid2xVPm3utGrrZ723GUM-qDrte9mwoQlLuyUvjX__FrGCGV2lRb7VAJkgYS8d2jZT-QBWrzWf_tygPYmxb7nqkbwu70AK7xiDJJ68GtGSYLwmE)
-
-*Figure 3:* Images of tiles are captured as the stage moves across the imaged region row by row (left) or via a serpentine (or snake-like) path (right).
+*Figure 3: Images of tiles are captured as the stage moves across the imaged region row by row (left) or via a serpentine (or snake-like) path (right).*
 
 ![](https://lh4.googleusercontent.com/dCpsoJuhwEyIXqjw10JuURnYnVrDfpuKtk7kEOQkjfIZuFa3Vv6f4xllekDUlzzDlhd0pHfBt5vAObpY-BWglpGFRZGG4cNUJILSAFOiWrF-HYWnVpGy-2SAkDuMnzaS6dwGiB9t)
-
-*Figure 4:* Stitching is the process of aligning and merging neighboring image tiles into a single composite image.
+*Figure 4: Stitching is the process of aligning and merging neighboring image tiles into a single composite image.*
 
 ## **HuBMAP AF Data States (Levels):**
-
 |**Data State** |  **Description**| **Example File Type** | 
 |--|--|--|
 |  0 | Raw image data: This is the data that comes directly off the microscope without preprocessing; sometimes referred to as tiled or unstitched data. (may not always be included).| CZI, TIFF|
@@ -37,12 +32,10 @@ Because the field of view cannot be changed, tiles will overhang from the region
 | 2 |  Segmentation: Computationally predicted cell (nucleus, cytoplasm) and/or structural boundaries (tubules, ventricles, etc.) |  CSV, TIFF|
 | 3 |  Annotation (Cells and Structures): Interpretation of microscopy image and/or segmentation in terms of biology (e.g. unhealthy vs healthy, cell-type, function, functional region). |  TIFF, PNG|
 
-
 ## **HuBMAP Metadata:** 
 This metadata schema is now available in Github for download. Any further edits can be made through consultation with the HuBMAP team who will request changes through [Github.](https://github.com/hubmapconsortium/ingest-validation-tools/tree/master/docs/af)
 
 ## **Associated Metadata files:**
-
 |**Metadata File Name** |  **File Type**| **Field** | **Definition**|
 |--|--|--|--|
 |  OME-TIFF | OME-TIFF| SchemaType|Metadata schema type|
@@ -91,34 +84,7 @@ This metadata schema is now available in Github for download. Any further edits 
 |  | | tissue_object_size_z|Size of the z-dimension of the tissue sample|
 |  | | section_number|Tissue Section number. Each section is 10µm thick.|
 
-## **HuBMAP AF Structure (TMC-Vanderbilt):**
-
-    DR_reformat….
-    /LC Data
-    /metadata
-    /assay
-    AF.csv
-    /templates
-    /VAN000*-*K-**-**_**
-    /CCF Metadata
-    VAN000*-*K-**-**_ccf_metadata
-    /VAN000*-*K-**-**_**-AF
-    /processedMicroscopy
-    /VAN000*-*K-**-**-AF_preIMS_images
-    /VAN000*-*K-**-**
-    AF_preIMS_registered.ome.tiff
-    /VAN000*-*K-**-**-AF_preIMS_transformations
-    /transform_00_VAN000*-*K-**-**
-    AF_preIMS_rigid.txt
-    /transform_01_VAN000*-*K-**-**
-    AF_preIMS_affine.txt
-    /rawMicroscopy
-    /VAN000*-*K-**-**
-    AF_preIMS_meta_unregistered.xml
-    /VAN000*-*K-**-**-AF_preIMS_unregistered.czi
-
 ## **Terms defined in this document:**
-
 |**Term** |  **Definition**|
 |--|--|
 |  Intensity| Detector Counts| 

@@ -50,7 +50,9 @@ function SampleDetail(props) {
           description={description}
         >
           <SummaryItem>{mapped_organ}</SummaryItem>
-          <Typography variant="body1">{mapped_specimen_type}</Typography>
+          <Typography variant="h6" component="p">
+            {mapped_specimen_type}
+          </Typography>
         </Summary>
         <SampleTissue mapped_specimen_type={mapped_specimen_type} mapped_organ={mapped_organ} />
         <Attribution

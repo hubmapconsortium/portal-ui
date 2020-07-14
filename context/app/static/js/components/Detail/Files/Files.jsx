@@ -9,9 +9,7 @@ function Files(props) {
   const { files, entityEndpoint, uuid } = props;
   return (
     <SectionContainer id="files">
-      <SectionHeader variant="h3" component="h2">
-        Files
-      </SectionHeader>
+      <SectionHeader>Files</SectionHeader>
       {files && <FileBrowser files={files} />}
       <GlobusLink entityEndpoint={entityEndpoint} uuid={uuid} fileBrowserDisplayed={files !== undefined} />
     </SectionContainer>

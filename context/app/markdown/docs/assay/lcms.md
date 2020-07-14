@@ -48,29 +48,29 @@ Outline of the full ProTeomiX (PTX) Quality Control (QC) Report including metric
 - 1.1 HeatMap
 - 1.2 Name Mapping
 - 1.3 Metrics
---  1.3.1 PAR: parameters
---   1.3.2 EVD: Top5 Contaminants per Raw file
---   1.3.3 EVD: Contaminants
---   1.3.4 EVD: peptide intensity distribution
---   1.3.5 PG: intensity distribution
---   1.3.6 MSMS: Missed cleavages per Raw file
---  1.3.7 EVD: charge distribution
---   1.3.8 PG: Contaminant per condition
---   1.3.9 MSMSscans: TopN over RT
---   1.3.10 EVD: IDs over RT
---  1.3.11 EVD: Peak width over RT
---   1.3.12 MSMSscans: Ion Injection Time over RT
---   1.3.13 [experimental] MSMSscans: MS/MS intensity
---   1.3.14 EVD: Oversampling (MS/MS counts per 3D-peak)
---   1.3.15 EVD: Uncalibrated mass error
---   1.3.16 EVD: Calibrated mass error
---   1.3.17 MSMS: Fragment mass errors per Raw file
---   1.3.18 SM: MS/MS identified per Raw file
---   1.3.19 MSMSscans: TopN
---   1.3.20 MSMSscans: TopN % identified over N
---   1.3.21 Missing Values Skipped
---   1.3.22 EVD: Peptide ID count
---   1.3.23 EVD: ProteinGroups count
+    - 1.3.1 PAR: parameters
+    - 1.3.2 EVD: Top5 Contaminants per Raw file
+    - 1.3.3 EVD: Contaminants
+    - 1.3.4 EVD: peptide intensity distribution
+    - 1.3.5 PG: intensity distribution
+    - 1.3.6 MSMS: Missed cleavages per Raw file
+    - 1.3.7 EVD: charge distribution
+    - 1.3.8 PG: Contaminant per condition
+    - 1.3.9 MSMSscans: TopN over RT
+    - 1.3.10 EVD: IDs over RT
+    - 1.3.11 EVD: Peak width over RT
+    - 1.3.12 MSMSscans: Ion Injection Time over RT
+    - 1.3.13 [experimental] MSMSscans: MS/MS intensity
+    - 1.3.14 EVD: Oversampling (MS/MS counts per 3D-peak)
+    - 1.3.15 EVD: Uncalibrated mass error
+    - 1.3.16 EVD: Calibrated mass error
+    - 1.3.17 MSMS: Fragment mass errors per Raw file
+    - 1.3.18 SM: MS/MS identified per Raw file
+    - 1.3.19 MSMSscans: TopN
+    - 1.3.20 MSMSscans: TopN % identified over N
+    - 1.3.21 Missing Values Skipped
+    - 1.3.22 EVD: Peptide ID count
+    - 1.3.23 EVD: ProteinGroups count
  
 See J. Proteome Res., 2016, 15 (3), pp 777-787. DOI: [10.1021/acs.jproteome.5b00780](https://doi.org/10.1021/acs.jproteome.5b00780) for further details.
 
@@ -83,9 +83,9 @@ See J. Proteome Res., 2016, 15 (3), pp 777-787. DOI: [10.1021/acs.jproteome.5b00
 |  Metabolomics| After each cleaning (front plate, transfer capillary) that happens approximately every 4 days, mass calibration in positive and negative modes is performed using calibration mixes (cat# 88323, 88324, Thermo). Every 3 months, a more extensive calibration protocol including electronics, ion transfer, quadrupole and orbitrap is performed. Each sample is spiked-in with 15 labeled internal standards that are used to check mass accuracy, retention time and peak shape. Before each batch, the LC-MS system is equilibrated by injecting 6 and 12 pool samples (QC) for RPLC and HILIC, respectively. Signal deviation over time is controlled for by injecting a pool sample every 10 injections. After data processing, QC samples should be clustered together as well as samples prepared and analyzed in different batches should be overlaid on a principal component analysis plot.| 
 
 ## For Additional Help
-Please contact for general in formation in LC-MS:  [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.edu) 
-For questions about shotgun LC-MS (targeted lipidomics), contact: [Kevin Contrepois](mailto:kcontrep@stanford.edu)
-For questions about TMT LC-MS (proteomics), contact: [Lihua Jiang](mailto:lihuaj@stanford.edu)
-For questions about untargeted LC-MS/MS (untargeted proteomics), contact: [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.edu)
-For questions about untargeted LC-MS (untargeted metabolomics), contact: [Kevin Contrepois](mailto:kcontrep@stanford.edu)
+- For general information on LC-MS, contact:  [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.edu) 
+- For questions about shotgun LC-MS (targeted lipidomics), contact: [Kevin Contrepois](mailto:kcontrep@stanford.edu)
+- For questions about TMT LC-MS (proteomics), contact: [Lihua Jiang](mailto:lihuaj@stanford.edu)
+- For questions about untargeted LC-MS/MS (untargeted proteomics), contact: [Jeffrey Spraggins](mailto:jeff.spraggins@Vanderbilt.edu)
+- For questions about untargeted LC-MS (untargeted metabolomics), contact: [Kevin Contrepois](mailto:kcontrep@stanford.edu)
 
