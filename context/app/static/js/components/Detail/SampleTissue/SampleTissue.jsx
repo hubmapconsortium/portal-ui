@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyledTypography, FlexPaper } from './style';
+import { FlexPaper } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionItem from '../SectionItem';
 import SectionContainer from '../SectionContainer';
@@ -10,7 +10,7 @@ function MetadataItem(props) {
   const { label, value, ml } = props;
   return (
     <SectionItem label={label} ml={ml}>
-      <StyledTypography variant="body1">{value || `${label} not defined`}</StyledTypography>
+      {value || `${label} not defined`}
     </SectionItem>
   );
 }
