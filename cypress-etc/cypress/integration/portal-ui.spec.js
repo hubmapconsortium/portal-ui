@@ -30,8 +30,8 @@ describe('portal-ui', () => {
       cy.contains('Overview');
       cy.contains('FAQ');
       cy.contains('About');
-      // Login
-      cy.contains('Login');
+      // login
+      cy.contains('login');
       // Don't click! We shouldn't depend on Globus in tests.
 
       // TODO: nexus_token is now required for search results, so we can pass it

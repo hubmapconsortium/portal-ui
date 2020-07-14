@@ -5,6 +5,8 @@ const WhiteButton = styled(Button)`
   width: 136px;
   background-color: #ffffff;
   margin-left: 10px;
+  color: color: ${(props) => props.theme.palette.primary.main};
+  text-transform: capitalize;
 
   &:hover {
     background-color: rgb(255, 255, 255, 0.92);
@@ -12,8 +14,4 @@ const WhiteButton = styled(Button)`
   }
 `;
 
-const Link = styled.a`
-  color: ${(props) => props.theme.palette.primary.main};
-`;
-
-export { WhiteButton, Link };
+export { WhiteButton };
