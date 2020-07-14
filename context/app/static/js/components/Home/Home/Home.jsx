@@ -1,13 +1,15 @@
 import React, { Suspense } from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import DataSummary from '../DataSummary';
 import About from '../About';
 import Workflow from '../Workflow';
 import DataUseGuidelines from '../DataUseGuidelines';
 import Associations from '../Associations';
 import TwitterTimeline from '../TwitterTimeline';
-import { OuterGrid, UpperInnerGrid, LowerInnerGrid } from './style';
+import { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder } from './style';
 
 const BarChart = React.lazy(() => import('../BarChart'));
 
@@ -71,7 +73,13 @@ function Home(props) {
       <UpperInnerGrid maxWidth="lg">
         <DataSummary summaryData={summaryData} />
         {isLargerThanMd && (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <BarChartPlaceholder>
+                <CircularProgress />
+              </BarChartPlaceholder>
+            }
+          >
             <BarChart elasticsearchEndpoint={elasticsearchEndpoint} />
           </Suspense>
         )}

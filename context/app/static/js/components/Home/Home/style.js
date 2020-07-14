@@ -32,4 +32,11 @@ const LowerInnerGrid = styled(Container)`
   }
 `;
 
-export { OuterGrid, UpperInnerGrid, LowerInnerGrid };
+const BarChartPlaceholder = styled.div`
+  grid-area: 'bar';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder };
