@@ -4,11 +4,11 @@ Every dataset submission has two required components and one optional component 
 
 #### Required components:
 
--   One **data directory** per dataset
--   One assay  **metadata.tsv** per assay type
+- One **data directory** per dataset
+- One assay  **metadata.tsv** per assay type
     
 #### Optional component, dependent upon the assay type:
--   One **metadata directory** per dataset
+- One **metadata directory** per dataset
 
 
 If multiple datasets have been generated with the same assay_type, they may be submitted together in a single **data submission directory** with a single assay **metadata.tsv** listing all datasets, one per row (*Figure 1*). Each **data directory**  in a **data submission directory** contains the data files for a single dataset (*eg. image files, fastq files, etc*).
@@ -32,32 +32,33 @@ In addition, multiple assay-specific **metadata.tsvs** may be included together 
 ### Preparing an Assay Metadata.tsv for Data Submission
 
 HuBMAP supports 3 categories of assays : mass spectrometry, imaging and nucleotide sequence. Each assay category encompasses a variety of unique assay-types involving unique chemistries, platforms, data types and analysis tools. Below are examples of assay-types from each assay category in HuBMAP:
-### mass_spectrometry:
--   LC-MS
--   MS
--   TMT
+
+### mass spectrometry:
+- LC-MS
+- MS
+- TMT
     
 ### imaging:
--   AF
--   CODEX
--   Imaging Mass Cytometry
--   multiplexed IF
--   PAS microscopy
--   seqFISH
--   MALDI-IMS positive
--   MALDI-IMS negative
+- AF
+- CODEX
+- Imaging Mass Cytometry
+- multiplexed IF
+- PAS microscopy
+- seqFISH
+- MALDI-IMS positive
+- MALDI-IMS negative
 
-   ### sequencing:
--   bulk RNA
--   bulk ATAC
--   scRNA-Seq
--   sci-ATAC-seq
--   sci-RNA-seq
--   SNARE-SEQ2 (RNAseq & ATACseq)
--   snATAC
--   snRNA
--   SPLiT-Seq
--   WGS
+### sequencing:
+- bulk RNA
+- bulk ATAC
+- scRNA-Seq
+- sci-ATAC-seq
+- sci-RNA-seq
+- SNARE-SEQ2 (RNAseq & ATACseq)
+- snATAC
+- snRNA
+- SPLiT-Seq
+- WGS
 
 ### Assay Metadata
 Data centers provide the following 4 data types (Figure 3)for each data submission to HubMAP:
@@ -67,13 +68,13 @@ Data centers provide the following 4 data types (Figure 3)for each data submissi
 
 ### Definition of assay metadata levels
 
--   Level 1: Are attributes that are common to all assays, for example, the type (“CODEX”) and category of assay (“imaging”), a timestamp, and the name of the person who executed the assay.
+- Level 1: Are attributes that are common to all assays, for example, the type (“CODEX”) and category of assay (“imaging”), a timestamp, and the name of the person who executed the assay.
     
--   Level 2: Attributes that are common to a category of HuBMAP assays, i.e. imaging, sequencing, or mass spectrometry. For example, for imaging assays this includes fields such as x resolution and y resolution.
+- Level 2: Attributes that are common to a category of HuBMAP assays, i.e. imaging, sequencing, or mass spectrometry. For example, for imaging assays this includes fields such as x resolution and y resolution.
     
--   Level 3: Attributes that are specific to the type of assay, for example for CODEX that would include number of antibodies and number of cycles.
+- Level 3: Attributes that are specific to the type of assay, for example for CODEX that would include number of antibodies and number of cycles.
     
--   Level 4: Supplementary information such a QC report or information that is unique to a lab, not required for reproducibility or is otherwise not relevant for outside groups. This information is submitted in the form of a single file, a ZIP archive containing multiple files, or a directory of files. There is no formatting requirement (although formats readable with common tools such as text editors are preferable over proprietary binary formats).
+- Level 4: Supplementary information such a QC report or information that is unique to a lab, not required for reproducibility or is otherwise not relevant for outside groups. This information is submitted in the form of a single file, a ZIP archive containing multiple files, or a directory of files. There is no formatting requirement (although formats readable with common tools such as text editors are preferable over proprietary binary formats).
 
 As an example, here is a link to the CODEX metadata fields, required input and descriptions: 
 **[example assay metadata for CODEX](https://github.com/hubmapconsortium/ingest-validation-tools/blob/master/docs/codex/README.md)**
