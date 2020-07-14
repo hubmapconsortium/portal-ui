@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import DataSummary from '../DataSummary';
 import About from '../About';
 import Workflow from '../Workflow';
 import DataUseGuidelines from '../DataUseGuidelines';
 import Associations from '../Associations';
 import TwitterTimeline from '../TwitterTimeline';
-import BarChart from '../BarChart';
-import { OuterGrid, UpperInnerGrid, LowerInnerGrid } from './style';
+import { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder } from './style';
+
+const BarChart = React.lazy(() => import('../BarChart'));
 
 function checkPropReturnValue(prop, obj) {
   return prop in obj ? obj[prop] : 0;
@@ -69,7 +72,17 @@ function Home(props) {
     <OuterGrid>
       <UpperInnerGrid maxWidth="lg">
         <DataSummary summaryData={summaryData} />
-        {isLargerThanMd && <BarChart elasticsearchEndpoint={elasticsearchEndpoint} />}
+        {isLargerThanMd && (
+          <Suspense
+            fallback={
+              <BarChartPlaceholder>
+                <CircularProgress />
+              </BarChartPlaceholder>
+            }
+          >
+            <BarChart elasticsearchEndpoint={elasticsearchEndpoint} />
+          </Suspense>
+        )}
       </UpperInnerGrid>
       <About />
       <LowerInnerGrid maxWidth="lg">

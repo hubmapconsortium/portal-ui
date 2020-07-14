@@ -8,6 +8,7 @@ const config = {
     path: resolve('./app/static/public'),
     publicPath: `${resolve('/static/public/')}/`,
     filename: '[name].bundle.js',
+    chunkFilename: '[name].bundle.js',
   },
   optimization: {
     splitChunks: {
