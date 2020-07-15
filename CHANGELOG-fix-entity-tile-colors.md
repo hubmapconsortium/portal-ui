@@ -1,0 +1,1 @@
+- Fix entity tile divider and icon colors.
