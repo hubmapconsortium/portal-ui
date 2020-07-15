@@ -1,2 +1,0 @@
-- Only use variable font from typeface-inter.
-- Update font sizes throughout per design changes.

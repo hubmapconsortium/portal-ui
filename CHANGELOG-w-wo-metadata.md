@@ -1,1 +1,0 @@
-- Add a docs page with links to constrained searches with and without metadata.
