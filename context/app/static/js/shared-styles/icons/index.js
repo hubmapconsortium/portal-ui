@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import BubbleChartIcon from '@material-ui/icons/BubbleChart';
-import PersonIcon from '@material-ui/icons/Person';
-import TableChartIcon from '@material-ui/icons/TableChart';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+// NOTE: We are using the rounded icon variants consistently.
+import BubbleChartIcon from '@material-ui/icons/BubbleChartRounded';
+import PersonIcon from '@material-ui/icons/PersonRounded';
+import TableChartIcon from '@material-ui/icons/TableChartRounded';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalanceRounded';
 
 const CenterIcon = styled(AccountBalanceIcon)`
   font-size: ${(props) => props.fontSize};
