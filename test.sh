@@ -37,7 +37,7 @@ server_up 5000
 end dev-start
 
 start flake8
-# Unit tests require dev dependencies beyond what dev-start provides.
+# Unit tests require dev dependencies beyond requirements.txt.
 pip install -r context/requirements-dev.txt > /dev/null
 EXCLUDE=node_modules,ingest-validation-tools
 flake8 --exclude=$EXCLUDE \
