@@ -1,0 +1,1 @@
+- Update submodules to latest master with each run of push.sh.
