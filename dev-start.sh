@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -o errexit
-trap "kill 0" EXIT
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
