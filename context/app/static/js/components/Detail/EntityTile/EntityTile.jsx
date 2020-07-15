@@ -1,5 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 
 import {
   StyledDatasetIcon,
@@ -12,10 +13,13 @@ import {
   TruncatedTypography,
   StyledDivider,
   TextSection,
+  BottomSection,
+  BottomSectionDivider,
+  BottomSectionText,
 } from './style';
 
 function EntityTile(props) {
-  const { uuid, entity_type, id, isCurrentEntity, entityData } = props;
+  const { uuid, entity_type, id, isCurrentEntity, entityData, descendantCounts } = props;
 
   return (
     <a href={`/browse/${entity_type.toLowerCase()}/${uuid}`}>
@@ -50,6 +54,18 @@ function EntityTile(props) {
               )}
             </TextSection>
           </FixedWidthFlex>
+          <BottomSection $isCurrentEntity={isCurrentEntity}>
+            {Object.entries(descendantCounts).map(([k, v]) => (
+              <>
+                <BottomSectionText variant="body2">{`${k}: ${v}`}</BottomSectionText>
+                <BottomSectionDivider flexItem orientation="vertical" />
+              </>
+            ))}
+            <BottomSectionText variant="body2" $isCurrentEntity={isCurrentEntity}>
+              Last Modified {differenceInCalendarDays(new Date().getTime(), entityData.last_modified_timestamp)} Days
+              ago
+            </BottomSectionText>
+          </BottomSection>
         </HoverOverlay>
       </StyledPaper>
     </a>

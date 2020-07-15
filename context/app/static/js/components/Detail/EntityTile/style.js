@@ -4,6 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { DatasetIcon, SampleIcon, DonorIcon } from 'shared-styles/icons';
 
+const tileWidth = '300px';
+
 const iconStyle = css`
   font-size: 1.3rem;
   height: 25px;
@@ -56,7 +58,7 @@ const HoverOverlay = styled.div`
 // Width needs to be defined in px for text-overflow to work
 const FixedWidthFlex = styled.div`
   display: flex;
-  width: 300px;
+  width: tileWidth;
   padding: 10px 10px;
 `;
 
@@ -77,7 +79,23 @@ const StyledDivider = styled(Divider)`
 
 const TextSection = styled.div`
   min-width: 0;
-  flex-wrow: 1;
+  flex-grow: 1;
+`;
+
+const BottomSection = styled.div`
+  display: flex;
+  width: ${tileWidth};
+  background-color: ${(props) => (props.$isCurrentEntity ? '#ffffff' : props.theme.palette.primary.main)};
+  padding: 0 ${(props) => props.theme.spacing(1)}px;
+`;
+
+const BottomSectionDivider = styled(Divider)`
+  background-color: ${(props) => (props.$isCurrentEntity ? props.theme.palette.primary.main : '#ffffff')};
+  margin: 0px ${(props) => props.theme.spacing(0.5)}px;
+`;
+
+const BottomSectionText = styled(Typography)`
+  color: ${(props) => (props.$isCurrentEntity ? props.theme.palette.primary.main : '#ffffff')};
 `;
 
 export {
@@ -91,4 +109,7 @@ export {
   TruncatedTypography,
   StyledDivider,
   TextSection,
+  BottomSection,
+  BottomSectionDivider,
+  BottomSectionText,
 };
