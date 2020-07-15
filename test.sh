@@ -5,19 +5,6 @@ start() { echo travis_fold':'start:$1; echo $1; }
 end() { echo travis_fold':'end:$1; }
 die() { set +v; echo "$*" 1>&2 ; sleep 1; exit 1; }
 
-server_up() {
-  TRIES=0
-  MAX_TRIES=150
-  URL=http://localhost:$1
-  until curl --silent --fail $URL; do
-    [ ${TRIES} -gt ${MAX_TRIES} ] && die "Server not running at $URL"
-    printf '.'
-    sleep 1
-    TRIES=$(($TRIES+1))
-  done
-  echo "Server starts up, and $URL returns 200."
-}
-
 start changelog
 if [ "$TRAVIS_BRANCH" != 'master' ] && [[ "$TRAVIS_BRANCH" != *'release'* ]]; then
   git remote set-branches --add origin master
@@ -41,7 +28,8 @@ if [ ! -z "$TRAVIS" ]; then
   )
 fi
 ./dev-start.sh &
-server_up 5001
+cypress-etc/test.sh
+kill $!  # Kill dev server
 end dev-start
 
 start flake8
@@ -56,7 +44,7 @@ start pytest
 pytest
 end pytest
 
-start cypress
-./docker.sh 5002  # Needs to match port in cypress.json.
+start docker
+./docker.sh 5001  # Needs to match port in cypress.json.
 cypress-etc/test.sh
-end cypress
+end docker
