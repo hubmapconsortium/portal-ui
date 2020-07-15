@@ -1,22 +1,27 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import { ExistsQuery, BoolMustNot } from 'searchkit';
 import SearchWrapper from './SearchWrapper';
 import { readCookie } from '../../helpers/functions';
 import './Search.scss';
-
 import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named
-import { filter } from './utils';
+import { filter, checkboxFilter } from './utils';
 import AncestorNote from './AncestorNote';
 import LookupEntity from '../../helpers/LookupEntity';
 
-const baseFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
+const hiddenFilters = [
+  filter('ancestor_ids', 'Ancestor ID'),
+  filter('entity_type', 'Entity Type'),
+  checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata')),
+  checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata'))),
+];
 
 const filtersByType = {
-  '': baseFilters,
-  donor: donorConfig.filters.concat(baseFilters),
-  sample: sampleConfig.filters.concat(baseFilters),
-  dataset: datasetConfig.filters.concat(baseFilters),
+  '': hiddenFilters,
+  donor: donorConfig.filters.concat(hiddenFilters),
+  sample: sampleConfig.filters.concat(hiddenFilters),
+  dataset: datasetConfig.filters.concat(hiddenFilters),
 };
 
 const resultFieldsByType = {
@@ -68,7 +73,7 @@ const searchProps = {
       defaultOption: false,
     },
   ],
-  hiddenFilterIds: ['entity_type', 'ancestor_ids'],
+  hiddenFilterIds: hiddenFilters.map((hiddenFilter) => hiddenFilter.props.id),
   queryFields: ['everything'],
   isLoggedIn: Boolean(nexus_token),
 };
