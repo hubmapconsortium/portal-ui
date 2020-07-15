@@ -57,5 +57,6 @@ pytest
 end pytest
 
 start cypress
+./docker.sh 5002  # Needs to match port in cypress.json.
 cypress-etc/test.sh
 end cypress
