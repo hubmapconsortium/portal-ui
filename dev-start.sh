@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -o errexit
-trap "kill 0" EXIT
+trap 'jobs -p | xargs kill' EXIT
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
