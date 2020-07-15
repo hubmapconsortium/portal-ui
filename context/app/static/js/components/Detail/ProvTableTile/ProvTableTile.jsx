@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 import useEntityData from 'hooks/useEntityData';
 import DetailContext from '../context';
@@ -12,6 +12,22 @@ function ProvTableTile(props) {
   // mapped fields are not included in ancestor object
   const entityData = useEntityData(uuid, elasticsearchEndpoint);
 
+  const types = entity_type === 'Donor' ? ['Sample', 'Dataset'] : ['Dataset'];
+
+  const descendantCounts = useMemo(() => {
+    if (entityData && entity_type !== 'Dataset') {
+      // use Map to preserve insertion order
+      const counts = new Map();
+      types.reduce((acc, type) => {
+        acc[type] = entityData.descendants.filter((d) => d.entity_type === type).length;
+        return acc;
+      }, counts);
+      return counts;
+    }
+
+    return {};
+  }, [entity_type, types, entityData]);
+
   return (
     <>
       {entity_type === 'Sample' && isNotSibling && <DownIcon />}
@@ -22,6 +38,7 @@ function ProvTableTile(props) {
           id={id}
           isCurrentEntity={isCurrentEntity}
           entityData={entityData}
+          descendantCounts={descendantCounts || {}}
         />
       )}
     </>
