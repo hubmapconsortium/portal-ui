@@ -5,7 +5,7 @@ Every dataset submission has two required components and one optional component 
 #### Required components:
 
 - One **data directory** per dataset
-- One assay  **metadata.tsv** per assay type
+- One assay **metadata.tsv** per assay type
     
 #### Optional component, dependent upon the assay type:
 - One **metadata directory** per dataset
@@ -78,4 +78,3 @@ Data centers provide the following 4 data types (Figure 3)for each data submissi
 
 As an example, here is a link to the CODEX metadata fields, required input and descriptions: 
 **[example assay metadata for CODEX](https://github.com/hubmapconsortium/ingest-validation-tools/blob/master/docs/codex/README.md)**
-
