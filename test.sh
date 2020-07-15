@@ -32,17 +32,16 @@ start dev-start
 if [ ! -z "$TRAVIS" ]; then
   echo 'Running on Travis...'
   ./dev-start.sh || (
-    echo 'dev-start.sh failed!'
-    ls context/instance
     echo 'app.conf before:'
     cat context/instance/app.conf
+    echo 'Rewrite conf...'
     sed -i 's/TODO/FAKE/' context/instance/app.conf
     echo 'app.conf after:'
     cat context/instance/app.conf
   )
 fi
 ./dev-start.sh &
-server_up 5000
+server_up 5001
 end dev-start
 
 start flake8
@@ -57,7 +56,6 @@ start pytest
 pytest
 end pytest
 
-start docker
-./docker.sh 5001
+start cypress
 cypress-etc/test.sh
-end docker
+end cypress
