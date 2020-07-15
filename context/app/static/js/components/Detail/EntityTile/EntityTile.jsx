@@ -22,9 +22,9 @@ function EntityTile(props) {
       <StyledPaper $isCurrentEntity={isCurrentEntity}>
         <HoverOverlay $isCurrentEntity={isCurrentEntity}>
           <FixedWidthFlex>
-            {entity_type === 'Dataset' && <StyledDatasetIcon />}
-            {entity_type === 'Donor' && <StyledDonorIcon />}
-            {entity_type === 'Sample' && <StyledSampleIcon />}
+            {entity_type === 'Dataset' && <StyledDatasetIcon $isCurrentEntity={isCurrentEntity} />}
+            {entity_type === 'Donor' && <StyledDonorIcon $isCurrentEntity={isCurrentEntity} />}
+            {entity_type === 'Sample' && <StyledSampleIcon $isCurrentEntity={isCurrentEntity} />}
             <TextSection>
               <Typography component="h4" variant="h6">
                 {id}
@@ -42,7 +42,7 @@ function EntityTile(props) {
                 <>
                   <Flex>
                     <Typography variant="body2">{entityData.mapped_metadata.gender}</Typography>
-                    <StyledDivider flexItem orientation="vertical" />
+                    <StyledDivider flexItem orientation="vertical" $isCurrentEntity={isCurrentEntity} />
                     <Typography variant="body2">{entityData.mapped_metadata.age} years</Typography>
                   </Flex>
                   <TruncatedTypography variant="body2">{entityData.mapped_metadata.race}</TruncatedTypography>
