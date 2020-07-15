@@ -19,9 +19,7 @@ function SampleTissue(props) {
   const { mapped_organ, mapped_specimen_type, tissueLocation } = props;
   return (
     <SectionContainer id="tissue">
-      <SectionHeader variant="h3" component="h2">
-        Tissue
-      </SectionHeader>
+      <SectionHeader>Tissue</SectionHeader>
       <FlexPaper>
         <MetadataItem label="Organ Type" value={mapped_organ} />
         <MetadataItem label="Specimen Type" ml={1} value={mapped_specimen_type} />
