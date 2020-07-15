@@ -48,9 +48,8 @@ After checking out the project, cd-ing into it, and setting up a Python3.7 virtu
     - (Note: Error with @hubmap-prov-vis dependency. Manually add
     the schema.json until [this issue is resolved](https://github.com/hubmapconsortium/portal-ui/issues/139).)
 - in the root project directory
-    - Run `./dev-start.sh`, which will fail with a warning.
-    - Update `context/instance/app.conf` with the Globus client ID and client secret. (Get the those codes from another developer.)
-    - Run `./dev-start.sh` again to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
+    - Get `app.conf` from another developer and place it at `context/instance/app.conf`.
+    - Run `./dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
 
 ### Development servers
 The webpack dev server serves all files within the public directory and provides hot module replacement for the react application.
@@ -103,8 +102,8 @@ Then, to redeploy `dev` and `test`:
 Javascript / React UI components:
 - [`vitessce`](https://github.com/hubmapconsortium/vitessce): Visual integration tool for exploration of spatial single-cell experiments. Built on top of [deck.gl](https://deck.gl/).
 - [`prov-vis`](https://github.com/hubmapconsortium/prov-vis): Wrapper for [`4dn-dcic/react-workflow-viz`](https://github.com/4dn-dcic/react-workflow-viz) provenance visualization.
-- [`portal-search`](https://github.com/hubmapconsortium/portal-search/): A simple, opinionated wrapper for [Searchkit](http://www.searchkit.co/) offering facetted search.
 
 Preprocessing:
 - [`portal-containers`](https://github.com/hubmapconsortium/portal-containers): Docker containers for visualization preprocessing.
 - [`airflow-dev`](https://github.com/hubmapconsortium/airflow-dev): CWL pipelines wrapping those Docker containers.
+- [`search-api`](https://github.com/hubmapconsortium/search-api/tree/master/src/elasticsearch/addl_index_transformations): The Elasticsearch index the portal uses clean up the raw Neo4J export.
