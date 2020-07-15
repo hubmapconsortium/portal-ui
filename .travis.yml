@@ -2,7 +2,7 @@ language: python
 python:
   - '3.7'
 cache: pip
-# pip install happens inside quick-start.sh, inside test.sh, to make sure it really works.
+# pip install happens inside dev-start.sh, inside test.sh, to make sure it really works.
 before_install:
   - nvm install 12.16.3
 script:

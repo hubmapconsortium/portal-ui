@@ -48,7 +48,7 @@ After checking out the project, cd-ing into it, and setting up a Python3.7 virtu
     - (Note: Error with @hubmap-prov-vis dependency. Manually add
     the schema.json until [this issue is resolved](https://github.com/hubmapconsortium/portal-ui/issues/139).)
 - in the root project directory
-    - `./quick-start.sh`,
+    - `./dev-start.sh`,
     - update `context/instance/app.conf` with the Globus client ID and client secret, and the Elasticsearch endpoint,
     - `./dev-start.sh` to run the webpack dev and flask servers and visit [localhost:5001](http://localhost:5001).
 
