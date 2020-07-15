@@ -1,3 +1,20 @@
+## v0.0.40 - 2020-07-15
+
+- Move seldom used facets to the bottom.
+- Fix entity tile divider and icon colors.
+- Make entire login/logout button a link.
+- Only use variable font from typeface-inter.
+- Update font sizes throughout per design changes.
+- Separate home page bar chart into own bundle chunks and lazy load.
+- Separate vitessce visualization into own bundle chunks and lazy load.
+- Markdown syntax fixes.
+- Add metadata table to sample detail.
+- Fix sample tissue header size.
+- Add bundle entry chunk for vendors.
+- Update submodules to latest master with each run of push.sh.
+- Add a docs page with links to constrained searches with and without metadata.
+
+
 ## v0.0.39 - 2020-07-13
 
 - Change documentation button in nav to a dropdown menu.

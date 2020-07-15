@@ -1,1 +1,0 @@
-- Separate home page bar chart into own bundle chunks and lazy load.

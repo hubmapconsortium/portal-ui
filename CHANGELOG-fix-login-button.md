@@ -1,1 +1,0 @@
-- Make entire login/logout button a link.
