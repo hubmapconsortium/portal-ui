@@ -16,6 +16,8 @@ import {
   BottomSection,
   BottomSectionDivider,
   BottomSectionText,
+  BottomDatasetIcon,
+  BottomSampleIcon,
 } from './style';
 
 function EntityTile(props) {
@@ -57,13 +59,13 @@ function EntityTile(props) {
           <BottomSection $isCurrentEntity={isCurrentEntity}>
             {Object.entries(descendantCounts).map(([k, v]) => (
               <>
-                <BottomSectionText variant="body2">{`${k}: ${v}`}</BottomSectionText>
+                {k === 'Dataset' ? <BottomDatasetIcon /> : <BottomSampleIcon />}
+                <BottomSectionText variant="body2">{v}</BottomSectionText>
                 <BottomSectionDivider flexItem orientation="vertical" />
               </>
             ))}
             <BottomSectionText variant="body2" $isCurrentEntity={isCurrentEntity}>
-              Last Modified {differenceInCalendarDays(new Date().getTime(), entityData.last_modified_timestamp)} Days
-              ago
+              Modified {differenceInCalendarDays(new Date().getTime(), entityData.last_modified_timestamp)} Days Ago
             </BottomSectionText>
           </BottomSection>
         </HoverOverlay>

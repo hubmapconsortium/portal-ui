@@ -25,6 +25,21 @@ const StyledDonorIcon = styled(DonorIcon)`
   ${iconStyle};
 `;
 
+const bottomIconStyle = css`
+  font-size: 0.9rem;
+  height: 18px;
+  margin-right: ${(props) => props.theme.spacing(1)}px;
+  color: ${(props) => (props.$isCurrentEntity ? props.theme.palette.primary.main : '#ffffff')};
+`;
+
+const BottomDatasetIcon = styled(DatasetIcon)`
+  ${bottomIconStyle};
+`;
+
+const BottomSampleIcon = styled(SampleIcon)`
+  ${bottomIconStyle};
+`;
+
 const StyledPaper = styled(Paper)`
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
   box-shadow: ${(props) => props.theme.shadows[1]};
@@ -113,4 +128,6 @@ export {
   BottomSection,
   BottomSectionDivider,
   BottomSectionText,
+  BottomDatasetIcon,
+  BottomSampleIcon,
 };
