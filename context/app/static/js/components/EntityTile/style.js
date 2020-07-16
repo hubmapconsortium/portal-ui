@@ -74,7 +74,7 @@ const HoverOverlay = styled.div`
 // Width needs to be defined in px for text-overflow to work
 const FixedWidthFlex = styled.div`
   display: flex;
-  width: tileWidth;
+  width: ${tileWidth};
   padding: 10px 10px;
 `;
 
