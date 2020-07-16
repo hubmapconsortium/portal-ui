@@ -78,26 +78,6 @@ const FixedWidthFlex = styled.div`
   padding: 10px 10px;
 `;
 
-const Flex = styled.div`
-  display: flex;
-`;
-
-const TruncatedTypography = styled(Typography)`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const StyledDivider = styled(Divider)`
-  background-color: ${(props) => (props.$isCurrentEntity ? '#ffffff' : props.theme.palette.text.primary)};
-  margin: 0px ${(props) => props.theme.spacing(0.5)}px;
-`;
-
-const TextSection = styled.div`
-  min-width: 0;
-  flex-grow: 1;
-`;
-
 const BottomSection = styled.div`
   display: flex;
   width: ${tileWidth};
@@ -121,10 +101,6 @@ export {
   StyledPaper,
   HoverOverlay,
   FixedWidthFlex,
-  Flex,
-  TruncatedTypography,
-  StyledDivider,
-  TextSection,
   BottomSection,
   BottomSectionDivider,
   BottomSectionText,
