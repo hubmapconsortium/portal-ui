@@ -11,11 +11,6 @@ const StyledPaper = styled(Paper)`
     props.$invertColors &&
     css`
       background-color: ${props.theme.palette.primary.main};
-      color: #ffffff;
-
-      svg {
-        color: #ffffff;
-      }
     `}
 `;
 

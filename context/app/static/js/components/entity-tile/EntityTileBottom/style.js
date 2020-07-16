@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
 import { DatasetIcon, SampleIcon } from 'shared-styles/icons';
@@ -9,7 +8,6 @@ const iconStyle = css`
   font-size: 0.9rem;
   height: 18px;
   margin-right: ${(props) => props.theme.spacing(1)}px;
-  color: ${(props) => (props.$invertColors ? props.theme.palette.primary.main : '#ffffff')};
 `;
 
 const StyledDatasetIcon = styled(DatasetIcon)`
@@ -23,8 +21,24 @@ const StyledSampleIcon = styled(SampleIcon)`
 const FixedWidthFlex = styled.div`
   display: flex;
   width: ${tileWidth};
-  background-color: ${(props) => (props.$invertColors ? '#ffffff' : props.theme.palette.primary.main)};
+  background-color: ${(props) => props.theme.palette.primary.main};
   padding: 0 ${(props) => props.theme.spacing(1)}px;
+  color: #ffffff;
+
+  svg {
+    color: #ffffff;
+  }
+
+  ${(props) =>
+    props.$invertColors &&
+    css`
+      background-color: #ffffff;
+      color: ${props.theme.palette.primary.main};
+
+      svg {
+        color: ${props.theme.palette.primary.main};
+      }
+    `}
 `;
 
 const StyledDivider = styled(Divider)`
@@ -32,8 +46,4 @@ const StyledDivider = styled(Divider)`
   margin: 0px ${(props) => props.theme.spacing(0.5)}px;
 `;
 
-const StyledTypography = styled(Typography)`
-  color: ${(props) => (props.$invertColors ? props.theme.palette.primary.main : '#ffffff')};
-`;
-
-export { FixedWidthFlex, StyledDivider, StyledTypography, StyledDatasetIcon, StyledSampleIcon };
+export { FixedWidthFlex, StyledDivider, StyledDatasetIcon, StyledSampleIcon };

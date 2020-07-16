@@ -5,14 +5,14 @@ import EntityTileTopText from '../EntityTileTopText';
 import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FixedWidthFlex } from './style';
 
 function EntityTileTop(props) {
-  const { entity_type, id, invertColors, entityData } = props;
+  const { entity_type, id, entityData, invertColors } = props;
 
   return (
-    <FixedWidthFlex>
-      {entity_type === 'Dataset' && <StyledDatasetIcon $invertColors={invertColors} />}
-      {entity_type === 'Donor' && <StyledDonorIcon $invertColors={invertColors} />}
-      {entity_type === 'Sample' && <StyledSampleIcon $invertColors={invertColors} />}
-      <EntityTileTopText entity_type={entity_type} id={id} invertColors={invertColors} entityData={entityData} />
+    <FixedWidthFlex $invertColors={invertColors}>
+      {entity_type === 'Dataset' && <StyledDatasetIcon />}
+      {entity_type === 'Donor' && <StyledDonorIcon />}
+      {entity_type === 'Sample' && <StyledSampleIcon />}
+      <EntityTileTopText entity_type={entity_type} id={id} entityData={entityData} />
     </FixedWidthFlex>
   );
 }
