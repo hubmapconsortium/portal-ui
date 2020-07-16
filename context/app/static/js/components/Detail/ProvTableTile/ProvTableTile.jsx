@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 
 import useEntityData from 'hooks/useEntityData';
-import EntityTile from 'components/EntityTile';
+import EntityTile from 'components/entity-tile/EntityTile';
 import DetailContext from '../context';
 import { DownIcon } from './style';
 
