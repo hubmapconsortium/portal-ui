@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
+import format from 'date-fns/format';
 
 import {
   StyledDatasetIcon,
@@ -65,7 +65,7 @@ function EntityTile(props) {
               </>
             ))}
             <BottomSectionText variant="body2" $isCurrentEntity={isCurrentEntity}>
-              Modified {differenceInCalendarDays(new Date().getTime(), entityData.last_modified_timestamp)} Days Ago
+              Modified {format(entityData.last_modified_timestamp, 'MM-dd-yyyy')}
             </BottomSectionText>
           </BottomSection>
         </HoverOverlay>
