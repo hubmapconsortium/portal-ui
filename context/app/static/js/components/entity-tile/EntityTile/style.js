@@ -8,7 +8,7 @@ const StyledPaper = styled(Paper)`
   box-shadow: ${(props) => props.theme.shadows[1]};
 
   ${(props) =>
-    props.$isCurrentEntity &&
+    props.$invertColors &&
     css`
       background-color: ${props.theme.palette.primary.main};
       color: #ffffff;
@@ -26,7 +26,7 @@ const HoverOverlay = styled.div`
   }
 
   ${(props) =>
-    props.$isCurrentEntity &&
+    props.$invertColors &&
     css`
       &:hover {
         background-color: ${props.theme.palette.primaryHoverOverlay.main};

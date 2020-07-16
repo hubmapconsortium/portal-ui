@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { Flex, TruncatedTypography, StyledDivider, StyledDiv } from './style';
 
 function EntityTileBodyText(props) {
-  const { entity_type, id, isCurrentEntity, entityData } = props;
+  const { entity_type, id, invertColors, entityData } = props;
 
   return (
     <StyledDiv>
@@ -24,7 +24,7 @@ function EntityTileBodyText(props) {
         <>
           <Flex>
             <Typography variant="body2">{entityData.mapped_metadata.gender}</Typography>
-            <StyledDivider flexItem orientation="vertical" $isCurrentEntity={isCurrentEntity} />
+            <StyledDivider flexItem orientation="vertical" $invertColors={invertColors} />
             <Typography variant="body2">{entityData.mapped_metadata.age} years</Typography>
           </Flex>
           <TruncatedTypography variant="body2">{entityData.mapped_metadata.race}</TruncatedTypography>

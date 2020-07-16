@@ -9,7 +9,7 @@ const iconStyle = css`
   font-size: 0.9rem;
   height: 18px;
   margin-right: ${(props) => props.theme.spacing(1)}px;
-  color: ${(props) => (props.$isCurrentEntity ? props.theme.palette.primary.main : '#ffffff')};
+  color: ${(props) => (props.$invertColors ? props.theme.palette.primary.main : '#ffffff')};
 `;
 
 const StyledDatasetIcon = styled(DatasetIcon)`
@@ -23,17 +23,17 @@ const StyledSampleIcon = styled(SampleIcon)`
 const FixedWidthFlex = styled.div`
   display: flex;
   width: ${tileWidth};
-  background-color: ${(props) => (props.$isCurrentEntity ? '#ffffff' : props.theme.palette.primary.main)};
+  background-color: ${(props) => (props.$invertColors ? '#ffffff' : props.theme.palette.primary.main)};
   padding: 0 ${(props) => props.theme.spacing(1)}px;
 `;
 
 const StyledDivider = styled(Divider)`
-  background-color: ${(props) => (props.$isCurrentEntity ? props.theme.palette.primary.main : '#ffffff')};
+  background-color: ${(props) => (props.$invertColors ? props.theme.palette.primary.main : '#ffffff')};
   margin: 0px ${(props) => props.theme.spacing(0.5)}px;
 `;
 
 const StyledTypography = styled(Typography)`
-  color: ${(props) => (props.$isCurrentEntity ? props.theme.palette.primary.main : '#ffffff')};
+  color: ${(props) => (props.$invertColors ? props.theme.palette.primary.main : '#ffffff')};
 `;
 
 export { FixedWidthFlex, StyledDivider, StyledTypography, StyledDatasetIcon, StyledSampleIcon };

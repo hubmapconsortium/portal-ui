@@ -4,10 +4,10 @@ import format from 'date-fns/format';
 import { FixedWidthFlex, StyledDivider, StyledTypography, StyledDatasetIcon, StyledSampleIcon } from './style';
 
 function EntityTileBottom(props) {
-  const { isCurrentEntity, entityData, descendantCounts } = props;
+  const { invertColors, entityData, descendantCounts } = props;
 
   return (
-    <FixedWidthFlex $isCurrentEntity={isCurrentEntity}>
+    <FixedWidthFlex $invertColors={invertColors}>
       {Object.entries(descendantCounts).map(([k, v]) => (
         <>
           {k === 'Dataset' ? <StyledDatasetIcon /> : <StyledSampleIcon />}
@@ -15,7 +15,7 @@ function EntityTileBottom(props) {
           <StyledDivider flexItem orientation="vertical" />
         </>
       ))}
-      <StyledTypography variant="body2" $isCurrentEntity={isCurrentEntity}>
+      <StyledTypography variant="body2" $invertColors={invertColors}>
         Modified {format(entityData.last_modified_timestamp, 'MM-dd-yyyy')}
       </StyledTypography>
     </FixedWidthFlex>
