@@ -1,8 +1,8 @@
 import React, { useContext, useMemo } from 'react';
 
 import useEntityData from 'hooks/useEntityData';
+import EntityTile from 'components/EntityTile';
 import DetailContext from '../context';
-import EntityTile from '../EntityTile';
 import { DownIcon } from './style';
 
 function ProvTableTile(props) {
