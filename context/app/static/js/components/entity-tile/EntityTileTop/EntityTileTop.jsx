@@ -4,6 +4,14 @@ import PropTypes from 'prop-types';
 import EntityTileTopText from '../EntityTileTopText';
 import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FixedWidthFlex } from './style';
 
+/**
+ * Tile section displaying icon and entity metadata
+ * @param {object} props
+ * @param {string} props.entity_type type of entity (donor, sample, or dataset)
+ * @param {string} props.id display id
+ * @param {object} props.entityData entity data from search api.
+ * @param {boolean} [props.invertColors] whether the colors should be inverted
+ */
 function EntityTileTop(props) {
   const { entity_type, id, entityData, invertColors } = props;
 

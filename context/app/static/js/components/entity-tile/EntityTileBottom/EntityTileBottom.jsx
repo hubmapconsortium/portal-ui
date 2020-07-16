@@ -5,8 +5,15 @@ import Typography from '@material-ui/core/Typography';
 
 import { FixedWidthFlex, StyledDivider, StyledDatasetIcon, StyledSampleIcon } from './style';
 
+/**
+ * Tile section displaying descendant counts and modified date
+ * @param {object} props
+ * @param {object} props.entityData entity data from search api.
+ * @param {boolean} [props.invertColors] whether the colors should be inverted
+ * @param {object} [props.descendantCounts] number of descendant entities as entries
+ */
 function EntityTileBottom(props) {
-  const { invertColors, entityData, descendantCounts } = props;
+  const { entityData, invertColors, descendantCounts } = props;
 
   return (
     <FixedWidthFlex $invertColors={invertColors}>

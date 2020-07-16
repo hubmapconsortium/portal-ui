@@ -4,6 +4,13 @@ import Typography from '@material-ui/core/Typography';
 
 import { Flex, TruncatedTypography, StyledDivider, StyledDiv } from './style';
 
+/**
+ * Tile section displaying entity metadata
+ * @param {object} props
+ * @param {string} props.id display id
+ * @param {object} props.entityData entity data from search api.
+ * @param {boolean} [props.invertColors] whether the colors should be inverted
+ */
 function EntityTileTopText(props) {
   const { entity_type, id, invertColors, entityData } = props;
 
