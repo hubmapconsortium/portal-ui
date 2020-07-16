@@ -1,1 +1,0 @@
-- Add bundle entry chunk for vendors.

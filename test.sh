@@ -18,6 +18,7 @@ server_up() {
   echo "Server starts up, and $URL returns 200."
 }
 
+
 start changelog
 if [ "$TRAVIS_BRANCH" != 'master' ] && [[ "$TRAVIS_BRANCH" != *'release'* ]]; then
   git remote set-branches --add origin master
@@ -28,27 +29,44 @@ if [ "$TRAVIS_BRANCH" != 'master' ] && [[ "$TRAVIS_BRANCH" != *'release'* ]]; th
 fi
 end changelog
 
-start quick-start
+
+start dev-start
 if [ ! -z "$TRAVIS" ]; then
-  ./quick-start.sh || sed -i 's/TODO/FAKE/' context/instance/app.conf
+  echo 'Running on Travis...'
+  ./dev-start.sh || (
+    echo 'app.conf before:'
+    cat context/instance/app.conf
+    echo 'Rewrite conf...'
+    sed -i 's/TODO/FAKE/' context/instance/app.conf
+    echo 'app.conf after:'
+    cat context/instance/app.conf
+  )
 fi
-./quick-start.sh &
-server_up 5000
-end quick-start
+set -m; ./dev-start.sh & set +m  # Without job control, I had trouble killing parent and children.
+PID=$!
+server_up 5001  # Not really needed: Cypress will wait for response.
+cypress-etc/test.sh
+kill -TERM -$PID  # Kill dev server processes
+end dev-start
+
 
 start flake8
-# Unit tests require dev dependencies beyond what quick-start provides.
+# Unit tests require dev dependencies beyond requirements.txt.
 pip install -r context/requirements-dev.txt > /dev/null
 EXCLUDE=node_modules,ingest-validation-tools
 flake8 --exclude=$EXCLUDE \
   || die "Try: autopep8 --in-place --aggressive -r . --exclude $EXCLUDE"
 end flake8
 
+
 start pytest
 pytest
 end pytest
 
+
 start docker
-./docker.sh 5001
+./docker.sh 5001  # Needs to match port in cypress.json.
+server_up 5001  # Without this, Cypress gets an undefined content-type and immediately fails.
 cypress-etc/test.sh
+docker kill hubmap-portal-ui
 end docker

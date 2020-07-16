@@ -1,1 +1,0 @@
-- Add metadata table to sample detail.

@@ -1,8 +1,6 @@
 Flask==1.1.1
-globus-sdk==1.8.0
+globus-sdk==1.9.0
 requests==2.22.0
-yattag==1.12.2
-jsonschema==3.2.0
 pyyaml==5.2
 python-datauri==0.2.8
 python-frontmatter==0.5.0
