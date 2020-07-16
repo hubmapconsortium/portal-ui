@@ -1,44 +1,7 @@
 import styled, { css } from 'styled-components';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import { DatasetIcon, SampleIcon, DonorIcon } from 'shared-styles/icons';
 
 const tileWidth = '300px';
-
-const iconStyle = css`
-  font-size: 1.3rem;
-  height: 25px;
-  margin-right: ${(props) => props.theme.spacing(1)}px;
-  color: ${(props) => (props.$isCurrentEntity ? '#ffffff' : props.theme.palette.primary.main)};
-`;
-
-const StyledDatasetIcon = styled(DatasetIcon)`
-  ${iconStyle};
-`;
-
-const StyledSampleIcon = styled(SampleIcon)`
-  ${iconStyle};
-`;
-
-const StyledDonorIcon = styled(DonorIcon)`
-  ${iconStyle};
-`;
-
-const bottomIconStyle = css`
-  font-size: 0.9rem;
-  height: 18px;
-  margin-right: ${(props) => props.theme.spacing(1)}px;
-  color: ${(props) => (props.$isCurrentEntity ? props.theme.palette.primary.main : '#ffffff')};
-`;
-
-const BottomDatasetIcon = styled(DatasetIcon)`
-  ${bottomIconStyle};
-`;
-
-const BottomSampleIcon = styled(SampleIcon)`
-  ${bottomIconStyle};
-`;
 
 const StyledPaper = styled(Paper)`
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
@@ -71,39 +34,4 @@ const HoverOverlay = styled.div`
     `}
 `;
 
-// Width needs to be defined in px for text-overflow to work
-const FixedWidthFlex = styled.div`
-  display: flex;
-  width: ${tileWidth};
-  padding: 10px 10px;
-`;
-
-const BottomSection = styled.div`
-  display: flex;
-  width: ${tileWidth};
-  background-color: ${(props) => (props.$isCurrentEntity ? '#ffffff' : props.theme.palette.primary.main)};
-  padding: 0 ${(props) => props.theme.spacing(1)}px;
-`;
-
-const BottomSectionDivider = styled(Divider)`
-  background-color: ${(props) => (props.$isCurrentEntity ? props.theme.palette.primary.main : '#ffffff')};
-  margin: 0px ${(props) => props.theme.spacing(0.5)}px;
-`;
-
-const BottomSectionText = styled(Typography)`
-  color: ${(props) => (props.$isCurrentEntity ? props.theme.palette.primary.main : '#ffffff')};
-`;
-
-export {
-  StyledDatasetIcon,
-  StyledSampleIcon,
-  StyledDonorIcon,
-  StyledPaper,
-  HoverOverlay,
-  FixedWidthFlex,
-  BottomSection,
-  BottomSectionDivider,
-  BottomSectionText,
-  BottomDatasetIcon,
-  BottomSampleIcon,
-};
+export { tileWidth, StyledPaper, HoverOverlay };
