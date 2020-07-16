@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
 
 import { DatasetIcon, SampleIcon, DonorIcon } from 'shared-styles/icons';
-import { tileWidth } from '../EntityTile/style';
 
 const iconStyle = css`
   font-size: 1.3rem;
@@ -25,7 +24,6 @@ const StyledDonorIcon = styled(DonorIcon)`
 // Width needs to be defined in px for text-overflow to work
 const FixedWidthFlex = styled.div`
   display: flex;
-  width: ${tileWidth};
   padding: 10px 10px;
 
   background-color: #ffffff;
