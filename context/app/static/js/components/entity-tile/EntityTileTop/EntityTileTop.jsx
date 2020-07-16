@@ -1,7 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import EntityTileTopText from '../EntityTileTopText';
-
 import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FixedWidthFlex } from './style';
 
 function EntityTileTop(props) {
@@ -16,5 +16,17 @@ function EntityTileTop(props) {
     </FixedWidthFlex>
   );
 }
+
+EntityTileTop.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  entityData: PropTypes.object.isRequired,
+  entity_type: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  invertColors: PropTypes.bool,
+};
+
+EntityTileTop.defaultProps = {
+  invertColors: false,
+};
 
 export default EntityTileTop;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import EntityTileBottom from '../EntityTileBottom';
 import EntityTileTop from '../EntityTileTop';
@@ -18,5 +19,20 @@ function EntityTile(props) {
     </a>
   );
 }
+
+EntityTile.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  entityData: PropTypes.object.isRequired,
+  uuid: PropTypes.string.isRequired,
+  entity_type: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  descendantCounts: PropTypes.shape({ Dataset: PropTypes.number, Sample: PropTypes.number }),
+  invertColors: PropTypes.bool,
+};
+
+EntityTile.defaultProps = {
+  descendantCounts: {},
+  invertColors: false,
+};
 
 export default EntityTile;

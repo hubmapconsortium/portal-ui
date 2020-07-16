@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 import { Flex, TruncatedTypography, StyledDivider, StyledDiv } from './style';
 
-function EntityTileBodyText(props) {
+function EntityTileTopText(props) {
   const { entity_type, id, invertColors, entityData } = props;
 
   return (
@@ -34,4 +35,16 @@ function EntityTileBodyText(props) {
   );
 }
 
-export default EntityTileBodyText;
+EntityTileTopText.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  entityData: PropTypes.object.isRequired,
+  entity_type: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  invertColors: PropTypes.bool,
+};
+
+EntityTileTopText.defaultProps = {
+  invertColors: false,
+};
+
+export default EntityTileTopText;
