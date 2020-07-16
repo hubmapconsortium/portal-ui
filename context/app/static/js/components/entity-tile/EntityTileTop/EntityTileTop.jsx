@@ -12,7 +12,7 @@ function EntityTileTop(props) {
       {entity_type === 'Dataset' && <StyledDatasetIcon />}
       {entity_type === 'Donor' && <StyledDonorIcon />}
       {entity_type === 'Sample' && <StyledSampleIcon />}
-      <EntityTileTopText entity_type={entity_type} id={id} entityData={entityData} />
+      <EntityTileTopText entity_type={entity_type} id={id} entityData={entityData} invertColors={invertColors} />
     </FixedWidthFlex>
   );
 }
