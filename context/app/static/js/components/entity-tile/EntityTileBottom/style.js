@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 import Divider from '@material-ui/core/Divider';
 
 import { DatasetIcon, SampleIcon } from 'shared-styles/icons';
-import { tileWidth } from '../EntityTile/style';
 
 const iconStyle = css`
   font-size: 0.9rem;
@@ -20,7 +19,6 @@ const StyledSampleIcon = styled(SampleIcon)`
 
 const FixedWidthFlex = styled.div`
   display: flex;
-  width: ${tileWidth};
   background-color: ${(props) => props.theme.palette.primary.main};
   padding: 0 ${(props) => props.theme.spacing(1)}px;
   color: #ffffff;

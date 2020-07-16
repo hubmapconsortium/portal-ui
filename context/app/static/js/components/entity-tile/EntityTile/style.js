@@ -1,11 +1,10 @@
 import styled, { css } from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 
-const tileWidth = '300px';
-
 const StyledPaper = styled(Paper)`
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
   box-shadow: ${(props) => props.theme.shadows[1]};
+  width: 300px;
 
   &:hover {
     box-shadow: ${(props) => props.theme.shadows[8]};
@@ -21,4 +20,4 @@ const StyledPaper = styled(Paper)`
     `}
 `;
 
-export { tileWidth, StyledPaper };
+export { StyledPaper };
