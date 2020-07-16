@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { Flex, TruncatedTypography, StyledDivider, StyledDiv } from './style';
 
-function EntityTileBodyText(props) {
+function EntityTileTopText(props) {
   const { entity_type, id, isCurrentEntity, entityData } = props;
 
   return (
@@ -34,4 +34,4 @@ function EntityTileBodyText(props) {
   );
 }
 
-export default EntityTileBodyText;
+export default EntityTileTopText;
