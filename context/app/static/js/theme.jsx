@@ -31,12 +31,6 @@ const theme = createMuiTheme({
     collectionsDivider: {
       main: 'rgba(0, 0, 0, 0.12)',
     },
-    primaryHoverOverlay: {
-      main: 'rgba(255, 255, 255, 0.08)',
-    },
-    whiteHoverOverlay: {
-      main: 'rgba(0, 0, 0, 0.04)',
-    },
     type: 'light',
   },
   typography: {
