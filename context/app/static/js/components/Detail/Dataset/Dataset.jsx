@@ -105,7 +105,7 @@ function DatasetDetail(props) {
           <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
         )}
         {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
-        <Files files={files} entityEndpoint={entityEndpoint} uuid={uuid} />
+        <Files files={files} entityEndpoint={entityEndpoint} uuid={uuid} display_doi={display_doi} />
       </DetailLayout>
     </DetailContext.Provider>
   );
