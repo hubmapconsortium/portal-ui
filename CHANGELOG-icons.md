@@ -1,0 +1,1 @@
+- Make icon usage more consistent.
