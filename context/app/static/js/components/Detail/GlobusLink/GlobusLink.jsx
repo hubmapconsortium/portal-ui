@@ -1,12 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@material-ui/core';
-import { readCookie } from '../../../helpers/functions';
-import { StyledButton } from './style';
+import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import { DetailSectionPaper } from 'shared-styles/surfaces';
+import { readCookie } from 'helpers/functions';
+import { StyledTypography, CenteredDiv, MarginTopDiv } from './style';
+import GlobusLinkMessage from '../GlobusLinkMessage';
+
+const statusCodesWithMessages = new Set([200, 401, 403, 404, 500]);
 
 function GlobusLink(props) {
-  const { uuid, entityEndpoint, fileBrowserDisplayed } = props;
-  const [globusUrlText, setGlobusUrlText] = React.useState({ url: null, text: 'Please wait...' });
+  const { uuid, entityEndpoint, display_doi } = props;
+  const [loading, setLoading] = React.useState(true);
+  const [globusUrlText, setGlobusUrlText] = React.useState({ url: null, statusCode: null });
+
   React.useEffect(() => {
     async function getAndSetGlobusUrlText() {
       const response = await fetch(`${entityEndpoint}/entities/dataset/globus-url/${uuid}`, {
@@ -16,22 +24,35 @@ function GlobusLink(props) {
       });
       if (!response.ok) {
         console.error('Entities API failed', response);
-        setGlobusUrlText({ url: null, text: `Globus File Browser: ${response.status}: ${response.statusText}` });
+        setGlobusUrlText({ url: null, statusCode: response.status });
         return;
       }
       const responseGlobusUrl = await response.text();
-      setGlobusUrlText({ url: responseGlobusUrl, text: 'Download from Globus' });
+      setGlobusUrlText({ url: responseGlobusUrl, statusCode: response.status });
     }
     getAndSetGlobusUrlText();
+    setLoading(false);
   }, [entityEndpoint, uuid]);
 
-  const { url, text } = globusUrlText;
-  return url ? (
-    <StyledButton $fileBrowserDisplayed={fileBrowserDisplayed}>
-      <Link href={url}>{text}</Link>
-    </StyledButton>
+  const { statusCode, url } = globusUrlText;
+
+  return loading ? (
+    <CenteredDiv>
+      <CircularProgress />
+    </CenteredDiv>
   ) : (
-    text
+    <MarginTopDiv>
+      <DetailSectionPaper>
+        <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
+        <Typography variant="body2">
+          {statusCodesWithMessages.has(statusCode) ? (
+            <GlobusLinkMessage statusCode={statusCode} url={url} display_doi={display_doi} />
+          ) : (
+            <GlobusLinkMessage statusCode={500} url={url} />
+          )}
+        </Typography>
+      </DetailSectionPaper>
+    </MarginTopDiv>
   );
 }
 
