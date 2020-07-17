@@ -8,14 +8,14 @@ const StyledPaper = styled(Paper)`
 
   &:hover {
     box-shadow: ${(props) => props.theme.shadows[8]};
-    filter: brightness(96%);
+    filter: ${(props) => props.theme.palette.white.hover};
   }
 
   ${(props) =>
     props.$invertColors &&
     css`
       &:hover {
-        filter: brightness(108%);
+        filter: ${props.theme.palette.primary.hover};
       }
     `}
 `;
