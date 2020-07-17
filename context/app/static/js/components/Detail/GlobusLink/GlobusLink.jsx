@@ -5,7 +5,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { DetailSectionPaper } from 'shared-styles/surfaces';
 import { readCookie } from 'helpers/functions';
-import { StyledTypography, CenteredDiv, MarginTopDiv } from './style';
+import { StyledTypography, CenteredDiv, MarginTopDiv, Flex, StyledInfoIcon, StyledSuccessIcon } from './style';
 import GlobusLinkMessage from '../GlobusLinkMessage';
 
 const statusCodesWithMessages = new Set([200, 401, 403, 404, 500]);
@@ -43,7 +43,10 @@ function GlobusLink(props) {
   ) : (
     <MarginTopDiv>
       <DetailSectionPaper>
-        <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
+        <Flex>
+          <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
+          {statusCode === 200 ? <StyledSuccessIcon /> : <StyledInfoIcon />}
+        </Flex>
         <Typography variant="body2">
           {statusCodesWithMessages.has(statusCode) ? (
             <GlobusLinkMessage statusCode={statusCode} url={url} display_doi={display_doi} />
