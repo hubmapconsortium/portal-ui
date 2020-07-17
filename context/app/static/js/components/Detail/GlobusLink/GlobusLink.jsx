@@ -62,6 +62,7 @@ function GlobusLink(props) {
 GlobusLink.propTypes = {
   entityEndpoint: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
+  display_doi: PropTypes.string.isRequired,
 };
 
 export default GlobusLink;
