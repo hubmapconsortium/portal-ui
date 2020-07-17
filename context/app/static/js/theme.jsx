@@ -5,6 +5,7 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       main: '#444A65',
+      hover: 'brightness(108%)',
     },
     secondary: {
       main: '#636363',
@@ -21,6 +22,10 @@ const theme = createMuiTheme({
     success: {
       main: '#6C8938', // '#9BC551'
       light: '#9CB965',
+    },
+    white: {
+      main: '#fff',
+      hover: 'brightness(96%)',
     },
     action: {
       disabled: 'rgba(0,0,0, 0.38)',
