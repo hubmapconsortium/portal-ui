@@ -9,15 +9,11 @@ function DataUseGuidelines() {
         Data Use Guidelines
       </Typography>
       <MainText mt={1} variant="body1">
-        The HuBMAP Data Portal allows access to both open and restricted access data and will be guided by the rules set
-        by existing NIH GDH Policy and other applicable laws. There may be both controlled and uncontrolled access data
-        available through the Data Portal. Permission to access controlled data will be reviewed and granted by a
-        designated NIH Data Access Committee.
-      </MainText>
-      <MainText mt={2} variant="body1">
-        Users of HuBMAP open-data or processed data agree not to use the requested datasets, either alone or in concert
-        with any other information, to identify or contact individual participants (or family members) from whom data
-        and/or samples were collected.
+        The majority of data available on the HuBMAP Portal is open access data to be used for research of human
+        biology. Certain data types with potential for re-identification are available in restricted access either
+        directly through this portal by login-dependent permissions or through dbGAP. All data users are expected to
+        respect the privacy and confidentiality of the donors who provided samples. Data are not to be used to
+        re-identify donors or their family members without further approval from HuBMAP.
       </MainText>
       <MainText mt={2} variant="body1">
         Please direct any questions to{' '}
