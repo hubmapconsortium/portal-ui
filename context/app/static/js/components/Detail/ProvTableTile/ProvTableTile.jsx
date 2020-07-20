@@ -36,7 +36,7 @@ function ProvTableTile(props) {
           uuid={uuid}
           entity_type={entity_type}
           id={id}
-          isCurrentEntity={isCurrentEntity}
+          invertColors={isCurrentEntity}
           entityData={entityData}
           descendantCounts={descendantCounts || {}}
         />

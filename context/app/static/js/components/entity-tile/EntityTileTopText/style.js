@@ -13,7 +13,7 @@ const TruncatedTypography = styled(Typography)`
 `;
 
 const StyledDivider = styled(Divider)`
-  background-color: ${(props) => (props.$isCurrentEntity ? '#ffffff' : props.theme.palette.text.primary)};
+  background-color: ${(props) => (props.$invertColors ? '#ffffff' : props.theme.palette.text.primary)};
   margin: 0px ${(props) => props.theme.spacing(0.5)}px;
 `;
 

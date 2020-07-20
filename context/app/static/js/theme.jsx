@@ -5,6 +5,7 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       main: '#444A65',
+      hover: 'brightness(108%)',
     },
     secondary: {
       main: '#636363',
@@ -22,6 +23,10 @@ const theme = createMuiTheme({
       main: '#6C8938', // '#9BC551'
       light: '#9CB965',
     },
+    white: {
+      main: '#fff',
+      hover: 'brightness(96%)',
+    },
     action: {
       disabled: 'rgba(0,0,0, 0.38)',
     },
@@ -30,12 +35,6 @@ const theme = createMuiTheme({
     },
     collectionsDivider: {
       main: 'rgba(0, 0, 0, 0.12)',
-    },
-    primaryHoverOverlay: {
-      main: 'rgba(255, 255, 255, 0.08)',
-    },
-    whiteHoverOverlay: {
-      main: 'rgba(0, 0, 0, 0.04)',
     },
     type: 'light',
   },

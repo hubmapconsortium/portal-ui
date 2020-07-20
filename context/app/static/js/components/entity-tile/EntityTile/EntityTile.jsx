@@ -2,22 +2,16 @@ import React from 'react';
 
 import EntityTileBottom from '../EntityTileBottom';
 import EntityTileTop from '../EntityTileTop';
-import { StyledPaper, HoverOverlay } from './style';
+import { StyledPaper } from './style';
 
 function EntityTile(props) {
-  const { uuid, entity_type, id, isCurrentEntity, entityData, descendantCounts } = props;
+  const { uuid, entity_type, id, invertColors, entityData, descendantCounts } = props;
 
   return (
     <a href={`/browse/${entity_type.toLowerCase()}/${uuid}`}>
-      <StyledPaper $isCurrentEntity={isCurrentEntity}>
-        <HoverOverlay $isCurrentEntity={isCurrentEntity}>
-          <EntityTileTop entity_type={entity_type} id={id} isCurrentEntity={isCurrentEntity} entityData={entityData} />
-          <EntityTileBottom
-            isCurrentEntity={isCurrentEntity}
-            entityData={entityData}
-            descendantCounts={descendantCounts}
-          />
-        </HoverOverlay>
+      <StyledPaper $invertColors={invertColors}>
+        <EntityTileTop entity_type={entity_type} id={id} invertColors={invertColors} entityData={entityData} />
+        <EntityTileBottom invertColors={invertColors} entityData={entityData} descendantCounts={descendantCounts} />
       </StyledPaper>
     </a>
   );
