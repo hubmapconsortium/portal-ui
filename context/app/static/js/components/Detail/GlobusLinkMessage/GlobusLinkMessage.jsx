@@ -18,7 +18,7 @@ function GlobusLinkMessage(props) {
   if (statusCode === 200) {
     return (
       <Typography variant="body2">
-        {`'Files are available through the Globus Research Data Management System. Access dataset' ${display_doi} on `}
+        {`Files are available through the Globus Research Data Management System. Access dataset' ${display_doi} on `}
         <LightBlueLink underline="none" variant="body2" href={url}>
           Globus <StyledExternalLinkIcon />
         </LightBlueLink>
@@ -26,7 +26,7 @@ function GlobusLinkMessage(props) {
     );
   }
 
-  if (statusCode in Object.keys(messages)) {
+  if (statusCode in messages) {
     return (
       <Typography variant="body2">
         {`${messages[statusCode]} `}
