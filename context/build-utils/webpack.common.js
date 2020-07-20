@@ -29,6 +29,7 @@ const config = {
       hooks: resolve(__dirname, '../app/static/js/hooks/'),
       images: resolve(__dirname, '../app/static/images/'),
       theme$: resolve(__dirname, '../app/static/js/theme.jsx'),
+      components: resolve(__dirname, '../app/static/js/components'),
       'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
     },
   },

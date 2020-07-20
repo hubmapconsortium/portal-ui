@@ -1,8 +1,8 @@
 import React, { useContext, useMemo } from 'react';
 
 import useEntityData from 'hooks/useEntityData';
+import EntityTile from 'components/entity-tile/EntityTile';
 import DetailContext from '../context';
-import EntityTile from '../EntityTile';
 import { DownIcon } from './style';
 
 function ProvTableTile(props) {
@@ -36,7 +36,7 @@ function ProvTableTile(props) {
           uuid={uuid}
           entity_type={entity_type}
           id={id}
-          isCurrentEntity={isCurrentEntity}
+          invertColors={isCurrentEntity}
           entityData={entityData}
           descendantCounts={descendantCounts || {}}
         />

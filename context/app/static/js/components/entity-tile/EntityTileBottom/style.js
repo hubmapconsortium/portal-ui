@@ -1,0 +1,33 @@
+import styled, { css } from 'styled-components';
+import Divider from '@material-ui/core/Divider';
+
+import { DatasetIcon, SampleIcon } from 'shared-styles/icons';
+import { invertSectionColors } from '../EntityTile/style';
+
+const iconStyle = css`
+  font-size: 0.9rem;
+  height: 18px;
+  margin-right: ${(props) => props.theme.spacing(1)}px;
+`;
+
+const StyledDatasetIcon = styled(DatasetIcon)`
+  ${iconStyle};
+`;
+
+const StyledSampleIcon = styled(SampleIcon)`
+  ${iconStyle};
+`;
+
+const FixedWidthFlex = styled.div`
+  display: flex;
+  padding: 0 ${(props) => props.theme.spacing(1)}px;
+  color: #ffffff;
+  ${(props) => invertSectionColors(props.theme.palette.primary.main, '#ffffff', props.$invertColors)}
+`;
+
+const StyledDivider = styled(Divider)`
+  background-color: ${(props) => (props.$invertColors ? props.theme.palette.primary.main : '#ffffff')};
+  margin: 0px ${(props) => props.theme.spacing(0.5)}px;
+`;
+
+export { FixedWidthFlex, StyledDivider, StyledDatasetIcon, StyledSampleIcon };

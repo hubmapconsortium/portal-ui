@@ -1,0 +1,1 @@
+- Move entity tile into components directory and split into subcomponents. 
