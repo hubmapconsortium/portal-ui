@@ -22,13 +22,14 @@ function GlobusLink(props) {
       if (!response.ok) {
         console.error('Entities API failed', response);
         setGlobusUrlStatus({ url: null, statusCode: response.status });
+        setIsLoading(false);
         return;
       }
       const responseGlobusUrl = await response.text();
       setGlobusUrlStatus({ url: responseGlobusUrl, statusCode: response.status });
+      setIsLoading(false);
     }
     getAndSetGlobusUrlStatus();
-    setIsLoading(false);
   }, [entityEndpoint, uuid]);
 
   const { statusCode, url } = globusUrlStatus;
