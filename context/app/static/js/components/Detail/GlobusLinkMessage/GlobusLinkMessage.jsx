@@ -41,7 +41,7 @@ function GlobusLinkMessage(props) {
 
   return (
     <Typography variant="body2">
-      {`Unexpected error. Report error to `}
+      {`Unexpected error ${statusCode}. Report error to `}
       <LightBlueLink underline="none" variant="body2" href="mailto:help@hubmapconsortium.org">
         help@hubmapconsortium.org
       </LightBlueLink>
