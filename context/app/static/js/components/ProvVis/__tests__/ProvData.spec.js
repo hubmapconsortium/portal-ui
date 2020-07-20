@@ -1,6 +1,6 @@
 import expect from 'expect';
 
-import ProvData, { _makeCwlInput, _makeCwlOutput, _expand } from '../src/ProvData';
+import ProvData, { makeCwlInput, makeCwlOutput, expand } from '../ProvData';
 
 import * as fixtures from './fixtures';
 
@@ -33,9 +33,7 @@ describe('ProvData errors', () => {
 });
 
 describe('ProvData methods', () => {
-  const prov = new ProvData(
-    fixtures.complex.prov,
-  );
+  const prov = new ProvData(fixtures.complex.prov);
 
   it('getParentEntityNames', () => {
     expect(prov._getParentEntityNames('https://hubmapconsortium.org/act-4')).toEqual([
@@ -47,7 +45,8 @@ describe('ProvData methods', () => {
 
   it('getChildEntityNames', () => {
     expect(prov._getChildEntityNames('https://hubmapconsortium.org/act-2')).toEqual([
-      'https://hubmapconsortium.org/ent-4', 'https://hubmapconsortium.org/ent-7',
+      'https://hubmapconsortium.org/ent-4',
+      'https://hubmapconsortium.org/ent-7',
     ]);
   });
 
@@ -69,15 +68,17 @@ describe('ProvData methods', () => {
 describe('PROV expansion', () => {
   it('should expand prefixes', () => {
     expect(
-      _expand({
-        'do:C': { 're:D': 'mi:E' },
-        're:D': { 're:D': 'not-expanded' },
-      },
-      {
-        do: 'deer#',
-        re: 'drop-of-golden-sun#',
-        mi: 'name-i-call-myself#',
-      }),
+      expand(
+        {
+          'do:C': { 're:D': 'mi:E' },
+          're:D': { 're:D': 'not-expanded' },
+        },
+        {
+          do: 'deer#',
+          re: 'drop-of-golden-sun#',
+          mi: 'name-i-call-myself#',
+        },
+      ),
     ).toEqual({
       'deer#C': { 'drop-of-golden-sun#D': 'name-i-call-myself#E' },
       'drop-of-golden-sun#D': { 'drop-of-golden-sun#D': 'not-expanded' },
@@ -86,86 +87,84 @@ describe('PROV expansion', () => {
 });
 
 describe('CWL utils', () => {
-  it('_makeCwlInput reference', () => {
-    expect(_makeCwlInput('name1', [], { extras: 'go here!' }, true)).toEqual(
-      {
-        meta: {
-          global: true,
-          in_path: true,
-          type: 'reference file',
-        },
-        name: 'name1',
-        run_data: {
-          file: [
-            {
-              '@id': 'name1',
-            },
-          ],
-        },
-        source: [{
+  it('makeCwlInput reference', () => {
+    expect(makeCwlInput('name1', [], { extras: 'go here!' }, true)).toEqual({
+      meta: {
+        global: true,
+        in_path: true,
+        type: 'reference file',
+      },
+      name: 'name1',
+      run_data: {
+        file: [
+          {
+            '@id': 'name1',
+          },
+        ],
+      },
+      source: [
+        {
           for_file: 'name1',
           name: 'name1',
-        }],
-        prov: {
-          extras: 'go here!',
         },
+      ],
+      prov: {
+        extras: 'go here!',
       },
-    );
+    });
   });
 
-  it('_makeCwlInput with step', () => {
-    expect(_makeCwlInput('name1', ['step1'], { extras: 'go here!' })).toEqual(
-      {
-        meta: {
-          global: true,
-          in_path: true,
-          type: 'data file',
-        },
-        name: 'name1',
-        run_data: {
-          file: [
-            {
-              '@id': 'name1',
-            },
-          ],
-        },
-        source: [{
+  it('makeCwlInput with step', () => {
+    expect(makeCwlInput('name1', ['step1'], { extras: 'go here!' })).toEqual({
+      meta: {
+        global: true,
+        in_path: true,
+        type: 'data file',
+      },
+      name: 'name1',
+      run_data: {
+        file: [
+          {
+            '@id': 'name1',
+          },
+        ],
+      },
+      source: [
+        {
           for_file: 'name1',
           name: 'name1',
           step: 'step1',
-        }],
-        prov: {
-          extras: 'go here!',
         },
+      ],
+      prov: {
+        extras: 'go here!',
       },
-    );
+    });
   });
 
   it('_makeCwlOutput', () => {
-    expect(_makeCwlOutput('name1', ['step1'], { extras: 'go here!' })).toEqual(
-      {
-        meta: {
-          global: true,
-          in_path: true,
-        },
-        name: 'name1',
-        run_data: {
-          file: [
-            {
-              '@id': 'name1',
-            },
-          ],
-        },
-        target: [
+    expect(makeCwlOutput('name1', ['step1'], { extras: 'go here!' })).toEqual({
+      meta: {
+        global: true,
+        in_path: true,
+      },
+      name: 'name1',
+      run_data: {
+        file: [
           {
-            name: 'name1',
-            step: 'step1',
+            '@id': 'name1',
           },
         ],
-        prov: {
-          extras: 'go here!',
-        },
       },
-    );
+      target: [
+        {
+          name: 'name1',
+          step: 'step1',
+        },
+      ],
+      prov: {
+        extras: 'go here!',
+      },
+    });
   });
 });
