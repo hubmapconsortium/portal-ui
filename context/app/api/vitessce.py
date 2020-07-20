@@ -77,8 +77,8 @@ CODDEX_SPRM_PATH = "output_json"
 
 # Hardcoded CODEX offsets and tile path.
 IMAGING_PATHS = {
-    CODEX_CYTOKIT: {"offsets": OFFSETS_PATH, "image": CODEX_TILE_PATH,},
-    IMAGE_PYRAMID: {"offsets": OFFSETS_PATH, "image": IMAGE_PYRAMID_PATH,},
+    CODEX_CYTOKIT: {"offsets": OFFSETS_PATH, "image": CODEX_TILE_PATH, },
+    IMAGE_PYRAMID: {"offsets": OFFSETS_PATH, "image": IMAGE_PYRAMID_PATH, },
 }
 
 TILE_REGEX = r"R\d+_X\d+_Y\d+"
@@ -122,7 +122,7 @@ ASSAY_CONF_LOOKUP = {
         # We can actually fetch height/width using a COG tiff library, but for now this will do.
         "view": {"zoom": -6.5, "target": [1000, 1000, 0]},
         "files_conf": [
-            {"rel_path": IMAGE_PYRAMID_PATH + r"/.*.ome.tif(f?)", "type": "RASTER",},
+            {"rel_path": IMAGE_PYRAMID_PATH + r"/.*.ome.tif(f?)", "type": "RASTER", },
         ],
     },
 }
