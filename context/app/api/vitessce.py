@@ -81,6 +81,8 @@ IMAGING_PATHS = {
     IMAGE_PYRAMID: {"offsets": OFFSETS_PATH, "image": IMAGE_PYRAMID_PATH,},
 }
 
+TILE_REGEX = r"R\d+_X\d+_Y\d+"
+
 ASSAY_CONF_LOOKUP = {
     SCRNA_SEQ: {
         "base_conf": SCATTERPLOT,
@@ -94,23 +96,23 @@ ASSAY_CONF_LOOKUP = {
         "view": {"zoom": -1.5, "target": [600, 600, 0]},
         "files_conf": [
             {
-                "rel_path": str(Path(CODEX_TILE_PATH) / "#TILE#.ome.tiff"),
+                "rel_path": CODEX_TILE_PATH + "/" + TILE_REGEX + ".ome.tiff",
                 "type": "RASTER",
             },
             {
-                "rel_path": str(Path(CODDEX_SPRM_PATH) / "#TILE#.cells.json"),
+                "rel_path": CODDEX_SPRM_PATH + "/" + TILE_REGEX + ".cells.json",
                 "type": "CELLS",
             },
             {
-                "rel_path": str(Path(CODDEX_SPRM_PATH) / "#TILE#.cell-sets.json"),
+                "rel_path": CODDEX_SPRM_PATH + "/" + TILE_REGEX + ".cell-sets.json",
                 "type": "CELL-SETS",
             },
             {
-                "rel_path": str(Path(CODDEX_SPRM_PATH) / "#TILE#.genes.json"),
+                "rel_path": CODDEX_SPRM_PATH + "/" + TILE_REGEX + ".genes.json",
                 "type": "GENES",
             },
             {
-                "rel_path": str(Path(CODDEX_SPRM_PATH) / "#TILE#.clusters.json"),
+                "rel_path": CODDEX_SPRM_PATH + "/" + TILE_REGEX + ".clusters.json",
                 "type": "CLUSTERS",
             },
         ],
@@ -128,12 +130,10 @@ ASSAY_CONF_LOOKUP = {
 IMAGE_ASSAYS = [CODEX_CYTOKIT, IMAGE_PYRAMID]
 TILED_ASSAYS = [CODEX_CYTOKIT]
 
-TILE_REGEX = r"R\d+_X\d+_Y\d+"
-
 MOCK_URL = "https://example.com"
 
 
-def _get_matching_files(files, regex):
+def _get_matches(files, regex):
     return list(
         set(
             [
@@ -217,7 +217,7 @@ class Vitessce:
             self.conf = conf
             return conf
         elif self.assay_type in TILED_ASSAYS:
-            found_tiles = _get_matching_files(file_paths_found, TILE_REGEX)
+            found_tiles = _get_matches(file_paths_found, TILE_REGEX)
             confs = []
             for tile in sorted(found_tiles):
                 new_conf = copy.deepcopy(conf)
@@ -229,7 +229,7 @@ class Vitessce:
             self.conf = confs
             return confs
         elif self.assay_type in IMAGE_ASSAYS:
-            found_images = _get_matching_files(file_paths_found, files[0]["rel_path"])
+            found_images = _get_matches(file_paths_found, files[0]["rel_path"])
             layer = self._build_multi_file_image_layer_conf(found_images)
             conf["layers"] = [layer]
             conf["name"] = self.uuid
@@ -251,10 +251,10 @@ class Vitessce:
 
         return {
             "type": file["type"],
-            "url": self._build_assets_url(file["rel_path"].replace("#TILE#", tile))
+            "url": self._build_assets_url(file["rel_path"].replace(TILE_REGEX, tile))
             if file["type"] != "RASTER"
             else self._build_image_layer_datauri(
-                [file["rel_path"].replace("#TILE#", tile)]
+                [file["rel_path"].replace(TILE_REGEX, tile)]
             ),
             "name": file["type"].lower(),
         }
