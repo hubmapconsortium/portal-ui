@@ -12,7 +12,7 @@ const statusCodesWithMessages = new Set([200, 401, 403, 404, 500]);
 
 function GlobusLink(props) {
   const { uuid, entityEndpoint, display_doi } = props;
-  const [loading, setLoading] = React.useState(true);
+  const [isLoading, setLoading] = React.useState(true);
   const [globusUrlText, setGlobusUrlText] = React.useState({ url: null, statusCode: null });
 
   React.useEffect(() => {
@@ -36,7 +36,7 @@ function GlobusLink(props) {
 
   const { statusCode, url } = globusUrlText;
 
-  return loading ? (
+  return isLoading ? (
     <CenteredDiv>
       <CircularProgress />
     </CenteredDiv>
