@@ -38,10 +38,9 @@ function GlobusLinkMessage(props) {
     );
   }
 
-  // TODO get fallback message for unanticipated response statuses
   return (
     <Typography variant="body2">
-      {`Unexpected ${statusCode}. Report error to `}
+      {`Unexpected error. Report error to `}
       <LightBlueLink underline="none" variant="body2" href="mailto:help@hubmapconsortium.org">
         help@hubmapconsortium.org
       </LightBlueLink>
