@@ -22,6 +22,7 @@ function GlobusLinkMessage(props) {
         <LightBlueLink underline="none" variant="body2" href={url}>
           Globus <StyledExternalLinkIcon />
         </LightBlueLink>
+        .
       </Typography>
     );
   }
