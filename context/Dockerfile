@@ -7,9 +7,8 @@ COPY package.json .
 COPY package-lock.json .
 
 RUN npm install
-# TODO: Get rid of prepublish... wget the prov-vis schema shouldn't be necessary. See PR #232.
-RUN npm run prepublish
 
+# TODO: Copy only the JS for the npm build.
 COPY . .
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
