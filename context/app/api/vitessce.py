@@ -112,7 +112,7 @@ ASSAY_CONF_LOOKUP = {
                 "type": "GENES",
             },
             {
-                "rel_path": CODDEX_SPRM_PATH + "/" + TILE_REGEX + ".clusters.json",
+                "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.clusters.json",
                 "type": "CLUSTERS",
             },
         ],
@@ -122,7 +122,7 @@ ASSAY_CONF_LOOKUP = {
         # We can actually fetch height/width using a COG tiff library, but for now this will do.
         "view": {"zoom": -6.5, "target": [1000, 1000, 0]},
         "files_conf": [
-            {"rel_path": IMAGE_PYRAMID_PATH + r"/.*.ome.tif(f?)", "type": "RASTER", },
+            {"rel_path": re.escape(IMAGE_PYRAMID_PATH) + r"/.*\.ome\.tiff?$", "type": "RASTER" },
         ],
     },
 }
@@ -266,7 +266,7 @@ class Vitessce:
 
         {
           'type': 'RASTER',
-          'url': DataURI({})
+          'url': 'data:base-64-encoded-string'
           'name': 'rasters'
         }
         """
@@ -332,11 +332,9 @@ class Vitessce:
         schema["url"] = self._build_assets_url(image_rel_path)
         schema["metadata"] = {}
         imaging_paths = IMAGING_PATHS[self.assay_type]
-        offsets_path = (
-            image_rel_path.replace(imaging_paths["image"], imaging_paths["offsets"])
-            .replace("ome.tiff", "offsets.json")
-            .replace("ome.tif", "offsets.json")
-        )
+        offsets_path = re.sub(
+            r'ome\.tiff?$', 'offsets.json',
+            image_rel_path.replace(imaging_paths["image"], imaging_paths["offsets"]))
         schema["metadata"]["omeTiffOffsetsUrl"] = self._build_assets_url(
             str(offsets_path)
         )
