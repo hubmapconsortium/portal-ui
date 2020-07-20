@@ -36,7 +36,9 @@ function ProvTable(props) {
                     id={item.display_doi}
                     entity_type={item.entity_type}
                     isCurrentEntity={uuid === item.uuid}
-                    isSibling={j > 0 && type[j - 1].specimen_type === item.specimen_type}
+                    isSampleSibling={
+                      j > 0 && item.entity_type === 'Sample' && type[j - 1].specimen_type === item.specimen_type
+                    }
                     isFirstTile={j === 0}
                   />
                 ))
