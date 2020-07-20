@@ -11,10 +11,10 @@ import GlobusLinkMessage from '../GlobusLinkMessage';
 function GlobusLink(props) {
   const { uuid, entityEndpoint, display_doi } = props;
   const [isLoading, setLoading] = React.useState(true);
-  const [globusUrlText, setGlobusUrlText] = React.useState({ url: null, statusCode: null });
+  const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: null, statusCode: null });
 
   React.useEffect(() => {
-    async function getAndSetGlobusUrlText() {
+    async function getAndSetGlobusUrlStatus() {
       const response = await fetch(`${entityEndpoint}/entities/dataset/globus-url/${uuid}`, {
         headers: {
           Authorization: `Bearer ${readCookie('nexus_token')}`,
@@ -22,17 +22,17 @@ function GlobusLink(props) {
       });
       if (!response.ok) {
         console.error('Entities API failed', response);
-        setGlobusUrlText({ url: null, statusCode: response.status });
+        setGlobusUrlStatus({ url: null, statusCode: response.status });
         return;
       }
       const responseGlobusUrl = await response.text();
-      setGlobusUrlText({ url: responseGlobusUrl, statusCode: response.status });
+      setGlobusUrlStatus({ url: responseGlobusUrl, statusCode: response.status });
     }
-    getAndSetGlobusUrlText();
+    getAndSetGlobusUrlStatus();
     setLoading(false);
   }, [entityEndpoint, uuid]);
 
-  const { statusCode, url } = globusUrlText;
+  const { statusCode, url } = globusUrlStatus;
 
   return isLoading ? (
     <CenteredDiv>
