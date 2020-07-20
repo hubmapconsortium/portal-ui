@@ -8,8 +8,6 @@ import { readCookie } from 'helpers/functions';
 import { StyledTypography, CenteredDiv, MarginTopDiv, Flex, StyledInfoIcon, StyledSuccessIcon } from './style';
 import GlobusLinkMessage from '../GlobusLinkMessage';
 
-const statusCodesWithMessages = new Set([200, 401, 403, 404, 500]);
-
 function GlobusLink(props) {
   const { uuid, entityEndpoint, display_doi } = props;
   const [isLoading, setLoading] = React.useState(true);
@@ -48,11 +46,7 @@ function GlobusLink(props) {
           {statusCode === 200 ? <StyledSuccessIcon /> : <StyledInfoIcon />}
         </Flex>
         <Typography variant="body2">
-          {statusCodesWithMessages.has(statusCode) ? (
-            <GlobusLinkMessage statusCode={statusCode} url={url} display_doi={display_doi} />
-          ) : (
-            <GlobusLinkMessage statusCode={500} url={url} />
-          )}
+          <GlobusLinkMessage statusCode={statusCode} url={url} display_doi={display_doi} />
         </Typography>
       </DetailSectionPaper>
     </MarginTopDiv>
