@@ -6,7 +6,7 @@ import EntityTile from '../EntityTile';
 import { DownIcon } from './style';
 
 function ProvTableTile(props) {
-  const { uuid, entity_type, id, isCurrentEntity, isNotSibling } = props;
+  const { uuid, entity_type, id, isCurrentEntity, isSibling, isFirstTile } = props;
   const { elasticsearchEndpoint } = useContext(DetailContext);
 
   // mapped fields are not included in ancestor object
@@ -14,7 +14,7 @@ function ProvTableTile(props) {
 
   return (
     <>
-      {entity_type === 'Sample' && isNotSibling && <DownIcon />}
+      {!isFirstTile && ((entity_type === 'Sample' && !isSibling) || entity_type === 'Dataset') && <DownIcon />}
       {entityData && (
         <EntityTile
           uuid={uuid}
