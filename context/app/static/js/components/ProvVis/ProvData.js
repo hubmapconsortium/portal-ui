@@ -52,7 +52,7 @@ export function makeCwlOutput(name, steps, extras) {
   };
 }
 
-export default class Prov {
+export default class ProvData {
   constructor(prov, getNameForActivity = (id) => id, getNameForEntity = (id) => id) {
     this.getNameForActivity = getNameForActivity;
     this.getNameForEntity = getNameForEntity;
