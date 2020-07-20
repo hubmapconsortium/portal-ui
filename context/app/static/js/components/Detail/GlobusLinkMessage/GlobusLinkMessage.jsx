@@ -52,11 +52,12 @@ function GlobusLinkMessage(props) {
 
 GlobusLinkMessage.propTypes = {
   statusCode: PropTypes.number.isRequired,
-  url: PropTypes.oneOf([PropTypes.string, PropTypes.null]).isRequired,
+  url: PropTypes.string,
   display_doi: PropTypes.string,
 };
 
 GlobusLinkMessage.defaultProps = {
+  url: '',
   display_doi: '',
 };
 
