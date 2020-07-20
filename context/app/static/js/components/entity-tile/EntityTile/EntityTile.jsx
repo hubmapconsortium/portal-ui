@@ -5,16 +5,6 @@ import EntityTileBottom from '../EntityTileBottom';
 import EntityTileTop from '../EntityTileTop';
 import { StyledPaper } from './style';
 
-/**
- * Tile displaying entity data
- * @param {object} props
- * @param {string} props.uuid universally unique identifier
- * @param {string} props.entity_type type of entity (donor, sample, or dataset)
- * @param {string} props.id display id
- * @param {object} props.entityData entity data from search api.
- * @param {boolean} [props.invertColors] whether the colors should be inverted
- * @param {object} [props.descendantCounts] number of descendant entities as entries
- */
 function EntityTile(props) {
   const { uuid, entity_type, id, invertColors, entityData, descendantCounts } = props;
 
