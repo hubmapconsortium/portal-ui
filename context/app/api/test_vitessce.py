@@ -37,7 +37,7 @@ def test_build_image_schema():
     vitessce = Vitessce(
         entity=TEST_ENTITY_CODEX, nexus_token=TEST_NEXUS_TOKEN, is_mock=True
     )
-    schema = vitessce._build_image_schema(rel_path=TEST_PATH_TIFF)
+    schema = vitessce._build_image_schema(image_rel_path=TEST_PATH_TIFF)
     assert schema["name"] == "example.ome.tiff"
     assert (
         schema["url"]
@@ -46,7 +46,7 @@ def test_build_image_schema():
     assert schema["type"] == "ome-tiff"
     assert (
         schema["metadata"]["omeTiffOffsetsUrl"]
-        == f"https://example.com/uuid/output_offsets/example.offsets.json?token={TEST_NEXUS_TOKEN}"
+        == f"https://example.com/uuid/path/to/example.offsets.json?token={TEST_NEXUS_TOKEN}"
     )
 
 
