@@ -1,0 +1,1 @@
+- Updated the styles for the .vitessce-container to make the Vitessce Please wait... modal visible

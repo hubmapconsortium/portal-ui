@@ -60,6 +60,7 @@ const ExpandableDiv = styled.div`
     display: block;
     height: ${(props) => (props.$isExpanded ? `calc(100vh - ${headerFixedHeight}px)` : 'auto')};
     width: 100%;
+    position: static;
   }
 `;
 
