@@ -1,0 +1,64 @@
+[
+  {
+    "name": "process",
+    "inputs": [
+      {
+        "name": "input",
+        "source": [
+          {
+            "name": "input",
+            "for_file": "input"
+          }
+        ],
+        "run_data": {
+          "file": [
+            {
+              "@id": "input"
+            }
+          ]
+        },
+        "meta": {
+          "global": true,
+          "in_path": true,
+          "type": "data file"
+        },
+        "prov": {
+          "http://www.w3.org/ns/prov#label": "Input",
+          "http://example.com#note": "Begins here..."
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "name": "output",
+        "target": [],
+        "run_data": {
+          "file": [
+            {
+              "@id": "output"
+            }
+          ]
+        },
+        "meta": {
+          "global": true,
+          "in_path": true
+        },
+        "prov": {
+          "http://www.w3.org/ns/prov#label": "Output",
+          "http://example.com#note": "... and ends here."
+        }
+      }
+    ],
+    "prov": {
+      "http://www.w3.org/ns/prov#label": "Process",
+      "http://www.w3.org/ns/prov#delegate": {
+        "http://example.com#DisplayName": "Jane Austen",
+        "http://www.w3.org/ns/prov#type": "http://www.w3.org/ns/prov#Person"
+      },
+      "http://www.w3.org/ns/prov#responsible": {
+        "http://example.com#DisplayName": "Example.com, incorporated",
+        "http://www.w3.org/ns/prov#type": "http://www.w3.org/ns/prov#Organization"
+      }
+    }
+  }
+]
