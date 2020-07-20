@@ -1,14 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@material-ui/core';
-import { readCookie } from '../../../helpers/functions';
-import { StyledButton } from './style';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import { DetailSectionPaper } from 'shared-styles/surfaces';
+import { readCookie } from 'helpers/functions';
+import { StyledTypography, CenteredDiv, MarginTopDiv, Flex, StyledInfoIcon, StyledSuccessIcon } from './style';
+import GlobusLinkMessage from '../GlobusLinkMessage';
 
 function GlobusLink(props) {
-  const { uuid, entityEndpoint, fileBrowserDisplayed } = props;
-  const [globusUrlText, setGlobusUrlText] = React.useState({ url: null, text: 'Please wait...' });
+  const { uuid, entityEndpoint, display_doi } = props;
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: '', statusCode: null });
+
   React.useEffect(() => {
-    async function getAndSetGlobusUrlText() {
+    async function getAndSetGlobusUrlStatus() {
       const response = await fetch(`${entityEndpoint}/entities/dataset/globus-url/${uuid}`, {
         headers: {
           Authorization: `Bearer ${readCookie('nexus_token')}`,
@@ -16,28 +21,40 @@ function GlobusLink(props) {
       });
       if (!response.ok) {
         console.error('Entities API failed', response);
-        setGlobusUrlText({ url: null, text: `Globus File Browser: ${response.status}: ${response.statusText}` });
+        setGlobusUrlStatus({ url: null, statusCode: response.status });
+        setIsLoading(false);
         return;
       }
       const responseGlobusUrl = await response.text();
-      setGlobusUrlText({ url: responseGlobusUrl, text: 'Download from Globus' });
+      setGlobusUrlStatus({ url: responseGlobusUrl, statusCode: response.status });
+      setIsLoading(false);
     }
-    getAndSetGlobusUrlText();
+    getAndSetGlobusUrlStatus();
   }, [entityEndpoint, uuid]);
 
-  const { url, text } = globusUrlText;
-  return url ? (
-    <StyledButton $fileBrowserDisplayed={fileBrowserDisplayed}>
-      <Link href={url}>{text}</Link>
-    </StyledButton>
+  const { statusCode, url } = globusUrlStatus;
+
+  return isLoading ? (
+    <CenteredDiv>
+      <CircularProgress />
+    </CenteredDiv>
   ) : (
-    text
+    <MarginTopDiv>
+      <DetailSectionPaper>
+        <Flex>
+          <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
+          {statusCode === 200 ? <StyledSuccessIcon /> : <StyledInfoIcon />}
+        </Flex>
+        <GlobusLinkMessage statusCode={statusCode} url={url} display_doi={display_doi} />
+      </DetailSectionPaper>
+    </MarginTopDiv>
   );
 }
 
 GlobusLink.propTypes = {
   entityEndpoint: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
+  display_doi: PropTypes.string.isRequired,
 };
 
 export default GlobusLink;
