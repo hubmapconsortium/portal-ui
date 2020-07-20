@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { DetailSectionPaper } from 'shared-styles/surfaces';
@@ -45,9 +44,7 @@ function GlobusLink(props) {
           <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
           {statusCode === 200 ? <StyledSuccessIcon /> : <StyledInfoIcon />}
         </Flex>
-        <Typography variant="body2">
-          <GlobusLinkMessage statusCode={statusCode} url={url} display_doi={display_doi} />
-        </Typography>
+        <GlobusLinkMessage statusCode={statusCode} url={url} display_doi={display_doi} />
       </DetailSectionPaper>
     </MarginTopDiv>
   );
