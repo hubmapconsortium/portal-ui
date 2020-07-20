@@ -10,7 +10,7 @@ import GlobusLinkMessage from '../GlobusLinkMessage';
 
 function GlobusLink(props) {
   const { uuid, entityEndpoint, display_doi } = props;
-  const [isLoading, setLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(true);
   const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: null, statusCode: null });
 
   React.useEffect(() => {
@@ -29,7 +29,7 @@ function GlobusLink(props) {
       setGlobusUrlStatus({ url: responseGlobusUrl, statusCode: response.status });
     }
     getAndSetGlobusUrlStatus();
-    setLoading(false);
+    setIsLoading(false);
   }, [entityEndpoint, uuid]);
 
   const { statusCode, url } = globusUrlStatus;
