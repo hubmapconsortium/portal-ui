@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { renderProvVis } from '../ProvVis';
+import { renderProvVis } from '../../ProvVis';
 import { StyledTypography, StyledLink, FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
