@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { DatasetIcon, SampleIcon, DonorIcon } from 'shared-styles/icons';
+import { invertSectionColors } from '../EntityTile/style';
 
 const iconStyle = css`
   font-size: 1.3rem;
@@ -26,22 +27,7 @@ const FixedWidthFlex = styled.div`
   display: flex;
   padding: 10px 10px;
 
-  background-color: #ffffff;
-
-  svg {
-    color: ${(props) => props.theme.palette.primary.main};
-  }
-
-  ${(props) =>
-    props.$invertColors &&
-    css`
-      background-color: ${props.theme.palette.primary.main};
-      color: #ffffff;
-
-      svg {
-        color: #ffffff;
-      }
-    `}
+  ${(props) => invertSectionColors('#ffffff', props.theme.palette.primary.main, props.$invertColors)}
 `;
 
 export { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FixedWidthFlex };

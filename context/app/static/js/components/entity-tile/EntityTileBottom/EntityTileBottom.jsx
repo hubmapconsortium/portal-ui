@@ -12,7 +12,8 @@ function EntityTileBottom(props) {
     <FixedWidthFlex $invertColors={invertColors}>
       {Object.entries(descendantCounts).map(([k, v]) => (
         <React.Fragment key={k}>
-          {k === 'Dataset' ? <StyledDatasetIcon /> : <StyledSampleIcon />}
+          {k === 'Dataset' && <StyledDatasetIcon />}
+          {k === 'Sample' && <StyledSampleIcon />}
           <Typography variant="body2">{v}</Typography>
           <StyledDivider flexItem orientation="vertical" $invertColors={invertColors} />
         </React.Fragment>
