@@ -10,7 +10,8 @@ function EntityTileBottom(props) {
     <FixedWidthFlex $isCurrentEntity={isCurrentEntity}>
       {Object.entries(descendantCounts).map(([k, v]) => (
         <>
-          {k === 'Dataset' ? <StyledDatasetIcon /> : <StyledSampleIcon />}
+          {k === 'Dataset' && <StyledDatasetIcon />}
+          {k === 'Sample' && <StyledSampleIcon />}
           <StyledTypography variant="body2">{v}</StyledTypography>
           <StyledDivider flexItem orientation="vertical" />
         </>
