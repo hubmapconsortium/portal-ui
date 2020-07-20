@@ -10,7 +10,7 @@ import GlobusLinkMessage from '../GlobusLinkMessage';
 function GlobusLink(props) {
   const { uuid, entityEndpoint, display_doi } = props;
   const [isLoading, setIsLoading] = React.useState(true);
-  const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: null, statusCode: null });
+  const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: '', statusCode: null });
 
   React.useEffect(() => {
     async function getAndSetGlobusUrlStatus() {
