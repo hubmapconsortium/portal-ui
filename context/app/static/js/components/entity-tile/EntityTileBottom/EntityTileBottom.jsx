@@ -13,8 +13,8 @@ function EntityTileBottom(props) {
         <>
           {k === 'Dataset' && <StyledDatasetIcon />}
           {k === 'Sample' && <StyledSampleIcon />}
-          <StyledTypography variant="body2">{v}</StyledTypography>
-          <StyledDivider flexItem orientation="vertical" />
+          <Typography variant="body2">{v}</Typography>
+          <StyledDivider flexItem orientation="vertical" $invertColors={invertColors} />
         </>
       ))}
       <Typography variant="body2">Modified {format(entityData.last_modified_timestamp, 'MM-dd-yyyy')}</Typography>
