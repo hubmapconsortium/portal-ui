@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import { StyledTab, StyledTabs, StyledTabPanel } from './style';
-import ProvGraph from '../ProvGraph';
+import ProvGraph from '../../ProvGraph';
 import ProvTable from '../ProvTable';
 import ProvAnalysisDetails from '../ProvAnalysisDetails';
 import SectionHeader from '../SectionHeader';

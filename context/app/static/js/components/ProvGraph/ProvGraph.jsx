@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ProvVis from '../../ProvVis';
+import ProvVis from './ProvVis';
 import { StyledTypography, StyledLink, FlexPaper } from './style';
-import SectionItem from '../SectionItem';
+import SectionItem from '../Detail/SectionItem';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 
 function ProvGraph(props) {
