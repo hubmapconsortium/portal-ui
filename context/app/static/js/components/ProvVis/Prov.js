@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import Ajv from 'ajv';
 
-import schema from './schema.json';
+import schema from './prov-schema.json';
 
 // export only to test.
 export function makeCwlInput(name, steps, extras, isReference) {
