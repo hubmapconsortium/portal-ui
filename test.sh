@@ -66,7 +66,7 @@ end pytest
 
 start npm-test
 cd context
-npm test
+npm run test
 cd -
 end npm-test
 
