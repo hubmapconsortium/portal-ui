@@ -1,3 +1,14 @@
+## v0.0.41 - 2020-07-20
+
+- Update homepage data use guidelines.
+- Make icon usage more consistent.
+- Get rid of the quick-start script.
+- Incorporate the ProvVis wrapper directly. This simplifies the build process.
+- Update globus link per 07/15/2020 design.
+- Upgrade lodash to fix potential vulnerabilities. 
+- Updated the styles for the .vitessce-container to make the Vitessce Please wait... modal visible
+
+
 ## v0.0.40 - 2020-07-15
 
 - Move seldom used facets to the bottom.
