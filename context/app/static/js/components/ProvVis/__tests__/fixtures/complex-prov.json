@@ -48,6 +48,5 @@
               "prov:entity": "hubmap:ent-3" },
     "_:11": { "prov:activity": "hubmap:act-4",
               "prov:entity": "hubmap:ent-4" }
-    }
   }
 }

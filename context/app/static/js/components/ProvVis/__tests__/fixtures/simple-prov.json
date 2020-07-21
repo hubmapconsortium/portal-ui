@@ -36,7 +36,7 @@
     "_:id6": {
       "prov:delegate": "ex:j-austen",
       "prov:responsible": "ex:example-com",
-      "prov:activity": "ex:process",
+      "prov:activity": "ex:process"
     }
   }
 }

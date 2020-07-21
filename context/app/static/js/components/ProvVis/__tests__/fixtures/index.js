@@ -1,8 +1,8 @@
-import { PROV_NS } from '../../src/ProvData';
+import { PROV_NS } from '../../ProvData';
 
 import realProv from './real-prov.json';
 import realCwl from './real-cwl.json';
-import complexProv from './complex-prov';
+import complexProv from './complex-prov.json';
 import complexCwl from './complex-cwl.json';
 import simpleProv from './simple-prov';
 import simpleCwl from './simple-cwl.json';
