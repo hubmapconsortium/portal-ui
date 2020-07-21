@@ -15,7 +15,7 @@ function ProvTableTile(props) {
 
   return (
     <>
-      {!isFirstTile && ((entity_type === 'Sample' && !isSampleSibling) || entity_type === 'Dataset') && <DownIcon />}
+      {!isFirstTile && !isSampleSibling && entity_type !== 'Donor' && <DownIcon />}
       {entityData && (
         <EntityTile
           uuid={uuid}
