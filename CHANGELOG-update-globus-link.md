@@ -1,1 +1,0 @@
-- Update globus link per 07/15/2020 design.

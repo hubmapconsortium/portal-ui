@@ -1,1 +1,0 @@
-- Update homepage data use guidelines.

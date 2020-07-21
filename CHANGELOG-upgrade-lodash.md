@@ -1,1 +1,0 @@
-- Upgrade lodash to fix potential vulnerabilities. 

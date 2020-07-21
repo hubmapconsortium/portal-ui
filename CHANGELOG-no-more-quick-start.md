@@ -1,1 +1,0 @@
-- Get rid of the quick-start script.
