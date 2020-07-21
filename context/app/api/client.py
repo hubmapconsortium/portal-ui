@@ -1,6 +1,5 @@
 from collections import namedtuple
 import json
-from datetime import datetime
 
 from datauri import DataURI
 from flask import abort, current_app
