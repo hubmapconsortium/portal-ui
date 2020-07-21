@@ -65,3 +65,18 @@ export const datasetConfig = {
     field('mapped_last_modified_timestamp', 'Last Modified'),
   ],
 };
+
+export const lastModifiedSort = [
+  {
+    label: 'Newest',
+    field: 'last_modified_timestamp',
+    order: 'desc',
+    defaultOption: true,
+  },
+  {
+    label: 'Oldest',
+    field: 'last_modified_timestamp',
+    order: 'asc',
+    defaultOption: false,
+  },
+];

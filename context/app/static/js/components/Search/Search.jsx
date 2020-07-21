@@ -1,21 +1,15 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { ExistsQuery, BoolMustNot } from 'searchkit';
 import SearchWrapper from './SearchWrapper';
 import { readCookie } from '../../helpers/functions';
 import './Search.scss';
-import { donorConfig, sampleConfig, datasetConfig } from './config';
+import { donorConfig, sampleConfig, datasetConfig, lastModifiedSort } from './config';
 // eslint-disable-next-line import/named
-import { filter, checkboxFilter } from './utils';
+import { filter } from './utils';
 import AncestorNote from './AncestorNote';
 import LookupEntity from '../../helpers/LookupEntity';
 
-const hiddenFilters = [
-  filter('ancestor_ids', 'Ancestor ID'),
-  filter('entity_type', 'Entity Type'),
-  checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata')),
-  checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata'))),
-];
+const hiddenFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
 
 const filtersByType = {
   '': hiddenFilters,
@@ -59,20 +53,7 @@ const searchProps = {
   // "type" should be one of the filters described here:
   // http://docs.searchkit.co/stable/components/navigation/
   filters: filtersByType[type],
-  sortOptions: [
-    {
-      label: 'Newest',
-      field: 'last_modified_timestamp',
-      order: 'desc',
-      defaultOption: true,
-    },
-    {
-      label: 'Oldest',
-      field: 'last_modified_timestamp',
-      order: 'asc',
-      defaultOption: false,
-    },
-  ],
+  sortOptions: lastModifiedSort,
   hiddenFilterIds: hiddenFilters.map((hiddenFilter) => hiddenFilter.props.id),
   queryFields: ['everything'],
   isLoggedIn: Boolean(nexus_token),

@@ -136,6 +136,21 @@ def search():
     )
 
 
+@blueprint.route('/dev-search')
+def dev_search():
+    title = 'Dev Search'
+    core_props = {
+        'endpoints': _get_endpoints(),
+        'title': title
+    }
+    return render_template(
+        'pages/base_react.html',
+        title=title,
+        types=types,
+        flask_data=core_props
+    )
+
+
 @blueprint.route('/showcase/<name>')
 def showcase_view(name):
     filename = dirname(__file__) + '/showcase/' + name + '.md'
