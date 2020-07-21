@@ -23,7 +23,7 @@
           "type": "data file"
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "Input",
+          "prov:label": "Input",
           "http://example.com#note": "Begins here..."
         }
       }
@@ -44,20 +44,20 @@
           "in_path": true
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "Output",
+          "prov:label": "Output",
           "http://example.com#note": "... and ends here."
         }
       }
     ],
     "prov": {
-      "http://www.w3.org/ns/prov#label": "Process",
-      "http://www.w3.org/ns/prov#delegate": {
+      "prov:label": "Process",
+      "prov:delegate": {
         "http://example.com#DisplayName": "Jane Austen",
-        "http://www.w3.org/ns/prov#type": "http://www.w3.org/ns/prov#Person"
+        "prov:type": "prov:Person"
       },
-      "http://www.w3.org/ns/prov#responsible": {
+      "prov:responsible": {
         "http://example.com#DisplayName": "Example.com, incorporated",
-        "http://www.w3.org/ns/prov#type": "http://www.w3.org/ns/prov#Organization"
+        "prov:type": "prov:Organization"
       }
     }
   }
