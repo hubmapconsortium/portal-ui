@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Alert from '@material-ui/lab/Alert';
 
-import { readCookie } from 'helpers/functions';
+import useProvData from 'hooks/useProvData';
 import ProvTabs from '../ProvTabs';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
@@ -11,33 +11,7 @@ function ProvSection(props) {
   const { uuid, assayMetadata, entityEndpoint } = props;
   const { entity_type } = assayMetadata;
 
-  const [provData, setProvData] = React.useState(null);
-  const [isLoading, setIsLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    async function getAndSetProvData() {
-      const nexus_token = readCookie('nexus_token');
-      const requestInit = nexus_token
-        ? {
-            headers: {
-              Authorization: `Bearer ${nexus_token}`,
-            },
-          }
-        : {};
-
-      const response = await fetch(`${entityEndpoint}/entities/${uuid}/provenance`, requestInit);
-
-      if (!response.ok) {
-        console.error('Prov API failed', response);
-        setIsLoading(false);
-        return;
-      }
-      const responseProvData = await response.json();
-      setProvData(responseProvData);
-      setIsLoading(false);
-    }
-    getAndSetProvData();
-  }, [entityEndpoint, uuid]);
+  const { provData, isLoading } = useProvData(uuid, entityEndpoint);
 
   if (isLoading) {
     return (
