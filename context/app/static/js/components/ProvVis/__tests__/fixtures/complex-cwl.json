@@ -3,17 +3,17 @@
     "name": "act-1",
     "inputs": [
       {
-        "name": "ent-1",
+        "name": "hubmap:ent-1",
         "source": [
           {
-            "name": "ent-1",
-            "for_file": "ent-1"
+            "name": "hubmap:ent-1",
+            "for_file": "hubmap:ent-1"
           }
         ],
         "run_data": {
           "file": [
             {
-              "@id": "ent-1"
+              "@id": "hubmap:ent-1"
             }
           ]
         },
@@ -23,27 +23,27 @@
           "type": "data file"
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-1"
+          "prov:label": "hubmap:ent-1"
         }
       }
     ],
     "outputs": [
       {
-        "name": "ent-3",
+        "name": "hubmap:ent-3",
         "target": [
           {
             "step": "act-3",
-            "name": "ent-3"
+            "name": "hubmap:ent-3"
           },
           {
             "step": "act-4",
-            "name": "ent-3"
+            "name": "hubmap:ent-3"
           }
         ],
         "run_data": {
           "file": [
             {
-              "@id": "ent-3"
+              "@id": "hubmap:ent-3"
             }
           ]
         },
@@ -52,29 +52,29 @@
           "in_path": true
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-3"
+          "prov:label": "hubmap:ent-3"
         }
       }
     ],
     "prov": {
-      "http://www.w3.org/ns/prov#label": "act-1"
+      "prov:label": "act-1"
     }
   },
   {
     "name": "act-2",
     "inputs": [
       {
-        "name": "ent-1",
+        "name": "hubmap:ent-1",
         "source": [
           {
-            "name": "ent-1",
-            "for_file": "ent-1"
+            "name": "hubmap:ent-1",
+            "for_file": "hubmap:ent-1"
           }
         ],
         "run_data": {
           "file": [
             {
-              "@id": "ent-1"
+              "@id": "hubmap:ent-1"
             }
           ]
         },
@@ -84,21 +84,21 @@
           "type": "data file"
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-1"
+          "prov:label": "hubmap:ent-1"
         }
       },
       {
-        "name": "ent-2",
+        "name": "hubmap:ent-2",
         "source": [
           {
-            "name": "ent-2",
-            "for_file": "ent-2"
+            "name": "hubmap:ent-2",
+            "for_file": "hubmap:ent-2"
           }
         ],
         "run_data": {
           "file": [
             {
-              "@id": "ent-2"
+              "@id": "hubmap:ent-2"
             }
           ]
         },
@@ -108,23 +108,23 @@
           "type": "data file"
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-2"
+          "prov:label": "hubmap:ent-2"
         }
       }
     ],
     "outputs": [
       {
-        "name": "ent-4",
+        "name": "hubmap:ent-4",
         "target": [
           {
             "step": "act-4",
-            "name": "ent-4"
+            "name": "hubmap:ent-4"
           }
         ],
         "run_data": {
           "file": [
             {
-              "@id": "ent-4"
+              "@id": "hubmap:ent-4"
             }
           ]
         },
@@ -133,16 +133,16 @@
           "in_path": true
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-4"
+          "prov:label": "hubmap:ent-4"
         }
       },
       {
-        "name": "ent-7",
+        "name": "hubmap:ent-7",
         "target": [],
         "run_data": {
           "file": [
             {
-              "@id": "ent-7"
+              "@id": "hubmap:ent-7"
             }
           ]
         },
@@ -151,30 +151,30 @@
           "in_path": true
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-7"
+          "prov:label": "hubmap:ent-7"
         }
       }
     ],
     "prov": {
-      "http://www.w3.org/ns/prov#label": "act-2"
+      "prov:label": "act-2"
     }
   },
   {
     "name": "act-3",
     "inputs": [
       {
-        "name": "ent-3",
+        "name": "hubmap:ent-3",
         "source": [
           {
-            "name": "ent-3",
-            "for_file": "ent-3",
+            "name": "hubmap:ent-3",
+            "for_file": "hubmap:ent-3",
             "step": "act-1"
           }
         ],
         "run_data": {
           "file": [
             {
-              "@id": "ent-3"
+              "@id": "hubmap:ent-3"
             }
           ]
         },
@@ -184,18 +184,18 @@
           "type": "data file"
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-3"
+          "prov:label": "hubmap:ent-3"
         }
       }
     ],
     "outputs": [
       {
-        "name": "ent-5",
+        "name": "hubmap:ent-5",
         "target": [],
         "run_data": {
           "file": [
             {
-              "@id": "ent-5"
+              "@id": "hubmap:ent-5"
             }
           ]
         },
@@ -204,29 +204,29 @@
           "in_path": true
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-5"
+          "prov:label": "hubmap:ent-5"
         }
       }
     ],
     "prov": {
-      "http://www.w3.org/ns/prov#label": "act-3"
+      "prov:label": "act-3"
     }
   },
   {
     "name": "act-4",
     "inputs": [
       {
-        "name": "ent-1",
+        "name": "hubmap:ent-1",
         "source": [
           {
-            "name": "ent-1",
-            "for_file": "ent-1"
+            "name": "hubmap:ent-1",
+            "for_file": "hubmap:ent-1"
           }
         ],
         "run_data": {
           "file": [
             {
-              "@id": "ent-1"
+              "@id": "hubmap:ent-1"
             }
           ]
         },
@@ -236,22 +236,22 @@
           "type": "data file"
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-1"
+          "prov:label": "hubmap:ent-1"
         }
       },
       {
-        "name": "ent-3",
+        "name": "hubmap:ent-3",
         "source": [
           {
-            "name": "ent-3",
-            "for_file": "ent-3",
+            "name": "hubmap:ent-3",
+            "for_file": "hubmap:ent-3",
             "step": "act-1"
           }
         ],
         "run_data": {
           "file": [
             {
-              "@id": "ent-3"
+              "@id": "hubmap:ent-3"
             }
           ]
         },
@@ -261,22 +261,22 @@
           "type": "data file"
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-3"
+          "prov:label": "hubmap:ent-3"
         }
       },
       {
-        "name": "ent-4",
+        "name": "hubmap:ent-4",
         "source": [
           {
-            "name": "ent-4",
-            "for_file": "ent-4",
+            "name": "hubmap:ent-4",
+            "for_file": "hubmap:ent-4",
             "step": "act-2"
           }
         ],
         "run_data": {
           "file": [
             {
-              "@id": "ent-4"
+              "@id": "hubmap:ent-4"
             }
           ]
         },
@@ -286,18 +286,18 @@
           "type": "data file"
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-4"
+          "prov:label": "hubmap:ent-4"
         }
       }
     ],
     "outputs": [
       {
-        "name": "ent-6",
+        "name": "hubmap:ent-6",
         "target": [],
         "run_data": {
           "file": [
             {
-              "@id": "ent-6"
+              "@id": "hubmap:ent-6"
             }
           ]
         },
@@ -306,12 +306,12 @@
           "in_path": true
         },
         "prov": {
-          "http://www.w3.org/ns/prov#label": "ent-6"
+          "prov:label": "hubmap:ent-6"
         }
       }
     ],
     "prov": {
-      "http://www.w3.org/ns/prov#label": "act-4"
+      "prov:label": "act-4"
     }
   }
 ]
