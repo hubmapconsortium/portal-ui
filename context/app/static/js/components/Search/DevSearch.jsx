@@ -1,8 +1,9 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { ExistsQuery, BoolMustNot } from 'searchkit';
+
+import { readCookie } from 'helpers/functions';
 import SearchWrapper from './SearchWrapper';
-import { readCookie } from '../../helpers/functions';
 import './Search.scss';
 // eslint-disable-next-line import/named
 import { field, filter, checkboxFilter } from './utils';
@@ -14,6 +15,7 @@ const httpHeaders = nexus_token
       Authorization: `Bearer ${nexus_token}`,
     }
   : {};
+
 const searchProps = {
   // The default behavior is to add a "_search" path.
   // We don't want that.
@@ -49,7 +51,7 @@ const searchProps = {
 
 function DevSearch(props) {
   const { elasticsearchEndpoint } = props;
-  const allProps = Object.assign(searchProps, { apiUrl: elasticsearchEndpoint });
+  const allProps = {...searchProps, apiUrl: elasticsearchEndpoint};
 
   // eslint-disable-next-line react/jsx-props-no-spreading
   const wrappedSearch = <SearchWrapper {...allProps} />;
