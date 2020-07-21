@@ -15,6 +15,7 @@ const httpHeaders = nexus_token
       Authorization: `Bearer ${nexus_token}`,
     }
   : {};
+
 const searchProps = {
   // The default behavior is to add a "_search" path.
   // We don't want that.
