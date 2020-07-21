@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import { Home } from '../Home';
 import Search from '../Search/Search';
+import DevSearch from '../Search/DevSearch';
 import { Donor, Sample, Dataset, Collection } from '../Detail';
 import Showcase from '../Showcase';
 import { Collections } from '../Collections';
@@ -60,6 +61,14 @@ function Routes(props) {
     return (
       <Container maxWidth="lg">
         <Search elasticsearchEndpoint={endpoints.elasticsearchEndpoint} title={title} />
+      </Container>
+    );
+  }
+
+  if (urlPath.startsWith('/dev-search')) {
+    return (
+      <Container maxWidth="lg">
+        <DevSearch elasticsearchEndpoint={endpoints.elasticsearchEndpoint} />
       </Container>
     );
   }
