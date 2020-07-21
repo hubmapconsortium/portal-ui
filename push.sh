@@ -14,15 +14,6 @@ git checkout -b "$BRANCH"
 git add .
 git commit -m 'Version bump'
 
-git submodule foreach '
-  echo "was:" `git rev-parse HEAD`
-  git checkout master
-  git pull
-  echo "now:" `git rev-parse HEAD`
-'
-git add .
-git commit -m 'Update submodules'
-
 if ls CHANGELOG-*.md; then
   (
     echo '##' `cat VERSION` - `date +"%F"`
@@ -50,6 +41,18 @@ docker push $LATEST_IMAGE_NAME
 
 git tag $VERSION
 git push origin --tags
+
+# We want to keep submodules up to date,
+# but safer to do it after making an image than before.
+git submodule foreach '
+  echo "was:" `git rev-parse HEAD`
+  git checkout master
+  git pull
+  echo "now:" `git rev-parse HEAD`
+'
+git add .
+git commit -m 'Update submodules'
+
 git push --set-upstream origin $BRANCH
 
 echo "Open a new PR on github with $BRANCH."
