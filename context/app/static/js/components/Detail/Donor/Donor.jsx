@@ -1,5 +1,5 @@
 import React from 'react';
-import ProvTabs from '../ProvTabs';
+import ProvSection from '../ProvSection';
 import Summary from '../Summary';
 import Attribution from '../Attribution';
 import Protocol from '../Protocol';
@@ -47,7 +47,7 @@ function DonorDetail(props) {
           created_by_user_displayname={created_by_user_displayname}
           created_by_user_email={created_by_user_email}
         />
-        <ProvTabs uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
+        <ProvSection uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
         {shouldDisplaySection.protocols && (
           <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
         )}
