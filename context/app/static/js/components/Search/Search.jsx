@@ -1,13 +1,13 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import { readCookie } from 'helpers/functions';
+import LookupEntity from 'helpers/LookupEntity';
 import SearchWrapper from './SearchWrapper';
-import { readCookie } from '../../helpers/functions';
 import './Search.scss';
 import { donorConfig, sampleConfig, datasetConfig, lastModifiedSort } from './config';
 // eslint-disable-next-line import/named
 import { filter } from './utils';
 import AncestorNote from './AncestorNote';
-import LookupEntity from '../../helpers/LookupEntity';
 
 const hiddenFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
 
