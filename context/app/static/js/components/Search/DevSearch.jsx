@@ -6,7 +6,7 @@ import { readCookie } from '../../helpers/functions';
 import './Search.scss';
 // eslint-disable-next-line import/named
 import { field, filter, checkboxFilter } from './utils';
-import { lastModifiedSort } from './config';
+import { lastModifiedSort, sizeSort } from './config';
 
 const nexus_token = readCookie('nexus_token');
 const httpHeaders = nexus_token
@@ -29,16 +29,18 @@ const searchProps = {
     field('entity_type', 'type'),
     field('display_doi', 'ID'),
     field('mapped_last_modified_timestamp', 'Last Modified'),
+    field('mapper_metadata.size', 'Doc Size'),
   ],
   // Default hitsPerPage is 10:
   hitsPerPage: 20,
   // Sidebar facet configuration:
   filters: [
     filter('entity_type', 'Entity Type'),
+    filter('mapper_metadata.version', 'Mapper Version'),
     checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata')),
     checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata'))),
   ],
-  sortOptions: lastModifiedSort,
+  sortOptions: lastModifiedSort.concat(sizeSort),
   queryFields: ['everything'],
   isLoggedIn: Boolean(nexus_token),
 };

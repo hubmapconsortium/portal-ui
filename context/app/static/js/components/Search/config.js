@@ -80,3 +80,18 @@ export const lastModifiedSort = [
     defaultOption: false,
   },
 ];
+
+export const sizeSort = [
+  {
+    label: 'Largest',
+    field: 'mapper_metadata.size',
+    order: 'desc',
+    defaultOption: false,
+  },
+  {
+    label: 'Smallest',
+    field: 'mapper_metadata.size',
+    order: 'asc',
+    defaultOption: false,
+  },
+];
