@@ -11,7 +11,16 @@ const urlPath = window.location.pathname;
 
 const isRoute = (route) => urlPath.startsWith(route);
 
-const availableRoutes = ['/browse', '/search', '/showcase', '/collections', '/docs', '/VERSION', '/client-side-error'];
+const availableRoutes = [
+  '/browse',
+  '/search',
+  '/dev-search',
+  '/showcase',
+  '/collections',
+  '/docs',
+  '/VERSION',
+  '/client-side-error',
+];
 
 if (urlPath === '/' || availableRoutes.some(isRoute)) {
   ReactDOM.render(

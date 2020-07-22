@@ -1,0 +1,1 @@
+- Remove unused methods and corresponding tests for the python API client; combine copy-and-paste methods for GET and POST.

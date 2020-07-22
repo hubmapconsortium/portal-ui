@@ -211,9 +211,21 @@ const rangeFilterPropTypes = PropTypes.exact({
   }),
 });
 
+const checkboxFilterPropTypes = PropTypes.exact({
+  type: PropTypes.oneOf(['CheckboxFilter']).isRequired,
+  props: PropTypes.exact({
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    filter: PropTypes.object.isRequired,
+  }),
+});
+
 SearchWrapper.propTypes = {
   apiUrl: PropTypes.string.isRequired,
-  filters: PropTypes.arrayOf(PropTypes.oneOfType([refinementListPropTypes, rangeFilterPropTypes])).isRequired,
+  filters: PropTypes.arrayOf(
+    PropTypes.oneOfType([refinementListPropTypes, rangeFilterPropTypes, checkboxFilterPropTypes]),
+  ).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
   resultFields: PropTypes.arrayOf(

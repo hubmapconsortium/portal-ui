@@ -1,4 +1,5 @@
 import React, { useContext, useMemo } from 'react';
+import PropTypes from 'prop-types';
 
 import useEntityData from 'hooks/useEntityData';
 import EntityTile from 'components/entity-tile/EntityTile';
@@ -6,7 +7,7 @@ import DetailContext from '../context';
 import { DownIcon } from './style';
 
 function ProvTableTile(props) {
-  const { uuid, entity_type, id, isCurrentEntity, isNotSibling } = props;
+  const { uuid, entity_type, id, isCurrentEntity, isSampleSibling, isFirstTile } = props;
   const { elasticsearchEndpoint } = useContext(DetailContext);
 
   // mapped fields are not included in ancestor object
@@ -30,7 +31,7 @@ function ProvTableTile(props) {
 
   return (
     <>
-      {entity_type === 'Sample' && isNotSibling && <DownIcon />}
+      {!isFirstTile && !isSampleSibling && entity_type !== 'Donor' && <DownIcon />}
       {entityData && (
         <EntityTile
           uuid={uuid}
@@ -44,5 +45,13 @@ function ProvTableTile(props) {
     </>
   );
 }
+
+ProvTableTile.propTypes = {
+  uuid: PropTypes.string.isRequired,
+  entity_type: PropTypes.string.isRequired,
+  isCurrentEntity: PropTypes.bool.isRequired,
+  isSampleSibling: PropTypes.bool.isRequired,
+  isFirstTile: PropTypes.bool.isRequired,
+};
 
 export default ProvTableTile;

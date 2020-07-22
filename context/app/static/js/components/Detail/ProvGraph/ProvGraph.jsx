@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import hubmapProvVis from '@hubmap/prov-vis';
+import { renderProvVis } from '../../ProvVis';
 import { StyledTypography, StyledLink, FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
@@ -8,7 +8,7 @@ import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 function ProvGraph(props) {
   const { provData } = props;
   const runRenderProvVis = () =>
-    hubmapProvVis.renderProvVis('prov-vis-react', provData, {
+    renderProvVis('prov-vis-react', provData, {
       getNameForActivity: (id, prov) => {
         const activity = prov.activity[id];
         return `${activity['prov:type']} - ${activity['hubmap:displayDOI']}`;

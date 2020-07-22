@@ -1,0 +1,1 @@
+- Add a generic image viewing vitessce configuration.

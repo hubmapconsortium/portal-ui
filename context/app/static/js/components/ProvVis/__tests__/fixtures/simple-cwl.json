@@ -1,0 +1,64 @@
+[
+  {
+    "name": "process",
+    "inputs": [
+      {
+        "name": "input",
+        "source": [
+          {
+            "name": "input",
+            "for_file": "input"
+          }
+        ],
+        "run_data": {
+          "file": [
+            {
+              "@id": "input"
+            }
+          ]
+        },
+        "meta": {
+          "global": true,
+          "in_path": true,
+          "type": "data file"
+        },
+        "prov": {
+          "prov:label": "Input",
+          "http://example.com#note": "Begins here..."
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "name": "output",
+        "target": [],
+        "run_data": {
+          "file": [
+            {
+              "@id": "output"
+            }
+          ]
+        },
+        "meta": {
+          "global": true,
+          "in_path": true
+        },
+        "prov": {
+          "prov:label": "Output",
+          "http://example.com#note": "... and ends here."
+        }
+      }
+    ],
+    "prov": {
+      "prov:label": "Process",
+      "prov:delegate": {
+        "http://example.com#DisplayName": "Jane Austen",
+        "prov:type": "prov:Person"
+      },
+      "prov:responsible": {
+        "http://example.com#DisplayName": "Example.com, incorporated",
+        "prov:type": "prov:Organization"
+      }
+    }
+  }
+]

@@ -64,6 +64,13 @@ pytest
 end pytest
 
 
+start npm-test
+cd context
+node_modules/jest/bin/jest.js test
+cd -
+end npm-test
+
+
 start docker
 ./docker.sh 5001  # Needs to match port in cypress.json.
 server_up 5001  # Without this, Cypress gets an undefined content-type and immediately fails.
