@@ -30,8 +30,15 @@
     "entity": { "$ref": "#/definitions/string_to_string_to_string" },
     "activity": { "$ref": "#/definitions/string_to_string_to_string" },
     "wasGeneratedBy": { "$ref": "#/definitions/string_to_string_to_string" },
+    "wasStartedBy": { "$ref": "#/definitions/string_to_string_to_string" },
+    "wasAssociatedWith": { "$ref": "#/definitions/string_to_string_to_string" },
+    "mentionOf": { "$ref": "#/definitions/string_to_string_to_string" },
+    "hadMember": { "$ref": "#/definitions/string_to_string_to_string" },
+    "wasEndedBy": { "$ref": "#/definitions/string_to_string_to_string" },
+    "specializationOf": { "$ref": "#/definitions/string_to_string_to_string" },
     "used": { "$ref": "#/definitions/string_to_string_to_string" },
     "agent": { "$ref": "#/definitions/string_to_string_to_string" },
+    "bundle": { "$ref": "#/definitions/string_to_string_to_string" },
     "actedOnBehalfOf": { "$ref": "#/definitions/string_to_string_to_string" }
   }
 }

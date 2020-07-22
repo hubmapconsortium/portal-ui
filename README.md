@@ -76,10 +76,10 @@ Low-level unit tests are in python (`pytest -vv`),
 while end-to-end tests use [Cypress](https://docs.cypress.io/guides/overview/why-cypress.html) (`npm run cypress:open`).
 
 ## Linting
-In the `context/` directory, the following command can be run to allow eslint to fix problems:
-
-```sh
-npm run lint-fix
+In the `context/` directory, the following commands can find and fix eslint problems:
+```
+npm run lint
+npm run lint:fix
 ```
 
 ## Buid, tag, and deploy

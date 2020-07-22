@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import { Home } from '../Home';
 import Search from '../Search/Search';
+import DevSearch from '../Search/DevSearch';
 import { Donor, Sample, Dataset, Collection } from '../Detail';
-import Showcase from '../Showcase';
+import Preview from '../Preview';
 import { Collections } from '../Collections';
 import Markdown from '../Markdown';
 
@@ -64,8 +65,16 @@ function Routes(props) {
     );
   }
 
-  if (urlPath.startsWith('/showcase')) {
-    return <Showcase title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />;
+  if (urlPath.startsWith('/dev-search')) {
+    return (
+      <Container maxWidth="lg">
+        <DevSearch elasticsearchEndpoint={endpoints.elasticsearchEndpoint} />
+      </Container>
+    );
+  }
+
+  if (urlPath.startsWith('/preview')) {
+    return <Preview title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />;
   }
 
   if (urlPath === '/collections') {

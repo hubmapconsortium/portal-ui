@@ -1,0 +1,1 @@
+- Run JS tests as part of Travis.

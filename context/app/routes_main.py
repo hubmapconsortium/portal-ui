@@ -136,25 +136,40 @@ def search():
     )
 
 
-@blueprint.route('/showcase/<name>')
-def showcase_view(name):
-    filename = dirname(__file__) + '/showcase/' + name + '.md'
+@blueprint.route('/dev-search')
+def dev_search():
+    title = 'Dev Search'
+    core_props = {
+        'endpoints': _get_endpoints(),
+        'title': title
+    }
+    return render_template(
+        'pages/base_react.html',
+        title=title,
+        types=types,
+        flask_data=core_props
+    )
+
+
+@blueprint.route('/preview/<name>')
+def preview_view(name):
+    filename = dirname(__file__) + '/preview/' + name + '.md'
     metadata_content = frontmatter.load(filename)
-    showcase_metadata = metadata_content.metadata
+    preview_metadata = metadata_content.metadata
     markdown = metadata_content.content
     core_props = {
-        'title': showcase_metadata['title'],
-        'vitessce_conf': showcase_metadata['vitessce_conf'],
+        'title': preview_metadata['title'],
+        'vitessce_conf': preview_metadata['vitessce_conf'],
         'markdown': markdown,
         'entity': {
-            'group_name': showcase_metadata['group_name'],
-            'created_by_user_displayname': showcase_metadata['created_by_user_displayname'],
-            'created_by_user_email': showcase_metadata['created_by_user_email'],
+            'group_name': preview_metadata['group_name'],
+            'created_by_user_displayname': preview_metadata['created_by_user_displayname'],
+            'created_by_user_email': preview_metadata['created_by_user_email'],
         },
     }
     return render_template(
         'pages/base_react.html',
-        title='Showcase',
+        title='Preview',
         flask_data=core_props
     )
 
