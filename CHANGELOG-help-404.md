@@ -1,1 +1,0 @@
-- In the narrow layout, the header linked to "/help", which is not valid. Help is still available from "/docs".

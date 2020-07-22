@@ -1,3 +1,17 @@
+## v0.0.42 - 2020-07-22
+
+- Display alert in provenance section when provenance data is unavailable.
+- Link to CCF docs.
+- Remove unused methods and corresponding tests for the python API client; combine copy-and-paste methods for GET and POST.
+- Add a search page focussed on the needs of developers.
+- Run eslint across all js/jsx before webpack.
+- In the narrow layout, the header linked to "/help", which is not valid. Help is still available from "/docs".
+- Run JS tests as part of Travis.
+- Display down chevron in provenance table for datasets.
+- Change "Showcase" to "Preview"
+- Add a generic image viewing vitessce configuration.
+
+
 ## v0.0.41 - 2020-07-20
 
 - Update homepage data use guidelines.
