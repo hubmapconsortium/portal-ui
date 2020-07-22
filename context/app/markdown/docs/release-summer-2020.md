@@ -16,7 +16,7 @@ The objectives of our inaugural portal release are to:
 - Sequencing, Microscopy & Mass Spectrometry imaging data
 - Spatial common coordinate framework data for select Kidney and Spleen datasets
 - Faceted search for select metadata fields
-- Cell naming future functionality showcase
+- Cell naming future functionality preview
 
 ### Analysis & Infrastructure
 - Hybrid cloud storage and computing resource access

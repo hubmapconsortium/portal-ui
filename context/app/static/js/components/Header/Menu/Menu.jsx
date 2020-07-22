@@ -7,14 +7,14 @@ import MenuList from '@material-ui/core/MenuList';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 
-import ShowcaseLinks from '../ShowcaseLinks';
+import PreviewLinks from '../PreviewLinks';
 import DocumentationLinks from '../DocumentationLinks';
 import { WidePopper, WidePaper, DropdownMenuItem } from './style';
 import DropdownLink from '../DropdownLink';
 
 function Menu(props) {
   const [open, toggle] = useReducer((v) => !v, false);
-  const [openShowcase, toggleShowcase] = useReducer((v) => !v, false);
+  const [openPreview, togglePreview] = useReducer((v) => !v, false);
   const [openDocumentation, toggleDocumentation] = useReducer((v) => !v, false);
   const { anchorRef } = props;
 
@@ -30,18 +30,17 @@ function Menu(props) {
               <DropdownLink key={type} href={`/search?entity_type[0]=${type}`}>{`${type}s`}</DropdownLink>
             ))}
             <DropdownLink href="/collections">Collections</DropdownLink>
-            <DropdownMenuItem onClick={toggleShowcase}>
-              Showcases
-              {openShowcase ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+            <DropdownMenuItem onClick={togglePreview}>
+              Previews
+              {openPreview ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </DropdownMenuItem>
-            {openShowcase && <ShowcaseLinks isIndented />}
+            {openPreview && <PreviewLinks isIndented />}
             <DropdownMenuItem onClick={toggleDocumentation}>
               Documentation
               {openDocumentation ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </DropdownMenuItem>
             {openDocumentation && <DocumentationLinks isIndented />}
             <DropdownLink href="/ccf-eui">CCF</DropdownLink>
-            <DropdownLink href="/help">Help</DropdownLink>
           </MenuList>
         </WidePaper>
       </WidePopper>
