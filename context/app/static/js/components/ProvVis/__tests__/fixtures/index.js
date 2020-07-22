@@ -2,13 +2,13 @@ import realProv from './real-prov.json';
 import realCwl from './real-cwl.json';
 import complexProv from './complex-prov.json';
 import complexCwl from './complex-cwl.json';
-import simpleProv from './simple-prov';
+import simpleProv from './simple-prov.json';
 import simpleCwl from './simple-cwl.json';
 
 import cwlProv from './primary.cwlprov.json';
 
 // This file just builds test fixtures: it has no tests of its own.
-test.skip('skip', () => { });
+test.skip('skip', () => {});
 
 const PROV_NS = 'prov:';
 

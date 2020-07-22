@@ -1,4 +1,3 @@
-// import expect from 'expect';
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 
@@ -21,10 +20,9 @@ describe('ProvVis', () => {
   });
 
   it('renders React component', () => {
-    render(<ProvVis prov={simple.prov} />, node,
-      () => {
-        // TODO: Just getting empty div.
-        // expect(node.innerHTML).toContain('svg')
-      });
+    render(<ProvVis prov={simple.prov} />, node, () => {
+      // TODO: Just getting empty div.
+      // expect(node.innerHTML).toContain('svg')
+    });
   });
 });
