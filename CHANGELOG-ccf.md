@@ -1,0 +1,1 @@
+- CCF no longer opens in new tab.
