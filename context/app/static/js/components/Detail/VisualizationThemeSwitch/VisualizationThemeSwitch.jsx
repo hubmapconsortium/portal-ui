@@ -10,10 +10,10 @@ function VisualizationThemeSwitch(props) {
   const { theme, onChange } = props;
   return (
     <ToggleButtonGroup value={theme} exclusive onChange={onChange} size="small">
-      <StyledToggleButton disableRipple value="light">
+      <StyledToggleButton disableRipple value="light" aria-label="Visualization light theme button">
         <WbSunnyIcon color={theme === 'light' ? 'primary' : 'secondary'} />
       </StyledToggleButton>
-      <StyledToggleButton disableRipple value="dark">
+      <StyledToggleButton disableRipple value="dark" aria-label="Visualization dark theme button">
         <Brightness2Icon color={theme !== 'light' ? 'primary' : 'secondary'} />
       </StyledToggleButton>
     </ToggleButtonGroup>
