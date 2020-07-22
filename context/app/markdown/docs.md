@@ -13,6 +13,7 @@
 - [Metadata](/docs/metadata)
 - [Assays](/docs/assays)
 - [Pipelines](/docs/pipelines)
+- [CCF](https://hubmapconsortium.github.io/ccf/)
 
 ---
 - [APIs](/docs/apis)
