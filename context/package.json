@@ -8,6 +8,7 @@
     "@material-ui/lab": "^4.0.0-alpha.45",
     "ajv": "^6.12.3",
     "d3": "^5.16.0",
+    "date-fns": "^2.14.0",
     "fromentries": "^1.2.0",
     "lodash": "^4.17.19",
     "pretty-bytes": "^5.3.0",

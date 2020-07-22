@@ -1,0 +1,1 @@
+- Add bottom section to entity tiles.
