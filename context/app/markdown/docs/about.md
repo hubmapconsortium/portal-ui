@@ -1,4 +1,3 @@
-
 # About
 
 ## HuBMAP Consortium
