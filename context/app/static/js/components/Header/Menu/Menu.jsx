@@ -43,7 +43,6 @@ function Menu(props) {
             <DropdownLink href="/ccf-eui" target="_blank" rel="noopener noreferrer">
               CCF
             </DropdownLink>
-            <DropdownLink href="/help">Help</DropdownLink>
           </MenuList>
         </WidePaper>
       </WidePopper>
