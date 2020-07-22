@@ -1,0 +1,1 @@
+- Fix early exit in push.sh.
