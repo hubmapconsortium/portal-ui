@@ -1,6 +1,7 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import expect from 'expect';
 
-import ProvData, { makeCwlInput, makeCwlOutput, expand } from '../ProvData';
+import ProvData, { makeCwlInput, makeCwlOutput } from '../ProvData';
 
 import * as fixtures from './fixtures';
 
