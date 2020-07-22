@@ -15,7 +15,7 @@ const availableRoutes = [
   '/browse',
   '/search',
   '/dev-search',
-  '/showcase',
+  '/preview',
   '/collections',
   '/docs',
   '/VERSION',
