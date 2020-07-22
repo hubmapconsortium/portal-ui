@@ -20,6 +20,9 @@ fi
 grep 'TODO' "$APP_CONF" && die "Replace 'TODO' in $APP_CONF."
 
 FLASK_ENV=development FLASK_APP="$CONTEXT/app/main.py" python -m flask run &
-cd $CONTEXT && npm install && npm run dev-server &
+cd $CONTEXT
+npm install
+npm run lint || die 'Try "npm run lint:fix"'
+npm run dev-server &
 
 wait

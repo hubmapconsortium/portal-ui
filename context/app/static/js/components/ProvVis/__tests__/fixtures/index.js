@@ -8,7 +8,7 @@ import simpleCwl from './simple-cwl.json';
 import cwlProv from './primary.cwlprov.json';
 
 // This file just builds test fixtures: it has no tests of its own.
-test.skip('skip', () => { });
+test.skip('skip', () => {});
 
 const PROV_NS = 'prov:';
 
