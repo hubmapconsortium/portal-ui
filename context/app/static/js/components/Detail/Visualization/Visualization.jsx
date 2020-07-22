@@ -81,7 +81,7 @@ function Visualization(props) {
               <Popper open={open} anchorEl={anchorRef.current} placement="top-end" style={{ zIndex: 50 }}>
                 <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                   <ClickAwayListener onClickAway={toggle}>
-                    <MenuList id="showcase-options">
+                    <MenuList id="preview-options">
                       {vitData.map(({ name }, i) => (
                         <MenuItem onClick={() => setVitessceSelection(i)} key={name}>
                           {name}

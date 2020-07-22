@@ -7,7 +7,7 @@ import Link from '@material-ui/core/Link';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { StyledAppBar, HubmapLogo, Spacer, HeaderButton } from './style';
 import Menu from '../Menu';
-import ShowcaseLinks from '../ShowcaseLinks';
+import PreviewLinks from '../PreviewLinks';
 import Dropdown from '../Dropdown';
 import LoginButton from '../LoginButton';
 import DocumentationLinks from '../DocumentationLinks';
@@ -38,8 +38,8 @@ function Header() {
                 </HeaderButton>
               </div>
               <Spacer />
-              <Dropdown title="Showcases" menuListId="showcase-options">
-                <ShowcaseLinks />
+              <Dropdown title="Previews" menuListId="preview-options">
+                <PreviewLinks />
               </Dropdown>
               <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
                 <HeaderButton component={Link} href="/ccf-eui" target="_blank" rel="noopener noreferrer">

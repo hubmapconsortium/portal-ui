@@ -5,7 +5,7 @@ import { Home } from '../Home';
 import Search from '../Search/Search';
 import DevSearch from '../Search/DevSearch';
 import { Donor, Sample, Dataset, Collection } from '../Detail';
-import Showcase from '../Showcase';
+import Preview from '../Preview';
 import { Collections } from '../Collections';
 import Markdown from '../Markdown';
 
@@ -73,8 +73,8 @@ function Routes(props) {
     );
   }
 
-  if (urlPath.startsWith('/showcase')) {
-    return <Showcase title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />;
+  if (urlPath.startsWith('/preview')) {
+    return <Preview title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />;
   }
 
   if (urlPath === '/collections') {

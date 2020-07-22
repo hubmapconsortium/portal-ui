@@ -9,7 +9,7 @@ import SectionContainer from '../Detail/SectionContainer';
 import { StyledPaper } from '../Detail/Summary/style';
 import Attribution from '../Detail/Attribution';
 
-function Showcase(props) {
+function Preview(props) {
   const { vitData, title, assayMetadata, markdown } = props;
 
   const { group_name, created_by_user_displayname, created_by_user_email } = assayMetadata;
@@ -18,7 +18,7 @@ function Showcase(props) {
     <Container maxWidth="lg">
       <SectionContainer id="summary">
         <Typography variant="h4" component="h1" color="primary">
-          Showcase
+          Preview
         </Typography>
         <SectionHeader variant="h1" component="h2">
           {title}
@@ -40,4 +40,4 @@ function Showcase(props) {
   );
 }
 
-export default Showcase;
+export default Preview;
