@@ -89,7 +89,6 @@ def details(type, uuid):
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
-    print(entity["data_types"])
     actual_type = entity['entity_type'].lower()
     if type != actual_type:
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))

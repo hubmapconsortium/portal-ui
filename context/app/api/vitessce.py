@@ -378,7 +378,6 @@ class Vitessce:
         # The images are generally smaller but have a lot of padding.
         # IMS images are named under this convention.  Some of the non IMS images contain the substring "IMS."
         if(any(['IMS_PosMode' in file['rel_path'] or 'IMS_NegMode' in file['rel_path'] for file in self.entity['files']])):
-            print('here')
             conf["staticLayout"][-1]["props"]["view"]["zoom"] = -2
             conf["staticLayout"][-1]["props"]["view"]["target"] = [1000, 1000, 0]
         return conf
