@@ -374,9 +374,11 @@ class Vitessce:
         conf["staticLayout"][-1]["props"]["view"] = ASSAY_CONF_LOOKUP[self.assay_type][
             "view"
         ]
-        # IMS needs to be zoomed in a bit more, but we don't have a great of finding this assay type.
+        # IMS needs to be zoomed in a bit more,
+        # but we don't have a great of finding this assay type.
         # The images are generally smaller but have a lot of padding.
-        # IMS images are named under this convention.  Some of the non IMS images contain the substring "IMS."
+        # IMS images are named under this convention.
+        # Some of the non IMS images contain the substring "IMS."
         if(any(['IMS_PosMode' in file['rel_path'] or 'IMS_NegMode' in file['rel_path'] for file in self.entity['files']])):
             conf["staticLayout"][-1]["props"]["view"]["zoom"] = -2
             conf["staticLayout"][-1]["props"]["view"]["target"] = [1000, 1000, 0]
