@@ -1,0 +1,1 @@
+- Updated version of vitessce-data in view config URLs for Satija showcase
