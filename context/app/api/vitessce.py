@@ -234,8 +234,8 @@ class Vitessce:
         elif self.assay_type in IMAGE_ASSAYS:
             found_images = _get_matches(file_paths_found, files[0]["rel_path"])
             # Do not show IMS images that are in the "/separate/" folder.
-            no_ims_separate = _get_matches(found_images, r"^((?!/separate/).)*$")
-            layer = self._build_multi_file_image_layer_conf(no_ims_separate)
+            no_ims_separate_images = _get_matches(found_images, r"^((?!/separate/).)*$")
+            layer = self._build_multi_file_image_layer_conf(no_ims_separate_images)
             conf["layers"] = [layer]
             conf["name"] = self.uuid
             conf = self._replace_view(conf)
