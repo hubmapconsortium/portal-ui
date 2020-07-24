@@ -16,7 +16,7 @@ function ProvTableTile(props) {
   const types = entity_type === 'Donor' ? ['Sample', 'Dataset'] : ['Dataset'];
 
   const descendantCounts = useMemo(() => {
-    if (entityData && entity_type !== 'Dataset') {
+    if (entityData) {
       // use Map to preserve insertion order
       const counts = new Map();
       types.reduce((acc, type) => {
@@ -27,7 +27,7 @@ function ProvTableTile(props) {
     }
 
     return {};
-  }, [entity_type, types, entityData]);
+  }, [types, entityData]);
 
   return (
     <>
