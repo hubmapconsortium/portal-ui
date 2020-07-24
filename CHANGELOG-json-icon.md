@@ -1,1 +1,0 @@
-- Replace link to JSON on entity detail pages with icon.

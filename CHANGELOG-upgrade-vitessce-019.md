@@ -1,1 +1,0 @@
-- Upgrade Vitessce to 0.1.9.
