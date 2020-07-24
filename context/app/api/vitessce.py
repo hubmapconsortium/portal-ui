@@ -36,7 +36,7 @@ TILED_SPRM_IMAGING = {
         {"component": "cellSets", "x": 10, "y": 2, "w": 2, "h": 4},
         {
             "component": "genes",
-            "props": {"labelOverride": "antigens"},
+            "props": {"variablesLabelOverride": "antigens"},
             "x": 10,
             "y": 0,
             "w": 2,
@@ -44,7 +44,7 @@ TILED_SPRM_IMAGING = {
         },
         {
             "component": "heatmap",
-            "props": {"labelOverride": "antigens"},
+            "props": {"variablesLabelOverride": "antigens"},
             "x": 3,
             "y": 4,
             "w": 7,
