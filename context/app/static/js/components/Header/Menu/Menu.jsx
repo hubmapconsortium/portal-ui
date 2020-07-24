@@ -40,9 +40,7 @@ function Menu(props) {
               {openDocumentation ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </DropdownMenuItem>
             {openDocumentation && <DocumentationLinks isIndented />}
-            <DropdownLink href="/ccf-eui" target="_blank" rel="noopener noreferrer">
-              CCF
-            </DropdownLink>
+            <DropdownLink href="/ccf-eui">CCF</DropdownLink>
           </MenuList>
         </WidePaper>
       </WidePopper>

@@ -42,7 +42,7 @@ function Header() {
                 <PreviewLinks />
               </Dropdown>
               <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
-                <HeaderButton component={Link} href="/ccf-eui" target="_blank" rel="noopener noreferrer">
+                <HeaderButton component={Link} href="/ccf-eui">
                   CCF
                 </HeaderButton>
               </Tooltip>
