@@ -162,6 +162,7 @@ def _get_matches(files, regex):
         )
     )
 
+
 def _exclude_matches(files, regex):
     return list(
         set(file for file in files if not re.search(regex, file))
