@@ -162,6 +162,11 @@ def _get_matches(files, regex):
         )
     )
 
+def _exclude_matches(files, regex):
+    return list(
+        set(file for file in files if not re.search(regex, file))
+    )
+
 
 class Vitessce:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
@@ -249,7 +254,7 @@ class Vitessce:
         elif self.assay_type in IMAGE_ASSAYS:
             found_images = _get_matches(file_paths_found, files[0]["rel_path"])
             # Do not show IMS images that are in the "/separate/" folder.
-            no_ims_separate_images = _get_matches(found_images, r"^((?!/separate/).)*$")
+            no_ims_separate_images = _exclude_matches(found_images, r"/separate/")
             layer = self._build_multi_file_image_layer_conf(no_ims_separate_images)
             conf["layers"] = [layer]
             conf["name"] = self.uuid
