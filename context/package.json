@@ -23,7 +23,7 @@
     "typeface-inter": "^3.12.0",
     "vega": "^5.13.0",
     "vega-lite": "^4.13.1",
-    "vitessce": "^0.1.8",
+    "vitessce": "^0.1.10",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
