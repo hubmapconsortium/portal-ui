@@ -119,7 +119,7 @@ ASSAY_CONF_LOOKUP = {
     },
     IMAGE_PYRAMID: {
         "base_conf": IMAGING_ONLY,
-        # We can actually fetch height/width using a COG tiff library, but for now this will do.
+        # TODO: We can actually fetch height/width using a COG tiff library, but for now this will do.
         "view": {"zoom": -6.5, "target": [15000, 15000, 0]},
         "files_conf": [
             {
