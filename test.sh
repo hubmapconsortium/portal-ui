@@ -66,7 +66,7 @@ end pytest
 
 start npm-test
 cd context
-node_modules/jest/bin/jest.js test
+npm run test
 cd -
 end npm-test
 
