@@ -4,10 +4,10 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
 const VerticalDivider = styled(Divider)`
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)}px;
   height: 15px;
-  background-color: #444a65;
+  background-color: ${(props) => props.theme.palette.text.primary};
   align-self: center;
 `;
 

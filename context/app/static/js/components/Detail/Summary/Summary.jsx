@@ -2,13 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
-import { LightBlueLink } from 'shared-styles/Links';
-import { FlexContainer, FlexCenterAlign, FlexColumn, FlexBottomRight, FlexColumnRight, StyledPaper } from './style';
+import SummaryData from '../SummaryData';
+import { FlexColumnRight, StyledPaper, StyledDiv } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionItem from '../SectionItem';
-import SummaryItem from '../SummaryItem';
 import SectionContainer from '../SectionContainer';
-import StatusIcon from '../StatusIcon';
 
 function Summary(props) {
   const {
@@ -31,28 +29,12 @@ function Summary(props) {
       <Typography variant="subtitle1" component="h1" color="primary">
         {entity_type}
       </Typography>
-      <FlexContainer>
-        <FlexColumn>
-          <SectionHeader isSummary>{display_doi}</SectionHeader>
-          {entity_type !== 'Donor' && <FlexContainer>{children}</FlexContainer>}
-        </FlexColumn>
-        <FlexBottomRight>
-          {entity_type === 'Dataset' && status && status.length > 0 && (
-            <FlexCenterAlign>
-              <StatusIcon status={status} />
-              <SummaryItem>{status}</SummaryItem>
-            </FlexCenterAlign>
-          )}
-          <LightBlueLink
-            href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
-            variant="button"
-            target="_blank"
-            underline="none"
-          >
-            View JSON
-          </LightBlueLink>
-        </FlexBottomRight>
-      </FlexContainer>
+      <StyledDiv>
+        <SectionHeader isSummary>{display_doi}</SectionHeader>
+        <SummaryData entity_type={entity_type} uuid={uuid} status={status}>
+          {children}
+        </SummaryData>
+      </StyledDiv>
 
       <StyledPaper>
         <div>
