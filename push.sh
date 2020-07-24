@@ -51,7 +51,7 @@ git submodule foreach '
   echo "now:" `git rev-parse HEAD`
 '
 git add .
-git commit -m 'Update submodules'
+git commit -m 'Update submodules' || echo 'Nothing to commit; Continue to git push...'
 
 git push --set-upstream origin $BRANCH
 
