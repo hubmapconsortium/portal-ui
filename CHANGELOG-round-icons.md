@@ -1,0 +1,1 @@
+- Use the rounded variants of all icons.

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import DescriptionIcon from '@material-ui/icons/Description';
-import SearchIcon from '@material-ui/icons/Search';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import DescriptionIcon from '@material-ui/icons/DescriptionRounded';
+import SearchIcon from '@material-ui/icons/SearchRounded';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRightRounded';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDownRounded';
 import { CenterIcon } from 'shared-styles/icons';
 import WorkflowItem from '../WorkflowItem';
 import { Flex, StyledLink } from './style';

@@ -2,8 +2,8 @@ import React, { useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 

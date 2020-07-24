@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import InfoIcon from '@material-ui/icons/Info';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFileRounded';
+import InfoIcon from '@material-ui/icons/InfoRounded';
 
 const StyledDiv = styled.div`
   border-bottom: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
