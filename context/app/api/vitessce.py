@@ -34,8 +34,22 @@ TILED_SPRM_IMAGING = {
         {"component": "layerController", "x": 0, "y": 0, "w": 3, "h": 4},
         {"component": "description", "x": 0, "y": 4, "w": 3, "h": 2},
         {"component": "cellSets", "x": 10, "y": 2, "w": 2, "h": 4},
-        {"component": "genes", "x": 10, "y": 0, "w": 2, "h": 2},
-        {"component": "heatmap", "x": 3, "y": 4, "w": 7, "h": 2},
+        {
+            "component": "genes",
+            "props": {"labelOverride": "antigens"},
+            "x": 10,
+            "y": 0,
+            "w": 2,
+            "h": 2,
+        },
+        {
+            "component": "heatmap",
+            "props": {"labelOverride": "antigens"},
+            "x": 3,
+            "y": 4,
+            "w": 7,
+            "h": 2
+        },
         {
             "component": "spatial",
             "props": {"view": {}},
@@ -119,7 +133,8 @@ ASSAY_CONF_LOOKUP = {
     },
     IMAGE_PYRAMID: {
         "base_conf": IMAGING_ONLY,
-        # TODO: We can actually fetch height/width using a COG tiff library, but for now this will do.
+        # TODO: We can actually fetch height/width using a COG tiff library,
+        # but for now this will do.
         "view": {"zoom": -6.5, "target": [15000, 15000, 0]},
         "files_conf": [
             {
