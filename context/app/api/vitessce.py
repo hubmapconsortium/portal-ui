@@ -198,10 +198,10 @@ class Vitessce:
         """
         if self.assay_type not in ASSAY_CONF_LOOKUP:
             return {}
-        files = ASSAY_CONF_LOOKUP[self.assay_type]["files_conf"]
+        files = copy.deepcopy(ASSAY_CONF_LOOKUP[self.assay_type]["files_conf"])
         file_paths_expected = [file["rel_path"] for file in files]
         file_paths_found = [file["rel_path"] for file in self.entity["files"]]
-        conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
+        conf = copy.deepcopy(ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"])
         # Codex and other tiled assays needs to be built up based on their input tiles.
         if self.assay_type not in IMAGE_ASSAYS:
             # We need to check that the files we expect actually exist.
@@ -223,7 +223,7 @@ class Vitessce:
             found_tiles = _get_matches(file_paths_found, TILE_REGEX)
             confs = []
             for tile in sorted(found_tiles):
-                new_conf = copy.deepcopy(conf)
+                new_conf = conf
                 layers = [self._build_layer_conf(file, tile) for file in files]
                 new_conf["layers"] = layers
                 new_conf["name"] = tile
@@ -371,9 +371,9 @@ class Vitessce:
 
         if self.assay_type not in IMAGE_ASSAYS:
             return conf
-        conf["staticLayout"][-1]["props"]["view"] = ASSAY_CONF_LOOKUP[self.assay_type][
+        conf["staticLayout"][-1]["props"]["view"] = copy.deepcopy(ASSAY_CONF_LOOKUP[self.assay_type][
             "view"
-        ]
+        ])
 
         # IMS needs to be zoomed in a bit more,
         # but we don't have a great of finding this assay type:
