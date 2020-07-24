@@ -1,3 +1,11 @@
+## v0.0.43 - 2020-07-23
+
+- Add bottom section to entity tiles.
+- Fix and simplify entity tile color logic.
+- Updated version of vitessce-data in view config URLs for Satija showcase
+- Move entity tile into components directory and split into subcomponents. 
+
+
 ## v0.0.42 - 2020-07-22
 
 - Display alert in provenance section when provenance data is unavailable.
