@@ -1,6 +1,6 @@
 FROM node:12.16.3-alpine as builder
 WORKDIR /work
-RUN apk add --no-cache python
+RUN apk add --no-cache python git
 
 # COPY only what is needed so layers can be cached.
 COPY package.json .
