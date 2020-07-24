@@ -67,10 +67,10 @@ In addition, all HuBMAP IMC data will have an associated “acquisition_metadata
 
 |**Processed Data Loaded** |  **Descriptor (the name should contain the following)**| **Example** | 
 |--|--|--|
-|  QA/QC Pass/Fail Channel Report | channelnames_report.csv| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/|
-|  CSV file containing all single cell measurements| 20191128_hubMAP__masterfile| /U/University of Florida TMC/256795b18af5b1d318e2326266053f7e/SingleCellData/|  
-|Classified cell types projected onto images for each measured region of each tissue type | ClusterDisplay_*| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/Mapping/| 
-|Plots of data: tSNE, heatmap of marker expression per cluster and density plots of marker intensity | 20191128_HubMAP__PhenoGraph_tsne_M.png 20191128_HubMAP__heatmap.pdf 20191128_HubMAP__histogram_sample.png| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/processed/|
+|  QA/QC Pass/Fail Channel Report | `channelnames_report.csv`| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/|
+|  CSV file containing all single cell measurements| `20191128_hubMAP__masterfile`| /U/University of Florida TMC/256795b18af5b1d318e2326266053f7e/SingleCellData/|  
+|Classified cell types projected onto images for each measured region of each tissue type | `ClusterDisplay_*`| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/Mapping/| 
+|Plots of data: tSNE, heatmap of marker expression per cluster and density plots of marker intensity | `20191128_HubMAP__PhenoGraph_tsne_M.png 20191128_HubMAP__heatmap.pdf 20191128_HubMAP__histogram_sample.png`| /University of Florida TMC/256795b18af5b1d318e2326266053f7e/processed/|
 
 ## HuBMAP QA/QC of raw (state0) data files
 1.  Raw data (level 0) QC
