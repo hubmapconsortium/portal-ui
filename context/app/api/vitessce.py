@@ -223,7 +223,7 @@ class Vitessce:
             found_tiles = _get_matches(file_paths_found, TILE_REGEX)
             confs = []
             for tile in sorted(found_tiles):
-                new_conf = conf
+                new_conf = copy.deepcopy(conf)
                 layers = [self._build_layer_conf(file, tile) for file in files]
                 new_conf["layers"] = layers
                 new_conf["name"] = tile
