@@ -1,6 +1,4 @@
-import expect from 'expect';
-
-import ProvData, { makeCwlInput, makeCwlOutput, expand } from '../ProvData';
+import ProvData, { makeCwlInput, makeCwlOutput } from '../ProvData';
 
 import * as fixtures from './fixtures';
 
@@ -36,7 +34,7 @@ describe('ProvData methods', () => {
   const prov = new ProvData(fixtures.complex.prov);
 
   it('getParentEntityNames', () => {
-    expect(prov._getParentEntityNames('https://hubmapconsortium.org/act-4')).toEqual([
+    expect(prov.getParentEntityNames('https://hubmapconsortium.org/act-4')).toEqual([
       'https://hubmapconsortium.org/ent-1',
       'https://hubmapconsortium.org/ent-3',
       'https://hubmapconsortium.org/ent-4',
@@ -44,20 +42,20 @@ describe('ProvData methods', () => {
   });
 
   it('getChildEntityNames', () => {
-    expect(prov._getChildEntityNames('https://hubmapconsortium.org/act-2')).toEqual([
+    expect(prov.getChildEntityNames('https://hubmapconsortium.org/act-2')).toEqual([
       'https://hubmapconsortium.org/ent-4',
       'https://hubmapconsortium.org/ent-7',
     ]);
   });
 
   it('getParentActivityNames', () => {
-    expect(prov._getParentActivityNames('https://hubmapconsortium.org/ent-6')).toEqual([
+    expect(prov.getParentActivityNames('https://hubmapconsortium.org/ent-6')).toEqual([
       'https://hubmapconsortium.org/act-4',
     ]);
   });
 
   it('getChildActivityNames', () => {
-    expect(prov._getChildActivityNames('https://hubmapconsortium.org/ent-1')).toEqual([
+    expect(prov.getChildActivityNames('https://hubmapconsortium.org/ent-1')).toEqual([
       'https://hubmapconsortium.org/act-1',
       'https://hubmapconsortium.org/act-2',
       'https://hubmapconsortium.org/act-4',
@@ -65,26 +63,26 @@ describe('ProvData methods', () => {
   });
 });
 
-describe('PROV expansion', () => {
-  it('should expand prefixes', () => {
-    expect(
-      expand(
-        {
-          'do:C': { 're:D': 'mi:E' },
-          're:D': { 're:D': 'not-expanded' },
-        },
-        {
-          do: 'deer#',
-          re: 'drop-of-golden-sun#',
-          mi: 'name-i-call-myself#',
-        },
-      ),
-    ).toEqual({
-      'deer#C': { 'drop-of-golden-sun#D': 'name-i-call-myself#E' },
-      'drop-of-golden-sun#D': { 'drop-of-golden-sun#D': 'not-expanded' },
-    });
-  });
-});
+// describe('PROV expansion', () => {
+//   it('should expand prefixes', () => {
+//     expect(
+//       expand(
+//         {
+//           'do:C': { 're:D': 'mi:E' },
+//           're:D': { 're:D': 'not-expanded' },
+//         },
+//         {
+//           do: 'deer#',
+//           re: 'drop-of-golden-sun#',
+//           mi: 'name-i-call-myself#',
+//         },
+//       ),
+//     ).toEqual({
+//       'deer#C': { 'drop-of-golden-sun#D': 'name-i-call-myself#E' },
+//       'drop-of-golden-sun#D': { 'drop-of-golden-sun#D': 'not-expanded' },
+//     });
+//   });
+// });
 
 describe('CWL utils', () => {
   it('makeCwlInput reference', () => {

@@ -1,5 +1,3 @@
-import { PROV_NS } from '../../src/ProvData';
-
 import realProv from './real-prov.json';
 import realCwl from './real-cwl.json';
 import complexProv from './complex-prov';
@@ -7,7 +5,9 @@ import complexCwl from './complex-cwl.json';
 import simpleProv from './simple-prov';
 import simpleCwl from './simple-cwl.json';
 
-import cwlProv from './primary.cwlprov.json'
+import cwlProv from './primary.cwlprov.json';
+
+const PROV_NS = 'prov:';
 
 export const simple = {
   getNameForActivity: (id) => id.split('#').pop(),
@@ -39,8 +39,8 @@ export const real = {
 };
 
 export const cwl = {
-  prov: cwlProv
-}
+  prov: cwlProv,
+};
 
 // The React demo references the default export.
 export default cwl;
