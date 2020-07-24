@@ -16,7 +16,6 @@ function SampleDetail(props) {
   const {
     uuid,
     protocol_url,
-    portal_uploaded_protocol_files,
     mapped_specimen_type,
     origin_sample,
     group_name,
@@ -33,7 +32,7 @@ function SampleDetail(props) {
   const { mapped_organ } = origin_sample;
 
   const shouldDisplaySection = {
-    protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
+    protocols: Boolean(protocol_url),
     tissue: true,
     metadataTable: 'metadata' in assayMetadata,
   };
@@ -61,9 +60,7 @@ function SampleDetail(props) {
           created_by_user_email={created_by_user_email}
         />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
-        {shouldDisplaySection.protocols && (
-          <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
-        )}
+        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata} display_doi={display_doi} />}
       </DetailLayout>
     </DetailContext.Provider>

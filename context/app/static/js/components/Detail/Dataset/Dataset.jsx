@@ -50,7 +50,6 @@ function DatasetDetail(props) {
   const { assayMetadata, vitData, assetsEndpoint, elasticsearchEndpoint, entityEndpoint } = props;
   const {
     protocol_url,
-    portal_uploaded_protocol_files,
     metadata,
     files,
     uuid,
@@ -70,7 +69,7 @@ function DatasetDetail(props) {
 
   const shouldDisplaySection = {
     visualization: 'name' in vitData || (vitData[0] && 'name' in vitData[0]),
-    protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
+    protocols: Boolean(protocol_url),
     metadataTable: metadata && 'metadata' in metadata,
     files: true,
   };
@@ -101,9 +100,7 @@ function DatasetDetail(props) {
           created_by_user_email={created_by_user_email}
         />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
-        {shouldDisplaySection.protocols && (
-          <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
-        )}
+        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
         <Files files={files} entityEndpoint={entityEndpoint} uuid={uuid} display_doi={display_doi} />
       </DetailLayout>
