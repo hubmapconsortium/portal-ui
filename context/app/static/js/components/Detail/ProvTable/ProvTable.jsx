@@ -27,30 +27,32 @@ function ProvTable(props) {
     <FlexContainer>
       {types.map((type, i) => (
         <TableColumn key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
-          <EntityColumnTitle variant="h5">{typesToSplit[i]}s</EntityColumnTitle>
           {(type.length > 0 || descendantCounts[typesToSplit[i]] > 0) && (
-            <FlexColumn>
-              {type.length > 0 ? (
-                type
-                  .sort((a, b) => a.create_timestamp - b.create_timestamp)
-                  .map((item, j) => (
-                    <ProvTableTile
-                      key={item.uuid}
-                      uuid={item.uuid}
-                      id={item.display_doi}
-                      entity_type={item.entity_type}
-                      isCurrentEntity={uuid === item.uuid}
-                      isSampleSibling={
-                        j > 0 && item.entity_type === 'Sample' && type[j - 1].specimen_type === item.specimen_type
-                      }
-                      isFirstTile={j === 0}
-                      isLastTile={j === type.length - 1}
-                    />
-                  ))
-              ) : (
-                <ProvTableDerivedLink uuid={uuid} type={[typesToSplit[i]]} />
-              )}
-            </FlexColumn>
+            <>
+              <EntityColumnTitle variant="h5">{typesToSplit[i]}s</EntityColumnTitle>
+              <FlexColumn>
+                {type.length > 0 ? (
+                  type
+                    .sort((a, b) => a.create_timestamp - b.create_timestamp)
+                    .map((item, j) => (
+                      <ProvTableTile
+                        key={item.uuid}
+                        uuid={item.uuid}
+                        id={item.display_doi}
+                        entity_type={item.entity_type}
+                        isCurrentEntity={uuid === item.uuid}
+                        isSampleSibling={
+                          j > 0 && item.entity_type === 'Sample' && type[j - 1].specimen_type === item.specimen_type
+                        }
+                        isFirstTile={j === 0}
+                        isLastTile={j === type.length - 1}
+                      />
+                    ))
+                ) : (
+                  <ProvTableDerivedLink uuid={uuid} type={[typesToSplit[i]]} />
+                )}
+              </FlexColumn>
+            </>
           )}
         </TableColumn>
       ))}
