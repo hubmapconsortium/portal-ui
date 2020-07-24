@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Link from '@material-ui/core/Link';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@material-ui/icons/InfoRounded';
 import { HeaderCell } from 'shared-styles/Table';
 
 const HeaderIconCell = styled(HeaderCell)`

@@ -1,6 +1,6 @@
 import React from 'react';
-import WbSunnyIcon from '@material-ui/icons/WbSunny';
-import Brightness2Icon from '@material-ui/icons/Brightness2';
+import WbSunnyIcon from '@material-ui/icons/WbSunnyRounded';
+import Brightness2Icon from '@material-ui/icons/Brightness2Rounded';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 import { StyledToggleButton } from './style';

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import FolderIcon from '@material-ui/icons/Folder';
-import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import FolderIcon from '@material-ui/icons/FolderRounded';
+import FolderOpenIcon from '@material-ui/icons/FolderOpenRounded';
 
 const Directory = styled.div`
   padding: 10px 0px 10px ${(props) => props.theme.spacing(props.$depth * 1.5) + props.theme.spacing(3)}px;

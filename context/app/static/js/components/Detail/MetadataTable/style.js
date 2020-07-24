@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import GetAppIcon from '@material-ui/icons/GetAppRounded';
 
 const DownloadIcon = styled(GetAppIcon)`
   font-size: 25px;

@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import CloseIcon from '@material-ui/icons/Close';
+import MenuIcon from '@material-ui/icons/MenuRounded';
+import CloseIcon from '@material-ui/icons/CloseRounded';
 import MenuList from '@material-ui/core/MenuList';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 
 import PreviewLinks from '../PreviewLinks';
 import DocumentationLinks from '../DocumentationLinks';
