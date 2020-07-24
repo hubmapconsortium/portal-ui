@@ -371,9 +371,9 @@ class Vitessce:
 
         if self.assay_type not in IMAGE_ASSAYS:
             return conf
-        conf["staticLayout"][-1]["props"]["view"] = copy.deepcopy(ASSAY_CONF_LOOKUP[self.assay_type][
-            "view"
-        ])
+        conf["staticLayout"][-1]["props"]["view"] = copy.deepcopy(
+            ASSAY_CONF_LOOKUP[self.assay_type]["view"]
+        )
 
         # IMS needs to be zoomed in a bit more,
         # but we don't have a great of finding this assay type:
