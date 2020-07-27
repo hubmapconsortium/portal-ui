@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDownRounded';
 
 const DownIcon = styled(KeyboardArrowDownIcon)`
   font-size: 2rem;

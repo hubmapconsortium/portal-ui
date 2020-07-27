@@ -36,17 +36,6 @@ const config = {
   module: {
     rules: [
       {
-        enforce: 'pre',
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader',
-        options: {
-          emitError: true,
-          emitWarning: true,
-          configFile: './.eslintrc.yml',
-        },
-      },
-      {
         test: /\.js$/,
         use: ['source-map-loader'],
         enforce: 'pre',

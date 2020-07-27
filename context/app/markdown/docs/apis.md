@@ -38,11 +38,3 @@ Examples of Entity endpoints are as follows:
 
 - [GitHub](https://github.com/hubmapconsortium/entity-api) 
 - [Smart API](https://smart-api.info/ui/0065e419668f3336a40d1f5ab89c6ba3)
-
-
-
-### Common Coordinate Framework (CCF) Registration User Interface (RUI) and Exploration User Interface (EUI) API
-A specification and set of web service calls to return information about CCF-mapped data
-
-- [GitHub](https://github.com/hubmapconsortium/ccf-data-api)
-- [Smart API](https://smart-api.info/ui/d1f33c1a75e9dcda984194e4d8cea7d8)

@@ -13,7 +13,6 @@ function DonorDetail(props) {
   const {
     uuid,
     protocol_url,
-    portal_uploaded_protocol_files,
     group_name,
     created_by_user_displayname,
     created_by_user_email,
@@ -26,7 +25,7 @@ function DonorDetail(props) {
   } = assayMetadata;
 
   const shouldDisplaySection = {
-    protocols: Boolean(portal_uploaded_protocol_files || protocol_url),
+    protocols: Boolean(protocol_url),
     metadata: Boolean(mapped_metadata),
   };
 
@@ -48,9 +47,7 @@ function DonorDetail(props) {
           created_by_user_email={created_by_user_email}
         />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
-        {shouldDisplaySection.protocols && (
-          <Protocol protocol_url={protocol_url} portal_uploaded_protocol_files={portal_uploaded_protocol_files} />
-        )}
+        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
       </DetailLayout>
     </DetailContext.Provider>
   );

@@ -1,3 +1,24 @@
+## v0.0.44 - 2020-07-24
+
+- CCF no longer opens in new tab.
+- Display descendant dataset count in dataset entity tiles.
+- Remove references to portal_uploaded_protocol_files.
+- Misc. small fixes to docs.
+- Fix npm run test issues and add to test script.
+- Replace link to JSON on entity detail pages with icon.
+- Fix early exit in push.sh.
+- Use the rounded variants of all icons.
+- Upgrade Vitessce to 0.1.9.
+
+
+## v0.0.43 - 2020-07-23
+
+- Add bottom section to entity tiles.
+- Fix and simplify entity tile color logic.
+- Updated version of vitessce-data in view config URLs for Satija showcase
+- Move entity tile into components directory and split into subcomponents. 
+
+
 ## v0.0.42 - 2020-07-22
 
 - Display alert in provenance section when provenance data is unavailable.

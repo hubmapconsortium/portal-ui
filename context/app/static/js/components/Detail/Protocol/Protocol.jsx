@@ -24,7 +24,7 @@ function ProtocolLink(props) {
 }
 
 function Protocol(props) {
-  const { protocol_url, portal_uploaded_protocol_files } = props;
+  const { protocol_url } = props;
 
   return (
     <SectionContainer id="protocols">
@@ -32,14 +32,6 @@ function Protocol(props) {
       <Divider />
       <StyledPaper>
         <ProtocolLink protocolUrl={protocol_url} />
-        {portal_uploaded_protocol_files &&
-          portal_uploaded_protocol_files.map((protocol, i) => (
-            <React.Fragment key={protocol}>
-              {i !== 0 || protocol_url ? <Divider /> : null}
-              <ProtocolLink protocolUrl={protocol.protocol_doi} />
-              <SectionItem label="Image Files">{protocol.protocol_file || 'No File Available'}</SectionItem>
-            </React.Fragment>
-          ))}
       </StyledPaper>
     </SectionContainer>
   );
@@ -47,12 +39,10 @@ function Protocol(props) {
 
 Protocol.propTypes = {
   protocol_url: PropTypes.string,
-  portal_uploaded_protocol_files: PropTypes.arrayOf(PropTypes.object),
 };
 
 Protocol.defaultProps = {
   protocol_url: '',
-  portal_uploaded_protocol_files: [],
 };
 
 export default React.memo(Protocol);

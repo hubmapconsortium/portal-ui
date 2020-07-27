@@ -34,8 +34,22 @@ TILED_SPRM_IMAGING = {
         {"component": "layerController", "x": 0, "y": 0, "w": 3, "h": 4},
         {"component": "description", "x": 0, "y": 4, "w": 3, "h": 2},
         {"component": "cellSets", "x": 10, "y": 2, "w": 2, "h": 4},
-        {"component": "genes", "x": 10, "y": 0, "w": 2, "h": 2},
-        {"component": "heatmap", "x": 3, "y": 4, "w": 7, "h": 2},
+        {
+            "component": "genes",
+            "props": {"variablesLabelOverride": "antigens"},
+            "x": 10,
+            "y": 0,
+            "w": 2,
+            "h": 2,
+        },
+        {
+            "component": "heatmap",
+            "props": {"variablesLabelOverride": "antigens"},
+            "x": 3,
+            "y": 4,
+            "w": 7,
+            "h": 2
+        },
         {
             "component": "spatial",
             "props": {"view": {}},
@@ -96,19 +110,19 @@ ASSAY_CONF_LOOKUP = {
         "view": {"zoom": -1.5, "target": [600, 600, 0]},
         "files_conf": [
             {
-                "rel_path": CODEX_TILE_PATH + "/" + TILE_REGEX + ".ome.tiff",
+                "rel_path": f"{CODEX_TILE_PATH}/{TILE_REGEX}.ome.tiff",
                 "type": "RASTER",
             },
             {
-                "rel_path": CODDEX_SPRM_PATH + "/" + TILE_REGEX + ".cells.json",
+                "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.cells.json",
                 "type": "CELLS",
             },
             {
-                "rel_path": CODDEX_SPRM_PATH + "/" + TILE_REGEX + ".cell-sets.json",
+                "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.cell-sets.json",
                 "type": "CELL-SETS",
             },
             {
-                "rel_path": CODDEX_SPRM_PATH + "/" + TILE_REGEX + ".genes.json",
+                "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.genes.json",
                 "type": "GENES",
             },
             {
@@ -119,8 +133,9 @@ ASSAY_CONF_LOOKUP = {
     },
     IMAGE_PYRAMID: {
         "base_conf": IMAGING_ONLY,
-        # We can actually fetch height/width using a COG tiff library, but for now this will do.
-        "view": {"zoom": -6.5, "target": [1000, 1000, 0]},
+        # TODO: We can actually fetch height/width using a COG tiff library,
+        # but for now this will do.
+        "view": {"zoom": -6.5, "target": [15000, 15000, 0]},
         "files_conf": [
             {
                 "rel_path": re.escape(IMAGE_PYRAMID_PATH) + r"/.*\.ome\.tiff?$",
@@ -145,6 +160,12 @@ def _get_matches(files, regex):
                 if match
             ]
         )
+    )
+
+
+def _exclude_matches(files, regex):
+    return list(
+        set(file for file in files if not re.search(regex, file))
     )
 
 
@@ -198,10 +219,10 @@ class Vitessce:
         """
         if self.assay_type not in ASSAY_CONF_LOOKUP:
             return {}
-        files = ASSAY_CONF_LOOKUP[self.assay_type]["files_conf"]
+        files = copy.deepcopy(ASSAY_CONF_LOOKUP[self.assay_type]["files_conf"])
         file_paths_expected = [file["rel_path"] for file in files]
         file_paths_found = [file["rel_path"] for file in self.entity["files"]]
-        conf = ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"]
+        conf = copy.deepcopy(ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"])
         # Codex and other tiled assays needs to be built up based on their input tiles.
         if self.assay_type not in IMAGE_ASSAYS:
             # We need to check that the files we expect actually exist.
@@ -233,7 +254,9 @@ class Vitessce:
             return confs
         elif self.assay_type in IMAGE_ASSAYS:
             found_images = _get_matches(file_paths_found, files[0]["rel_path"])
-            layer = self._build_multi_file_image_layer_conf(found_images)
+            # Do not show IMS images that are in the "/separate/" folder.
+            no_ims_separate_images = _exclude_matches(found_images, r"/separate/")
+            layer = self._build_multi_file_image_layer_conf(no_ims_separate_images)
             conf["layers"] = [layer]
             conf["name"] = self.uuid
             conf = self._replace_view(conf)
@@ -369,7 +392,22 @@ class Vitessce:
 
         if self.assay_type not in IMAGE_ASSAYS:
             return conf
-        conf["staticLayout"][-1]["props"]["view"] = ASSAY_CONF_LOOKUP[self.assay_type][
-            "view"
-        ]
+        conf["staticLayout"][-1]["props"]["view"] = copy.deepcopy(
+            ASSAY_CONF_LOOKUP[self.assay_type]["view"]
+        )
+
+        # IMS needs to be zoomed in a bit more,
+        # but we don't have a great of finding this assay type:
+        # The images are generally smaller but have a lot of padding.
+
+        # IMS images are named under this convention, "IMS_XXXMode".
+        # Some of the non IMS images contain the substring "IMS," so that is insufficient.
+        if any(
+            [
+                "IMS_PosMode" in file["rel_path"] or "IMS_NegMode" in file["rel_path"]
+                for file in self.entity["files"]
+            ]
+        ):
+            conf["staticLayout"][-1]["props"]["view"]["zoom"] = -2
+            conf["staticLayout"][-1]["props"]["view"]["target"] = [1000, 1000, 0]
         return conf

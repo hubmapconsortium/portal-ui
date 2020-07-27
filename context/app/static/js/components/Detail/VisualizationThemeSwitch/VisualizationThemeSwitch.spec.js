@@ -6,20 +6,20 @@ import VisualizationThemeSwitch from './VisualizationThemeSwitch';
 
 test('switch emits change from light to dark by click on dark label', (done) => {
   function onThemeChange(e) {
-    expect(e.target).toBeChecked();
+    expect(e.target).not.toHaveAttribute('aria-pressed', expect.stringContaining('true'));
     done();
   }
-  const { getByText } = render(<VisualizationThemeSwitch theme="light" onChange={onThemeChange} />);
-  const darkLabel = getByText('Dark');
+  const { getByLabelText } = render(<VisualizationThemeSwitch theme="light" onChange={onThemeChange} />);
+  const darkLabel = getByLabelText('Visualization dark theme button');
   fireEvent.click(darkLabel);
 });
 
 test('switch emits change from dark to light by click on light label', (done) => {
   function onThemeChange(e) {
-    expect(e.target).not.toBeChecked();
+    expect(e.target).not.toHaveAttribute('aria-pressed', expect.stringContaining('true'));
     done();
   }
-  const { getByText } = render(<VisualizationThemeSwitch theme="dark" onChange={onThemeChange} />);
-  const lightLabel = getByText('Light');
+  const { getByLabelText } = render(<VisualizationThemeSwitch theme="dark" onChange={onThemeChange} />);
+  const lightLabel = getByLabelText('Visualization light theme button');
   fireEvent.click(lightLabel);
 });

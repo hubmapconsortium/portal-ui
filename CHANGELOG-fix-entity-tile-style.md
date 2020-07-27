@@ -1,1 +1,0 @@
-- Fix and simplify entity tile color logic.
