@@ -81,9 +81,18 @@ IMAGING_ONLY = {
 
 CODEX_CYTOKIT = "codex_cytokit"
 IMAGE_PYRAMID = "image_pyramid"
-SCRNA_SEQ = "salmon_rnaseq_10x"
 
-SCRNASEQ_BASE_PATH = "cluster-marker-genes/output/cluster_marker_genes"
+SCRNA_SEQ_10X = "salmon_rnaseq_10x"
+SCRNA_SEQ_SCI = "salmon_rnaseq_sciseq"
+SCRNA_SEQ_SNARE = "salmon_rnaseq_snareseq"
+
+SCATAC_SEQ_SCI = "sc_atac_seq_sci"
+SCATAC_SEQ_SNARE = "sc_atac_seq_snare"
+SCATAC_SEQ_SN = "sc_atac_seq_sn"
+
+SCRNA_SEQ_BASE_PATH = "cluster-marker-genes/output/cluster_marker_genes"
+SCATAC_SEQ_BASE_PATH = "output"
+
 OFFSETS_PATH = "output_offsets"
 IMAGE_PYRAMID_PATH = "ometiff-pyramids"
 CODEX_TILE_PATH = "output/extract/expressions/ome-tiff"
@@ -97,14 +106,29 @@ IMAGING_PATHS = {
 
 TILE_REGEX = r"R\d+_X\d+_Y\d+"
 
+SCRNA_SEQ_CONFIG = {
+    "base_conf": SCATTERPLOT,
+    "files_conf": [
+        {"rel_path": f"{SCRNA_SEQ_BASE_PATH}.cells.json", "type": "CELLS"},
+        {"rel_path": f"{SCRNA_SEQ_BASE_PATH}.cell-sets.json", "type": "CELL-SETS"},
+    ],
+}
+
+SCATAC_SEQ_CONFIG = {
+    "base_conf": SCATTERPLOT,
+    "files_conf": [
+        {"rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cells.json", "type": "CELLS"},
+        {"rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cell-sets.json", "type": "CELL-SETS"},
+    ],
+}
+
 ASSAY_CONF_LOOKUP = {
-    SCRNA_SEQ: {
-        "base_conf": SCATTERPLOT,
-        "files_conf": [
-            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cells.json", "type": "CELLS"},
-            {"rel_path": f"{SCRNASEQ_BASE_PATH}.cell-sets.json", "type": "CELL-SETS"},
-        ],
-    },
+    SCRNA_SEQ_10X: SCRNA_SEQ_CONFIG,
+    SCRNA_SEQ_SCI: SCRNA_SEQ_CONFIG,
+    SCATAC_SEQ_SCI: SCATAC_SEQ_CONFIG,
+    SCRNA_SEQ_SNARE: SCRNA_SEQ_CONFIG,
+    SCATAC_SEQ_SNARE: SCATAC_SEQ_CONFIG,
+    SCATAC_SEQ_SN: SCATAC_SEQ_CONFIG,
     CODEX_CYTOKIT: {
         "base_conf": TILED_SPRM_IMAGING,
         "view": {"zoom": -1.5, "target": [600, 600, 0]},
