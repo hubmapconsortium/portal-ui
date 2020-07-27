@@ -92,7 +92,7 @@ def mock_search_donor_post(path, **kwargs):
 
 @pytest.mark.parametrize(
     'path',
-    ['/', '/browse/donor/fake-uuid', '/ccf-eui', '/docs', '/VERSION', '/preview/spraggins']
+    ['/', '/browse/donor/fake-uuid', '/ccf-eui', '/docs', '/VERSION', '/preview/multimodal-molecular-imaging-data']
 )
 def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_prov_get)
