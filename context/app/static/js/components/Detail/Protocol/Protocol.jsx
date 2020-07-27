@@ -29,7 +29,7 @@ function Protocol(props) {
 
   const matchedDoiSuffix = protocol_url.match(/\w+$/)[0];
 
-  const protocolData = useProtocolData(matchedDoi, 1);
+  const protocolData = useProtocolData(matchedDoiSuffix, 1);
 
   const doi = 'protocol' in protocolData && 'doi' in protocolData.protocol ? protocolData.protocol.doi : '';
 
