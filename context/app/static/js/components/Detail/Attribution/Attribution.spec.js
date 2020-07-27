@@ -14,6 +14,6 @@ test('text displays properly', () => {
       created_by_user_email={created_by_user_email}
     />,
   );
-  const textToTest = ['Attribution', 'Creator', 'Fake TMC', 'Creator', 'Fake Name', 'fake@fake.com'];
+  const textToTest = ['Attribution', 'Creator', 'Fake TMC', 'Contact', 'Fake Name', 'fake@fake.com'];
   textToTest.forEach((text) => expect(getByText(text)).toBeInTheDocument());
 });
