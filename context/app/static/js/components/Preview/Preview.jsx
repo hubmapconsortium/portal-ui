@@ -1,8 +1,8 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import ReactMarkdown from 'react-markdown';
 
+import { StyledMarkdown } from './style';
 import VisualizationWrapper from '../Detail/VisualizationWrapper';
 import SectionHeader from '../Detail/SectionHeader';
 import SectionContainer from '../Detail/SectionContainer';
@@ -26,7 +26,7 @@ function Preview(props) {
 
         <StyledPaper>
           <Typography variant="body1">
-            <ReactMarkdown source={markdown} />
+            <StyledMarkdown source={markdown} />
           </Typography>
         </StyledPaper>
       </SectionContainer>

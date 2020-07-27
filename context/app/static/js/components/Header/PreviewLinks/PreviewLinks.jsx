@@ -6,8 +6,12 @@ function PreviewLinks(props) {
   const { isIndented } = props;
   return (
     <>
-      {['Spraggins', 'Satija'].map((previewName) => (
-        <DropdownLink key={previewName} href={`/preview/${previewName.toLowerCase()}`} isIndented={isIndented}>
+      {['Multimodal Molecular Imaging Data', 'Cell Type Annotations'].map((previewName) => (
+        <DropdownLink
+          key={previewName}
+          href={`/preview/${previewName.toLowerCase().replace(/\s/g, '-')}`}
+          isIndented={isIndented}
+        >
           {previewName}
         </DropdownLink>
       ))}
