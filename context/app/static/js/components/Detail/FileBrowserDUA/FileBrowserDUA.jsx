@@ -8,6 +8,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import { getDUAText } from './utils';
+import { ObliqueSpan } from './style';
 
 function FileBrowserDUA(props) {
   const { isOpen, handleAgree, handleClose, data_access_level } = props;
@@ -26,7 +27,7 @@ function FileBrowserDUA(props) {
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           <h1 id="alert-dialog-title">
-            {'HuBMAP '} <span>{`${title} Data`}</span> {' Usage'}
+            {'HuBMAP '} <ObliqueSpan>{`${title} Data`}</ObliqueSpan> {' Usage'}
           </h1>
 
           <h2>Appropriate Use</h2>
