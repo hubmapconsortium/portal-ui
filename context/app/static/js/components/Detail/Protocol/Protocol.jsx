@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 
 import { LightBlueLink } from 'shared-styles/Links';
+import useProtocolData from 'hooks/useProtocolData';
 import { StyledPaper } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionItem from '../SectionItem';
@@ -17,7 +18,7 @@ function ProtocolLink(props) {
           {urlMinusProtocol}
         </LightBlueLink>
       ) : (
-        'No URL Available'
+        'Please wait...'
       )}
     </SectionItem>
   );
@@ -26,12 +27,19 @@ function ProtocolLink(props) {
 function Protocol(props) {
   const { protocol_url } = props;
 
+  const lastWordPattern = new RegExp('([a-zA-Z0-9]+)$');
+  const matchedDoi = protocol_url.match(lastWordPattern)[0];
+
+  const protocolData = useProtocolData(matchedDoi, 1);
+
+  const doi = Object.keys(protocolData).length > 0 ? protocolData.protocol.doi : '';
+
   return (
     <SectionContainer id="protocols">
       <SectionHeader>Protocols</SectionHeader>
       <Divider />
       <StyledPaper>
-        <ProtocolLink protocolUrl={protocol_url} />
+        <ProtocolLink protocolUrl={doi} />
       </StyledPaper>
     </SectionContainer>
   );
