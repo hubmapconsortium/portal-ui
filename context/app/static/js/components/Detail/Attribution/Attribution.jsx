@@ -14,8 +14,8 @@ function Attribution(props) {
     <SectionContainer id="attribution">
       <SectionHeader>Attribution</SectionHeader>
       <FlexPaper>
-        <SectionItem label="Center">{group_name}</SectionItem>
-        <SectionItem label="Contact" ml={1}>
+        <SectionItem label="Group">{group_name}</SectionItem>
+        <SectionItem label="Creator" ml={1}>
           {created_by_user_displayname}
           <LightBlueLink href={`mailto:${encodeURI(created_by_user_email)}`}>{created_by_user_email}</LightBlueLink>
         </SectionItem>
