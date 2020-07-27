@@ -1,1 +1,0 @@
-- Change center to group in entity detail attribution section.
