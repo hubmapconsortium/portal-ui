@@ -1,0 +1,1 @@
+- Display latest protocol version in entity detail protocol section.
