@@ -118,7 +118,10 @@ SCATAC_SEQ_CONFIG = {
     "base_conf": SCATTERPLOT,
     "files_conf": [
         {"rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cells.json", "type": "CELLS"},
-        {"rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cell-sets.json", "type": "CELL-SETS"},
+        {
+            "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cell-sets.json",
+            "type": "CELL-SETS",
+        },
     ],
 }
 
