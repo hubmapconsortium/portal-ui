@@ -21,7 +21,7 @@ function CollectionDatasetsTable(props) {
     { id: 'organ', label: 'Organ' },
     { id: 'assayTypesString', label: 'Assay Types' },
     { id: 'modifiedDate', label: 'Last Modified' },
-    { id: 'properties.creator_name', label: 'Creator' },
+    { id: 'properties.creator_name', label: 'Contact' },
     { id: 'properties.status', label: 'Status' },
   ];
 
