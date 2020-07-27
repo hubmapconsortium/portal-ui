@@ -10,12 +10,12 @@ import SectionItem from '../SectionItem';
 import SectionContainer from '../SectionContainer';
 
 function ProtocolLink(props) {
-  const { protocolUrl: urlMinusProtocol } = props;
+  const { doi } = props;
   return (
     <SectionItem label="Protocol URL">
-      {urlMinusProtocol ? (
-        <LightBlueLink href={`https://${encodeURI(urlMinusProtocol)}`} target="_blank" rel="noopener noreferrer">
-          {urlMinusProtocol}
+      {doi ? (
+        <LightBlueLink href={`https://${encodeURI(doi)}`} target="_blank" rel="noopener noreferrer">
+          {doi}
         </LightBlueLink>
       ) : (
         'Please wait...'
@@ -38,7 +38,7 @@ function Protocol(props) {
       <SectionHeader>Protocols</SectionHeader>
       <Divider />
       <StyledPaper>
-        <ProtocolLink protocolUrl={doi} />
+        <ProtocolLink doi={doi} />
       </StyledPaper>
     </SectionContainer>
   );
