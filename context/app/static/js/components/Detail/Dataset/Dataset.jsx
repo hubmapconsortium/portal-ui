@@ -65,6 +65,7 @@ function DatasetDetail(props) {
     last_modified_timestamp,
     description,
     status,
+    data_access_level,
   } = assayMetadata;
 
   const shouldDisplaySection = {
@@ -76,7 +77,7 @@ function DatasetDetail(props) {
 
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
   return (
-    <DetailContext.Provider value={{ assetsEndpoint, elasticsearchEndpoint, display_doi, uuid }}>
+    <DetailContext.Provider value={{ assetsEndpoint, elasticsearchEndpoint, display_doi, uuid, data_access_level }}>
       <DetailLayout shouldDisplaySection={shouldDisplaySection}>
         <Summary
           uuid={uuid}
