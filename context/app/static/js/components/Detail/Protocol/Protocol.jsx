@@ -27,8 +27,7 @@ function ProtocolLink(props) {
 function Protocol(props) {
   const { protocol_url } = props;
 
-  const lastWordPattern = new RegExp('([a-zA-Z0-9]+)$');
-  const matchedDoi = protocol_url.match(lastWordPattern)[0];
+  const matchedDoiSuffix = protocol_url.match(/\w+$/)[0];
 
   const protocolData = useProtocolData(matchedDoi, 1);
 
