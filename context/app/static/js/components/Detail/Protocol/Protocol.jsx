@@ -32,7 +32,7 @@ function Protocol(props) {
 
   const protocolData = useProtocolData(matchedDoi, 1);
 
-  const doi = Object.keys(protocolData).length > 0 ? protocolData.protocol.doi : '';
+  const doi = 'protocol' in protocolData && 'doi' in protocolData.protocol ? protocolData.protocol.doi : '';
 
   return (
     <SectionContainer id="protocols">
