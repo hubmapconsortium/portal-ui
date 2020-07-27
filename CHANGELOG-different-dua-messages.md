@@ -1,1 +1,1 @@
-- Handle DUA by data access leevel.
+- Handle DUA by data access level.
