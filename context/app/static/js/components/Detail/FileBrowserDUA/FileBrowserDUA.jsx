@@ -7,10 +7,14 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
+import { getDUAText } from './utils';
+
 function FileBrowserDUA(props) {
-  const { isOpen, handleAgree, handleClose } = props;
+  const { isOpen, handleAgree, handleClose, data_access_level } = props;
 
   const [isChecked, check] = useState(false);
+
+  const { title, appropriateUse } = getDUAText(data_access_level);
 
   return (
     <Dialog
@@ -21,14 +25,12 @@ function FileBrowserDUA(props) {
     >
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          <h1 id="alert-dialog-title">HuBMAP Data Usage</h1>
+          <h1 id="alert-dialog-title">
+            {'HuBMAP '} <span>{`${title} Data`}</span> {' Usage'}
+          </h1>
 
           <h2>Appropriate Use</h2>
-          <p>
-            Users of HuBMAP open-data or processed data agree not to use the requested datasets, either alone or in
-            concert with any other information, to identify or contact individual participants or family members from
-            whom data and/or samples were collected.
-          </p>
+          <p>{appropriateUse}</p>
 
           <h2>Acknowledgement</h2>
           <p>
