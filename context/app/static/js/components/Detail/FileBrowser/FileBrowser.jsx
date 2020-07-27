@@ -13,7 +13,7 @@ function FileBrowser(props) {
   const localStorageKey = `has_agreed_to_${data_access_level}_DUA`;
   const [fileTree, setFileTree] = useState({});
   const [hasAgreedToDUA, agreeToDUA] = useState(localStorage.getItem(localStorageKey));
-  const [isDialogOpen, setDialogOpen] = React.useState(false);
+  const [isDialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const treePath = relativeFilePathsToTree(files);
