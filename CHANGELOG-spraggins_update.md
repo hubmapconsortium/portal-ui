@@ -1,0 +1,1 @@
+- Add Jeff Spraggins' description to the preview of the Spraggins data.
