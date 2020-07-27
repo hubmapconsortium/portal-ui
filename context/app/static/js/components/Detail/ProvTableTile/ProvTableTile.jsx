@@ -1,33 +1,24 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import useEntityData from 'hooks/useEntityData';
+import useDescendantCounts from 'hooks/useDescendantCounts';
 import EntityTile from 'components/entity-tile/EntityTile';
+import ProvTableDerivedLink from '../ProvTableDerivedLink';
 import DetailContext from '../context';
 import { DownIcon } from './style';
 
 function ProvTableTile(props) {
-  const { uuid, entity_type, id, isCurrentEntity, isSampleSibling, isFirstTile } = props;
+  const { uuid, entity_type, id, isCurrentEntity, isSampleSibling, isFirstTile, isLastTile } = props;
   const { elasticsearchEndpoint } = useContext(DetailContext);
 
   // mapped fields are not included in ancestor object
   const entityData = useEntityData(uuid, elasticsearchEndpoint);
 
-  const types = entity_type === 'Donor' ? ['Sample', 'Dataset'] : ['Dataset'];
+  const allDescendantCounts = useDescendantCounts(entityData, ['Sample', 'Dataset']);
 
-  const descendantCounts = useMemo(() => {
-    if (entityData) {
-      // use Map to preserve insertion order
-      const counts = new Map();
-      types.reduce((acc, type) => {
-        acc[type] = entityData.descendants.filter((d) => d.entity_type === type).length;
-        return acc;
-      }, counts);
-      return counts;
-    }
-
-    return {};
-  }, [types, entityData]);
+  const displayDescendantCounts =
+    entity_type === 'Donor' ? allDescendantCounts : { Dataset: allDescendantCounts.Dataset };
 
   return (
     <>
@@ -39,8 +30,11 @@ function ProvTableTile(props) {
           id={id}
           invertColors={isCurrentEntity}
           entityData={entityData}
-          descendantCounts={descendantCounts || {}}
+          descendantCounts={displayDescendantCounts}
         />
+      )}
+      {isLastTile && entity_type !== 'Donor' && allDescendantCounts[entity_type] > 0 && (
+        <ProvTableDerivedLink uuid={uuid} type={entity_type} />
       )}
     </>
   );

@@ -1,0 +1,1 @@
+- Display derived entities button in provenance table only if descendant entities exist.
