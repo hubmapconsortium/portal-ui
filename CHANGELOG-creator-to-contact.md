@@ -1,1 +1,0 @@
-- Change creator to contact in entity detail attribution and collection datasets table.

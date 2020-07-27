@@ -1,1 +1,0 @@
-- No longer run eslint as part of webpack: it was missing tests, and we're running eslint across everything outside webpack now.

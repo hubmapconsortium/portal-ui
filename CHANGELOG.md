@@ -1,3 +1,15 @@
+## v0.0.45 - 2020-07-27
+
+- Change center to group in entity detail attribution section.
+- Display derived entities button in provenance table only if descendant entities exist.
+- Change creator to contact in entity detail attribution and collection datasets table.
+- Display descendant dataset count in dataset entity tiles.
+- Handle DUA by data access level.
+- No longer run eslint as part of webpack: it was missing tests, and we're running eslint across everything outside webpack now.
+- Add more single cell assay support.
+- Add Jeff Spraggins' description to the preview of the Spraggins data.
+
+
 ## v0.0.44 - 2020-07-24
 
 - CCF no longer opens in new tab.
