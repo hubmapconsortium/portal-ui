@@ -51,7 +51,7 @@ function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
     const { hits } = props;
     /* eslint-disable no-underscore-dangle */
     return (
-      <table className="sk-table sk-table-striped" style={{ width: '100%' }}>
+      <table className="sk-table">
         <thead>
           <tr>
             {resultFields.map((field) => (
@@ -64,9 +64,7 @@ function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
             <tr key={hit._id}>
               {resultFields.map((field) => (
                 <td key={field.id}>
-                  <a href={detailsUrlPrefix + hit._source[idField]} style={{ display: 'block' }}>
-                    {getByPath(hit._source, field)}
-                  </a>
+                  <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
                 </td>
               ))}
             </tr>
