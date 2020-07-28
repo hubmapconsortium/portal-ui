@@ -1,17 +1,16 @@
 import styled from 'styled-components';
-import MarkedViewer from '@jnbelo/react-marked';
 
-const StyledMarkdown = styled(MarkedViewer)`
-  & img {
+const MarkdownStyle = styled.div`
+  img {
     max-width: 100%;
   }
 
-  & table {
+  table {
     border-spacing: 0px;
     border-collapse: collapse;
   }
-  & th,
-  & td {
+  th,
+  td {
     border: 1px solid grey;
     padding: 0.25em 0.5em;
   }
@@ -23,8 +22,9 @@ const StyledMarkdown = styled(MarkedViewer)`
   }
 
   li {
-    list-style: square;
+    list-style: circle;
+    list-style-type: disc;
   }
 `;
 
-export { StyledMarkdown };
+export { MarkdownStyle };
