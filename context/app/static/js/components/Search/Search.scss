@@ -10,7 +10,7 @@
 .sk-table {
     width: '100%';
 
-    tr:hover {
+    tbody tr:hover {
         border: 1px solid grey;
     }
 
@@ -24,5 +24,9 @@
         margin: -10em;
         padding: 10em;
         color: rgb(0,0,0);
+    }
+
+    td:first-child a {
+        color: #3781D1;
     }
 }
