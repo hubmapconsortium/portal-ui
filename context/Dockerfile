@@ -6,9 +6,9 @@ RUN apk add --no-cache python git
 COPY package.json .
 COPY package-lock.json .
 
-RUN npm install
+RUN npm ci
 
-# TODO: Copy only the JS for the npm build.
+# Most of our changes are in the JS, so don't worry about blowing away cache.
 COPY . .
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
