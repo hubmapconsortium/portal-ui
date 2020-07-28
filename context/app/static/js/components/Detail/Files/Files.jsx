@@ -29,9 +29,9 @@ function Files(props) {
     setDialogOpen(false);
   }
 
-  function openDUA(url) {
+  function openDUA(linkUrl) {
     setDialogOpen(true);
-    setUrlClickedBeforeDUA(url);
+    setUrlClickedBeforeDUA(linkUrl);
   }
 
   return (
