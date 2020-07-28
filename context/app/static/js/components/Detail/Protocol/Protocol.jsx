@@ -10,7 +10,7 @@ import SectionItem from '../SectionItem';
 import SectionContainer from '../SectionContainer';
 
 function ProtocolLink(props) {
-  const { doi } = props;
+  const { resolverHostnameAndDOI } = props;
   return (
     <SectionItem label="Protocol URL">
       {doi ? (
