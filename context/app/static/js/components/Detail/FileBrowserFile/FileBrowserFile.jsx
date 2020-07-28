@@ -24,6 +24,8 @@ function FileBrowserFile(props) {
           href={`${assetsEndpoint}/${uuid}/${fileObj.rel_path}?token=${token}`}
           hasAgreedToDUA={hasAgreedToDUA}
           openDUA={openDUA}
+          variant="body1"
+          download
         >
           {fileObj.file}
         </FileBrowserConditionalLink>
