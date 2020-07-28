@@ -22,7 +22,7 @@ function GlobusLinkMessage(props) {
     return (
       <Typography variant="body2">
         {`Files are available through the Globus Research Data Management System. Access dataset ${display_doi} on `}
-        <FilesConditionalLink href={url} hasAgreedToDUA={hasAgreedToDUA} openDUA={openDUA} variant="body2">
+        <FilesConditionalLink href={url} hasAgreedToDUA={hasAgreedToDUA} openDUA={() => openDUA(url)} variant="body2">
           Globus <StyledExternalLinkIcon />
         </FilesConditionalLink>
         .

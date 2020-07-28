@@ -16,19 +16,22 @@ function Files(props) {
   const localStorageKey = `has_agreed_to_${data_access_level}_DUA`;
   const [hasAgreedToDUA, agreeToDUA] = useState(localStorage.getItem(localStorageKey));
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const [urlClickedBeforeDUA, setUrlClickedBeforeDUA] = useState('');
 
   function handleDUAAgree() {
     agreeToDUA(true);
     localStorage.setItem(localStorageKey, true);
     setDialogOpen(false);
+    window.open(urlClickedBeforeDUA, '_blank');
   }
 
   function handleDUAClose() {
     setDialogOpen(false);
   }
 
-  function openDUA() {
+  function openDUA(linkUrl) {
     setDialogOpen(true);
+    setUrlClickedBeforeDUA(linkUrl);
   }
 
   return (
