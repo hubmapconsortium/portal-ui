@@ -1,11 +1,7 @@
 import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
+import MarkedViewer from '@jnbelo/react-marked';
 
-// TODO: Copied and pasted the padding.
-// Should find a way to manage it in one place.
-const StyledPaper = styled(Paper)`
-  padding: 30px 40px 30px 40px;
-
+const StyledMarkdown = styled(MarkedViewer)`
   & img {
     max-width: 100%;
   }
@@ -31,4 +27,4 @@ const StyledPaper = styled(Paper)`
   }
 `;
 
-export { StyledPaper };
+export { StyledMarkdown };

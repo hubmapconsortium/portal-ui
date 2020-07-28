@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactMarkdown from 'react-markdown';
+import { StyledPaper } from '../Detail/Summary/style';
 
-import { StyledPaper } from './style';
+import { StyledMarkdown } from './style';
 
 function Markdown(props) {
   const { markdown } = props;
 
   return (
-    // Turn off escapeHtml so that <a name="assay"> comes through.
     <StyledPaper>
-      <ReactMarkdown source={markdown} escapeHtml={false} />
+      <StyledMarkdown content={markdown} />
     </StyledPaper>
   );
 }
