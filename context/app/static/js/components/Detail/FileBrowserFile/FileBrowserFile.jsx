@@ -4,7 +4,7 @@ import prettyBytes from 'pretty-bytes';
 import { readCookie } from 'helpers/functions';
 
 import { useRoundedSecondaryTooltipStyles } from 'shared-styles/Tooltips';
-import FileBrowserConditionalLink from '../FileBrowserConditionalLink';
+import FileBrowserConditionalLink from '../FilesConditionalLink';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
 import DetailContext from '../context';
 import FilesContext from '../Files/context';

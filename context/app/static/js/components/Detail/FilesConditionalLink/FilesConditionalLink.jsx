@@ -3,7 +3,7 @@ import React from 'react';
 
 import { LightBlueLink } from 'shared-styles/Links';
 
-function ConditionalLink(props) {
+function FilesConditionalLink(props) {
   const { hasAgreedToDUA, openDUA, href, children, ...rest } = props;
   if (hasAgreedToDUA) {
     return (
@@ -25,4 +25,4 @@ function ConditionalLink(props) {
   );
 }
 
-export default ConditionalLink;
+export default FilesConditionalLink;

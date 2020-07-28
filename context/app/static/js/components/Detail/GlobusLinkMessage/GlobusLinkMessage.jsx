@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'shared-styles/Links';
 import FilesContext from '../Files/context';
-import FileBrowserConditionalLink from '../FileBrowserConditionalLink';
+import FileBrowserConditionalLink from '../FilesConditionalLink';
 import { StyledExternalLinkIcon } from './style';
 
 const messages = {
