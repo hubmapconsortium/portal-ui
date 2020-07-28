@@ -15,7 +15,7 @@ function ProtocolLink(props) {
     <SectionItem label="Protocol URL">
       {resolverHostnameAndDOI ? (
         <LightBlueLink href={`https://${resolverHostnameAndDOI}`} target="_blank" rel="noopener noreferrer">
-          {doi}
+          {resolverHostnameAndDOI}
         </LightBlueLink>
       ) : (
         'Please wait...'
@@ -31,7 +31,8 @@ function Protocol(props) {
 
   const protocolData = useProtocolData(matchedDoiSuffix, 1);
 
-  const resolverHostnameAndDOI = 'protocol' in protocolData && 'doi' in protocolData.protocol ? protocolData.protocol.doi : '';
+  const resolverHostnameAndDOI =
+    'protocol' in protocolData && 'doi' in protocolData.protocol ? protocolData.protocol.doi : '';
 
   return (
     <SectionContainer id="protocols">
