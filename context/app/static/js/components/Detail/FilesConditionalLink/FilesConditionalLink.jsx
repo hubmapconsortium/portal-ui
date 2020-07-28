@@ -2,6 +2,7 @@
 import React from 'react';
 
 import { LightBlueLink } from 'shared-styles/Links';
+import { AlignedLink } from './style';
 
 function FilesConditionalLink(props) {
   const { hasAgreedToDUA, openDUA, href, children, ...rest } = props;
@@ -13,15 +14,16 @@ function FilesConditionalLink(props) {
     );
   }
   return (
-    <LightBlueLink
+    <AlignedLink
       onClick={() => {
         openDUA();
       }}
+      component="button"
       underline="none"
       {...rest}
     >
       {children}
-    </LightBlueLink>
+    </AlignedLink>
   );
 }
 
