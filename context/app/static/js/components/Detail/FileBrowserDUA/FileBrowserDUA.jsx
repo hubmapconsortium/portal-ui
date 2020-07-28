@@ -31,12 +31,12 @@ function FileBrowserDUA(props) {
             {'HuBMAP '} <ObliqueSpan>{`${title} Data`}</ObliqueSpan> {' Usage'}
           </StyledHeader>
 
-          <StyledHeader variant="h5" component="h2">
+          <StyledHeader variant="h4" component="h2">
             Appropriate Use
           </StyledHeader>
           <Typography variant="body1">{appropriateUse}</Typography>
 
-          <StyledHeader variant="h5" component="h2">
+          <StyledHeader variant="h4" component="h2">
             Acknowledgement
           </StyledHeader>
           <Typography variant="body1">
@@ -54,7 +54,7 @@ function FileBrowserDUA(props) {
             .”
           </Typography>
 
-          <StyledHeader variant="h5" component="h2">
+          <StyledHeader variant="h4" component="h2">
             Data Sharing Policy
           </StyledHeader>
           <Typography variant="body1">
