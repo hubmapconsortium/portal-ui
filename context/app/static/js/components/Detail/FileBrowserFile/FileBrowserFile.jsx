@@ -7,12 +7,15 @@ import { useRoundedSecondaryTooltipStyles } from 'shared-styles/Tooltips';
 import FileBrowserConditionalLink from '../FileBrowserConditionalLink';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
 import DetailContext from '../context';
+import FilesContext from '../Files/context';
 
 function FileBrowserFile(props) {
-  const { fileObj, depth, hasAgreedToDUA, openDUA } = props;
+  const { fileObj, depth } = props;
+  const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
   const { assetsEndpoint, uuid } = useContext(DetailContext);
   const token = readCookie('nexus_token');
   const classes = useRoundedSecondaryTooltipStyles();
+
   return (
     <StyledDiv>
       <IndentedDiv $depth={depth}>
