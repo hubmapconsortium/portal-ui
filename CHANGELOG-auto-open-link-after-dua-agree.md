@@ -1,1 +1,0 @@
-- Automatically open link in new window after agreeing to DUA.

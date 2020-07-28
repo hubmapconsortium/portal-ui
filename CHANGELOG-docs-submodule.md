@@ -1,1 +1,0 @@
-- Reference docs as submodule.

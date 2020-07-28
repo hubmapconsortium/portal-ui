@@ -1,3 +1,14 @@
+## v0.0.46 - 2020-07-28
+
+- Automatically open link in new window after agreeing to DUA.
+- Tweaks to make docker build a little faster.
+- Reference docs as submodule.
+- Require user to agree to DUA before accessing Globus files.
+- Update DUA Typography.
+- Display latest protocol version in entity detail protocol section.
+- Tweak style of results table so it's more clear that the hole row is the result.
+
+
 ## v0.0.45 - 2020-07-27
 
 - Change center to group in entity detail attribution section.

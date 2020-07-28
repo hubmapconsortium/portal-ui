@@ -1,1 +1,0 @@
-- Require user to agree to DUA before accessing Globus files.
