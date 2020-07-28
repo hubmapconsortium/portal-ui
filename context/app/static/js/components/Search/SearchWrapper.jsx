@@ -51,7 +51,7 @@ function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
     const { hits } = props;
     /* eslint-disable no-underscore-dangle */
     return (
-      <table className="sk-table sk-table-striped">
+      <table className="sk-table">
         <thead>
           <tr>
             {resultFields.map((field) => (

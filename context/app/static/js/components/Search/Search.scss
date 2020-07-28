@@ -10,8 +10,14 @@
 .sk-table {
     width: '100%';
 
+    // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.
+    // (What looks white is actually "transparent" and brightness() has no effect.
+
+    tbody tr {
+        background-color: #FFF;
+    }
     tbody tr:hover {
-        border: 1px solid grey;
+        filter: brightness(96%);
     }
 
     // Force <a> to fill each cell, so the whole row is clickable.
