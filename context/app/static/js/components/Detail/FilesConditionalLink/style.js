@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { LightBlueLink } from 'shared-styles/Links';
 
-const StyledLink = styled(LightBlueLink)`
-  cursor: pointer;
+const AlignedLink = styled(LightBlueLink)`
+  vertical-align: baseline;
 `;
 
-export { StyledLink };
+export { AlignedLink };

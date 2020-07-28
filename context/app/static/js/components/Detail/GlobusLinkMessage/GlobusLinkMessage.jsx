@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'shared-styles/Links';
+import FilesContext from '../Files/context';
+import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledExternalLinkIcon } from './style';
 
 const messages = {
@@ -14,14 +16,15 @@ const messages = {
 
 function GlobusLinkMessage(props) {
   const { statusCode, url, display_doi } = props;
+  const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
 
   if (statusCode === 200) {
     return (
       <Typography variant="body2">
         {`Files are available through the Globus Research Data Management System. Access dataset ${display_doi} on `}
-        <LightBlueLink underline="none" variant="body2" href={url}>
+        <FilesConditionalLink href={url} hasAgreedToDUA={hasAgreedToDUA} openDUA={() => openDUA(url)} variant="body2">
           Globus <StyledExternalLinkIcon />
-        </LightBlueLink>
+        </FilesConditionalLink>
         .
       </Typography>
     );
