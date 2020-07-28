@@ -13,7 +13,7 @@ function useProtocolData(doiSuffix, lastVersion = 1) {
       setProtocol(data);
     }
     getAndSetProtocol();
-  }, [doi, lastVersion]);
+  }, [doiSuffix, lastVersion]);
 
   return protocol;
 }
