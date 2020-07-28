@@ -3,13 +3,13 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'shared-styles/Links';
 import { getDUAText } from './utils';
-import { ObliqueSpan } from './style';
+import { ObliqueSpan, StyledHeader, StyledDiv } from './style';
 
 function FileBrowserDUA(props) {
   const { isOpen, handleAgree, handleClose, data_access_level } = props;
@@ -26,16 +26,20 @@ function FileBrowserDUA(props) {
       aria-describedby="alert-dialog-description"
     >
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          <h1 id="alert-dialog-title">
+        <StyledDiv id="alert-dialog-description">
+          <StyledHeader id="alert-dialog-title" variant="h2" component="h1">
             {'HuBMAP '} <ObliqueSpan>{`${title} Data`}</ObliqueSpan> {' Usage'}
-          </h1>
+          </StyledHeader>
 
-          <h2>Appropriate Use</h2>
-          <p>{appropriateUse}</p>
+          <StyledHeader variant="h5" component="h2">
+            Appropriate Use
+          </StyledHeader>
+          <Typography variant="body1">{appropriateUse}</Typography>
 
-          <h2>Acknowledgement</h2>
-          <p>
+          <StyledHeader variant="h5" component="h2">
+            Acknowledgement
+          </StyledHeader>
+          <Typography variant="body1">
             Investigators using HuBMAP data in publications or presentations are requested to cite The Human Body at
             Cellular Resolution: the NIH Human BioMolecular Atlas Program (doi:
             <LightBlueLink href="https://doi.org/10.1038/s41586-019-1629-x" target="_blank" rel="noopener noreferrer">
@@ -48,17 +52,19 @@ function FileBrowserDUA(props) {
               https://hubmapconsortium.org
             </LightBlueLink>
             .”
-          </p>
+          </Typography>
 
-          <h2>Data Sharing Policy</h2>
-          <p>
+          <StyledHeader variant="h5" component="h2">
+            Data Sharing Policy
+          </StyledHeader>
+          <Typography variant="body1">
             The HuBMAP Data Sharing Policy can be found at{' '}
             <LightBlueLink href="https://hubmapconsortium.org/policies/" target="_blank" rel="noopener noreferrer">
               https://hubmapconsortium.org/policies/
             </LightBlueLink>
             .
-          </p>
-        </DialogContentText>
+          </Typography>
+        </StyledDiv>
         <FormControlLabel
           control={
             <Checkbox
