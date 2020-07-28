@@ -1,6 +1,6 @@
 import React from 'react';
 
-function useProtocolData(doi, lastVersion = 1) {
+function useProtocolData(doiSuffix, lastVersion = 1) {
   const [protocol, setProtocol] = React.useState({});
   React.useEffect(() => {
     async function getAndSetProtocol() {
