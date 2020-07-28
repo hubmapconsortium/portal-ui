@@ -1,0 +1,1 @@
+- Switch markdown libraries; H1/2/3 have generated ID attributes
