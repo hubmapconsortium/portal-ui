@@ -13,8 +13,8 @@ function ProtocolLink(props) {
   const { resolverHostnameAndDOI } = props;
   return (
     <SectionItem label="Protocol URL">
-      {doi ? (
-        <LightBlueLink href={`https://${encodeURI(doi)}`} target="_blank" rel="noopener noreferrer">
+      {resolverHostnameAndDOI ? (
+        <LightBlueLink href={`https://${resolverHostnameAndDOI}`} target="_blank" rel="noopener noreferrer">
           {doi}
         </LightBlueLink>
       ) : (
