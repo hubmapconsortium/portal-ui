@@ -4,7 +4,7 @@ import prettyBytes from 'pretty-bytes';
 import { readCookie } from 'helpers/functions';
 
 import { useRoundedSecondaryTooltipStyles } from 'shared-styles/Tooltips';
-import FileBrowserConditionalLink from '../FilesConditionalLink';
+import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
 import DetailContext from '../context';
 import FilesContext from '../Files/context';
@@ -20,7 +20,7 @@ function FileBrowserFile(props) {
     <StyledDiv>
       <IndentedDiv $depth={depth}>
         <StyledFileIcon color="primary" />
-        <FileBrowserConditionalLink
+        <FilesConditionalLink
           href={`${assetsEndpoint}/${uuid}/${fileObj.rel_path}?token=${token}`}
           hasAgreedToDUA={hasAgreedToDUA}
           openDUA={openDUA}
@@ -28,7 +28,7 @@ function FileBrowserFile(props) {
           download
         >
           {fileObj.file}
-        </FileBrowserConditionalLink>
+        </FilesConditionalLink>
         <FileSize variant="body1">{prettyBytes(fileObj.size)}</FileSize>
         <Tooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`} classes={classes}>
           <StyledInfoIcon color="primary" />

@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'shared-styles/Links';
 import FilesContext from '../Files/context';
-import FileBrowserConditionalLink from '../FilesConditionalLink';
+import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledExternalLinkIcon } from './style';
 
 const messages = {
@@ -22,9 +22,9 @@ function GlobusLinkMessage(props) {
     return (
       <Typography variant="body2">
         {`Files are available through the Globus Research Data Management System. Access dataset ${display_doi} on `}
-        <FileBrowserConditionalLink href={url} hasAgreedToDUA={hasAgreedToDUA} openDUA={openDUA} variant="body2">
+        <FilesConditionalLink href={url} hasAgreedToDUA={hasAgreedToDUA} openDUA={openDUA} variant="body2">
           Globus <StyledExternalLinkIcon />
-        </FileBrowserConditionalLink>
+        </FilesConditionalLink>
         .
       </Typography>
     );
