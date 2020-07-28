@@ -38,7 +38,7 @@ function Protocol(props) {
       <SectionHeader>Protocols</SectionHeader>
       <Divider />
       <StyledPaper>
-        <ProtocolLink doi={doi} />
+        <ProtocolLink resolverHostnameAndDOI={resolverHostnameAndDOI} />
       </StyledPaper>
     </SectionContainer>
   );
