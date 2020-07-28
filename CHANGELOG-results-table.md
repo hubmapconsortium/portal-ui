@@ -1,0 +1,1 @@
+- Tweak style of results table so it's more clear that the hole row is the result.
