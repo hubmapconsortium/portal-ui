@@ -16,14 +16,16 @@ function FileBrowserFile(props) {
   const token = readCookie('nexus_token');
   const classes = useRoundedSecondaryTooltipStyles();
 
+  const fileUrl = `${assetsEndpoint}/${uuid}/${fileObj.rel_path}?token=${token}`;
+
   return (
     <StyledDiv>
       <IndentedDiv $depth={depth}>
         <StyledFileIcon color="primary" />
         <FilesConditionalLink
-          href={`${assetsEndpoint}/${uuid}/${fileObj.rel_path}?token=${token}`}
+          href={fileUrl}
           hasAgreedToDUA={hasAgreedToDUA}
-          openDUA={openDUA}
+          openDUA={() => openDUA(fileUrl)}
           variant="body1"
           download
         >
