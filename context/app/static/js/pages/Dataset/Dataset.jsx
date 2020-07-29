@@ -2,18 +2,18 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'shared-styles/Links';
-import ProvSection from 'components/Detail/ProvSection';
-import Summary from 'components/Detail/Summary';
-import Attribution from 'components/Detail/Attribution';
-import Protocol from 'components/Detail/Protocol';
-import MetadataTable from 'components/Detail/MetadataTable';
-import VisualizationWrapper from 'components/Detail/VisualizationWrapper';
-import DetailLayout from 'components/Detail/DetailLayout';
-import Files from 'components/Detail/Files';
-import SummaryItem from 'components/Detail/SummaryItem';
+import ProvSection from 'components/detail/ProvSection';
+import Summary from 'components/detail/Summary';
+import Attribution from 'components/detail/Attribution';
+import Protocol from 'components/detail/Protocol';
+import MetadataTable from 'components/detail/MetadataTable';
+import VisualizationWrapper from 'components/detail/VisualizationWrapper';
+import DetailLayout from 'components/detail/DetailLayout';
+import Files from 'components/detail/Files';
+import SummaryItem from 'components/detail/SummaryItem';
 
 // TODO use this context for components other than FileBrowser
-import DetailContext from 'components/Detail/context';
+import DetailContext from 'components/detail/context';
 
 function SummaryData(props) {
   const { data_types, mapped_data_types, origin_sample } = props;
