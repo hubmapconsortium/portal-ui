@@ -46,31 +46,36 @@ function getByPath(nested, field) {
   return current;
 }
 
-function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
-  return function ResultsTable(props) {
+function makeTheadComponent(resultFields) {
+  return function ResultsThead(props) {
+    return (
+      <thead>
+        <tr>
+          {resultFields.map((field) => (
+            <th key={field.id}>{field.name}</th>
+          ))}
+        </tr>
+      </thead>
+    );
+  };
+}
+
+function makeTbodyComponent(resultFields, detailsUrlPrefix, idField) {
+  return function ResultsTbody(props) {
     const { hits } = props;
     /* eslint-disable no-underscore-dangle */
     return (
-      <table className="sk-table">
-        <thead>
-          <tr>
+      <tbody>
+        {hits.map((hit) => (
+          <tr key={hit._id}>
             {resultFields.map((field) => (
-              <th key={field.id}>{field.name}</th>
+              <td key={field.id}>
+                <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
+              </td>
             ))}
           </tr>
-        </thead>
-        <tbody>
-          {hits.map((hit) => (
-            <tr key={hit._id}>
-              {resultFields.map((field) => (
-                <td key={field.id}>
-                  <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        ))}
+      </tbody>
     );
     /* eslint-enable no-underscore-dangle */
   };
@@ -168,17 +173,26 @@ function SearchWrapper(props) {
             />
           )}
 
-          <Hits
-            mod="sk-hits-list"
-            hitsPerPage={hitsPerPage}
-            listComponent={makeTableComponent(resultFields, detailsUrlPrefix, idField)}
-            sourceFilter={resultFieldIds}
-          />
-          <NoHits
-            translations={{
-              'NoHits.NoResultsFound': `No results found. ${isLoggedIn ? '' : 'Login to view more results.'}`,
-            }}
-          />
+          <table className="sk-table">
+            {makeTheadComponent(resultFields)()}
+            <Hits
+              mod="sk-hits-list"
+              hitsPerPage={hitsPerPage}
+              listComponent={makeTbodyComponent(resultFields, detailsUrlPrefix, idField)}
+              sourceFilter={resultFieldIds}
+            />
+            <tbody>
+              <tr>
+                <td>
+                  <NoHits
+                    translations={{
+                      'NoHits.NoResultsFound': `No results found. ${isLoggedIn ? '' : 'Login to view more results.'}`,
+                    }}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <Pagination showNumbers />
         </LayoutResults>
       </LayoutBody>
