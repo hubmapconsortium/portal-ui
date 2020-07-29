@@ -2,11 +2,10 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
-import { StyledMarkdown } from './style';
 import VisualizationWrapper from '../Detail/VisualizationWrapper';
 import SectionHeader from '../Detail/SectionHeader';
 import SectionContainer from '../Detail/SectionContainer';
-import { StyledPaper } from '../Detail/Summary/style';
+import { StyledPaper, StyledInfoIcon, StyledMarkdown } from './style';
 import Attribution from '../Detail/Attribution';
 
 function Preview(props) {
@@ -23,7 +22,16 @@ function Preview(props) {
         <SectionHeader variant="h1" component="h2">
           {title}
         </SectionHeader>
-
+        <SectionContainer id="description">
+          <StyledPaper>
+            <StyledInfoIcon />
+            <Typography variant="body1">
+              HuBMAP Data Portal Previews demonstrate functionality and resources that will become available in future
+              releases. Previews may rely on externally hosted data or analysis results that were generated with
+              processing pipelines that are not yet integrated into the HuBMAP Data Portal infrastructure.
+            </Typography>
+          </StyledPaper>
+        </SectionContainer>
         <StyledPaper>
           <Typography variant="body1">
             <StyledMarkdown source={markdown} />
