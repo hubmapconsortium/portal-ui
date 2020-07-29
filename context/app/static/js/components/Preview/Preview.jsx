@@ -24,7 +24,7 @@ function Preview(props) {
         </SectionHeader>
         <SectionContainer id="description">
           <StyledPaper>
-            <StyledInfoIcon />
+            <StyledInfoIcon color="primary" />
             <Typography variant="body1">
               HuBMAP Data Portal Previews demonstrate functionality and resources that will become available in future
               releases. Previews may rely on externally hosted data or analysis results that were generated with
