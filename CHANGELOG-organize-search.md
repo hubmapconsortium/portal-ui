@@ -1,0 +1,1 @@
+- Move search and dev search into pages.
