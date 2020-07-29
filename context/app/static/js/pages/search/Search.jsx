@@ -2,9 +2,9 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { readCookie } from 'helpers/functions';
 
-import LookupEntity from 'helpers/LookupEntity';
-import SearchWrapper from 'components/search/SearchWrapper';
-import AncestorNote from 'components/search/AncestorNote';
+import LookupEntity from 'js/helpers/LookupEntity';
+import SearchWrapper from 'js/components/search/SearchWrapper';
+import AncestorNote from 'js/components/search/AncestorNote';
 import { donorConfig, sampleConfig, datasetConfig, lastModifiedSort } from './config';
 // eslint-disable-next-line import/named
 import { filter } from './utils';

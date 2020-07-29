@@ -1,12 +1,12 @@
 import React from 'react';
-import ProvSection from 'components/detail/ProvSection';
-import Summary from 'components/detail/Summary';
-import Attribution from 'components/detail/Attribution';
-import Protocol from 'components/detail/Protocol';
-import DonorMetadata from 'components/detail/DonorMetadata';
-import DetailLayout from 'components/detail/DetailLayout';
 
-import DetailContext from 'components/detail/context';
+import ProvSection from 'js/components/Detail/ProvSection';
+import Summary from 'js/components/Detail/Summary';
+import Attribution from 'js/components/Detail/Attribution';
+import Protocol from 'js/components/Detail/Protocol';
+import DonorMetadata from 'js/components/Detail/DonorMetadata';
+import DetailLayout from 'js/components/Detail/DetailLayout';
+import DetailContext from 'js/components/Detail/context';
 
 function DonorDetail(props) {
   const { assayMetadata, entityEndpoint, elasticsearchEndpoint } = props;

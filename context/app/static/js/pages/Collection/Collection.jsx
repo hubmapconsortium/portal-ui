@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LightBlueLink } from 'shared-styles/links';
-import Summary from 'components/detail/Summary';
-import CollectionDatasetsTable from 'components/detail/CollectionDatasetsTable';
-import CollectionCreatorsTable from 'components/detail/CollectionCreatorsTable';
+import { LightBlueLink } from 'js/shared-styles/Links';
+import Summary from 'js/components/Detail/Summary';
+import CollectionDatasetsTable from 'js/components/Detail/CollectionDatasetsTable';
+import CollectionCreatorsTable from 'js/components/Detail/CollectionCreatorsTable';
 
 function Collection(props) {
   const { collection: collectionData } = props;

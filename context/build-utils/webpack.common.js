@@ -25,12 +25,13 @@ const config = {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml'],
     alias: {
       'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
+      images: resolve(__dirname, '../app/static/images/'),
+      js: resolve(__dirname, '../app/static/js/'),
       helpers: resolve(__dirname, '../app/static/js/helpers/'),
       hooks: resolve(__dirname, '../app/static/js/hooks/'),
-      images: resolve(__dirname, '../app/static/images/'),
-      theme$: resolve(__dirname, '../app/static/js/theme.jsx'),
       components: resolve(__dirname, '../app/static/js/components'),
       'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
+      theme$: resolve(__dirname, '../app/static/js/theme.jsx'),
     },
   },
   module: {
