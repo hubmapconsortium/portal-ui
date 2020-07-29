@@ -1,5 +1,5 @@
 import React from 'react';
-import { readCookie } from 'helpers/functions';
+import { readCookie } from 'js/helpers/functions';
 
 function useProvData(uuid, entityEndpoint) {
   const [provData, setProvData] = React.useState(undefined);

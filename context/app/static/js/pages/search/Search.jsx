@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { readCookie } from 'helpers/functions';
+import { readCookie } from 'js/helpers/functions';
 
 import LookupEntity from 'js/helpers/LookupEntity';
 import SearchWrapper from 'js/components/search/SearchWrapper';

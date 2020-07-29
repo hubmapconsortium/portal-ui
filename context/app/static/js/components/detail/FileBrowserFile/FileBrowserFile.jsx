@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import prettyBytes from 'pretty-bytes';
-import { readCookie } from 'helpers/functions';
+import { readCookie } from 'js/helpers/functions';
 
 import { useRoundedSecondaryTooltipStyles } from 'js/shared-styles/tooltips';
 import FilesConditionalLink from '../FilesConditionalLink';

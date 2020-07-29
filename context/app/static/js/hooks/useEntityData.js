@@ -1,5 +1,5 @@
 import React from 'react';
-import { readCookie } from 'helpers/functions';
+import { readCookie } from 'js/helpers/functions';
 
 function useEntityData(uuid, elasticsearchEndpoint) {
   const [entity, setEntity] = React.useState(undefined);
