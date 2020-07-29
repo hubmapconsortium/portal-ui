@@ -28,7 +28,6 @@ const config = {
       images: resolve(__dirname, '../app/static/images/'),
       js: resolve(__dirname, '../app/static/js/'),
       components: resolve(__dirname, '../app/static/js/components'),
-      theme$: resolve(__dirname, '../app/static/js/theme.jsx'),
     },
   },
   module: {

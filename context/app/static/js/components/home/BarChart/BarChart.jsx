@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Vega as ReactVega } from 'react-vega';
 /* eslint-disable import/no-unresolved */
 import useWindowSize from 'js/hooks/useWindowSize';
-import theme from 'theme';
+import theme from 'js/theme';
 /* eslint-enable */
 
 const dummyData = [
