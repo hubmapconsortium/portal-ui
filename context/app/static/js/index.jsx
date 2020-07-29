@@ -5,7 +5,7 @@ import './index.css';
 import App from './components/App';
 import Providers from './components/Providers';
 import Footer from './components/Footer';
-import { Header } from './components/Header';
+import { Header } from './components/header';
 
 const urlPath = window.location.pathname;
 
