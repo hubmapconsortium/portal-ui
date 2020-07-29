@@ -1,0 +1,1 @@
+- Make components imports in pages absolute.
