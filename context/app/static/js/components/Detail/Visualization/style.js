@@ -41,11 +41,15 @@ const SelectionButton = styled(Button)`
   color: white;
 `;
 
-const TopSnackbar = styled(Snackbar)`
+const EscSnackbar = styled(Snackbar)`
   top: ${headerFixedHeight + 10}px;
   & > div {
     background-color: dimgray;
   }
+`;
+
+const WarnSnackbar = styled(Snackbar)`
+  position: absolute;
 `;
 
 const ExpandableDiv = styled.div`
@@ -83,7 +87,8 @@ export {
   StyledHeaderText,
   StyledHeaderRight,
   ExpandButton,
-  TopSnackbar,
+  EscSnackbar,
+  WarnSnackbar,
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
