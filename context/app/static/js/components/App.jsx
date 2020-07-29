@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Providers from './Providers';
 import Routes from './Routes';
 import Footer from './Footer';
-import { Header } from './Header';
+import { Header } from './header';
 
 function App(props) {
   const { flaskData } = props;
