@@ -2,12 +2,12 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
+import VisualizationWrapper from 'components/Detail/VisualizationWrapper';
+import SectionHeader from 'components/Detail/SectionHeader';
+import SectionContainer from 'components/Detail/SectionContainer';
+import { StyledPaper } from 'components/Detail/Summary/style';
+import Attribution from 'components/Detail/Attribution';
 import { StyledMarkdown } from './style';
-import VisualizationWrapper from '../../components/Detail/VisualizationWrapper';
-import SectionHeader from '../../components/Detail/SectionHeader';
-import SectionContainer from '../../components/Detail/SectionContainer';
-import { StyledPaper } from '../../components/Detail/Summary/style';
-import Attribution from '../../components/Detail/Attribution';
 
 function Preview(props) {
   const { vitData, title, assayMetadata, markdown } = props;

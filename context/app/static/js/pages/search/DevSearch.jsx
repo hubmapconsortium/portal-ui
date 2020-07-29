@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import { ExistsQuery, BoolMustNot } from 'searchkit';
 
 import { readCookie } from 'helpers/functions';
-import SearchWrapper from '../../components/Search/SearchWrapper';
+import SearchWrapper from 'components/search/SearchWrapper';
 
 // eslint-disable-next-line import/named
 import { field, filter, checkboxFilter } from './utils';

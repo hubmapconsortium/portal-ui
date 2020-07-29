@@ -3,11 +3,11 @@ import Typography from '@material-ui/core/Typography';
 import { readCookie } from 'helpers/functions';
 
 import LookupEntity from 'helpers/LookupEntity';
-import SearchWrapper from '../../components/Search/SearchWrapper';
+import SearchWrapper from 'components/search/SearchWrapper';
+import AncestorNote from 'components/search/AncestorNote';
 import { donorConfig, sampleConfig, datasetConfig, lastModifiedSort } from './config';
 // eslint-disable-next-line import/named
 import { filter } from './utils';
-import AncestorNote from '../../components/Search/AncestorNote';
 
 const hiddenFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
 
