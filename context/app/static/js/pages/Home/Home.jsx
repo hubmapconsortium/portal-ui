@@ -11,7 +11,7 @@ import Associations from '../../components/Home/Associations';
 import TwitterTimeline from '../../components/Home/TwitterTimeline';
 import { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder } from './style';
 
-const BarChart = React.lazy(() => import('../BarChart'));
+const BarChart = React.lazy(() => import('../../components/Home/BarChart'));
 
 function checkPropReturnValue(prop, obj) {
   return prop in obj ? obj[prop] : 0;
