@@ -27,7 +27,6 @@ const config = {
       'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
       images: resolve(__dirname, '../app/static/images/'),
       js: resolve(__dirname, '../app/static/js/'),
-      components: resolve(__dirname, '../app/static/js/components'),
     },
   },
   module: {

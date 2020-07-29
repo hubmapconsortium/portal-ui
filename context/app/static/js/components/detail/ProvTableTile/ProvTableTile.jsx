@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import useEntityData from 'js/hooks/useEntityData';
 import useDescendantCounts from 'js/hooks/useDescendantCounts';
-import EntityTile from 'components/entity-tile/EntityTile';
+import EntityTile from 'js/components/entity-tile/EntityTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 import DetailContext from '../context';
 import { DownIcon } from './style';
