@@ -2,11 +2,11 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
-import VisualizationWrapper from 'components/Detail/VisualizationWrapper';
-import SectionHeader from 'components/Detail/SectionHeader';
-import SectionContainer from 'components/Detail/SectionContainer';
-import { StyledPaper } from 'components/Detail/Summary/style';
-import Attribution from 'components/Detail/Attribution';
+import VisualizationWrapper from 'js/components/Detail/VisualizationWrapper';
+import SectionHeader from 'js/components/Detail/SectionHeader';
+import SectionContainer from 'js/components/Detail/SectionContainer';
+import { StyledPaper } from 'js/components/Detail/Summary/style';
+import Attribution from 'js/components/Detail/Attribution';
 import { StyledMarkdown } from './style';
 
 function Preview(props) {
