@@ -3,12 +3,12 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import DataSummary from '../DataSummary';
-import About from '../About';
-import Workflow from '../Workflow';
-import DataUseGuidelines from '../DataUseGuidelines';
-import Associations from '../Associations';
-import TwitterTimeline from '../TwitterTimeline';
+import DataSummary from '../../components/Home/DataSummary';
+import About from '../../components/Home/About';
+import Workflow from '../../components/Home/Workflow';
+import DataUseGuidelines from '../../components/Home/DataUseGuidelines';
+import Associations from '../../components/Home/Associations';
+import TwitterTimeline from '../../components/Home/TwitterTimeline';
 import { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder } from './style';
 
 const BarChart = React.lazy(() => import('../BarChart'));
