@@ -46,13 +46,18 @@ function getByPath(nested, field) {
   return current;
 }
 
-function makeTheadComponent(resultFields) {
-  return function ResultsThead(props) {
+function makeTheadComponent() {
+  return function ResultsTheadTd(props) {
+    const { items } = props;
+    const pairs = [];
+    for (let i = 0; i < items.length; i += 2) {
+      pairs.push(items.slice(i, i + 2));
+    }
     return (
       <thead>
         <tr>
-          {resultFields.map((field) => (
-            <th key={field.id}>{field.name}</th>
+          {pairs.map((pair) => (
+            <td>{JSON.stringify(pair)}</td>
           ))}
         </tr>
       </thead>
@@ -161,7 +166,6 @@ function SearchWrapper(props) {
                 }}
               />
               <MaskedSelectedFilters hiddenFilterIds={hiddenFilterIds} />
-              <SortingSelector options={sortOptions} />
             </ActionBarRow>
           </ActionBar>
           {debug && (
@@ -174,7 +178,7 @@ function SearchWrapper(props) {
           )}
 
           <table className="sk-table">
-            {makeTheadComponent(resultFields)()}
+            <SortingSelector options={sortOptions} listComponent={makeTheadComponent()} />
             <Hits
               mod="sk-hits-list"
               hitsPerPage={hitsPerPage}
