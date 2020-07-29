@@ -20,8 +20,6 @@ import {
 import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
 // There is more in the name space, but we only need the filterTypes.
 
-// TODO figure out why we are getting es-lint here
-// eslint-disable-next-line import/no-unresolved
 import './SearchWrapper.scss';
 
 function DebugItem(props) {
