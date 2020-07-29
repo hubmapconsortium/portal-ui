@@ -3,15 +3,15 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import DataSummary from 'js/components/Home/DataSummary';
-import About from 'js/components/Home/About';
-import Workflow from 'js/components/Home/Workflow';
-import DataUseGuidelines from 'js/components/Home/DataUseGuidelines';
-import Associations from 'js/components/Home/Associations';
-import TwitterTimeline from 'js/components/Home/TwitterTimeline';
+import DataSummary from 'js/components/home/DataSummary';
+import About from 'js/components/home/About';
+import Workflow from 'js/components/home/Workflow';
+import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
+import Associations from 'js/components/home/Associations';
+import TwitterTimeline from 'js/components/home/TwitterTimeline';
 import { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder } from './style';
 
-const BarChart = React.lazy(() => import('js/components/Home/BarChart'));
+const BarChart = React.lazy(() => import('js/components/home/BarChart'));
 
 function checkPropReturnValue(prop, obj) {
   return prop in obj ? obj[prop] : 0;

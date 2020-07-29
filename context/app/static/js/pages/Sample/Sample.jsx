@@ -1,16 +1,16 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import ProvSection from 'js/components/Detail/ProvSection';
-import Summary from 'js/components/Detail/Summary';
-import Attribution from 'js/components/Detail/Attribution';
-import Protocol from 'js/components/Detail/Protocol';
-import SummaryItem from 'js/components/Detail/SummaryItem';
-import DetailLayout from 'js/components/Detail/DetailLayout';
-import MetadataTable from 'js/components/Detail/MetadataTable';
-import SampleTissue from 'js/components/Detail/SampleTissue';
+import ProvSection from 'js/components/detail/ProvSection';
+import Summary from 'js/components/detail/Summary';
+import Attribution from 'js/components/detail/Attribution';
+import Protocol from 'js/components/detail/Protocol';
+import SummaryItem from 'js/components/detail/SummaryItem';
+import DetailLayout from 'js/components/detail/DetailLayout';
+import MetadataTable from 'js/components/detail/MetadataTable';
+import SampleTissue from 'js/components/detail/SampleTissue';
 
-import DetailContext from 'js/components/Detail/context';
+import DetailContext from 'js/components/detail/context';
 
 function SampleDetail(props) {
   const { assayMetadata, entityEndpoint, elasticsearchEndpoint } = props;
