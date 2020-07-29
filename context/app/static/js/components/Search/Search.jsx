@@ -56,9 +56,14 @@ const searchProps = {
   filters: filtersByType[type],
   sortOptions: resultFields
     .map((field) => {
+      const base = {
+        defaultOption: false,
+        label: field.name,
+        field: `${field.id}.keyword`,
+      };
       return [
-        { defaultOption: false, label: `${field.name} down`, field: `${field.id}.keyword`, order: 'desc' },
-        { defaultOption: false, label: `${field.name} up`, field: `${field.id}.keyword`, order: 'asc' },
+        { ...base, order: 'desc' },
+        { ...base, order: 'asc' },
       ];
     })
     .flat(),

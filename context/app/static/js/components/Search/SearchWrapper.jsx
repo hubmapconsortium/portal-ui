@@ -48,7 +48,7 @@ function getByPath(nested, field) {
 
 function makeTheadComponent() {
   return function ResultsTheadTd(props) {
-    const { items } = props;
+    const { items, setItems } = props;
     const pairs = [];
     for (let i = 0; i < items.length; i += 2) {
       pairs.push(items.slice(i, i + 2));
@@ -57,7 +57,7 @@ function makeTheadComponent() {
       <thead>
         <tr>
           {pairs.map((pair) => (
-            <td>{JSON.stringify(pair)}</td>
+            <th key={pair[0].key}>{pair[0].label}</th>
           ))}
         </tr>
       </thead>
