@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
-import Panel from '../Panel';
+import Panel from '../../components/collections/Panel';
 import { PageWrapper, ScrollBox } from './style';
 
 function Collections(props) {
