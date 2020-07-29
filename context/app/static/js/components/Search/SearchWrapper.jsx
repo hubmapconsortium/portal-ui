@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './SearchWrapper.scss';
 import {
   SearchkitManager,
   SearchkitProvider,
@@ -20,6 +19,10 @@ import {
 
 import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
 // There is more in the name space, but we only need the filterTypes.
+
+// TODO figure out why we are getting es-lint here
+// eslint-disable-next-line import/no-unresolved
+import './SearchWrapper.scss';
 
 function DebugItem(props) {
   return <pre>{JSON.stringify(props, false, 2)}</pre>;
