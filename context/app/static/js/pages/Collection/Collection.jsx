@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { LightBlueLink } from 'shared-styles/Links';
-import Summary from '../Summary';
-import CollectionDatasetsTable from '../CollectionDatasetsTable';
-import CollectionCreatorsTable from '../CollectionCreatorsTable';
+import Summary from '../../components/Detail/Summary';
+import CollectionDatasetsTable from '../../components/Detail/CollectionDatasetsTable';
+import CollectionCreatorsTable from '../../components/Detail/CollectionCreatorsTable';
 
 function Collection(props) {
   const { collection: collectionData } = props;
