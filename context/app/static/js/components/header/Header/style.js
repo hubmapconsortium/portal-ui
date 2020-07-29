@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-// eslint-disable-next-line import/no-unresolved
+
 import Logo from 'images/hubmap-logo.svg';
 
 const StyledAppBar = styled(AppBar)`
