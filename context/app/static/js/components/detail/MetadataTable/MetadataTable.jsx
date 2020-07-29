@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { tableToDelimitedString, createDownloadUrl } from 'helpers/functions';
-import { StyledTableContainer, HeaderCell } from 'shared-styles/Table';
+import { StyledTableContainer, HeaderCell } from 'shared-styles/table';
 import { DownloadIcon, Flex } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
