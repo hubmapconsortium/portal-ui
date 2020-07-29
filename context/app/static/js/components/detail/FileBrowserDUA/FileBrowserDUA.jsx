@@ -7,7 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 
-import { LightBlueLink } from 'shared-styles/links';
+import { LightBlueLink } from 'js/shared-styles/links';
 import { getDUAText } from './utils';
 import { ObliqueSpan, StyledHeader, StyledDiv } from './style';
 

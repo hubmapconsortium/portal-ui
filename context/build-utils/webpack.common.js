@@ -30,7 +30,6 @@ const config = {
       helpers: resolve(__dirname, '../app/static/js/helpers/'),
       hooks: resolve(__dirname, '../app/static/js/hooks/'),
       components: resolve(__dirname, '../app/static/js/components'),
-      'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
       theme$: resolve(__dirname, '../app/static/js/theme.jsx'),
     },
   },

@@ -3,7 +3,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import prettyBytes from 'pretty-bytes';
 import { readCookie } from 'helpers/functions';
 
-import { useRoundedSecondaryTooltipStyles } from 'shared-styles/tooltips';
+import { useRoundedSecondaryTooltipStyles } from 'js/shared-styles/tooltips';
 import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
 import DetailContext from '../context';

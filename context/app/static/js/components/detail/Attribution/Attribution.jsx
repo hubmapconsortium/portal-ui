@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LightBlueLink } from 'shared-styles/links';
+import { LightBlueLink } from 'js/shared-styles/links';
 import { FlexPaper } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';

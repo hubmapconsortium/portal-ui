@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import IconButton from '@material-ui/core/IconButton';
 
-import { FileIcon } from 'shared-styles/icons';
+import { FileIcon } from 'js/shared-styles/icons';
 
 const Flex = styled.div`
   display: flex;

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 
-import { LightBlueLink } from 'shared-styles/links';
+import { LightBlueLink } from 'js/shared-styles/links';
 import useProtocolData from 'hooks/useProtocolData';
 import { StyledPaper } from './style';
 import SectionHeader from '../SectionHeader';

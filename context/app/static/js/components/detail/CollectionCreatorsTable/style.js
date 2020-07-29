@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Link from '@material-ui/core/Link';
 import InfoIcon from '@material-ui/icons/InfoRounded';
-import { HeaderCell } from 'shared-styles/table';
+import { HeaderCell } from 'js/shared-styles/table';
 
 const HeaderIconCell = styled(HeaderCell)`
   font-size: ${(props) => props.theme.typography.subtitle2.fontSize};
