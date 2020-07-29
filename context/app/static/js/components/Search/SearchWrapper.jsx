@@ -48,7 +48,11 @@ function getByPath(nested, field) {
 
 function makeTheadComponent() {
   return function ResultsTheadTd(props) {
-    const { items, setItems } = props;
+    const { items, setItems, selectedItems } = props;
+    if (selectedItems.length > 1) {
+      console.warn(`Expected only a single selected sort, not ${JSON.stringify(selectedItems)}`);
+    }
+    const selectedItem = selectedItems.length ? selectedItems[0] : undefined;
     const pairs = [];
     for (let i = 0; i < items.length; i += 2) {
       pairs.push(items.slice(i, i + 2));
@@ -56,9 +60,16 @@ function makeTheadComponent() {
     return (
       <thead>
         <tr>
-          {pairs.map((pair) => (
-            <th key={pair[0].key}>{pair[0].label}</th>
-          ))}
+          {pairs.map((pair) => {
+            const match = pair.filter((item) => item.key === selectedItem);
+            const order = match.length ? match[0].order : undefined;
+            const orderIcon = order ? { asc: '^', desc: 'v' }[order] : undefined;
+            return (
+              <th key={pair[0].key}>
+                {pair[0].label}&nbsp;{orderIcon}
+              </th>
+            );
+          })}
         </tr>
       </thead>
     );
