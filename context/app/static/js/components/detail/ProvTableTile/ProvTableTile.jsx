@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
-import useEntityData from 'hooks/useEntityData';
-import useDescendantCounts from 'hooks/useDescendantCounts';
+import useEntityData from 'js/hooks/useEntityData';
+import useDescendantCounts from 'js/hooks/useDescendantCounts';
 import EntityTile from 'components/entity-tile/EntityTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 import DetailContext from '../context';

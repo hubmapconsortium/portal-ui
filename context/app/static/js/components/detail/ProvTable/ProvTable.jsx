@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import useDescendantCounts from 'hooks/useDescendantCounts';
+import useDescendantCounts from 'js/hooks/useDescendantCounts';
 import { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';

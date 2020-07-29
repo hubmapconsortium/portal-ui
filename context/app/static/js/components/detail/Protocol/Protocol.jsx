@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 
 import { LightBlueLink } from 'js/shared-styles/links';
-import useProtocolData from 'hooks/useProtocolData';
+import useProtocolData from 'js/hooks/useProtocolData';
 import { StyledPaper } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionItem from '../SectionItem';
