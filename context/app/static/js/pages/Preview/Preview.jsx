@@ -3,11 +3,11 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
 import { StyledMarkdown } from './style';
-import VisualizationWrapper from '../Detail/VisualizationWrapper';
-import SectionHeader from '../Detail/SectionHeader';
-import SectionContainer from '../Detail/SectionContainer';
-import { StyledPaper } from '../Detail/Summary/style';
-import Attribution from '../Detail/Attribution';
+import VisualizationWrapper from '../../components/Detail/VisualizationWrapper';
+import SectionHeader from '../../components/Detail/SectionHeader';
+import SectionContainer from '../../components/Detail/SectionContainer';
+import { StyledPaper } from '../../components/Detail/Summary/style';
+import Attribution from '../../components/Detail/Attribution';
 
 function Preview(props) {
   const { vitData, title, assayMetadata, markdown } = props;
