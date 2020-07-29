@@ -63,9 +63,14 @@ function makeTheadComponent() {
           {pairs.map((pair) => {
             const match = pair.filter((item) => item.key === selectedItem);
             const order = match.length ? match[0].order : undefined;
-            const orderIcon = order ? { asc: '^', desc: 'v' }[order] : undefined;
+            const orderIcon = order ? { asc: '▲', desc: '▼' }[order] : undefined;
             return (
-              <th key={pair[0].key}>
+              <th
+                key={pair[0].key}
+                onClick={() => {
+                  setItems([pair[0].key]);
+                }}
+              >
                 {pair[0].label}&nbsp;{orderIcon}
               </th>
             );
