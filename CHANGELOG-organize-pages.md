@@ -1,0 +1,1 @@
+- Move pages from components to a pages directory.
