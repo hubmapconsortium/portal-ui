@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import LaunchRoundedIcon from '@material-ui/icons/LaunchRounded';
-import { LightBlueLink } from 'shared-styles/Links';
+import { LightBlueLink } from 'shared-styles/links';
 
 const CwlIcon = styled(LaunchRoundedIcon)`
   margin-left: ${(props) => props.theme.spacing(0.5)}px;

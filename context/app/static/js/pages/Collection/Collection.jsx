@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LightBlueLink } from 'shared-styles/Links';
+import { LightBlueLink } from 'shared-styles/links';
 import Summary from 'components/detail/Summary';
 import CollectionDatasetsTable from 'components/detail/CollectionDatasetsTable';
 import CollectionCreatorsTable from 'components/detail/CollectionCreatorsTable';

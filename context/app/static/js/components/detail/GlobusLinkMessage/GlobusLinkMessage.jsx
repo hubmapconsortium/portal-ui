@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
-import { LightBlueLink } from 'shared-styles/Links';
+import { LightBlueLink } from 'shared-styles/links';
 import FilesContext from '../Files/context';
 import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledExternalLinkIcon } from './style';
