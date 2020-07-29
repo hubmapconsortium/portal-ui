@@ -1,0 +1,1 @@
+- Simplify webpack aliases.
