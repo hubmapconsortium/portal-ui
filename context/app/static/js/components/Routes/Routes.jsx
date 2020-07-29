@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
-import { Home } from '../Home';
+
+import Home from '../../pages/Home';
 import Search from '../Search/Search';
 import DevSearch from '../Search/DevSearch';
-import { Donor, Sample, Dataset, Collection } from '../Detail';
-import Preview from '../Preview';
-import { Collections } from '../Collections';
-import Markdown from '../Markdown';
+import Donor from '../../pages/Donor';
+import Sample from '../../pages/Sample';
+import Dataset from '../../pages/Dataset';
+import Collection from '../../pages/Collection';
+import Preview from '../../pages/Preview';
+import Collections from '../../pages/Collections';
+import Markdown from '../../pages/Markdown';
 
 function Routes(props) {
   const { flaskData } = props;
