@@ -21,6 +21,8 @@ import {
 import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
 // There is more in the name space, but we only need the filterTypes.
 
+import { resultFieldsToSortOptions } from './utils';
+
 function getByPath(nested, field) {
   const path = field.id;
   let current = nested;
@@ -144,12 +146,12 @@ function SearchWrapper(props) {
     resultFields,
     hitsPerPage,
     httpHeaders,
-    sortOptions,
     hiddenFilterIds,
     searchUrlPath,
     queryFields,
     isLoggedIn,
   } = props;
+  const sortOptions = resultFieldsToSortOptions(resultFields);
   const resultFieldIds = resultFields.map((field) => field.id).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 

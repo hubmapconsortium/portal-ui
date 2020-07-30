@@ -52,3 +52,19 @@ export function checkboxFilter(id, name, filter) {
     },
   };
 }
+
+export function resultFieldsToSortOptions(fields) {
+  return fields
+    .map((f) => {
+      const base = {
+        defaultOption: false,
+        label: f.name,
+        field: `${f.id}.keyword`,
+      };
+      return [
+        { ...base, order: 'desc', defaultOption: f.id === 'mapped_last_modified_timestamp' },
+        { ...base, order: 'asc' },
+      ];
+    })
+    .flat();
+}

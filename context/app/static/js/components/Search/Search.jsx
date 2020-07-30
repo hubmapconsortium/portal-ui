@@ -4,7 +4,7 @@ import { readCookie } from 'helpers/functions';
 import LookupEntity from 'helpers/LookupEntity';
 import SearchWrapper from './SearchWrapper';
 import './Search.scss';
-import { donorConfig, sampleConfig, datasetConfig, lastModifiedSort } from './config';
+import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named
 import { filter } from './utils';
 import AncestorNote from './AncestorNote';
@@ -54,19 +54,6 @@ const searchProps = {
   // "type" should be one of the filters described here:
   // http://docs.searchkit.co/stable/components/navigation/
   filters: filtersByType[type],
-  sortOptions: resultFields
-    .map((field) => {
-      const base = {
-        defaultOption: false,
-        label: field.name,
-        field: `${field.id}.keyword`,
-      };
-      return [
-        { ...base, order: 'desc', defaultOption: field.id === 'mapped_last_modified_timestamp' },
-        { ...base, order: 'asc' },
-      ];
-    })
-    .flat(),
   hiddenFilterIds: hiddenFilters.map((hiddenFilter) => hiddenFilter.props.id),
   queryFields: ['everything'],
   isLoggedIn: Boolean(nexus_token),

@@ -7,7 +7,6 @@ import SearchWrapper from './SearchWrapper';
 import './Search.scss';
 // eslint-disable-next-line import/named
 import { field, filter, checkboxFilter } from './utils';
-import { lastModifiedSort, sizeSort } from './config';
 
 const nexus_token = readCookie('nexus_token');
 const httpHeaders = nexus_token
@@ -44,7 +43,6 @@ const searchProps = {
     checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),
     checkboxFilter('no_files', 'No files?', BoolMustNot(ExistsQuery('files'))),
   ],
-  sortOptions: lastModifiedSort.concat(sizeSort),
   queryFields: ['everything'],
   isLoggedIn: Boolean(nexus_token),
 };
