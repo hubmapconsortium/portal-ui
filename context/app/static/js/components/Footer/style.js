@@ -38,5 +38,4 @@ const Background = styled.div`
   width: 100%;
 `;
 
-
 export { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background };
