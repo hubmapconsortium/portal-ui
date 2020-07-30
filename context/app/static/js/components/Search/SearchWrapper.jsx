@@ -21,10 +21,6 @@ import {
 import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
 // There is more in the name space, but we only need the filterTypes.
 
-function DebugItem(props) {
-  return <pre>{JSON.stringify(props, false, 2)}</pre>;
-}
-
 function getByPath(nested, field) {
   const path = field.id;
   let current = nested;
@@ -47,7 +43,7 @@ function getByPath(nested, field) {
 }
 
 function makeTheadComponent() {
-  return function ResultsTheadTd(props) {
+  return function ResultsThead(props) {
     const { items, toggleItem, selectedItems } = props;
     if (selectedItems.length > 1) {
       console.warn('Expected only a single sort, not:', selectedItems);
@@ -147,7 +143,6 @@ function SearchWrapper(props) {
     idField,
     resultFields,
     hitsPerPage,
-    debug,
     httpHeaders,
     sortOptions,
     hiddenFilterIds,
@@ -188,15 +183,6 @@ function SearchWrapper(props) {
               <MaskedSelectedFilters hiddenFilterIds={hiddenFilterIds} />
             </ActionBarRow>
           </ActionBar>
-          {debug && (
-            <Hits
-              mod="sk-hits-list"
-              hitsPerPage={hitsPerPage}
-              itemComponent={DebugItem}
-              sourceFilter={resultFieldIds}
-            />
-          )}
-
           <table className="sk-table">
             <SortingSelector options={sortOptions} listComponent={makeTheadComponent()} />
             <Hits
@@ -205,18 +191,12 @@ function SearchWrapper(props) {
               listComponent={makeTbodyComponent(resultFields, detailsUrlPrefix, idField)}
               sourceFilter={resultFieldIds}
             />
-            <tbody>
-              <tr>
-                <td>
-                  <NoHits
-                    translations={{
-                      'NoHits.NoResultsFound': `No results found. ${isLoggedIn ? '' : 'Login to view more results.'}`,
-                    }}
-                  />
-                </td>
-              </tr>
-            </tbody>
           </table>
+          <NoHits
+            translations={{
+              'NoHits.NoResultsFound': `No results found. ${isLoggedIn ? '' : 'Login to view more results.'}`,
+            }}
+          />
           <Pagination showNumbers />
         </LayoutResults>
       </LayoutBody>
@@ -272,7 +252,6 @@ SearchWrapper.propTypes = {
     }),
   ).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
-  debug: PropTypes.bool,
   httpHeaders: PropTypes.objectOf(PropTypes.string),
   sortOptions: PropTypes.arrayOf(
     PropTypes.exact({
@@ -289,7 +268,6 @@ SearchWrapper.propTypes = {
 };
 
 SearchWrapper.defaultProps = {
-  debug: false,
   sortOptions: [
     {
       label: 'Relevance',
