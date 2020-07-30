@@ -48,7 +48,7 @@ function getByPath(nested, field) {
 
 function makeTheadComponent() {
   return function ResultsTheadTd(props) {
-    const { items, setItems, selectedItems } = props;
+    const { items, toggleItem, selectedItems } = props;
     if (selectedItems.length > 1) {
       console.warn(`Expected only a single selected sort, not ${JSON.stringify(selectedItems)}`);
     }
@@ -68,7 +68,7 @@ function makeTheadComponent() {
               <th
                 key={pair[0].key}
                 onClick={() => {
-                  setItems([pair[0].key]);
+                  toggleItem(pair[order && order === pair[0].order ? 1 : 0].key);
                 }}
               >
                 {pair[0].label}&nbsp;{orderIcon}
