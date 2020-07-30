@@ -10,6 +10,7 @@ vitessce_conf:
         {
           'name': 'raster',
           'type': 'RASTER',
+          'fileType': 'raster.json',
           'url': 'https://s3.amazonaws.com/vitessce-data/0.0.27/master_release/spraggins/spraggins.raster.json',
         },
       ],

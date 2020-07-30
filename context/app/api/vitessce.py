@@ -303,15 +303,18 @@ class Vitessce:
         }
         """
 
+        # Replace file["type"] with EXPRESSION-MATRIX if it is outdated CLUSTERS or GENES
+        layer_type = file["type"] if file['type'] not in ['CLUSTERS', 'GENES'] else 'EXPRESSION-MATRIX'
+
         return {
-            "type": file["type"],
+            "type": layer_type,
             "fileType": f"{file["type"].lower()}.json",
             "url": self._build_assets_url(file["rel_path"].replace(TILE_REGEX, tile))
             if file["type"] != "RASTER"
             else self._build_image_layer_datauri(
                 [file["rel_path"].replace(TILE_REGEX, tile)]
             ),
-            "name": file["type"].lower(),
+            "name": layer_type.lower(),
         }
 
     def _build_multi_file_image_layer_conf(self, files):

@@ -12,27 +12,36 @@ vitessce_conf:
           {
             'name': 'cells',
             'type': 'CELLS',
+            'fileType': 'cells.json',
             'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/2dca1bf5832a4102ba780e9e54f6c350.cells.json',
           },
           {
             'name': 'cell-sets',
             'type': 'CELL-SETS',
+            'fileType': 'cell-sets.json',
             'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/2dca1bf5832a4102ba780e9e54f6c350.cell-sets.json',
+          },
+          {
+            'name': 'expression-matrix',
+            'type': 'EXPRESSION-MATRIX',
+            'fileType': 'expression-matrix.zarr',
+            'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/2dca1bf5832a4102ba780e9e54f6c350.expression-matrix.zarr',
           },
         ],
       'public': true,
       'staticLayout':
         [
-          { 'component': 'cellSets', 'x': 7, 'y': 0, 'w': 5, 'h': 1 },
-          { 'component': 'cellSetSizes', 'x': 7, 'y': 1, 'w': 5, 'h': 1 },
+          { 'component': 'cellSets', 'x': 7, 'y': 0, 'w': 5, 'h': 2 },
+          { 'component': 'cellSetSizes', 'x': 7, 'y': 2, 'w': 5, 'h': 2 },
           {
             'component': 'scatterplot',
             'props': { 'mapping': 'UMAP', 'view': { 'zoom': 4, 'target': [8, 8, 0] } },
             'x': 0,
             'y': 0,
             'w': 7,
-            'h': 2,
+            'h': 4,
           },
+          { 'component': 'heatmap', 'x': 0, 'y': 4, 'w': 12, 'h': 4 },
         ],
     },
     {
@@ -42,27 +51,36 @@ vitessce_conf:
           {
             'name': 'cells',
             'type': 'CELLS',
+            'fileType': 'cells.json',
             'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/7fd04d1aba61c35843dd2eb6a19d2545.cells.json',
           },
           {
             'name': 'cell-sets',
             'type': 'CELL-SETS',
+            'fileType': 'cell-sets.json',
             'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/7fd04d1aba61c35843dd2eb6a19d2545.cell-sets.json',
+          },
+          {
+            'name': 'expression-matrix',
+            'type': 'EXPRESSION-MATRIX',
+            'fileType': 'expression-matrix.zarr',
+            'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/7fd04d1aba61c35843dd2eb6a19d2545.expression-matrix.zarr',
           },
         ],
       'public': true,
       'staticLayout':
         [
-          { 'component': 'cellSets', 'x': 7, 'y': 0, 'w': 5, 'h': 1 },
-          { 'component': 'cellSetSizes', 'x': 7, 'y': 1, 'w': 5, 'h': 1 },
+          { 'component': 'cellSets', 'x': 7, 'y': 0, 'w': 5, 'h': 2 },
+          { 'component': 'cellSetSizes', 'x': 7, 'y': 2, 'w': 5, 'h': 2 },
           {
             'component': 'scatterplot',
             'props': { 'mapping': 'UMAP', 'view': { 'zoom': 4, 'target': [8, 8, 0] } },
             'x': 0,
             'y': 0,
             'w': 7,
-            'h': 2,
+            'h': 4,
           },
+          { 'component': 'heatmap', 'x': 0, 'y': 4, 'w': 12, 'h': 4 },
         ],
     },
     {
@@ -72,27 +90,36 @@ vitessce_conf:
           {
             'name': 'cells',
             'type': 'CELLS',
+            'fileType': 'cells.json',
             'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/8a238da50c0c0436510b857c21e4e792.cells.json',
           },
           {
             'name': 'cell-sets',
             'type': 'CELL-SETS',
+            'fileType': 'cell-sets.json',
             'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/8a238da50c0c0436510b857c21e4e792.cell-sets.json',
+          },
+          {
+            'name': 'expression-matrix',
+            'type': 'EXPRESSION-MATRIX',
+            'fileType': 'expression-matrix.zarr',
+            'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/8a238da50c0c0436510b857c21e4e792.expression-matrix.zarr',
           },
         ],
       'public': true,
       'staticLayout':
         [
-          { 'component': 'cellSets', 'x': 7, 'y': 0, 'w': 5, 'h': 1 },
-          { 'component': 'cellSetSizes', 'x': 7, 'y': 1, 'w': 5, 'h': 1 },
+          { 'component': 'cellSets', 'x': 7, 'y': 0, 'w': 5, 'h': 2 },
+          { 'component': 'cellSetSizes', 'x': 7, 'y': 2, 'w': 5, 'h': 2 },
           {
             'component': 'scatterplot',
             'props': { 'mapping': 'UMAP', 'view': { 'zoom': 4, 'target': [8, 8, 0] } },
             'x': 0,
             'y': 0,
             'w': 7,
-            'h': 2,
+            'h': 4,
           },
+          { 'component': 'heatmap', 'x': 0, 'y': 4, 'w': 12, 'h': 4 },
         ],
     },
     {
@@ -102,27 +129,36 @@ vitessce_conf:
           {
             'name': 'cells',
             'type': 'CELLS',
+            'fileType': 'cells.json',
             'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/3683b49e27133c064ccbd59ff9723e7c.cells.json',
           },
           {
             'name': 'cell-sets',
             'type': 'CELL-SETS',
+            'fileType': 'cell-sets.json',
             'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/3683b49e27133c064ccbd59ff9723e7c.cell-sets.json',
+          },
+          {
+            'name': 'expression-matrix',
+            'type': 'EXPRESSION-MATRIX',
+            'fileType': 'expression-matrix.zarr',
+            'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/3683b49e27133c064ccbd59ff9723e7c.expression-matrix.zarr',
           },
         ],
       'public': true,
       'staticLayout':
         [
-          { 'component': 'cellSets', 'x': 7, 'y': 0, 'w': 5, 'h': 1 },
-          { 'component': 'cellSetSizes', 'x': 7, 'y': 1, 'w': 5, 'h': 1 },
+          { 'component': 'cellSets', 'x': 7, 'y': 0, 'w': 5, 'h': 2 },
+          { 'component': 'cellSetSizes', 'x': 7, 'y': 2, 'w': 5, 'h': 2 },
           {
             'component': 'scatterplot',
             'props': { 'mapping': 'UMAP', 'view': { 'zoom': 4, 'target': [8, 8, 0] } },
             'x': 0,
             'y': 0,
             'w': 7,
-            'h': 2,
+            'h': 4,
           },
+          { 'component': 'heatmap', 'x': 0, 'y': 4, 'w': 12, 'h': 4 },
         ],
     },
     {
@@ -132,27 +168,36 @@ vitessce_conf:
           {
             'name': 'cells',
             'type': 'CELLS',
+            'fileType': 'cells.json',
             'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/ed8a4dbbb1554a5e3227d6dfb2368828.cells.json',
           },
           {
             'name': 'cell-sets',
             'type': 'CELL-SETS',
+            'fileType': 'cell-sets.json',
             'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/ed8a4dbbb1554a5e3227d6dfb2368828.cell-sets.json',
+          },
+          {
+            'name': 'expression-matrix',
+            'type': 'EXPRESSION-MATRIX',
+            'fileType': 'expression-matrix.zarr',
+            'url': 'https://s3.amazonaws.com/vitessce-data/0.0.31/master_release/satija/ed8a4dbbb1554a5e3227d6dfb2368828.expression-matrix.zarr',
           },
         ],
       'public': true,
       'staticLayout':
         [
-          { 'component': 'cellSets', 'x': 7, 'y': 0, 'w': 5, 'h': 1 },
-          { 'component': 'cellSetSizes', 'x': 7, 'y': 1, 'w': 5, 'h': 1 },
+          { 'component': 'cellSets', 'x': 7, 'y': 0, 'w': 5, 'h': 2 },
+          { 'component': 'cellSetSizes', 'x': 7, 'y': 2, 'w': 5, 'h': 2 },
           {
             'component': 'scatterplot',
             'props': { 'mapping': 'UMAP', 'view': { 'zoom': 4, 'target': [8, 8, 0] } },
             'x': 0,
             'y': 0,
             'w': 7,
-            'h': 2,
+            'h': 4,
           },
+          { 'component': 'heatmap', 'x': 0, 'y': 4, 'w': 12, 'h': 4 },
         ],
     },
   ]
