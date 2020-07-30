@@ -21,7 +21,7 @@ import {
   StyledHeaderRight,
   ExpandButton,
   EscSnackbar,
-  WarnSnackbar,
+  ErrorSnackbar,
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
@@ -33,7 +33,7 @@ function Visualization(props) {
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEscSnackbarOpen, setIsEscSnackbarOpen] = useState(false);
-  const [vitessceWarnings, setVitessceWarnings] = useState([]);
+  const [vitessceErrors, setVitessceErrors] = useState([]);
   const [vitessceTheme, setVitessceTheme] = useState('light');
   const [vitessceSelection, setVitessceSelection] = useState(0);
   const [open, toggle] = useReducer((v) => !v, false);
@@ -49,16 +49,16 @@ function Visualization(props) {
     setIsEscSnackbarOpen(false);
   }
 
-  function removeWarning(warning) {
-    setVitessceWarnings((prev) => prev.filter((w) => w !== warning));
+  function removeError(message) {
+    setVitessceErrors((prev) => prev.filter((d) => d !== message));
   }
 
-  function addWarning(warning) {
-    setVitessceWarnings((prev) => (prev.includes(warning) ? prev : [...prev, warning]));
+  function addError(message) {
+    setVitessceErrors((prev) => (prev.includes(message) ? prev : [...prev, message]));
   }
 
-  function setSelectionAndClearWarnings(i) {
-    setVitessceWarnings([]);
+  function setSelectionAndClearErrors(i) {
+    setVitessceErrors([]);
     setVitessceSelection(i);
   }
 
@@ -100,7 +100,7 @@ function Visualization(props) {
                   <ClickAwayListener onClickAway={toggle}>
                     <MenuList id="preview-options">
                       {vitData.map(({ name }, i) => (
-                        <MenuItem onClick={() => setSelectionAndClearWarnings(i)} key={name}>
+                        <MenuItem onClick={() => setSelectionAndClearErrors(i)} key={name}>
                           {name}
                         </MenuItem>
                       ))}
@@ -124,25 +124,25 @@ function Visualization(props) {
             onClose={() => setIsEscSnackbarOpen(false)}
             message="Press [esc] to exit full window."
           />
-          {vitessceWarnings.length > 0 && (
-            <WarnSnackbar
+          {vitessceErrors.length > 0 && (
+            <ErrorSnackbar
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'right',
               }}
               open
-              key={vitessceWarnings[0]}
+              key={vitessceErrors[0]}
             >
-              <Alert severity="warning" variant="filled" onClose={() => removeWarning(vitessceWarnings[0])}>
-                {vitessceWarnings[0]}
+              <Alert severity="error" variant="filled" onClose={() => removeError(vitessceErrors[0])}>
+                {vitessceErrors[0]}
               </Alert>
-            </WarnSnackbar>
+            </ErrorSnackbar>
           )}
           <Vitessce
             config={vitData[vitessceSelection] || vitData}
             theme={vitessceTheme}
             height={isExpanded ? null : vitessceFixedHeight}
-            onWarn={addWarning}
+            onWarn={addError}
           />
         </ExpandableDiv>
       </Paper>

@@ -48,7 +48,7 @@ const EscSnackbar = styled(Snackbar)`
   }
 `;
 
-const WarnSnackbar = styled(Snackbar)`
+const ErrorSnackbar = styled(Snackbar)`
   position: absolute;
 `;
 
@@ -88,7 +88,7 @@ export {
   StyledHeaderRight,
   ExpandButton,
   EscSnackbar,
-  WarnSnackbar,
+  ErrorSnackbar,
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
