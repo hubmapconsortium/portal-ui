@@ -77,6 +77,7 @@ function SortingThead(props) {
           const order = getOrder(pair, selectedItems);
           return (
             <th
+              role="button"
               key={pair[0].key}
               onClick={() => {
                 toggleItem(pair[order && order === pair[0].order ? 1 : 0].key);
