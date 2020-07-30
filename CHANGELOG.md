@@ -1,3 +1,12 @@
+## v0.0.47 - 2020-07-30
+
+- CCF is now explicitly versioned, instead of just pulling latest.
+- Add description of all previews.
+- Sort columns by clicking headers.
+- Update footer per 07/29/2020 design.
+- Added a snackbar to display warning messages from Vitessce
+
+
 ## v0.0.46 - 2020-07-28
 
 - Automatically open link in new window after agreeing to DUA.
