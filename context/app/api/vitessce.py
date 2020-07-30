@@ -17,7 +17,7 @@ SCATTERPLOT = {
             "props": {
                 # Need to get a better name/way to handle this but for now, this is fine.
                 "mapping": "UMAP",
-                "view": {"zoom": 3, "target": [0, 0, 0]},
+                "view": {"zoom": 4, "target": [0, 0, 0]},
             },
             "x": 0,
             "y": 0,
