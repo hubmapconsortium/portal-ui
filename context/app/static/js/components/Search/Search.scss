@@ -12,6 +12,7 @@
 
     th {
         cursor: pointer;
+        white-space: nowrap;
     }
 
     // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.

@@ -22,6 +22,7 @@ import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-dupli
 // There is more in the name space, but we only need the filterTypes.
 
 import { resultFieldsToSortOptions } from './utils';
+import { ArrowUpOn, ArrowDownOn, ArrowDownOff } from './style';
 
 function getByPath(nested, field) {
   const path = field.id;
@@ -65,7 +66,7 @@ function makeTheadComponent() {
           {pairs.map((pair) => {
             const match = pair.filter((item) => item.key === selectedItem);
             const order = match.length ? match[0].order : undefined;
-            const orderIcon = order ? { asc: '▲', desc: '▼' }[order] : undefined;
+            const orderIcon = order ? { asc: <ArrowUpOn />, desc: <ArrowDownOn /> }[order] : <ArrowDownOff />;
             return (
               <th
                 key={pair[0].key}
