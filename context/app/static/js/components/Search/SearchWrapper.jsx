@@ -50,12 +50,16 @@ function makeTheadComponent() {
   return function ResultsTheadTd(props) {
     const { items, toggleItem, selectedItems } = props;
     if (selectedItems.length > 1) {
-      console.warn(`Expected only a single selected sort, not ${JSON.stringify(selectedItems)}`);
+      console.warn('Expected only a single sort, not:', selectedItems);
     }
     const selectedItem = selectedItems.length ? selectedItems[0] : undefined;
     const pairs = [];
     for (let i = 0; i < items.length; i += 2) {
-      pairs.push(items.slice(i, i + 2));
+      const pair = items.slice(i, i + 2);
+      pairs.push(pair);
+      if (pair[0].label !== pair[1].label || pair[0].field !== pair[1].field) {
+        console.warn('Expected pair.label and .field to match', pair);
+      }
     }
     return (
       <thead>
