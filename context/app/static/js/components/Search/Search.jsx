@@ -62,7 +62,7 @@ const searchProps = {
         field: `${field.id}.keyword`,
       };
       return [
-        { ...base, order: 'desc' },
+        { ...base, order: 'desc', defaultOption: field.id === 'mapped_last_modified_timestamp' },
         { ...base, order: 'asc' },
       ];
     })
