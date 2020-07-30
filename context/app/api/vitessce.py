@@ -17,7 +17,7 @@ SCATTERPLOT = {
             "props": {
                 # Need to get a better name/way to handle this but for now, this is fine.
                 "mapping": "UMAP",
-                "view": {"zoom": 4, "target": [0, 0, 0]},
+                "view": {"zoom": 3, "target": [0, 0, 0]},
             },
             "x": 0,
             "y": 0,
@@ -36,7 +36,7 @@ TILED_SPRM_IMAGING = {
         {"component": "cellSets", "x": 10, "y": 2, "w": 2, "h": 4},
         {
             "component": "genes",
-            "props": {"variablesLabelOverride": "antigens"},
+            "props": {"variablesLabelOverride": "antigen"},
             "x": 10,
             "y": 0,
             "w": 2,
@@ -44,7 +44,7 @@ TILED_SPRM_IMAGING = {
         },
         {
             "component": "heatmap",
-            "props": {"variablesLabelOverride": "antigens"},
+            "props": {"variablesLabelOverride": "antigen", "transpose": True},
             "x": 3,
             "y": 4,
             "w": 7,
@@ -109,17 +109,30 @@ TILE_REGEX = r"R\d+_X\d+_Y\d+"
 SCRNA_SEQ_CONFIG = {
     "base_conf": SCATTERPLOT,
     "files_conf": [
-        {"rel_path": f"{SCRNA_SEQ_BASE_PATH}.cells.json", "type": "CELLS"},
-        {"rel_path": f"{SCRNA_SEQ_BASE_PATH}.cell-sets.json", "type": "CELL-SETS"},
+        {
+            "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cells.json",
+            "fileType": "cells.json",
+            "type": "CELLS"
+        },
+        {
+            "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cell-sets.json",
+            "fileType": "cell-sets.json",
+            "type": "CELL-SETS"
+        },
     ],
 }
 
 SCATAC_SEQ_CONFIG = {
     "base_conf": SCATTERPLOT,
     "files_conf": [
-        {"rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cells.json", "type": "CELLS"},
+        {
+            "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cells.json",
+            "fileType": "cells.json",
+            "type": "CELLS"
+        },
         {
             "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cell-sets.json",
+            "fileType": "cell-sets.json",
             "type": "CELL-SETS",
         },
     ],
@@ -138,23 +151,23 @@ ASSAY_CONF_LOOKUP = {
         "files_conf": [
             {
                 "rel_path": f"{CODEX_TILE_PATH}/{TILE_REGEX}.ome.tiff",
+                "fileType": "raster.json",
                 "type": "RASTER",
             },
             {
                 "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.cells.json",
+                "fileType": "cells.json",
                 "type": "CELLS",
             },
             {
                 "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.cell-sets.json",
+                "fileType": "cell-sets.json",
                 "type": "CELL-SETS",
             },
             {
-                "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.genes.json",
-                "type": "GENES",
-            },
-            {
                 "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.clusters.json",
-                "type": "CLUSTERS",
+                "fileType": "clusters.json",
+                "type": "EXPRESSION-MATRIX",
             },
         ],
     },
@@ -166,6 +179,7 @@ ASSAY_CONF_LOOKUP = {
         "files_conf": [
             {
                 "rel_path": re.escape(IMAGE_PYRAMID_PATH) + r"/.*\.ome\.tiff?$",
+                "fileType": "raster.json",
                 "type": "RASTER",
             },
         ],
@@ -303,18 +317,15 @@ class Vitessce:
         }
         """
 
-        # Replace file["type"] with EXPRESSION-MATRIX if it is outdated CLUSTERS or GENES
-        layer_type = file["type"] if file['type'] not in ['CLUSTERS', 'GENES'] else 'EXPRESSION-MATRIX'
-
         return {
-            "type": layer_type,
-            "fileType": f"{file["type"].lower()}.json",
+            "type": file["type"],
+            "fileType": file["fileType"],
             "url": self._build_assets_url(file["rel_path"].replace(TILE_REGEX, tile))
             if file["type"] != "RASTER"
             else self._build_image_layer_datauri(
                 [file["rel_path"].replace(TILE_REGEX, tile)]
             ),
-            "name": layer_type.lower(),
+            "name": file["type"].lower(),
         }
 
     def _build_multi_file_image_layer_conf(self, files):
