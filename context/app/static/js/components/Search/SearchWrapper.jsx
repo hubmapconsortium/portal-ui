@@ -21,9 +21,8 @@ import {
 import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
 // There is more in the name space, but we only need the filterTypes.
 
-function DebugItem(props) {
-  return <pre>{JSON.stringify(props, false, 2)}</pre>;
-}
+import { resultFieldsToSortOptions } from './utils';
+import { ArrowUpOn, ArrowDownOn, ArrowDownOff } from './style';
 
 function getByPath(nested, field) {
   const path = field.id;
@@ -46,31 +45,69 @@ function getByPath(nested, field) {
   return current;
 }
 
-function makeTableComponent(resultFields, detailsUrlPrefix, idField) {
-  return function ResultsTable(props) {
+function getOrder(orderPair, selectedItems) {
+  if (selectedItems.length > 1) {
+    console.warn('Expected only a single sort, not:', selectedItems);
+  }
+  const selectedItem = selectedItems.length ? selectedItems[0] : undefined;
+  const match = orderPair.filter((item) => item.key === selectedItem);
+  return match.length ? match[0].order : undefined;
+}
+
+function getOrderIcon(order) {
+  if (order === 'asc') return <ArrowUpOn />;
+  if (order === 'desc') return <ArrowDownOn />;
+  return <ArrowDownOff />;
+}
+
+function SortingThead(props) {
+  const { items, toggleItem, selectedItems } = props;
+  const pairs = [];
+  for (let i = 0; i < items.length; i += 2) {
+    const pair = items.slice(i, i + 2);
+    pairs.push(pair);
+    if (pair[0].label !== pair[1].label || pair[0].field !== pair[1].field) {
+      console.warn('Expected pair.label and .field to match', pair);
+    }
+  }
+  return (
+    <thead>
+      <tr>
+        {pairs.map((pair) => {
+          const order = getOrder(pair, selectedItems);
+          return (
+            <th
+              role="button"
+              key={pair[0].key}
+              onClick={() => {
+                toggleItem(pair[order && order === pair[0].order ? 1 : 0].key);
+              }}
+            >
+              {pair[0].label} {getOrderIcon(order)}
+            </th>
+          );
+        })}
+      </tr>
+    </thead>
+  );
+}
+
+function makeTbodyComponent(resultFields, detailsUrlPrefix, idField) {
+  return function ResultsTbody(props) {
     const { hits } = props;
     /* eslint-disable no-underscore-dangle */
     return (
-      <table className="sk-table">
-        <thead>
-          <tr>
+      <tbody>
+        {hits.map((hit) => (
+          <tr key={hit._id}>
             {resultFields.map((field) => (
-              <th key={field.id}>{field.name}</th>
+              <td key={field.id}>
+                <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
+              </td>
             ))}
           </tr>
-        </thead>
-        <tbody>
-          {hits.map((hit) => (
-            <tr key={hit._id}>
-              {resultFields.map((field) => (
-                <td key={field.id}>
-                  <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        ))}
+      </tbody>
     );
     /* eslint-enable no-underscore-dangle */
   };
@@ -117,14 +154,13 @@ function SearchWrapper(props) {
     idField,
     resultFields,
     hitsPerPage,
-    debug,
     httpHeaders,
-    sortOptions,
     hiddenFilterIds,
     searchUrlPath,
     queryFields,
     isLoggedIn,
   } = props;
+  const sortOptions = resultFieldsToSortOptions(resultFields);
   const resultFieldIds = resultFields.map((field) => field.id).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 
@@ -156,24 +192,17 @@ function SearchWrapper(props) {
                 }}
               />
               <MaskedSelectedFilters hiddenFilterIds={hiddenFilterIds} />
-              <SortingSelector options={sortOptions} />
             </ActionBarRow>
           </ActionBar>
-          {debug && (
+          <table className="sk-table">
+            <SortingSelector options={sortOptions} listComponent={SortingThead} />
             <Hits
               mod="sk-hits-list"
               hitsPerPage={hitsPerPage}
-              itemComponent={DebugItem}
+              listComponent={makeTbodyComponent(resultFields, detailsUrlPrefix, idField)}
               sourceFilter={resultFieldIds}
             />
-          )}
-
-          <Hits
-            mod="sk-hits-list"
-            hitsPerPage={hitsPerPage}
-            listComponent={makeTableComponent(resultFields, detailsUrlPrefix, idField)}
-            sourceFilter={resultFieldIds}
-          />
+          </table>
           <NoHits
             translations={{
               'NoHits.NoResultsFound': `No results found. ${isLoggedIn ? '' : 'Login to view more results.'}`,
@@ -234,7 +263,6 @@ SearchWrapper.propTypes = {
     }),
   ).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
-  debug: PropTypes.bool,
   httpHeaders: PropTypes.objectOf(PropTypes.string),
   sortOptions: PropTypes.arrayOf(
     PropTypes.exact({
@@ -251,7 +279,6 @@ SearchWrapper.propTypes = {
 };
 
 SearchWrapper.defaultProps = {
-  debug: false,
   sortOptions: [
     {
       label: 'Relevance',

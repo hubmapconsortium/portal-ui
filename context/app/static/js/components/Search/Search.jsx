@@ -4,7 +4,7 @@ import { readCookie } from 'helpers/functions';
 import LookupEntity from 'helpers/LookupEntity';
 import SearchWrapper from './SearchWrapper';
 import './Search.scss';
-import { donorConfig, sampleConfig, datasetConfig, lastModifiedSort } from './config';
+import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named
 import { filter } from './utils';
 import AncestorNote from './AncestorNote';
@@ -35,6 +35,7 @@ const httpHeaders = nexus_token
       Authorization: `Bearer ${nexus_token}`,
     }
   : {};
+const resultFields = resultFieldsByType[type];
 const searchProps = {
   // The default behavior is to add a "_search" path.
   // We don't want that.
@@ -46,14 +47,13 @@ const searchProps = {
   // Search results field which will be appended to detailsUrlPrefix:
   idField: 'uuid',
   // Search results fields to display in table:
-  resultFields: resultFieldsByType[type],
+  resultFields,
   // Default hitsPerPage is 10:
   hitsPerPage: 20,
   // Sidebar facet configuration;
   // "type" should be one of the filters described here:
   // http://docs.searchkit.co/stable/components/navigation/
   filters: filtersByType[type],
-  sortOptions: lastModifiedSort,
   hiddenFilterIds: hiddenFilters.map((hiddenFilter) => hiddenFilter.props.id),
   queryFields: ['everything'],
   isLoggedIn: Boolean(nexus_token),
