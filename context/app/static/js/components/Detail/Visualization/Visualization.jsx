@@ -9,6 +9,7 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
+import Alert from '@material-ui/lab/Alert';
 
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import {
@@ -19,7 +20,8 @@ import {
   StyledHeaderText,
   StyledHeaderRight,
   ExpandButton,
-  TopSnackbar,
+  EscSnackbar,
+  ErrorSnackbar,
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
@@ -30,7 +32,8 @@ function Visualization(props) {
   const { vitData } = props;
 
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [isEscSnackbarOpen, setIsEscSnackbarOpen] = useState(false);
+  const [vitessceErrors, setVitessceErrors] = useState([]);
   const [vitessceTheme, setVitessceTheme] = useState('light');
   const [vitessceSelection, setVitessceSelection] = useState(0);
   const [open, toggle] = useReducer((v) => !v, false);
@@ -38,12 +41,25 @@ function Visualization(props) {
 
   function handleExpand() {
     setIsExpanded(true);
-    setIsSnackbarOpen(true);
+    setIsEscSnackbarOpen(true);
   }
 
   function handleCollapse() {
     setIsExpanded(false);
-    setIsSnackbarOpen(false);
+    setIsEscSnackbarOpen(false);
+  }
+
+  function removeError(message) {
+    setVitessceErrors((prev) => prev.filter((d) => d !== message));
+  }
+
+  function addError(message) {
+    setVitessceErrors((prev) => (prev.includes(message) ? prev : [...prev, message]));
+  }
+
+  function setSelectionAndClearErrors(i) {
+    setVitessceErrors([]);
+    setVitessceSelection(i);
   }
 
   useEffect(() => {
@@ -57,6 +73,7 @@ function Visualization(props) {
       window.removeEventListener('keydown', onKeydown);
     };
   }, []);
+
   return (
     <StyledSectionContainer id="visualization">
       <StyledHeader>
@@ -83,7 +100,7 @@ function Visualization(props) {
                   <ClickAwayListener onClickAway={toggle}>
                     <MenuList id="preview-options">
                       {vitData.map(({ name }, i) => (
-                        <MenuItem onClick={() => setVitessceSelection(i)} key={name}>
+                        <MenuItem onClick={() => setSelectionAndClearErrors(i)} key={name}>
                           {name}
                         </MenuItem>
                       ))}
@@ -97,20 +114,35 @@ function Visualization(props) {
       </StyledHeader>
       <Paper>
         <ExpandableDiv $isExpanded={isExpanded} $theme={vitessceTheme}>
-          <TopSnackbar
+          <EscSnackbar
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'center',
             }}
-            open={isSnackbarOpen}
+            open={isEscSnackbarOpen}
             autoHideDuration={4000}
-            onClose={() => setIsSnackbarOpen(false)}
+            onClose={() => setIsEscSnackbarOpen(false)}
             message="Press [esc] to exit full window."
           />
+          {vitessceErrors.length > 0 && (
+            <ErrorSnackbar
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              open
+              key={vitessceErrors[0]}
+            >
+              <Alert severity="error" variant="filled" onClose={() => removeError(vitessceErrors[0])}>
+                {vitessceErrors[0]}
+              </Alert>
+            </ErrorSnackbar>
+          )}
           <Vitessce
             config={vitData[vitessceSelection] || vitData}
             theme={vitessceTheme}
             height={isExpanded ? null : vitessceFixedHeight}
+            onWarn={addError}
           />
         </ExpandableDiv>
       </Paper>

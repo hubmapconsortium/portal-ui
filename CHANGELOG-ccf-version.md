@@ -1,0 +1,1 @@
+- CCF is now explicitly versioned, instead of just pulling latest.
