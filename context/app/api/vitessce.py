@@ -297,6 +297,7 @@ class Vitessce:
 
         {
           'type': 'CELLS',
+          'fileType': 'cells.json',
           'url': 'https://assets.dev.hubmapconsortium.org/uuid/cells.json',
           'name': 'cells'
         }
@@ -304,6 +305,7 @@ class Vitessce:
 
         return {
             "type": file["type"],
+            "fileType": f"{file["type"].lower()}.json",
             "url": self._build_assets_url(file["rel_path"].replace(TILE_REGEX, tile))
             if file["type"] != "RASTER"
             else self._build_image_layer_datauri(
@@ -319,12 +321,14 @@ class Vitessce:
 
         {
           'type': 'RASTER',
+          'fileType': 'raster.json',
           'url': 'data:base-64-encoded-string'
-          'name': 'rasters'
+          'name': 'raster'
         }
         """
         return {
             "type": "RASTER",
+            "fileType": "raster.json",
             "url": self._build_image_layer_datauri([file for file in files]),
             "name": "raster",
         }
