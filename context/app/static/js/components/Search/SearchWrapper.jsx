@@ -45,43 +45,50 @@ function getByPath(nested, field) {
   return current;
 }
 
-function makeTheadComponent() {
-  return function ResultsThead(props) {
-    const { items, toggleItem, selectedItems } = props;
-    if (selectedItems.length > 1) {
-      console.warn('Expected only a single sort, not:', selectedItems);
+function getOrder(orderPair, selectedItems) {
+  if (selectedItems.length > 1) {
+    console.warn('Expected only a single sort, not:', selectedItems);
+  }
+  const selectedItem = selectedItems.length ? selectedItems[0] : undefined;
+  const match = orderPair.filter((item) => item.key === selectedItem);
+  return match.length ? match[0].order : undefined;
+}
+
+function getOrderIcon(order) {
+  if (order === 'asc') return <ArrowUpOn />;
+  if (order === 'desc') return <ArrowDownOn />;
+  return <ArrowDownOff />;
+}
+
+function SortingThead(props) {
+  const { items, toggleItem, selectedItems } = props;
+  const pairs = [];
+  for (let i = 0; i < items.length; i += 2) {
+    const pair = items.slice(i, i + 2);
+    pairs.push(pair);
+    if (pair[0].label !== pair[1].label || pair[0].field !== pair[1].field) {
+      console.warn('Expected pair.label and .field to match', pair);
     }
-    const selectedItem = selectedItems.length ? selectedItems[0] : undefined;
-    const pairs = [];
-    for (let i = 0; i < items.length; i += 2) {
-      const pair = items.slice(i, i + 2);
-      pairs.push(pair);
-      if (pair[0].label !== pair[1].label || pair[0].field !== pair[1].field) {
-        console.warn('Expected pair.label and .field to match', pair);
-      }
-    }
-    return (
-      <thead>
-        <tr>
-          {pairs.map((pair) => {
-            const match = pair.filter((item) => item.key === selectedItem);
-            const order = match.length ? match[0].order : undefined;
-            const orderIcon = order ? { asc: <ArrowUpOn />, desc: <ArrowDownOn /> }[order] : <ArrowDownOff />;
-            return (
-              <th
-                key={pair[0].key}
-                onClick={() => {
-                  toggleItem(pair[order && order === pair[0].order ? 1 : 0].key);
-                }}
-              >
-                {pair[0].label}&nbsp;{orderIcon}
-              </th>
-            );
-          })}
-        </tr>
-      </thead>
-    );
-  };
+  }
+  return (
+    <thead>
+      <tr>
+        {pairs.map((pair) => {
+          const order = getOrder(pair, selectedItems);
+          return (
+            <th
+              key={pair[0].key}
+              onClick={() => {
+                toggleItem(pair[order && order === pair[0].order ? 1 : 0].key);
+              }}
+            >
+              {pair[0].label} {getOrderIcon(order)}
+            </th>
+          );
+        })}
+      </tr>
+    </thead>
+  );
 }
 
 function makeTbodyComponent(resultFields, detailsUrlPrefix, idField) {
@@ -187,7 +194,7 @@ function SearchWrapper(props) {
             </ActionBarRow>
           </ActionBar>
           <table className="sk-table">
-            <SortingSelector options={sortOptions} listComponent={makeTheadComponent()} />
+            <SortingSelector options={sortOptions} listComponent={SortingThead} />
             <Hits
               mod="sk-hits-list"
               hitsPerPage={hitsPerPage}
