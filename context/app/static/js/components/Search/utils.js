@@ -56,10 +56,18 @@ export function checkboxFilter(id, name, filter) {
 export function resultFieldsToSortOptions(fields) {
   return fields
     .map((f) => {
+      // We are using default mappings in Elasticsearch.
+      // As a consequence, if we want to sort a text field,
+      // we need to use the ".keyword" mapping.
+      // No such suffix is necessary (or allowed) for numeric fields.
+      // https://www.elastic.co/blog/strings-are-dead-long-live-strings
+      //
+      // So: If there are more numeric fields, remember to update the regex!
+      const isNumeric = f.id.match(/\.(age|bmi|size)$/);
       const base = {
         defaultOption: false,
         label: f.name,
-        field: `${f.id}.keyword`,
+        field: `${f.id}${isNumeric ? '' : '.keyword'}`,
       };
       return [
         { ...base, order: 'desc', defaultOption: f.id === 'mapped_last_modified_timestamp' },
