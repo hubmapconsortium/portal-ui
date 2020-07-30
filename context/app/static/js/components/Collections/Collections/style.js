@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 
-// 88px = header height + header margin, 60px = footer height
+// 88px = header height + header margin
 const PageWrapper = styled.div`
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
-    height: calc(100vh - 88px - 60px);
+    height: calc(100vh - 88px);
     display: flex;
     flex-direction: column;
   }

@@ -1,5 +1,4 @@
 :root {
-  --foot-height: 60px;
   --header-height: 60px;
 }
 
@@ -33,12 +32,6 @@ li {
 
 .container-lg {
   max-width: 1240px;
-}
-
-.footer {
-  height: var(--foot-height);
-  width: 100%;
-  line-height: var(--foot-height); /* Vertically center the text there */
 }
 
 a {
