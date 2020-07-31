@@ -1,0 +1,1 @@
+- Use Material UI styling for the search table.
