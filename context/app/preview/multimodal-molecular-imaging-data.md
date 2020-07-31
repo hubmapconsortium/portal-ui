@@ -1,5 +1,5 @@
 ---
-title: Vanderbilt University Multimodal Molecular Imaging Data
+title: Multimodal Molecular Imaging Data
 group_name: Vanderbilt
 created_by_user_displayname: Jeff Spraggins
 created_by_user_email: jeff.spraggins@vanderbilt.edu
