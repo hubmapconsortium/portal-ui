@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import ArrowUpward from '@material-ui/icons/ArrowUpwardRounded';
 import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
 import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 
 import { HeaderCell } from 'shared-styles/Table';
 
@@ -38,4 +39,22 @@ const StyledTableRow = styled(TableRow)`
   }
 `;
 
-export { ArrowUpOn, ArrowDownOn, ArrowUpOff, ArrowDownOff, StyledHeaderCell, StyledTableRow };
+const StyledTableCell = styled(TableCell)`
+  // Force <a> to fill each cell, so the whole row is clickable.
+  // https://stackoverflow.com/questions/3966027
+
+  overflow: hidden;
+
+  & a {
+    display: block;
+    margin: -100%;
+    padding: 100%;
+    color: rgb(0, 0, 0);
+  }
+
+  &:first-child a {
+    color: #3781d1;
+  }
+`;
+
+export { ArrowUpOn, ArrowDownOn, ArrowUpOff, ArrowDownOff, StyledHeaderCell, StyledTableRow, StyledTableCell };

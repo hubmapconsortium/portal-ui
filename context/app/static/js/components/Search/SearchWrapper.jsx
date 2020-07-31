@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 
 import {
   SearchkitManager,
@@ -28,7 +26,7 @@ import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-dupli
 // There is more in the name space, but we only need the filterTypes.
 
 import { resultFieldsToSortOptions } from './utils';
-import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell, StyledTableRow } from './style';
+import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell, StyledTableRow, StyledTableCell } from './style';
 
 function getByPath(nested, field) {
   const path = field.id;
@@ -78,7 +76,7 @@ function SortingTableHead(props) {
   }
   return (
     <TableHead>
-      <TableRow>
+      <StyledTableRow>
         {pairs.map((pair) => {
           const order = getOrder(pair, selectedItems);
           return (
@@ -93,7 +91,7 @@ function SortingTableHead(props) {
             </StyledHeaderCell>
           );
         })}
-      </TableRow>
+      </StyledTableRow>
     </TableHead>
   );
 }
@@ -107,9 +105,9 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
         {hits.map((hit) => (
           <StyledTableRow key={hit._id}>
             {resultFields.map((field) => (
-              <TableCell key={field.id}>
+              <StyledTableCell key={field.id}>
                 <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
-              </TableCell>
+              </StyledTableCell>
             ))}
           </StyledTableRow>
         ))}
