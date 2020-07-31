@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 import {
   SearchkitManager,
@@ -77,7 +78,7 @@ function SortingTableHead(props) {
   }
   return (
     <TableHead>
-      <StyledTableRow>
+      <TableRow>
         {pairs.map((pair) => {
           const order = getOrder(pair, selectedItems);
           return (
@@ -92,7 +93,7 @@ function SortingTableHead(props) {
             </StyledHeaderCell>
           );
         })}
-      </StyledTableRow>
+      </TableRow>
     </TableHead>
   );
 }
