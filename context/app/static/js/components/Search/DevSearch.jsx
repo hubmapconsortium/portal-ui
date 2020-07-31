@@ -4,7 +4,6 @@ import { ExistsQuery, BoolMustNot } from 'searchkit';
 
 import { readCookie } from 'helpers/functions';
 import SearchWrapper from './SearchWrapper';
-import './Search.scss';
 // eslint-disable-next-line import/named
 import { field, filter, checkboxFilter } from './utils';
 

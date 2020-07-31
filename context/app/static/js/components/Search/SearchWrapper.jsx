@@ -27,6 +27,7 @@ import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-dupli
 
 import { resultFieldsToSortOptions } from './utils';
 import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell, StyledTableRow, StyledTableCell } from './style';
+import './Search.scss';
 
 function getByPath(nested, field) {
   const path = field.id;
