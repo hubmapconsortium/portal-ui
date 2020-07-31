@@ -28,7 +28,7 @@ import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-dupli
 // There is more in the name space, but we only need the filterTypes.
 
 import { resultFieldsToSortOptions } from './utils';
-import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from './style';
+import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell, StyledTableRow } from './style';
 
 function getByPath(nested, field) {
   const path = field.id;
@@ -105,13 +105,13 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
     return (
       <TableBody>
         {hits.map((hit) => (
-          <TableRow key={hit._id}>
+          <StyledTableRow key={hit._id}>
             {resultFields.map((field) => (
               <TableCell key={field.id}>
                 <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
               </TableCell>
             ))}
-          </TableRow>
+          </StyledTableRow>
         ))}
       </TableBody>
     );
