@@ -70,6 +70,7 @@ def test_build_layer_conf():
     layer = conf["layers"][0]
     vitessce_component = conf["staticLayout"][0]["component"]
     assert layer["type"] == "CELLS"
+    assert layer["fileType"] == "cells.json"
     assert layer["name"] == "cells"
     assert vitessce_component == "cellSets"
 
