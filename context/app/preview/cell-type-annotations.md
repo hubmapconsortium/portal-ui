@@ -1,5 +1,5 @@
 ---
-title: Satija Cell Type Annotations
+title: Cell Type Annotations
 group_name: NYGC and UF
 created_by_user_displayname: Rahul Satija
 created_by_user_email: rsatija@nygenome.org
