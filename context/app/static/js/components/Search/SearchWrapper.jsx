@@ -9,7 +9,6 @@ import {
   SortingSelector,
   ActionBar,
   ActionBarRow,
-  SelectedFilters,
   NoHits,
   HitsStats,
   Hits,
@@ -113,39 +112,6 @@ function makeTbodyComponent(resultFields, detailsUrlPrefix, idField) {
   };
 }
 
-function MaskedSelectedFilters(props) {
-  const { hiddenFilterIds } = props;
-  const SelectedFilter = (filterProps) => {
-    const isHidden = hiddenFilterIds.indexOf(filterProps.filterId) !== -1;
-
-    const style = isHidden ? { display: 'None' } : {};
-
-    // Copy and paste from
-    // http://docs.searchkit.co/v0.8.3/docs/components/navigation/selected-filters.html
-    // plus typo corrections and wrapping div.
-    /* eslint-disable jsx-a11y/click-events-have-key-events */
-    /* eslint-disable jsx-a11y/no-static-element-interactions */
-    return (
-      <div
-        style={style}
-        className={filterProps.bemBlocks
-          .option()
-          .mix(filterProps.bemBlocks.container('item'))
-          .mix(`selected-filter--${filterProps.filterId}`)}
-      >
-        <div className={filterProps.bemBlocks.option('name')}>
-          {`${filterProps.labelKey}: ${filterProps.labelValue}`}
-        </div>
-        <div className={filterProps.bemBlocks.option('remove-action')} onClick={filterProps.removeFilter}>
-          x
-        </div>
-      </div>
-    );
-    /* eslint-enable */
-  };
-  return <SelectedFilters itemComponent={SelectedFilter} />;
-}
-
 function SearchWrapper(props) {
   const {
     apiUrl,
@@ -191,7 +157,6 @@ function SearchWrapper(props) {
                   'hitstats.results_found': '{hitCount} results found',
                 }}
               />
-              <MaskedSelectedFilters hiddenFilterIds={hiddenFilterIds} />
             </ActionBarRow>
           </ActionBar>
           <table className="sk-table">
