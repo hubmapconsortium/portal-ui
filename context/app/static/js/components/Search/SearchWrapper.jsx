@@ -6,7 +6,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { StyledTableContainer, HeaderCell } from 'shared-styles/Table';
 
 import {
   SearchkitManager,
@@ -29,7 +28,7 @@ import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-dupli
 // There is more in the name space, but we only need the filterTypes.
 
 import { resultFieldsToSortOptions } from './utils';
-import { ArrowUpOn, ArrowDownOn, ArrowDownOff } from './style';
+import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from './style';
 
 function getByPath(nested, field) {
   const path = field.id;
@@ -83,7 +82,7 @@ function SortingTableHead(props) {
         {pairs.map((pair) => {
           const order = getOrder(pair, selectedItems);
           return (
-            <HeaderCell
+            <StyledHeaderCell
               role="button"
               key={pair[0].key}
               onClick={() => {
@@ -91,7 +90,7 @@ function SortingTableHead(props) {
               }}
             >
               {pair[0].label} {getOrderIcon(order)}
-            </HeaderCell>
+            </StyledHeaderCell>
           );
         })}
       </TableRow>

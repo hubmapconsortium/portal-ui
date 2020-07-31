@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import ArrowUpward from '@material-ui/icons/ArrowUpwardRounded';
 import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
+import { HeaderCell } from 'shared-styles/Table';
 
 const ArrowUpOn = styled(ArrowUpward)`
   vertical-align: middle;
@@ -20,4 +21,9 @@ const ArrowDownOff = styled(ArrowDownward)`
   opacity: 12%;
 `;
 
-export { ArrowUpOn, ArrowDownOn, ArrowUpOff, ArrowDownOff };
+const StyledHeaderCell = styled(HeaderCell)`
+  cursor: pointer;
+  white-space: nowrap;
+`;
+
+export { ArrowUpOn, ArrowDownOn, ArrowUpOff, ArrowDownOff, StyledHeaderCell };
