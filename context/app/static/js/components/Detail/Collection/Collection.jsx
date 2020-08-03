@@ -6,8 +6,13 @@ import Summary from '../Summary';
 import CollectionDatasetsTable from '../CollectionDatasetsTable';
 import CollectionCreatorsTable from '../CollectionCreatorsTable';
 
+import useSendUUIDEvent from '../useSendUUIDEvent';
+
 function Collection(props) {
   const { collection: collectionData } = props;
+
+  useSendUUIDEvent(collectionData.entitytype, collectionData.uuid);
+
   return (
     <div>
       {collectionData && (

@@ -5,6 +5,7 @@ import Attribution from '../Attribution';
 import Protocol from '../Protocol';
 import DonorMetadata from '../DonorMetadata';
 import DetailLayout from '../DetailLayout';
+import useSendUUIDEvent from '../useSendUUIDEvent';
 
 import DetailContext from '../context';
 
@@ -28,6 +29,8 @@ function DonorDetail(props) {
     protocols: Boolean(protocol_url),
     metadata: Boolean(mapped_metadata),
   };
+
+  useSendUUIDEvent(entity_type, uuid);
 
   return (
     <DetailContext.Provider value={{ elasticsearchEndpoint, display_doi, uuid }}>

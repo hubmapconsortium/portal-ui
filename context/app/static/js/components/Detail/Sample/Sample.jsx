@@ -8,6 +8,7 @@ import SummaryItem from '../SummaryItem';
 import DetailLayout from '../DetailLayout';
 import MetadataTable from '../MetadataTable';
 import SampleTissue from '../SampleTissue';
+import useSendUUIDEvent from '../useSendUUIDEvent';
 
 import DetailContext from '../context';
 
@@ -36,6 +37,8 @@ function SampleDetail(props) {
     tissue: true,
     metadataTable: 'metadata' in assayMetadata,
   };
+
+  useSendUUIDEvent(entity_type, uuid);
 
   return (
     <DetailContext.Provider value={{ elasticsearchEndpoint, display_doi, uuid }}>
