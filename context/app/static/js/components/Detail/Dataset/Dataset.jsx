@@ -29,6 +29,7 @@ function SummaryData(props) {
   const codesNames = typeCodes.map((code, i) => {
     return { code, name: typeNames[i] };
   });
+
   return (
     <>
       <SummaryItem>
@@ -87,6 +88,7 @@ function DatasetDetail(props) {
           last_modified_timestamp={last_modified_timestamp}
           description={description}
           status={status}
+          data_access_level={data_access_level}
         >
           <SummaryData
             data_types={data_types || []}

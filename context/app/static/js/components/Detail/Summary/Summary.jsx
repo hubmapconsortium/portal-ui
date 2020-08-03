@@ -19,6 +19,7 @@ function Summary(props) {
     status,
     children,
     collectionName,
+    data_access_level,
   } = props;
 
   const createdDate = create_timestamp ? new Date(create_timestamp).toDateString() : 'Undefined';
@@ -31,7 +32,7 @@ function Summary(props) {
       </Typography>
       <StyledDiv>
         <SectionHeader isSummary>{display_doi}</SectionHeader>
-        <SummaryData entity_type={entity_type} uuid={uuid} status={status}>
+        <SummaryData entity_type={entity_type} uuid={uuid} status={status} data_access_level={data_access_level}>
           {children}
         </SummaryData>
       </StyledDiv>
@@ -63,6 +64,7 @@ Summary.propTypes = {
   uuid: PropTypes.string.isRequired,
   description: PropTypes.string,
   status: PropTypes.string,
+  data_access_level: PropTypes.string,
   children: PropTypes.element,
 };
 
@@ -71,6 +73,7 @@ Summary.defaultProps = {
   last_modified_timestamp: undefined,
   description: '',
   status: '',
+  data_access_level: '',
   children: undefined,
 };
 
