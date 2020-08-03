@@ -9,7 +9,7 @@ import { Donor, Sample, Dataset, Collection } from '../Detail';
 import Preview from '../Preview';
 import { Collections } from '../Collections';
 import Markdown from '../Markdown';
-import { useSendPageView } from './useSendPageView';
+import useSendPageView from './useSendPageView';
 
 function Routes(props) {
   const { flaskData } = props;
