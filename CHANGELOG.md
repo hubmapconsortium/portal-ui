@@ -1,5 +1,11 @@
 ## v0.0.49 - 2020-08-03
 
+Chuck neglected to merge the PR for v0.0.47, 
+though the docker image and tag were made successfully.
+He then misdiagnosed the problem, and incremented the version number.
+
+So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
+
 - Add "Access Group" facet.
 - CCF is now explicitly versioned, instead of just pulling latest.
 - Add description section to collections page.
