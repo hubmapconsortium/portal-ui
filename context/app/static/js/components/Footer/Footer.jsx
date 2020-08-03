@@ -48,7 +48,7 @@ function Footer() {
               >
                 Data Use Agreement
               </LightBlueLink>
-              <LightBlueLink href="/docs/about" variant="body2">
+              <LightBlueLink href="/docs/about#citation" variant="body2">
                 Citing HuBMAP
               </LightBlueLink>
             </FlexColumn>
