@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
 import {
   SearchkitManager,
   SearchkitProvider,
@@ -22,7 +27,8 @@ import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-dupli
 // There is more in the name space, but we only need the filterTypes.
 
 import { resultFieldsToSortOptions } from './utils';
-import { ArrowUpOn, ArrowDownOn, ArrowDownOff } from './style';
+import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell, StyledTableRow, StyledTableCell } from './style';
+import './Search.scss';
 
 function getByPath(nested, field) {
   const path = field.id;
@@ -60,7 +66,7 @@ function getOrderIcon(order) {
   return <ArrowDownOff />;
 }
 
-function SortingThead(props) {
+function SortingTableHead(props) {
   const { items, toggleItem, selectedItems } = props;
   const pairs = [];
   for (let i = 0; i < items.length; i += 2) {
@@ -71,12 +77,12 @@ function SortingThead(props) {
     }
   }
   return (
-    <thead>
-      <tr>
+    <TableHead>
+      <TableRow>
         {pairs.map((pair) => {
           const order = getOrder(pair, selectedItems);
           return (
-            <th
+            <StyledHeaderCell
               role="button"
               key={pair[0].key}
               onClick={() => {
@@ -84,30 +90,30 @@ function SortingThead(props) {
               }}
             >
               {pair[0].label} {getOrderIcon(order)}
-            </th>
+            </StyledHeaderCell>
           );
         })}
-      </tr>
-    </thead>
+      </TableRow>
+    </TableHead>
   );
 }
 
-function makeTbodyComponent(resultFields, detailsUrlPrefix, idField) {
-  return function ResultsTbody(props) {
+function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
+  return function ResultsTableBody(props) {
     const { hits } = props;
     /* eslint-disable no-underscore-dangle */
     return (
-      <tbody>
+      <TableBody>
         {hits.map((hit) => (
-          <tr key={hit._id}>
+          <StyledTableRow key={hit._id}>
             {resultFields.map((field) => (
-              <td key={field.id}>
+              <StyledTableCell key={field.id}>
                 <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
-              </td>
+              </StyledTableCell>
             ))}
-          </tr>
+          </StyledTableRow>
         ))}
-      </tbody>
+      </TableBody>
     );
     /* eslint-enable no-underscore-dangle */
   };
@@ -194,15 +200,14 @@ function SearchWrapper(props) {
               <MaskedSelectedFilters hiddenFilterIds={hiddenFilterIds} />
             </ActionBarRow>
           </ActionBar>
-          <table className="sk-table">
-            <SortingSelector options={sortOptions} listComponent={SortingThead} />
+          <Table>
+            <SortingSelector options={sortOptions} listComponent={SortingTableHead} />
             <Hits
-              mod="sk-hits-list"
               hitsPerPage={hitsPerPage}
-              listComponent={makeTbodyComponent(resultFields, detailsUrlPrefix, idField)}
+              listComponent={makeTableBodyComponent(resultFields, detailsUrlPrefix, idField)}
               sourceFilter={resultFieldIds}
             />
-          </table>
+          </Table>
           <NoHits
             translations={{
               'NoHits.NoResultsFound': `No results found. ${isLoggedIn ? '' : 'Login to view more results.'}`,

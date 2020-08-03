@@ -1,44 +1,6 @@
-// For example: This makes the "View all" links red.
-// $sk-action-text-color: red;
-
 @import "~searchkit/theming/theme.scss";
 
 .sk-layout__body {
+    // Without this, there's too much space at the top.
     margin: 0px;
-}
-
-.sk-table {
-    width: 100%;
-
-    th {
-        cursor: pointer;
-        white-space: nowrap;
-    }
-
-    // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.
-    // (What looks white is actually "transparent" and brightness() has no effect.
-
-    tbody tr {
-        background-color: #FFF;
-        border: 1px solid #cbcbcb;
-    }
-    tbody tr:hover {
-        filter: brightness(96%);
-    }
-
-    // Force <a> to fill each cell, so the whole row is clickable.
-    // https://stackoverflow.com/questions/3966027
-    td {
-        overflow: hidden;
-    }
-    td a {
-        display: block;
-        margin: -100%;
-        padding: 100%;
-        color: rgb(0,0,0);
-    }
-
-    td:first-child a {
-        color: #3781D1;
-    }
 }

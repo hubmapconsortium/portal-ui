@@ -4,7 +4,6 @@ import { ExistsQuery, BoolMustNot } from 'searchkit';
 
 import { readCookie } from 'helpers/functions';
 import SearchWrapper from './SearchWrapper';
-import './Search.scss';
 // eslint-disable-next-line import/named
 import { field, filter, checkboxFilter } from './utils';
 
@@ -38,8 +37,8 @@ const searchProps = {
   filters: [
     filter('entity_type', 'Entity Type'),
     filter('mapper_metadata.version', 'Mapper Version'),
-    checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata')),
-    checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata'))),
+    checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata.metadata')),
+    checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
     checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),
     checkboxFilter('no_files', 'No files?', BoolMustNot(ExistsQuery('files'))),
   ],

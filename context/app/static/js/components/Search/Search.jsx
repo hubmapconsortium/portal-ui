@@ -3,7 +3,6 @@ import Typography from '@material-ui/core/Typography';
 import { readCookie } from 'helpers/functions';
 import LookupEntity from 'helpers/LookupEntity';
 import SearchWrapper from './SearchWrapper';
-import './Search.scss';
 import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named
 import { filter } from './utils';
