@@ -7,7 +7,7 @@ import { StyledPaper, StyledInfoIcon } from './style';
 function Description(props) {
   const { children } = props;
   return (
-    <SectionContainer id="description">
+    <SectionContainer>
       <StyledPaper>
         <StyledInfoIcon color="primary" />
         <Typography variant="body1">{children}</Typography>
