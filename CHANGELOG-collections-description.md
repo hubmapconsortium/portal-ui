@@ -1,0 +1,1 @@
+- Add description section to collections page.

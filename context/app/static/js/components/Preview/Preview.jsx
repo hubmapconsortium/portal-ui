@@ -5,8 +5,9 @@ import Container from '@material-ui/core/Container';
 import VisualizationWrapper from '../Detail/VisualizationWrapper';
 import SectionHeader from '../Detail/SectionHeader';
 import SectionContainer from '../Detail/SectionContainer';
-import { StyledPaper, StyledInfoIcon, StyledMarkdown } from './style';
+import { StyledPaper, StyledMarkdown } from './style';
 import Attribution from '../Detail/Attribution';
+import Description from '../Detail/Description';
 
 function Preview(props) {
   const { vitData, title, assayMetadata, markdown } = props;
@@ -22,16 +23,11 @@ function Preview(props) {
         <SectionHeader variant="h1" component="h2">
           {title}
         </SectionHeader>
-        <SectionContainer id="description">
-          <StyledPaper>
-            <StyledInfoIcon color="primary" />
-            <Typography variant="body1">
-              HuBMAP Data Portal Previews demonstrate functionality and resources that will become available in future
-              releases. Previews may rely on externally hosted data or analysis results that were generated with
-              processing pipelines that are not yet integrated into the HuBMAP Data Portal infrastructure.
-            </Typography>
-          </StyledPaper>
-        </SectionContainer>
+        <Description>
+          HuBMAP Data Portal Previews demonstrate functionality and resources that will become available in future
+          releases. Previews may rely on externally hosted data or analysis results that were generated with processing
+          pipelines that are not yet integrated into the HuBMAP Data Portal infrastructure.
+        </Description>
         <StyledPaper>
           <Typography variant="body1">
             <StyledMarkdown source={markdown} />
