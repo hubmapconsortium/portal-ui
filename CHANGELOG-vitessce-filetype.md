@@ -1,1 +1,0 @@
-- Updated Vitessce view config generation script to fill in the fileType layer property

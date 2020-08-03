@@ -1,3 +1,22 @@
+## v0.0.49 - 2020-08-03
+
+- Add "Access Group" facet.
+- CCF is now explicitly versioned, instead of just pulling latest.
+- Add description section to collections page.
+- Display access level in dataset detail.
+- Update docs submodule: Fix formatting, change "assay/" to "assays/", etc.
+- Add href to 'Citing HuBMAP' link in the footer.
+- Use Material UI styling for the search table.
+- Don't show the currently selected filters across the top.
+- Add description of all previews.
+- Update titles of previews.
+- Sort columns by clicking headers.
+- Update footer per 07/29/2020 design.
+- Updated Vitessce view config generation script to fill in the fileType layer property
+- Added a snackbar to display warning messages from Vitessce
+- Fix wrapping in search results on Safari.
+
+
 ## v0.0.46 - 2020-07-28
 
 - Automatically open link in new window after agreeing to DUA.

@@ -1,1 +1,0 @@
-- Update footer per 07/29/2020 design.

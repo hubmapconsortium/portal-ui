@@ -1,1 +1,0 @@
-- Added a snackbar to display warning messages from Vitessce

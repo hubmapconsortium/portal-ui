@@ -1,1 +1,0 @@
-- Don't show the currently selected filters across the top.

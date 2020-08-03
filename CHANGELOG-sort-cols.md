@@ -1,1 +1,0 @@
-- Sort columns by clicking headers.
