@@ -305,10 +305,11 @@ class Vitessce:
                 # If there are no cell segmentations, remove the non-imaging parts of the assay.
                 if f"{CODDEX_SPRM_PATH}/{tile}.cell-sets.json" not in file_paths_found:
                     new_conf = copy.deepcopy(TILED_SPRM_IMAGING_ONLY)
-                    layers = [self._build_layer_conf(files[0], tile)]
+                    files_for_layers = [files[0]]
                 else:
                     new_conf = copy.deepcopy(conf)
-                    layers = [self._build_layer_conf(file, tile) for file in files]
+                    files_for_layers = files
+                layers = [self._build_layer_conf(file, tile) for file in files_for_layers]
                 new_conf["layers"] = layers
                 new_conf["name"] = tile
                 new_conf = self._replace_view(new_conf)
