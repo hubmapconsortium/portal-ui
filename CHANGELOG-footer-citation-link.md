@@ -1,0 +1,1 @@
+- Add href to 'Citing HuBMAP' link in the footer.
