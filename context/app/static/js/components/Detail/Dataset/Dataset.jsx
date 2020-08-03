@@ -15,7 +15,7 @@ import SummaryItem from '../SummaryItem';
 // TODO use this context for components other than FileBrowser
 import DetailContext from '../context';
 
-function SummaryData(props) {
+function SummaryDataChildren(props) {
   const { data_types, mapped_data_types, origin_sample } = props;
 
   // TODO: This was an array, but in production it's a single value.
@@ -90,7 +90,7 @@ function DatasetDetail(props) {
           status={status}
           data_access_level={data_access_level}
         >
-          <SummaryData
+          <SummaryDataChildren
             data_types={data_types || []}
             mapped_data_types={mapped_data_types || []}
             origin_sample={origin_sample}
