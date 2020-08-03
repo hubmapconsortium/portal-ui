@@ -12,11 +12,11 @@ import { getDUAText } from './utils';
 import { ObliqueSpan, StyledHeader, StyledDiv } from './style';
 
 function FileBrowserDUA(props) {
-  const { isOpen, handleAgree, handleClose, data_access_level } = props;
+  const { isOpen, handleAgree, handleClose, mapped_data_access_level } = props;
 
   const [isChecked, check] = useState(false);
 
-  const { title, appropriateUse } = getDUAText(data_access_level);
+  const { title, appropriateUse } = getDUAText(mapped_data_access_level);
 
   return (
     <Dialog

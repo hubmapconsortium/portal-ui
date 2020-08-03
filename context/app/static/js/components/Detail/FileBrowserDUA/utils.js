@@ -1,5 +1,5 @@
-function getDUAText(data_access_level) {
-  if (data_access_level === 'protected') {
+function getDUAText(mapped_data_access_level) {
+  if (mapped_data_access_level === 'protected') {
     return {
       title: 'Genomic Sequence',
       appropriateUse: `You are attempting to download protected genomic sequence data accessible only to HuBMAP Members who have requested and been granted access. 
@@ -12,7 +12,7 @@ function getDUAText(data_access_level) {
     };
   }
 
-  if (data_access_level === 'consortium') {
+  if (mapped_data_access_level === 'consortium') {
     return {
       title: 'Controlled',
       appropriateUse: `You are attempting to download data accessible only to HuBMAP Members. 
