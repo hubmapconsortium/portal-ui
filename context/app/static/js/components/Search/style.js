@@ -50,6 +50,7 @@ const StyledTableCell = styled(TableCell)`
     margin: -100%;
     padding: 100%;
     color: rgb(0, 0, 0);
+    overflow-wrap: break-word;
   }
 
   &:first-child a {

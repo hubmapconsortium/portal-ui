@@ -1,0 +1,1 @@
+- Fix wrapping in search results on Safari.
