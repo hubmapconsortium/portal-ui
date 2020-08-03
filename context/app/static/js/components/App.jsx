@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactGA from 'react-ga';
+
 import PropTypes from 'prop-types';
 import Providers from './Providers';
 import Routes from './Routes';
@@ -7,6 +9,8 @@ import { Header } from './Header';
 
 function App(props) {
   const { flaskData } = props;
+  ReactGA.initialize('UA-133341631-3');
+
   return (
     <Providers>
       <Header />
