@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
+
 import { Home } from '../Home';
 import Search from '../Search/Search';
 import DevSearch from '../Search/DevSearch';
@@ -8,11 +9,14 @@ import { Donor, Sample, Dataset, Collection } from '../Detail';
 import Preview from '../Preview';
 import { Collections } from '../Collections';
 import Markdown from '../Markdown';
+import { useSendPageView } from './useSendPageView';
 
 function Routes(props) {
   const { flaskData } = props;
   const { entity, vitessce_conf, endpoints, title, markdown, collection } = flaskData;
   const urlPath = window.location.pathname;
+
+  useSendPageView(urlPath);
 
   if (urlPath.startsWith('/browse/donor/')) {
     return (
