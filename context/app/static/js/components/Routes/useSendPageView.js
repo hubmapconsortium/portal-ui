@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import ReactGA from 'react-ga';
 
-export function useSendPageView(path) {
+function useSendPageView(path) {
   useEffect(() => {
     if (path.startsWith('/search') || path.startsWith('/dev-search')) {
       const urlParams = new URLSearchParams(window.location.search);
@@ -12,3 +12,5 @@ export function useSendPageView(path) {
     ReactGA.pageview(path);
   }, [path]);
 }
+
+export default useSendPageView;
