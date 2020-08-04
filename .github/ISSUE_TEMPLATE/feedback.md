@@ -2,7 +2,7 @@
 name: Feedback
 about: Feedback reported by portal users via HuBMAP Help Desk
 title: ''
-labels: UI, triage, Alpha
+labels: UI, triage, Beta
 assignees: mccalluc, tsliaw
 
 ---

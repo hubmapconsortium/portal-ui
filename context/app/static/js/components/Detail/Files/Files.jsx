@@ -11,9 +11,9 @@ import FilesContext from './context';
 function Files(props) {
   const { files, entityEndpoint, uuid, display_doi } = props;
 
-  const { data_access_level } = useContext(DetailContext);
+  const { mapped_data_access_level } = useContext(DetailContext);
 
-  const localStorageKey = `has_agreed_to_${data_access_level}_DUA`;
+  const localStorageKey = `has_agreed_to_${mapped_data_access_level}_DUA`;
   const [hasAgreedToDUA, agreeToDUA] = useState(localStorage.getItem(localStorageKey));
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [urlClickedBeforeDUA, setUrlClickedBeforeDUA] = useState('');
@@ -44,7 +44,7 @@ function Files(props) {
           isOpen={isDialogOpen}
           handleAgree={handleDUAAgree}
           handleClose={handleDUAClose}
-          data_access_level={data_access_level}
+          mapped_data_access_level={mapped_data_access_level}
         />
       </SectionContainer>
     </FilesContext.Provider>

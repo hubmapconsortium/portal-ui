@@ -53,7 +53,7 @@ export const datasetConfig = {
     filter('origin_sample.mapped_organ', 'Organ'),
     filter('source_sample.mapped_specimen_type', 'Specimen Type'),
     filter('mapped_status', 'Status'),
-    filter('access_group', 'Access Group'),
+    filter('mapped_data_access_level', 'Access Level'),
   ]
     .concat(makeDonorMetadataFilters(false))
     .concat([filter('donor.group_name', 'Group'), filter('created_by_user_displayname', 'Creator')]),
