@@ -5,9 +5,8 @@ module.exports = {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/test-utils/__mocks__/file.js',
     '^.+\\.css$': '<rootDir>/test-utils/__mocks__/style.js',
-    '^static(.*)$': '<rootDir>/app/static/$1',
-    '^js(.*)$': '<rootDir>/app/static/js/$1',
-    '^test-utils(.*)$': '<rootDir>/test-utils/$1',
+    '^js/(.*)$': '<rootDir>/app/static/js/$1',
+    '^test-utils/(.*)$': '<rootDir>/test-utils/$1',
     'metadata-field-descriptions$': '<rootDir>/ingest-validation-tools/docs/field-descriptions.yaml',
   },
   transform: {
