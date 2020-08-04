@@ -470,11 +470,13 @@ class Vitessce:
 
         # IMS images are named under this convention, "IMS_XXXMode".
         # Some of the non IMS images contain the substring "IMS," so that is insufficient.
+        # IMC also needs to be handled specially.
+        # TODO: Clean this up by handling multiple assay types (#982).
         if any(
-            [
-                "IMS_PosMode" in file["rel_path"] or "IMS_NegMode" in file["rel_path"]
-                for file in self.entity["files"]
-            ]
+            "IMS_PosMode" in file["rel_path"]
+            or "IMS_NegMode" in file["rel_path"]
+            or "IMC" in self.entity["data_types"]
+            for file in self.entity["files"]
         ):
             conf["staticLayout"][-1]["props"]["view"]["zoom"] = -2
             conf["staticLayout"][-1]["props"]["view"]["target"] = [1000, 1000, 0]
