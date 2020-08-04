@@ -1,3 +1,10 @@
+## v0.0.50 - 2020-08-03
+
+- Use mapped_data_access_level consistently.
+- Security update from dependabot.
+- Show only imaging SPRM when there are no cell segmentations.
+
+
 ## v0.0.49 - 2020-08-03
 
 Chuck neglected to merge the PR for v0.0.47, 
