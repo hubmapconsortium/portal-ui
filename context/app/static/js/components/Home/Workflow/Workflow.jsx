@@ -5,7 +5,7 @@ import DescriptionIcon from '@material-ui/icons/DescriptionRounded';
 import SearchIcon from '@material-ui/icons/SearchRounded';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRightRounded';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDownRounded';
-import { CenterIcon } from 'shared-styles/icons';
+import { CenterIcon } from 'js/shared-styles/icons';
 import WorkflowItem from '../WorkflowItem';
 import { Flex, StyledLink } from './style';
 

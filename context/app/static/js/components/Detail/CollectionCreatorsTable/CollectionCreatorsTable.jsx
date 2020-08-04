@@ -9,8 +9,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { StyledTableContainer, HeaderCell } from 'shared-styles/Table';
-import { useRoundedSecondaryTooltipStyles } from 'shared-styles/Tooltips';
+import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
+import { useRoundedSecondaryTooltipStyles } from 'js/shared-styles/Tooltips';
 import { HeaderIconCell, StyledLink, StyledInfoIcon, CenterAlignedFlexRow } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';

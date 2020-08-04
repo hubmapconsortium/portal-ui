@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-unresolved
-import { capitalizeString } from 'helpers/functions';
+import { capitalizeString } from 'js/helpers/functions';
 import TableOfContents from '../TableOfContents';
 import { Content, FlexRow } from './style';
 

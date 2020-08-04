@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Alert from '@material-ui/lab/Alert';
 
-import useProvData from 'hooks/useProvData';
+import useProvData from 'js/hooks/useProvData';
 import ProvTabs from '../ProvTabs';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';

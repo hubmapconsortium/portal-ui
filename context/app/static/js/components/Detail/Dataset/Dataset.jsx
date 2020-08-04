@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { LightBlueLink } from 'shared-styles/Links';
+import { LightBlueLink } from 'js/shared-styles/Links';
 import ProvSection from '../ProvSection';
 import Summary from '../Summary';
 import Attribution from '../Attribution';
