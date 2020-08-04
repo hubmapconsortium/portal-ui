@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import Divider from '@material-ui/core/Divider';
 
-import { DatasetIcon, SampleIcon } from 'shared-styles/icons';
+import { DatasetIcon, SampleIcon } from 'js/shared-styles/icons';
 import { invertSectionColors } from '../EntityTile/style';
 
 const iconStyle = css`

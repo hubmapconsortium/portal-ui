@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LightBlueLink } from 'shared-styles/Links';
+import { LightBlueLink } from 'js/shared-styles/Links';
 import { CwlIcon, FlexLightBlueLink, StyledSpan } from './style';
 
 function ProvAnalysisDetailsLink(props) {

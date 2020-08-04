@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 
-import { LightBlueLink } from 'shared-styles/Links';
+import { LightBlueLink } from 'js/shared-styles/Links';
 import { AlignedLink } from './style';
 
 function FilesConditionalLink(props) {

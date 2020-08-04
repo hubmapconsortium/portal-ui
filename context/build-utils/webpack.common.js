@@ -25,11 +25,8 @@ const config = {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml'],
     alias: {
       'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
-      helpers: resolve(__dirname, '../app/static/js/helpers/'),
-      hooks: resolve(__dirname, '../app/static/js/hooks/'),
+      js: resolve(__dirname, '../app/static/js/'),
       images: resolve(__dirname, '../app/static/images/'),
-      theme$: resolve(__dirname, '../app/static/js/theme.jsx'),
-      components: resolve(__dirname, '../app/static/js/components'),
       'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
     },
   },

@@ -1,0 +1,1 @@
+- Make webpack dev build logs less verbose.

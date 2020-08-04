@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CenterIcon, DatasetIcon, SampleIcon, DonorIcon } from 'shared-styles/icons';
+import { CenterIcon, DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
 import DataSummaryItem from '../DataSummaryItem';
 import Title from '../Title';
 import { Wrapper, FlexRow } from './style';

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { DatasetIcon, SampleIcon, DonorIcon } from 'shared-styles/icons';
+import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
 import { invertSectionColors } from '../EntityTile/style';
 
 const iconStyle = css`
