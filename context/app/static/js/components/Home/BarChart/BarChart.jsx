@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Vega as ReactVega } from 'react-vega';
 /* eslint-disable import/no-unresolved */
-import useWindowSize from 'hooks/useWindowSize';
-import theme from 'theme';
+import useWindowSize from 'js/hooks/useWindowSize';
+import theme from 'js/theme';
 /* eslint-enable */
 
 const dummyData = [

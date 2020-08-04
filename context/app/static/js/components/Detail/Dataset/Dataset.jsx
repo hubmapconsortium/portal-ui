@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { LightBlueLink } from 'shared-styles/Links';
+import { LightBlueLink } from 'js/shared-styles/Links';
 import ProvSection from '../ProvSection';
 import Summary from '../Summary';
 import Attribution from '../Attribution';
@@ -11,6 +11,7 @@ import VisualizationWrapper from '../VisualizationWrapper';
 import DetailLayout from '../DetailLayout';
 import Files from '../Files';
 import SummaryItem from '../SummaryItem';
+import useSendUUIDEvent from '../useSendUUIDEvent';
 
 // TODO use this context for components other than FileBrowser
 import DetailContext from '../context';
@@ -75,6 +76,8 @@ function DatasetDetail(props) {
     metadataTable: metadata && 'metadata' in metadata,
     files: true,
   };
+
+  useSendUUIDEvent(entity_type, uuid);
 
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
   return (

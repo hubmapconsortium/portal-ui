@@ -1,0 +1,1 @@
+- Setup tracking page views with Google Analytics.

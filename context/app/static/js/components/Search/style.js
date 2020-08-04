@@ -4,7 +4,7 @@ import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-import { HeaderCell } from 'shared-styles/Table';
+import { HeaderCell } from 'js/shared-styles/Table';
 
 const ArrowUpOn = styled(ArrowUpward)`
   vertical-align: middle;

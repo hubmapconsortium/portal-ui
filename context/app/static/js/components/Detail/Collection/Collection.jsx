@@ -1,23 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LightBlueLink } from 'shared-styles/Links';
+import { LightBlueLink } from 'js/shared-styles/Links';
 import Summary from '../Summary';
 import CollectionDatasetsTable from '../CollectionDatasetsTable';
 import CollectionCreatorsTable from '../CollectionCreatorsTable';
 
+import useSendUUIDEvent from '../useSendUUIDEvent';
+
 function Collection(props) {
   const { collection: collectionData } = props;
+  const { uuid, entitytype, display_doi, name, description } = collectionData;
+
+  useSendUUIDEvent(entitytype, collectionData);
+
   return (
     <div>
       {collectionData && (
         <>
           <Summary
-            uuid={collectionData.uuid}
-            entity_type={collectionData.entitytype}
-            display_doi={collectionData.display_doi}
-            collectionName={collectionData.name}
-            description={collectionData.description}
+            uuid={uuid}
+            entity_type={entitytype}
+            display_doi={display_doi}
+            collectionName={name}
+            description={description}
           >
             <LightBlueLink href="https://www.doi.org" target="_blank" rel="noopener noreferrer" variant="body1">
               doi.org

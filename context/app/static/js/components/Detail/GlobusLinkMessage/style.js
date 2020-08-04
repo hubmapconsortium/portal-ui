@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { ExternalLinkIcon } from 'shared-styles/icons';
+import { ExternalLinkIcon } from 'js/shared-styles/icons';
 
 const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
   font-size: 1rem;

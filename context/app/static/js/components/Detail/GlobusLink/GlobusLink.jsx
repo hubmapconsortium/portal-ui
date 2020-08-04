@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { DetailSectionPaper } from 'shared-styles/surfaces';
-import { readCookie } from 'helpers/functions';
+import { DetailSectionPaper } from 'js/shared-styles/surfaces';
+import { readCookie } from 'js/helpers/functions';
 import { StyledTypography, CenteredDiv, MarginTopDiv, Flex, StyledInfoIcon, StyledSuccessIcon } from './style';
 import GlobusLinkMessage from '../GlobusLinkMessage';
 
