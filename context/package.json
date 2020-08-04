@@ -83,5 +83,13 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint -c .eslintrc.yml --ext .js,.jsx app/static/js/",
     "lint:fix": "eslint -c .eslintrc.yml --ext .js,.jsx --fix app/static/js/"
+  },
+  "lint-staged": {
+    "app/static/js/**/*.{js,jsx}":  "eslint -c .eslintrc.yml --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
