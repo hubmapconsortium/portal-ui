@@ -4,7 +4,7 @@ import ReactGA from 'react-ga';
 function useSendPageView(path) {
   useEffect(() => {
     if (path.startsWith('/browse')) {
-      const pathWithoutUUID = path.match(/\/\w+\/\w+/)[0];
+      const pathWithoutUUID = path.match(/\/browse\/\w+/)[0];
       ReactGA.pageview(pathWithoutUUID);
       return;
     }
