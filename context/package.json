@@ -72,7 +72,7 @@
   "license": "MIT",
   "repository": "https://github.com/hubmapconsortium/portal-ui/",
   "scripts": {
-    "build": "webpack --progress --config build-utils/webpack.prod.js",
+    "build": "webpack --config build-utils/webpack.prod.js",
     "build:dev": "webpack --progress --profile --colors --config build-utils/webpack.dev.js",
     "build:analyze": "webpack --progress --config build-utils/webpack.analyze.js",
     "dev-server": "webpack-dev-server --config build-utils/webpack.dev.js --hot",
