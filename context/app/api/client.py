@@ -44,7 +44,7 @@ class ApiClient():
             raise
         return response.json()
 
-    def get_entity(self, uuid):
+    def get_entity(self, uuid=None, hbm_id=None):
         if self.is_mock:
             return {
                 'created': '2020-01-01 00:00:00',
@@ -56,7 +56,17 @@ class ApiClient():
                 'description': 'Mock Entity'
             }
 
-        query = {'query': {'ids': {'values': [uuid]}}}
+        if uuid is not None and hbm_id is not None:
+            raise Exception('Either UUID or HBM ID should be provided')
+        query = {'query':
+            # ES guarantees that _id is unique, so this is best:
+            {'ids': {'values': [uuid]}}
+            if uuid else
+            {'match': {'display_doi.keyword': hbm_id}}
+            # With default mapping, without ".keyword", it splits into tokens,
+            # and we get multiple substring matches, instead of unique match.
+        }
+
         response_json = self._request(
             current_app.config['ELASTICSEARCH_ENDPOINT']
             + current_app.config['PORTAL_INDEX_PATH'],
@@ -67,7 +77,7 @@ class ApiClient():
         if len(hits) == 0:
             abort(404)
         if len(hits) > 1:
-            raise Exception(f'UUID not unique; got {len(hits)} matches')
+            raise Exception(f'ID not unique; got {len(hits)} matches for {query}')
         entity = hits[0]['_source']
         return entity
 
