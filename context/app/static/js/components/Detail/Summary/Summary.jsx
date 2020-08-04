@@ -32,7 +32,12 @@ function Summary(props) {
       </Typography>
       <StyledDiv>
         <SectionHeader isSummary>{display_doi}</SectionHeader>
-        <SummaryData entity_type={entity_type} uuid={uuid} status={status} mapped_data_access_level={mapped_data_access_level}>
+        <SummaryData
+          entity_type={entity_type}
+          uuid={uuid}
+          status={status}
+          mapped_data_access_level={mapped_data_access_level}
+        >
           {children}
         </SummaryData>
       </StyledDiv>
