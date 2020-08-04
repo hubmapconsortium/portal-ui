@@ -234,9 +234,8 @@ class Vitessce:
           >> vitessce = Vitessce(entity, nexus_token)
 
         """
-
-        # Can there be more than one of these?  This seems like a fine default for now.
-        self.assay_type = entity["data_types"][0]
+        non_pyramid_types = [t for t in entity["data_types"] if t != 'image_pyramid']
+        self.assay_type = non_pyramid_types[0] if len(non_pyramid_types) == 1 else None
         self.uuid = entity["uuid"]
         self.nexus_token = nexus_token
         self.is_mock = is_mock
