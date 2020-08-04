@@ -59,13 +59,13 @@ class ApiClient():
         if uuid is not None and hbm_id is not None:
             raise Exception('Either UUID or HBM ID should be provided')
         query = {'query':
-            # ES guarantees that _id is unique, so this is best:
-            {'ids': {'values': [uuid]}}
-            if uuid else
-            {'match': {'display_doi.keyword': hbm_id}}
-            # With default mapping, without ".keyword", it splits into tokens,
-            # and we get multiple substring matches, instead of unique match.
-        }
+                 # ES guarantees that _id is unique, so this is best:
+                 {'ids': {'values': [uuid]}}
+                 if uuid else
+                 {'match': {'display_doi.keyword': hbm_id}}
+                 # With default mapping, without ".keyword", it splits into tokens,
+                 # and we get multiple substring matches, instead of unique match.
+                 }
 
         response_json = self._request(
             current_app.config['ELASTICSEARCH_ENDPOINT']
