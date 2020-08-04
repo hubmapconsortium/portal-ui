@@ -19,9 +19,8 @@ FROM tiangolo/uwsgi-nginx-flask:python3.7
 # https://github.com/tiangolo/uwsgi-nginx-flask-docker#custom-static-path
 ENV STATIC_PATH /app/app/static
 
-COPY --from=builder /work/app/static/public ${STATIC_PATH}/public
-
 COPY requirements.txt /app
 RUN pip install -r /app/requirements.txt
 
+COPY --from=builder /work/app/static/public ${STATIC_PATH}/public
 COPY . /app
