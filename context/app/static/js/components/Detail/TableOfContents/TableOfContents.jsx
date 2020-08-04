@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 
-import { throttle } from 'helpers/functions';
+import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
 
 function ItemLink(props) {

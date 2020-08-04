@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { readCookie } from 'helpers/functions';
-import LookupEntity from 'helpers/LookupEntity';
+import { readCookie } from 'js/helpers/functions';
+import LookupEntity from 'js/helpers/LookupEntity';
 import SearchWrapper from './SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named

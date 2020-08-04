@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import prettyBytes from 'pretty-bytes';
-import { readCookie } from 'helpers/functions';
+import { readCookie } from 'js/helpers/functions';
 
-import { useRoundedSecondaryTooltipStyles } from 'shared-styles/Tooltips';
+import { useRoundedSecondaryTooltipStyles } from 'js/shared-styles/Tooltips';
 import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
 import DetailContext from '../context';
