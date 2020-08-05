@@ -104,13 +104,23 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
     return (
       <TableBody>
         {hits.map((hit) => (
-          <StyledTableRow key={hit._id}>
-            {resultFields.map((field) => (
-              <StyledTableCell key={field.id}>
-                <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
+          <>
+            <StyledTableRow key={hit._id}>
+              {resultFields.map((field) => (
+                <StyledTableCell key={field.id}>
+                  <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
+                </StyledTableCell>
+              ))}
+            </StyledTableRow>
+            <StyledTableRow key={`${hit._id}-highlight`}>
+              <StyledTableCell>
+                {hit.highlight.everything.map((html) => (
+                  // eslint-disable-next-line react/no-danger
+                  <p dangerouslySetInnerHTML={{ __html: html }} />
+                ))}
               </StyledTableCell>
-            ))}
-          </StyledTableRow>
+            </StyledTableRow>
+          </>
         ))}
       </TableBody>
     );
@@ -171,6 +181,11 @@ function SearchWrapper(props) {
               hitsPerPage={hitsPerPage}
               listComponent={makeTableBodyComponent(resultFields, detailsUrlPrefix, idField)}
               sourceFilter={resultFieldIds}
+              customHighlight={{
+                fields: {
+                  everything: { type: 'plain' },
+                },
+              }}
             />
           </Table>
           <NoHits
