@@ -1,3 +1,12 @@
+## v0.0.51 - 2020-08-05
+
+- Upgrade Viv for IMC data fix.
+- Reorder Dockerfile steps to improve caching.
+- Simply webpack and jest import aliases.
+- Make webpack dev build logs less verbose.
+- Make webpack production build logs less verbose.
+
+
 ## v0.0.50 - 2020-08-03
 
 - Use mapped_data_access_level consistently.
