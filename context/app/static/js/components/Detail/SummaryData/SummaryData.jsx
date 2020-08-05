@@ -10,7 +10,7 @@ function SummaryData(props) {
 
   return (
     <Flex>
-      {children && <FlexCenterAlign>{children}</FlexCenterAlign>}
+      {children && <FlexCenterAlign data-testid="summary-data-parent">{children}</FlexCenterAlign>}
       <FlexRight>
         {entity_type === 'Dataset' && (
           <FlexCenterAlign>
@@ -19,7 +19,12 @@ function SummaryData(props) {
             <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
           </FlexCenterAlign>
         )}
-        <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
+        <JsonButton
+          href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
+          target="_blank"
+          component="a"
+          data-testid="summary-data-json-button"
+        >
           <StyledFileIcon color="primary" />
         </JsonButton>
       </FlexRight>
