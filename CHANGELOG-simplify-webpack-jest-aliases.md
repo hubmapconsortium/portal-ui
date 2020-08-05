@@ -1,1 +1,0 @@
-- Simply webpack and jest import aliases.
