@@ -5,12 +5,12 @@ import SummaryData from './SummaryData';
 
 test('json button exists and has href', () => {
   // const { entity_type, uuid, status, mapped_data_access_level, children } = props;
-  const { getByTestId } = render(
+  const { getByRole } = render(
     <SummaryData entity_type="Fake" uuid="fakeuuid" status="QA" mapped_data_access_level="Public" />,
   );
-  expect(getByTestId('summary-data-json-button')).toBeInTheDocument();
-  expect(getByTestId('summary-data-json-button')).not.toBeEmptyDOMElement();
-  expect(getByTestId('summary-data-json-button')).toHaveAttribute('href', `/browse/fake/fakeuuid.json`);
+  expect(getByRole('link')).toBeInTheDocument();
+  expect(getByRole('link')).not.toBeEmptyDOMElement();
+  expect(getByRole('link')).toHaveAttribute('href', `/browse/fake/fakeuuid.json`);
 });
 
 test('dataset displays properly', () => {

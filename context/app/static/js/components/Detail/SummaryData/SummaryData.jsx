@@ -19,12 +19,7 @@ function SummaryData(props) {
             <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
           </FlexCenterAlign>
         )}
-        <JsonButton
-          href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
-          target="_blank"
-          component="a"
-          data-testid="summary-data-json-button"
-        >
+        <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
           <StyledFileIcon color="primary" />
         </JsonButton>
       </FlexRight>
