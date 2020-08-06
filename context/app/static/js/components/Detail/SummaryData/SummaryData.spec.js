@@ -4,7 +4,6 @@ import { render } from 'test-utils/functions';
 import SummaryData from './SummaryData';
 
 test('json button exists and has href', () => {
-  // const { entity_type, uuid, status, mapped_data_access_level, children } = props;
   const { getByRole } = render(
     <SummaryData entity_type="Fake" uuid="fakeuuid" status="QA" mapped_data_access_level="Public" />,
   );
@@ -14,7 +13,6 @@ test('json button exists and has href', () => {
 });
 
 test('dataset displays properly', () => {
-  // const { entity_type, uuid, status, mapped_data_access_level, children } = props;
   const { getByText, getByTestId } = render(
     <SummaryData entity_type="Dataset" uuid="fakeuuid" status="QA" mapped_data_access_level="Public" />,
   );
@@ -24,7 +22,6 @@ test('dataset displays properly', () => {
 });
 
 test('non-dataset displays properly', () => {
-  // const { entity_type, uuid, status, mapped_data_access_level, children } = props;
   const { queryByTestId } = render(
     <SummaryData entity_type="fake" uuid="fakeuuid" status="QA" mapped_data_access_level="Public" />,
   );
@@ -32,7 +29,6 @@ test('non-dataset displays properly', () => {
 });
 
 test('children display when provided', () => {
-  // const { entity_type, uuid, status, mapped_data_access_level, children } = props;
   const { getByText, getByTestId } = render(
     <SummaryData entity_type="fake" uuid="fakeuuid" status="QA" mapped_data_access_level="Public">
       <>
@@ -49,7 +45,6 @@ test('children display when provided', () => {
 });
 
 test('children do not display when undefined', () => {
-  // const { entity_type, uuid, status, mapped_data_access_level, children } = props;
   const { queryByText, queryByTestId } = render(
     <SummaryData entity_type="fake" uuid="fakeuuid" status="QA" mapped_data_access_level="Public" />,
   );
