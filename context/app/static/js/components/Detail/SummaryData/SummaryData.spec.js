@@ -5,7 +5,7 @@ import SummaryData from './SummaryData';
 
 test('json button exists and has href', () => {
   render(<SummaryData entity_type="Fake" uuid="fakeuuid" status="QA" mapped_data_access_level="Public" />);
-  expect(screen.getByRole('link')).toBeInTheDocument();
+
   expect(screen.getByRole('link')).not.toBeEmptyDOMElement();
   expect(screen.getByRole('link')).toHaveAttribute('href', `/browse/fake/fakeuuid.json`);
 });
