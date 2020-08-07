@@ -101,6 +101,7 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
   return function ResultsTableBody(props) {
     const { hits } = props;
     /* eslint-disable no-underscore-dangle */
+    /* eslint-disable react/no-danger */
     return (
       <TableBody>
         {hits.map((hit) => (
@@ -115,10 +116,7 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
             {'highlight' in hit && (
               <StyledTableRow className="highlight">
                 <StyledTableCell colSpan={resultFields.length}>
-                  {hit.highlight.everything.map((html) => (
-                    // eslint-disable-next-line react/no-danger
-                    <p dangerouslySetInnerHTML={{ __html: html }} />
-                  ))}
+                  <p dangerouslySetInnerHTML={{ __html: hit.highlight.everything.join(' ... ') }} />
                 </StyledTableCell>
               </StyledTableRow>
             )}
@@ -126,7 +124,7 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
         ))}
       </TableBody>
     );
-    /* eslint-enable no-underscore-dangle */
+    /* eslint-enable */
   };
 }
 
