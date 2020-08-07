@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 import Tooltip from '@material-ui/core/Tooltip';
 import prettyBytes from 'pretty-bytes';
-import { readCookie } from 'js/helpers/functions';
 
+import { readCookie } from 'js/helpers/functions';
 import { useRoundedSecondaryTooltipStyles } from 'js/shared-styles/Tooltips';
 import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
@@ -39,5 +40,16 @@ function FileBrowserFile(props) {
     </StyledDiv>
   );
 }
+
+FileBrowserFile.propTypes = {
+  fileObj: PropTypes.shape({
+    rel_path: PropTypes.string,
+    file: PropTypes.string,
+    size: PropTypes.number,
+    description: PropTypes.string,
+    edam_term: PropTypes.string,
+  }).isRequired,
+  depth: PropTypes.number.isRequired,
+};
 
 export default FileBrowserFile;
