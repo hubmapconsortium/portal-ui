@@ -104,23 +104,25 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
     return (
       <TableBody>
         {hits.map((hit) => (
-          <>
-            <StyledTableRow key={hit._id}>
+          <React.Fragment key={hit._id}>
+            <StyledTableRow>
               {resultFields.map((field) => (
                 <StyledTableCell key={field.id}>
                   <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
                 </StyledTableCell>
               ))}
             </StyledTableRow>
-            <StyledTableRow key={`${hit._id}-highlight`}>
-              <StyledTableCell>
-                {hit.highlight.everything.map((html) => (
-                  // eslint-disable-next-line react/no-danger
-                  <p dangerouslySetInnerHTML={{ __html: html }} />
-                ))}
-              </StyledTableCell>
-            </StyledTableRow>
-          </>
+            {'highlight' in hit && (
+              <StyledTableRow>
+                <StyledTableCell>
+                  {hit.highlight.everything.map((html) => (
+                    // eslint-disable-next-line react/no-danger
+                    <p dangerouslySetInnerHTML={{ __html: html }} />
+                  ))}
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </React.Fragment>
         ))}
       </TableBody>
     );
@@ -182,9 +184,7 @@ function SearchWrapper(props) {
               listComponent={makeTableBodyComponent(resultFields, detailsUrlPrefix, idField)}
               sourceFilter={resultFieldIds}
               customHighlight={{
-                fields: {
-                  everything: { type: 'plain' },
-                },
+                fields: { everything: { type: 'plain' } },
               }}
             />
           </Table>
