@@ -114,7 +114,7 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
             </StyledTableRow>
             {'highlight' in hit && (
               <StyledTableRow>
-                <StyledTableCell>
+                <StyledTableCell colspan={resultFields.length}>
                   {hit.highlight.everything.map((html) => (
                     // eslint-disable-next-line react/no-danger
                     <p dangerouslySetInnerHTML={{ __html: html }} />
