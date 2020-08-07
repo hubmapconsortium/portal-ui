@@ -9,8 +9,6 @@ git pull
 
 perl -i -pne 's/(\d+)$/$1+1/e' context/app/markdown/VERSION.md
 VERSION=`cat VERSION`
-BRANCH="release-$VERSION"
-git checkout -b "$BRANCH"
 git add .
 git commit -m 'Version bump'
 
@@ -53,6 +51,4 @@ git submodule foreach '
 git add .
 git commit -m 'Update submodules' || echo 'Nothing to commit; Continue to git push...'
 
-git push --set-upstream origin $BRANCH
-
-echo "Open a new PR on github with $BRANCH."
+git push origin
