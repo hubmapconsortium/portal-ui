@@ -25,10 +25,8 @@ test('non-dataset displays properly', () => {
 test('children display when provided', () => {
   render(
     <SummaryData entity_type="fake" uuid="fakeuuid" status="QA" mapped_data_access_level="Public">
-      <>
-        <div>child 1</div>
-        <div>child 2</div>
-      </>
+      <div>child 1</div>
+      <div>child 2</div>
     </SummaryData>,
   );
   expect(screen.getByTestId('summary-data-parent')).toBeInTheDocument();
