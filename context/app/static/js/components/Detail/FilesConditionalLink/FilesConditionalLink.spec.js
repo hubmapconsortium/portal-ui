@@ -5,8 +5,7 @@ import FilesConditionalLink from './FilesConditionalLink';
 
 const fakeOpenDUA = () => {};
 
-test('the link is functional when dua has been agreed to', () => {
-  // const { hasAgreedToDUA, openDUA, href, children, ...rest } = props;
+test('the element is a link when dua has been agreed to', () => {
   render(
     <FilesConditionalLink hasAgreedToDUA="fake" openDUA={fakeOpenDUA} href="fakeref">
       child
@@ -17,8 +16,7 @@ test('the link is functional when dua has been agreed to', () => {
   expect(screen.queryByRole('button')).toBeNull();
 });
 
-test('the link is functional when dua has been agreed to', () => {
-  // const { hasAgreedToDUA, openDUA, href, children, ...rest } = props;
+test('the element is button when dua has not been agreed to', () => {
   render(
     <FilesConditionalLink hasAgreedToDUA={null} openDUA={fakeOpenDUA} href="fakeref">
       child
