@@ -39,7 +39,7 @@ function Preview(props) {
         created_by_user_displayname={created_by_user_displayname}
         created_by_user_email={created_by_user_email}
       />
-      <VisualizationWrapper vitData={vitData} />
+      {Boolean(vitData) && <VisualizationWrapper vitData={vitData} />}
     </Container>
   );
 }
