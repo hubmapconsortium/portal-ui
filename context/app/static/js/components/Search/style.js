@@ -34,7 +34,7 @@ const StyledTableRow = styled(TableRow)`
   // What looks white is actually transparent and brightness() has no effect.
   background-color: #fff;
 
-  :hover {
+  :hover:not(.highlight) {
     filter: brightness(96%);
   }
 `;
@@ -45,7 +45,7 @@ const StyledTableCell = styled(TableCell)`
 
   overflow: hidden;
 
-  & a {
+  a {
     display: block;
     margin: -100%;
     padding: 100%;
@@ -53,8 +53,13 @@ const StyledTableCell = styled(TableCell)`
     overflow-wrap: break-word;
   }
 
-  &:first-child a {
+  :first-child a {
     color: #3781d1;
+  }
+
+  em {
+    font-weight: bold;
+    font-style: normal;
   }
 `;
 
