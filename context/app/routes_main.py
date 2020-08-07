@@ -83,11 +83,11 @@ def collection_details_ext(uuid, ext):
     return collection
 
 
-@blueprint.route('/browse/<type>/HBM<hbm_suffix>')
-def hbm_redirect(type, hbm_suffix):
+@blueprint.route('/browse/HBM<hbm_suffix>')
+def hbm_redirect(hbm_suffix):
     client = _get_client()
     entity = client.get_entity(hbm_id=f'HBM{hbm_suffix}')
-    return redirect(url_for('routes.details', type=type, uuid=entity['uuid']))
+    return redirect(url_for('routes.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
 
 
 @blueprint.route('/browse/<type>/<uuid>')

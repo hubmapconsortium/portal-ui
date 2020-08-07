@@ -57,7 +57,7 @@ class ApiClient():
             }
 
         if uuid is not None and hbm_id is not None:
-            raise Exception('Either UUID or HBM ID should be provided')
+            raise Exception('Only UUID or HBM ID should be provided, not both')
         query = {'query':
                  # ES guarantees that _id is unique, so this is best:
                  {'ids': {'values': [uuid]}}
