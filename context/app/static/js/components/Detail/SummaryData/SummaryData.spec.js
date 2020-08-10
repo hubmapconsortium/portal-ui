@@ -39,7 +39,4 @@ test('children display when provided', () => {
 test('children do not display when undefined', () => {
   render(<SummaryData entity_type="fake" uuid="fakeuuid" status="QA" mapped_data_access_level="Public" />);
   expect(screen.queryByTestId('summary-data-parent')).toBeNull();
-
-  const textToTest = ['child 1', 'child 2'];
-  textToTest.forEach((text) => expect(screen.queryByText(text)).toBeNull());
 });
