@@ -22,7 +22,7 @@ if ls CHANGELOG-*.md; then
     echo
     cat CHANGELOG.md
   ) > CHANGELOG.md.new
-  mv CHANGELOG.md.new CHANGELOG.md
+  mv CHANGELOG.md.new context/app/markdown/CHANGELOG.md
   git rm CHANGELOG-*.md
   git add .
   git commit -m 'Update CHANGELOG'
