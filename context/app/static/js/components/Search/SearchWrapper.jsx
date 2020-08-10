@@ -116,7 +116,7 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
             {'highlight' in hit && (
               <StyledTableRow className="highlight">
                 <StyledTableCell colSpan={resultFields.length}>
-                  <p dangerouslySetInnerHTML={{ __html: hit.highlight.everything.join(' ... ') }} />
+                  <span dangerouslySetInnerHTML={{ __html: hit.highlight.everything.join(' ... ') }} />
                 </StyledTableCell>
               </StyledTableRow>
             )}

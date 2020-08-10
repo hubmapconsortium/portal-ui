@@ -37,6 +37,20 @@ const StyledTableRow = styled(TableRow)`
   :hover:not(.highlight) {
     filter: brightness(96%);
   }
+
+  &.highlight {
+    // 1px border not effective.
+    border-top: 2px solid white;
+
+    // Dotted border comes out irregular; different on different browsers.
+    // border-top: 2px dotted rgb(224, 224, 224);
+
+    & td {
+      color: rgba(0, 0, 0, 0.54);
+      padding-left: 4em;
+      padding-right: 4em;
+    }
+  }
 `;
 
 const StyledTableCell = styled(TableCell)`
