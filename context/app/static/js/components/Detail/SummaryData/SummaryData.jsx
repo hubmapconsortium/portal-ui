@@ -10,7 +10,7 @@ function SummaryData(props) {
 
   return (
     <Flex>
-      {children && <FlexCenterAlign>{children}</FlexCenterAlign>}
+      {children && <FlexCenterAlign data-testid="summary-data-parent">{children}</FlexCenterAlign>}
       <FlexRight>
         {entity_type === 'Dataset' && (
           <FlexCenterAlign>
