@@ -10,23 +10,6 @@ const handleAgree = jest.fn();
 const handleClose = jest.fn();
 const mapped_data_access_level = 'fakeaccess';
 
-test('handles check', () => {
-  render(
-    <FileBrowserDUA
-      isOpen
-      handleAgree={handleAgree}
-      handleClose={handleClose}
-      mapped_data_access_level={mapped_data_access_level}
-    />,
-  );
-
-  expect(screen.getByLabelText('I have read and agree to the above data use guidelines.')).not.toBeChecked();
-  expect(screen.getByRole('button', { name: 'Agree' })).toBeDisabled();
-  userEvent.click(screen.getByRole('checkbox'));
-  expect(screen.getByLabelText('I have read and agree to the above data use guidelines.')).toBeChecked();
-  expect(screen.getByRole('button', { name: 'Agree' })).toBeEnabled();
-});
-
 test('autofocused on disagree button', () => {
   render(
     <FileBrowserDUA
