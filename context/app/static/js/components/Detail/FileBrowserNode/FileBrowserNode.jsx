@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import FileBrowserDirectory from '../FileBrowserDirectory';
 import FileBrowserFile from '../FileBrowserFile';
@@ -25,5 +26,10 @@ function FileBrowserNode(props) {
     );
   });
 }
+
+FileBrowserNode.propTypes = {
+  fileSubTree: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.array])).isRequired,
+  depth: PropTypes.number.isRequired,
+};
 
 export default FileBrowserNode;
