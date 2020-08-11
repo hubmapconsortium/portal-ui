@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { Directory, StyledFolderIcon, StyledFolderOpenIcon } from './style';
 
 function FileBrowserDirectory(props) {
@@ -7,7 +9,13 @@ function FileBrowserDirectory(props) {
 
   return (
     <div>
-      <Directory $depth={depth} onClick={() => setIsExpanded(!isExpanded)}>
+      <Directory
+        $depth={depth}
+        onClick={() => setIsExpanded(!isExpanded)}
+        onKeyDown={() => setIsExpanded(!isExpanded)}
+        role="button"
+        tabIndex="0"
+      >
         {isExpanded ? <StyledFolderOpenIcon color="primary" /> : <StyledFolderIcon color="primary" />}
         {dirName}
       </Directory>
@@ -15,5 +23,11 @@ function FileBrowserDirectory(props) {
     </div>
   );
 }
+
+FileBrowserDirectory.propTypes = {
+  dirName: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  depth: PropTypes.number.isRequired,
+};
 
 export default FileBrowserDirectory;
