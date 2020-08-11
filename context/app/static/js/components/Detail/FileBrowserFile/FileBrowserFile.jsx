@@ -21,7 +21,7 @@ function FileBrowserFile(props) {
 
   return (
     <StyledDiv>
-      <IndentedDiv $depth={depth}>
+      <IndentedDiv $depth={depth} data-testid="file-indented-div">
         <StyledFileIcon color="primary" />
         <FilesConditionalLink
           href={fileUrl}
@@ -34,7 +34,7 @@ function FileBrowserFile(props) {
         </FilesConditionalLink>
         <FileSize variant="body1">{prettyBytes(fileObj.size)}</FileSize>
         <Tooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`} classes={classes}>
-          <StyledInfoIcon color="primary" />
+          <StyledInfoIcon color="primary" aria-label="file-description" />
         </Tooltip>
       </IndentedDiv>
     </StyledDiv>
