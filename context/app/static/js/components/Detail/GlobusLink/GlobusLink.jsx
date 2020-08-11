@@ -43,7 +43,11 @@ function GlobusLink(props) {
       <DetailSectionPaper>
         <Flex>
           <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
-          {statusCode === 200 ? <StyledSuccessIcon /> : <StyledInfoIcon />}
+          {statusCode === 200 ? (
+            <StyledSuccessIcon data-testid="success-icon" />
+          ) : (
+            <StyledInfoIcon data-testid="info-icon" />
+          )}
         </Flex>
         <GlobusLinkMessage statusCode={statusCode} url={url} display_doi={display_doi} />
       </DetailSectionPaper>
