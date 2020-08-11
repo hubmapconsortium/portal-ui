@@ -7,6 +7,10 @@ const StyledMarkdown = styled(ReactMarkdown)`
     list-style: circle;
     list-style-type: disc;
   }
+
+  img {
+    max-width: 100%;
+  }
 `;
 
 const StyledPaper = styled(Paper)`

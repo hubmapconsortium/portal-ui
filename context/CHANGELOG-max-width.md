@@ -1,0 +1,1 @@
+- Limit width of screenshots in preview.
