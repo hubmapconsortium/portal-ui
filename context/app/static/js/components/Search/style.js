@@ -38,23 +38,20 @@ const StyledTableBody = styled(TableBody)`
   :hover {
     filter: brightness(96%);
   }
+
+  border: 1px solid rgba(224, 224, 224, 1); // Material would apply this on TD, but we override.
+  border-left: none;
+  border-right: none;
 `;
 
-const internalPaddingPx = 10;
-const defaultPaddingPx = 16;
 const sidePadding = '4em';
 
 const StyledTableRow = styled(TableRow)`
+  border: 0;
+
   &.highlight {
-    // "none" or just a 1px border won't override like a 2px border does:
-    border-top: 2px solid white;
-
     & td {
-      position: relative;
       padding-top: 0;
-      top: ${internalPaddingPx - defaultPaddingPx}px;
-      padding-bottom: ${internalPaddingPx}px;
-
       padding-left: ${sidePadding};
       padding-right: ${sidePadding};
       & a {
@@ -69,6 +66,7 @@ const StyledTableCell = styled(TableCell)`
   // https://stackoverflow.com/questions/3966027
 
   overflow: hidden;
+  border: none; // Borders handled by tbody.
 
   a {
     display: block;
