@@ -42,16 +42,17 @@ const StyledTableBody = styled(TableBody)`
 
 const StyledTableRow = styled(TableRow)`
   &.highlight {
-    // 1px border not effective.
+    // "none" or just a 1px border won't override like a 2px border does:
     border-top: 2px solid white;
 
-    // Dotted border comes out irregular; different on different browsers.
-    // border-top: 2px dotted rgb(224, 224, 224);
-
     & td {
+      position: relative;
+      padding-top: 0;
+      top: -6px;
+      padding-bottom: 10px; // = 16px (default) - 6px
+
       padding-left: 4em;
       padding-right: 4em;
-      padding-top: 0;
       & a {
         color: rgba(0, 0, 0, 0.54);
       }
