@@ -4,6 +4,8 @@ import Paper from '@material-ui/core/Paper';
 // TODO: Copied and pasted the padding.
 // Should find a way to manage it in one place.
 const StyledPaper = styled(Paper)`
+  margin-bottom: 16px;
+
   padding: 30px 40px 30px 40px;
 
   & img {
