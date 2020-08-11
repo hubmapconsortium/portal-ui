@@ -40,6 +40,10 @@ const StyledTableBody = styled(TableBody)`
   }
 `;
 
+const internalPaddingPx = 10;
+const defaultPaddingPx = 16;
+const sidePadding = '4em';
+
 const StyledTableRow = styled(TableRow)`
   &.highlight {
     // "none" or just a 1px border won't override like a 2px border does:
@@ -48,11 +52,11 @@ const StyledTableRow = styled(TableRow)`
     & td {
       position: relative;
       padding-top: 0;
-      top: -6px;
-      padding-bottom: 10px; // = 16px (default) - 6px
+      top: ${internalPaddingPx - defaultPaddingPx}px;
+      padding-bottom: ${internalPaddingPx}px;
 
-      padding-left: 4em;
-      padding-right: 4em;
+      padding-left: ${sidePadding};
+      padding-right: ${sidePadding};
       & a {
         color: rgba(0, 0, 0, 0.54);
       }
