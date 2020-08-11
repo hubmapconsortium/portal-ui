@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import ArrowUpward from '@material-ui/icons/ArrowUpwardRounded';
 import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
 import TableRow from '@material-ui/core/TableRow';
+import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 
 import { HeaderCell } from 'js/shared-styles/Table';
@@ -29,15 +30,17 @@ const StyledHeaderCell = styled(HeaderCell)`
   white-space: nowrap;
 `;
 
-const StyledTableRow = styled(TableRow)`
+const StyledTableBody = styled(TableBody)`
   // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.
   // What looks white is actually transparent and brightness() has no effect.
   background-color: #fff;
 
-  :hover:not(.highlight) {
+  :hover {
     filter: brightness(96%);
   }
+`;
 
+const StyledTableRow = styled(TableRow)`
   &.highlight {
     // 1px border not effective.
     border-top: 2px solid white;
@@ -46,9 +49,12 @@ const StyledTableRow = styled(TableRow)`
     // border-top: 2px dotted rgb(224, 224, 224);
 
     & td {
-      color: rgba(0, 0, 0, 0.54);
       padding-left: 4em;
       padding-right: 4em;
+      padding-top: 0;
+      & a {
+        color: rgba(0, 0, 0, 0.54);
+      }
     }
   }
 `;
@@ -77,4 +83,13 @@ const StyledTableCell = styled(TableCell)`
   }
 `;
 
-export { ArrowUpOn, ArrowDownOn, ArrowUpOff, ArrowDownOff, StyledHeaderCell, StyledTableRow, StyledTableCell };
+export {
+  ArrowUpOn,
+  ArrowDownOn,
+  ArrowUpOff,
+  ArrowDownOff,
+  StyledHeaderCell,
+  StyledTableRow,
+  StyledTableBody,
+  StyledTableCell,
+};

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
@@ -26,7 +25,15 @@ import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-dupli
 // There is more in the name space, but we only need the filterTypes.
 
 import { resultFieldsToSortOptions } from './utils';
-import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell, StyledTableRow, StyledTableCell } from './style';
+import {
+  ArrowUpOn,
+  ArrowDownOn,
+  ArrowDownOff,
+  StyledHeaderCell,
+  StyledTableBody,
+  StyledTableRow,
+  StyledTableCell,
+} from './style';
 import './Search.scss';
 
 function getByPath(nested, field) {
@@ -102,10 +109,11 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
     const { hits } = props;
     /* eslint-disable no-underscore-dangle */
     /* eslint-disable react/no-danger */
+    /* eslint-disable jsx-a11y/control-has-associated-label */
     return (
-      <TableBody>
+      <>
         {hits.map((hit) => (
-          <React.Fragment key={hit._id}>
+          <StyledTableBody key={hit._id}>
             <StyledTableRow>
               {resultFields.map((field) => (
                 <StyledTableCell key={field.id}>
@@ -116,13 +124,18 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
             {'highlight' in hit && (
               <StyledTableRow className="highlight">
                 <StyledTableCell colSpan={resultFields.length}>
-                  <span dangerouslySetInnerHTML={{ __html: hit.highlight.everything.join(' ... ') }} />
+                  <a
+                    href={detailsUrlPrefix + hit._source[idField]}
+                    dangerouslySetInnerHTML={{
+                      __html: hit.highlight.everything.join(' ... '),
+                    }}
+                  />
                 </StyledTableCell>
               </StyledTableRow>
             )}
-          </React.Fragment>
+          </StyledTableBody>
         ))}
-      </TableBody>
+      </>
     );
     /* eslint-enable */
   };
