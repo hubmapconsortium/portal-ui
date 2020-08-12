@@ -1,0 +1,1 @@
+- Script to generate static html for server maintenance.

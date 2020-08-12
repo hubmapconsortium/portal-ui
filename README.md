@@ -101,6 +101,14 @@ Then, to redeploy `dev` and `test`:
 ./redeploy.sh $USERNAME test
 ```
 
+## Maintenance static page
+Periodically, even on production, our container will need to be down for maintenance.
+The IEC can put up a static "Under Construction" page if we provide them with static HTML bundle.
+To generate this bundle:
+- Add `MAINTENANCE_MODE = True` in `app.conf`.
+- Restart the dev server.
+- Run `./make-maintenance-tarball.sh`.
+
 ## Related projects and dependencies
 
 Javascript / React UI components:
