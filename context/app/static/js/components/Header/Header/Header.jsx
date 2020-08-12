@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -12,9 +13,10 @@ import Dropdown from '../Dropdown';
 import LoginButton from '../LoginButton';
 import DocumentationLinks from '../DocumentationLinks';
 
-function Header() {
+function Header(props) {
+  const { isMaintenanceMode } = props;
   const theme = useTheme();
-  const shouldDisplayMenu = !useMediaQuery(theme.breakpoints.up('md'));
+  const shouldDisplayMenu = !useMediaQuery(theme.breakpoints.up('md')) && !isMaintenanceMode;
   const anchorRef = useRef(null);
 
   return (
@@ -25,7 +27,7 @@ function Header() {
           <a href="/">
             <HubmapLogo aria-label="HubMAP logo" />
           </a>
-          {!shouldDisplayMenu && (
+          {!isMaintenanceMode && !shouldDisplayMenu && (
             <>
               <div>
                 {['Donor', 'Sample', 'Dataset'].map((type) => (
@@ -53,11 +55,19 @@ function Header() {
           )}
           {shouldDisplayMenu && <Spacer />}
           {/* eslint-disable-next-line no-undef */}
-          <LoginButton isAuthenticated={isAuthenticated} />
+          {!isMaintenanceMode && <LoginButton isAuthenticated={isAuthenticated} />}
         </Toolbar>
       </Container>
     </StyledAppBar>
   );
 }
+
+Header.propTypes = {
+  isMaintenanceMode: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  isMaintenanceMode: false,
+};
 
 export default Header;

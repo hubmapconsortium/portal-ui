@@ -26,7 +26,7 @@ const availableRoutes = [
 if ('maintenance_mode' in flaskData && flaskData.maintenance_mode) {
   ReactDOM.render(
     <Providers>
-      <Header />
+      <Header isMaintenanceMode />
       <p>Under Construction</p>
       <Footer />
     </Providers>,
