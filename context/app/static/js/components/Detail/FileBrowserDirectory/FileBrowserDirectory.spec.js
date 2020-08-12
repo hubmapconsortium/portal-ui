@@ -36,7 +36,7 @@ test('handles key down', () => {
   );
 
   expect(screen.queryByText('directory child')).toBeNull();
-  fireEvent.keyDown(screen.getByRole('button'), { key: 'Enter', code: 'Enter' });
+  fireEvent.keyDown(screen.getByRole('button'), { key: 'Enter', code: 'Enter', keyCode: 13 });
   expect(screen.getByText('directory child')).toBeInTheDocument();
 });
 
