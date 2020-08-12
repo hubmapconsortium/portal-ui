@@ -192,3 +192,12 @@ def collections():
         title='Collections',
         flask_data=core_props
     )
+
+
+@blueprint.route('/maintenance')
+def maintenance():
+    return render_template(
+        'pages/base_react.html',
+        title='Maintenance',
+        flask_data={}
+    )

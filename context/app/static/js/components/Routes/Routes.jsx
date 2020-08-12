@@ -7,6 +7,7 @@ import Search from '../Search/Search';
 import DevSearch from '../Search/DevSearch';
 import { Donor, Sample, Dataset, Collection } from '../Detail';
 import Preview from '../Preview';
+import Maintenance from '../Maintenance';
 import { Collections } from '../Collections';
 import Markdown from '../Markdown';
 import useSendPageView from './useSendPageView';
@@ -93,6 +94,14 @@ function Routes(props) {
     return (
       <Container maxWidth="lg">
         <Collection entityEndpoint={endpoints.entityEndpoint} collection={collection} />
+      </Container>
+    );
+  }
+
+  if (urlPath.startsWith('/maintenance')) {
+    return (
+      <Container maxWidth="lg">
+        <Maintenance />
       </Container>
     );
   }

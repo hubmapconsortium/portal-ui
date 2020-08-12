@@ -20,6 +20,7 @@ const availableRoutes = [
   '/docs',
   '/VERSION',
   '/client-side-error',
+  '/maintenance',
 ];
 
 if (urlPath === '/' || availableRoutes.some(isRoute)) {
