@@ -78,5 +78,4 @@ test('displays files and directories', () => {
 
   const textInDocumentAfterOpenDirectory = [...textInDocumentBeforeOpenDirectory, 'fake3.txt', 'path2'];
   textInDocumentAfterOpenDirectory.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-
 });
