@@ -114,7 +114,7 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
       <>
         {hits.map((hit) => (
           <StyledTableBody key={hit._id}>
-            <StyledTableRow>
+            <StyledTableRow className={'highlight' in hit && 'before-highlight'}>
               {resultFields.map((field) => (
                 <StyledTableCell key={field.id}>
                   <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>

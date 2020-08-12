@@ -39,24 +39,29 @@ const StyledTableBody = styled(TableBody)`
     filter: brightness(96%);
   }
 
-  border: 1px solid rgba(224, 224, 224, 1); // Material would apply this on TD, but we override.
+  // Material would apply this on TD, but we override, so there is no internal border above the highlight.
+  border: 1px solid rgba(224, 224, 224, 1);
+
   border-left: none;
   border-right: none;
 `;
 
+const interPadding = `${16 * 0.6}px`;
 const sidePadding = '4em';
 
 const StyledTableRow = styled(TableRow)`
   border: 0;
 
-  &.highlight {
-    & td {
-      padding-top: 0;
-      padding-left: ${sidePadding};
-      padding-right: ${sidePadding};
-      & a {
-        color: rgba(0, 0, 0, 0.54);
-      }
+  &.before-highlight td {
+    padding-bottom: 0px;
+  }
+
+  &.highlight td {
+    padding-top: ${interPadding};
+    padding-left: ${sidePadding};
+    padding-right: ${sidePadding};
+    & a {
+      color: rgba(0, 0, 0, 0.54);
     }
   }
 `;
@@ -64,9 +69,7 @@ const StyledTableRow = styled(TableRow)`
 const StyledTableCell = styled(TableCell)`
   // Force <a> to fill each cell, so the whole row is clickable.
   // https://stackoverflow.com/questions/3966027
-
   overflow: hidden;
-  border: none; // Borders handled by tbody.
 
   a {
     display: block;
@@ -76,10 +79,15 @@ const StyledTableCell = styled(TableCell)`
     overflow-wrap: break-word;
   }
 
+  // So just one entry in the row looks like a link.
   :first-child a {
     color: #3781d1;
   }
 
+  // Borders handled by tbody.
+  border: none;
+
+  // Elastic search injects <em> when showing matches in context.
   em {
     font-weight: bold;
     font-style: normal;
