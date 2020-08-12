@@ -8,20 +8,20 @@ const theme = createMuiTheme({
       hover: 'brightness(108%)',
     },
     secondary: {
-      main: '#636363',
+      main: '#636363', // grey
     },
     error: {
-      main: '#DA348A',
+      main: '#DA348A', // pink
     },
     warning: {
-      main: '#D25435',
+      main: '#D25435', // orange
     },
     info: {
-      main: '#3781D1',
+      main: '#3781D1', // blue
     },
     success: {
-      main: '#6C8938', // '#9BC551'
-      light: '#9CB965',
+      main: '#6C8938', // avocado green '#9BC551'
+      light: '#9CB965', // lime green
     },
     white: {
       main: '#fff',
