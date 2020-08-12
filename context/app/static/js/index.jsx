@@ -28,7 +28,7 @@ if ('maintenance_mode' in flaskData && flaskData.maintenance_mode) {
     <Providers>
       <Header isMaintenanceMode />
       <div className="main-content">Under Construction</div>
-      <Footer />
+      <Footer isMaintenanceMode />
     </Providers>,
     document.getElementById('react-content'),
   );

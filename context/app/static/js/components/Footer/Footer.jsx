@@ -1,10 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background } from './style';
 
-function Footer() {
+function Footer(props) {
+  const { isMaintenanceMode } = props;
   return (
     <Background>
       <FlexContainer maxWidth="lg">
@@ -23,9 +25,11 @@ function Footer() {
               >
                 Project Website
               </LightBlueLink>
-              <LightBlueLink href="/docs" variant="body2">
-                Documentation
-              </LightBlueLink>
+              {!isMaintenanceMode && (
+                <LightBlueLink href="/docs" variant="body2">
+                  Documentation
+                </LightBlueLink>
+              )}
               <LightBlueLink variant="body2" href="mailto:help@hubmapconsortium.org">
                 Contact
               </LightBlueLink>
@@ -48,9 +52,11 @@ function Footer() {
               >
                 Data Use Agreement
               </LightBlueLink>
-              <LightBlueLink href="/docs/about#citation" variant="body2">
-                Citing HuBMAP
-              </LightBlueLink>
+              {!isMaintenanceMode && (
+                <LightBlueLink href="/docs/about#citation" variant="body2">
+                  Citing HuBMAP
+                </LightBlueLink>
+              )}
             </FlexColumn>
             <FlexColumn>
               <Typography variant="subtitle2">Funding</Typography>
@@ -78,5 +84,13 @@ function Footer() {
     </Background>
   );
 }
+
+Footer.propTypes = {
+  isMaintenanceMode: PropTypes.bool,
+};
+
+Footer.defaultProps = {
+  isMaintenanceMode: false,
+};
 
 export default Footer;
