@@ -1,0 +1,1 @@
+- Make the changelog accessible at /CHANGELOG.

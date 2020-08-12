@@ -167,7 +167,6 @@ def preview_view(name):
     markdown = metadata_content.content
     core_props = {
         'title': preview_metadata['title'],
-        'vitessce_conf': preview_metadata['vitessce_conf'],
         'markdown': markdown,
         'entity': {
             'group_name': preview_metadata['group_name'],
@@ -175,6 +174,8 @@ def preview_view(name):
             'created_by_user_email': preview_metadata['created_by_user_email'],
         },
     }
+    if 'vitessce_conf' in preview_metadata:
+        core_props['vitessce_conf'] = preview_metadata['vitessce_conf']
     return render_template(
         'pages/base_react.html',
         title='Preview',

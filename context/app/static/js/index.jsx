@@ -19,6 +19,7 @@ const availableRoutes = [
   '/collections',
   '/docs',
   '/VERSION',
+  '/CHANGELOG',
   '/client-side-error',
 ];
 

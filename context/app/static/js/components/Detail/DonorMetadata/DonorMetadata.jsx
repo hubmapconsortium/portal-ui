@@ -34,7 +34,12 @@ function DonorMetadata(props) {
 }
 
 DonorMetadata.propTypes = {
-  metadata: PropTypes.string.isRequired,
+  metadata: PropTypes.shape({
+    gender: PropTypes.string,
+    age: PropTypes.number,
+    bmi: PropTypes.number,
+    race: PropTypes.string,
+  }).isRequired,
 };
 
 export default DonorMetadata;

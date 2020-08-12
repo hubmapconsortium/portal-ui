@@ -17,7 +17,6 @@ export const donorConfig = {
   filters: makeDonorMetadataFilters(true).concat([
     filter('group_name', 'Group'),
     filter('created_by_user_displayname', 'Creator'),
-    filter('access_group', 'Access Group'),
   ]),
   fields: [
     field('display_doi', 'Donor'),
@@ -34,7 +33,6 @@ export const sampleConfig = {
   filters: [
     filter('origin_sample.mapped_organ', 'Organ'),
     filter('mapped_specimen_type', 'Specimen Type'),
-    filter('access_group', 'Access Group'),
   ]
     .concat(makeDonorMetadataFilters(false))
     .concat([filter('donor.group_name', 'Group'), filter('created_by_user_displayname', 'Creator')]),
@@ -63,6 +61,21 @@ export const datasetConfig = {
     field('mapped_data_types', 'Data Types'),
     field('origin_sample.mapped_organ', 'Organ'),
     field('mapped_status', 'Status'),
+    field('mapped_last_modified_timestamp', 'Last Modified'),
+  ],
+};
+
+export const fallbackConfig = {
+  filters: [
+    // 'entity_type' filter would make sense, but it is hidden for the other searches.
+    filter('mapped_status', 'Status'),
+    filter('mapped_data_access_level', 'Access Level'),
+  ],
+  fields: [
+    field('display_doi', 'ID'),
+    field('entity_type', 'Entity Type'),
+    field('mapped_status', 'Status'),
+    field('mapped_data_access_level', 'Access Level'),
     field('mapped_last_modified_timestamp', 'Last Modified'),
   ],
 };

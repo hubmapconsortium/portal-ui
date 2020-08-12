@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import { readCookie } from 'js/helpers/functions';
 import LookupEntity from 'js/helpers/LookupEntity';
 import SearchWrapper from './SearchWrapper';
-import { donorConfig, sampleConfig, datasetConfig } from './config';
+import { donorConfig, sampleConfig, datasetConfig, fallbackConfig } from './config';
 // eslint-disable-next-line import/named
 import { filter } from './utils';
 import AncestorNote from './AncestorNote';
@@ -11,14 +11,14 @@ import AncestorNote from './AncestorNote';
 const hiddenFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
 
 const filtersByType = {
-  '': hiddenFilters,
+  '': fallbackConfig.filters,
   donor: donorConfig.filters.concat(hiddenFilters),
   sample: sampleConfig.filters.concat(hiddenFilters),
   dataset: datasetConfig.filters.concat(hiddenFilters),
 };
 
 const resultFieldsByType = {
-  '': ['status', 'entity_type'],
+  '': fallbackConfig.fields,
   donor: donorConfig.fields,
   sample: sampleConfig.fields,
   dataset: datasetConfig.fields,

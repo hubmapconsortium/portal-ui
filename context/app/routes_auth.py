@@ -82,7 +82,6 @@ def login():
 
     token_object = tokens.by_resource_server['nexus.api.globus.org']
     nexus_token = token_object['access_token']
-    expires_at_seconds = token_object['expires_at_seconds']
 
     if not has_hubmap_group(nexus_token):
         # Globus institution login worked, but user does not have HuBMAP group!
@@ -91,14 +90,11 @@ def login():
     session.update(
         nexus_token=nexus_token,
         is_authenticated=True)
-    # Would like to set an expiration on the session like I set on
-    # the cookie, but the lifetime of sessions is a global config.
     response = make_response(
         redirect(url_for('routes.index', _external=True)))
     response.set_cookie(
         key='nexus_token',
-        value=nexus_token,
-        expires=expires_at_seconds)
+        value=nexus_token)
     return response
 
 
