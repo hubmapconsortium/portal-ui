@@ -5,6 +5,7 @@ import './index.css';
 import App from './components/App';
 import Providers from './components/Providers';
 import Footer from './components/Footer';
+import Maintenance from './components/Maintenance';
 import { Header } from './components/Header';
 
 const urlPath = window.location.pathname;
@@ -24,14 +25,7 @@ const availableRoutes = [
 
 // eslint-disable-next-line no-undef
 if ('maintenance_mode' in flaskData && flaskData.maintenance_mode) {
-  ReactDOM.render(
-    <Providers>
-      <Header isMaintenanceMode />
-      <div className="main-content">Under Construction</div>
-      <Footer isMaintenanceMode />
-    </Providers>,
-    document.getElementById('react-content'),
-  );
+  ReactDOM.render(<Maintenance />, document.getElementById('react-content'));
 } else if (urlPath === '/' || availableRoutes.some(isRoute)) {
   ReactDOM.render(
     // eslint-disable-next-line no-undef
