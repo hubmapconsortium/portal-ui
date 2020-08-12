@@ -3,6 +3,8 @@ import ReactMarkdown from 'react-markdown';
 import Paper from '@material-ui/core/Paper';
 
 const StyledMarkdown = styled(ReactMarkdown)`
+  margin-bottom: 16px;
+
   li {
     list-style: circle;
     list-style-type: disc;
