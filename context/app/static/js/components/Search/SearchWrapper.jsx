@@ -135,7 +135,7 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
         ))}
       </>
     );
-    /* eslint-enable */
+    /* eslint-enable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
   };
 }
 
