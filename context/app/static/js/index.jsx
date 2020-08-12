@@ -27,7 +27,7 @@ if ('maintenance_mode' in flaskData && flaskData.maintenance_mode) {
   ReactDOM.render(
     <Providers>
       <Header isMaintenanceMode />
-      <p>Under Construction</p>
+      <div className="main-content">Under Construction</div>
       <Footer />
     </Providers>,
     document.getElementById('react-content'),
