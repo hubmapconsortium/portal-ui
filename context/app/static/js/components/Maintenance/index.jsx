@@ -1,27 +1,14 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import styled from 'styled-components';
 import Providers from '../Providers';
 import Footer from '../Footer';
 import { Header } from '../Header';
 
-const Background = styled.div`
-  background-color: ${(props) => props.theme.palette.warning.main};
-  margin-top: -16px; // Override the Header's margin.
-`;
-
-const StyledContainer = styled(Container)`
-  position: absolute;
-  top: 40%;
-  transform: translateY(-40%) translateX(-50%);
-  left: 50%;
-`;
+import { Background, StyledContainer } from './style';
 
 function Maintenance() {
-  /* TODO: pull styles into JSS */
   return (
     <Providers>
       <Header isMaintenanceMode />
