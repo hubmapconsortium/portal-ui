@@ -107,9 +107,7 @@ function SortingTableHead(props) {
 function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
   return function ResultsTableBody(props) {
     const { hits } = props;
-    /* eslint-disable no-underscore-dangle */
-    /* eslint-disable react/no-danger */
-    /* eslint-disable jsx-a11y/control-has-associated-label */
+    /* eslint-disable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
     return (
       <>
         {hits.map((hit) => (
