@@ -290,4 +290,4 @@ SearchWrapper.defaultProps = {
 };
 
 export default SearchWrapper;
-export { getByPath }; // For tests
+export { getByPath, getOrder }; // For tests
