@@ -1,1 +1,0 @@
-- Make token cookie a session cookie.

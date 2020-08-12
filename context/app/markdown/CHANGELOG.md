@@ -1,3 +1,22 @@
+## v0.0.52 - 2020-08-12
+
+- Stub out ASCTB and make vitessce config optional in previews.
+- Make the changelog accessible at /CHANGELOG.
+- Add tests for summary data component.
+- Add tests for summary component.
+- Implement a minimal search for /search without a query: This prevents errors, but we should not link to it.
+- Add a redirect for HBM IDs; No exposure in UI -- just a tool for developers for now. (Since issue reports often reference the HBM IDs.)
+- Add a bottom margin on markdown pages.
+- Remove the access group facet.
+- For a release, just do everything on master. Requiring manual PR doesn't really help us.
+- Add pre-commit hook to lint js files.
+- Filter for RUI in dev-search.
+- When Vitessce is full-window, and Safari is full-screen, pressing escape once will take Vitessce out of full-window,
+and pressing again will take Safari out of full-screen (which is Safari's default behavior for escape).
+- Add test for status icon component.
+- Make token cookie a session cookie.
+
+
 ## v0.0.51 - 2020-08-05
 
 - Upgrade Viv for IMC data fix.

@@ -1,1 +1,0 @@
-- For a release, just do everything on master. Requiring manual PR doesn't really help us.

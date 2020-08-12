@@ -1,1 +1,0 @@
-- Stub out ASCTB and make vitessce config optional in previews.
