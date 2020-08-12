@@ -42,11 +42,18 @@ function Visualization(props) {
   function handleExpand() {
     setIsExpanded(true);
     setIsEscSnackbarOpen(true);
+    // Hack for Safari which lets the user exit from full-window Vitessce,
+    // but not take the browser out of full-screen.
+    document.onkeydown = function preventDefault(evt) {
+      if (evt.keyCode === 27) evt.preventDefault();
+    };
   }
 
   function handleCollapse() {
     setIsExpanded(false);
     setIsEscSnackbarOpen(false);
+    // Clear the Safari hack.
+    document.onkeydown = null;
   }
 
   function removeError(message) {
