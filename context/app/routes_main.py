@@ -37,7 +37,11 @@ def _get_endpoints():
 @blueprint.route('/')
 def index():
     if 'MAINTENANCE_MODE' in current_app.config and current_app.config['MAINTENANCE_MODE']:
-        return render_template('pages/base_react.html', title='Maintenance', flask_data={'maintenance_mode': True})
+        return render_template(
+            'pages/base_react.html',
+            title='Maintenance',
+            flask_data={'maintenance_mode': True}
+        )
     core_props = {'endpoints': _get_endpoints()}
     return render_template(
         'pages/base_react.html',
