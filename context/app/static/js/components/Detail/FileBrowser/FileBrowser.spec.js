@@ -29,36 +29,33 @@ test('displays files and directories', () => {
     value: `nexus_token=${token}`,
   });
 
+  const sharedEntries = {
+    edam_term: 'faketerm',
+    description: 'fakedescription',
+    size: 1000,
+    type: 'faketype',
+  };
+
   const testFiles = [
     {
       rel_path: 'path1/path2/fake1.txt',
-      edam_term: 'faketerm',
-      description: 'fakedescription',
-      size: 1000,
+      ...sharedEntries,
     },
     {
       rel_path: 'path1/path2/fake2.txt',
-      edam_term: 'faketerm',
-      description: 'fakedescription',
-      size: 1000,
+      ...sharedEntries,
     },
     {
       rel_path: 'path1/fake3.txt',
-      edam_term: 'faketerm',
-      description: 'fakedescription',
-      size: 1000,
+      ...sharedEntries,
     },
     {
       rel_path: 'path3/fake4.txt',
-      edam_term: 'faketerm',
-      description: 'fakedescription',
-      size: 1000,
+      ...sharedEntries,
     },
     {
       rel_path: 'fake5.txt',
-      edam_term: 'faketerm',
-      description: 'fakedescription',
-      size: 1000,
+      ...sharedEntries,
     },
   ];
 
