@@ -41,7 +41,7 @@ test('displays a link with correct href when dua is agreed to', () => {
 
   render(
     <FilesProviders>
-      ;<FileBrowserFile fileObj={fileObj} depth={depth} />
+      <FileBrowserFile fileObj={fileObj} depth={depth} />
     </FilesProviders>,
   );
 
