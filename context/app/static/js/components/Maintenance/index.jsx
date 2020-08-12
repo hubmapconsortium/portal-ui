@@ -13,16 +13,20 @@ const Background = styled.div`
   margin-top: -16px; // Override the Header's margin.
 `;
 
+const StyledContainer = styled(Container)`
+  position: absolute;
+  top: 40%;
+  transform: translateY(-40%) translateX(-50%);
+  left: 50%;
+`;
+
 function Maintenance() {
   /* TODO: pull styles into JSS */
   return (
     <Providers>
       <Header isMaintenanceMode />
       <Background className="main-content">
-        <Container
-          maxWidth="md"
-          style={{ position: 'absolute', top: '40%', transform: 'translateY(-40%) translateX(-50%)', left: '50%' }}
-        >
+        <StyledContainer maxWidth="md">
           <Card>
             <CardContent>
               <Typography variant="h2" component="h1">
@@ -35,7 +39,7 @@ function Maintenance() {
               </Typography>
             </CardContent>
           </Card>
-        </Container>
+        </StyledContainer>
       </Background>
       <Footer isMaintenanceMode />
     </Providers>
