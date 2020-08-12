@@ -18,10 +18,6 @@ function Routes(props) {
 
   useSendPageView(urlPath);
 
-  if ('maintenance_mode' in flaskData && flaskData.maintenance_mode) {
-    return <p>Under Construction</p>;
-  }
-
   if (urlPath.startsWith('/browse/donor/')) {
     return (
       <Container maxWidth="lg">

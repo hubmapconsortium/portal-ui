@@ -22,7 +22,17 @@ const availableRoutes = [
   '/client-side-error',
 ];
 
-if (urlPath === '/' || availableRoutes.some(isRoute)) {
+// eslint-disable-next-line no-undef
+if ('maintenance_mode' in flaskData && flaskData.maintenance_mode) {
+  ReactDOM.render(
+    <Providers>
+      <Header />
+      <p>Under Construction</p>
+      <Footer />
+    </Providers>,
+    document.getElementById('react-content'),
+  );
+} else if (urlPath === '/' || availableRoutes.some(isRoute)) {
   ReactDOM.render(
     // eslint-disable-next-line no-undef
     <App flaskData={flaskData} />,
