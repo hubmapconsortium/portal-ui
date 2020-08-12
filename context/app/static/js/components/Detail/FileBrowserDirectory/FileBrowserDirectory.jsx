@@ -7,12 +7,18 @@ function FileBrowserDirectory(props) {
   const { dirName, children, depth } = props;
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const onKeyDownHandler = (e) => {
+    if (e.keyCode === 13) {
+      setIsExpanded(!isExpanded);
+    }
+  };
+
   return (
     <div>
       <Directory
         $depth={depth}
         onClick={() => setIsExpanded(!isExpanded)}
-        onKeyDown={() => setIsExpanded(!isExpanded)}
+        onKeyDown={onKeyDownHandler}
         role="button"
         tabIndex="0"
       >
