@@ -5,9 +5,9 @@ import prettyBytes from 'pretty-bytes';
 
 import { readCookie } from 'js/helpers/functions';
 import { useRoundedSecondaryTooltipStyles } from 'js/shared-styles/Tooltips';
+import DetailContext from 'js/components//Detail/context';
 import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
-import DetailContext from '../context';
 import FilesContext from '../Files/context';
 
 function FileBrowserFile(props) {

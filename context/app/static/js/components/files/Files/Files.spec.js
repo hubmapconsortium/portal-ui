@@ -5,8 +5,8 @@ import { render, screen, waitForElementToBeRemoved } from 'test-utils/functions'
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
+import DetailContext from 'js/components/Detail/context';
 import Files from './Files';
-import DetailContext from '../context';
 
 const assetsEndpoint = 'fakeendpoint';
 const uuid = 'fakeuuid';
