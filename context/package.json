@@ -55,8 +55,10 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "eslint-plugin-testing-library": "^3.2.0",
+    "husky": "^4.2.5",
     "jest": "^26.0.1",
     "js-yaml": "^3.14.0",
+    "lint-staged": "^10.2.11",
     "msw": "^0.19.5",
     "node-sass": "^4.14.1",
     "prettier": "^2.0.5",
@@ -84,5 +86,13 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint -c .eslintrc.yml --ext .js,.jsx app/static/js/",
     "lint:fix": "eslint -c .eslintrc.yml --ext .js,.jsx --fix app/static/js/"
+  },
+  "lint-staged": {
+    "app/static/js/**/*.{js,jsx}": [  "prettier --write", "eslint -c .eslintrc.yml"]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }

@@ -64,11 +64,12 @@ function Summary(props) {
 Summary.propTypes = {
   display_doi: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
+  uuid: PropTypes.string.isRequired,
   create_timestamp: PropTypes.number,
   last_modified_timestamp: PropTypes.number,
-  uuid: PropTypes.string.isRequired,
   description: PropTypes.string,
   status: PropTypes.string,
+  collectionName: PropTypes.string,
   mapped_data_access_level: PropTypes.string,
   children: PropTypes.element,
 };
@@ -79,6 +80,7 @@ Summary.defaultProps = {
   description: '',
   status: '',
   mapped_data_access_level: '',
+  collectionName: '',
   children: undefined,
 };
 

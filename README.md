@@ -82,6 +82,10 @@ npm run lint
 npm run lint:fix
 ```
 
+## Pre-commit hooks
+We use pre-commit hooks to improve code quality and catch errors early on.
+If you need to bypass the pre-commit hooks, you can prepend your git command with `HUSKY_SKIP_HOOKS=1`.
+
 ## Buid, tag, and deploy
 To build a new image for [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
 and tag a release for github, just run:

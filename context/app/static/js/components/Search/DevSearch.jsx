@@ -41,6 +41,8 @@ const searchProps = {
     checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
     checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),
     checkboxFilter('no_files', 'No files?', BoolMustNot(ExistsQuery('files'))),
+    checkboxFilter('has_files', 'Spatially Located (CCF)?', ExistsQuery('rui_location')),
+    checkboxFilter('no_files', 'Not Spatially Located (CCF)?', BoolMustNot(ExistsQuery('rui_location'))),
   ],
   queryFields: ['everything'],
   isLoggedIn: Boolean(nexus_token),

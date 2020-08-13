@@ -28,7 +28,7 @@ function StatusIcon(props) {
   const status = irregularCaseStatus.toUpperCase();
   const color = getColor(status);
 
-  return <ColoredStatusIcon $iconColor={color} />;
+  return <ColoredStatusIcon $iconColor={color} data-testid="status-svg-icon" />;
 }
 
 StatusIcon.propTypes = {
