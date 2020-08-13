@@ -97,11 +97,9 @@ test('handles DUA flow', async () => {
 });
 
 test('does not display file browser when files prop is undefined', async () => {
-  const testFiles = undefined;
-
   render(
     <DetailProvider>
-      <Files files={testFiles} entityEndpoint={entityEndpoint} uuid={uuid} display_doi="fakedoi" />
+      <Files entityEndpoint={entityEndpoint} uuid={uuid} display_doi="fakedoi" />
     </DetailProvider>,
   );
 
