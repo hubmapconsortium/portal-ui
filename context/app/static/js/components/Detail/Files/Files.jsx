@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 
 import DetailContext from '../context';
 import SectionHeader from '../SectionHeader';
@@ -50,5 +51,24 @@ function Files(props) {
     </FilesContext.Provider>
   );
 }
+
+Files.propTypes = {
+  entityEndpoint: PropTypes.string.isRequired,
+  uuid: PropTypes.string.isRequired,
+  display_doi: PropTypes.string.isRequired,
+  files: PropTypes.arrayOf(
+    PropTypes.exact({
+      rel_path: PropTypes.string,
+      edam_term: PropTypes.string,
+      description: PropTypes.string,
+      size: PropTypes.number,
+      type: PropTypes.string,
+    }),
+  ),
+};
+
+Files.defaultProps = {
+  files: undefined,
+};
 
 export default Files;
