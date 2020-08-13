@@ -48,7 +48,7 @@ TILED_SPRM_IMAGING = {
             "x": 3,
             "y": 4,
             "w": 7,
-            "h": 2
+            "h": 2,
         },
         {
             "component": "spatial",
@@ -129,12 +129,12 @@ SCRNA_SEQ_CONFIG = {
         {
             "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cells.json",
             "fileType": "cells.json",
-            "type": "CELLS"
+            "type": "CELLS",
         },
         {
             "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cell-sets.json",
             "fileType": "cell-sets.json",
-            "type": "CELL-SETS"
+            "type": "CELL-SETS",
         },
     ],
 }
@@ -145,7 +145,7 @@ SCATAC_SEQ_CONFIG = {
         {
             "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cells.json",
             "fileType": "cells.json",
-            "type": "CELLS"
+            "type": "CELLS",
         },
         {
             "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cell-sets.json",
@@ -222,9 +222,7 @@ def _get_matches(files, regex):
 
 
 def _exclude_matches(files, regex):
-    return list(
-        set(file for file in files if not re.search(regex, file))
-    )
+    return list(set(file for file in files if not re.search(regex, file)))
 
 
 class Vitessce:
@@ -309,7 +307,9 @@ class Vitessce:
                 else:
                     new_conf = copy.deepcopy(conf)
                     files_for_layers = files
-                layers = [self._build_layer_conf(file, tile) for file in files_for_layers]
+                layers = [
+                    self._build_layer_conf(file, tile) for file in files_for_layers
+                ]
                 new_conf["layers"] = layers
                 new_conf["name"] = tile
                 new_conf = self._replace_view(new_conf)
@@ -320,8 +320,42 @@ class Vitessce:
             found_images = _get_matches(file_paths_found, files[0]["rel_path"])
             # Do not show IMS images that are in the "/separate/" folder.
             no_ims_separate_images = _exclude_matches(found_images, r"/separate/")
-            layer = self._build_multi_file_image_layer_conf(no_ims_separate_images)
-            conf["layers"] = [layer]
+            # File paths are like path/to/HybCycle_N/MMStack_PosM.ome.tif and we want
+            # each conf to be all images across a given PosM, each image named HybCycle_N.
+            # This is unique to seqFish.
+            if "seqFish" in self.entity["data_types"]:
+                # Get all PosN names.
+                pos_name_set = set([Path(image).name for image in found_images])
+                # Get all the paths grouped by Pos.
+                images_by_pos = [
+                    [image for image in found_images if Path(image).name == name]
+                    for name in sorted(pos_name_set)
+                ]
+                # Get Hybridization per paths grouped by Pos.
+                hyb_cycles_per_pos = [
+                    sorted([Path(image).parts[-2] for image in images])
+                    for images in images_by_pos
+                ]
+                confs = []
+                # Build up a conf for each Pos.
+                for i, images in enumerate(images_by_pos):
+                    new_conf = copy.deepcopy(conf)
+                    layers = [
+                        self._build_multi_file_image_layer_conf(
+                            images, hyb_cycles_per_pos[i]
+                        )
+                    ]
+                    new_conf["layers"] = layers
+                    # The stem is the name of the ome.tif file (since it has pos) but stem g.
+                    new_conf["name"] = Path(images[0]).stem.split(".")[0]
+                    new_conf = self._replace_view(new_conf)
+                    confs += [new_conf]
+                self.conf = confs
+                return confs
+            layers = [
+                self._build_multi_file_image_layer_conf(no_ims_separate_images)
+            ]
+            conf["layers"] = layers
             conf["name"] = self.uuid
             conf = self._replace_view(conf)
             self.conf = conf
@@ -351,7 +385,7 @@ class Vitessce:
             "name": file["type"].lower(),
         }
 
-    def _build_multi_file_image_layer_conf(self, files):
+    def _build_multi_file_image_layer_conf(self, files, names=[]):
         """Build each layer in the layers section.
 
         returns e.g
@@ -366,11 +400,11 @@ class Vitessce:
         return {
             "type": "RASTER",
             "fileType": "raster.json",
-            "url": self._build_image_layer_datauri([file for file in files]),
+            "url": self._build_image_layer_datauri(files, names),
             "name": "raster",
         }
 
-    def _build_image_layer_datauri(self, rel_paths):
+    def _build_image_layer_datauri(self, rel_paths, names=[]):
         """
         Specifically for the RASTERS schema, we need to build a DataURI of the schema because
         it contains a URL for a file whose location is unknown until pipelines have been run.
@@ -399,14 +433,15 @@ class Vitessce:
 
         image_layer = {}
         image_layer["images"] = [
-            self._build_image_schema(rel_path) for rel_path in rel_paths
+            self._build_image_schema(rel_path, names[ind] if names else "")
+            for ind, rel_path in enumerate(rel_paths)
         ]
         image_layer["schemaVersion"] = "0.0.2"
         return DataURI.make(
             "text/plain", charset="us-ascii", base64=True, data=json.dumps(image_layer)
         )
 
-    def _build_image_schema(self, image_rel_path):
+    def _build_image_schema(self, image_rel_path, name=""):
         """
         Builds the 'images' sections of the RASTER schema.
 
@@ -421,7 +456,7 @@ class Vitessce:
         """
 
         schema = {}
-        schema["name"] = Path(image_rel_path).name
+        schema["name"] = name if name else Path(image_rel_path).name
         schema["type"] = "ome-tiff"
         schema["url"] = self._build_assets_url(image_rel_path)
         schema["metadata"] = {}
@@ -479,5 +514,8 @@ class Vitessce:
             for file in self.entity["files"]
         ):
             conf["staticLayout"][-1]["props"]["view"]["zoom"] = -2
+            conf["staticLayout"][-1]["props"]["view"]["target"] = [1000, 1000, 0]
+        elif "seqFish" in self.entity["data_types"]:
+            conf["staticLayout"][-1]["props"]["view"]["zoom"] = -4
             conf["staticLayout"][-1]["props"]["view"]["target"] = [1000, 1000, 0]
         return conf
