@@ -32,4 +32,5 @@ FileBrowser.propTypes = {
     }),
   ).isRequired,
 };
+
 export default FileBrowser;
