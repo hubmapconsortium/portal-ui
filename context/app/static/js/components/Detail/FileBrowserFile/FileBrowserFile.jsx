@@ -34,7 +34,7 @@ function FileBrowserFile(props) {
         </FilesConditionalLink>
         <FileSize variant="body1">{prettyBytes(fileObj.size)}</FileSize>
         <Tooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`} classes={classes}>
-          <StyledInfoIcon color="primary" aria-label="file-description" />
+          <StyledInfoIcon color="primary" />
         </Tooltip>
       </IndentedDiv>
     </StyledDiv>

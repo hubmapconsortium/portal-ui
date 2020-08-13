@@ -50,38 +50,6 @@ test('displays a link with correct href when dua is agreed to', () => {
   expect(screen.getByRole('link')).toHaveAttribute('href', refToTest);
 });
 
-/*
-test('displays file description tooltip correctly on hover', () => {
-  Object.defineProperty(window.document, 'cookie', {
-    writable: true,
-    value: `nexus_token=${token}`,
-  });
-
-  const fileObj = {
-    rel_path: 'fakepath',
-    edam_term: 'faketerm',
-    description: 'fakedescription',
-    file: 'fakefile',
-    size: 1000,
-  };
-
-  const depth = 0;
-
-  render(
-    <FilesProviders>
-      ;<FileBrowserFile fileObj={fileObj} depth={depth} />
-    </FilesProviders>,
-  );
-
-  const descriptionToTest = `${fileObj.description} (Format: ${fileObj.edam_term})`;
-
-  screen.getByLabelText('description');
-  userEvent.hover(screen.getByLabelText('description'));
-  expect(screen.getByText(descriptionToText);
-  userEvent.unhover(screen.getByLabelText('description'));
-});
-*/
-
 test('has correct left margin', () => {
   Object.defineProperty(window.document, 'cookie', {
     writable: true,
