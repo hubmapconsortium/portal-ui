@@ -29,7 +29,7 @@ function FilesConditionalLink(props) {
 }
 
 FilesConditionalLink.propTypes = {
-  hasAgreedToDUA: PropTypes.string,
+  hasAgreedToDUA: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   openDUA: PropTypes.func.isRequired,
   href: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
