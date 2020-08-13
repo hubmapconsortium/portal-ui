@@ -1,1 +1,0 @@
-- Implement a minimal search for /search without a query: This prevents errors, but we should not link to it.
