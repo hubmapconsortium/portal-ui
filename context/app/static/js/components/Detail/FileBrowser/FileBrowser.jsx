@@ -15,7 +15,7 @@ function FileBrowser(props) {
   }, [files]);
 
   return (
-    <ScrollPaper>
+    <ScrollPaper data-testid="file-browser">
       <FileBrowserNode fileSubTree={fileTree} depth={0} />
     </ScrollPaper>
   );
