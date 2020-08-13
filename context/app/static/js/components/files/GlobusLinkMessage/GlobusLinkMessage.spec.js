@@ -1,8 +1,9 @@
 /* eslint-disable import/no-unresolved */
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
+
+import DetailContext from 'js/components/Detail/context';
 import GlobusLinkMessage from './GlobusLinkMessage';
-import DetailContext from '../context';
 import FilesContext from '../Files/context';
 
 const fakeOpenDUA = jest.fn();

@@ -2,8 +2,8 @@
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
 
+import DetailContext from 'js/components/Detail/context';
 import FileBrowserNode from './FileBrowserNode';
-import DetailContext from '../context';
 import FilesContext from '../Files/context';
 
 const fakeOpenDUA = jest.fn();
