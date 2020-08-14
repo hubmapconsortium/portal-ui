@@ -66,7 +66,8 @@ function getOrder(orderPair, selectedItems) {
   return match.length ? match[0].order : undefined;
 }
 
-function getOrderIcon(order) {
+function OrderIcon(props) {
+  const { order } = props;
   if (order === 'asc') return <ArrowUpOn />;
   if (order === 'desc') return <ArrowDownOn />;
   return <ArrowDownOff />;
@@ -95,7 +96,7 @@ function SortingTableHead(props) {
                 toggleItem(pair[order && order === pair[0].order ? 1 : 0].key);
               }}
             >
-              {pair[0].label} {getOrderIcon(order)}
+              {pair[0].label} <OrderIcon order={order} />
             </StyledHeaderCell>
           );
         })}
