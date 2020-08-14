@@ -83,8 +83,9 @@ def test_build_layer_conf_empty():
     conf = vitessce.conf
     assert conf == {}
 
+
 def test_group_by_parent_path():
     data = ['foo/bar.sh', 'zap/bar.sh', 'jazz/bar.js', 'jazz/not_bar.js']
-    grouped = _group_by_parent_path(data)
+    grouped = _group_by_file_name(data)
     # Grouped by file name.
     assert [['jazz/bar.js'], ['foo/bar.sh', 'zap/bar.sh'], ['jazz/not_bar.js']] == grouped
