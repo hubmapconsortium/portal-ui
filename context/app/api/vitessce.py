@@ -225,8 +225,10 @@ def _get_matches(files, regex):
 def _exclude_matches(files, regex):
     return list(set(file for file in files if not re.search(regex, file)))
 
+
 def _get_path_name(file):
     return Path(file).name
+
 
 def _group_by_file_name(files):
     files_grouped_by_name = []
