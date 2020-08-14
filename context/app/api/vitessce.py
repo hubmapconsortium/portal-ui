@@ -225,12 +225,13 @@ def _get_matches(files, regex):
 def _exclude_matches(files, regex):
     return list(set(file for file in files if not re.search(regex, file)))
 
+def _get_path_name(file):
+    return Path(file).name
 
 def _group_by_file_name(files):
     files_grouped_by_name = []
-    keyfunc = lambda x: Path(x).name
-    sorted_files = sorted(files, key=keyfunc)
-    for _, g in groupby(sorted_files, keyfunc):
+    sorted_files = sorted(files, key=_get_path_name)
+    for _, g in groupby(sorted_files, _get_path_name):
         files_grouped_by_name.append(list(g))
     return files_grouped_by_name
 
