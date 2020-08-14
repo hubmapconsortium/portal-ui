@@ -444,7 +444,7 @@ class Vitessce:
             "text/plain", charset="us-ascii", base64=True, data=json.dumps(image_layer)
         )
 
-    def _build_image_schema(self, image_rel_path, name=""):
+    def _build_image_schema(self, image_rel_path, name=None):
         """
         Builds the 'images' sections of the RASTER schema.
 
