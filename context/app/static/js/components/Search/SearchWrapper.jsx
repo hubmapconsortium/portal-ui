@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 
 import {
   SearchkitManager,
@@ -24,16 +22,9 @@ import {
 import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
 // There is more in the name space, but we only need the filterTypes.
 
+import SortingTableHead from './SortingTableHead';
 import { resultFieldsToSortOptions } from './utils';
-import {
-  ArrowUpOn,
-  ArrowDownOn,
-  ArrowDownOff,
-  StyledHeaderCell,
-  StyledTableBody,
-  StyledTableRow,
-  StyledTableCell,
-} from './style';
+import { StyledTableBody, StyledTableRow, StyledTableCell } from './style';
 import './Search.scss';
 import * as filterPropTypes from './filterPropTypes';
 
@@ -56,54 +47,6 @@ function getByPath(nested, field) {
     return current.join(' / ');
   }
   return current;
-}
-
-function getOrder(orderPair, selectedItems) {
-  if (selectedItems.length > 1) {
-    console.warn('Expected only a single sort, not:', selectedItems);
-  }
-  const selectedItem = selectedItems.length ? selectedItems[0] : undefined;
-  const match = orderPair.filter((item) => item.key === selectedItem);
-  return match.length ? match[0].order : undefined;
-}
-
-function OrderIcon(props) {
-  const { order } = props;
-  if (order === 'asc') return <ArrowUpOn />;
-  if (order === 'desc') return <ArrowDownOn />;
-  return <ArrowDownOff />;
-}
-
-function SortingTableHead(props) {
-  const { items, toggleItem, selectedItems } = props;
-  const pairs = [];
-  for (let i = 0; i < items.length; i += 2) {
-    const pair = items.slice(i, i + 2);
-    pairs.push(pair);
-    if (pair[0].label !== pair[1].label || pair[0].field !== pair[1].field) {
-      console.warn('Expected pair.label and .field to match', pair);
-    }
-  }
-  return (
-    <TableHead>
-      <TableRow>
-        {pairs.map((pair) => {
-          const order = getOrder(pair, selectedItems);
-          return (
-            <StyledHeaderCell
-              role="button"
-              key={pair[0].key}
-              onClick={() => {
-                toggleItem(pair[order && order === pair[0].order ? 1 : 0].key);
-              }}
-            >
-              {pair[0].label} <OrderIcon order={order} />
-            </StyledHeaderCell>
-          );
-        })}
-      </TableRow>
-    </TableHead>
-  );
 }
 
 function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
@@ -168,7 +111,7 @@ function SearchWrapper(props) {
         <Filter {...def.props} />
       </div>
     );
-    /* eslint-enable */
+    /* eslint-enable react/jsx-props-no-spreading */
   });
 
   return (
@@ -261,4 +204,4 @@ SearchWrapper.defaultProps = {
 };
 
 export default SearchWrapper;
-export { getByPath, getOrder }; // For tests
+export { getByPath }; // For tests
