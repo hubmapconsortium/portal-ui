@@ -84,7 +84,7 @@ def test_build_layer_conf_empty():
     assert conf == {}
 
 
-def test_group_by_parent_path():
+def test_group_by_file_name():
     data = ['foo/bar.sh', 'zap/bar.sh', 'jazz/bar.js', 'jazz/not_bar.js']
     grouped = _group_by_file_name(data)
     # Grouped by file name.

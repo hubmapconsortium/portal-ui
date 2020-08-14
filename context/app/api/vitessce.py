@@ -233,9 +233,7 @@ def _get_path_name(file):
 def _group_by_file_name(files):
     files_grouped_by_name = []
     sorted_files = sorted(files, key=_get_path_name)
-    for _, g in groupby(sorted_files, _get_path_name):
-        files_grouped_by_name.append(list(g))
-    return files_grouped_by_name
+    return [list(g) for _, g in groupby(sorted_files, _get_path_name)]
 
 
 class Vitessce:
@@ -291,6 +289,7 @@ class Vitessce:
         files = copy.deepcopy(ASSAY_CONF_LOOKUP[self.assay_type]["files_conf"])
         file_paths_expected = [file["rel_path"] for file in files]
         file_paths_found = [file["rel_path"] for file in self.entity["files"]]
+        print(file_paths_found)
         conf = copy.deepcopy(ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"])
         # Codex and other tiled assays needs to be built up based on their input tiles.
         if self.assay_type not in IMAGE_ASSAYS:
