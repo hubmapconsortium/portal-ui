@@ -19,6 +19,9 @@ const theme = createMuiTheme({
     info: {
       main: '#3781D1',
     },
+    link: {
+      main: '#3781D1',
+    },
     success: {
       main: '#6C8938', // '#9BC551'
       light: '#9CB965',
