@@ -4,6 +4,7 @@ import json
 from datauri import DataURI
 import re
 import copy
+from itertools import groupby
 
 from flask import current_app
 
@@ -225,6 +226,15 @@ def _exclude_matches(files, regex):
     return list(set(file for file in files if not re.search(regex, file)))
 
 
+def _group_by_file_name(files):
+    files_grouped_by_name = []
+    def keyfunc(x): return Path(x).name
+    sorted_files = sorted(files, key=keyfunc)
+    for _, g in groupby(sorted_files, keyfunc):
+        files_grouped_by_name.append(list(g))
+    return files_grouped_by_name
+
+
 class Vitessce:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
@@ -324,13 +334,8 @@ class Vitessce:
             # each conf to be all images across a given PosM, each image named HybCycle_N.
             # This is unique to seqFish.
             if "seqFish" in self.entity["data_types"]:
-                # Get all PosN names.
-                pos_name_set = set([Path(image).name for image in found_images])
-                # Get all the paths grouped by Pos.
-                images_by_pos = [
-                    [image for image in found_images if Path(image).name == name]
-                    for name in sorted(pos_name_set)
-                ]
+                # Get all files grouped by PosN names.
+                images_by_pos = _group_by_file_name(found_images)
                 # Get Hybridization per paths grouped by Pos.
                 hyb_cycles_per_pos = [
                     sorted([Path(image).parts[-2] for image in images])
@@ -346,7 +351,8 @@ class Vitessce:
                         )
                     ]
                     new_conf["layers"] = layers
-                    # The stem is the name of the ome.tif file (since it has pos) but stem g.
+                    # The stem is the name of the ome.tif file (since it has "PosN")
+                    # but the stem includes "ome" as well so we split on the ".".
                     new_conf["name"] = Path(images[0]).stem.split(".")[0]
                     new_conf = self._replace_view(new_conf)
                     confs += [new_conf]
