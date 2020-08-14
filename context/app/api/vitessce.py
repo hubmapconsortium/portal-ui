@@ -231,7 +231,6 @@ def _get_path_name(file):
 
 
 def _group_by_file_name(files):
-    files_grouped_by_name = []
     sorted_files = sorted(files, key=_get_path_name)
     return [list(g) for _, g in groupby(sorted_files, _get_path_name)]
 
