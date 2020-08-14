@@ -354,8 +354,7 @@ class Vitessce:
                     # The stem is the name of the ome.tif file (since it has "PosN")
                     # but the stem includes "ome" as well so we split on the ".".
                     new_conf["name"] = Path(images[0]).stem.split(".")[0]
-                    new_conf = self._replace_view(new_conf)
-                    confs += [new_conf]
+                    confs.append(self._replace_view(new_conf))
                 self.conf = confs
                 return confs
             layers = [self._build_multi_file_image_layer_conf(no_ims_separate_images)]
@@ -437,8 +436,8 @@ class Vitessce:
 
         image_layer = {}
         image_layer["images"] = [
-            self._build_image_schema(rel_path, names[ind] if names else "")
-            for ind, rel_path in enumerate(rel_paths)
+            self._build_image_schema(rel_path, names[i] if names else None)
+            for i, rel_path in enumerate(rel_paths)
         ]
         image_layer["schemaVersion"] = "0.0.2"
         return DataURI.make(
@@ -460,7 +459,7 @@ class Vitessce:
         """
 
         schema = {}
-        schema["name"] = name if name else Path(image_rel_path).name
+        schema["name"] = name if name is not None else Path(image_rel_path).name
         schema["type"] = "ome-tiff"
         schema["url"] = self._build_assets_url(image_rel_path)
         schema["metadata"] = {}
