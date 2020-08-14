@@ -352,9 +352,7 @@ class Vitessce:
                     confs += [new_conf]
                 self.conf = confs
                 return confs
-            layers = [
-                self._build_multi_file_image_layer_conf(no_ims_separate_images)
-            ]
+            layers = [self._build_multi_file_image_layer_conf(no_ims_separate_images)]
             conf["layers"] = layers
             conf["name"] = self.uuid
             conf = self._replace_view(conf)
@@ -505,17 +503,14 @@ class Vitessce:
 
         # IMS images are named under this convention, "IMS_XXXMode".
         # Some of the non IMS images contain the substring "IMS," so that is insufficient.
-        # IMC also needs to be handled specially.
+        # IMC also needs to be handled specially, as does seqFish.
         # TODO: Clean this up by handling multiple assay types (#982).
-        if any(
+        if "seqFish" in self.entity["data_types"] or any(
             "IMS_PosMode" in file["rel_path"]
             or "IMS_NegMode" in file["rel_path"]
             or "IMC" in self.entity["data_types"]
             for file in self.entity["files"]
         ):
             conf["staticLayout"][-1]["props"]["view"]["zoom"] = -2
-            conf["staticLayout"][-1]["props"]["view"]["target"] = [1000, 1000, 0]
-        elif "seqFish" in self.entity["data_types"]:
-            conf["staticLayout"][-1]["props"]["view"]["zoom"] = -4
             conf["staticLayout"][-1]["props"]["view"]["target"] = [1000, 1000, 0]
         return conf
