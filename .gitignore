@@ -115,6 +115,7 @@ venv.bak/
 
 # public
 context/app/static/public
+context/app/static/js/maintenance/public
 
 # scratch
 
