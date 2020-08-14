@@ -228,7 +228,7 @@ def _exclude_matches(files, regex):
 
 def _group_by_file_name(files):
     files_grouped_by_name = []
-    def keyfunc(x): return Path(x).name
+    keyfunc = lambda x: Path(x).name
     sorted_files = sorted(files, key=keyfunc)
     for _, g in groupby(sorted_files, keyfunc):
         files_grouped_by_name.append(list(g))
