@@ -53,6 +53,8 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "eslint-plugin-testing-library": "^3.2.0",
+    "html-loader": "^1.1.0",
+    "html-webpack-plugin": "^4.3.0",
     "husky": "^4.2.5",
     "jest": "^26.0.1",
     "js-yaml": "^3.14.0",
@@ -78,7 +80,9 @@
     "build": "webpack --config build-utils/webpack.prod.js",
     "build:dev": "webpack --config build-utils/webpack.dev.js",
     "build:analyze": "webpack --progress --config build-utils/webpack.analyze.js",
+    "build:maintain": "webpack --config build-utils/webpack.maintenance.js",
     "dev-server": "webpack-dev-server --config build-utils/webpack.dev.js --hot",
+    "dev-server:maintain": "webpack-dev-server --config build-utils/webpack.dev.maintenance.js --hot",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -86,7 +90,10 @@
     "lint:fix": "eslint -c .eslintrc.yml --ext .js,.jsx --fix app/static/js/"
   },
   "lint-staged": {
-    "app/static/js/**/*.{js,jsx}": [  "prettier --write", "eslint -c .eslintrc.yml"]
+    "app/static/js/**/*.{js,jsx}": [
+      "prettier --write",
+      "eslint -c .eslintrc.yml"
+    ]
   },
   "husky": {
     "hooks": {
