@@ -1,5 +1,5 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -20,6 +20,11 @@ function OrderIcon(props) {
   if (order === 'desc') return <ArrowDownOn />;
   return <ArrowDownOff />;
 }
+
+OrderIcon.propTypes = {
+  // eslint-disable-next-line react/require-default-props
+  order: PropTypes.oneOf(['asc', 'desc']),
+};
 
 function SortingTableHead(props) {
   const { items, toggleItem, selectedItems } = props;
@@ -52,6 +57,12 @@ function SortingTableHead(props) {
     </TableHead>
   );
 }
+
+SortingTableHead.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  toggleItem: PropTypes.func.isRequired,
+  selectedItems: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default SortingTableHead;
 export { getOrder }; // For tests
