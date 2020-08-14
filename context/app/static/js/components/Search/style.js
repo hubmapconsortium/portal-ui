@@ -33,10 +33,10 @@ const StyledHeaderCell = styled(HeaderCell)`
 const StyledTableBody = styled(TableBody)`
   // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.
   // What looks white is actually transparent and brightness() has no effect.
-  background-color: #fff;
+  background-color: ${(props) => props.theme.palette.white.main};
 
   :hover {
-    filter: brightness(96%);
+    filter: ${(props) => props.theme.palette.white.hover};
   }
 
   // Material would apply this on TD, but we override, so there is no internal border above the highlight.
@@ -47,7 +47,7 @@ const StyledTableBody = styled(TableBody)`
 `;
 
 const interPadding = `${16 * 0.6}px`;
-const sidePadding = '4em';
+const sidePadding = '64px';
 
 const StyledTableRow = styled(TableRow)`
   border: 0;
@@ -81,7 +81,7 @@ const StyledTableCell = styled(TableCell)`
 
   // So just one entry in the row looks like a link.
   :first-child a {
-    color: #3781d1;
+    color: ${(props) => props.theme.palette.link.main};
   }
 
   // Borders handled by tbody.
