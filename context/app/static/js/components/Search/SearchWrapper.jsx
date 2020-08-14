@@ -35,6 +35,7 @@ import {
   StyledTableCell,
 } from './style';
 import './Search.scss';
+import * as filterPropTypes from './filterPropTypes';
 
 function getByPath(nested, field) {
   const path = field.id;
@@ -210,43 +211,14 @@ function SearchWrapper(props) {
   );
 }
 
-const refinementListPropTypes = PropTypes.exact({
-  type: PropTypes.oneOf(['RefinementListFilter']).isRequired,
-  props: PropTypes.exact({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    field: PropTypes.string.isRequired,
-    operator: PropTypes.string.isRequired,
-    size: PropTypes.number.isRequired,
-  }),
-});
-
-const rangeFilterPropTypes = PropTypes.exact({
-  type: PropTypes.oneOf(['RangeFilter']).isRequired,
-  props: PropTypes.exact({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    field: PropTypes.string.isRequired,
-    min: PropTypes.number.isRequired,
-    max: PropTypes.number.isRequired,
-    showHistogram: PropTypes.bool.isRequired,
-  }),
-});
-
-const checkboxFilterPropTypes = PropTypes.exact({
-  type: PropTypes.oneOf(['CheckboxFilter']).isRequired,
-  props: PropTypes.exact({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    filter: PropTypes.object.isRequired,
-  }),
-});
-
 SearchWrapper.propTypes = {
   apiUrl: PropTypes.string.isRequired,
   filters: PropTypes.arrayOf(
-    PropTypes.oneOfType([refinementListPropTypes, rangeFilterPropTypes, checkboxFilterPropTypes]),
+    PropTypes.oneOfType([
+      filterPropTypes.refinementListPropTypes,
+      filterPropTypes.rangeFilterPropTypes,
+      filterPropTypes.checkboxFilterPropTypes,
+    ]),
   ).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
