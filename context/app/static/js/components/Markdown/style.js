@@ -8,18 +8,18 @@ const StyledPaper = styled(Paper)`
 
   padding: 30px 40px 30px 40px;
 
-  & img {
+  img {
     max-width: 100%;
   }
 
-  & table {
+  table {
     border-spacing: 0px;
     border-collapse: collapse;
     overflow: scroll;
     display: block; // overflow only applies to block elements.
   }
-  & th,
-  & td {
+  th,
+  td {
     border: 1px solid grey;
     padding: 0.25em 0.5em;
   }
