@@ -338,9 +338,9 @@ class Vitessce:
             # each conf to be all images across a given PosM, each image named HybCycle_N.
             # This is unique to seqFish.
             if "seqFish" in self.entity["data_types"]:
-                is_valid_directory = all([re.match(SEQFISH_PATH, file) for file in found_images])
+                is_valid_directory = all([re.fullmatch(SEQFISH_PATH, file) for file in found_images])
                 if not is_valid_directory:
-                    raise NameError("Directory structure for seqFish is incorrect")
+                    raise Exception("Directory structure for seqFish is incorrect")
                 # Get all files grouped by PosN names.
                 images_by_pos = _group_by_file_name(found_images)
                 # Get Hybridization per paths grouped by Pos.
