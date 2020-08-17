@@ -33,8 +33,10 @@
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.9.0",
     "@svgr/webpack": "^5.2.0",
+    "@testing-library/dom": "^7.22.0",
     "@testing-library/jest-dom": "^5.9.0",
     "@testing-library/react": "^10.2.0",
+    "@testing-library/user-event": "^12.1.1",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.0.1",
     "babel-loader": "^8.0.6",
@@ -57,7 +59,7 @@
     "jest": "^26.0.1",
     "js-yaml": "^3.14.0",
     "lint-staged": "^10.2.11",
-    "msw": "^0.19.0",
+    "msw": "^0.19.5",
     "node-sass": "^4.14.1",
     "prettier": "^2.0.5",
     "sass-loader": "^8.0.2",
@@ -86,7 +88,10 @@
     "lint:fix": "eslint -c .eslintrc.yml --ext .js,.jsx --fix app/static/js/"
   },
   "lint-staged": {
-    "app/static/js/**/*.{js,jsx}": ["prettier --write", "eslint -c .eslintrc.yml"]
+    "app/static/js/**/*.{js,jsx}": [
+      "prettier --write",
+      "eslint -c .eslintrc.yml"
+    ]
   },
   "husky": {
     "hooks": {

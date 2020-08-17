@@ -2,9 +2,6 @@
  * Takes an array of objects each containing a file path and returns an object representing the directory structure in a tree like organization.
  * @param  {Array} files Array of objects each containing a key, rel_path, which is the file path.
  * @return {Object}      The directory structure in a tree like organization.
- * @example
- * // returns {files:[{file:'e.pdf', ...}], a: {b: {files: [{file: 'c.pdf', ...}, {file: 'd.pdf', ...}]}}}
- * relativeFilePathsToTree[{rel_path: 'a/b/c.pdf', ...}, {rel_path: 'a/b/d.pdf'...}, {rel_path: 'e.pdf'}]
  */
 export function relativeFilePathsToTree(files) {
   const treePath = {};
