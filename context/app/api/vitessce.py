@@ -4,6 +4,7 @@ import json
 from datauri import DataURI
 import re
 import copy
+from itertools import groupby
 
 from flask import current_app
 
@@ -48,7 +49,7 @@ TILED_SPRM_IMAGING = {
             "x": 3,
             "y": 4,
             "w": 7,
-            "h": 2
+            "h": 2,
         },
         {
             "component": "spatial",
@@ -114,6 +115,8 @@ OFFSETS_PATH = "output_offsets"
 IMAGE_PYRAMID_PATH = "ometiff-pyramids"
 CODEX_TILE_PATH = "output/extract/expressions/ome-tiff"
 CODDEX_SPRM_PATH = "output_json"
+TILE_REGEX = r"R\d+_X\d+_Y\d+"
+
 
 # Hardcoded CODEX offsets and tile path.
 IMAGING_PATHS = {
@@ -121,7 +124,9 @@ IMAGING_PATHS = {
     IMAGE_PYRAMID: {"offsets": OFFSETS_PATH, "image": IMAGE_PYRAMID_PATH, },
 }
 
-TILE_REGEX = r"R\d+_X\d+_Y\d+"
+SEQFISH_HYB_CYCLE_REGEX = r"HybCycle_\d+"
+SEQFISH_NAME_REGEX = r"MMStack_Pos\d+\.ome\.tiff?"
+SEQFISH_REGEX = f"{IMAGE_PYRAMID_PATH}/{SEQFISH_HYB_CYCLE_REGEX}/{SEQFISH_NAME_REGEX}"
 
 SCRNA_SEQ_CONFIG = {
     "base_conf": SCATTERPLOT,
@@ -129,12 +134,12 @@ SCRNA_SEQ_CONFIG = {
         {
             "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cells.json",
             "fileType": "cells.json",
-            "type": "CELLS"
+            "type": "CELLS",
         },
         {
             "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cell-sets.json",
             "fileType": "cell-sets.json",
-            "type": "CELL-SETS"
+            "type": "CELL-SETS",
         },
     ],
 }
@@ -145,7 +150,7 @@ SCATAC_SEQ_CONFIG = {
         {
             "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cells.json",
             "fileType": "cells.json",
-            "type": "CELLS"
+            "type": "CELLS",
         },
         {
             "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cell-sets.json",
@@ -222,9 +227,16 @@ def _get_matches(files, regex):
 
 
 def _exclude_matches(files, regex):
-    return list(
-        set(file for file in files if not re.search(regex, file))
-    )
+    return list(set(file for file in files if not re.search(regex, file)))
+
+
+def _get_path_name(file):
+    return Path(file).name
+
+
+def _group_by_file_name(files):
+    sorted_files = sorted(files, key=_get_path_name)
+    return [list(g) for _, g in groupby(sorted_files, _get_path_name)]
 
 
 class Vitessce:
@@ -309,7 +321,9 @@ class Vitessce:
                 else:
                     new_conf = copy.deepcopy(conf)
                     files_for_layers = files
-                layers = [self._build_layer_conf(file, tile) for file in files_for_layers]
+                layers = [
+                    self._build_layer_conf(file, tile) for file in files_for_layers
+                ]
                 new_conf["layers"] = layers
                 new_conf["name"] = tile
                 new_conf = self._replace_view(new_conf)
@@ -320,12 +334,43 @@ class Vitessce:
             found_images = _get_matches(file_paths_found, files[0]["rel_path"])
             # Do not show IMS images that are in the "/separate/" folder.
             no_ims_separate_images = _exclude_matches(found_images, r"/separate/")
-            layer = self._build_multi_file_image_layer_conf(no_ims_separate_images)
-            conf["layers"] = [layer]
+            # File paths are like path/to/HybCycle_N/MMStack_PosM.ome.tif and we want
+            # each conf to be all images across a given PosM, each image named HybCycle_N.
+            # This is unique to seqFish.
+            if "seqFish" in self.entity["data_types"]:
+                return self._build_seqfish_conf(found_images, conf)
+            layers = [self._build_multi_file_image_layer_conf(no_ims_separate_images)]
+            conf["layers"] = layers
             conf["name"] = self.uuid
             conf = self._replace_view(conf)
             self.conf = conf
             return conf
+
+    def _build_seqfish_conf(self, found_images, conf):
+        is_valid_directory = all([re.fullmatch(SEQFISH_REGEX, file) for file in found_images])
+        if not is_valid_directory:
+            raise Exception("Directory structure for seqFish is incorrect")
+        # Get all files grouped by PosN names.
+        images_by_pos = _group_by_file_name(found_images)
+        # Get Hybridization per paths grouped by Pos.
+        hyb_cycles_per_pos = [
+            sorted([re.search(SEQFISH_HYB_CYCLE_REGEX, image)[0] for image in images])
+            for images in images_by_pos
+        ]
+        confs = []
+        # Build up a conf for each Pos.
+        for i, images in enumerate(images_by_pos):
+            new_conf = copy.deepcopy(conf)
+            layers = [
+                self._build_multi_file_image_layer_conf(
+                    images, hyb_cycles_per_pos[i]
+                )
+            ]
+            new_conf["layers"] = layers
+            new_conf["name"] = re.search(SEQFISH_NAME_REGEX, images[0])[0].split(".")[0]
+            confs.append(self._replace_view(new_conf))
+        self.conf = confs
+        return confs
 
     def _build_layer_conf(self, file, tile=""):
         """Build each layer in the layers section.
@@ -351,7 +396,7 @@ class Vitessce:
             "name": file["type"].lower(),
         }
 
-    def _build_multi_file_image_layer_conf(self, files):
+    def _build_multi_file_image_layer_conf(self, files, names=[]):
         """Build each layer in the layers section.
 
         returns e.g
@@ -366,11 +411,11 @@ class Vitessce:
         return {
             "type": "RASTER",
             "fileType": "raster.json",
-            "url": self._build_image_layer_datauri([file for file in files]),
+            "url": self._build_image_layer_datauri(files, names),
             "name": "raster",
         }
 
-    def _build_image_layer_datauri(self, rel_paths):
+    def _build_image_layer_datauri(self, rel_paths, names=[]):
         """
         Specifically for the RASTERS schema, we need to build a DataURI of the schema because
         it contains a URL for a file whose location is unknown until pipelines have been run.
@@ -399,14 +444,15 @@ class Vitessce:
 
         image_layer = {}
         image_layer["images"] = [
-            self._build_image_schema(rel_path) for rel_path in rel_paths
+            self._build_image_schema(rel_path, names[i] if names else None)
+            for i, rel_path in enumerate(rel_paths)
         ]
         image_layer["schemaVersion"] = "0.0.2"
         return DataURI.make(
             "text/plain", charset="us-ascii", base64=True, data=json.dumps(image_layer)
         )
 
-    def _build_image_schema(self, image_rel_path):
+    def _build_image_schema(self, image_rel_path, name=None):
         """
         Builds the 'images' sections of the RASTER schema.
 
@@ -421,7 +467,7 @@ class Vitessce:
         """
 
         schema = {}
-        schema["name"] = Path(image_rel_path).name
+        schema["name"] = name if name is not None else Path(image_rel_path).name
         schema["type"] = "ome-tiff"
         schema["url"] = self._build_assets_url(image_rel_path)
         schema["metadata"] = {}
@@ -470,9 +516,9 @@ class Vitessce:
 
         # IMS images are named under this convention, "IMS_XXXMode".
         # Some of the non IMS images contain the substring "IMS," so that is insufficient.
-        # IMC also needs to be handled specially.
+        # IMC also needs to be handled specially, as does seqFish.
         # TODO: Clean this up by handling multiple assay types (#982).
-        if any(
+        if "seqFish" in self.entity["data_types"] or any(
             "IMS_PosMode" in file["rel_path"]
             or "IMS_NegMode" in file["rel_path"]
             or "IMC" in self.entity["data_types"]
