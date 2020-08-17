@@ -115,9 +115,8 @@ OFFSETS_PATH = "output_offsets"
 IMAGE_PYRAMID_PATH = "ometiff-pyramids"
 CODEX_TILE_PATH = "output/extract/expressions/ome-tiff"
 CODDEX_SPRM_PATH = "output_json"
+TILE_REGEX = r"R\d+_X\d+_Y\d+"
 
-SEQFISH_HYB_CYCLE = r"HybCycle_\d+"
-SEQFISH_NAME = r"MMStack_Pos\d+\.ome\.tiff?"
 
 # Hardcoded CODEX offsets and tile path.
 IMAGING_PATHS = {
@@ -125,8 +124,9 @@ IMAGING_PATHS = {
     IMAGE_PYRAMID: {"offsets": OFFSETS_PATH, "image": IMAGE_PYRAMID_PATH, },
 }
 
-TILE_REGEX = r"R\d+_X\d+_Y\d+"
-SEQFISH_PATH = f"{IMAGE_PYRAMID_PATH}/{SEQFISH_HYB_CYCLE}/{SEQFISH_NAME}"
+SEQFISH_HYB_CYCLE_REGEX = r"HybCycle_\d+"
+SEQFISH_NAME_REGEX = r"MMStack_Pos\d+\.ome\.tiff?"
+SEQFISH_REGEX = f"{IMAGE_PYRAMID_PATH}/{SEQFISH_HYB_CYCLE_REGEX}/{SEQFISH_NAME_REGEX}"
 
 SCRNA_SEQ_CONFIG = {
     "base_conf": SCATTERPLOT,
@@ -338,36 +338,39 @@ class Vitessce:
             # each conf to be all images across a given PosM, each image named HybCycle_N.
             # This is unique to seqFish.
             if "seqFish" in self.entity["data_types"]:
-                is_valid_directory = all([re.fullmatch(SEQFISH_PATH, file) for file in found_images])
-                if not is_valid_directory:
-                    raise Exception("Directory structure for seqFish is incorrect")
-                # Get all files grouped by PosN names.
-                images_by_pos = _group_by_file_name(found_images)
-                # Get Hybridization per paths grouped by Pos.
-                hyb_cycles_per_pos = [
-                    sorted([re.search(SEQFISH_HYB_CYCLE, image)[0] for image in images])
-                    for images in images_by_pos
-                ]
-                confs = []
-                # Build up a conf for each Pos.
-                for i, images in enumerate(images_by_pos):
-                    new_conf = copy.deepcopy(conf)
-                    layers = [
-                        self._build_multi_file_image_layer_conf(
-                            images, hyb_cycles_per_pos[i]
-                        )
-                    ]
-                    new_conf["layers"] = layers
-                    new_conf["name"] = re.search(SEQFISH_NAME, images[0])[0].split(".")[0]
-                    confs.append(self._replace_view(new_conf))
-                self.conf = confs
-                return confs
+                return self._build_seqfish_conf(found_images, conf)
             layers = [self._build_multi_file_image_layer_conf(no_ims_separate_images)]
             conf["layers"] = layers
             conf["name"] = self.uuid
             conf = self._replace_view(conf)
             self.conf = conf
             return conf
+
+    def _build_seqfish_conf(self, found_images, conf):
+        is_valid_directory = all([re.fullmatch(SEQFISH_REGEX, file) for file in found_images])
+        if not is_valid_directory:
+            raise Exception("Directory structure for seqFish is incorrect")
+        # Get all files grouped by PosN names.
+        images_by_pos = _group_by_file_name(found_images)
+        # Get Hybridization per paths grouped by Pos.
+        hyb_cycles_per_pos = [
+            sorted([re.search(SEQFISH_HYB_CYCLE_REGEX, image)[0] for image in images])
+            for images in images_by_pos
+        ]
+        confs = []
+        # Build up a conf for each Pos.
+        for i, images in enumerate(images_by_pos):
+            new_conf = copy.deepcopy(conf)
+            layers = [
+                self._build_multi_file_image_layer_conf(
+                    images, hyb_cycles_per_pos[i]
+                )
+            ]
+            new_conf["layers"] = layers
+            new_conf["name"] = re.search(SEQFISH_NAME_REGEX, images[0])[0].split(".")[0]
+            confs.append(self._replace_view(new_conf))
+        self.conf = confs
+        return confs
 
     def _build_layer_conf(self, file, tile=""):
         """Build each layer in the layers section.
