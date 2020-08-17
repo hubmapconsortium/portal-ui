@@ -33,6 +33,41 @@ const StyledPaper = styled(Paper)`
   li {
     list-style: square;
   }
+
+  // The header styles are copied from the Material UI defaults.
+  // The style for h1 (one "#") was too large, so everything is bumped down a level.
+
+  // h1 {
+  //   font-size: 2.6rem;
+  //   font-weight: 300;
+  //   line-height: 1.167;
+  // }
+
+  h1 {
+    font-size: 2.3rem;
+    font-weight: 300;
+    line-height: 1.2;
+  }
+  h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1.167;
+  }
+  h3 {
+    font-size: 1.6rem;
+    font-weight: 300;
+    line-height: 1.235;
+  }
+  h4 {
+    font-size: 1.3rem;
+    font-weight: 300;
+    line-height: 1.334;
+  }
+  h5 {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.6;
+  }
 `;
 
 export { StyledPaper };
