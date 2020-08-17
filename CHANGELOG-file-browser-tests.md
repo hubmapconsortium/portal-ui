@@ -1,1 +1,0 @@
-- Add tests and prop types for files components.

@@ -1,3 +1,12 @@
+## v0.0.53 - 2020-08-17
+
+- Add tests and prop types for files components.
+- Move files components out of detail directory and into files directory within components.
+- Search is now aligned with title and header content. 
+- seqFISH data layout updated.
+- Show text search matches in context.
+
+
 ## v0.0.52 - 2020-08-12
 
 - Stub out ASCTB and make vitessce config optional in previews.

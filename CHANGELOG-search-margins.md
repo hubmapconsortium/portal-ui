@@ -1,1 +1,0 @@
-- Search is now aligned with title and header content. 
