@@ -3,8 +3,8 @@ import React from 'react';
 import { render, screen } from 'test-utils/functions';
 // import userEvent from '@testing-library/user-event';
 
+import DetailContext from 'js/components/Detail/context';
 import FileBrowserFile from './FileBrowserFile';
-import DetailContext from '../context';
 import FilesContext from '../Files/context';
 
 const fakeOpenDUA = jest.fn();

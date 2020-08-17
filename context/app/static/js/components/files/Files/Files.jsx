@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
-import DetailContext from '../context';
-import SectionHeader from '../SectionHeader';
-import SectionContainer from '../SectionContainer';
+import DetailContext from 'js/components/Detail/context';
+import SectionHeader from 'js/components/Detail/SectionHeader';
+import SectionContainer from 'js/components/Detail/SectionContainer';
 import GlobusLink from '../GlobusLink';
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../FileBrowserDUA';

@@ -1,0 +1,1 @@
+- Move files components out of detail directory and into files directory within components.
