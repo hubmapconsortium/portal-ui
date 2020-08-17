@@ -2,6 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
+import Files from 'js/components/files/Files';
 import ProvSection from '../ProvSection';
 import Summary from '../Summary';
 import Attribution from '../Attribution';
@@ -9,7 +10,6 @@ import Protocol from '../Protocol';
 import MetadataTable from '../MetadataTable';
 import VisualizationWrapper from '../VisualizationWrapper';
 import DetailLayout from '../DetailLayout';
-import Files from '../Files';
 import SummaryItem from '../SummaryItem';
 import useSendUUIDEvent from '../useSendUUIDEvent';
 

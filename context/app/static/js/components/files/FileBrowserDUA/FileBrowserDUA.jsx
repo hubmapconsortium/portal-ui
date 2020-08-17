@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -88,5 +89,12 @@ function FileBrowserDUA(props) {
     </Dialog>
   );
 }
+
+FileBrowserDUA.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  handleAgree: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  mapped_data_access_level: PropTypes.string.isRequired,
+};
 
 export default FileBrowserDUA;
