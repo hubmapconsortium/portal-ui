@@ -20,7 +20,7 @@ server_up() {
 
 
 start changelog
-if [ "$TRAVIS_BRANCH" != 'master' ] && [[ "$TRAVIS_BRANCH" != *'release'* ]]; then
+if [ "$TRAVIS_BRANCH" != 'master' ]; then
   git remote set-branches --add origin master
   git fetch
   git diff --summary origin/master \
