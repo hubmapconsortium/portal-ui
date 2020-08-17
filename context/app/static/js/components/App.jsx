@@ -30,6 +30,7 @@ App.propTypes = {
     endpoints: PropTypes.object,
     markdown: PropTypes.string,
     collection: PropTypes.object,
+    errorCode: PropTypes.number,
   }),
 };
 

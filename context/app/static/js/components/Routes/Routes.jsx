@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 
+import Error from 'js/pages/Error';
 import { Home } from '../Home';
 import Search from '../Search/Search';
 import DevSearch from '../Search/DevSearch';
@@ -13,10 +14,14 @@ import useSendPageView from './useSendPageView';
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, endpoints, title, markdown, collection } = flaskData;
+  const { entity, vitessce_conf, endpoints, title, markdown, collection, errorCode } = flaskData;
   const urlPath = window.location.pathname;
 
   useSendPageView(urlPath);
+
+  if (errorCode !== undefined) {
+    return <Error errorCode={errorCode} />;
+  }
 
   if (urlPath.startsWith('/browse/donor/')) {
     return (
@@ -118,6 +123,7 @@ Routes.propTypes = {
     endpoints: PropTypes.object,
     markdown: PropTypes.string,
     collection: PropTypes.object,
+    errorCode: PropTypes.number,
   }),
 };
 
