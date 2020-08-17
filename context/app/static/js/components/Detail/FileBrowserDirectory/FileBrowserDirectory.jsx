@@ -8,7 +8,7 @@ function FileBrowserDirectory(props) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const onKeyDownHandler = (e) => {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 /* carriage return */) {
       setIsExpanded(!isExpanded);
     }
   };
