@@ -51,7 +51,7 @@ test('displays correct text for consortium access level', () => {
 
   expect(screen.getByText(/Controlled/)).toBeInTheDocument();
   expect(
-    screen.getByText(/You are attempting to download data accessible only to HuBMAP Members./),
+    screen.getByText('You are attempting to download data accessible only to HuBMAP Members.'),
   ).toBeInTheDocument();
 });
 
