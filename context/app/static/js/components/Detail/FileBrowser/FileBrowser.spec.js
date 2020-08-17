@@ -68,8 +68,8 @@ test('displays files and directories', () => {
   const textInDocumentBeforeOpenDirectory = ['path1', 'path3', 'fake5.txt'];
   textInDocumentBeforeOpenDirectory.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 
-  const textNullBeforeOpenDirectory = ['path2', 'fake1.txt', 'fake2.txt', 'fake3.txt', 'fake4.txt'];
-  textNullBeforeOpenDirectory.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+  const textNotInDocumentBeforeOpenDirectory = ['path2', 'fake1.txt', 'fake2.txt', 'fake3.txt', 'fake4.txt'];
+  textNotInDocumentBeforeOpenDirectory.forEach((text) => expect(screen.queryByText(text)).toBeNull());
 
   userEvent.click(screen.getByRole('button', { name: 'path1' }));
 
