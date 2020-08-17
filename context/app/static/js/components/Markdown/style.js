@@ -15,6 +15,8 @@ const StyledPaper = styled(Paper)`
   & table {
     border-spacing: 0px;
     border-collapse: collapse;
+    overflow: scroll;
+    display: block; // overflow only applies to block elements.
   }
   & th,
   & td {
