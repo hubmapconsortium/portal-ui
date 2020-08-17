@@ -23,9 +23,9 @@ start changelog
 if [ "$TRAVIS_BRANCH" != 'master' ]; then
   git remote set-branches --add origin master
   git fetch
-  git diff --summary origin/master \
-    | grep '^ create' | grep 'CHANGELOG-' \
-    || die 'Add a CHANGELOG-something.md'
+  git diff --compact-summary origin/master \
+    | grep -e '^ CHANGELOG-\S\+ (new)' \
+    || die 'Add a CHANGELOG-something.md at the top level'
 fi
 end changelog
 
