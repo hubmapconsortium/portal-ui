@@ -2,10 +2,10 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
+import Markdown from 'js/components/Markdown';
 import VisualizationWrapper from '../Detail/VisualizationWrapper';
 import SectionHeader from '../Detail/SectionHeader';
 import SectionContainer from '../Detail/SectionContainer';
-import { StyledPaper, StyledMarkdown } from './style';
 import Attribution from '../Detail/Attribution';
 import Description from '../Detail/Description';
 
@@ -28,11 +28,7 @@ function Preview(props) {
           releases. Previews may rely on externally hosted data or analysis results that were generated with processing
           pipelines that are not yet integrated into the HuBMAP Data Portal infrastructure.
         </Description>
-        <StyledPaper>
-          <Typography variant="body1">
-            <StyledMarkdown source={markdown} />
-          </Typography>
-        </StyledPaper>
+        <Markdown markdown={markdown} />
       </SectionContainer>
       <Attribution
         group_name={group_name}
