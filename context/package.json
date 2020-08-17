@@ -86,10 +86,7 @@
     "lint:fix": "eslint -c .eslintrc.yml --ext .js,.jsx --fix app/static/js/"
   },
   "lint-staged": {
-    "app/static/js/**/*.{js,jsx}": [
-      "prettier --write",
-      "eslint -c .eslintrc.yml"
-    ]
+    "app/static/js/**/*.{js,jsx}": ["prettier --write", "eslint -c .eslintrc.yml"]
   },
   "husky": {
     "hooks": {
