@@ -51,7 +51,7 @@ test('displays correct text for consortium access level', () => {
 
   expect(screen.getByText(/Controlled/)).toBeInTheDocument();
   expect(
-    screen.getByText('You are attempting to download data accessible only to HuBMAP Members.'),
+    screen.getByText('You are attempting to download data accessible only to HuBMAP Members.', { exact: false }),
   ).toBeInTheDocument();
 });
 
@@ -68,7 +68,8 @@ test('displays correct text for when access level is not protected or consortium
   expect(screen.getByText(/Public/)).toBeInTheDocument();
   expect(
     screen.getByText(
-      /By downloading HuBMAP raw or processed data and using this data alone or combined with any other information/,
+      'By downloading HuBMAP raw or processed data and using this data alone or combined with any other information',
+      { exact: false },
     ),
   ).toBeInTheDocument();
 });
