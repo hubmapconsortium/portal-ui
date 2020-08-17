@@ -116,6 +116,9 @@ IMAGE_PYRAMID_PATH = "ometiff-pyramids"
 CODEX_TILE_PATH = "output/extract/expressions/ome-tiff"
 CODDEX_SPRM_PATH = "output_json"
 
+SEQFISH_HYB_CYCLE = r"HybCycle_\d+"
+SEQFISH_NAME = r"MMStack_Pos\d+\.ome\.tiff?"
+
 # Hardcoded CODEX offsets and tile path.
 IMAGING_PATHS = {
     CODEX_CYTOKIT: {"offsets": OFFSETS_PATH, "image": CODEX_TILE_PATH, },
@@ -123,6 +126,7 @@ IMAGING_PATHS = {
 }
 
 TILE_REGEX = r"R\d+_X\d+_Y\d+"
+SEQFISH_PATH = f"{IMAGE_PYRAMID_PATH}/{SEQFISH_HYB_CYCLE}/{SEQFISH_NAME}"
 
 SCRNA_SEQ_CONFIG = {
     "base_conf": SCATTERPLOT,
@@ -288,7 +292,6 @@ class Vitessce:
         files = copy.deepcopy(ASSAY_CONF_LOOKUP[self.assay_type]["files_conf"])
         file_paths_expected = [file["rel_path"] for file in files]
         file_paths_found = [file["rel_path"] for file in self.entity["files"]]
-        print(file_paths_found)
         conf = copy.deepcopy(ASSAY_CONF_LOOKUP[self.assay_type]["base_conf"])
         # Codex and other tiled assays needs to be built up based on their input tiles.
         if self.assay_type not in IMAGE_ASSAYS:
@@ -335,11 +338,14 @@ class Vitessce:
             # each conf to be all images across a given PosM, each image named HybCycle_N.
             # This is unique to seqFish.
             if "seqFish" in self.entity["data_types"]:
+                is_valid_directory = all([re.match(SEQFISH_PATH, file) for file in found_images])
+                if not is_valid_directory:
+                    raise NameError("Directory structure for seqFish is incorrect")
                 # Get all files grouped by PosN names.
                 images_by_pos = _group_by_file_name(found_images)
                 # Get Hybridization per paths grouped by Pos.
                 hyb_cycles_per_pos = [
-                    sorted([Path(image).parts[-2] for image in images])
+                    sorted([re.search(SEQFISH_HYB_CYCLE, image)[0] for image in images])
                     for images in images_by_pos
                 ]
                 confs = []
@@ -352,9 +358,7 @@ class Vitessce:
                         )
                     ]
                     new_conf["layers"] = layers
-                    # The stem is the name of the ome.tif file (since it has "PosN")
-                    # but the stem includes "ome" as well so we split on the ".".
-                    new_conf["name"] = Path(images[0]).stem.split(".")[0]
+                    new_conf["name"] = re.search(SEQFISH_NAME, images[0])[0].split(".")[0]
                     confs.append(self._replace_view(new_conf))
                 self.conf = confs
                 return confs
