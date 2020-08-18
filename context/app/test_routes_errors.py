@@ -33,8 +33,6 @@ def test_400_html_page(client, mocker):
     mocker.patch('requests.post', side_effect=mock_post_400)
     response = client.get('/browse/donor/FAKE')
     assert response.status == '400 BAD REQUEST'
-    assert_is_valid_html(response)
-    assert '400: Bad Request' in response.data.decode('utf8')
 
 
 def mock_post_401(path, **kwargs):
@@ -52,8 +50,6 @@ def test_401_html_page(client, mocker):
     mocker.patch('requests.post', side_effect=mock_post_401)
     response = client.get('/browse/donor/FAKE')
     assert response.status == '401 UNAUTHORIZED'
-    assert_is_valid_html(response)
-    assert '401: Unauthorized' in response.data.decode('utf8')
 
 
 @pytest.fixture
@@ -71,8 +67,6 @@ def client_not_logged_in():
 def test_404_html_page(client, path):
     response = client.get(path)
     assert response.status == '404 NOT FOUND'
-    assert_is_valid_html(response)
-    assert '404: Not Found' in response.data.decode('utf8')
 
 
 def mock_timeout_post(path, **kwargs):
@@ -83,5 +77,3 @@ def test_504_html_page(client, mocker):
     mocker.patch('requests.post', side_effect=mock_timeout_post)
     response = client.get('/browse/donor/FAKE')
     assert response.status == '504 GATEWAY TIMEOUT'
-    assert_is_valid_html(response)
-    assert '504: Gateway Timeout' in response.data.decode('utf8')
