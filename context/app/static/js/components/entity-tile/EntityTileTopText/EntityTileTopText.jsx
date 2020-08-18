@@ -24,7 +24,7 @@ function EntityTileTopText(props) {
       {entity_type === 'Donor' && 'mapped_metadata' in entityData && (
         <>
           <Flex>
-            <Typography variant="body2">{entityData.mapped_metadata.gender}</Typography>
+            <Typography variant="body2">{entityData.mapped_metadata.sex}</Typography>
             <StyledDivider flexItem orientation="vertical" $invertColors={invertColors} />
             <Typography variant="body2">{entityData.mapped_metadata.age} years</Typography>
           </Flex>
