@@ -1,4 +1,5 @@
 import React from 'react';
+import MetadataTable from 'js/components/Detail/MetadataTable';
 import ProvSection from '../ProvSection';
 import Summary from '../Summary';
 import Attribution from '../Attribution';
@@ -44,6 +45,7 @@ function DonorDetail(props) {
           description={description}
         />
         {shouldDisplaySection.metadata && <DonorMetadata metadata={mapped_metadata} />}
+        {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
