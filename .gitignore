@@ -118,9 +118,9 @@ venv.bak/
 context/app/static/public
 context/app/static/js/maintenance/public
 
-# scratch
+# scratch and tmp
+/scratch
+/tmp
 
 # pycharm
 .idea/
-
-/scratch
