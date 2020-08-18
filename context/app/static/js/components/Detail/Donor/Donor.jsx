@@ -4,7 +4,6 @@ import ProvSection from '../ProvSection';
 import Summary from '../Summary';
 import Attribution from '../Attribution';
 import Protocol from '../Protocol';
-import DonorMetadata from '../DonorMetadata';
 import DetailLayout from '../DetailLayout';
 import useSendUUIDEvent from '../useSendUUIDEvent';
 
@@ -44,7 +43,6 @@ function DonorDetail(props) {
           last_modified_timestamp={last_modified_timestamp}
           description={description}
         />
-        {shouldDisplaySection.metadata && <DonorMetadata metadata={mapped_metadata} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} />}
         <Attribution
           group_name={group_name}
