@@ -20,18 +20,19 @@ function ErrorBody({ errorCode, isGlobus401, isMaintenancePage }) {
       </>
     );
   }
-  if (errorCode === 401) {
-    return (
-      <>
-        You have not been added to the HuBMAP Group on Globus. Request access at <HelpEmailLink />.
-      </>
-    );
-  }
 
   if (errorCode === 401 && isGlobus401) {
     return (
       <>
         Your credentials have expired. Please <LoginLink /> again.
+      </>
+    );
+  }
+
+  if (errorCode === 401) {
+    return (
+      <>
+        You have not been added to the HuBMAP Group on Globus. Request access at <HelpEmailLink />.
       </>
     );
   }
@@ -60,12 +61,13 @@ function ErrorBody({ errorCode, isGlobus401, isMaintenancePage }) {
 }
 
 ErrorBody.propTypes = {
-  errorCode: PropTypes.number.isRequired,
+  errorCode: PropTypes.number,
   isGlobus401: PropTypes.bool,
   isMaintenancePage: PropTypes.bool,
 };
 
 ErrorBody.defaultProps = {
+  errorCode: undefined,
   isGlobus401: false,
   isMaintenancePage: false,
 };
