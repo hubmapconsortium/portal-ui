@@ -3,7 +3,6 @@ import requests
 
 from .main import create_app
 from .config import types
-from .test_routes_main import assert_is_valid_html
 
 
 @pytest.fixture
