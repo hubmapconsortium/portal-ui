@@ -6,8 +6,8 @@ describe('portal-ui', () => {
     it('has nice 404', () => {
       // Homepage
       cy.visit('/no-such-page', {failOnStatusCode: false});
-      cy.contains('404: Not Found');
-      cy.contains('If this page should exist');
+      cy.contains('Page Not Found');
+      cy.contains('If this page should exist, submit a bug report to help@hubmapconsortium.org.');
     });
 
     it('handles click-through', () => {
