@@ -17,14 +17,14 @@ function MetadataItem(props) {
 
 function DonorMetadata(props) {
   const { metadata } = props;
-  const { gender, age, bmi, race } = metadata;
+  const { sex, age, bmi, race } = metadata;
   return (
     <SectionContainer id="metadata">
       <SectionHeader variant="h3" component="h2">
         Metadata
       </SectionHeader>
       <FlexPaper>
-        <MetadataItem label="Gender Finding" value={gender} />
+        <MetadataItem label="Sex" value={sex} />
         <MetadataItem label="Current Chronological Age" ml={1} value={age} />
         <MetadataItem label="Body Mass Index" ml={1} value={bmi} />
         <MetadataItem label="Racial Group" ml={1} value={race} />
@@ -35,7 +35,7 @@ function DonorMetadata(props) {
 
 DonorMetadata.propTypes = {
   metadata: PropTypes.shape({
-    gender: PropTypes.string,
+    sex: PropTypes.string,
     age: PropTypes.number,
     bmi: PropTypes.number,
     race: PropTypes.string,
