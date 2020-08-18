@@ -1,10 +1,12 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
+const purple = '#444A65';
+
 // default HuBMAP color and font theme
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#444A65',
+      main: purple,
       hover: 'brightness(108%)',
     },
     secondary: {
@@ -70,10 +72,12 @@ const theme = createMuiTheme({
     subtitle1: {
       fontWeight: 500,
       fontSize: '1.1rem',
+      color: purple,
     },
     subtitle2: {
       fontWeight: 500,
       fontSize: '0.875rem',
+      color: purple,
     },
     body1: {
       fontWeight: 300,
