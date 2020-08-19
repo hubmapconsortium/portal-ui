@@ -78,7 +78,7 @@ const config = {
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: `${maintenancePath}/index.html` }),
+    new HtmlWebpackPlugin({ template: `${maintenancePath}/index.html`, favicon: './app/static/favicon.ico' }),
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
   ],
 };
