@@ -17,7 +17,7 @@ class ApiClient():
         self.is_mock = is_mock
 
     def _request(self, url, body_json=None):
-        headers = {'Authorization': 'Bearer ' + self.nexus_token}
+        headers = {'Authorization': 'Bearer ' + self.nexus_token} if self.nexus_token else {}
         try:
             response = (
                 requests.post(url, headers=headers, json=body_json)
