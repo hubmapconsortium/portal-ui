@@ -1,0 +1,1 @@
+- Use the same metadata table as with datasets.
