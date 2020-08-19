@@ -1,1 +1,0 @@
-- Don't set an `Authorization` header when we don't have a nexus token. Public datasets are now visible without login.

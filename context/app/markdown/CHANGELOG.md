@@ -1,3 +1,16 @@
+## v0.0.54 - 2020-08-19
+
+- Use the same metadata table as with datasets.
+- Add tests for donor metadata component. (Older work, but we had missed the changelog.)
+- Tweak script to flag misplaced changelogs
+- Fix seqfish directories
+- Limit width of screenshots in preview. (Older work, but we had missed the changelog.)
+- Don't set an `Authorization` header when we don't have a nexus token. Public datasets are now visible without login.
+- Add tests for sample tissue component. (Older work, but we had missed the changelog.)
+- Setup tracking page views with Google Analytics. (Older work, but we had missed the changelog.)
+- Replace "gender" with "sex" in the donor facets.
+
+
 ## v0.0.53 - 2020-08-17
 
 - Add tests and prop types for files components.
