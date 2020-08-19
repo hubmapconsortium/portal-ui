@@ -1,1 +1,1 @@
-- Setup tracking page views with Google Analytics.
+- Setup tracking page views with Google Analytics. (Older work, but we had missed the changelog.)
