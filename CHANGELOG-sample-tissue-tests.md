@@ -1,1 +1,1 @@
-- Add tests for sample tissue component.
+- Add tests for sample tissue component. (Older work, but we had missed the changelog.)

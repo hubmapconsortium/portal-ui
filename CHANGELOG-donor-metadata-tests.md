@@ -1,1 +1,1 @@
-- Add tests for donor metadata component.
+- Add tests for donor metadata component. (Older work, but we had missed the changelog.)
