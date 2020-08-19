@@ -8,16 +8,18 @@ const StyledPaper = styled(Paper)`
 
   padding: 30px 40px 30px 40px;
 
-  & img {
+  img {
     max-width: 100%;
   }
 
-  & table {
+  table {
     border-spacing: 0px;
     border-collapse: collapse;
+    overflow: scroll;
+    display: block; // overflow only applies to block elements.
   }
-  & th,
-  & td {
+  th,
+  td {
     border: 1px solid grey;
     padding: 0.25em 0.5em;
   }
@@ -30,6 +32,41 @@ const StyledPaper = styled(Paper)`
 
   li {
     list-style: square;
+  }
+
+  // The header styles are copied from the Material UI defaults.
+  // The style for h1 (one "#") was too large, so everything is bumped down a level.
+
+  // h1 {
+  //   font-size: 2.6rem;
+  //   font-weight: 300;
+  //   line-height: 1.167;
+  // }
+
+  h1 {
+    font-size: 2.3rem;
+    font-weight: 300;
+    line-height: 1.2;
+  }
+  h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1.167;
+  }
+  h3 {
+    font-size: 1.6rem;
+    font-weight: 300;
+    line-height: 1.235;
+  }
+  h4 {
+    font-size: 1.3rem;
+    font-weight: 300;
+    line-height: 1.334;
+  }
+  h5 {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.6;
   }
 `;
 
