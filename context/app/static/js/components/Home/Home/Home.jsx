@@ -23,13 +23,10 @@ function shapeSummaryResponse(data) {
     acc[d.key] = d.doc_count;
     return acc;
   }, {});
-  const uniqueCenters = data.aggregations.group_name.buckets.length;
-
   return {
     datasetCount: checkPropReturnValue('Dataset', searchData),
     sampleCount: checkPropReturnValue('Sample', searchData),
     donorCount: checkPropReturnValue('Donor', searchData),
-    centerCount: uniqueCenters,
   };
 }
 
@@ -49,10 +46,7 @@ function Home(props) {
         method: 'POST',
         body: JSON.stringify({
           size: 0,
-          aggs: {
-            entity_type: { terms: { field: 'entity_type.keyword' } },
-            group_name: { terms: { field: 'group_name.keyword' } },
-          },
+          aggs: { entity_type: { terms: { field: 'entity_type.keyword' } } },
         }),
         headers: {
           'Content-Type': 'application/json',
