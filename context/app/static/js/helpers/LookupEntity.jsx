@@ -26,7 +26,7 @@ function LookupEntity(props) {
       setEntity(resultEntity);
     }
     getAndSetEntity();
-  }, [elasticsearchEndpoint, uuid]);
+  }, [authHeader, elasticsearchEndpoint, uuid]);
 
   return React.cloneElement(props.children, { entity });
 }

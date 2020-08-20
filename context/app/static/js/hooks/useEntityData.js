@@ -24,7 +24,7 @@ function useEntityData(uuid, elasticsearchEndpoint) {
       setEntity(resultEntity);
     }
     getAndSetEntity();
-  }, [elasticsearchEndpoint, uuid]);
+  }, [authHeader, elasticsearchEndpoint, uuid]);
 
   return entity;
 }
