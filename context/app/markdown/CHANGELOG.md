@@ -1,3 +1,8 @@
+## v0.0.55 - 2020-08-20
+
+- Fix issue where a null token was being used in requests when not logged in.
+
+
 ## v0.0.54 - 2020-08-19
 
 - Use the same metadata table as with datasets.

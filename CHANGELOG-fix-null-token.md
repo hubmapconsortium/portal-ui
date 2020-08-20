@@ -1,1 +1,0 @@
-- Fix issue where a null token was being used in requests when not logged in.
