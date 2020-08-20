@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { readCookie } from './functions';
+import { getAuthHeaderIfNexusTokenCookieExists } from './functions';
 
 function LookupEntity(props) {
   const { uuid, elasticsearchEndpoint } = props;
   const [entity, setEntity] = React.useState(undefined);
+  const authHeader = getAuthHeaderIfNexusTokenCookieExists();
   React.useEffect(() => {
     async function getAndSetEntity() {
-      const nexus_token = readCookie('nexus_token');
       const response = await fetch(elasticsearchEndpoint, {
         method: 'POST',
         body: JSON.stringify({ query: { ids: { values: [uuid] } } }),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${nexus_token}`,
+          ...authHeader,
         },
       });
       if (!response.ok) {
@@ -26,7 +26,7 @@ function LookupEntity(props) {
       setEntity(resultEntity);
     }
     getAndSetEntity();
-  }, [elasticsearchEndpoint, uuid]);
+  }, [authHeader, elasticsearchEndpoint, uuid]);
 
   return React.cloneElement(props.children, { entity });
 }
