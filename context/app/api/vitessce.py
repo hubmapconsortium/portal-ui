@@ -349,7 +349,8 @@ class Vitessce:
     def _build_seqfish_conf(self, found_images, conf):
         is_valid_directory = all([re.fullmatch(SEQFISH_REGEX, file) for file in found_images])
         if not is_valid_directory:
-            raise Exception("Directory structure for seqFish is incorrect")
+            print(f'Directory structure for seqFish dataset {self.uuid} invalid')
+            return []
         # Get all files grouped by PosN names.
         images_by_pos = _group_by_file_name(found_images)
         # Get Hybridization per paths grouped by Pos.
