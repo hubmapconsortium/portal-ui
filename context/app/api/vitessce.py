@@ -239,6 +239,10 @@ def _group_by_file_name(files):
     return [list(g) for _, g in groupby(sorted_files, _get_path_name)]
 
 
+def _get_hybcycle(image):
+    return re.search(SEQFISH_HYB_CYCLE_REGEX, image)[0]
+
+
 class Vitessce:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
@@ -349,12 +353,13 @@ class Vitessce:
     def _build_seqfish_conf(self, found_images, conf):
         is_valid_directory = all([re.fullmatch(SEQFISH_REGEX, file) for file in found_images])
         if not is_valid_directory:
-            raise Exception("Directory structure for seqFish is incorrect")
+            print(f'Directory structure for seqFish dataset {self.uuid} invalid')
+            return []
         # Get all files grouped by PosN names.
         images_by_pos = _group_by_file_name(found_images)
         # Get Hybridization per paths grouped by Pos.
         hyb_cycles_per_pos = [
-            sorted([re.search(SEQFISH_HYB_CYCLE_REGEX, image)[0] for image in images])
+            sorted([_get_hybcycle(image) for image in images])
             for images in images_by_pos
         ]
         confs = []
@@ -363,7 +368,8 @@ class Vitessce:
             new_conf = copy.deepcopy(conf)
             layers = [
                 self._build_multi_file_image_layer_conf(
-                    images, hyb_cycles_per_pos[i]
+                    # Images and hybridization cycles need to be in the same order.
+                    sorted(images, key=_get_hybcycle), hyb_cycles_per_pos[i]
                 )
             ]
             new_conf["layers"] = layers

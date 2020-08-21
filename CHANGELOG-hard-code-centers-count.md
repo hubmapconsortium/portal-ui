@@ -1,1 +1,0 @@
-- Hard code centers count in home page data summary to 5.

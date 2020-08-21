@@ -53,7 +53,7 @@ function Header() {
           )}
           {shouldDisplayMenu && <Spacer />}
           {/* eslint-disable-next-line no-undef */}
-          <LoginButton isAuthenticated={isAuthenticated} />
+          <LoginButton isAuthenticated={isAuthenticated} nexusToken={nexus_token} />
         </Toolbar>
       </Container>
     </StyledAppBar>

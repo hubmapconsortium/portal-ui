@@ -1,3 +1,12 @@
+## v0.0.56 - 2020-08-21
+
+- Fix seqFish hybcycles issue where wrong cycle is displayed.
+- Don't show 500 on seqFish error - instead show no visualization.
+- Hard code centers count in home page data summary to 5.
+- Get nexus token for search and dev search pages from flask.
+- Update donor search facets to reflect current strings.
+
+
 ## v0.0.55 - 2020-08-20
 
 - Fix issue where a null token was being used in requests when not logged in.
