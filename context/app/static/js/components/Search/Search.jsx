@@ -1,6 +1,5 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { readCookie } from 'js/helpers/functions';
 import LookupEntity from 'js/helpers/LookupEntity';
 import SearchWrapper from './SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fallbackConfig } from './config';
@@ -28,10 +27,11 @@ const { searchParams } = new URL(document.location);
 const type = (searchParams.get('entity_type[0]') || '').toLowerCase();
 const hasAncestorParam = searchParams.has('ancestor_ids[0]');
 
-const nexus_token = readCookie('nexus_token');
-const httpHeaders = nexus_token
+// eslint-disable-next-line no-undef
+const nexusToken = nexus_token || '';
+const httpHeaders = nexusToken
   ? {
-      Authorization: `Bearer ${nexus_token}`,
+      Authorization: `Bearer ${nexusToken}`,
     }
   : {};
 const resultFields = resultFieldsByType[type];
@@ -55,7 +55,7 @@ const searchProps = {
   filters: filtersByType[type],
   hiddenFilterIds: hiddenFilters.map((hiddenFilter) => hiddenFilter.props.id),
   queryFields: ['everything'],
-  isLoggedIn: Boolean(nexus_token),
+  isLoggedIn: Boolean(nexusToken),
 };
 
 function Search(props) {

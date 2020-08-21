@@ -2,15 +2,15 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { ExistsQuery, BoolMustNot } from 'searchkit';
 
-import { readCookie } from 'js/helpers/functions';
 import SearchWrapper from './SearchWrapper';
 // eslint-disable-next-line import/named
 import { field, filter, checkboxFilter } from './utils';
 
-const nexus_token = readCookie('nexus_token');
-const httpHeaders = nexus_token
+// eslint-disable-next-line no-undef
+const nexusToken = nexus_token || '';
+const httpHeaders = nexusToken
   ? {
-      Authorization: `Bearer ${nexus_token}`,
+      Authorization: `Bearer ${nexusToken}`,
     }
   : {};
 
@@ -45,7 +45,7 @@ const searchProps = {
     checkboxFilter('no_files', 'Not Spatially Located (CCF)?', BoolMustNot(ExistsQuery('rui_location'))),
   ],
   queryFields: ['everything'],
-  isLoggedIn: Boolean(nexus_token),
+  isLoggedIn: Boolean(nexusToken),
 };
 
 function DevSearch(props) {
