@@ -78,6 +78,7 @@ function Routes(props) {
     );
   }
   /* eslint-enable no-undef */
+
   if (urlPath.startsWith('/preview')) {
     return <Preview title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />;
   }
