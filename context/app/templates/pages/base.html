@@ -11,6 +11,7 @@
     <title>{% block title_text %}{% endblock %} | HuBMAP</title>
     <script>
       const isAuthenticated = {{ 'true' if is_authenticated else 'false' }};
+      const nexus_token = {{ nexus_token if nexus_token else 'false' }} || '';
     </script>
   </head>
 
