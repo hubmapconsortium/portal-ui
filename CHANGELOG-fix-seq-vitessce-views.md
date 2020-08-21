@@ -1,0 +1,1 @@
+- Fix seq vitessce views.

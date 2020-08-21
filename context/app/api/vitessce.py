@@ -103,10 +103,11 @@ IMAGE_PYRAMID = "image_pyramid"
 SCRNA_SEQ_10X = "salmon_rnaseq_10x"
 SCRNA_SEQ_SCI = "salmon_rnaseq_sciseq"
 SCRNA_SEQ_SNARE = "salmon_rnaseq_snareseq"
+SCRNA_SEQ_SN = "salmon_sn_rnaseq_10x"
 
 SCATAC_SEQ_SCI = "sc_atac_seq_sci"
 SCATAC_SEQ_SNARE = "sc_atac_seq_snare"
-SCATAC_SEQ_SN = "sc_atac_seq_sn"
+SCATAC_SEQ_SN = "sn_atac_seq"
 
 SCRNA_SEQ_BASE_PATH = "cluster-marker-genes/output/cluster_marker_genes"
 SCATAC_SEQ_BASE_PATH = "output"
@@ -162,6 +163,7 @@ SCATAC_SEQ_CONFIG = {
 
 ASSAY_CONF_LOOKUP = {
     SCRNA_SEQ_10X: SCRNA_SEQ_CONFIG,
+    SCRNA_SEQ_SN: SCRNA_SEQ_CONFIG,
     SCRNA_SEQ_SCI: SCRNA_SEQ_CONFIG,
     SCATAC_SEQ_SCI: SCATAC_SEQ_CONFIG,
     SCRNA_SEQ_SNARE: SCRNA_SEQ_CONFIG,
