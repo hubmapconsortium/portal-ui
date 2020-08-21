@@ -49,7 +49,8 @@ def create_app(testing=False):
     @app.context_processor
     def inject_template_globals():
         return {
-            'is_authenticated': session.get('is_authenticated')
+            'is_authenticated': session.get('is_authenticated'),
+            'nexus_token': session.get('nexus_token')
         }
 
     @app.before_request

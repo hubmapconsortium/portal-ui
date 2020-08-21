@@ -1,0 +1,1 @@
+- Get nexus token for search and dev search pages from flask.
