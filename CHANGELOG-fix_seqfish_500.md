@@ -1,0 +1,1 @@
+- Don't show 500 on seqFish error - instead show no visualization.
