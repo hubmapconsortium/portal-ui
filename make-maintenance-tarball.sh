@@ -13,4 +13,5 @@ cd app/static/js/maintenance/
 
 tar -czvf "$TAR_GZ" public
 mv "$TAR_GZ" public
-echo "${green}Send $TAR_GZ in context/app/static/js/maintenance/public to Bill.$reset" 
+echo "${green}Send $TAR_GZ in $PWD/public to Bill.$reset" 
+# TODO: Add `aws s3 cp` to this script, and give Bill the URL.
