@@ -1,0 +1,1 @@
+- Simplify the README, and put the important parts at the top.
