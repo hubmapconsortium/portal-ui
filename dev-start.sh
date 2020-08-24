@@ -4,6 +4,9 @@ trap 'jobs -p | xargs kill' EXIT
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
+[ `git config --get submodule.recurse` == 'true' ] \
+  || die "To update submodules automatically: git config --global submodule.recurse true";
+
 CONTEXT=context
 pip install -r $CONTEXT/requirements.txt > /dev/null
 
