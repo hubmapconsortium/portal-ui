@@ -1,14 +1,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { resolve } = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
 const config = {
   entry: { main: './app/static/js/index.jsx' },
   output: {
     path: resolve('./app/static/public'),
     publicPath: `${resolve('/static/public/')}/`,
-    filename: '[name].bundle.js',
-    chunkFilename: '[name].bundle.js',
+    filename: '[name].bundle.[hash].js',
+    chunkFilename: '[name].bundle.[hash].js',
   },
   optimization: {
     splitChunks: {
@@ -49,14 +50,6 @@ const config = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-          },
-        ],
-      },
-      {
         test: /\.s[ac]ss$/i,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
@@ -84,7 +77,7 @@ const config = {
       },
     ],
   },
-  plugins: [new CleanWebpackPlugin()],
+  plugins: [new CleanWebpackPlugin(), new ManifestPlugin({ writeToFileEmit: true })],
 };
 
 module.exports = config;
