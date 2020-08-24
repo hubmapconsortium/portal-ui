@@ -2,8 +2,8 @@
 // eslint-disable-next-line import/named
 import { filter, rangeFilter, field } from './utils';
 
-const bmiField = 'body_mass_index_in_kg_m_2';
-const ageField = 'age_in_years';
+const bmiField = 'body_mass_index_value';
+const ageField = 'age_value';
 
 function makeDonorMetadataFilters(isDonor) {
   const pathPrefix = isDonor ? '' : 'donor.';
