@@ -1,7 +1,13 @@
 import React from 'react';
+import HeaderAppBar from 'js/components/Header/HeaderAppBar';
+import { HubmapLogo } from 'js/components/Header/HeaderContent/style';
 
 function MaintenanceHeader() {
-  return <div>Header</div>;
+  return (
+    <HeaderAppBar>
+      <HubmapLogo />
+    </HeaderAppBar>
+  );
 }
 
 export default MaintenanceHeader;
