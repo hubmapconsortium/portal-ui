@@ -35,10 +35,10 @@ export const donorConfig = {
 export const sampleConfig = {
   filters: [filter('origin_sample.mapped_organ', 'Organ'), filter('mapped_specimen_type', 'Specimen Type')]
     .concat(makeDonorMetadataFilters(false))
-    .concat([filter('donor.group_name', 'Group'), filter('created_by_user_displayname', 'Creator')]),
+    .concat([filter('group_name', 'Group'), filter('created_by_user_displayname', 'Creator')]),
   fields: [
     field('display_doi', 'Sample'),
-    field('donor.group_name', 'Group'),
+    field('group_name', 'Group'),
     field('mapped_specimen_type', 'Speciment Type'),
     field('origin_sample.mapped_organ', 'Organ'),
     field('mapped_last_modified_timestamp', 'Last Modified'),
@@ -54,10 +54,10 @@ export const datasetConfig = {
     filter('mapped_data_access_level', 'Access Level'),
   ]
     .concat(makeDonorMetadataFilters(false))
-    .concat([filter('donor.group_name', 'Group'), filter('created_by_user_displayname', 'Creator')]),
+    .concat([filter('group_name', 'Group'), filter('created_by_user_displayname', 'Creator')]),
   fields: [
     field('display_doi', 'Dataset'),
-    field('donor.group_name', 'Group'),
+    field('group_name', 'Group'),
     field('mapped_data_types', 'Data Types'),
     field('origin_sample.mapped_organ', 'Organ'),
     field('mapped_status', 'Status'),
