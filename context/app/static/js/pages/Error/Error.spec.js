@@ -23,3 +23,9 @@ test('should display maintenance titles', () => {
   expect(screen.getByText('Portal Maintenance')).toBeInTheDocument();
   expect(screen.getByText('Portal unavailable for scheduled maintenance.')).toBeInTheDocument();
 });
+
+test('should display titles for unexpected error codes', () => {
+  render(<Error errorCode={502} />);
+  expect(screen.getByText('Unexpected Error')).toBeInTheDocument();
+  expect(screen.getByText('502', { exact: false })).toBeInTheDocument();
+});
