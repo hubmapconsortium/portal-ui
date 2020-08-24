@@ -77,10 +77,7 @@ const config = {
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({ template: `${maintenancePath}/index.html` }),
-    new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
-  ],
+  plugins: [new HtmlWebpackPlugin({ template: `${maintenancePath}/index.html` }), new CleanWebpackPlugin()],
 };
 
 module.exports = config;
