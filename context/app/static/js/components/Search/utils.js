@@ -62,8 +62,7 @@ export function resultFieldsToSortOptions(fields) {
       // No such suffix is necessary (or allowed) for numeric fields.
       // https://www.elastic.co/blog/strings-are-dead-long-live-strings
       //
-      // So: If there are more numeric fields, remember to update the regex!
-      const isNumeric = f.id.match(/\.(age|bmi|size)$/);
+      const isNumeric = f.id.match(/(_value|\.size)$/);
       const base = {
         defaultOption: false,
         label: f.name,
