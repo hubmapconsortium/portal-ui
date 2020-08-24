@@ -1,9 +1,9 @@
 import React from 'react';
-import { getAuthHeaderIfNexusTokenCookieExists } from 'js/helpers/functions';
+import { useGetAuthHeaderIfNexusTokenCookieExists } from './useGetAuthHeaderIfTokenExists';
 
 function useEntityData(uuid, elasticsearchEndpoint) {
   const [entity, setEntity] = React.useState(undefined);
-  const authHeader = getAuthHeaderIfNexusTokenCookieExists();
+  const authHeader = useGetAuthHeaderIfNexusTokenCookieExists();
   React.useEffect(() => {
     async function getAndSetEntity() {
       const response = await fetch(elasticsearchEndpoint, {
