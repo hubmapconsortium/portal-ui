@@ -1,3 +1,12 @@
+## v0.1.2 - 2020-08-24
+
+- Fix seq vitessce views.
+- Use the dataset's own group, not the donor's.
+- Follow up to fix donor search, again.
+- Update donor search facets to reflect current strings.
+- Upgrade vitessce to 0.2.4, giving us auto-adjusting sliders.
+
+
 ## v0.1.1 - 2020-08-24
 
 - Fix "BioMedical" capitalization.
