@@ -1,4 +1,7 @@
-from .vitessce import Vitessce, _group_by_file_name
+import requests
+from yaml import safe_load as load_yaml
+
+from .vitessce import Vitessce, _group_by_file_name, SC_DATA_TYPES
 
 TEST_ENTITY_CODEX = {
     "data_types": ["codex_cytokit"],
@@ -31,6 +34,9 @@ TEST_UUID = "uuid"
 TEST_PATH_TIFF = "path/to/example.ome.tiff"
 
 MOCK_URL = "https://example.com"
+
+SEARCH_SCHEMA_ASSAYS = 'https://raw.githubusercontent.com/hubmapconsortium/search-api'\
+    '/master/src/search-schema/data/definitions/enums/assay_types.yaml'
 
 
 def test_build_image_schema():
@@ -89,3 +95,9 @@ def test_group_by_file_name():
     grouped = _group_by_file_name(data)
     # Grouped by file name.
     assert [['jazz/bar.js'], ['foo/bar.sh', 'zap/bar.sh'], ['jazz/not_bar.js']] == grouped
+
+
+def test_data_types():
+    res_search_assay_types = requests.get(SEARCH_SCHEMA_ASSAYS).text
+    search_assay_types = load_yaml(res_search_assay_types)
+    assert(all([assay in search_assay_types for assay in SC_DATA_TYPES]))

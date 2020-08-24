@@ -109,6 +109,11 @@ SCATAC_SEQ_SCI = "sc_atac_seq_sci"
 SCATAC_SEQ_SNARE = "sc_atac_seq_snare"
 SCATAC_SEQ_SN = "sn_atac_seq"
 
+SC_DATA_TYPES = [
+    SCRNA_SEQ_10X, SCRNA_SEQ_SCI, SCRNA_SEQ_SNARE, SCRNA_SEQ_SN,
+    SCATAC_SEQ_SCI, SCATAC_SEQ_SNARE, SCATAC_SEQ_SN
+]
+
 SCRNA_SEQ_BASE_PATH = "cluster-marker-genes/output/cluster_marker_genes"
 SCATAC_SEQ_BASE_PATH = "output"
 
