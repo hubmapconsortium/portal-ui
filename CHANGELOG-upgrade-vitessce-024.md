@@ -1,0 +1,1 @@
+- Upgrade vitessce to 0.2.4, giving us auto-adjusting sliders.
