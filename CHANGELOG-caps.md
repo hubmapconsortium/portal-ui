@@ -1,1 +1,0 @@
-- Fix "BioMedical" capitalization.

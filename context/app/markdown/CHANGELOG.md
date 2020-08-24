@@ -1,3 +1,11 @@
+## v0.1.1 - 2020-08-24
+
+- Fix "BioMedical" capitalization.
+- Fix provenance table request loop.
+- Simplify the README, and put the important parts at the top.
+- Increment the minor version number: Releases over the next two weeks will update the patch number.
+
+
 ## v0.0.56 - 2020-08-21
 
 - Fix seqFish hybcycles issue where wrong cycle is displayed.

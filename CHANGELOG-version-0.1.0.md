@@ -1,1 +1,0 @@
-- Increment the minor version number: Releases over the next two weeks will update the patch number.
