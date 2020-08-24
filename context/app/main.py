@@ -2,15 +2,17 @@ from flask import Flask, session, render_template
 
 from . import routes_main, routes_auth, routes_markdown, default_config
 
+def render_react_error(code):
+    return render_template('pages/base_react.html', flask_data={'errorCode': code}), code
 
 def bad_request(e):
     '''A 400 means the request to the API failed.'''
-    return render_template('pages/base_react.html', flask_data={'errorCode': 400}), 400
+    return render_react_error(400)
 
 
 def not_found(e):
     '''A 404 means Flask routing failed.'''
-    return render_template('pages/base_react.html', flask_data={'errorCode': 404}), 404
+    return render_react_error(404)
 
 
 def unauthorized(e):
@@ -20,12 +22,12 @@ def unauthorized(e):
     # We check group membership on login, which is a distinct 401,
     # with its own template.
     session.clear()
-    return render_template('pages/base_react.html', flask_data={'errorCode': 401}), 401
+    return render_react_error(401)
 
 
 def gateway_timeout(e):
     '''A 504 means the API has timed out.'''
-    return render_template('pages/base_react.html', flask_data={'errorCode': 504}), 504
+    return render_react_error(504)
 
 
 def create_app(testing=False):
