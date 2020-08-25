@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "artillery": "^1.6.1",
     "cypress": "^4.7.0"
   },
   "scripts": {
