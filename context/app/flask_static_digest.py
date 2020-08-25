@@ -1,8 +1,8 @@
 import json
 import os
 
-
 from flask import url_for as flask_url_for
+
 
 class FlaskStaticDigest(object):
     def __init__(self, app=None):
@@ -12,7 +12,7 @@ class FlaskStaticDigest(object):
             self.init_app(app)
 
     def init_app(self, app):
-        self.manifest_path = os.path.join(app.static_folder,"public/","manifest.json")
+        self.manifest_path = os.path.join(app.static_folder, "public/", "manifest.json")
         self.has_manifest = os.path.exists(self.manifest_path)
 
         self.manifest = {}
@@ -45,8 +45,8 @@ class FlaskStaticDigest(object):
             temp_filename = filename
         else:
             temp_filename = self.manifest.get(filename).split('/')[-1]
-            
-        new_filename["filename"] =  "/".join(["public", temp_filename])
+
+        new_filename["filename"] = "/".join(["public", temp_filename])
         merged_values = {**values, **new_filename}
 
         return flask_url_for(endpoint, **merged_values)

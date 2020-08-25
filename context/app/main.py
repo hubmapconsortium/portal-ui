@@ -38,7 +38,7 @@ def create_app(testing=False):
     else:
         # We should not load the gitignored app.conf during tests.
         app.config.from_pyfile('app.conf')
-    
+
     flask_static_digest.init_app(app)
 
     app.register_blueprint(routes_main.blueprint)
