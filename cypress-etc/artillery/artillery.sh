@@ -14,12 +14,14 @@ mkdir outputs || echo 'outputs/ already exists...'
 rm outputs/* || echo 'outputs/ already empty...'
 
 for TARGET in scenarios/*.yml; do
+  [[ TARGET == "skip-*" ]] && echo "Skip $TARGET" && continue
   BASE=`basename $TARGET`
-  for RATE in 1 5 10 15; do
+  for RATE in 1 5 10 15 20 25; do
     ZERO_PADDED=`printf "%02d" $RATE`
     export RATE
     ../node_modules/.bin/artillery \
       run $TARGET \
+      --insecure \
       --output outputs/$BASE-$ZERO_PADDED-per-second.json
   done
 done

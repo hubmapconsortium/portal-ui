@@ -1,5 +1,5 @@
 config:
-  target: 'https://search.api.hubmapconsortium.org'
+  target: 'https://search-api.stage.hubmapconsortium.org'
   phases:
     - duration: 5 # seconds
       arrivalRate: "{{ $processEnvironment.RATE }}" # scenarios started per second

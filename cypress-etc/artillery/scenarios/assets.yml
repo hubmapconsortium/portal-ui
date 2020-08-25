@@ -1,0 +1,30 @@
+config:
+  target: 'https://assets.stage.hubmapconsortium.org'
+  phases:
+    - duration: 5 # seconds
+      arrivalRate: "{{ $processEnvironment.RATE }}" # scenarios started per second
+  processor: "./helper.js"
+scenarios:
+  - flow:
+    - get:
+        url: "/83291f309f2f2855d8ec8167d913a25e/ometiff-pyramids/ometiffs/VAN0013-LK-202-96-IMS_PosMode_multilayer.ome.tif"
+        headers:
+          'Range': 'bytes=0-65535'
+          'TE': 'Trailers'
+        gzip: true
+        afterResponse: "printStatus"
+    - get:
+        url: "/83291f309f2f2855d8ec8167d913a25e/ometiff-pyramids/ometiffs/VAN0013-LK-202-96-IMS_PosMode_multilayer.ome.tif"
+        headers:
+          'Range': 'bytes=32571392-32636927'
+          'TE': 'Trailers'
+        gzip: true
+        afterResponse: "printStatus"
+    - get:
+        url: "/83291f309f2f2855d8ec8167d913a25e/ometiff-pyramids/ometiffs/VAN0013-LK-202-96-IMS_PosMode_multilayer.ome.tif"
+        headers:
+          'Range': 'bytes=34996224-35127295'
+          'TE': 'Trailers'
+        gzip: true
+        afterResponse: "printStatus"
+        
