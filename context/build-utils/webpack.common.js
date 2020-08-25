@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { resolve } = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
 
 const config = {
   entry: { main: './app/static/js/index.jsx' },
@@ -75,7 +74,7 @@ const config = {
       },
     ],
   },
-  plugins: [new CleanWebpackPlugin(), new ManifestPlugin()],
+  plugins: [new CleanWebpackPlugin()],
 };
 
 module.exports = config;
