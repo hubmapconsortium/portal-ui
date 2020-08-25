@@ -1,8 +1,8 @@
 config:
   target: 'https://search.api.hubmapconsortium.org'
   phases:
-    - duration: 1
-      arrivalRate: 1
+    - duration: 5 # seconds
+      arrivalRate: 5 # scenarios started per second
   processor: "./helper.js"
 scenarios:
   - flow:
@@ -10,11 +10,21 @@ scenarios:
         url: "/portal/search"
         headers:
           'Content-Type': application/json
-        body: "{{ $processEnvironment.HOME_PAGE_DATA_TYPES }}"
+        body: "{{ $processEnvironment.DATA_TYPES_QUERY }}"
+        gzip: true
         afterResponse: "printStatus"
     - post:
         url: "/portal/search"
         headers:
           'Content-Type': application/json
-        body: "{{ $processEnvironment.HOME_PAGE_ENTITY_TYPES }}"
+        body: "{{ $processEnvironment.ENTITY_TYPES_QUERY }}"
+        gzip: true
+        afterResponse: "printStatus"
+    - post:
+        url: "/portal/search"
+        headers:
+          'Content-Type': application/json
+          'Authorization': "Bearer {{ $processEnvironment.NEXUS_TOKEN }}"
+        body: "{{ $processEnvironment.DATASETS_QUERY }}"
+        gzip: true
         afterResponse: "printStatus"
