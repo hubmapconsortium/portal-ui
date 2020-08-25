@@ -8,8 +8,6 @@ const config = {
   output: {
     path: resolve('./app/static/public'),
     publicPath: `${resolve('/static/public/')}/`,
-    filename: '[name].bundle.[hash].js',
-    chunkFilename: '[name].bundle.[hash].js',
   },
   optimization: {
     splitChunks: {
@@ -77,7 +75,7 @@ const config = {
       },
     ],
   },
-  plugins: [new CleanWebpackPlugin(), new ManifestPlugin({ writeToFileEmit: true })],
+  plugins: [new CleanWebpackPlugin(), new ManifestPlugin()],
 };
 
 module.exports = config;
