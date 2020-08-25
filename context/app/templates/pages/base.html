@@ -29,8 +29,8 @@
     </div>
     <footer id="react-footer"></footer>
 
-    <script src="{{ webpack_url_for('main.js') }}"></script>
-    <script src="{{ webpack_url_for('vendors.js') }}"></script>
+    <script src="{{ static_url_for('static', filename='main.js') }}"></script>
+    <script src="{{ static_url_for('static', filename='vendors.js') }}"></script>
 
     {% block extra_scripts %}{% endblock %}
   </body>
