@@ -25,7 +25,7 @@ function MetadataTable(props) {
 
   const tableRows = Object.entries(tableData).map((entry) => ({
     key: entry[0],
-    value: entry[1].toString(),
+    value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
     description: metadataFieldDescriptions[entry[0]],
   }));
 

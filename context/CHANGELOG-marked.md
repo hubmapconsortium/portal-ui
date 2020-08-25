@@ -1,0 +1,3 @@
+- Use the `marked` markdown engine, primarily because it generates IDs for headings so they can be linked.
+- Tidy up Markdown CSS.
+- Unify Markdown and Preview code.

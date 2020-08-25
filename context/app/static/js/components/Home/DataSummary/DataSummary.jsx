@@ -13,7 +13,7 @@ function DataSummary(props) {
         <DataSummaryItem
           icon={CenterIcon}
           label="Centers"
-          value={summaryData.centerCount}
+          value={5}
           href="https://hubmapconsortium.org/funded-research-tmc/"
         />
         <DataSummaryItem
@@ -46,7 +46,6 @@ DataSummary.propTypes = {
     datasetCount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     sampleCount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     donorCount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    centerCount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }).isRequired,
 };
 

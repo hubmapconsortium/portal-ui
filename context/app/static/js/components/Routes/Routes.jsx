@@ -67,10 +67,11 @@ function Routes(props) {
     return <Home elasticsearchEndpoint={endpoints.elasticsearchEndpoint} />;
   }
 
+  /* eslint-disable no-undef */
   if (urlPath.startsWith('/search')) {
     return (
       <Container maxWidth="lg">
-        <Search elasticsearchEndpoint={endpoints.elasticsearchEndpoint} title={title} />
+        <Search elasticsearchEndpoint={endpoints.elasticsearchEndpoint} title={title} nexusToken={nexus_token} />
       </Container>
     );
   }
@@ -78,10 +79,11 @@ function Routes(props) {
   if (urlPath.startsWith('/dev-search')) {
     return (
       <Container maxWidth="lg">
-        <DevSearch elasticsearchEndpoint={endpoints.elasticsearchEndpoint} />
+        <DevSearch elasticsearchEndpoint={endpoints.elasticsearchEndpoint} nexusToken={nexus_token} />
       </Container>
     );
   }
+  /* eslint-enable no-undef */
 
   if (urlPath.startsWith('/preview')) {
     return <Preview title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />;

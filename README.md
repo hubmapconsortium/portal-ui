@@ -28,36 +28,15 @@ If you need to work on the code in a submodule, I would encourage you to do that
 in a separate top-level checkout. You certainly can push changes from inside
 a submodule, but it just gets more confusing.
 
-## Local demo using Docker
-To build and run:
-```sh
-./docker.sh 5001 --follow
-```
-You will need Globus keys to login to the demo. The base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
-
-A [simple demonstration](compose/) of how the NGINX reverse proxy works in Docker Compose.
-
 ## Development
-Please install both eslint and prettier plugins for your IDE of choice.
+Please install both eslint and prettier plugins for your IDE.
 
 After checking out the project, cd-ing into it, and setting up a Python3.7 virtual environment,
+- Get `app.conf` from another developer and place it at `context/instance/app.conf`.
+- Run `./dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
 
-- in the `context/` directory
-    - `npm install`
-    - `wget https://raw.githubusercontent.com/hubmapconsortium/prov-vis/master/src/schema.json -O node_modules/@hubmap/prov-vis/es/schema.json`
-    - (Note: Error with @hubmap-prov-vis dependency. Manually add
-    the schema.json until [this issue is resolved](https://github.com/hubmapconsortium/portal-ui/issues/139).)
-- in the root project directory
-    - Get `app.conf` from another developer and place it at `context/instance/app.conf`.
-    - Run `./dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
-
-### Development servers
-The webpack dev server serves all files within the public directory and provides hot module replacement for the react application.
+The webpack dev server serves all files within the public directory and provides hot module replacement for the react application;
 The webpack dev server proxies all requests outside of those for files in the public directory to the flask server.
-
-### Webpack bundle inspection
-To view visualizations of the production webpack bundle run `npm run build:analyze`.
-The script will generate two files, report.html and stats.html, inside the public directory each showing a different visual representation of the bundle.
 
 ### React File Structure
 - Components with tests or styles should be placed in to their own directory.
@@ -68,44 +47,60 @@ The script will generate two files, report.html and stats.html, inside the publi
 
 ### Changelog files
 Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
-These are concatenated by push.sh.
+These are concatenated by `push.sh`.
 
 ## Testing
 [`test.sh`](test.sh) wraps all the tests and is run on Travis.
-Low-level unit tests are in python (`pytest -vv`),
-while end-to-end tests use [Cypress](https://docs.cypress.io/guides/overview/why-cypress.html) (`npm run cypress:open`).
+Python unit tests use Pytest, front end tests use Jest, an end-to-end tests use Cypress.
+Look at the source code of the script to see how to run a particular set of tests.
 
-## Linting
-In the `context/` directory, the following commands can find and fix eslint problems:
+### Linting and pre-commit hooks
+In addition, `test.sh` lints the codebase, and to save time, we also lint in a pre-commit hook.
+If you want to bypass the hook, set `HUSKY_SKIP_HOOKS=1`.
+
+You can also lint and auto-correct from the command-line:
 ```
 npm run lint
 npm run lint:fix
 ```
 
-## Pre-commit hooks
-We use pre-commit hooks to improve code quality and catch errors early on.
-If you need to bypass the pre-commit hooks, you can prepend your git command with `HUSKY_SKIP_HOOKS=1`.
+## Build, tag, and deploy
+We plan to release new images Mondays and Wednesdays, and these are deployed to production the following day. [More details](https://docs.google.com/document/d/1Vto1RYRCG6w3z9PtgEFCWv2GCSLPgBT3p_7n-5udpgo/edit#heading=h.4ddr60vky5f).
 
-## Buid, tag, and deploy
 To build a new image for [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
-and tag a release for github, just run:
+and tag a release on github, just run:
 ```
 ./push.sh
 ```
-and merge the release branch to master in github.
 
-Then, to redeploy `dev` and `test`:
+Then, to redeploy `dev`, `test`, and `stage`:
 ```
 # PSC will need a ssh public key for USERNAME.
 ./redeploy.sh $USERNAME dev
 ./redeploy.sh $USERNAME test
+./redeploy.sh $USERNAME stage
 ```
+
+IEC is responsible for deploying to production.
+
+### Understanding the build
+
+To view visualizations of the production webpack bundle run `npm run build:analyze`.
+The script will generate two files, report.html and stats.html, inside the public directory each showing a different visual representation of the bundle.
+
+To build and run the docker image locally:
+```sh
+./docker.sh 5001 --follow
+```
+Our base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
+
+In the deployments, our container is behind a NGINX reverse reproxy;
+Here's a [simple demonstration](compose/) of how that works.
 
 ## Related projects and dependencies
 
-Javascript / React UI components:
+Javascript:
 - [`vitessce`](https://github.com/hubmapconsortium/vitessce): Visual integration tool for exploration of spatial single-cell experiments. Built on top of [deck.gl](https://deck.gl/).
-- [`prov-vis`](https://github.com/hubmapconsortium/prov-vis): Wrapper for [`4dn-dcic/react-workflow-viz`](https://github.com/4dn-dcic/react-workflow-viz) provenance visualization.
 
 Preprocessing:
 - [`portal-containers`](https://github.com/hubmapconsortium/portal-containers): Docker containers for visualization preprocessing.

@@ -13,7 +13,7 @@ describe('portal-ui', () => {
     it('handles click-through', () => {
       // Homepage
       cy.visit('/');
-      cy.contains('Human Biomolecular Atlas Program');
+      cy.contains('Human BioMolecular Atlas Program');
     
       // Donors
       cy.contains('Donors');

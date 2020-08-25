@@ -1,17 +1,17 @@
 import React from 'react';
-import { readCookie } from 'js/helpers/functions';
+import { getAuthHeaderIfNexusTokenCookieExists } from 'js/helpers/functions';
 
 function useEntityData(uuid, elasticsearchEndpoint) {
   const [entity, setEntity] = React.useState(undefined);
   React.useEffect(() => {
     async function getAndSetEntity() {
-      const nexus_token = readCookie('nexus_token');
+      const authHeader = getAuthHeaderIfNexusTokenCookieExists();
       const response = await fetch(elasticsearchEndpoint, {
         method: 'POST',
         body: JSON.stringify({ query: { ids: { values: [uuid] } } }),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${nexus_token}`,
+          ...authHeader,
         },
       });
       if (!response.ok) {

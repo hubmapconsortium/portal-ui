@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 
 import {
   SearchkitManager,
@@ -25,9 +22,11 @@ import {
 import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
 // There is more in the name space, but we only need the filterTypes.
 
+import SortingTableHead from './SortingTableHead';
 import { resultFieldsToSortOptions } from './utils';
-import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell, StyledTableRow, StyledTableCell } from './style';
+import { StyledTableBody, StyledTableRow, StyledTableCell } from './style';
 import './Search.scss';
+import * as filterPropTypes from './filterPropTypes';
 
 function getByPath(nested, field) {
   const path = field.id;
@@ -50,71 +49,38 @@ function getByPath(nested, field) {
   return current;
 }
 
-function getOrder(orderPair, selectedItems) {
-  if (selectedItems.length > 1) {
-    console.warn('Expected only a single sort, not:', selectedItems);
-  }
-  const selectedItem = selectedItems.length ? selectedItems[0] : undefined;
-  const match = orderPair.filter((item) => item.key === selectedItem);
-  return match.length ? match[0].order : undefined;
-}
-
-function getOrderIcon(order) {
-  if (order === 'asc') return <ArrowUpOn />;
-  if (order === 'desc') return <ArrowDownOn />;
-  return <ArrowDownOff />;
-}
-
-function SortingTableHead(props) {
-  const { items, toggleItem, selectedItems } = props;
-  const pairs = [];
-  for (let i = 0; i < items.length; i += 2) {
-    const pair = items.slice(i, i + 2);
-    pairs.push(pair);
-    if (pair[0].label !== pair[1].label || pair[0].field !== pair[1].field) {
-      console.warn('Expected pair.label and .field to match', pair);
-    }
-  }
-  return (
-    <TableHead>
-      <TableRow>
-        {pairs.map((pair) => {
-          const order = getOrder(pair, selectedItems);
-          return (
-            <StyledHeaderCell
-              role="button"
-              key={pair[0].key}
-              onClick={() => {
-                toggleItem(pair[order && order === pair[0].order ? 1 : 0].key);
-              }}
-            >
-              {pair[0].label} {getOrderIcon(order)}
-            </StyledHeaderCell>
-          );
-        })}
-      </TableRow>
-    </TableHead>
-  );
-}
-
 function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
   return function ResultsTableBody(props) {
     const { hits } = props;
-    /* eslint-disable no-underscore-dangle */
+    /* eslint-disable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
     return (
-      <TableBody>
+      <>
         {hits.map((hit) => (
-          <StyledTableRow key={hit._id}>
-            {resultFields.map((field) => (
-              <StyledTableCell key={field.id}>
-                <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
-              </StyledTableCell>
-            ))}
-          </StyledTableRow>
+          <StyledTableBody key={hit._id}>
+            <StyledTableRow className={'highlight' in hit && 'before-highlight'}>
+              {resultFields.map((field) => (
+                <StyledTableCell key={field.id}>
+                  <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
+                </StyledTableCell>
+              ))}
+            </StyledTableRow>
+            {'highlight' in hit && (
+              <StyledTableRow className="highlight">
+                <StyledTableCell colSpan={resultFields.length}>
+                  <a
+                    href={detailsUrlPrefix + hit._source[idField]}
+                    dangerouslySetInnerHTML={{
+                      __html: hit.highlight.everything.join(' ... '),
+                    }}
+                  />
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </StyledTableBody>
         ))}
-      </TableBody>
+      </>
     );
-    /* eslint-enable no-underscore-dangle */
+    /* eslint-enable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
   };
 }
 
@@ -145,7 +111,7 @@ function SearchWrapper(props) {
         <Filter {...def.props} />
       </div>
     );
-    /* eslint-enable */
+    /* eslint-enable react/jsx-props-no-spreading */
   });
 
   return (
@@ -171,6 +137,9 @@ function SearchWrapper(props) {
               hitsPerPage={hitsPerPage}
               listComponent={makeTableBodyComponent(resultFields, detailsUrlPrefix, idField)}
               sourceFilter={resultFieldIds}
+              customHighlight={{
+                fields: { everything: { type: 'plain' } },
+              }}
             />
           </Table>
           <NoHits
@@ -185,43 +154,14 @@ function SearchWrapper(props) {
   );
 }
 
-const refinementListPropTypes = PropTypes.exact({
-  type: PropTypes.oneOf(['RefinementListFilter']).isRequired,
-  props: PropTypes.exact({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    field: PropTypes.string.isRequired,
-    operator: PropTypes.string.isRequired,
-    size: PropTypes.number.isRequired,
-  }),
-});
-
-const rangeFilterPropTypes = PropTypes.exact({
-  type: PropTypes.oneOf(['RangeFilter']).isRequired,
-  props: PropTypes.exact({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    field: PropTypes.string.isRequired,
-    min: PropTypes.number.isRequired,
-    max: PropTypes.number.isRequired,
-    showHistogram: PropTypes.bool.isRequired,
-  }),
-});
-
-const checkboxFilterPropTypes = PropTypes.exact({
-  type: PropTypes.oneOf(['CheckboxFilter']).isRequired,
-  props: PropTypes.exact({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    filter: PropTypes.object.isRequired,
-  }),
-});
-
 SearchWrapper.propTypes = {
   apiUrl: PropTypes.string.isRequired,
   filters: PropTypes.arrayOf(
-    PropTypes.oneOfType([refinementListPropTypes, rangeFilterPropTypes, checkboxFilterPropTypes]),
+    PropTypes.oneOfType([
+      filterPropTypes.refinementListPropTypes,
+      filterPropTypes.rangeFilterPropTypes,
+      filterPropTypes.checkboxFilterPropTypes,
+    ]),
   ).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
@@ -264,3 +204,4 @@ SearchWrapper.defaultProps = {
 };
 
 export default SearchWrapper;
+export { getByPath }; // For tests

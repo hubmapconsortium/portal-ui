@@ -1,3 +1,47 @@
+## v0.1.1 - 2020-08-24
+
+- Fix "BioMedical" capitalization.
+- Fix provenance table request loop.
+- Simplify the README, and put the important parts at the top.
+- Increment the minor version number: Releases over the next two weeks will update the patch number.
+
+
+## v0.0.56 - 2020-08-21
+
+- Fix seqFish hybcycles issue where wrong cycle is displayed.
+- Don't show 500 on seqFish error - instead show no visualization.
+- Hard code centers count in home page data summary to 5.
+- Get nexus token for search and dev search pages from flask.
+- Update donor search facets to reflect current strings.
+
+
+## v0.0.55 - 2020-08-20
+
+- Fix issue where a null token was being used in requests when not logged in.
+
+
+## v0.0.54 - 2020-08-19
+
+- Use the same metadata table as with datasets.
+- Add tests for donor metadata component. (Older work, but we had missed the changelog.)
+- Tweak script to flag misplaced changelogs
+- Fix seqfish directories
+- Limit width of screenshots in preview. (Older work, but we had missed the changelog.)
+- Don't set an `Authorization` header when we don't have a nexus token. Public datasets are now visible without login.
+- Add tests for sample tissue component. (Older work, but we had missed the changelog.)
+- Setup tracking page views with Google Analytics. (Older work, but we had missed the changelog.)
+- Replace "gender" with "sex" in the donor facets.
+
+
+## v0.0.53 - 2020-08-17
+
+- Add tests and prop types for files components.
+- Move files components out of detail directory and into files directory within components.
+- Search is now aligned with title and header content. 
+- seqFISH data layout updated.
+- Show text search matches in context.
+
+
 ## v0.0.52 - 2020-08-12
 
 - Stub out ASCTB and make vitessce config optional in previews.

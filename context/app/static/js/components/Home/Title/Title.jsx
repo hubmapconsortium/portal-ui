@@ -5,7 +5,7 @@ function Title() {
   return (
     <>
       <Typography variant="h2" component="h1">
-        Human Biomolecular Atlas Program
+        Human BioMolecular Atlas Program
       </Typography>
       <Typography variant="h4" component="h3" color="secondary">
         An open, global atlas of the human body at the cellular level

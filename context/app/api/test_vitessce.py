@@ -1,4 +1,4 @@
-from .vitessce import Vitessce
+from .vitessce import Vitessce, _group_by_file_name
 
 TEST_ENTITY_CODEX = {
     "data_types": ["codex_cytokit"],
@@ -82,3 +82,10 @@ def test_build_layer_conf_empty():
     vitessce._build_vitessce_conf()
     conf = vitessce.conf
     assert conf == {}
+
+
+def test_group_by_file_name():
+    data = ['foo/bar.sh', 'zap/bar.sh', 'jazz/bar.js', 'jazz/not_bar.js']
+    grouped = _group_by_file_name(data)
+    # Grouped by file name.
+    assert [['jazz/bar.js'], ['foo/bar.sh', 'zap/bar.sh'], ['jazz/not_bar.js']] == grouped

@@ -1,6 +1,15 @@
 @import "~searchkit/theming/theme.scss";
 
 .sk-layout__body {
-    // Without this, there's too much space at the top.
+    // Default is too large:
+    margin-top: 16px;
+}
+
+.sk-layout__filters, .sk-layout__results {
+    // We want it flush on left and right:
     margin: 0px;
+}
+.sk-layout__filters {
+    // Spacing between filters and results:
+    margin-right: 16px;
 }
