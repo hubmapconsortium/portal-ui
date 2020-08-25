@@ -4,4 +4,3 @@ requests==2.22.0
 pyyaml==5.2
 python-datauri==0.2.8
 python-frontmatter==0.5.0
-Flask-Manage-Webpack==1.4.1
