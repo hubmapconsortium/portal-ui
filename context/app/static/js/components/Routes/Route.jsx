@@ -20,10 +20,12 @@ function Route({ children, mt, constrainWidth }) {
 
 Route.propTypes = {
   mt: PropTypes.bool,
+  constrainWidth: PropTypes.bool,
 };
 
 Route.defaultProps = {
   mt: false,
+  constrainWidth: false,
 };
 
 export default Route;
