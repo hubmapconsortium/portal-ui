@@ -12,7 +12,7 @@ function Error(props) {
   const { title, subtitle } = getErrorTitleAndSubtitle(errorCode, isMaintenancePage);
 
   return (
-    <Background>
+    <Background isMaintenancePage={isMaintenancePage}>
       <StyledPaper>
         <StyledTypography variant="h1" $mb={2}>
           {title}

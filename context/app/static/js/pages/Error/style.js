@@ -3,7 +3,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 const Background = styled.div`
-  background-color: ${(props) => props.theme.palette.error.main};
+  background-color: ${(props) =>
+    props.isMaintenancePage ? props.theme.palette.warning.main : props.theme.palette.error.main};
   width: 100%;
   display: flex;
   justify-content: center;

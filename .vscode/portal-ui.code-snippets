@@ -27,5 +27,13 @@
 
 		],
 		"description": "Basic imports needed for a javascript test"
+	},
+	"Import Styled Components": {
+		"prefix": "isc",
+		"body": [
+			"import styled from 'styled-components';",
+
+		],
+		"description": "Import styled-components"
 	}
 }
