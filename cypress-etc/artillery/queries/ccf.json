@@ -1,0 +1,18 @@
+{
+  "version": true,
+  "size": 10000,
+  "_source": {
+    "excludes": [
+      "donor",
+      "immediate_ancestors",
+      "immediate_descendants",
+      "origin_sample",
+      "ancestor_ids",
+      "descendant_ids"
+    ]
+  },
+  "stored_fields": ["*"],
+  "script_fields": {},
+  "docvalue_fields": [],
+  "query": { "exists": { "field": "rui_location" } }
+}

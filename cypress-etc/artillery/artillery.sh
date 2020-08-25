@@ -9,12 +9,12 @@ cd `dirname $0`
 export DATA_TYPES_QUERY=`cat queries/data-types.json`
 export ENTITY_TYPES_QUERY=`cat queries/entity-types.json`
 export DATASETS_QUERY=`cat queries/datasets.json`
+export CCF_QUERY=`cat queries/ccf.json`
 
 mkdir outputs || echo 'outputs/ already exists...'
 rm outputs/* || echo 'outputs/ already empty...'
 
 for TARGET in scenarios/*.yml; do
-  [[ TARGET == "skip-*" ]] && echo "Skip $TARGET" && continue
   BASE=`basename $TARGET`
   for RATE in 1 5 10 15 20 25; do
     ZERO_PADDED=`printf "%02d" $RATE`
