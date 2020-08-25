@@ -11,8 +11,11 @@ export ENTITY_TYPES_QUERY=`cat queries/entity-types.json`
 export DATASETS_QUERY=`cat queries/datasets.json`
 
 mkdir outputs || echo 'outputs dir already exists...'
-for RATE in 10 20 40; do
-  export RATE
-  ../node_modules/.bin/artillery run artillery.yml --output outputs/$RATE.json
+for TARGET in search; do
+  for RATE in 1 5 10 15 20 25; do
+    export RATE
+    ../node_modules/.bin/artillery run $TARGET.yml --output outputs/$TARGET-`printf "%02d" $RATE`-per-second.json
+  done
 done
-ls outputs
+
+./summarize.py
