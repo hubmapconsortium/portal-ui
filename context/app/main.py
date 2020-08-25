@@ -2,8 +2,10 @@ from flask import Flask, session, render_template
 
 from . import routes_main, routes_auth, routes_markdown, default_config
 
+
 def render_react_error(code):
     return render_template('pages/base_react.html', flask_data={'errorCode': code}), code
+
 
 def bad_request(e):
     '''A 400 means the request to the API failed.'''
