@@ -8,7 +8,7 @@ const HelpEmailLink = () => (
   <LightBlueLink href="mailto:help@hubmapconsortium.org">help@hubmapconsortium.org</LightBlueLink>
 );
 
-function ErrorBody({ errorCode, isGlobus401, isMaintenancePage }) {
+function ErrorBody({ errorCode, isAuthenticated, isGlobus401, isMaintenancePage }) {
   if (isMaintenancePage) {
     return (
       <>
@@ -33,6 +33,14 @@ function ErrorBody({ errorCode, isGlobus401, isMaintenancePage }) {
     return (
       <>
         You have not been added to the HuBMAP Group on Globus. Request access at <HelpEmailLink />.
+      </>
+    );
+  }
+
+  if (errorCode === 403 && isAuthenticated) {
+    return (
+      <>
+        You may not have access to this resource. Request access at <HelpEmailLink />.
       </>
     );
   }
@@ -62,12 +70,14 @@ function ErrorBody({ errorCode, isGlobus401, isMaintenancePage }) {
 
 ErrorBody.propTypes = {
   errorCode: PropTypes.number,
+  isAuthenticated: PropTypes.bool,
   isGlobus401: PropTypes.bool,
   isMaintenancePage: PropTypes.bool,
 };
 
 ErrorBody.defaultProps = {
   errorCode: undefined,
+  isAuthenticated: false,
   isGlobus401: false,
   isMaintenancePage: false,
 };

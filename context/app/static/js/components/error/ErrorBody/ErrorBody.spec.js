@@ -29,10 +29,16 @@ test('401', () => {
   expect(screen.getByRole('link', { name: help.name })).toHaveAttribute('href', help.url);
 });
 
-test('403', () => {
+test('403 unauthenticated', () => {
   render(<ErrorBody errorCode={403} />);
   expect(screen.getByText('You may not have access to this resource', { exact: false })).toBeInTheDocument();
   expect(screen.getByRole('link', { name: login.name })).toHaveAttribute('href', login.url);
+});
+
+test('403 authenticated', () => {
+  render(<ErrorBody errorCode={403} isAuthenticated />);
+  expect(screen.getByText('You may not have access to this resource', { exact: false })).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: help.name })).toHaveAttribute('href', help.url);
 });
 
 test('404', () => {

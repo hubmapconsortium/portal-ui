@@ -7,7 +7,7 @@ import { Background, StyledPaper, StyledTypography } from './style';
 import { getErrorTitleAndSubtitle } from './utils';
 
 function Error(props) {
-  const { errorCode, isGlobus401, isMaintenancePage } = props;
+  const { errorCode, isAuthenticated, isGlobus401, isMaintenancePage } = props;
 
   const { title, subtitle } = getErrorTitleAndSubtitle(errorCode, isMaintenancePage);
 
@@ -21,7 +21,12 @@ function Error(props) {
           {subtitle}
         </StyledTypography>
         <Typography variant="body1">
-          <ErrorBody errorCode={errorCode} isGlobus401={isGlobus401} isMaintenancePage={isMaintenancePage} />
+          <ErrorBody
+            errorCode={errorCode}
+            isAuthenticated={isAuthenticated}
+            isGlobus401={isGlobus401}
+            isMaintenancePage={isMaintenancePage}
+          />
         </Typography>
       </StyledPaper>
     </Background>
@@ -30,12 +35,14 @@ function Error(props) {
 
 Error.propTypes = {
   errorCode: PropTypes.number,
+  isAuthenticated: PropTypes.bool,
   isGlobus401: PropTypes.bool,
   isMaintenancePage: PropTypes.bool,
 };
 
 Error.defaultProps = {
   errorCode: undefined,
+  isAuthenticated: false,
   isGlobus401: false,
   isMaintenancePage: false,
 };

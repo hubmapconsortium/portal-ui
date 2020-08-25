@@ -20,7 +20,8 @@ function Routes(props) {
   useSendPageView(urlPath);
 
   if (errorCode !== undefined) {
-    return <Error errorCode={errorCode} />;
+    // eslint-disable-next-line no-undef
+    return <Error errorCode={errorCode} isAuthenticated={isAuthenticated} />;
   }
 
   if (urlPath.startsWith('/browse/donor/')) {
