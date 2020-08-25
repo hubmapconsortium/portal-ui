@@ -1,29 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Vega as ReactVega } from 'react-vega';
-/* eslint-disable import/no-unresolved */
+
 import useWindowSize from 'js/hooks/useWindowSize';
 import theme from 'js/theme';
-/* eslint-enable */
-
-const dummyData = [
-  { doc_count: 51, key: 'FAKE-AF-bulk' },
-  { doc_count: 50, key: 'FAKE-ATACseq-bulk' },
-  { doc_count: 50, key: 'FAKE-MxIF' },
-  { doc_count: 40, key: 'FAKE-CODEX' },
-  { doc_count: 40, key: 'FAKE-IMC' },
-  { doc_count: 40, key: 'FAKE-MALDI-IMS-neg' },
-  { doc_count: 30, key: 'FAKE-MALDI-IMS-pos' },
-  { doc_count: 30, key: 'FAKE-PAS' },
-  { doc_count: 30, key: 'FAKE-bulk-RNA' },
-  { doc_count: 20, key: 'FAKE-SNAREseq' },
-  { doc_count: 20, key: 'FAKE-TMT-LC-MS' },
-  { doc_count: 20, key: 'FAKE-Targeted-Shotgun-LC-MS' },
-  { doc_count: 10, key: 'FAKE-LC-MS-untargeted' },
-  { doc_count: 10, key: 'FAKE-WGS' },
-  { doc_count: 10, key: 'FAKE-scRNA-Seq-10x' },
-  { doc_count: 5, key: 'FAKE-sciATACseq' },
-];
 
 const sharedAxisSpec = {
   titleFontWeight: 300,
@@ -45,7 +25,7 @@ const partialSpec = {
       field: 'key',
       type: 'ordinal',
       axis: {
-        labelAngle: '-75',
+        labelAngle: '-50',
         ticks: true,
         labelOverlap: true,
         ...sharedAxisSpec,
@@ -98,7 +78,7 @@ function BarChart(props) {
         body: JSON.stringify({
           size: 0,
           aggs: {
-            data_types: { terms: { field: 'data_types.keyword' } },
+            mapped_data_types: { terms: { field: 'mapped_data_types.keyword' } },
           },
         }),
         headers: {
@@ -110,13 +90,8 @@ function BarChart(props) {
         return;
       }
       const data = await response.json();
-      const { buckets } = data.aggregations.data_types;
-
-      if (buckets.length > 0) {
-        setAssayTypesData(buckets);
-      } else {
-        setAssayTypesData(dummyData);
-      }
+      const { buckets } = data.aggregations.mapped_data_types;
+      setAssayTypesData(buckets);
     }
     getAssayTypesData();
   }, [elasticsearchEndpoint]);
