@@ -1,0 +1,1 @@
+- Add route wrapper component.
