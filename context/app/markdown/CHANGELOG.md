@@ -1,3 +1,13 @@
+## v0.1.3 - 2020-08-26
+
+- Create react error pages.
+- Create build process for static maintenance page.
+- Display mapped data types for home page bar chart.
+- Add route wrapper component.
+- dev-start.sh now checks that submodules are being pulled.
+- Add hashes to webpack bundle filenames.
+
+
 ## v0.1.2 - 2020-08-24
 
 - Fix seq vitessce views.

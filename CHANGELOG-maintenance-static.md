@@ -1,1 +1,0 @@
-- Create build process for static maintenance page.
