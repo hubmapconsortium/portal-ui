@@ -60,7 +60,7 @@ end flake8
 
 
 start pytest
-pytest
+pytest context/app
 end pytest
 
 
