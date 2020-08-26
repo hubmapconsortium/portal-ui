@@ -4,7 +4,7 @@ config:
     - duration: 5 # seconds
       arrivalRate: "{{ $processEnvironment.RATE }}" # scenarios started per second
   payload:
-    path: '../payloads/fixed-assets-ranges.csv'
+    path: '../payloads/generated-assets-ranges.csv'
     order: sequence
     fields:
       - range
