@@ -1,0 +1,1 @@
+- Add hashes to webpack bundle filenames.

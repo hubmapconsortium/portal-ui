@@ -1,6 +1,8 @@
 from flask import Flask, session, render_template
 
 from . import routes_main, routes_auth, routes_markdown, default_config
+from .flask_static_digest import FlaskStaticDigest
+flask_static_digest = FlaskStaticDigest()
 
 
 def bad_request(e):
@@ -36,6 +38,8 @@ def create_app(testing=False):
     else:
         # We should not load the gitignored app.conf during tests.
         app.config.from_pyfile('app.conf')
+
+    flask_static_digest.init_app(app)
 
     app.register_blueprint(routes_main.blueprint)
     app.register_blueprint(routes_auth.blueprint)
