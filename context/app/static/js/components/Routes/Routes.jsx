@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Container from '@material-ui/core/Container';
 
 import Error from 'js/pages/Error';
+import Route from './Route';
 import { Home } from '../Home';
 import Search from '../Search/Search';
 import DevSearch from '../Search/DevSearch';
@@ -26,32 +26,32 @@ function Routes(props) {
 
   if (urlPath.startsWith('/browse/donor/')) {
     return (
-      <Container maxWidth="lg">
+      <Route>
         <Donor
           assayMetadata={entity}
           vitData={vitessce_conf}
           entityEndpoint={endpoints.entityEndpoint}
           elasticsearchEndpoint={endpoints.elasticsearchEndpoint}
         />
-      </Container>
+      </Route>
     );
   }
   if (urlPath.startsWith('/browse/sample/')) {
     return (
-      <Container maxWidth="lg">
+      <Route>
         <Sample
           assayMetadata={entity}
           vitData={vitessce_conf}
           entityEndpoint={endpoints.entityEndpoint}
           elasticsearchEndpoint={endpoints.elasticsearchEndpoint}
         />
-      </Container>
+      </Route>
     );
   }
 
   if (urlPath.startsWith('/browse/dataset/')) {
     return (
-      <Container maxWidth="lg">
+      <Route>
         <Dataset
           assayMetadata={entity}
           vitData={vitessce_conf}
@@ -59,49 +59,57 @@ function Routes(props) {
           entityEndpoint={endpoints.entityEndpoint}
           elasticsearchEndpoint={endpoints.elasticsearchEndpoint}
         />
-      </Container>
+      </Route>
     );
   }
 
   if (urlPath === '/') {
-    return <Home elasticsearchEndpoint={endpoints.elasticsearchEndpoint} />;
+    return (
+      <Route disableWidthConstraint>
+        <Home elasticsearchEndpoint={endpoints.elasticsearchEndpoint} />
+      </Route>
+    );
   }
 
   /* eslint-disable no-undef */
   if (urlPath.startsWith('/search')) {
     return (
-      <Container maxWidth="lg">
+      <Route>
         <Search elasticsearchEndpoint={endpoints.elasticsearchEndpoint} title={title} nexusToken={nexus_token} />
-      </Container>
+      </Route>
     );
   }
 
   if (urlPath.startsWith('/dev-search')) {
     return (
-      <Container maxWidth="lg">
+      <Route>
         <DevSearch elasticsearchEndpoint={endpoints.elasticsearchEndpoint} nexusToken={nexus_token} />
-      </Container>
+      </Route>
     );
   }
   /* eslint-enable no-undef */
 
   if (urlPath.startsWith('/preview')) {
-    return <Preview title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />;
+    return (
+      <Route>
+        <Preview title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />
+      </Route>
+    );
   }
 
   if (urlPath === '/collections') {
     return (
-      <Container maxWidth="lg">
+      <Route>
         <Collections entityEndpoint={endpoints.entityEndpoint} />
-      </Container>
+      </Route>
     );
   }
 
   if (urlPath.startsWith('/browse/collection/')) {
     return (
-      <Container maxWidth="lg">
+      <Route>
         <Collection entityEndpoint={endpoints.entityEndpoint} collection={collection} />
-      </Container>
+      </Route>
     );
   }
 
@@ -111,9 +119,9 @@ function Routes(props) {
 
   if ('markdown' in flaskData) {
     return (
-      <Container maxWidth="lg">
+      <Route>
         <Markdown markdown={markdown} />
-      </Container>
+      </Route>
     );
   }
 }
