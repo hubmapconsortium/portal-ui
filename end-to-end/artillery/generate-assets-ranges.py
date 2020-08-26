@@ -4,6 +4,7 @@ import random
 
 import requests
 
+
 def generate():
     es_docs = 20
     es_url = 'https://search-api.stage.hubmapconsortium.org/portal/search'
@@ -43,6 +44,7 @@ def generate():
             bottom = i * chunk_size
             top = (i + 1) * chunk_size - 1
             print(f'{size},{bottom}-{top},{url}')
+
 
 if __name__ == "__main__":
     generate()

@@ -3,6 +3,7 @@
 from json import load
 from pathlib import Path
 
+
 def summarize():
     sorted_paths = sorted(
         Path(__file__).parent.glob('outputs/*.json'),
@@ -15,6 +16,7 @@ def summarize():
                 str(report['aggregate']['latency']['median']),
                 ', '.join([f'{k}: {v}' for k, v in report['aggregate']['codes'].items()])
             ]))
+
 
 if __name__ == "__main__":
     summarize()
