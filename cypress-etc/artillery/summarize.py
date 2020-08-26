@@ -12,5 +12,5 @@ for path in sorted_paths:
         print('\t'.join([
             path.stem,
             str(report['aggregate']['latency']['median']),
-            ';'.join([f'{k}: {v}' for k, v in report['aggregate']['codes'].items()])
+            ', '.join([f'{k}: {v}' for k, v in report['aggregate']['codes'].items()])
         ]))

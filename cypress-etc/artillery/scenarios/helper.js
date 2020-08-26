@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 function printStatus(requestParams, response, context, ee, next) {
-  const { method, uri } = response.request;
-  console.log(`${method} ${uri.path}: ${response.statusCode} ${response.body.slice(0, 100)}`);
+    const { statusCode, body, request } = response;
+  const { method, uri } = request;
+  console.log(`${method} ${uri.path}: ${statusCode} ${body.slice(0, 50)}`);
   // console.log(response.request.body);
   return next();
 }

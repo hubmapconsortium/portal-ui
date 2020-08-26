@@ -16,7 +16,7 @@ rm outputs/* || echo 'outputs/ already empty...'
 
 for TARGET in scenarios/*.yml; do
   BASE=`basename $TARGET`
-  for RATE in 1 5 10 15 20 25; do
+  for RATE in 5 15; do
     ZERO_PADDED=`printf "%02d" $RATE`
     export RATE
     ../node_modules/.bin/artillery \
