@@ -4,28 +4,28 @@ import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 
 const StyledContainer = styled(Container)`
-  margin-top: ${(props) => (props.$mt ? props.theme.spacing(2) : 0)}px;
+  margin-top: ${(props) => (props.$disableMarginTop ? 0 : props.theme.spacing(2))}px;
 `;
 
-function Route({ children, mt, constrainWidth }) {
-  const constrainWidthProps = constrainWidth ? { maxWidth: 'lg' } : { maxWidth: false, disableGutters: true };
+function Route({ children, disableMarginTop, disableWidthConstraint }) {
+  const constrainWidthProps = disableWidthConstraint ? { maxWidth: false, disableGutters: true } : { maxWidth: 'lg' };
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <StyledContainer $mt={mt} {...constrainWidthProps}>
+    <StyledContainer $disableMarginTop={disableMarginTop} {...constrainWidthProps}>
       {children}
     </StyledContainer>
   );
 }
 
 Route.propTypes = {
-  mt: PropTypes.bool,
-  constrainWidth: PropTypes.bool,
+  disableMarginTop: PropTypes.bool,
+  disableWidthConstraint: PropTypes.bool,
 };
 
 Route.defaultProps = {
-  mt: false,
-  constrainWidth: false,
+  disableMarginTop: false,
+  disableWidthConstraint: false,
 };
 
 export default Route;

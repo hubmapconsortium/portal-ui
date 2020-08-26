@@ -26,7 +26,7 @@ function Routes(props) {
 
   if (urlPath.startsWith('/browse/donor/')) {
     return (
-      <Route mt constrainWidth>
+      <Route>
         <Donor
           assayMetadata={entity}
           vitData={vitessce_conf}
@@ -38,7 +38,7 @@ function Routes(props) {
   }
   if (urlPath.startsWith('/browse/sample/')) {
     return (
-      <Route mt constrainWidth>
+      <Route>
         <Sample
           assayMetadata={entity}
           vitData={vitessce_conf}
@@ -51,7 +51,7 @@ function Routes(props) {
 
   if (urlPath.startsWith('/browse/dataset/')) {
     return (
-      <Route mt constrainWidth>
+      <Route>
         <Dataset
           assayMetadata={entity}
           vitData={vitessce_conf}
@@ -65,7 +65,7 @@ function Routes(props) {
 
   if (urlPath === '/') {
     return (
-      <Route mt>
+      <Route disableWidthConstraint>
         <Home elasticsearchEndpoint={endpoints.elasticsearchEndpoint} />
       </Route>
     );
@@ -74,7 +74,7 @@ function Routes(props) {
   /* eslint-disable no-undef */
   if (urlPath.startsWith('/search')) {
     return (
-      <Route mt constrainWidth>
+      <Route>
         <Search elasticsearchEndpoint={endpoints.elasticsearchEndpoint} title={title} nexusToken={nexus_token} />
       </Route>
     );
@@ -82,7 +82,7 @@ function Routes(props) {
 
   if (urlPath.startsWith('/dev-search')) {
     return (
-      <Route mt constrainWidth>
+      <Route>
         <DevSearch elasticsearchEndpoint={endpoints.elasticsearchEndpoint} nexusToken={nexus_token} />
       </Route>
     );
@@ -91,7 +91,7 @@ function Routes(props) {
 
   if (urlPath.startsWith('/preview')) {
     return (
-      <Route mt constrainWidth>
+      <Route>
         <Preview title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />
       </Route>
     );
@@ -99,7 +99,7 @@ function Routes(props) {
 
   if (urlPath === '/collections') {
     return (
-      <Route mt constrainWidth>
+      <Route>
         <Collections entityEndpoint={endpoints.entityEndpoint} />
       </Route>
     );
@@ -107,7 +107,7 @@ function Routes(props) {
 
   if (urlPath.startsWith('/browse/collection/')) {
     return (
-      <Route mt constrainWidth>
+      <Route>
         <Collection entityEndpoint={endpoints.entityEndpoint} collection={collection} />
       </Route>
     );
@@ -119,7 +119,7 @@ function Routes(props) {
 
   if ('markdown' in flaskData) {
     return (
-      <Route mt constrainWidth>
+      <Route>
         <Markdown markdown={markdown} />
       </Route>
     );
