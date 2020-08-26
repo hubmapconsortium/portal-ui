@@ -1,0 +1,1 @@
+- Display mapped data types for home page bar chart.
