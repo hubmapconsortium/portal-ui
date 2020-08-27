@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
   :root {
-    --header-height: 60px;
+    --header-height: 64px;
   }
 
   body {
