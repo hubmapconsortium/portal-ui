@@ -1,0 +1,20 @@
+config:
+  target: 'https://portal.stage.hubmapconsortium.org'
+  phases:
+    - duration: 5 # seconds
+      arrivalRate: "{{ $processEnvironment.RATE }}" # scenarios started per second
+  processor: "./helper.js"
+scenarios:
+  - flow:
+    - get:
+        url: "/docs/assays"
+        gzip: true
+        afterResponse: "printStatus"
+    - get:
+        url: "/docs/about"
+        gzip: true
+        afterResponse: "printStatus"
+    - get:
+        url: "/CHANGELOG"
+        gzip: true
+        afterResponse: "printStatus"

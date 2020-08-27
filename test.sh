@@ -45,7 +45,7 @@ fi
 set -m; ./dev-start.sh & set +m  # Without job control, I had trouble killing parent and children.
 PID=$!
 server_up 5001  # Not really needed: Cypress will wait for response.
-cypress-etc/test.sh
+end-to-end/test.sh
 kill -TERM -$PID  # Kill dev server processes
 end dev-start
 
@@ -60,7 +60,7 @@ end flake8
 
 
 start pytest
-pytest
+pytest context/app
 end pytest
 
 
@@ -74,6 +74,6 @@ end npm-test
 start docker
 ./docker.sh 5001  # Needs to match port in cypress.json.
 server_up 5001  # Without this, Cypress gets an undefined content-type and immediately fails.
-cypress-etc/test.sh
+end-to-end/test.sh
 docker kill hubmap-portal-ui
 end docker

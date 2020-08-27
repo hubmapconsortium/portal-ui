@@ -1,0 +1,10 @@
+{
+  "size": 0,
+  "aggs": {
+    "data_types": {
+      "terms": {
+        "field": "data_types.keyword"
+      }
+    }
+  }
+}

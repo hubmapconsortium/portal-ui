@@ -49,6 +49,8 @@ These are concatenated by `push.sh`.
 Python unit tests use Pytest, front end tests use Jest, an end-to-end tests use Cypress.
 Look at the source code of the script to see how to run a particular set of tests.
 
+Load tests [are available](end-to-end/artillery/), but they are not part of `test.sh`.
+
 ### Linting and pre-commit hooks
 In addition, `test.sh` lints the codebase, and to save time, we also lint in a pre-commit hook.
 If you want to bypass the hook, set `HUSKY_SKIP_HOOKS=1`.
