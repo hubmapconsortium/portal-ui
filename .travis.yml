@@ -7,4 +7,5 @@ before_install:
 install:
   - pip install -r context/requirements.txt
 script:
+  - git config --global submodule.recurse true # Make dev-start.sh happy.
   - ./test.sh

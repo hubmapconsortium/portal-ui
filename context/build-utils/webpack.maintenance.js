@@ -1,26 +1,21 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { resolve } = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
+const maintenancePath = './app/static/js/maintenance/';
+
 const config = {
-  entry: { main: './app/static/js/index.jsx' },
+  mode: 'production',
+  devtool: 'cheap-source-map',
+  entry: { maintenance: `./app/static/js/maintenance/index.jsx` },
   output: {
-    path: resolve('./app/static/public'),
-    publicPath: `${resolve('/static/public/')}/`,
-  },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: RegExp('/node_modules/'),
-          name: 'vendors',
-          chunks: 'initial',
-        },
-      },
-    },
+    path: resolve('./app/static/js/maintenance/public'),
+    publicPath: `/`,
+    filename: '[name].bundle.js',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml'],
+    extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml', '.html'],
     alias: {
       'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
       js: resolve(__dirname, '../app/static/js/'),
@@ -74,7 +69,10 @@ const config = {
       },
     ],
   },
-  plugins: [new CleanWebpackPlugin()],
+  plugins: [
+    new HtmlWebpackPlugin({ template: `${maintenancePath}/index.html`, favicon: './app/static/favicon.ico' }),
+    new CleanWebpackPlugin(),
+  ],
 };
 
 module.exports = config;

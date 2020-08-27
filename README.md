@@ -15,13 +15,8 @@ Because we're using git submodules, a couple additional steps are needed with ch
 git clone https://github.com/hubmapconsortium/portal-ui.git
 git submodule init
 git submodule update
-```
-
-Git does not update submodules on pull by default...
-but you can make it the default:
-```
 git config --global submodule.recurse true # Run this once...
-git pull                                   # Now pulls submodules!
+git pull                                   # Now pulls submodules every time!
 ```
 
 If you need to work on the code in a submodule, I would encourage you to do that
