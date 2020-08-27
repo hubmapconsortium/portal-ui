@@ -1,6 +1,5 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 
 import Markdown from 'js/components/Markdown';
 import VisualizationWrapper from '../Detail/VisualizationWrapper';
@@ -15,7 +14,7 @@ function Preview(props) {
   const { group_name, created_by_user_displayname, created_by_user_email } = assayMetadata;
 
   return (
-    <Container maxWidth="lg">
+    <>
       <SectionContainer id="summary">
         <Typography variant="subtitle1">Preview</Typography>
         <SectionHeader variant="h1" component="h1">
@@ -34,7 +33,7 @@ function Preview(props) {
         created_by_user_email={created_by_user_email}
       />
       {Boolean(vitData) && <VisualizationWrapper vitData={vitData} />}
-    </Container>
+    </>
   );
 }
 

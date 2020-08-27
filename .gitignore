@@ -112,13 +112,15 @@ venv.bak/
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
+!.vscode/portal-ui.code-snippets
 
 # public
 context/app/static/public
+context/app/static/js/maintenance/public
 
-# scratch
+# scratch and tmp
+/scratch
+/tmp
 
 # pycharm
 .idea/
-
-/scratch

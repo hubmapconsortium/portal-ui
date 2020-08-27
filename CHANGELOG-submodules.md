@@ -1,1 +1,0 @@
-- dev-start.sh now checks that submodules are being pulled.

@@ -6,6 +6,10 @@ const common = require('./webpack.common');
 const envConfig = {
   mode: 'development',
   devtool: 'inline-source-map',
+  output: {
+    filename: '[name].js',
+    chunkFilename: '[name].js',
+  },
   devServer: {
     contentBase: join(__dirname, './app'),
     publicPath: '/static/public/',

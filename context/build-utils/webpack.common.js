@@ -7,8 +7,6 @@ const config = {
   output: {
     path: resolve('./app/static/public'),
     publicPath: `${resolve('/static/public/')}/`,
-    filename: '[name].bundle.js',
-    chunkFilename: '[name].bundle.js',
   },
   optimization: {
     splitChunks: {
@@ -47,14 +45,6 @@ const config = {
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-          },
-        ],
       },
       {
         test: /\.s[ac]ss$/i,
