@@ -1,0 +1,1 @@
+- Add eslintignore and ignore all public directories.
