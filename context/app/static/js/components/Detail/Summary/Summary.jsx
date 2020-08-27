@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 
 import SummaryData from '../SummaryData';
 import { FlexColumnRight, StyledPaper, StyledDiv } from './style';
-import SectionHeader from '../SectionHeader';
 import SectionItem from '../SectionItem';
 import SectionContainer from '../SectionContainer';
 
@@ -31,7 +30,7 @@ function Summary(props) {
         {entity_type}
       </Typography>
       <StyledDiv>
-        <SectionHeader isSummary>{display_doi}</SectionHeader>
+        <Typography variant="h2">{display_doi}</Typography>
         <SummaryData
           entity_type={entity_type}
           uuid={uuid}
