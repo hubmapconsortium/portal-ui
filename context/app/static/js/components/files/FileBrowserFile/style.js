@@ -12,7 +12,7 @@ const StyledDiv = styled.div`
 `;
 
 const IndentedDiv = styled.div`
-  padding: 10px ${(props) => props.theme.spacing(3)}px;
+  padding: 10px 40px;
   margin-left: ${(props) => props.theme.spacing(props.$depth * 1.5)}px;
   display: flex;
   align-items: center;
