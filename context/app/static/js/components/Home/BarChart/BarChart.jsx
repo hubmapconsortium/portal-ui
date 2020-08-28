@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Vega as ReactVega } from 'react-vega';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import useWindowSize from 'js/hooks/useWindowSize';
 import theme from 'js/theme';
@@ -26,7 +25,7 @@ const partialSpec = {
       field: 'key',
       type: 'ordinal',
       axis: {
-        labelAngle: '-50',
+        labelAngle: '-90',
         ticks: true,
         labelOverlap: true,
         ...sharedAxisSpec,
@@ -79,7 +78,7 @@ function BarChart(props) {
         body: JSON.stringify({
           size: 0,
           aggs: {
-            mapped_data_types: { terms: { field: 'mapped_data_types.keyword' } },
+            mapped_data_types: { terms: { field: 'mapped_data_types.keyword', size: 30 } },
           },
         }),
         headers: {
@@ -106,18 +105,6 @@ function BarChart(props) {
     setSpec({ ...partialSpec, width: chartWidth });
     setStyle({ maxHeight: 790, gridArea: 'bar', width: chartWidth + 38 }); // 38 = padding for vega button
   }, [windowDimensions]);
-
-  const labelAngle = useMediaQuery('(min-width:1150px)') ? '-50' : '-65';
-
-  useEffect(
-    () =>
-      setSpec((prevState) => {
-        const temp = prevState.encoding;
-        temp.x.axis.labelAngle = labelAngle;
-        return { ...prevState, ...temp };
-      }),
-    [labelAngle],
-  );
 
   return (
     <ReactVega
