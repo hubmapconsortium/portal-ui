@@ -17,11 +17,11 @@ function ProvTabs(props) {
     setOpen(newValue);
   };
 
-  const shouldDisplayTable = !(
-    entity_type === 'Dataset' &&
-    data_types &&
-    checkDataTypesForValues(data_types, ['sc_rna_seq_snare_lab', 'sc_atac_seq_snare_lab', 'TMT-LC-MS'])
-  );
+  const shouldDisplayTable = !checkDataTypesForValues(data_types, [
+    'sc_rna_seq_snare_lab',
+    'sc_atac_seq_snare_lab',
+    'TMT-LC-MS',
+  ]);
   const shouldDisplayDag = entity_type === 'Dataset' && metadata && 'dag_provenance_list' in metadata;
 
   const graphIndex = shouldDisplayTable ? 1 : 0;
