@@ -6,7 +6,7 @@ import { StyledTab, StyledTabs, StyledTabPanel } from './style';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
 import ProvAnalysisDetails from '../ProvAnalysisDetails';
-import { checkDataTypesForValues } from './utils';
+import { hasDataTypes } from './utils';
 
 function ProvTabs(props) {
   const { uuid, assayMetadata, provData } = props;
@@ -17,11 +17,7 @@ function ProvTabs(props) {
     setOpen(newValue);
   };
 
-  const shouldDisplayTable = !checkDataTypesForValues(data_types, [
-    'sc_rna_seq_snare_lab',
-    'sc_atac_seq_snare_lab',
-    'TMT-LC-MS',
-  ]);
+  const shouldDisplayTable = !hasDataTypes(data_types, ['sc_rna_seq_snare_lab', 'sc_atac_seq_snare_lab', 'TMT-LC-MS']);
   const shouldDisplayDag = entity_type === 'Dataset' && metadata && 'dag_provenance_list' in metadata;
 
   const graphIndex = shouldDisplayTable ? 1 : 0;
@@ -36,10 +32,10 @@ function ProvTabs(props) {
         aria-label="Detail View Tabs"
         TabIndicatorProps={{ style: { backgroundColor: '#9CB965' } }}
       >
-        {shouldDisplayTable && <StyledTab label="Table" id="tab-table" aria-controls="tabpanel-0" />}
-        <StyledTab label="Graph" id="tab-graph" aria-controls={`tabpanel-${graphIndex}`} />
+        {shouldDisplayTable && <StyledTab label="Table" id="tab-table" aria-controls="tabpanel-table" />}
+        <StyledTab label="Graph" id="tab-graph" aria-controls="tabpanel-graph" />
         {shouldDisplayDag && (
-          <StyledTab label="Analysis Details" id="tab-analysis-details" aria-controls={`tabpanel-${dagIndex}`} />
+          <StyledTab label="Analysis Details" id="tab-analysis-details" aria-controls="tabpanel-analysis-details" />
         )}
       </StyledTabs>
       {shouldDisplayTable && (

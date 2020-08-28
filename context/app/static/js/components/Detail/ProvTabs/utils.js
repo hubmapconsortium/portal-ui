@@ -1,7 +1,7 @@
-export function checkDataTypesForValues(dataTypes, valuesToCheck) {
+export function hasDataTypes(dataTypes, typesToCheck) {
   if (!dataTypes) {
     return false;
   }
 
-  return dataTypes.some((type) => valuesToCheck.some((value) => type === value));
+  return dataTypes.some((type) => typesToCheck.some((value) => type === value));
 }
