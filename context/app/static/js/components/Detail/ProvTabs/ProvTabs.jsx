@@ -36,10 +36,10 @@ function ProvTabs(props) {
         aria-label="Detail View Tabs"
         TabIndicatorProps={{ style: { backgroundColor: '#9CB965' } }}
       >
-        {shouldDisplayTable && <StyledTab label="Table" id="tab-0" aria-controls="tabpanel-0" />}
-        <StyledTab label="Graph" id={`tab-${graphIndex}`} aria-controls={`tabpanel-${graphIndex}`} />
+        {shouldDisplayTable && <StyledTab label="Table" id="tab-table" aria-controls="tabpanel-0" />}
+        <StyledTab label="Graph" id="tab-graph" aria-controls={`tabpanel-${graphIndex}`} />
         {shouldDisplayDag && (
-          <StyledTab label="Analysis Details" id={`tab-${dagIndex}`} aria-controls={`tabpanel-${dagIndex}`} />
+          <StyledTab label="Analysis Details" id="tab-analysis-details" aria-controls={`tabpanel-${dagIndex}`} />
         )}
       </StyledTabs>
       {shouldDisplayTable && (
