@@ -1,1 +1,0 @@
-- Increase number of data types displayed in the home page bar chart to 30.

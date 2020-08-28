@@ -1,1 +1,0 @@
-- Update ProvTabs to disable table for snare_lab and TMT-LC-MS data types.

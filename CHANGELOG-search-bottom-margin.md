@@ -1,1 +1,0 @@
-- Add a margin at the bottom of the search page.

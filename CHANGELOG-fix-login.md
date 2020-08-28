@@ -1,1 +1,0 @@
-- Fix issue where login button was not displaying logout when logged in.

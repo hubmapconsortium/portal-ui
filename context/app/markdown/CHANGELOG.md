@@ -1,3 +1,15 @@
+## v0.1.4 - 2020-08-28
+
+- Add artillery load tests.
+- Update ProvTabs to disable table for snare_lab and TMT-LC-MS data types.
+- Add eslintignore and ignore all public directories.
+- Fix issue where login button was not displaying logout when logged in.
+- Change link in footer from "Contact" to "Submit Feedback".
+- Increase number of data types displayed in the home page bar chart to 30.
+- Remove collections from navigation menus.
+- Add a margin at the bottom of the search page.
+
+
 ## v0.1.3 - 2020-08-26
 
 - Create react error pages.
