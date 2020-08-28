@@ -1,0 +1,1 @@
+- Remove collections from navigation menus.
