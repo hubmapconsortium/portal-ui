@@ -6,7 +6,7 @@ import { StyledTab, StyledTabs, StyledTabPanel } from './style';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
 import ProvAnalysisDetails from '../ProvAnalysisDetails';
-import { checkDataTypesForValues, getTabIndex } from './utils';
+import { checkDataTypesForValues } from './utils';
 
 function ProvTabs(props) {
   const { uuid, assayMetadata, provData } = props;
@@ -20,11 +20,11 @@ function ProvTabs(props) {
   const shouldDisplayTable = !(
     entity_type === 'Dataset' &&
     data_types &&
-    checkDataTypesForValues(data_types, ['snare_lab', 'TMT-LC-MS'])
+    checkDataTypesForValues(data_types, ['sc_rna_seq_snare_lab', 'sc_atac_seq_snare_lab', 'TMT-LC-MS'])
   );
   const shouldDisplayDag = entity_type === 'Dataset' && metadata && 'dag_provenance_list' in metadata;
 
-  const graphIndex = getTabIndex(1, shouldDisplayTable);
+  const graphIndex = shouldDisplayTable ? 1 : 0;
   const dagIndex = graphIndex + 1;
 
   return (
