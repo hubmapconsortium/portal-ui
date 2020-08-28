@@ -29,9 +29,6 @@ function HeaderContent({ anchorRef }) {
                 {`${type}s`}
               </HeaderButton>
             ))}
-            <HeaderButton component={Link} href="/collections">
-              Collections
-            </HeaderButton>
           </div>
           <Spacer />
           <Dropdown title="Previews" menuListId="preview-options">

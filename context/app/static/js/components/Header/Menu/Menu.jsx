@@ -29,7 +29,6 @@ function Menu(props) {
             {['Donor', 'Sample', 'Dataset'].map((type) => (
               <DropdownLink key={type} href={`/search?entity_type[0]=${type}`}>{`${type}s`}</DropdownLink>
             ))}
-            <DropdownLink href="/collections">Collections</DropdownLink>
             <DropdownMenuItem onClick={togglePreview}>
               Previews
               {openPreview ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
