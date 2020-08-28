@@ -1,0 +1,1 @@
+- Change link in footer from "Contact" to "Submit Feedback".
