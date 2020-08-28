@@ -6,17 +6,22 @@ import { StyledTab, StyledTabs, StyledTabPanel } from './style';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
 import ProvAnalysisDetails from '../ProvAnalysisDetails';
+import { hasDataTypes } from './utils';
 
 function ProvTabs(props) {
   const { uuid, assayMetadata, provData } = props;
-  const { metadata, entity_type, ancestors } = assayMetadata;
+  const { metadata, entity_type, ancestors, data_types } = assayMetadata;
 
   const [open, setOpen] = React.useState(0);
   const handleChange = (event, newValue) => {
     setOpen(newValue);
   };
 
+  const shouldDisplayTable = !hasDataTypes(data_types, ['sc_rna_seq_snare_lab', 'sc_atac_seq_snare_lab', 'TMT-LC-MS']);
   const shouldDisplayDag = entity_type === 'Dataset' && metadata && 'dag_provenance_list' in metadata;
+
+  const graphIndex = shouldDisplayTable ? 1 : 0;
+  const dagIndex = graphIndex + 1;
 
   return (
     <Paper>
@@ -27,30 +32,34 @@ function ProvTabs(props) {
         aria-label="Detail View Tabs"
         TabIndicatorProps={{ style: { backgroundColor: '#9CB965' } }}
       >
-        <StyledTab label="Table" id="tab-0" aria-controls="tabpanel-0" />
-        <StyledTab label="Graph" id="tab-1" aria-controls="tabpanel-1" />
-        {shouldDisplayDag && <StyledTab label="Analysis Details" id="tab-2" aria-controls="tabpanel-2" />}
+        {shouldDisplayTable && <StyledTab label="Table" id="tab-table" aria-controls="tabpanel-table" />}
+        <StyledTab label="Graph" id="tab-graph" aria-controls="tabpanel-graph" />
+        {shouldDisplayDag && (
+          <StyledTab label="Analysis Details" id="tab-analysis-details" aria-controls="tabpanel-analysis-details" />
+        )}
       </StyledTabs>
-      <StyledTabPanel value={open} index={0} pad={1}>
-        <ProvTable
-          provData={provData}
-          uuid={uuid}
-          entity_type={entity_type}
-          typesToSplit={['Donor', 'Sample', 'Dataset']}
-          ancestors={ancestors}
-          assayMetadata={assayMetadata}
-        />
-      </StyledTabPanel>
-      <StyledTabPanel value={open} index={1}>
+      {shouldDisplayTable && (
+        <StyledTabPanel value={open} index={0} pad={1}>
+          <ProvTable
+            provData={provData}
+            uuid={uuid}
+            entity_type={entity_type}
+            typesToSplit={['Donor', 'Sample', 'Dataset']}
+            ancestors={ancestors}
+            assayMetadata={assayMetadata}
+          />
+        </StyledTabPanel>
+      )}
+      <StyledTabPanel value={open} index={graphIndex}>
         <span id="prov-vis-react">
           <ProvGraph provData={provData} />
         </span>
       </StyledTabPanel>
-      <StyledTabPanel value={open} index={2} pad={1}>
-        {shouldDisplayDag && (
+      {shouldDisplayDag && (
+        <StyledTabPanel value={open} index={dagIndex} pad={1}>
           <ProvAnalysisDetails dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />
-        )}
-      </StyledTabPanel>
+        </StyledTabPanel>
+      )}
     </Paper>
   );
 }
