@@ -1,1 +1,0 @@
-- Fix search request loop bug for derived entities.
