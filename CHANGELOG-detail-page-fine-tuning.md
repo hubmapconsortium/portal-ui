@@ -1,1 +1,5 @@
 - Update detail page spacing.
+- Fix anchor link locations in entity detail pages for Safari.
+- Update icons for globus link.
+- Replace index.css with global styles.
+- Update initial padding for FileBrowser to be vertically aligned with other entity detail sections.
