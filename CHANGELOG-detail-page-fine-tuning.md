@@ -1,0 +1,1 @@
+- Update detail page spacing.
