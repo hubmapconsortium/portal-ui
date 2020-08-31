@@ -32,6 +32,7 @@ const GlobalStyles = createGlobalStyle`
   .container-lg {
     max-width: 1240px;
   }
+
   a {
     text-decoration: none;
     background-color: transparent;
