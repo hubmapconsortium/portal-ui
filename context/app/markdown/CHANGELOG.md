@@ -1,3 +1,14 @@
+## v0.1.5 - 2020-08-31
+
+- Update detail page spacing.
+- Fix anchor link locations in entity detail pages for Safari.
+- Update icons for globus link.
+- Replace index.css with global styles.
+- Update initial padding for FileBrowser to be vertically aligned with other entity detail sections.
+- Fix donor entity tile age to reflect changes to metadata field names.
+- Replace sample tissue location placeholder with link to ccf.
+
+
 ## v0.1.4 - 2020-08-28
 
 - Add artillery load tests.
