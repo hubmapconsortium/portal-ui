@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { WhiteButton } from './style';
 
 function LoginButton(props) {
-  const { isAuthenticated, nexusToken } = props;
+  const { isAuthenticated } = props;
 
-  const link = isAuthenticated && nexusToken ? 'logout' : 'login';
+  const link = isAuthenticated ? 'logout' : 'login';
 
   return (
     <WhiteButton component="a" href={`/${link}`}>

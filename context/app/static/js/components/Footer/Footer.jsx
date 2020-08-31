@@ -31,7 +31,7 @@ function Footer(props) {
                 </LightBlueLink>
               )}
               <LightBlueLink variant="body2" href="mailto:help@hubmapconsortium.org">
-                Contact
+                Submit Feedback
               </LightBlueLink>
             </FlexColumn>
             <FlexColumn $mr={1}>
