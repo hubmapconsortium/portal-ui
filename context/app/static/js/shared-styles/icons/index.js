@@ -8,6 +8,7 @@ import LaunchRoundedIcon from '@material-ui/icons/LaunchRounded';
 import InfoRoundedIcon from '@material-ui/icons/InfoRounded';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import InsertDriveFileRoundedIcon from '@material-ui/icons/InsertDriveFileRounded';
+import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
 
 const CenterIcon = styled(AccountBalanceIcon)`
   font-size: ${(props) => props.fontSize};
@@ -41,4 +42,8 @@ const FileIcon = styled(InsertDriveFileRoundedIcon)`
   font-size: ${(props) => props.fontSize};
 `;
 
-export { DonorIcon, SampleIcon, DatasetIcon, CenterIcon, ExternalLinkIcon, InfoIcon, SuccessIcon, FileIcon };
+const ErrorIcon = styled(ErrorRoundedIcon)`
+  font-size: ${(props) => props.fontSize};
+`;
+
+export { DonorIcon, SampleIcon, DatasetIcon, CenterIcon, ExternalLinkIcon, InfoIcon, SuccessIcon, FileIcon, ErrorIcon };

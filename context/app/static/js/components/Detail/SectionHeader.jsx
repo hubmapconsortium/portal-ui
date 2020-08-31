@@ -7,12 +7,10 @@ const StyledTypography = styled(Typography)`
 `;
 
 function SectionHeader(props) {
-  const { children, isSummary, ...rest } = props;
-
-  const variant = isSummary ? 'h2' : 'h4';
+  const { children, ...rest } = props;
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <StyledTypography variant={variant} component="h2" {...rest}>
+    <StyledTypography variant="h4" component="h2" {...rest}>
       {children}
     </StyledTypography>
   );

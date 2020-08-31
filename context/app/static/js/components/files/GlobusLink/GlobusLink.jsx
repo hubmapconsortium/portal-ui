@@ -5,7 +5,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { getAuthHeaderIfNexusTokenCookieExists } from 'js/helpers/functions';
 import useAbortableEffect from 'js/hooks/useAbortableEffect';
-import { StyledTypography, CenteredDiv, MarginTopDiv, Flex, StyledInfoIcon, StyledSuccessIcon } from './style';
+import { StyledTypography, CenteredDiv, MarginTopDiv, Flex, StyledErrorIcon, StyledSuccessIcon } from './style';
 import GlobusLinkMessage from '../GlobusLinkMessage';
 
 function GlobusLink(props) {
@@ -49,12 +49,12 @@ function GlobusLink(props) {
     <MarginTopDiv>
       <DetailSectionPaper>
         <Flex>
-          <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
           {statusCode === 200 ? (
             <StyledSuccessIcon data-testid="success-icon" />
           ) : (
-            <StyledInfoIcon data-testid="info-icon" />
+            <StyledErrorIcon data-testid="error-icon" />
           )}
+          <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
         </Flex>
         <GlobusLinkMessage statusCode={statusCode} url={url} display_doi={display_doi} />
       </DetailSectionPaper>

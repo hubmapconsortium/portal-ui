@@ -53,5 +53,5 @@ test('displays info icon with 500 response', async () => {
   render(<GlobusLink uuid={uuid} entityEndpoint={entityEndpoint} display_doi={display_doi} />);
 
   await screen.findByText('Bulk Data Transfer');
-  expect(screen.getByTestId('info-icon')).toBeInTheDocument();
+  expect(screen.getByTestId('error-icon')).toBeInTheDocument();
 });
