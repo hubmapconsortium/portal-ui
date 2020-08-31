@@ -5,13 +5,14 @@ import Typography from '@material-ui/core/Typography';
 
 const StyledDiv = styled.div`
   margin-left: ${(props) => (props.ml ? '75px' : '0px')};
+  ${(props) => props.flexBasis && `flex-basis: ${props.flexBasis};`}
 `;
 
 function SectionItem(props) {
-  const { children, ml, label } = props;
+  const { children, ml, label, flexBasis } = props;
   const childrenArray = Array.isArray(children) ? children : [children];
   return (
-    <StyledDiv ml={ml}>
+    <StyledDiv ml={ml} flexBasis={flexBasis}>
       <Typography variant="subtitle2" component="h3" color="primary">
         {label}
       </Typography>
