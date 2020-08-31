@@ -26,7 +26,9 @@ function EntityTileTopText(props) {
           <Flex>
             <Typography variant="body2">{entityData.mapped_metadata.sex}</Typography>
             <StyledDivider flexItem orientation="vertical" $invertColors={invertColors} />
-            <Typography variant="body2">{entityData.mapped_metadata.age} years</Typography>
+            <Typography variant="body2">
+              {entityData.mapped_metadata.age_value} {entityData.mapped_metadata.age_unit}
+            </Typography>
           </Flex>
           <TruncatedTypography variant="body2">{entityData.mapped_metadata.race}</TruncatedTypography>
         </>
