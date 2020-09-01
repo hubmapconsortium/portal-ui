@@ -1,0 +1,1 @@
+- Make "Group" and "Creator" folded by default.
