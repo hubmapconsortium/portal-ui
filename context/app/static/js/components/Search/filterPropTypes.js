@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 const refinementListPropTypes = PropTypes.exact({
-  type: PropTypes.oneOf(['RefinementListFilter']).isRequired,
+  type: PropTypes.oneOf(['RefinementListFilter', 'FoldingFilter']).isRequired,
   props: PropTypes.exact({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,

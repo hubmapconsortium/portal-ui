@@ -18,8 +18,8 @@ function makeDonorMetadataFilters(isDonor) {
 
 export const donorConfig = {
   filters: makeDonorMetadataFilters(true).concat([
-    filter('group_name', 'Group'),
-    filter('created_by_user_displayname', 'Creator'),
+    foldingFilter('group_name', 'Group'),
+    foldingFilter('created_by_user_displayname', 'Creator'),
   ]),
   fields: [
     field('display_doi', 'Donor'),
@@ -35,7 +35,7 @@ export const donorConfig = {
 export const sampleConfig = {
   filters: [filter('origin_sample.mapped_organ', 'Organ'), filter('mapped_specimen_type', 'Specimen Type')]
     .concat(makeDonorMetadataFilters(false))
-    .concat([filter('group_name', 'Group'), filter('created_by_user_displayname', 'Creator')]),
+    .concat([foldingFilter('group_name', 'Group'), foldingFilter('created_by_user_displayname', 'Creator')]),
   fields: [
     field('display_doi', 'Sample'),
     field('group_name', 'Group'),
@@ -47,14 +47,14 @@ export const sampleConfig = {
 
 export const datasetConfig = {
   filters: [
-    foldingFilter('mapped_data_types', 'Data Type'),
+    filter('mapped_data_types', 'Data Type'),
     filter('origin_sample.mapped_organ', 'Organ'),
     filter('source_sample.mapped_specimen_type', 'Specimen Type'),
     filter('mapped_status', 'Status'),
     filter('mapped_data_access_level', 'Access Level'),
   ]
     .concat(makeDonorMetadataFilters(false))
-    .concat([filter('group_name', 'Group'), filter('created_by_user_displayname', 'Creator')]),
+    .concat([foldingFilter('group_name', 'Group'), foldingFilter('created_by_user_displayname', 'Creator')]),
   fields: [
     field('display_doi', 'Dataset'),
     field('group_name', 'Group'),
