@@ -16,11 +16,10 @@ function makeDonorMetadataFilters(isDonor) {
   ];
 }
 
+const groupAndCreator = [foldingFilter('group_name', 'Group'), foldingFilter('created_by_user_displayname', 'Creator')];
+
 export const donorConfig = {
-  filters: makeDonorMetadataFilters(true).concat([
-    foldingFilter('group_name', 'Group'),
-    foldingFilter('created_by_user_displayname', 'Creator'),
-  ]),
+  filters: makeDonorMetadataFilters(true).concat(groupAndCreator),
   fields: [
     field('display_doi', 'Donor'),
     field('group_name', 'Group'),
@@ -35,7 +34,7 @@ export const donorConfig = {
 export const sampleConfig = {
   filters: [filter('origin_sample.mapped_organ', 'Organ'), filter('mapped_specimen_type', 'Specimen Type')]
     .concat(makeDonorMetadataFilters(false))
-    .concat([foldingFilter('group_name', 'Group'), foldingFilter('created_by_user_displayname', 'Creator')]),
+    .concat(groupAndCreator),
   fields: [
     field('display_doi', 'Sample'),
     field('group_name', 'Group'),
@@ -54,7 +53,7 @@ export const datasetConfig = {
     filter('mapped_data_access_level', 'Access Level'),
   ]
     .concat(makeDonorMetadataFilters(false))
-    .concat([foldingFilter('group_name', 'Group'), foldingFilter('created_by_user_displayname', 'Creator')]),
+    .concat(groupAndCreator),
   fields: [
     field('display_doi', 'Dataset'),
     field('group_name', 'Group'),
