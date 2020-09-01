@@ -11,15 +11,17 @@ const VerticalDivider = styled(Divider)`
   align-self: center;
 `;
 
+const StyledTypography = styled(Typography)`
+  display: flex;
+`;
+
 function SummaryItem(props) {
   const { children } = props;
   return (
-    <>
-      <Typography variant="h6" component="p">
-        {children}
-      </Typography>
+    <StyledTypography variant="h6" component="p">
+      {children}
       <VerticalDivider orientation="vertical" flexItem />
-    </>
+    </StyledTypography>
   );
 }
 
