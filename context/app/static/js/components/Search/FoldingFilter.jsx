@@ -1,14 +1,23 @@
 import React from 'react';
-// import FacetFilter from 'searchkit';
+import { FacetFilter } from 'searchkit';
 
-function FoldingFilter() {
+function Container(props) {
+  const { title, id, children } = props;
   return (
-    <details>
-      <summary>Title</summary>Details
+    <details className={id ? `filter--${id}` : undefined}>
+      <summary className="sk-panel__header">{title}</summary>
+      {children}
     </details>
   );
-  // // eslint-disable-next-line react/jsx-props-no-spreading
-  // return <FacetFilter {...props} />;
+}
+
+function FoldingFilter(props) {
+  const innerProps = {
+    containerComponent: Container,
+    ...props,
+  };
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return <FacetFilter {...innerProps} />;
 }
 
 export default FoldingFilter;
