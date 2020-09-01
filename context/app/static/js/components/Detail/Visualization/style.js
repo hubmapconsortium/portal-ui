@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
+
+import { BackgroundIconButton } from 'js/shared-styles/buttons';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 
@@ -27,13 +29,8 @@ const StyledSectionContainer = styled(SectionContainer)`
   position: relative;
 `;
 
-const ExpandButton = styled(Button)`
-  display: inline-block;
-  background-color: #ffffff;
+const ExpandButton = styled(BackgroundIconButton)`
   margin-left: 0.5rem;
-  svg {
-    vertical-align: middle;
-  }
 `;
 
 const SelectionButton = styled(Button)`
