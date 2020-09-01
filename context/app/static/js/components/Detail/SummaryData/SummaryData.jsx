@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
+import { SecondaryTooltip } from 'js/shared-styles/tooltips';
 import { Flex, FlexRight, FlexEnd, JsonButton, StyledFileIcon, StyledTypography } from './style';
 import SummaryItem from '../SummaryItem';
 import StatusIcon from '../StatusIcon';
 
 function SummaryData(props) {
   const { entity_type, uuid, status, mapped_data_access_level, display_doi, children } = props;
-
   return (
     <>
       <Typography variant="subtitle1" component="h1" color="primary">
@@ -32,9 +32,11 @@ function SummaryData(props) {
             </FlexEnd>
           )}
           <FlexEnd>
-            <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
-              <StyledFileIcon color="primary" />
-            </JsonButton>
+            <SecondaryTooltip title="View JSON">
+              <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
+                <StyledFileIcon color="primary" />
+              </JsonButton>
+            </SecondaryTooltip>
           </FlexEnd>
         </FlexRight>
       </Flex>
