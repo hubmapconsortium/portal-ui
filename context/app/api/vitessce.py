@@ -9,6 +9,7 @@ from itertools import groupby
 from flask import current_app
 
 SCATTERPLOT = {
+    "version": "0.1.0",
     "layers": [],
     "name": "NAME",
     "staticLayout": [
@@ -29,6 +30,7 @@ SCATTERPLOT = {
 }
 
 TILED_SPRM_IMAGING = {
+    "version": "0.1.0",
     "name": "NAME",
     "layers": [],
     "staticLayout": [
@@ -63,6 +65,7 @@ TILED_SPRM_IMAGING = {
 }
 
 TILED_SPRM_IMAGING_ONLY = {
+    "version": "0.1.0",
     "name": "NAME",
     "layers": [],
     "staticLayout": [
@@ -80,6 +83,7 @@ TILED_SPRM_IMAGING_ONLY = {
 }
 
 IMAGING_ONLY = {
+    "version": "0.1.0",
     "name": "NAME",
     "layers": [],
     "staticLayout": [
