@@ -26,6 +26,23 @@ export function filter(id, name, translations) {
   return def;
 }
 
+export function foldingFilter(id, name, translations) {
+  const def = {
+    type: 'FoldingFilter',
+    props: {
+      id,
+      title: name,
+      field: `${id}.keyword`,
+      operator: 'OR',
+      size: 5,
+    },
+  };
+  if (translations) {
+    def.props.translations = translations;
+  }
+  return def;
+}
+
 export function rangeFilter(id, name, min, max) {
   return {
     type: 'RangeFilter',

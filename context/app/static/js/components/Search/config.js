@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line import/named
-import { filter, rangeFilter, field } from './utils';
+import { filter, foldingFilter, rangeFilter, field } from './utils';
 
 const bmiField = 'body_mass_index_value';
 const ageField = 'age_value';
@@ -47,7 +47,7 @@ export const sampleConfig = {
 
 export const datasetConfig = {
   filters: [
-    filter('mapped_data_types', 'Data Type'),
+    foldingFilter('mapped_data_types', 'Data Type'),
     filter('origin_sample.mapped_organ', 'Organ'),
     filter('source_sample.mapped_specimen_type', 'Specimen Type'),
     filter('mapped_status', 'Status'),
