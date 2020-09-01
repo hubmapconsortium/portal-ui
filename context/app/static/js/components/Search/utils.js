@@ -34,7 +34,7 @@ export function foldingFilter(id, name, translations) {
       title: name,
       field: `${id}.keyword`,
       operator: 'OR',
-      size: 5,
+      size: 100, // Large enough that you usually won't need to unfold twice.
     },
   };
   if (translations) {
