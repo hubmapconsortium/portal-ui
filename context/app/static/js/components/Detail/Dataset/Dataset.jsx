@@ -17,29 +17,13 @@ import useSendUUIDEvent from '../useSendUUIDEvent';
 import DetailContext from '../context';
 
 function SummaryDataChildren(props) {
-  const { data_types, mapped_data_types, origin_sample } = props;
-
-  // TODO: This was an array, but in production it's a single value.
-  // Simplify when it's single valued in all environments.
-
-  // NOTE: This is the one place we use unmapped values,
-  // because they are better than human-readable strings as URL fragments.
-
-  const typeCodes = Array.isArray(data_types) ? data_types : [data_types];
-  const typeNames = Array.isArray(mapped_data_types) ? mapped_data_types : [mapped_data_types];
-  const codesNames = typeCodes.map((code, i) => {
-    return { code, name: typeNames[i] };
-  });
-
+  const { mapped_data_types, origin_sample } = props;
   return (
     <>
       <SummaryItem>
-        {codesNames.map(({ code, name }, i) => [
-          i > 0 && ' / ',
-          <LightBlueLink key={code} variant="h6" href={`/docs/assays#${code}`} underline="none">
-            {name}
-          </LightBlueLink>,
-        ])}
+        <LightBlueLink variant="h6" href="/docs/assays" underline="none">
+          {mapped_data_types[0]}
+        </LightBlueLink>
       </SummaryItem>
       <Typography variant="h6" component="p">
         {origin_sample.mapped_organ}
