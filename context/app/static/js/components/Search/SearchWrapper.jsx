@@ -19,9 +19,7 @@ import {
   Pagination,
 } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
-import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
-// There is more in the name space, but we only need the filterTypes.
-
+import filterTypes from './filterTypes';
 import SortingTableHead from './SortingTableHead';
 import { resultFieldsToSortOptions } from './utils';
 import { StyledTableBody, StyledTableRow, StyledTableCell } from './style';
