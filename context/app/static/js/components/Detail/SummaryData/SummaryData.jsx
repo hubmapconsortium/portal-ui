@@ -22,12 +22,7 @@ function SummaryData(props) {
         <FlexRight>
           {entity_type === 'Dataset' && (
             <FlexEnd>
-              <SummaryItem>
-                <>
-                  <StatusIcon status={status} />
-                  {status}
-                </>
-              </SummaryItem>
+              <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
               <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
             </FlexEnd>
           )}

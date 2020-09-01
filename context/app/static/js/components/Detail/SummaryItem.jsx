@@ -16,9 +16,10 @@ const StyledDiv = styled.div`
 `;
 
 function SummaryItem(props) {
-  const { children } = props;
+  const { children, statusIcon } = props;
   return (
     <StyledDiv>
+      {statusIcon && statusIcon}
       <Typography variant="h6" component="p">
         {children}
       </Typography>
