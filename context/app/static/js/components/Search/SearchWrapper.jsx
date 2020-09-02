@@ -159,12 +159,14 @@ function SearchWrapper(props) {
 
 SearchWrapper.propTypes = {
   apiUrl: PropTypes.string.isRequired,
-  filters: PropTypes.arrayOf(
-    PropTypes.oneOfType([
-      filterPropTypes.refinementListPropTypes,
-      filterPropTypes.rangeFilterPropTypes,
-      filterPropTypes.checkboxFilterPropTypes,
-    ]),
+  filters: PropTypes.objectOf(
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([
+        filterPropTypes.refinementListPropTypes,
+        filterPropTypes.rangeFilterPropTypes,
+        filterPropTypes.checkboxFilterPropTypes,
+      ]),
+    ),
   ).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
