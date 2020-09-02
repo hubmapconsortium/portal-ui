@@ -1,54 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// eslint-disable-next-line import/no-unresolved
-import { capitalizeString } from 'js/helpers/functions';
+
 import TableOfContents from '../TableOfContents';
 import { Content, FlexRow } from './style';
-
-function getSectionFromString(s) {
-  if (s === 'metadataTable') {
-    return [s, { text: 'Metadata', hash: 'metadata-table' }];
-  }
-  if (s === 'dagProv') {
-    return [s, { text: 'DAG Provenance', hash: 'dag-provenance' }];
-  }
-  return [s, { text: capitalizeString(s), hash: s }];
-}
-
-function getPossibleSections() {
-  // Array order reflects order of table of contents.
-  return [
-    'summary',
-    'metadata',
-    'tissue',
-    'visualization',
-    'attribution',
-    'provenance',
-    'protocols',
-    'metadataTable',
-    'files',
-    'dagProv',
-  ].map((s) => getSectionFromString(s));
-}
-
-function testAndDeleteFromObject(toDelete, obj, test) {
-  if (test) {
-    obj.delete(toDelete);
-  }
-}
+import { getSections } from './utils';
 
 function DetailLayout(props) {
-  const { shouldDisplaySection, children } = props;
-
-  const getSections = () => {
-    const sections = new Map(getPossibleSections());
-    // Add sections that are not common to all entity types
-    const sectionsToTest = ['metadata', 'tissue', 'visualization', 'protocols', 'metadataTable', 'files', 'dagProv'];
-    sectionsToTest.forEach((section) => testAndDeleteFromObject(section, sections, !shouldDisplaySection[section]));
-    return sections;
-  };
-
-  const sections = getSections();
+  const { sectionOrder, children } = props;
+  const sections = new Map(getSections(sectionOrder));
 
   return (
     <FlexRow>
@@ -59,7 +18,7 @@ function DetailLayout(props) {
 }
 
 DetailLayout.propTypes = {
-  shouldDisplaySection: PropTypes.objectOf(PropTypes.bool).isRequired,
+  sectionOrder: PropTypes.arrayOf(PropTypes.string).isRequired,
   children: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.element, PropTypes.bool])).isRequired,
 };
 
