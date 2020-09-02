@@ -4,6 +4,7 @@ import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
 
 import { HeaderCell } from 'js/shared-styles/Table';
 
@@ -94,6 +95,10 @@ const StyledTableCell = styled(TableCell)`
   }
 `;
 
+const StyledAccordionDetails = styled(AccordionDetails)`
+  flex-direction: column;
+`;
+
 export {
   ArrowUpOn,
   ArrowDownOn,
@@ -103,4 +108,5 @@ export {
   StyledTableRow,
   StyledTableBody,
   StyledTableCell,
+  StyledAccordionDetails,
 };

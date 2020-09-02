@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Table from '@material-ui/core/Table';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 // In the latest version, "ExpansionPanel" is renamed to "Accordion".
 import Accordion from '@material-ui/core/ExpansionPanel';
 import AccordionSummary from '@material-ui/core/ExpansionPanelSummary';
-import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
 
 import {
   SearchkitManager,
@@ -28,7 +29,7 @@ import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-dupli
 
 import SortingTableHead from './SortingTableHead';
 import { resultFieldsToSortOptions } from './utils';
-import { StyledTableBody, StyledTableRow, StyledTableCell } from './style';
+import { StyledTableBody, StyledTableRow, StyledTableCell, StyledAccordionDetails } from './style';
 import './Search.scss';
 import * as filterPropTypes from './filterPropTypes';
 
@@ -110,19 +111,22 @@ function SearchWrapper(props) {
   const filterElements = Object.entries(filters).map(([title, filterGroup]) => {
     const filterGroupRendered = filterGroup.map((def) => {
       const Filter = filterTypes[def.type];
-      const style = hiddenFilterIds.indexOf(def.props.id) === -1 ? {} : { display: 'None' };
+      // const style = hiddenFilterIds.indexOf(def.props.id) === -1 ? {} : { display: 'None' };
       /* eslint-disable react/jsx-props-no-spreading */
       return (
-        <div key={def.props.id} style={style}>
-          <Filter {...def.props} />
-        </div>
+        <Accordion key={def.props.title}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>{def.props.title}</AccordionSummary>
+          <StyledAccordionDetails>
+            <Filter {...def.props} />
+          </StyledAccordionDetails>
+        </Accordion>
       );
       /* eslint-enable react/jsx-props-no-spreading */
     });
     return (
-      <Accordion>
-        <AccordionSummary>{title}</AccordionSummary>
-        <AccordionDetails>{filterGroupRendered}</AccordionDetails>
+      <Accordion key={title}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>{title}</AccordionSummary>
+        <StyledAccordionDetails>{filterGroupRendered}</StyledAccordionDetails>
       </Accordion>
     );
   });

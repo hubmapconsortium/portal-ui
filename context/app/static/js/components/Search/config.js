@@ -36,11 +36,7 @@ export const donorConfig = {
 
 export const sampleConfig = {
   filters: {
-    'Name?': [
-      // TODO
-      filter('origin_sample.mapped_organ', 'Organ'),
-      filter('mapped_specimen_type', 'Specimen Type'),
-    ],
+    'Sample Metadata': [filter('origin_sample.mapped_organ', 'Organ'), filter('mapped_specimen_type', 'Specimen Type')],
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
   },
@@ -55,8 +51,7 @@ export const sampleConfig = {
 
 export const datasetConfig = {
   filters: {
-    'Name?': [
-      // TODO
+    'Dataset Metadata': [
       filter('mapped_data_types', 'Data Type'),
       filter('origin_sample.mapped_organ', 'Organ'),
       filter('source_sample.mapped_specimen_type', 'Specimen Type'),
