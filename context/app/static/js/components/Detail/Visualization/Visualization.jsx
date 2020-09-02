@@ -89,7 +89,7 @@ function Visualization(props) {
         <StyledHeaderRight>
           <VisualizationThemeSwitch theme={vitessceTheme} onChange={(e, theme) => setVitessceTheme(theme)} />
           <SecondaryBackgroundTooltip title="Switch to Fullscreen">
-            <ExpandButton size="small" onClick={handleExpand} variant="contained" disableElevation>
+            <ExpandButton size="small" onClick={handleExpand} variant="contained">
               <ZoomOutMapIcon color="primary" />
             </ExpandButton>
           </SecondaryBackgroundTooltip>
