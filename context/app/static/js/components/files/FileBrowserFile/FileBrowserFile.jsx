@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import prettyBytes from 'pretty-bytes';
 
 import { getTokenParamIfNexusTokenCookieExists } from 'js/helpers/functions';
-import { SecondaryTooltip } from 'js/shared-styles/tooltips';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import DetailContext from 'js/components//Detail/context';
 import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
@@ -31,9 +31,9 @@ function FileBrowserFile(props) {
           {fileObj.file}
         </FilesConditionalLink>
         <FileSize variant="body1">{prettyBytes(fileObj.size)}</FileSize>
-        <SecondaryTooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`}>
+        <SecondaryBackgroundTooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`}>
           <StyledInfoIcon color="primary" />
-        </SecondaryTooltip>
+        </SecondaryBackgroundTooltip>
       </IndentedDiv>
     </StyledDiv>
   );

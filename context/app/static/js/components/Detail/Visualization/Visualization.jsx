@@ -11,7 +11,7 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import Alert from '@material-ui/lab/Alert';
 
-import { SecondaryTooltip } from 'js/shared-styles/tooltips';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import {
   vitessceFixedHeight,
@@ -88,11 +88,11 @@ function Visualization(props) {
         <StyledHeaderText>Visualization</StyledHeaderText>
         <StyledHeaderRight>
           <VisualizationThemeSwitch theme={vitessceTheme} onChange={(e, theme) => setVitessceTheme(theme)} />
-          <SecondaryTooltip title="Switch to Fullscreen">
+          <SecondaryBackgroundTooltip title="Switch to Fullscreen">
             <ExpandButton size="small" onClick={handleExpand} variant="contained" disableElevation>
               <ZoomOutMapIcon color="primary" />
             </ExpandButton>
-          </SecondaryTooltip>
+          </SecondaryBackgroundTooltip>
           {Array.isArray(vitData) ? (
             <>
               <SelectionButton

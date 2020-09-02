@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import metadataFieldDescriptions from 'metadata-field-descriptions';
-import { SecondaryTooltip } from 'js/shared-styles/tooltips';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import { DownloadIcon, Flex, StyledBackgroundIconButton, StyledSectionHeader } from './style';
@@ -42,11 +42,11 @@ function MetadataTable(props) {
     <SectionContainer id="metadata-table">
       <Flex>
         <StyledSectionHeader>Metadata</StyledSectionHeader>
-        <SecondaryTooltip title="Download">
+        <SecondaryBackgroundTooltip title="Download">
           <StyledBackgroundIconButton href={downloadUrl} download={`${display_doi}.tsv`}>
             <DownloadIcon color="primary" />
           </StyledBackgroundIconButton>
-        </SecondaryTooltip>
+        </SecondaryBackgroundTooltip>
       </Flex>
       <Paper>
         <StyledTableContainer $maxHeight={364}>

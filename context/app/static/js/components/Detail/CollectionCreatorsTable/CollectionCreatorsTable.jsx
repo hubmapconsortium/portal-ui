@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import { SecondaryTooltip } from 'js/shared-styles/tooltips';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { HeaderIconCell, StyledLink, StyledInfoIcon, CenterAlignedFlexRow } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
@@ -36,9 +36,9 @@ function CollectionCreatorsTable(props) {
                 <HeaderIconCell>
                   <CenterAlignedFlexRow>
                     ORCID ID
-                    <SecondaryTooltip title="Open Researcher and Contributor ID">
+                    <SecondaryBackgroundTooltip title="Open Researcher and Contributor ID">
                       <StyledInfoIcon color="primary" />
-                    </SecondaryTooltip>
+                    </SecondaryBackgroundTooltip>
                   </CenterAlignedFlexRow>
                 </HeaderIconCell>
               </TableRow>
