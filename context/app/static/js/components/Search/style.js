@@ -6,6 +6,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
 
+import { SideBar } from 'searchkit';
+
 import { HeaderCell } from 'js/shared-styles/Table';
 
 const ArrowUpOn = styled(ArrowUpward)`
@@ -99,6 +101,10 @@ const StyledAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;
 `;
 
+const StyledSideBar = styled(SideBar)`
+  padding: 0;
+`;
+
 export {
   ArrowUpOn,
   ArrowDownOn,
@@ -109,4 +115,5 @@ export {
   StyledTableBody,
   StyledTableCell,
   StyledAccordionDetails,
+  StyledSideBar,
 };

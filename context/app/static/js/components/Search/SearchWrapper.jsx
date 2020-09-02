@@ -20,7 +20,6 @@ import {
   HitsStats,
   Hits,
   LayoutBody,
-  SideBar,
   Pagination,
 } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
@@ -29,7 +28,7 @@ import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-dupli
 
 import SortingTableHead from './SortingTableHead';
 import { resultFieldsToSortOptions } from './utils';
-import { StyledTableBody, StyledTableRow, StyledTableCell, StyledAccordionDetails } from './style';
+import { StyledTableBody, StyledTableRow, StyledTableCell, StyledAccordionDetails, StyledSideBar } from './style';
 import './Search.scss';
 import * as filterPropTypes from './filterPropTypes';
 
@@ -147,7 +146,7 @@ function SearchWrapper(props) {
   return (
     <SearchkitProvider searchkit={searchkit}>
       <LayoutBody>
-        <SideBar>{filterElements}</SideBar>
+        <StyledSideBar>{filterElements}</StyledSideBar>
         <LayoutResults>
           <ActionBar>
             <ActionBarRow>
