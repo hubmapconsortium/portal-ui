@@ -22,7 +22,7 @@ function SummaryDataChildren(props) {
     <>
       <SummaryItem>
         <LightBlueLink variant="h6" href="/docs/assays" underline="none">
-          {mapped_data_types[0]}
+          {mapped_data_types}
         </LightBlueLink>
       </SummaryItem>
       <Typography variant="h6" component="p">
