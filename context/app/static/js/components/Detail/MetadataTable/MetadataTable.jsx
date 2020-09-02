@@ -11,7 +11,14 @@ import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton, StyledSectionHeader } from './style';
+import {
+  DownloadIcon,
+  Flex,
+  StyledWhiteBackgroundIconButton,
+  StyledSectionHeader,
+  FlexTableCell,
+  StyledInfoIcon,
+} from './style';
 import SectionContainer from '../SectionContainer';
 
 function MetadataTable(props) {
@@ -20,7 +27,6 @@ function MetadataTable(props) {
   const columns = [
     { id: 'key', label: 'Key' },
     { id: 'value', label: 'Value' },
-    { id: 'description', label: 'Description' },
   ];
 
   const tableRows = Object.entries(tableData).map((entry) => ({
@@ -61,9 +67,15 @@ function MetadataTable(props) {
             <TableBody>
               {tableRows.map((row) => (
                 <TableRow key={row.key}>
-                  <TableCell>{row.key}</TableCell>
+                  <FlexTableCell>
+                    {row.key}
+                    {row.description && (
+                      <SecondaryBackgroundTooltip title={row.description} placement="bottom-start">
+                        <StyledInfoIcon fontSize="14px" color="primary" />
+                      </SecondaryBackgroundTooltip>
+                    )}
+                  </FlexTableCell>
                   <TableCell>{row.value}</TableCell>
-                  <TableCell>{row.description}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
