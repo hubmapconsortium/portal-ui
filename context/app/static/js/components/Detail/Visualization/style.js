@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 
-import { BackgroundIconButton } from 'js/shared-styles/buttons';
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 
@@ -29,7 +29,7 @@ const StyledSectionContainer = styled(SectionContainer)`
   position: relative;
 `;
 
-const ExpandButton = styled(BackgroundIconButton)`
+const ExpandButton = styled(WhiteBackgroundIconButton)`
   margin-left: 0.5rem;
 `;
 

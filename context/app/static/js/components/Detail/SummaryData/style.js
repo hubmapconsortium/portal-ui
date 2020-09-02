@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { BackgroundIconButton } from 'js/shared-styles/buttons';
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 
 import { FileIcon } from 'js/shared-styles/icons';
 import Typography from '@material-ui/core/Typography';
@@ -19,7 +19,7 @@ const FlexEnd = styled.div`
   align-items: flex-end;
 `;
 
-const JsonButton = styled(BackgroundIconButton)`
+const JsonButton = styled(WhiteBackgroundIconButton)`
   margin-left: auto;
 `;
 
