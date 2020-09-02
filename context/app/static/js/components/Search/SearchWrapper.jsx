@@ -4,10 +4,6 @@ import PropTypes from 'prop-types';
 import Table from '@material-ui/core/Table';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-// In the latest version, "ExpansionPanel" is renamed to "Accordion".
-import Accordion from '@material-ui/core/ExpansionPanel';
-import AccordionSummary from '@material-ui/core/ExpansionPanelSummary';
-
 import {
   SearchkitManager,
   SearchkitProvider,
@@ -28,7 +24,16 @@ import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-dupli
 
 import SortingTableHead from './SortingTableHead';
 import { resultFieldsToSortOptions } from './utils';
-import { StyledTableBody, StyledTableRow, StyledTableCell, StyledAccordionDetails, StyledSideBar } from './style';
+import {
+  StyledTableBody,
+  StyledTableRow,
+  StyledTableCell,
+  InnerAccordion,
+  OuterAccordion,
+  StyledAccordionDetails,
+  StyledSideBar,
+  StyledAccordionSummary,
+} from './style';
 import './Search.scss';
 import * as filterPropTypes from './filterPropTypes';
 
@@ -112,20 +117,20 @@ function SearchWrapper(props) {
       // const style = hiddenFilterIds.indexOf(def.props.id) === -1 ? {} : { display: 'None' };
       /* eslint-disable react/jsx-props-no-spreading */
       return (
-        <Accordion key={def.props.title}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>{def.props.title}</AccordionSummary>
+        <InnerAccordion key={def.props.title}>
+          <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>{def.props.title}</StyledAccordionSummary>
           <StyledAccordionDetails>
             <Filter {...def.props} />
           </StyledAccordionDetails>
-        </Accordion>
+        </InnerAccordion>
       );
       /* eslint-enable react/jsx-props-no-spreading */
     });
     return (
-      <Accordion key={title}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>{title}</AccordionSummary>
+      <OuterAccordion key={title}>
+        <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>{title}</StyledAccordionSummary>
         <StyledAccordionDetails>{filterGroupRendered}</StyledAccordionDetails>
-      </Accordion>
+      </OuterAccordion>
     );
   });
 

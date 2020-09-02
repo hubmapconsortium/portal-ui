@@ -4,7 +4,11 @@ import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+
+// In the latest version, "ExpansionPanel" is renamed to "Accordion".
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
+import AccordionSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/ExpansionPanel';
 
 import { SideBar } from 'searchkit';
 
@@ -97,6 +101,23 @@ const StyledTableCell = styled(TableCell)`
   }
 `;
 
+const InnerAccordion = styled(Accordion)`
+  box-shadow: none;
+  border: none;
+  margin: 0 !important; // Override margin on expand; could be done more cleanly.
+  .Mui-expanded {
+    margin: 0;
+  }
+`;
+
+const OuterAccordion = styled(InnerAccordion)`
+  border-bottom: 1px solid grey;
+`;
+
+const StyledAccordionSummary = styled(AccordionSummary)`
+  // Do we turn off the slight change in margin on expand?
+`;
+
 const StyledAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;
 `;
@@ -115,5 +136,8 @@ export {
   StyledTableBody,
   StyledTableCell,
   StyledAccordionDetails,
+  StyledAccordionSummary,
   StyledSideBar,
+  InnerAccordion,
+  OuterAccordion,
 };
