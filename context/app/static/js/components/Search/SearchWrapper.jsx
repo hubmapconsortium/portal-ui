@@ -2,6 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Table from '@material-ui/core/Table';
+// In the latest version, "ExpansionPanel" is renamed to "Accordion".
+import Accordion from '@material-ui/core/ExpansionPanel';
+import AccordionSummary from '@material-ui/core/ExpansionPanelSummary';
+import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
 
 import {
   SearchkitManager,
@@ -116,10 +120,10 @@ function SearchWrapper(props) {
       /* eslint-enable react/jsx-props-no-spreading */
     });
     return (
-      <div>
-        <h3>{title}</h3>
-        {filterGroupRendered}
-      </div>
+      <Accordion>
+        <AccordionSummary>{title}</AccordionSummary>
+        <AccordionDetails>{filterGroupRendered}</AccordionDetails>
+      </Accordion>
     );
   });
 
