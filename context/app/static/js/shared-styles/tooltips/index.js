@@ -12,7 +12,7 @@ function TooltipBase(props) {
   );
 }
 
-const useRoundedSecondaryBackgroundBackgroundTooltipStyles = makeStyles((theme) => ({
+const useRoundedSecondaryBackgroundTooltipStyles = makeStyles((theme) => ({
   tooltip: {
     backgroundColor: theme.palette.secondary.main,
     borderRadius: '0.4rem',
@@ -20,7 +20,7 @@ const useRoundedSecondaryBackgroundBackgroundTooltipStyles = makeStyles((theme) 
 }));
 
 const SecondaryBackgroundTooltip = (props) => {
-  const secondaryClasses = useRoundedSecondaryBackgroundBackgroundTooltipStyles();
+  const secondaryClasses = useRoundedSecondaryBackgroundTooltipStyles();
 
   return <TooltipBase {...props} classes={secondaryClasses} />;
 };
