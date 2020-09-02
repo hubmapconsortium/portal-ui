@@ -16,11 +16,13 @@ function makeDonorMetadataFilters(isDonor) {
   ];
 }
 
+export const affiliationFilters = [filter('group_name', 'Group'), filter('created_by_user_displayname', 'Creator')];
+
 export const donorConfig = {
-  filters: makeDonorMetadataFilters(true).concat([
-    filter('group_name', 'Group'),
-    filter('created_by_user_displayname', 'Creator'),
-  ]),
+  filters: {
+    'Donor Metadata': makeDonorMetadataFilters(true),
+    Affiliation: affiliationFilters,
+  },
   fields: [
     field('display_doi', 'Donor'),
     field('group_name', 'Group'),
@@ -33,9 +35,15 @@ export const donorConfig = {
 };
 
 export const sampleConfig = {
-  filters: [filter('origin_sample.mapped_organ', 'Organ'), filter('mapped_specimen_type', 'Specimen Type')]
-    .concat(makeDonorMetadataFilters(false))
-    .concat([filter('group_name', 'Group'), filter('created_by_user_displayname', 'Creator')]),
+  filters: {
+    'Name?': [
+      // TODO
+      filter('origin_sample.mapped_organ', 'Organ'),
+      filter('mapped_specimen_type', 'Specimen Type'),
+    ],
+    'Donor Metadata': makeDonorMetadataFilters(false),
+    Affiliation: affiliationFilters,
+  },
   fields: [
     field('display_doi', 'Sample'),
     field('group_name', 'Group'),
@@ -46,15 +54,18 @@ export const sampleConfig = {
 };
 
 export const datasetConfig = {
-  filters: [
-    filter('mapped_data_types', 'Data Type'),
-    filter('origin_sample.mapped_organ', 'Organ'),
-    filter('source_sample.mapped_specimen_type', 'Specimen Type'),
-    filter('mapped_status', 'Status'),
-    filter('mapped_data_access_level', 'Access Level'),
-  ]
-    .concat(makeDonorMetadataFilters(false))
-    .concat([filter('group_name', 'Group'), filter('created_by_user_displayname', 'Creator')]),
+  filters: {
+    'Name?': [
+      // TODO
+      filter('mapped_data_types', 'Data Type'),
+      filter('origin_sample.mapped_organ', 'Organ'),
+      filter('source_sample.mapped_specimen_type', 'Specimen Type'),
+      filter('mapped_status', 'Status'),
+      filter('mapped_data_access_level', 'Access Level'),
+    ],
+    'Donor Metadata': makeDonorMetadataFilters(false),
+    Affiliation: affiliationFilters,
+  },
   fields: [
     field('display_doi', 'Dataset'),
     field('group_name', 'Group'),
@@ -66,11 +77,13 @@ export const datasetConfig = {
 };
 
 export const fallbackConfig = {
-  filters: [
-    // 'entity_type' filter would make sense, but it is hidden for the other searches.
-    filter('mapped_status', 'Status'),
-    filter('mapped_data_access_level', 'Access Level'),
-  ],
+  filters: {
+    Basics: [
+      // 'entity_type' filter would make sense, but it is hidden for the other searches.
+      filter('mapped_status', 'Status'),
+      filter('mapped_data_access_level', 'Access Level'),
+    ],
+  },
   fields: [
     field('display_doi', 'ID'),
     field('entity_type', 'Entity Type'),

@@ -16,9 +16,9 @@ function Search(props) {
 
   const filtersByType = {
     '': fallbackConfig.filters,
-    donor: donorConfig.filters.concat(hiddenFilters),
-    sample: sampleConfig.filters.concat(hiddenFilters),
-    dataset: datasetConfig.filters.concat(hiddenFilters),
+    donor: { hiddenFilters, ...donorConfig.filters },
+    sample: { hiddenFilters, ...sampleConfig.filters },
+    dataset: { hiddenFilters, ...datasetConfig.filters },
   };
 
   const resultFieldsByType = {
@@ -52,15 +52,13 @@ function Search(props) {
     resultFields,
     // Default hitsPerPage is 10:
     hitsPerPage: 20,
-    // Sidebar facet configuration;
-    // "type" should be one of the filters described here:
-    // http://docs.searchkit.co/stable/components/navigation/
+    // Sidebar facet configuration:
     filters: filtersByType[type],
     hiddenFilterIds: hiddenFilters.map((hiddenFilter) => hiddenFilter.props.id),
     queryFields: ['everything'],
     isLoggedIn: Boolean(nexusToken),
   };
-  const allProps = Object.assign(searchProps, { apiUrl: elasticsearchEndpoint });
+  const allProps = { apiUrl: elasticsearchEndpoint, ...searchProps }; // TODO: Not needed?
 
   // eslint-disable-next-line react/jsx-props-no-spreading
   const wrappedSearch = <SearchWrapper {...allProps} />;

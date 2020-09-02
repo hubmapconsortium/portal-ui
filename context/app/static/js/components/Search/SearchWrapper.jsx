@@ -102,17 +102,20 @@ function SearchWrapper(props) {
   const resultFieldIds = resultFields.map((field) => field.id).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 
-  const filterElements = filters.map((def) => {
-    const Filter = filterTypes[def.type];
-    const style = hiddenFilterIds.indexOf(def.props.id) === -1 ? {} : { display: 'None' };
-    /* eslint-disable react/jsx-props-no-spreading */
-    return (
-      <div key={def.props.id} style={style}>
-        <Filter {...def.props} />
-      </div>
-    );
-    /* eslint-enable react/jsx-props-no-spreading */
-  });
+  // TODO: Preserve object structure; add accordions!
+  const filterElements = Object.values(filters)
+    .flat()
+    .map((def) => {
+      const Filter = filterTypes[def.type];
+      const style = hiddenFilterIds.indexOf(def.props.id) === -1 ? {} : { display: 'None' };
+      /* eslint-disable react/jsx-props-no-spreading */
+      return (
+        <div key={def.props.id} style={style}>
+          <Filter {...def.props} />
+        </div>
+      );
+      /* eslint-enable react/jsx-props-no-spreading */
+    });
 
   return (
     <SearchkitProvider searchkit={searchkit}>
