@@ -1,0 +1,1 @@
+- Move description in metadata table to icon tooltip.
