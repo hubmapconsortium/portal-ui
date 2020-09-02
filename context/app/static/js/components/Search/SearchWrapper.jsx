@@ -107,7 +107,6 @@ function SearchWrapper(props) {
   const resultFieldIds = resultFields.map((field) => field.id).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 
-  // TODO: Preserve object structure; add accordions!
   const filterElements = Object.entries(filters).map(([title, filterGroup]) => {
     const filterGroupRendered = filterGroup.map((def) => {
       const Filter = filterTypes[def.type];
@@ -148,12 +147,12 @@ function SearchWrapper(props) {
   return (
     <SearchkitProvider searchkit={searchkit}>
       <LayoutBody>
-        <SideBar>
-          <SearchBox autofocus queryFields={queryFields} />
-          {filterElements}
-        </SideBar>
+        <SideBar>{filterElements}</SideBar>
         <LayoutResults>
           <ActionBar>
+            <ActionBarRow>
+              <SearchBox autofocus queryFields={queryFields} />
+            </ActionBarRow>
             <ActionBarRow>
               <HitsStats
                 translations={{
