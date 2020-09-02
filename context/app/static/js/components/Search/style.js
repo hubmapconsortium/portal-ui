@@ -105,13 +105,14 @@ const InnerAccordion = styled(Accordion)`
   box-shadow: none;
   border: none;
   margin: 0 !important; // Override margin on expand; could be done more cleanly.
-  .Mui-expanded {
-    margin: 0;
+  ::before {
+    // Material UI adds a "border" using the pseudoelement.
+    content: none;
   }
 `;
 
 const OuterAccordion = styled(InnerAccordion)`
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid ${(props) => props.theme.palette.transparentGray.main};
 `;
 
 const StyledAccordionSummary = styled(AccordionSummary)`
