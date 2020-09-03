@@ -17,15 +17,14 @@ const generateClassName = createGenerateClassName({
 const AppContext = React.createContext({});
 
 function Providers(props) {
-  const { endpoints, children } = props;
+  const { endpoints, nexusToken, children } = props;
   // injectFirst ensures styled-components takes priority over mui for styling
   return (
     <StylesProvider generateClassName={generateClassName} injectFirst>
       <GlobalFonts />
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
-          {/* eslint-disable-next-line no-undef */}
-          <AppContext.Provider value={{ nexusToken: nexus_token, ...endpoints }}>
+          <AppContext.Provider value={{ nexusToken, ...endpoints }}>
             <CssBaseline />
             <GlobalStyles />
             {children}

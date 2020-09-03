@@ -15,7 +15,8 @@ function App(props) {
   ReactGA.initialize('UA-133341631-3');
 
   return (
-    <Providers endpoints={endpoints}>
+    // eslint-disable-next-line no-undef
+    <Providers endpoints={endpoints} nexusToken={nexus_token}>
       <Header />
       <div className="main-content">
         <Routes flaskData={flaskData} />
