@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Table from '@material-ui/core/Table';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import {
   SearchkitManager,
@@ -19,21 +18,10 @@ import {
   Pagination,
 } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
-import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
-// There is more in the name space, but we only need the filterTypes.
-
+import Accordions from './Accordions';
 import SortingTableHead from './SortingTableHead';
 import { resultFieldsToSortOptions } from './utils';
-import {
-  StyledTableBody,
-  StyledTableRow,
-  StyledTableCell,
-  InnerAccordion,
-  OuterAccordion,
-  StyledAccordionDetails,
-  StyledSideBar,
-  StyledAccordionSummary,
-} from './style';
+import { StyledTableBody, StyledTableRow, StyledTableCell, StyledSideBar } from './style';
 import './Search.scss';
 import * as filterPropTypes from './filterPropTypes';
 
@@ -110,42 +98,12 @@ function SearchWrapper(props) {
   const resultFieldIds = resultFields.map((field) => field.id).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 
-  const filterElements = Object.entries(filters).map(([title, filterGroup]) => {
-    const innerAccordion = filterGroup.map((def) => {
-      const Filter = filterTypes[def.type];
-      /* eslint-disable react/jsx-props-no-spreading */
-      return (
-        <InnerAccordion key={def.props.title}>
-          <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>{def.props.title}</StyledAccordionSummary>
-          <StyledAccordionDetails>
-            <Filter {...def.props} />
-          </StyledAccordionDetails>
-        </InnerAccordion>
-      );
-      /* eslint-enable react/jsx-props-no-spreading */
-    });
-    if (!title) {
-      // We leave the title blank for the group of facets
-      // that need to be on the page for Searchkit,
-      // but that we don't want to display.
-      return (
-        <div style={{ display: 'none' }} key="hidden">
-          {innerAccordion}
-        </div>
-      );
-    }
-    return (
-      <OuterAccordion key={title}>
-        <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>{title}</StyledAccordionSummary>
-        <StyledAccordionDetails>{innerAccordion}</StyledAccordionDetails>
-      </OuterAccordion>
-    );
-  });
-
   return (
     <SearchkitProvider searchkit={searchkit}>
       <LayoutBody>
-        <StyledSideBar>{filterElements}</StyledSideBar>
+        <StyledSideBar>
+          <Accordions filters={filters} />
+        </StyledSideBar>
         <LayoutResults>
           <ActionBar>
             <ActionBarRow>
@@ -204,28 +162,13 @@ SearchWrapper.propTypes = {
   ).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
   httpHeaders: PropTypes.objectOf(PropTypes.string),
-  sortOptions: PropTypes.arrayOf(
-    PropTypes.exact({
-      label: PropTypes.string.isRequired,
-      field: PropTypes.string.isRequired,
-      order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-      defaultOption: PropTypes.bool.isRequired,
-    }),
-  ),
+
   searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   isLoggedIn: PropTypes.bool,
 };
 
 SearchWrapper.defaultProps = {
-  sortOptions: [
-    {
-      label: 'Relevance',
-      field: '_score',
-      order: 'desc',
-      defaultOption: true,
-    },
-  ],
   searchUrlPath: '_search',
   httpHeaders: {},
   isLoggedIn: false,

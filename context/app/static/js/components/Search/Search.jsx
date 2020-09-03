@@ -54,7 +54,6 @@ function Search(props) {
     hitsPerPage: 20,
     // Sidebar facet configuration:
     filters: filtersByType[type],
-    hiddenFilterIds: hiddenFilters.map((hiddenFilter) => hiddenFilter.props.id),
     queryFields: ['everything'],
     isLoggedIn: Boolean(nexusToken),
   };
