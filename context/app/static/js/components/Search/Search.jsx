@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
+import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
+import { getAuthHeader } from 'js/helpers/functions';
 import SearchWrapper from './SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fallbackConfig } from './config';
 // eslint-disable-next-line import/named
@@ -10,7 +12,8 @@ import { filter } from './utils';
 import AncestorNote from './AncestorNote';
 
 function Search(props) {
-  const { title, elasticsearchEndpoint, nexusToken } = props;
+  const { title } = props;
+  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   const hiddenFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
 
@@ -32,11 +35,7 @@ function Search(props) {
   const type = (searchParams.get('entity_type[0]') || '').toLowerCase();
   const hasAncestorParam = searchParams.has('ancestor_ids[0]');
 
-  const httpHeaders = nexusToken
-    ? {
-        Authorization: `Bearer ${nexusToken}`,
-      }
-    : {};
+  const httpHeaders = getAuthHeader(nexusToken);
   const resultFields = resultFieldsByType[type];
   const searchProps = {
     // The default behavior is to add a "_search" path.
@@ -70,7 +69,11 @@ function Search(props) {
         {title}
       </Typography>
       {hasAncestorParam && (
-        <LookupEntity uuid={searchParams.get('ancestor_ids[0]')} elasticsearchEndpoint={elasticsearchEndpoint}>
+        <LookupEntity
+          uuid={searchParams.get('ancestor_ids[0]')}
+          elasticsearchEndpoint={elasticsearchEndpoint}
+          nexusToken={nexusToken}
+        >
           <AncestorNote />
         </LookupEntity>
       )}

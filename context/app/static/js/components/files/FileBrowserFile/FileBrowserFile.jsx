@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import Tooltip from '@material-ui/core/Tooltip';
 import prettyBytes from 'pretty-bytes';
 
-import { getTokenParamIfNexusTokenCookieExists } from 'js/helpers/functions';
+import { AppContext } from 'js/components/Providers';
+import { getAuthHeader } from 'js/helpers/functions';
 import { useRoundedSecondaryTooltipStyles } from 'js/shared-styles/Tooltips';
 import DetailContext from 'js/components//Detail/context';
 import FilesConditionalLink from '../FilesConditionalLink';
@@ -13,8 +14,10 @@ import FilesContext from '../Files/context';
 function FileBrowserFile(props) {
   const { fileObj, depth } = props;
   const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
-  const { assetsEndpoint, uuid } = useContext(DetailContext);
-  const tokenParam = getTokenParamIfNexusTokenCookieExists();
+  const { uuid } = useContext(DetailContext);
+  const { assetsEndpoint, nexusToken } = useContext(AppContext);
+
+  const tokenParam = getAuthHeader(nexusToken);
   const classes = useRoundedSecondaryTooltipStyles();
 
   const fileUrl = `${assetsEndpoint}/${uuid}/${fileObj.rel_path}${tokenParam}`;

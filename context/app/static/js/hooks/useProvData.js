@@ -1,20 +1,14 @@
 import React from 'react';
-import { readCookie } from 'js/helpers/functions';
 
-function useProvData(uuid, entityEndpoint) {
+import { getAuthHeader } from 'js/helpers/functions';
+
+function useProvData(uuid, entityEndpoint, nexusToken) {
   const [provData, setProvData] = React.useState(undefined);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     async function getAndSetProvData() {
-      const nexus_token = readCookie('nexus_token');
-      const requestInit = nexus_token
-        ? {
-            headers: {
-              Authorization: `Bearer ${nexus_token}`,
-            },
-          }
-        : {};
+      const requestInit = getAuthHeader(nexusToken);
 
       const response = await fetch(`${entityEndpoint}/entities/${uuid}/provenance`, requestInit);
 
@@ -28,7 +22,7 @@ function useProvData(uuid, entityEndpoint) {
       setIsLoading(false);
     }
     getAndSetProvData();
-  }, [entityEndpoint, uuid]);
+  }, [nexusToken, entityEndpoint, uuid]);
 
   return { provData, isLoading };
 }

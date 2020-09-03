@@ -10,7 +10,7 @@ import useSendUUIDEvent from '../useSendUUIDEvent';
 import DetailContext from '../context';
 
 function DonorDetail(props) {
-  const { assayMetadata, entityEndpoint, elasticsearchEndpoint } = props;
+  const { assayMetadata } = props;
   const {
     uuid,
     protocol_url,
@@ -33,7 +33,7 @@ function DonorDetail(props) {
   useSendUUIDEvent(entity_type, uuid);
 
   return (
-    <DetailContext.Provider value={{ elasticsearchEndpoint, display_doi, uuid }}>
+    <DetailContext.Provider value={{ display_doi, uuid }}>
       <DetailLayout shouldDisplaySection={shouldDisplaySection}>
         <Summary
           uuid={uuid}
@@ -49,7 +49,7 @@ function DonorDetail(props) {
           created_by_user_displayname={created_by_user_displayname}
           created_by_user_email={created_by_user_email}
         />
-        <ProvSection uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
+        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
       </DetailLayout>
     </DetailContext.Provider>

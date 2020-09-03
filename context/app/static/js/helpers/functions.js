@@ -33,11 +33,10 @@ export function getTokenParamIfNexusTokenCookieExists() {
   return nexus_token ? `?token=${nexus_token}` : '';
 }
 
-export function getAuthHeaderIfNexusTokenCookieExists() {
-  const nexus_token = readCookie('nexus_token');
-  return nexus_token
+export function getAuthHeader(nexusToken) {
+  return nexusToken
     ? {
-        Authorization: `Bearer ${nexus_token}`,
+        Authorization: `Bearer ${nexusToken}`,
       }
     : {};
 }
