@@ -8,11 +8,14 @@ import Footer from './Footer';
 import Header from './Header';
 
 function App(props) {
-  const { flaskData } = props;
+  const {
+    flaskData,
+    flaskData: { endpoints },
+  } = props;
   ReactGA.initialize('UA-133341631-3');
 
   return (
-    <Providers>
+    <Providers endpoints={endpoints}>
       <Header />
       <div className="main-content">
         <Routes flaskData={flaskData} />
