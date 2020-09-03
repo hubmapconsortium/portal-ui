@@ -7,6 +7,8 @@ import { getSections } from './utils';
 
 function DetailLayout(props) {
   const { sectionOrder, children } = props;
+
+  // section hash must match section id in each component
   const sections = new Map(getSections(sectionOrder));
 
   return (
