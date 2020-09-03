@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { withStyles } from '@material-ui/core/styles';
 import ArrowUpward from '@material-ui/icons/ArrowUpwardRounded';
 import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
 import TableRow from '@material-ui/core/TableRow';
@@ -115,9 +116,17 @@ const OuterAccordion = styled(InnerAccordion)`
   border-bottom: 1px solid ${(props) => props.theme.palette.transparentGray.main};
 `;
 
-const StyledAccordionSummary = styled(AccordionSummary)`
-  // Do we turn off the slight change in margin on expand?
-`;
+const StyledAccordionSummary = withStyles({
+  // Default is to increase spacing when expanded.
+  root: {
+    minHeight: 'auto !important',
+    margin: '0 !important',
+  },
+  expanded: {
+    minHeight: 'auto !important',
+    margin: '0 !important',
+  },
+})(AccordionSummary);
 
 const StyledAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;
