@@ -28,9 +28,8 @@ export function readCookie(name) {
   return null;
 }
 
-export function getTokenParamIfNexusTokenCookieExists() {
-  const nexus_token = readCookie('nexus_token');
-  return nexus_token ? `?token=${nexus_token}` : '';
+export function getTokenParam(nexusToken) {
+  return nexusToken ? `?token=${nexusToken}` : '';
 }
 
 export function getAuthHeader(nexusToken) {
