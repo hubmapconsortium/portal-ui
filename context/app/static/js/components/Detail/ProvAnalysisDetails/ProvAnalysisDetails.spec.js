@@ -12,12 +12,9 @@ test('should display ingest and cwl lists', () => {
   ];
   render(<ProvAnalysisDetails dagListData={dagListData} />);
 
-  const pipelineLists = screen.getAllByRole('list');
-  const ingestList = pipelineLists[0];
-  const cwlList = pipelineLists[1];
+  expect(screen.getByText('Ingest Pipelines')).toBeInTheDocument();
+  expect(screen.getByText('CWL Pipelines')).toBeInTheDocument();
 
-  expect(ingestList).toContainElement(screen.getByText('Ingest Pipelines'));
-  expect(ingestList.children).toHaveLength(3);
-  expect(cwlList).toContainElement(screen.getByText('CWL Pipelines'));
-  expect(cwlList.children).toHaveLength(2);
+  expect(screen.getByTestId('Ingest').children).toHaveLength(2);
+  expect(screen.getByTestId('CWL').children).toHaveLength(1);
 });

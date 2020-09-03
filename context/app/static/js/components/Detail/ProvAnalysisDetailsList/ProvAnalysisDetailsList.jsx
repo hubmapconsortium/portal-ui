@@ -8,15 +8,17 @@ import ProvAnalysisDetailsLink from '../ProvAnalysisDetailsLink';
 
 function ProvAnalysisDetailsList({ pipelines, pipelineType }) {
   return (
-    <List>
+    <>
       <Typography variant="subtitle1">{`${pipelineType} Pipelines`}</Typography>
-      {pipelines.map((item, i) => (
-        <ProvAnalysisDetailsLink
-          data={item}
-          key={`provenance-analysis-details-${pipelineType.toLowerCase()}-pipeline-${i}`}
-        />
-      ))}
-    </List>
+      <List data-testid={pipelineType}>
+        {pipelines.map((item, i) => (
+          <ProvAnalysisDetailsLink
+            data={item}
+            key={`provenance-analysis-details-${pipelineType.toLowerCase()}-pipeline-${i}`}
+          />
+        ))}
+      </List>
+    </>
   );
 }
 
