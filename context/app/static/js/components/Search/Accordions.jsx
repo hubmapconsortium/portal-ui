@@ -15,7 +15,7 @@ function Accordions(props) {
       const Filter = filterTypes[def.type];
       /* eslint-disable react/jsx-props-no-spreading */
       return (
-        <InnerAccordion key={def.props.title}>
+        <InnerAccordion key={def.props.title} defaultExpanded>
           <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>{def.props.title}</StyledAccordionSummary>
           <StyledAccordionDetails>
             <Filter {...def.props} />
