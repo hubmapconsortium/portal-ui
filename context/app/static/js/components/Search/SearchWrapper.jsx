@@ -102,7 +102,6 @@ function SearchWrapper(props) {
     resultFields,
     hitsPerPage,
     httpHeaders,
-    hiddenFilterIds,
     searchUrlPath,
     queryFields,
     isLoggedIn,
@@ -142,20 +141,6 @@ function SearchWrapper(props) {
       </OuterAccordion>
     );
   });
-
-  Object.values(filters)
-    .flat()
-    .map((def) => {
-      const Filter = filterTypes[def.type];
-      const style = hiddenFilterIds.indexOf(def.props.id) === -1 ? {} : { display: 'None' };
-      /* eslint-disable react/jsx-props-no-spreading */
-      return (
-        <div key={def.props.id} style={style}>
-          <Filter {...def.props} />
-        </div>
-      );
-      /* eslint-enable react/jsx-props-no-spreading */
-    });
 
   return (
     <SearchkitProvider searchkit={searchkit}>
@@ -227,7 +212,6 @@ SearchWrapper.propTypes = {
       defaultOption: PropTypes.bool.isRequired,
     }),
   ),
-  hiddenFilterIds: PropTypes.arrayOf(PropTypes.string),
   searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   isLoggedIn: PropTypes.bool,
@@ -242,7 +226,6 @@ SearchWrapper.defaultProps = {
       defaultOption: true,
     },
   ],
-  hiddenFilterIds: [],
   searchUrlPath: '_search',
   httpHeaders: {},
   isLoggedIn: false,
