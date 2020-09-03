@@ -112,9 +112,8 @@ function SearchWrapper(props) {
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 
   const filterElements = Object.entries(filters).map(([title, filterGroup]) => {
-    const filterGroupRendered = filterGroup.map((def) => {
+    const innerAccordion = filterGroup.map((def) => {
       const Filter = filterTypes[def.type];
-      // const style = hiddenFilterIds.indexOf(def.props.id) === -1 ? {} : { display: 'None' };
       /* eslint-disable react/jsx-props-no-spreading */
       return (
         <InnerAccordion key={def.props.title}>
@@ -126,10 +125,20 @@ function SearchWrapper(props) {
       );
       /* eslint-enable react/jsx-props-no-spreading */
     });
+    if (!title) {
+      // We leave the title blank for the group of facets
+      // that need to be on the page for Searchkit,
+      // but that we don't want to display.
+      return (
+        <div style={{ display: 'none' }} key="hidden">
+          {innerAccordion}
+        </div>
+      );
+    }
     return (
       <OuterAccordion key={title}>
         <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>{title}</StyledAccordionSummary>
-        <StyledAccordionDetails>{filterGroupRendered}</StyledAccordionDetails>
+        <StyledAccordionDetails>{innerAccordion}</StyledAccordionDetails>
       </OuterAccordion>
     );
   });

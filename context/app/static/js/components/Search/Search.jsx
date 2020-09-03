@@ -16,9 +16,9 @@ function Search(props) {
 
   const filtersByType = {
     '': fallbackConfig.filters,
-    donor: { hiddenFilters, ...donorConfig.filters },
-    sample: { hiddenFilters, ...sampleConfig.filters },
-    dataset: { hiddenFilters, ...datasetConfig.filters },
+    donor: { ...donorConfig.filters, '': hiddenFilters },
+    sample: { ...sampleConfig.filters, '': hiddenFilters },
+    dataset: { ...datasetConfig.filters, '': hiddenFilters },
   };
 
   const resultFieldsByType = {

@@ -105,7 +105,7 @@ const StyledTableCell = styled(TableCell)`
 const InnerAccordion = styled(Accordion)`
   box-shadow: none;
   border: none;
-  margin: 0 !important; // Override margin on expand; could be done more cleanly.
+  margin: 0 !important; // Override margin on expand.
   ::before {
     // Material UI adds a "border" using the pseudoelement.
     content: none;
@@ -117,7 +117,7 @@ const OuterAccordion = styled(InnerAccordion)`
 `;
 
 const StyledAccordionSummary = withStyles({
-  // Default is to increase spacing when expanded.
+  // Material UI default is to increase spacing when expanded.
   root: {
     minHeight: 'auto !important',
     margin: '0 !important',
