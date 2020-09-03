@@ -15,6 +15,7 @@ import useSendUUIDEvent from '../useSendUUIDEvent';
 
 // TODO use this context for components other than FileBrowser
 import DetailContext from '../context';
+import { getSectionOrder } from '../utils';
 
 function SummaryDataChildren(props) {
   const { data_types, mapped_data_types, origin_sample } = props;
@@ -73,9 +74,14 @@ function DatasetDetail(props) {
   const shouldDisplaySection = {
     visualization: 'name' in vitData || (vitData[0] && 'name' in vitData[0]),
     protocols: Boolean(protocol_url),
-    metadataTable: metadata && 'metadata' in metadata,
+    metadata: metadata && 'metadata' in metadata,
     files: true,
   };
+
+  const sectionOrder = getSectionOrder(
+    ['summary', 'visualization', 'attribution', 'provenance', 'protocols', 'metadata', 'files'],
+    shouldDisplaySection,
+  );
 
   useSendUUIDEvent(entity_type, uuid);
 
@@ -84,7 +90,7 @@ function DatasetDetail(props) {
     <DetailContext.Provider
       value={{ assetsEndpoint, elasticsearchEndpoint, display_doi, uuid, mapped_data_access_level }}
     >
-      <DetailLayout shouldDisplaySection={shouldDisplaySection}>
+      <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}
           entity_type={entity_type}
