@@ -11,6 +11,7 @@ import SampleTissue from '../SampleTissue';
 import useSendUUIDEvent from '../useSendUUIDEvent';
 
 import DetailContext from '../context';
+import { getSectionOrder } from '../utils';
 
 function SampleDetail(props) {
   const { assayMetadata } = props;
@@ -35,14 +36,19 @@ function SampleDetail(props) {
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     tissue: true,
-    metadataTable: 'metadata' in assayMetadata,
+    metadata: 'metadata' in assayMetadata,
   };
+
+  const sectionOrder = getSectionOrder(
+    ['summary', 'tissue', 'attribution', 'provenance', 'protocols', 'metadata'],
+    shouldDisplaySection,
+  );
 
   useSendUUIDEvent(entity_type, uuid);
 
   return (
     <DetailContext.Provider value={{ display_doi, uuid }}>
-      <DetailLayout shouldDisplaySection={shouldDisplaySection}>
+      <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}
           entity_type={entity_type}

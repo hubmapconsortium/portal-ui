@@ -18,7 +18,7 @@ test('text displays properly when all props provided', () => {
       exact: false,
     }),
   ).toBeInTheDocument();
-  expect(screen.getByRole('link')).toHaveAttribute('href', 'https://portal.hubmapconsortium.org/ccf-eui');
+  expect(screen.getByRole('link')).toHaveAttribute('href', '/ccf-eui');
 });
 
 test('displays label not defined when values are undefined', () => {

@@ -38,7 +38,6 @@ function Home() {
     datasetCount: '-',
     sampleCount: '-',
     donorCount: '-',
-    centerCount: '-',
   });
 
   const { elasticsearchEndpoint } = useContext(AppContext);
