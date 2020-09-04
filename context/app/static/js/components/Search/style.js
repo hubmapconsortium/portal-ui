@@ -148,6 +148,7 @@ const InnerAccordionSummary = styled(StyledAccordionSummary)`
 
 const StyledAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;
+  padding-bottom: 0;
 `;
 
 const StyledSideBar = styled(SideBar)`

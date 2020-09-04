@@ -1,6 +1,8 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 
+import Typography from '@material-ui/core/Typography';
+
 import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
 // There is more in the name space, but we only need the filterTypes.
 
@@ -23,7 +25,9 @@ function Accordions(props) {
       /* eslint-disable react/jsx-props-no-spreading */
       return (
         <InnerAccordion key={def.props.title} defaultExpanded>
-          <InnerAccordionSummary expandIcon={<ExpandMoreIcon />}>{def.props.title}</InnerAccordionSummary>
+          <InnerAccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography variant="subtitle2">{def.props.title}</Typography>
+          </InnerAccordionSummary>
           <StyledAccordionDetails>
             <Filter {...def.props} />
           </StyledAccordionDetails>
@@ -43,7 +47,9 @@ function Accordions(props) {
     }
     return (
       <OuterAccordion key={title} defaultExpanded={isFirst}>
-        <OuterAccordionSummary expandIcon={<ExpandMoreIcon />}>{title}</OuterAccordionSummary>
+        <OuterAccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>{title}</Typography>
+        </OuterAccordionSummary>
         <StyledAccordionDetails>{innerAccordion}</StyledAccordionDetails>
       </OuterAccordion>
     );
