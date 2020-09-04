@@ -49,6 +49,7 @@ const InnerAccordionSummary = styled(StyledAccordionSummary)`
     flex-grow: unset;
     padding: 0;
     margin: 0;
+    color: #000;
   }
   margin: 0;
 `;
