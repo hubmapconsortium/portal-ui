@@ -38,7 +38,6 @@ function Home(props) {
     datasetCount: '-',
     sampleCount: '-',
     donorCount: '-',
-    centerCount: '-',
   });
   React.useEffect(() => {
     async function getAndSetSummaryData() {
