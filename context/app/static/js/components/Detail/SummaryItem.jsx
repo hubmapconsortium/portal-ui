@@ -11,15 +11,20 @@ const VerticalDivider = styled(Divider)`
   align-self: center;
 `;
 
+const StyledDiv = styled.div`
+  display: flex;
+`;
+
 function SummaryItem(props) {
-  const { children } = props;
+  const { children, statusIcon } = props;
   return (
-    <>
+    <StyledDiv>
+      {statusIcon}
       <Typography variant="h6" component="p">
         {children}
       </Typography>
       <VerticalDivider orientation="vertical" flexItem />
-    </>
+    </StyledDiv>
   );
 }
 

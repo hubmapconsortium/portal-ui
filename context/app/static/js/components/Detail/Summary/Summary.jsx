@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 import SummaryData from '../SummaryData';
-import { FlexColumnRight, StyledPaper, StyledDiv } from './style';
+import { FlexColumnRight, StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 import SectionContainer from '../SectionContainer';
 
@@ -26,20 +26,15 @@ function Summary(props) {
 
   return (
     <SectionContainer id="summary">
-      <Typography variant="subtitle1" component="h1" color="primary">
-        {entity_type}
-      </Typography>
-      <StyledDiv>
-        <Typography variant="h2">{display_doi}</Typography>
-        <SummaryData
-          entity_type={entity_type}
-          uuid={uuid}
-          status={status}
-          mapped_data_access_level={mapped_data_access_level}
-        >
-          {children}
-        </SummaryData>
-      </StyledDiv>
+      <SummaryData
+        entity_type={entity_type}
+        uuid={uuid}
+        status={status}
+        display_doi={display_doi}
+        mapped_data_access_level={mapped_data_access_level}
+      >
+        {children}
+      </SummaryData>
 
       <StyledPaper>
         <div>

@@ -6,12 +6,12 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import IconButton from '@material-ui/core/IconButton';
+
 import metadataFieldDescriptions from 'metadata-field-descriptions';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import { DownloadIcon, Flex } from './style';
-import SectionHeader from '../SectionHeader';
+import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton, StyledSectionHeader } from './style';
 import SectionContainer from '../SectionContainer';
 
 function MetadataTable(props) {
@@ -41,10 +41,12 @@ function MetadataTable(props) {
   return (
     <SectionContainer id="metadata-table">
       <Flex>
-        <SectionHeader>Metadata</SectionHeader>
-        <IconButton href={downloadUrl} download={`${display_doi}.tsv`}>
-          <DownloadIcon color="primary" />
-        </IconButton>
+        <StyledSectionHeader>Metadata</StyledSectionHeader>
+        <SecondaryBackgroundTooltip title="Download">
+          <StyledWhiteBackgroundIconButton href={downloadUrl} download={`${display_doi}.tsv`}>
+            <DownloadIcon color="primary" />
+          </StyledWhiteBackgroundIconButton>
+        </SecondaryBackgroundTooltip>
       </Flex>
       <Paper>
         <StyledTableContainer $maxHeight={364}>
