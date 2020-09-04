@@ -34,7 +34,7 @@ function SummaryDataChildren(props) {
 }
 
 function DatasetDetail(props) {
-  const { assayMetadata, vitData, assetsEndpoint, elasticsearchEndpoint, entityEndpoint } = props;
+  const { assayMetadata, vitData } = props;
   const {
     protocol_url,
     metadata,
@@ -71,9 +71,7 @@ function DatasetDetail(props) {
 
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
   return (
-    <DetailContext.Provider
-      value={{ assetsEndpoint, elasticsearchEndpoint, display_doi, uuid, mapped_data_access_level }}
-    >
+    <DetailContext.Provider value={{ display_doi, uuid, mapped_data_access_level }}>
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}
@@ -97,10 +95,10 @@ function DatasetDetail(props) {
           created_by_user_displayname={created_by_user_displayname}
           created_by_user_email={created_by_user_email}
         />
-        <ProvSection uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
+        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
-        <Files files={files} entityEndpoint={entityEndpoint} uuid={uuid} display_doi={display_doi} />
+        <Files files={files} uuid={uuid} display_doi={display_doi} />
       </DetailLayout>
     </DetailContext.Provider>
   );

@@ -1,8 +1,9 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useContext } from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import { AppContext } from 'js/components/Providers';
 import DataSummary from '../DataSummary';
 import About from '../About';
 import Workflow from '../Workflow';
@@ -30,8 +31,7 @@ function shapeSummaryResponse(data) {
   };
 }
 
-function Home(props) {
-  const { elasticsearchEndpoint } = props;
+function Home() {
   const theme = useTheme();
   const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
   const [summaryData, setSummaryData] = React.useState({
@@ -39,6 +39,9 @@ function Home(props) {
     sampleCount: '-',
     donorCount: '-',
   });
+
+  const { elasticsearchEndpoint } = useContext(AppContext);
+
   React.useEffect(() => {
     async function getAndSetSummaryData() {
       const response = await fetch(elasticsearchEndpoint, {
@@ -73,7 +76,7 @@ function Home(props) {
               </BarChartPlaceholder>
             }
           >
-            <BarChart elasticsearchEndpoint={elasticsearchEndpoint} />
+            <BarChart />
           </Suspense>
         )}
       </UpperInnerGrid>

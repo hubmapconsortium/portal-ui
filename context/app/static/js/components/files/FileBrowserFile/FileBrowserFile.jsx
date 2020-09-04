@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import prettyBytes from 'pretty-bytes';
 
-import { getTokenParamIfNexusTokenCookieExists } from 'js/helpers/functions';
+import { AppContext } from 'js/components/Providers';
+import { getTokenParam } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import DetailContext from 'js/components//Detail/context';
 import FilesConditionalLink from '../FilesConditionalLink';
@@ -12,8 +13,10 @@ import FilesContext from '../Files/context';
 function FileBrowserFile(props) {
   const { fileObj, depth } = props;
   const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
-  const { assetsEndpoint, uuid } = useContext(DetailContext);
-  const tokenParam = getTokenParamIfNexusTokenCookieExists();
+  const { uuid } = useContext(DetailContext);
+  const { assetsEndpoint, nexusToken } = useContext(AppContext);
+
+  const tokenParam = getTokenParam(nexusToken);
 
   const fileUrl = `${assetsEndpoint}/${uuid}/${fileObj.rel_path}${tokenParam}`;
 

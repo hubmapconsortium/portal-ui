@@ -92,9 +92,6 @@ def login():
         is_authenticated=True)
     response = make_response(
         redirect(url_for('routes.index', _external=True)))
-    response.set_cookie(
-        key='nexus_token',
-        value=nexus_token)
     return response
 
 
@@ -103,7 +100,6 @@ def logout():
     '''
     - Revoke the tokens with Globus Auth.
     - Destroy the session state.
-    - Delete cookie, and return a redirect response.
     - And when redirect returns, redirect again to the Globus Auth logout page.
     '''
     redirect_to_globus_param = 'redirect_to_globus'
@@ -136,5 +132,4 @@ def logout():
     kwargs = {redirect_to_globus_param: True}
     response = make_response(
         redirect(url_for('routes_auth.logout', _external=True, **kwargs)))
-    response.delete_cookie(key='nexus_token')
     return response

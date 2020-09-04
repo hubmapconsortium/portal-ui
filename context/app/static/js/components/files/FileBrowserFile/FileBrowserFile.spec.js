@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import React from 'react';
-import { render, screen } from 'test-utils/functions';
+import { render, screen, appProviderEndpoints, appProviderToken } from 'test-utils/functions';
 // import userEvent from '@testing-library/user-event';
 
 import DetailContext from 'js/components/Detail/context';
@@ -9,13 +9,11 @@ import FilesContext from '../Files/context';
 
 const fakeOpenDUA = jest.fn();
 
-const assetsEndpoint = 'fakeendpoint';
 const uuid = 'fakeuuid';
-const token = 'faketoken';
 
 const FilesProviders = ({ children }) => {
   return (
-    <DetailContext.Provider value={{ assetsEndpoint, uuid }}>
+    <DetailContext.Provider value={{ uuid }}>
       <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
         {children}
       </FilesContext.Provider>
@@ -24,11 +22,6 @@ const FilesProviders = ({ children }) => {
 };
 
 test('displays a link with correct href when dua is agreed to', () => {
-  Object.defineProperty(window.document, 'cookie', {
-    writable: true,
-    value: `nexus_token=${token}`,
-  });
-
   const fileObj = {
     rel_path: 'fakepath',
     edam_term: 'faketerm',
@@ -45,17 +38,12 @@ test('displays a link with correct href when dua is agreed to', () => {
     </FilesProviders>,
   );
 
-  const refToTest = `${assetsEndpoint}/${uuid}/${fileObj.rel_path}?token=${token}`;
+  const refToTest = `${appProviderEndpoints.assetsEndpoint}/${uuid}/${fileObj.rel_path}?token=${appProviderToken}`;
 
   expect(screen.getByRole('link')).toHaveAttribute('href', refToTest);
 });
 
 test('has correct left margin', () => {
-  Object.defineProperty(window.document, 'cookie', {
-    writable: true,
-    value: `nexus_token=${token}`,
-  });
-
   const fileObj = {
     rel_path: 'fakepath',
     edam_term: 'faketerm',

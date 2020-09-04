@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import Alert from '@material-ui/lab/Alert';
 
+import { AppContext } from 'js/components/Providers';
 import useProvData from 'js/hooks/useProvData';
 import ProvTabs from '../ProvTabs';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
 
 function ProvSection(props) {
-  const { uuid, assayMetadata, entityEndpoint } = props;
+  const { uuid, assayMetadata } = props;
   const { entity_type } = assayMetadata;
-
-  const { provData, isLoading } = useProvData(uuid, entityEndpoint);
+  const { nexusToken, entityEndpoint } = useContext(AppContext);
+  const { provData, isLoading } = useProvData(uuid, entityEndpoint, nexusToken);
 
   if (isLoading) {
     return (
@@ -39,7 +40,6 @@ ProvSection.propTypes = {
   uuid: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   assayMetadata: PropTypes.object.isRequired,
-  entityEndpoint: PropTypes.string.isRequired,
 };
 
 export default ProvSection;
