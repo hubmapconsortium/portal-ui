@@ -30,6 +30,7 @@ const FlexTableCell = styled(TableCell)`
 
 const StyledInfoIcon = styled(InfoIcon)`
   margin-left: ${(props) => props.theme.spacing(0.5)}px;
+  font-size: 14px;
 `;
 
 export { DownloadIcon, Flex, StyledWhiteBackgroundIconButton, StyledSectionHeader, FlexTableCell, StyledInfoIcon };

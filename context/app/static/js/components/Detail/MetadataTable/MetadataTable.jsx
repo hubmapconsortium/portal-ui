@@ -71,7 +71,7 @@ function MetadataTable(props) {
                     {row.key}
                     {row.description && (
                       <SecondaryBackgroundTooltip title={row.description} placement="bottom-start">
-                        <StyledInfoIcon fontSize="14px" color="primary" />
+                        <StyledInfoIcon color="primary" />
                       </SecondaryBackgroundTooltip>
                     )}
                   </FlexTableCell>
