@@ -39,7 +39,8 @@ const OuterAccordionSummary = styled(StyledAccordionSummary)`
     padding: 0;
     margin: 0;
   }
-  margin: 0;
+  margin-top: 12px !important;
+  margin-bottom: 12px !important;
 `;
 
 const InnerAccordionSummary = styled(StyledAccordionSummary)`
