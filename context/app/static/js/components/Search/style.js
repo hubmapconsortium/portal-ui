@@ -48,7 +48,7 @@ const StyledTableBody = styled(TableBody)`
   }
 
   // Material would apply this on TD, but we override, so there is no internal border above the highlight.
-  border: 1px solid rgba(224, 224, 224, 1);
+  border: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
 
   border-left: none;
   border-right: none;
@@ -113,7 +113,7 @@ const InnerAccordion = styled(Accordion)`
 `;
 
 const OuterAccordion = styled(InnerAccordion)`
-  border-bottom: 1px solid ${(props) => props.theme.palette.transparentGray.main};
+  border-bottom: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
 `;
 
 const StyledAccordionSummary = withStyles({
