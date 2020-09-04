@@ -10,7 +10,7 @@ function useProvData(uuid, entityEndpoint, nexusToken) {
     async function getAndSetProvData() {
       const requestInit = getAuthHeader(nexusToken);
 
-      const response = await fetch(`${entityEndpoint}/entities/${uuid}/provenance`, requestInit);
+      const response = await fetch(`${entityEndpoint}/entities/${uuid}/provenance`, { headers: requestInit });
 
       if (!response.ok) {
         console.error('Prov API failed', response);
