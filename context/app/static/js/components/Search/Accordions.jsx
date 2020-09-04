@@ -10,7 +10,8 @@ import { InnerAccordion, OuterAccordion, StyledAccordionDetails, StyledAccordion
 
 function Accordions(props) {
   const { filters } = props;
-  return Object.entries(filters).map(([title, filterGroup]) => {
+  return Object.entries(filters).map(([title, filterGroup], i) => {
+    const isFirst = i === 0;
     const innerAccordion = filterGroup.map((def) => {
       const Filter = filterTypes[def.type];
       /* eslint-disable react/jsx-props-no-spreading */
@@ -35,7 +36,7 @@ function Accordions(props) {
       );
     }
     return (
-      <OuterAccordion key={title}>
+      <OuterAccordion key={title} defaultExpanded={isFirst}>
         <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>{title}</StyledAccordionSummary>
         <StyledAccordionDetails>{innerAccordion}</StyledAccordionDetails>
       </OuterAccordion>
