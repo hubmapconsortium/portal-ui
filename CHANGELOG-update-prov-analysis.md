@@ -1,0 +1,1 @@
+- Update provenance analysis details to separate ingest and cwl pipelines.

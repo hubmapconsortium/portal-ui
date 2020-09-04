@@ -43,7 +43,7 @@ function DonorDetail(props) {
           last_modified_timestamp={last_modified_timestamp}
           description={description}
         />
-        {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} />}
+        {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} display_doi={display_doi} />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
