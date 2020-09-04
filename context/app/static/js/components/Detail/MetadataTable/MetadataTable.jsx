@@ -39,7 +39,7 @@ function MetadataTable(props) {
   );
 
   return (
-    <SectionContainer id="metadata-table">
+    <SectionContainer id="metadata">
       <Flex>
         <StyledSectionHeader>Metadata</StyledSectionHeader>
         <SecondaryBackgroundTooltip title="Download">

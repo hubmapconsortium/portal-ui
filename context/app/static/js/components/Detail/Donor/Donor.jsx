@@ -8,6 +8,7 @@ import DetailLayout from '../DetailLayout';
 import useSendUUIDEvent from '../useSendUUIDEvent';
 
 import DetailContext from '../context';
+import { getSectionOrder } from '../utils';
 
 function DonorDetail(props) {
   const { assayMetadata, entityEndpoint, elasticsearchEndpoint } = props;
@@ -30,11 +31,16 @@ function DonorDetail(props) {
     metadata: Boolean(mapped_metadata),
   };
 
+  const sectionOrder = getSectionOrder(
+    ['summary', 'metadata', 'attribution', 'provenance', 'protocols'],
+    shouldDisplaySection,
+  );
+
   useSendUUIDEvent(entity_type, uuid);
 
   return (
     <DetailContext.Provider value={{ elasticsearchEndpoint, display_doi, uuid }}>
-      <DetailLayout shouldDisplaySection={shouldDisplaySection}>
+      <DetailLayout shouldDisplaySection={shouldDisplaySection} sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}
           entity_type={entity_type}
