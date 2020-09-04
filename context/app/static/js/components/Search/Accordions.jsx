@@ -6,7 +6,13 @@ import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-dupli
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { InnerAccordion, OuterAccordion, StyledAccordionDetails, StyledAccordionSummary } from './style';
+import {
+  InnerAccordion,
+  InnerAccordionSummary,
+  OuterAccordion,
+  StyledAccordionDetails,
+  StyledAccordionSummary,
+} from './style';
 
 function Accordions(props) {
   const { filters } = props;
@@ -17,7 +23,7 @@ function Accordions(props) {
       /* eslint-disable react/jsx-props-no-spreading */
       return (
         <InnerAccordion key={def.props.title} defaultExpanded>
-          <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>{def.props.title}</StyledAccordionSummary>
+          <InnerAccordionSummary expandIcon={<ExpandMoreIcon />}>{def.props.title}</InnerAccordionSummary>
           <StyledAccordionDetails>
             <Filter {...def.props} />
           </StyledAccordionDetails>
