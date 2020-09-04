@@ -1,27 +1,22 @@
-/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 
-import ProvAnalysisDetailsLink from '../ProvAnalysisDetailsLink';
-import { StyledListItem } from './style';
+import ProvAnalysisDetailsList from 'js/components/Detail/ProvAnalysisDetailsList';
 
 function ProvAnalysisDetails(props) {
   const { dagListData } = props;
+
+  const ingestPipelines = dagListData.filter((pipeline) => !('name' in pipeline));
+  const cwlPipelines = dagListData.filter((pipeline) => 'name' in pipeline);
+
   return (
-    <List>
-      {dagListData.map((item, i) => (
-        <React.Fragment key={`dag-provenance-list-item${i}`}>
-          {i !== 0 && <Divider />}
-          <StyledListItem>
-            <ProvAnalysisDetailsLink data={item} />
-          </StyledListItem>
-        </React.Fragment>
-      ))}
-    </List>
+    <div>
+      <ProvAnalysisDetailsList pipelines={ingestPipelines} pipelineType="Ingest" />
+      <ProvAnalysisDetailsList pipelines={cwlPipelines} pipelineType="CWL" />
+    </div>
   );
 }
+
 ProvAnalysisDetails.propTypes = {
   dagListData: PropTypes.arrayOf(
     PropTypes.shape({
