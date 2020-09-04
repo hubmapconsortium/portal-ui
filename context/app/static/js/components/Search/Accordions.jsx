@@ -10,8 +10,8 @@ import {
   InnerAccordion,
   InnerAccordionSummary,
   OuterAccordion,
+  OuterAccordionSummary,
   StyledAccordionDetails,
-  StyledAccordionSummary,
 } from './style';
 
 function Accordions(props) {
@@ -43,7 +43,7 @@ function Accordions(props) {
     }
     return (
       <OuterAccordion key={title} defaultExpanded={isFirst}>
-        <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>{title}</StyledAccordionSummary>
+        <OuterAccordionSummary expandIcon={<ExpandMoreIcon />}>{title}</OuterAccordionSummary>
         <StyledAccordionDetails>{innerAccordion}</StyledAccordionDetails>
       </OuterAccordion>
     );

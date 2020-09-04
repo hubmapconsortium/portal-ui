@@ -128,11 +128,22 @@ const StyledAccordionSummary = withStyles({
   },
 })(AccordionSummary);
 
+const OuterAccordionSummary = styled(StyledAccordionSummary)`
+  & > * {
+    padding: 0;
+    margin: 0;
+  }
+  margin: 0;
+`;
+
 const InnerAccordionSummary = styled(StyledAccordionSummary)`
   justify-content: left;
   & > * {
     flex-grow: unset;
+    padding: 0;
+    margin: 0;
   }
+  margin: 0;
 `;
 
 const StyledAccordionDetails = styled(AccordionDetails)`
@@ -153,7 +164,7 @@ export {
   StyledTableBody,
   StyledTableCell,
   StyledAccordionDetails,
-  StyledAccordionSummary,
+  OuterAccordionSummary,
   InnerAccordionSummary,
   StyledSideBar,
   InnerAccordion,
