@@ -18,3 +18,9 @@
     // Spacing between filters and results:
     margin-right: 16px;
 }
+
+.sk-item-list-option__text {
+    // Same weight, even if .is-active:
+    font-weight: 200 !important;
+    color: #000;
+}
