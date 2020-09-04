@@ -102,13 +102,11 @@ function SearchWrapper(props) {
     <SearchkitProvider searchkit={searchkit}>
       <LayoutBody>
         <StyledSideBar>
+          <SearchBox autofocus queryFields={queryFields} />
           <Accordions filters={filters} />
         </StyledSideBar>
         <LayoutResults>
           <ActionBar>
-            <ActionBarRow>
-              <SearchBox autofocus queryFields={queryFields} />
-            </ActionBarRow>
             <ActionBarRow>
               <HitsStats
                 translations={{
