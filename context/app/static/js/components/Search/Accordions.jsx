@@ -1,23 +1,22 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { OuterAccordion, OuterAccordionSummary, StyledAccordionDetails } from './style';
-import * as filterTypes from './accordionFilters';
+import accordionFilters from './accordionFilters';
 
 function Accordions(props) {
   const { filters } = props;
   return Object.entries(filters).map(([title, filterGroup], i) => {
     const isFirst = i === 0;
     const innerAccordion = filterGroup.map((def) => {
-      if (!(def.type in filterTypes)) {
-        throw new Error(`"${def.type}" not in {${Object.keys(filterTypes).join(', ')}}`);
+      if (!(def.type in accordionFilters)) {
+        throw new Error(`"${def.type}" not in {${Object.keys(accordionFilters).join(', ')}}`);
       }
-      // eslint-disable-next-line import/namespace
-      const Filter = filterTypes[def.type];
+      const Filter = accordionFilters[def.type];
       // eslint-disable-next-line react/jsx-props-no-spreading
       return <Filter {...def.props} key={def.props.title} />;
     });
@@ -41,5 +40,9 @@ function Accordions(props) {
     );
   });
 }
+
+Accordions.propTypes = {
+  filters: PropTypes.objectOf(PropTypes.array).isRequired,
+};
 
 export default Accordions;

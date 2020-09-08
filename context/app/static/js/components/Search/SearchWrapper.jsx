@@ -23,7 +23,6 @@ import SortingTableHead from './SortingTableHead';
 import { resultFieldsToSortOptions } from './utils';
 import { StyledTableBody, StyledTableRow, StyledTableCell, StyledSideBar } from './style';
 import './Search.scss';
-import * as filterPropTypes from './filterPropTypes';
 
 function getByPath(nested, field) {
   const path = field.id;
@@ -140,15 +139,7 @@ function SearchWrapper(props) {
 
 SearchWrapper.propTypes = {
   apiUrl: PropTypes.string.isRequired,
-  filters: PropTypes.objectOf(
-    PropTypes.arrayOf(
-      PropTypes.oneOfType([
-        filterPropTypes.refinementListPropTypes,
-        filterPropTypes.rangeFilterPropTypes,
-        filterPropTypes.checkboxFilterPropTypes,
-      ]),
-    ),
-  ).isRequired,
+  filters: PropTypes.objectOf(PropTypes.array).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
   resultFields: PropTypes.arrayOf(
