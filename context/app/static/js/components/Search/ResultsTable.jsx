@@ -1,5 +1,5 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import Table from '@material-ui/core/Table';
 
@@ -81,6 +81,15 @@ function ResultsTable(props) {
     </Table>
   );
 }
+
+ResultsTable.propTypes = {
+  sortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  hitsPerPage: PropTypes.number.isRequired,
+  resultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  detailsUrlPrefix: PropTypes.string.isRequired,
+  idField: PropTypes.string.isRequired,
+  resultFieldIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default ResultsTable;
 export { getByPath }; // For tests
