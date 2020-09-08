@@ -20,7 +20,7 @@ function Dropdown(props) {
         {title}
         {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </Button>
-      <OffsetPopper open={open} anchorEl={anchorRef.current} placement="bottom-start">
+      <OffsetPopper open={open} anchorEl={anchorRef.current} placement="bottom-end">
         <Paper>
           <ClickAwayListener onClickAway={toggle}>
             <MenuList id={menuListId}>{children}</MenuList>
