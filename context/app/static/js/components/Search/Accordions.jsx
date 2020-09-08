@@ -3,35 +3,26 @@ import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 
-import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
+// import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
 // There is more in the name space, but we only need the filterTypes.
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import {
-  InnerAccordion,
-  InnerAccordionSummary,
-  OuterAccordion,
-  OuterAccordionSummary,
-  StyledAccordionDetails,
-} from './style';
+import { OuterAccordion, OuterAccordionSummary, StyledAccordionDetails } from './style';
+import { AccordionListFilter } from './accordionFilters';
 
 function Accordions(props) {
   const { filters } = props;
   return Object.entries(filters).map(([title, filterGroup], i) => {
     const isFirst = i === 0;
     const innerAccordion = filterGroup.map((def) => {
-      const Filter = filterTypes[def.type];
+      // const Filter = filterTypes[def.type];
       /* eslint-disable react/jsx-props-no-spreading */
       return (
-        <InnerAccordion key={def.props.title} defaultExpanded>
-          <InnerAccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="subtitle2">{def.props.title}</Typography>
-          </InnerAccordionSummary>
-          <StyledAccordionDetails>
-            <Filter {...def.props} />
-          </StyledAccordionDetails>
-        </InnerAccordion>
+        <React.Fragment key={def.props.title}>
+          {def.type}
+          <AccordionListFilter {...def.props} key={def.props.title} />
+        </React.Fragment>
       );
       /* eslint-enable react/jsx-props-no-spreading */
     });
