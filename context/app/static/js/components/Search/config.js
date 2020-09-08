@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line import/named
-import { filter, rangeFilter, field } from './utils';
+import { listFilter, rangeFilter, field } from './utils';
 
 const bmiField = 'body_mass_index_value';
 const ageField = 'age_value';
@@ -9,14 +9,17 @@ function makeDonorMetadataFilters(isDonor) {
   const pathPrefix = isDonor ? '' : 'donor.';
   const labelPrefix = isDonor ? '' : 'Donor ';
   return [
-    filter(`${pathPrefix}mapped_metadata.sex`, `${labelPrefix}Sex`),
+    listFilter(`${pathPrefix}mapped_metadata.sex`, `${labelPrefix}Sex`),
     rangeFilter(`${pathPrefix}mapped_metadata.${ageField}`, `${labelPrefix}Age`, 0, 100),
-    filter(`${pathPrefix}mapped_metadata.race`, `${labelPrefix}Race`),
+    listFilter(`${pathPrefix}mapped_metadata.race`, `${labelPrefix}Race`),
     rangeFilter(`${pathPrefix}mapped_metadata.${bmiField}`, `${labelPrefix}BMI`, 0, 50),
   ];
 }
 
-export const affiliationFilters = [filter('group_name', 'Group'), filter('created_by_user_displayname', 'Creator')];
+export const affiliationFilters = [
+  listFilter('group_name', 'Group'),
+  listFilter('created_by_user_displayname', 'Creator'),
+];
 
 export const donorConfig = {
   filters: {
@@ -36,7 +39,10 @@ export const donorConfig = {
 
 export const sampleConfig = {
   filters: {
-    'Sample Metadata': [filter('origin_sample.mapped_organ', 'Organ'), filter('mapped_specimen_type', 'Specimen Type')],
+    'Sample Metadata': [
+      listFilter('origin_sample.mapped_organ', 'Organ'),
+      listFilter('mapped_specimen_type', 'Specimen Type'),
+    ],
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
   },
@@ -52,11 +58,11 @@ export const sampleConfig = {
 export const datasetConfig = {
   filters: {
     'Dataset Metadata': [
-      filter('mapped_data_types', 'Data Type'),
-      filter('origin_sample.mapped_organ', 'Organ'),
-      filter('source_sample.mapped_specimen_type', 'Specimen Type'),
-      filter('mapped_status', 'Status'),
-      filter('mapped_data_access_level', 'Access Level'),
+      listFilter('mapped_data_types', 'Data Type'),
+      listFilter('origin_sample.mapped_organ', 'Organ'),
+      listFilter('source_sample.mapped_specimen_type', 'Specimen Type'),
+      listFilter('mapped_status', 'Status'),
+      listFilter('mapped_data_access_level', 'Access Level'),
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
@@ -74,9 +80,9 @@ export const datasetConfig = {
 export const fallbackConfig = {
   filters: {
     Basics: [
-      // 'entity_type' filter would make sense, but it is hidden for the other searches.
-      filter('mapped_status', 'Status'),
-      filter('mapped_data_access_level', 'Access Level'),
+      // 'entity_type' listFilter would make sense, but it is hidden for the other searches.
+      listFilter('mapped_status', 'Status'),
+      listFilter('mapped_data_access_level', 'Access Level'),
     ],
   },
   fields: [

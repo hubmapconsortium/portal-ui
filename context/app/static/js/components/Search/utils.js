@@ -9,9 +9,9 @@ export function field(id, name, translations) {
   return def;
 }
 
-export function filter(id, name, translations) {
+export function listFilter(id, name, translations) {
   const def = {
-    type: 'RefinementListFilter',
+    type: 'AccordionListFilter',
     props: {
       id,
       title: name,
@@ -28,7 +28,7 @@ export function filter(id, name, translations) {
 
 export function rangeFilter(id, name, min, max) {
   return {
-    type: 'RangeFilter',
+    type: 'AccordionRangeFilter',
     props: {
       id,
       title: name,

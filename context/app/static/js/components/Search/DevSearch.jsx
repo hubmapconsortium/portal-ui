@@ -6,7 +6,7 @@ import { ExistsQuery, BoolMustNot } from 'searchkit';
 
 import SearchWrapper from './SearchWrapper';
 // eslint-disable-next-line import/named
-import { field, filter, checkboxFilter } from './utils';
+import { field, listFilter, checkboxFilter } from './utils';
 
 function DevSearch(props) {
   const { elasticsearchEndpoint, nexusToken } = props;
@@ -37,8 +37,8 @@ function DevSearch(props) {
     hitsPerPage: 20,
     // Sidebar facet configuration:
     filters: [
-      filter('entity_type', 'Entity Type'),
-      filter('mapper_metadata.version', 'Mapper Version'),
+      listFilter('entity_type', 'Entity Type'),
+      listFilter('mapper_metadata.version', 'Mapper Version'),
       checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata.metadata')),
       checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
       checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),

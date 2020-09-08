@@ -6,13 +6,13 @@ import LookupEntity from 'js/helpers/LookupEntity';
 import SearchWrapper from './SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fallbackConfig } from './config';
 // eslint-disable-next-line import/named
-import { filter } from './utils';
+import { listFilter } from './utils';
 import AncestorNote from './AncestorNote';
 
 function Search(props) {
   const { title, elasticsearchEndpoint, nexusToken } = props;
 
-  const hiddenFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
+  const hiddenFilters = [listFilter('ancestor_ids', 'Ancestor ID'), listFilter('entity_type', 'Entity Type')];
 
   const filtersByType = {
     '': fallbackConfig.filters,

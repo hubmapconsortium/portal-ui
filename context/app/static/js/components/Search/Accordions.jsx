@@ -9,22 +9,17 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { OuterAccordion, OuterAccordionSummary, StyledAccordionDetails } from './style';
-import { AccordionListFilter } from './accordionFilters';
+import * as filterTypes from './accordionFilters';
 
 function Accordions(props) {
   const { filters } = props;
   return Object.entries(filters).map(([title, filterGroup], i) => {
     const isFirst = i === 0;
     const innerAccordion = filterGroup.map((def) => {
-      // const Filter = filterTypes[def.type];
-      /* eslint-disable react/jsx-props-no-spreading */
-      return (
-        <React.Fragment key={def.props.title}>
-          {def.type}
-          <AccordionListFilter {...def.props} key={def.props.title} />
-        </React.Fragment>
-      );
-      /* eslint-enable react/jsx-props-no-spreading */
+      // eslint-disable-next-line import/namespace
+      const Filter = filterTypes[def.type];
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      return <Filter {...def.props} key={def.props.title} />;
     });
     if (!title) {
       // We leave the title blank for the group of facets
