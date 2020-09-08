@@ -86,8 +86,9 @@ def login():
     auth_token_object = tokens.by_resource_server['auth.globus.org']
     auth_token = auth_token_object['access_token']
 
-    user_info_request_headers={'Authorization': 'Bearer ' + auth_token}
-    user_info = requests.get('https://auth.globus.org/v2/oauth2/userinfo', headers=user_info_request_headers).json()
+    user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
+    user_info = requests.get('https://auth.globus.org/v2/oauth2/userinfo',
+                             headers=user_info_request_headers).json()
     user_email = user_info['email'] if 'email' in user_info else 'User'
 
     if not has_hubmap_group(nexus_token):
