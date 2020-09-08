@@ -54,9 +54,16 @@ const InnerAccordionSummary = styled(StyledAccordionSummary)`
   margin: 0;
 `;
 
-const StyledAccordionDetails = styled(AccordionDetails)`
+const OuterAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;
   padding-bottom: 0;
+  padding-top: 0;
+`;
+
+const InnerAccordionDetails = styled(AccordionDetails)`
+  flex-direction: column;
+  padding-bottom: 4px;
+  padding-top: 4px;
 `;
 
 const StyledSideBar = styled(SideBar)`
@@ -64,7 +71,8 @@ const StyledSideBar = styled(SideBar)`
 `;
 
 export {
-  StyledAccordionDetails,
+  OuterAccordionDetails,
+  InnerAccordionDetails,
   OuterAccordionSummary,
   InnerAccordionSummary,
   StyledSideBar,

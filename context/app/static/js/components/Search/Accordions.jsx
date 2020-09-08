@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { OuterAccordion, OuterAccordionSummary, StyledAccordionDetails } from './style';
+import { OuterAccordion, OuterAccordionSummary, OuterAccordionDetails } from './style';
 import accordionFilters from './accordionFilters';
 
 function Accordions(props) {
@@ -35,7 +35,7 @@ function Accordions(props) {
         <OuterAccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>{title}</Typography>
         </OuterAccordionSummary>
-        <StyledAccordionDetails>{innerAccordion}</StyledAccordionDetails>
+        <OuterAccordionDetails>{innerAccordion}</OuterAccordionDetails>
       </OuterAccordion>
     );
   });

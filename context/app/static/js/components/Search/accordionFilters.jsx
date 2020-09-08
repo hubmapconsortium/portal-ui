@@ -4,7 +4,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 
-import { InnerAccordion, InnerAccordionSummary, StyledAccordionDetails } from './style';
+import { InnerAccordion, InnerAccordionSummary, InnerAccordionDetails } from './style';
 
 function Details(props) {
   const { title, children } = props;
@@ -13,7 +13,7 @@ function Details(props) {
       <InnerAccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant="subtitle2">{title}</Typography>
       </InnerAccordionSummary>
-      <StyledAccordionDetails>{children}</StyledAccordionDetails>
+      <InnerAccordionDetails>{children}</InnerAccordionDetails>
     </InnerAccordion>
   );
 }
