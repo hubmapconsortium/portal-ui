@@ -7,8 +7,7 @@ import Accordions from '../Accordions';
 
 test('Accordions renders', () => {
   const filters = {
-    '': [], // display: none;
-    'Visible Accordion': [],
+    'Section Title': [],
   };
   const searchkit = SearchkitManager.mock();
   const { getByText } = render(
@@ -16,5 +15,5 @@ test('Accordions renders', () => {
       <Accordions filters={filters} />
     </SearchkitProvider>,
   );
-  expect(getByText('Visible Accordion')).toBeInTheDocument();
+  expect(getByText('Section Title')).toBeInTheDocument();
 });
