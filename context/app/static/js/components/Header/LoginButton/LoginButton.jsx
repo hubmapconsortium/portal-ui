@@ -1,15 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { WhiteButton } from './style';
+
+import Dropdown from '../Dropdown';
+import DropdownLink from '../DropdownLink';
+import { WhiteButton, TruncatedSpan } from './style';
 
 function LoginButton(props) {
-  const { isAuthenticated } = props;
+  const { isAuthenticated, user_email } = props;
 
-  const link = isAuthenticated ? 'logout' : 'login';
-
-  return (
-    <WhiteButton component="a" href={`/${link}`}>
-      {link}
+  return isAuthenticated ? (
+    <Dropdown
+      title={<TruncatedSpan>{user_email}</TruncatedSpan>}
+      menuListId="user-options"
+      removeDefaultTextTransformations
+      trimText
+    >
+      <DropdownLink href="/logout">Log Out</DropdownLink>
+    </Dropdown>
+  ) : (
+    <WhiteButton component="a" href="/login">
+      login
     </WhiteButton>
   );
 }
