@@ -29,7 +29,7 @@ test('title comes through AccordionRangeFilter', () => {
   const searchkit = SearchkitManager.mock();
   const { getByText } = render(
     <SearchkitProvider searchkit={searchkit}>
-      <AccordionRangeFilter id="ID" title="TITLE" field="FIELD" operator="OR" min={0} max={42} showHistogram />
+      <AccordionRangeFilter id="ID" title="TITLE" field="FIELD" min={0} max={42} showHistogram />
     </SearchkitProvider>,
   );
   expect(getByText('TITLE')).toBeInTheDocument();
@@ -40,7 +40,7 @@ test('title comes through AccordionCheckboxFilter', () => {
   const searchkit = SearchkitManager.mock();
   const { getByText } = render(
     <SearchkitProvider searchkit={searchkit}>
-      <AccordionCheckboxFilter id="ID" title="TITLE" field="FIELD" operator="OR" size={42} filter={{}} label="LABEL" />
+      <AccordionCheckboxFilter id="ID" title="TITLE" filter={{}} label="LABEL" />
     </SearchkitProvider>,
   );
   expect(getByText('TITLE')).toBeInTheDocument();
