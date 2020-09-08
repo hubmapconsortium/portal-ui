@@ -40,10 +40,9 @@ export function rangeFilter(id, name, min, max) {
   };
 }
 
-// eslint-disable-next-line no-shadow
 export function checkboxFilter(id, name, filter) {
   return {
-    type: 'CheckboxFilter',
+    type: 'AccordionCheckboxFilter',
     props: {
       id,
       title: name,

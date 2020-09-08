@@ -3,9 +3,6 @@ import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 
-// import * as filterTypes from 'searchkit'; // eslint-disable-line import/no-duplicates
-// There is more in the name space, but we only need the filterTypes.
-
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { OuterAccordion, OuterAccordionSummary, StyledAccordionDetails } from './style';
@@ -16,6 +13,9 @@ function Accordions(props) {
   return Object.entries(filters).map(([title, filterGroup], i) => {
     const isFirst = i === 0;
     const innerAccordion = filterGroup.map((def) => {
+      if (!(def.type in filterTypes)) {
+        throw new Error(`"${def.type}" not in {${Object.keys(filterTypes).join(', ')}}`);
+      }
       // eslint-disable-next-line import/namespace
       const Filter = filterTypes[def.type];
       // eslint-disable-next-line react/jsx-props-no-spreading
