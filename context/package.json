@@ -23,6 +23,7 @@
     "searchkit": "^2.4.1-alpha.4",
     "styled-components": "^5.1.0",
     "typeface-inter": "^3.12.0",
+    "universal-cookie": "^4.0.3",
     "vega": "^5.13.0",
     "vega-lite": "^4.13.1",
     "vitessce": "^0.2.4",
