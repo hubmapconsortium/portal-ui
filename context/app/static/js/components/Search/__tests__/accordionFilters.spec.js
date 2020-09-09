@@ -13,35 +13,13 @@ test('default export has the right keys', () => {
   ]);
 });
 
-test('title comes through AccordionListFilter', () => {
+test('empty AccordionListFilter', () => {
   const { AccordionListFilter } = accordionFilters;
   const searchkit = SearchkitManager.mock();
-  const { getByText } = render(
+  const { container } = render(
     <SearchkitProvider searchkit={searchkit}>
       <AccordionListFilter id="ID" title="TITLE" field="FIELD" operator="OR" size={42} />
     </SearchkitProvider>,
   );
-  expect(getByText('TITLE')).toBeInTheDocument();
-});
-
-test('title comes through AccordionRangeFilter', () => {
-  const { AccordionRangeFilter } = accordionFilters;
-  const searchkit = SearchkitManager.mock();
-  const { getByText } = render(
-    <SearchkitProvider searchkit={searchkit}>
-      <AccordionRangeFilter id="ID" title="TITLE" field="FIELD" min={0} max={42} showHistogram />
-    </SearchkitProvider>,
-  );
-  expect(getByText('TITLE')).toBeInTheDocument();
-});
-
-test('title comes through AccordionCheckboxFilter', () => {
-  const { AccordionCheckboxFilter } = accordionFilters;
-  const searchkit = SearchkitManager.mock();
-  const { getByText } = render(
-    <SearchkitProvider searchkit={searchkit}>
-      <AccordionCheckboxFilter id="ID" title="TITLE" filter={{}} label="LABEL" />
-    </SearchkitProvider>,
-  );
-  expect(getByText('TITLE')).toBeInTheDocument();
+  expect(container).toMatchInlineSnapshot(`<div />`);
 });
