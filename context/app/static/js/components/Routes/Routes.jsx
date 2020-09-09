@@ -11,13 +11,16 @@ import Preview from '../Preview';
 import { Collections } from '../Collections';
 import Markdown from '../Markdown';
 import useSendPageView from './useSendPageView';
+import useSetUrlBeforeLogin from './useSetUrlBeforeLogin';
 
 function Routes(props) {
   const { flaskData } = props;
   const { entity, vitessce_conf, title, markdown, collection, errorCode } = flaskData;
   const urlPath = window.location.pathname;
+  const url = window.location.href;
 
   useSendPageView(urlPath);
+  useSetUrlBeforeLogin(url);
 
   if (errorCode !== undefined) {
     // eslint-disable-next-line no-undef
