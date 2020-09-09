@@ -15,5 +15,6 @@ test('should be logout button when authenticated', () => {
   render(<LoginButton isAuthenticated user_email="fake@fake.fake" />);
   expect(screen.getByText('fake@fake.fake')).toBeInTheDocument();
   userEvent.click(screen.getByText('fake@fake.fake'));
+  // In drop-down:
   expect(screen.getByText('Log Out')).toHaveAttribute('href', '/logout');
 });
