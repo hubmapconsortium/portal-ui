@@ -54,7 +54,7 @@ def login():
          param
     '''
     # The redirect URI, as a complete URI (not relative path)
-    redirect_uri = url_for('routes_auth.login', _external=True)
+    redirect_uri = request.cookies.get('urlBeforeLogin')
 
     client = load_app_client()
     client.oauth2_start_flow(redirect_uri)
