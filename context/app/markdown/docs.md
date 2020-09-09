@@ -2,6 +2,7 @@
 
 - [About HuBMAP portal](/docs/about)
    * [Policies](https://hubmapconsortium.org/policies/)
+   * [Access Levels](/docs/datasets)
    * [Consent Information](/docs/consent)
    * [Contact](mailto:help@hubmapconsortium.org)
 
