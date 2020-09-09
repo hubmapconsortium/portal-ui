@@ -1,1 +1,0 @@
-- Refactor detail layout and fix table of contents sections for entity detail pages.

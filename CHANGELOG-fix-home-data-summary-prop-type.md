@@ -1,1 +1,0 @@
-- Fix prop type warning for summary data in home page.

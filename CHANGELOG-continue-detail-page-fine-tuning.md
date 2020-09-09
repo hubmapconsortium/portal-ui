@@ -1,3 +1,0 @@
-- Add hover tooltips to entity detail buttons.
-- Update spacing in entity detail summary.
-- Remove anchors from data types links in entity detail summary.
