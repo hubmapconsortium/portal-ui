@@ -67,7 +67,7 @@ def create_app(testing=False):
         if 'nexus_token' not in session:
             session.update(
                 nexus_token='',
-                user_email='User',
+                user_email='',
                 is_authenticated=False)
 
     return app

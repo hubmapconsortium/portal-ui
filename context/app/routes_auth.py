@@ -89,7 +89,7 @@ def login():
     user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
     user_info = requests.get('https://auth.globus.org/v2/oauth2/userinfo',
                              headers=user_info_request_headers).json()
-    user_email = user_info['email'] if 'email' in user_info else 'User'
+    user_email = user_info['email'] if 'email' in user_info else ''
 
     if not has_hubmap_group(nexus_token):
         # Globus institution login worked, but user does not have HuBMAP group!

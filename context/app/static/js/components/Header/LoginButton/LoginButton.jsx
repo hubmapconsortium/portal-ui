@@ -8,9 +8,11 @@ import { WhiteButton, TruncatedSpan } from './style';
 function LoginButton(props) {
   const { isAuthenticated, user_email } = props;
 
+  const displayName = user_email || 'User';
+
   return isAuthenticated ? (
     <Dropdown
-      title={<TruncatedSpan>{user_email}</TruncatedSpan>}
+      title={<TruncatedSpan>{displayName}</TruncatedSpan>}
       menuListId="user-options"
       removeDefaultTextTransformations
       trimText
