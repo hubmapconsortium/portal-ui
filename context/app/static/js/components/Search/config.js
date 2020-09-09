@@ -16,12 +16,9 @@ function makeDonorMetadataFilters(isDonor) {
   ];
 }
 
-export const affiliationFilters = [
-  listFilter('group_name', 'Group'),
-  listFilter('created_by_user_displayname', 'Creator'),
-];
+const affiliationFilters = [listFilter('group_name', 'Group'), listFilter('created_by_user_displayname', 'Creator')];
 
-export const donorConfig = {
+const donorConfig = {
   filters: {
     'Donor Metadata': makeDonorMetadataFilters(true),
     Affiliation: affiliationFilters,
@@ -37,7 +34,7 @@ export const donorConfig = {
   ],
 };
 
-export const sampleConfig = {
+const sampleConfig = {
   filters: {
     'Sample Metadata': [
       listFilter('origin_sample.mapped_organ', 'Organ'),
@@ -55,7 +52,7 @@ export const sampleConfig = {
   ],
 };
 
-export const datasetConfig = {
+const datasetConfig = {
   filters: {
     'Dataset Metadata': [
       listFilter('mapped_data_types', 'Data Type'),
@@ -77,7 +74,7 @@ export const datasetConfig = {
   ],
 };
 
-export const fallbackConfig = {
+const fallbackConfig = {
   filters: {
     Basics: [
       // 'entity_type' listFilter would make sense, but it is hidden for the other searches.
@@ -93,3 +90,5 @@ export const fallbackConfig = {
     field('mapped_last_modified_timestamp', 'Last Modified'),
   ],
 };
+
+export { donorConfig, sampleConfig, datasetConfig, fallbackConfig };
