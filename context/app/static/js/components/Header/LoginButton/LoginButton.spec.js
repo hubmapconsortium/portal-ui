@@ -18,3 +18,8 @@ test('should be logout button when authenticated', () => {
   // In drop-down:
   expect(screen.getByText('Log Out')).toHaveAttribute('href', '/logout');
 });
+
+test('should display User when user_email is empty', () => {
+  render(<LoginButton isAuthenticated user_email="" />);
+  expect(screen.getByText('User')).toBeInTheDocument();
+});
