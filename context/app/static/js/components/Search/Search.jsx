@@ -6,7 +6,7 @@ import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader } from 'js/helpers/functions';
 import SearchWrapper from './SearchWrapper';
-import { donorConfig, sampleConfig, datasetConfig, fallbackConfig } from './config';
+import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named
 import { filter } from './utils';
 import AncestorNote from './AncestorNote';
@@ -18,21 +18,25 @@ function Search(props) {
   const hiddenFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
 
   const filtersByType = {
-    '': fallbackConfig.filters,
     donor: donorConfig.filters.concat(hiddenFilters),
     sample: sampleConfig.filters.concat(hiddenFilters),
     dataset: datasetConfig.filters.concat(hiddenFilters),
   };
 
   const resultFieldsByType = {
-    '': fallbackConfig.fields,
     donor: donorConfig.fields,
     sample: sampleConfig.fields,
     dataset: datasetConfig.fields,
   };
 
   const { searchParams } = new URL(document.location);
-  const type = (searchParams.get('entity_type[0]') || '').toLowerCase();
+  const typeParam = 'entity_type[0]';
+  const type = (searchParams.get(typeParam) || '').toLowerCase();
+  if (!(type in resultFieldsByType)) {
+    throw Error(
+      `Unexpected URL param "${typeParam}=${type}"; Should be one of {${Object.keys(resultFieldsByType).join(', ')}}`,
+    );
+  }
   const hasAncestorParam = searchParams.has('ancestor_ids[0]');
 
   const httpHeaders = getAuthHeader(nexusToken);
