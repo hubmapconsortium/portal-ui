@@ -1,0 +1,1 @@
+- Do not display provenance analysis details pipelines headers when pipelines do not exist.
