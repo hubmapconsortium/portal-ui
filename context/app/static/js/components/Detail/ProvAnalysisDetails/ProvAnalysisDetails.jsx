@@ -11,8 +11,8 @@ function ProvAnalysisDetails(props) {
 
   return (
     <div>
-      <ProvAnalysisDetailsList pipelines={ingestPipelines} pipelineType="Ingest" />
-      <ProvAnalysisDetailsList pipelines={cwlPipelines} pipelineType="CWL" />
+      {ingestPipelines.length > 0 && <ProvAnalysisDetailsList pipelines={ingestPipelines} pipelineType="Ingest" />}
+      {cwlPipelines.length > 0 && <ProvAnalysisDetailsList pipelines={cwlPipelines} pipelineType="CWL" />}
     </div>
   );
 }
