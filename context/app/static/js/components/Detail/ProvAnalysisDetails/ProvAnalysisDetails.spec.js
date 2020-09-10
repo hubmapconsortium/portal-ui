@@ -18,3 +18,11 @@ test('should display ingest and cwl lists', () => {
   expect(screen.getByTestId('Ingest').children).toHaveLength(2);
   expect(screen.getByTestId('CWL').children).toHaveLength(1);
 });
+
+test('should not display pipelines when pipelines do not exist', () => {
+  const dagListData = [];
+  render(<ProvAnalysisDetails dagListData={dagListData} />);
+
+  expect(screen.queryByText('Ingest Pipelines')).toBeNull();
+  expect(screen.queryByText('CWL Pipelines')).toBeNull();
+});
