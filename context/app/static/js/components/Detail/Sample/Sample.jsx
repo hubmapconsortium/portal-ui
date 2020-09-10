@@ -70,7 +70,7 @@ function SampleDetail(props) {
         />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata} display_doi={display_doi} />}
+        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata} display_doi={display_doi} />}
       </DetailLayout>
     </DetailContext.Provider>
   );
