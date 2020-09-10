@@ -1,4 +1,4 @@
-from urllib.parse import urlencode
+from urllib.parse import urlencode, unquote
 
 from flask import (
     Blueprint, make_response, current_app, url_for,
@@ -54,7 +54,7 @@ def login():
          param
     '''
     # The redirect URI, as a complete URI (not relative path)
-    redirect_uri = request.cookies.get('urlBeforeLogin')
+    redirect_uri = url_for('routes_auth.login', _external=True)
 
     client = load_app_client()
     client.oauth2_start_flow(redirect_uri)
@@ -99,8 +99,11 @@ def login():
         nexus_token=nexus_token,
         is_authenticated=True,
         user_email=user_email)
+
+    previous_path_and_search = unquote(request.cookies.get('urlPathAndSearchBeforeLogin'))
+    redirect_route = previous_path_and_search if previous_path_and_search else url_for('routes.index', _external=True)
     response = make_response(
-        redirect(url_for('routes.index', _external=True)))
+        redirect(redirect_route))
     return response
 
 
