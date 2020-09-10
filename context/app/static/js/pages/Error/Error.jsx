@@ -7,9 +7,9 @@ import { Background, StyledPaper, StyledTypography } from './style';
 import { getErrorTitleAndSubtitle } from './utils';
 
 function Error(props) {
-  const { errorCode, isAuthenticated, isGlobus401, isMaintenancePage } = props;
+  const { errorCode, isAuthenticated, isGlobus401, isMaintenancePage, isErrorBoundary, errorBoundaryMessage } = props;
 
-  const { title, subtitle } = getErrorTitleAndSubtitle(errorCode, isMaintenancePage);
+  const { title, subtitle } = getErrorTitleAndSubtitle(errorCode, isMaintenancePage, isErrorBoundary);
 
   return (
     <Background isMaintenancePage={isMaintenancePage}>
@@ -20,12 +20,18 @@ function Error(props) {
         <StyledTypography variant="subtitle1" color="primary" $mb={1}>
           {subtitle}
         </StyledTypography>
+        {errorBoundaryMessage && (
+          <StyledTypography variant="body1" $mb={1}>
+            {errorBoundaryMessage}
+          </StyledTypography>
+        )}
         <Typography variant="body1">
           <ErrorBody
             errorCode={errorCode}
             isAuthenticated={isAuthenticated}
             isGlobus401={isGlobus401}
             isMaintenancePage={isMaintenancePage}
+            isErrorBoundary={isErrorBoundary}
           />
         </Typography>
       </StyledPaper>
@@ -38,6 +44,8 @@ Error.propTypes = {
   isAuthenticated: PropTypes.bool,
   isGlobus401: PropTypes.bool,
   isMaintenancePage: PropTypes.bool,
+  isErrorBoundary: PropTypes.bool,
+  errorBoundaryMessage: PropTypes.string,
 };
 
 Error.defaultProps = {
@@ -45,6 +53,8 @@ Error.defaultProps = {
   isAuthenticated: false,
   isGlobus401: false,
   isMaintenancePage: false,
+  isErrorBoundary: false,
+  errorBoundaryMessage: undefined,
 };
 
 export default Error;
