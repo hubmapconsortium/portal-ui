@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import Routes from './Routes';
-import ErrorBoundary from '../ErrorBoundary';
+import ErrorBoundary from './ErrorBoundary';
 
 function BoundedRoutes(props) {
   return (
