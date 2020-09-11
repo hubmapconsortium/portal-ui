@@ -1,6 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line import/no-unresolved
-import { render } from 'test-utils/functions';
+import { render, screen } from 'test-utils/functions';
 import { SearchkitProvider, SearchkitManager } from 'searchkit';
 
 import Accordions from '../Accordions';
