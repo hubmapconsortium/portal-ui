@@ -1,42 +1,45 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
+import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
+import { getAuthHeader } from 'js/helpers/functions';
 import SearchWrapper from './SearchWrapper';
-import { donorConfig, sampleConfig, datasetConfig, fallbackConfig } from './config';
+import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named
 import { listFilter } from './utils';
 import AncestorNote from './AncestorNote';
 
 function Search(props) {
-  const { title, elasticsearchEndpoint, nexusToken } = props;
+  const { title } = props;
+  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   const hiddenFilters = [listFilter('ancestor_ids', 'Ancestor ID'), listFilter('entity_type', 'Entity Type')];
 
   const filtersByType = {
-    '': fallbackConfig.filters,
     donor: { ...donorConfig.filters, '': hiddenFilters },
     sample: { ...sampleConfig.filters, '': hiddenFilters },
     dataset: { ...datasetConfig.filters, '': hiddenFilters },
   };
 
   const resultFieldsByType = {
-    '': fallbackConfig.fields,
     donor: donorConfig.fields,
     sample: sampleConfig.fields,
     dataset: datasetConfig.fields,
   };
 
   const { searchParams } = new URL(document.location);
-  const type = (searchParams.get('entity_type[0]') || '').toLowerCase();
+  const typeParam = 'entity_type[0]';
+  const type = (searchParams.get(typeParam) || '').toLowerCase();
+  if (!(type in resultFieldsByType)) {
+    throw Error(
+      `Unexpected URL param "${typeParam}=${type}"; Should be one of {${Object.keys(resultFieldsByType).join(', ')}}`,
+    );
+  }
   const hasAncestorParam = searchParams.has('ancestor_ids[0]');
 
-  const httpHeaders = nexusToken
-    ? {
-        Authorization: `Bearer ${nexusToken}`,
-      }
-    : {};
+  const httpHeaders = getAuthHeader(nexusToken);
   const resultFields = resultFieldsByType[type];
   const searchProps = {
     // The default behavior is to add a "_search" path.
@@ -67,7 +70,11 @@ function Search(props) {
         {title}
       </Typography>
       {hasAncestorParam && (
-        <LookupEntity uuid={searchParams.get('ancestor_ids[0]')} elasticsearchEndpoint={elasticsearchEndpoint}>
+        <LookupEntity
+          uuid={searchParams.get('ancestor_ids[0]')}
+          elasticsearchEndpoint={elasticsearchEndpoint}
+          nexusToken={nexusToken}
+        >
           <AncestorNote />
         </LookupEntity>
       )}

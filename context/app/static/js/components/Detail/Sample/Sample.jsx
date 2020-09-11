@@ -11,9 +11,10 @@ import SampleTissue from '../SampleTissue';
 import useSendUUIDEvent from '../useSendUUIDEvent';
 
 import DetailContext from '../context';
+import { getSectionOrder } from '../utils';
 
 function SampleDetail(props) {
-  const { assayMetadata, entityEndpoint, elasticsearchEndpoint } = props;
+  const { assayMetadata } = props;
   const {
     uuid,
     protocol_url,
@@ -35,14 +36,19 @@ function SampleDetail(props) {
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     tissue: true,
-    metadataTable: 'metadata' in assayMetadata,
+    metadata: 'metadata' in assayMetadata,
   };
+
+  const sectionOrder = getSectionOrder(
+    ['summary', 'tissue', 'attribution', 'provenance', 'protocols', 'metadata'],
+    shouldDisplaySection,
+  );
 
   useSendUUIDEvent(entity_type, uuid);
 
   return (
-    <DetailContext.Provider value={{ elasticsearchEndpoint, display_doi, uuid }}>
-      <DetailLayout shouldDisplaySection={shouldDisplaySection}>
+    <DetailContext.Provider value={{ display_doi, uuid }}>
+      <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}
           entity_type={entity_type}
@@ -62,7 +68,7 @@ function SampleDetail(props) {
           created_by_user_displayname={created_by_user_displayname}
           created_by_user_email={created_by_user_email}
         />
-        <ProvSection uuid={uuid} assayMetadata={assayMetadata} entityEndpoint={entityEndpoint} />
+        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadataTable && <MetadataTable metadata={metadata} display_doi={display_doi} />}
       </DetailLayout>

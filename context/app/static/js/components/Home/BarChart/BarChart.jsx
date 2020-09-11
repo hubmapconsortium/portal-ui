@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useContext } from 'react';
 import { Vega as ReactVega } from 'react-vega';
 
+import { AppContext } from 'js/components/Providers';
 import useWindowSize from 'js/hooks/useWindowSize';
 import theme from 'js/theme';
 
@@ -67,9 +67,9 @@ const partialSpec = {
   ],
 };
 
-function BarChart(props) {
-  const { elasticsearchEndpoint } = props;
+function BarChart() {
   const [assayTypesData, setAssayTypesData] = useState([]);
+  const { elasticsearchEndpoint } = useContext(AppContext);
 
   useEffect(() => {
     async function getAssayTypesData() {
@@ -117,9 +117,5 @@ function BarChart(props) {
     />
   );
 }
-
-BarChart.propTypes = {
-  elasticsearchEndpoint: PropTypes.string.isRequired,
-};
 
 export default BarChart;

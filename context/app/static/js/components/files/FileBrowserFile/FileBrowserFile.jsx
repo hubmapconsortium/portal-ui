@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import Tooltip from '@material-ui/core/Tooltip';
 import prettyBytes from 'pretty-bytes';
 
-import { getTokenParamIfNexusTokenCookieExists } from 'js/helpers/functions';
-import { useRoundedSecondaryTooltipStyles } from 'js/shared-styles/Tooltips';
+import { AppContext } from 'js/components/Providers';
+import { getTokenParam } from 'js/helpers/functions';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import DetailContext from 'js/components//Detail/context';
 import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
@@ -13,9 +13,10 @@ import FilesContext from '../Files/context';
 function FileBrowserFile(props) {
   const { fileObj, depth } = props;
   const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
-  const { assetsEndpoint, uuid } = useContext(DetailContext);
-  const tokenParam = getTokenParamIfNexusTokenCookieExists();
-  const classes = useRoundedSecondaryTooltipStyles();
+  const { uuid } = useContext(DetailContext);
+  const { assetsEndpoint, nexusToken } = useContext(AppContext);
+
+  const tokenParam = getTokenParam(nexusToken);
 
   const fileUrl = `${assetsEndpoint}/${uuid}/${fileObj.rel_path}${tokenParam}`;
 
@@ -33,9 +34,9 @@ function FileBrowserFile(props) {
           {fileObj.file}
         </FilesConditionalLink>
         <FileSize variant="body1">{prettyBytes(fileObj.size)}</FileSize>
-        <Tooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`} classes={classes}>
+        <SecondaryBackgroundTooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`}>
           <StyledInfoIcon color="primary" />
-        </Tooltip>
+        </SecondaryBackgroundTooltip>
       </IndentedDiv>
     </StyledDiv>
   );

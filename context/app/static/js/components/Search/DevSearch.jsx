@@ -1,20 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
+import React, { useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { ExistsQuery, BoolMustNot } from 'searchkit';
 
+import { getAuthHeader } from 'js/helpers/functions';
+import { AppContext } from 'js/components/Providers';
 import SearchWrapper from './SearchWrapper';
 // eslint-disable-next-line import/named
 import { field, listFilter, checkboxFilter } from './utils';
 
-function DevSearch(props) {
-  const { elasticsearchEndpoint, nexusToken } = props;
-  const httpHeaders = nexusToken
-    ? {
-        Authorization: `Bearer ${nexusToken}`,
-      }
-    : {};
+function DevSearch() {
+  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+  const httpHeaders = getAuthHeader(nexusToken);
 
   const searchProps = {
     // The default behavior is to add a "_search" path.
@@ -64,14 +60,5 @@ function DevSearch(props) {
     </>
   );
 }
-
-DevSearch.propTypes = {
-  elasticsearchEndpoint: PropTypes.string.isRequired,
-  nexusToken: PropTypes.string,
-};
-
-DevSearch.defaultProps = {
-  nexusToken: '',
-};
 
 export default DevSearch;

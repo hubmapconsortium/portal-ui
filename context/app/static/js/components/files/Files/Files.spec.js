@@ -1,26 +1,22 @@
 /* eslint-disable import/no-unresolved */
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { render, screen, waitForElementToBeRemoved } from 'test-utils/functions';
+import { render, screen, waitForElementToBeRemoved, appProviderEndpoints } from 'test-utils/functions';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
 import DetailContext from 'js/components/Detail/context';
 import Files from './Files';
 
-const assetsEndpoint = 'fakeendpoint';
 const uuid = 'fakeuuid';
-const token = 'faketoken';
 const mapped_data_access_level = 'fakeaccess';
-
-const entityEndpoint = 'fakeendpoint';
 
 const globusUrlResponse = {
   url: 'fakeglobusurl',
 };
 
 const server = setupServer(
-  rest.get(`/${entityEndpoint}/entities/dataset/globus-url/${uuid}`, (req, res, ctx) => {
+  rest.get(`/${appProviderEndpoints.entityEndpoint}/entities/dataset/globus-url/${uuid}`, (req, res, ctx) => {
     return res(ctx.json(globusUrlResponse), ctx.status(200));
   }),
 );
@@ -30,19 +26,10 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 const DetailProvider = ({ children }) => {
-  return (
-    <DetailContext.Provider value={{ assetsEndpoint, uuid, mapped_data_access_level }}>
-      {children}
-    </DetailContext.Provider>
-  );
+  return <DetailContext.Provider value={{ uuid, mapped_data_access_level }}>{children}</DetailContext.Provider>;
 };
 
 test('handles DUA flow', async () => {
-  Object.defineProperty(window.document, 'cookie', {
-    writable: true,
-    value: `nexus_token=${token}`,
-  });
-
   const open = jest.fn();
   Object.defineProperty(window, 'open', { value: open });
 
@@ -78,7 +65,7 @@ test('handles DUA flow', async () => {
 
   render(
     <DetailProvider>
-      <Files files={testFiles} entityEndpoint={entityEndpoint} uuid={uuid} display_doi="fakedoi" />
+      <Files files={testFiles} uuid={uuid} display_doi="fakedoi" />
     </DetailProvider>,
   );
 
@@ -99,7 +86,7 @@ test('handles DUA flow', async () => {
 test('does not display file browser when files prop is undefined', async () => {
   render(
     <DetailProvider>
-      <Files entityEndpoint={entityEndpoint} uuid={uuid} display_doi="fakedoi" />
+      <Files uuid={uuid} display_doi="fakedoi" />
     </DetailProvider>,
   );
 

@@ -74,21 +74,4 @@ const datasetConfig = {
   ],
 };
 
-const fallbackConfig = {
-  filters: {
-    Basics: [
-      // 'entity_type' listFilter would make sense, but it is hidden for the other searches.
-      listFilter('mapped_status', 'Status'),
-      listFilter('mapped_data_access_level', 'Access Level'),
-    ],
-  },
-  fields: [
-    field('display_doi', 'ID'),
-    field('entity_type', 'Entity Type'),
-    field('mapped_status', 'Status'),
-    field('mapped_data_access_level', 'Access Level'),
-    field('mapped_last_modified_timestamp', 'Last Modified'),
-  ],
-};
-
-export { donorConfig, sampleConfig, datasetConfig, fallbackConfig };
+export { donorConfig, sampleConfig, datasetConfig };

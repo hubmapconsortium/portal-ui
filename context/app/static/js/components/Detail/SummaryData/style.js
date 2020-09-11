@@ -1,10 +1,12 @@
 import styled from 'styled-components';
-import IconButton from '@material-ui/core/IconButton';
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 
 import { FileIcon } from 'js/shared-styles/icons';
+import Typography from '@material-ui/core/Typography';
 
 const Flex = styled.div`
   display: flex;
+  margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
 `;
 
 const FlexRight = styled.div`
@@ -12,15 +14,12 @@ const FlexRight = styled.div`
   margin-left: auto;
 `;
 
-const FlexCenterAlign = styled.div`
+const FlexEnd = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
 `;
 
-const JsonButton = styled(IconButton)`
-  background-color: #fff;
-  padding: 10px;
-  border-radius: 4px;
+const JsonButton = styled(WhiteBackgroundIconButton)`
   margin-left: auto;
 `;
 
@@ -28,4 +27,8 @@ const StyledFileIcon = styled(FileIcon)`
   font-size: 1.2rem;
 `;
 
-export { Flex, FlexRight, FlexCenterAlign, JsonButton, StyledFileIcon };
+const StyledTypography = styled(Typography)`
+  margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
+`;
+
+export { Flex, FlexRight, FlexEnd, JsonButton, StyledFileIcon, StyledTypography };

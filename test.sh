@@ -23,7 +23,8 @@ start changelog
 if [ "$TRAVIS_BRANCH" != 'master' ]; then
   git remote set-branches --add origin master
   git fetch
-  git diff --compact-summary origin/master \
+  # "--stat=1000" ensures that filenames are not truncated. 
+  git diff --stat=1000 --compact-summary origin/master \
     | grep -e '^ CHANGELOG-\S\+ (new)' \
     || die 'Add a CHANGELOG-something.md at the top level'
 fi
