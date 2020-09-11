@@ -25,7 +25,7 @@ function Accordions(props) {
       // that need to be on the page for Searchkit,
       // but that we don't want to display.
       return (
-        <div style={{ display: 'none' }} key="hidden">
+        <div style={{ display: 'none' }} key="hidden-because-title-blank">
           {innerAccordion}
         </div>
       );
