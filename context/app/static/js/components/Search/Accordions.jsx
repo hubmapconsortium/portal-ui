@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Typography from '@material-ui/core/Typography';
-
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { OuterAccordion, OuterAccordionSummary, OuterAccordionDetails } from './style';
