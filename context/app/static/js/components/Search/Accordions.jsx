@@ -18,7 +18,7 @@ function Accordions(props) {
       }
       const Filter = accordionFilters[def.type];
       // eslint-disable-next-line react/jsx-props-no-spreading
-      return <Filter {...def.props} key={def.props.title} />;
+      return <Filter {...def.props} key={`title-${def.props.title}`} />;
     });
     if (!title) {
       // We leave the title blank for the group of facets
