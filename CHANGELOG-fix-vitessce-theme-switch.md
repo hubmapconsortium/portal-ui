@@ -1,0 +1,1 @@
+- Fix bug where clicking a visualization theme switch button twice removes theme.

@@ -70,6 +70,14 @@ function Visualization(props) {
     setVitessceSelection(i);
   }
 
+  function handleThemeChange(theme) {
+    if (!['dark', 'light'].includes(theme)) {
+      return;
+    }
+
+    setVitessceTheme(theme);
+  }
+
   useEffect(() => {
     function onKeydown(event) {
       if (event.key === 'Escape') {
@@ -87,7 +95,7 @@ function Visualization(props) {
       <StyledHeader>
         <StyledHeaderText>Visualization</StyledHeaderText>
         <StyledHeaderRight>
-          <VisualizationThemeSwitch theme={vitessceTheme} onChange={(e, theme) => setVitessceTheme(theme)} />
+          <VisualizationThemeSwitch theme={vitessceTheme} onChange={(e, theme) => handleThemeChange(theme)} />
           <SecondaryBackgroundTooltip title="Switch to Fullscreen">
             <ExpandButton size="small" onClick={handleExpand} variant="contained">
               <ZoomOutMapIcon color="primary" />
