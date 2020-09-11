@@ -14,7 +14,6 @@ function Accordions(props) {
       if (!(def.type in accordionFilters)) {
         throw new Error(`"${def.type}" not in {${Object.keys(accordionFilters).join(', ')}}`);
       }
- 
       const Filter = accordionFilters[def.type];
       // eslint-disable-next-line react/jsx-props-no-spreading
       return <Filter {...def.props} key={`title-${def.props.title}`} />;
