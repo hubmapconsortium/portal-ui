@@ -8,19 +8,19 @@ import { getAuthHeader } from 'js/helpers/functions';
 import SearchWrapper from './SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig } from './config';
 // eslint-disable-next-line import/named
-import { filter } from './utils';
+import { listFilter } from './utils';
 import AncestorNote from './AncestorNote';
 
 function Search(props) {
   const { title } = props;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
-  const hiddenFilters = [filter('ancestor_ids', 'Ancestor ID'), filter('entity_type', 'Entity Type')];
+  const hiddenFilters = [listFilter('ancestor_ids', 'Ancestor ID'), listFilter('entity_type', 'Entity Type')];
 
   const filtersByType = {
-    donor: donorConfig.filters.concat(hiddenFilters),
-    sample: sampleConfig.filters.concat(hiddenFilters),
-    dataset: datasetConfig.filters.concat(hiddenFilters),
+    donor: { ...donorConfig.filters, '': hiddenFilters },
+    sample: { ...sampleConfig.filters, '': hiddenFilters },
+    dataset: { ...datasetConfig.filters, '': hiddenFilters },
   };
 
   const resultFieldsByType = {
@@ -55,15 +55,12 @@ function Search(props) {
     resultFields,
     // Default hitsPerPage is 10:
     hitsPerPage: 20,
-    // Sidebar facet configuration;
-    // "type" should be one of the filters described here:
-    // http://docs.searchkit.co/stable/components/navigation/
+    // Sidebar facet configuration:
     filters: filtersByType[type],
-    hiddenFilterIds: hiddenFilters.map((hiddenFilter) => hiddenFilter.props.id),
     queryFields: ['everything'],
     isLoggedIn: Boolean(nexusToken),
   };
-  const allProps = Object.assign(searchProps, { apiUrl: elasticsearchEndpoint });
+  const allProps = { apiUrl: elasticsearchEndpoint, ...searchProps }; // TODO: Not needed?
 
   // eslint-disable-next-line react/jsx-props-no-spreading
   const wrappedSearch = <SearchWrapper {...allProps} />;

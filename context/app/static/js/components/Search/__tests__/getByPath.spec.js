@@ -1,4 +1,4 @@
-import { getByPath } from '../SearchWrapper';
+import { getByPath } from '../ResultsTable';
 
 test('extract values by paths', () => {
   const document = { a: { b: { c: 'xyz' } } };
