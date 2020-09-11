@@ -10,10 +10,10 @@ test('Accordions renders', () => {
     'Section Title': [],
   };
   const searchkit = SearchkitManager.mock();
-  const { getByText } = render(
+  render(
     <SearchkitProvider searchkit={searchkit}>
       <Accordions filters={filters} />
     </SearchkitProvider>,
   );
-  expect(getByText('Section Title')).toBeInTheDocument();
+  expect(screen.getByText('Section Title')).toBeInTheDocument();
 });
