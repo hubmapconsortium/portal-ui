@@ -8,7 +8,7 @@ import { InnerAccordion, InnerAccordionSummary, InnerAccordionDetails } from './
 
 function Details(props) {
   const { title, children } = props;
-  if (Array.isArray(children) && children[0].props.docCount === 0) {
+  if (Array.isArray(children) && children[0].props.items.length === 0) {
     // Presumably a list filter...
     return null;
   }
