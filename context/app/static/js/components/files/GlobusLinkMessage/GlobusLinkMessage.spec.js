@@ -7,12 +7,11 @@ import GlobusLinkMessage from './GlobusLinkMessage';
 import FilesContext from '../Files/context';
 
 const fakeOpenDUA = jest.fn();
-const assetsEndpoint = 'fakeendpoint';
 const uuid = 'fakeuuid';
 
 const FilesProviders = ({ children }) => {
   return (
-    <DetailContext.Provider value={{ assetsEndpoint, uuid }}>
+    <DetailContext.Provider value={{ uuid }}>
       <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
         {children}
       </FilesContext.Provider>

@@ -9,13 +9,11 @@ import FilesContext from '../Files/context';
 
 const fakeOpenDUA = jest.fn();
 
-const assetsEndpoint = 'fakeendpoint';
 const uuid = 'fakeuuid';
-const token = 'faketoken';
 
 const FilesProviders = ({ children }) => {
   return (
-    <DetailContext.Provider value={{ assetsEndpoint, uuid }}>
+    <DetailContext.Provider value={{ uuid }}>
       <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
         {children}
       </FilesContext.Provider>
@@ -24,11 +22,6 @@ const FilesProviders = ({ children }) => {
 };
 
 test('displays files and directories', () => {
-  Object.defineProperty(window.document, 'cookie', {
-    writable: true,
-    value: `nexus_token=${token}`,
-  });
-
   const sharedEntries = {
     edam_term: 'faketerm',
     description: 'fakedescription',

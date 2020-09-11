@@ -8,13 +8,11 @@ import FilesContext from '../Files/context';
 
 const fakeOpenDUA = jest.fn();
 
-const assetsEndpoint = 'fakeendpoint';
 const uuid = 'fakeuuid';
-const token = 'faketoken';
 
 const FilesProviders = ({ children }) => {
   return (
-    <DetailContext.Provider value={{ assetsEndpoint, uuid }}>
+    <DetailContext.Provider value={{ uuid }}>
       <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
         {children}
       </FilesContext.Provider>
@@ -31,11 +29,6 @@ function FakeFileObject(i) {
 }
 
 test('displays a link with correct href when dua is agreed to', () => {
-  Object.defineProperty(window.document, 'cookie', {
-    writable: true,
-    value: `nexus_token=${token}`,
-  });
-
   const fileSubTree = {
     files: [new FakeFileObject(1), new FakeFileObject(2)],
     'fakedirpath1/': { files: [new FakeFileObject(3)] },

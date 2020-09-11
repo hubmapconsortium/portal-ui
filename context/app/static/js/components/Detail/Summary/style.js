@@ -15,8 +15,4 @@ const StyledPaper = styled(Paper)`
   padding: 30px 40px 30px 40px;
 `;
 
-const StyledDiv = styled.div`
-  margin-bottom: ${(props) => props.theme.spacing(1)}px;
-`;
-
-export { FlexColumnRight, StyledPaper, StyledDiv };
+export { FlexColumnRight, StyledPaper };

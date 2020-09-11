@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import Description from '../../Detail/Description';
+import { AppContext } from 'js/components/Providers';
+import Description from 'js/components/Detail/Description';
 import Panel from '../Panel';
 import { PageWrapper, ScrollBox } from './style';
 
-function Collections(props) {
-  const { entityEndpoint } = props;
+function Collections() {
   const [collectionsData, setCollectionsData] = useState([]);
+  const { entityEndpoint } = useContext(AppContext);
+
   useEffect(() => {
     async function getAllCollections() {
       const response = await fetch(`${entityEndpoint}/collections`, {
@@ -52,9 +53,5 @@ function Collections(props) {
     </PageWrapper>
   );
 }
-
-Collections.propTypes = {
-  entityEndpoint: PropTypes.string.isRequired,
-};
 
 export default Collections;

@@ -6,12 +6,19 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import IconButton from '@material-ui/core/IconButton';
+
 import metadataFieldDescriptions from 'metadata-field-descriptions';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import { DownloadIcon, Flex } from './style';
-import SectionHeader from '../SectionHeader';
+import {
+  DownloadIcon,
+  Flex,
+  StyledWhiteBackgroundIconButton,
+  StyledSectionHeader,
+  FlexTableCell,
+  StyledInfoIcon,
+} from './style';
 import SectionContainer from '../SectionContainer';
 
 function MetadataTable(props) {
@@ -20,7 +27,6 @@ function MetadataTable(props) {
   const columns = [
     { id: 'key', label: 'Key' },
     { id: 'value', label: 'Value' },
-    { id: 'description', label: 'Description' },
   ];
 
   const tableRows = Object.entries(tableData).map((entry) => ({
@@ -39,12 +45,14 @@ function MetadataTable(props) {
   );
 
   return (
-    <SectionContainer id="metadata-table">
+    <SectionContainer id="metadata">
       <Flex>
-        <SectionHeader>Metadata</SectionHeader>
-        <IconButton href={downloadUrl} download={`${display_doi}.tsv`}>
-          <DownloadIcon color="primary" />
-        </IconButton>
+        <StyledSectionHeader>Metadata</StyledSectionHeader>
+        <SecondaryBackgroundTooltip title="Download">
+          <StyledWhiteBackgroundIconButton href={downloadUrl} download={`${display_doi}.tsv`}>
+            <DownloadIcon color="primary" />
+          </StyledWhiteBackgroundIconButton>
+        </SecondaryBackgroundTooltip>
       </Flex>
       <Paper>
         <StyledTableContainer $maxHeight={364}>
@@ -59,9 +67,15 @@ function MetadataTable(props) {
             <TableBody>
               {tableRows.map((row) => (
                 <TableRow key={row.key}>
-                  <TableCell>{row.key}</TableCell>
+                  <FlexTableCell>
+                    {row.key}
+                    {row.description && (
+                      <SecondaryBackgroundTooltip title={row.description} placement="bottom-start">
+                        <StyledInfoIcon color="primary" />
+                      </SecondaryBackgroundTooltip>
+                    )}
+                  </FlexTableCell>
                   <TableCell>{row.value}</TableCell>
-                  <TableCell>{row.description}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
