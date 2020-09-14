@@ -49,7 +49,6 @@ function DevSearch() {
 
   const allProps = { ...searchProps, apiUrl: elasticsearchEndpoint };
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   const wrappedSearch = <SearchWrapper {...allProps} />;
   return (
     <>

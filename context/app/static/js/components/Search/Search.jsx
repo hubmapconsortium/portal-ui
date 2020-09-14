@@ -62,7 +62,6 @@ function Search(props) {
   };
   const allProps = { apiUrl: elasticsearchEndpoint, ...searchProps }; // TODO: Not needed?
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   const wrappedSearch = <SearchWrapper {...allProps} />;
   return (
     <>
