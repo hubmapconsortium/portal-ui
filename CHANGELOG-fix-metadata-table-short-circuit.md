@@ -1,0 +1,1 @@
+- Fix metadata table short circuit for sample and dataset detail pages.
