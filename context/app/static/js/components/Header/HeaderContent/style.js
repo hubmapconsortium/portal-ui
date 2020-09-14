@@ -17,4 +17,9 @@ const HeaderButton = styled(Button)`
   color: #ffffff;
 `;
 
-export { HubmapLogo, Spacer, HeaderButton };
+const FlexNoWrap = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+`;
+
+export { HubmapLogo, Spacer, HeaderButton, FlexNoWrap };

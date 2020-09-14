@@ -58,7 +58,8 @@ def create_app(testing=False):
     def inject_template_globals():
         return {
             'is_authenticated': session.get('is_authenticated'),
-            'nexus_token': session.get('nexus_token')
+            'nexus_token': session.get('nexus_token'),
+            'user_email': session.get('user_email')
         }
 
     @app.before_request
@@ -66,6 +67,7 @@ def create_app(testing=False):
         if 'nexus_token' not in session:
             session.update(
                 nexus_token='',
+                user_email='',
                 is_authenticated=False)
 
     return app
