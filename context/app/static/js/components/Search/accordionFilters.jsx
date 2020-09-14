@@ -34,7 +34,6 @@ function AccordionListFilter(props) {
     containerComponent: Details,
     ...props,
   };
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <RefinementListFilter {...innerProps} />;
 }
 
@@ -51,7 +50,6 @@ function AccordionRangeFilter(props) {
     containerComponent: Details,
     ...props,
   };
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <RangeFilter {...innerProps} />;
 }
 
@@ -69,7 +67,6 @@ function AccordionCheckboxFilter(props) {
     containerComponent: Details,
     ...props,
   };
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <CheckboxFilter {...innerProps} />;
 }
 
