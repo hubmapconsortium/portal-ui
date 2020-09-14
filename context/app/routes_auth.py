@@ -100,11 +100,9 @@ def login():
         is_authenticated=True,
         user_email=user_email)
 
-    previous_path_and_search = unquote(request.cookies.get('urlPathAndSearchBeforeLogin'))
-    redirect_route = previous_path_and_search if previous_path_and_search else url_for(
-        'routes.index', _external=True)
+    previous_url = unquote(request.cookies.get('urlBeforeLogin'))
     response = make_response(
-        redirect(redirect_route))
+        redirect(previous_url))
     return response
 
 
