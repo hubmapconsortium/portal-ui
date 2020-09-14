@@ -1,3 +1,16 @@
+## v0.2.1 - 2020-09-14
+
+- Give a user-friendlier error if a bad type was in the search URL.
+- Minor version bump.
+- Disable no props spreading rule in eslintrc.
+- Update dockerignore for smaller images.
+- Fix metadata table short circuit for sample and dataset detail pages.
+- Do not display provenance analysis details pipelines headers when pipelines do not exist.
+- Fix bug where clicking a visualization theme switch button twice removes theme.
+- Grouped, folding search facets.
+- Style error boundary like other errors.
+
+
 ## v0.1.8 - 2020-09-09
 
 - Add hover tooltips to entity detail buttons.

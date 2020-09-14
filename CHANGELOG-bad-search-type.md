@@ -1,1 +1,0 @@
-- Give a user-friendlier error if a bad type was in the search URL.

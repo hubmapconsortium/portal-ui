@@ -1,1 +1,0 @@
-- Grouped, folding search facets.

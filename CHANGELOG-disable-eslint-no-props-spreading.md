@@ -1,1 +1,0 @@
-- Disable no props spreading rule in eslintrc.

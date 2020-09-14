@@ -1,1 +1,0 @@
-- Update dockerignore for smaller images.
