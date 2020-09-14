@@ -1,0 +1,1 @@
+- Style error boundary like other errors.

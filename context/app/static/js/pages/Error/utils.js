@@ -1,4 +1,4 @@
-export function getErrorTitleAndSubtitle(errorCode, isMaintenancePage) {
+export function getErrorTitleAndSubtitle(errorCode, isMaintenancePage, isErrorBoundary) {
   const errorTitle = {
     400: 'Bad Request',
     401: 'Unauthorized',
@@ -10,6 +10,10 @@ export function getErrorTitleAndSubtitle(errorCode, isMaintenancePage) {
 
   if (isMaintenancePage) {
     return { title: 'Portal Maintenance', subtitle: 'Portal unavailable for scheduled maintenance.' };
+  }
+
+  if (isErrorBoundary) {
+    return { title: 'Error', subtitle: `URL: ${window.location.href}` };
   }
 
   const expectedTitle = errorTitle?.[errorCode];
