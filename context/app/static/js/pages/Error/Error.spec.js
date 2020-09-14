@@ -29,3 +29,17 @@ test('should display titles for unexpected error codes', () => {
   expect(screen.getByText('Unexpected Error')).toBeInTheDocument();
   expect(screen.getByText('502', { exact: false })).toBeInTheDocument();
 });
+
+test('should display titles and message for error boundary', () => {
+  global.window = Object.create(window);
+  const url = 'http://fake.com';
+  Object.defineProperty(window, 'location', {
+    value: {
+      href: url,
+    },
+  });
+  render(<Error isErrorBoundary errorBoundaryMessage="Fake message" />);
+  expect(screen.getByText('Error')).toBeInTheDocument();
+  expect(screen.getByText(`URL: ${url}`)).toBeInTheDocument();
+  expect(screen.getByText('Fake message')).toBeInTheDocument();
+});

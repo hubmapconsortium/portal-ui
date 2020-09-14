@@ -1,2 +1,0 @@
-- Create app context provider which includes endpoints and flask nexus token.
-- Use flask nexus token instead of cookie nexus token for all requests.

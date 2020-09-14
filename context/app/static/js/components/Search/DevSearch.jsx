@@ -6,7 +6,7 @@ import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
 import SearchWrapper from './SearchWrapper';
 // eslint-disable-next-line import/named
-import { field, filter, checkboxFilter } from './utils';
+import { field, listFilter, checkboxFilter } from './utils';
 
 function DevSearch() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
@@ -32,23 +32,23 @@ function DevSearch() {
     // Default hitsPerPage is 10:
     hitsPerPage: 20,
     // Sidebar facet configuration:
-    filters: [
-      filter('entity_type', 'Entity Type'),
-      filter('mapper_metadata.version', 'Mapper Version'),
-      checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata.metadata')),
-      checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
-      checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),
-      checkboxFilter('no_files', 'No files?', BoolMustNot(ExistsQuery('files'))),
-      checkboxFilter('has_files', 'Spatially Located (CCF)?', ExistsQuery('rui_location')),
-      checkboxFilter('no_files', 'Not Spatially Located (CCF)?', BoolMustNot(ExistsQuery('rui_location'))),
-    ],
+    filters: {
+      Core: [listFilter('entity_type', 'Entity Type'), listFilter('mapper_metadata.version', 'Mapper Version')],
+      Booleans: [
+        checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata.metadata')),
+        checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
+        checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),
+        checkboxFilter('no_files', 'No files?', BoolMustNot(ExistsQuery('files'))),
+        checkboxFilter('has_files', 'Spatially Located (CCF)?', ExistsQuery('rui_location')),
+        checkboxFilter('no_files', 'Not Spatially Located (CCF)?', BoolMustNot(ExistsQuery('rui_location'))),
+      ],
+    },
     queryFields: ['everything'],
     isLoggedIn: Boolean(nexusToken),
   };
 
   const allProps = { ...searchProps, apiUrl: elasticsearchEndpoint };
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   const wrappedSearch = <SearchWrapper {...allProps} />;
   return (
     <>

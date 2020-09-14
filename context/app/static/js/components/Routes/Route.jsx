@@ -10,10 +10,7 @@ const StyledContainer = styled(Container)`
 function Route({ children, disableWidthConstraint }) {
   const constrainWidthProps = disableWidthConstraint ? { maxWidth: false, disableGutters: true } : { maxWidth: 'lg' };
 
-  return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <StyledContainer {...constrainWidthProps}>{children}</StyledContainer>
-  );
+  return <StyledContainer {...constrainWidthProps}>{children}</StyledContainer>;
 }
 
 Route.propTypes = {
