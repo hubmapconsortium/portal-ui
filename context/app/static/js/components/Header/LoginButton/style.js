@@ -14,4 +14,11 @@ const WhiteButton = styled(Button)`
   }
 `;
 
-export { WhiteButton };
+const TruncatedSpan = styled.span`
+  text-transform: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`;
+
+export { WhiteButton, TruncatedSpan };

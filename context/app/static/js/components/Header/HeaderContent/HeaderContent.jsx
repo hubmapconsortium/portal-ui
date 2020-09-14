@@ -10,7 +10,7 @@ import PreviewLinks from '../PreviewLinks';
 import Dropdown from '../Dropdown';
 import LoginButton from '../LoginButton';
 import DocumentationLinks from '../DocumentationLinks';
-import { HubmapLogo, Spacer, HeaderButton } from './style';
+import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap } from './style';
 
 function HeaderContent({ anchorRef }) {
   const theme = useTheme();
@@ -23,13 +23,13 @@ function HeaderContent({ anchorRef }) {
       </a>
       {!shouldDisplayMenu && (
         <>
-          <div>
+          <FlexNoWrap>
             {['Donor', 'Sample', 'Dataset'].map((type) => (
               <HeaderButton key={type} href={`/search?entity_type[0]=${type}`} component={Link}>
                 {`${type}s`}
               </HeaderButton>
             ))}
-          </div>
+          </FlexNoWrap>
           <Spacer />
           <Dropdown title="Previews" menuListId="preview-options">
             <PreviewLinks />
@@ -46,7 +46,7 @@ function HeaderContent({ anchorRef }) {
       )}
       {shouldDisplayMenu && <Spacer />}
       {/* eslint-disable-next-line no-undef */}
-      <LoginButton isAuthenticated={isAuthenticated} />
+      <LoginButton isAuthenticated={isAuthenticated} user_email={user_email} />
     </>
   );
 }
