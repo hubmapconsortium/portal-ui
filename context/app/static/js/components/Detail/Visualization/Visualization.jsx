@@ -151,7 +151,7 @@ function Visualization(props) {
               open
               key={vitessceErrors[0]}
             >
-              <Alert severity="error" variant="filled" onClose={() => removeError(vitessceErrors[0])}>
+              <Alert severity="error" variant="outlined" onClose={() => removeError(vitessceErrors[0])}>
                 {vitessceErrors[0]}
               </Alert>
             </ErrorSnackbar>

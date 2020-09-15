@@ -28,7 +28,7 @@ function ProvSection(props) {
       {provData ? (
         <ProvTabs uuid={uuid} assayMetadata={assayMetadata} provData={provData} />
       ) : (
-        <Alert variant="filled" severity="warning">
+        <Alert variant="outlined" severity="warning">
           {`We were unable to retrieve provenance information for this ${entity_type.toLowerCase()}.`}
         </Alert>
       )}
