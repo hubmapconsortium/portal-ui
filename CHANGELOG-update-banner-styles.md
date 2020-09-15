@@ -1,1 +1,1 @@
-- Change alert banners to outlined variant.
+- Change alerts to outlined variant and update their icons.
