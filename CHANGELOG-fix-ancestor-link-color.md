@@ -1,0 +1,1 @@
+- Make derived from ancestor link the same color as other links.
