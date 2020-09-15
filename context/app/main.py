@@ -5,8 +5,18 @@ from .flask_static_digest import FlaskStaticDigest
 flask_static_digest = FlaskStaticDigest()
 
 
+def get_error_title(code):
+    error_titles = {
+        400: 'Bad Request',
+        401: 'Unauthorized',
+        404: 'Page Not Found',
+        504: 'Gateway Timeout',
+    }
+    return error_titles[code]
+
+
 def render_react_error(code):
-    return render_template('pages/base_react.html', flask_data={'errorCode': code}), code
+    return render_template('pages/base_react.html', flask_data={'errorCode': code}, title=get_error_title(code)), code
 
 
 def bad_request(e):
