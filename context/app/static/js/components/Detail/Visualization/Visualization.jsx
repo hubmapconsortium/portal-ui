@@ -9,8 +9,8 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
-import Alert from '@material-ui/lab/Alert';
 
+import { Alert } from 'js/shared-styles/alerts';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import {
@@ -151,7 +151,7 @@ function Visualization(props) {
               open
               key={vitessceErrors[0]}
             >
-              <Alert severity="error" variant="outlined" onClose={() => removeError(vitessceErrors[0])}>
+              <Alert severity="error" onClose={() => removeError(vitessceErrors[0])}>
                 {vitessceErrors[0]}
               </Alert>
             </ErrorSnackbar>
