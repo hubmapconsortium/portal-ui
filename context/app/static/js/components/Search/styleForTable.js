@@ -52,6 +52,11 @@ const sidePadding = '64px';
 const StyledTableRow = styled(TableRow)`
   border: 0;
 
+  // So just one entry in the row looks like a link.
+  td:first-child {
+    color: ${(props) => props.theme.palette.link.main};
+  }
+
   &.before-highlight td {
     padding-bottom: 0px;
   }
@@ -67,23 +72,6 @@ const StyledTableRow = styled(TableRow)`
 `;
 
 const StyledTableCell = styled(TableCell)`
-  // Force <a> to fill each cell, so the whole row is clickable.
-  // https://stackoverflow.com/questions/3966027
-  overflow: hidden;
-
-  a {
-    display: block;
-    margin: -100%;
-    padding: 100%;
-    color: rgb(0, 0, 0);
-    overflow-wrap: break-word;
-  }
-
-  // So just one entry in the row looks like a link.
-  :first-child a {
-    color: ${(props) => props.theme.palette.link.main};
-  }
-
   // Borders handled by tbody.
   border: none;
 
