@@ -1,0 +1,1 @@
+- Modify search table row links to fix safari bugs.
