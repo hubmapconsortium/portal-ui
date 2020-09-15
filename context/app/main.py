@@ -16,7 +16,9 @@ def get_error_title(code):
 
 
 def render_react_error(code):
-    return render_template('pages/base_react.html', flask_data={'errorCode': code}, title=get_error_title(code)), code
+    return render_template('pages/base_react.html',
+                           flask_data={'errorCode': code},
+                           title=get_error_title(code)), code
 
 
 def bad_request(e):
