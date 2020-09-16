@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import Alert from '@material-ui/lab/Alert';
 import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
 import InfoRoundedIcon from '@material-ui/icons/InfoRounded';
@@ -18,4 +19,10 @@ const OutlinedAlert = (props) => (
   />
 );
 
-export { OutlinedAlert as Alert };
+const StyledAlert = styled(OutlinedAlert)`
+  :not(svg) {
+    color: ${(props) => props.theme.palette.text.primary};
+  }
+`;
+
+export { StyledAlert as Alert };
