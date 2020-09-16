@@ -1,1 +1,0 @@
-- Display user email dropdown in header when logged in.

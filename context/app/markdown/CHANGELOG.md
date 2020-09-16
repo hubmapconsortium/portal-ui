@@ -1,3 +1,9 @@
+## v0.2.2 - 2020-09-16
+
+- Add elevation to header app bar.
+- Display user email dropdown in header when logged in.
+
+
 ## v0.2.1 - 2020-09-14
 
 - Give a user-friendlier error if a bad type was in the search URL.
