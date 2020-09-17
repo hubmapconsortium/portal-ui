@@ -1,4 +1,4 @@
-from urllib.parse import urlencode
+from urllib.parse import urlencode, unquote
 
 from flask import (
     Blueprint, make_response, current_app, url_for,
@@ -99,8 +99,10 @@ def login():
         nexus_token=nexus_token,
         is_authenticated=True,
         user_email=user_email)
+
+    previous_url = unquote(request.cookies.get('urlBeforeLogin'))
     response = make_response(
-        redirect(url_for('routes.index', _external=True)))
+        redirect(previous_url))
     return response
 
 
