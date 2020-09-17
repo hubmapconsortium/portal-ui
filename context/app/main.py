@@ -37,10 +37,10 @@ def gateway_timeout(e):
 
 
 def create_app(testing=False):
-    app=Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(default_config.DefaultConfig)
     if testing:
-        app.config['TESTING']=True
+        app.config['TESTING'] = True
     else:
         # We should not load the gitignored app.conf during tests.
         app.config.from_pyfile('app.conf')
@@ -75,4 +75,4 @@ def create_app(testing=False):
     return app
 
 
-app=create_app()
+app = create_app()
