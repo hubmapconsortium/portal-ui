@@ -1,0 +1,1 @@
+- Change alerts to outlined variant and update their icons.
