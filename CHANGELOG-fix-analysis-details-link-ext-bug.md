@@ -1,0 +1,1 @@
+- Fix analysis detail links for pipeline origin fields which do not end with .git.

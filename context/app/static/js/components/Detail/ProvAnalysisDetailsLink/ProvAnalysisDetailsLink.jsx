@@ -6,7 +6,7 @@ import { CwlIcon, FlexLightBlueLink, PrimaryTextDivider, StyledListItem } from '
 function ProvAnalysisDetailsLink(props) {
   const { data } = props;
 
-  const trimmedOrigin = data.origin.split('.').slice(0, -1).join('.');
+  const trimmedOrigin = data.origin.replace(/\.git$/, '');
   const githubUrl =
     'name' in data ? `${trimmedOrigin}/blob/${data.hash}/${data.name}` : `${trimmedOrigin}/tree/${data.hash}`;
   const cwlUrl = `https://view.commonwl.org/workflows/${githubUrl.replace(/^http(s?):\/\//i, '')}`;
