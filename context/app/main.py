@@ -5,30 +5,20 @@ from .flask_static_digest import FlaskStaticDigest
 flask_static_digest = FlaskStaticDigest()
 
 
-def get_error_title(code):
-    error_titles = {
-        400: 'Bad Request',
-        401: 'Unauthorized',
-        404: 'Page Not Found',
-        504: 'Gateway Timeout',
-    }
-    return error_titles[code]
-
-
-def render_react_error(code):
+def render_react_error(code, title):
     return render_template('pages/base_react.html',
                            flask_data={'errorCode': code},
-                           title=get_error_title(code)), code
+                           title=title), code
 
 
 def bad_request(e):
     '''A 400 means the request to the API failed.'''
-    return render_react_error(400)
+    return render_react_error(400, 'Bad Request')
 
 
 def not_found(e):
     '''A 404 means Flask routing failed.'''
-    return render_react_error(404)
+    return render_react_error(404, 'Page Not Found')
 
 
 def unauthorized(e):
@@ -38,19 +28,19 @@ def unauthorized(e):
     # We check group membership on login, which is a distinct 401,
     # with its own template.
     session.clear()
-    return render_react_error(401)
+    return render_react_error(401, 'Unauthorized')
 
 
 def gateway_timeout(e):
     '''A 504 means the API has timed out.'''
-    return render_react_error(504)
+    return render_react_error(504, 'Gateway Timeout')
 
 
 def create_app(testing=False):
-    app = Flask(__name__, instance_relative_config=True)
+    app=Flask(__name__, instance_relative_config=True)
     app.config.from_object(default_config.DefaultConfig)
     if testing:
-        app.config['TESTING'] = True
+        app.config['TESTING']=True
     else:
         # We should not load the gitignored app.conf during tests.
         app.config.from_pyfile('app.conf')
@@ -66,7 +56,7 @@ def create_app(testing=False):
     app.register_error_handler(404, not_found)
     app.register_error_handler(504, gateway_timeout)
 
-    @app.context_processor
+    @ app.context_processor
     def inject_template_globals():
         return {
             'is_authenticated': session.get('is_authenticated'),
@@ -74,7 +64,7 @@ def create_app(testing=False):
             'user_email': session.get('user_email')
         }
 
-    @app.before_request
+    @ app.before_request
     def set_default_nexus_token():
         if 'nexus_token' not in session:
             session.update(
@@ -85,4 +75,4 @@ def create_app(testing=False):
     return app
 
 
-app = create_app()
+app=create_app()
