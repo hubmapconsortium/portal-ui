@@ -56,7 +56,7 @@ def create_app(testing=False):
     app.register_error_handler(404, not_found)
     app.register_error_handler(504, gateway_timeout)
 
-    @ app.context_processor
+    @app.context_processor
     def inject_template_globals():
         return {
             'is_authenticated': session.get('is_authenticated'),
