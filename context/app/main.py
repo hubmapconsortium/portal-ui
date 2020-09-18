@@ -64,7 +64,7 @@ def create_app(testing=False):
             'user_email': session.get('user_email')
         }
 
-    @ app.before_request
+    @app.before_request
     def set_default_nexus_token():
         if 'nexus_token' not in session:
             session.update(
