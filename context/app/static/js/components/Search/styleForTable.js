@@ -50,6 +50,7 @@ const interPadding = `${16 * 0.6}px`;
 const sidePadding = '64px';
 
 const StyledTableRow = styled(TableRow)`
+  cursor: pointer;
   border: 0;
 
   // So just one entry in the row looks like a link.
