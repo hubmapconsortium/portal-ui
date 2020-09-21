@@ -2,7 +2,6 @@ import React, { useState, useEffect, useReducer, useRef } from 'react';
 import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMapRounded';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
@@ -21,6 +20,7 @@ import {
   StyledHeaderText,
   StyledHeaderRight,
   ExpandButton,
+  ExpandIcon,
   EscSnackbar,
   ErrorSnackbar,
   ExpandableDiv,
@@ -97,8 +97,8 @@ function Visualization(props) {
         <StyledHeaderRight>
           <VisualizationThemeSwitch theme={vitessceTheme} onChange={(e, theme) => handleThemeChange(theme)} />
           <SecondaryBackgroundTooltip title="Switch to Fullscreen">
-            <ExpandButton size="small" onClick={handleExpand} variant="contained">
-              <ZoomOutMapIcon color="primary" />
+            <ExpandButton onClick={handleExpand} variant="contained" color="primary">
+              <ExpandIcon /> Fullscreen
             </ExpandButton>
           </SecondaryBackgroundTooltip>
           {Array.isArray(vitData) ? (

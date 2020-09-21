@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
+import FullScreenRounded from '@material-ui/icons/FullscreenRounded';
 
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 
@@ -29,8 +29,13 @@ const StyledSectionContainer = styled(SectionContainer)`
   position: relative;
 `;
 
-const ExpandButton = styled(WhiteBackgroundIconButton)`
+const ExpandButton = styled(Button)`
   margin-left: 0.5rem;
+`;
+
+const ExpandIcon = styled(FullScreenRounded)`
+  margin-right: ${(props) => props.theme.spacing(1)}px;
+  font-size: 1.2rem;
 `;
 
 const SelectionButton = styled(Button)`
@@ -84,6 +89,7 @@ export {
   StyledHeaderText,
   StyledHeaderRight,
   ExpandButton,
+  ExpandIcon,
   EscSnackbar,
   ErrorSnackbar,
   ExpandableDiv,
