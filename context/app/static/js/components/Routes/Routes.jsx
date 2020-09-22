@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Donor from 'js/pages/Donor';
+import Dataset from 'js/pages/Dataset';
+import Sample from 'js/pages/Sample';
+import Collection from 'js/pages/Collection';
 import Error from 'js/pages/Error';
+import Home from 'js/pages/Home';
+import Search from 'js/pages/search/Search';
+import DevSearch from 'js/pages/search/DevSearch';
+import Preview from 'js/pages/Preview';
+import Collections from 'js/pages/Collections';
+import Markdown from 'js/components/Markdown';
 import Route from './Route';
-import { Home } from '../Home';
-import Search from '../Search/Search';
-import DevSearch from '../Search/DevSearch';
-import { Donor, Sample, Dataset, Collection } from '../Detail';
-import Preview from '../Preview';
-import { Collections } from '../Collections';
-import Markdown from '../Markdown';
 import useSendPageView from './useSendPageView';
 import useSetUrlBeforeLogin from './useSetUrlBeforeLogin';
 
