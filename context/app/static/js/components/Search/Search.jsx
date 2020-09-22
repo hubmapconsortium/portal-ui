@@ -83,7 +83,6 @@ function Search(props) {
 }
 
 Search.propTypes = {
-  elasticsearchEndpoint: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   nexusToken: PropTypes.string,
 };
