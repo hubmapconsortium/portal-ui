@@ -9,9 +9,8 @@ import Header from './Header';
 
 function App(props) {
   const { flaskData } = props;
-  ReactGA.initialize('UA-133341631-3');
-
   const { title, entity, vitessce_conf, endpoints, markdown, collection, errorCode } = flaskData;
+  ReactGA.initialize('UA-133341631-3');
 
   return (
     // eslint-disable-next-line no-undef
