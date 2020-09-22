@@ -1,3 +1,13 @@
+## v0.3.1 - 2020-09-21
+
+- Fix analysis detail links for pipeline origin fields which do not end with .git.
+- Make derived from ancestor link the same color as other links.
+- Fix error page html titles.
+- Modify search table row links to fix safari bugs.
+- Redirect to previous page following login.
+- Change alerts to outlined variant and update their icons.
+
+
 ## v0.2.2 - 2020-09-16
 
 - Add elevation to header app bar.

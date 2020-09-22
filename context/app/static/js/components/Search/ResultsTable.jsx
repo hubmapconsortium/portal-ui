@@ -38,11 +38,13 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
       <>
         {hits.map((hit) => (
           <StyledTableBody key={hit._id}>
-            <StyledTableRow className={'highlight' in hit && 'before-highlight'}>
+            <StyledTableRow
+              className={'highlight' in hit && 'before-highlight'}
+              onClick={() => window.location.assign(detailsUrlPrefix + hit._source[idField])}
+              role="row link"
+            >
               {resultFields.map((field) => (
-                <StyledTableCell key={field.id}>
-                  <a href={detailsUrlPrefix + hit._source[idField]}>{getByPath(hit._source, field)}</a>
-                </StyledTableCell>
+                <StyledTableCell key={field.id}>{getByPath(hit._source, field)}</StyledTableCell>
               ))}
             </StyledTableRow>
             {'highlight' in hit && (

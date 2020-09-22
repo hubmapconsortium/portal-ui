@@ -5,18 +5,20 @@ from .flask_static_digest import FlaskStaticDigest
 flask_static_digest = FlaskStaticDigest()
 
 
-def render_react_error(code):
-    return render_template('pages/base_react.html', flask_data={'errorCode': code}), code
+def render_react_error(code, title):
+    return render_template('pages/base_react.html',
+                           flask_data={'errorCode': code},
+                           title=title), code
 
 
 def bad_request(e):
     '''A 400 means the request to the API failed.'''
-    return render_react_error(400)
+    return render_react_error(400, 'Bad Request')
 
 
 def not_found(e):
     '''A 404 means Flask routing failed.'''
-    return render_react_error(404)
+    return render_react_error(404, 'Page Not Found')
 
 
 def unauthorized(e):
@@ -26,12 +28,12 @@ def unauthorized(e):
     # We check group membership on login, which is a distinct 401,
     # with its own template.
     session.clear()
-    return render_react_error(401)
+    return render_react_error(401, 'Unauthorized')
 
 
 def gateway_timeout(e):
     '''A 504 means the API has timed out.'''
-    return render_react_error(504)
+    return render_react_error(504, 'Gateway Timeout')
 
 
 def create_app(testing=False):
