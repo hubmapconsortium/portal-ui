@@ -12,7 +12,7 @@ import Associations from 'js/components/Home/Associations';
 import TwitterTimeline from 'js/components/Home/TwitterTimeline';
 import { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder } from './style';
 
-const BarChart = React.lazy(() => import('../BarChart'));
+const BarChart = React.lazy(() => import('../js/components/Home/BarChart'));
 
 function checkPropReturnValue(prop, obj) {
   return prop in obj ? obj[prop] : 0;
