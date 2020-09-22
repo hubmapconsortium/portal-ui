@@ -8,7 +8,7 @@ import Summary from 'js/components/Detail/Summary';
 import Attribution from 'js/components/Detail/Attribution';
 import Protocol from 'js/components/Detail/Protocol';
 import MetadataTable from 'js/components/Detail/MetadataTable';
-import VisualizationWrapper from 'js/components/Detail/VisualizationWrapper';
+import VisualizationWrapper from 'js/components/visualization/VisualizationWrapper';
 import DetailLayout from 'js/components/Detail/DetailLayout';
 import SummaryItem from 'js/components/Detail/SummaryItem';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
