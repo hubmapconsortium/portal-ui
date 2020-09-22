@@ -2,11 +2,11 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import Markdown from 'js/components/Markdown';
-import VisualizationWrapper from '../Detail/VisualizationWrapper';
-import SectionHeader from '../Detail/SectionHeader';
-import SectionContainer from '../Detail/SectionContainer';
-import Attribution from '../Detail/Attribution';
-import Description from '../Detail/Description';
+import VisualizationWrapper from 'js/components/Detail/VisualizationWrapper';
+import SectionHeader from 'js/components/Detail/SectionHeader';
+import SectionContainer from 'js/components/Detail/SectionContainer';
+import Attribution from 'js/components/Detail/Attribution';
+import Description from 'js/components/Detail/Description';
 
 function Preview(props) {
   const { vitData, title, assayMetadata, markdown } = props;

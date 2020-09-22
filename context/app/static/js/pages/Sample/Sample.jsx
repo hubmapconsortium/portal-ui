@@ -1,17 +1,18 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import ProvSection from '../ProvSection';
-import Summary from '../Summary';
-import Attribution from '../Attribution';
-import Protocol from '../Protocol';
-import SummaryItem from '../SummaryItem';
-import DetailLayout from '../DetailLayout';
-import MetadataTable from '../MetadataTable';
-import SampleTissue from '../SampleTissue';
-import useSendUUIDEvent from '../useSendUUIDEvent';
 
-import DetailContext from '../context';
-import { getSectionOrder } from '../utils';
+import ProvSection from 'js/components/Detail/ProvSection';
+import Summary from 'js/components/Detail/Summary';
+import Attribution from 'js/components/Detail/Attribution';
+import Protocol from 'js/components/Detail/Protocol';
+import SummaryItem from 'js/components/Detail/SummaryItem';
+import DetailLayout from 'js/components/Detail/DetailLayout';
+import MetadataTable from 'js/components/Detail/MetadataTable';
+import SampleTissue from 'js/components/Detail/SampleTissue';
+import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
+
+import DetailContext from 'js/components/Detail/context';
+import { getSectionOrder } from 'js/components/Detail/utils';
 
 function SampleDetail(props) {
   const { assayMetadata } = props;

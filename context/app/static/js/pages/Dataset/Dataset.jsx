@@ -3,19 +3,19 @@ import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/files/Files';
-import ProvSection from '../ProvSection';
-import Summary from '../Summary';
-import Attribution from '../Attribution';
-import Protocol from '../Protocol';
-import MetadataTable from '../MetadataTable';
-import VisualizationWrapper from '../VisualizationWrapper';
-import DetailLayout from '../DetailLayout';
-import SummaryItem from '../SummaryItem';
-import useSendUUIDEvent from '../useSendUUIDEvent';
+import ProvSection from 'js/components/Detail/ProvSection';
+import Summary from 'js/components/Detail/Summary';
+import Attribution from 'js/components/Detail/Attribution';
+import Protocol from 'js/components/Detail/Protocol';
+import MetadataTable from 'js/components/Detail/MetadataTable';
+import VisualizationWrapper from 'js/components/Detail/VisualizationWrapper';
+import DetailLayout from 'js/components/Detail/DetailLayout';
+import SummaryItem from 'js/components/Detail/SummaryItem';
+import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 
 // TODO use this context for components other than FileBrowser
-import DetailContext from '../context';
-import { getSectionOrder } from '../utils';
+import DetailContext from 'js/components/Detail/context';
+import { getSectionOrder } from 'js/components/Detail/utils';
 
 function SummaryDataChildren(props) {
   const { mapped_data_types, origin_sample } = props;

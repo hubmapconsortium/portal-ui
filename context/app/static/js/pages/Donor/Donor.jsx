@@ -1,14 +1,14 @@
 import React from 'react';
 import MetadataTable from 'js/components/Detail/MetadataTable';
-import ProvSection from '../ProvSection';
-import Summary from '../Summary';
-import Attribution from '../Attribution';
-import Protocol from '../Protocol';
-import DetailLayout from '../DetailLayout';
-import useSendUUIDEvent from '../useSendUUIDEvent';
+import ProvSection from 'js/components/Detail/ProvSection';
+import Summary from 'js/components/Detail/Summary';
+import Attribution from 'js/components/Detail/Attribution';
+import Protocol from 'js/components/Detail/Protocol';
+import DetailLayout from 'js/components/Detail/DetailLayout';
+import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 
-import DetailContext from '../context';
-import { getSectionOrder } from '../utils';
+import DetailContext from 'js/components/Detail/context';
+import { getSectionOrder } from 'js/components/Detail/utils';
 
 function DonorDetail(props) {
   const { assayMetadata } = props;
