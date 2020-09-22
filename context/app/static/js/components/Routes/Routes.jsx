@@ -121,7 +121,6 @@ Routes.propTypes = {
     markdown: PropTypes.string,
     collection: PropTypes.object,
     errorCode: PropTypes.number,
-    endpoints: PropTypes.objectOf(PropTypes.string),
   }),
 };
 
