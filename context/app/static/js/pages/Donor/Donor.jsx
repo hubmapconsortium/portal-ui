@@ -1,6 +1,6 @@
 import React from 'react';
 import MetadataTable from 'js/components/Detail/MetadataTable';
-import ProvSection from 'js/components/Detail/ProvSection';
+import ProvSection from 'js/components/provenance/ProvSection';
 import Summary from 'js/components/Detail/Summary';
 import Attribution from 'js/components/Detail/Attribution';
 import Protocol from 'js/components/Detail/Protocol';
