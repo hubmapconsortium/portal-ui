@@ -1,1 +1,0 @@
-- Move visualization into own directory in components.

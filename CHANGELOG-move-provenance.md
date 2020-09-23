@@ -1,1 +1,1 @@
-- Move provenance components into own directory in components.
+- Reorganize provenance and visualization components.
