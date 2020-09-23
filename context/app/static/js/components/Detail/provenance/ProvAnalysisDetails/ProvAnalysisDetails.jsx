@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ProvAnalysisDetailsList from 'js/components/Detail/ProvAnalysisDetailsList';
+import ProvAnalysisDetailsList from '../ProvAnalysisDetailsList';
 
 function ProvAnalysisDetails(props) {
   const { dagListData } = props;
