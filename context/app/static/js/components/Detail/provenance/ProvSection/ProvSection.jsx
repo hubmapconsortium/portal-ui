@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { AppContext } from 'js/components/Providers';
 import useProvData from 'js/hooks/useProvData';
 import { Alert } from 'js/shared-styles/alerts';
+import SectionHeader from 'js/components/Detail/SectionHeader';
+import SectionContainer from 'js/components/Detail/SectionContainer';
 import ProvTabs from '../ProvTabs';
-import SectionHeader from '../SectionHeader';
-import SectionContainer from '../SectionContainer';
 
 function ProvSection(props) {
   const { uuid, assayMetadata } = props;

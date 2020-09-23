@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { AppContext } from 'js/components/Providers';
 import Description from 'js/components/Detail/Description';
-import Panel from '../Panel';
+import Panel from 'js/components/Collections/Panel';
 import { PageWrapper, ScrollBox } from './style';
 
 function Collections() {

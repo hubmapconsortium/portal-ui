@@ -4,9 +4,8 @@ import { ExistsQuery, BoolMustNot } from 'searchkit';
 
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
-import SearchWrapper from './SearchWrapper';
-// eslint-disable-next-line import/named
-import { field, listFilter, checkboxFilter } from './utils';
+import { field, listFilter, checkboxFilter } from 'js/components/Search/utils';
+import SearchWrapper from 'js/components/Search/SearchWrapper';
 
 function DevSearch() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);

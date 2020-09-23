@@ -4,8 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
-import SectionContainer from '../SectionContainer';
-import SectionHeader from '../SectionHeader';
+import SectionContainer from 'js/components/Detail/SectionContainer';
+import SectionHeader from 'js/components/Detail/SectionHeader';
 
 const headerFixedHeight = 64;
 const vitessceFixedHeight = 600;
