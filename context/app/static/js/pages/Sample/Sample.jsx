@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import ProvSection from 'js/components/Detail/provenance/ProvSection';
@@ -10,6 +10,7 @@ import DetailLayout from 'js/components/Detail/DetailLayout';
 import MetadataTable from 'js/components/Detail/MetadataTable';
 import SampleTissue from 'js/components/Detail/SampleTissue';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
+import useStore from 'js/components/store';
 
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
@@ -44,6 +45,11 @@ function SampleDetail(props) {
     ['summary', 'tissue', 'attribution', 'provenance', 'protocols', 'metadata'],
     shouldDisplaySection,
   );
+
+  const { setAssayMetadata } = useStore();
+  useEffect(() => {
+    setAssayMetadata({ display_doi, entity_type, mapped_organ, mapped_specimen_type });
+  }, [setAssayMetadata, display_doi, entity_type, mapped_organ, mapped_specimen_type]);
 
   useSendUUIDEvent(entity_type, uuid);
 

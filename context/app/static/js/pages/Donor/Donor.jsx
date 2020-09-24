@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MetadataTable from 'js/components/Detail/MetadataTable';
 import ProvSection from 'js/components/Detail/provenance/ProvSection';
 import Summary from 'js/components/Detail/Summary';
@@ -6,6 +6,7 @@ import Attribution from 'js/components/Detail/Attribution';
 import Protocol from 'js/components/Detail/Protocol';
 import DetailLayout from 'js/components/Detail/DetailLayout';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
+import useStore from 'js/components/store';
 
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
@@ -35,6 +36,13 @@ function DonorDetail(props) {
     ['summary', 'metadata', 'attribution', 'provenance', 'protocols'],
     shouldDisplaySection,
   );
+
+  const { sex, race, age_value, age_unit } = mapped_metadata;
+
+  const { setAssayMetadata } = useStore();
+  useEffect(() => {
+    setAssayMetadata({ display_doi, entity_type, sex, race, age_value, age_unit });
+  }, [setAssayMetadata, display_doi, entity_type, sex, race, age_value, age_unit]);
 
   useSendUUIDEvent(entity_type, uuid);
 
