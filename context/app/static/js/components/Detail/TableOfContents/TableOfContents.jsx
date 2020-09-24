@@ -121,7 +121,7 @@ function TableOfContents(props) {
 
   const summaryInView = useStore((state) => state.summaryInView);
   const [stickyNavAnimationProps, set] = useSpring(() => ({ top: '80px' }));
-  set({ top: summaryInView ? '80px' : '120px' });
+  set({ top: summaryInView ? '80px' : '115px' });
 
   return (
     <TableContainer>
