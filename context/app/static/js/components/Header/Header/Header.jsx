@@ -8,13 +8,14 @@ import HeaderContent from '../HeaderContent';
 function Header() {
   const anchorRef = useRef(null);
   const summaryInView = useStore((state) => state.summaryInView);
+  const displayEntityHeader = !summaryInView && window.location.pathname.startsWith('/browse');
 
   return (
     <>
-      <HeaderAppBar anchorRef={anchorRef}>
+      <HeaderAppBar anchorRef={anchorRef} elevation={displayEntityHeader ? 0 : 4}>
         <HeaderContent anchorRef={anchorRef} />
       </HeaderAppBar>
-      {!summaryInView && <DetailHeader />}
+      {displayEntityHeader && <DetailHeader />}
     </>
   );
 }
