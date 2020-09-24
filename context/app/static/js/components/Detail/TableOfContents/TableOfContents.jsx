@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 
+import useStore from 'js/components/store';
 import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
 
@@ -51,6 +52,8 @@ function useThrottledOnScroll(callback, delay) {
 function TableOfContents(props) {
   const { items } = props;
   const [currentSection, setCurrentSection] = useState(items[0].hash);
+
+  const summaryInView = useStore((state) => state.summaryInView);
 
   const itemsWithNodeRef = React.useRef([]);
   React.useEffect(() => {
@@ -117,7 +120,7 @@ function TableOfContents(props) {
 
   return (
     <TableContainer>
-      <StickyNav>
+      <StickyNav summaryInView={summaryInView}>
         {items.length > 0 ? (
           <>
             <TableTitle variant="h5" component="h3">
