@@ -9,7 +9,6 @@ const TableContainer = styled.div`
 
 const StickyNav = styled.nav`
   position: sticky;
-  top: ${(props) => (props.summaryInView ? '70px' : '110px')};
 `;
 
 const TableTitle = styled(Typography)`

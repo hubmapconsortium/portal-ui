@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
+import { useSpring, animated } from 'react-spring';
 
 import useStore from 'js/components/store';
 import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
+
+const AnimatedNav = animated(StickyNav);
 
 function ItemLink(props) {
   const { item, currentSection, handleClick } = props;
@@ -52,8 +55,6 @@ function useThrottledOnScroll(callback, delay) {
 function TableOfContents(props) {
   const { items } = props;
   const [currentSection, setCurrentSection] = useState(items[0].hash);
-
-  const summaryInView = useStore((state) => state.summaryInView);
 
   const itemsWithNodeRef = React.useRef([]);
   React.useEffect(() => {
@@ -118,9 +119,13 @@ function TableOfContents(props) {
     [],
   );
 
+  const summaryInView = useStore((state) => state.summaryInView);
+  const [stickyNavAnimationProps, set] = useSpring(() => ({ top: '80px' }));
+  set({ top: summaryInView ? '80px' : '120px' });
+
   return (
     <TableContainer>
-      <StickyNav summaryInView={summaryInView}>
+      <AnimatedNav style={stickyNavAnimationProps}>
         {items.length > 0 ? (
           <>
             <TableTitle variant="h5" component="h3">
@@ -135,7 +140,7 @@ function TableOfContents(props) {
             </List>
           </>
         ) : null}
-      </StickyNav>
+      </AnimatedNav>
     </TableContainer>
   );
 }
