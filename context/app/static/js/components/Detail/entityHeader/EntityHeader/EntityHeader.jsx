@@ -8,13 +8,15 @@ import EntityHeaderContent from '../EntityHeaderContent';
 const AnimatedPaper = animated(StyledPaper);
 
 function Header() {
-  const summaryInView = useEntityStore((state) => state.summaryInView);
+  const { assayMetadata, summaryInView } = useEntityStore((state) => ({
+    assayMetadata: state.assayMetadata,
+    summaryInView: state.summaryInView,
+  }));
   const transitions = useTransition(!summaryInView && [true], null, {
     from: { overflow: 'hidden', height: 0 },
     enter: { height: 35 },
     leave: { overflow: 'hidden', height: 0 },
   });
-  const assayMetadata = useEntityStore((state) => state.assayMetadata);
   const { display_doi, entity_type } = assayMetadata;
 
   const data = (({ mapped_organ, mapped_data_types, mapped_specimen_type, sex, race }) => ({
