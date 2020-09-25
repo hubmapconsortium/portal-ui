@@ -5,11 +5,11 @@ import Typography from '@material-ui/core/Typography';
 import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader } from 'js/helpers/functions';
-import SearchWrapper from './SearchWrapper';
-import { donorConfig, sampleConfig, datasetConfig } from './config';
+import SearchWrapper from 'js/components/Search/SearchWrapper';
+import { donorConfig, sampleConfig, datasetConfig } from 'js/components/Search/config';
 // eslint-disable-next-line import/named
-import { listFilter } from './utils';
-import AncestorNote from './AncestorNote';
+import { listFilter } from 'js/components/Search/utils';
+import AncestorNote from 'js/components/Search/AncestorNote';
 
 function Search(props) {
   const { title } = props;

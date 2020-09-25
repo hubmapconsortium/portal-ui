@@ -1,25 +1,20 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import ProvSection from '../ProvSection';
-import Summary from '../Summary';
-import Attribution from '../Attribution';
-import Protocol from '../Protocol';
-import SummaryItem from '../SummaryItem';
-import DetailLayout from '../DetailLayout';
-import MetadataTable from '../MetadataTable';
-import SampleTissue from '../SampleTissue';
-import useSendUUIDEvent from '../useSendUUIDEvent';
+import MetadataTable from 'js/components/Detail/MetadataTable';
+import ProvSection from 'js/components/Detail/provenance/ProvSection';
+import Summary from 'js/components/Detail/Summary';
+import Attribution from 'js/components/Detail/Attribution';
+import Protocol from 'js/components/Detail/Protocol';
+import DetailLayout from 'js/components/Detail/DetailLayout';
+import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 
-import DetailContext from '../context';
-import { getSectionOrder } from '../utils';
+import DetailContext from 'js/components/Detail/context';
+import { getSectionOrder } from 'js/components/Detail/utils';
 
-function SampleDetail(props) {
+function DonorDetail(props) {
   const { assayMetadata } = props;
   const {
     uuid,
     protocol_url,
-    mapped_specimen_type,
-    origin_sample,
     group_name,
     created_by_user_displayname,
     created_by_user_email,
@@ -28,19 +23,16 @@ function SampleDetail(props) {
     create_timestamp,
     last_modified_timestamp,
     description,
-    metadata,
+    mapped_metadata,
   } = assayMetadata;
-
-  const { mapped_organ } = origin_sample;
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
-    tissue: true,
-    metadata: 'metadata' in assayMetadata,
+    metadata: Boolean(mapped_metadata),
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'tissue', 'attribution', 'provenance', 'protocols', 'metadata'],
+    ['summary', 'metadata', 'attribution', 'provenance', 'protocols'],
     shouldDisplaySection,
   );
 
@@ -56,13 +48,8 @@ function SampleDetail(props) {
           create_timestamp={create_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}
-        >
-          <SummaryItem>{mapped_organ}</SummaryItem>
-          <Typography variant="h6" component="p">
-            {mapped_specimen_type}
-          </Typography>
-        </Summary>
-        <SampleTissue mapped_specimen_type={mapped_specimen_type} mapped_organ={mapped_organ} />
+        />
+        {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} display_doi={display_doi} />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
@@ -70,10 +57,9 @@ function SampleDetail(props) {
         />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata} display_doi={display_doi} />}
       </DetailLayout>
     </DetailContext.Provider>
   );
 }
 
-export default SampleDetail;
+export default DonorDetail;
