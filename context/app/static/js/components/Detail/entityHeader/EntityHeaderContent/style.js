@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
+import Container from '@material-ui/core/Container';
 
 const iconStyle = css`
   font-size: 1.5rem;
@@ -19,4 +20,10 @@ const StyledDonorIcon = styled(DonorIcon)`
   ${iconStyle}
 `;
 
-export { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon };
+const FlexContainer = styled(Container)`
+  display: flex;
+  height: 100%;
+  align-items: center;
+`;
+
+export { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer };

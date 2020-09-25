@@ -2,7 +2,7 @@ import React from 'react';
 import { useTransition, animated } from 'react-spring';
 
 import useStore from 'js/components/store';
-import { StyledPaper, FlexContainer } from './style';
+import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 
 const AnimatedPaper = animated(StyledPaper);
@@ -33,9 +33,12 @@ function Header() {
     ({ item, key, props }) =>
       item && (
         <AnimatedPaper key={key} style={props} elevation={4}>
-          <FlexContainer maxWidth="lg">
-            <EntityHeaderContent display_doi={display_doi} entity_type={entity_type} data={data} />
-          </FlexContainer>
+          <EntityHeaderContent
+            display_doi={display_doi}
+            entity_type={entity_type}
+            data={data}
+            summaryInView={summaryInView}
+          />
         </AnimatedPaper>
       ),
   );
