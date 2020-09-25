@@ -25,7 +25,7 @@ function EntityHeaderContent({ display_doi, entity_type, data, summaryInView }) 
         <AnimatedFlexContainer style={props} key={key}>
           {iconMap[entity_type]}
           <EntityHeaderItem text={display_doi} />
-          {Object.entries(data).map(([k, v]) => v && <EntityHeaderItem text={v} key={k} />)}
+          {data.map((d) => d && <EntityHeaderItem text={d} key={d} />)}
         </AnimatedFlexContainer>
       ),
   );

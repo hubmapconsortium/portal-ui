@@ -4,6 +4,7 @@ import { useTransition, animated } from 'react-spring';
 import useEntityStore from 'js/stores/useEntityStore';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
+import { extractHeaderMetadata } from './utils';
 
 const AnimatedPaper = animated(StyledPaper);
 const entitySelector = (state) => ({
@@ -20,17 +21,7 @@ function Header() {
   });
   const { display_doi, entity_type } = assayMetadata;
 
-  const data = (({ mapped_organ, mapped_data_types, mapped_specimen_type, sex, race }) => ({
-    mapped_organ,
-    mapped_data_types,
-    mapped_specimen_type,
-    sex,
-    race,
-  }))(assayMetadata);
-
-  if ('age_value' in assayMetadata && 'age_unit' in assayMetadata) {
-    data.age = `${assayMetadata.age_value} ${assayMetadata.age_unit}`;
-  }
+  const data = extractHeaderMetadata(assayMetadata, entity_type);
 
   return transitions.map(
     ({ item, key, props }) =>
