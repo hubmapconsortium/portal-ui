@@ -5,6 +5,7 @@ import Table from '@material-ui/core/Table';
 
 import { SortingSelector, Hits } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
+import { LightBlueLink } from 'js/shared-styles/Links';
 import { StyledTableBody, StyledTableRow, StyledTableCell } from './style';
 
 import SortingTableHead from './SortingTableHead';
@@ -38,20 +39,23 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
       <>
         {hits.map((hit) => (
           <StyledTableBody key={hit._id}>
-            <StyledTableRow
-              className={'highlight' in hit && 'before-highlight'}
-              onClick={() => window.location.assign(detailsUrlPrefix + hit._source[idField])}
-              role="row link"
-            >
+            <StyledTableRow className={'highlight' in hit && 'before-highlight'}>
               {resultFields.map((field) => (
-                <StyledTableCell key={field.id}>{getByPath(hit._source, field)}</StyledTableCell>
+                <StyledTableCell key={field.id}>
+                  {field.id === 'display_doi' ? (
+                    <LightBlueLink href={detailsUrlPrefix + hit._source[idField]}>
+                      {getByPath(hit._source, field)}
+                    </LightBlueLink>
+                  ) : (
+                    getByPath(hit._source, field)
+                  )}
+                </StyledTableCell>
               ))}
             </StyledTableRow>
             {'highlight' in hit && (
               <StyledTableRow className="highlight">
                 <StyledTableCell colSpan={resultFields.length}>
-                  <a
-                    href={detailsUrlPrefix + hit._source[idField]}
+                  <p
                     dangerouslySetInnerHTML={{
                       __html: hit.highlight.everything.join(' ... '),
                     }}
