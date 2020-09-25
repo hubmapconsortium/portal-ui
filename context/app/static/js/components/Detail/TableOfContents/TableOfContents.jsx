@@ -8,6 +8,7 @@ import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
 
 const AnimatedNav = animated(StickyNav);
+const entitySelector = (state) => state.summaryInView;
 
 function ItemLink(props) {
   const { item, currentSection, handleClick } = props;
@@ -119,7 +120,7 @@ function TableOfContents(props) {
     [],
   );
 
-  const summaryInView = useEntityStore((state) => state.summaryInView);
+  const summaryInView = useEntityStore(entitySelector);
   const [stickyNavAnimationProps, set] = useSpring(() => ({ top: '80px' }));
   set({ top: summaryInView ? '80px' : '115px' });
 

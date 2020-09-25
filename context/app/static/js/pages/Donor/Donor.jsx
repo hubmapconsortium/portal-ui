@@ -11,6 +11,8 @@ import useEntityStore from 'js/stores/useEntityStore';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
 
+const entitySelector = (state) => state.setAssayMetadata;
+
 function DonorDetail(props) {
   const { assayMetadata } = props;
   const {
@@ -39,7 +41,8 @@ function DonorDetail(props) {
 
   const { sex, race, age_value, age_unit } = mapped_metadata;
 
-  const { setAssayMetadata } = useEntityStore();
+  const setAssayMetadata = useEntityStore(entitySelector);
+
   useEffect(() => {
     setAssayMetadata({ display_doi, entity_type, sex, race, age_value, age_unit });
   }, [setAssayMetadata, display_doi, entity_type, sex, race, age_value, age_unit]);

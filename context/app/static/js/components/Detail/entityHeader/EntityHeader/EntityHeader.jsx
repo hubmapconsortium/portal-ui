@@ -6,12 +6,13 @@ import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 
 const AnimatedPaper = animated(StyledPaper);
+const entitySelector = (state) => ({
+  assayMetadata: state.assayMetadata,
+  summaryInView: state.summaryInView,
+});
 
 function Header() {
-  const { assayMetadata, summaryInView } = useEntityStore((state) => ({
-    assayMetadata: state.assayMetadata,
-    summaryInView: state.summaryInView,
-  }));
+  const { assayMetadata, summaryInView } = useEntityStore(entitySelector);
   const transitions = useTransition(!summaryInView && [true], null, {
     from: { overflow: 'hidden', height: 0 },
     enter: { height: 35 },
