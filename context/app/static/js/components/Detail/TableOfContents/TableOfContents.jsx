@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import { useSpring, animated } from 'react-spring';
 
-import useStore from 'js/components/store';
+import useEntityStore from 'js/stores/useEntityStore';
 import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
 
@@ -119,7 +119,7 @@ function TableOfContents(props) {
     [],
   );
 
-  const summaryInView = useStore((state) => state.summaryInView);
+  const summaryInView = useEntityStore((state) => state.summaryInView);
   const [stickyNavAnimationProps, set] = useSpring(() => ({ top: '80px' }));
   set({ top: summaryInView ? '80px' : '115px' });
 

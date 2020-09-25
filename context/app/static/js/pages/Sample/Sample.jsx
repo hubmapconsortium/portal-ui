@@ -10,7 +10,7 @@ import DetailLayout from 'js/components/Detail/DetailLayout';
 import MetadataTable from 'js/components/Detail/MetadataTable';
 import SampleTissue from 'js/components/Detail/SampleTissue';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
-import useStore from 'js/components/store';
+import useEntityStore from 'js/stores/useEntityStore';
 
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
@@ -46,7 +46,7 @@ function SampleDetail(props) {
     shouldDisplaySection,
   );
 
-  const { setAssayMetadata } = useStore();
+  const { setAssayMetadata } = useEntityStore();
   useEffect(() => {
     setAssayMetadata({ display_doi, entity_type, mapped_organ, mapped_specimen_type });
   }, [setAssayMetadata, display_doi, entity_type, mapped_organ, mapped_specimen_type]);

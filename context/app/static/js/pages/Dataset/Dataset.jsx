@@ -12,7 +12,7 @@ import VisualizationWrapper from 'js/components/Detail/visualization/Visualizati
 import DetailLayout from 'js/components/Detail/DetailLayout';
 import SummaryItem from 'js/components/Detail/SummaryItem';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
-import useStore from 'js/components/store';
+import useEntityStore from 'js/stores/useEntityStore';
 
 // TODO use this context for components other than FileBrowser
 import DetailContext from 'js/components/Detail/context';
@@ -70,7 +70,7 @@ function DatasetDetail(props) {
 
   useSendUUIDEvent(entity_type, uuid);
 
-  const { setAssayMetadata } = useStore();
+  const { setAssayMetadata } = useEntityStore();
   useEffect(() => {
     setAssayMetadata({ display_doi, entity_type, mapped_data_types, mapped_organ: origin_sample.mapped_organ });
   }, [setAssayMetadata, display_doi, entity_type, mapped_data_types, origin_sample.mapped_organ]);

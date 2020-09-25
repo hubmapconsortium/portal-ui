@@ -6,7 +6,7 @@ import Attribution from 'js/components/Detail/Attribution';
 import Protocol from 'js/components/Detail/Protocol';
 import DetailLayout from 'js/components/Detail/DetailLayout';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
-import useStore from 'js/components/store';
+import useEntityStore from 'js/stores/useEntityStore';
 
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
@@ -39,7 +39,7 @@ function DonorDetail(props) {
 
   const { sex, race, age_value, age_unit } = mapped_metadata;
 
-  const { setAssayMetadata } = useStore();
+  const { setAssayMetadata } = useEntityStore();
   useEffect(() => {
     setAssayMetadata({ display_doi, entity_type, sex, race, age_value, age_unit });
   }, [setAssayMetadata, display_doi, entity_type, sex, race, age_value, age_unit]);

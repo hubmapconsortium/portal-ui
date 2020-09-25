@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { useInView } from 'react-intersection-observer';
 
-import useStore from 'js/components/store';
+import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { Flex, FlexRight, FlexEnd, JsonButton, StyledFileIcon, StyledTypography } from './style';
 import SummaryItem from '../SummaryItem';
@@ -12,7 +12,7 @@ import StatusIcon from '../StatusIcon';
 function SummaryData(props) {
   const { entity_type, uuid, status, mapped_data_access_level, display_doi, children } = props;
 
-  const { setSummaryInView } = useStore();
+  const { setSummaryInView } = useEntityStore();
 
   const { ref, inView } = useInView({
     /* Optional options */
