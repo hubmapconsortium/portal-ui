@@ -14,7 +14,7 @@ const entitySelector = (state) => ({
 
 function Header() {
   const { assayMetadata, summaryInView } = useEntityStore(entitySelector);
-  const transitions = useTransition(!summaryInView && [true], null, {
+  const transitions = useTransition(!summaryInView, null, {
     from: { overflow: 'hidden', height: 0 },
     enter: { height: 35 },
     leave: { overflow: 'hidden', height: 0 },

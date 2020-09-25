@@ -14,7 +14,7 @@ const iconMap = {
 const AnimatedFlexContainer = animated(FlexContainer);
 
 function EntityHeaderContent({ display_doi, entity_type, data, summaryInView }) {
-  const transitions = useTransition(!summaryInView && [true], null, {
+  const transitions = useTransition(!summaryInView, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
