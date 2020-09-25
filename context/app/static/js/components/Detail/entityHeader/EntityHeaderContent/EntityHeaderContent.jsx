@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useTransition, animated } from 'react-spring';
 
 import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer } from './style';
@@ -30,5 +31,19 @@ function EntityHeaderContent({ display_doi, entity_type, data, summaryInView }) 
       ),
   );
 }
+
+EntityHeaderContent.propTypes = {
+  display_doi: PropTypes.string,
+  entity_type: PropTypes.string,
+  data: PropTypes.arrayOf(PropTypes.string),
+  summaryInView: PropTypes.bool,
+};
+
+EntityHeaderContent.defaultProps = {
+  display_doi: undefined,
+  entity_type: undefined,
+  data: [],
+  summaryInView: false,
+};
 
 export default EntityHeaderContent;
