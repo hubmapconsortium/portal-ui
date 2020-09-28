@@ -62,6 +62,7 @@ const StyledTableRow = styled(TableRow)`
     padding-right: ${sidePadding};
     & p {
       color: rgba(0, 0, 0, 0.54);
+      margin: 0px;
     }
   }
 `;
