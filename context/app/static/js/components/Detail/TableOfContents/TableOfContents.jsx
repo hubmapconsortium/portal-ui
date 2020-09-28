@@ -121,8 +121,9 @@ function TableOfContents(props) {
   );
 
   const summaryInView = useEntityStore(entitySelector);
-  const [stickyNavAnimationProps, set] = useSpring(() => ({ top: '80px' }));
-  set({ top: summaryInView ? '80px' : '115px' });
+  const initialProps = { top: '80px' };
+  const [stickyNavAnimationProps, set] = useSpring(() => initialProps);
+  set(summaryInView ? initialProps : { top: '115px' });
 
   return (
     <TableContainer>
