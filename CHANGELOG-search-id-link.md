@@ -1,0 +1,1 @@
+- Link to detail page in each row's HuBMAP ID cell not the entire row in search table.
