@@ -1,3 +1,15 @@
+## v0.3.2 - 2020-09-28
+
+- Add more information to dev-search.
+- Document maintenance build process.
+- Move existing pages from components to pages directory.
+- Reorganize provenance and visualization components.
+- Do not pass `endpoints` down down to `Routes`; There is now a context provider. 
+- Only allow robots on the main production site, none of the other deployments.
+- Add a meta tag that will give Chuck access to Google Search Console.
+- Link to detail page in each row's HuBMAP ID cell not the entire row in search table.
+
+
 ## v0.3.1 - 2020-09-21
 
 - Fix analysis detail links for pipeline origin fields which do not end with .git.
