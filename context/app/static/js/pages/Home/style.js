@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
+import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
 const OuterGrid = styled.div`
   flex-grow: 1;
@@ -15,7 +16,7 @@ const UpperInnerGrid = styled(Container)`
   grid-gap: ${(props) => props.theme.spacing(3)}px;
   grid-template-areas: 'data' 'bar';
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
-    min-height: calc(100vh - 88px);
+    min-height: calc(100vh - ${headerHeight + 24}px);
     grid-template-rows: auto 1fr;
   }
 `;
