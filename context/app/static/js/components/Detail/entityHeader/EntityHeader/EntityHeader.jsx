@@ -12,11 +12,13 @@ const entitySelector = (state) => ({
   summaryInView: state.summaryInView,
 });
 
+const entityHeaderHeight = 35;
+
 function Header() {
   const { assayMetadata, summaryInView } = useEntityStore(entitySelector);
   const transitions = useTransition(!summaryInView, null, {
     from: { overflow: 'hidden', height: 0 },
-    enter: { height: 35 },
+    enter: { height: entityHeaderHeight },
     leave: { overflow: 'hidden', height: 0 },
   });
   const { display_doi, entity_type } = assayMetadata;
@@ -36,5 +38,5 @@ function Header() {
       ),
   );
 }
-
+export { entityHeaderHeight };
 export default Header;
