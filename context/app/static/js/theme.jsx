@@ -38,9 +38,6 @@ const theme = createMuiTheme({
     transparentGray: {
       main: 'rgba(144, 144, 144, 0.1)',
     },
-    collectionsDivider: {
-      main: 'rgba(0, 0, 0, 0.12)',
-    },
     type: 'light',
   },
   typography: {
