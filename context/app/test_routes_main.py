@@ -140,3 +140,13 @@ def test_login(client):
     assert response.location.startswith(
         'https://auth.globus.org/v2/oauth2/authorize'
     )
+
+
+def test_robots_txt_disallow(client):
+    response = client.get('/robots.txt')
+    assert 'Disallow: /' in response.data.decode('utf8')
+
+
+def test_robots_txt_allow(client):
+    response = client.get('/robots.txt', headers={'Host': 'portal.hubmapconsortium.org'})
+    assert 'Disallow: /' not in response.data.decode('utf8')
