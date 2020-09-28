@@ -26,7 +26,13 @@ function EntityHeaderContent({ display_doi, entity_type, data, summaryInView }) 
         <AnimatedFlexContainer style={props} key={key}>
           {iconMap[entity_type]}
           <EntityHeaderItem text={display_doi} />
-          {data.map((d) => d && <EntityHeaderItem text={d} key={d} />)}
+          {Object.entries(data).map(([k, v]) =>
+            v.value ? (
+              <EntityHeaderItem text={v.value} key={k} />
+            ) : (
+              <EntityHeaderItem text={`undefined ${v.label}`} key={k} />
+            ),
+          )}
         </AnimatedFlexContainer>
       ),
   );
@@ -35,7 +41,7 @@ function EntityHeaderContent({ display_doi, entity_type, data, summaryInView }) 
 EntityHeaderContent.propTypes = {
   display_doi: PropTypes.string,
   entity_type: PropTypes.string,
-  data: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.objectOf(PropTypes.string),
   summaryInView: PropTypes.bool,
 };
 

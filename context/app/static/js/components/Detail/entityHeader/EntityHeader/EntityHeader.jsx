@@ -22,7 +22,6 @@ function Header() {
   const { display_doi, entity_type } = assayMetadata;
 
   const data = extractHeaderMetadata(assayMetadata, entity_type);
-
   return transitions.map(
     ({ item, key, props }) =>
       item && (

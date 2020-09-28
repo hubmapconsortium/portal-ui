@@ -1,29 +1,27 @@
-const extractValuesFromObject = (obj, keys) =>
-  keys.reduce((acc, k) => {
-    if (k in obj) {
-      acc.push(obj[k]);
-    }
+const extractAndLabelMetadata = (obj, keys) => {
+  const labels = { mapped_organ: 'organ type', mapped_data_types: 'data type', mapped_specimen_type: 'specimen type' };
+  return keys.reduce((acc, k) => {
+    acc[k] = { value: k in obj ? obj[k] : undefined, label: k in labels ? labels[k] : k };
     return acc;
-  }, []);
+  }, {});
+};
 
 function extractHeaderMetadata(assayMetadata, entity_type) {
-  if (!entity_type) return [];
-
   if (entity_type === 'Dataset') {
-    return extractValuesFromObject(assayMetadata, ['mapped_organ', 'mapped_data_types']);
+    return extractAndLabelMetadata(assayMetadata, ['mapped_organ', 'mapped_data_types']);
   }
   if (entity_type === 'Sample') {
-    return extractValuesFromObject(assayMetadata, ['mapped_organ', 'mapped_specimen_type']);
+    return extractAndLabelMetadata(assayMetadata, ['mapped_organ', 'mapped_specimen_type']);
   }
   if (entity_type === 'Donor') {
-    const donorMetadata = extractValuesFromObject(assayMetadata, ['sex', 'race']);
+    const donorMetadata = extractAndLabelMetadata(assayMetadata, ['sex', 'race']);
     if ('age_value' in assayMetadata && 'age_unit' in assayMetadata) {
-      donorMetadata.push(`${assayMetadata.age_value} ${assayMetadata.age_unit}`);
+      donorMetadata.age = { value: `${assayMetadata.age_value} ${assayMetadata.age_unit}`, label: 'age' };
     }
     return donorMetadata;
   }
 
-  return [];
+  return {};
 }
 
 export { extractHeaderMetadata };
