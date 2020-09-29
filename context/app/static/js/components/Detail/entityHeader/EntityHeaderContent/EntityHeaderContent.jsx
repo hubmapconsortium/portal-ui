@@ -45,7 +45,7 @@ EntityHeaderContent.propTypes = {
 EntityHeaderContent.defaultProps = {
   display_doi: undefined,
   entity_type: undefined,
-  data: [],
+  data: {},
 };
 
 export default EntityHeaderContent;
