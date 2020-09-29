@@ -17,6 +17,9 @@ def _aggs_from_fields(fields):
             },
             "aggs": _aggs_from_fields(fields)
         }
+        # f'{last}-missing': {
+        #     "missing": {"field": f'{last}.keyword'}
+        # }
     }
 
 def _flatten_buckets(es_aggregations):
@@ -34,23 +37,24 @@ def _flatten_buckets(es_aggregations):
 
 
 def main():
+    root = 'ROOT'
     response = requests.post(
         'https://search.api.hubmapconsortium.org/portal/search',
         json={
             "aggs": {
-                "root": {
+                root: {
                     "filter": {
                         "term": {
                             "entity_type.keyword": "Dataset"
                         }
                     },
-                    "aggs": _aggs_from_fields(['data_types', 'mapped_data_types', 'metadata.metadata.assay_category', 'metadata.metadata.assay_type'])
+                    "aggs": _aggs_from_fields(['metadata.metadata.assay_category', 'metadata.metadata.assay_type', 'data_types', 'mapped_data_types'])
                 }
             },
             "size": 0,
         }
     )
-    print(yaml.dump(_flatten_buckets(response.json()['aggregations'])))
+    print(yaml.dump(_flatten_buckets(response.json()['aggregations'][root])))
     return 0
 
 if __name__ == "__main__":
