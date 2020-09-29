@@ -95,7 +95,7 @@ function Visualization(props) {
     return () => {
       window.removeEventListener('keydown', onKeydown);
     };
-  }, [handleCollapse]);
+  }, []);
 
   return (
     <StyledSectionContainer id="visualization">
