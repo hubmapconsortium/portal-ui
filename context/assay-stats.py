@@ -20,7 +20,17 @@ def _aggs_from_fields(fields):
     }
 
 def _flatten_buckets(es_aggregations):
-    return es_aggregations
+    if not isinstance(es_aggregations, dict):
+        return es_aggregations
+    return {
+        k: (
+            [_flatten_buckets(count) for count in v['buckets']]
+            if isinstance(v, dict) and 'buckets' in v
+            else _flatten_buckets(v)
+        )
+        for k, v in es_aggregations.items()
+            if k not in ['doc_count_error_upper_bound', 'sum_other_doc_count']
+    }
 
 
 def main():
@@ -28,13 +38,13 @@ def main():
         'https://search.api.hubmapconsortium.org/portal/search',
         json={
             "aggs": {
-                "all_assay_types": {
+                "root": {
                     "filter": {
                         "term": {
                             "entity_type.keyword": "Dataset"
                         }
                     },
-                    "aggs": _aggs_from_fields(['data_types', 'mapped_data_types'])
+                    "aggs": _aggs_from_fields(['data_types', 'mapped_data_types', 'metadata.metadata.assay_category', 'metadata.metadata.assay_type'])
                 }
             },
             "size": 0,
