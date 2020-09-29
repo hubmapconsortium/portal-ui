@@ -10,7 +10,7 @@ def _aggs_from_fields(fields):
         return {}
     last = fields.pop()
     return {
-        last: {
+        "agg": {
             "terms": {
                 "field": f'{last}.keyword',
                 "size": 10000
@@ -36,6 +36,13 @@ def _flatten_buckets(es_aggregations):
     }
 
 
+def _tabulate(agg_buckets, path=[]):
+    for bucket in agg_buckets:
+        if 'agg' not in bucket:
+            print(bucket['doc_count'], path + [bucket['key']])
+        else:
+            _tabulate(bucket['agg']['buckets'], path + [bucket['key']])
+
 def main():
     root = 'ROOT'
     response = requests.post(
@@ -54,7 +61,10 @@ def main():
             "size": 0,
         }
     )
-    print(yaml.dump(_flatten_buckets(response.json()['aggregations'][root])))
+    agg_buckets = _flatten_buckets(response.json()['aggregations'][root]['agg']['buckets'])
+    _tabulate(agg_buckets)
+
+    # print(yaml.dump(agg_buckets))
     return 0
 
 if __name__ == "__main__":
