@@ -37,15 +37,15 @@ function EntityHeaderContent({ display_doi, entity_type, data, shouldDisplayHead
 EntityHeaderContent.propTypes = {
   display_doi: PropTypes.string,
   entity_type: PropTypes.string,
-  data: PropTypes.objectOf(PropTypes.string),
-  summaryInView: PropTypes.bool,
+  data: PropTypes.objectOf(PropTypes.object),
+  shouldDisplayHeader: PropTypes.bool.isRequired,
+  vizIsFullscreen: PropTypes.bool.isRequired,
 };
 
 EntityHeaderContent.defaultProps = {
   display_doi: undefined,
   entity_type: undefined,
   data: [],
-  summaryInView: false,
 };
 
 export default EntityHeaderContent;
