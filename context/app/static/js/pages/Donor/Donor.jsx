@@ -27,6 +27,7 @@ function DonorDetail(props) {
     last_modified_timestamp,
     description,
     mapped_metadata,
+    mapped_metadata: { sex, race, age_value, age_unit },
   } = assayMetadata;
 
   const shouldDisplaySection = {
@@ -38,8 +39,6 @@ function DonorDetail(props) {
     ['summary', 'metadata', 'attribution', 'provenance', 'protocols'],
     shouldDisplaySection,
   );
-
-  const { sex, race, age_value, age_unit } = mapped_metadata;
 
   const setAssayMetadata = useEntityStore(entitySelector);
 

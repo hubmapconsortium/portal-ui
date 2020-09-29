@@ -23,7 +23,7 @@ function SampleDetail(props) {
     uuid,
     protocol_url,
     mapped_specimen_type,
-    origin_sample,
+    origin_sample: { mapped_organ },
     group_name,
     created_by_user_displayname,
     created_by_user_email,
@@ -34,8 +34,6 @@ function SampleDetail(props) {
     description,
     metadata,
   } = assayMetadata;
-
-  const { mapped_organ } = origin_sample;
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
