@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
-import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
 import Container from '@material-ui/core/Container';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+
+import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
 
 const iconStyle = css`
   font-size: 1.5rem;
@@ -26,4 +28,14 @@ const FlexContainer = styled(Container)`
   align-items: center;
 `;
 
-export { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer };
+const FullscreenToggleButton = styled(ToggleButton)`
+  border: 0px;
+  padding: 0px 10px;
+  height: 35px;
+`;
+
+const RightDiv = styled.div`
+  margin-left: auto;
+`;
+
+export { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer, FullscreenToggleButton, RightDiv };

@@ -13,7 +13,7 @@ const entitySelector = (state) => ({
   setVizTheme: state.setVizTheme,
 });
 
-function VisualizationThemeSwitch() {
+function VisualizationThemeSwitch({ toggleButtonComponent }) {
   const { vizTheme, setVizTheme } = useEntityStore(entitySelector);
 
   function handleThemeChange(theme) {
@@ -29,6 +29,7 @@ function VisualizationThemeSwitch() {
       <TooltipToggleButton
         tooltipComponent={SecondaryBackgroundTooltip}
         tooltipTitle="Switch to Light Theme"
+        buttonComponent={toggleButtonComponent}
         disableRipple
         value="light"
         aria-label="Visualization light theme button"
@@ -38,6 +39,7 @@ function VisualizationThemeSwitch() {
       <TooltipToggleButton
         tooltipComponent={SecondaryBackgroundTooltip}
         tooltipTitle="Switch to Dark Theme"
+        buttonComponent={toggleButtonComponent}
         disableRipple
         value="dark"
         aria-label="Visualization dark theme button"
