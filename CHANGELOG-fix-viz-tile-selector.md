@@ -1,0 +1,1 @@
+- Change placement of visualization tile selector and close upon selection.
