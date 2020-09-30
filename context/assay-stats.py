@@ -8,18 +8,15 @@ import yaml
 def _aggs_from_fields(fields):
     if not fields:
         return {}
-    last = fields.pop()
+    first, rest = fields[0], fields[1:]
     return {
         "agg": {
             "terms": {
-                "field": f'{last}.keyword',
+                "field": f'{first}.keyword',
                 "size": 10000
             },
-            "aggs": _aggs_from_fields(fields)
+            "aggs": _aggs_from_fields(rest)
         }
-        # f'{last}-missing': {
-        #     "missing": {"field": f'{last}.keyword'}
-        # }
     }
 
 def _flatten_buckets(es_aggregations):
@@ -38,13 +35,19 @@ def _flatten_buckets(es_aggregations):
 
 def _tabulate(agg_buckets, path=[]):
     for bucket in agg_buckets:
-        if 'agg' not in bucket:
-            print(bucket['doc_count'], path + [bucket['key']])
+        if 'agg' not in bucket or not bucket['agg']['buckets']:
+            print(f"| {bucket['doc_count']} | {' | '.join(path)} | {bucket['key']} |")
         else:
             _tabulate(bucket['agg']['buckets'], path + [bucket['key']])
 
 def main():
     root = 'ROOT'
+    fields = [
+        'data_types', 'mapped_data_types',
+        'metadata.metadata.assay_type',
+        'metadata.metadata.assay_category',
+        'metadata.metadata.analyte_class',
+    ]
     response = requests.post(
         'https://search.api.hubmapconsortium.org/portal/search',
         json={
@@ -55,16 +58,18 @@ def main():
                             "entity_type.keyword": "Dataset"
                         }
                     },
-                    "aggs": _aggs_from_fields(['metadata.metadata.assay_category', 'metadata.metadata.assay_type', 'data_types', 'mapped_data_types'])
+                    "aggs": _aggs_from_fields(fields)
                 }
             },
             "size": 0,
         }
     )
     agg_buckets = _flatten_buckets(response.json()['aggregations'][root]['agg']['buckets'])
+    print(f"| {' | '.join(['count'] + list(reversed(fields)))} |")
+    print(f"| {' | '.join(['---']*(len(fields) + 1))} |")
     _tabulate(agg_buckets)
 
-    # print(yaml.dump(agg_buckets))
+    # 
     return 0
 
 if __name__ == "__main__":
