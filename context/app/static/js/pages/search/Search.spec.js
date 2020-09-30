@@ -16,16 +16,14 @@ test('Search error if missing entity_type param', () => {
 });
 
 test('Search works with entity_type param', () => {
-  // Tried a few approaches: This is based on https://www.grzegorowski.com/how-to-mock-global-window-with-jest
-  const originalWindow = { ...window };
-  const windowSpy = jest.spyOn(global, 'window', 'get');
-  windowSpy.mockImplementation(() => ({
-    ...originalWindow,
-    location: {
-      ...originalWindow.location,
-      search: '?entity_type[0]=Donor',
-    },
-  }));
+  const location = {
+    ...window.location,
+    search: '?entity_type[0]=Donor',
+  };
+  Object.defineProperty(window, 'location', {
+    writable: true,
+    value: location,
+  });
 
   // const { container } =
   render(<Search elasticsearchEndpoint="not-used" title="not-used" />);
