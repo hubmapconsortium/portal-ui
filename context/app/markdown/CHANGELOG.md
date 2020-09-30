@@ -1,3 +1,10 @@
+## v0.3.3 - 2020-09-30
+
+- Add entity header for detail pages.
+- Change placement of visualization tile selector and close upon selection.
+- Upgrade lodash to fix security warning.
+
+
 ## v0.3.2 - 2020-09-28
 
 - Add more information to dev-search.
