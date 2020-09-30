@@ -1,10 +1,11 @@
 function extractAndLabelMetadata(obj, keys) {
   const labels = { mapped_organ: 'organ type', mapped_data_types: 'data type', mapped_specimen_type: 'specimen type' };
-  return keys.reduce((acc, k) => {
+  const acc = {};
+  keys.forEach((k) => {
     acc[k] = { value: k in obj ? obj[k] : undefined, label: k in labels ? labels[k] : k };
-    return acc;
-  }, {});
-};
+  });
+  return acc;
+}
 
 function extractHeaderMetadata(assayMetadata, entity_type) {
   if (entity_type === 'Dataset') {
