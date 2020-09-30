@@ -10,19 +10,26 @@ const AnimatedPaper = animated(StyledPaper);
 const entitySelector = (state) => ({
   assayMetadata: state.assayMetadata,
   summaryInView: state.summaryInView,
+  vizIsFullscreen: state.vizIsFullscreen,
 });
 
+const entityHeaderHeight = 35;
+
 function Header() {
-  const { assayMetadata, summaryInView } = useEntityStore(entitySelector);
-  const transitions = useTransition(!summaryInView, null, {
-    from: { overflow: 'hidden', height: 0 },
-    enter: { height: 35 },
-    leave: { overflow: 'hidden', height: 0 },
-  });
+  const { assayMetadata, summaryInView, vizIsFullscreen } = useEntityStore(entitySelector);
+  const shouldDisplayHeader = !summaryInView || vizIsFullscreen;
+
+  const transitionConfig = vizIsFullscreen
+    ? {}
+    : {
+        from: { overflow: 'hidden', height: 0 },
+        enter: { height: entityHeaderHeight },
+        leave: { overflow: 'hidden', height: 0 },
+      };
+  const transitions = useTransition(shouldDisplayHeader, null, transitionConfig);
   const { display_doi, entity_type } = assayMetadata;
 
   const data = extractHeaderMetadata(assayMetadata, entity_type);
-
   return transitions.map(
     ({ item, key, props }) =>
       item && (
@@ -31,11 +38,12 @@ function Header() {
             display_doi={display_doi}
             entity_type={entity_type}
             data={data}
-            summaryInView={summaryInView}
+            shouldDisplayHeader={shouldDisplayHeader}
+            vizIsFullscreen={vizIsFullscreen}
           />
         </AnimatedPaper>
       ),
   );
 }
-
+export { entityHeaderHeight };
 export default Header;

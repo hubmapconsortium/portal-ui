@@ -6,8 +6,10 @@ import Snackbar from '@material-ui/core/Snackbar';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import SectionContainer from 'js/components/Detail/SectionContainer';
 import SectionHeader from 'js/components/Detail/SectionHeader';
+import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
+import { entityHeaderHeight } from 'js/components/Detail/entityHeader/EntityHeader';
 
-const headerFixedHeight = 64;
+const totalHeightOffset = headerHeight + entityHeaderHeight;
 const vitessceFixedHeight = 600;
 
 const StyledHeader = styled.div`
@@ -39,7 +41,7 @@ const SelectionButton = styled(Button)`
 `;
 
 const EscSnackbar = styled(Snackbar)`
-  top: ${headerFixedHeight + 10}px;
+  top: ${totalHeightOffset + 10}px;
   & > div {
     background-color: dimgray;
   }
@@ -50,16 +52,16 @@ const ErrorSnackbar = styled(Snackbar)`
 `;
 
 const ExpandableDiv = styled.div`
-  top: ${(props) => (props.$isExpanded ? `${headerFixedHeight}px` : 'auto')};
+  top: ${(props) => (props.$isExpanded ? `${totalHeightOffset}px` : 'auto')};
   left: ${(props) => (props.$isExpanded ? '0' : 'auto')};
   position: ${(props) => (props.$isExpanded ? 'fixed' : 'relative')};
-  height: ${(props) => (props.$isExpanded ? `calc(100vh - ${headerFixedHeight}px)` : `${vitessceFixedHeight}px`)};
+  height: ${(props) => (props.$isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : `${vitessceFixedHeight}px`)};
   background-color: ${(props) => (props.$theme === 'dark' ? '#333333' : '#FFFFFF')};
   width: 100%;
   overflow: hidden;
   .vitessce-container {
     display: block;
-    height: ${(props) => (props.$isExpanded ? `calc(100vh - ${headerFixedHeight}px)` : 'auto')};
+    height: ${(props) => (props.$isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : 'auto')};
     width: 100%;
     position: static;
   }

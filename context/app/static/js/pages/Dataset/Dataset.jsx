@@ -46,6 +46,7 @@ function DatasetDetail(props) {
     data_types,
     mapped_data_types,
     origin_sample,
+    origin_sample: { mapped_organ },
     group_name,
     created_by_user_displayname,
     created_by_user_email,
@@ -74,8 +75,8 @@ function DatasetDetail(props) {
 
   const setAssayMetadata = useEntityStore(entitySelector);
   useEffect(() => {
-    setAssayMetadata({ display_doi, entity_type, mapped_data_types, mapped_organ: origin_sample.mapped_organ });
-  }, [setAssayMetadata, display_doi, entity_type, mapped_data_types, origin_sample.mapped_organ]);
+    setAssayMetadata({ display_doi, entity_type, mapped_data_types, mapped_organ });
+  }, [setAssayMetadata, display_doi, entity_type, mapped_data_types, mapped_organ]);
 
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
   return (

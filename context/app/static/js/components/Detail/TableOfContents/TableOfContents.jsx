@@ -4,6 +4,8 @@ import List from '@material-ui/core/List';
 import { useSpring, animated } from 'react-spring';
 
 import useEntityStore from 'js/stores/useEntityStore';
+import { entityHeaderHeight } from 'js/components/Detail/entityHeader/EntityHeader';
+import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
 
@@ -121,9 +123,10 @@ function TableOfContents(props) {
   );
 
   const summaryInView = useEntityStore(entitySelector);
-  const initialProps = { top: '80px' };
+  const initialHeightOffset = headerHeight + 16;
+  const initialProps = { top: `${initialHeightOffset}px` };
   const [stickyNavAnimationProps, set] = useSpring(() => initialProps);
-  set(summaryInView ? initialProps : { top: '115px' });
+  set(summaryInView ? initialProps : { top: `${initialHeightOffset + entityHeaderHeight}px` });
 
   return (
     <TableContainer>
