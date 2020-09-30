@@ -33,16 +33,16 @@ import 'vitessce/dist/es/production/static/css/index.css';
 const entitySelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
   setVizIsFullscreen: state.setVizIsFullscreen,
+  vizTheme: state.vizTheme,
 });
 
 function Visualization(props) {
   const { vitData } = props;
 
-  const { vizIsFullscreen, setVizIsFullscreen } = useEntityStore(entitySelector);
+  const { vizIsFullscreen, setVizIsFullscreen, vizTheme } = useEntityStore(entitySelector);
 
   const [isEscSnackbarOpen, setIsEscSnackbarOpen] = useState(false);
   const [vitessceErrors, setVitessceErrors] = useState([]);
-  const [vitessceTheme, setVitessceTheme] = useState('light');
   const [vitessceSelection, setVitessceSelection] = useState(0);
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
@@ -78,14 +78,6 @@ function Visualization(props) {
     toggle();
   }
 
-  function handleThemeChange(theme) {
-    if (!['dark', 'light'].includes(theme)) {
-      return;
-    }
-
-    setVitessceTheme(theme);
-  }
-
   useEffect(() => {
     function onKeydown(event) {
       if (event.key === 'Escape') {
@@ -103,7 +95,7 @@ function Visualization(props) {
       <StyledHeader>
         <StyledHeaderText>Visualization</StyledHeaderText>
         <StyledHeaderRight>
-          <VisualizationThemeSwitch theme={vitessceTheme} onChange={(e, theme) => handleThemeChange(theme)} />
+          <VisualizationThemeSwitch />
           <SecondaryBackgroundTooltip title="Switch to Fullscreen">
             <ExpandButton size="small" onClick={handleExpand} variant="contained">
               <ZoomOutMapIcon color="primary" />
@@ -139,7 +131,7 @@ function Visualization(props) {
         </StyledHeaderRight>
       </StyledHeader>
       <Paper>
-        <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vitessceTheme}>
+        <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme}>
           <EscSnackbar
             anchorOrigin={{
               vertical: 'top',
@@ -166,7 +158,7 @@ function Visualization(props) {
           )}
           <Vitessce
             config={vitData[vitessceSelection] || vitData}
-            theme={vitessceTheme}
+            theme={vizTheme}
             height={vizIsFullscreen ? null : vitessceFixedHeight}
             onWarn={addError}
           />
