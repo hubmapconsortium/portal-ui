@@ -31,6 +31,4 @@ test('Search works with entity_type param', () => {
   // from react-dom.development.js
 
   // TODO: Test the container!
-
-  windowSpy.mockRestore();
 });
