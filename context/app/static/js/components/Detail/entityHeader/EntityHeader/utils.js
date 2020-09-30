@@ -1,4 +1,4 @@
-const extractAndLabelMetadata = (obj, keys) => {
+function extractAndLabelMetadata(obj, keys) {
   const labels = { mapped_organ: 'organ type', mapped_data_types: 'data type', mapped_specimen_type: 'specimen type' };
   return keys.reduce((acc, k) => {
     acc[k] = { value: k in obj ? obj[k] : undefined, label: k in labels ? labels[k] : k };

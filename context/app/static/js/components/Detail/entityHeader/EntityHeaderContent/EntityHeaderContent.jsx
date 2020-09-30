@@ -27,7 +27,7 @@ function EntityHeaderContent({ display_doi, entity_type, data, shouldDisplayHead
           {iconMap[entity_type]}
           <EntityHeaderItem text={display_doi} />
           {Object.entries(data).map(([k, v]) => (
-            <EntityHeaderItem text={v.value ? v.value : `undefined ${v.label}`} key={k} />
+            <EntityHeaderItem text={v.value || `undefined ${v.label}`} key={k} />
           ))}
         </AnimatedFlexContainer>
       ),
