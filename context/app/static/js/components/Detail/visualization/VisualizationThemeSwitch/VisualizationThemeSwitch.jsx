@@ -4,7 +4,7 @@ import Brightness2Icon from '@material-ui/icons/Brightness2Rounded';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/Tooltips';
 import 'vitessce/dist/es/production/static/css/index.css';
 
 function VisualizationThemeSwitch(props) {

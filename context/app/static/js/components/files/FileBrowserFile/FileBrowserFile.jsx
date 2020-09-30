@@ -4,7 +4,7 @@ import prettyBytes from 'pretty-bytes';
 
 import { AppContext } from 'js/components/Providers';
 import { getTokenParam } from 'js/helpers/functions';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/Tooltips';
 import DetailContext from 'js/components//Detail/context';
 import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';

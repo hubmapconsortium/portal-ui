@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import Markdown from 'js/components/Markdown';
-import VisualizationWrapper from 'js/components/Detail/visualization/VisualizationWrapper';
+import VisualizationWrapper from 'js/components/Detail/Visualization/VisualizationWrapper';
 import SectionHeader from 'js/components/Detail/SectionHeader';
 import SectionContainer from 'js/components/Detail/SectionContainer';
 import Attribution from 'js/components/Detail/Attribution';
