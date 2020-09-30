@@ -8,7 +8,7 @@ const Link = styled.a`
 
 const PanelWrapper = styled.div`
   padding: 15px 20px;
-  border-bottom: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
+  border-bottom: 1px solid ${(props) => props.theme.palette.divider};
   display: flex;
   flex-direction: column;
 

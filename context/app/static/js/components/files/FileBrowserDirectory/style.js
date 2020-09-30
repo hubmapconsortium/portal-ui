@@ -4,7 +4,7 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpenRounded';
 
 const Directory = styled.div`
   padding: 10px 0px 10px ${(props) => props.theme.spacing(props.$depth * 1.5) + 40}px;
-  border-bottom: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
+  border-bottom: 1px solid ${(props) => props.theme.palette.divider};
   font-size: ${(props) => props.theme.typography.body1.fontSize};
   cursor: pointer;
   display: flex;

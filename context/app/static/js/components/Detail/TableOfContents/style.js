@@ -8,8 +8,7 @@ const TableContainer = styled.div`
 `;
 
 const StickyNav = styled.nav`
-position: sticky;
-top 70px;
+  position: sticky;
 `;
 
 const TableTitle = styled(Typography)`

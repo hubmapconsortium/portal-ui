@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MetadataTable from 'js/components/Detail/MetadataTable';
 import ProvSection from 'js/components/Detail/provenance/ProvSection';
 import Summary from 'js/components/Detail/Summary';
@@ -6,9 +6,12 @@ import Attribution from 'js/components/Detail/Attribution';
 import Protocol from 'js/components/Detail/Protocol';
 import DetailLayout from 'js/components/Detail/DetailLayout';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
+import useEntityStore from 'js/stores/useEntityStore';
 
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
+
+const entitySelector = (state) => state.setAssayMetadata;
 
 function DonorDetail(props) {
   const { assayMetadata } = props;
@@ -24,6 +27,7 @@ function DonorDetail(props) {
     last_modified_timestamp,
     description,
     mapped_metadata,
+    mapped_metadata: { sex, race, age_value, age_unit },
   } = assayMetadata;
 
   const shouldDisplaySection = {
@@ -35,6 +39,12 @@ function DonorDetail(props) {
     ['summary', 'metadata', 'attribution', 'provenance', 'protocols'],
     shouldDisplaySection,
   );
+
+  const setAssayMetadata = useEntityStore(entitySelector);
+
+  useEffect(() => {
+    setAssayMetadata({ display_doi, entity_type, sex, race, age_value, age_unit });
+  }, [setAssayMetadata, display_doi, entity_type, sex, race, age_value, age_unit]);
 
   useSendUUIDEvent(entity_type, uuid);
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import ProvSection from 'js/components/Detail/provenance/ProvSection';
@@ -10,9 +10,12 @@ import DetailLayout from 'js/components/Detail/DetailLayout';
 import MetadataTable from 'js/components/Detail/MetadataTable';
 import SampleTissue from 'js/components/Detail/SampleTissue';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
+import useEntityStore from 'js/stores/useEntityStore';
 
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
+
+const entitySelector = (state) => state.setAssayMetadata;
 
 function SampleDetail(props) {
   const { assayMetadata } = props;
@@ -20,7 +23,7 @@ function SampleDetail(props) {
     uuid,
     protocol_url,
     mapped_specimen_type,
-    origin_sample,
+    origin_sample: { mapped_organ },
     group_name,
     created_by_user_displayname,
     created_by_user_email,
@@ -32,8 +35,6 @@ function SampleDetail(props) {
     metadata,
   } = assayMetadata;
 
-  const { mapped_organ } = origin_sample;
-
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     tissue: true,
@@ -44,6 +45,11 @@ function SampleDetail(props) {
     ['summary', 'tissue', 'attribution', 'provenance', 'protocols', 'metadata'],
     shouldDisplaySection,
   );
+
+  const setAssayMetadata = useEntityStore(entitySelector);
+  useEffect(() => {
+    setAssayMetadata({ display_doi, entity_type, mapped_organ, mapped_specimen_type });
+  }, [setAssayMetadata, display_doi, entity_type, mapped_organ, mapped_specimen_type]);
 
   useSendUUIDEvent(entity_type, uuid);
 

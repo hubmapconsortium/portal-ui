@@ -40,7 +40,7 @@ const StyledTableBody = styled(TableBody)`
   }
 
   // Material would apply this on TD, but we override, so there is no internal border above the highlight.
-  border: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
+  border: 1px solid ${(props) => props.theme.palette.divider};
 
   border-left: none;
   border-right: none;

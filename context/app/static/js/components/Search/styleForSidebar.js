@@ -19,7 +19,7 @@ const InnerAccordion = styled(Accordion)`
 `;
 
 const OuterAccordion = styled(InnerAccordion)`
-  border-bottom: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
+  border-bottom: 1px solid ${(props) => props.theme.palette.divider};
 `;
 
 const StyledAccordionSummary = withStyles({

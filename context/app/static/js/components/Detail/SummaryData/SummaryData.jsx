@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import { useInView } from 'react-intersection-observer';
+import 'intersection-observer';
 
+import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { Flex, FlexRight, FlexEnd, JsonButton, StyledFileIcon, StyledTypography } from './style';
 import SummaryItem from '../SummaryItem';
 import StatusIcon from '../StatusIcon';
 
+const entitySelector = (state) => state.setSummaryInView;
+
 function SummaryData(props) {
   const { entity_type, uuid, status, mapped_data_access_level, display_doi, children } = props;
+
+  const setSummaryInView = useEntityStore(entitySelector);
+
+  const { ref, inView } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
+
+  useEffect(() => {
+    setSummaryInView(inView);
+  }, [setSummaryInView, inView]);
+
   return (
     <>
-      <Typography variant="subtitle1" component="h1" color="primary">
+      <Typography variant="subtitle1" component="h1" color="primary" ref={ref}>
         {entity_type}
       </Typography>
       <Flex>

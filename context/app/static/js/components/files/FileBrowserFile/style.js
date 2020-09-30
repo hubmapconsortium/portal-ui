@@ -4,7 +4,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFileRounded';
 import InfoIcon from '@material-ui/icons/InfoRounded';
 
 const StyledDiv = styled.div`
-  border-bottom: 1px solid ${(props) => props.theme.palette.collectionsDivider.main};
+  border-bottom: 1px solid ${(props) => props.theme.palette.divider};
 
   &:hover {
     background-color: rgb(0, 0, 0, 0.08);
