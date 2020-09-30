@@ -3,29 +3,21 @@ import WbSunnyIcon from '@material-ui/icons/WbSunnyRounded';
 import Brightness2Icon from '@material-ui/icons/Brightness2Rounded';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
-import useEntityStore from 'js/stores/useEntityStore';
+import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import 'vitessce/dist/es/production/static/css/index.css';
 
-const entitySelector = (state) => ({
+const visualizationStoreSelector = (state) => ({
   vizTheme: state.vizTheme,
   setVizTheme: state.setVizTheme,
 });
 
 function VisualizationThemeSwitch({ toggleButtonComponent }) {
-  const { vizTheme, setVizTheme } = useEntityStore(entitySelector);
-
-  function handleThemeChange(theme) {
-    if (!['dark', 'light'].includes(theme)) {
-      return;
-    }
-
-    setVizTheme(theme);
-  }
+  const { vizTheme, setVizTheme } = useVisualizationStore(visualizationStoreSelector);
 
   return (
-    <ToggleButtonGroup value={vizTheme} exclusive onChange={(e, theme) => handleThemeChange(theme)} size="small">
+    <ToggleButtonGroup value={vizTheme} exclusive onChange={(e, theme) => setVizTheme(theme)} size="small">
       <TooltipToggleButton
         tooltipComponent={SecondaryBackgroundTooltip}
         tooltipTitle="Switch to Light Theme"

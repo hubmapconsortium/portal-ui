@@ -10,12 +10,12 @@ import { Flex, FlexRight, FlexEnd, JsonButton, StyledFileIcon, StyledTypography 
 import SummaryItem from '../SummaryItem';
 import StatusIcon from '../StatusIcon';
 
-const entitySelector = (state) => state.setSummaryInView;
+const entityStoreSelector = (state) => state.setSummaryInView;
 
 function SummaryData(props) {
   const { entity_type, uuid, status, mapped_data_access_level, display_doi, children } = props;
 
-  const setSummaryInView = useEntityStore(entitySelector);
+  const setSummaryInView = useEntityStore(entityStoreSelector);
 
   const { ref, inView } = useInView({
     /* Optional options */

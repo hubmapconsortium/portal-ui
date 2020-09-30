@@ -34,7 +34,7 @@ function SummaryDataChildren(props) {
   );
 }
 
-const entitySelector = (state) => state.setAssayMetadata;
+const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DatasetDetail(props) {
   const { assayMetadata, vitData } = props;
@@ -73,7 +73,7 @@ function DatasetDetail(props) {
 
   useSendUUIDEvent(entity_type, uuid);
 
-  const setAssayMetadata = useEntityStore(entitySelector);
+  const setAssayMetadata = useEntityStore(entityStoreSelector);
   useEffect(() => {
     setAssayMetadata({ display_doi, entity_type, mapped_data_types, mapped_organ });
   }, [setAssayMetadata, display_doi, entity_type, mapped_data_types, mapped_organ]);
