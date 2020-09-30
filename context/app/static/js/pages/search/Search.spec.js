@@ -1,6 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line import/no-unresolved
-import { render } from 'test-utils/functions';
+import { render, screen } from 'test-utils/functions';
 
 import Search from './Search';
 
@@ -25,10 +25,7 @@ test('Search works with entity_type param', () => {
     value: location,
   });
 
-  // const { container } =
-  render(<Search elasticsearchEndpoint="not-used" title="not-used" />);
-  // Fails with "TypeError: Right-hand side of 'instanceof' is not an object"
-  // from react-dom.development.js
-
-  // TODO: Test the container!
+  render(<Search elasticsearchEndpoint="not-used" title="TITLE" />);
+  expect(screen.getByText('TITLE'));
+  // expect(screen).toMatchInlineSnapshot(`<div />`);
 });
