@@ -18,7 +18,7 @@ test('Search error if missing entity_type param', () => {
 test('Search works with entity_type param', () => {
   const location = {
     ...window.location,
-    search: '?entity_type[0]=Donor',
+    search: '?entity_type[0]=Donor', // Donor is the least complicated of the three.
   };
   Object.defineProperty(window, 'location', {
     writable: true,
