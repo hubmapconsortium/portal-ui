@@ -1,0 +1,1 @@
+- Upgrade lodash to fix security warning.
