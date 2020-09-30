@@ -1,4 +1,4 @@
-from urllib.parse import urlencode
+from urllib.parse import urlencode, unquote
 
 from flask import (
     Blueprint, make_response, current_app, url_for,
@@ -83,18 +83,26 @@ def login():
     token_object = tokens.by_resource_server['nexus.api.globus.org']
     nexus_token = token_object['access_token']
 
+    auth_token_object = tokens.by_resource_server['auth.globus.org']
+    auth_token = auth_token_object['access_token']
+
+    user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
+    user_info = requests.get('https://auth.globus.org/v2/oauth2/userinfo',
+                             headers=user_info_request_headers).json()
+    user_email = user_info['email'] if 'email' in user_info else ''
+
     if not has_hubmap_group(nexus_token):
         # Globus institution login worked, but user does not have HuBMAP group!
         return render_template('errors/401-no-hubmap-group.html'), 401
 
     session.update(
         nexus_token=nexus_token,
-        is_authenticated=True)
+        is_authenticated=True,
+        user_email=user_email)
+
+    previous_url = unquote(request.cookies.get('urlBeforeLogin'))
     response = make_response(
-        redirect(url_for('routes.index', _external=True)))
-    response.set_cookie(
-        key='nexus_token',
-        value=nexus_token)
+        redirect(previous_url))
     return response
 
 
@@ -103,7 +111,6 @@ def logout():
     '''
     - Revoke the tokens with Globus Auth.
     - Destroy the session state.
-    - Delete cookie, and return a redirect response.
     - And when redirect returns, redirect again to the Globus Auth logout page.
     '''
     redirect_to_globus_param = 'redirect_to_globus'
@@ -136,5 +143,4 @@ def logout():
     kwargs = {redirect_to_globus_param: True}
     response = make_response(
         redirect(url_for('routes_auth.logout', _external=True, **kwargs)))
-    response.delete_cookie(key='nexus_token')
     return response

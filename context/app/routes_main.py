@@ -1,7 +1,8 @@
 from os.path import dirname
+from urllib.parse import urlparse
 
 from flask import (Blueprint, render_template, abort, current_app,
-                   session, request, redirect, url_for)
+                   session, request, redirect, url_for, Response)
 
 import frontmatter
 
@@ -193,3 +194,14 @@ def collections():
         title='Collections',
         flask_data=core_props
     )
+
+
+@blueprint.route('/robots.txt')
+def robots_txt():
+    allowed_hostname = 'portal.hubmapconsortium.org'
+    hostname = urlparse(request.base_url).hostname
+    if hostname == allowed_hostname:
+        return Response(f'# No disallows on {allowed_hostname}!', mimetype='text/plain')
+    return Response(
+        f'# {hostname} != {allowed_hostname}\n'
+        'User-agent: *\nDisallow: /\n', mimetype='text/plain')

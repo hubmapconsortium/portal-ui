@@ -1,23 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Donor from 'js/pages/Donor';
+import Dataset from 'js/pages/Dataset';
+import Sample from 'js/pages/Sample';
+import Collection from 'js/pages/Collection';
 import Error from 'js/pages/Error';
+import Home from 'js/pages/Home';
+import Search from 'js/pages/search/Search';
+import DevSearch from 'js/pages/search/DevSearch';
+import Preview from 'js/pages/Preview';
+import Collections from 'js/pages/Collections';
+import Markdown from 'js/components/Markdown';
 import Route from './Route';
-import { Home } from '../Home';
-import Search from '../Search/Search';
-import DevSearch from '../Search/DevSearch';
-import { Donor, Sample, Dataset, Collection } from '../Detail';
-import Preview from '../Preview';
-import { Collections } from '../Collections';
-import Markdown from '../Markdown';
 import useSendPageView from './useSendPageView';
+import useSetUrlBeforeLogin from './useSetUrlBeforeLogin';
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, endpoints, title, markdown, collection, errorCode } = flaskData;
+  const { entity, vitessce_conf, title, markdown, collection, errorCode } = flaskData;
   const urlPath = window.location.pathname;
+  const url = window.location.href;
 
   useSendPageView(urlPath);
+  useSetUrlBeforeLogin(url);
 
   if (errorCode !== undefined) {
     // eslint-disable-next-line no-undef
@@ -27,24 +33,14 @@ function Routes(props) {
   if (urlPath.startsWith('/browse/donor/')) {
     return (
       <Route>
-        <Donor
-          assayMetadata={entity}
-          vitData={vitessce_conf}
-          entityEndpoint={endpoints.entityEndpoint}
-          elasticsearchEndpoint={endpoints.elasticsearchEndpoint}
-        />
+        <Donor assayMetadata={entity} vitData={vitessce_conf} />
       </Route>
     );
   }
   if (urlPath.startsWith('/browse/sample/')) {
     return (
       <Route>
-        <Sample
-          assayMetadata={entity}
-          vitData={vitessce_conf}
-          entityEndpoint={endpoints.entityEndpoint}
-          elasticsearchEndpoint={endpoints.elasticsearchEndpoint}
-        />
+        <Sample assayMetadata={entity} vitData={vitessce_conf} />
       </Route>
     );
   }
@@ -52,13 +48,7 @@ function Routes(props) {
   if (urlPath.startsWith('/browse/dataset/')) {
     return (
       <Route>
-        <Dataset
-          assayMetadata={entity}
-          vitData={vitessce_conf}
-          assetsEndpoint={endpoints.assetsEndpoint}
-          entityEndpoint={endpoints.entityEndpoint}
-          elasticsearchEndpoint={endpoints.elasticsearchEndpoint}
-        />
+        <Dataset assayMetadata={entity} vitData={vitessce_conf} />
       </Route>
     );
   }
@@ -66,7 +56,7 @@ function Routes(props) {
   if (urlPath === '/') {
     return (
       <Route disableWidthConstraint>
-        <Home elasticsearchEndpoint={endpoints.elasticsearchEndpoint} />
+        <Home />
       </Route>
     );
   }
@@ -75,7 +65,7 @@ function Routes(props) {
   if (urlPath.startsWith('/search')) {
     return (
       <Route>
-        <Search elasticsearchEndpoint={endpoints.elasticsearchEndpoint} title={title} nexusToken={nexus_token} />
+        <Search title={title} />
       </Route>
     );
   }
@@ -83,7 +73,7 @@ function Routes(props) {
   if (urlPath.startsWith('/dev-search')) {
     return (
       <Route>
-        <DevSearch elasticsearchEndpoint={endpoints.elasticsearchEndpoint} nexusToken={nexus_token} />
+        <DevSearch />
       </Route>
     );
   }
@@ -100,7 +90,7 @@ function Routes(props) {
   if (urlPath === '/collections') {
     return (
       <Route>
-        <Collections entityEndpoint={endpoints.entityEndpoint} />
+        <Collections />
       </Route>
     );
   }
@@ -108,7 +98,7 @@ function Routes(props) {
   if (urlPath.startsWith('/browse/collection/')) {
     return (
       <Route>
-        <Collection entityEndpoint={endpoints.entityEndpoint} collection={collection} />
+        <Collection collection={collection} />
       </Route>
     );
   }
@@ -131,7 +121,6 @@ Routes.propTypes = {
     title: PropTypes.string,
     entity: PropTypes.object,
     vitessce_conf: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
-    endpoints: PropTypes.object,
     markdown: PropTypes.string,
     collection: PropTypes.object,
     errorCode: PropTypes.number,

@@ -9,13 +9,15 @@ import Header from './Header';
 
 function App(props) {
   const { flaskData } = props;
+  const { title, entity, vitessce_conf, endpoints, markdown, collection, errorCode } = flaskData;
   ReactGA.initialize('UA-133341631-3');
 
   return (
-    <Providers>
+    // eslint-disable-next-line no-undef
+    <Providers endpoints={endpoints} nexusToken={nexus_token}>
       <Header />
       <div className="main-content">
-        <Routes flaskData={flaskData} />
+        <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode }} />
       </div>
       <Footer />
     </Providers>

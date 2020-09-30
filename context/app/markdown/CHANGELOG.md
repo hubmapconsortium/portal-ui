@@ -1,3 +1,62 @@
+## v0.3.2 - 2020-09-28
+
+- Add more information to dev-search.
+- Document maintenance build process.
+- Move existing pages from components to pages directory.
+- Reorganize provenance and visualization components.
+- Do not pass `endpoints` down down to `Routes`; There is now a context provider. 
+- Only allow robots on the main production site, none of the other deployments.
+- Add a meta tag that will give Chuck access to Google Search Console.
+- Link to detail page in each row's HuBMAP ID cell not the entire row in search table.
+
+
+## v0.3.1 - 2020-09-21
+
+- Fix analysis detail links for pipeline origin fields which do not end with .git.
+- Make derived from ancestor link the same color as other links.
+- Fix error page html titles.
+- Modify search table row links to fix safari bugs.
+- Redirect to previous page following login.
+- Change alerts to outlined variant and update their icons.
+
+
+## v0.2.2 - 2020-09-16
+
+- Add elevation to header app bar.
+- Display user email dropdown in header when logged in.
+
+
+## v0.2.1 - 2020-09-14
+
+- Give a user-friendlier error if a bad type was in the search URL.
+- Minor version bump.
+- Disable no props spreading rule in eslintrc.
+- Update dockerignore for smaller images.
+- Fix metadata table short circuit for sample and dataset detail pages.
+- Do not display provenance analysis details pipelines headers when pipelines do not exist.
+- Fix bug where clicking a visualization theme switch button twice removes theme.
+- Grouped, folding search facets.
+- Style error boundary like other errors.
+
+
+## v0.1.8 - 2020-09-09
+
+- Add hover tooltips to entity detail buttons.
+- Update spacing in entity detail summary.
+- Remove anchors from data types links in entity detail summary.
+- Update documentation about dataset statuses.
+- Update docs. (Normally part of release, but we didn't release today.)
+- Refactor detail layout and fix table of contents sections for entity detail pages.
+- Fix filename for donor metadata table tsv.
+- Fix prop type warning for summary data in home page.
+- Fix headers in useProvData hook.
+- Remove host from sample tissue ccf link.
+- Create app context provider which includes endpoints and flask nexus token.
+- Use flask nexus token instead of cookie nexus token for all requests.
+- Move description in metadata table to icon tooltip.
+- Update provenance analysis details to separate ingest and cwl pipelines.
+
+
 ## v0.1.7 - 2020-08-31
 
 - Fix search request loop bug for derived entities.

@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -32,7 +31,7 @@ function SampleTissue(props) {
         <MetadataItem label="Tissue Location" ml={1}>
           <>
             The spatial coordinates of this sample have been registered and it can be found in the{' '}
-            <LightBlueLink href="https://portal.hubmapconsortium.org/ccf-eui" target="_blank" rel="noopener noreferrer">
+            <LightBlueLink href="/ccf-eui" target="_blank" rel="noopener noreferrer">
               Common Coordinate Framework Exploration User Interface
             </LightBlueLink>
             .

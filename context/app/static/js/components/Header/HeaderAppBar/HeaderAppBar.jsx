@@ -7,7 +7,7 @@ function HeaderAppBar(props) {
   const { children, anchorRef } = props;
 
   return (
-    <AppBar position="sticky" ref={anchorRef} elevation={0}>
+    <AppBar position="sticky" ref={anchorRef} elevation={4}>
       <Container maxWidth="lg">
         <Toolbar disableGutters>{children} </Toolbar>
       </Container>

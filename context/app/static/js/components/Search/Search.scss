@@ -4,6 +4,12 @@
     margin: 16px 0px;
 }
 
+.sk-panel__header {
+    // We pull out the title prop and use it in the AccordionSummary.
+    // Easier to hide with CSS than change the rendering.
+    display: none;
+}
+
 .sk-layout__filters, .sk-layout__results {
     // We want it flush on left and right:
     margin: 0px;
@@ -11,4 +17,14 @@
 .sk-layout__filters {
     // Spacing between filters and results:
     margin-right: 16px;
+}
+
+.sk-item-list-option__text {
+    // Same weight, even if .is-active:
+    font-weight: 200 !important;
+    color: #000;
+}
+
+.sk-refinement-list__view-more-action {
+    color: #3781D1;
 }

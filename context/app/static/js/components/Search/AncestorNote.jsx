@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
+import { LightBlueLink } from 'js/shared-styles/Links';
+
 function AncestorNote(props) {
   const { entity } = props;
 
@@ -11,7 +13,7 @@ function AncestorNote(props) {
     const lcType = entity_type.toLowerCase();
     message = (
       <>
-        Derived from {lcType} <a href={`/browse/${lcType}/${uuid}`}>{display_doi}</a>
+        Derived from {lcType} <LightBlueLink href={`/browse/${lcType}/${uuid}`}>{display_doi}</LightBlueLink>
       </>
     );
   }

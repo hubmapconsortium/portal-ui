@@ -7,10 +7,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import { useRoundedSecondaryTooltipStyles } from 'js/shared-styles/Tooltips';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { HeaderIconCell, StyledLink, StyledInfoIcon, CenterAlignedFlexRow } from './style';
 import SectionHeader from '../SectionHeader';
 import SectionContainer from '../SectionContainer';
@@ -22,8 +21,6 @@ function CollectionCreatorsTable(props) {
     { id: 'name', label: 'Name' },
     { id: 'affiliation', label: 'Affiliation' },
   ];
-
-  const classes = useRoundedSecondaryTooltipStyles();
 
   return (
     <SectionContainer id="datasets-table">
@@ -39,9 +36,9 @@ function CollectionCreatorsTable(props) {
                 <HeaderIconCell>
                   <CenterAlignedFlexRow>
                     ORCID ID
-                    <Tooltip title="Open Researcher and Contributor ID" classes={classes}>
+                    <SecondaryBackgroundTooltip title="Open Researcher and Contributor ID">
                       <StyledInfoIcon color="primary" />
-                    </Tooltip>
+                    </SecondaryBackgroundTooltip>
                   </CenterAlignedFlexRow>
                 </HeaderIconCell>
               </TableRow>
