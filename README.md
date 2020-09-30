@@ -80,6 +80,27 @@ Then, to redeploy `dev`, `test`, and `stage`:
 
 IEC is responsible for deploying to production.
 
+### Maintenace page
+
+If the maintence page ever needs to be updated, you'll need to build the bundle,
+and then make a PR against the `gateway` repo:
+
+<details>
+
+```
+cd context/
+npm run build:maintain
+cd ${YOUR_HUBMAP_REPOS}/gateway
+git checkout master; git pull
+git checkout -b update-portal-ui-maintenance
+cp ${YOUR_HUBMAP_REPOS}/portal-ui/context/app/static/js/maintenance/public/* \
+   nginx/html/portal-ui-maintenance/
+git add .; git commit -m 'Update portal-ui maintenance'
+git push --set-upstream origin update-portal-ui-maintenance
+```
+
+</details>
+
 ### Understanding the build
 
 To view visualizations of the production webpack bundle run `npm run build:analyze`.

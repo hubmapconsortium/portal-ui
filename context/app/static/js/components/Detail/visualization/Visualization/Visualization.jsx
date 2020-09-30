@@ -75,6 +75,7 @@ function Visualization(props) {
   function setSelectionAndClearErrors(i) {
     setVitessceErrors([]);
     setVitessceSelection(i);
+    toggle();
   }
 
   function handleThemeChange(theme) {
@@ -120,7 +121,7 @@ function Visualization(props) {
               >
                 {vitData[vitessceSelection].name} {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
               </SelectionButton>
-              <Popper open={open} anchorEl={anchorRef.current} placement="top-end" style={{ zIndex: 50 }}>
+              <Popper open={open} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>
                 <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                   <ClickAwayListener onClickAway={toggle}>
                     <MenuList id="preview-options">

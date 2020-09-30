@@ -50,13 +50,7 @@ const interPadding = `${16 * 0.6}px`;
 const sidePadding = '64px';
 
 const StyledTableRow = styled(TableRow)`
-  cursor: pointer;
   border: 0;
-
-  // So just one entry in the row looks like a link.
-  td:first-child {
-    color: ${(props) => props.theme.palette.link.main};
-  }
 
   &.before-highlight td {
     padding-bottom: 0px;
@@ -66,8 +60,9 @@ const StyledTableRow = styled(TableRow)`
     padding-top: ${interPadding};
     padding-left: ${sidePadding};
     padding-right: ${sidePadding};
-    & a {
+    & p {
       color: rgba(0, 0, 0, 0.54);
+      margin: 0px;
     }
   }
 `;

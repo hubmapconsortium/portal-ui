@@ -32,7 +32,17 @@ function DevSearch() {
     hitsPerPage: 20,
     // Sidebar facet configuration:
     filters: {
-      Core: [listFilter('entity_type', 'Entity Type'), listFilter('mapper_metadata.version', 'Mapper Version')],
+      Core: [
+        listFilter('entity_type', 'Entity Type'),
+        listFilter('mapper_metadata.version', 'Mapper Version'),
+        listFilter('index_version', 'Index Version'),
+      ],
+      'Assay Types': [
+        listFilter('data_types', 'data_types'),
+        listFilter('mapped_data_types', 'mapped_data_types'),
+        listFilter('metadata.metadata.assay_category', 'assay_category'),
+        listFilter('metadata.metadata.assay_type', 'assay_type'),
+      ],
       Booleans: [
         checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata.metadata')),
         checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),

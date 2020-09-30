@@ -8,10 +8,8 @@ import Footer from './Footer';
 import Header from './Header';
 
 function App(props) {
-  const {
-    flaskData,
-    flaskData: { endpoints },
-  } = props;
+  const { flaskData } = props;
+  const { title, entity, vitessce_conf, endpoints, markdown, collection, errorCode } = flaskData;
   ReactGA.initialize('UA-133341631-3');
 
   return (
@@ -19,7 +17,7 @@ function App(props) {
     <Providers endpoints={endpoints} nexusToken={nexus_token}>
       <Header />
       <div className="main-content">
-        <Routes flaskData={flaskData} />
+        <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode }} />
       </div>
       <Footer />
     </Providers>
