@@ -1,0 +1,1 @@
+- Fix bug where entity header is stuck in a loop of appearing and disappearing in Safari.
