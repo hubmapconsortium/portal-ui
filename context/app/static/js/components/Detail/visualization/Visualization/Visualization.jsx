@@ -14,6 +14,7 @@ import { Alert } from 'js/shared-styles/alerts';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useEntityStore from 'js/stores/useEntityStore';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
+import VisualizationShareButton from '../VisualizationShareButton';
 import {
   vitessceFixedHeight,
   bodyExpandedCSS,
@@ -103,6 +104,7 @@ function Visualization(props) {
       <StyledHeader>
         <StyledHeaderText>Visualization</StyledHeaderText>
         <StyledHeaderRight>
+          <VisualizationShareButton theme={vitessceTheme} />
           <VisualizationThemeSwitch theme={vitessceTheme} onChange={(e, theme) => handleThemeChange(theme)} />
           <SecondaryBackgroundTooltip title="Switch to Fullscreen">
             <ExpandButton size="small" onClick={handleExpand} variant="contained">
