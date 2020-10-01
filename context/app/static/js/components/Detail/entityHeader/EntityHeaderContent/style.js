@@ -36,6 +36,7 @@ const FullscreenToggleButton = styled(ToggleButton)`
 
 const RightDiv = styled.div`
   margin-left: auto;
+  display: flex;
 `;
 
 export { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer, FullscreenToggleButton, RightDiv };

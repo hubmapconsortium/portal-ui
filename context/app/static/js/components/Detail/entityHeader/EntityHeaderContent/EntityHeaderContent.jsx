@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useTransition, animated } from 'react-spring';
 
 import VizualizationThemeSwitch from 'js/components/Detail/visualization/VisualizationThemeSwitch';
+import VisualizationCollapseButton from 'js/components/Detail/visualization/VisualizationCollapseButton';
 import {
   StyledDatasetIcon,
   StyledSampleIcon,
@@ -40,6 +41,7 @@ function EntityHeaderContent({ display_doi, entity_type, data, shouldDisplayHead
           {vizIsFullscreen && (
             <RightDiv>
               <VizualizationThemeSwitch toggleButtonComponent={FullscreenToggleButton} />
+              <VisualizationCollapseButton />
             </RightDiv>
           )}
         </AnimatedFlexContainer>
