@@ -37,5 +37,5 @@ test('Search works with entity_type param', () => {
     'Race',
     'Last Modified',
   ];
-  expectedStrings.forEach((s) => expect(screen.getByText(s)));
+  expectedStrings.forEach((s) => expect(screen.getByText(s)).toBeInTheDocument());
 });
