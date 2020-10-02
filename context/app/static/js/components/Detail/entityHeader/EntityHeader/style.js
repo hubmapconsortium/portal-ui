@@ -4,7 +4,8 @@ import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
 const StyledPaper = styled(Paper)`
   height: 35px;
-  position: sticky;
+  position: fixed;
+  width: 100%;
   top: ${headerHeight}px;
   z-index: 1000;
 `;

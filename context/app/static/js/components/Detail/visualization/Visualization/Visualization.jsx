@@ -12,7 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { Alert } from 'js/shared-styles/alerts';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import useEntityStore from 'js/stores/useEntityStore';
+import useVisualizationStore from 'js/stores/useVisualizationStore';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import {
   vitessceFixedHeight,
@@ -30,39 +30,31 @@ import {
 } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
-const entitySelector = (state) => ({
+const visualizationStoreSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
-  setVizIsFullscreen: state.setVizIsFullscreen,
+  expandViz: state.expandViz,
+  collapseViz: state.collapseViz,
+  vizTheme: state.vizTheme,
+  vizEscSnackbarIsOpen: state.vizEscSnackbarIsOpen,
+  setVizEscSnackbarIsOpen: state.setVizEscSnackbarIsOpen,
 });
 
 function Visualization(props) {
   const { vitData } = props;
 
-  const { vizIsFullscreen, setVizIsFullscreen } = useEntityStore(entitySelector);
+  const {
+    vizIsFullscreen,
+    expandViz,
+    collapseViz,
+    vizTheme,
+    vizEscSnackbarIsOpen,
+    setVizEscSnackbarIsOpen,
+  } = useVisualizationStore(visualizationStoreSelector);
 
-  const [isEscSnackbarOpen, setIsEscSnackbarOpen] = useState(false);
   const [vitessceErrors, setVitessceErrors] = useState([]);
-  const [vitessceTheme, setVitessceTheme] = useState('light');
   const [vitessceSelection, setVitessceSelection] = useState(0);
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
-
-  function handleExpand() {
-    setVizIsFullscreen(true);
-    setIsEscSnackbarOpen(true);
-    // Hack for Safari which lets the user exit from full-window Vitessce,
-    // but not take the browser out of full-screen.
-    document.onkeydown = function preventDefault(evt) {
-      if (evt.keyCode === 27) evt.preventDefault();
-    };
-  }
-
-  function handleCollapse() {
-    setVizIsFullscreen(false);
-    setIsEscSnackbarOpen(false);
-    // Clear the Safari hack.
-    document.onkeydown = null;
-  }
 
   function removeError(message) {
     setVitessceErrors((prev) => prev.filter((d) => d !== message));
@@ -78,34 +70,26 @@ function Visualization(props) {
     toggle();
   }
 
-  function handleThemeChange(theme) {
-    if (!['dark', 'light'].includes(theme)) {
-      return;
-    }
-
-    setVitessceTheme(theme);
-  }
-
   useEffect(() => {
     function onKeydown(event) {
       if (event.key === 'Escape') {
-        handleCollapse();
+        collapseViz();
       }
     }
     window.addEventListener('keydown', onKeydown);
     return () => {
       window.removeEventListener('keydown', onKeydown);
     };
-  }, []);
+  }, [collapseViz]);
 
   return (
     <StyledSectionContainer id="visualization">
       <StyledHeader>
         <StyledHeaderText>Visualization</StyledHeaderText>
         <StyledHeaderRight>
-          <VisualizationThemeSwitch theme={vitessceTheme} onChange={(e, theme) => handleThemeChange(theme)} />
+          <VisualizationThemeSwitch />
           <SecondaryBackgroundTooltip title="Switch to Fullscreen">
-            <ExpandButton size="small" onClick={handleExpand} variant="contained">
+            <ExpandButton size="small" onClick={expandViz} variant="contained">
               <ZoomOutMapIcon color="primary" />
             </ExpandButton>
           </SecondaryBackgroundTooltip>
@@ -139,15 +123,15 @@ function Visualization(props) {
         </StyledHeaderRight>
       </StyledHeader>
       <Paper>
-        <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vitessceTheme}>
+        <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme}>
           <EscSnackbar
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'center',
             }}
-            open={isEscSnackbarOpen}
+            open={vizEscSnackbarIsOpen}
             autoHideDuration={4000}
-            onClose={() => setIsEscSnackbarOpen(false)}
+            onClose={() => setVizEscSnackbarIsOpen(false)}
             message="Press [esc] to exit full window."
           />
           {vitessceErrors.length > 0 && (
@@ -166,7 +150,7 @@ function Visualization(props) {
           )}
           <Vitessce
             config={vitData[vitessceSelection] || vitData}
-            theme={vitessceTheme}
+            theme={vizTheme}
             height={vizIsFullscreen ? null : vitessceFixedHeight}
             onWarn={addError}
           />
