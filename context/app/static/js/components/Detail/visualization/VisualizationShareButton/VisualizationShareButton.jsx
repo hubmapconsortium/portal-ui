@@ -6,13 +6,10 @@ import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import LinkIcon from '@material-ui/icons/Link';
-import Typography from '@material-ui/core/Typography';
-import EmailIcon from '@material-ui/icons/Email';
 
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { StyledWhiteButton } from './style';
+import { StyledWhiteButton, StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
 function VisualizationThemeSwitch(props) {
@@ -31,15 +28,15 @@ function VisualizationThemeSwitch(props) {
           <ClickAwayListener onClickAway={toggle}>
             <MenuList id="preview-options">
               <MenuItem>
-                <Typography variant="inherit">Copy Visualization Link</Typography>
+                <StyledTypography variant="inherit">Copy Visualization Link</StyledTypography>
                 <ListItemIcon>
-                  <LinkIcon fontSize="small" />
+                  <StyledLinkIcon fontSize="small" />
                 </ListItemIcon>
               </MenuItem>
               <MenuItem>
-                <Typography variant="inherit">Email</Typography>
+                <StyledTypography variant="inherit">Email</StyledTypography>
                 <ListItemIcon>
-                  <EmailIcon fontSize="small" />
+                  <StyledEmailIcon fontSize="small" />
                 </ListItemIcon>
               </MenuItem>
             </MenuList>
