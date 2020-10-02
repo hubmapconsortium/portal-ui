@@ -32,7 +32,7 @@ function EntityHeaderContent({ display_doi, entity_type, data, shouldDisplayHead
   return transitions.map(
     ({ item, key, props }) =>
       item && (
-        <AnimatedFlexContainer style={props} key={key}>
+        <AnimatedFlexContainer style={props} key={key} maxWidth={vizIsFullscreen ? false : 'lg'}>
           {iconMap[entity_type]}
           <EntityHeaderItem text={display_doi} />
           {Object.entries(data).map(([k, v]) => (
