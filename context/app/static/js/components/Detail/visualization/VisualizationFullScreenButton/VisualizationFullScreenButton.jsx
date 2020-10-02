@@ -3,9 +3,8 @@ import FullscreenExitRoundedIcon from '@material-ui/icons/FullscreenExitRounded'
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMapRounded';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
-
 import useVisualizationStore from 'js/stores/useVisualizationStore';
+import { FullScreenButton } from './style';
 
 const visualizationStoreSelector = (state) => ({
   collapseViz: state.collapseViz,
@@ -17,9 +16,9 @@ function VisualizationFullScreenButton() {
   const vizTooltip = `${vizIsFullscreen ? 'Exit' : 'Enter'} Fullscreen`;
   return (
     <SecondaryBackgroundTooltip title={vizTooltip}>
-      <WhiteBackgroundIconButton onClick={() => (vizIsFullscreen ? collapseViz() : expandViz())}>
+      <FullScreenButton onClick={() => (vizIsFullscreen ? collapseViz() : expandViz())}>
         {vizIsFullscreen ? <FullscreenExitRoundedIcon color="primary" /> : <ZoomOutMapIcon color="primary" />}
-      </WhiteBackgroundIconButton>
+      </FullScreenButton>
     </SecondaryBackgroundTooltip>
   );
 }
