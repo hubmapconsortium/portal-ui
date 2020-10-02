@@ -10,14 +10,19 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 
-import { StyledWhiteButton, StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
+import { StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
+const visualizationStoreSelector = (state) => ({
+  vizTheme: state.vizTheme,
+  vitessceConfig: state.vitessceConfig,
+});
 function VisualizationThemeSwitch() {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
-  const { vizTheme, vitessceConfig } = useVisualizationStore();
+  const { vizTheme, vitessceConfig } = useVisualizationStore(visualizationStoreSelector);
 
   const copyToClipBoard = (text) => {
     const dummy = document.createElement('input');
@@ -27,13 +32,12 @@ function VisualizationThemeSwitch() {
     document.execCommand('copy');
     document.body.removeChild(dummy);
   };
-  console.log(vitessceConfig); // eslint-disable-line
   return (
     <>
       <SecondaryBackgroundTooltip title="Share Visualization">
-        <StyledWhiteButton ref={anchorRef} onClick={toggle}>
+        <WhiteBackgroundIconButton ref={anchorRef} onClick={toggle}>
           <ShareIcon color={vizTheme === 'light' ? 'primary' : 'secondary'} />
-        </StyledWhiteButton>
+        </WhiteBackgroundIconButton>
       </SecondaryBackgroundTooltip>
       <Popper open={open} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>
         <Paper style={{ maxHeight: 200, overflow: 'auto' }}>

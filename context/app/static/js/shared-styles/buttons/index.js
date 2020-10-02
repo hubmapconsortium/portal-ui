@@ -24,7 +24,7 @@ function TooltipToggleButton(props) {
 
   const Button = buttonComponent || WhiteBackgroundToggleButton;
   return (
-    <Tooltip title={tooltipTitle}>
+    <Tooltip style={{ height: '100%' }} title={tooltipTitle}>
       <Button {...rest}>{children}</Button>
     </Tooltip>
   );

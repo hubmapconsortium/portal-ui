@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { useTransition, animated } from 'react-spring';
 
 import VizualizationThemeSwitch from 'js/components/Detail/visualization/VisualizationThemeSwitch';
-import VisualizationCollapseButton from 'js/components/Detail/visualization/VisualizationCollapseButton';
+import VisualizationShareButton from 'js/components/Detail/visualization/VisualizationShareButton';
+import VisualizationFullScreenButton from 'js/components/Detail/visualization/VisualizationFullScreenButton';
 import {
   StyledDatasetIcon,
   StyledSampleIcon,
@@ -40,8 +41,9 @@ function EntityHeaderContent({ display_doi, entity_type, data, shouldDisplayHead
           ))}
           {vizIsFullscreen && (
             <RightDiv>
+              <VisualizationShareButton />
               <VizualizationThemeSwitch toggleButtonComponent={FullscreenToggleButton} />
-              <VisualizationCollapseButton />
+              <VisualizationFullScreenButton />
             </RightDiv>
           )}
         </AnimatedFlexContainer>
