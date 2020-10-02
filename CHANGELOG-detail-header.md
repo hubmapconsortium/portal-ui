@@ -1,0 +1,1 @@
+- Add entity header for detail pages.

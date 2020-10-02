@@ -1,22 +1,27 @@
 import React from 'react';
 import { useTransition, animated } from 'react-spring';
 
-import useEntityStore from 'js/stores/useEntityStore';
+import { useEntityStore, useVisualizationStore } from 'js/stores';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 import { extractHeaderMetadata } from './utils';
 
 const AnimatedPaper = animated(StyledPaper);
-const entitySelector = (state) => ({
+const entityStoreSelector = (state) => ({
   assayMetadata: state.assayMetadata,
   summaryInView: state.summaryInView,
+  vizIsFullscreen: state.vizIsFullscreen,
+});
+const visualizationSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
 
 const entityHeaderHeight = 35;
 
 function Header() {
-  const { assayMetadata, summaryInView, vizIsFullscreen } = useEntityStore(entitySelector);
+  const { assayMetadata, summaryInView } = useEntityStore(entityStoreSelector);
+  const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
+
   const shouldDisplayHeader = !summaryInView || vizIsFullscreen;
 
   const transitionConfig = vizIsFullscreen
