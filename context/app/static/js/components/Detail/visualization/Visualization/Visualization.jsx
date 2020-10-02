@@ -52,8 +52,19 @@ function Visualization(props) {
     setVitessceConfig,
   } = useVisualizationStore(visualizationStoreSelector);
 
+  // Get the vitessce configuration from the url if available and set the initial selection if it is a multi-dataset.
+  const vitessceURLConf = JSON.parse(new URL(window.location.href).searchParams.get('vitessce_conf'));
+  const initialSelection =
+    Array.isArray(vitData) && Math.max(0, vitData.map(({ name }) => name).indexOf(vitessceURLConf?.name));
+  let initializedVitData = vitData;
+  if (Array.isArray(vitData)) {
+    initializedVitData[initialSelection] = vitessceURLConf || vitData[initialSelection];
+  } else {
+    initializedVitData = vitessceURLConf || vitData;
+  }
+
   const [vitessceErrors, setVitessceErrors] = useState([]);
-  const [vitessceSelection, setVitessceSelection] = useState(0);
+  const [vitessceSelection, setVitessceSelection] = useState(initialSelection);
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
   const handleVitessceConfigDebounced = useCallback(debounce(setVitessceConfig, 250, { trailing: true }), [
@@ -93,7 +104,7 @@ function Visualization(props) {
           <VisualizationShareButton />
           <VisualizationThemeSwitch />
           <VisualizationFullScreenButton />
-          {Array.isArray(vitData) ? (
+          {Array.isArray(initializedVitData) ? (
             <>
               <SelectionButton
                 ref={anchorRef}
@@ -103,13 +114,13 @@ function Visualization(props) {
                 variant="contained"
                 color="primary"
               >
-                {vitData[vitessceSelection].name} {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                {initializedVitData[vitessceSelection].name} {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
               </SelectionButton>
               <Popper open={open} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>
                 <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                   <ClickAwayListener onClickAway={toggle}>
                     <MenuList id="preview-options">
-                      {vitData.map(({ name }, i) => (
+                      {initializedVitData.map(({ name }, i) => (
                         <MenuItem onClick={() => setSelectionAndClearErrors(i)} key={name}>
                           {name}
                         </MenuItem>
@@ -149,7 +160,7 @@ function Visualization(props) {
             </ErrorSnackbar>
           )}
           <Vitessce
-            config={vitData[vitessceSelection] || vitData}
+            config={initializedVitData[vitessceSelection] || initializedVitData}
             theme={vizTheme}
             onConfigChange={handleVitessceConfigDebounced}
             height={vizIsFullscreen ? null : vitessceFixedHeight}

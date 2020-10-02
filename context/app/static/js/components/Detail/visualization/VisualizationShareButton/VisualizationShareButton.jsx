@@ -24,10 +24,11 @@ function VisualizationThemeSwitch() {
   const anchorRef = useRef(null);
   const { vizTheme, vitessceConfig } = useVisualizationStore(visualizationStoreSelector);
 
-  const copyToClipBoard = (text) => {
+  const copyToClipBoard = (conf) => {
     const dummy = document.createElement('input');
     document.body.appendChild(dummy);
-    dummy.setAttribute('value', text);
+    const url = `${window.location.href}?vitessce_conf=${JSON.stringify(conf)}`;
+    dummy.setAttribute('value', url);
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);
