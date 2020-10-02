@@ -9,15 +9,15 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import useEntityStore from 'js/stores/useEntityStore';
+import useVisualizationStore from 'js/stores/useVisualizationStore';
+
 import { StyledWhiteButton, StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
-function VisualizationThemeSwitch(props) {
-  const { theme } = props;
+function VisualizationThemeSwitch() {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
-  const { vitessceConfig } = useEntityStore();
+  const { vizTheme, vitessceConfig } = useVisualizationStore();
 
   const copyToClipBoard = (text) => {
     const dummy = document.createElement('input');
@@ -27,12 +27,12 @@ function VisualizationThemeSwitch(props) {
     document.execCommand('copy');
     document.body.removeChild(dummy);
   };
-
+  console.log(vitessceConfig); // eslint-disable-line
   return (
     <>
       <SecondaryBackgroundTooltip title="Share Visualization">
         <StyledWhiteButton ref={anchorRef} onClick={toggle}>
-          <ShareIcon color={theme === 'light' ? 'primary' : 'secondary'} />
+          <ShareIcon color={vizTheme === 'light' ? 'primary' : 'secondary'} />
         </StyledWhiteButton>
       </SecondaryBackgroundTooltip>
       <Popper open={open} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>

@@ -29,7 +29,7 @@ function Search(props) {
     dataset: datasetConfig.fields,
   };
 
-  const { searchParams } = new URL(document.location);
+  const searchParams = new URLSearchParams(window.location.search);
   const typeParam = 'entity_type[0]';
   const type = (searchParams.get(typeParam) || '').toLowerCase();
   if (!(type in resultFieldsByType)) {

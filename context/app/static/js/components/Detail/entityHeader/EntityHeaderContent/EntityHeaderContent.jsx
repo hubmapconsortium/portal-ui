@@ -2,7 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTransition, animated } from 'react-spring';
 
-import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer } from './style';
+import VizualizationThemeSwitch from 'js/components/Detail/visualization/VisualizationThemeSwitch';
+import VisualizationCollapseButton from 'js/components/Detail/visualization/VisualizationCollapseButton';
+import {
+  StyledDatasetIcon,
+  StyledSampleIcon,
+  StyledDonorIcon,
+  FlexContainer,
+  FullscreenToggleButton,
+  RightDiv,
+} from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 
 const iconMap = {
@@ -23,12 +32,18 @@ function EntityHeaderContent({ display_doi, entity_type, data, shouldDisplayHead
   return transitions.map(
     ({ item, key, props }) =>
       item && (
-        <AnimatedFlexContainer style={props} key={key}>
+        <AnimatedFlexContainer style={props} key={key} maxWidth={vizIsFullscreen ? false : 'lg'}>
           {iconMap[entity_type]}
           <EntityHeaderItem text={display_doi} />
           {Object.entries(data).map(([k, v]) => (
             <EntityHeaderItem text={v.value || `undefined ${v.label}`} key={k} />
           ))}
+          {vizIsFullscreen && (
+            <RightDiv>
+              <VizualizationThemeSwitch toggleButtonComponent={FullscreenToggleButton} />
+              <VisualizationCollapseButton />
+            </RightDiv>
+          )}
         </AnimatedFlexContainer>
       ),
   );
