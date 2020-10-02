@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useRef } from 'react';
+import React, { useState, useEffect, useReducer, useRef, useCallback } from 'react';
 import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
@@ -9,6 +9,7 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
+import debounce from 'lodash/debounce';
 
 import { Alert } from 'js/shared-styles/alerts';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -31,15 +32,21 @@ import {
 } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
-const entitySelector = (state) => ({
+const fullScreenEntitySelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
   setVizIsFullscreen: state.setVizIsFullscreen,
+});
+
+const vitessceConfigEntitySelector = (state) => ({
+  vitessceConfig: state.vitessceConfig,
+  setVitessceConfig: state.setVitessceConfig,
 });
 
 function Visualization(props) {
   const { vitData } = props;
 
-  const { vizIsFullscreen, setVizIsFullscreen } = useEntityStore(entitySelector);
+  const { vizIsFullscreen, setVizIsFullscreen } = useEntityStore(fullScreenEntitySelector);
+  const { setVitessceConfig } = useEntityStore(vitessceConfigEntitySelector);
 
   const [isEscSnackbarOpen, setIsEscSnackbarOpen] = useState(false);
   const [vitessceErrors, setVitessceErrors] = useState([]);
@@ -47,6 +54,10 @@ function Visualization(props) {
   const [vitessceSelection, setVitessceSelection] = useState(0);
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
+
+  const handleVitessceConfigDebounced = useCallback(debounce(setVitessceConfig, 250, { trailing: true }), [
+    setVitessceConfig,
+  ]);
 
   function handleExpand() {
     setVizIsFullscreen(true);
@@ -169,6 +180,7 @@ function Visualization(props) {
           <Vitessce
             config={vitData[vitessceSelection] || vitData}
             theme={vitessceTheme}
+            onConfigChange={handleVitessceConfigDebounced}
             height={vizIsFullscreen ? null : vitessceFixedHeight}
             onWarn={addError}
           />

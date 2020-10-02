@@ -7,6 +7,8 @@ const useEntityStore = create((set) => ({
   setVizIsFullscreen: (val) => set({ vizIsFullscreen: val }),
   assayMetadata: {},
   setAssayMetadata: (val) => set({ assayMetadata: val }),
+  vitessceConfig: {},
+  setVitessceConfig: (val) => set({ vitessceConfig: val }),
 }));
 
 export default useEntityStore;
