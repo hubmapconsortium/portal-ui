@@ -37,3 +37,18 @@
 .sk-refinement-list__view-more-action {
     color: #3781D1;
 }
+
+.sk-pagination-navigation .sk-toggle-option:first-child,
+  .sk-pagination-navigation .sk-toggle-option:last-child {
+    color: #444A65;
+}
+
+.sk-toggle-option.is-active {
+background-color: #444A65;
+border-color: #444A65;
+}
+
+.sk-pagination-navigation .sk-toggle-option:first-child.is-disabled,
+  .sk-pagination-navigation .sk-toggle-option:last-child.is-disabled {
+    color: #ddd
+  }
