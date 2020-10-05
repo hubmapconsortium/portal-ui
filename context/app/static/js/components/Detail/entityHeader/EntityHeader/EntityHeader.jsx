@@ -9,8 +9,7 @@ import { extractHeaderMetadata } from './utils';
 const AnimatedPaper = animated(StyledPaper);
 const entityStoreSelector = (state) => ({
   assayMetadata: state.assayMetadata,
-  summaryInView: state.summaryInView,
-  vizIsFullscreen: state.vizIsFullscreen,
+  summaryComponentObserver: state.summaryComponentObserver,
 });
 const visualizationSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
@@ -19,7 +18,10 @@ const visualizationSelector = (state) => ({
 const entityHeaderHeight = 35;
 
 function Header() {
-  const { assayMetadata, summaryInView } = useEntityStore(entityStoreSelector);
+  const {
+    assayMetadata,
+    summaryComponentObserver: { summaryInView },
+  } = useEntityStore(entityStoreSelector);
   const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
 
   const shouldDisplayHeader = !summaryInView || vizIsFullscreen;
