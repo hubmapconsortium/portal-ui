@@ -4,6 +4,7 @@ import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import Table from '@material-ui/core/Table';
 
 import { HeaderCell } from 'js/shared-styles/Table';
 
@@ -78,6 +79,10 @@ const StyledTableCell = styled(TableCell)`
   }
 `;
 
+const StyledTable = styled(Table)`
+  background-color: white;
+`;
+
 export {
   ArrowUpOn,
   ArrowDownOn,
@@ -87,4 +92,5 @@ export {
   StyledTableRow,
   StyledTableBody,
   StyledTableCell,
+  StyledTable,
 };

@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Table from '@material-ui/core/Table';
-
 import { SortingSelector, Hits } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
 import { LightBlueLink } from 'js/shared-styles/Links';
-import { StyledTableBody, StyledTableRow, StyledTableCell } from './style';
+import { StyledTableBody, StyledTableRow, StyledTableCell, StyledTable } from './style';
 
 import SortingTableHead from './SortingTableHead';
 
@@ -74,7 +72,7 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
 function ResultsTable(props) {
   const { sortOptions, hitsPerPage, resultFields, detailsUrlPrefix, idField, resultFieldIds } = props;
   return (
-    <Table>
+    <StyledTable>
       <SortingSelector options={sortOptions} listComponent={SortingTableHead} />
       <Hits
         hitsPerPage={hitsPerPage}
@@ -84,7 +82,7 @@ function ResultsTable(props) {
           fields: { everything: { type: 'plain' } },
         }}
       />
-    </Table>
+    </StyledTable>
   );
 }
 
