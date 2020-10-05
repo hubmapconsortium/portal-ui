@@ -19,6 +19,15 @@
     margin-right: 16px;
 }
 
+.sk-item-list-option input.sk-item-list-option__checkbox {
+    margin: 0 4px 0 0;
+}
+
+.sk-item-list-option {
+    padding-top: 8px;
+    line-height: 120%;
+}
+
 .sk-item-list-option__text {
     // Same weight, even if .is-active:
     font-weight: 200 !important;
