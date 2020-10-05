@@ -10,21 +10,24 @@ import { Flex, FlexRight, FlexEnd, JsonButton, StyledFileIcon, StyledTypography 
 import SummaryItem from '../SummaryItem';
 import StatusIcon from '../StatusIcon';
 
-const entityStoreSelector = (state) => state.setSummaryInView;
+const entityStoreSelector = (state) => state.setSummaryComponentObserver;
 
 function SummaryData(props) {
   const { entity_type, uuid, status, mapped_data_access_level, display_doi, children } = props;
 
-  const setSummaryInView = useEntityStore(entityStoreSelector);
+  const setSummaryComponentObserver = useEntityStore(entityStoreSelector);
 
-  const { ref, inView } = useInView({
+  const { ref, inView, entry } = useInView({
     /* Optional options */
     threshold: 0,
+    initialInView: true,
   });
 
   useEffect(() => {
-    setSummaryInView(inView);
-  }, [setSummaryInView, inView]);
+    if (entry) {
+      setSummaryComponentObserver(inView, entry);
+    }
+  }, [setSummaryComponentObserver, entry, inView]);
 
   return (
     <>
