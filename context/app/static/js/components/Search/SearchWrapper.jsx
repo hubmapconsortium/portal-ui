@@ -1,21 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  SearchkitManager,
-  SearchkitProvider,
-  SearchBox,
-  LayoutResults,
-  ActionBar,
-  ActionBarRow,
-  NoHits,
-  HitsStats,
-  LayoutBody,
-  Pagination,
-} from 'searchkit'; // eslint-disable-line import/no-duplicates
+import { SearchkitManager, SearchkitProvider, SearchBox, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
 import Accordions from './Accordions';
 import ResultsTable from './ResultsTable';
+import PaginationWrapper from './PaginationWrapper';
 import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
 import './Search.scss';
@@ -45,15 +35,6 @@ function SearchWrapper(props) {
           <Accordions filters={filters} />
         </StyledSideBar>
         <LayoutResults>
-          <ActionBar>
-            <ActionBarRow>
-              <HitsStats
-                translations={{
-                  'hitstats.results_found': '{hitCount} results found',
-                }}
-              />
-            </ActionBarRow>
-          </ActionBar>
           <ResultsTable
             sortOptions={sortOptions}
             hitsPerPage={hitsPerPage}
@@ -67,7 +48,7 @@ function SearchWrapper(props) {
               'NoHits.NoResultsFound': `No results found. ${isLoggedIn ? '' : 'Login to view more results.'}`,
             }}
           />
-          <Pagination showNumbers />
+          <PaginationWrapper />
         </LayoutResults>
       </LayoutBody>
     </SearchkitProvider>
