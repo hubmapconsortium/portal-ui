@@ -50,6 +50,12 @@ function DevSearch() {
         checkboxFilter('no_files', 'No files?', BoolMustNot(ExistsQuery('files'))),
         checkboxFilter('has_files', 'Spatially Located (CCF)?', ExistsQuery('rui_location')),
         checkboxFilter('no_files', 'Not Spatially Located (CCF)?', BoolMustNot(ExistsQuery('rui_location'))),
+        checkboxFilter('has_errors', 'Validation Errors?', ExistsQuery('mapper_metadata.validation_errors')),
+        checkboxFilter(
+          'no_errors',
+          'No Validation Errors?',
+          BoolMustNot(ExistsQuery('mapper_metadata.validation_errors')),
+        ),
       ],
     },
     queryFields: ['everything'],
