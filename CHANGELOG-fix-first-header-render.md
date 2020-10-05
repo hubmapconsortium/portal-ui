@@ -1,0 +1,1 @@
+- Fix issues with header elevation and subheader appearance on initial renders.
