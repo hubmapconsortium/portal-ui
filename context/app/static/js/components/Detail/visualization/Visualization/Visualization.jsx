@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useReducer, useRef, useCallback, useMemo } from 'react';
 import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
@@ -53,15 +53,18 @@ function Visualization(props) {
   } = useVisualizationStore(visualizationStoreSelector);
 
   // Get the vitessce configuration from the url if available and set the initial selection if it is a multi-dataset.
-  const vitessceURLConf = JSON.parse(new URL(window.location.href).searchParams.get('vitessce_conf'));
-  const initialSelection =
-    Array.isArray(vitData) && Math.max(0, vitData.map(({ name }) => name).indexOf(vitessceURLConf?.name));
-  let initializedVitData = vitData;
-  if (Array.isArray(vitData)) {
-    initializedVitData[initialSelection] = vitessceURLConf || vitData[initialSelection];
-  } else {
-    initializedVitData = vitessceURLConf || vitData;
-  }
+  const [initializedVitData, initialSelection] = useMemo(() => {
+    const vitessceURLConf = JSON.parse(new URL(window.location.href).searchParams.get('vitessce_conf'));
+    const initialSelectionFromUrl =
+      Array.isArray(vitData) && Math.max(0, vitData.map(({ name }) => name).indexOf(vitessceURLConf?.name));
+    let initializedVitDataFromUrl = vitData;
+    if (Array.isArray(vitData)) {
+      initializedVitDataFromUrl[initialSelectionFromUrl] = vitessceURLConf || vitData[initialSelectionFromUrl];
+    } else {
+      initializedVitDataFromUrl = vitessceURLConf || vitData;
+    }
+    return [initializedVitDataFromUrl, initialSelectionFromUrl];
+  }, [vitData]);
 
   const [vitessceErrors, setVitessceErrors] = useState([]);
   const [vitessceSelection, setVitessceSelection] = useState(initialSelection);

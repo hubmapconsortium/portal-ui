@@ -27,7 +27,7 @@ function VisualizationThemeSwitch() {
   const copyToClipBoard = (conf) => {
     const dummy = document.createElement('input');
     document.body.appendChild(dummy);
-    const url = `${window.location.href}?vitessce_conf=${JSON.stringify(conf)}`;
+    const url = `${window.location.href.split('?')[0]}?vitessce_conf=${JSON.stringify(conf)}`;
     dummy.setAttribute('value', url);
     dummy.select();
     document.execCommand('copy');
