@@ -6,16 +6,16 @@ import useEntityStore from 'js/stores/useEntityStore';
 import HeaderAppBar from '../HeaderAppBar';
 import HeaderContent from '../HeaderContent';
 
-const entityStoreSelector = (state) => state.summaryInView;
+const entityStoreSelector = (state) => state.summaryComponentObserver;
 const visualizationSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
 
 function Header() {
   const anchorRef = useRef(null);
-  const summaryInView = useEntityStore(entityStoreSelector);
+  const { summaryInView, summaryEntry } = useEntityStore(entityStoreSelector);
   const displayEntityHeader =
-    !summaryInView &&
+    summaryEntry &&
     window.location.pathname.startsWith('/browse') &&
     !window.location.pathname.startsWith('/browse/collection');
 
@@ -23,11 +23,7 @@ function Header() {
 
   return (
     <>
-      <HeaderAppBar
-        anchorRef={anchorRef}
-        elevation={displayEntityHeader ? 0 : 4}
-        shouldConstrainWidth={!vizIsFullscreen}
-      >
+      <HeaderAppBar anchorRef={anchorRef} elevation={!summaryInView ? 0 : 4} shouldConstrainWidth={!vizIsFullscreen}>
         <HeaderContent anchorRef={anchorRef} />
       </HeaderAppBar>
       {displayEntityHeader && <EntityHeader />}
