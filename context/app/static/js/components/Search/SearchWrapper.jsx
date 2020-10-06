@@ -29,9 +29,9 @@ function SearchWrapper(props) {
 
   return (
     <SearchkitProvider searchkit={searchkit}>
+      <SearchBox autofocus queryFields={queryFields} />
       <LayoutBody>
         <StyledSideBar>
-          <SearchBox autofocus queryFields={queryFields} />
           <Accordions filters={filters} />
         </StyledSideBar>
         <LayoutResults>
