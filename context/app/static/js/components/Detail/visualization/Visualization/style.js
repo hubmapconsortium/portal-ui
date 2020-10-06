@@ -9,7 +9,12 @@ import SectionHeader from 'js/components/Detail/SectionHeader';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { entityHeaderHeight } from 'js/components/Detail/entityHeader/EntityHeader';
 
-const totalHeightOffset = headerHeight + entityHeaderHeight;
+let totalHeightOffset = headerHeight;
+
+if (!window.location.pathname.startsWith('/preview')) {
+  totalHeightOffset += entityHeaderHeight;
+}
+
 const vitessceFixedHeight = 600;
 
 const StyledHeader = styled.div`
