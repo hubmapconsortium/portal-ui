@@ -1,15 +1,14 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 
 import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig } from 'js/components/Search/config';
-// eslint-disable-next-line import/named
 import { listFilter } from 'js/components/Search/utils';
 import AncestorNote from 'js/components/Search/AncestorNote';
+import { SearchHeader } from './style';
 
 function Search(props) {
   const { title } = props;
@@ -65,9 +64,9 @@ function Search(props) {
   const wrappedSearch = <SearchWrapper {...allProps} />;
   return (
     <>
-      <Typography component="h1" variant="h2">
+      <SearchHeader component="h1" variant="h2">
         {title}
-      </Typography>
+      </SearchHeader>
       {hasAncestorParam && (
         <LookupEntity
           uuid={searchParams.get('ancestor_ids[0]')}

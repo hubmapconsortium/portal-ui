@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import Typography from '@material-ui/core/Typography';
 import { ExistsQuery, BoolMustNot } from 'searchkit';
 
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
 import { field, listFilter, checkboxFilter } from 'js/components/Search/utils';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
+import { SearchHeader } from './style';
 
 function DevSearch() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
@@ -61,9 +61,9 @@ function DevSearch() {
   const wrappedSearch = <SearchWrapper {...allProps} />;
   return (
     <>
-      <Typography component="h1" variant="h2">
+      <SearchHeader component="h1" variant="h2">
         Dev Search
-      </Typography>
+      </SearchHeader>
       {wrappedSearch}
     </>
   );
