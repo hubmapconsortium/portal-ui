@@ -23,7 +23,11 @@ function Header() {
 
   return (
     <>
-      <HeaderAppBar anchorRef={anchorRef} elevation={!summaryInView ? 0 : 4} shouldConstrainWidth={!vizIsFullscreen}>
+      <HeaderAppBar
+        anchorRef={anchorRef}
+        elevation={!summaryInView || vizIsFullscreen ? 0 : 4}
+        shouldConstrainWidth={!vizIsFullscreen}
+      >
         <HeaderContent anchorRef={anchorRef} />
       </HeaderAppBar>
       {displayEntityHeader && <EntityHeader />}
