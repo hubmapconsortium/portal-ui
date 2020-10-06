@@ -1,0 +1,1 @@
+- Fix header elevation when vitessce is fullscreen.
