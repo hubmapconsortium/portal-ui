@@ -7,6 +7,7 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import lzString from 'lz-string';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
@@ -27,7 +28,8 @@ function VisualizationThemeSwitch() {
   const copyToClipBoard = (conf) => {
     const dummy = document.createElement('input');
     document.body.appendChild(dummy);
-    const url = `${window.location.href.split('?')[0]}?vitessce_conf=${JSON.stringify(conf)}`;
+    const compressedConf = lzString.compressToEncodedURIComponent(JSON.stringify(conf));
+    const url = `${window.location.href.split('?')[0]}?vitessce_conf=${compressedConf}`;
     dummy.setAttribute('value', url);
     dummy.select();
     document.execCommand('copy');
