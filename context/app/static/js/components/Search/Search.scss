@@ -76,3 +76,18 @@ border-color: #444A65;
   .sk-pagination-navigation .sk-toggle-option:last-child.is-disabled {
     color: #ddd
   }
+
+  .sk-search-box form{
+    border: 1px solid #636363;
+    border-radius: 8px;
+    background-color: white;
+  }
+
+  .sk-search-box__icon{
+      opacity: 1;
+  }
+
+  .sk-search-box__icon:before{
+    fill: #444A65;
+    background: url('~images/search-icon.svg') no-repeat top left;
+  }
