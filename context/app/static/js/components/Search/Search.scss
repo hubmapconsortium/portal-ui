@@ -26,6 +26,7 @@
 
 .sk-layout__filters {
   height: fit-content;
+  background-color: white;
 }
 
 .sk-layout__filters {
@@ -60,6 +61,10 @@
 .sk-pagination-navigation .sk-toggle-option:first-child,
   .sk-pagination-navigation .sk-toggle-option:last-child {
     color: #444A65;
+}
+
+.sk-pagination-navigation .sk-toggle-option {
+    background-color: transparent;
 }
 
 .sk-toggle-option.is-active {
