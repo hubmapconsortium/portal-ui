@@ -6,7 +6,8 @@ import 'intersection-observer';
 
 import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { Flex, FlexRight, FlexEnd, JsonButton, StyledFileIcon, StyledTypography } from './style';
+import { FileIcon } from 'js/shared-styles/icons';
+import { Flex, FlexRight, FlexEnd, JsonButton, StyledTypography } from './style';
 import SummaryItem from '../SummaryItem';
 import StatusIcon from '../StatusIcon';
 
@@ -49,7 +50,7 @@ function SummaryData(props) {
           <FlexEnd>
             <SecondaryBackgroundTooltip title="View JSON">
               <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
-                <StyledFileIcon color="primary" />
+                <FileIcon color="primary" />
               </JsonButton>
             </SecondaryBackgroundTooltip>
           </FlexEnd>
