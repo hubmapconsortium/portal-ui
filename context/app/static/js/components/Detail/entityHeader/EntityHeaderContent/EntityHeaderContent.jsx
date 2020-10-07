@@ -4,14 +4,7 @@ import { useTransition, animated } from 'react-spring';
 
 import VizualizationThemeSwitch from 'js/components/Detail/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/Detail/visualization/VisualizationCollapseButton';
-import {
-  StyledDatasetIcon,
-  StyledSampleIcon,
-  StyledDonorIcon,
-  FlexContainer,
-  FullscreenToggleButton,
-  RightDiv,
-} from './style';
+import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 
 const iconMap = {
@@ -40,7 +33,7 @@ function EntityHeaderContent({ display_doi, entity_type, data, shouldDisplayHead
           ))}
           {vizIsFullscreen && (
             <RightDiv>
-              <VizualizationThemeSwitch toggleButtonComponent={FullscreenToggleButton} />
+              <VizualizationThemeSwitch />
               <VisualizationCollapseButton />
             </RightDiv>
           )}
