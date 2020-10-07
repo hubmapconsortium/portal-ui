@@ -15,7 +15,7 @@ const visualizationSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
 
-const entityHeaderHeight = 35;
+const entityHeaderHeight = 40;
 
 function Header() {
   const {
