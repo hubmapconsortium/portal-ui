@@ -30,7 +30,7 @@ test('Search works with entity_type param', () => {
     'TITLE',
     'Donor Metadata',
     'Affiliation',
-    '0 results found',
+    '0 Results Found',
     'Age',
     'BMI',
     'Sex',
