@@ -2,6 +2,7 @@ import React from 'react';
 import { useTransition, animated } from 'react-spring';
 
 import { useEntityStore, useVisualizationStore } from 'js/stores';
+import { iconButtonHeight } from 'js/shared-styles/buttons';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 import { extractHeaderMetadata } from './utils';
@@ -15,7 +16,7 @@ const visualizationSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
 
-const entityHeaderHeight = 35;
+const entityHeaderHeight = iconButtonHeight;
 
 function Header() {
   const {
