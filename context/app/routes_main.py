@@ -207,5 +207,25 @@ def robots_txt():
 # Allowed host: {allowed_hostname}
 User-agent: *
 Disallow: {disallow}
+Sitemap: {get_url_base_from_request()}/sitemap.txt
 ''',
-        mimetype='text / plain')
+        mimetype='text/plain')
+
+
+@blueprint.route('/sitemap.txt')
+def sitemap_txt():
+    client = _get_client()
+    uuids = client.get_all_dataset_uuids()
+    url_base = get_url_base_from_request()
+    return Response(
+        '\n'.join(
+            f'{url_base}/browse/dataset/{uuid}' for uuid in uuids
+        ),
+        mimetype='text/plain')
+
+
+def get_url_base_from_request():
+    parsed = urlparse(request.base_url)
+    scheme = parsed.scheme
+    netloc = parsed.netloc
+    return f'{scheme}://{netloc}'
