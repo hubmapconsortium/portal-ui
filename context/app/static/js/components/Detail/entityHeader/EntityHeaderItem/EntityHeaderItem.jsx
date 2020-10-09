@@ -14,7 +14,7 @@ function EntityHeaderItem({ text }) {
 }
 
 EntityHeaderItem.propTypes = {
-  text: PropTypes.oneOfType(PropTypes.string, PropTypes.arrayOf(PropTypes.string)),
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
 };
 
 EntityHeaderItem.defaultProps = {
