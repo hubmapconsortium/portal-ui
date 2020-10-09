@@ -200,8 +200,12 @@ def collections():
 def robots_txt():
     allowed_hostname = 'portal.hubmapconsortium.org'
     hostname = urlparse(request.base_url).hostname
-    if hostname == allowed_hostname:
-        return Response(f'# No disallows on {allowed_hostname}!', mimetype='text/plain')
+    disallow = '/search' if hostname == allowed_hostname else '/'
     return Response(
-        f'# {hostname} != {allowed_hostname}\n'
-        'User-agent: *\nDisallow: /\n', mimetype='text/plain')
+        f'''
+# This host: {hostname}
+# Allowed host: {allowed_hostname}
+User-agent: *
+Disallow: {disallow}
+''',
+        mimetype='text / plain')
