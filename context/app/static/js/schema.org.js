@@ -1,7 +1,12 @@
 function getDatasetLD(entity) {
+  // Based on https://developers.google.com/search/docs/data-types/dataset#guidelines
   const donor = entity.donor.mapped_metadata;
-  const shortDonorString = `${donor.sex}, ${donor.age_value} ${donor.age_unit} old`;
-  const longDonorString = `${donor.height_value}${donor.height_unit}, ${donor.weight_value}${donor.weight_unit}, ${donor.race} ${shortDonorString}`;
+  const shortDonorString = `${donor.sex || '(Unknown sex)'}, ${donor.age_value || '(Unknown age)'} ${
+    donor.age_unit || '(Unknown age unit)'
+  } old`;
+  const heightString = `${donor.height_value || ''}${donor.height_unit || ''}`;
+  const weightString = `${donor.weight_value || ''}${donor.weight_unit || ''}`;
+  const longDonorString = `${heightString}, ${weightString}, ${donor.race || ''} ${shortDonorString}`;
   const assayOrganString = `${entity.mapped_data_types} of ${entity.origin_sample.mapped_organ}`;
   const medicalHistory = donor.medicalHistory ? `${donor.medicalHistory.join(', ')}` : 'no medical history';
   const name = `${assayOrganString} from ${shortDonorString}`;
@@ -35,4 +40,4 @@ function setJsonLD(entity) {
   document.head.appendChild(script);
 }
 
-export { setJsonLD };
+export { getDatasetLD, setJsonLD };
