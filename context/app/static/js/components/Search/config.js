@@ -64,14 +64,20 @@ const datasetConfig = {
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
   },
-  fields: [
-    field('display_doi', 'Dataset'),
-    field('group_name', 'Group'),
-    field('mapped_data_types', 'Data Types'),
-    field('origin_sample.mapped_organ', 'Organ'),
-    field('mapped_status', 'Status'),
-    field('mapped_last_modified_timestamp', 'Last Modified'),
-  ],
+  fields: {
+    table: [
+      field('display_doi', 'Dataset'),
+      field('group_name', 'Group'),
+      field('mapped_data_types', 'Data Types'),
+      field('origin_sample.mapped_organ', 'Organ'),
+      field('mapped_status', 'Status'),
+      field('mapped_last_modified_timestamp', 'Last Modified'),
+    ],
+    tile: [
+      field('last_modified_timestamp', 'Last Modified Unmapped'),
+      field('descendant_counts.entity_type', 'Descendant Counts'),
+    ],
+  },
 };
 
 export { donorConfig, sampleConfig, datasetConfig };
