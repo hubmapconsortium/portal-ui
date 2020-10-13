@@ -80,7 +80,11 @@ border-color: #444A65;
   .sk-search-box form{
     border: 1px solid #636363;
     border-radius: 8px;
+  }
+
+  .sk-search-box {
     background-color: white;
+    max-width: 925px;
   }
 
   .sk-search-box__icon{

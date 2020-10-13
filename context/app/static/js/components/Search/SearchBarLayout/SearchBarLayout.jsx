@@ -2,13 +2,15 @@ import React from 'react';
 import { SearchBox } from 'searchkit';
 
 import SearchViewSwitch from '../SearchViewSwitch';
-import { Flex } from './style';
+import { Flex, StyledDiv } from './style';
 
-function SearchBarLayout({ queryFields }) {
+function SearchBarLayout({ queryFields, searchView, setSearchView }) {
   return (
     <Flex>
       <SearchBox autofocus queryFields={queryFields} />
-      <SearchViewSwitch />
+      <StyledDiv>
+        <SearchViewSwitch searchView={searchView} setSearchView={setSearchView} />
+      </StyledDiv>
     </Flex>
   );
 }
