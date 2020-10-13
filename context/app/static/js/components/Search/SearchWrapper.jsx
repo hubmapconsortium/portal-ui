@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { SearchkitManager, SearchkitProvider, SearchBox, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
+import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
 import Accordions from './Accordions';
 import ResultsTable from './ResultsTable';
 import PaginationWrapper from './PaginationWrapper';
+import SearchBarLayout from './SearchBarLayout';
 import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
 import './Search.scss';
@@ -29,7 +30,7 @@ function SearchWrapper(props) {
 
   return (
     <SearchkitProvider searchkit={searchkit}>
-      <SearchBox autofocus queryFields={queryFields} />
+      <SearchBarLayout queryFields={queryFields} />
       <LayoutBody>
         <StyledSideBar>
           <Accordions filters={filters} />
