@@ -24,11 +24,11 @@ function SearchWrapper(props) {
     queryFields,
     isLoggedIn,
   } = props;
-  const sortOptions = resultFieldsToSortOptions(resultFields);
-  const resultFieldIds = resultFields.map((field) => field.id).concat(idField);
-  const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
-
   const [searchView, setSearchView] = useState('table');
+
+  const sortOptions = resultFieldsToSortOptions(resultFields.table);
+  const resultFieldIds = [...resultFields.table, ...resultFields.tile].map((field) => field.id).concat(idField);
+  const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 
   return (
     <SearchkitProvider searchkit={searchkit}>
@@ -41,10 +41,11 @@ function SearchWrapper(props) {
           <ResultsTable
             sortOptions={sortOptions}
             hitsPerPage={hitsPerPage}
-            resultFields={resultFields}
+            resultFields={resultFields[searchView]}
             detailsUrlPrefix={detailsUrlPrefix}
             idField={idField}
             resultFieldIds={resultFieldIds}
+            searchView={searchView}
           />
           <NoHits
             translations={{
