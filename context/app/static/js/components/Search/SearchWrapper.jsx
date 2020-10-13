@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
@@ -28,9 +28,11 @@ function SearchWrapper(props) {
   const resultFieldIds = resultFields.map((field) => field.id).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 
+  const [searchView, setSearchView] = useState('table');
+
   return (
     <SearchkitProvider searchkit={searchkit}>
-      <SearchBarLayout queryFields={queryFields} />
+      <SearchBarLayout queryFields={queryFields} searchView={searchView} setSearchView={setSearchView} />
       <LayoutBody>
         <StyledSideBar>
           <Accordions filters={filters} />
