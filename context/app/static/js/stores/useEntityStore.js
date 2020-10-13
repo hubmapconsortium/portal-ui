@@ -1,8 +1,18 @@
 import create from 'zustand';
 
 const useEntityStore = create((set) => ({
-  summaryInView: false,
-  setSummaryInView: (val) => set({ summaryInView: val }),
+  summaryComponentObserver: {
+    summaryInView: true,
+    summaryEntry: undefined,
+  },
+  setSummaryComponentObserver: (inView, entry) =>
+    set({
+      summaryComponentObserver: {
+        summaryInView: inView,
+        summaryEntry: entry,
+      },
+    }),
+
   assayMetadata: {},
   setAssayMetadata: (val) => set({ assayMetadata: val }),
 }));

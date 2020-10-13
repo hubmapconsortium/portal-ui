@@ -1,0 +1,1 @@
+- Make links in markdown-based pages blue.

@@ -1,1 +1,0 @@
-- Fix bug where header elevation was incorrect on entity detail pages when subheader was not displaying.

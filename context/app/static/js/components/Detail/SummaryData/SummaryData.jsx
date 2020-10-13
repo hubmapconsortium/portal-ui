@@ -6,25 +6,29 @@ import 'intersection-observer';
 
 import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { Flex, FlexRight, FlexEnd, JsonButton, StyledFileIcon, StyledTypography } from './style';
+import { FileIcon } from 'js/shared-styles/icons';
+import { Flex, FlexRight, FlexEnd, JsonButton, StyledTypography } from './style';
 import SummaryItem from '../SummaryItem';
 import StatusIcon from '../StatusIcon';
 
-const entityStoreSelector = (state) => state.setSummaryInView;
+const entityStoreSelector = (state) => state.setSummaryComponentObserver;
 
 function SummaryData(props) {
   const { entity_type, uuid, status, mapped_data_access_level, display_doi, children } = props;
 
-  const setSummaryInView = useEntityStore(entityStoreSelector);
+  const setSummaryComponentObserver = useEntityStore(entityStoreSelector);
 
-  const { ref, inView } = useInView({
+  const { ref, inView, entry } = useInView({
     /* Optional options */
     threshold: 0,
+    initialInView: true,
   });
 
   useEffect(() => {
-    setSummaryInView(inView);
-  }, [setSummaryInView, inView]);
+    if (entry) {
+      setSummaryComponentObserver(inView, entry);
+    }
+  }, [setSummaryComponentObserver, entry, inView]);
 
   return (
     <>
@@ -46,7 +50,7 @@ function SummaryData(props) {
           <FlexEnd>
             <SecondaryBackgroundTooltip title="View JSON">
               <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
-                <StyledFileIcon color="primary" />
+                <FileIcon color="primary" />
               </JsonButton>
             </SecondaryBackgroundTooltip>
           </FlexEnd>

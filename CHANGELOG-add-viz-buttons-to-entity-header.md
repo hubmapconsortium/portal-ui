@@ -1,1 +1,0 @@
-- Add theme switch and exit fullscreen button to subheader when visualization is fullscreen.

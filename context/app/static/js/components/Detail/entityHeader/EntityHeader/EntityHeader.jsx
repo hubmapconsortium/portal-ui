@@ -2,6 +2,7 @@ import React from 'react';
 import { useTransition, animated } from 'react-spring';
 
 import { useEntityStore, useVisualizationStore } from 'js/stores';
+import { iconButtonHeight } from 'js/shared-styles/buttons';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 import { extractHeaderMetadata } from './utils';
@@ -9,17 +10,19 @@ import { extractHeaderMetadata } from './utils';
 const AnimatedPaper = animated(StyledPaper);
 const entityStoreSelector = (state) => ({
   assayMetadata: state.assayMetadata,
-  summaryInView: state.summaryInView,
-  vizIsFullscreen: state.vizIsFullscreen,
+  summaryComponentObserver: state.summaryComponentObserver,
 });
 const visualizationSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
 
-const entityHeaderHeight = 35;
+const entityHeaderHeight = iconButtonHeight;
 
 function Header() {
-  const { assayMetadata, summaryInView } = useEntityStore(entityStoreSelector);
+  const {
+    assayMetadata,
+    summaryComponentObserver: { summaryInView },
+  } = useEntityStore(entityStoreSelector);
   const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
 
   const shouldDisplayHeader = !summaryInView || vizIsFullscreen;

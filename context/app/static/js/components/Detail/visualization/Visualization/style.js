@@ -9,11 +9,15 @@ import SectionHeader from 'js/components/Detail/SectionHeader';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { entityHeaderHeight } from 'js/components/Detail/entityHeader/EntityHeader';
 
-const totalHeightOffset = headerHeight + entityHeaderHeight;
+const totalHeightOffset = window.location.pathname.startsWith('/preview')
+  ? headerHeight
+  : headerHeight + entityHeaderHeight;
+
 const vitessceFixedHeight = 600;
 
 const StyledHeader = styled.div`
-  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  display: flex;
 `;
 
 const StyledHeaderText = styled(SectionHeader)`
@@ -22,7 +26,7 @@ const StyledHeaderText = styled(SectionHeader)`
 `;
 
 const StyledHeaderRight = styled.div`
-  float: right;
+  margin-left: auto;
   display: flex;
 `;
 

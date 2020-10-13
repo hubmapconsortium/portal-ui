@@ -1,0 +1,1 @@
+- Do not offset for entity header when visualization is fullscreen on preview pages.
