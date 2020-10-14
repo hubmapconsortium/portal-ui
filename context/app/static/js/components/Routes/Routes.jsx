@@ -10,6 +10,7 @@ import Home from 'js/pages/Home';
 import Search from 'js/pages/search/Search';
 import DevSearch from 'js/pages/search/DevSearch';
 import Preview from 'js/pages/Preview';
+import ServiceStatus from 'js/pages/ServiceStatus';
 import Collections from 'js/pages/Collections';
 import Markdown from 'js/components/Markdown';
 import Route from './Route';
@@ -83,6 +84,14 @@ function Routes(props) {
     return (
       <Route>
         <Preview title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />
+      </Route>
+    );
+  }
+
+  if (urlPath === '/service-status') {
+    return (
+      <Route>
+        <ServiceStatus />
       </Route>
     );
   }

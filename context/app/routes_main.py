@@ -46,6 +46,17 @@ def index():
     )
 
 
+@blueprint.route('/service-status')
+def service_status():
+    core_props = {'endpoints': _get_endpoints()}
+    return render_template(
+        'pages/base_react.html',
+        types=types,
+        flask_data=core_props,
+        title='Service Status'
+    )
+
+
 @blueprint.route('/ccf-eui')
 def ccf_eui():
     return render_template(
