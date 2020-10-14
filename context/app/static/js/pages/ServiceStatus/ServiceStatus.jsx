@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import SectionHeader from 'js/components/Detail/SectionHeader';
 import SectionContainer from 'js/components/Detail/SectionContainer';
 import Description from 'js/components/Detail/Description';
+import StatusIcon from 'js/components/Detail/StatusIcon';
 import { HeaderCell } from 'js/shared-styles/Table';
 
 function ServiceStatus() {
@@ -36,7 +37,10 @@ function ServiceStatus() {
           <TableBody>
             <TableRow>
               <TableCell>portal-ui</TableCell>
-              <TableCell>Good</TableCell>
+              <TableCell>
+                <StatusIcon status="PUBLISHED" />
+                Available
+              </TableCell>
               <TableCell>TODO</TableCell>
               <TableCell>TODO</TableCell>
             </TableRow>
