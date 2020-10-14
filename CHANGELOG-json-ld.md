@@ -1,1 +1,0 @@
-- Schema.org JSON-LD in header.

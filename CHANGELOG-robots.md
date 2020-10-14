@@ -1,1 +1,0 @@
-- Add /search to the disallow list in robots.txt.

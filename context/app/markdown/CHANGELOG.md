@@ -1,3 +1,9 @@
+## v0.4.3 - 2020-10-14
+
+- Schema.org JSON-LD in header.
+- Add /search to the disallow list in robots.txt.
+
+
 ## v0.4.2 - 2020-10-09
 
 - Fix main header dropdown menus' z-index to be above the subheader.
