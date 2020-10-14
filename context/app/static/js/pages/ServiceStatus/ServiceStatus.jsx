@@ -1,9 +1,15 @@
 import React from 'react';
-// import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 import SectionHeader from 'js/components/Detail/SectionHeader';
 import SectionContainer from 'js/components/Detail/SectionContainer';
 import Description from 'js/components/Detail/Description';
+import { HeaderCell } from 'js/shared-styles/Table';
 
 function ServiceStatus() {
   return (
@@ -17,6 +23,26 @@ function ServiceStatus() {
           with a link to the source code.
         </Description>
       </SectionContainer>
+      <Paper>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <HeaderCell>Service</HeaderCell>
+              <HeaderCell>Status</HeaderCell>
+              <HeaderCell>Github Repository</HeaderCell>
+              <HeaderCell>Version Number</HeaderCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>portal-ui</TableCell>
+              <TableCell>Good</TableCell>
+              <TableCell>TODO</TableCell>
+              <TableCell>TODO</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Paper>
     </>
   );
 }
