@@ -15,10 +15,75 @@ import { HeaderCell } from 'js/shared-styles/Table';
 import { LightBlueLink } from 'js/shared-styles/Links';
 
 import StatusIcon from './StatusIcon';
-import { useEntityApiStatus } from './hooks';
+// import { useGatewayStatus } from './hooks';
 
 function ServiceStatus() {
-  const entityApiStatus = useEntityApiStatus();
+  // const gatewayStatus = useGatewayStatus();
+  // Blocked by https://github.com/hubmapconsortium/gateway/issues/58
+
+  // TODO: Temporary, to develop UI:
+  const gatewayStatus = {
+    entity_api: { api_auth: true, build: 'master:da23d1a', neo4j_connection: true, version: '1.8.1' },
+    file_assets: { api_auth: true, file_assets_status: true },
+    gateway: { build: 'master:53431e4', version: '1.8.1' },
+    ingest_api: { api_auth: true, build: 'master:9061dd3', neo4j_connection: true, version: '1.15.0' },
+    search_api: {
+      api_auth: true,
+      build: 'master:69af7d6',
+      elasticsearch_connection: true,
+      elasticsearch_status: 'green',
+      version: '1.8.2',
+    },
+    uuid_api: { api_auth: true, build: 'master:8e27b2e', mysql_connection: true, version: '1.7.0' },
+  };
+
+  const apiStatuses = gatewayStatus
+    ? [
+        {
+          name: 'entity-api',
+          github: 'https://github.com/hubmapconsortium/entity-api',
+          build: gatewayStatus.entity_api.build,
+          version: gatewayStatus.entity_api.version,
+          note: `Auth? ${gatewayStatus.entity_api.api_auth}; Neo4j? ${gatewayStatus.entity_api.neo4j_connection}`,
+        },
+        {
+          name: 'assets',
+          github: undefined,
+          build: 'na',
+          version: 'na',
+          note: `Auth? ${gatewayStatus.file_assets.api_auth}; Status? ${gatewayStatus.file_assets.file_assets_status}`,
+        },
+        {
+          name: 'gateway',
+          github: 'https://github.com/hubmapconsortium/gateway',
+          build: gatewayStatus.gateway.build,
+          version: gatewayStatus.gateway.version,
+          note: '',
+        },
+        {
+          name: 'ingest-api',
+          github: 'https://github.com/hubmapconsortium/ingest-api',
+          build: gatewayStatus.ingest_api.build,
+          version: gatewayStatus.ingest_api.version,
+          note: `Auth? ${gatewayStatus.ingest_api.api_auth}; Neo4j? ${gatewayStatus.ingest_api.neo4j_connection}`,
+        },
+        {
+          name: 'search-api',
+          github: 'https://github.com/hubmapconsortium/search-api',
+          build: gatewayStatus.search_api.build,
+          version: gatewayStatus.search_api.version,
+          // TODO: Add mapper info here?
+          note: `Auth? ${gatewayStatus.search_api.api_auth}; ES? ${gatewayStatus.search_api.elasticsearch_connection}; ES Status? ${gatewayStatus.search_api.elasticsearch_status}`,
+        },
+        {
+          name: 'uuid-api',
+          github: 'https://github.com/hubmapconsortium/uuid-api',
+          build: gatewayStatus.uuid_api.build,
+          version: gatewayStatus.uuid_api.version,
+          note: `MySQL? ${gatewayStatus.uuid_api.mysql_connection}`,
+        },
+      ]
+    : [];
   return (
     <>
       <SectionContainer id="summary">
@@ -26,8 +91,9 @@ function ServiceStatus() {
           Services
         </SectionHeader>
         <Description>
-          The HuBMAP Data Portal is powered by a number of APIs. The current status of each is available here, along
-          with a link to the source code.
+          {'HuBMAP is powered by a number of APIs. '}
+          {'The Portal depends directly on only search-api, entity-api, and assets. '}
+          {'Other services use the others listed below. '}
         </Description>
       </SectionContainer>
       <Paper>
@@ -39,38 +105,31 @@ function ServiceStatus() {
               <HeaderCell>Github Repository</HeaderCell>
               <HeaderCell>Version Number</HeaderCell>
               <HeaderCell>Build</HeaderCell>
-              <HeaderCell>Notes</HeaderCell>
+              <HeaderCell>Note</HeaderCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
-              <TableCell>portal-ui</TableCell>
-              <TableCell>
-                <StatusIcon status="OK" />
-                Available
-              </TableCell>
-              <TableCell>TODO</TableCell>
-              <TableCell>TODO</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>entity-api</TableCell>
-              <TableCell>
-                <StatusIcon status="OK" />
-                Available
-              </TableCell>
-              <TableCell>
-                <LightBlueLink
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="none"
-                  href="https://github.com/hubmapconsortium/entity-api/"
-                >
-                  Github Link <StyledExternalLinkIcon />
-                </LightBlueLink>
-              </TableCell>
-              <TableCell>{entityApiStatus?.version}</TableCell>
-              <TableCell>{entityApiStatus?.build}</TableCell>
-            </TableRow>
+            {apiStatuses.map((api) => (
+              <TableRow key={api.name}>
+                <TableCell>{api.name}</TableCell>
+                <TableCell>
+                  <StatusIcon status="OK" />
+                  TODO
+                </TableCell>
+                <TableCell>
+                  {api.github ? (
+                    <LightBlueLink target="_blank" rel="noopener noreferrer" underline="none" href={api.github}>
+                      Github Link <StyledExternalLinkIcon />
+                    </LightBlueLink>
+                  ) : (
+                    'none'
+                  )}
+                </TableCell>
+                <TableCell>{api.version}</TableCell>
+                <TableCell>{api.build}</TableCell>
+                <TableCell>{api.note}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </Paper>

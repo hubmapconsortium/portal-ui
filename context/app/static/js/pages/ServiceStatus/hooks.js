@@ -1,20 +1,20 @@
 import React from 'react';
 
-function useEntityApiStatus() {
-  const [entityApiStatus, setEntityApiStatus] = React.useState(undefined);
+function useGatewayStatus() {
+  const [gatewayStatus, setGatewayStatus] = React.useState(undefined);
   React.useEffect(() => {
-    async function getAndSetEntityApiStatus() {
-      const response = await fetch('https://entity.api.hubmapconsortium.org/status');
+    async function getAndSetGatewayStatus() {
+      const response = await fetch('https://gateway.api.hubmapconsortium.org/status.json');
       if (!response.ok) {
         console.error('Entity API status failed', response);
         return;
       }
-      setEntityApiStatus(await response.json());
+      setGatewayStatus(await response.json());
     }
-    getAndSetEntityApiStatus();
+    getAndSetGatewayStatus();
   }, []);
 
-  return entityApiStatus;
+  return gatewayStatus;
 }
 
-export { useEntityApiStatus };
+export { useGatewayStatus };
