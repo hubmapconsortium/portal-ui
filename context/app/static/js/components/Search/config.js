@@ -43,13 +43,19 @@ const sampleConfig = {
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
   },
-  fields: [
-    field('display_doi', 'Sample'),
-    field('group_name', 'Group'),
-    field('mapped_specimen_type', 'Speciment Type'),
-    field('origin_sample.mapped_organ', 'Organ'),
-    field('mapped_last_modified_timestamp', 'Last Modified'),
-  ],
+  fields: {
+    table: [
+      field('display_doi', 'Sample'),
+      field('group_name', 'Group'),
+      field('mapped_specimen_type', 'Speciment Type'),
+      field('origin_sample.mapped_organ', 'Organ'),
+      field('mapped_last_modified_timestamp', 'Last Modified'),
+    ],
+    tile: [
+      field('last_modified_timestamp', 'Last Modified Unmapped'),
+      field('descendant_counts.entity_type', 'Descendant Counts'),
+    ],
+  },
 };
 
 const datasetConfig = {
