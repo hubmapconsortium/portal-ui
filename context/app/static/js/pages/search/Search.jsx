@@ -54,6 +54,8 @@ function Search(props) {
     resultFields,
     // Default hitsPerPage is 10:
     hitsPerPage: 20,
+    // Entity type
+    type,
     // Sidebar facet configuration:
     filters: filtersByType[type],
     queryFields: ['everything'],

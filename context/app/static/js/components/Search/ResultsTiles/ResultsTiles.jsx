@@ -1,17 +1,21 @@
 import React from 'react';
 import EntityTile from 'js/components/entity-tile/EntityTile';
 
+import { capitalizeString } from 'js/helpers/functions';
 import { TilesLayout } from './style';
 
 function ResultsTiles(props) {
-  const { hits } = props;
+  const { hits, type } = props;
   /* eslint-disable no-underscore-dangle */
+
+  const capitalizedType = capitalizeString(type);
+
   return (
     <TilesLayout>
       {hits.map((hit) => (
         <div>
           <EntityTile
-            entity_type="Dataset"
+            entity_type={capitalizedType}
             uuid={hit._source.uuid}
             id={hit._source.display_doi}
             entityData={hit._source}

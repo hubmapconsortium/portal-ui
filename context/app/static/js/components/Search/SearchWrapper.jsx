@@ -23,6 +23,7 @@ function SearchWrapper(props) {
     searchUrlPath,
     queryFields,
     isLoggedIn,
+    type,
   } = props;
   const [searchView, setSearchView] = useState('table');
 
@@ -51,6 +52,7 @@ function SearchWrapper(props) {
             idField={idField}
             resultFieldIds={resultFieldIds}
             searchView={searchView}
+            type={type}
           />
           <NoHits
             translations={{
@@ -82,6 +84,7 @@ SearchWrapper.propTypes = {
   searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   isLoggedIn: PropTypes.bool,
+  type: PropTypes.string.isRequired,
 };
 
 SearchWrapper.defaultProps = {

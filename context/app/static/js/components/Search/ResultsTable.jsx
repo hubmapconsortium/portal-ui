@@ -11,7 +11,7 @@ import SortingTableHead from './SortingTableHead';
 const searchViewStoreSelector = (state) => state.searchView;
 
 function ResultsTable(props) {
-  const { sortOptions, hitsPerPage, resultFields, detailsUrlPrefix, idField, resultFieldIds } = props;
+  const { sortOptions, hitsPerPage, resultFields, detailsUrlPrefix, idField, resultFieldIds, type } = props;
 
   const searchView = useSearchViewStore(searchViewStoreSelector);
 
@@ -29,7 +29,7 @@ function ResultsTable(props) {
             ),
             defaultOption: true,
           },
-          { key: 'tile', title: 'Tile', listComponent: ResultsTiles },
+          { key: 'tile', title: 'Tile', listComponent: <ResultsTiles type={type} /> },
         ]}
         sourceFilter={resultFieldIds}
         customHighlight={{
