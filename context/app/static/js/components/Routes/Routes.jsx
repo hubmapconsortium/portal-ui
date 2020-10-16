@@ -88,7 +88,7 @@ function Routes(props) {
     );
   }
 
-  if (urlPath === '/service-status') {
+  if (urlPath === '/services') {
     return (
       <Route>
         <ServiceStatus />

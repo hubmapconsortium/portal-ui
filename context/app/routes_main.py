@@ -46,7 +46,7 @@ def index():
     )
 
 
-@blueprint.route('/service-status')
+@blueprint.route('/services')
 def service_status():
     core_props = {'endpoints': _get_endpoints()}
     return render_template(
