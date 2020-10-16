@@ -17,6 +17,18 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import StatusIcon from './StatusIcon';
 // import { useGatewayStatus } from './hooks';
 
+function buildServiceStatus(name, response, noteFunc) {
+  const { build, version, api_auth: isUp } = response;
+  return {
+    name,
+    github: build ? `https://github.com/hubmapconsortium/${name}` : undefined,
+    build,
+    version,
+    isUp,
+    note: noteFunc(response),
+  };
+}
+
 function ServiceStatus() {
   // const gatewayStatus = useGatewayStatus();
   // Blocked by https://github.com/hubmapconsortium/gateway/issues/58
@@ -37,53 +49,23 @@ function ServiceStatus() {
     uuid_api: { api_auth: true, build: 'master:8e27b2e', mysql_connection: true, version: '1.7.0' },
   };
 
+  /* eslint-disable prettier/prettier */
   const apiStatuses = gatewayStatus
     ? [
-        {
-          name: 'entity-api',
-          github: 'https://github.com/hubmapconsortium/entity-api',
-          build: gatewayStatus.entity_api.build,
-          version: gatewayStatus.entity_api.version,
-          note: `Auth? ${gatewayStatus.entity_api.api_auth}; Neo4j? ${gatewayStatus.entity_api.neo4j_connection}`,
-        },
-        {
-          name: 'assets',
-          github: undefined,
-          build: 'na',
-          version: 'na',
-          note: `Auth? ${gatewayStatus.file_assets.api_auth}; Status? ${gatewayStatus.file_assets.file_assets_status}`,
-        },
-        {
-          name: 'gateway',
-          github: 'https://github.com/hubmapconsortium/gateway',
-          build: gatewayStatus.gateway.build,
-          version: gatewayStatus.gateway.version,
-          note: '',
-        },
-        {
-          name: 'ingest-api',
-          github: 'https://github.com/hubmapconsortium/ingest-api',
-          build: gatewayStatus.ingest_api.build,
-          version: gatewayStatus.ingest_api.version,
-          note: `Auth? ${gatewayStatus.ingest_api.api_auth}; Neo4j? ${gatewayStatus.ingest_api.neo4j_connection}`,
-        },
-        {
-          name: 'search-api',
-          github: 'https://github.com/hubmapconsortium/search-api',
-          build: gatewayStatus.search_api.build,
-          version: gatewayStatus.search_api.version,
-          // TODO: Add mapper info here?
-          note: `Auth? ${gatewayStatus.search_api.api_auth}; ES? ${gatewayStatus.search_api.elasticsearch_connection}; ES Status? ${gatewayStatus.search_api.elasticsearch_status}`,
-        },
-        {
-          name: 'uuid-api',
-          github: 'https://github.com/hubmapconsortium/uuid-api',
-          build: gatewayStatus.uuid_api.build,
-          version: gatewayStatus.uuid_api.version,
-          note: `MySQL? ${gatewayStatus.uuid_api.mysql_connection}`,
-        },
+        buildServiceStatus('entity-api', gatewayStatus.entity_api, (api) => `Neo4j: ${api.neo4j_connection}`),
+        buildServiceStatus('assets', gatewayStatus.file_assets, (api) => `Status: ${api.file_assets_status}`),
+        buildServiceStatus('gateway', gatewayStatus.gateway, () => ''),
+        buildServiceStatus('ingest-api', gatewayStatus.ingest_api, (api) => `Neo4j: ${api.neo4j_connection}`),
+        buildServiceStatus(
+          'search-api',
+          gatewayStatus.search_api,
+          (api) => `ES: ${api.elasticsearch_connection}; ES Status: ${api.elasticsearch_status}`,
+        ),
+        buildServiceStatus('uuid-api', gatewayStatus.uuid_api, (api) => `MySQL: ${api.mysql_connection}`),
       ]
     : [];
+  /* eslint-enable prettier/prettier */
+
   return (
     <>
       <SectionContainer id="summary">
@@ -117,12 +99,10 @@ function ServiceStatus() {
                   TODO
                 </TableCell>
                 <TableCell>
-                  {api.github ? (
+                  {api.github && (
                     <LightBlueLink target="_blank" rel="noopener noreferrer" underline="none" href={api.github}>
                       Github Link <StyledExternalLinkIcon />
                     </LightBlueLink>
-                  ) : (
-                    'none'
                   )}
                 </TableCell>
                 <TableCell>{api.version}</TableCell>
