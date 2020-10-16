@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SortingSelector, Hits } from 'searchkit'; // eslint-disable-line import/no-duplicates
+import { SortingSelector, ViewSwitcherHits } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { StyledTableBody, StyledTableRow, StyledTableCell, StyledTable } from './style';
@@ -69,21 +69,29 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
 }
 
 function ResultsTable(props) {
-  const { sortOptions, hitsPerPage, resultFields, detailsUrlPrefix, idField, resultFieldIds, searchView } = props;
+  const { sortOptions, hitsPerPage, resultFields, detailsUrlPrefix, idField, resultFieldIds } = props;
   return (
-    <StyledTable>
-      <SortingSelector options={sortOptions} listComponent={SortingTableHead} />
-      <Hits
-        hitsPerPage={hitsPerPage}
-        listComponent={
-          searchView === 'table' ? makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) : ResultsTiles
-        }
-        sourceFilter={resultFieldIds}
-        customHighlight={{
-          fields: { everything: { type: 'plain' } },
-        }}
-      />
-    </StyledTable>
+    <>
+      <StyledTable>
+        <SortingSelector options={sortOptions} listComponent={SortingTableHead} />
+        <ViewSwitcherHits
+          hitsPerPage={hitsPerPage}
+          hitComponents={[
+            {
+              key: 'table',
+              title: 'Table',
+              listComponent: makeTableBodyComponent(resultFields, detailsUrlPrefix, idField),
+              defaultOption: true,
+            },
+            { key: 'tile', title: 'Tile', listComponent: ResultsTiles },
+          ]}
+          sourceFilter={resultFieldIds}
+          customHighlight={{
+            fields: { everything: { type: 'plain' } },
+          }}
+        />
+      </StyledTable>
+    </>
   );
 }
 
