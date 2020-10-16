@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ColoredStatusIcon } from 'js/components/Detail/StatusIcon/style';
 
 function getColor(status) {
-  if (['OK'].includes(status)) {
+  if (['UP'].includes(status)) {
     return 'success';
   }
 

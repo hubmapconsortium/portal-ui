@@ -18,7 +18,10 @@ import StatusIcon from './StatusIcon';
 // import { useGatewayStatus } from './hooks';
 
 function buildServiceStatus(name, response, noteFunc) {
-  const { build, version, api_auth: isUp } = response;
+  const { build, version, api_auth } = response;
+  const isUp = api_auth || name === 'gateway';
+  // The gateway isn't explicit: If it's not up, you wouldn't get anything at all,
+  // (and you wouldn't be able to get to the portal in the first place.)
   return {
     name,
     github: build ? `https://github.com/hubmapconsortium/${name}` : undefined,
@@ -49,11 +52,10 @@ function ServiceStatus() {
     uuid_api: { api_auth: true, build: 'master:8e27b2e', mysql_connection: true, version: '1.7.0' },
   };
 
-  /* eslint-disable prettier/prettier */
   const apiStatuses = gatewayStatus
     ? [
-        buildServiceStatus('entity-api', gatewayStatus.entity_api, (api) => `Neo4j: ${api.neo4j_connection}`),
         buildServiceStatus('assets', gatewayStatus.file_assets, (api) => `Status: ${api.file_assets_status}`),
+        buildServiceStatus('entity-api', gatewayStatus.entity_api, (api) => `Neo4j: ${api.neo4j_connection}`),
         buildServiceStatus('gateway', gatewayStatus.gateway, () => ''),
         buildServiceStatus('ingest-api', gatewayStatus.ingest_api, (api) => `Neo4j: ${api.neo4j_connection}`),
         buildServiceStatus(
@@ -64,7 +66,6 @@ function ServiceStatus() {
         buildServiceStatus('uuid-api', gatewayStatus.uuid_api, (api) => `MySQL: ${api.mysql_connection}`),
       ]
     : [];
-  /* eslint-enable prettier/prettier */
 
   return (
     <>
@@ -95,8 +96,17 @@ function ServiceStatus() {
               <TableRow key={api.name}>
                 <TableCell>{api.name}</TableCell>
                 <TableCell>
-                  <StatusIcon status="OK" />
-                  TODO
+                  {api.isUp ? (
+                    <>
+                      <StatusIcon status="UP" />
+                      Up
+                    </>
+                  ) : (
+                    <>
+                      <StatusIcon status="DOWN" />
+                      Down
+                    </>
+                  )}
                 </TableCell>
                 <TableCell>
                   {api.github && (
