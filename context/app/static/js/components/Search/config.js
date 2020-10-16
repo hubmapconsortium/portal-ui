@@ -19,6 +19,11 @@ function makeDonorMetadataFilters(isDonor) {
 
 const affiliationFilters = [listFilter('group_name', 'Group'), listFilter('created_by_user_displayname', 'Creator')];
 
+const sharedTileFields = [
+  field('last_modified_timestamp', 'Last Modified Unmapped'),
+  field('descendant_counts.entity_type', 'Descendant Counts'),
+];
+
 const donorConfig = {
   filters: {
     'Donor Metadata': makeDonorMetadataFilters(true),
@@ -34,11 +39,7 @@ const donorConfig = {
       field('mapped_metadata.race', 'Race'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
-    tile: [
-      field('last_modified_timestamp', 'Last Modified Unmapped'),
-      field('descendant_counts.entity_type', 'Descendant Counts'),
-      field(`mapped_metadata.${ageUnitField}`, 'Age Unit'),
-    ],
+    tile: [...sharedTileFields, field(`mapped_metadata.${ageUnitField}`, 'Age Unit')],
   },
 };
 
@@ -59,10 +60,7 @@ const sampleConfig = {
       field('origin_sample.mapped_organ', 'Organ'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
-    tile: [
-      field('last_modified_timestamp', 'Last Modified Unmapped'),
-      field('descendant_counts.entity_type', 'Descendant Counts'),
-    ],
+    tile: sharedTileFields,
   },
 };
 
@@ -87,10 +85,7 @@ const datasetConfig = {
       field('mapped_status', 'Status'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
-    tile: [
-      field('last_modified_timestamp', 'Last Modified Unmapped'),
-      field('descendant_counts.entity_type', 'Descendant Counts'),
-    ],
+    tile: sharedTileFields,
   },
 };
 
