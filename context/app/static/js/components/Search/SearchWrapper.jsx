@@ -32,7 +32,12 @@ function SearchWrapper(props) {
 
   return (
     <SearchkitProvider searchkit={searchkit}>
-      <SearchBarLayout queryFields={queryFields} searchView={searchView} setSearchView={setSearchView} />
+      <SearchBarLayout
+        queryFields={queryFields}
+        searchView={searchView}
+        setSearchView={setSearchView}
+        sortOptions={sortOptions}
+      />
       <LayoutBody>
         <StyledSideBar>
           <Accordions filters={filters} />
