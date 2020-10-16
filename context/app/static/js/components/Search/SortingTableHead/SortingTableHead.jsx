@@ -1,9 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from './style';
+
+import useSearchViewStore from 'js/stores/useSearchViewStore';
+import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from '../style';
+import { getSortPairs } from '../utils';
+
+import { StyledTableHead } from './style';
+
+const searchViewStoreSelector = (state) => state.searchView;
 
 function getOrder(orderPair, selectedItems) {
   if (selectedItems.length > 1) {
@@ -28,16 +33,12 @@ OrderIcon.propTypes = {
 
 function SortingTableHead(props) {
   const { items, toggleItem, selectedItems } = props;
-  const pairs = [];
-  for (let i = 0; i < items.length; i += 2) {
-    const pair = items.slice(i, i + 2);
-    pairs.push(pair);
-    if (pair[0].label !== pair[1].label || pair[0].field !== pair[1].field) {
-      console.warn('Expected pair.label and .field to match', pair);
-    }
-  }
+
+  const searchView = useSearchViewStore(searchViewStoreSelector);
+
+  const pairs = getSortPairs(items);
   return (
-    <TableHead>
+    <StyledTableHead searchView={searchView}>
       <TableRow>
         {pairs.map((pair) => {
           const order = getOrder(pair, selectedItems);
@@ -54,7 +55,7 @@ function SortingTableHead(props) {
           );
         })}
       </TableRow>
-    </TableHead>
+    </StyledTableHead>
   );
 }
 
