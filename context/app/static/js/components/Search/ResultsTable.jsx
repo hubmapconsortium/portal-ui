@@ -71,27 +71,25 @@ function makeTableBodyComponent(resultFields, detailsUrlPrefix, idField) {
 function ResultsTable(props) {
   const { sortOptions, hitsPerPage, resultFields, detailsUrlPrefix, idField, resultFieldIds } = props;
   return (
-    <>
-      <StyledTable>
-        <SortingSelector options={sortOptions} listComponent={SortingTableHead} />
-        <ViewSwitcherHits
-          hitsPerPage={hitsPerPage}
-          hitComponents={[
-            {
-              key: 'table',
-              title: 'Table',
-              listComponent: makeTableBodyComponent(resultFields, detailsUrlPrefix, idField),
-              defaultOption: true,
-            },
-            { key: 'tile', title: 'Tile', listComponent: ResultsTiles },
-          ]}
-          sourceFilter={resultFieldIds}
-          customHighlight={{
-            fields: { everything: { type: 'plain' } },
-          }}
-        />
-      </StyledTable>
-    </>
+    <StyledTable>
+      <SortingSelector options={sortOptions} listComponent={SortingTableHead} />
+      <ViewSwitcherHits
+        hitsPerPage={hitsPerPage}
+        hitComponents={[
+          {
+            key: 'table',
+            title: 'Table',
+            listComponent: makeTableBodyComponent(resultFields, detailsUrlPrefix, idField),
+            defaultOption: true,
+          },
+          { key: 'tile', title: 'Tile', listComponent: ResultsTiles },
+        ]}
+        sourceFilter={resultFieldIds}
+        customHighlight={{
+          fields: { everything: { type: 'plain' } },
+        }}
+      />
+    </StyledTable>
   );
 }
 
