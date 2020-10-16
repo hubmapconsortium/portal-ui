@@ -2,16 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SortingSelector, ViewSwitcherHits } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
+import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { StyledTable } from './style';
 import ResultsTableBody from './ResultsTableBody';
 import ResultsTiles from './ResultsTiles';
 import SortingTableHead from './SortingTableHead';
 
+const searchViewStoreSelector = (state) => state.searchView;
+
 function ResultsTable(props) {
   const { sortOptions, hitsPerPage, resultFields, detailsUrlPrefix, idField, resultFieldIds } = props;
 
+  const searchView = useSearchViewStore(searchViewStoreSelector);
+
   return (
-    <StyledTable>
+    <StyledTable searchView={searchView}>
       <SortingSelector options={sortOptions} listComponent={SortingTableHead} />
       <ViewSwitcherHits
         hitsPerPage={hitsPerPage}
