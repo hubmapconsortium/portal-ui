@@ -4,6 +4,7 @@ import { listFilter, rangeFilter, field } from './utils';
 
 const bmiField = 'body_mass_index_value';
 const ageField = 'age_value';
+const ageUnitField = 'age_unit';
 
 function makeDonorMetadataFilters(isDonor) {
   const pathPrefix = isDonor ? '' : 'donor.';
@@ -23,15 +24,22 @@ const donorConfig = {
     'Donor Metadata': makeDonorMetadataFilters(true),
     Affiliation: affiliationFilters,
   },
-  fields: [
-    field('display_doi', 'Donor'),
-    field('group_name', 'Group'),
-    field(`mapped_metadata.${ageField}`, 'Age'),
-    field(`mapped_metadata.${bmiField}`, 'BMI'),
-    field('mapped_metadata.sex', 'Sex'),
-    field('mapped_metadata.race', 'Race'),
-    field('mapped_last_modified_timestamp', 'Last Modified'),
-  ],
+  fields: {
+    table: [
+      field('display_doi', 'Donor'),
+      field('group_name', 'Group'),
+      field(`mapped_metadata.${ageField}`, 'Age'),
+      field(`mapped_metadata.${bmiField}`, 'BMI'),
+      field('mapped_metadata.sex', 'Sex'),
+      field('mapped_metadata.race', 'Race'),
+      field('mapped_last_modified_timestamp', 'Last Modified'),
+    ],
+    tile: [
+      field('last_modified_timestamp', 'Last Modified Unmapped'),
+      field('descendant_counts.entity_type', 'Descendant Counts'),
+      field(`mapped_metadata.${ageUnitField}`, 'Age Unit'),
+    ],
+  },
 };
 
 const sampleConfig = {
