@@ -74,3 +74,15 @@ export function resultFieldsToSortOptions(fields) {
     })
     .flat();
 }
+
+export function getSortPairs(sortItems) {
+  const pairs = [];
+  for (let i = 0; i < sortItems.length; i += 2) {
+    const pair = sortItems.slice(i, i + 2);
+    pairs.push(pair);
+    if (pair[0].label !== pair[1].label || pair[0].field !== pair[1].field) {
+      console.warn('Expected pair.label and .field to match', pair);
+    }
+  }
+  return pairs;
+}
