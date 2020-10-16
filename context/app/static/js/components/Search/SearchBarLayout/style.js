@@ -6,7 +6,9 @@ const Flex = styled.div`
 `;
 
 const StyledDiv = styled.div`
+  display: flex;
   margin-left: auto;
+  align-items: center;
 `;
 
 export { Flex, StyledDiv };
