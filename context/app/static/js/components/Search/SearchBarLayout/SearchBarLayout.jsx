@@ -1,15 +1,18 @@
 import React from 'react';
-import { SearchBox } from 'searchkit';
+import { SearchBox, SortingSelector, ViewSwitcherToggle } from 'searchkit';
 
 import SearchViewSwitch from '../SearchViewSwitch';
+import TilesSortDropdown from '../TilesSortDropdown';
 import { Flex, StyledDiv } from './style';
 
-function SearchBarLayout({ queryFields, searchView, setSearchView }) {
+function SearchBarLayout(props) {
+  const { queryFields, sortOptions } = props;
   return (
     <Flex>
       <SearchBox autofocus queryFields={queryFields} />
       <StyledDiv>
-        <SearchViewSwitch searchView={searchView} setSearchView={setSearchView} />
+        <SortingSelector options={sortOptions} listComponent={TilesSortDropdown} />
+        <ViewSwitcherToggle listComponent={SearchViewSwitch} />
       </StyledDiv>
     </Flex>
   );
