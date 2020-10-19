@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TableRow from '@material-ui/core/TableRow';
+import TableHead from '@material-ui/core/TableHead';
 
-import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { getSortPairs } from '../utils';
-import { StyledTableHead, ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from './style';
-
-const searchViewStoreSelector = (state) => state.searchView;
+import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from './style';
 
 function getOrder(orderPair, selectedItems) {
   if (selectedItems.length > 1) {
@@ -32,11 +30,9 @@ OrderIcon.propTypes = {
 function SortingTableHead(props) {
   const { items, toggleItem, selectedItems } = props;
 
-  const searchView = useSearchViewStore(searchViewStoreSelector);
-
   const pairs = getSortPairs(items);
   return (
-    <StyledTableHead searchView={searchView}>
+    <TableHead>
       <TableRow>
         {pairs.map((pair) => {
           const order = getOrder(pair, selectedItems);
@@ -53,7 +49,7 @@ function SortingTableHead(props) {
           );
         })}
       </TableRow>
-    </StyledTableHead>
+    </TableHead>
   );
 }
 

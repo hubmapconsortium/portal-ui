@@ -1,17 +1,8 @@
 import styled from 'styled-components';
-import TableHead from '@material-ui/core/TableHead';
 import ArrowUpward from '@material-ui/icons/ArrowUpwardRounded';
 import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
 
 import { HeaderCell } from 'js/shared-styles/Table';
-
-const StyledTableHead = styled(TableHead)`
-  ${({ searchView }) =>
-    searchView === 'tile' &&
-    `
-    display: none;
-  `}
-`;
 
 const ArrowUpOn = styled(ArrowUpward)`
   vertical-align: middle;
@@ -36,4 +27,4 @@ const StyledHeaderCell = styled(HeaderCell)`
   white-space: nowrap;
 `;
 
-export { StyledTableHead, ArrowUpOn, ArrowDownOn, ArrowUpOff, ArrowDownOff, StyledHeaderCell };
+export { ArrowUpOn, ArrowDownOn, ArrowUpOff, ArrowDownOff, StyledHeaderCell };
