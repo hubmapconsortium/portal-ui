@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import EntityTile from 'js/components/entity-tile/EntityTile';
 
 import { capitalizeString } from 'js/helpers/functions';
@@ -27,4 +28,23 @@ function ResultsTiles(props) {
   );
   /* eslint-enable no-underscore-dangle */
 }
+
+ResultsTiles.propTypes = {
+  type: PropTypes.string.isRequired,
+  hits: PropTypes.arrayOf(
+    PropTypes.shape({
+      sort: PropTypes.array,
+      _id: PropTypes.string,
+      _index: PropTypes.string,
+      _score: PropTypes.number,
+      _source: PropTypes.object,
+      _type: PropTypes.string,
+    }),
+  ),
+};
+
+ResultsTiles.defaultProps = {
+  hits: undefined,
+};
+
 export default ResultsTiles;

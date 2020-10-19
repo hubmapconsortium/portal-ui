@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { SearchBox, SortingSelector, ViewSwitcherToggle } from 'searchkit';
 
 import SearchViewSwitch from '../SearchViewSwitch';
@@ -17,5 +18,10 @@ function SearchBarLayout(props) {
     </Flex>
   );
 }
+
+SearchBarLayout.propTypes = {
+  queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
+  sortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default SearchBarLayout;

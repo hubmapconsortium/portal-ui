@@ -42,6 +42,7 @@ Results.propTypes = {
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
   resultFieldIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default Results;

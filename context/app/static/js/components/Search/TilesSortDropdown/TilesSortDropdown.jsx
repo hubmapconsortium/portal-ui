@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
@@ -23,9 +24,9 @@ function getSelectedItemLabel(items, selectedItems) {
 }
 
 function TilesSortDropdown(props) {
+  const { items, toggleItem, selectedItems } = props;
   const anchorRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const { items, toggleItem, selectedItems } = props;
   const [selectedItemLabel, setSelectedItemLabel] = useState(getSelectedItemLabel(items, selectedItems));
   const searchView = useSearchViewStore(searchViewStoreSelector);
 
@@ -67,5 +68,11 @@ function TilesSortDropdown(props) {
     </>
   );
 }
+
+TilesSortDropdown.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  toggleItem: PropTypes.func.isRequired,
+  selectedItems: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default TilesSortDropdown;

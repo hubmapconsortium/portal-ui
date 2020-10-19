@@ -1,5 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { SortingSelector } from 'searchkit';
+
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { getByPath } from './utils';
 import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell } from './style';
@@ -43,5 +45,26 @@ function ResultsTable(props) {
   );
   /* eslint-enable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
 }
+
+ResultsTable.propTypes = {
+  sortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  resultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  detailsUrlPrefix: PropTypes.string.isRequired,
+  idField: PropTypes.string.isRequired,
+  hits: PropTypes.arrayOf(
+    PropTypes.shape({
+      sort: PropTypes.array,
+      _id: PropTypes.string,
+      _index: PropTypes.string,
+      _score: PropTypes.number,
+      _source: PropTypes.object,
+      _type: PropTypes.string,
+    }),
+  ),
+};
+
+ResultsTable.defaultProps = {
+  hits: undefined,
+};
 
 export default ResultsTable;

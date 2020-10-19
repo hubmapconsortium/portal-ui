@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ListRoundedIcon from '@material-ui/icons/ListRounded';
 import GridOnRoundedIcon from '@material-ui/icons/GridOnRounded';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
@@ -14,7 +15,6 @@ const searchViewStoreSelector = (state) => ({
 
 function SearchViewSwitch(props) {
   const { toggleItem } = props;
-
   const { searchView, setSearchView } = useSearchViewStore(searchViewStoreSelector);
 
   function handleChangeView(view) {
@@ -46,5 +46,9 @@ function SearchViewSwitch(props) {
     </ToggleButtonGroup>
   );
 }
+
+SearchViewSwitch.propTypes = {
+  toggleItem: PropTypes.func.isRequired,
+};
 
 export default SearchViewSwitch;
