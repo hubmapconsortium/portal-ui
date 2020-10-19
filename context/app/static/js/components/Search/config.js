@@ -56,7 +56,7 @@ const sampleConfig = {
     table: [
       field('display_doi', 'Sample'),
       field('group_name', 'Group'),
-      field('mapped_specimen_type', 'Speciment Type'),
+      field('mapped_specimen_type', 'Specimen Type'),
       field('origin_sample.mapped_organ', 'Organ'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
