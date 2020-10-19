@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import TableRow from '@material-ui/core/TableRow';
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
-import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from '../style';
 import { getSortPairs } from '../utils';
-
-import { StyledTableHead } from './style';
+import { StyledTableHead, ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from './style';
 
 const searchViewStoreSelector = (state) => state.searchView;
 
