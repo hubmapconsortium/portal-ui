@@ -18,6 +18,9 @@ function SearchViewSwitch(props) {
   const { searchView, setSearchView } = useSearchViewStore(searchViewStoreSelector);
 
   function handleChangeView(view) {
+    if (!['table', 'tile'].includes(view)) {
+      return;
+    }
     setSearchView(view);
     toggleItem(view);
   }
