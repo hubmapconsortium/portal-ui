@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ColoredStatusIcon } from 'js/components/Detail/StatusIcon/style';
+import { ColoredStatusIcon } from './style';
 
 function StatusIcon(props) {
   const { isUp } = props;
