@@ -1,4 +1,4 @@
-import { getByPath } from '../ResultsTable';
+import { getByPath } from '../ResultsTable/utils';
 
 test('extract values by paths', () => {
   const document = { a: { b: { c: 'xyz' } } };
