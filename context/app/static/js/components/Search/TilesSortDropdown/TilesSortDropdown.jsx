@@ -30,7 +30,9 @@ function TilesSortDropdown(props) {
   const searchView = useSearchViewStore(searchViewStoreSelector);
 
   const pairs = getSortPairs(items);
-  function selectSortItem(item) {
+  function selectSortItem(pair) {
+    // Sort everything in ascending order except for last modified
+    const item = pair[0].field === 'mapped_last_modified_timestamp.keyword' ? pair[0] : pair[1];
     toggleItem(item.key);
     setSelectedItemLabel(item.label);
     setIsOpen(false);
@@ -54,7 +56,7 @@ function TilesSortDropdown(props) {
           <ClickAwayListener onClickAway={() => setIsOpen(false)}>
             <MenuList id="preview-options">
               {pairs.map((pair) => (
-                <MenuItem onClick={() => selectSortItem(pair[0])} key={pair[0].field}>
+                <MenuItem onClick={() => selectSortItem(pair)} key={pair[0].field}>
                   {pair[0].label}
                 </MenuItem>
               ))}
