@@ -37,6 +37,13 @@ function ServiceStatusTable() {
         buildServiceStatus('entity-api', gatewayStatus.entity_api, (api) => `Neo4j: ${api.neo4j_connection}`),
         buildServiceStatus('gateway', gatewayStatus.gateway, () => ''),
         buildServiceStatus('ingest-api', gatewayStatus.ingest_api, (api) => `Neo4j: ${api.neo4j_connection}`),
+        {
+          name: 'portal-ui',
+          github: 'https://github.com/hubmapconsortium/portal-ui',
+          // build: TODO: pull from VERSION
+          // version,
+          isUp: true,
+        },
         buildServiceStatus(
           'search-api',
           gatewayStatus.search_api,
