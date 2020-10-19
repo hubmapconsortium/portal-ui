@@ -1,7 +1,13 @@
 import styled from 'styled-components';
+import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+
+const StyledTable = styled(Table)`
+  background-color: white;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+`;
 
 const StyledTableBody = styled(TableBody)`
   // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.
@@ -51,4 +57,4 @@ const StyledTableCell = styled(TableCell)`
   }
 `;
 
-export { StyledTableRow, StyledTableBody, StyledTableCell };
+export { StyledTable, StyledTableRow, StyledTableBody, StyledTableCell };
