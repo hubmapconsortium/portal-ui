@@ -11,7 +11,7 @@ import { HeaderCell } from 'js/shared-styles/Table';
 import { LightBlueLink } from 'js/shared-styles/Links';
 
 import StatusIcon from './StatusIcon';
-// import { useGatewayStatus } from './hooks';
+import { useGatewayStatus } from './hooks';
 
 function buildServiceStatus(name, response, noteFunc) {
   const { build, version, api_auth } = response;
@@ -29,24 +29,7 @@ function buildServiceStatus(name, response, noteFunc) {
 }
 
 function ServiceStatusTable() {
-  // const gatewayStatus = useGatewayStatus();
-  // Blocked by https://github.com/hubmapconsortium/gateway/issues/58
-
-  // TODO: Temporary, to develop UI:
-  const gatewayStatus = {
-    entity_api: { api_auth: true, build: 'master:da23d1a', neo4j_connection: true, version: '1.8.1' },
-    file_assets: { api_auth: true, file_assets_status: true },
-    gateway: { build: 'master:53431e4', version: '1.8.1' },
-    ingest_api: { api_auth: true, build: 'master:9061dd3', neo4j_connection: true, version: '1.15.0' },
-    search_api: {
-      api_auth: true,
-      build: 'master:69af7d6',
-      elasticsearch_connection: true,
-      elasticsearch_status: 'green',
-      version: '1.8.2',
-    },
-    uuid_api: { api_auth: true, build: 'master:8e27b2e', mysql_connection: true, version: '1.7.0' },
-  };
+  const gatewayStatus = useGatewayStatus();
 
   const apiStatuses = gatewayStatus
     ? [
