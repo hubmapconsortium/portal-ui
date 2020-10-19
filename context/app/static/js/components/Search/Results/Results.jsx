@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ViewSwitcherHits } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
-import ResultsTableBody from './ResultsTableBody';
-import ResultsTiles from './ResultsTiles';
+import ResultsTableBody from '../ResultsTableBody';
+import ResultsTiles from '../ResultsTiles';
 
-function ResultsTable(props) {
+function Results(props) {
   const { sortOptions, hitsPerPage, resultFields, detailsUrlPrefix, idField, resultFieldIds, type } = props;
 
   return (
@@ -35,7 +35,7 @@ function ResultsTable(props) {
   );
 }
 
-ResultsTable.propTypes = {
+Results.propTypes = {
   sortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
   resultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -44,4 +44,4 @@ ResultsTable.propTypes = {
   resultFieldIds: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default ResultsTable;
+export default Results;

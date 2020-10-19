@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
 import Accordions from './Accordions';
-import ResultsTable from './ResultsTable';
+import Results from './Results';
 import PaginationWrapper from './PaginationWrapper';
 import SearchBarLayout from './SearchBarLayout';
 import { resultFieldsToSortOptions } from './utils';
@@ -44,7 +44,7 @@ function SearchWrapper(props) {
           <Accordions filters={filters} />
         </StyledSideBar>
         <LayoutResults>
-          <ResultsTable
+          <Results
             sortOptions={sortOptions}
             hitsPerPage={hitsPerPage}
             resultFields={resultFields[searchView]}
