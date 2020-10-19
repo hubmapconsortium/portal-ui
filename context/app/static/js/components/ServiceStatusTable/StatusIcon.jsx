@@ -2,24 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ColoredStatusIcon } from 'js/components/Detail/StatusIcon/style';
 
-function getColor(status) {
-  if (['UP'].includes(status)) {
-    return 'success';
-  }
-
-  console.warn('Invalid status', status);
-  return 'error';
-}
-
 function StatusIcon(props) {
-  const { status } = props;
-  const color = getColor(status);
-
-  return <ColoredStatusIcon $iconColor={color} />;
+  const { isUp } = props;
+  const color = isUp ? 'success' : 'error';
+  const text = isUp ? 'Up' : 'Down';
+  return (
+    <>
+      <ColoredStatusIcon $iconColor={color} />
+      {text}
+    </>
+  );
 }
 
 StatusIcon.propTypes = {
-  status: PropTypes.string.isRequired,
+  isUp: PropTypes.bool.isRequired,
 };
 
 export default StatusIcon;

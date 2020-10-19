@@ -63,17 +63,7 @@ function ServiceStatusTable() {
           <TableRow key={api.name}>
             <TableCell>{api.name}</TableCell>
             <TableCell>
-              {api.isUp ? (
-                <>
-                  <StatusIcon status="UP" />
-                  Up
-                </>
-              ) : (
-                <>
-                  <StatusIcon status="DOWN" />
-                  Down
-                </>
-              )}
+              <StatusIcon isUp={api.isUp} />
             </TableCell>
             <TableCell>
               {api.github && (
