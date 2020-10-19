@@ -14,15 +14,14 @@ function ResultsTiles(props) {
   return (
     <TilesLayout>
       {hits.map((hit) => (
-        <div>
-          <EntityTile
-            entity_type={capitalizedType}
-            uuid={hit._source.uuid}
-            id={hit._source.display_doi}
-            entityData={hit._source}
-            descendantCounts={getDescendantCounts(hit._source, capitalizedType)}
-          />
-        </div>
+        <EntityTile
+          key={hit._source.uuid}
+          entity_type={capitalizedType}
+          uuid={hit._source.uuid}
+          id={hit._source.display_doi}
+          entityData={hit._source}
+          descendantCounts={getDescendantCounts(hit._source, capitalizedType)}
+        />
       ))}
     </TilesLayout>
   );
