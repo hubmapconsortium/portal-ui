@@ -33,7 +33,7 @@ function Footer(props) {
               <LightBlueLink variant="body2" href="mailto:help@hubmapconsortium.org">
                 Submit Feedback
               </LightBlueLink>
-              <LightBlueLink variant="body2" href="/service-status">
+              <LightBlueLink variant="body2" href="/services">
                 Services
               </LightBlueLink>
             </FlexColumn>

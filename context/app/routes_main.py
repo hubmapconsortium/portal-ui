@@ -53,7 +53,7 @@ def service_status():
         'pages/base_react.html',
         types=types,
         flask_data=core_props,
-        title='Service Status'
+        title='Services'
     )
 
 

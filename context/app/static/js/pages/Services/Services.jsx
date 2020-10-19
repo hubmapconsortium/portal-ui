@@ -6,7 +6,7 @@ import SectionContainer from 'js/components/Detail/SectionContainer';
 import Description from 'js/components/Detail/Description';
 import ServiceStatusTable from 'js/components/ServiceStatusTable';
 
-function ServiceStatus() {
+function Services() {
   return (
     <>
       <SectionContainer id="summary">
@@ -26,4 +26,4 @@ function ServiceStatus() {
   );
 }
 
-export default ServiceStatus;
+export default Services;

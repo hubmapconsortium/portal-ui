@@ -10,7 +10,7 @@ import Home from 'js/pages/Home';
 import Search from 'js/pages/search/Search';
 import DevSearch from 'js/pages/search/DevSearch';
 import Preview from 'js/pages/Preview';
-import ServiceStatus from 'js/pages/ServiceStatus';
+import Services from 'js/pages/Services';
 import Collections from 'js/pages/Collections';
 import Markdown from 'js/components/Markdown';
 import Route from './Route';
@@ -91,7 +91,7 @@ function Routes(props) {
   if (urlPath === '/services') {
     return (
       <Route>
-        <ServiceStatus />
+        <Services />
       </Route>
     );
   }
