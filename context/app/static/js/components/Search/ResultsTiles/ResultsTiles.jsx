@@ -3,6 +3,7 @@ import EntityTile from 'js/components/entity-tile/EntityTile';
 
 import { capitalizeString } from 'js/helpers/functions';
 import { TilesLayout } from './style';
+import { getDescendantCounts } from './utils';
 
 function ResultsTiles(props) {
   const { hits, type } = props;
@@ -19,9 +20,7 @@ function ResultsTiles(props) {
             uuid={hit._source.uuid}
             id={hit._source.display_doi}
             entityData={hit._source}
-            descendantCounts={
-              'descendant_counts' in hit._source ? hit._source.descendant_counts.entity_type : { Dataset: 0 }
-            }
+            descendantCounts={getDescendantCounts(hit._source, capitalizedType)}
           />
         </div>
       ))}
