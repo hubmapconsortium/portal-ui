@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ViewSwitcherHits } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
-import ResultsTableBody from '../ResultsTableBody';
+import ResultsTable from '../ResultsTable';
 import ResultsTiles from '../ResultsTiles';
 
 function Results(props) {
@@ -16,7 +16,7 @@ function Results(props) {
           key: 'table',
           title: 'Table',
           listComponent: (
-            <ResultsTableBody
+            <ResultsTable
               resultFields={resultFields}
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}

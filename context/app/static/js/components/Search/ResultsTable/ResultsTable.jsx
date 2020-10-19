@@ -5,7 +5,7 @@ import { getByPath } from './utils';
 import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell } from './style';
 import SortingTableHead from '../SortingTableHead';
 
-function ResultsTableBody(props) {
+function ResultsTable(props) {
   const { hits, resultFields, detailsUrlPrefix, idField, sortOptions } = props;
   /* eslint-disable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
   return (
@@ -44,4 +44,4 @@ function ResultsTableBody(props) {
   /* eslint-enable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
 }
 
-export default ResultsTableBody;
+export default ResultsTable;
