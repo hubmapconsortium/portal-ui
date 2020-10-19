@@ -47,7 +47,7 @@ function TilesSortDropdown(props) {
         disableElevation
         variant="contained"
         color="primary"
-        searchView={searchView}
+        $searchView={searchView}
       >
         {selectedItemLabel} {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </SelectionButton>

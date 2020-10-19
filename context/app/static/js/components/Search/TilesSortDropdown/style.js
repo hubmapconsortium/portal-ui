@@ -7,8 +7,8 @@ const SelectionButton = styled(Button)`
   height: 40px;
   margin-right: ${(props) => props.theme.spacing(1)}px;
   width: 185px;
-  ${({ searchView }) =>
-    searchView === 'table' &&
+  ${({ $searchView }) =>
+    $searchView === 'table' &&
     `
     display: none;
   `}

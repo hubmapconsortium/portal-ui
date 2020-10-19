@@ -33,35 +33,37 @@ function SearchWrapper(props) {
 
   return (
     <SearchkitProvider searchkit={searchkit}>
-      <SearchBarLayout
-        queryFields={queryFields}
-        searchView={searchView}
-        setSearchView={setSearchView}
-        sortOptions={sortOptions}
-      />
-      <LayoutBody>
-        <StyledSideBar>
-          <Accordions filters={filters} />
-        </StyledSideBar>
-        <LayoutResults>
-          <Results
-            sortOptions={sortOptions}
-            hitsPerPage={hitsPerPage}
-            resultFields={resultFields[searchView]}
-            detailsUrlPrefix={detailsUrlPrefix}
-            idField={idField}
-            resultFieldIds={resultFieldIds}
-            searchView={searchView}
-            type={type}
-          />
-          <NoHits
-            translations={{
-              'NoHits.NoResultsFound': `No results found. ${isLoggedIn ? '' : 'Login to view more results.'}`,
-            }}
-          />
-          <PaginationWrapper />
-        </LayoutResults>
-      </LayoutBody>
+      <>
+        <SearchBarLayout
+          queryFields={queryFields}
+          searchView={searchView}
+          setSearchView={setSearchView}
+          sortOptions={sortOptions}
+        />
+        <LayoutBody>
+          <StyledSideBar>
+            <Accordions filters={filters} />
+          </StyledSideBar>
+          <LayoutResults>
+            <Results
+              sortOptions={sortOptions}
+              hitsPerPage={hitsPerPage}
+              resultFields={resultFields[searchView]}
+              detailsUrlPrefix={detailsUrlPrefix}
+              idField={idField}
+              resultFieldIds={resultFieldIds}
+              searchView={searchView}
+              type={type}
+            />
+            <NoHits
+              translations={{
+                'NoHits.NoResultsFound': `No results found. ${isLoggedIn ? '' : 'Login to view more results.'}`,
+              }}
+            />
+            <PaginationWrapper />
+          </LayoutResults>
+        </LayoutBody>
+      </>
     </SearchkitProvider>
   );
 }
@@ -71,13 +73,22 @@ SearchWrapper.propTypes = {
   filters: PropTypes.objectOf(PropTypes.array).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
-  resultFields: PropTypes.arrayOf(
-    PropTypes.exact({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      translations: PropTypes.objectOf(PropTypes.string),
-    }),
-  ).isRequired,
+  resultFields: PropTypes.exact({
+    table: PropTypes.arrayOf(
+      PropTypes.exact({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        translations: PropTypes.objectOf(PropTypes.string),
+      }),
+    ),
+    tile: PropTypes.arrayOf(
+      PropTypes.exact({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        translations: PropTypes.objectOf(PropTypes.string),
+      }),
+    ),
+  }).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
   httpHeaders: PropTypes.objectOf(PropTypes.string),
 
