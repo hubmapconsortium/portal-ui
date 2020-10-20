@@ -10,7 +10,7 @@ import SearchBarLayout from './SearchBarLayout';
 import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
 import './Search.scss';
-import NoResults from './NoResults';
+import { NoResults, SearchError } from './noHitsComponents';
 
 function SearchWrapper(props) {
   const {
@@ -55,7 +55,7 @@ function SearchWrapper(props) {
               searchView={searchView}
               type={type}
             />
-            <NoHits component={NoResults} />
+            <NoHits component={NoResults} errorComponent={SearchError} />
             <PaginationWrapper />
           </LayoutResults>
         </LayoutBody>
