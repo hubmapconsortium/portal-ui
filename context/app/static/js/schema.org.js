@@ -16,7 +16,10 @@ function getDatasetLD(entity) {
     '@context': 'https://schema.org/',
     '@type': 'Dataset',
     name,
-    description: entity.description.length < 50 ? `${fallbackDescription}. ${entity.description}` : entity.description,
+    description:
+      entity.description && entity.description.length >= 50
+        ? entity.description
+        : `${fallbackDescription}. ${entity.description}`,
     creator: [
       {
         '@type': 'Person',
