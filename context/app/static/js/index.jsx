@@ -4,6 +4,12 @@ import ReactDOM from 'react-dom';
 import App from './components/App';
 import { setJsonLD } from './schema.org';
 
+// eslint-disable-next-line no-undef
+const validation_errors = flaskData.entity?.mapper_metadata?.validation_errors;
+if (validation_errors && validation_errors.length) {
+  console.warn('Schema validation errors', validation_errors);
+}
+
 ReactDOM.render(
   // eslint-disable-next-line no-undef
   <App flaskData={flaskData} />,
