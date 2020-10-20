@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 function ResultsFoundText({ hitsCount }) {
   return (
-    <Typography variant="caption" color="secondary">
+    <Typography style={{ marginLeft: 'auto' }} variant="caption" color="secondary">
       {hitsCount} Results Found
     </Typography>
   );
