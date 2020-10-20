@@ -7,7 +7,7 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import lzString from 'lz-string';
+import { encodeConfAsURLParams } from 'vitessce';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
@@ -20,7 +20,7 @@ const visualizationStoreSelector = (state) => ({
   vizTheme: state.vizTheme,
   vitessceConfig: state.vitessceConfig,
 });
-function VisualizationThemeSwitch() {
+function VisualizationShareButton() {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
   const { vizTheme, vitessceConfig } = useVisualizationStore(visualizationStoreSelector);
@@ -28,8 +28,8 @@ function VisualizationThemeSwitch() {
   const copyToClipBoard = (conf) => {
     const dummy = document.createElement('input');
     document.body.appendChild(dummy);
-    const compressedConf = lzString.compressToEncodedURIComponent(JSON.stringify(conf));
-    const url = `${window.location.href.split('?')[0]}?vitessce_conf=${compressedConf}`;
+    const params = encodeConfAsURLParams(conf);
+    const url = `${window.location.href.split('?')[0]}?${params}`;
     dummy.setAttribute('value', url);
     dummy.select();
     document.execCommand('copy');
@@ -66,4 +66,4 @@ function VisualizationThemeSwitch() {
   );
 }
 
-export default VisualizationThemeSwitch;
+export default VisualizationShareButton;

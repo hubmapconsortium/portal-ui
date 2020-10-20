@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer, useRef, useCallback, useMemo } from 'react';
-import { Vitessce } from 'vitessce';
+import { Vitessce, decodeURLParamsToConf } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -9,7 +9,6 @@ import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import debounce from 'lodash/debounce';
-import lzString from 'lz-string';
 
 import { Alert } from 'js/shared-styles/alerts';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
@@ -55,11 +54,8 @@ function Visualization(props) {
 
   // Get the vitessce configuration from the url if available and set the initial selection if it is a multi-dataset.
   const [initializedVitData, initialSelection] = useMemo(() => {
-    const compressedConfString = new URL(window.location.href).searchParams.get('vitessce_conf');
-    const decompressedConfString = compressedConfString
-      ? lzString.decompressFromEncodedURIComponent(compressedConfString)
-      : '';
-    const vitessceURLConf = decompressedConfString ? JSON.parse(decompressedConfString) : null;
+    const queryString = window.location.href.split('?')[1];
+    const vitessceURLConf = queryString?.length > 0 ? decodeURLParamsToConf(queryString) : null;
     const initialSelectionFromUrl =
       Array.isArray(vitData) && Math.max(0, vitData.map(({ name }) => name).indexOf(vitessceURLConf?.name));
     let initializedVitDataFromUrl = vitData;
