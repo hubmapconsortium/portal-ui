@@ -59,7 +59,6 @@ function Search(props) {
     // Sidebar facet configuration:
     filters: filtersByType[type],
     queryFields: ['everything'],
-    isLoggedIn: Boolean(nexusToken),
   };
   const allProps = { apiUrl: elasticsearchEndpoint, ...searchProps }; // TODO: Not needed?
 
