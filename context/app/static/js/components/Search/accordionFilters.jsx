@@ -1,10 +1,9 @@
 import React from 'react';
 import { RefinementListFilter, RangeFilter, CheckboxFilter } from 'searchkit';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 
-import { InnerAccordion, InnerAccordionSummary, InnerAccordionDetails } from './style';
+import { InnerAccordion, InnerAccordionSummary, InnerAccordionDetails, StyledExpandMoreIcon } from './style';
 
 function Details(props) {
   const { title, children } = props;
@@ -21,8 +20,10 @@ function Details(props) {
   }
   return (
     <InnerAccordion key={title} defaultExpanded>
-      <InnerAccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="subtitle2">{title}</Typography>
+      <InnerAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
+        <Typography variant="subtitle2" color="textPrimary">
+          {title}
+        </Typography>
       </InnerAccordionSummary>
       <InnerAccordionDetails>{children}</InnerAccordionDetails>
     </InnerAccordion>
