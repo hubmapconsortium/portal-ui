@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { AppContext } from 'js/components/Providers';
 import useProvData from 'js/hooks/useProvData';
 import { Alert } from 'js/shared-styles/alerts';
-import SectionHeader from 'js/components/Detail/SectionHeader';
-import SectionContainer from 'js/components/Detail/SectionContainer';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import ProvTabs from '../ProvTabs';
 
 function ProvSection(props) {

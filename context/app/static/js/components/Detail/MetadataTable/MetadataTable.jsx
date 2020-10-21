@@ -11,6 +11,7 @@ import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
+import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import {
   DownloadIcon,
   Flex,
@@ -19,7 +20,6 @@ import {
   FlexTableCell,
   StyledInfoIcon,
 } from './style';
-import SectionContainer from '../SectionContainer';
 
 function MetadataTable(props) {
   const { metadata: tableData, display_doi } = props;

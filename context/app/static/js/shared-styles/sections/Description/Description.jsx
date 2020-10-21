@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import SectionContainer from '../SectionContainer';
+import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { StyledPaper, StyledInfoIcon } from './style';
 
 function Description(props) {

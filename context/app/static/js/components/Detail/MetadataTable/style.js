@@ -4,7 +4,7 @@ import TableCell from '@material-ui/core/TableCell';
 import { InfoIcon } from 'js/shared-styles/icons';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
-import SectionHeader from '../SectionHeader';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 
 const DownloadIcon = styled(GetAppIcon)`
   font-size: 25px;
