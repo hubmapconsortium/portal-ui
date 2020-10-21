@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
+import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import SummaryData from '../SummaryData';
 import { FlexColumnRight, StyledPaper } from './style';
 import SectionItem from '../SectionItem';
-import SectionContainer from '../SectionContainer';
 
 function Summary(props) {
   const {

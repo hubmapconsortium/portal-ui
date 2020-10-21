@@ -1,1 +1,0 @@
-- Expand the primary header and entity subheader when vitessce is fullscreen.

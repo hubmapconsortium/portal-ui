@@ -10,7 +10,7 @@ import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
 
 const AnimatedNav = animated(StickyNav);
-const entityStoreSelector = (state) => state.summaryInView;
+const entityStoreSelector = (state) => state.summaryComponentObserver;
 
 function ItemLink(props) {
   const { item, currentSection, handleClick } = props;
@@ -122,7 +122,7 @@ function TableOfContents(props) {
     [],
   );
 
-  const summaryInView = useEntityStore(entityStoreSelector);
+  const { summaryInView } = useEntityStore(entityStoreSelector);
   const initialHeightOffset = headerHeight + 16;
   const initialProps = { top: `${initialHeightOffset}px` };
   const [stickyNavAnimationProps, set] = useSpring(() => initialProps);
