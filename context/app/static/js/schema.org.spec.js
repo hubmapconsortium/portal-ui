@@ -11,6 +11,7 @@ test('minimal', () => {
     },
     created_by_user_displayname: 'Lisa',
     group_name: 'The Simpsons',
+    description: 'too short :(',
   };
   expect(getDatasetLD(entity)).toEqual({
     '@context': 'https://schema.org/',
@@ -26,7 +27,7 @@ test('minimal', () => {
       },
     ],
     description:
-      'Nifty Assay of Elbow from , ,  (Unknown sex), (Unknown age) (Unknown age unit) old with no medical history',
+      'Nifty Assay of Elbow from , ,  (Unknown sex), (Unknown age) (Unknown age unit) old with no medical history. too short :(',
     name: 'Nifty Assay of Elbow from (Unknown sex), (Unknown age) (Unknown age unit) old',
   });
 });
