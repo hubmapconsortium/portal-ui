@@ -9,9 +9,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { StyledLink } from './style';
-import SectionHeader from '../SectionHeader';
-import SectionContainer from '../SectionContainer';
 
 function CollectionDatasetsTable(props) {
   const { datasets } = props;
