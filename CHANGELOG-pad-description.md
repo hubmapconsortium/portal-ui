@@ -1,0 +1,1 @@
+- Pad out short descriptions in JSON-LD metadata to meet minimum-length requirements.
