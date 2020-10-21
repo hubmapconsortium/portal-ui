@@ -95,13 +95,14 @@ SearchWrapper.propTypes = {
   searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   isLoggedIn: PropTypes.bool,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
 };
 
 SearchWrapper.defaultProps = {
   searchUrlPath: '_search',
   httpHeaders: {},
   isLoggedIn: false,
+  type: undefined,
 };
 
 export default SearchWrapper;
