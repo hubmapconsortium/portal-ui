@@ -1,1 +1,2 @@
 - Update search page ui to 8/17/2020 design.
+- Compact search sidebar spacing and update font size and colors.
