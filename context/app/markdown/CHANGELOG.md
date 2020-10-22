@@ -1,3 +1,11 @@
+## v0.4.4 - 2020-10-21
+
+- Log validation errors, if we see them.
+- Manual update of ingest-validation-tools to get Donor metadata field descriptions.
+- Pad out short descriptions in JSON-LD metadata to meet minimum-length requirements.
+- Add service status page.
+
+
 ## v0.4.3 - 2020-10-14
 
 - Schema.org JSON-LD in header.

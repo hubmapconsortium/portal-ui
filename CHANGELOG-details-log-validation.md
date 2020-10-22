@@ -1,1 +1,0 @@
-- Log validation errors, if we see them.
