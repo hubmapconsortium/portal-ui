@@ -42,7 +42,8 @@ def index():
         'pages/base_react.html',
         types=types,
         flask_data=core_props,
-        title='Welcome'
+        title='HuBMAP Data Portal',
+        isHomePage=True
     )
 
 
