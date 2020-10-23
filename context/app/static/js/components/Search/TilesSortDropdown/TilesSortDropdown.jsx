@@ -56,11 +56,14 @@ function TilesSortDropdown(props) {
         <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
           <ClickAwayListener onClickAway={() => setIsOpen(false)}>
             <MenuList id="preview-options">
-              {pairs.map((pair) => (
-                <MenuItem onClick={() => selectSortItem(pair)} key={pair[0].field}>
-                  {pair[0].label}
-                </MenuItem>
-              ))}
+              {pairs.map(
+                (pair) =>
+                  pair[0].label !== selectedItemLabel && (
+                    <MenuItem onClick={() => selectSortItem(pair)} key={pair[0].field}>
+                      {pair[0].label}
+                    </MenuItem>
+                  ),
+              )}
             </MenuList>
           </ClickAwayListener>
         </Paper>
