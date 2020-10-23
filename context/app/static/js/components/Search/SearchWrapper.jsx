@@ -96,6 +96,7 @@ SearchWrapper.propTypes = {
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   isLoggedIn: PropTypes.bool,
   type: PropTypes.string,
+  resultsComponent: PropTypes.func.isRequired,
 };
 
 SearchWrapper.defaultProps = {
