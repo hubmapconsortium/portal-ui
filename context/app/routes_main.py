@@ -43,7 +43,7 @@ def index():
         types=types,
         flask_data=core_props,
         title='HuBMAP Data Portal',
-        isHomePage=True
+        is_home_page=True
     )
 
 
