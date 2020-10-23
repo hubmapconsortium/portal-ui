@@ -17,7 +17,12 @@ function ProvTabs(props) {
     setOpen(newValue);
   };
 
-  const shouldDisplayTable = !hasDataTypes(data_types, ['sc_rna_seq_snare_lab', 'sc_atac_seq_snare_lab', 'TMT-LC-MS']);
+  const shouldDisplayTable = !hasDataTypes(data_types, [
+    'sc_rna_seq_snare_lab',
+    'sc_atac_seq_snare_lab',
+    'TMT-LC-MS',
+    'salmon_rnaseq_snareseq',
+  ]);
   const shouldDisplayDag = entity_type === 'Dataset' && metadata && 'dag_provenance_list' in metadata;
 
   const graphIndex = shouldDisplayTable ? 1 : 0;
