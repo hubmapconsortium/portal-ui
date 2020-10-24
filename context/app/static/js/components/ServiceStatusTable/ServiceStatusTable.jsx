@@ -22,7 +22,7 @@ function ServiceStatusTable() {
         buildServiceStatus('assets', gatewayStatus.file_assets, (api) => `Status: ${api.file_assets_status}`),
         buildServiceStatus('entity-api', gatewayStatus.entity_api, (api) => `Neo4j: ${api.neo4j_connection}`),
         buildServiceStatus('gateway', gatewayStatus.gateway, () => ''),
-        buildServiceStatus('ingest-api', gatewayStatus.ingest_api, (api) => `Neo4j: ${api.neo4j_connection}`),
+        buildServiceStatus('ingest-ui', gatewayStatus.ingest_api, (api) => `Neo4j: ${api.neo4j_connection}`),
         {
           name: 'portal-ui',
           github: 'https://github.com/hubmapconsortium/portal-ui',
