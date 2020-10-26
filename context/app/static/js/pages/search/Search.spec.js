@@ -26,16 +26,6 @@ test('Search works with entity_type param', () => {
   });
 
   render(<Search elasticsearchEndpoint="not-used" title="TITLE" />);
-  const expectedStrings = [
-    'TITLE',
-    'Donor Metadata',
-    'Affiliation',
-    '0 Results Found',
-    'Age',
-    'BMI',
-    'Sex',
-    'Race',
-    'Last Modified',
-  ];
+  const expectedStrings = ['TITLE', 'Donor Metadata', 'Affiliation'];
   expectedStrings.forEach((s) => expect(screen.getByText(s)).toBeInTheDocument());
 });

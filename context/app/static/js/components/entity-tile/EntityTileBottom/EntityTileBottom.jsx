@@ -18,7 +18,7 @@ function EntityTileBottom(props) {
           <StyledDivider flexItem orientation="vertical" $invertColors={invertColors} />
         </React.Fragment>
       ))}
-      <Typography variant="body2">Modified {format(entityData.last_modified_timestamp, 'MM-dd-yyyy')}</Typography>
+      <Typography variant="body2">Modified {format(entityData.last_modified_timestamp, 'yyyy-MM-dd')}</Typography>
     </FixedWidthFlex>
   );
 }

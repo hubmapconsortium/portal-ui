@@ -1,0 +1,81 @@
+import React, { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
+import MenuList from '@material-ui/core/MenuList';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+
+import useSearchViewStore from 'js/stores/useSearchViewStore';
+import { SelectionButton, StyledDropdownSelectItem } from './style';
+import { getSortPairs } from '../utils';
+
+const searchViewStoreSelector = (state) => state.searchView;
+
+function getSelectedItemLabel(items, selectedItems) {
+  if (selectedItems.length > 1) {
+    console.warn('Expected only a single sort, not:', selectedItems);
+  }
+  const selectedItem = selectedItems.length ? selectedItems[0] : undefined;
+  const match = items.filter((item) => item.key === selectedItem);
+  return match.length ? match[0].label : '';
+}
+
+function TilesSortDropdown(props) {
+  const { items, toggleItem, selectedItems } = props;
+  const anchorRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const selectedItemLabel = getSelectedItemLabel(items, selectedItems);
+
+  const searchView = useSearchViewStore(searchViewStoreSelector);
+
+  const pairs = getSortPairs(items);
+  function selectSortItem(pair) {
+    // Sort everything in ascending order except for last modified
+    const item = pair[0].field === 'mapped_last_modified_timestamp.keyword' ? pair[0] : pair[1];
+    toggleItem(item.key);
+    setIsOpen(false);
+  }
+
+  return (
+    <>
+      <SelectionButton
+        ref={anchorRef}
+        style={{ borderRadius: 3 }}
+        onClick={() => setIsOpen(true)}
+        disableElevation
+        variant="contained"
+        color="primary"
+        $searchView={searchView}
+      >
+        {selectedItemLabel} {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+      </SelectionButton>
+      <Popper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>
+        <Paper>
+          <ClickAwayListener onClickAway={() => setIsOpen(false)}>
+            <MenuList id="preview-options">
+              {pairs.map((pair) => (
+                <StyledDropdownSelectItem
+                  onClick={() => selectSortItem(pair)}
+                  key={pair[0].field}
+                  isSelected={pair[0].label === selectedItemLabel}
+                >
+                  {pair[0].label}
+                </StyledDropdownSelectItem>
+              ))}
+            </MenuList>
+          </ClickAwayListener>
+        </Paper>
+      </Popper>
+    </>
+  );
+}
+
+TilesSortDropdown.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  toggleItem: PropTypes.func.isRequired,
+  selectedItems: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+export default TilesSortDropdown;

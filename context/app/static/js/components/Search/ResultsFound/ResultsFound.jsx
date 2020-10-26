@@ -1,14 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { HitsStats } from 'searchkit';
-import Typography from '@material-ui/core/Typography';
+
+import { StyledTypography } from './style';
 
 function ResultsFoundText({ hitsCount }) {
   return (
-    <Typography variant="caption" color="secondary">
+    <StyledTypography variant="caption" color="secondary">
       {hitsCount} Results Found
-    </Typography>
+    </StyledTypography>
   );
 }
+
+ResultsFoundText.propTypes = {
+  hitsCount: PropTypes.number.isRequired,
+};
 
 function ResultsFound() {
   return <HitsStats component={ResultsFoundText} />;

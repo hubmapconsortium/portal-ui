@@ -8,6 +8,7 @@ import SearchWrapper from 'js/components/Search/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig } from 'js/components/Search/config';
 import { listFilter } from 'js/components/Search/utils';
 import AncestorNote from 'js/components/Search/AncestorNote';
+import Results from 'js/components/Search/Results';
 import { SearchHeader } from './style';
 
 function Search(props) {
@@ -53,7 +54,9 @@ function Search(props) {
     // Search results fields to display in table:
     resultFields,
     // Default hitsPerPage is 10:
-    hitsPerPage: 20,
+    hitsPerPage: 18,
+    // Entity type
+    type,
     // Sidebar facet configuration:
     filters: filtersByType[type],
     queryFields: ['everything'],
@@ -61,7 +64,7 @@ function Search(props) {
   };
   const allProps = { apiUrl: elasticsearchEndpoint, ...searchProps }; // TODO: Not needed?
 
-  const wrappedSearch = <SearchWrapper {...allProps} />;
+  const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={Results} />;
   return (
     <>
       <SearchHeader component="h1" variant="h2">

@@ -21,6 +21,9 @@ $secondary-gray: #636363;
 .sk-layout__results {
     box-shadow: none;
     background-color:transparent;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .sk-results-list {
@@ -44,7 +47,7 @@ $secondary-gray: #636363;
 }
 
 .sk-item-list-option {
-    padding-top: 8px;
+    padding: 4px 0px 4px 0px;
     line-height: 120%;
 }
 
@@ -84,7 +87,11 @@ border-color: $primary-purple;
   .sk-search-box form{
     border: 1px solid $secondary-gray;
     border-radius: 8px;
+  }
+
+  .sk-search-box {
     background-color: white;
+    max-width: 925px;
   }
 
   .sk-search-box__icon{

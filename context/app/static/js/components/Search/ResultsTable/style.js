@@ -1,34 +1,12 @@
 import styled from 'styled-components';
-import ArrowUpward from '@material-ui/icons/ArrowUpwardRounded';
-import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
+import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import Table from '@material-ui/core/Table';
 
-import { HeaderCell } from 'js/shared-styles/Table';
-
-const ArrowUpOn = styled(ArrowUpward)`
-  vertical-align: middle;
-`;
-
-const ArrowDownOn = styled(ArrowDownward)`
-  vertical-align: middle;
-`;
-
-const ArrowUpOff = styled(ArrowUpward)`
-  vertical-align: middle;
-  opacity: 12%;
-`;
-
-const ArrowDownOff = styled(ArrowDownward)`
-  vertical-align: middle;
-  opacity: 12%;
-`;
-
-const StyledHeaderCell = styled(HeaderCell)`
-  cursor: pointer;
-  white-space: nowrap;
+const StyledTable = styled(Table)`
+  background-color: white;
+  box-shadow: ${(props) => props.theme.shadows[1]};
 `;
 
 const StyledTableBody = styled(TableBody)`
@@ -79,19 +57,4 @@ const StyledTableCell = styled(TableCell)`
   }
 `;
 
-const StyledTable = styled(Table)`
-  background-color: white;
-  box-shadow: ${(props) => props.theme.shadows[1]};
-`;
-
-export {
-  ArrowUpOn,
-  ArrowDownOn,
-  ArrowUpOff,
-  ArrowDownOff,
-  StyledHeaderCell,
-  StyledTableRow,
-  StyledTableBody,
-  StyledTableCell,
-  StyledTable,
-};
+export { StyledTable, StyledTableRow, StyledTableBody, StyledTableCell };
