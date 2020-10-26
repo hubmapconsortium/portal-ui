@@ -21,6 +21,9 @@ $secondary-gray: #636363;
 .sk-layout__results {
     box-shadow: none;
     background-color:transparent;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .sk-results-list {

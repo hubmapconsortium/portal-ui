@@ -9,6 +9,7 @@ import SearchBarLayout from './SearchBarLayout';
 import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
 import './Search.scss';
+import { NoResults, SearchError } from './noHitsComponents';
 
 function SearchWrapper(props) {
   const {
@@ -21,8 +22,8 @@ function SearchWrapper(props) {
     httpHeaders,
     searchUrlPath,
     queryFields,
-    isLoggedIn,
     type,
+    isLoggedIn,
     resultsComponent: ResultsComponent,
   } = props;
   const [searchView, setSearchView] = useState('table');
@@ -55,11 +56,7 @@ function SearchWrapper(props) {
               searchView={searchView}
               type={type}
             />
-            <NoHits
-              translations={{
-                'NoHits.NoResultsFound': `No results found. ${isLoggedIn ? '' : 'Login to view more results.'}`,
-              }}
-            />
+            <NoHits component={<NoResults isLoggedIn={isLoggedIn} />} errorComponent={SearchError} />
             <PaginationWrapper />
           </LayoutResults>
         </LayoutBody>
@@ -94,8 +91,8 @@ SearchWrapper.propTypes = {
 
   searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
-  isLoggedIn: PropTypes.bool,
   type: PropTypes.string,
+  isLoggedIn: PropTypes.bool,
   resultsComponent: PropTypes.func.isRequired,
 };
 
