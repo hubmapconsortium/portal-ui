@@ -1,2 +1,3 @@
 - Update search page ui to 8/17/2020 design.
 - Resize search table sort arrows.
+- Add tile view for search page.

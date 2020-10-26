@@ -1,1 +1,0 @@
-- Standardize icon button sizes.

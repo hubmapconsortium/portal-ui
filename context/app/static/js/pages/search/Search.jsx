@@ -53,7 +53,7 @@ function Search(props) {
     // Search results fields to display in table:
     resultFields,
     // Default hitsPerPage is 10:
-    hitsPerPage: 20,
+    hitsPerPage: 18,
     // Entity type
     type,
     // Sidebar facet configuration:

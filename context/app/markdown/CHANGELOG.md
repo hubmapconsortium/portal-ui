@@ -1,3 +1,19 @@
+## v0.4.3 - 2020-10-14
+
+- Schema.org JSON-LD in header.
+- Add /search to the disallow list in robots.txt.
+
+
+## v0.4.2 - 2020-10-09
+
+- Fix main header dropdown menus' z-index to be above the subheader.
+- Fix header elevation when vitessce is fullscreen.
+- Do not offset for entity header when visualization is fullscreen on preview pages.
+- Make links in markdown-based pages blue.
+- Fix proptypes error.
+- Standardize icon button sizes.
+
+
 ## v0.4.1 - 2020-10-05
 
 - Add theme switch and exit fullscreen button to subheader when visualization is fullscreen.
