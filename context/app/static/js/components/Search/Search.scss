@@ -1,5 +1,8 @@
 @import "~searchkit/theming/theme.scss";
 
+$primary-purple: #444A65;
+$secondary-gray: #636363;
+
 .sk-layout__body {
     margin: 16px 0px 32px 0px;
 }
@@ -32,7 +35,8 @@
 .sk-layout__filters {
     // Spacing between filters and results:
     margin-right: 16px;
-    box-shadow: 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12), 0 1px 3px 0 rgba(0,0,0,0.20);
+    // theme shadows 1 matches table
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
 }
 
 .sk-item-list-option input.sk-item-list-option__checkbox {
@@ -60,7 +64,7 @@
 
 .sk-pagination-navigation .sk-toggle-option:first-child,
   .sk-pagination-navigation .sk-toggle-option:last-child {
-    color: #444A65;
+    color: $primary-purple;
 }
 
 .sk-pagination-navigation .sk-toggle-option {
@@ -68,8 +72,8 @@
 }
 
 .sk-toggle-option.is-active {
-background-color: #444A65;
-border-color: #444A65;
+background-color: $primary-purple;
+border-color: $primary-purple;
 }
 
 .sk-pagination-navigation .sk-toggle-option:first-child.is-disabled,
@@ -78,7 +82,7 @@ border-color: #444A65;
   }
 
   .sk-search-box form{
-    border: 1px solid #636363;
+    border: 1px solid $secondary-gray;
     border-radius: 8px;
   }
 
@@ -92,6 +96,6 @@ border-color: #444A65;
   }
 
   .sk-search-box__icon:before{
-    fill: #444A65;
+    fill: $primary-purple;
     background: url('~images/search-icon.svg') no-repeat top left;
   }
