@@ -23,7 +23,7 @@ function DropdownSelectItem(props) {
   return (
     <FlexMenuItem className={className} {...rest}>
       {isSelected && <CheckIcon color="primary" />}
-      <StyledSpan isSelected={isSelected}> {children}</StyledSpan>
+      <StyledSpan isSelected={isSelected}>{children}</StyledSpan>
     </FlexMenuItem>
   );
 }
