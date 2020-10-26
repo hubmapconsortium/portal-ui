@@ -5,6 +5,7 @@ import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
 import { field, listFilter, checkboxFilter } from 'js/components/Search/utils';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
+import DevResults from 'js/components/Search/DevResults';
 import { SearchHeader } from './style';
 
 function DevSearch() {
@@ -22,12 +23,15 @@ function DevSearch() {
     // Search results field which will be appended to detailsUrlPrefix:
     idField: 'uuid',
     // Search results fields to display in table:
-    resultFields: [
-      field('entity_type', 'type'),
-      field('display_doi', 'ID'),
-      field('mapped_last_modified_timestamp', 'Last Modified'),
-      field('mapper_metadata.size', 'Doc Size'),
-    ],
+    resultFields: {
+      table: [
+        field('entity_type', 'type'),
+        field('display_doi', 'ID'),
+        field('mapped_last_modified_timestamp', 'Last Modified'),
+        field('mapper_metadata.size', 'Doc Size'),
+      ],
+      tile: [],
+    },
     // Default hitsPerPage is 10:
     hitsPerPage: 20,
     // Sidebar facet configuration:
@@ -64,7 +68,7 @@ function DevSearch() {
 
   const allProps = { ...searchProps, apiUrl: elasticsearchEndpoint };
 
-  const wrappedSearch = <SearchWrapper {...allProps} />;
+  const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={DevResults} />;
   return (
     <>
       <SearchHeader component="h1" variant="h2">

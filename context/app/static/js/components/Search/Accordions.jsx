@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { OuterAccordion, OuterAccordionSummary, OuterAccordionDetails } from './style';
+import { OuterAccordion, OuterAccordionSummary, OuterAccordionDetails, StyledExpandMoreIcon } from './style';
 import accordionFilters from './accordionFilters';
 
 function Accordions(props) {
@@ -29,8 +28,10 @@ function Accordions(props) {
     }
     return (
       <OuterAccordion key={title} defaultExpanded={isFirst}>
-        <OuterAccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>{title}</Typography>
+        <OuterAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
+          <Typography variant="subtitle2" color="secondary">
+            {title}
+          </Typography>
         </OuterAccordionSummary>
         <OuterAccordionDetails>{innerAccordion}</OuterAccordionDetails>
       </OuterAccordion>
