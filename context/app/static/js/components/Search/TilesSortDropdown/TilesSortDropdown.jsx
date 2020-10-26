@@ -52,7 +52,7 @@ function TilesSortDropdown(props) {
         {selectedItemLabel} {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </SelectionButton>
       <Popper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>
-        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+        <Paper>
           <ClickAwayListener onClickAway={() => setIsOpen(false)}>
             <MenuList id="preview-options">
               {pairs.map((pair) => (
