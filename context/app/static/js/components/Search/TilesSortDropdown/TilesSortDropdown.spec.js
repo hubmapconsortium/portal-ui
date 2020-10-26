@@ -42,7 +42,6 @@ test('should handle open and toggling new item', () => {
 
   render(<TilesSortDropdown toggleItem={mockToggle} items={items} selectedItems={selectedItems} />);
   userEvent.click(screen.getByText('Last Modified'));
-  expect(screen.queryByRole('menuitem', { name: 'Last Modified' })).toBeNull();
   userEvent.click(screen.getByText('Fake'));
 
   expect(mockToggle).toHaveBeenCalled();
