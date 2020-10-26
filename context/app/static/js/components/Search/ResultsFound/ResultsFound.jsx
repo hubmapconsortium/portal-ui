@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { HitsStats } from 'searchkit';
-import Typography from '@material-ui/core/Typography';
+
+import { StyledTypography } from './style';
 
 function ResultsFoundText({ hitsCount }) {
   return (
-    <Typography style={{ marginLeft: 'auto' }} variant="caption" color="secondary">
+    <StyledTypography variant="caption" color="secondary">
       {hitsCount} Results Found
-    </Typography>
+    </StyledTypography>
   );
 }
 
