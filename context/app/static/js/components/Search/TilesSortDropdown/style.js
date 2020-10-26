@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
+import { DropdownSelectItem } from 'js/shared-styles/dropdowns';
 
 const SelectionButton = styled(Button)`
   margin-left: ${(props) => props.theme.spacing(1)}px;
@@ -14,4 +15,8 @@ const SelectionButton = styled(Button)`
   `}
 `;
 
-export { SelectionButton };
+const StyledDropdownSelectItem = styled(DropdownSelectItem)`
+  min-width: 185px;
+`;
+
+export { SelectionButton, StyledDropdownSelectItem };
