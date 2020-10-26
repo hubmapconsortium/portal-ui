@@ -5,7 +5,7 @@ import { Alert } from 'js/shared-styles/alerts';
 
 function NoResults({ isLoggedIn }) {
   const message = isLoggedIn ? 'Check your spelling or unselect filters.' : 'Login to view more results.';
-  return <Alert severity="warning">{`No results Found. ${message}`}</Alert>;
+  return <Alert severity="warning">{`No results found. ${message}`}</Alert>;
 }
 
 NoResults.propTypes = {
