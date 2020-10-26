@@ -24,6 +24,7 @@ function SearchWrapper(props) {
     searchUrlPath,
     queryFields,
     type,
+    isLoggedIn,
   } = props;
   const [searchView, setSearchView] = useState('table');
 
@@ -55,7 +56,7 @@ function SearchWrapper(props) {
               searchView={searchView}
               type={type}
             />
-            <NoHits component={NoResults} errorComponent={SearchError} />
+            <NoHits component={<NoResults isLoggedIn={isLoggedIn} />} errorComponent={SearchError} />
             <PaginationWrapper />
           </LayoutResults>
         </LayoutBody>
@@ -91,11 +92,13 @@ SearchWrapper.propTypes = {
   searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   type: PropTypes.string.isRequired,
+  isLoggedIn: PropTypes.bool,
 };
 
 SearchWrapper.defaultProps = {
   searchUrlPath: '_search',
   httpHeaders: {},
+  isLoggedIn: false,
 };
 
 export default SearchWrapper;
