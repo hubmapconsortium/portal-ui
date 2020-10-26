@@ -10,9 +10,9 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { HeaderIconCell, StyledLink, StyledInfoIcon, CenterAlignedFlexRow } from './style';
-import SectionHeader from '../SectionHeader';
-import SectionContainer from '../SectionContainer';
 
 function CollectionCreatorsTable(props) {
   const { creators: tableRows } = props;

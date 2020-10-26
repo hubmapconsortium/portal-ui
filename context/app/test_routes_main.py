@@ -145,8 +145,9 @@ def test_login(client):
 def test_robots_txt_disallow(client):
     response = client.get('/robots.txt')
     assert 'Disallow: /' in response.data.decode('utf8')
+    assert 'Disallow: /search' not in response.data.decode('utf8')
 
 
 def test_robots_txt_allow(client):
     response = client.get('/robots.txt', headers={'Host': 'portal.hubmapconsortium.org'})
-    assert 'Disallow: /' not in response.data.decode('utf8')
+    assert 'Disallow: /search' in response.data.decode('utf8')

@@ -44,6 +44,24 @@ class ApiClient():
             raise
         return response.json()
 
+    def get_all_dataset_uuids(self):
+        size = 10000  # Default ES limit
+        query = {
+            "size": size,
+            "post_filter": {
+                "term": {"entity_type.keyword": "Dataset"}
+            },
+            "_source": ["empty-returns-everything"]
+        }
+        response_json = self._request(
+            current_app.config['ELASTICSEARCH_ENDPOINT']
+            + current_app.config['PORTAL_INDEX_PATH'],
+            body_json=query)
+        uuids = [hit['_id'] for hit in response_json['hits']['hits']]
+        if len(uuids) == size:
+            raise Exception(f'At least 10k datasets: need to make multiple requests')
+        return uuids
+
     def get_entity(self, uuid=None, hbm_id=None):
         if self.is_mock:
             return {

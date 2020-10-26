@@ -7,7 +7,7 @@ import ResultsTiles from '../ResultsTiles';
 
 function Results(props) {
   const { sortOptions, hitsPerPage, resultFields, detailsUrlPrefix, idField, resultFieldIds, type } = props;
-
+  // one of the sort components must stay mounted to preserve sort history between views.
   return (
     <ViewSwitcherHits
       hitsPerPage={hitsPerPage}

@@ -27,7 +27,8 @@ function TilesSortDropdown(props) {
   const { items, toggleItem, selectedItems } = props;
   const anchorRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedItemLabel, setSelectedItemLabel] = useState(getSelectedItemLabel(items, selectedItems));
+  const selectedItemLabel = getSelectedItemLabel(items, selectedItems);
+
   const searchView = useSearchViewStore(searchViewStoreSelector);
 
   const pairs = getSortPairs(items);
@@ -35,7 +36,6 @@ function TilesSortDropdown(props) {
     // Sort everything in ascending order except for last modified
     const item = pair[0].field === 'mapped_last_modified_timestamp.keyword' ? pair[0] : pair[1];
     toggleItem(item.key);
-    setSelectedItemLabel(item.label);
     setIsOpen(false);
   }
 
