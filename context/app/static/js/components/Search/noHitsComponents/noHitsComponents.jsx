@@ -5,7 +5,7 @@ import { Alert } from 'js/shared-styles/alerts';
 
 function NoResults({ isLoggedIn }) {
   const message = isLoggedIn ? 'Check your spelling or unselect filters.' : 'Login to view more results.';
-  return <Alert severity="warning">{`No Results Found. ${message}`}</Alert>;
+  return <Alert severity="warning">{`No results Found. ${message}`}</Alert>;
 }
 
 NoResults.propTypes = {
@@ -17,7 +17,7 @@ NoResults.defaultProps = {
 };
 
 function SearchError() {
-  return <Alert severity="error">An issue occurred when fetching your results. Please try again. </Alert>;
+  return <Alert severity="error">An error occurred when fetching your results. Please try again.</Alert>;
 }
 
 export { NoResults, SearchError };
