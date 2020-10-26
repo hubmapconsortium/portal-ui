@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
 import Accordions from './Accordions';
-import Results from './Results';
 import PaginationWrapper from './PaginationWrapper';
 import SearchBarLayout from './SearchBarLayout';
 import { resultFieldsToSortOptions } from './utils';
@@ -24,6 +23,7 @@ function SearchWrapper(props) {
     queryFields,
     isLoggedIn,
     type,
+    resultsComponent: ResultsComponent,
   } = props;
   const [searchView, setSearchView] = useState('table');
 
@@ -45,7 +45,7 @@ function SearchWrapper(props) {
             <Accordions filters={filters} />
           </StyledSideBar>
           <LayoutResults>
-            <Results
+            <ResultsComponent
               sortOptions={sortOptions}
               hitsPerPage={hitsPerPage}
               resultFields={resultFields[searchView]}
@@ -95,13 +95,15 @@ SearchWrapper.propTypes = {
   searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   isLoggedIn: PropTypes.bool,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  resultsComponent: PropTypes.func.isRequired,
 };
 
 SearchWrapper.defaultProps = {
   searchUrlPath: '_search',
   httpHeaders: {},
   isLoggedIn: false,
+  type: undefined,
 };
 
 export default SearchWrapper;
