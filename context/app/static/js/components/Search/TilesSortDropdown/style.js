@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
+import { DropdownSelectItem } from 'js/shared-styles/dropdowns';
 
 // must use display: none instead of conditional rendering to preserve sort history between views
 const SelectionButton = styled(Button)`
@@ -15,4 +16,8 @@ const SelectionButton = styled(Button)`
   `}
 `;
 
-export { SelectionButton };
+const StyledDropdownSelectItem = styled(DropdownSelectItem)`
+  min-width: 185px;
+`;
+
+export { SelectionButton, StyledDropdownSelectItem };

@@ -5,11 +5,10 @@ import Popper from '@material-ui/core/Popper';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
-import { SelectionButton } from './style';
+import { SelectionButton, StyledDropdownSelectItem } from './style';
 import { getSortPairs } from '../utils';
 
 const searchViewStoreSelector = (state) => state.searchView;
@@ -53,13 +52,17 @@ function TilesSortDropdown(props) {
         {selectedItemLabel} {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </SelectionButton>
       <Popper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>
-        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+        <Paper>
           <ClickAwayListener onClickAway={() => setIsOpen(false)}>
             <MenuList id="preview-options">
               {pairs.map((pair) => (
-                <MenuItem onClick={() => selectSortItem(pair)} key={pair[0].field}>
+                <StyledDropdownSelectItem
+                  onClick={() => selectSortItem(pair)}
+                  key={pair[0].field}
+                  isSelected={pair[0].label === selectedItemLabel}
+                >
                   {pair[0].label}
-                </MenuItem>
+                </StyledDropdownSelectItem>
               ))}
             </MenuList>
           </ClickAwayListener>
