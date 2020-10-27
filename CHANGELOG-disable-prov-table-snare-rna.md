@@ -1,1 +1,0 @@
-- Disable provenance table for salmon_rnaseq_snareseq data types.

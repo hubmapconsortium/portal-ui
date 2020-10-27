@@ -1,3 +1,10 @@
+## v0.4.5 - 2020-10-26
+
+- Disable provenance table for salmon_rnaseq_snareseq data types.
+- Fix in ingest-api url on status page.
+- Update home page html title.
+
+
 ## v0.4.4 - 2020-10-21
 
 - Log validation errors, if we see them.

@@ -1,1 +1,0 @@
-- Fix in ingest-api url on status page.
