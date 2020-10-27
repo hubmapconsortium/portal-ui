@@ -19,11 +19,11 @@ const StyledSpan = styled.span`
 `;
 
 function DropdownSelectItem(props) {
-  const { children, isSelected, className, ...rest } = props;
+  const { children, selected, className, ...rest } = props;
   return (
-    <FlexMenuItem className={className} {...rest}>
-      {isSelected && <CheckIcon color="primary" />}
-      <StyledSpan isSelected={isSelected}>{children}</StyledSpan>
+    <FlexMenuItem className={className} selected={selected} {...rest} role="option">
+      {selected && <CheckIcon color="primary" />}
+      <StyledSpan isSelected={selected}>{children}</StyledSpan>
     </FlexMenuItem>
   );
 }

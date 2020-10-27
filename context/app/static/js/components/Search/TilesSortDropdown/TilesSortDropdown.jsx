@@ -48,18 +48,22 @@ function TilesSortDropdown(props) {
         variant="contained"
         color="primary"
         $searchView={searchView}
+        aria-haspopup="true"
       >
         {selectedItemLabel} {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </SelectionButton>
       <Popper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>
         <Paper>
           <ClickAwayListener onClickAway={() => setIsOpen(false)}>
-            <MenuList id="preview-options">
+            <MenuList id="preview-options" role="listbox">
               {pairs.map((pair) => (
                 <StyledDropdownSelectItem
                   onClick={() => selectSortItem(pair)}
                   key={pair[0].field}
                   isSelected={pair[0].label === selectedItemLabel}
+                  autoFocus={pair[0].label === selectedItemLabel}
+                  selected={pair[0].label === selectedItemLabel}
+                  aria-selected={pair[0].label === selectedItemLabel}
                 >
                   {pair[0].label}
                 </StyledDropdownSelectItem>
