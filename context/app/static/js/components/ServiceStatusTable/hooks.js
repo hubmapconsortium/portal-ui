@@ -1,10 +1,12 @@
 import React from 'react';
 
+const gatewayUrl = 'https://gateway.api.hubmapconsortium.org/status.json';
+
 function useGatewayStatus() {
   const [gatewayStatus, setGatewayStatus] = React.useState(undefined);
   React.useEffect(() => {
     async function getAndSetGatewayStatus() {
-      const response = await fetch('https://gateway.api.hubmapconsortium.org/status.json');
+      const response = await fetch(gatewayUrl);
       if (!response.ok) {
         console.error('Entity API status failed', response);
         return;
@@ -17,4 +19,4 @@ function useGatewayStatus() {
   return gatewayStatus;
 }
 
-export { useGatewayStatus };
+export { useGatewayStatus, gatewayUrl };
