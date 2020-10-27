@@ -32,6 +32,9 @@ $secondary-gray: #636363;
 
 .sk-layout__filters {
   height: fit-content;
+  height:-webkit-fit-content;
+  height:-ms-fit-content;
+  height:-moz-fit-content;
   background-color: white;
 }
 
