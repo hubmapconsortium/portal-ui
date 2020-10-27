@@ -43,6 +43,10 @@ function DevSearch() {
         listFilter('metadata.metadata.assay_category', 'assay_category'),
         listFilter('metadata.metadata.assay_type', 'assay_type'),
       ],
+      'Validation Errors': [
+        listFilter('mapper_metadata.validation_errors.absolute_path', 'Document Path'),
+        listFilter('mapper_metadata.validation_errors.absolute_schema_path', 'Schema Path'),
+      ],
       Booleans: [
         checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata.metadata')),
         checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
