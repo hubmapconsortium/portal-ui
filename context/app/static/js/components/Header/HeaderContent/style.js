@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 
-import Logo from 'images/hubmap-logo.svg';
+import { ReactComponent as Logo } from 'images/hubmap-logo.svg';
 
 const HubmapLogo = styled(Logo)`
   margin-right: 10px;

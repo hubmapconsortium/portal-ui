@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 
 import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig } from 'js/components/Search/config';
-// eslint-disable-next-line import/named
 import { listFilter } from 'js/components/Search/utils';
 import AncestorNote from 'js/components/Search/AncestorNote';
+import Results from 'js/components/Search/Results';
+import { SearchHeader } from './style';
 
 function Search(props) {
   const { title } = props;
@@ -54,7 +54,9 @@ function Search(props) {
     // Search results fields to display in table:
     resultFields,
     // Default hitsPerPage is 10:
-    hitsPerPage: 20,
+    hitsPerPage: 18,
+    // Entity type
+    type,
     // Sidebar facet configuration:
     filters: filtersByType[type],
     queryFields: ['everything'],
@@ -62,12 +64,12 @@ function Search(props) {
   };
   const allProps = { apiUrl: elasticsearchEndpoint, ...searchProps }; // TODO: Not needed?
 
-  const wrappedSearch = <SearchWrapper {...allProps} />;
+  const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={Results} />;
   return (
     <>
-      <Typography component="h1" variant="h2">
+      <SearchHeader component="h1" variant="h2">
         {title}
-      </Typography>
+      </SearchHeader>
       {hasAncestorParam && (
         <LookupEntity
           uuid={searchParams.get('ancestor_ids[0]')}
