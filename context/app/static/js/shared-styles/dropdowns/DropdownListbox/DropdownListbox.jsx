@@ -1,11 +1,10 @@
 import React, { useState, useRef } from 'react';
-import Paper from '@material-ui/core/Paper';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuList from '@material-ui/core/MenuList';
 
-import { StyledPopper } from './style';
+import { StyledPopper, StyledPaper } from './style';
 
 function DropdownListbox(props) {
   const {
@@ -43,7 +42,7 @@ function DropdownListbox(props) {
         {selectedItemLabel} {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </SelectionButton>
       <StyledPopper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start">
-        <Paper>
+        <StyledPaper>
           <ClickAwayListener onClickAway={() => setIsOpen(false)}>
             <MenuList role="listbox">
               {options.map((option) => (
@@ -59,7 +58,7 @@ function DropdownListbox(props) {
               ))}
             </MenuList>
           </ClickAwayListener>
-        </Paper>
+        </StyledPaper>
       </StyledPopper>
     </>
   );
