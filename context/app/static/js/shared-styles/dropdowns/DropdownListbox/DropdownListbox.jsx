@@ -8,7 +8,7 @@ import { StyledPopper, StyledPaper } from './style';
 
 function DropdownListbox(props) {
   const {
-    selectedItemLabel,
+    selectedOptionIndex,
     buttonComponent: SelectionButton,
     optionComponent: Option,
     buttonProps,
@@ -24,10 +24,6 @@ function DropdownListbox(props) {
     setIsOpen(false);
   }
 
-  function isSelectedOption(option) {
-    return getOptionLabel(option) === selectedItemLabel;
-  }
-
   return (
     <>
       <SelectionButton
@@ -39,19 +35,19 @@ function DropdownListbox(props) {
         onClick={() => setIsOpen(true)}
         {...buttonProps}
       >
-        {selectedItemLabel} {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+        {getOptionLabel(options[selectedOptionIndex])} {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </SelectionButton>
       <StyledPopper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start">
         <StyledPaper>
           <ClickAwayListener onClickAway={() => setIsOpen(false)}>
             <MenuList role="listbox">
-              {options.map((option) => (
+              {options.map((option, i) => (
                 <Option
-                  onClick={() => selectOption(option)}
+                  onClick={() => selectOption({ option, i })}
                   key={getOptionLabel(option)}
-                  autoFocus={isSelectedOption(option)}
-                  selected={isSelectedOption(option)}
-                  aria-selected={isSelectedOption(option)}
+                  autoFocus={selectedOptionIndex === i}
+                  selected={selectedOptionIndex === i}
+                  aria-selected={selectedOptionIndex === i}
                 >
                   {getOptionLabel(option)}
                 </Option>

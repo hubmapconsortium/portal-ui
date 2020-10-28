@@ -8,23 +8,23 @@ import { getSortPairs } from '../utils';
 
 const searchViewStoreSelector = (state) => state.searchView;
 
-function getSelectedItemLabel(items, selectedItems) {
+function getSelectedItemIndex(items, selectedItems) {
   if (selectedItems.length > 1) {
     console.warn('Expected only a single sort, not:', selectedItems);
   }
   const selectedItem = selectedItems.length ? selectedItems[0] : undefined;
-  const match = items.filter((item) => item.key === selectedItem);
-  return match.length ? match[0].label : '';
+  return items.findIndex((item) => [item[0].key, item[1].key].includes(selectedItem)) || 0;
 }
 
 function TilesSortDropdown(props) {
   const { items, toggleItem, selectedItems } = props;
-  const selectedItemLabel = getSelectedItemLabel(items, selectedItems);
+  const pairs = getSortPairs(items);
+  const selectedItemIndex = getSelectedItemIndex(pairs, selectedItems);
 
   const searchView = useSearchViewStore(searchViewStoreSelector);
 
-  const pairs = getSortPairs(items);
-  function selectSortItem(pair) {
+  function selectSortItem(itemAndIndex) {
+    const pair = itemAndIndex.option;
     // Sort everything in ascending order except for last modified
     const item = pair[0].field === 'mapped_last_modified_timestamp.keyword' ? pair[0] : pair[1];
     toggleItem(item.key);
@@ -34,7 +34,7 @@ function TilesSortDropdown(props) {
     <DropdownListbox
       buttonComponent={StyledButton}
       optionComponent={StyledDropdownListboxOption}
-      selectedItemLabel={selectedItemLabel}
+      selectedOptionIndex={selectedItemIndex}
       buttonProps={{
         $searchView: searchView,
       }}

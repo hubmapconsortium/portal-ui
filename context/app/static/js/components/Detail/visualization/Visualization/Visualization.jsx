@@ -48,7 +48,7 @@ function Visualization(props) {
   } = useVisualizationStore(visualizationStoreSelector);
 
   const [vitessceErrors, setVitessceErrors] = useState([]);
-  const [vitessceSelection, setVitessceSelection] = useState(vitData[0]);
+  const [vitessceSelection, setVitessceSelection] = useState(0);
 
   function removeError(message) {
     setVitessceErrors((prev) => prev.filter((d) => d !== message));
@@ -58,9 +58,10 @@ function Visualization(props) {
     setVitessceErrors((prev) => (prev.includes(message) ? prev : [...prev, message]));
   }
 
-  function setSelectionAndClearErrors(s) {
+  function setSelectionAndClearErrors(itemAndIndex) {
+    const { i } = itemAndIndex;
     setVitessceErrors([]);
-    setVitessceSelection(s);
+    setVitessceSelection(i);
   }
 
   useEffect(() => {
@@ -90,7 +91,7 @@ function Visualization(props) {
             <DropdownListbox
               buttonComponent={SelectionButton}
               optionComponent={DropdownListboxOption}
-              selectedItemLabel={vitessceSelection.name}
+              selectedOptionIndex={vitessceSelection}
               buttonProps={{}}
               options={vitData}
               selectOnClick={setSelectionAndClearErrors}
@@ -126,7 +127,7 @@ function Visualization(props) {
             </ErrorSnackbar>
           )}
           <Vitessce
-            config={vitessceSelection || vitData}
+            config={vitData[vitessceSelection] || vitData}
             theme={vizTheme}
             height={vizIsFullscreen ? null : vitessceFixedHeight}
             onWarn={addError}
