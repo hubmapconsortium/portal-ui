@@ -1,14 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
-import MenuList from '@material-ui/core/MenuList';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
+import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
-import { SelectionButton, StyledDropdownSelectItem } from './style';
+import { StyledButton, StyledDropdownListboxOption } from './style';
 import { getSortPairs } from '../utils';
 
 const searchViewStoreSelector = (state) => state.searchView;
@@ -24,8 +19,6 @@ function getSelectedItemLabel(items, selectedItems) {
 
 function TilesSortDropdown(props) {
   const { items, toggleItem, selectedItems } = props;
-  const anchorRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
   const selectedItemLabel = getSelectedItemLabel(items, selectedItems);
 
   const searchView = useSearchViewStore(searchViewStoreSelector);
@@ -35,44 +28,20 @@ function TilesSortDropdown(props) {
     // Sort everything in ascending order except for last modified
     const item = pair[0].field === 'mapped_last_modified_timestamp.keyword' ? pair[0] : pair[1];
     toggleItem(item.key);
-    setIsOpen(false);
   }
 
   return (
-    <>
-      <SelectionButton
-        ref={anchorRef}
-        style={{ borderRadius: 3 }}
-        onClick={() => setIsOpen(true)}
-        disableElevation
-        variant="contained"
-        color="primary"
-        $searchView={searchView}
-        aria-haspopup="true"
-      >
-        {selectedItemLabel} {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-      </SelectionButton>
-      <Popper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>
-        <Paper>
-          <ClickAwayListener onClickAway={() => setIsOpen(false)}>
-            <MenuList id="preview-options" role="listbox">
-              {pairs.map((pair) => (
-                <StyledDropdownSelectItem
-                  onClick={() => selectSortItem(pair)}
-                  key={pair[0].field}
-                  isSelected={pair[0].label === selectedItemLabel}
-                  autoFocus={pair[0].label === selectedItemLabel}
-                  selected={pair[0].label === selectedItemLabel}
-                  aria-selected={pair[0].label === selectedItemLabel}
-                >
-                  {pair[0].label}
-                </StyledDropdownSelectItem>
-              ))}
-            </MenuList>
-          </ClickAwayListener>
-        </Paper>
-      </Popper>
-    </>
+    <DropdownListbox
+      buttonComponent={StyledButton}
+      optionComponent={StyledDropdownListboxOption}
+      selectedItemLabel={selectedItemLabel}
+      buttonProps={{
+        $searchView: searchView,
+      }}
+      options={pairs}
+      selectOnClick={selectSortItem}
+      getOptionLabel={(pair) => pair[0].label}
+    />
   );
 }
 
