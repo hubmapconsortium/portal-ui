@@ -41,6 +41,7 @@ function TilesSortDropdown(props) {
       options={pairs}
       selectOnClick={selectSortItem}
       getOptionLabel={(pair) => pair[0].label}
+      id="search-tiles-sort"
     />
   );
 }

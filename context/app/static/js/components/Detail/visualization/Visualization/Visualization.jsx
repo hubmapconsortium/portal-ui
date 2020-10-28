@@ -96,6 +96,7 @@ function Visualization(props) {
               options={vitData}
               selectOnClick={setSelectionAndClearErrors}
               getOptionLabel={(v) => v.name}
+              id="visualization-data"
             />
           ) : null}
         </StyledHeaderRight>

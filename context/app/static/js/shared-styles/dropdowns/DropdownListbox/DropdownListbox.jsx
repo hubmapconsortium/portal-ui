@@ -15,6 +15,7 @@ function DropdownListbox(props) {
     options,
     selectOnClick,
     getOptionLabel,
+    id,
   } = props;
   const anchorRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -28,6 +29,7 @@ function DropdownListbox(props) {
     <>
       <SelectionButton
         ref={anchorRef}
+        id={`${id}-button`}
         aria-haspopup="listbox"
         disableElevation
         variant="contained"
@@ -40,7 +42,7 @@ function DropdownListbox(props) {
       <StyledPopper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start">
         <StyledPaper>
           <ClickAwayListener onClickAway={() => setIsOpen(false)}>
-            <MenuList role="listbox">
+            <MenuList role="listbox" id={`${id}-options`}>
               {options.map((option, i) => (
                 <Option
                   onClick={() => selectOption({ option, i })}
