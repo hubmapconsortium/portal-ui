@@ -1,1 +1,0 @@
-- On the status page, show where the API info comes from.
