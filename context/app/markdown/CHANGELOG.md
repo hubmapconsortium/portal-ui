@@ -1,3 +1,12 @@
+## v0.4.7 - 2020-10-28
+
+- Update search page ui to 8/17/2020 design.
+- Compact search sidebar spacing and update font size and colors.
+- Resize search table sort arrows.
+- Add tile view for search page.
+- On the status page, show where the API info comes from.
+
+
 ## v0.4.5 - 2020-10-26
 
 - Disable provenance table for salmon_rnaseq_snareseq data types.

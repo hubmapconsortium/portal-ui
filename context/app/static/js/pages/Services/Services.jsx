@@ -5,6 +5,8 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import Description from 'js/shared-styles/sections/Description';
 import ServiceStatusTable from 'js/components/ServiceStatusTable';
+import { LightBlueLink } from 'js/shared-styles/Links';
+import { gatewayUrl } from 'js/components/ServiceStatusTable/hooks';
 
 function Services() {
   return (
@@ -14,9 +16,11 @@ function Services() {
           Services
         </SectionHeader>
         <Description>
-          {'HuBMAP is powered by a number of APIs. '}
-          {'The Portal depends directly on only search-api, entity-api, and assets. '}
-          {'Other services use the others listed below. '}
+          {'HuBMAP is powered by a number of APIs. Status information provided by '}
+          <LightBlueLink target="_blank" rel="noopener noreferrer" underline="none" href={gatewayUrl}>
+            {new URL(gatewayUrl).hostname}
+          </LightBlueLink>
+          .
         </Description>
       </SectionContainer>
       <Paper>
