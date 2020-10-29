@@ -92,7 +92,6 @@ function Visualization(props) {
               buttonComponent={SelectionButton}
               optionComponent={DropdownListboxOption}
               selectedOptionIndex={vitessceSelection}
-              buttonProps={{}}
               options={vitData}
               selectOnClick={setSelectionAndClearErrors}
               getOptionLabel={(v) => v.name}

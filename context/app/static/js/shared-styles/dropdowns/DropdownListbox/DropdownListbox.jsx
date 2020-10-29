@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -61,5 +62,22 @@ function DropdownListbox(props) {
     </>
   );
 }
+
+DropdownListbox.propTypes = {
+  selectedOptionIndex: PropTypes.number.isRequired,
+  buttonComponent: PropTypes.elementType.isRequired,
+  optionComponent: PropTypes.elementType.isRequired,
+  /* eslint-disable react/forbid-prop-types */
+  buttonProps: PropTypes.object,
+  options: PropTypes.array.isRequired,
+  /* eslint-enable react/forbid-prop-types */
+  selectOnClick: PropTypes.func.isRequired,
+  getOptionLabel: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+};
+
+DropdownListbox.defaultProps = {
+  buttonProps: {},
+};
 
 export default DropdownListbox;
