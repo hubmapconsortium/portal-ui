@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import { ExistsQuery, BoolMustNot } from 'searchkit';
+
 import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig } from 'js/components/Search/config';
-import { listFilter } from 'js/components/Search/utils';
+import { listFilter, checkboxFilter } from 'js/components/Search/utils';
 import AncestorNote from 'js/components/Search/AncestorNote';
 import Results from 'js/components/Search/Results';
 import { SearchHeader } from './style';
@@ -15,7 +17,11 @@ function Search(props) {
   const { title } = props;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
-  const hiddenFilters = [listFilter('ancestor_ids', 'Ancestor ID'), listFilter('entity_type', 'Entity Type')];
+  const hiddenFilters = [
+    checkboxFilter('no_next_version', 'No next version?', BoolMustNot(ExistsQuery('next_version'))),
+    listFilter('ancestor_ids', 'Ancestor ID'),
+    listFilter('entity_type', 'Entity Type'),
+  ];
 
   const filtersByType = {
     donor: { ...donorConfig.filters, '': hiddenFilters },
