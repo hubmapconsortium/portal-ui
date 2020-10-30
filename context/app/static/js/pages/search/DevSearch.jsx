@@ -47,6 +47,11 @@ function DevSearch() {
         listFilter('metadata.metadata.assay_category', 'assay_category'),
         listFilter('metadata.metadata.assay_type', 'assay_type'),
       ],
+      Versioning: [
+        checkboxFilter('has_latest_version', 'Has latest?', ExistsQuery('latest_version')),
+        checkboxFilter('has_previous_version', 'Has previous?', ExistsQuery('previous_version')),
+        checkboxFilter('has_next_version', 'Has next?', ExistsQuery('next_version')),
+      ],
       Booleans: [
         checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata.metadata')),
         checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
