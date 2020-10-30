@@ -1,0 +1,1 @@
+- Bump version to 0.6. (I forgot to increment for the 0.5 sprint. Sorry!)
