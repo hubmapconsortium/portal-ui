@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
+import {
+  SearchkitManager,
+  SearchkitProvider,
+  LayoutResults,
+  NoHits,
+  LayoutBody,
+  BoolMustNot,
+  ExistsQuery,
+} from 'searchkit'; // eslint-disable-line import/no-duplicates
 
 import Accordions from './Accordions';
 import PaginationWrapper from './PaginationWrapper';
@@ -31,6 +39,9 @@ function SearchWrapper(props) {
   const sortOptions = resultFieldsToSortOptions(resultFields.table);
   const resultFieldIds = [...resultFields.table, ...resultFields.tile].map((field) => field.id).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
+  searchkit.addDefaultQuery((query) => {
+    return query.addQuery(BoolMustNot(ExistsQuery('next_version')));
+  });
 
   return (
     <SearchkitProvider searchkit={searchkit}>
