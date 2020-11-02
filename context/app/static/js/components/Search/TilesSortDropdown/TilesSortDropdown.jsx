@@ -8,12 +8,12 @@ import { getSortPairs } from '../utils';
 
 const searchViewStoreSelector = (state) => state.searchView;
 
-function getSelectedItemIndex(items, selectedItems) {
+function getSelectedItemIndex(pairs, selectedItems) {
   if (selectedItems.length > 1) {
     console.warn('Expected only a single sort, not:', selectedItems);
   }
   const selectedItem = selectedItems.length ? selectedItems[0] : undefined;
-  return items.findIndex((item) => [item[0].key, item[1].key].includes(selectedItem)) || 0;
+  return pairs.findIndex((item) => [item[0].key, item[1].key].includes(selectedItem));
 }
 
 function TilesSortDropdown(props) {
