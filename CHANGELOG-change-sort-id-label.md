@@ -1,1 +1,0 @@
-- Change sort label for IDs from the entity type to HubMAP ID.
