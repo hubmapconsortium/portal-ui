@@ -1,0 +1,1 @@
+- Drop our standalone file, and use package.json for versioning info.
