@@ -7,8 +7,11 @@ git diff --quiet || die 'Uncommitted changes: Stash or commit'
 git checkout master
 git pull
 
-perl -i -pne 's/(\d+)$/$1+1/e' context/app/markdown/VERSION.md
-VERSION=`cat VERSION`
+# The docs say that a git tag will be created by default.
+# That would be useful, but it doesn't see to be happening for me.
+# Add additional flag to override.
+# https://docs.npmjs.com/cli/v6/commands/npm-version
+VERSION=`npm version patch --no-git-tag-version`
 git add .
 git commit -m 'Version bump'
 
@@ -27,7 +30,6 @@ if ls CHANGELOG-*.md; then
   git add .
   git commit -m 'Update CHANGELOG'
 fi
-
 
 VERSION_IMAGE_NAME=hubmap/portal-ui:$VERSION
 LATEST_IMAGE_NAME=hubmap/portal-ui:latest
