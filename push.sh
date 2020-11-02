@@ -7,17 +7,25 @@ git diff --quiet || die 'Uncommitted changes: Stash or commit'
 git checkout master
 git pull
 
+EXPECTED_MINOR=v0.`expr $(date +%s) / 86400 / 14 - 1320`
+
 # The docs say that a git tag will be created by default.
 # That would be useful, but it doesn't see to be happening for me.
 # Add additional flag to override.
 # https://docs.npmjs.com/cli/v6/commands/npm-version
 VERSION=`npm version patch --no-git-tag-version`
+
+if [[ $VERSION != $EXPECTED_MINOR* ]]; then
+  echo "End of 2-week cycle. Setting minor version to: $EXPECTED_MINOR"
+  VERSION=`npm version $EXPECTED_MINOR.0 --no-git-tag-version`
+fi
+
 git add .
 git commit -m 'Version bump'
 
 if ls CHANGELOG-*.md; then
   (
-    echo '##' `cat VERSION` - `date +"%F"`
+    echo '##' $VERSION - `date +"%F"`
     echo
     # "-l" chomps and adds newline.
     perl -lpe '' CHANGELOG-*.md

@@ -10,6 +10,7 @@ import { StyledExternalLinkIcon } from 'js/components/files/GlobusLinkMessage/st
 import { HeaderCell } from 'js/shared-styles/Table';
 import { LightBlueLink } from 'js/shared-styles/Links';
 
+import { version } from 'context/package';
 import StatusIcon from './StatusIcon';
 import { useGatewayStatus } from './hooks';
 import { buildServiceStatus } from './utils';
@@ -26,8 +27,8 @@ function ServiceStatusTable() {
         {
           name: 'portal-ui',
           github: 'https://github.com/hubmapconsortium/portal-ui',
-          // build: TODO: pull from VERSION, or put in package.json.
-          // version,
+          // build: Not distinct from version.
+          version,
           isUp: true,
         },
         buildServiceStatus(

@@ -20,12 +20,13 @@ const config = {
     },
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml'],
+    extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml', '.json'],
     alias: {
       'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
       js: resolve(__dirname, '../app/static/js/'),
       images: resolve(__dirname, '../app/static/images/'),
       'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
+      context: resolve(__dirname, '../../context'),
     },
   },
   module: {
