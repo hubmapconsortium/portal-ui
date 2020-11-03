@@ -1,3 +1,11 @@
+## v0.6.1 - 2020-11-02
+
+- Bump version to 0.6. (I forgot to increment for the 0.5 sprint. Sorry!)
+- Change sort label for IDs from the entity type to HubMAP ID.
+- Facet the validation errors, to understand what part of the schema is being violated,
+  and what part of the documents are in violation.
+
+
 ## v0.4.7 - 2020-10-28
 
 - Update search page ui to 8/17/2020 design.
