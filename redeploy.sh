@@ -14,23 +14,34 @@ echo 'whoami?' `whoami`
 su - centos
 echo 'whoami?' `whoami`
 
-cd /home/centos/hubmap/portal-ui/compose
-echo 'portal running?' `docker ps | grep portal-ui`
+set -o errexit
 
-echo 'stopping...'
-docker-compose -f hubmap.yml down
-echo 'portal running?' `docker ps | grep portal-ui`
+function take_it_down {
+  [ -e /home/centos/hubmap/$1 ] || return
+  cd /home/centos/hubmap/$1/compose
+  echo "$1 running?" `docker ps | grep $1`
+
+  echo "stopping $1..."
+  docker-compose -f hubmap.yml down
+  echo "$1 running?" `docker ps | grep $1`
+}
+
+function bring_it_up {
+  [ -e /home/centos/hubmap/$1 ] || return
+  echo "starting $1..."
+  docker-compose -f hubmap.yml up -d
+  echo "$1 running?" `docker ps | grep portal-ui`
+}
+
+take_it_down "portal-ui"
+take_it_down "portal-ui-prod"
 
 echo 'removing old "latest"...'
 # Unless we clear it, Docker will think it already has the image.
-docker rmi hubmap/portal-ui:latest
+docker rmi hubmap/portal-ui:latest || echo 'Image already gone'
 
-echo 'starting...'
-docker-compose -f hubmap.yml up -d
-echo 'portal running?' `docker ps | grep portal-ui`
-
-# TODO: Move VERSION into context, and cat it.
-docker exec -it portal-ui cat package.json
+bring_it_up "portal-ui"
+bring_it_up "portal-ui-prod"
 
 EOF
 
