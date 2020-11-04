@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+
+  portal-ui-prod:
+    hostname: portal-ui-prod
+    container_name: portal-ui-prod
+    image: hubmap/portal-ui:latest
+
+    # Mount the app config in container to keep it outside the image.
+    volumes:
+      - "../context/instance/portal-prod.stage-app.conf:/app/instance/app.conf"
+
+    # Avoid accidentally creating zombie processes
+    init: true
+
+    # Specifying a restart policy to avoid downtime
+    restart: always
+
+    networks:
+      - gateway_hubmap
+
+networks:
+  # This is the network created by gateway to enable communicaton between multiple docker-compose projects
+  gateway_hubmap:
+    external: true
