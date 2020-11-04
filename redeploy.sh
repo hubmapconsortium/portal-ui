@@ -28,6 +28,7 @@ function take_it_down {
 
 function bring_it_up {
   [ -e /home/centos/hubmap/$1 ] || return
+  cd /home/centos/hubmap/$1/compose
   echo "starting $1..."
   docker-compose -f hubmap.yml up -d
   echo "$1 running?" `docker ps | grep portal-ui`
