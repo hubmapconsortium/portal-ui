@@ -9,7 +9,7 @@ services:
 
     # Mount the app config in container to keep it outside the image.
     volumes:
-      - "../context/instance/portal-prod.stage-app.conf:/app/instance/app.conf"
+      - "../context/instance/app.stage.conf:/app/instance/app.conf"
 
     # Avoid accidentally creating zombie processes
     init: true
