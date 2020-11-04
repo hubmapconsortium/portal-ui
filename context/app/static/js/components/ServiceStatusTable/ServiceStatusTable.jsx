@@ -10,7 +10,7 @@ import { StyledExternalLinkIcon } from 'js/components/files/GlobusLinkMessage/st
 import { HeaderCell } from 'js/shared-styles/Table';
 import { LightBlueLink } from 'js/shared-styles/Links';
 
-import { version } from 'context/package';
+import { version } from 'package';
 import StatusIcon from './StatusIcon';
 import { useGatewayStatus } from './hooks';
 import { buildServiceStatus } from './utils';

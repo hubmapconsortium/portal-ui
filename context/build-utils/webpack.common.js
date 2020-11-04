@@ -26,7 +26,7 @@ const config = {
       js: resolve(__dirname, '../app/static/js/'),
       images: resolve(__dirname, '../app/static/images/'),
       'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
-      context: resolve(__dirname, '../../context'),
+      package: resolve(__dirname, '../package.json'),
     },
   },
   module: {
