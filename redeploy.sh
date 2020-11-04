@@ -21,7 +21,7 @@ echo 'stopping...'
 
 # Also stop and remove the portal-ui-pord container on STAGE only
 if [ "$2" = "stage" ]; then
-    docker-compose -f hubmap.yml -f portal-prod.stage.yml down
+    docker-compose -f hubmap.yml -f hubmap.stage.yml down
 else
     docker-compose -f hubmap.yml down
 fi
@@ -36,7 +36,7 @@ echo 'starting...'
 
 # Also start the portal-ui-pord container on STAGE only
 if [ "$2" = "stage" ]; then
-    docker-compose -f hubmap.yml -f portal-prod.stage.yml up -d
+    docker-compose -f hubmap.yml -f hubmap.stage.yml up -d
 else
     docker-compose -f hubmap.yml up -d
 fi
