@@ -1,3 +1,8 @@
+## v0.6.2 - 2020-11-05
+
+- Update redeploy.sh to handle to stage environment.
+
+
 ## v0.6.1 - 2020-11-02
 
 - Bump version to 0.6. (I forgot to increment for the 0.5 sprint. Sorry!)
