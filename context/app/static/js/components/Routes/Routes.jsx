@@ -1,6 +1,7 @@
 import React, { lazy } from 'react';
 import PropTypes from 'prop-types';
 
+import Error from 'js/pages/Error';
 import Route from './Route';
 import useSendPageView from './useSendPageView';
 import useSetUrlBeforeLogin from './useSetUrlBeforeLogin';
@@ -9,7 +10,6 @@ const Donor = lazy(() => import('js/pages/Donor'));
 const Dataset = lazy(() => import('js/pages/Dataset'));
 const Sample = lazy(() => import('js/pages/Sample'));
 const Collection = lazy(() => import('js/pages/Collection'));
-const Error = lazy(() => import('js/pages/Error'));
 const Home = lazy(() => import('js/pages/Home'));
 const Search = lazy(() => import('js/pages/search/Search'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
