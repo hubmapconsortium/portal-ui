@@ -6,6 +6,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const StyledContainer = styled(Container)`
   margin-top: ${(props) => props.theme.spacing(2)}px;
+`;
+
+const MainWrapper = styled.div`
   flex-grow: 1;
 `;
 
@@ -13,7 +16,6 @@ const LoadingWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
   flex-grow: 1;
 `;
 
@@ -28,7 +30,9 @@ function Route({ children, disableWidthConstraint }) {
         </LoadingWrapper>
       }
     >
-      <StyledContainer {...constrainWidthProps}>{children}</StyledContainer>{' '}
+      <MainWrapper>
+        <StyledContainer {...constrainWidthProps}>{children}</StyledContainer>
+      </MainWrapper>
     </Suspense>
   );
 }
