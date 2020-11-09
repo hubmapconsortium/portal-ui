@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import useFilesStore from 'js/stores/useFilesStore';
 import { Directory, StyledFolderIcon, StyledFolderOpenIcon } from './style';
+
+const filesStoreSelector = (state) => state.displayOnlyQaQc;
 
 function FileBrowserDirectory(props) {
   const { dirName, children, depth } = props;
@@ -12,6 +15,16 @@ function FileBrowserDirectory(props) {
       setIsExpanded(!isExpanded);
     }
   };
+
+  const displayOnlyQaQc = useFilesStore(filesStoreSelector);
+
+  useEffect(() => {
+    if (displayOnlyQaQc === true) {
+      setIsExpanded(true);
+      return;
+    }
+    setIsExpanded(false);
+  }, [displayOnlyQaQc]);
 
   return (
     <div>
