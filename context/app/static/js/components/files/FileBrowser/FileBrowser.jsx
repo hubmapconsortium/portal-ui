@@ -34,6 +34,7 @@ function FileBrowser(props) {
         onClick={toggleDisplayOnlyQaQc}
         icon={<DoneIcon />}
         component="button"
+        disabled={Object.keys(qaFileTree).length === 0}
       />
       <ScrollPaper data-testid="file-browser">
         <FileBrowserNode fileSubTree={displayOnlyQaQc ? qaFileTree : fileTree} depth={0} />
