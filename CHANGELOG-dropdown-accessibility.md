@@ -1,0 +1,1 @@
+- Improve accessibility of search sort dropdown.
