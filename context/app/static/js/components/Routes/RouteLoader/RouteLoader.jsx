@@ -1,14 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useTransition, animated, config } from 'react-spring';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const LoadingWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
+import { LoadingWrapper } from './style';
 
 const AnimatedCircularProgress = animated(CircularProgress);
 
