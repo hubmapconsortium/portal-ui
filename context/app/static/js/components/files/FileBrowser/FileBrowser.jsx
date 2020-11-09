@@ -3,15 +3,22 @@ import PropTypes from 'prop-types';
 import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Done';
 
+import useFilesStore from 'js/stores/useFilesStore';
 import { relativeFilePathsToTree } from './utils';
 import FileBrowserNode from '../FileBrowserNode';
 import { ScrollPaper } from './style';
+
+const filesStoreSelector = (state) => ({
+  displayOnlyQaQc: state.displayOnlyQaQc,
+  toggleDisplayOnlyQaQc: state.toggleDisplayOnlyQaQc,
+});
 
 function FileBrowser(props) {
   const { files } = props;
   const [fileTree, setFileTree] = useState({});
   const [qaFileTree, setQaFileTree] = useState({});
-  const [displayOnlyQaFiles, setDisplayOnlyQaFiles] = useState(false);
+
+  const { displayOnlyQaQc, toggleDisplayOnlyQaQc } = useFilesStore(filesStoreSelector);
 
   useEffect(() => {
     setFileTree(relativeFilePathsToTree(files));
@@ -24,12 +31,12 @@ function FileBrowser(props) {
         label="Show QA Files Only"
         clickable
         color="primary"
-        onClick={() => setDisplayOnlyQaFiles((prevState) => !prevState)}
+        onClick={toggleDisplayOnlyQaQc}
         icon={<DoneIcon />}
         component="button"
       />
       <ScrollPaper data-testid="file-browser">
-        <FileBrowserNode fileSubTree={displayOnlyQaFiles ? qaFileTree : fileTree} depth={0} />
+        <FileBrowserNode fileSubTree={displayOnlyQaQc ? qaFileTree : fileTree} depth={0} />
       </ScrollPaper>
     </>
   );
