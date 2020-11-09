@@ -16,9 +16,7 @@ function App(props) {
     // eslint-disable-next-line no-undef
     <Providers endpoints={endpoints} nexusToken={nexus_token}>
       <Header />
-      <div className="main-content">
-        <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode }} />
-      </div>
+      <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode }} />
       <Footer />
     </Providers>
   );

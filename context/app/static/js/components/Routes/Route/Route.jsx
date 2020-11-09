@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
 
-const StyledContainer = styled(Container)`
-  margin-top: ${(props) => props.theme.spacing(2)}px;
-`;
+import RouteLoader from '../RouteLoader';
+import { StyledContainer, MainWrapper } from './style';
 
 function Route({ children, disableWidthConstraint }) {
   const constrainWidthProps = disableWidthConstraint ? { maxWidth: false, disableGutters: true } : { maxWidth: 'lg' };
 
-  return <StyledContainer {...constrainWidthProps}>{children}</StyledContainer>;
+  return (
+    <Suspense fallback={<RouteLoader />}>
+      <MainWrapper>
+        <StyledContainer {...constrainWidthProps}>{children}</StyledContainer>
+      </MainWrapper>
+    </Suspense>
+  );
 }
 
 Route.propTypes = {
