@@ -1,1 +1,0 @@
-- Split js bundle by route.
