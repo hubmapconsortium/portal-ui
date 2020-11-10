@@ -1,3 +1,10 @@
+## v0.6.3 - 2020-11-09
+
+- Improve accessibility of search sort dropdown.
+- Split js bundle by route.
+- Drop our standalone file, and use package.json for versioning info.
+
+
 ## v0.6.2 - 2020-11-05
 
 - Update redeploy.sh to handle to stage environment.

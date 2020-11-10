@@ -1,1 +1,1 @@
-- Drop our standalone file, and use package.json for versioning info.
+- Try to diagnose and fix versioning bug.
