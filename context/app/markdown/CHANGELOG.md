@@ -1,4 +1,4 @@
-## v0.6.1 - 2020-11-09
+## v0.6.3 - 2020-11-09
 
 - Improve accessibility of search sort dropdown.
 - Split js bundle by route.
