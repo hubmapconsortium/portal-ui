@@ -22,6 +22,7 @@ function ProvTabs(props) {
     'sc_atac_seq_snare_lab',
     'TMT-LC-MS',
     'salmon_rnaseq_snareseq',
+    'ATACseq-bulk',
   ]);
   const shouldDisplayDag = entity_type === 'Dataset' && metadata && 'dag_provenance_list' in metadata;
 
