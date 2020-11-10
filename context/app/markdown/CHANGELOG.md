@@ -1,3 +1,8 @@
+## v0.6.4 - 2020-11-10
+
+- Try to diagnose and fix versioning bug.
+
+
 ## v0.6.3 - 2020-11-09
 
 - Improve accessibility of search sort dropdown.
