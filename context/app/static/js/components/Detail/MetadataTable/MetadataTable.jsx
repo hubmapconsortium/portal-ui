@@ -55,8 +55,7 @@ function MetadataTable(props) {
         </SecondaryBackgroundTooltip>
       </Flex>
       <Paper>
-        <StyledTableContainer $maxHeight={340}>
-          {/* Height lands in the middle of a row, to show that div can scroll. */}
+        <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
