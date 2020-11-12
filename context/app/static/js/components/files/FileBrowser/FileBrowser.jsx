@@ -40,7 +40,6 @@ function FileBrowser(props) {
           icon={displayOnlyQaQc ? <DoneIcon /> : null}
           component="button"
           disabled={Object.keys(fileTrees.qa).length === 0}
-          displayOnlyQaQc={displayOnlyQaQc}
         />
       </ChipWrapper>
       <Table data-testid="file-browser">
