@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import DoneIcon from '@material-ui/icons/Done';
 import Paper from '@material-ui/core/Paper';
@@ -18,15 +18,16 @@ const filesStoreSelector = (state) => ({
 
 function FileBrowser(props) {
   const { files } = props;
-  const [fileTree, setFileTree] = useState({});
-  const [qaFileTree, setQaFileTree] = useState({});
 
   const { displayOnlyQaQc, toggleDisplayOnlyQaQc } = useFilesStore(filesStoreSelector);
 
-  useEffect(() => {
-    setFileTree(relativeFilePathsToTree(files));
-    setQaFileTree(relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc)));
-  }, [files]);
+  const fileTrees = useMemo(
+    () => ({
+      all: relativeFilePathsToTree(files),
+      qa: relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc)),
+    }),
+    [files],
+  );
 
   return (
     <StyledTableContainer component={Paper}>
@@ -38,7 +39,7 @@ function FileBrowser(props) {
           color={displayOnlyQaQc ? 'primary' : ''}
           icon={displayOnlyQaQc ? <DoneIcon /> : null}
           component="button"
-          disabled={Object.keys(qaFileTree).length === 0}
+          disabled={Object.keys(fileTrees.qa).length === 0}
           displayOnlyQaQc={displayOnlyQaQc}
         />
       </ChipWrapper>
@@ -51,7 +52,7 @@ function FileBrowser(props) {
           </TableRow>
         </HiddenTableHead>
         <ScrollTableBody>
-          <FileBrowserNode fileSubTree={displayOnlyQaQc ? qaFileTree : fileTree} depth={0} />
+          <FileBrowserNode fileSubTree={displayOnlyQaQc ? fileTrees.qa : fileTrees.all} depth={0} />
         </ScrollTableBody>
       </Table>
     </StyledTableContainer>
