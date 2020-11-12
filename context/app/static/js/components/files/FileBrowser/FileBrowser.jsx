@@ -45,8 +45,8 @@ function FileBrowser(props) {
       <Table data-testid="file-browser">
         <HiddenTableHead>
           <TableRow>
-            <td>File</td>
-            <td>Is QA</td>
+            <td>Name</td>
+            <td>Type</td>
             <td>Size</td>
           </TableRow>
         </HiddenTableHead>
