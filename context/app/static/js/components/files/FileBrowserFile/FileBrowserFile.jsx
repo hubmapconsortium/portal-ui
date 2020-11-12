@@ -7,7 +7,7 @@ import { getTokenParam } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import DetailContext from 'js/components//Detail/context';
 import FilesConditionalLink from '../FilesConditionalLink';
-import { StyledDiv, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon } from './style';
+import { StyledRow, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon, QaChip } from './style';
 import FilesContext from '../Files/context';
 
 function FileBrowserFile(props) {
@@ -21,24 +21,29 @@ function FileBrowserFile(props) {
   const fileUrl = `${assetsEndpoint}/${uuid}/${fileObj.rel_path}${tokenParam}`;
 
   return (
-    <StyledDiv>
-      <IndentedDiv $depth={depth} data-testid="file-indented-div">
-        <StyledFileIcon color="primary" />
-        <FilesConditionalLink
-          href={fileUrl}
-          hasAgreedToDUA={hasAgreedToDUA}
-          openDUA={() => openDUA(fileUrl)}
-          variant="body1"
-          download
-        >
-          {fileObj.file}
-        </FilesConditionalLink>
+    <StyledRow>
+      <td>
+        <IndentedDiv $depth={depth} data-testid="file-indented-div">
+          <StyledFileIcon color="primary" />
+          <FilesConditionalLink
+            href={fileUrl}
+            hasAgreedToDUA={hasAgreedToDUA}
+            openDUA={() => openDUA(fileUrl)}
+            variant="body1"
+            download
+          >
+            {fileObj.file}
+          </FilesConditionalLink>
+          <SecondaryBackgroundTooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`}>
+            <StyledInfoIcon color="primary" />
+          </SecondaryBackgroundTooltip>
+        </IndentedDiv>
+      </td>
+      <td>{fileObj?.is_qa_qc ? <QaChip label="QA" variant="outlined" /> : null}</td>
+      <td>
         <FileSize variant="body1">{prettyBytes(fileObj.size)}</FileSize>
-        <SecondaryBackgroundTooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`}>
-          <StyledInfoIcon color="primary" />
-        </SecondaryBackgroundTooltip>
-      </IndentedDiv>
-    </StyledDiv>
+      </td>
+    </StyledRow>
   );
 }
 

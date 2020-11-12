@@ -2,10 +2,11 @@ import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFileRounded';
 import InfoIcon from '@material-ui/icons/InfoRounded';
+import TableRow from '@material-ui/core/TableRow';
+import Chip from '@material-ui/core/Chip';
 
-const StyledDiv = styled.div`
+const StyledRow = styled(TableRow)`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};
-
   &:hover {
     background-color: rgb(0, 0, 0, 0.08);
   }
@@ -32,4 +33,10 @@ const StyledInfoIcon = styled(InfoIcon)`
   font-size: 1rem;
 `;
 
-export { StyledDiv, IndentedDiv, StyledFileIcon, FileSize, StyledInfoIcon };
+const QaChip = styled(Chip)`
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 8px;
+`;
+
+export { StyledRow, IndentedDiv, StyledFileIcon, FileSize, StyledInfoIcon, QaChip };

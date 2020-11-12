@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import useFilesStore from 'js/stores/useFilesStore';
-import { Directory, StyledFolderIcon, StyledFolderOpenIcon } from './style';
+import { StyledTableRow, Directory, StyledFolderIcon, StyledFolderOpenIcon } from './style';
 
 const filesStoreSelector = (state) => state.displayOnlyQaQc;
 
@@ -27,19 +27,24 @@ function FileBrowserDirectory(props) {
   }, [displayOnlyQaQc]);
 
   return (
-    <div>
-      <Directory
-        $depth={depth}
+    <>
+      <StyledTableRow
         onClick={() => setIsExpanded(!isExpanded)}
         onKeyDown={onKeyDownHandler}
         role="button"
         tabIndex="0"
       >
-        {isExpanded ? <StyledFolderOpenIcon color="primary" /> : <StyledFolderIcon color="primary" />}
-        {dirName}
-      </Directory>
+        <td>
+          <Directory $depth={depth}>
+            {isExpanded ? <StyledFolderOpenIcon color="primary" /> : <StyledFolderIcon color="primary" />}
+            {dirName}
+          </Directory>
+        </td>
+        <td />
+        <td />
+      </StyledTableRow>
       {isExpanded && children}
-    </div>
+    </>
   );
 }
 
