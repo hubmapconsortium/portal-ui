@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Done';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
+import Chip from '@material-ui/core/Chip';
 
 import useFilesStore from 'js/stores/useFilesStore';
 import { relativeFilePathsToTree } from './utils';
@@ -34,11 +34,12 @@ function FileBrowser(props) {
         <Chip
           label="Show QA Files Only"
           clickable
-          color="primary"
           onClick={toggleDisplayOnlyQaQc}
-          icon={<DoneIcon />}
+          color={displayOnlyQaQc ? 'primary' : ''}
+          icon={displayOnlyQaQc ? <DoneIcon /> : null}
           component="button"
           disabled={Object.keys(qaFileTree).length === 0}
+          displayOnlyQaQc={displayOnlyQaQc}
         />
       </ChipWrapper>
       <Table data-testid="file-browser">
