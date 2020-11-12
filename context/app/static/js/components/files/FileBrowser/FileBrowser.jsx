@@ -36,7 +36,7 @@ function FileBrowser(props) {
           label="Show QA Files Only"
           clickable
           onClick={toggleDisplayOnlyQaQc}
-          color={displayOnlyQaQc ? 'primary' : ''}
+          color={displayOnlyQaQc ? 'primary' : undefined}
           icon={displayOnlyQaQc ? <DoneIcon /> : null}
           component="button"
           disabled={Object.keys(fileTrees.qa).length === 0}
