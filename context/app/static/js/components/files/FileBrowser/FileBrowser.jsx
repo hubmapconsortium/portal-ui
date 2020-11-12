@@ -60,12 +60,13 @@ function FileBrowser(props) {
 
 FileBrowser.propTypes = {
   files: PropTypes.arrayOf(
-    PropTypes.exact({
+    PropTypes.shape({
       rel_path: PropTypes.string,
       edam_term: PropTypes.string,
       description: PropTypes.string,
       size: PropTypes.number,
       type: PropTypes.string,
+      is_qa_qc: PropTypes.bool,
     }),
   ).isRequired,
 };

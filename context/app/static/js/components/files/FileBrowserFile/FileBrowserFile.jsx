@@ -54,6 +54,7 @@ FileBrowserFile.propTypes = {
     size: PropTypes.number,
     description: PropTypes.string,
     edam_term: PropTypes.string,
+    is_qa_qc: PropTypes.bool,
   }).isRequired,
   depth: PropTypes.number.isRequired,
 };
