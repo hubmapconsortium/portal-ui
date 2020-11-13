@@ -1,0 +1,1 @@
+- Update CCF template to use the same analytics key as the rest of the site.
