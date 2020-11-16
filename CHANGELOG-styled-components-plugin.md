@@ -1,0 +1,1 @@
+- Add styled-components babel plugin
