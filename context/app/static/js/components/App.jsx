@@ -7,6 +7,8 @@ import Routes from './Routes';
 import Footer from './Footer';
 import Header from './Header';
 
+import 'js/components/Search/Search.scss';
+
 function App(props) {
   const { flaskData } = props;
   const { title, entity, vitessce_conf, endpoints, markdown, collection, errorCode } = flaskData;
