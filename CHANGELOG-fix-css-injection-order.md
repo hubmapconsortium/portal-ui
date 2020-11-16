@@ -1,0 +1,1 @@
+- Fix injection order for Search stylesheet.
