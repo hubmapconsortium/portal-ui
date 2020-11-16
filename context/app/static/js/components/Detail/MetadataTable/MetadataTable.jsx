@@ -55,7 +55,7 @@ function MetadataTable(props) {
         </SecondaryBackgroundTooltip>
       </Flex>
       <Paper>
-        <StyledTableContainer $maxHeight={364}>
+        <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
