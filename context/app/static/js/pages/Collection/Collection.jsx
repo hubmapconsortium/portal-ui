@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Summary from 'js/components/Detail/Summary';
 import CollectionDatasetsTable from 'js/components/Detail/CollectionDatasetsTable';
-import CollectionCreatorsTable from 'js/components/Detail/CollectionCreatorsTable';
 
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
+import CollectionsAffiliationsTable from 'js/components/Detail/CollectionsAffiliationsTable';
 
 function Collection(props) {
   const { collection: collectionData } = props;
-  const { uuid, entitytype, display_doi, name, description } = collectionData;
+  const { uuid, entity_type, display_doi, title, description } = collectionData;
 
-  useSendUUIDEvent(entitytype, collectionData);
+  useSendUUIDEvent(entity_type, collectionData);
 
   return (
     <div>
@@ -20,17 +20,19 @@ function Collection(props) {
         <>
           <Summary
             uuid={uuid}
-            entity_type={entitytype}
+            entity_type={entity_type}
             display_doi={display_doi}
-            collectionName={name}
+            collectionName={title}
             description={description}
           >
             <LightBlueLink href="https://www.doi.org" target="_blank" rel="noopener noreferrer" variant="body1">
               doi.org
             </LightBlueLink>
           </Summary>
-          {'items' in collectionData && <CollectionDatasetsTable datasets={collectionData.items} />}
-          {'creators' in collectionData && <CollectionCreatorsTable creators={collectionData.creators} />}
+          {'items' in collectionData && <CollectionDatasetsTable datasets={collectionData.datasets} />}
+          {'creators' in collectionData && (
+            <CollectionsAffiliationsTable affiliations={collectionData.creators} title="Creators" />
+          )}
         </>
       )}
     </div>
