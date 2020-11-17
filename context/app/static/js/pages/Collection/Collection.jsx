@@ -29,7 +29,7 @@ function Collection(props) {
               doi.org
             </LightBlueLink>
           </Summary>
-          {'items' in collectionData && <CollectionDatasetsTable datasets={collectionData.datasets} />}
+          {'datasets' in collectionData && <CollectionDatasetsTable datasets={collectionData.datasets} />}
           {'creators' in collectionData && (
             <CollectionsAffiliationsTable affiliations={collectionData.creators} title="Creators" />
           )}
