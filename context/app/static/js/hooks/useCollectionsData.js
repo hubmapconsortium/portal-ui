@@ -19,7 +19,6 @@ function useCollectionsData(elasticsearchEndpoint, nexusToken) {
         return;
       }
       const results = await response.json();
-      // eslint-disable-next-line no-underscore-dangle
       const collectionsHits = results.hits.hits;
       setCollections(collectionsHits);
     }
