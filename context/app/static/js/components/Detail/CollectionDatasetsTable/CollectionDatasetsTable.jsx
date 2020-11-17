@@ -19,32 +19,17 @@ function CollectionDatasetsTable(props) {
   const columns = [
     { id: 'display_doi', label: 'HuBMAP ID' },
     { id: 'organ', label: 'Organ' },
-    { id: 'assayTypesString', label: 'Assay Types' },
-    { id: 'modifiedDate', label: 'Last Modified' },
-    { id: 'properties.creator_name', label: 'Contact' },
-    { id: 'properties.status', label: 'Status' },
+    { id: 'data_types', label: 'Assay Types' },
+    { id: 'last_modified_timestamp', label: 'Last Modified' },
+    { id: 'properties.created_by_user_displayname', label: 'Contact' },
+    { id: 'status', label: 'Status' },
   ];
-
-  const tableRows = datasets.reduce((rows, dataset) => {
-    if (dataset.entitytype === 'Dataset') {
-      const formattedData = {};
-      if ('data_types' in dataset.properties) {
-        Object.assign(formattedData, { assayTypesString: dataset.properties.data_types.join(', ') });
-      }
-      rows.push({
-        ...dataset,
-        ...formattedData,
-        modifiedDate: new Date(dataset.properties.provenance_modified_timestamp).toDateString(),
-      });
-    }
-    return rows;
-  }, []);
 
   return (
     <SectionContainer id="datasets-table">
       <SectionHeader>Datasets</SectionHeader>
       <Typography variant="subtitle1" color="primary">
-        {tableRows.length} Datasets
+        {datasets.length} Datasets
       </Typography>
       <Paper>
         <StyledTableContainer>
@@ -57,18 +42,18 @@ function CollectionDatasetsTable(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tableRows.map((row) => (
-                <TableRow key={row.display_doi}>
+              {datasets.map((dataset) => (
+                <TableRow key={dataset.display_doi}>
                   <TableCell>
-                    <StyledLink href={`/browse/dataset/${row.uuid}`} variant="body2">
-                      {row.display_doi}
+                    <StyledLink href={`/browse/dataset/${dataset.uuid}`} variant="body2">
+                      {dataset.display_doi}
                     </StyledLink>
                   </TableCell>
                   <TableCell />
-                  <TableCell>{row.assayTypesString}</TableCell>
-                  <TableCell>{row.modifiedDate}</TableCell>
-                  <TableCell>{row.properties.creator_name}</TableCell>
-                  <TableCell>{row.properties.status}</TableCell>
+                  <TableCell>{dataset.data_types}</TableCell>
+                  <TableCell>{dataset.last_modified_timestamp}</TableCell>
+                  <TableCell>{dataset.created_by_user_displayname}</TableCell>
+                  <TableCell>{dataset.status}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
