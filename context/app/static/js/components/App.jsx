@@ -7,6 +7,7 @@ import Routes from './Routes';
 import Footer from './Footer';
 import Header from './Header';
 
+// Importing Search styles here so the CSS import order is correct.
 import 'js/components/Search/Search.scss';
 
 function App(props) {
