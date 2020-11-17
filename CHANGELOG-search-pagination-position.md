@@ -1,1 +1,0 @@
-- Search pagination control immediately follows the table.
