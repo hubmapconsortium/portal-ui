@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Summary from 'js/components/Detail/Summary';
 import CollectionDatasetsTable from 'js/components/Detail/CollectionDatasetsTable';
-
-import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import CollectionsAffiliationsTable from 'js/components/Detail/CollectionsAffiliationsTable';
+import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 
 function Collection(props) {
   const { collection: collectionData } = props;
