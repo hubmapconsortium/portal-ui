@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import format from 'date-fns/format';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import Typography from '@material-ui/core/Typography';
@@ -51,7 +52,7 @@ function CollectionDatasetsTable(props) {
                   </TableCell>
                   <TableCell />
                   <TableCell>{dataset.data_types}</TableCell>
-                  <TableCell>{dataset.last_modified_timestamp}</TableCell>
+                  <TableCell>{format(dataset.last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
                   <TableCell>{dataset.created_by_user_displayname}</TableCell>
                   <TableCell>{dataset.status}</TableCell>
                 </TableRow>
