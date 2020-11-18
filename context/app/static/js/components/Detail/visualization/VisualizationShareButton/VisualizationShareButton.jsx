@@ -7,7 +7,7 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import { encodeConfAsURLParams } from 'vitessce';
+import { encodeConfInUrl } from 'vitessce';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
@@ -28,8 +28,9 @@ function VisualizationShareButton() {
   const copyToClipBoard = (conf) => {
     const dummy = document.createElement('input');
     document.body.appendChild(dummy);
-    const params = encodeConfAsURLParams(conf);
-    const url = `${window.location.href.split('?')[0]}?${params}`;
+    const url = `${window.location.href.split('#')[0]}#${encodeConfInUrl({
+      conf,
+    })}`;
     dummy.setAttribute('value', url);
     dummy.select();
     document.execCommand('copy');

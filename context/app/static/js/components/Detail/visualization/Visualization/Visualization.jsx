@@ -54,7 +54,7 @@ function Visualization(props) {
 
   // Get the vitessce configuration from the url if available and set the initial selection if it is a multi-dataset.
   const [initializedVitData, initialSelection] = useMemo(() => {
-    const queryString = window.location.href.split('?')[1];
+    const queryString = window.location.href.split('#')[1];
     const vitessceURLConf = queryString?.length > 0 ? decodeURLParamsToConf(queryString) : null;
     const initialSelectionFromUrl =
       Array.isArray(vitData) && Math.max(0, vitData.map(({ name }) => name).indexOf(vitessceURLConf?.name));
@@ -64,8 +64,9 @@ function Visualization(props) {
     } else {
       initializedVitDataFromUrl = vitessceURLConf || vitData;
     }
+    setVitessceConfig(initializedVitDataFromUrl);
     return [initializedVitDataFromUrl, initialSelectionFromUrl];
-  }, [vitData]);
+  }, [vitData, setVitessceConfig]);
 
   const [vitessceErrors, setVitessceErrors] = useState([]);
   const [vitessceSelection, setVitessceSelection] = useState(initialSelection);
