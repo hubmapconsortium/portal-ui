@@ -4,6 +4,7 @@ import { listFilter, rangeFilter, field } from './utils';
 
 const bmiField = 'body_mass_index_value';
 const ageField = 'age_value';
+const ageUnitField = 'age_unit';
 
 function makeDonorMetadataFilters(isDonor) {
   const pathPrefix = isDonor ? '' : 'donor.';
@@ -18,20 +19,28 @@ function makeDonorMetadataFilters(isDonor) {
 
 const affiliationFilters = [listFilter('group_name', 'Group'), listFilter('created_by_user_displayname', 'Creator')];
 
+const sharedTileFields = [
+  field('last_modified_timestamp', 'Last Modified Unmapped'),
+  field('descendant_counts.entity_type', 'Descendant Counts'),
+];
+
 const donorConfig = {
   filters: {
     'Donor Metadata': makeDonorMetadataFilters(true),
     Affiliation: affiliationFilters,
   },
-  fields: [
-    field('display_doi', 'Donor'),
-    field('group_name', 'Group'),
-    field(`mapped_metadata.${ageField}`, 'Age'),
-    field(`mapped_metadata.${bmiField}`, 'BMI'),
-    field('mapped_metadata.sex', 'Sex'),
-    field('mapped_metadata.race', 'Race'),
-    field('mapped_last_modified_timestamp', 'Last Modified'),
-  ],
+  fields: {
+    table: [
+      field('display_doi', 'HuBMAP ID'),
+      field('group_name', 'Group'),
+      field(`mapped_metadata.${ageField}`, 'Age'),
+      field(`mapped_metadata.${bmiField}`, 'BMI'),
+      field('mapped_metadata.sex', 'Sex'),
+      field('mapped_metadata.race', 'Race'),
+      field('mapped_last_modified_timestamp', 'Last Modified'),
+    ],
+    tile: [...sharedTileFields, field(`mapped_metadata.${ageUnitField}`, 'Age Unit')],
+  },
 };
 
 const sampleConfig = {
@@ -43,13 +52,16 @@ const sampleConfig = {
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
   },
-  fields: [
-    field('display_doi', 'Sample'),
-    field('group_name', 'Group'),
-    field('mapped_specimen_type', 'Speciment Type'),
-    field('origin_sample.mapped_organ', 'Organ'),
-    field('mapped_last_modified_timestamp', 'Last Modified'),
-  ],
+  fields: {
+    table: [
+      field('display_doi', 'HuBMAP ID'),
+      field('group_name', 'Group'),
+      field('mapped_specimen_type', 'Specimen Type'),
+      field('origin_sample.mapped_organ', 'Organ'),
+      field('mapped_last_modified_timestamp', 'Last Modified'),
+    ],
+    tile: sharedTileFields,
+  },
 };
 
 const datasetConfig = {
@@ -64,14 +76,17 @@ const datasetConfig = {
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
   },
-  fields: [
-    field('display_doi', 'Dataset'),
-    field('group_name', 'Group'),
-    field('mapped_data_types', 'Data Types'),
-    field('origin_sample.mapped_organ', 'Organ'),
-    field('mapped_status', 'Status'),
-    field('mapped_last_modified_timestamp', 'Last Modified'),
-  ],
+  fields: {
+    table: [
+      field('display_doi', 'HuBMAP ID'),
+      field('group_name', 'Group'),
+      field('mapped_data_types', 'Data Types'),
+      field('origin_sample.mapped_organ', 'Organ'),
+      field('mapped_status', 'Status'),
+      field('mapped_last_modified_timestamp', 'Last Modified'),
+    ],
+    tile: sharedTileFields,
+  },
 };
 
 export { donorConfig, sampleConfig, datasetConfig };

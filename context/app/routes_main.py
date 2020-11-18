@@ -42,7 +42,19 @@ def index():
         'pages/base_react.html',
         types=types,
         flask_data=core_props,
-        title='Welcome'
+        title='HuBMAP Data Portal',
+        is_home_page=True
+    )
+
+
+@blueprint.route('/services')
+def service_status():
+    core_props = {'endpoints': _get_endpoints()}
+    return render_template(
+        'pages/base_react.html',
+        types=types,
+        flask_data=core_props,
+        title='Services'
     )
 
 
@@ -200,8 +212,32 @@ def collections():
 def robots_txt():
     allowed_hostname = 'portal.hubmapconsortium.org'
     hostname = urlparse(request.base_url).hostname
-    if hostname == allowed_hostname:
-        return Response(f'# No disallows on {allowed_hostname}!', mimetype='text/plain')
+    disallow = '/search' if hostname == allowed_hostname else '/'
     return Response(
-        f'# {hostname} != {allowed_hostname}\n'
-        'User-agent: *\nDisallow: /\n', mimetype='text/plain')
+        f'''
+# This host: {hostname}
+# Allowed host: {allowed_hostname}
+User-agent: *
+Disallow: {disallow}
+Sitemap: {get_url_base_from_request()}/sitemap.txt
+''',
+        mimetype='text/plain')
+
+
+@blueprint.route('/sitemap.txt')
+def sitemap_txt():
+    client = _get_client()
+    uuids = client.get_all_dataset_uuids()
+    url_base = get_url_base_from_request()
+    return Response(
+        '\n'.join(
+            f'{url_base}/browse/dataset/{uuid}' for uuid in uuids
+        ),
+        mimetype='text/plain')
+
+
+def get_url_base_from_request():
+    parsed = urlparse(request.base_url)
+    scheme = parsed.scheme
+    netloc = parsed.netloc
+    return f'{scheme}://{netloc}'

@@ -13,7 +13,7 @@ const visualizationStoreSelector = (state) => ({
   setVizTheme: state.setVizTheme,
 });
 
-function VisualizationThemeSwitch({ toggleButtonComponent }) {
+function VisualizationThemeSwitch() {
   const { vizTheme, setVizTheme } = useVisualizationStore(visualizationStoreSelector);
 
   return (
@@ -21,7 +21,6 @@ function VisualizationThemeSwitch({ toggleButtonComponent }) {
       <TooltipToggleButton
         tooltipComponent={SecondaryBackgroundTooltip}
         tooltipTitle="Switch to Light Theme"
-        buttonComponent={toggleButtonComponent}
         disableRipple
         value="light"
         aria-label="Visualization light theme button"
@@ -31,7 +30,6 @@ function VisualizationThemeSwitch({ toggleButtonComponent }) {
       <TooltipToggleButton
         tooltipComponent={SecondaryBackgroundTooltip}
         tooltipTitle="Switch to Dark Theme"
-        buttonComponent={toggleButtonComponent}
         disableRipple
         value="dark"
         aria-label="Visualization dark theme button"

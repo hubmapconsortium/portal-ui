@@ -1,7 +1,10 @@
 @import "~searchkit/theming/theme.scss";
 
+$primary-purple: #444A65;
+$secondary-gray: #636363;
+
 .sk-layout__body {
-    margin: 16px 0px;
+    margin: 16px 0px 32px 0px;
 }
 
 .sk-panel__header {
@@ -14,9 +17,41 @@
     // We want it flush on left and right:
     margin: 0px;
 }
+
+.sk-layout__results {
+    box-shadow: none;
+    background-color:transparent;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sk-results-list {
+    padding: 0px;
+}
+
+.sk-layout__filters {
+  height: fit-content;
+  height:-webkit-fit-content;
+  height:-ms-fit-content;
+  height:-moz-fit-content;
+  background-color: white;
+}
+
 .sk-layout__filters {
     // Spacing between filters and results:
     margin-right: 16px;
+    // theme shadows 1 matches table
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+}
+
+.sk-item-list-option input.sk-item-list-option__checkbox {
+    margin: 0 4px 0 0;
+}
+
+.sk-item-list-option {
+    padding: 4px 0px 4px 0px;
+    line-height: 120%;
 }
 
 .sk-item-list-option__text {
@@ -28,3 +63,45 @@
 .sk-refinement-list__view-more-action {
     color: #3781D1;
 }
+
+.sk-pagination-navigation {
+  margin: 0px;
+}
+
+.sk-pagination-navigation .sk-toggle-option:first-child,
+  .sk-pagination-navigation .sk-toggle-option:last-child {
+    color: $primary-purple;
+}
+
+.sk-pagination-navigation .sk-toggle-option {
+    background-color: transparent;
+}
+
+.sk-toggle-option.is-active {
+background-color: $primary-purple;
+border-color: $primary-purple;
+}
+
+.sk-pagination-navigation .sk-toggle-option:first-child.is-disabled,
+  .sk-pagination-navigation .sk-toggle-option:last-child.is-disabled {
+    color: #ddd
+  }
+
+  .sk-search-box form{
+    border: 1px solid $secondary-gray;
+    border-radius: 8px;
+  }
+
+  .sk-search-box {
+    background-color: white;
+    max-width: 925px;
+  }
+
+  .sk-search-box__icon{
+      opacity: 1;
+  }
+
+  .sk-search-box__icon:before{
+    fill: $primary-purple;
+    background: url('~images/search-icon.svg') no-repeat top left;
+  }

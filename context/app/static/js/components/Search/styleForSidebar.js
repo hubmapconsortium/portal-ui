@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
 import AccordionSummary from '@material-ui/core/ExpansionPanelSummary';
 import Accordion from '@material-ui/core/ExpansionPanel';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { SideBar } from 'searchkit';
 
@@ -39,12 +40,14 @@ const OuterAccordionSummary = styled(StyledAccordionSummary)`
     padding: 0;
     margin: 0;
   }
-  margin-top: 12px !important;
-  margin-bottom: 12px !important;
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+  padding: 0px 12px 0px 12px;
 `;
 
 const InnerAccordionSummary = styled(StyledAccordionSummary)`
   justify-content: left;
+  padding: 0px 16px 0px 16px;
   & > * {
     flex-grow: unset;
     padding: 0;
@@ -56,18 +59,21 @@ const InnerAccordionSummary = styled(StyledAccordionSummary)`
 
 const OuterAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;
-  padding-bottom: 0;
-  padding-top: 0;
+  padding: 0;
 `;
 
 const InnerAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;
-  padding-bottom: 4px;
-  padding-top: 4px;
+  padding: 4px 10px 4px 16px;
 `;
 
 const StyledSideBar = styled(SideBar)`
   padding: 0;
+`;
+
+const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
+  font-size: 1rem;
+  color: ${(props) => props.theme.palette.secondary.main};
 `;
 
 export {
@@ -78,4 +84,5 @@ export {
   StyledSideBar,
   InnerAccordion,
   OuterAccordion,
+  StyledExpandMoreIcon,
 };

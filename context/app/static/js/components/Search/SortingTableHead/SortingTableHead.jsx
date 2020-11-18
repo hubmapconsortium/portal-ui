@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableHead from '@material-ui/core/TableHead';
+
+import { getSortPairs } from '../utils';
 import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from './style';
 
 function getOrder(orderPair, selectedItems) {
@@ -28,14 +29,8 @@ OrderIcon.propTypes = {
 
 function SortingTableHead(props) {
   const { items, toggleItem, selectedItems } = props;
-  const pairs = [];
-  for (let i = 0; i < items.length; i += 2) {
-    const pair = items.slice(i, i + 2);
-    pairs.push(pair);
-    if (pair[0].label !== pair[1].label || pair[0].field !== pair[1].field) {
-      console.warn('Expected pair.label and .field to match', pair);
-    }
-  }
+
+  const pairs = getSortPairs(items);
   return (
     <TableHead>
       <TableRow>

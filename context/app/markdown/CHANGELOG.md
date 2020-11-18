@@ -1,3 +1,69 @@
+## v0.6.2 - 2020-11-05
+
+- Update redeploy.sh to handle to stage environment.
+
+
+## v0.6.1 - 2020-11-02
+
+- Bump version to 0.6. (I forgot to increment for the 0.5 sprint. Sorry!)
+- Change sort label for IDs from the entity type to HubMAP ID.
+- Facet the validation errors, to understand what part of the schema is being violated,
+  and what part of the documents are in violation.
+
+
+## v0.4.7 - 2020-10-28
+
+- Update search page ui to 8/17/2020 design.
+- Compact search sidebar spacing and update font size and colors.
+- Resize search table sort arrows.
+- Add tile view for search page.
+- On the status page, show where the API info comes from.
+
+
+## v0.4.5 - 2020-10-26
+
+- Disable provenance table for salmon_rnaseq_snareseq data types.
+- Fix in ingest-api url on status page.
+- Update home page html title.
+
+
+## v0.4.4 - 2020-10-21
+
+- Log validation errors, if we see them.
+- Manual update of ingest-validation-tools to get Donor metadata field descriptions.
+- Pad out short descriptions in JSON-LD metadata to meet minimum-length requirements.
+- Add service status page.
+
+
+## v0.4.3 - 2020-10-14
+
+- Schema.org JSON-LD in header.
+- Add /search to the disallow list in robots.txt.
+
+
+## v0.4.2 - 2020-10-09
+
+- Fix main header dropdown menus' z-index to be above the subheader.
+- Fix header elevation when vitessce is fullscreen.
+- Do not offset for entity header when visualization is fullscreen on preview pages.
+- Make links in markdown-based pages blue.
+- Fix proptypes error.
+- Standardize icon button sizes.
+
+
+## v0.4.1 - 2020-10-05
+
+- Add theme switch and exit fullscreen button to subheader when visualization is fullscreen.
+- Expand the primary header and entity subheader when vitessce is fullscreen.
+- Make the facets a little more clear.
+- Fix bug where entity header is stuck in a loop of appearing and disappearing in Safari.
+- Fix issues with header elevation and subheader appearance on initial renders.
+- Fix bug where header elevation was incorrect on entity detail pages when subheader was not displaying.
+- Improve test coverage on Search.
+- Find documents with validation-errors on dev-search.
+- Bump version to v0.4.
+
+
 ## v0.3.3 - 2020-09-30
 
 - Add entity header for detail pages.

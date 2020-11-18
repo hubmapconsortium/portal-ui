@@ -1,6 +1,7 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 const purple = '#444A65';
+const blue = '#3781D1';
 
 // default HuBMAP color and font theme
 const theme = createMuiTheme({
@@ -19,10 +20,10 @@ const theme = createMuiTheme({
       main: '#D25435',
     },
     info: {
-      main: '#3781D1',
+      main: blue,
     },
     link: {
-      main: '#3781D1',
+      main: blue,
     },
     success: {
       main: '#6C8938', // '#9BC551'

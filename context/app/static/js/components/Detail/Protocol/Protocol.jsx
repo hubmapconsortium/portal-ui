@@ -4,10 +4,10 @@ import Divider from '@material-ui/core/Divider';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import useProtocolData from 'js/hooks/useProtocolData';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { StyledPaper } from './style';
-import SectionHeader from '../SectionHeader';
 import SectionItem from '../SectionItem';
-import SectionContainer from '../SectionContainer';
 
 function ProtocolLink(props) {
   const { resolverHostnameAndDOI } = props;
