@@ -19,18 +19,26 @@ import 'vitessce/dist/es/production/static/css/index.css';
 const visualizationStoreSelector = (state) => ({
   vizTheme: state.vizTheme,
   vitessceConfig: state.vitessceConfig,
+  setOnCopyUrlMessage: state.setOnCopyUrlMessage,
+  setOnCopyUrlMessageSnackbarOpen: state.setOnCopyUrlMessageSnackbarOpen,
 });
 function VisualizationShareButton() {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
-  const { vizTheme, vitessceConfig } = useVisualizationStore(visualizationStoreSelector);
+  const { vizTheme, vitessceConfig, setOnCopyUrlMessage, setOnCopyUrlMessageSnackbarOpen } = useVisualizationStore(
+    visualizationStoreSelector,
+  );
 
   const copyToClipBoard = (conf) => {
     const dummy = document.createElement('input');
     document.body.appendChild(dummy);
     const url = `${window.location.href.split('#')[0]}#${encodeConfInUrl({
       conf,
+      onOverMaximumUrlLength: ({ message }) => {
+        setOnCopyUrlMessage(message);
+      },
     })}`;
+    setOnCopyUrlMessageSnackbarOpen(true);
     dummy.setAttribute('value', url);
     dummy.select();
     document.execCommand('copy');

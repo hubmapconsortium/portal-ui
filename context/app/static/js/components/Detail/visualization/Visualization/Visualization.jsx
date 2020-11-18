@@ -22,11 +22,11 @@ import {
   StyledHeader,
   StyledHeaderText,
   StyledHeaderRight,
-  EscSnackbar,
   ErrorSnackbar,
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
+  GreySnackbar,
 } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
@@ -34,10 +34,13 @@ const visualizationStoreSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
   collapseViz: state.collapseViz,
   vizTheme: state.vizTheme,
-  vizEscSnackbarIsOpen: state.vizEscSnackbarIsOpen,
-  setVizEscSnackbarIsOpen: state.setVizEscSnackbarIsOpen,
+  vizGreySnackbarIsOpen: state.vizGreySnackbarIsOpen,
+  setVizGreySnackbarIsOpen: state.setVizGreySnackbarIsOpen,
   vitessceConfig: state.vitessceConfig,
   setVitessceConfig: state.setVitessceConfig,
+  onCopyUrlMessage: state.onCopyUrlMessage,
+  onCopyUrlMessageSnackbarOpen: state.onCopyUrlMessageSnackbarOpen,
+  setOnCopyUrlMessageSnackbarOpen: state.setOnCopyUrlMessageSnackbarOpen,
 });
 
 function Visualization(props) {
@@ -47,9 +50,12 @@ function Visualization(props) {
     vizIsFullscreen,
     collapseViz,
     vizTheme,
-    vizEscSnackbarIsOpen,
-    setVizEscSnackbarIsOpen,
+    vizGreySnackbarIsOpen,
+    setVizGreySnackbarIsOpen,
     setVitessceConfig,
+    onCopyUrlMessage,
+    onCopyUrlMessageSnackbarOpen,
+    setOnCopyUrlMessageSnackbarOpen,
   } = useVisualizationStore(visualizationStoreSelector);
 
   // Get the vitessce configuration from the url if available and set the initial selection if it is a multi-dataset.
@@ -140,15 +146,25 @@ function Visualization(props) {
       </StyledHeader>
       <Paper>
         <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme}>
-          <EscSnackbar
+          <GreySnackbar
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'center',
             }}
-            open={vizEscSnackbarIsOpen}
+            open={vizGreySnackbarIsOpen}
             autoHideDuration={4000}
-            onClose={() => setVizEscSnackbarIsOpen(false)}
+            onClose={() => setVizGreySnackbarIsOpen(false)}
             message="Press [esc] to exit full window."
+          />
+          <GreySnackbar
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            open={onCopyUrlMessageSnackbarOpen}
+            autoHideDuration={4000}
+            onClose={() => setOnCopyUrlMessageSnackbarOpen(false)}
+            message={`Shareable URL has been copied to clipboard.  ${onCopyUrlMessage}`}
           />
           {vitessceErrors.length > 0 && (
             <ErrorSnackbar

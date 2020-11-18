@@ -40,7 +40,7 @@ const SelectionButton = styled(Button)`
   color: white;
 `;
 
-const EscSnackbar = styled(Snackbar)`
+const GreySnackbar = styled(Snackbar)`
   top: ${totalHeightOffset + 10}px;
   & > div {
     background-color: dimgray;
@@ -86,8 +86,8 @@ export {
   StyledHeaderText,
   StyledHeaderRight,
   ExpandButton,
-  EscSnackbar,
   ErrorSnackbar,
+  GreySnackbar,
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
