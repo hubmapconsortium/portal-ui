@@ -29,6 +29,9 @@ function Collection(props) {
               doi.org
             </LightBlueLink>
           </Summary>
+          {'contacts' in collectionData && (
+            <CollectionsAffiliationsTable affiliations={collectionData.contacts} title="Contacts" />
+          )}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={collectionData.datasets} />}
           {'creators' in collectionData && (
             <CollectionsAffiliationsTable affiliations={collectionData.creators} title="Creators" />
