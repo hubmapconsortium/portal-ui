@@ -10,7 +10,15 @@ import CollectionsAffiliationsTable from 'js/components/Detail/CollectionsAffili
 
 function Collection(props) {
   const { collection: collectionData } = props;
-  const { uuid, entity_type, display_doi, title, description } = collectionData;
+  const {
+    uuid,
+    entity_type,
+    display_doi,
+    title,
+    description,
+    create_timestamp,
+    last_modified_timestamp,
+  } = collectionData;
 
   useSendUUIDEvent(entity_type, collectionData);
 
@@ -24,6 +32,8 @@ function Collection(props) {
             display_doi={display_doi}
             collectionName={title}
             description={description}
+            create_timestamp={create_timestamp}
+            last_modified_timestamp={last_modified_timestamp}
           >
             <LightBlueLink href="https://www.doi.org" target="_blank" rel="noopener noreferrer" variant="body1">
               doi.org
