@@ -18,6 +18,9 @@ function Collection(props) {
     description,
     create_timestamp,
     last_modified_timestamp,
+    contacts,
+    datasets,
+    creators,
   } = collectionData;
 
   useSendUUIDEvent(entity_type, collectionData);
@@ -39,13 +42,9 @@ function Collection(props) {
               doi.org
             </LightBlueLink>
           </Summary>
-          {'contacts' in collectionData && (
-            <CollectionsAffiliationsTable affiliations={collectionData.contacts} title="Contacts" />
-          )}
-          {'datasets' in collectionData && <CollectionDatasetsTable datasets={collectionData.datasets} />}
-          {'creators' in collectionData && (
-            <CollectionsAffiliationsTable affiliations={collectionData.creators} title="Creators" />
-          )}
+          {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}
+          {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
+          {'creators' in collectionData && <CollectionsAffiliationsTable affiliations={creators} title="Creators" />}
         </>
       )}
     </div>
