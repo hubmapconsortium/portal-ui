@@ -75,13 +75,24 @@ function VisualizationShareButton() {
         <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
           <ClickAwayListener onClickAway={toggle}>
             <MenuList id="preview-options">
-              <MenuItem onClick={() => copyToClipBoard(vitessceConfig)}>
+              <MenuItem
+                onClick={() => {
+                  copyToClipBoard(vitessceConfig);
+                  toggle();
+                }}
+              >
                 <StyledTypography variant="inherit">Copy Visualization Link</StyledTypography>
                 <ListItemIcon>
                   <StyledLinkIcon fontSize="small" />
                 </ListItemIcon>
               </MenuItem>
-              <MenuItem onClick={() => emailUrl(vitessceConfig)} component={Link}>
+              <MenuItem
+                onClick={() => {
+                  emailUrl(vitessceConfig);
+                  toggle();
+                }}
+                component={Link}
+              >
                 <StyledTypography variant="inherit">Email</StyledTypography>
                 <ListItemIcon>
                   <StyledEmailIcon fontSize="small" />

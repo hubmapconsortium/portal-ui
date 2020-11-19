@@ -2,6 +2,7 @@ import React, { useState, useEffect, useReducer, useRef, useCallback, useMemo } 
 import { Vitessce, decodeURLParamsToConf } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
+import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMapRounded';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
@@ -11,10 +12,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import debounce from 'lodash/debounce';
 
 import { Alert } from 'js/shared-styles/alerts';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import VisualizationShareButton from '../VisualizationShareButton';
-import VisualizationFullScreenButton from '../VisualizationFullScreenButton';
 import {
   vitessceFixedHeight,
   bodyExpandedCSS,
@@ -22,16 +23,18 @@ import {
   StyledHeader,
   StyledHeaderText,
   StyledHeaderRight,
+  ExpandButton,
+  GreySnackbar,
   ErrorSnackbar,
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
-  GreySnackbar,
 } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
 const visualizationStoreSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
+  expandViz: state.expandViz,
   collapseViz: state.collapseViz,
   vizTheme: state.vizTheme,
   vizEscSnackbarIsOpen: state.vizEscSnackbarIsOpen,
@@ -48,6 +51,7 @@ function Visualization(props) {
 
   const {
     vizIsFullscreen,
+    expandViz,
     collapseViz,
     vizTheme,
     vizEscSnackbarIsOpen,
@@ -114,7 +118,11 @@ function Visualization(props) {
         <StyledHeaderRight>
           <VisualizationShareButton />
           <VisualizationThemeSwitch />
-          <VisualizationFullScreenButton />
+          <SecondaryBackgroundTooltip title="Switch to Fullscreen">
+            <ExpandButton size="small" onClick={expandViz} variant="contained">
+              <ZoomOutMapIcon color="primary" />
+            </ExpandButton>
+          </SecondaryBackgroundTooltip>
           {Array.isArray(initializedVitData) ? (
             <>
               <SelectionButton
