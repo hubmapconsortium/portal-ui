@@ -26,12 +26,12 @@ const visualizationStoreSelector = (state) => ({
   vizTheme: state.vizTheme,
   vitessceConfig: state.vitessceConfig,
   setOnCopyUrlMessage: state.setOnCopyUrlMessage,
-  setOnCopyUrlMessageSnackbarOpen: state.setOnCopyUrlMessageSnackbarOpen,
+  setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
 });
 function VisualizationShareButton() {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
-  const { vizTheme, vitessceConfig, setOnCopyUrlMessage, setOnCopyUrlMessageSnackbarOpen } = useVisualizationStore(
+  const { vizTheme, vitessceConfig, setOnCopyUrlMessage, setOnCopyUrlSnackbarOpen } = useVisualizationStore(
     visualizationStoreSelector,
   );
 
@@ -44,7 +44,7 @@ function VisualizationShareButton() {
         setOnCopyUrlMessage(DEFAULT_LONG_URL_MESSAGE);
       },
     })}`;
-    setOnCopyUrlMessageSnackbarOpen(true);
+    setOnCopyUrlSnackbarOpen(true);
     dummy.setAttribute('value', url);
     dummy.select();
     document.execCommand('copy');

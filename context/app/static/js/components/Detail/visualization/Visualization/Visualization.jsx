@@ -39,8 +39,8 @@ const visualizationStoreSelector = (state) => ({
   vitessceConfig: state.vitessceConfig,
   setVitessceConfig: state.setVitessceConfig,
   onCopyUrlMessage: state.onCopyUrlMessage,
-  onCopyUrlMessageSnackbarOpen: state.onCopyUrlMessageSnackbarOpen,
-  setOnCopyUrlMessageSnackbarOpen: state.setOnCopyUrlMessageSnackbarOpen,
+  onCopyUrlSnackbarOpen: state.onCopyUrlSnackbarOpen,
+  setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
 });
 
 function Visualization(props) {
@@ -54,8 +54,8 @@ function Visualization(props) {
     setVizEscSnackbarIsOpen,
     setVitessceConfig,
     onCopyUrlMessage,
-    onCopyUrlMessageSnackbarOpen,
-    setOnCopyUrlMessageSnackbarOpen,
+    onCopyUrlSnackbarOpen,
+    setOnCopyUrlSnackbarOpen,
   } = useVisualizationStore(visualizationStoreSelector);
 
   // Get the vitessce configuration from the url if available and set the initial selection if it is a multi-dataset.
@@ -161,9 +161,9 @@ function Visualization(props) {
               vertical: 'top',
               horizontal: 'center',
             }}
-            open={onCopyUrlMessageSnackbarOpen}
+            open={onCopyUrlSnackbarOpen}
             autoHideDuration={4000}
-            onClose={() => setOnCopyUrlMessageSnackbarOpen(false)}
+            onClose={() => setOnCopyUrlSnackbarOpen(false)}
             message={`Shareable URL has been copied to clipboard.  ${onCopyUrlMessage}`}
           />
           {vitessceErrors.length > 0 && (
