@@ -166,6 +166,7 @@ vitessce_conf:
         ],
     },
     {
+      'version': '0.1.0',
       'name': 'HBM396.RPRR.624',
       'layers':
         [
