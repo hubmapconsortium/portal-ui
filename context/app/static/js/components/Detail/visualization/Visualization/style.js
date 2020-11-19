@@ -49,6 +49,7 @@ const VitessceInfoSnackbar = styled(Snackbar)`
   top: ${totalHeightOffset + 10}px;
   & > div {
     background-color: ${(props) => (props.$isWarning ? props.theme.palette.warning.main : 'dimgray')};
+    color: ${(props) => (props.$isWarning ? '#000000' : '#ffffff')};
   }
 `;
 
