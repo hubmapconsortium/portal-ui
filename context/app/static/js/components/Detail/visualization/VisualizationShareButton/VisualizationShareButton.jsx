@@ -17,20 +17,20 @@ import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
-const DEFAULT_LONG_URL_MESSAGE =
+const DEFAULT_LONG_URL_WARNING =
   'Warning: this is a long URL which may be incompatible or load slowly with some browsers.';
 
 const DEFAULT_EMAIL_MESSAGE = 'Here is an interesting dataset I found in the HuBMAP Data Portal:';
 
 const visualizationStoreSelector = (state) => ({
   vitessceConfig: state.vitessceConfig,
-  setOnCopyUrlMessage: state.setOnCopyUrlMessage,
+  setOnCopyUrlWarning: state.setOnCopyUrlWarning,
   setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
 });
 function VisualizationShareButton() {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
-  const { vitessceConfig, setOnCopyUrlMessage, setOnCopyUrlSnackbarOpen } = useVisualizationStore(
+  const { vitessceConfig, setOnCopyUrlWarning, setOnCopyUrlSnackbarOpen } = useVisualizationStore(
     visualizationStoreSelector,
   );
 
@@ -40,7 +40,7 @@ function VisualizationShareButton() {
     const url = `${window.location.href.split('#')[0]}#${encodeConfInUrl({
       conf,
       onOverMaximumUrlLength: () => {
-        setOnCopyUrlMessage(DEFAULT_LONG_URL_MESSAGE);
+        setOnCopyUrlWarning(DEFAULT_LONG_URL_WARNING);
       },
     })}`;
     setOnCopyUrlSnackbarOpen(true);
@@ -50,16 +50,16 @@ function VisualizationShareButton() {
     document.body.removeChild(dummy);
   };
   const emailUrl = (conf) => {
-    let longUrlMessage = '';
+    let longUrlWarning = '';
     const url = `${window.location.href.split('#')[0]}#${encodeConfInUrl({
       conf,
       onOverMaximumUrlLength: () => {
-        longUrlMessage = DEFAULT_LONG_URL_MESSAGE;
+        longUrlWarning = DEFAULT_LONG_URL_WARNING;
       },
     })}`;
     // We need to encode the URL so its parameters do not conflict with mailto's.
     const encodedUrl = encodeURIComponent(url);
-    const mailtoLink = `mailto:?body=${longUrlMessage} ${DEFAULT_EMAIL_MESSAGE} ${encodedUrl}`;
+    const mailtoLink = `mailto:?body=${longUrlWarning}%0D%0A%0D%0A${DEFAULT_EMAIL_MESSAGE} ${encodedUrl}`;
     window.location.href = mailtoLink;
   };
 

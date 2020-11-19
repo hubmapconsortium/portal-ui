@@ -20,7 +20,7 @@ import {
   StyledHeaderText,
   StyledHeaderRight,
   ExpandButton,
-  GreySnackbar,
+  VitessceInfoSnackbar,
   ErrorSnackbar,
   ExpandableDiv,
   StyledFooterText,
@@ -37,7 +37,7 @@ const visualizationStoreSelector = (state) => ({
   setVizEscSnackbarIsOpen: state.setVizEscSnackbarIsOpen,
   vitessceConfig: state.vitessceConfig,
   setVitessceConfig: state.setVitessceConfig,
-  onCopyUrlMessage: state.onCopyUrlMessage,
+  onCopyUrlWarning: state.onCopyUrlWarning,
   onCopyUrlSnackbarOpen: state.onCopyUrlSnackbarOpen,
   setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
 });
@@ -53,7 +53,7 @@ function Visualization(props) {
     vizEscSnackbarIsOpen,
     setVizEscSnackbarIsOpen,
     setVitessceConfig,
-    onCopyUrlMessage,
+    onCopyUrlWarning,
     onCopyUrlSnackbarOpen,
     setOnCopyUrlSnackbarOpen,
   } = useVisualizationStore(visualizationStoreSelector);
@@ -132,7 +132,7 @@ function Visualization(props) {
       </StyledHeader>
       <Paper>
         <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme}>
-          <GreySnackbar
+          <VitessceInfoSnackbar
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'center',
@@ -142,15 +142,16 @@ function Visualization(props) {
             onClose={() => setVizEscSnackbarIsOpen(false)}
             message="Press [esc] to exit full window."
           />
-          <GreySnackbar
+          <VitessceInfoSnackbar
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'center',
             }}
             open={onCopyUrlSnackbarOpen}
             autoHideDuration={4000}
+            $isWarning={onCopyUrlWarning}
             onClose={() => setOnCopyUrlSnackbarOpen(false)}
-            message={`Shareable URL has been copied to clipboard.  ${onCopyUrlMessage}`}
+            message={`Shareable URL has been copied to clipboard. ${onCopyUrlWarning}`}
           />
           {vitessceErrors.length > 0 && (
             <ErrorSnackbar

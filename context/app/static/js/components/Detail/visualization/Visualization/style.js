@@ -45,10 +45,10 @@ const SelectionButton = styled(Button)`
   border-radius: 3px;
 `;
 
-const GreySnackbar = styled(Snackbar)`
+const VitessceInfoSnackbar = styled(Snackbar)`
   top: ${totalHeightOffset + 10}px;
   & > div {
-    background-color: dimgray;
+    background-color: ${(props) => (props.$isWarning ? props.theme.palette.warning.main : 'dimgray')};
   }
 `;
 
@@ -92,7 +92,7 @@ export {
   StyledHeaderRight,
   ExpandButton,
   ErrorSnackbar,
-  GreySnackbar,
+  VitessceInfoSnackbar,
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,

@@ -23,8 +23,8 @@ const useVisualizationStore = create((set) => ({
   },
   vitessceConfig: {},
   setVitessceConfig: (val) => set({ vitessceConfig: val }),
-  onCopyUrlMessage: '',
-  setOnCopyUrlMessage: (val) => set({ onCopyUrlMessage: val }),
+  onCopyUrlWarning: '',
+  setOnCopyUrlWarning: (val) => set({ onCopyUrlWarning: val }),
   onCopyUrlSnackbarOpen: false,
   setOnCopyUrlSnackbarOpen: (val) => set({ onCopyUrlSnackbarOpen: val }),
 }));
