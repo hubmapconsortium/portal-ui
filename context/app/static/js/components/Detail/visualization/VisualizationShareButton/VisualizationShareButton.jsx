@@ -7,6 +7,7 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Link from '@material-ui/core/Link';
 import { encodeConfInUrl } from 'vitessce';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -17,7 +18,9 @@ import { StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
 const DEFAULT_LONG_URL_MESSAGE =
-  'Warning: this is a long URL which may be incompatible or load slowly with some browsers';
+  'Warning: this is a long URL which may be incompatible or load slowly with some browsers.';
+
+const DEFAULT_EMAIL_MESSAGE = 'Here is an interesting dataset I found in the HuBMAP Data Portal:';
 
 const visualizationStoreSelector = (state) => ({
   vizTheme: state.vizTheme,
@@ -47,6 +50,20 @@ function VisualizationShareButton() {
     document.execCommand('copy');
     document.body.removeChild(dummy);
   };
+  const emailUrl = (conf) => {
+    let longUrlMessage = '';
+    const url = `${window.location.href.split('#')[0]}#${encodeConfInUrl({
+      conf,
+      onOverMaximumUrlLength: () => {
+        longUrlMessage = DEFAULT_LONG_URL_MESSAGE;
+      },
+    })}`;
+    // We need to encode the URL so its parameters do not conflict with mailto's.
+    const encodedUrl = encodeURIComponent(url);
+    const mailtoLink = `mailto:?body=${longUrlMessage} ${DEFAULT_EMAIL_MESSAGE} ${encodedUrl}`;
+    window.location.href = mailtoLink;
+  };
+
   return (
     <>
       <SecondaryBackgroundTooltip title="Share Visualization">
@@ -64,7 +81,7 @@ function VisualizationShareButton() {
                   <StyledLinkIcon fontSize="small" />
                 </ListItemIcon>
               </MenuItem>
-              <MenuItem>
+              <MenuItem onClick={() => emailUrl(vitessceConfig)} component={Link}>
                 <StyledTypography variant="inherit">Email</StyledTypography>
                 <ListItemIcon>
                   <StyledEmailIcon fontSize="small" />
