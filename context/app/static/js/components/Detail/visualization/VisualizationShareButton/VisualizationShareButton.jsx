@@ -23,7 +23,6 @@ const DEFAULT_LONG_URL_MESSAGE =
 const DEFAULT_EMAIL_MESSAGE = 'Here is an interesting dataset I found in the HuBMAP Data Portal:';
 
 const visualizationStoreSelector = (state) => ({
-  vizTheme: state.vizTheme,
   vitessceConfig: state.vitessceConfig,
   setOnCopyUrlMessage: state.setOnCopyUrlMessage,
   setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
@@ -31,7 +30,7 @@ const visualizationStoreSelector = (state) => ({
 function VisualizationShareButton() {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
-  const { vizTheme, vitessceConfig, setOnCopyUrlMessage, setOnCopyUrlSnackbarOpen } = useVisualizationStore(
+  const { vitessceConfig, setOnCopyUrlMessage, setOnCopyUrlSnackbarOpen } = useVisualizationStore(
     visualizationStoreSelector,
   );
 
@@ -68,7 +67,7 @@ function VisualizationShareButton() {
     <>
       <SecondaryBackgroundTooltip title="Share Visualization">
         <WhiteBackgroundIconButton ref={anchorRef} onClick={toggle}>
-          <ShareIcon color={vizTheme === 'light' ? 'primary' : 'secondary'} />
+          <ShareIcon color="primary" />
         </WhiteBackgroundIconButton>
       </SecondaryBackgroundTooltip>
       <Popper open={open} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>
