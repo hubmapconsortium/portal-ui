@@ -2,16 +2,16 @@ import create from 'zustand';
 
 const useVisualizationStore = create((set) => ({
   vizIsFullscreen: false,
-  vizGreySnackbarIsOpen: false,
-  setVizGreySnackbarIsOpen: (val) => set({ vizGreySnackbarIsOpen: val }),
+  vizEscSnackbarIsOpen: false,
+  setVizEscSnackbarIsOpen: (val) => set({ vizEscSnackbarIsOpen: val }),
   expandViz: () => {
-    set({ vizIsFullscreen: true, vizGreySnackbarIsOpen: true });
+    set({ vizIsFullscreen: true, vizEscSnackbarIsOpen: true });
     document.onkeydown = function preventDefault(evt) {
       if (evt.keyCode === 27) evt.preventDefault();
     };
   },
   collapseViz: () => {
-    set({ vizIsFullscreen: false, vizGreySnackbarIsOpen: false });
+    set({ vizIsFullscreen: false, vizEscSnackbarIsOpen: false });
     document.onkeydown = null;
   },
   vizTheme: 'light',

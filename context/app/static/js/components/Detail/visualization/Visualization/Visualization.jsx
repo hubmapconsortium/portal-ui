@@ -34,8 +34,8 @@ const visualizationStoreSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
   collapseViz: state.collapseViz,
   vizTheme: state.vizTheme,
-  vizGreySnackbarIsOpen: state.vizGreySnackbarIsOpen,
-  setVizGreySnackbarIsOpen: state.setVizGreySnackbarIsOpen,
+  vizEscSnackbarIsOpen: state.vizEscSnackbarIsOpen,
+  setVizEscSnackbarIsOpen: state.setVizEscSnackbarIsOpen,
   vitessceConfig: state.vitessceConfig,
   setVitessceConfig: state.setVitessceConfig,
   onCopyUrlMessage: state.onCopyUrlMessage,
@@ -50,8 +50,8 @@ function Visualization(props) {
     vizIsFullscreen,
     collapseViz,
     vizTheme,
-    vizGreySnackbarIsOpen,
-    setVizGreySnackbarIsOpen,
+    vizEscSnackbarIsOpen,
+    setVizEscSnackbarIsOpen,
     setVitessceConfig,
     onCopyUrlMessage,
     onCopyUrlMessageSnackbarOpen,
@@ -151,9 +151,9 @@ function Visualization(props) {
               vertical: 'top',
               horizontal: 'center',
             }}
-            open={vizGreySnackbarIsOpen}
+            open={vizEscSnackbarIsOpen}
             autoHideDuration={4000}
-            onClose={() => setVizGreySnackbarIsOpen(false)}
+            onClose={() => setVizEscSnackbarIsOpen(false)}
             message="Press [esc] to exit full window."
           />
           <GreySnackbar
