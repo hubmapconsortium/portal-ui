@@ -8,7 +8,6 @@ import PaginationWrapper from './PaginationWrapper';
 import SearchBarLayout from './SearchBarLayout';
 import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
-import './Search.scss';
 import { NoResults, SearchError } from './noHitsComponents';
 
 function SearchWrapper(props) {

@@ -47,7 +47,7 @@ function CollectionDatasetsTable(props) {
         {tableRows.length} Datasets
       </Typography>
       <Paper>
-        <StyledTableContainer $maxHeight={312}>
+        <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
               <TableRow>

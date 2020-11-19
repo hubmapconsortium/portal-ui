@@ -7,14 +7,26 @@ git diff --quiet || die 'Uncommitted changes: Stash or commit'
 git checkout master
 git pull
 
-perl -i -pne 's/(\d+)$/$1+1/e' context/app/markdown/VERSION.md
-VERSION=`cat VERSION`
+EXPECTED_MINOR=v0.`expr $(date +%s) / 86400 / 14 - 1320`
+
+# The docs say that a git tag will be created by default.
+# That would be useful, but it doesn't see to be happening for me.
+# Add additional flag to override.
+# https://docs.npmjs.com/cli/v6/commands/npm-version
+VERSION=`cd context && npm version patch --no-git-tag-version`
+
+if [[ $VERSION != $EXPECTED_MINOR* ]]; then
+  echo "End of 2-week cycle. Setting minor version to: $EXPECTED_MINOR"
+  VERSION=`cd context && npm version $EXPECTED_MINOR.0 --no-git-tag-version`
+fi
+echo "Version: $VERSION"
+
 git add .
-git commit -m 'Version bump'
+git commit -m "Version bump to $VERSION"
 
 if ls CHANGELOG-*.md; then
   (
-    echo '##' `cat VERSION` - `date +"%F"`
+    echo '##' $VERSION - `date +"%F"`
     echo
     # "-l" chomps and adds newline.
     perl -lpe '' CHANGELOG-*.md
@@ -27,7 +39,6 @@ if ls CHANGELOG-*.md; then
   git add .
   git commit -m 'Update CHANGELOG'
 fi
-
 
 VERSION_IMAGE_NAME=hubmap/portal-ui:$VERSION
 LATEST_IMAGE_NAME=hubmap/portal-ui:latest

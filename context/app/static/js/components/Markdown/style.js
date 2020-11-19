@@ -72,6 +72,13 @@ const StyledPaper = styled(Paper)`
     font-weight: 300;
     line-height: 1.6;
   }
+
+  details {
+    margin-left: 2em;
+    summary {
+      margin-left: -2em;
+    }
+  }
 `;
 
 export { StyledPaper };

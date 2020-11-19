@@ -1,17 +1,13 @@
-import React, { useState, useEffect, useReducer, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Vitessce, decodeURLParamsToConf } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMapRounded';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
-import Popper from '@material-ui/core/Popper';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
 import debounce from 'lodash/debounce';
 
 import { Alert } from 'js/shared-styles/alerts';
+import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
+import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
@@ -80,8 +76,6 @@ function Visualization(props) {
 
   const [vitessceErrors, setVitessceErrors] = useState([]);
   const [vitessceSelection, setVitessceSelection] = useState(initialSelection);
-  const [open, toggle] = useReducer((v) => !v, false);
-  const anchorRef = useRef(null);
   const handleVitessceConfigDebounced = useCallback(debounce(setVitessceConfig, 250, { trailing: true }), [
     setVitessceConfig,
   ]);
@@ -93,10 +87,10 @@ function Visualization(props) {
     setVitessceErrors((prev) => (prev.includes(message) ? prev : [...prev, message]));
   }
 
-  function setSelectionAndClearErrors(i) {
+  function setSelectionAndClearErrors(itemAndIndex) {
+    const { i } = itemAndIndex;
     setVitessceErrors([]);
     setVitessceSelection(i);
-    toggle();
   }
 
   useEffect(() => {
@@ -124,31 +118,15 @@ function Visualization(props) {
             </ExpandButton>
           </SecondaryBackgroundTooltip>
           {Array.isArray(initializedVitData) ? (
-            <>
-              <SelectionButton
-                ref={anchorRef}
-                style={{ borderRadius: 3 }}
-                onClick={toggle}
-                disableElevation
-                variant="contained"
-                color="primary"
-              >
-                {initializedVitData[vitessceSelection].name} {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-              </SelectionButton>
-              <Popper open={open} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>
-                <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-                  <ClickAwayListener onClickAway={toggle}>
-                    <MenuList id="preview-options">
-                      {initializedVitData.map(({ name }, i) => (
-                        <MenuItem onClick={() => setSelectionAndClearErrors(i)} key={name}>
-                          {name}
-                        </MenuItem>
-                      ))}
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Popper>
-            </>
+            <DropdownListbox
+              buttonComponent={SelectionButton}
+              optionComponent={DropdownListboxOption}
+              selectedOptionIndex={vitessceSelection}
+              options={initializedVitData}
+              selectOnClick={setSelectionAndClearErrors}
+              getOptionLabel={(v) => v.name}
+              id="visualization-data"
+            />
           ) : null}
         </StyledHeaderRight>
       </StyledHeader>

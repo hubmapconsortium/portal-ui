@@ -1,3 +1,25 @@
+## v0.7.1 - 2020-11-16
+
+- Fix injection order for Search stylesheet.
+- Indent the FAQs.
+- Search pagination control immediately follows the table.
+- Add "Software" section to footer.
+- Add styled-components babel plugin
+- Change table-height to land in the middle of a row.
+
+
+## v0.6.4 - 2020-11-10
+
+- Try to diagnose and fix versioning bug.
+
+
+## v0.6.3 - 2020-11-09
+
+- Improve accessibility of search sort dropdown.
+- Split js bundle by route.
+- Drop our standalone file, and use package.json for versioning info.
+
+
 ## v0.6.2 - 2020-11-05
 
 - Update redeploy.sh to handle to stage environment.

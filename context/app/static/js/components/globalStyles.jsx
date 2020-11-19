@@ -18,11 +18,6 @@ const GlobalStyles = createGlobalStyle`
     list-style: none;
   }
 
-  .main-content {
-    flex-grow: 1;
-    display: flex;
-  }
-
   #react-content {
     display: flex;
     min-height: 100vh;

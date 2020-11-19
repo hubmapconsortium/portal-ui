@@ -7,6 +7,9 @@ import Routes from './Routes';
 import Footer from './Footer';
 import Header from './Header';
 
+// Importing Search styles here so the CSS import order is correct.
+import 'js/components/Search/Search.scss';
+
 function App(props) {
   const { flaskData } = props;
   const { title, entity, vitessce_conf, endpoints, markdown, collection, errorCode } = flaskData;
@@ -16,9 +19,7 @@ function App(props) {
     // eslint-disable-next-line no-undef
     <Providers endpoints={endpoints} nexusToken={nexus_token}>
       <Header />
-      <div className="main-content">
-        <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode }} />
-      </div>
+      <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode }} />
       <Footer />
     </Providers>
   );

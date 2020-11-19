@@ -42,6 +42,7 @@ const ExpandButton = styled(WhiteBackgroundIconButton)`
 const SelectionButton = styled(Button)`
   margin-left: ${(props) => props.theme.spacing(1)}px;
   color: white;
+  border-radius: 3px;
 `;
 
 const GreySnackbar = styled(Snackbar)`
