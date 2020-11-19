@@ -16,6 +16,9 @@ import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
+const DEFAULT_LONG_URL_MESSAGE =
+  'Warning: this is a long URL which may be incompatible or load slowly with some browsers';
+
 const visualizationStoreSelector = (state) => ({
   vizTheme: state.vizTheme,
   vitessceConfig: state.vitessceConfig,
@@ -34,8 +37,8 @@ function VisualizationShareButton() {
     document.body.appendChild(dummy);
     const url = `${window.location.href.split('#')[0]}#${encodeConfInUrl({
       conf,
-      onOverMaximumUrlLength: ({ message }) => {
-        setOnCopyUrlMessage(message);
+      onOverMaximumUrlLength: () => {
+        setOnCopyUrlMessage(DEFAULT_LONG_URL_MESSAGE);
       },
     })}`;
     setOnCopyUrlMessageSnackbarOpen(true);
