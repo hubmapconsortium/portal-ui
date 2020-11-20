@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import ArrowRightRoundedIcon from '@material-ui/icons/ArrowRightRounded';
+import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
 
 import useFilesStore from 'js/stores/useFilesStore';
 import { StyledTableRow, Directory, StyledFolderIcon, StyledFolderOpenIcon } from './style';
@@ -36,7 +38,17 @@ function FileBrowserDirectory(props) {
       >
         <td>
           <Directory $depth={depth}>
-            {isExpanded ? <StyledFolderOpenIcon color="primary" /> : <StyledFolderIcon color="primary" />}
+            {isExpanded ? (
+              <>
+                <ArrowDropDownRoundedIcon color="secondary" />
+                <StyledFolderOpenIcon color="primary" />
+              </>
+            ) : (
+              <>
+                <ArrowRightRoundedIcon color="secondary" />
+                <StyledFolderIcon color="primary" />
+              </>
+            )}
             {dirName}
           </Directory>
         </td>
