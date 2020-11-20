@@ -4,7 +4,7 @@ import { encodeConfInUrl } from 'vitessce';
 
 import { useVitessceConfig } from './hooks';
 
-test('allows you to undo and redo', () => {
+test('Vitessce Config Hook Test', () => {
   const urlConf = { name: 'conf1' };
   const urlParams = encodeConfInUrl({ conf: urlConf });
   delete window.location;
