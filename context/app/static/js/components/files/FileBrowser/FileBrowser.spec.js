@@ -69,3 +69,65 @@ test('displays files and directories', () => {
   const textInDocumentAfterOpenDirectory = [...textInDocumentBeforeOpenDirectory, 'fake3.txt', 'path2'];
   textInDocumentAfterOpenDirectory.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 });
+
+test('Displays correct files before and after display only QA files chip is clicked', () => {
+  const sharedEntries = {
+    edam_term: 'faketerm',
+    description: 'fakedescription',
+    size: 1000,
+    type: 'faketype',
+  };
+
+  const testFiles = [
+    {
+      rel_path: 'path1/path2/fake1.txt',
+      ...sharedEntries,
+      is_qa_qc: true,
+    },
+    {
+      rel_path: 'path1/path2/fake2.txt',
+      ...sharedEntries,
+    },
+    {
+      rel_path: 'path1/fake3.txt',
+      ...sharedEntries,
+      is_qa_qc: true,
+    },
+    {
+      rel_path: 'path3/fake4.txt',
+      ...sharedEntries,
+    },
+    {
+      rel_path: 'fake5.txt',
+      ...sharedEntries,
+    },
+  ];
+
+  render(
+    <FilesProviders>
+      <FileBrowser files={testFiles} />
+    </FilesProviders>,
+  );
+
+  // intial
+  const textInDocumentBeforeQAFilesOnly = ['path1', 'path3', 'fake5.txt'];
+  textInDocumentBeforeQAFilesOnly.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+
+  const textNotInDocumentBeforeQAFilesOnly = ['path2', 'fake1.txt', 'fake2.txt', 'fake3.txt', 'fake4.txt'];
+  textNotInDocumentBeforeQAFilesOnly.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+
+  userEvent.click(screen.getByRole('button', { name: 'Show QA Files Only' }));
+
+  // after QA files chip clicked
+  const textInDocumentAfterQAFilesOnly = ['path1', 'path2', 'fake1.txt', 'fake3.txt'];
+  textInDocumentAfterQAFilesOnly.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+
+  const textNotInDocumentAfterQAFilesOnly = ['path3', 'fake4.txt', 'fake2.txt', 'fake5.txt'];
+  textNotInDocumentAfterQAFilesOnly.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+
+  userEvent.click(screen.getByRole('button', { name: 'Show QA Files Only' }));
+
+  // returns to all dirs closes
+  textInDocumentBeforeQAFilesOnly.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  textNotInDocumentBeforeQAFilesOnly.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+});
