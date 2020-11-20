@@ -19,14 +19,14 @@ import { StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
 const visualizationStoreSelector = (state) => ({
-  vitessceConfig: state.vitessceConfig,
+  vitessceState: state.vitessceState,
   setOnCopyUrlWarning: state.setOnCopyUrlWarning,
   setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
 });
 function VisualizationShareButton() {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
-  const { vitessceConfig, setOnCopyUrlWarning, setOnCopyUrlSnackbarOpen } = useVisualizationStore(
+  const { vitessceState, setOnCopyUrlWarning, setOnCopyUrlSnackbarOpen } = useVisualizationStore(
     visualizationStoreSelector,
   );
 
@@ -43,7 +43,7 @@ function VisualizationShareButton() {
             <MenuList id="preview-options">
               <MenuItem
                 onClick={() => {
-                  copyToClipBoard(vitessceConfig, () => {
+                  copyToClipBoard(vitessceState, () => {
                     setOnCopyUrlWarning(DEFAULT_LONG_URL_WARNING);
                   });
                   setOnCopyUrlSnackbarOpen(true);
@@ -57,7 +57,7 @@ function VisualizationShareButton() {
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  createEmailWithUrl(vitessceConfig);
+                  createEmailWithUrl(vitessceState);
                   toggle();
                 }}
                 component={Link}

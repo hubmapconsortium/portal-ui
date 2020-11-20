@@ -21,8 +21,8 @@ const useVisualizationStore = create((set) => ({
     }
     set({ vizTheme: theme });
   },
-  vitessceConfig: {},
-  setVitessceConfig: (val) => set({ vitessceConfig: val }),
+  vitessceState: null,
+  setVitessceState: (val) => set({ vitessceState: val }),
   onCopyUrlWarning: '',
   setOnCopyUrlWarning: (val) => set({ onCopyUrlWarning: val }),
   onCopyUrlSnackbarOpen: false,
