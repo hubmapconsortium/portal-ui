@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
@@ -65,9 +65,8 @@ function Visualization(props) {
   });
 
   const [vitessceErrors, setVitessceErrors] = useState([]);
-  const handleVitessceConfigDebounced = useCallback(debounce(setVitessceState, 250, { trailing: true }), [
-    setVitessceState,
-  ]);
+  // The application is very slow without debouncing since state can be quite large.
+  const handleVitessceConfigDebounced = debounce(setVitessceState, 250, { trailing: true });
   function removeError(message) {
     setVitessceErrors((prev) => prev.filter((d) => d !== message));
   }
