@@ -21,6 +21,9 @@ const FilesProviders = ({ children }) => {
   );
 };
 
+const expectArrayOfStringsToExist = (arr) => arr.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+const expectArrayOfStringsToNotExist = (arr) => arr.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+
 test('displays files and directories', () => {
   const sharedEntries = {
     edam_term: 'faketerm',
@@ -59,15 +62,15 @@ test('displays files and directories', () => {
   );
 
   const textInDocumentBeforeOpenDirectory = ['path1', 'path3', 'fake5.txt'];
-  textInDocumentBeforeOpenDirectory.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  expectArrayOfStringsToExist(textInDocumentBeforeOpenDirectory);
 
   const textNotInDocumentBeforeOpenDirectory = ['path2', 'fake1.txt', 'fake2.txt', 'fake3.txt', 'fake4.txt'];
-  textNotInDocumentBeforeOpenDirectory.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+  expectArrayOfStringsToNotExist(textNotInDocumentBeforeOpenDirectory);
 
   userEvent.click(screen.getByRole('button', { name: 'path1' }));
 
   const textInDocumentAfterOpenDirectory = [...textInDocumentBeforeOpenDirectory, 'fake3.txt', 'path2'];
-  textInDocumentAfterOpenDirectory.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  expectArrayOfStringsToExist(textInDocumentAfterOpenDirectory);
 });
 
 test('Displays correct files before and after display only QA files chip is clicked', () => {
@@ -111,23 +114,23 @@ test('Displays correct files before and after display only QA files chip is clic
 
   // intial
   const textInDocumentBeforeQAFilesOnly = ['path1', 'path3', 'fake5.txt'];
-  textInDocumentBeforeQAFilesOnly.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  expectArrayOfStringsToExist(textInDocumentBeforeQAFilesOnly);
 
   const textNotInDocumentBeforeQAFilesOnly = ['path2', 'fake1.txt', 'fake2.txt', 'fake3.txt', 'fake4.txt'];
-  textNotInDocumentBeforeQAFilesOnly.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+  expectArrayOfStringsToNotExist(textNotInDocumentBeforeQAFilesOnly);
 
   userEvent.click(screen.getByRole('button', { name: 'Show QA Files Only' }));
 
   // after QA files chip clicked
   const textInDocumentAfterQAFilesOnly = ['path1', 'path2', 'fake1.txt', 'fake3.txt'];
-  textInDocumentAfterQAFilesOnly.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  expectArrayOfStringsToExist(textInDocumentAfterQAFilesOnly);
 
   const textNotInDocumentAfterQAFilesOnly = ['path3', 'fake4.txt', 'fake2.txt', 'fake5.txt'];
-  textNotInDocumentAfterQAFilesOnly.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+  expectArrayOfStringsToNotExist(textNotInDocumentAfterQAFilesOnly);
 
   userEvent.click(screen.getByRole('button', { name: 'Show QA Files Only' }));
 
   // returns to all dirs closes
-  textInDocumentBeforeQAFilesOnly.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-  textNotInDocumentBeforeQAFilesOnly.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+  expectArrayOfStringsToExist(textInDocumentBeforeQAFilesOnly);
+  expectArrayOfStringsToNotExist(textNotInDocumentBeforeQAFilesOnly);
 });
