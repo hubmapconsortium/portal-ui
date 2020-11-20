@@ -2,7 +2,7 @@ import { encodeConfInUrl } from 'vitessce';
 import { DEFAULT_LONG_URL_WARNING, DEFAULT_EMAIL_MESSAGE } from './constants';
 
 const getUrl = (conf, onOverMaximumUrlLength) => {
-  const baseUrl = window.location.hash.substr(1);
+  const baseUrl = window.location.href.split('#')[0];
   const fragment = encodeConfInUrl({
     conf,
     onOverMaximumUrlLength,
