@@ -8,19 +8,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Link from '@material-ui/core/Link';
-import { encodeConfInUrl } from 'vitessce';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
+import { copyToClipBoard, createEmailWithUrl } from './utils';
+import { DEFAULT_LONG_URL_WARNING } from './constants';
 
 import { StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
-
-const DEFAULT_LONG_URL_WARNING =
-  'Warning: this is a long URL which may be incompatible or load slowly with some browsers.';
-
-const DEFAULT_EMAIL_MESSAGE = 'Here is an interesting dataset I found in the HuBMAP Data Portal:';
 
 const visualizationStoreSelector = (state) => ({
   vitessceConfig: state.vitessceConfig,
@@ -33,35 +29,6 @@ function VisualizationShareButton() {
   const { vitessceConfig, setOnCopyUrlWarning, setOnCopyUrlSnackbarOpen } = useVisualizationStore(
     visualizationStoreSelector,
   );
-
-  const copyToClipBoard = (conf) => {
-    const dummy = document.createElement('input');
-    document.body.appendChild(dummy);
-    const url = `${window.location.href.split('#')[0]}#${encodeConfInUrl({
-      conf,
-      onOverMaximumUrlLength: () => {
-        setOnCopyUrlWarning(DEFAULT_LONG_URL_WARNING);
-      },
-    })}`;
-    setOnCopyUrlSnackbarOpen(true);
-    dummy.setAttribute('value', url);
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-  };
-  const emailUrl = (conf) => {
-    let longUrlWarning = '';
-    const url = `${window.location.href.split('#')[0]}#${encodeConfInUrl({
-      conf,
-      onOverMaximumUrlLength: () => {
-        longUrlWarning = DEFAULT_LONG_URL_WARNING;
-      },
-    })}`;
-    // We need to encode the URL so its parameters do not conflict with mailto's.
-    const encodedUrl = encodeURIComponent(url);
-    const mailtoLink = `mailto:?body=${longUrlWarning}%0D%0A%0D%0A${DEFAULT_EMAIL_MESSAGE} ${encodedUrl}`;
-    window.location.href = mailtoLink;
-  };
 
   return (
     <>
@@ -76,7 +43,10 @@ function VisualizationShareButton() {
             <MenuList id="preview-options">
               <MenuItem
                 onClick={() => {
-                  copyToClipBoard(vitessceConfig);
+                  copyToClipBoard(vitessceConfig, () => {
+                    setOnCopyUrlWarning(DEFAULT_LONG_URL_WARNING);
+                  });
+                  setOnCopyUrlSnackbarOpen(true);
                   toggle();
                 }}
               >
@@ -87,7 +57,7 @@ function VisualizationShareButton() {
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  emailUrl(vitessceConfig);
+                  createEmailWithUrl(vitessceConfig);
                   toggle();
                 }}
                 component={Link}
