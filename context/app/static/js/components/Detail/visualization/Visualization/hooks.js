@@ -20,7 +20,7 @@ export function useVitessceConfig({ vitData, setVitessceState }) {
       } else {
         initializedVitDataFromUrl = vitessceURLConf || vitData;
       }
-      setVitessceState(initializedVitDataFromUrl);
+      setVitessceState(initializedVitDataFromUrl[initialSelectionFromUrl]);
       setVitessceSelection(initialSelectionFromUrl);
       setVitessceConfig(initializedVitDataFromUrl);
     }
