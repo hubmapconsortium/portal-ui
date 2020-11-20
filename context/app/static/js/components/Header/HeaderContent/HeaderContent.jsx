@@ -30,6 +30,7 @@ function HeaderContent({ anchorRef }) {
               </HeaderButton>
             ))}
             <HeaderButton component={Link} href="/collections">
+              {/* TODO: Move this into the loop above when search works. */}
               Collections
             </HeaderButton>
           </FlexNoWrap>

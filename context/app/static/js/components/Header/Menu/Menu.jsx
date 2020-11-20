@@ -26,6 +26,7 @@ function Menu(props) {
       <WidePopper id="main-menu" open={open} anchorEl={anchorRef.current}>
         <WidePaper>
           <MenuList>
+            {/* NOTE: Changes here should be in sync with HeaderContent.jsx. */}
             {['Donor', 'Sample', 'Dataset'].map((type) => (
               <DropdownLink key={type} href={`/search?entity_type[0]=${type}`}>{`${type}s`}</DropdownLink>
             ))}
