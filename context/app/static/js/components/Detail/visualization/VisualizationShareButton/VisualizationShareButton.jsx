@@ -23,6 +23,7 @@ const visualizationStoreSelector = (state) => ({
   setOnCopyUrlWarning: state.setOnCopyUrlWarning,
   setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
 });
+
 function VisualizationShareButton() {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);

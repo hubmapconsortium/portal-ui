@@ -1,13 +1,20 @@
 import { encodeConfInUrl } from 'vitessce';
 import { DEFAULT_LONG_URL_WARNING, DEFAULT_EMAIL_MESSAGE } from './constants';
 
+const getUrl = (conf, onOverMaximumUrlLength) => {
+  const baseUrl = window.location.hash.substr(1);
+  const fragment = encodeConfInUrl({
+    conf,
+    onOverMaximumUrlLength,
+  });
+  const url = `${baseUrl}#${fragment}`;
+  return url;
+};
+
 const copyToClipBoard = (conf, onOverMaximumUrlLength) => {
   const dummy = document.createElement('input');
   document.body.appendChild(dummy);
-  const url = `${window.location.href.split('#')[0]}#${encodeConfInUrl({
-    conf,
-    onOverMaximumUrlLength,
-  })}`;
+  const url = getUrl(conf, onOverMaximumUrlLength);
   dummy.setAttribute('value', url);
   dummy.select();
   document.execCommand('copy');
@@ -16,15 +23,14 @@ const copyToClipBoard = (conf, onOverMaximumUrlLength) => {
 
 const createEmailWithUrl = (conf) => {
   let longUrlWarning = '';
-  const url = `${window.location.href.split('#')[0]}#${encodeConfInUrl({
-    conf,
-    onOverMaximumUrlLength: () => {
-      longUrlWarning = DEFAULT_LONG_URL_WARNING;
-    },
-  })}`;
+  const onOverMaximumUrlLength = () => {
+    longUrlWarning = DEFAULT_LONG_URL_WARNING;
+  };
+  const url = getUrl(conf, onOverMaximumUrlLength);
   // We need to encode the URL so its parameters do not conflict with mailto's.
   const encodedUrl = encodeURIComponent(url);
-  const mailtoLink = `mailto:?body=${longUrlWarning}%0D%0A%0D%0A${DEFAULT_EMAIL_MESSAGE} ${encodedUrl}`;
+  const emailBody = `${longUrlWarning}${longUrlWarning && encodeURI('\r\n\r\n')}${DEFAULT_EMAIL_MESSAGE} ${encodedUrl}`;
+  const mailtoLink = `mailto:?body=${emailBody}`;
   window.location.href = mailtoLink;
 };
 

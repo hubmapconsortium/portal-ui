@@ -65,6 +65,7 @@ function Visualization(props) {
   });
 
   const [vitessceErrors, setVitessceErrors] = useState([]);
+
   // The application is very slow without debouncing since state can be quite large.
   const handleVitessceConfigDebounced = debounce(setVitessceState, 250, { trailing: true });
   function removeError(message) {
@@ -142,7 +143,7 @@ function Visualization(props) {
               autoHideDuration={4000}
               $isWarning={onCopyUrlWarning}
               onClose={() => setOnCopyUrlSnackbarOpen(false)}
-              message={`Shareable URL has been copied to clipboard. ${onCopyUrlWarning}`}
+              message={`Shareable URL copied to clipboard. ${onCopyUrlWarning}`}
             />
             {vitessceErrors.length > 0 && (
               <ErrorSnackbar
