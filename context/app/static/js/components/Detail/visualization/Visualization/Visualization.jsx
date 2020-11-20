@@ -59,7 +59,7 @@ function Visualization(props) {
   } = useVisualizationStore(visualizationStoreSelector);
 
   // Get the vitessce configuration from the url if available and set the selection if it is a multi-dataset.
-  const [vitessceConfig, vitessceSelection, setVitessceSelection] = useVitessceConfig({
+  const { vitessceConfig, vitessceSelection, setVitessceSelection } = useVitessceConfig({
     vitData,
     setVitessceState,
   });

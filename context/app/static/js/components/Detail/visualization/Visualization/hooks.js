@@ -24,6 +24,6 @@ export function useVitessceConfig({ vitData, setVitessceState }) {
       setVitessceSelection(initialSelectionFromUrl);
       setVitessceConfig(initializedVitDataFromUrl);
     }
-  }, [setVitessceState, vitData, vitessceConfig]);
-  return [vitessceConfig, vitessceSelection, setVitessceSelection];
+  }, [setVitessceState, vitData]);
+  return { vitessceConfig, vitessceSelection, setVitessceSelection };
 }
