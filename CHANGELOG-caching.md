@@ -1,0 +1,2 @@
+- Tweak NGINX settings to allow caching on client.
+- Rearrange Dockerfile to improve layer caching.
