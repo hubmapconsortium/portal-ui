@@ -4,12 +4,13 @@ import DoneIcon from '@material-ui/icons/Done';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
+import TableBody from '@material-ui/core/TableBody';
 import Chip from '@material-ui/core/Chip';
 
 import useFilesStore from 'js/stores/useFilesStore';
 import { relativeFilePathsToTree } from './utils';
 import FileBrowserNode from '../FileBrowserNode';
-import { ChipWrapper, ScrollTableBody, StyledTableContainer, HiddenTableHead } from './style';
+import { ChipWrapper, StyledTableContainer, HiddenTableHead } from './style';
 
 const filesStoreSelector = (state) => ({
   displayOnlyQaQc: state.displayOnlyQaQc,
@@ -50,9 +51,9 @@ function FileBrowser(props) {
             <td>Size</td>
           </TableRow>
         </HiddenTableHead>
-        <ScrollTableBody>
+        <TableBody>
           <FileBrowserNode fileSubTree={displayOnlyQaQc ? fileTrees.qa : fileTrees.all} depth={0} />
-        </ScrollTableBody>
+        </TableBody>
       </Table>
     </StyledTableContainer>
   );

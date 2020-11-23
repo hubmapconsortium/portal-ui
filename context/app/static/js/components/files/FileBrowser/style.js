@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 
@@ -11,17 +10,13 @@ const ChipWrapper = styled.div`
   background-color: #fff;
 `;
 
-const ScrollTableBody = styled(TableBody)`
-  overflow-y: auto;
-  max-height: 600px;
-`;
-
 const StyledTableContainer = styled(TableContainer)`
   max-height: 600px;
+  overflow-y: auto;
 `;
 
 const HiddenTableHead = styled(TableHead)`
   display: none;
 `;
 
-export { ScrollTableBody, ChipWrapper, StyledTableContainer, HiddenTableHead };
+export { ChipWrapper, StyledTableContainer, HiddenTableHead };
