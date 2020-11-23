@@ -14,8 +14,8 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { HeaderIconCell, StyledLink, StyledInfoIcon, CenterAlignedFlexRow } from './style';
 
-function CollectionCreatorsTable(props) {
-  const { creators: tableRows } = props;
+function CollectionsAffiliationsTable(props) {
+  const { title, affiliations: tableRows } = props;
 
   const columns = [
     { id: 'name', label: 'Name' },
@@ -24,7 +24,7 @@ function CollectionCreatorsTable(props) {
 
   return (
     <SectionContainer id="datasets-table">
-      <SectionHeader>Creators</SectionHeader>
+      <SectionHeader>{title}</SectionHeader>
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
@@ -68,8 +68,9 @@ function CollectionCreatorsTable(props) {
   );
 }
 
-CollectionCreatorsTable.propTypes = {
-  creators: PropTypes.arrayOf(PropTypes.object).isRequired,
+CollectionsAffiliationsTable.propTypes = {
+  title: PropTypes.string.isRequired,
+  affiliations: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default CollectionCreatorsTable;
+export default CollectionsAffiliationsTable;

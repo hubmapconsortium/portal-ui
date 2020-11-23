@@ -20,7 +20,7 @@ const Markdown = lazy(() => import('js/components/Markdown'));
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, title, markdown, collection, errorCode } = flaskData;
+  const { entity, vitessce_conf, title, markdown, errorCode } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
 
@@ -51,6 +51,14 @@ function Routes(props) {
     return (
       <Route>
         <Dataset assayMetadata={entity} vitData={vitessce_conf} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/browse/collection/')) {
+    return (
+      <Route>
+        <Collection collection={entity} />
       </Route>
     );
   }
@@ -101,14 +109,6 @@ function Routes(props) {
     return (
       <Route>
         <Collections />
-      </Route>
-    );
-  }
-
-  if (urlPath.startsWith('/browse/collection/')) {
-    return (
-      <Route>
-        <Collection collection={collection} />
       </Route>
     );
   }

@@ -99,11 +99,6 @@ class ApiClient():
         entity = hits[0]['_source']
         return entity
 
-    def get_collection(self, uuid):
-        path = f"{current_app.config['ENTITY_API_BASE']}/collections/{uuid}"
-        response_json = self._request(path)
-        return response_json
-
     def get_vitessce_conf(self, entity):
         if ('files' not in entity or 'data_types' not in entity):
             # Would a default no-viz config be better?

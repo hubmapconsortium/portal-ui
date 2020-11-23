@@ -29,6 +29,10 @@ function HeaderContent({ anchorRef }) {
                 {`${type}s`}
               </HeaderButton>
             ))}
+            <HeaderButton component={Link} href="/collections">
+              {/* TODO: Move this into the loop above when search works. */}
+              Collections
+            </HeaderButton>
           </FlexNoWrap>
           <Spacer />
           <Dropdown title="Previews" menuListId="preview-options">
