@@ -49,11 +49,11 @@ function FileBrowserFile(props) {
 
 FileBrowserFile.propTypes = {
   fileObj: PropTypes.shape({
-    rel_path: PropTypes.string,
-    file: PropTypes.string,
-    size: PropTypes.number,
-    description: PropTypes.string,
-    edam_term: PropTypes.string,
+    rel_path: PropTypes.string.isRequired,
+    file: PropTypes.string.isRequired,
+    size: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    edam_term: PropTypes.string.isRequired,
     is_qa_qc: PropTypes.bool,
   }).isRequired,
   depth: PropTypes.number.isRequired,

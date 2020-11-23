@@ -57,11 +57,11 @@ Files.propTypes = {
   display_doi: PropTypes.string.isRequired,
   files: PropTypes.arrayOf(
     PropTypes.shape({
-      rel_path: PropTypes.string,
-      edam_term: PropTypes.string,
-      description: PropTypes.string,
-      size: PropTypes.number,
-      type: PropTypes.string,
+      rel_path: PropTypes.string.isRequired,
+      edam_term: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      size: PropTypes.number.isRequired,
+      type: PropTypes.string.isRequired,
       is_qa_qc: PropTypes.bool,
     }),
   ),
