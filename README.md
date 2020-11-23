@@ -8,6 +8,12 @@ The Data Portal depends, directly or indirectly, on many other HuBMAP repos:
 
 [![Repo diagram](https://docs.google.com/drawings/d/e/2PACX-1vQ1ISVanilVt3vewU6tekVirOxPpTsKMS3zXa8tL0J5JjdT9zS9adgXivm1ZcXxoyC_lctIlHVYhJuI/pub?w=922&amp;h=408)](https://docs.google.com/drawings/d/1q0IvliNTX0Xo9EzHTAoRZ2x1gatG_n0gOoLN7uVMJ4o/edit)
 
+## Feedback
+
+Issues with the Portal can be reported [via email](mailto:help@hubmapconsortium.org).
+More information on how issues are tracked across HuBMAP is available
+[here](https://portal.hubmapconsortium.org/docs/feedback).
+
 ## Checkout
 
 Because we're using git submodules, a couple additional steps are needed with checkout:
