@@ -38,7 +38,7 @@ function FileBrowser(props) {
           clickable
           onClick={toggleDisplayOnlyQaQc}
           color={displayOnlyQaQc ? 'primary' : undefined}
-          icon={displayOnlyQaQc ? <DoneIcon /> : null}
+          icon={displayOnlyQaQc && <DoneIcon />}
           component="button"
           disabled={Object.keys(fileTrees.qa).length === 0}
         />
