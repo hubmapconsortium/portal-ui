@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMapRounded';
 import debounce from 'lodash/debounce';
+import Bowser from 'bowser';
 
 import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
@@ -28,6 +29,14 @@ import {
 } from './style';
 import { useVitessceConfig } from './hooks';
 import 'vitessce/dist/es/production/static/css/index.css';
+
+function sniffBrowser() {
+  const { browser } = Bowser.parse(window.navigator.userAgent);
+  return browser.name;
+}
+
+const FIREFOX_WARNING =
+  'Visualizations may be slow on Firefox.  If there is latency, please upgrade to the latest version of Firefox, which may alleviate the problem';
 
 const visualizationStoreSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
@@ -65,6 +74,7 @@ function Visualization(props) {
   });
 
   const [vitessceErrors, setVitessceErrors] = useState([]);
+  const [isVisibleFirefoxWarning, setIsVisibleFirefoxWarning] = useState(sniffBrowser() === 'Firefox');
 
   // The application is very slow without debouncing since state can be quite large.
   const handleVitessceConfigDebounced = useCallback(debounce(setVitessceState, 250, { trailing: true }), []);
@@ -125,6 +135,16 @@ function Visualization(props) {
         </StyledHeader>
         <Paper>
           <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme}>
+            <VitessceInfoSnackbar
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              open={isVisibleFirefoxWarning}
+              autoHideDuration={4000}
+              onClose={() => setIsVisibleFirefoxWarning(false)}
+              message={FIREFOX_WARNING}
+            />
             <VitessceInfoSnackbar
               anchorOrigin={{
                 vertical: 'top',
