@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMapRounded';
+import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
 
 import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
@@ -84,7 +84,7 @@ function Visualization(props) {
           <VisualizationThemeSwitch />
           <SecondaryBackgroundTooltip title="Switch to Fullscreen">
             <ExpandButton size="small" onClick={expandViz} variant="contained">
-              <ZoomOutMapIcon color="primary" />
+              <FullscreenRoundedIcon color="primary" />
             </ExpandButton>
           </SecondaryBackgroundTooltip>
           {Array.isArray(vitData) ? (
