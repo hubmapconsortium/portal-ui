@@ -130,7 +130,7 @@ test('Displays correct files before and after display only QA files chip is clic
 
   userEvent.click(screen.getByRole('button', { name: 'Show QA Files Only' }));
 
-  // returns to all dirs closes
+  // returns to all dirs closed
   expectArrayOfStringsToExist(textInDocumentBeforeQAFilesOnly);
   expectArrayOfStringsToNotExist(textNotInDocumentBeforeQAFilesOnly);
 });
