@@ -71,6 +71,7 @@ def ccf_eui():
         )
     )
 
+
 @blueprint.route('/browse/HBM<hbm_suffix>')
 def hbm_redirect(hbm_suffix):
     client = _get_client()
