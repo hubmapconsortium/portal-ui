@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMapRounded';
+import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
 import debounce from 'lodash/debounce';
 import Bowser from 'bowser';
 
@@ -36,7 +36,7 @@ function sniffBrowser() {
 }
 
 const FIREFOX_WARNING =
-  'Visualizations may be slow on Firefox.  If there is latency, please upgrade to the latest version of Firefox, which may alleviate the problem';
+  'Visualizations may be slow on Firefox.  If there is latency, please make sure you are on the latest version - upgrading Firefox may alleviate the problem.';
 
 const visualizationStoreSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
@@ -117,7 +117,7 @@ function Visualization(props) {
             <VisualizationThemeSwitch />
             <SecondaryBackgroundTooltip title="Switch to Fullscreen">
               <ExpandButton size="small" onClick={expandViz} variant="contained">
-                <ZoomOutMapIcon color="primary" />
+                <FullscreenRoundedIcon color="primary" />
               </ExpandButton>
             </SecondaryBackgroundTooltip>
             {isMultiDataset && (
