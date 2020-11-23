@@ -21,11 +21,7 @@ function FileBrowserDirectory(props) {
   const displayOnlyQaQc = useFilesStore(filesStoreSelector);
 
   useEffect(() => {
-    if (displayOnlyQaQc === true) {
-      setIsExpanded(true);
-      return;
-    }
-    setIsExpanded(false);
+    setIsExpanded(displayOnlyQaQc);
   }, [displayOnlyQaQc]);
 
   return (

@@ -5,7 +5,7 @@ import TableHead from '@material-ui/core/TableHead';
 
 const ChipWrapper = styled.div`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};
-  padding: 12px 15px 12px 15px;
+  padding: 12px 15px;
   position: sticky;
   top: 0;
   background-color: #fff;
