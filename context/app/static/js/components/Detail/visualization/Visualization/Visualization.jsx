@@ -97,7 +97,8 @@ function Visualization(props) {
 
   return (
     vitessceConfig &&
-    (isMultiDataset ? Number.isInteger(vitessceSelection) : true) && (
+    // Don't render multi-datasets unless they have a selection from the list of options in vitessceConfig.
+    (!isMultiDataset || Number.isInteger(vitessceSelection)) && (
       <StyledSectionContainer id="visualization">
         <StyledHeader>
           <StyledHeaderText>Visualization</StyledHeaderText>
@@ -109,7 +110,7 @@ function Visualization(props) {
                 <ZoomOutMapIcon color="primary" />
               </ExpandButton>
             </SecondaryBackgroundTooltip>
-            {isMultiDataset ? (
+            {isMultiDataset && (
               <DropdownListbox
                 buttonComponent={SelectionButton}
                 optionComponent={DropdownListboxOption}
@@ -119,7 +120,7 @@ function Visualization(props) {
                 getOptionLabel={(v) => v.name}
                 id="visualization-data"
               />
-            ) : null}
+            )}
           </StyledHeaderRight>
         </StyledHeader>
         <Paper>
@@ -174,7 +175,7 @@ function Visualization(props) {
             Vitessce
           </Link>
         </StyledFooterText>
-        <style type="text/css">{vizIsFullscreen ? bodyExpandedCSS : null}</style>
+        <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
       </StyledSectionContainer>
     )
   );
