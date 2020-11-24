@@ -1,0 +1,1 @@
+- Compress webpack assets with gzip and enable gzip in nginx.
