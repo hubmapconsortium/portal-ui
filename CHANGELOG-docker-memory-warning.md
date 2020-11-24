@@ -1,0 +1,1 @@
+- Add message to docker if npm build fails.
