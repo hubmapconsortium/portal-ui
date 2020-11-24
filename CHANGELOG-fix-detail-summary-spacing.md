@@ -1,1 +1,0 @@
-- Fix spacing between description and dates in entity detail page.

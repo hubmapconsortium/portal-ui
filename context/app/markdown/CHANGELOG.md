@@ -1,3 +1,12 @@
+## v0.7.2 - 2020-11-23
+
+- Update CCF template to use the same analytics key as the rest of the site.
+- Change fullscreen visualization icon.
+- Fix spacing between description and dates in entity detail page.
+- Return collections page.
+- Add contacts table to collection page.
+
+
 ## v0.7.1 - 2020-11-16
 
 - Fix injection order for Search stylesheet.
