@@ -20,7 +20,7 @@ server_up() {
 
 
 start changelog
-if [ "$ACTIONS_BRANCH" != 'refs/heads/master' ] || [ "$TRAVIS_BRANCH" != 'master' ]; then
+if [ "$GH_ACTIONS_BRANCH" != 'refs/heads/master' ] || [ "$TRAVIS_BRANCH" != 'master' ]; then
   git remote set-branches --add origin master
   git fetch
   # "--stat=1000" ensures that filenames are not truncated. 
@@ -32,7 +32,7 @@ end changelog
 
 
 start dev-start
-if [ ! -z "$TRAVIS" ] || [ ! -z "$ACTIONS" ]; then
+if [ ! -z "$TRAVIS" ] || [ ! -z "$GH_ACTIONS" ]; then
   echo 'Running on Travis...'
   ./dev-start.sh || (
     echo 'app.conf before:'
