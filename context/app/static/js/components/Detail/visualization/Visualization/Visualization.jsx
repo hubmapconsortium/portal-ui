@@ -36,7 +36,7 @@ function sniffBrowser() {
 }
 
 const FIREFOX_WARNING =
-  'Visualizations may be slow on Firefox.  If there is latency, please check if you are on the latest version - upgrading Firefox may alleviate the problem.';
+  'On older versions of Firefox, zooming in on visualizations is very slow; Upgrading to the latest version will fix the problem.';
 
 const visualizationStoreSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
