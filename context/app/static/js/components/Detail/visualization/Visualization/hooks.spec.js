@@ -11,7 +11,7 @@ describe('Run Vitessce Hooks Test', () => {
       hash: `#mock_url_to_be_ignored`,
     };
     const vitData = [{ name: 'conf1' }, { name: 'conf2' }];
-    const props = { vitData, setVitessceState: () => {} };
+    const props = { vitData, setVitessceState: () => {}, setVitessceErrors: () => {} };
     const { result } = renderHook(() => useVitessceConfig(props));
 
     expect(result.current.vitessceSelection).toEqual(0);

@@ -67,14 +67,15 @@ function Visualization(props) {
     setOnCopyUrlSnackbarOpen,
   } = useVisualizationStore(visualizationStoreSelector);
 
+  const [vitessceErrors, setVitessceErrors] = useState([]);
+  const [isVisibleFirefoxWarning, setIsVisibleFirefoxWarning] = useState(sniffBrowser() === 'Firefox');
+
   // Get the vitessce configuration from the url if available and set the selection if it is a multi-dataset.
   const { vitessceConfig, vitessceSelection, setVitessceSelection } = useVitessceConfig({
     vitData,
     setVitessceState,
+    setVitessceErrors,
   });
-
-  const [vitessceErrors, setVitessceErrors] = useState([]);
-  const [isVisibleFirefoxWarning, setIsVisibleFirefoxWarning] = useState(sniffBrowser() === 'Firefox');
 
   // The application is very slow without debouncing since state can be quite large.
   const handleVitessceConfigDebounced = useCallback(debounce(setVitessceState, 250, { trailing: true }), []);
