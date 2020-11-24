@@ -1,0 +1,33 @@
+name: Portal CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
+        architecture: 'x64'
+
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('context/requirements.txt') }}
+
+    - name: Set up Node 12.16.3
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.16.3'
+
+    - name: Set up git config to make .dev-start happy
+      run: git config --global submodule.recurse true
+
+    - name: Run test script
+      run: ./test.sh
