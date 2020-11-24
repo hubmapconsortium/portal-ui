@@ -14,7 +14,7 @@ export function useVitessceConfig({ vitData, setVitessceState, setVitessceErrors
         vitessceURLConf = fragment.length > 0 ? decodeURLParamsToConf(fragment) : null;
       } catch (err) {
         // If URL cannot be parsed, display error and show Vitessce.
-        setVitessceErrors(['URL was not able to parsed because it was likely truncated.']);
+        setVitessceErrors(['View configuration from URL was not able to parsed because it was likely truncated.']);
         setVitessceState(isMultiDataset ? vitData[0] : vitData);
         setVitessceSelection(0);
         setVitessceConfig(vitData);
