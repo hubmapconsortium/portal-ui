@@ -31,3 +31,6 @@ jobs:
 
     - name: Run test script
       run: ./test.sh
+      env:
+        ACTIONS_BRANCH: ${{ github.ref }}
+        ACTIONS: true
