@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import ArrowRightRoundedIcon from '@material-ui/icons/ArrowRightRounded';
+import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
 
-import { Directory, StyledFolderIcon, StyledFolderOpenIcon } from './style';
+import useFilesStore from 'js/stores/useFilesStore';
+import { StyledTableRow, Directory, StyledFolderIcon, StyledFolderOpenIcon } from './style';
+
+const filesStoreSelector = (state) => state.displayOnlyQaQc;
 
 function FileBrowserDirectory(props) {
   const { dirName, children, depth } = props;
@@ -13,20 +18,41 @@ function FileBrowserDirectory(props) {
     }
   };
 
+  const displayOnlyQaQc = useFilesStore(filesStoreSelector);
+
+  useEffect(() => {
+    setIsExpanded(displayOnlyQaQc);
+  }, [displayOnlyQaQc]);
+
   return (
-    <div>
-      <Directory
-        $depth={depth}
+    <>
+      <StyledTableRow
         onClick={() => setIsExpanded(!isExpanded)}
         onKeyDown={onKeyDownHandler}
         role="button"
         tabIndex="0"
       >
-        {isExpanded ? <StyledFolderOpenIcon color="primary" /> : <StyledFolderIcon color="primary" />}
-        {dirName}
-      </Directory>
+        <td>
+          <Directory $depth={depth}>
+            {isExpanded ? (
+              <>
+                <ArrowDropDownRoundedIcon color="secondary" />
+                <StyledFolderOpenIcon color="primary" />
+              </>
+            ) : (
+              <>
+                <ArrowRightRoundedIcon color="secondary" />
+                <StyledFolderIcon color="primary" />
+              </>
+            )}
+            {dirName}
+          </Directory>
+        </td>
+        <td />
+        <td />
+      </StyledTableRow>
       {isExpanded && children}
-    </div>
+    </>
   );
 }
 
