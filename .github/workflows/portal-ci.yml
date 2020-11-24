@@ -22,9 +22,9 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('context/requirements.txt') }}
 
     - name: Set up Node 12.16.3
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12.16.3'
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.16.3'
 
     - name: Set up git config to make .dev-start happy
       run: git config --global submodule.recurse true
