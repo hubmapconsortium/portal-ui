@@ -55,6 +55,7 @@ const VitessceInfoSnackbar = styled(Snackbar)`
 
 const ErrorSnackbar = styled(Snackbar)`
   position: absolute;
+  background-color: #ffffff;
 `;
 
 const ExpandableDiv = styled.div`
