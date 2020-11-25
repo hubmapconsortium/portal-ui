@@ -91,11 +91,11 @@ def details(type, uuid):
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
     template = f'pages/base_react.html'
-    flask_data = {'endpoints': _get_endpoints()}
-    flask_data.update({
+    flask_data = {
+        'endpoints': _get_endpoints(),
         'entity': entity,
         'vitessce_conf': client.get_vitessce_conf(entity)
-    })
+    }
     return render_template(
         template,
         type=type,
@@ -162,9 +162,8 @@ def preview_view(name):
             'created_by_user_displayname': preview_metadata['created_by_user_displayname'],
             'created_by_user_email': preview_metadata['created_by_user_email'],
         },
+        'vitessce_conf': ('vitessce_conf' in preview_metadata) and preview_metadata['vitessce_conf']
     }
-    if 'vitessce_conf' in preview_metadata:
-        flask_data['vitessce_conf'] = preview_metadata['vitessce_conf']
     return render_template(
         'pages/base_react.html',
         title='Preview',
@@ -174,9 +173,7 @@ def preview_view(name):
 
 @blueprint.route('/collections')
 def collections():
-    flask_data = {
-        'endpoints': _get_endpoints(),
-    }
+    flask_data = {'endpoints': _get_endpoints()}
     return render_template(
         'pages/base_react.html',
         title='Collections',
