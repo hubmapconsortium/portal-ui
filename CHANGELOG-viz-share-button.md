@@ -1,1 +1,0 @@
-- Upgrade Vitessce to allow for shareable linkes, and add sharing functionality.
