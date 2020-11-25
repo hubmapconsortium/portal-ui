@@ -24,8 +24,8 @@ docker run -d \
   --mount type=bind,source="$(pwd)"/"$CONF_PATH",target=/app/instance/app.conf \
   $IMAGE_NAME
 
-green=`tput setaf 2`
-reset=`tput sgr0`
+green=`tput setaf 2 || echo ''`
+reset=`tput sgr0 || echo ''`
 
 echo $green
 echo "To visit:   http://localhost:$PORT/"
