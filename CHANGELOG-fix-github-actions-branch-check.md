@@ -1,0 +1,1 @@
+- Fix conditional in test.sh
