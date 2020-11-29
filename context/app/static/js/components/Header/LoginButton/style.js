@@ -9,7 +9,7 @@ const WhiteButton = styled(Button)`
   text-transform: capitalize;
 
   &:hover {
-    background-color: rgb(255, 255, 255, 0.92);
+    background-color: rgb(255, 255, 255, 0.92); // TODO: move to theme.
     box-shadow: ${(props) => props.theme.shadows[8]};
   }
 `;
