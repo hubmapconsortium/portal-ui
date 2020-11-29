@@ -9,7 +9,7 @@ const StyledPaper = styled(Paper)`
   height: ${iconButtonHeight}px;
   width: 100%;
   top: ${headerHeight}px;
-  z-index: 1000;
+  z-index: ${(props) => props.theme.zIndex.entityHeader};
 `;
 
 export { StyledPaper };
