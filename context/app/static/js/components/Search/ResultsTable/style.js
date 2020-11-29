@@ -40,7 +40,7 @@ const StyledTableRow = styled(TableRow)`
     padding-left: ${sidePadding};
     padding-right: ${sidePadding};
     & p {
-      color: rgba(0, 0, 0, 0.54);
+      color: ${(props) => props.theme.palette.halfShadow.main};
       margin: 0px;
     }
   }

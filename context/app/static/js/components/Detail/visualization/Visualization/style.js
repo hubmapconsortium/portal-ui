@@ -49,13 +49,13 @@ const VitessceInfoSnackbar = styled(Snackbar)`
   top: ${totalHeightOffset + 10}px;
   & > div {
     background-color: ${(props) => (props.$isWarning ? props.theme.palette.warning.main : 'dimgray')};
-    color: ${(props) => (props.$isWarning ? '#000000' : '#ffffff')};
+    color: ${(props) => (props.$isWarning ? '#000000' : props.theme.palette.white.main)};
   }
 `;
 
 const ErrorSnackbar = styled(Snackbar)`
   position: absolute;
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.palette.white.main};
 `;
 
 const ExpandableDiv = styled.div`
@@ -63,7 +63,7 @@ const ExpandableDiv = styled.div`
   left: ${(props) => (props.$isExpanded ? '0' : 'auto')};
   position: ${(props) => (props.$isExpanded ? 'fixed' : 'relative')};
   height: ${(props) => (props.$isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : `${vitessceFixedHeight}px`)};
-  background-color: ${(props) => (props.$theme === 'dark' ? '#333333' : '#FFFFFF')};
+  background-color: ${(props) => (props.$theme === 'dark' ? '#333333' : props.theme.palette.white.main)};
   width: 100%;
   overflow: hidden;
   .vitessce-container {

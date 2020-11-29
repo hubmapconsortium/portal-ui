@@ -3,9 +3,9 @@ import Button from '@material-ui/core/Button';
 
 const WhiteButton = styled(Button)`
   width: 136px;
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.palette.white.main};
   margin-left: 10px;
-  color: color: ${(props) => props.theme.palette.primary.main};
+  color: ${(props) => props.theme.palette.primary.main};
   text-transform: capitalize;
 
   &:hover {

@@ -34,7 +34,7 @@ const LogoWrapper = styled.div`
 `;
 
 const Background = styled.div`
-  background-color: #fff;
+  background-color: ${(props) => props.theme.palette.white.main};
   width: 100%;
 `;
 
