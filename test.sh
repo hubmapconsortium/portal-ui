@@ -34,7 +34,7 @@ end changelog
 start dev-start
 if [ ! -z "$TRAVIS" ] || [ ! -z "$GH_ACTIONS" ]; then
   echo 'Running on Travis...'
-  ./dev-start.sh || (
+  ./dev-start.sh ci || (
     echo 'app.conf before:'
     cat context/instance/app.conf
     echo 'Rewrite conf...'
@@ -43,7 +43,7 @@ if [ ! -z "$TRAVIS" ] || [ ! -z "$GH_ACTIONS" ]; then
     cat context/instance/app.conf
   )
 fi
-set -m; ./dev-start.sh & set +m  # Without job control, I had trouble killing parent and children.
+set -m; ./dev-start.sh ci & set +m  # Without job control, I had trouble killing parent and children.
 PID=$!
 server_up 5001  # Not really needed: Cypress will wait for response.
 end-to-end/test.sh
