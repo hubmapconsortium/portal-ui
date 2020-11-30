@@ -1,29 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { AppContext } from 'js/components/Providers';
 import Description from 'js/shared-styles/sections/Description';
 import Panel from 'js/components/Collections/Panel';
+import useCollectionsData from 'js/hooks/useCollectionsData';
 import { PageWrapper, ScrollBox } from './style';
 
 function Collections() {
-  const [collectionsData, setCollectionsData] = useState([]);
-  const { entityEndpoint } = useContext(AppContext);
+  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
-  useEffect(() => {
-    async function getAllCollections() {
-      const response = await fetch(`${entityEndpoint}/collections`, {
-        method: 'GET',
-      });
-      if (!response.ok) {
-        console.error('Search API failed', response);
-        return;
-      }
-      const data = await response.json();
-      setCollectionsData(data);
-    }
-    getAllCollections();
-  }, [entityEndpoint]);
+  const collectionsData = useCollectionsData(elasticsearchEndpoint, nexusToken);
 
   return (
     <PageWrapper>
@@ -40,13 +27,13 @@ function Collections() {
       </Description>
       <ScrollBox>
         {collectionsData.length > 0 &&
-          collectionsData.map((col) => (
+          collectionsData.map(({ _source }) => (
             <Panel
-              key={col.uuid}
-              name={col.name}
-              dataset_uuids={col.dataset_uuids}
-              doi_id={col.doi_id}
-              uuid={col.uuid}
+              key={_source.uuid}
+              name={_source.title}
+              datasetsCount={_source.datasets.length}
+              display_doi={_source.display_doi}
+              uuid={_source.uuid}
             />
           ))}
       </ScrollBox>

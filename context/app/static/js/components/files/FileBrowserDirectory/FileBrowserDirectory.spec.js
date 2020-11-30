@@ -51,7 +51,7 @@ test('has correct left padding', () => {
   // depth * indentation multiplier * 8px spacing unit + base padding
   const expectedPadding = depth * 1.5 * 8 + 40;
 
-  expect(screen.getByRole('button')).toHaveStyle(`padding-left: ${expectedPadding}px`);
+  expect(screen.getByText('fakedir')).toHaveStyle(`padding-left: ${expectedPadding}px`);
 });
 
 test('is keyboard focusable', () => {

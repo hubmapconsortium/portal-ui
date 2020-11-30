@@ -7,6 +7,7 @@ const FlexColumnRight = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   white-space: nowrap;
+  padding-left: ${(props) => props.theme.spacing(1)}px;
 `;
 
 const StyledPaper = styled(Paper)`

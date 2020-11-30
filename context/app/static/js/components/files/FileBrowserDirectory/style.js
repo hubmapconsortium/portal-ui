@@ -1,18 +1,21 @@
 import styled from 'styled-components';
 import FolderIcon from '@material-ui/icons/FolderRounded';
 import FolderOpenIcon from '@material-ui/icons/FolderOpenRounded';
+import TableRow from '@material-ui/core/TableRow';
 
-const Directory = styled.div`
-  padding: 10px 0px 10px ${(props) => props.theme.spacing(props.$depth * 1.5) + 40}px;
+const StyledTableRow = styled(TableRow)`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};
-  font-size: ${(props) => props.theme.typography.body1.fontSize};
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-
   &:hover {
     background-color: rgb(0, 0, 0, 0.08);
   }
+  cursor: pointer;
+`;
+
+const Directory = styled.div`
+  padding: 10px 0px 10px ${(props) => props.theme.spacing(props.$depth * 1.5) + 40}px;
+  font-size: ${(props) => props.theme.typography.body1.fontSize};
+  display: flex;
+  align-items: center;
 `;
 
 const StyledFolderIcon = styled(FolderIcon)`
@@ -23,4 +26,4 @@ const StyledFolderOpenIcon = styled(FolderOpenIcon)`
   margin-right: ${(props) => props.theme.spacing(1)}px;
 `;
 
-export { Directory, StyledFolderOpenIcon, StyledFolderIcon };
+export { StyledTableRow, Directory, StyledFolderOpenIcon, StyledFolderIcon };

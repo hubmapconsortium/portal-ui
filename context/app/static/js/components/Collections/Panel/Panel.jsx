@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { Link, PanelWrapper, Name } from './style';
 
 function Panel(props) {
-  const { name, uuid, doi_id, dataset_uuids } = props;
+  const { name, uuid, display_doi, datasetsCount } = props;
   return (
     <Link href={`/browse/collection/${uuid}`}>
       <PanelWrapper>
@@ -15,10 +15,10 @@ function Panel(props) {
             {name}
           </Name>
           <Typography variant="body2" color="secondary">
-            {doi_id}
+            {display_doi}
           </Typography>
         </div>
-        <Typography variant="caption">{dataset_uuids.length} Datasets</Typography>
+        <Typography variant="caption">{datasetsCount} Datasets</Typography>
       </PanelWrapper>
     </Link>
   );
@@ -27,8 +27,8 @@ function Panel(props) {
 Panel.propTypes = {
   name: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
-  doi_id: PropTypes.string.isRequired,
-  dataset_uuids: PropTypes.arrayOf(PropTypes.string).isRequired,
+  display_doi: PropTypes.string.isRequired,
+  datasetsCount: PropTypes.number.isRequired,
 };
 
 export default Panel;

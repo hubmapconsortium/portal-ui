@@ -1,11 +1,11 @@
 import React from 'react';
 import WbSunnyIcon from '@material-ui/icons/WbSunnyRounded';
 import Brightness2Icon from '@material-ui/icons/Brightness2Rounded';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { StyledToggleButtonGroup } from './style';
 import 'vitessce/dist/es/production/static/css/index.css';
 
 const visualizationStoreSelector = (state) => ({
@@ -17,7 +17,7 @@ function VisualizationThemeSwitch() {
   const { vizTheme, setVizTheme } = useVisualizationStore(visualizationStoreSelector);
 
   return (
-    <ToggleButtonGroup value={vizTheme} exclusive onChange={(e, theme) => setVizTheme(theme)} size="small">
+    <StyledToggleButtonGroup value={vizTheme} exclusive onChange={(e, theme) => setVizTheme(theme)} size="small">
       <TooltipToggleButton
         tooltipComponent={SecondaryBackgroundTooltip}
         tooltipTitle="Switch to Light Theme"
@@ -36,7 +36,7 @@ function VisualizationThemeSwitch() {
       >
         <Brightness2Icon color={vizTheme !== 'light' ? 'primary' : 'secondary'} />
       </TooltipToggleButton>
-    </ToggleButtonGroup>
+    </StyledToggleButtonGroup>
   );
 }
 

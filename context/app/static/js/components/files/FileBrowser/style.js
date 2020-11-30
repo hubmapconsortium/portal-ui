@@ -1,9 +1,22 @@
 import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
 
-const ScrollPaper = styled(Paper)`
+const ChipWrapper = styled.div`
+  border-bottom: 1px solid ${(props) => props.theme.palette.divider};
+  padding: 12px 15px;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+`;
+
+const StyledTableContainer = styled(TableContainer)`
   max-height: 600px;
   overflow-y: auto;
 `;
 
-export { ScrollPaper };
+const HiddenTableHead = styled(TableHead)`
+  display: none;
+`;
+
+export { ChipWrapper, StyledTableContainer, HiddenTableHead };
