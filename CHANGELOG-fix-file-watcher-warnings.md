@@ -1,0 +1,1 @@
+- Remove hot module replacement from dev server used in ci.
