@@ -95,6 +95,7 @@
     "build:maintain": "webpack --config build-utils/webpack.maintenance.js",
     "dev-server": "webpack-dev-server --config build-utils/webpack.dev.js --hot",
     "dev-server:maintain": "webpack-dev-server --config build-utils/webpack.dev.maintenance.js --hot",
+    "dev-server:ci": "webpack-dev-server --config build-utils/webpack.dev.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
