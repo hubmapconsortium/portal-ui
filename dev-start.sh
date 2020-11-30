@@ -26,6 +26,11 @@ FLASK_ENV=development FLASK_APP="$CONTEXT/app/main.py" python -m flask run &
 cd $CONTEXT
 npm install
 npm run lint || die 'Try "npm run lint:fix"'
-npm run dev-server &
+
+if [ "$1" = "ci" ]; then
+  npm run dev-server:ci &
+else
+  npm run dev-server &
+fi
 
 wait
