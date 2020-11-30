@@ -1,0 +1,1 @@
+- Lazy load vitessce share button in entity header to keep vitessce out of bundle entry points.
