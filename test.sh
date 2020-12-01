@@ -31,26 +31,6 @@ fi
 end changelog
 
 
-start dev-start
-if [ ! -z "$TRAVIS" ] || [ ! -z "$GH_ACTIONS" ]; then
-  echo 'Running on Travis...'
-  ./dev-start.sh || (
-    echo 'app.conf before:'
-    cat context/instance/app.conf
-    echo 'Rewrite conf...'
-    sed -i 's/TODO/FAKE/' context/instance/app.conf
-    echo 'app.conf after:'
-    cat context/instance/app.conf
-  )
-fi
-set -m; ./dev-start.sh & set +m  # Without job control, I had trouble killing parent and children.
-PID=$!
-server_up 5001  # Not really needed: Cypress will wait for response.
-end-to-end/test.sh
-kill -TERM -$PID  # Kill dev server processes
-end dev-start
-
-
 start flake8
 # Unit tests require dev dependencies beyond requirements.txt.
 pip install -r context/requirements-dev.txt > /dev/null
