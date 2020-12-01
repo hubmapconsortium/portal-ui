@@ -98,6 +98,12 @@ const theme = createMuiTheme({
   shape: {
     borderRadius: 2,
   },
+  zIndex: {
+    dropdownOffset: 1001,
+    entityHeader: 1000,
+    dropdown: 50,
+    visualization: 3,
+  },
 });
 
 export default theme;

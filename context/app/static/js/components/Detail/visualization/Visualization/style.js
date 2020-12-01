@@ -31,7 +31,7 @@ const StyledHeaderRight = styled.div`
 `;
 
 const StyledSectionContainer = styled(SectionContainer)`
-  z-index: 3;
+  z-index: ${(props) => props.theme.zIndex.visualization};
   position: relative;
 `;
 
