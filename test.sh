@@ -31,6 +31,21 @@ fi
 end changelog
 
 
+start copy-app-conf
+if [ ! -z "$TRAVIS" ] || [ ! -z "$GH_ACTIONS" ]; then
+  echo 'Running on ci...'
+  ./copy-app-conf.sh || (
+    echo 'app.conf before:'
+    cat context/instance/app.conf
+    echo 'Rewrite conf...'
+    sed -i 's/TODO/FAKE/' context/instance/app.conf
+    echo 'app.conf after:'
+    cat context/instance/app.conf
+  )
+fi
+end copy-app-conf
+
+
 start flake8
 # Unit tests require dev dependencies beyond requirements.txt.
 pip install -r context/requirements-dev.txt > /dev/null
