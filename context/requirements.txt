@@ -5,4 +5,4 @@ pyyaml==5.2
 python-datauri==0.2.8
 python-frontmatter==0.5.0
 # COMMONS_BRANCH controls the branch of hubmap-commons.
-git+git://github.com/hubmapconsortium/commons.git@${COMMONS_BRANCH:-master}#egg=hubmap-commons
+git+git://github.com/hubmapconsortium/commons.git@${COMMONS_BRANCH}#egg=hubmap-commons
