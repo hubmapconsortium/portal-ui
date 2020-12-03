@@ -1,3 +1,12 @@
+## v0.8.0 - 2020-12-03
+
+- Lazy load vitessce share button in entity header to keep vitessce out of bundle entry points.
+- Link to the feedback process documentation from the README.
+- Set proxy http version for gzip in example nginx conf.
+- Simplify python routing code.
+- Centralize our CSS z-indexes, so we have global view of what overlays what.
+
+
 ## v0.7.3 - 2020-11-25
 
 - Tweak NGINX settings to allow caching on client.

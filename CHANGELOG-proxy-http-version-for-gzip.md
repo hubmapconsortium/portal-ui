@@ -1,1 +1,0 @@
-- Set proxy http version for gzip in example nginx conf.
