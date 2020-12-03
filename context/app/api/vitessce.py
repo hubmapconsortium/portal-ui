@@ -110,14 +110,14 @@ SCRNA_SEQ_CONFIG = {
             "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cells.json",
             "fileType": "cells.json",
             "type": "CELLS",
-            },
+        },
         {
             "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cell-sets.json",
             "fileType": "cell-sets.json",
             "type": "CELL-SETS",
-            },
-        ],
-    }
+        },
+    ],
+}
 
 SCATAC_SEQ_BASE_PATH = "output"
 SCATAC_SEQ_CONFIG = {
@@ -127,14 +127,14 @@ SCATAC_SEQ_CONFIG = {
             "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cells.json",
             "fileType": "cells.json",
             "type": "CELLS",
-            },
+        },
         {
             "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cell-sets.json",
             "fileType": "cell-sets.json",
             "type": "CELL-SETS",
-            },
-        ],
-    }
+        },
+    ],
+}
 
 CODEX_TILE_PATH = "output/extract/expressions/ome-tiff"
 CODDEX_SPRM_PATH = "output_json"
@@ -147,24 +147,24 @@ CODEX_CYTOKIT_CONFIG = {
             "rel_path": f"{CODEX_TILE_PATH}/{TILE_REGEX}.ome.tiff",
             "fileType": "raster.json",
             "type": "RASTER",
-            },
+        },
         {
             "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.cells.json",
             "fileType": "cells.json",
             "type": "CELLS",
-            },
+        },
         {
             "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.cell-sets.json",
             "fileType": "cell-sets.json",
             "type": "CELL-SETS",
-            },
+        },
         {
             "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.clusters.json",
             "fileType": "clusters.json",
             "type": "EXPRESSION-MATRIX",
-            },
-        ],
-    }
+        },
+    ],
+}
 
 IMAGE_PYRAMID_PATH = "ometiff-pyramids"
 IMAGE_PYRAMID_CONFIG = {
@@ -177,15 +177,16 @@ IMAGE_PYRAMID_CONFIG = {
             "rel_path": re.escape(IMAGE_PYRAMID_PATH) + r"/.*\.ome\.tiff?$",
             "fileType": "raster.json",
             "type": "RASTER",
-            },
-        ],
-    }
+        },
+    ],
+}
 
 SEQFISH_HYB_CYCLE_REGEX = r"(HybCycle_\d+|final_mRNA_background)"
 SEQFISH_NAME_REGEX = r"MMStack_Pos\d+\.ome\.tiff?"
 SEQFISH_REGEX = f"{IMAGE_PYRAMID_PATH}/{SEQFISH_HYB_CYCLE_REGEX}/{SEQFISH_NAME_REGEX}"
 
 OFFSETS_PATH = "output_offsets"
+
 
 class Const(object, metaclass=SingletonMetaClass):
     """
@@ -205,12 +206,12 @@ class Const(object, metaclass=SingletonMetaClass):
         for assay in tc.iterAssays():
             name = assay.name
             hints = assay.vitessce_hints
-            
+
             if 'codex' in hints:
                 path_lut[name] = {"offsets": OFFSETS_PATH, "image": CODEX_TILE_PATH}
             elif 'pyramid' in hints:
                 path_lut[name] = {"offsets": OFFSETS_PATH, "image": IMAGE_PYRAMID_PATH}
-            
+
             if 'is_sc' in hints:
                 sc_l.append(name)
                 if 'atac' in hints:
