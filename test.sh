@@ -47,9 +47,6 @@ end copy-app-conf
 
 
 start flake8
-pip install -r context/requirements.txt > /dev/null
-# Unit tests require dev dependencies beyond requirements.txt.
-pip install -r context/requirements-dev.txt > /dev/null
 EXCLUDE=node_modules,ingest-validation-tools
 flake8 --exclude=$EXCLUDE \
   || die "Try: autopep8 --in-place --aggressive -r . --exclude $EXCLUDE"
@@ -63,7 +60,6 @@ end pytest
 
 start npm-test
 cd context
-npm ci
 npm run test
 cd -
 end npm-test
