@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-CONTEXT=context
-
-APP_INSTANCE="$CONTEXT/instance"
+APP_INSTANCE="context/instance"
 APP_CONF="$APP_INSTANCE/app.conf"
 
 if [ ! -e $APP_CONF ]; then
