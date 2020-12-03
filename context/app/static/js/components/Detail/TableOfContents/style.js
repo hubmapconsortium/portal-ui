@@ -23,13 +23,13 @@ const StyledItemLink = styled(Link)`
   margin-bottom: ${(props) => props.theme.spacing(0.25)}px;
 
   &:hover {
-    border-left: 3px solid #c4c4c4;
+    border-left: 3px solid #c4c4c4; // TODO: Move to theme.
   }
   ${(props) =>
     props.$isCurrentSection &&
     css`
       color: ${props.theme.palette.info.main};
-      border-left: 3px solid #c4c4c4;
+      border-left: 3px solid #c4c4c4; // TODO: Move to theme.
     `};
 `;
 

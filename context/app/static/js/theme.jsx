@@ -33,8 +33,14 @@ const theme = createMuiTheme({
       main: '#fff',
       hover: 'brightness(96%)',
     },
+    halfShadow: {
+      main: 'rgb(0, 0, 0, 0.54)',
+    },
     action: {
       disabled: 'rgba(0,0,0, 0.38)',
+    },
+    hoverShadow: {
+      main: 'rgb(0, 0, 0, 0.08)',
     },
     transparentGray: {
       main: 'rgba(144, 144, 144, 0.1)',

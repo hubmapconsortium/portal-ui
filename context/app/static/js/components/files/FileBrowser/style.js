@@ -7,7 +7,7 @@ const ChipWrapper = styled.div`
   padding: 12px 15px;
   position: sticky;
   top: 0;
-  background-color: #fff;
+  background-color: ${(props) => props.theme.palette.white.main};
 `;
 
 const StyledTableContainer = styled(TableContainer)`

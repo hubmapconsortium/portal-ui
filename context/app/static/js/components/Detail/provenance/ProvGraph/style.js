@@ -9,9 +9,8 @@ const StyledTypography = styled(Typography)`
   margin: 2px 0px 2px 0px;
 `;
 
-// TODO: Define this color globally?
 const StyledLink = styled(Link)`
-  color: rgb(55, 129, 209);
+  color: ${(props) => props.theme.palette.link.main};
 `;
 
 const FlexPaper = styled(Paper)`
