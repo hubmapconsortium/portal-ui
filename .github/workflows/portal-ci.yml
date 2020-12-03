@@ -18,8 +18,10 @@ jobs:
         python-version: '3.7'
         architecture: 'x64'
 
-    - name: Install python dependencies
+    - name: Install python main dependencies
       run: pip install -r context/requirements.txt
+
+    - name: Install python dev dependencies
       run: pip install -r context/requirements-dev.txt
 
     - name: Set up Node 12.16.3
