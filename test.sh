@@ -53,7 +53,8 @@ end dev-start
 
 start flake8
 # Unit tests require dev dependencies beyond requirements.txt.
-pip install -r context/requirements-dev.txt > /dev/null
+env COMMONS_BRANCH=${COMMONS_BRANCH:-devel} \
+    pip install -r context/requirements-dev.txt > /dev/null
 EXCLUDE=node_modules,ingest-validation-tools
 flake8 --exclude=$EXCLUDE \
   || die "Try: autopep8 --in-place --aggressive -r . --exclude $EXCLUDE"

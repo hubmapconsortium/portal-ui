@@ -273,7 +273,6 @@ class Vitessce:
         Const()  # Force initialization
 
         self.assay_type = TypeClient().getAssayType(entity["data_types"][0])
-        current_app.logger.info(repr(self.assay_type))        
         self.uuid = entity["uuid"]
         self.nexus_token = nexus_token
         self.is_mock = is_mock
