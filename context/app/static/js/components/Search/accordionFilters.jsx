@@ -25,7 +25,7 @@ function Details(props) {
           {title}
         </Typography>
       </InnerAccordionSummary>
-      <InnerAccordionDetails>{children}</InnerAccordionDetails>
+      <InnerAccordionDetails id={title.replace(/ /g, '-')}>{children}</InnerAccordionDetails>
     </InnerAccordion>
   );
 }
