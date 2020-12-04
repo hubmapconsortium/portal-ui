@@ -6,7 +6,7 @@ import TableRow from '@material-ui/core/TableRow';
 const StyledTableRow = styled(TableRow)`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};
   &:hover {
-    background-color: rgb(0, 0, 0, 0.08);
+    background-color: ${(props) => props.theme.palette.hoverShadow.main};
   }
   cursor: pointer;
 `;

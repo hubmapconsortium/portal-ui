@@ -15,14 +15,14 @@ const StyledContainer = styled(Container)`
 `;
 
 const MainText = styled(Typography)`
-  color: #ffffff;
+  color: ${(props) => props.theme.palette.white.main};
   margin-top: ${(props) => props.theme.spacing(1)}px;
 `;
 
 const Title = styled(Typography)`
-  color: #ffffff;
+  color: ${(props) => props.theme.palette.white.main};
   padding-bottom: ${(props) => props.theme.spacing(1)}px;
-  border-bottom: 1px solid #ffffff;
+  border-bottom: 1px solid ${(props) => props.theme.palette.white.main};
 `;
 
 export { Background, StyledContainer, MainText, Title };

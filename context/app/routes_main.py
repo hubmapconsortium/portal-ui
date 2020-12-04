@@ -7,9 +7,9 @@ from flask import (Blueprint, render_template, abort, current_app,
 import frontmatter
 
 from .api.client import ApiClient
-from .config import types
 
 
+entity_types = ['donor', 'sample', 'dataset', 'collection']
 blueprint = Blueprint('routes', __name__, template_folder='templates')
 
 
@@ -40,7 +40,7 @@ def index():
     flask_data = {'endpoints': _get_endpoints()}
     return render_template(
         'pages/base_react.html',
-        types=types,
+        types=entity_types,
         flask_data=flask_data,
         title='HuBMAP Data Portal',
         is_home_page=True
@@ -52,7 +52,7 @@ def service_status():
     flask_data = {'endpoints': _get_endpoints()}
     return render_template(
         'pages/base_react.html',
-        types=types,
+        types=entity_types,
         flask_data=flask_data,
         title='Services'
     )
@@ -82,7 +82,7 @@ def hbm_redirect(hbm_suffix):
 
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
-    if type not in types:
+    if type not in entity_types:
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
@@ -107,7 +107,7 @@ def details(type, uuid):
 
 @blueprint.route('/browse/<type>/<uuid>.<ext>')
 def details_ext(type, uuid, ext):
-    if type not in types:
+    if type not in entity_types:
         abort(404)
     if ext != 'json':
         abort(404)
@@ -128,7 +128,7 @@ def search():
     return render_template(
         'pages/base_react.html',
         title=title,
-        types=types,
+        types=entity_types,
         flask_data=flask_data
     )
 
@@ -143,7 +143,7 @@ def dev_search():
     return render_template(
         'pages/base_react.html',
         title=title,
-        types=types,
+        types=entity_types,
         flask_data=flask_data
     )
 

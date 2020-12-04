@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const LinkButton = styled.a`
-  color: #ffffff;
+  color: ${(props) => props.theme.palette.white.main};
   border-radius: 4px;
   background-color: ${(props) => props.theme.palette.primary.main};
   font-size: ${(props) => props.theme.typography.subtitle2.fontSize};

@@ -13,7 +13,7 @@ const PanelWrapper = styled.div`
   flex-direction: column;
 
   &:hover {
-    background-color: rgb(0, 0, 0, 0.08);
+    background-color: ${(props) => props.theme.palette.hoverShadow.main};
   }
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     flex-direction: row;

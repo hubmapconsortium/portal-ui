@@ -5,7 +5,7 @@ import { ReactComponent as Logo } from 'images/hubmap-logo.svg';
 
 const HubmapLogo = styled(Logo)`
   margin-right: 10px;
-  fill: #fff;
+  fill: ${(props) => props.theme.palette.white.main};
   height: 20px;
 `;
 const Spacer = styled.div`
@@ -14,7 +14,7 @@ const Spacer = styled.div`
 
 const HeaderButton = styled(Button)`
   margin-left: 10px;
-  color: #ffffff;
+  color: ${(props) => props.theme.palette.white.main};
 `;
 
 const FlexNoWrap = styled.div`
