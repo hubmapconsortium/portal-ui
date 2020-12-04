@@ -3,6 +3,7 @@ from unittest.mock import patch
 from hubmap_commons.type_client import TypeClient, DummyTypeClient
 
 from .vitessce import Vitessce, _group_by_file_name, Const
+from . import vitessce
 
 TEST_ENTITY_CODEX = {
     "data_types": ["codex_cytokit"],
@@ -44,9 +45,9 @@ SEARCH_SCHEMA_ASSAYS = 'https://raw.githubusercontent.com/hubmapconsortium/searc
 
 def apply_patches(func):
     @wraps(func)
-    @patch(__name__ + ".vitessce.TypeClient", DummyTypeClient)
+    @patch(vitessce.__name__ + ".TypeClient", DummyTypeClient)
     @patch(__name__ + ".TypeClient", DummyTypeClient)
-    @patch(__name__ + ".vitessce.current_app")
+    @patch(vitessce.__name__ + ".current_app")
     def wrapper(mock1=None):
         return func(mock1=mock1)
     return wrapper
