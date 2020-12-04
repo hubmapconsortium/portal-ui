@@ -32,7 +32,7 @@ function SearchDatasetTutorial({ runTutorial }) {
     },
   ];
 
-  return <Joyride steps={steps} debug continuous run={runTutorial} />;
+  return <Joyride steps={steps} debug continuous run={runTutorial} scrollOffset={100} />;
 }
 
 export default SearchDatasetTutorial;
