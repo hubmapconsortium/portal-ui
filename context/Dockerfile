@@ -1,5 +1,6 @@
 FROM node:12.16.3-alpine as builder
 WORKDIR /work
+ENV COMMONS_BRANCH=$COMMONS_BRANCH
 RUN apk add --no-cache python git
 
 # COPY only what is needed so layers can be cached.

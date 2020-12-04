@@ -17,7 +17,7 @@ Copy example-app.conf and fill in blanks."
 
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
-docker build --tag $IMAGE_NAME $CONTEXT
+docker build --build-arg COMMONS_BRANCH --tag $IMAGE_NAME $CONTEXT
 docker run -d \
   --name $CONTAINER_NAME \
   -p $PORT:80 \
