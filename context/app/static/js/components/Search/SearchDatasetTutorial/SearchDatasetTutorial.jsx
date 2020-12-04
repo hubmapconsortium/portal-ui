@@ -4,7 +4,7 @@ import Joyride from 'react-joyride';
 function SearchDatasetTutorial({ runTutorial }) {
   const steps = [
     {
-      target: '#Data-Type .sk-item-list:first-child',
+      target: '#Data-Type .sk-item-list :first-child',
       disableBeacon: true,
       styles: { zIndex: 10000 },
       content:
