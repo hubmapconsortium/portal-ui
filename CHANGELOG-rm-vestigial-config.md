@@ -1,0 +1,1 @@
+- Remove vestigial config.py, and move list of entities types to routes_main.py.
