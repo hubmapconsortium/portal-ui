@@ -1,6 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import DatasetSearchPrompt from 'js/components/tutorials/DatasetSearchPrompt';
+import SearchDatasetTutorial from 'js/components/Search/SearchDatasetTutorial';
 import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader } from 'js/helpers/functions';
@@ -65,11 +67,16 @@ function Search(props) {
   const allProps = { apiUrl: elasticsearchEndpoint, ...searchProps }; // TODO: Not needed?
 
   const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={Results} />;
+
+  const [runTutorial, setRunTutorial] = useState(false);
+
   return (
     <>
-      <SearchHeader component="h1" variant="h2">
+      <SearchHeader component="h1" variant="h2" id="asd">
         {title}
       </SearchHeader>
+      <DatasetSearchPrompt setRunTutorial={setRunTutorial} />
+      <SearchDatasetTutorial runTutorial={runTutorial} />
       {hasAncestorParam && (
         <LookupEntity
           uuid={searchParams.get('ancestor_ids[0]')}
