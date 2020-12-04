@@ -1,7 +1,8 @@
-import requests
-from yaml import safe_load as load_yaml
+from functools import wraps
+from unittest.mock import patch
+from hubmap_commons.type_client import TypeClient, DummyTypeClient
 
-from .vitessce import Vitessce, _group_by_file_name, SC_DATA_TYPES
+from .vitessce import Vitessce, _group_by_file_name, Const
 
 TEST_ENTITY_CODEX = {
     "data_types": ["codex_cytokit"],
@@ -35,11 +36,24 @@ TEST_PATH_TIFF = "path/to/example.ome.tiff"
 
 MOCK_URL = "https://example.com"
 
+TYPE_SERVICE_URL = "http://mock.type.service/"
+
 SEARCH_SCHEMA_ASSAYS = 'https://raw.githubusercontent.com/hubmapconsortium/search-api'\
     '/master/src/search-schema/data/definitions/enums/assay_types.yaml'
 
 
-def test_build_image_schema():
+def apply_patches(func):
+    @wraps(func)
+    @patch(__name__ + ".vitessce.TypeClient", DummyTypeClient)
+    @patch(__name__ + ".TypeClient", DummyTypeClient)
+    @patch(__name__ + ".vitessce.current_app")
+    def wrapper(mock1=None):
+        return func(mock1=mock1)
+    return wrapper
+
+
+@apply_patches
+def test_build_image_schema(mock1=None):
     vitessce = Vitessce(
         entity=TEST_ENTITY_CODEX, nexus_token=TEST_NEXUS_TOKEN, is_mock=True
     )
@@ -56,7 +70,8 @@ def test_build_image_schema():
     )
 
 
-def test_build_assets_url():
+@apply_patches
+def test_build_assets_url(mock1=None):
     vitessce = Vitessce(
         entity=TEST_ENTITY_CODEX, nexus_token=TEST_NEXUS_TOKEN, is_mock=True
     )
@@ -67,7 +82,8 @@ def test_build_assets_url():
     )
 
 
-def test_build_layer_conf():
+@apply_patches
+def test_build_layer_conf(mock1=None):
     vitessce = Vitessce(
         entity=TEST_ENTITY_RNASEQ, nexus_token=TEST_NEXUS_TOKEN, is_mock=True
     )
@@ -81,7 +97,8 @@ def test_build_layer_conf():
     assert vitessce_component == "cellSets"
 
 
-def test_build_layer_conf_empty():
+@apply_patches
+def test_build_layer_conf_empty(mock1=None):
     vitessce = Vitessce(
         entity=TEST_ENTITY_RNASEQ_EMPTY, nexus_token=TEST_NEXUS_TOKEN, is_mock=True
     )
@@ -90,14 +107,15 @@ def test_build_layer_conf_empty():
     assert conf == {}
 
 
-def test_group_by_file_name():
+@apply_patches
+def test_group_by_file_name(mock1=None):
     data = ['foo/bar.sh', 'zap/bar.sh', 'jazz/bar.js', 'jazz/not_bar.js']
     grouped = _group_by_file_name(data)
     # Grouped by file name.
     assert [['jazz/bar.js'], ['foo/bar.sh', 'zap/bar.sh'], ['jazz/not_bar.js']] == grouped
 
 
-def test_data_types():
-    res_search_assay_types = requests.get(SEARCH_SCHEMA_ASSAYS).text
-    search_assay_types = load_yaml(res_search_assay_types)
-    assert(all([assay in search_assay_types for assay in SC_DATA_TYPES]))
+@apply_patches
+def test_data_types(mock1=None):
+    search_assay_types = [nm for nm in TypeClient(TYPE_SERVICE_URL).iterAssayNames()]
+    assert(all([assay in search_assay_types for assay in Const().SC_DATA_TYPES]))
