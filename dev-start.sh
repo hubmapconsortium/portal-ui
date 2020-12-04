@@ -8,8 +8,7 @@ die() { set +v; echo "$*" 1>&2 ; exit 1; }
   || die "To update submodules automatically: git config --global submodule.recurse true";
 
 CONTEXT=context
-env COMMONS_BRANCH=${COMMONS_BRANCH:-devel} \
-    pip install -r $CONTEXT/requirements.txt > /dev/null
+pip install -r $CONTEXT/requirements.txt > /dev/null
 
 APP_INSTANCE="$CONTEXT/instance"
 APP_CONF="$APP_INSTANCE/app.conf"
