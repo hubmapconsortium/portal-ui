@@ -8,6 +8,11 @@ import { CenteredDiv, Flex, StyledTypography, StyledPaper, StyledInfoIcon, Style
 function DatasetSearchPrompt({ setRunTutorial }) {
   const [isDisplayed, setIsDisplayed] = useState(true);
 
+  function beginTutorial() {
+    setIsDisplayed(false);
+    setRunTutorial(true);
+  }
+
   return isDisplayed ? (
     <StyledPaper>
       <CenteredDiv>
@@ -20,7 +25,7 @@ function DatasetSearchPrompt({ setRunTutorial }) {
         <StyledTypography>
           Welcome to the HuBMAP Data Portal. Get a quick tour of different sections of the dataset search page.
         </StyledTypography>
-        <StyledButton color="primary" variant="contained" onClick={() => setRunTutorial(true)}>
+        <StyledButton color="primary" variant="contained" onClick={beginTutorial}>
           Take The Dataset Search Tutorial
         </StyledButton>
       </CenteredDiv>
