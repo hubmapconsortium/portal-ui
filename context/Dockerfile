@@ -1,7 +1,5 @@
 FROM node:12.16.3-alpine as builder
 WORKDIR /work
-ARG COMMONS_BRANCH=master
-ENV COMMONS_BRANCH=${COMMONS_BRANCH}
 RUN apk add --no-cache python git
 
 # COPY only what is needed so layers can be cached.
@@ -21,8 +19,9 @@ RUN npm run build
 FROM tiangolo/uwsgi-nginx-flask:python3.7
 
 COPY requirements.txt /app
-RUN pip install --upgrade pip && \
-    pip install -r /app/requirements.txt
+ARG COMMONS_BRANCH=master
+ENV COMMONS_BRANCH=${COMMONS_BRANCH}
+RUN pip install -r /app/requirements.txt
 
 # NGINX should serve static content directly.
 # https://github.com/tiangolo/uwsgi-nginx-flask-docker#custom-static-path
