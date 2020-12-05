@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -o errexit
 
+start() { echo travis_fold':'start:$1; echo $1; }
+end() { echo travis_fold':'end:$1; }
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
 IMAGE_NAME=hubmap/portal-ui
@@ -17,12 +19,16 @@ Copy example-app.conf and fill in blanks."
 
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
+start docker_build
 docker build --build-arg COMMONS_BRANCH --tag $IMAGE_NAME $CONTEXT
+end docker_build
+start docker_run
 docker run -d \
   --name $CONTAINER_NAME \
   -p $PORT:80 \
   --mount type=bind,source="$(pwd)"/"$CONF_PATH",target=/app/instance/app.conf \
   $IMAGE_NAME
+end docker_run
 
 green=`tput setaf 2`
 reset=`tput sgr0`
