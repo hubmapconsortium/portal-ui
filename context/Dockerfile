@@ -21,7 +21,8 @@ RUN npm run build
 FROM tiangolo/uwsgi-nginx-flask:python3.7
 
 COPY requirements.txt /app
-RUN pip install -r /app/requirements.txt
+RUN pip install --upgrade pip && \
+    pip install -r /app/requirements.txt
 
 # NGINX should serve static content directly.
 # https://github.com/tiangolo/uwsgi-nginx-flask-docker#custom-static-path
