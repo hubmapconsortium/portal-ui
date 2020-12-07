@@ -76,7 +76,7 @@ function Search(props) {
         {title}
       </SearchHeader>
       <DatasetSearchPrompt setRunTutorial={setRunTutorial} />
-      <SearchDatasetTutorial runTutorial={runTutorial} />
+      <SearchDatasetTutorial runTutorial={runTutorial} setRunTutorial={setRunTutorial} />
       {hasAncestorParam && (
         <LookupEntity
           uuid={searchParams.get('ancestor_ids[0]')}
