@@ -1,7 +1,20 @@
-import React from 'react';
-import Joyride from 'react-joyride';
+import React, { useContext } from 'react';
+import Joyride, { STATUS } from 'react-joyride';
+import TutorialTooltip from 'js/components/tutorials/TutorialTooltip';
+import { ThemeContext } from 'styled-components';
 
-function SearchDatasetTutorial({ runTutorial }) {
+function SearchDatasetTutorial({ runTutorial, setRunTutorial }) {
+  const themeContext = useContext(ThemeContext);
+
+  const handleJoyrideCallback = (data) => {
+    const { status, action } = data;
+    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
+
+    if (finishedStatuses.includes(status) || action === 'close') {
+      setRunTutorial(false);
+    }
+  };
+
   const steps = [
     {
       target: '#Data-Type > div.sk-item-list > div:nth-child(1)',
@@ -32,7 +45,17 @@ function SearchDatasetTutorial({ runTutorial }) {
     },
   ];
 
-  return <Joyride steps={steps} debug continuous run={runTutorial} scrollOffset={100} />;
+  return (
+    <Joyride
+      steps={steps}
+      callback={handleJoyrideCallback}
+      continuous
+      run={runTutorial}
+      scrollOffset={100}
+      tooltipComponent={TutorialTooltip}
+      styles={{ options: { arrowColor: themeContext.palette.info.dark } }}
+    />
+  );
 }
 
 export default SearchDatasetTutorial;
