@@ -1,1 +1,0 @@
-- submission.md in portal-docs had fallen out of sync with the ingest-validation-tools. Remove link.

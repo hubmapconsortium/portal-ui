@@ -1,1 +1,0 @@
-- Remove dev server from ci test script.

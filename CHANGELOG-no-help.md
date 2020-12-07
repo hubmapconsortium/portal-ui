@@ -1,1 +1,0 @@
-- Remove broken link to /docs/help.

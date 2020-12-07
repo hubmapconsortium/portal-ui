@@ -1,1 +1,0 @@
-- Centralize color definitions in the theme.

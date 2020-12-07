@@ -1,3 +1,12 @@
+## v0.8.1 - 2020-12-07
+
+- Centralize color definitions in the theme.
+- Remove broken link to /docs/help.
+- submission.md in portal-docs had fallen out of sync with the ingest-validation-tools. Remove link.
+- Remove dev server from ci test script.
+- Remove vestigial config.py, and move list of entities types to routes_main.py.
+
+
 ## v0.8.0 - 2020-12-03
 
 - Lazy load vitessce share button in entity header to keep vitessce out of bundle entry points.
