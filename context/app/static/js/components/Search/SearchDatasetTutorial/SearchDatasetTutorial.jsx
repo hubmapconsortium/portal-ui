@@ -3,7 +3,7 @@ import Joyride, { STATUS } from 'react-joyride';
 import TutorialTooltip from 'js/components/tutorials/TutorialTooltip';
 import { ThemeContext } from 'styled-components';
 
-function SearchDatasetTutorial({ runTutorial, setRunTutorial }) {
+function SearchDatasetTutorial({ runTutorial, setRunTutorial, stepIndex }) {
   const themeContext = useContext(ThemeContext);
 
   const handleJoyrideCallback = (data) => {
@@ -49,11 +49,11 @@ function SearchDatasetTutorial({ runTutorial, setRunTutorial }) {
     <Joyride
       steps={steps}
       callback={handleJoyrideCallback}
-      continuous
       run={runTutorial}
       scrollOffset={100}
       tooltipComponent={TutorialTooltip}
       styles={{ options: { arrowColor: themeContext.palette.info.dark } }}
+      stepIndex={stepIndex}
     />
   );
 }

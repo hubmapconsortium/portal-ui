@@ -17,15 +17,18 @@ import { SearchHeader } from './style';
 const searchDatasetTutorialSelector = (state) => ({
   runSearchDatasetTutorial: state.runSearchDatasetTutorial,
   setRunSearchDatasetTutorial: state.setRunSearchDatasetTutorial,
+  searchDatasetTutorialStep: state.searchDatasetTutorialStep,
 });
 
 function Search(props) {
   const { title } = props;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
-  const { runSearchDatasetTutorial, setRunSearchDatasetTutorial } = useSearchDatasetTutorialStore(
-    searchDatasetTutorialSelector,
-  );
+  const {
+    runSearchDatasetTutorial,
+    setRunSearchDatasetTutorial,
+    searchDatasetTutorialStep,
+  } = useSearchDatasetTutorialStore(searchDatasetTutorialSelector);
 
   const hiddenFilters = [listFilter('ancestor_ids', 'Ancestor ID'), listFilter('entity_type', 'Entity Type')];
 
@@ -84,7 +87,11 @@ function Search(props) {
         {title}
       </SearchHeader>
       <DatasetSearchPrompt setRunTutorial={setRunSearchDatasetTutorial} />
-      <SearchDatasetTutorial runTutorial={runSearchDatasetTutorial} setRunTutorial={setRunSearchDatasetTutorial} />
+      <SearchDatasetTutorial
+        runTutorial={runSearchDatasetTutorial}
+        setRunTutorial={setRunSearchDatasetTutorial}
+        stepIndex={searchDatasetTutorialStep}
+      />
       {hasAncestorParam && (
         <LookupEntity
           uuid={searchParams.get('ancestor_ids[0]')}
