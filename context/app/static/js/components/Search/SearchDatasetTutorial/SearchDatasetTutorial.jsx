@@ -1,9 +1,13 @@
 import React, { useContext, useState } from 'react';
-import Joyride, { STATUS } from 'react-joyride';
-import TutorialTooltip from 'js/components/tutorials/TutorialTooltip';
 import { ThemeContext } from 'styled-components';
+import Joyride, { STATUS } from 'react-joyride';
+
+import TutorialTooltip from 'js/components/tutorials/TutorialTooltip';
+import useSearchViewStore from 'js/stores/useSearchViewStore';
 
 const viewMoreSelector = '#Data-Type > div.sk-refinement-list__view-more-action';
+
+const searchViewStoreSelector = (state) => ({ searchView: state.searchView, toggleItem: state.toggleItem });
 
 const defaultSteps = [
   {
@@ -53,10 +57,20 @@ const stepToAddIfViewMoreExists = {
 function SearchDatasetTutorial({ runTutorial, setRunTutorial, stepIndex }) {
   const themeContext = useContext(ThemeContext);
   const [steps, setSteps] = useState(defaultSteps);
+  const { searchView, toggleItem } = useSearchViewStore(searchViewStoreSelector);
 
   const handleJoyrideCallback = (data) => {
-    const { status, action } = data;
+    const {
+      status,
+      action,
+      step: { title },
+    } = data;
+
     const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
+
+    if (action === 'prev' && title === 'Sort Search Results for Tile View' && searchView === 'tile') {
+      toggleItem('table');
+    }
 
     if (finishedStatuses.includes(status) || action === 'close') {
       setRunTutorial(false);
