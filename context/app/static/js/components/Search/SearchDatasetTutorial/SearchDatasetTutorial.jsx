@@ -27,6 +27,20 @@ const defaultSteps = [
     disableBeacon: true,
     title: 'Sort Search Results',
   },
+  {
+    target: '#tile-view-toggle-button',
+    content:
+      'Toggle the results display mode between list view and tile view. Click the tile view button above to continue.',
+    title: 'Toggle Display Mode',
+    disableBeacon: true,
+    spotlightClicks: true,
+  },
+  {
+    target: '#search-tiles-sort-button',
+    content: 'To sort your search results in grid view, select your sorting option in this dropdown menu.',
+    disableBeacon: true,
+    title: 'Sort Search Results for Tile View',
+  },
 ];
 
 const stepToAddIfViewMoreExists = {
@@ -74,17 +88,3 @@ function SearchDatasetTutorial({ runTutorial, setRunTutorial, stepIndex }) {
 }
 
 export default SearchDatasetTutorial;
-
-/*
-  {
-    target: '.my-other-step',
-    content:
-      'Toggle the results display mode between list view and tile view. Click the tile view button above to continue.',
-      title: 'Toggle Display Mode',
-  },
-  {
-    target: '.my-other-step',
-    content: 'To sort your search results in grid view, select your sorting option in this dropdown menu.',
-    title: 'Sort Search Results for Tile View',
-  },
-  */
