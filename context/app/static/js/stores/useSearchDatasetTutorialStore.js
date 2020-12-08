@@ -2,7 +2,7 @@ import create from 'zustand';
 
 const useSearchDatasetTutorialStore = create((set) => ({
   runSearchDatasetTutorial: false,
-  setRunSearchDatasetTutorial: (val) => set({ searchView: val }),
+  setRunSearchDatasetTutorial: (val) => set({ runSearchDatasetTutorial: val }),
 }));
 
 export default useSearchDatasetTutorialStore;
