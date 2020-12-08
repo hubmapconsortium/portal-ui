@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import DatasetSearchPrompt from 'js/components/tutorials/DatasetSearchPrompt';
@@ -11,11 +11,21 @@ import { donorConfig, sampleConfig, datasetConfig } from 'js/components/Search/c
 import { listFilter } from 'js/components/Search/utils';
 import AncestorNote from 'js/components/Search/AncestorNote';
 import Results from 'js/components/Search/Results';
+import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 import { SearchHeader } from './style';
+
+const searchDatasetTutorialSelector = (state) => ({
+  runSearchDatasetTutorial: state.runSearchDatasetTutorial,
+  setRunSearchDatasetTutorial: state.setRunSearchDatasetTutorial,
+});
 
 function Search(props) {
   const { title } = props;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+
+  const { runSearchDatasetTutorial, setRunSearchDatasetTutorial } = useSearchDatasetTutorialStore(
+    searchDatasetTutorialSelector,
+  );
 
   const hiddenFilters = [listFilter('ancestor_ids', 'Ancestor ID'), listFilter('entity_type', 'Entity Type')];
 
@@ -68,15 +78,13 @@ function Search(props) {
 
   const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={Results} />;
 
-  const [runTutorial, setRunTutorial] = useState(false);
-
   return (
     <>
       <SearchHeader component="h1" variant="h2" id="asd">
         {title}
       </SearchHeader>
-      <DatasetSearchPrompt setRunTutorial={setRunTutorial} />
-      <SearchDatasetTutorial runTutorial={runTutorial} setRunTutorial={setRunTutorial} />
+      <DatasetSearchPrompt setRunTutorial={setRunSearchDatasetTutorial} />
+      <SearchDatasetTutorial runTutorial={runSearchDatasetTutorial} setRunTutorial={setRunSearchDatasetTutorial} />
       {hasAncestorParam && (
         <LookupEntity
           uuid={searchParams.get('ancestor_ids[0]')}
