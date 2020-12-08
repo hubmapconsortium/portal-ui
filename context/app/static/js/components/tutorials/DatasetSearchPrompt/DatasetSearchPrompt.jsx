@@ -3,12 +3,25 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 
+import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { CenteredDiv, Flex, StyledTypography, StyledPaper, StyledInfoIcon, StyledButton } from './style';
+
+const searchViewStoreSelector = (state) => ({
+  setSearchView: state.setSearchView,
+  searchView: state.searchView,
+  toggleItem: state.toggleItem,
+});
 
 function DatasetSearchPrompt({ setRunTutorial }) {
   const [isDisplayed, setIsDisplayed] = useState(true);
 
+  const { searchView, setSearchView, toggleItem } = useSearchViewStore(searchViewStoreSelector);
+
   function beginTutorial() {
+    if (searchView === 'tile') {
+      setSearchView('table');
+      toggleItem('table');
+    }
     setIsDisplayed(false);
     setRunTutorial(true);
   }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ListRoundedIcon from '@material-ui/icons/ListRounded';
 import GridOnRoundedIcon from '@material-ui/icons/GridOnRounded';
@@ -12,6 +12,7 @@ import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialSto
 const searchViewStoreSelector = (state) => ({
   searchView: state.searchView,
   setSearchView: state.setSearchView,
+  setToggleItem: state.setToggleItem,
 });
 
 const searchDatasetTutorialSelector = (state) => ({
@@ -21,11 +22,15 @@ const searchDatasetTutorialSelector = (state) => ({
 
 function SearchViewSwitch(props) {
   const { toggleItem } = props;
-  const { searchView, setSearchView } = useSearchViewStore(searchViewStoreSelector);
+  const { searchView, setSearchView, setToggleItem } = useSearchViewStore(searchViewStoreSelector);
 
   const { runSearchDatasetTutorial, incrementSearchDatasetTutorialStep } = useSearchDatasetTutorialStore(
     searchDatasetTutorialSelector,
   );
+
+  useEffect(() => {
+    setToggleItem(toggleItem);
+  }, [setToggleItem, toggleItem]);
 
   function handleChangeView(view) {
     if (!['table', 'tile'].includes(view)) {
