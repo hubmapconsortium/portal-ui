@@ -5,14 +5,14 @@ import { Hits } from 'searchkit'; // eslint-disable-line import/no-duplicates
 import ResultsTable from '../ResultsTable';
 
 function DevResults(props) {
-  const { sortOptions, hitsPerPage, resultFields, detailsUrlPrefix, idField, resultFieldIds } = props;
+  const { sortOptions, hitsPerPage, tableResultFields, detailsUrlPrefix, idField, resultFieldIds } = props;
 
   return (
     <Hits
       hitsPerPage={hitsPerPage}
       listComponent={
         <ResultsTable
-          resultFields={resultFields}
+          resultFields={tableResultFields}
           detailsUrlPrefix={detailsUrlPrefix}
           idField={idField}
           sortOptions={sortOptions}
@@ -29,7 +29,7 @@ function DevResults(props) {
 DevResults.propTypes = {
   sortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
-  resultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tableResultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
   resultFieldIds: PropTypes.arrayOf(PropTypes.string).isRequired,

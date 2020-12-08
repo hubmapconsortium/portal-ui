@@ -6,7 +6,7 @@ import ResultsTable from '../ResultsTable';
 import ResultsTiles from '../ResultsTiles';
 
 function Results(props) {
-  const { sortOptions, hitsPerPage, resultFields, detailsUrlPrefix, idField, resultFieldIds, type } = props;
+  const { sortOptions, hitsPerPage, tableResultFields, detailsUrlPrefix, idField, resultFieldIds, type } = props;
   // one of the sort components must stay mounted to preserve sort history between views.
   return (
     <ViewSwitcherHits
@@ -17,7 +17,7 @@ function Results(props) {
           title: 'Table',
           listComponent: (
             <ResultsTable
-              resultFields={resultFields}
+              resultFields={tableResultFields}
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}
               sortOptions={sortOptions}
@@ -38,7 +38,7 @@ function Results(props) {
 Results.propTypes = {
   sortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
-  resultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tableResultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
   resultFieldIds: PropTypes.arrayOf(PropTypes.string).isRequired,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
@@ -25,7 +25,6 @@ function SearchWrapper(props) {
     isLoggedIn,
     resultsComponent: ResultsComponent,
   } = props;
-  const [searchView, setSearchView] = useState('table');
 
   const sortOptions = resultFieldsToSortOptions(resultFields.table);
   const resultFieldIds = [...resultFields.table, ...resultFields.tile].map((field) => field.id).concat(idField);
@@ -34,12 +33,7 @@ function SearchWrapper(props) {
   return (
     <SearchkitProvider searchkit={searchkit}>
       <>
-        <SearchBarLayout
-          queryFields={queryFields}
-          searchView={searchView}
-          setSearchView={setSearchView}
-          sortOptions={sortOptions}
-        />
+        <SearchBarLayout queryFields={queryFields} sortOptions={sortOptions} />
         <LayoutBody>
           <StyledSideBar>
             <Accordions filters={filters} />
@@ -48,11 +42,10 @@ function SearchWrapper(props) {
             <ResultsComponent
               sortOptions={sortOptions}
               hitsPerPage={hitsPerPage}
-              resultFields={resultFields[searchView]}
+              tableResultFields={resultFields.table}
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}
               resultFieldIds={resultFieldIds}
-              searchView={searchView}
               type={type}
             />
             <NoHits component={<NoResults isLoggedIn={isLoggedIn} />} errorComponent={SearchError} />
