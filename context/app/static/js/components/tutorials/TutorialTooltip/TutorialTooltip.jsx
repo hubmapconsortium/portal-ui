@@ -10,7 +10,7 @@ const searchDatasetTutorialSelector = (state) => ({
   closeSearchDatasetTutorial: state.closeSearchDatasetTutorial,
 });
 
-function TutorialTooltip({ index, size, step, tooltipProps }) {
+function TutorialTooltip({ index, isLastStep, size, step, tooltipProps }) {
   const {
     incrementSearchDatasetTutorialStep,
     decrementSearchDatasetTutorialStep,
@@ -27,7 +27,7 @@ function TutorialTooltip({ index, size, step, tooltipProps }) {
       <WhiteTypography variant="body1">{step.content}</WhiteTypography>
       <FlexEnd>
         {index > 0 && <WhiteTextButton onClick={() => decrementSearchDatasetTutorialStep()}>Back</WhiteTextButton>}
-        {<WhiteTextButton onClick={() => incrementSearchDatasetTutorialStep()}>Next</WhiteTextButton>}
+        {!isLastStep && <WhiteTextButton onClick={() => incrementSearchDatasetTutorialStep()}>Next</WhiteTextButton>}
       </FlexEnd>
     </StyledPaper>
   );
