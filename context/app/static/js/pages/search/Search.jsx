@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import DatasetSearchPrompt from 'js/components/tutorials/DatasetSearchPrompt';
-import SearchDatasetTutorial from 'js/components/Search/SearchDatasetTutorial';
+import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
 import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader } from 'js/helpers/functions';
