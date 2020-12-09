@@ -118,5 +118,5 @@ def test_group_by_file_name(mock1=None):
 
 @apply_patches
 def test_data_types(mock1=None):
-    search_assay_types = [nm for nm in TypeClient(TYPE_SERVICE_URL).iterAssayNames()]
+    search_assay_types = [name for name in TypeClient(TYPE_SERVICE_URL).iterAssayNames()]
     assert(all([assay in search_assay_types for assay in Const().SC_DATA_TYPES]))

@@ -202,7 +202,7 @@ class Const(object, metaclass=SingletonMetaClass):
         tc = TypeClient(current_app.config['TYPE_SERVICE_ENDPOINT'])
         conf_lut = {}
         path_lut = {}
-        sc_l = []
+        single_cell_list = []
         for assay in tc.iterAssays():
             name = assay.name
             hints = assay.vitessce_hints
@@ -213,7 +213,7 @@ class Const(object, metaclass=SingletonMetaClass):
                 path_lut[name] = {"offsets": OFFSETS_PATH, "image": IMAGE_PYRAMID_PATH}
 
             if 'is_sc' in hints:
-                sc_l.append(name)
+                single_cell_list.append(name)
                 if 'atac' in hints:
                     conf_lut[name] = SCATAC_SEQ_CONFIG
                 elif 'rna' in hints:
@@ -226,7 +226,7 @@ class Const(object, metaclass=SingletonMetaClass):
 
         self.ASSAY_CONF_LOOKUP = conf_lut
         self.IMAGING_PATHS = path_lut
-        self.SC_DATA_TYPES = sc_l
+        self.SC_DATA_TYPES = single_cell_list
 
 
 MOCK_URL = "https://example.com"
