@@ -19,8 +19,6 @@ RUN npm run build
 FROM tiangolo/uwsgi-nginx-flask:python3.7
 
 COPY requirements.txt /app
-ARG COMMONS_BRANCH=master
-ENV COMMONS_BRANCH=${COMMONS_BRANCH}
 RUN pip install -r /app/requirements.txt
 
 # NGINX should serve static content directly.
