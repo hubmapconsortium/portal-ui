@@ -95,7 +95,7 @@ function SearchDatasetTutorial({ runTutorial, setRunTutorial, stepIndex }) {
       run={runTutorial}
       scrollOffset={100}
       tooltipComponent={TutorialTooltip}
-      styles={{ options: { arrowColor: themeContext.palette.info.dark } }}
+      styles={{ options: { arrowColor: themeContext.palette.info.dark, zIndex: themeContext.zIndex.tutorial } }}
       stepIndex={stepIndex}
     />
   );
