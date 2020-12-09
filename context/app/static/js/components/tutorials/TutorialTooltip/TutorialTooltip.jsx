@@ -30,6 +30,7 @@ function TutorialTooltip({ index, isLastStep, size, step, tooltipProps }) {
         {!isLastStep && step.title !== 'Toggle Display Mode' && (
           <WhiteTextButton onClick={() => incrementSearchDatasetTutorialStep()}>Next</WhiteTextButton>
         )}
+        {isLastStep && <WhiteTextButton onClick={() => closeSearchDatasetTutorial()}>Last</WhiteTextButton>}
       </FlexEnd>
     </StyledPaper>
   );
