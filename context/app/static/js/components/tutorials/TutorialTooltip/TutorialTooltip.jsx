@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 
@@ -35,5 +36,15 @@ function TutorialTooltip({ index, isLastStep, size, step, tooltipProps }) {
     </StyledPaper>
   );
 }
+
+TutorialTooltip.propTypes = {
+  index: PropTypes.number.isRequired,
+  isLastStep: PropTypes.bool.isRequired,
+  size: PropTypes.number.isRequired,
+  /* eslint-disable react/forbid-prop-types */
+  step: PropTypes.object.isRequired,
+  tooltipProps: PropTypes.object.isRequired,
+  /* eslint-enable react/forbid-prop-types */
+};
 
 export default TutorialTooltip;

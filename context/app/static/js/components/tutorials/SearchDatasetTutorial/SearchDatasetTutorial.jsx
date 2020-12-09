@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 import { ThemeContext } from 'styled-components';
 import Joyride, { STATUS } from 'react-joyride';
 
@@ -100,5 +101,11 @@ function SearchDatasetTutorial({ runTutorial, setRunTutorial, stepIndex }) {
     />
   );
 }
+
+SearchDatasetTutorial.propTypes = {
+  runTutorial: PropTypes.bool.isRequired,
+  setRunTutorial: PropTypes.func.isRequired,
+  stepIndex: PropTypes.number.isRequired,
+};
 
 export default SearchDatasetTutorial;

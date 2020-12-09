@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
@@ -50,5 +51,9 @@ function DatasetSearchPrompt({ setRunTutorial }) {
     </StyledPaper>
   ) : null;
 }
+
+DatasetSearchPrompt.propTypes = {
+  setRunTutorial: PropTypes.func.isRequired,
+};
 
 export default DatasetSearchPrompt;
