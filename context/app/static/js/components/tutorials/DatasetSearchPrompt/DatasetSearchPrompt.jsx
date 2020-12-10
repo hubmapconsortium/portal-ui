@@ -16,7 +16,7 @@ const searchViewStoreSelector = (state) => ({
 
 function DatasetSearchPrompt({ setRunTutorial }) {
   const [isDisplayed, setIsDisplayed] = useState(true);
-  const [startButtonIsEnabled, setStartButtonIsEnabled] = useState(false);
+  const [timeoutHasRun, setTimeoutHasRun] = useState(false);
 
   const { searchView, setSearchView, toggleItem, searchHitsCount } = useSearchViewStore(searchViewStoreSelector);
 
@@ -31,8 +31,8 @@ function DatasetSearchPrompt({ setRunTutorial }) {
 
   /* TODO enable button based on whether element targeted in the first step has mounted */
   useEffect(() => {
-    setTimeout(() => setStartButtonIsEnabled(true), 1000);
-  }, [setStartButtonIsEnabled]);
+    setTimeout(() => setTimeoutHasRun(true), 1000);
+  }, [setTimeoutHasRun]);
 
   return isDisplayed ? (
     <StyledPaper>
@@ -50,7 +50,7 @@ function DatasetSearchPrompt({ setRunTutorial }) {
           color="primary"
           variant="contained"
           onClick={beginTutorial}
-          disabled={!startButtonIsEnabled || searchHitsCount === 0}
+          disabled={!timeoutHasRun || searchHitsCount === 0}
         >
           Take The Dataset Search Tutorial
         </StyledButton>
