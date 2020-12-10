@@ -1,5 +1,7 @@
 import create from 'zustand';
 
+const localStorageKey = 'has_exited_dataset_search_tutorial';
+
 const useSearchDatasetTutorialStore = create((set) => ({
   runSearchDatasetTutorial: false,
   setRunSearchDatasetTutorial: (val) => set({ runSearchDatasetTutorial: val }),
@@ -12,7 +14,11 @@ const useSearchDatasetTutorialStore = create((set) => ({
     set((state) => ({
       searchDatasetTutorialStep: state.searchDatasetTutorialStep - 1,
     })),
-  closeSearchDatasetTutorial: () => set({ runSearchDatasetTutorial: false }),
+  tutorialHasExited: localStorage.getItem(localStorageKey),
+  closeSearchDatasetTutorial: () => {
+    localStorage.setItem(localStorageKey, true);
+    set({ runSearchDatasetTutorial: false, tutorialHasExited: true });
+  },
 }));
 
 export default useSearchDatasetTutorialStore;

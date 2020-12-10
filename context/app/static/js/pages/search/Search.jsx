@@ -18,6 +18,8 @@ const searchDatasetTutorialSelector = (state) => ({
   runSearchDatasetTutorial: state.runSearchDatasetTutorial,
   setRunSearchDatasetTutorial: state.setRunSearchDatasetTutorial,
   searchDatasetTutorialStep: state.searchDatasetTutorialStep,
+  tutorialHasExited: state.tutorialHasExited,
+  closeSearchDatasetTutorial: state.closeSearchDatasetTutorial,
 });
 
 function Search(props) {
@@ -28,6 +30,8 @@ function Search(props) {
     runSearchDatasetTutorial,
     setRunSearchDatasetTutorial,
     searchDatasetTutorialStep,
+    tutorialHasExited,
+    closeSearchDatasetTutorial,
   } = useSearchDatasetTutorialStore(searchDatasetTutorialSelector);
 
   const hiddenFilters = [listFilter('ancestor_ids', 'Ancestor ID'), listFilter('entity_type', 'Entity Type')];
@@ -86,12 +90,16 @@ function Search(props) {
       <SearchHeader component="h1" variant="h2" id="asd">
         {title}
       </SearchHeader>
-      <DatasetSearchPrompt setRunTutorial={setRunSearchDatasetTutorial} />
-      <SearchDatasetTutorial
-        runTutorial={runSearchDatasetTutorial}
-        setRunTutorial={setRunSearchDatasetTutorial}
-        stepIndex={searchDatasetTutorialStep}
-      />
+      {!tutorialHasExited && (
+        <>
+          <DatasetSearchPrompt setRunTutorial={setRunSearchDatasetTutorial} />
+          <SearchDatasetTutorial
+            runTutorial={runSearchDatasetTutorial}
+            closeSearchDatasetTutorial={closeSearchDatasetTutorial}
+            stepIndex={searchDatasetTutorialStep}
+          />
+        </>
+      )}
       {hasAncestorParam && (
         <LookupEntity
           uuid={searchParams.get('ancestor_ids[0]')}

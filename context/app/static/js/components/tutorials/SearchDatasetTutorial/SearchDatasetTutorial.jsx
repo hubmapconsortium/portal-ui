@@ -9,7 +9,6 @@ import useSearchViewStore from 'js/stores/useSearchViewStore';
 const viewMoreSelector = '#Data-Type > div.sk-refinement-list__view-more-action';
 
 const searchViewStoreSelector = (state) => ({ searchView: state.searchView, toggleItem: state.toggleItem });
-
 const defaultSteps = [
   {
     target: '#Data-Type > div.sk-item-list > div:nth-child(1)',
@@ -55,7 +54,7 @@ const stepToAddIfViewMoreExists = {
   title: 'View More Filters',
 };
 
-function SearchDatasetTutorial({ runTutorial, setRunTutorial, stepIndex }) {
+function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIndex }) {
   const themeContext = useContext(ThemeContext);
   const [steps, setSteps] = useState(defaultSteps);
   const { searchView, toggleItem } = useSearchViewStore(searchViewStoreSelector);
@@ -67,14 +66,16 @@ function SearchDatasetTutorial({ runTutorial, setRunTutorial, stepIndex }) {
       step: { title },
     } = data;
 
-    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
-
+    // if user selects back after being instructed to toggle search view
     if (action === 'prev' && title === 'Sort Search Results for Tile View' && searchView === 'tile') {
       toggleItem('table');
     }
 
+    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
+
+    // handles when user clicks the overlay
     if (finishedStatuses.includes(status) || action === 'close') {
-      setRunTutorial(false);
+      closeSearchDatasetTutorial();
     }
   };
 
@@ -104,7 +105,7 @@ function SearchDatasetTutorial({ runTutorial, setRunTutorial, stepIndex }) {
 
 SearchDatasetTutorial.propTypes = {
   runTutorial: PropTypes.bool.isRequired,
-  setRunTutorial: PropTypes.func.isRequired,
+  closeSearchDatasetTutorial: PropTypes.func.isRequired,
   stepIndex: PropTypes.number.isRequired,
 };
 
