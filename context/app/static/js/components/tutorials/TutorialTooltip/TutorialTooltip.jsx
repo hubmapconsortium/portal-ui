@@ -11,7 +11,7 @@ const searchDatasetTutorialSelector = (state) => ({
   closeSearchDatasetTutorial: state.closeSearchDatasetTutorial,
 });
 
-function TutorialTooltip({ index, isLastStep, size, step, tooltipProps }) {
+function TutorialTooltip({ index, isLastStep, size, step: { title, content, contentIsComponent }, tooltipProps }) {
   const {
     incrementSearchDatasetTutorialStep,
     decrementSearchDatasetTutorialStep,
@@ -20,15 +20,15 @@ function TutorialTooltip({ index, isLastStep, size, step, tooltipProps }) {
   return (
     <StyledPaper {...tooltipProps}>
       <Flex>
-        <WhiteTypography variant="subtitle1">{`${step.title} (${index + 1}/${size})`}</WhiteTypography>
+        <WhiteTypography variant="subtitle1">{`${title} (${index + 1}/${size})`}</WhiteTypography>
         <IconButton aria-label="close" size="small" onClick={() => closeSearchDatasetTutorial()}>
           <WhiteCloseRoundedIcon />
         </IconButton>
       </Flex>
-      <WhiteTypography variant="body1">{step.content}</WhiteTypography>
+      {contentIsComponent ? content : <WhiteTypography variant="body1">{content}</WhiteTypography>}
       <FlexEnd>
         {index > 0 && <WhiteTextButton onClick={() => decrementSearchDatasetTutorialStep()}>Back</WhiteTextButton>}
-        {!isLastStep && step.title !== 'Toggle Display Mode' && (
+        {!isLastStep && title !== 'Toggle Display Mode' && (
           <WhiteTextButton onClick={() => incrementSearchDatasetTutorialStep()}>Next</WhiteTextButton>
         )}
         {isLastStep && <WhiteTextButton onClick={() => closeSearchDatasetTutorial()}>Last</WhiteTextButton>}

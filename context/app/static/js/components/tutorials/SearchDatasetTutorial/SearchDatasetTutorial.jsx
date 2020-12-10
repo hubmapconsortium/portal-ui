@@ -2,9 +2,11 @@ import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ThemeContext } from 'styled-components';
 import Joyride, { STATUS } from 'react-joyride';
+import Box from '@material-ui/core/Box';
 
 import TutorialTooltip from 'js/components/tutorials/TutorialTooltip';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
+import { WhiteTypography } from 'js/components/tutorials/TutorialTooltip/style';
 
 const viewMoreSelector = '#Data-Type > div.sk-refinement-list__view-more-action';
 
@@ -33,8 +35,19 @@ const defaultSteps = [
   },
   {
     target: '#tile-view-toggle-button',
-    content:
-      'Toggle the results display mode between table view and tile view. Click the tile view button above to continue.',
+    content: (
+      <>
+        <WhiteTypography gutterBottom>
+          Toggle the results display mode between table view and tile view.
+        </WhiteTypography>
+        <WhiteTypography component="div">
+          <Box component="strong" fontWeight="fontWeightMedium">
+            Click the tile view button above to continue.
+          </Box>
+        </WhiteTypography>
+      </>
+    ),
+    contentIsComponent: true,
     title: 'Toggle Display Mode',
     disableBeacon: true,
     spotlightClicks: true,
