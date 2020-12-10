@@ -90,7 +90,7 @@ function Search(props) {
       <SearchHeader component="h1" variant="h2" id="asd">
         {title}
       </SearchHeader>
-      {!tutorialHasExited && (
+      {!tutorialHasExited && type === 'dataset' && (
         <>
           <DatasetSearchPrompt setRunTutorial={setRunSearchDatasetTutorial} />
           <SearchDatasetTutorial
