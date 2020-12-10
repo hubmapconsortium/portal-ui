@@ -10,7 +10,11 @@ import { WhiteTypography } from 'js/components/tutorials/TutorialTooltip/style';
 
 const viewMoreSelector = '#Data-Type > div.sk-refinement-list__view-more-action';
 
-const searchViewStoreSelector = (state) => ({ searchView: state.searchView, toggleItem: state.toggleItem });
+const searchViewStoreSelector = (state) => ({
+  searchView: state.searchView,
+  setSearchView: state.setSearchView,
+  toggleItem: state.toggleItem,
+});
 const defaultSteps = [
   {
     target: '#Data-Type > div.sk-item-list > div:nth-child(1)',
@@ -70,7 +74,7 @@ const stepToAddIfViewMoreExists = {
 function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIndex }) {
   const themeContext = useContext(ThemeContext);
   const [steps, setSteps] = useState(defaultSteps);
-  const { searchView, toggleItem } = useSearchViewStore(searchViewStoreSelector);
+  const { searchView, setSearchView, toggleItem } = useSearchViewStore(searchViewStoreSelector);
 
   const handleJoyrideCallback = (data) => {
     const {
@@ -82,6 +86,7 @@ function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIn
     // if user selects back after being instructed to toggle search view
     if (action === 'prev' && title === 'Sort Search Results for Tile View' && searchView === 'tile') {
       toggleItem('table');
+      setSearchView('table');
     }
 
     const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
