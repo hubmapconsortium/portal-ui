@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
+import useSearchViewStore from 'js/stores/useSearchViewStore';
 import Accordions from './Accordions';
 import PaginationWrapper from './PaginationWrapper';
 import SearchBarLayout from './SearchBarLayout';
 import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
 import { NoResults, SearchError } from './noHitsComponents';
+
+const searchViewStoreSelector = (state) => state.setSearchHitsCount;
 
 function SearchWrapper(props) {
   const {
@@ -29,6 +32,17 @@ function SearchWrapper(props) {
   const sortOptions = resultFieldsToSortOptions(resultFields.table);
   const resultFieldIds = [...resultFields.table, ...resultFields.tile].map((field) => field.id).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
+
+  const setSearchHitsCount = useSearchViewStore(searchViewStoreSelector);
+
+  useEffect(() => {
+    const removalFn = searchkit.addResultsListener((results) => {
+      setSearchHitsCount(results.hits.total.value);
+    });
+    return () => {
+      removalFn();
+    };
+  }, [searchkit, setSearchHitsCount]);
 
   return (
     <SearchkitProvider searchkit={searchkit}>

@@ -11,13 +11,14 @@ const searchViewStoreSelector = (state) => ({
   setSearchView: state.setSearchView,
   searchView: state.searchView,
   toggleItem: state.toggleItem,
+  searchHitsCount: state.searchHitsCount,
 });
 
 function DatasetSearchPrompt({ setRunTutorial }) {
   const [isDisplayed, setIsDisplayed] = useState(true);
   const [startButtonIsEnabled, setStartButtonIsEnabled] = useState(false);
 
-  const { searchView, setSearchView, toggleItem } = useSearchViewStore(searchViewStoreSelector);
+  const { searchView, setSearchView, toggleItem, searchHitsCount } = useSearchViewStore(searchViewStoreSelector);
 
   function beginTutorial() {
     if (searchView === 'tile') {
@@ -45,7 +46,12 @@ function DatasetSearchPrompt({ setRunTutorial }) {
         <StyledTypography>
           Welcome to the HuBMAP Data Portal. Get a quick tour of different sections of the dataset search page.
         </StyledTypography>
-        <StyledButton color="primary" variant="contained" onClick={beginTutorial} disabled={!startButtonIsEnabled}>
+        <StyledButton
+          color="primary"
+          variant="contained"
+          onClick={beginTutorial}
+          disabled={!startButtonIsEnabled || searchHitsCount === 0}
+        >
           Take The Dataset Search Tutorial
         </StyledButton>
       </CenteredDiv>

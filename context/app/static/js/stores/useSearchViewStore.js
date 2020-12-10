@@ -6,6 +6,8 @@ const useSearchViewStore = create((set) => ({
   // toggleItem is provided by searchkit to toggle search view
   toggleItem: null,
   setToggleItem: (val) => set({ toggleItem: val }),
+  searchHitsCount: 0,
+  setSearchHitsCount: (val) => set({ searchHitsCount: val }),
 }));
 
 export default useSearchViewStore;
