@@ -83,7 +83,7 @@ function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIn
       step: { title },
     } = data;
 
-    // if user selects back after being instructed to toggle search view
+    // If the user selects back after tile view has been toggled, return to table view.
     if (action === 'prev' && title === 'Sort Search Results for Tile View' && searchView === 'tile') {
       toggleItem('table');
       setSearchView('table');
@@ -91,7 +91,7 @@ function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIn
 
     const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
 
-    // handles when user clicks the overlay
+    // If the user clicks the overlay or highlighted element, close the search tutorial.
     if (finishedStatuses.includes(status) || action === 'close') {
       closeSearchDatasetTutorial();
     }
