@@ -27,7 +27,7 @@ const defaultSteps = [
   },
   {
     target: 'div.sk-search-box',
-    content: 'To further narrow the relevant datasets, type search terms or phrases in “quotes" into the Search bar.',
+    content: 'To further narrow the relevant datasets, type search terms or phrases in “quotes" into the Search bar. Datasets containing any of the search terms will be returned',
     disableBeacon: true,
     title: 'Search Datasets by Free Text',
   },
