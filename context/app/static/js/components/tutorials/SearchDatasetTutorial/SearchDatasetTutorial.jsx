@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ThemeContext } from 'styled-components';
-import Joyride, { STATUS } from 'react-joyride';
+import Joyride, { STATUS, ACTIONS } from 'react-joyride';
 import Box from '@material-ui/core/Box';
 
 import TutorialTooltip from 'js/components/tutorials/TutorialTooltip';
@@ -9,6 +9,8 @@ import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { WhiteTypography } from 'js/components/tutorials/TutorialTooltip/style';
 
 const viewMoreSelector = '#Data-Type div.sk-refinement-list__view-more-action';
+
+const tileViewStepTitle = 'Sort Search Results for Tile View';
 
 const searchViewStoreSelector = (state) => ({
   searchView: state.searchView,
@@ -60,7 +62,7 @@ const defaultSteps = [
     target: '#search-tiles-sort-button',
     content: 'To sort your search results in tile view, select your sorting option in this dropdown menu.',
     disableBeacon: true,
-    title: 'Sort Search Results for Tile View',
+    title: tileViewStepTitle,
   },
 ];
 
@@ -84,7 +86,7 @@ function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIn
     } = data;
 
     // If the user selects back after tile view has been toggled, return to table view.
-    if (action === 'prev' && title === 'Sort Search Results for Tile View' && searchView === 'tile') {
+    if (action === ACTIONS.PREV && title === tileViewStepTitle && searchView === 'tile') {
       toggleItem('table');
       setSearchView('table');
     }
@@ -92,7 +94,7 @@ function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIn
     const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
 
     // If the user clicks the overlay or highlighted element, close the search tutorial.
-    if (finishedStatuses.includes(status) || action === 'close') {
+    if (finishedStatuses.includes(status) || ACTIONS.CLOSE) {
       closeSearchDatasetTutorial();
     }
   };
