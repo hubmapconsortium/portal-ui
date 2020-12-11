@@ -2,21 +2,21 @@ import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ThemeContext } from 'styled-components';
 import Joyride, { STATUS, ACTIONS } from 'react-joyride';
-import Box from '@material-ui/core/Box';
 
 import TutorialTooltip from 'js/components/tutorials/TutorialTooltip';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
-import { WhiteTypography } from 'js/components/tutorials/TutorialTooltip/style';
 
 const viewMoreSelector = '#Data-Type div.sk-refinement-list__view-more-action';
 
-const tileViewStepTitle = 'Sort Search Results for Tile View';
+const tileViewStepTitle = 'Toggle Display Mode';
+const sortTileViewStepTitle = 'Sort Search Results for Tile View';
 
 const searchViewStoreSelector = (state) => ({
   searchView: state.searchView,
   setSearchView: state.setSearchView,
   toggleItem: state.toggleItem,
 });
+
 const defaultSteps = [
   {
     target: '#Data-Type div.sk-item-list > div:nth-child(1)',
@@ -40,28 +40,15 @@ const defaultSteps = [
   },
   {
     target: '#tile-view-toggle-button',
-    content: (
-      <>
-        <WhiteTypography gutterBottom>
-          Toggle the results display mode between table view and tile view.
-        </WhiteTypography>
-        <WhiteTypography component="div">
-          <Box component="strong" fontWeight="fontWeightMedium">
-            Click the tile view button above to continue.
-          </Box>
-        </WhiteTypography>
-      </>
-    ),
-    contentIsComponent: true,
-    title: 'Toggle Display Mode',
+    content: 'Toggle the results display mode between table view and tile view.',
+    title: tileViewStepTitle,
     disableBeacon: true,
-    spotlightClicks: true,
   },
   {
     target: '#search-tiles-sort-button',
     content: 'To sort your search results in tile view, select your sorting option in this dropdown menu.',
     disableBeacon: true,
-    title: tileViewStepTitle,
+    title: sortTileViewStepTitle,
   },
 ];
 
@@ -85,15 +72,20 @@ function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIn
     } = data;
 
     // If the user selects back after tile view has been toggled, return to table view.
-    if (action === ACTIONS.PREV && title === tileViewStepTitle && searchView === 'tile') {
+    if (action === ACTIONS.PREV && title === sortTileViewStepTitle && searchView === 'tile') {
       toggleItem('table');
       setSearchView('table');
+    }
+
+    if (action === ACTIONS.NEXT && title === tileViewStepTitle && searchView === 'table') {
+      toggleItem('tile');
+      setSearchView('tile');
     }
 
     const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
 
     // If the user clicks the overlay or highlighted element, close the search tutorial.
-    if (finishedStatuses.includes(status) || ACTIONS.CLOSE) {
+    if (finishedStatuses.includes(status) || action === ACTIONS.CLOSE) {
       closeSearchDatasetTutorial();
     }
   };

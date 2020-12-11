@@ -28,9 +28,7 @@ function TutorialTooltip({ index, isLastStep, size, step: { title, content, cont
       {contentIsComponent ? content : <WhiteTypography variant="body1">{content}</WhiteTypography>}
       <FlexEnd>
         {index > 0 && <WhiteTextButton onClick={() => decrementSearchDatasetTutorialStep()}>Back</WhiteTextButton>}
-        {!isLastStep && title !== 'Toggle Display Mode' && (
-          <WhiteTextButton onClick={() => incrementSearchDatasetTutorialStep()}>Next</WhiteTextButton>
-        )}
+        {!isLastStep && <WhiteTextButton onClick={() => incrementSearchDatasetTutorialStep()}>Next</WhiteTextButton>}
         {isLastStep && <WhiteTextButton onClick={() => closeSearchDatasetTutorial()}>Last</WhiteTextButton>}
       </FlexEnd>
     </StyledPaper>
