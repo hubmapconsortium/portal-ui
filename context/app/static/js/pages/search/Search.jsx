@@ -87,7 +87,7 @@ function Search(props) {
 
   return (
     <>
-      <SearchHeader component="h1" variant="h2" id="asd">
+      <SearchHeader component="h1" variant="h2">
         {title}
       </SearchHeader>
       {!tutorialHasExited && type === 'dataset' && (
