@@ -29,7 +29,8 @@ function DatasetSearchPrompt({ setRunTutorial }) {
     setRunTutorial(true);
   }
 
-  /* TODO enable button based on whether element targeted in the first step has mounted */
+  /* TODO The enable button should be disabled based on whether the element targeted in the first step has mounted. 
+  See https://github.com/hubmapconsortium/portal-ui/issues/1412 for more information. */
   useEffect(() => {
     setTimeout(() => setTimeoutHasRun(true), 1000);
   }, [setTimeoutHasRun]);
