@@ -105,6 +105,7 @@ const theme = createMuiTheme({
     borderRadius: 2,
   },
   zIndex: {
+    tutorial: 1101, // one higher than zIndex of app bar
     dropdownOffset: 1001,
     entityHeader: 1000,
     dropdown: 50,

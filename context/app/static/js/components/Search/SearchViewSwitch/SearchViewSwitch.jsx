@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ListRoundedIcon from '@material-ui/icons/ListRounded';
 import GridOnRoundedIcon from '@material-ui/icons/GridOnRounded';
@@ -11,11 +11,16 @@ import useSearchViewStore from 'js/stores/useSearchViewStore';
 const searchViewStoreSelector = (state) => ({
   searchView: state.searchView,
   setSearchView: state.setSearchView,
+  setToggleItem: state.setToggleItem,
 });
 
 function SearchViewSwitch(props) {
   const { toggleItem } = props;
-  const { searchView, setSearchView } = useSearchViewStore(searchViewStoreSelector);
+  const { searchView, setSearchView, setToggleItem } = useSearchViewStore(searchViewStoreSelector);
+
+  useEffect(() => {
+    setToggleItem(toggleItem);
+  }, [setToggleItem, toggleItem]);
 
   function handleChangeView(view) {
     if (!['table', 'tile'].includes(view)) {
@@ -32,6 +37,7 @@ function SearchViewSwitch(props) {
         tooltipTitle="Switch to Table View"
         disableRipple
         value="table"
+        id="table-view-toggle-button"
       >
         <ListRoundedIcon color={searchView === 'table' ? 'primary' : 'secondary'} />
       </TooltipToggleButton>
@@ -40,6 +46,7 @@ function SearchViewSwitch(props) {
         tooltipTitle="Switch to Tile View"
         disableRipple
         value="tile"
+        id="tile-view-toggle-button"
       >
         <GridOnRoundedIcon color={searchView !== 'table' ? 'primary' : 'secondary'} />
       </TooltipToggleButton>

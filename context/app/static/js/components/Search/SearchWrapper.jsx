@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
+import useSearchViewStore from 'js/stores/useSearchViewStore';
 import Accordions from './Accordions';
 import PaginationWrapper from './PaginationWrapper';
 import SearchBarLayout from './SearchBarLayout';
 import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
 import { NoResults, SearchError } from './noHitsComponents';
+
+const searchViewStoreSelector = (state) => state.setSearchHitsCount;
 
 function SearchWrapper(props) {
   const {
@@ -25,21 +28,26 @@ function SearchWrapper(props) {
     isLoggedIn,
     resultsComponent: ResultsComponent,
   } = props;
-  const [searchView, setSearchView] = useState('table');
 
   const sortOptions = resultFieldsToSortOptions(resultFields.table);
   const resultFieldIds = [...resultFields.table, ...resultFields.tile].map((field) => field.id).concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 
+  const setSearchHitsCount = useSearchViewStore(searchViewStoreSelector);
+
+  useEffect(() => {
+    const removalFn = searchkit.addResultsListener((results) => {
+      setSearchHitsCount(results.hits.total.value);
+    });
+    return () => {
+      removalFn();
+    };
+  }, [searchkit, setSearchHitsCount]);
+
   return (
     <SearchkitProvider searchkit={searchkit}>
       <>
-        <SearchBarLayout
-          queryFields={queryFields}
-          searchView={searchView}
-          setSearchView={setSearchView}
-          sortOptions={sortOptions}
-        />
+        <SearchBarLayout queryFields={queryFields} sortOptions={sortOptions} />
         <LayoutBody>
           <StyledSideBar>
             <Accordions filters={filters} />
@@ -48,11 +56,10 @@ function SearchWrapper(props) {
             <ResultsComponent
               sortOptions={sortOptions}
               hitsPerPage={hitsPerPage}
-              resultFields={resultFields[searchView]}
+              tableResultFields={resultFields.table}
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}
               resultFieldIds={resultFieldIds}
-              searchView={searchView}
               type={type}
             />
             <NoHits component={<NoResults isLoggedIn={isLoggedIn} />} errorComponent={SearchError} />
