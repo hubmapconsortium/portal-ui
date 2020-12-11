@@ -52,7 +52,7 @@ function DatasetSearchPrompt({ setRunTutorial }) {
           onClick={beginTutorial}
           disabled={!timeoutHasRun || searchHitsCount === 0}
         >
-          Take The Dataset Search Tutorial
+          Begin the Dataset Search Tutorial
         </StyledButton>
       </CenteredDiv>
       <div>
