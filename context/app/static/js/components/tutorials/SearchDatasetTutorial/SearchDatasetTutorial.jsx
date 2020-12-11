@@ -21,8 +21,8 @@ const defaultSteps = [
   {
     target: '#Data-Type div.sk-item-list > div:nth-child(1)',
     disableBeacon: true,
-    content:
-      'The Dataset Metadata menu on the left side allows filtering datasets by any combination of metadata categories: Data Type, Organ and Specimen Type. Search results update automatically as you edit the selection of filters. ',
+    content: `The Dataset Metadata menu on the left side allows filtering datasets by any combination of metadata categories: Data Type, Organ and Specimen Type.
+      ${' '}Search results update automatically as you edit the selection of filters.`,
     title: 'Filter Your Browsing',
   },
   {
@@ -34,8 +34,8 @@ const defaultSteps = [
   },
   {
     target: 'div.sk-layout__results.sk-results-list > table > thead > tr > th:nth-child(3)',
-    content:
-      'Press the arrow button by the relevant column to sort search results. A bolded arrow indicates the current sorting selection. Selecting a bolded arrow will reverse the sorting order.   ',
+    content: `Press the arrow button by the relevant column to sort search results. A bolded arrow indicates the current sorting selection.
+      ${' '}Selecting a bolded arrow will reverse the sorting order.`,
     disableBeacon: true,
     title: 'Sort Search Results',
   },
