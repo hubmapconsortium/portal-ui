@@ -1,3 +1,8 @@
+## v0.9.1 - 2020-12-11
+
+- Add interactive tutorial for dataset search page.
+
+
 ## v0.8.1 - 2020-12-07
 
 - Centralize color definitions in the theme.
