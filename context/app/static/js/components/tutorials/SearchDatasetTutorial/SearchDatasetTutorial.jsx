@@ -8,7 +8,7 @@ import TutorialTooltip from 'js/components/tutorials/TutorialTooltip';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { WhiteTypography } from 'js/components/tutorials/TutorialTooltip/style';
 
-const viewMoreSelector = '#Data-Type > div.sk-refinement-list__view-more-action';
+const viewMoreSelector = '#Data-Type div.sk-refinement-list__view-more-action';
 
 const searchViewStoreSelector = (state) => ({
   searchView: state.searchView,
@@ -17,7 +17,7 @@ const searchViewStoreSelector = (state) => ({
 });
 const defaultSteps = [
   {
-    target: '#Data-Type > div.sk-item-list > div:nth-child(1)',
+    target: '#Data-Type div.sk-item-list > div:nth-child(1)',
     disableBeacon: true,
     content:
       'The Dataset Metadata menu on the left side allows filtering datasets by any combination of metadata categories: Data Type, Organ and Specimen Type. Search results update automatically as you edit the selection of filters. ',
@@ -65,7 +65,7 @@ const defaultSteps = [
 ];
 
 const stepToAddIfViewMoreExists = {
-  target: '#Data-Type > div.sk-refinement-list__view-more-action',
+  target: '#Data-Type div.sk-refinement-list__view-more-action',
   content: 'Click the View All button to display the entire list of filters in the selected category.',
   disableBeacon: true,
   title: 'View More Filters',
