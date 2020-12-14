@@ -7,9 +7,11 @@ services:
     container_name: portal-ui
     image: hubmap/portal-ui:latest
 
-    # Mount the app config in container to keep it outside the image.
     volumes:
+      # Mount the app config in container to keep it outside the container.
       - "../context/instance/app.conf:/app/instance/app.conf"
+      # Mount the logs so they are visible outside the container.
+      - "/var/log/portal-ui/:/var/log/"
 
     # Avoid accidentally creating zombie processes
     init: true
