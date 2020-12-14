@@ -11,7 +11,7 @@ services:
     volumes:
       - "../context/instance/app.conf:/app/instance/app.conf"
       # Mount the logs so they are visible outside the container.
-      - "../log/:/var/log/portal-ui/"
+      - "../log/:/var/log/"
 
     # Avoid accidentally creating zombie processes
     init: true

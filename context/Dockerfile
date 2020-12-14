@@ -33,3 +33,6 @@ COPY portal.nginx.conf /etc/nginx/conf.d/
 
 COPY --from=builder /work/app/static/public ${STATIC_PATH}/public
 COPY . /app
+
+# Base image links these to /dev/stdout:
+RUN rm /var/log/nginx/access.log /var/log/nginx/error.log
