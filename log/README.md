@@ -1,0 +1,1 @@
+# Mounted nginx logging from container to the host machine

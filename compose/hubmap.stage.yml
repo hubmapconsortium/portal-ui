@@ -10,6 +10,8 @@ services:
     # Mount the app config in container to keep it outside the image.
     volumes:
       - "../context/instance/app.conf:/app/instance/app.conf"
+      # Mount the logs so they are visible outside the container.
+      - "../log/:/var/log/portal-ui/"
 
     # Avoid accidentally creating zombie processes
     init: true
