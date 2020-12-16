@@ -1,0 +1,1 @@
+- No longer run tests on Travis.
