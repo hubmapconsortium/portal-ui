@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
-import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 
-import { StyledPaper, Flex, WhiteTextButton, FlexEnd, WhiteTypography, WhiteCloseRoundedIcon } from './style';
+import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
+import TooltipProgressButton from 'js/components/tutorials/TooltipProgressButton';
+import { StyledPaper, Flex, FlexEnd, WhiteTypography, WhiteCloseRoundedIcon } from './style';
 
 const searchDatasetTutorialSelector = (state) => ({
   incrementSearchDatasetTutorialStep: state.incrementSearchDatasetTutorialStep,
@@ -27,9 +28,21 @@ function TutorialTooltip({ index, isLastStep, size, step: { title, content, cont
       </Flex>
       {contentIsComponent ? content : <WhiteTypography variant="body1">{content}</WhiteTypography>}
       <FlexEnd>
-        {index > 0 && <WhiteTextButton onClick={() => decrementSearchDatasetTutorialStep()}>Back</WhiteTextButton>}
-        {!isLastStep && <WhiteTextButton onClick={() => incrementSearchDatasetTutorialStep()}>Next</WhiteTextButton>}
-        {isLastStep && <WhiteTextButton onClick={() => closeSearchDatasetTutorial()}>Finish Tutorial</WhiteTextButton>}
+        {index > 0 && (
+          <TooltipProgressButton eventHandler={decrementSearchDatasetTutorialStep} eventKeyCode={37}>
+            Back
+          </TooltipProgressButton>
+        )}
+        {!isLastStep && (
+          <TooltipProgressButton eventHandler={incrementSearchDatasetTutorialStep} eventKeyCode={39}>
+            Next
+          </TooltipProgressButton>
+        )}
+        {isLastStep && (
+          <TooltipProgressButton eventHandler={closeSearchDatasetTutorial} eventKeyCode={39}>
+            Finish Tutorial
+          </TooltipProgressButton>
+        )}
       </FlexEnd>
     </StyledPaper>
   );

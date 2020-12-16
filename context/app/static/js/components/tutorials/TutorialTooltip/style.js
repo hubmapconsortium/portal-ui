@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 
@@ -16,10 +15,6 @@ const Flex = styled.div`
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
 `;
 
-const WhiteTextButton = styled(Button)`
-  color: #fff;
-`;
-
 const FlexEnd = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -33,4 +28,4 @@ const WhiteCloseRoundedIcon = styled(CloseRoundedIcon)`
   color: #fff;
 `;
 
-export { StyledPaper, Flex, WhiteTextButton, FlexEnd, WhiteTypography, WhiteCloseRoundedIcon };
+export { StyledPaper, Flex, FlexEnd, WhiteTypography, WhiteCloseRoundedIcon };
