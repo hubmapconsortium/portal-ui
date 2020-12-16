@@ -3,7 +3,7 @@ import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
 
 const StyledPopper = styled(Popper)`
-  z-index: 50;
+  z-index: ${(props) => props.theme.zIndex.dropdown};
 `;
 
 const StyledPaper = styled(Paper)`

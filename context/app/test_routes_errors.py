@@ -2,7 +2,7 @@ import pytest
 import requests
 
 from .main import create_app
-from .config import types
+from .routes_main import entity_types
 
 
 @pytest.fixture
@@ -61,7 +61,7 @@ def client_not_logged_in():
 
 @pytest.mark.parametrize('path', [
     '/no-page-here']
-    + [f'/browse/{t}/fake-uuid.fake' for t in types]
+    + [f'/browse/{t}/fake-uuid.fake' for t in entity_types]
 )
 def test_404_html_page(client, path):
     response = client.get(path)

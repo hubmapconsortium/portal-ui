@@ -31,7 +31,7 @@ const StyledHeaderRight = styled.div`
 `;
 
 const StyledSectionContainer = styled(SectionContainer)`
-  z-index: 3;
+  z-index: ${(props) => props.theme.zIndex.visualization};
   position: relative;
 `;
 
@@ -45,15 +45,18 @@ const SelectionButton = styled(Button)`
   border-radius: 3px;
 `;
 
-const EscSnackbar = styled(Snackbar)`
+const VitessceInfoSnackbar = styled(Snackbar)`
   top: ${totalHeightOffset + 10}px;
   & > div {
-    background-color: dimgray;
+    background-color: ${(props) =>
+      props.$isWarning ? props.theme.palette.warning.main : 'dimgray'}; // TODO: Move to theme.
+    color: ${(props) => (props.$isWarning ? '#000000' : props.theme.palette.white.main)}; // TODO: Move to theme.
   }
 `;
 
 const ErrorSnackbar = styled(Snackbar)`
   position: absolute;
+  background-color: ${(props) => props.theme.palette.white.main};
 `;
 
 const ExpandableDiv = styled.div`
@@ -61,7 +64,8 @@ const ExpandableDiv = styled.div`
   left: ${(props) => (props.$isExpanded ? '0' : 'auto')};
   position: ${(props) => (props.$isExpanded ? 'fixed' : 'relative')};
   height: ${(props) => (props.$isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : `${vitessceFixedHeight}px`)};
-  background-color: ${(props) => (props.$theme === 'dark' ? '#333333' : '#FFFFFF')};
+  background-color: ${(props) =>
+    props.$theme === 'dark' ? '#333333' : props.theme.palette.white.main}; // TODO: Move to theme.
   width: 100%;
   overflow: hidden;
   .vitessce-container {
@@ -91,8 +95,8 @@ export {
   StyledHeaderText,
   StyledHeaderRight,
   ExpandButton,
-  EscSnackbar,
   ErrorSnackbar,
+  VitessceInfoSnackbar,
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,

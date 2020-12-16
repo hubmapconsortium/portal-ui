@@ -20,7 +20,7 @@ server_up() {
 
 
 start changelog
-if [ "$TRAVIS_BRANCH" != 'master' ]; then
+if [ "$GH_ACTIONS_BRANCH" != 'refs/heads/master' ] && [ "$TRAVIS_BRANCH" != 'master' ]; then
   git remote set-branches --add origin master
   git fetch
   # "--stat=1000" ensures that filenames are not truncated. 
@@ -31,10 +31,10 @@ fi
 end changelog
 
 
-start dev-start
-if [ ! -z "$TRAVIS" ]; then
-  echo 'Running on Travis...'
-  ./dev-start.sh || (
+start copy-app-conf
+if [ ! -z "$TRAVIS" ] || [ ! -z "$GH_ACTIONS" ]; then
+  echo 'Running on ci...'
+  ./copy-app-conf.sh || (
     echo 'app.conf before:'
     cat context/instance/app.conf
     echo 'Rewrite conf...'
@@ -43,17 +43,10 @@ if [ ! -z "$TRAVIS" ]; then
     cat context/instance/app.conf
   )
 fi
-set -m; ./dev-start.sh & set +m  # Without job control, I had trouble killing parent and children.
-PID=$!
-server_up 5001  # Not really needed: Cypress will wait for response.
-end-to-end/test.sh
-kill -TERM -$PID  # Kill dev server processes
-end dev-start
+end copy-app-conf
 
 
 start flake8
-# Unit tests require dev dependencies beyond requirements.txt.
-pip install -r context/requirements-dev.txt > /dev/null
 EXCLUDE=node_modules,ingest-validation-tools
 flake8 --exclude=$EXCLUDE \
   || die "Try: autopep8 --in-place --aggressive -r . --exclude $EXCLUDE"

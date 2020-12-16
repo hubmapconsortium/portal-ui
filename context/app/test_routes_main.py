@@ -6,7 +6,7 @@ import json
 import pytest
 
 from .main import create_app
-from .config import types
+from .routes_main import entity_types
 
 
 @pytest.fixture
@@ -125,7 +125,7 @@ def test_404_details_page(client, path, mocker):
 
 @pytest.mark.parametrize(
     'path',
-    [f'/browse/{t}/fake-uuid.json' for t in types]
+    [f'/browse/{t}/fake-uuid.json' for t in entity_types]
 )
 def test_200_json_page(client, path, mocker):
     mocker.patch('requests.post', side_effect=mock_search_donor_post)

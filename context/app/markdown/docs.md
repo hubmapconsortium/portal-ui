@@ -19,5 +19,4 @@
 ---
 - [APIs](/docs/apis)
 - [Infrastructure](/docs/infrastructure)
-- [Submission](/docs/submission)
-- [Help](/docs/help)
+

@@ -6,6 +6,7 @@ created_by_user_email: rsatija@nygenome.org
 vitessce_conf:
   [
     {
+      'version': '0.1.0',
       'name': 'HBM336.FWTN.636',
       'layers':
         [
@@ -45,6 +46,7 @@ vitessce_conf:
         ],
     },
     {
+      'version': '0.1.0',
       'name': 'HBM984.GRBB.858',
       'layers':
         [
@@ -84,6 +86,7 @@ vitessce_conf:
         ],
     },
     {
+      'version': '0.1.0',
       'name': 'HBM556.QMSM.776',
       'layers':
         [
@@ -123,6 +126,7 @@ vitessce_conf:
         ],
     },
     {
+      'version': '0.1.0',
       'name': 'HBM472.NTNN.543',
       'layers':
         [
@@ -162,6 +166,7 @@ vitessce_conf:
         ],
     },
     {
+      'version': '0.1.0',
       'name': 'HBM396.RPRR.624',
       'layers':
         [

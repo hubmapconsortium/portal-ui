@@ -1,3 +1,41 @@
+## v0.9.3 - 2020-12-16
+
+- Double UWSGI buffer size.
+
+
+## v0.9.1 - 2020-12-11
+
+- Add interactive tutorial for dataset search page.
+
+
+## v0.8.1 - 2020-12-07
+
+- Centralize color definitions in the theme.
+- Remove broken link to /docs/help.
+- submission.md in portal-docs had fallen out of sync with the ingest-validation-tools. Remove link.
+- Remove dev server from ci test script.
+- Remove vestigial config.py, and move list of entities types to routes_main.py.
+
+
+## v0.8.0 - 2020-12-03
+
+- Lazy load vitessce share button in entity header to keep vitessce out of bundle entry points.
+- Link to the feedback process documentation from the README.
+- Set proxy http version for gzip in example nginx conf.
+- Simplify python routing code.
+- Centralize our CSS z-indexes, so we have global view of what overlays what.
+
+
+## v0.7.3 - 2020-11-25
+
+- Tweak NGINX settings to allow caching on client.
+- Rearrange Dockerfile to improve layer caching.
+- Compress webpack assets with gzip and enable gzip in nginx.
+- Fix conditional in test.sh
+- Try out github actions for ci.
+- Upgrade Vitessce to allow for shareable linkes, and add sharing functionality.
+
+
 ## v0.7.2 - 2020-11-23
 
 - Update CCF template to use the same analytics key as the rest of the site.

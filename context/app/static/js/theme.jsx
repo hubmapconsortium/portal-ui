@@ -33,8 +33,14 @@ const theme = createMuiTheme({
       main: '#fff',
       hover: 'brightness(96%)',
     },
+    halfShadow: {
+      main: 'rgb(0, 0, 0, 0.54)',
+    },
     action: {
       disabled: 'rgba(0,0,0, 0.38)',
+    },
+    hoverShadow: {
+      main: 'rgb(0, 0, 0, 0.08)',
     },
     transparentGray: {
       main: 'rgba(144, 144, 144, 0.1)',
@@ -97,6 +103,13 @@ const theme = createMuiTheme({
   },
   shape: {
     borderRadius: 2,
+  },
+  zIndex: {
+    tutorial: 1101, // one higher than zIndex of app bar
+    dropdownOffset: 1001,
+    entityHeader: 1000,
+    dropdown: 50,
+    visualization: 3,
   },
 });
 

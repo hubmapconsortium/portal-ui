@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import DatasetSearchPrompt from 'js/components/tutorials/DatasetSearchPrompt';
+import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
 import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader } from 'js/helpers/functions';
@@ -9,11 +11,28 @@ import { donorConfig, sampleConfig, datasetConfig } from 'js/components/Search/c
 import { listFilter } from 'js/components/Search/utils';
 import AncestorNote from 'js/components/Search/AncestorNote';
 import Results from 'js/components/Search/Results';
+import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 import { SearchHeader } from './style';
+
+const searchDatasetTutorialSelector = (state) => ({
+  runSearchDatasetTutorial: state.runSearchDatasetTutorial,
+  setRunSearchDatasetTutorial: state.setRunSearchDatasetTutorial,
+  searchDatasetTutorialStep: state.searchDatasetTutorialStep,
+  tutorialHasExited: state.tutorialHasExited,
+  closeSearchDatasetTutorial: state.closeSearchDatasetTutorial,
+});
 
 function Search(props) {
   const { title } = props;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+
+  const {
+    runSearchDatasetTutorial,
+    setRunSearchDatasetTutorial,
+    searchDatasetTutorialStep,
+    tutorialHasExited,
+    closeSearchDatasetTutorial,
+  } = useSearchDatasetTutorialStore(searchDatasetTutorialSelector);
 
   const hiddenFilters = [listFilter('ancestor_ids', 'Ancestor ID'), listFilter('entity_type', 'Entity Type')];
 
@@ -65,11 +84,22 @@ function Search(props) {
   const allProps = { apiUrl: elasticsearchEndpoint, ...searchProps }; // TODO: Not needed?
 
   const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={Results} />;
+
   return (
     <>
       <SearchHeader component="h1" variant="h2">
         {title}
       </SearchHeader>
+      {!tutorialHasExited && type === 'dataset' && (
+        <>
+          <DatasetSearchPrompt setRunTutorial={setRunSearchDatasetTutorial} />
+          <SearchDatasetTutorial
+            runTutorial={runSearchDatasetTutorial}
+            closeSearchDatasetTutorial={closeSearchDatasetTutorial}
+            stepIndex={searchDatasetTutorialStep}
+          />
+        </>
+      )}
       {hasAncestorParam && (
         <LookupEntity
           uuid={searchParams.get('ancestor_ids[0]')}

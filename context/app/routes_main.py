@@ -7,9 +7,9 @@ from flask import (Blueprint, render_template, abort, current_app,
 import frontmatter
 
 from .api.client import ApiClient
-from .config import types
 
 
+entity_types = ['donor', 'sample', 'dataset', 'collection']
 blueprint = Blueprint('routes', __name__, template_folder='templates')
 
 
@@ -37,11 +37,11 @@ def _get_endpoints():
 
 @blueprint.route('/')
 def index():
-    core_props = {'endpoints': _get_endpoints()}
+    flask_data = {'endpoints': _get_endpoints()}
     return render_template(
         'pages/base_react.html',
-        types=types,
-        flask_data=core_props,
+        types=entity_types,
+        flask_data=flask_data,
         title='HuBMAP Data Portal',
         is_home_page=True
     )
@@ -49,11 +49,11 @@ def index():
 
 @blueprint.route('/services')
 def service_status():
-    core_props = {'endpoints': _get_endpoints()}
+    flask_data = {'endpoints': _get_endpoints()}
     return render_template(
         'pages/base_react.html',
-        types=types,
-        flask_data=core_props,
+        types=entity_types,
+        flask_data=flask_data,
         title='Services'
     )
 
@@ -82,7 +82,7 @@ def hbm_redirect(hbm_suffix):
 
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
-    if type not in types:
+    if type not in entity_types:
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
@@ -91,23 +91,23 @@ def details(type, uuid):
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
     template = f'pages/base_react.html'
-    core_props = {'endpoints': _get_endpoints()}
-    core_props.update({
+    flask_data = {
+        'endpoints': _get_endpoints(),
         'entity': entity,
         'vitessce_conf': client.get_vitessce_conf(entity)
-    })
+    }
     return render_template(
         template,
         type=type,
         uuid=uuid,
         title=f'{entity["display_doi"]} | {type.title()}',
-        flask_data=core_props
+        flask_data=flask_data
     )
 
 
 @blueprint.route('/browse/<type>/<uuid>.<ext>')
 def details_ext(type, uuid, ext):
-    if type not in types:
+    if type not in entity_types:
         abort(404)
     if ext != 'json':
         abort(404)
@@ -121,30 +121,30 @@ def details_ext(type, uuid, ext):
 def search():
     entity_type = request.args.get('entity_type[0]')
     title = f'{entity_type}s' if entity_type else 'Search'
-    core_props = {
+    flask_data = {
         'endpoints': _get_endpoints(),
         'title': title
     }
     return render_template(
         'pages/base_react.html',
         title=title,
-        types=types,
-        flask_data=core_props
+        types=entity_types,
+        flask_data=flask_data
     )
 
 
 @blueprint.route('/dev-search')
 def dev_search():
     title = 'Dev Search'
-    core_props = {
+    flask_data = {
         'endpoints': _get_endpoints(),
         'title': title
     }
     return render_template(
         'pages/base_react.html',
         title=title,
-        types=types,
-        flask_data=core_props
+        types=entity_types,
+        flask_data=flask_data
     )
 
 
@@ -154,7 +154,7 @@ def preview_view(name):
     metadata_content = frontmatter.load(filename)
     preview_metadata = metadata_content.metadata
     markdown = metadata_content.content
-    core_props = {
+    flask_data = {
         'title': preview_metadata['title'],
         'markdown': markdown,
         'entity': {
@@ -162,25 +162,23 @@ def preview_view(name):
             'created_by_user_displayname': preview_metadata['created_by_user_displayname'],
             'created_by_user_email': preview_metadata['created_by_user_email'],
         },
+        'vitessce_conf':
+            ('vitessce_conf' in preview_metadata) and preview_metadata['vitessce_conf']
     }
-    if 'vitessce_conf' in preview_metadata:
-        core_props['vitessce_conf'] = preview_metadata['vitessce_conf']
     return render_template(
         'pages/base_react.html',
         title='Preview',
-        flask_data=core_props
+        flask_data=flask_data
     )
 
 
 @blueprint.route('/collections')
 def collections():
-    core_props = {
-        'endpoints': _get_endpoints(),
-    }
+    flask_data = {'endpoints': _get_endpoints()}
     return render_template(
         'pages/base_react.html',
         title='Collections',
-        flask_data=core_props
+        flask_data=flask_data
     )
 
 

@@ -6,6 +6,7 @@ import VizualizationThemeSwitch from 'js/components/Detail/visualization/Visuali
 import VisualizationCollapseButton from 'js/components/Detail/visualization/VisualizationCollapseButton';
 import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
+import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 
 const iconMap = {
   Dataset: <StyledDatasetIcon />,
@@ -33,6 +34,7 @@ function EntityHeaderContent({ display_doi, entity_type, data, shouldDisplayHead
           ))}
           {vizIsFullscreen && (
             <RightDiv>
+              <VisualizationShareButtonWrapper />
               <VizualizationThemeSwitch />
               <VisualizationCollapseButton />
             </RightDiv>
