@@ -1,0 +1,1 @@
+- Double UWSGI buffer size.
