@@ -7,7 +7,18 @@ git diff --quiet || die 'Uncommitted changes: Stash or commit'
 git checkout master
 git pull
 
-EXPECTED_MINOR=v0.`expr $(date +%s) / 86400 / 14 - 1320`
+get_minor_version() {
+  REF_MINOR=$1
+  REF_DATE=$2
+  REF_EPOCH_DAY=`expr $(date -j -f "%d %b %Y" "$REF_DATE" +%s) / 86400`
+  NOW_EPOCH_DAY=`expr $(date +%s) / 86400`
+  DAYS_PAST_REF=`expr $NOW_EPOCH_DAY - $REF_EPOCH_DAY`
+  echo v0.`expr $REF_MINOR + $DAYS_PAST_REF / 14`
+  # Integer division truncates toward 0 for both positive and negative,
+  # so this doesn't work if the reference date is in the future.
+}
+
+EXPECTED_MINOR=`get_minor_version 9 '01 JAN 2021'`
 
 # The docs say that a git tag will be created by default.
 # That would be useful, but it doesn't see to be happening for me.
