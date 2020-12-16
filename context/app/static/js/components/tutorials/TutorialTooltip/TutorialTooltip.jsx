@@ -29,7 +29,7 @@ function TutorialTooltip({ index, isLastStep, size, step: { title, content, cont
       <FlexEnd>
         {index > 0 && <WhiteTextButton onClick={() => decrementSearchDatasetTutorialStep()}>Back</WhiteTextButton>}
         {!isLastStep && <WhiteTextButton onClick={() => incrementSearchDatasetTutorialStep()}>Next</WhiteTextButton>}
-        {isLastStep && <WhiteTextButton onClick={() => closeSearchDatasetTutorial()}>Last</WhiteTextButton>}
+        {isLastStep && <WhiteTextButton onClick={() => closeSearchDatasetTutorial()}>Finish Tutorial</WhiteTextButton>}
       </FlexEnd>
     </StyledPaper>
   );
