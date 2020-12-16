@@ -14,7 +14,7 @@ COPY app app
 COPY ingest-validation-tools ingest-validation-tools
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN npm run build || die 'Make sure Docker has at least 4GB'
+RUN npm run build
 
 FROM tiangolo/uwsgi-nginx-flask:python3.7
 
