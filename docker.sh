@@ -17,7 +17,7 @@ Copy example-app.conf and fill in blanks."
 
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
-docker build --tag $IMAGE_NAME $CONTEXT
+docker build --tag $IMAGE_NAME $CONTEXT || echo 'Make sure Docker has at least 4GB memory.'
 docker run -d \
   --name $CONTAINER_NAME \
   -p $PORT:80 \
