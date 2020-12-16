@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import IconButton from '@material-ui/core/IconButton';
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import Button from '@material-ui/core/Button';
 
 const iconButtonHeight = 40;
 
@@ -41,6 +42,10 @@ function TooltipToggleButton(props) {
   );
 }
 
+const WhiteTextButton = styled(Button)`
+  color: #fff;
+`;
+
 export default TooltipToggleButton;
 
-export { WhiteBackgroundButtonCSS, WhiteBackgroundIconButton, TooltipToggleButton, iconButtonHeight };
+export { WhiteBackgroundButtonCSS, WhiteBackgroundIconButton, TooltipToggleButton, iconButtonHeight, WhiteTextButton };
