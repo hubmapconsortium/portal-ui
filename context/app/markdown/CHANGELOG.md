@@ -1,3 +1,8 @@
+## v0.9.3 - 2020-12-16
+
+- Double UWSGI buffer size.
+
+
 ## v0.9.1 - 2020-12-11
 
 - Add interactive tutorial for dataset search page.
