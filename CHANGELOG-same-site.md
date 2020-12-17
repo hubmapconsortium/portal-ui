@@ -1,0 +1,1 @@
+- Explicitly state how cookies should be handled cross-site. This resolves a console warning.
