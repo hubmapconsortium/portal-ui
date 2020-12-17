@@ -42,7 +42,6 @@
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.9.0",
     "@svgr/webpack": "^5.2.0",
-    "@testing-library/cypress": "^7.0.3",
     "@testing-library/dom": "^7.22.0",
     "@testing-library/jest-dom": "^5.9.0",
     "@testing-library/react": "^10.2.0",
