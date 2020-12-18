@@ -13,7 +13,7 @@ function TooltipProgressButton({ eventHandler, triggerKeyCode, children }) {
     return () => {
       window.removeEventListener('keydown', onKeydown);
     };
-  }, [eventHandler, eventKeyCode]);
+  }, [eventHandler, triggerKeyCode]);
   return <WhiteTextButton onClick={() => eventHandler()}>{children}</WhiteTextButton>;
 }
 
