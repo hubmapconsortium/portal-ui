@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
+import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 import { CenteredDiv, Flex, StyledTypography, StyledPaper, StyledInfoIcon, StyledButton } from './style';
 
 const searchViewStoreSelector = (state) => ({
@@ -14,11 +15,14 @@ const searchViewStoreSelector = (state) => ({
   searchHitsCount: state.searchHitsCount,
 });
 
+const searchDatasetStoreSelector = (state) => state.setTutorialHasExited;
+
 function DatasetSearchPrompt({ setRunTutorial }) {
   const [isDisplayed, setIsDisplayed] = useState(true);
   const [timeoutHasRun, setTimeoutHasRun] = useState(false);
 
   const { searchView, setSearchView, toggleItem, searchHitsCount } = useSearchViewStore(searchViewStoreSelector);
+  const setTutorialHasExited = useSearchDatasetTutorialStore(searchDatasetStoreSelector);
 
   function beginTutorial() {
     if (searchView === 'tile') {
@@ -34,6 +38,11 @@ function DatasetSearchPrompt({ setRunTutorial }) {
   useEffect(() => {
     setTimeout(() => setTimeoutHasRun(true), 1000);
   }, [setTimeoutHasRun]);
+
+  function closePrompt() {
+    setTutorialHasExited(true);
+    setIsDisplayed(false);
+  }
 
   return isDisplayed ? (
     <StyledPaper>
@@ -57,7 +66,7 @@ function DatasetSearchPrompt({ setRunTutorial }) {
         </StyledButton>
       </CenteredDiv>
       <div>
-        <IconButton aria-label="close" onClick={() => setIsDisplayed(false)}>
+        <IconButton aria-label="close" onClick={() => closePrompt()}>
           <CloseRoundedIcon />
         </IconButton>
       </div>

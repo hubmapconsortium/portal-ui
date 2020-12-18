@@ -1,0 +1,3 @@
+- Enable user to traverse tutorial with arrow keys.
+- Alter tutorial language.
+- Fix tutorial bugs.

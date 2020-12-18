@@ -8,7 +8,6 @@ import useSearchViewStore from 'js/stores/useSearchViewStore';
 
 const viewMoreSelector = '#Data-Type div.sk-refinement-list__view-more-action';
 
-const tileViewStepTitle = 'Toggle Display Mode';
 const sortTileViewStepTitle = 'Sort Search Results for Tile View';
 
 const searchViewStoreSelector = (state) => ({
@@ -22,32 +21,33 @@ const defaultSteps = [
     target: '#Data-Type div.sk-item-list > div:nth-child(1)',
     disableBeacon: true,
     content: `The Dataset Metadata menu on the left side allows filtering datasets by any combination of metadata categories: Data Type, Organ and Specimen Type.
-      ${' '}Search results update automatically as you edit the selection of filters.`,
+    Search results update automatically as you edit the selection of filters.`,
     title: 'Filter Your Browsing',
   },
   {
     target: 'div.sk-search-box',
     content:
-      'To further narrow the relevant datasets, type search terms or phrases in “quotes" into the Search bar. Datasets containing any of the search terms will be returned',
+      'To further narrow the relevant datasets, type search terms or phrases in “quotes" into the Search bar. Datasets containing any of the search terms will be returned.',
     disableBeacon: true,
     title: 'Search Datasets by Free Text',
   },
   {
     target: 'div.sk-layout__results.sk-results-list > table > thead > tr > th:nth-child(3)',
-    content: `Press the arrow button by the relevant column to sort search results. A bolded arrow indicates the current sorting selection.
-      ${' '}Click again to reverse the order.`,
+    content: `Clicking the arrow button by the relevant column will sort search results.
+    A bolded arrow indicates the current sorting selection.
+    Clicking again will reverse the order.`,
     disableBeacon: true,
     title: 'Sort Search Results',
   },
   {
     target: '#tile-view-toggle-button',
-    content: 'Toggle the results display mode between table view and tile view.',
-    title: tileViewStepTitle,
+    content: 'Toggling the results display mode will switch between table view and tile view.',
+    title: 'Toggle Display Mode',
     disableBeacon: true,
   },
   {
     target: '#search-tiles-sort-button',
-    content: 'To sort your search results in tile view, select your sorting option in this dropdown menu.',
+    content: 'Selecting your sorting option in this dropdown menu will sort your search results in tile view.',
     disableBeacon: true,
     title: sortTileViewStepTitle,
   },
@@ -55,7 +55,7 @@ const defaultSteps = [
 
 const stepToAddIfViewMoreExists = {
   target: '#Data-Type div.sk-refinement-list__view-more-action',
-  content: 'Click the View All button to display the entire list of filters in the selected category.',
+  content: 'Clicking the "View All" button will display the entire list of filters in the selected category.',
   disableBeacon: true,
   title: 'View More Filters',
 };
@@ -78,7 +78,7 @@ function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIn
       setSearchView('table');
     }
 
-    if (action === ACTIONS.NEXT && title === tileViewStepTitle && searchView === 'table') {
+    if (action === ACTIONS.NEXT && title === sortTileViewStepTitle && searchView === 'table') {
       toggleItem('tile');
       setSearchView('tile');
     }

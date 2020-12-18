@@ -15,6 +15,7 @@ const useSearchDatasetTutorialStore = create((set) => ({
       searchDatasetTutorialStep: state.searchDatasetTutorialStep - 1,
     })),
   tutorialHasExited: localStorage.getItem(localStorageKey),
+  setTutorialHasExited: (val) => localStorage.setItem(localStorageKey, val),
   closeSearchDatasetTutorial: () => {
     localStorage.setItem(localStorageKey, true);
     set({ runSearchDatasetTutorial: false, tutorialHasExited: true });
