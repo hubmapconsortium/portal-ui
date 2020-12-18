@@ -29,18 +29,17 @@ function TutorialTooltip({ index, isLastStep, size, step: { title, content, cont
       {contentIsComponent ? content : <WhiteTypography variant="body1">{content}</WhiteTypography>}
       <FlexEnd>
         {index > 0 && (
-          <TooltipProgressButton eventHandler={decrementSearchDatasetTutorialStep} eventKeyCode={37}>
+          <TooltipProgressButton eventHandler={decrementSearchDatasetTutorialStep} triggerKeyCode={37}>
             Back
           </TooltipProgressButton>
         )}
-        {!isLastStep && (
-          <TooltipProgressButton eventHandler={incrementSearchDatasetTutorialStep} eventKeyCode={39}>
-            Next
-          </TooltipProgressButton>
-        )}
-        {isLastStep && (
-          <TooltipProgressButton eventHandler={closeSearchDatasetTutorial} eventKeyCode={39}>
+        {isLastStep ? (
+          <TooltipProgressButton eventHandler={closeSearchDatasetTutorial} triggerKeyCode={39}>
             Finish Tutorial
+          </TooltipProgressButton>
+        ) : (
+          <TooltipProgressButton eventHandler={incrementSearchDatasetTutorialStep} triggerKeyCode={39}>
+            Next
           </TooltipProgressButton>
         )}
       </FlexEnd>

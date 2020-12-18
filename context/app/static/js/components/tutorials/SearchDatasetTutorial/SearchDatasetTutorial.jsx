@@ -34,8 +34,9 @@ const defaultSteps = [
   },
   {
     target: 'div.sk-layout__results.sk-results-list > table > thead > tr > th:nth-child(3)',
-    content: `Clicking the arrow button by the relevant column will sort search results. A bolded arrow indicates the current sorting selection.
-    ${' '}Clicking again will reverse the order.`,
+    content: `Clicking the arrow button by the relevant column will sort search results.
+    A bolded arrow indicates the current sorting selection.
+    Clicking again will reverse the order.`,
     disableBeacon: true,
     title: 'Sort Search Results',
   },

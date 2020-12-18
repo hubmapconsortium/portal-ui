@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 
 import { WhiteTextButton } from 'js/shared-styles/buttons';
 
-function TooltipProgressButton({ eventHandler, eventKeyCode, children }) {
+function TooltipProgressButton({ eventHandler, triggerKeyCode, children }) {
   useEffect(() => {
     function onKeydown(event) {
-      if (event.keyCode === eventKeyCode) {
+      if (event.keyCode === triggerKeyCode) {
         eventHandler();
       }
     }
