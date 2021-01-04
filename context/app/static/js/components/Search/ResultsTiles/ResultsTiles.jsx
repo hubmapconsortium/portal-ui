@@ -13,7 +13,7 @@ function ResultsTiles(props) {
   const capitalizedType = capitalizeString(type);
 
   return (
-    <TilesLayout>
+    <TilesLayout data-testid="search-results-tiles">
       {hits.map((hit) => (
         <EntityTile
           key={hit._source.uuid}

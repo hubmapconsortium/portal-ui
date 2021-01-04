@@ -31,6 +31,7 @@ function DropdownListbox(props) {
       <SelectionButton
         ref={anchorRef}
         id={`${id}-button`}
+        data-testid={`${id}-button`}
         aria-haspopup="listbox"
         disableElevation
         variant="contained"
