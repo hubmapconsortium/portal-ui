@@ -1,1 +1,2 @@
 - Add cypress tests for dataset search tutorial.
+- Upgrade cypress.
