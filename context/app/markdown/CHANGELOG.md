@@ -1,3 +1,14 @@
+## v0.9.4 - 2021-01-05
+
+- Function to calculate minor version numbers given a reference.
+- No longer run tests on Travis.
+- Explicitly state how cookies should be handled cross-site. This resolves a console warning.
+- Enable user to traverse tutorial with arrow keys.
+- Alter tutorial language.
+- Fix tutorial bugs.
+- Disable schema validation warnings for now.
+
+
 ## v0.9.3 - 2020-12-16
 
 - Double UWSGI buffer size.

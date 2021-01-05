@@ -9,6 +9,7 @@ class DefaultConfig(object):
     # but they may expect certain keys to be present.
 
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=60)
+    SESSION_COOKIE_SAMESITE = 'Lax'
 
     ENTITY_API_TIMEOUT = 5
     PORTAL_INDEX_PATH = '/portal/search'
