@@ -7,7 +7,7 @@
   "devDependencies": {
     "@testing-library/cypress": "^7.0.3",
     "artillery": "^1.6.1",
-    "cypress": "^4.12.1"
+    "cypress": "^6.2.1"
   },
   "scripts": {
     "cypress:open": "cypress open",
