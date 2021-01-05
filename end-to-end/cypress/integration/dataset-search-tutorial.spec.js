@@ -1,3 +1,7 @@
+import defaultSearch from '../fixtures/dataset-search/default';
+import limitedDataTypesSearch from '../fixtures/dataset-search/heart-only-5-or-less-data-types';
+
+
 function traverseSteps(steps){
   cy.wrap(steps).each((step, i) => {
     cy.findByText(step.content).should('exist');
@@ -31,6 +35,10 @@ describe('dataset search tutorial', () => {
       })
 
       it('traverses the steps', () => {
+        cy.intercept('POST', 'https://search*.hubmapconsortium.org/portal/search', {
+          statusCode: 200,
+          body: defaultSearch,
+        });
         cy.visit('/search?entity_type[0]=Dataset',);
         cy.findByText("Begin the Dataset Search Tutorial").click();
         const stepsCopy = [...defaultSteps];
@@ -40,6 +48,10 @@ describe('dataset search tutorial', () => {
       });
 
       it('shows the correct search view', () => {
+        cy.intercept('POST', 'https://search*.hubmapconsortium.org/portal/search', {
+          statusCode: 200,
+          body: defaultSearch,
+        });
         cy.visit('/search?entity_type[0]=Dataset');
         cy.findByTestId('tile-view-toggle-button').click();
         assertTileView();
@@ -52,6 +64,17 @@ describe('dataset search tutorial', () => {
         assertTileView();
         cy.findByRole('button', { name: 'Back' }).click();
         assertTableView();
+      });
+
+      it('handles skipping the View More Filters when there are 5 or less data types available to filter', () => {
+        cy.intercept('POST', 'https://search*.hubmapconsortium.org/portal/search', {
+          statusCode: 200,
+          body: limitedDataTypesSearch,
+        });
+        cy.visit('/search?entity_type[0]=Dataset',);
+        cy.findByText("Begin the Dataset Search Tutorial").click();
+        traverseSteps(defaultSteps);
+        cy.findByText("Begin the Dataset Search Tutorial").should('not.exist');
       });
     });
 });
