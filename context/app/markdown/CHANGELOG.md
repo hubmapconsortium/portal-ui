@@ -1,4 +1,4 @@
-## v0.9.4 - 2021-01-05
+## v0.9.5 - 2021-01-05
 
 - Function to calculate minor version numbers given a reference.
 - No longer run tests on Travis.
