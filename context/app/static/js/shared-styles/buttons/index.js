@@ -35,7 +35,7 @@ function TooltipToggleButton(props) {
 
   return (
     <Tooltip title={tooltipTitle}>
-      <WhiteBackgroundToggleButton {...rest} id={id}>
+      <WhiteBackgroundToggleButton {...rest} id={id} data-testid={id}>
         {children}
       </WhiteBackgroundToggleButton>
     </Tooltip>

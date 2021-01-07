@@ -11,7 +11,7 @@ function ResultsTable(props) {
   const { hits, resultFields, detailsUrlPrefix, idField, sortOptions } = props;
   /* eslint-disable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
   return (
-    <StyledTable>
+    <StyledTable data-testid="search-results-table">
       <SortingSelector options={sortOptions} listComponent={SortingTableHead} />
       {hits.map((hit) => (
         <StyledTableBody key={hit._id}>
