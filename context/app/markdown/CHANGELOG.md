@@ -1,4 +1,4 @@
-## v0.9.4 - 2021-01-05
+## v0.9.5 - 2021-01-05
 
 - Function to calculate minor version numbers given a reference.
 - No longer run tests on Travis.
@@ -7,6 +7,10 @@
 - Alter tutorial language.
 - Fix tutorial bugs.
 - Disable schema validation warnings for now.
+
+## v0.9.4
+
+- Skipped because of deployment snafu.
 
 
 ## v0.9.3 - 2020-12-16
