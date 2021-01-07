@@ -8,6 +8,10 @@
 - Fix tutorial bugs.
 - Disable schema validation warnings for now.
 
+## v0.9.4
+
+- Skipped because of deployment snafu.
+
 
 ## v0.9.3 - 2020-12-16
 
