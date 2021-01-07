@@ -18,7 +18,7 @@ function traverseSteps(steps){
 function assertTileView(){
   cy.findByTestId('tile-view-toggle-button').should('have.attr', 'aria-pressed', 'true');
   cy.findByTestId('search-results-tiles').should('exist');
-  cy.findByTestId('search-tiles-sort-button').should('exist');
+  cy.findByTestId('search-tiles-sort-button').should('be.visible');
 }
 
 function assertTableView(){
