@@ -1,3 +1,9 @@
+## v0.9.6 - 2021-01-11
+
+- Add cypress tests for dataset search tutorial.
+- Upgrade cypress.
+
+
 ## v0.9.5 - 2021-01-05
 
 - Function to calculate minor version numbers given a reference.
