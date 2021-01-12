@@ -1,0 +1,1 @@
+- Emulate travis `[skip ci]`.
