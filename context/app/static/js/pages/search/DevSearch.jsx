@@ -56,8 +56,10 @@ function DevSearch() {
         checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
         checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),
         checkboxFilter('no_files', 'No files?', BoolMustNot(ExistsQuery('files'))),
-        checkboxFilter('has_files', 'Spatially Located (CCF)?', ExistsQuery('rui_location')),
-        checkboxFilter('no_files', 'Not Spatially Located (CCF)?', BoolMustNot(ExistsQuery('rui_location'))),
+        checkboxFilter('has_rui_sample', 'Spatial Sample?', ExistsQuery('rui_location')),
+        checkboxFilter('no_rui_sample', 'Not Spatial Sample?', BoolMustNot(ExistsQuery('rui_location'))),
+        checkboxFilter('has_rui_dataset', 'Spatial Dataset?', ExistsQuery('ancestors.rui_location')),
+        checkboxFilter('no_rui_dataset', 'Not Spatial Dataset?', BoolMustNot(ExistsQuery('ancestors.rui_location'))),
         checkboxFilter('has_errors', 'Validation Errors?', ExistsQuery('mapper_metadata.validation_errors')),
         checkboxFilter(
           'no_errors',
