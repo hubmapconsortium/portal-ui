@@ -7,6 +7,10 @@ $secondary-gray: #636363;
     margin: 16px 0px 32px 0px;
 }
 
+.selected-filter--entity_type {
+  display: none;
+}
+
 .sk-selected-filters-option {
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.12);
