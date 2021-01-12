@@ -47,7 +47,8 @@ The webpack dev server proxies all requests outside of those for files in the pu
 - Components which share a common domain can be placed in a directory within components named after the domain.
 
 ### Changelog files
-Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
+Branches can be made with `./branch.sh "Describe work here"`:
+This creates `CHANGELOG-describe-work-here.md`.
 These are concatenated by `push.sh`.
 
 ## Testing
