@@ -7,6 +7,14 @@ $secondary-gray: #636363;
     margin: 16px 0px 32px 0px;
 }
 
+.sk-selected-filters-option {
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    margin-right: 16px;
+    margin-top: 16px;
+}
+
 .sk-panel__header {
     // We pull out the title prop and use it in the AccordionSummary.
     // Easier to hide with CSS than change the rendering.
