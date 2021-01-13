@@ -1,0 +1,1 @@
+- Pin the Ubuntu version used by github CI.
