@@ -7,6 +7,8 @@ import CollectionDatasetsTable from 'js/components/Detail/CollectionDatasetsTabl
 import CollectionsAffiliationsTable from 'js/components/Detail/CollectionsAffiliationsTable';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 
+import { StyledOpenInNewRoundedIcon } from './style';
+
 function Collection(props) {
   const { collection: collectionData } = props;
   const {
@@ -39,7 +41,7 @@ function Collection(props) {
             last_modified_timestamp={last_modified_timestamp}
           >
             <LightBlueLink href={doi_url} target="_blank" rel="noopener noreferrer" variant="body1">
-              {new URL(doi_url).pathname.slice(1)}
+              doi:{new URL(doi_url).pathname.slice(1)} <StyledOpenInNewRoundedIcon />
             </LightBlueLink>
           </Summary>
           {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}
