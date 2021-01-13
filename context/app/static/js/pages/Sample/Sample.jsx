@@ -33,6 +33,7 @@ function SampleDetail(props) {
     last_modified_timestamp,
     description,
     metadata,
+    rui_location,
   } = assayMetadata;
 
   const shouldDisplaySection = {
@@ -69,7 +70,11 @@ function SampleDetail(props) {
             {mapped_specimen_type}
           </Typography>
         </Summary>
-        <SampleTissue mapped_specimen_type={mapped_specimen_type} mapped_organ={mapped_organ} />
+        <SampleTissue
+          mapped_specimen_type={mapped_specimen_type}
+          mapped_organ={mapped_organ}
+          rui_location={rui_location}
+        />
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}

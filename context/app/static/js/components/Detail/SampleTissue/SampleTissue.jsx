@@ -17,7 +17,8 @@ function MetadataItem(props) {
 }
 
 function SampleTissue(props) {
-  const { mapped_organ, mapped_specimen_type } = props;
+  const { mapped_organ, mapped_specimen_type, rui_location } = props;
+  const pretty_rui_location = JSON.stringify(JSON.parse(rui_location), null, 2);
   return (
     <SectionContainer id="tissue">
       <SectionHeader>Tissue</SectionHeader>
@@ -36,6 +37,7 @@ function SampleTissue(props) {
             </LightBlueLink>
             .
           </>
+          <pre>{pretty_rui_location}</pre>
         </MetadataItem>
       </FlexPaper>
     </SectionContainer>
@@ -45,6 +47,7 @@ function SampleTissue(props) {
 SampleTissue.propTypes = {
   mapped_organ: PropTypes.string.isRequired,
   mapped_specimen_type: PropTypes.string.isRequired,
+  rui_location: PropTypes.string.isRequired,
 };
 
 export default SampleTissue;

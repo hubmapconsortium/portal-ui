@@ -1,0 +1,1 @@
+- Show RUI location as a blob of JSON.
