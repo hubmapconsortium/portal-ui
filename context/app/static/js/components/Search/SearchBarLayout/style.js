@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import CancelIcon from '@material-ui/icons/CancelRounded';
 
 const Flex = styled.div`
   display: flex;
@@ -11,4 +12,11 @@ const StyledDiv = styled.div`
   align-items: center;
 `;
 
-export { Flex, StyledDiv };
+const StyledCancelIcon = styled(CancelIcon)`
+  height: 0.8em;
+  margin: 0 8px;
+  color: ${(props) => props.theme.palette.primary.main};
+  cursor: pointer;
+`;
+
+export { Flex, StyledDiv, StyledCancelIcon };
