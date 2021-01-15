@@ -39,7 +39,7 @@ After checking out the project, cd-ing into it, and setting up a Python3.7 virtu
 The webpack dev server serves all files within the public directory and provides hot module replacement for the react application;
 The webpack dev server proxies all requests outside of those for files in the public directory to the flask server.
 
-**Note**: Searchkit, our interface to Elasticsearch, has changed significantly in the lastest release. Documentation for the version we use can be found [here](https://github.com/searchkit/searchkit/tree/v2.0.0/docs).
+Note: Searchkit, our interface to Elasticsearch, has changed significantly in the lastest release. Documentation for version 2.0 can be found [here](http://searchkit.github.io/searchkit/stable/).
 
 ### React File Structure
 - Components with tests or styles should be placed in to their own directory.
