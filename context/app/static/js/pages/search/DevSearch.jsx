@@ -74,7 +74,7 @@ function DevSearch() {
 
   const allProps = { ...searchProps, apiUrl: elasticsearchEndpoint };
 
-  const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={DevResults} />;
+  const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={DevResults} isDevSearch />;
   return (
     <>
       <SearchHeader component="h1" variant="h2">

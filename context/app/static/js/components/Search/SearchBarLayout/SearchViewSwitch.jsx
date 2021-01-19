@@ -55,11 +55,18 @@ function createSearchViewSwitch(labelIconPairs) {
 const SearchViewSwitch = createSearchViewSwitch([
   { label: 'Table', Icon: ListRoundedIcon },
   { label: 'Tile', Icon: GridOnRoundedIcon },
+]);
+
+const DevSearchViewSwitch = createSearchViewSwitch([
+  { label: 'Table', Icon: ListRoundedIcon },
   { label: 'CCF', Icon: BodyRoundedIcon },
 ]);
 
 SearchViewSwitch.propTypes = {
   toggleItem: PropTypes.func.isRequired,
 };
+DevSearchViewSwitch.propTypes = {
+  toggleItem: PropTypes.func.isRequired,
+};
 
-export default SearchViewSwitch;
+export { SearchViewSwitch as default, DevSearchViewSwitch };

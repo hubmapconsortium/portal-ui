@@ -26,6 +26,7 @@ function SearchWrapper(props) {
     queryFields,
     type,
     isLoggedIn,
+    isDevSearch,
     resultsComponent: ResultsComponent,
   } = props;
 
@@ -47,7 +48,7 @@ function SearchWrapper(props) {
   return (
     <SearchkitProvider searchkit={searchkit}>
       <>
-        <SearchBarLayout queryFields={queryFields} sortOptions={sortOptions} />
+        <SearchBarLayout queryFields={queryFields} sortOptions={sortOptions} isDevSearch={isDevSearch} />
         <LayoutBody>
           <StyledSideBar>
             <Accordions filters={filters} />
