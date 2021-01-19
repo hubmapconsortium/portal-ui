@@ -12,7 +12,7 @@ const useSavedEntitiesStore = create(
         }),
     }),
     {
-      name: 'saved-entities-list',
+      name: 'saved_entities',
     },
   ),
 );
