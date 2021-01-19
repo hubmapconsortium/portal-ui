@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line import/named
-import { listFilter, rangeFilter, field } from './utils';
+import { listFilter, rangeFilter, field, hierarchicalFilter } from './utils';
 
 const bmiField = 'body_mass_index_value';
 const ageField = 'age_value';
@@ -70,8 +70,7 @@ const datasetConfig = {
       listFilter('mapped_data_types', 'Data Type'),
       listFilter('origin_sample.mapped_organ', 'Organ'),
       listFilter('source_sample.mapped_specimen_type', 'Specimen Type'),
-      listFilter('mapped_status', 'Status'),
-      listFilter('mapped_data_access_level', 'Access Level'),
+      hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
