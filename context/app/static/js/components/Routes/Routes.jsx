@@ -17,6 +17,7 @@ const Preview = lazy(() => import('js/pages/Preview'));
 const Services = lazy(() => import('js/pages/Services'));
 const Collections = lazy(() => import('js/pages/Collections'));
 const Markdown = lazy(() => import('js/components/Markdown'));
+const SavedLists = lazy(() => import('js/pages/SavedLists'));
 
 function Routes(props) {
   const { flaskData } = props;
@@ -109,6 +110,14 @@ function Routes(props) {
     return (
       <Route>
         <Collections />
+      </Route>
+    );
+  }
+
+  if (urlPath === '/my-lists') {
+    return (
+      <Route>
+        <SavedLists />
       </Route>
     );
   }
