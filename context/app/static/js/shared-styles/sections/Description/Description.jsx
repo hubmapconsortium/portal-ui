@@ -5,10 +5,10 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { StyledPaper, StyledInfoIcon } from './style';
 
 function Description(props) {
-  const { children } = props;
+  const { children, padding } = props;
   return (
     <SectionContainer>
-      <StyledPaper>
+      <StyledPaper $padding={padding}>
         <StyledInfoIcon color="primary" />
         <Typography variant="body1">{children}</Typography>
       </StyledPaper>
