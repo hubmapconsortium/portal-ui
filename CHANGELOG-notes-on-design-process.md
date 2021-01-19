@@ -1,1 +1,0 @@
-- Add notes on design process to README.

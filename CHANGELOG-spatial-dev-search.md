@@ -1,1 +1,0 @@
-- Add a dev search facet to find spatially located datasets; Fix a bug in the facet for spatially located samples.

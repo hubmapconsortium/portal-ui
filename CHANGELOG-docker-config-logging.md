@@ -1,1 +1,0 @@
-- Log config during docker startup.
