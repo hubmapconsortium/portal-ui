@@ -35,24 +35,6 @@ function DevResults(props) {
   );
 }
 
-/*
-    <Hits
-      hitsPerPage={hitsPerPage}
-      listComponent={
-        <ResultsTable
-          resultFields={tableResultFields}
-          detailsUrlPrefix={detailsUrlPrefix}
-          idField={idField}
-          sortOptions={sortOptions}
-        />
-      }
-      sourceFilter={resultFieldIds}
-      customHighlight={{
-        fields: { everything: { type: 'plain' } },
-      }}
-    />
-*/
-
 DevResults.propTypes = {
   sortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
