@@ -33,33 +33,22 @@ function SearchViewSwitch(props) {
 
   return (
     <ToggleButtonGroup value={searchView} exclusive onChange={(e, view) => handleChangeView(view)}>
-      <TooltipToggleButton
-        tooltipComponent={SecondaryBackgroundTooltip}
-        tooltipTitle="Switch to Table View"
-        disableRipple
-        value="table"
-        id="table-view-toggle-button"
-      >
-        <ListRoundedIcon color={searchView === 'table' ? 'primary' : 'secondary'} />
-      </TooltipToggleButton>
-      <TooltipToggleButton
-        tooltipComponent={SecondaryBackgroundTooltip}
-        tooltipTitle="Switch to Tile View"
-        disableRipple
-        value="tile"
-        id="tile-view-toggle-button"
-      >
-        <GridOnRoundedIcon color={searchView === 'tile' ? 'primary' : 'secondary'} />
-      </TooltipToggleButton>
-      <TooltipToggleButton
-        tooltipComponent={SecondaryBackgroundTooltip}
-        tooltipTitle="Switch to CCF View"
-        disableRipple
-        value="ccf"
-        id="ccf-view-toggle-button"
-      >
-        <BodyRoundedIcon color={searchView === 'ccf' ? 'primary' : 'secondary'} />
-      </TooltipToggleButton>
+      {[
+        { label: 'Table', Icon: ListRoundedIcon },
+        { label: 'Tile', Icon: GridOnRoundedIcon },
+        { label: 'CCF', Icon: BodyRoundedIcon },
+      ].map(({ label, Icon }) => (
+        <TooltipToggleButton
+          tooltipComponent={SecondaryBackgroundTooltip}
+          tooltipTitle={`Switch to ${label} View`}
+          disableRipple
+          value={label.toLowerCase()}
+          id={`${label.toLowerCase()}-view-toggle-button`}
+          key={label}
+        >
+          <Icon color={searchView === label.toLowerCase() ? 'primary' : 'secondary'} />
+        </TooltipToggleButton>
+      ))}
     </ToggleButtonGroup>
   );
 }
