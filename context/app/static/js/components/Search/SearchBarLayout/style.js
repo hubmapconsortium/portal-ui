@@ -32,4 +32,9 @@ const SelectedFilterOption = styled.div`
   line-height: 20px;
 `;
 
-export { Flex, CenteredDiv, StyledCancelIcon, SelectedFilterOption };
+const SelectedFilterOptionName = styled.div`
+  font-weight: 200 !important;
+  color: #000;
+`;
+
+export { Flex, CenteredDiv, StyledCancelIcon, SelectedFilterOption, SelectedFilterOptionName };

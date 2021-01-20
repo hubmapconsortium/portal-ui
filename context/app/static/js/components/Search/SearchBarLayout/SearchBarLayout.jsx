@@ -5,18 +5,18 @@ import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle } from 
 
 import SearchViewSwitch from '../SearchViewSwitch';
 import TilesSortDropdown from '../TilesSortDropdown';
-import { Flex, CenteredDiv, StyledCancelIcon, SelectedFilterOption } from './style';
+import { Flex, CenteredDiv, StyledCancelIcon, SelectedFilterOption, SelectedFilterOptionName } from './style';
 
 function SelectedFilter(props) {
-  const { bemBlocks, labelKey, labelValue, removeFilter, filterId } = props;
+  const { labelKey, labelValue, removeFilter, filterId } = props;
   if (filterId === 'entity_type') {
     return null;
   }
   return (
     <SelectedFilterOption>
-      <div className={bemBlocks.option('name')}>
+      <SelectedFilterOptionName>
         {labelKey}: {labelValue}
-      </div>
+      </SelectedFilterOptionName>
       <StyledCancelIcon onClick={removeFilter} />
     </SelectedFilterOption>
   );
