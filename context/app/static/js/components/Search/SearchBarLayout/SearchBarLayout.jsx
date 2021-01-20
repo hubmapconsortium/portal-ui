@@ -1,26 +1,11 @@
-/* eslint-disable max-classes-per-file */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle } from 'searchkit';
 
 import SearchViewSwitch from '../SearchViewSwitch';
 import TilesSortDropdown from '../TilesSortDropdown';
-import { Flex, CenteredDiv, StyledCancelIcon, SelectedFilterDiv, SelectedFilterName } from './style';
-
-function SelectedFilter(props) {
-  const { labelKey, labelValue, removeFilter, filterId } = props;
-  if (filterId === 'entity_type') {
-    return null;
-  }
-  return (
-    <SelectedFilterDiv>
-      <SelectedFilterName>
-        {labelKey}: {labelValue}
-      </SelectedFilterName>
-      <StyledCancelIcon onClick={removeFilter} />
-    </SelectedFilterDiv>
-  );
-}
+import SelectedFilter from '../SelectedFilter';
+import { Flex, CenteredDiv } from './style';
 
 function SearchBarLayout(props) {
   const { queryFields, sortOptions } = props;
