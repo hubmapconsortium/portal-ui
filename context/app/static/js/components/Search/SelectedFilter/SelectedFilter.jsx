@@ -1,5 +1,5 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { StyledCancelIcon, SelectedFilterDiv, SelectedFilterName } from './style';
 
@@ -17,5 +17,12 @@ function SelectedFilter(props) {
     </SelectedFilterDiv>
   );
 }
+
+SelectedFilter.propTypes = {
+  labelKey: PropTypes.string.isRequired,
+  labelValue: PropTypes.string.isRequired,
+  filterId: PropTypes.string.isRequired,
+  removeFilter: PropTypes.func.isRequired,
+};
 
 export default SelectedFilter;
