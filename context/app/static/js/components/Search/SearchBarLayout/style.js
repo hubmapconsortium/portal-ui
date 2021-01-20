@@ -23,9 +23,7 @@ const SelectedFilterDiv = styled.div`
   background-color: white;
   border: 1px solid ${(props) => props.theme.palette.hoverShadow.main};
   border-radius: 8px;
-  margin-right: 16px;
-  margin-top: 16px;
-  margin-bottom: 0;
+  margin: 16px 16px 0 0;
   display: flex;
   padding: 10px 0 10px 10px;
   font-size: 14px;
