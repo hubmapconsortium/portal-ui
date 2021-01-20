@@ -1,9 +1,12 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import useSavedListsStore from 'js/stores/useSavedListsStore';
 import Description from 'js/shared-styles/sections/Description';
+
+import { SeparatedFlexRow, FlexBottom } from './style';
 
 const useSavedListsSelector = (state) => ({
   savedLists: state.savedLists,
@@ -28,12 +31,21 @@ function SavedLists() {
         <LightBlueLink href="/search?entity_type[0]=Dataset">datasets</LightBlueLink> search pages to explore data to
         save.
       </Description>
-      <Typography variant="h3" component="h2">
-        All Created Lists
-      </Typography>
-      <Typography variant="h5" component="h3">
-        {Object.keys(savedLists).length} Lists
-      </Typography>
+      <SeparatedFlexRow>
+        <div>
+          <Typography variant="h3" component="h2">
+            All Created Lists
+          </Typography>
+          <Typography variant="h5" component="h3">
+            {Object.keys(savedLists).length} Lists
+          </Typography>
+        </div>
+        <FlexBottom>
+          <Button variant="contained" color="primary">
+            Create New List
+          </Button>
+        </FlexBottom>
+      </SeparatedFlexRow>
       <Description padding="20px 20px">No lists created yet.</Description>
     </>
   );
