@@ -13,7 +13,7 @@ const CenteredDiv = styled.div`
 `;
 
 const StyledCancelIcon = styled(CancelIcon)`
-  height: 0.8em;
+  height: 1.2rem;
   margin: 0 8px;
   color: ${(props) => props.theme.palette.primary.main};
   cursor: pointer;
