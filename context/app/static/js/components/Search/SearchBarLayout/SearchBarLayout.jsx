@@ -5,7 +5,7 @@ import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle } from 
 
 import SearchViewSwitch from '../SearchViewSwitch';
 import TilesSortDropdown from '../TilesSortDropdown';
-import { Flex, StyledDiv, StyledCancelIcon } from './style';
+import { Flex, CenteredDiv, StyledCancelIcon } from './style';
 
 function SelectedFilter(props) {
   const { bemBlocks, labelKey, labelValue, removeFilter, filterId } = props;
@@ -25,10 +25,10 @@ function SearchBarLayout(props) {
     <>
       <Flex>
         <SearchBox autofocus queryFields={queryFields} />
-        <StyledDiv>
+        <CenteredDiv>
           <SortingSelector options={sortOptions} listComponent={TilesSortDropdown} />
           <ViewSwitcherToggle listComponent={SearchViewSwitch} />
-        </StyledDiv>
+        </CenteredDiv>
       </Flex>
       <SelectedFilters itemComponent={SelectedFilter} />
     </>
