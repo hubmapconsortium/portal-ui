@@ -19,4 +19,17 @@ const StyledCancelIcon = styled(CancelIcon)`
   cursor: pointer;
 `;
 
-export { Flex, CenteredDiv, StyledCancelIcon };
+const SelectedFilterOption = styled.div`
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  margin-right: 16px;
+  margin-top: 16px;
+  margin-bottom: 0;
+  display: flex;
+  padding: 10px 0 10px 10px;
+  font-size: 14px;
+  line-height: 20px;
+`;
+
+export { Flex, CenteredDiv, StyledCancelIcon, SelectedFilterOption };
