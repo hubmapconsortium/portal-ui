@@ -19,7 +19,7 @@ const StyledCancelIcon = styled(CancelIcon)`
   cursor: pointer;
 `;
 
-const SelectedFilterOption = styled.div`
+const SelectedFilterDiv = styled.div`
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 8px;
@@ -32,9 +32,9 @@ const SelectedFilterOption = styled.div`
   line-height: 20px;
 `;
 
-const SelectedFilterOptionName = styled.div`
+const SelectedFilterName = styled.div`
   font-weight: 200 !important;
   color: #000;
 `;
 
-export { Flex, CenteredDiv, StyledCancelIcon, SelectedFilterOption, SelectedFilterOptionName };
+export { Flex, CenteredDiv, StyledCancelIcon, SelectedFilterDiv, SelectedFilterName };

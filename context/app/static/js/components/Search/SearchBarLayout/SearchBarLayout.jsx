@@ -5,7 +5,7 @@ import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle } from 
 
 import SearchViewSwitch from '../SearchViewSwitch';
 import TilesSortDropdown from '../TilesSortDropdown';
-import { Flex, CenteredDiv, StyledCancelIcon, SelectedFilterOption, SelectedFilterOptionName } from './style';
+import { Flex, CenteredDiv, StyledCancelIcon, SelectedFilterDiv, SelectedFilterName } from './style';
 
 function SelectedFilter(props) {
   const { labelKey, labelValue, removeFilter, filterId } = props;
@@ -13,12 +13,12 @@ function SelectedFilter(props) {
     return null;
   }
   return (
-    <SelectedFilterOption>
-      <SelectedFilterOptionName>
+    <SelectedFilterDiv>
+      <SelectedFilterName>
         {labelKey}: {labelValue}
-      </SelectedFilterOptionName>
+      </SelectedFilterName>
       <StyledCancelIcon onClick={removeFilter} />
-    </SelectedFilterOption>
+    </SelectedFilterDiv>
   );
 }
 
