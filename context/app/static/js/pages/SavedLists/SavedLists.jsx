@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import CreateListDialog from 'js/components/SavedLists/CreateListDialog';
+import CreateListDialog from 'js/components/savedLists/CreateListDialog';
+import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { Panel, PanelScrollBox } from 'js/shared-styles/panels';
 import useSavedListsStore from 'js/stores/useSavedListsStore';
+import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import Description from 'js/shared-styles/sections/Description';
 
 import { SeparatedFlexRow, FlexBottom } from './style';
@@ -14,9 +16,11 @@ const useSavedListsSelector = (state) => ({
   savedLists: state.savedLists,
 });
 
+const usedSavedEntitiesSelector = (state) => state.savedEntities;
+
 function SavedLists() {
   const { savedLists } = useSavedListsStore(useSavedListsSelector);
-
+  const savedEntities = useSavedEntitiesStore(usedSavedEntitiesSelector);
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   return (
@@ -30,12 +34,16 @@ function SavedLists() {
       <Typography variant="h3" component="h2">
         My Saves Lists
       </Typography>
-      <Description padding="20px 20px">
-        No items saved. Navigate to <LightBlueLink href="/search?entity_type[0]=Donor">donors</LightBlueLink>,{' '}
-        <LightBlueLink href="/search?entity_type[0]=Sample">samples</LightBlueLink> or{' '}
-        <LightBlueLink href="/search?entity_type[0]=Dataset">datasets</LightBlueLink> search pages to explore data to
-        save.
-      </Description>
+      {savedEntities.length === 0 ? (
+        <Description padding="20px 20px">
+          No items saved. Navigate to <LightBlueLink href="/search?entity_type[0]=Donor">donors</LightBlueLink>,{' '}
+          <LightBlueLink href="/search?entity_type[0]=Sample">samples</LightBlueLink> or{' '}
+          <LightBlueLink href="/search?entity_type[0]=Dataset">datasets</LightBlueLink> search pages to explore data to
+          save.
+        </Description>
+      ) : (
+        <SavedEntitiesTable savedEntities={savedEntities} />
+      )}
       <SeparatedFlexRow>
         <div>
           <Typography variant="h3" component="h2">
