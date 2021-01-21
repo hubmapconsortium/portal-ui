@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import { FlexPaper } from './style';
+import { FlexPaper, Pre } from './style';
 import SectionItem from '../SectionItem';
 
 function MetadataItem(props) {
@@ -16,9 +16,19 @@ function MetadataItem(props) {
   );
 }
 
+function LocationDetails(props) {
+  const { locationJson } = props;
+  const prettyLocation = JSON.stringify(JSON.parse(locationJson), null, 2);
+  return (
+    <details>
+      <summary>RUI JSON</summary>
+      <Pre>{prettyLocation}</Pre>
+    </details>
+  );
+}
+
 function SampleTissue(props) {
   const { mapped_organ, mapped_specimen_type, rui_location } = props;
-  const pretty_rui_location = JSON.stringify(JSON.parse(rui_location), null, 2);
   return (
     <SectionContainer id="tissue">
       <SectionHeader>Tissue</SectionHeader>
@@ -37,7 +47,7 @@ function SampleTissue(props) {
             </LightBlueLink>
             .
           </>
-          <pre>{pretty_rui_location}</pre>
+          <LocationDetails locationJson={rui_location} />
         </MetadataItem>
       </FlexPaper>
     </SectionContainer>

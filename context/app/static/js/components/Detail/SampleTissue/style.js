@@ -6,4 +6,9 @@ const FlexPaper = styled(Paper)`
   padding: 30px 40px 30px 40px;
 `;
 
-export { FlexPaper };
+const Pre = styled.pre`
+  font-size: 12px;
+  white-space: pre-wrap;
+`;
+
+export { FlexPaper, Pre };
