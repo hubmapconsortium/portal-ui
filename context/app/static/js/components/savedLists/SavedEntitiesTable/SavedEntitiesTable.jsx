@@ -6,7 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import SavedEntitiesTableRow from '../SavedEntitiesTableRow';
+import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 
 const columns = [
   { id: 'display_doi', label: 'HuBMAP ID' },
