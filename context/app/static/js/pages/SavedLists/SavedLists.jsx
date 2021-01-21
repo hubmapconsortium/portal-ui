@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 
 import CreateListDialog from 'js/components/SavedLists/CreateListDialog';
 import { LightBlueLink } from 'js/shared-styles/Links';
+import { Panel, PanelScrollBox } from 'js/shared-styles/panels';
 import useSavedListsStore from 'js/stores/useSavedListsStore';
 import Description from 'js/shared-styles/sections/Description';
 
@@ -51,7 +52,23 @@ function SavedLists() {
           <CreateListDialog dialogIsOpen={dialogIsOpen} setDialogIsOpen={setDialogIsOpen} />
         </FlexBottom>
       </SeparatedFlexRow>
-      <Description padding="20px 20px">No lists created yet.</Description>
+      {Object.keys(savedLists).length === 0 ? (
+        <Description padding="20px 20px">No lists created yet.</Description>
+      ) : (
+        <PanelScrollBox>
+          {Object.entries(savedLists).map(([key, value]) => {
+            const { donors, samples, datasets } = value;
+            return (
+              <Panel
+                title={key}
+                href=""
+                secondaryText={value.description}
+                entityCounts={{ donors: donors.length, samples: samples.length, datasets: datasets.length }}
+              />
+            );
+          })}
+        </PanelScrollBox>
+      )}
     </>
   );
 }
