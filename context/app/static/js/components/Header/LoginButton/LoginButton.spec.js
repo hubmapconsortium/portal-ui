@@ -7,7 +7,7 @@ import LoginButton from './LoginButton';
 
 test('should be login button when not authenticated', () => {
   render(<LoginButton isAuthenticated={false} />);
-  expect(screen.getByText('login')).toBeInTheDocument();
+  expect(screen.getByText('Member Login')).toBeInTheDocument();
   expect(screen.getByRole('link')).toHaveAttribute('href', '/login');
 });
 
