@@ -5,13 +5,17 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import useSavedListsStore from 'js/stores/useSavedListsStore';
 import { StyledPrimaryOutlineTextField, StyledDivider } from './style';
 
 const maxTitleLength = 50;
+const useSavedListsStoreSelector = (state) => state.createList;
 
 function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+
+  const createList = useSavedListsStore(useSavedListsStoreSelector);
 
   function handleTitleChange(event) {
     setTitle(event.target.value);
@@ -61,7 +65,7 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button color="primary" disabled={title.length === 0}>
+        <Button onClick={() => createList({ title, description })} color="primary" disabled={title.length === 0}>
           Save
         </Button>
       </DialogActions>
