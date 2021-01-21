@@ -18,7 +18,7 @@ function SaveButton({ uuid }) {
         saveEntity(uuid);
         toggleShouldDisplaySavedListsAlert();
       }}
-      disabled={savedEntities.includes(uuid)}
+      disabled={uuid in savedEntities}
     >
       Save
     </Button>

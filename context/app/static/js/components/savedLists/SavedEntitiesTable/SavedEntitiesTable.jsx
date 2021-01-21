@@ -28,8 +28,8 @@ function SavedEntitiesTable({ savedEntities }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {savedEntities.map((uuid) => (
-              <SavedEntitiesTableRow uuid={uuid} dateSaved="fake" />
+            {Object.entries(savedEntities).map(([key, value]) => (
+              <SavedEntitiesTableRow uuid={key} dateSaved={value.dateSaved} />
             ))}
           </TableBody>
         </Table>

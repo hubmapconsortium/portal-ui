@@ -34,7 +34,7 @@ function SavedLists() {
       <Typography variant="h3" component="h2">
         My Saves Lists
       </Typography>
-      {savedEntities.length === 0 ? (
+      {Object.keys(savedEntities).length === 0 ? (
         <Description padding="20px 20px">
           No items saved. Navigate to <LightBlueLink href="/search?entity_type[0]=Donor">donors</LightBlueLink>,{' '}
           <LightBlueLink href="/search?entity_type[0]=Sample">samples</LightBlueLink> or{' '}
