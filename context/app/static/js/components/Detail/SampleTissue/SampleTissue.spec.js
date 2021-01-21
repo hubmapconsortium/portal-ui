@@ -4,7 +4,13 @@ import { render, screen } from 'test-utils/functions';
 import SampleTissue from './SampleTissue';
 
 test('text displays properly when all props provided', () => {
-  render(<SampleTissue mapped_organ="Fake Organ" mapped_specimen_type="Fake Specimen Type" />);
+  render(
+    <SampleTissue
+      mapped_organ="Fake Organ"
+      mapped_specimen_type="Fake Specimen Type"
+      rui_location='{"expecting": "a JSON blob"}'
+    />,
+  );
 
   expect(screen.getByText('Tissue')).toBeInTheDocument();
 
@@ -21,12 +27,12 @@ test('text displays properly when all props provided', () => {
   expect(screen.getByRole('link')).toHaveAttribute('href', '/ccf-eui');
 });
 
-test('displays label not defined when values are undefined', () => {
+test('displays label not defined when values are undefined, and skips CCF', () => {
   render(<SampleTissue />);
 
   expect(screen.getByText('Tissue')).toBeInTheDocument();
 
-  const labelsToTest = ['Organ Type', 'Specimen Type', 'Tissue Location'];
+  const labelsToTest = ['Organ Type', 'Specimen Type'];
   labelsToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 
   const valuesToTest = ['Organ Type not defined', 'Specimen Type not defined'];
