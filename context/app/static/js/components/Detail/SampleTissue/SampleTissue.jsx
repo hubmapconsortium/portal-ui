@@ -39,16 +39,18 @@ function SampleTissue(props) {
         <MetadataItem label="Specimen Type" ml={1} flexBasis="25%">
           {mapped_specimen_type}
         </MetadataItem>
-        <MetadataItem label="Tissue Location" ml={1}>
-          <>
-            The spatial coordinates of this sample have been registered and it can be found in the{' '}
-            <LightBlueLink href="/ccf-eui" target="_blank" rel="noopener noreferrer">
-              Common Coordinate Framework Exploration User Interface
-            </LightBlueLink>
-            .
-          </>
-          <LocationDetails locationJson={rui_location} />
-        </MetadataItem>
+        {rui_location && (
+          <MetadataItem label="Tissue Location" ml={1}>
+            <>
+              The spatial coordinates of this sample have been registered and it can be found in the{' '}
+              <LightBlueLink href="/ccf-eui" target="_blank" rel="noopener noreferrer">
+                Common Coordinate Framework Exploration User Interface
+              </LightBlueLink>
+              .
+            </>
+            <LocationDetails locationJson={rui_location} />
+          </MetadataItem>
+        )}
       </FlexPaper>
     </SectionContainer>
   );
