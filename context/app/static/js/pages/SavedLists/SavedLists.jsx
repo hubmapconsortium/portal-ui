@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
+import CreateListDialog from 'js/components/SavedLists/CreateListDialog';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import useSavedListsStore from 'js/stores/useSavedListsStore';
 import Description from 'js/shared-styles/sections/Description';
@@ -14,6 +15,9 @@ const useSavedListsSelector = (state) => ({
 
 function SavedLists() {
   const { savedLists } = useSavedListsStore(useSavedListsSelector);
+
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+
   return (
     <>
       <Typography variant="h2" component="h1">
@@ -41,9 +45,10 @@ function SavedLists() {
           </Typography>
         </div>
         <FlexBottom>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={() => setDialogIsOpen(true)}>
             Create New List
           </Button>
+          <CreateListDialog dialogIsOpen={dialogIsOpen} setDialogIsOpen={setDialogIsOpen} />
         </FlexBottom>
       </SeparatedFlexRow>
       <Description padding="20px 20px">No lists created yet.</Description>
