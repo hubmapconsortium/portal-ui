@@ -1,8 +1,6 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
-import produce from 'immer';
-
-export const immer = (config) => (set, get) => config((fn) => set(produce(fn)), get);
+import immer from './immerMiddleware';
 
 const [useSavedListsStore] = create(
   persist(
