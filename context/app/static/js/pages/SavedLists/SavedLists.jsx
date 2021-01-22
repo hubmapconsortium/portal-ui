@@ -42,7 +42,7 @@ function SavedLists() {
           save.
         </Description>
       ) : (
-        <SavedEntitiesTable savedEntities={savedEntities} />
+        <SavedEntitiesTable />
       )}
       <SeparatedFlexRow>
         <div>

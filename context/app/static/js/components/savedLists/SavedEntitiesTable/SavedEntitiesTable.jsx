@@ -6,8 +6,13 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 
 const columns = [
@@ -17,9 +22,16 @@ const columns = [
   { id: 'dateSaved', label: 'Date Saved' },
 ];
 
-function SavedEntitiesTable({ savedEntities }) {
+const useSavedEntitiesSelector = (state) => ({
+  savedEntities: state.savedEntities,
+  deleteEntity: state.deleteEntity,
+});
+
+function SavedEntitiesTable() {
   const [selectedRows, setSelectedRows] = useState(new Set([]));
   const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
+
+  const { savedEntities, deleteEntity } = useSavedEntitiesStore(useSavedEntitiesSelector);
 
   function addToSelectedRows(rowUuid) {
     const selectedRowsCopy = new Set(selectedRows);
@@ -38,11 +50,33 @@ function SavedEntitiesTable({ savedEntities }) {
     setHeaderRowIsSelected(true);
   }
 
+  function deselectAllRows() {
+    setSelectedRows(new Set([]));
+    setHeaderRowIsSelected(false);
+  }
+
+  function deleteSelectedSavedEntities() {
+    selectedRows.forEach((uuid) => deleteEntity(uuid));
+    deselectAllRows();
+  }
+
+  const selectedRowsSize = selectedRows.size;
+
   return (
     <>
-      <Typography variant="subtitle1">
-        {selectedRows.size} {selectedRows.size === 1 ? 'Item' : 'Items'} Selected
-      </Typography>
+      <div>
+        <Typography variant="subtitle1">
+          {selectedRowsSize} {selectedRowsSize === 1 ? 'Item' : 'Items'} Selected
+        </Typography>
+        <Button color="primary" onClick={() => deselectAllRows()}>
+          Deselect All ({selectedRowsSize})
+        </Button>
+        <SecondaryBackgroundTooltip title="Delete Items">
+          <WhiteBackgroundIconButton onClick={() => deleteSelectedSavedEntities()}>
+            <DeleteRoundedIcon color="primary" />
+          </WhiteBackgroundIconButton>
+        </SecondaryBackgroundTooltip>
+      </div>
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
