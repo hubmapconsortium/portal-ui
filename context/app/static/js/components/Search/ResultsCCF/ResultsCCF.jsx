@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import '@vaadin/vaadin-button'; // TODO: When this is removed, please nmp uninstall!
+
 function ResultsCCF(props) {
   // eslint-disable-next-line no-unused-vars
   const { hits, resultFields, detailsUrlPrefix, idField, sortOptions } = props;
-  return <div>TODO</div>;
+  return <vaadin-button> A Web Component! </vaadin-button>;
 }
 
 ResultsCCF.propTypes = {
