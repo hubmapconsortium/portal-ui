@@ -11,7 +11,7 @@ function SelectedFilter(props) {
   }
   return (
     <SelectedFilterDiv>
-      <Typography>
+      <Typography variant="body2">
         {labelKey}: {labelValue}
       </Typography>
       <StyledCancelIcon onClick={removeFilter} />
