@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { StyledCancelIcon, SelectedFilterDiv, SelectedFilterName } from './style';
+import { Typography } from '@material-ui/core';
+import { StyledCancelIcon, SelectedFilterDiv } from './style';
 
 function SelectedFilter(props) {
   const { labelKey, labelValue, removeFilter, filterId } = props;
@@ -10,9 +11,9 @@ function SelectedFilter(props) {
   }
   return (
     <SelectedFilterDiv>
-      <SelectedFilterName>
+      <Typography>
         {labelKey}: {labelValue}
-      </SelectedFilterName>
+      </Typography>
       <StyledCancelIcon onClick={removeFilter} />
     </SelectedFilterDiv>
   );

@@ -15,13 +15,6 @@ const SelectedFilterDiv = styled.div`
   margin: 8px 8px 0 0;
   display: flex;
   padding: 10px 0 10px 10px;
-  font-size: 14px;
-  line-height: 20px;
 `;
 
-const SelectedFilterName = styled.div`
-  font-weight: 200 !important;
-  color: #000;
-`;
-
-export { StyledCancelIcon, SelectedFilterDiv, SelectedFilterName };
+export { StyledCancelIcon, SelectedFilterDiv };
