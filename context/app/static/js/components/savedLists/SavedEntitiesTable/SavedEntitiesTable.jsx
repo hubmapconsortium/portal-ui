@@ -40,7 +40,7 @@ function SavedEntitiesTable({ savedEntities }) {
 
   return (
     <>
-      <Typography variant="h5" component="h3">
+      <Typography variant="subtitle1">
         {selectedRows.size} {selectedRows.size === 1 ? 'Item' : 'Items'} Selected
       </Typography>
       <Paper>

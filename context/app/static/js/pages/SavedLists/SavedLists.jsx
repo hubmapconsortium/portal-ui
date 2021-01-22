@@ -49,9 +49,7 @@ function SavedLists() {
           <Typography variant="h3" component="h2">
             All Created Lists
           </Typography>
-          <Typography variant="h5" component="h3">
-            {Object.keys(savedLists).length} Lists
-          </Typography>
+          <Typography variant="subtitle1">{Object.keys(savedLists).length} Lists</Typography>
         </div>
         <FlexBottom>
           <Button variant="contained" color="primary" onClick={() => setDialogIsOpen(true)}>
