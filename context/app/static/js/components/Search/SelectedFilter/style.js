@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import CancelIcon from '@material-ui/icons/CancelRounded';
 
 const StyledCancelIcon = styled(CancelIcon)`
-  height: 1.2rem;
+  font-size: 1.2rem;
   margin: 0 8px;
   color: ${(props) => props.theme.palette.primary.main};
   cursor: pointer;
