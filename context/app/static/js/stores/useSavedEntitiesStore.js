@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import immer from './immerMiddleware';
@@ -9,8 +10,11 @@ const useSavedEntitiesStore = create(
       saveEntity: (entityUuid) =>
         !(entityUuid in get().savedEntities) &&
         set((state) => {
-          // eslint-disable-next-line no-param-reassign
           state.savedEntities[entityUuid] = { dateSaved: Date.now() };
+        }),
+      deleteEntity: (entityUuid) =>
+        set((state) => {
+          delete state.savedEntities[entityUuid];
         }),
     })),
     {
