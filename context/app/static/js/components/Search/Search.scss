@@ -8,7 +8,8 @@ $secondary-gray: #636363;
 }
 
 .sk-selected-filters {
-    padding-top: 8px;
+    // Together with 8px margin on SelectedFilterDiv, gives 16px between elements
+    margin-top: 8px;
 }
 
 .sk-selected-filters-option__name {
