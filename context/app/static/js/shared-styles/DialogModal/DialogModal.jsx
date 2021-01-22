@@ -6,13 +6,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { StyledDivider } from './style';
 
-function DialogModal({ dialogTitle, dialogContent, dialogActions, isOpen, handleClose }) {
+function DialogModal({ title, content, actions, isOpen, handleClose }) {
   return (
     <Dialog open={isOpen} onClose={handleClose} fullWidth>
-      <DialogTitle>{dialogTitle}</DialogTitle>
-      <DialogContent>{dialogContent}</DialogContent>
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>{content}</DialogContent>
       <StyledDivider />
-      <DialogActions>{dialogActions}</DialogActions>
+      <DialogActions>{actions}</DialogActions>
     </Dialog>
   );
 }
