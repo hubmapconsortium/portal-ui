@@ -5,6 +5,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
+import Typography from '@material-ui/core/Typography';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
@@ -38,37 +39,42 @@ function SavedEntitiesTable({ savedEntities }) {
   }
 
   return (
-    <Paper>
-      <StyledTableContainer>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow onClick={() => selectAllRows()}>
-              <HeaderCell padding="checkbox">
-                <Checkbox
-                  checked={headerRowIsSelected}
-                  inputProps={{ 'aria-labelledby': `saved-entities-header-row-checkbox` }}
+    <>
+      <Typography variant="h5" component="h3">
+        {selectedRows.size} {selectedRows.size === 1 ? 'Item' : 'Items'} Selected
+      </Typography>
+      <Paper>
+        <StyledTableContainer>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow onClick={() => selectAllRows()}>
+                <HeaderCell padding="checkbox">
+                  <Checkbox
+                    checked={headerRowIsSelected}
+                    inputProps={{ 'aria-labelledby': `saved-entities-header-row-checkbox` }}
+                  />
+                </HeaderCell>
+                {columns.map((column) => (
+                  <HeaderCell key={column.id}>{column.label}</HeaderCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Object.entries(savedEntities).map(([key, value], i) => (
+                <SavedEntitiesTableRow
+                  uuid={key}
+                  dateSaved={value.dateSaved}
+                  index={i}
+                  isSelected={selectedRows.has(key)}
+                  addToSelectedRows={addToSelectedRows}
+                  removeFromSelectedRows={removeFromSelectedRows}
                 />
-              </HeaderCell>
-              {columns.map((column) => (
-                <HeaderCell key={column.id}>{column.label}</HeaderCell>
               ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {Object.entries(savedEntities).map(([key, value], i) => (
-              <SavedEntitiesTableRow
-                uuid={key}
-                dateSaved={value.dateSaved}
-                index={i}
-                isSelected={selectedRows.has(key)}
-                addToSelectedRows={addToSelectedRows}
-                removeFromSelectedRows={removeFromSelectedRows}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </StyledTableContainer>
-    </Paper>
+            </TableBody>
+          </Table>
+        </StyledTableContainer>
+      </Paper>
+    </>
   );
 }
 
