@@ -1,3 +1,9 @@
+## v0.10.1 - 2021-01-25
+
+- Link to collections DOI.
+- Change "Login" to "Member Login".
+
+
 ## v0.10.0 - 2021-01-19
 
 - Log config during docker startup.

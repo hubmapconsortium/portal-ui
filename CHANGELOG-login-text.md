@@ -1,1 +1,0 @@
-- Change "Login" to "Member Login".
