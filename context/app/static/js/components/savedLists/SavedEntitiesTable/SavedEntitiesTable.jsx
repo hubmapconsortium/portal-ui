@@ -15,6 +15,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
+import { Flex } from './style';
 
 const columns = [
   { id: 'display_doi', label: 'HuBMAP ID' },
@@ -66,24 +67,26 @@ function SavedEntitiesTable() {
 
   return (
     <>
-      <div>
+      <Flex>
         <Typography variant="subtitle1">
           {selectedRowsSize} {selectedRowsSize === 1 ? 'Item' : 'Items'} Selected
         </Typography>
-        <Button color="primary" onClick={() => deselectAllRows()}>
-          Deselect All ({selectedRowsSize})
-        </Button>
-        <SecondaryBackgroundTooltip title="Delete Items">
-          <WhiteBackgroundIconButton onClick={() => setDeleteDialogIsOpen(true)}>
-            <DeleteRoundedIcon color="primary" />
-          </WhiteBackgroundIconButton>
-        </SecondaryBackgroundTooltip>
-        <DeleteSavedEntitiesDialog
-          dialogIsOpen={deleteDialogIsOpen}
-          setDialogIsOpen={setDeleteDialogIsOpen}
-          deleteSelectedSavedEntities={deleteSelectedSavedEntities}
-        />
-      </div>
+        <div>
+          <Button color="primary" onClick={() => deselectAllRows()}>
+            Deselect All ({selectedRowsSize})
+          </Button>
+          <SecondaryBackgroundTooltip title="Delete Items">
+            <WhiteBackgroundIconButton onClick={() => setDeleteDialogIsOpen(true)}>
+              <DeleteRoundedIcon color="primary" />
+            </WhiteBackgroundIconButton>
+          </SecondaryBackgroundTooltip>
+          <DeleteSavedEntitiesDialog
+            dialogIsOpen={deleteDialogIsOpen}
+            setDialogIsOpen={setDeleteDialogIsOpen}
+            deleteSelectedSavedEntities={deleteSelectedSavedEntities}
+          />
+        </div>
+      </Flex>
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
