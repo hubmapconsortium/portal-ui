@@ -1,5 +1,6 @@
 from os.path import dirname
 from urllib.parse import urlparse
+import json
 
 from flask import (Blueprint, render_template, abort, current_app,
                    session, request, redirect, url_for, Response)
@@ -112,9 +113,30 @@ def details_ext(type, uuid, ext):
     if ext != 'json':
         abort(404)
     client = _get_client()
-
     entity = client.get_entity(uuid)
     return entity
+
+
+@blueprint.route('/browse/<type>/<uuid>.rui.<ext>')
+def details_rui_ext(type, uuid, ext):
+    # Note that the API returns a blob of JSON as a string,
+    # so, to return a JSON object, and not just a string, we need to decode.
+    if type not in entity_types:
+        abort(404)
+    if ext != 'json':
+        abort(404)
+    client = _get_client()
+    entity = client.get_entity(uuid)
+    if 'rui_location' in entity:
+        return json.loads(entity['rui_location'])
+    if 'ancestors' not in entity:
+        abort(404)
+    located_ancestors = [a for a in entity['ancestors'] if 'rui_location' in a]
+    if not located_ancestors:
+        abort(404)
+    if not len(located_ancestors) == 1:
+        raise Exception('Expected only on spatially located ancestor')
+    return json.loads(located_ancestors[0]['rui_location'])
 
 
 @blueprint.route('/search')
