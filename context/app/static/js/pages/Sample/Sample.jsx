@@ -33,6 +33,7 @@ function SampleDetail(props) {
     last_modified_timestamp,
     description,
     metadata,
+    rui_location,
   } = assayMetadata;
 
   const shouldDisplaySection = {
@@ -53,6 +54,8 @@ function SampleDetail(props) {
 
   useSendUUIDEvent(entity_type, uuid);
 
+  const hasRUI = Boolean(rui_location);
+
   return (
     <DetailContext.Provider value={{ display_doi, uuid }}>
       <DetailLayout sectionOrder={sectionOrder}>
@@ -69,7 +72,12 @@ function SampleDetail(props) {
             {mapped_specimen_type}
           </Typography>
         </Summary>
-        <SampleTissue mapped_specimen_type={mapped_specimen_type} mapped_organ={mapped_organ} />
+        <SampleTissue
+          uuid={uuid}
+          mapped_specimen_type={mapped_specimen_type}
+          mapped_organ={mapped_organ}
+          hasRUI={hasRUI}
+        />
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
