@@ -14,6 +14,7 @@ import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
+import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
 
 const columns = [
   { id: 'display_doi', label: 'HuBMAP ID' },
@@ -30,6 +31,7 @@ const useSavedEntitiesSelector = (state) => ({
 function SavedEntitiesTable() {
   const [selectedRows, setSelectedRows] = useState(new Set([]));
   const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
+  const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
 
   const { savedEntities, deleteEntity } = useSavedEntitiesStore(useSavedEntitiesSelector);
 
@@ -72,10 +74,15 @@ function SavedEntitiesTable() {
           Deselect All ({selectedRowsSize})
         </Button>
         <SecondaryBackgroundTooltip title="Delete Items">
-          <WhiteBackgroundIconButton onClick={() => deleteSelectedSavedEntities()}>
+          <WhiteBackgroundIconButton onClick={() => setDeleteDialogIsOpen(true)}>
             <DeleteRoundedIcon color="primary" />
           </WhiteBackgroundIconButton>
         </SecondaryBackgroundTooltip>
+        <DeleteSavedEntitiesDialog
+          dialogIsOpen={deleteDialogIsOpen}
+          setDialogIsOpen={setDeleteDialogIsOpen}
+          deleteSelectedSavedEntities={deleteSelectedSavedEntities}
+        />
       </div>
       <Paper>
         <StyledTableContainer>
