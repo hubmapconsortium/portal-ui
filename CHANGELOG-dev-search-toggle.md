@@ -1,0 +1,2 @@
+- Provide two different view toggles, one for the main search, and one for dev.
+- For the dev search, provide a stub where a CCF view could be filled in.

@@ -40,6 +40,7 @@ const donorConfig = {
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
     tile: [...sharedTileFields, field(`mapped_metadata.${ageUnitField}`, 'Age Unit')],
+    ccf: [],
   },
 };
 
@@ -61,6 +62,7 @@ const sampleConfig = {
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
     tile: sharedTileFields,
+    ccf: [],
   },
 };
 
@@ -85,6 +87,7 @@ const datasetConfig = {
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
     tile: sharedTileFields,
+    ccf: [],
   },
 };
 

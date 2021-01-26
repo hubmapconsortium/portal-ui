@@ -31,6 +31,7 @@ function DevSearch() {
         field('mapper_metadata.size', 'Doc Size'),
       ],
       tile: [],
+      ccf: [field('rui_location', 'Location JSON')],
     },
     // Default hitsPerPage is 10:
     hitsPerPage: 20,
@@ -74,7 +75,7 @@ function DevSearch() {
 
   const allProps = { ...searchProps, apiUrl: elasticsearchEndpoint };
 
-  const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={DevResults} />;
+  const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={DevResults} isDevSearch />;
   return (
     <>
       <SearchHeader component="h1" variant="h2">
