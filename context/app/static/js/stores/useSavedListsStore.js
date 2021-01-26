@@ -3,7 +3,7 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import immer from './immerMiddleware';
 
-const [useSavedListsStore] = create(
+const useSavedListsStore = create(
   persist(
     immer((set) => ({
       savedLists: {},
