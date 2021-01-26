@@ -12,10 +12,6 @@ $secondary-gray: #636363;
     margin-top: 8px;
 }
 
-.sk-selected-filters-option__remove-action {
-    border: none;
-}
-
 .sk-panel__header {
     // We pull out the title prop and use it in the AccordionSummary.
     // Easier to hide with CSS than change the rendering.
