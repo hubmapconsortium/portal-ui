@@ -16,6 +16,7 @@ import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
 import AddToDialog from 'js/components/savedLists/AddToDialog';
+import useStateSet from 'js/hooks/useStateSet';
 import { Flex } from './style';
 
 const columns = [
@@ -31,24 +32,12 @@ const useSavedEntitiesSelector = (state) => ({
 });
 
 function SavedEntitiesTable() {
-  const [selectedRows, setSelectedRows] = useState(new Set([]));
+  const [selectedRows, addToSelectedRows, removeFromSelectedRows, setSelectedRows] = useStateSet([]);
   const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [addToDialogIsOpen, setAddToDialogIsOpen] = useState(false);
 
   const { savedEntities, deleteEntity } = useSavedEntitiesStore(useSavedEntitiesSelector);
-
-  function addToSelectedRows(rowUuid) {
-    const selectedRowsCopy = new Set(selectedRows);
-    selectedRowsCopy.add(rowUuid);
-    setSelectedRows(selectedRowsCopy);
-  }
-
-  function removeFromSelectedRows(rowUuid) {
-    const selectedRowsCopy = new Set(selectedRows);
-    selectedRowsCopy.delete(rowUuid);
-    setSelectedRows(selectedRowsCopy);
-  }
 
   function selectAllRows() {
     setSelectedRows(new Set(Object.keys(savedEntities)));

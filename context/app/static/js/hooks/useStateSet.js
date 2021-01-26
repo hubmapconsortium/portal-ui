@@ -15,7 +15,7 @@ function useStateSet(initialStateArray) {
     setSetStructure(setCopy);
   }
 
-  return [setStructure, addItemToSet, removeItemFromSet];
+  return [setStructure, addItemToSet, removeItemFromSet, setSetStructure];
 }
 
 export default useStateSet;
