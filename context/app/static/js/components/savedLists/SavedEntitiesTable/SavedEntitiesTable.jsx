@@ -15,7 +15,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
-import AddToDialog from 'js/components/savedLists/AddToDialog';
+import SaveToListDialog from 'js/components/savedLists/SaveToListDialog';
 import useStateSet from 'js/hooks/useStateSet';
 import { Flex } from './style';
 
@@ -79,11 +79,11 @@ function SavedEntitiesTable() {
           <Button color="primary" onClick={() => setAddToDialogIsOpen(true)} variant="contained">
             Add To
           </Button>
-          <AddToDialog
+          <SaveToListDialog
+            title="Add Items To"
             dialogIsOpen={addToDialogIsOpen}
             setDialogIsOpen={setAddToDialogIsOpen}
-            savedEntities={savedEntities}
-            selectedRows={selectedRows}
+            entitiesToAdd={selectedRows}
           />
         </div>
       </Flex>
