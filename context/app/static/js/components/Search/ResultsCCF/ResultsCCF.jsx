@@ -1,19 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import '@vaadin/vaadin-button'; // TODO: When this is removed, please nmp uninstall!
+function ReplaceMeWithWebComponent(props) {
+  // TODO: This will be replaced with a Web Component from Bruce.
+  const { spatialResults } = props;
+  return (
+    <div>
+      {spatialResults.map((result) => (
+        <pre key={result.uuid}>{JSON.stringify(result, null, 2)}</pre>
+      ))}
+    </div>
+  );
+}
 
 function ResultsCCF(props) {
   // eslint-disable-next-line no-unused-vars
   const { hits, resultFields, detailsUrlPrefix, idField, sortOptions } = props;
-  return <vaadin-button> A Web Component! </vaadin-button>;
+  const spatialResults = hits
+    // eslint-disable-next-line no-underscore-dangle
+    .map((hit) => hit._source)
+    .filter((source) => source.rui_location)
+    .map((source) => ({
+      uuid: source.uuid,
+      rui_location: JSON.parse(source.rui_location),
+    }));
+  return <ReplaceMeWithWebComponent spatialResults={spatialResults} />;
 }
 
 ResultsCCF.propTypes = {
-  sortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
-  resultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
-  detailsUrlPrefix: PropTypes.string.isRequired,
-  idField: PropTypes.string.isRequired,
   hits: PropTypes.arrayOf(
     PropTypes.shape({
       sort: PropTypes.array,

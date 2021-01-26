@@ -31,6 +31,7 @@ function DevSearch() {
         field('mapper_metadata.size', 'Doc Size'),
       ],
       tile: [],
+      ccf: [field('rui_location', 'Location JSON')],
     },
     // Default hitsPerPage is 10:
     hitsPerPage: 20,
