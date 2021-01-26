@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import immer from './immerMiddleware';
@@ -8,8 +9,11 @@ const [useSavedListsStore] = create(
       savedLists: {},
       createList: ({ title, description }) =>
         set((state) => {
-          // eslint-disable-next-line no-param-reassign
-          state.savedLists[title] = { donors: [], samples: [], datasets: [], description };
+          state.savedLists[title] = { Donor: {}, Sample: {}, Dataset: {}, description };
+        }),
+      addEntityToList: (title, uuid, entity_type) =>
+        set((state) => {
+          state.savedLists[title][entity_type][uuid] = true;
         }),
     })),
     {
