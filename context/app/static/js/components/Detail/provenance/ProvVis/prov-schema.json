@@ -4,23 +4,19 @@
   "title": "HuBMAP PROV schema",
   "type": "object",
   "definitions": {
-    "string_to_whatever": {
+    "string_to_anything": {
       "type": "object",
       "patternProperties": {
         ".": {
-          "anyOf": [
-            {"type": "string"},
-            {"type": "boolean"},
-            {"type": "object"}
-          ]
+          "$comment": "Usually string, but boolean or object in some cases."
         }
       }
     },
-    "string_to_string_to_whatever": {
+    "string_to_string_to_anything": {
       "type": "object",
       "patternProperties": {
         ".": {
-          "$ref": "#/definitions/string_to_whatever"
+          "$ref": "#/definitions/string_to_anything"
         }
       }
     }
@@ -28,21 +24,19 @@
   "additionalProperties": false,
   "required": ["prefix", "entity", "activity", "wasGeneratedBy", "used"],
   "properties": {
-    "prefix": {
-      "allOf": [{ "$ref": "#/definitions/string_to_whatever" }, { "$comment": "TODO: Add 'prov'." }]
-    },
-    "entity": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "activity": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "wasGeneratedBy": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "wasStartedBy": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "wasAssociatedWith": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "mentionOf": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "hadMember": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "wasEndedBy": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "specializationOf": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "used": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "agent": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "bundle": { "$ref": "#/definitions/string_to_string_to_whatever" },
-    "actedOnBehalfOf": { "$ref": "#/definitions/string_to_string_to_whatever" }
+    "prefix": { "$ref": "#/definitions/string_to_anything"},
+    "entity": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "activity": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "wasGeneratedBy": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "wasStartedBy": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "wasAssociatedWith": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "mentionOf": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "hadMember": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "wasEndedBy": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "specializationOf": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "used": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "agent": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "bundle": { "$ref": "#/definitions/string_to_string_to_anything" },
+    "actedOnBehalfOf": { "$ref": "#/definitions/string_to_string_to_anything" }
   }
 }
