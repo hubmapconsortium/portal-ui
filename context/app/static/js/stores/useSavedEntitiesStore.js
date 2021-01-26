@@ -7,10 +7,10 @@ const useSavedEntitiesStore = create(
   persist(
     immer((set, get) => ({
       savedEntities: {},
-      saveEntity: (entityUuid) =>
+      saveEntity: (entityUuid, entity_type) =>
         !(entityUuid in get().savedEntities) &&
         set((state) => {
-          state.savedEntities[entityUuid] = { dateSaved: Date.now() };
+          state.savedEntities[entityUuid] = { dateSaved: Date.now(), entity_type };
         }),
       deleteEntity: (entityUuid) =>
         set((state) => {

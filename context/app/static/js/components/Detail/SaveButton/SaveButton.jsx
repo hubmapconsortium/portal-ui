@@ -6,7 +6,7 @@ import useEntityStore from 'js/stores/useEntityStore';
 const useSavedEntitiesStoreSelector = (state) => ({ savedEntities: state.savedEntities, saveEntity: state.saveEntity });
 const entityStoreSelector = (state) => state.toggleShouldDisplaySavedListsAlert;
 
-function SaveButton({ uuid }) {
+function SaveButton({ uuid, entity_type }) {
   const { savedEntities, saveEntity } = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
   const toggleShouldDisplaySavedListsAlert = useEntityStore(entityStoreSelector);
 
@@ -15,7 +15,7 @@ function SaveButton({ uuid }) {
       color="primary"
       variant="contained"
       onClick={() => {
-        saveEntity(uuid);
+        saveEntity(uuid, entity_type);
         toggleShouldDisplaySavedListsAlert();
       }}
       disabled={uuid in savedEntities}
