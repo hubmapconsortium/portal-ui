@@ -12,13 +12,13 @@ function ProvGraph(props) {
     renderProvVis('prov-vis-react', provData, {
       getNameForActivity: (id, prov) => {
         const activity = prov.activity[id];
-        return `${activity['prov:type']} - ${activity['hubmap:displayDOI']}`;
+        return `${activity['prov:type']} - ${activity['hubmap:hubmap_id']}`;
       },
       getNameForEntity: (id, prov) => {
         const entity = prov.entity[id];
         // NOTE: The initial entity node was not included in the sample data;
         // Fallback to ID, if needed. https://github.com/hubmapconsortium/prov-vis/issues/15
-        return entity ? `${entity['prov:type']} - ${entity['hubmap:displayDOI']}` : id;
+        return entity ? `${entity['prov:type']} - ${entity['hubmap:hubmap_id']}` : id;
       },
       renderDetailPane: (prov) => {
         const typeEl =
@@ -36,7 +36,7 @@ function ProvGraph(props) {
             <SectionItem label="ID" ml>
               <StyledTypography variant="body1">
                 <StyledLink href={`/browse/${prov['prov:type'].toLowerCase()}/${prov['hubmap:uuid']}`}>
-                  {prov['hubmap:displayDOI']}
+                  {prov['hubmap:hubmap_id']}
                 </StyledLink>
               </StyledTypography>
             </SectionItem>
