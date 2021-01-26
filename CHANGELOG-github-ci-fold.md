@@ -1,1 +1,0 @@
-- Use the github CI syntax for output folding.
