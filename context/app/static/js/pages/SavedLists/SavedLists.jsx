@@ -63,13 +63,17 @@ function SavedLists() {
       ) : (
         <PanelScrollBox>
           {Object.entries(savedLists).map(([key, value]) => {
-            const { donors, samples, datasets } = value;
+            const { Donor, Sample, Dataset } = value;
             return (
               <Panel
                 title={key}
                 href=""
                 secondaryText={value.description}
-                entityCounts={{ donors: donors.length, samples: samples.length, datasets: datasets.length }}
+                entityCounts={{
+                  donors: Object.keys(Donor).length,
+                  samples: Object.keys(Sample).length,
+                  datasets: Object.keys(Dataset).length,
+                }}
               />
             );
           })}
