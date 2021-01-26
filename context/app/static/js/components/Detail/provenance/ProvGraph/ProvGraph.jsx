@@ -39,7 +39,8 @@ function ProvGraph(props) {
           typeKey in prov && ['Donor', 'Sample', 'Dataset'].includes(prov[typeKey]) ? (
             <SectionItem label="ID" ml>
               <StyledTypography variant="body1">
-                {/* TODO: Using StyledLink causes "TypeError: props.theme.palette is undefined" */}
+                {/* TODO: Using StyledLink causes "TypeError: props.theme.palette is undefined"
+                    https://github.com/hubmapconsortium/portal-ui/issues/1486 */}
                 <a href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}>{prov[idKey]}</a>
               </StyledTypography>
             </SectionItem>
