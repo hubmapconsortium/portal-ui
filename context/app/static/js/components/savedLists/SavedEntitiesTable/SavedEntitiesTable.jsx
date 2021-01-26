@@ -15,6 +15,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
+import AddToDialog from 'js/components/savedLists/AddToDialog';
 import { Flex } from './style';
 
 const columns = [
@@ -33,6 +34,7 @@ function SavedEntitiesTable() {
   const [selectedRows, setSelectedRows] = useState(new Set([]));
   const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
+  const [addToDialogIsOpen, setAddToDialogIsOpen] = useState(false);
 
   const { savedEntities, deleteEntity } = useSavedEntitiesStore(useSavedEntitiesSelector);
 
@@ -84,6 +86,15 @@ function SavedEntitiesTable() {
             dialogIsOpen={deleteDialogIsOpen}
             setDialogIsOpen={setDeleteDialogIsOpen}
             deleteSelectedSavedEntities={deleteSelectedSavedEntities}
+          />
+          <Button color="primary" onClick={() => setAddToDialogIsOpen(true)} variant="contained">
+            Add To
+          </Button>
+          <AddToDialog
+            dialogIsOpen={addToDialogIsOpen}
+            setDialogIsOpen={setAddToDialogIsOpen}
+            savedEntities={savedEntities}
+            selectedRows={selectedRows}
           />
         </div>
       </Flex>
