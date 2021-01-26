@@ -31,13 +31,13 @@ function SampleTissue(props) {
         {hasRUI && (
           <MetadataItem label="Tissue Location" ml={1}>
             <>
-              The spatial coordinates of this sample have been registered and it can be found in the{' '}
+              The{' '}
+              <LightBlueLink href={`/browse/sample/${uuid}.rui.json`} target="_blank" rel="noopener noreferrer">
+                spatial coordinates of this sample
+              </LightBlueLink>{' '}
+              have been registered and it can be found in the{' '}
               <LightBlueLink href="/ccf-eui" target="_blank" rel="noopener noreferrer">
                 Common Coordinate Framework Exploration User Interface
-              </LightBlueLink>
-              .{' '}
-              <LightBlueLink href={`/browse/sample/${uuid}.rui.json`} target="_blank" rel="noopener noreferrer">
-                RUI JSON is also available
               </LightBlueLink>
               .
             </>
