@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 
 import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialog';
 
-function EditSavedStatusButton({ uuid }) {
+function EditSavedStatusButton({ uuid, ...rest }) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   return (
@@ -14,6 +14,7 @@ function EditSavedStatusButton({ uuid }) {
         onClick={() => {
           setDialogIsOpen(true);
         }}
+        {...rest}
       >
         Edit Saved Status
       </Button>
