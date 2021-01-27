@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 
-import useSavedListsStore from 'js/stores/useSavedListsStore';
+import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { StyledPrimaryOutlineTextField } from './style';
 
 const maxTitleLength = 50;
-const useSavedListsStoreSelector = (state) => state.createList;
+const useSavedEntitiesStoreSelector = (state) => state.createList;
 
 function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const createList = useSavedListsStore(useSavedListsStoreSelector);
+  const createList = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
 
   function handleTitleChange(event) {
     setTitle(event.target.value);

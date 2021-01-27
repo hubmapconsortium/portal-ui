@@ -4,19 +4,19 @@ import Button from '@material-ui/core/Button';
 import useStateSet from 'js/hooks/useStateSet';
 import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
-import useSavedListsStore from 'js/stores/useSavedListsStore';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import useEntityStore, { editedAlertStatus } from 'js/stores/useEntityStore';
 
-const usedSavedListsSelector = (state) => state.addEntityToList;
-const useSavedEntitiesSelector = (state) => state.savedEntities;
+const useSavedEntitiesSelector = (state) => ({
+  savedEntities: state.savedEntities,
+  addEntityToList: state.addEntityToList,
+});
 const entityStoreSelector = (state) => state.setShouldDisplaySavedOrEditedAlert;
 
 function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }) {
   const [selectedLists, addToSelectedLists] = useStateSet([]);
 
-  const addEntityToList = useSavedListsStore(usedSavedListsSelector);
-  const savedEntities = useSavedEntitiesStore(useSavedEntitiesSelector);
+  const { savedEntities, addEntityToList } = useSavedEntitiesStore(useSavedEntitiesSelector);
   const setShouldDisplaySavedOrEditedAlert = useEntityStore(entityStoreSelector);
 
   function addSavedEntitiesToList() {

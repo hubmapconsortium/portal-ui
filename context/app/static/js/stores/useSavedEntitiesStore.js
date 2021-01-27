@@ -16,6 +16,23 @@ const useSavedEntitiesStore = create(
         set((state) => {
           delete state.savedEntities[entityUuid];
         }),
+      savedLists: {},
+      createList: ({ title, description }) =>
+        set((state) => {
+          state.savedLists[title] = {
+            Donor: {},
+            Sample: {},
+            Dataset: {},
+            description,
+            dateSaved: Date.now(),
+            dateLastModified: Date.now(),
+          };
+        }),
+      addEntityToList: (title, uuid, entity_type) =>
+        set((state) => {
+          state.savedLists[title][entity_type][uuid] = true;
+          state.savedLists[title].dateLastModified = Date.now();
+        }),
     })),
     {
       name: 'saved_entities',

@@ -6,21 +6,18 @@ import CreateListDialog from 'js/components/savedLists/CreateListDialog';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { Panel, PanelScrollBox } from 'js/shared-styles/panels';
-import useSavedListsStore from 'js/stores/useSavedListsStore';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import Description from 'js/shared-styles/sections/Description';
 
 import { SeparatedFlexRow, FlexBottom } from './style';
 
-const useSavedListsSelector = (state) => ({
+const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
+  savedEntities: state.savedEntities,
 });
 
-const usedSavedEntitiesSelector = (state) => state.savedEntities;
-
 function SavedLists() {
-  const { savedLists } = useSavedListsStore(useSavedListsSelector);
-  const savedEntities = useSavedEntitiesStore(usedSavedEntitiesSelector);
+  const { savedLists, savedEntities } = useSavedEntitiesStore(usedSavedEntitiesSelector);
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   return (
