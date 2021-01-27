@@ -1,6 +1,9 @@
 import create from 'zustand';
 
-const useEntityStore = create((set, get) => ({
+const savedAlertStatus = 'savedAlert';
+const editedAlertStatus = 'editedAlert';
+
+const useEntityStore = create((set) => ({
   summaryComponentObserver: {
     summaryInView: true,
     summaryEntry: undefined,
@@ -14,8 +17,9 @@ const useEntityStore = create((set, get) => ({
     }),
   assayMetadata: {},
   setAssayMetadata: (val) => set({ assayMetadata: val }),
-  shouldDisplaySavedListsAlert: false,
-  toggleShouldDisplaySavedListsAlert: () => set({ shouldDisplaySavedListsAlert: !get().shouldDisplaySavedListsAlert }),
+  shouldDisplaySavedOrEditedAlert: false,
+  setShouldDisplaySavedOrEditedAlert: (val) => set({ shouldDisplaySavedOrEditedAlert: val }),
 }));
 
+export { savedAlertStatus, editedAlertStatus };
 export default useEntityStore;
