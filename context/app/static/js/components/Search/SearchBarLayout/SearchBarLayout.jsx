@@ -13,10 +13,10 @@ function SearchBarLayout(props) {
     <>
       <Flex>
         <SearchBox autofocus queryFields={queryFields} />
-        <StyledDiv>
+        <CenteredDiv>
           <SortingSelector options={sortOptions} listComponent={TilesSortDropdown} />
           <ViewSwitcherToggle listComponent={isDevSearch ? DevSearchViewSwitch : SearchViewSwitch} />
-        </StyledDiv>
+        </CenteredDiv>
       </Flex>
       <SelectedFilters itemComponent={SelectedFilter} />
     </>
