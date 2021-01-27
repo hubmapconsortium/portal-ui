@@ -3,7 +3,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 import DialogModal from 'js/shared-styles/DialogModal';
-import { OrangeButton } from './styles';
 
 function DeleteSavedEntitiesDialog({ dialogIsOpen, setDialogIsOpen, deleteSelectedSavedEntities }) {
   function handleDelete() {
@@ -21,9 +20,7 @@ function DeleteSavedEntitiesDialog({ dialogIsOpen, setDialogIsOpen, deleteSelect
           <Button onClick={() => setDialogIsOpen(false)} color="primary">
             Cancel
           </Button>
-          <OrangeButton onClick={() => handleDelete()} color="warning">
-            Delete
-          </OrangeButton>
+          <Button onClick={() => handleDelete()}>Delete</Button>
         </>
       }
       isOpen={dialogIsOpen}
