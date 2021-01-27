@@ -28,11 +28,24 @@ const useSavedEntitiesStore = create(
             dateLastModified: Date.now(),
           };
         }),
-      addEntityToList: (title, uuid, entity_type) =>
+      addEntityToList: (title, uuid) => {
+        const { entity_type } = get().savedEntities[uuid];
         set((state) => {
           state.savedLists[title][entity_type][uuid] = true;
           state.savedLists[title].dateLastModified = Date.now();
-        }),
+        });
+      },
+      addEntitiesToList: (title, uuids) => {
+        uuids.forEach((uuid) => {
+          const { entity_type } = get().savedEntities[uuid];
+          set((state) => {
+            state.savedLists[title][entity_type][uuid] = true;
+          });
+        });
+        set((state) => {
+          state.savedLists[title].dateLastModified = Date.now();
+        });
+      },
     })),
     {
       name: 'saved_entities',

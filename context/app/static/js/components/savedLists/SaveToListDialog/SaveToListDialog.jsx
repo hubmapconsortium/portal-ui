@@ -6,22 +6,15 @@ import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 
-const useSavedEntitiesSelector = (state) => ({
-  savedEntities: state.savedEntities,
-  addEntityToList: state.addEntityToList,
-});
+const useSavedEntitiesSelector = (state) => state.addEntitiesToList;
 
 function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd }) {
   const [selectedLists, addToSelectedLists, removeFromSelectedLists] = useStateSet([]);
 
-  const { savedEntities, addEntityToList } = useSavedEntitiesStore(useSavedEntitiesSelector);
+  const addEntitiesToList = useSavedEntitiesStore(useSavedEntitiesSelector);
 
   function addSavedEntitiesToList() {
-    selectedLists.forEach((list) =>
-      entitiesToAdd.forEach((selectedRow) => {
-        addEntityToList(list, selectedRow, savedEntities[selectedRow].entity_type);
-      }),
-    );
+    selectedLists.forEach((list) => addEntitiesToList(list, entitiesToAdd));
   }
 
   return (

@@ -7,20 +7,17 @@ import AddToList from 'js/components/savedLists/AddToList';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import useEntityStore, { editedAlertStatus } from 'js/stores/useEntityStore';
 
-const useSavedEntitiesSelector = (state) => ({
-  savedEntities: state.savedEntities,
-  addEntityToList: state.addEntityToList,
-});
+const useSavedEntitiesSelector = (state) => state.addEntityToList;
 const entityStoreSelector = (state) => state.setShouldDisplaySavedOrEditedAlert;
 
 function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }) {
   const [selectedLists, addToSelectedLists] = useStateSet([]);
 
-  const { savedEntities, addEntityToList } = useSavedEntitiesStore(useSavedEntitiesSelector);
+  const addEntityToList = useSavedEntitiesStore(useSavedEntitiesSelector);
   const setShouldDisplaySavedOrEditedAlert = useEntityStore(entityStoreSelector);
 
   function addSavedEntitiesToList() {
-    selectedLists.forEach((list) => addEntityToList(list, uuid, savedEntities[uuid].entity_type));
+    selectedLists.forEach((list) => addEntityToList(list, uuid));
   }
 
   function handleSave() {
