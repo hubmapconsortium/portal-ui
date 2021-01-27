@@ -5,10 +5,10 @@ const Flex = styled.div`
   width: 100%;
 `;
 
-const StyledDiv = styled.div`
+const CenteredDiv = styled.div`
   display: flex;
   margin-left: auto;
   align-items: center;
 `;
 
-export { Flex, StyledDiv };
+export { Flex, CenteredDiv };

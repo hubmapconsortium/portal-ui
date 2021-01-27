@@ -7,6 +7,11 @@ $secondary-gray: #636363;
     margin: 16px 0px 32px 0px;
 }
 
+.sk-selected-filters {
+    // Together with 8px margin on SelectedFilterDiv, gives 16px between elements
+    margin-top: 8px;
+}
+
 .sk-panel__header {
     // We pull out the title prop and use it in the AccordionSummary.
     // Easier to hide with CSS than change the rendering.
