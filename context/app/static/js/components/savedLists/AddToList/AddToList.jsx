@@ -8,16 +8,18 @@ const useSavedListsSelector = (state) => ({
   savedLists: state.savedLists,
 });
 
-function AddToList({ selectedLists, addToSelectedLists }) {
+function AddToList({ selectedLists, addToSelectedLists, removeFromSelectedLists }) {
   const { savedLists } = useSavedListsStore(useSavedListsSelector);
 
   return (
     <List>
       {Object.keys(savedLists).map((listName) => (
         <AddToListItem
+          key={listName}
           title={listName}
           isSelected={selectedLists.has(listName)}
           addToSelectedLists={addToSelectedLists}
+          removeFromSelectedLists={removeFromSelectedLists}
         />
       ))}
     </List>

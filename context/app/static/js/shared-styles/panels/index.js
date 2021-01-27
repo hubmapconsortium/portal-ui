@@ -63,7 +63,7 @@ function Panel(props) {
         </MaxWidthDiv>
         <div>
           {Object.entries(entityCounts).map(([key, value]) => (
-            <StyledTypography variant="caption">{`${value} ${capitalizeString(key)}`}</StyledTypography>
+            <StyledTypography key={key} variant="caption">{`${value} ${capitalizeString(key)}`}</StyledTypography>
           ))}
         </div>
       </PanelWrapper>

@@ -11,7 +11,7 @@ const usedSavedListsSelector = (state) => state.addEntityToList;
 const useSavedEntitiesSelector = (state) => state.savedEntities;
 
 function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd }) {
-  const [selectedLists, addToSelectedLists] = useStateSet([]);
+  const [selectedLists, addToSelectedLists, removeFromSelectedLists] = useStateSet([]);
 
   const addEntityToList = useSavedListsStore(usedSavedListsSelector);
   const savedEntities = useSavedEntitiesStore(useSavedEntitiesSelector);
@@ -27,7 +27,13 @@ function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd 
   return (
     <DialogModal
       title={title}
-      content={<AddToList selectedLists={selectedLists} addToSelectedLists={addToSelectedLists} />}
+      content={
+        <AddToList
+          selectedLists={selectedLists}
+          addToSelectedLists={addToSelectedLists}
+          removeFromSelectedLists={removeFromSelectedLists}
+        />
+      }
       actions={
         <>
           <Button onClick={() => setDialogIsOpen(false)} color="primary">
