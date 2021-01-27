@@ -8,7 +8,7 @@ const useSavedListsSelector = (state) => ({
   savedLists: state.savedLists,
 });
 
-function AddToList({ selectedLists, addToSelectedLists }) {
+function AddToList({ selectedLists, addToSelectedLists, removeFromSelectedLists }) {
   const { savedLists } = useSavedListsStore(useSavedListsSelector);
 
   return (
@@ -18,6 +18,7 @@ function AddToList({ selectedLists, addToSelectedLists }) {
           title={listName}
           isSelected={selectedLists.has(listName)}
           addToSelectedLists={addToSelectedLists}
+          removeFromSelectedLists={removeFromSelectedLists}
         />
       ))}
     </List>

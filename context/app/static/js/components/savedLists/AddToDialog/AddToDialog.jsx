@@ -9,7 +9,7 @@ import useSavedListsStore from 'js/stores/useSavedListsStore';
 const usedSavedListsSelector = (state) => state.addEntityToList;
 
 function AddToDialog({ dialogIsOpen, setDialogIsOpen, savedEntities, selectedRows }) {
-  const [selectedLists, addToSelectedLists] = useStateSet([]);
+  const [selectedLists, addToSelectedLists, removeFromSelectedLists] = useStateSet([]);
 
   const addEntityToList = useSavedListsStore(usedSavedListsSelector);
 
@@ -24,7 +24,13 @@ function AddToDialog({ dialogIsOpen, setDialogIsOpen, savedEntities, selectedRow
   return (
     <DialogModal
       title="Add Items To"
-      content={<AddToList selectedLists={selectedLists} addToSelectedLists={addToSelectedLists} />}
+      content={
+        <AddToList
+          selectedLists={selectedLists}
+          addToSelectedLists={addToSelectedLists}
+          removeFromSelectedLists={removeFromSelectedLists}
+        />
+      }
       actions={
         <>
           <Button onClick={() => setDialogIsOpen(false)} color="primary">
