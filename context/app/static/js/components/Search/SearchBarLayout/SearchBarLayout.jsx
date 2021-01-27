@@ -2,21 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle } from 'searchkit';
 
-import SearchViewSwitch from '../SearchViewSwitch';
+import SearchViewSwitch, { DevSearchViewSwitch } from './SearchViewSwitch';
 import TilesSortDropdown from '../TilesSortDropdown';
 import SelectedFilter from '../SelectedFilter';
 import { Flex, CenteredDiv } from './style';
 
 function SearchBarLayout(props) {
-  const { queryFields, sortOptions } = props;
+  const { queryFields, sortOptions, isDevSearch } = props;
   return (
     <>
       <Flex>
         <SearchBox autofocus queryFields={queryFields} />
-        <CenteredDiv>
+        <StyledDiv>
           <SortingSelector options={sortOptions} listComponent={TilesSortDropdown} />
-          <ViewSwitcherToggle listComponent={SearchViewSwitch} />
-        </CenteredDiv>
+          <ViewSwitcherToggle listComponent={isDevSearch ? DevSearchViewSwitch : SearchViewSwitch} />
+        </StyledDiv>
       </Flex>
       <SelectedFilters itemComponent={SelectedFilter} />
     </>

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line import/named
-import { listFilter, rangeFilter, field } from './utils';
+import { listFilter, rangeFilter, field, hierarchicalFilter } from './utils';
 
 const bmiField = 'body_mass_index_value';
 const ageField = 'age_value';
@@ -40,6 +40,7 @@ const donorConfig = {
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
     tile: [...sharedTileFields, field(`mapped_metadata.${ageUnitField}`, 'Age Unit')],
+    ccf: [],
   },
 };
 
@@ -61,6 +62,7 @@ const sampleConfig = {
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
     tile: sharedTileFields,
+    ccf: [],
   },
 };
 
@@ -70,8 +72,7 @@ const datasetConfig = {
       listFilter('mapped_data_types', 'Data Type'),
       listFilter('origin_sample.mapped_organ', 'Organ'),
       listFilter('source_sample.mapped_specimen_type', 'Specimen Type'),
-      listFilter('mapped_status', 'Status'),
-      listFilter('mapped_data_access_level', 'Access Level'),
+      hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
@@ -86,6 +87,7 @@ const datasetConfig = {
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
     tile: sharedTileFields,
+    ccf: [],
   },
 };
 

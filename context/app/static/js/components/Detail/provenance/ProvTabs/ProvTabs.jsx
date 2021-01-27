@@ -46,9 +46,7 @@ function ProvTabs(props) {
       {shouldDisplayTable && (
         <StyledTabPanel value={open} index={0} pad={1}>
           <ProvTable
-            provData={provData}
             uuid={uuid}
-            entity_type={entity_type}
             typesToSplit={['Donor', 'Sample', 'Dataset']}
             ancestors={ancestors}
             assayMetadata={assayMetadata}

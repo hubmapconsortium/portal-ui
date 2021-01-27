@@ -4,6 +4,7 @@ import { ViewSwitcherHits } from 'searchkit'; // eslint-disable-line import/no-d
 
 import ResultsTable from '../ResultsTable';
 import ResultsTiles from '../ResultsTiles';
+import ResultsCCF from '../ResultsCCF';
 
 function Results(props) {
   const { sortOptions, hitsPerPage, tableResultFields, detailsUrlPrefix, idField, resultFieldIds, type } = props;
@@ -26,6 +27,7 @@ function Results(props) {
           defaultOption: true,
         },
         { key: 'tile', title: 'Tile', listComponent: <ResultsTiles type={type} /> },
+        { key: 'ccf', title: 'CCF', listComponent: <ResultsCCF type={type} /> },
       ]}
       sourceFilter={resultFieldIds}
       customHighlight={{

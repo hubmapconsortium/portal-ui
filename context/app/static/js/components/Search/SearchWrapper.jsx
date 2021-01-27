@@ -26,11 +26,14 @@ function SearchWrapper(props) {
     queryFields,
     type,
     isLoggedIn,
+    isDevSearch,
     resultsComponent: ResultsComponent,
   } = props;
 
   const sortOptions = resultFieldsToSortOptions(resultFields.table);
-  const resultFieldIds = [...resultFields.table, ...resultFields.tile].map((field) => field.id).concat(idField);
+  const resultFieldIds = [...resultFields.table, ...resultFields.tile, ...resultFields.ccf]
+    .map((field) => field.id)
+    .concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
 
   const setSearchHitsCount = useSearchViewStore(searchViewStoreSelector);
@@ -47,7 +50,7 @@ function SearchWrapper(props) {
   return (
     <SearchkitProvider searchkit={searchkit}>
       <>
-        <SearchBarLayout queryFields={queryFields} sortOptions={sortOptions} />
+        <SearchBarLayout queryFields={queryFields} sortOptions={sortOptions} isDevSearch={isDevSearch} />
         <LayoutBody>
           <StyledSideBar>
             <Accordions filters={filters} />
@@ -85,6 +88,13 @@ SearchWrapper.propTypes = {
       }),
     ),
     tile: PropTypes.arrayOf(
+      PropTypes.exact({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        translations: PropTypes.objectOf(PropTypes.string),
+      }),
+    ),
+    ccf: PropTypes.arrayOf(
       PropTypes.exact({
         id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,

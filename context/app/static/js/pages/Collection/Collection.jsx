@@ -7,12 +7,15 @@ import CollectionDatasetsTable from 'js/components/Detail/CollectionDatasetsTabl
 import CollectionsAffiliationsTable from 'js/components/Detail/CollectionsAffiliationsTable';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 
+import { StyledOpenInNewRoundedIcon } from './style';
+
 function Collection(props) {
   const { collection: collectionData } = props;
   const {
     uuid,
     entity_type,
     display_doi,
+    doi_url,
     title,
     description,
     create_timestamp,
@@ -37,8 +40,8 @@ function Collection(props) {
             create_timestamp={create_timestamp}
             last_modified_timestamp={last_modified_timestamp}
           >
-            <LightBlueLink href="https://www.doi.org" target="_blank" rel="noopener noreferrer" variant="body1">
-              doi.org
+            <LightBlueLink href={doi_url} target="_blank" rel="noopener noreferrer" variant="body1">
+              doi:{new URL(doi_url).pathname.slice(1)} <StyledOpenInNewRoundedIcon />
             </LightBlueLink>
           </Summary>
           {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}

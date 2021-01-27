@@ -21,7 +21,7 @@ function LoginButton(props) {
     </Dropdown>
   ) : (
     <WhiteButton component="a" href="/login">
-      login
+      Member Login
     </WhiteButton>
   );
 }

@@ -5,7 +5,9 @@ on: [push, pull_request]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    # Available versions:
+    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2

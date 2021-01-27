@@ -8,6 +8,7 @@ import accordionFilters from '../accordionFilters';
 test('default export has the right keys', () => {
   expect(Object.keys(accordionFilters).sort()).toEqual([
     'AccordionCheckboxFilter',
+    'AccordionHierarchicalMenuFilter',
     'AccordionListFilter',
     'AccordionRangeFilter',
   ]);

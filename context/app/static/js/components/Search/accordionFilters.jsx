@@ -1,5 +1,5 @@
 import React from 'react';
-import { RefinementListFilter, RangeFilter, CheckboxFilter } from 'searchkit';
+import { RefinementListFilter, RangeFilter, CheckboxFilter, HierarchicalMenuFilter } from 'searchkit';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 
@@ -13,7 +13,7 @@ function Details(props) {
   }
   if (
     !Array.isArray(children) &&
-    children.props.items.map((bucket) => bucket.doc_count).every((count) => count === 0)
+    children.props.items?.map((bucket) => bucket.doc_count).every((count) => count === 0)
   ) {
     // Presumably a range filter...
     return null;
@@ -29,6 +29,19 @@ function Details(props) {
     </InnerAccordion>
   );
 }
+
+function AccordionHierarchicalMenuFilter(props) {
+  const innerProps = {
+    containerComponent: Details,
+    ...props,
+  };
+  return <HierarchicalMenuFilter {...innerProps} />;
+}
+
+AccordionHierarchicalMenuFilter.propTypes = {
+  fields: PropTypes.arrayOf(PropTypes.string).isRequired,
+  title: PropTypes.string.isRequired,
+};
 
 function AccordionListFilter(props) {
   const innerProps = {
@@ -79,4 +92,4 @@ AccordionCheckboxFilter.propTypes = {
   filter: PropTypes.object.isRequired,
 };
 
-export default { AccordionListFilter, AccordionRangeFilter, AccordionCheckboxFilter };
+export default { AccordionHierarchicalMenuFilter, AccordionListFilter, AccordionRangeFilter, AccordionCheckboxFilter };

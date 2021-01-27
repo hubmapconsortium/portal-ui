@@ -1,3 +1,18 @@
+## v0.10.1 - 2021-01-25
+
+- Link to collections DOI.
+- Change "Login" to "Member Login".
+
+
+## v0.10.0 - 2021-01-19
+
+- Log config during docker startup.
+- Use the github CI syntax for output folding.
+- Add notes on design process to README.
+- Pin the Ubuntu version used by github CI.
+- Add a dev search facet to find spatially located datasets; Fix a bug in the facet for spatially located samples.
+
+
 ## v0.9.6 - 2021-01-11
 
 - Add cypress tests for dataset search tutorial.
