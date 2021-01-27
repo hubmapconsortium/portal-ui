@@ -15,6 +15,7 @@ function AddToList({ selectedLists, addToSelectedLists, removeFromSelectedLists 
     <List>
       {Object.keys(savedLists).map((listName) => (
         <AddToListItem
+          key={listName}
           title={listName}
           isSelected={selectedLists.has(listName)}
           addToSelectedLists={addToSelectedLists}

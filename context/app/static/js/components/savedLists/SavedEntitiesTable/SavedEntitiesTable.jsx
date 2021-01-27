@@ -106,6 +106,7 @@ function SavedEntitiesTable() {
             <TableBody>
               {Object.entries(savedEntities).map(([key, value], i) => (
                 <SavedEntitiesTableRow
+                  key={key}
                   uuid={key}
                   dateSaved={value.dateSaved}
                   index={i}

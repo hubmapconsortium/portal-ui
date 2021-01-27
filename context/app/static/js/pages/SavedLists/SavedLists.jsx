@@ -66,6 +66,7 @@ function SavedLists() {
             const { Donor, Sample, Dataset } = value;
             return (
               <Panel
+                key={key}
                 title={key}
                 href=""
                 secondaryText={value.description}
