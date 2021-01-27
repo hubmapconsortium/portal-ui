@@ -1,1 +1,0 @@
-- Remove unused props from ProvTable.

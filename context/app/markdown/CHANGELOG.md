@@ -1,3 +1,12 @@
+## v0.10.2 - 2021-01-27
+
+- Bring back selected filters UI.
+- Provide two different view toggles, one for the main search, and one for dev.
+- For the dev search, provide a stub where a CCF view could be filled in.
+- Demo hierarchical facets with publication status.
+- Remove unused props from ProvTable.
+
+
 ## v0.10.1 - 2021-01-25
 
 - Link to collections DOI.
