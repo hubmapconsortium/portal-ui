@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import SaveButton from 'js/components/Detail/SaveButton';
+import SaveEditEntityButton from 'js/components/Detail/SaveEditEntityButton';
 import { useInView } from 'react-intersection-observer';
 import 'intersection-observer';
 
@@ -54,7 +54,7 @@ function SummaryData(props) {
                 <FileIcon color="primary" />
               </JsonButton>
             </SecondaryBackgroundTooltip>
-            <SaveButton uuid={uuid} entity_type={entity_type} />
+            <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />
           </FlexEnd>
         </FlexRight>
       </Flex>
