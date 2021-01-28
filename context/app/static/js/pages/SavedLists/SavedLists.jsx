@@ -7,8 +7,8 @@ import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { Panel, PanelScrollBox } from 'js/shared-styles/panels';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
+import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import Description from 'js/shared-styles/sections/Description';
-
 import { SeparatedFlexRow, FlexBottom } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
@@ -25,9 +25,7 @@ function SavedLists() {
       <Typography variant="h2" component="h1">
         My Lists
       </Typography>
-      <Description padding="20px 20px">
-        Your lists are currently stored on local storage and are not transferable between devices.{' '}
-      </Description>
+      <LocalStorageDescription />
       <Typography variant="h3" component="h2">
         My Saves Lists
       </Typography>
@@ -65,7 +63,7 @@ function SavedLists() {
               <Panel
                 key={key}
                 title={key}
-                href=""
+                href={`/my-lists/${key}`}
                 secondaryText={value.description}
                 entityCounts={{
                   donors: Object.keys(Donor).length,
