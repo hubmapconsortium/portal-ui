@@ -20,6 +20,7 @@ const useSavedEntitiesStore = create(
       createList: ({ title, description }) =>
         set((state) => {
           state.savedLists[title] = {
+            // the Donor, Sample, and Datasets are objects to avoid duplicates. Normally they would be sets, but objects work better with local storage
             Donor: {},
             Sample: {},
             Dataset: {},
