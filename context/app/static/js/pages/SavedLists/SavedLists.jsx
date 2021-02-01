@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
@@ -14,11 +14,19 @@ import { SeparatedFlexRow, FlexBottom } from './style';
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
   savedEntities: state.savedEntities,
+  listsToBeDeleted: state.listsToBeDeleted,
+  deleteLists: state.deleteLists,
 });
 
 function SavedLists() {
-  const { savedLists, savedEntities } = useSavedEntitiesStore(usedSavedEntitiesSelector);
+  const { savedLists, savedEntities, listsToBeDeleted, deleteLists } = useSavedEntitiesStore(usedSavedEntitiesSelector);
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (listsToBeDeleted.length > 0) {
+      deleteLists();
+    }
+  }, [listsToBeDeleted, deleteLists]);
 
   return (
     <>
@@ -63,7 +71,7 @@ function SavedLists() {
               <Panel
                 key={key}
                 title={key}
-                href={`/my-lists/${key}`}
+                href={`/my-lists/${encodeURIComponent(key)}`}
                 secondaryText={value.description}
                 entityCounts={{
                   donors: Object.keys(Donor).length,
