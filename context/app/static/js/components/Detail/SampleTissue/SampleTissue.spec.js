@@ -4,7 +4,7 @@ import { render, screen } from 'test-utils/functions';
 import SampleTissue from './SampleTissue';
 
 test('text displays properly when all props provided', () => {
-  render(<SampleTissue mapped_organ="Fake Organ" mapped_specimen_type="Fake Specimen Type" />);
+  render(<SampleTissue mapped_organ="Fake Organ" mapped_specimen_type="Fake Specimen Type" hasRUI />);
 
   expect(screen.getByText('Tissue')).toBeInTheDocument();
 
