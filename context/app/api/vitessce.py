@@ -9,6 +9,7 @@ from itertools import groupby
 from flask import current_app
 from vitessce import (
     VitessceConfig,
+    MultiImageWrapper,
     OmeTiffWrapper,
     DataType as dt,
     FileType as ft,
@@ -327,7 +328,7 @@ class Vitessce:
         elif self.assay_type in IMAGE_ASSAYS:
             found_images = _get_matches(file_paths_found, files[0]["rel_path"])
             if "seqFish" in self.entity["data_types"]:
-                return self._build_seqfish_conf(found_images, conf)
+                return self._build_seqfish_conf(found_images)
             vc = VitessceConfig(name="HuBMAP Data Portal")
             dataset = vc.add_dataset(name="Visualization Files")
             for img_path in found_images:
@@ -343,7 +344,7 @@ class Vitessce:
             self.conf = vc.to_dict(on_obj=on_obj)
             return self.conf
 
-    def _build_seqfish_conf(self, found_images, conf):
+    def _build_seqfish_conf(self, found_images):
         is_valid_directory = all(
             [re.fullmatch(SEQFISH_REGEX, file) for file in found_images]
         )
@@ -360,17 +361,19 @@ class Vitessce:
         confs = []
         # Build up a conf for each Pos.
         for i, images in enumerate(images_by_pos):
-            new_conf = copy.deepcopy(conf)
-            layers = [
-                self._build_multi_file_image_layer_conf(
-                    # Images and hybridization cycles need to be in the same order.
-                    sorted(images, key=_get_hybcycle),
-                    hyb_cycles_per_pos[i],
+            image_wrappers = []
+            vc = VitessceConfig(name=f"HuBMAP Data Portal {i}")
+            dataset = vc.add_dataset(name="Visualization Files")
+            view_config_and_files = ASSAY_CONF_LOOKUP[self.assay_type]
+            view_function = view_config_and_files["view_function"]
+            for k, img_path in enumerate(sorted(images, key=_get_hybcycle)):
+                img_url, offsets_url = self._get_img_and_offset_url(
+                    img_path, IMAGING_PATHS[IMAGE_PYRAMID]
                 )
-            ]
-            new_conf["layers"] = layers
-            new_conf["name"] = re.search(SEQFISH_NAME_REGEX, images[0])[0].split(".")[0]
-            confs.append(self._replace_view(new_conf))
+                image_wrappers += [OmeTiffWrapper(img_url=img_url, offsets_url=offsets_url, name=f"Image {k}")]
+            dataset = dataset.add_object(MultiImageWrapper(image_wrappers))
+            vc = view_function(vc, dataset)
+            confs.append(vc.to_dict(on_obj=on_obj))
         self.conf = confs
         return confs
 
