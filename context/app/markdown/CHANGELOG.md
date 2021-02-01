@@ -1,3 +1,8 @@
+## v0.11.0 - 2021-02-01
+
+- Let the ProvGraph work against either the new or old Prov API.
+
+
 ## v0.10.2 - 2021-01-27
 
 - Bring back selected filters UI.
