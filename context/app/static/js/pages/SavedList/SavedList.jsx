@@ -4,6 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import DetailDescription from 'js/components/Detail/DetailDescription';
+import RightAlignedButtonRow from 'js/shared-styles/sections/RightAlignedButtonRow';
+import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
@@ -17,18 +19,24 @@ function getListAndItsEntities(savedLists, listTitle) {
 }
 
 function SavedList({ listTitle }) {
-  const { savedLists } = useSavedEntitiesStore(usedSavedEntitiesSelector);
-  const [savedList, listEntities] = getListAndItsEntities(savedLists, listTitle);
+  const decodedTitle = decodeURIComponent(listTitle);
 
+  const { savedLists } = useSavedEntitiesStore(usedSavedEntitiesSelector);
+  const [savedList, listEntities] = getListAndItsEntities(savedLists, decodedTitle);
   return (
     <>
       <Typography variant="subtitle1" component="h1" color="primary">
         List
       </Typography>
-      <Typography variant="h2">{listTitle}</Typography>
-      <Typography variant="body1" color="primary">
-        {Object.keys(listEntities).length}
-      </Typography>
+      <Typography variant="h2">{decodedTitle}</Typography>
+      <RightAlignedButtonRow
+        leftText={
+          <Typography variant="body1" color="primary">
+            {Object.keys(listEntities).length}
+          </Typography>
+        }
+        buttons={<SavedListMenuButton listTitle={decodedTitle} />}
+      />
       <LocalStorageDescription />
       <DetailDescription
         description={savedList.description}
