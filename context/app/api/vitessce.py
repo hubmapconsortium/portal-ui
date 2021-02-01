@@ -7,7 +7,15 @@ import copy
 from itertools import groupby
 
 from flask import current_app
-from vitessce import VitessceConfig, OmeTiffWrapper, DataType as dt, FileType as ft, Component as cm, CoordinationType as ct
+from vitessce import (
+    VitessceConfig,
+    OmeTiffWrapper,
+    DataType as dt,
+    FileType as ft,
+    Component as cm,
+    CoordinationType as ct,
+)
+
 
 def build_scatterplot_view_config(vc, dataset):
     umap = vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP")
@@ -15,13 +23,14 @@ def build_scatterplot_view_config(vc, dataset):
     vc.layout(umap | cell_sets)
     return vc
 
+
 def build_basic_imaging_config(vc, dataset):
     spatial = vc.add_view(dataset, cm.SPATIAL)
     status = vc.add_view(dataset, cm.DESCRIPTION)
     lc = vc.add_view(dataset, cm.LAYER_CONTROLLER)
     vc.layout(spatial | (lc / status))
-    print(vc, dataset, vc.to_dict())
     return vc
+
 
 def build_imaging_with_segmentation_and_clusters_config(vc, dataset):
     spatial = vc.add_view(dataset, cm.SPATIAL)
@@ -47,8 +56,13 @@ SCATAC_SEQ_SNARE = "sc_atac_seq_snare"
 SCATAC_SEQ_SN = "sn_atac_seq"
 
 SC_DATA_TYPES = [
-    SCRNA_SEQ_10X, SCRNA_SEQ_SCI, SCRNA_SEQ_SNARE, SCRNA_SEQ_SN,
-    SCATAC_SEQ_SCI, SCATAC_SEQ_SNARE, SCATAC_SEQ_SN
+    SCRNA_SEQ_10X,
+    SCRNA_SEQ_SCI,
+    SCRNA_SEQ_SNARE,
+    SCRNA_SEQ_SN,
+    SCATAC_SEQ_SCI,
+    SCATAC_SEQ_SNARE,
+    SCATAC_SEQ_SN,
 ]
 
 SCRNA_SEQ_BASE_PATH = "cluster-marker-genes/output/cluster_marker_genes"
@@ -63,8 +77,8 @@ TILE_REGEX = r"R\d+_X\d+_Y\d+"
 
 # Hardcoded CODEX offsets and tile path.
 IMAGING_PATHS = {
-    CODEX_CYTOKIT: {"offsets": OFFSETS_PATH, "image": CODEX_TILE_PATH, },
-    IMAGE_PYRAMID: {"offsets": OFFSETS_PATH, "image": IMAGE_PYRAMID_PATH, },
+    CODEX_CYTOKIT: {"offsets": OFFSETS_PATH, "image": CODEX_TILE_PATH,},
+    IMAGE_PYRAMID: {"offsets": OFFSETS_PATH, "image": IMAGE_PYRAMID_PATH,},
 }
 
 SEQFISH_HYB_CYCLE_REGEX = r"(HybCycle_\d+|final_mRNA_background)"
@@ -182,6 +196,7 @@ def _group_by_file_name(files):
 def _get_hybcycle(image):
     return re.search(SEQFISH_HYB_CYCLE_REGEX, image)[0]
 
+
 def create_obj_routes(obj, dataset_uid, obj_i):
     """
     For a particular data object, simultaneously set up:
@@ -197,16 +212,19 @@ def create_obj_routes(obj, dataset_uid, obj_i):
     """
     obj_file_defs = []
     obj_routes = []
-    base_url = ''
+    base_url = ""
     for data_type in dt:
         try:
-            dt_obj_file_defs, dt_obj_routes = obj._get_data(data_type, base_url, dataset_uid, obj_i)
+            dt_obj_file_defs, dt_obj_routes = obj._get_data(
+                data_type, base_url, dataset_uid, obj_i
+            )
             obj_file_defs += dt_obj_file_defs
             obj_routes += dt_obj_routes
         except NotImplementedError:
             pass
 
     return obj_file_defs, obj_routes
+
 
 def on_obj(obj, dataset_uid, obj_i):
     obj_file_defs, obj_routes = create_obj_routes(obj, dataset_uid, obj_i)
@@ -279,8 +297,8 @@ class Vitessce:
                         'uuid "{self.uuid}" not found as expected.'
                     )
                 return {}
-            vc = VitessceConfig(name='HuBMAP Data Portal')
-            dataset = vc.add_dataset(name='Visualization Files')
+            vc = VitessceConfig(name="HuBMAP Data Portal")
+            dataset = vc.add_dataset(name="Visualization Files")
             for file in files:
                 dataset = dataset.add_file(**(self._replace_url_in_file(file)))
             vc = view_function(vc, dataset)
@@ -310,19 +328,27 @@ class Vitessce:
             found_images = _get_matches(file_paths_found, files[0]["rel_path"])
             if "seqFish" in self.entity["data_types"]:
                 return self._build_seqfish_conf(found_images, conf)
-            vc = VitessceConfig(name='HuBMAP Data Portal')
-            dataset = vc.add_dataset(name='Visualization Files')
+            vc = VitessceConfig(name="HuBMAP Data Portal")
+            dataset = vc.add_dataset(name="Visualization Files")
             for img_path in found_images:
-                dataset = dataset.add_object(OmeTiffWrapper(img_url=self._build_assets_url(img_path), name='Image'))
-            print(dataset.objs)
+                img_url, offsets_url = self._get_img_and_offset_url(
+                    img_path, IMAGING_PATHS[IMAGE_PYRAMID]
+                )
+                dataset = dataset.add_object(
+                    OmeTiffWrapper(
+                        img_url=img_url, offsets_url=offsets_url, name="Image"
+                    )
+                )
             vc = view_function(vc, dataset)
             self.conf = vc.to_dict(on_obj=on_obj)
             return self.conf
 
     def _build_seqfish_conf(self, found_images, conf):
-        is_valid_directory = all([re.fullmatch(SEQFISH_REGEX, file) for file in found_images])
+        is_valid_directory = all(
+            [re.fullmatch(SEQFISH_REGEX, file) for file in found_images]
+        )
         if not is_valid_directory:
-            print(f'Directory structure for seqFish dataset {self.uuid} invalid')
+            print(f"Directory structure for seqFish dataset {self.uuid} invalid")
             return []
         # Get all files grouped by PosN names.
         images_by_pos = _group_by_file_name(found_images)
@@ -338,7 +364,8 @@ class Vitessce:
             layers = [
                 self._build_multi_file_image_layer_conf(
                     # Images and hybridization cycles need to be in the same order.
-                    sorted(images, key=_get_hybcycle), hyb_cycles_per_pos[i]
+                    sorted(images, key=_get_hybcycle),
+                    hyb_cycles_per_pos[i],
                 )
             ]
             new_conf["layers"] = layers
@@ -346,6 +373,19 @@ class Vitessce:
             confs.append(self._replace_view(new_conf))
         self.conf = confs
         return confs
+
+    def _get_img_and_offset_url(self, img_path, replace_params):
+        img_url = self._build_assets_url(img_path)
+        return (
+            img_url,
+            str(
+                re.sub(
+                    r"ome\.tiff?",
+                    "offsets.json",
+                    img_url.replace(replace_params["image"], replace_params["offsets"]),
+                )
+            ),
+        )
 
     def _replace_url_in_file(self, file):
         """Build each layer in the layers section.
