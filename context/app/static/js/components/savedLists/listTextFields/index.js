@@ -4,7 +4,7 @@ import { PrimaryOutlinedTextField } from 'js/shared-styles/formFields';
 
 const maxTitleLength = 50;
 
-function TitleTextField({ handleChange, title, ...props }) {
+function TitleTextField({ handleChange, title }) {
   return (
     <PrimaryOutlinedTextField
       autoFocus
@@ -19,12 +19,11 @@ function TitleTextField({ handleChange, title, ...props }) {
       required
       helperText={`${title.length}/${maxTitleLength} Characters`}
       value={title}
-      {...props}
     />
   );
 }
 
-function DescriptionTextField(handleChange, description, ...props) {
+function DescriptionTextField({ handleChange, description }) {
   return (
     <PrimaryOutlinedTextField
       id="description"
@@ -37,7 +36,6 @@ function DescriptionTextField(handleChange, description, ...props) {
       inputProps={{ maxLength: 1000 }}
       onChange={handleChange}
       value={description}
-      {...props}
     />
   );
 }
