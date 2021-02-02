@@ -55,7 +55,7 @@ const useSavedEntitiesStore = create(
           });
         }
       },
-      deleteLists: () => {
+      deleteQueuedLists: () => {
         get().listsToBeDeleted.forEach((listTitle) =>
           set((state) => {
             delete state.savedLists[listTitle];

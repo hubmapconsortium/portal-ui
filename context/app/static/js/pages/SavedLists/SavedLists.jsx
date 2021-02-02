@@ -15,18 +15,20 @@ const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
   savedEntities: state.savedEntities,
   listsToBeDeleted: state.listsToBeDeleted,
-  deleteLists: state.deleteLists,
+  deleteQueuedLists: state.deleteQueuedLists,
 });
 
 function SavedLists() {
-  const { savedLists, savedEntities, listsToBeDeleted, deleteLists } = useSavedEntitiesStore(usedSavedEntitiesSelector);
+  const { savedLists, savedEntities, listsToBeDeleted, deleteQueuedLists } = useSavedEntitiesStore(
+    usedSavedEntitiesSelector,
+  );
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   useEffect(() => {
     if (listsToBeDeleted.length > 0) {
-      deleteLists();
+      deleteQueuedLists();
     }
-  }, [listsToBeDeleted, deleteLists]);
+  }, [listsToBeDeleted, deleteQueuedLists]);
 
   return (
     <>
