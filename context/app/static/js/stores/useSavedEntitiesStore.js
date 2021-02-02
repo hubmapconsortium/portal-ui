@@ -65,6 +65,11 @@ const useSavedEntitiesStore = create(
           state.listsToBeDeleted = [];
         });
       },
+      deleteList: (listTitle) => {
+        set((state) => {
+          delete state.savedLists[listTitle];
+        });
+      },
     })),
     {
       name: 'saved_entities',
