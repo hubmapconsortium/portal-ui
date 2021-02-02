@@ -6,9 +6,9 @@ import SectionItem from '../SectionItem';
 import { FlexColumnRight, StyledPaper } from './style';
 
 function DetailDescription({ subtitle, description, createdTimestamp, modifiedTimestamp }) {
-  const dateFormat = 'MMMM d, yyyy';
-  const formattedCreationDate = format(createdTimestamp, dateFormat);
-  const formattedModificationDate = format(modifiedTimestamp, dateFormat);
+  const dateFormat = 'MMMM dd, yyyy';
+  const formattedCreationDate = createdTimestamp ? format(createdTimestamp, dateFormat) : 'Undefined';
+  const formattedModificationDate = modifiedTimestamp ? format(modifiedTimestamp, dateFormat) : 'Undefined';
   return (
     <StyledPaper>
       <div>
