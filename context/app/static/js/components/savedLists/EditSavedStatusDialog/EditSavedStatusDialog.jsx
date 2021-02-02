@@ -26,7 +26,7 @@ const entityStoreSelector = (state) => state.setShouldDisplaySavedOrEditedAlert;
 
 function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_type }) {
   const { addEntityToList, savedLists, removeEntityFromList } = useSavedEntitiesStore(useSavedEntitiesSelector);
-  const [selectedLists, addToSelectedLists, removeFromSelectedLists] = useStateSet(
+  const [selectedLists, addToSelectedLists, removeFromSelectedLists, setSelectedLists] = useStateSet(
     getSavedListsWhichContainEntity(savedLists, uuid, entity_type),
   );
 
@@ -44,6 +44,11 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_typ
     setDialogIsOpen(false);
   }
 
+  function handleClose() {
+    setSelectedLists(new Set(getSavedListsWhichContainEntity(savedLists, uuid, entity_type)));
+    setDialogIsOpen(false);
+  }
+
   return (
     <DialogModal
       title="Edit Saved Status"
@@ -56,7 +61,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_typ
       }
       actions={
         <>
-          <Button onClick={() => setDialogIsOpen(false)} color="primary">
+          <Button onClick={() => handleClose()} color="primary">
             Cancel
           </Button>
           <Button onClick={() => handleSave()} color="primary">
@@ -65,7 +70,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_typ
         </>
       }
       isOpen={dialogIsOpen}
-      handleClose={() => setDialogIsOpen(false)}
+      handleClose={() => handleClose()}
     />
   );
 }
