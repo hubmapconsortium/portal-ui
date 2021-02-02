@@ -11,7 +11,7 @@ const useSavedEntitiesSelector = (state) => state.addEntityToList;
 const entityStoreSelector = (state) => state.setShouldDisplaySavedOrEditedAlert;
 
 function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }) {
-  const [selectedLists, addToSelectedLists] = useStateSet([]);
+  const [selectedLists, addToSelectedLists, removeFromSelectedLists] = useStateSet([]);
 
   const addEntityToList = useSavedEntitiesStore(useSavedEntitiesSelector);
   const setShouldDisplaySavedOrEditedAlert = useEntityStore(entityStoreSelector);
@@ -29,7 +29,13 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }) {
   return (
     <DialogModal
       title="Edit Saved Status"
-      content={<AddToList selectedLists={selectedLists} addToSelectedLists={addToSelectedLists} />}
+      content={
+        <AddToList
+          selectedLists={selectedLists}
+          addToSelectedLists={addToSelectedLists}
+          removeFromSelectedLists={removeFromSelectedLists}
+        />
+      }
       actions={
         <>
           <Button onClick={() => setDialogIsOpen(false)} color="primary">
