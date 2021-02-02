@@ -3,9 +3,8 @@ import Button from '@material-ui/core/Button';
 
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import DialogModal from 'js/shared-styles/DialogModal';
-import { StyledPrimaryOutlineTextField } from './style';
+import { StyledTitleTextField, StyledDescriptionTextField } from './style';
 
-const maxTitleLength = 50;
 const useSavedEntitiesStoreSelector = (state) => state.createList;
 
 function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
@@ -31,32 +30,8 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
       title="Create New List"
       content={
         <>
-          <StyledPrimaryOutlineTextField
-            autoFocus
-            margin="dense"
-            id="title"
-            label="Title"
-            fullWidth
-            variant="outlined"
-            placeholder='Like “Spleen-Related Data” or “ATAC-seq Visualizations"'
-            inputProps={{ maxLength: maxTitleLength }}
-            onChange={handleTitleChange}
-            required
-            helperText={`${title.length}/${maxTitleLength} Characters`}
-            value={title}
-          />
-          <StyledPrimaryOutlineTextField
-            id="description"
-            label="Description (optional)"
-            fullWidth
-            variant="outlined"
-            placeholder="Input description of list"
-            multiline
-            rows={5}
-            inputProps={{ maxLength: 1000 }}
-            onChange={handleDescriptionChange}
-            value={description}
-          />
+          <StyledTitleTextField handleChange={handleTitleChange} title={title} />
+          <StyledDescriptionTextField handleChange={handleDescriptionChange} description={description} />
         </>
       }
       actions={
