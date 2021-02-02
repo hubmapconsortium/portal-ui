@@ -17,6 +17,11 @@ function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd 
     selectedLists.forEach((list) => addEntitiesToList(list, entitiesToAdd));
   }
 
+  function handleSubmit() {
+    addSavedEntitiesToList();
+    setDialogIsOpen(false);
+  }
+
   return (
     <DialogModal
       title={title}
@@ -32,7 +37,7 @@ function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd 
           <Button onClick={() => setDialogIsOpen(false)} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => addSavedEntitiesToList()} color="primary">
+          <Button onClick={() => handleSubmit()} color="primary">
             Save
           </Button>
         </>
