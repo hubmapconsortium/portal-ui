@@ -9,7 +9,7 @@ import { Panel, PanelScrollBox } from 'js/shared-styles/panels';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import Description from 'js/shared-styles/sections/Description';
-import { SeparatedFlexRow, FlexBottom } from './style';
+import { SeparatedFlexRow, FlexBottom, StyledAlert } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
@@ -21,15 +21,22 @@ const usedSavedEntitiesSelector = (state) => ({
 function SavedLists() {
   const { savedLists, savedEntities, listsToBeDeleted, deleteLists } = useSavedEntitiesStore(usedSavedEntitiesSelector);
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const [shouldDisplayDeleteAlert, setShouldDisplayDeleteAlert] = useState(false);
 
   useEffect(() => {
     if (listsToBeDeleted.length > 0) {
       deleteLists();
+      setShouldDisplayDeleteAlert(true);
     }
   }, [listsToBeDeleted, deleteLists]);
 
   return (
     <>
+      {shouldDisplayDeleteAlert && (
+        <StyledAlert severity="success" onClose={() => setShouldDisplayDeleteAlert(false)}>
+          List successfully deleted.
+        </StyledAlert>
+      )}
       <Typography variant="h2" component="h1">
         My Lists
       </Typography>
