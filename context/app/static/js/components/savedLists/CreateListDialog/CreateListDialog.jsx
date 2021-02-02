@@ -25,6 +25,11 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
     setDialogIsOpen(false);
   };
 
+  function handleSubmit() {
+    createList({ title, description });
+    setDialogIsOpen(false);
+  }
+
   return (
     <DialogModal
       title="Create New List"
@@ -39,7 +44,7 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => createList({ title, description })} color="primary" disabled={title.length === 0}>
+          <Button onClick={() => handleSubmit()} color="primary" disabled={title.length === 0}>
             Save
           </Button>
         </>
