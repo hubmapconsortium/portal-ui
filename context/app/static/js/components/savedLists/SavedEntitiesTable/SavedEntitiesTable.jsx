@@ -56,30 +56,37 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) 
         <Typography variant="subtitle1">
           {selectedRowsSize} {selectedRowsSize === 1 ? 'Item' : 'Items'} Selected
         </Typography>
-        <div>
-          <Button color="primary" onClick={() => deselectAllRows()}>
-            Deselect All ({selectedRowsSize})
-          </Button>
-          <SecondaryBackgroundTooltip title="Delete Items">
-            <WhiteBackgroundIconButton onClick={() => setDeleteDialogIsOpen(true)}>
-              <DeleteRoundedIcon color="primary" />
-            </WhiteBackgroundIconButton>
-          </SecondaryBackgroundTooltip>
-          <DeleteSavedEntitiesDialog
-            dialogIsOpen={deleteDialogIsOpen}
-            setDialogIsOpen={setDeleteDialogIsOpen}
-            deleteSelectedSavedEntities={deleteSelectedSavedEntities}
-          />
-          <Button color="primary" onClick={() => setAddToDialogIsOpen(true)} variant="contained">
-            Add To
-          </Button>
-          <SaveToListDialog
-            title="Add Items To"
-            dialogIsOpen={addToDialogIsOpen}
-            setDialogIsOpen={setAddToDialogIsOpen}
-            entitiesToAdd={selectedRows}
-          />
-        </div>
+        {selectedRowsSize > 0 && (
+          <div>
+            <Button color="primary" onClick={() => deselectAllRows()}>
+              Deselect All ({selectedRowsSize})
+            </Button>
+
+            <SecondaryBackgroundTooltip title="Delete Items">
+              <WhiteBackgroundIconButton onClick={() => setDeleteDialogIsOpen(true)}>
+                <DeleteRoundedIcon color="primary" />
+              </WhiteBackgroundIconButton>
+            </SecondaryBackgroundTooltip>
+            <DeleteSavedEntitiesDialog
+              dialogIsOpen={deleteDialogIsOpen}
+              setDialogIsOpen={setDeleteDialogIsOpen}
+              deleteSelectedSavedEntities={deleteSelectedSavedEntities}
+            />
+            {!isSavedListPage && (
+              <>
+                <Button color="primary" onClick={() => setAddToDialogIsOpen(true)} variant="contained">
+                  Add To
+                </Button>
+                <SaveToListDialog
+                  title="Add Items To"
+                  dialogIsOpen={addToDialogIsOpen}
+                  setDialogIsOpen={setAddToDialogIsOpen}
+                  entitiesToAdd={selectedRows}
+                />
+              </>
+            )}
+          </div>
+        )}
       </Flex>
       <Paper>
         <StyledTableContainer>
