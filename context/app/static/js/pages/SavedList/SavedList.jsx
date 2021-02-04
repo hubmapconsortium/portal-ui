@@ -28,6 +28,8 @@ function SavedList({ listTitle }) {
   const { savedLists } = useSavedEntitiesStore(usedSavedEntitiesSelector);
   const [savedList, listEntities] = getListAndItsEntities(savedLists, currentTitle);
 
+  const entitiesLength = Object.keys(listEntities).length;
+
   const { description } = savedList;
   return (
     <>
@@ -38,7 +40,7 @@ function SavedList({ listTitle }) {
       <RightAlignedButtonRow
         leftText={
           <Typography variant="body1" color="primary">
-            {Object.keys(listEntities).length}
+            {entitiesLength} {entitiesLength === 1 ? 'Item' : 'Items'}
           </Typography>
         }
         buttons={

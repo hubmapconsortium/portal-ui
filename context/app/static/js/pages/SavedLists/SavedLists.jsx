@@ -44,7 +44,7 @@ function SavedLists() {
       </Typography>
       <LocalStorageDescription />
       <Typography variant="h3" component="h2">
-        My Saves Lists
+        My Saved Items
       </Typography>
       {Object.keys(savedEntities).length === 0 ? (
         <Description padding="20px 20px">
