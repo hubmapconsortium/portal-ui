@@ -58,7 +58,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) 
         </Typography>
         {selectedRowsSize > 0 && (
           <div>
-            <Button color="primary" onClick={() => deselectAllRows()}>
+            <Button color="primary" onClick={deselectAllRows}>
               Deselect All ({selectedRowsSize})
             </Button>
 
