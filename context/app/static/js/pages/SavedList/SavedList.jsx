@@ -7,6 +7,7 @@ import DetailDescription from 'js/components/Detail/DetailDescription';
 import RightAlignedButtonRow from 'js/shared-styles/sections/RightAlignedButtonRow';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
+import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
@@ -25,10 +26,15 @@ function SavedList({ listTitle }) {
 
   const currentTitle = editedListTitle || decodedTitle;
 
-  const { savedLists } = useSavedEntitiesStore(usedSavedEntitiesSelector);
-  const [savedList, listEntities] = getListAndItsEntities(savedLists, currentTitle);
+  const { savedLists, savedEntities } = useSavedEntitiesStore(usedSavedEntitiesSelector);
+  const [savedList, listEntitiesUuids] = getListAndItsEntities(savedLists, currentTitle);
 
-  const entitiesLength = Object.keys(listEntities).length;
+  const entitiesLength = Object.keys(listEntitiesUuids).length;
+
+  const listEntities = Object.keys(listEntitiesUuids).reduce(
+    (acc, uuid) => ({ ...acc, [uuid]: savedEntities[uuid] }),
+    {},
+  );
 
   const { description } = savedList;
   return (
@@ -60,6 +66,7 @@ function SavedList({ listTitle }) {
         createdTimestamp={savedList.dateSaved}
         modifiedTimestamp={savedList.dateLastModified}
       />
+      <SavedEntitiesTable savedEntities={listEntities} />
     </>
   );
 }

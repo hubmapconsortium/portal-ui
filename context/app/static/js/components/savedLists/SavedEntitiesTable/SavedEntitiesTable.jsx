@@ -27,17 +27,16 @@ const columns = [
 ];
 
 const useSavedEntitiesSelector = (state) => ({
-  savedEntities: state.savedEntities,
   deleteEntity: state.deleteEntity,
 });
 
-function SavedEntitiesTable() {
+function SavedEntitiesTable({ savedEntities }) {
   const [selectedRows, addToSelectedRows, removeFromSelectedRows, setSelectedRows] = useStateSet([]);
   const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [addToDialogIsOpen, setAddToDialogIsOpen] = useState(false);
 
-  const { savedEntities, deleteEntity } = useSavedEntitiesStore(useSavedEntitiesSelector);
+  const { deleteEntity } = useSavedEntitiesStore(useSavedEntitiesSelector);
 
   function selectAllRows() {
     setSelectedRows(new Set(Object.keys(savedEntities)));
