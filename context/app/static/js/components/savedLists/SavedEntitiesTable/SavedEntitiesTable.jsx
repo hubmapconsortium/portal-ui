@@ -92,7 +92,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) 
         <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
-              <TableRow onClick={() => selectAllRows()}>
+              <TableRow onClick={headerRowIsSelected ? deselectAllRows : selectAllRows}>
                 <HeaderCell padding="checkbox">
                   <Checkbox
                     checked={headerRowIsSelected}
