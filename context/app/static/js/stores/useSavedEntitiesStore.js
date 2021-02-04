@@ -16,6 +16,13 @@ const useSavedEntitiesStore = create(
         set((state) => {
           delete state.savedEntities[entityUuid];
         }),
+      deleteEntities: (entityUuids) => {
+        entityUuids.forEach((uuid) => {
+          set((state) => {
+            delete state.savedEntities[uuid];
+          });
+        });
+      },
       savedLists: {},
       createList: ({ title, description }) =>
         set((state) => {
@@ -32,15 +39,16 @@ const useSavedEntitiesStore = create(
       addEntityToList: (title, uuid) => {
         const { entity_type } = get().savedEntities[uuid];
         set((state) => {
-          state.savedLists[title][entity_type][uuid] = true;
+          state.savedLists[title][entity_type][uuid] = { dateAddedToList: Date.now() };
           state.savedLists[title].dateLastModified = Date.now();
         });
       },
       addEntitiesToList: (title, uuids) => {
+        const timestamp = Date.now();
         uuids.forEach((uuid) => {
           const { entity_type } = get().savedEntities[uuid];
           set((state) => {
-            state.savedLists[title][entity_type][uuid] = true;
+            state.savedLists[title][entity_type][uuid] = { dateAddedToList: timestamp };
           });
         });
         set((state) => {
@@ -50,6 +58,14 @@ const useSavedEntitiesStore = create(
       removeEntityFromList: (title, uuid, entity_type) => {
         set((state) => {
           delete state.savedLists[title][entity_type][uuid];
+        });
+      },
+      removeEntitiesFromList: (title, uuids) => {
+        uuids.forEach((uuid) => {
+          const { entity_type } = get().savedEntities[uuid];
+          set((state) => {
+            delete state.savedLists[title][entity_type][uuid];
+          });
         });
       },
       listsToBeDeleted: [],
