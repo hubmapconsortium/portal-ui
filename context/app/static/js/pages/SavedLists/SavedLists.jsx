@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
@@ -9,25 +9,42 @@ import { Panel, PanelScrollBox } from 'js/shared-styles/panels';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import Description from 'js/shared-styles/sections/Description';
-import { SeparatedFlexRow, FlexBottom } from './style';
+import { SeparatedFlexRow, FlexBottom, StyledAlert } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
   savedEntities: state.savedEntities,
+  listsToBeDeleted: state.listsToBeDeleted,
+  deleteQueuedLists: state.deleteQueuedLists,
 });
 
 function SavedLists() {
-  const { savedLists, savedEntities } = useSavedEntitiesStore(usedSavedEntitiesSelector);
+  const { savedLists, savedEntities, listsToBeDeleted, deleteQueuedLists } = useSavedEntitiesStore(
+    usedSavedEntitiesSelector,
+  );
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const [shouldDisplayDeleteAlert, setShouldDisplayDeleteAlert] = useState(false);
+
+  useEffect(() => {
+    if (listsToBeDeleted.length > 0) {
+      deleteQueuedLists();
+      setShouldDisplayDeleteAlert(true);
+    }
+  }, [listsToBeDeleted, deleteQueuedLists]);
 
   return (
     <>
+      {shouldDisplayDeleteAlert && (
+        <StyledAlert severity="success" onClose={() => setShouldDisplayDeleteAlert(false)}>
+          List successfully deleted.
+        </StyledAlert>
+      )}
       <Typography variant="h2" component="h1">
         My Lists
       </Typography>
       <LocalStorageDescription />
       <Typography variant="h3" component="h2">
-        My Saves Lists
+        My Saved Items
       </Typography>
       {Object.keys(savedEntities).length === 0 ? (
         <Description padding="20px 20px">
@@ -63,7 +80,7 @@ function SavedLists() {
               <Panel
                 key={key}
                 title={key}
-                href={`/my-lists/${key}`}
+                href={`/my-lists/${encodeURIComponent(key)}`}
                 secondaryText={value.description}
                 entityCounts={{
                   donors: Object.keys(Donor).length,
