@@ -37,7 +37,7 @@ function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd 
           <Button onClick={() => setDialogIsOpen(false)} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => handleSubmit()} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Save
           </Button>
         </>

@@ -44,7 +44,7 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => handleSubmit()} color="primary" disabled={title.length === 0}>
+          <Button onClick={handleSubmit} color="primary" disabled={title.length === 0}>
             Save
           </Button>
         </>
