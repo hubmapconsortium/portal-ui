@@ -16,10 +16,11 @@ const usedSavedEntitiesSelector = (state) => ({
   savedEntities: state.savedEntities,
   listsToBeDeleted: state.listsToBeDeleted,
   deleteQueuedLists: state.deleteQueuedLists,
+  deleteEntities: state.deleteEntities,
 });
 
 function SavedLists() {
-  const { savedLists, savedEntities, listsToBeDeleted, deleteQueuedLists } = useSavedEntitiesStore(
+  const { savedLists, savedEntities, listsToBeDeleted, deleteQueuedLists, deleteEntities } = useSavedEntitiesStore(
     usedSavedEntitiesSelector,
   );
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -54,7 +55,7 @@ function SavedLists() {
           save.
         </Description>
       ) : (
-        <SavedEntitiesTable savedEntities={savedEntities} />
+        <SavedEntitiesTable savedEntities={savedEntities} deleteCallback={deleteEntities} />
       )}
       <SeparatedFlexRow>
         <div>

@@ -12,7 +12,6 @@ import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
 import SaveToListDialog from 'js/components/savedLists/SaveToListDialog';
@@ -26,17 +25,11 @@ const columns = [
   { id: 'dateSaved', label: 'Date Saved' },
 ];
 
-const useSavedEntitiesSelector = (state) => ({
-  deleteEntity: state.deleteEntity,
-});
-
-function SavedEntitiesTable({ savedEntities }) {
+function SavedEntitiesTable({ savedEntities, deleteCallback }) {
   const [selectedRows, addToSelectedRows, removeFromSelectedRows, setSelectedRows] = useStateSet([]);
   const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [addToDialogIsOpen, setAddToDialogIsOpen] = useState(false);
-
-  const { deleteEntity } = useSavedEntitiesStore(useSavedEntitiesSelector);
 
   function selectAllRows() {
     setSelectedRows(new Set(Object.keys(savedEntities)));
@@ -49,10 +42,9 @@ function SavedEntitiesTable({ savedEntities }) {
   }
 
   function deleteSelectedSavedEntities() {
-    selectedRows.forEach((uuid) => deleteEntity(uuid));
+    deleteCallback(selectedRows);
     deselectAllRows();
   }
-
   const selectedRowsSize = selectedRows.size;
 
   return (
@@ -107,7 +99,7 @@ function SavedEntitiesTable({ savedEntities }) {
                 <SavedEntitiesTableRow
                   key={key}
                   uuid={key}
-                  dateSaved={value.dateSaved}
+                  dateSaved={value?.dateSaved || value.dateAddedToList}
                   index={i}
                   isSelected={selectedRows.has(key)}
                   addToSelectedRows={addToSelectedRows}

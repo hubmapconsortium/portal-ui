@@ -11,7 +11,7 @@ import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
-  savedEntities: state.savedEntities,
+  removeEntitiesFromList: state.removeEntitiesFromList,
 });
 
 function getListAndItsEntities(savedLists, listTitle) {
@@ -26,17 +26,24 @@ function SavedList({ listTitle }) {
 
   const currentTitle = editedListTitle || decodedTitle;
 
-  const { savedLists, savedEntities } = useSavedEntitiesStore(usedSavedEntitiesSelector);
+  const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
   const [savedList, listEntitiesUuids] = getListAndItsEntities(savedLists, currentTitle);
 
   const entitiesLength = Object.keys(listEntitiesUuids).length;
 
-  const listEntities = Object.keys(listEntitiesUuids).reduce(
-    (acc, uuid) => ({ ...acc, [uuid]: savedEntities[uuid] }),
-    {},
-  );
+  const listEntities = Object.entries(savedList).reduce((acc, [key, value]) => {
+    if (['Donor', 'Sample', 'Dataset'].includes(key)) {
+      return { ...acc, ...value };
+    }
+    return acc;
+  }, {});
 
   const { description } = savedList;
+
+  function deleteCallback(uuids) {
+    removeEntitiesFromList(currentTitle, uuids);
+  }
+
   return (
     <>
       <Typography variant="subtitle1" component="h1" color="primary">
@@ -66,7 +73,7 @@ function SavedList({ listTitle }) {
         createdTimestamp={savedList.dateSaved}
         modifiedTimestamp={savedList.dateLastModified}
       />
-      <SavedEntitiesTable savedEntities={listEntities} />
+      <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} />
     </>
   );
 }
