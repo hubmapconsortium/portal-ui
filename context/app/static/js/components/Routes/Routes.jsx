@@ -18,10 +18,11 @@ const Services = lazy(() => import('js/pages/Services'));
 const Collections = lazy(() => import('js/pages/Collections'));
 const Markdown = lazy(() => import('js/components/Markdown'));
 const SavedLists = lazy(() => import('js/pages/SavedLists'));
+const SavedList = lazy(() => import('js/pages/SavedList'));
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, title, markdown, errorCode } = flaskData;
+  const { entity, vitessce_conf, title, markdown, errorCode, list_title } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
 
@@ -122,6 +123,14 @@ function Routes(props) {
     );
   }
 
+  if (urlPath.startsWith('/my-lists')) {
+    return (
+      <Route>
+        <SavedList listTitle={list_title} />
+      </Route>
+    );
+  }
+
   if (urlPath === '/client-side-error') {
     throw Error('Intentional client-side-error');
   }
@@ -143,6 +152,7 @@ Routes.propTypes = {
     markdown: PropTypes.string,
     collection: PropTypes.object,
     errorCode: PropTypes.number,
+    list_title: PropTypes.string,
   }),
 };
 

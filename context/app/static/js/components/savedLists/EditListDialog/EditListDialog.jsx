@@ -5,13 +5,13 @@ import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { StyledTitleTextField, StyledDescriptionTextField } from './style';
 
-const useSavedEntitiesStoreSelector = (state) => state.createList;
+const useSavedEntitiesStoreSelector = (state) => ({ createList: state.createList, deleteList: state.deleteList });
 
-function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTitle, setEditedListTitle }) {
+  const [title, setTitle] = useState(listTitle);
+  const [description, setDescription] = useState(listDescription);
 
-  const createList = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
+  const { createList, deleteList } = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
 
   function handleTitleChange(event) {
     setTitle(event.target.value);
@@ -23,16 +23,20 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
 
   const handleClose = () => {
     setDialogIsOpen(false);
+    setTitle(listTitle);
+    setDescription(listDescription);
   };
 
   function handleSubmit() {
     createList({ title, description });
+    setEditedListTitle(title);
+    deleteList(listTitle);
     setDialogIsOpen(false);
   }
 
   return (
     <DialogModal
-      title="Create New List"
+      title={`Edit ${listTitle}`}
       content={
         <>
           <StyledTitleTextField handleChange={handleTitleChange} title={title} />
@@ -44,7 +48,7 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary" disabled={title.length === 0}>
+          <Button onClick={() => handleSubmit()} color="primary" disabled={title.length === 0}>
             Save
           </Button>
         </>
@@ -55,4 +59,4 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
   );
 }
 
-export default CreateListDialog;
+export default EditListDialog;

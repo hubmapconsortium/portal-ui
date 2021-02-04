@@ -16,6 +16,65 @@ const useSavedEntitiesStore = create(
         set((state) => {
           delete state.savedEntities[entityUuid];
         }),
+      savedLists: {},
+      createList: ({ title, description }) =>
+        set((state) => {
+          state.savedLists[title] = {
+            // the Donor, Sample, and Datasets are objects to avoid duplicates. Normally they would be sets, but objects work better with local storage
+            Donor: {},
+            Sample: {},
+            Dataset: {},
+            description,
+            dateSaved: Date.now(),
+            dateLastModified: Date.now(),
+          };
+        }),
+      addEntityToList: (title, uuid) => {
+        const { entity_type } = get().savedEntities[uuid];
+        set((state) => {
+          state.savedLists[title][entity_type][uuid] = true;
+          state.savedLists[title].dateLastModified = Date.now();
+        });
+      },
+      addEntitiesToList: (title, uuids) => {
+        uuids.forEach((uuid) => {
+          const { entity_type } = get().savedEntities[uuid];
+          set((state) => {
+            state.savedLists[title][entity_type][uuid] = true;
+          });
+        });
+        set((state) => {
+          state.savedLists[title].dateLastModified = Date.now();
+        });
+      },
+      removeEntityFromList: (title, uuid, entity_type) => {
+        set((state) => {
+          delete state.savedLists[title][entity_type][uuid];
+        });
+      },
+      listsToBeDeleted: [],
+      queueListToBeDeleted: (listTitle) => {
+        if (!get().listsToBeDeleted.includes(listTitle)) {
+          set((state) => {
+            state.listsToBeDeleted.push(listTitle);
+          });
+        }
+      },
+      deleteQueuedLists: () => {
+        get().listsToBeDeleted.forEach((listTitle) =>
+          set((state) => {
+            delete state.savedLists[listTitle];
+          }),
+        );
+        set((state) => {
+          state.listsToBeDeleted = [];
+        });
+      },
+      deleteList: (listTitle) => {
+        set((state) => {
+          delete state.savedLists[listTitle];
+        });
+      },
     })),
     {
       name: 'saved_entities',

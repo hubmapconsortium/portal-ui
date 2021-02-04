@@ -1,15 +1,15 @@
 import React from 'react';
 import List from '@material-ui/core/List';
 
-import useSavedListsStore from 'js/stores/useSavedListsStore';
+import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import AddToListItem from 'js/components/savedLists/AddToListItem';
 
-const useSavedListsSelector = (state) => ({
+const usedSavedEntitiesStoreSelector = (state) => ({
   savedLists: state.savedLists,
 });
 
 function AddToList({ selectedLists, addToSelectedLists, removeFromSelectedLists }) {
-  const { savedLists } = useSavedListsStore(useSavedListsSelector);
+  const { savedLists } = useSavedEntitiesStore(usedSavedEntitiesStoreSelector);
 
   return (
     <List>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
@@ -6,33 +6,45 @@ import CreateListDialog from 'js/components/savedLists/CreateListDialog';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { Panel, PanelScrollBox } from 'js/shared-styles/panels';
-import useSavedListsStore from 'js/stores/useSavedListsStore';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
+import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import Description from 'js/shared-styles/sections/Description';
+import { SeparatedFlexRow, FlexBottom, StyledAlert } from './style';
 
-import { SeparatedFlexRow, FlexBottom } from './style';
-
-const useSavedListsSelector = (state) => ({
+const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
+  savedEntities: state.savedEntities,
+  listsToBeDeleted: state.listsToBeDeleted,
+  deleteQueuedLists: state.deleteQueuedLists,
 });
 
-const usedSavedEntitiesSelector = (state) => state.savedEntities;
-
 function SavedLists() {
-  const { savedLists } = useSavedListsStore(useSavedListsSelector);
-  const savedEntities = useSavedEntitiesStore(usedSavedEntitiesSelector);
+  const { savedLists, savedEntities, listsToBeDeleted, deleteQueuedLists } = useSavedEntitiesStore(
+    usedSavedEntitiesSelector,
+  );
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const [shouldDisplayDeleteAlert, setShouldDisplayDeleteAlert] = useState(false);
+
+  useEffect(() => {
+    if (listsToBeDeleted.length > 0) {
+      deleteQueuedLists();
+      setShouldDisplayDeleteAlert(true);
+    }
+  }, [listsToBeDeleted, deleteQueuedLists]);
 
   return (
     <>
+      {shouldDisplayDeleteAlert && (
+        <StyledAlert severity="success" onClose={() => setShouldDisplayDeleteAlert(false)}>
+          List successfully deleted.
+        </StyledAlert>
+      )}
       <Typography variant="h2" component="h1">
         My Lists
       </Typography>
-      <Description padding="20px 20px">
-        Your lists are currently stored on local storage and are not transferable between devices.{' '}
-      </Description>
+      <LocalStorageDescription />
       <Typography variant="h3" component="h2">
-        My Saves Lists
+        My Saved Items
       </Typography>
       {Object.keys(savedEntities).length === 0 ? (
         <Description padding="20px 20px">
@@ -68,7 +80,7 @@ function SavedLists() {
               <Panel
                 key={key}
                 title={key}
-                href=""
+                href={`/my-lists/${encodeURIComponent(key)}`}
                 secondaryText={value.description}
                 entityCounts={{
                   donors: Object.keys(Donor).length,

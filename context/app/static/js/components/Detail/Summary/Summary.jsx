@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import DetailDescription from 'js/components/Detail/DetailDescription';
 import SummaryData from '../SummaryData';
-import { FlexColumnRight, StyledPaper } from './style';
-import SectionItem from '../SectionItem';
 
 function Summary(props) {
   const {
@@ -20,10 +18,6 @@ function Summary(props) {
     collectionName,
     mapped_data_access_level,
   } = props;
-
-  const createdDate = create_timestamp ? new Date(create_timestamp).toDateString() : 'Undefined';
-  const modifiedDate = last_modified_timestamp ? new Date(last_modified_timestamp).toDateString() : 'Undefined';
-
   return (
     <SectionContainer id="summary">
       <SummaryData
@@ -35,22 +29,12 @@ function Summary(props) {
       >
         {children}
       </SummaryData>
-
-      <StyledPaper>
-        <div>
-          {collectionName && (
-            <Typography color="primary" variant="subtitle1" component="p">
-              {collectionName}
-            </Typography>
-          )}
-          <Typography variant="body1">{description || 'No description defined'}</Typography>
-        </div>
-
-        <FlexColumnRight>
-          <SectionItem label="Creation Date">{createdDate}</SectionItem>
-          <SectionItem label="Modification Date">{modifiedDate}</SectionItem>
-        </FlexColumnRight>
-      </StyledPaper>
+      <DetailDescription
+        subtitle={collectionName}
+        description={description}
+        createdTimestamp={create_timestamp}
+        modifiedTimestamp={last_modified_timestamp}
+      />
     </SectionContainer>
   );
 }
