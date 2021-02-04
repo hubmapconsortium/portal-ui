@@ -47,6 +47,11 @@ const useSavedEntitiesStore = create(
           state.savedLists[title].dateLastModified = Date.now();
         });
       },
+      removeEntityFromList: (title, uuid, entity_type) => {
+        set((state) => {
+          delete state.savedLists[title][entity_type][uuid];
+        });
+      },
       listsToBeDeleted: [],
       queueListToBeDeleted: (listTitle) => {
         if (!get().listsToBeDeleted.includes(listTitle)) {
