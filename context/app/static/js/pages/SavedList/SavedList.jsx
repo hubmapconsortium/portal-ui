@@ -73,6 +73,9 @@ function SavedList({ listTitle }) {
         createdTimestamp={savedList.dateSaved}
         modifiedTimestamp={savedList.dateLastModified}
       />
+      <Typography variant="h3" component="h2">
+        Items
+      </Typography>
       <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
     </>
   );
