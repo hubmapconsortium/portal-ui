@@ -9,7 +9,7 @@ function SaveEditEntityButton({ uuid, entity_type }) {
   const savedEntities = useSavedEntitiesStore(useSavedEntitiesSelector);
 
   return uuid in savedEntities ? (
-    <StyedEditSavedStatusButton uuid={uuid} />
+    <StyedEditSavedStatusButton uuid={uuid} entity_type={entity_type} />
   ) : (
     <StyledSaveEntityButton uuid={uuid} entity_type={entity_type} />
   );
