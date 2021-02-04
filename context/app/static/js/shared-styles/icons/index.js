@@ -11,6 +11,7 @@ import InsertDriveFileRoundedIcon from '@material-ui/icons/InsertDriveFileRounde
 import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
 import MoreHorizRoundedIcon from '@material-ui/icons/MoreHorizRounded';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
+import EditRoundedIcon from '@material-ui/icons/EditRounded';
 
 const CenterIcon = styled(AccountBalanceIcon)`
   font-size: ${(props) => props.fontSize};
@@ -56,6 +57,10 @@ const DeleteIcon = styled(DeleteRoundedIcon)`
   font-size: ${(props) => props.fontSize};
 `;
 
+const EditIcon = styled(EditRoundedIcon)`
+  font-size: ${(props) => props.fontSize};
+`;
+
 export {
   DonorIcon,
   SampleIcon,
@@ -68,4 +73,5 @@ export {
   ErrorIcon,
   MoreIcon,
   DeleteIcon,
+  EditIcon,
 };
