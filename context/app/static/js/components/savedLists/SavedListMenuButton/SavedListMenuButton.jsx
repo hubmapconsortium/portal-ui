@@ -26,7 +26,7 @@ function DeleteListButton({ listTitle }) {
 
   return (
     <>
-      <SecondaryBackgroundTooltip title="Delete Items">
+      <SecondaryBackgroundTooltip title="More Options">
         <WhiteBackgroundIconButton
           onClick={() => setMenuIsOpen(true)}
           aria-controls="list-actions-menu"
