@@ -73,7 +73,7 @@ function SavedList({ listTitle }) {
         createdTimestamp={savedList.dateSaved}
         modifiedTimestamp={savedList.dateLastModified}
       />
-      <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} />
+      <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
     </>
   );
 }

@@ -7,7 +7,7 @@ import { AppContext } from 'js/components/Providers';
 import useEntityData from 'js/hooks/useEntityData';
 import TableCell from '@material-ui/core/TableCell';
 
-function SavedEntitiesTableRow({ uuid, dateSaved, index, isSelected, addToSelectedRows, removeFromSelectedRows }) {
+function SavedEntitiesTableRow({ uuid, date, index, isSelected, addToSelectedRows, removeFromSelectedRows }) {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   const entityData = useEntityData(uuid, elasticsearchEndpoint, nexusToken);
 
@@ -21,7 +21,7 @@ function SavedEntitiesTableRow({ uuid, dateSaved, index, isSelected, addToSelect
       <TableCell>{entityData.display_doi || ''}</TableCell>
       <TableCell>{entityData.entity_type || ''}</TableCell>
       <TableCell>{entityData.group_name || ''}</TableCell>
-      <TableCell>{format(dateSaved, 'yyyy-MM-dd')}</TableCell>
+      <TableCell>{format(date, 'yyyy-MM-dd')}</TableCell>
     </TableRow>
   ) : null;
 }

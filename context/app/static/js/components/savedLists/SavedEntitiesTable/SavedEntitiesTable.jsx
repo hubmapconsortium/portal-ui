@@ -18,18 +18,21 @@ import SaveToListDialog from 'js/components/savedLists/SaveToListDialog';
 import useStateSet from 'js/hooks/useStateSet';
 import { Flex } from './style';
 
-const columns = [
+const defaultColumns = [
   { id: 'display_doi', label: 'HuBMAP ID' },
   { id: 'entity_type', label: 'Entity Type' },
   { id: 'group_name', label: 'Group' },
-  { id: 'dateSaved', label: 'Date Saved' },
 ];
 
-function SavedEntitiesTable({ savedEntities, deleteCallback }) {
+function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) {
   const [selectedRows, addToSelectedRows, removeFromSelectedRows, setSelectedRows] = useStateSet([]);
   const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [addToDialogIsOpen, setAddToDialogIsOpen] = useState(false);
+
+  const columns = isSavedListPage
+    ? [...defaultColumns, { id: 'dateAddedToCollection', label: 'Date Added To Collection' }]
+    : [...defaultColumns, { id: 'dateSaved', label: 'Date Saved' }];
 
   function selectAllRows() {
     setSelectedRows(new Set(Object.keys(savedEntities)));
@@ -99,7 +102,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback }) {
                 <SavedEntitiesTableRow
                   key={key}
                   uuid={key}
-                  dateSaved={value?.dateSaved || value.dateAddedToList}
+                  date={isSavedListPage ? value.dateAddedToList : value.dateSaved}
                   index={i}
                   isSelected={selectedRows.has(key)}
                   addToSelectedRows={addToSelectedRows}
