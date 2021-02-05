@@ -16,6 +16,7 @@ const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
 const Preview = lazy(() => import('js/pages/Preview'));
 const Services = lazy(() => import('js/pages/Services'));
 const Collections = lazy(() => import('js/pages/Collections'));
+const CellsAPIDemo = lazy(() => import('js/pages/CellsAPIDemo'));
 const Markdown = lazy(() => import('js/components/Markdown'));
 
 function Routes(props) {
@@ -109,6 +110,14 @@ function Routes(props) {
     return (
       <Route>
         <Collections />
+      </Route>
+    );
+  }
+
+  if (urlPath === '/cells-api-demo') {
+    return (
+      <Route>
+        <CellsAPIDemo />
       </Route>
     );
   }
