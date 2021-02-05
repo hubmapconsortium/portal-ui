@@ -5,10 +5,11 @@ import Button from '@material-ui/core/Button';
 import CreateListDialog from 'js/components/savedLists/CreateListDialog';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import { Panel, PanelScrollBox } from 'js/shared-styles/panels';
+import { PanelScrollBox } from 'js/shared-styles/panels';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import Description from 'js/shared-styles/sections/Description';
+import SavedListPanel from 'js/components/savedLists/SavedListPanel';
 import { SeparatedFlexRow, FlexBottom, StyledAlert } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
@@ -76,20 +77,7 @@ function SavedLists() {
       ) : (
         <PanelScrollBox>
           {Object.entries(savedLists).map(([key, value]) => {
-            const { Donor, Sample, Dataset } = value;
-            return (
-              <Panel
-                key={key}
-                title={key}
-                href={`/my-lists/${encodeURIComponent(key)}`}
-                secondaryText={value.description}
-                entityCounts={{
-                  donors: Object.keys(Donor).length,
-                  samples: Object.keys(Sample).length,
-                  datasets: Object.keys(Dataset).length,
-                }}
-              />
-            );
+            return <SavedListPanel key={key} title={key} entityObject={value} />;
           })}
         </PanelScrollBox>
       )}
