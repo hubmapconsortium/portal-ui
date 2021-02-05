@@ -63,6 +63,7 @@ function SampleDetail(props) {
           create_timestamp={create_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}
+          group_name={group_name}
         >
           <SummaryItem>{mapped_organ}</SummaryItem>
           <Typography variant="h6" component="p">

@@ -7,8 +7,8 @@ const StyledSaveEntityButton = styled(SaveEntityButton)`
   margin-left: ${(props) => props.theme.spacing(1)}px;
 `;
 
-const StyedEditSavedStatusButton = styled(EditSavedStatusButton)`
+const StyledEditSavedStatusButton = styled(EditSavedStatusButton)`
   margin-left: ${(props) => props.theme.spacing(1)}px;
 `;
 
-export { StyledSaveEntityButton, StyedEditSavedStatusButton };
+export { StyledSaveEntityButton, StyledEditSavedStatusButton };

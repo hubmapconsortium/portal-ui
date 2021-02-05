@@ -17,6 +17,7 @@ function Summary(props) {
     children,
     collectionName,
     mapped_data_access_level,
+    group_name,
   } = props;
   return (
     <SectionContainer id="summary">
@@ -26,6 +27,7 @@ function Summary(props) {
         status={status}
         display_doi={display_doi}
         mapped_data_access_level={mapped_data_access_level}
+        group_name={group_name}
       >
         {children}
       </SummaryData>

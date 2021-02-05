@@ -1,17 +1,17 @@
 import React from 'react';
 
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
-import { StyledSaveEntityButton, StyedEditSavedStatusButton } from './style';
+import { StyledSaveEntityButton, StyledEditSavedStatusButton } from './style';
 
 const useSavedEntitiesSelector = (state) => state.savedEntities;
 
-function SaveEditEntityButton({ uuid, entity_type }) {
+function SaveEditEntityButton({ uuid, entity_type, group_name }) {
   const savedEntities = useSavedEntitiesStore(useSavedEntitiesSelector);
 
   return uuid in savedEntities ? (
-    <StyedEditSavedStatusButton uuid={uuid} entity_type={entity_type} />
+    <StyledEditSavedStatusButton uuid={uuid} entity_type={entity_type} />
   ) : (
-    <StyledSaveEntityButton uuid={uuid} entity_type={entity_type} />
+    <StyledSaveEntityButton uuid={uuid} entity_type={entity_type} group_name={group_name} />
   );
 }
 
