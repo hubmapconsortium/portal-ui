@@ -1,3 +1,9 @@
+## v0.11.1 - 2021-02-05
+
+- Add a link to the CCF JSON, and a new route to serve the JSON.
+- Pull new lightsheet docs.
+
+
 ## v0.11.0 - 2021-02-01
 
 - Let the ProvGraph work against either the new or old Prov API.
