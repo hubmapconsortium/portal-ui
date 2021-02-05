@@ -15,7 +15,7 @@ const useSavedEntitiesSelector = (state) => ({
 
 function getSavedListsWhichContainEntity(savedLists, savedEntity) {
   return Object.entries(savedLists).reduce((acc, [title, obj]) => {
-    return savedEntity in obj ? [...acc, title] : acc;
+    return savedEntity in obj.savedEntities ? [...acc, title] : acc;
   }, []);
 }
 
