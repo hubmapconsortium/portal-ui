@@ -109,7 +109,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) 
                 <SavedEntitiesTableRow
                   key={key}
                   uuid={key}
-                  date={isSavedListPage ? value.dateAddedToList : value.dateSaved}
+                  rowData={value}
                   index={i}
                   isSelected={selectedRows.has(key)}
                   addToSelectedRows={addToSelectedRows}
