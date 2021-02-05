@@ -14,12 +14,6 @@ const usedSavedEntitiesSelector = (state) => ({
   removeEntitiesFromList: state.removeEntitiesFromList,
 });
 
-function getListAndItsEntities(savedLists, listTitle) {
-  const list = savedLists[listTitle];
-  const listEntities = { ...list.Donor, ...list.Sample, ...list.Dataset };
-  return [list, listEntities];
-}
-
 function SavedList({ listTitle }) {
   const decodedTitle = decodeURIComponent(listTitle);
   const [editedListTitle, setEditedListTitle] = useState(false);
@@ -27,16 +21,11 @@ function SavedList({ listTitle }) {
   const currentTitle = editedListTitle || decodedTitle;
 
   const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
-  const [savedList, listEntitiesUuids] = getListAndItsEntities(savedLists, currentTitle);
+  const savedList = savedLists[currentTitle];
 
-  const entitiesLength = Object.keys(listEntitiesUuids).length;
+  const { savedEntities: listEntities } = savedList;
 
-  const listEntities = Object.entries(savedList).reduce((acc, [key, value]) => {
-    if (['Donor', 'Sample', 'Dataset'].includes(key)) {
-      return { ...acc, ...value };
-    }
-    return acc;
-  }, {});
+  const entitiesLength = Object.keys(listEntities).length;
 
   const { description } = savedList;
 
