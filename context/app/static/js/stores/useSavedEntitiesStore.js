@@ -28,9 +28,7 @@ const useSavedEntitiesStore = create(
         set((state) => {
           state.savedLists[title] = {
             // the Donor, Sample, and Datasets are objects to avoid duplicates. Normally they would be sets, but objects work better with local storage
-            Donor: {},
-            Sample: {},
-            Dataset: {},
+            savedEntities: {},
             description,
             dateSaved: Date.now(),
             dateLastModified: Date.now(),
@@ -39,7 +37,7 @@ const useSavedEntitiesStore = create(
       addEntityToList: (title, uuid) => {
         const { entity_type, group_name, display_doi } = get().savedEntities[uuid];
         set((state) => {
-          state.savedLists[title][entity_type][uuid] = {
+          state.savedLists[title].savedEntities[uuid] = {
             dateAddedToList: Date.now(),
             entity_type,
             group_name,
@@ -53,7 +51,7 @@ const useSavedEntitiesStore = create(
         uuids.forEach((uuid) => {
           const { entity_type, group_name, display_doi } = get().savedEntities[uuid];
           set((state) => {
-            state.savedLists[title][entity_type][uuid] = {
+            state.savedLists[title].savedEntities[uuid] = {
               dateAddedToList: timestamp,
               entity_type,
               group_name,
@@ -65,16 +63,15 @@ const useSavedEntitiesStore = create(
           state.savedLists[title].dateLastModified = Date.now();
         });
       },
-      removeEntityFromList: (title, uuid, entity_type) => {
+      removeEntityFromList: (title, uuid) => {
         set((state) => {
-          delete state.savedLists[title][entity_type][uuid];
+          delete state.savedLists[title].savedEntities[uuid];
         });
       },
       removeEntitiesFromList: (title, uuids) => {
         uuids.forEach((uuid) => {
-          const { entity_type } = get().savedEntities[uuid];
           set((state) => {
-            delete state.savedLists[title][entity_type][uuid];
+            delete state.savedLists[title].savedEntities[uuid];
           });
         });
       },
