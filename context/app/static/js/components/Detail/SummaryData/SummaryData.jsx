@@ -54,7 +54,12 @@ function SummaryData(props) {
                 <FileIcon color="primary" />
               </JsonButton>
             </SecondaryBackgroundTooltip>
-            <SaveEditEntityButton uuid={uuid} entity_type={entity_type} group_name={group_name} />
+            <SaveEditEntityButton
+              uuid={uuid}
+              entity_type={entity_type}
+              group_name={group_name}
+              display_doi={display_doi}
+            />
           </FlexEnd>
         </FlexRight>
       </Flex>
