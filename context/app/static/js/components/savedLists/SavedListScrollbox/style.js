@@ -14,6 +14,6 @@ const FlexBottom = styled.div`
 `;
 
 const MaxHeightScrollbox = styled(PanelScrollBox)`
-  max-height: 400px;
+  max-height: 415px;
 `;
 export { SeparatedFlexRow, FlexBottom, MaxHeightScrollbox };
