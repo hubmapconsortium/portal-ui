@@ -7,17 +7,12 @@ import DetailDescription from 'js/components/Detail/DetailDescription';
 import RightAlignedButtonRow from 'js/shared-styles/sections/RightAlignedButtonRow';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
+import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
-  savedEntities: state.savedEntities,
+  removeEntitiesFromList: state.removeEntitiesFromList,
 });
-
-function getListAndItsEntities(savedLists, listTitle) {
-  const list = savedLists[listTitle];
-  const listEntities = { ...list.Donor, ...list.Sample, ...list.Dataset };
-  return [list, listEntities];
-}
 
 function SavedList({ listTitle }) {
   const decodedTitle = decodeURIComponent(listTitle);
@@ -25,12 +20,19 @@ function SavedList({ listTitle }) {
 
   const currentTitle = editedListTitle || decodedTitle;
 
-  const { savedLists } = useSavedEntitiesStore(usedSavedEntitiesSelector);
-  const [savedList, listEntities] = getListAndItsEntities(savedLists, currentTitle);
+  const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
+  const savedList = savedLists[currentTitle];
+
+  const { savedEntities: listEntities } = savedList;
 
   const entitiesLength = Object.keys(listEntities).length;
 
   const { description } = savedList;
+
+  function deleteCallback(uuids) {
+    removeEntitiesFromList(currentTitle, uuids);
+  }
+
   return (
     <>
       <Typography variant="subtitle1" component="h1" color="primary">
@@ -60,6 +62,10 @@ function SavedList({ listTitle }) {
         createdTimestamp={savedList.dateSaved}
         modifiedTimestamp={savedList.dateLastModified}
       />
+      <Typography variant="h3" component="h2">
+        Items
+      </Typography>
+      <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
     </>
   );
 }

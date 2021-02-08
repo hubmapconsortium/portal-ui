@@ -13,7 +13,7 @@ function DeleteSavedEntitiesDialog({ dialogIsOpen, setDialogIsOpen, deleteSelect
     <DialogModal
       title="Delete Items"
       content={
-        <Typography variant="bodyy1">Are you sure you want to delete these items from your My Saves List?</Typography>
+        <Typography variant="body1">Are you sure you want to delete these items from your My Saves List?</Typography>
       }
       actions={
         <>

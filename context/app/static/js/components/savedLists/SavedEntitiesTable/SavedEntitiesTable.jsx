@@ -12,32 +12,27 @@ import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
 import SaveToListDialog from 'js/components/savedLists/SaveToListDialog';
 import useStateSet from 'js/hooks/useStateSet';
 import { Flex } from './style';
 
-const columns = [
+const defaultColumns = [
   { id: 'display_doi', label: 'HuBMAP ID' },
   { id: 'entity_type', label: 'Entity Type' },
   { id: 'group_name', label: 'Group' },
-  { id: 'dateSaved', label: 'Date Saved' },
 ];
 
-const useSavedEntitiesSelector = (state) => ({
-  savedEntities: state.savedEntities,
-  deleteEntity: state.deleteEntity,
-});
-
-function SavedEntitiesTable() {
+function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) {
   const [selectedRows, addToSelectedRows, removeFromSelectedRows, setSelectedRows] = useStateSet([]);
   const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [addToDialogIsOpen, setAddToDialogIsOpen] = useState(false);
 
-  const { savedEntities, deleteEntity } = useSavedEntitiesStore(useSavedEntitiesSelector);
+  const columns = isSavedListPage
+    ? [...defaultColumns, { id: 'dateAddedToCollection', label: 'Date Added To Collection' }]
+    : [...defaultColumns, { id: 'dateSaved', label: 'Date Saved' }];
 
   function selectAllRows() {
     setSelectedRows(new Set(Object.keys(savedEntities)));
@@ -50,10 +45,9 @@ function SavedEntitiesTable() {
   }
 
   function deleteSelectedSavedEntities() {
-    selectedRows.forEach((uuid) => deleteEntity(uuid));
+    deleteCallback(selectedRows);
     deselectAllRows();
   }
-
   const selectedRowsSize = selectedRows.size;
 
   return (
@@ -62,37 +56,44 @@ function SavedEntitiesTable() {
         <Typography variant="subtitle1">
           {selectedRowsSize} {selectedRowsSize === 1 ? 'Item' : 'Items'} Selected
         </Typography>
-        <div>
-          <Button color="primary" onClick={() => deselectAllRows()}>
-            Deselect All ({selectedRowsSize})
-          </Button>
-          <SecondaryBackgroundTooltip title="Delete Items">
-            <WhiteBackgroundIconButton onClick={() => setDeleteDialogIsOpen(true)}>
-              <DeleteRoundedIcon color="primary" />
-            </WhiteBackgroundIconButton>
-          </SecondaryBackgroundTooltip>
-          <DeleteSavedEntitiesDialog
-            dialogIsOpen={deleteDialogIsOpen}
-            setDialogIsOpen={setDeleteDialogIsOpen}
-            deleteSelectedSavedEntities={deleteSelectedSavedEntities}
-          />
-          <Button color="primary" onClick={() => setAddToDialogIsOpen(true)} variant="contained">
-            Add To
-          </Button>
-          <SaveToListDialog
-            title="Add Items To"
-            dialogIsOpen={addToDialogIsOpen}
-            setDialogIsOpen={setAddToDialogIsOpen}
-            entitiesToAdd={selectedRows}
-          />
-        </div>
+        {selectedRowsSize > 0 && (
+          <div>
+            <Button color="primary" onClick={deselectAllRows}>
+              Deselect All ({selectedRowsSize})
+            </Button>
+
+            <SecondaryBackgroundTooltip title="Delete Items">
+              <WhiteBackgroundIconButton onClick={() => setDeleteDialogIsOpen(true)}>
+                <DeleteRoundedIcon color="primary" />
+              </WhiteBackgroundIconButton>
+            </SecondaryBackgroundTooltip>
+            <DeleteSavedEntitiesDialog
+              dialogIsOpen={deleteDialogIsOpen}
+              setDialogIsOpen={setDeleteDialogIsOpen}
+              deleteSelectedSavedEntities={deleteSelectedSavedEntities}
+            />
+            {!isSavedListPage && (
+              <>
+                <Button color="primary" onClick={() => setAddToDialogIsOpen(true)} variant="contained">
+                  Add To
+                </Button>
+                <SaveToListDialog
+                  title="Add Items To"
+                  dialogIsOpen={addToDialogIsOpen}
+                  setDialogIsOpen={setAddToDialogIsOpen}
+                  entitiesToAdd={selectedRows}
+                />
+              </>
+            )}
+          </div>
+        )}
       </Flex>
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
-              <TableRow onClick={() => selectAllRows()}>
-                <HeaderCell padding="checkbox">
+              <TableRow>
+                <HeaderCell padding="checkbox" onClick={headerRowIsSelected ? deselectAllRows : selectAllRows}>
                   <Checkbox
                     checked={headerRowIsSelected}
                     inputProps={{ 'aria-labelledby': `saved-entities-header-row-checkbox` }}
@@ -108,7 +109,7 @@ function SavedEntitiesTable() {
                 <SavedEntitiesTableRow
                   key={key}
                   uuid={key}
-                  dateSaved={value.dateSaved}
+                  rowData={value}
                   index={i}
                   isSelected={selectedRows.has(key)}
                   addToSelectedRows={addToSelectedRows}

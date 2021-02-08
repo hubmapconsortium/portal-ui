@@ -7,49 +7,72 @@ const useSavedEntitiesStore = create(
   persist(
     immer((set, get) => ({
       savedEntities: {},
-      saveEntity: (entityUuid, entity_type) =>
+      saveEntity: (entityUuid, entity_type, group_name, display_doi) =>
         !(entityUuid in get().savedEntities) &&
         set((state) => {
-          state.savedEntities[entityUuid] = { dateSaved: Date.now(), entity_type };
+          state.savedEntities[entityUuid] = { dateSaved: Date.now(), entity_type, group_name, display_doi };
         }),
       deleteEntity: (entityUuid) =>
         set((state) => {
           delete state.savedEntities[entityUuid];
         }),
+      deleteEntities: (entityUuids) => {
+        entityUuids.forEach((uuid) => {
+          set((state) => {
+            delete state.savedEntities[uuid];
+          });
+        });
+      },
       savedLists: {},
       createList: ({ title, description }) =>
         set((state) => {
           state.savedLists[title] = {
             // the Donor, Sample, and Datasets are objects to avoid duplicates. Normally they would be sets, but objects work better with local storage
-            Donor: {},
-            Sample: {},
-            Dataset: {},
+            savedEntities: {},
             description,
             dateSaved: Date.now(),
             dateLastModified: Date.now(),
           };
         }),
       addEntityToList: (title, uuid) => {
-        const { entity_type } = get().savedEntities[uuid];
+        const { entity_type, group_name, display_doi } = get().savedEntities[uuid];
         set((state) => {
-          state.savedLists[title][entity_type][uuid] = true;
+          state.savedLists[title].savedEntities[uuid] = {
+            dateAddedToList: Date.now(),
+            entity_type,
+            group_name,
+            display_doi,
+          };
           state.savedLists[title].dateLastModified = Date.now();
         });
       },
       addEntitiesToList: (title, uuids) => {
+        const timestamp = Date.now();
         uuids.forEach((uuid) => {
-          const { entity_type } = get().savedEntities[uuid];
+          const { entity_type, group_name, display_doi } = get().savedEntities[uuid];
           set((state) => {
-            state.savedLists[title][entity_type][uuid] = true;
+            state.savedLists[title].savedEntities[uuid] = {
+              dateAddedToList: timestamp,
+              entity_type,
+              group_name,
+              display_doi,
+            };
           });
         });
         set((state) => {
           state.savedLists[title].dateLastModified = Date.now();
         });
       },
-      removeEntityFromList: (title, uuid, entity_type) => {
+      removeEntityFromList: (title, uuid) => {
         set((state) => {
-          delete state.savedLists[title][entity_type][uuid];
+          delete state.savedLists[title].savedEntities[uuid];
+        });
+      },
+      removeEntitiesFromList: (title, uuids) => {
+        uuids.forEach((uuid) => {
+          set((state) => {
+            delete state.savedLists[title].savedEntities[uuid];
+          });
         });
       },
       listsToBeDeleted: [],
