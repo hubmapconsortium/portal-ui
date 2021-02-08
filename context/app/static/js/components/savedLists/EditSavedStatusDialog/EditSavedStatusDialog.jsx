@@ -13,21 +13,18 @@ const useSavedEntitiesSelector = (state) => ({
   removeEntityFromList: state.removeEntityFromList,
 });
 
-function getSavedListsWhichContainEntity(savedLists, savedEntity, entity_type) {
+function getSavedListsWhichContainEntity(savedLists, savedEntity) {
   return Object.entries(savedLists).reduce((acc, [title, obj]) => {
-    if (savedEntity in obj[entity_type]) {
-      return [...acc, title];
-    }
-    return acc;
+    return savedEntity in obj.savedEntities ? [...acc, title] : acc;
   }, []);
 }
 
 const entityStoreSelector = (state) => state.setShouldDisplaySavedOrEditedAlert;
 
-function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_type }) {
+function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }) {
   const { addEntityToList, savedLists, removeEntityFromList } = useSavedEntitiesStore(useSavedEntitiesSelector);
   const [selectedLists, addToSelectedLists, removeFromSelectedLists, setSelectedLists] = useStateSet(
-    getSavedListsWhichContainEntity(savedLists, uuid, entity_type),
+    getSavedListsWhichContainEntity(savedLists, uuid),
   );
 
   const setShouldDisplaySavedOrEditedAlert = useEntityStore(entityStoreSelector);
@@ -35,7 +32,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_typ
   function addSavedEntitiesToList() {
     selectedLists.forEach((list) => addEntityToList(list, uuid));
     const unselectedLists = Object.keys(savedLists).filter((list) => !selectedLists.has(list));
-    unselectedLists.forEach((list) => removeEntityFromList(list, uuid, entity_type));
+    unselectedLists.forEach((list) => removeEntityFromList(list, uuid));
   }
 
   function handleSave() {
@@ -45,7 +42,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_typ
   }
 
   function handleClose() {
-    setSelectedLists(new Set(getSavedListsWhichContainEntity(savedLists, uuid, entity_type)));
+    setSelectedLists(new Set(getSavedListsWhichContainEntity(savedLists, uuid)));
     setDialogIsOpen(false);
   }
 
