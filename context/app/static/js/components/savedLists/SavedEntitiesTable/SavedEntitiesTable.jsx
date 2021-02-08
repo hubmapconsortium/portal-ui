@@ -92,8 +92,8 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) 
         <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
-              <TableRow onClick={headerRowIsSelected ? deselectAllRows : selectAllRows}>
-                <HeaderCell padding="checkbox">
+              <TableRow>
+                <HeaderCell padding="checkbox" onClick={headerRowIsSelected ? deselectAllRows : selectAllRows}>
                   <Checkbox
                     checked={headerRowIsSelected}
                     inputProps={{ 'aria-labelledby': `saved-entities-header-row-checkbox` }}

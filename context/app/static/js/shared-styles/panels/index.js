@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
 import { capitalizeString } from 'js/helpers/functions';
+import { LightBlueLink } from 'js/shared-styles/Links';
 
-const Link = styled.a`
-  text-decoration: inherit;
-  color: inherit;
+const overflowCss = css`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const PanelWrapper = styled.div`
@@ -31,9 +33,11 @@ const MaxWidthDiv = styled.div`
 `;
 
 const TruncatedText = styled(Typography)`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  ${overflowCss};
+`;
+
+const TruncatedLink = styled(LightBlueLink)`
+  ${overflowCss};
 `;
 
 const StyledTypography = styled(Typography)`
@@ -51,23 +55,21 @@ const PanelScrollBox = styled(Paper)`
 function Panel(props) {
   const { title, href, secondaryText, entityCounts } = props;
   return (
-    <Link href={href}>
-      <PanelWrapper>
-        <MaxWidthDiv>
-          <TruncatedText variant="subtitle1" component="h3">
-            {title}
-          </TruncatedText>
-          <TruncatedText variant="body2" color="secondary">
-            {secondaryText}
-          </TruncatedText>
-        </MaxWidthDiv>
-        <div>
-          {Object.entries(entityCounts).map(([key, value]) => (
-            <StyledTypography key={key} variant="caption">{`${value} ${capitalizeString(key)}`}</StyledTypography>
-          ))}
-        </div>
-      </PanelWrapper>
-    </Link>
+    <PanelWrapper>
+      <MaxWidthDiv>
+        <TruncatedLink variant="subtitle1" href={href}>
+          {title}
+        </TruncatedLink>
+        <TruncatedText variant="body2" color="secondary">
+          {secondaryText}
+        </TruncatedText>
+      </MaxWidthDiv>
+      <div>
+        {Object.entries(entityCounts).map(([key, value]) => (
+          <StyledTypography key={key} variant="caption">{`${value} ${capitalizeString(key)}`}</StyledTypography>
+        ))}
+      </div>
+    </PanelWrapper>
   );
 }
 
