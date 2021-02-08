@@ -27,7 +27,7 @@ function SavedListScrollbox({ savedLists }) {
         </FlexBottom>
       </SeparatedFlexRow>
       {Object.keys(savedLists).length === 0 ? (
-        <Description padding="20px 20px">No lists created yet.</Description>
+        <Description padding="20px">No lists created yet.</Description>
       ) : (
         <MaxHeightScrollbox>
           {Object.entries(savedLists).map(([key, value]) => {
