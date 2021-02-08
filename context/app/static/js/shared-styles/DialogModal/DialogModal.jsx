@@ -8,9 +8,9 @@ import Typography from '@material-ui/core/Typography';
 
 import { StyledDivider } from './style';
 
-function DialogModal({ title, warning, content, actions, isOpen, handleClose }) {
+function DialogModal({ title, warning, content, actions, isOpen, handleClose, ...props }) {
   return (
-    <Dialog open={isOpen} onClose={handleClose} fullWidth>
+    <Dialog open={isOpen} onClose={handleClose} fullWidth {...props}>
       <DialogTitle disableTypography>
         <Typography variant="h3" component="h2">
           {title}

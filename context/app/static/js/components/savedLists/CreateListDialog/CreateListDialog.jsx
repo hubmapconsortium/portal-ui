@@ -28,6 +28,11 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
     setDialogIsOpen(false);
   };
 
+  function handleExit() {
+    setTitle('');
+    setDescription('');
+  }
+
   function handleSubmit() {
     if (!(title in savedLists)) {
       createList({ title, description });
@@ -59,6 +64,7 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
       }
       isOpen={dialogIsOpen}
       handleClose={handleClose}
+      onExited={handleExit}
     />
   );
 }
