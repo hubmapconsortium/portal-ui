@@ -1,3 +1,4 @@
-import Description from './Description';
+import DescriptionSection, { Description } from './Description';
 
-export default Description;
+export { Description };
+export default DescriptionSection;
