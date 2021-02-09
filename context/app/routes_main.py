@@ -192,12 +192,12 @@ def my_lists():
     )
 
 
-@blueprint.route('/my-lists/<saved_list_title>')
-def list_page(saved_list_title):
-    flask_data = {'endpoints': _get_endpoints(), 'list_title': saved_list_title}
+@blueprint.route('/my-lists/<saved_list_uuid>')
+def list_page(saved_list_uuid):
+    flask_data = {'endpoints': _get_endpoints(), 'list_uuid': saved_list_uuid}
     return render_template(
         'pages/base_react.html',
-        title=f'Saved List: {saved_list_title}',
+        title='Saved List',
         flask_data=flask_data
     )
 

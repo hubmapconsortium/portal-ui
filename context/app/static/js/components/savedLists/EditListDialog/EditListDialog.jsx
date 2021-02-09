@@ -6,17 +6,16 @@ import DialogModal from 'js/shared-styles/DialogModal';
 import { StyledTitleTextField, StyledDescriptionTextField } from './style';
 
 const useSavedEntitiesStoreSelector = (state) => ({
-  createList: state.createList,
-  deleteList: state.deleteList,
+  editList: state.editList,
   savedLists: state.savedLists,
 });
 
-function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTitle, setEditedListTitle }) {
+function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTitle, listUUID }) {
   const [title, setTitle] = useState(listTitle);
   const [description, setDescription] = useState(listDescription);
   const [shouldDisplayWarning, setShouldDisplayWarning] = useState(false);
 
-  const { createList, deleteList, savedLists } = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
+  const { editList, savedLists } = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
 
   function handleTitleChange(event) {
     setTitle(event.target.value);
@@ -37,9 +36,7 @@ function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTi
 
   function handleSubmit() {
     if (!(title in savedLists)) {
-      createList({ title, description });
-      setEditedListTitle(title);
-      deleteList(listTitle);
+      editList({ listUUID, title, description });
       setDialogIsOpen(false);
     } else {
       setShouldDisplayWarning(true);
