@@ -91,6 +91,7 @@ function DatasetDetail(props) {
           description={description}
           status={status}
           mapped_data_access_level={mapped_data_access_level}
+          group_name={group_name}
         >
           <SummaryDataChildren
             data_types={data_types || []}

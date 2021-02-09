@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 
-import useSavedListsStore from 'js/stores/useSavedListsStore';
+import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import DialogModal from 'js/shared-styles/DialogModal';
-import { StyledPrimaryOutlineTextField } from './style';
+import { StyledTitleTextField, StyledDescriptionTextField } from './style';
 
-const maxTitleLength = 50;
-const useSavedListsStoreSelector = (state) => state.createList;
+const useSavedEntitiesStoreSelector = (state) => ({ createList: state.createList, savedLists: state.savedLists });
 
 function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-
-  const createList = useSavedListsStore(useSavedListsStoreSelector);
+  const [shouldDisplayWarning, setShouldDisplayWarning] = useState(false);
+  const { createList, savedLists } = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
 
   function handleTitleChange(event) {
     setTitle(event.target.value);
+    if (shouldDisplayWarning) {
+      setShouldDisplayWarning(false);
+    }
   }
 
   function handleDescriptionChange(event) {
@@ -26,37 +28,28 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
     setDialogIsOpen(false);
   };
 
+  function handleExit() {
+    setTitle('');
+    setDescription('');
+  }
+
+  function handleSubmit() {
+    if (!(title in savedLists)) {
+      createList({ title, description });
+      setDialogIsOpen(false);
+    } else {
+      setShouldDisplayWarning(true);
+    }
+  }
+
   return (
     <DialogModal
       title="Create New List"
+      warning={shouldDisplayWarning && 'A list with that title already exists.'}
       content={
         <>
-          <StyledPrimaryOutlineTextField
-            autoFocus
-            margin="dense"
-            id="title"
-            label="Title"
-            fullWidth
-            variant="outlined"
-            placeholder='Like “Spleen-Related Data” or “ATAC-seq Visualizations"'
-            inputProps={{ maxLength: maxTitleLength }}
-            onChange={handleTitleChange}
-            required
-            helperText={`${title.length}/${maxTitleLength} Characters`}
-            value={title}
-          />
-          <StyledPrimaryOutlineTextField
-            id="description"
-            label="Description (optional)"
-            fullWidth
-            variant="outlined"
-            placeholder="Input description of list"
-            multiline
-            rows={5}
-            inputProps={{ maxLength: 1000 }}
-            onChange={handleDescriptionChange}
-            value={description}
-          />
+          <StyledTitleTextField handleChange={handleTitleChange} title={title} />
+          <StyledDescriptionTextField handleChange={handleDescriptionChange} description={description} />
         </>
       }
       actions={
@@ -64,13 +57,14 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => createList({ title, description })} color="primary" disabled={title.length === 0}>
+          <Button onClick={handleSubmit} color="primary" disabled={title.length === 0}>
             Save
           </Button>
         </>
       }
       isOpen={dialogIsOpen}
       handleClose={handleClose}
+      onExited={handleExit}
     />
   );
 }

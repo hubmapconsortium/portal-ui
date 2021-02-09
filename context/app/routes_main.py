@@ -192,6 +192,16 @@ def my_lists():
     )
 
 
+@blueprint.route('/my-lists/<saved_list_title>')
+def list_page(saved_list_title):
+    flask_data = {'endpoints': _get_endpoints(), 'list_title': saved_list_title}
+    return render_template(
+        'pages/base_react.html',
+        title=f'Saved List: {saved_list_title}',
+        flask_data=flask_data
+    )
+
+
 @blueprint.route('/robots.txt')
 def robots_txt():
     allowed_hostname = 'portal.hubmapconsortium.org'

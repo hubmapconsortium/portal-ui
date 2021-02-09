@@ -1,29 +1,30 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import useStateSet from 'js/hooks/useStateSet';
 
+import useStateSet from 'js/hooks/useStateSet';
 import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
-import useSavedListsStore from 'js/stores/useSavedListsStore';
+import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 
-const usedSavedListsSelector = (state) => state.addEntityToList;
+const useSavedEntitiesSelector = (state) => state.addEntitiesToList;
 
-function AddToDialog({ dialogIsOpen, setDialogIsOpen, savedEntities, selectedRows }) {
+function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd }) {
   const [selectedLists, addToSelectedLists, removeFromSelectedLists] = useStateSet([]);
 
-  const addEntityToList = useSavedListsStore(usedSavedListsSelector);
+  const addEntitiesToList = useSavedEntitiesStore(useSavedEntitiesSelector);
 
   function addSavedEntitiesToList() {
-    selectedLists.forEach((list) =>
-      selectedRows.forEach((selectedRow) => {
-        addEntityToList(list, selectedRow, savedEntities[selectedRow].entity_type);
-      }),
-    );
+    selectedLists.forEach((list) => addEntitiesToList(list, entitiesToAdd));
+  }
+
+  function handleSubmit() {
+    addSavedEntitiesToList();
+    setDialogIsOpen(false);
   }
 
   return (
     <DialogModal
-      title="Add Items To"
+      title={title}
       content={
         <AddToList
           selectedLists={selectedLists}
@@ -36,7 +37,7 @@ function AddToDialog({ dialogIsOpen, setDialogIsOpen, savedEntities, selectedRow
           <Button onClick={() => setDialogIsOpen(false)} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => addSavedEntitiesToList()} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Save
           </Button>
         </>
@@ -47,4 +48,4 @@ function AddToDialog({ dialogIsOpen, setDialogIsOpen, savedEntities, selectedRow
   );
 }
 
-export default AddToDialog;
+export default SaveToListDialog;

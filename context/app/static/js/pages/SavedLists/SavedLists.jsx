@@ -1,38 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 
-import CreateListDialog from 'js/components/savedLists/CreateListDialog';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import { Panel, PanelScrollBox } from 'js/shared-styles/panels';
-import useSavedListsStore from 'js/stores/useSavedListsStore';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
+import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import Description from 'js/shared-styles/sections/Description';
+import SavedListScrollbox from 'js/components/savedLists/SavedListScrollbox';
+import { StyledAlert } from './style';
 
-import { SeparatedFlexRow, FlexBottom } from './style';
-
-const useSavedListsSelector = (state) => ({
+const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
+  savedEntities: state.savedEntities,
+  listsToBeDeleted: state.listsToBeDeleted,
+  deleteQueuedLists: state.deleteQueuedLists,
+  deleteEntities: state.deleteEntities,
 });
 
-const usedSavedEntitiesSelector = (state) => state.savedEntities;
-
 function SavedLists() {
-  const { savedLists } = useSavedListsStore(useSavedListsSelector);
-  const savedEntities = useSavedEntitiesStore(usedSavedEntitiesSelector);
-  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const { savedLists, savedEntities, listsToBeDeleted, deleteQueuedLists, deleteEntities } = useSavedEntitiesStore(
+    usedSavedEntitiesSelector,
+  );
+  const [shouldDisplayDeleteAlert, setShouldDisplayDeleteAlert] = useState(false);
+
+  useEffect(() => {
+    if (listsToBeDeleted.length > 0) {
+      deleteQueuedLists();
+      setShouldDisplayDeleteAlert(true);
+    }
+  }, [listsToBeDeleted, deleteQueuedLists]);
 
   return (
     <>
+      {shouldDisplayDeleteAlert && (
+        <StyledAlert severity="success" onClose={() => setShouldDisplayDeleteAlert(false)}>
+          List successfully deleted.
+        </StyledAlert>
+      )}
       <Typography variant="h2" component="h1">
         My Lists
       </Typography>
-      <Description padding="20px 20px">
-        Your lists are currently stored on local storage and are not transferable between devices.{' '}
-      </Description>
+      <LocalStorageDescription />
       <Typography variant="h3" component="h2">
-        My Saves Lists
+        My Saved Items
       </Typography>
       {Object.keys(savedEntities).length === 0 ? (
         <Description padding="20px 20px">
@@ -42,44 +52,9 @@ function SavedLists() {
           save.
         </Description>
       ) : (
-        <SavedEntitiesTable />
+        <SavedEntitiesTable savedEntities={savedEntities} deleteCallback={deleteEntities} />
       )}
-      <SeparatedFlexRow>
-        <div>
-          <Typography variant="h3" component="h2">
-            All Created Lists
-          </Typography>
-          <Typography variant="subtitle1">{Object.keys(savedLists).length} Lists</Typography>
-        </div>
-        <FlexBottom>
-          <Button variant="contained" color="primary" onClick={() => setDialogIsOpen(true)}>
-            Create New List
-          </Button>
-          <CreateListDialog dialogIsOpen={dialogIsOpen} setDialogIsOpen={setDialogIsOpen} />
-        </FlexBottom>
-      </SeparatedFlexRow>
-      {Object.keys(savedLists).length === 0 ? (
-        <Description padding="20px 20px">No lists created yet.</Description>
-      ) : (
-        <PanelScrollBox>
-          {Object.entries(savedLists).map(([key, value]) => {
-            const { Donor, Sample, Dataset } = value;
-            return (
-              <Panel
-                key={key}
-                title={key}
-                href=""
-                secondaryText={value.description}
-                entityCounts={{
-                  donors: Object.keys(Donor).length,
-                  samples: Object.keys(Sample).length,
-                  datasets: Object.keys(Dataset).length,
-                }}
-              />
-            );
-          })}
-        </PanelScrollBox>
-      )}
+      <SavedListScrollbox savedLists={savedLists} />
     </>
   );
 }
