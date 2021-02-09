@@ -30,9 +30,9 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }) {
   const setShouldDisplaySavedOrEditedAlert = useEntityStore(entityStoreSelector);
 
   function addSavedEntitiesToList() {
-    selectedLists.forEach((list) => addEntityToList(list, uuid));
-    const unselectedLists = Object.keys(savedLists).filter((list) => !selectedLists.has(list));
-    unselectedLists.forEach((list) => removeEntityFromList(list, uuid));
+    selectedLists.forEach((listUuid) => addEntityToList(listUuid, uuid));
+    const unselectedLists = Object.keys(savedLists).filter((listUuid) => !selectedLists.has(listUuid));
+    unselectedLists.forEach((listUuid) => removeEntityFromList(listUuid, uuid));
   }
 
   function handleSave() {
