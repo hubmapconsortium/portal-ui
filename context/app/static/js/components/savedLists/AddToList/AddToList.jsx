@@ -13,12 +13,12 @@ function AddToList({ selectedLists, addToSelectedLists, removeFromSelectedLists 
 
   return (
     <MaxHeightList>
-      {Object.entries(savedLists).map(([listUuid, value]) => (
+      {Object.entries(savedLists).map(([listUUID, value]) => (
         <AddToListItem
-          key={listUuid}
+          key={listUUID}
           title={value.title}
-          listUuid={listUuid}
-          isSelected={selectedLists.has(listUuid)}
+          listUUID={listUUID}
+          isSelected={selectedLists.has(listUUID)}
           addToSelectedLists={addToSelectedLists}
           removeFromSelectedLists={removeFromSelectedLists}
         />

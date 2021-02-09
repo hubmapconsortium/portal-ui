@@ -12,7 +12,7 @@ import DialogModal from 'js/shared-styles/DialogModal';
 
 const useSavedEnitiesSelector = (state) => state.queueListToBeDeleted;
 
-function DeleteListButton({ listUuid }) {
+function DeleteListButton({ listUUID }) {
   const anchorEl = useRef(null);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [deleteListDialogIsOpen, setDeleteListDialogIsOpen] = useState(false);
@@ -59,7 +59,7 @@ function DeleteListButton({ listUuid }) {
             <Button
               href="/my-lists"
               onClick={() => {
-                queueListToBeDeleted(listUuid);
+                queueListToBeDeleted(listUUID);
               }}
               color="primary"
             >

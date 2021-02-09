@@ -126,7 +126,7 @@ function Routes(props) {
   if (urlPath.startsWith('/my-lists')) {
     return (
       <Route>
-        <SavedList listUuid={list_uuid} />
+        <SavedList listUUID={list_uuid} />
       </Route>
     );
   }
