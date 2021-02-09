@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 import EditListDialog from 'js/components/savedLists/EditListDialog';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { EditIcon } from 'js/shared-styles/icons';
+import { StyledEditButton } from './style';
 
 function EditListButton({ listDescription, listTitle, listUuid }) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -11,9 +11,9 @@ function EditListButton({ listDescription, listTitle, listUuid }) {
   return (
     <>
       <SecondaryBackgroundTooltip title="Edit List">
-        <WhiteBackgroundIconButton onClick={() => setDialogIsOpen(true)}>
+        <StyledEditButton onClick={() => setDialogIsOpen(true)}>
           <EditIcon color="primary" />
-        </WhiteBackgroundIconButton>
+        </StyledEditButton>
       </SecondaryBackgroundTooltip>
       <EditListDialog
         dialogIsOpen={dialogIsOpen}
