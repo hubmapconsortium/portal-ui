@@ -103,6 +103,12 @@ const useSavedEntitiesStore = create(
           delete state.savedLists[listUuid];
         });
       },
+      editList: ({ listUuid, title, description }) => {
+        set((state) => {
+          state.savedLists[listUuid].title = title;
+          state.savedLists[listUuid].description = description;
+        });
+      },
     })),
     {
       name: 'saved_entities',
