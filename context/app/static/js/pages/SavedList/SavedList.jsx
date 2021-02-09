@@ -7,7 +7,7 @@ import DetailDescription from 'js/components/Detail/DetailDescription';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
-import { StyledButtonRow } from './style';
+import { StyledButtonRow, BottomAlignedTypography } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
@@ -36,9 +36,9 @@ function SavedList({ listUuid }) {
       <Typography variant="h2">{title}</Typography>
       <StyledButtonRow
         leftText={
-          <Typography variant="body1" color="primary">
+          <BottomAlignedTypography variant="body1" color="primary">
             {entitiesLength} {entitiesLength === 1 ? 'Item' : 'Items'}
-          </Typography>
+          </BottomAlignedTypography>
         }
         buttons={
           <>
