@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Flex } from './style';
 
-function RightAlignedButtonRow({ leftText, buttons }) {
+function RightAlignedButtonRow({ leftText, buttons, ...props }) {
   return (
-    <Flex>
+    <Flex {...props}>
       {leftText}
       <div>{buttons}</div>
     </Flex>

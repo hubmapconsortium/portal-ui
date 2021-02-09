@@ -4,10 +4,10 @@ import Typography from '@material-ui/core/Typography';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import DetailDescription from 'js/components/Detail/DetailDescription';
-import RightAlignedButtonRow from 'js/shared-styles/sections/RightAlignedButtonRow';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
+import { StyledButtonRow } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
@@ -34,7 +34,7 @@ function SavedList({ listUuid }) {
         List
       </Typography>
       <Typography variant="h2">{title}</Typography>
-      <RightAlignedButtonRow
+      <StyledButtonRow
         leftText={
           <Typography variant="body1" color="primary">
             {entitiesLength} {entitiesLength === 1 ? 'Item' : 'Items'}
