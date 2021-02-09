@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
+import { v4 as uuidv4 } from 'uuid';
+
 import immer from './immerMiddleware';
 
 const useSavedEntitiesStore = create(
@@ -24,34 +26,37 @@ const useSavedEntitiesStore = create(
         });
       },
       savedLists: {},
-      createList: ({ title, description }) =>
+      createList: ({ title, description }) => {
+        const uuid = uuidv4();
         set((state) => {
-          state.savedLists[title] = {
+          state.savedLists[uuid] = {
             // the Donor, Sample, and Datasets are objects to avoid duplicates. Normally they would be sets, but objects work better with local storage
+            title,
             savedEntities: {},
             description,
             dateSaved: Date.now(),
             dateLastModified: Date.now(),
           };
-        }),
-      addEntityToList: (title, uuid) => {
-        const { entity_type, group_name, display_doi } = get().savedEntities[uuid];
+        });
+      },
+      addEntityToList: (listUuid, entityUuid) => {
+        const { entity_type, group_name, display_doi } = get().savedEntities[entityUuid];
         set((state) => {
-          state.savedLists[title].savedEntities[uuid] = {
+          state.savedLists[listUuid].savedEntities[entityUuid] = {
             dateAddedToList: Date.now(),
             entity_type,
             group_name,
             display_doi,
           };
-          state.savedLists[title].dateLastModified = Date.now();
+          state.savedLists[listUuid].dateLastModified = Date.now();
         });
       },
-      addEntitiesToList: (title, uuids) => {
+      addEntitiesToList: (listUuid, entityUuids) => {
         const timestamp = Date.now();
-        uuids.forEach((uuid) => {
+        entityUuids.forEach((uuid) => {
           const { entity_type, group_name, display_doi } = get().savedEntities[uuid];
           set((state) => {
-            state.savedLists[title].savedEntities[uuid] = {
+            state.savedLists[listUuid].savedEntities[uuid] = {
               dateAddedToList: timestamp,
               entity_type,
               group_name,
@@ -60,42 +65,42 @@ const useSavedEntitiesStore = create(
           });
         });
         set((state) => {
-          state.savedLists[title].dateLastModified = Date.now();
+          state.savedLists[listUuid].dateLastModified = Date.now();
         });
       },
-      removeEntityFromList: (title, uuid) => {
+      removeEntityFromList: (listUuid, entityUuid) => {
         set((state) => {
-          delete state.savedLists[title].savedEntities[uuid];
+          delete state.savedLists[listUuid].savedEntities[entityUuid];
         });
       },
-      removeEntitiesFromList: (title, uuids) => {
-        uuids.forEach((uuid) => {
+      removeEntitiesFromList: (listUuid, entityUuids) => {
+        entityUuids.forEach((uuid) => {
           set((state) => {
-            delete state.savedLists[title].savedEntities[uuid];
+            delete state.savedLists[listUuid].savedEntities[uuid];
           });
         });
       },
       listsToBeDeleted: [],
-      queueListToBeDeleted: (listTitle) => {
-        if (!get().listsToBeDeleted.includes(listTitle)) {
+      queueListToBeDeleted: (listUuid) => {
+        if (!get().listsToBeDeleted.includes(listUuid)) {
           set((state) => {
-            state.listsToBeDeleted.push(listTitle);
+            state.listsToBeDeleted.push(listUuid);
           });
         }
       },
       deleteQueuedLists: () => {
-        get().listsToBeDeleted.forEach((listTitle) =>
+        get().listsToBeDeleted.forEach((listUuid) =>
           set((state) => {
-            delete state.savedLists[listTitle];
+            delete state.savedLists[listUuid];
           }),
         );
         set((state) => {
           state.listsToBeDeleted = [];
         });
       },
-      deleteList: (listTitle) => {
+      deleteList: (listUuid) => {
         set((state) => {
-          delete state.savedLists[listTitle];
+          delete state.savedLists[listUuid];
         });
       },
     })),
