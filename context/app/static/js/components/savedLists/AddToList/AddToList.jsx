@@ -1,8 +1,8 @@
 import React from 'react';
-import List from '@material-ui/core/List';
 
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import AddToListItem from 'js/components/savedLists/AddToListItem';
+import { MaxHeightList } from './style';
 
 const usedSavedEntitiesStoreSelector = (state) => ({
   savedLists: state.savedLists,
@@ -12,7 +12,7 @@ function AddToList({ selectedLists, addToSelectedLists, removeFromSelectedLists 
   const { savedLists } = useSavedEntitiesStore(usedSavedEntitiesStoreSelector);
 
   return (
-    <List>
+    <MaxHeightList>
       {Object.keys(savedLists).map((listName) => (
         <AddToListItem
           key={listName}
@@ -22,7 +22,7 @@ function AddToList({ selectedLists, addToSelectedLists, removeFromSelectedLists 
           removeFromSelectedLists={removeFromSelectedLists}
         />
       ))}
-    </List>
+    </MaxHeightList>
   );
 }
 
