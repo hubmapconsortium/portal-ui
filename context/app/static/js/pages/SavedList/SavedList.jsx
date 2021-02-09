@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
@@ -14,23 +14,18 @@ const usedSavedEntitiesSelector = (state) => ({
   removeEntitiesFromList: state.removeEntitiesFromList,
 });
 
-function SavedList({ listTitle }) {
-  const decodedTitle = decodeURIComponent(listTitle);
-  const [editedListTitle, setEditedListTitle] = useState(false);
-
-  const currentTitle = editedListTitle || decodedTitle;
-
+function SavedList({ listUuid }) {
   const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
-  const savedList = savedLists[currentTitle];
+  const savedList = savedLists[listUuid];
 
   const { savedEntities: listEntities } = savedList;
 
   const entitiesLength = Object.keys(listEntities).length;
 
-  const { description } = savedList;
+  const { title, description } = savedList;
 
   function deleteCallback(uuids) {
-    removeEntitiesFromList(currentTitle, uuids);
+    removeEntitiesFromList(listUuid, uuids);
   }
 
   return (
@@ -38,7 +33,7 @@ function SavedList({ listTitle }) {
       <Typography variant="subtitle1" component="h1" color="primary">
         List
       </Typography>
-      <Typography variant="h2">{currentTitle}</Typography>
+      <Typography variant="h2">{title}</Typography>
       <RightAlignedButtonRow
         leftText={
           <Typography variant="body1" color="primary">
@@ -47,12 +42,8 @@ function SavedList({ listTitle }) {
         }
         buttons={
           <>
-            <EditListButton
-              listDescription={description}
-              listTitle={currentTitle}
-              setEditedListTitle={setEditedListTitle}
-            />
-            <SavedListMenuButton listTitle={currentTitle} />
+            <EditListButton listDescription={description} listTitle={title} listUuid={listUuid} />
+            <SavedListMenuButton listUuid={listUuid} />
           </>
         }
       />
