@@ -22,7 +22,7 @@ const SavedList = lazy(() => import('js/pages/SavedList'));
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, title, markdown, errorCode, list_title } = flaskData;
+  const { entity, vitessce_conf, title, markdown, errorCode, list_uuid } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
 
@@ -126,7 +126,7 @@ function Routes(props) {
   if (urlPath.startsWith('/my-lists')) {
     return (
       <Route>
-        <SavedList listTitle={list_title} />
+        <SavedList listUuid={list_uuid} />
       </Route>
     );
   }
@@ -152,7 +152,7 @@ Routes.propTypes = {
     markdown: PropTypes.string,
     collection: PropTypes.object,
     errorCode: PropTypes.number,
-    list_title: PropTypes.string,
+    list_uuid: PropTypes.string,
   }),
 };
 
