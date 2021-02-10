@@ -4,13 +4,13 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 
-function AddToListItem({ isSelected, addToSelectedLists, removeFromSelectedLists, title }) {
+function AddToListItem({ isSelected, addToSelectedLists, removeFromSelectedLists, title, listUUID }) {
   const labelId = `checkbox-list-${title}`;
 
   const handleClick = isSelected ? removeFromSelectedLists : addToSelectedLists;
 
   return (
-    <ListItem onClick={() => handleClick(title)}>
+    <ListItem onClick={() => handleClick(listUUID)}>
       <ListItemIcon>
         <Checkbox
           edge="start"
