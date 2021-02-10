@@ -5,18 +5,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
 import SaveToListDialog from 'js/components/savedLists/SaveToListDialog';
 import useStateSet from 'js/hooks/useStateSet';
-import { Flex } from './style';
+import { BottomAlignedTypography, LeftMarginButton, LeftMarginIconButton, StyledButtonRow } from './style';
 
 const defaultColumns = [
   { id: 'display_doi', label: 'HuBMAP ID' },
@@ -52,42 +50,46 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) 
 
   return (
     <>
-      <Flex>
-        <Typography variant="subtitle1">
-          {selectedRowsSize} {selectedRowsSize === 1 ? 'Item' : 'Items'} Selected
-        </Typography>
-        {selectedRowsSize > 0 && (
-          <div>
-            <Button color="primary" onClick={deselectAllRows}>
-              Deselect All ({selectedRowsSize})
-            </Button>
+      <StyledButtonRow
+        leftText={
+          <BottomAlignedTypography variant="subtitle1">
+            {selectedRowsSize} {selectedRowsSize === 1 ? 'Item' : 'Items'} Selected
+          </BottomAlignedTypography>
+        }
+        buttons={
+          selectedRowsSize > 0 && (
+            <div>
+              <Button color="primary" onClick={deselectAllRows}>
+                Deselect All ({selectedRowsSize})
+              </Button>
 
-            <SecondaryBackgroundTooltip title="Delete Items">
-              <WhiteBackgroundIconButton onClick={() => setDeleteDialogIsOpen(true)}>
-                <DeleteRoundedIcon color="primary" />
-              </WhiteBackgroundIconButton>
-            </SecondaryBackgroundTooltip>
-            <DeleteSavedEntitiesDialog
-              dialogIsOpen={deleteDialogIsOpen}
-              setDialogIsOpen={setDeleteDialogIsOpen}
-              deleteSelectedSavedEntities={deleteSelectedSavedEntities}
-            />
-            {!isSavedListPage && (
-              <>
-                <Button color="primary" onClick={() => setAddToDialogIsOpen(true)} variant="contained">
-                  Add To
-                </Button>
-                <SaveToListDialog
-                  title="Add Items To"
-                  dialogIsOpen={addToDialogIsOpen}
-                  setDialogIsOpen={setAddToDialogIsOpen}
-                  entitiesToAdd={selectedRows}
-                />
-              </>
-            )}
-          </div>
-        )}
-      </Flex>
+              <SecondaryBackgroundTooltip title="Delete Items">
+                <LeftMarginIconButton onClick={() => setDeleteDialogIsOpen(true)}>
+                  <DeleteRoundedIcon color="primary" />
+                </LeftMarginIconButton>
+              </SecondaryBackgroundTooltip>
+              <DeleteSavedEntitiesDialog
+                dialogIsOpen={deleteDialogIsOpen}
+                setDialogIsOpen={setDeleteDialogIsOpen}
+                deleteSelectedSavedEntities={deleteSelectedSavedEntities}
+              />
+              {!isSavedListPage && (
+                <>
+                  <LeftMarginButton color="primary" onClick={() => setAddToDialogIsOpen(true)} variant="contained">
+                    Add To
+                  </LeftMarginButton>
+                  <SaveToListDialog
+                    title="Add Items To"
+                    dialogIsOpen={addToDialogIsOpen}
+                    setDialogIsOpen={setAddToDialogIsOpen}
+                    entitiesToAdd={selectedRows}
+                  />
+                </>
+              )}
+            </div>
+          )
+        }
+      />
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>

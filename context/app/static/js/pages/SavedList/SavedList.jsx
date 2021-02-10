@@ -4,10 +4,10 @@ import Typography from '@material-ui/core/Typography';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import DetailDescription from 'js/components/Detail/DetailDescription';
-import RightAlignedButtonRow from 'js/shared-styles/sections/RightAlignedButtonRow';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
+import { StyledButtonRow, BottomAlignedTypography, SpacingDiv, PageSpacing } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
@@ -29,16 +29,16 @@ function SavedList({ listUUID }) {
   }
 
   return (
-    <>
+    <PageSpacing>
       <Typography variant="subtitle1" component="h1" color="primary">
         List
       </Typography>
       <Typography variant="h2">{title}</Typography>
-      <RightAlignedButtonRow
+      <StyledButtonRow
         leftText={
-          <Typography variant="body1" color="primary">
+          <BottomAlignedTypography variant="body1" color="primary">
             {entitiesLength} {entitiesLength === 1 ? 'Item' : 'Items'}
-          </Typography>
+          </BottomAlignedTypography>
         }
         buttons={
           <>
@@ -47,17 +47,21 @@ function SavedList({ listUUID }) {
           </>
         }
       />
-      <LocalStorageDescription />
-      <DetailDescription
-        description={savedList.description}
-        createdTimestamp={savedList.dateSaved}
-        modifiedTimestamp={savedList.dateLastModified}
-      />
+      <SpacingDiv>
+        <LocalStorageDescription />
+      </SpacingDiv>
+      <SpacingDiv>
+        <DetailDescription
+          description={savedList.description}
+          createdTimestamp={savedList.dateSaved}
+          modifiedTimestamp={savedList.dateLastModified}
+        />
+      </SpacingDiv>
       <Typography variant="h3" component="h2">
         Items
       </Typography>
       <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
-    </>
+    </PageSpacing>
   );
 }
 

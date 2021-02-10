@@ -1,5 +1,6 @@
 import React from 'react';
-import Description from 'js/shared-styles/sections/Description';
+
+import { Description } from 'js/shared-styles/sections/Description';
 
 function LocalStorageDescription() {
   return (
