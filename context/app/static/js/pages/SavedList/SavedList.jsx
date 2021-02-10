@@ -7,7 +7,7 @@ import DetailDescription from 'js/components/Detail/DetailDescription';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
-import { StyledButtonRow, BottomAlignedTypography, SpacingDiv } from './style';
+import { StyledButtonRow, BottomAlignedTypography, SpacingDiv, PageSpacing } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
@@ -29,7 +29,7 @@ function SavedList({ listUuid }) {
   }
 
   return (
-    <>
+    <PageSpacing>
       <Typography variant="subtitle1" component="h1" color="primary">
         List
       </Typography>
@@ -61,7 +61,7 @@ function SavedList({ listUuid }) {
         Items
       </Typography>
       <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
-    </>
+    </PageSpacing>
   );
 }
 

@@ -15,4 +15,8 @@ const SpacingDiv = styled.div`
   margin-bottom: ${(props) => props.theme.spacing(3)}px;
 `;
 
-export { StyledButtonRow, BottomAlignedTypography, SpacingDiv };
+const PageSpacing = styled.div`
+  margin-bottom: ${(props) => props.theme.spacing(5)}px;
+`;
+
+export { StyledButtonRow, BottomAlignedTypography, SpacingDiv, PageSpacing };

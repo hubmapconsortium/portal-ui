@@ -15,4 +15,8 @@ const StyledHeader = styled(Typography)`
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
 `;
 
-export { StyledAlert, SpacingDiv, StyledHeader };
+const PageSpacing = styled.div`
+  margin-bottom: ${(props) => props.theme.spacing(5)}px;
+`;
+
+export { StyledAlert, SpacingDiv, StyledHeader, PageSpacing };

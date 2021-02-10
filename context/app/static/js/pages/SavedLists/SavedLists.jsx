@@ -6,8 +6,7 @@ import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import { Description } from 'js/shared-styles/sections/Description';
 import SavedListScrollbox from 'js/components/savedLists/SavedListScrollbox';
-import { StyledAlert, StyledHeader } from './style';
-import { SpacingDiv } from '../SavedList/style';
+import { StyledAlert, StyledHeader, SpacingDiv, PageSpacing } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
@@ -31,7 +30,7 @@ function SavedLists() {
   }, [listsToBeDeleted, deleteQueuedLists]);
 
   return (
-    <>
+    <PageSpacing>
       {shouldDisplayDeleteAlert && (
         <StyledAlert severity="success" onClose={() => setShouldDisplayDeleteAlert(false)}>
           List successfully deleted.
@@ -59,7 +58,7 @@ function SavedLists() {
         )}
       </SpacingDiv>
       <SavedListScrollbox savedLists={savedLists} />
-    </>
+    </PageSpacing>
   );
 }
 
