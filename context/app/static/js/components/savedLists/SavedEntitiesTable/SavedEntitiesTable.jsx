@@ -98,7 +98,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) 
                 <HeaderCell padding="checkbox" onClick={headerRowIsSelected ? deselectAllRows : selectAllRows}>
                   <Checkbox
                     checked={headerRowIsSelected}
-                    inputProps={{ 'aria-labelledby': `saved-entities-header-row-checkbox` }}
+                    inputProps={{ 'aria-labelledby': 'saved-entities-header-row-checkbox' }}
                   />
                 </HeaderCell>
                 {columns.map((column) => (
