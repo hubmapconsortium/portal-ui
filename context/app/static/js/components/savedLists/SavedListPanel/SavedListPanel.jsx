@@ -9,10 +9,10 @@ function getEntityCounts(listSavedEntities) {
   return counts;
 }
 
-function SavedListPanel({ entityObject, listUuid }) {
+function SavedListPanel({ entityObject, listUUID }) {
   const { savedEntities, description, title } = entityObject;
   const counts = getEntityCounts(savedEntities);
-  return <Panel title={title} href={`/my-lists/${listUuid}`} secondaryText={description} entityCounts={counts} />;
+  return <Panel title={title} href={`/my-lists/${listUUID}`} secondaryText={description} entityCounts={counts} />;
 }
 
 export default SavedListPanel;

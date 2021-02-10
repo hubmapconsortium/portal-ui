@@ -10,7 +10,7 @@ const useSavedEntitiesStoreSelector = (state) => ({
   savedLists: state.savedLists,
 });
 
-function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTitle, listUuid }) {
+function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTitle, listUUID }) {
   const [title, setTitle] = useState(listTitle);
   const [description, setDescription] = useState(listDescription);
   const [shouldDisplayWarning, setShouldDisplayWarning] = useState(false);
@@ -36,7 +36,7 @@ function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTi
 
   function handleSubmit() {
     if (!(title in savedLists)) {
-      editList({ listUuid, title, description });
+      editList({ listUUID, title, description });
       setDialogIsOpen(false);
     } else {
       setShouldDisplayWarning(true);

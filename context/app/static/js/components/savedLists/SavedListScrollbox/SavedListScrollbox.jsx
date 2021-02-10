@@ -31,7 +31,7 @@ function SavedListScrollbox({ savedLists }) {
       ) : (
         <MaxHeightScrollbox>
           {Object.entries(savedLists).map(([key, value]) => {
-            return <SavedListPanel key={key} entityObject={value} listUuid={key} />;
+            return <SavedListPanel key={key} entityObject={value} listUUID={key} />;
           })}
         </MaxHeightScrollbox>
       )}

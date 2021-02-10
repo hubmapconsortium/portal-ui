@@ -5,7 +5,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { EditIcon } from 'js/shared-styles/icons';
 import { StyledEditButton } from './style';
 
-function EditListButton({ listDescription, listTitle, listUuid }) {
+function EditListButton({ listDescription, listTitle, listUUID }) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   return (
@@ -20,7 +20,7 @@ function EditListButton({ listDescription, listTitle, listUuid }) {
         setDialogIsOpen={setDialogIsOpen}
         listTitle={listTitle}
         listDescription={listDescription}
-        listUuid={listUuid}
+        listUUID={listUUID}
       />
     </>
   );

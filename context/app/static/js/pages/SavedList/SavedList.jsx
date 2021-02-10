@@ -14,9 +14,9 @@ const usedSavedEntitiesSelector = (state) => ({
   removeEntitiesFromList: state.removeEntitiesFromList,
 });
 
-function SavedList({ listUuid }) {
+function SavedList({ listUUID }) {
   const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
-  const savedList = savedLists[listUuid];
+  const savedList = savedLists[listUUID];
 
   const { savedEntities: listEntities } = savedList;
 
@@ -25,7 +25,7 @@ function SavedList({ listUuid }) {
   const { title, description } = savedList;
 
   function deleteCallback(uuids) {
-    removeEntitiesFromList(listUuid, uuids);
+    removeEntitiesFromList(listUUID, uuids);
   }
 
   return (
@@ -42,8 +42,8 @@ function SavedList({ listUuid }) {
         }
         buttons={
           <>
-            <EditListButton listDescription={description} listTitle={title} listUuid={listUuid} />
-            <SavedListMenuButton listUuid={listUuid} />
+            <EditListButton listDescription={description} listTitle={title} listUUID={listUUID} />
+            <SavedListMenuButton listUUID={listUUID} />
           </>
         }
       />
