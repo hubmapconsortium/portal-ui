@@ -7,7 +7,7 @@ import DetailDescription from 'js/components/Detail/DetailDescription';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
-import { StyledButtonRow, BottomAlignedTypography } from './style';
+import { StyledButtonRow, BottomAlignedTypography, SpacingDiv } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
@@ -47,12 +47,16 @@ function SavedList({ listUuid }) {
           </>
         }
       />
-      <LocalStorageDescription />
-      <DetailDescription
-        description={savedList.description}
-        createdTimestamp={savedList.dateSaved}
-        modifiedTimestamp={savedList.dateLastModified}
-      />
+      <SpacingDiv>
+        <LocalStorageDescription />
+      </SpacingDiv>
+      <SpacingDiv>
+        <DetailDescription
+          description={savedList.description}
+          createdTimestamp={savedList.dateSaved}
+          modifiedTimestamp={savedList.dateLastModified}
+        />
+      </SpacingDiv>
       <Typography variant="h3" component="h2">
         Items
       </Typography>

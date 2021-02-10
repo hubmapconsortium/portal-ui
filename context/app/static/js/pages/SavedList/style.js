@@ -11,4 +11,8 @@ const BottomAlignedTypography = styled(Typography)`
   align-self: flex-end;
 `;
 
-export { StyledButtonRow, BottomAlignedTypography };
+const SpacingDiv = styled.div`
+  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+`;
+
+export { StyledButtonRow, BottomAlignedTypography, SpacingDiv };
