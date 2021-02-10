@@ -1,21 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import useEntityStore, { savedAlertStatus, editedAlertStatus } from 'js/stores/useEntityStore';
 import TableOfContents from '../TableOfContents';
-import { Content, FlexRow } from './style';
+import { Content, FlexRow, StyledAlert } from './style';
 import { getSections } from './utils';
+
+const entityStoreSelector = (state) => ({
+  shouldDisplaySavedOrEditedAlert: state.shouldDisplaySavedOrEditedAlert,
+  setShouldDisplaySavedOrEditedAlert: state.setShouldDisplaySavedOrEditedAlert,
+});
 
 function DetailLayout(props) {
   const { sectionOrder, children } = props;
+
+  const { shouldDisplaySavedOrEditedAlert, setShouldDisplaySavedOrEditedAlert } = useEntityStore(entityStoreSelector);
 
   // section hash must match section id in each component
   const sections = new Map(getSections(sectionOrder));
 
   return (
-    <FlexRow>
-      <TableOfContents items={[...sections.values()]} />
-      <Content>{children}</Content>
-    </FlexRow>
+    <>
+      {shouldDisplaySavedOrEditedAlert === savedAlertStatus && (
+        <StyledAlert severity="success" onClose={() => setShouldDisplaySavedOrEditedAlert(false)}>
+          Successfully added to My Saves List. All data are currently stored on local storage and are not transferable
+          between devices.
+        </StyledAlert>
+      )}
+      {shouldDisplaySavedOrEditedAlert === editedAlertStatus && (
+        <StyledAlert severity="success" onClose={() => setShouldDisplaySavedOrEditedAlert(false)}>
+          Successfully updated save status. All data are currently stored on local storage and are not transferable
+          between devices.
+        </StyledAlert>
+      )}
+      <FlexRow>
+        <TableOfContents items={[...sections.values()]} />
+        <Content>{children}</Content>
+      </FlexRow>
+    </>
   );
 }
 
