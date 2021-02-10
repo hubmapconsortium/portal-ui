@@ -1,0 +1,1 @@
+- Stub out a UI for the Cells API.
