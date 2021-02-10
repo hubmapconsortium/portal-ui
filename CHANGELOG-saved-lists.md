@@ -1,2 +1,0 @@
-- Enable users to store entities and lists of entities in local storage.
-- Add my lists page to interact with stored entities and lists.

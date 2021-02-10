@@ -1,3 +1,10 @@
+## v0.11.2 - 2021-02-10
+
+- Stub out a UI for the Cells API.
+- Enable users to store entities and lists of entities in local storage.
+- Add my lists page to interact with stored entities and lists.
+
+
 ## v0.11.1 - 2021-02-05
 
 - Add a link to the CCF JSON, and a new route to serve the JSON.
