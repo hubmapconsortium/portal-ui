@@ -373,7 +373,9 @@ class Vitessce:
                 image_wrappers += [OmeTiffWrapper(img_url=img_url, offsets_url=offsets_url, name=f"Image {k}")]
             dataset = dataset.add_object(MultiImageWrapper(image_wrappers))
             vc = view_function(vc, dataset)
-            confs.append(vc.to_dict(on_obj=on_obj))
+            conf = vc.to_dict(on_obj=on_obj)
+            del conf['datasets'][0]['files'][0]['options']['renderLayers']
+            confs.append(conf)
         self.conf = confs
         return confs
 
