@@ -12,7 +12,7 @@ const BottomAlignedTypography = styled(Typography)`
 `;
 
 const SpacingDiv = styled.div`
-  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  margin-bottom: ${(props) => props.theme.spacing(3)}px;
 `;
 
 export { StyledButtonRow, BottomAlignedTypography, SpacingDiv };

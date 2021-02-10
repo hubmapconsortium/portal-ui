@@ -8,7 +8,7 @@ const StyledAlert = styled(Alert)`
 `;
 
 const SpacingDiv = styled.div`
-  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  margin-bottom: ${(props) => props.theme.spacing(3)}px;
 `;
 
 const StyledHeader = styled(Typography)`
