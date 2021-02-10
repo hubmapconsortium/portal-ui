@@ -7,6 +7,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
 
 // eslint-disable-next-line no-unused-vars
 function CellsAPIDemo(props) {
@@ -15,25 +16,51 @@ function CellsAPIDemo(props) {
   const [genomic_modality, setGenomicModality] = useState('rna');
   const [has, setHas] = useState('VIM > 0.5');
 
-  // const [results, setResults] = useState([]);
+  const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
 
   async function handleSubmit() {
-    const formData = new FormData();
-    formData.append('input_type', input_type);
-    formData.append('genomic_modality', genomic_modality);
-    formData.append('input_set', has);
     // TODO: Pull endpoint from context!
-    const response = await fetch(`https://cells.dev.hubmapconsortium.org/api/${output_type}/`, {
+    const urlBase = 'https://cells.dev.hubmapconsortium.org/api/';
+
+    const firstFormData = new FormData();
+    firstFormData.append('input_type', input_type);
+    firstFormData.append('genomic_modality', genomic_modality);
+    firstFormData.append('input_set', has);
+
+    const firstResponse = await fetch(`${urlBase}${output_type}/`, {
       method: 'POST',
-      body: formData,
+      body: firstFormData,
     });
-    const responseJson = await response.json();
-    if ('message' in responseJson) {
-      setError(responseJson.message);
-    } else {
-      // TODO
+    const firstResponseJson = await firstResponse.json();
+    if ('message' in firstResponseJson) {
+      setError(`first: ${firstResponseJson.message}`);
+      return;
     }
+    const handle = firstResponseJson.results[0].query_handle;
+
+    const secondFormData = new FormData();
+    secondFormData.append('key', handle);
+    secondFormData.append('set_type', output_type);
+    secondFormData.append('limit', 10);
+    secondFormData.append('values_type', input_type);
+    // limit,
+    // offset,
+    // values_included,
+    // sort_by,
+    // values_type
+
+    const secondResponse = await fetch(`${urlBase}${output_type}detailevaluation/`, {
+      method: 'POST',
+      body: secondFormData,
+    });
+    const secondResponseJson = await secondResponse.json();
+    if ('message' in secondResponseJson) {
+      setError(`second: ${secondResponseJson.message}`);
+      return;
+    }
+
+    setResults(secondResponseJson.results);
   }
 
   function handleChange(event) {
@@ -70,19 +97,39 @@ function CellsAPIDemo(props) {
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
       {error}
-      <Table>
-        <TableBody>
-          <TableRow>
-            <TableCell>test</TableCell>
-            <TableCell>test</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>a</TableCell>
-            <TableCell>b</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+      <ResultsTable results={results} />
     </Paper>
+  );
+}
+
+function ResultsTable(props) {
+  const { results } = props;
+  if (results.length === 0) {
+    return <p>No results</p>;
+  }
+  const fields = Object.keys(results[0]);
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          {fields.map((field) => (
+            <TableCell key={field}>{field}</TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {results.map((result) => (
+          <TableRow>
+            {fields.map((field) => (
+              <TableCell key={field}>
+                {/* Results can include objects in the "values" field. */}
+                {JSON.stringify(result[field])}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }
 
