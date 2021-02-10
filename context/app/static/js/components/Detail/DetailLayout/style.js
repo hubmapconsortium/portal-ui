@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Alert } from 'js/shared-styles/alerts';
 
 const Content = styled.div`
   width: calc(100% - 150px);
@@ -11,4 +12,8 @@ const FlexRow = styled.div`
   margin-bottom: ${(props) => props.theme.spacing(5)}px;
 `;
 
-export { Content, FlexRow };
+const StyledAlert = styled(Alert)`
+  margin-bottom: ${(props) => props.theme.spacing(1.5)}px;
+`;
+
+export { Content, FlexRow, StyledAlert };

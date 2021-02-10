@@ -9,6 +9,9 @@ import InfoRoundedIcon from '@material-ui/icons/InfoRounded';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import InsertDriveFileRoundedIcon from '@material-ui/icons/InsertDriveFileRounded';
 import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
+import MoreHorizRoundedIcon from '@material-ui/icons/MoreHorizRounded';
+import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
+import EditRoundedIcon from '@material-ui/icons/EditRounded';
 
 const CenterIcon = styled(AccountBalanceIcon)`
   font-size: ${(props) => props.fontSize};
@@ -46,4 +49,29 @@ const ErrorIcon = styled(ErrorRoundedIcon)`
   font-size: ${(props) => props.fontSize};
 `;
 
-export { DonorIcon, SampleIcon, DatasetIcon, CenterIcon, ExternalLinkIcon, InfoIcon, SuccessIcon, FileIcon, ErrorIcon };
+const MoreIcon = styled(MoreHorizRoundedIcon)`
+  font-size: ${(props) => props.fontSize};
+`;
+
+const DeleteIcon = styled(DeleteRoundedIcon)`
+  font-size: ${(props) => props.fontSize};
+`;
+
+const EditIcon = styled(EditRoundedIcon)`
+  font-size: ${(props) => props.fontSize};
+`;
+
+export {
+  DonorIcon,
+  SampleIcon,
+  DatasetIcon,
+  CenterIcon,
+  ExternalLinkIcon,
+  InfoIcon,
+  SuccessIcon,
+  FileIcon,
+  ErrorIcon,
+  MoreIcon,
+  DeleteIcon,
+  EditIcon,
+};

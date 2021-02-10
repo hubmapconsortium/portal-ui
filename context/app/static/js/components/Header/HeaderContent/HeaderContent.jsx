@@ -46,6 +46,9 @@ function HeaderContent({ anchorRef }) {
           <Dropdown title="Documentation" menuListId="documentation-options">
             <DocumentationLinks />
           </Dropdown>
+          <HeaderButton component={Link} href="/my-lists">
+            My Lists
+          </HeaderButton>
         </>
       )}
       {shouldDisplayMenu && <Spacer />}
