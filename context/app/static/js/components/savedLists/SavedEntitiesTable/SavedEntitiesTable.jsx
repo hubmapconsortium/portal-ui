@@ -18,8 +18,8 @@ import { BottomAlignedTypography, LeftMarginButton, LeftMarginIconButton, Styled
 
 const defaultColumns = [
   { id: 'display_doi', label: 'HuBMAP ID' },
-  { id: 'entity_type', label: 'Entity Type' },
   { id: 'group_name', label: 'Group' },
+  { id: 'entity_type', label: 'Entity Type' },
 ];
 
 function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) {
