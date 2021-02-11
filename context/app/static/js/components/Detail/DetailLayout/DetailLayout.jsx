@@ -23,13 +23,13 @@ function DetailLayout(props) {
     <>
       {shouldDisplaySavedOrEditedAlert === savedAlertStatus && (
         <StyledAlert severity="success" onClose={() => setShouldDisplaySavedOrEditedAlert(false)}>
-          Successfully added to My Saves List. All data are currently stored on local storage and are not transferable
+          Successfully added to My Saves List. All lists are currently stored on local storage and are not transferable
           between devices.
         </StyledAlert>
       )}
       {shouldDisplaySavedOrEditedAlert === editedAlertStatus && (
         <StyledAlert severity="success" onClose={() => setShouldDisplaySavedOrEditedAlert(false)}>
-          Successfully updated save status. All data are currently stored on local storage and are not transferable
+          Successfully updated save status. All lists are currently stored on local storage and are not transferable
           between devices.
         </StyledAlert>
       )}
