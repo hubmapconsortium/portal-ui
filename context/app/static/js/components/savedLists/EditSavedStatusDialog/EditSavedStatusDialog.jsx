@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 import useStateSet from 'js/hooks/useStateSet';
 import DialogModal from 'js/shared-styles/DialogModal';
@@ -21,7 +22,7 @@ function getSavedListsWhichContainEntity(savedLists, savedEntity) {
 
 const entityStoreSelector = (state) => state.setShouldDisplaySavedOrEditedAlert;
 
-function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }) {
+function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_type }) {
   const { addEntityToList, savedLists, removeEntityFromList } = useSavedEntitiesStore(useSavedEntitiesSelector);
   const [selectedLists, addToSelectedLists, removeFromSelectedLists, setSelectedLists] = useStateSet(
     getSavedListsWhichContainEntity(savedLists, uuid),
@@ -46,22 +47,30 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }) {
     setDialogIsOpen(false);
   }
 
+  const savedListsExist = Object.keys(savedLists).length > 0;
+
   return (
     <DialogModal
       title="Edit Saved Status"
       content={
-        <AddToList
-          selectedLists={selectedLists}
-          addToSelectedLists={addToSelectedLists}
-          removeFromSelectedLists={removeFromSelectedLists}
-        />
+        savedListsExist ? (
+          <AddToList
+            selectedLists={selectedLists}
+            addToSelectedLists={addToSelectedLists}
+            removeFromSelectedLists={removeFromSelectedLists}
+          />
+        ) : (
+          <Typography>
+            {`You don't have any lists. To assign this ${entity_type.toLowerCase()} to one or more lists, create a list in My Lists.`}
+          </Typography>
+        )
       }
       actions={
         <>
           <Button onClick={() => handleClose()} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => handleSave()} color="primary">
+          <Button onClick={() => handleSave()} color="primary" disabled={!savedListsExist}>
             Save
           </Button>
         </>
