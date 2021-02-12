@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import ReactGA from 'react-ga';
 import { getCLS, getFID, getLCP, getTTFB } from 'web-vitals';
 
+// copy-and-paste from https://github.com/GoogleChrome/web-vitals#using-analyticsjs
 function sendVitalsToGA({ name, delta, id }) {
   ReactGA.event({
     category: 'Web Vitals',
