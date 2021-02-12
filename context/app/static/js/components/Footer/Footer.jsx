@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background } from './style';
 
 function Footer(props) {
@@ -17,14 +18,14 @@ function Footer(props) {
           <Flex>
             <FlexColumn $mr={1}>
               <Typography variant="subtitle2">About</Typography>
-              <LightBlueLink
+              <OutboundLink
                 href="https://hubmapconsortium.org/"
                 target="_blank"
                 rel="noopener noreferrer"
                 variant="body2"
               >
                 Project Website
-              </LightBlueLink>
+              </OutboundLink>
               {!isMaintenancePage && (
                 <LightBlueLink href="/docs" variant="body2">
                   Documentation
