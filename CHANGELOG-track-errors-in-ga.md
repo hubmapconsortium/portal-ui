@@ -1,0 +1,1 @@
+- Track error boundary errors in Google Analytics.
