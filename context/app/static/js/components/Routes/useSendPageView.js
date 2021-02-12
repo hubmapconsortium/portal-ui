@@ -8,6 +8,11 @@ function useSendPageView(path) {
       ReactGA.pageview(pathWithoutUUID);
       return;
     }
+    // send path without ID for specific saved list page
+    if (path.match(/\/my-lists\/[\w-]+/)) {
+      ReactGA.pageview('/my-lists/saved-list');
+      return;
+    }
     if (path.startsWith('/search') || path.startsWith('/dev-search')) {
       const urlParams = new URLSearchParams(window.location.search);
       const entityTypeKey = 'entity_type[0]';
