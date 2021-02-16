@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
@@ -36,9 +37,9 @@ function SampleTissue(props) {
                 spatial coordinates of this sample
               </LightBlueLink>{' '}
               have been registered and it can be found in the{' '}
-              <LightBlueLink href="/ccf-eui" target="_blank" rel="noopener noreferrer">
+              <OutboundLink href="/ccf-eui" target="_blank" rel="noopener noreferrer">
                 Common Coordinate Framework Exploration User Interface
-              </LightBlueLink>
+              </OutboundLink>
               .
             </>
           </MetadataItem>
