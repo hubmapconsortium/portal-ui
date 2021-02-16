@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import LaunchRoundedIcon from '@material-ui/icons/LaunchRounded';
 import Divider from '@material-ui/core/Divider';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 
 const CwlIcon = styled(LaunchRoundedIcon)`
   margin-left: ${(props) => props.theme.spacing(0.5)}px;
@@ -10,7 +10,7 @@ const CwlIcon = styled(LaunchRoundedIcon)`
   align-self: center;
 `;
 
-const FlexLightBlueLink = styled(LightBlueLink)`
+const FlexOutboundLink = styled(OutboundLink)`
   display: flex;
 `;
 
@@ -26,4 +26,4 @@ const StyledListItem = styled.li`
   display: flex;
 `;
 
-export { CwlIcon, FlexLightBlueLink, PrimaryTextDivider, StyledListItem };
+export { CwlIcon, FlexOutboundLink, PrimaryTextDivider, StyledListItem };
