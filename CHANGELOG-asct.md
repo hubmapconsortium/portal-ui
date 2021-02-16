@@ -1,1 +1,0 @@
-- Update text of ASCT+B Preview.

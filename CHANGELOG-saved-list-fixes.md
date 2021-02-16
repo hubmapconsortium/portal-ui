@@ -1,3 +1,0 @@
-- Change language for alert shown on the entity detail page when saving the entity or editing its saved status.
-- Fix incorrect column labels in saved lists and saved list pages.
-- Display warning text when attempting to edit an entity's saved status when saved lists do not exist.

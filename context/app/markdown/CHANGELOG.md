@@ -1,3 +1,14 @@
+## v0.12.0 - 2021-02-16
+
+- Update text of ASCT+B Preview.
+- Change language for alert shown on the entity detail page when saving the entity or editing its saved status.
+- Fix incorrect column labels in saved lists and saved list pages.
+- Display warning text when attempting to edit an entity's saved status when saved lists do not exist.
+- Fix page view tracking to track visits to a saved list page together instead of separating by uuid.
+- Track error boundary errors in Google Analytics.
+- Track web vitals and send to Google Analytics.
+
+
 ## v0.11.2 - 2021-02-10
 
 - Stub out a UI for the Cells API.
