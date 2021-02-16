@@ -1,0 +1,1 @@
+- Track web vitals and send to Google Analytics.
