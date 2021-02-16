@@ -18,7 +18,7 @@ function Footer(props) {
           <Flex>
             <FlexColumn $mr={1}>
               <Typography variant="subtitle2">About</Typography>
-              <OutboundLink href="https://hubmapconsortium.org/" target="_blank" variant="body2">
+              <OutboundLink href="https://hubmapconsortium.org/" variant="body2">
                 Project Website
               </OutboundLink>
               {!isMaintenancePage && (
@@ -41,12 +41,11 @@ function Footer(props) {
             </FlexColumn>
             <FlexColumn $mr={1}>
               <Typography variant="subtitle2">Policies</Typography>
-              <OutboundLink href="https://hubmapconsortium.org/policies/" target="_blank" variant="body2">
+              <OutboundLink href="https://hubmapconsortium.org/policies/" variant="body2">
                 Overview
               </OutboundLink>
               <OutboundLink
                 href="https://hubmapconsortium.org/wp-content/uploads/2020/06/DUA_FINAL_2020_02_03_for_Signature.pdf"
-                target="_blank"
                 variant="body2"
               >
                 Data Use Agreement
@@ -59,14 +58,14 @@ function Footer(props) {
             </FlexColumn>
             <FlexColumn>
               <Typography variant="subtitle2">Funding</Typography>
-              <OutboundLink href="https://commonfund.nih.gov/hubmap" target="_blank" variant="body2">
+              <OutboundLink href="https://commonfund.nih.gov/hubmap" variant="body2">
                 NIH Common Fund
               </OutboundLink>
             </FlexColumn>
           </Flex>
           <Typography variant="body1" color="secondary">
             {'Copyright '}
-            <OutboundLink href="https://hubmapconsortium.org" target="_blank">
+            <OutboundLink href="https://hubmapconsortium.org">
               NIH Human BioMolecular Atlas Program (HuBMAP)
             </OutboundLink>{' '}
             {new Date().getFullYear()}
