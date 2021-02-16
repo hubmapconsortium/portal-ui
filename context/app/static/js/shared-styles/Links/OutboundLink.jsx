@@ -13,7 +13,7 @@ function OutboundLink({ children, ...props }) {
     });
   }
   return (
-    <LightBlueLink {...props} onClick={sendOutboundEvent} rel="noopener noreferrer">
+    <LightBlueLink {...props} onClick={sendOutboundEvent} rel="noopener noreferrer" target="_blank">
       {children}
     </LightBlueLink>
   );
