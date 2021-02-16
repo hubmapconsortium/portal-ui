@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import Summary from 'js/components/Detail/Summary';
 import CollectionDatasetsTable from 'js/components/Detail/CollectionDatasetsTable';
 import CollectionsAffiliationsTable from 'js/components/Detail/CollectionsAffiliationsTable';
@@ -40,9 +40,9 @@ function Collection(props) {
             create_timestamp={create_timestamp}
             last_modified_timestamp={last_modified_timestamp}
           >
-            <LightBlueLink href={doi_url} target="_blank" rel="noopener noreferrer" variant="body1">
+            <OutboundLink href={doi_url} variant="body1">
               doi:{new URL(doi_url).pathname.slice(1)} <StyledOpenInNewRoundedIcon />
-            </LightBlueLink>
+            </OutboundLink>
           </Summary>
           {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
