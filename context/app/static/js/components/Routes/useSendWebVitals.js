@@ -6,7 +6,7 @@ import { getCLS, getFID, getLCP, getTTFB } from 'web-vitals';
 function sendVitalsToGA({ name, delta, id }) {
   ReactGA.event({
     category: 'Web Vitals',
-    action: (name === 'CLS' ? 'CLS * 1000' : name),
+    action: name === 'CLS' ? 'CLS * 1000' : name,
     // From web-vitals: The `id` value will be unique to the current page load. When sending
     // multiple values from the same page (e.g. for CLS), Google Analytics can
     // compute a total by grouping on this ID (note: requires `eventLabel` to
