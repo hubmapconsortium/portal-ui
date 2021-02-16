@@ -9,7 +9,7 @@ function useSendPageView(path) {
       return;
     }
     // send path without ID for specific saved list page
-    if (path.startswith('/my-lists/')) {
+    if (path.startsWith('/my-lists/')) {
       // Distinguished by final slash.
       ReactGA.pageview('/my-lists/saved-list');
       return;
