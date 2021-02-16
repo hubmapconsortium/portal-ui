@@ -18,6 +18,7 @@ function Summary(props) {
     collectionName,
     mapped_data_access_level,
     group_name,
+    entityCanBeSaved,
   } = props;
   return (
     <SectionContainer id="summary">
@@ -28,6 +29,7 @@ function Summary(props) {
         display_doi={display_doi}
         mapped_data_access_level={mapped_data_access_level}
         group_name={group_name}
+        entityCanBeSaved={entityCanBeSaved}
       >
         {children}
       </SummaryData>
@@ -51,6 +53,7 @@ Summary.propTypes = {
   status: PropTypes.string,
   collectionName: PropTypes.string,
   mapped_data_access_level: PropTypes.string,
+  entityCanBeSaved: PropTypes.bool,
   children: PropTypes.element,
 };
 
@@ -61,6 +64,7 @@ Summary.defaultProps = {
   status: '',
   mapped_data_access_level: '',
   collectionName: '',
+  entityCanBeSaved: true,
   children: undefined,
 };
 

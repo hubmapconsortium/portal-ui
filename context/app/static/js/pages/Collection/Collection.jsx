@@ -39,6 +39,7 @@ function Collection(props) {
             description={description}
             create_timestamp={create_timestamp}
             last_modified_timestamp={last_modified_timestamp}
+            entityCanBeSaved={false}
           >
             <LightBlueLink href={doi_url} target="_blank" rel="noopener noreferrer" variant="body1">
               doi:{new URL(doi_url).pathname.slice(1)} <StyledOpenInNewRoundedIcon />
