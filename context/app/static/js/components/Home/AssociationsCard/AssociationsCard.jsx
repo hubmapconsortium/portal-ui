@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import { Card, StyledLink } from './style';
+
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import { Card } from './style';
 
 function AssociationsCard(props) {
   const { title, text, link, children, mb } = props;
@@ -14,9 +16,9 @@ function AssociationsCard(props) {
       <Typography variant="caption" color="secondary">
         {text}
       </Typography>
-      <StyledLink variant="button" href={link} target="_blank" rel="noopener noreferrer">
+      <OutboundLink variant="button" href={link}>
         Learn More
-      </StyledLink>
+      </OutboundLink>
     </Card>
   );
 }
