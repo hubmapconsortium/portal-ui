@@ -132,7 +132,7 @@ function Routes(props) {
     );
   }
 
-  if (urlPath.startsWith('/my-lists')) {
+  if (urlPath.startsWith('/my-lists/')) {
     return (
       <Route>
         <SavedList listUUID={list_uuid} />
