@@ -1,1 +1,1 @@
-- Create component to track outbound links with Google Analytics.
+- Track outbound links with Google Analytics.
