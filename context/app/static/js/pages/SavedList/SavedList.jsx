@@ -7,7 +7,9 @@ import DetailDescription from 'js/components/Detail/DetailDescription';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
-import { StyledButtonRow, BottomAlignedTypography, SpacingDiv, PageSpacing } from './style';
+import { LightBlueLink } from 'js/shared-styles/Links';
+import { Description } from 'js/shared-styles/sections/Description';
+import { StyledButtonRow, BottomAlignedTypography, SpacingDiv, PageSpacing, StyledHeader } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
   savedLists: state.savedLists,
@@ -57,10 +59,19 @@ function SavedList({ listUUID }) {
           modifiedTimestamp={savedList.dateLastModified}
         />
       </SpacingDiv>
-      <Typography variant="h3" component="h2">
+      <StyledHeader variant="h3" component="h2">
         Items
-      </Typography>
-      <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
+      </StyledHeader>
+      {Object.keys(listEntities).length === 0 ? (
+        <Description padding="20px 20px">
+          No items saved. Navigate to <LightBlueLink href="/search?entity_type[0]=Donor">donors</LightBlueLink>,{' '}
+          <LightBlueLink href="/search?entity_type[0]=Sample">samples</LightBlueLink> or{' '}
+          <LightBlueLink href="/search?entity_type[0]=Dataset">datasets</LightBlueLink> search pages to explore data to
+          save or navigate to <LightBlueLink href="/my-lists">My Lists</LightBlueLink> to add items to this list.
+        </Description>
+      ) : (
+        <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
+      )}
     </PageSpacing>
   );
 }
