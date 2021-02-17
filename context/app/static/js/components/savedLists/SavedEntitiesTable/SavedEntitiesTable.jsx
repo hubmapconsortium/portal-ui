@@ -22,7 +22,7 @@ const defaultColumns = [
   { id: 'entity_type', label: 'Entity Type' },
 ];
 
-function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) {
+function SavedEntitiesTable({ savedEntities, deleteCallback, onSaveCallback, isSavedListPage }) {
   const [selectedRows, addToSelectedRows, removeFromSelectedRows, setSelectedRows] = useStateSet([]);
   const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
@@ -62,7 +62,6 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) 
               <Button color="primary" onClick={deselectAllRows}>
                 Deselect All ({selectedRowsSize})
               </Button>
-
               <SecondaryBackgroundTooltip title="Delete Items">
                 <LeftMarginIconButton onClick={() => setDeleteDialogIsOpen(true)}>
                   <DeleteRoundedIcon color="primary" />
@@ -83,6 +82,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage }) 
                     dialogIsOpen={addToDialogIsOpen}
                     setDialogIsOpen={setAddToDialogIsOpen}
                     entitiesToAdd={selectedRows}
+                    onSaveCallback={onSaveCallback}
                   />
                 </>
               )}

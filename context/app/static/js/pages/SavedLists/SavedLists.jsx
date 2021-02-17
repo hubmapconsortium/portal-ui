@@ -21,6 +21,7 @@ function SavedLists() {
     usedSavedEntitiesSelector,
   );
   const [shouldDisplayDeleteAlert, setShouldDisplayDeleteAlert] = useState(false);
+  const [shouldDisplaySaveAlert, setShoulDisplaySaveAlert] = useState(false);
 
   useEffect(() => {
     if (listsToBeDeleted.length > 0) {
@@ -29,11 +30,20 @@ function SavedLists() {
     }
   }, [listsToBeDeleted, deleteQueuedLists]);
 
+  function onSaveCallback() {
+    setShoulDisplaySaveAlert(true);
+  }
+
   return (
     <PageSpacing>
       {shouldDisplayDeleteAlert && (
         <StyledAlert severity="success" onClose={() => setShouldDisplayDeleteAlert(false)}>
           List successfully deleted.
+        </StyledAlert>
+      )}
+      {shouldDisplaySaveAlert && (
+        <StyledAlert severity="success" onClose={() => setShoulDisplaySaveAlert(false)}>
+          Items successfully added to list.
         </StyledAlert>
       )}
       <StyledHeader variant="h2" component="h1">
@@ -54,7 +64,11 @@ function SavedLists() {
             to save.
           </Description>
         ) : (
-          <SavedEntitiesTable savedEntities={savedEntities} deleteCallback={deleteEntities} />
+          <SavedEntitiesTable
+            savedEntities={savedEntities}
+            deleteCallback={deleteEntities}
+            onSaveCallback={onSaveCallback}
+          />
         )}
       </SpacingDiv>
       <SavedListScrollbox savedLists={savedLists} />

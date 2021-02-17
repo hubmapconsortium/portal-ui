@@ -8,7 +8,7 @@ import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 
 const useSavedEntitiesSelector = (state) => state.addEntitiesToList;
 
-function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd }) {
+function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd, onSaveCallback }) {
   const [selectedLists, addToSelectedLists, removeFromSelectedLists] = useStateSet([]);
 
   const addEntitiesToList = useSavedEntitiesStore(useSavedEntitiesSelector);
@@ -20,6 +20,7 @@ function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd 
   function handleSubmit() {
     addSavedEntitiesToList();
     setDialogIsOpen(false);
+    onSaveCallback();
   }
 
   return (
