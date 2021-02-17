@@ -18,6 +18,10 @@ from vitessce import (
 )
 
 
+class TooManyFilesFoundError(Exception):
+    pass
+
+
 def build_scatterplot_view_config(vc, dataset):
     umap = vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP")
     cell_sets = vc.add_view(dataset, cm.CELL_SETS)
@@ -25,7 +29,7 @@ def build_scatterplot_view_config(vc, dataset):
     return vc
 
 
-def build_basic_imaging_config(vc, dataset):
+def build_basic_raster_config(vc, dataset):
     spatial = vc.add_view(dataset, cm.SPATIAL)
     status = vc.add_view(dataset, cm.DESCRIPTION)
     lc = vc.add_view(dataset, cm.LAYER_CONTROLLER)
@@ -33,7 +37,7 @@ def build_basic_imaging_config(vc, dataset):
     return vc
 
 
-def build_imaging_with_segmentation_and_clusters_config(vc, dataset):
+def build_raster_with_segmentation_and_clusters_config(vc, dataset):
     spatial = vc.add_view(dataset, cm.SPATIAL)
     description = vc.add_view(dataset, cm.DESCRIPTION)
     lc = vc.add_view(dataset, cm.LAYER_CONTROLLER)
@@ -127,7 +131,7 @@ ASSAY_CONF_LOOKUP = {
     SCATAC_SEQ_SNARE: SCATAC_SEQ_CONFIG,
     SCATAC_SEQ_SN: SCATAC_SEQ_CONFIG,
     CODEX_CYTOKIT: {
-        "view_function": build_imaging_with_segmentation_and_clusters_config,
+        "view_function": build_raster_with_segmentation_and_clusters_config,
         "files_conf": [
             {
                 "rel_path": f"{CODEX_TILE_PATH}/{TILE_REGEX}.ome.tiff",
@@ -152,7 +156,7 @@ ASSAY_CONF_LOOKUP = {
         ],
     },
     IMAGE_PYRAMID: {
-        "view_function": build_basic_imaging_config,
+        "view_function": build_basic_raster_config,
         "files_conf": [
             {
                 "rel_path": re.escape(IMAGE_PYRAMID_PATH) + r"/.*\.ome\.tiff?$",
@@ -232,7 +236,84 @@ def on_obj(obj, dataset_uid, obj_i):
     return obj_file_defs
 
 
-class Vitessce:
+class ImagePyramidViewConf(AssayViewConf):
+    def __init__(self, *args):
+        self.files = [
+            {
+                "rel_path": re.escape(IMAGE_PYRAMID_PATH) + r"/.*\.ome\.tiff?$",
+                "file_type": ft.RASTER_JSON,
+                "data_type": dt.RASTER,
+            },
+        ]
+        super(*args)
+
+    def _build_vitessce_conf(self):
+        file_paths_expected = [file["rel_path"] for file in self.files]
+        file_paths_found = [file["rel_path"] for file in self.entity["files"]]
+        found_images = _get_matches(file_paths_found, files[0]["rel_path"])
+        if len(found_images) > 1:
+            raise TooManyFilesFoundError
+        img_path = found_images[0]
+        vc = VitessceConfig(name="HuBMAP Data Portal")
+        dataset = vc.add_dataset(name="Visualization Files")
+        img_url, offsets_url = self._get_img_and_offset_url(
+            img_path, IMAGING_PATHS[IMAGE_PYRAMID]
+        )
+        dataset = dataset.add_object(
+            OmeTiffWrapper(img_url=img_url, offsets_url=offsets_url, name="Image")
+        )
+        vc = self._setup_view_config_raster(vc, dataset)
+        self.conf = vc.to_dict(on_obj=on_obj)
+        return self.conf
+
+
+class CytokitSPRMConf(AssayViewConf):
+    def __init__(self, *args):
+        self.files = [
+            {
+                "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.cells.json",
+                "file_type": ft.CELLS_JSON,
+                "data_type": dt.CELLS,
+            },
+            {
+                "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.cell-sets.json",
+                "file_type": ft.CELL_SETS_JSON,
+                "data_type": dt.CELL_SETS,
+            },
+            {
+                "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.clusters.json",
+                "file_type": "clusters.json",
+                "data_type": dt.EXPRESSION_MATRIX,
+            },
+        ]
+        super(*args)
+
+    def _build_vitessce_conf(self):
+        file_paths_found = [file["rel_path"] for file in self.entity["files"]]
+        found_tiles = _get_matches(file_paths_found, TILE_REGEX)
+        confs = []
+        for tile in sorted(found_tiles):
+            raster_only = False
+            if f"{CODDEX_SPRM_PATH}/{tile}.cell-sets.json" not in file_paths_found:
+                raster_only = True
+            vc = VitessceConfig(name="HuBMAP Data Portal")
+            dataset = vc.add_dataset(name="Visualization Files")
+            for file in files:
+                dataset_file = self._replace_url_in_file(file)
+                dataset_file["url"] = dataset_file["url"].replace(TILE_REGEX, tile)
+                dataset = dataset.add_file(**(self._replace_url_in_file(file)))
+            img_url, offsets_url = self._get_img_and_offset_url(
+                f"{CODEX_TILE_PATH}/{tile}.ome.tiff", IMAGING_PATHS[CODEX_CYTOKIT]
+            )
+            if raster_only:
+                vc = self._setup_view_config_raster(vc, dataset)
+                confs.append(vc.to_dict())
+            else:    
+                vc = self._setup_view_config_raster_cellsets_expression_segmentation(vc, dataset)
+                confs.append(vc.to_dict())
+        self.conf = confs
+
+class AssayViewConf:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
 
@@ -309,7 +390,7 @@ class Vitessce:
         #     found_tiles = _get_matches(file_paths_found, TILE_REGEX)
         #     confs = []
         #     for tile in sorted(found_tiles):
-        #         # If there are no cell segmentations, remove the non-imaging parts of the assay.
+        #         # If there are no cell segmentations, remove the non-raster parts of the assay.
         #         if f"{CODDEX_SPRM_PATH}/{tile}.cell-sets.json" not in file_paths_found:
         #             new_conf = copy.deepcopy(TILED_SPRM_IMAGING_ONLY)
         #             files_for_layers = [files[0]]
@@ -353,11 +434,6 @@ class Vitessce:
             return []
         # Get all files grouped by PosN names.
         images_by_pos = _group_by_file_name(found_images)
-        # Get Hybridization per paths grouped by Pos.
-        hyb_cycles_per_pos = [
-            sorted([_get_hybcycle(image) for image in images])
-            for images in images_by_pos
-        ]
         confs = []
         # Build up a conf for each Pos.
         for i, images in enumerate(images_by_pos):
@@ -370,11 +446,15 @@ class Vitessce:
                 img_url, offsets_url = self._get_img_and_offset_url(
                     img_path, IMAGING_PATHS[IMAGE_PYRAMID]
                 )
-                image_wrappers += [OmeTiffWrapper(img_url=img_url, offsets_url=offsets_url, name=f"Image {k}")]
+                image_wrappers += [
+                    OmeTiffWrapper(
+                        img_url=img_url, offsets_url=offsets_url, name=f"Image {k}"
+                    )
+                ]
             dataset = dataset.add_object(MultiImageWrapper(image_wrappers))
             vc = view_function(vc, dataset)
             conf = vc.to_dict(on_obj=on_obj)
-            del conf['datasets'][0]['files'][0]['options']['renderLayers']
+            del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
             confs.append(conf)
         self.conf = confs
         return confs
@@ -411,116 +491,6 @@ class Vitessce:
             "url": self._build_assets_url(file["rel_path"]),
         }
 
-    def _build_layer_conf(self, file, tile=""):
-        """Build each layer in the layers section.
-
-        returns e.g
-
-        {
-          'type': 'CELLS',
-          'fileType': 'cells.json',
-          'url': 'https://assets.dev.hubmapconsortium.org/uuid/cells.json',
-          'name': 'cells'
-        }
-        """
-
-        return {
-            "data_type": file["data_type"],
-            "fileType": file["fileType"],
-            "url": self._build_assets_url(file["rel_path"].replace(TILE_REGEX, tile))
-            if file["data_type"] != "RASTER"
-            else self._build_image_layer_datauri(
-                [file["rel_path"].replace(TILE_REGEX, tile)]
-            ),
-            "name": file["data_type"].lower(),
-        }
-
-    def _build_multi_file_image_layer_conf(self, files, names=[]):
-        """Build each layer in the layers section.
-
-        returns e.g
-
-        {
-          'type': 'RASTER',
-          'fileType': 'raster.json',
-          'url': 'data:base-64-encoded-string'
-          'name': 'raster'
-        }
-        """
-        return {
-            "data_type": "RASTER",
-            "fileType": "raster.json",
-            "url": self._build_image_layer_datauri(files, names),
-            "name": "raster",
-        }
-
-    def _build_image_layer_datauri(self, rel_paths, names=[]):
-        """
-        Specifically for the RASTERS schema, we need to build a DataURI of the schema because
-        it contains a URL for a file whose location is unknown until pipelines have been run.
-
-        returns e.g:
-
-        DataURI.make(
-          'text/plain',
-          charset='us-ascii',
-          base64=True,
-           data=json.dumps(
-             {
-               'schema_version': '0.0.1'
-               'images': [
-                 {
-                   'name': 'example.ome.tiff'
-                   'type': 'ome-tiff'
-                   'url': 'https://assets.dev.hubmapconsortium.org/uuid/example.ome.tiff',
-                 }
-               ]
-             }
-            )
-        )
-
-        """
-
-        image_layer = {}
-        image_layer["images"] = [
-            self._build_image_schema(rel_path, names[i] if names else None)
-            for i, rel_path in enumerate(rel_paths)
-        ]
-        image_layer["schemaVersion"] = "0.0.2"
-        return DataURI.make(
-            "text/plain", charset="us-ascii", base64=True, data=json.dumps(image_layer)
-        )
-
-    def _build_image_schema(self, image_rel_path, name=None):
-        """
-        Builds the 'images' sections of the RASTER schema.
-
-        returns e.g
-
-        {
-          'name': 'example.ome.tiff'
-          'type': 'ome-tiff'
-          'url': 'https://assets.dev.hubmapconsortium.org/uuid/example.ome.tiff',
-        }
-
-        """
-
-        schema = {}
-        schema["name"] = name if name is not None else Path(image_rel_path).name
-        schema["data_type"] = "ome-tiff"
-        schema["url"] = self._build_assets_url(image_rel_path)
-        schema["metadata"] = {}
-        imaging_paths = IMAGING_PATHS[self.assay_type]
-        offsets_path = re.sub(
-            r"ome\.tiff?$",
-            "offsets.json",
-            image_rel_path.replace(imaging_paths["image"], imaging_paths["offsets"]),
-        )
-        schema["metadata"]["omeTiffOffsetsUrl"] = self._build_assets_url(
-            str(offsets_path)
-        )
-        return schema
-
     def _build_assets_url(self, rel_path):
         """
       Create a url for an asset.
@@ -537,32 +507,21 @@ class Vitessce:
         base_url = urllib.parse.urljoin(assets_endpoint, f"{self.uuid}/{rel_path}")
         token_param = urllib.parse.urlencode({"token": self.nexus_token})
         return base_url + "?" + token_param
+    
+    def _setup_view_config_raster(self, vc, dataset):
+        spatial = vc.add_view(dataset, cm.SPATIAL)
+        status = vc.add_view(dataset, cm.DESCRIPTION)
+        lc = vc.add_view(dataset, cm.LAYER_CONTROLLER)
+        vc.layout(spatial | (lc / status))
+        return vc
+    
+    def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
+        spatial = vc.add_view(dataset, cm.SPATIAL)
+        description = vc.add_view(dataset, cm.DESCRIPTION)
+        lc = vc.add_view(dataset, cm.LAYER_CONTROLLER)
+        cell_sets = vc.add_view(dataset, cm.CELL_SETS)
+        genes = vc.add_view(dataset, cm.GENES)
+        heatmap = vc.add_view(dataset, cm.HEATMAP)
+        vc.layout((lc / description) | (spatial / heatmap) | (genes / cell_sets))
+        return vc
 
-    def _replace_view(self, conf):
-        """
-      Replace the 'view' section of IMAGE_ASSAYS with a reasonable initial view.
-      """
-
-        if self.assay_type not in IMAGE_ASSAYS:
-            return conf
-        conf["staticLayout"][-1]["props"]["view"] = copy.deepcopy(
-            ASSAY_CONF_LOOKUP[self.assay_type]["view"]
-        )
-
-        # IMS needs to be zoomed in a bit more,
-        # but we don't have a great of finding this assay type:
-        # The images are generally smaller but have a lot of padding.
-
-        # IMS images are named under this convention, "IMS_XXXMode".
-        # Some of the non IMS images contain the substring "IMS," so that is insufficient.
-        # IMC also needs to be handled specially, as does seqFish.
-        # TODO: Clean this up by handling multiple assay types (#982).
-        if "seqFish" in self.entity["data_types"] or any(
-            "IMS_PosMode" in file["rel_path"]
-            or "IMS_NegMode" in file["rel_path"]
-            or "IMC" in self.entity["data_types"]
-            for file in self.entity["files"]
-        ):
-            conf["staticLayout"][-1]["props"]["view"]["zoom"] = -2
-            conf["staticLayout"][-1]["props"]["view"]["target"] = [1000, 1000, 0]
-        return conf
