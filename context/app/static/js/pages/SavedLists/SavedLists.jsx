@@ -21,7 +21,7 @@ function SavedLists() {
     usedSavedEntitiesSelector,
   );
   const [shouldDisplayDeleteAlert, setShouldDisplayDeleteAlert] = useState(false);
-  const [shouldDisplaySaveAlert, setShoulDisplaySaveAlert] = useState(false);
+  const [shouldDisplaySaveAlert, setShouldDisplaySaveAlert] = useState(false);
 
   useEffect(() => {
     if (listsToBeDeleted.length > 0) {
@@ -29,10 +29,6 @@ function SavedLists() {
       setShouldDisplayDeleteAlert(true);
     }
   }, [listsToBeDeleted, deleteQueuedLists]);
-
-  function onSaveCallback() {
-    setShoulDisplaySaveAlert(true);
-  }
 
   return (
     <PageSpacing>
@@ -42,7 +38,7 @@ function SavedLists() {
         </StyledAlert>
       )}
       {shouldDisplaySaveAlert && (
-        <StyledAlert severity="success" onClose={() => setShoulDisplaySaveAlert(false)}>
+        <StyledAlert severity="success" onClose={() => setShouldDisplaySaveAlert(false)}>
           Items successfully added to list.
         </StyledAlert>
       )}
@@ -67,7 +63,7 @@ function SavedLists() {
           <SavedEntitiesTable
             savedEntities={savedEntities}
             deleteCallback={deleteEntities}
-            onSaveCallback={onSaveCallback}
+            setShouldDisplaySaveAlert={setShouldDisplaySaveAlert}
           />
         )}
       </SpacingDiv>

@@ -22,7 +22,7 @@ const defaultColumns = [
   { id: 'entity_type', label: 'Entity Type' },
 ];
 
-function SavedEntitiesTable({ savedEntities, deleteCallback, onSaveCallback, isSavedListPage }) {
+function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySaveAlert, isSavedListPage }) {
   const [selectedRows, addToSelectedRows, removeFromSelectedRows, setSelectedRows] = useStateSet([]);
   const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
@@ -44,6 +44,11 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, onSaveCallback, isS
 
   function deleteSelectedSavedEntities() {
     deleteCallback(selectedRows);
+    deselectAllRows();
+  }
+
+  function onSaveCallback() {
+    setShouldDisplaySaveAlert(true);
     deselectAllRows();
   }
   const selectedRowsSize = selectedRows.size;
