@@ -1,0 +1,1 @@
+- Handle Donors missing mapper_metadata.
