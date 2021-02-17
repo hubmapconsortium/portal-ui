@@ -1,0 +1,1 @@
+- Display message instead of empty table on saved list page.
