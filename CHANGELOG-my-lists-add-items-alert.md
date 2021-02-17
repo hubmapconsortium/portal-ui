@@ -1,2 +1,0 @@
-- Display alert and reset selected items when items are successfully added to lists.
-- Disable save to list button when no lists are selected.

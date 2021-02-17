@@ -1,3 +1,12 @@
+## v0.12.2 - 2021-02-17
+
+- Handle Donors missing mapper_metadata.
+- Display message instead of empty table on saved list page.
+- Display alert and reset selected items when items are successfully added to lists.
+- Disable save to list button when no lists are selected.
+- Track outbound links with Google Analytics.
+
+
 ## v0.12.1 - 2021-02-17
 
 - Disable saving collection entities.
