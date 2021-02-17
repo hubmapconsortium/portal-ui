@@ -15,7 +15,16 @@ import StatusIcon from '../StatusIcon';
 const entityStoreSelector = (state) => state.setSummaryComponentObserver;
 
 function SummaryData(props) {
-  const { entity_type, uuid, status, mapped_data_access_level, display_doi, group_name, children } = props;
+  const {
+    entity_type,
+    uuid,
+    status,
+    mapped_data_access_level,
+    display_doi,
+    group_name,
+    entityCanBeSaved,
+    children,
+  } = props;
 
   const setSummaryComponentObserver = useEntityStore(entityStoreSelector);
 
@@ -54,12 +63,14 @@ function SummaryData(props) {
                 <FileIcon color="primary" />
               </JsonButton>
             </SecondaryBackgroundTooltip>
-            <SaveEditEntityButton
-              uuid={uuid}
-              entity_type={entity_type}
-              group_name={group_name}
-              display_doi={display_doi}
-            />
+            {entityCanBeSaved && (
+              <SaveEditEntityButton
+                uuid={uuid}
+                entity_type={entity_type}
+                group_name={group_name}
+                display_doi={display_doi}
+              />
+            )}
           </FlexEnd>
         </FlexRight>
       </Flex>
@@ -72,10 +83,12 @@ SummaryData.propTypes = {
   uuid: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
   mapped_data_access_level: PropTypes.string.isRequired,
+  entityCanBeSaved: PropTypes.bool,
   children: PropTypes.element,
 };
 
 SummaryData.defaultProps = {
+  entityCanBeSaved: true,
   children: undefined,
 };
 

@@ -1,0 +1,1 @@
+- Disable saving collection entities.
