@@ -409,96 +409,22 @@ class AssayViewConf:
         file_paths_expected = [file["rel_path"] for file in files]
         file_paths_found = [file["rel_path"] for file in self.entity["files"]]
         view_function = view_config_and_files["view_function"]
-        # Codex and other tiled assays needs to be built up based on their input tiles.
-        if self.assay_type not in IMAGE_ASSAYS:
-            # We need to check that the files we expect actually exist.
-            # This is due to the volatility of the datasets.
-            if not set(file_paths_expected).issubset(set(file_paths_found)):
-                if not self.is_mock:
-                    current_app.logger.info(
-                        f'Files for assay "{self.assay_type}" '
-                        'uuid "{self.uuid}" not found as expected.'
-                    )
-                return {}
-            vc = VitessceConfig(name="HuBMAP Data Portal")
-            dataset = vc.add_dataset(name="Visualization Files")
-            for file in files:
-                dataset = dataset.add_file(**(self._replace_url_in_file(file)))
-            vc = view_function(vc, dataset)
-            self.conf = vc.to_dict()
-            return self.conf
-        # elif self.assay_type in TILED_ASSAYS:
-        #     found_tiles = _get_matches(file_paths_found, TILE_REGEX)
-        #     confs = []
-        #     for tile in sorted(found_tiles):
-        #         # If there are no cell segmentations, remove the non-raster parts of the assay.
-        #         if f"{CODDEX_SPRM_PATH}/{tile}.cell-sets.json" not in file_paths_found:
-        #             new_conf = copy.deepcopy(TILED_SPRM_IMAGING_ONLY)
-        #             files_for_layers = [files[0]]
-        #         else:
-        #             new_conf = copy.deepcopy(conf)
-        #             files_for_layers = files
-        #         layers = [
-        #             self._build_layer_conf(file, tile) for file in files_for_layers
-        #         ]
-        #         new_conf["layers"] = layers
-        #         new_conf["name"] = tile
-        #         new_conf = self._replace_view(new_conf)
-        #         confs += [new_conf]
-        #     self.conf = confs
-        #     return confs
-        elif self.assay_type in IMAGE_ASSAYS:
-            found_images = _get_matches(file_paths_found, files[0]["rel_path"])
-            if "seqFish" in self.entity["data_types"]:
-                return self._build_seqfish_conf(found_images)
-            vc = VitessceConfig(name="HuBMAP Data Portal")
-            dataset = vc.add_dataset(name="Visualization Files")
-            for img_path in found_images:
-                img_url, offsets_url = self._get_img_and_offset_url(
-                    img_path, IMAGING_PATHS[IMAGE_PYRAMID]
+        # We need to check that the files we expect actually exist.
+        # This is due to the volatility of the datasets.
+        if not set(file_paths_expected).issubset(set(file_paths_found)):
+            if not self.is_mock:
+                current_app.logger.info(
+                    f'Files for assay "{self.assay_type}" '
+                    'uuid "{self.uuid}" not found as expected.'
                 )
-                dataset = dataset.add_object(
-                    OmeTiffWrapper(
-                        img_url=img_url, offsets_url=offsets_url, name="Image"
-                    )
-                )
-            vc = view_function(vc, dataset)
-            self.conf = vc.to_dict(on_obj=on_obj)
-            return self.conf
-
-    def _build_seqfish_conf(self, found_images):
-        is_valid_directory = all(
-            [re.fullmatch(SEQFISH_REGEX, file) for file in found_images]
-        )
-        if not is_valid_directory:
-            print(f"Directory structure for seqFish dataset {self.uuid} invalid")
-            return []
-        # Get all files grouped by PosN names.
-        images_by_pos = _group_by_file_name(found_images)
-        confs = []
-        # Build up a conf for each Pos.
-        for i, images in enumerate(images_by_pos):
-            image_wrappers = []
-            vc = VitessceConfig(name=f"HuBMAP Data Portal {i}")
-            dataset = vc.add_dataset(name="Visualization Files")
-            view_config_and_files = ASSAY_CONF_LOOKUP[self.assay_type]
-            view_function = view_config_and_files["view_function"]
-            for k, img_path in enumerate(sorted(images, key=_get_hybcycle)):
-                img_url, offsets_url = self._get_img_and_offset_url(
-                    img_path, IMAGING_PATHS[IMAGE_PYRAMID]
-                )
-                image_wrappers += [
-                    OmeTiffWrapper(
-                        img_url=img_url, offsets_url=offsets_url, name=f"Image {k}"
-                    )
-                ]
-            dataset = dataset.add_object(MultiImageWrapper(image_wrappers))
-            vc = view_function(vc, dataset)
-            conf = vc.to_dict(on_obj=on_obj)
-            del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
-            confs.append(conf)
-        self.conf = confs
-        return confs
+            return {}
+        vc = VitessceConfig(name="HuBMAP Data Portal")
+        dataset = vc.add_dataset(name="Visualization Files")
+        for file in files:
+            dataset = dataset.add_file(**(self._replace_url_in_file(file)))
+        vc = view_function(vc, dataset)
+        self.conf = vc.to_dict()
+        return self.conf
 
     def _get_img_and_offset_url(self, img_path, replace_params):
         img_url = self._build_assets_url(img_path)
