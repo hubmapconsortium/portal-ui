@@ -267,6 +267,44 @@ class ImagePyramidViewConf(AssayViewConf):
         return self.conf
 
 
+class SeqFISHViewConf(AssayViewConf):
+
+    def _build_vitessce_conf(self):
+        file_paths_found = [file["rel_path"] for file in self.entity["files"]]
+        is_valid_directory = all(
+            [re.fullmatch(SEQFISH_REGEX, file) for file in found_images]
+        )
+        if not is_valid_directory:
+            print(f"Directory structure for seqFish dataset {self.uuid} invalid")
+            return []
+        # Get all files grouped by PosN names.
+        images_by_pos = _group_by_file_name(found_images)
+        confs = []
+        # Build up a conf for each Pos.
+        for i, images in enumerate(images_by_pos):
+            image_wrappers = []
+            vc = VitessceConfig(name=f"HuBMAP Data Portal {i}")
+            dataset = vc.add_dataset(name="Visualization Files")
+            view_config_and_files = ASSAY_CONF_LOOKUP[self.assay_type]
+            view_function = view_config_and_files["view_function"]
+            for k, img_path in enumerate(sorted(images, key=_get_hybcycle)):
+                img_url, offsets_url = self._get_img_and_offset_url(
+                    img_path, IMAGING_PATHS[IMAGE_PYRAMID]
+                )
+                image_wrappers += [
+                    OmeTiffWrapper(
+                        img_url=img_url, offsets_url=offsets_url, name=f"Image {k}"
+                    )
+                ]
+            dataset = dataset.add_object(MultiImageWrapper(image_wrappers))
+            vc = self._setup_view_config_raster(vc, dataset)
+            conf = vc.to_dict(on_obj=on_obj)
+            del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
+            confs.append(conf)
+        self.conf = confs
+        return confs
+
+
 class CytokitSPRMConf(AssayViewConf):
     def __init__(self, *args):
         self.files = [
@@ -307,11 +345,14 @@ class CytokitSPRMConf(AssayViewConf):
             )
             if raster_only:
                 vc = self._setup_view_config_raster(vc, dataset)
-                confs.append(vc.to_dict())
-            else:    
-                vc = self._setup_view_config_raster_cellsets_expression_segmentation(vc, dataset)
-                confs.append(vc.to_dict())
+                confs.append(vc.to_dict(on_obj=on_obj))
+            else:
+                vc = self._setup_view_config_raster_cellsets_expression_segmentation(
+                    vc, dataset
+                )
+                confs.append(vc.to_dict(on_obj=on_obj))
         self.conf = confs
+
 
 class AssayViewConf:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
@@ -507,14 +548,14 @@ class AssayViewConf:
         base_url = urllib.parse.urljoin(assets_endpoint, f"{self.uuid}/{rel_path}")
         token_param = urllib.parse.urlencode({"token": self.nexus_token})
         return base_url + "?" + token_param
-    
+
     def _setup_view_config_raster(self, vc, dataset):
         spatial = vc.add_view(dataset, cm.SPATIAL)
         status = vc.add_view(dataset, cm.DESCRIPTION)
         lc = vc.add_view(dataset, cm.LAYER_CONTROLLER)
         vc.layout(spatial | (lc / status))
         return vc
-    
+
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
         spatial = vc.add_view(dataset, cm.SPATIAL)
         description = vc.add_view(dataset, cm.DESCRIPTION)
@@ -524,4 +565,3 @@ class AssayViewConf:
         heatmap = vc.add_view(dataset, cm.HEATMAP)
         vc.layout((lc / description) | (spatial / heatmap) | (genes / cell_sets))
         return vc
-
