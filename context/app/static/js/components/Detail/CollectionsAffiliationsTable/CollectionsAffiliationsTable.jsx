@@ -12,7 +12,8 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import { HeaderIconCell, StyledLink, StyledInfoIcon, CenterAlignedFlexRow } from './style';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import { HeaderIconCell, StyledInfoIcon, CenterAlignedFlexRow } from './style';
 
 function CollectionsAffiliationsTable(props) {
   const { title, affiliations: tableRows } = props;
@@ -49,14 +50,9 @@ function CollectionsAffiliationsTable(props) {
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.affiliation}</TableCell>
                   <TableCell>
-                    <StyledLink
-                      href={`https://orcid.org/${row.orcid_id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      variant="body2"
-                    >
+                    <OutboundLink href={`https://orcid.org/${row.orcid_id}`} variant="body2">
                       {row.orcid_id}
-                    </StyledLink>
+                    </OutboundLink>
                   </TableCell>
                 </TableRow>
               ))}

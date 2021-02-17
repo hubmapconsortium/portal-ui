@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
 
 const Card = styled(Paper)`
   display: flex;
@@ -19,8 +18,4 @@ const Card = styled(Paper)`
   }
 `;
 
-const StyledLink = styled(Link)`
-  color: ${(props) => props.theme.palette.info.main};
-`;
-
-export { Card, StyledLink };
+export { Card };

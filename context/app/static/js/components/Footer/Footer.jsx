@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background } from './style';
 
 function Footer(props) {
@@ -17,14 +18,9 @@ function Footer(props) {
           <Flex>
             <FlexColumn $mr={1}>
               <Typography variant="subtitle2">About</Typography>
-              <LightBlueLink
-                href="https://hubmapconsortium.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="body2"
-              >
+              <OutboundLink href="https://hubmapconsortium.org/" variant="body2">
                 Project Website
-              </LightBlueLink>
+              </OutboundLink>
               {!isMaintenancePage && (
                 <LightBlueLink href="/docs" variant="body2">
                   Documentation
@@ -36,31 +32,24 @@ function Footer(props) {
             </FlexColumn>
             <FlexColumn $mr={1}>
               <Typography variant="subtitle2">Software</Typography>
-              <LightBlueLink variant="body2" href="https://github.com/hubmapconsortium">
+              <OutboundLink variant="body2" href="https://github.com/hubmapconsortium">
                 GitHub
-              </LightBlueLink>
+              </OutboundLink>
               <LightBlueLink variant="body2" href="/services">
                 Services
               </LightBlueLink>
             </FlexColumn>
             <FlexColumn $mr={1}>
               <Typography variant="subtitle2">Policies</Typography>
-              <LightBlueLink
-                href="https://hubmapconsortium.org/policies/"
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="body2"
-              >
+              <OutboundLink href="https://hubmapconsortium.org/policies/" variant="body2">
                 Overview
-              </LightBlueLink>
-              <LightBlueLink
+              </OutboundLink>
+              <OutboundLink
                 href="https://hubmapconsortium.org/wp-content/uploads/2020/06/DUA_FINAL_2020_02_03_for_Signature.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
                 variant="body2"
               >
                 Data Use Agreement
-              </LightBlueLink>
+              </OutboundLink>
               {!isMaintenancePage && (
                 <LightBlueLink href="/docs/about#citation" variant="body2">
                   Citing HuBMAP
@@ -69,21 +58,16 @@ function Footer(props) {
             </FlexColumn>
             <FlexColumn>
               <Typography variant="subtitle2">Funding</Typography>
-              <LightBlueLink
-                href="https://commonfund.nih.gov/hubmap"
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="body2"
-              >
+              <OutboundLink href="https://commonfund.nih.gov/hubmap" variant="body2">
                 NIH Common Fund
-              </LightBlueLink>
+              </OutboundLink>
             </FlexColumn>
           </Flex>
           <Typography variant="body1" color="secondary">
             {'Copyright '}
-            <LightBlueLink href="https://hubmapconsortium.org" target="_blank" rel="noopener noreferrer">
+            <OutboundLink href="https://hubmapconsortium.org">
               NIH Human BioMolecular Atlas Program (HuBMAP)
-            </LightBlueLink>{' '}
+            </OutboundLink>{' '}
             {new Date().getFullYear()}
             {'. All rights reserved. '}
           </Typography>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
 import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
 import debounce from 'lodash/debounce';
 import Bowser from 'bowser';
 
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
@@ -192,9 +192,7 @@ function Visualization(props) {
         </Paper>
         <StyledFooterText variant="body2">
           Powered by&nbsp;
-          <Link href="http://vitessce.io" target="_blank" rel="noreferrer">
-            Vitessce
-          </Link>
+          <OutboundLink href="http://vitessce.io">Vitessce</OutboundLink>
         </StyledFooterText>
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
       </StyledSectionContainer>

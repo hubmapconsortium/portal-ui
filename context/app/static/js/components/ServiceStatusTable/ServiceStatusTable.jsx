@@ -8,9 +8,9 @@ import TableRow from '@material-ui/core/TableRow';
 import { StyledExternalLinkIcon } from 'js/components/files/GlobusLinkMessage/style';
 
 import { HeaderCell } from 'js/shared-styles/Table';
-import { LightBlueLink } from 'js/shared-styles/Links';
 
 import { version } from 'package';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import StatusIcon from './StatusIcon';
 import { useGatewayStatus } from './hooks';
 import { buildServiceStatus } from './utils';
@@ -61,9 +61,9 @@ function ServiceStatusTable() {
             </TableCell>
             <TableCell>
               {api.github && (
-                <LightBlueLink target="_blank" rel="noopener noreferrer" underline="none" href={api.github}>
+                <OutboundLink underline="none" href={api.github}>
                   Github Link <StyledExternalLinkIcon />
-                </LightBlueLink>
+                </OutboundLink>
               )}
             </TableCell>
             <TableCell>{api.version}</TableCell>

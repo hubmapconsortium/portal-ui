@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import useProtocolData from 'js/hooks/useProtocolData';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
@@ -14,9 +14,7 @@ function ProtocolLink(props) {
   return (
     <SectionItem label="Protocol URL">
       {resolverHostnameAndDOI ? (
-        <LightBlueLink href={`https://${resolverHostnameAndDOI}`} target="_blank" rel="noopener noreferrer">
-          {resolverHostnameAndDOI}
-        </LightBlueLink>
+        <OutboundLink href={`https://${resolverHostnameAndDOI}`}>{resolverHostnameAndDOI}</OutboundLink>
       ) : (
         'Please wait...'
       )}

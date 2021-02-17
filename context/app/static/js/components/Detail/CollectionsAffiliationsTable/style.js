@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Link from '@material-ui/core/Link';
 import InfoIcon from '@material-ui/icons/InfoRounded';
 import { HeaderCell } from 'js/shared-styles/Table';
 
@@ -7,11 +6,6 @@ const HeaderIconCell = styled(HeaderCell)`
   font-size: ${(props) => props.theme.typography.subtitle2.fontSize};
   font-weight: ${(props) => props.theme.typography.subtitle2.fontWeight};
 `;
-
-const StyledLink = styled(Link)`
-  color: ${(props) => props.theme.palette.info.main};
-`;
-
 const CenterAlignedFlexRow = styled.div`
   display: flex;
   align-items: center;
@@ -22,4 +16,4 @@ const StyledInfoIcon = styled(InfoIcon)`
   font-size: 1rem;
 `;
 
-export { HeaderIconCell, StyledLink, CenterAlignedFlexRow, StyledInfoIcon };
+export { HeaderIconCell, CenterAlignedFlexRow, StyledInfoIcon };

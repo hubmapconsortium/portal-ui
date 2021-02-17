@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CwlIcon, FlexLightBlueLink, PrimaryTextDivider, StyledListItem } from './style';
+import { CwlIcon, FlexOutboundLink, PrimaryTextDivider, StyledListItem } from './style';
 
 function ProvAnalysisDetailsLink(props) {
   const { data } = props;
@@ -12,16 +12,16 @@ function ProvAnalysisDetailsLink(props) {
   const cwlUrl = `https://view.commonwl.org/workflows/${githubUrl.replace(/^http(s?):\/\//i, '')}`;
   return (
     <StyledListItem>
-      <FlexLightBlueLink href={githubUrl} target="_blank" rel="noopener noreferrer">
+      <FlexOutboundLink href={githubUrl}>
         {githubUrl} <CwlIcon />
-      </FlexLightBlueLink>
+      </FlexOutboundLink>
       {'name' in data && (
         <>
           <PrimaryTextDivider orientation="vertical" />
-          <FlexLightBlueLink href={cwlUrl} target="_blank" rel="noopener noreferrer">
+          <FlexOutboundLink href={cwlUrl}>
             Open in CWL Viewer
             <CwlIcon />
-          </FlexLightBlueLink>
+          </FlexOutboundLink>
         </>
       )}
     </StyledListItem>

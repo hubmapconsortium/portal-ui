@@ -5,9 +5,12 @@ import DescriptionIcon from '@material-ui/icons/DescriptionRounded';
 import SearchIcon from '@material-ui/icons/SearchRounded';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRightRounded';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDownRounded';
+
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import { LightBlueLink } from 'js/shared-styles/Links';
 import { CenterIcon } from 'js/shared-styles/icons';
 import WorkflowItem from '../WorkflowItem';
-import { Flex, StyledLink } from './style';
+import { Flex } from './style';
 
 function ArrowIcon() {
   const theme = useTheme();
@@ -26,14 +29,9 @@ function Workflow() {
       <WorkflowItem
         text="The HuBMAP Tissue Mapping Centers generate and submit data."
         link={
-          <StyledLink
-            variant="body1"
-            href="https://ingest.hubmapconsortium.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <OutboundLink variant="body1" href="https://ingest.hubmapconsortium.org/">
             Help contribute data
-          </StyledLink>
+          </OutboundLink>
         }
         icon={CenterIcon}
       />
@@ -43,9 +41,9 @@ function Workflow() {
       <WorkflowItem
         text="Anyone can discover, visualize, and download data."
         link={
-          <StyledLink variant="body1" href="/search?entity_type[0]=Dataset">
+          <LightBlueLink variant="body1" href="/search?entity_type[0]=Dataset">
             Start Searching
-          </StyledLink>
+          </LightBlueLink>
         }
         icon={SearchIcon}
       />
