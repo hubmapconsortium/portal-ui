@@ -37,7 +37,7 @@ function SampleTissue(props) {
                 spatial coordinates of this sample
               </LightBlueLink>{' '}
               have been registered and it can be found in the{' '}
-              <OutboundLink href="/ccf-eui" target="_blank" rel="noopener noreferrer">
+              <OutboundLink href="/ccf-eui">
                 Common Coordinate Framework Exploration User Interface
               </OutboundLink>
               .
