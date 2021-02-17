@@ -1,3 +1,8 @@
+## v0.12.1 - 2021-02-17
+
+- Disable saving collection entities.
+
+
 ## v0.12.0 - 2021-02-16
 
 - Update text of ASCT+B Preview.
