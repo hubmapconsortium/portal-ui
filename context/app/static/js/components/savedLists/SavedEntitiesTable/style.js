@@ -25,6 +25,7 @@ const LeftMarginIconButton = styled(WhiteBackgroundIconButton)`
 
 const StyledButtonRow = styled(RightAlignedButtonRow)`
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  min-height: 40px;
 `;
 
 const BottomAlignedTypography = styled(Typography)`
