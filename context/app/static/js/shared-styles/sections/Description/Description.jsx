@@ -1,25 +1,15 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { StyledPaper, StyledInfoIcon } from './style';
 
-function Description({ padding, children }) {
+function Description({ padding, children, ...props }) {
   return (
-    <StyledPaper $padding={padding}>
+    <StyledPaper $padding={padding} {...props}>
       <StyledInfoIcon color="primary" />
       <Typography variant="body1">{children}</Typography>
     </StyledPaper>
   );
 }
 
-function DescriptionSection({ children, padding }) {
-  return (
-    <SectionContainer>
-      <Description padding={padding}>{children}</Description>
-    </SectionContainer>
-  );
-}
-
-export { Description };
-export default DescriptionSection;
+export default Description;
