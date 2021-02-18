@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-/* Anchor offset for fixed header
+/* Anchor offset for fixed header.
+Only to be used on pages with table of contents.
 74px = fixed header height + 10px */
 const SectionContainer = styled.div`
   margin-bottom: ${(props) => props.theme.spacing(5)}px;
