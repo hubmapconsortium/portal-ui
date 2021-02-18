@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
+
+import Description from 'js/shared-styles/sections/Description';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
 // 88px = header height + header margin
@@ -20,4 +22,8 @@ const ScrollBox = styled(Paper)`
   }
 `;
 
-export { PageWrapper, ScrollBox };
+const StyledDescription = styled(Description)`
+  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+`;
+
+export { PageWrapper, ScrollBox, StyledDescription };
