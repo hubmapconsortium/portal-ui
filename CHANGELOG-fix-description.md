@@ -1,0 +1,1 @@
+- Fix eslint errors from description component export.

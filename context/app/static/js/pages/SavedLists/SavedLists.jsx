@@ -4,7 +4,7 @@ import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
-import { Description } from 'js/shared-styles/sections/Description';
+import Description from 'js/shared-styles/sections/Description';
 import SavedListScrollbox from 'js/components/savedLists/SavedListScrollbox';
 import { StyledAlert, StyledHeader, SpacingDiv, PageSpacing } from './style';
 

@@ -8,7 +8,7 @@ import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import { Description } from 'js/shared-styles/sections/Description';
+import Description from 'js/shared-styles/sections/Description';
 import { StyledButtonRow, BottomAlignedTypography, SpacingDiv, PageSpacing, StyledHeader } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
