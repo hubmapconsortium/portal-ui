@@ -238,7 +238,7 @@ def on_obj(obj, dataset_uid, obj_i):
 
 class ImagePyramidViewConf(AssayViewConf):
     def __init__(self, *args):
-        self.files = [
+        self._files = [
             {
                 "rel_path": re.escape(IMAGE_PYRAMID_PATH) + r"/.*\.ome\.tiff?$",
                 "file_type": ft.RASTER_JSON,
@@ -248,8 +248,8 @@ class ImagePyramidViewConf(AssayViewConf):
         super(*args)
 
     def _build_vitessce_conf(self):
-        file_paths_expected = [file["rel_path"] for file in self.files]
-        file_paths_found = [file["rel_path"] for file in self.entity["files"]]
+        file_paths_expected = [file["rel_path"] for file in self._files]
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_images = _get_matches(file_paths_found, files[0]["rel_path"])
         if len(found_images) > 1:
             raise TooManyFilesFoundError
@@ -263,19 +263,18 @@ class ImagePyramidViewConf(AssayViewConf):
             OmeTiffWrapper(img_url=img_url, offsets_url=offsets_url, name="Image")
         )
         vc = self._setup_view_config_raster(vc, dataset)
-        self.conf = vc.to_dict(on_obj=on_obj)
-        return self.conf
+        self._conf = vc.to_dict(on_obj=on_obj)
+        return self._conf
 
 
 class SeqFISHViewConf(AssayViewConf):
-
     def _build_vitessce_conf(self):
-        file_paths_found = [file["rel_path"] for file in self.entity["files"]]
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         is_valid_directory = all(
             [re.fullmatch(SEQFISH_REGEX, file) for file in found_images]
         )
         if not is_valid_directory:
-            print(f"Directory structure for seqFish dataset {self.uuid} invalid")
+            print(f"Directory structure for seqFish dataset {self._uuid} invalid")
             return []
         # Get all files grouped by PosN names.
         images_by_pos = _group_by_file_name(found_images)
@@ -285,7 +284,7 @@ class SeqFISHViewConf(AssayViewConf):
             image_wrappers = []
             vc = VitessceConfig(name=f"HuBMAP Data Portal {i}")
             dataset = vc.add_dataset(name="Visualization Files")
-            view_config_and_files = ASSAY_CONF_LOOKUP[self.assay_type]
+            view_config_and_files = ASSAY_CONF_LOOKUP[self._assay_type]
             view_function = view_config_and_files["view_function"]
             for k, img_path in enumerate(sorted(images, key=_get_hybcycle)):
                 img_url, offsets_url = self._get_img_and_offset_url(
@@ -301,13 +300,13 @@ class SeqFISHViewConf(AssayViewConf):
             conf = vc.to_dict(on_obj=on_obj)
             del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
             confs.append(conf)
-        self.conf = confs
+        self._conf = confs
         return confs
 
 
 class CytokitSPRMConf(AssayViewConf):
     def __init__(self, *args):
-        self.files = [
+        self._files = [
             {
                 "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.cells.json",
                 "file_type": ft.CELLS_JSON,
@@ -327,7 +326,7 @@ class CytokitSPRMConf(AssayViewConf):
         super(*args)
 
     def _build_vitessce_conf(self):
-        file_paths_found = [file["rel_path"] for file in self.entity["files"]]
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = _get_matches(file_paths_found, TILE_REGEX)
         confs = []
         for tile in sorted(found_tiles):
@@ -336,7 +335,7 @@ class CytokitSPRMConf(AssayViewConf):
                 raster_only = True
             vc = VitessceConfig(name="HuBMAP Data Portal")
             dataset = vc.add_dataset(name="Visualization Files")
-            for file in files:
+            for file in self._files:
                 dataset_file = self._replace_url_in_file(file)
                 dataset_file["url"] = dataset_file["url"].replace(TILE_REGEX, tile)
                 dataset = dataset.add_file(**(self._replace_url_in_file(file)))
@@ -351,7 +350,35 @@ class CytokitSPRMConf(AssayViewConf):
                     vc, dataset
                 )
                 confs.append(vc.to_dict(on_obj=on_obj))
-        self.conf = confs
+        self._conf = confs
+
+
+class ScatterplotViewConf(AssayViewConf):
+    def _build_vitessce_conf(self):
+        file_paths_expected = [file["rel_path"] for file in files]
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        # We need to check that the files we expect actually exist.
+        # This is due to the volatility of the datasets.
+        if not set(file_paths_expected).issubset(set(file_paths_found)):
+            if not self._is_mock:
+                current_app.logger.info(
+                    f'Files for assay "{self._assay_type}" '
+                    'uuid "{self._uuid}" not found as expected.'
+                )
+            return {}
+        vc = VitessceConfig(name="HuBMAP Data Portal")
+        dataset = vc.add_dataset(name="Visualization Files")
+        for file in self._files:
+            dataset = dataset.add_file(**(self._replace_url_in_file(file)))
+        vc = self._setup_scatterplot_view_config(vc, dataset)
+        self._conf = vc.to_dict(on_obj=on_obj)
+        return self._conf
+
+    def _setup_scatterplot_view_config(self):
+        umap = vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP")
+        cell_sets = vc.add_view(dataset, cm.CELL_SETS)
+        vc.layout(umap | cell_sets)
+        return vc
 
 
 class AssayViewConf:
@@ -363,68 +390,16 @@ class AssayViewConf:
         """
 
         # Can there be more than one of these?  This seems like a fine default for now.
-        self.assay_type = entity["data_types"][0]
-        self.uuid = entity["uuid"]
-        self.nexus_token = nexus_token
-        self.is_mock = is_mock
-        self.entity = entity
-        self.conf = {}
+        self._assay_type = entity["data_types"][0]
+        self._uuid = entity["uuid"]
+        self._nexus_token = nexus_token
+        self._is_mock = is_mock
+        self._entity = entity
+        self._conf = {}
         self._build_vitessce_conf()
 
     def _build_vitessce_conf(self):
-        """Vuilding the vitessce configuration.
-
-        >> vitessce = Vitessce(entity, nexus_token)
-        >> vitessce.conf
-
-        {
-          'name': 'NAME',
-          'layers': [
-            {
-              'name': 'raster',
-              'type': 'RASTER',
-              'url': DataURI('fjsdlfjasldfa')
-            }
-          ],
-          'staticLayout': [
-            {'component': 'layerController', 'x': 0, 'y': 0, 'w': 4, 'h': 6},
-            {
-                'component': 'spatial',
-                'props': {
-                    'view': {},
-                },
-                'x': 4,
-                'y': 0,
-                'w': 8,
-                'h': 6,
-            },
-          ],
-        }
-
-        """
-        if self.assay_type not in ASSAY_CONF_LOOKUP:
-            return {}
-        view_config_and_files = ASSAY_CONF_LOOKUP[self.assay_type]
-        files = copy.deepcopy(view_config_and_files["files_conf"])
-        file_paths_expected = [file["rel_path"] for file in files]
-        file_paths_found = [file["rel_path"] for file in self.entity["files"]]
-        view_function = view_config_and_files["view_function"]
-        # We need to check that the files we expect actually exist.
-        # This is due to the volatility of the datasets.
-        if not set(file_paths_expected).issubset(set(file_paths_found)):
-            if not self.is_mock:
-                current_app.logger.info(
-                    f'Files for assay "{self.assay_type}" '
-                    'uuid "{self.uuid}" not found as expected.'
-                )
-            return {}
-        vc = VitessceConfig(name="HuBMAP Data Portal")
-        dataset = vc.add_dataset(name="Visualization Files")
-        for file in files:
-            dataset = dataset.add_file(**(self._replace_url_in_file(file)))
-        vc = view_function(vc, dataset)
-        self.conf = vc.to_dict()
-        return self.conf
+        pass
 
     def _get_img_and_offset_url(self, img_path, replace_params):
         img_url = self._build_assets_url(img_path)
@@ -467,12 +442,12 @@ class AssayViewConf:
       'https://assets.dev.hubmapconsortium.org/uuid/rel_path/to/clusters.ome.tiff',
 
       """
-        if not self.is_mock:
+        if not self._is_mock:
             assets_endpoint = current_app.config["ASSETS_ENDPOINT"]
         else:
             assets_endpoint = MOCK_URL
-        base_url = urllib.parse.urljoin(assets_endpoint, f"{self.uuid}/{rel_path}")
-        token_param = urllib.parse.urlencode({"token": self.nexus_token})
+        base_url = urllib.parse.urljoin(assets_endpoint, f"{self._uuid}/{rel_path}")
+        token_param = urllib.parse.urlencode({"token": self._nexus_token})
         return base_url + "?" + token_param
 
     def _setup_view_config_raster(self, vc, dataset):
