@@ -1,6 +1,6 @@
 # HuBMAP Portal Documentation
 
-## Overview:
+## Overview
 - [About HuBMAP portal](/docs/about)
    * [Policies](https://hubmapconsortium.org/policies/)
    * [Access Levels](/docs/datasets)
@@ -20,7 +20,6 @@
 
 
 ## Technical Documentation 
-- [Software]
+- [Software](/docs/software)
 - [APIs](/docs/apis)
 - [Infrastructure](/docs/infrastructure)
-
