@@ -256,19 +256,6 @@ class AssayViewConf:
     def _build_vitessce_conf(self):
         pass
 
-    def _get_img_and_offset_url(self, img_path, replace_params):
-        img_url = self._build_assets_url(img_path)
-        return (
-            img_url,
-            str(
-                re.sub(
-                    r"ome\.tiff?",
-                    "offsets.json",
-                    img_url.replace(replace_params["image"], replace_params["offsets"]),
-                )
-            ),
-        )
-
     def _replace_url_in_file(self, file):
         """Build each layer in the layers section.
 
@@ -305,6 +292,21 @@ class AssayViewConf:
         token_param = urllib.parse.urlencode({"token": self._nexus_token})
         return base_url + "?" + token_param
 
+
+class ImagingViewConf(AssayViewConf):
+    def _get_img_and_offset_url(self, img_path, img_dir):
+        img_url = self._build_assets_url(img_path)
+        return (
+            img_url,
+            str(
+                re.sub(
+                    r"ome\.tiff?",
+                    "offsets.json",
+                    img_url.replace(img_dir, OFFSETS_PATH),
+                )
+            ),
+        )
+
     def _setup_view_config_raster(self, vc, dataset):
         spatial = vc.add_view(dataset, cm.SPATIAL)
         status = vc.add_view(dataset, cm.DESCRIPTION)
@@ -312,46 +314,35 @@ class AssayViewConf:
         vc.layout(spatial | (lc / status))
         return vc
 
-    def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
-        spatial = vc.add_view(dataset, cm.SPATIAL)
-        description = vc.add_view(dataset, cm.DESCRIPTION)
-        lc = vc.add_view(dataset, cm.LAYER_CONTROLLER)
-        cell_sets = vc.add_view(dataset, cm.CELL_SETS)
-        genes = vc.add_view(dataset, cm.GENES)
-        heatmap = vc.add_view(dataset, cm.HEATMAP)
-        vc.layout((lc / description) | (spatial / heatmap) | (genes / cell_sets))
-        return vc
 
+class ImagePyramidViewConf(ImagingViewConf):
 
-class ImagePyramidViewConf(AssayViewConf):
     def _build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_images = _get_matches(file_paths_found, files[0]["rel_path"])
-        if len(found_images) > 1:
-            raise TooManyFilesFoundError
-        img_path = found_images[0]
+        found_images = _get_matches(
+            file_paths_found, re.escape(IMAGE_PYRAMID_PATH) + r"/.*\.ome\.tiff?$"
+        )
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
-        img_url, offsets_url = self._get_img_and_offset_url(
-            img_path, IMAGING_PATHS[IMAGE_PYRAMID]
-        )
-        dataset = dataset.add_object(
-            OmeTiffWrapper(img_url=img_url, offsets_url=offsets_url, name="Image")
-        )
+        for img_path in found_images:
+            img_url, offsets_url = self._get_img_and_offset_url(
+                img_path, IMAGE_PYRAMID_PATH
+            )
+            dataset = dataset.add_object(
+                OmeTiffWrapper(img_url=img_url, offsets_url=offsets_url, name="Image")
+            )
         vc = self._setup_view_config_raster(vc, dataset)
         self.conf = vc.to_dict(on_obj=on_obj)
         return self.conf
 
 
-class SeqFISHViewConf(AssayViewConf):
+class SeqFISHViewConf(ImagingViewConf):
+
     def _build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        is_valid_directory = all(
-            [re.fullmatch(SEQFISH_REGEX, file) for file in found_images]
+        found_images = _get_matches(
+            file_paths_found, SEQFISH_REGEX
         )
-        if not is_valid_directory:
-            print(f"Directory structure for seqFish dataset {self._uuid} invalid")
-            return []
         # Get all files grouped by PosN names.
         images_by_pos = _group_by_file_name(found_images)
         confs = []
@@ -362,7 +353,7 @@ class SeqFISHViewConf(AssayViewConf):
             dataset = vc.add_dataset(name="Visualization Files")
             for k, img_path in enumerate(sorted(images, key=_get_hybcycle)):
                 img_url, offsets_url = self._get_img_and_offset_url(
-                    img_path, IMAGING_PATHS[IMAGE_PYRAMID]
+                    img_path, IMAGE_PYRAMID_PATH
                 )
                 image_wrappers += [
                     OmeTiffWrapper(
@@ -378,8 +369,8 @@ class SeqFISHViewConf(AssayViewConf):
         return confs
 
 
-class CytokitSPRMConf(AssayViewConf):
-    def __init__(self, *args):
+class CytokitSPRMConf(ImagingViewConf):
+    def __init__(self, **kwargs):
         self._files = [
             {
                 "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.cells.json",
@@ -397,38 +388,51 @@ class CytokitSPRMConf(AssayViewConf):
                 "data_type": dt.EXPRESSION_MATRIX,
             },
         ]
-        super(*args)
+        super().__init__(**kwargs)
 
     def _build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = _get_matches(file_paths_found, TILE_REGEX)
         confs = []
-        for tile in sorted(found_tiles):
-            raster_only = False
-            if f"{CODDEX_SPRM_PATH}/{tile}.cell-sets.json" not in file_paths_found:
-                raster_only = True
-            vc = VitessceConfig(name="HuBMAP Data Portal")
-            dataset = vc.add_dataset(name="Visualization Files")
-            for file in self._files:
-                dataset_file = self._replace_url_in_file(file)
-                dataset_file["url"] = dataset_file["url"].replace(TILE_REGEX, tile)
-                dataset = dataset.add_file(**(self._replace_url_in_file(file)))
+        for index, tile in enumerate(sorted(found_tiles)):
+            vc = VitessceConfig(name=tile)
+            dataset = vc.add_dataset(name="Cytokit + SPRM")
             img_url, offsets_url = self._get_img_and_offset_url(
-                f"{CODEX_TILE_PATH}/{tile}.ome.tiff", IMAGING_PATHS[CODEX_CYTOKIT]
+                f"{CODEX_TILE_PATH}/{tile}.ome.tiff", CODEX_TILE_PATH
             )
-            if raster_only:
+            image_wrapper = OmeTiffWrapper(
+                img_url=img_url, offsets_url=offsets_url, name=tile
+            )
+            dataset = dataset.add_object(image_wrapper)
+            # This tile has no segmentations
+            if (
+                self._files[0]["rel_path"].replace(TILE_REGEX, tile)
+                not in file_paths_found
+            ):
                 vc = self._setup_view_config_raster(vc, dataset)
-                confs.append(vc.to_dict(on_obj=on_obj))
             else:
+                for file in self._files:
+                    dataset_file = self._replace_url_in_file(file)
+                    dataset_file["url"] = dataset_file["url"].replace(TILE_REGEX, tile)
+                    dataset = dataset.add_file(**(dataset_file))
                 vc = self._setup_view_config_raster_cellsets_expression_segmentation(
                     vc, dataset
                 )
-                confs.append(vc.to_dict(on_obj=on_obj))
+            confs.append(vc.to_dict(on_obj=on_obj))
         self.conf = confs
+
+    def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
+        spatial = vc.add_view(dataset, cm.SPATIAL)
+        description = vc.add_view(dataset, cm.DESCRIPTION)
+        lc = vc.add_view(dataset, cm.LAYER_CONTROLLER)
+        cell_sets = vc.add_view(dataset, cm.CELL_SETS)
+        genes = vc.add_view(dataset, cm.GENES)
+        heatmap = vc.add_view(dataset, cm.HEATMAP)
+        vc.layout((lc / description) | (spatial / heatmap) | (genes / cell_sets))
+        return vc
 
 
 class ScatterplotViewConf(AssayViewConf):
-
     def _build_vitessce_conf(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -454,14 +458,14 @@ class ScatterplotViewConf(AssayViewConf):
         vc.layout(umap | cell_sets)
         return vc
 
-class RNASeqConf(ScatterplotViewConf):
 
+class RNASeqConf(ScatterplotViewConf):
     def __init__(self, **kwargs):
         self._files = [
             {
-            "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cells.json",
-            "file_type": ft.CELLS_JSON,
-            "data_type": dt.CELLS,
+                "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cells.json",
+                "file_type": ft.CELLS_JSON,
+                "data_type": dt.CELLS,
             },
             {
                 "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cell-sets.json",
@@ -471,14 +475,14 @@ class RNASeqConf(ScatterplotViewConf):
         ]
         super().__init__(**kwargs)
 
-class ATACSeqConf(ScatterplotViewConf):
 
+class ATACSeqConf(ScatterplotViewConf):
     def __init__(self, **kwargs):
         self._files = [
             {
-            "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cells.json",
-            "file_type": ft.CELLS_JSON,
-            "data_type": dt.CELLS,
+                "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cells.json",
+                "file_type": ft.CELLS_JSON,
+                "data_type": dt.CELLS,
             },
             {
                 "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cell-sets.json",
@@ -488,14 +492,30 @@ class ATACSeqConf(ScatterplotViewConf):
         ]
         super().__init__(**kwargs)
 
-def get_view_config_class_for_data_types(data_types):
+
+def get_view_config_class_for_data_types(entity, nexus_token):
+    data_types = entity["data_types"]
     if IMAGE_PYRAMID in data_types and SEQFISH in data_types:
-        return SeqFISHViewConf
+        return SeqFISHViewConf(entity=entity, nexus_token=nexus_token)
     if IMAGE_PYRAMID in data_types:
-        return ImagePyramidViewConf
+        return ImagePyramidViewConf(entity=entity, nexus_token=nexus_token)
     if CODEX_CYTOKIT in data_types:
-        return CytokitSPRMConf
-    if len(set([SCRNA_SEQ_10X, SCRNA_SEQ_SN, SCRNA_SEQ_SCI, SCRNA_SEQ_SNARE]).intersection(data_types)) != 0:
-        return RNASeqConf
-    if len(set([SCATAC_SEQ_SCI, SCATAC_SEQ_SNARE, SCATAC_SEQ_SN]).intersection(data_types)) != 0:
-        return ATACSeqConf
+        return CytokitSPRMConf(entity=entity, nexus_token=nexus_token)
+    if (
+        len(
+            set(
+                [SCRNA_SEQ_10X, SCRNA_SEQ_SN, SCRNA_SEQ_SCI, SCRNA_SEQ_SNARE]
+            ).intersection(data_types)
+        )
+        != 0
+    ):
+        return RNASeqConf(entity=entity, nexus_token=nexus_token)
+    if (
+        len(
+            set([SCATAC_SEQ_SCI, SCATAC_SEQ_SNARE, SCATAC_SEQ_SN]).intersection(
+                data_types
+            )
+        )
+        != 0
+    ):
+        return ATACSeqConf(entity=entity, nexus_token=nexus_token)

@@ -139,6 +139,5 @@ class ApiClient():
                 ]
             }
         else:
-            ViewConfig = get_view_config_class_for_data_types(entity["data_types"])
-            vc = ViewConfig(entity=entity, nexus_token=self.nexus_token)
+            vc = get_view_config_class_for_data_types(entity=entity, nexus_token=self.nexus_token)
             return vc.conf
