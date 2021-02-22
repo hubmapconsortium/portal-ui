@@ -20,7 +20,7 @@ describe('ProvVis', () => {
   });
 
   it('renders React component', () => {
-    render(<ProvVis prov={simple.prov} />, node, () => {
+    render(<ProvVis provData={simple.prov} />, node, () => {
       // TODO: Just getting empty div.
       // expect(node.innerHTML).toContain('svg')
     });
