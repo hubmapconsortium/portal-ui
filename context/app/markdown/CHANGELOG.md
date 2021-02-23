@@ -1,3 +1,12 @@
+## v0.12.3 - 2021-02-23
+
+- Fix eslint errors from description component export.
+- Fix anchor tag locations on detail pages.
+- Refactor prov vis components to be declarative and access providers.
+- Fix saved entities table ui shift when selecting rows.
+- Add link to software.
+
+
 ## v0.12.2 - 2021-02-17
 
 - Handle Donors missing mapper_metadata.

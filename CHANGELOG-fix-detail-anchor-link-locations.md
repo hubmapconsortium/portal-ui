@@ -1,1 +1,0 @@
-- Fix anchor tag locations on detail pages.

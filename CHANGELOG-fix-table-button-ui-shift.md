@@ -1,1 +1,0 @@
-- Fix saved entities table ui shift when selecting rows.
