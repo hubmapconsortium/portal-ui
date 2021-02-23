@@ -5,7 +5,7 @@ from datauri import DataURI
 from flask import abort, current_app
 import requests
 
-from .vitessce import get_view_config_class_for_data_types
+from .vitessce_confs import get_view_config_class_for_data_types
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
