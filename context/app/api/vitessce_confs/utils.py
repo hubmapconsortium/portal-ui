@@ -32,14 +32,6 @@ def _group_by_file_name(files):
     return [list(g) for _, g in groupby(sorted_files, _get_path_name)]
 
 
-def _get_hybcycle(image):
-    return re.search(AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value, image)[0]
-
-
-def _get_pos_name(image):
-    return re.search(AssetPaths.SEQFISH_FILE_REGEX.value, image)[0].split(".")[0]
-
-
 def create_obj_routes(obj, dataset_uid, obj_i):
     """
     For a particular data object, simultaneously set up:

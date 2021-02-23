@@ -15,8 +15,6 @@ from .utils import (
     _exclude_matches,
     _get_path_name,
     _group_by_file_name,
-    _get_hybcycle,
-    _get_pos_name,
     create_obj_routes,
     on_obj,
 )
@@ -38,9 +36,9 @@ class SeqFISHViewConf(ImagingViewConf):
         # Build up a conf for each Pos.
         for i, images in enumerate(images_by_pos):
             image_wrappers = []
-            vc = VitessceConfig(name=_get_pos_name(images[0]))
-            dataset = vc.add_dataset(name=_get_pos_name(images[0]))
-            for k, img_path in enumerate(sorted(images, key=_get_hybcycle)):
+            vc = VitessceConfig(name=self._get_pos_name(images[0]))
+            dataset = vc.add_dataset(name=self._get_pos_name(images[0]))
+            for k, img_path in enumerate(sorted(images, key=self._get_hybcycle)):
                 img_url, offsets_url = self._get_img_and_offset_url(
                     img_path, AssetPaths.IMAGE_PYRAMID_DIR.value
                 )
@@ -48,7 +46,7 @@ class SeqFISHViewConf(ImagingViewConf):
                     OmeTiffWrapper(
                         img_url=img_url,
                         offsets_url=offsets_url,
-                        name=_get_hybcycle(img_path),
+                        name=self._get_hybcycle(img_path),
                     )
                 ]
             dataset = dataset.add_object(MultiImageWrapper(image_wrappers))
@@ -58,6 +56,13 @@ class SeqFISHViewConf(ImagingViewConf):
             confs.append(conf)
         self.conf = confs
         return confs
+    
+    def _get_hybcycle(self, image_path):
+        return re.search(AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value, image_path)[0]
+
+
+    def _get_pos_name(self, image_path):
+        return re.search(AssetPaths.SEQFISH_FILE_REGEX.value, image_path)[0].split(".")[0]
 
 
 class CytokitSPRMConf(ImagingViewConf):
