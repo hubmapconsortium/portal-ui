@@ -202,6 +202,9 @@ def _group_by_file_name(files):
 def _get_hybcycle(image):
     return re.search(SEQFISH_HYB_CYCLE_REGEX, image)[0]
 
+def _get_pos_name(image):
+    return re.search(SEQFISH_NAME_REGEX, image)[0].split(".")[0]
+
 
 def create_obj_routes(obj, dataset_uid, obj_i):
     """
@@ -329,7 +332,7 @@ class ImagePyramidViewConf(ImagingViewConf):
                 img_path, IMAGE_PYRAMID_PATH
             )
             dataset = dataset.add_object(
-                OmeTiffWrapper(img_url=img_url, offsets_url=offsets_url, name="Image")
+                OmeTiffWrapper(img_url=img_url, offsets_url=offsets_url, name=Path(img_path).name)
             )
         vc = self._setup_view_config_raster(vc, dataset)
         self.conf = vc.to_dict(on_obj=on_obj)
@@ -349,15 +352,15 @@ class SeqFISHViewConf(ImagingViewConf):
         # Build up a conf for each Pos.
         for i, images in enumerate(images_by_pos):
             image_wrappers = []
-            vc = VitessceConfig(name=f"HuBMAP Data Portal {i}")
-            dataset = vc.add_dataset(name="Visualization Files")
+            vc = VitessceConfig(name=_get_pos_name(images[0]))
+            dataset = vc.add_dataset(name=_get_pos_name(images[0]))
             for k, img_path in enumerate(sorted(images, key=_get_hybcycle)):
                 img_url, offsets_url = self._get_img_and_offset_url(
                     img_path, IMAGE_PYRAMID_PATH
                 )
                 image_wrappers += [
                     OmeTiffWrapper(
-                        img_url=img_url, offsets_url=offsets_url, name=f"Image {k}"
+                        img_url=img_url, offsets_url=offsets_url, name=_get_hybcycle(img_path)
                     )
                 ]
             dataset = dataset.add_object(MultiImageWrapper(image_wrappers))
@@ -371,6 +374,7 @@ class SeqFISHViewConf(ImagingViewConf):
 
 class CytokitSPRMConf(ImagingViewConf):
     def __init__(self, **kwargs):
+        # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
                 "rel_path": f"{CODDEX_SPRM_PATH}/{TILE_REGEX}.cells.json",
@@ -461,6 +465,7 @@ class ScatterplotViewConf(AssayViewConf):
 
 class RNASeqConf(ScatterplotViewConf):
     def __init__(self, **kwargs):
+        # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
                 "rel_path": f"{SCRNA_SEQ_BASE_PATH}.cells.json",
@@ -478,6 +483,7 @@ class RNASeqConf(ScatterplotViewConf):
 
 class ATACSeqConf(ScatterplotViewConf):
     def __init__(self, **kwargs):
+        # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
                 "rel_path": f"{SCATAC_SEQ_BASE_PATH}/umap_coords_clusters.cells.json",
