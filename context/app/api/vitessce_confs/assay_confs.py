@@ -18,7 +18,12 @@ from .utils import (
     create_obj_routes,
     on_obj,
 )
-from .base_confs import (ImagingViewConf, ScatterplotViewConf, ImagePyramidViewConf)
+from .base_confs import (
+    ImagingViewConf,
+    ScatterplotViewConf,
+    ImagePyramidViewConf,
+    SPRMViewConf,
+)
 from .constants import (
     Assays,
     AssetPaths,
@@ -26,7 +31,7 @@ from .constants import (
 
 
 class SeqFISHViewConf(ImagingViewConf):
-    def _build_vitessce_conf(self):
+    def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         full_seqfish_reqex = f"{AssetPaths.IMAGE_PYRAMID_DIR.value}/{AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value}/{AssetPaths.SEQFISH_FILE_REGEX.value}"
         found_images = _get_matches(file_paths_found, full_seqfish_reqex)
@@ -55,17 +60,18 @@ class SeqFISHViewConf(ImagingViewConf):
             del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
             confs.append(conf)
         self.conf = confs
-        return confs
-    
+        return self
+
     def _get_hybcycle(self, image_path):
         return re.search(AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value, image_path)[0]
 
-
     def _get_pos_name(self, image_path):
-        return re.search(AssetPaths.SEQFISH_FILE_REGEX.value, image_path)[0].split(".")[0]
+        return re.search(AssetPaths.SEQFISH_FILE_REGEX.value, image_path)[0].split(".")[
+            0
+        ]
 
 
-class CytokitSPRMConf(ImagingViewConf):
+class CytokitSPRMConf(SPRMViewConf):
     def __init__(self, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
@@ -87,7 +93,7 @@ class CytokitSPRMConf(ImagingViewConf):
         ]
         super().__init__(**kwargs)
 
-    def _build_vitessce_conf(self):
+    def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = _get_matches(file_paths_found, AssetPaths.TILE_REGEX.value)
         confs = []
@@ -120,16 +126,7 @@ class CytokitSPRMConf(ImagingViewConf):
                 )
             confs.append(vc.to_dict(on_obj=on_obj))
         self.conf = confs
-
-    def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
-        spatial = vc.add_view(dataset, cm.SPATIAL)
-        description = vc.add_view(dataset, cm.DESCRIPTION)
-        lc = vc.add_view(dataset, cm.LAYER_CONTROLLER)
-        cell_sets = vc.add_view(dataset, cm.CELL_SETS)
-        genes = vc.add_view(dataset, cm.GENES)
-        heatmap = vc.add_view(dataset, cm.HEATMAP)
-        vc.layout((lc / description) | (spatial / heatmap) | (genes / cell_sets))
-        return vc
+        return self
 
 
 class RNASeqConf(ScatterplotViewConf):
@@ -168,29 +165,59 @@ class ATACSeqConf(ScatterplotViewConf):
         super().__init__(**kwargs)
 
 
+class IMSConf(ImagePyramidViewConf):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Do not show the separated mass-spec images.
+        self.image_pyramid_regex = (
+            re.escape(AssetPaths.IMAGE_PYRAMID_DIR.value) + r"(?!(/ometiffs/separate/))"
+        )
+
+
 def get_view_config_class_for_data_types(entity, nexus_token):
     data_types = entity["data_types"]
     if Assays.IMAGE_PYRAMID.value in data_types and Assays.SEQFISH.value in data_types:
-        return SeqFISHViewConf(entity=entity, nexus_token=nexus_token)
+        return SeqFISHViewConf(
+            entity=entity, nexus_token=nexus_token
+        ).build_vitessce_conf()
+    if (
+        Assays.MALDI_IMS_NEG.value in data_types
+        or Assays.MALDI_IMS_POS.value in data_types
+        and Assays.IMAGE_PYRAMID.value in data_types
+    ):
+        return IMSConf(entity=entity, nexus_token=nexus_token).build_vitessce_conf()
     if Assays.IMAGE_PYRAMID.value in data_types:
-        return ImagePyramidViewConf(entity=entity, nexus_token=nexus_token)
+        return ImagePyramidViewConf(
+            entity=entity, nexus_token=nexus_token
+        ).build_vitessce_conf()
     if Assays.CODEX_CYTOKIT.value in data_types:
-        return CytokitSPRMConf(entity=entity, nexus_token=nexus_token)
+        return CytokitSPRMConf(
+            entity=entity, nexus_token=nexus_token
+        ).build_vitessce_conf()
     if (
         len(
             set(
-                [Assays.SCRNA_SEQ_10X.value, Assays.SCRNA_SEQ_SN.value, Assays.SCRNA_SEQ_SCI.value, Assays.SCRNA_SEQ_SNARE.value]
+                [
+                    Assays.SCRNA_SEQ_10X.value,
+                    Assays.SCRNA_SEQ_SN.value,
+                    Assays.SCRNA_SEQ_SCI.value,
+                    Assays.SCRNA_SEQ_SNARE.value,
+                ]
             ).intersection(data_types)
         )
         != 0
     ):
-        return RNASeqConf(entity=entity, nexus_token=nexus_token)
+        return RNASeqConf(entity=entity, nexus_token=nexus_token).build_vitessce_conf()
     if (
         len(
-            set([Assays.SCATAC_SEQ_SCI.value, Assays.SCATAC_SEQ_SNARE.value, Assays.SCATAC_SEQ_SN.value]).intersection(
-                data_types
-            )
+            set(
+                [
+                    Assays.SCATAC_SEQ_SCI.value,
+                    Assays.SCATAC_SEQ_SNARE.value,
+                    Assays.SCATAC_SEQ_SN.value,
+                ]
+            ).intersection(data_types)
         )
         != 0
     ):
-        return ATACSeqConf(entity=entity, nexus_token=nexus_token)
+        return ATACSeqConf(entity=entity, nexus_token=nexus_token).build_vitessce_conf()

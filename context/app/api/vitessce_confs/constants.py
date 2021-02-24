@@ -4,6 +4,8 @@ class Assays(Enum):
   IMAGE_PYRAMID = "image_pyramid"
   CODEX_CYTOKIT = "codex_cytokit"
   SEQFISH = "seqFish"
+  MALDI_IMS_NEG = "MALDI-IMS-neg"
+  MALDI_IMS_POS = "MALDI-IMS-pos"
 
   SCRNA_SEQ_10X = "salmon_rnaseq_10x"
   SCRNA_SEQ_SCI = "salmon_rnaseq_sciseq"

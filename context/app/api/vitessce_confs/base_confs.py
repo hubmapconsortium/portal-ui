@@ -27,9 +27,8 @@ class ViewConf:
         self._nexus_token = nexus_token
         self._is_mock = is_mock
         self._entity = entity
-        self._build_vitessce_conf()
 
-    def _build_vitessce_conf(self):
+    def build_vitessce_conf(self):
         pass
 
     def _replace_url_in_file(self, file):
@@ -71,6 +70,7 @@ class ViewConf:
 
 class ImagingViewConf(ViewConf):
     def _get_img_and_offset_url(self, img_path, img_dir):
+        print(img_dir, img_path)
         img_url = self._build_assets_url(img_path)
         return (
             img_url,
@@ -78,30 +78,33 @@ class ImagingViewConf(ViewConf):
                 re.sub(
                     r"ome\.tiff?",
                     "offsets.json",
-                    img_url.replace(img_dir, AssetPaths.OFFSETS_DIR.value),
+                    str(re.sub(img_dir, AssetPaths.OFFSETS_DIR.value, img_url)),
                 )
             ),
         )
 
     def _setup_view_config_raster(self, vc, dataset):
-        spatial = vc.add_view(dataset, cm.SPATIAL)
-        status = vc.add_view(dataset, cm.DESCRIPTION)
-        lc = vc.add_view(dataset, cm.LAYER_CONTROLLER)
-        vc.layout(spatial | (lc / status))
+        vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=9, h=12)
+        vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
+        vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
         return vc
 
 
 class ImagePyramidViewConf(ImagingViewConf):
-    def _build_vitessce_conf(self):
+    def __init__(self, **kwargs):
+        self.image_pyramid_regex = AssetPaths.IMAGE_PYRAMID_DIR.value
+        super().__init__(**kwargs)
+
+    def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_images = _get_matches(
-            file_paths_found, re.escape(AssetPaths.IMAGE_PYRAMID_DIR.value) + r"/.*\.ome\.tiff?$"
+            file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
         )
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
         for img_path in found_images:
             img_url, offsets_url = self._get_img_and_offset_url(
-                img_path, AssetPaths.IMAGE_PYRAMID_DIR.value
+                img_path, self.image_pyramid_regex
             )
             dataset = dataset.add_object(
                 OmeTiffWrapper(
@@ -110,11 +113,11 @@ class ImagePyramidViewConf(ImagingViewConf):
             )
         vc = self._setup_view_config_raster(vc, dataset)
         self.conf = vc.to_dict(on_obj=on_obj)
-        return self.conf
+        return self
 
 
 class ScatterplotViewConf(ViewConf):
-    def _build_vitessce_conf(self):
+    def build_vitessce_conf(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         # We need to check that the files we expect actually exist.
@@ -131,10 +134,20 @@ class ScatterplotViewConf(ViewConf):
             dataset = dataset.add_file(**(self._replace_url_in_file(file)))
         vc = self._setup_scatterplot_view_config(vc, dataset)
         self.conf = vc.to_dict(on_obj=on_obj)
-        return self.conf
+        return self
 
     def _setup_scatterplot_view_config(self, vc, dataset):
-        umap = vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP")
-        cell_sets = vc.add_view(dataset, cm.CELL_SETS)
-        vc.layout(umap | cell_sets)
+        vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=9, h=12)
+        vc.add_view(dataset, cm.CELL_SETS, x=9, y=0, w=3, h=12)
+        return vc
+
+
+class SPRMViewConf(ImagingViewConf):
+    def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
+        vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=8)
+        vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
+        vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
+        vc.add_view(dataset, cm.CELL_SETS, x=10, y=6, w=2, h=6)
+        vc.add_view(dataset, cm.GENES, x=10, y=0, w=2, h=6)
+        vc.add_view(dataset, cm.HEATMAP, x=3, y=8, w=7, h=4)
         return vc
