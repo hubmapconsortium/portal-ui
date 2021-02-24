@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import SaveEditEntityButton from 'js/components/Detail/SaveEditEntityButton';
 import { useInView } from 'react-intersection-observer';
 import 'intersection-observer';
 
@@ -14,7 +15,16 @@ import StatusIcon from '../StatusIcon';
 const entityStoreSelector = (state) => state.setSummaryComponentObserver;
 
 function SummaryData(props) {
-  const { entity_type, uuid, status, mapped_data_access_level, display_doi, children } = props;
+  const {
+    entity_type,
+    uuid,
+    status,
+    mapped_data_access_level,
+    display_doi,
+    group_name,
+    entityCanBeSaved,
+    children,
+  } = props;
 
   const setSummaryComponentObserver = useEntityStore(entityStoreSelector);
 
@@ -53,6 +63,14 @@ function SummaryData(props) {
                 <FileIcon color="primary" />
               </JsonButton>
             </SecondaryBackgroundTooltip>
+            {entityCanBeSaved && (
+              <SaveEditEntityButton
+                uuid={uuid}
+                entity_type={entity_type}
+                group_name={group_name}
+                display_doi={display_doi}
+              />
+            )}
           </FlexEnd>
         </FlexRight>
       </Flex>
@@ -65,10 +83,12 @@ SummaryData.propTypes = {
   uuid: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
   mapped_data_access_level: PropTypes.string.isRequired,
+  entityCanBeSaved: PropTypes.bool,
   children: PropTypes.element,
 };
 
 SummaryData.defaultProps = {
+  entityCanBeSaved: true,
   children: undefined,
 };
 

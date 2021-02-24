@@ -26,9 +26,12 @@ function DonorDetail(props) {
     create_timestamp,
     last_modified_timestamp,
     description,
-    mapped_metadata,
-    mapped_metadata: { sex, race, age_value, age_unit },
+    mapped_metadata = {},
+    // Missing on some unpublished data. Not sure if there's a deeper bug.
+    // Filed: https://github.com/hubmapconsortium/search-api/issues/236
   } = assayMetadata;
+
+  const { sex, race, age_value, age_unit } = mapped_metadata;
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
@@ -58,6 +61,7 @@ function DonorDetail(props) {
           create_timestamp={create_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}
+          group_name={group_name}
         />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} display_doi={display_doi} />}
         <Attribution

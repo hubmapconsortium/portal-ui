@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Link from '@material-ui/core/Link';
 
 const Flex = styled.div`
   grid-area: workflow;
@@ -11,8 +10,4 @@ const Flex = styled.div`
   }
 `;
 
-const StyledLink = styled(Link)`
-  color: ${(props) => props.theme.palette.info.main};
-`;
-
-export { Flex, StyledLink };
+export { Flex };

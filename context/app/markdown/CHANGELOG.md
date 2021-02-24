@@ -1,3 +1,55 @@
+## v0.12.3 - 2021-02-23
+
+- Fix eslint errors from description component export.
+- Fix anchor tag locations on detail pages.
+- Refactor prov vis components to be declarative and access providers.
+- Fix saved entities table ui shift when selecting rows.
+- Add link to software.
+
+
+## v0.12.2 - 2021-02-17
+
+- Handle Donors missing mapper_metadata.
+- Display message instead of empty table on saved list page.
+- Display alert and reset selected items when items are successfully added to lists.
+- Disable save to list button when no lists are selected.
+- Track outbound links with Google Analytics.
+
+
+## v0.12.1 - 2021-02-17
+
+- Disable saving collection entities.
+
+
+## v0.12.0 - 2021-02-16
+
+- Update text of ASCT+B Preview.
+- Change language for alert shown on the entity detail page when saving the entity or editing its saved status.
+- Fix incorrect column labels in saved lists and saved list pages.
+- Display warning text when attempting to edit an entity's saved status when saved lists do not exist.
+- Fix page view tracking to track visits to a saved list page together instead of separating by uuid.
+- Track error boundary errors in Google Analytics.
+- Track web vitals and send to Google Analytics.
+
+
+## v0.11.2 - 2021-02-10
+
+- Stub out a UI for the Cells API.
+- Enable users to store entities and lists of entities in local storage.
+- Add my lists page to interact with stored entities and lists.
+
+
+## v0.11.1 - 2021-02-05
+
+- Add a link to the CCF JSON, and a new route to serve the JSON.
+- Pull new lightsheet docs.
+
+
+## v0.11.0 - 2021-02-01
+
+- Let the ProvGraph work against either the new or old Prov API.
+
+
 ## v0.10.2 - 2021-01-27
 
 - Bring back selected filters UI.

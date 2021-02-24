@@ -1,5 +1,6 @@
 from os.path import dirname
 from urllib.parse import urlparse
+import json
 
 from flask import (Blueprint, render_template, abort, current_app,
                    session, request, redirect, url_for, Response)
@@ -112,9 +113,32 @@ def details_ext(type, uuid, ext):
     if ext != 'json':
         abort(404)
     client = _get_client()
-
     entity = client.get_entity(uuid)
     return entity
+
+
+@blueprint.route('/browse/<type>/<uuid>.rui.<ext>')
+def details_rui_ext(type, uuid, ext):
+    # Note that the API returns a blob of JSON as a string,
+    # so, to return a JSON object, and not just a string, we need to decode.
+    if type not in entity_types:
+        abort(404)
+    if ext != 'json':
+        abort(404)
+    client = _get_client()
+    entity = client.get_entity(uuid)
+    # For Samples...
+    if 'rui_location' in entity:
+        return json.loads(entity['rui_location'])
+    # For Datasets...
+    if 'ancestors' not in entity:
+        abort(404)
+    located_ancestors = [a for a in entity['ancestors'] if 'rui_location' in a]
+    if not located_ancestors:
+        abort(404)
+    # There may be multiple: The last should be the closest...
+    # but this should be confirmed, when there are examples.
+    return json.loads(located_ancestors[-1]['rui_location'])
 
 
 @blueprint.route('/search')
@@ -172,12 +196,42 @@ def preview_view(name):
     )
 
 
+@blueprint.route('/cells-api-demo')
+def cells_api_demo():
+    flask_data = {'endpoints': _get_endpoints()}
+    return render_template(
+        'pages/base_react.html',
+        title='Cells API Demo',
+        flask_data=flask_data
+    )
+
+
 @blueprint.route('/collections')
 def collections():
     flask_data = {'endpoints': _get_endpoints()}
     return render_template(
         'pages/base_react.html',
         title='Collections',
+        flask_data=flask_data
+    )
+
+
+@blueprint.route('/my-lists')
+def my_lists():
+    flask_data = {'endpoints': _get_endpoints()}
+    return render_template(
+        'pages/base_react.html',
+        title='My Lists',
+        flask_data=flask_data
+    )
+
+
+@blueprint.route('/my-lists/<saved_list_uuid>')
+def list_page(saved_list_uuid):
+    flask_data = {'endpoints': _get_endpoints(), 'list_uuid': saved_list_uuid}
+    return render_template(
+        'pages/base_react.html',
+        title='Saved List',
         flask_data=flask_data
     )
 

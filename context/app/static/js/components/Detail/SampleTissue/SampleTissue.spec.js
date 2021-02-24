@@ -3,31 +3,27 @@ import React from 'react';
 import { render, screen } from 'test-utils/functions';
 import SampleTissue from './SampleTissue';
 
-test('text displays properly when all props provided', () => {
-  render(<SampleTissue mapped_organ="Fake Organ" mapped_specimen_type="Fake Specimen Type" />);
-
+function expectLabelsPresent() {
   expect(screen.getByText('Tissue')).toBeInTheDocument();
-
-  const labelsToTest = ['Organ Type', 'Specimen Type', 'Tissue Location'];
+  const labelsToTest = ['Organ Type', 'Specimen Type'];
   labelsToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+}
+
+test('text displays properly when all props provided', () => {
+  render(<SampleTissue mapped_organ="Fake Organ" mapped_specimen_type="Fake Specimen Type" hasRUI />);
+  expectLabelsPresent();
+
+  expect(screen.getByText('Tissue Location')).toBeInTheDocument();
 
   const valuesToTest = ['Fake Organ', 'Fake Specimen Type'];
   valuesToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-  expect(
-    screen.getByText('Common Coordinate Framework Exploration User Interface', {
-      exact: false,
-    }),
-  ).toBeInTheDocument();
-  expect(screen.getByRole('link')).toHaveAttribute('href', '/ccf-eui');
 });
 
 test('displays label not defined when values are undefined', () => {
   render(<SampleTissue />);
+  expectLabelsPresent();
 
-  expect(screen.getByText('Tissue')).toBeInTheDocument();
-
-  const labelsToTest = ['Organ Type', 'Specimen Type', 'Tissue Location'];
-  labelsToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  expect(screen.queryByText('Tissue Location')).not.toBeInTheDocument();
 
   const valuesToTest = ['Organ Type not defined', 'Specimen Type not defined'];
   valuesToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());

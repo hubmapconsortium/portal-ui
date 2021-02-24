@@ -6,7 +6,7 @@ import VisualizationWrapper from 'js/components/Detail/visualization/Visualizati
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import Attribution from 'js/components/Detail/Attribution';
-import Description from 'js/shared-styles/sections/Description';
+import { StyledDescription } from './style';
 
 function Preview(props) {
   const { vitData, title, assayMetadata, markdown } = props;
@@ -20,11 +20,11 @@ function Preview(props) {
         <SectionHeader variant="h1" component="h1">
           {title}
         </SectionHeader>
-        <Description>
+        <StyledDescription>
           HuBMAP Data Portal Previews demonstrate functionality and resources that will become available in future
           releases. Previews may rely on externally hosted data or analysis results that were generated with processing
           pipelines that are not yet integrated into the HuBMAP Data Portal infrastructure.
-        </Description>
+        </StyledDescription>
         <Markdown markdown={markdown} />
       </SectionContainer>
       <Attribution

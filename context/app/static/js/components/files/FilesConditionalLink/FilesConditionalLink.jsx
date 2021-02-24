@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { AlignedLink } from './style';
 
 function FilesConditionalLink(props) {
   const { hasAgreedToDUA, openDUA, href, children, ...rest } = props;
   if (hasAgreedToDUA) {
     return (
-      <LightBlueLink target="_blank" rel="noopener noreferrer" underline="none" href={href} {...rest}>
+      <OutboundLink href={href} {...rest}>
         {children}
-      </LightBlueLink>
+      </OutboundLink>
     );
   }
   return (

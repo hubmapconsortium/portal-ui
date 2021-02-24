@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 
 const StyledPaper = styled(Paper)`
   display: flex;
-  padding: 30px 40px 30px 40px;
+  padding: ${(props) => props?.$padding || '30px 40px'};
 `;
 
 const StyledInfoIcon = styled(InfoIcon)`

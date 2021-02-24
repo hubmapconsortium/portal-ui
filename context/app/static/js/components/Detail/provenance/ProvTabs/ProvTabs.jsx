@@ -54,9 +54,7 @@ function ProvTabs(props) {
         </StyledTabPanel>
       )}
       <StyledTabPanel value={open} index={graphIndex}>
-        <span id="prov-vis-react">
-          <ProvGraph provData={provData} />
-        </span>
+        <ProvGraph provData={provData} />
       </StyledTabPanel>
       {shouldDisplayDag && (
         <StyledTabPanel value={open} index={dagIndex} pad={1}>
