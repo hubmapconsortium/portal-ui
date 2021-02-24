@@ -25,7 +25,6 @@ class ViewConf:
         self.conf = {}
         self._uuid = entity["uuid"]
         self._nexus_token = nexus_token
-        self._is_mock = is_mock
         self._entity = entity
 
     def build_vitessce_conf(self):
@@ -59,10 +58,7 @@ class ViewConf:
       'https://assets.dev.hubmapconsortium.org/uuid/rel_path/to/clusters.ome.tiff',
 
       """
-        if not self._is_mock:
-            assets_endpoint = current_app.config["ASSETS_ENDPOINT"]
-        else:
-            assets_endpoint = MOCK_URL
+        assets_endpoint = current_app.config["ASSETS_ENDPOINT"]
         base_url = urllib.parse.urljoin(assets_endpoint, f"{self._uuid}/{rel_path}")
         token_param = urllib.parse.urlencode({"token": self._nexus_token})
         return base_url + "?" + token_param

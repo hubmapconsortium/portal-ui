@@ -4,8 +4,6 @@ from itertools import groupby
 
 from vitessce import DataType as dt
 
-from .constants import AssetPaths
-
 
 def _get_matches(files, regex):
     return list(

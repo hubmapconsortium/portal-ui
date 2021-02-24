@@ -1,4 +1,3 @@
-import urllib
 import re
 
 from vitessce import (
@@ -7,15 +6,11 @@ from vitessce import (
     OmeTiffWrapper,
     DataType as dt,
     FileType as ft,
-    Component as cm,
 )
 
 from .utils import (
-    _get_matches,
-    _exclude_matches,
     _get_path_name,
     _group_by_file_name,
-    create_obj_routes,
     on_obj,
 )
 from .base_confs import (
@@ -33,7 +28,9 @@ from .constants import (
 class SeqFISHViewConf(ImagingViewConf):
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        full_seqfish_reqex = f"{AssetPaths.IMAGE_PYRAMID_DIR.value}/{AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value}/{AssetPaths.SEQFISH_FILE_REGEX.value}"
+        full_seqfish_reqex = f"""{AssetPaths.IMAGE_PYRAMID_DIR.value}/
+        {AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value}/
+        {AssetPaths.SEQFISH_FILE_REGEX.value}"""
         found_images = _get_matches(file_paths_found, full_seqfish_reqex)
         # Get all files grouped by PosN names.
         images_by_pos = _group_by_file_name(found_images)
@@ -76,17 +73,20 @@ class CytokitSPRMConf(SPRMViewConf):
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
-                "rel_path": f"{AssetPaths.CODDEX_SPRM_DIR.value}/{AssetPaths.TILE_REGEX.value}.cells.json",
+                "rel_path": f""""{AssetPaths.CODDEX_SPRM_DIR.value}/
+                {AssetPaths.TILE_REGEX.value}.cells.json""",
                 "file_type": ft.CELLS_JSON,
                 "data_type": dt.CELLS,
             },
             {
-                "rel_path": f"{AssetPaths.CODDEX_SPRM_DIR.value}/{AssetPaths.TILE_REGEX.value}.cell-sets.json",
+                "rel_path": f""""{AssetPaths.CODDEX_SPRM_DIR.value}/
+                {AssetPaths.TILE_REGEX.value}.cell-sets.json""",
                 "file_type": ft.CELL_SETS_JSON,
                 "data_type": dt.CELL_SETS,
             },
             {
-                "rel_path": f"{AssetPaths.CODDEX_SPRM_DIR.value}/{AssetPaths.TILE_REGEX.value}.clusters.json",
+                "rel_path": f""""{AssetPaths.CODDEX_SPRM_DIR.value}/
+                {AssetPaths.TILE_REGEX.value}.clusters.json""",
                 "file_type": "clusters.json",
                 "data_type": dt.EXPRESSION_MATRIX,
             },
@@ -152,12 +152,14 @@ class ATACSeqConf(ScatterplotViewConf):
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
-                "rel_path": f"{AssetPaths.SCATAC_SEQ_DIR.value}/umap_coords_clusters.cells.json",
+                "rel_path": f"""{AssetPaths.SCATAC_SEQ_DIR.value}
+                /umap_coords_clusters.cells.json""",
                 "file_type": ft.CELLS_JSON,
                 "data_type": dt.CELLS,
             },
             {
-                "rel_path": f"{AssetPaths.SCATAC_SEQ_DIR.value}/umap_coords_clusters.cell-sets.json",
+                "rel_path": f"""{AssetPaths.SCATAC_SEQ_DIR.value}
+                /umap_coords_clusters.cell-sets.json""",
                 "file_type": ft.CELL_SETS_JSON,
                 "data_type": dt.CELL_SETS,
             },
