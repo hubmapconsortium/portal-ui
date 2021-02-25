@@ -181,23 +181,17 @@ class IMSConf(ImagePyramidViewConf):
 def get_view_config_class_for_data_types(entity, nexus_token):
     data_types = entity["data_types"]
     if Assays.IMAGE_PYRAMID.value in data_types and Assays.SEQFISH.value in data_types:
-        return SeqFISHViewConf(
-            entity=entity, nexus_token=nexus_token
-        ).build_vitessce_conf()
+        return SeqFISHViewConf(entity=entity, nexus_token=nexus_token)
     if (
         Assays.MALDI_IMS_NEG.value in data_types
         or Assays.MALDI_IMS_POS.value in data_types
         and Assays.IMAGE_PYRAMID.value in data_types
     ):
-        return IMSConf(entity=entity, nexus_token=nexus_token).build_vitessce_conf()
+        return IMSConf(entity=entity, nexus_token=nexus_token)
     if Assays.IMAGE_PYRAMID.value in data_types:
-        return ImagePyramidViewConf(
-            entity=entity, nexus_token=nexus_token
-        ).build_vitessce_conf()
+        return ImagePyramidViewConf(entity=entity, nexus_token=nexus_token)
     if Assays.CODEX_CYTOKIT.value in data_types:
-        return CytokitSPRMConf(
-            entity=entity, nexus_token=nexus_token
-        ).build_vitessce_conf()
+        return CytokitSPRMConf(entity=entity, nexus_token=nexus_token)
     if (
         len(
             set(
@@ -211,7 +205,7 @@ def get_view_config_class_for_data_types(entity, nexus_token):
         )
         != 0
     ):
-        return RNASeqConf(entity=entity, nexus_token=nexus_token).build_vitessce_conf()
+        return RNASeqConf(entity=entity, nexus_token=nexus_token)
     if (
         len(
             set(
@@ -224,4 +218,4 @@ def get_view_config_class_for_data_types(entity, nexus_token):
         )
         != 0
     ):
-        return ATACSeqConf(entity=entity, nexus_token=nexus_token).build_vitessce_conf()
+        return ATACSeqConf(entity=entity, nexus_token=nexus_token)
