@@ -104,9 +104,11 @@ class ImagePyramidViewConf(ImagingViewConf):
             img_url, offsets_url = self._get_img_and_offset_url(
                 img_path, self.image_pyramid_regex
             )
-            images.append(OmeTiffWrapper(
-                img_url=img_url, offsets_url=offsets_url, name=Path(img_path).name
-            ))
+            images.append(
+                OmeTiffWrapper(
+                    img_url=img_url, offsets_url=offsets_url, name=Path(img_path).name
+                )
+            )
         dataset = dataset.add_object(MultiImageWrapper(images))
         vc = self._setup_view_config_raster(vc, dataset)
         self.conf = vc.to_dict()

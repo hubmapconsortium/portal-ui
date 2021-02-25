@@ -72,20 +72,20 @@ class CytokitSPRMConf(SPRMViewConf):
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
-                "rel_path": f""""{AssetPaths.CODDEX_SPRM_DIR.value}/
-                {AssetPaths.TILE_REGEX.value}.cells.json""",
+                "rel_path": f"{AssetPaths.CODDEX_SPRM_DIR.value}/"
+                + f"{AssetPaths.TILE_REGEX.value}.cells.json",
                 "file_type": ft.CELLS_JSON,
                 "data_type": dt.CELLS,
             },
             {
-                "rel_path": f""""{AssetPaths.CODDEX_SPRM_DIR.value}/
-                {AssetPaths.TILE_REGEX.value}.cell-sets.json""",
+                "rel_path": f"{AssetPaths.CODDEX_SPRM_DIR.value}/"
+                + f"{AssetPaths.TILE_REGEX.value}.cell-sets.json",
                 "file_type": ft.CELL_SETS_JSON,
                 "data_type": dt.CELL_SETS,
             },
             {
-                "rel_path": f""""{AssetPaths.CODDEX_SPRM_DIR.value}/
-                {AssetPaths.TILE_REGEX.value}.clusters.json""",
+                "rel_path": f"{AssetPaths.CODDEX_SPRM_DIR.value}/"
+                + f"{AssetPaths.TILE_REGEX.value}.clusters.json",
                 "file_type": "clusters.json",
                 "data_type": dt.EXPRESSION_MATRIX,
             },
@@ -151,14 +151,14 @@ class ATACSeqConf(ScatterplotViewConf):
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
-                "rel_path": f"""{AssetPaths.SCATAC_SEQ_DIR.value}
-                /umap_coords_clusters.cells.json""",
+                "rel_path": AssetPaths.SCATAC_SEQ_DIR.value
+                + "/umap_coords_clusters.cells.json",
                 "file_type": ft.CELLS_JSON,
                 "data_type": dt.CELLS,
             },
             {
-                "rel_path": f"""{AssetPaths.SCATAC_SEQ_DIR.value}
-                /umap_coords_clusters.cell-sets.json""",
+                "rel_path": AssetPaths.SCATAC_SEQ_DIR.value
+                + "/umap_coords_clusters.cell-sets.json",
                 "file_type": ft.CELL_SETS_JSON,
                 "data_type": dt.CELL_SETS,
             },
