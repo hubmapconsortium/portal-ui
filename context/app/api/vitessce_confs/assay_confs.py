@@ -11,7 +11,6 @@ from vitessce import (
 from .utils import (
     _get_path_name,
     _group_by_file_name,
-    on_obj,
 )
 from .base_confs import (
     ImagingViewConf,
@@ -53,7 +52,7 @@ class SeqFISHViewConf(ImagingViewConf):
                 ]
             dataset = dataset.add_object(MultiImageWrapper(image_wrappers))
             vc = self._setup_view_config_raster(vc, dataset)
-            conf = vc.to_dict(on_obj=on_obj)
+            conf = vc.to_dict()
             del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
             confs.append(conf)
         self.conf = confs
@@ -124,7 +123,7 @@ class CytokitSPRMConf(SPRMViewConf):
                 vc = self._setup_view_config_raster_cellsets_expression_segmentation(
                     vc, dataset
                 )
-            confs.append(vc.to_dict(on_obj=on_obj))
+            confs.append(vc.to_dict())
         self.conf = confs
         return self
 

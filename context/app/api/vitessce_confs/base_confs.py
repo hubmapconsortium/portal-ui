@@ -9,7 +9,7 @@ from vitessce import (
     Component as cm,
 )
 
-from .utils import _get_matches, on_obj
+from .utils import _get_matches
 from .constants import AssetPaths
 
 
@@ -108,7 +108,7 @@ class ImagePyramidViewConf(ImagingViewConf):
                 )
             )
         vc = self._setup_view_config_raster(vc, dataset)
-        self.conf = vc.to_dict(on_obj=on_obj)
+        self.conf = vc.to_dict()
         return self
 
 
@@ -119,17 +119,16 @@ class ScatterplotViewConf(ViewConf):
         # We need to check that the files we expect actually exist.
         # This is due to the volatility of the datasets.
         if not set(file_paths_expected).issubset(set(file_paths_found)):
-            if not self._is_mock:
-                current_app.logger.info(
-                    f'Files for uuid "{self._uuid}" not found as expected.'
-                )
-            return {}
+            current_app.logger.info(
+                f'Files for uuid "{self._uuid}" not found as expected.'
+            )
+            return self
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
         for file in self._files:
             dataset = dataset.add_file(**(self._replace_url_in_file(file)))
         vc = self._setup_scatterplot_view_config(vc, dataset)
-        self.conf = vc.to_dict(on_obj=on_obj)
+        self.conf = vc.to_dict()
         return self
 
     def _setup_scatterplot_view_config(self, vc, dataset):
