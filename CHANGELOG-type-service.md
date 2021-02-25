@@ -1,0 +1,2 @@
+- Remove hard-coded assay types from Vitessce, replace with type service.
+- Add hubmap-commons to requirements.txt
