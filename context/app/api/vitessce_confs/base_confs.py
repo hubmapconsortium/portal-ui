@@ -29,6 +29,7 @@ class ViewConf:
         self._entity = entity
 
     def build_vitessce_conf(self):
+        "Build a Vitessce view conf and attach to conf attribute"
         pass
 
     def _replace_url_in_file(self, file):
