@@ -5,6 +5,7 @@ import re
 from flask import current_app
 from vitessce import (
     VitessceConfig,
+    MultiImageWrapper,
     OmeTiffWrapper,
     Component as cm,
 )
@@ -98,17 +99,18 @@ class ImagePyramidViewConf(ImagingViewConf):
         )
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
+        images = []
         for img_path in found_images:
             img_url, offsets_url = self._get_img_and_offset_url(
                 img_path, self.image_pyramid_regex
             )
-            dataset = dataset.add_object(
-                OmeTiffWrapper(
-                    img_url=img_url, offsets_url=offsets_url, name=Path(img_path).name
-                )
-            )
+            images.append(OmeTiffWrapper(
+                img_url=img_url, offsets_url=offsets_url, name=Path(img_path).name
+            ))
+        dataset = dataset.add_object(MultiImageWrapper(images))
         vc = self._setup_view_config_raster(vc, dataset)
         self.conf = vc.to_dict()
+        del self.conf["datasets"][0]["files"][0]["options"]["renderLayers"]
         return self
 
 
