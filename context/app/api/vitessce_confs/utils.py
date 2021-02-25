@@ -2,8 +2,6 @@ from pathlib import Path
 import re
 from itertools import groupby
 
-from vitessce import DataType as dt
-
 
 def _get_matches(files, regex):
     return list(

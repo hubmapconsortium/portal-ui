@@ -9,8 +9,8 @@ from vitessce import (
 )
 
 from .utils import (
-    _get_path_name,
     _group_by_file_name,
+    _get_matches,
 )
 from .base_confs import (
     ImagingViewConf,
