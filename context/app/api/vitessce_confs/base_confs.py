@@ -112,6 +112,7 @@ class ImagePyramidViewConf(ImagingViewConf):
         dataset = dataset.add_object(MultiImageWrapper(images))
         vc = self._setup_view_config_raster(vc, dataset)
         self.conf = vc.to_dict()
+        # Don't want to render all layers
         del self.conf["datasets"][0]["files"][0]["options"]["renderLayers"]
         return self
 

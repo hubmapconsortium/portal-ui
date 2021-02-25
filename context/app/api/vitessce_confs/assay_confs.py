@@ -27,15 +27,15 @@ from .constants import (
 class SeqFISHViewConf(ImagingViewConf):
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        full_seqfish_reqex = f"""{AssetPaths.IMAGE_PYRAMID_DIR.value}/
-        {AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value}/
-        {AssetPaths.SEQFISH_FILE_REGEX.value}"""
+        full_seqfish_reqex = f"{AssetPaths.IMAGE_PYRAMID_DIR.value}/" \
+        + f"{AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value}/" \
+        + AssetPaths.SEQFISH_FILE_REGEX.value
         found_images = _get_matches(file_paths_found, full_seqfish_reqex)
         # Get all files grouped by PosN names.
         images_by_pos = _group_by_file_name(found_images)
         confs = []
         # Build up a conf for each Pos.
-        for i, images in enumerate(images_by_pos):
+        for images in images_by_pos:
             image_wrappers = []
             vc = VitessceConfig(name=self._get_pos_name(images[0]))
             dataset = vc.add_dataset(name=self._get_pos_name(images[0]))
@@ -53,8 +53,10 @@ class SeqFISHViewConf(ImagingViewConf):
             dataset = dataset.add_object(MultiImageWrapper(image_wrappers))
             vc = self._setup_view_config_raster(vc, dataset)
             conf = vc.to_dict()
+            # Don't want to render all layers
             del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
             confs.append(conf)
+        print(confs)
         self.conf = confs
         return self
 
