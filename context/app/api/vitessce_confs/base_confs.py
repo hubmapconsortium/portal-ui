@@ -15,7 +15,7 @@ from .constants import AssetPaths
 
 
 class ViewConf:
-    def __init__(self, entity=None, nexus_token=None, is_mock=False):
+    def __init__(self, entity=None, nexus_token=None):
         """Object for building the vitessce configuration.
 
           >> vitessce = Vitessce(entity, nexus_token)
@@ -32,15 +32,19 @@ class ViewConf:
         pass
 
     def _replace_url_in_file(self, file):
-        """Build each layer in the layers section.
+        """Replace url in incoming file object
 
-        returns e.g
-
+        for input file
+        {
+          'type': 'CELLS',
+          'file_type': 'cells.json',
+          'rel_path': 'cells.json',
+        }
+        returns
         {
           'type': 'CELLS',
           'file_type': 'cells.json',
           'url': 'https://assets.dev.hubmapconsortium.org/uuid/cells.json',
-          'name': 'cells'
         }
         """
 
@@ -51,14 +55,15 @@ class ViewConf:
         }
 
     def _build_assets_url(self, rel_path):
+        """Create a url for an asset.
+
+        returns e.g
+
+        'https://assets.dev.hubmapconsortium.org/uuid/rel_path/to/clusters.ome.tiff'
+
+        for "rel_path/to/clusters.ome.tiff"
+
         """
-      Create a url for an asset.
-
-      returns e.g
-
-      'https://assets.dev.hubmapconsortium.org/uuid/rel_path/to/clusters.ome.tiff',
-
-      """
         assets_endpoint = current_app.config["ASSETS_ENDPOINT"]
         base_url = urllib.parse.urljoin(assets_endpoint, f"{self._uuid}/{rel_path}")
         token_param = urllib.parse.urlencode({"token": self._nexus_token})
@@ -67,7 +72,16 @@ class ViewConf:
 
 class ImagingViewConf(ViewConf):
     def _get_img_and_offset_url(self, img_path, img_dir):
-        print(img_dir, img_path)
+        """Create a url for the offsets and img.
+
+        returns e.g
+
+        'https://assets.dev.hubmapconsortium.org/uuid/rel_path/to/clusters.ome.tiff',
+        'https://assets.dev.hubmapconsortium.org/uuid/output_offsets/clusters.offsets.json'
+
+        for "rel_path/to/clusters.ome.tiff" and "rel_path/to"
+
+        """
         img_url = self._build_assets_url(img_path)
         return (
             img_url,
