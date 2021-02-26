@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Tooltip from '@material-ui/core/Tooltip';
 import Link from '@material-ui/core/Link';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -9,6 +8,7 @@ import Menu from '../Menu';
 import PreviewLinks from '../PreviewLinks';
 import Dropdown from '../Dropdown';
 import LoginButton from '../LoginButton';
+import CCFLinks from '../CCFLinks';
 import DocumentationLinks from '../DocumentationLinks';
 import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap } from './style';
 
@@ -38,11 +38,9 @@ function HeaderContent({ anchorRef }) {
           <Dropdown title="Previews" menuListId="preview-options">
             <PreviewLinks />
           </Dropdown>
-          <Tooltip title="Explore HuBMAP data using the Common Coordinate Framework">
-            <HeaderButton component={Link} href="/ccf-eui">
-              CCF
-            </HeaderButton>
-          </Tooltip>
+          <Dropdown title="CCF Atlas" menuListId="ccf-options">
+            <CCFLinks />
+          </Dropdown>
           <Dropdown title="Documentation" menuListId="documentation-options">
             <DocumentationLinks />
           </Dropdown>
