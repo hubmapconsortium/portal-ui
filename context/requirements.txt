@@ -1,7 +1,7 @@
 Flask==1.1.1
 globus-sdk==1.9.0
 requests==2.22.0
-pyyaml==5.2
+pyyaml==5.3.1
 python-datauri==0.2.8
 python-frontmatter==0.5.0
 git+git://github.com/hubmapconsortium/commons.git@v1.12.7#egg=hubmap-commons
