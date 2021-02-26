@@ -1,0 +1,886 @@
+{
+    "ancestor_counts": {
+        "entity_type": {
+            "Dataset": 1,
+            "Donor": 1,
+            "Sample": 3
+        }
+    },
+    "ancestor_ids": [
+        "c624abbe9836c7e3b6a8d8216a316f30",
+        "13129ad371683171b152618c83fd9e6f",
+        "729935b4f3319c237f782cce3c3fea56",
+        "7d83bdacad40193debb326b6b3ca34fa",
+        "8adc3c31ca84ec4b958ed20a7c4f4919"
+    ],
+    "ancestors": [
+        {
+            "create_timestamp": 1572634150881,
+            "created_by_user_displayname": "Elizabeth Neumann",
+            "created_by_user_email": "neumane@vanderbilt.edu",
+            "data_access_level": "public",
+            "description": "Age 73, White Female",
+            "display_doi": "HBM547.NCQL.874",
+            "entity_type": "Donor",
+            "group_uuid": "73bb26e4-ed43-11e8-8f19-0a7c1eab007a",
+            "hubmap_display_id": "VAN0003",
+            "lab_donor_id": "68-71",
+            "lab_name": "65631",
+            "last_modified_timestamp": 1577115834295,
+            "mapped_create_timestamp": "2019-11-01 18:49:10",
+            "mapped_data_access_level": "Public",
+            "mapped_last_modified_timestamp": "2019-12-23 15:43:54",
+            "mapped_metadata": {
+                "age_unit": [
+                    "years"
+                ],
+                "age_value": [
+                    73.0
+                ],
+                "body_mass_index_unit": [
+                    "kg/m^2"
+                ],
+                "body_mass_index_value": [
+                    33.2
+                ],
+                "height_unit": [
+                    "cm"
+                ],
+                "height_value": [
+                    162.3
+                ],
+                "medical_history": [
+                    "Diabetes",
+                    "Cancer",
+                    "Hypertension",
+                    "Coronary artery disease"
+                ],
+                "race": [
+                    "White"
+                ],
+                "sex": [
+                    "Female"
+                ],
+                "weight_unit": [
+                    "kg"
+                ],
+                "weight_value": [
+                    87.5
+                ]
+            },
+            "metadata": {
+                "organ_donor_data": [
+                    {
+                        "code": "1086007",
+                        "concept_id": "C0086287",
+                        "data_type": "Nominal",
+                        "data_value": "",
+                        "end_datetime": "",
+                        "graph_version": "UMLS2019AA",
+                        "grouping_code": "57312000",
+                        "grouping_concept": "C1522384",
+                        "grouping_concept_preferred_term": "Sex",
+                        "grouping_sab": "SNOMEDCT_US",
+                        "numeric_operator": "",
+                        "preferred_term": "Female",
+                        "sab": "SNOMEDCT_US",
+                        "start_datetime": "0",
+                        "units": ""
+                    },
+                    {
+                        "code": "424144002",
+                        "concept_id": "C0001779",
+                        "data_type": "Numeric",
+                        "data_value": "73",
+                        "end_datetime": "",
+                        "graph_version": "UMLS2019AA",
+                        "grouping_code": "424144002",
+                        "grouping_concept": "C0001779",
+                        "grouping_concept_preferred_term": "Age",
+                        "grouping_sab": "SNOMEDCT_US",
+                        "numeric_operator": "EQ",
+                        "preferred_term": "Age",
+                        "sab": "SNOMEDCT_US",
+                        "start_datetime": "0",
+                        "units": "years"
+                    },
+                    {
+                        "code": "60621009",
+                        "concept_id": "C1305855",
+                        "data_type": "Numeric",
+                        "data_value": "33.2",
+                        "end_datetime": "",
+                        "graph_version": "UMLS2019AA",
+                        "grouping_code": "60621009",
+                        "grouping_concept": "C1305855",
+                        "grouping_concept_preferred_term": "Body mass index",
+                        "grouping_sab": "SNOMEDCT_US",
+                        "numeric_operator": "EQ",
+                        "preferred_term": "Body mass index",
+                        "sab": "SNOMEDCT_US",
+                        "start_datetime": "0",
+                        "units": "kg/m^2"
+                    },
+                    {
+                        "code": "413773004",
+                        "concept_id": "C0007457",
+                        "data_type": "Nominal",
+                        "data_value": "",
+                        "end_datetime": "",
+                        "graph_version": "UMLS2019AA",
+                        "grouping_code": "415229000",
+                        "grouping_concept": "C0034510",
+                        "grouping_concept_preferred_term": "Race",
+                        "grouping_sab": "SNOMEDCT_US",
+                        "numeric_operator": "",
+                        "preferred_term": "White",
+                        "sab": "SNOMEDCT_US",
+                        "start_datetime": "0",
+                        "units": ""
+                    },
+                    {
+                        "code": "27113001",
+                        "concept_id": "C0005910",
+                        "data_type": "Numeric",
+                        "data_value": "87.5",
+                        "end_datetime": "",
+                        "graph_version": "UMLS2019AA",
+                        "grouping_code": "27113001",
+                        "grouping_concept": "C0005910",
+                        "grouping_concept_preferred_term": "Weight",
+                        "grouping_sab": "SNOMEDCT_US",
+                        "numeric_operator": "EQ",
+                        "preferred_term": "Weight",
+                        "sab": "SNOMEDCT_US",
+                        "start_datetime": "0",
+                        "units": "kg"
+                    },
+                    {
+                        "code": "50373000",
+                        "concept_id": "C0005890",
+                        "data_type": "Numeric",
+                        "data_value": "162.3",
+                        "end_datetime": "",
+                        "graph_version": "UMLS2019AA",
+                        "grouping_code": "50373000",
+                        "grouping_concept": "C0005890",
+                        "grouping_concept_preferred_term": "Height",
+                        "grouping_sab": "SNOMEDCT_US",
+                        "numeric_operator": "EQ",
+                        "preferred_term": "Height",
+                        "sab": "SNOMEDCT_US",
+                        "start_datetime": "0",
+                        "units": "cm"
+                    },
+                    {
+                        "code": "73211009",
+                        "concept_id": "C0011849",
+                        "data_type": "Nominal",
+                        "data_value": "",
+                        "end_datetime": "",
+                        "graph_version": "UMLS2019AA",
+                        "grouping_code": "392521001",
+                        "grouping_concept": "C0262926",
+                        "grouping_concept_preferred_term": "Medical history",
+                        "grouping_sab": "SNOMEDCT_US",
+                        "numeric_operator": "",
+                        "preferred_term": "Diabetes",
+                        "sab": "SNOMEDCT_US",
+                        "start_datetime": "0",
+                        "units": ""
+                    },
+                    {
+                        "code": "363346000",
+                        "concept_id": "C0006826",
+                        "data_type": "Nominal",
+                        "data_value": "",
+                        "end_datetime": "",
+                        "graph_version": "UMLS2019AA",
+                        "grouping_code": "392521001",
+                        "grouping_concept": "C0262926",
+                        "grouping_concept_preferred_term": "Medical history",
+                        "grouping_sab": "SNOMEDCT_US",
+                        "numeric_operator": "",
+                        "preferred_term": "Cancer",
+                        "sab": "SNOMEDCT_US",
+                        "start_datetime": "0",
+                        "units": ""
+                    },
+                    {
+                        "code": "38341003",
+                        "concept_id": "C0020538",
+                        "data_type": "Nominal",
+                        "data_value": "",
+                        "end_datetime": "",
+                        "graph_version": "UMLS2019AA",
+                        "grouping_code": "392521001",
+                        "grouping_concept": "C0262926",
+                        "grouping_concept_preferred_term": "Medical history",
+                        "grouping_sab": "SNOMEDCT_US",
+                        "numeric_operator": "",
+                        "preferred_term": "Hypertension",
+                        "sab": "SNOMEDCT_US",
+                        "start_datetime": "0",
+                        "units": ""
+                    },
+                    {
+                        "code": "53741008",
+                        "concept_id": "C1956346",
+                        "data_type": "Nominal",
+                        "data_value": "",
+                        "end_datetime": "",
+                        "graph_version": "UMLS2019AA",
+                        "grouping_code": "392521001",
+                        "grouping_concept": "C0262926",
+                        "grouping_concept_preferred_term": "Medical history",
+                        "grouping_sab": "SNOMEDCT_US",
+                        "numeric_operator": "",
+                        "preferred_term": "Coronary artery disease",
+                        "sab": "SNOMEDCT_US",
+                        "start_datetime": "0",
+                        "units": ""
+                    }
+                ]
+            },
+            "portal_metadata_upload_files": [],
+            "portal_uploaded_image_files": [],
+            "protocol_url": "dx.doi.org/10.17504/protocols.io.7hhhj36",
+            "uuid": "c624abbe9836c7e3b6a8d8216a316f30"
+        },
+        {
+            "create_timestamp": 1572634235491,
+            "created_by_user_displayname": "Elizabeth Neumann",
+            "created_by_user_email": "neumane@vanderbilt.edu",
+            "data_access_level": "public",
+            "display_doi": "HBM666.CHPF.373",
+            "entity_type": "Sample",
+            "group_uuid": "73bb26e4-ed43-11e8-8f19-0a7c1eab007a",
+            "hubmap_display_id": "VAN0003-LK",
+            "lab_tissue_sample_id": "65631",
+            "last_modified_timestamp": 1577115817703,
+            "mapped_create_timestamp": "2019-11-01 18:50:35",
+            "mapped_data_access_level": "Public",
+            "mapped_last_modified_timestamp": "2019-12-23 15:43:37",
+            "mapped_organ": "Kidney (Left)",
+            "mapped_specimen_type": "Organ",
+            "organ": "LK",
+            "organ_other": "",
+            "portal_metadata_upload_files": [],
+            "portal_uploaded_image_files": [],
+            "protocol_url": "https://dx.doi.org/10.17504/protocols.io.bfskjncw",
+            "specimen_type": "organ",
+            "uuid": "13129ad371683171b152618c83fd9e6f"
+        },
+        {
+            "create_timestamp": 1601587172043,
+            "created_by_user_displayname": "Elizabeth Neumann",
+            "created_by_user_email": "elizabeth.neumann@Vanderbilt.Edu",
+            "data_access_level": "public",
+            "display_doi": "HBM643.FDGT.862",
+            "entity_type": "Sample",
+            "group_uuid": "73bb26e4-ed43-11e8-8f19-0a7c1eab007a",
+            "hubmap_display_id": "VAN0003-LK-33",
+            "lab_tissue_sample_id": "71",
+            "last_modified_timestamp": 1601587172072,
+            "mapped_create_timestamp": "2020-10-01 21:19:32",
+            "mapped_data_access_level": "Public",
+            "mapped_last_modified_timestamp": "2020-10-01 21:19:32",
+            "mapped_metadata": {},
+            "mapped_organ": "Kidney (Left)",
+            "mapped_specimen_type": "FFPE block",
+            "metadata": {
+                "cold_ischemia_time_unit": "minutes",
+                "cold_ischemia_time_value": "60",
+                "health_status": "cancer",
+                "organ_condition": "diseased",
+                "pathologist_report": "normal, no cancer",
+                "perfusion_solution": "None",
+                "procedure_date": "2019-04-12",
+                "sample_id": "VAN0003-LK-33",
+                "specimen_preservation_temperature": "Freezer (-80 Celsius)",
+                "specimen_quality_criteria": "PAS",
+                "specimen_tumor_distance_unit": "cm",
+                "specimen_tumor_distance_value": "7",
+                "vital_state": "living",
+                "warm_ischemia_time_unit": "minutes",
+                "warm_ischemia_time_value": "25"
+            },
+            "organ": "LK",
+            "portal_metadata_upload_files": [],
+            "protocol_url": "dx.doi.org/10.17504/protocols.io.7gehjte",
+            "specimen_type": "ffpe_block",
+            "uuid": "729935b4f3319c237f782cce3c3fea56"
+        },
+        {
+            "create_timestamp": 1603259456906,
+            "created_by_user_displayname": "Jeffrey Spraggins",
+            "created_by_user_email": "jeff.spraggins@Vanderbilt.Edu",
+            "data_access_level": "public",
+            "display_doi": "HBM284.VNHX.846",
+            "entity_type": "Sample",
+            "group_uuid": "73bb26e4-ed43-11e8-8f19-0a7c1eab007a",
+            "hubmap_display_id": "VAN0003-LK-33-2",
+            "last_modified_timestamp": 1603259456911,
+            "mapped_create_timestamp": "2020-10-21 05:50:56",
+            "mapped_data_access_level": "Public",
+            "mapped_last_modified_timestamp": "2020-10-21 05:50:56",
+            "mapped_organ": "Kidney (Left)",
+            "mapped_specimen_type": "FFPE slide",
+            "organ": "LK",
+            "portal_metadata_upload_files": [],
+            "protocol_url": "https://dx.doi.org/10.17504/protocols.io.7gehjte",
+            "specimen_type": "ffpe_slide",
+            "uuid": "7d83bdacad40193debb326b6b3ca34fa"
+        },
+        {
+            "contains_human_genetic_sequences": "no",
+            "create_timestamp": 1603260526226,
+            "created_by_user_displayname": "Jeffrey Spraggins",
+            "created_by_user_email": "jeff.spraggins@Vanderbilt.Edu",
+            "data_access_level": "public",
+            "data_types": [
+                "PAS"
+            ],
+            "description": "PAS stained microscopy collected from the left kidney of a 73 year old white female donor by the Biomolecular Multimodal Imaging Center (BIOMC) at Vanderbilt University. BIOMIC is a Tissue Mapping Center that is part of the NIH funded Human Biomolecular Atlas Program (HuBMAP). Brightfield microscopy images of formalin-fixed paraffin-embedded (FFPE) tissue sections were collected with a Leica Biosystems SCN400 for histopathological assessment to determine tissue normalcy. Support was provided by the NIH Common Fund and National Institute of Diabetes and Digestive and Kidney Diseases (U54 DK120058). Tissue was collected through the Cooperative Human Tissue Network with support provided by the NIH National Cancer Institute (5 UM1 CA183727-08).",
+            "display_doi": "HBM875.QHDJ.259",
+            "entity_type": "Dataset",
+            "group_uuid": "73bb26e4-ed43-11e8-8f19-0a7c1eab007a",
+            "last_modified_timestamp": 1603568273059,
+            "mapped_create_timestamp": "2020-10-21 06:08:46",
+            "mapped_data_access_level": "Public",
+            "mapped_data_types": [
+                "PAS Stained Microscopy"
+            ],
+            "mapped_last_modified_timestamp": "2020-10-24 19:37:53",
+            "mapped_metadata": {},
+            "mapped_status": "Published",
+            "metadata": {
+                "dag_provenance_list": [
+                    {
+                        "hash": "620e7c3",
+                        "origin": "https://github.com/hubmapconsortium/ingest-pipeline.git"
+                    }
+                ],
+                "metadata": {
+                    "acquisition_instrument_model": "SCN400",
+                    "acquisition_instrument_vendor": "Leica Biosystems",
+                    "analyte_class": "Polysaccharides",
+                    "assay_category": "imaging",
+                    "assay_type": "PAS microscopy",
+                    "collectiontype": "single_metadatatsv",
+                    "data_path": "processedMicroscopy",
+                    "donor_id": "VAN0003",
+                    "execution_datetime": "2020-09-28 15:44",
+                    "is_targeted": "FALSE",
+                    "metadata_path": "/",
+                    "operator": "N. Heath Patterson",
+                    "operator_email": "nathan.h.patterson@vanderbilt.edu",
+                    "overall_protocols_io_doi": "10.17504/protocols.io.bfskjncw",
+                    "pi": "Jeffrey M. Spraggins",
+                    "pi_email": "jeff.spraggins@vanderbilt.edu",
+                    "protocols_io_doi": "10.17504/protocols.io.4qngvve",
+                    "resolution_x_unit": "nm",
+                    "resolution_x_value": "650",
+                    "resolution_y_unit": "nm",
+                    "resolution_y_value": "650",
+                    "resolution_z_unit": "nm",
+                    "resolution_z_value": "0",
+                    "section_prep_protocols_io_doi": "10.17504/protocols.io.7gehjte",
+                    "stain": "Periodic acid-Schiff ",
+                    "tissue_id": "VAN0003-LK-33-2"
+                }
+            },
+            "status": "Published",
+            "uuid": "8adc3c31ca84ec4b958ed20a7c4f4919"
+        }
+    ],
+    "contains_human_genetic_sequences": "no",
+    "create_timestamp": 1603400709704,
+    "created_by_user_displayname": "HuBMAP Process",
+    "created_by_user_email": "hubmap@hubmapconsortium.org",
+    "data_access_level": "public",
+    "data_types": [
+        "image_pyramid",
+        "PAS"
+    ],
+    "descendant_counts": {},
+    "descendant_ids": [],
+    "descendants": [],
+    "display_doi": "HBM464.GFFC.829",
+    "donor": {
+        "create_timestamp": 1572634150881,
+        "created_by_user_displayname": "Elizabeth Neumann",
+        "created_by_user_email": "neumane@vanderbilt.edu",
+        "data_access_level": "public",
+        "description": "Age 73, White Female",
+        "display_doi": "HBM547.NCQL.874",
+        "entity_type": "Donor",
+        "group_uuid": "73bb26e4-ed43-11e8-8f19-0a7c1eab007a",
+        "hubmap_display_id": "VAN0003",
+        "lab_donor_id": "68-71",
+        "lab_name": "65631",
+        "last_modified_timestamp": 1577115834295,
+        "mapped_create_timestamp": "2019-11-01 18:49:10",
+        "mapped_data_access_level": "Public",
+        "mapped_last_modified_timestamp": "2019-12-23 15:43:54",
+        "mapped_metadata": {
+            "age_unit": [
+                "years"
+            ],
+            "age_value": [
+                73.0
+            ],
+            "body_mass_index_unit": [
+                "kg/m^2"
+            ],
+            "body_mass_index_value": [
+                33.2
+            ],
+            "height_unit": [
+                "cm"
+            ],
+            "height_value": [
+                162.3
+            ],
+            "medical_history": [
+                "Diabetes",
+                "Cancer",
+                "Hypertension",
+                "Coronary artery disease"
+            ],
+            "race": [
+                "White"
+            ],
+            "sex": [
+                "Female"
+            ],
+            "weight_unit": [
+                "kg"
+            ],
+            "weight_value": [
+                87.5
+            ]
+        },
+        "metadata": {
+            "organ_donor_data": [
+                {
+                    "code": "1086007",
+                    "concept_id": "C0086287",
+                    "data_type": "Nominal",
+                    "data_value": "",
+                    "end_datetime": "",
+                    "graph_version": "UMLS2019AA",
+                    "grouping_code": "57312000",
+                    "grouping_concept": "C1522384",
+                    "grouping_concept_preferred_term": "Sex",
+                    "grouping_sab": "SNOMEDCT_US",
+                    "numeric_operator": "",
+                    "preferred_term": "Female",
+                    "sab": "SNOMEDCT_US",
+                    "start_datetime": "0",
+                    "units": ""
+                },
+                {
+                    "code": "424144002",
+                    "concept_id": "C0001779",
+                    "data_type": "Numeric",
+                    "data_value": "73",
+                    "end_datetime": "",
+                    "graph_version": "UMLS2019AA",
+                    "grouping_code": "424144002",
+                    "grouping_concept": "C0001779",
+                    "grouping_concept_preferred_term": "Age",
+                    "grouping_sab": "SNOMEDCT_US",
+                    "numeric_operator": "EQ",
+                    "preferred_term": "Age",
+                    "sab": "SNOMEDCT_US",
+                    "start_datetime": "0",
+                    "units": "years"
+                },
+                {
+                    "code": "60621009",
+                    "concept_id": "C1305855",
+                    "data_type": "Numeric",
+                    "data_value": "33.2",
+                    "end_datetime": "",
+                    "graph_version": "UMLS2019AA",
+                    "grouping_code": "60621009",
+                    "grouping_concept": "C1305855",
+                    "grouping_concept_preferred_term": "Body mass index",
+                    "grouping_sab": "SNOMEDCT_US",
+                    "numeric_operator": "EQ",
+                    "preferred_term": "Body mass index",
+                    "sab": "SNOMEDCT_US",
+                    "start_datetime": "0",
+                    "units": "kg/m^2"
+                },
+                {
+                    "code": "413773004",
+                    "concept_id": "C0007457",
+                    "data_type": "Nominal",
+                    "data_value": "",
+                    "end_datetime": "",
+                    "graph_version": "UMLS2019AA",
+                    "grouping_code": "415229000",
+                    "grouping_concept": "C0034510",
+                    "grouping_concept_preferred_term": "Race",
+                    "grouping_sab": "SNOMEDCT_US",
+                    "numeric_operator": "",
+                    "preferred_term": "White",
+                    "sab": "SNOMEDCT_US",
+                    "start_datetime": "0",
+                    "units": ""
+                },
+                {
+                    "code": "27113001",
+                    "concept_id": "C0005910",
+                    "data_type": "Numeric",
+                    "data_value": "87.5",
+                    "end_datetime": "",
+                    "graph_version": "UMLS2019AA",
+                    "grouping_code": "27113001",
+                    "grouping_concept": "C0005910",
+                    "grouping_concept_preferred_term": "Weight",
+                    "grouping_sab": "SNOMEDCT_US",
+                    "numeric_operator": "EQ",
+                    "preferred_term": "Weight",
+                    "sab": "SNOMEDCT_US",
+                    "start_datetime": "0",
+                    "units": "kg"
+                },
+                {
+                    "code": "50373000",
+                    "concept_id": "C0005890",
+                    "data_type": "Numeric",
+                    "data_value": "162.3",
+                    "end_datetime": "",
+                    "graph_version": "UMLS2019AA",
+                    "grouping_code": "50373000",
+                    "grouping_concept": "C0005890",
+                    "grouping_concept_preferred_term": "Height",
+                    "grouping_sab": "SNOMEDCT_US",
+                    "numeric_operator": "EQ",
+                    "preferred_term": "Height",
+                    "sab": "SNOMEDCT_US",
+                    "start_datetime": "0",
+                    "units": "cm"
+                },
+                {
+                    "code": "73211009",
+                    "concept_id": "C0011849",
+                    "data_type": "Nominal",
+                    "data_value": "",
+                    "end_datetime": "",
+                    "graph_version": "UMLS2019AA",
+                    "grouping_code": "392521001",
+                    "grouping_concept": "C0262926",
+                    "grouping_concept_preferred_term": "Medical history",
+                    "grouping_sab": "SNOMEDCT_US",
+                    "numeric_operator": "",
+                    "preferred_term": "Diabetes",
+                    "sab": "SNOMEDCT_US",
+                    "start_datetime": "0",
+                    "units": ""
+                },
+                {
+                    "code": "363346000",
+                    "concept_id": "C0006826",
+                    "data_type": "Nominal",
+                    "data_value": "",
+                    "end_datetime": "",
+                    "graph_version": "UMLS2019AA",
+                    "grouping_code": "392521001",
+                    "grouping_concept": "C0262926",
+                    "grouping_concept_preferred_term": "Medical history",
+                    "grouping_sab": "SNOMEDCT_US",
+                    "numeric_operator": "",
+                    "preferred_term": "Cancer",
+                    "sab": "SNOMEDCT_US",
+                    "start_datetime": "0",
+                    "units": ""
+                },
+                {
+                    "code": "38341003",
+                    "concept_id": "C0020538",
+                    "data_type": "Nominal",
+                    "data_value": "",
+                    "end_datetime": "",
+                    "graph_version": "UMLS2019AA",
+                    "grouping_code": "392521001",
+                    "grouping_concept": "C0262926",
+                    "grouping_concept_preferred_term": "Medical history",
+                    "grouping_sab": "SNOMEDCT_US",
+                    "numeric_operator": "",
+                    "preferred_term": "Hypertension",
+                    "sab": "SNOMEDCT_US",
+                    "start_datetime": "0",
+                    "units": ""
+                },
+                {
+                    "code": "53741008",
+                    "concept_id": "C1956346",
+                    "data_type": "Nominal",
+                    "data_value": "",
+                    "end_datetime": "",
+                    "graph_version": "UMLS2019AA",
+                    "grouping_code": "392521001",
+                    "grouping_concept": "C0262926",
+                    "grouping_concept_preferred_term": "Medical history",
+                    "grouping_sab": "SNOMEDCT_US",
+                    "numeric_operator": "",
+                    "preferred_term": "Coronary artery disease",
+                    "sab": "SNOMEDCT_US",
+                    "start_datetime": "0",
+                    "units": ""
+                }
+            ]
+        },
+        "portal_metadata_upload_files": [],
+        "portal_uploaded_image_files": [],
+        "protocol_url": "dx.doi.org/10.17504/protocols.io.7hhhj36",
+        "uuid": "c624abbe9836c7e3b6a8d8216a316f30"
+    },
+    "entity_type": "Dataset",
+    "everything": [
+        "1",
+        "1.8.6",
+        "13129ad371683171b152618c83fd9e6f",
+        "1603400709704",
+        "1603568280411",
+        "1609814914824",
+        "2020-10-22 21:05:09",
+        "2020-10-24 19:38:00",
+        "2021-01-05 02:48:34",
+        "3",
+        "33",
+        "589526086",
+        "620e7c3",
+        "729935b4f3319c237f782cce3c3fea56",
+        "73bb26e4-ed43-11e8-8f19-0a7c1eab007a",
+        "7d83bdacad40193debb326b6b3ca34fa",
+        "8adc3c31ca84ec4b958ed20a7c4f4919",
+        "8c65f17",
+        "A list of byte-offsets of a TIFF file for quick access in visualization.",
+        "Dataset",
+        "EDAM_1.24.format_3464",
+        "EDAM_1.24.format_3727",
+        "HBM464.GFFC.829",
+        "HuBMAP Process",
+        "OME-TIFF pyramid file",
+        "PAS",
+        "PAS Stained Microscopy [Image Pyramid]",
+        "Public",
+        "Published",
+        "Vanderbilt TMC",
+        "c624abbe9836c7e3b6a8d8216a316f30",
+        "f9ae931b8b49252f150d7f8bf1d2d13f",
+        "fb19103",
+        "https://github.com/hubmapconsortium/ingest-pipeline.git",
+        "https://github.com/hubmapconsortium/ome-tiff-pyramid",
+        "https://github.com/hubmapconsortium/portal-containers",
+        "hubmap@hubmapconsortium.org",
+        "image_pyramid",
+        "json",
+        "no",
+        "ome-tiff-offsets.cwl",
+        "ometiff-pyramids/processedMicroscopy/VAN0003-LK-33-2-PAS_FFPE.ome.tif",
+        "output_offsets/processedMicroscopy/VAN0003-LK-33-2-PAS_FFPE.offsets.json",
+        "pipeline.cwl",
+        "public",
+        "unknown"
+    ],
+    "files": [
+        {
+            "description": "OME-TIFF pyramid file",
+            "edam_term": "EDAM_1.24.format_3727",
+            "rel_path": "ometiff-pyramids/processedMicroscopy/VAN0003-LK-33-2-PAS_FFPE.ome.tif",
+            "size": 589526086,
+            "type": "unknown"
+        },
+        {
+            "description": "A list of byte-offsets of a TIFF file for quick access in visualization.",
+            "edam_term": "EDAM_1.24.format_3464",
+            "rel_path": "output_offsets/processedMicroscopy/VAN0003-LK-33-2-PAS_FFPE.offsets.json",
+            "size": 33,
+            "type": "json"
+        }
+    ],
+    "group_name": "Vanderbilt TMC",
+    "group_uuid": "73bb26e4-ed43-11e8-8f19-0a7c1eab007a",
+    "immediate_ancestors": [
+        {
+            "contains_human_genetic_sequences": "no",
+            "create_timestamp": 1603260526226,
+            "created_by_user_displayname": "Jeffrey Spraggins",
+            "created_by_user_email": "jeff.spraggins@Vanderbilt.Edu",
+            "data_access_level": "public",
+            "data_types": [
+                "PAS"
+            ],
+            "description": "PAS stained microscopy collected from the left kidney of a 73 year old white female donor by the Biomolecular Multimodal Imaging Center (BIOMC) at Vanderbilt University. BIOMIC is a Tissue Mapping Center that is part of the NIH funded Human Biomolecular Atlas Program (HuBMAP). Brightfield microscopy images of formalin-fixed paraffin-embedded (FFPE) tissue sections were collected with a Leica Biosystems SCN400 for histopathological assessment to determine tissue normalcy. Support was provided by the NIH Common Fund and National Institute of Diabetes and Digestive and Kidney Diseases (U54 DK120058). Tissue was collected through the Cooperative Human Tissue Network with support provided by the NIH National Cancer Institute (5 UM1 CA183727-08).",
+            "display_doi": "HBM875.QHDJ.259",
+            "entity_type": "Dataset",
+            "group_uuid": "73bb26e4-ed43-11e8-8f19-0a7c1eab007a",
+            "last_modified_timestamp": 1603568273059,
+            "metadata": {
+                "dag_provenance_list": [
+                    {
+                        "hash": "620e7c3",
+                        "origin": "https://github.com/hubmapconsortium/ingest-pipeline.git"
+                    }
+                ],
+                "metadata": {
+                    "acquisition_instrument_model": "SCN400",
+                    "acquisition_instrument_vendor": "Leica Biosystems",
+                    "analyte_class": "Polysaccharides",
+                    "assay_category": "imaging",
+                    "assay_type": "PAS microscopy",
+                    "collectiontype": "single_metadatatsv",
+                    "data_path": "processedMicroscopy",
+                    "donor_id": "VAN0003",
+                    "execution_datetime": "2020-09-28 15:44",
+                    "is_targeted": "FALSE",
+                    "metadata_path": "/",
+                    "operator": "N. Heath Patterson",
+                    "operator_email": "nathan.h.patterson@vanderbilt.edu",
+                    "overall_protocols_io_doi": "10.17504/protocols.io.bfskjncw",
+                    "pi": "Jeffrey M. Spraggins",
+                    "pi_email": "jeff.spraggins@vanderbilt.edu",
+                    "protocols_io_doi": "10.17504/protocols.io.4qngvve",
+                    "resolution_x_unit": "nm",
+                    "resolution_x_value": "650",
+                    "resolution_y_unit": "nm",
+                    "resolution_y_value": "650",
+                    "resolution_z_unit": "nm",
+                    "resolution_z_value": "0",
+                    "section_prep_protocols_io_doi": "10.17504/protocols.io.7gehjte",
+                    "stain": "Periodic acid-Schiff ",
+                    "tissue_id": "VAN0003-LK-33-2"
+                }
+            },
+            "status": "Published",
+            "uuid": "8adc3c31ca84ec4b958ed20a7c4f4919"
+        }
+    ],
+    "immediate_descendants": [],
+    "index_version": "1.8.6",
+    "last_modified_timestamp": 1603568280411,
+    "mapped_create_timestamp": "2020-10-22 21:05:09",
+    "mapped_data_access_level": "Public",
+    "mapped_data_types": [
+        "PAS Stained Microscopy [Image Pyramid]"
+    ],
+    "mapped_last_modified_timestamp": "2020-10-24 19:38:00",
+    "mapped_metadata": {},
+    "mapped_status": "Published",
+    "mapper_metadata": {
+        "datetime": "2021-01-05 02:48:38.533389",
+        "size": 24928,
+        "validation_errors": [
+            {
+                "absolute_path": "/",
+                "absolute_schema_path": "/additionalProperties",
+                "message": "Additional properties are not allowed ('update_timestamp_fmted', 'update_timestamp', 'immediate_descendants', 'immediate_ancestors', 'index_version' were unexpected)"
+            },
+            {
+                "absolute_path": "/data_types",
+                "absolute_schema_path": "/properties/data_types/enum",
+                "message": "['image_pyramid', 'PAS'] is not one of ['AF', 'ATACseq-bulk', 'CODEX', 'IMC', 'LC-MS-untargeted', 'Lightsheet', 'MALDI-IMS-neg', 'MALDI-IMS-pos', 'MxIF', 'PAS', 'SNAREseq', 'TMT-LC-MS', 'Targeted-Shotgun-LC-MS', 'WGS', 'bulk-RNA', 'bulk_atacseq', 'codex_cytokit', 'image_pyramid', 'lc-ms-ms_label-free', 'lc-ms-ms_labeled', 'lc-ms_label-free', 'lc-ms_labeled', 'salmon_rnaseq_10x', 'salmon_rnaseq_bulk', 'salmon_rnaseq_sciseq', 'salmon_rnaseq_snareseq', 'salmon_sn_rnaseq_10x', 'scRNA-Seq-10x', 'sc_atac_seq_sci', 'sc_atac_seq_snare', 'sc_atac_seq_snare_lab', 'sc_rna_seq_snare_lab', 'sciATACseq', 'sciRNAseq', 'seqFish', 'seqFish_lab_processed', 'snATACseq', 'snRNAseq', 'sn_atac_seq']"
+            },
+            {
+                "absolute_path": "/donor",
+                "absolute_schema_path": "/properties/donor/required",
+                "message": "'group_name' is a required property"
+            },
+            {
+                "absolute_path": "/origin_sample",
+                "absolute_schema_path": "/properties/origin_sample/required",
+                "message": "'group_name' is a required property"
+            },
+            {
+                "absolute_path": "/source_sample/0",
+                "absolute_schema_path": "/properties/source_sample/items/required",
+                "message": "'group_name' is a required property"
+            },
+            {
+                "absolute_path": "/",
+                "absolute_schema_path": "/required",
+                "message": "'access_group' is a required property"
+            }
+        ],
+        "version": "master:624e8ca"
+    },
+    "metadata": {
+        "dag_provenance_list": [
+            {
+                "hash": "620e7c3",
+                "origin": "https://github.com/hubmapconsortium/ingest-pipeline.git"
+            },
+            {
+                "hash": "620e7c3",
+                "origin": "https://github.com/hubmapconsortium/ingest-pipeline.git"
+            },
+            {
+                "hash": "8c65f17",
+                "name": "pipeline.cwl",
+                "origin": "https://github.com/hubmapconsortium/ome-tiff-pyramid"
+            },
+            {
+                "hash": "fb19103",
+                "name": "ome-tiff-offsets.cwl",
+                "origin": "https://github.com/hubmapconsortium/portal-containers"
+            }
+        ]
+    },
+    "origin_sample": {
+        "create_timestamp": 1572634235491,
+        "created_by_user_displayname": "Elizabeth Neumann",
+        "created_by_user_email": "neumane@vanderbilt.edu",
+        "data_access_level": "public",
+        "display_doi": "HBM666.CHPF.373",
+        "entity_type": "Sample",
+        "group_uuid": "73bb26e4-ed43-11e8-8f19-0a7c1eab007a",
+        "hubmap_display_id": "VAN0003-LK",
+        "lab_tissue_sample_id": "65631",
+        "last_modified_timestamp": 1577115817703,
+        "mapped_create_timestamp": "2019-11-01 18:50:35",
+        "mapped_data_access_level": "Public",
+        "mapped_last_modified_timestamp": "2019-12-23 15:43:37",
+        "mapped_organ": "Kidney (Left)",
+        "mapped_specimen_type": "Organ",
+        "organ": "LK",
+        "organ_other": "",
+        "portal_metadata_upload_files": [],
+        "portal_uploaded_image_files": [],
+        "protocol_url": "https://dx.doi.org/10.17504/protocols.io.bfskjncw",
+        "specimen_type": "organ",
+        "uuid": "13129ad371683171b152618c83fd9e6f"
+    },
+    "source_sample": [
+        {
+            "create_timestamp": 1603259456906,
+            "created_by_user_displayname": "Jeffrey Spraggins",
+            "created_by_user_email": "jeff.spraggins@Vanderbilt.Edu",
+            "data_access_level": "public",
+            "display_doi": "HBM284.VNHX.846",
+            "entity_type": "Sample",
+            "group_uuid": "73bb26e4-ed43-11e8-8f19-0a7c1eab007a",
+            "hubmap_display_id": "VAN0003-LK-33-2",
+            "last_modified_timestamp": 1603259456911,
+            "mapped_create_timestamp": "2020-10-21 05:50:56",
+            "mapped_data_access_level": "Public",
+            "mapped_last_modified_timestamp": "2020-10-21 05:50:56",
+            "mapped_organ": "Kidney (Left)",
+            "mapped_specimen_type": "FFPE slide",
+            "organ": "LK",
+            "portal_metadata_upload_files": [],
+            "protocol_url": "https://dx.doi.org/10.17504/protocols.io.7gehjte",
+            "specimen_type": "ffpe_slide",
+            "uuid": "7d83bdacad40193debb326b6b3ca34fa"
+        }
+    ],
+    "status": "Published",
+    "update_timestamp": 1609814914824,
+    "update_timestamp_fmted": "2021-01-05 02:48:34",
+    "uuid": "f9ae931b8b49252f150d7f8bf1d2d13f"
+}

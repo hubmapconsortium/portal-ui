@@ -13,9 +13,11 @@ from vitessce import (
 from .utils import _get_matches
 from .constants import AssetPaths
 
+MOCK_URL = "https://example.com"
+
 
 class ViewConf:
-    def __init__(self, entity=None, nexus_token=None):
+    def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
 
           >> vitessce = Vitessce(entity, nexus_token)
@@ -27,6 +29,8 @@ class ViewConf:
         self._uuid = entity["uuid"]
         self._nexus_token = nexus_token
         self._entity = entity
+        self._is_mock = is_mock
+        self._files = []
 
     def build_vitessce_conf(self):
         "Build a Vitessce view conf and attach to conf attribute"
@@ -65,7 +69,10 @@ class ViewConf:
         for "rel_path/to/clusters.ome.tiff"
 
         """
-        assets_endpoint = current_app.config["ASSETS_ENDPOINT"]
+        if not self._is_mock:
+            assets_endpoint = current_app.config["ASSETS_ENDPOINT"]
+        else:
+            assets_endpoint = MOCK_URL
         base_url = urllib.parse.urljoin(assets_endpoint, f"{self._uuid}/{rel_path}")
         token_param = urllib.parse.urlencode({"token": self._nexus_token})
         return base_url + "?" + token_param
@@ -103,9 +110,9 @@ class ImagingViewConf(ViewConf):
 
 
 class ImagePyramidViewConf(ImagingViewConf):
-    def __init__(self, **kwargs):
+    def __init__(self, entity, nexus_token, is_mock):
         self.image_pyramid_regex = AssetPaths.IMAGE_PYRAMID_DIR.value
-        super().__init__(**kwargs)
+        super().__init__(entity, nexus_token, is_mock)
 
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -139,9 +146,10 @@ class ScatterplotViewConf(ViewConf):
         # We need to check that the files we expect actually exist.
         # This is due to the volatility of the datasets.
         if not set(file_paths_expected).issubset(set(file_paths_found)):
-            current_app.logger.info(
-                f'Files for uuid "{self._uuid}" not found as expected.'
-            )
+            if not self._is_mock:
+                current_app.logger.info(
+                    f'Files for uuid "{self._uuid}" not found as expected.'
+                )
             return self
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")

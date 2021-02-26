@@ -8,7 +8,7 @@ from vitessce import (
     DataType as dt,
     FileType as ft,
 )
-from hubmap_commons.type_client import TypeClient 
+from hubmap_commons.type_client import TypeClient
 
 from .utils import (
     _group_by_file_name,
@@ -73,8 +73,9 @@ class SeqFISHViewConf(ImagingViewConf):
 
 
 class CytokitSPRMConf(SPRMViewConf):
-    def __init__(self, **kwargs):
+    def __init__(self, entity, nexus_token, is_mock):
         # All "file" Vitessce objects that do not have wrappers.
+        super().__init__(entity, nexus_token, is_mock)
         self._files = [
             {
                 "rel_path": f"{AssetPaths.CODDEX_SPRM_DIR.value}/"
@@ -95,7 +96,6 @@ class CytokitSPRMConf(SPRMViewConf):
                 "data_type": dt.EXPRESSION_MATRIX,
             },
         ]
-        super().__init__(**kwargs)
 
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -134,7 +134,8 @@ class CytokitSPRMConf(SPRMViewConf):
 
 
 class RNASeqConf(ScatterplotViewConf):
-    def __init__(self, **kwargs):
+    def __init__(self, entity, nexus_token, is_mock):
+        super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
@@ -148,11 +149,11 @@ class RNASeqConf(ScatterplotViewConf):
                 "data_type": dt.CELL_SETS,
             },
         ]
-        super().__init__(**kwargs)
 
 
 class ATACSeqConf(ScatterplotViewConf):
-    def __init__(self, **kwargs):
+    def __init__(self, entity, nexus_token, is_mock):
+        super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
@@ -168,12 +169,11 @@ class ATACSeqConf(ScatterplotViewConf):
                 "data_type": dt.CELL_SETS,
             },
         ]
-        super().__init__(**kwargs)
 
 
 class IMSConf(ImagePyramidViewConf):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, entity, nexus_token, is_mock):
+        super().__init__(entity, nexus_token, is_mock)
         # Do not show the separated mass-spec images.
         self.image_pyramid_regex = (
             re.escape(AssetPaths.IMAGE_PYRAMID_DIR.value) + r"(?!(/ometiffs/separate/))"
@@ -183,7 +183,7 @@ class IMSConf(ImagePyramidViewConf):
 def get_view_config_class_for_data_types(entity, nexus_token):
     data_types = entity["data_types"]
     tc = TypeClient(current_app.config['TYPE_SERVICE_ENDPOINT'])
-    assay_objs = [tc.getAssayType(dt) for dt in entity["data_types"]]
+    assay_objs = [tc.getAssayType(dt) for dt in data_types]
     assay_names = [assay.name for assay in assay_objs]
     hints = [hint for assay in assay_objs for hint in assay.vitessce_hints]
     if 'is_image' in hints:
