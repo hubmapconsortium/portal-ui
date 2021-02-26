@@ -35,6 +35,11 @@ function HeaderContent({ anchorRef }) {
             </HeaderButton>
           </FlexNoWrap>
           <Spacer />
+
+          {/*
+              If this changes, remember to update Menu.jsx!
+          */}
+
           <Dropdown title="Previews" menuListId="preview-options">
             <PreviewLinks />
           </Dropdown>
