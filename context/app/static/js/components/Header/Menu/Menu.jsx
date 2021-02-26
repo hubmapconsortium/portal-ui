@@ -43,6 +43,7 @@ function Menu(props) {
             {openDocumentation && <DocumentationLinks isIndented />}
             <DropdownLink href="/ccf-eui">CCF</DropdownLink>
           </MenuList>
+          <DropdownLink href="/my-lists">My Lists</DropdownLink>
         </WidePaper>
       </WidePopper>
     </>

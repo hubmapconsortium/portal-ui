@@ -1,0 +1,1 @@
+- Add "My Lists" to the header menu when the window in narrow.
