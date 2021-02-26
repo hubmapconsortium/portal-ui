@@ -1,5 +1,6 @@
 import re
 
+from flask import current_app
 from vitessce import (
     VitessceConfig,
     MultiImageWrapper,
@@ -7,6 +8,7 @@ from vitessce import (
     DataType as dt,
     FileType as ft,
 )
+from hubmap_commons.type_client import TypeClient 
 
 from .utils import (
     _group_by_file_name,
@@ -180,42 +182,22 @@ class IMSConf(ImagePyramidViewConf):
 
 def get_view_config_class_for_data_types(entity, nexus_token):
     data_types = entity["data_types"]
-    if Assays.IMAGE_PYRAMID.value in data_types and Assays.SEQFISH.value in data_types:
-        return SeqFISHViewConf(entity=entity, nexus_token=nexus_token)
-    if (
-        Assays.MALDI_IMS_NEG.value in data_types
-        or Assays.MALDI_IMS_POS.value in data_types
-        and Assays.IMAGE_PYRAMID.value in data_types
-    ):
-        return IMSConf(entity=entity, nexus_token=nexus_token)
-    if Assays.IMAGE_PYRAMID.value in data_types:
+    tc = TypeClient(current_app.config['TYPE_SERVICE_ENDPOINT'])
+    assay_objs = [tc.getAssayType(dt) for dt in entity["data_types"]]
+    assay_names = [assay.name for assay in assay_objs]
+    hints = [hint for assay in assay_objs for hint in assay.vitessce_hints]
+    if 'is_image' in hints:
+        if 'codex' in hints:
+            return CytokitSPRMConf(entity=entity, nexus_token=nexus_token)
+        if Assays.SEQFISH.value in assay_names:
+            return SeqFISHViewConf(entity=entity, nexus_token=nexus_token)
+        if (
+            Assays.MALDI_IMS_NEG.value in assay_names
+            or Assays.MALDI_IMS_POS.value in assay_names
+        ):
+            return IMSConf(entity=entity, nexus_token=nexus_token)
         return ImagePyramidViewConf(entity=entity, nexus_token=nexus_token)
-    if Assays.CODEX_CYTOKIT.value in data_types:
-        return CytokitSPRMConf(entity=entity, nexus_token=nexus_token)
-    if (
-        len(
-            set(
-                [
-                    Assays.SCRNA_SEQ_10X.value,
-                    Assays.SCRNA_SEQ_SN.value,
-                    Assays.SCRNA_SEQ_SCI.value,
-                    Assays.SCRNA_SEQ_SNARE.value,
-                ]
-            ).intersection(data_types)
-        )
-        != 0
-    ):
+    if 'rna' in hints:
         return RNASeqConf(entity=entity, nexus_token=nexus_token)
-    if (
-        len(
-            set(
-                [
-                    Assays.SCATAC_SEQ_SCI.value,
-                    Assays.SCATAC_SEQ_SNARE.value,
-                    Assays.SCATAC_SEQ_SN.value,
-                ]
-            ).intersection(data_types)
-        )
-        != 0
-    ):
+    if 'atac' in hints:
         return ATACSeqConf(entity=entity, nexus_token=nexus_token)
