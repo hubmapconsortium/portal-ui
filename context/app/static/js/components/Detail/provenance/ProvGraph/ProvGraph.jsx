@@ -24,7 +24,7 @@ function removeExistingSteps(steps, newSteps) {
   return uniqueNewSteps;
 }
 
-const useProvenanceStoreSelector = (state) => ({ steps: state.steps, setSteps: state.setSteps });
+const useProvenanceStoreSelector = (state) => ({ steps: state.steps, addDescendantSteps: state.addDescendantSteps });
 
 function ProvGraph(props) {
   const { provData, display_doi } = props;
@@ -45,12 +45,12 @@ function ProvGraph(props) {
     return entity ? `${entity[typeKey]} - ${entity[idKey]}` : id;
   }
 
-  function renderDetailPane(prov) {
+  function renderDetailPane(prov, nodeName) {
     function DetailPanel() {
       const { elasticsearchEndpoint, entityEndpoint, nexusToken } = useContext(AppContext);
-      const { steps, setSteps } = useProvenanceStore(useProvenanceStoreSelector);
+      const { steps, addDescendantSteps } = useProvenanceStore(useProvenanceStoreSelector);
 
-      async function getMoreSteps() {
+      async function getAndAddImmediateDescendants() {
         const results = await getImmediateDescendantProv(
           display_doi,
           elasticsearchEndpoint,
@@ -61,13 +61,11 @@ function ProvGraph(props) {
           .map((result) => new ProvData(result, getNameForActivity, getNameForEntity).toCwl())
           .flat();
         const uniqueNewSteps = removeExistingSteps(steps, moreSteps);
+        addDescendantSteps(nodeName, uniqueNewSteps);
+      }
 
-        const stepsCopy = [...steps];
-        stepsCopy[0].outputs[0].target = [
-          { step: 'Create Sample Activity - HBM229.JTTG.749', name: 'Donor - HBM546.MHVZ.749' },
-        ];
-        const x = [...stepsCopy, ...uniqueNewSteps];
-        setSteps(x);
+      function handleShowDescendants() {
+        getAndAddImmediateDescendants();
       }
 
       const typeEl =
@@ -99,7 +97,7 @@ function ProvGraph(props) {
       const actionsEl =
         typeKey in prov && ['Donor', 'Sample', 'Dataset'].includes(prov[typeKey]) ? (
           <SectionItem ml>
-            <Button color="primary" variant="contained" onClick={getMoreSteps}>
+            <Button color="primary" variant="contained" onClick={handleShowDescendants}>
               Show Descendants
             </Button>
           </SectionItem>
