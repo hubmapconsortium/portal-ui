@@ -6,11 +6,10 @@ from itertools import groupby
 def get_matches(files, regex):
     return list(
         set(
-                match[0]
-                for match in set(re.search(regex, file) for file in files)
-                if match
+            match[0] for match in set(re.search(regex, file) for file in files) if match
         )
     )
+
 
 def _get_path_name(file):
     return Path(file).name

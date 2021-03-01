@@ -20,7 +20,7 @@ class ViewConf:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
 
-        >>> vitessce = Vitessce(entity, nexus_token)
+        >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
 
         """
 
@@ -39,18 +39,10 @@ class ViewConf:
     def _replace_url_in_file(self, file):
         """Replace url in incoming file object
 
-        for input file
-        {
-          'type': 'CELLS',
-          'file_type': 'cells.json',
-          'rel_path': 'cells.json',
-        }
-        returns
-        {
-          'type': 'CELLS',
-          'file_type': 'cells.json',
-          'url': 'https://assets.dev.hubmapconsortium.org/uuid/cells.json',
-        }
+        >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
+        >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
+        >>> vc._replace_url_in_file(file)
+        {'data_type': 'CELLS', 'file_type': 'cells.json', 'url': 'https://example.com/uuid/cells.json?token=nexus_token'}
         """
 
         return {
@@ -62,11 +54,9 @@ class ViewConf:
     def _build_assets_url(self, rel_path):
         """Create a url for an asset.
 
-        returns e.g
-
-        'https://assets.dev.hubmapconsortium.org/uuid/rel_path/to/clusters.ome.tiff'
-
-        for "rel_path/to/clusters.ome.tiff"
+        >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
+        >>> vc._build_assets_url("rel_path/to/clusters.ome.tiff")
+        'https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=nexus_token'
 
         """
         if not self._is_mock:
@@ -81,13 +71,10 @@ class ViewConf:
 class ImagingViewConf(ViewConf):
     def _get_img_and_offset_url(self, img_path, img_dir):
         """Create a url for the offsets and img.
-
-        returns e.g
-
-        'https://assets.dev.hubmapconsortium.org/uuid/rel_path/to/clusters.ome.tiff',
-        'https://assets.dev.hubmapconsortium.org/uuid/output_offsets/clusters.offsets.json'
-
-        for "rel_path/to/clusters.ome.tiff" and "rel_path/to"
+        >>> vc = ImagingViewConf(entity={ "uuid": "uuid" },\
+            nexus_token='nexus_token', is_mock=True)
+        >>> vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff", "rel_path/to")
+        ('https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=nexus_token', 'https://example.com/uuid/output_offsets/clusters.offsets.json?token=nexus_token')
 
         """
         img_url = self._build_assets_url(img_path)

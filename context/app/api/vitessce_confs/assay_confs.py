@@ -29,12 +29,12 @@ from .constants import (
 class SeqFISHViewConf(ImagingViewConf):
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        full_seqfish_reqex = (
-            '/'.join([
-              AssetPaths.IMAGE_PYRAMID_DIR.value,
-              AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value,
-              AssetPaths.SEQFISH_FILE_REGEX.value
-            ])
+        full_seqfish_reqex = "/".join(
+            [
+                AssetPaths.IMAGE_PYRAMID_DIR.value,
+                AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value,
+                AssetPaths.SEQFISH_FILE_REGEX.value,
+            ]
         )
         found_images = get_matches(file_paths_found, full_seqfish_reqex)
         # Get all files grouped by PosN names.
@@ -185,22 +185,28 @@ class IMSConf(ImagePyramidViewConf):
 
 def get_view_config_class_for_data_types(entity, nexus_token):
     data_types = entity["data_types"]
-    tc = TypeClient(current_app.config['TYPE_SERVICE_ENDPOINT'])
+    tc = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
     assay_objs = [tc.getAssayType(dt) for dt in data_types]
     assay_names = [assay.name for assay in assay_objs]
     hints = [hint for assay in assay_objs for hint in assay.vitessce_hints]
-    if 'is_image' in hints:
-        if 'codex' in hints:
-            return CytokitSPRMConf(entity=entity, nexus_token=nexus_token, is_mock=False)
+    if "is_image" in hints:
+        if "codex" in hints:
+            return CytokitSPRMConf(
+                entity=entity, nexus_token=nexus_token, is_mock=False
+            )
         if Assays.SEQFISH.value in assay_names:
-            return SeqFISHViewConf(entity=entity, nexus_token=nexus_token, is_mock=False)
+            return SeqFISHViewConf(
+                entity=entity, nexus_token=nexus_token, is_mock=False
+            )
         if (
             Assays.MALDI_IMS_NEG.value in assay_names
             or Assays.MALDI_IMS_POS.value in assay_names
         ):
             return IMSConf(entity=entity, nexus_token=nexus_token, is_mock=False)
-        return ImagePyramidViewConf(entity=entity, nexus_token=nexus_token, is_mock=False)
-    if 'rna' in hints:
+        return ImagePyramidViewConf(
+            entity=entity, nexus_token=nexus_token, is_mock=False
+        )
+    if "rna" in hints:
         return RNASeqConf(entity=entity, nexus_token=nexus_token, is_mock=False)
-    if 'atac' in hints:
+    if "atac" in hints:
         return ATACSeqConf(entity=entity, nexus_token=nexus_token, is_mock=False)
