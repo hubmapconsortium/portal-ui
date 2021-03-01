@@ -10,6 +10,9 @@ function DocumentationLinks(props) {
       <DropdownLink href="/docs" isIndented={isIndented}>
         Overview
       </DropdownLink>
+      <DropdownLink href="/docs/software" isIndented={isIndented}>
+        Software
+      </DropdownLink>
       <DropdownLink href="/docs/faq" isIndented={isIndented}>
         FAQ
       </DropdownLink>
