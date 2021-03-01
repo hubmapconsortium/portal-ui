@@ -1,45 +1,18 @@
-import React, { useState, useContext } from 'react';
-import Button from '@material-ui/core/Button';
+import React, { useEffect } from 'react';
 import Graph, { GraphParser } from '@hms-dbmi-bgm/react-workflow-viz';
 
-import { AppContext } from 'js/components/Providers';
-import { getImmediateDescendantProv } from 'js/hooks/useImmediateDescendantProv';
+import useProvenanceStore from 'js/stores/useProvenanceStore';
 import ProvData from './ProvData';
 
-function createStepNameSet(steps) {
-  const nameSet = new Set([]);
-  steps.forEach((step) => nameSet.add(step.name));
-  return nameSet;
-}
-
-function removeExistingSteps(steps, newSteps) {
-  const nameSet = createStepNameSet(steps);
-  const uniqueNewSteps = [...newSteps].filter((step) => !nameSet.has(step.name));
-  return uniqueNewSteps;
-}
+const useProvenanceStoreSelector = (state) => ({ steps: state.steps, setSteps: state.setSteps });
 
 export default function ProvVis(props) {
-  const { provData, display_doi, getNameForActivity, getNameForEntity, renderDetailPane } = props;
-  const defaultSteps = new ProvData(provData, getNameForActivity, getNameForEntity).toCwl();
+  const { provData, getNameForActivity, getNameForEntity, renderDetailPane } = props;
+  const { steps, setSteps } = useProvenanceStore(useProvenanceStoreSelector);
 
-  const [steps, setSteps] = useState(defaultSteps);
-
-  const { elasticsearchEndpoint, entityEndpoint, nexusToken } = useContext(AppContext);
-
-  async function getMoreSteps() {
-    const results = await getImmediateDescendantProv(display_doi, elasticsearchEndpoint, entityEndpoint, nexusToken);
-    const moreSteps = results
-      .map((result) => new ProvData(result, getNameForActivity, getNameForEntity).toCwl())
-      .flat();
-    const uniqueNewSteps = removeExistingSteps(steps, moreSteps);
-
-    const stepsCopy = steps;
-    stepsCopy[0].outputs[0].target = [
-      { step: 'Create Sample Activity - HBM229.JTTG.749', name: 'Donor - HBM546.MHVZ.749' },
-    ];
-    const x = [...stepsCopy, ...uniqueNewSteps];
-    setSteps(x);
-  }
+  useEffect(() => {
+    setSteps(new ProvData(provData, getNameForActivity, getNameForEntity).toCwl());
+  }, [provData, getNameForActivity, getNameForEntity, setSteps]);
 
   // eslint-disable-next-line consistent-return
   function renderDetailPaneWithNode(node) {
@@ -61,7 +34,6 @@ export default function ProvVis(props) {
       >
         <Graph rowSpacingType="compact" minimumHeight={300} renderDetailPane={renderDetailPaneWithNode} />
       </GraphParser>
-      <Button onClick={() => getMoreSteps()}> Hello </Button>
     </>
   );
 }
