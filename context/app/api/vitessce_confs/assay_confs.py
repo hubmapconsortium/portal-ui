@@ -30,9 +30,11 @@ class SeqFISHViewConf(ImagingViewConf):
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         full_seqfish_reqex = (
-            f"{AssetPaths.IMAGE_PYRAMID_DIR.value}/"
-            + f"{AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value}/"
-            + AssetPaths.SEQFISH_FILE_REGEX.value
+            '/'.join([
+              AssetPaths.IMAGE_PYRAMID_DIR.value,
+              AssetPaths.SEQFISH_HYB_CYCLE_REGEX.value,
+              AssetPaths.SEQFISH_FILE_REGEX.value
+            ])
         )
         found_images = _get_matches(file_paths_found, full_seqfish_reqex)
         # Get all files grouped by PosN names.
@@ -41,19 +43,20 @@ class SeqFISHViewConf(ImagingViewConf):
         # Build up a conf for each Pos.
         for images in images_by_pos:
             image_wrappers = []
-            vc = VitessceConfig(name=self._get_pos_name(images[0]))
-            dataset = vc.add_dataset(name=self._get_pos_name(images[0]))
-            for k, img_path in enumerate(sorted(images, key=self._get_hybcycle)):
+            pos_name = self._get_pos_name(images[0])
+            vc = VitessceConfig(name=pos_name)
+            dataset = vc.add_dataset(name=pos_name)
+            for img_path in sorted(images, key=self._get_hybcycle):
                 img_url, offsets_url = self._get_img_and_offset_url(
                     img_path, AssetPaths.IMAGE_PYRAMID_DIR.value
                 )
-                image_wrappers += [
+                image_wrappers.append(
                     OmeTiffWrapper(
                         img_url=img_url,
                         offsets_url=offsets_url,
                         name=self._get_hybcycle(img_path),
                     )
-                ]
+                )
             dataset = dataset.add_object(MultiImageWrapper(image_wrappers))
             vc = self._setup_view_config_raster(vc, dataset)
             conf = vc.to_dict()
@@ -176,7 +179,7 @@ class IMSConf(ImagePyramidViewConf):
         super().__init__(entity, nexus_token, is_mock)
         # Do not show the separated mass-spec images.
         self.image_pyramid_regex = (
-            re.escape(AssetPaths.IMAGE_PYRAMID_DIR.value) + r"(?!(/ometiffs/separate/))"
+            re.escape(AssetPaths.IMAGE_PYRAMID_DIR.value) + r"(?!/ometiffs/separate/)"
         )
 
 

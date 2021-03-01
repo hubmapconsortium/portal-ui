@@ -10,7 +10,7 @@ from vitessce import (
     Component as cm,
 )
 
-from .utils import _get_matches
+from .utils import get_matches
 from .constants import AssetPaths
 
 MOCK_URL = "https://example.com"
@@ -20,7 +20,7 @@ class ViewConf:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
 
-          >> vitessce = Vitessce(entity, nexus_token)
+        >>> vitessce = Vitessce(entity, nexus_token)
 
         """
 
@@ -97,7 +97,7 @@ class ImagingViewConf(ViewConf):
                 re.sub(
                     r"ome\.tiff?",
                     "offsets.json",
-                    str(re.sub(img_dir, AssetPaths.OFFSETS_DIR.value, img_url)),
+                    re.sub(img_dir, AssetPaths.OFFSETS_DIR.value, img_url),
                 )
             ),
         )

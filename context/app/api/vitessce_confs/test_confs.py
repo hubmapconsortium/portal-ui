@@ -62,13 +62,7 @@ def test_get_img_and_offset_url():
 
 def test_codex():
     assay = "codex"
-    with open(
-        os.path.join(
-            os.path.dirname(__file__), f"fixtures/input_entity/{assay}_entity.json"
-        ),
-        "r",
-    ) as f:
-        entity = json.loads(f.read())
+    entity = json.loads((Path(__file__).parent / f"fixtures/input_entity/{assay}_entity.json").read_text())
     vc = CytokitSPRMConf(entity=entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True)
     vc.build_vitessce_conf()
     with open(
