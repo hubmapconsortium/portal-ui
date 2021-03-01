@@ -8,7 +8,6 @@ from vitessce import (
     DataType as dt,
     FileType as ft,
 )
-from hubmap_commons.type_client import TypeClient
 
 from .utils import (
     group_by_file_name,
@@ -20,10 +19,7 @@ from .base_confs import (
     ImagePyramidViewConf,
     SPRMViewConf,
 )
-from .constants import (
-    Assays,
-    AssetPaths,
-)
+from .constants import Assays, AssetPaths, CommonsTypeClient
 
 
 class SeqFISHViewConf(ImagingViewConf):
@@ -185,8 +181,8 @@ class IMSConf(ImagePyramidViewConf):
 
 def get_view_config_class_for_data_types(entity, nexus_token):
     data_types = entity["data_types"]
-    tc = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
-    assay_objs = [tc.getAssayType(dt) for dt in data_types]
+    tc = CommonsTypeClient()
+    assay_objs = [tc.get_assay(dt) for dt in data_types]
     assay_names = [assay.name for assay in assay_objs]
     hints = [hint for assay in assay_objs for hint in assay.vitessce_hints]
     if "is_image" in hints:
