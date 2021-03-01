@@ -10,7 +10,7 @@ import { hasDataTypes } from './utils';
 
 function ProvTabs(props) {
   const { uuid, assayMetadata, provData } = props;
-  const { metadata, entity_type, ancestors, data_types } = assayMetadata;
+  const { metadata, entity_type, ancestors, data_types, display_doi } = assayMetadata;
 
   const [open, setOpen] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -54,7 +54,7 @@ function ProvTabs(props) {
         </StyledTabPanel>
       )}
       <StyledTabPanel value={open} index={graphIndex}>
-        <ProvGraph provData={provData} />
+        <ProvGraph provData={provData} display_doi={display_doi} />
       </StyledTabPanel>
       {shouldDisplayDag && (
         <StyledTabPanel value={open} index={dagIndex} pad={1}>

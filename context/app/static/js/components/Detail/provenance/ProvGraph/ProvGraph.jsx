@@ -8,7 +8,7 @@ import { StyledTypography, FlexPaper } from './style';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 
 function ProvGraph(props) {
-  const { provData } = props;
+  const { provData, display_doi } = props;
   const isOld = 'ex' in provData.prefix;
   const idKey = isOld ? 'hubmap:displayDOI' : 'hubmap:hubmap_id';
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
@@ -65,6 +65,7 @@ function ProvGraph(props) {
   return (
     <ProvVis
       provData={provData}
+      display_doi={display_doi}
       getNameForActivity={getNameForActivity}
       getNameForEntity={getNameForEntity}
       renderDetailPane={renderDetailPane}
