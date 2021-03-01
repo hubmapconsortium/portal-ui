@@ -116,7 +116,7 @@ class ImagePyramidViewConf(ImagingViewConf):
 
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_images = _get_matches(
+        found_images = get_matches(
             file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
         )
         vc = VitessceConfig(name="HuBMAP Data Portal")

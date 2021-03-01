@@ -11,8 +11,8 @@ from vitessce import (
 from hubmap_commons.type_client import TypeClient
 
 from .utils import (
-    _group_by_file_name,
-    _get_matches,
+    group_by_file_name,
+    get_matches,
 )
 from .base_confs import (
     ImagingViewConf,
@@ -36,9 +36,9 @@ class SeqFISHViewConf(ImagingViewConf):
               AssetPaths.SEQFISH_FILE_REGEX.value
             ])
         )
-        found_images = _get_matches(file_paths_found, full_seqfish_reqex)
+        found_images = get_matches(file_paths_found, full_seqfish_reqex)
         # Get all files grouped by PosN names.
-        images_by_pos = _group_by_file_name(found_images)
+        images_by_pos = group_by_file_name(found_images)
         confs = []
         # Build up a conf for each Pos.
         for images in images_by_pos:
@@ -102,7 +102,7 @@ class CytokitSPRMConf(SPRMViewConf):
 
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_tiles = _get_matches(file_paths_found, AssetPaths.TILE_REGEX.value)
+        found_tiles = get_matches(file_paths_found, AssetPaths.TILE_REGEX.value)
         confs = []
         for index, tile in enumerate(sorted(found_tiles)):
             vc = VitessceConfig(name=tile)
@@ -191,16 +191,16 @@ def get_view_config_class_for_data_types(entity, nexus_token):
     hints = [hint for assay in assay_objs for hint in assay.vitessce_hints]
     if 'is_image' in hints:
         if 'codex' in hints:
-            return CytokitSPRMConf(entity=entity, nexus_token=nexus_token)
+            return CytokitSPRMConf(entity=entity, nexus_token=nexus_token, is_mock=False)
         if Assays.SEQFISH.value in assay_names:
-            return SeqFISHViewConf(entity=entity, nexus_token=nexus_token)
+            return SeqFISHViewConf(entity=entity, nexus_token=nexus_token, is_mock=False)
         if (
             Assays.MALDI_IMS_NEG.value in assay_names
             or Assays.MALDI_IMS_POS.value in assay_names
         ):
-            return IMSConf(entity=entity, nexus_token=nexus_token)
-        return ImagePyramidViewConf(entity=entity, nexus_token=nexus_token)
+            return IMSConf(entity=entity, nexus_token=nexus_token, is_mock=False)
+        return ImagePyramidViewConf(entity=entity, nexus_token=nexus_token, is_mock=False)
     if 'rna' in hints:
-        return RNASeqConf(entity=entity, nexus_token=nexus_token)
+        return RNASeqConf(entity=entity, nexus_token=nexus_token, is_mock=False)
     if 'atac' in hints:
-        return ATACSeqConf(entity=entity, nexus_token=nexus_token)
+        return ATACSeqConf(entity=entity, nexus_token=nexus_token, is_mock=False)
