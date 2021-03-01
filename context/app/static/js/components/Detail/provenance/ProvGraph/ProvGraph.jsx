@@ -27,7 +27,7 @@ function removeExistingSteps(steps, newSteps) {
 const useProvenanceStoreSelector = (state) => ({ steps: state.steps, addDescendantSteps: state.addDescendantSteps });
 
 function ProvGraph(props) {
-  const { provData, display_doi } = props;
+  const { provData } = props;
   const isOld = 'ex' in provData.prefix;
   const idKey = isOld ? 'hubmap:displayDOI' : 'hubmap:hubmap_id';
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
@@ -52,7 +52,7 @@ function ProvGraph(props) {
 
       async function getAndAddImmediateDescendants() {
         const results = await getImmediateDescendantProv(
-          display_doi,
+          prov[idKey],
           elasticsearchEndpoint,
           entityEndpoint,
           nexusToken,
@@ -117,7 +117,6 @@ function ProvGraph(props) {
   return (
     <ProvVis
       provData={provData}
-      display_doi={display_doi}
       getNameForActivity={getNameForActivity}
       getNameForEntity={getNameForEntity}
       renderDetailPane={renderDetailPane}
