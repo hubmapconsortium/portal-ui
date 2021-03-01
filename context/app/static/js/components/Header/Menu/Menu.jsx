@@ -55,6 +55,7 @@ function Menu(props) {
             </DropdownMenuItem>
             {openDocumentation && <DocumentationLinks isIndented />}
           </MenuList>
+          <DropdownLink href="/my-lists">My Lists</DropdownLink>
         </WidePaper>
       </WidePopper>
     </>
