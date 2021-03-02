@@ -1,1 +1,0 @@
-- Replace CCF link with menu.

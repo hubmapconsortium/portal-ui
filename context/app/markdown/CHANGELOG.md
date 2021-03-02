@@ -1,3 +1,13 @@
+## v0.13.0 - 2021-03-02
+
+- Replace CCF link with menu.
+- Add "My Lists" to the header menu when the window in narrow.
+- Add software link to header menu.
+- Remove hard-coded assay types from Vitessce, replace with type service.
+- Add hubmap-commons to requirements.txt
+- Upgrade dependency to agree with commons.
+
+
 ## v0.12.3 - 2021-02-23
 
 - Fix eslint errors from description component export.
