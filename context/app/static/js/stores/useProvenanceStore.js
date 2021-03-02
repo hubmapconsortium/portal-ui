@@ -16,10 +16,18 @@ const useProvenanceStore = create(
         state.steps = [...state.steps, ...steps];
       }),
     stitchEntityDescendantSteps: (nodeName, descendantSteps) => {
-      const index = get().steps.findIndex((step) => step.outputs[0].name === nodeName);
-      const outputsArray = descendantSteps.map((step) => ({ step: step.name, name: nodeName }));
-      set((state) => {
-        state.steps[index].outputs[0].target = outputsArray;
+      descendantSteps.forEach((descendantStep) => {
+        descendantStep.inputs.forEach((input) => {
+          get().steps.forEach((step, stepIndex) => {
+            const outputIndex = step.outputs.findIndex((output) => output.name === input.name);
+            if (outputIndex >= 0) {
+              const output = { step: descendantStep.name, name: input.name };
+              set((state) => {
+                state.steps[stepIndex].outputs[outputIndex].target.push(output);
+              });
+            }
+          });
+        });
       });
     },
     addDescendantSteps: (nodeName, descendantSteps) => {
