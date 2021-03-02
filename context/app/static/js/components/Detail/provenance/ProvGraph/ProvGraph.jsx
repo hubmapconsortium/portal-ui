@@ -98,7 +98,7 @@ function ProvGraph(props) {
         typeKey in prov && ['Donor', 'Sample', 'Dataset'].includes(prov[typeKey]) ? (
           <SectionItem ml>
             <Button color="primary" variant="contained" onClick={handleShowDescendants}>
-              Show Descendants
+              Show Derived Entities
             </Button>
           </SectionItem>
         ) : null;
