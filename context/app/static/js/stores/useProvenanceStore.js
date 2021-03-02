@@ -16,10 +16,12 @@ const useProvenanceStore = create(
         state.steps = [...state.steps, ...steps];
       }),
     stitchEntityDescendantSteps: (nodeName, descendantSteps) => {
+      // check new steps inputs to see if they exist in current steps
       descendantSteps.forEach((descendantStep) => {
         descendantStep.inputs.forEach((input) => {
           get().steps.forEach((step, stepIndex) => {
             const outputIndex = step.outputs.findIndex((output) => output.name === input.name);
+            // if input exists as an output of an existing step add new step as target
             if (outputIndex >= 0) {
               const output = { step: descendantStep.name, name: input.name };
               set((state) => {
