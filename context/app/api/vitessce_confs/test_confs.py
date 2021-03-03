@@ -28,12 +28,12 @@ AssayConfClasses = {
 
 
 def test_assays():
+    parent_dir = Path(__file__).parent
     for entity_file in glob.glob(
-        str(Path(__file__).parent / f"{FIXTURES_INPUT_DIR}/*_entity.json")
+        str(parent_dir / f"{FIXTURES_INPUT_DIR}/*_entity.json")
     ):
         assay = re.search(
-            str(Path(__file__).parent / f"{FIXTURES_INPUT_DIR}/(.*)_entity.json"),
-            entity_file,
+            str(parent_dir / f"{FIXTURES_INPUT_DIR}/(.*)_entity.json"), entity_file,
         )[1]
         entity = json.loads(Path(entity_file).read_text())
         AssayViewConfClass = AssayConfClasses[assay]
@@ -43,8 +43,7 @@ def test_assays():
         vc.build_vitessce_conf()
         conf_expected = json.loads(
             (
-                Path(__file__).parent
-                / f"{FIXTURES_EXPECTED_OUTPUT_DIR}/{assay}_conf.json"
+                parent_dir / f"{FIXTURES_EXPECTED_OUTPUT_DIR}/{assay}_conf.json"
             ).read_text()
         )
         assert conf_expected == vc.conf
