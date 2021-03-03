@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
 import SectionItem from 'js/components/Detail/SectionItem';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { AppContext } from 'js/components/Providers';
-import { getImmediateDescendantProv } from 'js/hooks/useImmediateDescendantProv';
+import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
 import ProvVis from '../ProvVis';
 import { StyledTypography, FlexPaper } from './style';
@@ -49,23 +49,26 @@ function ProvGraph(props) {
     function DetailPanel() {
       const { elasticsearchEndpoint, entityEndpoint, nexusToken } = useContext(AppContext);
       const { steps, addDescendantSteps } = useProvenanceStore(useProvenanceStoreSelector);
+      const [newSteps, setNewSteps] = useState([]);
 
-      async function getAndAddImmediateDescendants() {
-        const results = await getImmediateDescendantProv(
-          prov[idKey],
-          elasticsearchEndpoint,
-          entityEndpoint,
-          nexusToken,
-        );
-        const moreSteps = results
-          .map((result) => new ProvData(result, getNameForActivity, getNameForEntity).toCwl())
-          .flat();
-        const uniqueNewSteps = removeExistingSteps(steps, moreSteps);
-        addDescendantSteps(uniqueNewSteps);
-      }
+      const { immediateDescendantsProvData } = useImmediateDescendantProv(
+        prov[idKey],
+        elasticsearchEndpoint,
+        entityEndpoint,
+        nexusToken,
+      );
+
+      useEffect(() => {
+        if (immediateDescendantsProvData) {
+          const immediateDescendantSteps = immediateDescendantsProvData
+            .map((result) => new ProvData(result, getNameForActivity, getNameForEntity).toCwl())
+            .flat();
+          setNewSteps(removeExistingSteps(steps, immediateDescendantSteps));
+        }
+      }, [immediateDescendantsProvData, steps]);
 
       function handleShowDescendants() {
-        getAndAddImmediateDescendants();
+        addDescendantSteps(newSteps);
       }
 
       const typeEl =
@@ -97,7 +100,12 @@ function ProvGraph(props) {
       const actionsEl =
         typeKey in prov && ['Donor', 'Sample', 'Dataset'].includes(prov[typeKey]) ? (
           <SectionItem ml>
-            <Button color="primary" variant="contained" onClick={handleShowDescendants}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={handleShowDescendants}
+              disabled={newSteps.length === 0}
+            >
               Show Derived Entities
             </Button>
           </SectionItem>
