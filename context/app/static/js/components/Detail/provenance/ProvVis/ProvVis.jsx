@@ -17,7 +17,7 @@ export default function ProvVis(props) {
   // eslint-disable-next-line consistent-return
   function renderDetailPaneWithNode(node) {
     if (renderDetailPane && node) {
-      return renderDetailPane(node.meta.prov, node.name);
+      return renderDetailPane(node.meta.prov);
     }
   }
   return (

@@ -45,7 +45,7 @@ function ProvGraph(props) {
     return entity ? `${entity[typeKey]} - ${entity[idKey]}` : id;
   }
 
-  function renderDetailPane(prov, nodeName) {
+  function renderDetailPane(prov) {
     function DetailPanel() {
       const { elasticsearchEndpoint, entityEndpoint, nexusToken } = useContext(AppContext);
       const { steps, addDescendantSteps } = useProvenanceStore(useProvenanceStoreSelector);
@@ -61,7 +61,7 @@ function ProvGraph(props) {
           .map((result) => new ProvData(result, getNameForActivity, getNameForEntity).toCwl())
           .flat();
         const uniqueNewSteps = removeExistingSteps(steps, moreSteps);
-        addDescendantSteps(nodeName, uniqueNewSteps);
+        addDescendantSteps(uniqueNewSteps);
       }
 
       function handleShowDescendants() {

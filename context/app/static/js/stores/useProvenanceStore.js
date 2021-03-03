@@ -15,7 +15,7 @@ const useProvenanceStore = create(
       set((state) => {
         state.steps = [...state.steps, ...steps];
       }),
-    stitchEntityDescendantSteps: (nodeName, descendantSteps) => {
+    stitchEntityDescendantSteps: (descendantSteps) => {
       // check new steps inputs to see if they exist in current steps
       descendantSteps.forEach((descendantStep) => {
         descendantStep.inputs.forEach((input) => {
@@ -32,9 +32,9 @@ const useProvenanceStore = create(
         });
       });
     },
-    addDescendantSteps: (nodeName, descendantSteps) => {
+    addDescendantSteps: (descendantSteps) => {
       if (descendantSteps.length > 0) {
-        get().stitchEntityDescendantSteps(nodeName, descendantSteps);
+        get().stitchEntityDescendantSteps(descendantSteps);
         get().addSteps(descendantSteps);
       }
     },
