@@ -38,11 +38,14 @@ class ViewConf:
 
     def _replace_url_in_file(self, file):
         """Replace url in incoming file object
-
+        >>> import pprint
+        >>> pp = pprint.PrettyPrinter()
         >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
         >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
-        >>> vc._replace_url_in_file(file)
-        {'data_type': 'CELLS', 'file_type': 'cells.json', 'url': 'https://example.com/uuid/cells.json?token=nexus_token'}
+        >>> pp.pprint(vc._replace_url_in_file(file))
+        {'data_type': 'CELLS',\n\
+         'file_type': 'cells.json',\n\
+         'url': 'https://example.com/uuid/cells.json?token=nexus_token'}
         """
 
         return {
@@ -71,10 +74,14 @@ class ViewConf:
 class ImagingViewConf(ViewConf):
     def _get_img_and_offset_url(self, img_path, img_dir):
         """Create a url for the offsets and img.
+        >>> import pprint
+        >>> pp = pprint.PrettyPrinter()
         >>> vc = ImagingViewConf(entity={ "uuid": "uuid" },\
             nexus_token='nexus_token', is_mock=True)
-        >>> vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff", "rel_path/to")
-        ('https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=nexus_token', 'https://example.com/uuid/output_offsets/clusters.offsets.json?token=nexus_token')
+        >>> pp.pprint(vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff",\
+            "rel_path/to"))
+        ('https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=nexus_token',\n\
+         'https://example.com/uuid/output_offsets/clusters.offsets.json?token=nexus_token')
 
         """
         img_url = self._build_assets_url(img_path)
