@@ -13,7 +13,7 @@ import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 import ProvData from '../ProvVis/ProvData';
 
 function createStepNameSet(steps) {
-  return new Set(steps.map((step)=> step.name));
+  return new Set(steps.map((step) => step.name));
 }
 
 function removeExistingSteps(steps, newSteps) {

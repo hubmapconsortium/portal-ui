@@ -21,17 +21,17 @@ export default function ProvVis(props) {
     }
   }
   return (
-      <GraphParser
-        parsingOptions={{
-          parseBasicIO: false,
-          showIndirectFiles: true,
-          showParameters: false,
-          showReferenceFiles: true,
-        }}
-        parentItem={{ name: 'Is this used?' }}
-        steps={steps}
-      >
-        <Graph rowSpacingType="compact" minimumHeight={300} renderDetailPane={renderDetailPaneWithNode} />
-      </GraphParser>
+    <GraphParser
+      parsingOptions={{
+        parseBasicIO: false,
+        showIndirectFiles: true,
+        showParameters: false,
+        showReferenceFiles: true,
+      }}
+      parentItem={{ name: 'Is this used?' }}
+      steps={steps}
+    >
+      <Graph rowSpacingType="compact" minimumHeight={300} renderDetailPane={renderDetailPaneWithNode} />
+    </GraphParser>
   );
 }
