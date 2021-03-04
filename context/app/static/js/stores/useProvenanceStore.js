@@ -33,10 +33,8 @@ const useProvenanceStore = create(
       });
     },
     addDescendantSteps: (descendantSteps) => {
-      if (descendantSteps.length > 0) {
-        get().stitchEntityDescendantSteps(descendantSteps);
-        get().addSteps(descendantSteps);
-      }
+      get().stitchEntityDescendantSteps(descendantSteps);
+      get().addSteps(descendantSteps);
     },
   })),
 );
