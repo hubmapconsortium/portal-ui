@@ -13,14 +13,12 @@ import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 import ProvData from '../ProvVis/ProvData';
 
 function createStepNameSet(steps) {
-  const nameSet = new Set([]);
-  steps.forEach((step) => nameSet.add(step.name));
-  return nameSet;
+  return new Set(steps.map((step)=> step.name));
 }
 
 function removeExistingSteps(steps, newSteps) {
   const nameSet = createStepNameSet(steps);
-  const uniqueNewSteps = [...newSteps].filter((step) => !nameSet.has(step.name));
+  const uniqueNewSteps = newSteps.filter((step) => !nameSet.has(step.name));
   return uniqueNewSteps;
 }
 

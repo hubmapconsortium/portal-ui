@@ -21,7 +21,6 @@ export default function ProvVis(props) {
     }
   }
   return (
-    <>
       <GraphParser
         parsingOptions={{
           parseBasicIO: false,
@@ -34,6 +33,5 @@ export default function ProvVis(props) {
       >
         <Graph rowSpacingType="compact" minimumHeight={300} renderDetailPane={renderDetailPaneWithNode} />
       </GraphParser>
-    </>
   );
 }
