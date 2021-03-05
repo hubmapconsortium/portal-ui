@@ -18,9 +18,23 @@ from .base_confs import (
     ImagePyramidViewConf,
     SPRMViewConf,
 )
-from .assays import *
-from .paths import *
-from .type_client import *
+from .assays import (
+    SEQFISH,
+    MALDI_IMS_NEG,
+    MALDI_IMS_POS,
+)
+from .paths import (
+    SCRNA_SEQ_DIR,
+    SCATAC_SEQ_DIR,
+    IMAGE_PYRAMID_DIR,
+    CODEX_TILE_DIR,
+    CODEX_SPRM_DIR,
+    TILE_REGEX,
+    SEQFISH_HYB_CYCLE_REGEX,
+    SEQFISH_FILE_REGEX
+)
+from .type_client import CommonsTypeClient
+
 
 class SeqFISHViewConf(ImagingViewConf):
     def build_vitessce_conf(self):

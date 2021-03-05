@@ -2,6 +2,8 @@ from flask import current_app
 
 from hubmap_commons.type_client import TypeClient
 from hubmap_commons.singleton_metaclass import SingletonMetaClass
+
+
 class CommonsTypeClient(object, metaclass=SingletonMetaClass):
     """
     This class builds some constant data structures based on calls to the type client.  It is a
