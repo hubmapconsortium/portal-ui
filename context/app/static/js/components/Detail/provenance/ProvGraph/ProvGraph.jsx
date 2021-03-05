@@ -55,8 +55,7 @@ function ProvGraph(props) {
         typeKey in prov && ['Donor', 'Sample', 'Dataset'].includes(prov[typeKey]) ? (
           <SectionItem ml>
             <ShowDerivedEntitiesButton
-              prov={prov}
-              idKey={idKey}
+              id={prov[idKey]}
               getNameForActivity={getNameForActivity}
               getNameForEntity={getNameForEntity}
             />

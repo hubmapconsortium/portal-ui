@@ -18,13 +18,13 @@ function removeExistingSteps(steps, newSteps) {
 
 const useProvenanceStoreSelector = (state) => ({ steps: state.steps, addDescendantSteps: state.addDescendantSteps });
 
-function ShowDerivedEntitiesButton({ prov, idKey, getNameForActivity, getNameForEntity }) {
+function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }) {
   const { elasticsearchEndpoint, entityEndpoint, nexusToken } = useContext(AppContext);
   const { steps, addDescendantSteps } = useProvenanceStore(useProvenanceStoreSelector);
   const [newSteps, setNewSteps] = useState([]);
 
   const { immediateDescendantsProvData } = useImmediateDescendantProv(
-    prov[idKey],
+    id,
     elasticsearchEndpoint,
     entityEndpoint,
     nexusToken,
