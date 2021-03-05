@@ -130,7 +130,7 @@ class ImagePyramidViewConf(ImagingViewConf):
         self.conf = vc.to_dict()
         # Don't want to render all layers
         del self.conf["datasets"][0]["files"][0]["options"]["renderLayers"]
-        return self
+        return self.conf
 
 
 class ScatterplotViewConf(ViewConf):
@@ -144,14 +144,14 @@ class ScatterplotViewConf(ViewConf):
                 current_app.logger.info(
                     f'Files for uuid "{self._uuid}" not found as expected.'
                 )
-            return self
+            return self.conf
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
         for file in self._files:
             dataset = dataset.add_file(**(self._replace_url_in_file(file)))
         vc = self._setup_scatterplot_view_config(vc, dataset)
         self.conf = vc.to_dict()
-        return self
+        return self.conf
 
     def _setup_scatterplot_view_config(self, vc, dataset):
         vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=9, h=12)
