@@ -29,9 +29,7 @@ AssayConfClasses = {
 
 def test_assays():
     parent_dir = Path(__file__).parent
-    for entity_file in glob.glob(
-        str(parent_dir / f"{FIXTURES_INPUT_DIR}/*_entity.json")
-    ):
+    for entity_file in (parent_dir / FIXTURES_INPUT_DIR).glob('*_entity.json'):
         assay = re.search(
             str(parent_dir / f"{FIXTURES_INPUT_DIR}/(.*)_entity.json"), entity_file,
         )[1]
