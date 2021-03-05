@@ -35,7 +35,7 @@ export function makeCwlInput(name, steps, extras, isReference) {
 }
 
 // export only to test.
-export function makeCwlOutput(name, steps, extras) {
+export function makeCwlOutput(name, steps, extras, isReference) {
   const id = name;
   return {
     name,
@@ -46,6 +46,7 @@ export function makeCwlOutput(name, steps, extras) {
     meta: {
       global: true,
       in_path: true,
+      type: isReference ? 'reference file' : 'data file',
     },
     // Domain-specific extras go here:
     prov: extras,
