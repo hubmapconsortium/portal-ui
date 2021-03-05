@@ -14,12 +14,6 @@ export default function ProvVis(props) {
     setSteps(new ProvData(provData, getNameForActivity, getNameForEntity).toCwl());
   }, [provData, getNameForActivity, getNameForEntity, setSteps]);
 
-  // eslint-disable-next-line consistent-return
-  function renderDetailPaneWithNode(node) {
-    if (renderDetailPane && node) {
-      return renderDetailPane(node.meta.prov);
-    }
-  }
   return (
     <GraphParser
       parsingOptions={{
@@ -31,7 +25,7 @@ export default function ProvVis(props) {
       parentItem={{ name: 'Is this used?' }}
       steps={steps}
     >
-      <Graph rowSpacingType="compact" minimumHeight={300} renderDetailPane={renderDetailPaneWithNode} />
+      <Graph rowSpacingType="compact" minimumHeight={300} renderDetailPane={renderDetailPane} />
     </GraphParser>
   );
 }

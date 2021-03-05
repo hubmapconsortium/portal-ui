@@ -8,7 +8,7 @@ import { AppContext } from 'js/components/Providers';
 import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
 import ProvVis from '../ProvVis';
-import { StyledTypography, FlexPaper } from './style';
+import { FlexPaper } from './style';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 import ProvData from '../ProvVis/ProvData';
 
@@ -43,8 +43,10 @@ function ProvGraph(props) {
     return entity ? `${entity[typeKey]} - ${entity[idKey]}` : id;
   }
 
-  function renderDetailPane(prov) {
+  function renderDetailPane(node) {
     function DetailPanel() {
+      const { prov } = node.meta;
+
       const { elasticsearchEndpoint, entityEndpoint, nexusToken } = useContext(AppContext);
       const { steps, addDescendantSteps } = useProvenanceStore(useProvenanceStoreSelector);
       const [newSteps, setNewSteps] = useState([]);
@@ -71,28 +73,22 @@ function ProvGraph(props) {
 
       const typeEl =
         typeKey in prov ? (
-          <SectionItem label="Type">
-            <StyledTypography variant="body1">{prov[typeKey]}</StyledTypography>
-          </SectionItem>
+          <SectionItem label="Type">{prov[typeKey]}</SectionItem>
         ) : (
-          <SectionItem label="Type">
-            <StyledTypography variant="body1">{prov['prov:type']}</StyledTypography>
-          </SectionItem>
+          <SectionItem label="Type">{prov['prov:type']}</SectionItem>
         );
       const idEl =
         typeKey in prov && ['Donor', 'Sample', 'Dataset'].includes(prov[typeKey]) ? (
           <SectionItem label="ID" ml>
-            <StyledTypography variant="body1">
-              <LightBlueLink href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}>
-                {prov[idKey]}
-              </LightBlueLink>
-            </StyledTypography>
+            <LightBlueLink href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}>
+              {prov[idKey]}
+            </LightBlueLink>
           </SectionItem>
         ) : null;
       const createdEl =
         timeKey in prov ? (
           <SectionItem label="Created" ml>
-            <StyledTypography variant="body1">{prov[timeKey]}</StyledTypography>
+            {prov[timeKey]}
           </SectionItem>
         ) : null;
       const actionsEl =
@@ -117,7 +113,7 @@ function ProvGraph(props) {
         </FlexPaper>
       );
     }
-    return <DetailPanel />;
+    return node?.meta?.prov && <DetailPanel />;
   }
 
   return (
