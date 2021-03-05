@@ -27,9 +27,9 @@ class SeqFISHViewConf(ImagingViewConf):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         full_seqfish_reqex = "/".join(
             [
-                IMAGE_PYRAMID_DIR.value,
-                SEQFISH_HYB_CYCLE_REGEX.value,
-                SEQFISH_FILE_REGEX.value,
+                IMAGE_PYRAMID_DIR,
+                SEQFISH_HYB_CYCLE_REGEX,
+                SEQFISH_FILE_REGEX,
             ]
         )
         found_images = get_matches(file_paths_found, full_seqfish_reqex)
@@ -44,7 +44,7 @@ class SeqFISHViewConf(ImagingViewConf):
             dataset = vc.add_dataset(name=pos_name)
             for img_path in sorted(images, key=self._get_hybcycle):
                 img_url, offsets_url = self._get_img_and_offset_url(
-                    img_path, IMAGE_PYRAMID_DIR.value
+                    img_path, IMAGE_PYRAMID_DIR
                 )
                 image_wrappers.append(
                     OmeTiffWrapper(
@@ -63,10 +63,10 @@ class SeqFISHViewConf(ImagingViewConf):
         return self.conf
 
     def _get_hybcycle(self, image_path):
-        return re.search(SEQFISH_HYB_CYCLE_REGEX.value, image_path)[0]
+        return re.search(SEQFISH_HYB_CYCLE_REGEX, image_path)[0]
 
     def _get_pos_name(self, image_path):
-        return re.search(SEQFISH_FILE_REGEX.value, image_path)[0].split(".")[
+        return re.search(SEQFISH_FILE_REGEX, image_path)[0].split(".")[
             0
         ]
 
@@ -77,20 +77,20 @@ class CytokitSPRMConf(SPRMViewConf):
         super().__init__(entity, nexus_token, is_mock)
         self._files = [
             {
-                "rel_path": f"{CODEX_SPRM_DIR.value}/"
-                + f"{TILE_REGEX.value}.cells.json",
+                "rel_path": f"{CODEX_SPRM_DIR}/"
+                + f"{TILE_REGEX}.cells.json",
                 "file_type": ft.CELLS_JSON,
                 "data_type": dt.CELLS,
             },
             {
-                "rel_path": f"{CODEX_SPRM_DIR.value}/"
-                + f"{TILE_REGEX.value}.cell-sets.json",
+                "rel_path": f"{CODEX_SPRM_DIR}/"
+                + f"{TILE_REGEX}.cell-sets.json",
                 "file_type": ft.CELL_SETS_JSON,
                 "data_type": dt.CELL_SETS,
             },
             {
-                "rel_path": f"{CODEX_SPRM_DIR.value}/"
-                + f"{TILE_REGEX.value}.clusters.json",
+                "rel_path": f"{CODEX_SPRM_DIR}/"
+                + f"{TILE_REGEX}.clusters.json",
                 "file_type": "clusters.json",
                 "data_type": dt.EXPRESSION_MATRIX,
             },
@@ -98,14 +98,14 @@ class CytokitSPRMConf(SPRMViewConf):
 
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_tiles = get_matches(file_paths_found, TILE_REGEX.value)
+        found_tiles = get_matches(file_paths_found, TILE_REGEX)
         confs = []
         for index, tile in enumerate(sorted(found_tiles)):
             vc = VitessceConfig(name=tile)
             dataset = vc.add_dataset(name="Cytokit + SPRM")
             img_url, offsets_url = self._get_img_and_offset_url(
-                f"{CODEX_TILE_DIR.value}/{tile}.ome.tiff",
-                CODEX_TILE_DIR.value,
+                f"{CODEX_TILE_DIR}/{tile}.ome.tiff",
+                CODEX_TILE_DIR,
             )
             image_wrapper = OmeTiffWrapper(
                 img_url=img_url, offsets_url=offsets_url, name=tile
@@ -113,7 +113,7 @@ class CytokitSPRMConf(SPRMViewConf):
             dataset = dataset.add_object(image_wrapper)
             # This tile has no segmentations
             if (
-                self._files[0]["rel_path"].replace(TILE_REGEX.value, tile)
+                self._files[0]["rel_path"].replace(TILE_REGEX, tile)
                 not in file_paths_found
             ):
                 vc = self._setup_view_config_raster(vc, dataset)
@@ -121,7 +121,7 @@ class CytokitSPRMConf(SPRMViewConf):
                 for file in self._files:
                     dataset_file = self._replace_url_in_file(file)
                     dataset_file["url"] = dataset_file["url"].replace(
-                        TILE_REGEX.value, tile
+                        TILE_REGEX, tile
                     )
                     dataset = dataset.add_file(**(dataset_file))
                 vc = self._setup_view_config_raster_cellsets_expression_segmentation(
@@ -138,12 +138,12 @@ class RNASeqConf(ScatterplotViewConf):
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
-                "rel_path": f"{SCRNA_SEQ_DIR.value}.cells.json",
+                "rel_path": f"{SCRNA_SEQ_DIR}.cells.json",
                 "file_type": ft.CELLS_JSON,
                 "data_type": dt.CELLS,
             },
             {
-                "rel_path": f"{SCRNA_SEQ_DIR.value}.cell-sets.json",
+                "rel_path": f"{SCRNA_SEQ_DIR}.cell-sets.json",
                 "file_type": ft.CELL_SETS_JSON,
                 "data_type": dt.CELL_SETS,
             },
@@ -156,13 +156,13 @@ class ATACSeqConf(ScatterplotViewConf):
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
-                "rel_path": SCATAC_SEQ_DIR.value
+                "rel_path": SCATAC_SEQ_DIR
                 + "/umap_coords_clusters.cells.json",
                 "file_type": ft.CELLS_JSON,
                 "data_type": dt.CELLS,
             },
             {
-                "rel_path": SCATAC_SEQ_DIR.value
+                "rel_path": SCATAC_SEQ_DIR
                 + "/umap_coords_clusters.cell-sets.json",
                 "file_type": ft.CELL_SETS_JSON,
                 "data_type": dt.CELL_SETS,
@@ -175,7 +175,7 @@ class IMSConf(ImagePyramidViewConf):
         super().__init__(entity, nexus_token, is_mock)
         # Do not show the separated mass-spec images.
         self.image_pyramid_regex = (
-            re.escape(IMAGE_PYRAMID_DIR.value) + r"(?!/ometiffs/separate/)"
+            re.escape(IMAGE_PYRAMID_DIR) + r"(?!/ometiffs/separate/)"
         )
 
 
@@ -190,13 +190,13 @@ def get_view_config_class_for_data_types(entity, nexus_token):
             return CytokitSPRMConf(
                 entity=entity, nexus_token=nexus_token, is_mock=False
             )
-        if SEQFISH.value in assay_names:
+        if SEQFISH in assay_names:
             return SeqFISHViewConf(
                 entity=entity, nexus_token=nexus_token, is_mock=False
             )
         if (
-            MALDI_IMS_NEG.value in assay_names
-            or MALDI_IMS_POS.value in assay_names
+            MALDI_IMS_NEG in assay_names
+            or MALDI_IMS_POS in assay_names
         ):
             return IMSConf(entity=entity, nexus_token=nexus_token, is_mock=False)
         return ImagePyramidViewConf(
