@@ -3,7 +3,7 @@ import { ExistsQuery, BoolMustNot } from 'searchkit';
 
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
-import { field, listFilter, checkboxFilter } from 'js/components/Search/utils';
+import { field, listFilter, checkboxFilter, hierarchicalFilter } from 'js/components/Search/utils';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
 import DevResults from 'js/components/Search/DevResults';
 import { SearchHeader } from './style';
@@ -41,6 +41,10 @@ function DevSearch() {
         listFilter('entity_type', 'Entity Type'),
         listFilter('mapper_metadata.version', 'Mapper Version'),
         listFilter('index_version', 'Index Version'),
+        hierarchicalFilter(
+          [...Array(5).keys()].map((i) => `anatomy_${i + 1}`),
+          'Anatomy',
+        ),
       ],
       'Assay Types': [
         listFilter('data_types', 'data_types'),
