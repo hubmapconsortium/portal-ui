@@ -38,8 +38,7 @@ class ViewConf:
 
     def _replace_url_in_file(self, file):
         """Replace url in incoming file object
-        >>> import pprint
-        >>> pp = pprint.PrettyPrinter()
+        >>> from pprint import pprint
         >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
         >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
         >>> pp.pprint(vc._replace_url_in_file(file))
