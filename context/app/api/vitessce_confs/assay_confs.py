@@ -28,8 +28,6 @@ from .paths import (
     SCRNA_SEQ_DIR,
     SCATAC_SEQ_DIR,
     IMAGE_PYRAMID_DIR,
-    CODEX_TILE_DIR,
-    CODEX_SPRM_DIR,
     TILE_REGEX,
     SEQFISH_HYB_CYCLE_REGEX,
     SEQFISH_FILE_REGEX
@@ -44,7 +42,7 @@ class SeqFISHViewConf(ImagingViewConf):
             [
                 IMAGE_PYRAMID_DIR,
                 SEQFISH_HYB_CYCLE_REGEX,
-                SEQFISH_FILE_REGEX,
+                SEQFISH_FILE_REGEX
             ]
         )
         found_images = get_matches(file_paths_found, full_seqfish_reqex)
@@ -92,7 +90,12 @@ class CytokitSPRMConf(ViewConf):
         found_tiles = get_matches(file_paths_found, TILE_REGEX)
         confs = []
         for tile in sorted(found_tiles):
-            vc = SPRMViewConf(entity=self._entity, nexus_token=self._nexus_token, is_mock=self._is_mock, base_name=tile)
+            vc = SPRMViewConf(
+                entity=self._entity,
+                nexus_token=self._nexus_token,
+                is_mock=self._is_mock,
+                base_name=tile
+            )
             confs.append(vc.build_vitessce_conf())
         return confs
 

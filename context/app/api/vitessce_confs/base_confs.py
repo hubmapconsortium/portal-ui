@@ -9,16 +9,12 @@ from vitessce import (
     OmeTiffWrapper,
     Component as cm,
     DataType as dt,
-    FileType as ft
+    FileType as ft,
 )
 
 from .utils import get_matches
-from .paths import (
-    CODEX_SPRM_DIR,
-    IMAGE_PYRAMID_DIR,
-    OFFSETS_DIR,
-    CODEX_TILE_DIR
-)
+from .paths import CODEX_SPRM_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR, CODEX_TILE_DIR
+
 MOCK_URL = "https://example.com"
 
 
@@ -164,27 +160,23 @@ class ScatterplotViewConf(ViewConf):
 
 
 class SPRMViewConf(ImagingViewConf):
-
     def __init__(self, entity, nexus_token, is_mock, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
-        self._base_name = kwargs['base_name']
+        self._base_name = kwargs["base_name"]
         self._files = [
             {
-                "rel_path": f"{CODEX_SPRM_DIR}/"
-                + f"{self._base_name}.cells.json",
+                "rel_path": f"{CODEX_SPRM_DIR}/" + f"{self._base_name}.cells.json",
                 "file_type": ft.CELLS_JSON,
                 "data_type": dt.CELLS,
             },
             {
-                "rel_path": f"{CODEX_SPRM_DIR}/"
-                + f"{self._base_name}.cell-sets.json",
+                "rel_path": f"{CODEX_SPRM_DIR}/" + f"{self._base_name}.cell-sets.json",
                 "file_type": ft.CELL_SETS_JSON,
                 "data_type": dt.CELL_SETS,
             },
             {
-                "rel_path": f"{CODEX_SPRM_DIR}/"
-                + f"{self._base_name}.clusters.json",
+                "rel_path": f"{CODEX_SPRM_DIR}/" + f"{self._base_name}.clusters.json",
                 "file_type": "clusters.json",
                 "data_type": dt.EXPRESSION_MATRIX,
             },
@@ -195,18 +187,14 @@ class SPRMViewConf(ImagingViewConf):
         vc = VitessceConfig(name=self._base_name)
         dataset = vc.add_dataset(name="Cytokit + SPRM")
         img_url, offsets_url = self._get_img_and_offset_url(
-            f"{CODEX_TILE_DIR}/{self._base_name}.ome.tiff",
-            CODEX_TILE_DIR,
+            f"{CODEX_TILE_DIR}/{self._base_name}.ome.tiff", CODEX_TILE_DIR,
         )
         image_wrapper = OmeTiffWrapper(
             img_url=img_url, offsets_url=offsets_url, name=self._base_name
         )
         dataset = dataset.add_object(image_wrapper)
         # This tile has no segmentations
-        if (
-            self._files[0]["rel_path"]
-            not in file_paths_found
-        ):
+        if self._files[0]["rel_path"] not in file_paths_found:
             vc = self._setup_view_config_raster(vc, dataset)
         else:
             for file in self._files:
