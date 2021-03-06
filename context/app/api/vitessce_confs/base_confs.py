@@ -26,8 +26,6 @@ class ViewConf:
 
         """
 
-        # Can there be more than one of these?  This seems like a fine default for now.
-        self.conf = {}
         self._uuid = entity["uuid"]
         self._nexus_token = nexus_token
         self._entity = entity
@@ -43,7 +41,7 @@ class ViewConf:
         >>> from pprint import pprint
         >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
         >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
-        >>> pp.pprint(vc._replace_url_in_file(file))
+        >>> pprint(vc._replace_url_in_file(file))
         {'data_type': 'CELLS',\n\
          'file_type': 'cells.json',\n\
          'url': 'https://example.com/uuid/cells.json?token=nexus_token'}
@@ -75,11 +73,10 @@ class ViewConf:
 class ImagingViewConf(ViewConf):
     def _get_img_and_offset_url(self, img_path, img_dir):
         """Create a url for the offsets and img.
-        >>> import pprint
-        >>> pp = pprint.PrettyPrinter()
+        >>> from pprint import pprint
         >>> vc = ImagingViewConf(entity={ "uuid": "uuid" },\
             nexus_token='nexus_token', is_mock=True)
-        >>> pp.pprint(vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff",\
+        >>> pprint(vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff",\
             "rel_path/to"))
         ('https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=nexus_token',\n\
          'https://example.com/uuid/output_offsets/clusters.offsets.json?token=nexus_token')
