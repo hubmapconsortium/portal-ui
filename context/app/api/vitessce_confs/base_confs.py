@@ -8,11 +8,17 @@ from vitessce import (
     MultiImageWrapper,
     OmeTiffWrapper,
     Component as cm,
+    DataType as dt,
+    FileType as ft
 )
 
 from .utils import get_matches
-from .constants import AssetPaths
-
+from .paths import (
+    CODEX_SPRM_DIR,
+    IMAGE_PYRAMID_DIR,
+    OFFSETS_DIR,
+    CODEX_TILE_DIR
+)
 MOCK_URL = "https://example.com"
 
 
@@ -90,7 +96,7 @@ class ImagingViewConf(ViewConf):
                 re.sub(
                     r"ome\.tiff?",
                     "offsets.json",
-                    re.sub(img_dir, AssetPaths.OFFSETS_DIR.value, img_url),
+                    re.sub(img_dir, OFFSETS_DIR, img_url),
                 )
             ),
         )
@@ -104,7 +110,7 @@ class ImagingViewConf(ViewConf):
 
 class ImagePyramidViewConf(ImagingViewConf):
     def __init__(self, entity, nexus_token, is_mock):
-        self.image_pyramid_regex = AssetPaths.IMAGE_PYRAMID_DIR.value
+        self.image_pyramid_regex = IMAGE_PYRAMID_DIR
         super().__init__(entity, nexus_token, is_mock)
 
     def build_vitessce_conf(self):
@@ -126,10 +132,10 @@ class ImagePyramidViewConf(ImagingViewConf):
             )
         dataset = dataset.add_object(MultiImageWrapper(images))
         vc = self._setup_view_config_raster(vc, dataset)
-        self.conf = vc.to_dict()
+        conf = vc.to_dict()
         # Don't want to render all layers
-        del self.conf["datasets"][0]["files"][0]["options"]["renderLayers"]
-        return self.conf
+        del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
+        return conf
 
 
 class ScatterplotViewConf(ViewConf):
@@ -149,8 +155,7 @@ class ScatterplotViewConf(ViewConf):
         for file in self._files:
             dataset = dataset.add_file(**(self._replace_url_in_file(file)))
         vc = self._setup_scatterplot_view_config(vc, dataset)
-        self.conf = vc.to_dict()
-        return self.conf
+        return vc.to_dict()
 
     def _setup_scatterplot_view_config(self, vc, dataset):
         vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=9, h=12)
@@ -159,6 +164,59 @@ class ScatterplotViewConf(ViewConf):
 
 
 class SPRMViewConf(ImagingViewConf):
+
+    def __init__(self, entity, nexus_token, is_mock, **kwargs):
+        # All "file" Vitessce objects that do not have wrappers.
+        super().__init__(entity, nexus_token, is_mock)
+        self._base_name = kwargs['base_name']
+        self._files = [
+            {
+                "rel_path": f"{CODEX_SPRM_DIR}/"
+                + f"{self._base_name}.cells.json",
+                "file_type": ft.CELLS_JSON,
+                "data_type": dt.CELLS,
+            },
+            {
+                "rel_path": f"{CODEX_SPRM_DIR}/"
+                + f"{self._base_name}.cell-sets.json",
+                "file_type": ft.CELL_SETS_JSON,
+                "data_type": dt.CELL_SETS,
+            },
+            {
+                "rel_path": f"{CODEX_SPRM_DIR}/"
+                + f"{self._base_name}.clusters.json",
+                "file_type": "clusters.json",
+                "data_type": dt.EXPRESSION_MATRIX,
+            },
+        ]
+
+    def build_vitessce_conf(self):
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        vc = VitessceConfig(name=self._base_name)
+        dataset = vc.add_dataset(name="Cytokit + SPRM")
+        img_url, offsets_url = self._get_img_and_offset_url(
+            f"{CODEX_TILE_DIR}/{self._base_name}.ome.tiff",
+            CODEX_TILE_DIR,
+        )
+        image_wrapper = OmeTiffWrapper(
+            img_url=img_url, offsets_url=offsets_url, name=self._base_name
+        )
+        dataset = dataset.add_object(image_wrapper)
+        # This tile has no segmentations
+        if (
+            self._files[0]["rel_path"]
+            not in file_paths_found
+        ):
+            vc = self._setup_view_config_raster(vc, dataset)
+        else:
+            for file in self._files:
+                dataset_file = self._replace_url_in_file(file)
+                dataset = dataset.add_file(**(dataset_file))
+            vc = self._setup_view_config_raster_cellsets_expression_segmentation(
+                vc, dataset
+            )
+        return vc.to_dict()
+
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
         vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=8)
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)

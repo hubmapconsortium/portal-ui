@@ -17,6 +17,7 @@ from .base_confs import (
     ScatterplotViewConf,
     ImagePyramidViewConf,
     SPRMViewConf,
+    ViewConf
 )
 from .assays import (
     SEQFISH,
@@ -73,8 +74,7 @@ class SeqFISHViewConf(ImagingViewConf):
             # Don't want to render all layers
             del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
             confs.append(conf)
-        self.conf = confs
-        return self.conf
+        return confs
 
     def _get_hybcycle(self, image_path):
         return re.search(SEQFISH_HYB_CYCLE_REGEX, image_path)[0]
@@ -85,65 +85,16 @@ class SeqFISHViewConf(ImagingViewConf):
         ]
 
 
-class CytokitSPRMConf(SPRMViewConf):
-    def __init__(self, entity, nexus_token, is_mock):
-        # All "file" Vitessce objects that do not have wrappers.
-        super().__init__(entity, nexus_token, is_mock)
-        self._files = [
-            {
-                "rel_path": f"{CODEX_SPRM_DIR}/"
-                + f"{TILE_REGEX}.cells.json",
-                "file_type": ft.CELLS_JSON,
-                "data_type": dt.CELLS,
-            },
-            {
-                "rel_path": f"{CODEX_SPRM_DIR}/"
-                + f"{TILE_REGEX}.cell-sets.json",
-                "file_type": ft.CELL_SETS_JSON,
-                "data_type": dt.CELL_SETS,
-            },
-            {
-                "rel_path": f"{CODEX_SPRM_DIR}/"
-                + f"{TILE_REGEX}.clusters.json",
-                "file_type": "clusters.json",
-                "data_type": dt.EXPRESSION_MATRIX,
-            },
-        ]
+class CytokitSPRMConf(ViewConf):
 
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(file_paths_found, TILE_REGEX)
         confs = []
-        for index, tile in enumerate(sorted(found_tiles)):
-            vc = VitessceConfig(name=tile)
-            dataset = vc.add_dataset(name="Cytokit + SPRM")
-            img_url, offsets_url = self._get_img_and_offset_url(
-                f"{CODEX_TILE_DIR}/{tile}.ome.tiff",
-                CODEX_TILE_DIR,
-            )
-            image_wrapper = OmeTiffWrapper(
-                img_url=img_url, offsets_url=offsets_url, name=tile
-            )
-            dataset = dataset.add_object(image_wrapper)
-            # This tile has no segmentations
-            if (
-                self._files[0]["rel_path"].replace(TILE_REGEX, tile)
-                not in file_paths_found
-            ):
-                vc = self._setup_view_config_raster(vc, dataset)
-            else:
-                for file in self._files:
-                    dataset_file = self._replace_url_in_file(file)
-                    dataset_file["url"] = dataset_file["url"].replace(
-                        TILE_REGEX, tile
-                    )
-                    dataset = dataset.add_file(**(dataset_file))
-                vc = self._setup_view_config_raster_cellsets_expression_segmentation(
-                    vc, dataset
-                )
-            confs.append(vc.to_dict())
-        self.conf = confs
-        return self.conf
+        for tile in sorted(found_tiles):
+            vc = SPRMViewConf(entity=self._entity, nexus_token=self._nexus_token, is_mock=self._is_mock, base_name=tile)
+            confs.append(vc.build_vitessce_conf())
+        return confs
 
 
 class RNASeqConf(ScatterplotViewConf):
