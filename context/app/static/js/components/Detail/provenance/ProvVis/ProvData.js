@@ -3,6 +3,14 @@ import Ajv from 'ajv';
 
 import schema from './prov-schema.json';
 
+function getCwlMeta(isReference) {
+  return {
+    global: true,
+    in_path: true,
+    type: isReference ? 'reference file' : 'data file',
+  };
+}
+
 // export only to test.
 export function makeCwlInput(name, steps, extras, isReference) {
   const id = name;
@@ -25,11 +33,7 @@ export function makeCwlInput(name, steps, extras, isReference) {
     run_data: {
       file: [{ '@id': id }],
     },
-    meta: {
-      global: true,
-      in_path: true,
-      type: isReference ? 'reference file' : 'data file',
-    },
+    meta: getCwlMeta(isReference),
     prov: extras || {}, // TODO: real-prov has unmatched ID: https://github.com/hubmapconsortium/prov-vis/issues/15
   };
 }
@@ -43,11 +47,7 @@ export function makeCwlOutput(name, steps, extras, isReference) {
     run_data: {
       file: [{ '@id': id }],
     },
-    meta: {
-      global: true,
-      in_path: true,
-      type: isReference ? 'reference file' : 'data file',
-    },
+    meta: getCwlMeta(isReference),
     // Domain-specific extras go here:
     prov: extras,
   };
