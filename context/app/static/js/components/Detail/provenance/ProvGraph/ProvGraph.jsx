@@ -1,28 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
 
 import SectionItem from 'js/components/Detail/SectionItem';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import { AppContext } from 'js/components/Providers';
-import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
-import useProvenanceStore from 'js/stores/useProvenanceStore';
+import ShowDerivedEntitiesButton from 'js/components/Detail/provenance/ShowDerivedEntitiesButton';
 import ProvVis from '../ProvVis';
-import { StyledTypography, FlexPaper } from './style';
+import { FlexPaper } from './style';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
-import ProvData from '../ProvVis/ProvData';
-
-function createStepNameSet(steps) {
-  return new Set(steps.map((step) => step.name));
-}
-
-function removeExistingSteps(steps, newSteps) {
-  const nameSet = createStepNameSet(steps);
-  const uniqueNewSteps = newSteps.filter((step) => !nameSet.has(step.name));
-  return uniqueNewSteps;
-}
-
-const useProvenanceStoreSelector = (state) => ({ steps: state.steps, addDescendantSteps: state.addDescendantSteps });
 
 function ProvGraph(props) {
   const { provData } = props;
@@ -43,69 +27,38 @@ function ProvGraph(props) {
     return entity ? `${entity[typeKey]} - ${entity[idKey]}` : id;
   }
 
-  function renderDetailPane(prov) {
+  function renderDetailPane(node) {
     function DetailPanel() {
-      const { elasticsearchEndpoint, entityEndpoint, nexusToken } = useContext(AppContext);
-      const { steps, addDescendantSteps } = useProvenanceStore(useProvenanceStoreSelector);
-      const [newSteps, setNewSteps] = useState([]);
-
-      const { immediateDescendantsProvData } = useImmediateDescendantProv(
-        prov[idKey],
-        elasticsearchEndpoint,
-        entityEndpoint,
-        nexusToken,
-      );
-
-      useEffect(() => {
-        if (immediateDescendantsProvData) {
-          const immediateDescendantSteps = immediateDescendantsProvData
-            .map((result) => new ProvData(result, getNameForActivity, getNameForEntity).toCwl())
-            .flat();
-          setNewSteps(removeExistingSteps(steps, immediateDescendantSteps));
-        }
-      }, [immediateDescendantsProvData, steps]);
-
-      function handleShowDescendants() {
-        addDescendantSteps(newSteps);
-      }
+      const { prov } = node.meta;
 
       const typeEl =
         typeKey in prov ? (
-          <SectionItem label="Type">
-            <StyledTypography variant="body1">{prov[typeKey]}</StyledTypography>
-          </SectionItem>
+          <SectionItem label="Type">{prov[typeKey]}</SectionItem>
         ) : (
-          <SectionItem label="Type">
-            <StyledTypography variant="body1">{prov['prov:type']}</StyledTypography>
-          </SectionItem>
+          <SectionItem label="Type">{prov['prov:type']}</SectionItem>
         );
       const idEl =
         typeKey in prov && ['Donor', 'Sample', 'Dataset'].includes(prov[typeKey]) ? (
           <SectionItem label="ID" ml>
-            <StyledTypography variant="body1">
-              <LightBlueLink href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}>
-                {prov[idKey]}
-              </LightBlueLink>
-            </StyledTypography>
+            <LightBlueLink href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}>
+              {prov[idKey]}
+            </LightBlueLink>
           </SectionItem>
         ) : null;
       const createdEl =
         timeKey in prov ? (
           <SectionItem label="Created" ml>
-            <StyledTypography variant="body1">{prov[timeKey]}</StyledTypography>
+            {prov[timeKey]}
           </SectionItem>
         ) : null;
       const actionsEl =
         typeKey in prov && ['Donor', 'Sample', 'Dataset'].includes(prov[typeKey]) ? (
           <SectionItem ml>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={handleShowDescendants}
-              disabled={newSteps.length === 0}
-            >
-              Show Derived Entities
-            </Button>
+            <ShowDerivedEntitiesButton
+              id={prov[idKey]}
+              getNameForActivity={getNameForActivity}
+              getNameForEntity={getNameForEntity}
+            />
           </SectionItem>
         ) : null;
       return (
@@ -117,7 +70,7 @@ function ProvGraph(props) {
         </FlexPaper>
       );
     }
-    return <DetailPanel />;
+    return node?.meta?.prov && <DetailPanel />;
   }
 
   return (
