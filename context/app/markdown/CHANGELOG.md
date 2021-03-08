@@ -1,3 +1,14 @@
+## v0.13.1 - 2021-03-08
+
+- Dependabot version bump for lodash.
+- dependabot bumps the version number on marked.
+- Add button to show descendants of entity in provenance graph detail pane.
+- Fix the labels on the links for EUI and RUI.
+- Add partonomy facet to dev-search.
+- Add prev and next to dev-search.
+- Rewrite Vitessce backend to use `vitessce-python` package.
+
+
 ## v0.13.0 - 2021-03-02
 
 - Replace CCF link with menu.
