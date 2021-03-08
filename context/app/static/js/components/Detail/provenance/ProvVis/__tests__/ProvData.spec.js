@@ -135,6 +135,7 @@ describe('CWL utils', () => {
       meta: {
         global: true,
         in_path: true,
+        type: 'data file',
       },
       name: 'name1',
       run_data: {
