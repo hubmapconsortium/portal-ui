@@ -85,9 +85,9 @@
           "dataset": "A"
         },
         "x": 10,
-        "y": 6,
+        "y": 5,
         "w": 2,
-        "h": 6
+        "h": 7
       },
       {
         "component": "genes",
@@ -97,10 +97,13 @@
         "x": 10,
         "y": 0,
         "w": 2,
-        "h": 6
+        "h": 5
       },
       {
         "component": "heatmap",
+        "props": {
+          "transpose": true
+        },
         "coordinationScopes": {
           "dataset": "A"
         },
@@ -198,9 +201,9 @@
           "dataset": "A"
         },
         "x": 10,
-        "y": 6,
+        "y": 5,
         "w": 2,
-        "h": 6
+        "h": 7
       },
       {
         "component": "genes",
@@ -210,10 +213,13 @@
         "x": 10,
         "y": 0,
         "w": 2,
-        "h": 6
+        "h": 5
       },
       {
         "component": "heatmap",
+        "props": {
+          "transpose": true
+        },
         "coordinationScopes": {
           "dataset": "A"
         },
