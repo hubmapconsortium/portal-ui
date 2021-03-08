@@ -1,0 +1,1 @@
+- Add button to show descendants of entity in provenance graph detail pane.
