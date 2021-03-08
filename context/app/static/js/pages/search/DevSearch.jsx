@@ -67,6 +67,8 @@ function DevSearch() {
           'No Validation Errors?',
           BoolMustNot(ExistsQuery('mapper_metadata.validation_errors')),
         ),
+        checkboxFilter('has_next', 'Has next?', ExistsQuery('next_revision_uuid')),
+        checkboxFilter('has_prev', 'Has prev?', ExistsQuery('prev_revision_uuid')),
       ],
     },
     queryFields: ['everything'],
