@@ -14,10 +14,10 @@ function CCFLinks(props) {
         CCF Anatomical Structures, Cell Types and Biomarkers (ASCT+B) Tables/Reporter
       </DropdownLink>
       <DropdownLink href="https://portal.hubmapconsortium.org/ccf-eui" isIndented={isIndented}>
-        CCF Registration User Interface
+        CCF Exploration User Interface (EUI)
       </DropdownLink>
       <DropdownLink href="https://hubmapconsortium.github.io/ccf-ui/rui/" isIndented={isIndented}>
-        CCF Exploration User Interface
+        CCF Registration User Interface (RUI)
       </DropdownLink>
     </>
   );
