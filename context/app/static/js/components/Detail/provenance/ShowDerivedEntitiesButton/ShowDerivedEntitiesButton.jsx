@@ -6,14 +6,9 @@ import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
 import ProvData from '../ProvVis/ProvData';
 
-function createStepNameSet(steps) {
-  return new Set(steps.map((step) => step.name));
-}
-
-function removeExistingSteps(steps, newSteps) {
-  const nameSet = createStepNameSet(steps);
-  const uniqueNewSteps = newSteps.filter((step) => !nameSet.has(step.name));
-  return uniqueNewSteps;
+function getUniqueNewSteps(steps, newSteps) {
+  const nameSet = new Set(steps.map((step) => step.name));
+  return newSteps.filter((step) => !nameSet.has(step.name));
 }
 
 const useProvenanceStoreSelector = (state) => ({ steps: state.steps, addDescendantSteps: state.addDescendantSteps });
@@ -35,7 +30,7 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity })
       const immediateDescendantSteps = immediateDescendantsProvData
         .map((result) => new ProvData(result, getNameForActivity, getNameForEntity).toCwl())
         .flat();
-      setNewSteps(removeExistingSteps(steps, immediateDescendantSteps));
+      setNewSteps(getUniqueNewSteps(steps, immediateDescendantSteps));
     }
   }, [immediateDescendantsProvData, steps, getNameForActivity, getNameForEntity]);
   function handleShowDescendants() {
@@ -48,4 +43,5 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity })
   );
 }
 
+export { getUniqueNewSteps };
 export default ShowDerivedEntitiesButton;
