@@ -5,7 +5,7 @@ from datauri import DataURI
 from flask import abort, current_app
 import requests
 
-from .vitessce import Vitessce
+from .vitessce_confs import get_view_config_class_for_data_types
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
@@ -139,5 +139,6 @@ class ApiClient():
                 ]
             }
         else:
-            vitessce = Vitessce(entity=entity, nexus_token=self.nexus_token)
-            return vitessce.conf
+            vc = get_view_config_class_for_data_types(entity=entity, nexus_token=self.nexus_token)
+            conf = vc.build_vitessce_conf()
+            return conf
