@@ -16,7 +16,7 @@ describe('Run Vitessce Hooks Test', () => {
 
     expect(result.current.vitessceSelection).toEqual(0);
     expect(result.current.vitessceConfig[0].name).toEqual('conf1');
-    expect(result.current.vitessceConfig[0].attr).toEqual('bar');
+    expect(result.current.vitessceConfig[0].attr).toEqual(undefined);
     act(() => {
       result.current.setVitessceSelection(1);
     });
