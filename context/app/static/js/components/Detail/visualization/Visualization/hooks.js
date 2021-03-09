@@ -8,8 +8,15 @@ export function useVitessceConfig({ vitData, setVitessceState, setVitessceErrors
   useEffect(() => {
     if (setVitessceState && vitData) {
       const fragment = window.location.hash.substr(1);
-      let vitessceURLConf;
       const isMultiDataset = Array.isArray(vitData);
+      if (!fragment.startsWith('vitessce_conf_')) {
+        // This is an anchor link like "#attribution", rather than a saved vitessce link.
+        setVitessceState(isMultiDataset ? vitData[0] : vitData);
+        setVitessceSelection(0);
+        setVitessceConfig(vitData);
+        return;
+      }
+      let vitessceURLConf;
       try {
         vitessceURLConf = fragment.length > 0 ? decodeURLParamsToConf(fragment) : null;
       } catch (err) {

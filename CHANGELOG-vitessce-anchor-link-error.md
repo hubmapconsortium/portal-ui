@@ -1,0 +1,1 @@
+- Vitessce no longer errors if following a page anchor link.
