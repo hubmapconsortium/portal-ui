@@ -6,14 +6,17 @@ export function useVitessceConfig({ vitData, setVitessceState, setVitessceErrors
   const [vitessceConfig, setVitessceConfig] = useState(null);
 
   useEffect(() => {
+    function setVitessceDefaults(vData) {
+      setVitessceState(Array.isArray(vData) ? vData[0] : vData);
+      setVitessceSelection(0);
+      setVitessceConfig(vData);
+    }
+
     if (setVitessceState && vitData) {
       const fragment = window.location.hash.substr(1);
-      const isMultiDataset = Array.isArray(vitData);
       if (!fragment.startsWith('vitessce_conf_')) {
         // This is an anchor link like "#attribution", rather than a saved vitessce link.
-        setVitessceState(isMultiDataset ? vitData[0] : vitData);
-        setVitessceSelection(0);
-        setVitessceConfig(vitData);
+        setVitessceDefaults(vitData);
         return;
       }
       let vitessceURLConf;
@@ -22,15 +25,13 @@ export function useVitessceConfig({ vitData, setVitessceState, setVitessceErrors
       } catch (err) {
         // If URL cannot be parsed, display error and show Vitessce.
         setVitessceErrors(['View configuration from URL was not able to be parsed because it was likely truncated.']);
-        setVitessceState(isMultiDataset ? vitData[0] : vitData);
-        setVitessceSelection(0);
-        setVitessceConfig(vitData);
+        setVitessceDefaults(vitData);
         return;
       }
       let initializedVitDataFromUrl = vitData;
       let initialSelectionFromUrl;
       // If these is a url conf and the we have a multidataset, use the url conf to find the initial selection of the multi-dataset.
-      if (isMultiDataset) {
+      if (Array.isArray(vitData)) {
         initialSelectionFromUrl = Math.max(0, vitData.map(({ name }) => name).indexOf(vitessceURLConf?.name));
         initializedVitDataFromUrl[initialSelectionFromUrl] = vitessceURLConf || vitData[initialSelectionFromUrl];
       } else {
