@@ -1,4 +1,5 @@
 import React from 'react';
+import { fireEvent } from '@testing-library/react';
 
 // eslint-disable-next-line import/no-unresolved
 import { render, screen } from 'test-utils/functions';
@@ -120,15 +121,27 @@ const provData = {
 };
 
 test('should ', () => {
+  const sampleEntityText = 'Sample - HBM666.CHPF.373';
   const nodesText = [
     'hubmap:entities/73bb26e4-ed43-11e8-8f19-0a7c1eab007a',
     'Register Donor Activity - HBM398.NBBW.527',
     'Donor - HBM547.NCQL.874',
     'Create Sample Activity - HBM665.NTZB.997',
-    'Sample - HBM666.CHPF.373',
+    sampleEntityText,
   ];
 
   render(<ProvGraph provData={provData} />);
 
   nodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+
+  const detailPaneText = ['Type', 'Sample', 'ID', 'HBM666.CHPF.373', 'Created', '2019-11-01T18:50:35'];
+
+  fireEvent.click(screen.getByText(sampleEntityText));
+
+  detailPaneText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+
+  expect(screen.getByRole('link', { name: 'HBM666.CHPF.373' })).toHaveAttribute(
+    'href',
+    '/browse/sample/13129ad371683171b152618c83fd9e6f',
+  );
 });
