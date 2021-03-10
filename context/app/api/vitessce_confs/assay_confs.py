@@ -101,7 +101,7 @@ class CytokitSPRMConf(ViewConf):
 
 
 class RNASeqConf(ScatterplotViewConf):
-    def __init__(self, entity, nexus_token, is_mock):
+    def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
@@ -119,7 +119,7 @@ class RNASeqConf(ScatterplotViewConf):
 
 
 class ATACSeqConf(ScatterplotViewConf):
-    def __init__(self, entity, nexus_token, is_mock):
+    def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
@@ -139,7 +139,7 @@ class ATACSeqConf(ScatterplotViewConf):
 
 
 class IMSConf(ImagePyramidViewConf):
-    def __init__(self, entity, nexus_token, is_mock):
+    def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # Do not show the separated mass-spec images.
         self.image_pyramid_regex = (
