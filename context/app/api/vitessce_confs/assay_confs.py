@@ -161,22 +161,19 @@ def get_view_config_class_for_data_types(entity, nexus_token):
     if "is_image" in hints:
         if "codex" in hints:
             return CytokitSPRMConf(
-                entity=entity, nexus_token=nexus_token, is_mock=False
-            )
+                entity=entity, nexus_token=nexus_token)
         if SEQFISH in assay_names:
             return SeqFISHViewConf(
-                entity=entity, nexus_token=nexus_token, is_mock=False
-            )
+                entity=entity, nexus_token=nexus_token)
         if (
             MALDI_IMS_NEG in assay_names
             or MALDI_IMS_POS in assay_names
         ):
-            return IMSConf(entity=entity, nexus_token=nexus_token, is_mock=False)
+            return IMSConf(entity=entity, nexus_token=nexus_token)
         return ImagePyramidViewConf(
-            entity=entity, nexus_token=nexus_token, is_mock=False
-        )
+            entity=entity, nexus_token=nexus_token)
     if "rna" in hints:
-        return RNASeqConf(entity=entity, nexus_token=nexus_token, is_mock=False)
+        return RNASeqConf(entity=entity, nexus_token=nexus_token)
     if "atac" in hints:
-        return ATACSeqConf(entity=entity, nexus_token=nexus_token, is_mock=False)
+        return ATACSeqConf(entity=entity, nexus_token=nexus_token)
     return NullConf()
