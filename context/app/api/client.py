@@ -140,7 +140,5 @@ class ApiClient():
             }
         else:
             vc = get_view_config_class_for_data_types(entity=entity, nexus_token=self.nexus_token)
-            if vc is None:
-                return {}
             conf = vc.build_vitessce_conf()
             return conf

@@ -147,6 +147,11 @@ class IMSConf(ImagePyramidViewConf):
         )
 
 
+class NullConf():
+    def build_vitessce_conf(self):
+        return {}
+
+
 def get_view_config_class_for_data_types(entity, nexus_token):
     data_types = entity["data_types"]
     tc = CommonsTypeClient()
@@ -174,4 +179,4 @@ def get_view_config_class_for_data_types(entity, nexus_token):
         return RNASeqConf(entity=entity, nexus_token=nexus_token, is_mock=False)
     if "atac" in hints:
         return ATACSeqConf(entity=entity, nexus_token=nexus_token, is_mock=False)
-    return None
+    return NullConf()
