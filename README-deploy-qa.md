@@ -24,7 +24,7 @@ Tuesday/Thursday afternoon:
 
 ## QA
 
-It’s helpful to perform each action with the devtools console and networking tabs open to detect errors, warnings and generally monitor each page’s requests.
+It’s helpful to have the console and networking tabs open: To see both at the same time, bring up Network, and then hit “esc”.
 
 ### Home Page
 
