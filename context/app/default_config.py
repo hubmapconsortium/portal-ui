@@ -11,7 +11,6 @@ class DefaultConfig(object):
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=60)
     SESSION_COOKIE_SAMESITE = 'Lax'
 
-    ENTITY_API_TIMEOUT = 5
     PORTAL_INDEX_PATH = '/portal/search'
     CCF_INDEX_PATH = '/entities/search'
 

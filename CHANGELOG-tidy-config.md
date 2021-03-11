@@ -1,0 +1,1 @@
+- Tidy up the example config.
