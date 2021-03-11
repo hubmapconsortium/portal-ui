@@ -519,5 +519,12 @@ test('should ', async () => {
 
   fireEvent.click(derivedEntitiesButton);
 
-  expect(screen.getByText('Sample - HBM743.BZVB.466')).toBeInTheDocument();
+  const newNodesText = [
+    'Create Sample Activity - HBM358.MRDC.967',
+    'Sample - HBM743.BZVB.466',
+    'Create Sample Activity - HBM534.VGXH.932',
+    'HBM643.FDGT.862',
+  ];
+
+  newNodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 });
