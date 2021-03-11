@@ -101,7 +101,7 @@ class CytokitSPRMConf(ViewConf):
 
 
 class RNASeqConf(ScatterplotViewConf):
-    def __init__(self, entity, nexus_token, is_mock):
+    def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
@@ -119,7 +119,7 @@ class RNASeqConf(ScatterplotViewConf):
 
 
 class ATACSeqConf(ScatterplotViewConf):
-    def __init__(self, entity, nexus_token, is_mock):
+    def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
@@ -139,12 +139,17 @@ class ATACSeqConf(ScatterplotViewConf):
 
 
 class IMSConf(ImagePyramidViewConf):
-    def __init__(self, entity, nexus_token, is_mock):
+    def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # Do not show the separated mass-spec images.
         self.image_pyramid_regex = (
             re.escape(IMAGE_PYRAMID_DIR) + r"(?!/ometiffs/separate/)"
         )
+
+
+class NullConf():
+    def build_vitessce_conf(self):
+        return {}
 
 
 def get_view_config_class_for_data_types(entity, nexus_token):
@@ -156,21 +161,19 @@ def get_view_config_class_for_data_types(entity, nexus_token):
     if "is_image" in hints:
         if "codex" in hints:
             return CytokitSPRMConf(
-                entity=entity, nexus_token=nexus_token, is_mock=False
-            )
+                entity=entity, nexus_token=nexus_token)
         if SEQFISH in assay_names:
             return SeqFISHViewConf(
-                entity=entity, nexus_token=nexus_token, is_mock=False
-            )
+                entity=entity, nexus_token=nexus_token)
         if (
             MALDI_IMS_NEG in assay_names
             or MALDI_IMS_POS in assay_names
         ):
-            return IMSConf(entity=entity, nexus_token=nexus_token, is_mock=False)
+            return IMSConf(entity=entity, nexus_token=nexus_token)
         return ImagePyramidViewConf(
-            entity=entity, nexus_token=nexus_token, is_mock=False
-        )
+            entity=entity, nexus_token=nexus_token)
     if "rna" in hints:
-        return RNASeqConf(entity=entity, nexus_token=nexus_token, is_mock=False)
+        return RNASeqConf(entity=entity, nexus_token=nexus_token)
     if "atac" in hints:
-        return ATACSeqConf(entity=entity, nexus_token=nexus_token, is_mock=False)
+        return ATACSeqConf(entity=entity, nexus_token=nexus_token)
+    return NullConf()

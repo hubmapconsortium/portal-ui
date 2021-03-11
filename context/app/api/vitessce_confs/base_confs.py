@@ -102,7 +102,7 @@ class ImagingViewConf(ViewConf):
 
 
 class ImagePyramidViewConf(ImagingViewConf):
-    def __init__(self, entity, nexus_token, is_mock):
+    def __init__(self, entity, nexus_token, is_mock=False):
         self.image_pyramid_regex = IMAGE_PYRAMID_DIR
         super().__init__(entity, nexus_token, is_mock)
 
@@ -157,7 +157,7 @@ class ScatterplotViewConf(ViewConf):
 
 
 class SPRMViewConf(ImagingViewConf):
-    def __init__(self, entity, nexus_token, is_mock, **kwargs):
+    def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
         self._base_name = kwargs["base_name"]
