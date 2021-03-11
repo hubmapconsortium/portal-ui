@@ -7,20 +7,20 @@ Monday/Wednesday, before 5pm:
 
 Monday/Wednesday, after 5pm: (Or any time that Nils asks for a release...)
 *   Harvard TC (**John/Ilan**) makes a new Docker image from portal-ui master.
-*   Harvard TC announces on the [portal-deployment channel](https://hubmapconsortium.slack.com/archives/C016TK0APV2) that DEV/TEST/STAGE will be redeployed.
+*   Harvard TC announces on [`#portal-deployment`](https://hubmapconsortium.slack.com/archives/C016TK0APV2) that DEV/TEST/STAGE will be redeployed.
 *   Harvard TC redeploys to DEV/TEST/STAGE, makes sure the homepage loads, and announces redeployment.
 
 Tuesday/Thursday testing:
 *   Harvard TC (**Tiffany/Chuck**) runs through a brief manual QA test on [https://portal-prod.stage.hubmapconsortium.org/](https://portal-prod.stage.hubmapconsortium.org/).
 *   Small quirks are filed as issues.
-*   If there are big problems, notify Nils and ask if PROD redeploy can be deferred till next Tuesday/Thursday.
+*   If there are big problems, ping Chuck, and decide whether production release can just wait till the next regularly scheduled release, or if a redeploy is needed sooner. Post an update to `#portal-deployment`.
 
 Tuesday/Thursday hand-off:
-*   Tester posts to portal-deployment that the image v#.#.# has been tested, and is ready for deployment. Flag [@Zhou (Joe) Yuan](https://hubmapconsortium.slack.com/team/ULCT8GZJ4).
+*   Tester posts to `#portal-deployment` that the image `v#.#.#` has been tested, and is ready for deployment. Flag `@Zhou (Joe) Yuan`.
 
 Tuesday/Thursday afternoon:
-*   Someone in Pittsburgh deploys that image to both STAGE and PROD.
-*   Post to portal-deployment when complete.
+*   Zhou deploys that image to PROD,
+*   and posts to `#portal-deployment` when complete.
 
 ## QA
 
