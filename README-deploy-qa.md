@@ -24,7 +24,8 @@ Tuesday/Thursday afternoon:
 
 ## QA
 
-It’s helpful to have the console and networking tabs open: To see both at the same time, bring up Network, and then hit “esc”.
+- For QA, use the STAGE instance configured to hit the PROD APIs: [https://portal-prod.stage.hubmapconsortium.org/](`portal-prod.stage.hubmapconsortium.org`).
+- It’s helpful to have the console and networking tabs open: To see both at the same time, bring up Network, and then hit “esc”.
 
 ### Home Page
 
@@ -40,8 +41,8 @@ It’s helpful to have the console and networking tabs open: To see both at the 
 *   HuBMAP ID (table view) and tiles (tile view) should link to the correct detail page.
 *   Sorting in header row (table view) and dropdown (tile view) should work.
 *   Logging in should result in additional data with updated facets in the status section of the sidebar.
-*   If needed delete ‘has_exited_dataset_search_tutorial’  in local storage to begin the search tutorial. The search tutorial should traverse its steps beginning to end. (Dataset search page only).
-*   Dev Search page (/dev-search) should load without error.
+*   If needed delete `has_exited_dataset_search_tutorial`  in local storage to begin the search tutorial. The search tutorial should traverse its steps beginning to end. (Dataset search page only).
+*   [Dev Search](https://portal-prod.stage.hubmapconsortium.org/dev-search) should load without error.
 
 ### Detail Pages
 
@@ -50,7 +51,7 @@ Confirm the below for a variety of entities spread across assay types for datase
 *   Table of contents sidebar should reflect the sections on the page starting with ‘Summary’. Clicking a link should bring you to the appropriate section.
 *   Scrolling past the summary section should reveal a header below the primary app bar.
 *   Clicking on the file button in the summary should open a new tab with JSON shown.
-*   The provenance section can include up to three tabs, ‘Table’, ‘Graph’ and ‘Analysis Details’ please review dataset pages until you’ve reviewed each at least once.
+*   The provenance section can include up to three tabs, ‘Table’, ‘Graph’ and ‘Analysis Details’. Please review dataset pages until you’ve reviewed each at least once.
     *   The table should include equal sized tiles populated with metadata. The tile which represents the current page should have a majority purple background.
     *   The graph should include nodes which end with a node representing the current page. Clicking a node should reveal a detail pane below.
     *   The analysis details sections should include links to GitHub and CWL viewer.
@@ -60,19 +61,19 @@ Confirm the below for a variety of entities spread across assay types for datase
 **[CODEX + SPRM](https://portal-prod.stage.hubmapconsortium.org/search?mapped_data_types[0]=CODEX%20%5BCytokit%20%2B%20SPRM%5D&entity_type[0]=Dataset)**
 
 *   In Vitessce there should be a layer controller, a spatial component, data set metadata, a component to select antigen expression levels, a section to select clusterings, and a heatmap of antigen expression levels.
-*   You should be able to zoom in and out of the image smoothly and interact with each part
-*   If there are no cell segmentations, then the configuration should only have a spatial view, a layer controller, and a data set metadata section
-*   You should be able to change which tile you are looking at using the top right selector
+*   You should be able to zoom in and out of the image smoothly and interact with each part.
+*   If there are no cell segmentations, then the configuration should only have a spatial view, a layer controller, and a data set metadata section.
+*   You should be able to change which tile you are looking at using the top right selector.
 
 **[sc###-seq [TYPE]](https://portal-prod.stage.hubmapconsortium.org/search?mapped_data_types[0]=scRNA-seq%20%2810x%20Genomics%29%20%5BSalmon%5D&entity_type[0]=Dataset)**
 
-*   There should be a scatterplot and a left-hand side cell sets pane
-*   Each cell should have as ID a nucleotide sequence. The clusters should simply be numbered
+*   There should be a scatterplot and a left-hand side cell sets pane.
+*   Each cell should have as ID a nucleotide sequence. The clusters should simply be numbered.
 
 Imaging Assay [Image Pyramid]
 
-*   You should be able to zoom in and out, change channels, and add channels
-*   For **[seqFish](https://portal-prod.stage.hubmapconsortium.org/search?mapped_data_types[0]=seqFISH%20%5BImage%20Pyramid%5D&entity_type[0]=Dataset)**, you should be able to change the z-level using the selector in the top right
+*   You should be able to zoom in and out, change channels, and add channels.
+*   For **[seqFish](https://portal-prod.stage.hubmapconsortium.org/search?mapped_data_types[0]=seqFISH%20%5BImage%20Pyramid%5D&entity_type[0]=Dataset)**, you should be able to change the z-level using the selector in the top right.
 
 ### Saved Lists
 
