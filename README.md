@@ -77,7 +77,7 @@ npm run lint:fix
 ```
 
 ## Build, tag, and deploy
-We plan to release new images Mondays and Wednesdays, and these are deployed to production the following day. [More details](README-deploy-qa.md).
+We plan to release new images Mondays and Wednesdays, and these are deployed to production the following day. [More details](README-deploy-qa.md#readme).
 
 To build a new image for [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
 and tag a release on github, just run:
