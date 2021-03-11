@@ -484,7 +484,7 @@ beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test('should ', async () => {
+test('should display the correct initial nodes', () => {
   const sampleEntityText = 'Sample - HBM666.CHPF.373';
   const nodesText = [
     'hubmap:entities/73bb26e4-ed43-11e8-8f19-0a7c1eab007a',
@@ -497,7 +497,12 @@ test('should ', async () => {
   render(<ProvGraph provData={provData} />);
 
   nodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+});
 
+test('should selected node information in detail pane and show immediate descendants when show derived entities button is clicked', async () => {
+  render(<ProvGraph provData={provData} />);
+
+  const sampleEntityText = 'Sample - HBM666.CHPF.373';
   const detailPaneText = ['Type', 'Sample', 'ID', 'HBM666.CHPF.373', 'Created', '2019-11-01T18:50:35'];
 
   fireEvent.click(screen.getByText(sampleEntityText));
