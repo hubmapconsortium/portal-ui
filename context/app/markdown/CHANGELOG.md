@@ -1,3 +1,11 @@
+## v0.13.2 - 2021-03-11
+
+- Dependabot version bump for ini.
+- Upgrade commons to 2.0.0.
+- Vitessce no longer errors if following a page anchor link.
+- Fix bug where no assay is found for Vitessce.
+
+
 ## v0.13.1 - 2021-03-08
 
 - Dependabot version bump for lodash.

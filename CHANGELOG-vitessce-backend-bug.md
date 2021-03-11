@@ -1,1 +1,0 @@
-- Fix bug where no assay is found for Vitessce.
