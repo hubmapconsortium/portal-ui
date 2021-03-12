@@ -1,0 +1,1 @@
+- Remove metadata table for donors without metadata.
