@@ -200,10 +200,9 @@ class SPRMViewConf(ImagingViewConf):
     @return_empty_json_if_error
     def build_vitessce_conf(self):
         image_file = f"{self._imaging_path}/{self._base_name}.ome.tiff"
-        file_paths_expected = [file["rel_path"] for file in self._files] + [image_file]
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        if not set(file_paths_expected).issubset(set(file_paths_found)):
-            message = f'Files for SPRM uuid "{self._uuid}" not found as expected.'
+        if image_file not in file_paths_found:
+            message = f'Image file for SPRM uuid "{self._uuid}" not found as expected.'
             if not self._is_mock:
                 current_app.logger.info(message)
             raise FileNotFoundError(message)
@@ -221,6 +220,11 @@ class SPRMViewConf(ImagingViewConf):
             vc = self._setup_view_config_raster(vc, dataset)
         else:
             for file in self._files:
+                if file["rel_path"] not in file_paths_found:
+                    message = f'file for SPRM {file["rel_path"]} with uuid "{self._uuid}" not found as expected.'
+                    if not self._is_mock:
+                        current_app.logger.info(message)
+                    raise FileNotFoundError(message)
                 dataset_file = self._replace_url_in_file(file)
                 dataset = dataset.add_file(**(dataset_file))
             vc = self._setup_view_config_raster_cellsets_expression_segmentation(

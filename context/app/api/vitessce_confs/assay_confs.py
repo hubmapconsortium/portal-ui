@@ -93,6 +93,9 @@ class SeqFISHViewConf(ImagingViewConf):
             0
         ]
 
+class CytokitSPRMViewConfigError(Exception):
+    """Raised when one of the individual SPRM view configs errors out"""
+    pass
 
 class CytokitSPRMConf(ViewConf):
 
@@ -101,7 +104,7 @@ class CytokitSPRMConf(ViewConf):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(file_paths_found, TILE_REGEX)
         if len(found_tiles) == 0:
-            message = f'Cytokit SPRM assay with uuid {self._uuid} has no matching files'
+            message = f'Cytokit SPRM assay with uuid {self._uuid} has no matching tiles'
             if not self._is_mock:
                 current_app.logger.info(message)
             raise FileNotFoundError(message)
@@ -114,7 +117,13 @@ class CytokitSPRMConf(ViewConf):
                 base_name=tile,
                 imaging_path=CODEX_TILE_DIR
             )
-            confs.append(vc.build_vitessce_conf())
+            conf = vc.build_vitessce_conf()
+            if conf == {}:
+                message = f'Cytokit SPRM assay with uuid {self._uuid} has empty view config'
+                if not self._is_mock:
+                    current_app.logger.info(message)
+                raise CytokitSPRMViewConfigError(message)
+            confs.append(conf)
         return confs
 
 
