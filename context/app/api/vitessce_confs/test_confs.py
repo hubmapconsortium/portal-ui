@@ -16,7 +16,7 @@ MOCK_NEXUS_TOKEN = "nexus_token"
 FIXTURES_INPUT_DIR = "fixtures/input_entity"
 FIXTURES_EXPECTED_OUTPUT_DIR = "fixtures/output_expected"
 
-BASE_NAME_FOR_SPRM="BASE_NAME"
+BASE_NAME_FOR_SPRM = "BASE_NAME"
 
 AssayConfClasses = {
     "codex": CytokitSPRMConf,
@@ -25,13 +25,15 @@ AssayConfClasses = {
     "ims": IMSConf,
     "image_pyramid": ImagePyramidViewConf,
     "seqfish": SeqFISHViewConf,
-    "sprm": SPRMViewConf
+    "sprm": SPRMViewConf,
 }
 
 
 def test_assays():
     parent_dir = Path(__file__).parent
-    for entity_file in (parent_dir / FIXTURES_INPUT_DIR).glob("[!malformed]*_entity.json"):
+    for entity_file in (parent_dir / FIXTURES_INPUT_DIR).glob(
+        "[!malformed]*_entity.json"
+    ):
 
         assay = re.search(
             str(parent_dir / f"{str(re.escape(FIXTURES_INPUT_DIR))}/(.*)_entity.json"),
@@ -39,11 +41,15 @@ def test_assays():
         )[1]
         entity = json.loads(Path(entity_file).read_text())
         AssayViewConfClass = AssayConfClasses[assay]
-        if assay == 'sprm':
+        if assay == "sprm":
             vc = AssayViewConfClass(
-                entity=entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True, base_name=BASE_NAME_FOR_SPRM, imaging_path="imaging_path"
+                entity=entity,
+                nexus_token=MOCK_NEXUS_TOKEN,
+                is_mock=True,
+                base_name=BASE_NAME_FOR_SPRM,
+                imaging_path="imaging_path",
             )
-        else:    
+        else:
             vc = AssayViewConfClass(
                 entity=entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True
             )
@@ -54,16 +60,22 @@ def test_assays():
             ).read_text()
         )
         assert conf_expected == conf
-        malformed_entity = json.loads(Path(str(entity_file).replace(assay, f"malformed_{assay}")).read_text())
-        AssayViewConfClass=AssayConfClasses[assay]
-        if assay == 'sprm':
+        malformed_entity = json.loads(
+            Path(str(entity_file).replace(assay, f"malformed_{assay}")).read_text()
+        )
+        AssayViewConfClass = AssayConfClasses[assay]
+        if assay == "sprm":
             vc = AssayViewConfClass(
-                entity=malformed_entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True, base_name=BASE_NAME_FOR_SPRM, imaging_path="imaging_path"
+                entity=malformed_entity,
+                nexus_token=MOCK_NEXUS_TOKEN,
+                is_mock=True,
+                base_name=BASE_NAME_FOR_SPRM,
+                imaging_path="imaging_path",
             )
-        else:    
+        else:
             vc = AssayViewConfClass(
                 entity=malformed_entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True
             )
-        conf=vc.build_vitessce_conf()
-        conf_expected={}
+        conf = vc.build_vitessce_conf()
+        conf_expected = {}
         assert conf_expected == conf

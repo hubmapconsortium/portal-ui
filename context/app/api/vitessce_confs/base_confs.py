@@ -123,10 +123,11 @@ class ImagePyramidViewConf(ImagingViewConf):
             file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
         )
         if len(found_images) == 0:
+            message = f'Image pyramid assay with uuid {self._uuid} has no matching files'
             if not self._is_mock:
                 current_app.logger.info(message)
-            raise FileNotFoundError(f'Image pyramid assay with uuid {self._uuid} has no matching files')
-        
+            raise FileNotFoundError(message)
+
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
         images = []
@@ -202,7 +203,7 @@ class SPRMViewConf(ImagingViewConf):
         file_paths_expected = [file["rel_path"] for file in self._files] + [image_file]
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         if not set(file_paths_expected).issubset(set(file_paths_found)):
-            essage = f'Files for SPRM uuid "{self._uuid}" not found as expected.'
+            message = f'Files for SPRM uuid "{self._uuid}" not found as expected.'
             if not self._is_mock:
                 current_app.logger.info(message)
             raise FileNotFoundError(message)

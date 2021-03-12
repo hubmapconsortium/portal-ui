@@ -1,5 +1,7 @@
 import re
 
+from flask import current_app
+
 from vitessce import (
     VitessceConfig,
     MultiImageWrapper,
@@ -51,9 +53,10 @@ class SeqFISHViewConf(ImagingViewConf):
         )
         found_images = get_matches(file_paths_found, full_seqfish_reqex)
         if len(found_images) == 0:
+            message = f'seqFish assay with uuid {self._uuid} has no matching files'
             if not self._is_mock:
                 current_app.logger.info(message)
-            raise FileNotFoundError(f'seqFish assay with uuid {self._uuid} has no matching files')
+            raise FileNotFoundError(message)
         # Get all files grouped by PosN names.
         images_by_pos = group_by_file_name(found_images)
         confs = []
@@ -98,9 +101,10 @@ class CytokitSPRMConf(ViewConf):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(file_paths_found, TILE_REGEX)
         if len(found_tiles) == 0:
+            message = f'Cytokit SPRM assay with uuid {self._uuid} has no matching files'
             if not self._is_mock:
                 current_app.logger.info(message)
-            raise FileNotFoundError(f'Cytokit SPRM assay with uuid {self._uuid} has no matching files')
+            raise FileNotFoundError(message)
         confs = []
         for tile in sorted(found_tiles):
             vc = SPRMViewConf(
