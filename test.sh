@@ -57,9 +57,12 @@ start pytest
 pytest context/app
 end pytest
 
+start lint
+cd context
+npm run lint
+end lint
 
 start npm-test
-cd context
 npm run test
 cd -
 end npm-test
