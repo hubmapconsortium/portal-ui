@@ -17,6 +17,14 @@ from .paths import CODEX_SPRM_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR, CODEX_TILE_DI
 
 MOCK_URL = "https://example.com"
 
+def return_empty_json_if_error(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            return {}
+    return wrapper
+
 
 class ViewConf:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
@@ -106,6 +114,7 @@ class ImagePyramidViewConf(ImagingViewConf):
         self.image_pyramid_regex = IMAGE_PYRAMID_DIR
         super().__init__(entity, nexus_token, is_mock)
 
+    @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_images = get_matches(
@@ -132,17 +141,18 @@ class ImagePyramidViewConf(ImagingViewConf):
 
 
 class ScatterplotViewConf(ViewConf):
+
+    @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         # We need to check that the files we expect actually exist.
         # This is due to the volatility of the datasets.
         if not set(file_paths_expected).issubset(set(file_paths_found)):
+            message = f'Files for uuid "{self._uuid}" not found as expected.'
             if not self._is_mock:
-                current_app.logger.info(
-                    f'Files for uuid "{self._uuid}" not found as expected.'
-                )
-            return self.conf
+                current_app.logger.info(message)
+            raise FileNotFoundError(message)
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
         for file in self._files:
@@ -179,6 +189,7 @@ class SPRMViewConf(ImagingViewConf):
             },
         ]
 
+    @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         vc = VitessceConfig(name=self._base_name)

@@ -139,6 +139,12 @@ class ApiClient():
                 ]
             }
         else:
-            vc = get_view_config_class_for_data_types(entity=entity, nexus_token=self.nexus_token)
-            conf = vc.build_vitessce_conf()
-            return conf
+            try:
+                vc = get_view_config_class_for_data_types(entity=entity, nexus_token=self.nexus_token)
+                conf = vc.build_vitessce_conf()
+                return conf
+            except Exception as e:
+                current_app.logger.info(
+                    f'Building vitessce conf threw error: {str(e)}'
+                )
+                return {}

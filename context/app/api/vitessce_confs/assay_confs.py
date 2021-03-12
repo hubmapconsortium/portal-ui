@@ -17,7 +17,8 @@ from .base_confs import (
     ScatterplotViewConf,
     ImagePyramidViewConf,
     SPRMViewConf,
-    ViewConf
+    ViewConf,
+    return_empty_json_if_error
 )
 from .assays import (
     SEQFISH,
@@ -36,6 +37,8 @@ from .type_client import CommonsTypeClient
 
 
 class SeqFISHViewConf(ImagingViewConf):
+
+    @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         full_seqfish_reqex = "/".join(
@@ -85,6 +88,7 @@ class SeqFISHViewConf(ImagingViewConf):
 
 class CytokitSPRMConf(ViewConf):
 
+    @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(file_paths_found, TILE_REGEX)
@@ -148,6 +152,8 @@ class IMSConf(ImagePyramidViewConf):
 
 
 class NullConf():
+
+    @return_empty_json_if_error
     def build_vitessce_conf(self):
         return {}
 
