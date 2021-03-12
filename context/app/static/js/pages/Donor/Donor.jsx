@@ -35,7 +35,7 @@ function DonorDetail(props) {
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
-    metadata: Boolean(mapped_metadata),
+    metadata: Boolean(Object.keys(mapped_metadata).length),
   };
 
   const sectionOrder = getSectionOrder(
