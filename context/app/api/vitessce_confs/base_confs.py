@@ -22,7 +22,7 @@ def return_empty_json_if_error(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except Exception as e:
+        except Exception:
             return {}
 
     return wrapper
