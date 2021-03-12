@@ -57,16 +57,17 @@ start pytest
 pytest context/app
 end pytest
 
-start lint
 cd context
+
+start lint
 npm run lint
 end lint
 
 start npm-test
 npm run test
-cd -
 end npm-test
 
+cd -
 
 start docker
 ./docker.sh 5001  # Needs to match port in cypress.json.
