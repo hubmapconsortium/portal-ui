@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
@@ -13,7 +13,9 @@ import DetailLayout from 'js/components/Detail/DetailLayout';
 import SummaryItem from 'js/components/Detail/SummaryItem';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-
+import { AppContext } from 'js/components/Providers';
+import useCollectionsData from 'js/hooks/useCollectionsData';
+import CollectionsSection from 'js/components/Detail/CollectionsSection';
 // TODO use this context for components other than FileBrowser
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
@@ -32,6 +34,13 @@ function SummaryDataChildren(props) {
       </Typography>
     </>
   );
+}
+
+function getCollectionsWhichContainDataset(uuid, collections) {
+  return collections.filter((collection) => {
+    // eslint-disable-next-line no-underscore-dangle
+    return collection._source.datasets.some((dataset) => dataset.uuid === uuid);
+  });
 }
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
@@ -59,15 +68,21 @@ function DatasetDetail(props) {
     mapped_data_access_level,
   } = assayMetadata;
 
+  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+
+  const allCollections = useCollectionsData(elasticsearchEndpoint, nexusToken);
+  const collectionsData = getCollectionsWhichContainDataset(uuid, allCollections);
+
   const shouldDisplaySection = {
     visualization: 'name' in vitData || (vitData[0] && 'name' in vitData[0]),
     protocols: Boolean(protocol_url),
     metadata: metadata && 'metadata' in metadata,
     files: true,
+    collections: Boolean(collectionsData.length),
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'visualization', 'attribution', 'provenance', 'protocols', 'metadata', 'files'],
+    ['summary', 'visualization', 'attribution', 'provenance', 'protocols', 'metadata', 'files', 'collections'],
     shouldDisplaySection,
   );
 
@@ -109,6 +124,7 @@ function DatasetDetail(props) {
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
         <Files files={files} uuid={uuid} display_doi={display_doi} />
+        {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
       </DetailLayout>
     </DetailContext.Provider>
   );
