@@ -220,8 +220,9 @@ class SPRMViewConf(ImagingViewConf):
             vc = self._setup_view_config_raster(vc, dataset)
         else:
             for file in self._files:
-                if file["rel_path"] not in file_paths_found:
-                    message = f'file for SPRM {file["rel_path"]} with uuid "{self._uuid}" not found as expected.'
+                path = file["rel_path"]
+                if path not in file_paths_found:
+                    message = f'SPRM file {path} with uuid "{self._uuid}" not found as expected.'
                     if not self._is_mock:
                         current_app.logger.info(message)
                     raise FileNotFoundError(message)

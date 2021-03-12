@@ -146,7 +146,7 @@ class ApiClient():
                 )
                 conf = vc.build_vitessce_conf()
                 return conf
-            except:
+            except Exception:
                 current_app.logger.info(
                     f'Building vitessce conf threw error: {traceback.format_exc()}'
                 )

@@ -93,9 +93,11 @@ class SeqFISHViewConf(ImagingViewConf):
             0
         ]
 
+
 class CytokitSPRMViewConfigError(Exception):
     """Raised when one of the individual SPRM view configs errors out"""
     pass
+
 
 class CytokitSPRMConf(ViewConf):
 
