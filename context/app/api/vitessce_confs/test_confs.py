@@ -23,6 +23,7 @@ AssayConfClasses = {
     "ims": IMSConf,
     "image_pyramid": ImagePyramidViewConf,
     "seqfish": SeqFISHViewConf,
+    "malformed": RNASeqConf
 }
 
 
