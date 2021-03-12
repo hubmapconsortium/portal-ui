@@ -1,0 +1,1 @@
+- Add linting which includes prettier check to test script.
