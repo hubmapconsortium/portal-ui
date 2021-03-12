@@ -1,1 +1,0 @@
-- Rewrite Vitessce backend to use `vitessce-python` package.
