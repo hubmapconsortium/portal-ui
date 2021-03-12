@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
 
 import Description from 'js/shared-styles/sections/Description';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
@@ -14,16 +13,8 @@ const PageWrapper = styled.div`
   }
 `;
 
-const ScrollBox = styled(Paper)`
-  @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
-    flex-grow: 1;
-    overflow-y: scroll;
-    margin-top: ${(props) => props.theme.spacing(1)}px;
-  }
-`;
-
 const StyledDescription = styled(Description)`
   margin-bottom: ${(props) => props.theme.spacing(2)}px;
 `;
 
-export { PageWrapper, ScrollBox, StyledDescription };
+export { PageWrapper, StyledDescription };
