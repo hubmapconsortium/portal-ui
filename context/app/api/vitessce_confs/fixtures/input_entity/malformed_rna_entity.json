@@ -14,9 +14,6 @@
       "rel_path": "cluster-marker-genes/output/cluster_marker_genes.csv"
     },
     {
-      "rel_path": "cluster-marker-genes/output/cluster_marker_genes.factors.json"
-    },
-    {
       "rel_path": "out.h5ad"
     },
     {

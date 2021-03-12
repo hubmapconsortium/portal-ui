@@ -13,7 +13,7 @@ from vitessce import (
 )
 
 from .utils import get_matches
-from .paths import CODEX_SPRM_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR, CODEX_TILE_DIR
+from .paths import SPRM_JSON_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR
 
 MOCK_URL = "https://example.com"
 
@@ -122,6 +122,11 @@ class ImagePyramidViewConf(ImagingViewConf):
         found_images = get_matches(
             file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
         )
+        if len(found_images) == 0:
+            if not self._is_mock:
+                current_app.logger.info(message)
+            raise FileNotFoundError(f'Image pyramid assay with uuid {self._uuid} has no matching files')
+        
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
         images = []
@@ -172,19 +177,20 @@ class SPRMViewConf(ImagingViewConf):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
         self._base_name = kwargs["base_name"]
+        self._imaging_path = kwargs["imaging_path"]
         self._files = [
             {
-                "rel_path": f"{CODEX_SPRM_DIR}/" + f"{self._base_name}.cells.json",
+                "rel_path": f"{SPRM_JSON_DIR}/" + f"{self._base_name}.cells.json",
                 "file_type": ft.CELLS_JSON,
                 "data_type": dt.CELLS,
             },
             {
-                "rel_path": f"{CODEX_SPRM_DIR}/" + f"{self._base_name}.cell-sets.json",
+                "rel_path": f"{SPRM_JSON_DIR}/" + f"{self._base_name}.cell-sets.json",
                 "file_type": ft.CELL_SETS_JSON,
                 "data_type": dt.CELL_SETS,
             },
             {
-                "rel_path": f"{CODEX_SPRM_DIR}/" + f"{self._base_name}.clusters.json",
+                "rel_path": f"{SPRM_JSON_DIR}/" + f"{self._base_name}.clusters.json",
                 "file_type": "clusters.json",
                 "data_type": dt.EXPRESSION_MATRIX,
             },
@@ -192,11 +198,18 @@ class SPRMViewConf(ImagingViewConf):
 
     @return_empty_json_if_error
     def build_vitessce_conf(self):
+        image_file = f"{self._imaging_path}/{self._base_name}.ome.tiff"
+        file_paths_expected = [file["rel_path"] for file in self._files] + [image_file]
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        if not set(file_paths_expected).issubset(set(file_paths_found)):
+            essage = f'Files for SPRM uuid "{self._uuid}" not found as expected.'
+            if not self._is_mock:
+                current_app.logger.info(message)
+            raise FileNotFoundError(message)
         vc = VitessceConfig(name=self._base_name)
-        dataset = vc.add_dataset(name="Cytokit + SPRM")
+        dataset = vc.add_dataset(name="SPRM")
         img_url, offsets_url = self._get_img_and_offset_url(
-            f"{CODEX_TILE_DIR}/{self._base_name}.ome.tiff", CODEX_TILE_DIR,
+            image_file, self._imaging_path,
         )
         image_wrapper = OmeTiffWrapper(
             img_url=img_url, offsets_url=offsets_url, name=self._base_name

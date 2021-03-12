@@ -31,7 +31,8 @@ from .paths import (
     IMAGE_PYRAMID_DIR,
     TILE_REGEX,
     SEQFISH_HYB_CYCLE_REGEX,
-    SEQFISH_FILE_REGEX
+    SEQFISH_FILE_REGEX,
+    CODEX_TILE_DIR
 )
 from .type_client import CommonsTypeClient
 
@@ -49,6 +50,10 @@ class SeqFISHViewConf(ImagingViewConf):
             ]
         )
         found_images = get_matches(file_paths_found, full_seqfish_reqex)
+        if len(found_images) == 0:
+            if not self._is_mock:
+                current_app.logger.info(message)
+            raise FileNotFoundError(f'seqFish assay with uuid {self._uuid} has no matching files')
         # Get all files grouped by PosN names.
         images_by_pos = group_by_file_name(found_images)
         confs = []
@@ -92,13 +97,18 @@ class CytokitSPRMConf(ViewConf):
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(file_paths_found, TILE_REGEX)
+        if len(found_tiles) == 0:
+            if not self._is_mock:
+                current_app.logger.info(message)
+            raise FileNotFoundError(f'Cytokit SPRM assay with uuid {self._uuid} has no matching files')
         confs = []
         for tile in sorted(found_tiles):
             vc = SPRMViewConf(
                 entity=self._entity,
                 nexus_token=self._nexus_token,
                 is_mock=self._is_mock,
-                base_name=tile
+                base_name=tile,
+                imaging_path=CODEX_TILE_DIR
             )
             confs.append(vc.build_vitessce_conf())
         return confs

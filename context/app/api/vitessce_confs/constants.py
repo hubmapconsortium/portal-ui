@@ -29,7 +29,7 @@ class AssetPaths(Enum):
     OFFSETS_DIR = "output_offsets"
     IMAGE_PYRAMID_DIR = "ometiff-pyramids"
     CODEX_TILE_DIR = "output/extract/expressions/ome-tiff"
-    CODEX_SPRM_DIR = "output_json"
+    SPRM_JSON_DIR = "output_json"
     TILE_REGEX = r"R\d+_X\d+_Y\d+"
     SEQFISH_HYB_CYCLE_REGEX = r"(HybCycle_\d+|final_mRNA_background)"
     SEQFISH_FILE_REGEX = r"MMStack_Pos\d+\.ome\.tiff?"
