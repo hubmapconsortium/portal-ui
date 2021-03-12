@@ -1,5 +1,6 @@
 from collections import namedtuple
 import json
+import traceback
 
 from datauri import DataURI
 from flask import abort, current_app
@@ -147,6 +148,6 @@ class ApiClient():
                 return conf
             except Exception as e:
                 current_app.logger.info(
-                    f'Building vitessce conf threw error: {str(e)}'
+                    f'Building vitessce conf threw error: {traceback.format_exc()}'
                 )
                 return {}
