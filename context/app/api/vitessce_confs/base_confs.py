@@ -17,12 +17,14 @@ from .paths import CODEX_SPRM_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR, CODEX_TILE_DI
 
 MOCK_URL = "https://example.com"
 
+
 def return_empty_json_if_error(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
             return {}
+
     return wrapper
 
 
@@ -141,7 +143,6 @@ class ImagePyramidViewConf(ImagingViewConf):
 
 
 class ScatterplotViewConf(ViewConf):
-
     @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
