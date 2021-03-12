@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { AppContext } from 'js/components/Providers';
-import Panel from 'js/components/Collections/Panel';
+import PanelList from 'js/components/Collections/PanelList';
 import useCollectionsData from 'js/hooks/useCollectionsData';
-import { PageWrapper, ScrollBox, StyledDescription } from './style';
+import { PageWrapper, StyledDescription } from './style';
 
 function Collections() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
@@ -24,18 +24,7 @@ function Collections() {
         organ—or data that has been grouped for other reasons. In the future, it will be possible to reference
         collections through Document Object Identifiers (DOIs).
       </StyledDescription>
-      <ScrollBox>
-        {collectionsData.length > 0 &&
-          collectionsData.map(({ _source }) => (
-            <Panel
-              key={_source.uuid}
-              name={_source.title}
-              datasetsCount={_source.datasets.length}
-              display_doi={_source.display_doi}
-              uuid={_source.uuid}
-            />
-          ))}
-      </ScrollBox>
+      {collectionsData.length > 0 && <PanelList collectionsData={collectionsData} />}
     </PageWrapper>
   );
 }
