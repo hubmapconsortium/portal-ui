@@ -1,1 +1,0 @@
-- Fix returning `self.conf` when it does not exist for XXX-seq assays with scatterplot conf.

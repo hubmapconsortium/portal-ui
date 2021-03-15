@@ -1,1 +1,0 @@
-- Add collections section to dataset page.
