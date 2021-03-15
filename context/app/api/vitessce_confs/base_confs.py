@@ -142,7 +142,7 @@ class ScatterplotViewConf(ViewConf):
                 current_app.logger.info(
                     f'Files for uuid "{self._uuid}" not found as expected.'
                 )
-            return self.conf
+            return {}
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
         for file in self._files:
