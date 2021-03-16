@@ -1,3 +1,13 @@
+## v0.14.0 - 2021-03-15
+
+- Add collections section to dataset page.
+- Remove metadata table for donors without metadata.
+- Fix returning `self.conf` when it does not exist for XXX-seq assays with scatterplot conf.
+- Port QA doc to markdown.
+- Add linting which includes prettier check to test script.
+- Tidy up the example config.
+
+
 ## v0.13.2 - 2021-03-11
 
 - Dependabot version bump for ini.
