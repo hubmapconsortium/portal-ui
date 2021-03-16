@@ -78,7 +78,7 @@ function SampleDetail(props) {
             {mapped_specimen_type}
           </Typography>
         </Summary>
-        {shouldDisplaySection.datasets && <SampleSpecificDatasetsTable datasets={sampleSpecificDatasets} />}
+        {shouldDisplaySection.datasets && <SampleSpecificDatasetsTable datasets={sampleSpecificDatasets} uuid={uuid} />}
         <SampleTissue
           uuid={uuid}
           mapped_specimen_type={mapped_specimen_type}
