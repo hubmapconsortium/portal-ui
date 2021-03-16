@@ -7,6 +7,7 @@ from vitessce import (
     DataType as dt,
     FileType as ft,
 )
+import requests
 
 from .utils import (
     group_by_file_name,
@@ -85,10 +86,25 @@ class SeqFISHViewConf(ImagingViewConf):
 
 class CytokitSPRMConf(ViewConf):
 
+    def _get_data_json(self):
+        url = self._build_assets_url("data.json")
+        print(url)
+        data_json = requests.get(url).json()
+        return data_json
+    
+    def _get_tile_x_y(self, tile):
+        x = int(re.match('X(\d+)', tile)[0].replace('X', ''))
+        y = int(re.match('X(\d+)', tile)[0].replace('X', ''))
+        return [x, y]
+
+
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(file_paths_found, TILE_REGEX)
         confs = []
+        data_json = self._get_data_json()
+        focal_plane_selector = data_json['focal_plane_selector']
+        focal_plane_selector_items = focal_plane_selector.items()
         for tile in sorted(found_tiles):
             vc = SPRMViewConf(
                 entity=self._entity,
@@ -96,9 +112,50 @@ class CytokitSPRMConf(ViewConf):
                 is_mock=self._is_mock,
                 base_name=tile
             )
-            confs.append(vc.build_vitessce_conf())
+            conf = vc.build_vitessce_conf()
+            if not self._is_mock:
+                [x, y] = self._get_tile_x_y(tile)
+                best_z = filter(lambda entry: entry[1]['tile_x'] == x and entry[1]['tile_y'] == y, focal_plane_selector_items)[0]['best_z']
+                conf_obj = VitessceConfig.from_dict(conf)
+                layers_scope = conf_obj.add_coordination(ct.SPATIAL_LAYERS)
+                layers_scope.set_value(
+                    {
+                        "type": "raster",
+                        "channels": [
+                            {
+                            "selection": {
+                                "channel": 0,
+                                "time": 0,
+                                "z": best_z
+                            }
+                            },
+                            {
+                            "selection": {
+                                "channel": 1,
+                                "time": 0,
+                                "z": best_z
+                            }
+                            },
+                            {
+                            "selection": {
+                                "channel": 2,
+                                "time": 0,
+                                "z": best_z
+                            }
+                            },
+                            {
+                            "selection": {
+                                "channel": 3,
+                                "time": 0,
+                                "z": best_z
+                            }
+                            }
+                        ]
+                    }
+                )
+                conf = conf_obj.to_dict()
+            confs.append(conf)
         return confs
-
 
 class RNASeqConf(ScatterplotViewConf):
     def __init__(self, entity, nexus_token, is_mock=False):
