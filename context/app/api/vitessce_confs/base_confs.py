@@ -1,6 +1,7 @@
 import urllib
 from pathlib import Path
 import re
+import traceback
 
 from flask import current_app
 from vitessce import (
@@ -23,6 +24,11 @@ def return_empty_json_if_error(func):
         try:
             return func(*args, **kwargs)
         except Exception:
+            class_obj = args[0]
+            if not class_obj._is_mock:
+                current_app.logger.info(
+                    f'Building vitessce conf threw error: {traceback.format_exc()}'
+                )
             return {}
 
     return wrapper
@@ -124,8 +130,6 @@ class ImagePyramidViewConf(ImagingViewConf):
         )
         if len(found_images) == 0:
             message = f'Image pyramid assay with uuid {self._uuid} has no matching files'
-            if not self._is_mock:
-                current_app.logger.info(message)
             raise FileNotFoundError(message)
 
         vc = VitessceConfig(name="HuBMAP Data Portal")
@@ -157,8 +161,6 @@ class ScatterplotViewConf(ViewConf):
         # This is due to the volatility of the datasets.
         if not set(file_paths_expected).issubset(set(file_paths_found)):
             message = f'Files for uuid "{self._uuid}" not found as expected.'
-            if not self._is_mock:
-                current_app.logger.info(message)
             raise FileNotFoundError(message)
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
@@ -203,8 +205,6 @@ class SPRMViewConf(ImagingViewConf):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         if image_file not in file_paths_found:
             message = f'Image file for SPRM uuid "{self._uuid}" not found as expected.'
-            if not self._is_mock:
-                current_app.logger.info(message)
             raise FileNotFoundError(message)
         vc = VitessceConfig(name=self._base_name)
         dataset = vc.add_dataset(name="SPRM")

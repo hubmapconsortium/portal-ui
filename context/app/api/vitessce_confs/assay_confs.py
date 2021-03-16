@@ -54,8 +54,6 @@ class SeqFISHViewConf(ImagingViewConf):
         found_images = get_matches(file_paths_found, full_seqfish_reqex)
         if len(found_images) == 0:
             message = f'seqFish assay with uuid {self._uuid} has no matching files'
-            if not self._is_mock:
-                current_app.logger.info(message)
             raise FileNotFoundError(message)
         # Get all files grouped by PosN names.
         images_by_pos = group_by_file_name(found_images)
@@ -107,8 +105,6 @@ class CytokitSPRMConf(ViewConf):
         found_tiles = get_matches(file_paths_found, TILE_REGEX)
         if len(found_tiles) == 0:
             message = f'Cytokit SPRM assay with uuid {self._uuid} has no matching tiles'
-            if not self._is_mock:
-                current_app.logger.info(message)
             raise FileNotFoundError(message)
         confs = []
         for tile in sorted(found_tiles):

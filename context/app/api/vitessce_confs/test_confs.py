@@ -31,10 +31,11 @@ AssayConfClasses = {
 
 def test_assays():
     parent_dir = Path(__file__).parent
-    for entity_file in (parent_dir / FIXTURES_INPUT_DIR).glob(
-        "[!malformed]*_entity.json"
-    ):
-
+    fixtures_dir = parent_dir / FIXTURES_INPUT_DIR
+    non_malformed_entities = set(fixtures_dir.glob("*_entity.json")) - set(
+        fixtures_dir.glob("malformed_*_entity.json")
+    )
+    for entity_file in non_malformed_entities:
         assay = re.search(
             str(parent_dir / f"{str(re.escape(FIXTURES_INPUT_DIR))}/(.*)_entity.json"),
             str(entity_file),
