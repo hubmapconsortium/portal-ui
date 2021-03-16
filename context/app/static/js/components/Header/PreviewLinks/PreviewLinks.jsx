@@ -6,11 +6,7 @@ function PreviewLinks(props) {
   const { isIndented } = props;
   return (
     <>
-      {[
-        'Multimodal Molecular Imaging Data',
-        'Cell Type Annotations',
-        'Anatomical Structures, Cell Types, and Biomarkers Tables',
-      ].map((previewName) => (
+      {['Multimodal Molecular Imaging Data', 'Cell Type Annotations'].map((previewName) => (
         <DropdownLink
           key={previewName}
           href={`/preview/${previewName.toLowerCase().replace(/\W+/g, '-')}`}
