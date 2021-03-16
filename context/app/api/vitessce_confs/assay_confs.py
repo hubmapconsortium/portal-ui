@@ -1,7 +1,5 @@
 import re
 
-from flask import current_app
-
 from vitessce import (
     VitessceConfig,
     MultiImageWrapper,
@@ -118,8 +116,6 @@ class CytokitSPRMConf(ViewConf):
             conf = vc.build_vitessce_conf()
             if conf == {}:
                 message = f'Cytokit SPRM assay with uuid {self._uuid} has empty view config'
-                if not self._is_mock:
-                    current_app.logger.info(message)
                 raise CytokitSPRMViewConfigError(message)
             confs.append(conf)
         return confs
