@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import ProvSection from 'js/components/Detail/provenance/ProvSection';
@@ -11,9 +11,11 @@ import MetadataTable from 'js/components/Detail/MetadataTable';
 import SampleTissue from 'js/components/Detail/SampleTissue';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-
+import { AppContext } from 'js/components/Providers';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
+import { useSearchData } from 'js/hooks/useEntityData';
+import SampleSpecificDatasetsTable from 'js/components/Detail/SampleSpecificDatasetsTable';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -35,15 +37,18 @@ function SampleDetail(props) {
     metadata,
     rui_location,
   } = assayMetadata;
+  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+
+  const { searchData: sampleSpecificDatasets } = useSearchData(uuid, elasticsearchEndpoint, nexusToken);
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     tissue: true,
     metadata: 'metadata' in assayMetadata,
+    datasets: Boolean(sampleSpecificDatasets.length),
   };
-
   const sectionOrder = getSectionOrder(
-    ['summary', 'tissue', 'attribution', 'provenance', 'protocols', 'metadata'],
+    ['summary', 'datasets', 'tissue', 'attribution', 'provenance', 'protocols', 'metadata'],
     shouldDisplaySection,
   );
 
@@ -73,6 +78,7 @@ function SampleDetail(props) {
             {mapped_specimen_type}
           </Typography>
         </Summary>
+        {shouldDisplaySection.datasets && <SampleSpecificDatasetsTable datasets={sampleSpecificDatasets} />}
         <SampleTissue
           uuid={uuid}
           mapped_specimen_type={mapped_specimen_type}
