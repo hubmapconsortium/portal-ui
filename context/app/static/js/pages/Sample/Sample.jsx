@@ -14,7 +14,7 @@ import useEntityStore from 'js/stores/useEntityStore';
 import { AppContext } from 'js/components/Providers';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
-import useSearchData from 'js/hooks/useSearchData';
+import useSearchHits from 'js/hooks/useSearchHits';
 import SampleSpecificDatasetsTable from 'js/components/Detail/SampleSpecificDatasetsTable';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
@@ -39,7 +39,7 @@ function SampleDetail(props) {
   } = assayMetadata;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
-  const { searchData: sampleSpecificDatasets } = useSearchData(
+  const { searchData: sampleSpecificDatasets } = useSearchHits(
     JSON.stringify({
       query: {
         bool: {
