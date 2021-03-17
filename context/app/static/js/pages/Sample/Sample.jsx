@@ -66,6 +66,7 @@ function SampleDetail(props) {
         'status',
         'last_modified_timestamp',
       ],
+      size: 10000,
     }),
     elasticsearchEndpoint,
     nexusToken,
