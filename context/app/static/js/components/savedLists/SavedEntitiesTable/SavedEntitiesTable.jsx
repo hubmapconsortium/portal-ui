@@ -14,7 +14,8 @@ import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRo
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
 import SaveToListDialog from 'js/components/savedLists/SaveToListDialog';
 import useStateSet from 'js/hooks/useStateSet';
-import { BottomAlignedTypography, LeftMarginButton, LeftMarginIconButton, StyledButtonRow } from './style';
+import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/RightAlignedButtonRow';
+import { LeftMarginButton, LeftMarginIconButton } from './style';
 
 const defaultColumns = [
   { id: 'display_doi', label: 'HuBMAP ID' },
