@@ -14,7 +14,7 @@ import useEntityStore from 'js/stores/useEntityStore';
 import { AppContext } from 'js/components/Providers';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
-import { useSearchData } from 'js/hooks/useEntityData';
+import useSearchData from 'js/hooks/useSearchData';
 import SampleSpecificDatasetsTable from 'js/components/Detail/SampleSpecificDatasetsTable';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
