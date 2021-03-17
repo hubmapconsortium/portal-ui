@@ -39,7 +39,37 @@ function SampleDetail(props) {
   } = assayMetadata;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
-  const { searchData: sampleSpecificDatasets } = useSearchData(uuid, elasticsearchEndpoint, nexusToken);
+  const { searchData: sampleSpecificDatasets } = useSearchData(
+    JSON.stringify({
+      query: {
+        bool: {
+          filter: [
+            {
+              term: {
+                ancestor_ids: uuid,
+              },
+            },
+            {
+              term: {
+                entity_type: 'dataset',
+              },
+            },
+          ],
+        },
+      },
+      _source: [
+        'uuid',
+        'display_doi',
+        'mapped_data_types',
+        'descendant_counts',
+        'origin_sample.mapped_organ',
+        'status',
+        'last_modified_timestamp',
+      ],
+    }),
+    elasticsearchEndpoint,
+    nexusToken,
+  );
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),

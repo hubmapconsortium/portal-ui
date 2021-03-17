@@ -29,7 +29,7 @@ function useEntityData(uuid, elasticsearchEndpoint, nexusToken) {
   return entity;
 }
 
-function useSearchData(uuid, elasticsearchEndpoint, nexusToken) {
+function useSearchData(query, elasticsearchEndpoint, nexusToken) {
   const [searchData, setSearchData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,33 +38,7 @@ function useSearchData(uuid, elasticsearchEndpoint, nexusToken) {
       const authHeader = getAuthHeader(nexusToken);
       const response = await fetch(elasticsearchEndpoint, {
         method: 'POST',
-        body: JSON.stringify({
-          query: {
-            bool: {
-              filter: [
-                {
-                  term: {
-                    ancestor_ids: uuid,
-                  },
-                },
-                {
-                  term: {
-                    entity_type: 'dataset',
-                  },
-                },
-              ],
-            },
-          },
-          _source: [
-            'uuid',
-            'display_doi',
-            'mapped_data_types',
-            'descendant_counts',
-            'origin_sample.mapped_organ',
-            'status',
-            'last_modified_timestamp',
-          ],
-        }),
+        body: query,
         headers: {
           'Content-Type': 'application/json',
           ...authHeader,
@@ -81,7 +55,7 @@ function useSearchData(uuid, elasticsearchEndpoint, nexusToken) {
       setIsLoading(false);
     }
     getAndSetEntity();
-  }, [nexusToken, elasticsearchEndpoint, uuid]);
+  }, [nexusToken, elasticsearchEndpoint, query]);
 
   return { searchData, isLoading };
 }
