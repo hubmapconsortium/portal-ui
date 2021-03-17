@@ -76,7 +76,7 @@ function SampleDetail(props) {
     protocols: Boolean(protocol_url),
     tissue: true,
     metadata: 'metadata' in assayMetadata,
-    datasets: Boolean(sampleSpecificDatasets.length),
+    datasets: sampleSpecificDatasets.length > 0,
   };
   const sectionOrder = getSectionOrder(
     ['summary', 'datasets', 'tissue', 'attribution', 'provenance', 'protocols', 'metadata'],
