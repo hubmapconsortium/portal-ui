@@ -123,6 +123,11 @@ export default class ProvData {
   }
 
   toCwl() {
-    return Object.keys(this.prov.activity).map((activityId) => this.makeCwlStep(activityId));
+    return Object.entries(this.prov.activity).reduce((acc, [activityId, activity]) => {
+      if (activity['hubmap:creation_action'] !== 'Register Donor Activity') {
+        acc.push(this.makeCwlStep(activityId));
+      }
+      return acc;
+    }, []);
   }
 }
