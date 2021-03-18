@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 import { getAuthHeader } from 'js/helpers/functions';
 
-function useEntityData(uuid, elasticsearchEndpoint, nexusToken) {
-  const [entity, setEntity] = useState(undefined);
+function useSearchHits(query, elasticsearchEndpoint, nexusToken) {
+  const [searchData, setSearchData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    async function getAndSetEntity() {
+    async function getAndSetSearchHits() {
       const authHeader = getAuthHeader(nexusToken);
       const response = await fetch(elasticsearchEndpoint, {
         method: 'POST',
-        body: JSON.stringify({ query: { ids: { values: [uuid] } } }),
+        body: JSON.stringify(query),
         headers: {
           'Content-Type': 'application/json',
           ...authHeader,
@@ -19,14 +21,13 @@ function useEntityData(uuid, elasticsearchEndpoint, nexusToken) {
         return;
       }
       const results = await response.json();
-      // eslint-disable-next-line no-underscore-dangle
-      const resultEntity = results.hits.hits[0]._source;
-      setEntity(resultEntity);
+      setSearchData(results.hits.hits);
+      setIsLoading(false);
     }
-    getAndSetEntity();
-  }, [nexusToken, elasticsearchEndpoint, uuid]);
+    getAndSetSearchHits();
+  }, [nexusToken, elasticsearchEndpoint, query]);
 
-  return entity;
+  return { searchData, isLoading };
 }
 
-export default useEntityData;
+export default useSearchHits;
