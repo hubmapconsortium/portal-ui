@@ -1,4 +1,4 @@
-cypress/screenshots/
+end-to-end/cypress/screenshots/
 **/node_modules/
 **/.DS_Store
 
