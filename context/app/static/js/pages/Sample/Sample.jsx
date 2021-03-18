@@ -40,35 +40,34 @@ function SampleDetail(props) {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   const sampleSpecificDatasetsQuery = useMemo(
-    () =>
-      JSON.stringify({
-        query: {
-          bool: {
-            filter: [
-              {
-                term: {
-                  ancestor_ids: uuid,
-                },
+    () => ({
+      query: {
+        bool: {
+          filter: [
+            {
+              term: {
+                ancestor_ids: uuid,
               },
-              {
-                term: {
-                  entity_type: 'dataset',
-                },
+            },
+            {
+              term: {
+                entity_type: 'dataset',
               },
-            ],
-          },
+            },
+          ],
         },
-        _source: [
-          'uuid',
-          'display_doi',
-          'mapped_data_types',
-          'descendant_counts',
-          'origin_sample.mapped_organ',
-          'status',
-          'last_modified_timestamp',
-        ],
-        size: 10000,
-      }),
+      },
+      _source: [
+        'uuid',
+        'display_doi',
+        'mapped_data_types',
+        'descendant_counts',
+        'origin_sample.mapped_organ',
+        'status',
+        'last_modified_timestamp',
+      ],
+      size: 10000,
+    }),
     [uuid],
   );
 

@@ -10,7 +10,7 @@ function useSearchHits(query, elasticsearchEndpoint, nexusToken) {
       const authHeader = getAuthHeader(nexusToken);
       const response = await fetch(elasticsearchEndpoint, {
         method: 'POST',
-        body: query,
+        body: JSON.stringify(query),
         headers: {
           'Content-Type': 'application/json',
           ...authHeader,
