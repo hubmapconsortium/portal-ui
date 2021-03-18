@@ -124,7 +124,9 @@ export default class ProvData {
 
   toCwl() {
     return Object.entries(this.prov.activity).reduce((acc, [activityId, activity]) => {
-      if (activity['hubmap:creation_action'] !== 'Register Donor Activity') {
+      // activity names currently vary across environments
+      // TODO reduce to single value once apis are consistent
+      if (!['Register Donor Activity', 'Create Donor Activity'].includes(activity['hubmap:creation_action'])) {
         acc.push(this.makeCwlStep(activityId));
       }
       return acc;
