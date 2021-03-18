@@ -1,1 +1,0 @@
-- Remove the ASCT+B preview, since it is in the other menu.

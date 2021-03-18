@@ -1,3 +1,10 @@
+## v0.14.1 - 2021-03-18
+
+- Pull in CCF and ASCT+B docs that are needed for DOI.
+- Remove the ASCT+B preview, since it is in the other menu.
+- Add table for sample specific datasets on the sample page.
+
+
 ## v0.14.0 - 2021-03-15
 
 - Add collections section to dataset page.
