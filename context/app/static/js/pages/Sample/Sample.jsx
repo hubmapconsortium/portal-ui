@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useMemo } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import ProvSection from 'js/components/Detail/provenance/ProvSection';
@@ -39,35 +39,41 @@ function SampleDetail(props) {
   } = assayMetadata;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
-  const { searchData: sampleSpecificDatasets } = useSearchHits(
-    JSON.stringify({
-      query: {
-        bool: {
-          filter: [
-            {
-              term: {
-                ancestor_ids: uuid,
+  const sampleSpecificDatasetsQuery = useMemo(
+    () =>
+      JSON.stringify({
+        query: {
+          bool: {
+            filter: [
+              {
+                term: {
+                  ancestor_ids: uuid,
+                },
               },
-            },
-            {
-              term: {
-                entity_type: 'dataset',
+              {
+                term: {
+                  entity_type: 'dataset',
+                },
               },
-            },
-          ],
+            ],
+          },
         },
-      },
-      _source: [
-        'uuid',
-        'display_doi',
-        'mapped_data_types',
-        'descendant_counts',
-        'origin_sample.mapped_organ',
-        'status',
-        'last_modified_timestamp',
-      ],
-      size: 10000,
-    }),
+        _source: [
+          'uuid',
+          'display_doi',
+          'mapped_data_types',
+          'descendant_counts',
+          'origin_sample.mapped_organ',
+          'status',
+          'last_modified_timestamp',
+        ],
+        size: 10000,
+      }),
+    [uuid],
+  );
+
+  const { searchData: sampleSpecificDatasets } = useSearchHits(
+    sampleSpecificDatasetsQuery,
     elasticsearchEndpoint,
     nexusToken,
   );
