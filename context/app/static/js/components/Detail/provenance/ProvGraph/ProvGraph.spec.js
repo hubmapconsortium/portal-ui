@@ -50,17 +50,17 @@ afterAll(() => server.close());
 
 test('should display the correct initial nodes', () => {
   const sampleEntityText = 'Sample - HBM666.CHPF.373';
-  const nodesText = [
+  const nodesText = ['Donor - HBM547.NCQL.874', 'Create Sample Activity - HBM665.NTZB.997', sampleEntityText];
+
+  const notIncludedNodesText = [
     'hubmap:entities/73bb26e4-ed43-11e8-8f19-0a7c1eab007a',
     'Register Donor Activity - HBM398.NBBW.527',
-    'Donor - HBM547.NCQL.874',
-    'Create Sample Activity - HBM665.NTZB.997',
-    sampleEntityText,
   ];
 
   render(<ProvGraph provData={sampleProv} />);
 
   nodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  notIncludedNodesText.forEach((text) => expect(screen.queryByText(text)).toBeNull());
 });
 
 test('should selected node information in detail pane and show immediate descendants when show derived entities button is clicked', async () => {
