@@ -1,3 +1,8 @@
+## v0.14.2 - 2021-03-19
+
+- Update doc for IU again.
+
+
 ## v0.14.1 - 2021-03-18
 
 - Pull in CCF and ASCT+B docs that are needed for DOI.
