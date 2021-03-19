@@ -4,11 +4,10 @@ function useProtocolData(doiSuffix, lastVersion = 1) {
   const [protocol, setProtocol] = React.useState({});
   React.useEffect(() => {
     async function getAndSetProtocol() {
-      const response = await fetch(
-        `https://www.protocols.io/api/v3/protocols/${doiSuffix}?last_version=${lastVersion}`,
-      );
+      const url = `https://www.protocols.io/api/v3/protocols/${doiSuffix}?last_version=${lastVersion}`;
+      const response = await fetch(url);
       if (!response.ok) {
-        console.error('Protocol API failed', response);
+        console.error('Protocol API failed:', url, response);
         return;
       }
       const data = await response.json();
