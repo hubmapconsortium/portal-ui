@@ -123,6 +123,13 @@ export default class ProvData {
   }
 
   toCwl() {
-    return Object.keys(this.prov.activity).map((activityId) => this.makeCwlStep(activityId));
+    return Object.entries(this.prov.activity).reduce((acc, [activityId, activity]) => {
+      // activity names currently vary across environments
+      // TODO reduce to single value once apis are consistent
+      if (!['Register Donor Activity', 'Create Donor Activity'].includes(activity['hubmap:creation_action'])) {
+        acc.push(this.makeCwlStep(activityId));
+      }
+      return acc;
+    }, []);
   }
 }
