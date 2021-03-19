@@ -25,7 +25,7 @@ function ProtocolLink(props) {
 function Protocol(props) {
   const { protocol_url } = props;
 
-  const matchedDoiSuffix = protocol_url.match(/\w+$/)[0];
+  const matchedDoiSuffix = protocol_url.match(/\w*$/)[0];
 
   const protocolData = useProtocolData(matchedDoiSuffix, 1);
 
