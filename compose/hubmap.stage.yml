@@ -20,6 +20,9 @@ services:
     networks:
       - gateway_hubmap
 
+  # Service names need to be kept in sync with gateway:
+  # https://github.com/hubmapconsortium/gateway/blob/f2c2d5d/nginx/conf.d-stage/prod-portal-ui.conf
+  # Some part of the routing seems to be be based on left substrings, rather than names, so make sure left substrings are unique.
   prod-portal-ui:
     hostname: prod-portal-ui
     container_name: prod-portal-ui
