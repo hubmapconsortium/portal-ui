@@ -63,7 +63,7 @@ test('should display the correct initial nodes', () => {
   notIncludedNodesText.forEach((text) => expect(screen.queryByText(text)).toBeNull());
 });
 
-test('should selected node information in detail pane and show immediate descendants when show derived entities button is clicked', async () => {
+test('should display selected node information in detail pane and show immediate descendants when "Show Derived Entities" button is clicked', async () => {
   render(<ProvGraph provData={sampleProv} />);
 
   const sampleEntityText = 'Sample - HBM666.CHPF.373';
