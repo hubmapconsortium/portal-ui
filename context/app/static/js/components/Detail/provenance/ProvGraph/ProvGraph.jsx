@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import SectionItem from 'js/components/Detail/SectionItem';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import ShowDerivedEntitiesButton from 'js/components/Detail/provenance/ShowDerivedEntitiesButton';
+import useProvenanceStore from 'js/stores/useProvenanceStore';
 import ProvVis from '../ProvVis';
 import { FlexPaper } from './style';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 
+const provenanceStoreSelector = (state) => state.setUUID;
+
 function ProvGraph(props) {
-  const { provData } = props;
+  const { provData, uuid } = props;
   const isOld = 'ex' in provData.prefix;
   const idKey = isOld ? 'hubmap:displayDOI' : 'hubmap:hubmap_id';
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
   const typeKey = isOld ? 'prov:type' : 'hubmap:entity_type';
+
+  const setUUID = useProvenanceStore(provenanceStoreSelector);
+
+  useEffect(() => {
+    setUUID(uuid);
+  }, [setUUID, uuid]);
 
   function getNameForActivity(id, prov) {
     const activity = prov.activity[id];
