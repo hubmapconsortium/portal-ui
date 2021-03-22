@@ -7,6 +7,15 @@ git diff --quiet || die 'Uncommitted changes: Stash or commit'
 git checkout master
 git pull
 
+git submodule foreach '
+  echo "was:" `git rev-parse HEAD`
+  git checkout master
+  git pull
+  echo "now:" `git rev-parse HEAD`
+'
+git add .
+git commit -m 'Update submodules' || echo 'Nothing to commit; Continue to git push...'
+
 get_minor_version() {
   REF_MINOR=$1
   REF_DATE=$2
@@ -61,16 +70,3 @@ docker push $LATEST_IMAGE_NAME
 
 git tag $VERSION
 git push origin --tags
-
-# We want to keep submodules up to date,
-# but safer to do it after making an image than before.
-git submodule foreach '
-  echo "was:" `git rev-parse HEAD`
-  git checkout master
-  git pull
-  echo "now:" `git rev-parse HEAD`
-'
-git add .
-git commit -m 'Update submodules' || echo 'Nothing to commit; Continue to git push...'
-
-git push origin
