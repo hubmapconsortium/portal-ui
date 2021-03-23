@@ -54,9 +54,10 @@ export function makeCwlOutput(name, steps, extras, isReference) {
 }
 
 export default class ProvData {
-  constructor(prov, getNameForActivity = (id) => id, getNameForEntity = (id) => id) {
+  constructor(prov, getNameForActivity = (id) => id, getNameForEntity = (id) => id, entity_type) {
     this.getNameForActivity = getNameForActivity;
     this.getNameForEntity = getNameForEntity;
+    this.entity_type = entity_type;
 
     const validate = new Ajv().compile(schema);
     const valid = validate(prov);
@@ -124,9 +125,14 @@ export default class ProvData {
 
   toCwl() {
     return Object.entries(this.prov.activity).reduce((acc, [activityId, activity]) => {
-      // activity names currently vary across environments
-      // TODO reduce to single value once apis are consistent
-      if (!['Register Donor Activity', 'Create Donor Activity'].includes(activity['hubmap:creation_action'])) {
+      if (
+        // activity names currently vary across environments
+        // TODO reduce to single value once apis are consistent
+        !['Register Donor Activity', 'Create Donor Activity'].includes(activity['hubmap:creation_action']) ||
+        // donors only have a single step which can't be removed
+        // TODO determine how to remove actvitiy node for donors
+        this.entity_type === 'Donor'
+      ) {
         acc.push(this.makeCwlStep(activityId));
       }
       return acc;
