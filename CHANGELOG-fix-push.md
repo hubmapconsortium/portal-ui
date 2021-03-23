@@ -1,1 +1,0 @@
-- Fix a bug in the push.sh script: master is not being updated.

@@ -1,3 +1,9 @@
+## v0.14.5 - 2021-03-23
+
+- Return donor registration/creation nodes for donor page provenance graphs.
+- Fix a bug in the push.sh script: master is not being updated.
+
+
 ## v0.14.4 - 2021-03-23
 
 - Tweak container names to be in sync with gateway.
