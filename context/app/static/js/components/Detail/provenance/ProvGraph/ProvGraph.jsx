@@ -9,7 +9,7 @@ import { FlexPaper } from './style';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 
 function ProvGraph(props) {
-  const { provData } = props;
+  const { provData, entity_type } = props;
   const isOld = 'ex' in provData.prefix;
   const idKey = isOld ? 'hubmap:displayDOI' : 'hubmap:hubmap_id';
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
@@ -79,6 +79,7 @@ function ProvGraph(props) {
       getNameForActivity={getNameForActivity}
       getNameForEntity={getNameForEntity}
       renderDetailPane={renderDetailPane}
+      entity_type={entity_type}
     />
   );
 }

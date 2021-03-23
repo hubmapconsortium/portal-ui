@@ -6,6 +6,8 @@ import { setupServer } from 'msw/node';
 // eslint-disable-next-line import/no-unresolved
 import { render, screen, appProviderEndpoints } from 'test-utils/functions';
 import sampleProv, { sampleDescendantsProv } from './fixtures/sample_prov';
+import donorProv from './fixtures/donor_prov';
+
 import ProvGraph from './ProvGraph';
 
 const server = setupServer(
@@ -48,7 +50,19 @@ beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test('should display the correct initial nodes', () => {
+test('should display the correct initial nodes for a donor', () => {
+  const nodesText = [
+    'hubmap:entities/308f5ffc-ed43-11e8-b56a-0e8017bdda58',
+    'Register Donor Activity - HBM826.XCGC.423',
+    'Donor - HBM528.WJLC.564',
+  ];
+
+  render(<ProvGraph provData={donorProv} entity_type="Donor" />);
+
+  nodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+});
+
+test('should display the correct initial nodes for a sample', () => {
   const sampleEntityText = 'Sample - HBM666.CHPF.373';
   const nodesText = ['Donor - HBM547.NCQL.874', 'Create Sample Activity - HBM665.NTZB.997', sampleEntityText];
 

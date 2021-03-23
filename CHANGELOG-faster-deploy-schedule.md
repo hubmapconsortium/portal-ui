@@ -1,1 +1,0 @@
-- Update submodules before, rather than after, making an image.

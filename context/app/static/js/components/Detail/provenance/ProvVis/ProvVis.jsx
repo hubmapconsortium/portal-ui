@@ -7,13 +7,12 @@ import ProvData from './ProvData';
 const useProvenanceStoreSelector = (state) => ({ steps: state.steps, setSteps: state.setSteps });
 
 export default function ProvVis(props) {
-  const { provData, getNameForActivity, getNameForEntity, renderDetailPane } = props;
+  const { provData, getNameForActivity, getNameForEntity, renderDetailPane, entity_type } = props;
   const { steps, setSteps } = useProvenanceStore(useProvenanceStoreSelector);
 
   useEffect(() => {
-    setSteps(new ProvData(provData, getNameForActivity, getNameForEntity).toCwl());
-  }, [provData, getNameForActivity, getNameForEntity, setSteps]);
-
+    setSteps(new ProvData(provData, getNameForActivity, getNameForEntity, entity_type).toCwl());
+  }, [provData, getNameForActivity, getNameForEntity, setSteps, entity_type]);
   return (
     <GraphParser
       parsingOptions={{
