@@ -70,3 +70,4 @@ docker push $LATEST_IMAGE_NAME
 
 git tag $VERSION
 git push origin --tags
+git push origin
