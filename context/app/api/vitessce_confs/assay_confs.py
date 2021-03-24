@@ -170,8 +170,8 @@ class RNASeqAnnDataConf(ViewConf):
         return vc.to_dict()
 
     def _setup_anndata_view_config(self, vc, dataset):
-        vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=5, h=6)
-        vc.add_view(dataset, cm.CELL_SET_EXPRESSION, x=5, y=0, w=4, h=6)
+        vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=4, h=6)
+        vc.add_view(dataset, cm.CELL_SET_EXPRESSION, x=4, y=0, w=5, h=6)
         vc.add_view(dataset, cm.CELL_SETS, x=9, y=0, w=3, h=3)
         vc.add_view(dataset, cm.GENES, x=9, y=4, w=3, h=3)
         vc.add_view(dataset, cm.HEATMAP, x=0, y=6, w=12, h=4)
@@ -209,12 +209,12 @@ class SlideSeqAnnDataConf(ViewConf):
         return vc.to_dict()
 
     def _setup_anndata_view_config(self, vc, dataset):
-        vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=5, h=6)
-        vc.add_view(dataset, cm.SPATIAL, x=0, y=6, w=5, h=6)
-        vc.add_view(dataset, cm.CELL_SET_EXPRESSION, x=5, y=0, w=4, h=6)
+        vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=4, h=6)
+        vc.add_view(dataset, cm.SPATIAL, x=0, y=6, w=4, h=6)
+        vc.add_view(dataset, cm.CELL_SET_EXPRESSION, x=5, y=0, w=5, h=6)
         vc.add_view(dataset, cm.CELL_SETS, x=9, y=0, w=3, h=3)
         vc.add_view(dataset, cm.GENES, x=9, y=4, w=3, h=3)
-        vc.add_view(dataset, cm.HEATMAP, x=5, y=6, w=12, h=4)
+        vc.add_view(dataset, cm.HEATMAP, x=4, y=6, w=12, h=4)
         return vc
 
 
