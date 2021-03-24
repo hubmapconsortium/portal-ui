@@ -4,6 +4,6 @@ requests==2.22.0
 pyyaml==5.3.1
 python-datauri==0.2.8
 python-frontmatter==0.5.0
-vitessce==0.1.0a8
+vitessce==0.1.0a9
 pandas==1.1.2 # TODO: remove: https://github.com/vitessce/vitessce-python/issues/51
 git+git://github.com/hubmapconsortium/commons.git@v2.0.1#egg=hubmap-commons
