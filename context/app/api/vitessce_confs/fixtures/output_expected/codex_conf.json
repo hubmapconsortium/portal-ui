@@ -6,7 +6,7 @@
     "datasets": [
       {
         "uid": "A",
-        "name": "Cytokit + SPRM",
+        "name": "SPRM",
         "files": [
           {
             "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y001.cells.json?token=nexus_token",
@@ -122,7 +122,7 @@
     "datasets": [
       {
         "uid": "A",
-        "name": "Cytokit + SPRM",
+        "name": "SPRM",
         "files": [
           {
             "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y002.cells.json?token=nexus_token",

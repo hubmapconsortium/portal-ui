@@ -1,5 +1,6 @@
 from collections import namedtuple
 import json
+import traceback
 
 from datauri import DataURI
 from flask import abort, current_app
@@ -139,6 +140,14 @@ class ApiClient():
                 ]
             }
         else:
-            vc = get_view_config_class_for_data_types(entity=entity, nexus_token=self.nexus_token)
-            conf = vc.build_vitessce_conf()
-            return conf
+            try:
+                vc = get_view_config_class_for_data_types(
+                    entity=entity, nexus_token=self.nexus_token
+                )
+                conf = vc.build_vitessce_conf()
+                return conf
+            except Exception:
+                current_app.logger.info(
+                    f'Building vitessce conf threw error: {traceback.format_exc()}'
+                )
+                return {}
