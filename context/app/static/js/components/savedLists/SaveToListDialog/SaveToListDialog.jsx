@@ -4,14 +4,18 @@ import Button from '@material-ui/core/Button';
 import useStateSet from 'js/hooks/useStateSet';
 import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
+import CreateListDialog from 'js/components/savedLists/CreateListDialog';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 
-const useSavedEntitiesSelector = (state) => state.addEntitiesToList;
+const useSavedEntitiesSelector = (state) => ({
+  addEntitiesToList: state.addEntitiesToList,
+  savedLists: state.savedLists,
+});
 
 function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd, onSaveCallback }) {
   const [selectedLists, addToSelectedLists, removeFromSelectedLists] = useStateSet([]);
 
-  const addEntitiesToList = useSavedEntitiesStore(useSavedEntitiesSelector);
+  const { addEntitiesToList, savedLists } = useSavedEntitiesStore(useSavedEntitiesSelector);
 
   function addSavedEntitiesToList() {
     selectedLists.forEach((list) => addEntitiesToList(list, entitiesToAdd));
@@ -23,7 +27,7 @@ function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd,
     onSaveCallback();
   }
 
-  return (
+  return Object.keys(savedLists).length ? (
     <DialogModal
       title={title}
       content={
@@ -45,6 +49,12 @@ function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd,
       }
       isOpen={dialogIsOpen}
       handleClose={() => setDialogIsOpen(false)}
+    />
+  ) : (
+    <CreateListDialog
+      secondaryText="No lists created. Create a list before adding items."
+      dialogIsOpen={dialogIsOpen}
+      setDialogIsOpen={setDialogIsOpen}
     />
   );
 }
