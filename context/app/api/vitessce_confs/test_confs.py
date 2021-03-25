@@ -9,6 +9,7 @@ from .assay_confs import (
     RNASeqConf,
     ATACSeqConf,
     IMSConf,
+    RNASeqAnnDataZarrConf,
 )
 
 MOCK_NEXUS_TOKEN = "nexus_token"
@@ -26,6 +27,7 @@ AssayConfClasses = {
     "image_pyramid": ImagePyramidViewConf,
     "seqfish": SeqFISHViewConf,
     "sprm": SPRMViewConf,
+    "rna_zarr": RNASeqAnnDataZarrConf,
 }
 
 
