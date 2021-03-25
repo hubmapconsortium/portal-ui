@@ -2,10 +2,12 @@ import re
 
 from vitessce import (
     VitessceConfig,
+    AnnDataWrapper,
     MultiImageWrapper,
     OmeTiffWrapper,
     DataType as dt,
     FileType as ft,
+    Component as cm,
 )
 
 from .utils import (
@@ -159,6 +161,51 @@ class ATACSeqConf(ScatterplotViewConf):
         ]
 
 
+class RNASeqAnnDataZarrConf(ViewConf):
+
+    @return_empty_json_if_error
+    def build_vitessce_conf(self):
+        zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        if f'{zarr_path}/.zgroup' not in file_paths_found:
+            message = f'RNA-seq assay with uuid {self._uuid} has no matching .zarr store'
+            raise FileNotFoundError(message)
+        vc = VitessceConfig(name=self._uuid)
+        adata_url = self._build_assets_url(zarr_path, use_token=False)
+        dataset = vc.add_dataset(name=self._uuid).add_object(AnnDataWrapper(
+            adata_url=adata_url,
+            mappings_obsm=["X_umap"],
+            mappings_obsm_names=["UMAP"],
+            cell_set_obs=["leiden"],
+            cell_set_obs_names=["Leiden"],
+            expression_matrix="X",
+            matrix_gene_var_filter="marker_genes_for_heatmap",
+            factors_obs=[
+                "marker_gene_0",
+                "marker_gene_1",
+                "marker_gene_2",
+                "marker_gene_3",
+                "marker_gene_4"
+            ],
+            request_init={
+                "headers": {
+                    "Authorization": f"Bearer {self._nexus_token}"
+                }
+            }
+        )
+        )
+        vc = self._setup_anndata_view_config(vc, dataset)
+        return vc.to_dict()
+
+    def _setup_anndata_view_config(self, vc, dataset):
+        vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=4, h=6)
+        vc.add_view(dataset, cm.CELL_SET_EXPRESSION, x=4, y=0, w=5, h=6)
+        vc.add_view(dataset, cm.CELL_SETS, x=9, y=0, w=3, h=3)
+        vc.add_view(dataset, cm.GENES, x=9, y=4, w=3, h=3)
+        vc.add_view(dataset, cm.HEATMAP, x=0, y=6, w=12, h=4)
+        return vc
+
+
 class IMSConf(ImagePyramidViewConf):
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
@@ -196,6 +243,11 @@ def get_view_config_class_for_data_types(entity, nexus_token):
         return ImagePyramidViewConf(
             entity=entity, nexus_token=nexus_token)
     if "rna" in hints:
+        dag_names = [dag['name']
+                     for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
+        # This is the zarr-backed anndata pipeline.
+        if('anndata-to-ui.cwl' in dag_names):
+            return RNASeqAnnDataZarrConf(entity=entity, nexus_token=nexus_token)
         return RNASeqConf(entity=entity, nexus_token=nexus_token)
     if "atac" in hints:
         return ATACSeqConf(entity=entity, nexus_token=nexus_token)

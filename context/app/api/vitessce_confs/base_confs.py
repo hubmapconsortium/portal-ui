@@ -69,7 +69,7 @@ class ViewConf:
             "url": self._build_assets_url(file["rel_path"]),
         }
 
-    def _build_assets_url(self, rel_path):
+    def _build_assets_url(self, rel_path, use_token=True):
         """Create a url for an asset.
 
         >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
@@ -83,7 +83,7 @@ class ViewConf:
             assets_endpoint = MOCK_URL
         base_url = urllib.parse.urljoin(assets_endpoint, f"{self._uuid}/{rel_path}")
         token_param = urllib.parse.urlencode({"token": self._nexus_token})
-        return base_url + "?" + token_param
+        return f'{base_url}?{token_param}' if use_token else base_url
 
 
 class ImagingViewConf(ViewConf):

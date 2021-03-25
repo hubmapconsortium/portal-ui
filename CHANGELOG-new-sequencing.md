@@ -1,0 +1,1 @@
+- Add new sequencing conf generation for visualization of zarr-backed AnnDAta.
