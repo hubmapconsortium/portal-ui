@@ -1,0 +1,1 @@
+- Show create list dialog instead of save items to list dialog when no lists exist.
