@@ -6,7 +6,7 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import ShowDerivedEntitiesButton from 'js/components/Detail/provenance/ShowDerivedEntitiesButton';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
 import ProvVis from '../ProvVis';
-import { FlexPaper } from './style';
+import { StyledPaper, Flex, StyledTypography } from './style';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 
 const provenanceStoreSelector = (state) => state.setUUID;
@@ -71,12 +71,17 @@ function ProvGraph(props) {
           </SectionItem>
         ) : null;
       return (
-        <FlexPaper>
-          {typeEl}
-          {idEl}
-          {createdEl}
-          {actionsEl}
-        </FlexPaper>
+        <StyledPaper>
+          <Flex>
+            {typeEl}
+            {idEl}
+            {createdEl}
+            {actionsEl}
+          </Flex>
+          {uuid === node.meta.prov['hubmap:uuid'] && (
+            <StyledTypography>{`* denotes this ${entity_type.toLowerCase()}'s node`}</StyledTypography>
+          )}
+        </StyledPaper>
       );
     }
     return node?.meta?.prov && <DetailPanel />;

@@ -1,9 +1,17 @@
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
-const FlexPaper = styled(Paper)`
-  display: flex;
+const StyledPaper = styled(Paper)`
   padding: 30px 40px 30px 40px;
 `;
 
-export { FlexPaper };
+const Flex = styled.div`
+  display: flex;
+`;
+
+const StyledTypography = styled(Typography)`
+  margin-top: ${(props) => props.theme.spacing(2)}px;
+`;
+
+export { StyledPaper, Flex, StyledTypography };
