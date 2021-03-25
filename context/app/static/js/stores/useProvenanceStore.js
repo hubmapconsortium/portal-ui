@@ -6,6 +6,11 @@ import immer from './immerMiddleware';
 
 const useProvenanceStore = create(
   immer((set, get) => ({
+    uuid: '',
+    setUUID: (uuid) =>
+      set((state) => {
+        state.uuid = uuid;
+      }),
     steps: [],
     setSteps: (steps) =>
       set((state) => {

@@ -111,3 +111,8 @@ test('should display selected node information in detail pane and show immediate
 
   newNodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 });
+
+test("should display an asterisk in the current page's node", () => {
+  render(<ProvGraph provData={sampleProv} entity_type="Sample" uuid="13129ad371683171b152618c83fd9e6f" />);
+  expect(screen.getByTestId('Sample - HBM666.CHPF.373')).toContainElement(screen.getByText('*'));
+});
