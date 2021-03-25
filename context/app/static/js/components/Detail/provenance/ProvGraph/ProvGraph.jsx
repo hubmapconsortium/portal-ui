@@ -79,7 +79,7 @@ function ProvGraph(props) {
             {actionsEl}
           </Flex>
           {uuid === node.meta.prov['hubmap:uuid'] && (
-            <StyledTypography>{`* denotes this ${entity_type.toLowerCase()}'s node`}</StyledTypography>
+            <StyledTypography>* Indicates Current Entity Node</StyledTypography>
           )}
         </StyledPaper>
       );
