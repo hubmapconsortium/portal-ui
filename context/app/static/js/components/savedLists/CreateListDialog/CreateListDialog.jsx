@@ -5,12 +5,12 @@ import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { StyledTitleTextField, StyledDescriptionTextField } from './style';
 
-const useSavedEntitiesStoreSelector = (state) => ({ createList: state.createList });
+const useSavedEntitiesStoreSelector = (state) => state.createList;
 
 function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const { createList } = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
+  const createList = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
 
   function handleTitleChange(event) {
     setTitle(event.target.value);
