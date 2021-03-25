@@ -9,6 +9,8 @@ function NodeElement(props) {
   const { node, title, columnWidth } = props;
   const style = node.nodeType === 'input' || node.nodeType === 'output' ? { width: columnWidth || 100 } : null;
 
+  const displayTitle = title || node.title || node.name;
+
   const uuid = useProvenanceStore(provenanceStoreSelector);
 
   function tooltip() {
@@ -35,8 +37,15 @@ function NodeElement(props) {
   }
 
   return (
-    <div className="node-visible-element" data-tip={tooltip()} data-place="top" data-html style={style}>
-      <div className="node-name">{title || node.title || node.name}</div>
+    <div
+      data-testid={displayTitle}
+      className="node-visible-element"
+      data-tip={tooltip()}
+      data-place="top"
+      data-html
+      style={style}
+    >
+      <div className="node-name">{displayTitle}</div>
       {uuid === node.meta.prov['hubmap:uuid'] && <Asterisk aria-label="">*</Asterisk>}
     </div>
   );
