@@ -1,1 +1,0 @@
-Wrap all Vitessce conf creation calls in try catch to return empty json as well as class instantiation.

@@ -1,3 +1,12 @@
+## v0.14.6 - 2021-03-25
+
+- Upgrade commons dependency.
+Wrap all Vitessce conf creation calls in try catch to return empty json as well as class instantiation.
+- Add new sequencing conf generation for visualization of zarr-backed AnnDAta.
+- For versioning, "previous" will be spelled out in the API response. Fix dev search.
+- Upgrade Vitessce to 1.7.1.
+
+
 ## v0.14.5 - 2021-03-23
 
 - Return donor registration/creation nodes for donor page provenance graphs.

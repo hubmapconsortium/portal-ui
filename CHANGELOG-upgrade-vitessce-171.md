@@ -1,1 +1,0 @@
-- Upgrade Vitessce to 1.7.1.
