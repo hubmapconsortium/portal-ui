@@ -167,7 +167,7 @@ class RNASeqAnnDataZarrConf(ViewConf):
     def build_vitessce_conf(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        if not f'{zarr_path}/.zgroup' in file_paths_found:
+        if f'{zarr_path}/.zgroup' not in file_paths_found:
             message = f'RNA-seq assay with uuid {self._uuid} has no matching .zarr store'
             raise FileNotFoundError(message)
         vc = VitessceConfig(name=self._uuid)
@@ -243,7 +243,8 @@ def get_view_config_class_for_data_types(entity, nexus_token):
         return ImagePyramidViewConf(
             entity=entity, nexus_token=nexus_token)
     if "rna" in hints:
-        dag_names = [dag['name'] for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
+        dag_names = [dag['name']
+                     for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
         # This is the zarr-backed anndata pipeline.
         if('anndata-to-ui.cwl' in dag_names):
             return RNASeqAnnDataZarrConf(entity=entity, nexus_token=nexus_token)
