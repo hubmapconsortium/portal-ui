@@ -83,7 +83,7 @@ class ViewConf:
             assets_endpoint = MOCK_URL
         base_url = urllib.parse.urljoin(assets_endpoint, f"{self._uuid}/{rel_path}")
         token_param = urllib.parse.urlencode({"token": self._nexus_token})
-        return base_url + "?" + token_param if use_token else base_url
+        return f'{base_url}?{token_param}' if use_token else base_url
 
 
 class ImagingViewConf(ViewConf):
