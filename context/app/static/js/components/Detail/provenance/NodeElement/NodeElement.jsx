@@ -1,9 +1,9 @@
 import React from 'react';
 
 import useProvenanceStore from 'js/stores/useProvenanceStore';
-import { Asterisk } from './style';
+import { AsteriskWrapper } from './style';
 
-const provenanceStoreSelector = (state) => state.uuid;
+const provenanceStoreUUIDSelector = (state) => state.uuid;
 
 function NodeElement(props) {
   const { node, title, columnWidth } = props;
@@ -11,7 +11,7 @@ function NodeElement(props) {
 
   const displayTitle = title || node.title || node.name;
 
-  const uuid = useProvenanceStore(provenanceStoreSelector);
+  const uuid = useProvenanceStore(provenanceStoreUUIDSelector);
 
   function tooltip() {
     let output = '';
@@ -46,7 +46,7 @@ function NodeElement(props) {
       style={style}
     >
       <div className="node-name">{displayTitle}</div>
-      {uuid === node.meta.prov['hubmap:uuid'] && <Asterisk aria-label="">*</Asterisk>}
+      {uuid === node.meta.prov['hubmap:uuid'] && <AsteriskWrapper aria-label="">*</AsteriskWrapper>}
     </div>
   );
 }
