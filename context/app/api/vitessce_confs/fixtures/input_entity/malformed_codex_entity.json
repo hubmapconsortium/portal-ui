@@ -2,6 +2,7 @@
     "data_types": [
         "codex_cytokit"
     ],
+    "status": "QA",
     "files": [
         {
             "rel_path": "data.json"

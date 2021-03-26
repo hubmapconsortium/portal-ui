@@ -85,6 +85,18 @@ class ViewConf:
         token_param = urllib.parse.urlencode({"token": self._nexus_token})
         return f'{base_url}?{token_param}' if use_token else base_url
 
+    def _get_request_init(self):
+        request_init = {
+            "headers": {
+                "Authorization": f"Bearer {self._nexus_token}"
+            }
+        }
+        # Extra headers outside of a select few cause extra CORS-preflight requests which
+        # can slow down the webpage.  If the dataset is published, we don't need to use
+        # heaeder to authenticate access to the assets API.
+        use_request_init = False if self._entity['status'] == 'Published' else True
+        return request_init if use_request_init else None
+
 
 class ImagingViewConf(ViewConf):
     def _get_img_and_offset_url(self, img_path, img_dir):
