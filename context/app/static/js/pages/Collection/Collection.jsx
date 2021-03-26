@@ -41,9 +41,11 @@ function Collection(props) {
             last_modified_timestamp={last_modified_timestamp}
             entityCanBeSaved={false}
           >
-            <OutboundLink href={doi_url} variant="body1">
-              doi:{new URL(doi_url).pathname.slice(1)} <StyledOpenInNewRoundedIcon />
-            </OutboundLink>
+            {doi_url && (
+              <OutboundLink href={doi_url} variant="body1">
+                doi:{new URL(doi_url).pathname.slice(1)} <StyledOpenInNewRoundedIcon />
+              </OutboundLink>
+            )}
           </Summary>
           {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
