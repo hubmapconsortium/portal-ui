@@ -94,6 +94,7 @@ class ViewConf:
         # Extra headers outside of a select few cause extra CORS-preflight requests which
         # can slow down the webpage.  If the dataset is published, we don't need to use
         # heaeder to authenticate access to the assets API.
+        # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests
         use_request_init = False if self._entity['status'] == 'Published' else True
         return request_init if use_request_init else None
 
