@@ -1,1 +1,0 @@
-- Distinguish the current page's node in provenance graph.

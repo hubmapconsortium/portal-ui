@@ -1,3 +1,11 @@
+## v0.15.0 - 2021-03-26
+
+- Show create list dialog instead of save items to list dialog when no lists exist.
+- Handle collection missing doi_url.
+- Distinguish the current page's node in provenance graph.
+- Replace tooltip for provenance graph nodes.
+
+
 ## v0.14.6 - 2021-03-25
 
 - Upgrade commons dependency.

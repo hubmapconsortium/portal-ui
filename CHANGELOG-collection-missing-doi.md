@@ -1,1 +1,0 @@
-- Handle collection missing doi_url.
