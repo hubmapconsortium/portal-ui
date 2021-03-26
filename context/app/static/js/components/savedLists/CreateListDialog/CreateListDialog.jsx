@@ -5,19 +5,15 @@ import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { StyledTitleTextField, StyledDescriptionTextField } from './style';
 
-const useSavedEntitiesStoreSelector = (state) => ({ createList: state.createList, savedLists: state.savedLists });
+const useSavedEntitiesStoreSelector = (state) => state.createList;
 
-function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
+function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [shouldDisplayWarning, setShouldDisplayWarning] = useState(false);
-  const { createList, savedLists } = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
+  const createList = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
 
   function handleTitleChange(event) {
     setTitle(event.target.value);
-    if (shouldDisplayWarning) {
-      setShouldDisplayWarning(false);
-    }
   }
 
   function handleDescriptionChange(event) {
@@ -34,18 +30,14 @@ function CreateListDialog({ dialogIsOpen, setDialogIsOpen }) {
   }
 
   function handleSubmit() {
-    if (!(title in savedLists)) {
-      createList({ title, description });
-      setDialogIsOpen(false);
-    } else {
-      setShouldDisplayWarning(true);
-    }
+    createList({ title, description });
+    setDialogIsOpen(false);
   }
 
   return (
     <DialogModal
       title="Create New List"
-      warning={shouldDisplayWarning && 'A list with that title already exists.'}
+      secondaryText={secondaryText}
       content={
         <>
           <StyledTitleTextField handleChange={handleTitleChange} title={title} />
