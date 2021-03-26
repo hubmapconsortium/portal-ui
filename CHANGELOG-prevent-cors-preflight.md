@@ -1,0 +1,1 @@
+- Unnecessary auth headers for published zarr stores cause unecessary CORS preflight requests.
