@@ -1,6 +1,5 @@
 {
   "data_types": ["salmon_rnaseq_10x"],
-  "status": "QA",
   "files": [
     {
       "rel_path": "cluster-marker-genes/cluster_marker_genes.h5ad"

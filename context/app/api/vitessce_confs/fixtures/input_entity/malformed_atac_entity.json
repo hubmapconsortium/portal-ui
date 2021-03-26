@@ -2,7 +2,6 @@
     "data_types": [
         "sn_atac_seq"
     ],
-    "status": "QA",
     "files": [
         {
             "rel_path": "alignment_qc.json"

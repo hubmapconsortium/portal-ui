@@ -187,7 +187,11 @@ class RNASeqAnnDataZarrConf(ViewConf):
                 "marker_gene_3",
                 "marker_gene_4"
             ],
-            request_init=self._get_request_init()
+            request_init={
+                "headers": {
+                    "Authorization": f"Bearer {self._nexus_token}"
+                }
+            }
         )
         )
         vc = self._setup_anndata_view_config(vc, dataset)
@@ -219,7 +223,6 @@ class NullConf():
 
 
 def get_view_config_class_for_data_types(entity, nexus_token):
-    print(entity)
     data_types = entity["data_types"]
     tc = CommonsTypeClient()
     assay_objs = [tc.get_assay(dt) for dt in data_types]

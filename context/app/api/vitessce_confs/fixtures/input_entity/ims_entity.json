@@ -3,7 +3,6 @@
         "image_pyramid",
         "MALDI-IMS-neg"
     ],
-    "status": "QA",
     "files": [
         {
             "rel_path": "ometiff-pyramids/ometiffs/separate/VAN0003-LK-32-21-IMS_NegMode_mz909.606.ome.tif"

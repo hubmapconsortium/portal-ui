@@ -3,7 +3,6 @@
         "image_pyramid",
         "seqFish"
     ],
-    "status": "QA",
     "files": [
         {
             "rel_path": "ometiff-pyramids/final_mRNA_background/MMStack_foo_Pos12.ome.tif"
