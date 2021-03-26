@@ -2,6 +2,7 @@
     "data_types": [
         "salmon_rnaseq_10x"
     ],
+    "status": "QA",
     "files": [
         {
             "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/.zgroup"
