@@ -219,7 +219,6 @@ class NullConf():
 
 
 def get_view_config_class_for_data_types(entity, nexus_token):
-    print(entity)
     data_types = entity["data_types"]
     tc = CommonsTypeClient()
     assay_objs = [tc.get_assay(dt) for dt in data_types]
