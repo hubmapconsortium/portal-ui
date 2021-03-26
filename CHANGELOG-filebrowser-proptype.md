@@ -1,0 +1,1 @@
+- Fix a proptype error in FileBrowser.
