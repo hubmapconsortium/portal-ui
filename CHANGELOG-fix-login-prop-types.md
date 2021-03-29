@@ -1,0 +1,1 @@
+- Fix proptypes error that occurs after login.
