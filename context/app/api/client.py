@@ -106,18 +106,17 @@ class ApiClient():
             return {}
         if self.is_mock:
             return self._get_mock_vitessce_conf()
-        else:
-            try:
-                vc = get_view_config_class_for_data_types(
-                    entity=entity, nexus_token=self.nexus_token
-                )
-                conf = vc.build_vitessce_conf()
-                return conf
-            except Exception:
-                current_app.logger.info(
-                    f'Building vitessce conf threw error: {traceback.format_exc()}'
-                )
-                return {}
+        try:
+            vc = get_view_config_class_for_data_types(
+                entity=entity, nexus_token=self.nexus_token
+            )
+            conf = vc.build_vitessce_conf()
+            return conf
+        except Exception:
+            current_app.logger.warn(
+                f'Building vitessce conf threw error: {traceback.format_exc()}'
+            )
+            return {}
 
     def _get_mock_vitessce_conf(self):
         cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
