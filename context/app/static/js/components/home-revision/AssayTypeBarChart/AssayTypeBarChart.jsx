@@ -3,12 +3,13 @@ import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
+import { withParentSize } from '@visx/responsive';
 
 import { AppContext } from 'js/components/Providers';
 import useSearchHits from 'js/hooks/useSearchHits';
 import { formatAssayData, addSumProperty, sortBySumAscending } from './utils';
 
-function AssayTypeBarChart() {
+function AssayTypeBarChart({ parentWidth, parentHeight }) {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   const [organTypes, setOrganTypes] = useState([]);
 
@@ -106,12 +107,9 @@ function AssayTypeBarChart() {
     padding: 0.2,
   });
 
-  const width = 1200;
-  const height = 800;
-
   const margin = { top: 40, right: 50, bottom: 100, left: 300 };
-  const xMax = width - margin.left - margin.right;
-  const yMax = height - margin.top - margin.bottom;
+  const xMax = parentWidth - margin.left - margin.right;
+  const yMax = parentHeight - margin.top - margin.bottom;
 
   const getDataType = (d) => d.mapped_data_type;
 
@@ -120,7 +118,7 @@ function AssayTypeBarChart() {
 
   return (
     <div>
-      <svg width={width} height={height}>
+      <svg width={parentWidth} height={parentHeight}>
         <Group top={margin.top} left={margin.left}>
           <BarStackHorizontal
             data={formattedData}
@@ -133,16 +131,19 @@ function AssayTypeBarChart() {
           >
             {(barStacks) =>
               barStacks.map((barStack) =>
-                barStack.bars.map((bar) => (
-                  <rect
-                    key={`barstack-horizontal-${barStack.index}-${bar.index}`}
-                    x={bar.x}
-                    y={bar.y}
-                    width={bar.width}
-                    height={bar.height}
-                    fill={bar.color}
-                  />
-                )),
+                barStack.bars.map(
+                  (bar) =>
+                    bar.width > 0 && (
+                      <rect
+                        key={`barstack-horizontal-${barStack.index}-${bar.index}`}
+                        x={bar.x}
+                        y={bar.y}
+                        width={bar.width}
+                        height={bar.height}
+                        fill={bar.color}
+                      />
+                    ),
+                ),
               )
             }
           </BarStackHorizontal>
@@ -176,4 +177,4 @@ function AssayTypeBarChart() {
   );
 }
 
-export default AssayTypeBarChart;
+export default withParentSize(AssayTypeBarChart);
