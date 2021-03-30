@@ -1,14 +1,12 @@
-/* eslint-disable no-param-reassign */
 import React, { useContext, useMemo, useEffect, useState } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
 
-import produce from 'immer';
-
 import { AppContext } from 'js/components/Providers';
 import useSearchHits from 'js/hooks/useSearchHits';
+import { formatAssayData, getMaxDataValue } from './utils';
 
 function AssayTypeBarChart() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
@@ -73,37 +71,19 @@ function AssayTypeBarChart() {
   const { searchData } = useSearchHits(aggregationQuery, elasticsearchEndpoint, nexusToken);
 
   const formattedData = useMemo(() => {
-    let a = {};
-    let z = [];
     if (Object.keys(searchData).length > 0) {
-      a = searchData.aggregations.mapped_data_types.buckets.reduce((acc, o) => {
-        return produce(acc, (draft) => {
-          const k = o.key.mapped_data_type.replace(/ /g, '_');
-          if (!(k in draft)) {
-            draft[k] = {};
-          }
-          draft[k].mapped_data_type = o.key.mapped_data_type;
-          draft[k][o.key.organ_type] = o.doc_count;
-        });
-      }, {});
-
-      z = Object.values(a).map((o) => {
-        return Object.entries(o).reduce((acc, [k, v]) => {
-          if (k !== 'mapped_data_type') {
-            return acc + v;
-          }
-          return acc;
-        }, 0);
-      });
+      const fD = formatAssayData(searchData);
+      const maxDocCount = getMaxDataValue(fD);
+      return [fD, maxDocCount];
     }
-
-    return [Object.values(a), z];
+    return [[], []];
   }, [searchData]);
 
   const docCountScale = scaleLinear({
     domain: [0, Math.max(...formattedData[1])],
     nice: true,
   });
+
   const colorScale = scaleOrdinal({
     domain: organTypes,
     range: [
