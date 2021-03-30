@@ -15,15 +15,17 @@ function formatAssayData(assayData) {
   return Object.values(formattedData);
 }
 
-function getMaxDataValue(formattedData) {
+function addTotalValue(formattedData) {
   return formattedData.map((o) => {
-    return Object.entries(o).reduce((acc, [k, v]) => {
-      if (k !== 'mapped_data_type') {
-        return acc + v;
-      }
-      return acc;
-    }, 0);
+    return produce(o, (draft) => {
+      draft.sum = Object.entries(o).reduce((acc, [k, v]) => {
+        if (k !== 'mapped_data_type') {
+          return acc + v;
+        }
+        return acc;
+      }, 0);
+    });
   });
 }
 
-export { formatAssayData, getMaxDataValue };
+export { formatAssayData, addTotalValue };
