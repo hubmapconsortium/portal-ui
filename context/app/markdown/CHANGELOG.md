@@ -1,3 +1,11 @@
+## v0.15.1 - 2021-03-29
+
+- Fix a proptype error in FileBrowser.
+- Fix proptypes error that occurs after login.
+- Add route for homepage revision work in progress.
+- Unnecessary auth headers for published zarr stores cause unecessary CORS preflight requests.
+
+
 ## v0.15.0 - 2021-03-26
 
 - Show create list dialog instead of save items to list dialog when no lists exist.
