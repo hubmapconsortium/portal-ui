@@ -6,7 +6,7 @@ import { AxisTop, AxisLeft } from '@visx/axis';
 
 import { AppContext } from 'js/components/Providers';
 import useSearchHits from 'js/hooks/useSearchHits';
-import { formatAssayData, getMaxDataValue } from './utils';
+import { formatAssayData, addSumProperty, sortBySumAscending } from './utils';
 
 function AssayTypeBarChart() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
@@ -70,17 +70,18 @@ function AssayTypeBarChart() {
 
   const { searchData } = useSearchHits(aggregationQuery, elasticsearchEndpoint, nexusToken);
 
-  const formattedData = useMemo(() => {
+  const { formattedData, maxSumDocCount } = useMemo(() => {
     if (Object.keys(searchData).length > 0) {
-      const fD = formatAssayData(searchData);
-      const maxDocCount = getMaxDataValue(fD);
-      return [fD, maxDocCount];
+      const f = addSumProperty(formatAssayData(searchData));
+      const m = Math.max(...f.map((d) => d.sum));
+      sortBySumAscending(f);
+      return { formattedData: f, maxSumDocCount: m };
     }
-    return [[], []];
+    return { formattedData: [], maxSumDocCount: 0 };
   }, [searchData]);
 
   const docCountScale = scaleLinear({
-    domain: [0, Math.max(...formattedData[1])],
+    domain: [0, maxSumDocCount],
     nice: true,
   });
 
@@ -101,7 +102,7 @@ function AssayTypeBarChart() {
   });
 
   const dataTypeScale = scaleBand({
-    domain: formattedData[0].map((b) => b.mapped_data_type),
+    domain: formattedData.map((b) => b.mapped_data_type),
     padding: 0.2,
   });
 
@@ -122,7 +123,7 @@ function AssayTypeBarChart() {
       <svg width={width} height={height}>
         <Group top={margin.top} left={margin.left}>
           <BarStackHorizontal
-            data={formattedData[0]}
+            data={formattedData}
             keys={organTypes}
             height={yMax}
             y={getDataType}
