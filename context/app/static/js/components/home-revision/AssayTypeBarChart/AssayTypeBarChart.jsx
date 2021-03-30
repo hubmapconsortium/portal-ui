@@ -111,8 +111,6 @@ function AssayTypeBarChart() {
   const margin = { top: 40, right: 50, bottom: 100, left: 300 };
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
-  const purple3 = '#a44afe';
-  const background = '#eaedff';
 
   const getDataType = (d) => d.mapped_data_type;
 
@@ -122,7 +120,6 @@ function AssayTypeBarChart() {
   return (
     <div>
       <svg width={width} height={height}>
-        <rect width={width} height={height} fill={background} />
         <Group top={margin.top} left={margin.left}>
           <BarStackHorizontal
             data={formattedData[0]}
@@ -151,10 +148,10 @@ function AssayTypeBarChart() {
           <AxisLeft
             hideTicks
             scale={dataTypeScale}
-            stroke={purple3}
+            stroke="black"
             numTicks={33}
             tickLabelProps={() => ({
-              fill: purple3,
+              fill: 'black',
               fontSize: 8,
               textAnchor: 'end',
               dy: '0.33em',
@@ -164,10 +161,10 @@ function AssayTypeBarChart() {
             hideTicks
             top={1}
             scale={docCountScale}
-            stroke={purple3}
-            tickStroke={purple3}
+            stroke="black"
+            tickStroke="black"
             tickLabelProps={() => ({
-              fill: purple3,
+              fill: 'black',
               fontSize: 11,
               textAnchor: 'middle',
             })}
