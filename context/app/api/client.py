@@ -101,7 +101,9 @@ class ApiClient():
         return entity
 
     def get_vitessce_conf(self, entity):
-        if entity['descendants'] and 'image_pyramid' in entity['descendants'][0]['data_types']:
+        if 'descendants' in entity \
+                and len(entity['descendants']) \
+                and 'image_pyramid' in entity['descendants'][0]['data_types']:
             descendant = entity['descendants'][0]
             # TODO: Why are files in metadata in descendants?
             files = descendant['metadata']['files']
