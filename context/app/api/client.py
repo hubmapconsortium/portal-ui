@@ -105,40 +105,7 @@ class ApiClient():
             # Would a default no-viz config be better?
             return {}
         if self.is_mock:
-            cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
-            cellsUri = DataURI.make(
-                'text/plain', charset='us-ascii', base64=True, data=cellsData
-            )
-            token = 'fake-token'
-            return {
-                'description': 'DEMO',
-                'layers': [
-                    {
-                        'name': 'cells',
-                        'type': 'CELLS',
-                        'url': cellsUri,
-                        'requestInit': {
-                            'headers': {
-                                'Authorization': 'Bearer ' + token
-                            }
-                        }
-                    },
-                ],
-                'name': 'Linnarsson',
-                'staticLayout': [
-                    {
-                        'component': 'scatterplot',
-                        'props': {
-                            'mapping': 'UMAP',
-                            'view': {
-                                'zoom': 4,
-                                'target': [0, 0, 0]
-                            }
-                        },
-                        'x': 0, 'y': 0, 'w': 12, 'h': 2
-                    },
-                ]
-            }
+            return self._get_mock_vitessce_conf()
         else:
             try:
                 vc = get_view_config_class_for_data_types(
@@ -151,3 +118,39 @@ class ApiClient():
                     f'Building vitessce conf threw error: {traceback.format_exc()}'
                 )
                 return {}
+
+    def _get_mock_vitessce_conf(self):
+        cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
+        cellsUri = DataURI.make(
+            'text/plain', charset='us-ascii', base64=True, data=cellsData
+        )
+        token = 'fake-token'
+        return {
+            'description': 'DEMO',
+            'layers': [
+                {
+                    'name': 'cells',
+                    'type': 'CELLS',
+                    'url': cellsUri,
+                    'requestInit': {
+                        'headers': {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    }
+                },
+            ],
+            'name': 'Linnarsson',
+            'staticLayout': [
+                {
+                    'component': 'scatterplot',
+                    'props': {
+                        'mapping': 'UMAP',
+                        'view': {
+                            'zoom': 4,
+                            'target': [0, 0, 0]
+                        }
+                    },
+                    'x': 0, 'y': 0, 'w': 12, 'h': 2
+                },
+            ]
+        }
