@@ -101,7 +101,18 @@ class ApiClient():
         return entity
 
     def get_vitessce_conf(self, entity):
-        if ('files' not in entity or 'data_types' not in entity):
+        if entity['descendants'] and 'image_pyramid' in entity['descendants'][0]['data_types']:
+            descendant = entity['descendants'][0]
+            # TODO: Why are files in metadata in descendants?
+            files = descendant['metadata']['files']
+            derived_entity = {
+                'files': files,
+                'data_types': descendant['data_types'],
+                'descendants': [],
+                'uuid': descendant['uuid']
+            }
+            return self.get_vitessce_conf(derived_entity)
+        if 'files' not in entity or 'data_types' not in entity:
             # Would a default no-viz config be better?
             return {}
         if self.is_mock:
@@ -113,7 +124,7 @@ class ApiClient():
             conf = vc.build_vitessce_conf()
             return conf
         except Exception:
-            current_app.logger.warn(
+            current_app.logger.error(
                 f'Building vitessce conf threw error: {traceback.format_exc()}'
             )
             return {}
