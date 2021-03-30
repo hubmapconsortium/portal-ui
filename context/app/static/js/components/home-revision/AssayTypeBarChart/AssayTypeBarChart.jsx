@@ -3,7 +3,7 @@ import React, { useContext, useMemo, useEffect, useState } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
-import { AxisBottom, AxisLeft } from '@visx/axis';
+import { AxisTop, AxisLeft } from '@visx/axis';
 
 import produce from 'immer';
 
@@ -183,8 +183,9 @@ function AssayTypeBarChart() {
               dy: '0.33em',
             })}
           />
-          <AxisBottom
-            top={yMax}
+          <AxisTop
+            hideTicks
+            top={1}
             scale={docCountScale}
             stroke={purple3}
             tickStroke={purple3}
