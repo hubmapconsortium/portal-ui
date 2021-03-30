@@ -1,7 +1,8 @@
 import React from 'react';
+import AssayTypeBarChart from 'js/components/home-revision/AssayTypeBarChart';
 
 function HomeRevision() {
-  return <div>TODO</div>;
+  return <AssayTypeBarChart />;
 }
 
 export default HomeRevision;
