@@ -105,9 +105,6 @@ function AssayTypeBarChart() {
     padding: 0.2,
   });
 
-  // eslint-disable-next-line no-console
-  console.log(formattedData);
-
   const width = 1200;
   const height = 800;
 
