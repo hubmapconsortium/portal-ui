@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 
 import { ReactComponent as Logo } from 'images/hubmap-logo.svg';
 
@@ -22,4 +23,8 @@ const FlexNoWrap = styled.div`
   flex-wrap: nowrap;
 `;
 
-export { HubmapLogo, Spacer, HeaderButton, FlexNoWrap };
+const StyledDivider = styled(Divider)`
+  margin: ${(props) => props.theme.spacing(0.5)}px 0px;
+`;
+
+export { HubmapLogo, Spacer, HeaderButton, FlexNoWrap, StyledDivider };
