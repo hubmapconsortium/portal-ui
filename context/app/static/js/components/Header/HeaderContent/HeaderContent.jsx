@@ -47,9 +47,7 @@ function HeaderContent({ anchorRef }) {
           <Dropdown title="Atlas & Tools" menuListId="ccf-options">
             <CCFLinks />
             <StyledDivider />
-            <DropdownLink href="https://azimuth.hubmapconsortium.org/" isOutboundLink>
-              Azimuth Cell Type Mapping
-            </DropdownLink>
+            <DropdownLink href="https://azimuth.hubmapconsortium.org/">Azimuth Cell Type Mapping</DropdownLink>
           </Dropdown>
           <Dropdown title="Documentation" menuListId="documentation-options">
             <DocumentationLinks />
