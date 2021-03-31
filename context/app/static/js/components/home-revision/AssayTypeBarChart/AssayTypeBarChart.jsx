@@ -4,6 +4,7 @@ import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
+import { useTheme } from '@material-ui/core/styles';
 
 import { AppContext } from 'js/components/Providers';
 import useSearchHits from 'js/hooks/useSearchHits';
@@ -12,6 +13,17 @@ import { formatAssayData, addSumProperty, sortBySumAscending } from './utils';
 function AssayTypeBarChart({ parentWidth, parentHeight }) {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   const [organTypes, setOrganTypes] = useState([]);
+  const {
+    palette: { success, primary, secondary, error, warning, info },
+  } = useTheme();
+
+  const colorObjects = [success, primary, secondary, error, warning, info];
+
+  const colors = [
+    ...colorObjects.map((c) => c.light),
+    ...colorObjects.map((c) => c.main),
+    colorObjects.map((c) => c.dark),
+  ];
 
   useEffect(() => {
     async function getAssayTypesData() {
@@ -88,18 +100,7 @@ function AssayTypeBarChart({ parentWidth, parentHeight }) {
 
   const colorScale = scaleOrdinal({
     domain: organTypes,
-    range: [
-      '#1f77b4',
-      '#ff7f0e',
-      '#2ca02c',
-      '#d62728',
-      '#9467bd',
-      '#8c564b',
-      '#e377c2',
-      '#7f7f7f',
-      '#bcbd22',
-      '#17becf',
-    ],
+    range: colors,
   });
 
   const dataTypeScale = scaleBand({
