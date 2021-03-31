@@ -10,7 +10,8 @@ import Dropdown from '../Dropdown';
 import LoginButton from '../LoginButton';
 import CCFLinks from '../CCFLinks';
 import DocumentationLinks from '../DocumentationLinks';
-import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap } from './style';
+import DropdownLink from '../DropdownLink';
+import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap, StyledDivider } from './style';
 
 function HeaderContent({ anchorRef }) {
   const theme = useTheme();
@@ -43,8 +44,10 @@ function HeaderContent({ anchorRef }) {
           <Dropdown title="Previews" menuListId="preview-options">
             <PreviewLinks />
           </Dropdown>
-          <Dropdown title="CCF Atlas" menuListId="ccf-options">
+          <Dropdown title="Atlas & Tools" menuListId="ccf-options">
             <CCFLinks />
+            <StyledDivider />
+            <DropdownLink href="https://azimuth.hubmapconsortium.org/">Azimuth Cell Type Mapping</DropdownLink>
           </Dropdown>
           <Dropdown title="Documentation" menuListId="documentation-options">
             <DocumentationLinks />
