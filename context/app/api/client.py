@@ -1,6 +1,7 @@
 from collections import namedtuple
 import json
 import traceback
+from copy import deepcopy
 
 from datauri import DataURI
 from flask import abort, current_app
