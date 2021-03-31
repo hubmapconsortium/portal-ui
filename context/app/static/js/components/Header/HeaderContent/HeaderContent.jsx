@@ -43,7 +43,7 @@ function HeaderContent({ anchorRef }) {
           <Dropdown title="Previews" menuListId="preview-options">
             <PreviewLinks />
           </Dropdown>
-          <Dropdown title="CCF Atlas" menuListId="ccf-options">
+          <Dropdown title="Atlas & Tools" menuListId="ccf-options">
             <CCFLinks />
           </Dropdown>
           <Dropdown title="Documentation" menuListId="documentation-options">
