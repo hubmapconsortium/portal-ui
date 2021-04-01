@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
@@ -51,6 +51,7 @@ const getDataType = (d) => d.mapped_data_type;
 
 function AssayTypeBarChart({ parentWidth, parentHeight }) {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+  const [hoveredBarIndices, setHoveredBarIndices] = useState();
 
   const colors = useChartPalette();
 
@@ -101,14 +102,17 @@ function AssayTypeBarChart({ parentWidth, parentHeight }) {
     debounce: 100,
   });
 
-  const handleMouse = (event, bar) => {
+  const handleMouse = (event, bar, barStackIndex) => {
     const coords = localPoint(event.target.ownerSVGElement, event);
     showTooltip({
       tooltipLeft: coords.x,
       tooltipTop: coords.y,
       tooltipData: bar,
     });
+    setHoveredBarIndices({ barIndex: bar.index, barStackIndex });
   };
+
+  const strokeWidth = 1.5;
 
   return (
     <div>
@@ -132,9 +136,17 @@ function AssayTypeBarChart({ parentWidth, parentHeight }) {
                         key={`barstack-horizontal-${barStack.index}-${bar.index}`}
                         x={bar.x}
                         y={bar.y}
-                        width={bar.width}
+                        width={bar.width - strokeWidth}
                         height={bar.height}
                         fill={bar.color}
+                        stroke={
+                          hoveredBarIndices &&
+                          bar.index === hoveredBarIndices.barIndex &&
+                          barStack.index === hoveredBarIndices.barStackIndex
+                            ? 'black'
+                            : bar.color
+                        }
+                        strokeWidth={strokeWidth}
                         onMouseEnter={(event) => handleMouse(event, bar, barStack.index)}
                         onMouseLeave={hideTooltip}
                       />
