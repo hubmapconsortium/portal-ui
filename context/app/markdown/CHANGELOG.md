@@ -1,3 +1,8 @@
+## v0.15.2 - 2021-04-01
+
+- Replace ccf dropdown in header with 'Atlas & Tools' and add link to Azimuth.
+
+
 ## v0.15.1 - 2021-03-29
 
 - Fix a proptype error in FileBrowser.
