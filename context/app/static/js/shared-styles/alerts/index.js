@@ -23,6 +23,7 @@ const StyledAlert = styled(OutlinedAlert)`
   :not(svg) {
     color: ${(props) => props.theme.palette.text.primary};
   }
+  margin-bottom: 16px;
 `;
 
 export { StyledAlert as Alert };
