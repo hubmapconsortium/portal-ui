@@ -102,7 +102,7 @@ function AssayTypeBarChart({ parentWidth, parentHeight }) {
     debounce: 100,
   });
 
-  const handleMouse = (event, bar, barStackIndex) => {
+  function handleMouseEnter(event, bar, barStackIndex) {
     const coords = localPoint(event.target.ownerSVGElement, event);
     showTooltip({
       tooltipLeft: coords.x,
@@ -110,7 +110,12 @@ function AssayTypeBarChart({ parentWidth, parentHeight }) {
       tooltipData: bar,
     });
     setHoveredBarIndices({ barIndex: bar.index, barStackIndex });
-  };
+  }
+
+  function handleMouseLeave() {
+    hideTooltip();
+    setHoveredBarIndices(undefined);
+  }
 
   const strokeWidth = 1.5;
 
@@ -147,8 +152,8 @@ function AssayTypeBarChart({ parentWidth, parentHeight }) {
                             : bar.color
                         }
                         strokeWidth={strokeWidth}
-                        onMouseEnter={(event) => handleMouse(event, bar, barStack.index)}
-                        onMouseLeave={hideTooltip}
+                        onMouseEnter={(event) => handleMouseEnter(event, bar, barStack.index)}
+                        onMouseLeave={handleMouseLeave}
                       />
                     ),
                 ),
