@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { BoolMustNot, ExistsQuery } from 'searchkit';
 
 import DatasetSearchPrompt from 'js/components/tutorials/DatasetSearchPrompt';
 import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
@@ -81,6 +82,7 @@ function Search(props) {
     queryFields: ['everything'],
     isLoggedIn: Boolean(nexusToken),
     apiUrl: elasticsearchEndpoint,
+    defaultQuery: BoolMustNot(ExistsQuery('next_revision_uuid')),
   };
 
   const wrappedSearch = <SearchWrapper {...searchProps} resultsComponent={Results} />;

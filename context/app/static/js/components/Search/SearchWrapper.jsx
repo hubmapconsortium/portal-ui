@@ -27,6 +27,7 @@ function SearchWrapper(props) {
     type,
     isLoggedIn,
     isDevSearch,
+    defaultQuery,
     resultsComponent: ResultsComponent,
   } = props;
 
@@ -35,6 +36,7 @@ function SearchWrapper(props) {
     .map((field) => field.id)
     .concat(idField);
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
+  searchkit.addDefaultQuery((query) => query.addQuery(defaultQuery));
 
   const setSearchHitsCount = useSearchViewStore(searchViewStoreSelector);
 
