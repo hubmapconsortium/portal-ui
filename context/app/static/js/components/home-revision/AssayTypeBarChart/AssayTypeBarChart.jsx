@@ -183,9 +183,11 @@ function AssayTypeBarChart({ parentWidth, parentHeight }) {
       </svg>
       {tooltipOpen && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
-          <Typography variant="subtitle2">{tooltipData.bar.data.mapped_data_type}</Typography>
+          <Typography variant="subtitle2" color="secondary">
+            {tooltipData.bar.data.mapped_data_type}
+          </Typography>
           <Typography>{tooltipData.key}</Typography>
-          <Typography variant="h3" component="p">
+          <Typography variant="h3" component="p" color="textPrimary">
             {tooltipData.bar.data[tooltipData.key]}
           </Typography>
         </TooltipInPortal>
