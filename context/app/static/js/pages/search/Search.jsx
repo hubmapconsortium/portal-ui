@@ -80,10 +80,10 @@ function Search(props) {
     filters: filtersByType[type],
     queryFields: ['everything'],
     isLoggedIn: Boolean(nexusToken),
+    apiUrl: elasticsearchEndpoint,
   };
-  const allProps = { apiUrl: elasticsearchEndpoint, ...searchProps }; // TODO: Not needed?
 
-  const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={Results} />;
+  const wrappedSearch = <SearchWrapper {...searchProps} resultsComponent={Results} />;
 
   return (
     <>
