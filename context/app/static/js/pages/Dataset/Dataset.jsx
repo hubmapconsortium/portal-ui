@@ -82,7 +82,7 @@ function DatasetDetail(props) {
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'visualization', 'attribution', 'provenance', 'protocols', 'metadata', 'files', 'collections'],
+    ['summary', 'visualization', 'provenance', 'protocols', 'metadata', 'files', 'collections', 'attribution'],
     shouldDisplaySection,
   );
 
@@ -115,16 +115,16 @@ function DatasetDetail(props) {
           />
         </Summary>
         {shouldDisplaySection.visualization && <VisualizationWrapper vitData={vitData} />}
-        <Attribution
-          group_name={group_name}
-          created_by_user_displayname={created_by_user_displayname}
-          created_by_user_email={created_by_user_email}
-        />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
         <Files files={files} uuid={uuid} display_doi={display_doi} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
+        <Attribution
+          group_name={group_name}
+          created_by_user_displayname={created_by_user_displayname}
+          created_by_user_email={created_by_user_email}
+        />
       </DetailLayout>
     </DetailContext.Provider>
   );
