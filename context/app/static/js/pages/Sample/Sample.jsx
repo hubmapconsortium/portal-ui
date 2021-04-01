@@ -84,7 +84,7 @@ function SampleDetail(props) {
     datasets: sampleSpecificDatasets.length > 0,
   };
   const sectionOrder = getSectionOrder(
-    ['summary', 'datasets', 'tissue', 'attribution', 'provenance', 'protocols', 'metadata'],
+    ['summary', 'datasets', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
     shouldDisplaySection,
   );
 
@@ -121,14 +121,14 @@ function SampleDetail(props) {
           mapped_organ={mapped_organ}
           hasRUI={hasRUI}
         />
+        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
+        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
+        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata} display_doi={display_doi} />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
           created_by_user_email={created_by_user_email}
         />
-        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata} display_doi={display_doi} />}
       </DetailLayout>
     </DetailContext.Provider>
   );

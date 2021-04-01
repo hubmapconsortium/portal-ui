@@ -39,7 +39,7 @@ function DonorDetail(props) {
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'metadata', 'attribution', 'provenance', 'protocols'],
+    ['summary', 'metadata', 'provenance', 'protocols', 'attribution'],
     shouldDisplaySection,
   );
 
@@ -64,13 +64,13 @@ function DonorDetail(props) {
           group_name={group_name}
         />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} display_doi={display_doi} />}
+        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
+        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
           created_by_user_email={created_by_user_email}
         />
-        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
       </DetailLayout>
     </DetailContext.Provider>
   );
