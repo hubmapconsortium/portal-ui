@@ -1,11 +1,13 @@
 import React, { useContext, useMemo } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
+import { LegendOrdinal } from '@visx/legend';
 
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
 import { formatAssayData, addSumProperty, sortBySumAscending } from './utils';
 import { useChartPalette } from './hooks';
 import AssayTypeBarChart from '../AssayTypeBarChart/AssayTypeBarChart';
+import { Flex, ChartWrapper, LegendWrapper } from './style';
 
 const organTypesQuery = {
   size: 0,
@@ -78,14 +80,29 @@ function AssayTypeBarChartContainer() {
     padding: 0.2,
   });
 
+  const margin = { top: 40, right: 50, bottom: 100, left: 300 };
+
   return (
-    <AssayTypeBarChart
-      formattedData={formattedData}
-      docCountScale={docCountScale}
-      colorScale={colorScale}
-      dataTypeScale={dataTypeScale}
-      organTypes={organTypes}
-    />
+    <Flex>
+      <ChartWrapper>
+        <AssayTypeBarChart
+          formattedData={formattedData}
+          docCountScale={docCountScale}
+          colorScale={colorScale}
+          dataTypeScale={dataTypeScale}
+          organTypes={organTypes}
+          margin={margin}
+        />
+      </ChartWrapper>
+      <LegendWrapper marginTop={margin.top}>
+        <LegendOrdinal
+          scale={colorScale}
+          shapeStyle={() => ({
+            borderRadius: '3px',
+          })}
+        />
+      </LegendWrapper>
+    </Flex>
   );
 }
 

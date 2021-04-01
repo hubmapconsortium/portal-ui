@@ -17,10 +17,10 @@ function AssayTypeBarChart({
   dataTypeScale,
   colorScale,
   organTypes,
+  margin,
 }) {
   const [hoveredBarIndices, setHoveredBarIndices] = useState();
 
-  const margin = { top: 40, right: 50, bottom: 100, left: 300 };
   const xMax = parentWidth - margin.left - margin.right;
   const yMax = parentHeight - margin.top - margin.bottom;
 
