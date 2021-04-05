@@ -26,7 +26,7 @@ def return_empty_json_if_error(func):
         except Exception:
             class_obj = args[0]
             if not class_obj._is_mock:
-                current_app.logger.info(
+                current_app.logger.error(
                     f'Building vitessce conf threw error: {traceback.format_exc()}'
                 )
             return {}
@@ -237,7 +237,7 @@ class SPRMViewConf(ImagingViewConf):
                 if path not in file_paths_found:
                     message = f'SPRM file {path} with uuid "{self._uuid}" not found as expected.'
                     if not self._is_mock:
-                        current_app.logger.info(message)
+                        current_app.logger.error(message)
                     raise FileNotFoundError(message)
                 dataset_file = self._replace_url_in_file(file)
                 dataset = dataset.add_file(**(dataset_file))
