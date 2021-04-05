@@ -138,6 +138,7 @@ function AssayTypeBarChartContainer() {
         />
         <LegendOrdinal
           scale={colorScale}
+          itemMargin={1.5}
           shapeStyle={() => ({
             borderRadius: '3px',
           })}
