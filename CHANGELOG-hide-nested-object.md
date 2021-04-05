@@ -1,1 +1,0 @@
-- Hide nested objects in metadata table.

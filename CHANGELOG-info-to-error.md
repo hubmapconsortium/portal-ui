@@ -1,1 +1,0 @@
-- In several cases, python errors were only being logged at the info level. Elevate to error.

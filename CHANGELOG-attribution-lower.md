@@ -1,1 +1,0 @@
-- Move the Attribution section lower on the details pages.
