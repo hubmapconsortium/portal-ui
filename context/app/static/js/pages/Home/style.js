@@ -40,9 +40,4 @@ const BarChartPlaceholder = styled.div`
   justify-content: center;
 `;
 
-const TemporaryContainer = styled.div`
-  width: 1000px;
-  height: 800px;
-`;
-
-export { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder, TemporaryContainer };
+export { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder };
