@@ -4,6 +4,7 @@ import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
+import { GridColumns } from '@visx/grid';
 import { localPoint } from '@visx/event';
 import Typography from '@material-ui/core/Typography';
 
@@ -16,7 +17,7 @@ function AssayTypeBarChart({
   docCountScale,
   dataTypeScale,
   colorScale,
-  organTypes,
+  keys,
   margin,
 }) {
   const [hoveredBarIndices, setHoveredBarIndices] = useState();
@@ -55,10 +56,18 @@ function AssayTypeBarChart({
   return (
     <div>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
+        <GridColumns
+          top={margin.top + 1}
+          left={margin.left}
+          scale={docCountScale}
+          height={yMax}
+          stroke="black"
+          opacity={0.38}
+        />
         <Group top={margin.top} left={margin.left}>
           <BarStackHorizontal
             data={formattedData}
-            keys={organTypes}
+            keys={keys}
             height={yMax}
             y={getDataType}
             xScale={docCountScale}
