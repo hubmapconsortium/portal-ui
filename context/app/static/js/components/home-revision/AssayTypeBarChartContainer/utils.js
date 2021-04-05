@@ -3,8 +3,11 @@ import produce from 'immer';
 
 function formatAssayData(assayData, colorKey) {
   const formattedData = assayData.aggregations.mapped_data_types.buckets.reduce((acc, d) => {
+    const snakeCaseDataType = d.key.mapped_data_type.replace(/ /g, '_');
+    if (snakeCaseDataType.includes('[')) {
+      return acc;
+    }
     return produce(acc, (draft) => {
-      const snakeCaseDataType = d.key.mapped_data_type.replace(/ /g, '_');
       if (!(snakeCaseDataType in draft)) {
         draft[snakeCaseDataType] = {};
       }
