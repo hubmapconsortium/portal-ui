@@ -1,13 +1,13 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useState } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import { LegendOrdinal } from '@visx/legend';
 
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
-import { formatAssayData, addSumProperty, sortBySumAscending } from './utils';
-import { useChartPalette } from './hooks';
+import { useChartPalette, useAssayTypeBarChartData } from './hooks';
 import AssayTypeBarChart from '../AssayTypeBarChart/AssayTypeBarChart';
 import { Flex, ChartWrapper, LegendWrapper } from './style';
+import AssayTypeBarChartDropdown from '../AssayTypeBarChartDropdown';
 
 const organTypesQuery = {
   size: 0,
@@ -16,7 +16,7 @@ const organTypesQuery = {
   },
 };
 
-const assayTypesQuery = {
+const assayOrganTypesQuery = {
   size: 0,
   aggs: {
     mapped_data_types: {
@@ -43,40 +43,76 @@ const assayTypesQuery = {
   },
 };
 
+const assayDonorSexQuery = {
+  size: 0,
+  aggs: {
+    mapped_data_types: {
+      composite: {
+        sources: [
+          {
+            mapped_data_type: {
+              terms: {
+                field: 'mapped_data_types.keyword',
+              },
+            },
+          },
+          {
+            donor_sex: {
+              terms: {
+                field: 'donor.mapped_metadata.sex.keyword',
+              },
+            },
+          },
+        ],
+        size: 10000,
+      },
+    },
+  },
+};
+
 function AssayTypeBarChartContainer() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+  const [selectedColorDataIndex, setSelectedColorDataIndex] = useState(0);
 
+  function selectDropdownItem(itemAndIndex) {
+    const { i } = itemAndIndex;
+    setSelectedColorDataIndex(i);
+  }
   const colors = useChartPalette();
 
   const { searchData: organTypesData } = useSearchData(organTypesQuery, elasticsearchEndpoint, nexusToken);
+  const organTypes = organTypesData?.aggregations?.organ_types.buckets.map((b) => b.key);
 
-  const buckets = organTypesData?.aggregations?.organ_types?.buckets || [];
-  const organTypes = buckets.map((b) => b.key);
+  const { searchData: assayOrganTypeData } = useSearchData(assayOrganTypesQuery, elasticsearchEndpoint, nexusToken);
+  const { searchData: assayDonorSexData } = useSearchData(assayDonorSexQuery, elasticsearchEndpoint, nexusToken);
 
-  const { searchData: assayTypesData } = useSearchData(assayTypesQuery, elasticsearchEndpoint, nexusToken);
+  const { formattedData: formattedOrganTypeData, maxSumDocCount: maxAssayOrganTypeDocCount } = useAssayTypeBarChartData(
+    assayOrganTypeData,
+    'organ_type',
+  );
 
-  const { formattedData, maxSumDocCount } = useMemo(() => {
-    if (Object.keys(assayTypesData).length > 0) {
-      const f = addSumProperty(formatAssayData(assayTypesData));
-      sortBySumAscending(f);
-      const m = Math.max(...f.map((d) => d.sum));
-      return { formattedData: f, maxSumDocCount: m };
-    }
-    return { formattedData: [], maxSumDocCount: 0 };
-  }, [assayTypesData]);
+  const { formattedData: formattedDonorSexData, maxSumDocCount: maxAssayDonorSexDocCount } = useAssayTypeBarChartData(
+    assayDonorSexData,
+    'donor_sex',
+  );
+
+  const formattedData = [formattedOrganTypeData, formattedDonorSexData];
+  const maxSumDocCount = [maxAssayOrganTypeDocCount, maxAssayDonorSexDocCount];
+
+  const colorData = [organTypes, ['Male', 'Female']];
 
   const docCountScale = scaleLinear({
-    domain: [0, maxSumDocCount],
+    domain: [0, maxSumDocCount[selectedColorDataIndex]],
     nice: true,
   });
 
   const colorScale = scaleOrdinal({
-    domain: organTypes,
+    domain: colorData[selectedColorDataIndex],
     range: colors,
   });
 
   const dataTypeScale = scaleBand({
-    domain: formattedData.map((b) => b.mapped_data_type),
+    domain: formattedData[selectedColorDataIndex].map((b) => b.mapped_data_type),
     padding: 0.2,
   });
 
@@ -86,15 +122,20 @@ function AssayTypeBarChartContainer() {
     <Flex>
       <ChartWrapper>
         <AssayTypeBarChart
-          formattedData={formattedData}
+          formattedData={formattedData[selectedColorDataIndex]}
           docCountScale={docCountScale}
           colorScale={colorScale}
           dataTypeScale={dataTypeScale}
-          organTypes={organTypes}
+          keys={colorData[selectedColorDataIndex]}
           margin={margin}
         />
       </ChartWrapper>
       <LegendWrapper marginTop={margin.top}>
+        <AssayTypeBarChartDropdown
+          colorDataOptions={[{ name: 'Organ Type' }, { name: 'Donor Sex' }]}
+          selectedColorDataIndex={selectedColorDataIndex}
+          setSelectedColorDataIndex={selectDropdownItem}
+        />
         <LegendOrdinal
           scale={colorScale}
           shapeStyle={() => ({
