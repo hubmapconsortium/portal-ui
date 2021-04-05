@@ -106,7 +106,7 @@ function AssayTypeBarChart({
             hideTicks
             scale={dataTypeScale}
             stroke="black"
-            numTicks={33}
+            numTicks={Object.keys(formattedData).length}
             tickLabelProps={() => ({
               fill: 'black',
               fontSize: 11,
