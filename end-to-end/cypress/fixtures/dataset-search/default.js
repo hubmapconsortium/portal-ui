@@ -3,7 +3,7 @@ This is the default request from the dataset search page.
 You should not be authenticated when making this request.
 Request url: https://search.api.hubmapconsortium.org/portal/search
 Request body:
-const x = {
+{
   query: { bool: { must_not: { exists: { field: "next_revision_uuid" } } } },
   post_filter: { term: { "entity_type.keyword": "Dataset" } },
   aggs: {
