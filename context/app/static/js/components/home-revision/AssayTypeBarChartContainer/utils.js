@@ -4,7 +4,9 @@ import produce from 'immer';
 function formatAssayData(assayData, colorKey) {
   const formattedData = assayData.aggregations.mapped_data_types.buckets.reduce((acc, d) => {
     const snakeCaseDataType = d.key.mapped_data_type.replace(/ /g, '_');
-    // TODO get datasets to display from index
+    // TODO: Get datasets to display from index, instead of depending on patterns in names.
+    // The first step is having a hierarchy for assay types:
+    // https://github.com/hubmapconsortium/portal-ui/issues/1688
     if (snakeCaseDataType.includes('[')) {
       return acc;
     }
