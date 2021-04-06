@@ -241,7 +241,7 @@ Request body:
   },
   size: 18,
   sort: [{ "mapped_last_modified_timestamp.keyword": "desc" }],
-  highlight: { fields: { everything: { type: "plain" } } },
+  highlight: { fields: { description: { type: "plain" } } },
   _source: [
     "display_doi",
     "group_name",

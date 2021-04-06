@@ -79,7 +79,7 @@ function Search(props) {
     type,
     // Sidebar facet configuration:
     filters: filtersByType[type],
-    queryFields: ['everything'],
+    queryFields: ['all_text', 'description'],
     isLoggedIn: Boolean(nexusToken),
     apiUrl: elasticsearchEndpoint,
     defaultQuery: BoolMustNot(ExistsQuery('next_revision_uuid')),

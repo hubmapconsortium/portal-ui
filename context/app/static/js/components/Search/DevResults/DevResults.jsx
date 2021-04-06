@@ -29,7 +29,7 @@ function DevResults(props) {
       ]}
       sourceFilter={resultFieldIds}
       customHighlight={{
-        fields: { everything: { type: 'plain' } },
+        fields: { description: { type: 'plain' } },
       }}
     />
   );
