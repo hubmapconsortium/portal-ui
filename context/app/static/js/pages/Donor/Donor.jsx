@@ -27,8 +27,9 @@ function DonorDetail(props) {
     last_modified_timestamp,
     description,
     mapped_metadata = {},
-    // Missing on some unpublished data. Not sure if there's a deeper bug.
-    // Filed: https://github.com/hubmapconsortium/search-api/issues/236
+    // As data comes in from other consortia, we won't be able
+    // to rely on donor metadata always being available.
+    // Unpublished HuBMAP data may also be missing donor metadata.
   } = assayMetadata;
 
   const { sex, race, age_value, age_unit } = mapped_metadata;

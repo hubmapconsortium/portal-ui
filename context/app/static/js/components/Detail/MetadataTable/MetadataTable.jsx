@@ -30,8 +30,9 @@ function MetadataTable(props) {
   ];
 
   const tableRows = Object.entries(tableData)
-    // To suppress nested objects, like nested "metadata" for Samples:
-    .filter((entry) => typeof entry[1] !== 'object')
+    // Filter out nested objects, like nested "metadata" for Samples...
+    // but allow arrays. Remember, in JS: typeof [] === 'object'
+    .filter((entry) => typeof entry[1] !== 'object' || Array.isArray(entry[1]))
     .map((entry) => ({
       key: entry[0],
       value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
