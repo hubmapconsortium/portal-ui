@@ -45,4 +45,39 @@ function getAssayTypeBarChartData(rawData, colorKey) {
   return { formattedData, maxSumDocCount };
 }
 
-export { formatAssayData, addSumProperty, sortBySumAscending, getAssayTypeBarChartData };
+function getAssayTypesCompositeAggsQuery(esAggsKey, aggsKeyToReturn) {
+  return {
+    size: 0,
+    aggs: {
+      mapped_data_types: {
+        composite: {
+          sources: [
+            {
+              mapped_data_type: {
+                terms: {
+                  field: 'mapped_data_types.keyword',
+                },
+              },
+            },
+            {
+              [aggsKeyToReturn]: {
+                terms: {
+                  field: esAggsKey,
+                },
+              },
+            },
+          ],
+          size: 10000,
+        },
+      },
+    },
+  };
+}
+
+export {
+  formatAssayData,
+  addSumProperty,
+  sortBySumAscending,
+  getAssayTypeBarChartData,
+  getAssayTypesCompositeAggsQuery,
+};

@@ -5,6 +5,7 @@ import { LegendOrdinal } from '@visx/legend';
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
 import { useChartPalette, useAssayTypeBarChartData } from './hooks';
+import { getAssayTypesCompositeAggsQuery } from './utils';
 import AssayTypeBarChart from '../AssayTypeBarChart/AssayTypeBarChart';
 import { Flex, ChartWrapper, LegendWrapper } from './style';
 import AssayTypeBarChartDropdown from '../AssayTypeBarChartDropdown';
@@ -16,59 +17,8 @@ const organTypesQuery = {
   },
 };
 
-const assayOrganTypesQuery = {
-  size: 0,
-  aggs: {
-    mapped_data_types: {
-      composite: {
-        sources: [
-          {
-            mapped_data_type: {
-              terms: {
-                field: 'mapped_data_types.keyword',
-              },
-            },
-          },
-          {
-            organ_type: {
-              terms: {
-                field: 'origin_sample.mapped_organ.keyword',
-              },
-            },
-          },
-        ],
-        size: 10000,
-      },
-    },
-  },
-};
-
-const assayDonorSexQuery = {
-  size: 0,
-  aggs: {
-    mapped_data_types: {
-      composite: {
-        sources: [
-          {
-            mapped_data_type: {
-              terms: {
-                field: 'mapped_data_types.keyword',
-              },
-            },
-          },
-          {
-            donor_sex: {
-              terms: {
-                field: 'donor.mapped_metadata.sex.keyword',
-              },
-            },
-          },
-        ],
-        size: 10000,
-      },
-    },
-  },
-};
+const assayOrganTypesQuery = getAssayTypesCompositeAggsQuery('origin_sample.mapped_organ.keyword', 'organ_type');
+const assayDonorSexQuery = getAssayTypesCompositeAggsQuery('donor.mapped_metadata.sex.keyword', 'donor_sex');
 
 function AssayTypeBarChartContainer() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
