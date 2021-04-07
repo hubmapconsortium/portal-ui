@@ -1,3 +1,9 @@
+## v0.15.4 - 2021-04-07
+
+- Add assay type horizontal bar chart to home page revision.
+- Bug fix: Donor metadata is now shown.
+
+
 ## v0.15.3 - 2021-04-05
 
 - Move the Attribution section lower on the details pages.

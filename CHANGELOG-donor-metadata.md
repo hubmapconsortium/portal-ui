@@ -1,1 +1,0 @@
-- Bug fix: Donor metadata is now shown.
