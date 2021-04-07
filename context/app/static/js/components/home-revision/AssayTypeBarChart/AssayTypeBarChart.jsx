@@ -8,8 +8,6 @@ import { GridColumns } from '@visx/grid';
 import { localPoint } from '@visx/event';
 import Typography from '@material-ui/core/Typography';
 
-const getDataType = (d) => d.mapped_data_type;
-
 function AssayTypeBarChart({
   parentWidth,
   parentHeight,
@@ -69,7 +67,7 @@ function AssayTypeBarChart({
             data={formattedData}
             keys={keys}
             height={yMax}
-            y={getDataType}
+            y={(d) => d.mapped_data_type}
             xScale={docCountScale}
             yScale={dataTypeScale}
             color={colorScale}
