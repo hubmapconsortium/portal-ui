@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 function AssayTypeBarChart({
   parentWidth,
   parentHeight,
-  formattedData,
+  visxData,
   docCountScale,
   dataTypeScale,
   colorScale,
@@ -64,7 +64,7 @@ function AssayTypeBarChart({
         />
         <Group top={margin.top} left={margin.left}>
           <BarStackHorizontal
-            data={formattedData}
+            data={visxData}
             keys={keys}
             height={yHeight}
             y={(d) => d.mapped_data_type}
@@ -104,7 +104,7 @@ function AssayTypeBarChart({
             hideTicks
             scale={dataTypeScale}
             stroke="black"
-            numTicks={Object.keys(formattedData).length}
+            numTicks={Object.keys(visxData).length}
             tickLabelProps={() => ({
               fill: 'black',
               fontSize: 11,

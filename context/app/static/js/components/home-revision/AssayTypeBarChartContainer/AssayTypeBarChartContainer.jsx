@@ -46,7 +46,7 @@ function AssayTypeBarChartContainer() {
     'donor_sex',
   );
 
-  const formattedData = [formattedOrganTypeData, formattedDonorSexData];
+  const visxData = [formattedOrganTypeData, formattedDonorSexData];
   const maxSumDocCount = [maxAssayOrganTypeDocCount, maxAssayDonorSexDocCount];
 
   const colorData = [organTypes, ['Male', 'Female']];
@@ -62,7 +62,7 @@ function AssayTypeBarChartContainer() {
   });
 
   const dataTypeScale = scaleBand({
-    domain: formattedData[selectedColorDataIndex].map((b) => b.mapped_data_type),
+    domain: visxData[selectedColorDataIndex].map((b) => b.mapped_data_type),
     padding: 0.2,
   });
 
@@ -72,7 +72,7 @@ function AssayTypeBarChartContainer() {
     <Flex>
       <ChartWrapper>
         <AssayTypeBarChart
-          formattedData={formattedData[selectedColorDataIndex]}
+          visxData={visxData[selectedColorDataIndex]}
           docCountScale={docCountScale}
           colorScale={colorScale}
           dataTypeScale={dataTypeScale}
