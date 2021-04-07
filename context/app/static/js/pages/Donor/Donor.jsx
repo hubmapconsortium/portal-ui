@@ -29,6 +29,7 @@ function DonorDetail(props) {
     mapped_metadata = {},
     // As data comes in from other consortia, we won't be able
     // to rely on donor metadata always being available.
+    // Unpublished HuBMAP data may also be missing donor metadata.
   } = assayMetadata;
 
   const { sex, race, age_value, age_unit } = mapped_metadata;
