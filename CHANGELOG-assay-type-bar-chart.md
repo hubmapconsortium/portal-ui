@@ -1,0 +1,1 @@
+- Add assay type horizontal bar chart to home page revision.
