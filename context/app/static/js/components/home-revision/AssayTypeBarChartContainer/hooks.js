@@ -1,4 +1,7 @@
+import { useMemo } from 'react';
 import { useTheme } from '@material-ui/core/styles';
+
+import { getAssayTypeBarChartData } from './utils';
 
 function useChartPalette() {
   const {
@@ -7,7 +10,17 @@ function useChartPalette() {
 
   const colorObjects = [success, primary, secondary, error, warning, info];
 
+  // Color order matters. Light then main then dark.
   return [...colorObjects.map((c) => c.light), ...colorObjects.map((c) => c.main), ...colorObjects.map((c) => c.dark)];
 }
 
-export { useChartPalette };
+function useAssayTypeBarChartData(rawData, colorKey) {
+  return useMemo(() => {
+    if (Object.keys(rawData).length > 0) {
+      return getAssayTypeBarChartData(rawData, colorKey);
+    }
+    return { formattedData: [], maxSumDocCount: undefined };
+  }, [rawData, colorKey]);
+}
+
+export { useChartPalette, useAssayTypeBarChartData };

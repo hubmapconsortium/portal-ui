@@ -4,10 +4,9 @@ import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
+import { GridColumns } from '@visx/grid';
 import { localPoint } from '@visx/event';
 import Typography from '@material-ui/core/Typography';
-
-const getDataType = (d) => d.mapped_data_type;
 
 function AssayTypeBarChart({
   parentWidth,
@@ -16,16 +15,16 @@ function AssayTypeBarChart({
   docCountScale,
   dataTypeScale,
   colorScale,
-  organTypes,
+  keys,
   margin,
 }) {
   const [hoveredBarIndices, setHoveredBarIndices] = useState();
 
-  const xMax = parentWidth - margin.left - margin.right;
-  const yMax = parentHeight - margin.top - margin.bottom;
+  const xHeight = parentWidth - margin.left - margin.right;
+  const yHeight = parentHeight - margin.top - margin.bottom;
 
-  docCountScale.rangeRound([0, xMax]);
-  dataTypeScale.rangeRound([yMax, 0]);
+  docCountScale.rangeRound([0, xHeight]);
+  dataTypeScale.rangeRound([yHeight, 0]);
 
   const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip();
 
@@ -55,12 +54,20 @@ function AssayTypeBarChart({
   return (
     <div>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
+        <GridColumns
+          top={margin.top + 1}
+          left={margin.left}
+          scale={docCountScale}
+          height={yHeight}
+          stroke="black"
+          opacity={0.38}
+        />
         <Group top={margin.top} left={margin.left}>
           <BarStackHorizontal
             data={formattedData}
-            keys={organTypes}
-            height={yMax}
-            y={getDataType}
+            keys={keys}
+            height={yHeight}
+            y={(d) => d.mapped_data_type}
             xScale={docCountScale}
             yScale={dataTypeScale}
             color={colorScale}
@@ -97,7 +104,7 @@ function AssayTypeBarChart({
             hideTicks
             scale={dataTypeScale}
             stroke="black"
-            numTicks={33}
+            numTicks={Object.keys(formattedData).length}
             tickLabelProps={() => ({
               fill: 'black',
               fontSize: 11,

@@ -1,15 +1,21 @@
 import produce from 'immer';
 /* eslint-disable no-param-reassign */
 
-function formatAssayData(assayData) {
+function formatAssayData(assayData, colorKey) {
   const formattedData = assayData.aggregations.mapped_data_types.buckets.reduce((acc, d) => {
+    const snakeCaseDataType = d.key.mapped_data_type.replace(/ /g, '_');
+    // TODO: Get datasets to display from index, instead of depending on patterns in names.
+    // The first step is having a hierarchy for assay types:
+    // https://github.com/hubmapconsortium/portal-ui/issues/1688
+    if (snakeCaseDataType.includes('[')) {
+      return acc;
+    }
     return produce(acc, (draft) => {
-      const snakeCaseDataType = d.key.mapped_data_type.replace(/ /g, '_');
       if (!(snakeCaseDataType in draft)) {
         draft[snakeCaseDataType] = {};
       }
       draft[snakeCaseDataType].mapped_data_type = d.key.mapped_data_type;
-      draft[snakeCaseDataType][d.key.organ_type] = d.doc_count;
+      draft[snakeCaseDataType][d.key[colorKey]] = d.doc_count;
     });
   }, {});
   return Object.values(formattedData);
@@ -32,4 +38,46 @@ function sortBySumAscending(list) {
   list.sort((a, b) => a.sum - b.sum);
 }
 
-export { formatAssayData, addSumProperty, sortBySumAscending };
+function getAssayTypeBarChartData(rawData, colorKey) {
+  const formattedData = addSumProperty(formatAssayData(rawData, colorKey));
+  sortBySumAscending(formattedData);
+  const maxSumDocCount = Math.max(...formattedData.map((d) => d.sum));
+  return { formattedData, maxSumDocCount };
+}
+
+function getAssayTypesCompositeAggsQuery(esAggsKey, aggsKeyToReturn) {
+  return {
+    size: 0,
+    aggs: {
+      mapped_data_types: {
+        composite: {
+          sources: [
+            {
+              mapped_data_type: {
+                terms: {
+                  field: 'mapped_data_types.keyword',
+                },
+              },
+            },
+            {
+              [aggsKeyToReturn]: {
+                terms: {
+                  field: esAggsKey,
+                },
+              },
+            },
+          ],
+          size: 10000,
+        },
+      },
+    },
+  };
+}
+
+export {
+  formatAssayData,
+  addSumProperty,
+  sortBySumAscending,
+  getAssayTypeBarChartData,
+  getAssayTypesCompositeAggsQuery,
+};

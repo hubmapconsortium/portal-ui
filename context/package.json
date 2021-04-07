@@ -9,6 +9,7 @@
     "@material-ui/lab": "^4.0.0-alpha.45",
     "@visx/axis": "^1.7.0",
     "@visx/event": "^1.7.0",
+    "@visx/grid": "^1.7.0",
     "@visx/group": "^1.7.0",
     "@visx/legend": "^1.7.0",
     "@visx/responsive": "^1.7.0",
