@@ -20,11 +20,11 @@ function AssayTypeBarChart({
 }) {
   const [hoveredBarIndices, setHoveredBarIndices] = useState();
 
-  const xMax = parentWidth - margin.left - margin.right;
-  const yMax = parentHeight - margin.top - margin.bottom;
+  const xHeight = parentWidth - margin.left - margin.right;
+  const yHeight = parentHeight - margin.top - margin.bottom;
 
-  docCountScale.rangeRound([0, xMax]);
-  dataTypeScale.rangeRound([yMax, 0]);
+  docCountScale.rangeRound([0, xHeight]);
+  dataTypeScale.rangeRound([yHeight, 0]);
 
   const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip();
 
@@ -58,7 +58,7 @@ function AssayTypeBarChart({
           top={margin.top + 1}
           left={margin.left}
           scale={docCountScale}
-          height={yMax}
+          height={yHeight}
           stroke="black"
           opacity={0.38}
         />
@@ -66,7 +66,7 @@ function AssayTypeBarChart({
           <BarStackHorizontal
             data={formattedData}
             keys={keys}
-            height={yMax}
+            height={yHeight}
             y={(d) => d.mapped_data_type}
             xScale={docCountScale}
             yScale={dataTypeScale}
