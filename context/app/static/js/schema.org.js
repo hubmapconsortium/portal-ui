@@ -4,7 +4,7 @@ function getDatasetLD(entity) {
   let name = `${assayOrganString} from unknown donor`;
   let fallbackDescription = name;
 
-  const donor = entity?.donor.mapped_metadata;
+  const donor = entity.donor?.mapped_metadata;
   if (donor) {
     const shortDonorString = `${donor.sex || '(Unknown sex)'}, ${donor.age_value || '(Unknown age)'} ${
       donor.age_unit || '(Unknown age unit)'
