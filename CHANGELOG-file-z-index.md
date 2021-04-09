@@ -1,0 +1,1 @@
+- Fix the z-index of the Files header.
