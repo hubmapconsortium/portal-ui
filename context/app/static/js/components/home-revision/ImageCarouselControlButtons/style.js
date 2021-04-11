@@ -3,9 +3,14 @@ import IconButton from '@material-ui/core/IconButton';
 
 const FlexList = styled.ul`
   display: flex;
+  align-items: center;
 `;
 
 const StyledIconButton = styled(IconButton)`
+  // mui uses padding for icon button sizes which causes buttons with different size icons to vary in size
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
   // increase specificity to override disabled styles from mui
   && {
     color: ${(props) => props.theme.palette.primary.main};

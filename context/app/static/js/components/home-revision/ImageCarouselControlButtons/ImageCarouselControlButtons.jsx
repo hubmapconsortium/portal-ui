@@ -1,5 +1,4 @@
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftRoundedIcon from '@material-ui/icons/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
 import PanoramaFishEyeRoundedIcon from '@material-ui/icons/PanoramaFishEyeRounded';
@@ -9,7 +8,11 @@ import { FlexList, StyledIconButton } from './style';
 function SelectImageButton({ isSelectedImageIndex, onClick }) {
   return (
     <StyledIconButton tabIndex="-1" onClick={onClick} disabled={isSelectedImageIndex}>
-      {isSelectedImageIndex ? <Brightness1RoundedIcon /> : <PanoramaFishEyeRoundedIcon />}
+      {isSelectedImageIndex ? (
+        <Brightness1RoundedIcon fontSize="small" />
+      ) : (
+        <PanoramaFishEyeRoundedIcon fontSize="small" />
+      )}
     </StyledIconButton>
   );
 }
@@ -26,9 +29,9 @@ function ImageCarouselControlButtons({ numImages, selectedImageIndex, setSelecte
   return (
     <FlexList aria-hidden="true">
       <li>
-        <IconButton tabIndex="-1" color="primary" onClick={setPreviousSelectedImageIndex}>
+        <StyledIconButton tabIndex="-1" color="primary" onClick={setPreviousSelectedImageIndex}>
           <ChevronLeftRoundedIcon />
-        </IconButton>
+        </StyledIconButton>
       </li>
       {Array(numImages)
         .fill()
@@ -43,9 +46,9 @@ function ImageCarouselControlButtons({ numImages, selectedImageIndex, setSelecte
         ))}
 
       <li>
-        <IconButton tabIndex="-1" color="primary" onClick={setNextSelectedImageIndex}>
+        <StyledIconButton tabIndex="-1" color="primary" onClick={setNextSelectedImageIndex}>
           <ChevronRightRoundedIcon />
-        </IconButton>
+        </StyledIconButton>
       </li>
     </FlexList>
   );
