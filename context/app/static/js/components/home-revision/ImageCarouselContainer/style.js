@@ -12,10 +12,12 @@ const Flex = styled.div`
 const CallToActionWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     width: 400px;
     flex-shrink: 0;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 `;
 
