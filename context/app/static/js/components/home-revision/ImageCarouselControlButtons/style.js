@@ -4,6 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 const FlexList = styled.ul`
   display: flex;
   align-items: center;
+  padding: 0px;
 `;
 
 const StyledIconButton = styled(IconButton)`
