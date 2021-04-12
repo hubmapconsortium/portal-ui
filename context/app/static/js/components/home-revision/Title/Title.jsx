@@ -9,7 +9,7 @@ function Title() {
       <Typography variant="h2" component="h1">
         Human BioMolecular Atlas Program
       </Typography>
-      <Typography variant="h4" component="h3" color="secondary">
+      <Typography variant="h4" component="h2" color="secondary">
         An open, global atlas of the human body at the cellular level
       </Typography>
     </StyledDiv>
