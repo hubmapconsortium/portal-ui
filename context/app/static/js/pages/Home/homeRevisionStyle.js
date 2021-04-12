@@ -11,7 +11,7 @@ const AboveTheFoldGrid = styled(Container)`
   display: grid;
   grid-gap: ${(props) => props.theme.spacing(3)}px;
   grid-template-areas: 'title' 'description' 'carousel';
-  @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
+  @media (min-width: ${(props) => props.theme.breakpoints.values.lg}px) {
     height: calc(100vh - ${headerHeight + 24}px);
     grid-template-rows: auto auto 1fr;
   }
