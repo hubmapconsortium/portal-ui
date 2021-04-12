@@ -9,16 +9,18 @@ const Flex = styled.div`
   }
 `;
 
+const callToActionMdOrLargerWidth = 400;
+
 const CallToActionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
-    width: 400px;
+    width: ${callToActionMdOrLargerWidth}px;
     flex-shrink: 0;
     justify-content: space-between;
     align-items: flex-start;
   }
 `;
 
-export { Flex, CallToActionWrapper };
+export { Flex, CallToActionWrapper, callToActionMdOrLargerWidth };
