@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Container from '@material-ui/core/Container';
 
 import AssayTypeBarChartContainer from 'js/components/home-revision/AssayTypeBarChartContainer';
 import ImageCarouselContainer from 'js/components/home-revision/ImageCarouselContainer';
@@ -25,7 +26,11 @@ function HomeRevision() {
           <ImageCarouselContainer />
         </GridArea>
       </AboveTheFoldGrid>
-      {isLargerThanMd && <AssayTypeBarChartContainer />}
+      {isLargerThanMd && (
+        <Container maxWidth="lg">
+          <AssayTypeBarChartContainer />
+        </Container>
+      )}
     </>
   );
 }
