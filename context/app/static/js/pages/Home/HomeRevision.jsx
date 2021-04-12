@@ -1,4 +1,6 @@
 import React from 'react';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import AssayTypeBarChartContainer from 'js/components/home-revision/AssayTypeBarChartContainer';
 import ImageCarouselContainer from 'js/components/home-revision/ImageCarouselContainer';
@@ -8,6 +10,8 @@ import HuBMAPDescription from 'js/components/home-revision/HuBMAPDescription';
 import { GridArea, AboveTheFoldGrid } from './homeRevisionStyle';
 
 function HomeRevision() {
+  const theme = useTheme();
+  const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <>
       <AboveTheFoldGrid maxWidth="lg">
@@ -21,7 +25,7 @@ function HomeRevision() {
           <ImageCarouselContainer />
         </GridArea>
       </AboveTheFoldGrid>
-      <AssayTypeBarChartContainer />
+      {isLargerThanMd && <AssayTypeBarChartContainer />}
     </>
   );
 }
