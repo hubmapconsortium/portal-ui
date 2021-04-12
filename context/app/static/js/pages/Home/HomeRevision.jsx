@@ -2,14 +2,25 @@ import React from 'react';
 
 import AssayTypeBarChartContainer from 'js/components/home-revision/AssayTypeBarChartContainer';
 import ImageCarouselContainer from 'js/components/home-revision/ImageCarouselContainer';
-import { AboveTheFoldWrapper } from './style';
+import Title from 'js/components/home-revision/Title';
+import HuBMAPDescription from 'js/components/home-revision/HuBMAPDescription';
+
+import { GridArea, AboveTheFoldGrid } from './homeRevisionStyle';
 
 function HomeRevision() {
   return (
     <>
-      <AboveTheFoldWrapper maxWidth="lg">
-        <ImageCarouselContainer />
-      </AboveTheFoldWrapper>
+      <AboveTheFoldGrid maxWidth="lg">
+        <GridArea gridAreaTitle="title">
+          <Title />
+        </GridArea>
+        <GridArea gridAreaTitle="description">
+          <HuBMAPDescription />
+        </GridArea>
+        <GridArea gridAreaTitle="carousel">
+          <ImageCarouselContainer />
+        </GridArea>
+      </AboveTheFoldGrid>
       <AssayTypeBarChartContainer />
     </>
   );

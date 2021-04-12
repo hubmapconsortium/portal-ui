@@ -40,12 +40,4 @@ const BarChartPlaceholder = styled.div`
   justify-content: center;
 `;
 
-// 88px = height + margin of header
-const AboveTheFoldWrapper = styled(Container)`
-  @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
-    min-height: calc(100vh - ${headerHeight + 24}px);
-    grid-template-rows: auto 1fr;
-  }
-`;
-
-export { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder, AboveTheFoldWrapper };
+export { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder };
