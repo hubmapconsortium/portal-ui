@@ -8,7 +8,7 @@ const ChipWrapper = styled.div`
   position: sticky;
   top: 0;
   background-color: ${(props) => props.theme.palette.white.main};
-  z-index: 1;
+  z-index: ${(props) => props.theme.zIndex.entityHeader};
 `;
 
 const StyledTableContainer = styled(TableContainer)`
