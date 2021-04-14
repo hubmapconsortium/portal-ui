@@ -4,7 +4,6 @@ const Flex = styled.div`
   display: flex;
   flex-direction: column-reverse;
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
-    height: 100%;
     flex-direction: row;
   }
 `;

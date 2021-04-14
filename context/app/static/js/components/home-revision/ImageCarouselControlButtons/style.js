@@ -5,6 +5,7 @@ const FlexList = styled.ul`
   display: flex;
   align-items: center;
   padding: 0px;
+  margin: 0px;
 `;
 
 const StyledIconButton = styled(IconButton)`
