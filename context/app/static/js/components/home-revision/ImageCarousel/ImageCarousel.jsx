@@ -21,7 +21,7 @@ import CCFSlide1024w from 'images/ccf-slide-1024w.png';
 import CCFSlide1280w from 'images/ccf-slide-1280w.png';
 import CCFSlide1392w from 'images/ccf-slide-1392w.png';
 
-function ImageCarousel({ selectedImageIndex }) {
+function ImageCarousel({ selectedImageIndex, setSelectedImageIndex }) {
   return (
     <Carousel
       disableAnimation
@@ -29,8 +29,14 @@ function ImageCarousel({ selectedImageIndex }) {
       withoutControls
       swiping={false}
       dragging={false}
-      enableKeyboardControls
       wrapAround
+      enableKeyboardControls
+      // for key initiated change
+      afterSlide={(slideIndex) => {
+        if (selectedImageIndex !== slideIndex) {
+          setSelectedImageIndex(slideIndex);
+        }
+      }}
     >
       <CarouselImage
         src320w={VitessceSlide320w}

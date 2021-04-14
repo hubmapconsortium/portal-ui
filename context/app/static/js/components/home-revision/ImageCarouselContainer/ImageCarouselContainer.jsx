@@ -17,7 +17,7 @@ function ImageCarouselContainer() {
           numImages={3}
         />
       </CallToActionWrapper>
-      <ImageCarousel selectedImageIndex={selectedImageIndex} />
+      <ImageCarousel selectedImageIndex={selectedImageIndex} setSelectedImageIndex={setSelectedImageIndex} />
     </Flex>
   );
 }
