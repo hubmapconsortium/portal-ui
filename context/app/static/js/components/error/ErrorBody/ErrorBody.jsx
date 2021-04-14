@@ -30,17 +30,10 @@ function ErrorBody({ errorCode, isAuthenticated, isGlobus401, isMaintenancePage 
   if (errorCode === 401) {
     return (
       <>
-        Could not confirm your Globus credentials.
-        <ul>
-          <li>
-            You may not have been added to the HuBMAP Group on Globus. Request access at <HelpEmailLink />.
-          </li>
-          <li>
-            Or, you may be logged into a different Globus account from the one in the HuBMAP Group. Check{' '}
-            <OutboundLink href="http://app.globus.org/">http://app.globus.org/</OutboundLink> for details on your
-            account.
-          </li>
-        </ul>
+        Could not confirm your Globus credentials. You may not have been added to the HuBMAP Group on Globus. Request
+        access at <HelpEmailLink />. Or, you may be logged into a different Globus account from the one in the HuBMAP
+        Group. Check <OutboundLink href="http://app.globus.org/">http://app.globus.org/</OutboundLink> for details on
+        account.
       </>
     );
   }
