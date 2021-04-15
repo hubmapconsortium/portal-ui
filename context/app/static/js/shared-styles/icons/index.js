@@ -12,8 +12,13 @@ import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
 import MoreHorizRoundedIcon from '@material-ui/icons/MoreHorizRounded';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
+import CollectionsBookmarkRoundedIcon from '@material-ui/icons/CollectionsBookmarkRounded';
 
 const CenterIcon = styled(AccountBalanceIcon)`
+  font-size: ${(props) => props.fontSize};
+`;
+
+const CollectionIcon = styled(CollectionsBookmarkRoundedIcon)`
   font-size: ${(props) => props.fontSize};
 `;
 
@@ -62,6 +67,7 @@ const EditIcon = styled(EditRoundedIcon)`
 `;
 
 export {
+  CollectionIcon,
   DonorIcon,
   SampleIcon,
   DatasetIcon,
