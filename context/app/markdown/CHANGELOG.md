@@ -1,3 +1,9 @@
+## v0.16.1 - 2021-04-15
+
+- Supply metadata for webspiders, even when the donor is missing.
+- Help users who may be logged into the wrong globus account.
+
+
 ## v0.16.0 - 2021-04-12
 
 - Tweak dataset columns on Sample details.

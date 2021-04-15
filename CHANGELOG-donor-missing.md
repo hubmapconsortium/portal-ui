@@ -1,1 +1,0 @@
-- Supply metadata for webspiders, even when the donor is missing.
