@@ -7,6 +7,7 @@ import AssayTypeBarChartContainer from 'js/components/home-revision/AssayTypeBar
 import ImageCarouselContainer from 'js/components/home-revision/ImageCarouselContainer';
 import Title from 'js/components/home-revision/Title';
 import HuBMAPDescription from 'js/components/home-revision/HuBMAPDescription';
+import EntityCounts from 'js/components/home-revision/EntityCounts';
 
 import { GridArea, AboveTheFoldGrid } from './homeRevisionStyle';
 
@@ -15,16 +16,17 @@ function HomeRevision() {
   const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <>
-      <AboveTheFoldGrid maxWidth="lg">
-        <GridArea gridAreaTitle="title">
+      <AboveTheFoldGrid>
+        <GridArea maxWidth="lg" gridAreaTitle="title">
           <Title />
         </GridArea>
-        <GridArea gridAreaTitle="description">
+        <GridArea maxWidth="lg" gridAreaTitle="description">
           <HuBMAPDescription />
         </GridArea>
-        <GridArea gridAreaTitle="carousel">
+        <GridArea maxWidth="lg" gridAreaTitle="carousel">
           <ImageCarouselContainer />
         </GridArea>
+        <EntityCounts />
       </AboveTheFoldGrid>
       {isLargerThanMd && (
         <Container maxWidth="lg">
