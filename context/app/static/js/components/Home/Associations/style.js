@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 /* eslint-disable import/no-unresolved */
-import { ReactComponent as HPersonLogo } from 'images/hubmap-person.svg';
-import { ReactComponent as HTextLogo } from 'images/hubmap-logo.svg';
+import { ReactComponent as HPersonLogo } from 'portal-images/hubmap-person.svg';
+import { ReactComponent as HTextLogo } from 'portal-images/hubmap-logo.svg';
 /* eslint-enable import/no-unresolved */
 
 const logoHeight = '100px';
