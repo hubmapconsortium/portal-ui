@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+const StyledLink = styled.a`
+  text-decoration: none;
+  color: ${(props) => props.theme.palette.text.primary};
+`;
+
 const Flex = styled.div`
   display: flex;
   padding: 20px;
@@ -29,4 +34,4 @@ const StyledSvgIcon = styled(SvgIcon)`
   }
 `;
 
-export { Flex, StyledSvgIcon };
+export { StyledLink, Flex, StyledSvgIcon };

@@ -29,10 +29,20 @@ function EntityCounts() {
   return entityCounts ? (
     <Background>
       <FlexContainer>
-        <EntityCount icon={DonorIcon} count={entityCounts.Donor} label="Donors" />
-        <EntityCount icon={SampleIcon} count={entityCounts.Sample} label="Samples" />
-        <EntityCount icon={DatasetIcon} count={entityCounts.Dataset} label="Datasets" />
-        <EntityCount icon={CollectionIcon} count={entityCounts.Collection} label="Collections" />
+        <EntityCount icon={DonorIcon} count={entityCounts.Donor} label="Donors" href="/search?entity_type[0]=Donor" />
+        <EntityCount
+          icon={SampleIcon}
+          count={entityCounts.Sample}
+          label="Samples"
+          href="/search?entity_type[0]=Sample"
+        />
+        <EntityCount
+          icon={DatasetIcon}
+          count={entityCounts.Dataset}
+          label="Datasets"
+          href="/search?entity_type[0]=Dataset"
+        />
+        <EntityCount icon={CollectionIcon} count={entityCounts.Collection} label="Collections" href="/collections" />
       </FlexContainer>
     </Background>
   ) : null;
