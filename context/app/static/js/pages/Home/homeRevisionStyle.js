@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
 const GridArea = styled(Container)`
-  grid-area: ${(props) => props.gridAreaTitle};
+  grid-area: ${(props) => props.$gridAreaTitle};
 `;
 
 const AboveTheFoldGrid = styled.div`

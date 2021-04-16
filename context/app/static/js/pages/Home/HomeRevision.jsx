@@ -17,13 +17,13 @@ function HomeRevision() {
   return (
     <>
       <AboveTheFoldGrid>
-        <GridArea maxWidth="lg" gridAreaTitle="title">
+        <GridArea maxWidth="lg" $gridAreaTitle="title">
           <Title />
         </GridArea>
-        <GridArea maxWidth="lg" gridAreaTitle="description">
+        <GridArea maxWidth="lg" $gridAreaTitle="description">
           <HuBMAPDescription />
         </GridArea>
-        <GridArea maxWidth="lg" gridAreaTitle="carousel">
+        <GridArea maxWidth="lg" $gridAreaTitle="carousel">
           <ImageCarouselContainer />
         </GridArea>
         <EntityCounts />
