@@ -99,7 +99,7 @@ function DatasetDetail(props) {
   return (
     <DetailContext.Provider value={{ display_doi, uuid, mapped_data_access_level }}>
       {!isLatest && (
-        <Alert severity="warning">
+        <Alert severity="warning" $marginBottom="16">
           <span>
             {/* <span> to override "display: flex" which splits this on to multiple lines. */}
             You are viewing an older version of this page. Navigate to a{' '}
