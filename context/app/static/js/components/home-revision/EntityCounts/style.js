@@ -8,7 +8,6 @@ const Background = styled.div`
 const FlexContainer = styled(Container)`
   @media (min-width: ${(props) => props.theme.breakpoints.values.sm}px) {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
   }
 `;
