@@ -1,1 +1,0 @@
-- Add a banner on the details page if it is not the latest version.

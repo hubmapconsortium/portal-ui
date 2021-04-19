@@ -1,1 +1,0 @@
-- Fix vis-lifting bug on Samples.
