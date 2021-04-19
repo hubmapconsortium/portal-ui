@@ -1,0 +1,1 @@
+- Lift the visualization for image pyramids to the parent.
