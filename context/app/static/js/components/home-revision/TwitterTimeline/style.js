@@ -5,7 +5,7 @@ const Wrapper = styled(Paper)`
   height: 374px;
 
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
-    height: 624px;
+    height: 100%;
   }
 `;
 
