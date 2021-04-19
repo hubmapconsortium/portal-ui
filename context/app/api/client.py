@@ -104,6 +104,7 @@ class ApiClient():
     def get_vitessce_conf(self, entity):
         if 'descendants' in entity \
                 and len(entity['descendants']) \
+                and 'data_types' in entity['descendants'][0] \
                 and 'image_pyramid' in entity['descendants'][0]['data_types']:
             if len(entity['descendants']) > 1:
                 current_app.logger.error(f'Expected only one descendant on {entity["uuid"]}')
