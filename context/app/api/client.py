@@ -27,12 +27,12 @@ class ApiClient():
                 else requests.get(url, headers=headers)
             )
         except requests.exceptions.ConnectTimeout as error:
-            current_app.logger.info(error)
+            current_app.logger.error(error)
             abort(504)
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as error:
-            current_app.logger.info(error.response.text)
+            current_app.logger.error(error.response.text)
             status = error.response.status_code
             if status in [400, 404]:
                 # The same 404 page will be returned,
@@ -164,3 +164,15 @@ class ApiClient():
                 },
             ]
         }
+        else:
+            try:
+                vc = get_view_config_class_for_data_types(
+                    entity=entity, nexus_token=self.nexus_token
+                )
+                conf = vc.build_vitessce_conf()
+                return conf
+            except Exception:
+                current_app.logger.error(
+                    f'Building vitessce conf threw error: {traceback.format_exc()}'
+                )
+                return {}

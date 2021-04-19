@@ -26,7 +26,7 @@ def return_empty_json_if_error(func):
         except Exception:
             class_obj = args[0]
             if not class_obj._is_mock:
-                current_app.logger.info(
+                current_app.logger.error(
                     f'Building vitessce conf threw error: {traceback.format_exc()}'
                 )
             return {}
@@ -84,6 +84,19 @@ class ViewConf:
         base_url = urllib.parse.urljoin(assets_endpoint, f"{self._uuid}/{rel_path}")
         token_param = urllib.parse.urlencode({"token": self._nexus_token})
         return f'{base_url}?{token_param}' if use_token else base_url
+
+    def _get_request_init(self):
+        request_init = {
+            "headers": {
+                "Authorization": f"Bearer {self._nexus_token}"
+            }
+        }
+        # Extra headers outside of a select few cause extra CORS-preflight requests which
+        # can slow down the webpage.  If the dataset is published, we don't need to use
+        # heaeder to authenticate access to the assets API.
+        # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests
+        use_request_init = False if self._entity['status'] == 'Published' else True
+        return request_init if use_request_init else None
 
 
 class ImagingViewConf(ViewConf):
@@ -224,7 +237,7 @@ class SPRMViewConf(ImagingViewConf):
                 if path not in file_paths_found:
                     message = f'SPRM file {path} with uuid "{self._uuid}" not found as expected.'
                     if not self._is_mock:
-                        current_app.logger.info(message)
+                        current_app.logger.error(message)
                     raise FileNotFoundError(message)
                 dataset_file = self._replace_url_in_file(file)
                 dataset = dataset.add_file(**(dataset_file))

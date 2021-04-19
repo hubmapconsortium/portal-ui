@@ -187,11 +187,7 @@ class RNASeqAnnDataZarrConf(ViewConf):
                 "marker_gene_3",
                 "marker_gene_4"
             ],
-            request_init={
-                "headers": {
-                    "Authorization": f"Bearer {self._nexus_token}"
-                }
-            }
+            request_init=self._get_request_init()
         )
         )
         vc = self._setup_anndata_view_config(vc, dataset)

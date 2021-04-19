@@ -27,8 +27,9 @@ function DonorDetail(props) {
     last_modified_timestamp,
     description,
     mapped_metadata = {},
-    // Missing on some unpublished data. Not sure if there's a deeper bug.
-    // Filed: https://github.com/hubmapconsortium/search-api/issues/236
+    // As data comes in from other consortia, we won't be able
+    // to rely on donor metadata always being available.
+    // Unpublished HuBMAP data may also be missing donor metadata.
   } = assayMetadata;
 
   const { sex, race, age_value, age_unit } = mapped_metadata;
@@ -39,7 +40,7 @@ function DonorDetail(props) {
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'metadata', 'attribution', 'provenance', 'protocols'],
+    ['summary', 'metadata', 'provenance', 'protocols', 'attribution'],
     shouldDisplaySection,
   );
 
@@ -64,13 +65,13 @@ function DonorDetail(props) {
           group_name={group_name}
         />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} display_doi={display_doi} />}
+        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
+        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
           created_by_user_email={created_by_user_email}
         />
-        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
       </DetailLayout>
     </DetailContext.Provider>
   );

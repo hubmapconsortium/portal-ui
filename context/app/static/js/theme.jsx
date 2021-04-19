@@ -9,25 +9,36 @@ const theme = createMuiTheme({
     primary: {
       main: purple,
       hover: 'brightness(108%)',
+      light: '#696e83',
+      dark: '#2f3346',
     },
     secondary: {
       main: '#636363',
+      light: '#828282',
+      dark: '#454545',
     },
     error: {
       main: '#DA348A',
+      light: '#e15ca1',
+      dark: '#982460',
     },
     warning: {
       main: '#D25435',
+      light: '#db765d',
+      dark: '#933a25',
     },
     info: {
       main: blue,
+      light: '#5f9ada',
+      dark: '#265a92',
     },
     link: {
       main: blue,
     },
     success: {
       main: '#6C8938', // '#9BC551'
-      light: '#9CB965',
+      light: '#89a05f',
+      dark: '#4b5f27',
     },
     white: {
       main: '#fff',

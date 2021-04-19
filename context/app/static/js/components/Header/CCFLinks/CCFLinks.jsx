@@ -11,13 +11,13 @@ function CCFLinks(props) {
         Common Coordinate Framework (CCF) Portal
       </DropdownLink>
       <DropdownLink href="https://hubmapconsortium.github.io/ccf-asct-reporter/" isIndented={isIndented}>
-        CCF Anatomical Structures, Cell Types and Biomarkers (ASCT+B) Tables/Reporter
+        ASCT+B Reporter
       </DropdownLink>
       <DropdownLink href="https://portal.hubmapconsortium.org/ccf-eui" isIndented={isIndented}>
-        CCF Exploration User Interface (EUI)
+        Exploration User Interface (EUI)
       </DropdownLink>
       <DropdownLink href="https://hubmapconsortium.github.io/ccf-ui/rui/" isIndented={isIndented}>
-        CCF Registration User Interface (RUI)
+        Registration User Interface (RUI)
       </DropdownLink>
     </>
   );

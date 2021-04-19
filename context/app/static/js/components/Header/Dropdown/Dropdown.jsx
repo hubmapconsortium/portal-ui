@@ -20,7 +20,7 @@ function Dropdown(props) {
         {title}
         {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </Button>
-      <OffsetPopper open={open} anchorEl={anchorRef.current} placement="bottom-end">
+      <OffsetPopper open={open} anchorEl={anchorRef.current} placement="bottom-start">
         <Paper>
           <ClickAwayListener onClickAway={toggle}>
             <MenuList id={menuListId}>{children}</MenuList>
@@ -32,7 +32,7 @@ function Dropdown(props) {
 }
 
 Dropdown.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
   menuListId: PropTypes.string.isRequired,
 };

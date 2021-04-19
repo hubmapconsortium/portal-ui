@@ -29,11 +29,15 @@ function MetadataTable(props) {
     { id: 'value', label: 'Value' },
   ];
 
-  const tableRows = Object.entries(tableData).map((entry) => ({
-    key: entry[0],
-    value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
-    description: metadataFieldDescriptions[entry[0]],
-  }));
+  const tableRows = Object.entries(tableData)
+    // Filter out nested objects, like nested "metadata" for Samples...
+    // but allow arrays. Remember, in JS: typeof [] === 'object'
+    .filter((entry) => typeof entry[1] !== 'object' || Array.isArray(entry[1]))
+    .map((entry) => ({
+      key: entry[0],
+      value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
+      description: metadataFieldDescriptions[entry[0]],
+    }));
 
   const downloadUrl = createDownloadUrl(
     tableToDelimitedString(

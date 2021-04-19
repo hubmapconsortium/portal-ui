@@ -48,6 +48,18 @@ def index():
     )
 
 
+@blueprint.route('/home-revision')
+def home_revision():
+    flask_data = {'endpoints': _get_endpoints()}
+    return render_template(
+        'pages/base_react.html',
+        types=entity_types,
+        flask_data=flask_data,
+        title='HuBMAP Data Portal',
+        is_home_page=True
+    )
+
+
 @blueprint.route('/services')
 def service_status():
     flask_data = {'endpoints': _get_endpoints()}

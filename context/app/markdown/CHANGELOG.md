@@ -1,3 +1,45 @@
+## v0.16.1 - 2021-04-15
+
+- Supply metadata for webspiders, even when the donor is missing.
+- Help users who may be logged into the wrong globus account.
+
+
+## v0.16.0 - 2021-04-12
+
+- Tweak dataset columns on Sample details.
+
+
+## v0.15.4 - 2021-04-07
+
+- Add assay type horizontal bar chart to home page revision.
+- Bug fix: Donor metadata is now shown.
+
+
+## v0.15.3 - 2021-04-05
+
+- Move the Attribution section lower on the details pages.
+- link edit: "Azimuth: Reference-based single cell mapping"
+- Bump elliptic from 6.5.3 to 6.5.4.
+- Exclude Datasets which have been superseded from search results.
+- Hide nested objects in metadata table.
+- In several cases, python errors were only being logged at the info level. Elevate to error.
+- Bump pyyaml from 5.3.1 to 5.4.
+- Bump y18n from 4.0.0 to 4.0.1.
+
+
+## v0.15.2 - 2021-04-01
+
+- Replace ccf dropdown in header with 'Atlas & Tools' and add link to Azimuth.
+
+
+## v0.15.1 - 2021-03-29
+
+- Fix a proptype error in FileBrowser.
+- Fix proptypes error that occurs after login.
+- Add route for homepage revision work in progress.
+- Unnecessary auth headers for published zarr stores cause unecessary CORS preflight requests.
+
+
 ## v0.15.0 - 2021-03-26
 
 - Show create list dialog instead of save items to list dialog when no lists exist.
