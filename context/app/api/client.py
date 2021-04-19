@@ -108,7 +108,7 @@ class ApiClient():
             if len(entity['descendants']) > 1:
                 current_app.logger.error(f'Expected only one descendant on {entity["uuid"]}')
             derived_entity = deepcopy(entity['descendants'][0])
-            # TODO: Entity structure will change in the future to be consistent 
+            # TODO: Entity structure will change in the future to be consistent
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
             derived_entity['files'] = derived_entity['metadata']['files']
@@ -164,15 +164,3 @@ class ApiClient():
                 },
             ]
         }
-        else:
-            try:
-                vc = get_view_config_class_for_data_types(
-                    entity=entity, nexus_token=self.nexus_token
-                )
-                conf = vc.build_vitessce_conf()
-                return conf
-            except Exception:
-                current_app.logger.error(
-                    f'Building vitessce conf threw error: {traceback.format_exc()}'
-                )
-                return {}
