@@ -9,6 +9,7 @@ import HuBMAPDescription from 'js/components/home-revision/HuBMAPDescription';
 import EntityCounts from 'js/components/home-revision/EntityCounts';
 import DataUseGuidelines from 'js/components/home-revision/DataUseGuidelines';
 import TwitterTimeline from 'js/components/home-revision/TwitterTimeline';
+import ExternalLinks from 'js/components/home-revision/ExternalLinks';
 
 import { GridAreaContainer, AboveTheFoldGrid, LowerContainerGrid, GridArea } from './homeRevisionStyle';
 
@@ -38,7 +39,9 @@ function HomeRevision() {
         <GridArea $gridAreaTitle="guidelines">
           <DataUseGuidelines />
         </GridArea>
-        <GridArea $gridAreaTitle="external-links">External Links</GridArea>
+        <GridArea $gridAreaTitle="external-links">
+          <ExternalLinks />
+        </GridArea>
         <GridArea $gridAreaTitle="timeline">
           <TwitterTimeline />
         </GridArea>
