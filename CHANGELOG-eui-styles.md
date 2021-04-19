@@ -1,1 +1,1 @@
-Updated styles for CCF EUI v1.6.0
+- Updated styles for CCF EUI v1.6.0
