@@ -121,6 +121,7 @@ const theme = createMuiTheme({
     entityHeader: 1000,
     dropdown: 50,
     visualization: 3,
+    fileBrowserHeader: 1,
   },
 });
 
