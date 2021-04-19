@@ -3,7 +3,11 @@ import Container from '@material-ui/core/Container';
 
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
-const GridArea = styled(Container)`
+const GridAreaContainer = styled(Container)`
+  grid-area: ${(props) => props.$gridAreaTitle};
+`;
+
+const GridArea = styled.div`
   grid-area: ${(props) => props.$gridAreaTitle};
 `;
 
@@ -17,4 +21,15 @@ const AboveTheFoldGrid = styled.div`
   }
 `;
 
-export { GridArea, AboveTheFoldGrid };
+const LowerContainerGrid = styled(Container)`
+  display: grid;
+  grid-gap: ${(props) => props.theme.spacing(3)}px;
+  grid-template-areas: 'guidelines' 'timeline' 'external-links';
+
+  @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
+    grid-template-columns: 3fr 1fr;
+    grid-template-areas: 'bar-chart bar-chart' 'guidelines timeline' 'external-links timeline';
+  }
+`;
+
+export { GridAreaContainer, GridArea, AboveTheFoldGrid, LowerContainerGrid };
