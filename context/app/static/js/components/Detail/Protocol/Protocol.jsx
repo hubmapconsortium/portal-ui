@@ -29,8 +29,7 @@ function Protocol(props) {
 
   const protocolData = useProtocolData(matchedDoiSuffix, 1);
 
-  const resolverHostnameAndDOI =
-    'protocol' in protocolData && 'doi' in protocolData.protocol ? protocolData.protocol.doi : '';
+  const resolverHostnameAndDOI = protocolData?.protocol?.doi;
 
   return (
     <SectionContainer id="protocols">
