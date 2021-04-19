@@ -1,0 +1,12 @@
+import styled from 'styled-components';
+import Paper from '@material-ui/core/Paper';
+
+const Wrapper = styled(Paper)`
+  height: 374px;
+
+  @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
+    height: 624px;
+  }
+`;
+
+export { Wrapper };
