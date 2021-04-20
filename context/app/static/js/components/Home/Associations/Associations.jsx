@@ -1,6 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line import/no-unresolved
-import NihLogo from 'images/nih-logo.png';
+import NihLogo from 'portal-images/nih-logo.png';
 import AssociationsCard from '../AssociationsCard';
 import { Background, StyledImage, PersonLogo, TextLogo, Flex, StyledContainer } from './style';
 

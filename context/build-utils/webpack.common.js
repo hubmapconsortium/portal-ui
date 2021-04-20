@@ -24,7 +24,7 @@ const config = {
     alias: {
       'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
       js: resolve(__dirname, '../app/static/js/'),
-      images: resolve(__dirname, '../app/static/images/'),
+      'portal-images': resolve(__dirname, '../app/static/portal-images/'),
       'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
       package: resolve(__dirname, '../package.json'),
     },

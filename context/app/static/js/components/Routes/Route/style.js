@@ -10,4 +10,8 @@ const MainWrapper = styled.div`
   flex-grow: 1;
 `;
 
-export { StyledContainer, MainWrapper };
+// max width for a lg container
+const routeContainerMaxWidth = 1232;
+const routeContainerPadding = 32;
+
+export { StyledContainer, MainWrapper, routeContainerMaxWidth, routeContainerPadding };

@@ -24,10 +24,6 @@ const GlobalStyles = createGlobalStyle`
     flex-direction: column;
   }
 
-  .container-lg {
-    max-width: 1240px;
-  }
-
   a {
     text-decoration: none;
     background-color: transparent;
