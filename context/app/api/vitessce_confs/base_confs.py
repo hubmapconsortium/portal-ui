@@ -27,7 +27,7 @@ def return_empty_json_if_error(func):
             class_obj = args[0]
             if not class_obj._is_mock:
                 current_app.logger.error(
-                    f'Building vitessce conf threw error: {traceback.format_exc()}'
+                    f"Building vitessce conf threw error: {traceback.format_exc()}"
                 )
             return {}
 
@@ -83,19 +83,15 @@ class ViewConf:
             assets_endpoint = MOCK_URL
         base_url = urllib.parse.urljoin(assets_endpoint, f"{self._uuid}/{rel_path}")
         token_param = urllib.parse.urlencode({"token": self._nexus_token})
-        return f'{base_url}?{token_param}' if use_token else base_url
+        return f"{base_url}?{token_param}" if use_token else base_url
 
     def _get_request_init(self):
-        request_init = {
-            "headers": {
-                "Authorization": f"Bearer {self._nexus_token}"
-            }
-        }
+        request_init = {"headers": {"Authorization": f"Bearer {self._nexus_token}"}}
         # Extra headers outside of a select few cause extra CORS-preflight requests which
         # can slow down the webpage.  If the dataset is published, we don't need to use
         # heaeder to authenticate access to the assets API.
         # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests
-        use_request_init = False if self._entity['status'] == 'Published' else True
+        use_request_init = False if self._entity["status"] == "Published" else True
         return request_init if use_request_init else None
 
 
@@ -142,7 +138,9 @@ class ImagePyramidViewConf(ImagingViewConf):
             file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
         )
         if len(found_images) == 0:
-            message = f'Image pyramid assay with uuid {self._uuid} has no matching files'
+            message = (
+                f"Image pyramid assay with uuid {self._uuid} has no matching files"
+            )
             raise FileNotFoundError(message)
 
         vc = VitessceConfig(name="HuBMAP Data Portal")
@@ -244,6 +242,55 @@ class SPRMViewConf(ImagingViewConf):
             vc = self._setup_view_config_raster_cellsets_expression_segmentation(
                 vc, dataset
             )
+        return vc.to_dict()
+
+
+class SPRMAnnDataViewConf(ImagingViewConf):
+    def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
+        # All "file" Vitessce objects that do not have wrappers.
+        super().__init__(entity, nexus_token, is_mock)
+        self._base_name = kwargs["base_name"]
+
+    @return_empty_json_if_error
+    def build_vitessce_conf(self):
+        image_file = f"{self._imaging_path}/{self._base_name}.ome.tiff"
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        if image_file not in file_paths_found:
+            message = f'Image file for SPRM uuid "{self._uuid}" not found as expected.'
+            raise FileNotFoundError(message)
+        vc = VitessceConfig(name=self._base_name)
+        dataset = vc.add_dataset(name="SPRM")
+        img_url, offsets_url = self._get_img_and_offset_url(
+            image_file, self._imaging_path,
+        )
+        image_wrapper = OmeTiffWrapper(
+            img_url=img_url, offsets_url=offsets_url, name=self._base_name
+        )
+        dataset = dataset.add_object(image_wrapper)
+        anndata_wrapper = AnnDataWrapper(
+            adata_url=adata_url,
+            spatial_centroid_obsm="xy",
+            spatial_polygon_obsm="poly",
+            cell_set_obs=[
+                "K-Means [Covariance] Expression",
+                "K-Means [Mean-All-SubRegions] Expression",
+                "K-Means [Mean] Expression",
+                "K-Means [Shape-Vectors]",
+                "K-Means [Texture]",
+                "K-Means [Total] Expression",
+            ],
+            expression_matrix="X",
+            factors_obs=[
+                "K-Means [Covariance] Expression",
+                "K-Means [Mean-All-SubRegions] Expression",
+                "K-Means [Mean] Expression",
+                "K-Means [Shape-Vectors]",
+                "K-Means [Texture]",
+                "K-Means [Total] Expression",
+            ],
+            request_init=self._get_request_init(),
+        )
+        dataset = vc.add_object(anndata_wrapper)
         return vc.to_dict()
 
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):

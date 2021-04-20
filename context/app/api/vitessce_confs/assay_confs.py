@@ -19,6 +19,7 @@ from .base_confs import (
     ScatterplotViewConf,
     ImagePyramidViewConf,
     SPRMViewConf,
+    SPRMAnnDataViewConf,
     ViewConf,
     return_empty_json_if_error
 )
@@ -32,6 +33,7 @@ from .paths import (
     SCATAC_SEQ_DIR,
     IMAGE_PYRAMID_DIR,
     TILE_REGEX,
+    STITCHED_REGEX,
     SEQFISH_HYB_CYCLE_REGEX,
     SEQFISH_FILE_REGEX,
     CODEX_TILE_DIR
@@ -102,7 +104,7 @@ class CytokitSPRMConf(ViewConf):
     @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_tiles = get_matches(file_paths_found, TILE_REGEX)
+        found_tiles = get_matches(file_paths_found, f"{TILE_REGEX}|{STITCHED_REGEX}")
         if len(found_tiles) == 0:
             message = f'Cytokit SPRM assay with uuid {self._uuid} has no matching tiles'
             raise FileNotFoundError(message)
@@ -160,6 +162,34 @@ class ATACSeqConf(ScatterplotViewConf):
             },
         ]
 
+class StitchedCytokitSPRMConf(ViewConf):
+    @return_empty_json_if_error
+    def build_vitessce_conf(self):
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        print(file_paths_found)
+        found_regions = get_matches(file_paths_found, STITCHED_REGEX)
+        if len(found_regions) == 0:
+            message = (
+                f"Cytokit SPRM assay with uuid {self._uuid} has no matching regions"
+            )
+            raise FileNotFoundError(message)
+        confs = []
+        for region in sorted(found_regions):
+            vc = SPRMAnnDataViewConf(
+                entity=self._entity,
+                nexus_token=self._nexus_token,
+                is_mock=self._is_mock,
+                base_name=region,
+                imaging_path=CODEX_TILE_DIR,
+            )
+            conf = vc.build_vitessce_conf()
+            if conf == {}:
+                message = (
+                    f"Cytokit SPRM assay with uuid {self._uuid} has empty view config"
+                )
+                raise CytokitSPRMViewConfigError(message)
+            confs.append(conf)
+        return confs
 
 class RNASeqAnnDataZarrConf(ViewConf):
 
@@ -224,8 +254,15 @@ def get_view_config_class_for_data_types(entity, nexus_token):
     assay_objs = [tc.get_assay(dt) for dt in data_types]
     assay_names = [assay.name for assay in assay_objs]
     hints = [hint for assay in assay_objs for hint in assay.vitessce_hints]
+    dag_names = [dag['name']
+                     for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
     if "is_image" in hints:
         if "codex" in hints:
+            print(dag_names)
+            if ('sprm-to-anndata.cwl' in dag_names):
+                return StitchedCytokitSPRMConf(
+                    entity=entity, nexus_token=nexus_token
+                )
             return CytokitSPRMConf(
                 entity=entity, nexus_token=nexus_token)
         if SEQFISH in assay_names:
@@ -239,8 +276,6 @@ def get_view_config_class_for_data_types(entity, nexus_token):
         return ImagePyramidViewConf(
             entity=entity, nexus_token=nexus_token)
     if "rna" in hints:
-        dag_names = [dag['name']
-                     for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
         # This is the zarr-backed anndata pipeline.
         if('anndata-to-ui.cwl' in dag_names):
             return RNASeqAnnDataZarrConf(entity=entity, nexus_token=nexus_token)
