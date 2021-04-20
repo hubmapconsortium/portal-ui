@@ -23,7 +23,7 @@ function ImageCarouselControlButtons({ numImages, selectedImageIndex, setSelecte
   }
 
   function setPreviousSelectedImageIndex() {
-    setSelectedImageIndex(selectedImageIndex === 0 ? numImages - 1 : selectedImageIndex - 1);
+    setSelectedImageIndex((selectedImageIndex - 1 + numImages) % numImages); // In JS, "%" is remainder, not modulus.
   }
 
   return (
