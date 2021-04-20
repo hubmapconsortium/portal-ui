@@ -54,7 +54,7 @@ Summary.propTypes = {
   collectionName: PropTypes.string,
   mapped_data_access_level: PropTypes.string,
   entityCanBeSaved: PropTypes.bool,
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]),
 };
 
 Summary.defaultProps = {
