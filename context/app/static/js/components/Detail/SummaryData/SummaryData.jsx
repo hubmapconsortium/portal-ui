@@ -84,12 +84,10 @@ SummaryData.propTypes = {
   status: PropTypes.string.isRequired,
   mapped_data_access_level: PropTypes.string.isRequired,
   entityCanBeSaved: PropTypes.bool,
-  children: PropTypes.element,
 };
 
 SummaryData.defaultProps = {
   entityCanBeSaved: true,
-  children: undefined,
 };
 
 export default SummaryData;
