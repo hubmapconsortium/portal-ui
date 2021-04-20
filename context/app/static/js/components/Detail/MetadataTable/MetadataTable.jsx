@@ -91,7 +91,12 @@ function MetadataTable(props) {
 }
 
 MetadataTable.propTypes = {
-  metadata: PropTypes.objectOf(PropTypes.string).isRequired,
+  metadata: PropTypes.objectOf(
+    PropTypes.oneOfType(
+      // Usually a string, but placeholder metadata.metadata is an object.
+      [PropTypes.string, PropTypes.object],
+    ),
+  ).isRequired,
   display_doi: PropTypes.string.isRequired,
 };
 
