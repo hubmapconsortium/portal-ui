@@ -1,0 +1,1 @@
+- Upgrade vitessce to 0.1.8
