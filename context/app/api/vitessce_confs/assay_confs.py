@@ -36,7 +36,8 @@ from .paths import (
     STITCHED_REGEX,
     SEQFISH_HYB_CYCLE_REGEX,
     SEQFISH_FILE_REGEX,
-    CODEX_TILE_DIR
+    CODEX_TILE_DIR,
+    STITCHED_IMAGE_DIR
 )
 from .type_client import CommonsTypeClient
 
@@ -166,7 +167,6 @@ class StitchedCytokitSPRMConf(ViewConf):
     @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        print(file_paths_found)
         found_regions = get_matches(file_paths_found, STITCHED_REGEX)
         if len(found_regions) == 0:
             message = (
@@ -180,7 +180,7 @@ class StitchedCytokitSPRMConf(ViewConf):
                 nexus_token=self._nexus_token,
                 is_mock=self._is_mock,
                 base_name=region,
-                imaging_path=CODEX_TILE_DIR,
+                imaging_path=STITCHED_IMAGE_DIR,
             )
             conf = vc.build_vitessce_conf()
             if conf == {}:
@@ -189,7 +189,7 @@ class StitchedCytokitSPRMConf(ViewConf):
                 )
                 raise CytokitSPRMViewConfigError(message)
             confs.append(conf)
-        return confs
+        return confs if len(confs) > 1 else confs[0]
 
 class RNASeqAnnDataZarrConf(ViewConf):
 
@@ -258,7 +258,6 @@ def get_view_config_class_for_data_types(entity, nexus_token):
                      for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
     if "is_image" in hints:
         if "codex" in hints:
-            print(dag_names)
             if ('sprm-to-anndata.cwl' in dag_names):
                 return StitchedCytokitSPRMConf(
                     entity=entity, nexus_token=nexus_token

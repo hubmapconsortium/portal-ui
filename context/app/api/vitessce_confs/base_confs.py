@@ -8,6 +8,7 @@ from vitessce import (
     VitessceConfig,
     MultiImageWrapper,
     OmeTiffWrapper,
+    AnnDataWrapper,
     Component as cm,
     DataType as dt,
     FileType as ft,
@@ -250,6 +251,7 @@ class SPRMAnnDataViewConf(ImagingViewConf):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
         self._base_name = kwargs["base_name"]
+        self._imaging_path = kwargs["imaging_path"]
 
     @return_empty_json_if_error
     def build_vitessce_conf(self):
@@ -267,6 +269,8 @@ class SPRMAnnDataViewConf(ImagingViewConf):
             img_url=img_url, offsets_url=offsets_url, name=self._base_name
         )
         dataset = dataset.add_object(image_wrapper)
+        zarr_path = f'anndata-zarr/{self._base_name}-anndata.zarr'
+        adata_url = self._build_assets_url(zarr_path, use_token=False)
         anndata_wrapper = AnnDataWrapper(
             adata_url=adata_url,
             spatial_centroid_obsm="xy",
@@ -290,14 +294,16 @@ class SPRMAnnDataViewConf(ImagingViewConf):
             ],
             request_init=self._get_request_init(),
         )
-        dataset = vc.add_object(anndata_wrapper)
+        dataset = dataset.add_object(anndata_wrapper)
+        vc = self._setup_view_config_raster_cellsets_expression_segmentation(
+            vc, dataset
+        )
         return vc.to_dict()
 
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
-        vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=8)
+        vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=12)
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
         vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
         vc.add_view(dataset, cm.CELL_SETS, x=10, y=5, w=2, h=7)
         vc.add_view(dataset, cm.GENES, x=10, y=0, w=2, h=5)
-        vc.add_view(dataset, cm.HEATMAP, x=3, y=8, w=7, h=4).set_props(transpose=True)
         return vc
