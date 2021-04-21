@@ -1,1 +1,1 @@
-- Upgrade vitessce to 0.1.8
+- Upgrade vitessce to 1.1.8
