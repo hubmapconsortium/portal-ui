@@ -18,7 +18,7 @@ function ProvTable(props) {
       acc[typesToSplit.indexOf(item.entity_type)].push(item);
       return acc;
     },
-    [[], [], [], []], // Four initial arrays for four entity types.
+    typesToSplit.map(() => []),
   );
 
   const descendantCounts = useDescendantCounts(assayMetadata, typesToSplit);
