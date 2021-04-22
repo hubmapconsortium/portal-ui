@@ -1,0 +1,48 @@
+{
+    "data_types": [
+        "codex_cytokit"
+    ],
+    "files": [
+        {
+            "rel_path": "anndata-zarr/reg1_stitched_expressions-anndata.zarr/.zgroup"
+        },
+        {
+            "rel_path": "anndata-zarr/reg1_stitched_expressions-anndata.zarr/obs/.zgroup"
+        },
+        {
+            "rel_path": "anndata-zarr/reg1_stitched_expressions-anndata.zarr/obsm/.zgroup"
+        },
+        {
+            "rel_path": "anndata-zarr/reg1_stitched_expressions-anndata.zarr/var/.zgroup"
+        },
+        {
+            "rel_path": "data.json"
+        },
+        {
+            "rel_path": "output_offsets/stitched/expressions/reg1_stitched_expressions.offsets.json"
+        },
+        {
+            "rel_path": "ometiff-pyramids/stitched/expressions/reg1_stitched_expressions.ome.tiff"
+        },
+        {
+            "rel_path": "anndata-zarr/reg2_stitched_expressions-anndata.zarr/.zgroup"
+        },
+        {
+            "rel_path": "anndata-zarr/reg2_stitched_expressions-anndata.zarr/obs/.zgroup"
+        },
+        {
+            "rel_path": "anndata-zarr/reg2_stitched_expressions-anndata.zarr/obsm/.zgroup"
+        },
+        {
+            "rel_path": "anndata-zarr/reg2_stitched_expressions-anndata.zarr/var/.zgroup"
+        },
+        {
+            "rel_path": "output_offsets/stitched/expressions/reg2_stitched_expressions.offsets.json"
+        },
+        {
+            "rel_path": "ometiff-pyramids/stitched/expressions/reg2_stitched_expressions.ome.tiff"
+        }
+    ],
+    "status": "QA",
+    "uuid": "2f8d43199ca3167e991b320038024b77"
+}
