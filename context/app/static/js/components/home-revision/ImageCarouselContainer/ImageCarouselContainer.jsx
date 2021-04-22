@@ -5,8 +5,11 @@ import ImageCarouselControlButtons from '../ImageCarouselControlButtons';
 import ImageCarouselCallToAction from '../ImageCarouselCallToAction';
 import { Flex, CallToActionWrapper } from './style';
 
+const numImages = 3;
+
 function ImageCarouselContainer() {
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  // set random intial image index
+  const [selectedImageIndex, setSelectedImageIndex] = useState(Math.floor(Math.random() * numImages));
   return (
     <Flex>
       <CallToActionWrapper>
@@ -14,7 +17,7 @@ function ImageCarouselContainer() {
         <ImageCarouselControlButtons
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
-          numImages={3}
+          numImages={numImages}
         />
       </CallToActionWrapper>
       <ImageCarousel selectedImageIndex={selectedImageIndex} setSelectedImageIndex={setSelectedImageIndex} />
