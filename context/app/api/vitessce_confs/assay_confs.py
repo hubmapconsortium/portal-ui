@@ -163,6 +163,7 @@ class ATACSeqConf(ScatterplotViewConf):
             },
         ]
 
+
 class StitchedCytokitSPRMConf(ViewConf):
     @return_empty_json_if_error
     def build_vitessce_conf(self):
@@ -190,6 +191,7 @@ class StitchedCytokitSPRMConf(ViewConf):
                 raise CytokitSPRMViewConfigError(message)
             confs.append(conf)
         return confs if len(confs) > 1 else confs[0]
+
 
 class RNASeqAnnDataZarrConf(ViewConf):
 
@@ -255,7 +257,7 @@ def get_view_config_class_for_data_types(entity, nexus_token):
     assay_names = [assay.name for assay in assay_objs]
     hints = [hint for assay in assay_objs for hint in assay.vitessce_hints]
     dag_names = [dag['name']
-                     for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
+                 for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
     if "is_image" in hints:
         if "codex" in hints:
             if ('sprm-to-anndata.cwl' in dag_names):
