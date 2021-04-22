@@ -105,7 +105,11 @@ class TiledSPRMConf(ViewConf):
     @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_tiles = get_matches(file_paths_found, TILE_REGEX) or get_matches(file_paths_found, STITCHED_REGEX) 
+        found_tiles = get_matches(
+            file_paths_found,
+            TILE_REGEX) or get_matches(
+            file_paths_found,
+            STITCHED_REGEX)
         if len(found_tiles) == 0:
             message = f'Cytokit SPRM assay with uuid {self._uuid} has no matching tiles'
             raise FileNotFoundError(message)
@@ -186,7 +190,8 @@ class StitchedCytokitSPRMConf(ViewConf):
             conf = vc.build_vitessce_conf()
             if conf == {}:
                 raise CytokitSPRMViewConfigError(
-                    f"Cytokit SPRM assay with uuid {self._uuid} has empty view config for region '{region}'"
+                    f"Cytokit SPRM assay with uuid {self._uuid} has empty view\
+                        config for region '{region}'"
                 )
             confs.append(conf)
         return confs if len(confs) > 1 else confs[0]
