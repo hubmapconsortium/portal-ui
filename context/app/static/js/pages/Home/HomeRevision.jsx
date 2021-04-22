@@ -15,12 +15,12 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 
 import {
   GridAreaContainer,
-  AboveTheFoldGrid,
   LowerContainerGrid,
   GridArea,
   SectionHeader,
   FlexGridArea,
   FlexGrowDiv,
+  UpperGrid,
 } from './homeRevisionStyle';
 
 function HomeRevision() {
@@ -28,18 +28,18 @@ function HomeRevision() {
   const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <>
-      <AboveTheFoldGrid>
+      <UpperGrid>
         <GridAreaContainer maxWidth="lg" $gridAreaTitle="title">
           <Title />
-        </GridAreaContainer>
-        <GridAreaContainer maxWidth="lg" $gridAreaTitle="description">
           <HuBMAPDescription />
         </GridAreaContainer>
         <GridAreaContainer maxWidth="lg" $gridAreaTitle="carousel">
           <ImageCarouselContainer />
         </GridAreaContainer>
-        <EntityCounts />
-      </AboveTheFoldGrid>
+        <GridArea $gridAreaTitle="counts">
+          <EntityCounts />
+        </GridArea>
+      </UpperGrid>
       <LowerContainerGrid maxWidth="lg">
         {isLargerThanMd && (
           <GridArea $gridAreaTitle="bar-chart">
