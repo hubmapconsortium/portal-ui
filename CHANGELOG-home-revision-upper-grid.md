@@ -1,1 +1,0 @@
-- Add title, description and carousel to home page revision.

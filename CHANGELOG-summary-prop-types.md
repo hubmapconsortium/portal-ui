@@ -1,1 +1,0 @@
-- Fix prop-types error on Summary.

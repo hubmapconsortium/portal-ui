@@ -1,3 +1,16 @@
+## v0.16.3 - 2021-04-22
+
+- Updated styles for CCF EUI v1.6.0
+- Fix the z-index of the Files header.
+- Add data use guidlines, external links and twitter timeline to home page revision.
+- Add title, description and carousel to home page revision.
+- Show titles of protocols that the API gives us.
+- Remove unused python enums.
+- Add sprm-to-anndata visualization
+- Fix prop-types error on Summary.
+- Upgrade vitessce to 1.1.8
+
+
 ## v0.16.2 - 2021-04-19
 
 - Fix vis-lifting bug on Samples.
