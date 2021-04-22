@@ -18,7 +18,8 @@ from .base_confs import (
     ImagingViewConf,
     ScatterplotViewConf,
     ImagePyramidViewConf,
-    SPRMViewConf,
+    SPRMJSONViewConf,
+    SPRMAnnDataViewConf,
     ViewConf,
     return_empty_json_if_error
 )
@@ -32,9 +33,11 @@ from .paths import (
     SCATAC_SEQ_DIR,
     IMAGE_PYRAMID_DIR,
     TILE_REGEX,
+    STITCHED_REGEX,
     SEQFISH_HYB_CYCLE_REGEX,
     SEQFISH_FILE_REGEX,
-    CODEX_TILE_DIR
+    CODEX_TILE_DIR,
+    STITCHED_IMAGE_DIR
 )
 from .type_client import CommonsTypeClient
 
@@ -97,18 +100,22 @@ class CytokitSPRMViewConfigError(Exception):
     pass
 
 
-class CytokitSPRMConf(ViewConf):
+class TiledSPRMConf(ViewConf):
 
     @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_tiles = get_matches(file_paths_found, TILE_REGEX)
+        found_tiles = get_matches(
+            file_paths_found,
+            TILE_REGEX) or get_matches(
+            file_paths_found,
+            STITCHED_REGEX)
         if len(found_tiles) == 0:
             message = f'Cytokit SPRM assay with uuid {self._uuid} has no matching tiles'
             raise FileNotFoundError(message)
         confs = []
         for tile in sorted(found_tiles):
-            vc = SPRMViewConf(
+            vc = SPRMJSONViewConf(
                 entity=self._entity,
                 nexus_token=self._nexus_token,
                 is_mock=self._is_mock,
@@ -159,6 +166,35 @@ class ATACSeqConf(ScatterplotViewConf):
                 "data_type": dt.CELL_SETS,
             },
         ]
+
+
+class StitchedCytokitSPRMConf(ViewConf):
+    @return_empty_json_if_error
+    def build_vitessce_conf(self):
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        found_regions = get_matches(file_paths_found, STITCHED_REGEX)
+        if len(found_regions) == 0:
+            raise FileNotFoundError(
+                f"Cytokit SPRM assay with uuid {self._uuid} has no matching regions; "
+                f"No file matches for '{STITCHED_REGEX}'."
+            )
+        confs = []
+        for region in sorted(found_regions):
+            vc = SPRMAnnDataViewConf(
+                entity=self._entity,
+                nexus_token=self._nexus_token,
+                is_mock=self._is_mock,
+                base_name=region,
+                imaging_path=STITCHED_IMAGE_DIR,
+            )
+            conf = vc.build_vitessce_conf()
+            if conf == {}:
+                raise CytokitSPRMViewConfigError(
+                    f"Cytokit SPRM assay with uuid {self._uuid} has empty view\
+                        config for region '{region}'"
+                )
+            confs.append(conf)
+        return confs if len(confs) > 1 else confs[0]
 
 
 class RNASeqAnnDataZarrConf(ViewConf):
@@ -224,9 +260,15 @@ def get_view_config_class_for_data_types(entity, nexus_token):
     assay_objs = [tc.get_assay(dt) for dt in data_types]
     assay_names = [assay.name for assay in assay_objs]
     hints = [hint for assay in assay_objs for hint in assay.vitessce_hints]
+    dag_names = [dag['name']
+                 for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
     if "is_image" in hints:
         if "codex" in hints:
-            return CytokitSPRMConf(
+            if ('sprm-to-anndata.cwl' in dag_names):
+                return StitchedCytokitSPRMConf(
+                    entity=entity, nexus_token=nexus_token
+                )
+            return TiledSPRMConf(
                 entity=entity, nexus_token=nexus_token)
         if SEQFISH in assay_names:
             return SeqFISHViewConf(
@@ -239,8 +281,6 @@ def get_view_config_class_for_data_types(entity, nexus_token):
         return ImagePyramidViewConf(
             entity=entity, nexus_token=nexus_token)
     if "rna" in hints:
-        dag_names = [dag['name']
-                     for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
         # This is the zarr-backed anndata pipeline.
         if('anndata-to-ui.cwl' in dag_names):
             return RNASeqAnnDataZarrConf(entity=entity, nexus_token=nexus_token)
