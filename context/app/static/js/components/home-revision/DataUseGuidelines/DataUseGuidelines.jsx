@@ -1,5 +1,4 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { StyledPaper, MainText, StyledEmailIcon } from './style';
@@ -7,9 +6,6 @@ import { StyledPaper, MainText, StyledEmailIcon } from './style';
 function DataUseGuidelines() {
   return (
     <StyledPaper>
-      <Typography component="h2" variant="h4">
-        Data Use Guidelines
-      </Typography>
       <MainText mt={1} variant="body1">
         The majority of data available on the HuBMAP Portal is open access data to be used for research of human
         biology. Certain data types with potential for re-identification are available in restricted access either

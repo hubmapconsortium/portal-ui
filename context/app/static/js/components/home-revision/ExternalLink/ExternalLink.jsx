@@ -9,7 +9,7 @@ function ExternalLink({ linkText, linkHref, description }) {
     <Flex>
       <div>
         <OutboundLink href={linkHref} variant="subtitle1">
-          {linkText} <StyledExternalIcon size="small" />
+          {linkText} <StyledExternalIcon />
         </OutboundLink>
         <Typography>{description}</Typography>
       </div>
