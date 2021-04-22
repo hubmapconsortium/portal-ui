@@ -10,7 +10,7 @@ import frontmatter
 from .api.client import ApiClient
 
 
-entity_types = ['donor', 'sample', 'dataset', 'collection']
+entity_types = ['donor', 'sample', 'dataset', 'support', 'collection']
 blueprint = Blueprint('routes', __name__, template_folder='templates')
 
 

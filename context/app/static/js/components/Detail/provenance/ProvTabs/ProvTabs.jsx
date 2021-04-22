@@ -47,7 +47,7 @@ function ProvTabs(props) {
         <StyledTabPanel value={open} index={0} pad={1}>
           <ProvTable
             uuid={uuid}
-            typesToSplit={['Donor', 'Sample', 'Dataset']}
+            typesToSplit={['Donor', 'Sample', 'Dataset', 'Support']}
             ancestors={ancestors}
             assayMetadata={assayMetadata}
           />
