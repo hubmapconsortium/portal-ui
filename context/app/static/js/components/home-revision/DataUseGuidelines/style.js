@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { EmailIcon } from 'js/shared-styles/icons';
 
 const StyledPaper = styled(Paper)`
-  padding: ${(props) => props.theme.spacing(2, 1)};
+  padding: ${(props) => props.theme.spacing(2)}px;
 `;
 
 const MainText = styled(Typography)`
