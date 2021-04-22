@@ -2,14 +2,16 @@ import json
 from pathlib import Path
 import re
 
-from .base_confs import ImagePyramidViewConf, SPRMViewConf
+from .base_confs import ImagePyramidViewConf, SPRMJSONViewConf
 from .assay_confs import (
     SeqFISHViewConf,
-    CytokitSPRMConf,
+    TiledSPRMConf,
     RNASeqConf,
     ATACSeqConf,
     IMSConf,
     RNASeqAnnDataZarrConf,
+    SPRMAnnDataViewConf,
+    StitchedCytokitSPRMConf
 )
 
 MOCK_NEXUS_TOKEN = "nexus_token"
@@ -20,14 +22,16 @@ FIXTURES_EXPECTED_OUTPUT_DIR = "fixtures/output_expected"
 BASE_NAME_FOR_SPRM = "BASE_NAME"
 
 AssayConfClasses = {
-    "codex": CytokitSPRMConf,
+    "cytokit_json": TiledSPRMConf,
     "rna": RNASeqConf,
     "atac": ATACSeqConf,
     "ims": IMSConf,
     "image_pyramid": ImagePyramidViewConf,
     "seqfish": SeqFISHViewConf,
-    "sprm": SPRMViewConf,
+    "sprm": SPRMJSONViewConf,
     "rna_zarr": RNASeqAnnDataZarrConf,
+    "sprm_anndata": SPRMAnnDataViewConf,
+    "cytokit_anndata": StitchedCytokitSPRMConf
 }
 
 
@@ -44,7 +48,7 @@ def test_assays():
         )[1]
         entity = json.loads(Path(entity_file).read_text())
         AssayViewConfClass = AssayConfClasses[assay]
-        if assay == "sprm":
+        if assay in ["sprm", "sprm_anndata"]:
             vc = AssayViewConfClass(
                 entity=entity,
                 nexus_token=MOCK_NEXUS_TOKEN,
@@ -67,7 +71,7 @@ def test_assays():
             Path(str(entity_file).replace(assay, f"malformed_{assay}")).read_text()
         )
         AssayViewConfClass = AssayConfClasses[assay]
-        if assay == "sprm":
+        if assay in ["sprm", "sprm_anndata"]:
             vc = AssayViewConfClass(
                 entity=malformed_entity,
                 nexus_token=MOCK_NEXUS_TOKEN,

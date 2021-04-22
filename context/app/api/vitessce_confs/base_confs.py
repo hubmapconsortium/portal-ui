@@ -187,7 +187,7 @@ class ScatterplotViewConf(ViewConf):
         return vc
 
 
-class SPRMViewConf(ImagingViewConf):
+class SPRMJSONViewConf(ImagingViewConf):
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
@@ -272,13 +272,16 @@ class SPRMAnnDataViewConf(ImagePyramidViewConf):
         vc = VitessceConfig(name=self._base_name)
         dataset = vc.add_dataset(name="SPRM")
         img_url, offsets_url = self._get_img_and_offset_url(
-            image_file, self._imaging_path,
+            image_file, self.image_pyramid_regex,
         )
         image_wrapper = OmeTiffWrapper(
             img_url=img_url, offsets_url=offsets_url, name=self._base_name
         )
         dataset = dataset.add_object(image_wrapper)
         zarr_path = f"anndata-zarr/{self._base_name}-anndata.zarr"
+        if f'{zarr_path}/.zgroup' not in file_paths_found:
+            message = f'SPRM assay with uuid {self._uuid} has no matching .zarr store'
+            raise FileNotFoundError(message)
         adata_url = self._build_assets_url(zarr_path, use_token=False)
         anndata_wrapper = AnnDataWrapper(
             adata_url=adata_url,

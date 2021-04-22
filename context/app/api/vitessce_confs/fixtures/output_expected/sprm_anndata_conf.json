@@ -1,0 +1,159 @@
+{
+    "version": "1.0.0",
+    "name": "BASE_NAME",
+    "description": "",
+    "datasets": [
+        {
+            "uid": "A",
+            "name": "SPRM",
+            "files": [
+                {
+                    "type": "raster",
+                    "fileType": "raster.json",
+                    "options": {
+                        "schemaVersion": "0.0.2",
+                        "images": [
+                            {
+                                "name": "BASE_NAME",
+                                "type": "ome-tiff",
+                                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/imaging_path/BASE_NAME.ome.tiff?token=nexus_token",
+                                "metadata": {
+                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/imaging_path/BASE_NAME.offsets.json?token=nexus_token"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "cells",
+                    "fileType": "anndata-cells.zarr",
+                    "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/BASE_NAME-anndata.zarr",
+                    "options": {
+                        "xy": "obsm/xy",
+                        "poly": "obsm/poly",
+                        "factors": [
+                            "obs/K-Means [Covariance] Expression",
+                            "obs/K-Means [Mean-All-SubRegions] Expression",
+                            "obs/K-Means [Mean] Expression",
+                            "obs/K-Means [Shape-Vectors]",
+                            "obs/K-Means [Texture]",
+                            "obs/K-Means [Total] Expression"
+                        ]
+                    },
+                    "requestInit": {
+                        "headers": {
+                            "Authorization": "Bearer nexus_token"
+                        }
+                    }
+                },
+                {
+                    "type": "cell-sets",
+                    "fileType": "anndata-cell-sets.zarr",
+                    "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/BASE_NAME-anndata.zarr",
+                    "options": [
+                        {
+                            "groupName": "K-Means [Covariance] Expression",
+                            "setName": "obs/K-Means [Covariance] Expression"
+                        },
+                        {
+                            "groupName": "K-Means [Mean-All-SubRegions] Expression",
+                            "setName": "obs/K-Means [Mean-All-SubRegions] Expression"
+                        },
+                        {
+                            "groupName": "K-Means [Mean] Expression",
+                            "setName": "obs/K-Means [Mean] Expression"
+                        },
+                        {
+                            "groupName": "K-Means [Shape-Vectors]",
+                            "setName": "obs/K-Means [Shape-Vectors]"
+                        },
+                        {
+                            "groupName": "K-Means [Texture]",
+                            "setName": "obs/K-Means [Texture]"
+                        },
+                        {
+                            "groupName": "K-Means [Total] Expression",
+                            "setName": "obs/K-Means [Total] Expression"
+                        }
+                    ],
+                    "requestInit": {
+                        "headers": {
+                            "Authorization": "Bearer nexus_token"
+                        }
+                    }
+                },
+                {
+                    "type": "expression-matrix",
+                    "fileType": "anndata-expression-matrix.zarr",
+                    "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/BASE_NAME-anndata.zarr",
+                    "options": {
+                        "matrix": "X"
+                    },
+                    "requestInit": {
+                        "headers": {
+                            "Authorization": "Bearer nexus_token"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "coordinationSpace": {
+        "dataset": {
+            "A": "A"
+        }
+    },
+    "layout": [
+        {
+            "component": "spatial",
+            "coordinationScopes": {
+                "dataset": "A"
+            },
+            "x": 3,
+            "y": 0,
+            "w": 7,
+            "h": 12
+        },
+        {
+            "component": "description",
+            "coordinationScopes": {
+                "dataset": "A"
+            },
+            "x": 0,
+            "y": 8,
+            "w": 3,
+            "h": 4
+        },
+        {
+            "component": "layerController",
+            "coordinationScopes": {
+                "dataset": "A"
+            },
+            "x": 0,
+            "y": 0,
+            "w": 3,
+            "h": 8
+        },
+        {
+            "component": "cellSets",
+            "coordinationScopes": {
+                "dataset": "A"
+            },
+            "x": 10,
+            "y": 5,
+            "w": 2,
+            "h": 7
+        },
+        {
+            "component": "genes",
+            "coordinationScopes": {
+                "dataset": "A"
+            },
+            "x": 10,
+            "y": 0,
+            "w": 2,
+            "h": 5
+        }
+    ],
+    "initStrategy": "auto"
+}

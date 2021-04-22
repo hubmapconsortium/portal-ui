@@ -18,7 +18,7 @@ from .base_confs import (
     ImagingViewConf,
     ScatterplotViewConf,
     ImagePyramidViewConf,
-    SPRMViewConf,
+    SPRMJSONViewConf,
     SPRMAnnDataViewConf,
     ViewConf,
     return_empty_json_if_error
@@ -100,7 +100,7 @@ class CytokitSPRMViewConfigError(Exception):
     pass
 
 
-class CytokitSPRMConf(ViewConf):
+class TiledSPRMConf(ViewConf):
 
     @return_empty_json_if_error
     def build_vitessce_conf(self):
@@ -111,7 +111,7 @@ class CytokitSPRMConf(ViewConf):
             raise FileNotFoundError(message)
         confs = []
         for tile in sorted(found_tiles):
-            vc = SPRMViewConf(
+            vc = SPRMJSONViewConf(
                 entity=self._entity,
                 nexus_token=self._nexus_token,
                 is_mock=self._is_mock,
@@ -264,7 +264,7 @@ def get_view_config_class_for_data_types(entity, nexus_token):
                 return StitchedCytokitSPRMConf(
                     entity=entity, nexus_token=nexus_token
                 )
-            return CytokitSPRMConf(
+            return TiledSPRMConf(
                 entity=entity, nexus_token=nexus_token)
         if SEQFISH in assay_names:
             return SeqFISHViewConf(
