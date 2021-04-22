@@ -25,6 +25,7 @@ const LowerContainerGrid = styled(Container)`
   display: grid;
   grid-gap: ${(props) => props.theme.spacing(3)}px;
   grid-template-areas: 'guidelines' 'timeline' 'external-links';
+  margin-bottom: ${(props) => props.theme.spacing(5)}px;
 
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     grid-template-columns: 3fr 1fr;
