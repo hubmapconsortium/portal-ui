@@ -16,4 +16,13 @@ const StyledExternalIcon = styled(ExternalLinkIcon)`
   vertical-align: middle;
 `;
 
-export { Flex, StyledExternalIcon };
+const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  flex-shrink: 0;
+  margin-right: ${(props) => props.theme.spacing(2)}px;
+`;
+
+export { Flex, StyledExternalIcon, ImageWrapper };

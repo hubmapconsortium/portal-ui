@@ -2,11 +2,12 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import { Flex, StyledExternalIcon } from './style';
+import { Flex, StyledExternalIcon, ImageWrapper } from './style';
 
-function ExternalLink({ linkText, linkHref, description }) {
+function ExternalLink({ img, linkText, linkHref, description }) {
   return (
     <Flex>
+      <ImageWrapper>{img}</ImageWrapper>
       <div>
         <OutboundLink href={linkHref} variant="subtitle1">
           {linkText} <StyledExternalIcon />
