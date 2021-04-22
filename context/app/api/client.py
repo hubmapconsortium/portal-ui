@@ -102,7 +102,7 @@ class ApiClient():
         return entity
 
     def get_vitessce_conf(self, entity):
-        # First, try "vis-lifting": Display image pyramids on their parent entity pages, if possible.
+        # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         if 'descendants' in entity \
                 and len(entity['descendants']) \
                 and 'data_types' in entity['descendants'][0] \
