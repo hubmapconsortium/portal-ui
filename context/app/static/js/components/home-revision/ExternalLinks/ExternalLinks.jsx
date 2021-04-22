@@ -35,7 +35,6 @@ function ExternalLinks() {
         linkText="HuBMAP Protocols"
         description="View the HuBMAP Consortium’s protocols in protocols.io."
       />
-
       <ExternalLink
         img={<img src={HubmapLogo} height={56} width={100} alt="HuBMAP Logo" />}
         linkHref="https://ingest.hubmapconsortium.org/"
