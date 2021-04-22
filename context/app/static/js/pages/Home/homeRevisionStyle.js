@@ -2,10 +2,6 @@ import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
-import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
-
-const gridSpacing = 3;
-
 const GridAreaContainer = styled(Container)`
   grid-area: ${(props) => props.$gridAreaTitle};
 `;
@@ -23,20 +19,16 @@ const FlexGrowDiv = styled.div`
   flex-grow: 1;
 `;
 
-const AboveTheFoldGrid = styled.div`
+const UpperGrid = styled.div`
   display: grid;
-  grid-gap: ${(props) => props.theme.spacing(gridSpacing)}px;
-  grid-template-areas: 'title' 'description' 'carousel';
+  grid-gap: ${(props) => props.theme.spacing(5)}px;
+  grid-template-areas: 'title' 'carousel' 'counts';
   margin-bottom: ${(props) => props.theme.spacing(5)}px;
-  @media (min-width: ${(props) => props.theme.breakpoints.values.lg}px) {
-    height: calc(100vh - ${headerHeight + 16}px);
-    grid-template-rows: auto auto 1fr;
-  }
 `;
 
 const LowerContainerGrid = styled(Container)`
   display: grid;
-  grid-gap: ${(props) => props.theme.spacing(gridSpacing)}px;
+  grid-gap: ${(props) => props.theme.spacing(3)}px;
   grid-template-areas: 'guidelines' 'timeline' 'external-links';
   margin-bottom: ${(props) => props.theme.spacing(5)}px;
 
@@ -50,4 +42,4 @@ const SectionHeader = styled(Typography)`
   margin-bottom: ${(props) => props.theme.spacing(1.5)}px;
 `;
 
-export { GridAreaContainer, GridArea, AboveTheFoldGrid, LowerContainerGrid, SectionHeader, FlexGridArea, FlexGrowDiv };
+export { GridAreaContainer, GridArea, UpperGrid, LowerContainerGrid, SectionHeader, FlexGridArea, FlexGrowDiv };
