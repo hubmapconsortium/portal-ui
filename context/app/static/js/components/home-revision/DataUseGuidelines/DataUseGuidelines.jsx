@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
-import { StyledPaper, MainText } from './style';
+import { StyledPaper, MainText, StyledEmailIcon } from './style';
 
 function DataUseGuidelines() {
   return (
@@ -19,7 +19,9 @@ function DataUseGuidelines() {
       </MainText>
       <MainText mt={2} variant="body1">
         Please direct any questions to{' '}
-        <LightBlueLink href="mailto:help@hubmapconsortium.org">help@hubmapconsortium.org</LightBlueLink>.
+        <LightBlueLink href="mailto:help@hubmapconsortium.org">
+          help@hubmapconsortium.org <StyledEmailIcon />
+        </LightBlueLink>
       </MainText>
     </StyledPaper>
   );
