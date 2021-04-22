@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import OpenInNewRoundedIcon from '@material-ui/icons/OpenInNewRounded';
+
+import { ExternalLinkIcon } from 'js/shared-styles/icons';
 
 const Flex = styled.div`
   padding: ${(props) => props.theme.spacing(1)}px;
@@ -10,7 +11,7 @@ const Flex = styled.div`
   }
 `;
 
-const StyledExternalIcon = styled(OpenInNewRoundedIcon)`
+const StyledExternalIcon = styled(ExternalLinkIcon)`
   font-size: 1.2rem;
   vertical-align: middle;
 `;
