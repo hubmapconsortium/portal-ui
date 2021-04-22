@@ -6,7 +6,12 @@
 
 {% block content %}
 <p>
-  Unauthorized: You have not been added to the HuBMAP Group on Globus.
-  Request access <a href="https://profile.hubmapconsortium.org/">here</a>.
+  Could not confirm your Globus credentials.
 </p>
+<ul>
+  <li>You may not have been added to the HuBMAP Group on Globus. Request access at
+    <a href="mailto:help@hubmapconsortium.org">help@hubmapconsortium.org</a>.</li>
+  <li>Or, you may be logged into a different Globus account from the one in the HuBMAP Group.
+    Check <a href="http://app.globus.org/">http://app.globus.org/</a> for details on your account.</li>
+</ul>
 {% endblock %}

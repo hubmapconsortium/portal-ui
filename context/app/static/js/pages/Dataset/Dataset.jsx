@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 
+import { Alert } from 'js/shared-styles/alerts';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/files/Files';
 import ProvSection from 'js/components/Detail/provenance/ProvSection';
@@ -67,6 +68,7 @@ function DatasetDetail(props) {
     status,
     mapped_data_access_level,
   } = assayMetadata;
+  const isLatest = !('next_revision_uuid' in assayMetadata);
 
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
@@ -96,6 +98,18 @@ function DatasetDetail(props) {
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
   return (
     <DetailContext.Provider value={{ display_doi, uuid, mapped_data_access_level }}>
+      {!isLatest && (
+        <Alert severity="warning" $marginBottom="16">
+          <span>
+            {/* <span> to override "display: flex" which splits this on to multiple lines. */}
+            You are viewing an older version of this page. Navigate to a{' '}
+            <LightBlueLink href={`/browse/dataset/${assayMetadata.next_revision_uuid}`}>
+              more recent version
+            </LightBlueLink>
+            .
+          </span>
+        </Alert>
+      )}
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}

@@ -19,11 +19,11 @@ function SelectImageButton({ isSelectedImageIndex, onClick }) {
 
 function ImageCarouselControlButtons({ numImages, selectedImageIndex, setSelectedImageIndex }) {
   function setNextSelectedImageIndex() {
-    setSelectedImageIndex(selectedImageIndex === numImages - 1 ? 0 : selectedImageIndex + 1);
+    setSelectedImageIndex((selectedImageIndex + 1) % numImages);
   }
 
   function setPreviousSelectedImageIndex() {
-    setSelectedImageIndex(selectedImageIndex === 0 ? numImages - 1 : selectedImageIndex - 1);
+    setSelectedImageIndex((selectedImageIndex - 1 + numImages) % numImages); // In JS, "%" is remainder, not modulus.
   }
 
   return (

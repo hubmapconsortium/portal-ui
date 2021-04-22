@@ -10,9 +10,9 @@ import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 
 function ProtocolLink(props) {
-  const { resolverHostnameAndDOI } = props;
+  const { title, resolverHostnameAndDOI } = props;
   return (
-    <SectionItem label="Protocol URL">
+    <SectionItem label={title}>
       {resolverHostnameAndDOI ? (
         <OutboundLink href={`https://${resolverHostnameAndDOI}`}>{resolverHostnameAndDOI}</OutboundLink>
       ) : (
@@ -29,15 +29,15 @@ function Protocol(props) {
 
   const protocolData = useProtocolData(matchedDoiSuffix, 1);
 
-  const resolverHostnameAndDOI =
-    'protocol' in protocolData && 'doi' in protocolData.protocol ? protocolData.protocol.doi : '';
+  const title = protocolData?.protocol?.title;
+  const resolverHostnameAndDOI = protocolData?.protocol?.doi;
 
   return (
     <SectionContainer id="protocols">
       <SectionHeader>Protocols</SectionHeader>
       <Divider />
       <StyledPaper>
-        <ProtocolLink resolverHostnameAndDOI={resolverHostnameAndDOI} />
+        <ProtocolLink title={title} resolverHostnameAndDOI={resolverHostnameAndDOI} />
       </StyledPaper>
     </SectionContainer>
   );

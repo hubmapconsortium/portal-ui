@@ -1,6 +1,7 @@
 from collections import namedtuple
 import json
 import traceback
+from copy import deepcopy
 
 from datauri import DataURI
 from flask import abort, current_app
@@ -101,53 +102,66 @@ class ApiClient():
         return entity
 
     def get_vitessce_conf(self, entity):
-        if ('files' not in entity or 'data_types' not in entity):
-            # Would a default no-viz config be better?
+        if 'descendants' in entity \
+                and len(entity['descendants']) \
+                and 'data_types' in entity['descendants'][0] \
+                and 'image_pyramid' in entity['descendants'][0]['data_types']:
+            if len(entity['descendants']) > 1:
+                current_app.logger.error(f'Expected only one descendant on {entity["uuid"]}')
+            derived_entity = deepcopy(entity['descendants'][0])
+            # TODO: Entity structure will change in the future to be consistent
+            # about "files". Bill confirms that when the new structure comes in
+            # there will be a period of backward compatibility to allow us to migrate.
+            derived_entity['files'] = derived_entity['metadata']['files']
+            return self.get_vitessce_conf(derived_entity)
+        if 'files' not in entity or 'data_types' not in entity:
             return {}
         if self.is_mock:
-            cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
-            cellsUri = DataURI.make(
-                'text/plain', charset='us-ascii', base64=True, data=cellsData
+            return self._get_mock_vitessce_conf()
+        try:
+            vc = get_view_config_class_for_data_types(
+                entity=entity, nexus_token=self.nexus_token
             )
-            token = 'fake-token'
-            return {
-                'description': 'DEMO',
-                'layers': [
-                    {
-                        'name': 'cells',
-                        'type': 'CELLS',
-                        'url': cellsUri,
-                        'requestInit': {
-                            'headers': {
-                                'Authorization': 'Bearer ' + token
-                            }
+            conf = vc.build_vitessce_conf()
+            return conf
+        except Exception:
+            current_app.logger.error(
+                f'Building vitessce conf threw error: {traceback.format_exc()}'
+            )
+            return {}
+
+    def _get_mock_vitessce_conf(self):
+        cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
+        cellsUri = DataURI.make(
+            'text/plain', charset='us-ascii', base64=True, data=cellsData
+        )
+        token = 'fake-token'
+        return {
+            'description': 'DEMO',
+            'layers': [
+                {
+                    'name': 'cells',
+                    'type': 'CELLS',
+                    'url': cellsUri,
+                    'requestInit': {
+                        'headers': {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    }
+                },
+            ],
+            'name': 'Linnarsson',
+            'staticLayout': [
+                {
+                    'component': 'scatterplot',
+                    'props': {
+                        'mapping': 'UMAP',
+                        'view': {
+                            'zoom': 4,
+                            'target': [0, 0, 0]
                         }
                     },
-                ],
-                'name': 'Linnarsson',
-                'staticLayout': [
-                    {
-                        'component': 'scatterplot',
-                        'props': {
-                            'mapping': 'UMAP',
-                            'view': {
-                                'zoom': 4,
-                                'target': [0, 0, 0]
-                            }
-                        },
-                        'x': 0, 'y': 0, 'w': 12, 'h': 2
-                    },
-                ]
-            }
-        else:
-            try:
-                vc = get_view_config_class_for_data_types(
-                    entity=entity, nexus_token=self.nexus_token
-                )
-                conf = vc.build_vitessce_conf()
-                return conf
-            except Exception:
-                current_app.logger.error(
-                    f'Building vitessce conf threw error: {traceback.format_exc()}'
-                )
-                return {}
+                    'x': 0, 'y': 0, 'w': 12, 'h': 2
+                },
+            ]
+        }

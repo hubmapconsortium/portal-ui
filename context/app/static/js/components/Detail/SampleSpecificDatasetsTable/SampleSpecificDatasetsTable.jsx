@@ -17,7 +17,6 @@ import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/secti
 function SampleSpecificDatasetsTable({ datasets, uuid }) {
   const columns = [
     { id: 'display_doi', label: 'HuBMAP ID' },
-    { id: 'origin_sample.mapped_organ', label: 'Organ Type' },
     { id: 'mapped_data_types', label: 'Data Types' },
     { id: 'status', label: 'Status' },
     { id: 'descendant_counts.entity_type.Dataset', label: 'Derived Dataset Count' },
@@ -59,9 +58,8 @@ function SampleSpecificDatasetsTable({ datasets, uuid }) {
               {datasets.map(
                 ({
                   _source: {
-                    display_doi,
                     uuid: datasetUUID,
-                    origin_sample,
+                    display_doi,
                     mapped_data_types,
                     status,
                     descendant_counts,
@@ -74,7 +72,6 @@ function SampleSpecificDatasetsTable({ datasets, uuid }) {
                         {display_doi}
                       </LightBlueLink>
                     </TableCell>
-                    <TableCell> {origin_sample.mapped_organ}</TableCell>
                     <TableCell>{mapped_data_types}</TableCell>
                     <TableCell>{status}</TableCell>
                     <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>

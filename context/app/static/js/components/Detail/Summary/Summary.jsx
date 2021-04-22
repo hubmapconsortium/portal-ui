@@ -54,7 +54,6 @@ Summary.propTypes = {
   collectionName: PropTypes.string,
   mapped_data_access_level: PropTypes.string,
   entityCanBeSaved: PropTypes.bool,
-  children: PropTypes.element,
 };
 
 Summary.defaultProps = {
@@ -65,7 +64,6 @@ Summary.defaultProps = {
   mapped_data_access_level: '',
   collectionName: '',
   entityCanBeSaved: true,
-  children: undefined,
 };
 
 export default Summary;

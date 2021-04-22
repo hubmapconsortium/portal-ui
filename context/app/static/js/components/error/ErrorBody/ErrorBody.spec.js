@@ -23,9 +23,7 @@ test('Globus 401', () => {
 
 test('401', () => {
   render(<ErrorBody errorCode={401} />);
-  expect(
-    screen.getByText('You have not been added to the HuBMAP Group on Globus.', { exact: false }),
-  ).toBeInTheDocument();
+  expect(screen.getByText('Could not confirm your Globus credentials.', { exact: false })).toBeInTheDocument();
   expect(screen.getByRole('link', { name: help.name })).toHaveAttribute('href', help.url);
 });
 

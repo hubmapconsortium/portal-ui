@@ -1,3 +1,21 @@
+## v0.16.2 - 2021-04-19
+
+- Fix vis-lifting bug on Samples.
+- Lift the visualization for image pyramids to the parent.
+- Add a banner on the details page if it is not the latest version.
+
+
+## v0.16.1 - 2021-04-15
+
+- Supply metadata for webspiders, even when the donor is missing.
+- Help users who may be logged into the wrong globus account.
+
+
+## v0.16.0 - 2021-04-12
+
+- Tweak dataset columns on Sample details.
+
+
 ## v0.15.4 - 2021-04-07
 
 - Add assay type horizontal bar chart to home page revision.
