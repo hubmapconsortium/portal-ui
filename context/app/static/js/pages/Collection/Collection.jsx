@@ -49,7 +49,9 @@ function Collection(props) {
           </Summary>
           {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
-          {'creators' in collectionData && <CollectionsAffiliationsTable affiliations={creators} title="Creators" />}
+          {'creators' in collectionData && (
+            <CollectionsAffiliationsTable affiliations={creators} title="Contributors" />
+          )}
         </>
       )}
     </div>
