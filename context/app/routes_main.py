@@ -208,16 +208,6 @@ def preview_view(name):
     )
 
 
-@blueprint.route('/cells-api-demo')
-def cells_api_demo():
-    flask_data = {'endpoints': _get_endpoints()}
-    return render_template(
-        'pages/base_react.html',
-        title='Cells API Demo',
-        flask_data=flask_data
-    )
-
-
 @blueprint.route('/collections')
 def collections():
     flask_data = {'endpoints': _get_endpoints()}

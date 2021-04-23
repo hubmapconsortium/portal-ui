@@ -11,92 +11,44 @@ import TableHead from '@material-ui/core/TableHead';
 
 // eslint-disable-next-line no-unused-vars
 function CellsAPIDemo(props) {
-  const [input_type, setInputType] = useState('gene');
-  const [output_type, setOutputType] = useState('cell');
-  const [genomic_modality, setGenomicModality] = useState('rna');
-  const [has, setHas] = useState('VIM > 0.5');
+  const [someField, setSomeField] = useState('field value');
 
   const [results, setResults] = useState([]);
-  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
-    // TODO: Pull endpoint from context!
-    const urlBase = 'https://cells.dev.hubmapconsortium.org/api/';
+    const formData = new FormData();
+    formData.append('some_field', someField);
 
-    const firstFormData = new FormData();
-    firstFormData.append('input_type', input_type);
-    firstFormData.append('genomic_modality', genomic_modality);
-    firstFormData.append('input_set', has);
-
-    const firstResponse = await fetch(`${urlBase}${output_type}/`, {
+    const firstResponse = await fetch('/cells.json', {
       method: 'POST',
-      body: firstFormData,
+      body: formData,
     });
-    const firstResponseJson = await firstResponse.json();
-    if ('message' in firstResponseJson) {
-      setError(`first: ${firstResponseJson.message}`);
-      return;
+    const responseJson = await firstResponse.json();
+    if ('message' in responseJson) {
+      setMessage(responseJson.message);
     }
-    const handle = firstResponseJson.results[0].query_handle;
-
-    const secondFormData = new FormData();
-    secondFormData.append('key', handle);
-    secondFormData.append('set_type', output_type);
-    secondFormData.append('limit', 10);
-    secondFormData.append('values_type', input_type);
-    // limit,
-    // offset,
-    // values_included,
-    // sort_by,
-    // values_type
-
-    const secondResponse = await fetch(`${urlBase}${output_type}detailevaluation/`, {
-      method: 'POST',
-      body: secondFormData,
-    });
-    const secondResponseJson = await secondResponse.json();
-    if ('message' in secondResponseJson) {
-      setError(`second: ${secondResponseJson.message}`);
-      return;
+    if ('results' in responseJson) {
+      setResults(responseJson.results);
     }
-
-    setResults(secondResponseJson.results);
   }
 
   function handleChange(event) {
     const { target } = event;
     const { name } = target;
     const setFields = {
-      input_type: setInputType,
-      output_type: setOutputType,
-      genomic_modality: setGenomicModality,
-      has: setHas,
+      some_field: setSomeField,
     };
     setFields[name](event.target.value);
   }
 
   return (
     <Paper>
-      <TextField label="input type" value={input_type} name="input_type" variant="outlined" onChange={handleChange} />
-      <TextField
-        label="output type"
-        value={output_type}
-        name="output_type"
-        variant="outlined"
-        onChange={handleChange}
-      />
-      <TextField
-        label="genomic modality"
-        value={genomic_modality}
-        name="genomic_modality"
-        variant="outlined"
-        onChange={handleChange}
-      />
-      <TextField label="has" value={has} name="has" variant="outlined" onChange={handleChange} />
+      <TextField label="some field" value={someField} name="some_field" variant="outlined" onChange={handleChange} />
       <br />
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
-      {error}
+      {message}
       <ResultsTable results={results} />
     </Paper>
   );
@@ -121,10 +73,7 @@ function ResultsTable(props) {
         {results.map((result) => (
           <TableRow>
             {fields.map((field) => (
-              <TableCell key={field}>
-                {/* Results can include objects in the "values" field. */}
-                {JSON.stringify(result[field])}
-              </TableCell>
+              <TableCell key={field}>{result[field]}</TableCell>
             ))}
           </TableRow>
         ))}
