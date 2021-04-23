@@ -125,7 +125,7 @@ function Routes(props) {
     );
   }
 
-  if (urlPath === '/cells-api-demo') {
+  if (urlPath === '/cells') {
     return (
       <Route>
         <CellsAPIDemo />
