@@ -18,7 +18,7 @@ If it is valid in these three senses (viewable in Avivator locally, passes `inge
 </details>
 
 <details><summary>Is there spot data?</summary>
-Run the image pyramid pipeline + offsets on the appropriate imaging data.  We currently do not have a pipeline for visualizing spot data.  Create a new class that inherits from ViewConf to visualize the data (raw imaging + spot data) when such a pipeline is created.  If there is segmentation data coming from the TMC or elsewhere, then that will need to be both processed (via <a href="https://github.com/hubmapconsortium/portal-containers/tree/master/containers/sprm-to-anndata">sprm-to-anndata.cwl from portal-containers</a> or a different pipeline that ideally outputs zarr-backed AnnData) and visualized as well
+If the answer is "yes," we should run the image pyramid pipeline + offsets on the appropriate imaging data.  We currently do not have a pipeline for visualizing spot data.  Create a new class that inherits from ViewConf to visualize the data (raw imaging + spot data) when such a pipeline is created.  If there is segmentation data coming from the TMC or elsewhere, then that will need to be both processed (via <a href="https://github.com/hubmapconsortium/portal-containers/tree/master/containers/sprm-to-anndata">sprm-to-anndata.cwl from portal-containers</a> or a different pipeline that ideally outputs zarr-backed AnnData) and visualized as well
 </details>
 
 <details><summary>Will Cytokit + SPRM be run?</summary>
