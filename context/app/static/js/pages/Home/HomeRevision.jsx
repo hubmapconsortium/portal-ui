@@ -11,6 +11,7 @@ import EntityCounts from 'js/components/home-revision/EntityCounts';
 import DataUseGuidelines from 'js/components/home-revision/DataUseGuidelines';
 import TwitterTimeline from 'js/components/home-revision/TwitterTimeline';
 import ExternalLinks from 'js/components/home-revision/ExternalLinks';
+import FacetSearch from 'js/components/home-revision/FacetSearch';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 
 import {
@@ -38,6 +39,7 @@ function HomeRevision() {
         </GridAreaContainer>
         <GridArea $gridAreaTitle="counts">
           <EntityCounts />
+          <FacetSearch />
         </GridArea>
       </UpperGrid>
       <LowerContainerGrid maxWidth="lg">
