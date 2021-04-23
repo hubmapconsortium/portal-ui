@@ -1,0 +1,1 @@
+- In Collection, change label from "Creators" to "Contributors", to make this a better DOI landing page.
