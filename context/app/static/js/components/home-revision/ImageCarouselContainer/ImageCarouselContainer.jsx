@@ -20,45 +20,67 @@ import ImageCarouselCallToAction from '../ImageCarouselCallToAction';
 import { Flex, CallToActionWrapper } from './style';
 
 function ImageCarouselContainer() {
-  const images = [
-    <CarouselImage
-      src320w={VitessceSlide320w}
-      src640w={VitessceSlide640w}
-      src1280w={VitessceSlide1280w}
-      src1392w={VitessceSlide1392w}
-      alt="Vitessce"
-    />,
-    <CarouselImage
-      src320w={CCFSlide320w}
-      src640w={CCFSlide640w}
-      src1280w={CCFSlide1280w}
-      src1392w={CCFSlide1392w}
-      alt="CCF Portal"
-    />,
-    <CarouselImage
-      src320w={AzimuthSlide320w}
-      src640w={AzimuthSlide640w}
-      src1280w={AzimuthSlide1280w}
-      src1392w={AzimuthSlide1392w}
-      alt="Azimuth"
-    />,
+  const slides = [
+    {
+      title: 'Explore spatial single-cell data with Vitessce visualizations',
+      body:
+        'View multi-modal assay types with reusable interactive components such as a scatterplot, spatial+imaging plot, genome browser tracks, statistical plots and controller components.',
+      image: (
+        <CarouselImage
+          src320w={VitessceSlide320w}
+          src640w={VitessceSlide640w}
+          src1280w={VitessceSlide1280w}
+          src1392w={VitessceSlide1392w}
+          alt="Vitessce"
+        />
+      ),
+    },
+    {
+      title: 'Navigate healthy human cells with the Common Coordinate Framework',
+      body:
+        'Interact with the human body data with the Anatomical Structures, Cell Types and Biomarkers (ASCT+B) Tables and CCF Ontology. Also explore two user interfaces: the Registration User Interface (RUI) for tissue data registration and Exploration User Interface (EUI) for semantic and spatial data.',
+      image: (
+        <CarouselImage
+          src320w={CCFSlide320w}
+          src640w={CCFSlide640w}
+          src1280w={CCFSlide1280w}
+          src1392w={CCFSlide1392w}
+          alt="CCF Portal"
+        />
+      ),
+    },
+    {
+      title: 'Analyze single-cell RNA-seq experiments with Azimuth',
+      body:
+        'Explore Azimuth, a web application that uses an annotated reference dataset to automate the processing, analysis and interpretation of new single-cell RNA-seq experiments.',
+      image: (
+        <CarouselImage
+          src320w={AzimuthSlide320w}
+          src640w={AzimuthSlide640w}
+          src1280w={AzimuthSlide1280w}
+          src1392w={AzimuthSlide1392w}
+          alt="Azimuth"
+        />
+      ),
+    },
   ];
-  // set random intial image index
-  const [selectedImageIndex, setSelectedImageIndex] = useState(Math.floor(Math.random() * images.length));
+  // Set random intial image index:
+  const [selectedImageIndex, setSelectedImageIndex] = useState(Math.floor(Math.random() * slides.length));
+  const { title, body } = slides[selectedImageIndex];
   return (
     <Flex>
       <CallToActionWrapper>
-        <ImageCarouselCallToAction selectedImageIndex={selectedImageIndex} />
+        <ImageCarouselCallToAction title={title} body={body} />
         <ImageCarouselControlButtons
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
-          numImages={images.length}
+          numImages={slides.length}
         />
       </CallToActionWrapper>
       <ImageCarousel
         selectedImageIndex={selectedImageIndex}
         setSelectedImageIndex={setSelectedImageIndex}
-        images={images}
+        images={slides.map((slide) => slide.image)}
       />
     </Flex>
   );
