@@ -1,3 +1,11 @@
+## v0.17.0 - 2021-04-26
+
+- Remove code that hit the cells-api from the client with a stub for hitting it from the server.
+- In Collection, change label from "Creators" to "Contributors", to make this a better DOI landing page.
+- Fix height of twitter timeline in safari on new homepage.
+- Randomize intial carousel image.
+
+
 ## v0.16.3 - 2021-04-22
 
 - Updated styles for CCF EUI v1.6.0

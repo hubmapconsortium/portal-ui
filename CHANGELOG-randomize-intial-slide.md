@@ -1,1 +1,0 @@
-- Randomize intial carousel image.

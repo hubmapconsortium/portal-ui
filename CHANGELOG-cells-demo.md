@@ -1,1 +1,0 @@
-- Remove code that hit the cells-api from the client with a stub for hitting it from the server.

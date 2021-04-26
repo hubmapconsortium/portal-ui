@@ -1,1 +1,0 @@
-- Fix height of twitter timeline in safari on new homepage.
