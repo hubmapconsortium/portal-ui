@@ -7,7 +7,7 @@ Monday/Wednesday, before 5pm:
 
 Monday/Wednesday, after 5pm: (Or any time that Nils asks for a release...)
 *   Harvard TC (**John/Ilan**) makes a new Docker image from portal-ui master.
-*   **John/Ilan** look at AWS Cloudfront logs for any errors.
+*   Harvard TC looks at AWS Cloudfront logs for any errors and opens issues for any that are found.
 *   Harvard TC announces on [`#portal-deployment`](https://hubmapconsortium.slack.com/archives/C016TK0APV2) that DEV/TEST/STAGE will be redeployed.
 *   Harvard TC redeploys to DEV/TEST/STAGE, makes sure the homepage loads, and announces redeployment.
 
