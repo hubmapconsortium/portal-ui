@@ -16,7 +16,7 @@ const FlexGridArea = styled(GridArea)`
 `;
 
 const FlexGrowDiv = styled.div`
-  flex-grow: 1;
+  flex: 1;
 `;
 
 const UpperGrid = styled.div`
