@@ -1,0 +1,1 @@
+- Add comment to redeploy docs about checking Cloudfront logs.
