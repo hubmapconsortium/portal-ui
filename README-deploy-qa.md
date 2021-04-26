@@ -11,7 +11,7 @@ Monday/Wednesday, after 5pm: (Or any time that Nils asks for a release...)
 *   Harvard TC redeploys to DEV/TEST/STAGE, makes sure the homepage loads, and announces redeployment.
 
 Tuesday/Thursday testing:
-*   Harvard TC (**Tiffany/Chuck**) runs through a brief manual QA test on [https://portal-prod.stage.hubmapconsortium.org/](https://portal-prod.stage.hubmapconsortium.org/); Details below.
+*   Harvard TC (**Tiffany/Chuck**) runs through a brief manual QA test on [`https://portal-prod.stage.hubmapconsortium.org/`](https://portal-prod.stage.hubmapconsortium.org/); Details below.
 *   Small quirks are filed as issues.
 *   If there are big problems, ping Chuck, and decide whether production release can just wait till the next regularly scheduled release, or if a redeploy is needed sooner. Post an update to `#portal-deployment`.
 
@@ -24,7 +24,7 @@ Tuesday/Thursday afternoon:
 
 ## QA
 
-- For QA, use the STAGE instance configured to hit the PROD APIs: [https://portal-prod.stage.hubmapconsortium.org/](`https://portal-prod.stage.hubmapconsortium.org`).
+- For QA, use the STAGE instance configured to hit the PROD APIs: [`https://portal-prod.stage.hubmapconsortium.org/`](https://portal-prod.stage.hubmapconsortium.org).
 - It’s helpful to have the console and networking tabs open: To see both at the same time, bring up Network, and then hit “esc”.
 
 ### Home Page
