@@ -215,5 +215,8 @@ def _get_image_pyramid_descendants(entity):
 
     '''
     descendants = entity.get('descendants', [])
-    image_pyramid_descendants = [d for d in descendants if 'image_pyramid' in d.get('data_types', [])]
+    image_pyramid_descendants = [
+        d for d in descendants
+        if 'image_pyramid' in d.get('data_types', [])
+    ]
     return deepcopy(image_pyramid_descendants)
