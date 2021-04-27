@@ -8,16 +8,25 @@ import FacetSearchMenu from 'js/components/home-revision/FacetSearchMenu';
 import { Background, FlexForm, StyledLabel, StyledInput } from './style';
 import { getMatchingTerms } from './utils';
 
+const labels = {
+  sex: 'Sex',
+  race: 'Race',
+  mapped_organ: 'Organ',
+  mapped_specimen_type: 'Specimen Type',
+  mapped_data_types: 'Data Type',
+  mapped_data_access_level: 'Status',
+};
+
 const donorAggsQuery = {
   size: 0,
   aggs: {
-    sex: {
+    [labels.sex]: {
       terms: {
         field: 'mapped_metadata.sex.keyword',
         size: 100,
       },
     },
-    race: {
+    [labels.race]: {
       terms: {
         field: 'mapped_metadata.race.keyword',
         size: 100,
@@ -29,25 +38,25 @@ const donorAggsQuery = {
 const sampleAggsQuery = {
   size: 0,
   aggs: {
-    sex: {
+    [labels.sex]: {
       terms: {
         field: 'donor.mapped_metadata.sex.keyword',
         size: 100,
       },
     },
-    race: {
+    [labels.race]: {
       terms: {
         field: 'donor.mapped_metadata.race.keyword',
         size: 100,
       },
     },
-    mapped_organ: {
+    [labels.mapped_organ]: {
       terms: {
         field: 'origin_sample.mapped_organ.keyword',
         size: 100,
       },
     },
-    mapped_specimen_type: {
+    [labels.mapped_specimen_type]: {
       terms: {
         field: 'mapped_specimen_type.keyword',
         size: 100,
@@ -59,37 +68,37 @@ const sampleAggsQuery = {
 const datasetAggsQuery = {
   size: 0,
   aggs: {
-    sex: {
+    [labels.sex]: {
       terms: {
         field: 'donor.mapped_metadata.sex.keyword',
         size: 100,
       },
     },
-    race: {
+    [labels.race]: {
       terms: {
         field: 'donor.mapped_metadata.race.keyword',
         size: 100,
       },
     },
-    mapped_organ: {
+    [labels.mapped_organ]: {
       terms: {
         field: 'origin_sample.mapped_organ.keyword',
         size: 100,
       },
     },
-    mapped_specimen_type: {
+    [labels.mapped_specimen_type]: {
       terms: {
         field: 'source_sample.mapped_specimen_type.keyword',
         size: 100,
       },
     },
-    mapped_data_types: {
+    [labels.mapped_data_types]: {
       terms: {
         field: 'mapped_data_types.keyword',
         size: 100,
       },
     },
-    mapped_data_access_level: {
+    [labels.mapped_data_access_level]: {
       terms: {
         field: 'mapped_data_access_level.keyword',
         size: 100,

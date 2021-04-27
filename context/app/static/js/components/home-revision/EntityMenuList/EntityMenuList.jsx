@@ -8,7 +8,7 @@ function EntityMenuList({ entityType, matches }) {
       {Object.entries(matches).map(([k, v]) => {
         return (
           <div key={v}>
-            <Typography>{`${k} (${entityType}s)`}</Typography>
+            <Typography color="primary" variant="subtitle2">{`${k} (${entityType}s)`}</Typography>
             {v.map((m) => (
               <MenuItem key={m.key}>{m.key}</MenuItem>
             ))}
