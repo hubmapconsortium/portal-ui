@@ -55,7 +55,7 @@ function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMainten
   }
 
   if (errorCode === 404) {
-    if (urlPath && urlPath.match(/^\/browse\//)) {
+    if (urlPath && urlPath.startsWith('/browse/')) {
       const uuid = urlPath.split('/').pop();
       if (uuid.length !== 32) {
         return (
