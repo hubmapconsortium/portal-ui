@@ -71,7 +71,7 @@ function FacetSearch() {
   return (
     <Background>
       <Container maxWidth="lg">
-        <FlexForm>
+        <FlexForm onSubmit={(e) => e.preventDefault()}>
           <StyledLabel htmlFor="facet-search">
             <Typography variant="h5" component="span">
               Search Portal
