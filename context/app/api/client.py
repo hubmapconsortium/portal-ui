@@ -170,18 +170,50 @@ class ApiClient():
 
 def _get_image_pyramid_descendants(entity):
     '''
-    >>> entity = {
+    >>> _get_image_pyramid_descendants({
+    ...     'descendants': []
+    ... })
+    []
+
+    >>> _get_image_pyramid_descendants({
+    ...     'descendants': [{'no_data_types': 'should not error!'}]
+    ... })
+    []
+
+    >>> _get_image_pyramid_descendants({
+    ...     'descendants': [{'data_types': ['not_a_pyramid']}]
+    ... })
+    []
+
+    >>> doc = {'data_types': ['image_pyramid']}
+    >>> descendants = _get_image_pyramid_descendants({
+    ...     'descendants': [doc]
+    ... })
+    >>> descendants
+    [{'data_types': ['image_pyramid']}]
+    >>> assert doc == descendants[0]
+    >>> assert id(doc) != id(descendants[0])
+
+    >>> _get_image_pyramid_descendants({
     ...     'descendants': [
+    ...         {'data_types': ['not_a_pyramid']},
     ...         {'data_types': ['image_pyramid']}
     ...     ]
-    ... }
-    >>> _get_image_pyramid_descendants(entity)
+    ... })
     [{'data_types': ['image_pyramid']}]
 
+    There shouldn't be multiple image pyramids, but if there are, we should capture all of them:
+
+    >>> _get_image_pyramid_descendants({
+    ...     'descendants': [
+    ...         {'id': 'A', 'data_types': ['image_pyramid']},
+    ...         {'id': 'B', 'data_types': ['not_a_pyramid']},
+    ...         {'id': 'C', 'data_types': ['image_pyramid']}
+    ...     ]
+    ... })
+    [{'id': 'A', 'data_types': ['image_pyramid']}, {'id': 'C', 'data_types': ['image_pyramid']}]
+
     '''
-    if 'descendants' in entity \
-            and len(entity['descendants']) \
-            and 'data_types' in entity['descendants'][0] \
-            and 'image_pyramid' in entity['descendants'][0]['data_types']:
-        return [deepcopy(entity['descendants'][0])]
-    return []
+    descendants = entity.get('descendants', [])
+    image_pyramid_descendants = [d for d in descendants if 'image_pyramid' in d.get('data_types', [])]
+    return deepcopy(image_pyramid_descendants)
