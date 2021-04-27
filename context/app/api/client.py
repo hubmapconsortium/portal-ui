@@ -102,6 +102,7 @@ class ApiClient():
         return entity
 
     def get_vitessce_conf(self, entity):
+        # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         if 'descendants' in entity \
                 and len(entity['descendants']) \
                 and 'data_types' in entity['descendants'][0] \
@@ -114,6 +115,8 @@ class ApiClient():
             # there will be a period of backward compatibility to allow us to migrate.
             derived_entity['files'] = derived_entity['metadata']['files']
             return self.get_vitessce_conf(derived_entity)
+
+        # Otherwise, just try to visualize the data for the entity itself:
         if 'files' not in entity or 'data_types' not in entity:
             return {}
         if self.is_mock:

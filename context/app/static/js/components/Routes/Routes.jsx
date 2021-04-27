@@ -51,7 +51,7 @@ function Routes(props) {
     );
   }
 
-  if (urlPath.startsWith('/browse/dataset/')) {
+  if (urlPath.startsWith('/browse/dataset/') || urlPath.startsWith('/browse/support/')) {
     return (
       <Route>
         <Dataset assayMetadata={entity} vitData={vitessce_conf} />

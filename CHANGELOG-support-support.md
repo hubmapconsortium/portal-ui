@@ -1,0 +1,1 @@
+- UI support for new Support entity type.
