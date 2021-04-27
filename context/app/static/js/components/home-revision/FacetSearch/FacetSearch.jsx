@@ -8,6 +8,22 @@ import FacetSearchMenu from 'js/components/home-revision/FacetSearchMenu';
 import { Background, FlexForm, StyledLabel, StyledInput } from './style';
 import { getMatchingTerms, getAggsQuery } from './utils';
 
+const baseLabels = {
+  'mapped_metadata.sex': 'Sex',
+  'mapped_metadata.race': 'Race',
+  'origin_sample.mapped_organ': 'Organ',
+  mapped_specimen_type: 'Specimen Type',
+  mapped_data_types: 'Data Type',
+  mapped_data_access_level: 'Status',
+};
+
+const allLabels = {
+  ...baseLabels,
+  'donor.mapped_metadata.sex': baseLabels['mapped_metadata.sex'],
+  'donor.mapped_metadata.race': baseLabels['mapped_metadata.race'],
+  'source_sample.mapped_specimen_type': baseLabels.mapped_specimen_type,
+};
+
 const donorAggsQuery = getAggsQuery(['mapped_metadata.sex', 'mapped_metadata.race'], 100);
 const sampleAggsQuery = getAggsQuery(
   ['donor.mapped_metadata.sex', 'donor.mapped_metadata.race', 'origin_sample.mapped_organ', 'mapped_specimen_type'],
@@ -68,7 +84,7 @@ function FacetSearch() {
             onChange={(event) => setSearchTerm(event.target.value)}
             autoComplete="off"
           />
-          <FacetSearchMenu anchorRef={anchorRef} matches={matches} />
+          <FacetSearchMenu anchorRef={anchorRef} matches={matches} labels={allLabels} />
         </FlexForm>
       </Container>
     </Background>

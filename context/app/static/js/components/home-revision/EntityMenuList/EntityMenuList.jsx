@@ -2,13 +2,13 @@ import React from 'react';
 
 import { FlexDiv, FacetLabel, FacetValue } from './style';
 
-function EntityMenuList({ entityType, matches }) {
+function EntityMenuList({ entityType, matches, labels }) {
   return (
     <li>
       {Object.entries(matches).map(([k, v]) => {
         return (
           <FlexDiv key={k}>
-            <FacetLabel color="primary" variant="subtitle2">{`${k} (${entityType}s)`}</FacetLabel>
+            <FacetLabel color="primary" variant="subtitle2">{`${labels[k]} (${entityType}s)`}</FacetLabel>
             {v.map((m) => (
               <FacetValue
                 key={m.key}
