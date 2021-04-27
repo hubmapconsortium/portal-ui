@@ -58,7 +58,7 @@ $secondary-gray: #636363;
     line-height: 120%;
 }
 
-.sk-item-list-option__text {
+.sk-item-list-option__text, .sk-item-list-option__count {
     // Same weight, even if .is-active:
     font-weight: 200 !important;
     color: #000;
