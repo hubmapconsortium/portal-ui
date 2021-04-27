@@ -12,4 +12,21 @@ function getMatchingTerms(aggsData, searchTerm) {
   }, {});
 }
 
-export { getMatchingTerms };
+function getAggsObject(aggsField, fieldSize) {
+  return {
+    terms: {
+      field: `${aggsField}.keyword`,
+      size: fieldSize,
+    },
+  };
+}
+
+function getAggsQuery(aggsFields, fieldSize) {
+  const aggs = {};
+  aggsFields.forEach((aggsField) => {
+    aggs[aggsField] = getAggsObject(aggsField, fieldSize);
+  });
+  return { size: 0, aggs };
+}
+
+export { getMatchingTerms, getAggsQuery };

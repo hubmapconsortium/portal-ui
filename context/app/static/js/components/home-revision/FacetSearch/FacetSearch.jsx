@@ -6,106 +6,25 @@ import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
 import FacetSearchMenu from 'js/components/home-revision/FacetSearchMenu';
 import { Background, FlexForm, StyledLabel, StyledInput } from './style';
-import { getMatchingTerms } from './utils';
+import { getMatchingTerms, getAggsQuery } from './utils';
 
-const labels = {
-  sex: 'Sex',
-  race: 'Race',
-  mapped_organ: 'Organ',
-  mapped_specimen_type: 'Specimen Type',
-  mapped_data_types: 'Data Type',
-  mapped_data_access_level: 'Status',
-};
+const donorAggsQuery = getAggsQuery(['mapped_metadata.sex', 'mapped_metadata.race'], 100);
+const sampleAggsQuery = getAggsQuery(
+  ['donor.mapped_metadata.sex', 'donor.mapped_metadata.race', 'origin_sample.mapped_organ', 'mapped_specimen_type'],
+  100,
+);
 
-const donorAggsQuery = {
-  size: 0,
-  aggs: {
-    [labels.sex]: {
-      terms: {
-        field: 'mapped_metadata.sex.keyword',
-        size: 100,
-      },
-    },
-    [labels.race]: {
-      terms: {
-        field: 'mapped_metadata.race.keyword',
-        size: 100,
-      },
-    },
-  },
-};
-
-const sampleAggsQuery = {
-  size: 0,
-  aggs: {
-    [labels.sex]: {
-      terms: {
-        field: 'donor.mapped_metadata.sex.keyword',
-        size: 100,
-      },
-    },
-    [labels.race]: {
-      terms: {
-        field: 'donor.mapped_metadata.race.keyword',
-        size: 100,
-      },
-    },
-    [labels.mapped_organ]: {
-      terms: {
-        field: 'origin_sample.mapped_organ.keyword',
-        size: 100,
-      },
-    },
-    [labels.mapped_specimen_type]: {
-      terms: {
-        field: 'mapped_specimen_type.keyword',
-        size: 100,
-      },
-    },
-  },
-};
-
-const datasetAggsQuery = {
-  size: 0,
-  aggs: {
-    [labels.sex]: {
-      terms: {
-        field: 'donor.mapped_metadata.sex.keyword',
-        size: 100,
-      },
-    },
-    [labels.race]: {
-      terms: {
-        field: 'donor.mapped_metadata.race.keyword',
-        size: 100,
-      },
-    },
-    [labels.mapped_organ]: {
-      terms: {
-        field: 'origin_sample.mapped_organ.keyword',
-        size: 100,
-      },
-    },
-    [labels.mapped_specimen_type]: {
-      terms: {
-        field: 'source_sample.mapped_specimen_type.keyword',
-        size: 100,
-      },
-    },
-    [labels.mapped_data_types]: {
-      terms: {
-        field: 'mapped_data_types.keyword',
-        size: 100,
-      },
-    },
-    [labels.mapped_data_access_level]: {
-      terms: {
-        field: 'mapped_data_access_level.keyword',
-        size: 100,
-      },
-    },
-  },
-};
+const datasetAggsQuery = getAggsQuery(
+  [
+    'donor.mapped_metadata.sex',
+    'donor.mapped_metadata.race',
+    'origin_sample.mapped_organ',
+    'source_sample.mapped_specimen_type',
+    'mapped_data_types',
+    'mapped_data_access_level',
+  ],
+  100,
+);
 
 function FacetSearch() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
