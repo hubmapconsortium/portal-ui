@@ -1,3 +1,8 @@
+## v0.17.1 - 2021-04-27
+
+- UI support for new Support entity type.
+
+
 ## v0.17.0 - 2021-04-26
 
 - Remove code that hit the cells-api from the client with a stub for hitting it from the server.
