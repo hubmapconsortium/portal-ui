@@ -10,21 +10,24 @@ const Background = styled.div`
 const FlexForm = styled.form`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 `;
 
 const StyledLabel = styled.label`
   margin-right: ${(props) => props.theme.spacing(5)}px;
 `;
 
+const inputPadding = 8;
+
 const StyledInput = styled.input`
+  flex-grow: 1;
   appearance: none !important;
   outline: none;
-  flex-grow: 1;
   border-radius: 8px;
   border: 0;
-  padding: 8px;
+  padding: ${inputPadding}px;
   font-size: 16px;
   color: ${(props) => props.theme.palette.text.primary};
 `;
 
-export { Background, FlexForm, StyledLabel, StyledInput };
+export { Background, FlexForm, StyledLabel, StyledInput, inputPadding };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import useResizeObserver from 'use-resize-observer/polyfilled';
 
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
@@ -47,7 +48,7 @@ function FacetSearch() {
   const [searchTerm, setSearchTerm] = useState('');
   const [matches, setMatches] = useState([]);
   const anchorRef = useRef(null);
-
+  const { width: searchInputWidth } = useResizeObserver({ ref: anchorRef });
   const { searchData: donorAggsData } = useSearchData(donorAggsQuery, elasticsearchEndpoint, nexusToken);
   const { searchData: sampleAggsData } = useSearchData(sampleAggsQuery, elasticsearchEndpoint, nexusToken);
   const { searchData: datasetAggsData } = useSearchData(datasetAggsQuery, elasticsearchEndpoint, nexusToken);
@@ -84,7 +85,12 @@ function FacetSearch() {
             onChange={(event) => setSearchTerm(event.target.value)}
             autoComplete="off"
           />
-          <FacetSearchMenu anchorRef={anchorRef} matches={matches} labels={allLabels} />
+          <FacetSearchMenu
+            anchorRef={anchorRef}
+            matches={matches}
+            labels={allLabels}
+            searchInputWidth={searchInputWidth}
+          />
         </FlexForm>
       </Container>
     </Background>
