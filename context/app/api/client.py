@@ -169,6 +169,16 @@ class ApiClient():
 
 
 def _get_image_pyramid_descendants(entity):
+    '''
+    >>> entity = {
+    ...     'descendants': [
+    ...         {'data_types': ['image_pyramid']}
+    ...     ]
+    ... }
+    >>> _get_image_pyramid_descendants(entity)
+    [{'data_types': ['image_pyramid']}]
+
+    '''
     if 'descendants' in entity \
             and len(entity['descendants']) \
             and 'data_types' in entity['descendants'][0] \
