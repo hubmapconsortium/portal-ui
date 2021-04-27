@@ -39,8 +39,13 @@ test('403 authenticated', () => {
   expect(screen.getByRole('link', { name: help.name })).toHaveAttribute('href', help.url);
 });
 
+test('404 UUID length', () => {
+  render(<ErrorBody errorCode={404} urlPath="/browse/sample/BAD" />);
+  expect(screen.getByText('UUIDs should be 32 characters', { exact: false })).toBeInTheDocument();
+});
+
 test('404', () => {
-  render(<ErrorBody errorCode={404} />);
+  render(<ErrorBody errorCode={404} urlPath="/anything-else" />);
   expect(screen.getByText('If this page should exist,', { exact: false })).toBeInTheDocument();
   expect(screen.getByRole('link', { name: help.name })).toHaveAttribute('href', help.url);
 });

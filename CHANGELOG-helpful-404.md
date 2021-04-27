@@ -1,0 +1,1 @@
+- Friendlier 404 when UUID is the wrong length.

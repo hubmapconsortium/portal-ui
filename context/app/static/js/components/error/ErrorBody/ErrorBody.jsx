@@ -9,7 +9,7 @@ const HelpEmailLink = () => (
   <LightBlueLink href="mailto:help@hubmapconsortium.org">help@hubmapconsortium.org</LightBlueLink>
 );
 
-function ErrorBody({ errorCode, isAuthenticated, isGlobus401, isMaintenancePage }) {
+function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMaintenancePage }) {
   if (isMaintenancePage) {
     return (
       <>
@@ -55,6 +55,17 @@ function ErrorBody({ errorCode, isAuthenticated, isGlobus401, isMaintenancePage 
   }
 
   if (errorCode === 404) {
+    if (urlPath && urlPath.startsWith('/browse/')) {
+      const uuid = urlPath.split('/').pop();
+      if (uuid.length !== 32) {
+        return (
+          <>
+            UUIDs should be 32 characters, but <code>{uuid}</code> is {uuid.length}. Check whether the URL was
+            copy-and-pasted incorrectly.
+          </>
+        );
+      }
+    }
     return (
       <>
         If this page should exist, submit a bug report to <HelpEmailLink />.
@@ -71,6 +82,7 @@ function ErrorBody({ errorCode, isAuthenticated, isGlobus401, isMaintenancePage 
 
 ErrorBody.propTypes = {
   errorCode: PropTypes.number,
+  urlPath: PropTypes.string,
   isAuthenticated: PropTypes.bool,
   isGlobus401: PropTypes.bool,
   isMaintenancePage: PropTypes.bool,
@@ -78,6 +90,7 @@ ErrorBody.propTypes = {
 
 ErrorBody.defaultProps = {
   errorCode: undefined,
+  urlPath: undefined,
   isAuthenticated: false,
   isGlobus401: false,
   isMaintenancePage: false,

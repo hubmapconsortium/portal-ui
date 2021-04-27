@@ -7,7 +7,15 @@ import { Background, StyledPaper, StyledTypography } from './style';
 import { getErrorTitleAndSubtitle } from './utils';
 
 function Error(props) {
-  const { errorCode, isAuthenticated, isGlobus401, isMaintenancePage, isErrorBoundary, errorBoundaryMessage } = props;
+  const {
+    errorCode,
+    urlPath,
+    isAuthenticated,
+    isGlobus401,
+    isMaintenancePage,
+    isErrorBoundary,
+    errorBoundaryMessage,
+  } = props;
 
   const { title, subtitle } = getErrorTitleAndSubtitle(errorCode, isMaintenancePage, isErrorBoundary);
 
@@ -28,6 +36,7 @@ function Error(props) {
         <Typography variant="body1">
           <ErrorBody
             errorCode={errorCode}
+            urlPath={urlPath}
             isAuthenticated={isAuthenticated}
             isGlobus401={isGlobus401}
             isMaintenancePage={isMaintenancePage}
@@ -41,6 +50,7 @@ function Error(props) {
 
 Error.propTypes = {
   errorCode: PropTypes.number,
+  urlPath: PropTypes.string,
   isAuthenticated: PropTypes.bool,
   isGlobus401: PropTypes.bool,
   isMaintenancePage: PropTypes.bool,
@@ -50,6 +60,7 @@ Error.propTypes = {
 
 Error.defaultProps = {
   errorCode: undefined,
+  urlPath: undefined,
   isAuthenticated: false,
   isGlobus401: false,
   isMaintenancePage: false,

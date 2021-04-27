@@ -33,7 +33,7 @@ function Routes(props) {
 
   if (errorCode !== undefined) {
     // eslint-disable-next-line no-undef
-    return <Error errorCode={errorCode} isAuthenticated={isAuthenticated} />;
+    return <Error errorCode={errorCode} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
   }
 
   if (urlPath.startsWith('/browse/donor/')) {
