@@ -1,0 +1,1 @@
+- Show an icon in the tile for Support entities.
