@@ -14,7 +14,7 @@ function EntityMenuList({ entityType, matches }) {
                 key={m.key}
                 variant="body2"
                 component="a"
-                href={encodeURI(`/search?entity_type[0]=${entityType}&${k}[0]=${m.key}`)}
+                href={`/search?entity_type[0]=${entityType}&${encodeURIComponent(k)}[0]=${encodeURIComponent(m.key)}`}
               >
                 {m.key}
               </FacetValue>
