@@ -6,12 +6,14 @@ import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FixedWidthFlex } 
 
 function EntityTileTop(props) {
   const { entity_type, id, entityData, invertColors } = props;
-
+  const icons = {
+    Donor: <StyledDonorIcon />,
+    Sample: <StyledSampleIcon />,
+    Dataset: <StyledDatasetIcon />,
+  };
   return (
     <FixedWidthFlex $invertColors={invertColors}>
-      {entity_type === 'Dataset' && <StyledDatasetIcon />}
-      {entity_type === 'Donor' && <StyledDonorIcon />}
-      {entity_type === 'Sample' && <StyledSampleIcon />}
+      {icons[entity_type] || <StyledDatasetIcon />}
       <EntityTileTopText entity_type={entity_type} id={id} entityData={entityData} invertColors={invertColors} />
     </FixedWidthFlex>
   );
