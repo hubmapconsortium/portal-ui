@@ -73,7 +73,7 @@ Confirm the below for a variety of entities spread across assay types for datase
 Imaging Assay [Image Pyramid]
 
 *   You should be able to zoom in and out, change channels, and add channels.
-*   For **[seqFish](https://portal-prod.stage.hubmapconsortium.org/search?mapped_data_types[0]=seqFISH%20%5BImage%20Pyramid%5D&entity_type[0]=Dataset)**, you should be able to change the z-level using the selector in the top right.
+*   For **[seqFish](https://portal-prod.stage.hubmapconsortium.org/search?mapped_data_types[0]=seqFISH&entity_type[0]=Dataset)**, you should be able to change the z-level using the selector in the top right.
 
 ### Saved Lists
 
