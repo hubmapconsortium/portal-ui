@@ -1,0 +1,1 @@
+- Make facet counts as dark as the labels.
