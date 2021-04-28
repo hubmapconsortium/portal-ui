@@ -7,6 +7,7 @@ function PanelList({ collectionsData }) {
     <PanelScrollBox>
       {collectionsData.map(({ _source }) => (
         <Panel
+          key={_source.uuid}
           href={`/browse/collection/${_source.uuid}`}
           title={_source.title}
           entityCounts={{ datasets: _source.datasets.length }}
