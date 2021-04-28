@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 
+import { Alert } from 'js/shared-styles/alerts';
 import { inputPadding } from 'js/components/home-revision/FacetSearch/style';
 
 const StyledPaper = styled(Paper)`
@@ -15,4 +16,8 @@ const StyledPopper = styled(Popper)`
   width: ${(props) => props.$searchInputWidth + inputPadding * 2}px;
 `;
 
-export { StyledPaper, StyledPopper };
+const StyledAlert = styled(Alert)`
+  border: 0;
+`;
+
+export { StyledPaper, StyledPopper, StyledAlert };

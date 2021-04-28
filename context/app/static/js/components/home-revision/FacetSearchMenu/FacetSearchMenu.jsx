@@ -1,10 +1,11 @@
 import React from 'react';
 
 import EntityMenuList from 'js/components/home-revision/EntityMenuList';
-import { StyledPaper, StyledPopper } from './style';
+import { StyledPaper, StyledPopper, StyledAlert } from './style';
 
 function FacetSearchMenu({ anchorRef, matches, labels, searchInputWidth }) {
-  return matches.length === 3 ? (
+  const matchesExist = Object.keys(matches).length > 0;
+  return (
     <StyledPopper
       id="simple-menu"
       anchorEl={anchorRef.current}
@@ -13,12 +14,14 @@ function FacetSearchMenu({ anchorRef, matches, labels, searchInputWidth }) {
       $searchInputWidth={searchInputWidth}
     >
       <StyledPaper>
-        <EntityMenuList entityType="Donor" matches={matches[0]} labels={labels} />
-        <EntityMenuList entityType="Sample" matches={matches[1]} labels={labels} />
-        <EntityMenuList entityType="Dataset" matches={matches[2]} labels={labels} />
+        {matchesExist &&
+          Object.entries(matches).map(([k, v]) => <EntityMenuList entityType={k} matches={v} labels={labels} />)}
+        {!matchesExist && (
+          <StyledAlert severity="warning">No results found. Check your spelling or try a different term.</StyledAlert>
+        )}
       </StyledPaper>
     </StyledPopper>
-  ) : null;
+  );
 }
 
 export default FacetSearchMenu;

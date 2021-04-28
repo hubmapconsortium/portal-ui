@@ -46,7 +46,7 @@ const datasetAggsQuery = getAggsQuery(
 function FacetSearch() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   const [searchTerm, setSearchTerm] = useState('');
-  const [matches, setMatches] = useState([]);
+  const [matches, setMatches] = useState({});
   const anchorRef = useRef(null);
   const { width: searchInputWidth } = useResizeObserver({ ref: anchorRef });
   const { searchData: donorAggsData } = useSearchData(donorAggsQuery, elasticsearchEndpoint, nexusToken);
@@ -60,11 +60,24 @@ function FacetSearch() {
       Object.keys(datasetAggsData).length > 0 &&
       searchTerm.length > 0
     ) {
+      // order of objects in array matters, we want dataset matches to appear first.
       setMatches(
-        [donorAggsData, sampleAggsData, datasetAggsData].map((aggsData) => getMatchingTerms(aggsData, searchTerm)),
+        [
+          { entityType: 'Dataset', aggs: datasetAggsData },
+          { entityType: 'Sample', aggs: sampleAggsData },
+          { entityType: 'Donor', aggs: donorAggsData },
+        ].reduce((acc, entityData) => {
+          const matchingTerms = getMatchingTerms(entityData.aggs, searchTerm);
+          if (Object.keys(matchingTerms).length > 0) {
+            const tempAcc = acc;
+            tempAcc[entityData.entityType] = matchingTerms;
+            return tempAcc;
+          }
+          return acc;
+        }, {}),
       );
     } else {
-      setMatches([]);
+      setMatches({});
     }
   }, [donorAggsData, sampleAggsData, datasetAggsData, searchTerm]);
 
@@ -85,12 +98,14 @@ function FacetSearch() {
             onChange={(event) => setSearchTerm(event.target.value)}
             autoComplete="off"
           />
-          <FacetSearchMenu
-            anchorRef={anchorRef}
-            matches={matches}
-            labels={allLabels}
-            searchInputWidth={searchInputWidth}
-          />
+          {searchTerm.length > 0 && (
+            <FacetSearchMenu
+              anchorRef={anchorRef}
+              matches={matches}
+              labels={allLabels}
+              searchInputWidth={searchInputWidth}
+            />
+          )}
         </FlexForm>
       </Container>
     </Background>
