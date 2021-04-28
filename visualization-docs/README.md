@@ -7,7 +7,7 @@ Data for the Vitessce visualization almost always comes via raw data that is pro
 HuBMAP receives various imaging modalities (microscopy and otherwise). The processing is fairly uniform, and always includes running [ome-tiff-pyramid](https://github.com/hubmapconsortium/ome-tiff-pyramid) + a [pipeline](https://github.com/hubmapconsortium/portal-containers/tree/master/containers/ome-tiff-offsets) for extracting byte offsets to [optimize visualization](https://github.com/hms-dbmi/viv/tree/master/tutorial#viewing-in-avivator) load speeds of large imaging datasets. Vitessce is able to view OME-TIFF files directly via [Viv](https://github.com/hms-dbmi/viv). Two pipelines are commonly used for processing the image data with a more analytic orientation: [Cytokit](https://github.com/hubmapconsortium/codex-pipeline) is used to produce segmentations (+ stitching if the input data is tiled) for downstream analysis and [SPRM](https://github.com/hubmapconsortium/sprm) is one such analytic pipeline that does clustering and quantification. Below are common questions and answers for imaging modalities:
 
 <details><summary>Has the data been validated via ingest-validation-tools and confirmed to be viewable using Avivator (which loads data almost identically to what is in the portal)?</summary>
-To this end, we should ask the TMC to follow the instructions below for viewing their data in Avivator to make sure it looks right (should only need to be done for a single representative file): https://github.com/hms-dbmi/viv/tree/master/tutorial
+If so, we should ask the TMC to follow the instructions below for viewing their data in Avivator to make sure it looks right (should only need to be done for a single representative file): https://github.com/hms-dbmi/viv/tree/master/tutorial
 
 In the above instructions they should only need to a) run the bioformats2raw-raw2ometiff pipeline and then b) drag-and-drop or select the input file using the "CHOOSE A FILE" button on avivator.gehlenborglab.org. There is no need for a web server.
 
@@ -18,7 +18,7 @@ If it is valid in these three senses (viewable in Avivator locally, passes `inge
 </details>
 
 <details><summary>Is there spot data?</summary>
-If the answer is "yes," we should run the image pyramid pipeline + offsets on the appropriate imaging data.  We currently do not have a pipeline for visualizing spot data.  Create a new class that inherits from ViewConf to visualize the data (raw imaging + spot data) when such a pipeline is created.  If there is segmentation data coming from the TMC or elsewhere, then that will need to be both processed (via <a href="https://github.com/hubmapconsortium/portal-containers/tree/master/containers/sprm-to-anndata">sprm-to-anndata.cwl from portal-containers</a> or a different pipeline that ideally outputs zarr-backed AnnData) and visualized as well
+If the answer is "yes," we should run the image pyramid pipeline + offsets on the appropriate imaging data.  We currently do not have a pipeline for visualizing spot data.  Create a new class that inherits from ViewConf to visualize the data (raw imaging + spot data) when such a pipeline is created.  If there is segmentation data coming from the TMC or elsewhere, then that will need to be both processed (via <a href="https://github.com/hubmapconsortium/portal-containers/tree/master/containers/sprm-to-anndata">sprm-to-anndata.cwl from portal-containers</a> or a different pipeline that ideally outputs zarr-backed AnnData) and visualized as well.
 </details>
 
 <details><summary>Will Cytokit + SPRM be run?</summary>
