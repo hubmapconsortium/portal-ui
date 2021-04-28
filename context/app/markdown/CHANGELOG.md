@@ -1,3 +1,12 @@
+## v0.17.2 - 2021-04-28
+
+- Make facet counts as dark as the labels.
+- Friendlier 404 when UUID is the wrong length.
+- Add key to PanelList and fix react warning.
+- Re-enable visualization for seqFISH.
+- Add docs on visualization processing to the portal.
+
+
 ## v0.17.1 - 2021-04-27
 
 - UI support for new Support entity type.
