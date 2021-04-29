@@ -7,9 +7,8 @@ import DetailDescription from 'js/components/Detail/DetailDescription';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
-import { LightBlueLink } from 'js/shared-styles/Links';
-import Description from 'js/shared-styles/sections/Description';
 import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/RightAlignedButtonRow';
+import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
 import { SpacingDiv, PageSpacing, StyledHeader } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
@@ -64,12 +63,7 @@ function SavedList({ listUUID }) {
         Items
       </StyledHeader>
       {Object.keys(listEntities).length === 0 ? (
-        <Description padding="20px 20px">
-          No items saved. Navigate to <LightBlueLink href="/search?entity_type[0]=Donor">donors</LightBlueLink>,{' '}
-          <LightBlueLink href="/search?entity_type[0]=Sample">samples</LightBlueLink> or{' '}
-          <LightBlueLink href="/search?entity_type[0]=Dataset">datasets</LightBlueLink> search pages to explore data to
-          save or navigate to <LightBlueLink href="/my-lists">My Lists</LightBlueLink> to add items to this list.
-        </Description>
+        <NoItemsSaved isSavedListPage />
       ) : (
         <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
       )}
