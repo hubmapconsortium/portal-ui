@@ -1,4 +1,5 @@
 function filterDescendantCountsByType(descendant_counts, type) {
+  // Support entities will not be in the descendants list.
   if (['Sample', 'Dataset'].includes(type)) {
     return descendant_counts?.Dataset ? { Dataset: descendant_counts.Dataset } : {};
   }

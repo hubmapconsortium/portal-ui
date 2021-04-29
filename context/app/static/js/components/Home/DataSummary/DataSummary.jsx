@@ -35,6 +35,7 @@ function DataSummary(props) {
           value={summaryData.datasetCount}
           href="/search?entity_type[0]=Dataset"
         />
+        {/* Not interested in publicizing Support entities. */}
       </FlexRow>
       <Title />
     </Wrapper>

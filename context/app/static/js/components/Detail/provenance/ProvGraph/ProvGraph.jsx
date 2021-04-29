@@ -46,8 +46,9 @@ function ProvGraph(props) {
         ) : (
           <SectionItem label="Type">{prov['prov:type']}</SectionItem>
         );
+      const entityTypes = ['Donor', 'Sample', 'Dataset', 'Support'];
       const idEl =
-        typeKey in prov && ['Donor', 'Sample', 'Dataset'].includes(prov[typeKey]) ? (
+        typeKey in prov && entityTypes.includes(prov[typeKey]) ? (
           <SectionItem label="ID" ml>
             <LightBlueLink href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}>
               {prov[idKey]}
@@ -61,7 +62,7 @@ function ProvGraph(props) {
           </SectionItem>
         ) : null;
       const actionsEl =
-        typeKey in prov && ['Donor', 'Sample', 'Dataset'].includes(prov[typeKey]) ? (
+        typeKey in prov && entityTypes.includes(prov[typeKey]) ? (
           <SectionItem ml>
             <ShowDerivedEntitiesButton
               id={prov[idKey]}

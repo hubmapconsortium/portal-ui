@@ -15,9 +15,10 @@ function ProvTableTile(props) {
   // mapped fields are not included in ancestor object
   const entityData = useEntityData(uuid, elasticsearchEndpoint, nexusToken);
 
-  const allDescendantCounts = useDescendantCounts(entityData, ['Sample', 'Dataset']);
+  const allDescendantCounts = useDescendantCounts(entityData, ['Sample', 'Dataset', 'Support']);
 
   const displayDescendantCounts =
+    // "Support" could be added here if we wanted to publicize it.
     entity_type === 'Donor' ? allDescendantCounts : { Dataset: allDescendantCounts.Dataset };
 
   return (

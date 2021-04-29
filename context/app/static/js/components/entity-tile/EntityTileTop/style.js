@@ -10,6 +10,8 @@ const iconStyle = css`
   color: ${(props) => (props.$invertColors ? props.theme.palette.white.main : props.theme.palette.primary.main)};
 `;
 
+// If Support entities are shown, they can use the Dataset icon.
+
 const StyledDatasetIcon = styled(DatasetIcon)`
   ${iconStyle};
 `;

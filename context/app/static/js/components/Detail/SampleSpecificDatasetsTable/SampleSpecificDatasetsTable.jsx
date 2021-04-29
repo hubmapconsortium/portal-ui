@@ -19,6 +19,7 @@ function SampleSpecificDatasetsTable({ datasets, uuid }) {
     { id: 'display_doi', label: 'HuBMAP ID' },
     { id: 'mapped_data_types', label: 'Data Types' },
     { id: 'status', label: 'Status' },
+    // This count includes "Support" because it is calculated before "Support" entities are remapped.
     { id: 'descendant_counts.entity_type.Dataset', label: 'Derived Dataset Count' },
     { id: 'last_modified_timestamp', label: 'Last Modified' },
   ];

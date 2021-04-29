@@ -51,7 +51,7 @@ function SummaryData(props) {
           {children && <FlexEnd data-testid="summary-data-parent">{children}</FlexEnd>}
         </div>
         <FlexRight>
-          {entity_type === 'Dataset' && (
+          {['Dataset', 'Summary'].includes(entity_type) && (
             <FlexEnd>
               <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
               <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>

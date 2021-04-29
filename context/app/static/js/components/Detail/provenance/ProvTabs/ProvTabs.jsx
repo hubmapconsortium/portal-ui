@@ -23,7 +23,8 @@ function ProvTabs(props) {
     'TMT-LC-MS',
     'salmon_rnaseq_snareseq',
   ]);
-  const shouldDisplayDag = entity_type === 'Dataset' && metadata && 'dag_provenance_list' in metadata;
+  const shouldDisplayDag =
+    ['Dataset', 'Support'].includes(entity_type) && metadata && 'dag_provenance_list' in metadata;
 
   const graphIndex = shouldDisplayTable ? 1 : 0;
   const dagIndex = graphIndex + 1;

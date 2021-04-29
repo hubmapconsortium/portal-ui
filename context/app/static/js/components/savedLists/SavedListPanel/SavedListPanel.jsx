@@ -2,7 +2,7 @@ import React from 'react';
 import { Panel } from 'js/shared-styles/panels';
 
 function getEntityCounts(listSavedEntities) {
-  const counts = { Donor: 0, Sample: 0, Dataset: 0 };
+  const counts = { Donor: 0, Sample: 0, Dataset: 0 /* Don't count Support entities. */ };
   Object.values(listSavedEntities).forEach((entity) => {
     counts[entity.entity_type] += 1;
   });

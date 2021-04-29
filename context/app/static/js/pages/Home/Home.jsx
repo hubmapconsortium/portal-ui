@@ -25,6 +25,7 @@ function shapeSummaryResponse(data) {
     return acc;
   }, {});
   return {
+    // Not interested in counting Support entities.
     datasetCount: checkPropReturnValue('Dataset', searchData),
     sampleCount: checkPropReturnValue('Sample', searchData),
     donorCount: checkPropReturnValue('Donor', searchData),
@@ -35,6 +36,7 @@ function Home() {
   const theme = useTheme();
   const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
   const [summaryData, setSummaryData] = React.useState({
+    // Not interested in counting Support entities.
     datasetCount: '-',
     sampleCount: '-',
     donorCount: '-',
