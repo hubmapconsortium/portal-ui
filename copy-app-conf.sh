@@ -8,3 +8,5 @@ if [ ! -e $APP_CONF ]; then
 else
   echo "Using existing $APP_CONF."
 fi
+
+grep 'TODO' "$APP_CONF" && die "Replace 'TODO' in $APP_CONF."

@@ -12,8 +12,6 @@ pip install -r $CONTEXT/requirements.txt > /dev/null
 
 ./copy-app-conf.sh
 
-grep 'TODO' "$APP_CONF" && die "Replace 'TODO' in $APP_CONF."
-
 FLASK_ENV=development FLASK_APP="$CONTEXT/app/main.py" python -m flask run &
 cd $CONTEXT
 npm install
