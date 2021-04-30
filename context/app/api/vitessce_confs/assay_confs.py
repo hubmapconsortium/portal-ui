@@ -258,20 +258,18 @@ class NullConf():
 _assays = None
 
 
-def get_assay(data_type):
+def _get_assay(data_type):
     "Return the assay class for the given data type"
     global _assays
     if _assays is None:
         tc = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
-        _assays = list(tc.iterAssays())
-    matches = list(filter(lambda x: x.name == data_type, _assays))
-    assert len(matches) == 1
-    return matches[0]
+        _assays = {assay.name: assay for assay in tc.iterAssays()}
+    return _assays[data_type]
 
 
 def get_view_config_class_for_data_types(entity, nexus_token):
     data_types = entity["data_types"]
-    assay_objs = [get_assay(dt) for dt in data_types]
+    assay_objs = [_get_assay(dt) for dt in data_types]
     assay_names = [assay.name for assay in assay_objs]
     hints = [hint for assay in assay_objs for hint in assay.vitessce_hints]
     dag_names = [dag['name']
