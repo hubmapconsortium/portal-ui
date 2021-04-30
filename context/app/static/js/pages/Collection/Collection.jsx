@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import Summary from 'js/components/Detail/Summary';
+import Citation from 'js/components/Detail/Citation';
 import CollectionDatasetsTable from 'js/components/Detail/CollectionDatasetsTable';
 import CollectionsAffiliationsTable from 'js/components/Detail/CollectionsAffiliationsTable';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
@@ -47,6 +48,7 @@ function Collection(props) {
               </OutboundLink>
             )}
           </Summary>
+          <Citation />
           {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
           {'creators' in collectionData && (
