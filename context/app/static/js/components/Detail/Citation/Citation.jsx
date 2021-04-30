@@ -18,7 +18,7 @@ function Citation({ contributors, title, timestamp, url }) {
     <SectionContainer id="citation">
       <SectionHeader>Citation</SectionHeader>
       <FlexPaper>
-        {firstContributors.join(', ')}. {title} [Internet]. HuBMAP Consortium {year}. Available from:{' '}
+        {firstContributors.join(', ')}. {title} [Internet]. HuBMAP Consortium; {year}. Available from:{' '}
         <LightBlueLink href={url}>{url}</LightBlueLink>
       </FlexPaper>
     </SectionContainer>
