@@ -1,5 +1,5 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -24,5 +24,13 @@ function Citation({ contributors, title, timestamp, url }) {
     </SectionContainer>
   );
 }
+
+Citation.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  contributors: PropTypes.array.isRequired,
+  title: PropTypes.string.isRequired,
+  timestamp: PropTypes.number.isRequired,
+  url: PropTypes.string.isRequired,
+};
 
 export default Citation;
