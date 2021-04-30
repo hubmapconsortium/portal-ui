@@ -39,7 +39,7 @@ from .paths import (
     CODEX_TILE_DIR,
     STITCHED_IMAGE_DIR
 )
-from .type_client import CommonsTypeClient
+from .type_client import get_assay
 
 
 class SeqFISHViewConf(ImagingViewConf):
@@ -257,7 +257,7 @@ class NullConf():
 def get_view_config_class_for_data_types(entity, nexus_token):
     data_types = entity["data_types"]
     tc = CommonsTypeClient()
-    assay_objs = [tc.get_assay(dt) for dt in data_types]
+    assay_objs = [get_assay(dt) for dt in data_types]
     assay_names = [assay.name for assay in assay_objs]
     hints = [hint for assay in assay_objs for hint in assay.vitessce_hints]
     dag_names = [dag['name']
