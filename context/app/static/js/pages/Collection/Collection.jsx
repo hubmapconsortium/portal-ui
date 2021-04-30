@@ -48,7 +48,7 @@ function Collection(props) {
               </OutboundLink>
             )}
           </Summary>
-          <Citation />
+          <Citation contributors={creators} title={title} timestamp={create_timestamp} url={doi_url} />
           {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
           {'creators' in collectionData && (
