@@ -4,6 +4,7 @@ import Popper from '@material-ui/core/Popper';
 
 import { Alert } from 'js/shared-styles/alerts';
 import { inputPadding } from 'js/components/home-revision/FacetSearch/style';
+import Typography from '@material-ui/core/Typography';
 
 const StyledPaper = styled(Paper)`
   margin-top: ${(props) => props.theme.spacing(1)}px;
@@ -20,4 +21,8 @@ const StyledAlert = styled(Alert)`
   border: 0;
 `;
 
-export { StyledPaper, StyledPopper, StyledAlert };
+const StyledTypography = styled(Typography)`
+  padding: 6px 16px;
+`;
+
+export { StyledPaper, StyledPopper, StyledAlert, StyledTypography };
