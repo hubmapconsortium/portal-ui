@@ -1,3 +1,11 @@
+## v0.17.3 - 2021-05-03
+
+- Remove duplicate file.
+- Fix dev-start.sh warnings.
+- Fix a tiny bit of copy-and-paste in the my-lists code.
+- Show an icon in the tile for Support entities.
+
+
 ## v0.17.2 - 2021-04-28
 
 - Make facet counts as dark as the labels.

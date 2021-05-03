@@ -1,1 +1,0 @@
-- Fix a tiny bit of copy-and-paste in the my-lists code.
