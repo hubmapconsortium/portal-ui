@@ -75,7 +75,7 @@ function DevSearch() {
         checkboxFilter('has_previous', 'Has previous?', ExistsQuery('previous_revision_uuid')),
       ],
     },
-    queryFields: ['everything'],
+    queryFields: ['all_text', 'description'],
     isLoggedIn: Boolean(nexusToken),
   };
 
