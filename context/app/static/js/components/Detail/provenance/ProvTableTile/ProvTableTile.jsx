@@ -18,7 +18,6 @@ function ProvTableTile(props) {
   const allDescendantCounts = useDescendantCounts(entityData, ['Sample', 'Dataset', 'Support']);
 
   const displayDescendantCounts =
-    // "Support" could be added here if we wanted to publicize it.
     entity_type === 'Donor' ? allDescendantCounts : { Dataset: allDescendantCounts.Dataset };
 
   return (

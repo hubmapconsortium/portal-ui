@@ -31,7 +31,6 @@ const SampleIcon = styled(BubbleChartIcon)`
   font-size: ${(props) => props.fontSize};
 `;
 
-// Support entities can use the DatasetIcon.
 const DatasetIcon = styled(TableChartIcon)`
   font-size: ${(props) => props.fontSize};
 `;

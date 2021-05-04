@@ -28,7 +28,6 @@ function Menu(props) {
       <WidePopper id="main-menu" open={open} anchorEl={anchorRef.current}>
         <WidePaper>
           <MenuList>
-            {/* Not interested in publicizing Support entities. */}
             {['Donor', 'Sample', 'Dataset'].map((type) => (
               <DropdownLink key={type} href={`/search?entity_type[0]=${type}`}>{`${type}s`}</DropdownLink>
             ))}
