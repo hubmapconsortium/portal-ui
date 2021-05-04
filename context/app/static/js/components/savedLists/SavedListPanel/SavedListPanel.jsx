@@ -5,7 +5,11 @@ function getEntityCounts(listSavedEntities) {
   const counts = { Donor: 0, Sample: 0, Dataset: 0 };
   Object.values(listSavedEntities).forEach((entity) => {
     const { entity_type } = entity;
-    counts[entity_type] ? counts[entity_type] += 1 : counts[entity_type] = 1;
+    if (!counts[entity_type]) {
+      // Support entities may be in the user's list.
+      counts[entity_type] = 0;
+    }
+    counts[entity_type] += 1;
   });
   return counts;
 }
