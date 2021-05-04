@@ -8,7 +8,6 @@ import useSetUrlBeforeLogin from './useSetUrlBeforeLogin';
 
 const Donor = lazy(() => import('js/pages/Donor'));
 const Dataset = lazy(() => import('js/pages/Dataset'));
-// Support entities use the Dataset rendering.
 const Sample = lazy(() => import('js/pages/Sample'));
 const Collection = lazy(() => import('js/pages/Collection'));
 const Home = lazy(() => import('js/pages/Home'));

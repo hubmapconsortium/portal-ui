@@ -24,7 +24,6 @@ const entities = [
     icon: DatasetIcon,
     entity_type: 'Dataset',
   },
-  // We do not want to show counts for Support entities by default.
 ];
 
 function EntityCounts() {

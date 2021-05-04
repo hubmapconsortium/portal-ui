@@ -25,7 +25,6 @@ function HeaderContent({ anchorRef }) {
       {!shouldDisplayMenu && (
         <>
           <FlexNoWrap>
-            {/* Not interested in publicizing Support entities. */}
             {['Donor', 'Sample', 'Dataset'].map((type) => (
               <HeaderButton key={type} href={`/search?entity_type[0]=${type}`} component={Link}>
                 {`${type}s`}

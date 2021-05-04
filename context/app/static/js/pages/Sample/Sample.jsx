@@ -51,7 +51,6 @@ function SampleDetail(props) {
             },
             {
               term: {
-                // Not intersted in finding Support entities.
                 entity_type: 'dataset',
               },
             },
