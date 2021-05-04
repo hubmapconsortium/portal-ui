@@ -8,7 +8,7 @@ import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
-import { donorConfig, sampleConfig, datasetConfig } from 'js/components/Search/config';
+import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/Search/config';
 import { listFilter } from 'js/components/Search/utils';
 import AncestorNote from 'js/components/Search/AncestorNote';
 import Results from 'js/components/Search/Results';
@@ -79,7 +79,7 @@ function Search(props) {
     type,
     // Sidebar facet configuration:
     filters: filtersByType[type],
-    queryFields: ['all_text', 'description'],
+    queryFields: ['all_text', ...fieldsToHighlight],
     isLoggedIn: Boolean(nexusToken),
     apiUrl: elasticsearchEndpoint,
     defaultQuery: BoolMustNot(ExistsQuery('next_revision_uuid')),

@@ -4,6 +4,7 @@ import { ExistsQuery, BoolMustNot } from 'searchkit';
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
 import { field, listFilter, checkboxFilter, hierarchicalFilter } from 'js/components/Search/utils';
+import { fieldsToHighlight } from 'js/components/Search/config';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
 import DevResults from 'js/components/Search/DevResults';
 import { SearchHeader } from './style';
@@ -75,7 +76,7 @@ function DevSearch() {
         checkboxFilter('has_previous', 'Has previous?', ExistsQuery('previous_revision_uuid')),
       ],
     },
-    queryFields: ['all_text', 'description'],
+    queryFields: ['all_text', ...fieldsToHighlight],
     isLoggedIn: Boolean(nexusToken),
   };
 

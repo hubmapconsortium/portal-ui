@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ViewSwitcherHits } from 'searchkit';
 
+import { customHighlight } from 'js/components/Search/config';
+
 import ResultsTable from '../ResultsTable';
 import ResultsCCF from '../ResultsCCF';
 
@@ -28,9 +30,7 @@ function DevResults(props) {
         { key: 'ccf', title: 'CCF', listComponent: <ResultsCCF /> },
       ]}
       sourceFilter={resultFieldIds}
-      customHighlight={{
-        fields: { description: { type: 'plain' } },
-      }}
+      customHighlight={customHighlight}
     />
   );
 }

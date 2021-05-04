@@ -33,7 +33,7 @@ function ResultsTable(props) {
               <StyledTableCell colSpan={resultFields.length}>
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: hit.highlight.description.join(' ... '),
+                    __html: Object.values(hit.highlight).join(' ... '),
                   }}
                 />
               </StyledTableCell>

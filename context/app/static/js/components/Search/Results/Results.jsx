@@ -2,12 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ViewSwitcherHits } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
+import { customHighlight } from 'js/components/Search/config';
+
 import ResultsTable from '../ResultsTable';
 import ResultsTiles from '../ResultsTiles';
 import ResultsCCF from '../ResultsCCF';
 
 function Results(props) {
   const { sortOptions, hitsPerPage, tableResultFields, detailsUrlPrefix, idField, resultFieldIds, type } = props;
+
   // one of the sort components must stay mounted to preserve sort history between views.
   return (
     <ViewSwitcherHits
@@ -30,9 +33,7 @@ function Results(props) {
         { key: 'ccf', title: 'CCF', listComponent: <ResultsCCF type={type} /> },
       ]}
       sourceFilter={resultFieldIds}
-      customHighlight={{
-        fields: { description: { type: 'plain' } },
-      }}
+      customHighlight={customHighlight}
     />
   );
 }
