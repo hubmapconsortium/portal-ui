@@ -6,7 +6,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { FlexPaper } from './style';
 
-function Citation({ contributors, title, timestamp, url }) {
+function buildNLMCitation({ contributors, title, timestamp }) {
   const firstContributors = contributors
     .slice(0, 6)
     .map(({ last_name, first_name }) => `${last_name} ${first_name[0]}`);
@@ -14,12 +14,17 @@ function Citation({ contributors, title, timestamp, url }) {
     firstContributors.push('et al');
   }
   const year = new Date(timestamp).getFullYear();
+  return `${firstContributors.join(', ')}. ${title} [Internet]. HuBMAP Consortium; ${year}.`;
+}
+
+function Citation({ contributors, title, timestamp, url }) {
+  const citation = buildNLMCitation({ contributors, title, timestamp });
+
   return (
     <SectionContainer id="citation">
       <SectionHeader>Citation</SectionHeader>
       <FlexPaper>
-        {firstContributors.join(', ')}. {title} [Internet]. HuBMAP Consortium; {year}. Available from:{' '}
-        <LightBlueLink href={url}>{url}</LightBlueLink>
+        {citation} Available from: <LightBlueLink href={url}>{url}</LightBlueLink>
       </FlexPaper>
     </SectionContainer>
   );
@@ -34,3 +39,4 @@ Citation.propTypes = {
 };
 
 export default Citation;
+export { buildNLMCitation };
