@@ -1,0 +1,1 @@
+- Stop using `everything`: Instead, use `all_text`, and highlight matches from `description`.
