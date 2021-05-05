@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FlexDiv, FacetLabel, FacetValue } from './style';
 
-function EntityMenuList({ entityType, matches, labels }) {
+function FacetSearchMenuListItem({ entityType, matches, labels }) {
   return (
     <li>
       {Object.entries(matches).map(([k, v]) => {
@@ -26,4 +26,4 @@ function EntityMenuList({ entityType, matches, labels }) {
   );
 }
 
-export default EntityMenuList;
+export default FacetSearchMenuListItem;
