@@ -48,6 +48,8 @@ function FacetSearch() {
   const [searchTerm, setSearchTerm] = useState('');
   const [matches, setMatches] = useState({});
   const anchorRef = useRef(null);
+  const [menuIsOpen, setMenuIsOpen] = useState(true);
+
   const { width: searchInputWidth } = useResizeObserver({ ref: anchorRef });
   const { searchData: donorAggsData, isLoading: donorAggsDataIsLoading } = useSearchData(
     donorAggsQuery,
@@ -104,7 +106,10 @@ function FacetSearch() {
             id="facet-search"
             type="text"
             value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
+            onChange={(event) => {
+              setSearchTerm(event.target.value);
+              setMenuIsOpen(true);
+            }}
             autoComplete="off"
           />
           {searchTerm.length > 0 && (
@@ -114,6 +119,8 @@ function FacetSearch() {
               labels={allLabels}
               searchInputWidth={searchInputWidth}
               isLoading={isLoading}
+              menuIsOpen={menuIsOpen}
+              setMenuIsOpen={setMenuIsOpen}
             />
           )}
         </FlexForm>
