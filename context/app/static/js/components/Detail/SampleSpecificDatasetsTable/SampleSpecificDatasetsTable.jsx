@@ -25,7 +25,7 @@ function SampleSpecificDatasetsTable({ datasets, uuid }) {
 
   return (
     <SectionContainer id="datasets-table">
-      <SectionHeader>Datasets</SectionHeader>
+      <SectionHeader>Derived Datasets</SectionHeader>
       <StyledButtonRow
         leftText={
           <BottomAlignedTypography variant="subtitle1" color="primary">
