@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
+import Skeleton from '@material-ui/lab/Skeleton';
+import Typography from '@material-ui/core/Typography';
 
 import { Alert } from 'js/shared-styles/alerts';
 import { inputPadding } from 'js/components/home-revision/FacetSearch/style';
-import Typography from '@material-ui/core/Typography';
 
 const StyledPaper = styled(Paper)`
   margin-top: ${(props) => props.theme.spacing(1)}px;
@@ -25,4 +26,8 @@ const StyledTypography = styled(Typography)`
   padding: 6px 16px;
 `;
 
-export { StyledPaper, StyledPopper, StyledAlert, StyledTypography };
+const HeaderSkeleton = styled(Skeleton)`
+  max-width: 200px;
+`;
+
+export { StyledPaper, StyledPopper, StyledAlert, StyledTypography, HeaderSkeleton };

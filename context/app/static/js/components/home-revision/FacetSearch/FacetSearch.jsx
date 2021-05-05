@@ -49,17 +49,26 @@ function FacetSearch() {
   const [matches, setMatches] = useState({});
   const anchorRef = useRef(null);
   const { width: searchInputWidth } = useResizeObserver({ ref: anchorRef });
-  const { searchData: donorAggsData } = useSearchData(donorAggsQuery, elasticsearchEndpoint, nexusToken);
-  const { searchData: sampleAggsData } = useSearchData(sampleAggsQuery, elasticsearchEndpoint, nexusToken);
-  const { searchData: datasetAggsData } = useSearchData(datasetAggsQuery, elasticsearchEndpoint, nexusToken);
+  const { searchData: donorAggsData, isLoading: donorAggsDataIsLoading } = useSearchData(
+    donorAggsQuery,
+    elasticsearchEndpoint,
+    nexusToken,
+  );
+  const { searchData: sampleAggsData, isLoading: sampleAggsDataIsLoading } = useSearchData(
+    sampleAggsQuery,
+    elasticsearchEndpoint,
+    nexusToken,
+  );
+  const { searchData: datasetAggsData, isLoading: datasetAggsDataIsLoading } = useSearchData(
+    datasetAggsQuery,
+    elasticsearchEndpoint,
+    nexusToken,
+  );
+
+  const isLoading = donorAggsDataIsLoading && sampleAggsDataIsLoading && datasetAggsDataIsLoading;
 
   useEffect(() => {
-    if (
-      Object.keys(donorAggsData).length > 0 &&
-      Object.keys(sampleAggsData).length > 0 &&
-      Object.keys(datasetAggsData).length > 0 &&
-      searchTerm.length > 0
-    ) {
+    if (!isLoading && searchTerm.length > 0) {
       // order of objects in array matters, we want dataset matches to appear first.
       setMatches(
         [
@@ -79,7 +88,7 @@ function FacetSearch() {
     } else {
       setMatches({});
     }
-  }, [donorAggsData, sampleAggsData, datasetAggsData, searchTerm]);
+  }, [donorAggsData, sampleAggsData, datasetAggsData, searchTerm, isLoading]);
 
   return (
     <Background>
@@ -104,6 +113,7 @@ function FacetSearch() {
               matches={matches}
               labels={allLabels}
               searchInputWidth={searchInputWidth}
+              isLoading={isLoading}
             />
           )}
         </FlexForm>
