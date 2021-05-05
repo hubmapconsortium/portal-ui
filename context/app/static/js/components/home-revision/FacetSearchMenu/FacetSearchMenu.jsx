@@ -1,5 +1,6 @@
 import React from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
+import List from '@material-ui/core/List';
 
 import EntityMenuList from 'js/components/home-revision/EntityMenuList';
 import { StyledPaper, StyledPopper, StyledAlert, StyledTypography, HeaderSkeleton } from './style';
@@ -25,9 +26,13 @@ function FacetSearchMenu({ anchorRef, matches, labels, searchInputWidth, isLoadi
             </StyledTypography>
           </>
         )}
-        {!isLoading &&
-          matchesExist &&
-          Object.entries(matches).map(([k, v]) => <EntityMenuList entityType={k} matches={v} labels={labels} />)}
+        {!isLoading && matchesExist && (
+          <List>
+            {Object.entries(matches).map(([k, v]) => (
+              <EntityMenuList entityType={k} matches={v} labels={labels} />
+            ))}
+          </List>
+        )}
         {!isLoading && !matchesExist && (
           <StyledAlert severity="warning">No results found. Check your spelling or try a different term.</StyledAlert>
         )}
