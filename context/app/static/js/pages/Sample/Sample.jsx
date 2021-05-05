@@ -13,7 +13,7 @@ import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
-import DerivedDatasetsTable from 'js/components/Detail/DerivedDatasetsTable';
+import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
 import useDerivedEntitySearchHits from 'js/hooks/useDerivedEntitySearchHits';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
@@ -76,7 +76,7 @@ function SampleDetail(props) {
             {mapped_specimen_type}
           </Typography>
         </Summary>
-        {shouldDisplaySection.derived && <DerivedDatasetsTable datasets={derivedDatasets} uuid={uuid} />}
+        {shouldDisplaySection.derived && <DerivedEntitiesTable datasets={derivedDatasets} uuid={uuid} />}
         <SampleTissue
           uuid={uuid}
           mapped_specimen_type={mapped_specimen_type}

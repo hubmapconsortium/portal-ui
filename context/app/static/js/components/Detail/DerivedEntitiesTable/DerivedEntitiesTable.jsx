@@ -14,7 +14,7 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/RightAlignedButtonRow';
 
-function DerivedDatasetsTable({ datasets, uuid }) {
+function DerivedEntitiesTable({ datasets, uuid }) {
   const columns = [
     { id: 'display_doi', label: 'HuBMAP ID' },
     { id: 'mapped_data_types', label: 'Data Types' },
@@ -87,4 +87,4 @@ function DerivedDatasetsTable({ datasets, uuid }) {
   );
 }
 
-export default DerivedDatasetsTable;
+export default DerivedEntitiesTable;
