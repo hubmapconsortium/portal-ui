@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import ProvSection from 'js/components/Detail/provenance/ProvSection';
@@ -11,11 +11,10 @@ import MetadataTable from 'js/components/Detail/MetadataTable';
 import SampleTissue from 'js/components/Detail/SampleTissue';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-import { AppContext } from 'js/components/Providers';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
-import { useSearchHits } from 'js/hooks/useSearchData';
 import DerivedDatasetsTable from 'js/components/Detail/DerivedDatasetsTable';
+import useDerivedEntitySearchHits from 'js/hooks/useDerivedEntitySearchHits';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -37,32 +36,6 @@ function SampleDetail(props) {
     metadata,
     rui_location,
   } = assayMetadata;
-
-  function useDerivedEntitySearchHits(ancestorUUID) {
-    const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-    const sampleSpecificDatasetsQuery = {
-      query: {
-        bool: {
-          filter: [
-            {
-              term: {
-                ancestor_ids: ancestorUUID,
-              },
-            },
-            {
-              term: {
-                entity_type: 'dataset',
-              },
-            },
-          ],
-        },
-      },
-      _source: ['uuid', 'display_doi', 'mapped_data_types', 'status', 'descendant_counts', 'last_modified_timestamp'],
-      size: 10000,
-    };
-
-    return useSearchHits(sampleSpecificDatasetsQuery, elasticsearchEndpoint, nexusToken);
-  }
 
   const { searchHits: sampleSpecificDatasets } = useDerivedEntitySearchHits(uuid);
 
