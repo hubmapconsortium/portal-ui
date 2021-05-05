@@ -7,6 +7,8 @@ import Protocol from 'js/components/Detail/Protocol';
 import DetailLayout from 'js/components/Detail/DetailLayout';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
+import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
+import useDerivedEntitySearchHits from 'js/hooks/useDerivedEntitySearchHits';
 
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
@@ -34,13 +36,16 @@ function DonorDetail(props) {
 
   const { sex, race, age_value, age_unit } = mapped_metadata;
 
+  const { searchHits: derivedDatasets } = useDerivedEntitySearchHits(uuid);
+
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(mapped_metadata).length),
+    derived: derivedDatasets.length > 0,
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'metadata', 'provenance', 'protocols', 'attribution'],
+    ['summary', 'metadata', 'derived', 'provenance', 'protocols', 'attribution'],
     shouldDisplaySection,
   );
 
@@ -65,6 +70,7 @@ function DonorDetail(props) {
           group_name={group_name}
         />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} display_doi={display_doi} />}
+        {shouldDisplaySection.derived && <DerivedEntitiesTable datasets={derivedDatasets} uuid={uuid} />}
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         <Attribution
