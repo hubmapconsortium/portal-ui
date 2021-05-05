@@ -76,7 +76,9 @@ function SampleDetail(props) {
             {mapped_specimen_type}
           </Typography>
         </Summary>
-        {shouldDisplaySection.derived && <DerivedEntitiesTable datasets={derivedDatasets} uuid={uuid} />}
+        {shouldDisplaySection.derived && (
+          <DerivedEntitiesTable entities={derivedDatasets} uuid={uuid} entityType="Dataset" />
+        )}
         <SampleTissue
           uuid={uuid}
           mapped_specimen_type={mapped_specimen_type}

@@ -14,7 +14,7 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/RightAlignedButtonRow';
 
-function DerivedEntitiesTable({ datasets, uuid }) {
+function DerivedEntitiesTable({ entities, uuid, entityType }) {
   const columns = [
     { id: 'display_doi', label: 'HuBMAP ID' },
     { id: 'mapped_data_types', label: 'Data Types' },
@@ -24,12 +24,12 @@ function DerivedEntitiesTable({ datasets, uuid }) {
   ];
 
   return (
-    <SectionContainer id="datasets-table">
-      <SectionHeader>Derived Datasets</SectionHeader>
+    <SectionContainer id="{entityType}-table">
+      <SectionHeader>Derived {entityType}s</SectionHeader>
       <StyledButtonRow
         leftText={
           <BottomAlignedTypography variant="subtitle1" color="primary">
-            {datasets.length} Datasets
+            {entities.length} {entityType}s
           </BottomAlignedTypography>
         }
         buttons={
@@ -37,7 +37,7 @@ function DerivedEntitiesTable({ datasets, uuid }) {
             variant="contained"
             color="primary"
             component="a"
-            href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=Dataset`}
+            href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entityType}`}
           >
             View Data on Search Page
           </Button>
@@ -55,7 +55,7 @@ function DerivedEntitiesTable({ datasets, uuid }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {datasets.map(
+              {entities.map(
                 ({
                   _source: {
                     uuid: datasetUUID,

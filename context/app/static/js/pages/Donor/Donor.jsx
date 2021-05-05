@@ -8,7 +8,7 @@ import DetailLayout from 'js/components/Detail/DetailLayout';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
-import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
+import { useDerivedDatasetSearchHits, useDerivedSampleSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
@@ -37,11 +37,12 @@ function DonorDetail(props) {
   const { sex, race, age_value, age_unit } = mapped_metadata;
 
   const { searchHits: derivedDatasets } = useDerivedDatasetSearchHits(uuid);
+  const { searchHits: derivedSamples } = useDerivedSampleSearchHits(uuid);
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(mapped_metadata).length),
-    derived: derivedDatasets.length > 0,
+    derived: derivedSamples.length > 0 || derivedDatasets.length > 0,
   };
 
   const sectionOrder = getSectionOrder(
@@ -70,7 +71,12 @@ function DonorDetail(props) {
           group_name={group_name}
         />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} display_doi={display_doi} />}
-        {shouldDisplaySection.derived && <DerivedEntitiesTable datasets={derivedDatasets} uuid={uuid} />}
+        {shouldDisplaySection.derived && (
+          <>
+            {/* <DerivedEntitiesTable entities={derivedSamples} uuid={uuid} entityType="Sample" /> */}
+            <DerivedEntitiesTable entities={derivedDatasets} uuid={uuid} entityType="Dataset" />
+          </>
+        )}
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         <Attribution
