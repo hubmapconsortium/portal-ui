@@ -4,7 +4,12 @@ import { Panel } from 'js/shared-styles/panels';
 function getEntityCounts(listSavedEntities) {
   const counts = { Donor: 0, Sample: 0, Dataset: 0 };
   Object.values(listSavedEntities).forEach((entity) => {
-    counts[entity.entity_type] += 1;
+    const { entity_type } = entity;
+    if (!counts[entity_type]) {
+      // Support entities may be in the user's list.
+      counts[entity_type] = 0;
+    }
+    counts[entity_type] += 1;
   });
   return counts;
 }
