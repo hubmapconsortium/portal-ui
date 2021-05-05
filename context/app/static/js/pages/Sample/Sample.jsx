@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useMemo } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import ProvSection from 'js/components/Detail/provenance/ProvSection';
@@ -37,16 +37,16 @@ function SampleDetail(props) {
     metadata,
     rui_location,
   } = assayMetadata;
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
-  const sampleSpecificDatasetsQuery = useMemo(
-    () => ({
+  function useDerivedEntitySearchHits(ancestorUUID) {
+    const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+    const sampleSpecificDatasetsQuery = {
       query: {
         bool: {
           filter: [
             {
               term: {
-                ancestor_ids: uuid,
+                ancestor_ids: ancestorUUID,
               },
             },
             {
@@ -59,15 +59,12 @@ function SampleDetail(props) {
       },
       _source: ['uuid', 'display_doi', 'mapped_data_types', 'status', 'descendant_counts', 'last_modified_timestamp'],
       size: 10000,
-    }),
-    [uuid],
-  );
+    };
 
-  const { searchHits: sampleSpecificDatasets } = useSearchHits(
-    sampleSpecificDatasetsQuery,
-    elasticsearchEndpoint,
-    nexusToken,
-  );
+    return useSearchHits(sampleSpecificDatasetsQuery, elasticsearchEndpoint, nexusToken);
+  }
+
+  const { searchHits: sampleSpecificDatasets } = useDerivedEntitySearchHits(uuid);
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
