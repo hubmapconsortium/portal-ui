@@ -8,7 +8,7 @@ import DetailLayout from 'js/components/Detail/DetailLayout';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
-import useDerivedEntitySearchHits from 'js/hooks/useDerivedEntitySearchHits';
+import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
@@ -36,7 +36,7 @@ function DonorDetail(props) {
 
   const { sex, race, age_value, age_unit } = mapped_metadata;
 
-  const { searchHits: derivedDatasets } = useDerivedEntitySearchHits(uuid);
+  const { searchHits: derivedDatasets } = useDerivedDatasetSearchHits(uuid);
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),

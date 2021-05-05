@@ -4,30 +4,44 @@ import { AppContext } from 'js/components/Providers';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 
-function useDerivedEntitySearchHits(ancestorUUID) {
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-  const sampleSpecificDatasetsQuery = {
-    query: {
-      bool: {
-        filter: [
-          {
-            term: {
-              ancestor_ids: ancestorUUID,
-            },
+function getTypeQuery(ancestorUUID, type) {
+  return {
+    bool: {
+      filter: [
+        {
+          term: {
+            ancestor_ids: ancestorUUID,
           },
-          {
-            term: {
-              entity_type: 'dataset',
-            },
+        },
+        {
+          term: {
+            entity_type: type,
           },
-        ],
-      },
+        },
+      ],
     },
+  };
+}
+
+function useDerivedDatasetSearchHits(ancestorUUID) {
+  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+  const query = {
+    query: getTypeQuery(ancestorUUID, 'dataset'),
     _source: ['uuid', 'display_doi', 'mapped_data_types', 'status', 'descendant_counts', 'last_modified_timestamp'],
     size: 10000,
   };
 
-  return useSearchHits(sampleSpecificDatasetsQuery, elasticsearchEndpoint, nexusToken);
+  return useSearchHits(query, elasticsearchEndpoint, nexusToken);
 }
 
-export default useDerivedEntitySearchHits;
+function useDerivedSampleSearchHits(ancestorUUID) {
+  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+  const query = {
+    query: getTypeQuery(ancestorUUID, 'sample'),
+    _source: ['uuid', 'display_doi', 'mapped_data_types', 'status', 'descendant_counts', 'last_modified_timestamp'],
+    size: 10000,
+  };
+  return useSearchHits(query, elasticsearchEndpoint, nexusToken);
+}
+
+export { useDerivedDatasetSearchHits, useDerivedSampleSearchHits };

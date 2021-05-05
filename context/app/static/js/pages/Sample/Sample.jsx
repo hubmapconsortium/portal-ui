@@ -14,7 +14,7 @@ import useEntityStore from 'js/stores/useEntityStore';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
 import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
-import useDerivedEntitySearchHits from 'js/hooks/useDerivedEntitySearchHits';
+import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -37,7 +37,7 @@ function SampleDetail(props) {
     rui_location,
   } = assayMetadata;
 
-  const { searchHits: derivedDatasets } = useDerivedEntitySearchHits(uuid);
+  const { searchHits: derivedDatasets } = useDerivedDatasetSearchHits(uuid);
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
