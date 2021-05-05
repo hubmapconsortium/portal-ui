@@ -2,7 +2,7 @@ import React from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
 import List from '@material-ui/core/List';
 
-import FacetSearchMenuListItem from 'js/components/home-revision/FacetSearchMenuListItem';
+import FacetSearchEntityListItems from 'js/components/home-revision/FacetSearchEntityListItems';
 import { StyledPaper, StyledPopper, StyledAlert, StyledTypography, HeaderSkeleton } from './style';
 
 function FacetSearchMenu({ anchorRef, matches, labels, searchInputWidth, isLoading }) {
@@ -29,7 +29,7 @@ function FacetSearchMenu({ anchorRef, matches, labels, searchInputWidth, isLoadi
         {!isLoading && matchesExist && (
           <List>
             {Object.entries(matches).map(([k, v]) => (
-              <FacetSearchMenuListItem entityType={k} matches={v} labels={labels} />
+              <FacetSearchEntityListItems entityType={k} matches={v} labels={labels} />
             ))}
           </List>
         )}
