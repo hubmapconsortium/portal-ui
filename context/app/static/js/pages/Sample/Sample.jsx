@@ -37,13 +37,13 @@ function SampleDetail(props) {
     rui_location,
   } = assayMetadata;
 
-  const { searchHits: sampleSpecificDatasets } = useDerivedEntitySearchHits(uuid);
+  const { searchHits: derivedDatasets } = useDerivedEntitySearchHits(uuid);
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     tissue: true,
     metadata: 'metadata' in assayMetadata,
-    derived: sampleSpecificDatasets.length > 0,
+    derived: derivedDatasets.length > 0,
   };
   const sectionOrder = getSectionOrder(
     ['summary', 'derived', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
@@ -76,7 +76,7 @@ function SampleDetail(props) {
             {mapped_specimen_type}
           </Typography>
         </Summary>
-        {shouldDisplaySection.derived && <DerivedDatasetsTable datasets={sampleSpecificDatasets} uuid={uuid} />}
+        {shouldDisplaySection.derived && <DerivedDatasetsTable datasets={derivedDatasets} uuid={uuid} />}
         <SampleTissue
           uuid={uuid}
           mapped_specimen_type={mapped_specimen_type}
