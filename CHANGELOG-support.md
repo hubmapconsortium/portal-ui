@@ -1,1 +1,0 @@
-- Handle a few more edge-cases with the new Support entities.

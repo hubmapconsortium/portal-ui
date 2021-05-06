@@ -1,1 +1,0 @@
-- Show correct count when a my-list includes a "Support" entity.

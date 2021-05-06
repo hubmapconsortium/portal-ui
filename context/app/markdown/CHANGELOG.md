@@ -1,3 +1,13 @@
+## v0.17.4 - 2021-05-06
+
+- Add citation section to collections.
+- Fix bug in dev-start.sh.
+- Add facet search to new home page.
+- Show correct count when a my-list includes a "Support" entity.
+- Handle a few more edge-cases with the new Support entities.
+- Stop using `everything`: Instead, use `all_text`, and highlight matches from `description`.
+
+
 ## v0.17.3 - 2021-05-03
 
 - Remove duplicate file.
