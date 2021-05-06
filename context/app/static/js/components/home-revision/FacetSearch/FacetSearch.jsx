@@ -69,7 +69,7 @@ function FacetSearch() {
     nexusToken,
   );
 
-  const isLoading = donorAggsDataIsLoading && sampleAggsDataIsLoading && datasetAggsDataIsLoading;
+  const isLoading = donorAggsDataIsLoading || sampleAggsDataIsLoading || datasetAggsDataIsLoading;
 
   useEffect(() => {
     if (!isLoading && searchTerm.length > 0) {
