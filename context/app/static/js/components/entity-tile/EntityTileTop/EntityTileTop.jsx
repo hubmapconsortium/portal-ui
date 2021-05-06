@@ -10,6 +10,7 @@ function EntityTileTop(props) {
     Donor: <StyledDonorIcon />,
     Sample: <StyledSampleIcon />,
     Dataset: <StyledDatasetIcon />,
+    Support: <StyledDatasetIcon />,
   };
   return (
     <FixedWidthFlex $invertColors={invertColors}>
