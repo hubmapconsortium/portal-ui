@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -21,7 +22,9 @@ function Citation({ contributors, title, timestamp, url }) {
     <SectionContainer id="citation">
       <SectionHeader>Citation</SectionHeader>
       <FlexPaper>
-        {citation} Available from: <LightBlueLink href={url}>{url}</LightBlueLink>
+        <Typography variant="body1">
+          {citation} Available from: <LightBlueLink href={url}>{url}</LightBlueLink>
+        </Typography>
       </FlexPaper>
     </SectionContainer>
   );
