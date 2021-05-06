@@ -82,7 +82,7 @@ function FacetSearch() {
         ].reduce((acc, entityData) => {
           const matchingTerms = getMatchingTerms(entityData.aggs, searchTerm);
           if (Object.keys(matchingTerms).length > 0) {
-            const tempAcc = acc;
+            const tempAcc = { ...acc };
             tempAcc[entityData.entityType] = matchingTerms;
             return tempAcc;
           }

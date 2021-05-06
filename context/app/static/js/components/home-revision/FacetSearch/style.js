@@ -26,7 +26,7 @@ const StyledInput = styled.input`
   border-radius: 8px;
   border: 0;
   padding: ${inputPadding}px;
-  font-size: 16px;
+  font-size: 1rem;
   color: ${(props) => props.theme.palette.text.primary};
 `;
 
