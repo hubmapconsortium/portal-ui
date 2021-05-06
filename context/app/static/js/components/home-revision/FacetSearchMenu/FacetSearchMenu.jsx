@@ -12,7 +12,7 @@ function FacetSearchMenu({ anchorRef, matches, labels, searchInputWidth, isLoadi
   return (
     <ClickAwayListener onClickAway={() => setMenuIsOpen(false)}>
       <StyledPopper
-        id="simple-menu"
+        id="facet-search-menu"
         anchorEl={anchorRef.current}
         open={menuIsOpen}
         placement="bottom-start"
