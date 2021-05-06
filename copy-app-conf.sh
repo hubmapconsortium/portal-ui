@@ -9,4 +9,4 @@ else
   echo "Using existing $APP_CONF."
 fi
 
-grep 'TODO' "$APP_CONF" && die "Replace 'TODO' in $APP_CONF."
+grep 'TODO' "$APP_CONF" || echo "No TODOs in $APP_CONF"
