@@ -64,8 +64,8 @@ def cell_counts_for_datasets():
     return response
 
 
-@blueprint.route('/cells/cell-expressions-in-dataset.json', methods=['POST'])
-def cell_expressions_in_dataset():
+@blueprint.route('/cells/cell-expression-in-dataset.json', methods=['POST'])
+def cell_expression_in_dataset():
     # For a single dataset we want to get the expression level of a given gene for all cells.
     # (In our discussion, we started by thinking about the set of matching cells, and then showing expression levels for the two groups, but that’s not needed.)
 
@@ -75,4 +75,5 @@ def cell_expressions_in_dataset():
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 
     cells = client.select_cells(where='dataset', has=[uuid])
+    # list() will call iterator behind the scenes.
     return list(cells.get_list(values_included=gene_names))
