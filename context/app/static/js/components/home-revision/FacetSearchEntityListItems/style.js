@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
 
-const FlexDiv = styled.div`
-  display: flex;
-  flex-direction: column;
+const StyledList = styled(List)`
+  padding: 0px;
 `;
 
 const FacetLabel = styled(Typography)`
@@ -13,6 +13,9 @@ const FacetLabel = styled(Typography)`
 const FacetValue = styled(Typography)`
   padding: 6px 16px;
   text-decoration: none;
+  width: 100%;
+  height: 100%;
+  display: block;
   color: ${(props) => props.theme.palette.text.primary};
 
   &:hover {
@@ -20,4 +23,4 @@ const FacetValue = styled(Typography)`
   }
 `;
 
-export { FlexDiv, FacetLabel, FacetValue };
+export { StyledList, FacetLabel, FacetValue };
