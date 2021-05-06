@@ -91,4 +91,9 @@ const datasetConfig = {
   },
 };
 
-export { donorConfig, sampleConfig, datasetConfig };
+const fieldsToHighlight = ['description'];
+const customHighlight = {
+  fields: Object.fromEntries(fieldsToHighlight.map((fieldName) => [fieldName, { type: 'plain' }])),
+};
+
+export { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight, customHighlight };
