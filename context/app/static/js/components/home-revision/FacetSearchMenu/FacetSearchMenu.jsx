@@ -29,16 +29,18 @@ function FacetSearchMenu({ anchorRef, matches, labels, searchInputWidth, isLoadi
               </StyledTypography>
             </>
           )}
-          {!isLoading && matchesExist && (
-            <List>
-              {Object.entries(matches).map(([k, v]) => (
-                <FacetSearchEntityListItems entityType={k} matches={v} labels={labels} />
-              ))}
-            </List>
-          )}
-          {!isLoading && !matchesExist && (
-            <StyledAlert severity="warning">No results found. Check your spelling or try a different term.</StyledAlert>
-          )}
+          {!isLoading &&
+            (matchesExist ? (
+              <List>
+                {Object.entries(matches).map(([k, v]) => (
+                  <FacetSearchEntityListItems entityType={k} matches={v} labels={labels} />
+                ))}
+              </List>
+            ) : (
+              <StyledAlert severity="warning">
+                No results found. Check your spelling or try a different term.
+              </StyledAlert>
+            ))}
         </StyledPaper>
       </StyledPopper>
     </ClickAwayListener>
