@@ -7,14 +7,11 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { FlexPaper } from './style';
 
 function buildNLMCitation({ contributors, title, timestamp }) {
-  const firstContributors = contributors
-    .slice(0, 6)
-    .map(({ last_name, first_name }) => `${last_name} ${first_name[0]}`);
-  if (firstContributors.length < contributors.length) {
-    firstContributors.push('et al');
-  }
+  const joinedContributors = contributors
+    .map(({ last_name, first_name }) => `${last_name} ${first_name[0]}`)
+    .join(', ');
   const year = new Date(timestamp).getFullYear();
-  return `${firstContributors.join(', ')}. ${title} [Internet]. HuBMAP Consortium; ${year}.`;
+  return `${joinedContributors}. ${title} [Internet]. HuBMAP Consortium; ${year}.`;
 }
 
 function Citation({ contributors, title, timestamp, url }) {
