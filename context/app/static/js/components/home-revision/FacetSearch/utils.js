@@ -21,12 +21,24 @@ function getAggsObject(aggsField, fieldSize) {
   };
 }
 
-function getAggsQuery(aggsFields, fieldSize) {
+function getAggsQuery(entityType, aggsFields, fieldSize) {
   const aggs = {};
   aggsFields.forEach((aggsField) => {
     aggs[aggsField] = getAggsObject(aggsField, fieldSize);
   });
-  return { size: 0, aggs };
+  return {
+    query: {
+      bool: {
+        filter: {
+          term: {
+            entity_type: entityType,
+          },
+        },
+      },
+    },
+    size: 0,
+    aggs,
+  };
 }
 
 export { getMatchingTerms, getAggsQuery };

@@ -25,13 +25,15 @@ const allLabels = {
   'source_sample.mapped_specimen_type': baseLabels.mapped_specimen_type,
 };
 
-const donorAggsQuery = getAggsQuery(['mapped_metadata.sex', 'mapped_metadata.race'], 100);
+const donorAggsQuery = getAggsQuery('donor', ['mapped_metadata.sex', 'mapped_metadata.race'], 100);
 const sampleAggsQuery = getAggsQuery(
+  'sample',
   ['donor.mapped_metadata.sex', 'donor.mapped_metadata.race', 'origin_sample.mapped_organ', 'mapped_specimen_type'],
   100,
 );
 
 const datasetAggsQuery = getAggsQuery(
+  'dataset',
   [
     'donor.mapped_metadata.sex',
     'donor.mapped_metadata.race',
