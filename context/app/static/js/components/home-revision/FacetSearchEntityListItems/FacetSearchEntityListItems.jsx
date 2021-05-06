@@ -7,7 +7,7 @@ function FacetSearchEntityListItems({ entityType, matches, labels }) {
     <li>
       {Object.entries(matches).map(([k, v]) => {
         return (
-          <>
+          <React.Fragment key={k}>
             <FacetLabel color="primary" variant="subtitle2">{`${labels[k]} (${entityType}s)`}</FacetLabel>
             <StyledList>
               {v.map((m) => {
@@ -18,9 +18,8 @@ function FacetSearchEntityListItems({ entityType, matches, labels }) {
                       )}`
                     : `${encodeURIComponent(k)}[0]=${encodeURIComponent(m.key)}`;
                 return (
-                  <li>
+                  <li key={m.key}>
                     <FacetValue
-                      key={m.key}
                       variant="body2"
                       component="a"
                       href={`/search?entity_type[0]=${entityType}&${facetQueryParam}`}
@@ -31,7 +30,7 @@ function FacetSearchEntityListItems({ entityType, matches, labels }) {
                 );
               })}
             </StyledList>
-          </>
+          </React.Fragment>
         );
       })}
     </li>

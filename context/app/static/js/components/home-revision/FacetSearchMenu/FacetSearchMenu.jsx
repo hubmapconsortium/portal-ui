@@ -33,7 +33,7 @@ function FacetSearchMenu({ anchorRef, matches, labels, searchInputWidth, isLoadi
             (matchesExist ? (
               <List>
                 {Object.entries(matches).map(([k, v]) => (
-                  <FacetSearchEntityListItems entityType={k} matches={v} labels={labels} />
+                  <FacetSearchEntityListItems key={k} entityType={k} matches={v} labels={labels} />
                 ))}
               </List>
             ) : (

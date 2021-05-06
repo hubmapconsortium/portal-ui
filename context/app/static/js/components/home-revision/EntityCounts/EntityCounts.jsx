@@ -46,6 +46,7 @@ function EntityCounts() {
       <FlexContainer>
         {entities.map(({ icon, entity_type }) => (
           <EntityCount
+            key={entity_type}
             icon={icon}
             count={entityCounts?.[entity_type]}
             label={`${entity_type}s`}
