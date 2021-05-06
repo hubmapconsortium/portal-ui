@@ -7,6 +7,7 @@ import { SelectionButton } from './style';
 function AssayTypeBarChartDropdown({ colorDataOptions, selectedColorDataIndex, setSelectedColorDataIndex }) {
   return (
     <DropdownListbox
+      id="bar-fill-dropdown"
       buttonComponent={SelectionButton}
       optionComponent={DropdownListboxOption}
       selectedOptionIndex={selectedColorDataIndex}
