@@ -3,6 +3,7 @@
 ## Deployment
 
 Monday/Wednesday, before 5pm:
+*   **John/Ilan** will review warnings from the portal in CloudWatch, and triage as approapriate. There should be no errors we get used to ignoring.
 *   **John/Ilan** will look at [portal PRs](https://github.com/hubmapconsortium/portal-ui/pulls), and nudge people to merge approved PRs, or get approvals on older PRs. 
 
 Monday/Wednesday, after 5pm: (Or any time that Nils asks for a release...)
