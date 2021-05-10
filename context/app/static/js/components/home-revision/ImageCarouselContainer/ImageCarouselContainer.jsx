@@ -17,7 +17,22 @@ import CCFSlide1392w from 'portal-images/ccf-slide-1392w.png';
 import ImageCarousel from '../ImageCarousel';
 import ImageCarouselControlButtons from '../ImageCarouselControlButtons';
 import ImageCarouselCallToAction from '../ImageCarouselCallToAction';
+import { getMappedDataTypesParams } from './utils';
 import { Flex, CallToActionWrapper } from './style';
+
+const assaysWithVisualizations = [
+  'Autofluorescence Microscopy',
+  'CODEX [Cytokit + SPRM]',
+  'Imaging Mass Cytometry',
+  'MALDI IMS negative',
+  'MALDI IMS positive',
+  'PAS Stained Microscopy',
+  'scRNA-seq (10x Genomics) [Salmon]',
+  'sciATAC-seq [SnapATAC]',
+  'seqFISH',
+  'snATAC-seq [SnapATAC]',
+  'snRNA-seq [Salmon]',
+];
 
 function ImageCarouselContainer() {
   const slides = [
@@ -34,6 +49,7 @@ function ImageCarouselContainer() {
           alt="Vitessce"
         />
       ),
+      buttonHref: `/search?entity_type[0]=Dataset${getMappedDataTypesParams(assaysWithVisualizations)}`,
     },
     {
       title: 'Navigate healthy human cells with the Common Coordinate Framework',
@@ -48,6 +64,7 @@ function ImageCarouselContainer() {
           alt="CCF Portal"
         />
       ),
+      buttonHref: 'https://hubmapconsortium.github.io/ccf/',
     },
     {
       title: 'Analyze single-cell RNA-seq experiments with Azimuth',
@@ -62,15 +79,16 @@ function ImageCarouselContainer() {
           alt="Azimuth"
         />
       ),
+      buttonHref: 'https://azimuth.hubmapconsortium.org/',
     },
   ];
   // Set random intial image index:
   const [selectedImageIndex, setSelectedImageIndex] = useState(Math.floor(Math.random() * slides.length));
-  const { title, body } = slides[selectedImageIndex];
+  const { title, body, buttonHref } = slides[selectedImageIndex];
   return (
     <Flex>
       <CallToActionWrapper>
-        <ImageCarouselCallToAction title={title} body={body} />
+        <ImageCarouselCallToAction title={title} body={body} buttonHref={buttonHref} />
         <ImageCarouselControlButtons
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}

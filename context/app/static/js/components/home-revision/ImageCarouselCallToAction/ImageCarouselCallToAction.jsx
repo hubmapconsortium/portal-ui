@@ -1,14 +1,16 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+
+import CarouselButton from 'js/components/home-revision/CarouselButton';
 import { StyledTypography } from './style';
 
-function ImageCarouselCallToAction({ title, body }) {
+function ImageCarouselCallToAction({ title, body, buttonHref }) {
   return (
     <div>
       <StyledTypography variant="h3">{title}</StyledTypography>
-      <Typography variant="h6" component="p">
+      <StyledTypography variant="h6" component="p">
         {body}
-      </Typography>
+      </StyledTypography>
+      <CarouselButton href={buttonHref} />
     </div>
   );
 }
