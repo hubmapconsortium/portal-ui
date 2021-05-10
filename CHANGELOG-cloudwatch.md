@@ -1,0 +1,1 @@
+- Add a check on Cloudwatch to the deployment routine.
