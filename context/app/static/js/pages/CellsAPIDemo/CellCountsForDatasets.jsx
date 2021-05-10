@@ -8,7 +8,7 @@ import ResultsTable from './ResultsTable';
 
 // eslint-disable-next-line no-unused-vars
 function CellCountsForDatasets(props) {
-  const [uuid, setUUID] = useState('81a9fa68b2b4ea3e5f7cb17554149473');
+  const [uuids, setUUIDs] = useState('81a9fa68b2b4ea3e5f7cb17554149473,other-uuid');
   const [geneName, setGeneName] = useState('VIM');
   const [minGeneExpression, setMinGeneExpression] = useState('1');
 
@@ -17,7 +17,9 @@ function CellCountsForDatasets(props) {
 
   async function handleSubmit() {
     const urlParams = new URLSearchParams();
-    urlParams.append('uuid', uuid);
+    uuids.split(',').forEach((uuid) => {
+      urlParams.append('uuid', uuid);
+    });
     urlParams.append('gene_name', geneName);
     urlParams.append('min_gene_expression', minGeneExpression);
 
@@ -37,7 +39,7 @@ function CellCountsForDatasets(props) {
     const { target } = event;
     const { name } = target;
     const setFields = {
-      uuid: setUUID,
+      uuids: setUUIDs,
       geneName: setGeneName,
       minGeneExpression: setMinGeneExpression,
     };
@@ -46,7 +48,13 @@ function CellCountsForDatasets(props) {
 
   return (
     <Paper>
-      <TextField label="uuid" value={uuid} name="uuid" variant="outlined" onChange={handleChange} />
+      <TextField
+        label="uuids (comma delimited)"
+        value={uuids}
+        name="uuids"
+        variant="outlined"
+        onChange={handleChange}
+      />
       <TextField label="gene name" value={geneName} name="geneName" variant="outlined" onChange={handleChange} />
       <TextField
         label="min gene expression"
