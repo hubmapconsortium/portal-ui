@@ -16,14 +16,13 @@ function DatasetsSelectedByGene(props) {
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
-    const formData = new FormData();
-    formData.append('gene_name', geneName);
-    formData.append('min_gene_expression', minGeneExpression);
-    formData.append('min_cell_percentage', minCellPercentage);
+    const urlParams = new URLSearchParams();
+    urlParams.append('gene_name', geneName);
+    urlParams.append('min_gene_expression', minGeneExpression);
+    urlParams.append('min_cell_percentage', minCellPercentage);
 
-    const firstResponse = await fetch('/cells/datasets-selected-by-gene.json', {
+    const firstResponse = await fetch(`/cells/datasets-selected-by-gene.json?${urlParams}`, {
       method: 'POST',
-      body: formData,
     });
     const responseJson = await firstResponse.json();
     if ('message' in responseJson) {

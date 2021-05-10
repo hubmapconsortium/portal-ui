@@ -11,6 +11,7 @@ function CellsAPIDemo(props) {
   return (
     <>
       <SectionHeader>Datasets selected by gene</SectionHeader>
+      <em>Does not work with current client version</em>
       <DatasetsSelectedByGene />
 
       <SectionHeader>Cell counts for datasets</SectionHeader>

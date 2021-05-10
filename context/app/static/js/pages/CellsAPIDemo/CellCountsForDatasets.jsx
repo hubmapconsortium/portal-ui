@@ -8,22 +8,21 @@ import ResultsTable from './ResultsTable';
 
 // eslint-disable-next-line no-unused-vars
 function CellCountsForDatasets(props) {
-  const [uuid, setUUID] = useState('32-characters');
-  const [geneName, setGeneName] = useState('gene name');
+  const [uuid, setUUID] = useState('81a9fa68b2b4ea3e5f7cb17554149473');
+  const [geneName, setGeneName] = useState('VIM');
   const [minGeneExpression, setMinGeneExpression] = useState('1');
 
   const [results, setResults] = useState([]);
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
-    const formData = new FormData();
-    formData.append('uuid', uuid);
-    formData.append('gene_name', geneName);
-    formData.append('min_gene_expression', minGeneExpression);
+    const urlParams = new URLSearchParams();
+    urlParams.append('uuid', uuid);
+    urlParams.append('gene_name', geneName);
+    urlParams.append('min_gene_expression', minGeneExpression);
 
-    const firstResponse = await fetch('/cells/cell-counts-for-datasets.json', {
+    const firstResponse = await fetch(`/cells/cell-counts-for-datasets.json?${urlParams}`, {
       method: 'POST',
-      body: formData,
     });
     const responseJson = await firstResponse.json();
     if ('message' in responseJson) {
