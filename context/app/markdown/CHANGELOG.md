@@ -1,3 +1,12 @@
+## v0.18.0 - 2021-05-10
+
+- Add a check on Cloudwatch to the deployment routine.
+- Upgrade to lodash-4.17.21.
+- Upgrade to ssri-6.0.2.
+- Upgrade to underscore-1.13.1.
+- Upgrade Vitessce to 1.1.9.
+
+
 ## v0.17.4 - 2021-05-06
 
 - Add citation section to collections.
