@@ -208,13 +208,13 @@ class ApiClient():
     def get_assays_with_visualizations(self):
         tc = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
         assays_with_visualizations = []
-        assays = [assay.name for assay in tc.iterAssays()]
+        assays = [assay for assay in tc.iterAssays()]
         for assay in assays:
-            entity = self.get_most_recent_dataset_for_assay(assay)
+            entity = self.get_most_recent_dataset_for_assay(assay.name)
             if entity:
                 vc = self.get_vitessce_conf(entity)
                 if any(vc):
-                    assays_with_visualizations.append(assay)
+                    assays_with_visualizations.append(assay.description)
         return assays_with_visualizations
 
 
