@@ -8,14 +8,18 @@ import ResultsTable from './ResultsTable';
 
 // eslint-disable-next-line no-unused-vars
 function DatasetsSelectedByGene(props) {
-  const [someField, setSomeField] = useState('field value');
+  const [geneName, setGeneName] = useState('');
+  const [minGeneExpression, setMinGeneExpression] = useState(1);
+  const [minCellPercentage, setMinCellPercentage] = useState(100);
 
   const [results, setResults] = useState([]);
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
     const formData = new FormData();
-    formData.append('some_field', someField);
+    formData.append('gene_name', geneName);
+    formData.append('min_gene_expression', minGeneExpression);
+    formData.append('min_cell_percentage', minCellPercentage);
 
     const firstResponse = await fetch('/cells.json', {
       method: 'POST',
@@ -34,14 +38,30 @@ function DatasetsSelectedByGene(props) {
     const { target } = event;
     const { name } = target;
     const setFields = {
-      some_field: setSomeField,
+      geneName: setGeneName,
+      minGeneExpression: setMinGeneExpression,
+      minCellPercentage: setMinCellPercentage,
     };
     setFields[name](event.target.value);
   }
 
   return (
     <Paper>
-      <TextField label="some field" value={someField} name="some_field" variant="outlined" onChange={handleChange} />
+      <TextField label="gene name" value={geneName} name="geneName" variant="outlined" onChange={handleChange} />
+      <TextField
+        label="min gene expression"
+        value={minGeneExpression}
+        name="minGeneExpression"
+        variant="outlined"
+        onChange={handleChange}
+      />
+      <TextField
+        label="min cell percentage"
+        value={minCellPercentage}
+        name="minCellPercentage"
+        variant="outlined"
+        onChange={handleChange}
+      />
       <br />
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
