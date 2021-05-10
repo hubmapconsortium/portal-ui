@@ -8,16 +8,18 @@ import ResultsTable from './ResultsTable';
 
 // eslint-disable-next-line no-unused-vars
 function CellExpressionInDataset(props) {
-  const [someField, setSomeField] = useState('field value');
+  const [uuid, setUUID] = useState('32-characters');
+  const [geneName, setGeneName] = useState('gene name');
 
   const [results, setResults] = useState([]);
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
     const formData = new FormData();
-    formData.append('some_field', someField);
+    formData.append('uuid', uuid);
+    formData.append('gene_name', geneName);
 
-    const firstResponse = await fetch('/cells.json', {
+    const firstResponse = await fetch('/cells/cell-expression-in-dataset.json', {
       method: 'POST',
       body: formData,
     });
@@ -34,14 +36,16 @@ function CellExpressionInDataset(props) {
     const { target } = event;
     const { name } = target;
     const setFields = {
-      some_field: setSomeField,
+      uuid: setUUID,
+      geneName: setGeneName,
     };
     setFields[name](event.target.value);
   }
 
   return (
     <Paper>
-      <TextField label="some field" value={someField} name="some_field" variant="outlined" onChange={handleChange} />
+      <TextField label="uuid" value={uuid} name="uuid" variant="outlined" onChange={handleChange} />
+      <TextField label="gene name" value={geneName} name="geneName" variant="outlined" onChange={handleChange} />
       <br />
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
