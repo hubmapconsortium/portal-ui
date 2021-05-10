@@ -51,6 +51,8 @@ def index():
 @blueprint.route('/home-revision')
 def home_revision():
     flask_data = {'endpoints': _get_endpoints()}
+    client = _get_client()
+    print(client.get_assays_with_visualizations())
     return render_template(
         'pages/base_react.html',
         types=entity_types,

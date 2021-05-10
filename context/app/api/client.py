@@ -6,6 +6,7 @@ from copy import deepcopy
 from datauri import DataURI
 from flask import abort, current_app
 import requests
+from hubmap_commons.type_client import TypeClient
 
 from .vitessce_confs import get_view_config_class_for_data_types
 
@@ -166,6 +167,55 @@ class ApiClient():
                 },
             ]
         }
+
+    def get_most_recent_dataset_for_assay(self, assay):
+        query = {
+            "size": 1,
+            "query": {
+                "bool": {
+                    "must_not": {
+                        "exists": {
+                            "field": "next_revision_uuid"
+                        }
+                    }
+                }
+            },
+            "post_filter": {
+                "bool": {
+                    "must": [
+                        {
+                            "term": {
+                                "data_types.keyword": assay
+                            }
+                        },
+                        {
+                            "term": {
+                                "entity_type.keyword": "Dataset"
+                            }
+                        }
+                    ]
+                }
+            },
+            "sort": [{"mapped_last_modified_timestamp.keyword": "desc"}]
+        }
+
+        response_json = self._request(
+            current_app.config['ELASTICSEARCH_ENDPOINT']
+            + current_app.config['PORTAL_INDEX_PATH'],
+            body_json=query)
+        return response_json['hits']['hits'][0]["_source"] if len(response_json['hits']['hits']) > 0 else None
+
+    def get_assays_with_visualizations(self):
+        tc = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
+        assays_with_visualizations = []
+        assays = [assay.name for assay in tc.iterAssays()]
+        for assay in assays:
+            entity = self.get_most_recent_dataset_for_assay(assay)
+            if entity:
+                vc = self.get_vitessce_conf(entity)
+                if any(vc):
+                    assays_with_visualizations.append(assay)
+        return assays_with_visualizations
 
 
 def _get_image_pyramid_descendants(entity):
