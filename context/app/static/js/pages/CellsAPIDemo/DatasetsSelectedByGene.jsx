@@ -8,7 +8,7 @@ import ResultsTable from './ResultsTable';
 
 // eslint-disable-next-line no-unused-vars
 function DatasetsSelectedByGene(props) {
-  const [geneName, setGeneName] = useState('');
+  const [geneName, setGeneName] = useState('gene name');
   const [minGeneExpression, setMinGeneExpression] = useState(1);
   const [minCellPercentage, setMinCellPercentage] = useState(100);
 
@@ -21,7 +21,7 @@ function DatasetsSelectedByGene(props) {
     formData.append('min_gene_expression', minGeneExpression);
     formData.append('min_cell_percentage', minCellPercentage);
 
-    const firstResponse = await fetch('/cells.json', {
+    const firstResponse = await fetch('/cells/datasets-selected-by-gene.json', {
       method: 'POST',
       body: formData,
     });
