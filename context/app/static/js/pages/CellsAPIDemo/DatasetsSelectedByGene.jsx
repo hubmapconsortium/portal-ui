@@ -8,7 +8,7 @@ import ResultsTable from './ResultsTable';
 
 // eslint-disable-next-line no-unused-vars
 function DatasetsSelectedByGene(props) {
-  const [geneName, setGeneName] = useState('gene name');
+  const [geneName, setGeneName] = useState('VIM');
   const [minGeneExpression, setMinGeneExpression] = useState(1);
   const [minCellPercentage, setMinCellPercentage] = useState(100);
 
