@@ -34,7 +34,9 @@ def datasets_selected_by_gene():
         min_cell_percentage=min_cell_percentage,
         genomic_modality='rna'
     )
-    return list(dataset_set.get_list())
+    return {
+        'results': list(dataset_set.get_list())
+    }
 
 
 @blueprint.route('/cells/cell-counts-for-datasets.json', methods=['POST'])
@@ -47,21 +49,25 @@ def cell_counts_for_datasets():
 
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 
+
     cell_set = client.select_cells(
         where='gene',
         has=[f'{gene_name} > {min_gene_expression}'],
         genomic_modality='rna'
     )
 
-    response = {}
+    results = []
     for uuid in uuids:
         dataset_cells = client.select_cells(where='dataset', has=[uuid])
-        response[uuid] = {
-            'cells_expressing_gene': len(dataset_cells & gene_cells),
+        results.append({
+            'uuid': uuid,
+            'cells_expressing_gene': len(dataset_cells & cell_set),
             'total_cells': len(dataset_cells)
-        }
+        })
 
-    return response
+    return {
+        'results': results
+    }
 
 
 @blueprint.route('/cells/cell-expression-in-dataset.json', methods=['POST'])
@@ -76,4 +82,6 @@ def cell_expression_in_dataset():
 
     cells = client.select_cells(where='dataset', has=[uuid])
     # list() will call iterator behind the scenes.
-    return list(cells.get_list(values_included=gene_names))
+    return {
+        'results': list(cells.get_list(values_included=gene_names))
+    }
