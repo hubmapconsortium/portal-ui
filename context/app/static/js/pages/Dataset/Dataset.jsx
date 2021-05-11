@@ -110,6 +110,12 @@ function DatasetDetail(props) {
           </span>
         </Alert>
       )}
+      {entity_type === 'Support' && (
+        <Alert severity="warning" $marginBottom="16">
+          “Support” entities provide derived, low-level data for visualizations. Navigate to a parent entity for a view
+          of this information in context.
+        </Alert>
+      )}
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}
