@@ -31,6 +31,10 @@ def unauthorized(e):
     return render_react_error(401, 'Unauthorized')
 
 
+def forbidden(e):
+    return render_react_error(403, 'Forbidden')
+
+
 def gateway_timeout(e):
     '''A 504 means the API has timed out.'''
     return render_react_error(504, 'Gateway Timeout')
@@ -54,6 +58,7 @@ def create_app(testing=False):
 
     app.register_error_handler(400, bad_request)
     app.register_error_handler(401, unauthorized)
+    app.register_error_handler(403, forbidden)
     app.register_error_handler(404, not_found)
     app.register_error_handler(504, gateway_timeout)
 
