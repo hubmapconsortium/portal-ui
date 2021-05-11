@@ -32,7 +32,7 @@ const StyledInfoIcon = styled(InfoIcon)`
 `;
 
 const StyledButton = styled(Button)`
-  color: #fff !important; // Chrome sees the color, but doesn't always respect it unless forced.
+  color: #fff !important; // Safari sees the color, but doesn't always respect it unless forced.
   padding: 6px 36px;
 `;
 
