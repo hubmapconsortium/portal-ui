@@ -24,7 +24,13 @@ function Citation({ contributors, title, timestamp, url, doi }) {
       <Flex>
         <SectionHeader>Citation</SectionHeader>
         <FlexRight>
-          <Button color="primary" variant="contained" component="a" href={`https://search.datacite.org/works/${doi}`}>
+          <Button
+            color="primary"
+            variant="contained"
+            component="a"
+            target="_blank"
+            href={`https://search.datacite.org/works/${doi}`}
+          >
             View DataCite Page <StyledOpenInNewRoundedIcon />
           </Button>
         </FlexRight>
