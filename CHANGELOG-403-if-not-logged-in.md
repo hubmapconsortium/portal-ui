@@ -1,0 +1,1 @@
+- Serve a 403 if the user requests a 32-character UUID, but it's not in ES.
