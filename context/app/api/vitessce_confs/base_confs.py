@@ -250,8 +250,8 @@ class SPRMJSONViewConf(ImagingViewConf):
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
         vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
         vc.add_view(dataset, cm.CELL_SETS, x=10, y=5, w=2, h=7)
-        vc.add_view(dataset, cm.GENES, x=10, y=0, w=2, h=5)
-        vc.add_view(dataset, cm.HEATMAP, x=3, y=8, w=7, h=4).set_props(transpose=True)
+        vc.add_view(dataset, cm.GENES, x=10, y=0, w=2, h=5).set_props(variablesLabelOverride="antigen")
+        vc.add_view(dataset, cm.HEATMAP, x=3, y=8, w=7, h=4).set_props(transpose=True, variablesLabelOverride="antigen")
         return vc
 
 
@@ -317,5 +317,5 @@ class SPRMAnnDataViewConf(ImagePyramidViewConf):
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
         vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
         vc.add_view(dataset, cm.CELL_SETS, x=10, y=5, w=2, h=7)
-        vc.add_view(dataset, cm.GENES, x=10, y=0, w=2, h=5)
+        vc.add_view(dataset, cm.GENES, x=10, y=0, w=2, h=5).set_props(variablesLabelOverride="antigen")
         return vc

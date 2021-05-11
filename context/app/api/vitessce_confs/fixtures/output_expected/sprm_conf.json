@@ -1,4 +1,3 @@
-
 {
   "version": "1.0.0",
   "name": "BASE_NAME",
@@ -94,6 +93,9 @@
       "coordinationScopes": {
         "dataset": "A"
       },
+      "props": {
+        "variablesLabelOverride": "antigen"
+      },
       "x": 10,
       "y": 0,
       "w": 2,
@@ -102,7 +104,8 @@
     {
       "component": "heatmap",
       "props": {
-        "transpose": true
+        "transpose": true,
+        "variablesLabelOverride": "antigen"
       },
       "coordinationScopes": {
         "dataset": "A"
