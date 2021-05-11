@@ -1,7 +1,6 @@
 import urllib
 from pathlib import Path
 import re
-import traceback
 
 from flask import current_app
 from vitessce import (
