@@ -19,6 +19,7 @@ const FlexRight = styled.div`
 const StyledOpenInNewRoundedIcon = styled(OpenInNewRoundedIcon)`
   font-size: 1.1rem;
   vertical-align: text-bottom;
+  margin-left: 0.2rem;
 `;
 
 export { FlexPaper, Flex, FlexRight, StyledOpenInNewRoundedIcon };
