@@ -49,7 +49,7 @@ The webpack dev server proxies all requests outside of those for files in the pu
 Note: Searchkit, our interface to Elasticsearch, has changed significantly in the lastest release. Documentation for version 2.0 can be found [here](http://searchkit.github.io/searchkit/stable/).
 
 ## Using Images
-Images should displayed using the `source srcset` attribute. You should prepare four versions of the image starting at its original size and at 75%, 50% and 25% the original image's size preserving its aspect ratio. If available, you should also provide a 2x resolution for higher density screens. Once ready, each version of the image should be processed with an image optimizer.
+Images should displayed using the `source srcset` attribute. You should prepare four versions of the image starting at its original size and at 75%, 50% and 25% the original image's size preserving its aspect ratio. If available, you should also provide a 2x resolution for higher density screens. For example, to resize images using Mac's Preview you can visit the 'Tools' menu and select 'Adjust Size', from there you can change the image's width while making sure 'Scale Proportionally' and 'Resample Image' are checked. Once ready, each version of the image should be processed with an image optimizer such as ImgOptim.
 
 Finally after processing, the images should be checked into the [`portal-images`](https://github.com/hubmapconsortium/portal-images) submodule.
 
