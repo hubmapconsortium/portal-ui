@@ -53,7 +53,7 @@ Images should displayed using the `source srcset` attribute. You should prepare 
 
 Finally after processing, the images should be checked into the [`portal-images`](https://github.com/hubmapconsortium/portal-images) submodule.
 
-Images provided for the homepage carousel should have a 16:9 ratio and abide by the above rules.
+Images provided for the homepage carousel should have a 16:9 ratio and abide by the above guidelines.
 
 ### React File Structure
 - Components with tests or styles should be placed in to their own directory.
