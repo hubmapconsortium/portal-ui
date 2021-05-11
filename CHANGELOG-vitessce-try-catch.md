@@ -1,0 +1,1 @@
+- Remove the try-catch around Vitessce view-conf code.
