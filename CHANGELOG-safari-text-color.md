@@ -1,0 +1,1 @@
+- Add CSS `!important` to fix a problem with rendering on Safari.
