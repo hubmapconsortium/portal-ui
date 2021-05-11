@@ -1,0 +1,1 @@
+- Add animations for homepage carousel and bar chart.
