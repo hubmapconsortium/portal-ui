@@ -11,9 +11,11 @@ function AncestorNote(props) {
   if (entity) {
     const { entity_type, uuid, display_doi } = entity;
     const lcType = entity_type.toLowerCase();
+    const dataTypes = (entity?.mapped_data_types || []).join('/');
     message = (
       <>
-        Derived from {lcType} <LightBlueLink href={`/browse/${lcType}/${uuid}`}>{display_doi}</LightBlueLink>
+        Derived from {dataTypes} {lcType}{' '}
+        <LightBlueLink href={`/browse/${lcType}/${uuid}`}>{display_doi}</LightBlueLink>
       </>
     );
   }
