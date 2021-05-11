@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import { FlexPaper } from './style';
+import { FlexPaper, Flex, FlexRight } from './style';
 
 function buildNLMCitation({ contributors, title, timestamp }) {
   const joinedContributors = contributors
@@ -20,7 +21,14 @@ function Citation({ contributors, title, timestamp, url }) {
 
   return (
     <SectionContainer id="citation">
-      <SectionHeader>Citation</SectionHeader>
+      <Flex>
+        <SectionHeader>Citation</SectionHeader>
+        <FlexRight>
+          <Button color="primary" variant="contained">
+            View DataCite Page
+          </Button>
+        </FlexRight>
+      </Flex>
       <FlexPaper>
         <Typography variant="body1">
           {citation} Available from: <LightBlueLink href={url}>{url}</LightBlueLink>

@@ -5,4 +5,14 @@ const FlexPaper = styled(Paper)`
   padding: 30px 40px;
 `;
 
-export { FlexPaper };
+const Flex = styled.div`
+  display: flex;
+  margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
+`;
+
+const FlexRight = styled.div`
+  display: flex;
+  margin-left: auto;
+`;
+
+export { FlexPaper, Flex, FlexRight };
