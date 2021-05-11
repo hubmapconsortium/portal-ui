@@ -1,0 +1,1 @@
+- Add image processing guide to readme.
