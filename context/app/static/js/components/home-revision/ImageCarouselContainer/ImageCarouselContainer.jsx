@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSpring, animated } from 'react-spring';
 
 import CarouselImage from 'js/components/home-revision/CarouselImage';
 import VitessceSlide320w from 'portal-images/vitessce-slide-320w.png';
@@ -18,6 +19,18 @@ import ImageCarousel from '../ImageCarousel';
 import ImageCarouselControlButtons from '../ImageCarouselControlButtons';
 import ImageCarouselCallToAction from '../ImageCarouselCallToAction';
 import { Flex, CallToActionWrapper } from './style';
+
+const AnimatedFlex = animated(Flex);
+
+function Animated({ children }) {
+  const animation = useSpring({
+    to: { opacity: 1 },
+    from: { opacity: 0.5 },
+    config: { mass: 2, tension: 200, friction: 100 },
+  });
+
+  return <AnimatedFlex style={animation}>{children}</AnimatedFlex>;
+}
 
 function ImageCarouselContainer() {
   const slides = [
@@ -67,8 +80,9 @@ function ImageCarouselContainer() {
   // Set random intial image index:
   const [selectedImageIndex, setSelectedImageIndex] = useState(Math.floor(Math.random() * slides.length));
   const { title, body } = slides[selectedImageIndex];
+
   return (
-    <Flex>
+    <Animated key={selectedImageIndex}>
       <CallToActionWrapper>
         <ImageCarouselCallToAction title={title} body={body} />
         <ImageCarouselControlButtons
@@ -82,7 +96,7 @@ function ImageCarouselContainer() {
         setSelectedImageIndex={setSelectedImageIndex}
         images={slides.map((slide) => slide.image)}
       />
-    </Flex>
+    </Animated>
   );
 }
 
