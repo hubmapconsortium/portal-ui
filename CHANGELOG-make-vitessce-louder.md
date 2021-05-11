@@ -1,0 +1,1 @@
+- If there is a problem generating vitessce conf, show an error in the UI.

@@ -75,8 +75,12 @@ function DatasetDetail(props) {
   const allCollections = useCollectionsData(elasticsearchEndpoint, nexusToken);
   const collectionsData = getCollectionsWhichContainDataset(uuid, allCollections);
 
+  const shouldDisplayVisualization = vitData && ('name' in vitData || (vitData[0] && 'name' in vitData[0]));
+  if (vitData && !shouldDisplayVisualization) {
+    throw Error('Vitessce config does not have expected structure');
+  }
   const shouldDisplaySection = {
-    visualization: 'name' in vitData || (vitData[0] && 'name' in vitData[0]),
+    visualization: shouldDisplayVisualization,
     protocols: Boolean(protocol_url),
     metadata: metadata && 'metadata' in metadata,
     files: true,
