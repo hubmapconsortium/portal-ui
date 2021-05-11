@@ -26,6 +26,8 @@ function Collection(props) {
     creators,
   } = collectionData;
 
+  const doi = new URL(doi_url).pathname.slice(1);
+
   useSendUUIDEvent(entity_type, collectionData);
 
   return (
@@ -44,11 +46,11 @@ function Collection(props) {
           >
             {doi_url && (
               <OutboundLink href={doi_url} variant="body1">
-                doi:{new URL(doi_url).pathname.slice(1)} <StyledOpenInNewRoundedIcon />
+                doi:{doi} <StyledOpenInNewRoundedIcon />
               </OutboundLink>
             )}
           </Summary>
-          <Citation contributors={creators} title={title} timestamp={create_timestamp} url={doi_url} />
+          <Citation contributors={creators} title={title} timestamp={create_timestamp} url={doi_url} doi={doi} />
           {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
           {'creators' in collectionData && (

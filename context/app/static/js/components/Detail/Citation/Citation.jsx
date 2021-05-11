@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import { FlexPaper, Flex, FlexRight } from './style';
+import { FlexPaper, Flex, FlexRight, StyledOpenInNewRoundedIcon } from './style';
 
 function buildNLMCitation({ contributors, title, timestamp }) {
   const joinedContributors = contributors
@@ -16,7 +16,7 @@ function buildNLMCitation({ contributors, title, timestamp }) {
   return `${joinedContributors}. ${title} [Internet]. HuBMAP Consortium; ${year}.`;
 }
 
-function Citation({ contributors, title, timestamp, url }) {
+function Citation({ contributors, title, timestamp, url, doi }) {
   const citation = buildNLMCitation({ contributors, title, timestamp });
 
   return (
@@ -24,8 +24,8 @@ function Citation({ contributors, title, timestamp, url }) {
       <Flex>
         <SectionHeader>Citation</SectionHeader>
         <FlexRight>
-          <Button color="primary" variant="contained">
-            View DataCite Page
+          <Button color="primary" variant="contained" component="a" href={`https://search.datacite.org/works/${doi}`}>
+            View DataCite Page <StyledOpenInNewRoundedIcon />
           </Button>
         </FlexRight>
       </Flex>
@@ -44,6 +44,7 @@ Citation.propTypes = {
   title: PropTypes.string.isRequired,
   timestamp: PropTypes.number.isRequired,
   url: PropTypes.string.isRequired,
+  doi: PropTypes.string.isRequired,
 };
 
 export default Citation;

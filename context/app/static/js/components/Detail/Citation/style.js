@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
+import OpenInNewRoundedIcon from '@material-ui/icons/OpenInNewRounded';
 
 const FlexPaper = styled(Paper)`
   padding: 30px 40px;
@@ -15,4 +16,9 @@ const FlexRight = styled.div`
   margin-left: auto;
 `;
 
-export { FlexPaper, Flex, FlexRight };
+const StyledOpenInNewRoundedIcon = styled(OpenInNewRoundedIcon)`
+  font-size: 1.1rem;
+  vertical-align: text-bottom;
+`;
+
+export { FlexPaper, Flex, FlexRight, StyledOpenInNewRoundedIcon };
