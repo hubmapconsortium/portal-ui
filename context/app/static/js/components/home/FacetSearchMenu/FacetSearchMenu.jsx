@@ -3,7 +3,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import List from '@material-ui/core/List';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-import FacetSearchEntityListItems from 'js/components/home-revision/FacetSearchEntityListItems';
+import FacetSearchEntityListItems from 'js/components/home/FacetSearchEntityListItems';
 import { StyledPaper, StyledPopper, StyledAlert, StyledTypography, HeaderSkeleton } from './style';
 
 function FacetSearchMenu({ anchorRef, matches, labels, searchInputWidth, isLoading, menuIsOpen, setMenuIsOpen }) {

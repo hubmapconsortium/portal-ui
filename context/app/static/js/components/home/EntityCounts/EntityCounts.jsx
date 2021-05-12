@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from 'js/components/Providers';
 
-import EntityCount from 'js/components/home-revision/EntityCount';
+import EntityCount from 'js/components/home/EntityCount';
 import { DatasetIcon, SampleIcon, DonorIcon, CollectionIcon } from 'js/shared-styles/icons';
 import useSearchData from 'js/hooks/useSearchData';
 import { Background, FlexContainer } from './style';

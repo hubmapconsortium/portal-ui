@@ -5,7 +5,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import Typography from '@material-ui/core/Typography';
 
 import { Alert } from 'js/shared-styles/alerts';
-import { inputPadding } from 'js/components/home-revision/FacetSearch/style';
+import { inputPadding } from 'js/components/home/FacetSearch/style';
 
 const StyledPaper = styled(Paper)`
   margin-top: ${(props) => props.theme.spacing(1)}px;

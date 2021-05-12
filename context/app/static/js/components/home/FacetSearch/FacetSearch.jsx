@@ -5,7 +5,7 @@ import useResizeObserver from 'use-resize-observer/polyfilled';
 
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
-import FacetSearchMenu from 'js/components/home-revision/FacetSearchMenu';
+import FacetSearchMenu from 'js/components/home/FacetSearchMenu';
 import { Background, FlexForm, StyledLabel, StyledInput } from './style';
 import { getMatchingTerms, getAggsQuery } from './utils';
 

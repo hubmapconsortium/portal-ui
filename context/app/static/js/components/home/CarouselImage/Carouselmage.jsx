@@ -2,7 +2,7 @@ import React from 'react';
 import { useTheme } from '@material-ui/core/styles';
 
 import { routeContainerMaxWidth, routeContainerPadding } from 'js/components/Routes/Route/style';
-import { callToActionMdOrLargerWidth } from 'js/components/home-revision/ImageCarouselContainer/style';
+import { callToActionMdOrLargerWidth } from 'js/components/home/ImageCarouselContainer/style';
 import { StyledImage } from './style';
 
 // Responsive images: https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images

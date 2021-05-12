@@ -6,7 +6,7 @@ import ProtocolsIoLogo from 'portal-images/protocols-io-logo.png';
 import NIHLogo from 'portal-images/nih-logo.png';
 import HubmapLogo from 'portal-images/hubmap-person-and-text-logo.png';
 
-import ExternalLink from 'js/components/home-revision/ExternalLink';
+import ExternalLink from 'js/components/home/ExternalLink';
 
 function ExternalLinks() {
   return (

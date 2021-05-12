@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import CarouselImage from 'js/components/home-revision/CarouselImage';
+import CarouselImage from 'js/components/home/CarouselImage';
 
 // Use the same sizes when adding a new image to the carousel
 import VitessceSlide320w from 'portal-images/vitessce-slide-320w.png';
