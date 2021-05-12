@@ -127,20 +127,9 @@ class ApiClient():
             conf = vc.build_vitessce_conf()
             return conf
         except Exception:
-            current_app.logger.error(
-                f'Building vitessce conf threw error: {traceback.format_exc()}'
-            )
-            message = 'Error in Vitessce configuration. Please copy the URL and report this to help@hubmapconsortium.org.'
-            return {
-                'name': 'Vitessce error',
-                'version': '0.1.0',
-                'layers': [],
-                "staticLayout": [{
-                    "component": "description",
-                    "props": {"description": message},
-                    "x": 2, "y": 1, "w": 8, "h": 1,
-                }]
-            }
+            message = f'Building vitessce conf threw error: {traceback.format_exc()}'
+            current_app.logger.error(message)
+            return {'error': message}
 
     def _get_mock_vitessce_conf(self):
         cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
