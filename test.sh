@@ -20,7 +20,10 @@ server_up() {
 
 
 start changelog
-if [ "$GH_ACTIONS_BRANCH" != 'refs/heads/master' ] && [ "$TRAVIS_BRANCH" != 'master' ]; then
+echo "GITHUB_REF: $GITHUB_REF"
+echo "GITHUB_HEAD_REF: $GITHUB_HEAD_REF"
+echo "GITHUB_BASE_REF: $GITHUB_BASE_REF"
+if [ "$GITHUB_BASE_REF" != 'master' ] && [[ "$GITHUB_REF" != *'dependabot'* ]]; then
   git remote set-branches --add origin master
   git fetch
   # "--stat=1000" ensures that filenames are not truncated. 
