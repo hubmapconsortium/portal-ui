@@ -91,6 +91,9 @@
       },
       {
         "component": "genes",
+        "props": {
+          "variablesLabelOverride": "antigen"
+        },
         "coordinationScopes": {
           "dataset": "A"
         },
@@ -102,7 +105,8 @@
       {
         "component": "heatmap",
         "props": {
-          "transpose": true
+          "transpose": true,
+          "variablesLabelOverride": "antigen"
         },
         "coordinationScopes": {
           "dataset": "A"
@@ -207,6 +211,9 @@
       },
       {
         "component": "genes",
+        "props": {
+          "variablesLabelOverride": "antigen"
+        },
         "coordinationScopes": {
           "dataset": "A"
         },
@@ -218,7 +225,8 @@
       {
         "component": "heatmap",
         "props": {
-          "transpose": true
+          "transpose": true,
+          "variablesLabelOverride": "antigen"
         },
         "coordinationScopes": {
           "dataset": "A"

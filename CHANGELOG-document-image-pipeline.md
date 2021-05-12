@@ -1,1 +1,1 @@
-- Add image processing guide to readme.
+- Fix image carousel srcset.
