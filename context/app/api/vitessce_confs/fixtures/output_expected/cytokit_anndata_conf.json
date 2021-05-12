@@ -146,6 +146,9 @@
         },
         {
             "component": "genes",
+            "props": {
+                "variablesLabelOverride": "antigen"
+            },
             "coordinationScopes": {
                 "dataset": "A"
             },
@@ -305,6 +308,9 @@
         },
         {
             "component": "genes",
+            "props": {
+                "variablesLabelOverride": "antigen"
+            },
             "coordinationScopes": {
                 "dataset": "A"
             },
