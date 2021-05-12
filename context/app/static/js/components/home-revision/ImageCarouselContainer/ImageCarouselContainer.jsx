@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
 import CarouselImage from 'js/components/home-revision/CarouselImage';
+
+// Use the same sizes when adding a new image to the carousel
 import VitessceSlide320w from 'portal-images/vitessce-slide-320w.png';
 import VitessceSlide640w from 'portal-images/vitessce-slide-640w.png';
 import VitessceSlide1280w from 'portal-images/vitessce-slide-1280w.png';

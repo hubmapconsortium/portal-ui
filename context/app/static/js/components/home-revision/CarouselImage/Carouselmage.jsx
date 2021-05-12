@@ -7,9 +7,9 @@ import { StyledImage } from './style';
 
 // Responsive images: https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images
 // Setting height and width: https://www.smashingmagazine.com/2020/03/setting-height-width-images-important-again/
-// 1392 was the max resoultion provided by the designer.
+// 1392 was the max resolution provided by the designer.
 
-function Carouselmage({ src320w, src640w, src800w, src1024w, src1280w, src1392w, alt }) {
+function Carouselmage({ src320w, src640w, src1280w, src1392w, alt }) {
   const theme = useTheme();
   const mdBreakpoint = theme.breakpoints.values.md;
 
@@ -19,7 +19,6 @@ function Carouselmage({ src320w, src640w, src800w, src1024w, src1280w, src1392w,
   return (
     <StyledImage
       srcSet={`${src320w} 320w, ${src640w} 640w,
-          ${src800w} 800w,${src1024w} 1024w,
         ${src1280w} 1280w,
         ${src1392w} 1392w`}
       sizes={`(max-width: ${mdBreakpoint}px) calc(100vw - ${routeContainerPadding}px), max(${maxImageWidth}px, calc(100vw - ${callToActionMdOrLargerWidth}px - ${routeContainerPadding}px))`}
