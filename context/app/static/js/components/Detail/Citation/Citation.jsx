@@ -4,9 +4,8 @@ import Typography from '@material-ui/core/Typography';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import { FlexPaper, StyledInfoIcon } from './style';
+import { FlexPaper, StyledInfoIcon, StyledSectionHeader } from './style';
 
 function buildNLMCitation({ contributors, title, timestamp }) {
   const joinedContributors = contributors
@@ -21,12 +20,12 @@ function Citation({ contributors, title, timestamp, url }) {
 
   return (
     <SectionContainer id="citation">
-      <SectionHeader>
+      <StyledSectionHeader>
         Citation{' '}
         <SecondaryBackgroundTooltip title="Citation is provided in NLM format. If DataCite page is available, click button to view alternate ways to cite.">
           <StyledInfoIcon color="primary" />
         </SecondaryBackgroundTooltip>
-      </SectionHeader>
+      </StyledSectionHeader>
 
       <FlexPaper>
         <Typography variant="body1">
