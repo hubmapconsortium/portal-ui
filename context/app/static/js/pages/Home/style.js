@@ -1,43 +1,45 @@
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
-import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
+import Typography from '@material-ui/core/Typography';
 
-const OuterGrid = styled.div`
-  flex-grow: 1;
-  display: grid;
-  grid-gap: ${(props) => props.theme.spacing(3)}px;
-  grid-template-areas: 'summary' 'about' 'inner' 'associations';
+const GridAreaContainer = styled(Container)`
+  grid-area: ${(props) => props.$gridAreaTitle};
 `;
 
-// 88px = height + margin of header
-const UpperInnerGrid = styled(Container)`
-  grid-area: summary;
-  display: grid;
-  grid-gap: ${(props) => props.theme.spacing(3)}px;
-  grid-template-areas: 'data' 'bar';
-  @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
-    min-height: calc(100vh - ${headerHeight + 24}px);
-    grid-template-rows: auto 1fr;
-  }
+const GridArea = styled.div`
+  grid-area: ${(props) => props.$gridAreaTitle};
 `;
 
-const LowerInnerGrid = styled(Container)`
-  grid-area: inner;
+const FlexGridArea = styled(GridArea)`
+  display: flex;
+  flex-direction: column;
+`;
+
+const FlexGrowDiv = styled.div`
+  flex: 1;
+`;
+
+const UpperGrid = styled.div`
+  display: grid;
+  grid-gap: ${(props) => props.theme.spacing(5)}px;
+  grid-template-areas: 'title' 'carousel' 'counts';
+  margin-bottom: ${(props) => props.theme.spacing(5)}px;
+`;
+
+const LowerContainerGrid = styled(Container)`
   display: grid;
   grid-gap: ${(props) => props.theme.spacing(3)}px;
-  grid-template-areas: 'workflow' 'guidelines' 'timeline';
+  grid-template-areas: 'guidelines' 'timeline' 'external-links';
+  margin-bottom: ${(props) => props.theme.spacing(5)}px;
 
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     grid-template-columns: 3fr 1fr;
-    grid-template-areas: 'workflow timeline' 'guidelines timeline';
+    grid-template-areas: 'bar-chart bar-chart' 'guidelines timeline' 'external-links timeline';
   }
 `;
 
-const BarChartPlaceholder = styled.div`
-  grid-area: 'bar';
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const SectionHeader = styled(Typography)`
+  margin-bottom: ${(props) => props.theme.spacing(1.5)}px;
 `;
 
-export { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder };
+export { GridAreaContainer, GridArea, UpperGrid, LowerContainerGrid, SectionHeader, FlexGridArea, FlexGrowDiv };
