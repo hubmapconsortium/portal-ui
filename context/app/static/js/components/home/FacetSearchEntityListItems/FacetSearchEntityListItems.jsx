@@ -11,12 +11,7 @@ function FacetSearchEntityListItems({ entityType, matches, labels }) {
             <FacetLabel color="primary" variant="subtitle2">{`${labels[k]} (${entityType}s)`}</FacetLabel>
             <StyledList>
               {v.map((m) => {
-                const facetQueryParam =
-                  k === 'mapped_data_access_level'
-                    ? `mapped_status-mapped_data_access_level[0][0]=Published&mapped_status-mapped_data_access_level[1][0]=${encodeURIComponent(
-                        m.key,
-                      )}`
-                    : `${encodeURIComponent(k)}[0]=${encodeURIComponent(m.key)}`;
+                const facetQueryParam = `${encodeURIComponent(k)}[0]=${encodeURIComponent(m.key)}`;
                 return (
                   <li key={m.key}>
                     <FacetValue

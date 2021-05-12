@@ -1,0 +1,1 @@
+- Remove publication status from homepage facet search.
