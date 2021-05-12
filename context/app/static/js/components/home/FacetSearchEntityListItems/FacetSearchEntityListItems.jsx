@@ -11,14 +11,13 @@ function FacetSearchEntityListItems({ entityType, matches, labels }) {
             <FacetLabel color="primary" variant="subtitle2">{`${labels[k]} (${entityType}s)`}</FacetLabel>
             <StyledList>
               {v.map((m) => {
+                const facetQueryParam = `${encodeURIComponent(k)}[0]=${encodeURIComponent(m.key)}`;
                 return (
                   <li key={m.key}>
                     <FacetValue
                       variant="body2"
                       component="a"
-                      href={`/search?entity_type[0]=${entityType}&${encodeURIComponent(k)}[0]=${encodeURIComponent(
-                        m.key,
-                      )}`}
+                      href={`/search?entity_type[0]=${entityType}&${facetQueryParam}`}
                     >
                       {m.key}
                     </FacetValue>
