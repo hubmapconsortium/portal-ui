@@ -15,7 +15,6 @@ const baseLabels = {
   'origin_sample.mapped_organ': 'Organ',
   mapped_specimen_type: 'Specimen Type',
   mapped_data_types: 'Data Type',
-  mapped_data_access_level: 'Status',
 };
 
 const allLabels = {
@@ -40,7 +39,6 @@ const datasetAggsQuery = getAggsQuery(
     'origin_sample.mapped_organ',
     'source_sample.mapped_specimen_type',
     'mapped_data_types',
-    'mapped_data_access_level',
   ],
   100,
 );
