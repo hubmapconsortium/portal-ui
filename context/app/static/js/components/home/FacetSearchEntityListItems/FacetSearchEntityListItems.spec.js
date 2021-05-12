@@ -35,20 +35,3 @@ test('should display correct text', () => {
     ),
   );
 });
-
-test('should have correct href for mapped_data_access_level', () => {
-  const fakeMatches = { mapped_data_access_level: [{ key: 'Apple' }] };
-  const fakeEntityType = 'Pear';
-  render(
-    <FacetSearchEntityListItems
-      entityType={fakeEntityType}
-      matches={fakeMatches}
-      labels={{ mapped_data_access_level: 'Status' }}
-    />,
-  );
-
-  expect(screen.getByRole('link', { name: 'Apple' })).toHaveAttribute(
-    'href',
-    `/search?entity_type[0]=${fakeEntityType}&mapped_status-mapped_data_access_level[0][0]=Published&mapped_status-mapped_data_access_level[1][0]=Apple`,
-  );
-});
