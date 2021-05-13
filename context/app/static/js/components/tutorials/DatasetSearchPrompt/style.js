@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { InfoIcon } from 'js/shared-styles/icons';
 
-import DisabledButton from 'shared-styles/buttons/DisabledButton';
+import DisabledButton from 'js/shared-styles/buttons/DisabledButton';
 
 const CenteredDiv = styled.div`
   display: flex;

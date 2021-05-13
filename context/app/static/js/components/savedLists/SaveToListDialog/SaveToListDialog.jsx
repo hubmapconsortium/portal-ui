@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 
-import DisabledButton from 'shared-styles/buttons/DisabledButton';
+import DisabledButton from 'js/shared-styles/buttons/DisabledButton';
 import useStateSet from 'js/hooks/useStateSet';
 import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';

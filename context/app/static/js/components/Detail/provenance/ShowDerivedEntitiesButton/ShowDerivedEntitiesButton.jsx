@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from 'js/components/Providers';
 import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
-import DisabledButton from 'shared-styles/buttons/DisabledButton';
+import DisabledButton from 'js/shared-styles/buttons/DisabledButton';
 import ProvData from '../ProvVis/ProvData';
 
 function getUniqueNewSteps(steps, newSteps) {

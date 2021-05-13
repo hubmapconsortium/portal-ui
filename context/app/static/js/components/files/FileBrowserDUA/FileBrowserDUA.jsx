@@ -8,7 +8,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 
-import DisabledButton from 'shared-styles/buttons/DisabledButton';
+import DisabledButton from 'js/shared-styles/buttons/DisabledButton';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { getDUAText } from './utils';
 import { ObliqueSpan, StyledHeader, StyledDiv } from './style';

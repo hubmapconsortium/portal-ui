@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 
-import DisabledButton from 'shared-styles/buttons/DisabledButton';
+import DisabledButton from 'js/shared-styles/buttons/DisabledButton';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { StyledTitleTextField, StyledDescriptionTextField } from './style';
