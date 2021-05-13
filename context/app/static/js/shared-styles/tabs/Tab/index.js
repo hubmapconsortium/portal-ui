@@ -1,3 +1,3 @@
-import { StyledTab } from './style';
+import Tab from './Tab';
 
-export default StyledTab;
+export default Tab;
