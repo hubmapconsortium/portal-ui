@@ -1,1 +1,0 @@
-- Change variables label for SPRM vitessce view conf from `genes` to `antigens`.

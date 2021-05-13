@@ -1,1 +1,0 @@
-- Add call to action button to home page revision carousel.

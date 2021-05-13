@@ -1,1 +1,0 @@
-- On a derived search, show the assay type it is derived from.

@@ -1,1 +1,0 @@
-- Add an explanatory warning at the top of Support pages.
