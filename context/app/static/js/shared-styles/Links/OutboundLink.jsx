@@ -3,15 +3,16 @@ import ReactGA from 'react-ga';
 
 import { LightBlueLink } from '.';
 
+function sendOutboundEvent(event) {
+  ReactGA.event({
+    category: 'Outbound Link',
+    action: 'Clicked',
+    label: event.target.href,
+    nonInteraction: false,
+  });
+}
+
 function OutboundLink({ children, ...props }) {
-  function sendOutboundEvent(event) {
-    ReactGA.event({
-      category: 'Outbound Link',
-      action: 'Clicked',
-      label: event.target.href,
-      nonInteraction: false,
-    });
-  }
   return (
     <LightBlueLink {...props} onClick={sendOutboundEvent} rel="noopener noreferrer" target="_blank">
       {children}
@@ -20,3 +21,4 @@ function OutboundLink({ children, ...props }) {
 }
 
 export default OutboundLink;
+export { sendOutboundEvent };
