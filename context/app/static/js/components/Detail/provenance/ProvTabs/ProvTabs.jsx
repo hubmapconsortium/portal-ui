@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 
-import { StyledTab, StyledTabs, StyledTabPanel } from './style';
+import Tabs from 'js/shared-styles/tabs/Tabs';
+import { StyledTab, StyledTabPanel } from './style';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
 import ProvAnalysisDetails from '../ProvAnalysisDetails';
@@ -30,19 +31,13 @@ function ProvTabs(props) {
 
   return (
     <Paper>
-      <StyledTabs
-        variant="standard"
-        value={open}
-        onChange={handleChange}
-        aria-label="Detail View Tabs"
-        TabIndicatorProps={{ style: { backgroundColor: '#9CB965' } }}
-      >
+      <Tabs value={open} onChange={handleChange} aria-label="Detail View Tabs">
         {shouldDisplayTable && <StyledTab label="Table" id="tab-table" aria-controls="tabpanel-table" />}
         <StyledTab label="Graph" id="tab-graph" aria-controls="tabpanel-graph" />
         {shouldDisplayDag && (
           <StyledTab label="Analysis Details" id="tab-analysis-details" aria-controls="tabpanel-analysis-details" />
         )}
-      </StyledTabs>
+      </Tabs>
       {shouldDisplayTable && (
         <StyledTabPanel value={open} index={0} pad={1}>
           <ProvTable
