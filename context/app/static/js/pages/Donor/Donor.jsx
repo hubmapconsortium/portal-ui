@@ -7,11 +7,11 @@ import Protocol from 'js/components/Detail/Protocol';
 import DetailLayout from 'js/components/Detail/DetailLayout';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
 import { useDerivedDatasetSearchHits, useDerivedSampleSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
+import DerivedEntitiesSection from 'js/components/Detail/DerivedEntitiesSection';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -74,7 +74,13 @@ function DonorDetail(props) {
         {shouldDisplaySection.derived && (
           <>
             {/* <DerivedEntitiesTable entities={derivedSamples} uuid={uuid} entityType="Sample" /> */}
-            <DerivedEntitiesTable entities={derivedDatasets} uuid={uuid} entityType="Dataset" />
+            <DerivedEntitiesSection
+              entities={derivedDatasets}
+              samples={derivedSamples}
+              datasets={derivedDatasets}
+              uuid={uuid}
+              entityType="Dataset"
+            />
           </>
         )}
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
