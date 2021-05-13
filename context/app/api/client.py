@@ -95,6 +95,10 @@ class ApiClient():
         hits = response_json['hits']['hits']
 
         if len(hits) == 0:
+            if len(uuid) == 32 and not self.nexus_token:
+                # Assume that the UUID is not yet published:
+                # UI will suggest logging in.
+                abort(403)
             abort(404)
         if len(hits) > 1:
             raise Exception(f'ID not unique; got {len(hits)} matches for {query}')

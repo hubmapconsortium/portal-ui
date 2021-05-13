@@ -145,14 +145,17 @@
             "h": 7
         },
         {
-            "component": "genes",
-            "coordinationScopes": {
-                "dataset": "A"
-            },
-            "x": 10,
-            "y": 0,
-            "w": 2,
-            "h": 5
+          "component": "genes",
+          "coordinationScopes": {
+            "dataset": "A"
+          },
+          "props": {
+            "variablesLabelOverride": "antigen"
+          },
+          "x": 10,
+          "y": 0,
+          "w": 2,
+          "h": 5
         }
     ],
     "initStrategy": "auto"

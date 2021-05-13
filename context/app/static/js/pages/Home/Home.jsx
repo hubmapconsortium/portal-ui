@@ -1,93 +1,84 @@
-import React, { Suspense, useContext } from 'react';
+import React from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 
-import { AppContext } from 'js/components/Providers';
-import DataSummary from 'js/components/Home/DataSummary';
-import About from 'js/components/Home/About';
-import Workflow from 'js/components/Home/Workflow';
-import DataUseGuidelines from 'js/components/Home/DataUseGuidelines';
-import Associations from 'js/components/Home/Associations';
-import TwitterTimeline from 'js/components/Home/TwitterTimeline';
-import { OuterGrid, UpperInnerGrid, LowerInnerGrid, BarChartPlaceholder } from './style';
+import AssayTypeBarChartContainer from 'js/components/home/AssayTypeBarChartContainer';
+import ImageCarouselContainer from 'js/components/home/ImageCarouselContainer';
+import Title from 'js/components/home/Title';
+import HuBMAPDescription from 'js/components/home/HuBMAPDescription';
+import EntityCounts from 'js/components/home/EntityCounts';
+import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
+import TwitterTimeline from 'js/components/home/TwitterTimeline';
+import ExternalLinks from 'js/components/home/ExternalLinks';
+import FacetSearch from 'js/components/home/FacetSearch';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 
-const BarChart = React.lazy(() => import('js/components/Home/BarChart'));
-
-function checkPropReturnValue(prop, obj) {
-  return prop in obj ? obj[prop] : 0;
-}
-
-function shapeSummaryResponse(data) {
-  const searchDataBuckets = data.aggregations.entity_type.buckets;
-  const searchData = searchDataBuckets.reduce((acc, d) => {
-    acc[d.key] = d.doc_count;
-    return acc;
-  }, {});
-  return {
-    datasetCount: checkPropReturnValue('Dataset', searchData),
-    sampleCount: checkPropReturnValue('Sample', searchData),
-    donorCount: checkPropReturnValue('Donor', searchData),
-  };
-}
+import {
+  GridAreaContainer,
+  LowerContainerGrid,
+  GridArea,
+  SectionHeader,
+  FlexGridArea,
+  FlexGrowDiv,
+  UpperGrid,
+} from './style';
 
 function Home() {
   const theme = useTheme();
   const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
-  const [summaryData, setSummaryData] = React.useState({
-    datasetCount: '-',
-    sampleCount: '-',
-    donorCount: '-',
-  });
-
-  const { elasticsearchEndpoint } = useContext(AppContext);
-
-  React.useEffect(() => {
-    async function getAndSetSummaryData() {
-      const response = await fetch(elasticsearchEndpoint, {
-        method: 'POST',
-        body: JSON.stringify({
-          size: 0,
-          aggs: { entity_type: { terms: { field: 'entity_type.keyword' } } },
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        console.error('Search API failed', response);
-        return;
-      }
-      const data = await response.json();
-      setSummaryData(shapeSummaryResponse(data));
-    }
-    getAndSetSummaryData();
-  }, [elasticsearchEndpoint]);
-
   return (
-    <OuterGrid>
-      <UpperInnerGrid maxWidth="lg">
-        <DataSummary summaryData={summaryData} />
+    <>
+      <UpperGrid>
+        <GridAreaContainer maxWidth="lg" $gridAreaTitle="title">
+          <Title />
+          <HuBMAPDescription />
+        </GridAreaContainer>
+        <GridAreaContainer maxWidth="lg" $gridAreaTitle="carousel">
+          <ImageCarouselContainer />
+        </GridAreaContainer>
+        <GridArea $gridAreaTitle="counts">
+          <EntityCounts />
+          <FacetSearch />
+        </GridArea>
+      </UpperGrid>
+      <LowerContainerGrid maxWidth="lg">
         {isLargerThanMd && (
-          <Suspense
-            fallback={
-              <BarChartPlaceholder>
-                <CircularProgress />
-              </BarChartPlaceholder>
-            }
-          >
-            <BarChart />
-          </Suspense>
+          <GridArea $gridAreaTitle="bar-chart">
+            <SectionHeader variant="h4" component="h3">
+              HuBMAP Data
+            </SectionHeader>
+            <AssayTypeBarChartContainer />
+          </GridArea>
         )}
-      </UpperInnerGrid>
-      <About />
-      <LowerInnerGrid maxWidth="lg">
-        <Workflow />
-        <DataUseGuidelines />
-        <TwitterTimeline />
-      </LowerInnerGrid>
-      <Associations />
-    </OuterGrid>
+        <GridArea $gridAreaTitle="guidelines">
+          <SectionHeader variant="h4" component="h3">
+            Data Use Guidelines
+          </SectionHeader>
+          <DataUseGuidelines />
+        </GridArea>
+        <GridArea $gridAreaTitle="external-links">
+          <SectionHeader variant="h4" component="h3">
+            External Links
+          </SectionHeader>
+          <ExternalLinks />
+        </GridArea>
+        <FlexGridArea $gridAreaTitle="timeline">
+          <SectionHeader variant="h4" component="h3">
+            Tweets{' '}
+            <Typography variant="caption" component="span">
+              by{' '}
+            </Typography>
+            <OutboundLink variant="caption" href="https://twitter.com/_hubmap">
+              @_hubmap
+            </OutboundLink>
+          </SectionHeader>
+          <FlexGrowDiv>
+            <TwitterTimeline />
+          </FlexGrowDiv>
+        </FlexGridArea>
+      </LowerContainerGrid>
+    </>
   );
 }
 

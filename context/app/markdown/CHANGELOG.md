@@ -1,3 +1,17 @@
+## v0.18.1 - 2021-05-12
+
+- Serve a 403 if the user requests a 32-character UUID, but it's not in ES.
+- Add missing info button to citation.
+- Add call to action button to home page revision carousel.
+- On a derived search, show the assay type it is derived from.
+- Fix image carousel srcset.
+- Change variables label for SPRM vitessce view conf from `genes` to `antigens`.
+- Bump lodash to 4.17.21.
+- Remove publication status from homepage facet search.
+- Replace homepage with new version.
+- Add an explanatory warning at the top of Support pages.
+
+
 ## v0.18.0 - 2021-05-10
 
 - Add a check on Cloudwatch to the deployment routine.

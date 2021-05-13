@@ -10,8 +10,7 @@ const Donor = lazy(() => import('js/pages/Donor'));
 const Dataset = lazy(() => import('js/pages/Dataset'));
 const Sample = lazy(() => import('js/pages/Sample'));
 const Collection = lazy(() => import('js/pages/Collection'));
-const Home = lazy(() => import('js/pages/Home'));
-const HomeRevision = lazy(() => import('js/pages/Home/HomeRevision'));
+const Home = lazy(() => import('js/pages/Home/Home'));
 const Search = lazy(() => import('js/pages/search/Search'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
 const Preview = lazy(() => import('js/pages/Preview'));
@@ -71,14 +70,6 @@ function Routes(props) {
     return (
       <Route disableWidthConstraint>
         <Home />
-      </Route>
-    );
-  }
-
-  if (urlPath === '/home-revision') {
-    return (
-      <Route disableWidthConstraint>
-        <HomeRevision />
       </Route>
     );
   }
