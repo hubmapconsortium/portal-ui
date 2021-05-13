@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 
+import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/RightAlignedButtonRow';
 import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
 
-function DerivedEntitiesSection({ entities, uuid, entityType }) {
+function DerivedEntitiesSection({ samples, datasets, entities, uuid, entityType }) {
+  const [openIndex, setOpenIndex] = useState(0);
+
+  const handleChange = (event, newIndex) => {
+    setOpenIndex(newIndex);
+  };
+
   return entities.length > 0 ? (
     <SectionContainer id="{entityType}-table">
       <SectionHeader>Derived {entityType}s</SectionHeader>
@@ -27,7 +34,20 @@ function DerivedEntitiesSection({ entities, uuid, entityType }) {
           </Button>
         }
       />
-      <DerivedEntitiesTable entities={entities} />
+      <Tabs value={openIndex} onChange={handleChange} aria-label="Provenance Tabs">
+        {samples && <Tab label="Samples" index={0} />}
+        {datasets && <Tab label="Datasets" index={1} />}
+      </Tabs>
+      {samples && (
+        <TabPanel value={openIndex} index={0}>
+          <DerivedEntitiesTable entities={samples} />
+        </TabPanel>
+      )}
+      {datasets && (
+        <TabPanel value={openIndex} index={1}>
+          <DerivedEntitiesTable entities={datasets} />
+        </TabPanel>
+      )}
     </SectionContainer>
   ) : null;
 }
