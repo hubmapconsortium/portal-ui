@@ -6,15 +6,11 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Button from '@material-ui/core/Button';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/RightAlignedButtonRow';
 
-function DerivedEntitiesTable({ entities, uuid, entityType }) {
+function DerivedEntitiesTable({ entities }) {
   const columns = [
     { id: 'display_doi', label: 'HuBMAP ID' },
     { id: 'mapped_data_types', label: 'Data Types' },
@@ -24,66 +20,45 @@ function DerivedEntitiesTable({ entities, uuid, entityType }) {
   ];
 
   return (
-    <SectionContainer id="{entityType}-table">
-      <SectionHeader>Derived {entityType}s</SectionHeader>
-      <StyledButtonRow
-        leftText={
-          <BottomAlignedTypography variant="subtitle1" color="primary">
-            {entities.length} {entityType}s
-          </BottomAlignedTypography>
-        }
-        buttons={
-          <Button
-            variant="contained"
-            color="primary"
-            component="a"
-            href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entityType}`}
-          >
-            View Data on Search Page
-          </Button>
-        }
-      />
-
-      <Paper>
-        <StyledTableContainer>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <HeaderCell key={column.id}>{column.label}</HeaderCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {entities.map(
-                ({
-                  _source: {
-                    uuid: datasetUUID,
-                    display_doi,
-                    mapped_data_types,
-                    status,
-                    descendant_counts,
-                    last_modified_timestamp,
-                  },
-                }) => (
-                  <TableRow key={display_doi}>
-                    <TableCell>
-                      <LightBlueLink href={`/browse/dataset/${datasetUUID}`} variant="body2">
-                        {display_doi}
-                      </LightBlueLink>
-                    </TableCell>
-                    <TableCell>{mapped_data_types}</TableCell>
-                    <TableCell>{status}</TableCell>
-                    <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
-                    <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-                  </TableRow>
-                ),
-              )}
-            </TableBody>
-          </Table>
-        </StyledTableContainer>
-      </Paper>
-    </SectionContainer>
+    <Paper>
+      <StyledTableContainer>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <HeaderCell key={column.id}>{column.label}</HeaderCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {entities.map(
+              ({
+                _source: {
+                  uuid: datasetUUID,
+                  display_doi,
+                  mapped_data_types,
+                  status,
+                  descendant_counts,
+                  last_modified_timestamp,
+                },
+              }) => (
+                <TableRow key={display_doi}>
+                  <TableCell>
+                    <LightBlueLink href={`/browse/dataset/${datasetUUID}`} variant="body2">
+                      {display_doi}
+                    </LightBlueLink>
+                  </TableCell>
+                  <TableCell>{mapped_data_types}</TableCell>
+                  <TableCell>{status}</TableCell>
+                  <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
+                  <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
+                </TableRow>
+              ),
+            )}
+          </TableBody>
+        </Table>
+      </StyledTableContainer>
+    </Paper>
   );
 }
 
