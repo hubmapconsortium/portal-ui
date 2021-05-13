@@ -1,3 +1,8 @@
+## v0.18.2 - 2021-05-13
+
+- Add `git checkout main` to the deployment process for pulling new submodule repos.
+
+
 ## v0.18.1 - 2021-05-12
 
 - Serve a 403 if the user requests a 32-character UUID, but it's not in ES.
