@@ -2,8 +2,9 @@ import React from 'react';
 
 import { StyledTab } from './style';
 
-function Tab({ label, index }) {
-  return <StyledTab label={label} id={`tab-${index}`} aria-controls={`tabpanel-${index}`} />;
+// receives props from parent, needs ...props
+function Tab({ label, index, ...props }) {
+  return <StyledTab label={label} id={`tab-${index}`} aria-controls={`tabpanel-${index}`} {...props} />;
 }
 
 export default Tab;
