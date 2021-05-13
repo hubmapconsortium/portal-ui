@@ -29,16 +29,18 @@ def datasets_selected_by_gene():
 
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 
-    # WARNING: This does not work with the current version of the client.
-    dataset_set = client.select_datasets(
-        where='gene',
-        has=[f'{gene_name} > {min_gene_expression}'],
-        min_cell_percentage=min_cell_percentage,
-        genomic_modality='rna'
-    )
-    return {
-        'results': list(dataset_set.get_list())
-    }
+    try:
+        # WARNING: This does not work with the current version of the client.
+        dataset_set = client.select_datasets(
+            where='gene',
+            has=[f'{gene_name} > {min_gene_expression}'],
+            min_cell_percentage=min_cell_percentage,
+            genomic_modality='rna'
+        )
+        return { 'results': list(dataset_set.get_list()) }
+
+    except Exception as e:
+        return { 'message': str(e) }
 
 
 @blueprint.route('/cells/cell-counts-for-datasets.json', methods=['POST'])
@@ -52,24 +54,26 @@ def cell_counts_for_datasets():
 
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 
-    cell_set = client.select_cells(
-        where='gene',
-        has=[f'{gene_name} > {min_gene_expression}'],
-        genomic_modality='rna'
-    )
+    try:
+        cell_set = client.select_cells(
+            where='gene',
+            has=[f'{gene_name} > {min_gene_expression}'],
+            genomic_modality='rna'
+        )
 
-    results = []
-    for uuid in uuids:
-        dataset_cells = client.select_cells(where='dataset', has=[uuid])
-        results.append({
-            'uuid': uuid,
-            'cells_expressing_gene': len(dataset_cells & cell_set),
-            'total_cells': len(dataset_cells)
-        })
+        results = []
+        for uuid in uuids:
+            dataset_cells = client.select_cells(where='dataset', has=[uuid])
+            results.append({
+                'uuid': uuid,
+                'cells_expressing_gene': len(dataset_cells & cell_set),
+                'total_cells': len(dataset_cells)
+            })
 
-    return {
-        'results': results
-    }
+        return { 'results': results }
+
+    except Exception as e:
+        return { 'message': str(e) }
 
 
 @blueprint.route('/cells/cell-expression-in-dataset.json', methods=['POST'])
@@ -83,8 +87,10 @@ def cell_expression_in_dataset():
 
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 
-    cells = client.select_cells(where='dataset', has=[uuid])
-    # list() will call iterator behind the scenes.
-    return {
-        'results': list(cells.get_list(values_included=gene_names))
-    }
+    try:
+        cells = client.select_cells(where='dataset', has=[uuid])
+        # list() will call iterator behind the scenes.
+        return { 'results': list(cells.get_list(values_included=gene_names)) }
+
+    except Exception as e:
+        return {'message': str(e)}
