@@ -1,0 +1,1 @@
+- Add `git checkout main` to the deployment process for pulling new submodule repos.
