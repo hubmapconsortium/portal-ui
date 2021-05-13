@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 
 import { AppContext } from 'js/components/Providers';
 
@@ -25,22 +25,28 @@ function getTypeQuery(ancestorUUID, type) {
 
 function useDerivedDatasetSearchHits(ancestorUUID) {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-  const query = {
-    query: getTypeQuery(ancestorUUID, 'dataset'),
-    _source: ['uuid', 'display_doi', 'mapped_data_types', 'status', 'descendant_counts', 'last_modified_timestamp'],
-    size: 10000,
-  };
+  const query = useMemo(
+    () => ({
+      query: getTypeQuery(ancestorUUID, 'dataset'),
+      _source: ['uuid', 'display_doi', 'mapped_data_types', 'status', 'descendant_counts', 'last_modified_timestamp'],
+      size: 10000,
+    }),
+    [ancestorUUID],
+  );
 
   return useSearchHits(query, elasticsearchEndpoint, nexusToken);
 }
 
 function useDerivedSampleSearchHits(ancestorUUID) {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-  const query = {
-    query: getTypeQuery(ancestorUUID, 'sample'),
-    _source: ['uuid', 'display_doi', 'mapped_data_types', 'status', 'descendant_counts', 'last_modified_timestamp'],
-    size: 10000,
-  };
+  const query = useMemo(
+    () => ({
+      query: getTypeQuery(ancestorUUID, 'sample'),
+      _source: ['uuid', 'display_doi', 'mapped_data_types', 'status', 'descendant_counts', 'last_modified_timestamp'],
+      size: 10000,
+    }),
+    [ancestorUUID],
+  );
   return useSearchHits(query, elasticsearchEndpoint, nexusToken);
 }
 
