@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 
 import Tabs from 'js/shared-styles/tabs/Tabs';
-import { StyledTab, StyledTabPanel } from './style';
+import TabPanel from 'js/shared-styles/tabs/TabPanel';
+import { StyledTab } from './style';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
 import ProvAnalysisDetails from '../ProvAnalysisDetails';
@@ -39,22 +40,22 @@ function ProvTabs(props) {
         )}
       </Tabs>
       {shouldDisplayTable && (
-        <StyledTabPanel value={open} index={0} pad={1}>
+        <TabPanel value={open} index={0} pad={1}>
           <ProvTable
             uuid={uuid}
             typesToSplit={['Donor', 'Sample', 'Dataset', 'Support']}
             ancestors={ancestors}
             assayMetadata={assayMetadata}
           />
-        </StyledTabPanel>
+        </TabPanel>
       )}
-      <StyledTabPanel value={open} index={graphIndex}>
+      <TabPanel value={open} index={graphIndex}>
         <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />
-      </StyledTabPanel>
+      </TabPanel>
       {shouldDisplayDag && (
-        <StyledTabPanel value={open} index={dagIndex} pad={1}>
+        <TabPanel value={open} index={dagIndex} pad={1}>
           <ProvAnalysisDetails dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />
-        </StyledTabPanel>
+        </TabPanel>
       )}
     </Paper>
   );
