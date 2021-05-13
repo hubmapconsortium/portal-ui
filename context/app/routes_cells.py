@@ -37,10 +37,10 @@ def datasets_selected_by_gene():
             min_cell_percentage=min_cell_percentage,
             genomic_modality='rna'
         )
-        return { 'results': list(dataset_set.get_list()) }
+        return {'results': list(dataset_set.get_list())}
 
     except Exception as e:
-        return { 'message': str(e) }
+        return {'message': str(e)}
 
 
 @blueprint.route('/cells/cell-counts-for-datasets.json', methods=['POST'])
@@ -70,10 +70,10 @@ def cell_counts_for_datasets():
                 'total_cells': len(dataset_cells)
             })
 
-        return { 'results': results }
+        return {'results': results}
 
     except Exception as e:
-        return { 'message': str(e) }
+        return {'message': str(e)}
 
 
 @blueprint.route('/cells/cell-expression-in-dataset.json', methods=['POST'])
@@ -90,7 +90,7 @@ def cell_expression_in_dataset():
     try:
         cells = client.select_cells(where='dataset', has=[uuid])
         # list() will call iterator behind the scenes.
-        return { 'results': list(cells.get_list(values_included=gene_names)) }
+        return {'results': list(cells.get_list(values_included=gene_names))}
 
     except Exception as e:
         return {'message': str(e)}
