@@ -22,8 +22,7 @@ from .base_confs import (
     ImagePyramidViewConf,
     SPRMJSONViewConf,
     SPRMAnnDataViewConf,
-    ViewConf,
-    return_empty_json_if_error
+    ViewConf
 )
 from .assays import (
     SEQFISH,
@@ -44,8 +43,6 @@ from .paths import (
 
 
 class SeqFISHViewConf(ImagingViewConf):
-
-    @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         full_seqfish_reqex = "/".join(
@@ -102,8 +99,6 @@ class CytokitSPRMViewConfigError(Exception):
 
 
 class TiledSPRMConf(ViewConf):
-
-    @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(
@@ -170,7 +165,6 @@ class ATACSeqConf(ScatterplotViewConf):
 
 
 class StitchedCytokitSPRMConf(ViewConf):
-    @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_regions = get_matches(file_paths_found, STITCHED_REGEX)
@@ -199,8 +193,6 @@ class StitchedCytokitSPRMConf(ViewConf):
 
 
 class RNASeqAnnDataZarrConf(ViewConf):
-
-    @return_empty_json_if_error
     def build_vitessce_conf(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -249,10 +241,8 @@ class IMSConf(ImagePyramidViewConf):
 
 
 class NullConf():
-
-    @return_empty_json_if_error
     def build_vitessce_conf(self):
-        return {}
+        return None
 
 
 _assays = None

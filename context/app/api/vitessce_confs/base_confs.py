@@ -1,7 +1,6 @@
 import urllib
 from pathlib import Path
 import re
-import traceback
 
 from flask import current_app
 from vitessce import (
@@ -18,21 +17,6 @@ from .utils import get_matches
 from .paths import SPRM_JSON_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR
 
 MOCK_URL = "https://example.com"
-
-
-def return_empty_json_if_error(func):
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except Exception:
-            class_obj = args[0]
-            if not class_obj._is_mock:
-                current_app.logger.error(
-                    f"Building vitessce conf threw error: {traceback.format_exc()}"
-                )
-            return {}
-
-    return wrapper
 
 
 class ViewConf:
@@ -132,7 +116,6 @@ class ImagePyramidViewConf(ImagingViewConf):
         self.image_pyramid_regex = IMAGE_PYRAMID_DIR
         super().__init__(entity, nexus_token, is_mock)
 
-    @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_images = get_matches(
@@ -165,7 +148,6 @@ class ImagePyramidViewConf(ImagingViewConf):
 
 
 class ScatterplotViewConf(ViewConf):
-    @return_empty_json_if_error
     def build_vitessce_conf(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -211,7 +193,6 @@ class SPRMJSONViewConf(ImagingViewConf):
             },
         ]
 
-    @return_empty_json_if_error
     def build_vitessce_conf(self):
         image_file = f"{self._imaging_path}/{self._base_name}.ome.tiff"
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -266,7 +247,6 @@ class SPRMAnnDataViewConf(ImagePyramidViewConf):
         self._base_name = kwargs["base_name"]
         self._imaging_path = kwargs["imaging_path"]
 
-    @return_empty_json_if_error
     def build_vitessce_conf(self):
         image_file = f"{self.image_pyramid_regex}/{self._imaging_path}/{self._base_name}.ome.tiff"
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]

@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 import re
 
+import pytest
+
 from .base_confs import ImagePyramidViewConf, SPRMJSONViewConf
 from .assay_confs import (
     SeqFISHViewConf,
@@ -83,6 +85,5 @@ def test_assays():
             vc = AssayViewConfClass(
                 entity=malformed_entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True
             )
-        conf = vc.build_vitessce_conf()
-        conf_expected = {}
-        assert conf_expected == conf
+        with pytest.raises(FileNotFoundError):
+            vc.build_vitessce_conf()

@@ -118,11 +118,12 @@ class ApiClient():
             derived_entity['files'] = derived_entity['metadata']['files']
             return self.get_vitessce_conf(derived_entity)
 
-        # Otherwise, just try to visualize the data for the entity itself:
         if 'files' not in entity or 'data_types' not in entity:
-            return {}
+            return None
         if self.is_mock:
             return self._get_mock_vitessce_conf()
+
+        # Otherwise, just try to visualize the data for the entity itself:
         try:
             vc = get_view_config_class_for_data_types(
                 entity=entity, nexus_token=self.nexus_token
@@ -130,10 +131,9 @@ class ApiClient():
             conf = vc.build_vitessce_conf()
             return conf
         except Exception:
-            current_app.logger.error(
-                f'Building vitessce conf threw error: {traceback.format_exc()}'
-            )
-            return {}
+            message = f'Building vitessce conf threw error: {traceback.format_exc()}'
+            current_app.logger.error(message)
+            return {'error': message}
 
     def _get_mock_vitessce_conf(self):
         cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})

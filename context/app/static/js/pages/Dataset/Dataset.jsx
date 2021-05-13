@@ -76,7 +76,7 @@ function DatasetDetail(props) {
   const collectionsData = getCollectionsWhichContainDataset(uuid, allCollections);
 
   const shouldDisplaySection = {
-    visualization: 'name' in vitData || (vitData[0] && 'name' in vitData[0]),
+    visualization: Boolean(vitData),
     protocols: Boolean(protocol_url),
     metadata: metadata && 'metadata' in metadata,
     files: true,
