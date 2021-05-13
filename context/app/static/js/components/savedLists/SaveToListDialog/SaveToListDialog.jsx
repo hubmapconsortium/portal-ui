@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 
+import DisabledButton from 'shared-styles/buttons/DisabledButton';
 import useStateSet from 'js/hooks/useStateSet';
 import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
@@ -42,9 +43,9 @@ function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd,
           <Button onClick={() => setDialogIsOpen(false)} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary" disabled={selectedLists.size === 0}>
+          <DisabledButton onClick={handleSubmit} color="primary" disabled={selectedLists.size === 0}>
             Save
-          </Button>
+          </DisabledButton>
         </>
       }
       isOpen={dialogIsOpen}
