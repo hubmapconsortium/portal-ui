@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import { FlexPaper, Flex, FlexRight, StyledOpenInNewRoundedIcon, StyledInfoIcon, StyledSectionHeader } from './style';
+import { FlexPaper, Flex, FlexRight, StyledInfoIcon, StyledSectionHeader } from './style';
+import OutboundLinkButton from '../../../shared-styles/Links/OutboundLinkButton';
 
 function buildNLMCitation({ contributors, title, timestamp }) {
   const joinedContributors = contributors
@@ -29,15 +29,7 @@ function Citation({ contributors, title, timestamp, url, doi }) {
           </SecondaryBackgroundTooltip>
         </StyledSectionHeader>
         <FlexRight>
-          <Button
-            color="primary"
-            variant="contained"
-            component="a"
-            target="_blank"
-            href={`https://search.datacite.org/works/${doi}`}
-          >
-            View DataCite Page <StyledOpenInNewRoundedIcon />
-          </Button>
+          <OutboundLinkButton href={`https://search.datacite.org/works/${doi}`}>View DataCite Page</OutboundLinkButton>
         </FlexRight>
       </Flex>
       <FlexPaper>

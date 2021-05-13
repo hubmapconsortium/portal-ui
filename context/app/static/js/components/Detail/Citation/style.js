@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
-import OpenInNewRoundedIcon from '@material-ui/icons/OpenInNewRounded';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { InfoIcon } from 'js/shared-styles/icons';
@@ -19,12 +18,6 @@ const FlexRight = styled.div`
   margin-left: auto;
 `;
 
-const StyledOpenInNewRoundedIcon = styled(OpenInNewRoundedIcon)`
-  font-size: 1.1rem;
-  vertical-align: text-bottom;
-  margin-left: ${(props) => props.theme.spacing(0.5)}px;
-`;
-
 const StyledInfoIcon = styled(InfoIcon)`
   margin-left: ${(props) => props.theme.spacing(0.5)}px;
 `;
@@ -34,4 +27,4 @@ const StyledSectionHeader = styled(SectionHeader)`
   align-items: center;
 `;
 
-export { FlexPaper, Flex, FlexRight, StyledOpenInNewRoundedIcon, StyledInfoIcon, StyledSectionHeader };
+export { FlexPaper, Flex, FlexRight, StyledInfoIcon, StyledSectionHeader };
