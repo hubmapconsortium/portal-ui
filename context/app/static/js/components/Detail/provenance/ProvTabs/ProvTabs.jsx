@@ -30,10 +30,10 @@ function ProvTabs(props) {
 
   return (
     <Paper>
-      <Tabs value={open} onChange={handleChange} aria-label="Detail View Tabs">
+      <Tabs value={open} onChange={handleChange} aria-label="Provenance Tabs">
         {shouldDisplayTable && <Tab label="Table" index={0} />}
-        <Tab label="Graph" index={1} />
-        {shouldDisplayDag && <Tab label="Analysis Details" index={2} />}
+        <Tab label="Graph" index={graphIndex} />
+        {shouldDisplayDag && <Tab label="Analysis Details" index={dagIndex} />}
       </Tabs>
       {shouldDisplayTable && (
         <TabPanel value={open} index={0} pad={1}>
