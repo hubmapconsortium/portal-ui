@@ -7,21 +7,23 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/RightAlignedButtonRow';
 import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
 
-function DerivedEntitiesSection({ samples, datasets, entities, uuid, entityType }) {
+function DerivedEntitiesSection({ samples, datasets, uuid, entityType }) {
   const [openIndex, setOpenIndex] = useState(0);
 
   const handleChange = (event, newIndex) => {
     setOpenIndex(newIndex);
   };
 
-  return entities.length > 0 ? (
+  return datasets.length > 0 && samples.length > 0 ? (
     <SectionContainer id="derived-entities">
-      <SectionHeader>Derived Entities</SectionHeader>
       <StyledButtonRow
         leftText={
-          <BottomAlignedTypography variant="subtitle1" color="primary">
-            {[`${samples.length} Samples`, `${datasets.length} Datasets`].join(' | ')}
-          </BottomAlignedTypography>
+          <div>
+            <SectionHeader>Derived Entities</SectionHeader>
+            <BottomAlignedTypography variant="subtitle1" color="primary">
+              {[`${samples.length} Samples`, `${datasets.length} Datasets`].join(' | ')}
+            </BottomAlignedTypography>
+          </div>
         }
         buttons={
           <Button
