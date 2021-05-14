@@ -1,23 +1,15 @@
 import React from 'react';
-import format from 'date-fns/format';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import DerivedEntitiesTableBody from 'js/components/Detail/DerivedEntitiesTableBody';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { getColumnNames } from './utils';
 
-function DerivedEntitiesTable({ entities }) {
-  const columns = [
-    { id: 'display_doi', label: 'HuBMAP ID' },
-    { id: 'mapped_data_types', label: 'Data Types' },
-    { id: 'status', label: 'Status' },
-    { id: 'descendant_counts.entity_type.Dataset', label: 'Derived Dataset Count' },
-    { id: 'last_modified_timestamp', label: 'Last Modified' },
-  ];
+function DerivedEntitiesTable({ entities, entityType }) {
+  const columns = getColumnNames(entityType);
 
   return (
     <Paper>
@@ -30,32 +22,7 @@ function DerivedEntitiesTable({ entities }) {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {entities.map(
-              ({
-                _source: {
-                  uuid: datasetUUID,
-                  display_doi,
-                  mapped_data_types,
-                  status,
-                  descendant_counts,
-                  last_modified_timestamp,
-                },
-              }) => (
-                <TableRow key={display_doi}>
-                  <TableCell>
-                    <LightBlueLink href={`/browse/dataset/${datasetUUID}`} variant="body2">
-                      {display_doi}
-                    </LightBlueLink>
-                  </TableCell>
-                  <TableCell>{mapped_data_types}</TableCell>
-                  <TableCell>{status}</TableCell>
-                  <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
-                  <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-                </TableRow>
-              ),
-            )}
-          </TableBody>
+          <DerivedEntitiesTableBody entities={entities} entityType={entityType} />
         </Table>
       </StyledTableContainer>
     </Paper>

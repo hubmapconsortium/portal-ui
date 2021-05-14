@@ -40,12 +40,12 @@ function DerivedEntitiesSection({ samples, datasets, entities, uuid, entityType 
       </Tabs>
       {samples && (
         <TabPanel value={openIndex} index={0}>
-          <DerivedEntitiesTable entities={samples} />
+          <DerivedEntitiesTable entities={samples} entityType="Sample" />
         </TabPanel>
       )}
       {datasets && (
         <TabPanel value={openIndex} index={1}>
-          <DerivedEntitiesTable entities={datasets} />
+          <DerivedEntitiesTable entities={datasets} entityType="Dataset" />
         </TabPanel>
       )}
     </SectionContainer>

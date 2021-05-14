@@ -42,7 +42,14 @@ function useDerivedSampleSearchHits(ancestorUUID) {
   const query = useMemo(
     () => ({
       query: getTypeQuery(ancestorUUID, 'sample'),
-      _source: ['uuid', 'display_doi', 'mapped_data_types', 'status', 'descendant_counts', 'last_modified_timestamp'],
+      _source: [
+        'uuid',
+        'display_doi',
+        'origin_sample.mapped_organ',
+        'mapped_specimen_type',
+        'descendant_counts',
+        'last_modified_timestamp',
+      ],
       size: 10000,
     }),
     [ancestorUUID],
