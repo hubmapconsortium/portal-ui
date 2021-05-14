@@ -1,20 +1,18 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import { PaddedBox } from './style';
 
-function TabPanel(props) {
-  const { children, value, index, className, pad } = props;
+function TabPanel({ children, value, index, pad, ...props }) {
   return (
-    <Typography
-      className={className}
-      component="div"
+    <PaddedBox
+      $pad={pad}
       role="tabpanel"
       hidden={value !== index}
       id={`tabpanel-${index}`}
       aria-labelledby={`tab-${index}`}
+      {...props}
     >
-      {value === index && <PaddedBox $pad={pad}>{children}</PaddedBox>}
-    </Typography>
+      {value === index && children}
+    </PaddedBox>
   );
 }
 
