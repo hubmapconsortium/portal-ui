@@ -15,12 +15,12 @@ function DerivedEntitiesSection({ samples, datasets, entities, uuid, entityType 
   };
 
   return entities.length > 0 ? (
-    <SectionContainer id="{entityType}-table">
-      <SectionHeader>Derived {entityType}s</SectionHeader>
+    <SectionContainer id="derived-entities">
+      <SectionHeader>Derived Entities</SectionHeader>
       <StyledButtonRow
         leftText={
           <BottomAlignedTypography variant="subtitle1" color="primary">
-            {entities.length} {entityType}s
+            {[`${samples.length} Samples`, `${datasets.length} Datasets`].join(' | ')}
           </BottomAlignedTypography>
         }
         buttons={
