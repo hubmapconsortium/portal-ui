@@ -39,12 +39,12 @@ function DonorDetail(props) {
   const { searchHits: derivedDatasets, isLoading: derivedDatasetsAreLoading } = useDerivedDatasetSearchHits(uuid);
   const { searchHits: derivedSamples, isLoading: derivedSamplesAreLoading } = useDerivedSampleSearchHits(uuid);
 
-  const derivedEntitiesAreLoading = derivedDatasetsAreLoading && derivedSamplesAreLoading;
+  const derivedEntitiesAreLoading = derivedDatasetsAreLoading || derivedSamplesAreLoading;
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(mapped_metadata).length),
-    derived: derivedSamples.length > 0 || derivedDatasets.length > 0,
+    derived: true,
   };
 
   const sectionOrder = getSectionOrder(
