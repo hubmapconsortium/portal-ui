@@ -4,13 +4,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { StyledDiv, StyledCenteredLoaderWrapper } from './style';
 
-function DerivedEntitiesSectionWrapper({ isLoading, children }) {
+function DerivedEntitiesSectionWrapper({ isLoading, sectionId, children }) {
   return isLoading ? (
     <StyledCenteredLoaderWrapper>
       <CircularProgress />
     </StyledCenteredLoaderWrapper>
   ) : (
-    <SectionContainer id="derived">
+    <SectionContainer id={sectionId}>
       <StyledDiv>{children}</StyledDiv>
     </SectionContainer>
   );

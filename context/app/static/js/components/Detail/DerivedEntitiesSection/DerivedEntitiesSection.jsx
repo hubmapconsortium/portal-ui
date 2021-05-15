@@ -4,9 +4,9 @@ import DerivedEntitiesSectionWrapper from 'js/components/Detail/DerivedEntitiesS
 import DerivedEntitiesTabs from 'js/components/Detail/DerivedEntitiesTabs';
 import DerivedEntitiesSectionHeader from 'js/components/Detail/DerivedEntitiesSectionHeader';
 
-function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, entityType }) {
+function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, entityType, sectionId }) {
   return (
-    <DerivedEntitiesSectionWrapper isLoading={isLoading}>
+    <DerivedEntitiesSectionWrapper isLoading={isLoading} sectionId={sectionId}>
       <DerivedEntitiesSectionHeader
         header="Derived Entities"
         entityCountsText={[`${samples.length} Samples`, `${datasets.length} Datasets`].join(' | ')}

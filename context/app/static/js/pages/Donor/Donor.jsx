@@ -83,6 +83,7 @@ function DonorDetail(props) {
               uuid={uuid}
               isLoading={derivedEntitiesAreLoading}
               entityType="Dataset"
+              sectionId="derived"
             />
           </>
         )}
