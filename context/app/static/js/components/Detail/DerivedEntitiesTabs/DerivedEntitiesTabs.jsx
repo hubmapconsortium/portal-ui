@@ -13,8 +13,8 @@ function DerivedEntitiesTabs({ samples, datasets }) {
   return (
     <>
       <Tabs value={openIndex} onChange={handleChange} aria-label="Provenance Tabs">
-        {samples && <Tab label="Samples" index={0} />}
-        {datasets && <Tab label="Datasets" index={1} />}
+        <Tab label="Samples" index={0} />
+        <Tab label="Datasets" index={1} />
       </Tabs>
       {samples && (
         <StyledTabPanel value={openIndex} index={0}>
