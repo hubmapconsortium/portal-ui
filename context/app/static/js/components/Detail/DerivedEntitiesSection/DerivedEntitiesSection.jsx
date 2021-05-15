@@ -14,7 +14,7 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, entityType
       <CircularProgress />
     </StyledCenteredLoaderWrapper>
   ) : (
-    <SectionContainer id="derived-entities">
+    <SectionContainer id="derived">
       <StyledDiv>
         <StyledButtonRow
           leftText={
