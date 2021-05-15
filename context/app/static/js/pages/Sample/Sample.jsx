@@ -13,8 +13,8 @@ import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
-import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
 import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
+import DerivedDatasetsSection from 'js/components/Detail/DerivedDatasetsSection';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -37,16 +37,16 @@ function SampleDetail(props) {
     rui_location,
   } = assayMetadata;
 
-  const { searchHits: derivedDatasets } = useDerivedDatasetSearchHits(uuid);
+  const { searchHits: derivedDatasets, isLoading: derivedDatsetsAreLoading } = useDerivedDatasetSearchHits(uuid);
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     tissue: true,
     metadata: 'metadata' in assayMetadata,
-    derived: derivedDatasets.length > 0,
+    datasets: true,
   };
   const sectionOrder = getSectionOrder(
-    ['summary', 'derived', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
+    ['summary', 'datasets', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
     shouldDisplaySection,
   );
 
@@ -76,8 +76,13 @@ function SampleDetail(props) {
             {mapped_specimen_type}
           </Typography>
         </Summary>
-        {shouldDisplaySection.derived && (
-          <DerivedEntitiesTable entities={derivedDatasets} uuid={uuid} entityType="Dataset" />
+        {shouldDisplaySection.datasets && (
+          <DerivedDatasetsSection
+            datasets={derivedDatasets}
+            uuid={uuid}
+            isLoading={derivedDatsetsAreLoading}
+            sectionId="datasets"
+          />
         )}
         <SampleTissue
           uuid={uuid}
