@@ -8,14 +8,14 @@ import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/secti
 import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
 import { StyledDiv, StyledTabPanel } from './style';
 
-function DerivedEntitiesSection({ samples, datasets, uuid, entityType }) {
+function DerivedEntitiesSection({ samples, datasets, isLoading, uuid, entityType }) {
   const [openIndex, setOpenIndex] = useState(0);
 
   const handleChange = (event, newIndex) => {
     setOpenIndex(newIndex);
   };
 
-  return datasets.length > 0 && samples.length > 0 ? (
+  return !isLoading ? (
     <SectionContainer id="derived-entities">
       <StyledDiv>
         <StyledButtonRow

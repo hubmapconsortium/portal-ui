@@ -36,8 +36,10 @@ function DonorDetail(props) {
 
   const { sex, race, age_value, age_unit } = mapped_metadata;
 
-  const { searchHits: derivedDatasets } = useDerivedDatasetSearchHits(uuid);
-  const { searchHits: derivedSamples } = useDerivedSampleSearchHits(uuid);
+  const { searchHits: derivedDatasets, isLoading: derivedDatasetsAreLoading } = useDerivedDatasetSearchHits(uuid);
+  const { searchHits: derivedSamples, isLoading: derivedSamplesAreLoading } = useDerivedSampleSearchHits(uuid);
+
+  const derivedEntitiesAreLoading = derivedDatasetsAreLoading && derivedSamplesAreLoading;
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
@@ -79,6 +81,7 @@ function DonorDetail(props) {
               samples={derivedSamples}
               datasets={derivedDatasets}
               uuid={uuid}
+              isLoading={derivedEntitiesAreLoading}
               entityType="Dataset"
             />
           </>
