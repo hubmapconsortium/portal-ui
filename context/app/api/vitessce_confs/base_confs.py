@@ -198,7 +198,7 @@ class SPRMJSONViewConf(ImagingViewConf):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_image_files = get_matches(file_paths_found, image_file_regex)
         if len(found_image_files) != 1:
-            message = f'Image file for SPRM uuid "{self._uuid}" not found as expected or too many files found.'
+            message = f'Image file for SPRM uuid "{self._uuid}" not found or too many files found.'
             raise FileNotFoundError(message)
         found_image_file = found_image_files[0]
         vc = VitessceConfig(name=self._base_name)
@@ -255,7 +255,7 @@ class SPRMAnnDataViewConf(ImagePyramidViewConf):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_image_files = get_matches(file_paths_found, image_file_regex)
         if len(found_image_files) != 1:
-            message = f'Image file for SPRM uuid "{self._uuid}" not found as expected or too many files found.'
+            message = f'Image file for SPRM uuid "{self._uuid}" not found or too many files found.'
             raise FileNotFoundError(message)
         found_image_file = found_image_files[0]
         vc = VitessceConfig(name=self._base_name)
