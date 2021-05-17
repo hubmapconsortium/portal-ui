@@ -1,1 +1,0 @@
-- Fix new stitched `AnnData` SPRM viewconf.

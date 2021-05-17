@@ -248,8 +248,7 @@ class SPRMAnnDataViewConf(ImagePyramidViewConf):
         self._imaging_path = kwargs["imaging_path"]
 
     def build_vitessce_conf(self):
-        img_dir = f"{self.image_pyramid_regex}/{self._imaging_path}"
-        image_file = f"{img_dir}/{self._base_name}.ome.tif"
+        image_file = f"{self.image_pyramid_regex}/{self._imaging_path}/{self._base_name}.ome.tiff"
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         if image_file not in file_paths_found:
             message = f'Image file for SPRM uuid "{self._uuid}" not found as expected.'
@@ -257,7 +256,7 @@ class SPRMAnnDataViewConf(ImagePyramidViewConf):
         vc = VitessceConfig(name=self._base_name)
         dataset = vc.add_dataset(name="SPRM")
         img_url, offsets_url = self._get_img_and_offset_url(
-            image_file, img_dir,
+            image_file, self.image_pyramid_regex,
         )
         image_wrapper = OmeTiffWrapper(
             img_url=img_url, offsets_url=offsets_url, name=self._base_name
