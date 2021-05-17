@@ -194,15 +194,17 @@ class SPRMJSONViewConf(ImagingViewConf):
         ]
 
     def build_vitessce_conf(self):
-        image_file = f"{self._imaging_path}/{self._base_name}.ome.tiff"
+        image_file_regex = f"{self._imaging_path}/{self._base_name}.ome.tiff?"
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        if image_file not in file_paths_found:
-            message = f'Image file for SPRM uuid "{self._uuid}" not found as expected.'
+        found_image_files = get_matches(file_paths_found, image_file_regex)
+        if len(found_image_files) != 1:
+            message = f'Image file for SPRM uuid "{self._uuid}" not found as expected or too many files found.'
             raise FileNotFoundError(message)
+        found_image_file = found_image_files[0]
         vc = VitessceConfig(name=self._base_name)
         dataset = vc.add_dataset(name="SPRM")
         img_url, offsets_url = self._get_img_and_offset_url(
-            image_file, self._imaging_path,
+            found_image_file, self._imaging_path,
         )
         image_wrapper = OmeTiffWrapper(
             img_url=img_url, offsets_url=offsets_url, name=self._base_name
@@ -249,15 +251,17 @@ class SPRMAnnDataViewConf(ImagePyramidViewConf):
 
     def build_vitessce_conf(self):
         img_dir = f"{self.image_pyramid_regex}/{self._imaging_path}"
-        image_file = f"{img_dir}/{self._base_name}.ome.tif"
+        image_file_regex = f"{img_dir}/{self._base_name}.ome.tiff?"
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        if image_file not in file_paths_found:
-            message = f'Image file for SPRM uuid "{self._uuid}" not found as expected.'
+        found_image_files = get_matches(file_paths_found, image_file_regex)
+        if len(found_image_files) != 1:
+            message = f'Image file for SPRM uuid "{self._uuid}" not found as expected or too many files found.'
             raise FileNotFoundError(message)
+        found_image_file = found_image_files[0]
         vc = VitessceConfig(name=self._base_name)
         dataset = vc.add_dataset(name="SPRM")
         img_url, offsets_url = self._get_img_and_offset_url(
-            image_file, img_dir,
+            found_image_file, img_dir,
         )
         image_wrapper = OmeTiffWrapper(
             img_url=img_url, offsets_url=offsets_url, name=self._base_name
