@@ -1,3 +1,10 @@
+## v0.18.3 - 2021-05-17
+
+- Three JSON endpoints and three react forms for the main usecases.
+- Add a link to datacite on Collections.
+- If there is a problem generating vitessce conf, show an error in the UI.
+
+
 ## v0.18.2 - 2021-05-13
 
 - Add `git checkout main` to the deployment process for pulling new submodule repos.
