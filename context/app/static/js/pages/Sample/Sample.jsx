@@ -43,10 +43,10 @@ function SampleDetail(props) {
     protocols: Boolean(protocol_url),
     tissue: true,
     metadata: 'metadata' in assayMetadata,
-    datasets: true,
+    derived: true,
   };
   const sectionOrder = getSectionOrder(
-    ['summary', 'datasets', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
+    ['summary', 'derived', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
     shouldDisplaySection,
   );
 
@@ -76,12 +76,12 @@ function SampleDetail(props) {
             {mapped_specimen_type}
           </Typography>
         </Summary>
-        {shouldDisplaySection.datasets && (
+        {shouldDisplaySection.derived && (
           <DerivedDatasetsSection
             datasets={derivedDatasets}
             uuid={uuid}
             isLoading={derivedDatsetsAreLoading}
-            sectionId="datasets"
+            sectionId="derived"
           />
         )}
         <SampleTissue
