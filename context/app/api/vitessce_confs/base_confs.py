@@ -78,6 +78,9 @@ class ViewConf:
         # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests
         use_request_init = False if self._entity["status"] == "Published" else True
         return request_init if use_request_init else None
+    
+    def _get_file_paths(self):
+        return [file["rel_path"] for file in self._entity["files"]]
 
 
 class ImagingViewConf(ViewConf):
@@ -117,7 +120,7 @@ class ImagePyramidViewConf(ImagingViewConf):
         super().__init__(entity, nexus_token, is_mock)
 
     def build_vitessce_conf(self):
-        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        file_paths_found = self._get_file_paths()
         found_images = get_matches(
             file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
         )
@@ -150,7 +153,7 @@ class ImagePyramidViewConf(ImagingViewConf):
 class ScatterplotViewConf(ViewConf):
     def build_vitessce_conf(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
-        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        file_paths_found = self._get_file_paths()
         # We need to check that the files we expect actually exist.
         # This is due to the volatility of the datasets.
         if not set(file_paths_expected).issubset(set(file_paths_found)):
@@ -168,8 +171,39 @@ class ScatterplotViewConf(ViewConf):
         vc.add_view(dataset, cm.CELL_SETS, x=9, y=0, w=3, h=12)
         return vc
 
+class SPRMViewConf(ImagePyramidViewConf):
 
-class SPRMJSONViewConf(ImagingViewConf):
+    def _get_sprm_image(self):
+        image_file_regex = f"{self._imaging_path}/{self._base_name}.ome.tiff?"
+        file_paths_found = self._get_file_paths()
+        found_image_files = get_matches(file_paths_found, image_file_regex)
+        if len(found_image_files) != 1:
+            message = f'Image file for SPRM uuid "{self._uuid}" not found or too many files found.'
+            raise FileNotFoundError(message)
+        found_image_file = found_image_files[0]
+        return found_image_file
+    
+    def _add_sprm_image_to_view_conf(self, found_image_file, vc, dataset):
+        img_url, offsets_url = self._get_img_and_offset_url(
+            found_image_file, self._imaging_path,
+        )
+        image_wrapper = OmeTiffWrapper(
+            img_url=img_url, offsets_url=offsets_url, name=self._base_name
+        )
+        dataset = dataset.add_object(image_wrapper)
+        return dataset
+    
+    def _perpare_vc_and_dataset_with_image(self):
+        found_image_file = self._get_sprm_image()
+        file_paths_found = self._get_file_paths()
+        vc = VitessceConfig(name=self._base_name)
+        dataset = vc.add_dataset(name="SPRM")
+        dataset = self._add_sprm_image_to_view_conf(found_image_file, vc, dataset)
+        return vc, dataset
+
+
+
+class SPRMJSONViewConf(SPRMViewConf):
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
@@ -194,22 +228,8 @@ class SPRMJSONViewConf(ImagingViewConf):
         ]
 
     def build_vitessce_conf(self):
-        image_file_regex = f"{self._imaging_path}/{self._base_name}.ome.tiff?"
-        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_image_files = get_matches(file_paths_found, image_file_regex)
-        if len(found_image_files) != 1:
-            message = f'Image file for SPRM uuid "{self._uuid}" not found or too many files found.'
-            raise FileNotFoundError(message)
-        found_image_file = found_image_files[0]
-        vc = VitessceConfig(name=self._base_name)
-        dataset = vc.add_dataset(name="SPRM")
-        img_url, offsets_url = self._get_img_and_offset_url(
-            found_image_file, self._imaging_path,
-        )
-        image_wrapper = OmeTiffWrapper(
-            img_url=img_url, offsets_url=offsets_url, name=self._base_name
-        )
-        dataset = dataset.add_object(image_wrapper)
+        vc, dataset = self._perpare_vc_and_dataset_with_image()
+        file_paths_found = self._get_file_paths()
         # This tile has no segmentations
         if self._files[0]["rel_path"] not in file_paths_found:
             vc = self._setup_view_config_raster(vc, dataset)
@@ -242,31 +262,16 @@ class SPRMJSONViewConf(ImagingViewConf):
         return vc
 
 
-class SPRMAnnDataViewConf(ImagePyramidViewConf):
+class SPRMAnnDataViewConf(SPRMViewConf):
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
         self._base_name = kwargs["base_name"]
-        self._imaging_path = kwargs["imaging_path"]
+        self._imaging_path =  f"{self.image_pyramid_regex}/{kwargs['imaging_path']}"
 
     def build_vitessce_conf(self):
-        img_dir = f"{self.image_pyramid_regex}/{self._imaging_path}"
-        image_file_regex = f"{img_dir}/{self._base_name}.ome.tiff?"
-        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_image_files = get_matches(file_paths_found, image_file_regex)
-        if len(found_image_files) != 1:
-            message = f'Image file for SPRM uuid "{self._uuid}" not found or too many files found.'
-            raise FileNotFoundError(message)
-        found_image_file = found_image_files[0]
-        vc = VitessceConfig(name=self._base_name)
-        dataset = vc.add_dataset(name="SPRM")
-        img_url, offsets_url = self._get_img_and_offset_url(
-            found_image_file, img_dir,
-        )
-        image_wrapper = OmeTiffWrapper(
-            img_url=img_url, offsets_url=offsets_url, name=self._base_name
-        )
-        dataset = dataset.add_object(image_wrapper)
+        vc, dataset = self._perpare_vc_and_dataset_with_image()
+        file_paths_found = self._get_file_paths()
         zarr_path = f"anndata-zarr/{self._base_name}-anndata.zarr"
         if f"{zarr_path}/.zgroup" not in file_paths_found:
             message = f"SPRM assay with uuid {self._uuid} has no matching .zarr store"
