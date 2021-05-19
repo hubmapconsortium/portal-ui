@@ -78,7 +78,7 @@ class ViewConf:
         # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests
         use_request_init = False if self._entity["status"] == "Published" else True
         return request_init if use_request_init else None
-    
+
     def _get_file_paths(self):
         return [file["rel_path"] for file in self._entity["files"]]
 
@@ -171,6 +171,7 @@ class ScatterplotViewConf(ViewConf):
         vc.add_view(dataset, cm.CELL_SETS, x=9, y=0, w=3, h=12)
         return vc
 
+
 class SPRMViewConf(ImagePyramidViewConf):
 
     def _get_sprm_image(self):
@@ -182,7 +183,7 @@ class SPRMViewConf(ImagePyramidViewConf):
             raise FileNotFoundError(message)
         found_image_file = found_image_files[0]
         return found_image_file
-    
+
     def _add_sprm_image_to_view_conf(self, found_image_file, vc, dataset):
         img_url, offsets_url = self._get_img_and_offset_url(
             found_image_file, self._imaging_path,
@@ -192,15 +193,13 @@ class SPRMViewConf(ImagePyramidViewConf):
         )
         dataset = dataset.add_object(image_wrapper)
         return dataset
-    
+
     def _perpare_vc_and_dataset_with_image(self):
         found_image_file = self._get_sprm_image()
-        file_paths_found = self._get_file_paths()
         vc = VitessceConfig(name=self._base_name)
         dataset = vc.add_dataset(name="SPRM")
         dataset = self._add_sprm_image_to_view_conf(found_image_file, vc, dataset)
         return vc, dataset
-
 
 
 class SPRMJSONViewConf(SPRMViewConf):
@@ -267,7 +266,7 @@ class SPRMAnnDataViewConf(SPRMViewConf):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
         self._base_name = kwargs["base_name"]
-        self._imaging_path =  f"{self.image_pyramid_regex}/{kwargs['imaging_path']}"
+        self._imaging_path = f"{self.image_pyramid_regex}/{kwargs['imaging_path']}"
 
     def build_vitessce_conf(self):
         vc, dataset = self._perpare_vc_and_dataset_with_image()
