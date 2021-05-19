@@ -178,7 +178,7 @@ class SPRMViewConf(ImagePyramidViewConf):
         file_paths_found = self._get_file_paths()
         found_image_files = get_matches(file_paths_found, image_file_regex)
         if len(found_image_files) != 1:
-            message = f'Image file for SPRM uuid "{self._uuid}" not found or too many files found.'
+            message = f'Found {len(found_image_files)} image files for SPRM uuid "{self._uuid}".'
             raise FileNotFoundError(message)
         found_image_file = found_image_files[0]
         return found_image_file
