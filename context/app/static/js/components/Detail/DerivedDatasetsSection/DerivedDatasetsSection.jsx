@@ -12,7 +12,7 @@ function DerivedDatasetsSection({ datasets, uuid, isLoading, sectionId }) {
         header="Derived Datasets"
         entityCountsText={`${datasets.length} Datasets`}
         uuid={uuid}
-        entityType="Dataset"
+        entityType={entityType}
       />
       <DerivedEntitiesTable entities={datasets} entityType={entityType} />
     </DerivedEntitiesSectionWrapper>
