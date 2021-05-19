@@ -1,31 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Tabs, Tab } from 'js/shared-styles/tabs';
 import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
 import { StyledTabPanel } from './style';
 
-function DerivedEntitiesTabs({ samples, datasets }) {
-  const [openIndex, setOpenIndex] = useState(0);
-
+function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex }) {
   const handleChange = (event, newIndex) => {
     setOpenIndex(newIndex);
   };
   return (
     <>
       <Tabs value={openIndex} onChange={handleChange} aria-label="Provenance Tabs">
-        <Tab label="Samples" index={0} />
-        <Tab label="Datasets" index={1} />
+        {entities.map((entity, i) => (
+          <Tab label={entity.tabLabel} index={i} />
+        ))}
       </Tabs>
-      {samples && (
-        <StyledTabPanel value={openIndex} index={0}>
-          <DerivedEntitiesTable entities={samples} entityType="Sample" />
+      {entities.map((entity, i) => (
+        <StyledTabPanel value={openIndex} index={i}>
+          <DerivedEntitiesTable entities={entity.data} entityType={entity.entityType} />
         </StyledTabPanel>
-      )}
-      {datasets && (
-        <StyledTabPanel value={openIndex} index={1}>
-          <DerivedEntitiesTable entities={datasets} entityType="Dataset" />
-        </StyledTabPanel>
-      )}
+      ))}
     </>
   );
 }
