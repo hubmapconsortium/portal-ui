@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Tabs, Tab } from 'js/shared-styles/tabs';
 import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
-import { StyledTabPanel } from './style';
+import { StyledTabPanel, StyledAlert } from './style';
 
-function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex }) {
+function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex, entityType }) {
   const handleChange = (event, newIndex) => {
     setOpenIndex(newIndex);
   };
@@ -17,7 +17,11 @@ function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex }) {
       </Tabs>
       {entities.map((entity, i) => (
         <StyledTabPanel value={openIndex} index={i}>
-          <DerivedEntitiesTable entities={entity.data} entityType={entity.entityType} />
+          {entities.length > 0 ? (
+            <DerivedEntitiesTable entities={entity.data} entityType={entity.entityType} />
+          ) : (
+            <StyledAlert severity="warning">{`No derived ${entity.entityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`}</StyledAlert>
+          )}
         </StyledTabPanel>
       ))}
     </>

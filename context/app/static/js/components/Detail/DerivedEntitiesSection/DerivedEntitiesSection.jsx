@@ -4,7 +4,7 @@ import DerivedEntitiesSectionWrapper from 'js/components/Detail/DerivedEntitiesS
 import DerivedEntitiesTabs from 'js/components/Detail/DerivedEntitiesTabs';
 import DerivedEntitiesSectionHeader from 'js/components/Detail/DerivedEntitiesSectionHeader';
 
-function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId }) {
+function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId, entityType }) {
   const [openIndex, setOpenIndex] = useState(0);
 
   const entities = [
@@ -27,7 +27,12 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId 
         uuid={uuid}
         entityType={entities[openIndex].entityType}
       />
-      <DerivedEntitiesTabs entities={entities} openIndex={openIndex} setOpenIndex={setOpenIndex} />
+      <DerivedEntitiesTabs
+        entities={entities}
+        openIndex={openIndex}
+        setOpenIndex={setOpenIndex}
+        entityType={entityType}
+      />
     </DerivedEntitiesSectionWrapper>
   );
 }
