@@ -44,7 +44,6 @@ function DonorDetail(props) {
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(mapped_metadata).length),
-    derived: true,
   };
 
   const sectionOrder = getSectionOrder(
@@ -73,20 +72,15 @@ function DonorDetail(props) {
           group_name={group_name}
         />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} display_doi={display_doi} />}
-        {shouldDisplaySection.derived && (
-          <>
-            {/* <DerivedEntitiesTable entities={derivedSamples} uuid={uuid} entityType="Sample" /> */}
-            <DerivedEntitiesSection
-              entities={derivedDatasets}
-              samples={derivedSamples}
-              datasets={derivedDatasets}
-              uuid={uuid}
-              isLoading={derivedEntitiesAreLoading}
-              entityType={entity_type}
-              sectionId="derived"
-            />
-          </>
-        )}
+        <DerivedEntitiesSection
+          entities={derivedDatasets}
+          samples={derivedSamples}
+          datasets={derivedDatasets}
+          uuid={uuid}
+          isLoading={derivedEntitiesAreLoading}
+          entityType={entity_type}
+          sectionId="derived"
+        />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         <Attribution

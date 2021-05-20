@@ -35,6 +35,7 @@ function SampleDetail(props) {
     description,
     metadata,
     rui_location,
+    descendant_counts,
   } = assayMetadata;
 
   const { searchHits: derivedDatasets, isLoading: derivedDatsetsAreLoading } = useDerivedDatasetSearchHits(uuid);
@@ -43,8 +44,9 @@ function SampleDetail(props) {
     protocols: Boolean(protocol_url),
     tissue: true,
     metadata: 'metadata' in assayMetadata,
-    derived: true,
+    derived: Boolean(descendant_counts?.entity_type?.Dataset > 0),
   };
+
   const sectionOrder = getSectionOrder(
     ['summary', 'derived', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
     shouldDisplaySection,
