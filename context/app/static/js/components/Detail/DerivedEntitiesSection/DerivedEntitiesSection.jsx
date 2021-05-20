@@ -20,13 +20,18 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId,
     },
   ];
   return (
-    <DerivedEntitiesSectionWrapper isLoading={isLoading} sectionId={sectionId}>
-      <DerivedEntitiesSectionHeader
-        header="Derived Samples and Datasets"
-        entityCountsText={[`${samples.length} Samples`, `${datasets.length} Datasets`].join(' | ')}
-        uuid={uuid}
-        entityType={entities[openIndex].entityType}
-      />
+    <DerivedEntitiesSectionWrapper
+      isLoading={isLoading}
+      sectionId={sectionId}
+      header={
+        <DerivedEntitiesSectionHeader
+          header="Derived Samples and Datasets"
+          entityCountsText={[`${samples.length} Samples`, `${datasets.length} Datasets`].join(' | ')}
+          uuid={uuid}
+          entityType={entities[openIndex].entityType}
+        />
+      }
+    >
       <DerivedEntitiesTabs
         entities={entities}
         openIndex={openIndex}

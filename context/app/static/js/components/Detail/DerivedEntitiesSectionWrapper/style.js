@@ -1,16 +1,18 @@
 import styled from 'styled-components';
+import Paper from '@material-ui/core/Paper';
+
 import CenteredLoaderWrapper from 'js/shared-styles/loaders/CenteredLoaderWrapper';
 
-const sectionHeight = 400; // px
-
-const StyledDiv = styled.div`
-  height: ${sectionHeight}px;
-  display: flex;
-  flex-direction: column;
-`;
+const sectionHeight = 335; // px
 
 const StyledCenteredLoaderWrapper = styled(CenteredLoaderWrapper)`
   height: ${sectionHeight}px;
 `;
 
-export { StyledDiv, StyledCenteredLoaderWrapper };
+const StyledPaper = styled(Paper)`
+  height: ${sectionHeight}px;
+  display: flex;
+  flex-direction: column;
+`;
+
+export { StyledCenteredLoaderWrapper, StyledPaper };

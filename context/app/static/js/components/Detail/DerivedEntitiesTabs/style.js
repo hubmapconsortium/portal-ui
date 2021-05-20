@@ -1,9 +1,14 @@
 import styled from 'styled-components';
-import TabPanel from 'js/shared-styles/tabs/TabPanel';
+import { TabPanel, Tabs } from 'js/shared-styles/tabs';
 import { Alert } from 'js/shared-styles/alerts';
 
 const StyledTabPanel = styled(TabPanel)`
   flex: 1;
+  min-height: 0px; // flex overflow fix
+`;
+
+const StyledTabs = styled(Tabs)`
+  flex: none;
 `;
 
 const StyledAlert = styled(Alert)`
@@ -12,4 +17,4 @@ const StyledAlert = styled(Alert)`
   margin: 10px;
 `;
 
-export { StyledTabPanel, StyledAlert };
+export { StyledTabPanel, StyledTabs, StyledAlert };

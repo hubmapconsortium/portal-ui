@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
 
-const StyledPaper = styled(Paper)`
+const StyledDiv = styled.div`
   height: 100%;
+  overflow-y: auto;
+  min-height: 0px; // flex overflow fix
 `;
 
-export { StyledPaper };
+export { StyledDiv };

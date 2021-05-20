@@ -7,13 +7,18 @@ import DerivedEntitiesSectionHeader from 'js/components/Detail/DerivedEntitiesSe
 function DerivedDatasetsSection({ datasets, uuid, isLoading, sectionId }) {
   const entityType = 'Dataset';
   return (
-    <DerivedEntitiesSectionWrapper isLoading={isLoading} sectionId={sectionId}>
-      <DerivedEntitiesSectionHeader
-        header="Derived Datasets"
-        entityCountsText={`${datasets.length} Datasets`}
-        uuid={uuid}
-        entityType={entityType}
-      />
+    <DerivedEntitiesSectionWrapper
+      isLoading={isLoading}
+      sectionId={sectionId}
+      header={
+        <DerivedEntitiesSectionHeader
+          header="Derived Datasets"
+          entityCountsText={`${datasets.length} Datasets`}
+          uuid={uuid}
+          entityType={entityType}
+        />
+      }
+    >
       <DerivedEntitiesTable entities={datasets} entityType={entityType} />
     </DerivedEntitiesSectionWrapper>
   );

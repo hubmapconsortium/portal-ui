@@ -6,13 +6,13 @@ import TableRow from '@material-ui/core/TableRow';
 import DerivedEntitiesTableBody from 'js/components/Detail/DerivedEntitiesTableBody';
 import { HeaderCell } from 'js/shared-styles/Table';
 import { getColumnNames } from './utils';
-import { StyledPaper } from './style';
+import { StyledDiv } from './style';
 
 function DerivedEntitiesTable({ entities, entityType }) {
   const columns = getColumnNames(entityType);
 
   return (
-    <StyledPaper>
+    <StyledDiv>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
@@ -23,7 +23,7 @@ function DerivedEntitiesTable({ entities, entityType }) {
         </TableHead>
         <DerivedEntitiesTableBody entities={entities} entityType={entityType} />
       </Table>
-    </StyledPaper>
+    </StyledDiv>
   );
 }
 
