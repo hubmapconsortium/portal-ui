@@ -35,7 +35,11 @@ function Search(props) {
     closeSearchDatasetTutorial,
   } = useSearchDatasetTutorialStore(searchDatasetTutorialSelector);
 
-  const hiddenFilters = [listFilter('ancestor_ids', 'Ancestor ID'), listFilter('entity_type', 'Entity Type')];
+  const hiddenFilters = [
+    listFilter('ancestor_ids', 'Ancestor ID'),
+    listFilter('entity_type', 'Entity Type'),
+    listFilter('descendant_ids', 'Descendant ID'),
+  ];
 
   const filtersByType = {
     donor: { ...donorConfig.filters, '': hiddenFilters },
@@ -58,6 +62,7 @@ function Search(props) {
     );
   }
   const hasAncestorParam = searchParams.has('ancestor_ids[0]');
+  const hasDescendantParam = searchParams.has('descendant_ids[0]');
 
   const httpHeaders = getAuthHeader(nexusToken);
   const resultFields = resultFieldsByType[type];
@@ -108,7 +113,16 @@ function Search(props) {
           elasticsearchEndpoint={elasticsearchEndpoint}
           nexusToken={nexusToken}
         >
-          <AncestorNote />
+          <AncestorNote ancestorOrDescendantNote="ancestor" />
+        </LookupEntity>
+      )}
+      {hasDescendantParam && (
+        <LookupEntity
+          uuid={searchParams.get('descendant_ids[0]')}
+          elasticsearchEndpoint={elasticsearchEndpoint}
+          nexusToken={nexusToken}
+        >
+          <AncestorNote ancestorOrDescendantNote="descendant" />
         </LookupEntity>
       )}
       {wrappedSearch}
