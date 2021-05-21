@@ -17,6 +17,8 @@ import useEntityStore from 'js/stores/useEntityStore';
 import { AppContext } from 'js/components/Providers';
 import useCollectionsData from 'js/hooks/useCollectionsData';
 import CollectionsSection from 'js/components/Detail/CollectionsSection';
+import SupportAlert from 'js/components/Detail/SupportAlert';
+
 // TODO use this context for components other than FileBrowser
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
@@ -67,6 +69,7 @@ function DatasetDetail(props) {
     description,
     status,
     mapped_data_access_level,
+    immediate_ancestors,
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
@@ -76,6 +79,7 @@ function DatasetDetail(props) {
   const collectionsData = getCollectionsWhichContainDataset(uuid, allCollections);
 
   const shouldDisplaySection = {
+    provenance: entity_type !== 'Support',
     visualization: Boolean(vitData),
     protocols: Boolean(protocol_url),
     metadata: metadata && 'metadata' in metadata,
@@ -110,12 +114,7 @@ function DatasetDetail(props) {
           </span>
         </Alert>
       )}
-      {entity_type === 'Support' && (
-        <Alert severity="warning" $marginBottom="16">
-          “Support” entities provide derived, low-level data for visualizations. Navigate to a parent entity for a view
-          of this information in context.
-        </Alert>
-      )}
+      {entity_type === 'Support' && <SupportAlert immediate_ancestors={immediate_ancestors} uuid={uuid} />}
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}
@@ -135,7 +134,7 @@ function DatasetDetail(props) {
           />
         </Summary>
         {shouldDisplaySection.visualization && <VisualizationWrapper vitData={vitData} />}
-        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
+        {true && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
         <Files files={files} uuid={uuid} display_doi={display_doi} />
