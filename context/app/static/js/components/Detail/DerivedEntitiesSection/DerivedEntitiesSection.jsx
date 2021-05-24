@@ -26,7 +26,7 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId,
       header={
         <DerivedEntitiesSectionHeader
           header="Derived Samples and Datasets"
-          entityCountsText={[`${samples.length} Samples`, `${datasets.length} Datasets`].join(' | ')}
+          entityCountsText={`${samples.length} Samples | ${datasets.length} Datasets`}
           uuid={uuid}
           entityType={entities[openIndex].entityType}
         />
