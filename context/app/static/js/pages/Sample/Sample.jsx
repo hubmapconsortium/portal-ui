@@ -14,7 +14,7 @@ import useEntityStore from 'js/stores/useEntityStore';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
 import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
-import DerivedDatasetsSection from 'js/components/Detail/DerivedDatasetsSection';
+import DerivedDatasetsSection from 'js/components/Detail/derivedEntities/DerivedDatasetsSection';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
