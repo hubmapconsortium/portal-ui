@@ -49,15 +49,26 @@ function AssayTypeBarChartContainer() {
   const visxData = [formattedOrganTypeData, formattedDonorSexData];
   const maxSumDocCount = [maxAssayOrganTypeDocCount, maxAssayDonorSexDocCount];
 
-  const colorData = [organTypes, ['Male', 'Female']];
-
   const docCountScale = scaleLinear({
     domain: [0, maxSumDocCount[selectedColorDataIndex]],
     nice: true,
   });
 
+  const colorOptions = [
+    {
+      dropdownLabel: { name: 'Organ Type' },
+      facetName: 'origin_sample.mapped_organ',
+      values: organTypes,
+    },
+    {
+      dropdownLabel: { name: 'Donor Sex' },
+      facetName: 'donor.mapped_metadata.sex',
+      values: ['Male', 'Female'],
+    },
+  ];
+
   const colorScale = scaleOrdinal({
-    domain: colorData[selectedColorDataIndex],
+    domain: colorOptions[selectedColorDataIndex].values,
     range: colors,
   });
 
@@ -76,13 +87,14 @@ function AssayTypeBarChartContainer() {
           docCountScale={docCountScale}
           colorScale={colorScale}
           dataTypeScale={dataTypeScale}
-          keys={colorData[selectedColorDataIndex]}
+          keys={colorOptions[selectedColorDataIndex].values}
+          selectedColorFacetName={colorOptions[selectedColorDataIndex].facetName}
           margin={margin}
         />
       </ChartWrapper>
       <LegendWrapper marginTop={margin.top}>
         <AssayTypeBarChartDropdown
-          colorDataOptions={[{ name: 'Organ Type' }, { name: 'Donor Sex' }]}
+          colorDataOptions={colorOptions.map((color) => color.dropdownLabel)}
           selectedColorDataIndex={selectedColorDataIndex}
           setSelectedColorDataIndex={selectDropdownItem}
         />

@@ -17,6 +17,7 @@ function AssayTypeBarChart({
   colorScale,
   keys,
   margin,
+  selectedColorFacetName,
 }) {
   const [hoveredBarIndices, setHoveredBarIndices] = useState();
 
@@ -72,33 +73,39 @@ function AssayTypeBarChart({
             yScale={dataTypeScale}
             color={colorScale}
           >
-            {(barStacks) =>
-              barStacks.map((barStack) =>
+            {(barStacks) => {
+              return barStacks.map((barStack) =>
                 barStack.bars.map(
                   (bar) =>
                     bar.width > 0 && (
-                      <rect
-                        key={`barstack-horizontal-${barStack.index}-${bar.index}`}
-                        x={bar.x}
-                        y={bar.y}
-                        width={bar.width - strokeWidth}
-                        height={bar.height}
-                        fill={bar.color}
-                        stroke={
-                          hoveredBarIndices &&
-                          bar.index === hoveredBarIndices.barIndex &&
-                          barStack.index === hoveredBarIndices.barStackIndex
-                            ? 'black'
-                            : bar.color
-                        }
-                        strokeWidth={strokeWidth}
-                        onMouseEnter={(event) => handleMouseEnter(event, bar, barStack.index)}
-                        onMouseLeave={handleMouseLeave}
-                      />
+                      <a
+                        href={`/search?entity_type[0]=Dataset&mapped_data_types[0]=${encodeURIComponent(
+                          bar.bar.data.mapped_data_type,
+                        )}&${selectedColorFacetName}[0]=${encodeURIComponent(bar.key)}`}
+                      >
+                        <rect
+                          key={`barstack-horizontal-${barStack.index}-${bar.index}`}
+                          x={bar.x}
+                          y={bar.y}
+                          width={bar.width - strokeWidth}
+                          height={bar.height}
+                          fill={bar.color}
+                          stroke={
+                            hoveredBarIndices &&
+                            bar.index === hoveredBarIndices.barIndex &&
+                            barStack.index === hoveredBarIndices.barStackIndex
+                              ? 'black'
+                              : bar.color
+                          }
+                          strokeWidth={strokeWidth}
+                          onMouseEnter={(event) => handleMouseEnter(event, bar, barStack.index)}
+                          onMouseLeave={handleMouseLeave}
+                        />
+                      </a>
                     ),
                 ),
-              )
-            }
+              );
+            }}
           </BarStackHorizontal>
           <AxisLeft
             hideTicks
