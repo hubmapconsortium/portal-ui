@@ -10,7 +10,7 @@ function DerivedDatasetsSection({ datasets, uuid, isLoading, sectionId }) {
     <DerivedEntitiesSectionWrapper
       isLoading={isLoading}
       sectionId={sectionId}
-      header={
+      headerComponent={
         <DerivedEntitiesSectionHeader
           header="Derived Datasets"
           entityCountsText={`${datasets.length} Datasets`}
