@@ -1,0 +1,1 @@
+- Fix changelog test for master build.
