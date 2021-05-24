@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import DerivedEntitiesSectionWrapper from 'js/components/Detail/DerivedEntitiesSectionWrapper';
-import DerivedEntitiesTabs from 'js/components/Detail/DerivedEntitiesTabs';
-import DerivedEntitiesSectionHeader from 'js/components/Detail/DerivedEntitiesSectionHeader';
+import DerivedEntitiesSectionWrapper from 'js/components/Detail/derivedEntities/DerivedEntitiesSectionWrapper';
+import DerivedEntitiesTabs from 'js/components/Detail/derivedEntities/DerivedEntitiesTabs';
+import DerivedEntitiesSectionHeader from 'js/components/Detail/derivedEntities/DerivedEntitiesSectionHeader';
 
 function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId, entityType }) {
   const [openIndex, setOpenIndex] = useState(0);

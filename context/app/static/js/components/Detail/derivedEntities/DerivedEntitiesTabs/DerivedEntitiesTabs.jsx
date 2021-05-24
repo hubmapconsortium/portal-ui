@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Tab } from 'js/shared-styles/tabs';
-import DerivedDatasetsTable from 'js/components/Detail/DerivedDatasetsTable';
-import DerivedSamplesTable from 'js/components/Detail/DerivedSamplesTable';
+import DerivedDatasetsTable from 'js/components/Detail/derivedEntities/DerivedDatasetsTable';
+import DerivedSamplesTable from 'js/components/Detail/derivedEntities/DerivedSamplesTable';
 
 import { StyledTabs, StyledTabPanel, StyledAlert } from './style';
 

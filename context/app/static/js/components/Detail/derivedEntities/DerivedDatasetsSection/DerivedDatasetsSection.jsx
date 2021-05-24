@@ -1,8 +1,8 @@
 import React from 'react';
 
-import DerivedEntitiesSectionWrapper from 'js/components/Detail/DerivedEntitiesSectionWrapper';
-import DerivedDatasetsTable from 'js/components/Detail/DerivedDatasetsTable';
-import DerivedEntitiesSectionHeader from 'js/components/Detail/DerivedEntitiesSectionHeader';
+import DerivedEntitiesSectionWrapper from 'js/components/Detail/derivedEntities/DerivedEntitiesSectionWrapper';
+import DerivedDatasetsTable from 'js/components/Detail/derivedEntities/DerivedDatasetsTable';
+import DerivedEntitiesSectionHeader from 'js/components/Detail/derivedEntities/DerivedEntitiesSectionHeader';
 
 function DerivedDatasetsSection({ datasets, uuid, isLoading, sectionId }) {
   const entityType = 'Dataset';
