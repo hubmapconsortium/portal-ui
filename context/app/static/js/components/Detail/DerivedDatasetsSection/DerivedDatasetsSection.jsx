@@ -1,7 +1,7 @@
 import React from 'react';
 
 import DerivedEntitiesSectionWrapper from 'js/components/Detail/DerivedEntitiesSectionWrapper';
-import DerivedEntitiesTable from 'js/components/Detail/DerivedEntitiesTable';
+import DerivedDatasetsTable from 'js/components/Detail/DerivedDatasetsTable';
 import DerivedEntitiesSectionHeader from 'js/components/Detail/DerivedEntitiesSectionHeader';
 
 function DerivedDatasetsSection({ datasets, uuid, isLoading, sectionId }) {
@@ -19,7 +19,7 @@ function DerivedDatasetsSection({ datasets, uuid, isLoading, sectionId }) {
         />
       }
     >
-      <DerivedEntitiesTable entities={datasets} entityType={entityType} />
+      <DerivedDatasetsTable entities={datasets} />
     </DerivedEntitiesSectionWrapper>
   );
 }

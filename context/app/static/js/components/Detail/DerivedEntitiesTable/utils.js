@@ -1,23 +1,9 @@
-function getColumnNames(entityType) {
-  const idColumn = { id: 'display_doi', label: 'HuBMAP ID' };
-
-  const finalSharedColumns = [
-    { id: 'descendant_counts.entity_type.Dataset', label: 'Derived Dataset Count' },
-    { id: 'last_modified_timestamp', label: 'Last Modified' },
-  ];
-
-  const entitySpecificColumns = {
-    Dataset: [
-      { id: 'mapped_data_types', label: 'Data Types' },
-      { id: 'status', label: 'Status' },
-    ],
-    Sample: [
-      { id: 'origin_sample.mapped_organ', label: 'Organ' },
-      { id: 'mapped_specimen_type', label: 'Specimen' },
-    ],
+function getSharedColumns() {
+  return {
+    displayDOICol: { id: 'display_doi', label: 'HuBMAP ID' },
+    descendantCountsCol: { id: 'descendant_counts.entity_type.Dataset', label: 'Derived Dataset Count' },
+    lastModifiedTimestampCol: { id: 'last_modified_timestamp', label: 'Last Modified' },
   };
-
-  return [idColumn, ...entitySpecificColumns[entityType], ...finalSharedColumns];
 }
 
-export { getColumnNames };
+export { getSharedColumns };
