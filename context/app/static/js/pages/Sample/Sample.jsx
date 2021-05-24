@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import ProvSection from 'js/components/Detail/provenance/ProvSection';
@@ -11,11 +11,10 @@ import MetadataTable from 'js/components/Detail/MetadataTable';
 import SampleTissue from 'js/components/Detail/SampleTissue';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-import { AppContext } from 'js/components/Providers';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
-import { useSearchHits } from 'js/hooks/useSearchData';
-import SampleSpecificDatasetsTable from 'js/components/Detail/SampleSpecificDatasetsTable';
+import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
+import DerivedDatasetsSection from 'js/components/Detail/derivedEntities/DerivedDatasetsSection';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -36,47 +35,20 @@ function SampleDetail(props) {
     description,
     metadata,
     rui_location,
+    descendant_counts,
   } = assayMetadata;
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
-  const sampleSpecificDatasetsQuery = useMemo(
-    () => ({
-      query: {
-        bool: {
-          filter: [
-            {
-              term: {
-                ancestor_ids: uuid,
-              },
-            },
-            {
-              term: {
-                entity_type: 'dataset',
-              },
-            },
-          ],
-        },
-      },
-      _source: ['uuid', 'display_doi', 'mapped_data_types', 'status', 'descendant_counts', 'last_modified_timestamp'],
-      size: 10000,
-    }),
-    [uuid],
-  );
-
-  const { searchHits: sampleSpecificDatasets } = useSearchHits(
-    sampleSpecificDatasetsQuery,
-    elasticsearchEndpoint,
-    nexusToken,
-  );
+  const { searchHits: derivedDatasets, isLoading: derivedDatsetsAreLoading } = useDerivedDatasetSearchHits(uuid);
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     tissue: true,
     metadata: 'metadata' in assayMetadata,
-    datasets: sampleSpecificDatasets.length > 0,
+    derived: Boolean(descendant_counts?.entity_type?.Dataset > 0),
   };
+
   const sectionOrder = getSectionOrder(
-    ['summary', 'datasets', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
+    ['summary', 'derived', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
     shouldDisplaySection,
   );
 
@@ -106,7 +78,14 @@ function SampleDetail(props) {
             {mapped_specimen_type}
           </Typography>
         </Summary>
-        {shouldDisplaySection.datasets && <SampleSpecificDatasetsTable datasets={sampleSpecificDatasets} uuid={uuid} />}
+        {shouldDisplaySection.derived && (
+          <DerivedDatasetsSection
+            datasets={derivedDatasets}
+            uuid={uuid}
+            isLoading={derivedDatsetsAreLoading}
+            sectionId="derived"
+          />
+        )}
         <SampleTissue
           uuid={uuid}
           mapped_specimen_type={mapped_specimen_type}

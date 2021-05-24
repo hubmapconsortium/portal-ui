@@ -12,13 +12,13 @@ function ProvAnalysisDetailsLink(props) {
   const cwlUrl = `https://view.commonwl.org/workflows/${githubUrl.replace(/^http(s?):\/\//i, '')}`;
   return (
     <StyledListItem>
-      <FlexOutboundLink href={githubUrl}>
+      <FlexOutboundLink href={githubUrl} variant="body1">
         {githubUrl} <CwlIcon />
       </FlexOutboundLink>
       {'name' in data && (
         <>
           <PrimaryTextDivider orientation="vertical" />
-          <FlexOutboundLink href={cwlUrl}>
+          <FlexOutboundLink href={cwlUrl} variant="body1">
             Open in CWL Viewer
             <CwlIcon />
           </FlexOutboundLink>

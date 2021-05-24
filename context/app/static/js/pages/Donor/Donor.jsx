@@ -7,9 +7,11 @@ import Protocol from 'js/components/Detail/Protocol';
 import DetailLayout from 'js/components/Detail/DetailLayout';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
+import { useDerivedDatasetSearchHits, useDerivedSampleSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
+import DerivedEntitiesSection from 'js/components/Detail/derivedEntities/DerivedEntitiesSection';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -34,13 +36,18 @@ function DonorDetail(props) {
 
   const { sex, race, age_value, age_unit } = mapped_metadata;
 
+  const { searchHits: derivedDatasets, isLoading: derivedDatasetsAreLoading } = useDerivedDatasetSearchHits(uuid);
+  const { searchHits: derivedSamples, isLoading: derivedSamplesAreLoading } = useDerivedSampleSearchHits(uuid);
+
+  const derivedEntitiesAreLoading = derivedDatasetsAreLoading || derivedSamplesAreLoading;
+
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(mapped_metadata).length),
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'metadata', 'provenance', 'protocols', 'attribution'],
+    ['summary', 'metadata', 'derived', 'provenance', 'protocols', 'attribution'],
     shouldDisplaySection,
   );
 
@@ -65,6 +72,15 @@ function DonorDetail(props) {
           group_name={group_name}
         />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} display_doi={display_doi} />}
+        <DerivedEntitiesSection
+          entities={derivedDatasets}
+          samples={derivedSamples}
+          datasets={derivedDatasets}
+          uuid={uuid}
+          isLoading={derivedEntitiesAreLoading}
+          entityType={entity_type}
+          sectionId="derived"
+        />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         <Attribution

@@ -1,4 +1,5 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
 
 import useProvenanceStore from 'js/stores/useProvenanceStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -17,7 +18,7 @@ function NodeElement(props) {
   return (
     <SecondaryBackgroundTooltip title={displayTitle}>
       <div data-testid={displayTitle} className="node-visible-element" style={style}>
-        <div className="node-name">{displayTitle}</div>
+        <Typography className="node-name">{displayTitle}</Typography>
         {uuid === node.meta.prov['hubmap:uuid'] && <AsteriskWrapper aria-label="">*</AsteriskWrapper>}
       </div>
     </SecondaryBackgroundTooltip>
