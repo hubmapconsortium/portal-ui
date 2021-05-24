@@ -1,1 +1,0 @@
-- Add links to search page in home page bar chart bars.

@@ -1,3 +1,10 @@
+## v0.19.0 - 2021-05-24
+
+- Add links to search page in home page bar chart bars.
+- List the derived samples and datasets on donor pages.
+- Fix changelog test for master build.
+
+
 ## v0.18.3 - 2021-05-17
 
 - Three JSON endpoints and three react forms for the main usecases.
