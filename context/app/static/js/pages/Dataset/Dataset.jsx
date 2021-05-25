@@ -134,7 +134,7 @@ function DatasetDetail(props) {
           />
         </Summary>
         {shouldDisplaySection.visualization && <VisualizationWrapper vitData={vitData} />}
-        {true && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
+        {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
         <Files files={files} uuid={uuid} display_doi={display_doi} />
