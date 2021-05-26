@@ -1,3 +1,9 @@
+## v0.19.1 - 2021-05-26
+
+- Fix new stitched `AnnData` SPRM viewconf.
+- Change home page bar chart title to hubmap datasets.
+
+
 ## v0.19.0 - 2021-05-24
 
 - Add links to search page in home page bar chart bars.
