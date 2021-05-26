@@ -46,7 +46,7 @@ function Home() {
         {isLargerThanMd && (
           <GridArea $gridAreaTitle="bar-chart">
             <SectionHeader variant="h4" component="h3">
-              HuBMAP Data
+              HuBMAP Datasets
             </SectionHeader>
             <AssayTypeBarChartContainer />
           </GridArea>
