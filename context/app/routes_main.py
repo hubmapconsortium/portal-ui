@@ -1,3 +1,4 @@
+from context.app.api import vitessce_confs
 from os.path import dirname
 from urllib.parse import urlparse
 import json
@@ -122,9 +123,19 @@ def details_notebook(type, uuid):
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
+    vitessce_conf = client.get_vitessce_conf(entity)
+    if vitessce_conf is None:
+        abort(404)
     nb = nbformat.v4.new_notebook()
-    nb['cells'] = [nbformat.v4.new_markdown_cell('hello world!'),
-                   nbformat.v4.new_code_cell('2 + 2')]
+    nb['cells'] = [
+        nbformat.v4.new_markdown_cell(f"""
+Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','')})
+        """.strip()),
+        nbformat.v4.new_code_cell('% pip install vitessce==0.1.0a9'),
+        nbformat.v4.new_code_cell('import vitessce'),
+        nbformat.v4.new_code_cell(f'vitessce_conf = {vitessce_conf}'),
+        nbformat.v4.new_code_cell('# TODO: Render!')
+    ]
     return Response(
         response=nbformat.writes(nb),
         headers={'Content-Disposition': f"attachment; filename={entity['display_doi']}.ipynb"},
