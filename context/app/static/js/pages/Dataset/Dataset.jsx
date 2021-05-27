@@ -134,7 +134,7 @@ function DatasetDetail(props) {
             origin_sample={origin_sample}
           />
         </Summary>
-        {shouldDisplaySection.visualization && <VisualizationWrapper vitData={vitData} />}
+        {shouldDisplaySection.visualization && <VisualizationWrapper vitData={vitData} uuid={uuid} />}
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}

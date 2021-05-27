@@ -53,7 +53,7 @@ const visualizationStoreSelector = (state) => ({
 });
 
 function Visualization(props) {
-  const { vitData } = props;
+  const { vitData, uuid } = props;
 
   const {
     vizIsFullscreen,
@@ -115,7 +115,7 @@ function Visualization(props) {
         <StyledHeader>
           <StyledHeaderText>Visualization</StyledHeaderText>
           <StyledHeaderRight>
-            <VisualizationNotebookButton />
+            <VisualizationNotebookButton uuid={uuid} />
             <VisualizationShareButton />
             <VisualizationThemeSwitch />
             <SecondaryBackgroundTooltip title="Switch to Fullscreen">
