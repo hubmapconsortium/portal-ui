@@ -106,24 +106,20 @@ def details(type, uuid):
     )
 
 
-@blueprint.route('/browse/<type>/<uuid>.<ext>')
-def details_ext(type, uuid, ext):
+@blueprint.route('/browse/<type>/<uuid>.json')
+def details_ext(type, uuid):
     if type not in entity_types:
-        abort(404)
-    if ext != 'json':
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
     return entity
 
 
-@blueprint.route('/browse/<type>/<uuid>.rui.<ext>')
-def details_rui_ext(type, uuid, ext):
+@blueprint.route('/browse/<type>/<uuid>.rui.json')
+def details_rui_ext(type, uuid):
     # Note that the API returns a blob of JSON as a string,
     # so, to return a JSON object, and not just a string, we need to decode.
     if type not in entity_types:
-        abort(404)
-    if ext != 'json':
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
