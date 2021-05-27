@@ -1,4 +1,3 @@
-from context.app.api import vitessce_confs
 from os.path import dirname
 from urllib.parse import urlparse
 import json
