@@ -13,6 +13,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import VisualizationShareButton from '../VisualizationShareButton';
+import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import {
   vitessceFixedHeight,
   bodyExpandedCSS,
@@ -114,6 +115,7 @@ function Visualization(props) {
         <StyledHeader>
           <StyledHeaderText>Visualization</StyledHeaderText>
           <StyledHeaderRight>
+            <VisualizationNotebookButton />
             <VisualizationShareButton />
             <VisualizationThemeSwitch />
             <SecondaryBackgroundTooltip title="Switch to Fullscreen">
