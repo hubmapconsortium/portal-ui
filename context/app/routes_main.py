@@ -1,6 +1,7 @@
 from os.path import dirname
 from urllib.parse import urlparse
 import json
+import nbformat
 
 from flask import (Blueprint, render_template, abort, current_app,
                    session, request, redirect, url_for, Response)
@@ -107,7 +108,7 @@ def details(type, uuid):
 
 
 @blueprint.route('/browse/<type>/<uuid>.json')
-def details_ext(type, uuid):
+def details_json(type, uuid):
     if type not in entity_types:
         abort(404)
     client = _get_client()
@@ -115,8 +116,21 @@ def details_ext(type, uuid):
     return entity
 
 
+@blueprint.route('/browse/<type>/<uuid>.ipynb')
+def details_notebook(type, uuid):
+    if type not in entity_types:
+        abort(404)
+    client = _get_client()
+    entity = client.get_entity(uuid)
+    nb = nbformat.v4.new_notebook()
+    nb['cells'] = [nbformat.v4.new_markdown_cell('hello world!'),
+                   nbformat.v4.new_code_cell('2 + 2')]
+    nb_json = nbformat.writes(nb)
+    return nb_json
+
+
 @blueprint.route('/browse/<type>/<uuid>.rui.json')
-def details_rui_ext(type, uuid):
+def details_rui_json(type, uuid):
     # Note that the API returns a blob of JSON as a string,
     # so, to return a JSON object, and not just a string, we need to decode.
     if type not in entity_types:
