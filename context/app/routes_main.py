@@ -125,8 +125,11 @@ def details_notebook(type, uuid):
     nb = nbformat.v4.new_notebook()
     nb['cells'] = [nbformat.v4.new_markdown_cell('hello world!'),
                    nbformat.v4.new_code_cell('2 + 2')]
-    nb_json = nbformat.writes(nb)
-    return nb_json
+    return Response(
+        response=nbformat.writes(nb),
+        headers={'Content-Disposition': f"attachment; filename={entity['display_doi']}.ipynb"},
+        mimetype='application/x-ipynb+json'
+    )
 
 
 @blueprint.route('/browse/<type>/<uuid>.rui.json')
