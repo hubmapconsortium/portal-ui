@@ -58,6 +58,8 @@ function DevSearch() {
         listFilter('mapper_metadata.validation_errors.absolute_schema_path', 'Schema Path'),
       ],
       Booleans: [
+        checkboxFilter('is_living_donor', 'Is living donor?', ExistsQuery('metadata.living_donor_data')),
+        checkboxFilter('is_organ_donor', 'Is organ donor?', ExistsQuery('metadata.organ_donor_data')),
         checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata.metadata')),
         checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
         checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),
