@@ -1,4 +1,4 @@
-nbformat=5.1.2
+nbformat==5.1.2
 Flask==1.1.2
 globus-sdk==2.0.1
 requests==2.22.0
