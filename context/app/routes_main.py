@@ -96,7 +96,7 @@ def details(type, uuid):
     flask_data = {
         'endpoints': _get_endpoints(),
         'entity': entity,
-        'vitessce_conf': client.get_vitessce_conf(entity)
+        'vitessce_conf': client.get_vitessce_conf_cells(entity)[0]
     }
     return render_template(
         template,
@@ -122,8 +122,8 @@ def details_notebook(type, uuid):
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
-    vitessce_conf = client.get_vitessce_conf(entity)
-    if vitessce_conf is None:
+    vitessce_cells = client.get_vitessce_conf_cells(entity)[1]
+    if vitessce_cells is None:
         abort(404)
     nb = nbformat.v4.new_notebook()
     nb['cells'] = [
@@ -135,8 +135,8 @@ Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','
             '!jupyter nbextension install --py --sys-prefix vitessce',
             '!jupyter nbextension enable --py --sys-prefix vitessce'
         ])),
-        nbformat.v4.new_code_cell('from vitessce import VitessceConfig'),
-        nbformat.v4.new_code_cell(f'vitessce_conf = {vitessce_conf}'),
+        nbformat.v4.new_code_cell('from vitessce import VitessceConfig')
+    ] + vitessce_cells + [
         nbformat.v4.new_code_cell('vc = VitessceConfig.from_dict(vitessce_conf)'),
         nbformat.v4.new_code_cell('vw = vc.widget()'),
         nbformat.v4.new_code_cell('vw')

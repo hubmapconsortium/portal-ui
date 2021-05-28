@@ -2,6 +2,7 @@ import urllib
 from pathlib import Path
 import re
 
+import nbformat
 from flask import current_app
 from vitessce import (
     VitessceConfig,
@@ -119,7 +120,10 @@ class ImagePyramidViewConf(ImagingViewConf):
         self.image_pyramid_regex = IMAGE_PYRAMID_DIR
         super().__init__(entity, nexus_token, is_mock)
 
-    def build_vitessce_conf(self):
+    def build_vitessce_conf_cells(self):
+        cells = [
+            nbformat.v4.new_code_cell('# TODO: vitessce_conf = ...')
+        ]
         file_paths_found = self._get_file_paths()
         found_images = get_matches(
             file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
@@ -147,7 +151,7 @@ class ImagePyramidViewConf(ImagingViewConf):
         conf = vc.to_dict()
         # Don't want to render all layers
         del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
-        return conf
+        return (conf, cells)
 
 
 class ScatterplotViewConf(ViewConf):
