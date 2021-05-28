@@ -33,6 +33,7 @@ def _get_endpoints():
         + current_app.config['PORTAL_INDEX_PATH'],
         'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
         'entityEndpoint': current_app.config['ENTITY_API_BASE'],
+        'cellsEndpoint': current_app.config['CELLS_API_ENDPOINT'],
         'gatewayEndpoint': 'https://gateway.api.hubmapconsortium.org'
     }
 

@@ -32,7 +32,7 @@ function buildServiceStatus(args) {
 }
 
 function ServiceStatusTable(props) {
-  const { elasticsearchEndpoint, assetsEndpoint, entityEndpoint, gatewayEndpoint } = props;
+  const { elasticsearchEndpoint, assetsEndpoint, cellsEndpoint, entityEndpoint, gatewayEndpoint } = props;
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
   const apiStatuses = gatewayStatus
@@ -43,6 +43,11 @@ function ServiceStatusTable(props) {
           response: gatewayStatus.file_assets,
           noteFunction: (api) => `Status: ${api.file_assets_status}`,
         }),
+        {
+          apiName: 'cells',
+          github: 'https://github.com/hubmapconsortium/cross_modality_query',
+          endpointUrl: cellsEndpoint,
+        },
         buildServiceStatus({
           apiName: 'entity-api',
           endpointUrl: entityEndpoint,
