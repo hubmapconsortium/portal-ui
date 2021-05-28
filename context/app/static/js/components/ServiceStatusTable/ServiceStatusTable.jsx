@@ -1,32 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import { StyledExternalLinkIcon } from 'js/components/files/GlobusLinkMessage/style';
-
-import { HeaderCell } from 'js/shared-styles/Table';
-
 import { version } from 'package';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import { AppContext } from 'js/components/Providers';
+import { StyledExternalLinkIcon } from 'js/components/files/GlobusLinkMessage/style';
+import { HeaderCell } from 'js/shared-styles/Table';
+
 import StatusIcon from './StatusIcon';
 import { useGatewayStatus } from './hooks';
 import { buildServiceStatus } from './utils';
 
 function ServiceStatusTable() {
+  const { elasticsearchEndpoint, assetsEndpoint, entityEndpoint } = useContext(AppContext);
   const gatewayStatus = useGatewayStatus();
 
   const apiStatuses = gatewayStatus
     ? [
         buildServiceStatus({
           apiName: 'assets',
+          endpointUrl: assetsEndpoint,
           response: gatewayStatus.file_assets,
           noteFunction: (api) => `Status: ${api.file_assets_status}`,
         }),
         buildServiceStatus({
           apiName: 'entity-api',
+          endpointUrl: entityEndpoint,
           response: gatewayStatus.entity_api,
           noteFunction: (api) => `Neo4j: ${api.neo4j_connection}`,
         }),
@@ -45,6 +49,7 @@ function ServiceStatusTable() {
         },
         buildServiceStatus({
           apiName: 'search-api',
+          endpointUrl: elasticsearchEndpoint,
           response: gatewayStatus.search_api,
           noteFunction: (api) => `ES: ${api.elasticsearch_connection}; ES Status: ${api.elasticsearch_status}`,
         }),
@@ -62,6 +67,7 @@ function ServiceStatusTable() {
         <TableRow>
           <HeaderCell>Service</HeaderCell>
           <HeaderCell>Status</HeaderCell>
+          <HeaderCell>Endpoint</HeaderCell>
           <HeaderCell>Github Repository</HeaderCell>
           <HeaderCell>Version Number</HeaderCell>
           <HeaderCell>Build</HeaderCell>
@@ -75,6 +81,7 @@ function ServiceStatusTable() {
             <TableCell>
               <StatusIcon isUp={api.isUp} />
             </TableCell>
+            <TableCell>{api.endpointUrl}</TableCell>
             <TableCell>
               {api.github && (
                 <OutboundLink underline="none" href={api.github}>
