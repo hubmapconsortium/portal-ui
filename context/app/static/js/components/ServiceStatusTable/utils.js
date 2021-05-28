@@ -5,7 +5,7 @@ function buildServiceStatus(args) {
   // The gateway isn't explicit: If it's not up, you wouldn't get anything at all,
   // (and you wouldn't be able to get to the portal in the first place.)
   return {
-    name: apiName,
+    apiName,
     github: build ? `https://github.com/hubmapconsortium/${apiName}` : undefined,
     build,
     version,

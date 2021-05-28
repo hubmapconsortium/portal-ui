@@ -37,7 +37,7 @@ function ServiceStatusTable() {
           noteFunction: (api) => `Neo4j: ${api.neo4j_connection}`,
         }),
         {
-          name: 'portal-ui',
+          apiName: 'portal-ui',
           github: 'https://github.com/hubmapconsortium/portal-ui',
           // build: Not distinct from version.
           version,
@@ -70,8 +70,8 @@ function ServiceStatusTable() {
       </TableHead>
       <TableBody>
         {apiStatuses.map((api) => (
-          <TableRow key={api.name}>
-            <TableCell>{api.name}</TableCell>
+          <TableRow key={api.apiName}>
+            <TableCell>{api.apiName}</TableCell>
             <TableCell>
               <StatusIcon isUp={api.isUp} />
             </TableCell>
