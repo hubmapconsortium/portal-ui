@@ -25,7 +25,7 @@ Tuesday/Thursday afternoon:
 
 ## QA
 
-- For QA, use the STAGE instance configured to hit the PROD APIs: [`https://portal-prod.stage.hubmapconsortium.org/`](https://portal-prod.stage.hubmapconsortium.org).
+- For QA, use the [STAGE instance configured to hit the PROD APIs](https://portal-prod.stage.hubmapconsortium.org/services), and always begin by confirming on the status page that is using the PROD APIs.
 - It’s helpful to have the console and networking tabs open: To see both at the same time, bring up Network, and then hit “esc”.
 
 ### Home Page
