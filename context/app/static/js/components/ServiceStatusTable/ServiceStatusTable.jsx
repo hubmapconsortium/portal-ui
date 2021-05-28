@@ -24,7 +24,7 @@ function buildServiceStatus(args) {
   return {
     apiName,
     endpointUrl,
-    github: build ? `https://github.com/hubmapconsortium/${apiName}` : undefined,
+    githubUrl: build ? `https://github.com/hubmapconsortium/${apiName}` : undefined,
     build,
     apiVersion,
     isUp,
@@ -91,7 +91,7 @@ function ServiceStatusTable() {
         </TableRow>
       </TableHead>
       <TableBody>
-        {apiStatuses.map(({ apiName, isUp, endpointUrl, github, apiVersion, build, note }) => (
+        {apiStatuses.map(({ apiName, isUp, endpointUrl, githubUrl, apiVersion, build, note }) => (
           <TableRow key={apiName}>
             <TableCell>{apiName}</TableCell>
             <TableCell>
@@ -99,8 +99,8 @@ function ServiceStatusTable() {
             </TableCell>
             <TableCell>{endpointUrl}</TableCell>
             <TableCell>
-              {github && (
-                <OutboundLink underline="none" href={github}>
+              {githubUrl && (
+                <OutboundLink underline="none" href={githubUrl}>
                   Github Link <StyledExternalLinkIcon />
                 </OutboundLink>
               )}
