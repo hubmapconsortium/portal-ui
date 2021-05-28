@@ -20,10 +20,22 @@ function ServiceStatusTable() {
 
   const apiStatuses = gatewayStatus
     ? [
-        buildServiceStatus('assets', gatewayStatus.file_assets, (api) => `Status: ${api.file_assets_status}`),
-        buildServiceStatus('entity-api', gatewayStatus.entity_api, (api) => `Neo4j: ${api.neo4j_connection}`),
-        buildServiceStatus('gateway', gatewayStatus.gateway, () => ''),
-        buildServiceStatus('ingest-ui', gatewayStatus.ingest_api, (api) => `Neo4j: ${api.neo4j_connection}`),
+        buildServiceStatus({
+          apiName: 'assets',
+          response: gatewayStatus.file_assets,
+          noteFunction: (api) => `Status: ${api.file_assets_status}`,
+        }),
+        buildServiceStatus({
+          apiName: 'entity-api',
+          response: gatewayStatus.entity_api,
+          noteFunction: (api) => `Neo4j: ${api.neo4j_connection}`,
+        }),
+        buildServiceStatus({ apiName: 'gateway', response: gatewayStatus.gateway, noteFunction: () => '' }),
+        buildServiceStatus({
+          apiName: 'ingest-ui',
+          response: gatewayStatus.ingest_api,
+          noteFunction: (api) => `Neo4j: ${api.neo4j_connection}`,
+        }),
         {
           name: 'portal-ui',
           github: 'https://github.com/hubmapconsortium/portal-ui',
@@ -31,12 +43,16 @@ function ServiceStatusTable() {
           version,
           isUp: true,
         },
-        buildServiceStatus(
-          'search-api',
-          gatewayStatus.search_api,
-          (api) => `ES: ${api.elasticsearch_connection}; ES Status: ${api.elasticsearch_status}`,
-        ),
-        buildServiceStatus('uuid-api', gatewayStatus.uuid_api, (api) => `MySQL: ${api.mysql_connection}`),
+        buildServiceStatus({
+          apiName: 'search-api',
+          response: gatewayStatus.search_api,
+          noteFunction: (api) => `ES: ${api.elasticsearch_connection}; ES Status: ${api.elasticsearch_status}`,
+        }),
+        buildServiceStatus({
+          apiName: 'uuid-api',
+          response: gatewayStatus.uuid_api,
+          noteFunction: (api) => `MySQL: ${api.mysql_connection}`,
+        }),
       ]
     : [];
 
