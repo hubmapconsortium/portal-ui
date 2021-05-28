@@ -130,10 +130,16 @@ def details_notebook(type, uuid):
         nbformat.v4.new_markdown_cell(f"""
 Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','')})
         """.strip()),
-        nbformat.v4.new_code_cell('% pip install vitessce==0.1.0a9'),
-        nbformat.v4.new_code_cell('import vitessce'),
+        nbformat.v4.new_code_cell('\n'.join([
+            '!pip install vitessce==0.1.0a9',
+            '!jupyter nbextension install --py --sys-prefix vitessce',
+            '!jupyter nbextension enable --py --sys-prefix vitessce'
+        ])),
+        nbformat.v4.new_code_cell('from vitessce import VitessceConfig'),
         nbformat.v4.new_code_cell(f'vitessce_conf = {vitessce_conf}'),
-        nbformat.v4.new_code_cell('# TODO: Render!')
+        nbformat.v4.new_code_cell('vc = VitessceConfig.from_dict(vitessce_conf)'),
+        nbformat.v4.new_code_cell('vw = vc.widget()'),
+        nbformat.v4.new_code_cell('vw')
     ]
     return Response(
         response=nbformat.writes(nb),
