@@ -45,8 +45,10 @@ function ServiceStatusTable(props) {
         }),
         {
           apiName: 'cells',
-          github: 'https://github.com/hubmapconsortium/cross_modality_query',
+          githubUrl: 'https://github.com/hubmapconsortium/cross_modality_query',
           endpointUrl: cellsEndpoint,
+          apiVersion: 'unknown',
+          build: 'unknown',
         },
         buildServiceStatus({
           apiName: 'entity-api',
@@ -67,9 +69,9 @@ function ServiceStatusTable(props) {
         }),
         {
           apiName: 'portal-ui',
-          github: 'https://github.com/hubmapconsortium/portal-ui',
+          githubUrl: 'https://github.com/hubmapconsortium/portal-ui',
           // build: Not distinct from version.
-          version,
+          apiVersion: version,
           isUp: true,
         },
         buildServiceStatus({
@@ -103,19 +105,19 @@ function ServiceStatusTable(props) {
         {apiStatuses.map(({ apiName, isUp, endpointUrl, githubUrl, apiVersion, build, note }) => (
           <TableRow key={apiName}>
             <TableCell>{apiName}</TableCell>
+            <TableCell>{typeof isUp === 'undefined' ? 'unknown' : <StatusIcon isUp={isUp} />}</TableCell>
+            <TableCell>{endpointUrl || 'not referenced by portal'}</TableCell>
             <TableCell>
-              <StatusIcon isUp={isUp} />
-            </TableCell>
-            <TableCell>{endpointUrl}</TableCell>
-            <TableCell>
-              {githubUrl && (
+              {githubUrl ? (
                 <OutboundLink underline="none" href={githubUrl}>
                   Github Link <StyledExternalLinkIcon />
                 </OutboundLink>
+              ) : (
+                'n/a'
               )}
             </TableCell>
-            <TableCell>{apiVersion}</TableCell>
-            <TableCell>{build}</TableCell>
+            <TableCell>{apiVersion || 'n/a'}</TableCell>
+            <TableCell>{build || 'n/a'}</TableCell>
             <TableCell>{note}</TableCell>
           </TableRow>
         ))}
