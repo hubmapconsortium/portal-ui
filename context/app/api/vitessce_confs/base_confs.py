@@ -121,9 +121,7 @@ class ImagePyramidViewConf(ImagingViewConf):
         super().__init__(entity, nexus_token, is_mock)
 
     def build_vitessce_conf_cells(self):
-        cells = [
-            nbformat.v4.new_code_cell('# TODO: vitessce_conf = ...')
-        ]
+        cells = []
         file_paths_found = self._get_file_paths()
         found_images = get_matches(
             file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
@@ -135,8 +133,18 @@ class ImagePyramidViewConf(ImagingViewConf):
             raise FileNotFoundError(message)
 
         vc = VitessceConfig(name="HuBMAP Data Portal")
+        cells.append(nbformat.v4.new_code_cell(
+            'vc = VitessceConfig(name="HuBMAP Data Portal")'
+        ))
+
         dataset = vc.add_dataset(name="Visualization Files")
+        cells.append(nbformat.v4.new_code_cell(
+            'vc.add_dataset(name="Visualization Files")'
+        ))
+
         images = []
+        cells.append(nbformat.v4.new_code_cell(f'images = []'))
+
         for img_path in found_images:
             img_url, offsets_url = self._get_img_and_offset_url(
                 img_path, self.image_pyramid_regex
@@ -146,8 +154,25 @@ class ImagePyramidViewConf(ImagingViewConf):
                     img_url=img_url, offsets_url=offsets_url, name=Path(img_path).name
                 )
             )
+            cells.append(nbformat.v4.new_code_cell(
+                f"images.append(OmeTiffWrapper(img_url='{img_url}', offsets_url='{offsets_url}', name=Path('{img_path}').name))"
+            ))
+        # NOTE: If OmeTiffWrapper had a repr which reproduced the object, we could just say:
+        #    f"images = {images}"
+
         dataset = dataset.add_object(MultiImageWrapper(images))
+        cells.append(nbformat.v4.new_code_cell(
+            'dataset = dataset.add_object(MultiImageWrapper(images))'
+        ))
+
         vc = self._setup_view_config_raster(vc, dataset)
+        cells.append(nbformat.v4.new_code_cell(
+            f'vc = self._setup_view_config_raster(vc, dataset)'
+        ))
+
+        # NOTE: We could skip the serialization to JSON and then back to an object.
+        # ... but not sure how to handle the del below... does a method need to be added to the viewconf?
+
         conf = vc.to_dict()
         # Don't want to render all layers
         del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
