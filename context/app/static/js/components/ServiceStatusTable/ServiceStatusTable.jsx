@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,7 +8,6 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { version } from 'package';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import { AppContext } from 'js/components/Providers';
 import { StyledExternalLinkIcon } from 'js/components/files/GlobusLinkMessage/style';
 import { HeaderCell } from 'js/shared-styles/Table';
 
@@ -32,8 +31,8 @@ function buildServiceStatus(args) {
   };
 }
 
-function ServiceStatusTable() {
-  const { elasticsearchEndpoint, assetsEndpoint, entityEndpoint, gatewayEndpoint } = useContext(AppContext);
+function ServiceStatusTable(props) {
+  const { elasticsearchEndpoint, assetsEndpoint, entityEndpoint, gatewayEndpoint } = props;
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
   const apiStatuses = gatewayStatus
