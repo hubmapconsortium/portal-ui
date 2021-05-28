@@ -20,6 +20,7 @@ class DefaultConfig(object):
 
     GROUP_ID = 'should-be-overridden'
 
+    GATEWAY_ENDPOINT = 'should-be-overridden'
     ELASTICSEARCH_ENDPOINT = 'should-be-overridden'
     ASSETS_ENDPOINT = 'should-be-overridden'
     CELLS_API_ENDPOINT = 'should-be-overridden'
