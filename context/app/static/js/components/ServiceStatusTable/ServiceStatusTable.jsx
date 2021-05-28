@@ -34,7 +34,7 @@ function buildServiceStatus(args) {
 
 function ServiceStatusTable() {
   const { elasticsearchEndpoint, assetsEndpoint, entityEndpoint, gatewayEndpoint } = useContext(AppContext);
-  const gatewayStatus = useGatewayStatus();
+  const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
   const apiStatuses = gatewayStatus
     ? [

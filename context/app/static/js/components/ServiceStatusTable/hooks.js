@@ -1,8 +1,6 @@
 import React from 'react';
 
-const gatewayUrl = 'https://gateway.api.hubmapconsortium.org/status.json';
-
-function useGatewayStatus() {
+function useGatewayStatus(gatewayUrl) {
   const [gatewayStatus, setGatewayStatus] = React.useState(undefined);
   React.useEffect(() => {
     async function getAndSetGatewayStatus() {
@@ -14,9 +12,9 @@ function useGatewayStatus() {
       setGatewayStatus(await response.json());
     }
     getAndSetGatewayStatus();
-  }, []);
+  }, [gatewayUrl]);
 
   return gatewayStatus;
 }
 
-export { useGatewayStatus, gatewayUrl };
+export { useGatewayStatus };
