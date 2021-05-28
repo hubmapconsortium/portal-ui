@@ -110,7 +110,7 @@ function ServiceStatusTable(props) {
             <TableCell>
               {githubUrl ? (
                 <OutboundLink underline="none" href={githubUrl}>
-                  Github Link <StyledExternalLinkIcon />
+                  {githubUrl.split('/').pop()} <StyledExternalLinkIcon />
                 </OutboundLink>
               ) : (
                 'n/a'
