@@ -32,7 +32,8 @@ def _get_endpoints():
         'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
         + current_app.config['PORTAL_INDEX_PATH'],
         'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
-        'entityEndpoint': current_app.config['ENTITY_API_BASE']
+        'entityEndpoint': current_app.config['ENTITY_API_BASE'],
+        'gatewayEndpoint': 'https://gateway.api.hubmapconsortium.org'
     }
 
 

@@ -19,7 +19,7 @@ function buildServiceStatus(args) {
   const { apiName, endpointUrl, response, noteFunction } = args;
   const { build, version: apiVersion, api_auth } = response;
   const isUp = api_auth || apiName === 'gateway';
-  // The gateway isn't explicit: If it's not up, you wouldn't get anything at all,
+  // The gateway is implicit: If it's not up, you wouldn't get anything at all,
   // (and you wouldn't be able to get to the portal in the first place.)
   return {
     apiName,
@@ -33,7 +33,7 @@ function buildServiceStatus(args) {
 }
 
 function ServiceStatusTable() {
-  const { elasticsearchEndpoint, assetsEndpoint, entityEndpoint } = useContext(AppContext);
+  const { elasticsearchEndpoint, assetsEndpoint, entityEndpoint, gatewayEndpoint } = useContext(AppContext);
   const gatewayStatus = useGatewayStatus();
 
   const apiStatuses = gatewayStatus
@@ -50,7 +50,12 @@ function ServiceStatusTable() {
           response: gatewayStatus.entity_api,
           noteFunction: (api) => `Neo4j: ${api.neo4j_connection}`,
         }),
-        buildServiceStatus({ apiName: 'gateway', response: gatewayStatus.gateway, noteFunction: () => '' }),
+        buildServiceStatus({
+          apiName: 'gateway',
+          endpointUrl: gatewayEndpoint,
+          response: gatewayStatus.gateway,
+          noteFunction: () => '',
+        }),
         buildServiceStatus({
           apiName: 'ingest-ui',
           response: gatewayStatus.ingest_api,
