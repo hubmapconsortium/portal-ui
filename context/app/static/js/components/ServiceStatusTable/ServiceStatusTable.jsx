@@ -17,7 +17,7 @@ import { useGatewayStatus } from './hooks';
 
 function buildServiceStatus(args) {
   const { apiName, endpointUrl, response, noteFunction } = args;
-  const { build, apiVersion, api_auth } = response;
+  const { build, version: apiVersion, api_auth } = response;
   const isUp = api_auth || apiName === 'gateway';
   // The gateway isn't explicit: If it's not up, you wouldn't get anything at all,
   // (and you wouldn't be able to get to the portal in the first place.)
@@ -91,23 +91,23 @@ function ServiceStatusTable() {
         </TableRow>
       </TableHead>
       <TableBody>
-        {apiStatuses.map((api) => (
-          <TableRow key={api.apiName}>
-            <TableCell>{api.apiName}</TableCell>
+        {apiStatuses.map(({ apiName, isUp, endpointUrl, github, apiVersion, build, note }) => (
+          <TableRow key={apiName}>
+            <TableCell>{apiName}</TableCell>
             <TableCell>
-              <StatusIcon isUp={api.isUp} />
+              <StatusIcon isUp={isUp} />
             </TableCell>
-            <TableCell>{api.endpointUrl}</TableCell>
+            <TableCell>{endpointUrl}</TableCell>
             <TableCell>
-              {api.github && (
-                <OutboundLink underline="none" href={api.github}>
+              {github && (
+                <OutboundLink underline="none" href={github}>
                   Github Link <StyledExternalLinkIcon />
                 </OutboundLink>
               )}
             </TableCell>
-            <TableCell>{api.version}</TableCell>
-            <TableCell>{api.build}</TableCell>
-            <TableCell>{api.note}</TableCell>
+            <TableCell>{apiVersion}</TableCell>
+            <TableCell>{build}</TableCell>
+            <TableCell>{note}</TableCell>
           </TableRow>
         ))}
       </TableBody>
