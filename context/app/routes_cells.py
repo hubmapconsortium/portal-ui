@@ -25,17 +25,16 @@ def datasets_selected_by_gene():
 
     gene_name = request.args.get('gene_name')
     min_gene_expression = request.args.get('min_gene_expression')
-    min_cell_percentage = request.args.get('min_cell_percentage')
+
+    # TODO: Remove if unused?
+    # min_cell_percentage = request.args.get('min_cell_percentage')
 
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 
     try:
-        # WARNING: This does not work with the current version of the client.
         dataset_set = client.select_datasets(
-            where='gene',
-            has=[f'{gene_name} > {min_gene_expression}'],
-            min_cell_percentage=min_cell_percentage,
-            genomic_modality='rna'
+            where='cell',
+            has=[f'{gene_name} > {min_gene_expression}']
         )
         return {'results': list(dataset_set.get_list())}
 
