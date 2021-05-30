@@ -26,15 +26,16 @@ def datasets_selected_by_gene():
     gene_name = request.args.get('gene_name')
     min_gene_expression = request.args.get('min_gene_expression')
 
-    # TODO: Remove if unused?
-    # min_cell_percentage = request.args.get('min_cell_percentage')
+    min_cell_percentage = request.args.get('min_cell_percentage')
 
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 
     try:
         dataset_set = client.select_datasets(
             where='cell',
-            has=[f'{gene_name} > {min_gene_expression}']
+            has=[f'{gene_name} > {min_gene_expression}'],
+            genomic_modality='rna',
+            min_cell_percentage=min_cell_percentage
         )
         return {'results': list(dataset_set.get_list())}
 
@@ -54,20 +55,8 @@ def cell_counts_for_datasets():
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 
     try:
-        cell_set = client.select_cells(
-            where='gene',
-            has=[f'{gene_name} > {min_gene_expression}'],
-            genomic_modality='rna'
-        )
-
-        results = []
-        for uuid in uuids:
-            dataset_cells = client.select_cells(where='dataset', has=[uuid])
-            results.append({
-                'uuid': uuid,
-                'cells_expressing_gene': len(dataset_cells & cell_set),
-                'total_cells': len(dataset_cells)
-            })
+        dataset_set = client.select_datasets(where='dataset', has=[uuids])
+        results = list(dataset_set.get_list(values_included=[f'{gene_name} > {min_gene_expression}']))
 
         return {'results': results}
 
