@@ -32,7 +32,7 @@ def datasets_selected_by_gene():
 
     try:
         dataset_set = client.select_datasets(
-            where='cell',
+            where='gene',
             has=[f'{gene_name} > {min_gene_expression}'],
             genomic_modality='rna',
             min_cell_percentage=min_cell_percentage
