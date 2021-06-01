@@ -32,6 +32,16 @@ docker rmi hubmap/portal-ui:latest
 
 echo 'starting...'
 docker-compose -f \$COMPOSE_CONFIG up -d
+
+# Need to restart the hubmap-auth container on STAGE to avoid
+# portal.stage.hubmapconsortium.org and portal-prod.stage.hubmapconsortium.org get swapped
+if [ "$TARGET" = "stage" ]; then
+    echo 'Restart the hubmap-auth container... for STAGE only'
+    docker stop hubmap-auth
+    sleep 5
+    docker start hubmap-auth
+fi
+
 echo 'portal running?' \`docker ps | grep portal-ui\`
 
 docker exec -it portal-ui cat package.json
