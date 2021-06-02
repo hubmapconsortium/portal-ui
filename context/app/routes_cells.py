@@ -56,7 +56,9 @@ def cell_counts_for_datasets():
 
     try:
         dataset_set = client.select_datasets(where='dataset', has=[uuids])
-        results = list(dataset_set.get_list(values_included=[f'{gene_name} > {min_gene_expression}']))
+        results = list(dataset_set.get_list(
+            values_included=[f'{gene_name} > {min_gene_expression}'])
+        )
 
         return {'results': results}
 
