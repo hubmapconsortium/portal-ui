@@ -33,8 +33,8 @@ docker rmi hubmap/portal-ui:latest
 echo 'starting...'
 docker-compose -f \$COMPOSE_CONFIG up -d
 
-# Need to restart the hubmap-auth container on STAGE to avoid
-# portal.stage.hubmapconsortium.org and portal-prod.stage.hubmapconsortium.org get swapped
+# We don't understand why the prod-stage instance is getting the wrong configuration.
+# We hope turning it off-and-on will help, but this is not a good situation.
 if [ "$TARGET" = "stage" ]; then
     echo 'Restart the hubmap-auth container... for STAGE only'
     docker restart hubmap-auth
