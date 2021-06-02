@@ -29,10 +29,7 @@ function CellsAPIDemo(props) {
       <p>
         <b>Return</b> for each UUID the percentage of cells above that minimum
       </p>
-      <p>
-        (Getting counts of cells for each dataset is feasible, but would require multiple API calls. Requests with
-        multiple UUIDs are failing on the backend: https://github.com/hubmapconsortium/cross_modality_query/issues/19)
-      </p>
+      <p>(Getting counts of cells for each dataset is feasible, but would require multiple API calls.)</p>
       <CellPercentagesForDatasets />
 
       <SectionHeader>Cell expression in dataset</SectionHeader>
