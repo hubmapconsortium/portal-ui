@@ -3,7 +3,7 @@ import React from 'react';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { Alert } from 'js/shared-styles/alerts';
 
-import CellCountsForDatasets from './CellCountsForDatasets';
+import CellPercentagesForDatasets from './CellPercentagesForDatasets';
 import CellExpressionInDataset from './CellExpressionInDataset';
 import DatasetsSelectedByGene from './DatasetsSelectedByGene';
 
@@ -11,10 +11,7 @@ import DatasetsSelectedByGene from './DatasetsSelectedByGene';
 function CellsAPIDemo(props) {
   return (
     <>
-      <Alert severity="warning">
-        We&apos;ve gotten ahead of what the python client and the API server support, but this demonstrates what
-        we&apos;re aiming for.
-      </Alert>
+      <Alert severity="warning">UI is still being designed, but we want to demonstrate that the API works.</Alert>
 
       <SectionHeader>Datasets selected by gene</SectionHeader>
       <p>
@@ -33,7 +30,7 @@ function CellsAPIDemo(props) {
         <b>Return</b> for each UUID the percentage of cells above that minimum
       </p>
       <p>(Getting counts of cells for each dataset is feasible, but would require multiple API calls.)</p>
-      <CellCountsForDatasets />
+      <CellPercentagesForDatasets />
 
       <SectionHeader>Cell expression in dataset</SectionHeader>
       <p>

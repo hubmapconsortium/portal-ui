@@ -43,7 +43,7 @@ def datasets_selected_by_gene():
         return {'message': str(e)}
 
 
-@blueprint.route('/cells/cell-counts-for-datasets.json', methods=['POST'])
+@blueprint.route('/cells/cell-percentages-for-datasets.json', methods=['POST'])
 def cell_percentages_for_datasets():
     # Select a set of datasets where cells express a given gene,
     # and for each dataset, give the percentage of matching cells.

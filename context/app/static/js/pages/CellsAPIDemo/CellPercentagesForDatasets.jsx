@@ -7,8 +7,8 @@ import Button from '@material-ui/core/Button';
 import ResultsTable from './ResultsTable';
 
 // eslint-disable-next-line no-unused-vars
-function CellCountsForDatasets(props) {
-  const [uuids, setUUIDs] = useState('81a9fa68b2b4ea3e5f7cb17554149473,other-uuid');
+function CellPercentagesForDatasets(props) {
+  const [uuids, setUUIDs] = useState('14946a8eb12f2d787302f818b72fdc4e,1ca63edfa35971f475c91d92f4a70cb0');
   const [geneName, setGeneName] = useState('VIM');
   const [minGeneExpression, setMinGeneExpression] = useState('1');
 
@@ -23,7 +23,7 @@ function CellCountsForDatasets(props) {
     urlParams.append('gene_name', geneName);
     urlParams.append('min_gene_expression', minGeneExpression);
 
-    const firstResponse = await fetch(`/cells/cell-counts-for-datasets.json?${urlParams}`, {
+    const firstResponse = await fetch(`/cells/cell-percentages-for-datasets.json?${urlParams}`, {
       method: 'POST',
     });
     const responseJson = await firstResponse.json();
@@ -72,4 +72,4 @@ function CellCountsForDatasets(props) {
   );
 }
 
-export default CellCountsForDatasets;
+export default CellPercentagesForDatasets;
