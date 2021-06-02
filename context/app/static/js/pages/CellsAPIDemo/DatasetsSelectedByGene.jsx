@@ -10,7 +10,7 @@ import ResultsTable from './ResultsTable';
 function DatasetsSelectedByGene(props) {
   const [geneName, setGeneName] = useState('VIM');
   const [minGeneExpression, setMinGeneExpression] = useState(1);
-  const [minCellPercentage, setMinCellPercentage] = useState(100);
+  const [minCellPercentage, setMinCellPercentage] = useState(10);
 
   const [results, setResults] = useState([]);
   const [message, setMessage] = useState(null);

@@ -25,17 +25,17 @@ def datasets_selected_by_gene():
 
     gene_name = request.args.get('gene_name')
     min_gene_expression = request.args.get('min_gene_expression')
+
     min_cell_percentage = request.args.get('min_cell_percentage')
 
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 
     try:
-        # WARNING: This does not work with the current version of the client.
         dataset_set = client.select_datasets(
             where='gene',
             has=[f'{gene_name} > {min_gene_expression}'],
-            min_cell_percentage=min_cell_percentage,
-            genomic_modality='rna'
+            genomic_modality='rna',
+            min_cell_percentage=min_cell_percentage
         )
         return {'results': list(dataset_set.get_list())}
 
@@ -43,10 +43,10 @@ def datasets_selected_by_gene():
         return {'message': str(e)}
 
 
-@blueprint.route('/cells/cell-counts-for-datasets.json', methods=['POST'])
-def cell_counts_for_datasets():
-    # Select a set of datasets where cells express a given gene, and for each dataset,
-    # give the number of matching cells, and the total number of cells.
+@blueprint.route('/cells/cell-percentages-for-datasets.json', methods=['POST'])
+def cell_percentages_for_datasets():
+    # Select a set of datasets where cells express a given gene,
+    # and for each dataset, give the percentage of matching cells.
 
     uuids = request.args.getlist('uuid')
     gene_name = request.args.get('gene_name')
@@ -55,20 +55,10 @@ def cell_counts_for_datasets():
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 
     try:
-        cell_set = client.select_cells(
-            where='gene',
-            has=[f'{gene_name} > {min_gene_expression}'],
-            genomic_modality='rna'
+        dataset_set = client.select_datasets(where='dataset', has=[uuids])
+        results = list(dataset_set.get_list(
+            values_included=[f'{gene_name} > {min_gene_expression}'])
         )
-
-        results = []
-        for uuid in uuids:
-            dataset_cells = client.select_cells(where='dataset', has=[uuid])
-            results.append({
-                'uuid': uuid,
-                'cells_expressing_gene': len(dataset_cells & cell_set),
-                'total_cells': len(dataset_cells)
-            })
 
         return {'results': results}
 
@@ -83,7 +73,7 @@ def cell_expression_in_dataset():
     # and then showing expression levels for the two groups, but that’s not needed.)
 
     uuid = request.args.get('uuid')
-    gene_names = request.args.getlist('gene_names')
+    gene_names = request.args.getlist('gene_name')
 
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 

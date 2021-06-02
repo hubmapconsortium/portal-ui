@@ -11,7 +11,21 @@ function ResultsTable(props) {
   if (results.length === 0) {
     return <p>No results</p>;
   }
-  const fields = Object.keys(results[0]);
+  const flatResults = results.map((row) => {
+    const flatRow = {};
+    Object.entries(row).forEach(([key, value]) => {
+      if (typeof value !== 'object') {
+        flatRow[key] = value;
+      } else {
+        // Shouldn't be deeper than one layer, so recursion would be overkill.
+        Object.entries(value).forEach(([nestedKey, nestedValue]) => {
+          flatRow[`${key}.${nestedKey}`] = nestedValue;
+        });
+      }
+    });
+    return flatRow;
+  });
+  const fields = Object.keys(flatResults[0]);
   return (
     <Table>
       <TableHead>
@@ -22,7 +36,7 @@ function ResultsTable(props) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {results.map((result) => (
+        {flatResults.map((result) => (
           <TableRow>
             {fields.map((field) => (
               <TableCell key={field}>{result[field]}</TableCell>

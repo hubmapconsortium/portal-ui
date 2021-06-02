@@ -3,7 +3,7 @@ import React from 'react';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { Alert } from 'js/shared-styles/alerts';
 
-import CellCountsForDatasets from './CellCountsForDatasets';
+import CellPercentagesForDatasets from './CellPercentagesForDatasets';
 import CellExpressionInDataset from './CellExpressionInDataset';
 import DatasetsSelectedByGene from './DatasetsSelectedByGene';
 
@@ -11,10 +11,7 @@ import DatasetsSelectedByGene from './DatasetsSelectedByGene';
 function CellsAPIDemo(props) {
   return (
     <>
-      <Alert severity="warning">
-        We&apos;ve gotten ahead of what the python client and the API server support, but this demonstrates what
-        we&apos;re aiming for.
-      </Alert>
+      <Alert severity="warning">UI is still being designed, but we want to demonstrate that the API works.</Alert>
 
       <SectionHeader>Datasets selected by gene</SectionHeader>
       <p>
@@ -25,21 +22,22 @@ function CellsAPIDemo(props) {
       </p>
       <DatasetsSelectedByGene />
 
-      <SectionHeader>Cell counts for datasets</SectionHeader>
+      <SectionHeader>Cell percentages for datasets</SectionHeader>
       <p>
         <b>Given</b> a list of dataset UUIDs, a gene, and a minimum expression level
       </p>
       <p>
-        <b>Return</b> for each UUID the number of cells above that minimum, and the total number of cells
+        <b>Return</b> for each UUID the percentage of cells above that minimum
       </p>
-      <CellCountsForDatasets />
+      <p>(Getting counts of cells for each dataset is feasible, but would require multiple API calls.)</p>
+      <CellPercentagesForDatasets />
 
       <SectionHeader>Cell expression in dataset</SectionHeader>
       <p>
-        <b>Given</b> a dataset UUID and a gene
+        <b>Given</b> a dataset UUID and a list of genes
       </p>
       <p>
-        <b>Return</b> the expression level of that gene for every cell in the dataset
+        <b>Return</b> the expression level of those genes for every cell in the dataset
       </p>
       <CellExpressionInDataset />
     </>
