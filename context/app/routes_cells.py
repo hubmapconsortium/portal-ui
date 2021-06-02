@@ -44,9 +44,9 @@ def datasets_selected_by_gene():
 
 
 @blueprint.route('/cells/cell-counts-for-datasets.json', methods=['POST'])
-def cell_counts_for_datasets():
-    # Select a set of datasets where cells express a given gene, and for each dataset,
-    # give the number of matching cells, and the total number of cells.
+def cell_percentages_for_datasets():
+    # Select a set of datasets where cells express a given gene,
+    # and for each dataset, give the percentage of matching cells.
 
     uuids = request.args.getlist('uuid')
     gene_name = request.args.get('gene_name')

@@ -25,13 +25,14 @@ function CellsAPIDemo(props) {
       </p>
       <DatasetsSelectedByGene />
 
-      <SectionHeader>Cell counts for datasets</SectionHeader>
+      <SectionHeader>Cell percentages for datasets</SectionHeader>
       <p>
         <b>Given</b> a list of dataset UUIDs, a gene, and a minimum expression level
       </p>
       <p>
-        <b>Return</b> for each UUID the number of cells above that minimum, and the total number of cells
+        <b>Return</b> for each UUID the percentage of cells above that minimum
       </p>
+      <p>(Getting counts of cells for each dataset is feasible, but would require multiple API calls.)</p>
       <CellCountsForDatasets />
 
       <SectionHeader>Cell expression in dataset</SectionHeader>
