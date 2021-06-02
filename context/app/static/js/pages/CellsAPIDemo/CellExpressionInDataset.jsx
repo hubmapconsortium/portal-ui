@@ -9,7 +9,7 @@ import ResultsTable from './ResultsTable';
 // eslint-disable-next-line no-unused-vars
 function CellExpressionInDataset(props) {
   const [uuid, setUUID] = useState('81a9fa68b2b4ea3e5f7cb17554149473');
-  const [geneName, setGeneName] = useState('VIM');
+  const [geneNames, setGeneNames] = useState('VIM');
 
   const [results, setResults] = useState([]);
   const [message, setMessage] = useState(null);
@@ -17,7 +17,9 @@ function CellExpressionInDataset(props) {
   async function handleSubmit() {
     const urlParams = new URLSearchParams();
     urlParams.append('uuid', uuid);
-    urlParams.append('gene_name', geneName);
+    geneNames.split(',').forEach((geneName) => {
+      urlParams.append('gene_name', geneName);
+    });
 
     const firstResponse = await fetch(`/cells/cell-expression-in-dataset.json?${urlParams}`, {
       method: 'POST',
@@ -36,7 +38,7 @@ function CellExpressionInDataset(props) {
     const { name } = target;
     const setFields = {
       uuid: setUUID,
-      geneName: setGeneName,
+      geneNames: setGeneNames,
     };
     setFields[name](event.target.value);
   }
@@ -44,7 +46,7 @@ function CellExpressionInDataset(props) {
   return (
     <Paper>
       <TextField label="uuid" value={uuid} name="uuid" variant="outlined" onChange={handleChange} />
-      <TextField label="gene name" value={geneName} name="geneName" variant="outlined" onChange={handleChange} />
+      <TextField label="gene names" value={geneNames} name="geneNames" variant="outlined" onChange={handleChange} />
       <br />
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
