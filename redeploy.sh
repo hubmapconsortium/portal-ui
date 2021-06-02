@@ -32,6 +32,14 @@ docker rmi hubmap/portal-ui:latest
 
 echo 'starting...'
 docker-compose -f \$COMPOSE_CONFIG up -d
+
+# We don't understand why the prod-stage instance is getting the wrong configuration.
+# We hope turning it off-and-on will help, but this is not a good situation.
+if [ "$TARGET" = "stage" ]; then
+    echo 'Restart the hubmap-auth container... for STAGE only'
+    docker restart hubmap-auth
+fi
+
 echo 'portal running?' \`docker ps | grep portal-ui\`
 
 docker exec -it portal-ui cat package.json
@@ -41,4 +49,3 @@ EOF
 echo "Visit --> http://portal.$TARGET.hubmapconsortium.org/"
 
 [ "$TARGET" = "stage" ] && echo "Visit --> http://portal-prod.stage.hubmapconsortium.org/"
-
