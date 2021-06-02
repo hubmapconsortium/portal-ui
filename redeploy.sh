@@ -37,9 +37,7 @@ docker-compose -f \$COMPOSE_CONFIG up -d
 # portal.stage.hubmapconsortium.org and portal-prod.stage.hubmapconsortium.org get swapped
 if [ "$TARGET" = "stage" ]; then
     echo 'Restart the hubmap-auth container... for STAGE only'
-    docker stop hubmap-auth
-    sleep 5
-    docker start hubmap-auth
+    docker restart hubmap-auth
 fi
 
 echo 'portal running?' \`docker ps | grep portal-ui\`
@@ -51,4 +49,3 @@ EOF
 echo "Visit --> http://portal.$TARGET.hubmapconsortium.org/"
 
 [ "$TARGET" = "stage" ] && echo "Visit --> http://portal-prod.stage.hubmapconsortium.org/"
-
