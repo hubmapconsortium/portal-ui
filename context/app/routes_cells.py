@@ -73,7 +73,7 @@ def cell_expression_in_dataset():
     # and then showing expression levels for the two groups, but that’s not needed.)
 
     uuid = request.args.get('uuid')
-    gene_names = request.args.getlist('gene_names')
+    gene_names = request.args.getlist('gene_name')
 
     client = Client(current_app.config['CELLS_API_ENDPOINT'])
 
