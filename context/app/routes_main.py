@@ -2,6 +2,7 @@ from os.path import dirname
 from urllib.parse import urlparse
 import json
 import nbformat
+from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
 from flask import (Blueprint, render_template, abort, current_app,
                    session, request, redirect, url_for, Response)
@@ -125,21 +126,21 @@ def details_notebook(type, uuid):
     vitessce_conf = client.get_vitessce_conf(entity)
     if vitessce_conf is None:
         abort(404)
-    nb = nbformat.v4.new_notebook()
+    nb = new_notebook()
     nb['cells'] = [
-        nbformat.v4.new_markdown_cell(f"""
+        new_markdown_cell(f"""
 Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','')})
         """.strip()),
-        nbformat.v4.new_code_cell('\n'.join([
+        new_code_cell('\n'.join([
             '!pip install vitessce==0.1.0a9',
             '!jupyter nbextension install --py --sys-prefix vitessce',
             '!jupyter nbextension enable --py --sys-prefix vitessce'
         ])),
-        nbformat.v4.new_code_cell('from vitessce import VitessceConfig'),
-        nbformat.v4.new_code_cell(f'vitessce_conf = {vitessce_conf}'),
-        nbformat.v4.new_code_cell('vc = VitessceConfig.from_dict(vitessce_conf)'),
-        nbformat.v4.new_code_cell('vw = vc.widget()'),
-        nbformat.v4.new_code_cell('vw')
+        new_code_cell('from vitessce import VitessceConfig'),
+        new_code_cell(f'vitessce_conf = {vitessce_conf}'),
+        new_code_cell('vc = VitessceConfig.from_dict(vitessce_conf)'),
+        new_code_cell('vw = vc.widget()'),
+        new_code_cell('vw')
     ]
     return Response(
         response=nbformat.writes(nb),
