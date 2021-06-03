@@ -83,6 +83,14 @@ def hbm_redirect(hbm_suffix):
         url_for('routes.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
 
 
+@blueprint.route('/browse/<type>/<uuid>.<unknown_ext>')
+def unknown_ext(type, uuid, unknown_ext):
+    # https://github.com/pallets/werkzeug/blob/b01fa1817343d2a36a9d8bb17f61ddf209c27c2b/src/werkzeug/routing.py#L1126
+    # Rules with static parts come before variable routes...
+    # so the known extensions will come before this.
+    abort(404)
+
+
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
     if type not in entity_types:
