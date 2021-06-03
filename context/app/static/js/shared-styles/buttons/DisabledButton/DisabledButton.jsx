@@ -1,8 +1,9 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+
+import { StyledButton } from './style';
 
 function DisabledButton({ disabled, ...props }) {
-  return <Button key={disabled} disabled={disabled} {...props} />;
+  return <StyledButton disabled={disabled} {...props} />;
 }
 
 export default DisabledButton;
