@@ -4,17 +4,16 @@ import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 
-function AncestorNote({ entity, ancestorOrDescendantNote }) {
+function AncestorNote({ entity, label }) {
   let message = '...';
 
-  const text = ancestorOrDescendantNote === 'ancestor' ? 'Derived from' : 'Ancestor of';
   if (entity) {
     const { entity_type, uuid, display_doi } = entity;
     const lcType = entity_type.toLowerCase();
     const dataTypes = (entity?.mapped_data_types || []).join('/');
     message = (
       <>
-        {`${text} ${dataTypes} ${lcType} `}
+        {`${label} ${dataTypes} ${lcType} `}
         <LightBlueLink href={`/browse/${lcType}/${uuid}`}>{display_doi}</LightBlueLink>
       </>
     );
