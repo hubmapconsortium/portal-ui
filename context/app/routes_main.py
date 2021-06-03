@@ -140,9 +140,9 @@ def details_notebook(type, uuid):
 Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','')})
         """.strip()),
         new_code_cell("""
-'!pip install vitessce==0.1.0a9',
-'!jupyter nbextension install --py --sys-prefix vitessce',
-'!jupyter nbextension enable --py --sys-prefix vitessce'
+!pip install vitessce==0.1.0a9
+!jupyter nbextension install --py --sys-prefix vitessce
+!jupyter nbextension enable --py --sys-prefix vitessce
         """.strip()),
         new_code_cell('from vitessce import VitessceConfig'),
         new_markdown_cell('TODO: Generate the appropriate `conf` using `vitessce-python`'),
