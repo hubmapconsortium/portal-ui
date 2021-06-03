@@ -61,8 +61,11 @@ function Search(props) {
       `Unexpected URL param "${typeParam}=${type}"; Should be one of {${Object.keys(resultFieldsByType).join(', ')}}`,
     );
   }
-  const hasAncestorParam = searchParams.has('ancestor_ids[0]');
-  const hasDescendantParam = searchParams.has('descendant_ids[0]');
+
+  const notesToDisplay = [
+    { urlSearchParam: 'ancestor_ids[0]', label: 'Derived from' },
+    { urlSearchParam: 'descendant_ids[0]', label: 'Ancestor of' },
+  ].filter((note) => searchParams.has(note.urlSearchParam));
 
   const httpHeaders = getAuthHeader(nexusToken);
   const resultFields = resultFieldsByType[type];
@@ -107,24 +110,15 @@ function Search(props) {
           />
         </>
       )}
-      {hasAncestorParam && (
+      {notesToDisplay.map((note) => (
         <LookupEntity
-          uuid={searchParams.get('ancestor_ids[0]')}
+          uuid={searchParams.get(note.urlSearchParam)}
           elasticsearchEndpoint={elasticsearchEndpoint}
           nexusToken={nexusToken}
         >
-          <AncestorNote ancestorOrDescendantNote="ancestor" />
+          <AncestorNote label={note.label} />
         </LookupEntity>
-      )}
-      {hasDescendantParam && (
-        <LookupEntity
-          uuid={searchParams.get('descendant_ids[0]')}
-          elasticsearchEndpoint={elasticsearchEndpoint}
-          nexusToken={nexusToken}
-        >
-          <AncestorNote ancestorOrDescendantNote="descendant" />
-        </LookupEntity>
-      )}
+      ))}
       {wrappedSearch}
     </>
   );
