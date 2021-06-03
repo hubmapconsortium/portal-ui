@@ -1,1 +1,0 @@
-- Gateway endpoint should also be provided as a config, instead of being hardcoded.

@@ -1,3 +1,12 @@
+## v0.19.2 - 2021-06-03
+
+- Update to the latest cells client, and update the flask endpoints.
+- New dev-search query to find donor metadata.
+- Gateway endpoint should also be provided as a config, instead of being hardcoded.
+- Tweak redeploy script; Hope this will make sure that the prod-stage instance gets the right config.
+- Show the URLs of the endpoints we hit on the status page.
+
+
 ## v0.19.1 - 2021-05-26
 
 - Fix new stitched `AnnData` SPRM viewconf.

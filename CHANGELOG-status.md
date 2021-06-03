@@ -1,1 +1,0 @@
-- Show the URLs of the endpoints we hit on the status page.

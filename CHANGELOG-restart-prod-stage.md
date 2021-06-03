@@ -1,1 +1,0 @@
-- Tweak redeploy script; Hope this will make sure that the prod-stage instance gets the right config.
