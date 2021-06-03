@@ -8,7 +8,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 
-import DisabledButton from 'js/shared-styles/buttons/DisabledButton';
+import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { getDUAText } from './utils';
 import { ObliqueSpan, StyledHeader, StyledDiv } from './style';
@@ -78,9 +78,9 @@ function FileBrowserDUA(props) {
         <Button onClick={handleClose} autoFocus>
           Disagree
         </Button>
-        <DisabledButton onClick={handleAgree} disabled={!isChecked}>
+        <OptDisabledButton onClick={handleAgree} disabled={!isChecked}>
           Agree
-        </DisabledButton>
+        </OptDisabledButton>
       </DialogActions>
     </Dialog>
   );

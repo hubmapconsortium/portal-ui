@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from 'js/components/Providers';
 import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
-import DisabledButton from 'js/shared-styles/buttons/DisabledButton';
+import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import ProvData from '../ProvVis/ProvData';
 
 function getUniqueNewSteps(steps, newSteps) {
@@ -37,14 +37,14 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity })
     addDescendantSteps(newSteps);
   }
   return (
-    <DisabledButton
+    <OptDisabledButton
       color="primary"
       variant="contained"
       onClick={handleShowDescendants}
       disabled={newSteps.length === 0}
     >
       Show Derived Entities
-    </DisabledButton>
+    </OptDisabledButton>
   );
 }
 

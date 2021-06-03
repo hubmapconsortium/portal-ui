@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 
-import DisabledButton from 'js/shared-styles/buttons/DisabledButton';
+import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { StyledTitleTextField, StyledDescriptionTextField } from './style';
@@ -59,9 +59,9 @@ function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTi
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <DisabledButton onClick={() => handleSubmit()} color="primary" disabled={title.length === 0}>
+          <OptDisabledButton onClick={() => handleSubmit()} color="primary" disabled={title.length === 0}>
             Save
-          </DisabledButton>
+          </OptDisabledButton>
         </>
       }
       isOpen={dialogIsOpen}
