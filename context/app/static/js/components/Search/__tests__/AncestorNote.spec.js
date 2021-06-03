@@ -10,7 +10,7 @@ test('AncestorNote renders', () => {
     entity_type: 'FAKE_TYPE',
     display_doi: 'FAKE_DOI',
   };
-  const { getByText } = render(<AncestorNote entity={entity} />);
+  const { getByText } = render(<AncestorNote entity={entity} label="Derived from" />);
   expect(getByText('Derived from fake_type')).toBeInTheDocument();
   const link = getByText('FAKE_DOI');
   expect(link.href).toBe('http://localhost/browse/fake_type/FAKE_UUID');
