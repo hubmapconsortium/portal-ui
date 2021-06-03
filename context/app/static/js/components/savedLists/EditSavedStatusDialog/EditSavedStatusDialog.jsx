@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import useStateSet from 'js/hooks/useStateSet';
 import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
@@ -72,9 +73,9 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_typ
           <Button onClick={() => handleClose()} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => handleSave()} color="primary" disabled={!savedListsExist}>
+          <OptDisabledButton onClick={() => handleSave()} color="primary" disabled={!savedListsExist}>
             Save
-          </Button>
+          </OptDisabledButton>
         </>
       }
       isOpen={dialogIsOpen}

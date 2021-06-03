@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
 
 import { AppContext } from 'js/components/Providers';
 import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
+import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import ProvData from '../ProvVis/ProvData';
 
 function getUniqueNewSteps(steps, newSteps) {
@@ -37,9 +37,14 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity })
     addDescendantSteps(newSteps);
   }
   return (
-    <Button color="primary" variant="contained" onClick={handleShowDescendants} disabled={newSteps.length === 0}>
+    <OptDisabledButton
+      color="primary"
+      variant="contained"
+      onClick={handleShowDescendants}
+      disabled={newSteps.length === 0}
+    >
       Show Derived Entities
-    </Button>
+    </OptDisabledButton>
   );
 }
 
