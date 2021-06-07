@@ -1,6 +1,7 @@
 import urllib
 from pathlib import Path
 import re
+from collections import namedtuple
 
 from flask import current_app
 from vitessce import (
@@ -19,6 +20,9 @@ from .paths import SPRM_JSON_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR
 MOCK_URL = "https://example.com"
 
 
+ConfCells = namedtuple('ConfCells', ['conf', 'cells'])
+
+
 class ViewConf:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
@@ -33,9 +37,8 @@ class ViewConf:
         self._is_mock = is_mock
         self._files = []
 
-    def build_vitessce_conf(self):
-        "Build a Vitessce view conf and attach to conf attribute"
-        pass
+    def get_conf_cells(self):
+        raise NotImplementedError
 
     def _replace_url_in_file(self, file):
         """Replace url in incoming file object
@@ -119,7 +122,7 @@ class ImagePyramidViewConf(ImagingViewConf):
         self.image_pyramid_regex = IMAGE_PYRAMID_DIR
         super().__init__(entity, nexus_token, is_mock)
 
-    def build_vitessce_conf(self):
+    def get_conf_cells(self):
         file_paths_found = self._get_file_paths()
         found_images = get_matches(
             file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
@@ -147,11 +150,11 @@ class ImagePyramidViewConf(ImagingViewConf):
         conf = vc.to_dict()
         # Don't want to render all layers
         del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
-        return conf
+        return ConfCells(conf, None)
 
 
 class ScatterplotViewConf(ViewConf):
-    def build_vitessce_conf(self):
+    def get_conf_cells(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
         file_paths_found = self._get_file_paths()
         # We need to check that the files we expect actually exist.
@@ -164,7 +167,7 @@ class ScatterplotViewConf(ViewConf):
         for file in self._files:
             dataset = dataset.add_file(**(self._replace_url_in_file(file)))
         vc = self._setup_scatterplot_view_config(vc, dataset)
-        return vc.to_dict()
+        return ConfCells(vc.to_dict(), None)
 
     def _setup_scatterplot_view_config(self, vc, dataset):
         vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=9, h=12)
@@ -226,7 +229,7 @@ class SPRMJSONViewConf(SPRMViewConf):
             },
         ]
 
-    def build_vitessce_conf(self):
+    def get_conf_cells(self):
         vc, dataset = self._perpare_vc_and_dataset_with_image()
         file_paths_found = self._get_file_paths()
         # This tile has no segmentations
@@ -245,7 +248,7 @@ class SPRMJSONViewConf(SPRMViewConf):
             vc = self._setup_view_config_raster_cellsets_expression_segmentation(
                 vc, dataset
             )
-        return vc.to_dict()
+        return ConfCells(vc.to_dict(), None)
 
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
         vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=8)
@@ -268,7 +271,7 @@ class SPRMAnnDataViewConf(SPRMViewConf):
         self._base_name = kwargs["base_name"]
         self._imaging_path = f"{self.image_pyramid_regex}/{kwargs['imaging_path']}"
 
-    def build_vitessce_conf(self):
+    def get_conf_cells(self):
         vc, dataset = self._perpare_vc_and_dataset_with_image()
         file_paths_found = self._get_file_paths()
         zarr_path = f"anndata-zarr/{self._base_name}-anndata.zarr"
@@ -303,7 +306,7 @@ class SPRMAnnDataViewConf(SPRMViewConf):
         vc = self._setup_view_config_raster_cellsets_expression_segmentation(
             vc, dataset
         )
-        return vc.to_dict()
+        return ConfCells(vc.to_dict(), None)
 
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
         vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=12)

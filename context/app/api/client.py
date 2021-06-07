@@ -128,7 +128,7 @@ class ApiClient():
             vc = get_view_config_class_for_data_types(
                 entity=entity, nexus_token=self.nexus_token
             )
-            conf = vc.build_vitessce_conf()
+            conf = vc.get_conf_cells().conf
             return conf
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'

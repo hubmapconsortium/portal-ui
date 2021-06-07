@@ -22,7 +22,8 @@ from .base_confs import (
     ImagePyramidViewConf,
     SPRMJSONViewConf,
     SPRMAnnDataViewConf,
-    ViewConf
+    ViewConf,
+    ConfCells
 )
 from .assays import (
     SEQFISH,
@@ -43,7 +44,7 @@ from .paths import (
 
 
 class SeqFISHViewConf(ImagingViewConf):
-    def build_vitessce_conf(self):
+    def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         full_seqfish_reqex = "/".join(
             [
@@ -82,7 +83,7 @@ class SeqFISHViewConf(ImagingViewConf):
             # Don't want to render all layers
             del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
             confs.append(conf)
-        return confs
+        return ConfCells(confs, None)
 
     def _get_hybcycle(self, image_path):
         return re.search(SEQFISH_HYB_CYCLE_REGEX, image_path)[0]
@@ -99,7 +100,7 @@ class CytokitSPRMViewConfigError(Exception):
 
 
 class TiledSPRMConf(ViewConf):
-    def build_vitessce_conf(self):
+    def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(
             file_paths_found,
@@ -118,12 +119,12 @@ class TiledSPRMConf(ViewConf):
                 base_name=tile,
                 imaging_path=CODEX_TILE_DIR
             )
-            conf = vc.build_vitessce_conf()
+            conf = vc.get_conf_cells().conf
             if conf == {}:
                 message = f'Cytokit SPRM assay with uuid {self._uuid} has empty view config'
                 raise CytokitSPRMViewConfigError(message)
             confs.append(conf)
-        return confs
+        return ConfCells(confs, None)
 
 
 class RNASeqConf(ScatterplotViewConf):
@@ -165,7 +166,7 @@ class ATACSeqConf(ScatterplotViewConf):
 
 
 class StitchedCytokitSPRMConf(ViewConf):
-    def build_vitessce_conf(self):
+    def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_regions = get_matches(file_paths_found, STITCHED_REGEX)
         if len(found_regions) == 0:
@@ -182,18 +183,18 @@ class StitchedCytokitSPRMConf(ViewConf):
                 base_name=region,
                 imaging_path=STITCHED_IMAGE_DIR,
             )
-            conf = vc.build_vitessce_conf()
+            conf = vc.get_conf_cells().conf
             if conf == {}:
                 raise CytokitSPRMViewConfigError(
                     f"Cytokit SPRM assay with uuid {self._uuid} has empty view\
                         config for region '{region}'"
                 )
             confs.append(conf)
-        return confs if len(confs) > 1 else confs[0]
+        return ConfCells(confs if len(confs) > 1 else confs[0], None)
 
 
 class RNASeqAnnDataZarrConf(ViewConf):
-    def build_vitessce_conf(self):
+    def get_conf_cells(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         if f'{zarr_path}/.zgroup' not in file_paths_found:
@@ -220,7 +221,7 @@ class RNASeqAnnDataZarrConf(ViewConf):
         )
         )
         vc = self._setup_anndata_view_config(vc, dataset)
-        return vc.to_dict()
+        return ConfCells(vc.to_dict(), None)
 
     def _setup_anndata_view_config(self, vc, dataset):
         vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=4, h=6)
@@ -241,8 +242,8 @@ class IMSConf(ImagePyramidViewConf):
 
 
 class NullConf():
-    def build_vitessce_conf(self):
-        return None
+    def get_conf_cells(self):
+        return ConfCells(None, None)
 
 
 _assays = None
