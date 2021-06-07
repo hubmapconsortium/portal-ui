@@ -69,7 +69,6 @@ function DatasetDetail(props) {
     description,
     status,
     mapped_data_access_level,
-    immediate_ancestors,
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
@@ -114,7 +113,7 @@ function DatasetDetail(props) {
           </span>
         </Alert>
       )}
-      {entity_type === 'Support' && <SupportAlert immediate_ancestors={immediate_ancestors} uuid={uuid} />}
+      {entity_type === 'Support' && <SupportAlert uuid={uuid} />}
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}
