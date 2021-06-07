@@ -10,7 +10,7 @@ import { getAuthHeader } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/Search/config';
 import { listFilter } from 'js/components/Search/utils';
-import AncestorNote from 'js/components/Search/AncestorNote';
+import SearchNote from 'js/components/Search/SearchNote';
 import Results from 'js/components/Search/Results';
 import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 import { SearchHeader } from './style';
@@ -35,7 +35,11 @@ function Search(props) {
     closeSearchDatasetTutorial,
   } = useSearchDatasetTutorialStore(searchDatasetTutorialSelector);
 
-  const hiddenFilters = [listFilter('ancestor_ids', 'Ancestor ID'), listFilter('entity_type', 'Entity Type')];
+  const hiddenFilters = [
+    listFilter('ancestor_ids', 'Ancestor ID'),
+    listFilter('entity_type', 'Entity Type'),
+    listFilter('descendant_ids', 'Descendant ID'),
+  ];
 
   const filtersByType = {
     donor: { ...donorConfig.filters, '': hiddenFilters },
@@ -57,7 +61,11 @@ function Search(props) {
       `Unexpected URL param "${typeParam}=${type}"; Should be one of {${Object.keys(resultFieldsByType).join(', ')}}`,
     );
   }
-  const hasAncestorParam = searchParams.has('ancestor_ids[0]');
+
+  const notesToDisplay = [
+    { urlSearchParam: 'ancestor_ids[0]', label: 'Derived from' },
+    { urlSearchParam: 'descendant_ids[0]', label: 'Ancestor of' },
+  ].filter((note) => searchParams.has(note.urlSearchParam));
 
   const httpHeaders = getAuthHeader(nexusToken);
   const resultFields = resultFieldsByType[type];
@@ -102,15 +110,15 @@ function Search(props) {
           />
         </>
       )}
-      {hasAncestorParam && (
+      {notesToDisplay.map((note) => (
         <LookupEntity
-          uuid={searchParams.get('ancestor_ids[0]')}
+          uuid={searchParams.get(note.urlSearchParam)}
           elasticsearchEndpoint={elasticsearchEndpoint}
           nexusToken={nexusToken}
         >
-          <AncestorNote />
+          <SearchNote label={note.label} />
         </LookupEntity>
-      )}
+      ))}
       {wrappedSearch}
     </>
   );
