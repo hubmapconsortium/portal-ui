@@ -4,15 +4,15 @@ import re
 
 import pytest
 
-from .base_confs import ImagePyramidViewConf, SPRMJSONViewConf
+from .base_confs import ImagePyramidViewConfBuilder, SPRMJSONViewConfBuilder
 from .assay_confs import (
-    SeqFISHViewConf,
+    SeqFISHViewConfBuilder,
     TiledSPRMConf,
     RNASeqConf,
     ATACSeqConf,
     IMSConf,
     RNASeqAnnDataZarrConf,
-    SPRMAnnDataViewConf,
+    SPRMAnnDataViewConfBuilder,
     StitchedCytokitSPRMConf
 )
 
@@ -28,11 +28,11 @@ AssayConfClasses = {
     "rna": RNASeqConf,
     "atac": ATACSeqConf,
     "ims": IMSConf,
-    "image_pyramid": ImagePyramidViewConf,
-    "seqfish": SeqFISHViewConf,
-    "sprm": SPRMJSONViewConf,
+    "image_pyramid": ImagePyramidViewConfBuilder,
+    "seqfish": SeqFISHViewConfBuilder,
+    "sprm": SPRMJSONViewConfBuilder,
     "rna_zarr": RNASeqAnnDataZarrConf,
-    "sprm_anndata": SPRMAnnDataViewConf,
+    "sprm_anndata": SPRMAnnDataViewConfBuilder,
     "cytokit_anndata": StitchedCytokitSPRMConf
 }
 
