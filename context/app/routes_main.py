@@ -1,6 +1,8 @@
 from os.path import dirname
 from urllib.parse import urlparse
 import json
+import nbformat
+from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
 from flask import (Blueprint, render_template, abort, current_app,
                    session, request, redirect, url_for, Response)
@@ -83,6 +85,14 @@ def hbm_redirect(hbm_suffix):
         url_for('routes.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
 
 
+@blueprint.route('/browse/<type>/<uuid>.<unknown_ext>')
+def unknown_ext(type, uuid, unknown_ext):
+    # https://github.com/pallets/werkzeug/blob/b01fa1817343d2a36a9d8bb17f61ddf209c27c2b/src/werkzeug/routing.py#L1126
+    # Rules with static parts come before variable routes...
+    # so the known extensions will come before this.
+    abort(404)
+
+
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
     if type not in entity_types:
@@ -108,24 +118,50 @@ def details(type, uuid):
     )
 
 
-@blueprint.route('/browse/<type>/<uuid>.<ext>')
-def details_ext(type, uuid, ext):
+@blueprint.route('/browse/<type>/<uuid>.json')
+def details_json(type, uuid):
     if type not in entity_types:
-        abort(404)
-    if ext != 'json':
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
     return entity
 
 
-@blueprint.route('/browse/<type>/<uuid>.rui.<ext>')
-def details_rui_ext(type, uuid, ext):
+@blueprint.route('/browse/<type>/<uuid>.ipynb')
+def details_notebook(type, uuid):
+    if type not in entity_types:
+        abort(404)
+    client = _get_client()
+    entity = client.get_entity(uuid)
+    vitessce_conf = client.get_vitessce_conf(entity)
+    if vitessce_conf is None:
+        abort(404)
+    nb = new_notebook()
+    nb['cells'] = [
+        new_markdown_cell(f"""
+Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','')})
+        """.strip()),
+        new_code_cell("""
+!pip install vitessce==0.1.0a9
+!jupyter nbextension install --py --sys-prefix vitessce
+!jupyter nbextension enable --py --sys-prefix vitessce
+        """.strip()),
+        new_code_cell('from vitessce import VitessceConfig'),
+        new_markdown_cell('TODO: Generate the appropriate `conf` using `vitessce-python`'),
+        new_code_cell('conf.widget()')
+    ]
+    return Response(
+        response=nbformat.writes(nb),
+        headers={'Content-Disposition': f"attachment; filename={entity['display_doi']}.ipynb"},
+        mimetype='application/x-ipynb+json'
+    )
+
+
+@blueprint.route('/browse/<type>/<uuid>.rui.json')
+def details_rui_json(type, uuid):
     # Note that the API returns a blob of JSON as a string,
     # so, to return a JSON object, and not just a string, we need to decode.
     if type not in entity_types:
-        abort(404)
-    if ext != 'json':
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
