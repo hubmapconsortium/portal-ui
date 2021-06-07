@@ -1,0 +1,1 @@
+- `ViewConf` to `ViewConfBuilder` to disambiguate the object from what it returns.

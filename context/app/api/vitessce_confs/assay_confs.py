@@ -17,12 +17,12 @@ from .utils import (
     get_matches,
 )
 from .base_confs import (
-    ImagingViewConf,
-    ScatterplotViewConf,
-    ImagePyramidViewConf,
-    SPRMJSONViewConf,
-    SPRMAnnDataViewConf,
-    ViewConf,
+    ImagingViewConfBuilder,
+    ScatterplotViewConfBuilder,
+    ImagePyramidViewConfBuilder,
+    SPRMJSONViewConfBuilder,
+    SPRMAnnDataViewConfBuilder,
+    ViewConfBuilder,
     ConfCells
 )
 from .assays import (
@@ -43,7 +43,7 @@ from .paths import (
 )
 
 
-class SeqFISHViewConf(ImagingViewConf):
+class SeqFISHViewConfBuilder(ImagingViewConfBuilder):
     def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         full_seqfish_reqex = "/".join(
@@ -99,7 +99,7 @@ class CytokitSPRMViewConfigError(Exception):
     pass
 
 
-class TiledSPRMConf(ViewConf):
+class TiledSPRMViewConfBuilder(ViewConfBuilder):
     def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(
@@ -112,7 +112,7 @@ class TiledSPRMConf(ViewConf):
             raise FileNotFoundError(message)
         confs = []
         for tile in sorted(found_tiles):
-            vc = SPRMJSONViewConf(
+            vc = SPRMJSONViewConfBuilder(
                 entity=self._entity,
                 nexus_token=self._nexus_token,
                 is_mock=self._is_mock,
@@ -127,7 +127,7 @@ class TiledSPRMConf(ViewConf):
         return ConfCells(confs, None)
 
 
-class RNASeqConf(ScatterplotViewConf):
+class RNASeqViewConfBuilder(ScatterplotViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
@@ -145,7 +145,7 @@ class RNASeqConf(ScatterplotViewConf):
         ]
 
 
-class ATACSeqConf(ScatterplotViewConf):
+class ATACSeqViewConfBuilder(ScatterplotViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
@@ -165,7 +165,7 @@ class ATACSeqConf(ScatterplotViewConf):
         ]
 
 
-class StitchedCytokitSPRMConf(ViewConf):
+class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
     def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_regions = get_matches(file_paths_found, STITCHED_REGEX)
@@ -176,7 +176,7 @@ class StitchedCytokitSPRMConf(ViewConf):
             )
         confs = []
         for region in sorted(found_regions):
-            vc = SPRMAnnDataViewConf(
+            vc = SPRMAnnDataViewConfBuilder(
                 entity=self._entity,
                 nexus_token=self._nexus_token,
                 is_mock=self._is_mock,
@@ -193,7 +193,7 @@ class StitchedCytokitSPRMConf(ViewConf):
         return ConfCells(confs if len(confs) > 1 else confs[0], None)
 
 
-class RNASeqAnnDataZarrConf(ViewConf):
+class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
     def get_conf_cells(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -232,7 +232,7 @@ class RNASeqAnnDataZarrConf(ViewConf):
         return vc
 
 
-class IMSConf(ImagePyramidViewConf):
+class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # Do not show the separated mass-spec images.
@@ -241,7 +241,7 @@ class IMSConf(ImagePyramidViewConf):
         )
 
 
-class NullConf():
+class NullViewConfBuilder():
     def get_conf_cells(self):
         return ConfCells(None, None)
 
@@ -268,26 +268,26 @@ def get_view_config_class_for_data_types(entity, nexus_token):
     if "is_image" in hints:
         if "codex" in hints:
             if ('sprm-to-anndata.cwl' in dag_names):
-                return StitchedCytokitSPRMConf(
+                return StitchedCytokitSPRMViewConfBuilder(
                     entity=entity, nexus_token=nexus_token
                 )
-            return TiledSPRMConf(
+            return TiledSPRMViewConfBuilder(
                 entity=entity, nexus_token=nexus_token)
         if SEQFISH in assay_names:
-            return SeqFISHViewConf(
+            return SeqFISHViewConfBuilder(
                 entity=entity, nexus_token=nexus_token)
         if (
             MALDI_IMS_NEG in assay_names
             or MALDI_IMS_POS in assay_names
         ):
-            return IMSConf(entity=entity, nexus_token=nexus_token)
-        return ImagePyramidViewConf(
+            return IMSViewConfBuilder(entity=entity, nexus_token=nexus_token)
+        return ImagePyramidViewConfBuilder(
             entity=entity, nexus_token=nexus_token)
     if "rna" in hints:
         # This is the zarr-backed anndata pipeline.
         if('anndata-to-ui.cwl' in dag_names):
-            return RNASeqAnnDataZarrConf(entity=entity, nexus_token=nexus_token)
-        return RNASeqConf(entity=entity, nexus_token=nexus_token)
+            return RNASeqAnnDataZarrViewConfBuilder(entity=entity, nexus_token=nexus_token)
+        return RNASeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
     if "atac" in hints:
-        return ATACSeqConf(entity=entity, nexus_token=nexus_token)
-    return NullConf()
+        return ATACSeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
+    return NullViewConfBuilder()

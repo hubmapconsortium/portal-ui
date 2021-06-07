@@ -23,11 +23,11 @@ MOCK_URL = "https://example.com"
 ConfCells = namedtuple('ConfCells', ['conf', 'cells'])
 
 
-class ViewConf:
+class ViewConfBuilder:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
 
-        >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
 
         """
 
@@ -43,7 +43,7 @@ class ViewConf:
     def _replace_url_in_file(self, file):
         """Replace url in incoming file object
         >>> from pprint import pprint
-        >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
         >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
         >>> pprint(vc._replace_url_in_file(file))
         {'data_type': 'CELLS',\n\
@@ -60,7 +60,7 @@ class ViewConf:
     def _build_assets_url(self, rel_path, use_token=True):
         """Create a url for an asset.
 
-        >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
         >>> vc._build_assets_url("rel_path/to/clusters.ome.tiff")
         'https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=nexus_token'
 
@@ -86,11 +86,11 @@ class ViewConf:
         return [file["rel_path"] for file in self._entity["files"]]
 
 
-class ImagingViewConf(ViewConf):
+class ImagingViewConfBuilder(ViewConfBuilder):
     def _get_img_and_offset_url(self, img_path, img_dir):
         """Create a url for the offsets and img.
         >>> from pprint import pprint
-        >>> vc = ImagingViewConf(entity={ "uuid": "uuid" },\
+        >>> vc = ImagingViewConfBuilder(entity={ "uuid": "uuid" },\
             nexus_token='nexus_token', is_mock=True)
         >>> pprint(vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff",\
             "rel_path/to"))
@@ -117,7 +117,7 @@ class ImagingViewConf(ViewConf):
         return vc
 
 
-class ImagePyramidViewConf(ImagingViewConf):
+class ImagePyramidViewConfBuilder(ImagingViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         self.image_pyramid_regex = IMAGE_PYRAMID_DIR
         super().__init__(entity, nexus_token, is_mock)
@@ -153,7 +153,7 @@ class ImagePyramidViewConf(ImagingViewConf):
         return ConfCells(conf, None)
 
 
-class ScatterplotViewConf(ViewConf):
+class ScatterplotViewConfBuilder(ViewConfBuilder):
     def get_conf_cells(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
         file_paths_found = self._get_file_paths()
@@ -175,7 +175,7 @@ class ScatterplotViewConf(ViewConf):
         return vc
 
 
-class SPRMViewConf(ImagePyramidViewConf):
+class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
 
     def _get_sprm_image(self):
         image_file_regex = f"{self._imaging_path}/{self._base_name}.ome.tiff?"
@@ -205,7 +205,7 @@ class SPRMViewConf(ImagePyramidViewConf):
         return vc, dataset
 
 
-class SPRMJSONViewConf(SPRMViewConf):
+class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
@@ -264,7 +264,7 @@ class SPRMJSONViewConf(SPRMViewConf):
         return vc
 
 
-class SPRMAnnDataViewConf(SPRMViewConf):
+class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
