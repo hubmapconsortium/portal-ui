@@ -62,7 +62,7 @@ def test_assays():
             vc = AssayViewConfClass(
                 entity=entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True
             )
-        conf = vc.build_vitessce_conf()
+        conf = vc.get_conf_cells().conf
         conf_expected = json.loads(
             (
                 parent_dir / f"{FIXTURES_EXPECTED_OUTPUT_DIR}/{assay}_conf.json"
@@ -86,4 +86,4 @@ def test_assays():
                 entity=malformed_entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True
             )
         with pytest.raises(FileNotFoundError):
-            vc.build_vitessce_conf()
+            vc.get_conf_cells().conf
