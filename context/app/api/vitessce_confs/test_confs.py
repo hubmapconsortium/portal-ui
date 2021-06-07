@@ -7,13 +7,13 @@ import pytest
 from .base_confs import ImagePyramidViewConfBuilder, SPRMJSONViewConfBuilder
 from .assay_confs import (
     SeqFISHViewConfBuilder,
-    TiledSPRMConf,
-    RNASeqConf,
-    ATACSeqConf,
-    IMSConf,
-    RNASeqAnnDataZarrConf,
+    TiledSPRMViewConfBuilder,
+    RNASeqViewConfBuilder,
+    ATACSeqViewConfBuilder,
+    IMSViewConfBuilder,
+    RNASeqAnnDataZarrViewConfBuilder,
     SPRMAnnDataViewConfBuilder,
-    StitchedCytokitSPRMConf
+    StitchedCytokitSPRMViewConfBuilder
 )
 
 MOCK_NEXUS_TOKEN = "nexus_token"
@@ -24,16 +24,16 @@ FIXTURES_EXPECTED_OUTPUT_DIR = "fixtures/output_expected"
 BASE_NAME_FOR_SPRM = "BASE_NAME"
 
 AssayConfClasses = {
-    "cytokit_json": TiledSPRMConf,
-    "rna": RNASeqConf,
-    "atac": ATACSeqConf,
-    "ims": IMSConf,
+    "cytokit_json": TiledSPRMViewConfBuilder,
+    "rna": RNASeqViewConfBuilder,
+    "atac": ATACSeqViewConfBuilder,
+    "ims": IMSViewConfBuilder,
     "image_pyramid": ImagePyramidViewConfBuilder,
     "seqfish": SeqFISHViewConfBuilder,
     "sprm": SPRMJSONViewConfBuilder,
-    "rna_zarr": RNASeqAnnDataZarrConf,
+    "rna_zarr": RNASeqAnnDataZarrViewConfBuilder,
     "sprm_anndata": SPRMAnnDataViewConfBuilder,
-    "cytokit_anndata": StitchedCytokitSPRMConf
+    "cytokit_anndata": StitchedCytokitSPRMViewConfBuilder
 }
 
 

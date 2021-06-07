@@ -98,7 +98,7 @@ class CytokitSPRMViewConfigError(Exception):
     pass
 
 
-class TiledSPRMConf(ViewConfBuilder):
+class TiledSPRMViewConfBuilder(ViewConfBuilder):
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(
@@ -126,7 +126,7 @@ class TiledSPRMConf(ViewConfBuilder):
         return confs
 
 
-class RNASeqConf(ScatterplotViewConfBuilder):
+class RNASeqViewConfBuilder(ScatterplotViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
@@ -144,7 +144,7 @@ class RNASeqConf(ScatterplotViewConfBuilder):
         ]
 
 
-class ATACSeqConf(ScatterplotViewConfBuilder):
+class ATACSeqViewConfBuilder(ScatterplotViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
@@ -164,7 +164,7 @@ class ATACSeqConf(ScatterplotViewConfBuilder):
         ]
 
 
-class StitchedCytokitSPRMConf(ViewConfBuilder):
+class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
     def build_vitessce_conf(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_regions = get_matches(file_paths_found, STITCHED_REGEX)
@@ -192,7 +192,7 @@ class StitchedCytokitSPRMConf(ViewConfBuilder):
         return confs if len(confs) > 1 else confs[0]
 
 
-class RNASeqAnnDataZarrConf(ViewConfBuilder):
+class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
     def build_vitessce_conf(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -231,7 +231,7 @@ class RNASeqAnnDataZarrConf(ViewConfBuilder):
         return vc
 
 
-class IMSConf(ImagePyramidViewConfBuilder):
+class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # Do not show the separated mass-spec images.
@@ -240,7 +240,7 @@ class IMSConf(ImagePyramidViewConfBuilder):
         )
 
 
-class NullConf():
+class NullViewConfBuilder():
     def build_vitessce_conf(self):
         return None
 
@@ -267,10 +267,10 @@ def get_view_config_class_for_data_types(entity, nexus_token):
     if "is_image" in hints:
         if "codex" in hints:
             if ('sprm-to-anndata.cwl' in dag_names):
-                return StitchedCytokitSPRMConf(
+                return StitchedCytokitSPRMViewConfBuilder(
                     entity=entity, nexus_token=nexus_token
                 )
-            return TiledSPRMConf(
+            return TiledSPRMViewConfBuilder(
                 entity=entity, nexus_token=nexus_token)
         if SEQFISH in assay_names:
             return SeqFISHViewConfBuilder(
@@ -279,14 +279,14 @@ def get_view_config_class_for_data_types(entity, nexus_token):
             MALDI_IMS_NEG in assay_names
             or MALDI_IMS_POS in assay_names
         ):
-            return IMSConf(entity=entity, nexus_token=nexus_token)
+            return IMSViewConfBuilder(entity=entity, nexus_token=nexus_token)
         return ImagePyramidViewConfBuilder(
             entity=entity, nexus_token=nexus_token)
     if "rna" in hints:
         # This is the zarr-backed anndata pipeline.
         if('anndata-to-ui.cwl' in dag_names):
-            return RNASeqAnnDataZarrConf(entity=entity, nexus_token=nexus_token)
-        return RNASeqConf(entity=entity, nexus_token=nexus_token)
+            return RNASeqAnnDataZarrViewConfBuilder(entity=entity, nexus_token=nexus_token)
+        return RNASeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
     if "atac" in hints:
-        return ATACSeqConf(entity=entity, nexus_token=nexus_token)
-    return NullConf()
+        return ATACSeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
+    return NullViewConfBuilder()
