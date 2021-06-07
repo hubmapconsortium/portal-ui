@@ -1,1 +1,0 @@
-- Fix safari disabled button bug.

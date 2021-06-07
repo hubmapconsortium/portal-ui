@@ -1,3 +1,14 @@
+## v0.20.0 - 2021-06-07
+
+- `ViewConf` to `ViewConfBuilder` to disambiguate the object from what it returns.
+- Refactor to return a conf/cells tuple, instead of just a conf.
+  (The cells part is `None` for now.)
+- Add an endpoint which serves a Jupyter notebook with the viewconf for a dataset.
+- Remove provenance section for support pages.
+- Link to parent datasets in support page alert.
+- Fix safari disabled button bug.
+
+
 ## v0.19.2 - 2021-06-03
 
 - Update to the latest cells client, and update the flask endpoints.
