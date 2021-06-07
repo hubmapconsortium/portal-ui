@@ -23,7 +23,7 @@ class ViewConfBuilder:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
 
-        >>> vc = ViewConfBuilder(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
 
         """
 
@@ -40,7 +40,7 @@ class ViewConfBuilder:
     def _replace_url_in_file(self, file):
         """Replace url in incoming file object
         >>> from pprint import pprint
-        >>> vc = ViewConfBuilder(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
         >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
         >>> pprint(vc._replace_url_in_file(file))
         {'data_type': 'CELLS',\n\
@@ -57,7 +57,7 @@ class ViewConfBuilder:
     def _build_assets_url(self, rel_path, use_token=True):
         """Create a url for an asset.
 
-        >>> vc = ViewConfBuilder(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
         >>> vc._build_assets_url("rel_path/to/clusters.ome.tiff")
         'https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=nexus_token'
 

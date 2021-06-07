@@ -103,7 +103,7 @@ def details(type, uuid):
     if type != actual_type:
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
-    template = f'pages/base_react.html'
+    template = 'pages/base_react.html'
     flask_data = {
         'endpoints': _get_endpoints(),
         'entity': entity,

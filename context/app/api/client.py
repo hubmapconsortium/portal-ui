@@ -61,7 +61,7 @@ class ApiClient():
             body_json=query)
         uuids = [hit['_id'] for hit in response_json['hits']['hits']]
         if len(uuids) == size:
-            raise Exception(f'At least 10k datasets: need to make multiple requests')
+            raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
 
     def get_entity(self, uuid=None, hbm_id=None):
