@@ -10,7 +10,7 @@ import { getAuthHeader } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/Search/config';
 import { listFilter } from 'js/components/Search/utils';
-import AncestorNote from 'js/components/Search/AncestorNote';
+import SearchNote from 'js/components/Search/SearchNote';
 import Results from 'js/components/Search/Results';
 import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 import { SearchHeader } from './style';
@@ -116,7 +116,7 @@ function Search(props) {
           elasticsearchEndpoint={elasticsearchEndpoint}
           nexusToken={nexusToken}
         >
-          <AncestorNote label={note.label} />
+          <SearchNote label={note.label} />
         </LookupEntity>
       ))}
       {wrappedSearch}

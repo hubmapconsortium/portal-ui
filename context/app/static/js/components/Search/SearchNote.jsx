@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 
-function AncestorNote({ entity, label }) {
+function SearchNote({ entity, label }) {
   let message = '...';
 
   if (entity) {
@@ -21,7 +21,7 @@ function AncestorNote({ entity, label }) {
   return <Typography component="h2">{message}</Typography>;
 }
 
-AncestorNote.propTypes = {
+SearchNote.propTypes = {
   entity: PropTypes.shape({
     uuid: PropTypes.string.isRequired,
     entity_type: PropTypes.string.isRequired,
@@ -29,8 +29,8 @@ AncestorNote.propTypes = {
   }),
 };
 
-AncestorNote.defaultProps = {
+SearchNote.defaultProps = {
   entity: undefined,
 };
 
-export default AncestorNote;
+export default SearchNote;
