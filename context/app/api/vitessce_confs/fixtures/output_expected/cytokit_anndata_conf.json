@@ -20,6 +20,14 @@
                                 "metadata": {
                                     "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg1_stitched_expressions.offsets.json?token=nexus_token"
                                 }
+                            },
+                            {
+                              "name": "reg1_stitched_mask",
+                              "type": "ome-tiff",
+                              "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/mask/reg1_stitched_mask.ome.tiff?token=nexus_token",
+                              "metadata": {
+                                "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg1_stitched_mask.offsets.json?token=nexus_token"
+                              }
                             }
                         ]
                     }
@@ -182,6 +190,14 @@
                                 "metadata": {
                                     "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg2_stitched_expressions.offsets.json?token=nexus_token"
                                 }
+                            },
+                            {
+                              "name": "reg2_stitched_mask",
+                              "type": "ome-tiff",
+                              "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/mask/reg2_stitched_mask.ome.tiff?token=nexus_token",
+                              "metadata": {
+                                "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg2_stitched_mask.offsets.json?token=nexus_token"
+                              }
                             }
                         ]
                     }

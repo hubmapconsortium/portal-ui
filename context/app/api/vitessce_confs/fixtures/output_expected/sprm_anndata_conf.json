@@ -14,12 +14,20 @@
                         "schemaVersion": "0.0.2",
                         "images": [
                             {
-                                "name": "BASE_NAME",
+                                "name": "expressions",
                                 "type": "ome-tiff",
-                                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/imaging_path/BASE_NAME.ome.tiff?token=nexus_token",
+                                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/imaging_path/expressions.ome.tiff?token=nexus_token",
                                 "metadata": {
-                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/BASE_NAME.offsets.json?token=nexus_token"
+                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/expressions.offsets.json?token=nexus_token"
                                 }
+                            },
+                            {
+                              "name": "mask",
+                              "type": "ome-tiff",
+                              "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/imaging_path/mask.ome.tiff?token=nexus_token",
+                              "metadata": {
+                                "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/mask.offsets.json?token=nexus_token"
+                              }
                             }
                         ]
                     }
