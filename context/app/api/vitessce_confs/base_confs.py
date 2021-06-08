@@ -325,7 +325,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         )
         bitmask_wrapper = OmeTiffWrapper(
             img_url=bitmask_img_url,
-            offsets_url=bitmask_img_url,
+            offsets_url=bitmask_offsets_url,
             name=self._mask_name,
             is_bitmask=True
         )

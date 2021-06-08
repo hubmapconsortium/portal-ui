@@ -19,8 +19,8 @@
                 "type": "ome-tiff",
                 "url": "https://example.com/954281e9fd8732adfa4479e0d238ce8d/ometiff-pyramids/ometiffs/VAN0003-LK-32-21-IMS_NegMode_multilayer.ome.tif?token=nexus_token",
                 "metadata": {
-                  "omeTiffOffsetsUrl": "https://example.com/954281e9fd8732adfa4479e0d238ce8d/output_offsets/ometiffs/VAN0003-LK-32-21-IMS_NegMode_multilayer.offsets.json?token=nexus_token",
-                  "isBitmask": false
+                  "isBitmask": false,
+                  "omeTiffOffsetsUrl": "https://example.com/954281e9fd8732adfa4479e0d238ce8d/output_offsets/ometiffs/VAN0003-LK-32-21-IMS_NegMode_multilayer.offsets.json?token=nexus_token"
                 }
               }
             ]

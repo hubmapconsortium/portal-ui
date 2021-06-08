@@ -34,8 +34,8 @@
                   "type": "ome-tiff",
                   "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output/extract/expressions/ome-tiff/R001_X001_Y001.ome.tiff?token=nexus_token",
                   "metadata": {
-                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/R001_X001_Y001.offsets.json?token=nexus_token",
-                    "isBitmask": false
+                    "isBitmask": false,
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/R001_X001_Y001.offsets.json?token=nexus_token"
                   }
                 }
               ]
@@ -155,8 +155,8 @@
                   "type": "ome-tiff",
                   "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output/extract/expressions/ome-tiff/R001_X001_Y002.ome.tiff?token=nexus_token",
                   "metadata": {
-                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/R001_X001_Y002.offsets.json?token=nexus_token",
-                    "isBitmask": false
+                    "isBitmask": false,
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/R001_X001_Y002.offsets.json?token=nexus_token"
                   }
                 }
               ]

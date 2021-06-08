@@ -83,6 +83,9 @@ def test_assays():
                 is_mock=True,
                 base_name=BASE_NAME_FOR_SPRM,
                 imaging_path="imaging_path",
+                image_name="expressions",
+                mask_name="mask",
+                mask_path="imaging_path"
             )
         else:
             vc = AssayViewConfClass(
