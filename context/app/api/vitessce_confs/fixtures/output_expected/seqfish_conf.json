@@ -20,7 +20,8 @@
                   "type": "ome-tiff",
                   "url": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/ometiff-pyramids/HybCycle_12/MMStack_Pos12.ome.tif?token=nexus_token",
                   "metadata": {
-                    "omeTiffOffsetsUrl": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/output_offsets/HybCycle_12/MMStack_Pos12.offsets.json?token=nexus_token"
+                    "omeTiffOffsetsUrl": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/output_offsets/HybCycle_12/MMStack_Pos12.offsets.json?token=nexus_token",
+                    "isBitmask": false
                   }
                 },
                 {
@@ -28,7 +29,8 @@
                   "type": "ome-tiff",
                   "url": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/ometiff-pyramids/final_mRNA_background/MMStack_Pos12.ome.tif?token=nexus_token",
                   "metadata": {
-                    "omeTiffOffsetsUrl": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/output_offsets/final_mRNA_background/MMStack_Pos12.offsets.json?token=nexus_token"
+                    "omeTiffOffsetsUrl": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/output_offsets/final_mRNA_background/MMStack_Pos12.offsets.json?token=nexus_token",
+                    "isBitmask": false
                   }
                 }
               ]
@@ -97,7 +99,8 @@
                   "type": "ome-tiff",
                   "url": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/ometiff-pyramids/HybCycle_12/MMStack_Pos13.ome.tif?token=nexus_token",
                   "metadata": {
-                    "omeTiffOffsetsUrl": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/output_offsets/HybCycle_12/MMStack_Pos13.offsets.json?token=nexus_token"
+                    "omeTiffOffsetsUrl": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/output_offsets/HybCycle_12/MMStack_Pos13.offsets.json?token=nexus_token",
+                    "isBitmask": false
                   }
                 },
                 {
@@ -105,7 +108,8 @@
                   "type": "ome-tiff",
                   "url": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/ometiff-pyramids/final_mRNA_background/MMStack_Pos13.ome.tif?token=nexus_token",
                   "metadata": {
-                    "omeTiffOffsetsUrl": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/output_offsets/final_mRNA_background/MMStack_Pos13.offsets.json?token=nexus_token"
+                    "omeTiffOffsetsUrl": "https://example.com/9db61adfc017670a196ea9b3ca1852a0/output_offsets/final_mRNA_background/MMStack_Pos13.offsets.json?token=nexus_token",
+                    "isBitmask": false
                   }
                 }
               ]
