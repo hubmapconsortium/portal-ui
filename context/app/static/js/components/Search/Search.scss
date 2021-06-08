@@ -115,6 +115,8 @@ $text-primary: rgba(0, 0, 0, 0.87);
     background: url('~portal-images/search-icon.svg') no-repeat top left;
 }
 
-.sk-search-box.is-focused input.sk-search-box__text, .sk-search-box input.sk-search-box__text {
+.sk-search-box.is-focused, .sk-search-box {
+    input.sk-search-box__text {
     color: $text-primary;
+    }
 }
