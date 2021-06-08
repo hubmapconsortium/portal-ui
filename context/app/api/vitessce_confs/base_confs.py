@@ -188,7 +188,7 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
             raise FileNotFoundError(message)
         found_image_file = found_image_files[0]
         return found_image_file
-    
+
     def _get_sprm_ometiff_wrapper(self, found_image_file):
         img_url, offsets_url = self._get_img_and_offset_url(
             found_image_file, self._imaging_path,
@@ -318,7 +318,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
             found_image_file, self._imaging_path,
         )
         image_wrapper = OmeTiffWrapper(
-            img_url=img_url, offsets_url = offsets_url, name=self._image_name
+            img_url=img_url, offsets_url=offsets_url, name=self._image_name
         )
         bitmask_img_url, bitmask_offsets_url = self._get_img_and_offset_url(
             found_bitmask_file, self._mask_path,
