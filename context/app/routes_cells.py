@@ -15,6 +15,10 @@ def cells_ui():
     )
 
 
+def _get_client(app):
+    return Client(app.config['XMODALITY_ENDPOINT'] + '/api/')
+
+
 @blueprint.route('/cells/datasets-selected-by-gene.json', methods=['POST'])
 def datasets_selected_by_gene():
     # Refine what it means for a dataset to match a cells query:
@@ -28,7 +32,7 @@ def datasets_selected_by_gene():
 
     min_cell_percentage = request.args.get('min_cell_percentage')
 
-    client = Client(current_app.config['CELLS_API_ENDPOINT'])
+    client = _get_client(current_app)
 
     try:
         dataset_set = client.select_datasets(
@@ -52,7 +56,7 @@ def cell_percentages_for_datasets():
     gene_name = request.args.get('gene_name')
     min_gene_expression = request.args.get('min_gene_expression')
 
-    client = Client(current_app.config['CELLS_API_ENDPOINT'])
+    client = _get_client(current_app)
 
     try:
         dataset_set = client.select_datasets(where='dataset', has=[uuids])
@@ -75,7 +79,7 @@ def cell_expression_in_dataset():
     uuid = request.args.get('uuid')
     gene_names = request.args.getlist('gene_name')
 
-    client = Client(current_app.config['CELLS_API_ENDPOINT'])
+    client = _get_client(current_app)
 
     try:
         cells = client.select_cells(where='dataset', has=[uuid])
