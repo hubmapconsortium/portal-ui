@@ -1,30 +1,34 @@
 {
-    "data_types": [
-        "codex_cytokit"
-    ],
-    "files": [
-        {
-            "rel_path": "anndata-zarr/BASE_NAME-anndata.zarr/.zgroup"
-        },
-        {
-            "rel_path": "anndata-zarr/BASE_NAME-anndata.zarr/obs/.zgroup"
-        },
-        {
-            "rel_path": "anndata-zarr/BASE_NAME-anndata.zarr/obsm/.zgroup"
-        },
-        {
-            "rel_path": "anndata-zarr/BASE_NAME-anndata.zarr/var/.zgroup"
-        },
-        {
-            "rel_path": "data.json"
-        },
-        {
-            "rel_path": "output_offsets/imaging_path/BASE_NAME.offsets.json"
-        },
-        {
-            "rel_path": "ometiff-pyramids/imaging_path/BASE_NAME.ome.tiff"
-        }
-    ],
-    "status": "QA",
-    "uuid": "2f8d43199ca3167e991b320038024b77"
+  "data_types": ["codex_cytokit"],
+  "files": [
+    {
+      "rel_path": "anndata-zarr/expressions-anndata.zarr/.zgroup"
+    },
+    {
+      "rel_path": "anndata-zarr/expressions-anndata.zarr/obs/.zgroup"
+    },
+    {
+      "rel_path": "anndata-zarr/expressions-anndata.zarr/obsm/.zgroup"
+    },
+    {
+      "rel_path": "anndata-zarr/expressions-anndata.zarr/var/.zgroup"
+    },
+    {
+      "rel_path": "data.json"
+    },
+    {
+      "rel_path": "output_offsets/imaging_path/expressions.offsets.json"
+    },
+    {
+      "rel_path": "ometiff-pyramids/imaging_path/expressions.ome.tiff"
+    },
+    {
+      "rel_path": "output_offsets/imaging_path/mask.offsets.json"
+    },
+    {
+      "rel_path": "ometiff-pyramids/imaging_path/mask.ome.tiff"
+    }
+  ],
+  "status": "QA",
+  "uuid": "2f8d43199ca3167e991b320038024b77"
 }

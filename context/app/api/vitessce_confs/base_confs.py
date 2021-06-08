@@ -177,32 +177,25 @@ class ScatterplotViewConfBuilder(ViewConfBuilder):
 
 class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
 
-    def _get_sprm_image(self):
-        image_file_regex = f"{self._imaging_path}/{self._base_name}.ome.tiff?"
+    def _make_full_image_path(self):
+        return f"{self._imaging_path}/{self._image_name}.ome.tiff?"
+
+    def _check_sprm_image(self, path_regex):
         file_paths_found = self._get_file_paths()
-        found_image_files = get_matches(file_paths_found, image_file_regex)
+        found_image_files = get_matches(file_paths_found, path_regex)
         if len(found_image_files) != 1:
             message = f'Found {len(found_image_files)} image files for SPRM uuid "{self._uuid}".'
             raise FileNotFoundError(message)
         found_image_file = found_image_files[0]
         return found_image_file
-
-    def _add_sprm_image_to_view_conf(self, found_image_file, vc, dataset):
+    
+    def _get_sprm_ometiff_wrapper(self, found_image_file):
         img_url, offsets_url = self._get_img_and_offset_url(
             found_image_file, self._imaging_path,
         )
-        image_wrapper = OmeTiffWrapper(
+        return OmeTiffWrapper(
             img_url=img_url, offsets_url=offsets_url, name=self._base_name
         )
-        dataset = dataset.add_object(image_wrapper)
-        return dataset
-
-    def _perpare_vc_and_dataset_with_image(self):
-        found_image_file = self._get_sprm_image()
-        vc = VitessceConfig(name=self._base_name)
-        dataset = vc.add_dataset(name="SPRM")
-        dataset = self._add_sprm_image_to_view_conf(found_image_file, vc, dataset)
-        return vc, dataset
 
 
 class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
@@ -210,6 +203,7 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
         self._base_name = kwargs["base_name"]
+        self._image_name = kwargs["base_name"]
         self._imaging_path = kwargs["imaging_path"]
         self._files = [
             {
@@ -230,7 +224,16 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
         ]
 
     def get_conf_cells(self):
-        vc, dataset = self._perpare_vc_and_dataset_with_image()
+        found_image_file = self._check_sprm_image(self._make_full_image_path())
+        vc = VitessceConfig(name=self._base_name)
+        dataset = vc.add_dataset(name="SPRM")
+        img_url, offsets_url = self._get_img_and_offset_url(
+            found_image_file, self._imaging_path,
+        )
+        image_wrapper = OmeTiffWrapper(
+            img_url=img_url, offsets_url=offsets_url, name=self._base_name
+        )
+        dataset = dataset.add_object(image_wrapper)
         file_paths_found = self._get_file_paths()
         # This tile has no segmentations
         if self._files[0]["rel_path"] not in file_paths_found:
@@ -269,12 +272,20 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
         self._base_name = kwargs["base_name"]
+        self._mask_name = kwargs["mask_name"]
+        self._image_name = kwargs["image_name"]
         self._imaging_path = f"{self.image_pyramid_regex}/{kwargs['imaging_path']}"
+        self._mask_path = f"{self.image_pyramid_regex}/{kwargs['mask_path']}"
+
+    def _make_bitmask_image_path(self):
+        return f"{self._mask_path}/{self._mask_name}.ome.tiff?"
 
     def get_conf_cells(self):
-        vc, dataset = self._perpare_vc_and_dataset_with_image()
+        found_image_file = self._check_sprm_image(self._make_full_image_path())
+        vc = VitessceConfig(name=self._image_name)
+        dataset = vc.add_dataset(name="SPRM")
         file_paths_found = self._get_file_paths()
-        zarr_path = f"anndata-zarr/{self._base_name}-anndata.zarr"
+        zarr_path = f"anndata-zarr/{self._image_name}-anndata.zarr"
         if f"{zarr_path}/.zgroup" not in file_paths_found:
             message = f"SPRM assay with uuid {self._uuid} has no matching .zarr store"
             raise FileNotFoundError(message)
@@ -282,7 +293,6 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         anndata_wrapper = AnnDataWrapper(
             adata_url=adata_url,
             spatial_centroid_obsm="xy",
-            spatial_polygon_obsm="poly",
             cell_set_obs=[
                 "K-Means [Covariance] Expression",
                 "K-Means [Mean-All-SubRegions] Expression",
@@ -303,17 +313,37 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
             request_init=self._get_request_init(),
         )
         dataset = dataset.add_object(anndata_wrapper)
+        found_bitmask_file = self._check_sprm_image(self._make_bitmask_image_path())
+        img_url, offsets_url = self._get_img_and_offset_url(
+            found_image_file, self._imaging_path,
+        )
+        image_wrapper = OmeTiffWrapper(
+            img_url=img_url, offsets_url = offsets_url, name=self._image_name
+        )
+        bitmask_img_url, bitmask_offsets_url = self._get_img_and_offset_url(
+            found_bitmask_file, self._mask_path,
+        )
+        bitmask_wrapper = OmeTiffWrapper(
+            img_url=bitmask_img_url,
+            offsets_url=bitmask_img_url,
+            name=self._mask_name,
+            is_bitmask=True
+        )
+        dataset = dataset.add_object(MultiImageWrapper([image_wrapper, bitmask_wrapper]))
         vc = self._setup_view_config_raster_cellsets_expression_segmentation(
             vc, dataset
         )
         return ConfCells(vc.to_dict(), None)
 
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
-        vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=12)
+        vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=8)
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
         vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
         vc.add_view(dataset, cm.CELL_SETS, x=10, y=5, w=2, h=7)
         vc.add_view(dataset, cm.GENES, x=10, y=0, w=2, h=5).set_props(
             variablesLabelOverride="antigen"
+        )
+        vc.add_view(dataset, cm.HEATMAP, x=3, y=8, w=7, h=4).set_props(
+            variablesLabelOverride="antigen", transpose=True
         )
         return vc
