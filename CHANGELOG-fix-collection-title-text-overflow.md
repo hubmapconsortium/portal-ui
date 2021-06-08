@@ -1,0 +1,1 @@
+- Fix text overflow for collections panel titles.
