@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import format from 'date-fns/format';
 
 import SectionItem from '../SectionItem';
-import { FlexColumnRight, StyledPaper } from './style';
+import { FlexColumnRight, StyledPaper, StyledSectionItem } from './style';
 
 function DetailDescription({ subtitle, description, createdTimestamp, modifiedTimestamp }) {
   const dateFormat = 'MMMM dd, yyyy';
@@ -21,7 +21,7 @@ function DetailDescription({ subtitle, description, createdTimestamp, modifiedTi
       </div>
 
       <FlexColumnRight>
-        <SectionItem label="Creation Date">{formattedCreationDate}</SectionItem>
+        <StyledSectionItem label="Creation Date">{formattedCreationDate}</StyledSectionItem>
         <SectionItem label="Modification Date">{formattedModificationDate}</SectionItem>
       </FlexColumnRight>
     </StyledPaper>

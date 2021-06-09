@@ -1,0 +1,1 @@
+- Fix spacing for detail summary creation and modification dates.

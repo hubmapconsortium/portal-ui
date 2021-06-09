@@ -2,6 +2,7 @@
 
 $primary-purple: #444A65;
 $secondary-gray: #636363;
+$text-primary: rgba(0, 0, 0, 0.87);
 
 .sk-layout__body {
     margin: 16px 0px 32px 0px;
@@ -112,4 +113,10 @@ $secondary-gray: #636363;
 .sk-search-box__icon:before{
     fill: $primary-purple;
     background: url('~portal-images/search-icon.svg') no-repeat top left;
+}
+
+.sk-search-box.is-focused, .sk-search-box {
+    input.sk-search-box__text {
+    color: $text-primary;
+    }
 }

@@ -9,8 +9,8 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 
 const overflowCss = css`
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 const PanelWrapper = styled.div`
@@ -28,8 +28,10 @@ const PanelWrapper = styled.div`
   }
 `;
 
-const MaxWidthDiv = styled.div`
-  max-width: 900px;
+const TextWrapper = styled.div`
+  white-space: nowrap;
+  min-width: 0px; // needed to handle overflow
+  margin-right: ${(props) => props.theme.spacing(1)}px;
 `;
 
 const TruncatedText = styled(Typography)`
@@ -38,6 +40,11 @@ const TruncatedText = styled(Typography)`
 
 const TruncatedLink = styled(LightBlueLink)`
   ${overflowCss};
+  display: block; //text-overflow only applies to block elements
+`;
+
+const CountsWrapper = styled.div`
+  flex-shrink: 0;
 `;
 
 const StyledTypography = styled(Typography)`
@@ -56,19 +63,19 @@ function Panel(props) {
   const { title, href, secondaryText, entityCounts } = props;
   return (
     <PanelWrapper>
-      <MaxWidthDiv>
+      <TextWrapper>
         <TruncatedLink variant="subtitle1" href={href}>
           {title}
         </TruncatedLink>
         <TruncatedText variant="body2" color="secondary">
           {secondaryText}
         </TruncatedText>
-      </MaxWidthDiv>
-      <div>
+      </TextWrapper>
+      <CountsWrapper>
         {Object.entries(entityCounts).map(([key, value]) => (
           <StyledTypography key={key} variant="caption">{`${value} ${capitalizeString(key)}`}</StyledTypography>
         ))}
-      </div>
+      </CountsWrapper>
     </PanelWrapper>
   );
 }
