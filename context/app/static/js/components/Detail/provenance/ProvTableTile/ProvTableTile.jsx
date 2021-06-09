@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import useEntityData from 'js/hooks/useEntityData';
-import useDescendantCounts from 'js/hooks/useDescendantCounts';
 import EntityTile from 'js/components/entity-tile/EntityTile';
+import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/utils';
 import { AppContext } from 'js/components/Providers';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 import { DownIcon } from './style';
@@ -11,14 +11,18 @@ import { DownIcon } from './style';
 function ProvTableTile(props) {
   const { uuid, entity_type, id, isCurrentEntity, isSampleSibling, isFirstTile, isLastTile } = props;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+  const [descendantCounts, setDescendantCounts] = useState({});
+  const [descendantCountsToDisplay, setDescendantCountsToDisplay] = useState({});
 
   // mapped fields are not included in ancestor object
   const entityData = useEntityData(uuid, elasticsearchEndpoint, nexusToken);
 
-  const allDescendantCounts = useDescendantCounts(entityData, ['Sample', 'Dataset']);
-
-  const displayDescendantCounts =
-    entity_type === 'Donor' ? allDescendantCounts : { Dataset: allDescendantCounts.Dataset };
+  useEffect(() => {
+    if (entityData?.descendant_counts) {
+      setDescendantCounts(entityData.descendant_counts.entity_type);
+      setDescendantCountsToDisplay(getTileDescendantCounts(entityData, entity_type));
+    }
+  }, [entityData, entity_type]);
 
   return (
     <>
@@ -30,10 +34,10 @@ function ProvTableTile(props) {
           id={id}
           invertColors={isCurrentEntity}
           entityData={entityData}
-          descendantCounts={displayDescendantCounts}
+          descendantCounts={descendantCountsToDisplay}
         />
       )}
-      {isLastTile && entity_type !== 'Donor' && allDescendantCounts[entity_type] > 0 && (
+      {isLastTile && entity_type !== 'Donor' && descendantCounts?.[entity_type] > 0 && (
         <ProvTableDerivedLink uuid={uuid} type={entity_type} />
       )}
     </>

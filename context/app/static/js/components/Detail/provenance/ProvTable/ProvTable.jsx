@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import useDescendantCounts from 'js/hooks/useDescendantCounts';
 import { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
@@ -21,7 +20,7 @@ function ProvTable(props) {
     typesToSplit.map(() => []),
   );
 
-  const descendantCounts = useDescendantCounts(assayMetadata, typesToSplit);
+  const descendantCounts = assayMetadata.descendant_counts.entity_type;
 
   return (
     <FlexContainer>
