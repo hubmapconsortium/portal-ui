@@ -177,7 +177,7 @@ class ScatterplotViewConfBuilder(ViewConfBuilder):
 
 class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
 
-    def _make_full_image_path(self):
+    def _get_full_image_path(self):
         return f"{self._imaging_path_regex}/{self._image_name}.ome.tiff?"
 
     def _check_sprm_image(self, path_regex):
@@ -202,6 +202,8 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
+        # These are both something like R001_X009_Y009 because
+        # there is no mask used here or shared name with the mask data.
         self._base_name = kwargs["base_name"]
         self._image_name = kwargs["base_name"]
         self._imaging_path_regex = kwargs["imaging_path"]
@@ -224,7 +226,7 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
         ]
 
     def get_conf_cells(self):
-        found_image_file = self._check_sprm_image(self._make_full_image_path())
+        found_image_file = self._check_sprm_image(self._get_full_image_path())
         vc = VitessceConfig(name=self._base_name)
         dataset = vc.add_dataset(name="SPRM")
         image_wrapper = self._get_ometiff_image_wrapper(found_image_file)
@@ -318,7 +320,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
             request_init=self._get_request_init(),
         )
         dataset = dataset.add_object(anndata_wrapper)
-        found_image_file = self._check_sprm_image(self._make_full_image_path())
+        found_image_file = self._check_sprm_image(self._get_full_image_path())
         image_wrapper = self._get_ometiff_image_wrapper(found_image_file)
         found_bitmask_file = self._check_sprm_image(self._get_bitmask_image_path())
         bitmask_wrapper = self._get_ometiff_mask_wrapper(found_bitmask_file)
