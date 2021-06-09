@@ -18,7 +18,7 @@ function ProvTableTile(props) {
   const entityData = useEntityData(uuid, elasticsearchEndpoint, nexusToken);
 
   useEffect(() => {
-    if (entityData?.descendant_counts) {
+    if ('descendant_counts' in entityData) {
       setDescendantCounts(entityData.descendant_counts.entity_type);
       setDescendantCountsToDisplay(getTileDescendantCounts(entityData, entity_type));
     }
