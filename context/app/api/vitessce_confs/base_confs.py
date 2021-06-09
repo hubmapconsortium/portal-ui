@@ -178,7 +178,7 @@ class ScatterplotViewConfBuilder(ViewConfBuilder):
 class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
 
     def _make_full_image_path(self):
-        return f"{self._imaging_path}/{self._image_name}.ome.tiff?"
+        return f"{self._imaging_path_regex}/{self._image_name}.ome.tiff?"
 
     def _check_sprm_image(self, path_regex):
         file_paths_found = self._get_file_paths()
@@ -191,7 +191,7 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
 
     def _get_ometiff_image_wrapper(self, found_image_file):
         img_url, offsets_url = self._get_img_and_offset_url(
-            found_image_file, self._imaging_path,
+            found_image_file, self._imaging_path_regex,
         )
         return OmeTiffWrapper(
             img_url=img_url, offsets_url=offsets_url, name=self._image_name
@@ -204,7 +204,7 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
         super().__init__(entity, nexus_token, is_mock)
         self._base_name = kwargs["base_name"]
         self._image_name = kwargs["base_name"]
-        self._imaging_path = kwargs["imaging_path"]
+        self._imaging_path_regex = kwargs["imaging_path"]
         self._files = [
             {
                 "rel_path": f"{SPRM_JSON_DIR}/" + f"{self._base_name}.cells.json",
@@ -269,15 +269,15 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         self._base_name = kwargs["base_name"]
         self._mask_name = kwargs["mask_name"]
         self._image_name = kwargs["image_name"]
-        self._imaging_path = f"{self.image_pyramid_regex}/{kwargs['imaging_path']}"
-        self._mask_path = f"{self.image_pyramid_regex}/{kwargs['mask_path']}"
+        self._imaging_path_regex = f"{self.image_pyramid_regex}/{kwargs['imaging_path']}"
+        self._mask_path_regex = f"{self.image_pyramid_regex}/{kwargs['mask_path']}"
 
     def _get_bitmask_image_path(self):
-        return f"{self._mask_path}/{self._mask_name}.ome.tiff?"
+        return f"{self._mask_path_regex}/{self._mask_name}.ome.tiff?"
 
     def _get_ometiff_mask_wrapper(self, found_bitmask_file):
         bitmask_img_url, bitmask_offsets_url = self._get_img_and_offset_url(
-            found_bitmask_file, self._mask_path,
+            found_bitmask_file, self._mask_path_regex,
         )
         return OmeTiffWrapper(
             img_url=bitmask_img_url,
