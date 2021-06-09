@@ -5,7 +5,9 @@ const Flex = styled.div`
 `;
 
 const ChartWrapper = styled.div`
-  width: 1000px;
+  flex-grow: 1;
+  max-width: 1000px;
+  width: 0px;
   height: 500px;
 `;
 
