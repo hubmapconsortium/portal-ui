@@ -189,7 +189,7 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
         found_image_file = found_image_files[0]
         return found_image_file
 
-    def _get_sprm_ometiff_wrapper(self, found_image_file):
+    def _get_ometiff_image_wrapper(self, found_image_file):
         img_url, offsets_url = self._get_img_and_offset_url(
             found_image_file, self._imaging_path,
         )
@@ -227,12 +227,7 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
         found_image_file = self._check_sprm_image(self._make_full_image_path())
         vc = VitessceConfig(name=self._base_name)
         dataset = vc.add_dataset(name="SPRM")
-        img_url, offsets_url = self._get_img_and_offset_url(
-            found_image_file, self._imaging_path,
-        )
-        image_wrapper = OmeTiffWrapper(
-            img_url=img_url, offsets_url=offsets_url, name=self._base_name
-        )
+        image_wrapper = self._get_ometiff_image_wrapper(found_image_file)
         dataset = dataset.add_object(image_wrapper)
         file_paths_found = self._get_file_paths()
         # This tile has no segmentations
@@ -277,11 +272,21 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         self._imaging_path = f"{self.image_pyramid_regex}/{kwargs['imaging_path']}"
         self._mask_path = f"{self.image_pyramid_regex}/{kwargs['mask_path']}"
 
-    def _make_bitmask_image_path(self):
+    def _get_bitmask_image_path(self):
         return f"{self._mask_path}/{self._mask_name}.ome.tiff?"
 
+    def _get_ometiff_mask_wrapper(self, found_bitmask_file):
+        bitmask_img_url, bitmask_offsets_url = self._get_img_and_offset_url(
+            found_bitmask_file, self._mask_path,
+        )
+        return OmeTiffWrapper(
+            img_url=bitmask_img_url,
+            offsets_url=bitmask_offsets_url,
+            name=self._mask_name,
+            is_bitmask=True
+        )
+
     def get_conf_cells(self):
-        found_image_file = self._check_sprm_image(self._make_full_image_path())
         vc = VitessceConfig(name=self._image_name)
         dataset = vc.add_dataset(name="SPRM")
         file_paths_found = self._get_file_paths()
@@ -313,22 +318,10 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
             request_init=self._get_request_init(),
         )
         dataset = dataset.add_object(anndata_wrapper)
-        img_url, offsets_url = self._get_img_and_offset_url(
-            found_image_file, self._imaging_path,
-        )
-        image_wrapper = OmeTiffWrapper(
-            img_url=img_url, offsets_url=offsets_url, name=self._image_name
-        )
-        found_bitmask_file = self._check_sprm_image(self._make_bitmask_image_path())
-        bitmask_img_url, bitmask_offsets_url = self._get_img_and_offset_url(
-            found_bitmask_file, self._mask_path,
-        )
-        bitmask_wrapper = OmeTiffWrapper(
-            img_url=bitmask_img_url,
-            offsets_url=bitmask_offsets_url,
-            name=self._mask_name,
-            is_bitmask=True
-        )
+        found_image_file = self._check_sprm_image(self._make_full_image_path())
+        image_wrapper = self._get_ometiff_image_wrapper(found_image_file)
+        found_bitmask_file = self._check_sprm_image(self._get_bitmask_image_path())
+        bitmask_wrapper = self._get_ometiff_mask_wrapper(found_bitmask_file)
         dataset = dataset.add_object(MultiImageWrapper([image_wrapper, bitmask_wrapper]))
         vc = self._setup_view_config_raster_cellsets_expression_segmentation(
             vc, dataset
