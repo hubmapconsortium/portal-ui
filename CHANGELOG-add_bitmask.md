@@ -1,1 +1,0 @@
-- Add bitmask to SPRM `AnnData` example.

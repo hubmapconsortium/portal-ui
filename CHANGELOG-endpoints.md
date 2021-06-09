@@ -1,1 +1,0 @@
-- Remove the path component from the cell endpoint in the config, for consistency with other endpoints.

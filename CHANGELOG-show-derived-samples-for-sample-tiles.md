@@ -1,1 +1,0 @@
-- Show derived samples in sample entity tiles.

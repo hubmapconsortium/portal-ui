@@ -1,1 +1,0 @@
-- Remove support entity counts from provenance table tiles.

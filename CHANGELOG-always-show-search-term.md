@@ -1,1 +1,0 @@
-- Show search terms when the search input is focused or unfocused.

@@ -1,1 +1,0 @@
-- Fix homepage bar chart responsiveness.
