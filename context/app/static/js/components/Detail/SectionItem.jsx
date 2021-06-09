@@ -9,10 +9,10 @@ const StyledDiv = styled.div`
 `;
 
 function SectionItem(props) {
-  const { children, ml, label, flexBasis } = props;
+  const { children, ml, label, flexBasis, ...rest } = props;
   const childrenArray = Array.isArray(children) ? children : [children];
   return (
-    <StyledDiv ml={ml} flexBasis={flexBasis}>
+    <StyledDiv ml={ml} flexBasis={flexBasis} {...rest}>
       <Typography variant="subtitle2" component="h3" color="primary">
         {label}
       </Typography>
