@@ -33,6 +33,7 @@
                 "type": "ome-tiff",
                 "url": "https://example.com/2f8d43199ca3167e991b320038024b77/imaging_path/BASE_NAME.ome.tiff?token=nexus_token",
                 "metadata": {
+                  "isBitmask": false,
                   "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/BASE_NAME.offsets.json?token=nexus_token"
                 }
               }

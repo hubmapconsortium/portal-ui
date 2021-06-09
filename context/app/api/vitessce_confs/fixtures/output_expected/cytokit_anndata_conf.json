@@ -8,29 +8,11 @@
             "name": "SPRM",
             "files": [
                 {
-                    "type": "raster",
-                    "fileType": "raster.json",
-                    "options": {
-                        "schemaVersion": "0.0.2",
-                        "images": [
-                            {
-                                "name": "reg1_stitched_expressions",
-                                "type": "ome-tiff",
-                                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/expressions/reg1_stitched_expressions.ome.tiff?token=nexus_token",
-                                "metadata": {
-                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg1_stitched_expressions.offsets.json?token=nexus_token"
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
                     "type": "cells",
                     "fileType": "anndata-cells.zarr",
                     "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/reg1_stitched_expressions-anndata.zarr",
                     "options": {
                         "xy": "obsm/xy",
-                        "poly": "obsm/poly",
                         "factors": [
                             "obs/K-Means [Covariance] Expression",
                             "obs/K-Means [Mean-All-SubRegions] Expression",
@@ -94,6 +76,35 @@
                             "Authorization": "Bearer nexus_token"
                         }
                     }
+                },
+                {
+                    "type": "raster",
+                    "fileType": "raster.json",
+                    "options": {
+                        "schemaVersion": "0.0.2",
+                        "usePhysicalSizeScaling": false,
+                        "renderLayers": ["reg1_stitched_expressions", "reg1_stitched_mask"],
+                        "images": [
+                            {
+                                "name": "reg1_stitched_expressions",
+                                "type": "ome-tiff",
+                                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/expressions/reg1_stitched_expressions.ome.tiff?token=nexus_token",
+                                "metadata": {
+                                    "isBitmask": false,
+                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg1_stitched_expressions.offsets.json?token=nexus_token"
+                                }
+                            },
+                            {
+                              "name": "reg1_stitched_mask",
+                              "type": "ome-tiff",
+                              "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/mask/reg1_stitched_mask.ome.tiff?token=nexus_token",
+                              "metadata": {
+                                "isBitmask": true,
+                                "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg1_stitched_mask.offsets.json?token=nexus_token"
+                              }
+                            }
+                        ]
+                    }
                 }
             ]
         }
@@ -112,7 +123,7 @@
             "x": 3,
             "y": 0,
             "w": 7,
-            "h": 12
+            "h": 8
         },
         {
             "component": "description",
@@ -156,6 +167,15 @@
             "y": 0,
             "w": 2,
             "h": 5
+        },
+        {
+          "component": "heatmap",
+          "coordinationScopes": { "dataset": "A" },
+          "h": 4,
+          "props": { "transpose": true, "variablesLabelOverride": "antigen" },
+          "w": 7,
+          "x": 3,
+          "y": 8
         }
     ],
     "initStrategy": "auto"
@@ -170,29 +190,11 @@
             "name": "SPRM",
             "files": [
                 {
-                    "type": "raster",
-                    "fileType": "raster.json",
-                    "options": {
-                        "schemaVersion": "0.0.2",
-                        "images": [
-                            {
-                                "name": "reg2_stitched_expressions",
-                                "type": "ome-tiff",
-                                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/expressions/reg2_stitched_expressions.ome.tiff?token=nexus_token",
-                                "metadata": {
-                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg2_stitched_expressions.offsets.json?token=nexus_token"
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
                     "type": "cells",
                     "fileType": "anndata-cells.zarr",
                     "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/reg2_stitched_expressions-anndata.zarr",
                     "options": {
                         "xy": "obsm/xy",
-                        "poly": "obsm/poly",
                         "factors": [
                             "obs/K-Means [Covariance] Expression",
                             "obs/K-Means [Mean-All-SubRegions] Expression",
@@ -256,6 +258,35 @@
                             "Authorization": "Bearer nexus_token"
                         }
                     }
+                },
+                {
+                    "type": "raster",
+                    "fileType": "raster.json",
+                    "options": {
+                        "schemaVersion": "0.0.2",
+                        "usePhysicalSizeScaling": false,
+                        "renderLayers": ["reg2_stitched_expressions", "reg2_stitched_mask"],
+                        "images": [
+                            {
+                                "name": "reg2_stitched_expressions",
+                                "type": "ome-tiff",
+                                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/expressions/reg2_stitched_expressions.ome.tiff?token=nexus_token",
+                                "metadata": {
+                                    "isBitmask": false,
+                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg2_stitched_expressions.offsets.json?token=nexus_token"
+                                }
+                            },
+                            {
+                              "name": "reg2_stitched_mask",
+                              "type": "ome-tiff",
+                              "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/mask/reg2_stitched_mask.ome.tiff?token=nexus_token",
+                              "metadata": {
+                                "isBitmask": true,
+                                "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg2_stitched_mask.offsets.json?token=nexus_token"
+                              }
+                            }
+                        ]
+                    }
                 }
             ]
         }
@@ -274,7 +305,7 @@
             "x": 3,
             "y": 0,
             "w": 7,
-            "h": 12
+            "h": 8
         },
         {
             "component": "description",
@@ -318,6 +349,15 @@
             "y": 0,
             "w": 2,
             "h": 5
+        },
+        {
+          "component": "heatmap",
+          "coordinationScopes": { "dataset": "A" },
+          "h": 4,
+          "props": { "transpose": true, "variablesLabelOverride": "antigen" },
+          "w": 7,
+          "x": 3,
+          "y": 8
         }
     ],
     "initStrategy": "auto"

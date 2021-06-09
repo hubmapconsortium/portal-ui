@@ -1,0 +1,1 @@
+- Upgrade Vitessce to 1.1.10 (and python package as well).

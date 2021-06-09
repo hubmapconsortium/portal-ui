@@ -182,6 +182,9 @@ class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
                 is_mock=self._is_mock,
                 base_name=region,
                 imaging_path=STITCHED_IMAGE_DIR,
+                mask_path=STITCHED_IMAGE_DIR.replace('expressions', 'mask'),
+                image_name=f"{region}_stitched_expressions",
+                mask_name=f"{region}_stitched_mask"
             )
             conf = vc.get_conf_cells().conf
             if conf == {}:
