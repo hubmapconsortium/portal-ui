@@ -194,7 +194,7 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
             found_image_file, self._imaging_path,
         )
         return OmeTiffWrapper(
-            img_url=img_url, offsets_url=offsets_url, name=self._base_name
+            img_url=img_url, offsets_url=offsets_url, name=self._image_name
         )
 
 
