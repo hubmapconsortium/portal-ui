@@ -48,13 +48,9 @@ The webpack dev server proxies all requests outside of those for files in the pu
 
 Note: Searchkit, our interface to Elasticsearch, has changed significantly in the lastest release. Documentation for version 2.0 can be found [here](http://searchkit.github.io/searchkit/stable/).
 
-## Using Images
-Images should displayed using the `source srcset` attribute. You should prepare four versions of the image starting at its original size and at 75%, 50% and 25% the original image's size preserving its aspect ratio. If available, you should also provide a 2x resolution for higher density screens. For example, to resize images using Mac's Preview you can visit the 'Tools' menu and select 'Adjust Size', from there you can change the image's width while making sure 'Scale Proportionally' and 'Resample Image' are checked. Once ready, each version of the image should be processed with an image optimizer such as ImgOptim.
-
-Finally after processing, the images should be checked into the [`portal-images`](https://github.com/hubmapconsortium/portal-images) submodule.
-
-## Contributing Carousel Images
-Images provided to be used in the homepage's carousel should have a 16:9 aspect ratio, a width of at least 1400px, a title, a description, and, if desired, a url to be used for the 'Get Started' button.
+### Changelog files
+Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
+These are concatenated by `push.sh`.
 
 ### React File Structure
 - Components with tests or styles should be placed in to their own directory.
@@ -63,9 +59,12 @@ Images provided to be used in the homepage's carousel should have a 16:9 aspect 
 - Each component directory should have an `index.js` which exports the component as default.
 - Components which share a common domain can be placed in a directory within components named after the domain.
 
-### Changelog files
-Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
-These are concatenated by `push.sh`.
+### Using Images
+Images should displayed using the `source srcset` attribute. You should prepare four versions of the image starting at its original size and at 75%, 50% and 25% the original image's size preserving its aspect ratio. If available, you should also provide a 2x resolution for higher density screens. For example, to resize images using Mac's Preview you can visit the 'Tools' menu and select 'Adjust Size', from there you can change the image's width while making sure 'Scale Proportionally' and 'Resample Image' are checked. Once ready, each version of the image should be processed with an image optimizer such as ImgOptim.
+
+Finally after processing, the images should be checked into the [`portal-images`](https://github.com/hubmapconsortium/portal-images) submodule.
+
+For the homepage carousel, images should have a 16:9 aspect ratio, a width of at least 1400px, a title, a description, and, if desired, a url to be used for the 'Get Started' button.
 
 ## Testing
 [`test.sh`](test.sh) wraps all the tests and is run on Travis.
