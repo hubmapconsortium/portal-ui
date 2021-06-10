@@ -14,6 +14,14 @@ Issues with the Portal can be reported [via email](mailto:help@hubmapconsortium.
 More information on how issues are tracked across HuBMAP is available
 [here](https://portal.hubmapconsortium.org/docs/feedback).
 
+## Design
+
+We try to have a design ready before we start coding.
+Often, issues are filed in pairs, tagged [`design`](https://github.com/hubmapconsortium/portal-ui/issues?q=is%3Aissue+is%3Aopen+label%3Adesign)
+and [`enhancement`](https://github.com/hubmapconsortium/portal-ui/labels/enhancement).
+All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/HuBMAP).
+(Note that if that link redirects to `/files/recent`, you'll need to be added to the project, preferably with a `.edu` email, if you want write access.)
+
 ## Checkout
 
 Because we're using git submodules, a couple additional steps are needed with checkout:
@@ -28,13 +36,6 @@ git pull                                   # Now pulls submodules every time!
 If you need to work on the code in a submodule, I would encourage you to do that
 in a separate top-level checkout. You certainly can push changes from inside
 a submodule, but it just gets more confusing.
-
-## Design
-We try to have a design ready before we start coding.
-Often, issues are filed in pairs, tagged [`design`](https://github.com/hubmapconsortium/portal-ui/issues?q=is%3Aissue+is%3Aopen+label%3Adesign)
-and [`enhancement`](https://github.com/hubmapconsortium/portal-ui/labels/enhancement).
-All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/HuBMAP).
-(Note that if that link redirects to `/files/recent`, you'll need to be added to the project, preferably with a `.edu` email, if you want write access.)
 
 ## Development
 Please install both eslint and prettier plugins for your IDE.
