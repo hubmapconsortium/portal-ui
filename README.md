@@ -125,8 +125,14 @@ git push --set-upstream origin update-portal-ui-maintenance
 
 ### Understanding the build
 
+<details><summary>Webpack</summary>
+
 To view visualizations of the production webpack bundle run `npm run build:analyze`.
 The script will generate two files, report.html and stats.html, inside the public directory each showing a different visual representation of the bundle.
+
+</details>
+
+<details><summary>Docker</summary>
 
 To build and run the docker image locally:
 ```sh
@@ -134,8 +140,14 @@ To build and run the docker image locally:
 ```
 Our base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
 
+</details>
+
+<details><summary>Docker Compose</summary>
+
 In the deployments, our container is behind a NGINX reverse reproxy;
 Here's a [simple demonstration](compose/) of how that works.
+
+</details>
 
 ## Related projects and dependencies
 
