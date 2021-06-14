@@ -1,0 +1,1 @@
+- Add an endpoint which serves a Jupyter notebook with the viewconf for a dataset.
