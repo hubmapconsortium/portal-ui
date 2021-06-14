@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { InfoIcon } from 'js/shared-styles/icons';
-import Button from '@material-ui/core/Button';
+
+import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 
 const CenteredDiv = styled.div`
   display: flex;
@@ -31,7 +32,7 @@ const StyledInfoIcon = styled(InfoIcon)`
   margin-right: ${(props) => props.theme.spacing(0.5)}px;
 `;
 
-const StyledButton = styled(Button)`
+const StyledButton = styled(OptDisabledButton)`
   padding: 6px 36px;
 `;
 

@@ -17,12 +17,13 @@ from .utils import (
     get_matches,
 )
 from .base_confs import (
-    ImagingViewConf,
-    ScatterplotViewConf,
-    ImagePyramidViewConf,
-    SPRMJSONViewConf,
-    SPRMAnnDataViewConf,
-    ViewConf
+    ImagingViewConfBuilder,
+    ScatterplotViewConfBuilder,
+    ImagePyramidViewConfBuilder,
+    SPRMJSONViewConfBuilder,
+    SPRMAnnDataViewConfBuilder,
+    ViewConfBuilder,
+    ConfCells
 )
 from .assays import (
     SEQFISH,
@@ -42,8 +43,8 @@ from .paths import (
 )
 
 
-class SeqFISHViewConf(ImagingViewConf):
-    def build_vitessce_conf(self):
+class SeqFISHViewConfBuilder(ImagingViewConfBuilder):
+    def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         full_seqfish_reqex = "/".join(
             [
@@ -82,7 +83,7 @@ class SeqFISHViewConf(ImagingViewConf):
             # Don't want to render all layers
             del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
             confs.append(conf)
-        return confs
+        return ConfCells(confs, None)
 
     def _get_hybcycle(self, image_path):
         return re.search(SEQFISH_HYB_CYCLE_REGEX, image_path)[0]
@@ -98,8 +99,8 @@ class CytokitSPRMViewConfigError(Exception):
     pass
 
 
-class TiledSPRMConf(ViewConf):
-    def build_vitessce_conf(self):
+class TiledSPRMViewConfBuilder(ViewConfBuilder):
+    def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(
             file_paths_found,
@@ -111,22 +112,22 @@ class TiledSPRMConf(ViewConf):
             raise FileNotFoundError(message)
         confs = []
         for tile in sorted(found_tiles):
-            vc = SPRMJSONViewConf(
+            vc = SPRMJSONViewConfBuilder(
                 entity=self._entity,
                 nexus_token=self._nexus_token,
                 is_mock=self._is_mock,
                 base_name=tile,
                 imaging_path=CODEX_TILE_DIR
             )
-            conf = vc.build_vitessce_conf()
+            conf = vc.get_conf_cells().conf
             if conf == {}:
                 message = f'Cytokit SPRM assay with uuid {self._uuid} has empty view config'
                 raise CytokitSPRMViewConfigError(message)
             confs.append(conf)
-        return confs
+        return ConfCells(confs, None)
 
 
-class RNASeqConf(ScatterplotViewConf):
+class RNASeqViewConfBuilder(ScatterplotViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
@@ -144,7 +145,7 @@ class RNASeqConf(ScatterplotViewConf):
         ]
 
 
-class ATACSeqConf(ScatterplotViewConf):
+class ATACSeqViewConfBuilder(ScatterplotViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
@@ -164,8 +165,8 @@ class ATACSeqConf(ScatterplotViewConf):
         ]
 
 
-class StitchedCytokitSPRMConf(ViewConf):
-    def build_vitessce_conf(self):
+class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
+    def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_regions = get_matches(file_paths_found, STITCHED_REGEX)
         if len(found_regions) == 0:
@@ -175,25 +176,28 @@ class StitchedCytokitSPRMConf(ViewConf):
             )
         confs = []
         for region in sorted(found_regions):
-            vc = SPRMAnnDataViewConf(
+            vc = SPRMAnnDataViewConfBuilder(
                 entity=self._entity,
                 nexus_token=self._nexus_token,
                 is_mock=self._is_mock,
                 base_name=region,
                 imaging_path=STITCHED_IMAGE_DIR,
+                mask_path=STITCHED_IMAGE_DIR.replace('expressions', 'mask'),
+                image_name=f"{region}_stitched_expressions",
+                mask_name=f"{region}_stitched_mask"
             )
-            conf = vc.build_vitessce_conf()
+            conf = vc.get_conf_cells().conf
             if conf == {}:
                 raise CytokitSPRMViewConfigError(
                     f"Cytokit SPRM assay with uuid {self._uuid} has empty view\
                         config for region '{region}'"
                 )
             confs.append(conf)
-        return confs if len(confs) > 1 else confs[0]
+        return ConfCells(confs if len(confs) > 1 else confs[0], None)
 
 
-class RNASeqAnnDataZarrConf(ViewConf):
-    def build_vitessce_conf(self):
+class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
+    def get_conf_cells(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         if f'{zarr_path}/.zgroup' not in file_paths_found:
@@ -220,7 +224,7 @@ class RNASeqAnnDataZarrConf(ViewConf):
         )
         )
         vc = self._setup_anndata_view_config(vc, dataset)
-        return vc.to_dict()
+        return ConfCells(vc.to_dict(), None)
 
     def _setup_anndata_view_config(self, vc, dataset):
         vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=4, h=6)
@@ -231,7 +235,7 @@ class RNASeqAnnDataZarrConf(ViewConf):
         return vc
 
 
-class IMSConf(ImagePyramidViewConf):
+class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # Do not show the separated mass-spec images.
@@ -240,9 +244,9 @@ class IMSConf(ImagePyramidViewConf):
         )
 
 
-class NullConf():
-    def build_vitessce_conf(self):
-        return None
+class NullViewConfBuilder():
+    def get_conf_cells(self):
+        return ConfCells(None, None)
 
 
 _assays = None
@@ -267,26 +271,26 @@ def get_view_config_class_for_data_types(entity, nexus_token):
     if "is_image" in hints:
         if "codex" in hints:
             if ('sprm-to-anndata.cwl' in dag_names):
-                return StitchedCytokitSPRMConf(
+                return StitchedCytokitSPRMViewConfBuilder(
                     entity=entity, nexus_token=nexus_token
                 )
-            return TiledSPRMConf(
+            return TiledSPRMViewConfBuilder(
                 entity=entity, nexus_token=nexus_token)
         if SEQFISH in assay_names:
-            return SeqFISHViewConf(
+            return SeqFISHViewConfBuilder(
                 entity=entity, nexus_token=nexus_token)
         if (
             MALDI_IMS_NEG in assay_names
             or MALDI_IMS_POS in assay_names
         ):
-            return IMSConf(entity=entity, nexus_token=nexus_token)
-        return ImagePyramidViewConf(
+            return IMSViewConfBuilder(entity=entity, nexus_token=nexus_token)
+        return ImagePyramidViewConfBuilder(
             entity=entity, nexus_token=nexus_token)
     if "rna" in hints:
         # This is the zarr-backed anndata pipeline.
         if('anndata-to-ui.cwl' in dag_names):
-            return RNASeqAnnDataZarrConf(entity=entity, nexus_token=nexus_token)
-        return RNASeqConf(entity=entity, nexus_token=nexus_token)
+            return RNASeqAnnDataZarrViewConfBuilder(entity=entity, nexus_token=nexus_token)
+        return RNASeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
     if "atac" in hints:
-        return ATACSeqConf(entity=entity, nexus_token=nexus_token)
-    return NullConf()
+        return ATACSeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
+    return NullViewConfBuilder()

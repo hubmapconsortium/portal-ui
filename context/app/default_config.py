@@ -20,8 +20,10 @@ class DefaultConfig(object):
 
     GROUP_ID = 'should-be-overridden'
 
+    GATEWAY_ENDPOINT = 'should-be-overridden'
     ELASTICSEARCH_ENDPOINT = 'should-be-overridden'
     ASSETS_ENDPOINT = 'should-be-overridden'
+    XMODALITY_ENDPOINT = 'should-be-overridden'
 
     SECRET_KEY = 'should-be-overridden'
     APP_CLIENT_ID = 'should-be-overridden'

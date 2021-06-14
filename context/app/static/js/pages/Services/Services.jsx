@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 
+import { AppContext } from 'js/components/Providers';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import Description from 'js/shared-styles/sections/Description';
 import ServiceStatusTable from 'js/components/ServiceStatusTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import { gatewayUrl } from 'js/components/ServiceStatusTable/hooks';
 
 function Services() {
+  const endpoints = useContext(AppContext);
+  const gatewayUrl = `${endpoints.gatewayEndpoint}/status.json`;
   return (
     <>
       <SectionContainer id="summary">
@@ -24,7 +26,7 @@ function Services() {
         </Description>
       </SectionContainer>
       <Paper>
-        <ServiceStatusTable />
+        <ServiceStatusTable {...endpoints} />
       </Paper>
     </>
   );

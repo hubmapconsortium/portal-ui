@@ -2,6 +2,7 @@ from os.path import dirname
 from urllib.parse import urlparse
 import json
 import nbformat
+from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
 from flask import (Blueprint, render_template, abort, current_app,
                    session, request, redirect, url_for, Response)
@@ -33,7 +34,9 @@ def _get_endpoints():
         'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
         + current_app.config['PORTAL_INDEX_PATH'],
         'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
-        'entityEndpoint': current_app.config['ENTITY_API_BASE']
+        'entityEndpoint': current_app.config['ENTITY_API_BASE'],
+        'xmodalityEndpoint': current_app.config['XMODALITY_ENDPOINT'],
+        'gatewayEndpoint': current_app.config['GATEWAY_ENDPOINT'],
     }
 
 
@@ -82,6 +85,14 @@ def hbm_redirect(hbm_suffix):
         url_for('routes.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
 
 
+@blueprint.route('/browse/<type>/<uuid>.<unknown_ext>')
+def unknown_ext(type, uuid, unknown_ext):
+    # https://github.com/pallets/werkzeug/blob/b01fa1817343d2a36a9d8bb17f61ddf209c27c2b/src/werkzeug/routing.py#L1126
+    # Rules with static parts come before variable routes...
+    # so the known extensions will come before this.
+    abort(404)
+
+
 @blueprint.route('/browse/<type>/<uuid>')
 def details(type, uuid):
     if type not in entity_types:
@@ -92,7 +103,7 @@ def details(type, uuid):
     if type != actual_type:
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
-    template = f'pages/base_react.html'
+    template = 'pages/base_react.html'
     flask_data = {
         'endpoints': _get_endpoints(),
         'entity': entity,
@@ -125,15 +136,19 @@ def details_notebook(type, uuid):
     vitessce_conf = client.get_vitessce_conf(entity)
     if vitessce_conf is None:
         abort(404)
-    nb = nbformat.v4.new_notebook()
+    nb = new_notebook()
     nb['cells'] = [
-        nbformat.v4.new_markdown_cell(f"""
+        new_markdown_cell(f"""
 Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','')})
         """.strip()),
-        nbformat.v4.new_code_cell('% pip install vitessce==0.1.0a9'),
-        nbformat.v4.new_code_cell('import vitessce'),
-        nbformat.v4.new_code_cell(f'vitessce_conf = {vitessce_conf}'),
-        nbformat.v4.new_code_cell('# TODO: Render!')
+        new_code_cell("""
+!pip install vitessce==0.1.0a9
+!jupyter nbextension install --py --sys-prefix vitessce
+!jupyter nbextension enable --py --sys-prefix vitessce
+        """.strip()),
+        new_code_cell('from vitessce import VitessceConfig'),
+        new_markdown_cell('TODO: Generate the appropriate `conf` using `vitessce-python`'),
+        new_code_cell('conf.widget()')
     ]
     return Response(
         response=nbformat.writes(nb),

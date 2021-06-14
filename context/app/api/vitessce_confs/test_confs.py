@@ -4,16 +4,16 @@ import re
 
 import pytest
 
-from .base_confs import ImagePyramidViewConf, SPRMJSONViewConf
+from .base_confs import ImagePyramidViewConfBuilder, SPRMJSONViewConfBuilder
 from .assay_confs import (
-    SeqFISHViewConf,
-    TiledSPRMConf,
-    RNASeqConf,
-    ATACSeqConf,
-    IMSConf,
-    RNASeqAnnDataZarrConf,
-    SPRMAnnDataViewConf,
-    StitchedCytokitSPRMConf
+    SeqFISHViewConfBuilder,
+    TiledSPRMViewConfBuilder,
+    RNASeqViewConfBuilder,
+    ATACSeqViewConfBuilder,
+    IMSViewConfBuilder,
+    RNASeqAnnDataZarrViewConfBuilder,
+    SPRMAnnDataViewConfBuilder,
+    StitchedCytokitSPRMViewConfBuilder
 )
 
 MOCK_NEXUS_TOKEN = "nexus_token"
@@ -24,16 +24,16 @@ FIXTURES_EXPECTED_OUTPUT_DIR = "fixtures/output_expected"
 BASE_NAME_FOR_SPRM = "BASE_NAME"
 
 AssayConfClasses = {
-    "cytokit_json": TiledSPRMConf,
-    "rna": RNASeqConf,
-    "atac": ATACSeqConf,
-    "ims": IMSConf,
-    "image_pyramid": ImagePyramidViewConf,
-    "seqfish": SeqFISHViewConf,
-    "sprm": SPRMJSONViewConf,
-    "rna_zarr": RNASeqAnnDataZarrConf,
-    "sprm_anndata": SPRMAnnDataViewConf,
-    "cytokit_anndata": StitchedCytokitSPRMConf
+    "cytokit_json": TiledSPRMViewConfBuilder,
+    "rna": RNASeqViewConfBuilder,
+    "atac": ATACSeqViewConfBuilder,
+    "ims": IMSViewConfBuilder,
+    "image_pyramid": ImagePyramidViewConfBuilder,
+    "seqfish": SeqFISHViewConfBuilder,
+    "sprm": SPRMJSONViewConfBuilder,
+    "rna_zarr": RNASeqAnnDataZarrViewConfBuilder,
+    "sprm_anndata": SPRMAnnDataViewConfBuilder,
+    "cytokit_anndata": StitchedCytokitSPRMViewConfBuilder
 }
 
 
@@ -57,12 +57,15 @@ def test_assays():
                 is_mock=True,
                 base_name=BASE_NAME_FOR_SPRM,
                 imaging_path="imaging_path",
+                image_name="expressions",
+                mask_name="mask",
+                mask_path="imaging_path"
             )
         else:
             vc = AssayViewConfClass(
                 entity=entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True
             )
-        conf = vc.build_vitessce_conf()
+        conf = vc.get_conf_cells().conf
         conf_expected = json.loads(
             (
                 parent_dir / f"{FIXTURES_EXPECTED_OUTPUT_DIR}/{assay}_conf.json"
@@ -80,10 +83,13 @@ def test_assays():
                 is_mock=True,
                 base_name=BASE_NAME_FOR_SPRM,
                 imaging_path="imaging_path",
+                image_name="expressions",
+                mask_name="mask",
+                mask_path="imaging_path"
             )
         else:
             vc = AssayViewConfClass(
                 entity=malformed_entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True
             )
         with pytest.raises(FileNotFoundError):
-            vc.build_vitessce_conf()
+            vc.get_conf_cells().conf

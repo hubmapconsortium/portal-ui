@@ -1,6 +1,7 @@
 import urllib
 from pathlib import Path
 import re
+from collections import namedtuple
 
 from flask import current_app
 from vitessce import (
@@ -19,11 +20,14 @@ from .paths import SPRM_JSON_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR
 MOCK_URL = "https://example.com"
 
 
-class ViewConf:
+ConfCells = namedtuple('ConfCells', ['conf', 'cells'])
+
+
+class ViewConfBuilder:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
 
-        >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
 
         """
 
@@ -33,14 +37,13 @@ class ViewConf:
         self._is_mock = is_mock
         self._files = []
 
-    def build_vitessce_conf(self):
-        "Build a Vitessce view conf and attach to conf attribute"
-        pass
+    def get_conf_cells(self):
+        raise NotImplementedError
 
     def _replace_url_in_file(self, file):
         """Replace url in incoming file object
         >>> from pprint import pprint
-        >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
         >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
         >>> pprint(vc._replace_url_in_file(file))
         {'data_type': 'CELLS',\n\
@@ -57,7 +60,7 @@ class ViewConf:
     def _build_assets_url(self, rel_path, use_token=True):
         """Create a url for an asset.
 
-        >>> vc = ViewConf(entity={ "uuid": "uuid" }, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
         >>> vc._build_assets_url("rel_path/to/clusters.ome.tiff")
         'https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=nexus_token'
 
@@ -83,11 +86,11 @@ class ViewConf:
         return [file["rel_path"] for file in self._entity["files"]]
 
 
-class ImagingViewConf(ViewConf):
+class ImagingViewConfBuilder(ViewConfBuilder):
     def _get_img_and_offset_url(self, img_path, img_dir):
         """Create a url for the offsets and img.
         >>> from pprint import pprint
-        >>> vc = ImagingViewConf(entity={ "uuid": "uuid" },\
+        >>> vc = ImagingViewConfBuilder(entity={ "uuid": "uuid" },\
             nexus_token='nexus_token', is_mock=True)
         >>> pprint(vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff",\
             "rel_path/to"))
@@ -114,12 +117,12 @@ class ImagingViewConf(ViewConf):
         return vc
 
 
-class ImagePyramidViewConf(ImagingViewConf):
+class ImagePyramidViewConfBuilder(ImagingViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         self.image_pyramid_regex = IMAGE_PYRAMID_DIR
         super().__init__(entity, nexus_token, is_mock)
 
-    def build_vitessce_conf(self):
+    def get_conf_cells(self):
         file_paths_found = self._get_file_paths()
         found_images = get_matches(
             file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
@@ -147,11 +150,11 @@ class ImagePyramidViewConf(ImagingViewConf):
         conf = vc.to_dict()
         # Don't want to render all layers
         del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
-        return conf
+        return ConfCells(conf, None)
 
 
-class ScatterplotViewConf(ViewConf):
-    def build_vitessce_conf(self):
+class ScatterplotViewConfBuilder(ViewConfBuilder):
+    def get_conf_cells(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
         file_paths_found = self._get_file_paths()
         # We need to check that the files we expect actually exist.
@@ -164,7 +167,7 @@ class ScatterplotViewConf(ViewConf):
         for file in self._files:
             dataset = dataset.add_file(**(self._replace_url_in_file(file)))
         vc = self._setup_scatterplot_view_config(vc, dataset)
-        return vc.to_dict()
+        return ConfCells(vc.to_dict(), None)
 
     def _setup_scatterplot_view_config(self, vc, dataset):
         vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=9, h=12)
@@ -172,42 +175,38 @@ class ScatterplotViewConf(ViewConf):
         return vc
 
 
-class SPRMViewConf(ImagePyramidViewConf):
+class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
 
-    def _get_sprm_image(self):
-        image_file_regex = f"{self._imaging_path}/{self._base_name}.ome.tiff?"
+    def _get_full_image_path(self):
+        return f"{self._imaging_path_regex}/{self._image_name}.ome.tiff?"
+
+    def _check_sprm_image(self, path_regex):
         file_paths_found = self._get_file_paths()
-        found_image_files = get_matches(file_paths_found, image_file_regex)
+        found_image_files = get_matches(file_paths_found, path_regex)
         if len(found_image_files) != 1:
             message = f'Found {len(found_image_files)} image files for SPRM uuid "{self._uuid}".'
             raise FileNotFoundError(message)
         found_image_file = found_image_files[0]
         return found_image_file
 
-    def _add_sprm_image_to_view_conf(self, found_image_file, vc, dataset):
+    def _get_ometiff_image_wrapper(self, found_image_file):
         img_url, offsets_url = self._get_img_and_offset_url(
-            found_image_file, self._imaging_path,
+            found_image_file, self._imaging_path_regex,
         )
-        image_wrapper = OmeTiffWrapper(
-            img_url=img_url, offsets_url=offsets_url, name=self._base_name
+        return OmeTiffWrapper(
+            img_url=img_url, offsets_url=offsets_url, name=self._image_name
         )
-        dataset = dataset.add_object(image_wrapper)
-        return dataset
-
-    def _perpare_vc_and_dataset_with_image(self):
-        found_image_file = self._get_sprm_image()
-        vc = VitessceConfig(name=self._base_name)
-        dataset = vc.add_dataset(name="SPRM")
-        dataset = self._add_sprm_image_to_view_conf(found_image_file, vc, dataset)
-        return vc, dataset
 
 
-class SPRMJSONViewConf(SPRMViewConf):
+class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
+        # These are both something like R001_X009_Y009 because
+        # there is no mask used here or shared name with the mask data.
         self._base_name = kwargs["base_name"]
-        self._imaging_path = kwargs["imaging_path"]
+        self._image_name = kwargs["base_name"]
+        self._imaging_path_regex = kwargs["imaging_path"]
         self._files = [
             {
                 "rel_path": f"{SPRM_JSON_DIR}/" + f"{self._base_name}.cells.json",
@@ -226,8 +225,12 @@ class SPRMJSONViewConf(SPRMViewConf):
             },
         ]
 
-    def build_vitessce_conf(self):
-        vc, dataset = self._perpare_vc_and_dataset_with_image()
+    def get_conf_cells(self):
+        found_image_file = self._check_sprm_image(self._get_full_image_path())
+        vc = VitessceConfig(name=self._base_name)
+        dataset = vc.add_dataset(name="SPRM")
+        image_wrapper = self._get_ometiff_image_wrapper(found_image_file)
+        dataset = dataset.add_object(image_wrapper)
         file_paths_found = self._get_file_paths()
         # This tile has no segmentations
         if self._files[0]["rel_path"] not in file_paths_found:
@@ -245,7 +248,7 @@ class SPRMJSONViewConf(SPRMViewConf):
             vc = self._setup_view_config_raster_cellsets_expression_segmentation(
                 vc, dataset
             )
-        return vc.to_dict()
+        return ConfCells(vc.to_dict(), None)
 
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
         vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=8)
@@ -261,17 +264,35 @@ class SPRMJSONViewConf(SPRMViewConf):
         return vc
 
 
-class SPRMAnnDataViewConf(SPRMViewConf):
+class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
         self._base_name = kwargs["base_name"]
-        self._imaging_path = f"{self.image_pyramid_regex}/{kwargs['imaging_path']}"
+        self._mask_name = kwargs["mask_name"]
+        self._image_name = kwargs["image_name"]
+        self._imaging_path_regex = f"{self.image_pyramid_regex}/{kwargs['imaging_path']}"
+        self._mask_path_regex = f"{self.image_pyramid_regex}/{kwargs['mask_path']}"
 
-    def build_vitessce_conf(self):
-        vc, dataset = self._perpare_vc_and_dataset_with_image()
+    def _get_bitmask_image_path(self):
+        return f"{self._mask_path_regex}/{self._mask_name}.ome.tiff?"
+
+    def _get_ometiff_mask_wrapper(self, found_bitmask_file):
+        bitmask_img_url, bitmask_offsets_url = self._get_img_and_offset_url(
+            found_bitmask_file, self._mask_path_regex,
+        )
+        return OmeTiffWrapper(
+            img_url=bitmask_img_url,
+            offsets_url=bitmask_offsets_url,
+            name=self._mask_name,
+            is_bitmask=True
+        )
+
+    def get_conf_cells(self):
+        vc = VitessceConfig(name=self._image_name)
+        dataset = vc.add_dataset(name="SPRM")
         file_paths_found = self._get_file_paths()
-        zarr_path = f"anndata-zarr/{self._base_name}-anndata.zarr"
+        zarr_path = f"anndata-zarr/{self._image_name}-anndata.zarr"
         if f"{zarr_path}/.zgroup" not in file_paths_found:
             message = f"SPRM assay with uuid {self._uuid} has no matching .zarr store"
             raise FileNotFoundError(message)
@@ -279,7 +300,6 @@ class SPRMAnnDataViewConf(SPRMViewConf):
         anndata_wrapper = AnnDataWrapper(
             adata_url=adata_url,
             spatial_centroid_obsm="xy",
-            spatial_polygon_obsm="poly",
             cell_set_obs=[
                 "K-Means [Covariance] Expression",
                 "K-Means [Mean-All-SubRegions] Expression",
@@ -300,17 +320,25 @@ class SPRMAnnDataViewConf(SPRMViewConf):
             request_init=self._get_request_init(),
         )
         dataset = dataset.add_object(anndata_wrapper)
+        found_image_file = self._check_sprm_image(self._get_full_image_path())
+        image_wrapper = self._get_ometiff_image_wrapper(found_image_file)
+        found_bitmask_file = self._check_sprm_image(self._get_bitmask_image_path())
+        bitmask_wrapper = self._get_ometiff_mask_wrapper(found_bitmask_file)
+        dataset = dataset.add_object(MultiImageWrapper([image_wrapper, bitmask_wrapper]))
         vc = self._setup_view_config_raster_cellsets_expression_segmentation(
             vc, dataset
         )
-        return vc.to_dict()
+        return ConfCells(vc.to_dict(), None)
 
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
-        vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=12)
+        vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=8)
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
         vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
         vc.add_view(dataset, cm.CELL_SETS, x=10, y=5, w=2, h=7)
         vc.add_view(dataset, cm.GENES, x=10, y=0, w=2, h=5).set_props(
             variablesLabelOverride="antigen"
+        )
+        vc.add_view(dataset, cm.HEATMAP, x=3, y=8, w=7, h=4).set_props(
+            variablesLabelOverride="antigen", transpose=True
         )
         return vc

@@ -61,7 +61,7 @@ class ApiClient():
             body_json=query)
         uuids = [hit['_id'] for hit in response_json['hits']['hits']]
         if len(uuids) == size:
-            raise Exception(f'At least 10k datasets: need to make multiple requests')
+            raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
 
     def get_entity(self, uuid=None, hbm_id=None):
@@ -128,7 +128,7 @@ class ApiClient():
             vc = get_view_config_class_for_data_types(
                 entity=entity, nexus_token=self.nexus_token
             )
-            conf = vc.build_vitessce_conf()
+            conf = vc.get_conf_cells().conf
             return conf
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'

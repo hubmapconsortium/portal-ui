@@ -1,3 +1,36 @@
+## v0.20.1 - 2021-06-09
+
+- Add bitmask to SPRM `AnnData` example.
+- Show search terms when the search input is focused or unfocused.
+- Remove the path component from the cell endpoint in the config, for consistency with other endpoints.
+- Fix homepage bar chart responsiveness.
+- Fix text overflow for collections panel titles.
+- Fix spacing for detail summary creation and modification dates.
+- Remove support entity counts from provenance table tiles.
+- Show derived samples in sample entity tiles.
+- Upgrade Vitessce to 1.1.10 (and python package as well).
+
+
+## v0.20.0 - 2021-06-07
+
+- `ViewConf` to `ViewConfBuilder` to disambiguate the object from what it returns.
+- Refactor to return a conf/cells tuple, instead of just a conf.
+  (The cells part is `None` for now.)
+- Add an endpoint which serves a Jupyter notebook with the viewconf for a dataset.
+- Remove provenance section for support pages.
+- Link to parent datasets in support page alert.
+- Fix safari disabled button bug.
+
+
+## v0.19.2 - 2021-06-03
+
+- Update to the latest cells client, and update the flask endpoints.
+- New dev-search query to find donor metadata.
+- Gateway endpoint should also be provided as a config, instead of being hardcoded.
+- Tweak redeploy script; Hope this will make sure that the prod-stage instance gets the right config.
+- Show the URLs of the endpoints we hit on the status page.
+
+
 ## v0.19.1 - 2021-05-26
 
 - Fix new stitched `AnnData` SPRM viewconf.

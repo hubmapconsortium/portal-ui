@@ -48,24 +48,31 @@ The webpack dev server proxies all requests outside of those for files in the pu
 
 Note: Searchkit, our interface to Elasticsearch, has changed significantly in the lastest release. Documentation for version 2.0 can be found [here](http://searchkit.github.io/searchkit/stable/).
 
-## Using Images
-Images should displayed using the `source srcset` attribute. You should prepare four versions of the image starting at its original size and at 75%, 50% and 25% the original image's size preserving its aspect ratio. If available, you should also provide a 2x resolution for higher density screens. For example, to resize images using Mac's Preview you can visit the 'Tools' menu and select 'Adjust Size', from there you can change the image's width while making sure 'Scale Proportionally' and 'Resample Image' are checked. Once ready, each version of the image should be processed with an image optimizer such as ImgOptim.
+### Changelog files
+Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
+These are concatenated by `push.sh`.
 
-Finally after processing, the images should be checked into the [`portal-images`](https://github.com/hubmapconsortium/portal-images) submodule.
+### File and directory structure conventions
 
-## Contributing Carousel Images
-Images provided to be used in the homepage's carousel should have a 16:9 aspect ratio, a width of at least 1400px, a title, a description, and, if desired, a url to be used for the 'Get Started' button.
+<details><summary>For React</summary>
 
-### React File Structure
 - Components with tests or styles should be placed in to their own directory.
 - Styles should be placed in `style.*` where the extension is js for styled components or css for stylesheets.
 - Tests should be placed in `*.spec.js` where the prefix is the name of the component.
 - Each component directory should have an `index.js` which exports the component as default.
 - Components which share a common domain can be placed in a directory within components named after the domain.
 
-### Changelog files
-Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
-These are concatenated by `push.sh`.
+</details>
+
+<details><summary>For images</summary>
+
+Images should displayed using the `source srcset` attribute. You should prepare four versions of the image starting at its original size and at 75%, 50% and 25% the original image's size preserving its aspect ratio. If available, you should also provide a 2x resolution for higher density screens. For example, to resize images using Mac's Preview you can visit the 'Tools' menu and select 'Adjust Size', from there you can change the image's width while making sure 'Scale Proportionally' and 'Resample Image' are checked. Once ready, each version of the image should be processed with an image optimizer such as ImgOptim.
+
+Finally after processing, the images should be checked into the [`portal-images`](https://github.com/hubmapconsortium/portal-images) submodule.
+
+For the homepage carousel, images should have a 16:9 aspect ratio, a width of at least 1400px, a title, a description, and, if desired, a url to be used for the 'Get Started' button.
+
+</details>
 
 ## Testing
 [`test.sh`](test.sh) wraps all the tests and is run on Travis.
@@ -126,8 +133,14 @@ git push --set-upstream origin update-portal-ui-maintenance
 
 ### Understanding the build
 
+<details><summary>Webpack</summary>
+
 To view visualizations of the production webpack bundle run `npm run build:analyze`.
 The script will generate two files, report.html and stats.html, inside the public directory each showing a different visual representation of the bundle.
+
+</details>
+
+<details><summary>Docker</summary>
 
 To build and run the docker image locally:
 ```sh
@@ -135,19 +148,35 @@ To build and run the docker image locally:
 ```
 Our base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
 
+</details>
+
+<details><summary>Docker Compose</summary>
+
 In the deployments, our container is behind a NGINX reverse reproxy;
 Here's a [simple demonstration](compose/) of how that works.
 
+</details>
+
 ## Related projects and dependencies
 
-Javascript:
-- [`vitessce`](https://github.com/hubmapconsortium/vitessce): Visual integration tool for exploration of spatial single-cell experiments. Built on top of [deck.gl](https://deck.gl/).
+### Search and Metadata
 
-Preprocessing:
-- [`portal-containers`](https://github.com/hubmapconsortium/portal-containers): Docker containers for visualization preprocessing.
-- [`airflow-dev`](https://github.com/hubmapconsortium/airflow-dev): CWL pipelines wrapping those Docker containers.
-- [`search-api`](https://github.com/hubmapconsortium/search-api/tree/master/src/elasticsearch/addl_index_transformations): The Elasticsearch index the portal uses clean up the raw Neo4J export.
+The metadata that we have for each dataset ultimately comes from the data providers,
+but the fields they supply are determined by the schemas in [`ingest-validation-tools`](https://github.com/hubmapconsortium/ingest-validation-tools#readme).
+That repo is also included as a submodule here, and human-readable field descriptions are pulled from it.
 
-## Visualization via Vitessce
+The portal team contributes code to a [subdirectory within `search-api`](https://github.com/hubmapconsortium/search-api/tree/master/src/elasticsearch/addl_index_transformations)
+to clean up the raw Neo4J export and provide us with clean, usable facets.
+Within that directory, [`config.yaml`](https://github.com/hubmapconsortium/search-api/blob/test-release/src/elasticsearch/addl_index_transformations/portal/config.yaml) configures the Elasticsearch index itself.
+
+### Visualization
 
 Data visualization is an integral part of the portal, allowing users to view the results of analysis pipelines or raw uploaded data easily directly in the browser.  How such data is processed and prepared for visualization in the client-side Javascript via [`vitessce`](https://github.com/hubmapconsortium/vitessce) can be found [here](./visualization-docs/README.md).
+
+General-purpose tools:
+- [`vitessce`](https://github.com/hubmapconsortium/vitessce): Visual integration tool for exploration of spatial single-cell experiments. Built on top of [deck.gl](https://deck.gl/).
+- [`vitessce-python`](https://github.com/vitessce/vitessce-python): Python wrapper classes which make it easier to build configurations.
+
+Particular to HuBMAP:
+- [`portal-containers`](https://github.com/hubmapconsortium/portal-containers): Docker containers for visualization preprocessing.
+- [`airflow-dev`](https://github.com/hubmapconsortium/airflow-dev): CWL pipelines wrapping those Docker containers.
