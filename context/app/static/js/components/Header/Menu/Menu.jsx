@@ -44,7 +44,7 @@ function Menu(props) {
             {openPreview && <PreviewLinks isIndented />}
 
             <DropdownMenuItem onClick={toggleCCF}>
-              CCF Atlas
+              Atlas & Tools
               {openCCF ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </DropdownMenuItem>
             {openCCF && <CCFLinks isIndented />}
