@@ -7,7 +7,7 @@ import { VisualizationBackground } from './style';
 const Visualization = React.lazy(() => import('../Visualization'));
 
 function VisualizationWrapper(props) {
-  const { vitData, uuid } = props;
+  const { vitData, uuid, hasNotebook } = props;
 
   return (
     <Suspense
@@ -22,7 +22,7 @@ function VisualizationWrapper(props) {
         </StyledSectionContainer>
       }
     >
-      <Visualization vitData={vitData} uuid={uuid} />
+      <Visualization vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
     </Suspense>
   );
 }

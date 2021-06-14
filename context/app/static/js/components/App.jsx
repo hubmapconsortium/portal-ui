@@ -12,14 +12,24 @@ import 'js/components/Search/Search.scss';
 
 function App(props) {
   const { flaskData } = props;
-  const { title, entity, vitessce_conf, endpoints, markdown, collection, errorCode, list_uuid } = flaskData;
+  const {
+    title,
+    entity,
+    vitessce_conf,
+    endpoints,
+    markdown,
+    collection,
+    errorCode,
+    list_uuid,
+    has_notebook,
+  } = flaskData;
   ReactGA.initialize('UA-133341631-3');
 
   return (
     // eslint-disable-next-line no-undef
     <Providers endpoints={endpoints} nexusToken={nexus_token}>
       <Header />
-      <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode, list_uuid }} />
+      <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode, list_uuid, has_notebook }} />
       <Footer />
     </Providers>
   );
@@ -35,6 +45,7 @@ App.propTypes = {
     collection: PropTypes.object,
     errorCode: PropTypes.number,
     list_uuid: PropTypes.string,
+    has_notebook: PropTypes.bool,
   }),
 };
 
