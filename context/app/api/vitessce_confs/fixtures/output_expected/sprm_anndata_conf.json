@@ -1,6 +1,6 @@
 {
     "version": "1.0.0",
-    "name": "BASE_NAME",
+    "name": "expressions",
     "description": "",
     "datasets": [
         {
@@ -8,29 +8,11 @@
             "name": "SPRM",
             "files": [
                 {
-                    "type": "raster",
-                    "fileType": "raster.json",
-                    "options": {
-                        "schemaVersion": "0.0.2",
-                        "images": [
-                            {
-                                "name": "BASE_NAME",
-                                "type": "ome-tiff",
-                                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/imaging_path/BASE_NAME.ome.tiff?token=nexus_token",
-                                "metadata": {
-                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/BASE_NAME.offsets.json?token=nexus_token"
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
                     "type": "cells",
                     "fileType": "anndata-cells.zarr",
-                    "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/BASE_NAME-anndata.zarr",
+                    "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/expressions-anndata.zarr",
                     "options": {
                         "xy": "obsm/xy",
-                        "poly": "obsm/poly",
                         "factors": [
                             "obs/K-Means [Covariance] Expression",
                             "obs/K-Means [Mean-All-SubRegions] Expression",
@@ -49,7 +31,7 @@
                 {
                     "type": "cell-sets",
                     "fileType": "anndata-cell-sets.zarr",
-                    "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/BASE_NAME-anndata.zarr",
+                    "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/expressions-anndata.zarr",
                     "options": [
                         {
                             "groupName": "K-Means [Covariance] Expression",
@@ -85,7 +67,7 @@
                 {
                     "type": "expression-matrix",
                     "fileType": "anndata-expression-matrix.zarr",
-                    "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/BASE_NAME-anndata.zarr",
+                    "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/expressions-anndata.zarr",
                     "options": {
                         "matrix": "X"
                     },
@@ -93,6 +75,35 @@
                         "headers": {
                             "Authorization": "Bearer nexus_token"
                         }
+                    }
+                },
+                {
+                    "type": "raster",
+                    "fileType": "raster.json",
+                    "options": {
+                        "schemaVersion": "0.0.2",
+                        "usePhysicalSizeScaling": false,
+                        "renderLayers": ["expressions", "mask"],
+                        "images": [
+                            {
+                                "name": "expressions",
+                                "type": "ome-tiff",
+                                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/imaging_path/expressions.ome.tiff?token=nexus_token",
+                                "metadata": {
+                                    "isBitmask": false,
+                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/expressions.offsets.json?token=nexus_token"
+                                }
+                            },
+                            {
+                              "name": "mask",
+                              "type": "ome-tiff",
+                              "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/imaging_path/mask.ome.tiff?token=nexus_token",
+                              "metadata": {
+                                "isBitmask": true,
+                                "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/mask.offsets.json?token=nexus_token"
+                              }
+                            }
+                        ]
                     }
                 }
             ]
@@ -112,7 +123,7 @@
             "x": 3,
             "y": 0,
             "w": 7,
-            "h": 12
+            "h": 8
         },
         {
             "component": "description",
@@ -156,6 +167,15 @@
           "y": 0,
           "w": 2,
           "h": 5
+        },
+        {
+            "component": "heatmap",
+            "coordinationScopes": {"dataset": "A"},
+            "h": 4,
+            "props": {"transpose": true, "variablesLabelOverride": "antigen"},
+            "w": 7,
+            "x": 3,
+            "y": 8
         }
     ],
     "initStrategy": "auto"

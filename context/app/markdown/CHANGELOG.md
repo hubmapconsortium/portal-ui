@@ -1,3 +1,16 @@
+## v0.20.1 - 2021-06-09
+
+- Add bitmask to SPRM `AnnData` example.
+- Show search terms when the search input is focused or unfocused.
+- Remove the path component from the cell endpoint in the config, for consistency with other endpoints.
+- Fix homepage bar chart responsiveness.
+- Fix text overflow for collections panel titles.
+- Fix spacing for detail summary creation and modification dates.
+- Remove support entity counts from provenance table tiles.
+- Show derived samples in sample entity tiles.
+- Upgrade Vitessce to 1.1.10 (and python package as well).
+
+
 ## v0.20.0 - 2021-06-07
 
 - `ViewConf` to `ViewConfBuilder` to disambiguate the object from what it returns.

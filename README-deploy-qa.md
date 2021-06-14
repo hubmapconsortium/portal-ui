@@ -76,6 +76,13 @@ Imaging Assay [Image Pyramid]
 *   You should be able to zoom in and out, change channels, and add channels.
 *   For **[seqFish](https://portal-prod.stage.hubmapconsortium.org/search?mapped_data_types[0]=seqFISH&entity_type[0]=Dataset)**, you should be able to change the z-level using the selector in the top right.
 
+### Cells
+
+*   Visit [`/cells`](https://portal-prod.stage.hubmapconsortium.org/cells) and click submit for each form:
+The tables below should populate for each, though the third one is slow.
+
+<details><summary>Stable features</summary>
+
 ### Saved Lists
 
 *   Visit the ‘My Lists’ page and create a list. Once created the list should be displayed below ‘All Created Lists’.
@@ -92,3 +99,5 @@ Imaging Assay [Image Pyramid]
 ### Collection Page
 
 *   The contacts, datasets, creators tables should be populated. The organ column in the datasets table should be empty for now.
+
+</details>

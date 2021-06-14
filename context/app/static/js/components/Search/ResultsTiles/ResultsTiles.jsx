@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import EntityTile from 'js/components/entity-tile/EntityTile';
 
+import EntityTile from 'js/components/entity-tile/EntityTile';
+import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/utils';
 import { capitalizeString } from 'js/helpers/functions';
 import { TilesLayout } from './style';
-import { getDescendantCounts } from './utils';
 
 function ResultsTiles(props) {
   const { hits, type } = props;
@@ -21,7 +21,7 @@ function ResultsTiles(props) {
           uuid={hit._source.uuid}
           id={hit._source.display_doi}
           entityData={hit._source}
-          descendantCounts={getDescendantCounts(hit._source, capitalizedType)}
+          descendantCounts={getTileDescendantCounts(hit._source, capitalizedType)}
         />
       ))}
     </TilesLayout>

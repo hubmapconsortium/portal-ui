@@ -19,6 +19,7 @@
                 "type": "ome-tiff",
                 "url": "https://example.com/f9ae931b8b49252f150d7f8bf1d2d13f/ometiff-pyramids/processedMicroscopy/VAN0003-LK-33-2-PAS_FFPE.ome.tif?token=nexus_token",
                 "metadata": {
+                  "isBitmask": false,
                   "omeTiffOffsetsUrl": "https://example.com/f9ae931b8b49252f150d7f8bf1d2d13f/output_offsets/processedMicroscopy/VAN0003-LK-33-2-PAS_FFPE.offsets.json?token=nexus_token"
                 }
               }
