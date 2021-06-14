@@ -8,6 +8,7 @@ from flask import abort, current_app
 import requests
 
 from .vitessce_confs import get_view_config_class_for_data_types
+from .vitessce_confs.base_confs import ConfCells
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
@@ -105,7 +106,7 @@ class ApiClient():
         entity = hits[0]['_source']
         return entity
 
-    def get_vitessce_conf(self, entity):
+    def get_vitessce_conf_cells(self, entity):
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         image_pyramid_descendants = _get_image_pyramid_descendants(entity)
         if image_pyramid_descendants:
@@ -116,24 +117,24 @@ class ApiClient():
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
             derived_entity['files'] = derived_entity['metadata']['files']
-            return self.get_vitessce_conf(derived_entity)
+            return self.get_vitessce_conf_cells(derived_entity)
 
         if 'files' not in entity or 'data_types' not in entity:
             return None
         if self.is_mock:
-            return self._get_mock_vitessce_conf()
+            return ConfCells(self._get_mock_vitessce_conf(), None)
 
         # Otherwise, just try to visualize the data for the entity itself:
         try:
             vc = get_view_config_class_for_data_types(
                 entity=entity, nexus_token=self.nexus_token
             )
-            conf = vc.get_conf_cells().conf
-            return conf
+            return vc.get_conf_cells()
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'
             current_app.logger.error(message)
-            return {'error': message}
+
+            return ConfCells({'error': message}, None)
 
     def _get_mock_vitessce_conf(self):
         cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})

@@ -107,7 +107,7 @@ def details(type, uuid):
     flask_data = {
         'endpoints': _get_endpoints(),
         'entity': entity,
-        'vitessce_conf': client.get_vitessce_conf(entity)
+        'vitessce_conf': client.get_vitessce_conf_cells(entity)
     }
     return render_template(
         template,
@@ -133,7 +133,7 @@ def details_notebook(type, uuid):
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
-    vitessce_conf = client.get_vitessce_conf(entity)
+    vitessce_conf = client.get_vitessce_conf_cells(entity)
     if vitessce_conf is None:
         abort(404)
     nb = new_notebook()
