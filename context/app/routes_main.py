@@ -136,9 +136,9 @@ def details_notebook(type, uuid):
     client = _get_client()
     entity = client.get_entity(uuid)
     vitessce_conf = client.get_vitessce_conf_cells(entity)
-    if vitessce_conf is None \
-        or vitessce_conf.conf is None \
-        or vitessce_conf.cells is None:
+    if (vitessce_conf is None
+        or vitessce_conf.conf is None
+        or vitessce_conf.cells is None):
         abort(404)
     nb = new_notebook()
     nb['cells'] = [
