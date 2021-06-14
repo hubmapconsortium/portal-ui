@@ -120,7 +120,7 @@ class ApiClient():
             return self.get_vitessce_conf_cells(derived_entity)
 
         if 'files' not in entity or 'data_types' not in entity:
-            return None
+            return ConfCells(None, None)
         if self.is_mock:
             return ConfCells(self._get_mock_vitessce_conf(), None)
 
