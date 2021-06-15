@@ -13,6 +13,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import VisualizationShareButton from '../VisualizationShareButton';
+import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import {
   vitessceFixedHeight,
   bodyExpandedCSS,
@@ -52,7 +53,7 @@ const visualizationStoreSelector = (state) => ({
 });
 
 function Visualization(props) {
-  const { vitData } = props;
+  const { vitData, uuid, hasNotebook } = props;
 
   const {
     vizIsFullscreen,
@@ -114,6 +115,7 @@ function Visualization(props) {
         <StyledHeader>
           <StyledHeaderText>Visualization</StyledHeaderText>
           <StyledHeaderRight>
+            {hasNotebook && <VisualizationNotebookButton uuid={uuid} />}
             <VisualizationShareButton />
             <VisualizationThemeSwitch />
             <SecondaryBackgroundTooltip title="Switch to Fullscreen">

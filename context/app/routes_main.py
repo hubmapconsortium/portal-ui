@@ -104,10 +104,12 @@ def details(type, uuid):
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
     template = 'pages/base_react.html'
+    conf_cells = client.get_vitessce_conf_cells(entity)
     flask_data = {
         'endpoints': _get_endpoints(),
         'entity': entity,
-        'vitessce_conf': client.get_vitessce_conf(entity)
+        'vitessce_conf': conf_cells.conf,
+        'has_notebook': conf_cells.cells is not None
     }
     return render_template(
         template,
@@ -133,8 +135,10 @@ def details_notebook(type, uuid):
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
-    vitessce_conf = client.get_vitessce_conf(entity)
-    if vitessce_conf is None:
+    vitessce_conf = client.get_vitessce_conf_cells(entity)
+    if (vitessce_conf is None
+            or vitessce_conf.conf is None
+            or vitessce_conf.cells is None):
         abort(404)
     nb = new_notebook()
     nb['cells'] = [
@@ -146,8 +150,8 @@ Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','
 !jupyter nbextension install --py --sys-prefix vitessce
 !jupyter nbextension enable --py --sys-prefix vitessce
         """.strip()),
-        new_code_cell('from vitessce import VitessceConfig'),
-        new_markdown_cell('TODO: Generate the appropriate `conf` using `vitessce-python`'),
+        new_code_cell('from vitessce import VitessceConfig')
+    ] + vitessce_conf.cells + [
         new_code_cell('conf.widget()')
     ]
     return Response(

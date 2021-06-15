@@ -14,7 +14,26 @@ Issues with the Portal can be reported [via email](mailto:help@hubmapconsortium.
 More information on how issues are tracked across HuBMAP is available
 [here](https://portal.hubmapconsortium.org/docs/feedback).
 
-## Checkout
+## Design
+
+We try to have a design ready before we start coding.
+Often, issues are filed in pairs, tagged [`design`](https://github.com/hubmapconsortium/portal-ui/issues?q=is%3Aissue+is%3Aopen+label%3Adesign)
+and [`enhancement`](https://github.com/hubmapconsortium/portal-ui/labels/enhancement).
+All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/HuBMAP).
+(Note that if that link redirects to `/files/recent`, you'll need to be added to the project, preferably with a `.edu` email, if you want write access.)
+
+## Development
+
+### Prerequisites
+- `git`: Suggest [installing Apple XCode](https://developer.apple.com/xcode/).
+- `python 3.7`: Suggest [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands) with python 3.7.
+- `nodejs/npm`: Suggest [installing nodejs](https://nodejs.org/en/).
+
+Optional:
+- `VSCode`, with `eslint` and `prettier` plugins
+- `docker`
+
+### Checkout
 
 Because we're using git submodules, a couple additional steps are needed with checkout:
 ```
@@ -29,19 +48,13 @@ If you need to work on the code in a submodule, I would encourage you to do that
 in a separate top-level checkout. You certainly can push changes from inside
 a submodule, but it just gets more confusing.
 
-## Design
-We try to have a design ready before we start coding.
-Often, issues are filed in pairs, tagged [`design`](https://github.com/hubmapconsortium/portal-ui/issues?q=is%3Aissue+is%3Aopen+label%3Adesign)
-and [`enhancement`](https://github.com/hubmapconsortium/portal-ui/labels/enhancement).
-All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/HuBMAP).
-(Note that if that link redirects to `/files/recent`, you'll need to be added to the project, preferably with a `.edu` email, if you want write access.)
-
-## Development
-Please install both eslint and prettier plugins for your IDE.
+### Development
 
 After checking out the project, cd-ing into it, and setting up a Python3.7 virtual environment,
 - Get `app.conf` from another developer and place it at `context/instance/app.conf`.
 - Run `./dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
+
+You will see an warning about `Cannot find source file '../src/index.ts'`, but just ignore it; [Issue filed](https://github.com/hubmapconsortium/portal-ui/issues/1489).
 
 The webpack dev server serves all files within the public directory and provides hot module replacement for the react application;
 The webpack dev server proxies all requests outside of those for files in the public directory to the flask server.

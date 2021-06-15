@@ -1,3 +1,10 @@
+## v0.20.2 - 2021-06-14
+
+- Change the title of the mobile menu. 
+- Note developer prerequisites.
+- Update the README and manual QA instructions.
+
+
 ## v0.20.1 - 2021-06-09
 
 - Add bitmask to SPRM `AnnData` example.
