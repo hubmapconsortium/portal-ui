@@ -8,4 +8,8 @@ module.exports = {
     "@storybook/addon-links",
     "@storybook/addon-essentials"
   ],
+  "webpackFinal": async (config) => {
+    config.resolve.alias['js'] = path.resolve(__dirname, '../app/static/js/')
+    return config
+  }
 }
