@@ -1,4 +1,5 @@
 const path = require("path")
+const {aliases} = require('../build-utils/aliases');
 
 module.exports = {
   "stories": [
@@ -9,7 +10,10 @@ module.exports = {
     "@storybook/addon-essentials"
   ],
   "webpackFinal": async (config) => {
-    config.resolve.alias['js'] = path.resolve(__dirname, '../app/static/js/')
+    config.resolve.alias = {
+      // extend aliases with our own
+      ...config.resolve?.alias,
+      ...aliases}
     return config
   }
 }
