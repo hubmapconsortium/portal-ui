@@ -57,8 +57,8 @@ These are concatenated by `push.sh`.
 <details><summary>For React</summary>
 
 - Components with tests or styles should be placed in to their own directory.
-- Styles should be placed in `style.*` where the extension is js for styled components or css for stylesheets.
-- Tests should be placed in `*.spec.js` where the prefix is the name of the component.
+- Styles should follow the `style.*` pattern where the extension is js for styled components or css for stylesheets.
+- Tests and stories should follow the `*.spec.js` and `*.stories.js` pattern where the prefix is the name of the component.
 - Each component directory should have an `index.js` which exports the component as default.
 - Components which share a common domain can be placed in a directory within components named after the domain.
 
@@ -90,6 +90,9 @@ You can also lint and auto-correct from the command-line:
 npm run lint
 npm run lint:fix
 ```
+
+### Storybook
+To start storybook locally run `npm run storybook`.
 
 ## Build, tag, and deploy
 We plan to release new images Mondays and Wednesdays, and these are deployed to production the following day. [More details](README-deploy-qa.md#readme).
