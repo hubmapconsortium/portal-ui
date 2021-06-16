@@ -8,8 +8,8 @@ export default {
   component: SectionPaper,
 };
 
-const Template = (args) => <SectionPaper {...args} />;
-export const Default = Template.bind({});
-Default.args = {
-  children: <DefaultLabelledSectionText {...DefaultLabelledSectionText.args} />,
-};
+export const Default = () => (
+  <SectionPaper>
+    <DefaultLabelledSectionText {...DefaultLabelledSectionText.args} />
+  </SectionPaper>
+);
