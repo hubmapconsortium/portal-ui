@@ -3,9 +3,9 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 function LabelledSectionText(props) {
-  const { children, label } = props;
+  const { children, label, className } = props;
   return (
-    <div>
+    <div className={className}>
       <Typography variant="subtitle2" component="h3" color="primary">
         {label}
       </Typography>
