@@ -1,3 +1,8 @@
+## v0.20.3 - 2021-06-17
+
+- Add an endpoint which serves a Jupyter notebook with the viewconf for a dataset.
+
+
 ## v0.20.2 - 2021-06-14
 
 - Change the title of the mobile menu. 
