@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
@@ -25,7 +26,7 @@ function SummaryBody({
         <Citation
           contributors={contributors}
           citationTitle={citationTitle}
-          createTimestamp={create_timestamp}
+          create_timestamp={create_timestamp}
           doi_url={doi_url}
           doi={doi}
         />
@@ -37,5 +38,23 @@ function SummaryBody({
     </SummaryPaper>
   );
 }
+
+SummaryBody.propTypes = {
+  create_timestamp: PropTypes.number.isRequired,
+  last_modified_timestamp: PropTypes.number.isRequired,
+  description: PropTypes.string,
+  contributors: PropTypes.arrayOf(PropTypes.shape({ last_name: PropTypes.string, first_name: PropTypes.string })),
+  citationTitle: PropTypes.string,
+  doi_url: PropTypes.string,
+  doi: PropTypes.string,
+};
+
+SummaryBody.defaultProps = {
+  description: undefined,
+  contributors: undefined,
+  citationTitle: undefined,
+  doi_url: undefined,
+  doi: undefined,
+};
 
 export default SummaryBody;
