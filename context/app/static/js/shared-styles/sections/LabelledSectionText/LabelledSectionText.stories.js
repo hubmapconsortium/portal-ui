@@ -5,13 +5,6 @@ import LabelledSectionText from './LabelledSectionText';
 export default {
   title: 'Sections/LabelledSectionText',
   component: LabelledSectionText,
-  argTypes: {
-    isDate: {
-      control: {
-        type: 'boolean',
-      },
-    },
-  },
 };
 
 export const Default = (args) => (
