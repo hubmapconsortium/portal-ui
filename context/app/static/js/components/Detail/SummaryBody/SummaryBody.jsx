@@ -16,9 +16,11 @@ function SummaryBody({
 }) {
   return (
     <SummaryPaper>
-      <LabelledSectionText label="Description" bottomSpacing={1}>
-        {description}
-      </LabelledSectionText>
+      {description && (
+        <LabelledSectionText label="Description" bottomSpacing={1}>
+          {description}
+        </LabelledSectionText>
+      )}
       {doi && (
         <Citation
           contributors={contributors}
