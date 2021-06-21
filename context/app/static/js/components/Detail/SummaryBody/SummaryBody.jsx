@@ -2,9 +2,8 @@ import React from 'react';
 
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import LabelledSectionDate from 'js/shared-styles/sections/LabelledSectionDate';
 import Citation from 'js/components/Detail/Citation';
-import { Flex } from './style';
+import { Flex, StyledCreationDate, StyledModificationDate } from './style';
 
 function SummaryBody({
   description,
@@ -17,7 +16,9 @@ function SummaryBody({
 }) {
   return (
     <SummaryPaper>
-      <LabelledSectionText label="Description">{description}</LabelledSectionText>
+      <LabelledSectionText label="Description" bottomSpacing={1}>
+        {description}
+      </LabelledSectionText>
       {doi && (
         <Citation
           contributors={contributors}
@@ -28,8 +29,8 @@ function SummaryBody({
         />
       )}
       <Flex>
-        <LabelledSectionDate label="Creation Date" timestamp={create_timestamp} />
-        <LabelledSectionDate label="Modification Date" timestamp={last_modified_timestamp} />
+        <StyledCreationDate label="Creation Date" timestamp={create_timestamp} />
+        <StyledModificationDate label="Modification Date" timestamp={last_modified_timestamp} />
       </Flex>
     </SummaryPaper>
   );
