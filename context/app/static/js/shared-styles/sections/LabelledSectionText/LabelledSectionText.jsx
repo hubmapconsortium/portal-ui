@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
+import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -23,5 +24,14 @@ function LabelledSectionText(props) {
     </div>
   );
 }
+
+LabelledSectionText.propTypes = {
+  label: PropTypes.string.isRequired,
+  iconTooltipText: PropTypes.string,
+};
+
+LabelledSectionText.defaultProps = {
+  iconTooltipText: undefined,
+};
 
 export default LabelledSectionText;

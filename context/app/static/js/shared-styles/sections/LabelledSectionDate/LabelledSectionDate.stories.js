@@ -1,10 +1,12 @@
 import React from 'react';
 
 import LabelledSectionDate from './LabelledSectionDate';
+import LabelledSectionText from '../LabelledSectionText';
 
 export default {
   title: 'Sections/LabelledSectionDate',
   component: LabelledSectionDate,
+  subcomponents: { LabelledSectionText },
 };
 
 const sharedArgs = {
