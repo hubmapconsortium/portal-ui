@@ -15,7 +15,7 @@ function LabelledSectionText(props) {
           {label}
         </Typography>
         {iconTooltipText && (
-          <SecondaryBackgroundTooltip title="Citation is provided in NLM format. If DataCite page is available, click button to view alternate ways to cite.">
+          <SecondaryBackgroundTooltip title={iconTooltipText}>
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         )}
