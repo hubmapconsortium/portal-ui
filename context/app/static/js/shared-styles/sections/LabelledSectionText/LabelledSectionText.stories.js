@@ -25,9 +25,3 @@ export const Default = (args) => (
 Default.args = {
   label: 'Interesting Label',
 };
-
-export const Date = (args) => <LabelledSectionText {...args}>2021-06-16</LabelledSectionText>;
-Date.args = {
-  label: 'Interesting Date',
-  isDate: true,
-};
