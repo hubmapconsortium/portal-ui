@@ -11,4 +11,8 @@ const StyledInfoIcon = styled(InfoIcon)`
   font-size: 1.1rem;
 `;
 
-export { Flex, StyledInfoIcon };
+const StyledDiv = styled.div`
+  ${(props) => props.$bottomSpacing && `margin-bottom: ${props.theme.spacing(props.$bottomSpacing)}px`};
+`;
+
+export { Flex, StyledInfoIcon, StyledDiv };

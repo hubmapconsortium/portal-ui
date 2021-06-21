@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { Flex, StyledInfoIcon } from './style';
+import { StyledDiv, Flex, StyledInfoIcon } from './style';
 
 function LabelledSectionText(props) {
-  const { children, label, iconTooltipText, className } = props;
+  const { children, label, iconTooltipText, bottomSpacing, className } = props;
   return (
-    <div className={className}>
+    <StyledDiv className={className} $bottomSpacing={bottomSpacing}>
       <Flex>
         <Typography variant="subtitle2" component="h3" color="primary">
           {label}
@@ -21,17 +21,19 @@ function LabelledSectionText(props) {
         )}
       </Flex>
       <Typography variant="body1">{children}</Typography>
-    </div>
+    </StyledDiv>
   );
 }
 
 LabelledSectionText.propTypes = {
   label: PropTypes.string.isRequired,
   iconTooltipText: PropTypes.string,
+  bottomSpacing: PropTypes.number,
 };
 
 LabelledSectionText.defaultProps = {
   iconTooltipText: undefined,
+  bottomSpacing: undefined,
 };
 
 export default LabelledSectionText;
