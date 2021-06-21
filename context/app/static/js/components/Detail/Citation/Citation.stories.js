@@ -18,5 +18,5 @@ Default.args = {
   citationTitle: 'Something Science-y',
   createTimestamp: 1520153805000,
   doi: 'fakeDoi',
-  doi_url: 'fakeDoiUrl',
+  doi_url: 'https://www.doi.org/',
 };
