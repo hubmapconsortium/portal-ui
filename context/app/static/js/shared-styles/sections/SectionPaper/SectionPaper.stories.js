@@ -8,7 +8,9 @@ export default {
   component: SectionPaper,
 };
 
-export const Default = () => (
+export const Default = () => <SectionPaper />;
+
+export const WithExampleText = () => (
   <SectionPaper>
     <DefaultLabelledSectionText {...DefaultLabelledSectionText.args} />
   </SectionPaper>
