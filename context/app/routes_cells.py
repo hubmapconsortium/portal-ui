@@ -1,3 +1,5 @@
+from itertools import islice
+
 from flask import (Blueprint, render_template, current_app, request)
 
 from hubmap_api_py_client import Client
@@ -17,6 +19,55 @@ def cells_ui():
 
 def _get_client(app):
     return Client(app.config['XMODALITY_ENDPOINT'] + '/api/')
+
+
+# TODO: In python 3.9, functools.cache would be better.
+gene_symbols = None
+def _get_gene_symbols(app):
+    client = _get_client(app)
+    global gene_symbols
+    if gene_symbols is None:
+        gene_symbols = [gene["gene_symbol"] for gene in client.select_genes().get_list()]
+    return gene_symbols
+
+protein_ids = None
+def _get_protein_ids(app):
+    client = _get_client(app)
+    global protein_ids
+    if protein_ids is None:
+        protein_ids = [protein["protein_id"] for protein in client.select_proteins().get_list()]
+    return protein_ids
+
+
+# def _first_n_matches(strings, substring, n):
+#     first_n = islice((s for s in strings if substring in s), n)
+#     return [{'string': s} for s in first_n]
+
+
+def _first_n_matches(strings, substring, n):
+    substring_lower = substring.lower()
+    # TODO: Python 3.8 allows assignment within comprehensions.
+    first_n = list(islice((s for s in strings if substring_lower in s.lower()), n))
+    # return [{'string': s} for s in first_n]
+    offsets = [s.lower().find(substring_lower) for s in first_n]
+    return [{
+        'full': s,
+        'pre': s[:offset],
+        'match': s[offset:offset + len(substring)],
+        'post': s[offset + len(substring):]
+    } for s, offset in zip(first_n, offsets)]
+
+
+@blueprint.route('/cells/genes-by-substring.json', methods=['POST'])
+def genes_by_substring():
+    substring = request.args.get('substring')
+    return {'results': _first_n_matches(_get_gene_symbols(current_app), substring, 10)}
+
+
+@blueprint.route('/cells/proteins-by-substring.json', methods=['POST'])
+def proteins_by_substring():
+    substring = request.args.get('substring')
+    return {'results': _first_n_matches(_get_protein_ids(current_app), substring, 10)}
 
 
 @blueprint.route('/cells/datasets-selected-by-gene.json', methods=['POST'])
