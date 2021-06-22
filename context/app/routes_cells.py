@@ -39,16 +39,10 @@ def _get_protein_ids(app):
     return protein_ids
 
 
-# def _first_n_matches(strings, substring, n):
-#     first_n = islice((s for s in strings if substring in s), n)
-#     return [{'string': s} for s in first_n]
-
-
 def _first_n_matches(strings, substring, n):
     substring_lower = substring.lower()
     # TODO: Python 3.8 allows assignment within comprehensions.
     first_n = list(islice((s for s in strings if substring_lower in s.lower()), n))
-    # return [{'string': s} for s in first_n]
     offsets = [s.lower().find(substring_lower) for s in first_n]
     return [{
         'full': s,
