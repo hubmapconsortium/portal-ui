@@ -8,6 +8,8 @@ import ResultsTable from './ResultsTable';
 
 // eslint-disable-next-line no-unused-vars
 function SearchBySubstring(props) {
+  const { targetEntity } = props;
+
   const [substring, setSubstring] = useState('');
 
   const [results, setResults] = useState([]);
@@ -17,7 +19,7 @@ function SearchBySubstring(props) {
     const urlParams = new URLSearchParams();
     urlParams.append('substring', substring);
 
-    const firstResponse = await fetch(`/cells/genes-by-substring.json?${urlParams}`, {
+    const firstResponse = await fetch(`/cells/${targetEntity}-by-substring.json?${urlParams}`, {
       method: 'POST',
     });
     const responseJson = await firstResponse.json();

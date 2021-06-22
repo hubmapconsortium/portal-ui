@@ -14,14 +14,23 @@ function CellsAPIDemo(props) {
     <>
       <Alert severity="warning">UI is still being designed, but we want to demonstrate that the API works.</Alert>
 
-      <SectionHeader>Search by substring</SectionHeader>
+      <SectionHeader>Search genes by substring</SectionHeader>
       <p>
-        <b>Given</b> a subtring from a gene or protein name.
+        <b>Given</b> a subtring from a gene name.
       </p>
       <p>
         <b>Return</b> a list of the first few matches.
       </p>
-      <SearchBySubstring />
+      <SearchBySubstring targetEntity="genes" />
+
+      <SectionHeader>Search proteins by substring</SectionHeader>
+      <p>
+        <b>Given</b> a subtring from a protein name.
+      </p>
+      <p>
+        <b>Return</b> a list of the first few matches.
+      </p>
+      <SearchBySubstring targetEntity="proteins" />
 
       <SectionHeader>Datasets selected by gene</SectionHeader>
       <p>
