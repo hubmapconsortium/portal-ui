@@ -23,6 +23,8 @@ def _get_client(app):
 
 # TODO: In python 3.9, functools.cache would be better.
 gene_symbols = None
+
+
 def _get_gene_symbols(app):
     client = _get_client(app)
     global gene_symbols
@@ -30,7 +32,10 @@ def _get_gene_symbols(app):
         gene_symbols = [gene["gene_symbol"] for gene in client.select_genes().get_list()]
     return gene_symbols
 
+
 protein_ids = None
+
+
 def _get_protein_ids(app):
     client = _get_client(app)
     global protein_ids
