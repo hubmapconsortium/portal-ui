@@ -209,6 +209,19 @@ def dev_search():
         flask_data=flask_data
     )
 
+@blueprint.route('/vis')
+def vis():
+    title = 'Visualizations'
+    flask_data = {
+        'endpoints': _get_endpoints(),
+        'title': title
+    }
+    return render_template(
+        'pages/base_react.html',
+        title=title,
+        types=entity_types,
+        flask_data=flask_data
+    )
 
 @blueprint.route('/preview/<name>')
 def preview_view(name):
