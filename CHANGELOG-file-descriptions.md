@@ -1,0 +1,1 @@
+- If file-type descriptions are missing, don't show "i" in UI.
