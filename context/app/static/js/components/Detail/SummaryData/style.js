@@ -1,17 +1,7 @@
 import styled from 'styled-components';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
-
 import Typography from '@material-ui/core/Typography';
 
-const Flex = styled.div`
-  display: flex;
-  margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
-`;
-
-const FlexRight = styled.div`
-  display: flex;
-  margin-left: auto;
-`;
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 
 const FlexEnd = styled.div`
   display: flex;
@@ -26,4 +16,4 @@ const StyledTypography = styled(Typography)`
   margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
 `;
 
-export { Flex, FlexRight, FlexEnd, JsonButton, StyledTypography };
+export { FlexEnd, JsonButton, StyledTypography };

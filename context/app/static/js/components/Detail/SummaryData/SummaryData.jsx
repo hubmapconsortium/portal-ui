@@ -5,10 +5,11 @@ import SaveEditEntityButton from 'js/components/Detail/SaveEditEntityButton';
 import { useInView } from 'react-intersection-observer';
 import 'intersection-observer';
 
+import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { FileIcon } from 'js/shared-styles/icons';
-import { Flex, FlexRight, FlexEnd, JsonButton, StyledTypography } from './style';
+import { FlexEnd, JsonButton, StyledTypography } from './style';
 import SummaryItem from '../SummaryItem';
 import StatusIcon from '../StatusIcon';
 
@@ -45,35 +46,39 @@ function SummaryData(props) {
       <Typography variant="subtitle1" component="h1" color="primary" ref={ref}>
         {entity_type}
       </Typography>
-      <Flex>
-        <div>
-          <StyledTypography variant="h2">{display_doi}</StyledTypography>
-          {children && <FlexEnd data-testid="summary-data-parent">{children}</FlexEnd>}
-        </div>
-        <FlexRight>
-          {['Dataset', 'Summary'].includes(entity_type) && (
-            <FlexEnd>
-              <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
-              <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
-            </FlexEnd>
-          )}
+      <SpacedSectionButtonRow
+        leftText={
+          <div>
+            <StyledTypography variant="h2">{display_doi}</StyledTypography>
+            {children && <FlexEnd data-testid="summary-data-parent">{children}</FlexEnd>}
+          </div>
+        }
+        buttons={
           <FlexEnd>
-            <SecondaryBackgroundTooltip title="View JSON">
-              <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
-                <FileIcon color="primary" />
-              </JsonButton>
-            </SecondaryBackgroundTooltip>
-            {entityCanBeSaved && (
-              <SaveEditEntityButton
-                uuid={uuid}
-                entity_type={entity_type}
-                group_name={group_name}
-                display_doi={display_doi}
-              />
+            {['Dataset', 'Summary'].includes(entity_type) && (
+              <>
+                <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
+                <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
+              </>
             )}
+            <FlexEnd>
+              <SecondaryBackgroundTooltip title="View JSON">
+                <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
+                  <FileIcon color="primary" />
+                </JsonButton>
+              </SecondaryBackgroundTooltip>
+              {entityCanBeSaved && (
+                <SaveEditEntityButton
+                  uuid={uuid}
+                  entity_type={entity_type}
+                  group_name={group_name}
+                  display_doi={display_doi}
+                />
+              )}
+            </FlexEnd>
           </FlexEnd>
-        </FlexRight>
-      </Flex>
+        }
+      />
     </>
   );
 }
