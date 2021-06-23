@@ -7,7 +7,7 @@ import SummaryBody from 'js/components/Detail/SummaryBody';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
-import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/RightAlignedButtonRow';
+import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
 import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
 import { SpacingDiv, PageSpacing, StyledHeader } from './style';
 
@@ -36,7 +36,7 @@ function SavedList({ listUUID }) {
         List
       </Typography>
       <Typography variant="h2">{title}</Typography>
-      <StyledButtonRow
+      <SpacedSectionButtonRow
         leftText={
           <BottomAlignedTypography variant="body1" color="primary">
             {entitiesLength} {entitiesLength === 1 ? 'Item' : 'Items'}
