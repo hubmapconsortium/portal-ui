@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
-import DetailDescription from 'js/components/Detail/DetailDescription';
+import SummaryBody from 'js/components/Detail/SummaryBody';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
@@ -53,10 +53,10 @@ function SavedList({ listUUID }) {
         <LocalStorageDescription />
       </SpacingDiv>
       <SpacingDiv>
-        <DetailDescription
+        <SummaryBody
           description={savedList.description}
-          createdTimestamp={savedList.dateSaved}
-          modifiedTimestamp={savedList.dateLastModified}
+          create_timestamp={savedList.dateSaved}
+          last_modified_timestamp={savedList.dateLastModified}
         />
       </SpacingDiv>
       <StyledHeader variant="h3" component="h2">
