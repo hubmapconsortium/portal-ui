@@ -9,7 +9,7 @@ const FlexEnd = styled.div`
 `;
 
 const JsonButton = styled(WhiteBackgroundIconButton)`
-  margin-left: auto;
+  height: 36px;
 `;
 
 const StyledTypography = styled(Typography)`
