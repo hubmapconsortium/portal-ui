@@ -3,6 +3,7 @@ import React from 'react';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { Alert } from 'js/shared-styles/alerts';
 
+import SearchBySubstring from './SearchBySubstring';
 import CellPercentagesForDatasets from './CellPercentagesForDatasets';
 import CellExpressionInDataset from './CellExpressionInDataset';
 import DatasetsSelectedByGene from './DatasetsSelectedByGene';
@@ -12,6 +13,24 @@ function CellsAPIDemo(props) {
   return (
     <>
       <Alert severity="warning">UI is still being designed, but we want to demonstrate that the API works.</Alert>
+
+      <SectionHeader>Search genes by substring</SectionHeader>
+      <p>
+        <b>Given</b> a substring from a gene name.
+      </p>
+      <p>
+        <b>Return</b> a list of the first few matches.
+      </p>
+      <SearchBySubstring targetEntity="genes" />
+
+      <SectionHeader>Search proteins by substring</SectionHeader>
+      <p>
+        <b>Given</b> a substring from a protein name.
+      </p>
+      <p>
+        <b>Return</b> a list of the first few matches.
+      </p>
+      <SearchBySubstring targetEntity="proteins" />
 
       <SectionHeader>Datasets selected by gene</SectionHeader>
       <p>
