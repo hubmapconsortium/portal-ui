@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Slider from '@material-ui/core/Slider';
 
 import ResultsTable from './ResultsTable';
 
@@ -38,8 +39,6 @@ function DatasetsSelectedByGene(props) {
     const { name } = target;
     const setFields = {
       geneName: setGeneName,
-      minGeneExpression: setMinGeneExpression,
-      minCellPercentage: setMinCellPercentage,
     };
     setFields[name](event.target.value);
   }
@@ -47,20 +46,29 @@ function DatasetsSelectedByGene(props) {
   return (
     <Paper>
       <TextField label="gene name" value={geneName} name="geneName" variant="outlined" onChange={handleChange} />
-      <TextField
-        label="min gene expression"
+
+      <p id="min-gene-expression-label">Minimun gene expression</p>
+      <Slider
         value={minGeneExpression}
-        name="minGeneExpression"
-        variant="outlined"
-        onChange={handleChange}
+        min={0}
+        max={100}
+        onChange={(e, value) => {
+          setMinGeneExpression(value);
+        }}
+        aria-labelledby="min-gene-expression-label"
       />
-      <TextField
-        label="min cell percentage"
+
+      <p id="min-cell-percentage-label">Minimun cell percentage</p>
+      <Slider
         value={minCellPercentage}
-        name="minCellPercentage"
-        variant="outlined"
-        onChange={handleChange}
+        min={0}
+        max={100}
+        onChange={(e, value) => {
+          setMinCellPercentage(value);
+        }}
+        aria-labelledby="min-cell-percentage-label"
       />
+
       <br />
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
