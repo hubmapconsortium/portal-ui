@@ -35,6 +35,20 @@ function SearchBySubstring(props) {
   async function handleChange(event) {
     const { target } = event;
     setSubstring(target.value);
+
+    const urlParams = new URLSearchParams();
+    urlParams.append('substring', target.value);
+
+    const firstResponse = await fetch(`/cells/${targetEntity}-by-substring.json?${urlParams}`, {
+      method: 'POST',
+    });
+    const responseJson = await firstResponse.json();
+    if ('message' in responseJson) {
+      console.warn(responseJson.message);
+    }
+    if ('results' in responseJson) {
+      setOptions(responseJson.results.map((row) => row.full));
+    }
   }
 
   return (
