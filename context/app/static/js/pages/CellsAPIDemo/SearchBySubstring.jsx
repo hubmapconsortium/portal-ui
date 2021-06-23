@@ -31,7 +31,7 @@ function SearchBySubstring(props) {
       console.warn(responseJson.message);
     }
     if ('results' in responseJson) {
-      setOptions(responseJson.results.map((row) => row.full));
+      setOptions(responseJson.results);
     }
   }
 
@@ -39,8 +39,14 @@ function SearchBySubstring(props) {
     <Paper>
       <Autocomplete
         options={options}
+        renderOption={(option) => (
+          <>
+            {option.pre}
+            <b>{option.match}</b>
+            {option.post}
+          </>
+        )}
         renderInput={(params) => (
-          // eslint-disable-next-line prettier/prettier
           <TextField
             label="substring"
             value={substring}
