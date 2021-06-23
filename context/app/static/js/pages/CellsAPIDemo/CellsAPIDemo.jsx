@@ -16,7 +16,7 @@ function CellsAPIDemo(props) {
 
       <SectionHeader>Search genes by substring</SectionHeader>
       <p>
-        <b>Given</b> a subtring from a gene name.
+        <b>Given</b> a substring from a gene name.
       </p>
       <p>
         <b>Return</b> a list of the first few matches.
@@ -25,7 +25,7 @@ function CellsAPIDemo(props) {
 
       <SectionHeader>Search proteins by substring</SectionHeader>
       <p>
-        <b>Given</b> a subtring from a protein name.
+        <b>Given</b> a substring from a protein name.
       </p>
       <p>
         <b>Return</b> a list of the first few matches.
