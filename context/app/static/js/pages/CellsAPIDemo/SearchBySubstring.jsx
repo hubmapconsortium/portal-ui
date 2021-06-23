@@ -15,6 +15,11 @@ function SearchBySubstring(props) {
     const { target } = event;
     setSubstring(target.value);
 
+    if (target.value === '') {
+      setOptions([]);
+      return;
+    }
+
     const urlParams = new URLSearchParams();
     urlParams.append('substring', target.value);
 
