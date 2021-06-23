@@ -84,6 +84,7 @@ function SummaryData(props) {
 }
 
 SummaryData.propTypes = {
+  display_doi: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
