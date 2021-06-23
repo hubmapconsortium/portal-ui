@@ -4,7 +4,7 @@ import { Default as DefaultCitation } from 'js/components/Detail/Citation/Citati
 import SummaryBody from './SummaryBody';
 
 export default {
-  title: 'EntityDetail/SummaryBody',
+  title: 'EntityDetail/Summary/SummaryBody',
   component: SummaryBody,
 };
 
