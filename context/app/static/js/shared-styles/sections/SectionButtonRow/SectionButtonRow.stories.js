@@ -5,6 +5,13 @@ import SectionButtonRow, { BottomAlignedTypography } from './SectionButtonRow';
 export default {
   title: 'Sections/SectionButtonRow',
   component: SectionButtonRow,
+  parameters: {
+    docs: {
+      description: {
+        component: 'A right aligned button row often used above entity detail sections.',
+      },
+    },
+  },
   argTypes: {
     buttons: {
       control: false,
