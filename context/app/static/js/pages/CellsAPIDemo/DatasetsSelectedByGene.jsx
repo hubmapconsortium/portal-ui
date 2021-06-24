@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Slider from '@material-ui/core/Slider';
+import FormLabel from '@material-ui/core/FormLabel';
 
 import ResultsTable from './ResultsTable';
 
@@ -38,8 +40,6 @@ function DatasetsSelectedByGene(props) {
     const { name } = target;
     const setFields = {
       geneName: setGeneName,
-      minGeneExpression: setMinGeneExpression,
-      minCellPercentage: setMinCellPercentage,
     };
     setFields[name](event.target.value);
   }
@@ -47,26 +47,53 @@ function DatasetsSelectedByGene(props) {
   return (
     <Paper>
       <TextField label="gene name" value={geneName} name="geneName" variant="outlined" onChange={handleChange} />
-      <TextField
-        label="min gene expression"
+
+      <br />
+
+      <FormLabel id="min-gene-expression-label">Minimum gene expression</FormLabel>
+      <SliderWrapper
         value={minGeneExpression}
-        name="minGeneExpression"
-        variant="outlined"
-        onChange={handleChange}
+        min={0}
+        max={100}
+        setter={setMinGeneExpression}
+        labelledby="min-gene-expression-label"
       />
-      <TextField
-        label="min cell percentage"
+
+      <FormLabel id="min-cell-percentage-label">Minimum cell percentage</FormLabel>
+      <SliderWrapper
         value={minCellPercentage}
-        name="minCellPercentage"
-        variant="outlined"
-        onChange={handleChange}
+        min={0}
+        max={100}
+        setter={setMinCellPercentage}
+        labelledby="min-cell-percentage-label"
       />
+
       <br />
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
       {message}
       <ResultsTable results={results} />
     </Paper>
+  );
+}
+
+function SliderWrapper(props) {
+  const { value, min, max, setter, labelledby } = props;
+  return (
+    <Slider
+      value={value}
+      min={min}
+      max={max}
+      valueLabelDisplay="auto"
+      marks={[
+        { value: min, label: min },
+        { value: max, label: max },
+      ]}
+      onChange={(e, val) => {
+        setter(val);
+      }}
+      aria-labelledby={labelledby}
+    />
   );
 }
 

@@ -1,0 +1,1 @@
+- Use sliders to select values for cell queries.
