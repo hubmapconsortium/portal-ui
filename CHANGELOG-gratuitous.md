@@ -1,0 +1,1 @@
+- Cleanup the boilerplate in the cells demo.

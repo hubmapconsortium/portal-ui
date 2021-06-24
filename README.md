@@ -26,7 +26,7 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
 
 ### Prerequisites
 - `git`: Suggest [installing Apple XCode](https://developer.apple.com/xcode/).
-- `python 3.7`: Suggest [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands) with python 3.7.
+- `python 3.8`: Suggest [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands) with python 3.8.
 - `nodejs/npm`: Suggest [installing nodejs](https://nodejs.org/en/).
 
 Optional:
@@ -50,7 +50,7 @@ a submodule, but it just gets more confusing.
 
 ### Development
 
-After checking out the project, cd-ing into it, and setting up a Python3.7 virtual environment,
+After checking out the project, cd-ing into it, and setting up a Python3.8 virtual environment,
 - Get `app.conf` from another developer and place it at `context/instance/app.conf`.
 - Run `./dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
 
