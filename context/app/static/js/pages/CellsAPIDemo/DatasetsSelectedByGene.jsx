@@ -47,7 +47,7 @@ function DatasetsSelectedByGene(props) {
     <Paper>
       <TextField label="gene name" value={geneName} name="geneName" variant="outlined" onChange={handleChange} />
 
-      <p id="min-gene-expression-label">Minimun gene expression</p>
+      <p id="min-gene-expression-label">Minimum gene expression</p>
       <Slider
         value={minGeneExpression}
         min={0}
@@ -58,7 +58,7 @@ function DatasetsSelectedByGene(props) {
         aria-labelledby="min-gene-expression-label"
       />
 
-      <p id="min-cell-percentage-label">Minimun cell percentage</p>
+      <p id="min-cell-percentage-label">Minimum cell percentage</p>
       <Slider
         value={minCellPercentage}
         min={0}
