@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/core/Slider';
+import FormLabel from '@material-ui/core/FormLabel';
 
 import ResultsTable from './ResultsTable';
 
@@ -47,26 +48,24 @@ function DatasetsSelectedByGene(props) {
     <Paper>
       <TextField label="gene name" value={geneName} name="geneName" variant="outlined" onChange={handleChange} />
 
-      <p id="min-gene-expression-label">Minimum gene expression</p>
-      <Slider
+      <br />
+
+      <FormLabel id="min-gene-expression-label">Minimum gene expression</FormLabel>
+      <SliderWrapper
         value={minGeneExpression}
         min={0}
         max={100}
-        onChange={(e, value) => {
-          setMinGeneExpression(value);
-        }}
-        aria-labelledby="min-gene-expression-label"
+        setter={setMinGeneExpression}
+        labelledby="min-gene-expression-label"
       />
 
-      <p id="min-cell-percentage-label">Minimum cell percentage</p>
-      <Slider
+      <FormLabel id="min-cell-percentage-label">Minimum cell percentage</FormLabel>
+      <SliderWrapper
         value={minCellPercentage}
         min={0}
         max={100}
-        onChange={(e, value) => {
-          setMinCellPercentage(value);
-        }}
-        aria-labelledby="min-cell-percentage-label"
+        setter={setMinCellPercentage}
+        labelledby="min-cell-percentage-label"
       />
 
       <br />
@@ -75,6 +74,26 @@ function DatasetsSelectedByGene(props) {
       {message}
       <ResultsTable results={results} />
     </Paper>
+  );
+}
+
+function SliderWrapper(props) {
+  const { value, min, max, setter, labelledby } = props;
+  return (
+    <Slider
+      value={value}
+      min={min}
+      max={max}
+      valueLabelDisplay="auto"
+      marks={[
+        { value: min, label: min },
+        { value: max, label: max },
+      ]}
+      onChange={(e, val) => {
+        setter(val);
+      }}
+      aria-labelledby={labelledby}
+    />
   );
 }
 
