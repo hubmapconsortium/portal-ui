@@ -6,7 +6,7 @@ import { Alert } from 'js/shared-styles/alerts';
 import SearchBySubstring from './SearchBySubstring';
 import CellPercentagesForDatasets from './CellPercentagesForDatasets';
 import CellExpressionInDataset from './CellExpressionInDataset';
-import DatasetsSelectedByGene from './DatasetsSelectedByGene';
+import DatasetsSelectedByExpression from './DatasetsSelectedByExpression';
 
 // eslint-disable-next-line no-unused-vars
 function CellsAPIDemo(props) {
@@ -32,14 +32,14 @@ function CellsAPIDemo(props) {
       </p>
       <SearchBySubstring targetEntity="proteins" />
 
-      <SectionHeader>Datasets selected by gene</SectionHeader>
+      <SectionHeader>Datasets selected by expression</SectionHeader>
       <p>
         <b>Given</b> a gene, a minimum expression level, and a minimum percentage of cells at that expression level
       </p>
       <p>
         <b>Return</b> a list of UUIDs for datasets which meet those minimums
       </p>
-      <DatasetsSelectedByGene />
+      <DatasetsSelectedByExpression />
 
       <SectionHeader>Cell percentages for datasets</SectionHeader>
       <p>

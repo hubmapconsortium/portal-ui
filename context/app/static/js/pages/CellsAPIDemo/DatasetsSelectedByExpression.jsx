@@ -7,9 +7,11 @@ import Button from '@material-ui/core/Button';
 import ResultsTable from './ResultsTable';
 
 // eslint-disable-next-line no-unused-vars
-function DatasetsSelectedByGene(props) {
-  const [geneName, setGeneName] = useState('VIM');
-  const [minGeneExpression, setMinGeneExpression] = useState(1);
+function DatasetsSelectedByExpression(props) {
+  const [name, setName] = useState('VIM');
+  const [targetEntity, setTargetEntity] = useState('gene'); // eslint-disable-line no-unused-vars
+  const [modality, setModality] = useState('rna'); // eslint-disable-line no-unused-vars
+  const [minExpression, setMinExpression] = useState(1);
   const [minCellPercentage, setMinCellPercentage] = useState(10);
 
   const [results, setResults] = useState([]);
@@ -17,11 +19,13 @@ function DatasetsSelectedByGene(props) {
 
   async function handleSubmit() {
     const urlParams = new URLSearchParams();
-    urlParams.append('gene_name', geneName);
-    urlParams.append('min_gene_expression', minGeneExpression);
+    urlParams.append('name', name);
+    urlParams.append('target_entity', targetEntity);
+    urlParams.append('modality', modality);
+    urlParams.append('min_expression', minExpression);
     urlParams.append('min_cell_percentage', minCellPercentage);
 
-    const firstResponse = await fetch(`/cells/datasets-selected-by-gene.json?${urlParams}`, {
+    const firstResponse = await fetch(`/cells/datasets-selected-by-expression.json?${urlParams}`, {
       method: 'POST',
     });
     const responseJson = await firstResponse.json();
@@ -35,22 +39,21 @@ function DatasetsSelectedByGene(props) {
 
   function handleChange(event) {
     const { target } = event;
-    const { name } = target;
     const setFields = {
-      geneName: setGeneName,
-      minGeneExpression: setMinGeneExpression,
+      name: setName,
+      minExpression: setMinExpression,
       minCellPercentage: setMinCellPercentage,
     };
-    setFields[name](event.target.value);
+    setFields[target.name](event.target.value);
   }
 
   return (
     <Paper>
-      <TextField label="gene name" value={geneName} name="geneName" variant="outlined" onChange={handleChange} />
+      <TextField label="name" value={name} name="name" variant="outlined" onChange={handleChange} />
       <TextField
-        label="min gene expression"
-        value={minGeneExpression}
-        name="minGeneExpression"
+        label="min expression"
+        value={minExpression}
+        name="minExpression"
         variant="outlined"
         onChange={handleChange}
       />
@@ -70,4 +73,4 @@ function DatasetsSelectedByGene(props) {
   );
 }
 
-export default DatasetsSelectedByGene;
+export default DatasetsSelectedByExpression;
