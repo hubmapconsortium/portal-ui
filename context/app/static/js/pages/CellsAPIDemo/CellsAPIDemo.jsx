@@ -42,7 +42,7 @@ function CellsAPIDemo(props) {
         returns="a list of the first few matches"
       />
       <SearchBySubstring targetEntity="proteins" />
-    
+
       <About
         title="Datasets selected by gene"
         given="a gene, a minimum expression level, and a minimum percentage of cells at that expression level"
