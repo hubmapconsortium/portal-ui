@@ -23,11 +23,12 @@ function SearchBySubstring(props) {
     }
 
     try {
-      const serviceResults = await new CellsService().searchBySubstring({
-        targetEntity,
-        substring: target.value,
-      });
-      setOptions(serviceResults);
+      setOptions(
+        await new CellsService().searchBySubstring({
+          targetEntity,
+          substring: target.value,
+        }),
+      );
     } catch (e) {
       console.warn(e.message);
     }

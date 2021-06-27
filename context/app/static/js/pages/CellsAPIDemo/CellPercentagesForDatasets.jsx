@@ -18,12 +18,13 @@ function CellPercentagesForDatasets(props) {
 
   async function handleSubmit() {
     try {
-      const serviceResults = await new CellsService().getCellPercentagesForDatasets({
-        uuids: uuids.split(','),
-        geneName,
-        minGeneExpression,
-      });
-      setResults(serviceResults);
+      setResults(
+        await new CellsService().getCellPercentagesForDatasets({
+          uuids: uuids.split(','),
+          geneName,
+          minGeneExpression,
+        }),
+      );
     } catch (e) {
       setMessage(e.message);
     }
