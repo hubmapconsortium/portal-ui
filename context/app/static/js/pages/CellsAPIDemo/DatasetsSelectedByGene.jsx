@@ -20,8 +20,7 @@ function DatasetsSelectedByGene(props) {
 
   async function handleSubmit() {
     try {
-      const service = new CellsService();
-      const serviceResults = await service.getDatasetsSelectedByGene({
+      const serviceResults = await new CellsService().getDatasetsSelectedByGene({
         geneName,
         minGeneExpression,
         minCellPercentage,

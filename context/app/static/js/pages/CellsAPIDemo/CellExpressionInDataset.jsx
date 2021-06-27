@@ -17,8 +17,7 @@ function CellExpressionInDataset(props) {
 
   async function handleSubmit() {
     try {
-      const service = new CellsService();
-      const serviceResults = await service.getCellExpressionInDataset({
+      const serviceResults = await new CellsService().getCellExpressionInDataset({
         uuid,
         geneNames: geneNames.split(','),
       });

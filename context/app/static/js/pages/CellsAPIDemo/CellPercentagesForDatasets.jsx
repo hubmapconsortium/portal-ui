@@ -18,8 +18,7 @@ function CellPercentagesForDatasets(props) {
 
   async function handleSubmit() {
     try {
-      const service = new CellsService();
-      const serviceResults = await service.getCellPercentagesForDatasets({
+      const serviceResults = await new CellsService().getCellPercentagesForDatasets({
         uuids: uuids.split(','),
         geneName,
         minGeneExpression,

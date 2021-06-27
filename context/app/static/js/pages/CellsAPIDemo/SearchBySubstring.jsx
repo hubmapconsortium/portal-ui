@@ -23,8 +23,7 @@ function SearchBySubstring(props) {
     }
 
     try {
-      const service = new CellsService();
-      const serviceResults = await service.searchBySubstring({
+      const serviceResults = await new CellsService().searchBySubstring({
         targetEntity,
         substring: target.value,
       });
