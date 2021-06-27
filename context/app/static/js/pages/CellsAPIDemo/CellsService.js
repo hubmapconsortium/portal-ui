@@ -16,6 +16,26 @@ class CellsService {
     throw Error('Expected "message" or "results"');
   }
 
+  async searchBySubstring(props) {
+    const { targetEntity, substring } = props;
+    const urlParams = new URLSearchParams();
+
+    urlParams.append('substring', substring);
+
+    return this.fetchAndParse(`/cells/${targetEntity}-by-substring.json?${urlParams}`);
+  }
+
+  async getDatasetsSelectedByGene(props) {
+    const { geneName, minGeneExpression, minCellPercentage } = props;
+    const urlParams = new URLSearchParams();
+
+    urlParams.append('gene_name', geneName);
+    urlParams.append('min_gene_expression', minGeneExpression);
+    urlParams.append('min_cell_percentage', minCellPercentage);
+
+    return this.fetchAndParse(`/cells/datasets-selected-by-gene.json?${urlParams}`);
+  }
+
   async getCellPercentagesForDatasets(props) {
     const { uuids, geneName, minGeneExpression } = props;
     const urlParams = new URLSearchParams();

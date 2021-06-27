@@ -7,6 +7,7 @@ import Slider from '@material-ui/core/Slider';
 import FormLabel from '@material-ui/core/FormLabel';
 
 import ResultsTable from './ResultsTable';
+import CellsService from './CellsService';
 
 // eslint-disable-next-line no-unused-vars
 function DatasetsSelectedByGene(props) {
@@ -18,20 +19,16 @@ function DatasetsSelectedByGene(props) {
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
-    const urlParams = new URLSearchParams();
-    urlParams.append('gene_name', geneName);
-    urlParams.append('min_gene_expression', minGeneExpression);
-    urlParams.append('min_cell_percentage', minCellPercentage);
-
-    const firstResponse = await fetch(`/cells/datasets-selected-by-gene.json?${urlParams}`, {
-      method: 'POST',
-    });
-    const responseJson = await firstResponse.json();
-    if ('message' in responseJson) {
-      setMessage(responseJson.message);
-    }
-    if ('results' in responseJson) {
-      setResults(responseJson.results);
+    try {
+      const service = new CellsService();
+      const serviceResults = await service.getDatasetsSelectedByGene({
+        geneName,
+        minGeneExpression,
+        minCellPercentage,
+      });
+      setResults(serviceResults);
+    } catch (e) {
+      setMessage(e.message);
     }
   }
 
