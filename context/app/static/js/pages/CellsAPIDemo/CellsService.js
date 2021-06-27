@@ -16,13 +16,28 @@ class CellsService {
     throw Error('Expected "message" or "results"');
   }
 
+  async getCellPercentagesForDatasets(props) {
+    const { uuids, geneName, minGeneExpression } = props;
+    const urlParams = new URLSearchParams();
+
+    uuids.forEach((uuid) => {
+      urlParams.append('uuid', uuid);
+    });
+    urlParams.append('gene_name', geneName);
+    urlParams.append('min_gene_expression', minGeneExpression);
+
+    return this.fetchAndParse(`/cells/cell-percentages-for-datasets.json?${urlParams}`);
+  }
+
   async getCellExpressionInDataset(props) {
     const { uuid, geneNames } = props;
     const urlParams = new URLSearchParams();
+
     urlParams.append('uuid', uuid);
     geneNames.forEach((geneName) => {
       urlParams.append('gene_name', geneName);
     });
+
     return this.fetchAndParse(`/cells/cell-expression-in-dataset.json?${urlParams}`);
   }
 }
