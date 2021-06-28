@@ -1,0 +1,1 @@
+- Selecting multiple genes works now.
