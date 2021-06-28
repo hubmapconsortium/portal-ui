@@ -39,6 +39,8 @@ function SearchBySubstring(props) {
     <Paper>
       <Autocomplete
         options={options}
+        // multiple
+        getOptionLabel={(option) => option.full}
         renderOption={(option) => (
           <>
             {option.pre}
