@@ -216,7 +216,7 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
                 "data_type": dt.EXPRESSION_MATRIX,
             },
         ]
-    
+
     def _get_ometiff_image_wrapper(self, found_image_file):
         img_url, offsets_url = self._get_img_and_offset_url(
             found_image_file, self._imaging_path_regex,
@@ -281,7 +281,6 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         return OmeTiffWrapper(
             img_url=img_url, offsets_url=offsets_url, name=self._image_name
         )
-
 
     def _get_bitmask_image_path(self):
         return f"{self._mask_path_regex}/{self._mask_name}.ome.tiff?"
