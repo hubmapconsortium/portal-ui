@@ -82,7 +82,7 @@ class SeqFISHViewConfBuilder(ImagingViewConfBuilder):
             vc = self._setup_view_config_raster(
                 vc,
                 dataset,
-                disable3d=[self._get_hybcycle(img_path) for img_path in sorted_images]
+                disable_3d=[self._get_hybcycle(img_path) for img_path in sorted_images]
             )
             conf = vc.to_dict()
             # Don't want to render all layers
