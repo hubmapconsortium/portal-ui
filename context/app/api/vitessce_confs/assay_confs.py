@@ -66,7 +66,8 @@ class SeqFISHViewConfBuilder(ImagingViewConfBuilder):
             pos_name = self._get_pos_name(images[0])
             vc = VitessceConfig(name=pos_name)
             dataset = vc.add_dataset(name=pos_name)
-            for img_path in sorted(images, key=self._get_hybcycle):
+            sorted_images = sorted(images, key=self._get_hybcycle)
+            for img_path in sorted_images:
                 img_url, offsets_url = self._get_img_and_offset_url(
                     img_path, IMAGE_PYRAMID_DIR
                 )
@@ -78,7 +79,11 @@ class SeqFISHViewConfBuilder(ImagingViewConfBuilder):
                     )
                 )
             dataset = dataset.add_object(MultiImageWrapper(image_wrappers))
-            vc = self._setup_view_config_raster(vc, dataset)
+            vc = self._setup_view_config_raster(
+                vc,
+                dataset,
+                disable3d=[self._get_hybcycle(img_path) for img_path in sorted_images]
+            )
             conf = vc.to_dict()
             # Don't want to render all layers
             del conf["datasets"][0]["files"][0]["options"]["renderLayers"]
