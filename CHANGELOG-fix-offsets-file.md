@@ -1,0 +1,1 @@
+- Fix where Vitessce confs look for `offsets` file.
