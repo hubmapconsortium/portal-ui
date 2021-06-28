@@ -110,10 +110,12 @@ class ImagingViewConfBuilder(ViewConfBuilder):
             ),
         )
 
-    def _setup_view_config_raster(self, vc, dataset):
+    def _setup_view_config_raster(self, vc, dataset, disable_3d=[]):
         vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=9, h=12)
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
-        vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
+        vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8).set_props(
+            disable3d=disable_3d
+        )
         return vc
 
 
@@ -234,7 +236,7 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
         file_paths_found = self._get_file_paths()
         # This tile has no segmentations
         if self._files[0]["rel_path"] not in file_paths_found:
-            vc = self._setup_view_config_raster(vc, dataset)
+            vc = self._setup_view_config_raster(vc, dataset, disable_3d=[self._image_name])
         else:
             for file in self._files:
                 path = file["rel_path"]
@@ -253,7 +255,9 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
         vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=8)
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
-        vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
+        vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8).set_props(
+            disable3d=[self._image_name]
+        )
         vc.add_view(dataset, cm.CELL_SETS, x=10, y=5, w=2, h=7)
         vc.add_view(dataset, cm.GENES, x=10, y=0, w=2, h=5).set_props(
             variablesLabelOverride="antigen"

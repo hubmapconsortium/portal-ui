@@ -72,6 +72,9 @@
       },
       {
         "component": "layerController",
+        "props": {
+          "disable3d": ["R001_X001_Y001"]
+        },
         "coordinationScopes": {
           "dataset": "A"
         },
@@ -193,6 +196,9 @@
       },
       {
         "component": "layerController",
+        "props": {
+          "disable3d": ["R001_X001_Y002"]
+        },
         "coordinationScopes": {
           "dataset": "A"
         },

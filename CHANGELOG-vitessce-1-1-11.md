@@ -1,0 +1,1 @@
+- Upgrade Vitessce to version 1.1.11 and adapt view confs for new 3D feature.
