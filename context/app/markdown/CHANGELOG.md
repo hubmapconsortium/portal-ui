@@ -1,3 +1,8 @@
+## v0.21.1 - 2021-06-29
+
+- Manually update docs repo.
+
+
 ## v0.21.0 - 2021-06-28
 
 - Implement autosuggest UI for proteins and genes.
