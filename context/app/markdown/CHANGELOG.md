@@ -1,3 +1,8 @@
+## v0.21.2 - 2021-06-29
+
+- All submodules now use the `main` branch.
+
+
 ## v0.21.1 - 2021-06-29
 
 - Manually update docs repo.
