@@ -26,6 +26,9 @@ ConfCells = namedtuple('ConfCells', ['conf', 'cells'])
 class ViewConfBuilder:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.
+        :param dict entity: Entity response from search index (from the entity API)
+        :param str nexus_token: Nexus token for use in authenticating API
+        :param bool is_mock: Wether or not this class is being mocked.
 
         >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
 
@@ -42,6 +45,8 @@ class ViewConfBuilder:
 
     def _replace_url_in_file(self, file):
         """Replace url in incoming file object
+        :param dict file: File dict which will have its rel_path replaced by url
+        rtype: dict The file with rel_path replaced by url
         >>> from pprint import pprint
         >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
         >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
@@ -59,6 +64,9 @@ class ViewConfBuilder:
 
     def _build_assets_url(self, rel_path, use_token=True):
         """Create a url for an asset.
+        :param str rel_path: The path off of which the url should be built
+        :param bool use_token: Whether or not to append a nexus token to the URL, default True
+        rtype: dict The file with rel_path replaced by url
 
         >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
         >>> vc._build_assets_url("rel_path/to/clusters.ome.tiff")
@@ -74,6 +82,16 @@ class ViewConfBuilder:
         return f"{base_url}?{token_param}" if use_token else base_url
 
     def _get_request_init(self):
+        """Get request headers for requestInit parameter in Vitessce conf.
+        This is needed for non-public zarr stores because the client forms URLs for zarr chunks,
+        not the above _build_assets_url function.
+
+        >>> vc = ViewConfBuilder(entity={"uuid": "uuid", "status": "QA"}, nexus_token='nexus_token', is_mock=True)
+        >>> vc._get_request_init()
+        {'headers': {'Authorization': 'Bearer nexus_token'}}
+        >>> vc = ViewConfBuilder(entity={"uuid": "uuid", "status": "Published"}, nexus_token='nexus_token', is_mock=True)
+        >>> vc._get_request_init() # Returns None because dataset is Published i.e public
+        """
         request_init = {"headers": {"Authorization": f"Bearer {self._nexus_token}"}}
         # Extra headers outside of a select few cause extra CORS-preflight requests which
         # can slow down the webpage.  If the dataset is published, we don't need to use
@@ -83,6 +101,13 @@ class ViewConfBuilder:
         return request_init if use_request_init else None
 
     def _get_file_paths(self):
+        """Get all rel_path keys from the entity dict.
+
+        >>> entity = {"uuid": "uuid", "files": [{ "rel_path": "path/to/file" }, { "rel_path": "path/to/other_file" }]}
+        >>> vc = ViewConfBuilder(entity=entity, nexus_token='nexus_token', is_mock=True)
+        >>> vc._get_file_paths()
+        ['path/to/file', 'path/to/other_file']
+        """
         return [file["rel_path"] for file in self._entity["files"]]
 
 
@@ -121,6 +146,10 @@ class ImagingViewConfBuilder(ViewConfBuilder):
 
 class ImagePyramidViewConfBuilder(ImagingViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
+        """Wrapper class for creating a standard view configuration for image pyramids,
+        i.e for high resolution viz-lifted imaging datasets like
+        https://portal.hubmapconsortium.org/browse/dataset/dc289471333309925e46ceb9bafafaf4
+        """
         self.image_pyramid_regex = IMAGE_PYRAMID_DIR
         super().__init__(entity, nexus_token, is_mock)
 
@@ -156,6 +185,9 @@ class ImagePyramidViewConfBuilder(ImagingViewConfBuilder):
 
 
 class ScatterplotViewConfBuilder(ViewConfBuilder):
+    """Base class for subclasses creating a JSON-backed scatterplot for "first generation" RNA-seq and ATAC-seq data like
+    https://portal.hubmapconsortium.org/browse/dataset/d4493657cde29702c5ed73932da5317c
+    """
     def get_conf_cells(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
         file_paths_found = self._get_file_paths()
@@ -166,6 +198,7 @@ class ScatterplotViewConfBuilder(ViewConfBuilder):
             raise FileNotFoundError(message)
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
+        # The sublcass initializes _files in its __init__ method
         for file in self._files:
             dataset = dataset.add_file(**(self._replace_url_in_file(file)))
         vc = self._setup_scatterplot_view_config(vc, dataset)
@@ -178,7 +211,10 @@ class ScatterplotViewConfBuilder(ViewConfBuilder):
 
 
 class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
-
+    """Base class with shared methods for different SPRM subclasses,
+    like SPRMJSONViewConfBuilder and SPRMAnnDataViewConfBuilder
+    https://portal.hubmapconsortium.org/search?mapped_data_types[0]=CODEX%20%5BCytokit%20%2B%20SPRM%5D&entity_type[0]=Dataset
+    """
     def _get_full_image_path(self):
         return f"{self._imaging_path_regex}/{self._image_name}.ome.tiff?"
 
@@ -201,6 +237,9 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
 
 
 class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
+    """Wrapper class for generating "first generation" non-stitched JSON-backed SPRM Vitessce configurations,
+    like https://portal.hubmapconsortium.org/browse/dataset/dc31a6d06daa964299224e9c8d6cafb3
+    """
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
@@ -234,9 +273,10 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
         image_wrapper = self._get_ometiff_image_wrapper(found_image_file, self._imaging_path_regex)
         dataset = dataset.add_object(image_wrapper)
         file_paths_found = self._get_file_paths()
-        # This tile has no segmentations
+        # This tile has no segmentations so only show Spatial component without cells sets, genes etc.
         if self._files[0]["rel_path"] not in file_paths_found:
             vc = self._setup_view_config_raster(vc, dataset, disable_3d=[self._image_name])
+        # This tile has segmentations so show the analysis results.
         else:
             for file in self._files:
                 path = file["rel_path"]
@@ -269,8 +309,12 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
 
 
 class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
+    """Wrapper class for generating "second generation" stitched AnnData-backed SPRM Vitessce configurations,
+    like the dataset derived from https://portal.hubmapconsortium.org/browse/dataset/1c33472c68c4fb40f531b39bf6310f2d
+
+    :param \\*\\*kwargs: { imaging_path: str, mask_path: str } for the paths of the image and mask relative to image_pyramid_regex
+    """
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
-        # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
         self._base_name = kwargs["base_name"]
         self._mask_name = kwargs["mask_name"]
@@ -297,10 +341,13 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         dataset = vc.add_dataset(name="SPRM")
         file_paths_found = self._get_file_paths()
         zarr_path = f"anndata-zarr/{self._image_name}-anndata.zarr"
+        # Use the group as a proxy for presence of the rest of the zarr store.
         if f"{zarr_path}/.zgroup" not in file_paths_found:
             message = f"SPRM assay with uuid {self._uuid} has no matching .zarr store"
             raise FileNotFoundError(message)
         adata_url = self._build_assets_url(zarr_path, use_token=False)
+        # See https://github.com/hubmapconsortium/portal-containers/blob/master/containers/sprm-to-anndata/context/main.py
+        # For where these keys come from.
         anndata_wrapper = AnnDataWrapper(
             adata_url=adata_url,
             spatial_centroid_obsm="xy",
