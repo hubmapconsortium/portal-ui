@@ -1,0 +1,1 @@
+- All submodules now use the `main` branch.
