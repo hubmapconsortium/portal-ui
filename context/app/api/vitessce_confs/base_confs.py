@@ -219,6 +219,10 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
         return f"{self._imaging_path_regex}/{self._image_name}.ome.tiff?"
 
     def _check_sprm_image(self, path_regex):
+        """Check whether or not there is a matching SPRM image at a path. 
+        :param str path_regex: The path to look for the images
+        rtype: str The found image
+        """
         file_paths_found = self._get_file_paths()
         found_image_files = get_matches(file_paths_found, path_regex)
         if len(found_image_files) != 1:
@@ -228,6 +232,11 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
         return found_image_file
 
     def _get_ometiff_image_wrapper(self, found_image_file, found_image_path):
+        """Create a OmeTiffWrapper object for an image, including offsets.json.
+        :param str found_image_file: The path to look for the image itself
+        :param str found_image_path: The folder to be replaced with the offsets path
+        (see _get_img_and_offset_url for how this is used)
+        """
         img_url, offsets_url = self._get_img_and_offset_url(
             found_image_file, re.escape(found_image_path),
         )
