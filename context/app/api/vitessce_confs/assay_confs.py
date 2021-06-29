@@ -44,7 +44,8 @@ from .paths import (
 
 
 class SeqFISHViewConfBuilder(ImagingViewConfBuilder):
-    """Wrapper class for generating Vitessce configurations, one per position, with the hybridization cycles
+    """Wrapper class for generating Vitessce configurations,
+    one per position, with the hybridization cycles
     grouped together per position in a single Vitessce configuration.
     """
     def get_conf_cells(self):
@@ -108,7 +109,8 @@ class CytokitSPRMViewConfigError(Exception):
 
 
 class TiledSPRMViewConfBuilder(ViewConfBuilder):
-    """Wrapper class for generating many "first generation" non-stitched JSON-backed SPRM Vitessce configurations,
+    """Wrapper class for generating many "first generation"
+    non-stitched JSON-backed SPRM Vitessce configurations,
     one per tile per region, via SPRMJSONViewConfBuilder.
     """
     def get_conf_cells(self):
@@ -184,7 +186,8 @@ class ATACSeqViewConfBuilder(ScatterplotViewConfBuilder):
 
 class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
     """Wrapper class for generating multiple "second generation" stitched AnnData-backed SPRM
-    Vitessce configurations via SPRMAnnDataViewConfBuilder, used for datasets with multiple regions.
+    Vitessce configurations via SPRMAnnDataViewConfBuilder,
+    used for datasets with multiple regions.
     """
     def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -217,7 +220,8 @@ class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
 
 
 class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
-    """Wrapper class for creating a AnnData-backed view configuration for "second generation" RNA-seq data like
+    """Wrapper class for creating a AnnData-backed view configuration
+    for "second generation" RNA-seq data like
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
     def get_conf_cells(self):
@@ -230,8 +234,9 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
         vc = VitessceConfig(name=self._uuid)
         adata_url = self._build_assets_url(zarr_path, use_token=False)
         # Some of the keys (like marker_genes_for_heatmap) here are from our pipeline
-        # https://github.com/hubmapconsortium/portal-containers/blob/master/containers/anndata-to-ui/context/main.py
-        # while others come from Matt's standard scanpy pipeline or AnnData default (like X_umap or X).
+        # https://github.com/hubmapconsortium/portal-containers/blob/master/containers/anndata-to-ui
+        # while others come from Matt's standard scanpy pipeline
+        # or AnnData default (like X_umap or X).
         dataset = vc.add_dataset(name=self._uuid).add_object(AnnDataWrapper(
             adata_url=adata_url,
             mappings_obsm=["X_umap"],
@@ -263,7 +268,8 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
 
 
 class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
-    """Wrapper class for generating a Vitessce configurations for IMS data that excludes the image pyramids
+    """Wrapper class for generating a Vitessce configurations
+    for IMS data that excludes the image pyramids
     of all the channels separated out.
     """
     def __init__(self, entity, nexus_token, is_mock=False):

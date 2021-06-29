@@ -86,10 +86,12 @@ class ViewConfBuilder:
         This is needed for non-public zarr stores because the client forms URLs for zarr chunks,
         not the above _build_assets_url function.
 
-        >>> vc = ViewConfBuilder(entity={"uuid": "uuid", "status": "QA"}, nexus_token='nexus_token', is_mock=True)
+        >>> entity = {"uuid": "uuid", "status": "QA"}
+        >>> vc = ViewConfBuilder(entity=entity, nexus_token='nexus_token', is_mock=True)
         >>> vc._get_request_init()
         {'headers': {'Authorization': 'Bearer nexus_token'}}
-        >>> vc = ViewConfBuilder(entity={"uuid": "uuid", "status": "Published"}, nexus_token='nexus_token', is_mock=True)
+        >>> entity = {"uuid": "uuid", "status": "Published"}
+        >>> vc = ViewConfBuilder(entity=entity, nexus_token='nexus_token', is_mock=True)
         >>> vc._get_request_init() # Returns None because dataset is Published i.e public
         """
         request_init = {"headers": {"Authorization": f"Bearer {self._nexus_token}"}}
@@ -103,7 +105,8 @@ class ViewConfBuilder:
     def _get_file_paths(self):
         """Get all rel_path keys from the entity dict.
 
-        >>> entity = {"uuid": "uuid", "files": [{ "rel_path": "path/to/file" }, { "rel_path": "path/to/other_file" }]}
+        >>> files = [{ "rel_path": "path/to/file" }, { "rel_path": "path/to/other_file" }]
+        >>> entity = {"uuid": "uuid", "files": files}
         >>> vc = ViewConfBuilder(entity=entity, nexus_token='nexus_token', is_mock=True)
         >>> vc._get_file_paths()
         ['path/to/file', 'path/to/other_file']
@@ -185,7 +188,8 @@ class ImagePyramidViewConfBuilder(ImagingViewConfBuilder):
 
 
 class ScatterplotViewConfBuilder(ViewConfBuilder):
-    """Base class for subclasses creating a JSON-backed scatterplot for "first generation" RNA-seq and ATAC-seq data like
+    """Base class for subclasses creating a JSON-backed scatterplot for
+    "first generation" RNA-seq and ATAC-seq data like
     https://portal.hubmapconsortium.org/browse/dataset/d4493657cde29702c5ed73932da5317c
     """
     def get_conf_cells(self):
@@ -219,7 +223,7 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
         return f"{self._imaging_path_regex}/{self._image_name}.ome.tiff?"
 
     def _check_sprm_image(self, path_regex):
-        """Check whether or not there is a matching SPRM image at a path. 
+        """Check whether or not there is a matching SPRM image at a path.
         :param str path_regex: The path to look for the images
         rtype: str The found image
         """
@@ -246,8 +250,9 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
 
 
 class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
-    """Wrapper class for generating "first generation" non-stitched JSON-backed SPRM Vitessce configurations,
-    like https://portal.hubmapconsortium.org/browse/dataset/dc31a6d06daa964299224e9c8d6cafb3
+    """Wrapper class for generating "first generation" non-stitched JSON-backed
+    SPRM Vitessce configurations, like
+    https://portal.hubmapconsortium.org/browse/dataset/dc31a6d06daa964299224e9c8d6cafb3
     """
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
@@ -282,7 +287,8 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
         image_wrapper = self._get_ometiff_image_wrapper(found_image_file, self._imaging_path_regex)
         dataset = dataset.add_object(image_wrapper)
         file_paths_found = self._get_file_paths()
-        # This tile has no segmentations so only show Spatial component without cells sets, genes etc.
+        # This tile has no segmentations,
+        # so only show Spatial component without cells sets, genes etc.
         if self._files[0]["rel_path"] not in file_paths_found:
             vc = self._setup_view_config_raster(vc, dataset, disable_3d=[self._image_name])
         # This tile has segmentations so show the analysis results.
@@ -318,10 +324,13 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
 
 
 class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
-    """Wrapper class for generating "second generation" stitched AnnData-backed SPRM Vitessce configurations,
-    like the dataset derived from https://portal.hubmapconsortium.org/browse/dataset/1c33472c68c4fb40f531b39bf6310f2d
+    """Wrapper class for generating "second generation"
+    stitched AnnData-backed SPRM Vitessce configurations,
+    like the dataset derived from
+    https://portal.hubmapconsortium.org/browse/dataset/1c33472c68c4fb40f531b39bf6310f2d
 
-    :param \\*\\*kwargs: { imaging_path: str, mask_path: str } for the paths of the image and mask relative to image_pyramid_regex
+    :param \\*\\*kwargs: { imaging_path: str, mask_path: str } for the paths
+    of the image and mask relative to image_pyramid_regex
     """
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         super().__init__(entity, nexus_token, is_mock)
@@ -355,8 +364,8 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
             message = f"SPRM assay with uuid {self._uuid} has no matching .zarr store"
             raise FileNotFoundError(message)
         adata_url = self._build_assets_url(zarr_path, use_token=False)
-        # See https://github.com/hubmapconsortium/portal-containers/blob/master/containers/sprm-to-anndata/context/main.py
-        # For where these keys come from.
+        # https://github.com/hubmapconsortium/portal-containers/blob/master/containers/sprm-to-anndata
+        # has information on how these keys are generated.
         anndata_wrapper = AnnDataWrapper(
             adata_url=adata_url,
             spatial_centroid_obsm="xy",
