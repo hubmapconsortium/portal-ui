@@ -117,6 +117,11 @@ class ViewConfBuilder:
 class ImagingViewConfBuilder(ViewConfBuilder):
     def _get_img_and_offset_url(self, img_path, img_dir):
         """Create a url for the offsets and img.
+        :param str img_path: The path of the image
+        :param str img_dir: The image-specific part of the path to be
+        replaced by the OFFSETS_DIR constant.
+        rtype: tuple The image url and the offsets url
+
         >>> from pprint import pprint
         >>> vc = ImagingViewConfBuilder(entity={ "uuid": "uuid" },\
             nexus_token='nexus_token', is_mock=True)
@@ -236,10 +241,10 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
         return found_image_file
 
     def _get_ometiff_image_wrapper(self, found_image_file, found_image_path):
-        """Create a OmeTiffWrapper object for an image, including offsets.json.
+        """Create a OmeTiffWrapper object for an image, including offsets.json after calling
+        _get_img_and_offset_url on the arguments to this function.
         :param str found_image_file: The path to look for the image itself
         :param str found_image_path: The folder to be replaced with the offsets path
-        (see _get_img_and_offset_url for how this is used)
         """
         img_url, offsets_url = self._get_img_and_offset_url(
             found_image_file, re.escape(found_image_path),
