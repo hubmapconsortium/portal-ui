@@ -63,9 +63,8 @@ function ExampleDonorTable() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   // eslint-disable-next-line no-unused-vars
   const { searchData } = useSearchData(donorSexQuery, elasticsearchEndpoint, nexusToken);
-
   return (
-    searchData && (
+    Object.keys(searchData).length && (
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
@@ -77,7 +76,7 @@ function ExampleDonorTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {searchData.aggregations.mapped_metadata.sex.buckets.map((bucket) => (
+              {searchData.aggregations['mapped_metadata.sex'].buckets.map((bucket) => (
                 // place data as children to header cells to match your chosen columns
                 <TableRow key={bucket.key}>
                   <TableCell />
