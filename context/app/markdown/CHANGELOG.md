@@ -1,3 +1,8 @@
+## v0.21.3 - 2021-06-29
+
+- Upgrade marked, so processing conforms better to Github-flavored MD.
+
+
 ## v0.21.2 - 2021-06-29
 
 - All submodules now use the `main` branch.

@@ -1,1 +1,0 @@
-- Upgrade marked, so processing conforms better to Github-flavored MD.
