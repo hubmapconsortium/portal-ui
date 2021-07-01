@@ -22,6 +22,7 @@ function Summary(props) {
     citationTitle,
     doi_url,
     doi,
+    collectionName,
   } = props;
   return (
     <SectionContainer id="summary">
@@ -44,6 +45,7 @@ function Summary(props) {
         create_timestamp={create_timestamp}
         doi_url={doi_url}
         doi={doi}
+        collectionName={collectionName}
       />
     </SectionContainer>
   );
@@ -59,6 +61,7 @@ Summary.propTypes = {
   status: PropTypes.string,
   mapped_data_access_level: PropTypes.string,
   entityCanBeSaved: PropTypes.bool,
+  collectionName: PropTypes.string,
 };
 
 Summary.defaultProps = {
@@ -68,6 +71,7 @@ Summary.defaultProps = {
   status: '',
   mapped_data_access_level: '',
   entityCanBeSaved: true,
+  collectionName: '',
 };
 
 export default Summary;
