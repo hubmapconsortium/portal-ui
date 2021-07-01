@@ -5,7 +5,7 @@ import format from 'date-fns/format';
 import LabelledSectionText from '../LabelledSectionText';
 
 function LabelledSectionDate({ timestamp, dateFormat, ...rest }) {
-  const dateString = format(timestamp, dateFormat || 'yyyy-mm-dd');
+  const dateString = timestamp ? format(timestamp, dateFormat || 'yyyy-MM-dd') : 'Undefined';
   return <LabelledSectionText {...rest}>{dateString}</LabelledSectionText>;
 }
 

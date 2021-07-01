@@ -20,3 +20,6 @@ Default.args = sharedArgs;
 
 export const DifferentDateFormat = Template.bind({});
 DifferentDateFormat.args = { ...sharedArgs, dateFormat: 'MMMM dd, yyyy' };
+
+export const UndefinedTimestamp = Template.bind({});
+UndefinedTimestamp.args = { label: sharedArgs.label };
