@@ -32,3 +32,10 @@ WithCitation.args = {
   description,
   ...DefaultCitation.args,
 };
+
+export const WithCollectionName = Template.bind({});
+WithCollectionName.args = {
+  ...sharedArgs,
+  description,
+  collectionName: 'Fake Collection Name',
+};

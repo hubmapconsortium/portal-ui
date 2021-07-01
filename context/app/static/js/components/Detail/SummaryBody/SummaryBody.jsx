@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import Citation from 'js/components/Detail/Citation';
-import { Flex, StyledCreationDate, StyledModificationDate } from './style';
+import { StyledTypography, Flex, StyledCreationDate, StyledModificationDate } from './style';
 
 function SummaryBody({
   description,
+  collectionName,
   create_timestamp,
   last_modified_timestamp,
   contributors,
@@ -17,6 +18,11 @@ function SummaryBody({
 }) {
   return (
     <SummaryPaper>
+      {collectionName && (
+        <StyledTypography variant="h6" component="h3">
+          {collectionName}
+        </StyledTypography>
+      )}
       {description && (
         <LabelledSectionText label="Description" bottomSpacing={1}>
           {description}
