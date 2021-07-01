@@ -22,13 +22,13 @@ const donorSharedArgs = {
   entity_type: 'Donor',
 };
 
-const DonorTemplate = (args) => <Summary {...args} />;
-export const DonorDefault = DonorTemplate.bind({});
+const ChildlessTemplate = (args) => <Summary {...args} />;
+export const DonorDefault = ChildlessTemplate.bind({});
 DonorDefault.args = {
   ...donorSharedArgs,
 };
 
-export const DonorWithDescription = DonorTemplate.bind({});
+export const DonorWithDescription = ChildlessTemplate.bind({});
 DonorWithDescription.args = {
   ...donorSharedArgs,
   description:
@@ -61,11 +61,6 @@ SampleWithDescription.args = {
     'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.',
 };
 
-const datasetSharedArgs = {
-  ...sharedArgs,
-  entity_type: 'Dataset',
-};
-
 const DatasetTemplate = (args) => (
   <Summary {...args}>
     <SummaryItem>Fake Data Type</SummaryItem>
@@ -77,10 +72,21 @@ const DatasetTemplate = (args) => (
 
 export const DatasetDefault = DatasetTemplate.bind({});
 DatasetDefault.args = {
-  ...datasetSharedArgs,
+  ...sharedArgs,
+  entity_type: 'Dataset',
   status: 'QA',
   mapped_data_access_level: 'Public',
   description:
     'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.',
   ...DefaultCitation.args,
+};
+
+export const CollectionDefault = ChildlessTemplate.bind({});
+CollectionDefault.args = {
+  ...sharedArgs,
+  entity_type: 'Collection',
+  description:
+    'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.',
+  ...DefaultCitation.args,
+  collectionName: 'Fake Collection Name',
 };
