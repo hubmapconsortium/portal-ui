@@ -20,13 +20,12 @@ function DatasetsSelectedByGene(props) {
 
   async function handleSubmit() {
     try {
-      setResults(
-        await new CellsService().getDatasetsSelectedByGene({
-          geneName,
-          minGeneExpression,
-          minCellPercentage,
-        }),
-      );
+      const serviceResults = await new CellsService().getDatasetsSelectedByGene({
+        geneName,
+        minGeneExpression,
+        minCellPercentage,
+      });
+      setResults(serviceResults);
     } catch (e) {
       setMessage(e.message);
     }

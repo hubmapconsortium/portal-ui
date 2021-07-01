@@ -17,12 +17,11 @@ function CellExpressionInDataset(props) {
 
   async function handleSubmit() {
     try {
-      setResults(
-        await new CellsService().getCellExpressionInDataset({
-          uuid,
-          geneNames: geneNames.split(','),
-        }),
-      );
+      const serviceResults = await new CellsService().getCellExpressionInDataset({
+        uuid,
+        geneNames: geneNames.split(','),
+      });
+      setResults(serviceResults);
     } catch (e) {
       setMessage(e.message);
     }
