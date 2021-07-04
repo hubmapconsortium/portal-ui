@@ -4,6 +4,8 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 
+import CellsService from './CellsService';
+
 // eslint-disable-next-line no-unused-vars
 function SearchBySubstring(props) {
   const { targetEntity } = props;
@@ -20,18 +22,15 @@ function SearchBySubstring(props) {
       return;
     }
 
-    const urlParams = new URLSearchParams();
-    urlParams.append('substring', target.value);
-
-    const firstResponse = await fetch(`/cells/${targetEntity}-by-substring.json?${urlParams}`, {
-      method: 'POST',
-    });
-    const responseJson = await firstResponse.json();
-    if ('message' in responseJson) {
-      console.warn(responseJson.message);
-    }
-    if ('results' in responseJson) {
-      setOptions(responseJson.results);
+    try {
+      setOptions(
+        await new CellsService().searchBySubstring({
+          targetEntity,
+          substring: target.value,
+        }),
+      );
+    } catch (e) {
+      console.warn(e.message);
     }
   }
 

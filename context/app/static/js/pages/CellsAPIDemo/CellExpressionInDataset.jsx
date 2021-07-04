@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import ResultsTable from './ResultsTable';
+import CellsService from './CellsService';
 
 // eslint-disable-next-line no-unused-vars
 function CellExpressionInDataset(props) {
@@ -15,21 +16,14 @@ function CellExpressionInDataset(props) {
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
-    const urlParams = new URLSearchParams();
-    urlParams.append('uuid', uuid);
-    geneNames.split(',').forEach((geneName) => {
-      urlParams.append('gene_name', geneName);
-    });
-
-    const firstResponse = await fetch(`/cells/cell-expression-in-dataset.json?${urlParams}`, {
-      method: 'POST',
-    });
-    const responseJson = await firstResponse.json();
-    if ('message' in responseJson) {
-      setMessage(responseJson.message);
-    }
-    if ('results' in responseJson) {
-      setResults(responseJson.results);
+    try {
+      const serviceResults = await new CellsService().getCellExpressionInDataset({
+        uuid,
+        geneNames: geneNames.split(','),
+      });
+      setResults(serviceResults);
+    } catch (e) {
+      setMessage(e.message);
     }
   }
 
