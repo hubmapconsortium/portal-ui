@@ -92,7 +92,7 @@ class ViewConfBuilder:
         {'headers': {'Authorization': 'Bearer nexus_token'}}
         >>> entity = {"uuid": "uuid", "status": "Published"}
         >>> vc = ViewConfBuilder(entity=entity, nexus_token='nexus_token', is_mock=True)
-        >>> vc._get_request_init() # Returns None because dataset is Published i.e public
+        >>> assert vc._get_request_init() is None # Returns None because dataset is Published i.e public
         """
         request_init = {"headers": {"Authorization": f"Bearer {self._nexus_token}"}}
         # Extra headers outside of a select few cause extra CORS-preflight requests which
