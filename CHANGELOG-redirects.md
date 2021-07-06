@@ -1,0 +1,1 @@
+- Going forward, if a docs page is no longer needed, instead of just deleting it, replace `whatever.md` with `whatever.redirect`, and change the content to the new path.
