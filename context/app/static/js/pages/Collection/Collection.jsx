@@ -15,7 +15,7 @@ function Collection(props) {
   const {
     uuid,
     entity_type,
-    display_doi,
+    hubmap_id,
     doi_url,
     title,
     description,
@@ -37,7 +37,7 @@ function Collection(props) {
           <Summary
             uuid={uuid}
             entity_type={entity_type}
-            display_doi={display_doi}
+            hubmap_id={hubmap_id}
             collectionName={title}
             description={description}
             create_timestamp={create_timestamp}

@@ -11,7 +11,7 @@ function PanelList({ collectionsData }) {
           href={`/browse/collection/${_source.uuid}`}
           title={_source.title}
           entityCounts={{ datasets: _source.datasets.length }}
-          secondaryText={_source.display_doi}
+          secondaryText={_source.hubmap_id}
         />
       ))}
     </PanelScrollBox>

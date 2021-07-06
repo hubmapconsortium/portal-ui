@@ -183,7 +183,7 @@
   "sort": [{ "mapped_last_modified_timestamp.keyword": "desc" }],
   "highlight": { "fields": { "everything": { "type": "plain" } } },
   "_source": [
-    "display_doi",
+    "hubmap_id",
     "group_name",
     "mapped_data_types",
     "origin_sample.mapped_organ",

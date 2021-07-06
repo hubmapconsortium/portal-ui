@@ -37,7 +37,7 @@ function ProvTable(props) {
                       <ProvTableTile
                         key={item.uuid}
                         uuid={item.uuid}
-                        id={item.display_doi}
+                        id={item.hubmap_id}
                         entity_type={item.entity_type}
                         isCurrentEntity={uuid === item.uuid}
                         isSampleSibling={

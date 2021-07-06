@@ -18,7 +18,7 @@ import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/secti
 import { LeftMarginButton, LeftMarginIconButton } from './style';
 
 const defaultColumns = [
-  { id: 'display_doi', label: 'HuBMAP ID' },
+  { id: 'hubmap_id', label: 'HuBMAP ID' },
   { id: 'group_name', label: 'Group' },
   { id: 'entity_type', label: 'Entity Type' },
 ];

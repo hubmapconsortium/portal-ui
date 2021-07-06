@@ -6,7 +6,7 @@ import useEntityStore, { savedAlertStatus } from 'js/stores/useEntityStore';
 const useSavedEntitiesStoreSelector = (state) => state.saveEntity;
 const entityStoreSelector = (state) => state.setShouldDisplaySavedOrEditedAlert;
 
-function SaveEntityButton({ uuid, entity_type, group_name, display_doi, ...rest }) {
+function SaveEntityButton({ uuid, entity_type, group_name, hubmap_id, ...rest }) {
   const saveEntity = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
   const setShouldDisplaySavedOrEditedAlert = useEntityStore(entityStoreSelector);
   return (
@@ -14,7 +14,7 @@ function SaveEntityButton({ uuid, entity_type, group_name, display_doi, ...rest 
       color="primary"
       variant="contained"
       onClick={() => {
-        saveEntity(uuid, entity_type, group_name, display_doi);
+        saveEntity(uuid, entity_type, group_name, hubmap_id);
         setShouldDisplaySavedOrEditedAlert(savedAlertStatus);
       }}
       {...rest}

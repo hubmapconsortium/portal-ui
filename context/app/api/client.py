@@ -73,7 +73,7 @@ class ApiClient():
                 'provenance_user_displayname': 'Chuck McCallum',
                 'provenance_user_email': 'mccalluc@example.com',
                 'provenance_group_name': 'Mock Group',
-                'display_doi': 'abcd-1234',
+                'hubmap_id': 'abcd-1234',
                 'description': 'Mock Entity'
             }
 
@@ -83,7 +83,7 @@ class ApiClient():
                  # ES guarantees that _id is unique, so this is best:
                  {'ids': {'values': [uuid]}}
                  if uuid else
-                 {'match': {'display_doi.keyword': hbm_id}}
+                 {'match': {'hubmap_id.keyword': hbm_id}}
                  # With default mapping, without ".keyword", it splits into tokens,
                  # and we get multiple substring matches, instead of unique match.
                  }

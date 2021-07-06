@@ -31,7 +31,7 @@ const donorConfig = {
   },
   fields: {
     table: [
-      field('display_doi', 'HuBMAP ID'),
+      field('hubmap_id', 'HuBMAP ID'),
       field('group_name', 'Group'),
       field(`mapped_metadata.${ageField}`, 'Age'),
       field(`mapped_metadata.${bmiField}`, 'BMI'),
@@ -55,7 +55,7 @@ const sampleConfig = {
   },
   fields: {
     table: [
-      field('display_doi', 'HuBMAP ID'),
+      field('hubmap_id', 'HuBMAP ID'),
       field('group_name', 'Group'),
       field('mapped_specimen_type', 'Specimen Type'),
       field('origin_sample.mapped_organ', 'Organ'),
@@ -79,7 +79,7 @@ const datasetConfig = {
   },
   fields: {
     table: [
-      field('display_doi', 'HuBMAP ID'),
+      field('hubmap_id', 'HuBMAP ID'),
       field('group_name', 'Group'),
       field('mapped_data_types', 'Data Types'),
       field('origin_sample.mapped_organ', 'Organ'),

@@ -16,7 +16,7 @@ const iconMap = {
 
 const AnimatedFlexContainer = animated(FlexContainer);
 
-function EntityHeaderContent({ display_doi, entity_type, data, shouldDisplayHeader, vizIsFullscreen }) {
+function EntityHeaderContent({ hubmap_id, entity_type, data, shouldDisplayHeader, vizIsFullscreen }) {
   const transitions = useTransition(shouldDisplayHeader, null, {
     from: { opacity: vizIsFullscreen ? 1 : 0 },
     enter: { opacity: 1 },
@@ -28,7 +28,7 @@ function EntityHeaderContent({ display_doi, entity_type, data, shouldDisplayHead
       item && (
         <AnimatedFlexContainer style={props} key={key} maxWidth={vizIsFullscreen ? false : 'lg'}>
           {iconMap[entity_type]}
-          <EntityHeaderItem text={display_doi} />
+          <EntityHeaderItem text={hubmap_id} />
           {Object.entries(data).map(([k, v]) => (
             <EntityHeaderItem text={v.value || `undefined ${v.label}`} key={k} />
           ))}
@@ -45,7 +45,7 @@ function EntityHeaderContent({ display_doi, entity_type, data, shouldDisplayHead
 }
 
 EntityHeaderContent.propTypes = {
-  display_doi: PropTypes.string,
+  hubmap_id: PropTypes.string,
   entity_type: PropTypes.string,
   data: PropTypes.objectOf(PropTypes.object),
   shouldDisplayHeader: PropTypes.bool.isRequired,
@@ -53,7 +53,7 @@ EntityHeaderContent.propTypes = {
 };
 
 EntityHeaderContent.defaultProps = {
-  display_doi: undefined,
+  hubmap_id: undefined,
   entity_type: undefined,
   data: {},
 };

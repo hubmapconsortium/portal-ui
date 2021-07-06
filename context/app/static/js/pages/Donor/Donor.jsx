@@ -23,7 +23,7 @@ function DonorDetail(props) {
     group_name,
     created_by_user_displayname,
     created_by_user_email,
-    display_doi,
+    hubmap_id,
     entity_type,
     create_timestamp,
     last_modified_timestamp,
@@ -54,24 +54,24 @@ function DonorDetail(props) {
   const setAssayMetadata = useEntityStore(entityStoreSelector);
 
   useEffect(() => {
-    setAssayMetadata({ display_doi, entity_type, sex, race, age_value, age_unit });
-  }, [setAssayMetadata, display_doi, entity_type, sex, race, age_value, age_unit]);
+    setAssayMetadata({ hubmap_id, entity_type, sex, race, age_value, age_unit });
+  }, [setAssayMetadata, hubmap_id, entity_type, sex, race, age_value, age_unit]);
 
   useSendUUIDEvent(entity_type, uuid);
 
   return (
-    <DetailContext.Provider value={{ display_doi, uuid }}>
+    <DetailContext.Provider value={{ hubmap_id, uuid }}>
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}
           entity_type={entity_type}
-          display_doi={display_doi}
+          hubmap_id={hubmap_id}
           create_timestamp={create_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}
           group_name={group_name}
         />
-        {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} display_doi={display_doi} />}
+        {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} hubmap_id={hubmap_id} />}
         <DerivedEntitiesSection
           entities={derivedDatasets}
           samples={derivedSamples}

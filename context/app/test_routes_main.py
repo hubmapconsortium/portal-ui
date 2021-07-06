@@ -78,7 +78,7 @@ def mock_search_donor_post(path, **kwargs):
                                 'entity_type': 'Donor',
                                 'provenance_create_timestamp': '100000',
                                 'provenance_modified_timestamp': '100000',
-                                'display_doi': 'HBM:12345'
+                                'hubmap_id': 'HBM:12345'
                             }
                         }
                     ]

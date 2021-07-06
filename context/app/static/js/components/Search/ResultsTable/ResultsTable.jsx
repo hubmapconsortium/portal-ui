@@ -18,7 +18,7 @@ function ResultsTable(props) {
           <StyledTableRow className={'highlight' in hit && 'before-highlight'}>
             {resultFields.map((field) => (
               <StyledTableCell key={field.id}>
-                {field.id === 'display_doi' ? (
+                {field.id === 'hubmap_id' ? (
                   <LightBlueLink href={detailsUrlPrefix + hit._source[idField]}>
                     {getByPath(hit._source, field)}
                   </LightBlueLink>

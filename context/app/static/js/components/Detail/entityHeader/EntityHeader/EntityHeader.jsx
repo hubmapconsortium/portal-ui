@@ -35,7 +35,7 @@ function Header() {
         leave: { overflow: 'hidden', height: 0 },
       };
   const transitions = useTransition(shouldDisplayHeader, null, transitionConfig);
-  const { display_doi, entity_type } = assayMetadata;
+  const { hubmap_id, entity_type } = assayMetadata;
 
   const data = extractHeaderMetadata(assayMetadata, entity_type);
   return transitions.map(
@@ -43,7 +43,7 @@ function Header() {
       item && (
         <AnimatedPaper key={key} style={props} elevation={4}>
           <EntityHeaderContent
-            display_doi={display_doi}
+            hubmap_id={hubmap_id}
             entity_type={entity_type}
             data={data}
             shouldDisplayHeader={shouldDisplayHeader}

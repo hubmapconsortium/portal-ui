@@ -9,10 +9,10 @@ const useSavedEntitiesStore = create(
   persist(
     immer((set, get) => ({
       savedEntities: {},
-      saveEntity: (entityUUID, entity_type, group_name, display_doi) =>
+      saveEntity: (entityUUID, entity_type, group_name, hubmap_id) =>
         !(entityUUID in get().savedEntities) &&
         set((state) => {
-          state.savedEntities[entityUUID] = { dateSaved: Date.now(), entity_type, group_name, display_doi };
+          state.savedEntities[entityUUID] = { dateSaved: Date.now(), entity_type, group_name, hubmap_id };
         }),
       deleteEntity: (entityUUID) =>
         set((state) => {
@@ -40,13 +40,13 @@ const useSavedEntitiesStore = create(
         });
       },
       addEntityToList: (listUUID, entityUUID) => {
-        const { entity_type, group_name, display_doi } = get().savedEntities[entityUUID];
+        const { entity_type, group_name, hubmap_id } = get().savedEntities[entityUUID];
         set((state) => {
           state.savedLists[listUUID].savedEntities[entityUUID] = {
             dateAddedToList: Date.now(),
             entity_type,
             group_name,
-            display_doi,
+            hubmap_id,
           };
           state.savedLists[listUUID].dateLastModified = Date.now();
         });
@@ -54,13 +54,13 @@ const useSavedEntitiesStore = create(
       addEntitiesToList: (listUUID, entityUUIDs) => {
         const timestamp = Date.now();
         entityUUIDs.forEach((uuid) => {
-          const { entity_type, group_name, display_doi } = get().savedEntities[uuid];
+          const { entity_type, group_name, hubmap_id } = get().savedEntities[uuid];
           set((state) => {
             state.savedLists[listUUID].savedEntities[uuid] = {
               dateAddedToList: timestamp,
               entity_type,
               group_name,
-              display_doi,
+              hubmap_id,
             };
           });
         });
