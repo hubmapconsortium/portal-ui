@@ -46,7 +46,7 @@ class ViewConfBuilder:
     def _replace_url_in_file(self, file):
         """Replace url in incoming file object
         :param dict file: File dict which will have its rel_path replaced by url
-        rtype: dict The file with rel_path replaced by url
+        :rtype: dict The file with rel_path replaced by url
         >>> from pprint import pprint
         >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
         >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
@@ -66,7 +66,7 @@ class ViewConfBuilder:
         """Create a url for an asset.
         :param str rel_path: The path off of which the url should be built
         :param bool use_token: Whether or not to append a nexus token to the URL, default True
-        rtype: dict The file with rel_path replaced by url
+        :rtype: dict The file with rel_path replaced by url
 
         >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
         >>> vc._build_assets_url("rel_path/to/clusters.ome.tiff")
@@ -120,7 +120,7 @@ class ImagingViewConfBuilder(ViewConfBuilder):
         :param str img_path: The path of the image
         :param str img_dir: The image-specific part of the path to be
         replaced by the OFFSETS_DIR constant.
-        rtype: tuple The image url and the offsets url
+        :rtype: tuple The image url and the offsets url
 
         >>> from pprint import pprint
         >>> vc = ImagingViewConfBuilder(entity={ "uuid": "uuid" },\
@@ -230,7 +230,7 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
     def _check_sprm_image(self, path_regex):
         """Check whether or not there is a matching SPRM image at a path.
         :param str path_regex: The path to look for the images
-        rtype: str The found image
+        :rtype: str The found image
         """
         file_paths_found = self._get_file_paths()
         found_image_files = get_matches(file_paths_found, path_regex)
