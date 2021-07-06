@@ -26,12 +26,13 @@ class CellsService {
   }
 
   async getDatasetsSelectedByGene(props) {
-    const { geneName, minGeneExpression, minCellPercentage } = props;
+    const { geneName, minExpression, minCellPercentage, modality } = props;
     const urlParams = new URLSearchParams();
 
-    urlParams.append('gene_name', geneName);
-    urlParams.append('min_gene_expression', minGeneExpression);
+    urlParams.append('name', geneName);
+    urlParams.append('min_expression', minExpression);
     urlParams.append('min_cell_percentage', minCellPercentage);
+    urlParams.append('modality', modality);
 
     return this.fetchAndParse(`/cells/datasets-selected-by-gene.json?${urlParams}`);
   }

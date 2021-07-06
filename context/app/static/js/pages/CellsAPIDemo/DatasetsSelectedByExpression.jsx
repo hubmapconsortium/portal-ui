@@ -27,6 +27,7 @@ function DatasetsSelectedByExpression(props) {
           geneName: name,
           minExpression,
           minCellPercentage,
+          modality,
         });
         setResults(serviceResults);
       } else {
