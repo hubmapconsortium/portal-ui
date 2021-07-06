@@ -64,7 +64,7 @@ function DatasetDetail(props) {
     created_by_user_email,
     display_doi,
     entity_type,
-    create_timestamp,
+    created_timestamp,
     last_modified_timestamp,
     description,
     status,
@@ -119,7 +119,7 @@ function DatasetDetail(props) {
           uuid={uuid}
           entity_type={entity_type}
           display_doi={display_doi}
-          create_timestamp={create_timestamp}
+          created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}
           status={status}

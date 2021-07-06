@@ -19,7 +19,7 @@ function Collection(props) {
     doi_url,
     title,
     description,
-    create_timestamp,
+    created_timestamp,
     last_modified_timestamp,
     contacts,
     datasets,
@@ -40,7 +40,7 @@ function Collection(props) {
             display_doi={display_doi}
             collectionName={title}
             description={description}
-            create_timestamp={create_timestamp}
+            created_timestamp={created_timestamp}
             last_modified_timestamp={last_modified_timestamp}
             entityCanBeSaved={false}
           >
@@ -50,7 +50,7 @@ function Collection(props) {
               </OutboundLink>
             )}
           </Summary>
-          <Citation contributors={creators} title={title} timestamp={create_timestamp} url={doi_url} doi={doi} />
+          <Citation contributors={creators} title={title} timestamp={created_timestamp} url={doi_url} doi={doi} />
           {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
           {'creators' in collectionData && (

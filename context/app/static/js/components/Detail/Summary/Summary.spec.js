@@ -15,7 +15,7 @@ test('timestamps display when defined', () => {
       display_doi="fakedoi"
       entity_type="Fakeentity"
       uuid="fakeuuid"
-      create_timestamp={1596724856094}
+      created_timestamp={1596724856094}
       last_modified_timestamp={1596724856094}
     />,
   );
