@@ -196,7 +196,7 @@ class AbstractScatterplotViewConfBuilder(ViewConfBuilder):
     """Base class for subclasses creating a JSON-backed scatterplot for
     "first generation" RNA-seq and ATAC-seq data like
     https://portal.hubmapconsortium.org/browse/dataset/d4493657cde29702c5ed73932da5317c
-    from h5ad-to-arrow.cwl (August 2020 release).
+    from h5ad-to-arrow.cwl.
     """
     def get_conf_cells(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
