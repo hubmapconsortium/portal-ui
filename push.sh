@@ -9,7 +9,7 @@ git pull
 
 git submodule foreach '
   echo "was:" `git rev-parse HEAD`
-  git checkout master || git checkout main
+  git checkout main
   git pull
   echo "now:" `git rev-parse HEAD`
 '

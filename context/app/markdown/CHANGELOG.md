@@ -1,3 +1,37 @@
+## v0.21.4 - 2021-06-30
+
+- Change the documention menu, at Jonathan's request.
+
+
+## v0.21.3 - 2021-06-29
+
+- Upgrade marked, so processing conforms better to Github-flavored MD.
+
+
+## v0.21.2 - 2021-06-29
+
+- All submodules now use the `main` branch.
+
+
+## v0.21.1 - 2021-06-29
+
+- Manually update docs repo.
+
+
+## v0.21.0 - 2021-06-28
+
+- Implement autosuggest UI for proteins and genes.
+- Use sliders to select values for cell queries.
+- If file-type descriptions are missing, don't show "i" in UI.
+- Fix where Vitessce confs look for `offsets` file.
+- Cleanup the boilerplate in the cells demo.
+- Selecting multiple genes works now.
+- Fix proptypes warning.
+- Bump python from 3.7 to 3.8: There are some useful new language features.
+- Search gene and protein substrings.
+- Upgrade Vitessce to version 1.1.11 and adapt view confs for new 3D feature.
+
+
 ## v0.20.3 - 2021-06-17
 
 - Add an endpoint which serves a Jupyter notebook with the viewconf for a dataset.

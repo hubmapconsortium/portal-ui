@@ -1,53 +1,63 @@
 import React, { useState } from 'react';
 
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 
-import ResultsTable from './ResultsTable';
+import CellsService from './CellsService';
 
 // eslint-disable-next-line no-unused-vars
 function SearchBySubstring(props) {
   const { targetEntity } = props;
 
   const [substring, setSubstring] = useState('');
+  const [options, setOptions] = useState([]);
 
-  const [results, setResults] = useState([]);
-  const [message, setMessage] = useState(null);
-
-  async function handleSubmit() {
-    const urlParams = new URLSearchParams();
-    urlParams.append('substring', substring);
-
-    const firstResponse = await fetch(`/cells/${targetEntity}-by-substring.json?${urlParams}`, {
-      method: 'POST',
-    });
-    const responseJson = await firstResponse.json();
-    if ('message' in responseJson) {
-      setMessage(responseJson.message);
-    }
-    if ('results' in responseJson) {
-      setResults(responseJson.results);
-    }
-  }
-
-  function handleChange(event) {
+  async function handleChange(event) {
     const { target } = event;
-    const { name } = target;
-    const setFields = {
-      substring: setSubstring,
-    };
-    setFields[name](event.target.value);
+    setSubstring(target.value);
+
+    if (target.value === '') {
+      setOptions([]);
+      return;
+    }
+
+    try {
+      setOptions(
+        await new CellsService().searchBySubstring({
+          targetEntity,
+          substring: target.value,
+        }),
+      );
+    } catch (e) {
+      console.warn(e.message);
+    }
   }
 
   return (
     <Paper>
-      <TextField label="substring" value={substring} name="substring" variant="outlined" onChange={handleChange} />
-      <br />
-      <Button onClick={handleSubmit}>Submit</Button>
-      <br />
-      {message}
-      <ResultsTable results={results} />
+      <Autocomplete
+        options={options}
+        multiple
+        getOptionLabel={(option) => option.full}
+        renderOption={(option) => (
+          <>
+            {option.pre}
+            <b>{option.match}</b>
+            {option.post}
+          </>
+        )}
+        renderInput={(params) => (
+          <TextField
+            label="substring"
+            value={substring}
+            name="substring"
+            variant="outlined"
+            onChange={handleChange}
+            {...params}
+          />
+        )}
+      />
     </Paper>
   );
 }

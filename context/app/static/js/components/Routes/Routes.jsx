@@ -162,6 +162,7 @@ Routes.propTypes = {
     collection: PropTypes.object,
     errorCode: PropTypes.number,
     list_uuid: PropTypes.string,
+    has_notebook: PropTypes.bool,
   }),
 };
 

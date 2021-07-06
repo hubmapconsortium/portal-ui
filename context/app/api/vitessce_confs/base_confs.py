@@ -110,10 +110,12 @@ class ImagingViewConfBuilder(ViewConfBuilder):
             ),
         )
 
-    def _setup_view_config_raster(self, vc, dataset):
+    def _setup_view_config_raster(self, vc, dataset, disable_3d=[]):
         vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=9, h=12)
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
-        vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
+        vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8).set_props(
+            disable3d=disable_3d
+        )
         return vc
 
 
@@ -189,9 +191,9 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
         found_image_file = found_image_files[0]
         return found_image_file
 
-    def _get_ometiff_image_wrapper(self, found_image_file):
+    def _get_ometiff_image_wrapper(self, found_image_file, found_image_path):
         img_url, offsets_url = self._get_img_and_offset_url(
-            found_image_file, self._imaging_path_regex,
+            found_image_file, re.escape(found_image_path),
         )
         return OmeTiffWrapper(
             img_url=img_url, offsets_url=offsets_url, name=self._image_name
@@ -229,12 +231,12 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
         found_image_file = self._check_sprm_image(self._get_full_image_path())
         vc = VitessceConfig(name=self._base_name)
         dataset = vc.add_dataset(name="SPRM")
-        image_wrapper = self._get_ometiff_image_wrapper(found_image_file)
+        image_wrapper = self._get_ometiff_image_wrapper(found_image_file, self._imaging_path_regex)
         dataset = dataset.add_object(image_wrapper)
         file_paths_found = self._get_file_paths()
         # This tile has no segmentations
         if self._files[0]["rel_path"] not in file_paths_found:
-            vc = self._setup_view_config_raster(vc, dataset)
+            vc = self._setup_view_config_raster(vc, dataset, disable_3d=[self._image_name])
         else:
             for file in self._files:
                 path = file["rel_path"]
@@ -253,7 +255,9 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
         vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=8)
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
-        vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
+        vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8).set_props(
+            disable3d=[self._image_name]
+        )
         vc.add_view(dataset, cm.CELL_SETS, x=10, y=5, w=2, h=7)
         vc.add_view(dataset, cm.GENES, x=10, y=0, w=2, h=5).set_props(
             variablesLabelOverride="antigen"
@@ -279,7 +283,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
 
     def _get_ometiff_mask_wrapper(self, found_bitmask_file):
         bitmask_img_url, bitmask_offsets_url = self._get_img_and_offset_url(
-            found_bitmask_file, self._mask_path_regex,
+            found_bitmask_file, self.image_pyramid_regex,
         )
         return OmeTiffWrapper(
             img_url=bitmask_img_url,
@@ -321,7 +325,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         )
         dataset = dataset.add_object(anndata_wrapper)
         found_image_file = self._check_sprm_image(self._get_full_image_path())
-        image_wrapper = self._get_ometiff_image_wrapper(found_image_file)
+        image_wrapper = self._get_ometiff_image_wrapper(found_image_file, self.image_pyramid_regex)
         found_bitmask_file = self._check_sprm_image(self._get_bitmask_image_path())
         bitmask_wrapper = self._get_ometiff_mask_wrapper(found_bitmask_file)
         dataset = dataset.add_object(MultiImageWrapper([image_wrapper, bitmask_wrapper]))

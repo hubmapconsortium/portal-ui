@@ -71,6 +71,7 @@
     },
     {
       "component": "layerController",
+      "props": { "disable3d": ["BASE_NAME"] },
       "coordinationScopes": {
         "dataset": "A"
       },

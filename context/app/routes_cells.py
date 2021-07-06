@@ -45,8 +45,15 @@ def _get_protein_ids(app):
 
 
 def _first_n_matches(strings, substring, n):
+    '''
+    >>> strings = [f'fake{n}' for n in range(200)]
+    >>> first_n = _first_n_matches(strings, 'e1', 10)
+    >>> first_n[0]
+    {'full': 'fake1', 'pre': 'fak', 'match': 'e1', 'post': ''}
+    >>> first_n[-1]
+    {'full': 'fake18', 'pre': 'fak', 'match': 'e1', 'post': '8'}
+    '''
     substring_lower = substring.lower()
-    # TODO: Python 3.8 allows assignment within comprehensions.
     first_n = list(islice((s for s in strings if substring_lower in s.lower()), n))
     offsets = [s.lower().find(substring_lower) for s in first_n]
     return [{
