@@ -2,7 +2,7 @@ import re
 from glob import glob
 from os.path import dirname
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect
 
 # NOTE: A better approach might be to look again at the handful of libraries
 # that handle this, or to pre-render everything when flask starts.
@@ -34,8 +34,14 @@ def markdown_view():
     )
 
 
+def redirect_view():
+    with open(dirname(__file__) + '/markdown/' + request.path + '.redirect') as redirect_file:
+        target_url = redirect_file.read().strip()
+    return redirect(target_url)
+
+
 app_dir = dirname(__file__)
-for f in glob(app_dir + '/markdown/**/*.md', recursive=True):
-    route = f.replace(app_dir + '/markdown', '').replace('.md', '')
-    # This is equivalent to adding multiple @route decorators.
-    markdown_route = blueprint.route(route)(markdown_view)
+for (suffix, view_method) in [('.md', markdown_view), ('.redirect', redirect_view)]:
+    for f in glob(app_dir + f'/markdown/**/*{suffix}', recursive=True):
+        route = f.replace(app_dir + '/markdown', '').replace(suffix, '')
+        blueprint.route(route)(view_method)
