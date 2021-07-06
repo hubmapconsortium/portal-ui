@@ -165,7 +165,7 @@ class RNASeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
 class ATACSeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     """Wrapper class for creating a JSON-backed scatterplot for "first generation" ATAC-seq data like
     https://portal.hubmapconsortium.org/browse/dataset/d4493657cde29702c5ed73932da5317c
-    from h5ad-to-arrow.cwl (August 2020 release).
+    from h5ad-to-arrow.cwl.
     """
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
