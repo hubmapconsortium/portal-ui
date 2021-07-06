@@ -33,6 +33,8 @@ function MetadataTable(props) {
     // Filter out nested objects, like nested "metadata" for Samples...
     // but allow arrays. Remember, in JS: typeof [] === 'object'
     .filter((entry) => typeof entry[1] !== 'object' || Array.isArray(entry[1]))
+    // Filter out fields from TSV that aren't really metadata:
+    .filter((entry) => !['contributors_path', 'antibodies_path', 'version'].includes(entry[0]))
     .map((entry) => ({
       key: entry[0],
       value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
