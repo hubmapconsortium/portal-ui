@@ -20,12 +20,11 @@ function DatasetsSelectedByExpression(props) {
   async function handleSubmit() {
     const urlParams = new URLSearchParams();
     urlParams.append('name', name);
-    urlParams.append('target_entity', targetEntity);
     urlParams.append('modality', modality);
     urlParams.append('min_expression', minExpression);
     urlParams.append('min_cell_percentage', minCellPercentage);
 
-    const firstResponse = await fetch(`/cells/datasets-selected-by-expression.json?${urlParams}`, {
+    const firstResponse = await fetch(`/cells/datasets-selected-by-${targetEntity}.json?${urlParams}`, {
       method: 'POST',
     });
     const responseJson = await firstResponse.json();

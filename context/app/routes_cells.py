@@ -69,10 +69,9 @@ def proteins_by_substring():
     return {'results': _first_n_matches(_get_protein_ids(current_app), substring, 10)}
 
 
-@blueprint.route('/cells/datasets-selected-by-expression.json', methods=['POST'])
-def datasets_selected_by_level():
+@blueprint.route('/cells/datasets-selected-by-<target_entity>.json', methods=['POST'])
+def datasets_selected_by_level(target_entity):
     name = request.args.get('name')
-    target_entity = request.args.get('target_entity')
     modality = request.args.get('modality')
     min_expression = request.args.get('min_expression')
     min_cell_percentage = request.args.get('min_cell_percentage')
