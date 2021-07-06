@@ -17,8 +17,8 @@ from .utils import (
     get_matches,
 )
 from .base_confs import (
-    ImagingViewConfBuilder,
-    ScatterplotViewConfBuilder,
+    AbstractImagingViewConfBuilder,
+    AbstractScatterplotViewConfBuilder,
     ImagePyramidViewConfBuilder,
     SPRMJSONViewConfBuilder,
     SPRMAnnDataViewConfBuilder,
@@ -43,7 +43,11 @@ from .paths import (
 )
 
 
-class SeqFISHViewConfBuilder(ImagingViewConfBuilder):
+class SeqFISHViewConfBuilder(AbstractImagingViewConfBuilder):
+    """Wrapper class for generating Vitessce configurations,
+    one per position, with the hybridization cycles
+    grouped together per position in a single Vitessce configuration.
+    """
     def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         full_seqfish_reqex = "/".join(
@@ -105,6 +109,10 @@ class CytokitSPRMViewConfigError(Exception):
 
 
 class TiledSPRMViewConfBuilder(ViewConfBuilder):
+    """Wrapper class for generating many "first generation"
+    non-stitched JSON-backed SPRM Vitessce configurations,
+    one per tile per region, via SPRMJSONViewConfBuilder.
+    """
     def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(
@@ -132,7 +140,11 @@ class TiledSPRMViewConfBuilder(ViewConfBuilder):
         return ConfCells(confs, None)
 
 
-class RNASeqViewConfBuilder(ScatterplotViewConfBuilder):
+class RNASeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
+    """Wrapper class for creating a JSON-backed scatterplot for "first generation" RNA-seq data like
+    https://portal.hubmapconsortium.org/browse/dataset/c019a1cd35aab4d2b4a6ff221e92aaab
+    from h5ad-to-arrow.cwl (August 2020 release).
+    """
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
@@ -150,7 +162,11 @@ class RNASeqViewConfBuilder(ScatterplotViewConfBuilder):
         ]
 
 
-class ATACSeqViewConfBuilder(ScatterplotViewConfBuilder):
+class ATACSeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
+    """Wrapper class for creating a JSON-backed scatterplot for "first generation" ATAC-seq data like
+    https://portal.hubmapconsortium.org/browse/dataset/d4493657cde29702c5ed73932da5317c
+    from h5ad-to-arrow.cwl.
+    """
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
@@ -171,6 +187,11 @@ class ATACSeqViewConfBuilder(ScatterplotViewConfBuilder):
 
 
 class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
+    """Wrapper class for generating multiple "second generation" stitched AnnData-backed SPRM
+    Vitessce configurations via SPRMAnnDataViewConfBuilder,
+    used for datasets with multiple regions.
+    These are from post-August 2020 Cytokit datasets (stitched).
+    """
     def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_regions = get_matches(file_paths_found, STITCHED_REGEX)
@@ -202,14 +223,23 @@ class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
 
 
 class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
+    """Wrapper class for creating a AnnData-backed view configuration
+    for "second generation" post-August 2020 RNA-seq data from anndata-to-ui.cwl like
+    https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
+    """
     def get_conf_cells(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        # Use .zgroup file as proxy for whether or not the zarr store is present.
         if f'{zarr_path}/.zgroup' not in file_paths_found:
             message = f'RNA-seq assay with uuid {self._uuid} has no matching .zarr store'
             raise FileNotFoundError(message)
         vc = VitessceConfig(name=self._uuid)
         adata_url = self._build_assets_url(zarr_path, use_token=False)
+        # Some of the keys (like marker_genes_for_heatmap) here are from our pipeline
+        # https://github.com/hubmapconsortium/portal-containers/blob/master/containers/anndata-to-ui
+        # while others come from Matt's standard scanpy pipeline
+        # or AnnData default (like X_umap or X).
         dataset = vc.add_dataset(name=self._uuid).add_object(AnnDataWrapper(
             adata_url=adata_url,
             mappings_obsm=["X_umap"],
@@ -241,6 +271,10 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
 
 
 class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
+    """Wrapper class for generating a Vitessce configurations
+    for IMS data that excludes the image pyramids
+    of all the channels separated out.
+    """
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # Do not show the separated mass-spec images.
