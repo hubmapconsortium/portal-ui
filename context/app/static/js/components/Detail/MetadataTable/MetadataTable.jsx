@@ -21,6 +21,22 @@ import {
   StyledInfoIcon,
 } from './style';
 
+function tableDataToRows(tableData) {
+  return (
+    Object.entries(tableData)
+      // Filter out nested objects, like nested "metadata" for Samples...
+      // but allow arrays. Remember, in JS: typeof [] === 'object'
+      .filter((entry) => typeof entry[1] !== 'object' || Array.isArray(entry[1]))
+      // Filter out fields from TSV that aren't really metadata:
+      .filter((entry) => !['contributors_path', 'antibodies_path', 'version'].includes(entry[0]))
+      .map((entry) => ({
+        key: entry[0],
+        value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
+        description: metadataFieldDescriptions[entry[0]],
+      }))
+  );
+}
+
 function MetadataTable(props) {
   const { metadata: tableData, display_doi } = props;
 
@@ -29,17 +45,7 @@ function MetadataTable(props) {
     { id: 'value', label: 'Value' },
   ];
 
-  const tableRows = Object.entries(tableData)
-    // Filter out nested objects, like nested "metadata" for Samples...
-    // but allow arrays. Remember, in JS: typeof [] === 'object'
-    .filter((entry) => typeof entry[1] !== 'object' || Array.isArray(entry[1]))
-    // Filter out fields from TSV that aren't really metadata:
-    .filter((entry) => !['contributors_path', 'antibodies_path', 'version'].includes(entry[0]))
-    .map((entry) => ({
-      key: entry[0],
-      value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
-      description: metadataFieldDescriptions[entry[0]],
-    }));
+  const tableRows = tableDataToRows(tableData);
 
   const downloadUrl = createDownloadUrl(
     tableToDelimitedString(
@@ -103,3 +109,4 @@ MetadataTable.propTypes = {
 };
 
 export default MetadataTable;
+export { tableDataToRows };
