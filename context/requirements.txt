@@ -1,5 +1,5 @@
 nbformat==5.1.2
-Flask==1.1.2
+Flask==2.0.1
 globus-sdk==2.0.1
 requests==2.22.0
 pyyaml==5.4

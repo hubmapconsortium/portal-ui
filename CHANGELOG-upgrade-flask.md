@@ -1,0 +1,1 @@
+- Upgrade Flask, primarily to silence warnings during tests.
