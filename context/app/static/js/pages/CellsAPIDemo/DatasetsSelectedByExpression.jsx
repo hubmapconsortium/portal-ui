@@ -59,6 +59,7 @@ function DatasetsSelectedByExpression(props) {
         value={minExpression}
         min={0}
         max={100}
+        marks={[0, 12.5, 25, 50, 100]}
         setter={setMinExpression}
         labelledby="min-gene-expression-label"
       />
@@ -68,6 +69,7 @@ function DatasetsSelectedByExpression(props) {
         value={minCellPercentage}
         min={0}
         max={100}
+        marks={[0, 12.5, 25, 50, 100]}
         setter={setMinCellPercentage}
         labelledby="min-cell-percentage-label"
       />
@@ -82,17 +84,15 @@ function DatasetsSelectedByExpression(props) {
 }
 
 function SliderWrapper(props) {
-  const { value, min, max, setter, labelledby } = props;
+  const { value, min, max, marks, setter, labelledby } = props;
   return (
     <Slider
       value={value}
       min={min}
       max={max}
       valueLabelDisplay="auto"
-      marks={[
-        { value: min, label: min },
-        { value: max, label: max },
-      ]}
+      step={null} /* Constrains choices to the mark values. */
+      marks={marks.map((m) => ({ value: m, label: m }))}
       onChange={(e, val) => {
         setter(val);
       }}
