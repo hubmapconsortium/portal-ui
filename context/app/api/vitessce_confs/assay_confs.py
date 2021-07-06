@@ -17,8 +17,8 @@ from .utils import (
     get_matches,
 )
 from .base_confs import (
-    ImagingViewConfBuilder,
-    ScatterplotViewConfBuilder,
+    AbstractImagingViewConfBuilder,
+    AbstractScatterplotViewConfBuilder,
     ImagePyramidViewConfBuilder,
     SPRMJSONViewConfBuilder,
     SPRMAnnDataViewConfBuilder,
@@ -43,7 +43,7 @@ from .paths import (
 )
 
 
-class SeqFISHViewConfBuilder(ImagingViewConfBuilder):
+class SeqFISHViewConfBuilder(AbstractImagingViewConfBuilder):
     """Wrapper class for generating Vitessce configurations,
     one per position, with the hybridization cycles
     grouped together per position in a single Vitessce configuration.
@@ -140,9 +140,10 @@ class TiledSPRMViewConfBuilder(ViewConfBuilder):
         return ConfCells(confs, None)
 
 
-class RNASeqViewConfBuilder(ScatterplotViewConfBuilder):
+class RNASeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     """Wrapper class for creating a JSON-backed scatterplot for "first generation" RNA-seq data like
     https://portal.hubmapconsortium.org/browse/dataset/c019a1cd35aab4d2b4a6ff221e92aaab
+    from h5ad-to-arrow.cwl (August 2020 release).
     """
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
@@ -161,9 +162,10 @@ class RNASeqViewConfBuilder(ScatterplotViewConfBuilder):
         ]
 
 
-class ATACSeqViewConfBuilder(ScatterplotViewConfBuilder):
+class ATACSeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     """Wrapper class for creating a JSON-backed scatterplot for "first generation" ATAC-seq data like
     https://portal.hubmapconsortium.org/browse/dataset/d4493657cde29702c5ed73932da5317c
+    from h5ad-to-arrow.cwl (August 2020 release).
     """
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
@@ -188,6 +190,7 @@ class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
     """Wrapper class for generating multiple "second generation" stitched AnnData-backed SPRM
     Vitessce configurations via SPRMAnnDataViewConfBuilder,
     used for datasets with multiple regions.
+    These are from post-August 2020 Cytokit datasets (stitched).
     """
     def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -221,7 +224,7 @@ class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
 
 class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
     """Wrapper class for creating a AnnData-backed view configuration
-    for "second generation" RNA-seq data like
+    for "second generation" post-August 2020 RNA-seq data from anndata-to-ui.cwl like
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
     def get_conf_cells(self):

@@ -114,7 +114,7 @@ class ViewConfBuilder:
         return [file["rel_path"] for file in self._entity["files"]]
 
 
-class ImagingViewConfBuilder(ViewConfBuilder):
+class AbstractImagingViewConfBuilder(ViewConfBuilder):
     def _get_img_and_offset_url(self, img_path, img_dir):
         """Create a url for the offsets and img.
         :param str img_path: The path of the image
@@ -123,7 +123,7 @@ class ImagingViewConfBuilder(ViewConfBuilder):
         :rtype: tuple The image url and the offsets url
 
         >>> from pprint import pprint
-        >>> vc = ImagingViewConfBuilder(entity={ "uuid": "uuid" },\
+        >>> vc = AbstractImagingViewConfBuilder(entity={ "uuid": "uuid" },\
             nexus_token='nexus_token', is_mock=True)
         >>> pprint(vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff",\
             "rel_path/to"))
@@ -152,7 +152,7 @@ class ImagingViewConfBuilder(ViewConfBuilder):
         return vc
 
 
-class ImagePyramidViewConfBuilder(ImagingViewConfBuilder):
+class ImagePyramidViewConfBuilder(AbstractImagingViewConfBuilder):
     def __init__(self, entity, nexus_token, is_mock=False):
         """Wrapper class for creating a standard view configuration for image pyramids,
         i.e for high resolution viz-lifted imaging datasets like
@@ -192,10 +192,11 @@ class ImagePyramidViewConfBuilder(ImagingViewConfBuilder):
         return ConfCells(conf, None)
 
 
-class ScatterplotViewConfBuilder(ViewConfBuilder):
+class AbstractScatterplotViewConfBuilder(ViewConfBuilder):
     """Base class for subclasses creating a JSON-backed scatterplot for
     "first generation" RNA-seq and ATAC-seq data like
     https://portal.hubmapconsortium.org/browse/dataset/d4493657cde29702c5ed73932da5317c
+    from h5ad-to-arrow.cwl (August 2020 release).
     """
     def get_conf_cells(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
