@@ -76,26 +76,20 @@ def proteins_by_substring():
     return {'results': _first_n_matches(_get_protein_ids(current_app), substring, 10)}
 
 
-@blueprint.route('/cells/datasets-selected-by-gene.json', methods=['POST'])
-def datasets_selected_by_gene():
-    # Refine what it means for a dataset to match a cells query:
-    # It’s probably not useful to include a dataset if only a single
-    # cell highly expresses the gene in question.
-    # Besides a gene, and an expression level, probably want to say
-    # the percent of the total cells in the assay that match.
-
-    gene_name = request.args.get('gene_name')
-    min_gene_expression = request.args.get('min_gene_expression')
-
+@blueprint.route('/cells/datasets-selected-by-<target_entity>.json', methods=['POST'])
+def datasets_selected_by_level(target_entity):
+    name = request.args.get('name')
+    modality = request.args.get('modality')
+    min_expression = request.args.get('min_expression')
     min_cell_percentage = request.args.get('min_cell_percentage')
 
     client = _get_client(current_app)
 
     try:
         dataset_set = client.select_datasets(
-            where='gene',
-            has=[f'{gene_name} > {min_gene_expression}'],
-            genomic_modality='rna',
+            where=target_entity,
+            has=[f'{name} > {min_expression}'],
+            genomic_modality=modality,
             min_cell_percentage=min_cell_percentage
         )
         return {'results': list(dataset_set.get_list())}

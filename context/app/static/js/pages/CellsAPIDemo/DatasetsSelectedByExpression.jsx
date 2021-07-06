@@ -10,9 +10,11 @@ import ResultsTable from './ResultsTable';
 import CellsService from './CellsService';
 
 // eslint-disable-next-line no-unused-vars
-function DatasetsSelectedByGene(props) {
-  const [geneName, setGeneName] = useState('VIM');
-  const [minGeneExpression, setMinGeneExpression] = useState(1);
+function DatasetsSelectedByExpression(props) {
+  const [name, setName] = useState('VIM');
+  const [targetEntity, setTargetEntity] = useState('gene'); // eslint-disable-line no-unused-vars
+  const [modality, setModality] = useState('rna'); // eslint-disable-line no-unused-vars
+  const [minExpression, setMinExpression] = useState(1);
   const [minCellPercentage, setMinCellPercentage] = useState(10);
 
   const [results, setResults] = useState([]);
@@ -20,12 +22,17 @@ function DatasetsSelectedByGene(props) {
 
   async function handleSubmit() {
     try {
-      const serviceResults = await new CellsService().getDatasetsSelectedByGene({
-        geneName,
-        minGeneExpression,
-        minCellPercentage,
-      });
-      setResults(serviceResults);
+      if (targetEntity === 'gene') {
+        const serviceResults = await new CellsService().getDatasetsSelectedByGene({
+          geneName: name,
+          minExpression,
+          minCellPercentage,
+          modality,
+        });
+        setResults(serviceResults);
+      } else {
+        throw Error(`Datasets by "${targetEntity}" unimplemented`);
+      }
     } catch (e) {
       setMessage(e.message);
     }
@@ -33,25 +40,26 @@ function DatasetsSelectedByGene(props) {
 
   function handleChange(event) {
     const { target } = event;
-    const { name } = target;
     const setFields = {
-      geneName: setGeneName,
+      name: setName,
+      minExpression: setMinExpression,
+      minCellPercentage: setMinCellPercentage,
     };
-    setFields[name](event.target.value);
+    setFields[target.name](event.target.value);
   }
 
   return (
     <Paper>
-      <TextField label="gene name" value={geneName} name="geneName" variant="outlined" onChange={handleChange} />
+      <TextField label="name" value={name} name="name" variant="outlined" onChange={handleChange} />
 
       <br />
 
       <FormLabel id="min-gene-expression-label">Minimum gene expression</FormLabel>
       <SliderWrapper
-        value={minGeneExpression}
+        value={minExpression}
         min={0}
         max={100}
-        setter={setMinGeneExpression}
+        setter={setMinExpression}
         labelledby="min-gene-expression-label"
       />
 
@@ -93,4 +101,4 @@ function SliderWrapper(props) {
   );
 }
 
-export default DatasetsSelectedByGene;
+export default DatasetsSelectedByExpression;

@@ -6,7 +6,7 @@ import { Alert } from 'js/shared-styles/alerts';
 import SearchBySubstring from './SearchBySubstring';
 import CellPercentagesForDatasets from './CellPercentagesForDatasets';
 import CellExpressionInDataset from './CellExpressionInDataset';
-import DatasetsSelectedByGene from './DatasetsSelectedByGene';
+import DatasetsSelectedByExpression from './DatasetsSelectedByExpression';
 
 function About(props) {
   const { title, given, returns } = props;
@@ -44,11 +44,11 @@ function CellsAPIDemo(props) {
       <SearchBySubstring targetEntity="proteins" />
 
       <About
-        title="Datasets selected by gene"
+        title="Datasets selected by expression"
         given="a gene, a minimum expression level, and a minimum percentage of cells at that expression level"
         returns="a list of UUIDs for datasets which meet those minimums"
       />
-      <DatasetsSelectedByGene />
+      <DatasetsSelectedByExpression />
 
       <About
         title="Cell percentages for datasets"
