@@ -40,9 +40,13 @@ def _get_endpoints():
     }
 
 
+def _get_global_alert():
+    return current_app.config.get('GLOBAL_ALERT')
+
+
 @blueprint.route('/')
 def index():
-    flask_data = {'endpoints': _get_endpoints()}
+    flask_data = {'endpoints': _get_endpoints(), 'global_alert': _get_global_alert()}
     return render_template(
         'pages/base_react.html',
         types=entity_types,
@@ -54,7 +58,7 @@ def index():
 
 @blueprint.route('/services')
 def service_status():
-    flask_data = {'endpoints': _get_endpoints()}
+    flask_data = {'endpoints': _get_endpoints(), 'global_alert': _get_global_alert()}
     return render_template(
         'pages/base_react.html',
         types=entity_types,
@@ -109,7 +113,8 @@ def details(type, uuid):
         'endpoints': _get_endpoints(),
         'entity': entity,
         'vitessce_conf': conf_cells.conf,
-        'has_notebook': conf_cells.cells is not None
+        'has_notebook': conf_cells.cells is not None,
+        'global_alert': _get_global_alert()
     }
     return render_template(
         template,
@@ -189,13 +194,14 @@ def search():
     title = f'{entity_type}s' if entity_type else 'Search'
     flask_data = {
         'endpoints': _get_endpoints(),
-        'title': title
+        'title': title,
+        'global_alert': _get_global_alert()
     }
     return render_template(
         'pages/base_react.html',
         title=title,
         types=entity_types,
-        flask_data=flask_data
+        flask_data=flask_data,
     )
 
 
@@ -204,7 +210,8 @@ def dev_search():
     title = 'Dev Search'
     flask_data = {
         'endpoints': _get_endpoints(),
-        'title': title
+        'title': title,
+        'global_alert': _get_global_alert()
     }
     return render_template(
         'pages/base_react.html',
@@ -229,7 +236,8 @@ def preview_view(name):
             'created_by_user_email': preview_metadata['created_by_user_email'],
         },
         'vitessce_conf':
-            ('vitessce_conf' in preview_metadata) and preview_metadata['vitessce_conf']
+            ('vitessce_conf' in preview_metadata) and preview_metadata['vitessce_conf'],
+        'global_alert': _get_global_alert()
     }
     return render_template(
         'pages/base_react.html',
@@ -240,7 +248,7 @@ def preview_view(name):
 
 @blueprint.route('/collections')
 def collections():
-    flask_data = {'endpoints': _get_endpoints()}
+    flask_data = {'endpoints': _get_endpoints(), 'global_alert': _get_global_alert()}
     return render_template(
         'pages/base_react.html',
         title='Collections',
@@ -250,7 +258,7 @@ def collections():
 
 @blueprint.route('/my-lists')
 def my_lists():
-    flask_data = {'endpoints': _get_endpoints()}
+    flask_data = {'endpoints': _get_endpoints(), 'global_alert': _get_global_alert()}
     return render_template(
         'pages/base_react.html',
         title='My Lists',
@@ -260,7 +268,8 @@ def my_lists():
 
 @blueprint.route('/my-lists/<saved_list_uuid>')
 def list_page(saved_list_uuid):
-    flask_data = {'endpoints': _get_endpoints(), 'list_uuid': saved_list_uuid}
+    flask_data = {'endpoints': _get_endpoints(), 'list_uuid': saved_list_uuid,
+                  'global_alert': _get_global_alert()}
     return render_template(
         'pages/base_react.html',
         title='Saved List',

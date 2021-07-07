@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactGA from 'react-ga';
 
+import { Alert } from 'js/shared-styles/alerts';
+
 import PropTypes from 'prop-types';
 import Providers from './Providers';
 import Routes from './Routes';
@@ -22,6 +24,7 @@ function App(props) {
     errorCode,
     list_uuid,
     has_notebook,
+    global_alert,
   } = flaskData;
   ReactGA.initialize('UA-133341631-3');
 
@@ -29,6 +32,7 @@ function App(props) {
     // eslint-disable-next-line no-undef
     <Providers endpoints={endpoints} nexusToken={nexus_token}>
       <Header />
+      {global_alert && <Alert severity="warning">{global_alert}</Alert>}
       <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode, list_uuid, has_notebook }} />
       <Footer />
     </Providers>
