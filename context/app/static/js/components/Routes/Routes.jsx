@@ -83,6 +83,14 @@ function Routes(props) {
     );
   }
 
+  if (urlPath.startsWith('/cells-search')) {
+    return (
+      <Route>
+        <Search title={title} />
+      </Route>
+    );
+  }
+
   if (urlPath.startsWith('/dev-search')) {
     return (
       <Route>
