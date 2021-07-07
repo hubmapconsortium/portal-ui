@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 
+import { Alert } from 'js/shared-styles/alerts';
+
 import RouteLoader from '../RouteLoader';
 import useSendWebVitals from '../useSendWebVitals';
 import { StyledContainer, MainWrapper } from './style';
@@ -13,7 +15,10 @@ function Route({ children, disableWidthConstraint }) {
   return (
     <Suspense fallback={<RouteLoader />}>
       <MainWrapper>
-        <StyledContainer {...constrainWidthProps}>{children}</StyledContainer>
+        <StyledContainer {...constrainWidthProps}>
+          <Alert severity="warning">Hey!!!</Alert>
+          {children}
+        </StyledContainer>
       </MainWrapper>
     </Suspense>
   );
