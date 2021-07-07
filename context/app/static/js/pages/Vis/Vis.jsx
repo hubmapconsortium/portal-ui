@@ -33,7 +33,7 @@ import useSearchData from 'js/hooks/useSearchData';
 
  */
 
-const donorSexQuery = {
+const donorRaceQuery = {
   size: 0,
   query: {
     bool: {
@@ -55,14 +55,13 @@ const donorSexQuery = {
 
 // change to match the data
 const columns = [
-  { id: 'whie', label: 'White' },
+  { id: 'white', label: 'White' },
   { id: 'black', label: 'Black or African American' },
 ];
 
 function Vis() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-  // eslint-disable-next-line no-unused-vars
-  const { searchData } = useSearchData(donorSexQuery, elasticsearchEndpoint, nexusToken);
+  const { searchData } = useSearchData(donorRaceQuery, elasticsearchEndpoint, nexusToken);
 
   return (
     Object.keys(searchData).length && (

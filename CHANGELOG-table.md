@@ -1,1 +1,1 @@
-- I created a table about the donor's race.
+- Created a table about the donor's race.

@@ -209,6 +209,7 @@ def dev_search():
         flask_data=flask_data
     )
 
+
 @blueprint.route('/vis')
 def vis():
     title = 'Visualizations'
@@ -222,6 +223,7 @@ def vis():
         types=entity_types,
         flask_data=flask_data
     )
+
 
 @blueprint.route('/preview/<name>')
 def preview_view(name):
