@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { Default as DefaultCitation } from 'js/components/Detail/Citation/Citation.stories';
+import { Citation } from 'js/components/Detail/Citation/Citation.stories';
 import Summary from './Summary';
 import SummaryItem from '../SummaryItem';
 
@@ -78,7 +78,7 @@ DatasetDefault.args = {
   status: 'QA',
   mapped_data_access_level: 'Public',
   description: lorem,
-  ...DefaultCitation.args,
+  ...Citation.args,
 };
 
 export const CollectionDefault = ChildlessTemplate.bind({});
@@ -86,6 +86,6 @@ CollectionDefault.args = {
   ...sharedArgs,
   entity_type: 'Collection',
   description: lorem,
-  ...DefaultCitation.args,
+  ...Citation.args,
   collectionName: 'Fake Collection Name',
 };

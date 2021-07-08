@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Default as DefaultCitation } from 'js/components/Detail/Citation/Citation.stories';
+import { Citation } from 'js/components/Detail/Citation/Citation.stories';
 import SummaryBody from './SummaryBody';
 
 export default {
@@ -30,7 +30,7 @@ export const WithCitation = Template.bind({});
 WithCitation.args = {
   ...sharedArgs,
   description,
-  ...DefaultCitation.args,
+  ...Citation.args,
 };
 
 export const WithCollectionName = Template.bind({});
