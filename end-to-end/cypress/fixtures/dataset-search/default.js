@@ -178,7 +178,7 @@ Request body:
   sort: [{ "mapped_last_modified_timestamp.keyword": "desc" }],
   highlight: { fields: { everything: { type: "plain" } } },
   _source: [
-    "display_doi",
+    "hubmap_id",
     "group_name",
     "mapped_data_types",
     "origin_sample.mapped_organ",
@@ -393,7 +393,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM464.GFFC.829",
+          hubmap_id: "HBM464.GFFC.829",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568280411,
           mapped_data_types: ["PAS Stained Microscopy [Image Pyramid]"],
@@ -410,7 +410,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM385.RWPR.397",
+          hubmap_id: "HBM385.RWPR.397",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568280105,
           mapped_data_types: ["PAS Stained Microscopy [Image Pyramid]"],
@@ -427,7 +427,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM977.QSQZ.334",
+          hubmap_id: "HBM977.QSQZ.334",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568279485,
           mapped_data_types: ["PAS Stained Microscopy [Image Pyramid]"],
@@ -444,7 +444,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM927.TLPG.546",
+          hubmap_id: "HBM927.TLPG.546",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568279808,
           mapped_data_types: ["PAS Stained Microscopy [Image Pyramid]"],
@@ -461,7 +461,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM227.QKNQ.293",
+          hubmap_id: "HBM227.QKNQ.293",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568279166,
           mapped_data_types: ["PAS Stained Microscopy [Image Pyramid]"],
@@ -478,7 +478,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM776.CRXP.464",
+          hubmap_id: "HBM776.CRXP.464",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568278842,
           mapped_data_types: ["PAS Stained Microscopy [Image Pyramid]"],
@@ -495,7 +495,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM667.HKTF.584",
+          hubmap_id: "HBM667.HKTF.584",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568278542,
           mapped_data_types: ["PAS Stained Microscopy [Image Pyramid]"],
@@ -512,7 +512,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM282.MTGK.779",
+          hubmap_id: "HBM282.MTGK.779",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568278243,
           mapped_data_types: ["PAS Stained Microscopy [Image Pyramid]"],
@@ -530,7 +530,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 1 } },
-          display_doi: "HBM623.RPMC.638",
+          hubmap_id: "HBM623.RPMC.638",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568277650,
           mapped_data_types: ["PAS Stained Microscopy"],
@@ -547,7 +547,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM676.TDHK.358",
+          hubmap_id: "HBM676.TDHK.358",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568277947,
           mapped_data_types: ["PAS Stained Microscopy [Image Pyramid]"],
@@ -565,7 +565,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 1 } },
-          display_doi: "HBM636.ZPTS.368",
+          hubmap_id: "HBM636.ZPTS.368",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568277036,
           mapped_data_types: ["PAS Stained Microscopy"],
@@ -583,7 +583,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 1 } },
-          display_doi: "HBM636.GVWP.354",
+          hubmap_id: "HBM636.GVWP.354",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568276310,
           mapped_data_types: ["PAS Stained Microscopy"],
@@ -601,7 +601,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 1 } },
-          display_doi: "HBM833.DBGG.252",
+          hubmap_id: "HBM833.DBGG.252",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568275054,
           mapped_data_types: ["PAS Stained Microscopy"],
@@ -619,7 +619,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 1 } },
-          display_doi: "HBM676.SNVK.793",
+          hubmap_id: "HBM676.SNVK.793",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568275672,
           mapped_data_types: ["PAS Stained Microscopy"],
@@ -637,7 +637,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 1 } },
-          display_doi: "HBM276.PGFS.693",
+          hubmap_id: "HBM276.PGFS.693",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568274400,
           mapped_data_types: ["PAS Stained Microscopy"],
@@ -655,7 +655,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 1 } },
-          display_doi: "HBM875.QHDJ.259",
+          hubmap_id: "HBM875.QHDJ.259",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568273059,
           mapped_data_types: ["PAS Stained Microscopy"],
@@ -673,7 +673,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 1 } },
-          display_doi: "HBM783.GJWP.694",
+          hubmap_id: "HBM783.GJWP.694",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568273751,
           mapped_data_types: ["PAS Stained Microscopy"],
@@ -691,7 +691,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 1 } },
-          display_doi: "HBM879.CDHB.995",
+          hubmap_id: "HBM879.CDHB.995",
           group_name: "Vanderbilt TMC",
           last_modified_timestamp: 1603568272470,
           mapped_data_types: ["PAS Stained Microscopy"],

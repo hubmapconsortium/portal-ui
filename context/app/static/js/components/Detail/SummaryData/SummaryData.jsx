@@ -21,7 +21,7 @@ function SummaryData(props) {
     uuid,
     status,
     mapped_data_access_level,
-    display_doi,
+    hubmap_id,
     group_name,
     entityCanBeSaved,
     children,
@@ -49,7 +49,7 @@ function SummaryData(props) {
       <SpacedSectionButtonRow
         leftText={
           <div>
-            <StyledTypography variant="h2">{display_doi}</StyledTypography>
+            <StyledTypography variant="h2">{hubmap_id}</StyledTypography>
             {children && <FlexEnd data-testid="summary-data-parent">{children}</FlexEnd>}
           </div>
         }
@@ -72,7 +72,7 @@ function SummaryData(props) {
                   uuid={uuid}
                   entity_type={entity_type}
                   group_name={group_name}
-                  display_doi={display_doi}
+                  hubmap_id={hubmap_id}
                 />
               )}
             </FlexEnd>
@@ -84,7 +84,7 @@ function SummaryData(props) {
 }
 
 SummaryData.propTypes = {
-  display_doi: PropTypes.string.isRequired,
+  hubmap_id: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,

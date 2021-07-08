@@ -7,7 +7,7 @@ import { setupServer } from 'msw/node';
 import GlobusLink from './GlobusLink';
 
 const uuid = 'fakeuuid';
-const display_doi = 'fakedoi';
+const hubmap_id = 'fakedoi';
 
 const globusUrlResponse = {
   url: 'fakeglobusurl',
@@ -24,7 +24,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test('displays progress bar when loading and success icon with 200 response', async () => {
-  render(<GlobusLink uuid={uuid} display_doi={display_doi} />);
+  render(<GlobusLink uuid={uuid} hubmap_id={hubmap_id} />);
 
   expect(screen.getByRole('progressbar')).toBeInTheDocument();
   await screen.findByText('Bulk Data Transfer');
@@ -38,7 +38,7 @@ test('displays info icon with 500 response', async () => {
     }),
   );
 
-  render(<GlobusLink uuid={uuid} display_doi={display_doi} />);
+  render(<GlobusLink uuid={uuid} hubmap_id={hubmap_id} />);
 
   await screen.findByText('Bulk Data Transfer');
   expect(screen.getByTestId('error-icon')).toBeInTheDocument();

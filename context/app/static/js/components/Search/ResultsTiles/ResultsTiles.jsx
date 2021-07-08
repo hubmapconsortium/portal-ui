@@ -19,7 +19,7 @@ function ResultsTiles(props) {
           key={hit._source.uuid}
           entity_type={capitalizedType}
           uuid={hit._source.uuid}
-          id={hit._source.display_doi}
+          id={hit._source.hubmap_id}
           entityData={hit._source}
           descendantCounts={getTileDescendantCounts(hit._source, capitalizedType)}
         />

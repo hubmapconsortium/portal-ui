@@ -115,7 +115,7 @@ def details(type, uuid):
         template,
         type=type,
         uuid=uuid,
-        title=f'{entity["display_doi"]} | {type.title()}',
+        title=f'{entity["hubmap_id"]} | {type.title()}',
         flask_data=flask_data
     )
 
@@ -143,7 +143,7 @@ def details_notebook(type, uuid):
     nb = new_notebook()
     nb['cells'] = [
         new_markdown_cell(f"""
-Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','')})
+Visualization for [{entity['hubmap_id']}]({request.base_url.replace('.ipynb','')})
         """.strip()),
         new_code_cell("""
 !pip install vitessce==0.1.0a9
@@ -156,7 +156,7 @@ Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','
     ]
     return Response(
         response=nbformat.writes(nb),
-        headers={'Content-Disposition': f"attachment; filename={entity['display_doi']}.ipynb"},
+        headers={'Content-Disposition': f"attachment; filename={entity['hubmap_id']}.ipynb"},
         mimetype='application/x-ipynb+json'
     )
 

@@ -65,7 +65,7 @@ test('handles DUA flow', async () => {
 
   render(
     <DetailProvider>
-      <Files files={testFiles} uuid={uuid} display_doi="fakedoi" />
+      <Files files={testFiles} uuid={uuid} hubmap_id="fakedoi" />
     </DetailProvider>,
   );
 
@@ -86,7 +86,7 @@ test('handles DUA flow', async () => {
 test('does not display file browser when files prop is undefined', async () => {
   render(
     <DetailProvider>
-      <Files uuid={uuid} display_doi="fakedoi" />
+      <Files uuid={uuid} hubmap_id="fakedoi" />
     </DetailProvider>,
   );
 

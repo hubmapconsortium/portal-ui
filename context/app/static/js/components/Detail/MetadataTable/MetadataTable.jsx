@@ -38,7 +38,7 @@ function tableDataToRows(tableData) {
 }
 
 function MetadataTable(props) {
-  const { metadata: tableData, display_doi } = props;
+  const { metadata: tableData, hubmap_id } = props;
 
   const columns = [
     { id: 'key', label: 'Key' },
@@ -61,7 +61,7 @@ function MetadataTable(props) {
       <Flex>
         <StyledSectionHeader>Metadata</StyledSectionHeader>
         <SecondaryBackgroundTooltip title="Download">
-          <StyledWhiteBackgroundIconButton href={downloadUrl} download={`${display_doi}.tsv`}>
+          <StyledWhiteBackgroundIconButton href={downloadUrl} download={`${hubmap_id}.tsv`}>
             <DownloadIcon color="primary" />
           </StyledWhiteBackgroundIconButton>
         </SecondaryBackgroundTooltip>
@@ -105,7 +105,7 @@ MetadataTable.propTypes = {
       [PropTypes.string, PropTypes.object],
     ),
   ).isRequired,
-  display_doi: PropTypes.string.isRequired,
+  hubmap_id: PropTypes.string.isRequired,
 };
 
 export default MetadataTable;

@@ -18,7 +18,7 @@ function CollectionDatasetsTable(props) {
   const { datasets } = props;
 
   const columns = [
-    { id: 'display_doi', label: 'HuBMAP ID' },
+    { id: 'hubmap_id', label: 'HuBMAP ID' },
     { id: 'organ', label: 'Organ' },
     { id: 'data_types', label: 'Assay Types' },
     { id: 'last_modified_timestamp', label: 'Last Modified' },
@@ -44,10 +44,10 @@ function CollectionDatasetsTable(props) {
             </TableHead>
             <TableBody>
               {datasets.map((dataset) => (
-                <TableRow key={dataset.display_doi}>
+                <TableRow key={dataset.hubmap_id}>
                   <TableCell>
                     <StyledLink href={`/browse/dataset/${dataset.uuid}`} variant="body2">
-                      {dataset.display_doi}
+                      {dataset.hubmap_id}
                     </StyledLink>
                   </TableCell>
                   <TableCell />

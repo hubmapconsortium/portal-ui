@@ -15,13 +15,13 @@ const messages = {
 };
 
 function GlobusLinkMessage(props) {
-  const { statusCode, url, display_doi } = props;
+  const { statusCode, url, hubmap_id } = props;
   const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
 
   if (statusCode === 200) {
     return (
       <Typography variant="body2">
-        {`Files are available through the Globus Research Data Management System. Access dataset ${display_doi} on `}
+        {`Files are available through the Globus Research Data Management System. Access dataset ${hubmap_id} on `}
         <FilesConditionalLink href={url} hasAgreedToDUA={hasAgreedToDUA} openDUA={() => openDUA(url)} variant="body2">
           Globus <StyledExternalLinkIcon />
         </FilesConditionalLink>
@@ -56,12 +56,12 @@ function GlobusLinkMessage(props) {
 GlobusLinkMessage.propTypes = {
   statusCode: PropTypes.number.isRequired,
   url: PropTypes.string,
-  display_doi: PropTypes.string,
+  hubmap_id: PropTypes.string,
 };
 
 GlobusLinkMessage.defaultProps = {
   url: '',
-  display_doi: '',
+  hubmap_id: '',
 };
 
 export default GlobusLinkMessage;

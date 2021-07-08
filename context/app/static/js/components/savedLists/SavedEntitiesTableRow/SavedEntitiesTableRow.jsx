@@ -9,14 +9,14 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 function SavedEntitiesTableRow({ uuid, rowData, index, isSelected, addToSelectedRows, removeFromSelectedRows }) {
   const handleClick = isSelected ? removeFromSelectedRows : addToSelectedRows;
 
-  const { display_doi, group_name, entity_type, dateSaved, dateAddedToList } = rowData;
+  const { hubmap_id, group_name, entity_type, dateSaved, dateAddedToList } = rowData;
   return (
     <TableRow>
       <TableCell padding="checkbox" onClick={() => handleClick(uuid)}>
         <Checkbox checked={isSelected} inputProps={{ 'aria-labelledby': `saved-entities-row-${index}-checkbox` }} />
       </TableCell>
       <TableCell>
-        <LightBlueLink href={`/browse/${display_doi}`}>{display_doi}</LightBlueLink>
+        <LightBlueLink href={`/browse/${hubmap_id}`}>{hubmap_id}</LightBlueLink>
       </TableCell>
       <TableCell>{group_name}</TableCell>
       <TableCell>{entity_type}</TableCell>

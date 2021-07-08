@@ -27,7 +27,7 @@ function DevSearch() {
     resultFields: {
       table: [
         field('entity_type', 'type'),
-        field('display_doi', 'ID'),
+        field('hubmap_id', 'ID'),
         field('mapped_last_modified_timestamp', 'Last Modified'),
         field('mapper_metadata.size', 'Doc Size'),
       ],

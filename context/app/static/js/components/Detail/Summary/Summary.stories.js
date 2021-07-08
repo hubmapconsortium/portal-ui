@@ -17,7 +17,7 @@ const sharedArgs = {
   uuid: 'fakeuuid',
   create_timestamp: Date.now(),
   last_modified_timestamp: Date.now(),
-  display_doi: 'DOI123',
+  hubmap_id: 'DOI123',
 };
 
 const donorSharedArgs = {

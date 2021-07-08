@@ -10,7 +10,7 @@ import { StyledTypography, CenteredDiv, MarginTopDiv, Flex, StyledErrorIcon, Sty
 import GlobusLinkMessage from '../GlobusLinkMessage';
 
 function GlobusLink(props) {
-  const { uuid, display_doi } = props;
+  const { uuid, hubmap_id } = props;
   const [isLoading, setIsLoading] = React.useState(true);
   const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: '', statusCode: null });
 
@@ -59,7 +59,7 @@ function GlobusLink(props) {
           )}
           <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
         </Flex>
-        <GlobusLinkMessage statusCode={statusCode} url={url} display_doi={display_doi} />
+        <GlobusLinkMessage statusCode={statusCode} url={url} hubmap_id={hubmap_id} />
       </DetailSectionPaper>
     </MarginTopDiv>
   );
@@ -67,7 +67,7 @@ function GlobusLink(props) {
 
 GlobusLink.propTypes = {
   uuid: PropTypes.string.isRequired,
-  display_doi: PropTypes.string.isRequired,
+  hubmap_id: PropTypes.string.isRequired,
 };
 
 export default GlobusLink;

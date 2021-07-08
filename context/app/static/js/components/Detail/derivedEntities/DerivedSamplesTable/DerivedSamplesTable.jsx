@@ -22,17 +22,17 @@ function DerivedSamplesTable({ entities }) {
         ({
           _source: {
             uuid: entityUUID,
-            display_doi,
+            hubmap_id,
             origin_sample,
             mapped_specimen_type,
             descendant_counts,
             last_modified_timestamp,
           },
         }) => (
-          <TableRow key={display_doi}>
+          <TableRow key={hubmap_id}>
             <TableCell>
               <LightBlueLink href={`/browse/sample/${entityUUID}`} variant="body2">
-                {display_doi}
+                {hubmap_id}
               </LightBlueLink>
             </TableCell>
             <TableCell>{origin_sample?.mapped_organ}</TableCell>

@@ -3,10 +3,16 @@ import React from 'react';
 import { render, screen } from 'test-utils/functions';
 import Summary from './Summary';
 
+test('displays correctly with required props', () => {
+  const { getByText } = render(<Summary hubmap_id="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
+  const textToTest = ['fakedoi', 'Fakeentity'];
+  textToTest.forEach((text) => expect(getByText(text)).toBeInTheDocument());
+});
+
 test('timestamps display when defined', () => {
   render(
     <Summary
-      display_doi="fakedoi"
+      hubmap_id="fakedoi"
       entity_type="Fakeentity"
       uuid="fakeuuid"
       created_timestamp={1596724856094}
@@ -21,7 +27,7 @@ test('timestamps display when defined', () => {
 });
 
 test('timestamps do not display when undefined', () => {
-  render(<Summary display_doi="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
+  render(<Summary hubmap_id="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
 
   const textToTest = ['Creation Date', 'Modification Date'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
@@ -31,26 +37,26 @@ test('timestamps do not display when undefined', () => {
 
 test('collection name displays when defined', () => {
   render(
-    <Summary display_doi="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" collectionName="Fake Collection Name" />,
+    <Summary hubmap_id="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" collectionName="Fake Collection Name" />,
   );
 
   expect(screen.getByText('Fake Collection Name')).toBeInTheDocument();
 });
 
 test('collection name does not display when undefined', () => {
-  render(<Summary display_doi="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
+  render(<Summary hubmap_id="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
 
   expect(screen.queryByText('Fake Collection Name')).toBeNull();
 });
 
 test('description displays when defined', () => {
-  render(<Summary display_doi="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" description="fake description" />);
+  render(<Summary hubmap_id="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" description="fake description" />);
 
   expect(screen.getByText('fake description')).toBeInTheDocument();
 });
 
 test('description name does not display when undefined', () => {
-  render(<Summary display_doi="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
+  render(<Summary hubmap_id="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
 
   expect(screen.queryByText('fake description')).toBeNull();
 });

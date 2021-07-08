@@ -7,7 +7,7 @@ import SummaryBody from '../SummaryBody';
 
 function Summary(props) {
   const {
-    display_doi,
+    hubmap_id,
     entity_type,
     created_timestamp,
     last_modified_timestamp,
@@ -30,7 +30,7 @@ function Summary(props) {
         entity_type={entity_type}
         uuid={uuid}
         status={status}
-        display_doi={display_doi}
+        hubmap_id={hubmap_id}
         mapped_data_access_level={mapped_data_access_level}
         group_name={group_name}
         entityCanBeSaved={entityCanBeSaved}
@@ -52,7 +52,7 @@ function Summary(props) {
 }
 
 Summary.propTypes = {
-  display_doi: PropTypes.string.isRequired,
+  hubmap_id: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
   created_timestamp: PropTypes.number,

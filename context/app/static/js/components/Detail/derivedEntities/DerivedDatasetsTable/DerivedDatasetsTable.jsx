@@ -22,17 +22,17 @@ function DerivedDatasetsTable({ entities }) {
         ({
           _source: {
             uuid: entityUUID,
-            display_doi,
+            hubmap_id,
             mapped_data_types,
             status,
             descendant_counts,
             last_modified_timestamp,
           },
         }) => (
-          <TableRow key={display_doi}>
+          <TableRow key={hubmap_id}>
             <TableCell>
               <LightBlueLink href={`/browse/dataset/${entityUUID}`} variant="body2">
-                {display_doi}
+                {hubmap_id}
               </LightBlueLink>
             </TableCell>
             <TableCell>{mapped_data_types}</TableCell>

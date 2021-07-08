@@ -8,13 +8,13 @@ function SearchNote({ entity, label }) {
   let message = '...';
 
   if (entity) {
-    const { entity_type, uuid, display_doi } = entity;
+    const { entity_type, uuid, hubmap_id } = entity;
     const lcType = entity_type.toLowerCase();
     const dataTypes = (entity?.mapped_data_types || []).join('/');
     message = (
       <>
         {`${label} ${dataTypes} ${lcType} `}
-        <LightBlueLink href={`/browse/${lcType}/${uuid}`}>{display_doi}</LightBlueLink>
+        <LightBlueLink href={`/browse/${lcType}/${uuid}`}>{hubmap_id}</LightBlueLink>
       </>
     );
   }
@@ -25,7 +25,7 @@ SearchNote.propTypes = {
   entity: PropTypes.shape({
     uuid: PropTypes.string.isRequired,
     entity_type: PropTypes.string.isRequired,
-    display_doi: PropTypes.string.isRequired,
+    hubmap_id: PropTypes.string.isRequired,
   }),
 };
 

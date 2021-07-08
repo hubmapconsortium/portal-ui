@@ -28,7 +28,7 @@ function SampleDetail(props) {
     group_name,
     created_by_user_displayname,
     created_by_user_email,
-    display_doi,
+    hubmap_id,
     entity_type,
     created_timestamp,
     last_modified_timestamp,
@@ -54,20 +54,20 @@ function SampleDetail(props) {
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
   useEffect(() => {
-    setAssayMetadata({ display_doi, entity_type, mapped_organ, mapped_specimen_type });
-  }, [setAssayMetadata, display_doi, entity_type, mapped_organ, mapped_specimen_type]);
+    setAssayMetadata({ hubmap_id, entity_type, mapped_organ, mapped_specimen_type });
+  }, [setAssayMetadata, hubmap_id, entity_type, mapped_organ, mapped_specimen_type]);
 
   useSendUUIDEvent(entity_type, uuid);
 
   const hasRUI = Boolean(rui_location);
 
   return (
-    <DetailContext.Provider value={{ display_doi, uuid }}>
+    <DetailContext.Provider value={{ hubmap_id, uuid }}>
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}
           entity_type={entity_type}
-          display_doi={display_doi}
+          hubmap_id={hubmap_id}
           created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}
@@ -94,7 +94,7 @@ function SampleDetail(props) {
         />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata} display_doi={display_doi} />}
+        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata} hubmap_id={hubmap_id} />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
