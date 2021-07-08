@@ -1,15 +1,14 @@
 import React from 'react';
 
-import Citation from './Citation';
+import CitationComponent from './Citation';
 
 export default {
   title: 'EntityDetail/Citation',
-  component: Citation,
+  component: CitationComponent,
 };
 
-const Template = (args) => <Citation {...args} />;
-export const Default = Template.bind({});
-Default.args = {
+export const Citation = (args) => <CitationComponent {...args} />;
+Citation.args = {
   contributors: [
     { last_name: 'Aanders', first_name: 'Aanne' },
     { last_name: 'Banders', first_name: 'Banne' },

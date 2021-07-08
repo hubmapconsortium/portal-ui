@@ -13,10 +13,9 @@ export default {
   },
 };
 
-const Template = (args) => <Alert {...args} />;
-
-export const Default = Template.bind({});
-Default.args = {
+export const OutlinedAlert = (args) => <Alert {...args} />;
+OutlinedAlert.args = {
   severity: 'warning',
   children: 'Alert, intruders!',
 };
+OutlinedAlert.storyName = 'OutlinedAlert'; // needed for single story hoisting for multi word component names
