@@ -72,7 +72,7 @@ function SummaryData(props) {
                   uuid={uuid}
                   entity_type={entity_type}
                   group_name={group_name}
-                  display_doi={display_doi}
+                  hubmap_id={hubmap_id}
                 />
               )}
             </FlexEnd>
@@ -84,7 +84,7 @@ function SummaryData(props) {
 }
 
 SummaryData.propTypes = {
-  display_doi: PropTypes.string.isRequired,
+  hubmap_id: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
