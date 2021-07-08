@@ -3,12 +3,6 @@ import React from 'react';
 import { render, screen } from 'test-utils/functions';
 import Summary from './Summary';
 
-test('displays correctly with required props', () => {
-  const { getByText } = render(<Summary display_doi="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
-  const textToTest = ['fakedoi', 'Fakeentity'];
-  textToTest.forEach((text) => expect(getByText(text)).toBeInTheDocument());
-});
-
 test('timestamps display when defined', () => {
   render(
     <Summary
@@ -22,7 +16,7 @@ test('timestamps display when defined', () => {
   const textToTest = ['Creation Date', 'Modification Date'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 
-  expect(screen.getAllByText('August 06, 2020')).toHaveLength(2);
+  expect(screen.getAllByText('2020-08-06')).toHaveLength(2);
   expect(screen.queryAllByText('Undefined')).toHaveLength(0);
 });
 

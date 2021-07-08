@@ -1,1 +1,0 @@
-- Reference bookmarklet in QA instructions.

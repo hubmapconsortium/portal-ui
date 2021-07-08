@@ -42,7 +42,7 @@ Tuesday/Thursday afternoon:
 *   HuBMAP ID (table view) and tiles (tile view) should link to the correct detail page.
 *   Sorting in header row (table view) and dropdown (tile view) should work.
 *   Logging in should result in additional data with updated facets in the status section of the sidebar.
-*   The tutorial is usually only shown once to a user on the site: To reset, save this bookmarklet code: `javascript:(function(){localStorage.removeItem('has_exited_dataset_search_tutorial');})()`
+*   The tutorial is usually only shown once to a user on the site: To clear local storage, use this bookmarklet code: `javascript:(function(){localStorage.clear()})()`
 *   [Dev Search](https://portal-prod.stage.hubmapconsortium.org/dev-search) should load without error.
 
 ### Detail Pages

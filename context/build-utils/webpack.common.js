@@ -1,6 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
+
 const { resolve } = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { alias } = require('./alias');
 
 const config = {
   entry: { main: './app/static/js/index.jsx' },
@@ -21,13 +23,7 @@ const config = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml', '.json'],
-    alias: {
-      'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
-      js: resolve(__dirname, '../app/static/js/'),
-      'portal-images': resolve(__dirname, '../app/static/portal-images/'),
-      'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
-      package: resolve(__dirname, '../package.json'),
-    },
+    alias,
   },
   module: {
     rules: [
