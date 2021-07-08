@@ -3,7 +3,8 @@ const {aliases} = require('../build-utils/aliases');
 
 module.exports = {
   "stories": [
-    '../app/static/js/shared-styles/**/*.stories.js'
+    '../app/static/js/shared-styles/**/*.stories.js',
+    '../app/static/js/components/**/*.stories.js'
   ],
   "addons": [
     "@storybook/addon-links",
