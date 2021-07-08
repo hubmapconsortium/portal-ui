@@ -32,7 +32,7 @@ function ProvTable(props) {
               <FlexColumn>
                 {type.length > 0 ? (
                   type
-                    .sort((a, b) => a.create_timestamp - b.create_timestamp)
+                    .sort((a, b) => a.created_timestamp - b.created_timestamp)
                     .map((item, j) => (
                       <ProvTableTile
                         key={item.uuid}

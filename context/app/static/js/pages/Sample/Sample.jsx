@@ -30,7 +30,7 @@ function SampleDetail(props) {
     created_by_user_email,
     display_doi,
     entity_type,
-    create_timestamp,
+    created_timestamp,
     last_modified_timestamp,
     description,
     metadata,
@@ -68,7 +68,7 @@ function SampleDetail(props) {
           uuid={uuid}
           entity_type={entity_type}
           display_doi={display_doi}
-          create_timestamp={create_timestamp}
+          created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}
           group_name={group_name}

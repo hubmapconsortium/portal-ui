@@ -9,7 +9,7 @@ function Summary(props) {
   const {
     display_doi,
     entity_type,
-    create_timestamp,
+    created_timestamp,
     last_modified_timestamp,
     uuid,
     description,
@@ -42,7 +42,7 @@ function Summary(props) {
         contributors={contributors}
         citationTitle={citationTitle}
         last_modified_timestamp={last_modified_timestamp}
-        create_timestamp={create_timestamp}
+        create_timestamp={created_timestamp}
         doi_url={doi_url}
         doi={doi}
         collectionName={collectionName}
@@ -55,7 +55,7 @@ Summary.propTypes = {
   display_doi: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
-  create_timestamp: PropTypes.number,
+  created_timestamp: PropTypes.number,
   last_modified_timestamp: PropTypes.number,
   description: PropTypes.string,
   status: PropTypes.string,
@@ -65,7 +65,7 @@ Summary.propTypes = {
 };
 
 Summary.defaultProps = {
-  create_timestamp: undefined,
+  created_timestamp: undefined,
   last_modified_timestamp: undefined,
   description: '',
   status: '',
