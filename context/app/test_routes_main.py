@@ -93,7 +93,7 @@ def mock_search_donor_post(path, **kwargs):
 @pytest.mark.parametrize(
     'path',
     ['/', '/browse/donor/fake-uuid', '/ccf-eui',
-     '/docs', '/preview/multimodal-molecular-imaging-data']
+     '/docs/technical', '/preview/multimodal-molecular-imaging-data']
 )
 def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_prov_get)
@@ -105,9 +105,9 @@ def test_200_html_page(client, path, mocker):
 
 @pytest.mark.parametrize(
     'path',
-    ['/browse/sample/fake-uuid', '/browse/dataset/fake-uuid']
+    ['/browse/sample/fake-uuid', '/browse/dataset/fake-uuid', '/docs']
 )
-def test_302_details_page(client, path, mocker):
+def test_302_redirect(client, path, mocker):
     mocker.patch('requests.post', side_effect=mock_search_donor_post)
     response = client.get(path)
     assert response.status == '302 FOUND'

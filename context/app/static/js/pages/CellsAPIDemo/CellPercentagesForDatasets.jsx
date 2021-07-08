@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import ResultsTable from './ResultsTable';
+import CellsService from './CellsService';
 
 // eslint-disable-next-line no-unused-vars
 function CellPercentagesForDatasets(props) {
@@ -16,22 +17,15 @@ function CellPercentagesForDatasets(props) {
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
-    const urlParams = new URLSearchParams();
-    uuids.split(',').forEach((uuid) => {
-      urlParams.append('uuid', uuid);
-    });
-    urlParams.append('gene_name', geneName);
-    urlParams.append('min_gene_expression', minGeneExpression);
-
-    const firstResponse = await fetch(`/cells/cell-percentages-for-datasets.json?${urlParams}`, {
-      method: 'POST',
-    });
-    const responseJson = await firstResponse.json();
-    if ('message' in responseJson) {
-      setMessage(responseJson.message);
-    }
-    if ('results' in responseJson) {
-      setResults(responseJson.results);
+    try {
+      const serviceResults = await new CellsService().getCellPercentagesForDatasets({
+        uuids: uuids.split(','),
+        geneName,
+        minGeneExpression,
+      });
+      setResults(serviceResults);
+    } catch (e) {
+      setMessage(e.message);
     }
   }
 

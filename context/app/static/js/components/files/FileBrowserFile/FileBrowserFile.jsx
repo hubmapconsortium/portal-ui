@@ -34,9 +34,11 @@ function FileBrowserFile(props) {
           >
             {fileObj.file}
           </FilesConditionalLink>
-          <SecondaryBackgroundTooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`}>
-            <StyledInfoIcon color="primary" />
-          </SecondaryBackgroundTooltip>
+          {fileObj.description && (
+            <SecondaryBackgroundTooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`}>
+              <StyledInfoIcon color="primary" />
+            </SecondaryBackgroundTooltip>
+          )}
         </IndentedDiv>
       </td>
       <td>{fileObj?.is_qa_qc ? <QaChip label="QA" variant="outlined" /> : null}</td>

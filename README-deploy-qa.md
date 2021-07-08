@@ -25,7 +25,7 @@ Tuesday/Thursday afternoon:
 
 ## QA
 
-- For QA, use the [STAGE instance configured to hit the PROD APIs](https://portal-prod.stage.hubmapconsortium.org/services), and always begin by confirming on the status page that is using the PROD APIs.
+- For QA, use the [STAGE instance configured to hit the PROD APIs](https://portal-prod.stage.hubmapconsortium.org), and always begin by confirming on the [services page](https://portal.stage.hubmapconsortium.org/services) that it is using the PROD APIs.
 - It’s helpful to have the console and networking tabs open: To see both at the same time, bring up Network, and then hit “esc”.
 
 ### Home Page
@@ -42,7 +42,7 @@ Tuesday/Thursday afternoon:
 *   HuBMAP ID (table view) and tiles (tile view) should link to the correct detail page.
 *   Sorting in header row (table view) and dropdown (tile view) should work.
 *   Logging in should result in additional data with updated facets in the status section of the sidebar.
-*   If needed delete `has_exited_dataset_search_tutorial`  in local storage to begin the search tutorial. The search tutorial should traverse its steps beginning to end. (Dataset search page only).
+*   The tutorial is usually only shown once to a user on the site: To clear local storage, use this bookmarklet code: `javascript:(function(){localStorage.clear()})()`
 *   [Dev Search](https://portal-prod.stage.hubmapconsortium.org/dev-search) should load without error.
 
 ### Detail Pages

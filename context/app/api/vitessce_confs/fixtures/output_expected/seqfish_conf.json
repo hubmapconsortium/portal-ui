@@ -67,6 +67,9 @@
       },
       {
         "component": "layerController",
+        "props": {
+          "disable3d": ["HybCycle_12", "final_mRNA_background"]
+        },
         "coordinationScopes": {
           "dataset": "A"
         },
@@ -146,6 +149,9 @@
       },
       {
         "component": "layerController",
+        "props": {
+          "disable3d": ["HybCycle_12", "final_mRNA_background"]
+        },
         "coordinationScopes": {
           "dataset": "A"
         },

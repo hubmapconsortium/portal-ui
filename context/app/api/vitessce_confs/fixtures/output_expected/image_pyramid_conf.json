@@ -57,6 +57,9 @@
     },
     {
       "component": "layerController",
+      "props": {
+        "disable3d": []
+      },
       "coordinationScopes": {
         "dataset": "A"
       },

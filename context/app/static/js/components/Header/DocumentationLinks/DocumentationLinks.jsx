@@ -7,11 +7,8 @@ function DocumentationLinks(props) {
   const { isIndented } = props;
   return (
     <>
-      <DropdownLink href="/docs" isIndented={isIndented}>
-        Overview
-      </DropdownLink>
-      <DropdownLink href="/docs/software" isIndented={isIndented}>
-        Software
+      <DropdownLink href="/docs/technical" isIndented={isIndented}>
+        Technical
       </DropdownLink>
       <DropdownLink href="/docs/faq" isIndented={isIndented}>
         FAQ

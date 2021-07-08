@@ -91,7 +91,7 @@
                                 "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/expressions/reg1_stitched_expressions.ome.tiff?token=nexus_token",
                                 "metadata": {
                                     "isBitmask": false,
-                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg1_stitched_expressions.offsets.json?token=nexus_token"
+                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/expressions/reg1_stitched_expressions.offsets.json?token=nexus_token"
                                 }
                             },
                             {
@@ -100,7 +100,7 @@
                               "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/mask/reg1_stitched_mask.ome.tiff?token=nexus_token",
                               "metadata": {
                                 "isBitmask": true,
-                                "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg1_stitched_mask.offsets.json?token=nexus_token"
+                                "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/mask/reg1_stitched_mask.offsets.json?token=nexus_token"
                               }
                             }
                         ]
@@ -273,7 +273,7 @@
                                 "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/expressions/reg2_stitched_expressions.ome.tiff?token=nexus_token",
                                 "metadata": {
                                     "isBitmask": false,
-                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg2_stitched_expressions.offsets.json?token=nexus_token"
+                                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/expressions/reg2_stitched_expressions.offsets.json?token=nexus_token"
                                 }
                             },
                             {
@@ -282,7 +282,7 @@
                               "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/mask/reg2_stitched_mask.ome.tiff?token=nexus_token",
                               "metadata": {
                                 "isBitmask": true,
-                                "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/reg2_stitched_mask.offsets.json?token=nexus_token"
+                                "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/mask/reg2_stitched_mask.offsets.json?token=nexus_token"
                               }
                             }
                         ]

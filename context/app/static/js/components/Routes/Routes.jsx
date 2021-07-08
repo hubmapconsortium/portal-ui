@@ -12,7 +12,9 @@ const Sample = lazy(() => import('js/pages/Sample'));
 const Collection = lazy(() => import('js/pages/Collection'));
 const Home = lazy(() => import('js/pages/Home/Home'));
 const Search = lazy(() => import('js/pages/search/Search'));
+const CellsSearch = lazy(() => import('js/pages/search/CellsSearch'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
+const Vis = lazy(() => import('js/pages/Vis'));
 const Preview = lazy(() => import('js/pages/Preview'));
 const Services = lazy(() => import('js/pages/Services'));
 const Collections = lazy(() => import('js/pages/Collections'));
@@ -83,6 +85,14 @@ function Routes(props) {
     );
   }
 
+  if (urlPath.startsWith('/cells-search')) {
+    return (
+      <Route>
+        <CellsSearch title={title} />
+      </Route>
+    );
+  }
+
   if (urlPath.startsWith('/dev-search')) {
     return (
       <Route>
@@ -91,6 +101,14 @@ function Routes(props) {
     );
   }
   /* eslint-enable no-undef */
+
+  if (urlPath.startsWith('/vis')) {
+    return (
+      <Route>
+        <Vis />
+      </Route>
+    );
+  }
 
   if (urlPath.startsWith('/preview')) {
     return (
@@ -162,6 +180,7 @@ Routes.propTypes = {
     collection: PropTypes.object,
     errorCode: PropTypes.number,
     list_uuid: PropTypes.string,
+    has_notebook: PropTypes.bool,
   }),
 };
 
