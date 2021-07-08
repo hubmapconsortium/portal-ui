@@ -12,7 +12,7 @@ module.exports = {
   ],
   "webpackFinal": async (config) => {
     config.resolve.alias = {
-      // extend aliases with our own
+      // extend alias with our own
       ...config.resolve?.alias,
       ...alias}
     return config
