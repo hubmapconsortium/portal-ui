@@ -18,7 +18,7 @@ function Collection(props) {
     doi_url,
     title,
     description,
-    create_timestamp,
+    created_timestamp,
     last_modified_timestamp,
     contacts,
     datasets,
@@ -39,7 +39,7 @@ function Collection(props) {
             hubmap_id={hubmap_id}
             collectionName={title}
             description={description}
-            create_timestamp={create_timestamp}
+            created_timestamp={created_timestamp}
             last_modified_timestamp={last_modified_timestamp}
             entityCanBeSaved={false}
             contributors={creators}
