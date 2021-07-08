@@ -14,6 +14,7 @@ const Home = lazy(() => import('js/pages/Home/Home'));
 const Search = lazy(() => import('js/pages/search/Search'));
 const CellsSearch = lazy(() => import('js/pages/search/CellsSearch'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
+const Vis = lazy(() => import('js/pages/Vis'));
 const Preview = lazy(() => import('js/pages/Preview'));
 const Services = lazy(() => import('js/pages/Services'));
 const Collections = lazy(() => import('js/pages/Collections'));
@@ -100,6 +101,14 @@ function Routes(props) {
     );
   }
   /* eslint-enable no-undef */
+
+  if (urlPath.startsWith('/vis')) {
+    return (
+      <Route>
+        <Vis />
+      </Route>
+    );
+  }
 
   if (urlPath.startsWith('/preview')) {
     return (
