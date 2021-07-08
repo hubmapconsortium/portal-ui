@@ -65,7 +65,7 @@
       "filter": { "term": { "entity_type.keyword": "Dataset" } },
       "aggs": {
         "donor.mapped_metadata.sex.keyword": {
-          "terms": { "field": "donor..keyword", "size": 5 }
+          "terms": { "field": "donor.mapped_metadata.sex.keyword", "size": 5 }
         },
         "donor..keyword_count": {
           "cardinality": { "field": "donor.mapped_metadata.sex.keyword" }
