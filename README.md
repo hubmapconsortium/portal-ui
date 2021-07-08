@@ -141,7 +141,7 @@ and then make a PR against the `gateway` repo:
 cd context/
 npm run build:maintain
 cd ${YOUR_HUBMAP_REPOS}/gateway
-git checkout master; git pull
+git checkout main; git pull
 git checkout -b update-portal-ui-maintenance
 cp ${YOUR_HUBMAP_REPOS}/portal-ui/context/app/static/js/maintenance/public/* \
    nginx/html/portal-ui-maintenance/
@@ -185,7 +185,7 @@ The metadata that we have for each dataset ultimately comes from the data provid
 but the fields they supply are determined by the schemas in [`ingest-validation-tools`](https://github.com/hubmapconsortium/ingest-validation-tools#readme).
 That repo is also included as a submodule here, and human-readable field descriptions are pulled from it.
 
-The portal team contributes code to a [subdirectory within `search-api`](https://github.com/hubmapconsortium/search-api/tree/master/src/elasticsearch/addl_index_transformations)
+The portal team contributes code to a [subdirectory within `search-api`](https://github.com/hubmapconsortium/search-api/tree/main/src/elasticsearch/addl_index_transformations)
 to clean up the raw Neo4J export and provide us with clean, usable facets.
 Within that directory, [`config.yaml`](https://github.com/hubmapconsortium/search-api/blob/test-release/src/elasticsearch/addl_index_transformations/portal/config.yaml) configures the Elasticsearch index itself.
 

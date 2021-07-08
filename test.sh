@@ -23,15 +23,15 @@ start changelog
 echo "GITHUB_REF: $GITHUB_REF"
 echo "GITHUB_HEAD_REF: $GITHUB_HEAD_REF"
 echo "GITHUB_BASE_REF: $GITHUB_BASE_REF"
-if [ "$GITHUB_REF" != 'refs/heads/master' ] \
+if [ "$GITHUB_REF" != 'refs/heads/main' ] \
    && [[ "$GITHUB_REF" != *'dependabot'* ]] \
    && [[ "$GITHUB_HEAD_REF" != *'dependabot'* ]] \
    && [ ! -z "$GITHUB_HEAD_REF" ] \
    && [ ! -z "$GITHUB_BASE_REF" ]; then
-  git remote set-branches --add origin master
+  git remote set-branches --add origin main
   git fetch
   # "--stat=1000" ensures that filenames are not truncated. 
-  git diff --stat=1000 --compact-summary origin/master \
+  git diff --stat=1000 --compact-summary origin/main \
     | grep -e '^ CHANGELOG-\S\+ (new)' \
     || die 'Add a CHANGELOG-something.md at the top level'
 fi

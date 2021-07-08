@@ -7,7 +7,7 @@ Monday/Wednesday, before 5pm:
 *   **John/Ilan** will look at [portal PRs](https://github.com/hubmapconsortium/portal-ui/pulls), and nudge people to merge approved PRs, or get approvals on older PRs. 
 
 Monday/Wednesday, after 5pm: (Or any time that Nils asks for a release...)
-*   Harvard TC (**John/Ilan**) makes a new Docker image from portal-ui master.
+*   Harvard TC (**John/Ilan**) makes a new Docker image from portal-ui main.
 *   Harvard TC announces on [`#portal-deployment`](https://hubmapconsortium.slack.com/archives/C016TK0APV2) that DEV/TEST/STAGE will be redeployed.
 *   Harvard TC redeploys to DEV/TEST/STAGE, makes sure the homepage loads, and announces redeployment.
 
