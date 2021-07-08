@@ -67,7 +67,7 @@
         "donor.mapped_metadata.sex.keyword": {
           "terms": { "field": "donor.mapped_metadata.sex.keyword", "size": 5 }
         },
-        "donor..keyword_count": {
+        "donor.mapped_metadata.sex.keyword_count": {
           "cardinality": { "field": "donor.mapped_metadata.sex.keyword" }
         }
       }
