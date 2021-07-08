@@ -10,6 +10,9 @@ export default {
   component: Summary,
 };
 
+const lorem =
+  'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.';
+
 const sharedArgs = {
   uuid: 'fakeuuid',
   create_timestamp: Date.now(),
@@ -31,8 +34,7 @@ DonorDefault.args = {
 export const DonorWithDescription = ChildlessTemplate.bind({});
 DonorWithDescription.args = {
   ...donorSharedArgs,
-  description:
-    'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.',
+  description: lorem,
 };
 
 const sampleSharedArgs = {
@@ -57,8 +59,7 @@ SampleDefault.args = {
 export const SampleWithDescription = SampleTemplate.bind({});
 SampleWithDescription.args = {
   ...sampleSharedArgs,
-  description:
-    'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.',
+  description: lorem,
 };
 
 const DatasetTemplate = (args) => (
@@ -76,8 +77,7 @@ DatasetDefault.args = {
   entity_type: 'Dataset',
   status: 'QA',
   mapped_data_access_level: 'Public',
-  description:
-    'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.',
+  description: lorem,
   ...DefaultCitation.args,
 };
 
@@ -85,8 +85,7 @@ export const CollectionDefault = ChildlessTemplate.bind({});
 CollectionDefault.args = {
   ...sharedArgs,
   entity_type: 'Collection',
-  description:
-    'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.',
+  description: lorem,
   ...DefaultCitation.args,
   collectionName: 'Fake Collection Name',
 };
