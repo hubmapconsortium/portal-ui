@@ -1,1 +1,0 @@
-- Factor out Cells API calls to a separate class.

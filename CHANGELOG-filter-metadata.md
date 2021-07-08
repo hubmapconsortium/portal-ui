@@ -1,1 +1,0 @@
-- Hide fields which aren't really metadata.

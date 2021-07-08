@@ -1,1 +1,0 @@
-- Skip changelog check if `GITHUB_HEAD_REF` or `GITHUB_BASE_REF` are blank.
