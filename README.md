@@ -71,7 +71,8 @@ These are concatenated by `push.sh`.
 
 - Components with tests or styles should be placed in to their own directory.
 - Styles should follow the `style.*` pattern where the extension is js for styled components or css for stylesheets.
-- Tests and stories should follow the `*.spec.js` and `*.stories.js` patterns respectively where the prefix is the name of the component.
+- Tests should follow the `*.spec.js` pattern...
+- and stories should follow the `*.stories.js` pattern. For both, the prefix is the name of the component.
 - Each component directory should have an `index.js` which exports the component as default.
 - Components which share a common domain can be placed in a directory within components named after the domain.
 
