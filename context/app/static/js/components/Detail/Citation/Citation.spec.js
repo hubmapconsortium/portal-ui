@@ -6,20 +6,20 @@ import { composeStories } from '@storybook/testing-react';
 import { buildNLMCitation } from './Citation';
 import * as stories from './Citation.stories';
 
-const { Default } = composeStories(stories);
+const { Citation } = composeStories(stories);
 
 const defaultCitation = 'Aanders A, Banders B, Canders C. Something Science-y [Internet]. HuBMAP Consortium; 2018.';
 
 test('builds NLM citation', () => {
-  const { contributors, citationTitle, create_timestamp } = Default.args;
+  const { contributors, citationTitle, create_timestamp } = Citation.args;
   expect(buildNLMCitation({ contributors, citationTitle, create_timestamp })).toEqual(defaultCitation);
 });
 
 test('Displays correct text', () => {
-  render(<Default />);
+  render(<Citation />);
   const {
     args: { doi, doi_url },
-  } = Default;
+  } = Citation;
   expect(screen.getByText((content) => content.startsWith(defaultCitation))).toBeInTheDocument();
   expect(screen.getByRole('link', { name: 'View DataCite Page' })).toHaveAttribute(
     'href',
