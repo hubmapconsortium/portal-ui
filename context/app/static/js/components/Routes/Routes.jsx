@@ -12,6 +12,7 @@ const Sample = lazy(() => import('js/pages/Sample'));
 const Collection = lazy(() => import('js/pages/Collection'));
 const Home = lazy(() => import('js/pages/Home/Home'));
 const Search = lazy(() => import('js/pages/search/Search'));
+const CellsSearch = lazy(() => import('js/pages/search/CellsSearch'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
 const Preview = lazy(() => import('js/pages/Preview'));
 const Services = lazy(() => import('js/pages/Services'));
@@ -79,6 +80,14 @@ function Routes(props) {
     return (
       <Route>
         <Search title={title} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/cells-search')) {
+    return (
+      <Route>
+        <CellsSearch title={title} />
       </Route>
     );
   }
