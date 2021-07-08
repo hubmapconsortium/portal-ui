@@ -1,5 +1,5 @@
 const path = require("path")
-const {aliases} = require('../build-utils/aliases');
+const {alias} = require('../build-utils/alias');
 
 module.exports = {
   "stories": [
@@ -14,7 +14,7 @@ module.exports = {
     config.resolve.alias = {
       // extend aliases with our own
       ...config.resolve?.alias,
-      ...aliases}
+      ...alias}
     return config
   }
 }

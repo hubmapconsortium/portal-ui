@@ -2,7 +2,7 @@
 
 const { resolve } = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const { aliases } = require('./aliases');
+const { alias } = require('./alias');
 
 const config = {
   entry: { main: './app/static/js/index.jsx' },
@@ -23,7 +23,7 @@ const config = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml', '.json'],
-    alias: aliases,
+    alias,
   },
   module: {
     rules: [
