@@ -1,3 +1,15 @@
+## v0.22.0 - 2021-07-08
+
+- Factor out Cells API calls to a separate class.
+- Hide fields which aren't really metadata.
+- Skip changelog check if `GITHUB_HEAD_REF` or `GITHUB_BASE_REF` are blank.
+- Move towards allowing more than gene/rna searches.
+- Add doc strings to all Python Vitessce conf builders.
+- Reference bookmarklet in QA instructions.
+- Going forward, if a docs page is no longer needed, instead of just deleting it, replace `whatever.md` with `whatever.redirect`, and change the content to the new path.
+- Upgrade Flask, primarily to silence warnings during tests.
+
+
 ## v0.21.4 - 2021-06-30
 
 - Change the documention menu, at Jonathan's request.

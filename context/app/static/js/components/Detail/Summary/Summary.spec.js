@@ -22,7 +22,7 @@ test('timestamps display when defined', () => {
   const textToTest = ['Creation Date', 'Modification Date'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 
-  expect(screen.getAllByText('August 06, 2020')).toHaveLength(2);
+  expect(screen.getAllByText('2020-08-06')).toHaveLength(2);
   expect(screen.queryAllByText('Undefined')).toHaveLength(0);
 });
 

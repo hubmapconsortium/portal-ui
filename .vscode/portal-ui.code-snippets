@@ -24,7 +24,6 @@
 			"",
 			"import ${TM_FILENAME/(.*)\\.(spec|test).js/$1/} from './${TM_FILENAME/(.*)\\.(spec|test).js/$1/}';",
 			""
-
 		],
 		"description": "Basic imports needed for a javascript test"
 	},
@@ -35,5 +34,24 @@
 
 		],
 		"description": "Import styled-components"
+	},
+	"Create Component Story Skeleton": {
+		"prefix": "ccss",
+		"body": [
+			"import React from 'react';",
+			"",
+			"import ${TM_FILENAME/(.*)\\.(stories).js/$1/} from './${TM_FILENAME/(.*)\\.(stories).js/$1/}';",
+			"",
+			"export default {",
+			"  title: '${TM_FILENAME/(.*)\\.(stories).js/$1/}',",
+			"  component: ${TM_FILENAME/(.*)\\.(stories).js/$1/},",
+			"};",
+			"",
+			"const Template = (args) => <${TM_FILENAME/(.*)\\.(stories).js/$1/} {...args} />;",
+			"export const Default = Template.bind({});",
+			"Default.args = {};",
+			""
+		],
+		"description": "Create component story skeleton",
 	}
 }

@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import DetailDescription from 'js/components/Detail/DetailDescription';
 import SummaryData from '../SummaryData';
+import SummaryBody from '../SummaryBody';
 
 function Summary(props) {
   const {
@@ -15,10 +15,14 @@ function Summary(props) {
     description,
     status,
     children,
-    collectionName,
     mapped_data_access_level,
     group_name,
     entityCanBeSaved,
+    contributors,
+    citationTitle,
+    doi_url,
+    doi,
+    collectionName,
   } = props;
   return (
     <SectionContainer id="summary">
@@ -33,11 +37,15 @@ function Summary(props) {
       >
         {children}
       </SummaryData>
-      <DetailDescription
-        subtitle={collectionName}
+      <SummaryBody
         description={description}
-        createdTimestamp={create_timestamp}
-        modifiedTimestamp={last_modified_timestamp}
+        contributors={contributors}
+        citationTitle={citationTitle}
+        last_modified_timestamp={last_modified_timestamp}
+        create_timestamp={create_timestamp}
+        doi_url={doi_url}
+        doi={doi}
+        collectionName={collectionName}
       />
     </SectionContainer>
   );
@@ -51,9 +59,9 @@ Summary.propTypes = {
   last_modified_timestamp: PropTypes.number,
   description: PropTypes.string,
   status: PropTypes.string,
-  collectionName: PropTypes.string,
   mapped_data_access_level: PropTypes.string,
   entityCanBeSaved: PropTypes.bool,
+  collectionName: PropTypes.string,
 };
 
 Summary.defaultProps = {
@@ -62,8 +70,8 @@ Summary.defaultProps = {
   description: '',
   status: '',
   mapped_data_access_level: '',
-  collectionName: '',
   entityCanBeSaved: true,
+  collectionName: '',
 };
 
 export default Summary;

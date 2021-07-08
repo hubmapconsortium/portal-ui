@@ -2,11 +2,11 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/RightAlignedButtonRow';
+import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
 
 function DerivedEntitiesSectionHeader({ header, entityCountsText, uuid, entityType }) {
   return (
-    <StyledButtonRow
+    <SpacedSectionButtonRow
       leftText={
         <div>
           <SectionHeader>{header}</SectionHeader>

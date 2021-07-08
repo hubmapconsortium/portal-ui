@@ -184,6 +184,7 @@ def details_rui_json(type, uuid):
 
 
 @blueprint.route('/search')
+@blueprint.route('/cells-search')
 def search():
     entity_type = request.args.get('entity_type[0]')
     title = f'{entity_type}s' if entity_type else 'Search'
@@ -202,6 +203,21 @@ def search():
 @blueprint.route('/dev-search')
 def dev_search():
     title = 'Dev Search'
+    flask_data = {
+        'endpoints': _get_endpoints(),
+        'title': title
+    }
+    return render_template(
+        'pages/base_react.html',
+        title=title,
+        types=entity_types,
+        flask_data=flask_data
+    )
+
+
+@blueprint.route('/vis')
+def vis():
+    title = 'Visualizations'
     flask_data = {
         'endpoints': _get_endpoints(),
         'title': title

@@ -1,0 +1,1 @@
+- Stub a cells-search, where new functionality can be developed.
