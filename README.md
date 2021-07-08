@@ -105,7 +105,7 @@ npm run lint:fix
 ```
 
 ### Storybook
-To start storybook locally run `npm run storybook`.
+To start storybook locally you can run `npm run storybook` or visit [localhost:6006](http://localhost:6006). after you have run `./dev-start.sh`.
 
 To view the production storybook visit [chromatic](https://main--60e472b3f21a0d003bd71f2f.chromatic.com). To view the latest published storybook on a given branch, visit `https://<branch>--60e472b3f21a0d003bd71f2f.chromatic.com`. Replace `<branch>` with the designated branch.
 
