@@ -64,15 +64,13 @@ function SearchWrapper(props) {
       setMessage(null);
       return query;
     }
-    const provMusts = musts.filter(
-      (must) => 'ancestor_ids.keyword' in must.term || 'descendant_ids.keyword' in must.term,
-    );
+    const labels = {
+      'ancestor_ids.keyword': 'Derived from',
+      'descendant_ids.keyword': 'Ancestor of',
+    };
+    const provMusts = musts.filter((must) => Object.keys(labels).some((labelKey) => labelKey in must.term));
     setMessage(
       provMusts.map((must) => {
-        const labels = {
-          'ancestor_ids.keyword': 'Derived from',
-          'descendant_ids.keyword': 'Ancestor of',
-        };
         return Object.entries(must.term).map(([k, v]) => (
           <LookupEntity uuid={v} elasticsearchEndpoint={elasticsearchEndpoint} nexusToken={nexusToken}>
             <SearchNote label={labels[k]} />
