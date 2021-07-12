@@ -1,3 +1,14 @@
+## v0.22.1 - 2021-07-12
+
+- Stub a cells-search, where new functionality can be developed.
+- `create_timestamp` -> `created_timestamp`
+- Search and replace: `display_doi` -> `hubmap_id`
+- During QA, just clear localstorage.
+- Demo how constrained sliders will work.
+- Add and configure storybook.
+- Created a table about the donor's race.
+
+
 ## v0.22.0 - 2021-07-08
 
 - Factor out Cells API calls to a separate class.

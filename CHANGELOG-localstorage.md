@@ -1,1 +1,0 @@
-- During QA, just clear localstorage.
