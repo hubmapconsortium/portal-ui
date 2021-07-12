@@ -1,0 +1,1 @@
+- If a prov filter is removed in search, make sure the UI updates.
