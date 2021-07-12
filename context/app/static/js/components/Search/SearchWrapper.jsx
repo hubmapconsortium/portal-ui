@@ -68,7 +68,9 @@ function SearchWrapper(props) {
       'ancestor_ids.keyword': 'Derived from',
       'descendant_ids.keyword': 'Ancestor of',
     };
-    const provMusts = musts.filter((must) => Object.keys(labels).some((labelKey) => labelKey in must.term));
+    const provMusts = musts.filter(
+      (must) => 'term' in must && Object.keys(labels).some((labelKey) => labelKey in must.term),
+    );
     setMessage(
       provMusts.map((must) => {
         return Object.entries(must.term).map(([k, v]) => (
