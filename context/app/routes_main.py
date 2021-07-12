@@ -29,7 +29,6 @@ def _get_client():
     )
 
 
-
 def _get_default_flask_data():
     return {
         'endpoints': {
