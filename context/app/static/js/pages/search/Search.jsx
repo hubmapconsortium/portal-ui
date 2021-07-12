@@ -5,12 +5,10 @@ import { BoolMustNot, ExistsQuery } from 'searchkit';
 import DatasetSearchPrompt from 'js/components/tutorials/DatasetSearchPrompt';
 import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
 import { AppContext } from 'js/components/Providers';
-import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/Search/config';
 import { listFilter } from 'js/components/Search/utils';
-import SearchNote from 'js/components/Search/SearchNote';
 import Results from 'js/components/Search/Results';
 import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 import { SearchHeader } from './style';
@@ -62,11 +60,6 @@ function Search(props) {
     );
   }
 
-  const notesToDisplay = [
-    { urlSearchParam: 'ancestor_ids[0]', label: 'Derived from' },
-    { urlSearchParam: 'descendant_ids[0]', label: 'Ancestor of' },
-  ].filter((note) => searchParams.has(note.urlSearchParam));
-
   const httpHeaders = getAuthHeader(nexusToken);
   const resultFields = resultFieldsByType[type];
   const searchProps = {
@@ -110,15 +103,6 @@ function Search(props) {
           />
         </>
       )}
-      {notesToDisplay.map((note) => (
-        <LookupEntity
-          uuid={searchParams.get(note.urlSearchParam)}
-          elasticsearchEndpoint={elasticsearchEndpoint}
-          nexusToken={nexusToken}
-        >
-          <SearchNote label={note.label} />
-        </LookupEntity>
-      ))}
       {wrappedSearch}
     </>
   );
