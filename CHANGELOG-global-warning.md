@@ -1,0 +1,1 @@
+- Add a mechanism for site-wide alerts via config var. Could be used if half of our hybrid cloud goes down again.
