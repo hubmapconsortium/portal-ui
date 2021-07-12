@@ -11,6 +11,7 @@ function NoItemsSaved({ isSavedListPage }) {
       <LightBlueLink href="/search?entity_type[0]=Dataset">datasets</LightBlueLink> search pages to explore data to save
       {isSavedListPage && (
         <>
+          {' '}
           or navigate to <LightBlueLink href="/my-lists">My Lists</LightBlueLink> to add items to this list
         </>
       )}
