@@ -30,6 +30,9 @@ export default function ProvVis(props) {
       steps={steps}
     >
       <Graph
+        /* The library makes nodes and edges required props, and that's outside our control. */
+        nodes={[]}
+        edges={[]}
         rowSpacingType="compact"
         minimumHeight={300}
         renderDetailPane={renderDetailPane}
