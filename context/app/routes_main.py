@@ -39,7 +39,7 @@ def _get_default_flask_data():
             'xmodalityEndpoint': current_app.config['XMODALITY_ENDPOINT'],
             'gatewayEndpoint': current_app.config['GATEWAY_ENDPOINT'],
         },
-        'global_alert': current_app.config.get('GLOBAL_ALERT')
+        'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
 
     }
 
