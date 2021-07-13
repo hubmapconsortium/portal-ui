@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactGA from 'react-ga';
+import styled from 'styled-components';
 
 import { Alert } from 'js/shared-styles/alerts';
 
@@ -11,6 +12,11 @@ import Header from './Header';
 
 // Importing Search styles here so the CSS import order is correct.
 import 'js/components/Search/Search.scss';
+
+const StyledAlert = styled(Alert)`
+  margin: ${(props) => props.theme.spacing(3)}px;
+  margin-bottom: 0;
+`;
 
 function App(props) {
   const { flaskData } = props;
@@ -32,7 +38,7 @@ function App(props) {
     // eslint-disable-next-line no-undef
     <Providers endpoints={endpoints} nexusToken={nexus_token}>
       <Header />
-      {global_alert && <Alert severity="warning">{global_alert}</Alert>}
+      {global_alert && <StyledAlert severity="warning">{global_alert}</StyledAlert>}
       <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode, list_uuid, has_notebook }} />
       <Footer />
     </Providers>
