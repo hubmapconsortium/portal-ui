@@ -14,11 +14,11 @@ import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRo
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
 import SaveToListDialog from 'js/components/savedLists/SaveToListDialog';
 import useStateSet from 'js/hooks/useStateSet';
-import { StyledButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/RightAlignedButtonRow';
+import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
 import { LeftMarginButton, LeftMarginIconButton } from './style';
 
 const defaultColumns = [
-  { id: 'display_doi', label: 'HuBMAP ID' },
+  { id: 'hubmap_id', label: 'HuBMAP ID' },
   { id: 'group_name', label: 'Group' },
   { id: 'entity_type', label: 'Entity Type' },
 ];
@@ -56,7 +56,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
 
   return (
     <>
-      <StyledButtonRow
+      <SpacedSectionButtonRow
         leftText={
           <BottomAlignedTypography variant="subtitle1">
             {selectedRowsSize} {selectedRowsSize === 1 ? 'Item' : 'Items'} Selected

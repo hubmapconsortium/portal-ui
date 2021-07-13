@@ -2,23 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import DetailDescription from 'js/components/Detail/DetailDescription';
 import SummaryData from '../SummaryData';
+import SummaryBody from '../SummaryBody';
 
 function Summary(props) {
   const {
-    display_doi,
+    hubmap_id,
     entity_type,
-    create_timestamp,
+    created_timestamp,
     last_modified_timestamp,
     uuid,
     description,
     status,
     children,
-    collectionName,
     mapped_data_access_level,
     group_name,
     entityCanBeSaved,
+    contributors,
+    citationTitle,
+    doi_url,
+    doi,
+    collectionName,
   } = props;
   return (
     <SectionContainer id="summary">
@@ -26,44 +30,48 @@ function Summary(props) {
         entity_type={entity_type}
         uuid={uuid}
         status={status}
-        display_doi={display_doi}
+        hubmap_id={hubmap_id}
         mapped_data_access_level={mapped_data_access_level}
         group_name={group_name}
         entityCanBeSaved={entityCanBeSaved}
       >
         {children}
       </SummaryData>
-      <DetailDescription
-        subtitle={collectionName}
+      <SummaryBody
         description={description}
-        createdTimestamp={create_timestamp}
-        modifiedTimestamp={last_modified_timestamp}
+        contributors={contributors}
+        citationTitle={citationTitle}
+        last_modified_timestamp={last_modified_timestamp}
+        create_timestamp={created_timestamp}
+        doi_url={doi_url}
+        doi={doi}
+        collectionName={collectionName}
       />
     </SectionContainer>
   );
 }
 
 Summary.propTypes = {
-  display_doi: PropTypes.string.isRequired,
+  hubmap_id: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
-  create_timestamp: PropTypes.number,
+  created_timestamp: PropTypes.number,
   last_modified_timestamp: PropTypes.number,
   description: PropTypes.string,
   status: PropTypes.string,
-  collectionName: PropTypes.string,
   mapped_data_access_level: PropTypes.string,
   entityCanBeSaved: PropTypes.bool,
+  collectionName: PropTypes.string,
 };
 
 Summary.defaultProps = {
-  create_timestamp: undefined,
+  created_timestamp: undefined,
   last_modified_timestamp: undefined,
   description: '',
   status: '',
   mapped_data_access_level: '',
-  collectionName: '',
   entityCanBeSaved: true,
+  collectionName: '',
 };
 
 export default Summary;

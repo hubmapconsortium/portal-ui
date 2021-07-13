@@ -243,7 +243,7 @@ Request body:
   sort: [{ "mapped_last_modified_timestamp.keyword": "desc" }],
   highlight: { fields: { everything: { type: "plain" } } },
   _source: [
-    "display_doi",
+    "hubmap_id",
     "group_name",
     "mapped_data_types",
     "origin_sample.mapped_organ",
@@ -441,7 +441,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM626.JKSH.835",
+          hubmap_id: "HBM626.JKSH.835",
           group_name: "California Institute of Technology TMC",
           last_modified_timestamp: 1598129555663,
           mapped_data_types: ["sciATAC-seq [SnapATAC]"],
@@ -459,7 +459,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 1 } },
-          display_doi: "HBM666.FFFW.363",
+          hubmap_id: "HBM666.FFFW.363",
           group_name: "California Institute of Technology TMC",
           last_modified_timestamp: 1598129555354,
           mapped_data_types: ["sciATAC-seq"],
@@ -476,7 +476,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM266.ZZPW.922",
+          hubmap_id: "HBM266.ZZPW.922",
           group_name: "California Institute of Technology TMC",
           last_modified_timestamp: 1598129554155,
           mapped_data_types: ["seqFISH [Image Pyramid]"],
@@ -493,7 +493,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM357.LBRF.256",
+          hubmap_id: "HBM357.LBRF.256",
           group_name: "California Institute of Technology TMC",
           last_modified_timestamp: 1598129553531,
           mapped_data_types: ["seqFISH [Image Pyramid]"],
@@ -510,7 +510,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM377.PNXQ.838",
+          hubmap_id: "HBM377.PNXQ.838",
           group_name: "California Institute of Technology TMC",
           last_modified_timestamp: 1598129552343,
           mapped_data_types: ["seqFISH [Lab Processed]"],
@@ -527,7 +527,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM987.FMBC.577",
+          hubmap_id: "HBM987.FMBC.577",
           group_name: "California Institute of Technology TMC",
           last_modified_timestamp: 1598129552652,
           mapped_data_types: ["seqFISH [Image Pyramid]"],
@@ -544,7 +544,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM374.JBKR.938",
+          hubmap_id: "HBM374.JBKR.938",
           group_name: "California Institute of Technology TMC",
           last_modified_timestamp: 1598129551973,
           mapped_data_types: ["seqFISH [Lab Processed]"],
@@ -561,7 +561,7 @@ const response = {
         _index: "hm_public_portal",
         _score: null,
         _source: {
-          display_doi: "HBM395.JHDT.249",
+          hubmap_id: "HBM395.JHDT.249",
           group_name: "California Institute of Technology TMC",
           last_modified_timestamp: 1598129550975,
           mapped_data_types: ["seqFISH [Lab Processed]"],
@@ -579,7 +579,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 2 } },
-          display_doi: "HBM434.VLFT.986",
+          hubmap_id: "HBM434.VLFT.986",
           group_name: "California Institute of Technology TMC",
           last_modified_timestamp: 1598129549427,
           mapped_data_types: ["seqFISH"],
@@ -597,7 +597,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 2 } },
-          display_doi: "HBM965.GZHL.485",
+          hubmap_id: "HBM965.GZHL.485",
           group_name: "California Institute of Technology TMC",
           last_modified_timestamp: 1598129548433,
           mapped_data_types: ["seqFISH"],
@@ -615,7 +615,7 @@ const response = {
         _score: null,
         _source: {
           descendant_counts: { entity_type: { Dataset: 2 } },
-          display_doi: "HBM788.KHPF.569",
+          hubmap_id: "HBM788.KHPF.569",
           group_name: "California Institute of Technology TMC",
           last_modified_timestamp: 1598129546989,
           mapped_data_types: ["seqFISH"],

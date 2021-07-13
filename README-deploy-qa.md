@@ -7,7 +7,7 @@ Monday/Wednesday, before 5pm:
 *   **John/Ilan** will look at [portal PRs](https://github.com/hubmapconsortium/portal-ui/pulls), and nudge people to merge approved PRs, or get approvals on older PRs. 
 
 Monday/Wednesday, after 5pm: (Or any time that Nils asks for a release...)
-*   Harvard TC (**John/Ilan**) makes a new Docker image from portal-ui master.
+*   Harvard TC (**John/Ilan**) makes a new Docker image from portal-ui main.
 *   Harvard TC announces on [`#portal-deployment`](https://hubmapconsortium.slack.com/archives/C016TK0APV2) that DEV/TEST/STAGE will be redeployed.
 *   Harvard TC redeploys to DEV/TEST/STAGE, makes sure the homepage loads, and announces redeployment.
 
@@ -42,7 +42,7 @@ Tuesday/Thursday afternoon:
 *   HuBMAP ID (table view) and tiles (tile view) should link to the correct detail page.
 *   Sorting in header row (table view) and dropdown (tile view) should work.
 *   Logging in should result in additional data with updated facets in the status section of the sidebar.
-*   The tutorial is usually only shown once to a user on the site: To reset, save this bookmarklet code: `javascript:(function(){localStorage.removeItem('has_exited_dataset_search_tutorial');})()`
+*   The tutorial is usually only shown once to a user on the site: To clear local storage, use this bookmarklet code: `javascript:(function(){localStorage.clear()})()`
 *   [Dev Search](https://portal-prod.stage.hubmapconsortium.org/dev-search) should load without error.
 
 ### Detail Pages

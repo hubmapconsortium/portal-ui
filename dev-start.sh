@@ -17,5 +17,6 @@ cd $CONTEXT
 npm install
 npm run lint || die 'Try "npm run lint:fix"'
 npm run dev-server &
+npm run storybook &
 
 wait

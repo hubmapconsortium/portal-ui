@@ -8,7 +8,7 @@ test('SearchNote renders', () => {
   const entity = {
     uuid: 'FAKE_UUID',
     entity_type: 'FAKE_TYPE',
-    display_doi: 'FAKE_DOI',
+    hubmap_id: 'FAKE_DOI',
   };
   const { getByText } = render(<SearchNote entity={entity} label="Derived from" />);
   expect(getByText('Derived from fake_type')).toBeInTheDocument();

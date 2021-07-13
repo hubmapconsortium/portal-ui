@@ -21,23 +21,31 @@ import {
   StyledInfoIcon,
 } from './style';
 
+function tableDataToRows(tableData) {
+  return (
+    Object.entries(tableData)
+      // Filter out nested objects, like nested "metadata" for Samples...
+      // but allow arrays. Remember, in JS: typeof [] === 'object'
+      .filter((entry) => typeof entry[1] !== 'object' || Array.isArray(entry[1]))
+      // Filter out fields from TSV that aren't really metadata:
+      .filter((entry) => !['contributors_path', 'antibodies_path', 'version'].includes(entry[0]))
+      .map((entry) => ({
+        key: entry[0],
+        value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
+        description: metadataFieldDescriptions[entry[0]],
+      }))
+  );
+}
+
 function MetadataTable(props) {
-  const { metadata: tableData, display_doi } = props;
+  const { metadata: tableData, hubmap_id } = props;
 
   const columns = [
     { id: 'key', label: 'Key' },
     { id: 'value', label: 'Value' },
   ];
 
-  const tableRows = Object.entries(tableData)
-    // Filter out nested objects, like nested "metadata" for Samples...
-    // but allow arrays. Remember, in JS: typeof [] === 'object'
-    .filter((entry) => typeof entry[1] !== 'object' || Array.isArray(entry[1]))
-    .map((entry) => ({
-      key: entry[0],
-      value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
-      description: metadataFieldDescriptions[entry[0]],
-    }));
+  const tableRows = tableDataToRows(tableData);
 
   const downloadUrl = createDownloadUrl(
     tableToDelimitedString(
@@ -53,7 +61,7 @@ function MetadataTable(props) {
       <Flex>
         <StyledSectionHeader>Metadata</StyledSectionHeader>
         <SecondaryBackgroundTooltip title="Download">
-          <StyledWhiteBackgroundIconButton href={downloadUrl} download={`${display_doi}.tsv`}>
+          <StyledWhiteBackgroundIconButton href={downloadUrl} download={`${hubmap_id}.tsv`}>
             <DownloadIcon color="primary" />
           </StyledWhiteBackgroundIconButton>
         </SecondaryBackgroundTooltip>
@@ -97,7 +105,8 @@ MetadataTable.propTypes = {
       [PropTypes.string, PropTypes.object],
     ),
   ).isRequired,
-  display_doi: PropTypes.string.isRequired,
+  hubmap_id: PropTypes.string.isRequired,
 };
 
 export default MetadataTable;
+export { tableDataToRows };

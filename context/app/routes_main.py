@@ -119,7 +119,7 @@ def details(type, uuid):
         template,
         type=type,
         uuid=uuid,
-        title=f'{entity["display_doi"]} | {type.title()}',
+        title=f'{entity["hubmap_id"]} | {type.title()}',
         flask_data=flask_data
     )
 
@@ -147,7 +147,7 @@ def details_notebook(type, uuid):
     nb = new_notebook()
     nb['cells'] = [
         new_markdown_cell(f"""
-Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','')})
+Visualization for [{entity['hubmap_id']}]({request.base_url.replace('.ipynb','')})
         """.strip()),
         new_code_cell("""
 !pip install vitessce==0.1.0a9
@@ -160,7 +160,7 @@ Visualization for [{entity['display_doi']}]({request.base_url.replace('.ipynb','
     ]
     return Response(
         response=nbformat.writes(nb),
-        headers={'Content-Disposition': f"attachment; filename={entity['display_doi']}.ipynb"},
+        headers={'Content-Disposition': f"attachment; filename={entity['hubmap_id']}.ipynb"},
         mimetype='application/x-ipynb+json'
     )
 
@@ -188,6 +188,7 @@ def details_rui_json(type, uuid):
 
 
 @blueprint.route('/search')
+@blueprint.route('/cells-search')
 def search():
     entity_type = request.args.get('entity_type[0]')
     title = f'{entity_type}s' if entity_type else 'Search'
@@ -209,6 +210,21 @@ def dev_search():
     flask_data = {
         **_get_default_flask_data(),
         'title': title,
+    }
+    return render_template(
+        'pages/base_react.html',
+        title=title,
+        types=entity_types,
+        flask_data=flask_data
+    )
+
+
+@blueprint.route('/vis')
+def vis():
+    title = 'Visualizations'
+    flask_data = {
+        'endpoints': _get_endpoints(),
+        'title': title
     }
     return render_template(
         'pages/base_react.html',

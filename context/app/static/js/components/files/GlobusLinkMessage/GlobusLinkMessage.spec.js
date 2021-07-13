@@ -20,19 +20,19 @@ const FilesProviders = ({ children }) => {
 };
 
 const url = 'fakeurl';
-const display_doi = 'fake_doi';
+const hubmap_id = 'fake_doi';
 
 test('displays 200 correctly', () => {
   render(
     <FilesProviders>
-      <GlobusLinkMessage statusCode={200} url={url} display_doi={display_doi} />
+      <GlobusLinkMessage statusCode={200} url={url} hubmap_id={hubmap_id} />
     </FilesProviders>,
   );
   expect(screen.getByRole('link')).toHaveAttribute('href', `fakeurl`);
   expect(screen.getByRole('link')).toHaveTextContent('Globus');
   expect(
     screen.getByText(
-      `Files are available through the Globus Research Data Management System. Access dataset ${display_doi} on`,
+      `Files are available through the Globus Research Data Management System. Access dataset ${hubmap_id} on`,
       { exact: false },
     ),
   ).toBeInTheDocument();
@@ -47,7 +47,7 @@ const messages = {
 test.each(Object.entries(messages))('displays %i message correctly', (code, expected) => {
   render(
     <FilesProviders>
-      <GlobusLinkMessage statusCode={parseInt(code, 10)} url={url} display_doi={display_doi} />
+      <GlobusLinkMessage statusCode={parseInt(code, 10)} url={url} hubmap_id={hubmap_id} />
     </FilesProviders>,
   );
   expect(screen.getByRole('link')).toHaveAttribute('href', `mailto:help@hubmapconsortium.org`);

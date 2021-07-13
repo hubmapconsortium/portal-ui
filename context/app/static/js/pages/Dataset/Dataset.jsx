@@ -62,9 +62,9 @@ function DatasetDetail(props) {
     group_name,
     created_by_user_displayname,
     created_by_user_email,
-    display_doi,
+    hubmap_id,
     entity_type,
-    create_timestamp,
+    created_timestamp,
     last_modified_timestamp,
     description,
     status,
@@ -95,12 +95,12 @@ function DatasetDetail(props) {
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
   useEffect(() => {
-    setAssayMetadata({ display_doi, entity_type, mapped_data_types, mapped_organ });
-  }, [setAssayMetadata, display_doi, entity_type, mapped_data_types, mapped_organ]);
+    setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ });
+  }, [setAssayMetadata, hubmap_id, entity_type, mapped_data_types, mapped_organ]);
 
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
   return (
-    <DetailContext.Provider value={{ display_doi, uuid, mapped_data_access_level }}>
+    <DetailContext.Provider value={{ hubmap_id, uuid, mapped_data_access_level }}>
       {!isLatest && (
         <Alert severity="warning" $marginBottom="16">
           <span>
@@ -118,8 +118,8 @@ function DatasetDetail(props) {
         <Summary
           uuid={uuid}
           entity_type={entity_type}
-          display_doi={display_doi}
-          create_timestamp={create_timestamp}
+          hubmap_id={hubmap_id}
+          created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}
           status={status}
@@ -137,8 +137,8 @@ function DatasetDetail(props) {
         )}
         {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} display_doi={display_doi} />}
-        <Files files={files} uuid={uuid} display_doi={display_doi} />
+        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} hubmap_id={hubmap_id} />}
+        <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         <Attribution
           group_name={group_name}

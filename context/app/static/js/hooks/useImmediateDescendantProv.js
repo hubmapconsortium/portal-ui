@@ -5,7 +5,7 @@ async function getEntityData(hubmapID, elasticsearchEndpoint, nexusToken) {
   const authHeader = getAuthHeader(nexusToken);
   const response = await fetch(elasticsearchEndpoint, {
     method: 'POST',
-    body: JSON.stringify({ query: { match: { 'display_doi.keyword': hubmapID } } }),
+    body: JSON.stringify({ query: { match: { 'hubmap_id.keyword': hubmapID } } }),
     headers: {
       'Content-Type': 'application/json',
       ...authHeader,
@@ -25,13 +25,13 @@ function getProvRequest(uuid, entityEndpoint, nexusToken) {
   return { url: `${entityEndpoint}/entities/${uuid}/provenance`, options: { headers } };
 }
 
-function useImmediateDescendantProv(display_doi, elasticsearchEndpoint, entityEndpoint, nexusToken) {
+function useImmediateDescendantProv(hubmap_id, elasticsearchEndpoint, entityEndpoint, nexusToken) {
   const [immediateDescendantsProvData, setImmediateDescendantsProvData] = useState(undefined);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     async function getAndSetProvData() {
-      const hubmapID = display_doi;
+      const hubmapID = hubmap_id;
       const entityData = await getEntityData(hubmapID, elasticsearchEndpoint, nexusToken);
       const immediateDescendants = entityData?.immediate_descendants;
 
@@ -46,12 +46,12 @@ function useImmediateDescendantProv(display_doi, elasticsearchEndpoint, entityEn
       setIsLoading(false);
     }
     getAndSetProvData();
-  }, [nexusToken, elasticsearchEndpoint, entityEndpoint, display_doi]);
+  }, [nexusToken, elasticsearchEndpoint, entityEndpoint, hubmap_id]);
   return { immediateDescendantsProvData, isLoading };
 }
 
-async function getImmediateDescendantProv(display_doi, elasticsearchEndpoint, entityEndpoint, nexusToken) {
-  const hubmapID = display_doi;
+async function getImmediateDescendantProv(hubmap_id, elasticsearchEndpoint, entityEndpoint, nexusToken) {
+  const hubmapID = hubmap_id;
   const entityData = await getEntityData(hubmapID, elasticsearchEndpoint, nexusToken);
   const immediateDescendants = entityData?.immediate_descendants;
 

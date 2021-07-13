@@ -32,12 +32,12 @@ function ProvTable(props) {
               <FlexColumn>
                 {type.length > 0 ? (
                   type
-                    .sort((a, b) => a.create_timestamp - b.create_timestamp)
+                    .sort((a, b) => a.created_timestamp - b.created_timestamp)
                     .map((item, j) => (
                       <ProvTableTile
                         key={item.uuid}
                         uuid={item.uuid}
-                        id={item.display_doi}
+                        id={item.hubmap_id}
                         entity_type={item.entity_type}
                         isCurrentEntity={uuid === item.uuid}
                         isSampleSibling={

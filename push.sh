@@ -4,7 +4,7 @@ set -o errexit
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
 git diff --quiet || die 'Uncommitted changes: Stash or commit'
-git checkout master
+git checkout main
 git pull
 
 git submodule foreach '

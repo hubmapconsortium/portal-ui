@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import Summary from 'js/components/Detail/Summary';
-import Citation from 'js/components/Detail/Citation';
 import CollectionDatasetsTable from 'js/components/Detail/CollectionDatasetsTable';
 import CollectionsAffiliationsTable from 'js/components/Detail/CollectionsAffiliationsTable';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
@@ -15,11 +14,11 @@ function Collection(props) {
   const {
     uuid,
     entity_type,
-    display_doi,
+    hubmap_id,
     doi_url,
     title,
     description,
-    create_timestamp,
+    created_timestamp,
     last_modified_timestamp,
     contacts,
     datasets,
@@ -37,12 +36,16 @@ function Collection(props) {
           <Summary
             uuid={uuid}
             entity_type={entity_type}
-            display_doi={display_doi}
+            hubmap_id={hubmap_id}
             collectionName={title}
             description={description}
-            create_timestamp={create_timestamp}
+            created_timestamp={created_timestamp}
             last_modified_timestamp={last_modified_timestamp}
             entityCanBeSaved={false}
+            contributors={creators}
+            citationTitle={title}
+            doi_url={doi_url}
+            doi={doi}
           >
             {doi_url && (
               <OutboundLink href={doi_url} variant="body1">
@@ -50,7 +53,6 @@ function Collection(props) {
               </OutboundLink>
             )}
           </Summary>
-          <Citation contributors={creators} title={title} timestamp={create_timestamp} url={doi_url} doi={doi} />
           {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
           {'creators' in collectionData && (

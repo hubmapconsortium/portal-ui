@@ -70,8 +70,9 @@ These are concatenated by `push.sh`.
 <details><summary>For React</summary>
 
 - Components with tests or styles should be placed in to their own directory.
-- Styles should be placed in `style.*` where the extension is js for styled components or css for stylesheets.
-- Tests should be placed in `*.spec.js` where the prefix is the name of the component.
+- Styles should follow the `style.*` pattern where the extension is js for styled components or css for stylesheets.
+- Tests should follow the `*.spec.js` pattern...
+- and stories should follow the `*.stories.js` pattern. For both, the prefix is the name of the component.
 - Each component directory should have an `index.js` which exports the component as default.
 - Components which share a common domain can be placed in a directory within components named after the domain.
 
@@ -104,6 +105,12 @@ npm run lint
 npm run lint:fix
 ```
 
+### Storybook
+To start storybook locally you can either run `./dev-start.sh`, or just `npm run storybook`,
+and after it has started, visit [localhost:6006](http://localhost:6006).
+
+To view the production storybook visit [chromatic](https://main--60e472b3f21a0d003bd71f2f.chromatic.com). To view the latest published storybook on a given branch, visit `https://<branch>--60e472b3f21a0d003bd71f2f.chromatic.com`. Replace `<branch>` with the designated branch.
+
 ## Build, tag, and deploy
 We plan to release new images Mondays and Wednesdays, and these are deployed to production the following day. [More details](README-deploy-qa.md#readme).
 
@@ -134,7 +141,7 @@ and then make a PR against the `gateway` repo:
 cd context/
 npm run build:maintain
 cd ${YOUR_HUBMAP_REPOS}/gateway
-git checkout master; git pull
+git checkout main; git pull
 git checkout -b update-portal-ui-maintenance
 cp ${YOUR_HUBMAP_REPOS}/portal-ui/context/app/static/js/maintenance/public/* \
    nginx/html/portal-ui-maintenance/
@@ -178,7 +185,7 @@ The metadata that we have for each dataset ultimately comes from the data provid
 but the fields they supply are determined by the schemas in [`ingest-validation-tools`](https://github.com/hubmapconsortium/ingest-validation-tools#readme).
 That repo is also included as a submodule here, and human-readable field descriptions are pulled from it.
 
-The portal team contributes code to a [subdirectory within `search-api`](https://github.com/hubmapconsortium/search-api/tree/master/src/elasticsearch/addl_index_transformations)
+The portal team contributes code to a [subdirectory within `search-api`](https://github.com/hubmapconsortium/search-api/tree/main/src/elasticsearch/addl_index_transformations)
 to clean up the raw Neo4J export and provide us with clean, usable facets.
 Within that directory, [`config.yaml`](https://github.com/hubmapconsortium/search-api/blob/test-release/src/elasticsearch/addl_index_transformations/portal/config.yaml) configures the Elasticsearch index itself.
 
