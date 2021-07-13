@@ -1,8 +1,5 @@
 import React from 'react';
 import ReactGA from 'react-ga';
-import styled from 'styled-components';
-
-import { Alert } from 'js/shared-styles/alerts';
 
 import PropTypes from 'prop-types';
 import Providers from './Providers';
@@ -10,13 +7,10 @@ import Routes from './Routes';
 import Footer from './Footer';
 import Header from './Header';
 
+import { StyledAlert } from './style';
+
 // Importing Search styles here so the CSS import order is correct.
 import 'js/components/Search/Search.scss';
-
-const StyledAlert = styled(Alert)`
-  margin: ${(props) => props.theme.spacing(3)}px;
-  margin-bottom: 0;
-`;
 
 function App(props) {
   const { flaskData } = props;
