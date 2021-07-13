@@ -223,7 +223,7 @@ def dev_search():
 def vis():
     title = 'Visualizations'
     flask_data = {
-        'endpoints': _get_endpoints(),
+        **_get_default_flask_data(),
         'title': title
     }
     return render_template(
