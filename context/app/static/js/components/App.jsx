@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactGA from 'react-ga';
-
 import PropTypes from 'prop-types';
+import marked from 'marked';
+
 import Providers from './Providers';
 import Routes from './Routes';
 import Footer from './Footer';
@@ -32,7 +33,12 @@ function App(props) {
     // eslint-disable-next-line no-undef
     <Providers endpoints={endpoints} nexusToken={nexus_token}>
       <Header />
-      {globalAlertMd && <StyledAlert severity="warning">{globalAlertMd}</StyledAlert>}
+      {globalAlertMd && (
+        <StyledAlert severity="warning">
+          {/* eslint-disable-next-line react/no-danger */}
+          <div dangerouslySetInnerHTML={{ __html: marked.parseInline(globalAlertMd) }} />
+        </StyledAlert>
+      )}
       <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode, list_uuid, has_notebook }} />
       <Footer />
     </Providers>
@@ -49,6 +55,7 @@ App.propTypes = {
     collection: PropTypes.object,
     errorCode: PropTypes.number,
     list_uuid: PropTypes.string,
+    globalAlertMd: PropTypes.string,
     has_notebook: PropTypes.bool,
   }),
 };

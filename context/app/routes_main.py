@@ -40,7 +40,6 @@ def _get_default_flask_data():
             'gatewayEndpoint': current_app.config['GATEWAY_ENDPOINT'],
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
-
     }
 
 
