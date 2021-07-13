@@ -14,11 +14,11 @@ function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex, entityType }) 
     <>
       <StyledTabs value={openIndex} onChange={handleChange} aria-label="Derived Datasets and Samples Tabs">
         {entities.map((entity, i) => (
-          <Tab label={entity.tabLabel} index={i} />
+          <Tab label={entity.tabLabel} index={i} key={entity.tabLabel} />
         ))}
       </StyledTabs>
       {entities.map((entity, i) => (
-        <StyledTabPanel value={openIndex} index={i}>
+        <StyledTabPanel value={openIndex} index={i} key={entity.tabLabel}>
           {entities.length > 0 ? (
             <>
               {entity.entityType === 'Dataset' && <DerivedDatasetsTable entities={entity.data} />}
