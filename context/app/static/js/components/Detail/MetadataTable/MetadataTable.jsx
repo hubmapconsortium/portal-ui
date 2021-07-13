@@ -99,12 +99,11 @@ function MetadataTable(props) {
 }
 
 MetadataTable.propTypes = {
-  metadata: PropTypes.objectOf(
-    PropTypes.oneOfType(
-      // Usually a string, but placeholder metadata.metadata is an object.
-      [PropTypes.string, PropTypes.object],
-    ),
-  ).isRequired,
+  // Metadata values are usually strings
+  // ... but placeholder metadata.metadata is an object
+  // ... and for donors, all the values are wrapped in arrays.
+  // eslint-disable-next-line react/forbid-prop-types
+  metadata: PropTypes.object.isRequired,
   hubmap_id: PropTypes.string.isRequired,
 };
 
