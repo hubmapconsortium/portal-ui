@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import CellsService from './CellsService';
 
 function AutocompleteEntity(props) {
-  const { targetEntity, handleChange: handleChangeOutside } = props;
+  const { targetEntity, setter } = props;
 
   const [substring, setSubstring] = useState('');
   const [options, setOptions] = useState([]);
@@ -44,7 +44,9 @@ function AutocompleteEntity(props) {
           {option.post}
         </>
       )}
-      onChange={handleChangeOutside}
+      onChange={(event, value) => {
+        setter(value.map((match) => match.full));
+      }}
       renderInput={(params) => (
         <TextField
           label="substring"
