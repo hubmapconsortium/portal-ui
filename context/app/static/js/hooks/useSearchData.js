@@ -32,7 +32,7 @@ function useSearchData(query, elasticsearchEndpoint, nexusToken) {
 
 function useSearchHits(query, elasticsearchEndpoint, nexusToken) {
   const { searchData, isLoading } = useSearchData(query, elasticsearchEndpoint, nexusToken);
-  const searchHits = searchData?.hits?.hits || {};
+  const searchHits = searchData?.hits?.hits || [];
   return { searchHits, isLoading };
 }
 

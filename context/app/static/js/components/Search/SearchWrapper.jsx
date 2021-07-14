@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
+import { useSearchHits } from 'js/hooks/useSearchData';
 import Accordions from './Accordions';
 import PaginationWrapper from './PaginationWrapper';
 import SearchBarLayout from './SearchBarLayout';
@@ -12,6 +13,18 @@ import { StyledSideBar } from './style';
 import { NoResults, SearchError } from './noHitsComponents';
 
 const searchViewStoreSelector = (state) => state.setSearchHitsCount;
+
+function AllUUIDs(props) {
+  const { uuidsQuery, apiUrl } = props;
+  const hits = useSearchHits(uuidsQuery, apiUrl);
+  // eslint-disable-next-line no-console
+  console.log(
+    'UUIDs',
+    // eslint-disable-next-line no-underscore-dangle
+    hits.searchHits.map((hit) => hit._id),
+  );
+  return null;
+}
 
 function SearchWrapper(props) {
   const {
@@ -38,6 +51,18 @@ function SearchWrapper(props) {
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
   searchkit.addDefaultQuery((query) => query.addQuery(defaultQuery));
 
+  const [uuidsQuery, setUuidsQuery] = useState({});
+  searchkit.setQueryProcessor((originalQuery) => {
+    const { post_filter, query } = originalQuery;
+    setUuidsQuery({
+      _source: ['uuid'],
+      size: 1000,
+      post_filter,
+      query,
+    });
+    return originalQuery;
+  });
+
   const setSearchHitsCount = useSearchViewStore(searchViewStoreSelector);
 
   useEffect(() => {
@@ -52,6 +77,7 @@ function SearchWrapper(props) {
   return (
     <SearchkitProvider searchkit={searchkit}>
       <>
+        <AllUUIDs uuidsQuery={uuidsQuery} apiUrl={apiUrl} />
         <SearchBarLayout queryFields={queryFields} sortOptions={sortOptions} isDevSearch={isDevSearch} />
         <LayoutBody>
           <StyledSideBar>
