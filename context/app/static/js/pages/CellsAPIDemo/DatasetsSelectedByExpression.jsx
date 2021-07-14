@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/core/Slider';
 import FormLabel from '@material-ui/core/FormLabel';
 
 import ResultsTable from './ResultsTable';
 import CellsService from './CellsService';
+import AutocompleteEntity from './AutocompleteEntity';
 
 // eslint-disable-next-line no-unused-vars
 function DatasetsSelectedByExpression(props) {
@@ -50,7 +50,7 @@ function DatasetsSelectedByExpression(props) {
 
   return (
     <Paper>
-      <TextField label="name" value={name} name="name" variant="outlined" onChange={handleChange} />
+      <AutocompleteEntity targetEntity="genes" onChange={handleChange} />
 
       <br />
 
