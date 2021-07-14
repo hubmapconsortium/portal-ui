@@ -139,3 +139,19 @@ def cell_expression_in_dataset():
 
     except Exception as e:
         return {'message': str(e)}
+
+
+@blueprint.route('/cells/all-indexed-uuids.json', methods=['POST'])
+def all_indexed_uuids():
+    # Get all UUIDs that have been indexed. Because of the delay in indexing,
+    # we can't assume that all datasets of any particular type have been indexed.
+
+    client = _get_client(current_app)
+
+    try:
+        datasets = client.select_datasets()
+        # list() will call iterator behind the scenes.
+        return {'results': list(datasets.get_list())}
+
+    except Exception as e:
+        return {'message': str(e)}

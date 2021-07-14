@@ -7,6 +7,7 @@ import SearchBySubstring from './SearchBySubstring';
 import CellPercentagesForDatasets from './CellPercentagesForDatasets';
 import CellExpressionInDataset from './CellExpressionInDataset';
 import DatasetsSelectedByExpression from './DatasetsSelectedByExpression';
+import AllIndexedUUIDs from './AllIndexedUUIDs';
 
 function About(props) {
   const { title, given, returns } = props;
@@ -63,6 +64,9 @@ function CellsAPIDemo(props) {
         returns="the expression level of those genes for every cell in the dataset"
       />
       <CellExpressionInDataset />
+
+      <About title="All indexed UUIDs" given="nothing" returns="all UUIDs that have been indexed by the Cells API" />
+      <AllIndexedUUIDs />
     </>
   );
 }
