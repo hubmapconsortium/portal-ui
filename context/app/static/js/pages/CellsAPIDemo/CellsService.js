@@ -61,6 +61,10 @@ class CellsService {
 
     return this.fetchAndParse(`/cells/cell-expression-in-dataset.json?${urlParams}`);
   }
+
+  async getAllIndexedUUIDs() {
+    return this.fetchAndParse(`/cells/all-indexed-uuids.json`);
+  }
 }
 
 export default CellsService;
