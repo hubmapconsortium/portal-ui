@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 
@@ -12,6 +13,17 @@ function SectionButtonRow({ leftText, buttons, ...props }) {
     </Flex>
   );
 }
+
+SectionButtonRow.propTypes = {
+  /**
+   Text to be displayed in the left most available space. Usually a BottomAlignedTypography component.
+  */
+  leftText: PropTypes.element.isRequired,
+  /**
+   Button(s) to be displayed in the right most available space.
+  */
+  buttons: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
+};
 
 const SpacedSectionButtonRow = styled(SectionButtonRow)`
   margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
