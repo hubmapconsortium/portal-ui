@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/core/Slider';
 import FormLabel from '@material-ui/core/FormLabel';
 
 import ResultsTable from './ResultsTable';
 import CellsService from './CellsService';
+import AutocompleteEntity from './AutocompleteEntity';
 
 // eslint-disable-next-line no-unused-vars
 function DatasetsSelectedByExpression(props) {
-  const [name, setName] = useState('VIM');
+  const [geneNames, setGeneNames] = useState([]);
   const [targetEntity, setTargetEntity] = useState('gene'); // eslint-disable-line no-unused-vars
   const [modality, setModality] = useState('rna'); // eslint-disable-line no-unused-vars
   const [minExpression, setMinExpression] = useState(1);
@@ -23,8 +23,8 @@ function DatasetsSelectedByExpression(props) {
   async function handleSubmit() {
     try {
       if (targetEntity === 'gene') {
-        const serviceResults = await new CellsService().getDatasetsSelectedByGene({
-          geneName: name,
+        const serviceResults = await new CellsService().getDatasetsSelectedByGenes({
+          geneNames,
           minExpression,
           minCellPercentage,
           modality,
@@ -38,19 +38,9 @@ function DatasetsSelectedByExpression(props) {
     }
   }
 
-  function handleChange(event) {
-    const { target } = event;
-    const setFields = {
-      name: setName,
-      minExpression: setMinExpression,
-      minCellPercentage: setMinCellPercentage,
-    };
-    setFields[target.name](event.target.value);
-  }
-
   return (
     <Paper>
-      <TextField label="name" value={name} name="name" variant="outlined" onChange={handleChange} />
+      <AutocompleteEntity targetEntity="genes" setter={setGeneNames} />
 
       <br />
 

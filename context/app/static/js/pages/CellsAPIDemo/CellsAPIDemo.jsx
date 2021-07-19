@@ -31,13 +31,6 @@ function CellsAPIDemo(props) {
       <Alert severity="warning">UI is still being designed, but we want to demonstrate that the API works.</Alert>
 
       <About
-        title="Search genes by substring"
-        given="a substring from a gene name"
-        returns="a list of the first few matches"
-      />
-      <SearchBySubstring targetEntity="genes" />
-
-      <About
         title="Search proteins by substring"
         given="a substring from a protein name"
         returns="a list of the first few matches"
@@ -45,8 +38,8 @@ function CellsAPIDemo(props) {
       <SearchBySubstring targetEntity="proteins" />
 
       <About
-        title="Datasets selected by expression"
-        given="a gene, a minimum expression level, and a minimum percentage of cells at that expression level"
+        title="Datasets selected by gene expression"
+        given="a list of genes, a minimum expression level, and a minimum percentage of cells at that expression level"
         returns="a list of UUIDs for datasets which meet those minimums"
       />
       <DatasetsSelectedByExpression />

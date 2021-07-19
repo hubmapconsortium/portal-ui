@@ -78,7 +78,7 @@ def proteins_by_substring():
 
 @blueprint.route('/cells/datasets-selected-by-<target_entity>.json', methods=['POST'])
 def datasets_selected_by_level(target_entity):
-    name = request.args.get('name')
+    names = request.args.getlist('name')
     modality = request.args.get('modality')
     min_expression = request.args.get('min_expression')
     min_cell_percentage = request.args.get('min_cell_percentage')
@@ -88,7 +88,7 @@ def datasets_selected_by_level(target_entity):
     try:
         dataset_set = client.select_datasets(
             where=target_entity,
-            has=[f'{name} > {min_expression}'],
+            has=[f'{name} > {min_expression}' for name in names],
             genomic_modality=modality,
             min_cell_percentage=min_cell_percentage
         )
