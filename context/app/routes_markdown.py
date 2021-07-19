@@ -4,7 +4,7 @@ from os.path import dirname
 
 from flask import Blueprint, render_template, request, redirect
 
-from .routes_main import _get_default_flask_data
+from .routes_main import get_default_flask_data
 
 # NOTE: A better approach might be to look again at the handful of libraries
 # that handle this, or to pre-render everything when flask starts.
@@ -32,7 +32,7 @@ def markdown_view():
     return render_template(
         'pages/base_react.html',
         flask_data={
-            **_get_default_flask_data(),
+            **get_default_flask_data(),
             'markdown': content_md
         },
         title=title

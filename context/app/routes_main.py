@@ -29,7 +29,7 @@ def _get_client():
     )
 
 
-def _get_default_flask_data():
+def get_default_flask_data():
     return {
         'endpoints': {
             'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
@@ -45,7 +45,7 @@ def _get_default_flask_data():
 
 @blueprint.route('/')
 def index():
-    flask_data = {**_get_default_flask_data()}
+    flask_data = {**get_default_flask_data()}
     return render_template(
         'pages/base_react.html',
         types=entity_types,
@@ -57,7 +57,7 @@ def index():
 
 @blueprint.route('/services')
 def service_status():
-    flask_data = {**_get_default_flask_data()}
+    flask_data = {**get_default_flask_data()}
     return render_template(
         'pages/base_react.html',
         types=entity_types,
@@ -109,7 +109,7 @@ def details(type, uuid):
     template = 'pages/base_react.html'
     conf_cells = client.get_vitessce_conf_cells(entity)
     flask_data = {
-        **_get_default_flask_data(),
+        **get_default_flask_data(),
         'entity': entity,
         'vitessce_conf': conf_cells.conf,
         'has_notebook': conf_cells.cells is not None
@@ -192,7 +192,7 @@ def search():
     entity_type = request.args.get('entity_type[0]')
     title = f'{entity_type}s' if entity_type else 'Search'
     flask_data = {
-        **_get_default_flask_data(),
+        **get_default_flask_data(),
         'title': title,
     }
     return render_template(
@@ -207,7 +207,7 @@ def search():
 def dev_search():
     title = 'Dev Search'
     flask_data = {
-        **_get_default_flask_data(),
+        **get_default_flask_data(),
         'title': title,
     }
     return render_template(
@@ -222,7 +222,7 @@ def dev_search():
 def vis():
     title = 'Visualizations'
     flask_data = {
-        **_get_default_flask_data(),
+        **get_default_flask_data(),
         'title': title
     }
     return render_template(
@@ -240,7 +240,7 @@ def preview_view(name):
     preview_metadata = metadata_content.metadata
     markdown = metadata_content.content
     flask_data = {
-        **_get_default_flask_data(),
+        **get_default_flask_data(),
         'title': preview_metadata['title'],
         'markdown': markdown,
         'entity': {
@@ -260,7 +260,7 @@ def preview_view(name):
 
 @blueprint.route('/collections')
 def collections():
-    flask_data = {**_get_default_flask_data()}
+    flask_data = {**get_default_flask_data()}
     return render_template(
         'pages/base_react.html',
         title='Collections',
@@ -270,7 +270,7 @@ def collections():
 
 @blueprint.route('/my-lists')
 def my_lists():
-    flask_data = {**_get_default_flask_data()}
+    flask_data = {**get_default_flask_data()}
     return render_template(
         'pages/base_react.html',
         title='My Lists',
@@ -281,7 +281,7 @@ def my_lists():
 @blueprint.route('/my-lists/<saved_list_uuid>')
 def list_page(saved_list_uuid):
     flask_data = {
-        **_get_default_flask_data(),
+        **get_default_flask_data(),
         'list_uuid': saved_list_uuid
     }
     return render_template(

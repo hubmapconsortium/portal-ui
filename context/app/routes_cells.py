@@ -4,7 +4,7 @@ from flask import (Blueprint, render_template, current_app, request)
 
 from hubmap_api_py_client import Client
 
-from .routes_main import _get_default_flask_data
+from .routes_main import get_default_flask_data
 
 
 blueprint = Blueprint('routes_cells', __name__, template_folder='templates')
@@ -15,7 +15,7 @@ def cells_ui():
     return render_template(
         'pages/base_react.html',
         title='Cells API Demo',
-        flask_data={**_get_default_flask_data()}
+        flask_data={**get_default_flask_data()}
     )
 
 
