@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ThemeContext } from 'styled-components';
 import Joyride, { STATUS, ACTIONS } from 'react-joyride';
 
-import TutorialTooltip from 'js/components/tutorials/TutorialTooltip';
+import DatasetSearchTutorialTooltip from 'js/components/tutorials/DatasetSearchTutorialTooltip';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { sortTileViewStepTitle, defaultSteps, stepToAddIfViewMoreExists } from './config';
 
@@ -66,7 +66,7 @@ function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIn
       floaterProps={{
         disableAnimation: true,
       }}
-      tooltipComponent={TutorialTooltip}
+      tooltipComponent={DatasetSearchTutorialTooltip}
       styles={{ options: { arrowColor: themeContext.palette.info.dark, zIndex: themeContext.zIndex.tutorial } }}
       stepIndex={stepIndex}
     />

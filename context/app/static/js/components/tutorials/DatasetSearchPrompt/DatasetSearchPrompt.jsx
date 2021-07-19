@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
-import { CenteredDiv, Flex, StyledTypography, StyledPaper, StyledInfoIcon, StyledButton } from './style';
+import SearchPrompt from '../SearchPrompt';
 
 const searchViewStoreSelector = (state) => ({
   setSearchView: state.setSearchView,
@@ -45,32 +42,14 @@ function DatasetSearchPrompt({ setRunTutorial }) {
   }
 
   return isDisplayed ? (
-    <StyledPaper>
-      <CenteredDiv>
-        <Flex>
-          <StyledInfoIcon color="primary" />
-          <Typography variant="subtitle1" color="textPrimary">
-            Getting Started
-          </Typography>
-        </Flex>
-        <StyledTypography>
-          Welcome to the HuBMAP Data Portal. Get a quick tour of different sections of the dataset search page.
-        </StyledTypography>
-        <StyledButton
-          color="primary"
-          variant="contained"
-          onClick={beginTutorial}
-          disabled={!timeoutHasRun || searchHitsCount === 0}
-        >
-          Begin the Dataset Search Tutorial
-        </StyledButton>
-      </CenteredDiv>
-      <div>
-        <IconButton aria-label="close" onClick={() => closePrompt()}>
-          <CloseRoundedIcon />
-        </IconButton>
-      </div>
-    </StyledPaper>
+    <SearchPrompt
+      headerText="Getting Started"
+      descriptionText="Welcome to the HuBMAP Data Portal. Get a quick tour of different sections of the dataset search page."
+      buttonText="Begin the Dataset Search Tutorial"
+      buttonOnClick={beginTutorial}
+      buttonIsDisabled={!timeoutHasRun || searchHitsCount === 0}
+      closeOnClick={closePrompt}
+    />
   ) : null;
 }
 
