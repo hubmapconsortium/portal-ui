@@ -1,3 +1,13 @@
+## v0.23.0 - 2021-07-19
+
+- Refactor tutorial components and add to storybook.
+- Updated to CCF EUI 2.0
+- List datasets indexed by Cells API.
+- In the Cells Demo, demonstrate how multiple genes could be queried.
+- Fix missing whitespace in optional message.
+- Track dataset search tutorial events with google analytics.
+
+
 ## v0.22.1 - 2021-07-12
 
 - Stub a cells-search, where new functionality can be developed.
