@@ -1,11 +1,17 @@
 import styled from 'styled-components';
+import Container from '@material-ui/core/Container';
 
 import { Alert } from 'js/shared-styles/alerts';
 
 const StyledAlert = styled(Alert)`
-  max-width: ${(props) => props.theme.breakpoints.values.lg}px;
-  margin: ${(props) => props.theme.spacing(3)}px;
-  margin-bottom: 0;
+  width: ${(props) => props.theme.breakpoints.values.lg}px;
+  margin-top: ${(props) => props.theme.spacing(3)}px;
 `;
 
-export { StyledAlert };
+const FlexContainer = styled(Container)`
+  display: flex;
+  height: 100%;
+  align-items: center;
+`;
+
+export { StyledAlert, FlexContainer };

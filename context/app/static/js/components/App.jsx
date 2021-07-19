@@ -8,7 +8,7 @@ import Routes from './Routes';
 import Footer from './Footer';
 import Header from './Header';
 
-import { StyledAlert } from './style';
+import { StyledAlert, FlexContainer } from './style';
 
 // Importing Search styles here so the CSS import order is correct.
 import 'js/components/Search/Search.scss';
@@ -34,10 +34,12 @@ function App(props) {
     <Providers endpoints={endpoints} nexusToken={nexus_token}>
       <Header />
       {globalAlertMd && (
-        <StyledAlert severity="warning">
-          {/* eslint-disable-next-line react/no-danger */}
-          <div dangerouslySetInnerHTML={{ __html: marked.parseInline(globalAlertMd) }} />
-        </StyledAlert>
+        <FlexContainer>
+          <StyledAlert severity="warning">
+            {/* eslint-disable-next-line react/no-danger */}
+            <div dangerouslySetInnerHTML={{ __html: marked.parseInline(globalAlertMd) }} />
+          </StyledAlert>
+        </FlexContainer>
       )}
       <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode, list_uuid, has_notebook }} />
       <Footer />
