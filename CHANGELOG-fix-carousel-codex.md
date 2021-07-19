@@ -1,0 +1,1 @@
+- Fix carousel Codex link view config after upgrading Vitessce.
