@@ -1,6 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line import/no-unresolved
-import { render, screen } from 'test-utils/functions';
+import { render, screen, act } from 'test-utils/functions';
 
 import Search from './Search';
 
@@ -25,7 +25,9 @@ test('Search works with entity_type param', () => {
     value: location,
   });
 
-  render(<Search elasticsearchEndpoint="not-used" title="TITLE" />);
+  act(() => {
+    render(<Search elasticsearchEndpoint="not-used" title="TITLE" />);
+  });
   const expectedStrings = ['TITLE', 'Donor Metadata', 'Affiliation'];
   expectedStrings.forEach((s) => expect(screen.getByText(s)).toBeInTheDocument());
 });
