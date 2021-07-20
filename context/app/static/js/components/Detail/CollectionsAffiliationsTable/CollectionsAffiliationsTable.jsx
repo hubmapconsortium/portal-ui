@@ -13,7 +13,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import { HeaderIconCell, StyledInfoIcon, CenterAlignedFlexRow } from './style';
+import { HeaderIconCell, StyledInfoIcon, CenterAlignedFlexRow, StyledOpenInNewRoundedIcon } from './style';
 
 function CollectionsAffiliationsTable(props) {
   const { title, affiliations: tableRows } = props;
@@ -36,7 +36,7 @@ function CollectionsAffiliationsTable(props) {
                 ))}
                 <HeaderIconCell>
                   <CenterAlignedFlexRow>
-                    ORCID ID
+                    ORCID
                     <SecondaryBackgroundTooltip title="Open Researcher and Contributor ID">
                       <StyledInfoIcon color="primary" />
                     </SecondaryBackgroundTooltip>
@@ -51,7 +51,7 @@ function CollectionsAffiliationsTable(props) {
                   <TableCell>{row.affiliation}</TableCell>
                   <TableCell>
                     <OutboundLink href={`https://orcid.org/${row.orcid_id}`} variant="body2">
-                      {row.orcid_id}
+                      {row.orcid_id} <StyledOpenInNewRoundedIcon />
                     </OutboundLink>
                   </TableCell>
                 </TableRow>
