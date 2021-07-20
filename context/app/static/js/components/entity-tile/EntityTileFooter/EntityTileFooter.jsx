@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { FixedWidthFlex, StyledDivider, StyledDatasetIcon, StyledSampleIcon } from './style';
 
-function EntityTileBottom(props) {
+function EntityTileFooter(props) {
   const { entityData, invertColors, descendantCounts } = props;
 
   return (
@@ -24,16 +24,16 @@ function EntityTileBottom(props) {
   );
 }
 
-EntityTileBottom.propTypes = {
+EntityTileFooter.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   entityData: PropTypes.object.isRequired,
   descendantCounts: PropTypes.shape({ Dataset: PropTypes.number, Sample: PropTypes.number }),
   invertColors: PropTypes.bool,
 };
 
-EntityTileBottom.defaultProps = {
+EntityTileFooter.defaultProps = {
   descendantCounts: {},
   invertColors: false,
 };
 
-export default EntityTileBottom;
+export default EntityTileFooter;
