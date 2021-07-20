@@ -19,7 +19,7 @@ function AllUUIDs(props) {
   const hits = useSearchHits(uuidsQuery, apiUrl);
   // eslint-disable-next-line no-console
   console.log(
-    'UUIDs',
+    'TODO: Let the user build a list from these.',
     // eslint-disable-next-line no-underscore-dangle
     hits.searchHits.map((hit) => hit._id),
   );
@@ -56,7 +56,7 @@ function SearchWrapper(props) {
   searchkit.setQueryProcessor((originalQuery) => {
     const { post_filter, query } = originalQuery;
     setUuidsQuery({
-      _source: ['uuid'],
+      _source: [],
       size: 1000,
       post_filter,
       query,

@@ -1,1 +1,0 @@
-- Make a list of all UUIDs available on the search page.
