@@ -54,7 +54,7 @@ const donorRaceSexQuery = {
             },
           },
         ],
-        size: 10000,
+        size: 0,
       },
     },
   },
