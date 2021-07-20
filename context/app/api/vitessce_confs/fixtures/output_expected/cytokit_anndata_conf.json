@@ -1,5 +1,5 @@
 [{
-    "version": "1.0.0",
+    "version": "1.0.2",
     "name": "reg1_stitched_expressions",
     "description": "",
     "datasets": [
@@ -181,7 +181,7 @@
     "initStrategy": "auto"
 },
 {
-    "version": "1.0.0",
+    "version": "1.0.2",
     "name": "reg2_stitched_expressions",
     "description": "",
     "datasets": [
