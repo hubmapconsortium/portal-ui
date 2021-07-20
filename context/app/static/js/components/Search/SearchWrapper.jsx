@@ -41,6 +41,7 @@ function SearchWrapper(props) {
     isLoggedIn,
     isDevSearch,
     defaultQuery,
+    getAllUUIDs,
     resultsComponent: ResultsComponent,
   } = props;
 
@@ -77,7 +78,7 @@ function SearchWrapper(props) {
   return (
     <SearchkitProvider searchkit={searchkit}>
       <>
-        <AllUUIDs uuidsQuery={uuidsQuery} apiUrl={apiUrl} />
+        {getAllUUIDs && <AllUUIDs uuidsQuery={uuidsQuery} apiUrl={apiUrl} />}
         <SearchBarLayout queryFields={queryFields} sortOptions={sortOptions} isDevSearch={isDevSearch} />
         <LayoutBody>
           <StyledSideBar>
@@ -138,6 +139,7 @@ SearchWrapper.propTypes = {
   type: PropTypes.string,
   isLoggedIn: PropTypes.bool,
   resultsComponent: PropTypes.func.isRequired,
+  getAllUUIDs: PropTypes.bool,
 };
 
 SearchWrapper.defaultProps = {
@@ -145,6 +147,7 @@ SearchWrapper.defaultProps = {
   httpHeaders: {},
   isLoggedIn: false,
   type: undefined,
+  getAllUUIDs: false,
 };
 
 export default SearchWrapper;

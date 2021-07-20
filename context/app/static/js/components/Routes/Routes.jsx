@@ -80,7 +80,7 @@ function Routes(props) {
   if (urlPath.startsWith('/search')) {
     return (
       <Route>
-        <Search title={title} />
+        <Search title={title} getAllUUIDs />
       </Route>
     );
   }

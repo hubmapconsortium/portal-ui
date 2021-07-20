@@ -24,7 +24,7 @@ const searchDatasetTutorialSelector = (state) => ({
 });
 
 function Search(props) {
-  const { title } = props;
+  const { title, getAllUUIDs } = props;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   const {
@@ -91,6 +91,7 @@ function Search(props) {
     isLoggedIn: Boolean(nexusToken),
     apiUrl: elasticsearchEndpoint,
     defaultQuery: BoolMustNot(ExistsQuery('next_revision_uuid')),
+    getAllUUIDs,
   };
 
   const wrappedSearch = <SearchWrapper {...searchProps} resultsComponent={Results} />;
@@ -127,10 +128,12 @@ function Search(props) {
 Search.propTypes = {
   title: PropTypes.string.isRequired,
   nexusToken: PropTypes.string,
+  getAllUUIDs: PropTypes.bool,
 };
 
 Search.defaultProps = {
   nexusToken: '',
+  getAllUUIDs: false,
 };
 
 export default Search;
