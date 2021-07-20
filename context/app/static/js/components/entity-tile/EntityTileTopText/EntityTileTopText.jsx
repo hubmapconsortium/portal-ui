@@ -30,7 +30,7 @@ function EntityTileTopText(props) {
               {entityData.mapped_metadata.age_value} {entityData.mapped_metadata.age_unit}
             </Typography>
           </Flex>
-          <TruncatedTypography variant="body2">{entityData.mapped_metadata.race}</TruncatedTypography>
+          <TruncatedTypography variant="body2">{entityData.mapped_metadata.race.join(', ')}</TruncatedTypography>
         </>
       )}
     </StyledDiv>
