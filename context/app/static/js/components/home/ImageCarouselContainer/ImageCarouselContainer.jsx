@@ -34,6 +34,7 @@ function ImageCarouselContainer() {
           src1280w={VitessceSlide1280w}
           src1392w={VitessceSlide1392w}
           alt="Vitessce"
+          key="Vitessce"
         />
       ),
       buttonHref:
@@ -50,6 +51,7 @@ function ImageCarouselContainer() {
           src1280w={CCFSlide1280w}
           src1392w={CCFSlide1392w}
           alt="CCF Portal"
+          key="CCF Portal"
         />
       ),
       buttonHref: 'https://hubmapconsortium.github.io/ccf/',
@@ -65,6 +67,7 @@ function ImageCarouselContainer() {
           src1280w={AzimuthSlide1280w}
           src1392w={AzimuthSlide1392w}
           alt="Azimuth"
+          key="Azimuth"
         />
       ),
       buttonHref: 'https://azimuth.hubmapconsortium.org/',

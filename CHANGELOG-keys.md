@@ -1,0 +1,2 @@
+- Add keys to silence React warnings.
+- Loosen proptype checks for metadata tables.
