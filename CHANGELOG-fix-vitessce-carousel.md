@@ -1,0 +1,1 @@
+- Fix Vitessce carousel demo by upgrading Vitessce to 1.1.12 + python package to 0.1.0a11 to gain backwards compatibility.
