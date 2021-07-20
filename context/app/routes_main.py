@@ -29,20 +29,23 @@ def _get_client():
     )
 
 
-def _get_endpoints():
+def get_default_flask_data():
     return {
-        'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
-        + current_app.config['PORTAL_INDEX_PATH'],
-        'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
-        'entityEndpoint': current_app.config['ENTITY_API_BASE'],
-        'xmodalityEndpoint': current_app.config['XMODALITY_ENDPOINT'],
-        'gatewayEndpoint': current_app.config['GATEWAY_ENDPOINT'],
+        'endpoints': {
+            'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
+            + current_app.config['PORTAL_INDEX_PATH'],
+            'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
+            'entityEndpoint': current_app.config['ENTITY_API_BASE'],
+            'xmodalityEndpoint': current_app.config['XMODALITY_ENDPOINT'],
+            'gatewayEndpoint': current_app.config['GATEWAY_ENDPOINT'],
+        },
+        'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
     }
 
 
 @blueprint.route('/')
 def index():
-    flask_data = {'endpoints': _get_endpoints()}
+    flask_data = {**get_default_flask_data()}
     return render_template(
         'pages/base_react.html',
         types=entity_types,
@@ -54,7 +57,7 @@ def index():
 
 @blueprint.route('/services')
 def service_status():
-    flask_data = {'endpoints': _get_endpoints()}
+    flask_data = {**get_default_flask_data()}
     return render_template(
         'pages/base_react.html',
         types=entity_types,
@@ -106,7 +109,7 @@ def details(type, uuid):
     template = 'pages/base_react.html'
     conf_cells = client.get_vitessce_conf_cells(entity)
     flask_data = {
-        'endpoints': _get_endpoints(),
+        **get_default_flask_data(),
         'entity': entity,
         'vitessce_conf': conf_cells.conf,
         'has_notebook': conf_cells.cells is not None
@@ -189,14 +192,14 @@ def search():
     entity_type = request.args.get('entity_type[0]')
     title = f'{entity_type}s' if entity_type else 'Search'
     flask_data = {
-        'endpoints': _get_endpoints(),
-        'title': title
+        **get_default_flask_data(),
+        'title': title,
     }
     return render_template(
         'pages/base_react.html',
         title=title,
         types=entity_types,
-        flask_data=flask_data
+        flask_data=flask_data,
     )
 
 
@@ -204,8 +207,8 @@ def search():
 def dev_search():
     title = 'Dev Search'
     flask_data = {
-        'endpoints': _get_endpoints(),
-        'title': title
+        **get_default_flask_data(),
+        'title': title,
     }
     return render_template(
         'pages/base_react.html',
@@ -219,7 +222,7 @@ def dev_search():
 def vis():
     title = 'Visualizations'
     flask_data = {
-        'endpoints': _get_endpoints(),
+        **get_default_flask_data(),
         'title': title
     }
     return render_template(
@@ -237,6 +240,7 @@ def preview_view(name):
     preview_metadata = metadata_content.metadata
     markdown = metadata_content.content
     flask_data = {
+        **get_default_flask_data(),
         'title': preview_metadata['title'],
         'markdown': markdown,
         'entity': {
@@ -256,7 +260,7 @@ def preview_view(name):
 
 @blueprint.route('/collections')
 def collections():
-    flask_data = {'endpoints': _get_endpoints()}
+    flask_data = {**get_default_flask_data()}
     return render_template(
         'pages/base_react.html',
         title='Collections',
@@ -266,7 +270,7 @@ def collections():
 
 @blueprint.route('/my-lists')
 def my_lists():
-    flask_data = {'endpoints': _get_endpoints()}
+    flask_data = {**get_default_flask_data()}
     return render_template(
         'pages/base_react.html',
         title='My Lists',
@@ -276,7 +280,10 @@ def my_lists():
 
 @blueprint.route('/my-lists/<saved_list_uuid>')
 def list_page(saved_list_uuid):
-    flask_data = {'endpoints': _get_endpoints(), 'list_uuid': saved_list_uuid}
+    flask_data = {
+        **get_default_flask_data(),
+        'list_uuid': saved_list_uuid
+    }
     return render_template(
         'pages/base_react.html',
         title='Saved List',
