@@ -40,16 +40,16 @@ const donorRaceSexQuery = {
       composite: {
         sources: [
           {
-            'mapped_metadata.sex': {
+            'mapped_metadata.race': {
               terms: {
-                field: 'mapped_metadata.sex.keyword',
+                field: 'mapped_metadata.race.keyword',
               },
             },
           },
           {
-            'mapped_metadata.race': {
+            'mapped_metadata.blood_type': {
               terms: {
-                field: 'mapped_metadata.race.keyword',
+                field: 'mapped_metadata.blood_type.keyword',
               },
             },
           },
@@ -62,15 +62,24 @@ const donorRaceSexQuery = {
 
 const columns = [
   { id: 'none', label: '          ' },
-  { id: 'white', label: 'White' },
-  { id: 'black', label: 'Black or African American' },
-  { id: 'hispanic', label: 'Hispanic' },
+  { id: 'a', label: 'A' },
+  { id: 'ab', label: 'AB' },
+  { id: 'b', label: 'B' },
+  { id: 'o', label: 'O' },
 ];
 
 function Vis() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   const { searchData } = useSearchData(donorRaceSexQuery, elasticsearchEndpoint, nexusToken);
+  if (!('aggregations' in searchData)) {
+    return null;
+  }
+
+  const { buckets } = searchData.aggregations[('mapped_metadata.race', 'mapped_metadata.blood_type')];
+  const result = buckets.filter(
+    (bucket) => bucket.key['mapped_metadata.blood_type'] === 'O' && bucket.key['mapped_metadata.race'] === 'White',
+  );
 
   return (
     Object.keys(searchData).length && (
@@ -86,17 +95,27 @@ function Vis() {
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell> Male </TableCell>
-                <TableCell> {searchData.aggregations.mapped_data_types.buckets[4].doc_count}</TableCell>
-                <TableCell> {searchData.aggregations.mapped_data_types.buckets[2].doc_count}</TableCell>
-                <TableCell> {searchData.aggregations.mapped_data_types.buckets[3].doc_count}</TableCell>
+                <TableCell> White </TableCell>
+                <TableCell> </TableCell>
+                <TableCell> {searchData.aggregations.mapped_data_types.buckets[5].doc_count}</TableCell>
+                <TableCell> {searchData.aggregations.mapped_data_types.buckets[6].doc_count}</TableCell>
+                <TableCell> {result[0].doc_count} </TableCell>
               </TableRow>
             </TableBody>
             <TableBody>
               <TableRow>
-                <TableCell> Female</TableCell>
+                <TableCell> Black or African American </TableCell>
+                <TableCell> </TableCell>
+                <TableCell> </TableCell>
                 <TableCell> {searchData.aggregations.mapped_data_types.buckets[1].doc_count}</TableCell>
-                <TableCell> {searchData.aggregations.mapped_data_types.buckets[0].doc_count}</TableCell>
+                <TableCell> {searchData.aggregations.mapped_data_types.buckets[2].doc_count}</TableCell>
+              </TableRow>
+            </TableBody>
+            <TableBody>
+              <TableRow>
+                <TableCell> Hispanic </TableCell>
+                <TableCell> </TableCell>
+                <TableCell> {searchData.aggregations.mapped_data_types.buckets[3].doc_count}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
