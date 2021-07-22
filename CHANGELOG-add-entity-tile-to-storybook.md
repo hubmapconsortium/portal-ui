@@ -1,1 +1,0 @@
-- Add entity tile components to storybook.

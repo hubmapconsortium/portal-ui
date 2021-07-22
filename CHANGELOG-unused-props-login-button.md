@@ -1,1 +1,0 @@
-- Remove unused props passed from login button to dropdown.

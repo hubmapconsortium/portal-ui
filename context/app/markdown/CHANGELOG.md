@@ -1,3 +1,16 @@
+## v0.23.1 - 2021-07-22
+
+- Add entity tile components to storybook.
+- Separate multivalued donor race with comma in entity tile.
+- Fix Vitessce carousel demo by upgrading Vitessce to 1.1.12 + python package to 0.1.0a12 to gain backwards compatibility.
+- Add a mechanism for site-wide alerts via config var. Could be used if half of our hybrid cloud goes down again.
+- Add keys to silence React warnings.
+- Loosen proptype checks for metadata tables.
+- "ORCID ID" to "ORCID" in header; Add outbound icon in table body.
+- Remove unused props passed from login button to dropdown.
+- Upgrade to caniuse to silence warning.
+
+
 ## v0.23.0 - 2021-07-19
 
 - Refactor tutorial components and add to storybook.
