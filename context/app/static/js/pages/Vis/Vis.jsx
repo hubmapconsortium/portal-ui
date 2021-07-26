@@ -36,7 +36,7 @@ import useSearchData from 'js/hooks/useSearchData';
 const donorRaceSexQuery = {
   size: 0,
   aggs: {
-    mapped_data_types: {
+    composite_data: {
       composite: {
         sources: [
           {
@@ -54,19 +54,11 @@ const donorRaceSexQuery = {
             },
           },
         ],
-        size: 0,
+        size: 10000,
       },
     },
   },
 };
-
-const columns = [
-  { id: 'none', label: '          ' },
-  { id: 'a', label: 'A' },
-  { id: 'ab', label: 'AB' },
-  { id: 'b', label: 'B' },
-  { id: 'o', label: 'O' },
-];
 
 function Vis() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
@@ -76,10 +68,16 @@ function Vis() {
     return null;
   }
 
-  const { buckets } = searchData.aggregations[('mapped_metadata.race', 'mapped_metadata.blood_type')];
-  const result = buckets.filter(
-    (bucket) => bucket.key['mapped_metadata.blood_type'] === 'O' && bucket.key['mapped_metadata.race'] === 'White',
-  );
+  function getCount(buckets, bloodType, race) {
+    const filtered = buckets.filter(
+      (b) => b.key['mapped_metadata.blood_type'] === bloodType && b.key['mapped_metadata.race'] === race,
+    );
+    return filtered.length ? filtered[0].doc_count : 0;
+  }
+  function getKeyValues(buckets, key) {
+    return [...new Set(buckets.map((b) => b.key[key]))];
+  }
+  const { buckets } = searchData?.aggregations.composite_data;
 
   return (
     Object.keys(searchData).length && (
@@ -88,34 +86,35 @@ function Vis() {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                {columns.map((column) => (
-                  <HeaderCell key={column.id}>{column.label}</HeaderCell>
+                <HeaderCell> </HeaderCell>
+                {getKeyValues(buckets, 'mapped_metadata.blood_type').map((type) => (
+                  <HeaderCell> {type} </HeaderCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell> White </TableCell>
-                <TableCell> </TableCell>
-                <TableCell> {searchData.aggregations.mapped_data_types.buckets[5].doc_count}</TableCell>
-                <TableCell> {searchData.aggregations.mapped_data_types.buckets[6].doc_count}</TableCell>
-                <TableCell> {result[0].doc_count} </TableCell>
+                <HeaderCell> White </HeaderCell>
+                <TableCell> {getCount(buckets, 'A', 'White')}</TableCell>
+                <TableCell> {getCount(buckets, 'B', 'White')}</TableCell>
+                <TableCell> {getCount(buckets, 'O', 'White')} </TableCell>
+                <TableCell> {getCount(buckets, 'AB', 'White')}</TableCell>
               </TableRow>
-            </TableBody>
-            <TableBody>
+
               <TableRow>
-                <TableCell> Black or African American </TableCell>
-                <TableCell> </TableCell>
-                <TableCell> </TableCell>
-                <TableCell> {searchData.aggregations.mapped_data_types.buckets[1].doc_count}</TableCell>
-                <TableCell> {searchData.aggregations.mapped_data_types.buckets[2].doc_count}</TableCell>
+                <HeaderCell> Black or African American </HeaderCell>
+                <TableCell> {getCount(buckets, 'A', 'Black or African American')}</TableCell>
+                <TableCell> {getCount(buckets, 'B', 'Black or African American')} </TableCell>
+                <TableCell> {getCount(buckets, 'O', 'Black or African American')}</TableCell>
+                <TableCell> {getCount(buckets, 'AB', 'Black or African American')} </TableCell>
               </TableRow>
-            </TableBody>
-            <TableBody>
+
               <TableRow>
-                <TableCell> Hispanic </TableCell>
-                <TableCell> </TableCell>
-                <TableCell> {searchData.aggregations.mapped_data_types.buckets[3].doc_count}</TableCell>
+                <HeaderCell> Hispanic </HeaderCell>
+                <TableCell> {getCount(buckets, 'A', 'Hispanic')} </TableCell>
+                <TableCell> {getCount(buckets, 'B', 'Hispanic')} </TableCell>
+                <TableCell> {getCount(buckets, 'O', 'Hispanic')} </TableCell>
+                <TableCell> {getCount(buckets, 'AB', 'Hispanic')} </TableCell>
               </TableRow>
             </TableBody>
           </Table>
