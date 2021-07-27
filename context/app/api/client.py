@@ -170,25 +170,21 @@ def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
     ...
     Exception: ID not unique; got 2 matches
 
-    >>> _get_entity_from_hits([], hbm_id='HBM123.XYZ.456')
-    Traceback (most recent call last):
-    ...
-    werkzeug.exceptions.Forbidden: 403 Forbidden: You don't have the permission to access the requested resource. It is either read-protected or not readable by the server.
+    >>> def error(f):
+    ...   try: f()
+    ...   except Exception as e: print(type(e).__name__)
 
-    >>> _get_entity_from_hits([], uuid='0123456789abcdef0123456789abcdef')
-    Traceback (most recent call last):
-    ...
-    werkzeug.exceptions.Forbidden: 403 Forbidden: You don't have the permission to access the requested resource. It is either read-protected or not readable by the server.
+    >>> error(lambda: _get_entity_from_hits([], hbm_id='HBM123.XYZ.456'))
+    Forbidden
 
-    >>> _get_entity_from_hits([], uuid='0123456789abcdef0123456789abcdef', has_token=True)
-    Traceback (most recent call last):
-    ...
-    werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+    >>> error(lambda: _get_entity_from_hits([], uuid='0123456789abcdef0123456789abcdef'))
+    Forbidden
 
-    >>> _get_entity_from_hits([], uuid='too-short')
-    Traceback (most recent call last):
-    ...
-    werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+    >>> error(lambda: _get_entity_from_hits([], uuid='0123456789abcdef0123456789abcdef', has_token=True))
+    NotFound
+
+    >>> error(lambda: _get_entity_from_hits([], uuid='too-short'))
+    NotFound
 
     >>> _get_entity_from_hits([{'_source': 'fake-entity'}])
     'fake-entity'
