@@ -14,7 +14,7 @@ function DatasetsSelectedByExpression(props) {
   const [geneNames, setGeneNames] = useState([]);
   const [targetEntity, setTargetEntity] = useState('gene'); // eslint-disable-line no-unused-vars
   const [modality, setModality] = useState('rna'); // eslint-disable-line no-unused-vars
-  const [minExpression, setMinExpression] = useState(1);
+  const [minExpressionLog, setMinExpressionLog] = useState(1);
   const [minCellPercentage, setMinCellPercentage] = useState(10);
 
   const [results, setResults] = useState([]);
@@ -25,7 +25,7 @@ function DatasetsSelectedByExpression(props) {
       if (targetEntity === 'gene') {
         const serviceResults = await new CellsService().getDatasetsSelectedByGenes({
           geneNames,
-          minExpression,
+          minExpression: 10 ** minExpressionLog,
           minCellPercentage,
           modality,
         });
@@ -45,12 +45,11 @@ function DatasetsSelectedByExpression(props) {
       <br />
 
       <FormLabel id="min-gene-expression-label">Minimum gene expression</FormLabel>
-      <SliderWrapper
-        value={minExpression}
-        min={0}
-        max={100}
-        marks={[0, 12.5, 25, 50, 100]}
-        setter={setMinExpression}
+      <LogSliderWrapper
+        value={minExpressionLog}
+        minLog={-4}
+        maxLog={5}
+        setter={setMinExpressionLog}
         labelledby="min-gene-expression-label"
       />
 
@@ -83,6 +82,25 @@ function SliderWrapper(props) {
       valueLabelDisplay="auto"
       step={null} /* Constrains choices to the mark values. */
       marks={marks.map((m) => ({ value: m, label: m }))}
+      onChange={(e, val) => {
+        setter(val);
+      }}
+      aria-labelledby={labelledby}
+    />
+  );
+}
+
+function LogSliderWrapper(props) {
+  const { value, minLog, maxLog, setter, labelledby } = props;
+  const marks = [...Array(1 + maxLog - minLog).keys()].map((k) => k + minLog);
+  return (
+    <Slider
+      value={value}
+      min={minLog}
+      max={maxLog}
+      valueLabelDisplay="auto"
+      step={null} /* Constrains choices to the mark values. */
+      marks={marks.map((m) => ({ value: m, label: `10^${m}` }))}
       onChange={(e, val) => {
         setter(val);
       }}
