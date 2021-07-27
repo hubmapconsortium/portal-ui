@@ -94,7 +94,7 @@ class ApiClient():
             body_json=query)
 
         hits = response_json['hits']['hits']
-        return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id, query=query)
+        return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id)
 
     def get_vitessce_conf_cells(self, entity):
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
@@ -163,12 +163,35 @@ class ApiClient():
         }
 
 
-def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None, query=None):
+def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
     '''
+    >>> _get_entity_from_hits(['fake-hit-1', 'fake-hit-2'])
+    Traceback (most recent call last):
+    ...
+    Exception: ID not unique; got 2 matches
+
     >>> _get_entity_from_hits([], hbm_id='HBM123.XYZ.456')
     Traceback (most recent call last):
     ...
     werkzeug.exceptions.Forbidden: 403 Forbidden: You don't have the permission to access the requested resource. It is either read-protected or not readable by the server.
+
+    >>> _get_entity_from_hits([], uuid='0123456789abcdef0123456789abcdef')
+    Traceback (most recent call last):
+    ...
+    werkzeug.exceptions.Forbidden: 403 Forbidden: You don't have the permission to access the requested resource. It is either read-protected or not readable by the server.
+
+    >>> _get_entity_from_hits([], uuid='0123456789abcdef0123456789abcdef', has_token=True)
+    Traceback (most recent call last):
+    ...
+    werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+    >>> _get_entity_from_hits([], uuid='too-short')
+    Traceback (most recent call last):
+    ...
+    werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+    >>> _get_entity_from_hits([{'_source': 'fake-entity'}])
+    'fake-entity'
 
     '''
     if len(hits) == 0:
@@ -178,7 +201,7 @@ def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None, query=No
             abort(403)
         abort(404)
     if len(hits) > 1:
-        raise Exception(f'ID not unique; got {len(hits)} matches for {query}')
+        raise Exception(f'ID not unique; got {len(hits)} matches')
     entity = hits[0]['_source']
     return entity
 
