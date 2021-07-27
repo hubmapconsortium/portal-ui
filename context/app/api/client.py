@@ -180,7 +180,8 @@ def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
     >>> error(lambda: _get_entity_from_hits([], uuid='0123456789abcdef0123456789abcdef'))
     Forbidden
 
-    >>> error(lambda: _get_entity_from_hits([], uuid='0123456789abcdef0123456789abcdef', has_token=True))
+    >>> error(lambda: _get_entity_from_hits([], uuid='0123456789abcdef0123456789abcdef',
+    ...       has_token=True))
     NotFound
 
     >>> error(lambda: _get_entity_from_hits([], uuid='too-short'))
