@@ -96,7 +96,7 @@ class ApiClient():
         hits = response_json['hits']['hits']
 
         if len(hits) == 0:
-            if len(uuid) == 32 and not self.nexus_token:
+            if (uuid and len(uuid) == 32 or hbm_id) and not self.nexus_token:
                 # Assume that the UUID is not yet published:
                 # UI will suggest logging in.
                 abort(403)
