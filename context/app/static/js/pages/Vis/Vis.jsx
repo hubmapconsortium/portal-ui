@@ -75,7 +75,7 @@ function Vis() {
     return filtered.length ? filtered[0].doc_count : 0;
   }
   function getKeyValues(buckets, key) {
-    return [...new Set(buckets.map((b) => b.key[key]))];
+    return new Set(buckets.map((b) => b.key[key]));
   }
   const { buckets } = searchData?.aggregations.composite_data;
 
