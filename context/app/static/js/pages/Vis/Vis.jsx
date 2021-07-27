@@ -79,6 +79,10 @@ function Vis() {
   }
   const { buckets } = searchData?.aggregations.composite_data;
 
+  const bloodTypes = getKeyValues(buckets, 'mapped_metadata.blood_type');
+  /* const races = getKeyValues(buckets, 'mapped_metadata.race');
+   */
+
   return (
     Object.keys(searchData).length && (
       <Paper>
@@ -87,7 +91,7 @@ function Vis() {
             <TableHead>
               <TableRow>
                 <HeaderCell> </HeaderCell>
-                {getKeyValues(buckets, 'mapped_metadata.blood_type').map((type) => (
+                {bloodTypes.map((type) => (
                   <HeaderCell> {type} </HeaderCell>
                 ))}
               </TableRow>
@@ -95,26 +99,23 @@ function Vis() {
             <TableBody>
               <TableRow>
                 <HeaderCell> White </HeaderCell>
-                <TableCell> {getCount(buckets, 'A', 'White')}</TableCell>
-                <TableCell> {getCount(buckets, 'B', 'White')}</TableCell>
-                <TableCell> {getCount(buckets, 'O', 'White')} </TableCell>
-                <TableCell> {getCount(buckets, 'AB', 'White')}</TableCell>
+                {bloodTypes.map((type) => (
+                  <TableCell> {getCount(buckets, type, 'White')} </TableCell>
+                ))}
               </TableRow>
 
               <TableRow>
                 <HeaderCell> Black or African American </HeaderCell>
-                <TableCell> {getCount(buckets, 'A', 'Black or African American')}</TableCell>
-                <TableCell> {getCount(buckets, 'B', 'Black or African American')} </TableCell>
-                <TableCell> {getCount(buckets, 'O', 'Black or African American')}</TableCell>
-                <TableCell> {getCount(buckets, 'AB', 'Black or African American')} </TableCell>
+                {bloodTypes.map((type) => (
+                  <TableCell> {getCount(buckets, type, 'Black or African American')} </TableCell>
+                ))}
               </TableRow>
 
               <TableRow>
                 <HeaderCell> Hispanic </HeaderCell>
-                <TableCell> {getCount(buckets, 'A', 'Hispanic')} </TableCell>
-                <TableCell> {getCount(buckets, 'B', 'Hispanic')} </TableCell>
-                <TableCell> {getCount(buckets, 'O', 'Hispanic')} </TableCell>
-                <TableCell> {getCount(buckets, 'AB', 'Hispanic')} </TableCell>
+                {bloodTypes.map((type) => (
+                  <TableCell> {getCount(buckets, type, 'Hispanic')} </TableCell>
+                ))}
               </TableRow>
             </TableBody>
           </Table>
