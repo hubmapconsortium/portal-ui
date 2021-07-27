@@ -33,21 +33,28 @@ import useSearchData from 'js/hooks/useSearchData';
 
  */
 
-const donorRaceQuery = {
+const donorRaceSexQuery = {
   size: 0,
-  query: {
-    bool: {
-      filter: {
-        term: {
-          entity_type: 'donor',
-        },
-      },
-    },
-  },
   aggs: {
-    'mapped_metadata.race': {
-      terms: {
-        field: 'mapped_metadata.race.keyword',
+    composite_data: {
+      composite: {
+        sources: [
+          {
+            'mapped_metadata.race': {
+              terms: {
+                field: 'mapped_metadata.race.keyword',
+              },
+            },
+          },
+          {
+            'mapped_metadata.blood_type': {
+              terms: {
+                field: 'mapped_metadata.blood_type.keyword',
+              },
+            },
+          },
+        ],
+        size: 10000,
       },
     },
   },
@@ -55,33 +62,66 @@ const donorRaceQuery = {
 
 function Vis() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-  const { searchData } = useSearchData(donorRaceQuery, elasticsearchEndpoint, nexusToken);
+
+  const { searchData } = useSearchData(donorRaceSexQuery, elasticsearchEndpoint, nexusToken);
   if (!('aggregations' in searchData)) {
     return null;
   }
-  const { buckets } = searchData.aggregations['mapped_metadata.race'];
+
+  function getCount(buckets, bloodType, race) {
+    const filtered = buckets.filter(
+      (b) => b.key['mapped_metadata.blood_type'] === bloodType && b.key['mapped_metadata.race'] === race,
+    );
+    return filtered.length ? filtered[0].doc_count : 0;
+  }
+  function getKeyValues(buckets, key) {
+    return new Set(buckets.map((b) => b.key[key]));
+  }
+  const { buckets } = searchData?.aggregations.composite_data;
+
+  const bloodTypes = getKeyValues(buckets, 'mapped_metadata.blood_type');
+  /* const races = getKeyValues(buckets, 'mapped_metadata.race');
+   */
 
   return (
-    <Paper>
-      <StyledTableContainer>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              {buckets.map((bucket) => (
-                <HeaderCell key={bucket.key}>{bucket.key}</HeaderCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              {buckets.map((bucket) => (
-                <TableCell>{bucket.doc_count}</TableCell>
-              ))}
-            </TableRow>
-          </TableBody>
-        </Table>
-      </StyledTableContainer>
-    </Paper>
+    Object.keys(searchData).length && (
+      <Paper>
+        <StyledTableContainer>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <HeaderCell> </HeaderCell>
+                {bloodTypes.map((type) => (
+                  <HeaderCell> {type} </HeaderCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <HeaderCell> White </HeaderCell>
+                {bloodTypes.map((type) => (
+                  <TableCell> {getCount(buckets, type, 'White')} </TableCell>
+                ))}
+              </TableRow>
+
+              <TableRow>
+                <HeaderCell> Black or African American </HeaderCell>
+                {bloodTypes.map((type) => (
+                  <TableCell> {getCount(buckets, type, 'Black or African American')} </TableCell>
+                ))}
+              </TableRow>
+
+              <TableRow>
+                <HeaderCell> Hispanic </HeaderCell>
+                {bloodTypes.map((type) => (
+                  <TableCell> {getCount(buckets, type, 'Hispanic')} </TableCell>
+                ))}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </StyledTableContainer>
+      </Paper>
+    )
   );
 }
 
