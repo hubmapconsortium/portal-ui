@@ -100,7 +100,14 @@ function LogSliderWrapper(props) {
       max={maxLog}
       valueLabelDisplay="auto"
       step={null} /* Constrains choices to the mark values. */
-      marks={marks.map((m) => ({ value: m, label: `10^${m}` }))}
+      marks={marks.map((m) => ({
+        value: m,
+        label: (
+          <>
+            10<sup>{m}</sup>
+          </>
+        ),
+      }))}
       onChange={(e, val) => {
         setter(val);
       }}
