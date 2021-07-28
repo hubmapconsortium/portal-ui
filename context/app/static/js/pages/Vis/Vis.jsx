@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
+import { Bar } from 'react-chartjs-2';
 
 /* JSON query
  {
@@ -75,17 +76,62 @@ function Vis() {
     return filtered.length ? filtered[0].doc_count : 0;
   }
   function getKeyValues(buckets, key) {
-    return new Set(buckets.map((b) => b.key[key]));
+    return [...new Set(buckets.map((b) => b.key[key]))];
   }
   const { buckets } = searchData?.aggregations.composite_data;
 
   const bloodTypes = getKeyValues(buckets, 'mapped_metadata.blood_type');
   /* const races = getKeyValues(buckets, 'mapped_metadata.race');
    */
+  const graphdata = {
+    labels: bloodTypes,
+    datasets: [
+      {
+        label: 'White',
+        data: bloodTypes.map((type) => getCount(buckets, type, 'White')),
+        backgroundColor: 'rgb(255, 99, 132)',
+      },
+      {
+        label: 'Black or African American',
+        data: bloodTypes.map((type) => getCount(buckets, type, 'Black or African American')),
+        backgroundColor: 'rgb(54, 162, 235)',
+      },
+      {
+        label: 'Hispanic',
+        data: bloodTypes.map((type) => getCount(buckets, type, 'Hispanic')),
+        backgroundColor: 'rgb(75, 192, 192)',
+      },
+    ],
+  };
+
+  function GroupedBar(props) {
+    const { data } = props;
+
+    const options = {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      },
+    };
+    return (
+      <>
+        <div className="header">
+          <h1 className="title">Blood Type and Race</h1>
+        </div>
+        <Bar data={data} options={options} />
+      </>
+    );
+  }
 
   return (
     Object.keys(searchData).length && (
       <Paper>
+        <GroupedBar data={graphdata} />
         <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
