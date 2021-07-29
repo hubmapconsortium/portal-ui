@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
@@ -6,9 +6,8 @@ import useSearchData from 'js/hooks/useSearchData';
 function DonorChart(props) {
   const { title, donorQuery, xKey, yKey, colorKeys, colors } = props;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-  const query = useMemo(() => donorQuery, []);
 
-  const { searchData } = useSearchData(query, elasticsearchEndpoint, nexusToken);
+  const { searchData } = useSearchData(donorQuery, elasticsearchEndpoint, nexusToken);
   if (!('aggregations' in searchData)) {
     return null;
   }
@@ -27,7 +26,7 @@ function DonorChart(props) {
    */
   const graphdata = {
     labels,
-    example: [colorKeys].map((colorKey, i) => ({
+    datasets: colorKeys.map((colorKey, i) => ({
       label: colorKey,
       data: labels.map((type) => getCount(buckets, type, colorKey)),
       backgroundColor: colors[i],
@@ -45,6 +44,7 @@ function DonorChart(props) {
       ],
     },
   };
+
   return (
     <>
       <div className="header">
