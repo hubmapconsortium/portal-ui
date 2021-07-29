@@ -1,3 +1,9 @@
+## v0.23.2 - 2021-07-28
+
+- Fix more React warnings.
+- Table with the race and sex of the donors.
+
+
 ## v0.23.1 - 2021-07-22
 
 - Add entity tile components to storybook.
