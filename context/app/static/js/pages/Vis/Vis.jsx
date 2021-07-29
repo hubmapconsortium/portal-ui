@@ -1,4 +1,6 @@
 import React, { useContext } from 'react';
+import { AppContext } from 'js/components/Providers';
+import useSearchData from 'js/hooks/useSearchData';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,9 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import { AppContext } from 'js/components/Providers';
-import useSearchData from 'js/hooks/useSearchData';
-import { Bar } from 'react-chartjs-2';
+import DonorChart from './DonorChart';
 
 /* JSON query
  {
@@ -68,7 +68,6 @@ function Vis() {
   if (!('aggregations' in searchData)) {
     return null;
   }
-
   function getCount(buckets, bloodType, race) {
     const filtered = buckets.filter(
       (b) => b.key['mapped_metadata.blood_type'] === bloodType && b.key['mapped_metadata.race'] === race,
@@ -81,57 +80,18 @@ function Vis() {
   const { buckets } = searchData?.aggregations.composite_data;
 
   const bloodTypes = getKeyValues(buckets, 'mapped_metadata.blood_type');
-  /* const races = getKeyValues(buckets, 'mapped_metadata.race');
-   */
-  const graphdata = {
-    labels: bloodTypes,
-    datasets: [
-      {
-        label: 'White',
-        data: bloodTypes.map((type) => getCount(buckets, type, 'White')),
-        backgroundColor: 'rgb(255, 99, 132)',
-      },
-      {
-        label: 'Black or African American',
-        data: bloodTypes.map((type) => getCount(buckets, type, 'Black or African American')),
-        backgroundColor: 'rgb(54, 162, 235)',
-      },
-      {
-        label: 'Hispanic',
-        data: bloodTypes.map((type) => getCount(buckets, type, 'Hispanic')),
-        backgroundColor: 'rgb(75, 192, 192)',
-      },
-    ],
-  };
-
-  function GroupedBar(props) {
-    const { data } = props;
-
-    const options = {
-      scales: {
-        yAxes: [
-          {
-            ticks: {
-              beginAtZero: true,
-            },
-          },
-        ],
-      },
-    };
-    return (
-      <>
-        <div className="header">
-          <h1 className="title">Blood Type and Race</h1>
-        </div>
-        <Bar data={data} options={options} />
-      </>
-    );
-  }
 
   return (
     Object.keys(searchData).length && (
       <Paper>
-        <GroupedBar data={graphdata} />
+        <DonorChart
+          donorQuery={donorRaceSexQuery}
+          xKey="mapped_metadata.blood_type"
+          yKey="mapped_metadata.race"
+          colorKeys={['White', 'Black or African American', 'Hispanic']}
+          colors={['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(75, 192, 192)']}
+          title="Blood Type and Race"
+        />
         <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
