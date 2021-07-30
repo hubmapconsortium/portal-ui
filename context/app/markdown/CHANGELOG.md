@@ -1,3 +1,8 @@
+## v0.24.0 - 2021-07-30
+
+- Fix twitter timeline bug causing it not to display.
+
+
 ## v0.23.2 - 2021-07-28
 
 - Fix more React warnings.
