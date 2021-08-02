@@ -1,4 +1,5 @@
 import React from 'react';
+import useState from 'storybook-addon-state';
 
 import LogSliderWrapper from './LogSliderWrapper';
 
@@ -7,9 +8,11 @@ export default {
   component: LogSliderWrapper,
 };
 
-export const LogSliderWrapperStory = (args) => <LogSliderWrapper {...args} />;
+export const LogSliderWrapperStory = (args) => {
+  const [logValue, setLogValue] = useState(1);
+  return <LogSliderWrapper value={logValue} setter={setLogValue} {...args} />;
+};
 LogSliderWrapperStory.args = {
-  value: 1,
   minLog: -1,
   maxLog: 3,
 };
