@@ -5,10 +5,10 @@ import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/core/Slider';
 import FormLabel from '@material-ui/core/FormLabel';
 
+import LogSliderWrapper from 'js/components/cells/LogSliderWrapper';
 import ResultsTable from './ResultsTable';
 import CellsService from './CellsService';
 import AutocompleteEntity from './AutocompleteEntity';
-import LogSliderWrapper from './LogSliderWrapper';
 
 // eslint-disable-next-line no-unused-vars
 function DatasetsSelectedByExpression(props) {
