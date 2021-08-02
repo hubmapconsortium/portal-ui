@@ -1,4 +1,6 @@
 import React, { useContext } from 'react';
+import { AppContext } from 'js/components/Providers';
+import useSearchData from 'js/hooks/useSearchData';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,8 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import { AppContext } from 'js/components/Providers';
-import useSearchData from 'js/hooks/useSearchData';
+import DonorChart from './DonorChart';
 
 /* JSON query
  {
@@ -67,7 +68,6 @@ function Vis() {
   if (!('aggregations' in searchData)) {
     return null;
   }
-
   function getCount(buckets, bloodType, race) {
     const filtered = buckets.filter(
       (b) => b.key['mapped_metadata.blood_type'] === bloodType && b.key['mapped_metadata.race'] === race,
@@ -75,17 +75,23 @@ function Vis() {
     return filtered.length ? filtered[0].doc_count : 0;
   }
   function getKeyValues(buckets, key) {
-    return new Set(buckets.map((b) => b.key[key]));
+    return [...new Set(buckets.map((b) => b.key[key]))];
   }
   const { buckets } = searchData?.aggregations.composite_data;
 
   const bloodTypes = getKeyValues(buckets, 'mapped_metadata.blood_type');
-  /* const races = getKeyValues(buckets, 'mapped_metadata.race');
-   */
 
   return (
     Object.keys(searchData).length && (
       <Paper>
+        <DonorChart
+          donorQuery={donorRaceSexQuery}
+          xKey="mapped_metadata.blood_type"
+          yKey="mapped_metadata.race"
+          colorKeys={['White', 'Black or African American', 'Hispanic']}
+          colors={['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(75, 192, 192)']}
+          title="Blood Type and Race"
+        />
         <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
