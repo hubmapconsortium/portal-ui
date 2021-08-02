@@ -14,6 +14,9 @@ function DonorChart(props) {
 
   function getCount(buckets, key1, key2) {
     const filtered = buckets.filter((b) => b.key[xKey] === key1 && b.key[yKey] === key2);
+    if (filtered.length > 1) {
+      console.warn(`Expected at most one match for ${key1} and ${key2}: Got ${filtered.length}.`);
+    }
     return filtered.length ? filtered[0].doc_count : 0;
   }
   function getKeyValues(buckets, key) {
