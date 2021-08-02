@@ -15,3 +15,4 @@ LogSliderWrapperStory.args = {
   minLog: -1,
   maxLog: 3,
 };
+LogSliderWrapperStory.storyName = 'LogSliderWrapper'; // needed for single story hoisting for multi word component names
