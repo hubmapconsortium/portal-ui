@@ -6,7 +6,7 @@ import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 
 import { AppContext } from 'js/components/Providers';
-import LookupEntity from 'js/helpers/LookupEntity';
+import useEntityData from 'js/hooks/useEntityData';
 import SearchNote from 'js/components/Search/SearchNote';
 import Accordions from './Accordions';
 import PaginationWrapper from './PaginationWrapper';
@@ -53,35 +53,38 @@ function SearchWrapper(props) {
     };
   }, [searchkit, setSearchHitsCount]);
 
-  const [message, setMessage] = useState(null);
+  const [provUUID, setProvUUID] = useState(null);
+  const [provMusts, setProvMusts] = useState([]);
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   searchkit.setQueryProcessor((query) => {
     // setQueryProcessor is typically used to change the query,
     // but we're just using it as a place to call hooks.
-    // Make sure that every exit point from this function return the query.
-    const musts = query?.post_filter?.bool?.must;
-    if (!musts) {
-      setMessage(null);
-      return query;
-    }
-    const labels = {
-      'ancestor_ids.keyword': 'Derived from',
-      'descendant_ids.keyword': 'Ancestor of',
-    };
-    const provMusts = musts.filter(
-      (must) => 'term' in must && Object.keys(labels).some((labelKey) => labelKey in must.term),
-    );
-    setMessage(
-      provMusts.map((must) => {
-        return Object.entries(must.term).map(([k, v]) => (
-          <LookupEntity uuid={v} elasticsearchEndpoint={elasticsearchEndpoint} nexusToken={nexusToken}>
-            <SearchNote label={labels[k]} />
-          </LookupEntity>
-        ));
-      }),
+    const musts = query?.post_filter?.bool?.must || [];
+    setProvMusts(
+      musts.filter((must) => 'ancestor_ids.keyword' in must?.term || 'descendant_ids.keyword' in must?.term),
     );
     return query;
   });
+
+  let fieldName = null;
+  let newProvUuid = null;
+  if (provMusts.length) {
+    if (provMusts.length > 1) {
+      throw new Error(`More than one provenance constraint: ${provMusts}`);
+    }
+    const entries = Object.entries(provMusts[0].term);
+    if (entries.length > 1) {
+      throw new Error(`More than one provenance field constraint: ${entries}`);
+    }
+    [[fieldName, newProvUuid]] = entries;
+  }
+  const entity = useEntityData(newProvUuid, elasticsearchEndpoint, nexusToken);
+
+  let message;
+  if (provUUID !== newProvUuid) {
+    setProvUUID(newProvUuid);
+    message = <SearchNote label={fieldName} entity={entity} />;
+  }
 
   return (
     <SearchkitProvider searchkit={searchkit}>
