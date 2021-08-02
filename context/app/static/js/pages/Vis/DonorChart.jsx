@@ -23,10 +23,7 @@ function DonorChart(props) {
     return [...new Set(buckets.map((b) => b.key[key]))];
   }
   const { buckets } = searchData?.aggregations.composite_data;
-
   const labels = getKeyValues(buckets, xKey);
-  /* const races = getKeyValues(buckets, 'mapped_metadata.race');
-   */
   const graphdata = {
     labels,
     datasets: colorKeys.map((colorKey, i) => ({
