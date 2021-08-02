@@ -1,0 +1,1 @@
+- Resolve a 500 error that happens when an HBM redirect can't find a matching record.
