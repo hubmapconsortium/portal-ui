@@ -8,6 +8,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import ResultsTable from './ResultsTable';
 import CellsService from './CellsService';
 import AutocompleteEntity from './AutocompleteEntity';
+import LogSliderWrapper from './LogSliderWrapper';
 
 // eslint-disable-next-line no-unused-vars
 function DatasetsSelectedByExpression(props) {
@@ -82,32 +83,6 @@ function SliderWrapper(props) {
       valueLabelDisplay="auto"
       step={null} /* Constrains choices to the mark values. */
       marks={marks.map((m) => ({ value: m, label: m }))}
-      onChange={(e, val) => {
-        setter(val);
-      }}
-      aria-labelledby={labelledby}
-    />
-  );
-}
-
-function LogSliderWrapper(props) {
-  const { value, minLog, maxLog, setter, labelledby } = props;
-  const marks = [...Array(1 + maxLog - minLog).keys()].map((k) => k + minLog);
-  return (
-    <Slider
-      value={value}
-      min={minLog}
-      max={maxLog}
-      valueLabelDisplay="auto"
-      step={null} /* Constrains choices to the mark values. */
-      marks={marks.map((m) => ({
-        value: m,
-        label: (
-          <>
-            10<sup>{m}</sup>
-          </>
-        ),
-      }))}
       onChange={(e, val) => {
         setter(val);
       }}
