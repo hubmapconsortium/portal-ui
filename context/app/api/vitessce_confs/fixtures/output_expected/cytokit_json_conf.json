@@ -1,6 +1,6 @@
 [
   {
-    "version": "1.0.0",
+    "version": "1.0.2",
     "name": "R001_X001_Y001",
     "description": "",
     "datasets": [
@@ -124,7 +124,7 @@
     "initStrategy": "auto"
   },
   {
-    "version": "1.0.0",
+    "version": "1.0.2",
     "name": "R001_X001_Y002",
     "description": "",
     "datasets": [

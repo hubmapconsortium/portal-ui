@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import EntityTileBottom from '../EntityTileBottom';
-import EntityTileTop from '../EntityTileTop';
+import EntityTileFooter from '../EntityTileFooter';
+import EntityTileBody from '../EntityTileBody';
 import { StyledPaper } from './style';
 
 function EntityTile(props) {
@@ -11,8 +11,8 @@ function EntityTile(props) {
   return (
     <a href={`/browse/${entity_type.toLowerCase()}/${uuid}`}>
       <StyledPaper $invertColors={invertColors}>
-        <EntityTileTop entity_type={entity_type} id={id} invertColors={invertColors} entityData={entityData} />
-        <EntityTileBottom invertColors={invertColors} entityData={entityData} descendantCounts={descendantCounts} />
+        <EntityTileBody entity_type={entity_type} id={id} invertColors={invertColors} entityData={entityData} />
+        <EntityTileFooter invertColors={invertColors} entityData={entityData} descendantCounts={descendantCounts} />
       </StyledPaper>
     </a>
   );

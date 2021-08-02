@@ -2,21 +2,9 @@
 <html lang="en">
 
 <head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133341631-3"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-
-    gtag('config', 'UA-133341631-3');
-
-  </script>
   <meta charset="utf-8">
   <title>HuBMAP CCF Exploration User Interface (CCF-EUI)</title>
-  <base href="https://cdn.jsdelivr.net/gh/hubmapconsortium/ccf-ui@1/">
+  <base href="https://cdn.jsdelivr.net/gh/hubmapconsortium/ccf-ui@2/">
   <script>
     window.dbOptions = {
       hubmapDataService: 'search-api',
@@ -34,7 +22,7 @@
 </head>
 
 <body class="mat-typography">
-  <ccf-root></ccf-root>
+  <ccf-eui></ccf-eui>
   <script src="runtime-es2015.js" type="module"></script>
   <script src="runtime-es5.js" nomodule defer></script>
   <script src="polyfills-es5.js" nomodule defer></script>

@@ -1,6 +1,6 @@
 [
   {
-    "version": "1.0.0",
+    "version": "1.0.2",
     "name": "MMStack_Pos12",
     "description": "",
     "datasets": [
@@ -82,7 +82,7 @@
     "initStrategy": "auto"
   },
   {
-    "version": "1.0.0",
+    "version": "1.0.2",
     "name": "MMStack_Pos13",
     "description": "",
     "datasets": [

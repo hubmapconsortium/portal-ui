@@ -5,7 +5,14 @@ import { Wrapper } from './style';
 function TwitterTimeline() {
   return (
     <Wrapper>
-      <TwitterTimelineEmbed sourceType="profile" screenName="_hubmap" transparent autoHeight noHeader />
+      <TwitterTimelineEmbed
+        sourceType="profile"
+        screenName="_hubmap"
+        transparent
+        autoHeight
+        noHeader
+        options={{ id: 'profile:_hubmap' }}
+      />
     </Wrapper>
   );
 }

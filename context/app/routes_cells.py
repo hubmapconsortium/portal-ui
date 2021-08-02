@@ -4,6 +4,8 @@ from flask import (Blueprint, render_template, current_app, request)
 
 from hubmap_api_py_client import Client
 
+from .routes_main import get_default_flask_data
+
 
 blueprint = Blueprint('routes_cells', __name__, template_folder='templates')
 
@@ -13,7 +15,7 @@ def cells_ui():
     return render_template(
         'pages/base_react.html',
         title='Cells API Demo',
-        flask_data={}
+        flask_data={**get_default_flask_data()}
     )
 
 
@@ -78,7 +80,7 @@ def proteins_by_substring():
 
 @blueprint.route('/cells/datasets-selected-by-<target_entity>.json', methods=['POST'])
 def datasets_selected_by_level(target_entity):
-    name = request.args.get('name')
+    names = request.args.getlist('name')
     modality = request.args.get('modality')
     min_expression = request.args.get('min_expression')
     min_cell_percentage = request.args.get('min_cell_percentage')
@@ -88,7 +90,7 @@ def datasets_selected_by_level(target_entity):
     try:
         dataset_set = client.select_datasets(
             where=target_entity,
-            has=[f'{name} > {min_expression}'],
+            has=[f'{name} > {min_expression}' for name in names],
             genomic_modality=modality,
             min_cell_percentage=min_cell_percentage
         )
@@ -136,6 +138,22 @@ def cell_expression_in_dataset():
         cells = client.select_cells(where='dataset', has=[uuid])
         # list() will call iterator behind the scenes.
         return {'results': list(cells.get_list(values_included=gene_names))}
+
+    except Exception as e:
+        return {'message': str(e)}
+
+
+@blueprint.route('/cells/all-indexed-uuids.json', methods=['POST'])
+def all_indexed_uuids():
+    # Get all UUIDs that have been indexed. Because of the delay in indexing,
+    # we can't assume that all datasets of any particular type have been indexed.
+
+    client = _get_client(current_app)
+
+    try:
+        datasets = client.select_datasets()
+        # list() will call iterator behind the scenes.
+        return {'results': list(datasets.get_list())}
 
     except Exception as e:
         return {'message': str(e)}

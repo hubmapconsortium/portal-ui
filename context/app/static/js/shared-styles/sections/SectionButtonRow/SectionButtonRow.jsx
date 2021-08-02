@@ -22,7 +22,7 @@ SectionButtonRow.propTypes = {
   /**
    Button(s) to be displayed in the right most available space.
   */
-  buttons: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
+  buttons: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element, PropTypes.bool]).isRequired,
 };
 
 const SpacedSectionButtonRow = styled(SectionButtonRow)`
