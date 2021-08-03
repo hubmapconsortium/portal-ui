@@ -25,7 +25,7 @@ const SavedList = lazy(() => import('js/pages/SavedList'));
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, title, markdown, errorCode, list_uuid, has_notebook } = flaskData;
+  const { entity, vitessce_conf, title, markdown, errorCode, list_uuid, has_notebook, vis_lifted_uuid } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
 
@@ -55,7 +55,12 @@ function Routes(props) {
   if (urlPath.startsWith('/browse/dataset/') || urlPath.startsWith('/browse/support/')) {
     return (
       <Route>
-        <Dataset assayMetadata={entity} vitData={vitessce_conf} hasNotebook={has_notebook} />
+        <Dataset
+          assayMetadata={entity}
+          vitData={vitessce_conf}
+          hasNotebook={has_notebook}
+          visLiftedUUID={vis_lifted_uuid}
+        />
       </Route>
     );
   }
@@ -181,6 +186,7 @@ Routes.propTypes = {
     errorCode: PropTypes.number,
     list_uuid: PropTypes.string,
     has_notebook: PropTypes.bool,
+    vis_lifted_uuid: PropTypes.string,
   }),
 };
 

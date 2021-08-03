@@ -107,12 +107,13 @@ def details(type, uuid):
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
     template = 'pages/base_react.html'
-    conf_cells = client.get_vitessce_conf_cells_and_lifted_flag(entity).vitessce_conf
+    conf_cells_and_lifted_uuid = client.get_vitessce_conf_cells_and_lifted_uuid(entity)
     flask_data = {
         **get_default_flask_data(),
         'entity': entity,
-        'vitessce_conf': conf_cells.conf,
-        'has_notebook': conf_cells.cells is not None
+        'vitessce_conf': conf_cells_and_lifted_uuid.vitessce_conf.conf,
+        'has_notebook': conf_cells_and_lifted_uuid.vitessce_conf.cells is not None,
+        'vis_lifted_uuid': conf_cells_and_lifted_uuid.vis_lifted_uuid
     }
     return render_template(
         template,
@@ -138,7 +139,7 @@ def details_notebook(type, uuid):
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
-    vitessce_conf = client.get_vitessce_conf_cells_and_lifted_flag(entity).vitessce_conf
+    vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
     if (vitessce_conf is None
             or vitessce_conf.conf is None
             or vitessce_conf.cells is None):

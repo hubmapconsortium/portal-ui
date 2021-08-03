@@ -49,7 +49,7 @@ function getCollectionsWhichContainDataset(uuid, collections) {
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DatasetDetail(props) {
-  const { assayMetadata, vitData, hasNotebook } = props;
+  const { assayMetadata, vitData, hasNotebook, visLiftedUUID } = props;
   const {
     protocol_url,
     metadata,
@@ -135,7 +135,9 @@ function DatasetDetail(props) {
         {shouldDisplaySection.visualization && (
           <VisualizationWrapper vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
         )}
-        {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
+        {shouldDisplaySection.provenance && (
+          <ProvSection uuid={uuid} assayMetadata={assayMetadata} visLiftedUUID={visLiftedUUID} />
+        )}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} hubmap_id={hubmap_id} />}
         <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />

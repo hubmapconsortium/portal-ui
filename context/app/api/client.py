@@ -16,9 +16,9 @@ Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
 
 @dataclass
-class VitessceConfIsLifted:
+class VitessceConfLiftedUUID:
     vitessce_conf: dict
-    is_lifted: bool
+    vis_lifted_uuid: str
 
 
 class ApiClient():
@@ -104,7 +104,7 @@ class ApiClient():
         hits = response_json['hits']['hits']
         return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id)
 
-    def get_vitessce_conf_cells_and_lifted_flag(self, entity):
+    def get_vitessce_conf_cells_and_lifted_uuid(self, entity):
         '''
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
@@ -118,26 +118,26 @@ class ApiClient():
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
             derived_entity['files'] = derived_entity['metadata']['files']
-            return VitessceConfIsLifted(
-                vitessce_conf=self.get_vitessce_conf_cells_and_lifted_flag(derived_entity).vitessce_conf,
-                is_lifted=True)
+            return VitessceConfLiftedUUID(
+                vitessce_conf=self.get_vitessce_conf_cells_and_lifted_uuid(derived_entity).vitessce_conf,
+                vis_lifted_uuid=derived_entity['uuid'])
 
         if 'files' not in entity or 'data_types' not in entity:
-            return VitessceConfIsLifted(ConfCells(None, None), False)
+            return VitessceConfLiftedUUID(ConfCells(None, None), None)
         if self.is_mock:
-            return VitessceConfIsLifted(ConfCells(self._get_mock_vitessce_conf(), None), False)
+            return VitessceConfLiftedUUID(ConfCells(self._get_mock_vitessce_conf(), None), None)
 
         # Otherwise, just try to visualize the data for the entity itself:
         try:
             vc = get_view_config_class_for_data_types(
                 entity=entity, nexus_token=self.nexus_token
             )
-            return VitessceConfIsLifted(vc.get_conf_cells(), False)
+            return VitessceConfLiftedUUID(vc.get_conf_cells(), None)
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'
             current_app.logger.error(message)
 
-            return VitessceConfIsLifted(ConfCells({'error': message}, None), False)
+            return VitessceConfLiftedUUID(ConfCells({'error': message}, None), None)
 
     def _get_mock_vitessce_conf(self):
         cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})

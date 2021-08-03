@@ -26,6 +26,7 @@ function App(props) {
     list_uuid,
     has_notebook,
     globalAlertMd,
+    vis_lifted_uuid,
   } = flaskData;
   ReactGA.initialize('UA-133341631-3');
 
@@ -41,7 +42,19 @@ function App(props) {
           </StyledAlert>
         </FlexContainer>
       )}
-      <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode, list_uuid, has_notebook }} />
+      <Routes
+        flaskData={{
+          title,
+          entity,
+          vitessce_conf,
+          markdown,
+          collection,
+          errorCode,
+          list_uuid,
+          has_notebook,
+          vis_lifted_uuid,
+        }}
+      />
       <Footer />
     </Providers>
   );
@@ -59,6 +72,7 @@ App.propTypes = {
     list_uuid: PropTypes.string,
     globalAlertMd: PropTypes.string,
     has_notebook: PropTypes.bool,
+    vis_lifted_uuid: PropTypes.string,
   }),
 };
 
