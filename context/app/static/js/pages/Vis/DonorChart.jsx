@@ -38,13 +38,21 @@ function DonorChart(props) {
 
   const options = {
     scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
+      yAxes: {
+        title: {
+          text: 'Y Axis Title',
+          display: true,
         },
-      ],
+        ticks: {
+          beginAtZero: true,
+        },
+      },
+      xAxes: {
+        title: {
+          text: 'X Axis Title',
+          display: true,
+        },
+      },
     },
   };
 
