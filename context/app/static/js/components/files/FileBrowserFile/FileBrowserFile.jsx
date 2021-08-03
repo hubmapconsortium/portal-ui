@@ -7,6 +7,7 @@ import { getTokenParam } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import DetailContext from 'js/components//Detail/context';
 import FilesConditionalLink from '../FilesConditionalLink';
+import PDFViewer from '../PDFViewer';
 import { StyledRow, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon, QaChip } from './style';
 import FilesContext from '../Files/context';
 
@@ -42,6 +43,7 @@ function FileBrowserFile(props) {
         </IndentedDiv>
       </td>
       <td>{fileObj?.is_qa_qc ? <QaChip label="QA" variant="outlined" /> : null}</td>
+      <td>{fileObj?.file.endsWith('.pdf') ? <PDFViewer pdfUrl={fileUrl} /> : null}</td>
       <td>
         <FileSize variant="body1">{prettyBytes(fileObj.size)}</FileSize>
       </td>
