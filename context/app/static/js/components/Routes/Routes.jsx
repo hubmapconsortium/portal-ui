@@ -16,6 +16,7 @@ const CellsSearch = lazy(() => import('js/pages/search/CellsSearch'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
 const Vis = lazy(() => import('js/pages/Vis'));
 const Preview = lazy(() => import('js/pages/Preview'));
+const Publication = lazy(() => import('js/pages/Publication'));
 const Services = lazy(() => import('js/pages/Services'));
 const Collections = lazy(() => import('js/pages/Collections'));
 const CellsAPIDemo = lazy(() => import('js/pages/CellsAPIDemo'));
@@ -114,6 +115,14 @@ function Routes(props) {
     return (
       <Route>
         <Preview title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/publication')) {
+    return (
+      <Route>
+        <Publication title={title} vitData={vitessce_conf} markdown={markdown} />
       </Route>
     );
   }
