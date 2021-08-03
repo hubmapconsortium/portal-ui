@@ -6,7 +6,7 @@ import DetailContext from 'js/components/Detail/context';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import GlobusLink from '../GlobusLink';
-import { MarginTopDiv } from '../GlobusLink/style'; // TODO: Move to this component's style.js.
+import { MarginTopDiv } from './style';
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../FileBrowserDUA';
 import FilesContext from './context';

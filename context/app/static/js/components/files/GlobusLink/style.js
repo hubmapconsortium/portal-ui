@@ -12,10 +12,6 @@ const CenteredDiv = styled.div`
   margin-top: ${(props) => props.theme.spacing(2)}px;
 `;
 
-const MarginTopDiv = styled.div`
-  margin-top: ${(props) => props.theme.spacing(2)}px;
-`;
-
 const Flex = styled.div`
   display: flex;
 `;
@@ -32,4 +28,4 @@ const StyledSuccessIcon = styled(SuccessIcon)`
   font-size: 1.5rem;
 `;
 
-export { CenteredDiv, MarginTopDiv, StyledTypography, Flex, StyledSuccessIcon, StyledErrorIcon };
+export { CenteredDiv, StyledTypography, Flex, StyledSuccessIcon, StyledErrorIcon };
