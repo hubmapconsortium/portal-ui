@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { Bar } from 'react-chartjs-2';
+
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
+import { ChartPaper, ChartTitle, HorizontalChartDescription } from './style';
 
 function DemographicsChartVertical(props) {
-  const { title, donorQuery, xKey, yKey, colorKeys, colors } = props;
+  const { title, donorQuery, xKey, yKey, colorKeys, colors, description } = props;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   const { searchData } = useSearchData(donorQuery, elasticsearchEndpoint, nexusToken);
@@ -52,10 +54,11 @@ function DemographicsChartVertical(props) {
 
   return (
     <>
-      <div className="header">
-        <h1 className="title">{title}</h1>
-      </div>
-      <Bar data={graphdata} options={options} />
+      <ChartTitle variant="h2">{title}</ChartTitle>
+      <ChartPaper>
+        <Bar data={graphdata} options={options} />
+        <HorizontalChartDescription>{description}</HorizontalChartDescription>
+      </ChartPaper>
     </>
   );
 }

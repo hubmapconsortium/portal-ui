@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
-import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,6 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import DemographicsChartVertical from './DemographicsChartVertical';
 import DonorChart from './DonorChart';
+import { ChartPaper, ChartTitle } from './style';
 
 /* JSON query
  {
@@ -192,76 +192,86 @@ function Vis() {
   const age = getKeyValues(buckets, 'mapped_metadata.age');
 
   return (
-    Object.keys(searchData).length && (
-      <Paper>
-        <DonorChart
-          donorQuery={donorRaceSexQuery}
-          xKey="mapped_metadata.blood_type"
-          yKey="mapped_metadata.race"
-          colorKeys={['White', 'Black or African American', 'Hispanic']}
-          colors={['#DA348A', '#5f9ada', '#db765d']}
-          title="Blood Type and Race"
-        />
-        <DemographicsChartVertical
-          donorQuery={donorGenderRace}
-          xKey="mapped_metadata.sex"
-          yKey="mapped_metadata.race"
-          colorKeys={['White', 'Black or African American', 'Hispanic']}
-          colors={['#DA348A', '#5f9ada', '#db765d']}
-          title="Gender and Ethnicity"
-        />
-        <DonorChart
-          donorQuery={donorBloodtypeGender}
-          xKey="mapped_metadata.blood_type"
-          yKey="mapped_metadata.sex"
-          colorKeys={['Male', 'Female']}
-          colors={['#6C8938', '#D25435']}
-          title="Blood Type and Gender"
-        />
-        <DonorChart
-          donorQuery={donorAgeGender}
-          xKey="mapped_metadata.age"
-          yKey="mapped_metadata.sex"
-          colorKeys={['Male', 'Female']}
-          colors={['#6C8938', '#D25435']}
-          title="Age and Gender"
-        />
-        <StyledTableContainer>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <HeaderCell> </HeaderCell>
-                {age.map((type) => (
-                  <HeaderCell> {type} </HeaderCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <HeaderCell> White </HeaderCell>
-                {age.map((type) => (
-                  <TableCell> {getCount(buckets, type, 'White')} </TableCell>
-                ))}
-              </TableRow>
+    <>
+      {Object.keys(searchData).length && (
+        <>
+          <ChartTitle variant="h2">Ethnicity and Age</ChartTitle>
+          <ChartPaper>
+            <StyledTableContainer>
+              <Table stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <HeaderCell> </HeaderCell>
+                    {age.map((type) => (
+                      <HeaderCell> {type} </HeaderCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <HeaderCell> White </HeaderCell>
+                    {age.map((type) => (
+                      <TableCell> {getCount(buckets, type, 'White')} </TableCell>
+                    ))}
+                  </TableRow>
 
-              <TableRow>
-                <HeaderCell> Black or African American </HeaderCell>
-                {age.map((type) => (
-                  <TableCell> {getCount(buckets, type, 'Black or African American')} </TableCell>
-                ))}
-              </TableRow>
+                  <TableRow>
+                    <HeaderCell> Black or African American </HeaderCell>
+                    {age.map((type) => (
+                      <TableCell> {getCount(buckets, type, 'Black or African American')} </TableCell>
+                    ))}
+                  </TableRow>
 
-              <TableRow>
-                <HeaderCell> Hispanic </HeaderCell>
-                {age.map((type) => (
-                  <TableCell> {getCount(buckets, type, 'Hispanic')} </TableCell>
-                ))}
-              </TableRow>
-            </TableBody>
-          </Table>
-        </StyledTableContainer>
-      </Paper>
-    )
+                  <TableRow>
+                    <HeaderCell> Hispanic </HeaderCell>
+                    {age.map((type) => (
+                      <TableCell> {getCount(buckets, type, 'Hispanic')} </TableCell>
+                    ))}
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </StyledTableContainer>
+          </ChartPaper>
+
+          <DonorChart
+            donorQuery={donorRaceSexQuery}
+            xKey="mapped_metadata.blood_type"
+            yKey="mapped_metadata.race"
+            colorKeys={['White', 'Black or African American', 'Hispanic']}
+            colors={['#DA348A', '#5f9ada', '#db765d']}
+            description="Description Example"
+            title="Blood Type and Race"
+          />
+          <DemographicsChartVertical
+            donorQuery={donorGenderRace}
+            xKey="mapped_metadata.sex"
+            yKey="mapped_metadata.race"
+            colorKeys={['White', 'Black or African American', 'Hispanic']}
+            colors={['#DA348A', '#5f9ada', '#db765d']}
+            title="Gender and Ethnicity"
+            description="Vertical Description Example"
+          />
+          <DonorChart
+            donorQuery={donorBloodtypeGender}
+            xKey="mapped_metadata.blood_type"
+            yKey="mapped_metadata.sex"
+            colorKeys={['Male', 'Female']}
+            colors={['#6C8938', '#D25435']}
+            title="Blood Type and Gender"
+            description="Description Example"
+          />
+          <DonorChart
+            donorQuery={donorAgeGender}
+            xKey="mapped_metadata.age"
+            yKey="mapped_metadata.sex"
+            colorKeys={['Male', 'Female']}
+            colors={['#6C8938', '#D25435']}
+            title="Age and Gender"
+            description="Description Example"
+          />
+        </>
+      )}
+    </>
   );
 }
 
