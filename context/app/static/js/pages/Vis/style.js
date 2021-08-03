@@ -2,6 +2,14 @@ import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
+const PageTitleWrapper = styled.div`
+  margin-bottom: 20px;
+`;
+
+const PageTitle = styled(Typography)`
+  margin-bottom: 10px;
+`;
+
 const ChartPaper = styled(Paper)`
   padding: 20px;
   margin-bottom: 30px;
@@ -30,4 +38,13 @@ const HorizontalChartDescription = styled(Typography)`
   margin-top: 20px;
 `;
 
-export { ChartPaper, ChartTitle, FlexContainer, FlexChild, FlexDescriptionWrapper, HorizontalChartDescription };
+export {
+  PageTitleWrapper,
+  PageTitle,
+  ChartPaper,
+  ChartTitle,
+  FlexContainer,
+  FlexChild,
+  FlexDescriptionWrapper,
+  HorizontalChartDescription,
+};

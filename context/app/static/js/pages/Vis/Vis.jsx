@@ -6,11 +6,12 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import DemographicsChartVertical from './DemographicsChartVertical';
 import DonorChart from './DonorChart';
-import { ChartPaper, ChartTitle } from './style';
+import { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle } from './style';
 
 /* JSON query
  {
@@ -195,6 +196,10 @@ function Vis() {
     <>
       {Object.keys(searchData).length && (
         <>
+          <PageTitleWrapper>
+            <PageTitle variant="h1">Page Title</PageTitle>
+            <Typography>Page Description Here</Typography>
+          </PageTitleWrapper>
           <ChartTitle variant="h2">Ethnicity and Age</ChartTitle>
           <ChartPaper>
             <StyledTableContainer>
