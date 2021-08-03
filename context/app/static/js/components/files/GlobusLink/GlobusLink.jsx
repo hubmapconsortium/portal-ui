@@ -1,17 +1,15 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AppContext } from 'js/components/Providers';
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { getAuthHeader } from 'js/helpers/functions';
 import useAbortableEffect from 'js/hooks/useAbortableEffect';
-import { StyledTypography, CenteredDiv, MarginTopDiv, Flex, StyledErrorIcon, StyledSuccessIcon } from './style';
+import { StyledTypography, MarginTopDiv, Flex, StyledErrorIcon, StyledSuccessIcon } from './style';
 import GlobusLinkMessage from '../GlobusLinkMessage';
 
 function GlobusLink(props) {
   const { uuid, hubmap_id } = props;
-  const [isLoading, setIsLoading] = React.useState(true);
   const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: '', statusCode: null });
 
   const { entityEndpoint, nexusToken } = useContext(AppContext);
@@ -27,14 +25,12 @@ function GlobusLink(props) {
           console.error('Entities API failed', response);
           if (!status.aborted) {
             setGlobusUrlStatus({ url: null, statusCode: response.status });
-            setIsLoading(false);
           }
           return;
         }
         const responseGlobusUrl = await response.text();
         if (!status.aborted) {
           setGlobusUrlStatus({ url: responseGlobusUrl, statusCode: response.status });
-          setIsLoading(false);
         }
       }
       getAndSetGlobusUrlStatus();
@@ -44,11 +40,7 @@ function GlobusLink(props) {
 
   const { statusCode, url } = globusUrlStatus;
 
-  return isLoading ? (
-    <CenteredDiv>
-      <CircularProgress />
-    </CenteredDiv>
-  ) : (
+  return (
     <MarginTopDiv>
       <DetailSectionPaper>
         <Flex>
