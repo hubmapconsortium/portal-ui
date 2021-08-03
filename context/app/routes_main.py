@@ -107,7 +107,7 @@ def details(type, uuid):
         return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
 
     template = 'pages/base_react.html'
-    conf_cells = client.get_vitessce_conf_cells(entity)
+    conf_cells = client.get_vitessce_conf_cells_and_lifted_flag(entity).vitessce_conf
     flask_data = {
         **get_default_flask_data(),
         'entity': entity,
@@ -138,7 +138,7 @@ def details_notebook(type, uuid):
         abort(404)
     client = _get_client()
     entity = client.get_entity(uuid)
-    vitessce_conf = client.get_vitessce_conf_cells(entity)
+    vitessce_conf = client.get_vitessce_conf_cells_and_lifted_flag(entity).vitessce_conf
     if (vitessce_conf is None
             or vitessce_conf.conf is None
             or vitessce_conf.cells is None):

@@ -2,6 +2,7 @@ from collections import namedtuple
 import json
 import traceback
 from copy import deepcopy
+from dataclasses import dataclass
 
 from datauri import DataURI
 from flask import abort, current_app
@@ -9,8 +10,15 @@ import requests
 
 from .vitessce_confs import get_view_config_class_for_data_types
 from .vitessce_confs.base_confs import ConfCells
+from context.app.api import vitessce_confs
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
+
+
+@dataclass
+class VitessceConfIsLifted:
+    vitessce_conf: dict
+    is_lifted: bool
 
 
 class ApiClient():
@@ -96,7 +104,12 @@ class ApiClient():
         hits = response_json['hits']['hits']
         return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id)
 
-    def get_vitessce_conf_cells(self, entity):
+    def get_vitessce_conf_cells_and_lifted_flag(self, entity):
+        '''
+        Returns a dataclass with vitessce_conf and is_lifted.
+        '''
+        ConfIsLifted = namedtuple('ConfIsLifted', 'vitessce_conf is_lifted')
+
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         image_pyramid_descendants = _get_image_pyramid_descendants(entity)
         if image_pyramid_descendants:
@@ -107,24 +120,26 @@ class ApiClient():
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
             derived_entity['files'] = derived_entity['metadata']['files']
-            return self.get_vitessce_conf_cells(derived_entity)
+            return VitessceConfIsLifted(
+                vitessce_conf=self.get_vitessce_conf_cells_and_lifted_flag(derived_entity).vitessce_conf,
+                is_lifted=True)
 
         if 'files' not in entity or 'data_types' not in entity:
-            return ConfCells(None, None)
+            return VitessceConfIsLifted(ConfCells(None, None), False)
         if self.is_mock:
-            return ConfCells(self._get_mock_vitessce_conf(), None)
+            return VitessceConfIsLifted(ConfCells(self._get_mock_vitessce_conf(), None), False)
 
         # Otherwise, just try to visualize the data for the entity itself:
         try:
             vc = get_view_config_class_for_data_types(
                 entity=entity, nexus_token=self.nexus_token
             )
-            return vc.get_conf_cells()
+            return VitessceConfIsLifted(vc.get_conf_cells(), False)
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'
             current_app.logger.error(message)
 
-            return ConfCells({'error': message}, None)
+            return VitessceConfIsLifted(ConfCells({'error': message}, None), False)
 
     def _get_mock_vitessce_conf(self):
         cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
