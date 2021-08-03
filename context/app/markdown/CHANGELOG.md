@@ -1,3 +1,10 @@
+## v0.24.1 - 2021-08-03
+
+- Chart and table.
+- Resolve a 500 error that happens when an HBM redirect can't find a matching record.
+- Table with the race and sex of the donors.
+
+
 ## v0.24.0 - 2021-07-30
 
 - Fix twitter timeline bug causing it not to display.
