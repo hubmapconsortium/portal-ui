@@ -108,8 +108,6 @@ class ApiClient():
         '''
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
-        ConfIsLifted = namedtuple('ConfIsLifted', 'vitessce_conf is_lifted')
-
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         image_pyramid_descendants = _get_image_pyramid_descendants(entity)
         if image_pyramid_descendants:
