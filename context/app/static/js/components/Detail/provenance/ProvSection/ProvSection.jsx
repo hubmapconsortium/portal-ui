@@ -9,7 +9,7 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import ProvTabs from '../ProvTabs';
 
 function ProvSection(props) {
-  const { uuid, assayMetadata, visLiftedUUID } = props;
+  const { uuid, assayMetadata } = props;
   const { entity_type } = assayMetadata;
   const { nexusToken, entityEndpoint } = useContext(AppContext);
   const { provData, isLoading } = useProvData(uuid, entityEndpoint, nexusToken);
@@ -25,7 +25,6 @@ function ProvSection(props) {
   return (
     <SectionContainer id="provenance">
       <SectionHeader>Provenance</SectionHeader>
-      <p>TODO: visLiftedUUID: {visLiftedUUID}</p>
       {provData ? (
         <ProvTabs uuid={uuid} assayMetadata={assayMetadata} provData={provData} />
       ) : (

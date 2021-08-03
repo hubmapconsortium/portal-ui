@@ -135,12 +135,10 @@ function DatasetDetail(props) {
         {shouldDisplaySection.visualization && (
           <VisualizationWrapper vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
         )}
-        {shouldDisplaySection.provenance && (
-          <ProvSection uuid={uuid} assayMetadata={assayMetadata} visLiftedUUID={visLiftedUUID} />
-        )}
+        {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} hubmap_id={hubmap_id} />}
-        <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />
+        <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         <Attribution
           group_name={group_name}

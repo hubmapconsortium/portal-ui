@@ -10,7 +10,7 @@ import FileBrowserDUA from '../FileBrowserDUA';
 import FilesContext from './context';
 
 function Files(props) {
-  const { files, uuid, hubmap_id } = props;
+  const { files, uuid, hubmap_id, visLiftedUUID } = props;
 
   const { mapped_data_access_level } = useContext(DetailContext);
 
@@ -39,6 +39,7 @@ function Files(props) {
     <FilesContext.Provider value={{ openDUA, hasAgreedToDUA }}>
       <SectionContainer id="files">
         <SectionHeader>Files</SectionHeader>
+        <p>TODO: visLiftedUUID {visLiftedUUID}</p>
         {files && <FileBrowser files={files} />}
         <GlobusLink uuid={uuid} hubmap_id={hubmap_id} />
         <FileBrowserDUA
@@ -55,6 +56,7 @@ function Files(props) {
 Files.propTypes = {
   uuid: PropTypes.string.isRequired,
   hubmap_id: PropTypes.string.isRequired,
+  visLiftedUUID: PropTypes.string,
   files: PropTypes.arrayOf(
     PropTypes.shape({
       rel_path: PropTypes.string.isRequired,
@@ -69,6 +71,7 @@ Files.propTypes = {
 
 Files.defaultProps = {
   files: undefined,
+  visLiftedUUID: undefined,
 };
 
 export default Files;
