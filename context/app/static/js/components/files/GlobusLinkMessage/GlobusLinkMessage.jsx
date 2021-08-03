@@ -15,17 +15,22 @@ const messages = {
 };
 
 function GlobusLinkMessage(props) {
-  const { statusCode, url, hubmap_id } = props;
+  const { statusCode, url, hubmap_id, isSupport } = props;
   const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
 
   if (statusCode === 200) {
+    const globusLink = (
+      <FilesConditionalLink href={url} hasAgreedToDUA={hasAgreedToDUA} openDUA={() => openDUA(url)} variant="body2">
+        Globus <StyledExternalLinkIcon />
+      </FilesConditionalLink>
+    );
     return (
       <Typography variant="body2">
-        {`Files are available through the Globus Research Data Management System. Access dataset ${hubmap_id} on `}
-        <FilesConditionalLink href={url} hasAgreedToDUA={hasAgreedToDUA} openDUA={() => openDUA(url)} variant="body2">
-          Globus <StyledExternalLinkIcon />
-        </FilesConditionalLink>
-        .
+        {isSupport
+          ? 'Data generated for visualization of this dataset are also available.'
+          : 'Files are available through the Globus Research Data Management System.'}{' '}
+        {`Access ${isSupport ? 'support' : ''} dataset ${hubmap_id} on `}
+        {globusLink}.
       </Typography>
     );
   }

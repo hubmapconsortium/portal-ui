@@ -45,11 +45,7 @@ function Files(props) {
         <MarginTopDiv>
           <DetailSectionPaper>
             <GlobusLink uuid={uuid} hubmap_id={hubmap_id} />
-            {visLiftedUUID && (
-              <>
-                TODO VisLifted <GlobusLink uuid={visLiftedUUID} hubmap_id="UNKNOWN" />
-              </>
-            )}
+            {visLiftedUUID && <GlobusLink uuid={visLiftedUUID} isSupport />}
           </DetailSectionPaper>
         </MarginTopDiv>
         <FileBrowserDUA

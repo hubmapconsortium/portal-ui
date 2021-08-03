@@ -8,7 +8,7 @@ import { StyledTypography, Flex, StyledErrorIcon, StyledSuccessIcon } from './st
 import GlobusLinkMessage from '../GlobusLinkMessage';
 
 function GlobusLink(props) {
-  const { uuid, hubmap_id } = props;
+  const { uuid, hubmap_id, isSupport } = props;
   const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: '', statusCode: null });
 
   const { entityEndpoint, nexusToken } = useContext(AppContext);
@@ -47,9 +47,9 @@ function GlobusLink(props) {
         ) : (
           <StyledErrorIcon data-testid="error-icon" />
         )}
-        <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
+        <StyledTypography variant="h6">Bulk Data Transfer {isSupport && '(Support)'}</StyledTypography>
       </Flex>
-      <GlobusLinkMessage statusCode={statusCode} url={url} hubmap_id={hubmap_id} />
+      <GlobusLinkMessage statusCode={statusCode} url={url} hubmap_id={hubmap_id} isSupport={isSupport} />
     </>
   );
 }
@@ -57,6 +57,11 @@ function GlobusLink(props) {
 GlobusLink.propTypes = {
   uuid: PropTypes.string.isRequired,
   hubmap_id: PropTypes.string.isRequired,
+  isSupport: PropTypes.bool,
+};
+
+GlobusLink.defaultProps = {
+  isSupport: false,
 };
 
 export default GlobusLink;
