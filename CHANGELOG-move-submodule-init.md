@@ -1,0 +1,1 @@
+- Move submodule stuff into script, instead of cluttering readme.
