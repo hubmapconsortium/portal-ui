@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import DetailContext from 'js/components/Detail/context';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import GlobusLink from '../GlobusLink';
+import { MarginTopDiv } from '../GlobusLink/style'; // TODO: Move to this component's style.js.
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../FileBrowserDUA';
 import FilesContext from './context';
@@ -39,9 +41,17 @@ function Files(props) {
     <FilesContext.Provider value={{ openDUA, hasAgreedToDUA }}>
       <SectionContainer id="files">
         <SectionHeader>Files</SectionHeader>
-        <p>TODO: visLiftedUUID {visLiftedUUID}</p>
         {files && <FileBrowser files={files} />}
-        <GlobusLink uuid={uuid} hubmap_id={hubmap_id} />
+        <MarginTopDiv>
+          <DetailSectionPaper>
+            <GlobusLink uuid={uuid} hubmap_id={hubmap_id} />
+            {visLiftedUUID && (
+              <>
+                TODO VisLifted <GlobusLink uuid={visLiftedUUID} hubmap_id="UNKNOWN" />
+              </>
+            )}
+          </DetailSectionPaper>
+        </MarginTopDiv>
         <FileBrowserDUA
           isOpen={isDialogOpen}
           handleAgree={handleDUAAgree}

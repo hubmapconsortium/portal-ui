@@ -2,10 +2,9 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { AppContext } from 'js/components/Providers';
-import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { getAuthHeader } from 'js/helpers/functions';
 import useAbortableEffect from 'js/hooks/useAbortableEffect';
-import { StyledTypography, MarginTopDiv, Flex, StyledErrorIcon, StyledSuccessIcon } from './style';
+import { StyledTypography, Flex, StyledErrorIcon, StyledSuccessIcon } from './style';
 import GlobusLinkMessage from '../GlobusLinkMessage';
 
 function GlobusLink(props) {
@@ -41,19 +40,17 @@ function GlobusLink(props) {
   const { statusCode, url } = globusUrlStatus;
 
   return (
-    <MarginTopDiv>
-      <DetailSectionPaper>
-        <Flex>
-          {statusCode === 200 ? (
-            <StyledSuccessIcon data-testid="success-icon" />
-          ) : (
-            <StyledErrorIcon data-testid="error-icon" />
-          )}
-          <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
-        </Flex>
-        <GlobusLinkMessage statusCode={statusCode} url={url} hubmap_id={hubmap_id} />
-      </DetailSectionPaper>
-    </MarginTopDiv>
+    <>
+      <Flex>
+        {statusCode === 200 ? (
+          <StyledSuccessIcon data-testid="success-icon" />
+        ) : (
+          <StyledErrorIcon data-testid="error-icon" />
+        )}
+        <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
+      </Flex>
+      <GlobusLinkMessage statusCode={statusCode} url={url} hubmap_id={hubmap_id} />
+    </>
   );
 }
 
