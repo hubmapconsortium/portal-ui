@@ -11,7 +11,7 @@ import globus_sdk
 # https://globus-sdk-python.readthedocs.io/en/stable/examples/three_legged_oauth/
 
 
-blueprint = Blueprint('routes_auth', __name__, template_folder='templates')
+blueprint = Blueprint('auth', __name__, template_folder='templates')
 
 
 def load_app_client():

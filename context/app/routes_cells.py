@@ -4,10 +4,10 @@ from flask import (Blueprint, render_template, current_app, request)
 
 from hubmap_api_py_client import Client
 
-from .routes_main import get_default_flask_data
+from .utils import get_default_flask_data
 
 
-blueprint = Blueprint('routes_cells', __name__, template_folder='templates')
+blueprint = Blueprint('cells', __name__, template_folder='templates')
 
 
 @blueprint.route('/cells')
