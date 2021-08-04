@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactGA from 'react-ga';
-import PropTypes from 'prop-types';
 import marked from 'marked';
 
 import Providers from './Providers';
@@ -15,21 +14,13 @@ import 'js/components/Search/Search.scss';
 
 function App(props) {
   const { flaskData } = props;
-  const {
-    title,
-    entity,
-    vitessce_conf,
-    endpoints,
-    markdown,
-    collection,
-    errorCode,
-    list_uuid,
-    has_notebook,
-    globalAlertMd,
-  } = flaskData;
+  const { endpoints, globalAlertMd } = flaskData;
+  delete flaskData.endpoints;
+  delete flaskData.globalAlertMd;
   ReactGA.initialize('UA-133341631-3');
 
   return (
+    // nexus_token is injected as a global in the flask template.
     // eslint-disable-next-line no-undef
     <Providers endpoints={endpoints} nexusToken={nexus_token}>
       <Header />
@@ -41,29 +32,10 @@ function App(props) {
           </StyledAlert>
         </FlexContainer>
       )}
-      <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode, list_uuid, has_notebook }} />
+      <Routes flaskData={flaskData} />
       <Footer />
     </Providers>
   );
 }
-
-App.propTypes = {
-  flaskData: PropTypes.exact({
-    title: PropTypes.string,
-    entity: PropTypes.object,
-    vitessce_conf: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
-    endpoints: PropTypes.object,
-    markdown: PropTypes.string,
-    collection: PropTypes.object,
-    errorCode: PropTypes.number,
-    list_uuid: PropTypes.string,
-    globalAlertMd: PropTypes.string,
-    has_notebook: PropTypes.bool,
-  }),
-};
-
-App.defaultProps = {
-  flaskData: {},
-};
 
 export default App;

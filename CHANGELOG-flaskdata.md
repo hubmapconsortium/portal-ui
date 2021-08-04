@@ -1,0 +1,1 @@
+- Simplify App.jsx by just passing flaskData though, instead of destructuring and restructuring.
