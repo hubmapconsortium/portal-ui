@@ -15,6 +15,7 @@ blueprint = Blueprint('browse', __name__, template_folder='templates')
 
 entity_types = ['donor', 'sample', 'dataset', 'support', 'collection']
 
+
 def _get_client():
     try:
         is_mock = current_app.config['IS_MOCK']

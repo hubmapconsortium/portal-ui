@@ -1,6 +1,8 @@
 from flask import Flask, session, render_template
 
-from . import routes_main, routes_browse, routes_auth, routes_cells, routes_markdown, default_config
+from . import (
+    routes_main, routes_browse, routes_auth, routes_cells, routes_markdown,
+    default_config)
 from .flask_static_digest import FlaskStaticDigest
 flask_static_digest = FlaskStaticDigest()
 
