@@ -14,12 +14,13 @@ function Publication(props) {
         <SectionHeader variant="h1" component="h1">
           Publications!
         </SectionHeader>
-        {JSON.stringify(titles)}
-        {Object.entries(titles).map((path, title) => (
-          <li key={path}>
-            <a href={path}>{title}</a>
-          </li>
-        ))}
+        <ul>
+          {Object.entries(titles).map(([path, title]) => (
+            <li key={path}>
+              <a href={`publication/${path}`}>{title}</a>
+            </li>
+          ))}
+        </ul>
       </SectionContainer>
     </>
   );
