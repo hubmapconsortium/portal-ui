@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Slider from '@material-ui/core/Slider';
 
 function powerOf10(value) {
