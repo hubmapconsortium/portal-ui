@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/core/Slider';
 import FormLabel from '@material-ui/core/FormLabel';
 
+import LogSliderWrapper from 'js/components/cells/LogSliderWrapper';
 import ResultsTable from './ResultsTable';
 import CellsService from './CellsService';
 import AutocompleteEntity from './AutocompleteEntity';
@@ -14,7 +15,7 @@ function DatasetsSelectedByExpression(props) {
   const [geneNames, setGeneNames] = useState([]);
   const [targetEntity, setTargetEntity] = useState('gene'); // eslint-disable-line no-unused-vars
   const [modality, setModality] = useState('rna'); // eslint-disable-line no-unused-vars
-  const [minExpression, setMinExpression] = useState(1);
+  const [minExpressionLog, setMinExpressionLog] = useState(1);
   const [minCellPercentage, setMinCellPercentage] = useState(10);
 
   const [results, setResults] = useState([]);
@@ -25,7 +26,7 @@ function DatasetsSelectedByExpression(props) {
       if (targetEntity === 'gene') {
         const serviceResults = await new CellsService().getDatasetsSelectedByGenes({
           geneNames,
-          minExpression,
+          minExpression: 10 ** minExpressionLog,
           minCellPercentage,
           modality,
         });
@@ -45,12 +46,11 @@ function DatasetsSelectedByExpression(props) {
       <br />
 
       <FormLabel id="min-gene-expression-label">Minimum gene expression</FormLabel>
-      <SliderWrapper
-        value={minExpression}
-        min={0}
-        max={100}
-        marks={[0, 12.5, 25, 50, 100]}
-        setter={setMinExpression}
+      <LogSliderWrapper
+        value={minExpressionLog}
+        minLog={-4}
+        maxLog={5}
+        setter={setMinExpressionLog}
         labelledby="min-gene-expression-label"
       />
 
