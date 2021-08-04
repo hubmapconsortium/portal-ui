@@ -24,4 +24,12 @@ const StyledCloseIcon = styled(CancelRoundedIcon)`
   border-radius: 100%;
 `;
 
-export { ModalContentWrapper, StyledIconButton, StyledCloseIcon };
+const PaddedDiv = styled.div`
+  padding: 0px 20px;
+`;
+
+const ButtonWrapper = styled.div`
+  min-width: 100px;
+`;
+
+export { ModalContentWrapper, StyledIconButton, StyledCloseIcon, PaddedDiv, ButtonWrapper };

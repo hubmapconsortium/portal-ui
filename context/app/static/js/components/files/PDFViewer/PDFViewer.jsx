@@ -1,35 +1,50 @@
 import React, { useState } from 'react';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import Modal from '@material-ui/core/Modal';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import PDFViewerControlButtons from '../PDFViewerControlButtons';
-import { ModalContentWrapper, StyledIconButton, StyledCloseIcon } from './style';
+import { ModalContentWrapper, StyledIconButton, StyledCloseIcon, PaddedDiv, ButtonWrapper } from './style';
 
 function PDFViewer({ pdfUrl }) {
-  const [numPages, setNumPages] = useState(null);
-  // eslint-disable-next-line no-unused-vars
   const [pageNumber, setPageNumber] = useState(1);
+  const [open, setOpen] = useState(false);
+  const [pdf, setPdf] = useState();
+  const [processPdf, setProcessPdf] = React.useState(false);
 
-  // eslint-disable-next-line no-shadow
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
+  function onDocumentLoadSuccess(pdfObj) {
+    setOpen(true);
+    setPdf(pdfObj);
   }
 
-  const [open, setOpen] = React.useState(false);
-
   const handleOpen = () => {
-    setOpen(true);
+    setProcessPdf(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setProcessPdf(false);
   };
 
   return (
-    <div>
-      <button type="button" onClick={handleOpen}>
-        Open Modal
-      </button>
+    <PaddedDiv>
+      {(!processPdf || open) && (
+        <ButtonWrapper>
+          <Button type="button" onClick={handleOpen}>
+            View PDF
+          </Button>
+        </ButtonWrapper>
+      )}
+      {processPdf && (
+        <Document
+          file={pdfUrl}
+          onLoadSuccess={onDocumentLoadSuccess}
+          loading={<LinearProgress />}
+          error={<Typography>Failed to load</Typography>}
+        />
+      )}
       <Modal
         open={open}
         onClose={handleClose}
@@ -37,18 +52,16 @@ function PDFViewer({ pdfUrl }) {
         aria-describedby="simple-modal-description"
       >
         <ModalContentWrapper>
-          <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
-            <Page pageNumber={pageNumber} />
-          </Document>
-          {numPages && (
-            <PDFViewerControlButtons numPages={numPages} currentPageNum={pageNumber} setPageNum={setPageNumber} />
+          <Page pageNumber={pageNumber} pdf={pdf} />
+          {pdf && (
+            <PDFViewerControlButtons numPages={pdf.numPages} currentPageNum={pageNumber} setPageNum={setPageNumber} />
           )}
           <StyledIconButton color="primary" onClick={handleClose}>
             <StyledCloseIcon />
           </StyledIconButton>
         </ModalContentWrapper>
       </Modal>
-    </div>
+    </PaddedDiv>
   );
 }
 
