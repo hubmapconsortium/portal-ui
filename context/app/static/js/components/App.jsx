@@ -17,6 +17,7 @@ function App(props) {
   const { flaskData } = props;
   const {
     title,
+    titles,
     entity,
     vitessce_conf,
     endpoints,
@@ -41,7 +42,9 @@ function App(props) {
           </StyledAlert>
         </FlexContainer>
       )}
-      <Routes flaskData={{ title, entity, vitessce_conf, markdown, collection, errorCode, list_uuid, has_notebook }} />
+      <Routes
+        flaskData={{ title, titles, entity, vitessce_conf, markdown, collection, errorCode, list_uuid, has_notebook }}
+      />
       <Footer />
     </Providers>
   );
@@ -50,6 +53,7 @@ function App(props) {
 App.propTypes = {
   flaskData: PropTypes.exact({
     title: PropTypes.string,
+    titles: PropTypes.object,
     entity: PropTypes.object,
     vitessce_conf: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
     endpoints: PropTypes.object,

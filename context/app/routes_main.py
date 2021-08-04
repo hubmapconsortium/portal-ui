@@ -1,6 +1,7 @@
 from os.path import dirname
 from urllib.parse import urlparse
 import json
+from pathlib import Path
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
@@ -253,6 +254,21 @@ def preview_view(name):
     return render_template(
         'pages/base_react.html',
         title='Preview',
+        flask_data=flask_data
+    )
+
+
+@blueprint.route('/publication')
+def publication_index_view():
+    dir_path = Path(dirname(__file__) + '/publication')
+    titles = {p.stem: frontmatter.load(p)['title'] for p in dir_path.glob('*.md')}
+    flask_data = {
+        **get_default_flask_data(),
+        'titles': titles
+    }
+    return render_template(
+        'pages/base_react.html',
+        title='Publications',
         flask_data=flask_data
     )
 
