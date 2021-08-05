@@ -1,63 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
 
-import CellsService from './CellsService';
+import AutocompleteEntity from './AutocompleteEntity';
 
-// eslint-disable-next-line no-unused-vars
 function SearchBySubstring(props) {
   const { targetEntity } = props;
 
-  const [substring, setSubstring] = useState('');
-  const [options, setOptions] = useState([]);
-
-  async function handleChange(event) {
-    const { target } = event;
-    setSubstring(target.value);
-
-    if (target.value === '') {
-      setOptions([]);
-      return;
-    }
-
-    try {
-      setOptions(
-        await new CellsService().searchBySubstring({
-          targetEntity,
-          substring: target.value,
-        }),
-      );
-    } catch (e) {
-      console.warn(e.message);
-    }
-  }
-
   return (
     <Paper>
-      <Autocomplete
-        options={options}
-        multiple
-        getOptionLabel={(option) => option.full}
-        renderOption={(option) => (
-          <>
-            {option.pre}
-            <b>{option.match}</b>
-            {option.post}
-          </>
-        )}
-        renderInput={(params) => (
-          <TextField
-            label="substring"
-            value={substring}
-            name="substring"
-            variant="outlined"
-            onChange={handleChange}
-            {...params}
-          />
-        )}
-      />
+      <AutocompleteEntity targetEntity={targetEntity} />
     </Paper>
   );
 }

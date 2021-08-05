@@ -82,9 +82,9 @@ function AssayTypeBarChart({
                         href={`/search?entity_type[0]=Dataset&mapped_data_types[0]=${encodeURIComponent(
                           bar.bar.data.mapped_data_type,
                         )}&${selectedColorFacetName}[0]=${encodeURIComponent(bar.key)}`}
+                        key={`barstack-horizontal-${barStack.index}-${bar.index}`}
                       >
                         <rect
-                          key={`barstack-horizontal-${barStack.index}-${bar.index}`}
                           x={bar.x}
                           y={bar.y}
                           width={bar.width - strokeWidth}

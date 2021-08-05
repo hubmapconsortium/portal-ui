@@ -1,0 +1,1 @@
+- Introduce a log-scale slider.

@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
 import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
 import { invertSectionColors } from '../EntityTile/style';
@@ -31,4 +33,34 @@ const FixedWidthFlex = styled.div`
     invertSectionColors(props.theme.palette.white.main, props.theme.palette.primary.main, props.$invertColors)}
 `;
 
-export { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FixedWidthFlex };
+const Flex = styled.div`
+  display: flex;
+`;
+
+const TruncatedTypography = styled(Typography)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const StyledDivider = styled(Divider)`
+  background-color: ${(props) =>
+    props.$invertColors ? props.theme.palette.white.main : props.theme.palette.text.primary};
+  margin: 0px ${(props) => props.theme.spacing(0.5)}px;
+`;
+
+const StyledDiv = styled.div`
+  min-width: 0;
+  flex-grow: 1;
+`;
+
+export {
+  StyledDatasetIcon,
+  StyledSampleIcon,
+  StyledDonorIcon,
+  FixedWidthFlex,
+  Flex,
+  TruncatedTypography,
+  StyledDivider,
+  StyledDiv,
+};

@@ -1,3 +1,44 @@
+## v0.24.1 - 2021-08-03
+
+- Chart and table.
+- Resolve a 500 error that happens when an HBM redirect can't find a matching record.
+- Table with the race and sex of the donors.
+
+
+## v0.24.0 - 2021-07-30
+
+- Fix twitter timeline bug causing it not to display.
+
+
+## v0.23.2 - 2021-07-28
+
+- Fix more React warnings.
+- Table with the race and sex of the donors.
+
+
+## v0.23.1 - 2021-07-22
+
+- Add entity tile components to storybook.
+- Separate multivalued donor race with comma in entity tile.
+- Fix Vitessce carousel demo by upgrading Vitessce to 1.1.12 + python package to 0.1.0a12 to gain backwards compatibility.
+- Add a mechanism for site-wide alerts via config var. Could be used if half of our hybrid cloud goes down again.
+- Add keys to silence React warnings.
+- Loosen proptype checks for metadata tables.
+- "ORCID ID" to "ORCID" in header; Add outbound icon in table body.
+- Remove unused props passed from login button to dropdown.
+- Upgrade to caniuse to silence warning.
+
+
+## v0.23.0 - 2021-07-19
+
+- Refactor tutorial components and add to storybook.
+- Updated to CCF EUI 2.0
+- List datasets indexed by Cells API.
+- In the Cells Demo, demonstrate how multiple genes could be queried.
+- Fix missing whitespace in optional message.
+- Track dataset search tutorial events with google analytics.
+
+
 ## v0.22.1 - 2021-07-12
 
 - Stub a cells-search, where new functionality can be developed.

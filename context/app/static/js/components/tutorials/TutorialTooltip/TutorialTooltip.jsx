@@ -2,43 +2,40 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 
-import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 import TooltipProgressButton from 'js/components/tutorials/TooltipProgressButton';
 import { StyledPaper, Flex, FlexEnd, WhiteTypography, WhiteCloseRoundedIcon } from './style';
 
-const searchDatasetTutorialSelector = (state) => ({
-  incrementSearchDatasetTutorialStep: state.incrementSearchDatasetTutorialStep,
-  decrementSearchDatasetTutorialStep: state.decrementSearchDatasetTutorialStep,
-  closeSearchDatasetTutorial: state.closeSearchDatasetTutorial,
-});
-
-function TutorialTooltip({ index, isLastStep, size, step: { title, content, contentIsComponent }, tooltipProps }) {
-  const {
-    incrementSearchDatasetTutorialStep,
-    decrementSearchDatasetTutorialStep,
-    closeSearchDatasetTutorial,
-  } = useSearchDatasetTutorialStore(searchDatasetTutorialSelector);
+function TutorialTooltip({
+  index,
+  isLastStep,
+  size,
+  step: { title, content, contentIsComponent },
+  tooltipProps,
+  decrementStepOnClick,
+  closeOnClick,
+  incrementStepOnClick,
+}) {
   return (
     <StyledPaper {...tooltipProps}>
       <Flex>
         <WhiteTypography variant="subtitle1">{`${title} (${index + 1}/${size})`}</WhiteTypography>
-        <IconButton aria-label="close" size="small" onClick={() => closeSearchDatasetTutorial()}>
+        <IconButton aria-label="close" size="small" onClick={closeOnClick}>
           <WhiteCloseRoundedIcon />
         </IconButton>
       </Flex>
       {contentIsComponent ? content : <WhiteTypography variant="body1">{content}</WhiteTypography>}
       <FlexEnd>
         {index > 0 && (
-          <TooltipProgressButton eventHandler={decrementSearchDatasetTutorialStep} triggerKeyCode={37}>
+          <TooltipProgressButton eventHandler={decrementStepOnClick} triggerKeyCode={37}>
             Back
           </TooltipProgressButton>
         )}
         {isLastStep ? (
-          <TooltipProgressButton eventHandler={closeSearchDatasetTutorial} triggerKeyCode={39}>
+          <TooltipProgressButton eventHandler={closeOnClick} triggerKeyCode={39}>
             Finish Tutorial
           </TooltipProgressButton>
         ) : (
-          <TooltipProgressButton eventHandler={incrementSearchDatasetTutorialStep} triggerKeyCode={39}>
+          <TooltipProgressButton eventHandler={incrementStepOnClick} triggerKeyCode={39}>
             Next
           </TooltipProgressButton>
         )}
@@ -46,15 +43,18 @@ function TutorialTooltip({ index, isLastStep, size, step: { title, content, cont
     </StyledPaper>
   );
 }
-
+/* eslint-disable react/forbid-prop-types */
 TutorialTooltip.propTypes = {
   index: PropTypes.number.isRequired,
   isLastStep: PropTypes.bool.isRequired,
   size: PropTypes.number.isRequired,
-  /* eslint-disable react/forbid-prop-types */
   step: PropTypes.object.isRequired,
+  /* The root element props (including ref) */
   tooltipProps: PropTypes.object.isRequired,
-  /* eslint-enable react/forbid-prop-types */
+  decrementStepOnClick: PropTypes.func.isRequired,
+  closeOnClick: PropTypes.func.isRequired,
+  incrementStepOnClick: PropTypes.func.isRequired,
 };
+/* eslint-enable react/forbid-prop-types */
 
 export default TutorialTooltip;
