@@ -12,6 +12,7 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import DonorChart from './DonorChart';
 import ProjectAttribution from './ProjectAttribution';
 import { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle, DescriptionPaper } from './style';
+import { getKeyValues, getAgeLabels } from './utils';
 
 /* JSON query
  {
@@ -189,12 +190,11 @@ function Vis() {
     );
     return filtered.length ? filtered[0].doc_count : 0;
   }
-  function getKeyValues(buckets, key) {
-    return [...new Set(buckets.map((b) => b.key[key]))];
-  }
+
   const { buckets } = searchData?.aggregations.composite_data;
 
   const age = getKeyValues(buckets, 'mapped_metadata.age');
+  const headers = getAgeLabels(buckets, 'mapped_metadata.age');
 
   return (
     <>
@@ -220,7 +220,7 @@ function Vis() {
                 <TableHead>
                   <TableRow>
                     <HeaderCell> </HeaderCell>
-                    {age.map((type) => (
+                    {headers.map((type) => (
                       <HeaderCell> {type} </HeaderCell>
                     ))}
                   </TableRow>

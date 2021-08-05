@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
 import { ChartPaper, ChartTitle, DescriptionPaper } from './style';
+import { getKeyValues, getAgeLabels } from './utils';
 
 Chart.defaults.font.size = 18;
 
@@ -24,16 +25,14 @@ function DonorChart(props) {
     }
     return filtered.length ? filtered[0].doc_count : 0;
   }
-  function getKeyValues(buckets, key) {
-    return [...new Set(buckets.map((b) => b.key[key]))];
-  }
+
   const { buckets } = searchData?.aggregations.composite_data;
-  const labels = getKeyValues(buckets, xKey);
+  const labels = xKey === 'mapped_metadata.age' ? getAgeLabels(buckets, xKey) : getKeyValues(buckets, xKey);
   const graphdata = {
     labels,
     datasets: colorKeys.map((colorKey, i) => ({
       label: colorKey,
-      data: labels.map((type) => getCount(buckets, type, colorKey)),
+      data: getKeyValues(buckets, xKey).map((type) => getCount(buckets, type, colorKey)),
       backgroundColor: colors[i],
       barThickness: 40,
     })),
