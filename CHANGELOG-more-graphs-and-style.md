@@ -1,0 +1,3 @@
+- Add additional charts/tables to the donor diversity page.
+- Style donor diversity page.
+- Change donor diversity page's route from /vis to /diversity.

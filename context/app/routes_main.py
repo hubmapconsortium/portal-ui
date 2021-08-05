@@ -218,9 +218,9 @@ def dev_search():
     )
 
 
-@blueprint.route('/vis')
+@blueprint.route('/diversity')
 def vis():
-    title = 'Visualizations'
+    title = 'Diversity'
     flask_data = {
         **get_default_flask_data(),
         'title': title
