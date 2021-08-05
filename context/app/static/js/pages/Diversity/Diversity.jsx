@@ -176,7 +176,7 @@ const donorAgeRace = {
 const threeColors = ['#444A65', '#6C8938', '#DA348A'];
 const twoColors = threeColors.slice(0, 2);
 
-function Vis() {
+function Diversity() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   const { searchData } = useSearchData(donorAgeRace, elasticsearchEndpoint, nexusToken);
@@ -307,4 +307,4 @@ function Vis() {
   );
 }
 
-export default Vis;
+export default Diversity;
