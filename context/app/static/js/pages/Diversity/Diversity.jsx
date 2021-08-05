@@ -210,9 +210,6 @@ function Diversity() {
           <ChartTitle variant="h4" component="h2">
             Race & Age
           </ChartTitle>
-          <DescriptionPaper>
-            <Typography>Table Description Here</Typography>
-          </DescriptionPaper>
           <ChartPaper>
             <StyledTableContainer>
               <Table stickyHeader>
@@ -268,7 +265,6 @@ function Diversity() {
             colorKeys={['White', 'Black or African American', 'Hispanic']}
             colors={threeColors}
             title="Sex & Race"
-            description="Vertical Description Example"
             yAxisLabel="# of Donors"
             xAxisLabel="Sex"
           />
@@ -290,7 +286,6 @@ function Diversity() {
             colorKeys={['Male', 'Female']}
             colors={twoColors}
             title="Age & Sex"
-            description="Description Example"
             yAxisLabel="# of Donors"
             xAxisLabel="Age"
           />

@@ -63,9 +63,11 @@ function DonorChart(props) {
       <ChartTitle variant="h4" component="h2">
         {title}
       </ChartTitle>
-      <DescriptionPaper>
-        <Typography>{description}</Typography>
-      </DescriptionPaper>
+      {description && (
+        <DescriptionPaper>
+          <Typography>{description}</Typography>
+        </DescriptionPaper>
+      )}
       <ChartPaper>
         <Bar data={graphdata} options={options} />
       </ChartPaper>
