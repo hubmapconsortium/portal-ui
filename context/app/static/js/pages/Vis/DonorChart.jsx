@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Chart } from 'react-chartjs-2';
 import Typography from '@material-ui/core/Typography';
 
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
 import { ChartPaper, ChartTitle, DescriptionPaper } from './style';
+
+Chart.defaults.font.size = 18;
 
 function DonorChart(props) {
   const { title, donorQuery, xKey, yKey, colorKeys, colors, description, xAxisLabel, yAxisLabel } = props;
