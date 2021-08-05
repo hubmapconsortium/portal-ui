@@ -8,7 +8,9 @@ import { StyledSectionPaper, ChartTitle } from './style';
 function ProjectAttribution() {
   return (
     <SectionContainer id="attribution">
-      <ChartTitle variant="h2">Attribution</ChartTitle>
+      <ChartTitle variant="h4" component="h2">
+        Attribution
+      </ChartTitle>
       <StyledSectionPaper>
         <SectionItem label="Creator">Roselkis Morla-Adames</SectionItem>
         <SectionItem label="PI" ml={1}>

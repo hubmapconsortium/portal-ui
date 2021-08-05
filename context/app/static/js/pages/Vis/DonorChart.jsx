@@ -35,6 +35,7 @@ function DonorChart(props) {
       label: colorKey,
       data: labels.map((type) => getCount(buckets, type, colorKey)),
       backgroundColor: colors[i],
+      barThickness: 40,
     })),
   };
 
@@ -60,7 +61,9 @@ function DonorChart(props) {
 
   return (
     <>
-      <ChartTitle variant="h2">{title}</ChartTitle>
+      <ChartTitle variant="h4" component="h2">
+        {title}
+      </ChartTitle>
       <DescriptionPaper>
         <Typography>{description}</Typography>
       </DescriptionPaper>

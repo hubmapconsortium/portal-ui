@@ -201,12 +201,16 @@ function Vis() {
       {Object.keys(searchData).length && (
         <>
           <PageTitleWrapper>
-            <PageTitle variant="h1">Page Title</PageTitle>
+            <PageTitle variant="h2" component="h1">
+              HuBMAP Diversity
+            </PageTitle>
             <DescriptionPaper>
               <Typography>Page Description Here</Typography>
             </DescriptionPaper>
           </PageTitleWrapper>
-          <ChartTitle variant="h2">Race & Age</ChartTitle>
+          <ChartTitle variant="h4" component="h2">
+            Race & Age
+          </ChartTitle>
           <DescriptionPaper>
             <Typography>Table Description Here</Typography>
           </DescriptionPaper>
@@ -291,7 +295,9 @@ function Vis() {
             yAxisLabel="# of Donors"
             xAxisLabel="Age"
           />
-          <ChartTitle variant="h2">Methodology</ChartTitle>
+          <ChartTitle variant="h4" component="h2">
+            Methodology
+          </ChartTitle>
           <ChartPaper>
             <Typography>Page Description Here</Typography>
           </ChartPaper>
