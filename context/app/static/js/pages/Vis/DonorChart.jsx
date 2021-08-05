@@ -1,13 +1,16 @@
 import React, { useContext } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Chart } from 'react-chartjs-2';
 import Typography from '@material-ui/core/Typography';
 
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
-import { ChartPaper, ChartTitle, FlexContainer, FlexChild, FlexDescriptionWrapper } from './style';
+import { ChartPaper, ChartTitle, DescriptionPaper } from './style';
+import { getKeyValues, getAgeLabels } from './utils';
+
+Chart.defaults.font.size = 18;
 
 function DonorChart(props) {
-  const { title, donorQuery, xKey, yKey, colorKeys, colors, description } = props;
+  const { title, donorQuery, xKey, yKey, colorKeys, colors, description, xAxisLabel, yAxisLabel } = props;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   const { searchData } = useSearchData(donorQuery, elasticsearchEndpoint, nexusToken);
@@ -22,17 +25,16 @@ function DonorChart(props) {
     }
     return filtered.length ? filtered[0].doc_count : 0;
   }
-  function getKeyValues(buckets, key) {
-    return [...new Set(buckets.map((b) => b.key[key]))];
-  }
+
   const { buckets } = searchData?.aggregations.composite_data;
-  const labels = getKeyValues(buckets, xKey);
+  const labels = xKey === 'mapped_metadata.age' ? getAgeLabels(buckets, xKey) : getKeyValues(buckets, xKey);
   const graphdata = {
     labels,
     datasets: colorKeys.map((colorKey, i) => ({
       label: colorKey,
-      data: labels.map((type) => getCount(buckets, type, colorKey)),
+      data: getKeyValues(buckets, xKey).map((type) => getCount(buckets, type, colorKey)),
       backgroundColor: colors[i],
+      barThickness: 40,
     })),
   };
 
@@ -40,7 +42,7 @@ function DonorChart(props) {
     scales: {
       yAxes: {
         title: {
-          text: 'Y Axis Title',
+          text: yAxisLabel,
           display: true,
         },
         ticks: {
@@ -49,7 +51,7 @@ function DonorChart(props) {
       },
       xAxes: {
         title: {
-          text: 'X Axis Title',
+          text: xAxisLabel,
           display: true,
         },
       },
@@ -58,16 +60,14 @@ function DonorChart(props) {
 
   return (
     <>
-      <ChartTitle variant="h2">{title}</ChartTitle>
+      <ChartTitle variant="h4" component="h2">
+        {title}
+      </ChartTitle>
+      <DescriptionPaper>
+        <Typography>{description}</Typography>
+      </DescriptionPaper>
       <ChartPaper>
-        <FlexContainer>
-          <FlexChild>
-            <Bar data={graphdata} options={options} />
-          </FlexChild>
-          <FlexDescriptionWrapper>
-            <Typography>{description}</Typography>
-          </FlexDescriptionWrapper>
-        </FlexContainer>
+        <Bar data={graphdata} options={options} />
       </ChartPaper>
     </>
   );

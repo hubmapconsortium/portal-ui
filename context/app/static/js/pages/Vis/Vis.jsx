@@ -9,9 +9,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import DemographicsChartVertical from './DemographicsChartVertical';
 import DonorChart from './DonorChart';
-import { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle } from './style';
+import ProjectAttribution from './ProjectAttribution';
+import { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle, DescriptionPaper } from './style';
+import { getKeyValues, getAgeLabels } from './utils';
 
 /* JSON query
  {
@@ -172,6 +173,9 @@ const donorAgeRace = {
   },
 };
 
+const threeColors = ['#444A65', '#6C8938', '#DA348A'];
+const twoColors = threeColors.slice(0, 2);
+
 function Vis() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
@@ -185,29 +189,37 @@ function Vis() {
     );
     return filtered.length ? filtered[0].doc_count : 0;
   }
-  function getKeyValues(buckets, key) {
-    return [...new Set(buckets.map((b) => b.key[key]))];
-  }
+
   const { buckets } = searchData?.aggregations.composite_data;
 
   const age = getKeyValues(buckets, 'mapped_metadata.age');
+  const headers = getAgeLabels(buckets, 'mapped_metadata.age');
 
   return (
     <>
       {Object.keys(searchData).length && (
         <>
           <PageTitleWrapper>
-            <PageTitle variant="h1">Page Title</PageTitle>
-            <Typography>Page Description Here</Typography>
+            <PageTitle variant="h2" component="h1">
+              HuBMAP Diversity
+            </PageTitle>
+            <DescriptionPaper>
+              <Typography>Page Description Here</Typography>
+            </DescriptionPaper>
           </PageTitleWrapper>
-          <ChartTitle variant="h2">Ethnicity and Age</ChartTitle>
+          <ChartTitle variant="h4" component="h2">
+            Race & Age
+          </ChartTitle>
+          <DescriptionPaper>
+            <Typography>Table Description Here</Typography>
+          </DescriptionPaper>
           <ChartPaper>
             <StyledTableContainer>
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>
                     <HeaderCell> </HeaderCell>
-                    {age.map((type) => (
+                    {headers.map((type) => (
                       <HeaderCell> {type} </HeaderCell>
                     ))}
                   </TableRow>
@@ -243,37 +255,52 @@ function Vis() {
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
-            colors={['#DA348A', '#5f9ada', '#db765d']}
+            colors={threeColors}
             description="Description Example"
-            title="Blood Type and Race"
+            title="Blood Type & Race"
+            yAxisLabel="# of Donors"
+            xAxisLabel="Blood Type"
           />
-          <DemographicsChartVertical
+          <DonorChart
             donorQuery={donorGenderRace}
             xKey="mapped_metadata.sex"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
-            colors={['#DA348A', '#5f9ada', '#db765d']}
-            title="Gender and Ethnicity"
+            colors={threeColors}
+            title="Sex & Race"
             description="Vertical Description Example"
+            yAxisLabel="# of Donors"
+            xAxisLabel="Sex"
           />
           <DonorChart
             donorQuery={donorBloodtypeGender}
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
-            colors={['#6C8938', '#D25435']}
-            title="Blood Type and Gender"
+            colors={twoColors}
+            title="Blood Type & Sex"
             description="Description Example"
+            yAxisLabel="# of Donors"
+            xAxisLabel="Blood Type"
           />
           <DonorChart
             donorQuery={donorAgeGender}
             xKey="mapped_metadata.age"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
-            colors={['#6C8938', '#D25435']}
-            title="Age and Gender"
+            colors={twoColors}
+            title="Age & Sex"
             description="Description Example"
+            yAxisLabel="# of Donors"
+            xAxisLabel="Age"
           />
+          <ChartTitle variant="h4" component="h2">
+            Methodology
+          </ChartTitle>
+          <ChartPaper>
+            <Typography>Page Description Here</Typography>
+          </ChartPaper>
+          <ProjectAttribution />
         </>
       )}
     </>

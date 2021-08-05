@@ -102,7 +102,7 @@ function Routes(props) {
   }
   /* eslint-enable no-undef */
 
-  if (urlPath.startsWith('/vis')) {
+  if (urlPath.startsWith('/diversity')) {
     return (
       <Route>
         <Vis />
