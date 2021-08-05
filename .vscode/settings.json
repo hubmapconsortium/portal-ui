@@ -1,6 +1,3 @@
 {
-    "eslint.workingDirectories": [
-        "./context"
-    ],
-    "python.pythonPath": "/usr/bin/python"
+    "eslint.workingDirectories": ["./context"]
 }
