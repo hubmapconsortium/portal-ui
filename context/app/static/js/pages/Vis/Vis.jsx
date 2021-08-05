@@ -173,9 +173,8 @@ const donorAgeRace = {
   },
 };
 
-const purple = '#444A65';
-const green = '#6C8938';
-const pink = '#DA348A';
+const threeColors = ['#444A65', '#6C8938', '#DA348A'];
+const twoColors = threeColors.slice(0, 2);
 
 function Vis() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
@@ -256,7 +255,7 @@ function Vis() {
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
-            colors={[purple, green, pink]}
+            colors={threeColors}
             description="Description Example"
             title="Blood Type & Race"
             yAxisLabel="# of Donors"
@@ -267,7 +266,7 @@ function Vis() {
             xKey="mapped_metadata.sex"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
-            colors={[purple, green, pink]}
+            colors={threeColors}
             title="Sex & Race"
             description="Vertical Description Example"
             yAxisLabel="# of Donors"
@@ -278,7 +277,7 @@ function Vis() {
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
-            colors={[purple, green]}
+            colors={twoColors}
             title="Blood Type & Sex"
             description="Description Example"
             yAxisLabel="# of Donors"
@@ -289,7 +288,7 @@ function Vis() {
             xKey="mapped_metadata.age"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
-            colors={[purple, green]}
+            colors={twoColors}
             title="Age & Sex"
             description="Description Example"
             yAxisLabel="# of Donors"
