@@ -10,7 +10,6 @@ import requests
 
 from .vitessce_confs import get_view_config_class_for_data_types
 from .vitessce_confs.base_confs import ConfCells
-from context.app.api import vitessce_confs
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
@@ -118,9 +117,11 @@ class ApiClient():
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
             derived_entity['files'] = derived_entity['metadata']['files']
+            vitessce_conf = \
+                self.get_vitessce_conf_cells_and_lifted_uuid(derived_entity).vitessce_conf
             return VitessceConfLiftedUUID(
-                vitessce_conf=self.get_vitessce_conf_cells_and_lifted_uuid(derived_entity).vitessce_conf,
-                vis_lifted_uuid=derived_entity['uuid'])
+                vis_lifted_uuid=derived_entity['uuid'],
+                vitessce_conf=vitessce_conf)
 
         if 'files' not in entity or 'data_types' not in entity:
             return VitessceConfLiftedUUID(ConfCells(None, None), None)
