@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 import PDFViewerControlButtons from '../PDFViewerControlButtons';
-import { ModalContentWrapper, StyledIconButton, StyledCloseIcon, PaddedDiv, ButtonWrapper } from './style';
+import { ModalContentWrapper, StyledIconButton, StyledCloseIcon, ButtonWrapper, Flex, ErrorIcon } from './style';
 
 function PDFViewer({ pdfUrl }) {
   const [pageNumber, setPageNumber] = useState(1);
@@ -29,10 +29,10 @@ function PDFViewer({ pdfUrl }) {
   };
 
   return (
-    <PaddedDiv>
+    <>
       {(!processPdf || open) && (
         <ButtonWrapper>
-          <Button type="button" onClick={handleOpen}>
+          <Button type="button" onClick={handleOpen} variant="outlined">
             View PDF
           </Button>
         </ButtonWrapper>
@@ -42,7 +42,12 @@ function PDFViewer({ pdfUrl }) {
           file={pdfUrl}
           onLoadSuccess={onDocumentLoadSuccess}
           loading={<LinearProgress />}
-          error={<Typography>Failed to load</Typography>}
+          error={
+            <Flex>
+              <ErrorIcon />
+              <Typography>Failed to load</Typography>
+            </Flex>
+          }
         />
       )}
       <Modal
@@ -61,7 +66,7 @@ function PDFViewer({ pdfUrl }) {
           </StyledIconButton>
         </ModalContentWrapper>
       </Modal>
-    </PaddedDiv>
+    </>
   );
 }
 

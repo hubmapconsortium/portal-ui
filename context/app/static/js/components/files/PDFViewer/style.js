@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import IconButton from '@material-ui/core/IconButton';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
+import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
 
 const ModalContentWrapper = styled.div`
   position: absolute;
@@ -24,12 +25,18 @@ const StyledCloseIcon = styled(CancelRoundedIcon)`
   border-radius: 100%;
 `;
 
-const PaddedDiv = styled.div`
-  padding: 0px 20px;
-`;
-
 const ButtonWrapper = styled.div`
-  min-width: 100px;
+  min-width: 125px;
 `;
 
-export { ModalContentWrapper, StyledIconButton, StyledCloseIcon, PaddedDiv, ButtonWrapper };
+const Flex = styled.div`
+  display: flex;
+`;
+
+const ErrorIcon = styled(ErrorRoundedIcon)`
+  color: ${(props) => props.theme.palette.error.main};
+  font-size: 1.25rem;
+  margin-right: ${(props) => props.theme.spacing(0.5)}px;
+`;
+
+export { ModalContentWrapper, StyledIconButton, StyledCloseIcon, ButtonWrapper, Flex, ErrorIcon };
