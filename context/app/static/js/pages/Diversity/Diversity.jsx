@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import DonorChart from './DonorChart';
 import ProjectAttribution from './ProjectAttribution';
@@ -176,6 +177,22 @@ const donorAgeRace = {
 const threeColors = ['#444A65', '#6C8938', '#DA348A'];
 const twoColors = threeColors.slice(0, 2);
 
+function BloodTypeDescription() {
+  return (
+    <>
+      It is critical to be aware that{' '}
+      <OutboundLink href="https://www.redcrossblood.org/donate-blood/blood-types.html">
+        some blood types are more common than others
+      </OutboundLink>{' '}
+      in a racially diverse population like the United States. The blood type of an individual can{' '}
+      <OutboundLink href="https://www.pennmedicine.org/updates/blogs/health-and-wellness/2019/april/blood-types">
+        predispose them to different kinds of medical conditions
+      </OutboundLink>
+      .
+    </>
+  );
+}
+
 function Diversity() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
@@ -201,18 +218,21 @@ function Diversity() {
         <>
           <PageTitleWrapper>
             <PageTitle variant="h2" component="h1">
-              HuBMAP Diversity
+              HuBMAP Donor Diversity
             </PageTitle>
             <DescriptionPaper>
-              <Typography>Page Description Here</Typography>
+              <Typography>
+                The goal of HuBMAP is to develop an open and global platform to map healthy cells in the human body. To
+                serve as a reference atlas for future studies in human disease, HuBMAP needs to include a diverse
+                population of donors representing a broad spectrum of factors affecting health. These include age, sex,
+                race, ethnicity, and many other factors. The visualizations on this page provide an overview of the
+                distribution of these factors across all HuBMAP donors.
+              </Typography>
             </DescriptionPaper>
           </PageTitleWrapper>
           <ChartTitle variant="h4" component="h2">
             Race & Age
           </ChartTitle>
-          <DescriptionPaper>
-            <Typography>Table Description Here</Typography>
-          </DescriptionPaper>
           <ChartPaper>
             <StyledTableContainer>
               <Table stickyHeader>
@@ -256,7 +276,7 @@ function Diversity() {
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
             colors={threeColors}
-            description="Description Example"
+            description={<BloodTypeDescription />}
             title="Blood Type & Race"
             yAxisLabel="# of Donors"
             xAxisLabel="Blood Type"
@@ -268,7 +288,6 @@ function Diversity() {
             colorKeys={['White', 'Black or African American', 'Hispanic']}
             colors={threeColors}
             title="Sex & Race"
-            description="Vertical Description Example"
             yAxisLabel="# of Donors"
             xAxisLabel="Sex"
           />
@@ -279,7 +298,7 @@ function Diversity() {
             colorKeys={['Male', 'Female']}
             colors={twoColors}
             title="Blood Type & Sex"
-            description="Description Example"
+            description={<BloodTypeDescription />}
             yAxisLabel="# of Donors"
             xAxisLabel="Blood Type"
           />
@@ -290,16 +309,9 @@ function Diversity() {
             colorKeys={['Male', 'Female']}
             colors={twoColors}
             title="Age & Sex"
-            description="Description Example"
             yAxisLabel="# of Donors"
             xAxisLabel="Age"
           />
-          <ChartTitle variant="h4" component="h2">
-            Methodology
-          </ChartTitle>
-          <ChartPaper>
-            <Typography>Page Description Here</Typography>
-          </ChartPaper>
           <ProjectAttribution />
         </>
       )}

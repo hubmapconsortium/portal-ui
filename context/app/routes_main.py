@@ -220,7 +220,7 @@ def dev_search():
 
 @blueprint.route('/diversity')
 def vis():
-    title = 'Diversity'
+    title = 'Donor Diversity'
     flask_data = {
         **get_default_flask_data(),
         'title': title
