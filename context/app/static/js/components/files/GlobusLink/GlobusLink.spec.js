@@ -23,10 +23,9 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test('displays progress bar when loading and success icon with 200 response', async () => {
+test('displays success icon with 200 response', async () => {
   render(<GlobusLink uuid={uuid} hubmap_id={hubmap_id} />);
 
-  expect(screen.getByRole('progressbar')).toBeInTheDocument();
   await screen.findByText('Bulk Data Transfer');
   expect(screen.getByTestId('success-icon')).toBeInTheDocument();
 });
