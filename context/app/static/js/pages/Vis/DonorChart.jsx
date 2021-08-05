@@ -4,10 +4,10 @@ import Typography from '@material-ui/core/Typography';
 
 import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
-import { ChartPaper, ChartTitle, FlexContainer, FlexChild, FlexDescriptionWrapper } from './style';
+import { ChartPaper, ChartTitle, DescriptionPaper } from './style';
 
 function DonorChart(props) {
-  const { title, donorQuery, xKey, yKey, colorKeys, colors, description } = props;
+  const { title, donorQuery, xKey, yKey, colorKeys, colors, description, xAxisLabel, yAxisLabel } = props;
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   const { searchData } = useSearchData(donorQuery, elasticsearchEndpoint, nexusToken);
@@ -40,7 +40,7 @@ function DonorChart(props) {
     scales: {
       yAxes: {
         title: {
-          text: 'Y Axis Title',
+          text: yAxisLabel,
           display: true,
         },
         ticks: {
@@ -49,7 +49,7 @@ function DonorChart(props) {
       },
       xAxes: {
         title: {
-          text: 'X Axis Title',
+          text: xAxisLabel,
           display: true,
         },
       },
@@ -59,15 +59,11 @@ function DonorChart(props) {
   return (
     <>
       <ChartTitle variant="h2">{title}</ChartTitle>
+      <DescriptionPaper>
+        <Typography>{description}</Typography>
+      </DescriptionPaper>
       <ChartPaper>
-        <FlexContainer>
-          <FlexChild>
-            <Bar data={graphdata} options={options} />
-          </FlexChild>
-          <FlexDescriptionWrapper>
-            <Typography>{description}</Typography>
-          </FlexDescriptionWrapper>
-        </FlexContainer>
+        <Bar data={graphdata} options={options} />
       </ChartPaper>
     </>
   );
