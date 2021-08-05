@@ -201,7 +201,7 @@ function Diversity() {
         <>
           <PageTitleWrapper>
             <PageTitle variant="h2" component="h1">
-              HuBMAP Diversity
+              HuBMAP Donor Diversity
             </PageTitle>
             <DescriptionPaper>
               <Typography>Page Description Here</Typography>
