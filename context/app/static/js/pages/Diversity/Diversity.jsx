@@ -294,12 +294,6 @@ function Diversity() {
             yAxisLabel="# of Donors"
             xAxisLabel="Age"
           />
-          <ChartTitle variant="h4" component="h2">
-            Methodology
-          </ChartTitle>
-          <ChartPaper>
-            <Typography>Page Description Here</Typography>
-          </ChartPaper>
           <ProjectAttribution />
         </>
       )}
