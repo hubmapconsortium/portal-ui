@@ -9,9 +9,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
-import DemographicsChartVertical from './DemographicsChartVertical';
 import DonorChart from './DonorChart';
-import { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle } from './style';
+import ProjectAttribution from './ProjectAttribution';
+import { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle, DescriptionPaper } from './style';
 
 /* JSON query
  {
@@ -172,6 +172,10 @@ const donorAgeRace = {
   },
 };
 
+const purple = '#444A65';
+const green = '#6C8938';
+const pink = '#DA348A';
+
 function Vis() {
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
@@ -198,9 +202,14 @@ function Vis() {
         <>
           <PageTitleWrapper>
             <PageTitle variant="h1">Page Title</PageTitle>
-            <Typography>Page Description Here</Typography>
+            <DescriptionPaper>
+              <Typography>Page Description Here</Typography>
+            </DescriptionPaper>
           </PageTitleWrapper>
-          <ChartTitle variant="h2">Ethnicity and Age</ChartTitle>
+          <ChartTitle variant="h2">Race & Age</ChartTitle>
+          <DescriptionPaper>
+            <Typography>Table Description Here</Typography>
+          </DescriptionPaper>
           <ChartPaper>
             <StyledTableContainer>
               <Table stickyHeader>
@@ -243,37 +252,50 @@ function Vis() {
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
-            colors={['#DA348A', '#5f9ada', '#db765d']}
+            colors={[purple, green, pink]}
             description="Description Example"
-            title="Blood Type and Race"
+            title="Blood Type & Race"
+            yAxisLabel="# of Donors"
+            xAxisLabel="Blood Type"
           />
-          <DemographicsChartVertical
+          <DonorChart
             donorQuery={donorGenderRace}
             xKey="mapped_metadata.sex"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
-            colors={['#DA348A', '#5f9ada', '#db765d']}
-            title="Gender and Ethnicity"
+            colors={[purple, green, pink]}
+            title="Sex & Race"
             description="Vertical Description Example"
+            yAxisLabel="# of Donors"
+            xAxisLabel="Sex"
           />
           <DonorChart
             donorQuery={donorBloodtypeGender}
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
-            colors={['#6C8938', '#D25435']}
-            title="Blood Type and Gender"
+            colors={[purple, green]}
+            title="Blood Type & Sex"
             description="Description Example"
+            yAxisLabel="# of Donors"
+            xAxisLabel="Blood Type"
           />
           <DonorChart
             donorQuery={donorAgeGender}
             xKey="mapped_metadata.age"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
-            colors={['#6C8938', '#D25435']}
-            title="Age and Gender"
+            colors={[purple, green]}
+            title="Age & Sex"
             description="Description Example"
+            yAxisLabel="# of Donors"
+            xAxisLabel="Age"
           />
+          <ChartTitle variant="h2">Methodology</ChartTitle>
+          <ChartPaper>
+            <Typography>Page Description Here</Typography>
+          </ChartPaper>
+          <ProjectAttribution />
         </>
       )}
     </>
