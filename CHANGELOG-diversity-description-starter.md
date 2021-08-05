@@ -1,2 +1,0 @@
-- Remove descriptions from certain charts on diversity page.
-- Rename diversity page to donor diversity.

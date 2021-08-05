@@ -1,3 +1,14 @@
+## v0.24.2 - 2021-08-05
+
+- Remove descriptions from certain charts on diversity page.
+- Rename diversity page to donor diversity.
+- Introduce a log-scale slider.
+- Add additional charts/tables to the donor diversity page.
+- Style donor diversity page.
+- Change donor diversity page's route from /vis to /diversity.
+- Move submodule stuff into script, instead of cluttering readme.
+
+
 ## v0.24.1 - 2021-08-03
 
 - Chart and table.
