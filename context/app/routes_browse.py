@@ -41,7 +41,7 @@ def hbm_redirect(hbm_suffix):
     client = _get_client()
     entity = client.get_entity(hbm_id=f'HBM{hbm_suffix}')
     return redirect(
-        url_for('routes.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
+        url_for('browse.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
 
 
 @blueprint.route('/browse/<type>/<uuid>.<unknown_ext>')
@@ -60,7 +60,7 @@ def details(type, uuid):
     entity = client.get_entity(uuid)
     actual_type = entity['entity_type'].lower()
     if type != actual_type:
-        return redirect(url_for('routes.details', type=actual_type, uuid=uuid))
+        return redirect(url_for('browse.details', type=actual_type, uuid=uuid))
 
     template = 'pages/base_react.html'
     conf_cells = client.get_vitessce_conf_cells(entity)

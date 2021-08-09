@@ -54,7 +54,7 @@ def login():
          param
     '''
     # The redirect URI, as a complete URI (not relative path)
-    redirect_uri = url_for('routes_auth.login', _external=True)
+    redirect_uri = url_for('auth.login', _external=True)
 
     client = load_app_client()
     client.oauth2_start_flow(redirect_uri)
@@ -116,7 +116,7 @@ def logout():
     redirect_to_globus_param = 'redirect_to_globus'
 
     if redirect_to_globus_param in request.args:
-        redirect_uri = url_for('routes.index', _external=True)
+        redirect_uri = url_for('main.index', _external=True)
         globus_logout_url = 'https://auth.globus.org/v2/web/logout?' + urlencode({
             'client': current_app.config['APP_CLIENT_ID'],
             'redirect_uri': redirect_uri,
@@ -142,5 +142,5 @@ def logout():
 
     kwargs = {redirect_to_globus_param: True}
     response = make_response(
-        redirect(url_for('routes_auth.logout', _external=True, **kwargs)))
+        redirect(url_for('auth.logout', _external=True, **kwargs)))
     return response
