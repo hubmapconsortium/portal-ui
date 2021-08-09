@@ -2,7 +2,7 @@ import pytest
 import requests
 
 from .main import create_app
-from .routes_main import entity_types
+from .routes_browse import entity_types
 
 
 @pytest.fixture
