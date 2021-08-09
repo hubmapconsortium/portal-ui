@@ -1,0 +1,1 @@
+- Stub out publication page.

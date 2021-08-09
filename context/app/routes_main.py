@@ -248,12 +248,31 @@ def preview_view(name):
             'created_by_user_displayname': preview_metadata['created_by_user_displayname'],
             'created_by_user_email': preview_metadata['created_by_user_email'],
         },
-        'vitessce_conf':
-            ('vitessce_conf' in preview_metadata) and preview_metadata['vitessce_conf']
+        'vitessce_conf': preview_metadata.get('vitessce_conf')
     }
     return render_template(
         'pages/base_react.html',
         title='Preview',
+        flask_data=flask_data
+    )
+
+
+@blueprint.route('/publication/<name>')
+def publication_view(name):
+    filename = dirname(__file__) + '/publication/' + name + '.md'
+    metadata_content = frontmatter.load(filename)
+    publication_metadata = metadata_content.metadata
+    markdown = metadata_content.content
+    flask_data = {
+        **get_default_flask_data(),
+        'title': publication_metadata['title'],
+        'markdown': markdown,
+        # Unlike preview, no "entity".
+        'vitessce_conf': publication_metadata.get('vitessce_conf')
+    }
+    return render_template(
+        'pages/base_react.html',
+        title='Publication',
         flask_data=flask_data
     )
 
