@@ -7,7 +7,7 @@ from hubmap_api_py_client import Client
 from .utils import get_default_flask_data
 
 
-blueprint = Blueprint('cells', __name__, template_folder='templates')
+blueprint = Blueprint(__name__.split('.')[-1], __name__, template_folder='templates')
 
 
 @blueprint.route('/cells')
