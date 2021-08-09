@@ -345,7 +345,7 @@ def get_url_base_from_request():
     return f'{scheme}://{netloc}'
 
 
-# TODO: Move route, once the routes cleanup is merged: https://github.com/hubmapconsortium/portal-ui/pull/2052
+# TODO: Move these, once the routes cleanup is merged: https://github.com/hubmapconsortium/portal-ui/pull/2052
 from io import StringIO
 from csv import DictWriter
 @blueprint.route('/api/v0/donors.tsv')
@@ -360,6 +360,19 @@ def donors_tsv():
 
 
 def dicts_to_tsv(data_dicts, header_fields):
+    '''
+    >>> data_dicts = [
+    ...   {'title': 'Star Wars', 'subtitle': 'A New Hope', 'date': '1977'},
+    ...   {'title': 'The Empire Strikes Back', 'date': '1980'},
+    ...   {'title': 'The Return of the Jedi', 'date': '1983'}
+    ... ]
+    >>> from pprint import pp
+    >>> pp(dicts_to_tsv(data_dicts, ['title']))
+    ('title\\tdate\\tsubtitle\\r\\n'
+     'Star Wars\\t1977\\tA New Hope\\r\\n'
+     'The Empire Strikes Back\\t1980\\t\\r\\n'
+     'The Return of the Jedi\\t1983\\t\\r\\n')
+    '''
     body_fields = sorted(
         set().union(*[d.keys() for d in data_dicts])
         - set(header_fields)
