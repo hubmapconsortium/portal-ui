@@ -65,6 +65,35 @@ class ApiClient():
             raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
 
+    def get_all_donors(self):
+        size = 10000  # Default ES limit
+        query = {
+            "size": size,
+            "post_filter": {
+                "term": {"entity_type.keyword": "Donor"}
+            },
+            "_source": ['uuid', 'hubmap_id', 'mapped_metadata']
+        }
+        response_json = self._request(
+            current_app.config['ELASTICSEARCH_ENDPOINT']
+            + current_app.config['PORTAL_INDEX_PATH'],
+            body_json=query)
+        sources = [hit['_source'] for hit in response_json['hits']['hits']]
+        if len(sources) == size:
+            raise Exception('At least 10k datasets: need to make multiple requests')
+        donors = [
+            {
+                'uuid': source.get('uuid'),
+                'hubmap_id': source.get('hubmap_id'),
+                **{
+                    k: ', '.join(str(s) for s in v)
+                    for (k, v) in source.get('mapped_metadata', {}).items()
+                }
+            }
+            for source in sources
+        ]
+        return donors
+
     def get_entity(self, uuid=None, hbm_id=None):
         if self.is_mock:
             return {

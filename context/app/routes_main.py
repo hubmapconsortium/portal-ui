@@ -343,3 +343,29 @@ def get_url_base_from_request():
     scheme = parsed.scheme
     netloc = parsed.netloc
     return f'{scheme}://{netloc}'
+
+
+# TODO: Move route, once the routes cleanup is merged: https://github.com/hubmapconsortium/portal-ui/pull/2052
+from io import StringIO
+from csv import DictWriter
+@blueprint.route('/api/v0/donors.tsv')
+def donors_tsv():
+    client = _get_client()
+    donors = client.get_all_donors()
+    return Response(
+        response=dicts_to_tsv(donors, ['uuid', 'hubmap_id']),
+        headers={'Content-Disposition': f"attachment; filename=donors.tsv"},
+        mimetype='text/tab-separated-values'
+    )
+
+
+def dicts_to_tsv(data_dicts, header_fields):
+    body_fields = sorted(
+        set().union(*[d.keys() for d in data_dicts])
+        - set(header_fields)
+    )
+    output = StringIO()
+    writer = DictWriter(output, header_fields + body_fields, delimiter='\t')
+    writer.writeheader()
+    writer.writerows(data_dicts)
+    return output.getvalue()
