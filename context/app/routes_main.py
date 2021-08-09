@@ -8,7 +8,7 @@ import frontmatter
 from .utils import get_default_flask_data
 
 
-blueprint = Blueprint('main', __name__, template_folder='templates')
+blueprint = Blueprint(__name__.split('.')[-1], __name__, template_folder='templates')
 
 
 @blueprint.route('/')

@@ -116,7 +116,7 @@ def logout():
     redirect_to_globus_param = 'redirect_to_globus'
 
     if redirect_to_globus_param in request.args:
-        redirect_uri = url_for('main.index', _external=True)
+        redirect_uri = url_for('routes_main.index', _external=True)
         globus_logout_url = 'https://auth.globus.org/v2/web/logout?' + urlencode({
             'client': current_app.config['APP_CLIENT_ID'],
             'redirect_uri': redirect_uri,
