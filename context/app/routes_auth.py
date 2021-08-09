@@ -11,7 +11,7 @@ import globus_sdk
 # https://globus-sdk-python.readthedocs.io/en/stable/examples/three_legged_oauth/
 
 
-blueprint = Blueprint('auth', __name__, template_folder='templates')
+blueprint = Blueprint(__name__.split('.')[-1], __name__, template_folder='templates')
 
 
 def load_app_client():
@@ -54,7 +54,7 @@ def login():
          param
     '''
     # The redirect URI, as a complete URI (not relative path)
-    redirect_uri = url_for('auth.login', _external=True)
+    redirect_uri = url_for('routes_auth.login', _external=True)
 
     client = load_app_client()
     client.oauth2_start_flow(redirect_uri)
@@ -142,5 +142,5 @@ def logout():
 
     kwargs = {redirect_to_globus_param: True}
     response = make_response(
-        redirect(url_for('auth.logout', _external=True, **kwargs)))
+        redirect(url_for('routes_auth.logout', _external=True, **kwargs)))
     return response
