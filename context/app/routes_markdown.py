@@ -2,7 +2,7 @@ import re
 from glob import glob
 from os.path import dirname
 
-from flask import Blueprint, render_template, request, redirect
+from flask import render_template, request, redirect
 
 from .utils import get_default_flask_data, make_blueprint
 

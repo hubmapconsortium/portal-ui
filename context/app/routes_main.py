@@ -1,6 +1,6 @@
 from os.path import dirname
 
-from flask import (Blueprint, render_template, current_app,
+from flask import (render_template, current_app,
                    session, request)
 
 import frontmatter

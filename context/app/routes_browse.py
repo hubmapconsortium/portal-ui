@@ -1,7 +1,7 @@
 import json
 from urllib.parse import urlparse
 
-from flask import (Blueprint, current_app, session, render_template,
+from flask import (current_app, session, render_template,
                    abort, request, redirect, url_for, Response)
 
 import nbformat

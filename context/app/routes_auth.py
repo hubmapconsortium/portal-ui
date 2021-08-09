@@ -1,7 +1,7 @@
 from urllib.parse import urlencode, unquote
 
 from flask import (
-    Blueprint, make_response, current_app, url_for,
+    make_response, current_app, url_for,
     request, redirect, render_template, session)
 import requests
 import globus_sdk

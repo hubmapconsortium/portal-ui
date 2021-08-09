@@ -1,6 +1,6 @@
 from itertools import islice
 
-from flask import (Blueprint, render_template, current_app, request)
+from flask import render_template, current_app, request
 
 from hubmap_api_py_client import Client
 
