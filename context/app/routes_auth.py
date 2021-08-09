@@ -6,12 +6,14 @@ from flask import (
 import requests
 import globus_sdk
 
+from .utils import make_blueprint
+
 
 # This is mostly copy-and-paste from
 # https://globus-sdk-python.readthedocs.io/en/stable/examples/three_legged_oauth/
 
 
-blueprint = Blueprint(__name__.split('.')[-1], __name__, template_folder='templates')
+blueprint = make_blueprint(__name__)
 
 
 def load_app_client():

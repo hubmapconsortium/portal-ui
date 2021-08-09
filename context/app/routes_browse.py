@@ -8,10 +8,10 @@ import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
 from .api.client import ApiClient
-from .utils import get_default_flask_data
+from .utils import get_default_flask_data, make_blueprint
 
 
-blueprint = Blueprint(__name__.split('.')[-1], __name__, template_folder='templates')
+blueprint = make_blueprint(__name__)
 
 entity_types = ['donor', 'sample', 'dataset', 'support', 'collection']
 

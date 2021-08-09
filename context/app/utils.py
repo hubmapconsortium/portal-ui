@@ -1,4 +1,4 @@
-from flask import current_app
+from flask import (current_app, Blueprint)
 
 
 def get_default_flask_data():
@@ -13,3 +13,7 @@ def get_default_flask_data():
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
     }
+
+
+def make_blueprint(name):
+    return Blueprint(name.split('.')[-1], name, template_folder='templates')

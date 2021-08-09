@@ -5,10 +5,10 @@ from flask import (Blueprint, render_template, current_app,
 
 import frontmatter
 
-from .utils import get_default_flask_data
+from .utils import get_default_flask_data, make_blueprint
 
 
-blueprint = Blueprint(__name__.split('.')[-1], __name__, template_folder='templates')
+blueprint = make_blueprint(__name__)
 
 
 @blueprint.route('/')
