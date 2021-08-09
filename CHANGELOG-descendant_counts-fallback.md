@@ -1,0 +1,1 @@
+- Provide a fallback if `descendant_counts` is empty.
