@@ -66,13 +66,19 @@ class ApiClient():
         return uuids
 
     def get_all_donors(self, non_metadata_fields):
+        return self._get_all_entities_of_type(non_metadata_fields, 'Donor')
+
+    def get_all_samples(self, non_metadata_fields):
+        return self._get_all_entities_of_type(non_metadata_fields, 'Sample')
+
+    def _get_all_entities_of_type(self, non_metadata_fields, entity_type):
         size = 10000  # Default ES limit
         query = {
             "size": size,
             "post_filter": {
-                "term": {"entity_type.keyword": "Donor"}
+                "term": {"entity_type.keyword": entity_type}
             },
-            "_source": [*non_metadata_fields, 'mapped_metadata']
+            "_source": [*non_metadata_fields, 'mapped_metadata', 'metadata']
         }
         response_json = self._request(
             current_app.config['ELASTICSEARCH_ENDPOINT']
@@ -196,12 +202,18 @@ def _flatten_sources(sources, non_metadata_fields):
     [{'uuid': 'abcd1234', 'name': 'Ann', 'age': '40', 'weight': '150'},
      {'uuid': 'wxyz1234', 'name': 'Bob', 'age': '50', 'multi': 'A, B, C'}]
     '''
-    return [
+    flat_sources = [
         {
             **{
                 field: source.get(field)
                 for field in non_metadata_fields
             },
+
+            # This gets sample metadata.
+            # mapped_metadata not populated for samples... Can't recall why not.
+            **source.get('metadata', {}),
+
+            # This gets donor metadata, and concatenates nested lists.
             **{
                 k: ', '.join(str(s) for s in v)
                 for (k, v) in source.get('mapped_metadata', {}).items()
@@ -209,6 +221,18 @@ def _flatten_sources(sources, non_metadata_fields):
         }
         for source in sources
     ]
+    for source in flat_sources:
+        # An alternative approach to removing individual keys
+        # would be to remove all values which are dicts.
+
+        # For donors, this is the metadata in EAV form.
+        # For samples, this is a placeholder for dev-search.
+        source.pop('metadata', None)
+
+        source.pop('organ_donor_data', None)
+        source.pop('living_donor_data', None)
+    return flat_sources
+
 
 
 def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):

@@ -10,12 +10,13 @@ On a dataset page you can:
 - Download just the metadata as a key-value TSV by clicking the download button beside the "Metadata" section header.
 - Download the data files through Globus, via a link in the "Files" section.
 
-## Metadata for all donors
+## Metadata for all donors or samples
 
-For a TSV of donor metadata, visit [`/api/v0/donors.tsv`](/api/v0/donors.tsv).
-If you are logged in and have sufficient privs, this will include unpublished donors.
+For a TSV of donor or sample metadata, visit [`/api/v0/donors.tsv`](/api/v0/donors.tsv)
+or [`/api/v0/samples.tsv`](/api/v0/samples.tsv), respectively.
+If you are logged in and have sufficient privs, this will include unpublished data.
 
-This will be expanded to sample and dataset metadata soon.
+This will be expanded to dataset metadata soon.
 
 ## Query metadata
 
