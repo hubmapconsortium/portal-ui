@@ -355,14 +355,26 @@ def donors_tsv():
     client = _get_client()
     first_fields = ['uuid', 'hubmap_id']
     donors = client.get_all_donors(first_fields)
+    return _make_tsv_response(_dicts_to_tsv(donors, first_fields), 'donors.tsv')
+
+
+@blueprint.route('/api/v0/samples.tsv')
+def samples_tsv():
+    client = _get_client()
+    first_fields = ['uuid', 'hubmap_id']
+    samples = client.get_all_samples(first_fields)
+    return _make_tsv_response(_dicts_to_tsv(samples, first_fields), 'samples.tsv')
+
+
+def _make_tsv_response(tsv_content, filename):
     return Response(
-        response=dicts_to_tsv(donors, first_fields),
-        headers={'Content-Disposition': f"attachment; filename=donors.tsv"},
+        response=tsv_content,
+        headers={'Content-Disposition': f"attachment; filename={filename}"},
         mimetype='text/tab-separated-values'
     )
 
 
-def dicts_to_tsv(data_dicts, first_fields):
+def _dicts_to_tsv(data_dicts, first_fields):
     '''
     >>> data_dicts = [
     ...   {'title': 'Star Wars', 'subtitle': 'A New Hope', 'date': '1977'},
