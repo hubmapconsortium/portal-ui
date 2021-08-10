@@ -1,6 +1,9 @@
 from os.path import dirname
 from urllib.parse import urlparse
 import json
+from io import StringIO
+from csv import DictWriter
+
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
@@ -345,9 +348,8 @@ def get_url_base_from_request():
     return f'{scheme}://{netloc}'
 
 
-# TODO: Move these, once the routes cleanup is merged: https://github.com/hubmapconsortium/portal-ui/pull/2052
-from io import StringIO
-from csv import DictWriter
+# TODO: Move these, once the routes cleanup is merged:
+# https://github.com/hubmapconsortium/portal-ui/pull/2052
 @blueprint.route('/api/v0/donors.tsv')
 def donors_tsv():
     client = _get_client()
