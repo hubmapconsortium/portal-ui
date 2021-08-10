@@ -2,14 +2,14 @@ import re
 from glob import glob
 from os.path import dirname
 
-from flask import Blueprint, render_template, request, redirect
+from flask import render_template, request, redirect
 
-from .routes_main import get_default_flask_data
+from .utils import get_default_flask_data, make_blueprint
 
 # NOTE: A better approach might be to look again at the handful of libraries
 # that handle this, or to pre-render everything when flask starts.
 
-blueprint = Blueprint('routes_markdown', __name__, template_folder='templates')
+blueprint = make_blueprint(__name__)
 
 
 def _title_from_md(md):
