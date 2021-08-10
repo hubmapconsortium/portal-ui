@@ -81,20 +81,7 @@ class ApiClient():
         sources = [hit['_source'] for hit in response_json['hits']['hits']]
         if len(sources) == size:
             raise Exception('At least 10k datasets: need to make multiple requests')
-        donors = [
-            {
-                **{
-                    field: source.get(field)
-                    for field in non_metadata_fields
-                },
-                **{
-                    k: ', '.join(str(s) for s in v)
-                    for (k, v) in source.get('mapped_metadata', {}).items()
-                }
-            }
-            for source in sources
-        ]
-        return donors
+        return _flatten_sources(sources, non_metadata_fields)
 
     def get_entity(self, uuid=None, hbm_id=None):
         if self.is_mock:
@@ -192,6 +179,36 @@ class ApiClient():
                 },
             ]
         }
+
+
+def _flatten_sources(sources, non_metadata_fields):
+    '''
+    >>> sources = [
+    ...     {'uuid': 'abcd1234', 'name': 'Ann',
+    ...      'other': 'skipped',
+    ...      'mapped_metadata': {'age': [40], 'weight': [150]}
+    ...     },
+    ...     {'uuid': 'wxyz1234', 'name': 'Bob',
+    ...      'mapped_metadata': {'age': [50], 'multi': ['A', 'B', 'C']}
+    ...     }]
+    >>> from pprint import pp
+    >>> pp(_flatten_sources(sources, ['uuid', 'name']))
+    [{'uuid': 'abcd1234', 'name': 'Ann', 'age': '40', 'weight': '150'},
+     {'uuid': 'wxyz1234', 'name': 'Bob', 'age': '50', 'multi': 'A, B, C'}]
+    '''
+    return [
+        {
+            **{
+                field: source.get(field)
+                for field in non_metadata_fields
+            },
+            **{
+                k: ', '.join(str(s) for s in v)
+                for (k, v) in source.get('mapped_metadata', {}).items()
+            }
+        }
+        for source in sources
+    ]
 
 
 def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
