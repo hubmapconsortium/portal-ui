@@ -3,10 +3,17 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import LinearProgress from '@material-ui/core/LinearProgress';
 
 import PDFViewerControlButtons from '../PDFViewerControlButtons';
-import { ModalContentWrapper, StyledIconButton, StyledCloseIcon, ButtonWrapper, Flex, ErrorIcon } from './style';
+import {
+  ModalContentWrapper,
+  StyledIconButton,
+  StyledCloseIcon,
+  ButtonWrapper,
+  Flex,
+  ErrorIcon,
+  StyledLinearProgress,
+} from './style';
 
 function PDFViewer({ pdfUrl }) {
   const [pageNumber, setPageNumber] = useState(1);
@@ -41,7 +48,7 @@ function PDFViewer({ pdfUrl }) {
         <Document
           file={pdfUrl}
           onLoadSuccess={onDocumentLoadSuccess}
-          loading={<LinearProgress />}
+          loading={<StyledLinearProgress />}
           error={
             <Flex>
               <ErrorIcon />

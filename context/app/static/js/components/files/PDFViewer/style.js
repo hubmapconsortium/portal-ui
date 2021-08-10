@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import IconButton from '@material-ui/core/IconButton';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const ModalContentWrapper = styled.div`
   position: absolute;
@@ -39,4 +40,8 @@ const ErrorIcon = styled(ErrorRoundedIcon)`
   margin-right: ${(props) => props.theme.spacing(0.5)}px;
 `;
 
-export { ModalContentWrapper, StyledIconButton, StyledCloseIcon, ButtonWrapper, Flex, ErrorIcon };
+const StyledLinearProgress = styled(LinearProgress)`
+  max-width: 96px; //match max size of View PDF button
+`;
+
+export { ModalContentWrapper, StyledIconButton, StyledCloseIcon, ButtonWrapper, Flex, ErrorIcon, StyledLinearProgress };
