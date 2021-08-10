@@ -353,15 +353,16 @@ def get_url_base_from_request():
 @blueprint.route('/api/v0/donors.tsv')
 def donors_tsv():
     client = _get_client()
-    donors = client.get_all_donors()
+    first_fields = ['uuid', 'hubmap_id']
+    donors = client.get_all_donors(first_fields)
     return Response(
-        response=dicts_to_tsv(donors, ['uuid', 'hubmap_id']),
+        response=dicts_to_tsv(donors, first_fields),
         headers={'Content-Disposition': f"attachment; filename=donors.tsv"},
         mimetype='text/tab-separated-values'
     )
 
 
-def dicts_to_tsv(data_dicts, header_fields):
+def dicts_to_tsv(data_dicts, first_fields):
     '''
     >>> data_dicts = [
     ...   {'title': 'Star Wars', 'subtitle': 'A New Hope', 'date': '1977'},
@@ -377,10 +378,10 @@ def dicts_to_tsv(data_dicts, header_fields):
     '''
     body_fields = sorted(
         set().union(*[d.keys() for d in data_dicts])
-        - set(header_fields)
+        - set(first_fields)
     )
     output = StringIO()
-    writer = DictWriter(output, header_fields + body_fields, delimiter='\t')
+    writer = DictWriter(output, first_fields + body_fields, delimiter='\t')
     writer.writeheader()
     writer.writerows(data_dicts)
     return output.getvalue()

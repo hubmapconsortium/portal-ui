@@ -65,14 +65,14 @@ class ApiClient():
             raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
 
-    def get_all_donors(self):
+    def get_all_donors(self, non_metadata_fields):
         size = 10000  # Default ES limit
         query = {
             "size": size,
             "post_filter": {
                 "term": {"entity_type.keyword": "Donor"}
             },
-            "_source": ['uuid', 'hubmap_id', 'mapped_metadata']
+            "_source": [*non_metadata_fields, 'mapped_metadata']
         }
         response_json = self._request(
             current_app.config['ELASTICSEARCH_ENDPOINT']
@@ -83,8 +83,10 @@ class ApiClient():
             raise Exception('At least 10k datasets: need to make multiple requests')
         donors = [
             {
-                'uuid': source.get('uuid'),
-                'hubmap_id': source.get('hubmap_id'),
+                **{
+                    field: source.get(field)
+                    for field in non_metadata_fields
+                },
                 **{
                     k: ', '.join(str(s) for s in v)
                     for (k, v) in source.get('mapped_metadata', {}).items()
