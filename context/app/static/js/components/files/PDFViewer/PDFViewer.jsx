@@ -19,32 +19,28 @@ function PDFViewer({ pdfUrl }) {
   const [pageNumber, setPageNumber] = useState(1);
   const [open, setOpen] = useState(false);
   const [pdf, setPdf] = useState();
-  const [processPdf, setProcessPdf] = React.useState(false);
+  const [isProcessingPDF, setIsProcessingPDF] = React.useState(false);
 
   function onDocumentLoadSuccess(pdfObj) {
     setOpen(true);
     setPdf(pdfObj);
   }
 
-  const handleOpen = () => {
-    setProcessPdf(true);
-  };
-
   const handleClose = () => {
     setOpen(false);
-    setProcessPdf(false);
+    setIsProcessingPDF(false);
   };
 
   return (
     <>
-      {(!processPdf || open) && (
+      {(!isProcessingPDF || open) && (
         <ButtonWrapper>
-          <Button type="button" onClick={handleOpen} variant="outlined">
+          <Button type="button" onClick={() => setIsProcessingPDF(true)} variant="outlined">
             View PDF
           </Button>
         </ButtonWrapper>
       )}
-      {processPdf && (
+      {isProcessingPDF && (
         <Document
           file={pdfUrl}
           onLoadSuccess={onDocumentLoadSuccess}
