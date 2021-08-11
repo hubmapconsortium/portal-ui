@@ -41,7 +41,7 @@ const ErrorIcon = styled(ErrorRoundedIcon)`
 `;
 
 const StyledLinearProgress = styled(LinearProgress)`
-  max-width: 96px; //match max size of View PDF button
+  max-width: 100px;
 `;
 
 export { ModalContentWrapper, StyledIconButton, StyledCloseIcon, ButtonWrapper, Flex, ErrorIcon, StyledLinearProgress };
