@@ -60,7 +60,7 @@ function PDFViewer({ pdfUrl }) {
         aria-describedby="simple-modal-description"
       >
         <ModalContentWrapper>
-          <Page pageNumber={pageNumber} pdf={pdf} />
+          <Page pageNumber={pageNumber} pdf={pdf} renderTextLayer={false} />
           {pdf && (
             <PDFViewerControlButtons numPages={pdf.numPages} currentPageNum={pageNumber} setPageNum={setPageNumber} />
           )}
