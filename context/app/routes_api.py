@@ -8,6 +8,7 @@ from .utils import make_blueprint, get_client
 
 blueprint = make_blueprint(__name__)
 
+
 @blueprint.route('/api/v0/donors.tsv')
 def donors_tsv():
     client = get_client()

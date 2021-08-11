@@ -234,7 +234,6 @@ def _flatten_sources(sources, non_metadata_fields):
     return flat_sources
 
 
-
 def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
     '''
     >>> _get_entity_from_hits(['fake-hit-1', 'fake-hit-2'])
