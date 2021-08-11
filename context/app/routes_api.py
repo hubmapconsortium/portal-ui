@@ -41,7 +41,7 @@ def _dicts_to_tsv(data_dicts, first_fields):
     ...   {'title': 'The Return of the Jedi', 'date': '1983'}
     ... ]
     >>> from pprint import pp
-    >>> pp(dicts_to_tsv(data_dicts, ['title']))
+    >>> pp(_dicts_to_tsv(data_dicts, ['title']))
     ('title\\tdate\\tsubtitle\\r\\n'
      'Star Wars\\t1977\\tA New Hope\\r\\n'
      'The Empire Strikes Back\\t1980\\t\\r\\n'

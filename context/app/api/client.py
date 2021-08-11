@@ -189,7 +189,8 @@ class ApiClient():
 
 def _flatten_sources(sources, non_metadata_fields):
     '''
-    >>> sources = [
+    >>> from pprint import pp
+    >>> donor_sources = [
     ...     {'uuid': 'abcd1234', 'name': 'Ann',
     ...      'other': 'skipped',
     ...      'mapped_metadata': {'age': [40], 'weight': [150]}
@@ -197,10 +198,18 @@ def _flatten_sources(sources, non_metadata_fields):
     ...     {'uuid': 'wxyz1234', 'name': 'Bob',
     ...      'mapped_metadata': {'age': [50], 'multi': ['A', 'B', 'C']}
     ...     }]
-    >>> from pprint import pp
-    >>> pp(_flatten_sources(sources, ['uuid', 'name']))
+    >>> pp(_flatten_sources(donor_sources, ['uuid', 'name']))
     [{'uuid': 'abcd1234', 'name': 'Ann', 'age': '40', 'weight': '150'},
      {'uuid': 'wxyz1234', 'name': 'Bob', 'age': '50', 'multi': 'A, B, C'}]
+
+    >>> sample_sources = [
+    ...     {'uuid': 'abcd1234',
+    ...      'metadata': {'organ': 'belly button',
+    ...                   'organ_donor_data': {'example': 'Should remove!'},
+    ...                   'metadata': {'example': 'Should remove!'}}
+    ...     }]
+    >>> pp(_flatten_sources(sample_sources, ['uuid', 'name']))
+    [{'uuid': 'abcd1234', 'name': None, 'organ': 'belly button'}]
     '''
     flat_sources = [
         {
