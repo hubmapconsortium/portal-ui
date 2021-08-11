@@ -221,8 +221,7 @@ def _flatten_sources(sources, non_metadata_fields):
                 for field in non_metadata_fields
             },
 
-            # This gets sample metadata.
-            # mapped_metadata not populated for samples... Can't recall why not.
+            # This gets sample and donor metadata.
             **source.get('metadata', {}),
 
             # This gets donor metadata, and concatenates nested lists.
@@ -234,15 +233,22 @@ def _flatten_sources(sources, non_metadata_fields):
         for source in sources
     ]
     for source in flat_sources:
-        # An alternative approach to removing individual keys
-        # would be to remove all values which are dicts.
+        if 'assay_type' in source.get('metadata', {}):
+            # For donors, this is the metadata in EAV form,
+            # for samples, this is a placeholder for dev-search,
+            # but for datasets, we want to move it up a level.
+            source.update(source['metadata'])
 
-        # For donors, this is the metadata in EAV form.
-        # For samples, this is a placeholder for dev-search.
-        source.pop('metadata', None)
-
-        source.pop('organ_donor_data', None)
-        source.pop('living_donor_data', None)
+        for field in [
+                'metadata',
+                # From datasets JSON:
+                'dag_provenance_list', 'extra_metadata', 'files_info_alt_path',
+                # Dataset TSV columns to hide:
+                'antibodies_path', 'contributors_path', 'version',
+                # From samples:
+                'organ_donor_data', 'living_donor_data'
+            ]:
+            source.pop(field, None)
     return flat_sources
 
 
