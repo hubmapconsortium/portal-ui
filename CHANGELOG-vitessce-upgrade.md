@@ -1,1 +1,1 @@
-- Upgrade Vitessce to 1.1.13.
+- Upgrade Vitessce to 1.1.13 for performance boost and slight alteration to how RGB images are handled internally.
