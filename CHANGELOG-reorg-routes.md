@@ -1,1 +1,0 @@
-- In the python code, split the `/browse/*` routes to their own file, to keep things reasonable.

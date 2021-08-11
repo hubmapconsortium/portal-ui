@@ -1,3 +1,12 @@
+## v0.24.4 - 2021-08-11
+
+- Configure EUI via web-component properties
+- Simplify App.jsx by just passing flaskData though, instead of destructuring and restructuring.
+- Enable users to view files' pdfs without leaving the portal.
+- In the python code, split the `/browse/*` routes to their own file, to keep things reasonable.
+- Upgrade Vitessce to 1.1.13 for performance boost and slight alteration to how RGB images are handled internally.
+
+
 ## v0.24.3 - 2021-08-10
 
 - Provide a fallback if `descendant_counts` is empty.

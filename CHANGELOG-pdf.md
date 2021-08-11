@@ -1,1 +1,0 @@
-- Enable users to view files' pdfs without leaving the portal.
