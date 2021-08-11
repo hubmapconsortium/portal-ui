@@ -35,6 +35,7 @@ function PDFViewer({ pdfUrl }) {
     <>
       {(!isProcessingPDF || open) && (
         <ButtonWrapper>
+          {/* We don't open the modal here because there may be an error processing the PDF. */}
           <Button type="button" onClick={() => setIsProcessingPDF(true)} variant="outlined">
             View PDF
           </Button>
