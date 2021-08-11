@@ -1,4 +1,19 @@
-from flask import (current_app, Blueprint)
+from flask import (current_app, session, Blueprint)
+
+from .api.client import ApiClient
+
+
+def get_client():
+    try:
+        is_mock = current_app.config['IS_MOCK']
+    except KeyError:
+        is_mock = False
+    if is_mock:
+        return ApiClient(is_mock=is_mock)
+    return ApiClient(
+        current_app.config['ENTITY_API_BASE'],
+        session['nexus_token']
+    )
 
 
 def get_default_flask_data():
