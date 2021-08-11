@@ -25,7 +25,8 @@ To more flexibly query metadata, an [Elasticsearch endpoint](https://smart-api.i
 
 ## Create datasets
 
-All API microservices developed by the IEC are documented at [SmartAPI](https://smart-api.info/registry?q=hubmap).
+[All API microservices](/docs/apis) developed by the IEC are documented at
+[SmartAPI](https://smart-api.info/registry?q=hubmap).
 These APIs support our internal UIs, and are unlikely to be useful to most external users.
 
 ## Query gene expression data
