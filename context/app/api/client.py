@@ -246,8 +246,7 @@ def _flatten_sources(sources, non_metadata_fields):
                 # Dataset TSV columns to hide:
                 'antibodies_path', 'contributors_path', 'version',
                 # From samples:
-                'organ_donor_data', 'living_donor_data'
-            ]:
+                'organ_donor_data', 'living_donor_data']:
             source.pop(field, None)
     return flat_sources
 
