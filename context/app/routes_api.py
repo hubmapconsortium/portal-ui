@@ -25,6 +25,14 @@ def samples_tsv():
     return _make_tsv_response(_dicts_to_tsv(samples, first_fields), 'samples.tsv')
 
 
+@blueprint.route('/api/v0/datasets.tsv')
+def datasets_tsv():
+    client = get_client()
+    first_fields = ['uuid', 'hubmap_id']
+    datasets = client.get_all_datasets(first_fields)
+    return _make_tsv_response(_dicts_to_tsv(datasets, first_fields), 'datasets.tsv')
+
+
 def _make_tsv_response(tsv_content, filename):
     return Response(
         response=tsv_content,

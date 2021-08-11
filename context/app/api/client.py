@@ -71,6 +71,9 @@ class ApiClient():
     def get_all_samples(self, non_metadata_fields):
         return self._get_all_entities_of_type(non_metadata_fields, 'Sample')
 
+    def get_all_datasets(self, non_metadata_fields):
+        return self._get_all_entities_of_type(non_metadata_fields, 'Dataset')
+
     def _get_all_entities_of_type(self, non_metadata_fields, entity_type):
         size = 10000  # Default ES limit
         query = {
