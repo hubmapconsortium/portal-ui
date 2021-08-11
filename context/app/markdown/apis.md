@@ -1,7 +1,7 @@
 # APIs and Data Downloads
 
 HuBMAP incorporates a wide range of data and metadata, developed by a number of separate teams,
-so unfortunately there is no single "HuBMAP API". Depending on your data needs, there are different places to begin.
+so unfortunately there is no single "HuBMAP API". Depending on your needs, there are different places to begin.
 
 ## Data or metadata for a single dataset
 
@@ -10,13 +10,12 @@ On a dataset page you can:
 - Download just the metadata as a key-value TSV by clicking the download button beside the "Metadata" section header.
 - Download the data files through Globus, via a link in the "Files" section.
 
-## Metadata for all donors or samples
+## Metadata for all donors, samples, or datasets
 
-For a TSV of donor or sample metadata, visit [`/api/v0/donors.tsv`](/api/v0/donors.tsv)
-or [`/api/v0/samples.tsv`](/api/v0/samples.tsv), respectively.
-If you are logged in and have sufficient privs, this will include unpublished data.
-
-This will be expanded to dataset metadata soon.
+For metadata in TSV form, visit [`/api/v0/donors.tsv`](/api/v0/donors.tsv),
+[`/api/v0/samples.tsv`](/api/v0/samples.tsv), or [`/api/v0/datasets.tsv`](/api/v0/datasets.tsv).
+The datasets TSV has a large number of columns, because different assay types have different metadata fields.
+If you are logged in and have sufficient privs, these will include unpublished data.
 
 ## Query metadata
 
