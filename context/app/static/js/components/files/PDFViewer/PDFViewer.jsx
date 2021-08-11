@@ -16,10 +16,10 @@ import {
 } from './style';
 
 function PDFViewer({ pdfUrl }) {
-  const [pageNumber, setPageNumber] = useState(1);
+  const [currentPageNum, setCurrentPageNum] = useState(1);
   const [open, setOpen] = useState(false);
   const [pdf, setPdf] = useState();
-  const [isProcessingPDF, setIsProcessingPDF] = React.useState(false);
+  const [isProcessingPDF, setIsProcessingPDF] = useState(false);
 
   function onDocumentLoadSuccess(pdfObj) {
     setOpen(true);
@@ -53,16 +53,15 @@ function PDFViewer({ pdfUrl }) {
           }
         />
       )}
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
+      <Modal open={open} onClose={handleClose} aria-labelledby="pdf-viewer-modal" aria-describedby="pdf-viewer-modal">
         <ModalContentWrapper>
-          <Page pageNumber={pageNumber} pdf={pdf} renderTextLayer={false} />
+          <Page pageNumber={currentPageNum} pdf={pdf} renderTextLayer={false} />
           {pdf && (
-            <PDFViewerControlButtons numPages={pdf.numPages} currentPageNum={pageNumber} setPageNum={setPageNumber} />
+            <PDFViewerControlButtons
+              numPages={pdf.numPages}
+              currentPageNum={currentPageNum}
+              setPageNum={setCurrentPageNum}
+            />
           )}
           <StyledIconButton color="primary" onClick={handleClose}>
             <StyledCloseIcon />
