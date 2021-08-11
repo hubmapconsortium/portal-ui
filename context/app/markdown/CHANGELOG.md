@@ -1,3 +1,9 @@
+## v0.24.3 - 2021-08-10
+
+- Provide a fallback if `descendant_counts` is empty.
+- Stub out publication page.
+
+
 ## v0.24.2 - 2021-08-05
 
 - Remove descriptions from certain charts on diversity page.

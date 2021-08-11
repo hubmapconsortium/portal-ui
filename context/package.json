@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "0.24.2",
+  "version": "0.24.3",
   "dependencies": {
     "@babel/runtime": "^7.10.4",
     "@hms-dbmi-bgm/react-workflow-viz": "^0.1.4",
@@ -47,7 +47,7 @@
     "uuid": "^8.3.2",
     "vega": "^5.13.0",
     "vega-lite": "^4.13.1",
-    "vitessce": "^1.1.12",
+    "vitessce": "^1.1.13",
     "web-vitals": "^1.1.0",
     "whatwg-fetch": "^3.0.0",
     "zustand": "^3.3.1"
