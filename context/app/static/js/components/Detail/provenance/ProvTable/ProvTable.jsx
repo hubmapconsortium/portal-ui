@@ -20,7 +20,7 @@ function ProvTable(props) {
     typesToSplit.map(() => []),
   );
 
-  const descendantCounts = assayMetadata.descendant_counts.entity_type;
+  const descendantCounts = assayMetadata.descendant_counts.entity_type || {};
 
   return (
     <FlexContainer>

@@ -14,8 +14,9 @@ const Home = lazy(() => import('js/pages/Home/Home'));
 const Search = lazy(() => import('js/pages/search/Search'));
 const CellsSearch = lazy(() => import('js/pages/search/CellsSearch'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
-const Vis = lazy(() => import('js/pages/Vis'));
+const Diversity = lazy(() => import('js/pages/Diversity'));
 const Preview = lazy(() => import('js/pages/Preview'));
+const Publication = lazy(() => import('js/pages/Publication'));
 const Services = lazy(() => import('js/pages/Services'));
 const Collections = lazy(() => import('js/pages/Collections'));
 const CellsAPIDemo = lazy(() => import('js/pages/CellsAPIDemo'));
@@ -102,10 +103,10 @@ function Routes(props) {
   }
   /* eslint-enable no-undef */
 
-  if (urlPath.startsWith('/vis')) {
+  if (urlPath.startsWith('/diversity')) {
     return (
       <Route>
-        <Vis />
+        <Diversity />
       </Route>
     );
   }
@@ -114,6 +115,14 @@ function Routes(props) {
     return (
       <Route>
         <Preview title={title} vitData={vitessce_conf} assayMetadata={entity} markdown={markdown} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/publication')) {
+    return (
+      <Route>
+        <Publication title={title} vitData={vitessce_conf} markdown={markdown} />
       </Route>
     );
   }

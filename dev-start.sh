@@ -4,8 +4,9 @@ trap 'jobs -p | xargs kill' EXIT
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
-[ "`git config --get submodule.recurse`" == 'true' ] \
-  || die "To update submodules automatically: git config --global submodule.recurse true";
+git submodule init
+git submodule update
+git config submodule.recurse true # So 'git pull' will update submodules.
 
 CONTEXT=context
 pip install -r $CONTEXT/requirements.txt > /dev/null

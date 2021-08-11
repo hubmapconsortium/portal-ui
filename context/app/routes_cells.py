@@ -1,13 +1,13 @@
 from itertools import islice
 
-from flask import (Blueprint, render_template, current_app, request)
+from flask import render_template, current_app, request
 
 from hubmap_api_py_client import Client
 
-from .routes_main import get_default_flask_data
+from .utils import get_default_flask_data, make_blueprint
 
 
-blueprint = Blueprint('routes_cells', __name__, template_folder='templates')
+blueprint = make_blueprint(__name__)
 
 
 @blueprint.route('/cells')

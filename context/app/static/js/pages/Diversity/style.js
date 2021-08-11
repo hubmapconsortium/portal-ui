@@ -1,0 +1,31 @@
+import styled from 'styled-components';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import SectionPaper from 'js/shared-styles/sections/SectionPaper';
+
+const PageTitleWrapper = styled.div`
+  margin-bottom: 20px;
+`;
+
+const PageTitle = styled(Typography)`
+  margin-bottom: 10px;
+`;
+
+const ChartPaper = styled(Paper)`
+  padding: 20px;
+  margin-bottom: 30px;
+`;
+
+const DescriptionPaper = styled(ChartPaper)`
+  margin-bottom: 10px;
+`;
+
+const ChartTitle = styled(Typography)`
+  margin-bottom: 10px;
+`;
+
+const StyledSectionPaper = styled(SectionPaper)`
+  display: flex;
+`;
+
+export { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle, DescriptionPaper, StyledSectionPaper };

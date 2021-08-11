@@ -1,3 +1,27 @@
+## v0.24.3 - 2021-08-10
+
+- Provide a fallback if `descendant_counts` is empty.
+- Stub out publication page.
+
+
+## v0.24.2 - 2021-08-05
+
+- Remove descriptions from certain charts on diversity page.
+- Rename diversity page to donor diversity.
+- Introduce a log-scale slider.
+- Add additional charts/tables to the donor diversity page.
+- Style donor diversity page.
+- Change donor diversity page's route from /vis to /diversity.
+- Move submodule stuff into script, instead of cluttering readme.
+
+
+## v0.24.1 - 2021-08-03
+
+- Chart and table.
+- Resolve a 500 error that happens when an HBM redirect can't find a matching record.
+- Table with the race and sex of the donors.
+
+
 ## v0.24.0 - 2021-07-30
 
 - Fix twitter timeline bug causing it not to display.

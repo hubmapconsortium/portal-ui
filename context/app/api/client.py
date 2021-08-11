@@ -94,17 +94,7 @@ class ApiClient():
             body_json=query)
 
         hits = response_json['hits']['hits']
-
-        if len(hits) == 0:
-            if len(uuid) == 32 and not self.nexus_token:
-                # Assume that the UUID is not yet published:
-                # UI will suggest logging in.
-                abort(403)
-            abort(404)
-        if len(hits) > 1:
-            raise Exception(f'ID not unique; got {len(hits)} matches for {query}')
-        entity = hits[0]['_source']
-        return entity
+        return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id)
 
     def get_vitessce_conf_cells(self, entity):
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
@@ -171,6 +161,46 @@ class ApiClient():
                 },
             ]
         }
+
+
+def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
+    '''
+    >>> _get_entity_from_hits(['fake-hit-1', 'fake-hit-2'])
+    Traceback (most recent call last):
+    ...
+    Exception: ID not unique; got 2 matches
+
+    >>> def error(f):
+    ...   try: f()
+    ...   except Exception as e: print(type(e).__name__)
+
+    >>> error(lambda: _get_entity_from_hits([], hbm_id='HBM123.XYZ.456'))
+    Forbidden
+
+    >>> error(lambda: _get_entity_from_hits([], uuid='0123456789abcdef0123456789abcdef'))
+    Forbidden
+
+    >>> error(lambda: _get_entity_from_hits([], uuid='0123456789abcdef0123456789abcdef',
+    ...       has_token=True))
+    NotFound
+
+    >>> error(lambda: _get_entity_from_hits([], uuid='too-short'))
+    NotFound
+
+    >>> _get_entity_from_hits([{'_source': 'fake-entity'}])
+    'fake-entity'
+
+    '''
+    if len(hits) == 0:
+        if (uuid and len(uuid) == 32 or hbm_id) and not has_token:
+            # Assume that the UUID is not yet published:
+            # UI will suggest logging in.
+            abort(403)
+        abort(404)
+    if len(hits) > 1:
+        raise Exception(f'ID not unique; got {len(hits)} matches')
+    entity = hits[0]['_source']
+    return entity
 
 
 def _get_image_pyramid_descendants(entity):
