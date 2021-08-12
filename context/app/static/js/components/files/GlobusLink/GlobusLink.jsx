@@ -40,28 +40,31 @@ function GlobusLink(props) {
   const { statusCode, url } = globusUrlStatus;
 
   return (
-    <>
-      <Flex>
-        {statusCode === 200 ? (
-          <StyledSuccessIcon data-testid="success-icon" />
-        ) : (
-          <StyledErrorIcon data-testid="error-icon" />
-        )}
-        <StyledTypography variant="h6">Bulk Data Transfer {isSupport && '(Support)'}</StyledTypography>
-      </Flex>
-      <GlobusLinkMessage statusCode={statusCode} url={url} hubmap_id={hubmap_id} isSupport={isSupport} />
-    </>
+    statusCode && (
+      <>
+        <Flex>
+          {statusCode === 200 ? (
+            <StyledSuccessIcon data-testid="success-icon" />
+          ) : (
+            <StyledErrorIcon data-testid="error-icon" />
+          )}
+          <StyledTypography variant="h6">Bulk Data Transfer {isSupport && '(Support)'}</StyledTypography>
+        </Flex>
+        <GlobusLinkMessage statusCode={statusCode} url={url} hubmap_id={hubmap_id} isSupport={isSupport} />
+      </>
+    )
   );
 }
 
 GlobusLink.propTypes = {
   uuid: PropTypes.string.isRequired,
-  hubmap_id: PropTypes.string.isRequired,
+  hubmap_id: PropTypes.string,
   isSupport: PropTypes.bool,
 };
 
 GlobusLink.defaultProps = {
   isSupport: false,
+  hubmap_id: '',
 };
 
 export default GlobusLink;
