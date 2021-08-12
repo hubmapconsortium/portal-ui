@@ -48,6 +48,7 @@ class SeqFISHViewConfBuilder(AbstractImagingViewConfBuilder):
     one per position, with the hybridization cycles
     grouped together per position in a single Vitessce configuration.
     """
+
     def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         full_seqfish_reqex = "/".join(
@@ -113,6 +114,7 @@ class TiledSPRMViewConfBuilder(ViewConfBuilder):
     non-stitched JSON-backed SPRM Vitessce configurations,
     one per tile per region, via SPRMJSONViewConfBuilder.
     """
+
     def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_tiles = get_matches(
@@ -145,6 +147,7 @@ class RNASeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/c019a1cd35aab4d2b4a6ff221e92aaab
     from h5ad-to-arrow.cwl (August 2020 release).
     """
+
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
@@ -167,6 +170,7 @@ class ATACSeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/d4493657cde29702c5ed73932da5317c
     from h5ad-to-arrow.cwl.
     """
+
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
@@ -192,6 +196,7 @@ class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
     used for datasets with multiple regions.
     These are from post-August 2020 Cytokit datasets (stitched).
     """
+
     def get_conf_cells(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         found_regions = get_matches(file_paths_found, STITCHED_REGEX)
@@ -227,6 +232,7 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
     for "second generation" post-August 2020 RNA-seq data from anndata-to-ui.cwl like
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
+
     def get_conf_cells(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -275,6 +281,7 @@ class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
     for IMS data that excludes the image pyramids
     of all the channels separated out.
     """
+
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
         # Do not show the separated mass-spec images.
