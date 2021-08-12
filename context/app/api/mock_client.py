@@ -8,18 +8,19 @@ from .client import ApiClient
 
 class MockApiClient(ApiClient):
     def get_entity(self, uuid=None, hbm_id=None):
-          return {
-              'created': '2020-01-01 00:00:00',
-              'modified': '2020-01-01 00:00:00',
-              'provenance_user_displayname': 'Chuck McCallum',
-              'provenance_user_email': 'mccalluc@example.com',
-              'provenance_group_name': 'Mock Group',
-              'hubmap_id': 'abcd-1234',
-              'description': 'Mock Entity'
-          }
-    
+        return {
+            'created': '2020-01-01 00:00:00',
+            'modified': '2020-01-01 00:00:00',
+            'provenance_user_displayname': 'Chuck McCallum',
+            'provenance_user_email': 'mccalluc@example.com',
+            'provenance_group_name': 'Mock Group',
+            'hubmap_id': 'abcd-1234',
+            'description': 'Mock Entity'
+        }
+
     def get_vitessce_conf_cells(self, entity):
         return ConfCells(_get_mock_vitessce_conf(), None)
+
 
 def _get_mock_vitessce_conf():
     cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
