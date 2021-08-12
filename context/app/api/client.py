@@ -124,6 +124,8 @@ class ApiClient():
         return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id)
 
     def get_vitessce_conf_cells(self, entity):
+        if self.is_mock:
+            return ConfCells(self._get_mock_vitessce_conf(), None)
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         image_pyramid_descendants = _get_image_pyramid_descendants(entity)
         if image_pyramid_descendants:
@@ -138,8 +140,6 @@ class ApiClient():
 
         if 'files' not in entity or 'data_types' not in entity:
             return ConfCells(None, None)
-        if self.is_mock:
-            return ConfCells(self._get_mock_vitessce_conf(), None)
 
         # Otherwise, just try to visualize the data for the entity itself:
         try:
