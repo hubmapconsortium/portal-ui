@@ -18,6 +18,10 @@ function GlobusLinkMessage(props) {
   const { statusCode, url, hubmap_id, isSupport } = props;
   const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
 
+  if (statusCode === null) {
+    return null;
+  }
+
   if (statusCode === 200) {
     const globusLink = (
       <FilesConditionalLink href={url} hasAgreedToDUA={hasAgreedToDUA} openDUA={() => openDUA(url)} variant="body2">
@@ -59,12 +63,13 @@ function GlobusLinkMessage(props) {
 }
 
 GlobusLinkMessage.propTypes = {
-  statusCode: PropTypes.number.isRequired,
+  statusCode: PropTypes.number,
   url: PropTypes.string,
   hubmap_id: PropTypes.string,
 };
 
 GlobusLinkMessage.defaultProps = {
+  statusCode: null,
   url: '',
   hubmap_id: '',
 };
