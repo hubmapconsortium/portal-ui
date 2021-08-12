@@ -13,17 +13,18 @@ const globusUrlResponse = {
   url: 'fakeglobusurl',
 };
 
-const server = setupServer(
-  rest.get(`/${appProviderEndpoints.entityEndpoint}/entities/dataset/globus-url/${uuid}`, (req, res, ctx) => {
-    return res(ctx.json(globusUrlResponse), ctx.status(200));
-  }),
-);
+const server = setupServer();
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test('displays success icon with 200 response', async () => {
+  server.use(
+    rest.get(`/${appProviderEndpoints.entityEndpoint}/entities/dataset/globus-url/${uuid}`, (req, res, ctx) => {
+      return res(ctx.json(globusUrlResponse), ctx.status(200));
+    }),
+  );
   render(<GlobusLink uuid={uuid} hubmap_id={hubmap_id} />);
 
   await screen.findByTestId('success-icon');
