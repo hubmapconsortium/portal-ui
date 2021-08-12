@@ -26,8 +26,8 @@ afterAll(() => server.close());
 test('displays success icon with 200 response', async () => {
   render(<GlobusLink uuid={uuid} hubmap_id={hubmap_id} />);
 
-  await screen.findByText('Bulk Data Transfer');
-  expect(screen.getByTestId('success-icon')).toBeInTheDocument();
+  await screen.findByTestId('success-icon');
+  expect(screen.getByText('Bulk Data Transfer')).toBeInTheDocument();
 });
 
 test('displays info icon with 500 response', async () => {
@@ -39,6 +39,6 @@ test('displays info icon with 500 response', async () => {
 
   render(<GlobusLink uuid={uuid} hubmap_id={hubmap_id} />);
 
-  await screen.findByText('Bulk Data Transfer');
-  expect(screen.getByTestId('error-icon')).toBeInTheDocument();
+  await screen.findByTestId('error-icon');
+  expect(screen.getByText('Bulk Data Transfer')).toBeInTheDocument();
 });
