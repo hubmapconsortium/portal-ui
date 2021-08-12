@@ -1,9 +1,7 @@
 from collections import namedtuple
-import json
 import traceback
 from copy import deepcopy
 
-from datauri import DataURI
 from flask import abort, current_app
 import requests
 
@@ -14,10 +12,9 @@ Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
 
 class ApiClient():
-    def __init__(self, url_base=None, nexus_token=None, is_mock=False):
+    def __init__(self, url_base=None, nexus_token=None):
         self.url_base = url_base
         self.nexus_token = nexus_token
-        self.is_mock = is_mock
 
     def _request(self, url, body_json=None):
         headers = {'Authorization': 'Bearer ' + self.nexus_token} if self.nexus_token else {}
@@ -93,17 +90,6 @@ class ApiClient():
         return _flatten_sources(sources, non_metadata_fields)
 
     def get_entity(self, uuid=None, hbm_id=None):
-        if self.is_mock:
-            return {
-                'created': '2020-01-01 00:00:00',
-                'modified': '2020-01-01 00:00:00',
-                'provenance_user_displayname': 'Chuck McCallum',
-                'provenance_user_email': 'mccalluc@example.com',
-                'provenance_group_name': 'Mock Group',
-                'hubmap_id': 'abcd-1234',
-                'description': 'Mock Entity'
-            }
-
         if uuid is not None and hbm_id is not None:
             raise Exception('Only UUID or HBM ID should be provided, not both')
         query = {'query':
@@ -124,8 +110,6 @@ class ApiClient():
         return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id)
 
     def get_vitessce_conf_cells(self, entity):
-        if self.is_mock:
-            return ConfCells(self._get_mock_vitessce_conf(), None)
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         image_pyramid_descendants = _get_image_pyramid_descendants(entity)
         if image_pyramid_descendants:
@@ -152,42 +136,6 @@ class ApiClient():
             current_app.logger.error(message)
 
             return ConfCells({'error': message}, None)
-
-    def _get_mock_vitessce_conf(self):
-        cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
-        cellsUri = DataURI.make(
-            'text/plain', charset='us-ascii', base64=True, data=cellsData
-        )
-        token = 'fake-token'
-        return {
-            'description': 'DEMO',
-            'layers': [
-                {
-                    'name': 'cells',
-                    'type': 'CELLS',
-                    'url': cellsUri,
-                    'requestInit': {
-                        'headers': {
-                            'Authorization': 'Bearer ' + token
-                        }
-                    }
-                },
-            ],
-            'name': 'Linnarsson',
-            'staticLayout': [
-                {
-                    'component': 'scatterplot',
-                    'props': {
-                        'mapping': 'UMAP',
-                        'view': {
-                            'zoom': 4,
-                            'target': [0, 0, 0]
-                        }
-                    },
-                    'x': 0, 'y': 0, 'w': 12, 'h': 2
-                },
-            ]
-        }
 
 
 def _flatten_sources(sources, non_metadata_fields):
