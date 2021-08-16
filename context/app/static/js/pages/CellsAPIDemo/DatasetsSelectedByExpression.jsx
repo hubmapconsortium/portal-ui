@@ -108,7 +108,7 @@ function DatasetsSelectedByExpression(props) {
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
       {message}
-      {searchHits.length && <DatasetsTable datasets={searchHits} />}
+      {searchHits.length > 0 && <DatasetsTable datasets={searchHits} />}
     </Paper>
   );
 }
