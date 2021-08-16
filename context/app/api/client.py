@@ -72,9 +72,8 @@ class ApiClient():
         return self._get_all_entities_of_type(non_metadata_fields, 'Dataset')
 
     def _get_all_entities_of_type(self, non_metadata_fields, entity_type):
-        size = 10000  # Default ES limit
         query = {
-            "size": size,
+            "size": 10000,  # Default ES limit,
             "post_filter": {
                 "term": {"entity_type.keyword": entity_type}
             },
@@ -85,8 +84,9 @@ class ApiClient():
             + current_app.config['PORTAL_INDEX_PATH'],
             body_json=query)
         sources = [hit['_source'] for hit in response_json['hits']['hits']]
-        if len(sources) == size:
-            raise Exception('At least 10k datasets: need to make multiple requests')
+        total_hits = response_json['hits']['total']['value']
+        if len(sources) < total_hits:
+            raise Exception('Incomplete results: need to make multiple requests')
         return _flatten_sources(sources, non_metadata_fields)
 
     def get_entity(self, uuid=None, hbm_id=None):
