@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import { LegendOrdinal } from '@visx/legend';
 
-import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
 import { useChartPalette, useAssayTypeBarChartData } from './hooks';
 import { getAssayTypesCompositeAggsQuery } from './utils';
@@ -21,7 +20,6 @@ const assayOrganTypesQuery = getAssayTypesCompositeAggsQuery('origin_sample.mapp
 const assayDonorSexQuery = getAssayTypesCompositeAggsQuery('donor.mapped_metadata.sex.keyword', 'donor_sex');
 
 function AssayTypeBarChartContainer() {
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   const [selectedColorDataIndex, setSelectedColorDataIndex] = useState(0);
 
   function selectDropdownItem(itemAndIndex) {
@@ -30,11 +28,11 @@ function AssayTypeBarChartContainer() {
   }
   const colors = useChartPalette();
 
-  const { searchData: organTypesData } = useSearchData(organTypesQuery, elasticsearchEndpoint, nexusToken);
+  const { searchData: organTypesData } = useSearchData(organTypesQuery);
   const organTypes = organTypesData?.aggregations?.organ_types.buckets.map((b) => b.key);
 
-  const { searchData: assayOrganTypeData } = useSearchData(assayOrganTypesQuery, elasticsearchEndpoint, nexusToken);
-  const { searchData: assayDonorSexData } = useSearchData(assayDonorSexQuery, elasticsearchEndpoint, nexusToken);
+  const { searchData: assayOrganTypeData } = useSearchData(assayOrganTypesQuery);
+  const { searchData: assayDonorSexData } = useSearchData(assayDonorSexQuery);
 
   const { formattedData: formattedOrganTypeData, maxSumDocCount: maxAssayOrganTypeDocCount } = useAssayTypeBarChartData(
     assayOrganTypeData,

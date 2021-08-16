@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AppContext } from 'js/components/Providers';
+import React, { useEffect, useState } from 'react';
 
 import EntityCount from 'js/components/home/EntityCount';
 import { DatasetIcon, SampleIcon, DonorIcon, CollectionIcon } from 'js/shared-styles/icons';
@@ -27,9 +26,8 @@ const entities = [
 ];
 
 function EntityCounts() {
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   const [entityCounts, setEntityCountsData] = useState(undefined);
-  const { searchData: elasticsearchData } = useSearchData(entityCountsQuery, elasticsearchEndpoint, nexusToken);
+  const { searchData: elasticsearchData } = useSearchData(entityCountsQuery);
   useEffect(() => {
     if (Object.keys(elasticsearchData).length) {
       const entityCountsObject = elasticsearchData.aggregations.entity_type.buckets.reduce((acc, entity) => {
