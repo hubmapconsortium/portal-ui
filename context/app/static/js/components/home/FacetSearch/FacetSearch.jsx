@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import useResizeObserver from 'use-resize-observer/polyfilled';
 
-import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
 import FacetSearchMenu from 'js/components/home/FacetSearchMenu';
 import { Background, FlexForm, StyledLabel, StyledInput } from './style';
@@ -44,28 +43,15 @@ const datasetAggsQuery = getAggsQuery(
 );
 
 function FacetSearch() {
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [matches, setMatches] = useState({});
   const anchorRef = useRef(null);
   const [menuIsOpen, setMenuIsOpen] = useState(true);
 
   const { width: searchInputWidth } = useResizeObserver({ ref: anchorRef });
-  const { searchData: donorAggsData, isLoading: donorAggsDataIsLoading } = useSearchData(
-    donorAggsQuery,
-    elasticsearchEndpoint,
-    nexusToken,
-  );
-  const { searchData: sampleAggsData, isLoading: sampleAggsDataIsLoading } = useSearchData(
-    sampleAggsQuery,
-    elasticsearchEndpoint,
-    nexusToken,
-  );
-  const { searchData: datasetAggsData, isLoading: datasetAggsDataIsLoading } = useSearchData(
-    datasetAggsQuery,
-    elasticsearchEndpoint,
-    nexusToken,
-  );
+  const { searchData: donorAggsData, isLoading: donorAggsDataIsLoading } = useSearchData(donorAggsQuery);
+  const { searchData: sampleAggsData, isLoading: sampleAggsDataIsLoading } = useSearchData(sampleAggsQuery);
+  const { searchData: datasetAggsData, isLoading: datasetAggsDataIsLoading } = useSearchData(datasetAggsQuery);
 
   const isLoading = donorAggsDataIsLoading || sampleAggsDataIsLoading || datasetAggsDataIsLoading;
 

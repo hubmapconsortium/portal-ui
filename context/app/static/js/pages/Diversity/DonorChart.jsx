@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Bar, Chart } from 'react-chartjs-2';
 import Typography from '@material-ui/core/Typography';
 
-import { AppContext } from 'js/components/Providers';
 import useSearchData from 'js/hooks/useSearchData';
 import { ChartPaper, ChartTitle, DescriptionPaper } from './style';
 import { getKeyValues, getAgeLabels } from './utils';
@@ -11,9 +10,8 @@ Chart.defaults.font.size = 18;
 
 function DonorChart(props) {
   const { title, donorQuery, xKey, yKey, colorKeys, colors, description, xAxisLabel, yAxisLabel } = props;
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
-  const { searchData } = useSearchData(donorQuery, elasticsearchEndpoint, nexusToken);
+  const { searchData } = useSearchData(donorQuery);
   if (!('aggregations' in searchData)) {
     return null;
   }

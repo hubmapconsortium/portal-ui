@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { AppContext } from 'js/components/Providers';
+import React from 'react';
 import useSearchData from 'js/hooks/useSearchData';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -194,9 +193,7 @@ function BloodTypeDescription() {
 }
 
 function Diversity() {
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-
-  const { searchData } = useSearchData(donorAgeRace, elasticsearchEndpoint, nexusToken);
+  const { searchData } = useSearchData(donorAgeRace);
   if (!('aggregations' in searchData)) {
     return null;
   }

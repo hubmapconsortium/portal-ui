@@ -1,6 +1,4 @@
-import { useContext, useMemo } from 'react';
-
-import { AppContext } from 'js/components/Providers';
+import { useMemo } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 
@@ -24,7 +22,6 @@ function getTypeQuery(ancestorUUID, type) {
 }
 
 function useDerivedDatasetSearchHits(ancestorUUID) {
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   const query = useMemo(
     () => ({
       query: getTypeQuery(ancestorUUID, 'dataset'),
@@ -34,11 +31,10 @@ function useDerivedDatasetSearchHits(ancestorUUID) {
     [ancestorUUID],
   );
 
-  return useSearchHits(query, elasticsearchEndpoint, nexusToken);
+  return useSearchHits(query);
 }
 
 function useDerivedSampleSearchHits(ancestorUUID) {
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   const query = useMemo(
     () => ({
       query: getTypeQuery(ancestorUUID, 'sample'),
@@ -54,7 +50,7 @@ function useDerivedSampleSearchHits(ancestorUUID) {
     }),
     [ancestorUUID],
   );
-  return useSearchHits(query, elasticsearchEndpoint, nexusToken);
+  return useSearchHits(query);
 }
 
 export { useDerivedDatasetSearchHits, useDerivedSampleSearchHits };
