@@ -4,6 +4,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import format from 'date-fns/format';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 
@@ -49,7 +50,7 @@ function DatasetsTable({ datasets }) {
             ))}
             <TableCell>{_source.donor.mapped_metadata.sex}</TableCell>
             <TableCell>{_source.donor.mapped_metadata.race.join(', ')}</TableCell>
-            <TableCell>{_source.last_modified_timestamp}</TableCell>
+            <TableCell>{format(_source.last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
           </TableRow>
         ))}
       </TableBody>
