@@ -20,7 +20,7 @@ const columns = [
   { id: 'last_modified_timestamp', label: 'Last Modified' },
 ];
 
-function DonorMetadataCell({ unit, value }) {
+function UnitValueCell({ unit, value }) {
   return <TableCell>{`${value} ${unit}`}</TableCell>;
 }
 
@@ -43,7 +43,7 @@ function DatasetsTable({ datasets }) {
             <TableCell>{_source.origin_sample.mapped_organ}</TableCell>
             <TableCell>{_source.mapped_data_types.join(', ')}</TableCell>
             {['age', 'body_mass_index'].map((base) => (
-              <DonorMetadataCell
+              <UnitValueCell
                 value={_source.donor.mapped_metadata[`${base}_value`]}
                 unit={_source.donor.mapped_metadata[`${base}_unit`]}
               />
