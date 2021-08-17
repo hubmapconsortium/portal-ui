@@ -66,6 +66,7 @@ def details(type, uuid):
     conf_cells_and_lifted_uuid = client.get_vitessce_conf_cells_and_lifted_uuid(entity)
     flask_data = {
         **get_default_flask_data(),
+        'entity': entity,
         'vitessce_conf': conf_cells_and_lifted_uuid.vitessce_conf.conf,
         'has_notebook': conf_cells_and_lifted_uuid.vitessce_conf.cells is not None,
         'vis_lifted_uuid': conf_cells_and_lifted_uuid.vis_lifted_uuid
