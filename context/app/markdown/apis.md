@@ -26,9 +26,8 @@ This web service is a thin wrapper around the [Elasticsearch `_search` method](h
 
 ## Edit HuBMAP datasets, samples, and donors
 
-[All API microservices](/docs/apis) developed by the IEC are documented at
-[SmartAPI](https://smart-api.info/registry?q=hubmap).
-These APIs support our internal UIs, and are likely of limited value to most external users.
+The  [HuBMAP Entity API](https://smart-api.info/ui/0065e419668f3336a40d1f5ab89c6ba3) can be used to create, update and retrieve provenance entities which consist of three base types: donors, tissue samples, and datasets.
+Creation and modification of entities require internal access, but published entities can be programmatically retrieved by anyone.
 
 ## Query gene expression data
 
