@@ -1,7 +1,8 @@
 from flask import Flask, session, render_template
 
 from . import (
-    routes_main, routes_browse, routes_auth, routes_cells, routes_markdown,
+    routes_main, routes_browse, routes_api,
+    routes_auth, routes_cells, routes_markdown,
     default_config)
 from .flask_static_digest import FlaskStaticDigest
 flask_static_digest = FlaskStaticDigest()
@@ -55,6 +56,7 @@ def create_app(testing=False):
 
     app.register_blueprint(routes_main.blueprint)
     app.register_blueprint(routes_browse.blueprint)
+    app.register_blueprint(routes_api.blueprint)
     app.register_blueprint(routes_cells.blueprint)
     app.register_blueprint(routes_auth.blueprint)
     app.register_blueprint(routes_markdown.blueprint)
