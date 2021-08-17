@@ -376,28 +376,21 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         adata_url = self._build_assets_url(zarr_path, use_token=False)
         # https://github.com/hubmapconsortium/portal-containers/blob/master/containers/sprm-to-anndata
         # has information on how these keys are generated.
+        obs_keys=[
+            "K-Means [Covariance] Expression",
+            "K-Means [Mean-All-SubRegions] Expression",
+            "K-Means [Mean] Expression",
+            "K-Means [Shape-Vectors]",
+            "K-Means [Texture]",
+            "K-Means [Total] Expression",
+            "K-Means [tSNE_All_Features]"
+        ]
         anndata_wrapper = AnnDataWrapper(
             adata_url=adata_url,
             spatial_centroid_obsm="xy",
-            cell_set_obs=[
-                "K-Means [Covariance] Expression",
-                "K-Means [Mean-All-SubRegions] Expression",
-                "K-Means [Mean] Expression",
-                "K-Means [Shape-Vectors]",
-                "K-Means [Texture]",
-                "K-Means [Total] Expression",
-                "K-Means [tSNE_All_Features]"
-            ],
+            cell_set_obs=obs_keys,
             expression_matrix="X",
-            factors_obs=[
-                "K-Means [Covariance] Expression",
-                "K-Means [Mean-All-SubRegions] Expression",
-                "K-Means [Mean] Expression",
-                "K-Means [Shape-Vectors]",
-                "K-Means [Texture]",
-                "K-Means [Total] Expression",
-                "K-Means [tSNE_All_Features]"
-            ],
+            factors_obs=obs_keys,
             request_init=self._get_request_init(),
         )
         dataset = dataset.add_object(anndata_wrapper)
