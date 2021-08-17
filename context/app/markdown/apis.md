@@ -19,11 +19,12 @@ If you are logged in and have sufficient access privileges, these will include u
 
 ## Query metadata
 
-To more flexibly query metadata, an [Elasticsearch endpoint](https://smart-api.info/ui/7aaf02b838022d564da776b03f357158) is available.
+To more flexibly query metadata, the [HuBMAP Search API](https://smart-api.info/ui/7aaf02b838022d564da776b03f357158) is available.
+This web service is a thin wrapper around the [Elasticsearch `_search` method](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html).
 - Elasticsearch query syntax is non-trivial and only recommended for expert users.
 - The response structure is not documented, and we do not guarantee the stability of responses.
 
-## Create datasets
+## Edit HuBMAP datasets, samples, and donors
 
 [All API microservices](/docs/apis) developed by the IEC are documented at
 [SmartAPI](https://smart-api.info/registry?q=hubmap).
