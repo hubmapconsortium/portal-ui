@@ -1,3 +1,8 @@
+## v0.25.0 - 2021-08-17
+
+- Display datasets returned by cells gene expression query in rows with metadata.
+
+
 ## v0.24.4 - 2021-08-11
 
 - Configure EUI via web-component properties
