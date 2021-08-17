@@ -19,7 +19,8 @@
                             "obs/K-Means [Mean] Expression",
                             "obs/K-Means [Shape-Vectors]",
                             "obs/K-Means [Texture]",
-                            "obs/K-Means [Total] Expression"
+                            "obs/K-Means [Total] Expression",
+                            "obs/K-Means [tSNE_All_Features]"
                         ]
                     },
                     "requestInit": {
@@ -56,6 +57,10 @@
                         {
                             "groupName": "K-Means [Total] Expression",
                             "setName": "obs/K-Means [Total] Expression"
+                        },
+                        {
+                          "groupName": "K-Means [tSNE_All_Features]",
+                          "setName": "obs/K-Means [tSNE_All_Features]"
                         }
                     ],
                     "requestInit": {
@@ -201,7 +206,8 @@
                             "obs/K-Means [Mean] Expression",
                             "obs/K-Means [Shape-Vectors]",
                             "obs/K-Means [Texture]",
-                            "obs/K-Means [Total] Expression"
+                            "obs/K-Means [Total] Expression",
+                            "obs/K-Means [tSNE_All_Features]"
                         ]
                     },
                     "requestInit": {
@@ -238,6 +244,10 @@
                         {
                             "groupName": "K-Means [Total] Expression",
                             "setName": "obs/K-Means [Total] Expression"
+                        },
+                        {
+                          "groupName": "K-Means [tSNE_All_Features]",
+                          "setName": "obs/K-Means [tSNE_All_Features]"
                         }
                     ],
                     "requestInit": {
