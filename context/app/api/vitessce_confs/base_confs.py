@@ -386,6 +386,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
                 "K-Means [Shape-Vectors]",
                 "K-Means [Texture]",
                 "K-Means [Total] Expression",
+                "K-Means [tSNE_All_Features]"
             ],
             expression_matrix="X",
             factors_obs=[
@@ -395,6 +396,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
                 "K-Means [Shape-Vectors]",
                 "K-Means [Texture]",
                 "K-Means [Total] Expression",
+                "K-Means [tSNE_All_Features]"
             ],
             request_init=self._get_request_init(),
         )
