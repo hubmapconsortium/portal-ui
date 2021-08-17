@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { getAuthHeader } from 'js/helpers/functions';
+import { AppContext } from 'js/components/Providers';
 
-function useSearchData(query, elasticsearchEndpoint, nexusToken) {
+function useSearchData(query) {
+  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   const [searchData, setSearchData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,8 +32,8 @@ function useSearchData(query, elasticsearchEndpoint, nexusToken) {
   return { searchData, isLoading };
 }
 
-function useSearchHits(query, elasticsearchEndpoint, nexusToken) {
-  const { searchData, isLoading } = useSearchData(query, elasticsearchEndpoint, nexusToken);
+function useSearchHits(query) {
+  const { searchData, isLoading } = useSearchData(query);
   const searchHits = searchData?.hits?.hits || {};
   return { searchHits, isLoading };
 }

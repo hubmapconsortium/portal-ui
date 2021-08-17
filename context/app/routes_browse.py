@@ -1,32 +1,18 @@
 import json
 from urllib.parse import urlparse
 
-from flask import (current_app, session, render_template,
+from flask import (render_template,
                    abort, request, redirect, url_for, Response)
 
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
-from .api.client import ApiClient
-from .utils import get_default_flask_data, make_blueprint
+from .utils import get_default_flask_data, make_blueprint, get_client
 
 
 blueprint = make_blueprint(__name__)
 
 entity_types = ['donor', 'sample', 'dataset', 'support', 'collection']
-
-
-def _get_client():
-    try:
-        is_mock = current_app.config['IS_MOCK']
-    except KeyError:
-        is_mock = False
-    if is_mock:
-        return ApiClient(is_mock=is_mock)
-    return ApiClient(
-        current_app.config['ENTITY_API_BASE'],
-        session['nexus_token']
-    )
 
 
 def get_url_base_from_request():
@@ -38,7 +24,7 @@ def get_url_base_from_request():
 
 @blueprint.route('/browse/HBM<hbm_suffix>')
 def hbm_redirect(hbm_suffix):
-    client = _get_client()
+    client = get_client()
     entity = client.get_entity(hbm_id=f'HBM{hbm_suffix}')
     return redirect(
         url_for('routes_browse.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
@@ -56,7 +42,7 @@ def unknown_ext(type, uuid, unknown_ext):
 def details(type, uuid):
     if type not in entity_types:
         abort(404)
-    client = _get_client()
+    client = get_client()
     entity = client.get_entity(uuid)
     actual_type = entity['entity_type'].lower()
     if type != actual_type:
@@ -83,7 +69,7 @@ def details(type, uuid):
 def details_json(type, uuid):
     if type not in entity_types:
         abort(404)
-    client = _get_client()
+    client = get_client()
     entity = client.get_entity(uuid)
     return entity
 
@@ -92,7 +78,7 @@ def details_json(type, uuid):
 def details_notebook(type, uuid):
     if type not in entity_types:
         abort(404)
-    client = _get_client()
+    client = get_client()
     entity = client.get_entity(uuid)
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
     if (vitessce_conf is None
@@ -126,7 +112,7 @@ def details_rui_json(type, uuid):
     # so, to return a JSON object, and not just a string, we need to decode.
     if type not in entity_types:
         abort(404)
-    client = _get_client()
+    client = get_client()
     entity = client.get_entity(uuid)
     # For Samples...
     if 'rui_location' in entity:
@@ -144,7 +130,7 @@ def details_rui_json(type, uuid):
 
 @blueprint.route('/sitemap.txt')
 def sitemap_txt():
-    client = _get_client()
+    client = get_client()
     uuids = client.get_all_dataset_uuids()
     url_base = get_url_base_from_request()
     return Response(

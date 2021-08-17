@@ -35,9 +35,16 @@ function Footer(props) {
               <OutboundLink variant="body2" href="https://github.com/hubmapconsortium">
                 GitHub
               </OutboundLink>
-              <LightBlueLink variant="body2" href="/services">
-                Services
-              </LightBlueLink>
+              {!isMaintenancePage && (
+                <>
+                  <LightBlueLink variant="body2" href="/services">
+                    Services
+                  </LightBlueLink>
+                  <LightBlueLink variant="body2" href="/apis">
+                    APIs
+                  </LightBlueLink>
+                </>
+              )}
             </FlexColumn>
             <FlexColumn $mr={1}>
               <Typography variant="subtitle2">Policies</Typography>
