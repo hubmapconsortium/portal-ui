@@ -14,49 +14,23 @@ import ProjectAttribution from './ProjectAttribution';
 import { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle, DescriptionPaper } from './style';
 import { getKeyValues, getAgeLabels } from './utils';
 
-/* JSON query
- {
-     "size": 0,
-     "query": {
-         "bool": {
-             "filter": {
-                 "term": {
-                     "entity_type": "donor"
-                 }
-             }
-         }
-     },
-     "aggs": {
-         "mapped_metadata.sex": {
-             "terms": {
-                 "field": "mapped_metadata.sex.keyword"
-             }
-         }
-     }
- }
+function termSource(field) {
+  const esField = `mapped_metadata.${field}`;
+  const source = {};
+  source[esField] = {
+    terms: {
+      field: `mapped_metadata.${field}.keyword`,
+    },
+  };
+  return source;
+}
 
- */
 const donorRaceSexQuery = {
   size: 0,
   aggs: {
     composite_data: {
       composite: {
-        sources: [
-          {
-            'mapped_metadata.race': {
-              terms: {
-                field: 'mapped_metadata.race.keyword',
-              },
-            },
-          },
-          {
-            'mapped_metadata.blood_type': {
-              terms: {
-                field: 'mapped_metadata.blood_type.keyword',
-              },
-            },
-          },
-        ],
+        sources: [termSource('race'), termSource('blood_type')],
         size: 10000,
       },
     },
@@ -68,22 +42,7 @@ const donorGenderRace = {
   aggs: {
     composite_data: {
       composite: {
-        sources: [
-          {
-            'mapped_metadata.race': {
-              terms: {
-                field: 'mapped_metadata.race.keyword',
-              },
-            },
-          },
-          {
-            'mapped_metadata.sex': {
-              terms: {
-                field: 'mapped_metadata.sex.keyword',
-              },
-            },
-          },
-        ],
+        sources: [termSource('race'), termSource('sex')],
         size: 10000,
       },
     },
@@ -95,22 +54,7 @@ const donorBloodtypeGender = {
   aggs: {
     composite_data: {
       composite: {
-        sources: [
-          {
-            'mapped_metadata.sex': {
-              terms: {
-                field: 'mapped_metadata.sex.keyword',
-              },
-            },
-          },
-          {
-            'mapped_metadata.blood_type': {
-              terms: {
-                field: 'mapped_metadata.blood_type.keyword',
-              },
-            },
-          },
-        ],
+        sources: [termSource('sex'), termSource('blood_type')],
         size: 10000,
       },
     },
@@ -131,13 +75,7 @@ const donorAgeGender = {
               },
             },
           },
-          {
-            'mapped_metadata.sex': {
-              terms: {
-                field: 'mapped_metadata.sex.keyword',
-              },
-            },
-          },
+          termSource('sex'),
         ],
         size: 10000,
       },
@@ -159,13 +97,7 @@ const donorAgeRace = {
               },
             },
           },
-          {
-            'mapped_metadata.race': {
-              terms: {
-                field: 'mapped_metadata.race.keyword',
-              },
-            },
-          },
+          termSource('race'),
         ],
         size: 10000,
       },
