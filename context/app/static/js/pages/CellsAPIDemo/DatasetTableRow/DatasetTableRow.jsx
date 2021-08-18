@@ -7,9 +7,10 @@ import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
+import { StyledTableCell } from './style';
 
-function UnitValueCell({ unit, value }) {
-  return <TableCell>{`${value} ${unit}`}</TableCell>;
+function UnitValueCell({ unit, value, isExpanded }) {
+  return <StyledTableCell $removeBorder={isExpanded}>{`${value} ${unit}`}</StyledTableCell>;
 }
 
 function DatasetTableRow({ datasetMetadata, numCells }) {
@@ -23,26 +24,27 @@ function DatasetTableRow({ datasetMetadata, numCells }) {
   return (
     <>
       <TableRow>
-        <TableCell>
+        <StyledTableCell $removeBorder={isExpanded}>
           <LightBlueLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</LightBlueLink>
-        </TableCell>
-        <TableCell>{origin_sample.mapped_organ}</TableCell>
-        <TableCell>{mapped_data_types.join(', ')}</TableCell>
+        </StyledTableCell>
+        <StyledTableCell $removeBorder={isExpanded}>{origin_sample.mapped_organ}</StyledTableCell>
+        <StyledTableCell $removeBorder={isExpanded}>{mapped_data_types.join(', ')}</StyledTableCell>
         {['age', 'body_mass_index'].map((base) => (
           <UnitValueCell
             value={donor.mapped_metadata[`${base}_value`]}
             unit={donor.mapped_metadata[`${base}_unit`]}
             key={base}
+            isExpanded={isExpanded}
           />
         ))}
-        <TableCell>{donor.mapped_metadata.sex}</TableCell>
-        <TableCell>{donor.mapped_metadata.race.join(', ')}</TableCell>
-        <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-        <TableCell>
+        <StyledTableCell $removeBorder={isExpanded}>{donor.mapped_metadata.sex}</StyledTableCell>
+        <StyledTableCell $removeBorder={isExpanded}>{donor.mapped_metadata.race.join(', ')}</StyledTableCell>
+        <StyledTableCell $removeBorder={isExpanded}>{format(last_modified_timestamp, 'yyyy-MM-dd')}</StyledTableCell>
+        <StyledTableCell $removeBorder={isExpanded}>
           <IconButton onClick={toggleIsExpanded}>
             {isExpanded ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />}
           </IconButton>
-        </TableCell>
+        </StyledTableCell>
       </TableRow>
       {isExpanded && (
         <TableRow>
