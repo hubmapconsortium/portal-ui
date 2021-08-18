@@ -1,9 +1,7 @@
 from collections import namedtuple
-import json
 import traceback
 from copy import deepcopy
 
-from datauri import DataURI
 from flask import abort, current_app
 import requests
 
@@ -14,10 +12,9 @@ Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
 
 class ApiClient():
-    def __init__(self, url_base=None, nexus_token=None, is_mock=False):
+    def __init__(self, url_base=None, nexus_token=None):
         self.url_base = url_base
         self.nexus_token = nexus_token
-        self.is_mock = is_mock
 
     def _request(self, url, body_json=None):
         headers = {'Authorization': 'Bearer ' + self.nexus_token} if self.nexus_token else {}
@@ -65,18 +62,34 @@ class ApiClient():
             raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
 
-    def get_entity(self, uuid=None, hbm_id=None):
-        if self.is_mock:
-            return {
-                'created': '2020-01-01 00:00:00',
-                'modified': '2020-01-01 00:00:00',
-                'provenance_user_displayname': 'Chuck McCallum',
-                'provenance_user_email': 'mccalluc@example.com',
-                'provenance_group_name': 'Mock Group',
-                'hubmap_id': 'abcd-1234',
-                'description': 'Mock Entity'
-            }
+    def get_all_donors(self, non_metadata_fields):
+        return self._get_all_entities_of_type(non_metadata_fields, 'Donor')
 
+    def get_all_samples(self, non_metadata_fields):
+        return self._get_all_entities_of_type(non_metadata_fields, 'Sample')
+
+    def get_all_datasets(self, non_metadata_fields):
+        return self._get_all_entities_of_type(non_metadata_fields, 'Dataset')
+
+    def _get_all_entities_of_type(self, non_metadata_fields, entity_type):
+        query = {
+            "size": 10000,  # Default ES limit,
+            "post_filter": {
+                "term": {"entity_type.keyword": entity_type}
+            },
+            "_source": [*non_metadata_fields, 'mapped_metadata', 'metadata']
+        }
+        response_json = self._request(
+            current_app.config['ELASTICSEARCH_ENDPOINT']
+            + current_app.config['PORTAL_INDEX_PATH'],
+            body_json=query)
+        sources = [hit['_source'] for hit in response_json['hits']['hits']]
+        total_hits = response_json['hits']['total']['value']
+        if len(sources) < total_hits:
+            raise Exception('Incomplete results: need to make multiple requests')
+        return _flatten_sources(sources, non_metadata_fields)
+
+    def get_entity(self, uuid=None, hbm_id=None):
         if uuid is not None and hbm_id is not None:
             raise Exception('Only UUID or HBM ID should be provided, not both')
         query = {'query':
@@ -111,8 +124,6 @@ class ApiClient():
 
         if 'files' not in entity or 'data_types' not in entity:
             return ConfCells(None, None)
-        if self.is_mock:
-            return ConfCells(self._get_mock_vitessce_conf(), None)
 
         # Otherwise, just try to visualize the data for the entity itself:
         try:
@@ -126,41 +137,66 @@ class ApiClient():
 
             return ConfCells({'error': message}, None)
 
-    def _get_mock_vitessce_conf(self):
-        cellsData = json.dumps({'cell-id-1': {'mappings': {'t-SNE': [1, 1]}}})
-        cellsUri = DataURI.make(
-            'text/plain', charset='us-ascii', base64=True, data=cellsData
-        )
-        token = 'fake-token'
-        return {
-            'description': 'DEMO',
-            'layers': [
-                {
-                    'name': 'cells',
-                    'type': 'CELLS',
-                    'url': cellsUri,
-                    'requestInit': {
-                        'headers': {
-                            'Authorization': 'Bearer ' + token
-                        }
-                    }
-                },
-            ],
-            'name': 'Linnarsson',
-            'staticLayout': [
-                {
-                    'component': 'scatterplot',
-                    'props': {
-                        'mapping': 'UMAP',
-                        'view': {
-                            'zoom': 4,
-                            'target': [0, 0, 0]
-                        }
-                    },
-                    'x': 0, 'y': 0, 'w': 12, 'h': 2
-                },
-            ]
+
+def _flatten_sources(sources, non_metadata_fields):
+    '''
+    >>> from pprint import pp
+    >>> donor_sources = [
+    ...     {'uuid': 'abcd1234', 'name': 'Ann',
+    ...      'other': 'skipped',
+    ...      'mapped_metadata': {'age': [40], 'weight': [150]}
+    ...     },
+    ...     {'uuid': 'wxyz1234', 'name': 'Bob',
+    ...      'mapped_metadata': {'age': [50], 'multi': ['A', 'B', 'C']}
+    ...     }]
+    >>> pp(_flatten_sources(donor_sources, ['uuid', 'name']))
+    [{'uuid': 'abcd1234', 'name': 'Ann', 'age': '40', 'weight': '150'},
+     {'uuid': 'wxyz1234', 'name': 'Bob', 'age': '50', 'multi': 'A, B, C'}]
+
+    >>> sample_sources = [
+    ...     {'uuid': 'abcd1234',
+    ...      'metadata': {'organ': 'belly button',
+    ...                   'organ_donor_data': {'example': 'Should remove!'},
+    ...                   'metadata': {'example': 'Should remove!'}}
+    ...     }]
+    >>> pp(_flatten_sources(sample_sources, ['uuid', 'name']))
+    [{'uuid': 'abcd1234', 'name': None, 'organ': 'belly button'}]
+    '''
+    flat_sources = [
+        {
+            **{
+                field: source.get(field)
+                for field in non_metadata_fields
+            },
+
+            # This gets sample and donor metadata.
+            **source.get('metadata', {}),
+
+            # This gets donor metadata, and concatenates nested lists.
+            **{
+                k: ', '.join(str(s) for s in v)
+                for (k, v) in source.get('mapped_metadata', {}).items()
+            }
         }
+        for source in sources
+    ]
+    for source in flat_sources:
+        if 'assay_type' in source.get('metadata', {}):
+            # For donors, this is the metadata in EAV form,
+            # for samples, this is a placeholder for dev-search,
+            # but for datasets, we want to move it up a level.
+            source.update(source['metadata'])
+
+        for field in [
+                'metadata',
+                # From datasets JSON:
+                'dag_provenance_list', 'extra_metadata', 'files_info_alt_path',
+                # Dataset TSV columns to hide:
+                'antibodies_path', 'contributors_path', 'version',
+                # From samples:
+                'organ_donor_data', 'living_donor_data']:
+            source.pop(field, None)
+    return flat_sources
 
 
 def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):

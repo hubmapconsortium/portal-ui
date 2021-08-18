@@ -33,21 +33,6 @@ Optional:
 - `VSCode`, with `eslint` and `prettier` plugins
 - `docker`
 
-### Checkout
-
-Because we're using git submodules, a couple additional steps are needed with checkout:
-```
-git clone https://github.com/hubmapconsortium/portal-ui.git
-git submodule init
-git submodule update
-git config --global submodule.recurse true # Run this once...
-git pull                                   # Now pulls submodules every time!
-```
-
-If you need to work on the code in a submodule, I would encourage you to do that
-in a separate top-level checkout. You certainly can push changes from inside
-a submodule, but it just gets more confusing.
-
 ### Development
 
 After checking out the project, cd-ing into it, and setting up a Python3.8 virtual environment,

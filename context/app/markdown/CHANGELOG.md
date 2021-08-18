@@ -1,3 +1,40 @@
+## v0.25.1 - 2021-08-18
+
+- Add an endpoint for easy download of donor metadata.
+- Refactor `ApiClient` mocking with OO.
+
+
+## v0.25.0 - 2021-08-17
+
+- Display datasets returned by cells gene expression query in rows with metadata.
+
+
+## v0.24.4 - 2021-08-11
+
+- Configure EUI via web-component properties
+- Simplify App.jsx by just passing flaskData though, instead of destructuring and restructuring.
+- Enable users to view files' pdfs without leaving the portal.
+- In the python code, split the `/browse/*` routes to their own file, to keep things reasonable.
+- Upgrade Vitessce to 1.1.13 for performance boost and slight alteration to how RGB images are handled internally.
+
+
+## v0.24.3 - 2021-08-10
+
+- Provide a fallback if `descendant_counts` is empty.
+- Stub out publication page.
+
+
+## v0.24.2 - 2021-08-05
+
+- Remove descriptions from certain charts on diversity page.
+- Rename diversity page to donor diversity.
+- Introduce a log-scale slider.
+- Add additional charts/tables to the donor diversity page.
+- Style donor diversity page.
+- Change donor diversity page's route from /vis to /diversity.
+- Move submodule stuff into script, instead of cluttering readme.
+
+
 ## v0.24.1 - 2021-08-03
 
 - Chart and table.

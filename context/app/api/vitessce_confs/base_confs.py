@@ -198,6 +198,7 @@ class AbstractScatterplotViewConfBuilder(ViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/d4493657cde29702c5ed73932da5317c
     from h5ad-to-arrow.cwl.
     """
+
     def get_conf_cells(self):
         file_paths_expected = [file["rel_path"] for file in self._files]
         file_paths_found = self._get_file_paths()
@@ -225,6 +226,7 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
     like SPRMJSONViewConfBuilder and SPRMAnnDataViewConfBuilder
     https://portal.hubmapconsortium.org/search?mapped_data_types[0]=CODEX%20%5BCytokit%20%2B%20SPRM%5D&entity_type[0]=Dataset
     """
+
     def _get_full_image_path(self):
         return f"{self._imaging_path_regex}/{self._image_name}.ome.tiff?"
 
@@ -260,6 +262,7 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
     SPRM Vitessce configurations, like
     https://portal.hubmapconsortium.org/browse/dataset/dc31a6d06daa964299224e9c8d6cafb3
     """
+
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
         super().__init__(entity, nexus_token, is_mock)
@@ -338,6 +341,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
     :param \\*\\*kwargs: { imaging_path: str, mask_path: str } for the paths
     of the image and mask relative to image_pyramid_regex
     """
+
     def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
         super().__init__(entity, nexus_token, is_mock)
         self._base_name = kwargs["base_name"]
@@ -372,26 +376,21 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         adata_url = self._build_assets_url(zarr_path, use_token=False)
         # https://github.com/hubmapconsortium/portal-containers/blob/master/containers/sprm-to-anndata
         # has information on how these keys are generated.
+        obs_keys = [
+            "K-Means [Covariance] Expression",
+            "K-Means [Mean-All-SubRegions] Expression",
+            "K-Means [Mean] Expression",
+            "K-Means [Shape-Vectors]",
+            "K-Means [Texture]",
+            "K-Means [Total] Expression",
+            "K-Means [tSNE_All_Features]"
+        ]
         anndata_wrapper = AnnDataWrapper(
             adata_url=adata_url,
             spatial_centroid_obsm="xy",
-            cell_set_obs=[
-                "K-Means [Covariance] Expression",
-                "K-Means [Mean-All-SubRegions] Expression",
-                "K-Means [Mean] Expression",
-                "K-Means [Shape-Vectors]",
-                "K-Means [Texture]",
-                "K-Means [Total] Expression",
-            ],
+            cell_set_obs=obs_keys,
             expression_matrix="X",
-            factors_obs=[
-                "K-Means [Covariance] Expression",
-                "K-Means [Mean-All-SubRegions] Expression",
-                "K-Means [Mean] Expression",
-                "K-Means [Shape-Vectors]",
-                "K-Means [Texture]",
-                "K-Means [Total] Expression",
-            ],
+            factors_obs=obs_keys,
             request_init=self._get_request_init(),
         )
         dataset = dataset.add_object(anndata_wrapper)

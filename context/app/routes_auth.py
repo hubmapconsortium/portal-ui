@@ -1,17 +1,19 @@
 from urllib.parse import urlencode, unquote
 
 from flask import (
-    Blueprint, make_response, current_app, url_for,
+    make_response, current_app, url_for,
     request, redirect, render_template, session)
 import requests
 import globus_sdk
+
+from .utils import make_blueprint
 
 
 # This is mostly copy-and-paste from
 # https://globus-sdk-python.readthedocs.io/en/stable/examples/three_legged_oauth/
 
 
-blueprint = Blueprint('routes_auth', __name__, template_folder='templates')
+blueprint = make_blueprint(__name__)
 
 
 def load_app_client():
@@ -116,7 +118,7 @@ def logout():
     redirect_to_globus_param = 'redirect_to_globus'
 
     if redirect_to_globus_param in request.args:
-        redirect_uri = url_for('routes.index', _external=True)
+        redirect_uri = url_for('routes_main.index', _external=True)
         globus_logout_url = 'https://auth.globus.org/v2/web/logout?' + urlencode({
             'client': current_app.config['APP_CLIENT_ID'],
             'redirect_uri': redirect_uri,

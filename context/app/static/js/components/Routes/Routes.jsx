@@ -14,7 +14,7 @@ const Home = lazy(() => import('js/pages/Home/Home'));
 const Search = lazy(() => import('js/pages/search/Search'));
 const CellsSearch = lazy(() => import('js/pages/search/CellsSearch'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
-const Vis = lazy(() => import('js/pages/Vis'));
+const Diversity = lazy(() => import('js/pages/Diversity'));
 const Preview = lazy(() => import('js/pages/Preview'));
 const Publications = lazy(() => import('js/pages/Publications'));
 const Publication = lazy(() => import('js/pages/Publication'));
@@ -104,10 +104,10 @@ function Routes(props) {
   }
   /* eslint-enable no-undef */
 
-  if (urlPath.startsWith('/vis')) {
+  if (urlPath.startsWith('/diversity')) {
     return (
       <Route>
-        <Vis />
+        <Diversity />
       </Route>
     );
   }
@@ -192,7 +192,7 @@ function Routes(props) {
 Routes.propTypes = {
   flaskData: PropTypes.exact({
     title: PropTypes.string,
-    titles: PropTypes.object,
+    publications: PropTypes.object,
     entity: PropTypes.object,
     vitessce_conf: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
     markdown: PropTypes.string,
