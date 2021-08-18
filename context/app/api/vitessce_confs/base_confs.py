@@ -376,7 +376,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         adata_url = self._build_assets_url(zarr_path, use_token=False)
         # https://github.com/hubmapconsortium/portal-containers/blob/master/containers/sprm-to-anndata
         # has information on how these keys are generated.
-        obs_keys=[
+        obs_keys = [
             "K-Means [Covariance] Expression",
             "K-Means [Mean-All-SubRegions] Expression",
             "K-Means [Mean] Expression",
