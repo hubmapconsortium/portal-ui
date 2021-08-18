@@ -25,85 +25,33 @@ function termSource(field) {
   return source;
 }
 
-const donorRaceSexQuery = {
-  size: 0,
-  aggs: {
-    composite_data: {
-      composite: {
-        sources: [termSource('race'), termSource('blood_type')],
-        size: 10000,
-      },
+function histogramSource(field) {
+  const esField = `mapped_metadata.${field}`;
+  const source = {};
+  source[esField] = {
+    histogram: {
+      field: `${esField}_value`,
+      interval: 10,
     },
-  },
-};
+  };
+  return source;
+}
 
-const donorGenderRace = {
-  size: 0,
-  aggs: {
-    composite_data: {
-      composite: {
-        sources: [termSource('race'), termSource('sex')],
-        size: 10000,
+function compositeQuery(source1, source2) {
+  return {
+    size: 0,
+    aggs: {
+      composite_data: {
+        composite: {
+          sources: [source1, source2],
+          size: 10000,
+        },
       },
     },
-  },
-};
+  };
+}
 
-const donorBloodtypeGender = {
-  size: 0,
-  aggs: {
-    composite_data: {
-      composite: {
-        sources: [termSource('sex'), termSource('blood_type')],
-        size: 10000,
-      },
-    },
-  },
-};
-
-const donorAgeGender = {
-  size: 0,
-  aggs: {
-    composite_data: {
-      composite: {
-        sources: [
-          {
-            'mapped_metadata.age': {
-              histogram: {
-                field: 'mapped_metadata.age_value',
-                interval: 10,
-              },
-            },
-          },
-          termSource('sex'),
-        ],
-        size: 10000,
-      },
-    },
-  },
-};
-
-const donorAgeRace = {
-  size: 0,
-  aggs: {
-    composite_data: {
-      composite: {
-        sources: [
-          {
-            'mapped_metadata.age': {
-              histogram: {
-                field: 'mapped_metadata.age_value',
-                interval: 10,
-              },
-            },
-          },
-          termSource('race'),
-        ],
-        size: 10000,
-      },
-    },
-  },
-};
+const donorAgeRace = compositeQuery(histogramSource('age'), termSource('race'));
 
 const threeColors = ['#444A65', '#6C8938', '#DA348A'];
 const twoColors = threeColors.slice(0, 2);
@@ -200,7 +148,7 @@ function Diversity() {
           </ChartPaper>
 
           <DonorChart
-            donorQuery={donorRaceSexQuery}
+            donorQuery={compositeQuery(termSource('race'), termSource('blood_type'))}
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
@@ -211,7 +159,7 @@ function Diversity() {
             xAxisLabel="Blood Type"
           />
           <DonorChart
-            donorQuery={donorGenderRace}
+            donorQuery={compositeQuery(termSource('race'), termSource('sex'))}
             xKey="mapped_metadata.sex"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
@@ -221,7 +169,7 @@ function Diversity() {
             xAxisLabel="Sex"
           />
           <DonorChart
-            donorQuery={donorBloodtypeGender}
+            donorQuery={compositeQuery(termSource('sex'), termSource('blood_type'))}
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
@@ -232,7 +180,7 @@ function Diversity() {
             xAxisLabel="Blood Type"
           />
           <DonorChart
-            donorQuery={donorAgeGender}
+            donorQuery={compositeQuery(histogramSource('age'), termSource('sex'))}
             xKey="mapped_metadata.age"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
