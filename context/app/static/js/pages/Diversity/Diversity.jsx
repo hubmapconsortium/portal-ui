@@ -117,31 +117,19 @@ function Diversity() {
                   <TableRow>
                     <HeaderCell> </HeaderCell>
                     {headers.map((type) => (
-                      <HeaderCell> {type} </HeaderCell>
+                      <HeaderCell key={type}>{type}</HeaderCell>
                     ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <HeaderCell> White </HeaderCell>
-                    {age.map((type) => (
-                      <TableCell> {getCount(buckets, type, 'White')} </TableCell>
-                    ))}
-                  </TableRow>
-
-                  <TableRow>
-                    <HeaderCell> Black or African American </HeaderCell>
-                    {age.map((type) => (
-                      <TableCell> {getCount(buckets, type, 'Black or African American')} </TableCell>
-                    ))}
-                  </TableRow>
-
-                  <TableRow>
-                    <HeaderCell> Hispanic </HeaderCell>
-                    {age.map((type) => (
-                      <TableCell> {getCount(buckets, type, 'Hispanic')} </TableCell>
-                    ))}
-                  </TableRow>
+                  {['White', 'Black or African American', 'Hispanic'].map((value) => (
+                    <TableRow>
+                      <HeaderCell>{value}</HeaderCell>
+                      {age.map((type) => (
+                        <TableCell key={type}>{getCount(buckets, type, value)}</TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </StyledTableContainer>
