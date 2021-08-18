@@ -1,15 +1,14 @@
 import React from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 
-import VerticalStackedBarChart from './VerticalStackedBarChart';
+import VerticalStackedBarChartComponent from './VerticalStackedBarChart';
 
 export default {
   title: 'Charts/VerticalStackedBarChart',
-  component: VerticalStackedBarChart,
+  component: VerticalStackedBarChartComponent,
 };
 
-const Template = (args) => <VerticalStackedBarChart {...args} />;
-export const Default = Template.bind({});
+export const VerticalStackedBarChart = (args) => <VerticalStackedBarChartComponent {...args} />;
 const yScale = scaleLinear({
   domain: [0, 13],
   nice: true,
@@ -25,7 +24,7 @@ const colorScale = scaleOrdinal({
   range: ['#DA348A', '#6C8938'],
 });
 
-Default.args = {
+VerticalStackedBarChart.args = {
   parentWidth: 500,
   parentHeight: 500,
   visxData: [
@@ -72,3 +71,4 @@ Default.args = {
   },
   getX: (d) => d.cluster,
 };
+VerticalStackedBarChart.storyName = 'VerticalStackedBarChart'; // needed for single story hoisting for multi word component names
