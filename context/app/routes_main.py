@@ -261,10 +261,10 @@ def preview_view(name):
 @blueprint.route('/publication')
 def publication_index_view():
     dir_path = Path(dirname(__file__) + '/publication')
-    titles = {p.stem: frontmatter.load(p)['title'] for p in dir_path.glob('*.md')}
+    publications = {p.stem: dict(frontmatter.load(p)) for p in dir_path.glob('*.md')}
     flask_data = {
         **get_default_flask_data(),
-        'titles': titles
+        'publications': publications
     }
     return render_template(
         'pages/base_react.html',

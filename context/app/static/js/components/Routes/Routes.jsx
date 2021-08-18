@@ -27,7 +27,7 @@ const SavedList = lazy(() => import('js/pages/SavedList'));
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, title, titles, markdown, errorCode, list_uuid, has_notebook } = flaskData;
+  const { entity, vitessce_conf, title, publications, markdown, errorCode, list_uuid, has_notebook } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
 
@@ -123,7 +123,7 @@ function Routes(props) {
   if (urlPath === '/publication') {
     return (
       <Route>
-        <Publications titles={titles} />
+        <Publications publications={publications} />
       </Route>
     );
   }

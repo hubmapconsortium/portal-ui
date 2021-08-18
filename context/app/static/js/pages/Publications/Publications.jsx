@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,8 +11,8 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 
-function Publication(props) {
-  const { titles } = props;
+function Publications(props) {
+  const { publications } = props;
 
   return (
     <>
@@ -22,10 +23,13 @@ function Publication(props) {
         <Paper>
           <Table>
             <TableBody>
-              {Object.entries(titles).map(([path, title]) => (
+              {Object.entries(publications || []).map(([path, publication]) => (
                 <TableRow key={path}>
                   <TableCell>
-                    <LightBlueLink href={`publication/${path}`}>{title}</LightBlueLink>
+                    <Typography variant="subtitle2" component="h3" color="primary">
+                      <LightBlueLink href={`/publication/${path}`}>{publication.title}</LightBlueLink>
+                    </Typography>
+                    {publication.authors}
                   </TableCell>
                 </TableRow>
               ))}
@@ -37,4 +41,4 @@ function Publication(props) {
   );
 }
 
-export default Publication;
+export default Publications;
