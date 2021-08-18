@@ -1,10 +1,14 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import SectionPaper from '../../shared-styles/sections/SectionPaper/SectionPaper';
 
 function Publication(props) {
   const { titles } = props;
@@ -12,19 +16,22 @@ function Publication(props) {
   return (
     <>
       <SectionContainer id="summary">
-        <Typography variant="subtitle1">Publications?</Typography>
         <SectionHeader variant="h1" component="h1">
-          Publications!
+          Publications
         </SectionHeader>
-        <SectionPaper>
-          <ul>
-            {Object.entries(titles).map(([path, title]) => (
-              <li key={path}>
-                <LightBlueLink href={`publication/${path}`}>{title}</LightBlueLink>
-              </li>
-            ))}
-          </ul>
-        </SectionPaper>
+        <Paper>
+          <Table>
+            <TableBody>
+              {Object.entries(titles).map(([path, title]) => (
+                <TableRow key={path}>
+                  <TableCell>
+                    <LightBlueLink href={`publication/${path}`}>{title}</LightBlueLink>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
       </SectionContainer>
     </>
   );
