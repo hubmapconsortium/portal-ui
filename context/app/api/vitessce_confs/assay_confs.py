@@ -296,14 +296,24 @@ class NullViewConfBuilder():
 
 
 _assays = None
+tc = None
 
 
 def _get_assay(data_type):
     "Return the assay class for the given data type"
     global _assays
-    if _assays is None:
+    global tc
+    if _assays is None and tc is None:
         tc = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
         _assays = {assay.name: assay for assay in tc.iterAssays()}
+    # iterAssays only returns current, and not deprecated, assays,
+    # which may be present in the entity.
+    # getAssayType can check for deprecated assays properly.
+    if data_type not in _assays:
+        assay = tc.getAssayType(data_type)
+        # The assay.name in this case would be the new name for the
+        # data_type so we cache the result using the data_type from the entity.
+        _assays[data_type] = assay
     return _assays[data_type]
 
 
