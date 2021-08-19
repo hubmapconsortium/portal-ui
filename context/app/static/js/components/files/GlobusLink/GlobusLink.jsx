@@ -24,7 +24,12 @@ function GlobusLink(props) {
           headers: requestHeaders,
         });
         if (!response.ok) {
-          console.error('Entities API failed', response);
+          if (response.status === 403) {
+            // eslint-disable-next-line no-console
+            console.info('No error: 403 is an expected API response');
+          } else {
+            console.error('Entities API failed', response);
+          }
           if (!status.aborted) {
             setGlobusUrlStatus({ url: null, statusCode: response.status });
             setIsLoading(false);

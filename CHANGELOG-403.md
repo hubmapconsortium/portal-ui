@@ -1,0 +1,1 @@
+- Softer warning if 403 from Entities API.
