@@ -12,44 +12,7 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import DonorChart from './DonorChart';
 import ProjectAttribution from './ProjectAttribution';
 import { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle, DescriptionPaper } from './style';
-import { getKeyValues, getAgeLabels } from './utils';
-
-function makeTermSource(field) {
-  const esField = `mapped_metadata.${field}`;
-  const source = {};
-  source[esField] = {
-    terms: {
-      field: `mapped_metadata.${field}.keyword`,
-    },
-  };
-  return source;
-}
-
-function makeHistogramSource(field) {
-  const esField = `mapped_metadata.${field}`;
-  const source = {};
-  source[esField] = {
-    histogram: {
-      field: `${esField}_value`,
-      interval: 10,
-    },
-  };
-  return source;
-}
-
-function makeCompositeQuery(source1, source2) {
-  return {
-    size: 0,
-    aggs: {
-      composite_data: {
-        composite: {
-          sources: [source1, source2],
-          size: 10000,
-        },
-      },
-    },
-  };
-}
+import { getKeyValues, getAgeLabels, makeCompositeQuery, makeHistogramSource, makeTermSource } from './utils';
 
 const donorAgeRaceQuery = makeCompositeQuery(makeHistogramSource('age'), makeTermSource('race'));
 const donorRaceBloodTypeQuery = makeCompositeQuery(makeTermSource('race'), makeTermSource('blood_type'));
@@ -127,7 +90,7 @@ function Diversity() {
                 </TableHead>
                 <TableBody>
                   {['White', 'Black or African American', 'Hispanic'].map((value) => (
-                    <TableRow>
+                    <TableRow key={value}>
                       <HeaderCell>{value}</HeaderCell>
                       {age.map((type) => (
                         <TableCell key={type}>{getCount(buckets, type, value)}</TableCell>
