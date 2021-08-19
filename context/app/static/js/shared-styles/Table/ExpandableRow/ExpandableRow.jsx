@@ -17,8 +17,12 @@ function ExpandableRowChild({ children, numCells, expandedContent }) {
       <TableRow>
         {children}
         <ExpandableRowCell>
-          <IconButton onClick={toggleIsExpanded}>
-            {isExpanded ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />}
+          <IconButton onClick={toggleIsExpanded} aria-label="expand row">
+            {isExpanded ? (
+              <ArrowDropUpRoundedIcon data-testid="up-arrow-icon" />
+            ) : (
+              <ArrowDropDownRoundedIcon data-testid="down-arrow-icon" />
+            )}
           </IconButton>
         </ExpandableRowCell>
       </TableRow>
