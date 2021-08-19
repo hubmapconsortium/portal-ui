@@ -1,22 +1,23 @@
 import React from 'react';
 
 import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
-import ExpandableRow from './ExpandableRow';
+import ExpandableRowComponent from './ExpandableRow';
 
 export default {
-  title: 'ExpandableRow',
-  component: ExpandableRow,
+  title: 'Tables/ExpandableRow',
+  component: ExpandableRowComponent,
 };
 
-const Template = (args) => (
-  <ExpandableRow {...args}>
+export const ExpandableRow = (args) => (
+  <ExpandableRowComponent {...args}>
     <ExpandableRowCell>A</ExpandableRowCell>
     <ExpandableRowCell>B</ExpandableRowCell>
     <ExpandableRowCell>C</ExpandableRowCell>
-  </ExpandableRow>
+  </ExpandableRowComponent>
 );
-export const Default = Template.bind({});
-Default.args = {
+ExpandableRow.args = {
   numCells: 4,
   expandedContent: <div>123</div>,
 };
+
+ExpandableRow.storyName = 'ExpandableRow'; // needed for single story hoisting for multi word component names
