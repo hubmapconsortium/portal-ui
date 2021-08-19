@@ -14,7 +14,7 @@ import ProjectAttribution from './ProjectAttribution';
 import { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle, DescriptionPaper } from './style';
 import { getKeyValues, getAgeLabels } from './utils';
 
-function termSource(field) {
+function makeTermSource(field) {
   const esField = `mapped_metadata.${field}`;
   const source = {};
   source[esField] = {
@@ -25,7 +25,7 @@ function termSource(field) {
   return source;
 }
 
-function histogramSource(field) {
+function makeHistogramSource(field) {
   const esField = `mapped_metadata.${field}`;
   const source = {};
   source[esField] = {
@@ -37,7 +37,7 @@ function histogramSource(field) {
   return source;
 }
 
-function compositeQuery(source1, source2) {
+function makeCompositeQuery(source1, source2) {
   return {
     size: 0,
     aggs: {
@@ -51,7 +51,11 @@ function compositeQuery(source1, source2) {
   };
 }
 
-const donorAgeRace = compositeQuery(histogramSource('age'), termSource('race'));
+const donorAgeRaceQuery = makeCompositeQuery(makeHistogramSource('age'), makeTermSource('race'));
+const donorRaceBloodTypeQuery = makeCompositeQuery(makeTermSource('race'), makeTermSource('blood_type'));
+const donorRaceSexQuery = makeCompositeQuery(makeTermSource('race'), makeTermSource('sex'));
+const donorSexBloodTypeQuery = makeCompositeQuery(makeTermSource('sex'), makeTermSource('blood_type'));
+const donorAgeSexQuery = makeCompositeQuery(makeHistogramSource('age'), makeTermSource('sex'));
 
 const threeColors = ['#444A65', '#6C8938', '#DA348A'];
 const twoColors = threeColors.slice(0, 2);
@@ -73,7 +77,7 @@ function BloodTypeDescription() {
 }
 
 function Diversity() {
-  const { searchData } = useSearchData(donorAgeRace);
+  const { searchData } = useSearchData(donorAgeRaceQuery);
   if (!('aggregations' in searchData)) {
     return null;
   }
@@ -136,7 +140,7 @@ function Diversity() {
           </ChartPaper>
 
           <DonorChart
-            donorQuery={compositeQuery(termSource('race'), termSource('blood_type'))}
+            donorQuery={donorRaceBloodTypeQuery}
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
@@ -147,7 +151,7 @@ function Diversity() {
             xAxisLabel="Blood Type"
           />
           <DonorChart
-            donorQuery={compositeQuery(termSource('race'), termSource('sex'))}
+            donorQuery={donorRaceSexQuery}
             xKey="mapped_metadata.sex"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
@@ -157,7 +161,7 @@ function Diversity() {
             xAxisLabel="Sex"
           />
           <DonorChart
-            donorQuery={compositeQuery(termSource('sex'), termSource('blood_type'))}
+            donorQuery={donorSexBloodTypeQuery}
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
@@ -168,7 +172,7 @@ function Diversity() {
             xAxisLabel="Blood Type"
           />
           <DonorChart
-            donorQuery={compositeQuery(histogramSource('age'), termSource('sex'))}
+            donorQuery={donorAgeSexQuery}
             xKey="mapped_metadata.age"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
