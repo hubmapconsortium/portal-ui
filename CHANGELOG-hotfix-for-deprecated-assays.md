@@ -1,0 +1,1 @@
+- Deprecated assays are not present in `iterAssays` so we need to use `getAssayType` for Vitessce conf generation.

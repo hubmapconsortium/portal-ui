@@ -301,9 +301,15 @@ _assays = None
 def _get_assay(data_type):
     "Return the assay class for the given data type"
     global _assays
+
+    type_client = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
     if _assays is None:
-        tc = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
-        _assays = {assay.name: assay for assay in tc.iterAssays()}
+        # iterAssays does not include deprecated assay names...
+        _assays = {assay.name: assay for assay in type_client.iterAssays()}
+
+    if data_type not in _assays:
+        # ... but getAssayType does handle deprecated names:
+        _assays[data_type] = type_client.getAssayType(data_type)
     return _assays[data_type]
 
 
