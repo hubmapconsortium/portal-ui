@@ -1,7 +1,7 @@
 import React from 'react';
 
+import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
 import ExpandableRow from './ExpandableRow';
-import ExpandableRowCell from '../ExpandableRowCell';
 
 export default {
   title: 'ExpandableRow',
