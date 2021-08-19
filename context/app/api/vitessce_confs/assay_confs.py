@@ -306,7 +306,7 @@ def _get_assay(data_type):
     if _assays is None:
         # iterAssays does not include deprecated assay names...
         _assays = {assay.name: assay for assay in type_client.iterAssays()}
-        
+
     if data_type not in _assays:
         # ... but getAssayType does handle deprecated names:
         _assays[data_type] = type_client.getAssayType(data_type)
