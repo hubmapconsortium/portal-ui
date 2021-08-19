@@ -296,24 +296,20 @@ class NullViewConfBuilder():
 
 
 _assays = None
-_type_client = None
 
 
 def _get_assay(data_type):
     "Return the assay class for the given data type"
     global _assays
-    global _type_client
-    if _type_client is None:
-        _type_client = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
-    
-    global _assays
+
+    type_client = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
     if _assays is None:
         # iterAssays does not include deprecated assay names...
-        _assays = {assay.name: assay for assay in _type_client.iterAssays()}
+        _assays = {assay.name: assay for assay in type_client.iterAssays()}
         
     if data_type not in _assays:
         # ... but getAssayType does handle deprecated names:
-        _assays[data_type] = tc.getAssayType(data_type)
+        _assays[data_type] = type_client.getAssayType(data_type)
     return _assays[data_type]
 
 
