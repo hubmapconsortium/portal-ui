@@ -40,7 +40,7 @@ test('displays 200 correctly', () => {
 
 const messages = {
   401: 'Unauthorized access to the Globus Research Management System',
-  403: 'Access to files on the Globus Research Management system are restricted',
+  403: 'Access to files on the Globus Research Management system is restricted',
   404: 'Files are not available through the Globus Research Management system',
   500: 'Unexpected server or other error',
 };
