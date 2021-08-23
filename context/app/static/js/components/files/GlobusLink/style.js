@@ -6,16 +6,6 @@ const StyledTypography = styled(Typography)`
   margin: 0px ${(props) => props.theme.spacing(1)}px ${(props) => props.theme.spacing(1)}px 0px;
 `;
 
-const CenteredDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: ${(props) => props.theme.spacing(2)}px;
-`;
-
-const MarginTopDiv = styled.div`
-  margin-top: ${(props) => props.theme.spacing(2)}px;
-`;
-
 const Flex = styled.div`
   display: flex;
 `;
@@ -32,4 +22,4 @@ const StyledSuccessIcon = styled(SuccessIcon)`
   font-size: 1.5rem;
 `;
 
-export { CenteredDiv, MarginTopDiv, StyledTypography, Flex, StyledSuccessIcon, StyledErrorIcon };
+export { StyledTypography, Flex, StyledSuccessIcon, StyledErrorIcon };

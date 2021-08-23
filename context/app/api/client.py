@@ -1,6 +1,7 @@
 from collections import namedtuple
 import traceback
 from copy import deepcopy
+from dataclasses import dataclass
 
 from flask import abort, current_app
 import requests
@@ -9,6 +10,12 @@ from .vitessce_confs import get_view_config_class_for_data_types
 from .vitessce_confs.base_confs import ConfCells
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
+
+
+@dataclass
+class VitessceConfLiftedUUID:
+    vitessce_conf: dict
+    vis_lifted_uuid: str
 
 
 class ApiClient():
@@ -109,7 +116,10 @@ class ApiClient():
         hits = response_json['hits']['hits']
         return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id)
 
-    def get_vitessce_conf_cells(self, entity):
+    def get_vitessce_conf_cells_and_lifted_uuid(self, entity):
+        '''
+        Returns a dataclass with vitessce_conf and is_lifted.
+        '''
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         image_pyramid_descendants = _get_image_pyramid_descendants(entity)
         if image_pyramid_descendants:
@@ -120,22 +130,26 @@ class ApiClient():
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
             derived_entity['files'] = derived_entity['metadata']['files']
-            return self.get_vitessce_conf_cells(derived_entity)
+            vitessce_conf = \
+                self.get_vitessce_conf_cells_and_lifted_uuid(derived_entity).vitessce_conf
+            return VitessceConfLiftedUUID(
+                vis_lifted_uuid=derived_entity['uuid'],
+                vitessce_conf=vitessce_conf)
 
         if 'files' not in entity or 'data_types' not in entity:
-            return ConfCells(None, None)
+            return VitessceConfLiftedUUID(ConfCells(None, None), None)
 
         # Otherwise, just try to visualize the data for the entity itself:
         try:
             vc = get_view_config_class_for_data_types(
                 entity=entity, nexus_token=self.nexus_token
             )
-            return vc.get_conf_cells()
+            return VitessceConfLiftedUUID(vc.get_conf_cells(), None)
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'
             current_app.logger.error(message)
 
-            return ConfCells({'error': message}, None)
+            return VitessceConfLiftedUUID(ConfCells({'error': message}, None), None)
 
 
 def _flatten_sources(sources, non_metadata_fields):

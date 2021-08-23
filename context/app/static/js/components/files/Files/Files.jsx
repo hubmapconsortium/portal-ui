@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import DetailContext from 'js/components/Detail/context';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import GlobusLink from '../GlobusLink';
+import GlobusSection from '../GlobusSection';
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../FileBrowserDUA';
 import FilesContext from './context';
+import { MarginBottomDiv } from './style';
 
 function Files(props) {
-  const { files, uuid, hubmap_id } = props;
+  const { files, uuid, hubmap_id, visLiftedUUID } = props;
 
   const { mapped_data_access_level } = useContext(DetailContext);
 
@@ -39,8 +40,12 @@ function Files(props) {
     <FilesContext.Provider value={{ openDUA, hasAgreedToDUA }}>
       <SectionContainer id="files">
         <SectionHeader>Files</SectionHeader>
-        {files && <FileBrowser files={files} />}
-        <GlobusLink uuid={uuid} hubmap_id={hubmap_id} />
+        {files && (
+          <MarginBottomDiv>
+            <FileBrowser files={files} />
+          </MarginBottomDiv>
+        )}
+        <GlobusSection uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         <FileBrowserDUA
           isOpen={isDialogOpen}
           handleAgree={handleDUAAgree}
@@ -55,6 +60,7 @@ function Files(props) {
 Files.propTypes = {
   uuid: PropTypes.string.isRequired,
   hubmap_id: PropTypes.string.isRequired,
+  visLiftedUUID: PropTypes.string,
   files: PropTypes.arrayOf(
     PropTypes.shape({
       rel_path: PropTypes.string.isRequired,
@@ -69,6 +75,7 @@ Files.propTypes = {
 
 Files.defaultProps = {
   files: undefined,
+  visLiftedUUID: undefined,
 };
 
 export default Files;
