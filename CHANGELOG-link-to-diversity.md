@@ -1,0 +1,1 @@
+- Link to the diversity page from the footer.

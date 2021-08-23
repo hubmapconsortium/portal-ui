@@ -1,3 +1,14 @@
+## v0.25.2 - 2021-08-19
+
+- Deprecated assays are not present in `iterAssays` so we need to use `getAssayType` for Vitessce conf generation.
+
+
+## v0.25.1 - 2021-08-18
+
+- Add an endpoint for easy download of donor metadata.
+- Refactor `ApiClient` mocking with OO.
+
+
 ## v0.25.0 - 2021-08-17
 
 - Display datasets returned by cells gene expression query in rows with metadata.

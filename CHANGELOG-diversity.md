@@ -1,0 +1,1 @@
+- Add helper functions to simplify the diversity page.

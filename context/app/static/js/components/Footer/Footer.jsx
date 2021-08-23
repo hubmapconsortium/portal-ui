@@ -22,9 +22,14 @@ function Footer(props) {
                 Project Website
               </OutboundLink>
               {!isMaintenancePage && (
-                <LightBlueLink href="/docs" variant="body2">
-                  Documentation
-                </LightBlueLink>
+                <>
+                  <LightBlueLink href="/docs" variant="body2">
+                    Documentation
+                  </LightBlueLink>
+                  <LightBlueLink href="/diversity" variant="body2">
+                    Diversity
+                  </LightBlueLink>
+                </>
               )}
               <LightBlueLink variant="body2" href="mailto:help@hubmapconsortium.org">
                 Submit Feedback

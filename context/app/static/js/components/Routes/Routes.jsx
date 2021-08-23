@@ -16,6 +16,7 @@ const CellsSearch = lazy(() => import('js/pages/search/CellsSearch'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
 const Diversity = lazy(() => import('js/pages/Diversity'));
 const Preview = lazy(() => import('js/pages/Preview'));
+const Publications = lazy(() => import('js/pages/Publications'));
 const Publication = lazy(() => import('js/pages/Publication'));
 const Services = lazy(() => import('js/pages/Services'));
 const Collections = lazy(() => import('js/pages/Collections'));
@@ -26,7 +27,7 @@ const SavedList = lazy(() => import('js/pages/SavedList'));
 
 function Routes(props) {
   const { flaskData } = props;
-  const { entity, vitessce_conf, title, markdown, errorCode, list_uuid, has_notebook, vis_lifted_uuid } = flaskData;
+  const { entity, vitessce_conf, title, publications, markdown, errorCode, list_uuid, has_notebook, vis_lifted_uuid } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
 
@@ -124,6 +125,14 @@ function Routes(props) {
     );
   }
 
+  if (urlPath === '/publication') {
+    return (
+      <Route>
+        <Publications publications={publications} />
+      </Route>
+    );
+  }
+
   if (urlPath.startsWith('/publication')) {
     return (
       <Route>
@@ -188,6 +197,7 @@ function Routes(props) {
 Routes.propTypes = {
   flaskData: PropTypes.exact({
     title: PropTypes.string,
+    publications: PropTypes.object,
     entity: PropTypes.object,
     vitessce_conf: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
     markdown: PropTypes.string,

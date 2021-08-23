@@ -1,4 +1,5 @@
 from os.path import dirname
+from pathlib import Path
 
 from flask import (render_template, current_app,
                    session, request)
@@ -110,6 +111,21 @@ def preview_view(name):
     return render_template(
         'pages/base_react.html',
         title='Preview',
+        flask_data=flask_data
+    )
+
+
+@blueprint.route('/publication')
+def publication_index_view():
+    dir_path = Path(dirname(__file__) + '/publication')
+    publications = {p.stem: dict(frontmatter.load(p)) for p in dir_path.glob('*.md')}
+    flask_data = {
+        **get_default_flask_data(),
+        'publications': publications
+    }
+    return render_template(
+        'pages/base_react.html',
+        title='Publications',
         flask_data=flask_data
     )
 
