@@ -1,5 +1,7 @@
 ---
+is_public: True
 title: An atlas of healthy and injured cell states and niches in the human kidney
+authors: Blue B. Lake, Rajasree Menon, et al.
 vitessce_conf:
   [
     {
