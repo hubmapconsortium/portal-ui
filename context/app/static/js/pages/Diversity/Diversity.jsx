@@ -14,9 +14,6 @@ const donorRaceSexQuery = makeCompositeQuery(makeTermSource('race'), makeTermSou
 const donorSexBloodTypeQuery = makeCompositeQuery(makeTermSource('sex'), makeTermSource('blood_type'));
 const donorAgeSexQuery = makeCompositeQuery(makeHistogramSource('age'), makeTermSource('sex'));
 
-const threeColors = ['#444A65', '#6C8938', '#DA348A'];
-const twoColors = threeColors.slice(0, 2);
-
 function BloodTypeDescription() {
   return (
     <>
@@ -63,7 +60,6 @@ function Diversity() {
             xKey="mapped_metadata.age"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
-            colors={threeColors}
             title="Age & Race"
             xAxisLabel="Age"
           />
@@ -72,7 +68,6 @@ function Diversity() {
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
-            colors={threeColors}
             description={<BloodTypeDescription />}
             title="Blood Type & Race"
             xAxisLabel="Blood Type"
@@ -82,7 +77,6 @@ function Diversity() {
             xKey="mapped_metadata.sex"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
-            colors={threeColors}
             title="Sex & Race"
             xAxisLabel="Sex"
           />
@@ -91,7 +85,6 @@ function Diversity() {
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
-            colors={twoColors}
             title="Blood Type & Sex"
             description={<BloodTypeDescription />}
             xAxisLabel="Blood Type"
@@ -101,7 +94,6 @@ function Diversity() {
             xKey="mapped_metadata.age"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
-            colors={twoColors}
             title="Age & Sex"
             xAxisLabel="Age"
           />

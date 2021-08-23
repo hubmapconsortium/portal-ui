@@ -9,8 +9,8 @@ import { getKeyValues, getAgeLabels } from './utils';
 Chart.defaults.font.size = 18;
 
 function DonorChart(props) {
-  const { title, donorQuery, xKey, yKey, colorKeys, colors, description, xAxisLabel } = props;
-
+  const { title, donorQuery, xKey, yKey, colorKeys, description, xAxisLabel } = props;
+  const colors = ['#444A65', '#6C8938', '#DA348A'];
   const { searchData } = useSearchData(donorQuery);
   if (!('aggregations' in searchData)) {
     return null;
