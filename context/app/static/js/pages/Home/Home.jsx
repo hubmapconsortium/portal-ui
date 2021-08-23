@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Typography from '@material-ui/core/Typography';
@@ -19,6 +19,7 @@ import {
   LowerContainerGrid,
   GridArea,
   SectionHeader,
+  OffsetDatasetsHeader,
   FlexGridArea,
   FlexGrowDiv,
   UpperGrid,
@@ -27,6 +28,15 @@ import {
 function Home() {
   const theme = useTheme();
   const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
+
+  useEffect(() => {
+    if (document.location.hash === '#hubmap-datasets') {
+      setTimeout(() => {
+        document.querySelector('#hubmap-datasets').scrollIntoView({ behavior: 'auto', block: 'start' });
+      }, 300);
+    }
+  }, []);
+
   return (
     <>
       <UpperGrid>
@@ -45,9 +55,9 @@ function Home() {
       <LowerContainerGrid maxWidth="lg">
         {isLargerThanMd && (
           <GridArea $gridAreaTitle="bar-chart">
-            <SectionHeader variant="h4" component="h3">
+            <OffsetDatasetsHeader variant="h4" component="h3" id="hubmap-datasets">
               HuBMAP Datasets
-            </SectionHeader>
+            </OffsetDatasetsHeader>
             <AssayTypeBarChartContainer />
           </GridArea>
         )}
