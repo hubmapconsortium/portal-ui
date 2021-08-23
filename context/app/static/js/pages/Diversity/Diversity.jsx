@@ -1,18 +1,12 @@
 import React from 'react';
 import useSearchData from 'js/hooks/useSearchData';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import DonorChart from './DonorChart';
 import ProjectAttribution from './ProjectAttribution';
-import { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle, DescriptionPaper } from './style';
-import { getKeyValues, getAgeLabels, makeCompositeQuery, makeHistogramSource, makeTermSource } from './utils';
+import { PageTitleWrapper, PageTitle, DescriptionPaper } from './style';
+import { makeCompositeQuery, makeHistogramSource, makeTermSource } from './utils';
 
 const donorAgeRaceQuery = makeCompositeQuery(makeHistogramSource('age'), makeTermSource('race'));
 const donorRaceBloodTypeQuery = makeCompositeQuery(makeTermSource('race'), makeTermSource('blood_type'));
@@ -44,17 +38,6 @@ function Diversity() {
   if (!('aggregations' in searchData)) {
     return null;
   }
-  function getCount(buckets, age, race) {
-    const filtered = buckets.filter(
-      (b) => b.key['mapped_metadata.age'] === age && b.key['mapped_metadata.race'] === race,
-    );
-    return filtered.length ? filtered[0].doc_count : 0;
-  }
-
-  const { buckets } = searchData?.aggregations.composite_data;
-
-  const age = getKeyValues(buckets, 'mapped_metadata.age');
-  const headers = getAgeLabels(buckets, 'mapped_metadata.age');
 
   return (
     <>
@@ -74,34 +57,17 @@ function Diversity() {
               </Typography>
             </DescriptionPaper>
           </PageTitleWrapper>
-          <ChartTitle variant="h4" component="h2">
-            Race & Age
-          </ChartTitle>
-          <ChartPaper>
-            <StyledTableContainer>
-              <Table stickyHeader>
-                <TableHead>
-                  <TableRow>
-                    <HeaderCell> </HeaderCell>
-                    {headers.map((type) => (
-                      <HeaderCell key={type}>{type}</HeaderCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {['White', 'Black or African American', 'Hispanic'].map((value) => (
-                    <TableRow key={value}>
-                      <HeaderCell>{value}</HeaderCell>
-                      {age.map((type) => (
-                        <TableCell key={type}>{getCount(buckets, type, value)}</TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </StyledTableContainer>
-          </ChartPaper>
 
+          <DonorChart
+            donorQuery={donorAgeRaceQuery}
+            xKey="mapped_metadata.age"
+            yKey="mapped_metadata.race"
+            colorKeys={['White', 'Black or African American', 'Hispanic']}
+            colors={threeColors}
+            title="Age & Race"
+            yAxisLabel="# of Donors"
+            xAxisLabel="Age"
+          />
           <DonorChart
             donorQuery={donorRaceBloodTypeQuery}
             xKey="mapped_metadata.blood_type"
