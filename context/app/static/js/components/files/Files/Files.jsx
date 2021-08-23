@@ -6,10 +6,10 @@ import DetailContext from 'js/components/Detail/context';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import GlobusLink from '../GlobusLink';
-import { MarginTopDiv } from './style';
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../FileBrowserDUA';
 import FilesContext from './context';
+import { MarginBottomDiv } from './style';
 
 function Files(props) {
   const { files, uuid, hubmap_id, visLiftedUUID } = props;
@@ -41,13 +41,15 @@ function Files(props) {
     <FilesContext.Provider value={{ openDUA, hasAgreedToDUA }}>
       <SectionContainer id="files">
         <SectionHeader>Files</SectionHeader>
-        {files && <FileBrowser files={files} />}
-        <MarginTopDiv>
-          <DetailSectionPaper>
-            <GlobusLink uuid={uuid} hubmap_id={hubmap_id} />
-            {visLiftedUUID && <GlobusLink uuid={visLiftedUUID} isSupport />}
-          </DetailSectionPaper>
-        </MarginTopDiv>
+        {files && (
+          <MarginBottomDiv>
+            <FileBrowser files={files} />
+          </MarginBottomDiv>
+        )}
+        <DetailSectionPaper>
+          <GlobusLink uuid={uuid} hubmap_id={hubmap_id} />
+          {visLiftedUUID && <GlobusLink uuid={visLiftedUUID} isSupport />}
+        </DetailSectionPaper>
         <FileBrowserDUA
           isOpen={isDialogOpen}
           handleAgree={handleDUAAgree}

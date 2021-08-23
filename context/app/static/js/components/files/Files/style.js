@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-const MarginTopDiv = styled.div`
-  margin-top: ${(props) => props.theme.spacing(2)}px;
+const MarginBottomDiv = styled.div`
+  margin-bottom: ${(props) => props.theme.spacing(2)}px;
 `;
 
-export { MarginTopDiv };
+export { MarginBottomDiv };
