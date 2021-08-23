@@ -49,7 +49,7 @@ function GlobusLink(props) {
           ) : (
             <StyledErrorIcon data-testid="error-icon" />
           )}
-          <StyledTypography variant="h6">Bulk Data Transfer {isSupport && '(Support)'}</StyledTypography>
+          <StyledTypography variant="h6">Bulk Data Transfer{isSupport && ' (Support)'}</StyledTypography>
         </Flex>
         <GlobusLinkMessage statusCode={statusCode} url={url} hubmap_id={hubmap_id} isSupport={isSupport} />
       </>
