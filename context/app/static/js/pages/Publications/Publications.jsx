@@ -23,16 +23,19 @@ function Publications(props) {
         <Paper>
           <Table>
             <TableBody>
-              {Object.entries(publications || []).map(([path, publication]) => (
-                <TableRow key={path}>
-                  <TableCell>
-                    <Typography variant="subtitle2" component="h3" color="primary">
-                      <LightBlueLink href={`/publication/${path}`}>{publication.title}</LightBlueLink>
-                    </Typography>
-                    {publication.authors}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {Object.entries(publications || [])
+                // eslint-disable-next-line no-unused-vars
+                .filter(([path, publication]) => publication?.is_public)
+                .map(([path, publication]) => (
+                  <TableRow key={path}>
+                    <TableCell>
+                      <Typography variant="subtitle2" component="h3" color="primary">
+                        <LightBlueLink href={`/publication/${path}`}>{publication.title}</LightBlueLink>
+                      </Typography>
+                      {publication.authors}
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </Paper>
