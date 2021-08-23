@@ -8,7 +8,6 @@ const StyledTypography = styled(Typography)`
 
 const Flex = styled.div`
   display: flex;
-  margin-top: ${(props) => props.theme.spacing(1)}px;
 `;
 
 const StyledErrorIcon = styled(ErrorIcon)`

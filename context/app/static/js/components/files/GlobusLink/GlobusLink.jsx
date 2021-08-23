@@ -42,6 +42,7 @@ function GlobusLink(props) {
   return (
     statusCode && (
       <>
+        {isSupport && <br />}
         <Flex>
           {statusCode === 200 ? (
             <StyledSuccessIcon data-testid="success-icon" />
