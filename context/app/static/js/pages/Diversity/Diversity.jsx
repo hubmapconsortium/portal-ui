@@ -12,166 +12,13 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import DonorChart from './DonorChart';
 import ProjectAttribution from './ProjectAttribution';
 import { PageTitleWrapper, PageTitle, ChartPaper, ChartTitle, DescriptionPaper } from './style';
-import { getKeyValues, getAgeLabels } from './utils';
+import { getKeyValues, getAgeLabels, makeCompositeQuery, makeHistogramSource, makeTermSource } from './utils';
 
-/* JSON query
- {
-     "size": 0,
-     "query": {
-         "bool": {
-             "filter": {
-                 "term": {
-                     "entity_type": "donor"
-                 }
-             }
-         }
-     },
-     "aggs": {
-         "mapped_metadata.sex": {
-             "terms": {
-                 "field": "mapped_metadata.sex.keyword"
-             }
-         }
-     }
- }
-
- */
-const donorRaceSexQuery = {
-  size: 0,
-  aggs: {
-    composite_data: {
-      composite: {
-        sources: [
-          {
-            'mapped_metadata.race': {
-              terms: {
-                field: 'mapped_metadata.race.keyword',
-              },
-            },
-          },
-          {
-            'mapped_metadata.blood_type': {
-              terms: {
-                field: 'mapped_metadata.blood_type.keyword',
-              },
-            },
-          },
-        ],
-        size: 10000,
-      },
-    },
-  },
-};
-
-const donorGenderRace = {
-  size: 0,
-  aggs: {
-    composite_data: {
-      composite: {
-        sources: [
-          {
-            'mapped_metadata.race': {
-              terms: {
-                field: 'mapped_metadata.race.keyword',
-              },
-            },
-          },
-          {
-            'mapped_metadata.sex': {
-              terms: {
-                field: 'mapped_metadata.sex.keyword',
-              },
-            },
-          },
-        ],
-        size: 10000,
-      },
-    },
-  },
-};
-
-const donorBloodtypeGender = {
-  size: 0,
-  aggs: {
-    composite_data: {
-      composite: {
-        sources: [
-          {
-            'mapped_metadata.sex': {
-              terms: {
-                field: 'mapped_metadata.sex.keyword',
-              },
-            },
-          },
-          {
-            'mapped_metadata.blood_type': {
-              terms: {
-                field: 'mapped_metadata.blood_type.keyword',
-              },
-            },
-          },
-        ],
-        size: 10000,
-      },
-    },
-  },
-};
-
-const donorAgeGender = {
-  size: 0,
-  aggs: {
-    composite_data: {
-      composite: {
-        sources: [
-          {
-            'mapped_metadata.age': {
-              histogram: {
-                field: 'mapped_metadata.age_value',
-                interval: 10,
-              },
-            },
-          },
-          {
-            'mapped_metadata.sex': {
-              terms: {
-                field: 'mapped_metadata.sex.keyword',
-              },
-            },
-          },
-        ],
-        size: 10000,
-      },
-    },
-  },
-};
-
-const donorAgeRace = {
-  size: 0,
-  aggs: {
-    composite_data: {
-      composite: {
-        sources: [
-          {
-            'mapped_metadata.age': {
-              histogram: {
-                field: 'mapped_metadata.age_value',
-                interval: 10,
-              },
-            },
-          },
-          {
-            'mapped_metadata.race': {
-              terms: {
-                field: 'mapped_metadata.race.keyword',
-              },
-            },
-          },
-        ],
-        size: 10000,
-      },
-    },
-  },
-};
+const donorAgeRaceQuery = makeCompositeQuery(makeHistogramSource('age'), makeTermSource('race'));
+const donorRaceBloodTypeQuery = makeCompositeQuery(makeTermSource('race'), makeTermSource('blood_type'));
+const donorRaceSexQuery = makeCompositeQuery(makeTermSource('race'), makeTermSource('sex'));
+const donorSexBloodTypeQuery = makeCompositeQuery(makeTermSource('sex'), makeTermSource('blood_type'));
+const donorAgeSexQuery = makeCompositeQuery(makeHistogramSource('age'), makeTermSource('sex'));
 
 const threeColors = ['#444A65', '#6C8938', '#DA348A'];
 const twoColors = threeColors.slice(0, 2);
@@ -193,7 +40,7 @@ function BloodTypeDescription() {
 }
 
 function Diversity() {
-  const { searchData } = useSearchData(donorAgeRace);
+  const { searchData } = useSearchData(donorAgeRaceQuery);
   if (!('aggregations' in searchData)) {
     return null;
   }
@@ -237,38 +84,26 @@ function Diversity() {
                   <TableRow>
                     <HeaderCell> </HeaderCell>
                     {headers.map((type) => (
-                      <HeaderCell> {type} </HeaderCell>
+                      <HeaderCell key={type}>{type}</HeaderCell>
                     ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <HeaderCell> White </HeaderCell>
-                    {age.map((type) => (
-                      <TableCell> {getCount(buckets, type, 'White')} </TableCell>
-                    ))}
-                  </TableRow>
-
-                  <TableRow>
-                    <HeaderCell> Black or African American </HeaderCell>
-                    {age.map((type) => (
-                      <TableCell> {getCount(buckets, type, 'Black or African American')} </TableCell>
-                    ))}
-                  </TableRow>
-
-                  <TableRow>
-                    <HeaderCell> Hispanic </HeaderCell>
-                    {age.map((type) => (
-                      <TableCell> {getCount(buckets, type, 'Hispanic')} </TableCell>
-                    ))}
-                  </TableRow>
+                  {['White', 'Black or African American', 'Hispanic'].map((value) => (
+                    <TableRow key={value}>
+                      <HeaderCell>{value}</HeaderCell>
+                      {age.map((type) => (
+                        <TableCell key={type}>{getCount(buckets, type, value)}</TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </StyledTableContainer>
           </ChartPaper>
 
           <DonorChart
-            donorQuery={donorRaceSexQuery}
+            donorQuery={donorRaceBloodTypeQuery}
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
@@ -279,7 +114,7 @@ function Diversity() {
             xAxisLabel="Blood Type"
           />
           <DonorChart
-            donorQuery={donorGenderRace}
+            donorQuery={donorRaceSexQuery}
             xKey="mapped_metadata.sex"
             yKey="mapped_metadata.race"
             colorKeys={['White', 'Black or African American', 'Hispanic']}
@@ -289,7 +124,7 @@ function Diversity() {
             xAxisLabel="Sex"
           />
           <DonorChart
-            donorQuery={donorBloodtypeGender}
+            donorQuery={donorSexBloodTypeQuery}
             xKey="mapped_metadata.blood_type"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
@@ -300,7 +135,7 @@ function Diversity() {
             xAxisLabel="Blood Type"
           />
           <DonorChart
-            donorQuery={donorAgeGender}
+            donorQuery={donorAgeSexQuery}
             xKey="mapped_metadata.age"
             yKey="mapped_metadata.sex"
             colorKeys={['Male', 'Female']}
