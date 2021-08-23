@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
 const GridAreaContainer = styled(Container)`
   grid-area: ${(props) => props.$gridAreaTitle};
@@ -42,4 +43,18 @@ const SectionHeader = styled(Typography)`
   margin-bottom: ${(props) => props.theme.spacing(1.5)}px;
 `;
 
-export { GridAreaContainer, GridArea, UpperGrid, LowerContainerGrid, SectionHeader, FlexGridArea, FlexGrowDiv };
+const OffsetDatasetsHeader = styled(SectionHeader)`
+  padding-top: ${headerHeight + 10}px;
+  margin-top: -${headerHeight + 10}px;
+`;
+
+export {
+  GridAreaContainer,
+  GridArea,
+  UpperGrid,
+  LowerContainerGrid,
+  SectionHeader,
+  OffsetDatasetsHeader,
+  FlexGridArea,
+  FlexGrowDiv,
+};
