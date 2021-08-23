@@ -1,11 +1,10 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
-import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import DetailContext from 'js/components/Detail/context';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import GlobusLink from '../GlobusLink';
+import GlobusSection from '../GlobusSection';
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../FileBrowserDUA';
 import FilesContext from './context';
@@ -46,10 +45,7 @@ function Files(props) {
             <FileBrowser files={files} />
           </MarginBottomDiv>
         )}
-        <DetailSectionPaper>
-          <GlobusLink uuid={uuid} hubmap_id={hubmap_id} />
-          {visLiftedUUID && <GlobusLink uuid={visLiftedUUID} isSupport />}
-        </DetailSectionPaper>
+        <GlobusSection uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         <FileBrowserDUA
           isOpen={isDialogOpen}
           handleAgree={handleDUAAgree}
