@@ -1,3 +1,16 @@
+## v0.25.3 - 2021-08-23
+
+- Softer warning if 403 from Entities API.
+- Add helper functions to simplify the diversity page.
+- Enable external links directly to HuBMAP datasets on home page.
+- Link to the diversity page from the footer.
+- Add a flag so we could put up draft publications, but not show them in the list.
+- Stub out publication page.
+- Add an index page which lists all publication.
+- Tiny grammar fix.
+- Globus link for support datasets.
+
+
 ## v0.25.2 - 2021-08-19
 
 - Deprecated assays are not present in `iterAssays` so we need to use `getAssayType` for Vitessce conf generation.

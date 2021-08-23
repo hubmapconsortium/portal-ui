@@ -1,1 +1,0 @@
-- Enable external links directly to HuBMAP datasets on home page.
