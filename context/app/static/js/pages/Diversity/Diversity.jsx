@@ -65,7 +65,6 @@ function Diversity() {
             colorKeys={['White', 'Black or African American', 'Hispanic']}
             colors={threeColors}
             title="Age & Race"
-            yAxisLabel="# of Donors"
             xAxisLabel="Age"
           />
           <DonorChart
@@ -76,7 +75,6 @@ function Diversity() {
             colors={threeColors}
             description={<BloodTypeDescription />}
             title="Blood Type & Race"
-            yAxisLabel="# of Donors"
             xAxisLabel="Blood Type"
           />
           <DonorChart
@@ -86,7 +84,6 @@ function Diversity() {
             colorKeys={['White', 'Black or African American', 'Hispanic']}
             colors={threeColors}
             title="Sex & Race"
-            yAxisLabel="# of Donors"
             xAxisLabel="Sex"
           />
           <DonorChart
@@ -97,7 +94,6 @@ function Diversity() {
             colors={twoColors}
             title="Blood Type & Sex"
             description={<BloodTypeDescription />}
-            yAxisLabel="# of Donors"
             xAxisLabel="Blood Type"
           />
           <DonorChart
@@ -107,7 +103,6 @@ function Diversity() {
             colorKeys={['Male', 'Female']}
             colors={twoColors}
             title="Age & Sex"
-            yAxisLabel="# of Donors"
             xAxisLabel="Age"
           />
           <ProjectAttribution />

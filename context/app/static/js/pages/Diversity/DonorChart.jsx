@@ -9,7 +9,7 @@ import { getKeyValues, getAgeLabels } from './utils';
 Chart.defaults.font.size = 18;
 
 function DonorChart(props) {
-  const { title, donorQuery, xKey, yKey, colorKeys, colors, description, xAxisLabel, yAxisLabel } = props;
+  const { title, donorQuery, xKey, yKey, colorKeys, colors, description, xAxisLabel } = props;
 
   const { searchData } = useSearchData(donorQuery);
   if (!('aggregations' in searchData)) {
@@ -40,7 +40,7 @@ function DonorChart(props) {
     scales: {
       yAxes: {
         title: {
-          text: yAxisLabel,
+          text: '# of Donors',
           display: true,
         },
         ticks: {
