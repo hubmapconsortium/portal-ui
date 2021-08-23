@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Typography from '@material-ui/core/Typography';
@@ -28,19 +28,12 @@ import {
 function Home() {
   const theme = useTheme();
   const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
-  const [headerNodeExists, setHeaderNodeExists] = useState(false);
 
-  const trackedRef = useCallback((node) => {
-    if (node !== null) {
-      setHeaderNodeExists(true);
+  const scrollToBarChart = useCallback((node) => {
+    if (node !== null && document.location.hash === '#hubmap-datasets') {
+      node.scrollIntoView({ behavior: 'auto', block: 'start' });
     }
   }, []);
-
-  useEffect(() => {
-    if (document.location.hash === '#hubmap-datasets' && headerNodeExists) {
-      document.querySelector('#hubmap-datasets').scrollIntoView({ behavior: 'auto', block: 'start' });
-    }
-  }, [headerNodeExists]);
 
   return (
     <>
@@ -60,7 +53,7 @@ function Home() {
       <LowerContainerGrid maxWidth="lg">
         {isLargerThanMd && (
           <GridArea $gridAreaTitle="bar-chart">
-            <OffsetDatasetsHeader variant="h4" component="h3" id="hubmap-datasets" ref={trackedRef}>
+            <OffsetDatasetsHeader variant="h4" component="h3" id="hubmap-datasets" ref={scrollToBarChart}>
               HuBMAP Datasets
             </OffsetDatasetsHeader>
             <AssayTypeBarChartContainer />
