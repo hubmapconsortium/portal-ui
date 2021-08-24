@@ -6,6 +6,7 @@ import sys
 from yaml import dump
 from datetime import date
 from dataclasses import dataclass
+import requests
 
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -14,7 +15,16 @@ def main():
         type=dir_path,
         default=Path(__file__).parent.parent / 'context/app/organ',
         help='Target directory for markdown files')
+    parser.add_argument(
+        '--csv_url',
+        default='https://hubmapconsortium.github.io/ccf-releases/v1.0/models/ASCT-B_3D_Models_Mapping.csv',
+        help='ASCT+B Tables to 3D Reference Object Library Mapping CSV URL')
     args = parser.parse_args()
+
+    csv_path = Path(__file__).parent / 'asctb.csv'
+    if not csv_path.exists():
+        csv_text = requests.get(args.csv_url).text
+        csv_path.write_text(csv_text)
     DirectoryWriter(args.target, [Organ(stem='heart', title='Heart')]).write()
 
 
