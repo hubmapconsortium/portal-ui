@@ -377,15 +377,17 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         # https://github.com/hubmapconsortium/portal-containers/blob/master/containers/sprm-to-anndata
         # has information on how these keys are generated.
         obs_keys = [
-            "K-Means [Covariance] Expression",
-            "K-Means [Mean-All-SubRegions] Expression",
-            "K-Means [Mean] Expression",
-            "K-Means [Shape-Vectors]",
-            "K-Means [Texture]",
-            "K-Means [Total] Expression",
-            "K-Means [tSNE_All_Features]"
+            "Cell K-Means [tSNE_All_Features]",
+            "Cell K-Means [Mean-All-SubRegions] Expression",
+            "Cell K-Means [Mean] Expression",
+            "Cell K-Means [Shape-Vectors]",
+            "Cell K-Means [Texture]",
+            "Cell K-Means [Total] Expression",
+            "Cell K-Means [Covariance] Expression",
         ]
         anndata_wrapper = AnnDataWrapper(
+            mappings_obsm=["tsne"],
+            mappings_obsm_names=["TSNE"],
             adata_url=adata_url,
             spatial_centroid_obsm="xy",
             cell_set_obs=obs_keys,
@@ -405,7 +407,8 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         return ConfCells(vc.to_dict(), None)
 
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
-        vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=7, h=8)
+        vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=4, h=8)
+        vc.add_view(dataset, cm.SCATTERPLOT, mapping="TSNE", x=7, y=0, w=3, h=8)
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
         vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
         vc.add_view(dataset, cm.CELL_SETS, x=10, y=5, w=2, h=7)
