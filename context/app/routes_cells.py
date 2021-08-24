@@ -1,4 +1,4 @@
-from itertools import islice
+from itertools import islice, groupby
 
 from flask import render_template, current_app, request
 
@@ -6,6 +6,7 @@ from hubmap_api_py_client import Client
 
 from .utils import get_default_flask_data, make_blueprint
 
+from operator import itemgetter
 
 blueprint = make_blueprint(__name__)
 
@@ -64,6 +65,32 @@ def _first_n_matches(strings, substring, n):
         'match': s[offset:offset + len(substring)],
         'post': s[offset + len(substring):]
     } for s, offset in zip(first_n, offsets)]
+
+
+def get_cluster_cells(cells, gene, min_gene_expression):
+    cluster_cells = []
+    for cell in cells:
+        for cluster in cell['clusters']:
+            cluster_name_arr = cluster.split('-')
+            cluster_number = cluster_name_arr.pop()
+            cluster_name = '-'.join(cluster_name_arr)
+            
+            cluster_cells.append({'modality': cell['modality'], 'cluster_name': cluster_name, 'cluster_number': cluster_number, 'meets_minimum_gene_expression': cell['values'][gene] >= min_gene_expression})
+    return cluster_cells
+
+
+def get_matched_cell_counts_per_cluster(cells):
+  grouper = itemgetter("cluster_name", "cluster_number", 'modality')
+  clusters = {}
+  for key, grp in groupby(sorted(cells, key = grouper), grouper):
+    grp_list = list(grp)
+    cluster = dict(zip(["cluster_name", "cluster_number", 'modality'], key))
+    if not cluster['cluster_name'] in clusters:
+        clusters[cluster['cluster_name']] = []
+    cluster['matched'] = sum(item["meets_minimum_gene_expression"] for item in grp_list)
+    cluster['unmatched'] = len(grp_list) - cluster['matched']
+    clusters[cluster['cluster_name']].append(cluster)
+  return clusters
 
 
 @blueprint.route('/cells/genes-by-substring.json', methods=['POST'])
@@ -157,3 +184,25 @@ def all_indexed_uuids():
 
     except Exception as e:
         return {'message': str(e)}
+
+@blueprint.route('/cells/cells-in-dataset-clusters.json', methods=['POST'])
+def cells_in_dataset_clusters():
+    # For a single dataset we want to get the expression level of a given gene for all cells.
+    # (In our discussion, we started by thinking about the set of matching cells,
+    # and then showing expression levels for the two groups, but that’s not needed.)
+
+    uuid = request.args.get('uuid')
+    gene_name = request.args.get('gene_name')
+    min_gene_expression = request.args.get('min_gene_expression')
+    client = _get_client(current_app)
+
+    try:
+        cells = client.select_cells(where='dataset', has=[uuid])
+        cells_list = list(cells.get_list(values_included=gene_name))
+
+        # list() will call iterator behind the scenes.
+        return {'results': get_matched_cell_counts_per_cluster(get_cluster_cells(cells_list, gene_name, float(min_gene_expression)))}
+
+    except Exception as e:
+        return {'message': str(e)}
+
