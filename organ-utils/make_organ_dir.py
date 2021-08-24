@@ -6,6 +6,7 @@ import sys
 from datetime import date
 from dataclasses import dataclass
 import csv
+from itertools import groupby
 
 import requests
 from yaml import dump
@@ -39,8 +40,22 @@ def _parse_asctb(csv_url):
         data_lines = csv_lines[i:]
         csv_path.write_text('\n'.join(data_lines))
     reader = csv.DictReader(csv_path.open())
-    for row in reader:
-        print(row)
+    key_func = lambda row: row['anatomical_structure_of']
+    rows = sorted(reader, key=key_func)
+    groups = [
+        {
+            'id': key,
+            'anatomy': {
+                row['OntologyID']: {'label': row['label']} 
+                for row in list_group
+            },
+            'glb': list_group[0]['glb file of single organs']
+        }
+        for key, group in groupby(rows, key_func)
+        if (list_group := list(group))
+    ]
+    from pprint import pprint
+    pprint(groups)
 
 
 @dataclass
