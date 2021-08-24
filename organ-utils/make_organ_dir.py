@@ -3,10 +3,13 @@
 import argparse
 from pathlib import Path
 import sys
-from yaml import dump
 from datetime import date
 from dataclasses import dataclass
+import csv
+
 import requests
+from yaml import dump
+
 
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -21,11 +24,23 @@ def main():
         help='ASCT+B Tables to 3D Reference Object Library Mapping CSV URL')
     args = parser.parse_args()
 
+    _parse_asctb(args.csv_url)
+    DirectoryWriter(args.target, [Organ(stem='heart', title='Heart')]).write()
+
+
+def _parse_asctb(csv_url):
     csv_path = Path(__file__).parent / 'asctb.csv'
     if not csv_path.exists():
-        csv_text = requests.get(args.csv_url).text
-        csv_path.write_text(csv_text)
-    DirectoryWriter(args.target, [Organ(stem='heart', title='Heart')]).write()
+        csv_lines = requests.get(csv_url).text.split('\n')
+        for i, line in enumerate(csv_lines):
+            # Skip the header rows...
+            if line.startswith('anatomical_structure_of'):
+                break
+        data_lines = csv_lines[i:]
+        csv_path.write_text('\n'.join(data_lines))
+    reader = csv.DictReader(csv_path.open())
+    for row in reader:
+        print(row)
 
 
 @dataclass
