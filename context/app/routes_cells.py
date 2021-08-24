@@ -67,14 +67,18 @@ def _first_n_matches(strings, substring, n):
     } for s, offset in zip(first_n, offsets)]
 
 
+def get_cluster_name_and_number(cluster_str):
+    cluster_name_arr = cluster_str.split('-')
+    cluster_number = cluster_name_arr.pop()
+    cluster_name = '-'.join(cluster_name_arr)
+    return (cluster_name, cluster_number)
+
+
 def get_cluster_cells(cells, gene, min_gene_expression):
     cluster_cells = []
     for cell in cells:
         for cluster in cell['clusters']:
-            cluster_name_arr = cluster.split('-')
-            cluster_number = cluster_name_arr.pop()
-            cluster_name = '-'.join(cluster_name_arr)
-            
+            cluster_name, cluster_number = get_cluster_name_and_number(cluster)
             cluster_cells.append({'modality': cell['modality'], 'cluster_name': cluster_name, 'cluster_number': cluster_number, 'meets_minimum_gene_expression': cell['values'][gene] >= min_gene_expression})
     return cluster_cells
 
