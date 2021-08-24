@@ -1,4 +1,5 @@
 ---
+in_index: true
 instances:
 - anatomy:
     UBERON:0000059: large intestine
@@ -16,7 +17,9 @@ instances:
   id: '#VHMColon'
   label: large intestine
   sex: Male
-title: Large intestine
+title: Large Intestine
 ---
+
+# Large Intestine
 
 TODO

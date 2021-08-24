@@ -1,4 +1,5 @@
 ---
+in_index: true
 instances:
 - anatomy:
     UBERON:0000029: lymph node
@@ -50,7 +51,9 @@ instances:
   id: '#VHMRightLymphNode'
   label: lymph node
   sex: Male
-title: Lymph node
+title: Lymph Node
 ---
+
+# Lymph Node
 
 TODO

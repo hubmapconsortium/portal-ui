@@ -1,4 +1,5 @@
 ---
+in_index: false
 instances:
 - anatomy:
     UBERON:0001004: respiratory system
@@ -93,7 +94,9 @@ instances:
   id: '#VHMLung'
   label: respiratory system
   sex: Male
-title: Respiratory system
+title: Respiratory System
 ---
+
+# Respiratory System
 
 TODO

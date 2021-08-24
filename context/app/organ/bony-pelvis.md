@@ -1,4 +1,5 @@
 ---
+in_index: false
 instances:
 - anatomy:
     UBERON:0001270: bony pelvis
@@ -26,7 +27,9 @@ instances:
   id: '#VHMPelvis'
   label: bony pelvis
   sex: Male
-title: Bony pelvis
+title: Bony Pelvis
 ---
+
+# Bony Pelvis
 
 TODO

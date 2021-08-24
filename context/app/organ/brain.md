@@ -1,4 +1,5 @@
 ---
+in_index: false
 instances:
 - anatomy:
     UBERON:0000955: brain
@@ -26,5 +27,7 @@ instances:
   sex: Male
 title: Brain
 ---
+
+# Brain
 
 TODO

@@ -25,11 +25,52 @@ def main():
         help='ASCT+B Tables to 3D Reference Object Library Mapping CSV URL')
     args = parser.parse_args()
 
+    es_organs = _get_es_organs()
+
     organ_data = _parse_asctb_rows(_get_asctb_rows(args.csv_url))
     organs = [
-        Organ(title=label.capitalize(), stem=label.replace(' ', '-'), data=data)
-        for label, data in organ_data.items()]
+        Organ(
+            title=title,
+            stem=label.replace(' ', '-'),
+            in_index=title in es_organs,
+            instances=instances)
+        for label, instances in organ_data.items()
+        if (title := _label_to_es(label))
+    ]
     DirectoryWriter(args.target, organs).write()
+
+
+def _get_es_organs():
+    agg_name = 'organs'
+    response = requests.post(
+        'https://search.api.hubmapconsortium.org/portal/search',
+        json={
+            "size": 0,
+            "aggs": {
+                agg_name: {
+                    "terms": {
+                        "field": "origin_sample.mapped_organ.keyword",
+                        "size": 100
+                    }
+                }
+            }
+        }).json()
+    return [b['key'] for b in response['aggregations'][agg_name]['buckets']]
+
+
+def _label_to_es(label):
+    '''
+    >>> _label_to_es('large intestine')
+    'Large Intestine'
+    >>> _label_to_es('right kidney')
+    'Kidney (Right)'
+    >>> _label_to_es('heart')
+    'Heart'
+    '''
+    words = [w.capitalize() for w in label.split(' ')]
+    if words[0] in ['Left', 'Right']:
+        words.append(f'({words.pop(0)})')
+    return ' '.join(words)
 
 
 def _get_asctb_rows(csv_url):
@@ -124,11 +165,19 @@ def _parse_asctb_rows(rows):
 class Organ:
     stem: str
     title: str
-    data: dict
+    instances: list
+    in_index: bool
 
     def yaml_front_matter(self):
-        data = {'title': self.title, 'instances': self.data}
+        data = {
+            'title': self.title,
+            'instances': self.instances,
+            'in_index': self.in_index
+        }
         return f'---\n{dump(data)}---\n\n'
+
+    def markdown(self):
+        return f'# {self.title}\n\nTODO'
 
 
 def dir_path(s):
@@ -153,7 +202,7 @@ class DirectoryWriter():
         print(f'Writing to {file}...')
         file.write_text(
             organ.yaml_front_matter()
-            + 'TODO'
+            + organ.markdown()
         )
         
 

@@ -1,4 +1,5 @@
 ---
+in_index: true
 instances:
 - anatomy:
     UBERON:0000948: heart
@@ -46,5 +47,7 @@ instances:
   sex: Male
 title: Heart
 ---
+
+# Heart
 
 TODO

@@ -1,4 +1,5 @@
 ---
+in_index: false
 instances:
 - anatomy:
     UBERON:0002097: skin of body
@@ -12,7 +13,9 @@ instances:
   id: '#VHMSkin'
   label: skin of body
   sex: Male
-title: Skin of body
+title: Skin Of Body
 ---
+
+# Skin Of Body
 
 TODO

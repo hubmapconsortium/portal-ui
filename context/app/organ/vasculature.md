@@ -1,4 +1,5 @@
 ---
+in_index: false
 instances:
 - anatomy:
     UBERON:0000947: aorta
@@ -86,5 +87,7 @@ instances:
   sex: Male
 title: Vasculature
 ---
+
+# Vasculature
 
 TODO

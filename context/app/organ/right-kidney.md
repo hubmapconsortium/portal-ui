@@ -1,4 +1,5 @@
 ---
+in_index: true
 instances:
 - anatomy:
     UBERON:0000362: renal medulla
@@ -38,7 +39,9 @@ instances:
   id: '#VHMRightKidney'
   label: right kidney
   sex: Male
-title: Right kidney
+title: Kidney (Right)
 ---
+
+# Kidney (Right)
 
 TODO

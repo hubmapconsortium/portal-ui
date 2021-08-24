@@ -1,4 +1,5 @@
 ---
+in_index: true
 instances:
 - anatomy:
     UBERON:0002370: thymus
@@ -10,5 +11,7 @@ instances:
   sex: Male
 title: Thymus
 ---
+
+# Thymus
 
 TODO

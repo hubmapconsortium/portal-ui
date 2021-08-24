@@ -1,4 +1,5 @@
 ---
+in_index: true
 instances:
 - anatomy:
     UBERON:0001248: hilum of spleen
@@ -13,5 +14,7 @@ instances:
   sex: Male
 title: Spleen
 ---
+
+# Spleen
 
 TODO
