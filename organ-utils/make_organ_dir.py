@@ -25,11 +25,14 @@ def main():
         help='ASCT+B Tables to 3D Reference Object Library Mapping CSV URL')
     args = parser.parse_args()
 
-    _parse_asctb(args.csv_url)
-    DirectoryWriter(args.target, [Organ(stem='heart', title='Heart')]).write()
+    organ_data = _parse_asctb_rows(_get_asctb_rows(args.csv_url))
+    organs = [
+        Organ(title=label.capitalize(), stem=label.replace(' ', '-'), data=data)
+        for label, data in organ_data.items()]
+    DirectoryWriter(args.target, organs).write()
 
 
-def _parse_asctb(csv_url):
+def _get_asctb_rows(csv_url):
     csv_path = Path(__file__).parent / 'asctb.csv'
     if not csv_path.exists():
         csv_lines = requests.get(csv_url).text.split('\n')
@@ -39,32 +42,92 @@ def _parse_asctb(csv_url):
                 break
         data_lines = csv_lines[i:]
         csv_path.write_text('\n'.join(data_lines))
-    reader = csv.DictReader(csv_path.open())
-    key_func = lambda row: row['anatomical_structure_of']
-    rows = sorted(reader, key=key_func)
+    return csv.DictReader(csv_path.open())
+
+
+def _parse_asctb_rows(rows):
+    '''
+    >>> rows = [
+    ...     {
+    ...         'glb file of single organs': 'VH_F_Thymus',
+    ...         'OntologyID': 'UBERON:0002370',
+    ...         'label': 'thymus',
+    ...         'anatomical_structure_of': '#VHFThymus'},
+    ...     {
+    ...         'glb file of single organs': 'VH_M_Thymus',
+    ...         'OntologyID': 'UBERON:0002370',
+    ...         'label': 'thymus',
+    ...         'anatomical_structure_of': '#VHMThymus'},
+    ...     {
+    ...         'OntologyID': 'UBERON:0005457',
+    ...         'label': 'left thymus lobe',
+    ...         'anatomical_structure_of': '#VHMThymus'},
+    ...     {
+    ...         'OntologyID': 'UBERON:0005469',
+    ...         'label': 'REPEAT!!!!!!!',
+    ...         'anatomical_structure_of': '#VHMThymus'},
+    ...     {
+    ...         'OntologyID': 'UBERON:0005469',
+    ...         'label': 'right thymus lobe',
+    ...         'anatomical_structure_of': '#VHMThymus'}
+    ... ]
+    >>> from pprint import pp
+    >>> pp(_parse_asctb_rows(rows))
+    {'thymus': [{'id': '#VHFThymus',
+                 'label': 'thymus',
+                 'anatomy': {'UBERON:0002370': 'thymus'},
+                 'glb': 'VH_F_Thymus',
+                 'sex': 'Female'},
+                {'id': '#VHMThymus',
+                 'label': 'thymus',
+                 'anatomy': {'UBERON:0002370': 'thymus',
+                             'UBERON:0005457': 'left thymus lobe',
+                             'UBERON:0005469': 'right thymus lobe'},
+                 'glb': 'VH_M_Thymus',
+                 'sex': 'Male'}]}
+    '''
+    get_anatomy = lambda row: row['anatomical_structure_of']
+    rows = sorted(rows, key=get_anatomy)
     groups = [
         {
             'id': key,
+            'label': label,
             'anatomy': {
-                row['OntologyID']: {'label': row['label']} 
+                # Use dict to de-dupe.
+                row['OntologyID']: row['label'] 
                 for row in list_group
+                if row['label']
             },
-            'glb': list_group[0]['glb file of single organs']
+            'glb': glb,
+            'sex': {'M': 'Male', 'F': 'Female'}[sex_abbr]
         }
-        for key, group in groupby(rows, key_func)
+        for key, group in groupby(rows, get_anatomy)
         if (list_group := list(group))
+        # List order seems to matter, but I would prefer
+        # a more reliable way of extracing the information...
+        and (glb := list_group[0]['glb file of single organs'])
+        and (label := list_group[0]['label'])
+        # ... and this could be better, too. 
+        and (sex_abbr := glb.split('_')[1])
     ]
-    from pprint import pprint
-    pprint(groups)
+
+    get_label = lambda group: group['label']
+    groups = sorted(groups, key=get_label)
+    m_f_pairs = {
+        key: list(group)
+        for key, group in groupby(groups, get_label)
+    }
+    return m_f_pairs
 
 
 @dataclass
 class Organ:
     stem: str
     title: str
+    data: dict
 
     def yaml_front_matter(self):
-        data = {'title': self.title}
+        data = {'title': self.title, 'instances': self.data}
         return f'---\n{dump(data)}---\n\n'
 
 
