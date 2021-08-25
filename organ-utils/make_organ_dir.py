@@ -7,7 +7,9 @@ from datetime import date
 from dataclasses import dataclass
 import csv
 from itertools import groupby
+from io import StringIO
 
+from lxml import etree
 import requests
 from yaml import dump
 
@@ -20,28 +22,47 @@ def main():
         default=Path(__file__).parent.parent / 'context/app/organ',
         help='Target directory for markdown files')
     parser.add_argument(
-        '--csv_url',
+        '--asctb_csv_url',
         default='https://hubmapconsortium.github.io/ccf-releases/v1.0/models/ASCT-B_3D_Models_Mapping.csv',
         help='ASCT+B Tables to 3D Reference Object Library Mapping CSV URL')
     parser.add_argument(
-        '--es_url',
+        '--elasticsearch_url',
         default='https://search.api.hubmapconsortium.org/portal/search',
         help='ES endpoint to query for organs')
+    parser.add_argument(
+        '--azimuth_url',
+        default='https://azimuth.hubmapconsortium.org/references/',
+        help='HTML to scrape for Azimuth references')
     args = parser.parse_args()
 
-    es_organs = _get_es_organs(args.es_url)
+    es_organs = _get_es_organs(args.elasticsearch_url)
+    azimuth_data = _parse_azimuth_html(_get_azimuth_html(args.azimuth_url))
+    asctb_data = _parse_asctb_rows(_get_asctb_rows(args.asctb_csv_url))
 
-    organ_data = _parse_asctb_rows(_get_asctb_rows(args.csv_url))
     organs = [
         Organ(
             title=title,
             stem=label.replace(' ', '-'),
             in_index=title in es_organs,
             instances=instances)
-        for label, instances in organ_data.items()
+        for label, instances in asctb_data.items()
         if (title := _label_to_es(label))
     ]
     DirectoryWriter(args.target, organs).write()
+
+
+def _parse_azimuth_html(html):
+    parser = etree.HTMLParser()
+    tree = etree.parse(StringIO(html), parser)
+    # TODO: xpath
+
+
+def _get_azimuth_html(url):
+    html_path = Path(__file__).parent / 'azimuth.html'
+    if not html_path.exists():
+        html = requests.get(url).text
+        html_path.write_text(html)
+    return html_path.read_text()
 
 
 def _get_es_organs(es_url):
