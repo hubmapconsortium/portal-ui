@@ -8,6 +8,7 @@ from dataclasses import dataclass
 import csv
 from itertools import groupby
 import re
+from typing import DefaultDict
 
 from bs4 import BeautifulSoup
 import requests
@@ -35,10 +36,20 @@ def main():
         help='HTML to scrape for Azimuth references')
     args = parser.parse_args()
 
-    es_organs = _get_es_organs(args.elasticsearch_url)
-    azimuth_data = _parse_azimuth_html(_get_azimuth_html(args.azimuth_url))
-    print(azimuth_data)
-    asctb_data = _parse_asctb_rows(_get_asctb_rows(args.asctb_csv_url))
+    search_data = \
+        _parse_search_response(_get_search_response(args.elasticsearch_url))
+    azimuth_data = _duplicate_azimuth(
+        _parse_azimuth_html(_get_azimuth_html(args.azimuth_url)))
+    asctb_data = _rekey_asctb(
+        _parse_asctb_rows(_get_asctb_rows(args.asctb_csv_url)))
+    merged_data = _merge_data(
+        search=search_data,
+        azimuth=azimuth_data,
+        asctb=asctb_data
+    )
+    import pprint
+    pprint.pp(merged_data)
+    return
 
     organs = [
         Organ(
@@ -50,6 +61,39 @@ def main():
         if (title := _label_to_es(label))
     ]
     DirectoryWriter(args.target, organs).write()
+
+
+def _merge_data(**kwargs):
+    '''
+    >>> merged = _merge_data(
+    ...     capital={
+    ...         'USA': 'Washington',
+    ...         'UK': 'London'},
+    ...     population={
+    ...         'USA': 3e8,
+    ...         'China': 1e9})
+    >>> from pprint import pp
+    >>> pp(merged)
+    {'USA': {'capital': 'Washington', 'population': 300000000.0},
+     'UK': {'capital': 'London'},
+     'China': {'population': 1000000000.0}}
+    '''
+    merged = DefaultDict(dict)
+    for source, data in kwargs.items():
+        for key, value in data.items():
+            merged[key][source] = value
+    return dict(merged)
+
+
+###### Azimuth #######
+
+def _get_azimuth_html(url):
+    html_path = Path(__file__).parent / 'azimuth.html'
+    if not html_path.exists():
+        html = requests.get(url).text
+        soup = BeautifulSoup(html, features="lxml")
+        html_path.write_text(soup.prettify())
+    return html_path.read_text()
 
 
 def _parse_azimuth_html(html):
@@ -87,18 +131,19 @@ def _parse_azimuth_html(html):
     return titles_links
 
 
-def _get_azimuth_html(url):
-    html_path = Path(__file__).parent / 'azimuth.html'
-    if not html_path.exists():
-        html = requests.get(url).text
-        soup = BeautifulSoup(html, features="lxml")
-        html_path.write_text(soup.prettify())
-    return html_path.read_text()
+def _duplicate_azimuth(data):
+    for organ in ['Kidney', 'Lung']:
+        organ_data = data.pop(organ)
+        data[f'{organ} (Left)'] = organ_data
+        data[f'{organ} (Right)'] = organ_data
+    return data
 
 
-def _get_es_organs(es_url):
+###### Search #######
+
+def _get_search_response(es_url):
     agg_name = 'organs'
-    response = requests.post(
+    return requests.post(
         es_url,
         json={
             "size": 0,
@@ -111,8 +156,14 @@ def _get_es_organs(es_url):
                 }
             }
         }).json()
-    return [b['key'] for b in response['aggregations'][agg_name]['buckets']]
 
+
+def _parse_search_response(response):
+    agg_name = 'organs'
+    return {b['key']: True for b in response['aggregations'][agg_name]['buckets']}
+
+
+###### ASCTB #######
 
 def _label_to_es(label):
     '''
