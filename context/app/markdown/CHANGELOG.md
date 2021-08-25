@@ -1,3 +1,8 @@
+## v0.25.4 - 2021-08-25
+
+- Update SPRM viz to include new naming conventions + tsne.
+
+
 ## v0.25.3 - 2021-08-23
 
 - Softer warning if 403 from Entities API.
