@@ -7,9 +7,9 @@ from datetime import date
 from dataclasses import dataclass
 import csv
 from itertools import groupby
-from io import StringIO
+import re
 
-from lxml import etree
+from bs4 import BeautifulSoup
 import requests
 from yaml import dump
 
@@ -37,6 +37,7 @@ def main():
 
     es_organs = _get_es_organs(args.elasticsearch_url)
     azimuth_data = _parse_azimuth_html(_get_azimuth_html(args.azimuth_url))
+    print(azimuth_data)
     asctb_data = _parse_asctb_rows(_get_asctb_rows(args.asctb_csv_url))
 
     organs = [
@@ -52,16 +53,46 @@ def main():
 
 
 def _parse_azimuth_html(html):
-    parser = etree.HTMLParser()
-    tree = etree.parse(StringIO(html), parser)
-    # TODO: xpath
+    '''
+    >>> html = """
+    ...     <h2>Human - Funny Bone</h2>
+    ...     <div>
+    ...       <a class="app-btn"      href="http://example.com/app">App</a>
+    ...       <a class="vitessce-btn" href="/vitessce"             >Reference</a>
+    ...     </div>
+    ... """
+    >>> from pprint import pp
+    >>> pp(_parse_azimuth_html(html))
+    {'Funny Bone': {'app_url': 'http://example.com/app',
+                    'vitessce_url': 'https://azimuth.hubmapconsortium.org/vitessce'}}
+    '''
+    soup = BeautifulSoup(html, features="lxml")
+    titles = soup.find_all('h2')
+    titles_buttons_div = {
+        title.text.strip(): title.find_next('div')
+        for title in titles
+    }
+    titles_links = {
+        title.split(' - ')[1]: {
+            f'{tool}_url':
+                re.sub(
+                    r'^/', 'https://azimuth.hubmapconsortium.org/',
+                    button['href'])
+            for tool in ['app', 'vitessce', 'zenodo', 'snakemake']
+            if (button := div.find(class_=f'{tool}-btn'))
+        }
+        for title, div in titles_buttons_div.items()
+        if 'Human' in title
+    }
+    return titles_links
 
 
 def _get_azimuth_html(url):
     html_path = Path(__file__).parent / 'azimuth.html'
     if not html_path.exists():
         html = requests.get(url).text
-        html_path.write_text(html)
+        soup = BeautifulSoup(html, features="lxml")
+        html_path.write_text(soup.prettify())
     return html_path.read_text()
 
 
