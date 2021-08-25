@@ -23,9 +23,13 @@ def main():
         '--csv_url',
         default='https://hubmapconsortium.github.io/ccf-releases/v1.0/models/ASCT-B_3D_Models_Mapping.csv',
         help='ASCT+B Tables to 3D Reference Object Library Mapping CSV URL')
+    parser.add_argument(
+        '--es_url',
+        default='https://search.api.hubmapconsortium.org/portal/search',
+        help='ES endpoint to query for organs')
     args = parser.parse_args()
 
-    es_organs = _get_es_organs()
+    es_organs = _get_es_organs(args.es_url)
 
     organ_data = _parse_asctb_rows(_get_asctb_rows(args.csv_url))
     organs = [
@@ -40,10 +44,10 @@ def main():
     DirectoryWriter(args.target, organs).write()
 
 
-def _get_es_organs():
+def _get_es_organs(es_url):
     agg_name = 'organs'
     response = requests.post(
-        'https://search.api.hubmapconsortium.org/portal/search',
+        es_url,
         json={
             "size": 0,
             "aggs": {
