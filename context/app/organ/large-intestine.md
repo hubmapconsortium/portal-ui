@@ -1,6 +1,5 @@
 ---
-in_index: true
-instances:
+asctb:
 - anatomy:
     UBERON:0000059: large intestine
     UBERON:0000569: ileocecal valve
@@ -17,7 +16,7 @@ instances:
   id: '#VHMColon'
   label: large intestine
   sex: Male
-title: Large Intestine
+search: true
 ---
 
 # Large Intestine

@@ -1,6 +1,5 @@
 ---
-in_index: false
-instances:
+asctb:
 - anatomy:
     UBERON:0002097: skin of body
   glb: VH_F_Skin
@@ -13,7 +12,6 @@ instances:
   id: '#VHMSkin'
   label: skin of body
   sex: Male
-title: Skin Of Body
 ---
 
 # Skin Of Body

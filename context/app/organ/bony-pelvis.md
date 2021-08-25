@@ -1,6 +1,5 @@
 ---
-in_index: false
-instances:
+asctb:
 - anatomy:
     UBERON:0001270: bony pelvis
     UBERON:0001273: ilium
@@ -27,7 +26,6 @@ instances:
   id: '#VHMPelvis'
   label: bony pelvis
   sex: Male
-title: Bony Pelvis
 ---
 
 # Bony Pelvis

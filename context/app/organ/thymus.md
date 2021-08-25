@@ -1,6 +1,5 @@
 ---
-in_index: true
-instances:
+asctb:
 - anatomy:
     UBERON:0002370: thymus
     UBERON:0005457: left thymus lobe
@@ -9,7 +8,7 @@ instances:
   id: '#VHMThymus'
   label: thymus
   sex: Male
-title: Thymus
+search: true
 ---
 
 # Thymus

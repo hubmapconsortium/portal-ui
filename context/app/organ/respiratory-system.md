@@ -1,6 +1,5 @@
 ---
-in_index: false
-instances:
+asctb:
 - anatomy:
     UBERON:0001004: respiratory system
     UBERON:0001740: arytenoid cartilage
@@ -94,7 +93,6 @@ instances:
   id: '#VHMLung'
   label: respiratory system
   sex: Male
-title: Respiratory System
 ---
 
 # Respiratory System

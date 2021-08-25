@@ -1,6 +1,5 @@
 ---
-in_index: true
-instances:
+asctb:
 - anatomy:
     UBERON:0000029: lymph node
     UBERON:0002007: medulla of lymph node
@@ -51,7 +50,7 @@ instances:
   id: '#VHMRightLymphNode'
   label: lymph node
   sex: Male
-title: Lymph Node
+search: true
 ---
 
 # Lymph Node

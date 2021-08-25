@@ -1,6 +1,5 @@
 ---
-in_index: true
-instances:
+asctb:
 - anatomy:
     UBERON:0001248: hilum of spleen
     UBERON:0002106: spleen
@@ -12,7 +11,7 @@ instances:
   id: '#VHMSpleen'
   label: spleen
   sex: Male
-title: Spleen
+search: true
 ---
 
 # Spleen

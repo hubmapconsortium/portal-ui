@@ -1,6 +1,5 @@
 ---
-in_index: false
-instances:
+asctb:
 - anatomy:
     UBERON:0000947: aorta
     UBERON:0001139: common iliac vein
@@ -85,7 +84,6 @@ instances:
   id: '#VHMVasculature'
   label: vasculature
   sex: Male
-title: Vasculature
 ---
 
 # Vasculature

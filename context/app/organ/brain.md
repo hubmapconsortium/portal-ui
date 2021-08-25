@@ -1,6 +1,5 @@
 ---
-in_index: false
-instances:
+asctb:
 - anatomy:
     UBERON:0000955: brain
     UBERON:0001898: hypothalamus
@@ -25,7 +24,6 @@ instances:
   id: '#VHMAllenBrain'
   label: brain
   sex: Male
-title: Brain
 ---
 
 # Brain

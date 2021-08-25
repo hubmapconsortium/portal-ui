@@ -314,7 +314,7 @@ class DirectoryWriter():
         for organ in self.organs:
             self._write_organ(organ)
     def _write_organ(self, organ):
-        file = self.dir / f"{organ.stem}.md"
+        file = self.dir / organ.filename()
         print(f'Writing to {file}...')
         file.write_text(
             organ.yaml_front_matter()

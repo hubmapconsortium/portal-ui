@@ -1,6 +1,5 @@
 ---
-in_index: true
-instances:
+asctb:
 - anatomy:
     UBERON:0000948: heart
     UBERON:0002078: right cardiac atrium
@@ -45,7 +44,7 @@ instances:
   id: '#VHMHeart'
   label: heart
   sex: Male
-title: Heart
+search: true
 ---
 
 # Heart
