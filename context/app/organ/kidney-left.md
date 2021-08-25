@@ -15,7 +15,7 @@ asctb:
     UBERON:0004538: left kidney
     UBERON:0006517: kidney calyx
     UBERON:0008716: hilum of kidney
-  glb: VH_M_Kidney_L.
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Kidney_L.
   id: '#VHMLeftKidney'
   label: left kidney
   sex: Male

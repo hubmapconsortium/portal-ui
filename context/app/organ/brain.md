@@ -8,7 +8,7 @@ asctb:
     UBERON:0002812: left cerebral hemisphere
     UBERON:0002813: right cerebral hemisphere
     UBERON:0004725: piriform cortex
-  glb: Allen_F_Brain.glb
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/Allen_F_Brain.glb
   id: '#VHFAllenBrain'
   label: brain
   sex: Female
@@ -20,7 +20,7 @@ asctb:
     UBERON:0002812: left cerebral hemisphere
     UBERON:0002813: right cerebral hemisphere
     UBERON:0004725: piriform cortex
-  glb: Allen_M_Brain.glb
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/Allen_M_Brain.glb
   id: '#VHMAllenBrain'
   label: brain
   sex: Male

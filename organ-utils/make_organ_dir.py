@@ -191,12 +191,12 @@ def _parse_asctb_rows(rows):
     '''
     >>> rows = [
     ...     {
-    ...         'glb file of single organs': 'VH_F_Thymus',
+    ...         'glb file of single organs': 'VH_F_Thymus.glb',
     ...         'OntologyID': 'UBERON:0002370',
     ...         'label': 'thymus',
     ...         'anatomical_structure_of': '#VHFThymus'},
     ...     {
-    ...         'glb file of single organs': 'VH_M_Thymus',
+    ...         'glb file of single organs': 'VH_M_Thymus.glb',
     ...         'OntologyID': 'UBERON:0002370',
     ...         'label': 'thymus',
     ...         'anatomical_structure_of': '#VHMThymus'},
@@ -218,14 +218,14 @@ def _parse_asctb_rows(rows):
     {'Thymus': [{'id': '#VHFThymus',
                  'label': 'thymus',
                  'anatomy': {'UBERON:0002370': 'thymus'},
-                 'glb': 'VH_F_Thymus',
+                 'glb_url': 'https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_F_Thymus.glb',
                  'sex': 'Female'},
                 {'id': '#VHMThymus',
                  'label': 'thymus',
                  'anatomy': {'UBERON:0002370': 'thymus',
                              'UBERON:0005457': 'left thymus lobe',
                              'UBERON:0005469': 'right thymus lobe'},
-                 'glb': 'VH_M_Thymus',
+                 'glb_url': 'https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Thymus.glb',
                  'sex': 'Male'}]}
     '''
     get_anatomy = lambda row: row['anatomical_structure_of']
@@ -240,7 +240,7 @@ def _parse_asctb_rows(rows):
                 for row in list_group
                 if row['label']
             },
-            'glb': glb,
+            'glb_url': 'https://hubmapconsortium.github.io/ccf-releases/v1.0/models/' + glb,
             'sex': {'M': 'Male', 'F': 'Female'}[sex_abbr]
         }
         for key, group in groupby(rows, get_anatomy)

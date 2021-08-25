@@ -18,7 +18,7 @@ asctb:
     fma:fma7264: Anterior papillary muscle of left ventricle
     fma:fma7265: Anterolateral head of lateral papillary muscle of left ventricle
     fma:fma7267: Posteromedial head of posterior papillary muscle of left ventricle
-  glb: VH_F_Heart_v1.0
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_F_Heart_v1.0
   id: '#VHFHeart'
   label: heart
   sex: Female
@@ -40,7 +40,7 @@ asctb:
     fma:fma:7264: Anterior papillary muscle of left ventricle
     fma:fma:7265: Anterolateral head of lateral papillary muscle of left ventricle
     fma:fma:7267: Posteromedial head of posterior papillary muscle of left ventricle
-  glb: VH_M_Heart.glb
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Heart.glb
   id: '#VHMHeart'
   label: heart
   sex: Male

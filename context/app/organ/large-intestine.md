@@ -12,7 +12,7 @@ asctb:
     UBERON:0001159: sigmoid colon
     UBERON:0022276: splenic flexure of colon
     UBERON:0022277: hepatic flexure of colon
-  glb: SBU_M_Intestine_Large.glb
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/SBU_M_Intestine_Large.glb
   id: '#VHMColon'
   label: large intestine
   sex: Male

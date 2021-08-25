@@ -4,7 +4,7 @@ asctb:
     UBERON:0002370: thymus
     UBERON:0005457: left thymus lobe
     UBERON:0005469: right thymus lobe
-  glb: VH_M_Thymus
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Thymus
   id: '#VHMThymus'
   label: thymus
   sex: Male

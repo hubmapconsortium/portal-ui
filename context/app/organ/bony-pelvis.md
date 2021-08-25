@@ -9,7 +9,7 @@ asctb:
     UBERON:0001439: compact bone tissue
     UBERON:0002483: trabecular bone tissue
     UBERON:0003690: fused sacrum
-  glb: VH_M_Pelvis
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Pelvis
   id: '#VHFPelvis'
   label: bony pelvis
   sex: Male
@@ -22,7 +22,7 @@ asctb:
     UBERON:0001439: compact bone tissue
     UBERON:0002483: trabecular bone tissue
     UBERON:0003690: fused sacrum
-  glb: VH_M_Pelvis
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Pelvis
   id: '#VHMPelvis'
   label: bony pelvis
   sex: Male

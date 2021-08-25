@@ -80,7 +80,7 @@ asctb:
     fma:fma49916: left superior pulmonary vein
     fma:fma76767: Anterior cardiac vein
     fma:fma8636: Anterior descending branch of left pulmonary artery
-  glb: VH_M_Vasculature
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Vasculature
   id: '#VHMVasculature'
   label: vasculature
   sex: Male

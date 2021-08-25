@@ -15,7 +15,7 @@ asctb:
     UBERON:0004539: right kidney
     UBERON:0006517: kidney calyx
     UBERON:0008716: hilum of kidney
-  glb: VH_F_Kidney_Right
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_F_Kidney_Right
   id: '#VHFRightKidney'
   label: right kidney
   sex: Female
@@ -34,7 +34,7 @@ asctb:
     UBERON:0004539: right kidney
     UBERON:0006517: kidney calyx
     UBERON:0008716: hilum of kidney
-  glb: VH_M_Kidney_R
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Kidney_R
   id: '#VHMRightKidney'
   label: right kidney
   sex: Male

@@ -89,7 +89,7 @@ asctb:
     fma:fma7508: Left posterior basal segmental bronchus
     fma:fma9615: Cricoid cartilage
     ma:fma46564: Left cricothyroid muscle
-  glb: VH_M_Lung
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Lung
   id: '#VHMLung'
   label: respiratory system
   sex: Male
