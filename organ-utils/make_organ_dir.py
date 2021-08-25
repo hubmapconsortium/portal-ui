@@ -40,25 +40,19 @@ def main():
         _parse_search_response(_get_search_response(args.elasticsearch_url))
     azimuth_data = _duplicate_azimuth(
         _parse_azimuth_html(_get_azimuth_html(args.azimuth_url)))
-    asctb_data = _rekey_asctb(
-        _parse_asctb_rows(_get_asctb_rows(args.asctb_csv_url)))
+    asctb_data = \
+        _parse_asctb_rows(_get_asctb_rows(args.asctb_csv_url))
     merged_data = _merge_data(
         search=search_data,
         azimuth=azimuth_data,
         asctb=asctb_data
     )
-    import pprint
-    pprint.pp(merged_data)
-    return
 
     organs = [
         Organ(
             title=title,
-            stem=label.replace(' ', '-'),
-            in_index=title in es_organs,
-            instances=instances)
-        for label, instances in asctb_data.items()
-        if (title := _label_to_es(label))
+            data=data)
+        for title, data in merged_data.items()
     ]
     DirectoryWriter(args.target, organs).write()
 
@@ -221,7 +215,7 @@ def _parse_asctb_rows(rows):
     ... ]
     >>> from pprint import pp
     >>> pp(_parse_asctb_rows(rows))
-    {'thymus': [{'id': '#VHFThymus',
+    {'Thymus': [{'id': '#VHFThymus',
                  'label': 'thymus',
                  'anatomy': {'UBERON:0002370': 'thymus'},
                  'glb': 'VH_F_Thymus',
@@ -262,29 +256,44 @@ def _parse_asctb_rows(rows):
     get_label = lambda group: group['label']
     groups = sorted(groups, key=get_label)
     m_f_pairs = {
-        key: list(group)
+        _label_to_es(key): list(group)
         for key, group in groupby(groups, get_label)
     }
     return m_f_pairs
 
 
+###### Utils #######
+
 @dataclass
 class Organ:
-    stem: str
+    '''
+    >>> organ = Organ(title='Kidney (Right)', data={'foo': 'bar'})
+    >>> print(organ.yaml_front_matter())
+    ---
+    foo: bar
+    ---
+    <BLANKLINE>
+    <BLANKLINE>
+
+    >>> print(organ.markdown())
+    # Kidney (Right)
+    <BLANKLINE>
+    TODO
+
+    >>> print(organ.filename())
+    kidney-right.md
+    '''
     title: str
-    instances: list
-    in_index: bool
+    data: dict
 
     def yaml_front_matter(self):
-        data = {
-            'title': self.title,
-            'instances': self.instances,
-            'in_index': self.in_index
-        }
-        return f'---\n{dump(data)}---\n\n'
+        return f'---\n{dump(self.data)}---\n\n'
 
     def markdown(self):
         return f'# {self.title}\n\nTODO'
+
+    def filename(self):
+        return re.sub(r'\W+', ' ', self.title.lower()).strip().replace(' ', '-') + '.md'
 
 
 def dir_path(s):
