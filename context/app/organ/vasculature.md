@@ -1,87 +1,87 @@
 ---
 asctb:
 - anatomy:
-    UBERON:0000947: aorta
-    UBERON:0001139: common iliac vein
-    UBERON:0001140: renal vein
-    UBERON:0001141: right renal vein
-    UBERON:0001142: left renal vein
-    UBERON:0001182: superior mesenteric artery
-    UBERON:0001183: inferior mesenteric artery
-    UBERON:0001184: renal artery
-    UBERON:0001185: right renal artery
-    UBERON:0001186: left renal artery
-    UBERON:0001194: splenic artery
-    UBERON:0001196: middle colic artery
-    UBERON:0001215: inferior mesenteric vein
-    UBERON:0001218: middle colic vein
-    UBERON:0001219: ileocolic vein
-    UBERON:0001316: external iliac vein
-    UBERON:0001317: internal iliac vein
-    UBERON:0001496: ascending aorta
-    UBERON:0001508: arch of aorta
-    UBERON:0001514: descending aorta
-    UBERON:0001529: brachiocephalic artery
-    UBERON:0001536: left common carotid artery plus branches
-    UBERON:0001584: left subclavian artery
-    UBERON:0001625: right coronary artery
-    UBERON:0001626: left coronary artery
-    UBERON:0001637: artery
-    UBERON:0001638: vein
-    UBERON:0001639: hepatic portal vein
-    UBERON:0001640: celiac artery
-    UBERON:0001651: right pulmonary artery
-    UBERON:0001652: left pulmonary artery
-    UBERON:0002012: pulmonary artery
-    UBERON:0002016: pulmonary vein
-    UBERON:0002049: vasculature
-    UBERON:0002333: pulmonary trunk
-    UBERON:0003713: splenic vein
-    UBERON:0004087: vena cava
-    UBERON:0004148: cardiac vein
-    UBERON:0005438: coronary sinus
-    UBERON:0006687: median sacral vein
-    UBERON:0006958: great vein of heart
-    UBERON:0009687: middle cardiac vein
-    UBERON:0018252: internal pudendal vein
-    UBERON:0035040: superior rectal artery
-    UBERON:0035180: sigmoid artery
-    UBERON:0035374: small cardiac vein
-    UBERON:0035548: ileocolic artery
-    fma:fma0329299: Inferior pancreaticoduodenal vein
-    fma:fma10951: inferior vena cava
-    fma:fma14811: Right colic artery
-    fma:fma14824: marginal colic artery
-    fma:fma14826: Left colic artery
-    fma:fma15394: Left colic vein
-    fma:fma15395: sigmoid vein
-    fma:fma15407: Right colic vein
-    fma:fma18893: Middle rectal vein
-    fma:fma18894: Right middle rectal vein
-    fma:fma18895: Left middle rectal vein
-    fma:fma21242: Inferior rectal vein
-    fma:fma21313: right Inferior rectal vein
-    fma:fma21314: left Inferior rectal vein
-    fma:fma21387: Right common iliac vein
-    fma:fma21388: Left common iliac vein
-    fma:fma3818: marginal branch of right coronary artery
-    fma:fma3840: Posterior interventricular branch of right coronary artery
-    fma:fma3860: Diagonal branch of anterior descending branch of left coronary artery
-    fma:fma3902: Left marginal artery
-    fma:fma4712: Posterior vein of left ventricle
-    fma:fma4715: Oblique vein of left atrium
-    fma:fma4720: superior vena cava
-    fma:fma4723: brachiocephalic vein
-    fma:fma4751: Right brachiocephalic vein
-    fma:fma4761: Left brachiocephalic vein
-    fma:fma49911: right inferior pulmonary vein
-    fma:fma49913: left inferior pulmonary vein
-    fma:fma49914: right superior pulmonary vein
-    fma:fma49916: left superior pulmonary vein
-    fma:fma76767: Anterior cardiac vein
-    fma:fma8636: Anterior descending branch of left pulmonary artery
+    Anterior cardiac vein: http://purl.org/sig/ont/fma/fma76767
+    Anterior descending branch of left pulmonary artery: http://purl.org/sig/ont/fma/fma8636
+    Diagonal branch of anterior descending branch of left coronary artery: http://purl.org/sig/ont/fma/fma3860
+    Inferior pancreaticoduodenal vein: http://purl.org/sig/ont/fma/fma0329299
+    Inferior rectal vein: http://purl.org/sig/ont/fma/fma21242
+    Left brachiocephalic vein: http://purl.org/sig/ont/fma/fma4761
+    Left colic artery: http://purl.org/sig/ont/fma/fma14826
+    Left colic vein: http://purl.org/sig/ont/fma/fma15394
+    Left common iliac vein: http://purl.org/sig/ont/fma/fma21388
+    Left marginal artery: http://purl.org/sig/ont/fma/fma3902
+    Left middle rectal vein: http://purl.org/sig/ont/fma/fma18895
+    Middle rectal vein: http://purl.org/sig/ont/fma/fma18893
+    Oblique vein of left atrium: http://purl.org/sig/ont/fma/fma4715
+    Posterior interventricular branch of right coronary artery: http://purl.org/sig/ont/fma/fma3840
+    Posterior vein of left ventricle: http://purl.org/sig/ont/fma/fma4712
+    Right brachiocephalic vein: http://purl.org/sig/ont/fma/fma4751
+    Right colic artery: http://purl.org/sig/ont/fma/fma14811
+    Right colic vein: http://purl.org/sig/ont/fma/fma15407
+    Right common iliac vein: http://purl.org/sig/ont/fma/fma21387
+    Right middle rectal vein: http://purl.org/sig/ont/fma/fma18894
+    aorta: http://purl.obolibrary.org/obo/UBERON_0000947
+    arch of aorta: http://purl.obolibrary.org/obo/UBERON_0001508
+    artery: http://purl.obolibrary.org/obo/UBERON_0001637
+    ascending aorta: http://purl.obolibrary.org/obo/UBERON_0001496
+    brachiocephalic artery: http://purl.obolibrary.org/obo/UBERON_0001529
+    brachiocephalic vein: http://purl.org/sig/ont/fma/fma4723
+    cardiac vein: http://purl.obolibrary.org/obo/UBERON_0004148
+    celiac artery: http://purl.obolibrary.org/obo/UBERON_0001640
+    colic artery: http://purl.obolibrary.org/obo/UBERON_0035548
+    common iliac vein: http://purl.obolibrary.org/obo/UBERON_0001139
+    coronary sinus: http://purl.obolibrary.org/obo/UBERON_0005438
+    descending aorta: http://purl.obolibrary.org/obo/UBERON_0001514
+    external iliac vein: http://purl.obolibrary.org/obo/UBERON_0001316
+    great vein of heart: http://purl.obolibrary.org/obo/UBERON_0006958
+    hepatic portal vein: http://purl.obolibrary.org/obo/UBERON_0001639
+    ileocolic artery: http://purl.obolibrary.org/obo/UBERON_0001197
+    ileocolic vein: http://purl.obolibrary.org/obo/UBERON_0001219
+    inferior mesenteric artery: http://purl.obolibrary.org/obo/UBERON_0001183
+    inferior mesenteric vein: http://purl.obolibrary.org/obo/UBERON_0001215
+    inferior vena cava: http://purl.org/sig/ont/fma/fma10951
+    internal iliac vein: http://purl.obolibrary.org/obo/UBERON_0001317
+    internal pudendal vein: http://purl.obolibrary.org/obo/UBERON_0018252
+    left Inferior rectal vein: http://purl.org/sig/ont/fma/fma21314
+    left common carotid artery plus branches: http://purl.obolibrary.org/obo/UBERON_0001536
+    left coronary artery: http://purl.obolibrary.org/obo/UBERON_0001626
+    left inferior pulmonary vein: http://purl.org/sig/ont/fma/fma49913
+    left pulmonary artery: http://purl.obolibrary.org/obo/UBERON_0001652
+    left renal artery: http://purl.obolibrary.org/obo/UBERON_0001186
+    left renal vein: http://purl.obolibrary.org/obo/UBERON_0001142
+    left subclavian artery: http://purl.obolibrary.org/obo/UBERON_0001584
+    left superior pulmonary vein: http://purl.org/sig/ont/fma/fma49916
+    marginal branch of right coronary artery: http://purl.org/sig/ont/fma/fma3818
+    marginal colic artery: http://purl.org/sig/ont/fma/fma14824
+    median sacral vein: http://purl.obolibrary.org/obo/UBERON_0006687
+    middle cardiac vein: http://purl.obolibrary.org/obo/UBERON_0009687
+    middle colic artery: http://purl.obolibrary.org/obo/UBERON_0001196
+    middle colic vein: http://purl.obolibrary.org/obo/UBERON_0001218
+    pulmonary artery: http://purl.obolibrary.org/obo/UBERON_0002012
+    pulmonary trunk: http://purl.obolibrary.org/obo/UBERON_0002333
+    pulmonary vein: http://purl.obolibrary.org/obo/UBERON_0002016
+    renal artery: http://purl.obolibrary.org/obo/UBERON_0001184
+    renal vein: http://purl.obolibrary.org/obo/UBERON_0001140
+    right Inferior rectal vein: http://purl.org/sig/ont/fma/fma21313
+    right coronary artery: http://purl.obolibrary.org/obo/UBERON_0001625
+    right inferior pulmonary vein: http://purl.org/sig/ont/fma/fma49911
+    right pulmonary artery: http://purl.obolibrary.org/obo/UBERON_0001651
+    right renal artery: http://purl.obolibrary.org/obo/UBERON_0001185
+    right renal vein: http://purl.obolibrary.org/obo/UBERON_0001141
+    right superior pulmonary vein: http://purl.org/sig/ont/fma/fma49914
+    sigmoid artery: http://purl.obolibrary.org/obo/UBERON_0035180
+    sigmoid vein: http://purl.org/sig/ont/fma/fma15395
+    small cardiac vein: http://purl.obolibrary.org/obo/UBERON_0035374
+    splenic artery: http://purl.obolibrary.org/obo/UBERON_0001194
+    splenic vein: http://purl.obolibrary.org/obo/UBERON_0003713
+    superior mesenteric artery: http://purl.obolibrary.org/obo/UBERON_0001182
+    superior rectal artery: http://purl.obolibrary.org/obo/UBERON_0035040
+    superior vena cava: http://purl.org/sig/ont/fma/fma4720
+    vasculature: http://purl.obolibrary.org/obo/UBERON_0002049
+    vein: http://purl.obolibrary.org/obo/UBERON_0001638
+    vena cava: http://purl.obolibrary.org/obo/UBERON_0004087
   glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Vasculature
-  id: '#VHMVasculature'
   label: vasculature
   sex: Male
 ---

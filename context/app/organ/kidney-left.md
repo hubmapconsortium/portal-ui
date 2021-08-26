@@ -1,22 +1,21 @@
 ---
 asctb:
 - anatomy:
-    UBERON:0000362: renal medulla
-    UBERON:0001223: left ureter
-    UBERON:0001224: renal pelvis
-    UBERON:0001225: cortex of kidney
-    UBERON:0001226: major calyx
-    UBERON:0001227: minor calyx
-    UBERON:0001228: renal papilla
-    UBERON:0001284: renal column
-    UBERON:0002015: kidney capsule
-    UBERON:0002189: outer cortex of kidney
-    UBERON:0004200: renal pyramid
-    UBERON:0004538: left kidney
-    UBERON:0006517: kidney calyx
-    UBERON:0008716: hilum of kidney
+    cortex of kidney: http://purl.obolibrary.org/obo/UBERON_0001225
+    hilum of kidney: http://purl.obolibrary.org/obo/UBERON_0008716
+    kidney calyx: http://purl.obolibrary.org/obo/UBERON_0006517
+    kidney capsule: http://purl.obolibrary.org/obo/UBERON_0002015
+    left kidney: http://purl.obolibrary.org/obo/UBERON_0004538
+    left ureter: http://purl.obolibrary.org/obo/UBERON_0001223
+    major calyx: http://purl.obolibrary.org/obo/UBERON_0001226
+    minor calyx: http://purl.obolibrary.org/obo/UBERON_0001227
+    outer cortex of kidney: http://purl.obolibrary.org/obo/UBERON_0002189
+    renal column: http://purl.obolibrary.org/obo/UBERON_0001284
+    renal medulla: http://purl.obolibrary.org/obo/UBERON_0000362
+    renal papilla: http://purl.obolibrary.org/obo/UBERON_0001228
+    renal pelvis: http://purl.obolibrary.org/obo/UBERON_0001224
+    renal pyramid: http://purl.obolibrary.org/obo/UBERON_0004200
   glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Kidney_L.
-  id: '#VHMLeftKidney'
   label: left kidney
   sex: Male
 azimuth:

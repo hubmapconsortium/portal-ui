@@ -1,29 +1,27 @@
 ---
 asctb:
 - anatomy:
-    UBERON:0001270: bony pelvis
-    UBERON:0001273: ilium
-    UBERON:0001274: ischium
-    UBERON:0001275: pubis
-    UBERON:0001350: coccyx
-    UBERON:0001439: compact bone tissue
-    UBERON:0002483: trabecular bone tissue
-    UBERON:0003690: fused sacrum
+    bony pelvis: http://purl.obolibrary.org/obo/UBERON_0001270
+    coccyx: http://purl.obolibrary.org/obo/UBERON_0001350
+    compact bone tissue: http://purl.obolibrary.org/obo/UBERON_0001439
+    fused sacrum: http://purl.obolibrary.org/obo/UBERON_0003690
+    ilium: http://purl.obolibrary.org/obo/UBERON_0001273
+    ischium: http://purl.obolibrary.org/obo/UBERON_0001274
+    pubis: http://purl.obolibrary.org/obo/UBERON_0001275
+    trabecular bone tissue: http://purl.obolibrary.org/obo/UBERON_0002483
   glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Pelvis
-  id: '#VHFPelvis'
   label: bony pelvis
   sex: Male
 - anatomy:
-    UBERON:0001270: bony pelvis
-    UBERON:0001273: ilium
-    UBERON:0001274: ischium
-    UBERON:0001275: pubis
-    UBERON:0001350: coccyx
-    UBERON:0001439: compact bone tissue
-    UBERON:0002483: trabecular bone tissue
-    UBERON:0003690: fused sacrum
+    bony pelvis: http://purl.obolibrary.org/obo/UBERON_0001270
+    coccyx: http://purl.obolibrary.org/obo/UBERON_0001350
+    compact bone tissue: http://purl.obolibrary.org/obo/UBERON_0001439
+    fused sacrum: http://purl.obolibrary.org/obo/UBERON_0003690
+    ilium: http://purl.obolibrary.org/obo/UBERON_0001273
+    ischium: http://purl.obolibrary.org/obo/UBERON_0001274
+    pubis: http://purl.obolibrary.org/obo/UBERON_0001275
+    trabecular bone tissue: http://purl.obolibrary.org/obo/UBERON_0002483
   glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Pelvis
-  id: '#VHMPelvis'
   label: bony pelvis
   sex: Male
 ---

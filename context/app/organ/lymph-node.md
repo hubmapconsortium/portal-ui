@@ -1,53 +1,49 @@
 ---
 asctb:
 - anatomy:
-    UBERON:0000029: lymph node
-    UBERON:0002007: medulla of lymph node
-    UBERON:0002194: capsule of lymph node
-    UBERON:0010396: afferent lymphatic vessel
-    UBERON:0010397: efferent lymphatic vessel
-    UBERON:0010417: lymph node T cell domain
-    UBERON:0010748: lymph node follicle
+    afferent lymphatic vessel: http://purl.obolibrary.org/obo/UBERON_0010396
+    capsule of lymph node: http://purl.obolibrary.org/obo/UBERON_0002194
+    efferent lymphatic vessel: http://purl.obolibrary.org/obo/UBERON_0010397
+    lymph node: http://purl.obolibrary.org/obo/UBERON_0000029
+    lymph node T cell domain: http://purl.obolibrary.org/obo/UBERON_0010417
+    lymph node follicle: http://purl.obolibrary.org/obo/UBERON_0010748
+    medulla of lymph node: http://purl.obolibrary.org/obo/UBERON_0002007
   glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/NIH_F_Lymph_Node
-  id: '#VHFLeftLymphNode'
   label: lymph node
   sex: Female
 - anatomy:
-    UBERON:0000029: lymph node
-    UBERON:0002007: medulla of lymph node
-    UBERON:0002194: capsule of lymph node
-    UBERON:0010396: afferent lymphatic vessel
-    UBERON:0010397: efferent lymphatic vessel
-    UBERON:0010417: lymph node T cell domain
-    UBERON:0010748: lymph node follicle
+    afferent lymphatic vessel: http://purl.obolibrary.org/obo/UBERON_0010396
+    capsule of lymph node: http://purl.obolibrary.org/obo/UBERON_0002194
+    efferent lymphatic vessel: http://purl.obolibrary.org/obo/UBERON_0010397
+    lymph node: http://purl.obolibrary.org/obo/UBERON_0000029
+    lymph node T cell domain: http://purl.obolibrary.org/obo/UBERON_0010417
+    lymph node follicle: http://purl.obolibrary.org/obo/UBERON_0010748
+    medulla of lymph node: http://purl.obolibrary.org/obo/UBERON_0002007
   glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/NIH_F_Lymph_Node
-  id: '#VHFRightLymphNode'
   label: lymph node
   sex: Female
 - anatomy:
-    UBERON:0000029: lymph node
-    UBERON:0002007: medulla of lymph node
-    UBERON:0002049: vasculature
-    UBERON:0002194: capsule of lymph node
-    UBERON:0010396: afferent lymphatic vessel
-    UBERON:0010397: efferent lymphatic vessel
-    UBERON:0010417: lymph node T cell domain
-    UBERON:0010748: lymph node follicle
+    afferent lymphatic vessel: http://purl.obolibrary.org/obo/UBERON_0010396
+    capsule of lymph node: http://purl.obolibrary.org/obo/UBERON_0002194
+    efferent lymphatic vessel: http://purl.obolibrary.org/obo/UBERON_0010397
+    lymph node: http://purl.obolibrary.org/obo/UBERON_0000029
+    lymph node T cell domain: http://purl.obolibrary.org/obo/UBERON_0010417
+    lymph node follicle: http://purl.obolibrary.org/obo/UBERON_0010748
+    medulla of lymph node: http://purl.obolibrary.org/obo/UBERON_0002007
+    vasculature: http://purl.obolibrary.org/obo/UBERON_0002049
   glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/NIH_M_Lymph_Node_Left
-  id: '#VHMLeftLymphNode'
   label: lymph node
   sex: Male
 - anatomy:
-    UBERON:0000029: lymph node
-    UBERON:0002007: medulla of lymph node
-    UBERON:0002049: vasculature
-    UBERON:0002194: capsule of lymph node
-    UBERON:0010396: afferent lymphatic vessel
-    UBERON:0010397: efferent lymphatic vessel
-    UBERON:0010417: lymph node T cell domain
-    UBERON:0010748: lymph node follicle
+    afferent lymphatic vessel: http://purl.obolibrary.org/obo/UBERON_0010396
+    capsule of lymph node: http://purl.obolibrary.org/obo/UBERON_0002194
+    efferent lymphatic vessel: http://purl.obolibrary.org/obo/UBERON_0010397
+    lymph node: http://purl.obolibrary.org/obo/UBERON_0000029
+    lymph node T cell domain: http://purl.obolibrary.org/obo/UBERON_0010417
+    lymph node follicle: http://purl.obolibrary.org/obo/UBERON_0010748
+    medulla of lymph node: http://purl.obolibrary.org/obo/UBERON_0002007
+    vasculature: http://purl.obolibrary.org/obo/UBERON_0002049
   glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/NIH_M_Lymph_Node_Right
-  id: '#VHMRightLymphNode'
   label: lymph node
   sex: Male
 search: true

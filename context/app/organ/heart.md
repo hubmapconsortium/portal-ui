@@ -1,47 +1,45 @@
 ---
 asctb:
 - anatomy:
-    UBERON:0000948: heart
-    UBERON:0002078: right cardiac atrium
-    UBERON:0002079: left cardiac atrium
-    UBERON:0002080: heart right ventricle
-    UBERON:0002084: heart left ventricle
-    UBERON:0002094: interventricular septum
-    UBERON:0002134: tricuspid valve
-    UBERON:0002135: mitral valve
-    UBERON:0002137: aortic valve
-    UBERON:0002146: pulmonary valve
-    UBERON:0002494: papillary muscle of heart
-    UBERON:0003978: valve
-    fma:fma7261: Posterior papillary muscle of right ventricle
-    fma:fma7262: Septal papillary muscle of right ventricle
-    fma:fma7264: Anterior papillary muscle of left ventricle
-    fma:fma7265: Anterolateral head of lateral papillary muscle of left ventricle
-    fma:fma7267: Posteromedial head of posterior papillary muscle of left ventricle
+    Anterior papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma7264
+    Anterolateral head of lateral papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma7265
+    Posterior papillary muscle of right ventricle: http://purl.org/sig/ont/fma/fma7261
+    Posteromedial head of posterior papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma7267
+    Septal papillary muscle of right ventricle: http://purl.org/sig/ont/fma/fma7262
+    aortic valve: http://purl.obolibrary.org/obo/UBERON_0002137
+    heart: http://purl.obolibrary.org/obo/UBERON_0000948
+    heart left ventricle: http://purl.obolibrary.org/obo/UBERON_0002084
+    heart right ventricle: http://purl.obolibrary.org/obo/UBERON_0002080
+    interventricular septum: http://purl.obolibrary.org/obo/UBERON_0002094
+    left cardiac atrium: http://purl.obolibrary.org/obo/UBERON_0002079
+    mitral valve: http://purl.obolibrary.org/obo/UBERON_0002135
+    papillary muscle of heart: http://purl.obolibrary.org/obo/UBERON_0002494
+    pulmonary valve: http://purl.obolibrary.org/obo/UBERON_0002146
+    right cardiac atrium: http://purl.obolibrary.org/obo/UBERON_0002078
+    tricuspid valve: http://purl.obolibrary.org/obo/UBERON_0002134
+    valve: http://purl.obolibrary.org/obo/UBERON_0003978
   glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_F_Heart_v1.0
-  id: '#VHFHeart'
   label: heart
   sex: Female
 - anatomy:
-    UBERON:0000948: heart
-    UBERON:0002078: right cardiac atrium
-    UBERON:0002079: left cardiac atrium
-    UBERON:0002080: heart right ventricle
-    UBERON:0002084: heart left ventricle
-    UBERON:0002094: interventricular septum
-    UBERON:0002134: tricuspid valve
-    UBERON:0002135: mitral valve
-    UBERON:0002137: aortic valve
-    UBERON:0002146: pulmonary valve
-    UBERON:0002494: papillary muscle of heart
-    UBERON:0003978: valve
-    fma:fma:7261: Posterior papillary muscle of right ventricle
-    fma:fma:7262: Septal papillary muscle of right ventricle
-    fma:fma:7264: Anterior papillary muscle of left ventricle
-    fma:fma:7265: Anterolateral head of lateral papillary muscle of left ventricle
-    fma:fma:7267: Posteromedial head of posterior papillary muscle of left ventricle
+    Anterior papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma7264
+    Anterolateral head of lateral papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma72655
+    Posterior papillary muscle of right ventricle: http://purl.org/sig/ont/fma/fma72611
+    Posteromedial head of posterior papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma7267
+    Septal papillary muscle of right ventricle: http://purl.org/sig/ont/fma/fma7262
+    aortic valve: http://purl.obolibrary.org/obo/UBERON_0002137
+    heart: http://purl.obolibrary.org/obo/UBERON_0000948
+    heart left ventricle: http://purl.obolibrary.org/obo/UBERON_0002084
+    heart right ventricle: http://purl.obolibrary.org/obo/UBERON_0002080
+    interventricular septum: http://purl.obolibrary.org/obo/UBERON_0002094
+    left cardiac atrium: http://purl.obolibrary.org/obo/UBERON_0002079
+    mitral valve: http://purl.obolibrary.org/obo/UBERON_0002135
+    papillary muscle of heart: http://purl.obolibrary.org/obo/UBERON_0002494
+    pulmonary valve: http://purl.obolibrary.org/obo/UBERON_0002146
+    right cardiac atrium: http://purl.obolibrary.org/obo/UBERON_0002078
+    tricuspid valve: http://purl.obolibrary.org/obo/UBERON_0002134
+    valve: http://purl.obolibrary.org/obo/UBERON_0003978
   glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Heart.glb
-  id: '#VHMHeart'
   label: heart
   sex: Male
 search: true
