@@ -265,32 +265,23 @@ def _parse_asctb_rows(rows):
 class Organ:
     '''
     >>> organ = Organ(title='Kidney (Right)', data={'foo': 'bar'})
-    >>> print(organ.yaml_front_matter())
-    ---
+    >>> print(organ.yaml())
+    title: Kidney (Right)
     foo: bar
-    ---
-    <BLANKLINE>
-    <BLANKLINE>
-
-    >>> print(organ.markdown())
-    # Kidney (Right)
-    <BLANKLINE>
-    TODO
-
     >>> print(organ.filename())
-    kidney-right.md
+    kidney-right.yaml
     '''
     title: str
     data: dict
 
-    def yaml_front_matter(self):
-        return f'---\n{dump(self.data)}---\n\n'
-
-    def markdown(self):
-        return f'# {self.title}\n\nTODO'
+    def yaml(self):
+        return dump(
+            {'title': self.title, **self.data},
+            sort_keys=False
+        ).strip()
 
     def filename(self):
-        return re.sub(r'\W+', ' ', self.title.lower()).strip().replace(' ', '-') + '.md'
+        return re.sub(r'\W+', ' ', self.title.lower()).strip().replace(' ', '-') + '.yaml'
 
 
 def dir_path(s):
@@ -313,10 +304,7 @@ class DirectoryWriter():
     def _write_organ(self, organ):
         file = self.dir / organ.filename()
         print(f'Writing to {file}...')
-        file.write_text(
-            organ.yaml_front_matter()
-            + organ.markdown()
-        )
+        file.write_text(organ.yaml())
         
 
 if __name__ == "__main__":
