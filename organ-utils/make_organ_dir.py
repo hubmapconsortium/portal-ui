@@ -193,23 +193,23 @@ def _parse_asctb_rows(rows):
     ...     {
     ...         'glb file of single organs': 'VH_F_Thymus.glb',
     ...         'OntologyID': 'UBERON:0002370',
+    ...         'representation_of': 'http://purl.obolibrary.org/obo/UBERON_0002370',
     ...         'label': 'thymus',
     ...         'anatomical_structure_of': '#VHFThymus'},
     ...     {
     ...         'glb file of single organs': 'VH_M_Thymus.glb',
     ...         'OntologyID': 'UBERON:0002370',
+    ...         'representation_of': 'http://purl.obolibrary.org/obo/UBERON_0002370',
     ...         'label': 'thymus',
     ...         'anatomical_structure_of': '#VHMThymus'},
     ...     {
     ...         'OntologyID': 'UBERON:0005457',
+    ...         'representation_of': 'http://purl.obolibrary.org/obo/UBERON_0005457',
     ...         'label': 'left thymus lobe',
     ...         'anatomical_structure_of': '#VHMThymus'},
     ...     {
     ...         'OntologyID': 'UBERON:0005469',
-    ...         'label': 'REPEAT!!!!!!!',
-    ...         'anatomical_structure_of': '#VHMThymus'},
-    ...     {
-    ...         'OntologyID': 'UBERON:0005469',
+    ...         'representation_of': 'http://purl.obolibrary.org/obo/UBERON_0005469',
     ...         'label': 'right thymus lobe',
     ...         'anatomical_structure_of': '#VHMThymus'}
     ... ]
@@ -217,14 +217,14 @@ def _parse_asctb_rows(rows):
     >>> pp(_parse_asctb_rows(rows))
     {'Thymus': [{'id': '#VHFThymus',
                  'label': 'thymus',
-                 'anatomy': {'UBERON:0002370': 'thymus'},
+                 'anatomy': {'thymus': 'http://purl.obolibrary.org/obo/UBERON_0002370'},
                  'glb_url': 'https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_F_Thymus.glb',
                  'sex': 'Female'},
                 {'id': '#VHMThymus',
                  'label': 'thymus',
-                 'anatomy': {'UBERON:0002370': 'thymus',
-                             'UBERON:0005457': 'left thymus lobe',
-                             'UBERON:0005469': 'right thymus lobe'},
+                 'anatomy': {'thymus': 'http://purl.obolibrary.org/obo/UBERON_0002370',
+                             'left thymus lobe': 'http://purl.obolibrary.org/obo/UBERON_0005457',
+                             'right thymus lobe': 'http://purl.obolibrary.org/obo/UBERON_0005469'},
                  'glb_url': 'https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Thymus.glb',
                  'sex': 'Male'}]}
     '''
@@ -236,7 +236,7 @@ def _parse_asctb_rows(rows):
             'label': label,
             'anatomy': {
                 # Use dict to de-dupe.
-                row['OntologyID']: row['label'] 
+                row['label']: row['representation_of']
                 for row in list_group
                 if row['label']
             },
