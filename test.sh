@@ -54,7 +54,12 @@ end copy-app-conf
 
 
 start flake8
-EXCLUDE=node_modules,ingest-validation-tools
+EXCLUDE=node_modules,ingest-validation-tools,organ-utils
+# The organ-utils script uses the walrus operator (:=).
+# Latest pycodestyle does support that syntax,
+# but latest flake8 doesn't support the latest pycodestyle,
+# or something like that.
+# ¯\_(ツ)_/¯
 flake8 --exclude=$EXCLUDE \
   || die "Try: autopep8 --in-place --aggressive -r . --exclude $EXCLUDE"
 end flake8
