@@ -215,13 +215,11 @@ def _parse_asctb_rows(rows):
     ... ]
     >>> from pprint import pp
     >>> pp(_parse_asctb_rows(rows))
-    {'Thymus': [{'id': '#VHFThymus',
-                 'label': 'thymus',
+    {'Thymus': [{'label': 'thymus',
                  'anatomy': {'thymus': 'http://purl.obolibrary.org/obo/UBERON_0002370'},
                  'glb_url': 'https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_F_Thymus.glb',
                  'sex': 'Female'},
-                {'id': '#VHMThymus',
-                 'label': 'thymus',
+                {'label': 'thymus',
                  'anatomy': {'thymus': 'http://purl.obolibrary.org/obo/UBERON_0002370',
                              'left thymus lobe': 'http://purl.obolibrary.org/obo/UBERON_0005457',
                              'right thymus lobe': 'http://purl.obolibrary.org/obo/UBERON_0005469'},
@@ -232,7 +230,6 @@ def _parse_asctb_rows(rows):
     rows = sorted(rows, key=get_anatomy)
     groups = [
         {
-            'id': key,
             'label': label,
             'anatomy': {
                 # Use dict to de-dupe.
