@@ -155,13 +155,13 @@ def _make_query(constraints):
     >>> constraints = {'color': ['red', 'green'], 'number': ['42']}
     >>> query = _make_query(constraints)
     >>> from pprint import pp
-    >>> pp(query)
-    {'bool': {'must': [{'bool': {'should': [{'term': {'metadata.metadata.color.keyword': 'red'}},
-                                            {'term': {'mapped_metadata.color.keyword': 'red'}},
-                                            {'term': {'metadata.metadata.color.keyword': 'green'}},
-                                            {'term': {'mapped_metadata.color.keyword': 'green'}}]}},
-                       {'bool': {'should': [{'term': {'metadata.metadata.number.keyword': '42'}},
-                                            {'term': {'mapped_metadata.number.keyword': '42'}}]}}]}}
+    >>> pp(query['bool'])
+    {'must': [{'bool': {'should': [{'term': {'metadata.metadata.color.keyword': 'red'}},
+                                   {'term': {'mapped_metadata.color.keyword': 'red'}},
+                                   {'term': {'metadata.metadata.color.keyword': 'green'}},
+                                   {'term': {'mapped_metadata.color.keyword': 'green'}}]}},
+              {'bool': {'should': [{'term': {'metadata.metadata.number.keyword': '42'}},
+                                   {'term': {'mapped_metadata.number.keyword': '42'}}]}}]}
     '''
     shoulds = [
         [
