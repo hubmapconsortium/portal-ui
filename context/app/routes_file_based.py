@@ -2,7 +2,7 @@ from os.path import dirname
 from pathlib import Path
 
 from yaml import safe_load
-from flask import (render_template)
+from flask import render_template
 
 import frontmatter
 
@@ -89,7 +89,7 @@ def organ_index_view():
 @blueprint.route('/organ/<name>')
 def organ_details_view(name):
     filename = Path(dirname(__file__)) / 'organ' / f'{name}.yaml'
-    organ = safe_load(filename.read_text)
+    organ = safe_load(filename.read_text())
     flask_data = {
         **get_default_flask_data(),
         'organ': organ
