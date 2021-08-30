@@ -1,7 +1,7 @@
 from io import StringIO
 from csv import DictWriter
 
-from flask import Response, abort
+from flask import Response, abort, request
 
 from .utils import make_blueprint, get_client
 
@@ -15,7 +15,11 @@ def entities_tsv(entity_type):
         abort(404)
     client = get_client()
     first_fields = ['uuid', 'hubmap_id']
-    entities = client.get_entities(entity_type, first_fields)
+    entities = client.get_entities(
+        entity_type, first_fields,
+        constraints=request.args.to_dict(flat=False)
+        # Default "True" would throw away repeated keys after the first.
+    )
     return _make_tsv_response(_dicts_to_tsv(entities, first_fields), f'{entity_type}.tsv')
 
 
