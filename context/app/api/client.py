@@ -69,16 +69,8 @@ class ApiClient():
             raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
 
-    def get_all_donors(self, non_metadata_fields):
-        return self._get_all_entities_of_type(non_metadata_fields, 'Donor')
-
-    def get_all_samples(self, non_metadata_fields):
-        return self._get_all_entities_of_type(non_metadata_fields, 'Sample')
-
-    def get_all_datasets(self, non_metadata_fields):
-        return self._get_all_entities_of_type(non_metadata_fields, 'Dataset')
-
-    def _get_all_entities_of_type(self, non_metadata_fields, entity_type):
+    def get_entities(self, plural_lc_entity_type, non_metadata_fields):
+        entity_type = plural_lc_entity_type[:-1].capitalize()
         query = {
             "size": 10000,  # Default ES limit,
             "post_filter": {
