@@ -1,6 +1,7 @@
 from os.path import dirname
 from pathlib import Path
 
+from yaml import safe_load
 from flask import (render_template)
 
 import frontmatter
@@ -12,7 +13,7 @@ blueprint = make_blueprint(__name__)
 
 
 @blueprint.route('/preview/<name>')
-def preview_view(name):
+def preview_details_view(name):
     filename = dirname(__file__) + '/preview/' + name + '.md'
     metadata_content = frontmatter.load(filename)
     preview_metadata = metadata_content.metadata
@@ -51,7 +52,7 @@ def publication_index_view():
 
 
 @blueprint.route('/publication/<name>')
-def publication_view(name):
+def publication_details_view(name):
     filename = dirname(__file__) + '/publication/' + name + '.md'
     metadata_content = frontmatter.load(filename)
     publication_metadata = metadata_content.metadata
@@ -66,5 +67,35 @@ def publication_view(name):
     return render_template(
         'pages/base_react.html',
         title='Publication',
+        flask_data=flask_data
+    )
+
+
+@blueprint.route('/organ')
+def organ_index_view():
+    dir_path = Path(dirname(__file__) + '/organ')
+    organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
+    flask_data = {
+        **get_default_flask_data(),
+        'organs': organs
+    }
+    return render_template(
+        'pages/base_react.html',
+        title='Organs',
+        flask_data=flask_data
+    )
+
+
+@blueprint.route('/organ/<name>')
+def organ_details_view(name):
+    filename = Path(dirname(__file__)) / 'organ' / f'{name}.yaml'
+    organ = safe_load(filename.read_text)
+    flask_data = {
+        **get_default_flask_data(),
+        'organ': organ
+    }
+    return render_template(
+        'pages/base_react.html',
+        title='Organ',
         flask_data=flask_data
     )
