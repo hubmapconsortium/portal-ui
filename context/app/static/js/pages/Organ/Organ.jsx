@@ -1,9 +1,11 @@
 import React from 'react';
 
-import Paper from '@material-ui/core/Paper';
-
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import Asctb from 'js/components/organ/Asctb';
+import Azimuth from 'js/components/organ/Azimuth';
+import Assays from 'js/components/organ/Assays';
+import Description from 'js/components/organ/Description';
+import Samples from 'js/components/organ/Samples';
 
 function Organ(props) {
   const { organ } = props;
@@ -17,18 +19,16 @@ function Organ(props) {
   };
 
   return (
-    <SectionContainer>
+    <>
       <SectionHeader variant="h1" component="h1">
         {organ.title}
       </SectionHeader>
-      <Paper>
-        {shouldDisplaySection.description && <>TODO: description</>}
-        {shouldDisplaySection.asctb && <>TODO: asctb</>}
-        {shouldDisplaySection.azimuth && <>TODO: azimuth</>}
-        {shouldDisplaySection.assays && <>TODO: assays</>}
-        {shouldDisplaySection.samples && <>TODO: samples</>}
-      </Paper>
-    </SectionContainer>
+      {shouldDisplaySection.description && <Description description={organ.description} />}
+      {shouldDisplaySection.asctb && <Asctb asctb={organ.asctb} />}
+      {shouldDisplaySection.azimuth && <Azimuth description={organ.azimuth} />}
+      {shouldDisplaySection.assays && <Assays title={organ.title} />}
+      {shouldDisplaySection.samples && <Samples title={organ.title} />}
+    </>
   );
 }
 
