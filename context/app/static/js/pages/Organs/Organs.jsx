@@ -15,28 +15,26 @@ function Organs(props) {
   const { organs } = props;
 
   return (
-    <>
-      <SectionContainer id="summary">
-        <SectionHeader variant="h1" component="h1">
-          Organs
-        </SectionHeader>
-        <Paper>
-          <Table>
-            <TableBody>
-              {Object.entries(organs).map(([path, organ]) => (
-                <TableRow key={path}>
-                  <TableCell>
-                    <Typography variant="subtitle2" component="h3" color="primary">
-                      <LightBlueLink href={`/organ/${path}`}>{organ.title}</LightBlueLink>
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
-      </SectionContainer>
-    </>
+    <SectionContainer>
+      <SectionHeader variant="h1" component="h1">
+        Organs
+      </SectionHeader>
+      <Paper>
+        <Table>
+          <TableBody>
+            {Object.entries(organs).map(([path, organ]) => (
+              <TableRow key={path}>
+                <TableCell>
+                  <Typography variant="subtitle2" component="h3" color="primary">
+                    <LightBlueLink href={`/organ/${path}`}>{organ.title}</LightBlueLink>
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    </SectionContainer>
   );
 }
 
