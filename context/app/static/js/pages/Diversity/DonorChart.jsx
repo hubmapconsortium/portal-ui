@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bar, Chart } from 'react-chartjs-2';
 import Typography from '@material-ui/core/Typography';
+import { useTheme } from '@material-ui/core/styles';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import useSearchData from 'js/hooks/useSearchData';
@@ -65,7 +66,8 @@ function BloodTypeDescription() {
 
 function LowLevelDonorChart(props) {
   const { title, donorQuery, xKey, yKey, colorKeys, description, xAxisLabel } = props;
-  const colors = ['#444A65', '#6C8938', '#DA348A'];
+  const { palette } = useTheme();
+  const colors = [palette.primary.main, palette.success.main, palette.error.main];
   const { searchData } = useSearchData(donorQuery);
   if (!('aggregations' in searchData)) {
     return null;
