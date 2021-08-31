@@ -1,4 +1,5 @@
 import React from 'react';
+import LineUp from 'lineupjsx';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
@@ -15,7 +16,7 @@ function LineUpPage(props) {
       {/* <StyledDescription>
         Describe?
       </StyledDescription> */}
-      <pre>{JSON.stringify(entities, null, 2)}</pre>
+      <LineUp data={entities} />
     </SectionContainer>
   );
 }
