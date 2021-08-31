@@ -1,0 +1,45 @@
+title: Heart
+search: true
+asctb:
+- label: heart
+  anatomy:
+    heart: http://purl.obolibrary.org/obo/UBERON_0000948
+    interventricular septum: http://purl.obolibrary.org/obo/UBERON_0002094
+    left cardiac atrium: http://purl.obolibrary.org/obo/UBERON_0002079
+    heart left ventricle: http://purl.obolibrary.org/obo/UBERON_0002084
+    right cardiac atrium: http://purl.obolibrary.org/obo/UBERON_0002078
+    heart right ventricle: http://purl.obolibrary.org/obo/UBERON_0002080
+    papillary muscle of heart: http://purl.obolibrary.org/obo/UBERON_0002494
+    Anterior papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma7264
+    Anterolateral head of lateral papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma7265
+    Septal papillary muscle of right ventricle: http://purl.org/sig/ont/fma/fma7262
+    Posterior papillary muscle of right ventricle: http://purl.org/sig/ont/fma/fma7261
+    Posteromedial head of posterior papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma7267
+    valve: http://purl.obolibrary.org/obo/UBERON_0003978
+    aortic valve: http://purl.obolibrary.org/obo/UBERON_0002137
+    pulmonary valve: http://purl.obolibrary.org/obo/UBERON_0002146
+    mitral valve: http://purl.obolibrary.org/obo/UBERON_0002135
+    tricuspid valve: http://purl.obolibrary.org/obo/UBERON_0002134
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_F_Heart_v1.0
+  sex: Female
+- label: heart
+  anatomy:
+    heart: http://purl.obolibrary.org/obo/UBERON_0000948
+    valve: http://purl.obolibrary.org/obo/UBERON_0003978
+    mitral valve: http://purl.obolibrary.org/obo/UBERON_0002135
+    tricuspid valve: http://purl.obolibrary.org/obo/UBERON_0002134
+    aortic valve: http://purl.obolibrary.org/obo/UBERON_0002137
+    pulmonary valve: http://purl.obolibrary.org/obo/UBERON_0002146
+    papillary muscle of heart: http://purl.obolibrary.org/obo/UBERON_0002494
+    Anterior papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma7264
+    Anterolateral head of lateral papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma72655
+    Septal papillary muscle of right ventricle: http://purl.org/sig/ont/fma/fma7262
+    Posterior papillary muscle of right ventricle: http://purl.org/sig/ont/fma/fma72611
+    Posteromedial head of posterior papillary muscle of left ventricle: http://purl.org/sig/ont/fma/fma7267
+    left cardiac atrium: http://purl.obolibrary.org/obo/UBERON_0002079
+    right cardiac atrium: http://purl.obolibrary.org/obo/UBERON_0002078
+    heart right ventricle: http://purl.obolibrary.org/obo/UBERON_0002080
+    interventricular septum: http://purl.obolibrary.org/obo/UBERON_0002094
+    heart left ventricle: http://purl.obolibrary.org/obo/UBERON_0002084
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Heart.glb
+  sex: Male

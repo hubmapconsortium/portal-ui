@@ -1,0 +1,30 @@
+title: Brain
+description: The brain is the center of the nervous system in all vertebrate, and
+  most invertebrate, animals. Some primitive animals such as jellyfish and starfish
+  have a decentralized nervous system without a brain, while sponges lack any nervous
+  system at all. In vertebrates, the brain is located in the head, protected by the
+  skull and close to the primary sensory apparatus of vision, hearing, balance, taste,
+  and smell[WP].
+asctb:
+- label: brain
+  anatomy:
+    brain: http://purl.obolibrary.org/obo/UBERON_0000955
+    left cerebral hemisphere: http://purl.obolibrary.org/obo/UBERON_0002812
+    olfactory bulb: http://purl.obolibrary.org/obo/UBERON_0002264
+    anterior olfactory nucleus: http://purl.obolibrary.org/obo/UBERON_0002266
+    piriform cortex: http://purl.obolibrary.org/obo/UBERON_0004725
+    hypothalamus: http://purl.obolibrary.org/obo/UBERON_0001898
+    right cerebral hemisphere: http://purl.obolibrary.org/obo/UBERON_0002813
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/Allen_F_Brain.glb
+  sex: Female
+- label: brain
+  anatomy:
+    brain: http://purl.obolibrary.org/obo/UBERON_0000955
+    left cerebral hemisphere: http://purl.obolibrary.org/obo/UBERON_0002812
+    olfactory bulb: http://purl.obolibrary.org/obo/UBERON_0002264
+    anterior olfactory nucleus: http://purl.obolibrary.org/obo/UBERON_0002266
+    piriform cortex: http://purl.obolibrary.org/obo/UBERON_0004725
+    hypothalamus: http://purl.obolibrary.org/obo/UBERON_0001898
+    right cerebral hemisphere: http://purl.obolibrary.org/obo/UBERON_0002813
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/Allen_M_Brain.glb
+  sex: Male
