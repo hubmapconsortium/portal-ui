@@ -24,6 +24,7 @@ const CellsAPIDemo = lazy(() => import('js/pages/CellsAPIDemo'));
 const Markdown = lazy(() => import('js/components/Markdown'));
 const SavedLists = lazy(() => import('js/pages/SavedLists'));
 const SavedList = lazy(() => import('js/pages/SavedList'));
+const LineUpPage = lazy(() => import('js/pages/LineUpPage'));
 
 function Routes(props) {
   const { flaskData } = props;
@@ -37,6 +38,7 @@ function Routes(props) {
     list_uuid,
     has_notebook,
     vis_lifted_uuid,
+    entities,
   } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
@@ -187,6 +189,14 @@ function Routes(props) {
     return (
       <Route>
         <SavedList listUUID={list_uuid} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/lineup/')) {
+    return (
+      <Route>
+        <LineUpPage entities={entities} />
       </Route>
     );
   }
