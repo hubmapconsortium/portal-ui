@@ -171,14 +171,6 @@ function Routes(props) {
     );
   }
 
-  if (urlPath.startsWith('/publication')) {
-    return (
-      <Route>
-        <Organ organ={organ} />
-      </Route>
-    );
-  }
-
   if (urlPath === '/services') {
     return (
       <Route>
