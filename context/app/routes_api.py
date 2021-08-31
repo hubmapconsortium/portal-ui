@@ -24,7 +24,6 @@ def lineup(entity_type):
     )
 
 
-
 @blueprint.route('/api/v0/<entity_type>.tsv')
 def entities_tsv(entity_type):
     entities = _get_entities(entity_type)
@@ -44,6 +43,7 @@ def _get_entities(entity_type):
         # Default "True" would throw away repeated keys after the first.
     )
     return entities
+
 
 def _make_tsv_response(tsv_content, filename):
     return Response(
