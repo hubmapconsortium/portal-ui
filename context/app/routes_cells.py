@@ -81,7 +81,8 @@ def get_cluster_cells(cells, gene, min_gene_expression):
             cluster_name, cluster_number = get_cluster_name_and_number(cluster)
             cluster_cells.append({'modality': cell['modality'], 'cluster_name': cluster_name,
                                   'cluster_number': cluster_number,
-                                  'meets_minimum_gene_expression': cell['values'][gene] >= min_gene_expression})
+                                  'meets_minimum_gene_expression':
+                                  cell['values'][gene] >= min_gene_expression})
     return cluster_cells
 
 
@@ -209,7 +210,8 @@ def cells_in_dataset_clusters():
 
         # list() will call iterator behind the scenes.
         return {'results':
-                get_matched_cell_counts_per_cluster(get_cluster_cells(cells_list, gene_name, float(min_gene_expression)))}
+                get_matched_cell_counts_per_cluster(
+                    get_cluster_cells(cells_list, gene_name, float(min_gene_expression)))}
 
     except Exception as e:
         return {'message': str(e)}
