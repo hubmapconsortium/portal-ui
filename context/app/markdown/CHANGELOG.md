@@ -1,3 +1,12 @@
+## v0.26.0 - 2021-09-01
+
+- Use fewer hard-coded values on the DonorChart page.
+- Rough draft of organ detail pages.
+- Rough draft of organ index and detail pages.
+- Begin organ pages: Generate YAML from disparite sources of information.
+- Support query parameters on TSV downloads.
+
+
 ## v0.25.4 - 2021-08-25
 
 - Update SPRM viz to include new naming conventions + tsne.
