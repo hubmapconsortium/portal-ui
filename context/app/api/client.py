@@ -188,11 +188,12 @@ def _flatten_sources(sources, non_metadata_fields):
     ...      'mapped_metadata': {'age': [40], 'weight': [150]}
     ...     },
     ...     {'uuid': 'wxyz1234', 'name': 'Bob',
+    ...      'donor': {'hubmap_id': 'HBM1234.ABCD.7890'}
     ...      'mapped_metadata': {'age': [50], 'multi': ['A', 'B', 'C']}
     ...     }]
     >>> pp(_flatten_sources(donor_sources, ['uuid', 'name']))
     [{'uuid': 'abcd1234', 'name': 'Ann', 'age': '40', 'weight': '150'},
-     {'uuid': 'wxyz1234', 'name': 'Bob', 'age': '50', 'multi': 'A, B, C'}]
+     {'uuid': 'wxyz1234', 'name': 'Bob', 'donor.hubmap_id': 'HBM1234.ABCD.7890', 'age': '50', 'multi': 'A, B, C'}]
 
     >>> sample_sources = [
     ...     {'uuid': 'abcd1234',
