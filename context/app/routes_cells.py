@@ -79,22 +79,23 @@ def get_cluster_cells(cells, gene, min_gene_expression):
     for cell in cells:
         for cluster in cell['clusters']:
             cluster_name, cluster_number = get_cluster_name_and_number(cluster)
-            cluster_cells.append({'modality': cell['modality'], 'cluster_name': cluster_name, 'cluster_number': cluster_number, 'meets_minimum_gene_expression': cell['values'][gene] >= min_gene_expression})
+            cluster_cells.append({'modality': cell['modality'], 'cluster_name': cluster_name, 'cluster_number': cluster_number,
+                                 'meets_minimum_gene_expression': cell['values'][gene] >= min_gene_expression})
     return cluster_cells
 
 
 def get_matched_cell_counts_per_cluster(cells):
-  grouper = itemgetter("cluster_name", "cluster_number", 'modality')
-  clusters = {}
-  for key, grp in groupby(sorted(cells, key = grouper), grouper):
-    grp_list = list(grp)
-    cluster = dict(zip(["cluster_name", "cluster_number", 'modality'], key))
-    if not cluster['cluster_name'] in clusters:
-        clusters[cluster['cluster_name']] = []
-    cluster['matched'] = sum(item["meets_minimum_gene_expression"] for item in grp_list)
-    cluster['unmatched'] = len(grp_list) - cluster['matched']
-    clusters[cluster['cluster_name']].append(cluster)
-  return clusters
+    grouper = itemgetter("cluster_name", "cluster_number", 'modality')
+    clusters = {}
+    for key, grp in groupby(sorted(cells, key=grouper), grouper):
+        grp_list = list(grp)
+        cluster = dict(zip(["cluster_name", "cluster_number", 'modality'], key))
+        if not cluster['cluster_name'] in clusters:
+            clusters[cluster['cluster_name']] = []
+        cluster['matched'] = sum(item["meets_minimum_gene_expression"] for item in grp_list)
+        cluster['unmatched'] = len(grp_list) - cluster['matched']
+        clusters[cluster['cluster_name']].append(cluster)
+    return clusters
 
 
 @blueprint.route('/cells/genes-by-substring.json', methods=['POST'])
@@ -189,6 +190,7 @@ def all_indexed_uuids():
     except Exception as e:
         return {'message': str(e)}
 
+
 @blueprint.route('/cells/cells-in-dataset-clusters.json', methods=['POST'])
 def cells_in_dataset_clusters():
     # For a single dataset we want to get the expression level of a given gene for all cells.
@@ -209,4 +211,3 @@ def cells_in_dataset_clusters():
 
     except Exception as e:
         return {'message': str(e)}
-
