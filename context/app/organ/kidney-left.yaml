@@ -1,0 +1,30 @@
+title: Kidney (Left)
+description: 'A paired organ of the urinary tract which has the production of urine
+  as its primary function.
+
+  '
+search: true
+azimuth:
+  app_url: https://app.azimuth.hubmapconsortium.org/app/human-kidney
+  vitessce_url: https://azimuth.hubmapconsortium.org/references/human_kidney
+  zenodo_url: https://zenodo.org/record/5181818
+  snakemake_url: https://github.com/satijalab/azimuth-references/tree/master/human_kidney
+asctb:
+- label: left kidney
+  anatomy:
+    left kidney: http://purl.obolibrary.org/obo/UBERON_0004538
+    kidney capsule: http://purl.obolibrary.org/obo/UBERON_0002015
+    hilum of kidney: http://purl.obolibrary.org/obo/UBERON_0008716
+    renal medulla: http://purl.obolibrary.org/obo/UBERON_0000362
+    renal papilla: http://purl.obolibrary.org/obo/UBERON_0001228
+    renal pyramid: http://purl.obolibrary.org/obo/UBERON_0004200
+    kidney calyx: http://purl.obolibrary.org/obo/UBERON_0006517
+    major calyx: http://purl.obolibrary.org/obo/UBERON_0001226
+    minor calyx: http://purl.obolibrary.org/obo/UBERON_0001227
+    renal pelvis: http://purl.obolibrary.org/obo/UBERON_0001224
+    left ureter: http://purl.obolibrary.org/obo/UBERON_0001223
+    cortex of kidney: http://purl.obolibrary.org/obo/UBERON_0001225
+    renal column: http://purl.obolibrary.org/obo/UBERON_0001284
+    outer cortex of kidney: http://purl.obolibrary.org/obo/UBERON_0002189
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Kidney_L.
+  sex: Male

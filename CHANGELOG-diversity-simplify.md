@@ -1,0 +1,1 @@
+- Use fewer hard-coded values on the DonorChart page.

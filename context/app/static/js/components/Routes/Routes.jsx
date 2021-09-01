@@ -25,6 +25,8 @@ const Markdown = lazy(() => import('js/components/Markdown'));
 const SavedLists = lazy(() => import('js/pages/SavedLists'));
 const SavedList = lazy(() => import('js/pages/SavedList'));
 const LineUpPage = lazy(() => import('js/pages/LineUpPage'));
+const Organs = lazy(() => import('js/pages/Organs'));
+const Organ = lazy(() => import('js/pages/Organ'));
 
 function Routes(props) {
   const { flaskData } = props;
@@ -39,6 +41,8 @@ function Routes(props) {
     has_notebook,
     vis_lifted_uuid,
     entities,
+    organs,
+    organ,
   } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
@@ -145,10 +149,26 @@ function Routes(props) {
     );
   }
 
-  if (urlPath.startsWith('/publication')) {
+  if (urlPath.startsWith('/publication/')) {
     return (
       <Route>
         <Publication title={title} vitData={vitessce_conf} markdown={markdown} />
+      </Route>
+    );
+  }
+
+  if (urlPath === '/organ') {
+    return (
+      <Route>
+        <Organs organs={organs} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/organ/')) {
+    return (
+      <Route>
+        <Organ organ={organ} />
       </Route>
     );
   }
@@ -227,6 +247,8 @@ Routes.propTypes = {
     list_uuid: PropTypes.string,
     has_notebook: PropTypes.bool,
     vis_lifted_uuid: PropTypes.string,
+    organ: PropTypes.object,
+    organs: PropTypes.object,
   }),
 };
 

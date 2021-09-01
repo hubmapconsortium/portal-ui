@@ -1,0 +1,14 @@
+# For the other pieces of information, the owners are hubmap collaborators,
+# and if we need changes, those changes should be made in the source data.
+# The descriptions, on the other hand, will be pulled from an ontology,
+# at least to start, and down the road I fully expect that there will be 
+# changes requested to describe the organ in the HuBMAP context.
+
+Kidney: > # http://purl.obolibrary.org/obo/UBERON_0002113
+  A paired organ of the urinary tract which has the production of urine as its primary function.
+Brain: > # http://purl.obolibrary.org/obo/UBERON_0000955  
+  The brain is the center of the nervous system in all vertebrate, and most invertebrate, animals.
+  Some primitive animals such as jellyfish and starfish have a decentralized nervous system
+  without a brain, while sponges lack any nervous system at all. In vertebrates, the brain is
+  located in the head, protected by the skull and close to the primary sensory apparatus of
+  vision, hearing, balance, taste, and smell[WP].

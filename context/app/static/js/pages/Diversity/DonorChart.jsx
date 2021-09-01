@@ -1,16 +1,73 @@
 import React from 'react';
 import { Bar, Chart } from 'react-chartjs-2';
 import Typography from '@material-ui/core/Typography';
+import { useTheme } from '@material-ui/core/styles';
 
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import useSearchData from 'js/hooks/useSearchData';
 import { ChartPaper, ChartTitle, DescriptionPaper } from './style';
-import { getKeyValues, getAgeLabels } from './utils';
+import { getKeyValues, getAgeLabels, makeCompositeQuery, makeHistogramSource, makeTermSource } from './utils';
 
 Chart.defaults.font.size = 18;
 
-function DonorChart(props) {
-  const { title, donorQuery, xKey, yKey, colorKeys, colors, description, xAxisLabel, yAxisLabel } = props;
+function ucFirst(str) {
+  return `${str[0].toUpperCase()}${str.slice(1)}`;
+}
 
+function pretty(str) {
+  return str.split('_').map(ucFirst).join(' ');
+}
+
+function DonorChart(props) {
+  const { xAxis, groups } = props;
+  const xSource = xAxis === 'age' ? makeHistogramSource(xAxis) : makeTermSource(xAxis);
+  const ySource = groups === 'age' ? makeHistogramSource(groups) : makeTermSource(groups);
+  const donorQuery = makeCompositeQuery(xSource, ySource);
+  const xKey = `mapped_metadata.${xAxis}`;
+  const yKey = `mapped_metadata.${groups}`;
+  const colorKeysMap = {
+    race: ['White', 'Black or African American', 'Hispanic'],
+    sex: ['Male', 'Female'],
+    blood_type: ['A', 'B', 'AB', 'O'],
+  };
+  const colorKeys = colorKeysMap[groups];
+  const xAxisLabel = pretty(xAxis);
+  const title = `${pretty(xAxis)} & ${pretty(groups)}`;
+  const description = [xAxis, groups].includes('blood_type') ? <BloodTypeDescription /> : null;
+
+  return (
+    <LowLevelDonorChart
+      donorQuery={donorQuery}
+      xKey={xKey}
+      yKey={yKey}
+      colorKeys={colorKeys}
+      title={title}
+      xAxisLabel={xAxisLabel}
+      description={description}
+    />
+  );
+}
+
+function BloodTypeDescription() {
+  return (
+    <>
+      It is critical to be aware that{' '}
+      <OutboundLink href="https://www.redcrossblood.org/donate-blood/blood-types.html">
+        some blood types are more common than others
+      </OutboundLink>{' '}
+      in a racially diverse population like the United States. The blood type of an individual can{' '}
+      <OutboundLink href="https://www.pennmedicine.org/updates/blogs/health-and-wellness/2019/april/blood-types">
+        predispose them to different kinds of medical conditions
+      </OutboundLink>
+      .
+    </>
+  );
+}
+
+function LowLevelDonorChart(props) {
+  const { title, donorQuery, xKey, yKey, colorKeys, description, xAxisLabel } = props;
+  const { palette } = useTheme();
+  const colors = [palette.primary.main, palette.success.main, palette.error.main];
   const { searchData } = useSearchData(donorQuery);
   if (!('aggregations' in searchData)) {
     return null;
@@ -40,7 +97,7 @@ function DonorChart(props) {
     scales: {
       yAxes: {
         title: {
-          text: yAxisLabel,
+          text: '# of Donors',
           display: true,
         },
         ticks: {

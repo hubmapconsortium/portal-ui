@@ -1,0 +1,18 @@
+title: Large Intestine
+search: true
+asctb:
+- label: large intestine
+  anatomy:
+    large intestine: http://purl.obolibrary.org/obo/UBERON_0000059
+    ascending colon: http://purl.obolibrary.org/obo/UBERON_0001156
+    caecum: http://purl.obolibrary.org/obo/UBERON_0001153
+    descending colon: http://purl.obolibrary.org/obo/UBERON_0001158
+    hepatic flexure of colon: http://purl.obolibrary.org/obo/UBERON_0022277
+    ileocecal valve: http://purl.obolibrary.org/obo/UBERON_0000569
+    rectum: http://purl.obolibrary.org/obo/UBERON_0001052
+    sigmoid colon: http://purl.obolibrary.org/obo/UBERON_0001159
+    splenic flexure of colon: http://purl.obolibrary.org/obo/UBERON_0022276
+    transverse colon: http://purl.obolibrary.org/obo/UBERON_0001157
+    vermiform appendix: http://purl.obolibrary.org/obo/UBERON_0001154
+  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/SBU_M_Intestine_Large.glb
+  sex: Male

@@ -9,9 +9,14 @@ from .utils import make_blueprint, get_client, get_default_flask_data
 blueprint = make_blueprint(__name__)
 
 
+@blueprint.route('/api/v0/<entity_type>.tsv')
+def entities_tsv(entity_type):
+    entities = _get_entities(entity_type)
+    return _make_tsv_response(_dicts_to_tsv(entities, _first_fields), f'{entity_type}.tsv')
+
+
 @blueprint.route('/lineup/<entity_type>')
 def lineup(entity_type):
-    # TODO: When query constraints are merged, the same machinery should be used here.
     entities = _get_entities(entity_type)
     flask_data = {
         **get_default_flask_data(),
@@ -22,12 +27,6 @@ def lineup(entity_type):
         flask_data=flask_data,
         title=f'Lineup {entity_type}'
     )
-
-
-@blueprint.route('/api/v0/<entity_type>.tsv')
-def entities_tsv(entity_type):
-    entities = _get_entities(entity_type)
-    return _make_tsv_response(_dicts_to_tsv(entities, _first_fields), f'{entity_type}.tsv')
 
 
 _first_fields = ['uuid', 'hubmap_id']
