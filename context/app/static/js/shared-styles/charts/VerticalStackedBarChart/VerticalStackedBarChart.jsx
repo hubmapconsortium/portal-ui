@@ -97,7 +97,6 @@ function VerticalStackedBarChart({
             hideTicks
             scale={yScale}
             stroke="black"
-            numTicks={Object.keys(visxData).length}
             tickLabelProps={() => ({
               fill: 'black',
               fontSize: 11,
@@ -111,6 +110,7 @@ function VerticalStackedBarChart({
             scale={xScale}
             stroke="black"
             tickStroke="black"
+            numTicks={Object.keys(visxData).length}
             tickLabelProps={() => ({
               fill: 'black',
               fontSize: 11,
