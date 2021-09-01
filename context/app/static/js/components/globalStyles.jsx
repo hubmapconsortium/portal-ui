@@ -27,7 +27,12 @@ const GlobalStyles = createGlobalStyle`
   a {
     text-decoration: none;
     background-color: transparent;
-}
+  }
+
+  .lu-wrapper {
+    // For LineUp:
+    height: 90vh;
+  }
 `;
 
 export default GlobalStyles;

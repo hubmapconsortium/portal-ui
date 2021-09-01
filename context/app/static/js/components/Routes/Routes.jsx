@@ -219,6 +219,7 @@ Routes.propTypes = {
     title: PropTypes.string,
     publications: PropTypes.object,
     entity: PropTypes.object,
+    entities: PropTypes.array,
     vitessce_conf: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
     markdown: PropTypes.string,
     collection: PropTypes.object,
