@@ -1,5 +1,6 @@
 import React from 'react';
 import LineUp from 'lineupjsx';
+import 'lineupjsx/build/LineUpJSx.css';
 import Paper from '@material-ui/core/Paper';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -10,8 +11,6 @@ function LineUpPage(props) {
 
   return (
     <SectionContainer>
-      <link href="https://unpkg.com/lineupjsx/build/LineUpJSx.css" rel="stylesheet" />
-      {/* <Typography variant="subtitle1">Subtitle</Typography> */}
       <SectionHeader variant="h1" component="h1">
         LineUp
       </SectionHeader>
