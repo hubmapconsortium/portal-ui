@@ -67,6 +67,17 @@ class CellsService {
   async getAllIndexedUUIDs() {
     return this.fetchAndParse(`/cells/all-indexed-uuids.json`);
   }
+
+  async getClusterCellMatchesInDataset(props) {
+    const { uuid, geneName, minGeneExpression } = props;
+    const urlParams = new URLSearchParams();
+
+    urlParams.append('uuid', uuid);
+    urlParams.append('gene_name', geneName);
+    urlParams.append('min_gene_expression', minGeneExpression);
+
+    return this.fetchAndParse(`/cells/cells-in-dataset-clusters.json?${urlParams}`);
+  }
 }
 
 export default CellsService;
