@@ -40,13 +40,13 @@ function HeaderContent({ anchorRef }) {
               If this changes, remember to update Menu.jsx!
           */}
 
-          <Dropdown title="Resources" menuListId="preview-options">
+          <Dropdown title="Resources">
             <ResourceLinks />
           </Dropdown>
-          <Dropdown title="Atlas & Tools" menuListId="ccf-options">
+          <Dropdown title="Atlas & Tools">
             <AtlasToolsLinks />
           </Dropdown>
-          <Dropdown title="Documentation" menuListId="documentation-options">
+          <Dropdown title="Documentation">
             <DocumentationLinks />
           </Dropdown>
           <HeaderButton component={Link} href="/my-lists">
