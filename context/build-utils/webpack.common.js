@@ -69,6 +69,11 @@ const config = {
         type: 'json', // Required by Webpack v4
         use: 'yaml-loader',
       },
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      },
     ],
   },
   plugins: [new CleanWebpackPlugin()],
