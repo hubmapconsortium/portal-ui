@@ -14,14 +14,11 @@ def entities_tsv(entity_type):
     if entity_type not in ['donors', 'samples', 'datasets']:
         abort(404)
     client = get_client()
-    first_fields = [
-        'uuid', 'hubmap_id',
-        # TODO: Make these conditional:
-        # Extra for samples and datasets:
-        'donor.hubmap_id',
-        # Extra just for samples:
-        'mapped_specimen_type', 'source_sample.hubmap_id'
-    ]
+    first_fields = ['uuid', 'hubmap_id']
+    if entity_type in ['samples', 'datasets']:
+        first_fields.append('donor.hubmap_id')
+    if entity_type in ['samples']:
+        first_fields.append('mapped_specimen_type')
     entities = client.get_entities(
         entity_type, first_fields,
         constraints=request.args.to_dict(flat=False)
