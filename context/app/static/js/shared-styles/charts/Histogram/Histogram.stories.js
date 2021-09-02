@@ -16,7 +16,7 @@ Default.args = {
   margin: {
     top: 50,
     right: 50,
-    left: 100,
-    bottom: 200,
+    left: 50,
+    bottom: 50,
   },
 };
