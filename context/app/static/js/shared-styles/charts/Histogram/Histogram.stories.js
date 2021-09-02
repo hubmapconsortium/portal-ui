@@ -1,15 +1,14 @@
 import React from 'react';
 
-import Histogram from './Histogram';
+import HistogramComponent from './Histogram';
 
 export default {
   title: 'Charts/Histogram',
-  component: Histogram,
+  component: HistogramComponent,
 };
 
-const Template = (args) => <Histogram {...args} />;
-export const Default = Template.bind({});
-Default.args = {
+export const Histogram = (args) => <HistogramComponent {...args} />;
+Histogram.args = {
   parentWidth: 500,
   parentHeight: 500,
   visxData: Array.from({ length: 40 }, () => Math.floor(Math.random() * 40)),
