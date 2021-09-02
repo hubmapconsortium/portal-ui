@@ -98,7 +98,7 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
       />
     </>
   ) : (
-    <Typography>Please wait...</Typography>
+    <Typography>Please wait for cluster chart...</Typography>
   );
 }
 
