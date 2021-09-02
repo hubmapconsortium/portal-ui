@@ -4,7 +4,7 @@ import { Group } from '@visx/group';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import { GridRows } from '@visx/grid';
-import { scaleBand, scaleLinear } from '@visx/scale';
+import { scaleLinear } from '@visx/scale';
 import { bin } from 'd3-array';
 
 function Histogram({ parentWidth, parentHeight, visxData, margin }) {
@@ -14,33 +14,24 @@ function Histogram({ parentWidth, parentHeight, visxData, margin }) {
   const binner = bin();
   const bins = binner(visxData);
 
-  const chartData = bins.map((b) => {
-    const { x0, x1 } = b;
-    const xLabel = `${x0}-${x1}`;
-    const count = b.length - 2;
-    return { xLabel, count };
-  });
-
-  const getX = (d) => d.xLabel;
-  const getY = (d) => d.count;
+  const chartData = bins;
 
   // scales, memoize for performance
   const xScale = useMemo(
     () =>
-      scaleBand({
+      scaleLinear({
+        domain: [chartData[0].x0, chartData[chartData.length - 1].x1],
         range: [0, xWidth],
-        round: true,
-        domain: chartData.map(getX),
-        padding: 0.4,
       }),
     [chartData, xWidth],
   );
   const yScale = useMemo(
     () =>
       scaleLinear({
-        range: [yHeight, 0],
+        domain: [0, Math.max(...chartData.map((d) => d.length))],
+        nice: true,
         round: true,
-        domain: [0, Math.max(...chartData.map(getY))],
+        range: [yHeight, 0],
       }),
     [chartData, yHeight],
   );
@@ -48,24 +39,14 @@ function Histogram({ parentWidth, parentHeight, visxData, margin }) {
   return (
     <div>
       <svg width={parentWidth} height={parentHeight}>
-        <GridRows top={margin.top + 1} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.38} />
+        <GridRows top={margin.top} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.38} />
         <Group top={margin.top} left={margin.left}>
           {chartData.map((d) => {
-            const x = getX(d);
-            const barWidth = xScale.bandwidth();
-            const barHeight = yHeight - (yScale(getY(d)) ?? 0);
-            const barX = xScale(x);
-            const barY = yHeight - barHeight;
-            return (
-              <Bar
-                key={`bar-${x}`}
-                x={barX}
-                y={barY}
-                width={barWidth}
-                height={barHeight}
-                fill="rgba(23, 233, 217, .5)"
-              />
-            );
+            const barWidth = Math.max(0, xScale(d.x1) - xScale(d.x0) - 1);
+            const barHeight = yScale(0) - yScale(d.length);
+            const barX = xScale(d.x0) + 1;
+            const barY = yScale(d.length);
+            return <Bar x={barX} y={barY} width={barWidth} height={barHeight} fill="#6C8938" />;
           })}
           <AxisLeft
             hideTicks
@@ -84,7 +65,6 @@ function Histogram({ parentWidth, parentHeight, visxData, margin }) {
             scale={xScale}
             stroke="black"
             tickStroke="black"
-            numTicks={Object.keys(visxData).length}
             tickLabelProps={() => ({
               fill: 'black',
               fontSize: 11,
