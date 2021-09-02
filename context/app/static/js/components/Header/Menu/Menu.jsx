@@ -32,28 +32,19 @@ function Menu(props) {
               <DropdownLink key={type} href={`/search?entity_type[0]=${type}`}>{`${type}s`}</DropdownLink>
             ))}
             <DropdownLink href="/collections">Collections</DropdownLink>
-
-            {/*
-                If this changes, remember to update HeaderContent.jsx!
-            */}
-
-            <DropdownMenuItem onClick={toggleResources}>
-              Resources
-              {openResources ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-            </DropdownMenuItem>
-            {openResources && <ResourceLinks isIndented />}
-
-            <DropdownMenuItem onClick={toggleAtlasTools}>
-              Atlas & Tools
-              {openAtlasTools ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-            </DropdownMenuItem>
-            {openAtlasTools && <AtlasToolsLinks isIndented />}
-
-            <DropdownMenuItem onClick={toggleDocumentation}>
-              Documentation
-              {openDocumentation ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-            </DropdownMenuItem>
-            {openDocumentation && <DocumentationLinks isIndented />}
+            {[
+              [toggleResources, 'Resources', openResources, ResourceLinks],
+              [toggleAtlasTools, 'Atlas & Tools', openAtlasTools, AtlasToolsLinks],
+              [toggleDocumentation, 'Documentation', openDocumentation, DocumentationLinks],
+            ].map(([onClick, label, isOpen, Component]) => (
+              <>
+                <DropdownMenuItem onClick={onClick}>
+                  {label}
+                  {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                </DropdownMenuItem>
+                {isOpen && <Component isIndented />}
+              </>
+            ))}
           </MenuList>
           <DropdownLink href="/my-lists">My Lists</DropdownLink>
         </WidePaper>
