@@ -11,12 +11,9 @@ function Histogram({ parentWidth, parentHeight, visxData, margin }) {
   const xWidth = parentWidth - margin.left - margin.right;
   const yHeight = parentHeight - margin.top - margin.bottom;
 
-  const binner = bin();
-  const bins = binner(visxData);
+  const binFunc = bin();
+  const chartData = binFunc(visxData);
 
-  const chartData = bins;
-
-  // scales, memoize for performance
   const xScale = useMemo(
     () =>
       scaleLinear({
