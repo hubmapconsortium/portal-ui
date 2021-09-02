@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import DropdownLink from '../DropdownLink';
+import { StyledDivider } from '../HeaderContent/style';
 
-function CCFLinks(props) {
+function AtlasToolsLinks(props) {
   const { isIndented } = props;
   return (
     <>
@@ -19,16 +20,20 @@ function CCFLinks(props) {
       <DropdownLink href="https://hubmapconsortium.github.io/ccf-ui/rui/" isIndented={isIndented}>
         Registration User Interface (RUI)
       </DropdownLink>
+      <StyledDivider />
+      <DropdownLink href="https://azimuth.hubmapconsortium.org/" isIndented={isIndented}>
+        Azimuth: Reference-based single cell mapping
+      </DropdownLink>
     </>
   );
 }
 
-CCFLinks.propTypes = {
+AtlasToolsLinks.propTypes = {
   isIndented: PropTypes.bool,
 };
 
-CCFLinks.defaultProps = {
+AtlasToolsLinks.defaultProps = {
   isIndented: false,
 };
 
-export default CCFLinks;
+export default AtlasToolsLinks;

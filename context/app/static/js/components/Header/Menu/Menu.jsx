@@ -8,15 +8,15 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 
 import ResourceLinks from '../ResourceLinks';
-import CCFLinks from '../CCFLinks';
 import DocumentationLinks from '../DocumentationLinks';
 import { WidePopper, WidePaper, DropdownMenuItem } from './style';
 import DropdownLink from '../DropdownLink';
+import AtlasToolsLinks from '../AtlasToolsLinks';
 
 function Menu(props) {
   const [open, toggle] = useReducer((v) => !v, false);
-  const [openResources, togglePreview] = useReducer((v) => !v, false);
-  const [openCCF, toggleCCF] = useReducer((v) => !v, false);
+  const [openResources, toggleResources] = useReducer((v) => !v, false);
+  const [openAtlasTools, toggleAtlasTools] = useReducer((v) => !v, false);
   const [openDocumentation, toggleDocumentation] = useReducer((v) => !v, false);
   const { anchorRef } = props;
 
@@ -37,17 +37,17 @@ function Menu(props) {
                 If this changes, remember to update HeaderContent.jsx!
             */}
 
-            <DropdownMenuItem onClick={togglePreview}>
+            <DropdownMenuItem onClick={toggleResources}>
               Resources
               {openResources ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </DropdownMenuItem>
             {openResources && <ResourceLinks isIndented />}
 
-            <DropdownMenuItem onClick={toggleCCF}>
+            <DropdownMenuItem onClick={toggleAtlasTools}>
               Atlas & Tools
-              {openCCF ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+              {openAtlasTools ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </DropdownMenuItem>
-            {openCCF && <CCFLinks isIndented />}
+            {openAtlasTools && <AtlasToolsLinks isIndented />}
 
             <DropdownMenuItem onClick={toggleDocumentation}>
               Documentation

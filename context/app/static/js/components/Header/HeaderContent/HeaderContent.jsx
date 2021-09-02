@@ -8,10 +8,9 @@ import Menu from '../Menu';
 import ResourceLinks from '../ResourceLinks';
 import Dropdown from '../Dropdown';
 import LoginButton from '../LoginButton';
-import CCFLinks from '../CCFLinks';
+import AtlasToolsLinks from '../AtlasToolsLinks';
 import DocumentationLinks from '../DocumentationLinks';
-import DropdownLink from '../DropdownLink';
-import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap, StyledDivider } from './style';
+import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap } from './style';
 
 function HeaderContent({ anchorRef }) {
   const theme = useTheme();
@@ -45,11 +44,7 @@ function HeaderContent({ anchorRef }) {
             <ResourceLinks />
           </Dropdown>
           <Dropdown title="Atlas & Tools" menuListId="ccf-options">
-            <CCFLinks />
-            <StyledDivider />
-            <DropdownLink href="https://azimuth.hubmapconsortium.org/">
-              Azimuth: Reference-based single cell mapping
-            </DropdownLink>
+            <AtlasToolsLinks />
           </Dropdown>
           <Dropdown title="Documentation" menuListId="documentation-options">
             <DocumentationLinks />
