@@ -31,8 +31,8 @@ function CellExpressionHistogram({ uuid, geneName }) {
         {diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for {diagnosticInfo.numCells} cells.
       </Typography>
       <Histogram
-        parentHeight={400}
-        parentWidth={800}
+        parentHeight={500}
+        parentWidth={500}
         visxData={geneExpressionData}
         margin={{
           top: 50,
