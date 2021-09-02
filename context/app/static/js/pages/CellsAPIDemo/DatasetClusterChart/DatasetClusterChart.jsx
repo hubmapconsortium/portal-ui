@@ -51,8 +51,7 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
       });
       const t1 = performance.now();
       const timeWaiting = (t1 - t0) / 1000;
-      const numCells = Object.values(response)
-        .flat()
+      const numCells = response[Object.keys(response)[0]]
         .map(({ matched, unmatched }) => matched + unmatched)
         .reduce((a, b) => a + b);
       setDiagnosticInfo({ numCells, timeWaiting });
