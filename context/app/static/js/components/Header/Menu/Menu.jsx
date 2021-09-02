@@ -7,7 +7,7 @@ import MenuList from '@material-ui/core/MenuList';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 
-import PreviewLinks from '../PreviewLinks';
+import ResourceLinks from '../ResourceLinks';
 import CCFLinks from '../CCFLinks';
 import DocumentationLinks from '../DocumentationLinks';
 import { WidePopper, WidePaper, DropdownMenuItem } from './style';
@@ -15,7 +15,7 @@ import DropdownLink from '../DropdownLink';
 
 function Menu(props) {
   const [open, toggle] = useReducer((v) => !v, false);
-  const [openPreview, togglePreview] = useReducer((v) => !v, false);
+  const [openResources, togglePreview] = useReducer((v) => !v, false);
   const [openCCF, toggleCCF] = useReducer((v) => !v, false);
   const [openDocumentation, toggleDocumentation] = useReducer((v) => !v, false);
   const { anchorRef } = props;
@@ -38,10 +38,10 @@ function Menu(props) {
             */}
 
             <DropdownMenuItem onClick={togglePreview}>
-              Previews
-              {openPreview ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+              Resources
+              {openResources ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </DropdownMenuItem>
-            {openPreview && <PreviewLinks isIndented />}
+            {openResources && <ResourceLinks isIndented />}
 
             <DropdownMenuItem onClick={toggleCCF}>
               Atlas & Tools

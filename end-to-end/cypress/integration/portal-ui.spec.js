@@ -23,8 +23,8 @@ describe('portal-ui', () => {
       cy.contains('Datasets');
       // CCF-UI
       cy.contains('Atlas & Tools');
-      // Previews
-      cy.contains('Previews');
+      // Resources
+      cy.contains('Resources');
       // Docs
       cy.contains('Documentation').click();
       cy.contains('Overview');
