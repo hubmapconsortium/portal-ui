@@ -117,3 +117,15 @@ def list_page(saved_list_uuid):
         title='Saved List',
         flask_data=flask_data
     )
+
+
+@blueprint.route('/iframe/<path:path>')
+def iframe_page(path):
+    flask_data = {
+        **get_default_flask_data()
+    }
+    return render_template(
+        'pages/base_react.html',
+        title=f'{path} iframe',
+        flask_data=flask_data
+    )
