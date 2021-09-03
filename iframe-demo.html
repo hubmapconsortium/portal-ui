@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>iframe demo</title>
+    <style>
+      iframe {
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <p>
+      We provide <code>/iframe/*</code> routes that are designed for reuse.
+      Normally, we don't worry too much about the <code>target</code> on <code>hrefs</code>,
+      but the default behavior of a link in an iframe is just to open the new page inside the iframe,
+      which is not what we want here.
+    </p>
+    <p>
+      These examples assume you have a development instance running locally.
+      If configured correctly, links should navigate the whole page, not just the iframe.
+      Remember to set <code>border: none;</code> in the CSS.
+    </p>
+    <h2><code>/iframe/entity-counts</code></h2>
+    <h3>Horizontal</h3>
+    <div>
+      <iframe src="http://localhost:5001/iframe/entity-counts" height="112" width="800"></iframe>
+    </div>
+    <h3>Vertical</h3>
+    <div>
+      <iframe src="http://localhost:5001/iframe/entity-counts" height="448" width="200"></iframe>
+    </div>
+  </body>
+</html>
