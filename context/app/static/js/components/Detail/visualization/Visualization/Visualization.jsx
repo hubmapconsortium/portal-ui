@@ -37,7 +37,7 @@ function sniffBrowser() {
 }
 
 const FIREFOX_WARNING =
-  'On older versions of Firefox, zooming in on visualizations is very slow; Upgrading to the latest version will fix the problem.';
+  'Firefox is less performant in terms of both loading and interacting with data.  Please consider using Chrome or Safari for a smoother experience with the Vitessce visualization.';
 
 const visualizationStoreSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
