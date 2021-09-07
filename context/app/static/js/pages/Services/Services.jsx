@@ -13,7 +13,7 @@ function Services() {
   const gatewayUrl = `${endpoints.gatewayEndpoint}/status.json`;
   return (
     <>
-      <SectionContainer>
+      <SectionContainer id="summary">
         <SectionHeader variant="h1" component="h1">
           Services
         </SectionHeader>
@@ -24,8 +24,6 @@ function Services() {
           </LightBlueLink>
           .
         </Description>
-      </SectionContainer>
-      <SectionContainer>
         <Paper>
           <ServiceStatusTable {...endpoints} />
         </Paper>
