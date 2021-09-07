@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -27,7 +28,13 @@ const GlobalStyles = createGlobalStyle`
   a {
     text-decoration: none;
     background-color: transparent;
-}
+  }
+
+  .lu-wrapper {
+    // For LineUp:
+    height: calc(100vh - ${headerHeight}px - 100px);
+    // 100px for the page title.
+  }
 `;
 
 export default GlobalStyles;
