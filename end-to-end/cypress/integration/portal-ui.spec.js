@@ -23,13 +23,7 @@ describe('portal-ui', () => {
       cy.contains('Datasets');
       // CCF-UI
       cy.contains('Atlas & Tools');
-      // Previews
-      cy.contains('Previews');
-      // Docs
-      cy.contains('Documentation').click();
-      cy.contains('Overview');
-      cy.contains('FAQ');
-      cy.contains('About');
+
       // login
       cy.contains('login');
       // Don't click! We shouldn't depend on Globus in tests.
