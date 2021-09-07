@@ -24,10 +24,10 @@ function Services() {
           </LightBlueLink>
           .
         </Description>
-        <Paper>
-          <ServiceStatusTable {...endpoints} />
-        </Paper>
       </SectionContainer>
+      <Paper>
+        <ServiceStatusTable {...endpoints} />
+      </Paper>
     </>
   );
 }
