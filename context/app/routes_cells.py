@@ -83,7 +83,53 @@ def _get_cluster_name_and_number(cluster_str):
     return (cluster_name, cluster_number)
 
 
-def get_cluster_cells(cells, gene, min_gene_expression):
+def _get_cluster_cells(cells, gene, min_gene_expression):
+    '''
+    >>> cells = _get_cluster_cells([
+        {
+            "clusters": [
+                "cluster-method-a-1",
+                "cluster-method-b-2"
+            ],
+            "modality": "Z",
+            "values": {
+                "gene": 21.0
+            }
+        },
+        {
+            "clusters": [
+                "cluster-method-a-1",
+                "cluster-method-b-2"
+            ],
+            "modality": "Z",
+            "values": {
+                "gene": 7.0
+            }
+        }], 'gene', 10)
+    >>> cells
+    z = [
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-a',
+            'cluster_number': '1', 'meets_minimum_gene_expression': True
+        },
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-b',
+            'cluster_number': '2', 'meets_minimum_gene_expression': True
+        },
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-a',
+            'cluster_number': '1', 'meets_minimum_gene_expression': False
+        },
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-b',
+            'cluster_number': '2', 'meets_minimum_gene_expression': False
+        },
+    ]
+    '''
     cluster_cells = []
     for cell in cells:
         for cluster in cell['clusters']:
@@ -221,7 +267,7 @@ def cells_in_dataset_clusters():
 
         return {'results':
                 get_matched_cell_counts_per_cluster(
-                    get_cluster_cells(cells_list, gene_name, float(min_gene_expression)))}
+                    _get_cluster_cells(cells_list, gene_name, float(min_gene_expression)))}
 
     except Exception as e:
         return {'message': str(e)}
