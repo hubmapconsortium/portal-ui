@@ -23,7 +23,7 @@
     "date-fns": "^2.14.0",
     "fromentries": "^1.2.0",
     "html-webpack-plugin": "^4.3.0",
-    "immer": "^8.0.1",
+    "immer": "^9.0.6",
     "intersection-observer": "^0.11.0",
     "lineupjsx": "^4.0.0",
     "lodash": "^4.17.21",
