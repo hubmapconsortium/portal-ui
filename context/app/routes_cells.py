@@ -89,17 +89,27 @@ def _get_cluster_cells(cells, gene, min_gene_expression):
         {
             "clusters": [
                 "cluster-method-a-1",
-                "cluster-method-b-2"
+                "cluster-method-b-1"
             ],
             "modality": "Z",
             "values": {
                 "gene": 21.0
             }
         },
-        {
+                {
             "clusters": [
                 "cluster-method-a-1",
                 "cluster-method-b-2"
+            ],
+            "modality": "Z",
+            "values": {
+                "gene": 12.0
+            }
+        },
+        {
+            "clusters": [
+                "cluster-method-a-1",
+                "cluster-method-b-1"
             ],
             "modality": "Z",
             "values": {
@@ -108,6 +118,16 @@ def _get_cluster_cells(cells, gene, min_gene_expression):
         }], 'gene', 10)
     >>> cells
     '[
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-a',
+            'cluster_number': '1', 'meets_minimum_gene_expression': True
+        },
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-b',
+            'cluster_number': '1', 'meets_minimum_gene_expression': True
+        },
         {
             'modality': 'Z',
             'cluster_name': 'cluster-method-a',
@@ -126,7 +146,7 @@ def _get_cluster_cells(cells, gene, min_gene_expression):
         {
             'modality': 'Z',
             'cluster_name': 'cluster-method-b',
-            'cluster_number': '2', 'meets_minimum_gene_expression': False
+            'cluster_number': '1', 'meets_minimum_gene_expression': False
         },
     ]'
     '''
@@ -141,7 +161,67 @@ def _get_cluster_cells(cells, gene, min_gene_expression):
     return cluster_cells
 
 
-def get_matched_cell_counts_per_cluster(cells):
+def _get_matched_cell_counts_per_cluster(cells):
+    '''
+    >>> clusters = _get_matched_cell_counts_per_cluster([
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-a',
+            'cluster_number': '1', 'meets_minimum_gene_expression': True
+        },
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-b',
+            'cluster_number': '1', 'meets_minimum_gene_expression': True
+        },
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-a',
+            'cluster_number': '1', 'meets_minimum_gene_expression': True
+        },
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-b',
+            'cluster_number': '2', 'meets_minimum_gene_expression': True
+        },
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-a',
+            'cluster_number': '1', 'meets_minimum_gene_expression': False
+        },
+        {
+            'modality': 'Z',
+            'cluster_name': 'cluster-method-b',
+            'cluster_number': '1', 'meets_minimum_gene_expression': False
+        },
+    ])
+    >>> clusters
+    '{
+        "cluster-method-a": [
+            {
+                "cluster_name": "cluster-method-a",
+                "cluster_number": "1",
+                "matched": 2,
+                "modality": "Z",
+                "unmatched": 1
+            }],
+        'cluster-method-b': [
+            {
+                "cluster_name": "cluster-method-b",
+                "cluster_number": "1",
+                "matched": 1,
+                "modality": "Z",
+                "unmatched": 1
+            },
+            {
+                "cluster_name": "cluster-method-b",
+                "cluster_number": "2",
+                "matched": 1,
+                "modality": "Z",
+                "unmatched": 0
+            },
+        ]}'
+    '''
     group_keys = ["cluster_name", "cluster_number", 'modality']
     grouper = itemgetter(*group_keys)
     clusters = defaultdict(lambda: [])
@@ -266,7 +346,7 @@ def cells_in_dataset_clusters():
         cells_list = cells.get_list(values_included=gene_name)
 
         return {'results':
-                get_matched_cell_counts_per_cluster(
+                _get_matched_cell_counts_per_cluster(
                     _get_cluster_cells(cells_list, gene_name, float(min_gene_expression)))}
 
     except Exception as e:
