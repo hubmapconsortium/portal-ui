@@ -344,7 +344,6 @@ def cells_in_dataset_clusters():
     try:
         cells = client.select_cells(where='dataset', has=[uuid])
         cells_list = cells.get_list(values_included=gene_name)
-        
 
         return {'results':
                 _get_matched_cell_counts_per_cluster(
