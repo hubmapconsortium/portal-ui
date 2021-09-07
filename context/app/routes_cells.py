@@ -107,7 +107,7 @@ def _get_cluster_cells(cells, gene, min_gene_expression):
             }
         }], 'gene', 10)
     >>> cells
-    z = [
+    '[
         {
             'modality': 'Z',
             'cluster_name': 'cluster-method-a',
@@ -128,7 +128,7 @@ def _get_cluster_cells(cells, gene, min_gene_expression):
             'cluster_name': 'cluster-method-b',
             'cluster_number': '2', 'meets_minimum_gene_expression': False
         },
-    ]
+    ]'
     '''
     cluster_cells = []
     for cell in cells:
