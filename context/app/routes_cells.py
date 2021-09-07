@@ -67,7 +67,14 @@ def _first_n_matches(strings, substring, n):
     } for s, offset in zip(first_n, offsets)]
 
 
-def get_cluster_name_and_number(cluster_str):
+def _get_cluster_name_and_number(cluster_str):
+    '''
+    >>> n_n = _get_cluster_name_and_number('cluster-name-number')
+    >>> n_n.name
+    'cluster-name'
+    >>> n_n.number
+    'number'
+    '''
     cluster_name_arr = cluster_str.split('-')
     cluster_number = cluster_name_arr.pop()
     cluster_name = '-'.join(cluster_name_arr)
@@ -87,11 +94,12 @@ def get_cluster_cells(cells, gene, min_gene_expression):
 
 
 def get_matched_cell_counts_per_cluster(cells):
-    grouper = itemgetter("cluster_name", "cluster_number", 'modality')
+    group_keys = ["cluster_name", "cluster_number", 'modality']
+    grouper = itemgetter(*group_keys)
     clusters = {}
     for key, grp in groupby(sorted(cells, key=grouper), grouper):
         grp_list = list(grp)
-        cluster = dict(zip(["cluster_name", "cluster_number", 'modality'], key))
+        cluster = dict(zip(group_keys, key))
         if not cluster['cluster_name'] in clusters:
             clusters[cluster['cluster_name']] = []
         cluster['matched'] = sum(item["meets_minimum_gene_expression"] for item in grp_list)
@@ -206,9 +214,8 @@ def cells_in_dataset_clusters():
 
     try:
         cells = client.select_cells(where='dataset', has=[uuid])
-        cells_list = list(cells.get_list(values_included=gene_name))
+        cells_list = cells.get_list(values_included=gene_name)
 
-        # list() will call iterator behind the scenes.
         return {'results':
                 get_matched_cell_counts_per_cluster(
                     get_cluster_cells(cells_list, gene_name, float(min_gene_expression)))}
