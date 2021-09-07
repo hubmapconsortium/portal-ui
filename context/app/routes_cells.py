@@ -10,6 +10,8 @@ from operator import itemgetter
 
 from collections import defaultdict
 
+from dataclasses import dataclass
+
 blueprint = make_blueprint(__name__)
 
 
@@ -69,6 +71,12 @@ def _first_n_matches(strings, substring, n):
     } for s, offset in zip(first_n, offsets)]
 
 
+@dataclass
+class Cluster:
+    name: str
+    number: int
+
+
 def _get_cluster_name_and_number(cluster_str):
     '''
     >>> n_n = _get_cluster_name_and_number('cluster-name-number')
@@ -80,7 +88,7 @@ def _get_cluster_name_and_number(cluster_str):
     cluster_name_arr = cluster_str.split('-')
     cluster_number = cluster_name_arr.pop()
     cluster_name = '-'.join(cluster_name_arr)
-    return (cluster_name, cluster_number)
+    return Cluster(name=cluster_name, number=cluster_number)
 
 
 def _get_cluster_cells(cells, gene, min_gene_expression):
@@ -117,38 +125,7 @@ def _get_cluster_cells(cells, gene, min_gene_expression):
     ...             }
     ...         }], 'gene', 10)
     >>> cells
-    '[
-        {
-            'modality': 'Z',
-            'cluster_name': 'cluster-method-a',
-            'cluster_number': '1', 'meets_minimum_gene_expression': True
-        },
-        {
-            'modality': 'Z',
-            'cluster_name': 'cluster-method-b',
-            'cluster_number': '1', 'meets_minimum_gene_expression': True
-        },
-        {
-            'modality': 'Z',
-            'cluster_name': 'cluster-method-a',
-            'cluster_number': '1', 'meets_minimum_gene_expression': True
-        },
-        {
-            'modality': 'Z',
-            'cluster_name': 'cluster-method-b',
-            'cluster_number': '2', 'meets_minimum_gene_expression': True
-        },
-        {
-            'modality': 'Z',
-            'cluster_name': 'cluster-method-a',
-            'cluster_number': '1', 'meets_minimum_gene_expression': False
-        },
-        {
-            'modality': 'Z',
-            'cluster_name': 'cluster-method-b',
-            'cluster_number': '1', 'meets_minimum_gene_expression': False
-        },
-    ]'
+    '[{'modality': 'Z', 'cluster_name': 'cluster-method-a', 'cluster_number': '1', 'meets_minimum_gene_expression': True}, {'modality': 'Z', 'cluster_name': 'cluster-method-b', 'cluster_number': '1', 'meets_minimum_gene_expression': True}, {'modality': 'Z', 'cluster_name': 'cluster-method-a', 'cluster_number': '1', 'meets_minimum_gene_expression': True}, {'modality': 'Z', 'cluster_name': 'cluster-method-b', 'cluster_number': '2', 'meets_minimum_gene_expression': True}, {'modality': 'Z', 'cluster_name': 'cluster-method-a', 'cluster_number': '1', 'meets_minimum_gene_expression': False}, {'modality': 'Z', 'cluster_name': 'cluster-method-b', 'cluster_number': '1', 'meets_minimum_gene_expression': False}]
     '''
     cluster_cells = []
     for cell in cells:
@@ -196,31 +173,7 @@ def _get_matched_cell_counts_per_cluster(cells):
     ...         },
     ...     ])
     >>> dict(clusters)
-    '{
-        "cluster-method-a": [
-            {
-                "cluster_name": "cluster-method-a",
-                "cluster_number": "1",
-                "matched": 2,
-                "modality": "Z",
-                "unmatched": 1
-            }],
-        'cluster-method-b': [
-            {
-                "cluster_name": "cluster-method-b",
-                "cluster_number": "1",
-                "matched": 1,
-                "modality": "Z",
-                "unmatched": 1
-            },
-            {
-                "cluster_name": "cluster-method-b",
-                "cluster_number": "2",
-                "matched": 1,
-                "modality": "Z",
-                "unmatched": 0
-            },
-        ]}'
+    '{'cluster-method-a': [{'cluster_name': 'cluster-method-a', 'cluster_number': '1', 'modality': 'Z', 'matched': 2, 'unmatched': 1}], 'cluster-method-b': [{'cluster_name': 'cluster-method-b', 'cluster_number': '1', 'modality': 'Z', 'matched': 1, 'unmatched': 1}, {'cluster_name': 'cluster-method-b', 'cluster_number': '2', 'modality': 'Z', 'matched': 1, 'unmatched': 0}]}
     '''
     group_keys = ["cluster_name", "cluster_number", 'modality']
     grouper = itemgetter(*group_keys)
