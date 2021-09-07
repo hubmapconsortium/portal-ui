@@ -102,8 +102,11 @@ def get_matched_cell_counts_per_cluster(cells):
     for key, grp in groupby(sorted(cells, key=grouper), grouper):
         grp_list = list(grp)
         cluster = dict(zip(group_keys, key))
-        cluster['matched'] = sum(item["meets_minimum_gene_expression"] for item in grp_list)
-        cluster['unmatched'] = len(grp_list) - cluster['matched']
+        matched_count = sum(item["meets_minimum_gene_expression"] for item in grp_list)
+        cluster.update({
+            'matched': matched_count
+            'unmatched': len(grp_list) - matched_count
+        })
         clusters[cluster['cluster_name']].append(cluster)
     return clusters
 
