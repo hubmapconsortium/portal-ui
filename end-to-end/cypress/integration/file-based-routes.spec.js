@@ -20,14 +20,6 @@ describe('file-based-routes', () => {
       cy.contains('Technical').click();
       cy.contains('HIVE Software Engineering Principles')
     });
-    it('has link to EUI', () => {
-      cy.visit('/');
-      cy.contains('Atlas & Tools').click();
-      cy.contains('EUI').click(); // This is the only one which is part of the portal.
-      // Beyond this, we get this error:
-      // > Blocked a frame with origin "http://localhost:5001"
-      // > from accessing a cross-origin frame.
-    });
     it('has working publication pages', () => {
       // TODO: When we link to it from the menu, follow the link instead.
       cy.visit('/publication');
