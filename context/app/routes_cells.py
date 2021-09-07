@@ -85,7 +85,7 @@ def get_cluster_cells(cells, gene, min_gene_expression):
     cluster_cells = []
     for cell in cells:
         for cluster in cell['clusters']:
-            cluster_name, cluster_number = get_cluster_name_and_number(cluster)
+            cluster_name, cluster_number = _get_cluster_name_and_number(cluster)
             cluster_cells.append({'modality': cell['modality'], 'cluster_name': cluster_name,
                                   'cluster_number': cluster_number,
                                   'meets_minimum_gene_expression':
