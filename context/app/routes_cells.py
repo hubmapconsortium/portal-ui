@@ -8,6 +8,8 @@ from .utils import get_default_flask_data, make_blueprint
 
 from operator import itemgetter
 
+from collections import defaultdict
+
 blueprint = make_blueprint(__name__)
 
 
@@ -96,12 +98,10 @@ def get_cluster_cells(cells, gene, min_gene_expression):
 def get_matched_cell_counts_per_cluster(cells):
     group_keys = ["cluster_name", "cluster_number", 'modality']
     grouper = itemgetter(*group_keys)
-    clusters = {}
+    clusters = defaultdict(lambda: [])
     for key, grp in groupby(sorted(cells, key=grouper), grouper):
         grp_list = list(grp)
         cluster = dict(zip(group_keys, key))
-        if not cluster['cluster_name'] in clusters:
-            clusters[cluster['cluster_name']] = []
         cluster['matched'] = sum(item["meets_minimum_gene_expression"] for item in grp_list)
         cluster['unmatched'] = len(grp_list) - cluster['matched']
         clusters[cluster['cluster_name']].append(cluster)
