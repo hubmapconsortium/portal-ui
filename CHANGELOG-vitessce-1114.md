@@ -1,0 +1,1 @@
+- Upgrade Vitessce to 1.1.14.  Gene expression sliders and automatic overplot correction have been added.

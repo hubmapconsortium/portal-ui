@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './components/App';
+import Iframe from './pages/Iframe';
 import { setJsonLD } from './schema.org';
 
 // TODO: Re-enable. https://github.com/hubmapconsortium/portal-ui/issues/1426
@@ -13,7 +14,7 @@ import { setJsonLD } from './schema.org';
 
 ReactDOM.render(
   // eslint-disable-next-line no-undef
-  <App flaskData={flaskData} />,
+  window.location.pathname.startsWith('/iframe/') ? <Iframe flaskData={flaskData} /> : <App flaskData={flaskData} />,
   document.getElementById('react-content'),
 );
 

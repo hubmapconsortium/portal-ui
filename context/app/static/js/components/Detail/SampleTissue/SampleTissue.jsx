@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
 import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 
@@ -20,7 +20,7 @@ function MetadataItem(props) {
 function SampleTissue(props) {
   const { uuid, mapped_organ, mapped_specimen_type, hasRUI } = props;
   return (
-    <SectionContainer id="tissue">
+    <PaddedSectionContainer id="tissue">
       <SectionHeader>Tissue</SectionHeader>
       <FlexPaper>
         <MetadataItem label="Organ Type" flexBasis="25%">
@@ -42,7 +42,7 @@ function SampleTissue(props) {
           </MetadataItem>
         )}
       </FlexPaper>
-    </SectionContainer>
+    </PaddedSectionContainer>
   );
 }
 
