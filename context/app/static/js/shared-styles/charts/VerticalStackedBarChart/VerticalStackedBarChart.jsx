@@ -75,7 +75,8 @@ function VerticalStackedBarChart({
                         x={bar.x}
                         y={bar.y}
                         width={bar.width}
-                        height={bar.height - strokeWidth}
+                        // TODO: Fix stroke overlap without shrinking bars
+                        height={Math.max(bar.height - strokeWidth, 0.1)}
                         fill={bar.color}
                         stroke={
                           hoveredBarIndices &&

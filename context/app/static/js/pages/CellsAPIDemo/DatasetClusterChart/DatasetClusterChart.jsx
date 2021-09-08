@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
+import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
+import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalStackedBarChart';
 import CellsService from '../CellsService';
 
 function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
   const [results, setResults] = useState({});
   const [scales, setScales] = useState({});
-  const [diagnosticInfo, setDiagnosticInfo] = useState({});
+  const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useState(0);
 
   useEffect(() => {
     if (Object.keys(results).length) {
-      const selectedClusterType = Object.keys(results)[0];
+      const selectedData = results[Object.keys(results)[selectedClusterTypeIndex]];
       const yScale = scaleLinear({
-        domain: [0, Math.max(...results[selectedClusterType].map((result) => result.matched + result.unmatched))],
+        domain: [0, Math.max(...selectedData.map((result) => result.matched + result.unmatched))],
         nice: true,
       });
 
       const xScale = scaleBand({
-        domain: results[selectedClusterType].map((result) => result.cluster_number).sort((a, b) => a - b),
+        domain: selectedData.map((result) => result.cluster_number).sort((a, b) => a - b),
         padding: 0.2,
       });
 
@@ -29,41 +32,46 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
       });
 
       setScales({
+        selectedData,
         yScale,
         xScale,
         colorScale,
       });
     }
-  }, [setScales, results]);
+  }, [setScales, results, selectedClusterTypeIndex]);
 
   useEffect(() => {
     async function fetchCellClusterMatches() {
-      const t0 = performance.now();
       const response = await new CellsService().getClusterCellMatchesInDataset({
         uuid,
         geneName,
         minGeneExpression,
       });
-      const t1 = performance.now();
-      const timeWaiting = (t1 - t0) / 1000;
-      const numCells = response[Object.keys(response)[0]]
-        .map(({ matched, unmatched }) => matched + unmatched)
-        .reduce((a, b) => a + b);
-      setDiagnosticInfo({ numCells, timeWaiting });
       setResults(response);
     }
     fetchCellClusterMatches();
-  }, [geneName, minGeneExpression, results, uuid]);
+  }, [geneName, minGeneExpression, uuid]);
+
+  function handleSelectClusterType({ i }) {
+    setSelectedClusterTypeIndex(i);
+  }
 
   return Object.keys(scales).length ? (
     <>
-      <Typography>
-        {diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for {diagnosticInfo.numCells} cells.
-      </Typography>
+      <DropdownListbox
+        id="bar-fill-dropdown"
+        optionComponent={DropdownListboxOption}
+        buttonComponent={Button}
+        selectedOptionIndex={selectedClusterTypeIndex}
+        options={Object.keys(results)}
+        selectOnClick={handleSelectClusterType}
+        getOptionLabel={(v) => v}
+        buttonProps={{ variant: 'outlined' }}
+      />
       <VerticalStackedBarChart
         parentWidth={500}
         parentHeight={500}
-        visxData={results[Object.keys(results)[0]]}
+        visxData={scales.selectedData}
         yScale={scales.yScale}
         xScale={scales.xScale}
         colorScale={scales.colorScale}
@@ -72,13 +80,13 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
         margin={{
           top: 50,
           right: 50,
-          left: 100,
-          bottom: 200,
+          left: 50,
+          bottom: 50,
         }}
       />
     </>
   ) : (
-    <div>Please wait...</div>
+    <Typography>Please wait for cluster chart...</Typography>
   );
 }
 
