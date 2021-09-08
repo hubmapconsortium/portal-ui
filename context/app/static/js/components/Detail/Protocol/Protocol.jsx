@@ -5,7 +5,7 @@ import Divider from '@material-ui/core/Divider';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import useProtocolData from 'js/hooks/useProtocolData';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
 import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 
@@ -33,13 +33,13 @@ function Protocol(props) {
   const resolverHostnameAndDOI = protocolData?.protocol?.doi;
 
   return (
-    <SectionContainer id="protocols">
+    <PaddedSectionContainer id="protocols">
       <SectionHeader>Protocols</SectionHeader>
       <Divider />
       <StyledPaper>
         <ProtocolLink title={title} resolverHostnameAndDOI={resolverHostnameAndDOI} />
       </StyledPaper>
-    </SectionContainer>
+    </PaddedSectionContainer>
   );
 }
 

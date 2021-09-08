@@ -4,10 +4,10 @@ import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
 /* Anchor offset for fixed header.
 Only to be used on pages with table of contents. */
-const SectionContainer = styled.div`
+const PaddedSectionContainer = styled.div`
   margin-bottom: ${(props) => props.theme.spacing(5)}px;
   padding-top: ${headerHeight + entityHeaderHeight + 10}px;
   margin-top: -${headerHeight + entityHeaderHeight + 10}px;
 `;
 
-export default SectionContainer;
+export default PaddedSectionContainer;

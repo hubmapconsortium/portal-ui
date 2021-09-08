@@ -9,13 +9,13 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
 
 function Organs(props) {
   const { organs } = props;
 
   return (
-    <SectionContainer>
+    <PaddedSectionContainer>
       <SectionHeader variant="h1" component="h1">
         Organs
       </SectionHeader>
@@ -34,7 +34,7 @@ function Organs(props) {
           </TableBody>
         </Table>
       </Paper>
-    </SectionContainer>
+    </PaddedSectionContainer>
   );
 }
 

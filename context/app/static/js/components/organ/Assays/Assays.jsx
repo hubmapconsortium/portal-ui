@@ -3,16 +3,16 @@ import React from 'react';
 import Paper from '@material-ui/core/Paper';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
 
 function Assays(props) {
   const { title } = props;
 
   return (
-    <SectionContainer>
+    <PaddedSectionContainer>
       <SectionHeader>Assays</SectionHeader>
       <Paper>TODO: {title}</Paper>
-    </SectionContainer>
+    </PaddedSectionContainer>
   );
 }
 
