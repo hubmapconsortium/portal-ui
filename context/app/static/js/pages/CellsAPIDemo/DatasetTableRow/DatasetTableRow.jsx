@@ -4,15 +4,25 @@ import format from 'date-fns/format';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import ExpandableRow from 'js/shared-styles/Table/ExpandableRow';
 import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
+import DatasetClusterChart from '../DatasetClusterChart';
+import CellExpressionHistogram from '../CellExpressionHistogram';
 
 function UnitValueCell({ unit, value }) {
   return <ExpandableRowCell>{`${value} ${unit}`}</ExpandableRowCell>;
 }
 
-function DatasetTableRow({ datasetMetadata, numCells }) {
+function DatasetTableRow({ datasetMetadata, numCells, geneName, minGeneExpression }) {
   const { hubmap_id, uuid, origin_sample, mapped_data_types, donor, last_modified_timestamp } = datasetMetadata;
   return (
-    <ExpandableRow numCells={numCells} expandedContent={<div>Cells</div>}>
+    <ExpandableRow
+      numCells={numCells}
+      expandedContent={
+        <div>
+          <CellExpressionHistogram uuid={uuid} geneName={geneName} />
+          <DatasetClusterChart uuid={uuid} geneName={geneName} minGeneExpression={minGeneExpression} />
+        </div>
+      }
+    >
       <ExpandableRowCell>
         <LightBlueLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</LightBlueLink>
       </ExpandableRowCell>

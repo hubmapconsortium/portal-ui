@@ -19,7 +19,7 @@ const columns = [
   { id: 'expand', label: '' },
 ];
 
-function DatasetsTable({ datasets }) {
+function DatasetsTable({ datasets, minGeneExpression, geneName }) {
   return (
     <Table stickyHeader>
       <TableHead>
@@ -31,7 +31,13 @@ function DatasetsTable({ datasets }) {
       </TableHead>
       <TableBody>
         {datasets.map(({ _source }) => (
-          <DatasetTableRow datasetMetadata={_source} numCells={columns.length} key={_source.hubmap_id} />
+          <DatasetTableRow
+            datasetMetadata={_source}
+            numCells={columns.length}
+            key={_source.hubmap_id}
+            minGeneExpression={minGeneExpression}
+            geneName={geneName}
+          />
         ))}
       </TableBody>
     </Table>
