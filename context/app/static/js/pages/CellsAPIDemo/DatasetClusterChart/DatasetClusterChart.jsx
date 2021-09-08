@@ -11,7 +11,6 @@ import CellsService from '../CellsService';
 function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
   const [results, setResults] = useState({});
   const [scales, setScales] = useState({});
-  const [diagnosticInfo, setDiagnosticInfo] = useState({});
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useState(0);
 
   useEffect(() => {
@@ -43,18 +42,11 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
 
   useEffect(() => {
     async function fetchCellClusterMatches() {
-      const t0 = performance.now();
       const response = await new CellsService().getClusterCellMatchesInDataset({
         uuid,
         geneName,
         minGeneExpression,
       });
-      const t1 = performance.now();
-      const timeWaiting = (t1 - t0) / 1000;
-      const numCells = response[Object.keys(response)[0]]
-        .map(({ matched, unmatched }) => matched + unmatched)
-        .reduce((a, b) => a + b);
-      setDiagnosticInfo({ numCells, timeWaiting });
       setResults(response);
     }
     fetchCellClusterMatches();
@@ -66,9 +58,6 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
 
   return Object.keys(scales).length ? (
     <>
-      <Typography>
-        {diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for {diagnosticInfo.numCells} cells.
-      </Typography>
       <DropdownListbox
         id="bar-fill-dropdown"
         optionComponent={DropdownListboxOption}
@@ -97,7 +86,7 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
       />
     </>
   ) : (
-    <Typography>Please wait...</Typography>
+    <Typography>Please wait for cluster chart...</Typography>
   );
 }
 

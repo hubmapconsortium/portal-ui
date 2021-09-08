@@ -5,6 +5,7 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import ExpandableRow from 'js/shared-styles/Table/ExpandableRow';
 import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
 import DatasetClusterChart from '../DatasetClusterChart';
+import CellExpressionHistogram from '../CellExpressionHistogram';
 
 function UnitValueCell({ unit, value }) {
   return <ExpandableRowCell>{`${value} ${unit}`}</ExpandableRowCell>;
@@ -15,7 +16,12 @@ function DatasetTableRow({ datasetMetadata, numCells, geneName, minGeneExpressio
   return (
     <ExpandableRow
       numCells={numCells}
-      expandedContent={<DatasetClusterChart uuid={uuid} geneName={geneName} minGeneExpression={minGeneExpression} />}
+      expandedContent={
+        <div>
+          <CellExpressionHistogram uuid={uuid} geneName={geneName} />
+          <DatasetClusterChart uuid={uuid} geneName={geneName} minGeneExpression={minGeneExpression} />
+        </div>
+      }
     >
       <ExpandableRowCell>
         <LightBlueLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</LightBlueLink>
