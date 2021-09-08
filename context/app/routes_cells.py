@@ -12,6 +12,8 @@ from collections import defaultdict
 
 from dataclasses import dataclass
 
+import pprint
+
 blueprint = make_blueprint(__name__)
 
 
@@ -75,7 +77,6 @@ def _first_n_matches(strings, substring, n):
 class Cluster:
     name: str
     number: int
-
     def __iter__(self):
         return iter((self.name, self.number))
 
@@ -127,8 +128,31 @@ def _get_cluster_cells(cells, gene, min_gene_expression):
     ...                 "gene": 7.0
     ...             }
     ...         }], 'gene', 10)
-    >>> cells
-    [{'modality': 'Z', 'cluster_name': 'cluster-method-a', 'cluster_number': '1', 'meets_minimum_gene_expression': True}, {'modality': 'Z', 'cluster_name': 'cluster-method-b', 'cluster_number': '1', 'meets_minimum_gene_expression': True}, {'modality': 'Z', 'cluster_name': 'cluster-method-a', 'cluster_number': '1', 'meets_minimum_gene_expression': True}, {'modality': 'Z', 'cluster_name': 'cluster-method-b', 'cluster_number': '2', 'meets_minimum_gene_expression': True}, {'modality': 'Z', 'cluster_name': 'cluster-method-a', 'cluster_number': '1', 'meets_minimum_gene_expression': False}, {'modality': 'Z', 'cluster_name': 'cluster-method-b', 'cluster_number': '1', 'meets_minimum_gene_expression': False}]
+    >>> pprint.pprint(cells)
+    [{'cluster_name': 'cluster-method-a',
+      'cluster_number': '1',
+      'meets_minimum_gene_expression': True,
+      'modality': 'Z'},
+     {'cluster_name': 'cluster-method-b',
+      'cluster_number': '1',
+      'meets_minimum_gene_expression': True,
+      'modality': 'Z'},
+     {'cluster_name': 'cluster-method-a',
+      'cluster_number': '1',
+      'meets_minimum_gene_expression': True,
+      'modality': 'Z'},
+     {'cluster_name': 'cluster-method-b',
+      'cluster_number': '2',
+      'meets_minimum_gene_expression': True,
+      'modality': 'Z'},
+     {'cluster_name': 'cluster-method-a',
+      'cluster_number': '1',
+      'meets_minimum_gene_expression': False,
+      'modality': 'Z'},
+     {'cluster_name': 'cluster-method-b',
+      'cluster_number': '1',
+      'meets_minimum_gene_expression': False,
+      'modality': 'Z'}]
     '''
     cluster_cells = []
     for cell in cells:
@@ -175,8 +199,22 @@ def _get_matched_cell_counts_per_cluster(cells):
     ...             'cluster_number': '1', 'meets_minimum_gene_expression': False
     ...         },
     ...     ])
-    >>> dict(clusters)
-    {'cluster-method-a': [{'cluster_name': 'cluster-method-a', 'cluster_number': '1', 'modality': 'Z', 'matched': 2, 'unmatched': 1}], 'cluster-method-b': [{'cluster_name': 'cluster-method-b', 'cluster_number': '1', 'modality': 'Z', 'matched': 1, 'unmatched': 1}, {'cluster_name': 'cluster-method-b', 'cluster_number': '2', 'modality': 'Z', 'matched': 1, 'unmatched': 0}]}
+    >>> pprint.pprint(dict(clusters))
+    {'cluster-method-a': [{'cluster_name': 'cluster-method-a',
+                           'cluster_number': '1',
+                           'matched': 2,
+                           'modality': 'Z',
+                           'unmatched': 1}],
+     'cluster-method-b': [{'cluster_name': 'cluster-method-b',
+                           'cluster_number': '1',
+                           'matched': 1,
+                           'modality': 'Z',
+                           'unmatched': 1},
+                          {'cluster_name': 'cluster-method-b',
+                           'cluster_number': '2',
+                           'matched': 1,
+                           'modality': 'Z',
+                           'unmatched': 0}]}
     '''
     group_keys = ["cluster_name", "cluster_number", 'modality']
     grouper = itemgetter(*group_keys)
