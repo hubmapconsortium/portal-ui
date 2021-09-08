@@ -1,13 +1,13 @@
 import React from 'react';
 
-import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
+import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import SectionItem from 'js/components/Detail/SectionItem';
 
 import { StyledSectionPaper, ChartTitle } from './style';
 
 function ProjectAttribution() {
   return (
-    <PaddedSectionContainer id="attribution">
+    <SectionContainer id="attribution">
       <ChartTitle variant="h4" component="h2">
         Attribution
       </ChartTitle>
@@ -20,7 +20,7 @@ function ProjectAttribution() {
           NIH HuBMAP Underepresented Student Internship
         </SectionItem>
       </StyledSectionPaper>
-    </PaddedSectionContainer>
+    </SectionContainer>
   );
 }
 
