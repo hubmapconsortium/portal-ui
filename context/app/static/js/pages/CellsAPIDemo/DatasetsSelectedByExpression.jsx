@@ -108,7 +108,9 @@ function DatasetsSelectedByExpression(props) {
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
       {message}
-      {searchHits.length > 0 && <DatasetsTable datasets={searchHits} />}
+      {searchHits.length > 0 && (
+        <DatasetsTable datasets={searchHits} minGeneExpression={10 ** minExpressionLog} geneName={geneNames[0]} />
+      )}
     </Paper>
   );
 }
