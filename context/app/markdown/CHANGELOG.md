@@ -1,3 +1,14 @@
+## v0.26.1 - 2021-09-08
+
+- Add cypress tests of file-backed pages: These don't require API mocking, and because of
+  their relative simplicity, may get short shirt in manual testing.
+- Add routes for iframes.
+- Add a page with the metadata loaded into LineUp.
+- Add note explaining the limitted scope of the publications page.
+- Move `SectionContainer` to `PaddedSectionContainer`.
+- Upgrade Vitessce to 1.1.14.  Gene expression sliders and automatic overplot correction have been added.
+
+
 ## v0.26.0 - 2021-09-01
 
 - Use fewer hard-coded values on the DonorChart page.
