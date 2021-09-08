@@ -15,7 +15,7 @@ function Preview(props) {
 
   return (
     <>
-      <SectionContainer id="summary">
+      <SectionContainer>
         <Typography variant="subtitle1">Preview</Typography>
         <SectionHeader variant="h1" component="h1">
           {title}

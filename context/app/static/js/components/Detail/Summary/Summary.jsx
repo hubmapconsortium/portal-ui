@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
 import SummaryData from '../SummaryData';
 import SummaryBody from '../SummaryBody';
 
@@ -25,7 +25,7 @@ function Summary(props) {
     collectionName,
   } = props;
   return (
-    <SectionContainer id="summary">
+    <PaddedSectionContainer id="summary">
       <SummaryData
         entity_type={entity_type}
         uuid={uuid}
@@ -47,7 +47,7 @@ function Summary(props) {
         doi={doi}
         collectionName={collectionName}
       />
-    </SectionContainer>
+    </PaddedSectionContainer>
   );
 }
 

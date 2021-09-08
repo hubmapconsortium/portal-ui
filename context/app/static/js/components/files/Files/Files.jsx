@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import DetailContext from 'js/components/Detail/context';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
 import GlobusSection from '../GlobusSection';
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../FileBrowserDUA';
@@ -38,7 +38,7 @@ function Files(props) {
 
   return (
     <FilesContext.Provider value={{ openDUA, hasAgreedToDUA }}>
-      <SectionContainer id="files">
+      <PaddedSectionContainer id="files">
         <SectionHeader>Files</SectionHeader>
         {files && (
           <MarginBottomDiv>
@@ -52,7 +52,7 @@ function Files(props) {
           handleClose={handleDUAClose}
           mapped_data_access_level={mapped_data_access_level}
         />
-      </SectionContainer>
+      </PaddedSectionContainer>
     </FilesContext.Provider>
   );
 }

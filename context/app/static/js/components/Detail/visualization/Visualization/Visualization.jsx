@@ -17,7 +17,7 @@ import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import {
   vitessceFixedHeight,
   bodyExpandedCSS,
-  StyledSectionContainer,
+  StyledPaddedSectionContainer,
   StyledHeader,
   StyledHeaderText,
   StyledHeaderRight,
@@ -111,7 +111,7 @@ function Visualization(props) {
     vitessceConfig &&
     // Don't render multi-datasets unless they have a selection from the list of options in vitessceConfig.
     (!isMultiDataset || Number.isInteger(vitessceSelection)) && (
-      <StyledSectionContainer id="visualization">
+      <StyledPaddedSectionContainer id="visualization">
         <StyledHeader>
           <StyledHeaderText>Visualization</StyledHeaderText>
           <StyledHeaderRight>
@@ -197,7 +197,7 @@ function Visualization(props) {
           <OutboundLink href="http://vitessce.io">Vitessce</OutboundLink>
         </StyledFooterText>
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
-      </StyledSectionContainer>
+      </StyledPaddedSectionContainer>
     )
   );
 }
