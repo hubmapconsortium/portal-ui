@@ -12,8 +12,6 @@ from collections import defaultdict
 
 from dataclasses import dataclass
 
-import pprint
-
 blueprint = make_blueprint(__name__)
 
 
@@ -77,6 +75,7 @@ def _first_n_matches(strings, substring, n):
 class Cluster:
     name: str
     number: int
+
     def __iter__(self):
         return iter((self.name, self.number))
 
@@ -128,6 +127,7 @@ def _get_cluster_cells(cells, gene, min_gene_expression):
     ...                 "gene": 7.0
     ...             }
     ...         }], 'gene', 10)
+    >>> import pprint
     >>> pprint.pprint(cells)
     [{'cluster_name': 'cluster-method-a',
       'cluster_number': '1',
@@ -199,6 +199,7 @@ def _get_matched_cell_counts_per_cluster(cells):
     ...             'cluster_number': '1', 'meets_minimum_gene_expression': False
     ...         },
     ...     ])
+    >>> import pprint
     >>> pprint.pprint(dict(clusters))
     {'cluster-method-a': [{'cluster_name': 'cluster-method-a',
                            'cluster_number': '1',
