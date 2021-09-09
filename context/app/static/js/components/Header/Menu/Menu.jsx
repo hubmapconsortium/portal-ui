@@ -7,25 +7,38 @@ import MenuList from '@material-ui/core/MenuList';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 
-import ResourceLinks from '../ResourceLinks';
-import DocumentationLinks from '../DocumentationLinks';
 import { WidePopper, WidePaper, DropdownMenuItem } from './style';
 import DropdownLink from '../DropdownLink';
+
+import ResourceLinks from '../ResourceLinks';
 import AtlasToolsLinks from '../AtlasToolsLinks';
+import DocumentationLinks from '../DocumentationLinks';
+
+function DropdownContainer(props) {
+  const { label, children } = props;
+  const [isOpen, toggle] = useReducer((v) => !v, false);
+
+  return (
+    <>
+      <DropdownMenuItem onClick={toggle}>
+        {label}
+        {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+      </DropdownMenuItem>
+      {isOpen && children}
+    </>
+  );
+}
 
 function Menu(props) {
-  const [open, toggle] = useReducer((v) => !v, false);
-  const [openResources, toggleResources] = useReducer((v) => !v, false);
-  const [openAtlasTools, toggleAtlasTools] = useReducer((v) => !v, false);
-  const [openDocumentation, toggleDocumentation] = useReducer((v) => !v, false);
+  const [isOpen, toggle] = useReducer((v) => !v, false);
   const { anchorRef } = props;
 
   return (
     <>
       <IconButton color="inherit" aria-describedby="main-menu" aria-haspopup="true" onClick={toggle}>
-        {open ? <CloseIcon /> : <MenuIcon />}
+        {isOpen ? <CloseIcon /> : <MenuIcon />}
       </IconButton>
-      <WidePopper id="main-menu" open={open} anchorEl={anchorRef.current}>
+      <WidePopper id="main-menu" open={isOpen} anchorEl={anchorRef.current}>
         <WidePaper>
           <MenuList>
             {['Donor', 'Sample', 'Dataset'].map((type) => (
@@ -33,17 +46,13 @@ function Menu(props) {
             ))}
             <DropdownLink href="/collections">Collections</DropdownLink>
             {[
-              [toggleResources, 'Resources', openResources, ResourceLinks],
-              [toggleAtlasTools, 'Atlas & Tools', openAtlasTools, AtlasToolsLinks],
-              [toggleDocumentation, 'Documentation', openDocumentation, DocumentationLinks],
-            ].map(([onClick, label, isOpen, Component]) => (
-              <>
-                <DropdownMenuItem onClick={onClick}>
-                  {label}
-                  {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-                </DropdownMenuItem>
-                {isOpen && <Component isIndented />}
-              </>
+              ['Resources', ResourceLinks],
+              ['Atlas & Tools', AtlasToolsLinks],
+              ['Documentation', DocumentationLinks],
+            ].map(([label, Component]) => (
+              <DropdownContainer label={label}>
+                <Component isIndented />
+              </DropdownContainer>
             ))}
           </MenuList>
           <DropdownLink href="/my-lists">My Lists</DropdownLink>
