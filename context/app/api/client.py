@@ -260,6 +260,7 @@ def _fill_sources(sources):
             source[missing_key] = ''
     return sources
 
+
 def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
     '''
     >>> _get_entity_from_hits(['fake-hit-1', 'fake-hit-2'])
