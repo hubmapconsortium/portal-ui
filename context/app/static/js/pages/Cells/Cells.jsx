@@ -3,7 +3,7 @@ import React from 'react';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { Alert } from 'js/shared-styles/alerts';
 
-import DatasetsSelectedByExpression from './DatasetsSelectedByExpression';
+import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedByExpression';
 
 function About(props) {
   const { title, given, returns } = props;
@@ -20,7 +20,7 @@ function About(props) {
   );
 }
 
-function CellsAPIDemo() {
+function Cells() {
   return (
     <>
       <Alert severity="warning">UI is still being designed, but we want to demonstrate that the API works.</Alert>
@@ -34,4 +34,4 @@ function CellsAPIDemo() {
   );
 }
 
-export default CellsAPIDemo;
+export default Cells;
