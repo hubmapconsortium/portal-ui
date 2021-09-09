@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 
-import CellsService from './CellsService';
+import CellsService from 'js/components/cells/CellsService';
 
 function AutocompleteEntity(props) {
   const { targetEntity, setter } = props;

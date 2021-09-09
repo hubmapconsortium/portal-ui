@@ -5,7 +5,7 @@ import { AppContext } from 'js/components/Providers';
 import useProvData from 'js/hooks/useProvData';
 import { Alert } from 'js/shared-styles/alerts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
 import ProvTabs from '../ProvTabs';
 
 function ProvSection(props) {
@@ -16,14 +16,14 @@ function ProvSection(props) {
 
   if (isLoading) {
     return (
-      <SectionContainer id="provenance">
+      <PaddedSectionContainer id="provenance">
         <SectionHeader>Provenance</SectionHeader>
-      </SectionContainer>
+      </PaddedSectionContainer>
     );
   }
 
   return (
-    <SectionContainer id="provenance">
+    <PaddedSectionContainer id="provenance">
       <SectionHeader>Provenance</SectionHeader>
       {provData ? (
         <ProvTabs uuid={uuid} assayMetadata={assayMetadata} provData={provData} />
@@ -32,7 +32,7 @@ function ProvSection(props) {
           {`We were unable to retrieve provenance information for this ${entity_type.toLowerCase()}.`}
         </Alert>
       )}
-    </SectionContainer>
+    </PaddedSectionContainer>
   );
 }
 

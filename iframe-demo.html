@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>iframe demo</title>
+    <style>
+      iframe {
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <p>
+      We provide <code>/iframe/*</code> routes that are designed for reuse.
+      These examples assume you have a development instance running locally.
+      When working correctly, links should navigate the whole page, not just the iframe.
+      Remember to set <code>border: none;</code> in the CSS.
+    </p>
+
+    <h2><code>/iframe/entity-counts</code></h2>
+    <h3>Horizontal</h3>
+    <div>
+      <iframe src="http://localhost:5001/iframe/entity-counts" height="112" width="800"></iframe>
+    </div>
+    <h3>Vertical</h3>
+    <div>
+      <iframe src="http://localhost:5001/iframe/entity-counts" height="448" width="200"></iframe>
+    </div>
+
+    <h2><code>/iframe/assay-barchart</code></h2>
+    <div>
+      <iframe src="http://localhost:5001/iframe/assay-barchart" height="450" width="800" scrolling="no"></iframe>
+      <!-- The element has more whitespace at the bottom than you probably need.-->
+    </div>
+  </body>
+</html>

@@ -11,7 +11,7 @@ function Publication(props) {
 
   return (
     <>
-      <SectionContainer id="summary">
+      <SectionContainer>
         <Typography variant="subtitle1">Publication</Typography>
         <SectionHeader variant="h1" component="h1">
           {title}

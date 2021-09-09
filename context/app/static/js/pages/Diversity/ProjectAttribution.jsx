@@ -7,7 +7,7 @@ import { StyledSectionPaper, ChartTitle } from './style';
 
 function ProjectAttribution() {
   return (
-    <SectionContainer id="attribution">
+    <SectionContainer>
       <ChartTitle variant="h4" component="h2">
         Attribution
       </ChartTitle>

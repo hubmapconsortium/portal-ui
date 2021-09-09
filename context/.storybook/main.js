@@ -15,6 +15,12 @@ module.exports = {
       // extend alias with our own
       ...config.resolve?.alias,
       ...alias}
+    config.module.rules.push({
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: "javascript/auto"
+      });
     return config
   }
+  
 }

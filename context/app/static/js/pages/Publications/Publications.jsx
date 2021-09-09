@@ -10,16 +10,27 @@ import TableRow from '@material-ui/core/TableRow';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import Description from 'js/shared-styles/sections/Description';
 
 function Publications(props) {
   const { publications } = props;
 
   return (
     <>
-      <SectionContainer id="summary">
-        <SectionHeader variant="h1" component="h1">
-          Publications
-        </SectionHeader>
+      <SectionHeader variant="h1" component="h1">
+        Publications
+      </SectionHeader>
+      <SectionContainer>
+        <Description>
+          The following publications are a partial list of published HuBMAP research that uses data available through
+          the HuBMAP Data Portal. The full list of HuBMAP-funded publications is available on{' '}
+          <LightBlueLink href="https://scholar.google.com/citations?user=CtGSN80AAAAJ&hl=en">
+            Google Scholar
+          </LightBlueLink>
+          .
+        </Description>
+      </SectionContainer>
+      <SectionContainer>
         <Paper>
           <Table>
             <TableBody>

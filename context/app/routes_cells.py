@@ -1,4 +1,4 @@
-from itertools import islice
+from itertools import islice, groupby
 
 from flask import render_template, current_app, request
 
@@ -6,6 +6,11 @@ from hubmap_api_py_client import Client
 
 from .utils import get_default_flask_data, make_blueprint
 
+from operator import itemgetter
+
+from collections import defaultdict
+
+from dataclasses import dataclass
 
 blueprint = make_blueprint(__name__)
 
@@ -64,6 +69,167 @@ def _first_n_matches(strings, substring, n):
         'match': s[offset:offset + len(substring)],
         'post': s[offset + len(substring):]
     } for s, offset in zip(first_n, offsets)]
+
+
+@dataclass
+class Cluster:
+    name: str
+    number: int
+
+    def __iter__(self):
+        return iter((self.name, self.number))
+
+
+def _get_cluster_name_and_number(cluster_str):
+    '''
+    >>> n_n = _get_cluster_name_and_number('cluster-name-number')
+    >>> n_n.name
+    'cluster-name'
+    >>> n_n.number
+    'number'
+    '''
+    cluster_name_arr = cluster_str.split('-')
+    cluster_number = cluster_name_arr.pop()
+    cluster_name = '-'.join(cluster_name_arr)
+    return Cluster(name=cluster_name, number=cluster_number)
+
+
+def _get_cluster_cells(cells, gene, min_gene_expression):
+    '''
+    >>> cells = _get_cluster_cells([
+    ...         {
+    ...             "clusters": [
+    ...                 "cluster-method-a-1",
+    ...                 "cluster-method-b-1"
+    ...             ],
+    ...             "modality": "Z",
+    ...             "values": {
+    ...                 "gene": 21.0
+    ...             }
+    ...         },
+    ...                 {
+    ...             "clusters": [
+    ...                 "cluster-method-a-1",
+    ...                 "cluster-method-b-2"
+    ...             ],
+    ...             "modality": "Z",
+    ...             "values": {
+    ...                 "gene": 12.0
+    ...             }
+    ...         },
+    ...         {
+    ...             "clusters": [
+    ...                 "cluster-method-a-1",
+    ...                 "cluster-method-b-1"
+    ...             ],
+    ...             "modality": "Z",
+    ...             "values": {
+    ...                 "gene": 7.0
+    ...             }
+    ...         }], 'gene', 10)
+    >>> import pprint
+    >>> pprint.pprint(cells)
+    [{'cluster_name': 'cluster-method-a',
+      'cluster_number': '1',
+      'meets_minimum_gene_expression': True,
+      'modality': 'Z'},
+     {'cluster_name': 'cluster-method-b',
+      'cluster_number': '1',
+      'meets_minimum_gene_expression': True,
+      'modality': 'Z'},
+     {'cluster_name': 'cluster-method-a',
+      'cluster_number': '1',
+      'meets_minimum_gene_expression': True,
+      'modality': 'Z'},
+     {'cluster_name': 'cluster-method-b',
+      'cluster_number': '2',
+      'meets_minimum_gene_expression': True,
+      'modality': 'Z'},
+     {'cluster_name': 'cluster-method-a',
+      'cluster_number': '1',
+      'meets_minimum_gene_expression': False,
+      'modality': 'Z'},
+     {'cluster_name': 'cluster-method-b',
+      'cluster_number': '1',
+      'meets_minimum_gene_expression': False,
+      'modality': 'Z'}]
+    '''
+    cluster_cells = []
+    for cell in cells:
+        for cluster in cell['clusters']:
+            cluster_name, cluster_number = _get_cluster_name_and_number(cluster)
+            cluster_cells.append({'modality': cell['modality'], 'cluster_name': cluster_name,
+                                  'cluster_number': cluster_number,
+                                  'meets_minimum_gene_expression':
+                                  cell['values'][gene] >= min_gene_expression})
+    return cluster_cells
+
+
+def _get_matched_cell_counts_per_cluster(cells):
+    '''
+    >>> clusters = _get_matched_cell_counts_per_cluster([
+    ...         {
+    ...             'modality': 'Z',
+    ...             'cluster_name': 'cluster-method-a',
+    ...             'cluster_number': '1', 'meets_minimum_gene_expression': True
+    ...         },
+    ...         {
+    ...             'modality': 'Z',
+    ...             'cluster_name': 'cluster-method-b',
+    ...             'cluster_number': '1', 'meets_minimum_gene_expression': True
+    ...         },
+    ...         {
+    ...             'modality': 'Z',
+    ...             'cluster_name': 'cluster-method-a',
+    ...             'cluster_number': '1', 'meets_minimum_gene_expression': True
+    ...         },
+    ...         {
+    ...             'modality': 'Z',
+    ...             'cluster_name': 'cluster-method-b',
+    ...             'cluster_number': '2', 'meets_minimum_gene_expression': True
+    ...         },
+    ...         {
+    ...             'modality': 'Z',
+    ...             'cluster_name': 'cluster-method-a',
+    ...             'cluster_number': '1', 'meets_minimum_gene_expression': False
+    ...         },
+    ...         {
+    ...             'modality': 'Z',
+    ...             'cluster_name': 'cluster-method-b',
+    ...             'cluster_number': '1', 'meets_minimum_gene_expression': False
+    ...         },
+    ...     ])
+    >>> import pprint
+    >>> pprint.pprint(dict(clusters))
+    {'cluster-method-a': [{'cluster_name': 'cluster-method-a',
+                           'cluster_number': '1',
+                           'matched': 2,
+                           'modality': 'Z',
+                           'unmatched': 1}],
+     'cluster-method-b': [{'cluster_name': 'cluster-method-b',
+                           'cluster_number': '1',
+                           'matched': 1,
+                           'modality': 'Z',
+                           'unmatched': 1},
+                          {'cluster_name': 'cluster-method-b',
+                           'cluster_number': '2',
+                           'matched': 1,
+                           'modality': 'Z',
+                           'unmatched': 0}]}
+    '''
+    group_keys = ["cluster_name", "cluster_number", 'modality']
+    grouper = itemgetter(*group_keys)
+    clusters = defaultdict(lambda: [])
+    for key, grp in groupby(sorted(cells, key=grouper), grouper):
+        grp_list = list(grp)
+        cluster = dict(zip(group_keys, key))
+        matched_count = [item['meets_minimum_gene_expression'] for item in grp_list].count(True)
+        cluster.update({
+            'matched': matched_count,
+            'unmatched': len(grp_list) - matched_count
+        })
+        clusters[cluster['cluster_name']].append(cluster)
+    return clusters
 
 
 @blueprint.route('/cells/genes-by-substring.json', methods=['POST'])
@@ -154,6 +320,29 @@ def all_indexed_uuids():
         datasets = client.select_datasets()
         # list() will call iterator behind the scenes.
         return {'results': list(datasets.get_list())}
+
+    except Exception as e:
+        return {'message': str(e)}
+
+
+@blueprint.route('/cells/cells-in-dataset-clusters.json', methods=['POST'])
+def cells_in_dataset_clusters():
+    # For a single dataset we want to get the expression level of a given gene for all cells.
+    # (In our discussion, we started by thinking about the set of matching cells,
+    # and then showing expression levels for the two groups, but that’s not needed.)
+
+    uuid = request.args.get('uuid')
+    gene_name = request.args.get('gene_name')
+    min_gene_expression = request.args.get('min_gene_expression')
+    client = _get_client(current_app)
+
+    try:
+        cells = client.select_cells(where='dataset', has=[uuid])
+        cells_list = cells.get_list(values_included=gene_name)
+
+        return {'results':
+                _get_matched_cell_counts_per_cluster(
+                    _get_cluster_cells(cells_list, gene_name, float(min_gene_expression)))}
 
     except Exception as e:
         return {'message': str(e)}

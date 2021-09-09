@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { entityHeaderHeight } from 'js/components/Detail/entityHeader/EntityHeader';
@@ -30,7 +30,7 @@ const StyledHeaderRight = styled.div`
   display: flex;
 `;
 
-const StyledSectionContainer = styled(SectionContainer)`
+const StyledPaddedSectionContainer = styled(PaddedSectionContainer)`
   z-index: ${(props) => props.theme.zIndex.visualization};
   position: relative;
 `;
@@ -90,7 +90,7 @@ const bodyExpandedCSS = `
 export {
   vitessceFixedHeight,
   bodyExpandedCSS,
-  StyledSectionContainer,
+  StyledPaddedSectionContainer,
   StyledHeader,
   StyledHeaderText,
   StyledHeaderRight,
