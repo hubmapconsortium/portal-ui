@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
+import { useTheme } from '@material-ui/core/styles';
 
 import Histogram from 'js/shared-styles/charts/Histogram';
 import CellsService from '../CellsService';
@@ -7,6 +8,7 @@ import CellsService from '../CellsService';
 function CellExpressionHistogram({ uuid, geneName }) {
   const [geneExpressionData, setGeneExpressionData] = useState([]);
   const [diagnosticInfo, setDiagnosticInfo] = useState({});
+  const theme = useTheme();
 
   useEffect(() => {
     async function fetchCellExpression() {
@@ -40,6 +42,7 @@ function CellExpressionHistogram({ uuid, geneName }) {
           left: 50,
           bottom: 50,
         }}
+        barColor={theme.palette.success.main}
       />
     </>
   ) : (

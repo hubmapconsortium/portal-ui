@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import { useTheme } from '@material-ui/core/styles';
 
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
@@ -12,6 +13,7 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
   const [results, setResults] = useState({});
   const [scales, setScales] = useState({});
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useState(0);
+  const theme = useTheme();
 
   useEffect(() => {
     if (Object.keys(results).length) {
@@ -28,7 +30,7 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
 
       const colorScale = scaleOrdinal({
         domain: ['matched', 'unmatched'],
-        range: ['#DA348A', '#6C8938'],
+        range: [theme.palette.error.main, theme.palette.success.main],
       });
 
       setScales({
