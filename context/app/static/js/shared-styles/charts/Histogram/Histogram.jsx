@@ -7,7 +7,7 @@ import { GridRows } from '@visx/grid';
 import { scaleLinear } from '@visx/scale';
 import { bin } from 'd3-array';
 
-function Histogram({ parentWidth, parentHeight, visxData, margin }) {
+function Histogram({ parentWidth, parentHeight, visxData, margin, barColor }) {
   const xWidth = parentWidth - margin.left - margin.right;
   const yHeight = parentHeight - margin.top - margin.bottom;
 
@@ -43,7 +43,7 @@ function Histogram({ parentWidth, parentHeight, visxData, margin }) {
             const barHeight = yScale(0) - yScale(d.length);
             const barX = xScale(d.x0) + 1;
             const barY = yScale(d.length);
-            return <Bar x={barX} y={barY} width={barWidth} height={barHeight} fill="#6C8938" />;
+            return <Bar x={barX} y={barY} width={barWidth} height={barHeight} fill={barColor} />;
           })}
           <AxisLeft
             hideTicks
