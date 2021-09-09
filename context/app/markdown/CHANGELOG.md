@@ -1,3 +1,8 @@
+## v0.26.2 - 2021-09-09
+
+- Fix `TSNE` -> `t-SNE` in portal.
+
+
 ## v0.26.1 - 2021-09-08
 
 - Add cypress tests of file-backed pages: These don't require API mocking, and because of
