@@ -4,8 +4,8 @@ import format from 'date-fns/format';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import ExpandableRow from 'js/shared-styles/Table/ExpandableRow';
 import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
-import DatasetClusterChart from '../DatasetClusterChart';
-import CellExpressionHistogram from '../CellExpressionHistogram';
+import DatasetClusterChart from 'js/components/cells/DatasetClusterChart';
+import CellExpressionHistogram from 'js/components/cells/CellExpressionHistogram';
 
 function UnitValueCell({ unit, value }) {
   return <ExpandableRowCell>{`${value} ${unit}`}</ExpandableRowCell>;

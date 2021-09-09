@@ -6,10 +6,10 @@ import Slider from '@material-ui/core/Slider';
 import FormLabel from '@material-ui/core/FormLabel';
 
 import LogSliderWrapper from 'js/components/cells/LogSliderWrapper';
-import CellsService from './CellsService';
-import AutocompleteEntity from './AutocompleteEntity';
-import { useSearchHits } from '../../hooks/useSearchData';
-import DatasetsTable from './DatasetsTable';
+import CellsService from 'js/components/cells/CellsService';
+import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
+import { useSearchHits } from 'js/hooks/useSearchData';
+import DatasetsTable from 'js/components/cells/DatasetsTable';
 
 // eslint-disable-next-line no-unused-vars
 function DatasetsSelectedByExpression(props) {
