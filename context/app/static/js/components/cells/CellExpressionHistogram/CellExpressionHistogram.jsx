@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import Histogram from 'js/shared-styles/charts/Histogram';
-import CellsService from '../CellsService';
+import CellsService from 'js/components/cells/CellsService';
 
 function CellExpressionHistogram({ uuid, geneName }) {
   const [geneExpressionData, setGeneExpressionData] = useState([]);

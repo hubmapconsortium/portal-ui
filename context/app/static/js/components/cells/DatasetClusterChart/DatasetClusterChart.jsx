@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalStackedBarChart';
-import CellsService from '../CellsService';
+import CellsService from 'js/components/cells/CellsService';
 
 function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
   const [results, setResults] = useState({});
