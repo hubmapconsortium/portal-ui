@@ -9,14 +9,14 @@ import SelectedFilter from '../SelectedFilter';
 import { Flex, CenteredDiv } from './style';
 
 function SearchBarLayout(props) {
-  const { queryFields, sortOptions, isDevSearch } = props;
+  const { type, queryFields, sortOptions, isDevSearch } = props;
   return (
     <>
       <Flex>
         <SearchBox autofocus queryFields={queryFields} />
         <CenteredDiv>
           <SortingSelector options={sortOptions} listComponent={TilesSortDropdown} />
-          <DownloadButton />
+          <DownloadButton type={type} />
           <ViewSwitcherToggle listComponent={isDevSearch ? DevSearchViewSwitch : SearchViewSwitch} />
         </CenteredDiv>
       </Flex>
