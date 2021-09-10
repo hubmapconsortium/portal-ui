@@ -16,7 +16,7 @@ function SearchBarLayout(props) {
         <SearchBox autofocus queryFields={queryFields} />
         <CenteredDiv>
           <SortingSelector options={sortOptions} listComponent={TilesSortDropdown} />
-          <DownloadButton type={type} />
+          {!isDevSearch && <DownloadButton type={type} />}
           <ViewSwitcherToggle listComponent={isDevSearch ? DevSearchViewSwitch : SearchViewSwitch} />
         </CenteredDiv>
       </Flex>
