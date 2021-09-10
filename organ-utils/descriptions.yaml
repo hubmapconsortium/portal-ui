@@ -4,11 +4,55 @@
 # at least to start, and down the road I fully expect that there will be 
 # changes requested to describe the organ in the HuBMAP context.
 
-Kidney: > # http://purl.obolibrary.org/obo/UBERON_0002113
-  A paired organ of the urinary tract which has the production of urine as its primary function.
-Brain: > # http://purl.obolibrary.org/obo/UBERON_0000955  
-  The brain is the center of the nervous system in all vertebrate, and most invertebrate, animals.
-  Some primitive animals such as jellyfish and starfish have a decentralized nervous system
-  without a brain, while sponges lack any nervous system at all. In vertebrates, the brain is
-  located in the head, protected by the skull and close to the primary sensory apparatus of
-  vision, hearing, balance, taste, and smell[WP].
+http://purl.obolibrary.org/obo/UBERON_0002097:
+  name: Skin
+  description: The organ covering the body that consists of the dermis and epidermis.
+http://purl.obolibrary.org/obo/UBERON_0000059:
+  name: Large Intestine
+  description: A subdivision of the digestive tract that connects the small
+    intestine to the cloaca or anus. Lacks or has few villi[Kardong].
+http://purl.obolibrary.org/obo/UBERON_0000948:
+  name: Heart
+  description: A myogenic muscular circulatory organ found in the vertebrate
+    cardiovascular system composed of chambers of cardiac muscle. It is the
+    primary circulatory organ.
+http://purl.obolibrary.org/obo/UBERON_0004538:
+  name: Kidney (Left)
+  description: A kidney that is part of a left side of organism.
+http://purl.obolibrary.org/obo/UBERON_0004539:
+  name: Kidney (Right)
+  description: A kidney that is part of a right side of organism.
+http://purl.obolibrary.org/obo/UBERON_0002106:
+  name: Spleen
+  description: the organ that functions to filter blood and to store red
+    corpuscles and platelets
+http://purl.obolibrary.org/obo/UBERON_0000955:
+  name: Brain
+  description: The brain is the center of the nervous system in all vertebrate,
+    and most invertebrate, animals. Some primitive animals such as jellyfish and
+    starfish have a decentralized nervous system without a brain, while sponges
+    lack any nervous system at all. In vertebrates, the brain is located in the
+    head, protected by the skull and close to the primary sensory apparatus of
+    vision, hearing, balance, taste, and smell[WP].
+http://purl.obolibrary.org/obo/UBERON_0002048:
+  name: Lungs
+  description: Respiration organ that develops as an outpocketing of the esophagus.
+http://purl.obolibrary.org/obo/UBERON_0000029:
+  name: Lymph Node
+  description: Any of the rounded masses of lymphoid tissue that are surrounded by
+    a capsule of connective tissue, are distributed along the lymphatic vessels,
+    and contain numerous lymphocytes which filter the flow of lymph.
+http://purl.obolibrary.org/obo/UBERON_0001270:
+  name: Pelvis
+  description: A ring of bone formed by the sacrum and the first few coccygeal
+    vertebrae as the roof, the pubis and ischia as the floor and the ilia and
+    the acetabular part of the ischia as the walls.
+http://purl.obolibrary.org/obo/UBERON_0002370:
+  name: Thymus
+  description: Anatomical structure of largely lymphoid tissue that functions in
+    cell-mediated immunity by being the site where T cells develop.
+http://purl.obolibrary.org/obo/UBERON_0002049:
+  name: Vasculature
+  description: "An interconnected tubular multi-tissue structure contains fluid
+    that is actively transported around the organism[ZFA]. Examples: vasculature
+    of lung, vasculature of face."
