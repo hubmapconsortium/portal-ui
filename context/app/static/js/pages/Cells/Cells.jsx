@@ -32,12 +32,15 @@ function Cells() {
         returns="a list of UUIDs for datasets which meet those minimums"
       />
       <StepAccordion summaryHeading="Parameters" content={<DatasetsSelectedByExpression setResults={setResults} />} />
-      {results.length > 0 && (
-        <StepAccordion
-          summaryHeading="Results"
-          content={<DatasetsTable datasets={results} minGeneExpression={10 ** 1} geneName="VIM" />}
-        />
-      )}
+      <StepAccordion
+        summaryHeading="Results"
+        disabled={results.length === 0}
+        content={
+          results.length > 0 ? (
+            <DatasetsTable datasets={results} minGeneExpression={10 ** 1} geneName="VIM" />
+          ) : undefined
+        }
+      />
     </>
   );
 }
