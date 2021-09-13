@@ -5,7 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-import DatasetTableRow from './DatasetTableRow/DatasetTableRow';
+import DatasetTableRow from 'js/components/cells/DatasetTableRow';
 
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },

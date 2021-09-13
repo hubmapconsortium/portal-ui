@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import { useTheme } from '@material-ui/core/styles';
 
 import Histogram from 'js/shared-styles/charts/Histogram';
-import CellsService from '../CellsService';
+import CellsService from 'js/components/cells/CellsService';
 
 function CellExpressionHistogram({ uuid, geneName }) {
   const [geneExpressionData, setGeneExpressionData] = useState([]);
