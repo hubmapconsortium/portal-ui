@@ -14,7 +14,8 @@ const AccordionSummaryHeading = styled(AccordionText)`
 
 const StyledAccordionSummary = styled(AccordionSummary)`
   background-color: ${(props) => (props.$isExpanded ? props.theme.palette.secondary.main : '#E0E0E0')};
-  svg {
+  // only color the expand icon
+  span > svg {
     color: ${(props) => (props.$isExpanded ? '#fff' : props.theme.palette.text.primary)};
   }
 `;
