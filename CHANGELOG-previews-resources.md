@@ -1,0 +1,1 @@
+- Change "Previews" menu to "Resources".

@@ -23,6 +23,10 @@ describe('portal-ui', () => {
       cy.contains('Datasets');
       // CCF-UI
       cy.contains('Atlas & Tools');
+      // Resources
+      cy.contains('Resources');
+
+      // Static pages are tested separately.
 
       // login
       cy.contains('login');

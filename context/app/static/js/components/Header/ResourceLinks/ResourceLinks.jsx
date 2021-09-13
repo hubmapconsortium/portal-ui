@@ -1,30 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DropdownLink from '../DropdownLink';
+// import { StyledDivider } from '../HeaderContent/style';
 
-function PreviewLinks(props) {
+function ResourceLinks(props) {
   const { isIndented } = props;
   return (
     <>
+      {/* <DropdownLink href="/publication" isIndented={isIndented}>
+        Publications
+      </DropdownLink>
+      <StyledDivider /> */}
       {['Multimodal Molecular Imaging Data', 'Cell Type Annotations'].map((previewName) => (
         <DropdownLink
           key={previewName}
           href={`/preview/${previewName.toLowerCase().replace(/\W+/g, '-')}`}
           isIndented={isIndented}
         >
-          {previewName}
+          Preview: {previewName}
         </DropdownLink>
       ))}
     </>
   );
 }
 
-PreviewLinks.propTypes = {
+ResourceLinks.propTypes = {
   isIndented: PropTypes.bool,
 };
 
-PreviewLinks.defaultProps = {
+ResourceLinks.defaultProps = {
   isIndented: false,
 };
 
-export default React.memo(PreviewLinks);
+export default React.memo(ResourceLinks);
