@@ -14,7 +14,14 @@ function DownloadButton(props) {
   const lcPluralType = `${type.toLowerCase()}s`;
   return (
     <SecondaryBackgroundTooltip title="Download a TSV of the table metadata. This will not take into account any filtering done on the search page.">
-      <StyledButton href={`/api/v0/${lcPluralType}.tsv`} target="_blank" component="a" onClick={sendTsvEvent}>
+      <StyledButton
+        href={`/api/v0/${lcPluralType}.tsv`}
+        target="_blank"
+        component="a"
+        onClick={sendTsvEvent}
+        variant="outlined"
+        color="primary"
+      >
         Download Metadata
       </StyledButton>
     </SecondaryBackgroundTooltip>
