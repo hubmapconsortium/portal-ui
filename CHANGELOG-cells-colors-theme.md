@@ -1,0 +1,1 @@
+- Get cells ui chart colors from theme.

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import { useTheme } from '@material-ui/core/styles';
 
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
@@ -12,6 +13,7 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
   const [results, setResults] = useState({});
   const [scales, setScales] = useState({});
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useState(0);
+  const theme = useTheme();
 
   useEffect(() => {
     if (Object.keys(results).length) {
@@ -26,19 +28,18 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
         padding: 0.2,
       });
 
-      const colorScale = scaleOrdinal({
-        domain: ['matched', 'unmatched'],
-        range: ['#DA348A', '#6C8938'],
-      });
-
       setScales({
         selectedData,
         yScale,
         xScale,
-        colorScale,
       });
     }
   }, [setScales, results, selectedClusterTypeIndex]);
+
+  const colorScale = scaleOrdinal({
+    domain: ['matched', 'unmatched'],
+    range: [theme.palette.error.main, theme.palette.success.main],
+  });
 
   useEffect(() => {
     async function fetchCellClusterMatches() {
@@ -74,7 +75,7 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
         visxData={scales.selectedData}
         yScale={scales.yScale}
         xScale={scales.xScale}
-        colorScale={scales.colorScale}
+        colorScale={colorScale}
         getX={(x) => x.cluster_number}
         keys={['matched', 'unmatched']}
         margin={{
