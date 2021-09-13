@@ -8,7 +8,7 @@ const AccordionText = styled(Typography)`
 `;
 
 const AccordionSummaryHeading = styled(AccordionText)`
-  flex-grow: 1;
+  flex-basis: 20%;
   flex-shrink: 0;
 `;
 
@@ -25,7 +25,7 @@ const SuccessIcon = styled(CheckCircleRoundedIcon)`
 `;
 
 const Flex = styled.div`
-  flex-grow: 4;
+  flex-basis: 80%;
   display: flex;
   justify-content: space-between;
 `;
