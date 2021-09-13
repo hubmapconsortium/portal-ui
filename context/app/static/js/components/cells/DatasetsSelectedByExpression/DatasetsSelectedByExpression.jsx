@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
 
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/core/Slider';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -9,6 +8,8 @@ import LogSliderWrapper from 'js/components/cells/LogSliderWrapper';
 import CellsService from 'js/components/cells/CellsService';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
 import { useSearchHits } from 'js/hooks/useSearchData';
+
+import { StyledDiv } from './style';
 
 function DatasetsSelectedByExpression({ setStepCompletedText, setResults }) {
   const [geneNames, setGeneNames] = useState([]);
@@ -85,7 +86,7 @@ function DatasetsSelectedByExpression({ setStepCompletedText, setResults }) {
   }, [searchHits, setResults]);
 
   return (
-    <Paper>
+    <StyledDiv>
       <AutocompleteEntity targetEntity="genes" setter={setGeneNames} />
 
       <br />
@@ -113,7 +114,7 @@ function DatasetsSelectedByExpression({ setStepCompletedText, setResults }) {
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
       {message}
-    </Paper>
+    </StyledDiv>
   );
 }
 
