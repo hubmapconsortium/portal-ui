@@ -31,6 +31,7 @@ const config = {
         test: /\.js$/,
         use: ['source-map-loader'],
         enforce: 'pre',
+        exclude: [/node_modules\/lineupjs[x]?/],
       },
       {
         test: /\.(js|jsx)$/,
