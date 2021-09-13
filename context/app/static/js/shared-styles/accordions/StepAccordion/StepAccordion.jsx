@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Accordion from '@material-ui/core/ExpansionPanel';
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 
 import { AccordionSummaryHeading, AccordionText, Flex, StyledAccordionSummary, SuccessIcon } from './style';
 
@@ -15,7 +15,7 @@ function StepAccordion({ summaryHeading, content, disabled }) {
   }
   return (
     <Accordion onChange={handleExpand} disabled={disabled}>
-      <StyledAccordionSummary expandIcon={<ExpandMoreIcon />} $isExpanded={isExpanded}>
+      <StyledAccordionSummary expandIcon={<ArrowDropUpRoundedIcon />} $isExpanded={isExpanded}>
         <AccordionSummaryHeading variant="subtitle2" $isExpanded={isExpanded}>
           {summaryHeading}
         </AccordionSummaryHeading>
