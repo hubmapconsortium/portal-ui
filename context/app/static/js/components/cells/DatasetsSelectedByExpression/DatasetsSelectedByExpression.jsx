@@ -12,7 +12,7 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 import DatasetsTable from 'js/components/cells/DatasetsTable';
 
 // eslint-disable-next-line no-unused-vars
-function DatasetsSelectedByExpression(props) {
+function DatasetsSelectedByExpression({ setStepCompletedText }) {
   const [geneNames, setGeneNames] = useState([]);
   const [targetEntity, setTargetEntity] = useState('gene'); // eslint-disable-line no-unused-vars
   const [modality, setModality] = useState('rna'); // eslint-disable-line no-unused-vars
@@ -25,6 +25,9 @@ function DatasetsSelectedByExpression(props) {
   async function handleSubmit() {
     try {
       if (targetEntity === 'gene') {
+        setStepCompletedText(
+          `${geneNames.join(', ')} | Expression Level 10^${minExpressionLog} | ${minCellPercentage}% Cell Percentage`,
+        );
         const serviceResults = await new CellsService().getDatasetsSelectedByGenes({
           geneNames,
           minExpression: 10 ** minExpressionLog,

@@ -2,7 +2,7 @@ import React from 'react';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { Alert } from 'js/shared-styles/alerts';
-
+import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
 import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedByExpression';
 
 function About(props) {
@@ -29,7 +29,7 @@ function Cells() {
         given="a list of genes, a minimum expression level, and a minimum percentage of cells at that expression level"
         returns="a list of UUIDs for datasets which meet those minimums"
       />
-      <DatasetsSelectedByExpression />
+      <StepAccordion summaryHeading="Parameters" content={<DatasetsSelectedByExpression />} />
     </>
   );
 }
