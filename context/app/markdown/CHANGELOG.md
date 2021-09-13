@@ -1,3 +1,12 @@
+## v0.27.0 - 2021-09-13
+
+- Lineup was only showing columns for the first record, not the union of the columns for all records.
+- Get cells ui chart colors from theme.
+- Cleanup cells ui files.
+- Organ URIs and descriptions added; organ-utils reworked to handle the new format.
+- Change "Previews" menu to "Resources".
+
+
 ## v0.26.2 - 2021-09-09
 
 - Fix `TSNE` -> `t-SNE` in portal.
