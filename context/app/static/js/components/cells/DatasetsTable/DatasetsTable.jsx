@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
@@ -19,7 +19,11 @@ const columns = [
   { id: 'expand', label: '' },
 ];
 
-function DatasetsTable({ datasets, minGeneExpression, geneName }) {
+function DatasetsTable({ datasets, minGeneExpression, geneName, setStepCompletedText }) {
+  useEffect(() => {
+    setStepCompletedText(`${datasets.length} Datasets Matching Query Parameters`);
+  });
+
   return (
     <Table stickyHeader>
       <TableHead>
