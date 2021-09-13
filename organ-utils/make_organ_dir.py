@@ -10,7 +10,6 @@ from itertools import groupby
 import re
 from typing import DefaultDict
 
-from bs4 import BeautifulSoup
 import requests
 from yaml import dump, safe_load
 
@@ -23,47 +22,49 @@ def main():
         default=Path(__file__).parent.parent / 'context/app/organ',
         help='Target directory for markdown files')
     parser.add_argument(
-        '--asctb_csv_url',
-        default='https://hubmapconsortium.github.io/ccf-releases/v1.0/models/ASCT-B_3D_Models_Mapping.csv',
-        help='ASCT+B Tables to 3D Reference Object Library Mapping CSV URL')
-    parser.add_argument(
         '--elasticsearch_url',
         default='https://search.api.hubmapconsortium.org/portal/search',
         help='ES endpoint to query for organs')
     parser.add_argument(
         '--azimuth_url',
-        default='https://azimuth.hubmapconsortium.org/references/',
-        help='HTML to scrape for Azimuth references')
+        default='https://raw.githubusercontent.com/satijalab/azimuth_website/master/data/azimuth_references.yaml',
+        help='Azimuth references')
     args = parser.parse_args()
 
-    description_data = \
-        _get_descriptions()
-    search_data = \
-        _parse_search_response(_get_search_response(args.elasticsearch_url))
-    azimuth_data = _duplicate_paired_organs(
-        _parse_azimuth_html(_get_azimuth_html(args.azimuth_url)))
-    asctb_data = \
-        _parse_asctb_rows(_get_asctb_rows(args.asctb_csv_url))
+    descriptions = get_descriptions()
+    uberon_names = {uberon: value['name'] for uberon, value in descriptions.items()}
 
-    merged_data = _merge_data(
-        description=description_data,
-        search=search_data,
-        azimuth=azimuth_data,
-        asctb=asctb_data
+    search_organs_by_uberon = rekey_search(
+        get_search_organs(get_search_response(args.elasticsearch_url)),
+        uberon_names=uberon_names)
+    # azimuth_data = rekey_azimuth(
+    #     get_azimuth_yaml(args.azimuth_url),
+    #     uberon_names=uberon_names)
+
+    merged_data = merge_data(
+        uberon=
+            {uberon_id: uberon_id for uberon_id in descriptions.keys()},
+        name=
+            {uberon_id: value['name'] for uberon_id, value in descriptions.items()},
+        description=
+            {uberon_id: value['description'] for uberon_id, value in descriptions.items()},
+        search=
+            search_organs_by_uberon
+        # azimuth=azimuth_data
     )
 
     organs = [
         Organ(
-            title=title,
+            name=data['name'],
             data=data)
-        for title, data in merged_data.items()
+        for uberon_id, data in merged_data.items()
     ]
     DirectoryWriter(args.target, organs).write()
 
 
-def _merge_data(**kwargs):
+def merge_data(**kwargs):
     '''
-    >>> merged = _merge_data(
+    >>> merged = merge_data(
     ...     capital={
     ...         'USA': 'Washington',
     ...         'UK': 'London'},
@@ -85,62 +86,26 @@ def _merge_data(**kwargs):
 
 ###### Descriptions ######
 
-def _get_descriptions():
+def get_descriptions():
     descriptions_path = Path(__file__).parent / 'descriptions.yaml'
-    data = safe_load(descriptions_path.read_text())
-    return _duplicate_paired_organs(data)
+    return safe_load(descriptions_path.read_text())
 
 
 ###### Azimuth #######
 
-def _get_azimuth_html(url):
-    html_path = Path(__file__).parent / 'azimuth.html'
-    if not html_path.exists():
-        html = requests.get(url).text
-        soup = BeautifulSoup(html, features="lxml")
-        html_path.write_text(soup.prettify())
-    return html_path.read_text()
-
-
-def _parse_azimuth_html(html):
-    '''
-    >>> html = """
-    ...     <h2>Human - Funny Bone</h2>
-    ...     <div>
-    ...       <a class="app-btn"      href="http://example.com/app">App</a>
-    ...       <a class="vitessce-btn" href="/vitessce"             >Reference</a>
-    ...     </div>
-    ... """
-    >>> from pprint import pp
-    >>> pp(_parse_azimuth_html(html))
-    {'Funny Bone': {'app_url': 'http://example.com/app',
-                    'vitessce_url': 'https://azimuth.hubmapconsortium.org/vitessce'}}
-    '''
-    soup = BeautifulSoup(html, features="lxml")
-    titles = soup.find_all('h2')
-    titles_buttons_div = {
-        title.text.strip(): title.find_next('div')
-        for title in titles
-    }
-    titles_links = {
-        title.split(' - ')[1]: {
-            f'{tool}_url':
-                re.sub(
-                    r'^/', 'https://azimuth.hubmapconsortium.org/',
-                    button['href'])
-            for tool in ['app', 'vitessce', 'zenodo', 'snakemake']
-            if (button := div.find(class_=f'{tool}-btn'))
-        }
-        for title, div in titles_buttons_div.items()
-        if 'Human' in title
-    }
-    return titles_links
+def get_azimuth_yaml(url):
+    azimuth_path = Path(__file__).parent / 'azimuth.yaml'
+    if not azimuth_path.exists():
+        azimuth_path.write_text(requests.get(url).text)
+    return azimuth_path.read_text()
 
 
 ###### Search #######
 
-def _get_search_response(es_url):
-    agg_name = 'organs'
+agg_name = 'organs'
+
+
+def get_search_response(es_url):
     return requests.post(
         es_url,
         json={
@@ -156,156 +121,60 @@ def _get_search_response(es_url):
         }).json()
 
 
-def _parse_search_response(response):
-    agg_name = 'organs'
-    return {b['key']: True for b in response['aggregations'][agg_name]['buckets']}
+def get_search_organs(response):
+    return [b['key'] for b in response['aggregations'][agg_name]['buckets']]
+
+
+def rekey_search(search_organs, uberon_names):
+    '''
+    >>> search_organs = ['Kidney (Left)', 'Kidney (Right)', 'Spleen', 'Lung (Right)']
+    >>> uberon_names = {'UBERON_0002113': 'Kidney',
+    ...                 'UBERON_0002106': 'Spleen',
+    ...                 'UBERON_0002048': 'Lungs'}
+    >>> from pprint import pp
+    >>> pp(rekey_search(search_organs, uberon_names))
+    {'UBERON_0002113': ['Kidney (Left)', 'Kidney (Right)'],
+     'UBERON_0002106': ['Spleen'],
+     'UBERON_0002048': ['Lung (Right)']}
+    '''
+    return {
+        uberon_id: [
+            name for name in search_organs
+            if uberon_name in name
+               or uberon_name.rstrip('s') in name]
+        for uberon_id, uberon_name in uberon_names.items()
+    }
 
 
 ###### ASCTB #######
 
-def _label_to_es(label):
-    '''
-    >>> _label_to_es('large intestine')
-    'Large Intestine'
-    >>> _label_to_es('right kidney')
-    'Kidney (Right)'
-    >>> _label_to_es('heart')
-    'Heart'
-    '''
-    words = [w.capitalize() for w in label.split(' ')]
-    if words[0] in ['Left', 'Right']:
-        words.append(f'({words.pop(0)})')
-    return ' '.join(words)
 
-
-def _get_asctb_rows(csv_url):
-    csv_path = Path(__file__).parent / 'asctb.csv'
-    if not csv_path.exists():
-        csv_lines = requests.get(csv_url).text.split('\n')
-        for i, line in enumerate(csv_lines):
-            # Skip the header rows...
-            if line.startswith('anatomical_structure_of'):
-                break
-        data_lines = csv_lines[i:]
-        csv_path.write_text('\n'.join(data_lines))
-    return csv.DictReader(csv_path.open())
-
-
-def _parse_asctb_rows(rows):
-    '''
-    >>> rows = [
-    ...     {
-    ...         'glb file of single organs': 'VH_F_Thymus.glb',
-    ...         'OntologyID': 'UBERON:0002370',
-    ...         'representation_of': 'http://purl.obolibrary.org/obo/UBERON_0002370',
-    ...         'label': 'thymus',
-    ...         'anatomical_structure_of': '#VHFThymus'},
-    ...     {
-    ...         'glb file of single organs': 'VH_M_Thymus.glb',
-    ...         'OntologyID': 'UBERON:0002370',
-    ...         'representation_of': 'http://purl.obolibrary.org/obo/UBERON_0002370',
-    ...         'label': 'thymus',
-    ...         'anatomical_structure_of': '#VHMThymus'},
-    ...     {
-    ...         'OntologyID': 'UBERON:0005457',
-    ...         'representation_of': 'http://purl.obolibrary.org/obo/UBERON_0005457',
-    ...         'label': 'left thymus lobe',
-    ...         'anatomical_structure_of': '#VHMThymus'},
-    ...     {
-    ...         'OntologyID': 'UBERON:0005469',
-    ...         'representation_of': 'http://purl.obolibrary.org/obo/UBERON_0005469',
-    ...         'label': 'right thymus lobe',
-    ...         'anatomical_structure_of': '#VHMThymus'}
-    ... ]
-    >>> from pprint import pp
-    >>> pp(_parse_asctb_rows(rows))
-    {'Thymus': [{'label': 'thymus',
-                 'anatomy': {'thymus': 'http://purl.obolibrary.org/obo/UBERON_0002370'},
-                 'glb_url': 'https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_F_Thymus.glb',
-                 'sex': 'Female'},
-                {'label': 'thymus',
-                 'anatomy': {'thymus': 'http://purl.obolibrary.org/obo/UBERON_0002370',
-                             'left thymus lobe': 'http://purl.obolibrary.org/obo/UBERON_0005457',
-                             'right thymus lobe': 'http://purl.obolibrary.org/obo/UBERON_0005469'},
-                 'glb_url': 'https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Thymus.glb',
-                 'sex': 'Male'}]}
-    '''
-    get_anatomy = lambda row: row['anatomical_structure_of']
-    rows = sorted(rows, key=get_anatomy)
-    groups = [
-        {
-            'label': label,
-            'anatomy': {
-                # Use dict to de-dupe.
-                row['label']: row['representation_of']
-                for row in list_group
-                if row['label']
-            },
-            'glb_url': 'https://hubmapconsortium.github.io/ccf-releases/v1.0/models/' + glb,
-            'sex': {'M': 'Male', 'F': 'Female'}[sex_abbr]
-        }
-        for key, group in groupby(rows, get_anatomy)
-        if (list_group := list(group))
-        # List order seems to matter, but I would prefer
-        # a more reliable way of extracing the information...
-        and (glb := list_group[0]['glb file of single organs'])
-        and (label := list_group[0]['label'])
-        # ... and this could be better, too. 
-        and (sex_abbr := glb.split('_')[1])
-    ]
-
-    get_label = lambda group: group['label']
-    groups = sorted(groups, key=get_label)
-    m_f_pairs = {
-        _label_to_es(key): list(group)
-        for key, group in groupby(groups, get_label)
-    }
-    return m_f_pairs
 
 
 ###### Utils #######
-
-def _duplicate_paired_organs(data):
-    '''
-    >>> data = {
-    ...    'Kidney': {'is': 'important'},
-    ...    'Brain': {'is': 'more important'}
-    ... }
-    >>> from pprint import pp
-    >>> pp(_duplicate_paired_organs(data))
-    {'Brain': {'is': 'more important'},
-     'Kidney (Left)': {'is': 'important'},
-     'Kidney (Right)': {'is': 'important'}}
-    '''
-    for organ in ['Kidney', 'Lung']:
-        if organ in data:
-            organ_data = data.pop(organ)
-            data[f'{organ} (Left)'] = organ_data
-            data[f'{organ} (Right)'] = organ_data
-    return data
 
 
 @dataclass
 class Organ:
     '''
-    >>> organ = Organ(title='Kidney (Right)', data={'foo': 'bar'})
+    >>> organ = Organ(name='Small Intestine', data={'foo': 'bar'})
     >>> print(organ.yaml())
-    title: Kidney (Right)
+    name: Small Intestine
     foo: bar
     >>> print(organ.filename())
-    kidney-right.yaml
+    small-intestine.yaml
     '''
-    title: str
+    name: str
     data: dict
 
     def yaml(self):
         return dump(
-            {'title': self.title, **self.data},
+            {'name': self.name, **self.data},
             sort_keys=False
         ).strip()
 
     def filename(self):
-        return re.sub(r'\W+', ' ', self.title.lower()).strip().replace(' ', '-') + '.yaml'
+        return re.sub(r'\W+', ' ', self.name.lower()).strip().replace(' ', '-') + '.yaml'
 
 
 def dir_path(s):
@@ -324,8 +193,8 @@ class DirectoryWriter():
         readme_text = f'Generated by {Path(__file__).name} on {date.today()}.'
         (self.dir / 'README.md').write_text(readme_text)
         for organ in self.organs:
-            self._write_organ(organ)
-    def _write_organ(self, organ):
+            self.write_organ(organ)
+    def write_organ(self, organ):
         file = self.dir / organ.filename()
         print(f'Writing to {file}...')
         file.write_text(organ.yaml())

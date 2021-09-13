@@ -1,0 +1,5 @@
+name: Lungs
+uberon: http://purl.obolibrary.org/obo/UBERON_0002048
+description: Respiration organ that develops as an outpocketing of the esophagus.
+search:
+- Lung (Right)

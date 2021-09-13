@@ -1,10 +1,6 @@
-title: Thymus
-search: true
-asctb:
-- label: thymus
-  anatomy:
-    thymus: http://purl.obolibrary.org/obo/UBERON_0002370
-    left thymus lobe: http://purl.obolibrary.org/obo/UBERON_0005457
-    right thymus lobe: http://purl.obolibrary.org/obo/UBERON_0005469
-  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Thymus
-  sex: Male
+name: Thymus
+uberon: http://purl.obolibrary.org/obo/UBERON_0002370
+description: Anatomical structure of largely lymphoid tissue that functions in cell-mediated
+  immunity by being the site where T cells develop.
+search:
+- Thymus
