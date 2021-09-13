@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -9,17 +9,15 @@ import LogSliderWrapper from 'js/components/cells/LogSliderWrapper';
 import CellsService from 'js/components/cells/CellsService';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
 import { useSearchHits } from 'js/hooks/useSearchData';
-import DatasetsTable from 'js/components/cells/DatasetsTable';
 
-// eslint-disable-next-line no-unused-vars
-function DatasetsSelectedByExpression({ setStepCompletedText }) {
+function DatasetsSelectedByExpression({ setStepCompletedText, setResults }) {
   const [geneNames, setGeneNames] = useState([]);
   const [targetEntity, setTargetEntity] = useState('gene'); // eslint-disable-line no-unused-vars
   const [modality, setModality] = useState('rna'); // eslint-disable-line no-unused-vars
   const [minExpressionLog, setMinExpressionLog] = useState(1);
   const [minCellPercentage, setMinCellPercentage] = useState(10);
 
-  const [results, setResults] = useState([]);
+  const [cellsResults, setCellsResults] = useState([]);
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
@@ -34,7 +32,7 @@ function DatasetsSelectedByExpression({ setStepCompletedText }) {
           minCellPercentage,
           modality,
         });
-        setResults(serviceResults);
+        setCellsResults(serviceResults);
       } else {
         throw Error(`Datasets by "${targetEntity}" unimplemented`);
       }
@@ -63,7 +61,7 @@ function DatasetsSelectedByExpression({ setStepCompletedText }) {
             },
             {
               terms: {
-                uuid: results.map((result) => result.uuid),
+                uuid: cellsResults.map((result) => result.uuid),
               },
             },
           ],
@@ -78,9 +76,13 @@ function DatasetsSelectedByExpression({ setStepCompletedText }) {
         'last_modified_timestamp',
       ],
     };
-  }, [results]);
+  }, [cellsResults]);
 
   const { searchHits } = useSearchHits(query);
+
+  useEffect(() => {
+    setResults(searchHits);
+  }, [searchHits, setResults]);
 
   return (
     <Paper>
@@ -111,9 +113,6 @@ function DatasetsSelectedByExpression({ setStepCompletedText }) {
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
       {message}
-      {searchHits.length > 0 && (
-        <DatasetsTable datasets={searchHits} minGeneExpression={10 ** minExpressionLog} geneName={geneNames[0]} />
-      )}
     </Paper>
   );
 }
