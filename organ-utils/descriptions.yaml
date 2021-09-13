@@ -10,16 +10,13 @@ http://purl.obolibrary.org/obo/UBERON_0000948:
   description: A myogenic muscular circulatory organ found in the vertebrate
     cardiovascular system composed of chambers of cardiac muscle. It is the
     primary circulatory organ.
-http://purl.obolibrary.org/obo/UBERON_0004538:
-  name: Kidney (Left)
-  description: A kidney that is part of a left side of organism.
-http://purl.obolibrary.org/obo/UBERON_0004539:
-  name: Kidney (Right)
-  description: A kidney that is part of a right side of organism.
+http://purl.obolibrary.org/obo/UBERON_0002113:
+  name: Kidney
+  description: A paired organ of the urinary tract which has the production of urine as its primary function.
 http://purl.obolibrary.org/obo/UBERON_0002106:
   name: Spleen
-  description: the organ that functions to filter blood and to store red
-    corpuscles and platelets
+  description: The organ that functions to filter blood and to store red
+    corpuscles and platelets.
 http://purl.obolibrary.org/obo/UBERON_0000955:
   name: Brain
   description: The brain is the center of the nervous system in all vertebrate,
