@@ -13,7 +13,7 @@ function Services() {
   const gatewayUrl = `${endpoints.gatewayEndpoint}/status.json`;
   return (
     <>
-      <SectionContainer id="summary">
+      <SectionContainer>
         <SectionHeader variant="h1" component="h1">
           Services
         </SectionHeader>

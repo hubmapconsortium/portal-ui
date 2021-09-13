@@ -1,9 +1,9 @@
 from io import StringIO
 from csv import DictWriter
 
-from flask import Response, abort, request
+from flask import Response, abort, request, render_template
 
-from .utils import make_blueprint, get_client
+from .utils import make_blueprint, get_client, get_default_flask_data
 
 
 blueprint = make_blueprint(__name__)
@@ -11,6 +11,28 @@ blueprint = make_blueprint(__name__)
 
 @blueprint.route('/api/v0/<entity_type>.tsv')
 def entities_tsv(entity_type):
+    entities = _get_entities(entity_type)
+    return _make_tsv_response(_dicts_to_tsv(entities, _first_fields), f'{entity_type}.tsv')
+
+
+@blueprint.route('/lineup/<entity_type>')
+def lineup(entity_type):
+    entities = _get_entities(entity_type)
+    flask_data = {
+        **get_default_flask_data(),
+        'entities': entities
+    }
+    return render_template(
+        'pages/base_react.html',
+        flask_data=flask_data,
+        title=f'Lineup {entity_type}'
+    )
+
+
+_first_fields = ['uuid', 'hubmap_id']
+
+
+def _get_entities(entity_type):
     if entity_type not in ['donors', 'samples', 'datasets']:
         abort(404)
     client = get_client()
@@ -20,11 +42,11 @@ def entities_tsv(entity_type):
     if entity_type in ['samples']:
         first_fields.append('mapped_specimen_type')
     entities = client.get_entities(
-        entity_type, first_fields,
+        entity_type, _first_fields,
         constraints=request.args.to_dict(flat=False)
         # Default "True" would throw away repeated keys after the first.
     )
-    return _make_tsv_response(_dicts_to_tsv(entities, first_fields), f'{entity_type}.tsv')
+    return entities
 
 
 def _make_tsv_response(tsv_content, filename):

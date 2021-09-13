@@ -87,7 +87,9 @@ class ApiClient():
         total_hits = response_json['hits']['total']['value']
         if len(sources) < total_hits:
             raise Exception('Incomplete results: need to make multiple requests')
-        return _flatten_sources(sources, non_metadata_fields)
+        flat_sources = _flatten_sources(sources, non_metadata_fields)
+        filled_flat_sources = _fill_sources(flat_sources)
+        return filled_flat_sources
 
     def get_entity(self, uuid=None, hbm_id=None):
         if uuid is not None and hbm_id is not None:
@@ -263,6 +265,25 @@ def _flatten_sources(sources, non_metadata_fields):
                 'organ_donor_data', 'living_donor_data']:
             source.pop(field, None)
     return flat_sources
+
+
+def _fill_sources(sources):
+    '''
+    Lineup infers columns from first row.
+    Just to be safe, fill in all keys for all rows.
+
+    >>> sources = [{'a': 1}, {'b': 2}, {}]
+    >>> from pprint import pp
+    >>> pp(_fill_sources(sources), width=30, sort_dicts=True)
+    [{'a': 1, 'b': ''},
+     {'a': '', 'b': 2},
+     {'a': '', 'b': ''}]
+    '''
+    all_keys = set().union(*(source.keys() for source in sources))
+    for source in sources:
+        for missing_key in all_keys - source.keys():
+            source[missing_key] = ''
+    return sources
 
 
 def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):

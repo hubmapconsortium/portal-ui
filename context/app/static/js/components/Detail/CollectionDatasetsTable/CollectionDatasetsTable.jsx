@@ -11,7 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
 import { StyledLink } from './style';
 
 function CollectionDatasetsTable(props) {
@@ -27,7 +27,7 @@ function CollectionDatasetsTable(props) {
   ];
 
   return (
-    <SectionContainer id="datasets-table">
+    <PaddedSectionContainer id="datasets-table">
       <SectionHeader>Datasets</SectionHeader>
       <Typography variant="subtitle1" color="primary">
         {datasets.length} Datasets
@@ -61,7 +61,7 @@ function CollectionDatasetsTable(props) {
           </Table>
         </StyledTableContainer>
       </Paper>
-    </SectionContainer>
+    </PaddedSectionContainer>
   );
 }
 

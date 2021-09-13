@@ -1,1 +1,0 @@
-- Begin organ pages: Generate YAML from disparite sources of information.

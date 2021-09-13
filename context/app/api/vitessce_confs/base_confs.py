@@ -387,7 +387,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         ]
         anndata_wrapper = AnnDataWrapper(
             mappings_obsm=["tsne"],
-            mappings_obsm_names=["TSNE"],
+            mappings_obsm_names=["t-SNE"],
             adata_url=adata_url,
             spatial_centroid_obsm="xy",
             cell_set_obs=obs_keys,
@@ -408,7 +408,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
 
     def _setup_view_config_raster_cellsets_expression_segmentation(self, vc, dataset):
         vc.add_view(dataset, cm.SPATIAL, x=3, y=0, w=4, h=8)
-        vc.add_view(dataset, cm.SCATTERPLOT, mapping="TSNE", x=7, y=0, w=3, h=8)
+        vc.add_view(dataset, cm.SCATTERPLOT, mapping="t-SNE", x=7, y=0, w=3, h=8)
         vc.add_view(dataset, cm.DESCRIPTION, x=0, y=8, w=3, h=4)
         vc.add_view(dataset, cm.LAYER_CONTROLLER, x=0, y=0, w=3, h=8)
         vc.add_view(dataset, cm.CELL_SETS, x=10, y=5, w=2, h=7)

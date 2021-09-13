@@ -1,3 +1,28 @@
+## v0.26.2 - 2021-09-09
+
+- Fix `TSNE` -> `t-SNE` in portal.
+
+
+## v0.26.1 - 2021-09-08
+
+- Add cypress tests of file-backed pages: These don't require API mocking, and because of
+  their relative simplicity, may get short shirt in manual testing.
+- Add routes for iframes.
+- Add a page with the metadata loaded into LineUp.
+- Add note explaining the limitted scope of the publications page.
+- Move `SectionContainer` to `PaddedSectionContainer`.
+- Upgrade Vitessce to 1.1.14.  Gene expression sliders and automatic overplot correction have been added.
+
+
+## v0.26.0 - 2021-09-01
+
+- Use fewer hard-coded values on the DonorChart page.
+- Rough draft of organ detail pages.
+- Rough draft of organ index and detail pages.
+- Begin organ pages: Generate YAML from disparite sources of information.
+- Support query parameters on TSV downloads.
+
+
 ## v0.25.4 - 2021-08-25
 
 - Update SPRM viz to include new naming conventions + tsne.
