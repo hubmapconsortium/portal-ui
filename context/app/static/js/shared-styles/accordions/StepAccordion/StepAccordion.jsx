@@ -25,28 +25,30 @@ function StepAccordion({ summaryHeading, content, disabled }) {
               <AccordionText variant="body2" $isExpanded={isExpanded}>
                 {stepCompletedText}
               </AccordionText>
-              <SuccessIcon />
+              <SuccessIcon data-testid="success-icon" />
             </>
           )}
         </Flex>
       </StyledAccordionSummary>
-      <AccordionDetails>
-        {content &&
-          React.cloneElement(content, {
+      {content && (
+        <AccordionDetails>
+          {React.cloneElement(content, {
             setStepCompletedText,
           })}
-      </AccordionDetails>
+        </AccordionDetails>
+      )}
     </Accordion>
   );
 }
 
 StepAccordion.propTypes = {
   summaryHeading: PropTypes.string.isRequired,
-  content: PropTypes.element.isRequired,
-  disabled: PropTypes.element,
+  content: PropTypes.element,
+  disabled: PropTypes.bool,
 };
 
 StepAccordion.defaultProps = {
+  content: undefined,
   disabled: false,
 };
 
