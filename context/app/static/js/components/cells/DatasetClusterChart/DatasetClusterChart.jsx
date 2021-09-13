@@ -28,19 +28,18 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
         padding: 0.2,
       });
 
-      const colorScale = scaleOrdinal({
-        domain: ['matched', 'unmatched'],
-        range: [theme.palette.error.main, theme.palette.success.main],
-      });
-
       setScales({
         selectedData,
         yScale,
         xScale,
-        colorScale,
       });
     }
-  }, [setScales, results, selectedClusterTypeIndex, theme.palette.error.main, theme.palette.success.main]);
+  }, [setScales, results, selectedClusterTypeIndex]);
+
+  const colorScale = scaleOrdinal({
+    domain: ['matched', 'unmatched'],
+    range: [theme.palette.error.main, theme.palette.success.main],
+  });
 
   useEffect(() => {
     async function fetchCellClusterMatches() {
@@ -76,7 +75,7 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
         visxData={scales.selectedData}
         yScale={scales.yScale}
         xScale={scales.xScale}
-        colorScale={scales.colorScale}
+        colorScale={colorScale}
         getX={(x) => x.cluster_number}
         keys={['matched', 'unmatched']}
         margin={{
