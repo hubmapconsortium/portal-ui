@@ -40,7 +40,7 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
         colorScale,
       });
     }
-  }, [setScales, results, selectedClusterTypeIndex]);
+  }, [setScales, results, selectedClusterTypeIndex, theme.palette.error.main, theme.palette.success.main]);
 
   useEffect(() => {
     async function fetchCellClusterMatches() {
