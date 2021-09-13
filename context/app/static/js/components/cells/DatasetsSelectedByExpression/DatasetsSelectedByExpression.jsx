@@ -11,12 +11,18 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 
 import { StyledDiv } from './style';
 
-function DatasetsSelectedByExpression({ setStepCompletedText, setResults }) {
-  const [geneNames, setGeneNames] = useState([]);
+function DatasetsSelectedByExpression({
+  setStepCompletedText,
+  setResults,
+  minExpressionLog,
+  setMinExpressionLog,
+  minCellPercentage,
+  setMinCellPercentage,
+  geneNames,
+  setGeneNames,
+}) {
   const [targetEntity, setTargetEntity] = useState('gene'); // eslint-disable-line no-unused-vars
   const [modality, setModality] = useState('rna'); // eslint-disable-line no-unused-vars
-  const [minExpressionLog, setMinExpressionLog] = useState(1);
-  const [minCellPercentage, setMinCellPercentage] = useState(10);
 
   const [cellsResults, setCellsResults] = useState([]);
   const [message, setMessage] = useState(null);

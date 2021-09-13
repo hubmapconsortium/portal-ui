@@ -23,6 +23,10 @@ function About(props) {
 
 function Cells() {
   const [results, setResults] = useState([]);
+  const [minExpressionLog, setMinExpressionLog] = useState(1);
+  const [minCellPercentage, setMinCellPercentage] = useState(10);
+  const [geneNames, setGeneNames] = useState([]);
+
   return (
     <>
       <Alert severity="warning">UI is still being designed, but we want to demonstrate that the API works.</Alert>
@@ -31,13 +35,26 @@ function Cells() {
         given="a list of genes, a minimum expression level, and a minimum percentage of cells at that expression level"
         returns="a list of UUIDs for datasets which meet those minimums"
       />
-      <StepAccordion summaryHeading="Parameters" content={<DatasetsSelectedByExpression setResults={setResults} />} />
+      <StepAccordion
+        summaryHeading="Parameters"
+        content={
+          <DatasetsSelectedByExpression
+            setResults={setResults}
+            minExpressionLog={minExpressionLog}
+            setMinExpressionLog={setMinExpressionLog}
+            minCellPercentage={minCellPercentage}
+            setMinCellPercentage={setMinCellPercentage}
+            geneNames={geneNames}
+            setGeneNames={setGeneNames}
+          />
+        }
+      />
       <StepAccordion
         summaryHeading="Results"
         disabled={results.length === 0}
         content={
           results.length > 0 ? (
-            <DatasetsTable datasets={results} minGeneExpression={10 ** 1} geneName="VIM" />
+            <DatasetsTable datasets={results} minGeneExpression={10 ** minExpressionLog} geneName={geneNames[0]} />
           ) : undefined
         }
       />
