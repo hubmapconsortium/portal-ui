@@ -6,12 +6,12 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 
 function Description(props) {
-  const { description } = props;
+  const { children } = props;
 
   return (
     <SectionContainer>
       <SectionHeader>Description</SectionHeader>
-      <Paper>TODO: {description}</Paper>
+      <Paper>{children}</Paper>
     </SectionContainer>
   );
 }

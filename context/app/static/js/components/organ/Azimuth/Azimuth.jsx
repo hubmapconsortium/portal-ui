@@ -6,12 +6,12 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 
 function Azimuth(props) {
-  const { azimuth } = props;
+  const { config } = props;
 
   return (
     <SectionContainer>
-      <SectionHeader>Description</SectionHeader>
-      <Paper>TODO: {JSON.stringify(azimuth)}</Paper>
+      <SectionHeader>Azimuth</SectionHeader>
+      <Paper>TODO: {JSON.stringify(config)}</Paper>
     </SectionContainer>
   );
 }
