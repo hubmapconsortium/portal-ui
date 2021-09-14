@@ -36,8 +36,13 @@ def _get_entities(entity_type):
     if entity_type not in ['donors', 'samples', 'datasets']:
         abort(404)
     client = get_client()
+    extra_fields = _first_fields[:]
+    if entity_type in ['samples', 'datasets']:
+        extra_fields.append('donor.hubmap_id')
+    if entity_type in ['samples']:
+        extra_fields.append('mapped_specimen_type')
     entities = client.get_entities(
-        entity_type, _first_fields,
+        entity_type, extra_fields,
         constraints=request.args.to_dict(flat=False)
         # Default "True" would throw away repeated keys after the first.
     )

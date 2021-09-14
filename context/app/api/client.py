@@ -181,6 +181,22 @@ def _make_query(constraints):
     return query
 
 
+def _get_nested(path, nested):
+    '''
+    >>> path = 'a.b.c'
+    >>> nested = {'a': {'b': {'c': 123}}}
+
+    >>> _get_nested(path, {}) is None
+    True
+    >>> _get_nested(path, nested)
+    123
+    '''
+    tokens = path.split('.')
+    for t in tokens:
+        nested = nested.get(t, {})
+    return nested or None
+
+
 def _flatten_sources(sources, non_metadata_fields):
     '''
     >>> from pprint import pp
@@ -190,11 +206,20 @@ def _flatten_sources(sources, non_metadata_fields):
     ...      'mapped_metadata': {'age': [40], 'weight': [150]}
     ...     },
     ...     {'uuid': 'wxyz1234', 'name': 'Bob',
+    ...      'donor': {'hubmap_id': 'HBM1234.ABCD.7890'},
     ...      'mapped_metadata': {'age': [50], 'multi': ['A', 'B', 'C']}
     ...     }]
-    >>> pp(_flatten_sources(donor_sources, ['uuid', 'name']))
-    [{'uuid': 'abcd1234', 'name': 'Ann', 'age': '40', 'weight': '150'},
-     {'uuid': 'wxyz1234', 'name': 'Bob', 'age': '50', 'multi': 'A, B, C'}]
+    >>> pp(_flatten_sources(donor_sources, ['uuid', 'name', 'donor.hubmap_id']))
+    [{'uuid': 'abcd1234',
+      'name': 'Ann',
+      'donor.hubmap_id': None,
+      'age': '40',
+      'weight': '150'},
+     {'uuid': 'wxyz1234',
+      'name': 'Bob',
+      'donor.hubmap_id': 'HBM1234.ABCD.7890',
+      'age': '50',
+      'multi': 'A, B, C'}]
 
     >>> sample_sources = [
     ...     {'uuid': 'abcd1234',
@@ -208,7 +233,7 @@ def _flatten_sources(sources, non_metadata_fields):
     flat_sources = [
         {
             **{
-                field: source.get(field)
+                field: _get_nested(field, source)
                 for field in non_metadata_fields
             },
 
