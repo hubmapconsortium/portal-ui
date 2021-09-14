@@ -57,7 +57,7 @@ def main():
         Organ(
             name=data['name'],
             data=data)
-        for uberon_id, data in merged_data.items()
+        for data in merged_data.values()
     ]
     DirectoryWriter(args.target, organs).write()
 
