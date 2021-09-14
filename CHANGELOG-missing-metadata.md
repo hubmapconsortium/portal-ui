@@ -1,0 +1,1 @@
+- `metadata` will no longer be present on derived entities? Support either structure.
