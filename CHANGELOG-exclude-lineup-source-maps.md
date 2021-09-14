@@ -1,0 +1,1 @@
+- Exclude source maps from lineupjs when bundling to prevent console warnings.
