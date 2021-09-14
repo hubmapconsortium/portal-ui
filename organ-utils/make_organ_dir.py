@@ -114,7 +114,13 @@ def add_vitessce(azimuth_organs):
         url = f'{base}/assets/json/{file}'
         vitessce_path = Path(__file__).parent / file
         if not vitessce_path.exists():
-            vitessce_path.write_text(requests.get(url).text)
+            response = requests.get(url)
+            try:
+                response.raise_for_status()
+            except:
+                print(f'WARNING: {url}')
+                continue
+            vitessce_path.write_text(response.text)
         vitessce_conf = json.loads(vitessce_path.read_text())
         organ['vitessce_conf'] = vitessce_conf
     return azimuth_organs
