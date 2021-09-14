@@ -1,38 +1,48 @@
 import React, { useState } from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
 
 import { capitalizeString } from 'js/helpers/functions';
 import { StyledTextField } from './style';
 
-function QuerySelect({ setStepCompletedText }) {
+function QuerySelect({ setStepCompletedText, setQueryType }) {
   const [selectedQueryType, setSelectedQueryType] = useState('gene');
 
   function handleSelect(event) {
     setSelectedQueryType(event.target.value);
-    setStepCompletedText(`${capitalizeString(event.target.value)} Query`);
+  }
+
+  function handleButtonClick() {
+    setStepCompletedText(`${capitalizeString(selectedQueryType)} Query`);
+    setQueryType(selectedQueryType);
   }
   return (
-    <StyledTextField
-      id="query-select"
-      label="Query Type"
-      value={selectedQueryType}
-      onChange={handleSelect}
-      variant="outlined"
-      select
-      fullWidth
-      SelectProps={{
-        MenuProps: {
-          anchorOrigin: {
-            vertical: 'bottom',
-            horizontal: 'left',
+    <div>
+      <StyledTextField
+        id="query-select"
+        label="Query Type"
+        value={selectedQueryType}
+        onChange={handleSelect}
+        variant="outlined"
+        select
+        fullWidth
+        SelectProps={{
+          MenuProps: {
+            anchorOrigin: {
+              vertical: 'bottom',
+              horizontal: 'left',
+            },
+            getContentAnchorEl: null,
           },
-          getContentAnchorEl: null,
-        },
-      }}
-    >
-      <MenuItem value="gene">Gene</MenuItem>
-      <MenuItem value="protein">Protein</MenuItem>
-    </StyledTextField>
+        }}
+      >
+        <MenuItem value="gene">Gene</MenuItem>
+        <MenuItem value="protein">Protein</MenuItem>
+      </StyledTextField>
+      <Button variant="contained" color="primary" onClick={handleButtonClick}>
+        Set Parameters
+      </Button>
+    </div>
   );
 }
 

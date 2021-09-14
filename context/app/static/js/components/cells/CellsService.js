@@ -25,18 +25,20 @@ class CellsService {
     return this.fetchAndParse(`/cells/${targetEntity}-by-substring.json?${urlParams}`);
   }
 
-  async getDatasetsSelectedByGenes(props) {
-    const { geneNames, minExpression, minCellPercentage, modality } = props;
+  async getDatasets(props) {
+    const { type, names, minExpression, minCellPercentage, modality } = props;
     const urlParams = new URLSearchParams();
 
-    geneNames.forEach((geneName) => {
+    names.forEach((geneName) => {
       urlParams.append('name', geneName);
     });
     urlParams.append('min_expression', minExpression);
     urlParams.append('min_cell_percentage', minCellPercentage);
-    urlParams.append('modality', modality);
+    if (modality) {
+      urlParams.append('modality', modality);
+    }
 
-    return this.fetchAndParse(`/cells/datasets-selected-by-gene.json?${urlParams}`);
+    return this.fetchAndParse(`/cells/datasets-selected-by-${type}.json?${urlParams}`);
   }
 
   async getCellPercentagesForDatasets(props) {
