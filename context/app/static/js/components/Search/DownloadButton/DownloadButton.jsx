@@ -15,7 +15,7 @@ function DownloadButton(props) {
   return (
     <SecondaryBackgroundTooltip title="Download a TSV of the table metadata. This will not take into account any filtering done on the search page.">
       <StyledButton
-        href={`/api/v0/${lcPluralType}.tsv`}
+        href={`/metadata/v0/${lcPluralType}.tsv`}
         target="_blank"
         component="a"
         onClick={sendTsvEvent}
