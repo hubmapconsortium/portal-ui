@@ -12,10 +12,10 @@ On a dataset page you can:
 
 ## Metadata for all donors, samples, or datasets
 
-For metadata in TSV form, visit [`/api/v0/donors.tsv`](/api/v0/donors.tsv),
-[`/api/v0/samples.tsv`](/api/v0/samples.tsv), or [`/api/v0/datasets.tsv`](/api/v0/datasets.tsv).
+For metadata in TSV form, visit [`/metadata/v0/donors.tsv`](/metadata/v0/donors.tsv),
+[`/metadata/v0/samples.tsv`](/metadata/v0/samples.tsv), or [`/metadata/v0/datasets.tsv`](/metadata/v0/datasets.tsv).
 Without constraints, the datasets TSV has a large number of columns, because different assay types have different metadata fields.
-Add parameters to limit to a particular assay, for example [`datasets.tsv?assay_type=CODEX`](/api/v0/datasets.tsv?assay_type=CODEX).
+Add parameters to limit to a particular assay, for example [`datasets.tsv?assay_type=CODEX`](/metadata/v0/datasets.tsv?assay_type=CODEX).
 If you are logged in and have sufficient access privileges, these will include unpublished data.
 
 ## Query metadata
