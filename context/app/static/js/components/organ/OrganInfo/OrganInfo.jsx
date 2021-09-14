@@ -8,7 +8,7 @@ function OrganInfo(props) {
 
   return (
     <SectionContainer>
-      <SectionHeader>Organ Info</SectionHeader>
+      <SectionHeader>Human Reference Atlas</SectionHeader>
       <ccf-organ-info organ-iri={uberonIri} />
     </SectionContainer>
   );
