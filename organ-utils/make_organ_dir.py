@@ -12,6 +12,7 @@ from typing import DefaultDict
 
 import requests
 from yaml import dump, safe_load
+import json
 
 
 def main():
@@ -38,7 +39,7 @@ def main():
         get_search_organs(get_search_response(args.elasticsearch_url)),
         uberon_names=uberon_names)
     azimuth_organs_by_uberon = rekey_azimuth(
-        get_azimuth_yaml(args.azimuth_url),
+        add_vitessce(get_azimuth_yaml(args.azimuth_url)),
         uberon_names=uberon_names)
 
     merged_data = merge_data(
@@ -102,9 +103,24 @@ def get_azimuth_yaml(url):
     human_azimuth = [v for v in all_azimuth if v['species'] == 'Human']
     return human_azimuth
 
+def add_vitessce(azimuth_organs):
+    '''
+    Given an azimuth reference, use heuritics to fetch and integrate the vitessce config.
+    TODO: Get NYGC to make the mapping explicit.
+    '''
+    for organ in azimuth_organs:
+        file = organ['vitessce'].split('/')[-1] + '.json'
+        base = 'https://raw.githubusercontent.com/satijalab/azimuth_website/master'
+        url = f'{base}/assets/json/{file}'
+        vitessce_path = Path(__file__).parent / file
+        if not vitessce_path.exists():
+            vitessce_path.write_text(requests.get(url).text)
+        vitessce_conf = json.loads(vitessce_path.read_text())
+        organ['vitessce_conf'] = vitessce_conf
+    return azimuth_organs
 
 def rekey_azimuth(azimuth_organs, uberon_names):
-    # TODO: Get NYGC to add Uberon IDs
+    # TODO: Get NYGC to add Uberon IDs / Get rid of heuristics.
     '''
     >>> uberon_names = {
     ...     'UBERON_0002113': 'Kidney',
@@ -182,13 +198,7 @@ def rekey_search(search_organs, uberon_names):
     }
 
 
-###### ASCTB #######
-
-
-
-
 ###### Utils #######
-
 
 @dataclass
 class Organ:
