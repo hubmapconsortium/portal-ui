@@ -106,10 +106,14 @@ def get_azimuth_yaml(url):
 def rekey_azimuth(azimuth_organs, uberon_names):
     # TODO: Get NYGC to add Uberon IDs
     '''
-    >>> azimuth_organs = [{'title': 'Human - Kidney'}]
-    >>> uberon_names = {'UBERON_0002113': 'Kidney'}
+    >>> uberon_names = {
+    ...     'UBERON_0002113': 'Kidney',
+    ...     'UBERON_0002048': 'Lungs'}
+    >>> azimuth_organs = [
+    ...     {'title': 'Human - Kidney'},
+    ...     {'title': 'Human - Lung'}]
     >>> rekey_azimuth(azimuth_organs, uberon_names)
-    {'UBERON_0002113': {'title': 'Human - Kidney'}}
+    {'UBERON_0002113': {'title': 'Human - Kidney'}, 'UBERON_0002048': {'title': 'Human - Lung'}}
 
     >>> azimuth_organs = [
     ...     {'title': 'Human - Kidney'},
@@ -122,12 +126,13 @@ def rekey_azimuth(azimuth_organs, uberon_names):
     azimuth_organs = {
         uberon_id: [
             organ for organ in azimuth_organs
-            if uberon_name in organ['title']]
+            if uberon_name in organ['title']
+            or uberon_name.rstrip('s') in organ['title']]
         for uberon_id, uberon_name in uberon_names.items()
     }
-    match_count = {k: len(v) for k, v in azimuth_organs.items()}
-    assert all(v <= 1 for v in match_count.values()), \
-        f'Multiple matches for uberon in azimuth: {match_count}'
+    multi_matches = {k: len(v) for k, v in azimuth_organs.items() if len(v) > 1}
+    assert not multi_matches, \
+        f'Multiple matches for uberon in azimuth: {multi_matches}'
     return {k: v[0] for k, v in azimuth_organs.items() if v}
 
 
