@@ -37,9 +37,9 @@ def main():
     search_organs_by_uberon = rekey_search(
         get_search_organs(get_search_response(args.elasticsearch_url)),
         uberon_names=uberon_names)
-    # azimuth_data = rekey_azimuth(
-    #     get_azimuth_yaml(args.azimuth_url),
-    #     uberon_names=uberon_names)
+    azimuth_organs_by_uberon = rekey_azimuth(
+        get_azimuth_yaml(args.azimuth_url),
+        uberon_names=uberon_names)
 
     merged_data = merge_data(
         uberon=
@@ -49,8 +49,9 @@ def main():
         description=
             {uberon_id: value['description'] for uberon_id, value in descriptions.items()},
         search=
-            search_organs_by_uberon
-        # azimuth=azimuth_data
+            search_organs_by_uberon,
+        azimuth=
+            azimuth_organs_by_uberon
     )
 
     organs = [
@@ -97,7 +98,37 @@ def get_azimuth_yaml(url):
     azimuth_path = Path(__file__).parent / 'azimuth.yaml'
     if not azimuth_path.exists():
         azimuth_path.write_text(requests.get(url).text)
-    return azimuth_path.read_text()
+    all_azimuth = safe_load(azimuth_path.read_text())
+    human_azimuth = [v for v in all_azimuth if v['species'] == 'Human']
+    return human_azimuth
+
+
+def rekey_azimuth(azimuth_organs, uberon_names):
+    # TODO: Get NYGC to add Uberon IDs
+    '''
+    >>> azimuth_organs = [{'title': 'Human - Kidney'}]
+    >>> uberon_names = {'UBERON_0002113': 'Kidney'}
+    >>> rekey_azimuth(azimuth_organs, uberon_names)
+    {'UBERON_0002113': {'title': 'Human - Kidney'}}
+
+    >>> azimuth_organs = [
+    ...     {'title': 'Human - Kidney'},
+    ...     {'title': 'Human - duplicate - Kidney'}]
+    >>> rekey_azimuth(azimuth_organs, uberon_names)
+    Traceback (most recent call last):
+    ...
+    AssertionError: Multiple matches for uberon in azimuth: {'UBERON_0002113': 2}
+    '''
+    azimuth_organs = {
+        uberon_id: [
+            organ for organ in azimuth_organs
+            if uberon_name in organ['title']]
+        for uberon_id, uberon_name in uberon_names.items()
+    }
+    match_count = {k: len(v) for k, v in azimuth_organs.items()}
+    assert all(v <= 1 for v in match_count.values()), \
+        f'Multiple matches for uberon in azimuth: {match_count}'
+    return {k: v[0] for k, v in azimuth_organs.items() if v}
 
 
 ###### Search #######
