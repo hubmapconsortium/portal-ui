@@ -6,15 +6,25 @@ import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 
 import { AccordionSummaryHeading, AccordionText, Flex, StyledAccordionSummary, SuccessIcon } from './style';
 
-function StepAccordion({ summaryHeading, content, disabled }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+function StepAccordion({
+  summaryHeading,
+  content,
+  disabled,
+  handleExpand,
+  openedAccordionIndex,
+  index,
+  setCompletedStepIndex,
+}) {
   const [stepCompletedText, setStepCompletedText] = useState(null);
+  const isExpanded = openedAccordionIndex === index;
 
-  function handleExpand(event, expanded) {
-    setIsExpanded(expanded);
+  function handleComplete(text) {
+    setStepCompletedText(text);
+    setCompletedStepIndex(index);
   }
+
   return (
-    <Accordion onChange={handleExpand} disabled={disabled}>
+    <Accordion onChange={handleExpand(index)} disabled={disabled} expanded={isExpanded}>
       <StyledAccordionSummary expandIcon={<ArrowDropUpRoundedIcon />} $isExpanded={isExpanded}>
         <AccordionSummaryHeading variant="subtitle2" $isExpanded={isExpanded}>
           {summaryHeading}
@@ -33,7 +43,7 @@ function StepAccordion({ summaryHeading, content, disabled }) {
       {content && (
         <AccordionDetails>
           {React.cloneElement(content, {
-            setStepCompletedText,
+            setStepCompletedText: handleComplete,
           })}
         </AccordionDetails>
       )}
@@ -45,6 +55,9 @@ StepAccordion.propTypes = {
   summaryHeading: PropTypes.string.isRequired,
   content: PropTypes.element,
   disabled: PropTypes.bool,
+  handleExpand: PropTypes.func.isRequired,
+  openedAccordionIndex: PropTypes.number.isRequired,
+  index: PropTypes.number.isRequired,
 };
 
 StepAccordion.defaultProps = {
