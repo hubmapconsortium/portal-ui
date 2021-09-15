@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { Alert } from 'js/shared-styles/alerts';
-import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
+import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedByExpression';
 import DatasetsTable from 'js/components/cells/DatasetsTable';
 
@@ -35,28 +35,30 @@ function Cells() {
         given="a list of genes, a minimum expression level, and a minimum percentage of cells at that expression level"
         returns="a list of UUIDs for datasets which meet those minimums"
       />
-      <StepAccordion
-        summaryHeading="Parameters"
-        content={
-          <DatasetsSelectedByExpression
-            setResults={setResults}
-            minExpressionLog={minExpressionLog}
-            setMinExpressionLog={setMinExpressionLog}
-            minCellPercentage={minCellPercentage}
-            setMinCellPercentage={setMinCellPercentage}
-            geneNames={geneNames}
-            setGeneNames={setGeneNames}
-          />
-        }
-      />
-      <StepAccordion
-        summaryHeading="Results"
-        disabled={results.length === 0}
-        content={
-          results.length > 0 ? (
-            <DatasetsTable datasets={results} minGeneExpression={10 ** minExpressionLog} geneName={geneNames[0]} />
-          ) : undefined
-        }
+      <AccordionSteps
+        steps={[
+          {
+            heading: 'Parameters',
+            content: (
+              <DatasetsSelectedByExpression
+                setResults={setResults}
+                minExpressionLog={minExpressionLog}
+                setMinExpressionLog={setMinExpressionLog}
+                minCellPercentage={minCellPercentage}
+                setMinCellPercentage={setMinCellPercentage}
+                geneNames={geneNames}
+                setGeneNames={setGeneNames}
+              />
+            ),
+          },
+          {
+            heading: 'Results',
+            content:
+              results.length > 0 ? (
+                <DatasetsTable datasets={results} minGeneExpression={10 ** minExpressionLog} geneName={geneNames[0]} />
+              ) : undefined,
+          },
+        ]}
       />
     </>
   );
