@@ -55,12 +55,12 @@ class CellsService {
   }
 
   async getCellExpressionInDataset(props) {
-    const { uuid, geneNames } = props;
+    const { uuid, names } = props;
     const urlParams = new URLSearchParams();
 
     urlParams.append('uuid', uuid);
-    geneNames.forEach((geneName) => {
-      urlParams.append('gene_name', geneName);
+    names.forEach((name) => {
+      urlParams.append('names', name);
     });
 
     return this.fetchAndParse(`/cells/cell-expression-in-dataset.json?${urlParams}`);
@@ -71,12 +71,13 @@ class CellsService {
   }
 
   async getClusterCellMatchesInDataset(props) {
-    const { uuid, geneName, minGeneExpression } = props;
+    const { uuid, name, queryType, minExpression } = props;
     const urlParams = new URLSearchParams();
 
     urlParams.append('uuid', uuid);
-    urlParams.append('gene_name', geneName);
-    urlParams.append('min_gene_expression', minGeneExpression);
+    urlParams.append('name', name);
+    urlParams.append('min_expression', minExpression);
+    urlParams.append('query_type', queryType);
 
     return this.fetchAndParse(`/cells/cells-in-dataset-clusters.json?${urlParams}`);
   }

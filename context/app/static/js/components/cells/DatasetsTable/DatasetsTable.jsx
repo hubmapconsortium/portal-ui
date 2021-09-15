@@ -19,7 +19,7 @@ const columns = [
   { id: 'expand', label: '' },
 ];
 
-function DatasetsTable({ datasets, minGeneExpression, geneName, setStepCompletedText }) {
+function DatasetsTable({ datasets, minExpression, cellVariableName, queryType, setStepCompletedText }) {
   useEffect(() => {
     setStepCompletedText(`${datasets.length} Datasets Matching Query Parameters`);
   });
@@ -39,8 +39,9 @@ function DatasetsTable({ datasets, minGeneExpression, geneName, setStepCompleted
             datasetMetadata={_source}
             numCells={columns.length}
             key={_source.hubmap_id}
-            minGeneExpression={minGeneExpression}
-            geneName={geneName}
+            minExpression={minExpression}
+            cellVariableName={cellVariableName}
+            queryType={queryType}
           />
         ))}
       </TableBody>

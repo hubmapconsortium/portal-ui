@@ -37,8 +37,9 @@ function Cells() {
           results.length > 0 ? (
             <DatasetsTable
               datasets={results}
-              minGeneExpression={10 ** minExpressionLog}
-              geneName={cellVariableNames[0]}
+              minExpression={10 ** minExpressionLog}
+              cellVariableName={cellVariableNames[0]}
+              queryType={queryType}
             />
           ) : undefined
         }

@@ -11,15 +11,20 @@ function UnitValueCell({ unit, value }) {
   return <ExpandableRowCell>{`${value} ${unit}`}</ExpandableRowCell>;
 }
 
-function DatasetTableRow({ datasetMetadata, numCells, geneName, minGeneExpression }) {
+function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpression, queryType }) {
   const { hubmap_id, uuid, origin_sample, mapped_data_types, donor, last_modified_timestamp } = datasetMetadata;
   return (
     <ExpandableRow
       numCells={numCells}
       expandedContent={
         <div>
-          <CellExpressionHistogram uuid={uuid} geneName={geneName} />
-          <DatasetClusterChart uuid={uuid} geneName={geneName} minGeneExpression={minGeneExpression} />
+          <CellExpressionHistogram uuid={uuid} cellVariableName={cellVariableName} />
+          <DatasetClusterChart
+            uuid={uuid}
+            cellVariableName={cellVariableName}
+            minExpression={minExpression}
+            queryType={queryType}
+          />
         </div>
       }
     >
