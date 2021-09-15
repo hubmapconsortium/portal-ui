@@ -49,6 +49,8 @@ def main():
             {uberon_id: value['name'] for uberon_id, value in descriptions.items()},
         description=
             {uberon_id: value['description'] for uberon_id, value in descriptions.items()},
+        has_iu_component=
+            {uberon_id: value.get('has_iu_component', True) for uberon_id, value in descriptions.items()},
         search=
             search_organs_by_uberon,
         azimuth=

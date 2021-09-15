@@ -1,4 +1,5 @@
 name: Skin
 uberon: http://purl.obolibrary.org/obo/UBERON_0002097
 description: The organ covering the body that consists of the dermis and epidermis.
+has_iu_component: true
 search: []

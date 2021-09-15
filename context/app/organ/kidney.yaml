@@ -2,6 +2,7 @@ name: Kidney
 uberon: http://purl.obolibrary.org/obo/UBERON_0002113
 description: A paired organ of the urinary tract which has the production of urine
   as its primary function.
+has_iu_component: true
 search:
 - Kidney (Left)
 - Kidney (Right)
