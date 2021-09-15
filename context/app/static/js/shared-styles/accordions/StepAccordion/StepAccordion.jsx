@@ -13,14 +13,14 @@ function StepAccordion({
   handleExpand,
   openedAccordionIndex,
   index,
-  setCompletedStepIndex,
+  handleCompleteStep,
 }) {
   const [stepCompletedText, setStepCompletedText] = useState(null);
   const isExpanded = openedAccordionIndex === index;
 
   function handleComplete(text) {
     setStepCompletedText(text);
-    setCompletedStepIndex(index);
+    handleCompleteStep(index);
   }
 
   return (
@@ -43,7 +43,7 @@ function StepAccordion({
       {content && (
         <AccordionDetails>
           {React.cloneElement(content, {
-            setStepCompletedText: handleComplete,
+            completeStep: handleComplete,
           })}
         </AccordionDetails>
       )}

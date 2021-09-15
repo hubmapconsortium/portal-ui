@@ -12,7 +12,7 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 import { StyledDiv } from './style';
 
 function DatasetsSelectedByExpression({
-  setStepCompletedText,
+  completeStep,
   setResults,
   minExpressionLog,
   setMinExpressionLog,
@@ -30,7 +30,7 @@ function DatasetsSelectedByExpression({
   async function handleSubmit() {
     try {
       if (targetEntity === 'gene') {
-        setStepCompletedText(
+        completeStep(
           <>
             {geneNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
             Percentage

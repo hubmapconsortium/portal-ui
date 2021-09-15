@@ -9,6 +9,12 @@ function AccordionSteps({ steps }) {
     setOpenedAccordionIndex(isExpanded ? index : false);
   };
 
+  function handleCompleteStep(index) {
+    setCompletedStepIndex(index);
+    if (index !== steps.length - 1) {
+      setOpenedAccordionIndex(index + 1);
+    }
+  }
   return steps.map(({ heading, content }, i) => (
     <StepAccordion
       summaryHeading={heading}
@@ -17,7 +23,7 @@ function AccordionSteps({ steps }) {
       openedAccordionIndex={openedAccordionIndex}
       index={i}
       disabled={i > completedStepIndex + 1}
-      setCompletedStepIndex={setCompletedStepIndex}
+      handleCompleteStep={handleCompleteStep}
     />
   ));
 }
