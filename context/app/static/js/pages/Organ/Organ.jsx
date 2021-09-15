@@ -16,9 +16,9 @@ function Organ(props) {
         {organ.name}
       </SectionHeader>
       {organ?.description && <Description>{organ.description}</Description>}
-      {organ?.uberon && <OrganInfo uberonIri={organ.uberon} />}
+      {organ.has_iu_component && <OrganInfo uberonIri={organ.uberon} />}
       {organ?.azimuth && <Azimuth config={organ.azimuth} />}
-      {Boolean(organ.search.length) && (
+      {organ.search.length > 0 && (
         <>
           <Assays searchTerms={organ.search} />
           <Samples searchTerms={organ.search} />
