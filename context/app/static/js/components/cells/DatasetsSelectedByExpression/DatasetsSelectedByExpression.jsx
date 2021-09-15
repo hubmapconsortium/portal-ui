@@ -31,7 +31,10 @@ function DatasetsSelectedByExpression({
     try {
       if (targetEntity === 'gene') {
         setStepCompletedText(
-          `${geneNames.join(', ')} | Expression Level 10^${minExpressionLog} | ${minCellPercentage}% Cell Percentage`,
+          <>
+            {geneNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
+            Percentage
+          </>,
         );
         const serviceResults = await new CellsService().getDatasetsSelectedByGenes({
           geneNames,
