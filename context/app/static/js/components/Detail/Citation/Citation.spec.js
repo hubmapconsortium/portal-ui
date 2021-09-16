@@ -11,8 +11,8 @@ const { Citation } = composeStories(stories);
 const defaultCitation = 'Aanders A, Banders B, Canders C. Something Science-y [Internet]. HuBMAP Consortium; 2018.';
 
 test('builds NLM citation', () => {
-  const { contributors, citationTitle, create_timestamp } = Citation.args;
-  expect(buildNLMCitation({ contributors, citationTitle, create_timestamp })).toEqual(defaultCitation);
+  const { contributors, citationTitle, created_timestamp } = Citation.args;
+  expect(buildNLMCitation({ contributors, citationTitle, created_timestamp })).toEqual(defaultCitation);
 });
 
 test('Displays correct text', () => {
