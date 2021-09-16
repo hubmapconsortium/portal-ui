@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
 
-export function getObject(keys, object) {
-  return Object.assign({}, ...keys.map((key) => ({ [key]: object[key] })));
+export function getPartialObject(keysToRetain, object) {
+  return Object.assign({}, ...keysToRetain.map((key) => ({ [key]: object[key] })));
 }
 
 function AccordionSteps({ steps }) {
@@ -19,7 +19,7 @@ function AccordionSteps({ steps }) {
     (index) => (text) => {
       setCompletedStepsText((prevState) => {
         const previousStepIndexes = [...Array(index).keys()];
-        return { ...getObject(previousStepIndexes, prevState), [index]: text };
+        return { ...getPartialObject(previousStepIndexes, prevState), [index]: text };
       });
       setCompletedStepIndex(index);
       if (index !== steps.length - 1) {
