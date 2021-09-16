@@ -36,6 +36,7 @@ function AccordionSteps({ steps }) {
       handleExpand={handleExpand}
       openedAccordionIndex={openedAccordionIndex}
       index={i}
+      key={heading}
       disabled={i > completedStepIndex + 1}
       getCompleteStepFunction={getCompleteStepFunction}
       stepCompletedText={completeStepsText[i]}
