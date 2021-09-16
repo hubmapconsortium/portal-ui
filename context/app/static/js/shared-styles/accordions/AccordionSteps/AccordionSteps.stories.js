@@ -1,10 +1,12 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
 import AccordionSteps from './AccordionSteps';
 
 export default {
   title: 'AccordionSteps',
   component: AccordionSteps,
+  subcomponents: { StepAccordion },
 };
 
 function ExampleContent({ completeStep, stepNumber }) {
