@@ -28,6 +28,7 @@ function DatasetsSelectedByExpression({
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
+    setResults([]);
     try {
       if (targetEntity === 'gene') {
         completeStep(
