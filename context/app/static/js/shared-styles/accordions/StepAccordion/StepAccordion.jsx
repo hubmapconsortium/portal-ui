@@ -18,6 +18,7 @@ function StepAccordion({
 }) {
   const isExpanded = openedAccordionIndex === index;
 
+  // memoize to avoid rerenders
   const completeStep = useMemo(() => {
     return getCompleteStepFunction(index);
   }, [getCompleteStepFunction, index]);

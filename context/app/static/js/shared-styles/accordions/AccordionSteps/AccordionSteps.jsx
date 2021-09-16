@@ -14,8 +14,7 @@ function AccordionSteps({ steps }) {
     setOpenedAccordionIndex(isExpanded ? index : false);
   };
 
-  const stepsLength = steps.length;
-
+  // without the useCallback the prevState causes a render loop
   const getCompleteStepFunction = useCallback(
     (index) => (text) => {
       setCompletedStepsText((prevState) => {
@@ -23,11 +22,11 @@ function AccordionSteps({ steps }) {
         return { ...getObject(previousStepIndexes, prevState), [index]: text };
       });
       setCompletedStepIndex(index);
-      if (index !== stepsLength - 1) {
+      if (index !== steps.length - 1) {
         setOpenedAccordionIndex(index + 1);
       }
     },
-    [stepsLength],
+    [steps.length],
   );
 
   return steps.map(({ heading, content }, i) => (
