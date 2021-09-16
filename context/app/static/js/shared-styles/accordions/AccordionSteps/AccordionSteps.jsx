@@ -7,8 +7,7 @@ export function getSpecificObjectEntries(keys, object) {
 
 function AccordionSteps({ steps }) {
   const [openedAccordionIndex, setOpenedAccordionIndex] = useState(false);
-  const [completedStepIndex, setCompletedStepIndex] = useState(-1);
-  const [completeStepsText, setCompletedStepsText] = useState({});
+  const [completedStepsText, setCompletedStepsText] = useState({});
 
   const handleExpand = (index) => (event, isExpanded) => {
     setOpenedAccordionIndex(isExpanded ? index : false);
@@ -21,7 +20,6 @@ function AccordionSteps({ steps }) {
         const previousStepIndexes = [...Array(index).keys()];
         return Object.fromEntries([...getSpecificObjectEntries(previousStepIndexes, prevState), [index, text]]);
       });
-      setCompletedStepIndex(index);
       if (index !== steps.length - 1) {
         setOpenedAccordionIndex(index + 1);
       }
@@ -37,9 +35,9 @@ function AccordionSteps({ steps }) {
       openedAccordionIndex={openedAccordionIndex}
       index={i}
       key={heading}
-      disabled={i > completedStepIndex + 1}
+      disabled={i > Object.keys(completedStepsText)}
       getCompleteStepFunction={getCompleteStepFunction}
-      stepCompletedText={completeStepsText[i]}
+      stepCompletedText={completedStepsText[i]}
     />
   ));
 }
