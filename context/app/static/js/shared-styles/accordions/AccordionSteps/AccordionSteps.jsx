@@ -16,7 +16,7 @@ function AccordionSteps({ steps }) {
 
   const stepsLength = steps.length;
 
-  const completeStep = useCallback(
+  const getCompleteStepFunction = useCallback(
     (index) => (text) => {
       setCompletedStepsText((prevState) => {
         const previousStepIndexes = [...Array(index).keys()];
@@ -38,7 +38,7 @@ function AccordionSteps({ steps }) {
       openedAccordionIndex={openedAccordionIndex}
       index={i}
       disabled={i > completedStepIndex + 1}
-      completeStep={completeStep}
+      getCompleteStepFunction={getCompleteStepFunction}
       stepCompletedText={completeStepsText[i]}
     />
   ));
