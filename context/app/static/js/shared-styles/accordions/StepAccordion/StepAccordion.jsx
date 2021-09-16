@@ -7,12 +7,12 @@ import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 import { AccordionSummaryHeading, AccordionText, Flex, StyledAccordionSummary, SuccessIcon } from './style';
 
 function StepAccordion({
+  index,
   summaryHeading,
   content,
   disabled,
   getHandleExpandFunction,
   isExpanded,
-  index,
   stepCompletedText,
   getCompleteStepFunction,
 }) {
@@ -50,17 +50,19 @@ function StepAccordion({
 }
 
 StepAccordion.propTypes = {
-  summaryHeading: PropTypes.string.isRequired,
-  content: PropTypes.element,
-  disabled: PropTypes.bool,
-  getHandleExpandFunction: PropTypes.func.isRequired,
-  isExpanded: PropTypes.bool.isRequired,
   index: PropTypes.number.isRequired,
+  summaryHeading: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  content: PropTypes.element,
+  isExpanded: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  getHandleExpandFunction: PropTypes.func.isRequired,
+  getCompleteStepFunction: PropTypes.func.isRequired,
+  stepCompletedText: PropTypes.string,
 };
 
 StepAccordion.defaultProps = {
   content: undefined,
-  disabled: false,
+  stepCompletedText: undefined,
 };
 
 export default StepAccordion;

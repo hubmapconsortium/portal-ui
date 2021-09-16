@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
 
 export function getSpecificObjectEntries(keys, object) {
@@ -37,9 +38,18 @@ function AccordionSteps({ steps }) {
       disabled={i > Object.keys(completedStepsText).length}
       getHandleExpandFunction={getHandleExpandFunction}
       getCompleteStepFunction={getCompleteStepFunction}
-      stepCompletedText={completedStepsText[i]}
+      stepCompletedText={completedStepsText?.[i]}
     />
   ));
 }
+
+AccordionSteps.propTypes = {
+  steps: PropTypes.arrayOf(
+    PropTypes.shape({
+      heading: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+      content: PropTypes.element,
+    }),
+  ).isRequired,
+};
 
 export default AccordionSteps;
