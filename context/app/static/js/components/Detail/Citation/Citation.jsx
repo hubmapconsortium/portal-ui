@@ -6,16 +6,16 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 
-function buildNLMCitation({ contributors, citationTitle, create_timestamp }) {
+function buildNLMCitation({ contributors, citationTitle, created_timestamp }) {
   const joinedContributors = contributors
     .map(({ last_name, first_name }) => `${last_name} ${first_name[0]}`)
     .join(', ');
-  const year = new Date(create_timestamp).getFullYear();
+  const year = new Date(created_timestamp).getFullYear();
   return `${joinedContributors}. ${citationTitle} [Internet]. HuBMAP Consortium; ${year}.`;
 }
 
-function Citation({ contributors, citationTitle, create_timestamp, doi_url, doi, className }) {
-  const citation = buildNLMCitation({ contributors, citationTitle, create_timestamp });
+function Citation({ contributors, citationTitle, created_timestamp, doi_url, doi, className }) {
+  const citation = buildNLMCitation({ contributors, citationTitle, created_timestamp });
 
   return (
     <LabelledSectionText
@@ -36,7 +36,7 @@ Citation.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   contributors: PropTypes.array.isRequired,
   citationTitle: PropTypes.string.isRequired,
-  create_timestamp: PropTypes.number.isRequired,
+  created_timestamp: PropTypes.number.isRequired,
   doi_url: PropTypes.string.isRequired,
   doi: PropTypes.string.isRequired,
 };
