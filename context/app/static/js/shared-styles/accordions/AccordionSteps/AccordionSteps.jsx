@@ -29,13 +29,13 @@ function AccordionSteps({ steps }) {
 
   return steps.map(({ heading, content }, i) => (
     <StepAccordion
+      key={heading}
+      index={i}
       summaryHeading={heading}
       content={content}
+      isExpanded={openedAccordionIndex === i}
+      disabled={i > Object.keys(completedStepsText).length}
       getHandleExpandFunction={getHandleExpandFunction}
-      openedAccordionIndex={openedAccordionIndex}
-      index={i}
-      key={heading}
-      disabled={i > Object.keys(completedStepsText)}
       getCompleteStepFunction={getCompleteStepFunction}
       stepCompletedText={completedStepsText[i]}
     />

@@ -11,13 +11,11 @@ function StepAccordion({
   content,
   disabled,
   getHandleExpandFunction,
-  openedAccordionIndex,
+  isExpanded,
   index,
   stepCompletedText,
   getCompleteStepFunction,
 }) {
-  const isExpanded = openedAccordionIndex === index;
-
   // memoize to avoid rerenders
   const completeStep = useMemo(() => {
     return getCompleteStepFunction(index);
@@ -56,7 +54,7 @@ StepAccordion.propTypes = {
   content: PropTypes.element,
   disabled: PropTypes.bool,
   getHandleExpandFunction: PropTypes.func.isRequired,
-  openedAccordionIndex: PropTypes.number.isRequired,
+  isExpanded: PropTypes.bool.isRequired,
   index: PropTypes.number.isRequired,
 };
 
