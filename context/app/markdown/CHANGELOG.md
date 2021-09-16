@@ -1,3 +1,11 @@
+## v0.27.1 - 2021-09-16
+
+- Replace `create_timestamp` instances that were missed earlier.
+- Exclude source maps from lineupjs when bundling to prevent console warnings.
+- Add provenance columns to TSV.
+- On search, a button to download the TSV.
+
+
 ## v0.27.0 - 2021-09-13
 
 - Lineup was only showing columns for the first record, not the union of the columns for all records.
