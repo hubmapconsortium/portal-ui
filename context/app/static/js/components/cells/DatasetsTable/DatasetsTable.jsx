@@ -22,7 +22,7 @@ const columns = [
 function DatasetsTable({ datasets, minGeneExpression, geneName, completeStep }) {
   useEffect(() => {
     completeStep(`${datasets.length} Datasets Matching Query Parameters`);
-  });
+  }, [completeStep, datasets]);
 
   return (
     <Table stickyHeader>

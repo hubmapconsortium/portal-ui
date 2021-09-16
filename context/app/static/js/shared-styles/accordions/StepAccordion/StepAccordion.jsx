@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Accordion from '@material-ui/core/ExpansionPanel';
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -13,15 +13,14 @@ function StepAccordion({
   handleExpand,
   openedAccordionIndex,
   index,
-  handleCompleteStep,
+  stepCompletedText,
+  completeStep,
 }) {
-  const [stepCompletedText, setStepCompletedText] = useState(null);
   const isExpanded = openedAccordionIndex === index;
 
-  function handleComplete(text) {
-    setStepCompletedText(text);
-    handleCompleteStep(index);
-  }
+  const completeStepMemo = useMemo(() => {
+    return completeStep(index);
+  }, [completeStep, index]);
 
   return (
     <Accordion onChange={handleExpand(index)} disabled={disabled} expanded={isExpanded}>
@@ -43,7 +42,7 @@ function StepAccordion({
       {content && (
         <AccordionDetails>
           {React.cloneElement(content, {
-            completeStep: handleComplete,
+            completeStep: completeStepMemo,
           })}
         </AccordionDetails>
       )}
