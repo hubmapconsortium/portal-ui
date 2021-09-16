@@ -14,7 +14,7 @@ function AccordionSteps({ steps }) {
     setOpenedAccordionIndex(isExpanded ? index : false);
   };
 
-  // without the useCallback the prevState causes a render loop
+  // without the useCallback the prevState causes a loop if the function it returns is later used in a useEffect
   const getCompleteStepFunction = useCallback(
     (index) => (text) => {
       setCompletedStepsText((prevState) => {
