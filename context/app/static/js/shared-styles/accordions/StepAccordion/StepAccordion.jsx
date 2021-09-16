@@ -10,7 +10,7 @@ function StepAccordion({
   summaryHeading,
   content,
   disabled,
-  handleExpand,
+  getHandleExpandFunction,
   openedAccordionIndex,
   index,
   stepCompletedText,
@@ -24,7 +24,7 @@ function StepAccordion({
   }, [getCompleteStepFunction, index]);
 
   return (
-    <Accordion onChange={handleExpand(index)} disabled={disabled} expanded={isExpanded}>
+    <Accordion onChange={getHandleExpandFunction(index)} disabled={disabled} expanded={isExpanded}>
       <StyledAccordionSummary expandIcon={<ArrowDropUpRoundedIcon />} $isExpanded={isExpanded}>
         <AccordionSummaryHeading variant="subtitle2" $isExpanded={isExpanded}>
           {summaryHeading}
@@ -55,7 +55,7 @@ StepAccordion.propTypes = {
   summaryHeading: PropTypes.string.isRequired,
   content: PropTypes.element,
   disabled: PropTypes.bool,
-  handleExpand: PropTypes.func.isRequired,
+  getHandleExpandFunction: PropTypes.func.isRequired,
   openedAccordionIndex: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
 };

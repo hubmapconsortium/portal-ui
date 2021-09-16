@@ -9,7 +9,7 @@ function AccordionSteps({ steps }) {
   const [openedAccordionIndex, setOpenedAccordionIndex] = useState(false);
   const [completedStepsText, setCompletedStepsText] = useState({});
 
-  const handleExpand = (index) => (event, isExpanded) => {
+  const getHandleExpandFunction = (index) => (event, isExpanded) => {
     setOpenedAccordionIndex(isExpanded ? index : false);
   };
 
@@ -31,7 +31,7 @@ function AccordionSteps({ steps }) {
     <StepAccordion
       summaryHeading={heading}
       content={content}
-      handleExpand={handleExpand}
+      getHandleExpandFunction={getHandleExpandFunction}
       openedAccordionIndex={openedAccordionIndex}
       index={i}
       key={heading}
