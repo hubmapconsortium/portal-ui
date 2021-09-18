@@ -233,6 +233,11 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
 
+    def __init__(self, entity, nexus_token, is_mock=False):
+        super().__init__(entity, nexus_token, is_mock)
+        # SlideSeq is a spatially resolved RNA-seq assay that requires some special handling.
+        self._is_spatial = "salmon_rnaseq_slideseq" in self._entity["data_types"]
+
     def get_conf_cells(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -250,6 +255,7 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
             adata_url=adata_url,
             mappings_obsm=["X_umap"],
             mappings_obsm_names=["UMAP"],
+            spatial_centroid_obsm=("X_spatial" if self._is_spatial else None),
             cell_set_obs=["leiden"],
             cell_set_obs_names=["Leiden"],
             expression_matrix="X",
@@ -269,7 +275,20 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
 
     def _setup_anndata_view_config(self, vc, dataset):
         vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=4, h=6)
-        vc.add_view(dataset, cm.CELL_SET_EXPRESSION, x=4, y=0, w=5, h=6)
+        if self._is_spatial: 
+            spatial =vc.add_view(dataset, cm.SPATIAL, x=4, y=0, w=5, h=6)
+            [cells_layer] = vc.add_coordination('spatialCellsLayer')
+            cells_layer.set_value(
+                {
+                    "visible": True,
+                    "stroked": False,
+                    "radius": 20,
+                    "opacity": 1,
+                }
+            )
+            spatial.use_coordination(cells_layer)
+        else:
+            vc.add_view(dataset, cm.CELL_SET_EXPRESSION, x=4, y=0, w=5, h=6)
         vc.add_view(dataset, cm.CELL_SETS, x=9, y=0, w=3, h=3)
         vc.add_view(dataset, cm.GENES, x=9, y=4, w=3, h=3)
         vc.add_view(dataset, cm.HEATMAP, x=0, y=6, w=12, h=4)
