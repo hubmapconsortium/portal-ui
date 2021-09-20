@@ -6,8 +6,8 @@ export function getSpecificObjectEntries(keys, object) {
   return keys.map((key) => [key, object[key]]);
 }
 
-function AccordionSteps({ steps }) {
-  const [openedAccordionIndex, setOpenedAccordionIndex] = useState(false);
+function AccordionSteps({ steps, openFirstStep }) {
+  const [openedAccordionIndex, setOpenedAccordionIndex] = useState(openFirstStep && 0);
   const [completedStepsText, setCompletedStepsText] = useState({});
 
   const getHandleExpandFunction = (index) => (event, isExpanded) => {
@@ -50,6 +50,11 @@ AccordionSteps.propTypes = {
       content: PropTypes.element,
     }),
   ).isRequired,
+  openFirstStep: PropTypes.bool,
+};
+
+AccordionSteps.defaultProps = {
+  openFirstStep: false,
 };
 
 export default AccordionSteps;
