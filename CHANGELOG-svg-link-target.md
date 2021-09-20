@@ -1,0 +1,1 @@
+- Add explicit `target` in SVG that is used in iframe.

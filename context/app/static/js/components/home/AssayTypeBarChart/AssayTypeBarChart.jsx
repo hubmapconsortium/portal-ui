@@ -83,7 +83,9 @@ function AssayTypeBarChart({
                           bar.bar.data.mapped_data_type,
                         )}&${selectedColorFacetName}[0]=${encodeURIComponent(bar.key)}`}
                         key={`barstack-horizontal-${barStack.index}-${bar.index}`}
+                        target="_parent"
                       >
+                        {/* Make target explicit because html base target doesn't apply inside SVG. */}
                         <rect
                           x={bar.x}
                           y={bar.y}
