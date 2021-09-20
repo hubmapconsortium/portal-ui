@@ -23,6 +23,7 @@ from .base_confs import (
     SPRMJSONViewConfBuilder,
     SPRMAnnDataViewConfBuilder,
     ViewConfBuilder,
+    NullViewConfBuilder,
     ConfCells
 )
 from .assays import (
@@ -233,6 +234,12 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
 
+    def __init__(self, entity, nexus_token, is_mock=False):
+        super().__init__(entity, nexus_token, is_mock)
+        # Spatially resolved RNA-seq assays require some special handling,
+        # and others do not.
+        self._is_spatial = False
+
     def get_conf_cells(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
@@ -250,6 +257,7 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
             adata_url=adata_url,
             mappings_obsm=["X_umap"],
             mappings_obsm_names=["UMAP"],
+            spatial_centroid_obsm=("X_spatial" if self._is_spatial else None),
             cell_set_obs=["leiden"],
             cell_set_obs_names=["Leiden"],
             expression_matrix="X",
@@ -276,6 +284,38 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
         return vc
 
 
+class SpatialRNASeqAnnDataZarrViewConfBuilder(RNASeqAnnDataZarrViewConfBuilder):
+    """Wrapper class for creating a AnnData-backed view configuration
+    for "second generation" post-August 2020 spatial RNA-seq data from anndata-to-ui.cwl like
+    https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
+    """
+
+    def __init__(self, entity, nexus_token, is_mock=False):
+        super().__init__(entity, nexus_token, is_mock)
+        # Spatially resolved RNA-seq assays require some special handling,
+        # and others do not.
+        self._is_spatial = True
+
+    def _setup_anndata_view_config(self, vc, dataset):
+        vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=4, h=6)
+        spatial = vc.add_view(dataset, cm.SPATIAL, x=4, y=0, w=5, h=6)
+        [cells_layer] = vc.add_coordination('spatialCellsLayer')
+        cells_layer.set_value(
+            {
+                "visible": True,
+                "stroked": False,
+                "radius": 20,
+                "opacity": 1,
+            }
+        )
+        spatial.use_coordination(cells_layer)
+        vc.add_view(dataset, cm.CELL_SETS, x=9, y=0, w=3, h=3)
+        vc.add_view(dataset, cm.GENES, x=9, y=4, w=3, h=3)
+        vc.add_view(dataset, cm.HEATMAP, x=0, y=6, w=7, h=4)
+        vc.add_view(dataset, cm.CELL_SET_EXPRESSION, x=7, y=6, w=5, h=4)
+        return vc
+
+
 class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
     """Wrapper class for generating a Vitessce configurations
     for IMS data that excludes the image pyramids
@@ -288,11 +328,6 @@ class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
         self.image_pyramid_regex = (
             re.escape(IMAGE_PYRAMID_DIR) + r"(?!/ometiffs/separate/)"
         )
-
-
-class NullViewConfBuilder():
-    def get_conf_cells(self):
-        return ConfCells(None, None)
 
 
 _assays = None
@@ -313,7 +348,7 @@ def _get_assay(data_type):
     return _assays[data_type]
 
 
-def get_view_config_class_for_data_types(entity, nexus_token):
+def get_view_config_builder(entity):
     data_types = entity["data_types"]
     assay_objs = [_get_assay(dt) for dt in data_types]
     assay_names = [assay.name for assay in assay_objs]
@@ -323,26 +358,23 @@ def get_view_config_class_for_data_types(entity, nexus_token):
     if "is_image" in hints:
         if "codex" in hints:
             if ('sprm-to-anndata.cwl' in dag_names):
-                return StitchedCytokitSPRMViewConfBuilder(
-                    entity=entity, nexus_token=nexus_token
-                )
-            return TiledSPRMViewConfBuilder(
-                entity=entity, nexus_token=nexus_token)
+                return StitchedCytokitSPRMViewConfBuilder
+            return TiledSPRMViewConfBuilder
         if SEQFISH in assay_names:
-            return SeqFISHViewConfBuilder(
-                entity=entity, nexus_token=nexus_token)
+            return SeqFISHViewConfBuilder
         if (
             MALDI_IMS_NEG in assay_names
             or MALDI_IMS_POS in assay_names
         ):
-            return IMSViewConfBuilder(entity=entity, nexus_token=nexus_token)
-        return ImagePyramidViewConfBuilder(
-            entity=entity, nexus_token=nexus_token)
+            return IMSViewConfBuilder
+        return ImagePyramidViewConfBuilder
     if "rna" in hints:
         # This is the zarr-backed anndata pipeline.
-        if('anndata-to-ui.cwl' in dag_names):
-            return RNASeqAnnDataZarrViewConfBuilder(entity=entity, nexus_token=nexus_token)
-        return RNASeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
+        if "anndata-to-ui.cwl" in dag_names:
+            if "salmon_rnaseq_slideseq" in data_types:
+                return SpatialRNASeqAnnDataZarrViewConfBuilder
+            return RNASeqAnnDataZarrViewConfBuilder
+        return RNASeqViewConfBuilder
     if "atac" in hints:
-        return ATACSeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
-    return NullViewConfBuilder()
+        return ATACSeqViewConfBuilder
+    return NullViewConfBuilder

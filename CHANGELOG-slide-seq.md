@@ -1,0 +1,1 @@
+- Add SlideSeq visualization option to RNASeq visualization class.
