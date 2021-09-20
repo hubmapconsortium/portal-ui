@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/core/Slider';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -9,29 +8,41 @@ import LogSliderWrapper from 'js/components/cells/LogSliderWrapper';
 import CellsService from 'js/components/cells/CellsService';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
 import { useSearchHits } from 'js/hooks/useSearchData';
-import DatasetsTable from 'js/components/cells/DatasetsTable';
 
-// eslint-disable-next-line no-unused-vars
-function DatasetsSelectedByExpression(props) {
-  const [geneNames, setGeneNames] = useState([]);
+import { StyledDiv } from './style';
+
+function DatasetsSelectedByExpression({
+  setStepCompletedText,
+  setResults,
+  minExpressionLog,
+  setMinExpressionLog,
+  minCellPercentage,
+  setMinCellPercentage,
+  geneNames,
+  setGeneNames,
+}) {
   const [targetEntity, setTargetEntity] = useState('gene'); // eslint-disable-line no-unused-vars
   const [modality, setModality] = useState('rna'); // eslint-disable-line no-unused-vars
-  const [minExpressionLog, setMinExpressionLog] = useState(1);
-  const [minCellPercentage, setMinCellPercentage] = useState(10);
 
-  const [results, setResults] = useState([]);
+  const [cellsResults, setCellsResults] = useState([]);
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
     try {
       if (targetEntity === 'gene') {
+        setStepCompletedText(
+          <>
+            {geneNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
+            Percentage
+          </>,
+        );
         const serviceResults = await new CellsService().getDatasetsSelectedByGenes({
           geneNames,
           minExpression: 10 ** minExpressionLog,
           minCellPercentage,
           modality,
         });
-        setResults(serviceResults);
+        setCellsResults(serviceResults);
       } else {
         throw Error(`Datasets by "${targetEntity}" unimplemented`);
       }
@@ -60,7 +71,7 @@ function DatasetsSelectedByExpression(props) {
             },
             {
               terms: {
-                uuid: results.map((result) => result.uuid),
+                uuid: cellsResults.map((result) => result.uuid),
               },
             },
           ],
@@ -75,12 +86,16 @@ function DatasetsSelectedByExpression(props) {
         'last_modified_timestamp',
       ],
     };
-  }, [results]);
+  }, [cellsResults]);
 
   const { searchHits } = useSearchHits(query);
 
+  useEffect(() => {
+    setResults(searchHits);
+  }, [searchHits, setResults]);
+
   return (
-    <Paper>
+    <StyledDiv>
       <AutocompleteEntity targetEntity="genes" setter={setGeneNames} />
 
       <br />
@@ -108,10 +123,7 @@ function DatasetsSelectedByExpression(props) {
       <Button onClick={handleSubmit}>Submit</Button>
       <br />
       {message}
-      {searchHits.length > 0 && (
-        <DatasetsTable datasets={searchHits} minGeneExpression={10 ** minExpressionLog} geneName={geneNames[0]} />
-      )}
-    </Paper>
+    </StyledDiv>
   );
 }
 

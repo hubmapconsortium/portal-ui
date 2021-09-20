@@ -1,0 +1,1 @@
+- Add accordions for cells query and results.
