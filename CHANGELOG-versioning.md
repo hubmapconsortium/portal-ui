@@ -1,0 +1,1 @@
+- Only list current versions in sitemap.

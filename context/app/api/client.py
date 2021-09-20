@@ -55,6 +55,13 @@ class ApiClient():
         size = 10000  # Default ES limit
         query = {
             "size": size,
+            "query": {
+                "bool": {
+                    "must_not": {
+                        "exists": {"field": 'next_revision_uuid'}
+                    },
+                },
+            },
             "post_filter": {
                 "term": {"entity_type.keyword": "Dataset"}
             },
