@@ -12,6 +12,7 @@ from .assay_confs import (
     ATACSeqViewConfBuilder,
     IMSViewConfBuilder,
     RNASeqAnnDataZarrViewConfBuilder,
+    SpatialRNASeqAnnDataZarrViewConfBuilder,
     SPRMAnnDataViewConfBuilder,
     StitchedCytokitSPRMViewConfBuilder
 )
@@ -32,6 +33,7 @@ AssayConfClasses = {
     "seqfish": SeqFISHViewConfBuilder,
     "sprm": SPRMJSONViewConfBuilder,
     "rna_zarr": RNASeqAnnDataZarrViewConfBuilder,
+    "spatial_rna_zarr": SpatialRNASeqAnnDataZarrViewConfBuilder,
     "sprm_anndata": SPRMAnnDataViewConfBuilder,
     "cytokit_anndata": StitchedCytokitSPRMViewConfBuilder
 }

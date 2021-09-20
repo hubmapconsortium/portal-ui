@@ -235,8 +235,9 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
 
     def __init__(self, entity, nexus_token, is_mock=False):
         super().__init__(entity, nexus_token, is_mock)
-        # SlideSeq is a spatially resolved RNA-seq assay that requires some special handling.
-        self._is_spatial = "salmon_rnaseq_slideseq" in self._entity["data_types"]
+        # Spatially resolved RNA-seq assays require some special handling,
+        # and others do not.
+        self._is_spatial = "salmon_rnaseq_slideseq" in entity["data_types"]
 
     def get_conf_cells(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
@@ -275,23 +276,36 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
 
     def _setup_anndata_view_config(self, vc, dataset):
         vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=4, h=6)
-        if self._is_spatial: 
-            spatial =vc.add_view(dataset, cm.SPATIAL, x=4, y=0, w=5, h=6)
-            [cells_layer] = vc.add_coordination('spatialCellsLayer')
-            cells_layer.set_value(
-                {
-                    "visible": True,
-                    "stroked": False,
-                    "radius": 20,
-                    "opacity": 1,
-                }
-            )
-            spatial.use_coordination(cells_layer)
-        else:
-            vc.add_view(dataset, cm.CELL_SET_EXPRESSION, x=4, y=0, w=5, h=6)
+        vc.add_view(dataset, cm.CELL_SET_EXPRESSION, x=4, y=0, w=5, h=6)
         vc.add_view(dataset, cm.CELL_SETS, x=9, y=0, w=3, h=3)
         vc.add_view(dataset, cm.GENES, x=9, y=4, w=3, h=3)
         vc.add_view(dataset, cm.HEATMAP, x=0, y=6, w=12, h=4)
+        return vc
+
+
+class SpatialRNASeqAnnDataZarrViewConfBuilder(RNASeqAnnDataZarrViewConfBuilder):
+    """Wrapper class for creating a AnnData-backed view configuration
+    for "second generation" post-August 2020 spatial RNA-seq data from anndata-to-ui.cwl like
+    https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
+    """
+
+    def _setup_anndata_view_config(self, vc, dataset):
+        vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=4, h=6)
+        spatial = vc.add_view(dataset, cm.SPATIAL, x=4, y=0, w=5, h=6)
+        [cells_layer] = vc.add_coordination('spatialCellsLayer')
+        cells_layer.set_value(
+            {
+                "visible": True,
+                "stroked": False,
+                "radius": 20,
+                "opacity": 1,
+            }
+        )
+        spatial.use_coordination(cells_layer)
+        vc.add_view(dataset, cm.CELL_SETS, x=9, y=0, w=3, h=3)
+        vc.add_view(dataset, cm.GENES, x=9, y=4, w=3, h=3)
+        vc.add_view(dataset, cm.HEATMAP, x=0, y=6, w=7, h=4)
+        vc.add_view(dataset, cm.CELL_SET_EXPRESSION, x=7, y=6, w=5, h=4)
         return vc
 
 
@@ -359,8 +373,15 @@ def get_view_config_class_for_data_types(entity, nexus_token):
             entity=entity, nexus_token=nexus_token)
     if "rna" in hints:
         # This is the zarr-backed anndata pipeline.
-        if('anndata-to-ui.cwl' in dag_names):
-            return RNASeqAnnDataZarrViewConfBuilder(entity=entity, nexus_token=nexus_token)
+        if "anndata-to-ui.cwl" in dag_names:
+            if "salmon_rnaseq_slideseq" in data_types:
+                return SpatialRNASeqAnnDataZarrViewConfBuilder(
+                    entity=entity,
+                    nexus_token=nexus_token
+                )
+            return RNASeqAnnDataZarrViewConfBuilder(
+                entity=entity, nexus_token=nexus_token
+            )
         return RNASeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
     if "atac" in hints:
         return ATACSeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
