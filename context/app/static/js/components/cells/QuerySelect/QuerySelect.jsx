@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import { capitalizeString } from 'js/helpers/functions';
 import { StyledTextField } from './style';
 
-function QuerySelect({ setStepCompletedText, setQueryType }) {
+function QuerySelect({ completeStep, setQueryType }) {
   const [selectedQueryType, setSelectedQueryType] = useState('gene');
 
   function handleSelect(event) {
@@ -13,7 +13,7 @@ function QuerySelect({ setStepCompletedText, setQueryType }) {
   }
 
   function handleButtonClick() {
-    setStepCompletedText(`${capitalizeString(selectedQueryType)} Query`);
+    completeStep(`${capitalizeString(selectedQueryType)} Query`);
     setQueryType(selectedQueryType);
   }
   return (

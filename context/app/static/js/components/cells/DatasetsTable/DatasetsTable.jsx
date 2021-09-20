@@ -19,10 +19,10 @@ const columns = [
   { id: 'expand', label: '' },
 ];
 
-function DatasetsTable({ datasets, minExpression, cellVariableName, queryType, setStepCompletedText }) {
+function DatasetsTable({ datasets, minExpression, cellVariableName, queryType, completeStep }) {
   useEffect(() => {
-    setStepCompletedText(`${datasets.length} Datasets Matching Query Parameters`);
-  });
+    completeStep(`${datasets.length} Datasets Matching Query Parameters`);
+  }, [completeStep, datasets]);
 
   return (
     <Table stickyHeader>

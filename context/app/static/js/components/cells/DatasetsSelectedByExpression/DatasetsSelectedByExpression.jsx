@@ -12,7 +12,7 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 import { StyledDiv } from './style';
 
 function DatasetsSelectedByExpression({
-  setStepCompletedText,
+  completeStep,
   setResults,
   minExpressionLog,
   setMinExpressionLog,
@@ -26,6 +26,7 @@ function DatasetsSelectedByExpression({
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
+    setResults([]);
     const queryParams = {
       type: queryType,
       names: cellVariableNames,
@@ -36,7 +37,7 @@ function DatasetsSelectedByExpression({
       queryParams.modality = 'rna';
     }
     try {
-      setStepCompletedText(
+      completeStep(
         <>
           {cellVariableNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
           Percentage
