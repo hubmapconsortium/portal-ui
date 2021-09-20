@@ -23,7 +23,11 @@ function StepAccordion({
 
   return (
     <Accordion onChange={getHandleExpandFunction(index)} disabled={disabled} expanded={isExpanded}>
-      <StyledAccordionSummary expandIcon={<ArrowDropUpRoundedIcon />} $isExpanded={isExpanded}>
+      <StyledAccordionSummary
+        expandIcon={<ArrowDropUpRoundedIcon />}
+        $isExpanded={isExpanded}
+        data-testid={`accordion-summary-${index}`}
+      >
         <AccordionSummaryHeading variant="subtitle2" $isExpanded={isExpanded}>
           {summaryHeading}
         </AccordionSummaryHeading>
