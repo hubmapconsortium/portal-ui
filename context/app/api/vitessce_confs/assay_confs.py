@@ -237,7 +237,7 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
         super().__init__(entity, nexus_token, is_mock)
         # Spatially resolved RNA-seq assays require some special handling,
         # and others do not.
-        self._is_spatial = "salmon_rnaseq_slideseq" in entity["data_types"]
+        self._is_spatial = False
 
     def get_conf_cells(self):
         zarr_path = 'hubmap_ui/anndata-zarr/secondary_analysis.zarr'
@@ -288,6 +288,12 @@ class SpatialRNASeqAnnDataZarrViewConfBuilder(RNASeqAnnDataZarrViewConfBuilder):
     for "second generation" post-August 2020 spatial RNA-seq data from anndata-to-ui.cwl like
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
+
+    def __init__(self, entity, nexus_token, is_mock=False):
+        super().__init__(entity, nexus_token, is_mock)
+        # Spatially resolved RNA-seq assays require some special handling,
+        # and others do not.
+        self._is_spatial = True
 
     def _setup_anndata_view_config(self, vc, dataset):
         vc.add_view(dataset, cm.SCATTERPLOT, mapping="UMAP", x=0, y=0, w=4, h=6)
