@@ -23,6 +23,7 @@ from .base_confs import (
     SPRMJSONViewConfBuilder,
     SPRMAnnDataViewConfBuilder,
     ViewConfBuilder,
+    NullViewConfBuilder,
     ConfCells
 )
 from .assays import (
@@ -329,11 +330,6 @@ class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
         )
 
 
-class NullViewConfBuilder():
-    def get_conf_cells(self):
-        return ConfCells(None, None)
-
-
 _assays = None
 
 
@@ -352,7 +348,7 @@ def _get_assay(data_type):
     return _assays[data_type]
 
 
-def get_view_config_class_for_data_types(entity, nexus_token):
+def get_view_config_builder(entity):
     data_types = entity["data_types"]
     assay_objs = [_get_assay(dt) for dt in data_types]
     assay_names = [assay.name for assay in assay_objs]
@@ -362,33 +358,23 @@ def get_view_config_class_for_data_types(entity, nexus_token):
     if "is_image" in hints:
         if "codex" in hints:
             if ('sprm-to-anndata.cwl' in dag_names):
-                return StitchedCytokitSPRMViewConfBuilder(
-                    entity=entity, nexus_token=nexus_token
-                )
-            return TiledSPRMViewConfBuilder(
-                entity=entity, nexus_token=nexus_token)
+                return StitchedCytokitSPRMViewConfBuilder
+            return TiledSPRMViewConfBuilder
         if SEQFISH in assay_names:
-            return SeqFISHViewConfBuilder(
-                entity=entity, nexus_token=nexus_token)
+            return SeqFISHViewConfBuilder
         if (
             MALDI_IMS_NEG in assay_names
             or MALDI_IMS_POS in assay_names
         ):
-            return IMSViewConfBuilder(entity=entity, nexus_token=nexus_token)
-        return ImagePyramidViewConfBuilder(
-            entity=entity, nexus_token=nexus_token)
+            return IMSViewConfBuilder
+        return ImagePyramidViewConfBuilder
     if "rna" in hints:
         # This is the zarr-backed anndata pipeline.
         if "anndata-to-ui.cwl" in dag_names:
             if "salmon_rnaseq_slideseq" in data_types:
-                return SpatialRNASeqAnnDataZarrViewConfBuilder(
-                    entity=entity,
-                    nexus_token=nexus_token
-                )
-            return RNASeqAnnDataZarrViewConfBuilder(
-                entity=entity, nexus_token=nexus_token
-            )
-        return RNASeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
+                return SpatialRNASeqAnnDataZarrViewConfBuilder
+            return RNASeqAnnDataZarrViewConfBuilder
+        return RNASeqViewConfBuilder
     if "atac" in hints:
-        return ATACSeqViewConfBuilder(entity=entity, nexus_token=nexus_token)
-    return NullViewConfBuilder()
+        return ATACSeqViewConfBuilder
+    return NullViewConfBuilder
