@@ -7,12 +7,31 @@ function useSearchData(query) {
   const [searchData, setSearchData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
+  const queryCurrent = {};
+  Object.assign(queryCurrent, query);
+  /* eslint-disable prettier/prettier */
+  if (!('bool' in queryCurrent)) {
+    queryCurrent.bool = {};
+  }
+  if (!('must_not' in queryCurrent.bool)) {
+    queryCurrent.bool.must_not = {};
+  }
+  if (!('exists' in queryCurrent.bool.must_not)) {
+    queryCurrent.bool.must_not.exists = {};
+  }
+  if (!('field' in queryCurrent.bool.must_not.exists)) {
+    queryCurrent.bool.must_not.exists.field = 'next_revision_uuid';
+  } else {
+    throw new Error(`Bug: bool.must_not.exists.field already set: ${query}`);
+  }
+  /* eslint-enable prettier/prettier */
+
   useEffect(() => {
     async function getAndSetSearchHits() {
       const authHeader = getAuthHeader(nexusToken);
       const response = await fetch(elasticsearchEndpoint, {
         method: 'POST',
-        body: JSON.stringify(query),
+        body: JSON.stringify(queryCurrent),
         headers: {
           'Content-Type': 'application/json',
           ...authHeader,
@@ -27,7 +46,7 @@ function useSearchData(query) {
       setIsLoading(false);
     }
     getAndSetSearchHits();
-  }, [nexusToken, elasticsearchEndpoint, query]);
+  }, [nexusToken, elasticsearchEndpoint, queryCurrent]);
 
   return { searchData, isLoading };
 }
