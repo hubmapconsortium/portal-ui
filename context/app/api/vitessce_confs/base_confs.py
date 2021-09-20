@@ -23,6 +23,12 @@ MOCK_URL = "https://example.com"
 ConfCells = namedtuple('ConfCells', ['conf', 'cells'])
 
 
+class NullViewConfBuilder():
+
+    def get_conf_cells(self):
+        return ConfCells(None, None)
+
+
 class ViewConfBuilder:
     def __init__(self, entity=None, nexus_token=None, is_mock=False):
         """Object for building the vitessce configuration.

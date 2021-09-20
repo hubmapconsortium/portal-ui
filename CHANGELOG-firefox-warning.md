@@ -1,0 +1,1 @@
+- Change language of firefox warning to indicate general perforamnce issues.

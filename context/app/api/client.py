@@ -6,8 +6,8 @@ from dataclasses import dataclass
 from flask import abort, current_app
 import requests
 
-from .vitessce_confs import get_view_config_class_for_data_types
-from .vitessce_confs.base_confs import ConfCells
+from .vitessce_confs import get_view_config_builder
+from .vitessce_confs.base_confs import ConfCells, NullViewConfBuilder
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
@@ -136,9 +136,11 @@ class ApiClient():
 
         # Otherwise, just try to visualize the data for the entity itself:
         try:
-            vc = get_view_config_class_for_data_types(
-                entity=entity, nexus_token=self.nexus_token
-            )
+            Builder = get_view_config_builder(entity=entity)
+            if isinstance(Builder, NullViewConfBuilder):
+                vc = Builder()
+            else:
+                vc = Builder(entity, self.nexus_token)
             return VitessceConfLiftedUUID(vc.get_conf_cells(), None)
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'
