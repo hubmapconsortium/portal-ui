@@ -55,7 +55,7 @@ function SavedList({ listUUID }) {
       <SpacingDiv>
         <SummaryBody
           description={savedList.description}
-          create_timestamp={savedList.dateSaved}
+          created_timestamp={savedList.dateSaved}
           last_modified_timestamp={savedList.dateLastModified}
         />
       </SpacingDiv>

@@ -9,7 +9,7 @@ import { StyledTypography, Flex, StyledCreationDate, StyledModificationDate } fr
 function SummaryBody({
   description,
   collectionName,
-  create_timestamp,
+  created_timestamp,
   last_modified_timestamp,
   contributors,
   citationTitle,
@@ -32,13 +32,13 @@ function SummaryBody({
         <Citation
           contributors={contributors}
           citationTitle={citationTitle}
-          create_timestamp={create_timestamp}
+          created_timestamp={created_timestamp}
           doi_url={doi_url}
           doi={doi}
         />
       )}
       <Flex>
-        <StyledCreationDate label="Creation Date" timestamp={create_timestamp} />
+        <StyledCreationDate label="Creation Date" timestamp={created_timestamp} />
         <StyledModificationDate label="Modification Date" timestamp={last_modified_timestamp} />
       </Flex>
     </SummaryPaper>
@@ -46,7 +46,7 @@ function SummaryBody({
 }
 
 SummaryBody.propTypes = {
-  create_timestamp: PropTypes.number.isRequired,
+  created_timestamp: PropTypes.number.isRequired,
   last_modified_timestamp: PropTypes.number.isRequired,
   description: PropTypes.string,
   contributors: PropTypes.arrayOf(PropTypes.shape({ last_name: PropTypes.string, first_name: PropTypes.string })),

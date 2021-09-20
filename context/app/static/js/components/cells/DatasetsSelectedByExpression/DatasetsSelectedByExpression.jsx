@@ -37,9 +37,10 @@ function DatasetsSelectedByExpression({
     }
     try {
       setStepCompletedText(
-        `${cellVariableNames.join(
-          ', ',
-        )} | Expression Level 10^${minExpressionLog} | ${minCellPercentage}% Cell Percentage`,
+        <>
+          {cellVariableNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
+          Percentage
+        </>,
       );
       const serviceResults = await new CellsService().getDatasets(queryParams);
       setCellsResults(serviceResults);

@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import StepAccordion from './StepAccordion';
 
 export default {
-  title: 'StepAccordion',
+  title: 'Accordions/StepAccordion',
   component: StepAccordion,
   argTypes: {
     content: {

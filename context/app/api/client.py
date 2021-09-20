@@ -6,8 +6,8 @@ from dataclasses import dataclass
 from flask import abort, current_app
 import requests
 
-from .vitessce_confs import get_view_config_class_for_data_types
-from .vitessce_confs.base_confs import ConfCells
+from .vitessce_confs import get_view_config_builder
+from .vitessce_confs.base_confs import ConfCells, NullViewConfBuilder
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
@@ -136,9 +136,11 @@ class ApiClient():
 
         # Otherwise, just try to visualize the data for the entity itself:
         try:
-            vc = get_view_config_class_for_data_types(
-                entity=entity, nexus_token=self.nexus_token
-            )
+            Builder = get_view_config_builder(entity=entity)
+            if isinstance(Builder, NullViewConfBuilder):
+                vc = Builder()
+            else:
+                vc = Builder(entity, self.nexus_token)
             return VitessceConfLiftedUUID(vc.get_conf_cells(), None)
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'
@@ -181,6 +183,22 @@ def _make_query(constraints):
     return query
 
 
+def _get_nested(path, nested):
+    '''
+    >>> path = 'a.b.c'
+    >>> nested = {'a': {'b': {'c': 123}}}
+
+    >>> _get_nested(path, {}) is None
+    True
+    >>> _get_nested(path, nested)
+    123
+    '''
+    tokens = path.split('.')
+    for t in tokens:
+        nested = nested.get(t, {})
+    return nested or None
+
+
 def _flatten_sources(sources, non_metadata_fields):
     '''
     >>> from pprint import pp
@@ -190,11 +208,20 @@ def _flatten_sources(sources, non_metadata_fields):
     ...      'mapped_metadata': {'age': [40], 'weight': [150]}
     ...     },
     ...     {'uuid': 'wxyz1234', 'name': 'Bob',
+    ...      'donor': {'hubmap_id': 'HBM1234.ABCD.7890'},
     ...      'mapped_metadata': {'age': [50], 'multi': ['A', 'B', 'C']}
     ...     }]
-    >>> pp(_flatten_sources(donor_sources, ['uuid', 'name']))
-    [{'uuid': 'abcd1234', 'name': 'Ann', 'age': '40', 'weight': '150'},
-     {'uuid': 'wxyz1234', 'name': 'Bob', 'age': '50', 'multi': 'A, B, C'}]
+    >>> pp(_flatten_sources(donor_sources, ['uuid', 'name', 'donor.hubmap_id']))
+    [{'uuid': 'abcd1234',
+      'name': 'Ann',
+      'donor.hubmap_id': None,
+      'age': '40',
+      'weight': '150'},
+     {'uuid': 'wxyz1234',
+      'name': 'Bob',
+      'donor.hubmap_id': 'HBM1234.ABCD.7890',
+      'age': '50',
+      'multi': 'A, B, C'}]
 
     >>> sample_sources = [
     ...     {'uuid': 'abcd1234',
@@ -208,7 +235,7 @@ def _flatten_sources(sources, non_metadata_fields):
     flat_sources = [
         {
             **{
-                field: source.get(field)
+                field: _get_nested(field, source)
                 for field in non_metadata_fields
             },
 

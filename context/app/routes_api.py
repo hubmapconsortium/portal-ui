@@ -9,7 +9,7 @@ from .utils import make_blueprint, get_client, get_default_flask_data
 blueprint = make_blueprint(__name__)
 
 
-@blueprint.route('/api/v0/<entity_type>.tsv')
+@blueprint.route('/metadata/v0/<entity_type>.tsv')
 def entities_tsv(entity_type):
     entities = _get_entities(entity_type)
     return _make_tsv_response(_dicts_to_tsv(entities, _first_fields), f'{entity_type}.tsv')
@@ -36,8 +36,13 @@ def _get_entities(entity_type):
     if entity_type not in ['donors', 'samples', 'datasets']:
         abort(404)
     client = get_client()
+    extra_fields = _first_fields[:]
+    if entity_type in ['samples', 'datasets']:
+        extra_fields.append('donor.hubmap_id')
+    if entity_type in ['samples']:
+        extra_fields.append('mapped_specimen_type')
     entities = client.get_entities(
-        entity_type, _first_fields,
+        entity_type, extra_fields,
         constraints=request.args.to_dict(flat=False)
         # Default "True" would throw away repeated keys after the first.
     )

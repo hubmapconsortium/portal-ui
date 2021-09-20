@@ -15,7 +15,7 @@ Citation.args = {
     { last_name: 'Canders', first_name: 'Canne' },
   ],
   citationTitle: 'Something Science-y',
-  create_timestamp: 1520153805000,
+  created_timestamp: 1520153805000,
   doi: 'fakeDoi',
   doi_url: 'https://www.doi.org/',
 };
