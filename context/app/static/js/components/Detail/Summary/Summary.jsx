@@ -42,7 +42,7 @@ function Summary(props) {
         contributors={contributors}
         citationTitle={citationTitle}
         last_modified_timestamp={last_modified_timestamp}
-        create_timestamp={created_timestamp}
+        created_timestamp={created_timestamp}
         doi_url={doi_url}
         doi={doi}
         collectionName={collectionName}

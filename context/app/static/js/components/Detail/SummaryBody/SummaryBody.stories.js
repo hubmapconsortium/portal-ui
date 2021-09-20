@@ -9,7 +9,7 @@ export default {
 };
 
 const sharedArgs = {
-  create_timestamp: Date.now(),
+  created_timestamp: Date.now(),
   last_modified_timestamp: Date.now(),
 };
 

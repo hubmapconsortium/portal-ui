@@ -5,7 +5,7 @@ describe('file-based-routes', () => {
     })
     it('has working preview pages', () => {
       cy.visit('/');
-      cy.contains('Previews').click();
+      cy.contains('Resources').click();
       cy.contains('Cell Type Annotations').click();
       cy.contains('HuBMAP Data Portal Previews demonstrate functionality');
       cy.contains('Rahul Satija');
@@ -24,7 +24,8 @@ describe('file-based-routes', () => {
       // TODO: When we link to it from the menu, follow the link instead.
       cy.visit('/publication');
       cy.contains('Blue B. Lake');
-      cy.contains('An atlas of healthy and injured cell states').click();
+      // be.visible is a hack: https://github.com/cypress-io/cypress/issues/695
+      cy.contains('An atlas of healthy and injured cell states').should('be.visible').click();
       cy.contains('Understanding kidney disease relies upon');
       cy.contains('www.biorxiv.org/content/10.1101/2021.07.28.454201');
       cy.contains('Blue B. Lake, Rajasree Menon');

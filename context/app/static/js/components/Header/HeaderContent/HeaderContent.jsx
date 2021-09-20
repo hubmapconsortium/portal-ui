@@ -5,13 +5,12 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import Menu from '../Menu';
-import PreviewLinks from '../PreviewLinks';
+import ResourceLinks from '../ResourceLinks';
 import Dropdown from '../Dropdown';
 import LoginButton from '../LoginButton';
-import CCFLinks from '../CCFLinks';
+import AtlasToolsLinks from '../AtlasToolsLinks';
 import DocumentationLinks from '../DocumentationLinks';
-import DropdownLink from '../DropdownLink';
-import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap, StyledDivider } from './style';
+import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap } from './style';
 
 function HeaderContent({ anchorRef }) {
   const theme = useTheme();
@@ -41,17 +40,13 @@ function HeaderContent({ anchorRef }) {
               If this changes, remember to update Menu.jsx!
           */}
 
-          <Dropdown title="Previews" menuListId="preview-options">
-            <PreviewLinks />
+          <Dropdown title="Resources">
+            <ResourceLinks />
           </Dropdown>
-          <Dropdown title="Atlas & Tools" menuListId="ccf-options">
-            <CCFLinks />
-            <StyledDivider />
-            <DropdownLink href="https://azimuth.hubmapconsortium.org/">
-              Azimuth: Reference-based single cell mapping
-            </DropdownLink>
+          <Dropdown title="Atlas & Tools">
+            <AtlasToolsLinks />
           </Dropdown>
-          <Dropdown title="Documentation" menuListId="documentation-options">
+          <Dropdown title="Documentation">
             <DocumentationLinks />
           </Dropdown>
           <HeaderButton component={Link} href="/my-lists">

@@ -1,1 +1,0 @@
-- Lineup was only showing columns for the first record, not the union of the columns for all records.
