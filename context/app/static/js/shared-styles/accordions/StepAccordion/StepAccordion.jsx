@@ -37,7 +37,7 @@ function StepAccordion({
               <AccordionText variant="body2" $isExpanded={isExpanded}>
                 {stepCompletedText}
               </AccordionText>
-              <SuccessIcon data-testid="success-icon" />
+              <SuccessIcon data-testid={`accordion-success-icon-${index}`} />
             </>
           )}
         </Flex>
