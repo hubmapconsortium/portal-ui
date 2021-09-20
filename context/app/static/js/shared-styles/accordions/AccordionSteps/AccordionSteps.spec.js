@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import { render, screen, waitFor } from 'test-utils/functions';
 import { fireEvent } from '@testing-library/react';
@@ -109,4 +109,28 @@ test('future steps completed text are reset upon completion', async () => {
 
   expect(screen.getByText(step0.completed)).toBeInTheDocument();
   expect(screen.queryByText(step1.completed)).not.toBeInTheDocument();
+});
+
+function ContentWithUseEffect({ completeStep, spyFunction }) {
+  useEffect(() => {
+    completeStep('Completed');
+    spyFunction();
+  }, [completeStep, spyFunction]);
+  return <div />;
+}
+
+test('children useEffect hooks dependent on completeStep are only called once', async () => {
+  const spy = jest.fn();
+  render(
+    <AccordionSteps
+      openFirstStep={false}
+      steps={[
+        {
+          heading: 'Heading',
+          content: <ContentWithUseEffect spyFunction={spy} />,
+        },
+      ]}
+    />,
+  );
+  expect(spy).toHaveBeenCalledTimes(1);
 });
