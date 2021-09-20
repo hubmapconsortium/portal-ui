@@ -1,1 +1,2 @@
 - Only list current versions in sitemap.
+- Only list current versions for TSV downloads and Lineup.

@@ -59,8 +59,8 @@ class ApiClient():
                 "bool": {
                     "must_not": {
                         "exists": {"field": 'next_revision_uuid'}
-                    },
-                },
+                    }
+                }
             },
             "post_filter": {
                 "term": {"entity_type.keyword": "Dataset"}
@@ -170,7 +170,8 @@ def _make_query(constraints):
                                    {'term': {'metadata.metadata.color.keyword': 'green'}},
                                    {'term': {'mapped_metadata.color.keyword': 'green'}}]}},
               {'bool': {'should': [{'term': {'metadata.metadata.number.keyword': '42'}},
-                                   {'term': {'mapped_metadata.number.keyword': '42'}}]}}]}
+                                   {'term': {'mapped_metadata.number.keyword': '42'}}]}}],
+     'must_not': {'exists': {'field': 'next_revision_uuid'}}}
     '''
     shoulds = [
         [
@@ -184,7 +185,14 @@ def _make_query(constraints):
         {'bool': {'should': should}}
         for should in shoulds
     ]
-    query = {'bool': {'must': musts}}
+    query = {
+        'bool': {
+            'must': musts,
+            'must_not': {
+                "exists": {"field": 'next_revision_uuid'}
+            }
+        },
+    }
     return query
 
 
