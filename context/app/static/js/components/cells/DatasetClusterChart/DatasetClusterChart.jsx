@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useTheme } from '@material-ui/core/styles';
 
@@ -9,7 +8,17 @@ import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOpt
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalStackedBarChart';
 import CellsService from 'js/components/cells/CellsService';
 
-function DatasetClusterChart({ uuid, cellVariableName, minExpression, queryType }) {
+import { StyledSkeleton } from 'js/components/cells/CellsCharts/style';
+
+function DatasetClusterChart({
+  uuid,
+  cellVariableName,
+  minExpression,
+  queryType,
+  isLoading,
+  finishLoading,
+  loadingKey,
+}) {
   const [results, setResults] = useState({});
   const [scales, setScales] = useState({});
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useState(0);
@@ -33,8 +42,9 @@ function DatasetClusterChart({ uuid, cellVariableName, minExpression, queryType 
         yScale,
         xScale,
       });
+      finishLoading(loadingKey);
     }
-  }, [setScales, results, selectedClusterTypeIndex]);
+  }, [setScales, results, selectedClusterTypeIndex, finishLoading, loadingKey]);
 
   const colorScale = scaleOrdinal({
     domain: ['matched', 'unmatched'],
@@ -58,7 +68,7 @@ function DatasetClusterChart({ uuid, cellVariableName, minExpression, queryType 
     setSelectedClusterTypeIndex(i);
   }
 
-  return Object.keys(scales).length ? (
+  return Object.keys(scales).length && !isLoading[loadingKey] ? (
     <>
       <DropdownListbox
         id="bar-fill-dropdown"
@@ -71,8 +81,6 @@ function DatasetClusterChart({ uuid, cellVariableName, minExpression, queryType 
         buttonProps={{ variant: 'outlined' }}
       />
       <VerticalStackedBarChart
-        parentWidth={500}
-        parentHeight={500}
         visxData={scales.selectedData}
         yScale={scales.yScale}
         xScale={scales.xScale}
@@ -88,7 +96,7 @@ function DatasetClusterChart({ uuid, cellVariableName, minExpression, queryType 
       />
     </>
   ) : (
-    <Typography>Please wait for cluster chart...</Typography>
+    <StyledSkeleton variant="rectangular" />
   );
 }
 

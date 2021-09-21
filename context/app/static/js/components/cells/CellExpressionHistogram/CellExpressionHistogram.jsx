@@ -4,8 +4,9 @@ import { useTheme } from '@material-ui/core/styles';
 
 import Histogram from 'js/shared-styles/charts/Histogram';
 import CellsService from 'js/components/cells/CellsService';
+import { StyledSkeleton } from 'js/components/cells/CellsCharts/style';
 
-function CellExpressionHistogram({ uuid, cellVariableName }) {
+function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoading, loadingKey }) {
   const [expressionData, setExpressionData] = useState([]);
   const [diagnosticInfo, setDiagnosticInfo] = useState({});
   const theme = useTheme();
@@ -23,18 +24,17 @@ function CellExpressionHistogram({ uuid, cellVariableName }) {
       const numCells = response.length;
       setDiagnosticInfo({ numCells, timeWaiting });
       setExpressionData(response.map((d) => d.values[cellVariableName]));
+      finishLoading(loadingKey);
     }
     fetchCellExpression();
-  }, [uuid, cellVariableName]);
+  }, [uuid, cellVariableName, finishLoading, loadingKey]);
 
-  return expressionData.length ? (
+  return expressionData.length && !isLoading[loadingKey] ? (
     <>
       <Typography>
         {diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for {diagnosticInfo.numCells} cells.
       </Typography>
       <Histogram
-        parentHeight={500}
-        parentWidth={500}
         visxData={expressionData}
         margin={{
           top: 50,
@@ -46,7 +46,7 @@ function CellExpressionHistogram({ uuid, cellVariableName }) {
       />
     </>
   ) : (
-    <Typography>Please wait for histogram...</Typography>
+    <StyledSkeleton variant="rectangular" />
   );
 }
 
