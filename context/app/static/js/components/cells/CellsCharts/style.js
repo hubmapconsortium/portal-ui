@@ -11,6 +11,7 @@ const ChartWrapper = styled.div`
   height: 100%;
   box-sizing: border-box;
   margin: 0px 10px;
+  width: 0px;
 `;
 const StyledSkeleton = styled(Skeleton)`
   height: 100%;
