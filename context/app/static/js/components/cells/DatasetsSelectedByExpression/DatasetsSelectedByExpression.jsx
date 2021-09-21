@@ -95,7 +95,12 @@ function DatasetsSelectedByExpression({
 
   return (
     <StyledDiv>
-      <AutocompleteEntity targetEntity={`${queryType}s`} setter={setCellVariableNames} />
+      <AutocompleteEntity
+        targetEntity={`${queryType}s`}
+        setter={setCellVariableNames}
+        cellVariableNames={cellVariableNames}
+        setCellVariableNames={setCellVariableNames}
+      />
 
       <br />
 
