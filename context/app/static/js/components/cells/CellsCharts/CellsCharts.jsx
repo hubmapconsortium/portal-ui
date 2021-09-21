@@ -5,7 +5,9 @@ import CellExpressionHistogram from 'js/components/cells/CellExpressionHistogram
 import { Flex, ChartWrapper } from './style';
 
 function CellsCharts({ uuid, cellVariableName, minExpression, queryType }) {
-  const [isLoading, setIsLoading] = useState({});
+  const histogramKey = 'cell-histogram';
+  const clusterChartKey = 'cluster-bar';
+  const [isLoading, setIsLoading] = useState({ [histogramKey]: true, [clusterChartKey]: true });
 
   const finishLoading = useCallback((key) => {
     setIsLoading((prevState) => {
@@ -24,7 +26,7 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType }) {
           cellVariableName={cellVariableName}
           isLoading={isLoading}
           finishLoading={finishLoading}
-          loadingKey="histogram"
+          loadingKey={histogramKey}
         />
       </ChartWrapper>
       <ChartWrapper>
@@ -35,7 +37,7 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType }) {
           queryType={queryType}
           isLoading={isLoading}
           finishLoading={finishLoading}
-          loadingKey="cluster-bar"
+          loadingKey={clusterChartKey}
         />
       </ChartWrapper>
     </Flex>

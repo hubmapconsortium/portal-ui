@@ -29,7 +29,7 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
     fetchCellExpression();
   }, [uuid, cellVariableName, finishLoading, loadingKey]);
 
-  return expressionData.length && !isLoading[loadingKey] ? (
+  return Object.values(isLoading).every((val) => !val) ? (
     <>
       <Typography>
         {diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for {diagnosticInfo.numCells} cells.

@@ -68,7 +68,7 @@ function DatasetClusterChart({
     setSelectedClusterTypeIndex(i);
   }
 
-  return Object.keys(scales).length && !isLoading[loadingKey] ? (
+  return Object.values(isLoading).every((val) => !val) ? (
     <>
       <DropdownListbox
         id="bar-fill-dropdown"
