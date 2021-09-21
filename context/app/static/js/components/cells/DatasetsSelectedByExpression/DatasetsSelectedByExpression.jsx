@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/core/Slider';
@@ -7,9 +7,48 @@ import FormLabel from '@material-ui/core/FormLabel';
 import LogSliderWrapper from 'js/components/cells/LogSliderWrapper';
 import CellsService from 'js/components/cells/CellsService';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
-import { useSearchHits } from 'js/hooks/useSearchData';
+import { AppContext } from 'js/components/Providers';
+import { getAuthHeader } from 'js/helpers/functions';
 
 import { StyledDiv } from './style';
+
+function getSearchQuery(cellsResults) {
+  return {
+    query: {
+      bool: {
+        must_not: {
+          exists: {
+            field: 'next_revision_uuid',
+          },
+        },
+      },
+    },
+    post_filter: {
+      bool: {
+        must: [
+          {
+            term: {
+              'entity_type.keyword': 'Dataset',
+            },
+          },
+          {
+            terms: {
+              uuid: cellsResults.map((result) => result.uuid),
+            },
+          },
+        ],
+      },
+    },
+    _source: [
+      'uuid',
+      'hubmap_id',
+      'mapped_data_types',
+      'origin_sample.mapped_organ',
+      'donor.mapped_metadata',
+      'last_modified_timestamp',
+    ],
+  };
+}
 
 function DatasetsSelectedByExpression({
   completeStep,
@@ -21,11 +60,13 @@ function DatasetsSelectedByExpression({
   cellVariableNames,
   setCellVariableNames,
   queryType,
+  setIsLoading,
 }) {
-  const [cellsResults, setCellsResults] = useState([]);
   const [message, setMessage] = useState(null);
+  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   async function handleSubmit() {
+    setIsLoading(true);
     setResults([]);
     const queryParams = {
       type: queryType,
@@ -44,54 +85,27 @@ function DatasetsSelectedByExpression({
         </>,
       );
       const serviceResults = await new CellsService().getDatasets(queryParams);
-      setCellsResults(serviceResults);
+
+      const authHeader = getAuthHeader(nexusToken);
+      const response = await fetch(elasticsearchEndpoint, {
+        method: 'POST',
+        body: JSON.stringify(getSearchQuery(serviceResults)),
+        headers: {
+          'Content-Type': 'application/json',
+          ...authHeader,
+        },
+      });
+      if (!response.ok) {
+        console.error('Search API failed', response);
+        return;
+      }
+      const results = await response.json();
+      setResults(results.hits.hits);
+      setIsLoading(false);
     } catch (e) {
       setMessage(e.message);
     }
   }
-  const query = useMemo(() => {
-    return {
-      query: {
-        bool: {
-          must_not: {
-            exists: {
-              field: 'next_revision_uuid',
-            },
-          },
-        },
-      },
-      post_filter: {
-        bool: {
-          must: [
-            {
-              term: {
-                'entity_type.keyword': 'Dataset',
-              },
-            },
-            {
-              terms: {
-                uuid: cellsResults.map((result) => result.uuid),
-              },
-            },
-          ],
-        },
-      },
-      _source: [
-        'uuid',
-        'hubmap_id',
-        'mapped_data_types',
-        'origin_sample.mapped_organ',
-        'donor.mapped_metadata',
-        'last_modified_timestamp',
-      ],
-    };
-  }, [cellsResults]);
-
-  const { searchHits } = useSearchHits(query);
-
-  useEffect(() => {
-    setResults(searchHits);
-  }, [searchHits, setResults]);
 
   return (
     <StyledDiv>

@@ -4,9 +4,11 @@ import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedByExpression';
 import DatasetsTable from 'js/components/cells/DatasetsTable';
 import QuerySelect from 'js/components/cells/QuerySelect';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 function Cells() {
   const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [minExpressionLog, setMinExpressionLog] = useState(1);
   const [minCellPercentage, setMinCellPercentage] = useState(10);
   const [cellVariableNames, setCellVariableNames] = useState([]);
@@ -31,20 +33,22 @@ function Cells() {
               cellVariableNames={cellVariableNames}
               setCellVariableNames={setCellVariableNames}
               queryType={queryType}
+              setIsLoading={setIsLoading}
             />
           ),
         },
         {
           heading: '3. Results',
-          content:
-            results.length > 0 ? (
-              <DatasetsTable
-                datasets={results}
-                minExpression={10 ** minExpressionLog}
-                cellVariableName={cellVariableNames[0]}
-                queryType={queryType}
-              />
-            ) : undefined,
+          content: isLoading ? (
+            <CircularProgress />
+          ) : (
+            <DatasetsTable
+              datasets={results}
+              minExpression={10 ** minExpressionLog}
+              cellVariableName={cellVariableNames[0]}
+              queryType={queryType}
+            />
+          ),
         },
       ]}
     />
