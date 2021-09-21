@@ -348,7 +348,8 @@ def cells_in_dataset_clusters():
 
         return {'results':
                 _get_matched_cell_counts_per_cluster(
-                    _get_cluster_cells(cells_list, query_type, name, float(min_expression)), query_type)}
+                    _get_cluster_cells(cells_list, query_type, name,
+                                       float(min_expression)), query_type)}
 
     except Exception as e:
         return {'message': str(e)}
