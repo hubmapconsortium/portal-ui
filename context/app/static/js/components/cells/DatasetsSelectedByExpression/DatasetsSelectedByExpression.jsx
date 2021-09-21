@@ -124,7 +124,9 @@ function DatasetsSelectedByExpression({
       />
 
       <br />
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={handleSubmit} disabled={cellVariableNames.length === 0} variant="contained" color="primary">
+        Run Query
+      </Button>
       <br />
       {message}
     </StyledDiv>
