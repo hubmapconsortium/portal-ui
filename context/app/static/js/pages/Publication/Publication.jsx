@@ -18,19 +18,19 @@ function Publication(props) {
         {title}
       </SectionHeader>
       <StyledPaper>
-        <Typography variant="h3" component="h3">
+        <Typography variant="h4" component="h2">
           Abstract
         </Typography>
         {abstract}
-        <Typography variant="h3" component="h3">
+        <Typography variant="h4" component="h2">
           Manuscript
         </Typography>
-        <b>{journal}</b>: <a href={url}>{url}</a> {/* remove protocol */}
-        <Typography variant="h3" component="h3">
+        <b>{journal}</b>: <a href={url}>{url}</a>
+        <Typography variant="h4" component="h2">
           Authors
         </Typography>
         {authors.long}
-        <Typography variant="h3" component="h3">
+        <Typography variant="h4" component="h2">
           Contact
         </Typography>
         <b>Corresponding Author:</b>{' '}
