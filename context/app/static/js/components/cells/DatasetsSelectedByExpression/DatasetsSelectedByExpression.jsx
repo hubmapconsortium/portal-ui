@@ -8,8 +8,7 @@ import LogSliderWrapper from 'js/components/cells/LogSliderWrapper';
 import CellsService from 'js/components/cells/CellsService';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
 import { AppContext } from 'js/components/Providers';
-import { getAuthHeader } from 'js/helpers/functions';
-
+import { fetchSearchData } from 'js/hooks/useSearchData';
 import { StyledDiv } from './style';
 
 function getSearchQuery(cellsResults) {
@@ -85,22 +84,8 @@ function DatasetsSelectedByExpression({
         </>,
       );
       const serviceResults = await new CellsService().getDatasets(queryParams);
-
-      const authHeader = getAuthHeader(nexusToken);
-      const response = await fetch(elasticsearchEndpoint, {
-        method: 'POST',
-        body: JSON.stringify(getSearchQuery(serviceResults)),
-        headers: {
-          'Content-Type': 'application/json',
-          ...authHeader,
-        },
-      });
-      if (!response.ok) {
-        console.error('Search API failed', response);
-        return;
-      }
-      const results = await response.json();
-      setResults(results.hits.hits);
+      const searchResults = await fetchSearchData(getSearchQuery(serviceResults), elasticsearchEndpoint, nexusToken);
+      setResults(searchResults.hits.hits);
       setIsLoading(false);
     } catch (e) {
       setMessage(e.message);
