@@ -16,9 +16,9 @@ function Publication(props) {
         <SectionHeader variant="h1" component="h1">
           {title}
         </SectionHeader>
-        <Markdown markdown={markdown} />
       </SectionContainer>
       {Boolean(vitData) && <VisualizationWrapper vitData={vitData} />}
+      <Markdown markdown={markdown} />
     </>
   );
 }
