@@ -43,6 +43,7 @@ function Routes(props) {
     entities,
     organs,
     organ,
+    metadata,
   } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
@@ -152,7 +153,7 @@ function Routes(props) {
   if (urlPath.startsWith('/publication/')) {
     return (
       <Route>
-        <Publication title={title} vitData={vitessce_conf} markdown={markdown} />
+        <Publication metadata={metadata} markdown={markdown} />
       </Route>
     );
   }

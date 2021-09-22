@@ -7,7 +7,9 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { StyledPaper } from './style';
 
 function Publication(props) {
-  const { vitData, title, markdown } = props;
+  const { metadata, markdown } = props;
+  const { vitessce_conf, title, authors, manuscript, abstract } = metadata;
+  const { journal, url } = manuscript;
 
   return (
     <>
@@ -15,8 +17,30 @@ function Publication(props) {
       <SectionHeader variant="h1" component="h1">
         {title}
       </SectionHeader>
-      <StyledPaper>TODO</StyledPaper>
-      {Boolean(vitData) && <VisualizationWrapper vitData={vitData} />}
+      <StyledPaper>
+        <Typography variant="h3" component="h3">
+          Abstract
+        </Typography>
+        {abstract}
+        <Typography variant="h3" component="h3">
+          Manuscript
+        </Typography>
+        <b>{journal}</b>: <a href={url}>{url}</a> {/* remove protocol */}
+        <Typography variant="h3" component="h3">
+          Authors
+        </Typography>
+        {authors.long}
+        <Typography variant="h3" component="h3">
+          Contact
+        </Typography>
+        <b>Corresponding Author:</b>{' '}
+        {authors.corresponding.map((author) => (
+          <>
+            {author.name} - <a href={`mailto:${author.email}`}>{author.email}</a>
+          </>
+        ))}
+      </StyledPaper>
+      {Boolean(vitessce_conf) && <VisualizationWrapper vitData={vitessce_conf} />}
       <Markdown markdown={markdown} />
     </>
   );
