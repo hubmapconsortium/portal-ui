@@ -6,8 +6,8 @@ export function getSpecificObjectEntries(keys, object) {
   return keys.map((key) => [key, object[key]]);
 }
 
-function AccordionSteps({ steps, openFirstStep }) {
-  const [openedAccordionIndex, setOpenedAccordionIndex] = useState(openFirstStep && 0);
+function AccordionSteps({ steps, isFirstStepOpen }) {
+  const [openedAccordionIndex, setOpenedAccordionIndex] = useState(isFirstStepOpen && 0);
   const [completedStepsText, setCompletedStepsText] = useState({});
 
   const getHandleExpandFunction = (index) => (event, isExpanded) => {

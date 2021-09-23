@@ -34,7 +34,7 @@ function ExampleContent({ completeStep, stepNumber }) {
 export const AccordionSteps = (args) => <AccordionStepsComponent {...args} />;
 
 AccordionSteps.args = {
-  openFirstStep: false,
+  isFirstStepOpen: false,
   steps: [1, 2, 3].map((stepNumber) => ({
     heading: `Step ${stepNumber}`,
     content: <ExampleContent stepNumber={stepNumber} />,
