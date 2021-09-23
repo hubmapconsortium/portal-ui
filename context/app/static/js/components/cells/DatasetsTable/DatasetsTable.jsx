@@ -8,6 +8,7 @@ import { useTransition, animated, config } from 'react-spring';
 import useResizeObserver from 'use-resize-observer/polyfilled';
 
 import DatasetTableRow from 'js/components/cells/DatasetTableRow';
+import { initialHeight } from 'js/pages/Cells/style';
 
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
@@ -30,7 +31,7 @@ function DatasetsTable({ datasets, minExpression, cellVariableName, queryType, c
   const { height = 0 } = useResizeObserver({ ref: heightRef });
 
   const transitions = useTransition(true, null, {
-    from: { opacity: 0, height: 300 },
+    from: { opacity: 0, height: initialHeight },
     enter: { opacity: 1, height },
     config: config.slow,
     update: { height },
