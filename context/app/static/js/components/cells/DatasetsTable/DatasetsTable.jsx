@@ -4,6 +4,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import { useTransition, animated, config } from 'react-spring';
 
 import DatasetTableRow from 'js/components/cells/DatasetTableRow';
 
@@ -19,33 +20,44 @@ const columns = [
   { id: 'expand', label: '' },
 ];
 
+const AnimatedTable = animated(Table);
+
 function DatasetsTable({ datasets, minExpression, cellVariableName, queryType, completeStep }) {
   useEffect(() => {
     completeStep(`${datasets.length} Datasets Matching Query Parameters`);
   }, [completeStep, datasets]);
 
-  return (
-    <Table stickyHeader>
-      <TableHead>
-        <TableRow>
-          {columns.map((column) => (
-            <TableCell key={column.id}>{column.label}</TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {datasets.map(({ _source }) => (
-          <DatasetTableRow
-            datasetMetadata={_source}
-            numCells={columns.length}
-            key={_source.hubmap_id}
-            minExpression={minExpression}
-            cellVariableName={cellVariableName}
-            queryType={queryType}
-          />
-        ))}
-      </TableBody>
-    </Table>
+  const transitions = useTransition(true, null, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    config: config.molasses,
+  });
+
+  return transitions.map(
+    ({ item, key, props }) =>
+      item && (
+        <AnimatedTable stickyHeader key={key} style={props}>
+          <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell key={column.id}>{column.label}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {datasets.map(({ _source }) => (
+              <DatasetTableRow
+                datasetMetadata={_source}
+                numCells={columns.length}
+                key={_source.hubmap_id}
+                minExpression={minExpression}
+                cellVariableName={cellVariableName}
+                queryType={queryType}
+              />
+            ))}
+          </TableBody>
+        </AnimatedTable>
+      ),
   );
 }
 
