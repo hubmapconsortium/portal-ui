@@ -38,7 +38,7 @@ function AccordionSteps({ steps, isFirstStepOpen }) {
       disabled={i > Object.keys(completedStepsText).length}
       getHandleExpandFunction={getHandleExpandFunction}
       getCompleteStepFunction={getCompleteStepFunction}
-      stepCompletedText={completedStepsText?.[i]}
+      stepCompletedText={completedStepsText[i]}
     />
   ));
 }
