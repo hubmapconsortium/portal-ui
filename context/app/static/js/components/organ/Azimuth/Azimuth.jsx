@@ -22,7 +22,7 @@ function Azimuth(props) {
       <SpacedSectionButtonRow
         leftText={<SectionHeader>Reference-Based Analysis</SectionHeader>}
         buttons={
-          <Button color="primary" variant="contained" component="a" href={config.applink}>
+          <Button color="primary" variant="contained" component="a" target="_blank" href={config.applink}>
             Open Azimuth App
           </Button>
         }
