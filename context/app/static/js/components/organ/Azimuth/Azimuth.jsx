@@ -1,10 +1,12 @@
 import React from 'react';
 import marked from 'marked';
 
+import Button from '@material-ui/core/Button';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import VisualizationWrapper from 'js/components/Detail/visualization/VisualizationWrapper/VisualizationWrapper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
+import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 
 import { StyledPaper } from './style';
 
@@ -17,8 +19,14 @@ function Azimuth(props) {
   return (
     <SectionContainer>
       TODO: Add info popover.
-      <SectionHeader>Reference-Based Analysis</SectionHeader>
-      TODO: Add a button to <a href={config.applink}>Open Azimuth App</a>
+      <SpacedSectionButtonRow
+        leftText={<SectionHeader>Reference-Based Analysis</SectionHeader>}
+        buttons={
+          <Button color="primary" variant="contained" component="a" href={config.applink}>
+            Open Azimuth App
+          </Button>
+        }
+      />
       <StyledPaper>
         <LabelledSectionText label="Modalities">{config.modalities}</LabelledSectionText>
         <LabelledSectionText label="Nuclei in reference">{config.nunit}</LabelledSectionText>
