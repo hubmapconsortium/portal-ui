@@ -11,10 +11,24 @@ function Azimuth(props) {
 
   return (
     <SectionContainer>
+      TODO: Add info popover.
       <SectionHeader>Reference-Based Analysis</SectionHeader>
+      TODO: Add a button to <a href={config.applink}>Open Azimuth App</a>
       <StyledPaper>
-        <pre>{JSON.stringify(config, null, 2)}</pre>
+        TODO: Format this information:
+        <br />
+        Modalities: {config.modalities}
+        <br />
+        Nuclei in reference: {config.nunit}
+        <br />
+        TODO: Which of the following markdowns should be rendered?
+        <ul>
+          <li>{config.dataref}</li>
+          <li>{config.demodata}</li>
+          <li>{config.details}</li>
+        </ul>
       </StyledPaper>
+      TODO: Refactor so that can get the spinner without the a title?
       <VisualizationWrapper vitData={config.vitessce_conf} />
     </SectionContainer>
   );
