@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Accordion from '@material-ui/core/ExpansionPanel';
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -6,16 +6,28 @@ import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 
 import { AccordionSummaryHeading, AccordionText, Flex, StyledAccordionSummary, SuccessIcon } from './style';
 
-function StepAccordion({ summaryHeading, content, disabled }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [stepCompletedText, setStepCompletedText] = useState(null);
+function StepAccordion({
+  index,
+  summaryHeading,
+  content,
+  disabled,
+  getHandleExpandFunction,
+  isExpanded,
+  stepCompletedText,
+  getCompleteStepFunction,
+}) {
+  // memoize to avoid rerenders
+  const completeStep = useMemo(() => {
+    return getCompleteStepFunction(index);
+  }, [getCompleteStepFunction, index]);
 
-  function handleExpand(event, expanded) {
-    setIsExpanded(expanded);
-  }
   return (
-    <Accordion onChange={handleExpand} disabled={disabled}>
-      <StyledAccordionSummary expandIcon={<ArrowDropUpRoundedIcon />} $isExpanded={isExpanded}>
+    <Accordion onChange={getHandleExpandFunction(index)} disabled={disabled} expanded={isExpanded}>
+      <StyledAccordionSummary
+        expandIcon={<ArrowDropUpRoundedIcon />}
+        $isExpanded={isExpanded}
+        data-testid={`accordion-summary-${index}`}
+      >
         <AccordionSummaryHeading variant="subtitle2" $isExpanded={isExpanded}>
           {summaryHeading}
         </AccordionSummaryHeading>
@@ -25,7 +37,7 @@ function StepAccordion({ summaryHeading, content, disabled }) {
               <AccordionText variant="body2" $isExpanded={isExpanded}>
                 {stepCompletedText}
               </AccordionText>
-              <SuccessIcon data-testid="success-icon" />
+              <SuccessIcon data-testid={`accordion-success-icon-${index}`} />
             </>
           )}
         </Flex>
@@ -33,7 +45,7 @@ function StepAccordion({ summaryHeading, content, disabled }) {
       {content && (
         <AccordionDetails>
           {React.cloneElement(content, {
-            setStepCompletedText,
+            completeStep,
           })}
         </AccordionDetails>
       )}
@@ -42,14 +54,19 @@ function StepAccordion({ summaryHeading, content, disabled }) {
 }
 
 StepAccordion.propTypes = {
-  summaryHeading: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+  summaryHeading: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   content: PropTypes.element,
-  disabled: PropTypes.bool,
+  isExpanded: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  getHandleExpandFunction: PropTypes.func.isRequired,
+  getCompleteStepFunction: PropTypes.func.isRequired,
+  stepCompletedText: PropTypes.string,
 };
 
 StepAccordion.defaultProps = {
   content: undefined,
-  disabled: false,
+  stepCompletedText: undefined,
 };
 
 export default StepAccordion;
