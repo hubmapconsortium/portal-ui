@@ -9,7 +9,7 @@ function OrganInfo(props) {
   return (
     <SectionContainer>
       <SectionHeader>Human Reference Atlas</SectionHeader>
-      <ccf-organ-info organ-iri={uberonIri} />
+      <iframe title="Organ Info" src={`/iframe/organ?iri=${uberonIri}`} height="604" width="916" scrolling="no" />
     </SectionContainer>
   );
 }
