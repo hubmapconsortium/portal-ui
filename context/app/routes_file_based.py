@@ -95,7 +95,7 @@ def organ_details_view(name):
         'organ': organ
     }
     return render_template(
-        'pages/organ.html',
+        'pages/base_react.html',
         title='Organ',
         flask_data=flask_data
     )
