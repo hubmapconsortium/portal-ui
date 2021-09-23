@@ -10,8 +10,11 @@ function Assays(props) {
 
   return (
     <SectionContainer>
+      TODO: Assays Info popover
       <SectionHeader>Assays</SectionHeader>
-      <Paper>TODO: {searchTerms}</Paper>
+      TODO: Button to view all datasets
+      <Paper>TODO: Table listing assay types that have been used on {searchTerms}. (Not a list of datasets)</Paper>
+      TODO: Assay barchart
     </SectionContainer>
   );
 }

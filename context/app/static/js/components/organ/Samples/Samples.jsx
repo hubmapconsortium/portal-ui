@@ -10,8 +10,9 @@ function Samples(props) {
 
   return (
     <SectionContainer>
+      TODO: &quot;View Data on Search Page&quot; button TODO: &quot;Add to List&quot; button
       <SectionHeader>Samples</SectionHeader>
-      <Paper>TODO: {searchTerms}</Paper>
+      <Paper>TODO: table of samples matching {searchTerms}</Paper>
     </SectionContainer>
   );
 }

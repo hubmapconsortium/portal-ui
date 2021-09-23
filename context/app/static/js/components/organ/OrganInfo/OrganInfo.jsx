@@ -10,7 +10,7 @@ function OrganInfo(props) {
 
   return (
     <SectionContainer>
-      TODO: Add info popover
+      TODO: Add Human Reference Atlas info popover
       <SectionHeader>Human Reference Atlas</SectionHeader>
       <Paper>
         <iframe
