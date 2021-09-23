@@ -11,7 +11,7 @@ function AccordionSteps({ steps, isFirstStepOpen }) {
   const [completedStepsText, setCompletedStepsText] = useState({});
 
   const getHandleExpandFunction = (index) => (event, isExpanded) => {
-    setOpenedAccordionIndex(isExpanded ? index : false);
+    setOpenedAccordionIndex(isExpanded ? index : null);
   };
 
   // without the useCallback the prevState causes a loop if the function it returns is later used in a useEffect
