@@ -1,4 +1,5 @@
 import React from 'react';
+import marked from 'marked';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
@@ -8,6 +9,9 @@ import { StyledPaper } from './style';
 
 function Azimuth(props) {
   const { config } = props;
+  const datarefHtml = marked(config.dataref);
+  const demodataHtml = marked(config.demodata);
+  const detailsHtml = marked(config.details);
 
   return (
     <SectionContainer>
@@ -21,12 +25,11 @@ function Azimuth(props) {
         <br />
         Nuclei in reference: {config.nunit}
         <br />
-        TODO: Which of the following markdowns should be rendered?
-        <ul>
-          <li>{config.dataref}</li>
-          <li>{config.demodata}</li>
-          <li>{config.details}</li>
-        </ul>
+        TODO: Which of the following should be shown?
+        {/* eslint-disable react/no-danger */}
+        <div dangerouslySetInnerHTML={{ __html: datarefHtml }} />
+        <div dangerouslySetInnerHTML={{ __html: demodataHtml }} />
+        <div dangerouslySetInnerHTML={{ __html: detailsHtml }} />
       </StyledPaper>
       TODO: Refactor so that can get the spinner without the a title?
       <VisualizationWrapper vitData={config.vitessce_conf} />
