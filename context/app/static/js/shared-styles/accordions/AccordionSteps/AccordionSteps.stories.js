@@ -24,17 +24,13 @@ export default {
 };
 
 function ExampleContent({ completeStep, stepNumber }) {
-  return (
-    <>
-      <Button onClick={() => completeStep(`Step ${stepNumber} Completed!`)}>Complete Step</Button>
-    </>
-  );
+  return <Button onClick={() => completeStep(`Step ${stepNumber} Completed!`)}>Complete Step</Button>;
 }
 
 export const AccordionSteps = (args) => <AccordionStepsComponent {...args} />;
 
 AccordionSteps.args = {
-  openFirstStep: false,
+  isFirstStepOpen: false,
   steps: [1, 2, 3].map((stepNumber) => ({
     heading: `Step ${stepNumber}`,
     content: <ExampleContent stepNumber={stepNumber} />,
