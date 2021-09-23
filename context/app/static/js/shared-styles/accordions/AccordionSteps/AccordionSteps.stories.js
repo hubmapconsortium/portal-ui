@@ -24,11 +24,7 @@ export default {
 };
 
 function ExampleContent({ completeStep, stepNumber }) {
-  return (
-    <>
-      <Button onClick={() => completeStep(`Step ${stepNumber} Completed!`)}>Complete Step</Button>
-    </>
-  );
+  return <Button onClick={() => completeStep(`Step ${stepNumber} Completed!`)}>Complete Step</Button>;
 }
 
 export const AccordionSteps = (args) => <AccordionStepsComponent {...args} />;
