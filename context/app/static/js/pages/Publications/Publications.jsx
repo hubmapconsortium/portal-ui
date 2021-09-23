@@ -43,7 +43,7 @@ function Publications(props) {
                       <Typography variant="subtitle2" component="h3" color="primary">
                         <LightBlueLink href={`/publication/${path}`}>{publication.title}</LightBlueLink>
                       </Typography>
-                      {publication.authors}
+                      {publication.authors.short}
                     </TableCell>
                   </TableRow>
                 ))}

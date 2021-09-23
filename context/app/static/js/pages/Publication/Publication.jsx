@@ -4,21 +4,44 @@ import Typography from '@material-ui/core/Typography';
 import Markdown from 'js/components/Markdown';
 import VisualizationWrapper from 'js/components/Detail/visualization/VisualizationWrapper';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import { StyledPaper } from './style';
 
 function Publication(props) {
-  const { vitData, title, markdown } = props;
+  const { metadata, markdown } = props;
+  const { vitessce_conf, title, authors, manuscript, abstract } = metadata;
+  const { journal, url } = manuscript;
 
   return (
     <>
-      <SectionContainer>
-        <Typography variant="subtitle1">Publication</Typography>
-        <SectionHeader variant="h1" component="h1">
-          {title}
-        </SectionHeader>
-        <Markdown markdown={markdown} />
-      </SectionContainer>
-      {Boolean(vitData) && <VisualizationWrapper vitData={vitData} />}
+      <Typography variant="subtitle1">Publication</Typography>
+      <SectionHeader variant="h1" component="h1">
+        {title}
+      </SectionHeader>
+      <StyledPaper>
+        <Typography variant="h4" component="h2">
+          Abstract
+        </Typography>
+        {abstract}
+        <Typography variant="h4" component="h2">
+          Manuscript
+        </Typography>
+        <b>{journal}</b>: <a href={url}>{url}</a>
+        <Typography variant="h4" component="h2">
+          Authors
+        </Typography>
+        {authors.long}
+        <Typography variant="h4" component="h2">
+          Contact
+        </Typography>
+        <b>Corresponding Author:</b>{' '}
+        {authors.corresponding.map((author) => (
+          <>
+            {author.name} - <a href={`mailto:${author.email}`}>{author.email}</a>
+          </>
+        ))}
+      </StyledPaper>
+      {Boolean(vitessce_conf) && <VisualizationWrapper vitData={vitessce_conf} />}
+      <Markdown markdown={markdown} />
     </>
   );
 }

@@ -55,14 +55,10 @@ def publication_index_view():
 def publication_details_view(name):
     filename = dirname(__file__) + '/publication/' + name + '.md'
     metadata_content = frontmatter.load(filename)
-    publication_metadata = metadata_content.metadata
-    markdown = metadata_content.content
     flask_data = {
         **get_default_flask_data(),
-        'title': publication_metadata['title'],
-        'markdown': markdown,
-        # Unlike preview, no "entity".
-        'vitessce_conf': publication_metadata.get('vitessce_conf')
+        'metadata': metadata_content.metadata,
+        'markdown': metadata_content.content,
     }
     return render_template(
         'pages/base_react.html',

@@ -1,0 +1,1 @@
+- Put publication details in frontmatter.
