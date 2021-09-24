@@ -7,14 +7,11 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import Button from '@material-ui/core/Button';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 
+import { getSearchURL } from '../utils';
+
 function Samples(props) {
   const { searchTerms } = props;
-  const query = new URLSearchParams();
-  query.set('entity_type[0]', 'Sample');
-  searchTerms.forEach((term, i) => {
-    query.set(`origin_sample.mapped_organ[${i}]`, term);
-  });
-  const searchUrl = `/search?${query}`;
+  const searchUrl = getSearchURL('Sample', searchTerms);
 
   return (
     <SectionContainer>
