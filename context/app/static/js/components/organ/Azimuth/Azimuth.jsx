@@ -1,7 +1,7 @@
 import React from 'react';
 import marked from 'marked';
 
-import Button from '@material-ui/core/Button';
+import OutboundLinkButton from 'js/shared-styles/Links/OutboundLinkButton';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import VisualizationWrapper from 'js/components/Detail/visualization/VisualizationWrapper/VisualizationWrapper';
@@ -19,11 +19,7 @@ function Azimuth(props) {
       TODO: Add info popover.
       <SpacedSectionButtonRow
         leftText={<SectionHeader>Reference-Based Analysis</SectionHeader>}
-        buttons={
-          <Button color="primary" variant="contained" component="a" target="_blank" href={config.applink}>
-            Open Azimuth App
-          </Button>
-        }
+        buttons={<OutboundLinkButton href={config.applink}>Open Azimuth App</OutboundLinkButton>}
       />
       <StyledPaper>
         TODO: Fix formatting
