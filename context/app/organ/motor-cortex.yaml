@@ -1,6 +1,0 @@
-title: Motor Cortex
-azimuth:
-  app_url: https://app.azimuth.hubmapconsortium.org/app/human-motorcortex
-  vitessce_url: https://azimuth.hubmapconsortium.org/references/human_motorcortex
-  zenodo_url: https://zenodo.org/record/4546932
-  snakemake_url: https://github.com/satijalab/azimuth-references/tree/master/human_motorcortex

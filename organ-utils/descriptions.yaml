@@ -47,3 +47,9 @@ http://purl.obolibrary.org/obo/UBERON_0002049:
   description: "An interconnected tubular multi-tissue structure contains fluid
     that is actively transported around the organism[ZFA]. Examples: vasculature
     of lung, vasculature of face."
+http://purl.obolibrary.org/obo/UBERON_0001264:
+  name: Pancreas
+  description: "An endoderm derived structure that produces precursors of
+    digestive enzymes and blood glucose regulating enzymes[GO]."
+  has_iu_component: False
+

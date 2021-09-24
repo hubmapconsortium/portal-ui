@@ -26,7 +26,7 @@ function Organs(props) {
               <TableRow key={path}>
                 <TableCell>
                   <Typography variant="subtitle2" component="h3" color="primary">
-                    <LightBlueLink href={`/organ/${path}`}>{organ.title}</LightBlueLink>
+                    <LightBlueLink href={`/organ/${path}`}>{organ.name}</LightBlueLink>
                   </Typography>
                 </TableCell>
               </TableRow>
