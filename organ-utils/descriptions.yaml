@@ -26,7 +26,7 @@ http://purl.obolibrary.org/obo/UBERON_0000955:
     head, protected by the skull and close to the primary sensory apparatus of
     vision, hearing, balance, taste, and smell[WP].
 http://purl.obolibrary.org/obo/UBERON_0002048:
-  name: Lungs
+  name: Lung
   description: Respiration organ that develops as an outpocketing of the esophagus.
 http://purl.obolibrary.org/obo/UBERON_0000029:
   name: Lymph Node
