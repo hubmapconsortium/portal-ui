@@ -1,3 +1,10 @@
+## v0.28.0 - 2021-09-24
+
+- Add reusable accordion steps component.
+- Update the organ pages, based on the new approach using Uberon IDs.
+- Put publication details in frontmatter.
+
+
 ## v0.27.2 - 2021-09-20
 
 - Add accordions for cells query and results.

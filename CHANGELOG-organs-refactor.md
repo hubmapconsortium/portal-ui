@@ -1,1 +1,0 @@
-- Update the organ pages, based on the new approach using Uberon IDs.
