@@ -12,9 +12,7 @@ import { StyledPaper } from './style';
 
 function Azimuth(props) {
   const { config } = props;
-  const datarefHtml = marked(config.dataref);
-  const demodataHtml = marked(config.demodata);
-  const detailsHtml = marked(config.details);
+  const dataRefHtml = marked(config.dataref);
 
   return (
     <SectionContainer>
@@ -28,13 +26,13 @@ function Azimuth(props) {
         }
       />
       <StyledPaper>
+        TODO: Fix formatting
         <LabelledSectionText label="Modalities">{config.modalities}</LabelledSectionText>
         <LabelledSectionText label="Nuclei in reference">{config.nunit}</LabelledSectionText>
-        TODO: Which of the following should be shown?
         {/* eslint-disable react/no-danger */}
-        <div dangerouslySetInnerHTML={{ __html: datarefHtml }} />
-        <div dangerouslySetInnerHTML={{ __html: demodataHtml }} />
-        <div dangerouslySetInnerHTML={{ __html: detailsHtml }} />
+        <LabelledSectionText label="Reference dataset">
+          <div dangerouslySetInnerHTML={{ __html: dataRefHtml }} />
+        </LabelledSectionText>
       </StyledPaper>
       TODO: Refactor so that can get the spinner without the a title?
       <VisualizationWrapper vitData={config.vitessce_conf} />
