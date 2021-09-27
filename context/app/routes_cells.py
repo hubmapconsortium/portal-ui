@@ -341,8 +341,10 @@ def cells_in_dataset_clusters():
         cells_list = cells.get_list(values_included=cell_variable_name)
 
         return {'results':
-                _get_matched_cell_counts_per_cluster(cells=_get_cluster_cells(cells=cells_list, cell_variable_name=cell_variable_name,
-                                                                              min_expression=float(min_expression)))}
+                _get_matched_cell_counts_per_cluster(
+                    cells=_get_cluster_cells(cells=cells_list,
+                                             cell_variable_name=cell_variable_name,
+                                             min_expression=float(min_expression)))}
 
     except Exception as e:
         return {'message': str(e)}
