@@ -45,7 +45,7 @@ function DatasetClusterChart({ uuid, cellVariableName, minExpression }) {
     async function fetchCellClusterMatches() {
       const response = await new CellsService().getClusterCellMatchesInDataset({
         uuid,
-        name: cellVariableName,
+        cellVariableName,
         minExpression,
       });
       setResults(response);

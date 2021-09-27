@@ -26,11 +26,11 @@ class CellsService {
   }
 
   async getDatasets(props) {
-    const { type, names, minExpression, minCellPercentage, modality } = props;
+    const { type, cellVariableNames, minExpression, minCellPercentage, modality } = props;
     const urlParams = new URLSearchParams();
 
-    names.forEach((geneName) => {
-      urlParams.append('name', geneName);
+    cellVariableNames.forEach((cellVariableName) => {
+      urlParams.append('cell_variable_name', cellVariableName);
     });
     urlParams.append('min_expression', minExpression);
     urlParams.append('min_cell_percentage', minCellPercentage);
@@ -55,12 +55,12 @@ class CellsService {
   }
 
   async getCellExpressionInDataset(props) {
-    const { uuid, names } = props;
+    const { uuid, cellVariableNames } = props;
     const urlParams = new URLSearchParams();
 
     urlParams.append('uuid', uuid);
-    names.forEach((name) => {
-      urlParams.append('names', name);
+    cellVariableNames.forEach((cellVariableName) => {
+      urlParams.append('cell_variable_names', cellVariableName);
     });
 
     return this.fetchAndParse(`/cells/cell-expression-in-dataset.json?${urlParams}`);
@@ -71,13 +71,12 @@ class CellsService {
   }
 
   async getClusterCellMatchesInDataset(props) {
-    const { uuid, name, queryType, minExpression } = props;
+    const { uuid, cellVariableName, minExpression } = props;
     const urlParams = new URLSearchParams();
 
     urlParams.append('uuid', uuid);
-    urlParams.append('name', name);
+    urlParams.append('cell_variable_name', cellVariableName);
     urlParams.append('min_expression', minExpression);
-    urlParams.append('query_type', queryType);
 
     return this.fetchAndParse(`/cells/cells-in-dataset-clusters.json?${urlParams}`);
   }

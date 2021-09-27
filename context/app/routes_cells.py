@@ -94,7 +94,7 @@ def _get_cluster_name_and_number(cluster_str):
     return Cluster(name=cluster_name, number=cluster_number)
 
 
-def _get_cluster_cells(cells=None, name=None, min_expression=None):
+def _get_cluster_cells(cells=None, cell_variable_name=None, min_expression=None):
     '''
     >>> cells = _get_cluster_cells(cells=[
     ...         {
@@ -123,7 +123,7 @@ def _get_cluster_cells(cells=None, name=None, min_expression=None):
     ...             "values": {
     ...                 "VIM": 7.0
     ...             }
-    ...         }], name='VIM', min_expression=10)
+    ...         }], cell_variable_name='VIM', min_expression=10)
     >>> import pprint
     >>> pprint.pprint(cells)
     [{'cluster_name': 'cluster-method-a',
@@ -158,7 +158,7 @@ def _get_cluster_cells(cells=None, name=None, min_expression=None):
             cluster_cell = {'cluster_name': cluster_name,
                             'cluster_number': cluster_number,
                             'meets_minimum_expression':
-                            cell['values'][name] >= min_expression}
+                            cell['values'][cell_variable_name] >= min_expression}
             cluster_cell['modality'] = cell.get('modality')
             cluster_cells.append(cluster_cell)
     return cluster_cells
@@ -245,7 +245,7 @@ def proteins_by_substring():
 
 @blueprint.route('/cells/datasets-selected-by-<target_entity>.json', methods=['POST'])
 def datasets_selected_by_level(target_entity):
-    names = request.args.getlist('name')
+    cell_variable_names = request.args.getlist('cell_variable_name')
     modality = request.args.get('modality')
     min_expression = request.args.get('min_expression')
     min_cell_percentage = request.args.get('min_cell_percentage')
@@ -255,7 +255,7 @@ def datasets_selected_by_level(target_entity):
     try:
         dataset_set = client.select_datasets(
             where=target_entity,
-            has=[f'{name} > {min_expression}' for name in names],
+            has=[f'{cell_variable_name} > {min_expression}' for cell_variable_name in cell_variable_names],
             genomic_modality=modality,
             min_cell_percentage=min_cell_percentage
         )
@@ -295,14 +295,14 @@ def cell_expression_in_dataset():
     # and then showing expression levels for the two groups, but that’s not needed.)
 
     uuid = request.args.get('uuid')
-    names = request.args.getlist('names')
+    cell_variable_names = request.args.getlist('cell_variable_names')
 
     client = _get_client(current_app)
 
     try:
         cells = client.select_cells(where='dataset', has=[uuid])
         # list() will call iterator behind the scenes.
-        return {'results': list(cells.get_list(values_included=names))}
+        return {'results': list(cells.get_list(values_included=cell_variable_names))}
 
     except Exception as e:
         return {'message': str(e)}
@@ -331,17 +331,17 @@ def cells_in_dataset_clusters():
     # and then showing expression levels for the two groups, but that’s not needed.)
 
     uuid = request.args.get('uuid')
-    name = request.args.get('name')
+    cell_variable_name = request.args.get('cell_variable_name')
     min_expression = request.args.get('min_expression')
     client = _get_client(current_app)
 
     try:
         cells = client.select_cells(where='dataset', has=[uuid])
-        cells_list = cells.get_list(values_included=name)
+        cells_list = cells.get_list(values_included=cell_variable_name)
 
         return {'results':
                 _get_matched_cell_counts_per_cluster(cells=
-                    _get_cluster_cells(cells=cells_list, name=name,
+                    _get_cluster_cells(cells=cells_list, cell_variable_name=cell_variable_name,
                                        min_expression=float(min_expression)))}
 
     except Exception as e:
