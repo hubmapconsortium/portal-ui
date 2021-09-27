@@ -28,7 +28,7 @@ function Organs(props) {
                   <Typography variant="subtitle2" component="h3" color="primary">
                     <LightBlueLink href={`/organ/${path}`}>{organ.name}</LightBlueLink>
                   </Typography>
-                  {organ.uberon.split('/').slice(-1)[0]}
+                  {organ.short_uberon}
                 </TableCell>
               </TableRow>
             ))}

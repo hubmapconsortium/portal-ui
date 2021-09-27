@@ -1,5 +1,6 @@
 name: Pancreas
 uberon: http://purl.obolibrary.org/obo/UBERON_0001264
+short_uberon: UBERON_0001264
 description: An endoderm derived structure that produces precursors of digestive enzymes
   and blood glucose regulating enzymes[GO].
 has_iu_component: false

@@ -1,5 +1,6 @@
 name: Brain
 uberon: http://purl.obolibrary.org/obo/UBERON_0000955
+short_uberon: UBERON_0000955
 description: The brain is the center of the nervous system in all vertebrate, and
   most invertebrate, animals. Some primitive animals such as jellyfish and starfish
   have a decentralized nervous system without a brain, while sponges lack any nervous
