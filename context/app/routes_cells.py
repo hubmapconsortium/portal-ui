@@ -94,9 +94,9 @@ def _get_cluster_name_and_number(cluster_str):
     return Cluster(name=cluster_name, number=cluster_number)
 
 
-def _get_cluster_cells(cells, name, min_expression):
+def _get_cluster_cells(cells=None, name=None, min_expression=None):
     '''
-    >>> cells = _get_cluster_cells([
+    >>> cells = _get_cluster_cells(cells=[
     ...         {
     ...             "clusters": [
     ...                 "cluster-method-a-1",
@@ -123,7 +123,7 @@ def _get_cluster_cells(cells, name, min_expression):
     ...             "values": {
     ...                 "VIM": 7.0
     ...             }
-    ...         }], 'VIM', 10)
+    ...         }], name='VIM', min_expression=10)
     >>> import pprint
     >>> pprint.pprint(cells)
     [{'cluster_name': 'cluster-method-a',
@@ -164,9 +164,9 @@ def _get_cluster_cells(cells, name, min_expression):
     return cluster_cells
 
 
-def _get_matched_cell_counts_per_cluster(cells):
+def _get_matched_cell_counts_per_cluster(cells=None):
     '''
-    >>> clusters = _get_matched_cell_counts_per_cluster([
+    >>> clusters = _get_matched_cell_counts_per_cluster(cells=[
     ...         {
     ...             'modality': 'Z',
     ...             'cluster_name': 'cluster-method-a',
@@ -340,9 +340,9 @@ def cells_in_dataset_clusters():
         cells_list = cells.get_list(values_included=name)
 
         return {'results':
-                _get_matched_cell_counts_per_cluster(
-                    _get_cluster_cells(cells_list, name,
-                                       float(min_expression)))}
+                _get_matched_cell_counts_per_cluster(cells=
+                    _get_cluster_cells(cells=cells_list, name=name,
+                                       min_expression=float(min_expression)))}
 
     except Exception as e:
         return {'message': str(e)}
