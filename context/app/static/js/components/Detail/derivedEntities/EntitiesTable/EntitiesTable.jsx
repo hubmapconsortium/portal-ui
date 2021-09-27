@@ -7,7 +7,7 @@ import TableBody from '@material-ui/core/TableBody';
 import { HeaderCell } from 'js/shared-styles/Table';
 import { StyledDiv } from './style';
 
-function DerivedEntitiesTable({ columns, children }) {
+function EntitiesTable({ columns, children }) {
   return (
     <StyledDiv>
       <Table stickyHeader>
@@ -24,4 +24,4 @@ function DerivedEntitiesTable({ columns, children }) {
   );
 }
 
-export default DerivedEntitiesTable;
+export default EntitiesTable;
