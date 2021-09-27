@@ -1,6 +1,6 @@
 name: Vasculature
 uberon: http://purl.obolibrary.org/obo/UBERON_0002049
-short_uberon: UBERON_0002049
+uberon_short: UBERON_0002049
 description: 'An interconnected tubular multi-tissue structure contains fluid that
   is actively transported around the organism[ZFA]. Examples: vasculature of lung,
   vasculature of face.'

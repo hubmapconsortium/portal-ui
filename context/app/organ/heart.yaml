@@ -1,6 +1,6 @@
 name: Heart
 uberon: http://purl.obolibrary.org/obo/UBERON_0000948
-short_uberon: UBERON_0000948
+uberon_short: UBERON_0000948
 description: A myogenic muscular circulatory organ found in the vertebrate cardiovascular
   system composed of chambers of cardiac muscle. It is the primary circulatory organ.
 has_iu_component: true

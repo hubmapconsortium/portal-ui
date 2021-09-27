@@ -6,12 +6,17 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { StyledPaper } from './style';
 
 function Description(props) {
-  const { children } = props;
+  const { children, uberonIri, uberonShort } = props;
 
   return (
     <SectionContainer>
       <SectionHeader>Description</SectionHeader>
-      <StyledPaper>{children}</StyledPaper>
+      <StyledPaper>
+        <div>{children}</div>
+        <div>
+          Uberon: <a href={uberonIri}>{uberonShort}</a>
+        </div>
+      </StyledPaper>
     </SectionContainer>
   );
 }

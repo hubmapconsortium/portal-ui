@@ -1,6 +1,6 @@
 name: Large Intestine
 uberon: http://purl.obolibrary.org/obo/UBERON_0000059
-short_uberon: UBERON_0000059
+uberon_short: UBERON_0000059
 description: A subdivision of the digestive tract that connects the small intestine
   to the cloaca or anus. Lacks or has few villi[Kardong].
 has_iu_component: true

@@ -1,6 +1,6 @@
 name: Lymph Node
 uberon: http://purl.obolibrary.org/obo/UBERON_0000029
-short_uberon: UBERON_0000029
+uberon_short: UBERON_0000029
 description: Any of the rounded masses of lymphoid tissue that are surrounded by a
   capsule of connective tissue, are distributed along the lymphatic vessels, and contain
   numerous lymphocytes which filter the flow of lymph.

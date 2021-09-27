@@ -1,6 +1,6 @@
 name: Lungs
 uberon: http://purl.obolibrary.org/obo/UBERON_0002048
-short_uberon: UBERON_0002048
+uberon_short: UBERON_0002048
 description: Respiration organ that develops as an outpocketing of the esophagus.
 has_iu_component: true
 search:
