@@ -2,8 +2,8 @@ import React from 'react';
 import format from 'date-fns/format';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
-import ExpandableRow from 'js/shared-styles/Table/ExpandableRow';
-import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
+import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
+import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import DatasetClusterChart from 'js/components/cells/DatasetClusterChart';
 import CellExpressionHistogram from 'js/components/cells/CellExpressionHistogram';
 
