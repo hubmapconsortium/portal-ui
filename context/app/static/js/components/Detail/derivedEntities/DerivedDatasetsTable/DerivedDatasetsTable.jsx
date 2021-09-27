@@ -3,8 +3,8 @@ import format from 'date-fns/format';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-import EntitiesTable from 'js/components/Detail/derivedEntities/EntitiesTable';
-import { getSharedColumns } from 'js/components/Detail/derivedEntities/EntitiesTable/utils';
+import EntitiesTable from 'js/components/EntitiesTable';
+import { getSharedColumns } from 'js/components/EntitiesTable/utils';
 import { LightBlueLink } from 'js/shared-styles/Links';
 
 function DerivedDatasetsTable({ entities }) {
