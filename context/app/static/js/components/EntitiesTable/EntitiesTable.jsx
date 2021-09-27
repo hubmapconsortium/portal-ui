@@ -4,7 +4,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 
-import { HeaderCell } from 'js/shared-styles/Table';
+import { HeaderCell } from 'js/shared-styles/tables';
 import { StyledDiv } from './style';
 
 function EntitiesTable({ columns, children }) {

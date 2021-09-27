@@ -8,7 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import { StyledTableContainer, HeaderCell } from 'js/shared-styles/Table';
+import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';

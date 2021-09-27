@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 
-import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
+import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { Provider, createStore, useStore } from './store';
 
 function ExpandableRowChild({ children, numCells, expandedContent }) {
