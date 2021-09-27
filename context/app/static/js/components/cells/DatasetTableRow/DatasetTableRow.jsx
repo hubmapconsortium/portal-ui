@@ -11,7 +11,7 @@ function UnitValueCell({ unit, value }) {
   return <ExpandableRowCell>{`${value} ${unit}`}</ExpandableRowCell>;
 }
 
-function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpression, queryType }) {
+function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpression }) {
   const { hubmap_id, uuid, origin_sample, mapped_data_types, donor, last_modified_timestamp } = datasetMetadata;
   return (
     <ExpandableRow
@@ -19,12 +19,7 @@ function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpre
       expandedContent={
         <div>
           <CellExpressionHistogram uuid={uuid} cellVariableName={cellVariableName} />
-          <DatasetClusterChart
-            uuid={uuid}
-            cellVariableName={cellVariableName}
-            minExpression={minExpression}
-            queryType={queryType}
-          />
+          <DatasetClusterChart uuid={uuid} cellVariableName={cellVariableName} minExpression={minExpression} />
         </div>
       }
     >
