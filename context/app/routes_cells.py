@@ -255,7 +255,8 @@ def datasets_selected_by_level(target_entity):
     try:
         dataset_set = client.select_datasets(
             where=target_entity,
-            has=[f'{cell_variable_name} > {min_expression}' for cell_variable_name in cell_variable_names],
+            has=[f'{cell_variable_name} > {min_expression}'
+                 for cell_variable_name in cell_variable_names],
             genomic_modality=modality,
             min_cell_percentage=min_cell_percentage
         )
@@ -340,9 +341,8 @@ def cells_in_dataset_clusters():
         cells_list = cells.get_list(values_included=cell_variable_name)
 
         return {'results':
-                _get_matched_cell_counts_per_cluster(cells=
-                    _get_cluster_cells(cells=cells_list, cell_variable_name=cell_variable_name,
-                                       min_expression=float(min_expression)))}
+                _get_matched_cell_counts_per_cluster(cells=_get_cluster_cells(cells=cells_list, cell_variable_name=cell_variable_name,
+                                                                              min_expression=float(min_expression)))}
 
     except Exception as e:
         return {'message': str(e)}
