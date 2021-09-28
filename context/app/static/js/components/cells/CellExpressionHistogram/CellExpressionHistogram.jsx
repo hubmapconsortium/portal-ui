@@ -16,7 +16,7 @@ function CellExpressionHistogram({ uuid, cellVariableName }) {
 
       const response = await new CellsService().getCellExpressionInDataset({
         uuid,
-        names: [cellVariableName],
+        cellVariableNames: [cellVariableName],
       });
       const t1 = performance.now();
       const timeWaiting = (t1 - t0) / 1000;

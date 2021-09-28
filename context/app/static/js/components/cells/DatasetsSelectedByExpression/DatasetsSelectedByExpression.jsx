@@ -29,7 +29,7 @@ function DatasetsSelectedByExpression({
     setResults([]);
     const queryParams = {
       type: queryType,
-      names: cellVariableNames,
+      cellVariableNames,
       minExpression: 10 ** minExpressionLog,
       minCellPercentage,
     };
