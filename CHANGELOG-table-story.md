@@ -1,0 +1,1 @@
+- Add a story for EntitiesTable.
