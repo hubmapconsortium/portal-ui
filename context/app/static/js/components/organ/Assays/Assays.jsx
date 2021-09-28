@@ -6,12 +6,29 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import Button from '@material-ui/core/Button';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
+import useSearchData from 'js/hooks/useSearchData';
 
 import { getSearchURL } from '../utils';
 
 function Assays(props) {
   const { searchTerms } = props;
   const searchUrl = getSearchURL('Dataset', searchTerms);
+
+  const query = {
+    size: 0,
+    query: { bool: { must_not: { exists: { field: 'next_revision_uuid' } } } },
+    aggs: {
+      mapped_data_types: {
+        filter: { term: { 'entity_type.keyword': 'Dataset' } },
+        aggs: {
+          'mapped_data_types.keyword': { terms: { field: 'mapped_data_types.keyword', size: 100 } },
+          'mapped_data_types.keyword_count': { cardinality: { field: 'mapped_data_types.keyword' } },
+        },
+      },
+    },
+  };
+
+  const { searchData } = useSearchData(query);
 
   return (
     <SectionContainer>
@@ -24,8 +41,9 @@ function Assays(props) {
           </Button>
         }
       />
-      <Paper>TODO: Table listing assay types that have been used on {searchTerms}. (Not a list of datasets)</Paper>
-      TODO: Assay barchart
+      <Paper>
+        <pre>{JSON.stringify(searchData, null, 2)}</pre>
+      </Paper>
     </SectionContainer>
   );
 }
