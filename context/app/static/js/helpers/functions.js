@@ -1,3 +1,5 @@
+import { BoolMustNot, ExistsQuery } from 'searchkit';
+
 export function isEmptyArrayOrObject(val) {
   if (val.constructor.name === 'Object') {
     return Object.keys(val).length === 0;
@@ -68,4 +70,8 @@ export function tableToDelimitedString(rows, colNames, d) {
 
 export function createDownloadUrl(fileStr, fileType) {
   return window.URL.createObjectURL(new Blob([fileStr], { type: fileType }));
+}
+
+export function getDefaultQuery() {
+  return BoolMustNot(ExistsQuery('next_revision_uuid'));
 }

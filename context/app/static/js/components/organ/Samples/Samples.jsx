@@ -6,6 +6,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
+import { getDefaultQuery } from 'js/helpers/functions';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -29,15 +30,7 @@ function Samples(props) {
   ];
 
   const query = {
-    query: {
-      bool: {
-        must_not: {
-          exists: {
-            field: 'next_revision_uuid',
-          },
-        },
-      },
-    },
+    query: getDefaultQuery(),
     post_filter: {
       bool: {
         must: [
