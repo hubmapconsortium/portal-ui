@@ -64,22 +64,30 @@ function Samples(props) {
       />
       <Paper>
         <EntitiesTable columns={columns}>
-          {searchHits.map(
-            ({ _id: uuid, _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp } }) => (
+          {searchHits
+            .map((hit) => {
+              /* eslint-disable no-underscore-dangle */
+              if (!hit._source.donor) {
+                // eslint-disable-next-line no-param-reassign
+                hit._source.donor = {};
+              }
+              /* eslint-enable */
+              return hit;
+            })
+            .map(({ _id: uuid, _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp } }) => (
               <TableRow key={uuid}>
                 <TableCell>
                   <LightBlueLink href={`/browse/sample/${uuid}`} variant="body2">
                     {hubmap_id}
                   </LightBlueLink>
                 </TableCell>
-                <TableCell>{donor.mapped_metadata.age_value}</TableCell>
-                <TableCell>{donor.mapped_metadata.sex}</TableCell>
-                <TableCell>{donor.mapped_metadata.race}</TableCell>
+                <TableCell>{donor?.mapped_metadata?.age_value}</TableCell>
+                <TableCell>{donor?.mapped_metadata?.sex}</TableCell>
+                <TableCell>{donor?.mapped_metadata?.race}</TableCell>
                 <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
                 <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
               </TableRow>
-            ),
-          )}
+            ))}
         </EntitiesTable>
       </Paper>
     </SectionContainer>
