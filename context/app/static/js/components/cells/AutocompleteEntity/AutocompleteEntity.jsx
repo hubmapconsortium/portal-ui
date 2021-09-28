@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
@@ -6,10 +6,16 @@ import TextField from '@material-ui/core/TextField';
 import CellsService from 'js/components/cells/CellsService';
 
 function AutocompleteEntity(props) {
-  const { targetEntity, setter } = props;
+  const { targetEntity, setter, setCellVariableNames } = props;
 
   const [substring, setSubstring] = useState('');
   const [options, setOptions] = useState([]);
+  const [selected, setSelected] = useState([]);
+
+  useEffect(() => {
+    setSelected([]);
+    setCellVariableNames([]);
+  }, [targetEntity, setCellVariableNames]);
 
   async function handleChange(event) {
     const { target } = event;
@@ -44,7 +50,9 @@ function AutocompleteEntity(props) {
           {option.post}
         </>
       )}
+      value={selected}
       onChange={(event, value) => {
+        setSelected(value);
         setter(value.map((match) => match.full));
       }}
       renderInput={(params) => (

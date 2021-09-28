@@ -18,35 +18,33 @@ function DatasetsSelectedByExpression({
   setMinExpressionLog,
   minCellPercentage,
   setMinCellPercentage,
-  geneNames,
-  setGeneNames,
+  cellVariableNames,
+  setCellVariableNames,
+  queryType,
 }) {
-  const [targetEntity, setTargetEntity] = useState('gene'); // eslint-disable-line no-unused-vars
-  const [modality, setModality] = useState('rna'); // eslint-disable-line no-unused-vars
-
   const [cellsResults, setCellsResults] = useState([]);
   const [message, setMessage] = useState(null);
 
   async function handleSubmit() {
     setResults([]);
+    const queryParams = {
+      type: queryType,
+      cellVariableNames,
+      minExpression: 10 ** minExpressionLog,
+      minCellPercentage,
+    };
+    if (queryType === 'gene') {
+      queryParams.modality = 'rna';
+    }
     try {
-      if (targetEntity === 'gene') {
-        completeStep(
-          <>
-            {geneNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
-            Percentage
-          </>,
-        );
-        const serviceResults = await new CellsService().getDatasetsSelectedByGenes({
-          geneNames,
-          minExpression: 10 ** minExpressionLog,
-          minCellPercentage,
-          modality,
-        });
-        setCellsResults(serviceResults);
-      } else {
-        throw Error(`Datasets by "${targetEntity}" unimplemented`);
-      }
+      completeStep(
+        <>
+          {cellVariableNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
+          Percentage
+        </>,
+      );
+      const serviceResults = await new CellsService().getDatasets(queryParams);
+      setCellsResults(serviceResults);
     } catch (e) {
       setMessage(e.message);
     }
@@ -97,17 +95,22 @@ function DatasetsSelectedByExpression({
 
   return (
     <StyledDiv>
-      <AutocompleteEntity targetEntity="genes" setter={setGeneNames} />
+      <AutocompleteEntity
+        targetEntity={`${queryType}s`}
+        setter={setCellVariableNames}
+        cellVariableNames={cellVariableNames}
+        setCellVariableNames={setCellVariableNames}
+      />
 
       <br />
 
-      <FormLabel id="min-gene-expression-label">Minimum gene expression</FormLabel>
+      <FormLabel id="min-expression-label">{`Minimum ${queryType} expression`}</FormLabel>
       <LogSliderWrapper
         value={minExpressionLog}
         minLog={-4}
         maxLog={5}
         setter={setMinExpressionLog}
-        labelledby="min-gene-expression-label"
+        labelledby="min-expression-label"
       />
 
       <FormLabel id="min-cell-percentage-label">Minimum cell percentage</FormLabel>
@@ -121,7 +124,9 @@ function DatasetsSelectedByExpression({
       />
 
       <br />
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={handleSubmit} disabled={cellVariableNames.length === 0} variant="contained" color="primary">
+        Run Query
+      </Button>
       <br />
       {message}
     </StyledDiv>

@@ -9,7 +9,7 @@ import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOpt
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalStackedBarChart';
 import CellsService from 'js/components/cells/CellsService';
 
-function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
+function DatasetClusterChart({ uuid, cellVariableName, minExpression }) {
   const [results, setResults] = useState({});
   const [scales, setScales] = useState({});
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useState(0);
@@ -45,13 +45,13 @@ function DatasetClusterChart({ uuid, geneName, minGeneExpression }) {
     async function fetchCellClusterMatches() {
       const response = await new CellsService().getClusterCellMatchesInDataset({
         uuid,
-        geneName,
-        minGeneExpression,
+        cellVariableName,
+        minExpression,
       });
       setResults(response);
     }
     fetchCellClusterMatches();
-  }, [geneName, minGeneExpression, uuid]);
+  }, [cellVariableName, minExpression, uuid]);
 
   function handleSelectClusterType({ i }) {
     setSelectedClusterTypeIndex(i);

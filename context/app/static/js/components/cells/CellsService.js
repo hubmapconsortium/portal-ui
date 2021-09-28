@@ -25,18 +25,20 @@ class CellsService {
     return this.fetchAndParse(`/cells/${targetEntity}-by-substring.json?${urlParams}`);
   }
 
-  async getDatasetsSelectedByGenes(props) {
-    const { geneNames, minExpression, minCellPercentage, modality } = props;
+  async getDatasets(props) {
+    const { type, cellVariableNames, minExpression, minCellPercentage, modality } = props;
     const urlParams = new URLSearchParams();
 
-    geneNames.forEach((geneName) => {
-      urlParams.append('name', geneName);
+    cellVariableNames.forEach((cellVariableName) => {
+      urlParams.append('cell_variable_name', cellVariableName);
     });
     urlParams.append('min_expression', minExpression);
     urlParams.append('min_cell_percentage', minCellPercentage);
-    urlParams.append('modality', modality);
+    if (modality) {
+      urlParams.append('modality', modality);
+    }
 
-    return this.fetchAndParse(`/cells/datasets-selected-by-gene.json?${urlParams}`);
+    return this.fetchAndParse(`/cells/datasets-selected-by-${type}.json?${urlParams}`);
   }
 
   async getCellPercentagesForDatasets(props) {
@@ -53,12 +55,12 @@ class CellsService {
   }
 
   async getCellExpressionInDataset(props) {
-    const { uuid, geneNames } = props;
+    const { uuid, cellVariableNames } = props;
     const urlParams = new URLSearchParams();
 
     urlParams.append('uuid', uuid);
-    geneNames.forEach((geneName) => {
-      urlParams.append('gene_name', geneName);
+    cellVariableNames.forEach((name) => {
+      urlParams.append('cell_variable_names', name);
     });
 
     return this.fetchAndParse(`/cells/cell-expression-in-dataset.json?${urlParams}`);
@@ -69,12 +71,12 @@ class CellsService {
   }
 
   async getClusterCellMatchesInDataset(props) {
-    const { uuid, geneName, minGeneExpression } = props;
+    const { uuid, cellVariableName, minExpression } = props;
     const urlParams = new URLSearchParams();
 
     urlParams.append('uuid', uuid);
-    urlParams.append('gene_name', geneName);
-    urlParams.append('min_gene_expression', minGeneExpression);
+    urlParams.append('cell_variable_name', cellVariableName);
+    urlParams.append('min_expression', minExpression);
 
     return this.fetchAndParse(`/cells/cells-in-dataset-clusters.json?${urlParams}`);
   }

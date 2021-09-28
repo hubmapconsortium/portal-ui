@@ -5,8 +5,8 @@ import { useTheme } from '@material-ui/core/styles';
 import Histogram from 'js/shared-styles/charts/Histogram';
 import CellsService from 'js/components/cells/CellsService';
 
-function CellExpressionHistogram({ uuid, geneName }) {
-  const [geneExpressionData, setGeneExpressionData] = useState([]);
+function CellExpressionHistogram({ uuid, cellVariableName }) {
+  const [expressionData, setExpressionData] = useState([]);
   const [diagnosticInfo, setDiagnosticInfo] = useState({});
   const theme = useTheme();
 
@@ -16,18 +16,18 @@ function CellExpressionHistogram({ uuid, geneName }) {
 
       const response = await new CellsService().getCellExpressionInDataset({
         uuid,
-        geneNames: [geneName],
+        cellVariableNames: [cellVariableName],
       });
       const t1 = performance.now();
       const timeWaiting = (t1 - t0) / 1000;
       const numCells = response.length;
       setDiagnosticInfo({ numCells, timeWaiting });
-      setGeneExpressionData(response.map((d) => d.values[geneName]));
+      setExpressionData(response.map((d) => d.values[cellVariableName]));
     }
     fetchCellExpression();
-  }, [uuid, geneName]);
+  }, [uuid, cellVariableName]);
 
-  return geneExpressionData.length ? (
+  return expressionData.length ? (
     <>
       <Typography>
         {diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for {diagnosticInfo.numCells} cells.
@@ -35,7 +35,7 @@ function CellExpressionHistogram({ uuid, geneName }) {
       <Histogram
         parentHeight={500}
         parentWidth={500}
-        visxData={geneExpressionData}
+        visxData={expressionData}
         margin={{
           top: 50,
           right: 50,
