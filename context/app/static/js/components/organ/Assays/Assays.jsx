@@ -1,10 +1,14 @@
 import React from 'react';
 
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 
+import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
+import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import Button from '@material-ui/core/Button';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useSearchData from 'js/hooks/useSearchData';
 
@@ -19,7 +23,24 @@ function Assays(props) {
     query: { bool: { must_not: { exists: { field: 'next_revision_uuid' } } } },
     aggs: {
       mapped_data_types: {
-        filter: { term: { 'entity_type.keyword': 'Dataset' } },
+        filter: {
+          bool: {
+            must: [
+              {
+                term: {
+                  'entity_type.keyword': 'Dataset',
+                },
+              },
+              {
+                bool: {
+                  should: searchTerms.map((searchTerm) => ({
+                    term: { 'origin_sample.mapped_organ.keyword': searchTerm },
+                  })),
+                },
+              },
+            ],
+          },
+        },
         aggs: {
           'mapped_data_types.keyword': { terms: { field: 'mapped_data_types.keyword', size: 100 } },
           'mapped_data_types.keyword_count': { cardinality: { field: 'mapped_data_types.keyword' } },
@@ -29,6 +50,9 @@ function Assays(props) {
   };
 
   const { searchData } = useSearchData(query);
+  const buckets = searchData.aggregations
+    ? searchData.aggregations.mapped_data_types['mapped_data_types.keyword'].buckets
+    : [];
 
   return (
     <SectionContainer>
@@ -42,7 +66,23 @@ function Assays(props) {
         }
       />
       <Paper>
-        <pre>{JSON.stringify(searchData, null, 2)}</pre>
+        <EntitiesTable
+          columns={[
+            { id: 'a', label: 'Assays' },
+            { id: 'b', label: 'Dataset Count' },
+          ]}
+        >
+          {buckets.map((bucket) => (
+            <TableRow key={bucket.key}>
+              <TableCell>
+                <LightBlueLink href={`TODO${bucket.key}`} variant="body2">
+                  {bucket.key}
+                </LightBlueLink>
+              </TableCell>
+              <TableCell>{bucket.doc_count}</TableCell>
+            </TableRow>
+          ))}
+        </EntitiesTable>
       </Paper>
     </SectionContainer>
   );
