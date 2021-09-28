@@ -1,3 +1,11 @@
+## v0.28.1 - 2021-09-28
+
+- Bump to ccf 2.3.5.
+- Refactor entities table to make it reusable.
+- Rename "Lungs" to "Lung" in organ descriptions to match other organ names.
+- Add organ regen to push.sh, so we will get the latest changes from IU and NYGC with every release.
+
+
 ## v0.28.0 - 2021-09-24
 
 - Add reusable accordion steps component.

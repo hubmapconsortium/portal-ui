@@ -1,1 +1,0 @@
-- Add organ regen to push.sh, so we will get the latest changes from IU and NYGC with every release.
