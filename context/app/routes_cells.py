@@ -158,13 +158,13 @@ def _get_cluster_cells(cells=None, cell_variable_name=None, min_expression=None)
             cluster_cell = {'cluster_name': cluster_name,
                             'cluster_number': cluster_number,
                             'meets_minimum_expression':
-                            cell['values'][cell_variable_name] >= min_expression}
-            cluster_cell['modality'] = cell.get('modality')
+                            cell['values'][cell_variable_name] >= min_expression,
+                            'modality': cell.get('modality')}
             cluster_cells.append(cluster_cell)
     return cluster_cells
 
 
-def _get_matched_cell_counts_per_cluster(cells=None):
+def _get_matched_cell_counts_per_cluster(cells):
     '''
     >>> clusters = _get_matched_cell_counts_per_cluster(cells=[
     ...         {
@@ -255,8 +255,8 @@ def datasets_selected_by_level(target_entity):
     try:
         dataset_set = client.select_datasets(
             where=target_entity,
-            has=[f'{cell_variable_name} > {min_expression}'
-                 for cell_variable_name in cell_variable_names],
+            has=[f'{name} > {min_expression}'
+                 for name in cell_variable_names],
             genomic_modality=modality,
             min_cell_percentage=min_cell_percentage
         )

@@ -59,8 +59,8 @@ class CellsService {
     const urlParams = new URLSearchParams();
 
     urlParams.append('uuid', uuid);
-    cellVariableNames.forEach((cellVariableName) => {
-      urlParams.append('cell_variable_names', cellVariableName);
+    cellVariableNames.forEach((name) => {
+      urlParams.append('cell_variable_names', name);
     });
 
     return this.fetchAndParse(`/cells/cell-expression-in-dataset.json?${urlParams}`);
