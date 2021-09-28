@@ -16,7 +16,11 @@ function Organ(props) {
       <SectionHeader variant="h1" component="h1">
         {organ.name}
       </SectionHeader>
-      {organ?.description && <Description>{organ.description}</Description>}
+      {organ?.description && (
+        <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short}>
+          {organ.description}
+        </Description>
+      )}
       {organ.has_iu_component && <OrganInfo uberonIri={organ.uberon} />}
       {organ?.azimuth && <Azimuth config={organ.azimuth} />}
       {organ.search.length > 0 && (

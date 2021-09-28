@@ -45,6 +45,8 @@ def main():
     merged_data = merge_data(
         uberon=
             {uberon_id: uberon_id for uberon_id in descriptions.keys()},
+        uberon_short=
+            {uberon_id: uberon_id.split('/')[-1] for uberon_id in descriptions.keys()},
         name=
             {uberon_id: value['name'] for uberon_id, value in descriptions.items()},
         description=

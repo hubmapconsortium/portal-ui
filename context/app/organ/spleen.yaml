@@ -1,5 +1,6 @@
 name: Spleen
 uberon: http://purl.obolibrary.org/obo/UBERON_0002106
+uberon_short: UBERON_0002106
 description: The organ that functions to filter blood and to store red corpuscles
   and platelets.
 has_iu_component: true
