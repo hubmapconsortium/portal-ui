@@ -61,12 +61,11 @@ function Samples(props) {
 
   return (
     <SectionContainer>
-      TODO: &quot;Add to List&quot; button
       <SpacedSectionButtonRow
         leftText={<SectionHeader>Samples</SectionHeader>}
         buttons={
           <Button color="primary" variant="contained" component="a" href={searchUrl}>
-            View Data on Search Page
+            View All Samples
           </Button>
         }
       />

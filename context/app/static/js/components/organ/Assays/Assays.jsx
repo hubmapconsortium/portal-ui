@@ -56,12 +56,11 @@ function Assays(props) {
 
   return (
     <SectionContainer>
-      TODO: Assays Info popover
       <SpacedSectionButtonRow
         leftText={<SectionHeader>Datasets</SectionHeader>}
         buttons={
           <Button color="primary" variant="contained" component="a" href={searchUrl}>
-            View Data on Search Page
+            View All Datasets
           </Button>
         }
       />
