@@ -68,14 +68,17 @@ function Assays(props) {
       <Paper>
         <EntitiesTable
           columns={[
-            { id: 'a', label: 'Assays' },
-            { id: 'b', label: 'Dataset Count' },
+            { id: 'assays', label: 'Assays' },
+            { id: 'counts', label: 'Dataset Count' },
           ]}
         >
           {buckets.map((bucket) => (
             <TableRow key={bucket.key}>
               <TableCell>
-                <LightBlueLink href={`TODO${bucket.key}`} variant="body2">
+                <LightBlueLink
+                  href={`/search?entity_type[0]=Dataset&mapped_data_types[0]=${encodeURIComponent(bucket.key)}`}
+                  variant="body2"
+                >
                   {bucket.key}
                 </LightBlueLink>
               </TableCell>
