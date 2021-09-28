@@ -12,7 +12,6 @@ function Organ(props) {
 
   return (
     <>
-      TODO: Add table of contents
       <SectionHeader variant="h1" component="h1">
         {organ.name}
       </SectionHeader>
@@ -29,7 +28,6 @@ function Organ(props) {
           <Samples searchTerms={organ.search} />
         </>
       )}
-      TODO: Confirm that we are not still planning to include the old IU component as well?
     </>
   );
 }

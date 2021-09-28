@@ -58,7 +58,7 @@ function Assays(props) {
   return (
     <SectionContainer>
       <SpacedSectionButtonRow
-        leftText={<SectionHeader>Datasets</SectionHeader>}
+        leftText={<SectionHeader>Assays</SectionHeader>}
         buttons={
           <Button color="primary" variant="contained" component="a" href={searchUrl}>
             View All Datasets
