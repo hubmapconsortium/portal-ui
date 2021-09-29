@@ -4,11 +4,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-import { useTransition, animated, config } from 'react-spring';
-import useResizeObserver from 'use-resize-observer/polyfilled';
+import { animated } from 'react-spring';
 
 import DatasetTableRow from 'js/components/cells/DatasetTableRow';
 import { initialHeight } from 'js/pages/Cells/style';
+import useExpandTransition from 'js/hooks/useExpandTransition';
 
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
@@ -28,14 +28,7 @@ function DatasetsTable({ datasets, minExpression, cellVariableName, queryType, c
   }, [completeStep, datasets]);
   const heightRef = useRef(null);
 
-  const { height = 0 } = useResizeObserver({ ref: heightRef });
-
-  const transitions = useTransition(true, null, {
-    from: { opacity: 0, height: initialHeight },
-    enter: { opacity: 1, height },
-    config: config.slow,
-    update: { height },
-  });
+  const transitions = useExpandTransition(heightRef, initialHeight);
 
   return transitions.map(
     ({ item, key, props }) =>
