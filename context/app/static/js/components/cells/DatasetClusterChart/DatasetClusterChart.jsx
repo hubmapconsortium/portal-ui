@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import Button from '@material-ui/core/Button';
 import { useTheme } from '@material-ui/core/styles';
@@ -18,11 +18,13 @@ function DatasetClusterChart({
   isLoading,
   finishLoading,
   loadingKey,
+  isExpanded,
 }) {
   const [results, setResults] = useState({});
   const [scales, setScales] = useState({});
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useState(0);
   const theme = useTheme();
+  const loadedOnce = useRef(false);
 
   useEffect(() => {
     if (Object.keys(results).length) {
@@ -61,8 +63,14 @@ function DatasetClusterChart({
       });
       setResults(response);
     }
-    fetchCellClusterMatches();
-  }, [cellVariableName, minExpression, queryType, uuid]);
+    if (loadedOnce.current) {
+      return;
+    }
+    if (isExpanded) {
+      fetchCellClusterMatches();
+      loadedOnce.current = true;
+    }
+  }, [cellVariableName, isExpanded, minExpression, queryType, uuid]);
 
   function handleSelectClusterType({ i }) {
     setSelectedClusterTypeIndex(i);

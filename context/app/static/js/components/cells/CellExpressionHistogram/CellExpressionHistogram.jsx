@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useTheme } from '@material-ui/core/styles';
 
@@ -6,10 +6,11 @@ import Histogram from 'js/shared-styles/charts/Histogram';
 import CellsService from 'js/components/cells/CellsService';
 import { StyledSkeleton } from 'js/components/cells/CellsCharts/style';
 
-function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoading, loadingKey }) {
+function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoading, loadingKey, isExpanded }) {
   const [expressionData, setExpressionData] = useState([]);
   const [diagnosticInfo, setDiagnosticInfo] = useState({});
   const theme = useTheme();
+  const loadedOnce = useRef(false);
 
   useEffect(() => {
     async function fetchCellExpression() {
@@ -26,8 +27,15 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
       setExpressionData(response.map((d) => d.values[cellVariableName]));
       finishLoading(loadingKey);
     }
-    fetchCellExpression();
-  }, [uuid, cellVariableName, finishLoading, loadingKey]);
+    if (loadedOnce.current) {
+      return;
+    }
+
+    if (isExpanded) {
+      fetchCellExpression();
+      loadedOnce.current = true;
+    }
+  }, [uuid, cellVariableName, finishLoading, loadingKey, isExpanded]);
 
   return Object.values(isLoading).every((val) => !val) ? (
     <>
