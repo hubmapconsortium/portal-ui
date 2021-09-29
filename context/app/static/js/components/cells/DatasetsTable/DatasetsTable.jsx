@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import { animated } from 'react-spring';
 
 import DatasetTableRow from 'js/components/cells/DatasetTableRow';
+import { initialHeight } from 'js/pages/Cells/style';
+import { useExpandTransition } from 'js/hooks/useExpand';
 
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
@@ -23,29 +26,37 @@ function DatasetsTable({ datasets, minExpression, cellVariableName, queryType, c
   useEffect(() => {
     completeStep(`${datasets.length} Datasets Matching Query Parameters`);
   }, [completeStep, datasets]);
+  const heightRef = useRef(null);
 
-  return (
-    <Table stickyHeader>
-      <TableHead>
-        <TableRow>
-          {columns.map((column) => (
-            <TableCell key={column.id}>{column.label}</TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {datasets.map(({ _source }) => (
-          <DatasetTableRow
-            datasetMetadata={_source}
-            numCells={columns.length}
-            key={_source.hubmap_id}
-            minExpression={minExpression}
-            cellVariableName={cellVariableName}
-            queryType={queryType}
-          />
-        ))}
-      </TableBody>
-    </Table>
+  const transitions = useExpandTransition(heightRef, initialHeight);
+
+  return transitions.map(
+    ({ item, key, props }) =>
+      item && (
+        <animated.div key={key} style={props}>
+          <Table stickyHeader ref={heightRef}>
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell key={column.id}>{column.label}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {datasets.map(({ _source }) => (
+                <DatasetTableRow
+                  datasetMetadata={_source}
+                  numCells={columns.length}
+                  key={_source.hubmap_id}
+                  minExpression={minExpression}
+                  cellVariableName={cellVariableName}
+                  queryType={queryType}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </animated.div>
+      ),
   );
 }
 

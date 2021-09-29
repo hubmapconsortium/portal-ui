@@ -1,3 +1,11 @@
+## v0.27.2 - 2021-09-20
+
+- Add accordions for cells query and results.
+- Change language of firefox warning to indicate general perforamnce issues.
+- Add SlideSeq visualization option to RNASeq visualization class.
+- Add explicit `target` in SVG that is used in iframe.
+
+
 ## v0.27.1 - 2021-09-16
 
 - Replace `create_timestamp` instances that were missed earlier.
