@@ -8,7 +8,7 @@ import { animated } from 'react-spring';
 
 import DatasetTableRow from 'js/components/cells/DatasetTableRow';
 import { initialHeight } from 'js/pages/Cells/style';
-import useExpandTransition from 'js/hooks/useExpandTransition';
+import { useExpandTransition } from 'js/hooks/useExpand';
 
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },

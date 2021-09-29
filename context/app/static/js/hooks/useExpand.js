@@ -21,5 +21,4 @@ function useExpandSpring(ref, initialElementHeight, toggle, optionalConfig) {
     config: optionalConfig || config.default,
   });
 }
-export { useExpandSpring };
-export default useExpandTransition;
+export { useExpandTransition, useExpandSpring };
