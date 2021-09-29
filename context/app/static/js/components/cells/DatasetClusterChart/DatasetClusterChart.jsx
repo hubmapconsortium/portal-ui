@@ -99,7 +99,7 @@ function DatasetClusterChart({
           top: 50,
           right: 50,
           left: 50,
-          bottom: 50,
+          bottom: 60, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
         }}
       />
     </>
