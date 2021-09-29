@@ -8,7 +8,7 @@ import { animated } from 'react-spring';
 import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
 import { useExpandSpring } from 'js/hooks/useExpand';
 import { Provider, createStore, useStore } from './store';
-import { StyledTableCell } from './style';
+import { ExpandedRow, ExpandedCell } from './style';
 
 function ExpandableRowChild({ children, numCells, expandedContent }) {
   const { isExpanded, toggleIsExpanded } = useStore();
@@ -29,16 +29,16 @@ function ExpandableRowChild({ children, numCells, expandedContent }) {
           </IconButton>
         </ExpandableRowCell>
       </TableRow>
-      <TableRow>
-        <StyledTableCell colSpan={numCells} $isExpanded={isExpanded}>
+      <ExpandedRow $isExpanded={isExpanded}>
+        <ExpandedCell colSpan={numCells} $isExpanded={isExpanded}>
           <animated.div style={styles}>
             {React.cloneElement(expandedContent, {
               heightRef,
               isExpanded,
             })}
           </animated.div>
-        </StyledTableCell>
-      </TableRow>
+        </ExpandedCell>
+      </ExpandedRow>
     </>
   );
 }
