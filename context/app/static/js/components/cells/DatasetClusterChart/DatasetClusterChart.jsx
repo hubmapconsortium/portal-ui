@@ -57,9 +57,8 @@ function DatasetClusterChart({
     async function fetchCellClusterMatches() {
       const response = await new CellsService().getClusterCellMatchesInDataset({
         uuid,
-        name: cellVariableName,
+        cellVariableName,
         minExpression,
-        queryType,
       });
       setResults(response);
     }
@@ -77,7 +76,7 @@ function DatasetClusterChart({
   }
 
   if (Object.values(isLoading).some((val) => val)) {
-    return <StyledSkeleton variant="rectangular" />;
+    return <StyledSkeleton variant="rect" />;
   }
 
   return (

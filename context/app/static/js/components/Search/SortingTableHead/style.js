@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import ArrowUpward from '@material-ui/icons/ArrowUpwardRounded';
 import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
 
-import { HeaderCell } from 'js/shared-styles/Table';
+import { HeaderCell } from 'js/shared-styles/tables';
 
 const sharedArrowStyles = css`
   vertical-align: text-top;

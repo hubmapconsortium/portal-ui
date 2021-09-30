@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useStore } from 'js/shared-styles/Table/ExpandableRow/store';
+import { useStore } from 'js/shared-styles/tables/ExpandableRow/store';
 import { StyledTableCell } from './style';
 
 function ExpandableRowCell({ children }) {

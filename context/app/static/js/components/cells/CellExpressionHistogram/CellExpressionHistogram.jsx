@@ -18,7 +18,7 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
 
       const response = await new CellsService().getCellExpressionInDataset({
         uuid,
-        names: [cellVariableName],
+        cellVariableNames: [cellVariableName],
       });
       const t1 = performance.now();
       const timeWaiting = (t1 - t0) / 1000;
@@ -38,7 +38,7 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
   }, [uuid, cellVariableName, finishLoading, loadingKey, isExpanded]);
 
   if (Object.values(isLoading).some((val) => val)) {
-    return <StyledSkeleton variant="rectangular" />;
+    return <StyledSkeleton variant="rect" />;
   }
 
   return (

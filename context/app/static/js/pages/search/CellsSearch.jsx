@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { BoolMustNot, ExistsQuery } from 'searchkit';
 
 import DatasetSearchPrompt from 'js/components/tutorials/DatasetSearchPrompt';
 import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
 import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
-import { getAuthHeader } from 'js/helpers/functions';
+import { getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/Search/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/Search/config';
 import { listFilter } from 'js/components/Search/utils';
@@ -90,7 +89,7 @@ function Search(props) {
     queryFields: ['all_text', ...fieldsToHighlight],
     isLoggedIn: Boolean(nexusToken),
     apiUrl: elasticsearchEndpoint,
-    defaultQuery: BoolMustNot(ExistsQuery('next_revision_uuid')),
+    defaultQuery: getDefaultQuery(),
   };
 
   const wrappedSearch = <SearchWrapper {...searchProps} resultsComponent={Results} />;

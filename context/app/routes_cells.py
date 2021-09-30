@@ -94,15 +94,14 @@ def _get_cluster_name_and_number(cluster_str):
     return Cluster(name=cluster_name, number=cluster_number)
 
 
-def _get_cluster_cells(cells, query_type, name, min_expression):
+def _get_cluster_cells(cells=None, cell_variable_name=None, min_expression=None):
     '''
-    >>> cells = _get_cluster_cells([
+    >>> cells = _get_cluster_cells(cells=[
     ...         {
     ...             "clusters": [
     ...                 "cluster-method-a-1",
     ...                 "cluster-method-b-1"
     ...             ],
-    ...             "modality": "Z",
     ...             "values": {
     ...                 "VIM": 21.0
     ...             }
@@ -112,7 +111,6 @@ def _get_cluster_cells(cells, query_type, name, min_expression):
     ...                 "cluster-method-a-1",
     ...                 "cluster-method-b-2"
     ...             ],
-    ...             "modality": "Z",
     ...             "values": {
     ...                 "VIM": 12.0
     ...             }
@@ -122,37 +120,36 @@ def _get_cluster_cells(cells, query_type, name, min_expression):
     ...                 "cluster-method-a-1",
     ...                 "cluster-method-b-1"
     ...             ],
-    ...             "modality": "Z",
     ...             "values": {
     ...                 "VIM": 7.0
     ...             }
-    ...         }], 'gene', 'VIM', 10)
+    ...         }], cell_variable_name='VIM', min_expression=10)
     >>> import pprint
     >>> pprint.pprint(cells)
     [{'cluster_name': 'cluster-method-a',
       'cluster_number': '1',
       'meets_minimum_expression': True,
-      'modality': 'Z'},
+      'modality': None},
      {'cluster_name': 'cluster-method-b',
       'cluster_number': '1',
       'meets_minimum_expression': True,
-      'modality': 'Z'},
+      'modality': None},
      {'cluster_name': 'cluster-method-a',
       'cluster_number': '1',
       'meets_minimum_expression': True,
-      'modality': 'Z'},
+      'modality': None},
      {'cluster_name': 'cluster-method-b',
       'cluster_number': '2',
       'meets_minimum_expression': True,
-      'modality': 'Z'},
+      'modality': None},
      {'cluster_name': 'cluster-method-a',
       'cluster_number': '1',
       'meets_minimum_expression': False,
-      'modality': 'Z'},
+      'modality': None},
      {'cluster_name': 'cluster-method-b',
       'cluster_number': '1',
       'meets_minimum_expression': False,
-      'modality': 'Z'}]
+      'modality': None}]
     '''
     cluster_cells = []
     for cell in cells:
@@ -161,16 +158,15 @@ def _get_cluster_cells(cells, query_type, name, min_expression):
             cluster_cell = {'cluster_name': cluster_name,
                             'cluster_number': cluster_number,
                             'meets_minimum_expression':
-                            cell['values'][name] >= min_expression}
-            if query_type == 'gene':
-                cluster_cell['modality'] = cell['modality']
+                            cell['values'][cell_variable_name] >= min_expression,
+                            'modality': cell.get('modality')}
             cluster_cells.append(cluster_cell)
     return cluster_cells
 
 
-def _get_matched_cell_counts_per_cluster(cells, query_type):
+def _get_matched_cell_counts_per_cluster(cells):
     '''
-    >>> clusters = _get_matched_cell_counts_per_cluster([
+    >>> clusters = _get_matched_cell_counts_per_cluster(cells=[
     ...         {
     ...             'modality': 'Z',
     ...             'cluster_name': 'cluster-method-a',
@@ -220,9 +216,7 @@ def _get_matched_cell_counts_per_cluster(cells, query_type):
                            'modality': 'Z',
                            'unmatched': 0}]}
     '''
-    group_keys = ["cluster_name", "cluster_number"]
-    if query_type == 'gene':
-        group_keys.append('modality')
+    group_keys = ["cluster_name", "cluster_number", "modality"]
     grouper = itemgetter(*group_keys)
     clusters = defaultdict(lambda: [])
     for key, grp in groupby(sorted(cells, key=grouper), grouper):
@@ -251,7 +245,7 @@ def proteins_by_substring():
 
 @blueprint.route('/cells/datasets-selected-by-<target_entity>.json', methods=['POST'])
 def datasets_selected_by_level(target_entity):
-    names = request.args.getlist('name')
+    cell_variable_names = request.args.getlist('cell_variable_name')
     modality = request.args.get('modality')
     min_expression = request.args.get('min_expression')
     min_cell_percentage = request.args.get('min_cell_percentage')
@@ -261,7 +255,8 @@ def datasets_selected_by_level(target_entity):
     try:
         dataset_set = client.select_datasets(
             where=target_entity,
-            has=[f'{name} > {min_expression}' for name in names],
+            has=[f'{name} > {min_expression}'
+                 for name in cell_variable_names],
             genomic_modality=modality,
             min_cell_percentage=min_cell_percentage
         )
@@ -301,14 +296,14 @@ def cell_expression_in_dataset():
     # and then showing expression levels for the two groups, but that’s not needed.)
 
     uuid = request.args.get('uuid')
-    names = request.args.getlist('names')
+    cell_variable_names = request.args.getlist('cell_variable_names')
 
     client = _get_client(current_app)
 
     try:
         cells = client.select_cells(where='dataset', has=[uuid])
         # list() will call iterator behind the scenes.
-        return {'results': list(cells.get_list(values_included=names))}
+        return {'results': list(cells.get_list(values_included=cell_variable_names))}
 
     except Exception as e:
         return {'message': str(e)}
@@ -337,19 +332,19 @@ def cells_in_dataset_clusters():
     # and then showing expression levels for the two groups, but that’s not needed.)
 
     uuid = request.args.get('uuid')
-    name = request.args.get('name')
-    query_type = request.args.get('query_type')
+    cell_variable_name = request.args.get('cell_variable_name')
     min_expression = request.args.get('min_expression')
     client = _get_client(current_app)
 
     try:
         cells = client.select_cells(where='dataset', has=[uuid])
-        cells_list = cells.get_list(values_included=name)
+        cells_list = cells.get_list(values_included=cell_variable_name)
 
         return {'results':
                 _get_matched_cell_counts_per_cluster(
-                    _get_cluster_cells(cells_list, query_type, name,
-                                       float(min_expression)), query_type)}
+                    cells=_get_cluster_cells(cells=cells_list,
+                                             cell_variable_name=cell_variable_name,
+                                             min_expression=float(min_expression)))}
 
     except Exception as e:
         return {'message': str(e)}
