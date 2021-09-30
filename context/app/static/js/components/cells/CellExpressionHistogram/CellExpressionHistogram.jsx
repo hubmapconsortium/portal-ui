@@ -37,7 +37,11 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
     }
   }, [uuid, cellVariableName, finishLoading, loadingKey, isExpanded]);
 
-  return Object.values(isLoading).every((val) => !val) ? (
+  if (Object.values(isLoading).some((val) => val)) {
+    return <StyledSkeleton variant="rectangular" />;
+  }
+
+  return (
     <>
       <Typography>
         {diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for {diagnosticInfo.numCells} cells.
@@ -53,8 +57,6 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
         barColor={theme.palette.success.main}
       />
     </>
-  ) : (
-    <StyledSkeleton variant="rectangular" />
   );
 }
 

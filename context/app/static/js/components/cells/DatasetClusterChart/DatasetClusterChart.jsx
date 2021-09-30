@@ -76,7 +76,11 @@ function DatasetClusterChart({
     setSelectedClusterTypeIndex(i);
   }
 
-  return Object.values(isLoading).every((val) => !val) ? (
+  if (Object.values(isLoading).some((val) => val)) {
+    return <StyledSkeleton variant="rectangular" />;
+  }
+
+  return (
     <>
       <DropdownListbox
         id="bar-fill-dropdown"
@@ -103,9 +107,6 @@ function DatasetClusterChart({
         }}
       />
     </>
-  ) : (
-    <StyledSkeleton variant="rectangular" />
   );
 }
-
 export default DatasetClusterChart;
