@@ -1,3 +1,8 @@
+## v0.28.3 - 2021-09-30
+
+- Fix organ page request loop in samples table.
+
+
 ## v0.28.2 - 2021-09-30
 
 - Add Uberon ID to organ list.
