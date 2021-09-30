@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/core/Slider';
 import FormLabel from '@material-ui/core/FormLabel';
 
+import { getDefaultQuery } from 'js/helpers/functions';
 import LogSliderWrapper from 'js/components/cells/LogSliderWrapper';
 import CellsService from 'js/components/cells/CellsService';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
@@ -51,15 +52,7 @@ function DatasetsSelectedByExpression({
   }
   const query = useMemo(() => {
     return {
-      query: {
-        bool: {
-          must_not: {
-            exists: {
-              field: 'next_revision_uuid',
-            },
-          },
-        },
-      },
+      query: getDefaultQuery(),
       post_filter: {
         bool: {
           must: [

@@ -1,6 +1,5 @@
 import React from 'react';
 
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 
@@ -11,7 +10,6 @@ function Description(props) {
 
   return (
     <SectionContainer>
-      <SectionHeader>Description</SectionHeader>
       <StyledPaper>
         <p>{children}</p>
         <p>

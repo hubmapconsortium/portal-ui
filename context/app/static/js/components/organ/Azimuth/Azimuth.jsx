@@ -12,25 +12,26 @@ import { StyledPaper } from './style';
 
 function Azimuth(props) {
   const { config } = props;
-  const dataRefHtml = marked(config.dataref);
+  const dataRefHtml = marked.parseInline(config.dataref);
 
   return (
     <SectionContainer>
-      TODO: Add info popover.
       <SpacedSectionButtonRow
         leftText={<SectionHeader>Reference-Based Analysis</SectionHeader>}
         buttons={<OutboundLinkButton href={config.applink}>Open Azimuth App</OutboundLinkButton>}
       />
       <StyledPaper>
-        TODO: Fix formatting
         <LabelledSectionText label="Modalities">{config.modalities}</LabelledSectionText>
         <LabelledSectionText label="Nuclei in reference">{config.nunit}</LabelledSectionText>
         {/* eslint-disable react/no-danger */}
         <LabelledSectionText label="Reference dataset">
-          <div dangerouslySetInnerHTML={{ __html: dataRefHtml }} />
+          <span dangerouslySetInnerHTML={{ __html: dataRefHtml }} />
         </LabelledSectionText>
       </StyledPaper>
-      TODO: Refactor so that can get the spinner without the a title?
+
+      {/* TODO: Refactor so "Visualization" is not included... */}
+      {/* TODO: ... and then remove the <br> as well. */}
+      <br />
       <VisualizationWrapper vitData={config.vitessce_conf} />
     </SectionContainer>
   );

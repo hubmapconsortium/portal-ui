@@ -69,3 +69,15 @@ export function tableToDelimitedString(rows, colNames, d) {
 export function createDownloadUrl(fileStr, fileType) {
   return window.URL.createObjectURL(new Blob([fileStr], { type: fileType }));
 }
+
+export function getDefaultQuery() {
+  return {
+    bool: {
+      must_not: {
+        exists: {
+          field: 'next_revision_uuid',
+        },
+      },
+    },
+  };
+}
