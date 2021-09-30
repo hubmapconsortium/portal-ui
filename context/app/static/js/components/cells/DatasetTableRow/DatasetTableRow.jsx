@@ -4,8 +4,7 @@ import format from 'date-fns/format';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
-import DatasetClusterChart from 'js/components/cells/DatasetClusterChart';
-import CellExpressionHistogram from 'js/components/cells/CellExpressionHistogram';
+import CellsCharts from 'js/components/cells/CellsCharts';
 
 function UnitValueCell({ unit, value }) {
   return <ExpandableRowCell>{`${value} ${unit}`}</ExpandableRowCell>;
@@ -16,12 +15,7 @@ function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpre
   return (
     <ExpandableRow
       numCells={numCells}
-      expandedContent={
-        <div>
-          <CellExpressionHistogram uuid={uuid} cellVariableName={cellVariableName} />
-          <DatasetClusterChart uuid={uuid} cellVariableName={cellVariableName} minExpression={minExpression} />
-        </div>
-      }
+      expandedContent={<CellsCharts uuid={uuid} cellVariableName={cellVariableName} minExpression={minExpression} />}
     >
       <ExpandableRowCell>
         <LightBlueLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</LightBlueLink>

@@ -1,0 +1,1 @@
+- Add loaders to cells page.

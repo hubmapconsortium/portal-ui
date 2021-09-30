@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useTheme } from '@material-ui/core/styles';
 
@@ -9,11 +8,22 @@ import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOpt
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalStackedBarChart';
 import CellsService from 'js/components/cells/CellsService';
 
-function DatasetClusterChart({ uuid, cellVariableName, minExpression }) {
+import { StyledSkeleton } from 'js/components/cells/CellsCharts/style';
+
+function DatasetClusterChart({
+  uuid,
+  cellVariableName,
+  minExpression,
+  isLoading,
+  finishLoading,
+  loadingKey,
+  isExpanded,
+}) {
   const [results, setResults] = useState({});
   const [scales, setScales] = useState({});
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useState(0);
   const theme = useTheme();
+  const loadedOnce = useRef(false);
 
   useEffect(() => {
     if (Object.keys(results).length) {
@@ -33,8 +43,9 @@ function DatasetClusterChart({ uuid, cellVariableName, minExpression }) {
         yScale,
         xScale,
       });
+      finishLoading(loadingKey);
     }
-  }, [setScales, results, selectedClusterTypeIndex]);
+  }, [setScales, results, selectedClusterTypeIndex, finishLoading, loadingKey]);
 
   const colorScale = scaleOrdinal({
     domain: ['matched', 'unmatched'],
@@ -50,14 +61,24 @@ function DatasetClusterChart({ uuid, cellVariableName, minExpression }) {
       });
       setResults(response);
     }
-    fetchCellClusterMatches();
-  }, [cellVariableName, minExpression, uuid]);
+    if (loadedOnce.current) {
+      return;
+    }
+    if (isExpanded) {
+      fetchCellClusterMatches();
+      loadedOnce.current = true;
+    }
+  }, [cellVariableName, isExpanded, minExpression, uuid]);
 
   function handleSelectClusterType({ i }) {
     setSelectedClusterTypeIndex(i);
   }
 
-  return Object.keys(scales).length ? (
+  if (Object.values(isLoading).some((val) => val)) {
+    return <StyledSkeleton variant="rect" />;
+  }
+
+  return (
     <>
       <DropdownListbox
         id="bar-fill-dropdown"
@@ -70,8 +91,6 @@ function DatasetClusterChart({ uuid, cellVariableName, minExpression }) {
         buttonProps={{ variant: 'outlined' }}
       />
       <VerticalStackedBarChart
-        parentWidth={500}
-        parentHeight={500}
         visxData={scales.selectedData}
         yScale={scales.yScale}
         xScale={scales.xScale}
@@ -82,13 +101,10 @@ function DatasetClusterChart({ uuid, cellVariableName, minExpression }) {
           top: 50,
           right: 50,
           left: 50,
-          bottom: 50,
+          bottom: 60, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
         }}
       />
     </>
-  ) : (
-    <Typography>Please wait for cluster chart...</Typography>
   );
 }
-
 export default DatasetClusterChart;

@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useTheme } from '@material-ui/core/styles';
 
 import Histogram from 'js/shared-styles/charts/Histogram';
 import CellsService from 'js/components/cells/CellsService';
+import { StyledSkeleton } from 'js/components/cells/CellsCharts/style';
 
-function CellExpressionHistogram({ uuid, cellVariableName }) {
+function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoading, loadingKey, isExpanded }) {
   const [expressionData, setExpressionData] = useState([]);
   const [diagnosticInfo, setDiagnosticInfo] = useState({});
   const theme = useTheme();
+  const loadedOnce = useRef(false);
 
   useEffect(() => {
     async function fetchCellExpression() {
@@ -23,18 +25,28 @@ function CellExpressionHistogram({ uuid, cellVariableName }) {
       const numCells = response.length;
       setDiagnosticInfo({ numCells, timeWaiting });
       setExpressionData(response.map((d) => d.values[cellVariableName]));
+      finishLoading(loadingKey);
     }
-    fetchCellExpression();
-  }, [uuid, cellVariableName]);
+    if (loadedOnce.current) {
+      return;
+    }
 
-  return expressionData.length ? (
+    if (isExpanded) {
+      fetchCellExpression();
+      loadedOnce.current = true;
+    }
+  }, [uuid, cellVariableName, finishLoading, loadingKey, isExpanded]);
+
+  if (Object.values(isLoading).some((val) => val)) {
+    return <StyledSkeleton variant="rect" />;
+  }
+
+  return (
     <>
       <Typography>
         {diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for {diagnosticInfo.numCells} cells.
       </Typography>
       <Histogram
-        parentHeight={500}
-        parentWidth={500}
         visxData={expressionData}
         margin={{
           top: 50,
@@ -45,8 +57,6 @@ function CellExpressionHistogram({ uuid, cellVariableName }) {
         barColor={theme.palette.success.main}
       />
     </>
-  ) : (
-    <Typography>Please wait for histogram...</Typography>
   );
 }
 
