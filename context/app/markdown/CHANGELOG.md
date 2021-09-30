@@ -1,3 +1,12 @@
+## v0.28.2 - 2021-09-30
+
+- Add Uberon ID to organ list.
+- Get the organ pages into an acceptable state and link from the Atlas menu.
+- Add protein queries to cells UI.
+- Add a story for EntitiesTable.
+- Upgrade Vitessce to 1.1.15.
+
+
 ## v0.28.1 - 2021-09-28
 
 - Bump to ccf 2.3.5.
