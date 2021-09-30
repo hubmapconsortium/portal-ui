@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -19,36 +19,39 @@ function Assays(props) {
   const { searchTerms } = props;
   const searchUrl = getSearchURL('Dataset', searchTerms);
 
-  const query = {
-    size: 0,
-    query: getDefaultQuery(),
-    aggs: {
-      mapped_data_types: {
-        filter: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entity_type.keyword': 'Dataset',
+  const query = useMemo(
+    () => ({
+      size: 0,
+      query: getDefaultQuery(),
+      aggs: {
+        mapped_data_types: {
+          filter: {
+            bool: {
+              must: [
+                {
+                  term: {
+                    'entity_type.keyword': 'Dataset',
+                  },
                 },
-              },
-              {
-                bool: {
-                  should: searchTerms.map((searchTerm) => ({
-                    term: { 'origin_sample.mapped_organ.keyword': searchTerm },
-                  })),
+                {
+                  bool: {
+                    should: searchTerms.map((searchTerm) => ({
+                      term: { 'origin_sample.mapped_organ.keyword': searchTerm },
+                    })),
+                  },
                 },
-              },
-            ],
+              ],
+            },
+          },
+          aggs: {
+            'mapped_data_types.keyword': { terms: { field: 'mapped_data_types.keyword', size: 100 } },
+            'mapped_data_types.keyword_count': { cardinality: { field: 'mapped_data_types.keyword' } },
           },
         },
-        aggs: {
-          'mapped_data_types.keyword': { terms: { field: 'mapped_data_types.keyword', size: 100 } },
-          'mapped_data_types.keyword_count': { cardinality: { field: 'mapped_data_types.keyword' } },
-        },
       },
-    },
-  };
+    }),
+    [searchTerms],
+  );
 
   const { searchData } = useSearchData(query);
   const buckets = searchData.aggregations

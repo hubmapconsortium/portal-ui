@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import format from 'date-fns/format';
 
 import TableCell from '@material-ui/core/TableCell';
@@ -29,26 +29,31 @@ function Samples(props) {
     { id: 'last_modified_timestamp', label: 'Last Modified' },
   ];
 
-  const query = {
-    query: getDefaultQuery(),
-    post_filter: {
-      bool: {
-        must: [
-          {
-            term: {
-              'entity_type.keyword': 'Sample',
+  const query = useMemo(
+    () => ({
+      query: getDefaultQuery(),
+      post_filter: {
+        bool: {
+          must: [
+            {
+              term: {
+                'entity_type.keyword': 'Sample',
+              },
             },
-          },
-          {
-            bool: {
-              should: searchTerms.map((searchTerm) => ({ term: { 'origin_sample.mapped_organ.keyword': searchTerm } })),
+            {
+              bool: {
+                should: searchTerms.map((searchTerm) => ({
+                  term: { 'origin_sample.mapped_organ.keyword': searchTerm },
+                })),
+              },
             },
-          },
-        ],
+          ],
+        },
       },
-    },
-    _source: columns.map((column) => column.id),
-  };
+      _source: columns.map((column) => column.id),
+    }),
+    [columns, searchTerms],
+  );
 
   const { searchHits } = useSearchHits(query);
 

@@ -29,7 +29,8 @@ function Azimuth(props) {
         </LabelledSectionText>
       </StyledPaper>
 
-      {/* Need to refactor so "Visualization" is not included. */}
+      {/* TODO: Refactor so "Visualization" is not included... */}
+      {/* TODO: ... and then remove the <br> as well. */}
       <br />
       <VisualizationWrapper vitData={config.vitessce_conf} />
     </SectionContainer>
