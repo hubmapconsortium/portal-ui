@@ -14,7 +14,6 @@ function DatasetClusterChart({
   uuid,
   cellVariableName,
   minExpression,
-  queryType,
   isLoading,
   finishLoading,
   loadingKey,
@@ -69,7 +68,7 @@ function DatasetClusterChart({
       fetchCellClusterMatches();
       loadedOnce.current = true;
     }
-  }, [cellVariableName, isExpanded, minExpression, queryType, uuid]);
+  }, [cellVariableName, isExpanded, minExpression, uuid]);
 
   function handleSelectClusterType({ i }) {
     setSelectedClusterTypeIndex(i);

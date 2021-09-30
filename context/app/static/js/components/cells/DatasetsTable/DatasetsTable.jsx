@@ -22,7 +22,7 @@ const columns = [
   { id: 'expand', label: '' },
 ];
 
-function DatasetsTable({ datasets, minExpression, cellVariableName, queryType, completeStep }) {
+function DatasetsTable({ datasets, minExpression, cellVariableName, completeStep }) {
   useEffect(() => {
     completeStep(`${datasets.length} Datasets Matching Query Parameters`);
   }, [completeStep, datasets]);
@@ -50,7 +50,6 @@ function DatasetsTable({ datasets, minExpression, cellVariableName, queryType, c
                   key={_source.hubmap_id}
                   minExpression={minExpression}
                   cellVariableName={cellVariableName}
-                  queryType={queryType}
                 />
               ))}
             </TableBody>
