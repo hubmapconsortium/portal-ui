@@ -16,18 +16,18 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 
 import { getSearchURL } from '../utils';
 
+const columns = [
+  { id: 'hubmap_id', label: 'Sample' },
+  { id: 'donor.mapped_metadata.age_value', label: 'Donor Age' },
+  { id: 'donor.mapped_metadata.sex', label: 'Donor Sex' },
+  { id: 'donor.mapped_metadata.race', label: 'Donor Race' },
+  { id: 'descendant_counts.entity_type.Dataset', label: 'Derived Dataset Count' },
+  { id: 'last_modified_timestamp', label: 'Last Modified' },
+];
+
 function Samples(props) {
   const { searchTerms } = props;
   const searchUrl = getSearchURL('Sample', searchTerms);
-
-  const columns = [
-    { id: 'hubmap_id', label: 'Sample' },
-    { id: 'donor.mapped_metadata.age_value', label: 'Donor Age' },
-    { id: 'donor.mapped_metadata.sex', label: 'Donor Sex' },
-    { id: 'donor.mapped_metadata.race', label: 'Donor Race' },
-    { id: 'descendant_counts.entity_type.Dataset', label: 'Derived Dataset Count' },
-    { id: 'last_modified_timestamp', label: 'Last Modified' },
-  ];
 
   const query = useMemo(
     () => ({
@@ -52,7 +52,7 @@ function Samples(props) {
       },
       _source: columns.map((column) => column.id),
     }),
-    [columns, searchTerms],
+    [searchTerms],
   );
 
   const { searchHits } = useSearchHits(query);
