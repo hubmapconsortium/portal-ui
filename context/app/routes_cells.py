@@ -197,7 +197,7 @@ def _get_matched_cell_counts_per_cluster(cells):
     ...             'cluster_name': 'cluster-method-b',
     ...             'cluster_number': '1', 'meets_minimum_expression': False
     ...         },
-    ...     ], 'gene')
+    ...     ])
     >>> import pprint
     >>> pprint.pprint(dict(clusters))
     {'cluster-method-a': [{'cluster_name': 'cluster-method-a',
