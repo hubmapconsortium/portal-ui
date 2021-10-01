@@ -10,17 +10,19 @@ from itertools import groupby
 import re
 from typing import DefaultDict
 
+from jsonschema import validate
 import requests
 from yaml import dump, safe_load
 import json
 
 
 def main():
+    repo_path = Path(__file__).resolve().parent.parent
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
         '--target',
         type=dir_path,
-        default=Path(__file__).resolve().parent.parent / 'context/app/organ',
+        default=repo_path / 'context/app/organ',
         help='Target directory for markdown files')
     parser.add_argument(
         '--elasticsearch_url',
@@ -66,6 +68,11 @@ def main():
         for data in merged_data.values()
     ]
     DirectoryWriter(args.target, organs).write()
+    organ_schema = safe_load((Path(__file__).parent / 'organ-schema.yaml').read_text())
+    for p in (repo_path / 'context/app/organ').glob('*.yaml'):
+        organ = safe_load(p.read_text())
+        validate(instance=organ, schema=organ_schema)
+
 
 
 def merge_data(**kwargs):
