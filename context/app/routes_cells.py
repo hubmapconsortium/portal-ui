@@ -164,7 +164,7 @@ def _get_cluster_cells(cells=None, cell_variable_name=None, min_expression=None)
     return cluster_cells
 
 
-def _get_matched_cell_counts_per_cluster(cells, query_type):
+def _get_matched_cell_counts_per_cluster(cells):
     '''
     >>> clusters = _get_matched_cell_counts_per_cluster(cells=[
     ...         {
@@ -197,7 +197,7 @@ def _get_matched_cell_counts_per_cluster(cells, query_type):
     ...             'cluster_name': 'cluster-method-b',
     ...             'cluster_number': '1', 'meets_minimum_expression': False
     ...         },
-    ...     ], 'gene')
+    ...     ])
     >>> import pprint
     >>> pprint.pprint(dict(clusters))
     {'cluster-method-a': [{'cluster_name': 'cluster-method-a',
