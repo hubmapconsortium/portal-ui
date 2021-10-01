@@ -74,8 +74,11 @@ function DatasetDetail(props) {
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
+  // source_sample seems to be an array, but that seems strange,
+  // and we don't have good constraints on document structure,
+  // so we'll be flexible.
+  const sampleMetadata = (source_sample?.[0] || source_sample)?.metadata || {};
   const donorMetadata = donor?.mapped_metadata || {};
-  const sampleMetadata = source_sample[0]?.metadata || {};
   const combinedMetadata = {
     ...metadata.metadata,
     ...Object.fromEntries(Object.entries(sampleMetadata).map(([key, value]) => [`sample.${key}`, value])),
