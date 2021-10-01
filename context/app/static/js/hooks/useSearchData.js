@@ -40,7 +40,7 @@ function useSearchData(query) {
 
 function useSearchHits(query) {
   const { searchData, isLoading } = useSearchData(query);
-  const searchHits = searchData?.hits?.hits || {};
+  const searchHits = searchData?.hits?.hits || [];
   return { searchHits, isLoading };
 }
 

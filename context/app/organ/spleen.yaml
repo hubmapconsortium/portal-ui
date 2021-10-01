@@ -1,13 +1,8 @@
-title: Spleen
-search: true
-asctb:
-- label: spleen
-  anatomy:
-    spleen: http://purl.obolibrary.org/obo/UBERON_0002106
-    colic surface of spleen: http://purl.org/sig/ont/fma/fma15838
-    diaphragmatic surface of spleen: http://purl.org/sig/ont/fma/fma15828
-    gastric surface of spleen: http://purl.org/sig/ont/fma/fma15837
-    hilum of spleen: http://purl.obolibrary.org/obo/UBERON_0001248
-    renal surface of spleen: http://purl.org/sig/ont/fma/fma15839
-  glb_url: https://hubmapconsortium.github.io/ccf-releases/v1.0/models/VH_M_Spleen
-  sex: Male
+name: Spleen
+uberon: http://purl.obolibrary.org/obo/UBERON_0002106
+uberon_short: UBERON_0002106
+description: The organ that functions to filter blood and to store red corpuscles
+  and platelets.
+has_iu_component: true
+search:
+- Spleen

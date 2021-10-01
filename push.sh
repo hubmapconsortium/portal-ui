@@ -13,8 +13,9 @@ git submodule foreach '
   git pull
   echo "now:" `git rev-parse HEAD`
 '
+organ-utils/make_organ_dir.py
 git add .
-git commit -m 'Update submodules' || echo 'Nothing to commit; Continue to git push...'
+git commit -m 'Update submodules and organs' || echo 'Nothing to commit; Continue to git push...'
 
 get_minor_version() {
   REF_MINOR=$1

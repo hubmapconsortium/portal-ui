@@ -4,10 +4,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 
-import { HeaderCell } from 'js/shared-styles/Table';
+import { HeaderCell } from 'js/shared-styles/tables';
 import { StyledDiv } from './style';
 
-function DerivedEntitiesTable({ columns, children }) {
+function EntitiesTable({ columns, children }) {
   return (
     <StyledDiv>
       <Table stickyHeader>
@@ -24,4 +24,4 @@ function DerivedEntitiesTable({ columns, children }) {
   );
 }
 
-export default DerivedEntitiesTable;
+export default EntitiesTable;

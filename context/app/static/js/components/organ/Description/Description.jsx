@@ -1,17 +1,21 @@
 import React from 'react';
 
-import Paper from '@material-ui/core/Paper';
-
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+
+import { StyledPaper } from './style';
 
 function Description(props) {
-  const { description } = props;
+  const { children, uberonIri, uberonShort } = props;
 
   return (
     <SectionContainer>
-      <SectionHeader>Description</SectionHeader>
-      <Paper>TODO: {description}</Paper>
+      <StyledPaper>
+        <p>{children}</p>
+        <p>
+          Uberon: <OutboundLink href={uberonIri}>{uberonShort}</OutboundLink>
+        </p>
+      </StyledPaper>
     </SectionContainer>
   );
 }

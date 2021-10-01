@@ -56,12 +56,11 @@ function Cells() {
                 datasets={results}
                 minExpression={10 ** minExpressionLog}
                 cellVariableName={cellVariableNames[0]}
-                queryType={queryType}
               />
             ),
           },
         ]}
-        openFirstStep
+        isFirstStepOpen
       />
     </>
   );

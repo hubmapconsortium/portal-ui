@@ -1,0 +1,8 @@
+name: Pelvis
+uberon: http://purl.obolibrary.org/obo/UBERON_0001270
+uberon_short: UBERON_0001270
+description: A ring of bone formed by the sacrum and the first few coccygeal vertebrae
+  as the roof, the pubis and ischia as the floor and the ilia and the acetabular part
+  of the ischia as the walls.
+has_iu_component: true
+search: []

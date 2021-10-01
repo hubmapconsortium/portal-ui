@@ -18,7 +18,7 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
 
       const response = await new CellsService().getCellExpressionInDataset({
         uuid,
-        names: [cellVariableName],
+        cellVariableNames: [cellVariableName],
       });
       const t1 = performance.now();
       const timeWaiting = (t1 - t0) / 1000;
@@ -37,7 +37,11 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
     }
   }, [uuid, cellVariableName, finishLoading, loadingKey, isExpanded]);
 
-  return Object.values(isLoading).every((val) => !val) ? (
+  if (Object.values(isLoading).some((val) => val)) {
+    return <StyledSkeleton variant="rect" />;
+  }
+
+  return (
     <>
       <Typography>
         {diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for {diagnosticInfo.numCells} cells.
@@ -53,8 +57,6 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
         barColor={theme.palette.success.main}
       />
     </>
-  ) : (
-    <StyledSkeleton variant="rectangular" />
   );
 }
 

@@ -13,6 +13,7 @@ const ChartWrapper = styled.div`
   margin: 0px 10px;
   width: 0px;
 `;
+
 const StyledSkeleton = styled(Skeleton)`
   height: 100%;
   width: 100%;
