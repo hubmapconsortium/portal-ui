@@ -13,7 +13,7 @@ properties:
   has_iu_component:
     type: boolean
   search:
-    # May be 0 length.
+    # Array may be empty.
     type: array
     items: 
       type: string
