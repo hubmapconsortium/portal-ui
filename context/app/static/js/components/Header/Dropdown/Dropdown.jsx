@@ -34,7 +34,6 @@ function Dropdown(props) {
 Dropdown.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
-  menuListId: PropTypes.string.isRequired,
 };
 
 export default Dropdown;
