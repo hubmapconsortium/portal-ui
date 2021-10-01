@@ -54,6 +54,8 @@ function DatasetDetail(props) {
     protocol_url,
     metadata,
     files,
+    donor,
+    source_sample,
     uuid,
     data_types,
     mapped_data_types,
@@ -72,6 +74,14 @@ function DatasetDetail(props) {
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
+  const donorMetadata = donor?.mapped_metadata || {};
+  const sampleMetadata = source_sample[0]?.metadata || {};
+  const combinedMetadata = {
+    ...metadata.metadata,
+    ...Object.fromEntries(Object.entries(sampleMetadata).map(([key, value]) => [`sample.${key}`, value])),
+    ...Object.fromEntries(Object.entries(donorMetadata).map(([key, value]) => [`donor.${key}`, value])),
+  };
+
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   const allCollections = useCollectionsData(elasticsearchEndpoint, nexusToken);
@@ -81,7 +91,7 @@ function DatasetDetail(props) {
     provenance: entity_type !== 'Support',
     visualization: Boolean(vitData),
     protocols: Boolean(protocol_url),
-    metadata: metadata && 'metadata' in metadata,
+    metadata: Boolean(Object.keys(combinedMetadata).length),
     files: true,
     collections: Boolean(collectionsData.length),
   };
@@ -137,7 +147,7 @@ function DatasetDetail(props) {
         )}
         {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
         <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         <Attribution
