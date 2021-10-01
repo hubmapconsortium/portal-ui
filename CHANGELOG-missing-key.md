@@ -1,0 +1,1 @@
+- React warnings: Add missing key in repeated component, and remove required prop.

@@ -50,7 +50,7 @@ function Menu(props) {
               ['Atlas & Tools', AtlasToolsLinks],
               ['Documentation', DocumentationLinks],
             ].map(([label, Component]) => (
-              <DropdownContainer label={label}>
+              <DropdownContainer label={label} key={label}>
                 <Component isIndented />
               </DropdownContainer>
             ))}
