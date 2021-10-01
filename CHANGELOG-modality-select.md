@@ -1,0 +1,1 @@
+- Add drop down to allow users to select genomic modality in cells query.
