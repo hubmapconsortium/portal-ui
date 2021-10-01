@@ -34,8 +34,6 @@ function Dropdown(props) {
 Dropdown.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
-  // eslint-disable-next-line react/require-default-props
-  menuListId: PropTypes.string,
 };
 
 export default Dropdown;
