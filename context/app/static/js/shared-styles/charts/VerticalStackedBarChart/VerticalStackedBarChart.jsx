@@ -6,7 +6,10 @@ import { withParentSize } from '@visx/responsive';
 import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { GridRows } from '@visx/grid';
 import { localPoint } from '@visx/event';
+import { LegendOrdinal } from '@visx/legend';
 import Typography from '@material-ui/core/Typography';
+
+import { TitleAndLegendWrapper, CenteredFlex } from './style';
 
 function VerticalStackedBarChart({
   parentWidth,
@@ -18,6 +21,9 @@ function VerticalStackedBarChart({
   getX,
   keys,
   margin,
+  xAxisLabel,
+  yAxisLabel,
+  chartTitle,
 }) {
   const [hoveredBarIndices, setHoveredBarIndices] = useState();
 
@@ -54,8 +60,21 @@ function VerticalStackedBarChart({
 
   return (
     <div>
+      <TitleAndLegendWrapper $leftOffset={margin.left - margin.right}>
+        {chartTitle && <Typography>{chartTitle}</Typography>}
+        <CenteredFlex>
+          <LegendOrdinal
+            scale={colorScale}
+            direction="row"
+            labelMargin="0 15px 0 0"
+            shapeStyle={() => ({
+              borderRadius: '3px',
+            })}
+          />
+        </CenteredFlex>
+      </TitleAndLegendWrapper>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
-        <GridRows top={margin.top + 1} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.38} />
+        <GridRows top={margin.top + 1} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.2} />
         <Group top={margin.top} left={margin.left}>
           <BarStack
             data={visxData}
@@ -97,6 +116,7 @@ function VerticalStackedBarChart({
           <AxisLeft
             hideTicks
             scale={yScale}
+            label={yAxisLabel}
             stroke="black"
             tickLabelProps={() => ({
               fill: 'black',
@@ -104,11 +124,15 @@ function VerticalStackedBarChart({
               textAnchor: 'end',
               dy: '0.33em',
             })}
+            labelProps={{
+              fontSize: 12,
+            }}
           />
           <AxisBottom
             hideTicks
             top={yHeight}
             scale={xScale}
+            label={xAxisLabel}
             stroke="black"
             tickStroke="black"
             numTicks={Object.keys(visxData).length}
@@ -117,6 +141,10 @@ function VerticalStackedBarChart({
               fontSize: 11,
               textAnchor: 'middle',
             })}
+            labelProps={{
+              fontSize: 12,
+              textAnchor: 'middle',
+            }}
           />
         </Group>
       </svg>

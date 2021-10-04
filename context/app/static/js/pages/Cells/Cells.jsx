@@ -61,7 +61,7 @@ function Cells() {
             ),
           },
         ]}
-        openFirstStep
+        isFirstStepOpen
       />
     </>
   );

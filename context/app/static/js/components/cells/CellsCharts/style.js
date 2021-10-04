@@ -3,7 +3,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 const Flex = styled.div`
   display: flex;
-  height: 400px;
+  height: 500px;
 `;
 
 const ChartWrapper = styled.div`

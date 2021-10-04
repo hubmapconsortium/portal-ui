@@ -26,7 +26,7 @@ const StyledAccordionSummary = styled(AccordionSummary)`
 `;
 
 const SuccessIcon = styled(CheckCircleRoundedIcon)`
-  color: ${(props) => props.theme.palette.success.main};
+  color: ${(props) => props.theme.palette.success.light};
   font-size: ${iconHeight};
 `;
 

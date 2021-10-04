@@ -33,7 +33,7 @@ function DatasetsTable({ datasets, minExpression, cellVariableName, queryType, c
   return transitions.map(
     ({ item, key, props }) =>
       item && (
-        <animated.div key={key} style={props}>
+        <animated.div key={key} style={{ ...props, width: '100%' }}>
           <Table stickyHeader ref={heightRef}>
             <TableHead>
               <TableRow>
