@@ -15,14 +15,18 @@ import { FlexRow, Content } from './style';
 function Organ(props) {
   const { organ } = props;
 
+  const [descriptionId, organInfoId, azimuthId, searchId] = ['description', 'organ info', 'azimuth', 'search'];
+
   const shouldDisplaySection = {
-    description: Boolean(organ?.description),
-    organInfo: organ.has_iu_component,
-    azimuth: Boolean(organ?.azimuth),
-    search: organ.search.length > 0,
+    [descriptionId]: Boolean(organ?.description),
+    [organInfoId]: organ.has_iu_component,
+    [azimuthId]: Boolean(organ?.azimuth),
+    [searchId]: organ.search.length > 0,
   };
 
-  const sectionOrder = ['Description', 'Organ Info', 'Azimuth', 'Search'];
+  const sectionOrder = Object.entries(shouldDisplaySection)
+    .filter(([, shouldDisplay]) => shouldDisplay)
+    .map(([sectionName]) => sectionName);
   const sections = new Map(getSections(sectionOrder));
 
   return (
@@ -32,18 +36,28 @@ function Organ(props) {
         <SectionHeader variant="h1" component="h1">
           {organ.name}
         </SectionHeader>
-        {shouldDisplaySection.description && (
-          <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short}>
-            {organ.description}
-          </Description>
+        {shouldDisplaySection[descriptionId] && (
+          <div id={descriptionId}>
+            <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short}>
+              {organ.description}
+            </Description>
+          </div>
         )}
-        {shouldDisplaySection.organInfo && <OrganInfo uberonIri={organ.uberon} />}
-        {shouldDisplaySection.azimuth && <Azimuth config={organ.azimuth} />}
-        {shouldDisplaySection.search && (
-          <>
+        {shouldDisplaySection[organInfoId] && (
+          <div id={organInfoId}>
+            <OrganInfo uberonIri={organ.uberon} />
+          </div>
+        )}
+        {shouldDisplaySection[azimuthId] && (
+          <div id={azimuthId}>
+            <Azimuth config={organ.azimuth} />
+          </div>
+        )}
+        {shouldDisplaySection[searchId] && (
+          <div id={searchId}>
             <Assays searchTerms={organ.search} />
             <Samples searchTerms={organ.search} />
-          </>
+          </div>
         )}
       </Content>
     </FlexRow>
