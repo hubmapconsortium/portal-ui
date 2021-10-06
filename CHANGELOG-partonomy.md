@@ -1,0 +1,1 @@
+- Use partonomy in public search.
