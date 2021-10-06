@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 
-import Button from '@material-ui/core/Button';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
+import { StyledButton } from './style';
 
 function VersionSelect({ uuid }) {
   const { entityEndpoint, nexusToken } = useContext(AppContext);
@@ -43,7 +43,7 @@ function VersionSelect({ uuid }) {
       <DropdownListbox
         id="version-select"
         optionComponent={DropdownListboxOption}
-        buttonComponent={Button}
+        buttonComponent={StyledButton}
         selectedOptionIndex={selectedVersionIndex}
         options={versions}
         selectOnClick={visitNewVersion}
