@@ -10,19 +10,26 @@ import Samples from 'js/components/organ/Samples';
 function Organ(props) {
   const { organ } = props;
 
+  const shouldDisplaySection = {
+    description: Boolean(organ?.description),
+    organInfo: organ.has_iu_component,
+    azimuth: Boolean(organ?.azimuth),
+    search: organ.search.length > 0,
+  };
+
   return (
     <>
       <SectionHeader variant="h1" component="h1">
         {organ.name}
       </SectionHeader>
-      {organ?.description && (
+      {shouldDisplaySection.description && (
         <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short}>
           {organ.description}
         </Description>
       )}
-      {organ.has_iu_component && <OrganInfo uberonIri={organ.uberon} />}
-      {organ?.azimuth && <Azimuth config={organ.azimuth} />}
-      {organ.search.length > 0 && (
+      {shouldDisplaySection.organInfo && <OrganInfo uberonIri={organ.uberon} />}
+      {shouldDisplaySection.azimuth && <Azimuth config={organ.azimuth} />}
+      {shouldDisplaySection.search && (
         <>
           <Assays searchTerms={organ.search} />
           <Samples searchTerms={organ.search} />
