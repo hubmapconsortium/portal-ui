@@ -99,10 +99,9 @@ def get_descriptions():
 ###### Azimuth #######
 
 def get_azimuth_yaml(url):
-    azimuth_path = Path(__file__).parent / 'azimuth.yaml'
-    if not azimuth_path.exists():
-        azimuth_path.write_text(requests.get(url).text)
-    all_azimuth = safe_load(azimuth_path.read_text())
+    response = requests.get(url)
+    response.raise_for_status()
+    all_azimuth = safe_load(response.text)
     human_azimuth = [v for v in all_azimuth if v['species'] == 'Human']
     return human_azimuth
 
