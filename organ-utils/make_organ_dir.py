@@ -39,8 +39,7 @@ def main():
         get_search_organs(get_search_response(args.elasticsearch_url)),
         uberon_names=uberon_names)
     azimuth_organs_by_uberon = rekey_azimuth(
-        add_vitessce(get_azimuth_yaml(args.azimuth_url)),
-        uberon_names=uberon_names)
+        add_vitessce(get_azimuth_yaml(args.azimuth_url)))
 
     merged_data = merge_data(
         uberon=
@@ -109,7 +108,7 @@ def get_azimuth_yaml(url):
 
 def add_vitessce(azimuth_organs):
     '''
-    Given an azimuth reference, fetch and integrate the vitessce config.
+    Given the azimuth references, fetch and integrate the vitessce config for each.
     '''
     for organ in azimuth_organs:
         url = organ.get('vitessce_conf_url')
@@ -117,41 +116,11 @@ def add_vitessce(azimuth_organs):
             continue
         response = requests.get(url)
         response.raise_for_status()
-        vitessce_conf = response.json()
-        organ['vitessce_conf'] = vitessce_conf
+        organ['vitessce_conf'] = response.json()
     return azimuth_organs
 
-def rekey_azimuth(azimuth_organs, uberon_names):
-    # TODO: Get NYGC to add Uberon IDs / Get rid of heuristics.
-    '''
-    >>> uberon_names = {
-    ...     'UBERON_0002113': 'Kidney',
-    ...     'UBERON_0002048': 'Lungs'}
-    >>> azimuth_organs = [
-    ...     {'title': 'Human - Kidney'},
-    ...     {'title': 'Human - Lung'}]
-    >>> rekey_azimuth(azimuth_organs, uberon_names)
-    {'UBERON_0002113': {'title': 'Human - Kidney'}, 'UBERON_0002048': {'title': 'Human - Lung'}}
-
-    >>> azimuth_organs = [
-    ...     {'title': 'Human - Kidney'},
-    ...     {'title': 'Human - duplicate - Kidney'}]
-    >>> rekey_azimuth(azimuth_organs, uberon_names)
-    Traceback (most recent call last):
-    ...
-    AssertionError: Multiple matches for uberon in azimuth: {'UBERON_0002113': 2}
-    '''
-    azimuth_organs = {
-        uberon_id: [
-            organ for organ in azimuth_organs
-            if uberon_name in organ['title']
-            or uberon_name.rstrip('s') in organ['title']]
-        for uberon_id, uberon_name in uberon_names.items()
-    }
-    multi_matches = {k: len(v) for k, v in azimuth_organs.items() if len(v) > 1}
-    assert not multi_matches, \
-        f'Multiple matches for uberon in azimuth: {multi_matches}'
-    return {k: v[0] for k, v in azimuth_organs.items() if v}
+def rekey_azimuth(azimuth_organs):
+    return {organ['uberon_iri']: organ for organ in azimuth_organs if 'uberon_iri' in organ}
 
 
 ###### Search #######
