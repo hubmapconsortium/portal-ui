@@ -9,6 +9,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { FileIcon } from 'js/shared-styles/icons';
+import VersionSelect from 'js/components/Detail/VersionSelect';
 import { FlexEnd, JsonButton, StyledTypography } from './style';
 import SummaryItem from '../SummaryItem';
 import StatusIcon from '../StatusIcon';
@@ -55,13 +56,14 @@ function SummaryData(props) {
         }
         buttons={
           <FlexEnd>
-            {['Dataset', 'Summary'].includes(entity_type) && (
+            {['Dataset', 'Support'].includes(entity_type) && (
               <>
                 <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
                 <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
               </>
             )}
             <FlexEnd>
+              {['Dataset', 'Support'].includes(entity_type) && <VersionSelect uuid={uuid} />}
               <SecondaryBackgroundTooltip title="View JSON">
                 <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
                   <FileIcon color="primary" />
