@@ -1,3 +1,9 @@
+## v0.28.4 - 2021-10-06
+
+- Add loaders to cells page.
+- React warnings: Add missing key in repeated component, and remove required prop.
+
+
 ## v0.28.3 - 2021-09-30
 
 - Fix organ page request loop in samples table.
