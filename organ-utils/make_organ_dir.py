@@ -109,23 +109,15 @@ def get_azimuth_yaml(url):
 
 def add_vitessce(azimuth_organs):
     '''
-    Given an azimuth reference, use heuritics to fetch and integrate the vitessce config.
-    TODO: Get NYGC to make the mapping explicit.
+    Given an azimuth reference, fetch and integrate the vitessce config.
     '''
     for organ in azimuth_organs:
-        file = organ['vitessce'].split('/')[-1] + '.json'
-        base = 'https://raw.githubusercontent.com/satijalab/azimuth_website/master'
-        url = f'{base}/assets/json/{file}'
-        vitessce_path = Path(__file__).parent / file
-        if not vitessce_path.exists():
-            response = requests.get(url)
-            try:
-                response.raise_for_status()
-            except:
-                print(f'WARNING: {url}')
-                continue
-            vitessce_path.write_text(response.text)
-        vitessce_conf = json.loads(vitessce_path.read_text())
+        url = organ.get('vitessce_conf_url')
+        if not url:
+            continue
+        response = requests.get(url)
+        response.raise_for_status()
+        vitessce_conf = response.json()
         organ['vitessce_conf'] = vitessce_conf
     return azimuth_organs
 
