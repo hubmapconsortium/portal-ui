@@ -35,7 +35,6 @@ function DropdownListbox(props) {
         aria-haspopup="listbox"
         disableElevation
         variant="contained"
-        color="primary"
         onClick={() => setIsOpen(true)}
         {...buttonProps}
       >
@@ -53,7 +52,7 @@ function DropdownListbox(props) {
                   selected={selectedOptionIndex === i}
                   aria-selected={selectedOptionIndex === i}
                 >
-                  {getOptionLabel(option)}
+                  {getOptionLabel(option, i)}
                 </Option>
               ))}
             </MenuList>

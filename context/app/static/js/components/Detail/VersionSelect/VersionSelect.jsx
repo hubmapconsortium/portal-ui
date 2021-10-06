@@ -4,7 +4,7 @@ import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
-import { StyledButton } from './style';
+import { StyledButton, VersionStatusIcon } from './style';
 
 function VersionSelect({ uuid }) {
   const { entityEndpoint, nexusToken } = useContext(AppContext);
@@ -38,6 +38,14 @@ function VersionSelect({ uuid }) {
     window.location.href = `/browse/dataset/${versions[i][uuidKey]}`;
   }
 
+  function getOptionDisplay(option, i) {
+    return (
+      <>
+        <VersionStatusIcon $iconColor={i === versions.length - 1 ? 'success' : 'warning'} />v{option.revision_number}
+      </>
+    );
+  }
+
   return (
     versions.length > 0 && (
       <DropdownListbox
@@ -47,7 +55,7 @@ function VersionSelect({ uuid }) {
         selectedOptionIndex={selectedVersionIndex}
         options={versions}
         selectOnClick={visitNewVersion}
-        getOptionLabel={(v) => `v${v.revision_number}`}
+        getOptionLabel={getOptionDisplay}
       />
     )
   );
