@@ -130,6 +130,7 @@ function Visualization(props) {
                 options={vitessceConfig}
                 selectOnClick={setSelectionAndClearErrors}
                 getOptionLabel={(v) => v.name}
+                buttonProps={{ color: 'primary' }}
                 id="visualization-data"
               />
             )}

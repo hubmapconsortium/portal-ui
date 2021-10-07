@@ -14,7 +14,7 @@ function AssayTypeBarChartDropdown({ colorDataOptions, selectedColorDataIndex, s
       options={colorDataOptions}
       selectOnClick={setSelectedColorDataIndex}
       getOptionLabel={(v) => v.name}
-      buttonProps={{ variant: 'outlined' }}
+      buttonProps={{ variant: 'outlined', color: 'primary' }}
     />
   );
 }

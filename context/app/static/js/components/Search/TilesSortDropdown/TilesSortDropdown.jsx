@@ -37,6 +37,7 @@ function TilesSortDropdown(props) {
       selectedOptionIndex={selectedItemIndex}
       buttonProps={{
         $searchView: searchView,
+        color: 'primary',
       }}
       options={pairs}
       selectOnClick={selectSortItem}
