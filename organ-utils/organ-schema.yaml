@@ -1,0 +1,48 @@
+type: object
+properties:
+  name:
+    type: string
+  uberon:
+    type: string
+    pattern: 'http://purl.obolibrary.org/obo/UBERON_\d+'
+  uberon_short:
+    type: string
+    pattern: 'UBERON_\d+'
+  description:
+    type: string
+  has_iu_component:
+    type: boolean
+  search:
+    # Array may be empty.
+    type: array
+    items: 
+      type: string
+  azimuth:
+    type: object
+    properties:
+      dataref:
+        type: string
+      applink:
+        type: string
+        pattern: 'https://app.azimuth.hubmapconsortium.org/app/human-.+'
+      modalities:
+        type: string
+      nunit:
+        type: string
+      vitessce_conf:
+        type: object
+    required:
+      - dataref
+      - applink
+      - modalities
+      - nunit
+      - vitessce_conf
+required:
+  - name
+  - uberon
+  - uberon_short
+  - description
+  - has_iu_component
+  - search
+  # azimuth not required.
+additionalProperties: false
