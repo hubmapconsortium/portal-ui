@@ -38,7 +38,8 @@ function DropdownListbox(props) {
         onClick={() => setIsOpen(true)}
         {...buttonProps}
       >
-        {getOptionLabel(options[selectedOptionIndex])} {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+        {getOptionLabel(options[selectedOptionIndex], selectedOptionIndex)}
+        {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </SelectionButton>
       <StyledPopper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start">
         <StyledPaper>

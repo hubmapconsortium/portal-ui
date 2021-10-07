@@ -8,7 +8,6 @@ import { StyledButton, VersionStatusIcon } from './style';
 
 function VersionSelect({ uuid }) {
   const { entityEndpoint, nexusToken } = useContext(AppContext);
-  const authHeader = getAuthHeader(nexusToken);
   const [versions, setVersions] = useState([]);
   const [selectedVersionIndex, setSelectedVersionIndex] = useState(0);
 
@@ -17,6 +16,7 @@ function VersionSelect({ uuid }) {
 
   useEffect(() => {
     async function fetchVersions() {
+      const authHeader = getAuthHeader(nexusToken);
       const response = await fetch(`${entityEndpoint}/${lowerCaseEntityType}s/${uuid}/revisions`, {
         headers: {
           'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ function VersionSelect({ uuid }) {
       setSelectedVersionIndex(results.findIndex((version) => version[uuidKey] === uuid));
     }
     fetchVersions();
-  }, [authHeader, entityEndpoint, lowerCaseEntityType, uuid, uuidKey]);
+  }, [entityEndpoint, uuid, lowerCaseEntityType, uuidKey, nexusToken]);
 
   function visitNewVersion({ i }) {
     window.location.href = `/browse/dataset/${versions[i][uuidKey]}`;
