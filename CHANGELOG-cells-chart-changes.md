@@ -1,0 +1,4 @@
+- Add axis labels to cells charts.
+- Remove breakpoints for cells query cell percentage slider.
+- Fix bug relating to missing donor metadata on cells page.
+- Add legend and adjust bar colors in cell cluster bar chart.
