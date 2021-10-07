@@ -37,7 +37,7 @@ function getSearchQuery(cellsResults) {
       'hubmap_id',
       'mapped_data_types',
       'origin_sample.mapped_organ',
-      'donor.mapped_metadata',
+      'donor',
       'last_modified_timestamp',
     ],
   };
