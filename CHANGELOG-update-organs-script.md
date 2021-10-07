@@ -1,0 +1,1 @@
+- Simplify the organs script by pulling more information from the Azimuth github repo.
