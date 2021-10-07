@@ -5,7 +5,7 @@ import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 import { animated } from 'react-spring';
 
-import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
+import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { useExpandSpring } from 'js/hooks/useExpand';
 import { Provider, createStore, useStore } from './store';
 import { ExpandedRow, ExpandedCell } from './style';

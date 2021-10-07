@@ -7,12 +7,16 @@ const AssayTypeBarChartContainer = lazy(() => import('js/components/home/AssayTy
 
 function Switch() {
   const { pathname } = window.location;
+  const params = new URLSearchParams(window.location.search);
+  const iri = params.get('iri');
 
   switch (pathname) {
     case '/iframe/entity-counts':
       return <EntityCounts />;
     case '/iframe/assay-barchart':
       return <AssayTypeBarChartContainer />;
+    case '/iframe/organ':
+      return <ccf-organ-info organ-iri={iri} />;
     default:
       throw new Error(`No iframe ${pathname}`);
   }

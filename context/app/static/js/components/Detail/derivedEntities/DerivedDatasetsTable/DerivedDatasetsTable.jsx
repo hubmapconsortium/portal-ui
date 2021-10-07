@@ -3,8 +3,8 @@ import format from 'date-fns/format';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-import DerivedEntitiesTable from 'js/components/Detail/derivedEntities/DerivedEntitiesTable';
-import { getSharedColumns } from 'js/components/Detail/derivedEntities/DerivedEntitiesTable/utils';
+import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
+import { getSharedColumns } from 'js/shared-styles/tables/EntitiesTable/utils';
 import { LightBlueLink } from 'js/shared-styles/Links';
 
 function DerivedDatasetsTable({ entities }) {
@@ -17,7 +17,7 @@ function DerivedDatasetsTable({ entities }) {
 
   const columns = [displayDOICol, ...datasetColumns, descendantCountsCol, lastModifiedTimestampCol];
   return (
-    <DerivedEntitiesTable columns={columns}>
+    <EntitiesTable columns={columns}>
       {entities.map(
         ({
           _source: {
@@ -42,7 +42,7 @@ function DerivedDatasetsTable({ entities }) {
           </TableRow>
         ),
       )}
-    </DerivedEntitiesTable>
+    </EntitiesTable>
   );
 }
 

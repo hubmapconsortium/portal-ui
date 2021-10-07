@@ -1,7 +1,102 @@
-title: Pancreas
-search: true
+name: Pancreas
+uberon: http://purl.obolibrary.org/obo/UBERON_0001264
+uberon_short: UBERON_0001264
+description: An endoderm derived structure that produces precursors of digestive enzymes
+  and blood glucose regulating enzymes[GO].
+has_iu_component: false
+search:
+- Pancreas
 azimuth:
-  app_url: https://app.azimuth.hubmapconsortium.org/app/human-pancreas
-  vitessce_url: https://azimuth.hubmapconsortium.org/references/human_pancreas
-  zenodo_url: https://zenodo.org/record/4546926
-  snakemake_url: https://github.com/satijalab/azimuth-references/tree/master/human_pancreas
+  title: Human - Pancreas
+  uberon_iri: http://purl.obolibrary.org/obo/UBERON_0001264
+  vitessce_conf_url: https://raw.githubusercontent.com/satijalab/azimuth_website/master/assets/json/human_pancreas.json
+  applink: https://app.azimuth.hubmapconsortium.org/app/human-pancreas
+  image: pancreasumap.png
+  snakemake: https://github.com/satijalab/azimuth-references/tree/master/human_pancreas
+  zenodo: https://zenodo.org/record/4546926
+  vitessce: /references/human_pancreas
+  modalities: RNA
+  unit: Cells
+  nunit: 35,289
+  species: Human
+  demodata: '[Enge et al, Cell 2017](https://doi.org/10.1016/j.cell.2017.09.004) [[Seurat
+    Object](https://seurat.nygenome.org/azimuth/demo_datasets/enge.rds)]'
+  dataref: "[[Gr\xFCn et al, Cell Stem Cell 2016](https://dx.doi.org/10.1016%2Fj.stem.2016.05.010)],\
+    \ [[Muraro, Dharmadhikari et al, Cell Systems 2016](https://doi.org/10.1016/j.cels.2016.09.002)],\
+    \ [[ Segerstolpe, Palasantza, et al, Cell Metabolism 2016](https://doi.org/10.1016/j.cmet.2016.08.020)],\
+    \ [[Lawlor, George, et al, Genome Research 2017](https://doi.org/10.1101/gr.212720.116)],\
+    \ [[Baron, Veres, Wolock, Faust et al, Cell Systems 2016](https://doi.org/10.1016/j.cels.2016.08.011)],\
+    \ [[Xin et al, J. Vis. Exp 2019](https://doi.org/10.3791/59866)]\n"
+  details: 'This integrated pancreas reference dataset is an aggregate of multiple
+    pancreas single-cell RNA-seq datasets from the literature. It is comprised of
+    data from six different studies, generated using six different single-cell technologies,
+    and integrated into a single reference using Seurat. Details of the integration
+    procedure can be explored in the Snakemake workflow linked above.
+
+    '
+  annotations:
+  - name: annotation.l1
+    file: pancreas.csv
+  vitessce_conf:
+    version: 1.0.0
+    name: Human Pancreas
+    datasets:
+    - uid: human-pancreas
+      name: Human Pancreas
+      files:
+      - type: cells
+        fileType: anndata-cells.zarr
+        url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-pancreas/vitessce_ref.zarr
+        options:
+          mappings:
+            UMAP:
+              key: obsm/X_umap
+              dims:
+              - 0
+              - 1
+          factors:
+          - obs/annotation.l1
+      - type: cell-sets
+        fileType: anndata-cell-sets.zarr
+        url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-pancreas/vitessce_ref.zarr
+        options:
+        - groupName: annotation.l1
+          setName: obs/annotation.l1
+      - type: expression-matrix
+        fileType: anndata-expression-matrix.zarr
+        url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-pancreas/vitessce_ref.zarr
+        options:
+          matrix: X
+    initStrategy: auto
+    coordinationSpace:
+      embeddingType:
+        UMAP: UMAP
+      embeddingCellRadius:
+        UMAP: 0.25
+      embeddingCellSetLabelsVisible:
+        UMAP: true
+      embeddingCellSetLabelSize:
+        UMAP: 10
+    layout:
+    - component: cellSets
+      h: 3
+      w: 3
+      x: 9
+      y: 0
+      coordinationScopes: {}
+    - component: genes
+      h: 3
+      w: 3
+      x: 9
+      y: 3
+      coordinationScopes: {}
+    - component: scatterplot
+      h: 6
+      w: 9
+      x: 0
+      y: 0
+      coordinationScopes:
+        embeddingType: UMAP
+        embeddingCellRadius: UMAP
+        embeddingCellSetLabelsVisible: UMAP
+        embeddingCellSetLabelSize: UMAP

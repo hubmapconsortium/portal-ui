@@ -1,0 +1,119 @@
+name: Lung
+uberon: http://purl.obolibrary.org/obo/UBERON_0002048
+uberon_short: UBERON_0002048
+description: Respiration organ that develops as an outpocketing of the esophagus.
+has_iu_component: true
+search:
+- Lung (Right)
+azimuth:
+  title: Human - Lung
+  uberon_iri: http://purl.obolibrary.org/obo/UBERON_0002048
+  vitessce_conf_url: https://raw.githubusercontent.com/satijalab/azimuth_website/master/assets/json/human_lung.json
+  applink: https://app.azimuth.hubmapconsortium.org/app/human-lung
+  image: lungumap.png
+  snakemake: https://github.com/satijalab/azimuth-references/tree/master/human_lung
+  zenodo: https://zenodo.org/record/4895404
+  vitessce: /references/human_lung
+  modalities: RNA
+  unit: Cells
+  nunit: 65,662
+  species: Human
+  demodata: '[Vieira-Braga et al, Nature Medicine 2019](https://www.nature.com/articles/s41591-019-0468-5)
+    [[Seurat Object](https://seurat.nygenome.org/azimuth/demo_datasets/braga_lung_demo.Rds)]'
+  dataref: '[Travaglini et al, Nature 2020](https://www.nature.com/articles/s41586-020-2922-4)
+
+    '
+  details: 'This reference consists of 65,662 human lung cells (10x Genomics v2) from
+    Travaglini et al. 2020. Cells were sourced from three donor patients and from
+    all lung tissue compartments (bronchi, bronchiole, alveoli) as well as circulating
+    blood.
+
+    '
+  annotations:
+  - name: annotation.l1
+    file: lung_l1.csv
+  - name: annotation.l2
+    file: lung_l2.csv
+  mapped:
+    unit: Cells
+    nunit: 916,876
+    datasets: '[[Adams, Schupp, Poli et al, Science Advances 2020](https://dx.doi.org/10.1126/sciadv.aba1983)],
+      [[Delorey et al, Nature 2021](https://doi.org/10.1038/s41586-021-03570-8)],
+      [[Deprez, Zaragosi, et al, Am J Respir Crit Care Med. 2020](https://doi.org/10.1164/rccm.201911-2199oc)],
+      [[Habermann, Gutierrez, Bui, et al, Science Advances 2020](https://dx.doi.org/10.1126/sciadv.aba1972)],
+      [[Lukassen, Chua, Trefzer, Kahn, Schneider, et al, EMBO J. 2020](https://dx.doi.org/10.15252%2Fembj.20105114)],
+      [[Madissoon et al, Genome Biology 2020](https://doi.org/10.1186/s13059-019-1906-x)],
+      [[Mayr et al, EMBO Molecular Medicine 2021](https://doi.org/10.15252/emmm.202012871)],
+      [[Morse et al, Eur Respir J 2019](https://doi.org/10.1183/13993003.02441-2018)],
+      [[Reyfman, Walter, Joshi, et al, Am J Respir Crit Care Med. 2019](https://doi.org/10.1164/rccm.201712-2410OC)]
+
+      '
+    download: https://cellxgene.cziscience.com/collections/2f75d249-1bec-459b-bf2b-b86221097ced
+    snakemake: https://github.com/satijalab/azimuth-meta-analysis/tree/master/human_lung
+    cellxgene: https://cellxgene.cziscience.com/e/f72958f5-7f42-4ebb-98da-445b0c6de516.cxg/
+  vitessce_conf:
+    version: 1.0.0
+    name: Human Lung
+    datasets:
+    - uid: human-lung
+      name: Human Lung
+      files:
+      - type: cells
+        fileType: anndata-cells.zarr
+        url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-lung/vitessce_ref.zarr
+        options:
+          mappings:
+            UMAP:
+              key: obsm/X_umap
+              dims:
+              - 0
+              - 1
+          factors:
+          - obs/annotation.l1
+          - obs/annotation.l2
+      - type: cell-sets
+        fileType: anndata-cell-sets.zarr
+        url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-lung/vitessce_ref.zarr
+        options:
+        - groupName: annotation.l1
+          setName: obs/annotation.l1
+        - groupName: annotation.l2
+          setName: obs/annotation.l2
+      - type: expression-matrix
+        fileType: anndata-expression-matrix.zarr
+        url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-lung/vitessce_ref.zarr
+        options:
+          matrix: X
+    initStrategy: auto
+    coordinationSpace:
+      embeddingType:
+        UMAP: UMAP
+      embeddingCellRadius:
+        UMAP: 0.03
+      embeddingCellSetLabelsVisible:
+        UMAP: true
+      embeddingCellSetLabelSize:
+        UMAP: 10
+    layout:
+    - component: cellSets
+      h: 3
+      w: 3
+      x: 9
+      y: 0
+      coordinationScopes: {}
+    - component: genes
+      h: 3
+      w: 3
+      x: 9
+      y: 3
+      coordinationScopes: {}
+    - component: scatterplot
+      h: 6
+      w: 9
+      x: 0
+      y: 0
+      coordinationScopes:
+        embeddingType: UMAP
+        embeddingCellRadius: UMAP
+        embeddingCellSetLabelsVisible: UMAP
+        embeddingCellSetLabelSize: UMAP

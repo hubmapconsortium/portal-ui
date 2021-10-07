@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen } from 'test-utils/functions';
 import { fireEvent, waitFor } from '@testing-library/react';
 
-import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
+import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import ExpandableRow from './ExpandableRow';
 
 test('should handle user expanding row', async () => {

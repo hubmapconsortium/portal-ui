@@ -5,6 +5,7 @@ import Slider from '@material-ui/core/Slider';
 import FormLabel from '@material-ui/core/FormLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import { getDefaultQuery } from 'js/helpers/functions';
 import LogSliderWrapper from 'js/components/cells/LogSliderWrapper';
 import CellsService from 'js/components/cells/CellsService';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
@@ -14,15 +15,7 @@ import { StyledDiv, StyledTextField } from './style';
 
 function getSearchQuery(cellsResults) {
   return {
-    query: {
-      bool: {
-        must_not: {
-          exists: {
-            field: 'next_revision_uuid',
-          },
-        },
-      },
-    },
+    query: getDefaultQuery(),
     post_filter: {
       bool: {
         must: [
@@ -75,7 +68,7 @@ function DatasetsSelectedByExpression({
     setResults([]);
     const queryParams = {
       type: queryType,
-      names: cellVariableNames,
+      cellVariableNames,
       minExpression: 10 ** minExpressionLog,
       minCellPercentage,
     };

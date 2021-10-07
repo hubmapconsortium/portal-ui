@@ -2,27 +2,20 @@ import React from 'react';
 import format from 'date-fns/format';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
-import ExpandableRow from 'js/shared-styles/Table/ExpandableRow';
-import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
+import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
+import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import CellsCharts from 'js/components/cells/CellsCharts';
 
 function UnitValueCell({ unit, value }) {
   return <ExpandableRowCell>{`${value} ${unit}`}</ExpandableRowCell>;
 }
 
-function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpression, queryType }) {
+function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpression }) {
   const { hubmap_id, uuid, origin_sample, mapped_data_types, donor, last_modified_timestamp } = datasetMetadata;
   return (
     <ExpandableRow
       numCells={numCells}
-      expandedContent={
-        <CellsCharts
-          uuid={uuid}
-          cellVariableName={cellVariableName}
-          minExpression={minExpression}
-          queryType={queryType}
-        />
-      }
+      expandedContent={<CellsCharts uuid={uuid} cellVariableName={cellVariableName} minExpression={minExpression} />}
     >
       <ExpandableRowCell>
         <LightBlueLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</LightBlueLink>

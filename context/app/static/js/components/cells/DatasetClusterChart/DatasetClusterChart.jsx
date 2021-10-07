@@ -14,7 +14,6 @@ function DatasetClusterChart({
   uuid,
   cellVariableName,
   minExpression,
-  queryType,
   isLoading,
   finishLoading,
   loadingKey,
@@ -57,9 +56,8 @@ function DatasetClusterChart({
     async function fetchCellClusterMatches() {
       const response = await new CellsService().getClusterCellMatchesInDataset({
         uuid,
-        name: cellVariableName,
+        cellVariableName,
         minExpression,
-        queryType,
       });
       setResults(response);
     }
@@ -70,13 +68,17 @@ function DatasetClusterChart({
       fetchCellClusterMatches();
       loadedOnce.current = true;
     }
-  }, [cellVariableName, isExpanded, minExpression, queryType, uuid]);
+  }, [cellVariableName, isExpanded, minExpression, uuid]);
 
   function handleSelectClusterType({ i }) {
     setSelectedClusterTypeIndex(i);
   }
 
-  return Object.values(isLoading).every((val) => !val) ? (
+  if (Object.values(isLoading).some((val) => val)) {
+    return <StyledSkeleton variant="rect" />;
+  }
+
+  return (
     <>
       <DropdownListbox
         id="bar-fill-dropdown"
@@ -105,9 +107,6 @@ function DatasetClusterChart({
         yAxisLabel="Cell Set Size"
       />
     </>
-  ) : (
-    <StyledSkeleton variant="rectangular" />
   );
 }
-
 export default DatasetClusterChart;

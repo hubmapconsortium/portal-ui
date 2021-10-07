@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ExpandableRowCell from 'js/shared-styles/Table/ExpandableRowCell';
+import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import ExpandableRowComponent from './ExpandableRow';
 
 export default {

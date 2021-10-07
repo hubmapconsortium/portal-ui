@@ -125,7 +125,7 @@ def iframe_page(path):
         **get_default_flask_data()
     }
     return render_template(
-        'pages/base_react.html',
+        'pages/organ.html' if path == 'organ' else 'pages/base_react.html',
         title=f'{path} iframe',
         flask_data=flask_data
     )

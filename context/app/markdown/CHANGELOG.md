@@ -1,3 +1,38 @@
+## v0.28.4 - 2021-10-06
+
+- Add loaders to cells page.
+- React warnings: Add missing key in repeated component, and remove required prop.
+
+
+## v0.28.3 - 2021-09-30
+
+- Fix organ page request loop in samples table.
+
+
+## v0.28.2 - 2021-09-30
+
+- Add Uberon ID to organ list.
+- Get the organ pages into an acceptable state and link from the Atlas menu.
+- Add protein queries to cells UI.
+- Add a story for EntitiesTable.
+- Upgrade Vitessce to 1.1.15.
+
+
+## v0.28.1 - 2021-09-28
+
+- Bump to ccf 2.3.5.
+- Refactor entities table to make it reusable.
+- Rename "Lungs" to "Lung" in organ descriptions to match other organ names.
+- Add organ regen to push.sh, so we will get the latest changes from IU and NYGC with every release.
+
+
+## v0.28.0 - 2021-09-24
+
+- Add reusable accordion steps component.
+- Update the organ pages, based on the new approach using Uberon IDs.
+- Put publication details in frontmatter.
+
+
 ## v0.27.2 - 2021-09-20
 
 - Add accordions for cells query and results.

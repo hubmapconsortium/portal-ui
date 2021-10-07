@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { version } from 'package';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { StyledExternalLinkIcon } from 'js/components/files/GlobusLinkMessage/style';
-import { HeaderCell } from 'js/shared-styles/Table';
+import { HeaderCell } from 'js/shared-styles/tables';
 
 import StatusIcon from './StatusIcon';
 import { useGatewayStatus } from './hooks';
