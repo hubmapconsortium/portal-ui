@@ -5,6 +5,7 @@ import LensIcon from '@material-ui/icons/LensRounded';
 const StyledButton = styled(Button)`
   background-color: #fff;
   margin-right: 4px;
+  text-transform: lowercase;
 `;
 
 const VersionStatusIcon = styled(LensIcon)`
