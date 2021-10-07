@@ -9,6 +9,8 @@ search:
 - Kidney (Right)
 azimuth:
   title: Human - Kidney
+  uberon_iri: http://purl.obolibrary.org/obo/UBERON_0002113
+  vitessce_conf_url: https://raw.githubusercontent.com/satijalab/azimuth_website/master/assets/json/human_kidney.json
   applink: https://app.azimuth.hubmapconsortium.org/app/human-kidney
   image: kidneyumap.png
   snakemake: https://github.com/satijalab/azimuth-references/tree/master/human_kidney

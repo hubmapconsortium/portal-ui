@@ -11,7 +11,7 @@ function LoginButton(props) {
   const displayName = user_email || 'User';
 
   return isAuthenticated ? (
-    <Dropdown title={<TruncatedSpan>{displayName}</TruncatedSpan>} menuListId="user-options">
+    <Dropdown title={<TruncatedSpan>{displayName}</TruncatedSpan>}>
       <DropdownLink href="/logout">Log Out</DropdownLink>
     </Dropdown>
   ) : (

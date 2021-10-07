@@ -8,6 +8,8 @@ search:
 - Pancreas
 azimuth:
   title: Human - Pancreas
+  uberon_iri: http://purl.obolibrary.org/obo/UBERON_0001264
+  vitessce_conf_url: https://raw.githubusercontent.com/satijalab/azimuth_website/master/assets/json/human_pancreas.json
   applink: https://app.azimuth.hubmapconsortium.org/app/human-pancreas
   image: pancreasumap.png
   snakemake: https://github.com/satijalab/azimuth-references/tree/master/human_pancreas
