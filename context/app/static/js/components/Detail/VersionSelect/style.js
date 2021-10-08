@@ -27,4 +27,8 @@ const OverflowEllipsis = styled.div`
   min-width: 0px;
 `;
 
-export { StyledButton, VersionStatusIcon, Flex, OverflowEllipsis };
+const EmptyFullWidthDiv = styled.div`
+  width: 100%;
+`;
+
+export { StyledButton, VersionStatusIcon, Flex, OverflowEllipsis, EmptyFullWidthDiv };
