@@ -40,24 +40,25 @@ function VersionSelect({ uuid }) {
 
   function getOptionDisplay(option, i) {
     return (
-      <>
-        <VersionStatusIcon $iconColor={i === versions.length - 1 ? 'success' : 'warning'} />v{option.revision_number}
-      </>
+      option?.revision_number && (
+        <>
+          <VersionStatusIcon $iconColor={i === versions.length - 1 ? 'success' : 'warning'} />v{option.revision_number}
+        </>
+      )
     );
   }
 
   return (
-    versions.length > 0 && (
-      <DropdownListbox
-        id="version-select"
-        optionComponent={DropdownListboxOption}
-        buttonComponent={StyledButton}
-        selectedOptionIndex={selectedVersionIndex}
-        options={versions}
-        selectOnClick={visitNewVersion}
-        getOptionLabel={getOptionDisplay}
-      />
-    )
+    <DropdownListbox
+      id="version-select"
+      optionComponent={DropdownListboxOption}
+      buttonComponent={StyledButton}
+      selectedOptionIndex={selectedVersionIndex}
+      options={versions}
+      selectOnClick={visitNewVersion}
+      getOptionLabel={getOptionDisplay}
+      buttonProps={{ disabled: versions.length === 0 }}
+    />
   );
 }
 
