@@ -6,6 +6,7 @@ const StyledButton = styled(Button)`
   background-color: #fff;
   margin-right: 4px;
   text-transform: lowercase;
+  width: 100px;
 `;
 
 const VersionStatusIcon = styled(LensIcon)`
