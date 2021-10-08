@@ -4,7 +4,7 @@ import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
-import { StyledButton, VersionStatusIcon } from './style';
+import { StyledButton, VersionStatusIcon, Flex, OverflowEllipsis } from './style';
 
 function VersionSelect({ uuid }) {
   const { entityEndpoint, nexusToken } = useContext(AppContext);
@@ -41,9 +41,10 @@ function VersionSelect({ uuid }) {
   function getOptionDisplay(option, i) {
     return (
       option?.revision_number && (
-        <>
-          <VersionStatusIcon $iconColor={i === versions.length - 1 ? 'success' : 'warning'} />v{option.revision_number}
-        </>
+        <Flex>
+          <VersionStatusIcon $iconColor={i === versions.length - 1 ? 'success' : 'warning'} />
+          <OverflowEllipsis>v{option.revision_number}</OverflowEllipsis>
+        </Flex>
       )
     );
   }

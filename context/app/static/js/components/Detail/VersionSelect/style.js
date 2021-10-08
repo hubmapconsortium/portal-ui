@@ -15,4 +15,16 @@ const VersionStatusIcon = styled(LensIcon)`
   margin-right: 3px;
 `;
 
-export { StyledButton, VersionStatusIcon };
+const Flex = styled.div`
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+`;
+
+const OverflowEllipsis = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0px;
+`;
+
+export { StyledButton, VersionStatusIcon, Flex, OverflowEllipsis };
