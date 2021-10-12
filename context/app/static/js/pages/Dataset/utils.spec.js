@@ -1,4 +1,4 @@
-import { combineMetadata } from './Dataset';
+import { combineMetadata } from './utils';
 
 test('robust against undefined data', () => {
   const donor = undefined;

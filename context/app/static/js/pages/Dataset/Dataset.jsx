@@ -23,6 +23,8 @@ import SupportAlert from 'js/components/Detail/SupportAlert';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
 
+import { combineMetadata, getCollectionsWhichContainDataset } from './utils';
+
 function SummaryDataChildren(props) {
   const { mapped_data_types, origin_sample } = props;
   return (
@@ -39,31 +41,7 @@ function SummaryDataChildren(props) {
   );
 }
 
-function getCollectionsWhichContainDataset(uuid, collections) {
-  return collections.filter((collection) => {
-    // eslint-disable-next-line no-underscore-dangle
-    return collection._source.datasets.some((dataset) => dataset.uuid === uuid);
-  });
-}
-
 const entityStoreSelector = (state) => state.setAssayMetadata;
-
-function combineMetadata(donor, origin_sample, source_sample, metadata) {
-  const donorMetadata = donor?.mapped_metadata || {};
-  const combinedMetadata = {
-    ...(metadata?.metadata || {}),
-    ...Object.fromEntries(Object.entries(donorMetadata).map(([key, value]) => [`donor.${key}`, value])),
-  };
-  const sampleMetadatas = (source_sample || []).filter((sample) => sample?.metadata).map((sample) => sample.metadata);
-  sampleMetadatas.forEach((sampleMetadata) => {
-    Object.assign(
-      combinedMetadata,
-      Object.fromEntries(Object.entries(sampleMetadata).map(([key, value]) => [`sample.${key}`, value])),
-    );
-  });
-
-  return combinedMetadata;
-}
 
 function DatasetDetail(props) {
   const { assayMetadata, vitData, hasNotebook, visLiftedUUID } = props;
@@ -172,4 +150,3 @@ function DatasetDetail(props) {
 }
 
 export default DatasetDetail;
-export { combineMetadata };
