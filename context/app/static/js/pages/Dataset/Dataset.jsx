@@ -48,6 +48,23 @@ function getCollectionsWhichContainDataset(uuid, collections) {
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
+function combineMetadata(donor, origin_sample, source_sample, metadata) {
+  const donorMetadata = donor?.mapped_metadata || {};
+  const combinedMetadata = {
+    ...(metadata?.metadata || {}),
+    ...Object.fromEntries(Object.entries(donorMetadata).map(([key, value]) => [`donor.${key}`, value])),
+  };
+  const sampleMetadatas = (source_sample || []).filter((sample) => sample?.metadata).map((sample) => sample.metadata);
+  sampleMetadatas.forEach((sampleMetadata) => {
+    Object.assign(
+      combinedMetadata,
+      Object.fromEntries(Object.entries(sampleMetadata).map(([key, value]) => [`sample.${key}`, value])),
+    );
+  });
+
+  return combinedMetadata;
+}
+
 function DatasetDetail(props) {
   const { assayMetadata, vitData, hasNotebook, visLiftedUUID } = props;
   const {
@@ -74,13 +91,7 @@ function DatasetDetail(props) {
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
-  const sampleMetadata = source_sample?.[0]?.metadata || {};
-  const donorMetadata = donor?.mapped_metadata || {};
-  const combinedMetadata = {
-    ...metadata.metadata,
-    ...Object.fromEntries(Object.entries(sampleMetadata).map(([key, value]) => [`sample.${key}`, value])),
-    ...Object.fromEntries(Object.entries(donorMetadata).map(([key, value]) => [`donor.${key}`, value])),
-  };
+  const combinedMetadata = combineMetadata(donor, origin_sample, source_sample, metadata);
 
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
@@ -161,3 +172,4 @@ function DatasetDetail(props) {
 }
 
 export default DatasetDetail;
+export { combineMetadata };
