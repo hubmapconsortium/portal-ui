@@ -51,10 +51,12 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
         margin={{
           top: 50,
           right: 50,
-          left: 50,
-          bottom: 50,
+          left: 65,
+          bottom: 65,
         }}
         barColor={theme.palette.success.main}
+        xAxisLabel="Expression Level"
+        yAxisLabel="Frequency"
       />
     </>
   );

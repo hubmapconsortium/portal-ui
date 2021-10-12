@@ -7,7 +7,7 @@ import { GridRows } from '@visx/grid';
 import { scaleLinear } from '@visx/scale';
 import { bin } from 'd3-array';
 
-function Histogram({ parentWidth, parentHeight, visxData, margin, barColor }) {
+function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxisLabel, yAxisLabel }) {
   const xWidth = parentWidth - margin.left - margin.right;
   const yHeight = parentHeight - margin.top - margin.bottom;
 
@@ -36,7 +36,7 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor }) {
   return (
     <div>
       <svg width={parentWidth} height={parentHeight}>
-        <GridRows top={margin.top} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.38} />
+        <GridRows top={margin.top} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.2} />
         <Group top={margin.top} left={margin.left}>
           {chartData.map((d) => {
             const barWidth = Math.max(0, xScale(d.x1) - xScale(d.x0) - 1);
@@ -48,6 +48,7 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor }) {
           <AxisLeft
             hideTicks
             scale={yScale}
+            label={yAxisLabel}
             stroke="black"
             tickLabelProps={() => ({
               fill: 'black',
@@ -60,6 +61,7 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor }) {
             hideTicks
             top={yHeight}
             scale={xScale}
+            label={xAxisLabel}
             stroke="black"
             tickStroke="black"
             tickLabelProps={() => ({

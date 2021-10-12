@@ -8,7 +8,11 @@ export default {
   component: VerticalStackedBarChartComponent,
 };
 
-export const VerticalStackedBarChart = (args) => <VerticalStackedBarChartComponent {...args} />;
+export const VerticalStackedBarChart = (args) => (
+  <div style={{ height: 500, width: 500 }}>
+    <VerticalStackedBarChartComponent {...args} />
+  </div>
+);
 const yScale = scaleLinear({
   domain: [0, 13],
   nice: true,
@@ -25,8 +29,6 @@ const colorScale = scaleOrdinal({
 });
 
 VerticalStackedBarChart.args = {
-  parentWidth: 500,
-  parentHeight: 500,
   visxData: [
     {
       cluster: 1,
@@ -64,11 +66,14 @@ VerticalStackedBarChart.args = {
   colorScale,
   keys: ['matched', 'unmatched'],
   margin: {
-    top: 50,
-    right: 50,
-    left: 100,
+    top: 20,
+    right: 10,
+    left: 60,
     bottom: 200,
   },
   getX: (d) => d.cluster,
+  xAxisLabel: 'Cluster',
+  yAxisLabel: 'Cell Count',
+  chartTitle: 'Cluster Membership',
 };
 VerticalStackedBarChart.storyName = 'VerticalStackedBarChart'; // needed for single story hoisting for multi word component names

@@ -49,7 +49,7 @@ function DatasetClusterChart({
 
   const colorScale = scaleOrdinal({
     domain: ['matched', 'unmatched'],
-    range: [theme.palette.error.main, theme.palette.success.main],
+    range: [theme.palette.warning.main, theme.palette.warning.light],
   });
 
   useEffect(() => {
@@ -100,9 +100,11 @@ function DatasetClusterChart({
         margin={{
           top: 50,
           right: 50,
-          left: 50,
-          bottom: 60, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
+          left: 65,
+          bottom: 75, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
         }}
+        xAxisLabel="Cluster"
+        yAxisLabel="Cell Set Size"
       />
     </>
   );
