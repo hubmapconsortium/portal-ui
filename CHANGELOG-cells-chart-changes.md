@@ -1,4 +1,4 @@
-- Add axis labels to cells charts.
+- Add dropdown to select genomic modality for cells gene queries.
 - Remove breakpoints for cells query cell percentage slider.
 - Fix bug relating to missing donor metadata on cells page.
-- Add legend and adjust bar colors in cell cluster bar chart.
+- Add axis labels, legend and adjust bar colors in cell cluster bar chart.
