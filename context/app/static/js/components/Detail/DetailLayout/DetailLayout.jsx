@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import useEntityStore, { savedAlertStatus, editedAlertStatus } from 'js/stores/useEntityStore';
-import TableOfContents from '../TableOfContents';
+import TableOfContents from 'js/shared-styles/sections/TableOfContents';
+import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import { Content, FlexRow, StyledAlert } from './style';
-import { getSections } from './utils';
 
 const entityStoreSelector = (state) => ({
   shouldDisplaySavedOrEditedAlert: state.shouldDisplaySavedOrEditedAlert,
