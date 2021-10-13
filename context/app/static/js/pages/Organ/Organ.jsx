@@ -1,4 +1,5 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
@@ -33,6 +34,9 @@ function Organ(props) {
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
       <Content>
+        <Typography variant="subtitle1" component="h1" color="primary">
+          Organ
+        </Typography>
         <SectionHeader variant="h1" component="h1">
           {organ.name}
         </SectionHeader>
