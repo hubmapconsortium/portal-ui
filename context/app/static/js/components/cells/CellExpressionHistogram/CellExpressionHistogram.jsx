@@ -4,7 +4,7 @@ import { useTheme } from '@material-ui/core/styles';
 
 import Histogram from 'js/shared-styles/charts/Histogram';
 import CellsService from 'js/components/cells/CellsService';
-import { StyledSkeleton } from 'js/components/cells/CellsCharts/style';
+import ChartLoader from 'js/components/cells/ChartLoader';
 
 function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoading, loadingKey, isExpanded }) {
   const [expressionData, setExpressionData] = useState([]);
@@ -38,7 +38,7 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
   }, [uuid, cellVariableName, finishLoading, loadingKey, isExpanded]);
 
   if (Object.values(isLoading).some((val) => val)) {
-    return <StyledSkeleton variant="rect" />;
+    return <ChartLoader />;
   }
 
   return (

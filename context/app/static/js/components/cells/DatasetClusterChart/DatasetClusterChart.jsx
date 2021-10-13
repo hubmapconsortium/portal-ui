@@ -7,8 +7,7 @@ import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalStackedBarChart';
 import CellsService from 'js/components/cells/CellsService';
-
-import { StyledSkeleton } from 'js/components/cells/CellsCharts/style';
+import ChartLoader from 'js/components/cells/ChartLoader';
 
 function DatasetClusterChart({
   uuid,
@@ -75,7 +74,7 @@ function DatasetClusterChart({
   }
 
   if (Object.values(isLoading).some((val) => val)) {
-    return <StyledSkeleton variant="rect" />;
+    return <ChartLoader />;
   }
 
   return (

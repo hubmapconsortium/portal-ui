@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Skeleton from '@material-ui/lab/Skeleton';
 
 const Flex = styled.div`
   display: flex;
@@ -14,9 +13,4 @@ const ChartWrapper = styled.div`
   width: 0px;
 `;
 
-const StyledSkeleton = styled(Skeleton)`
-  height: 100%;
-  width: 100%;
-`;
-
-export { Flex, ChartWrapper, StyledSkeleton };
+export { Flex, ChartWrapper };
