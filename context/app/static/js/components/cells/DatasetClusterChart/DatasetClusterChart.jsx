@@ -58,7 +58,7 @@ function DatasetClusterChart({
 
   const colorScale = scaleOrdinal({
     domain: ['matched', 'unmatched'],
-    range: [theme.palette.warning.main, theme.palette.warning.light],
+    range: [theme.palette.warning.dark, theme.palette.warning.light],
   });
 
   useEffect(() => {
