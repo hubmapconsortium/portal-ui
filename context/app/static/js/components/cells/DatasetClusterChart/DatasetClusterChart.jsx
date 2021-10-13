@@ -9,8 +9,7 @@ import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOpt
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalStackedBarChart';
 import CellsService from 'js/components/cells/CellsService';
 import ChartLoader from 'js/components/cells/ChartLoader';
-
-import { Flex, FlexGrowChild } from './style';
+import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 
 function getDropdownLabel(option, uuid) {
   const split = option.split('-');
@@ -89,40 +88,48 @@ function DatasetClusterChart({
   }
 
   return (
-    <Flex>
-      <FlexGrowChild>
-        <VerticalStackedBarChart
-          visxData={scales.selectedData}
-          yScale={scales.yScale}
-          xScale={scales.xScale}
-          colorScale={colorScale}
-          getX={(x) => x.cluster_number}
-          keys={['matched', 'unmatched']}
-          margin={{
-            top: 25,
-            right: 50,
-            left: 65,
-            bottom: 100, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
-          }}
-          xAxisLabel="Cluster"
-          yAxisLabel="Cell Set Size"
-          chartTitle="Cluster Membership"
-        />
-      </FlexGrowChild>
-      <div>
-        <Typography>Cluster Method</Typography>
-        <DropdownListbox
-          id="bar-fill-dropdown"
-          optionComponent={DropdownListboxOption}
-          buttonComponent={Button}
-          selectedOptionIndex={selectedClusterTypeIndex}
-          options={Object.keys(results)}
-          selectOnClick={handleSelectClusterType}
-          getOptionLabel={(option) => getDropdownLabel(option, uuid)}
-          buttonProps={{ variant: 'outlined' }}
-        />
-      </div>
-    </Flex>
+    <ChartWrapper
+      chartTitle="Cluster Membership"
+      margin={{
+        top: 25,
+        right: 50,
+        left: 65,
+        bottom: 100, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
+      }}
+      colorScale={colorScale}
+      dropdown={
+        <div>
+          <Typography>Cluster Method</Typography>
+          <DropdownListbox
+            id="bar-fill-dropdown"
+            optionComponent={DropdownListboxOption}
+            buttonComponent={Button}
+            selectedOptionIndex={selectedClusterTypeIndex}
+            options={Object.keys(results)}
+            selectOnClick={handleSelectClusterType}
+            getOptionLabel={(option) => getDropdownLabel(option, uuid)}
+            buttonProps={{ variant: 'outlined' }}
+          />
+        </div>
+      }
+    >
+      <VerticalStackedBarChart
+        visxData={scales.selectedData}
+        yScale={scales.yScale}
+        xScale={scales.xScale}
+        colorScale={colorScale}
+        getX={(x) => x.cluster_number}
+        keys={['matched', 'unmatched']}
+        margin={{
+          top: 25,
+          right: 50,
+          left: 65,
+          bottom: 100, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
+        }}
+        xAxisLabel="Cluster"
+        yAxisLabel="Cell Set Size"
+      />
+    </ChartWrapper>
   );
 }
 export default DatasetClusterChart;

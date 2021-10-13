@@ -6,10 +6,7 @@ import { withParentSize } from '@visx/responsive';
 import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { GridRows } from '@visx/grid';
 import { localPoint } from '@visx/event';
-import { LegendOrdinal } from '@visx/legend';
 import Typography from '@material-ui/core/Typography';
-
-import { TitleAndLegendWrapper, CenteredFlex } from './style';
 
 function VerticalStackedBarChart({
   parentWidth,
@@ -23,7 +20,6 @@ function VerticalStackedBarChart({
   margin,
   xAxisLabel,
   yAxisLabel,
-  chartTitle,
 }) {
   const [hoveredBarIndices, setHoveredBarIndices] = useState();
 
@@ -59,20 +55,7 @@ function VerticalStackedBarChart({
   const strokeWidth = 1.5;
 
   return (
-    <div>
-      <TitleAndLegendWrapper $leftOffset={margin.left - margin.right}>
-        {chartTitle && <Typography>{chartTitle}</Typography>}
-        <CenteredFlex>
-          <LegendOrdinal
-            scale={colorScale}
-            direction="row"
-            labelMargin="0 15px 0 0"
-            shapeStyle={() => ({
-              borderRadius: '3px',
-            })}
-          />
-        </CenteredFlex>
-      </TitleAndLegendWrapper>
+    <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
         <GridRows top={margin.top + 1} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.2} />
         <Group top={margin.top} left={margin.left}>
@@ -156,7 +139,7 @@ function VerticalStackedBarChart({
           </Typography>
         </TooltipInPortal>
       )}
-    </div>
+    </>
   );
 }
 
