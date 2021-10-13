@@ -49,14 +49,15 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
       <Histogram
         visxData={expressionData}
         margin={{
-          top: 50,
+          top: 35,
           right: 50,
           left: 65,
-          bottom: 65,
+          bottom: 100,
         }}
         barColor={theme.palette.success.main}
         xAxisLabel="Expression Level"
         yAxisLabel="Frequency"
+        chartTitle="Gene Expression Distribution"
       />
     </>
   );
