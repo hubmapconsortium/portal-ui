@@ -6,6 +6,7 @@ import { useInView } from 'react-intersection-observer';
 import 'intersection-observer';
 
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
+import VerticalDivider from 'js/shared-styles/VerticalDivider';
 import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { FileIcon } from 'js/shared-styles/icons';
@@ -58,6 +59,7 @@ function SummaryData(props) {
             {['Dataset', 'Summary'].includes(entity_type) && (
               <>
                 <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
+                <VerticalDivider />
                 <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
               </>
             )}

@@ -15,6 +15,7 @@ import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
 import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 import DerivedDatasetsSection from 'js/components/Detail/derivedEntities/DerivedDatasetsSection';
+import VerticalDivider from 'js/shared-styles/VerticalDivider';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -74,6 +75,7 @@ function SampleDetail(props) {
           group_name={group_name}
         >
           <SummaryItem>{mapped_organ}</SummaryItem>
+          <VerticalDivider />
           <Typography variant="h6" component="p">
             {mapped_specimen_type}
           </Typography>

@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from 'react';
-import Typography from '@material-ui/core/Typography';
 
 import { Alert } from 'js/shared-styles/alerts';
 import { LightBlueLink } from 'js/shared-styles/Links';
@@ -22,6 +21,7 @@ import SupportAlert from 'js/components/Detail/SupportAlert';
 // TODO use this context for components other than FileBrowser
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
+import VerticalDivider from 'js/shared-styles/VerticalDivider';
 
 function SummaryDataChildren(props) {
   const { mapped_data_types, origin_sample } = props;
@@ -32,9 +32,12 @@ function SummaryDataChildren(props) {
           {mapped_data_types}
         </LightBlueLink>
       </SummaryItem>
-      <Typography variant="h6" component="p">
-        {origin_sample.mapped_organ}
-      </Typography>
+      <VerticalDivider />
+      <SummaryItem>
+        <LightBlueLink variant="h6" href="/organ" underline="none">
+          {origin_sample.mapped_organ}
+        </LightBlueLink>
+      </SummaryItem>
     </>
   );
 }
