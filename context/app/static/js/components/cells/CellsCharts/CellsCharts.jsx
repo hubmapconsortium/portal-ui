@@ -20,7 +20,7 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType, heightR
 
   return (
     <Flex ref={heightRef}>
-      <ChartWrapper>
+      <ChartWrapper $flexBasis={45}>
         <CellExpressionHistogram
           uuid={uuid}
           cellVariableName={cellVariableName}
@@ -30,7 +30,7 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType, heightR
           isExpanded={isExpanded}
         />
       </ChartWrapper>
-      <ChartWrapper>
+      <ChartWrapper $flexBasis={55}>
         <DatasetClusterChart
           uuid={uuid}
           cellVariableName={cellVariableName}

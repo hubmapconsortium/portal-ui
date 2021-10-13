@@ -6,7 +6,7 @@ const Flex = styled.div`
 `;
 
 const ChartWrapper = styled.div`
-  flex-basis: 50%;
+  flex-basis: ${(props) => props.$flexBasis}%;
   height: 100%;
   box-sizing: border-box;
   margin: 0px 10px;
