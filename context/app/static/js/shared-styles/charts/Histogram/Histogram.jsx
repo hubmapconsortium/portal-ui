@@ -65,6 +65,7 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
             labelProps={{
               fontSize: 12,
             }}
+            labelOffset={48}
           />
           <AxisBottom
             hideTicks
