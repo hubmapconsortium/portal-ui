@@ -11,10 +11,12 @@ import CellsService from 'js/components/cells/CellsService';
 import ChartLoader from 'js/components/cells/ChartLoader';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 
-function getDropdownLabel(option, uuid) {
+function removeUUIDFromOption(option, uuid) {
   const split = option.split('-');
-  if (split.at(-1) === uuid) {
-    return split.slice(0, -1).join('-');
+  const uuidIndex = split.findIndex((item) => item === uuid);
+  if (uuidIndex) {
+    split.splice(uuidIndex, 1);
+    return split.join('-');
   }
   return option;
 }
@@ -92,8 +94,8 @@ function DatasetClusterChart({
       chartTitle="Cluster Membership"
       margin={{
         top: 25,
-        right: 50,
-        left: 65,
+        right: 25,
+        left: 25,
         bottom: 100, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
       }}
       colorScale={colorScale}
@@ -107,7 +109,7 @@ function DatasetClusterChart({
             selectedOptionIndex={selectedClusterTypeIndex}
             options={Object.keys(results)}
             selectOnClick={handleSelectClusterType}
-            getOptionLabel={(option) => getDropdownLabel(option, uuid)}
+            getOptionLabel={(option) => removeUUIDFromOption(option, uuid)}
             buttonProps={{ variant: 'outlined' }}
           />
         </div>
