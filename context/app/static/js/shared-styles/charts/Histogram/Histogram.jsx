@@ -56,6 +56,9 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
               textAnchor: 'end',
               dy: '0.33em',
             })}
+            labelProps={{
+              fontSize: 12,
+            }}
           />
           <AxisBottom
             hideTicks
@@ -69,6 +72,10 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
               fontSize: 11,
               textAnchor: 'middle',
             })}
+            labelProps={{
+              fontSize: 12,
+              textAnchor: 'middle',
+            }}
           />
         </Group>
       </svg>
