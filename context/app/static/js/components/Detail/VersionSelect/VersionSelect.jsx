@@ -4,7 +4,7 @@ import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
-import { StyledButton, VersionStatusIcon, Flex, OverflowEllipsis, EmptyFullWidthDiv } from './style';
+import { StyledButton, OverflowEllipsis, EmptyFullWidthDiv } from './style';
 
 function VersionSelect({ uuid }) {
   const { entityEndpoint, nexusToken } = useContext(AppContext);
@@ -28,7 +28,7 @@ function VersionSelect({ uuid }) {
         return;
       }
       const results = await response.json();
-      setVersions(results.sort((a, b) => a.revision_number - b.revision_number));
+      setVersions(results.sort((a, b) => b.revision_number - a.revision_number));
       setSelectedVersionIndex(results.findIndex((version) => version[uuidKey] === uuid));
     }
     fetchVersions();
@@ -38,12 +38,9 @@ function VersionSelect({ uuid }) {
     window.location.href = `/browse/dataset/${versions[i][uuidKey]}`;
   }
 
-  function getOptionDisplay(option, i) {
+  function getOptionDisplay(option) {
     return option?.revision_number ? (
-      <Flex>
-        <VersionStatusIcon $iconColor={i === versions.length - 1 ? 'success' : 'warning'} />
-        <OverflowEllipsis>v{option.revision_number}</OverflowEllipsis>
-      </Flex>
+      <OverflowEllipsis>Version {option.revision_number}</OverflowEllipsis>
     ) : (
       <EmptyFullWidthDiv />
     );
@@ -58,7 +55,7 @@ function VersionSelect({ uuid }) {
       options={versions}
       selectOnClick={visitNewVersion}
       getOptionLabel={getOptionDisplay}
-      buttonProps={{ disabled: versions.length === 0 }}
+      buttonProps={{ disabled: versions.length === 0, color: 'primary' }}
     />
   );
 }
