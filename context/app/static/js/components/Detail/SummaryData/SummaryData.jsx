@@ -63,7 +63,6 @@ function SummaryData(props) {
               </>
             )}
             <FlexEnd>
-              {['Dataset', 'Support'].includes(entity_type) && <VersionSelect uuid={uuid} />}
               <SecondaryBackgroundTooltip title="View JSON">
                 <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
                   <FileIcon color="primary" />
@@ -77,6 +76,7 @@ function SummaryData(props) {
                   hubmap_id={hubmap_id}
                 />
               )}
+              {['Dataset', 'Support'].includes(entity_type) && <VersionSelect uuid={uuid} />}
             </FlexEnd>
           </FlexEnd>
         }
