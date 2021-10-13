@@ -1,0 +1,2 @@
+- Rearrange cells chart layout.
+- Add back fixed marks for cells percentage slider.
