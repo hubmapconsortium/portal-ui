@@ -11,15 +11,7 @@ import CellsService from 'js/components/cells/CellsService';
 import ChartLoader from 'js/components/cells/ChartLoader';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 
-function removeUUIDFromOption(option, uuid) {
-  const split = option.split('-');
-  const uuidIndex = split.findIndex((item) => item === uuid);
-  if (uuidIndex) {
-    split.splice(uuidIndex, 1);
-    return split.join('-');
-  }
-  return option;
-}
+import { getOptionLabels } from './utils';
 
 function DatasetClusterChart({
   uuid,
@@ -35,6 +27,7 @@ function DatasetClusterChart({
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useState(0);
   const theme = useTheme();
   const loadedOnce = useRef(false);
+  const [optionLabels, setOptionLabels] = useState({});
 
   useEffect(() => {
     if (Object.keys(results).length) {
@@ -54,9 +47,10 @@ function DatasetClusterChart({
         yScale,
         xScale,
       });
+      setOptionLabels(getOptionLabels(Object.keys(results), uuid));
       finishLoading(loadingKey);
     }
-  }, [setScales, results, selectedClusterTypeIndex, finishLoading, loadingKey]);
+  }, [setScales, results, selectedClusterTypeIndex, finishLoading, loadingKey, uuid]);
 
   const colorScale = scaleOrdinal({
     domain: ['matched', 'unmatched'],
@@ -109,7 +103,7 @@ function DatasetClusterChart({
             selectedOptionIndex={selectedClusterTypeIndex}
             options={Object.keys(results)}
             selectOnClick={handleSelectClusterType}
-            getOptionLabel={(option) => removeUUIDFromOption(option, uuid)}
+            getOptionLabel={(option) => optionLabels[option]}
             buttonProps={{ variant: 'outlined' }}
           />
         </div>
