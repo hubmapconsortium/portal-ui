@@ -8,6 +8,7 @@ const Flex = styled.div`
 
 const DropdownWrapper = styled.div`
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  max-width: 175px;
 `;
 
 const FlexGrowChild = styled.div`
