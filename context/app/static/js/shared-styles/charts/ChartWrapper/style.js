@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-const TitleWrapper = styled.div`
-  padding-left: ${(props) => props.$leftOffset}px;
-`;
-
 const Flex = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
+`;
+
+const DropdownWrapper = styled.div`
+  margin-bottom: ${(props) => props.theme.spacing(1)}px;
 `;
 
 const FlexGrowChild = styled.div`
@@ -15,4 +15,4 @@ const FlexGrowChild = styled.div`
   min-height: 0px;
 `;
 
-export { TitleWrapper, Flex, FlexGrowChild };
+export { Flex, DropdownWrapper, FlexGrowChild };

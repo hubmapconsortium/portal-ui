@@ -2,7 +2,8 @@ import React from 'react';
 import { LegendOrdinal } from '@visx/legend';
 import Typography from '@material-ui/core/Typography';
 
-import { TitleWrapper, Flex, FlexGrowChild } from './style';
+import { TitleWrapper } from 'js/shared-styles/charts/style';
+import { Flex, FlexGrowChild, DropdownWrapper } from './style';
 
 function ChartWrapper({ children, chartTitle, margin, colorScale, dropdown }) {
   return (
@@ -14,7 +15,7 @@ function ChartWrapper({ children, chartTitle, margin, colorScale, dropdown }) {
         {children}
       </FlexGrowChild>
       <div>
-        {dropdown}
+        {dropdown && <DropdownWrapper>{dropdown}</DropdownWrapper>}
         <LegendOrdinal
           scale={colorScale}
           labelMargin="0 15px 0 0"
