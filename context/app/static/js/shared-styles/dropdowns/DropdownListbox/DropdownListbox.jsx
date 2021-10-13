@@ -47,7 +47,7 @@ function DropdownListbox(props) {
             <MenuList role="listbox" id={`${id}-options`}>
               {options.map((option, i) => (
                 <Option
-                  onClick={() => selectOption({ option, i })}
+                  onClick={selectedOptionIndex === i ? undefined : () => selectOption({ option, i })}
                   key={getOptionLabel(option)}
                   autoFocus={selectedOptionIndex === i}
                   selected={selectedOptionIndex === i}
