@@ -43,6 +43,24 @@ function getSearchQuery(cellsResults) {
   };
 }
 
+function SliderWrapper(props) {
+  const { value, min, max, marks, setter, labelledby } = props;
+  return (
+    <Slider
+      value={value}
+      min={min}
+      max={max}
+      valueLabelDisplay="auto"
+      step={null} /* Constrains choices to the mark values. */
+      marks={marks.map((m) => ({ value: m, label: m }))}
+      onChange={(e, val) => {
+        setter(val);
+      }}
+      aria-labelledby={labelledby}
+    />
+  );
+}
+
 function DatasetsSelectedByExpression({
   completeStep,
   setResults,
@@ -132,15 +150,13 @@ function DatasetsSelectedByExpression({
         labelledby="min-expression-label"
       />
       <FormLabel id="min-cell-percentage-label">Minimum cell percentage</FormLabel>
-      <Slider
+      <SliderWrapper
         value={minCellPercentage}
         min={0}
-        max={100}
-        valueLabelDisplay="auto"
-        onChange={(e, val) => {
-          setMinCellPercentage(val);
-        }}
-        aria-labelledby="min-cell-percentage-label"
+        max={10}
+        marks={[0, 1, 2, 5, 10]}
+        setter={setMinCellPercentage}
+        labelledby="min-cell-percentage-label"
       />
       <br />
       <Button onClick={handleSubmit} disabled={cellVariableNames.length === 0} variant="contained" color="primary">

@@ -1,14 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Typography from '@material-ui/core/Typography';
 import { useTheme } from '@material-ui/core/styles';
 
 import Histogram from 'js/shared-styles/charts/Histogram';
 import CellsService from 'js/components/cells/CellsService';
-import { StyledSkeleton } from 'js/components/cells/CellsCharts/style';
+import ChartLoader from 'js/components/cells/ChartLoader';
 
-function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoading, loadingKey, isExpanded }) {
+function CellExpressionHistogram({
+  uuid,
+  cellVariableName,
+  isLoading,
+  finishLoading,
+  loadingKey,
+  isExpanded,
+  setDiagnosticInfo,
+}) {
   const [expressionData, setExpressionData] = useState([]);
-  const [diagnosticInfo, setDiagnosticInfo] = useState({});
   const theme = useTheme();
   const loadedOnce = useRef(false);
 
@@ -35,30 +41,26 @@ function CellExpressionHistogram({ uuid, cellVariableName, isLoading, finishLoad
       fetchCellExpression();
       loadedOnce.current = true;
     }
-  }, [uuid, cellVariableName, finishLoading, loadingKey, isExpanded]);
+  }, [uuid, cellVariableName, finishLoading, loadingKey, isExpanded, setDiagnosticInfo]);
 
   if (Object.values(isLoading).some((val) => val)) {
-    return <StyledSkeleton variant="rect" />;
+    return <ChartLoader />;
   }
 
   return (
-    <>
-      <Typography>
-        {diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for {diagnosticInfo.numCells} cells.
-      </Typography>
-      <Histogram
-        visxData={expressionData}
-        margin={{
-          top: 50,
-          right: 50,
-          left: 65,
-          bottom: 65,
-        }}
-        barColor={theme.palette.success.main}
-        xAxisLabel="Expression Level"
-        yAxisLabel="Frequency"
-      />
-    </>
+    <Histogram
+      visxData={expressionData}
+      margin={{
+        top: 25,
+        right: 50,
+        left: 65,
+        bottom: 100,
+      }}
+      barColor={theme.palette.success.main}
+      xAxisLabel="Expression Level"
+      yAxisLabel="Frequency"
+      chartTitle="Gene Expression Distribution"
+    />
   );
 }
 

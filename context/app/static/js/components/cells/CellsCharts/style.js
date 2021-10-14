@@ -1,22 +1,25 @@
-import styled from 'styled-components';
-import Skeleton from '@material-ui/lab/Skeleton';
+import styled, { css } from 'styled-components';
+import Typography from '@material-ui/core/Typography';
+
+const chartMargin = css`
+  margin: 0px 10px;
+`;
 
 const Flex = styled.div`
   display: flex;
   height: 400px;
 `;
 
+const StyledTypography = styled(Typography)`
+  ${chartMargin}
+`;
+
 const ChartWrapper = styled.div`
-  flex-basis: 50%;
+  flex-basis: ${(props) => props.$flexBasis}%;
   height: 100%;
   box-sizing: border-box;
-  margin: 0px 10px;
+  ${chartMargin}
   width: 0px;
 `;
 
-const StyledSkeleton = styled(Skeleton)`
-  height: 100%;
-  width: 100%;
-`;
-
-export { Flex, ChartWrapper, StyledSkeleton };
+export { Flex, ChartWrapper, StyledTypography };

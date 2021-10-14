@@ -1,0 +1,4 @@
+- Rearrange cells chart layout.
+- Add back fixed marks for cells percentage slider.
+- Add text to cells chart skeleton loaders.
+- Remove uuids from cells cluster method strings.
