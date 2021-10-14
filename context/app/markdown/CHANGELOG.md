@@ -1,3 +1,19 @@
+## v0.29.0 - 2021-10-14
+
+- Add dropdown to select genomic modality for cells gene queries.
+- Remove breakpoints for cells query cell percentage slider.
+- Fix bug relating to missing donor metadata on cells page.
+- Add axis labels, legend and adjust bar colors in cell cluster bar chart.
+- Rearrange cells chart layout.
+- Add back fixed marks for cells percentage slider.
+- Add text to cells chart skeleton loaders.
+- Remove uuids from cells cluster method strings.
+- Add a table of contents on the organ page.
+- Validate the organs yaml that we generate, and fetch fresh azimuth data each time.
+- Use partonomy in public search.
+- Simplify the organs script by pulling more information from the Azimuth github repo.
+
+
 ## v0.28.4 - 2021-10-06
 
 - Add loaders to cells page.
