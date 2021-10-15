@@ -117,7 +117,7 @@ class ApiClient():
         print(route)
         response_json = self._request(
             current_app.config['ENTITY_API_BASE'] + route)
-        return max(response_json, key=lambda revision:revision['revision_number'])[f"{lowercase_type}_uuid"]
+        return _get_latest_uuid(response_json, lowercase_type)
 
     def get_vitessce_conf_cells_and_lifted_uuid(self, entity):
         '''
@@ -388,3 +388,13 @@ def _get_image_pyramid_descendants(entity):
         if 'image_pyramid' in d.get('data_types', [])
     ]
     return deepcopy(image_pyramid_descendants)
+
+
+def _get_latest_uuid(revisions, lowercase_type):
+    '''
+    >>> revisions = [{'a_uuid': 'x', 'revision_number': 1}, {'a_uuid': 'z', 'revision_number': 10}]
+    >>> _get_latest_uuid(revisions, 'a')
+    'z'
+    '''
+    return max(revisions,
+               key=lambda revision: revision['revision_number'])[f"{lowercase_type}_uuid"]
