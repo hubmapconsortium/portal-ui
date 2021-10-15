@@ -111,6 +111,14 @@ class ApiClient():
         hits = response_json['hits']['hits']
         return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id)
 
+    def get_latest_entity_uuid(self, uuid, type):
+        lowercase_type = type.lower()
+        route = '/'.join(['', f"{lowercase_type}s", uuid, 'revisions'])
+        print(route)
+        response_json = self._request(
+            current_app.config['ENTITY_API_BASE'] + route)
+        return max(response_json, key=lambda revision:revision['revision_number'])[f"{lowercase_type}_uuid"]
+
     def get_vitessce_conf_cells_and_lifted_uuid(self, entity):
         '''
         Returns a dataclass with vitessce_conf and is_lifted.
