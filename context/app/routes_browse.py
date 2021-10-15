@@ -30,6 +30,14 @@ def hbm_redirect(hbm_suffix):
         url_for('routes_browse.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
 
 
+@blueprint.route('/browse/latest/<type>/<uuid>')
+def latest_redirect(type, uuid):
+    client = get_client()
+    latest_entity_uuid = client.get_latest_entity_uuid(uuid, type)
+    return redirect(
+        url_for('routes_browse.details', type=type.lower(), uuid=latest_entity_uuid))
+
+
 @blueprint.route('/browse/<type>/<uuid>.<unknown_ext>')
 def unknown_ext(type, uuid, unknown_ext):
     # https://github.com/pallets/werkzeug/blob/b01fa1817343d2a36a9d8bb17f61ddf209c27c2b/src/werkzeug/routing.py#L1126
