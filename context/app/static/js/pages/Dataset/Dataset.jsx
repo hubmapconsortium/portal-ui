@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { Alert } from 'js/shared-styles/alerts';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/files/Files';
 import ProvSection from 'js/components/Detail/provenance/ProvSection';
@@ -18,6 +17,7 @@ import { AppContext } from 'js/components/Providers';
 import useCollectionsData from 'js/hooks/useCollectionsData';
 import CollectionsSection from 'js/components/Detail/CollectionsSection';
 import SupportAlert from 'js/components/Detail/SupportAlert';
+import { DetailPageAlert } from 'js/shared-styles/alerts';
 
 // TODO use this context for components other than FileBrowser
 import DetailContext from 'js/components/Detail/context';
@@ -102,16 +102,13 @@ function DatasetDetail(props) {
   return (
     <DetailContext.Provider value={{ hubmap_id, uuid, mapped_data_access_level }}>
       {!isLatest && (
-        <Alert severity="warning" $marginBottom="16">
+        <DetailPageAlert severity="warning" $marginBottom="16">
           <span>
             {/* <span> to override "display: flex" which splits this on to multiple lines. */}
-            You are viewing an older version of this page. Navigate to a{' '}
-            <LightBlueLink href={`/browse/dataset/${assayMetadata.next_revision_uuid}`}>
-              more recent version
-            </LightBlueLink>
-            .
+            You are viewing an older version of this page. Navigate to the{' '}
+            <LightBlueLink href={`/browse/latest/dataset/${uuid}`}>latest version</LightBlueLink>.
           </span>
-        </Alert>
+        </DetailPageAlert>
       )}
       {entity_type === 'Support' && <SupportAlert uuid={uuid} />}
       <DetailLayout sectionOrder={sectionOrder}>
