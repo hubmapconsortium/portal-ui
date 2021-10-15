@@ -114,7 +114,6 @@ class ApiClient():
     def get_latest_entity_uuid(self, uuid, type):
         lowercase_type = type.lower()
         route = '/'.join(['', f"{lowercase_type}s", uuid, 'revisions'])
-        print(route)
         response_json = self._request(
             current_app.config['ENTITY_API_BASE'] + route)
         return _get_latest_uuid(response_json, lowercase_type)
