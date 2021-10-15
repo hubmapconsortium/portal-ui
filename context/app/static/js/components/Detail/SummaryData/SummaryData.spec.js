@@ -38,7 +38,7 @@ test('dataset displays properly', async () => {
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
   expect(screen.getByTestId('status-svg-icon')).toBeInTheDocument();
 
-  await screen.findByText('v1');
+  await screen.findByText('Version 1');
 });
 
 test('non-dataset displays properly', () => {
