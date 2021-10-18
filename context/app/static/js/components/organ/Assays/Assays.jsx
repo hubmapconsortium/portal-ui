@@ -5,6 +5,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { getDefaultQuery } from 'js/helpers/functions';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
@@ -13,6 +14,7 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useSearchData from 'js/hooks/useSearchData';
 
+import { Flex, StyledInfoIcon } from '../style';
 import { getSearchURL } from '../utils';
 
 function Assays(props) {
@@ -61,7 +63,14 @@ function Assays(props) {
   return (
     <SectionContainer>
       <SpacedSectionButtonRow
-        leftText={<SectionHeader>Assays</SectionHeader>}
+        leftText={
+          <Flex>
+            <SectionHeader>Assays</SectionHeader>
+            <SecondaryBackgroundTooltip title="Experiments related to this organ">
+              <StyledInfoIcon color="primary" />
+            </SecondaryBackgroundTooltip>
+          </Flex>
+        }
         buttons={
           <Button color="primary" variant="contained" component="a" href={searchUrl}>
             View All Datasets
