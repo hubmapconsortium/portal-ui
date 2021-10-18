@@ -34,12 +34,10 @@ function Organ(props) {
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
       <Content>
-        <Typography variant="subtitle1" component="h1" color="primary">
+        <Typography variant="subtitle1" color="primary">
           Organ
         </Typography>
-        <SectionHeader variant="h1" component="h1">
-          {organ.name}
-        </SectionHeader>
+        <SectionHeader variant="h1">{organ.name}</SectionHeader>
         {shouldDisplaySection[descriptionId] && (
           <div id={descriptionId}>
             <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short}>
