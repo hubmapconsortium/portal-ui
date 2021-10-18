@@ -1,4 +1,5 @@
-from flask import Flask, session, render_template
+from .utils import redirect_hbm
+from flask import Flask, session, render_template, request
 
 from . import (
     routes_main, routes_browse, routes_api, routes_file_based,
@@ -19,8 +20,16 @@ def bad_request(e):
     return render_react_error(400, 'Bad Request')
 
 
+def get_hbm_suffix(path):
+    uppercase_path = path.upper()
+    return uppercase_path.split('HBM').pop() if uppercase_path.startswith('/BROWSE/HBM') else None
+
+
 def not_found(e):
     '''A 404 means Flask routing failed.'''
+    hbm_suffix = get_hbm_suffix(request.path)
+    if hbm_suffix:
+        return redirect_hbm(hbm_suffix)
     return render_react_error(404, 'Page Not Found')
 
 
@@ -35,6 +44,9 @@ def unauthorized(e):
 
 
 def forbidden(e):
+    hbm_suffix = get_hbm_suffix(request.path)
+    if hbm_suffix:
+        return redirect_hbm(hbm_suffix)
     return render_react_error(403, 'Forbidden')
 
 
