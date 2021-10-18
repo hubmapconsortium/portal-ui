@@ -23,6 +23,8 @@ import SupportAlert from 'js/components/Detail/SupportAlert';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
 
+import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
+
 function SummaryDataChildren(props) {
   const { mapped_data_types, origin_sample } = props;
   return (
@@ -39,13 +41,6 @@ function SummaryDataChildren(props) {
   );
 }
 
-function getCollectionsWhichContainDataset(uuid, collections) {
-  return collections.filter((collection) => {
-    // eslint-disable-next-line no-underscore-dangle
-    return collection._source.datasets.some((dataset) => dataset.uuid === uuid);
-  });
-}
-
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DatasetDetail(props) {
@@ -54,6 +49,8 @@ function DatasetDetail(props) {
     protocol_url,
     metadata,
     files,
+    donor,
+    source_sample,
     uuid,
     data_types,
     mapped_data_types,
@@ -72,6 +69,8 @@ function DatasetDetail(props) {
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
+  const combinedMetadata = combineMetadata(donor, origin_sample, source_sample, metadata);
+
   const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
 
   const allCollections = useCollectionsData(elasticsearchEndpoint, nexusToken);
@@ -81,7 +80,7 @@ function DatasetDetail(props) {
     provenance: entity_type !== 'Support',
     visualization: Boolean(vitData),
     protocols: Boolean(protocol_url),
-    metadata: metadata && 'metadata' in metadata,
+    metadata: Boolean(Object.keys(combinedMetadata).length),
     files: true,
     collections: Boolean(collectionsData.length),
   };
@@ -137,7 +136,7 @@ function DatasetDetail(props) {
         )}
         {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
         <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         <Attribution

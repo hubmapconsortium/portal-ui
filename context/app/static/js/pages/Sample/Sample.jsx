@@ -16,12 +16,15 @@ import { getSectionOrder } from 'js/components/Detail/utils';
 import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 import DerivedDatasetsSection from 'js/components/Detail/derivedEntities/DerivedDatasetsSection';
 
+import { combineMetadata } from 'js/pages/utils/entity-utils';
+
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function SampleDetail(props) {
   const { assayMetadata } = props;
   const {
     uuid,
+    donor,
     protocol_url,
     mapped_specimen_type,
     origin_sample: { mapped_organ },
@@ -40,10 +43,12 @@ function SampleDetail(props) {
 
   const { searchHits: derivedDatasets, isLoading: derivedDatsetsAreLoading } = useDerivedDatasetSearchHits(uuid);
 
+  const combinedMetadata = combineMetadata(donor, undefined, undefined, metadata);
+
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     tissue: true,
-    metadata: 'metadata' in assayMetadata,
+    metadata: Boolean(Object.keys(combinedMetadata).length),
     derived: Boolean(descendant_counts?.entity_type?.Dataset > 0),
   };
 
@@ -94,7 +99,7 @@ function SampleDetail(props) {
         />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
