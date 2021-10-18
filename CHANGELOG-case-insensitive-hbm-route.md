@@ -1,0 +1,1 @@
+- Redirect to correct entity for hbm routes with incorrect casing.
