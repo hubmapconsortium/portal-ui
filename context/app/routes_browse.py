@@ -7,7 +7,7 @@ from flask import (render_template,
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
-from .utils import get_default_flask_data, make_blueprint, get_client
+from .utils import get_default_flask_data, make_blueprint, get_client, redirect_hbm
 
 
 blueprint = make_blueprint(__name__)
@@ -24,10 +24,7 @@ def get_url_base_from_request():
 
 @blueprint.route('/browse/HBM<hbm_suffix>')
 def hbm_redirect(hbm_suffix):
-    client = get_client()
-    entity = client.get_entity(hbm_id=f'HBM{hbm_suffix}')
-    return redirect(
-        url_for('routes_browse.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
+    return redirect_hbm(hbm_suffix)
 
 
 @blueprint.route('/browse/<type>/<uuid>.<unknown_ext>')
