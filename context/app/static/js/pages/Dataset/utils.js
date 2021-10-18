@@ -1,15 +1,24 @@
-function combineMetadata(donor, origin_sample, source_sample, metadata) {
+function addPrefix(prefix, object) {
+  return Object.fromEntries(Object.entries(object).map(([key, value]) => [prefix + key, value]));
+}
+
+function prefixDonorMetadata(donor) {
   const donorMetadata = donor?.mapped_metadata || {};
+  return addPrefix('donor.', donorMetadata);
+}
+
+function prefixSampleMetadata(source_sample) {
+  const sampleMetadatas = (source_sample || []).filter((sample) => sample?.metadata).map((sample) => sample.metadata);
+  return sampleMetadatas.map((sampleMetadata) => addPrefix('sample.', sampleMetadata));
+}
+
+function combineMetadata(donor, origin_sample, source_sample, metadata) {
   const combinedMetadata = {
     ...(metadata?.metadata || {}),
-    ...Object.fromEntries(Object.entries(donorMetadata).map(([key, value]) => [`donor.${key}`, value])),
+    ...prefixDonorMetadata(donor),
   };
-  const sampleMetadatas = (source_sample || []).filter((sample) => sample?.metadata).map((sample) => sample.metadata);
-  sampleMetadatas.forEach((sampleMetadata) => {
-    Object.assign(
-      combinedMetadata,
-      Object.fromEntries(Object.entries(sampleMetadata).map(([key, value]) => [`sample.${key}`, value])),
-    );
+  prefixSampleMetadata(source_sample).forEach((sampleMetadata) => {
+    Object.assign(combinedMetadata, sampleMetadata);
   });
 
   return combinedMetadata;

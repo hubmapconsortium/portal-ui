@@ -42,7 +42,7 @@ test('combines appropiately structured metadata', () => {
       mapped_metadata: {},
       metadata: {
         cold_ischemia_time_unit: 'minutes',
-        cold_ischemia_time_value: '1000',
+        cold_ischemia_time_value: '100',
       },
     },
   ];
@@ -62,6 +62,6 @@ test('combines appropiately structured metadata', () => {
     'donor.age_unit': ['years'],
     'donor.age_value': [40],
     'sample.cold_ischemia_time_unit': 'minutes',
-    'sample.cold_ischemia_time_value': '1000',
+    'sample.cold_ischemia_time_value': '100',
   });
 });
