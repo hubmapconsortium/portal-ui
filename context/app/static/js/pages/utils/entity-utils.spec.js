@@ -1,4 +1,4 @@
-import { combineMetadata } from './utils';
+import { combineMetadata } from './entity-utils';
 
 test('robust against undefined data', () => {
   const donor = undefined;

@@ -16,6 +16,8 @@ import { getSectionOrder } from 'js/components/Detail/utils';
 import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 import DerivedDatasetsSection from 'js/components/Detail/derivedEntities/DerivedDatasetsSection';
 
+import { combineMetadata } from 'js/pages/utils/entity-utils';
+
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function SampleDetail(props) {
@@ -41,11 +43,7 @@ function SampleDetail(props) {
 
   const { searchHits: derivedDatasets, isLoading: derivedDatsetsAreLoading } = useDerivedDatasetSearchHits(uuid);
 
-  const donorMetadata = donor?.mapped_metadata || {};
-  const combinedMetadata = {
-    ...(metadata || {}),
-    ...Object.fromEntries(Object.entries(donorMetadata).map(([key, value]) => [`donor.${key}`, value])),
-  };
+  const combinedMetadata = combineMetadata(donor, undefined, undefined, metadata);
 
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),

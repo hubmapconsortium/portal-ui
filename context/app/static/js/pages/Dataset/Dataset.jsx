@@ -23,7 +23,7 @@ import SupportAlert from 'js/components/Detail/SupportAlert';
 import DetailContext from 'js/components/Detail/context';
 import { getSectionOrder } from 'js/components/Detail/utils';
 
-import { combineMetadata, getCollectionsWhichContainDataset } from './utils';
+import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
 
 function SummaryDataChildren(props) {
   const { mapped_data_types, origin_sample } = props;
