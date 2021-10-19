@@ -1,3 +1,10 @@
+## v0.29.1 - 2021-10-19
+
+- Add info to the Organ page section headers.
+- Add donor and sample metadata.
+- Add "Organ" subtitle.
+
+
 ## v0.29.0 - 2021-10-14
 
 - Add dropdown to select genomic modality for cells gene queries.
