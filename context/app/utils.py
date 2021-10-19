@@ -1,4 +1,4 @@
-from flask import (current_app, session, Blueprint, redirect, url_for)
+from flask import (current_app, session, Blueprint)
 
 from .api.client import ApiClient
 from .api.mock_client import MockApiClient
