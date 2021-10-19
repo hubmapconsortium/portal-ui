@@ -7,7 +7,7 @@ from flask import (render_template,
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
-from .utils import get_default_flask_data, make_blueprint, get_client, redirect_hbm
+from .utils import get_default_flask_data, make_blueprint, get_client
 
 
 blueprint = make_blueprint(__name__)
