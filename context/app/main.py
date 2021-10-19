@@ -1,4 +1,3 @@
-from .utils import redirect_hbm
 from flask import Flask, session, render_template, request
 
 from . import (
