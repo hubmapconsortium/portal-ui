@@ -27,12 +27,5 @@ def get_default_flask_data():
     }
 
 
-def redirect_hbm(hbm_suffix):
-    client = get_client()
-    entity = client.get_entity(hbm_id=f'HBM{hbm_suffix}')
-    return redirect(
-        url_for('routes_browse.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
-
-
 def make_blueprint(name):
     return Blueprint(name.split('.')[-1], name, template_folder='templates')
