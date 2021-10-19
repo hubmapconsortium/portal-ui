@@ -1,1 +1,1 @@
-- Redirect to correct entity for hbm routes with incorrect casing.
+- Handle incorrect casing for HuBMAP ID browse routes.
