@@ -1,4 +1,4 @@
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template
 
 from . import (
     routes_main, routes_browse, routes_api, routes_file_based,
