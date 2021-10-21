@@ -33,6 +33,7 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType, heightR
             loadingKey={histogramKey}
             isExpanded={isExpanded}
             setDiagnosticInfo={setDiagnosticInfo}
+            queryType={queryType}
           />
         </ChartWrapper>
         <ChartWrapper $flexBasis={55}>
