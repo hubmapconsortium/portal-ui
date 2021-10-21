@@ -6,7 +6,7 @@ function DatasetClusterTooltip({ tooltipData }) {
   const matchedOrUnmatchedCount = tooltipData.bar.data[tooltipData.key];
   return (
     <>
-      <Typography variant="h5" component="p" color="textPrimary">
+      <Typography variant="h6" component="p" color="textPrimary">
         Cluster {cluster_number}
       </Typography>
       <Typography color="textPrimary">
