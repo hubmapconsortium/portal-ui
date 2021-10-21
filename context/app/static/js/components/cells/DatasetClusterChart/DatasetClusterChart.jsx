@@ -10,6 +10,7 @@ import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarC
 import CellsService from 'js/components/cells/CellsService';
 import ChartLoader from 'js/components/cells/ChartLoader';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
+import DatasetClusterTooltip from 'js/components/cells/DatasetClusterTooltip';
 
 import { getOptionLabels } from './utils';
 
@@ -28,6 +29,13 @@ function DatasetClusterChart({
   const theme = useTheme();
   const loadedOnce = useRef(false);
   const [optionLabels, setOptionLabels] = useState({});
+
+  const chartMargin = {
+    top: 25,
+    right: 50,
+    left: 65,
+    bottom: 100, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
+  };
 
   useEffect(() => {
     if (Object.keys(results).length) {
@@ -86,12 +94,7 @@ function DatasetClusterChart({
   return (
     <ChartWrapper
       chartTitle="Cluster Membership"
-      margin={{
-        top: 25,
-        right: 25,
-        left: 25,
-        bottom: 100, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
-      }}
+      margin={chartMargin}
       colorScale={colorScale}
       dropdown={
         <div>
@@ -116,14 +119,10 @@ function DatasetClusterChart({
         colorScale={colorScale}
         getX={(x) => x.cluster_number}
         keys={['matched', 'unmatched']}
-        margin={{
-          top: 25,
-          right: 50,
-          left: 65,
-          bottom: 100, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
-        }}
+        margin={chartMargin}
         xAxisLabel="Cluster"
         yAxisLabel="Cell Set Size"
+        TooltipContent={DatasetClusterTooltip}
       />
     </ChartWrapper>
   );
