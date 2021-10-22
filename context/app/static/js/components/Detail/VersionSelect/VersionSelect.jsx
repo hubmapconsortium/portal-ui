@@ -36,6 +36,7 @@ function VersionSelect({ uuid }) {
 
   function visitNewVersion({ i }) {
     window.location.href = `/browse/dataset/${versions[i][uuidKey]}`;
+    // In the future, if it's not a dataset, the url will still redirect.
   }
 
   function getOptionDisplay(option) {
