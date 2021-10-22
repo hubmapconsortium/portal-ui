@@ -6,7 +6,6 @@ const iconSize = '1.25rem';
 
 const FlexMenuItem = styled(MenuItem)`
   display: flex;
-  margin-right: ${(props) => props.theme.spacing(1)}px;
   ${(props) =>
     props.selected &&
     css`
