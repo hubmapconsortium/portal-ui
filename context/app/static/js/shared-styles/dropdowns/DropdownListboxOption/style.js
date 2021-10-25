@@ -11,6 +11,9 @@ const FlexMenuItem = styled(MenuItem)`
     css`
       cursor: default;
     `};
+  && {
+    background-color: #fff;
+  }
 `;
 
 const CheckIcon = styled(CheckRoundedIcon)`
