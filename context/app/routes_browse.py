@@ -22,10 +22,13 @@ def get_url_base_from_request():
     return f'{scheme}://{netloc}'
 
 
-@blueprint.route('/browse/HBM<hbm_suffix>')
-def hbm_redirect(hbm_suffix):
+@blueprint.route('/browse/<possible_hbm_id>')
+def hbm_redirect(possible_hbm_id):
+    uppercase_possible_hmb_id = possible_hbm_id.upper()
+    if not uppercase_possible_hmb_id.startswith('HBM'):
+        abort(404)
     client = get_client()
-    entity = client.get_entity(hbm_id=f'HBM{hbm_suffix}')
+    entity = client.get_entity(hbm_id=uppercase_possible_hmb_id)
     return redirect(
         url_for('routes_browse.details', type=entity['entity_type'].lower(), uuid=entity['uuid']))
 
