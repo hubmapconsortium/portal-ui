@@ -11,9 +11,7 @@ function DatasetClusterTooltip({ tooltipData }) {
         Cluster {cluster_number}
       </Typography>
       <Typography color="textPrimary">
-        {`${matchedOrUnmatchedCount} (${percent}%) cells ${
-          tooltipData.key
-        }.`}
+        {`${matchedOrUnmatchedCount} (${percent}%) cells ${tooltipData.key}.`}
       </Typography>
     </>
   );
