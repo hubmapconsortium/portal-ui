@@ -79,7 +79,6 @@ function VerticalStackedBarChart({
                         width={bar.width}
                         height={bar.height}
                         fill={bar.color}
-                        i={i}
                         stroke={
                           hoveredBarIndices &&
                           bar.index === hoveredBarIndices.barIndex &&
