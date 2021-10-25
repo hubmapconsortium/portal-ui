@@ -1,16 +1,16 @@
 import React from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 
-import VerticalStackedBarChartComponent from './VerticalStackedBarChart';
+import VerticalStackedBarChart from './VerticalStackedBarChart';
 
 export default {
   title: 'Charts/VerticalStackedBarChart',
-  component: VerticalStackedBarChartComponent,
+  component: VerticalStackedBarChart,
 };
 
-export const VerticalStackedBarChart = (args) => (
+const Template = (args) => (
   <div style={{ height: 500, width: 500 }}>
-    <VerticalStackedBarChartComponent {...args} />
+    <VerticalStackedBarChart {...args} />
   </div>
 );
 const yScale = scaleLinear({
@@ -23,12 +23,12 @@ const xScale = scaleBand({
   padding: 0.2,
 });
 
-const colorScale = scaleOrdinal({
+export const colorScale = scaleOrdinal({
   domain: ['matched', 'unmatched'],
   range: ['#DA348A', '#6C8938'],
 });
 
-VerticalStackedBarChart.args = {
+const sharedArgs = {
   visxData: [
     {
       cluster: 1,
@@ -76,4 +76,21 @@ VerticalStackedBarChart.args = {
   yAxisLabel: 'Cell Count',
   chartTitle: 'Cluster Membership',
 };
-VerticalStackedBarChart.storyName = 'VerticalStackedBarChart'; // needed for single story hoisting for multi word component names
+
+export const Basic = Template.bind({});
+Basic.args = sharedArgs;
+
+function Tooltip({ tooltipData }) {
+  return (
+    <>
+      <p>Key: {tooltipData.key}</p>
+      <p>Or anything else.</p>
+    </>
+  );
+}
+
+export const CustomTooltip = Template.bind({});
+CustomTooltip.args = {
+  ...sharedArgs,
+  TooltipContent: Tooltip,
+};

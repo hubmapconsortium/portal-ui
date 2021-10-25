@@ -4,6 +4,7 @@ import { useTheme } from '@material-ui/core/styles';
 import Histogram from 'js/shared-styles/charts/Histogram';
 import CellsService from 'js/components/cells/CellsService';
 import ChartLoader from 'js/components/cells/ChartLoader';
+import { capitalizeString } from 'js/helpers/functions';
 
 function CellExpressionHistogram({
   uuid,
@@ -13,6 +14,7 @@ function CellExpressionHistogram({
   loadingKey,
   isExpanded,
   setDiagnosticInfo,
+  queryType,
 }) {
   const [expressionData, setExpressionData] = useState([]);
   const theme = useTheme();
@@ -59,7 +61,7 @@ function CellExpressionHistogram({
       barColor={theme.palette.success.main}
       xAxisLabel="Expression Level"
       yAxisLabel="Frequency"
-      chartTitle="Gene Expression Distribution"
+      chartTitle={`${capitalizeString(queryType)} Expression Distribution`}
     />
   );
 }

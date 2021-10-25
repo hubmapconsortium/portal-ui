@@ -20,6 +20,7 @@ function VerticalStackedBarChart({
   margin,
   xAxisLabel,
   yAxisLabel,
+  TooltipContent,
 }) {
   const [hoveredBarIndices, setHoveredBarIndices] = useState();
 
@@ -30,7 +31,6 @@ function VerticalStackedBarChart({
   xScale.rangeRound([0, xWidth]);
 
   const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip();
-
   const { containerRef, TooltipInPortal } = useTooltipInPortal({
     detectBounds: true,
     scroll: true,
@@ -69,16 +69,15 @@ function VerticalStackedBarChart({
             color={colorScale}
           >
             {(barStacks) => {
-              return barStacks.map((barStack) =>
+              return barStacks.map((barStack, i) =>
                 barStack.bars.map(
                   (bar) =>
                     bar.width > 0 && (
                       <rect
                         x={bar.x}
-                        y={bar.y}
+                        y={bar.y - strokeWidth * i}
                         width={bar.width}
-                        // TODO: Fix stroke overlap without shrinking bars
-                        height={Math.max(bar.height - strokeWidth, 0.1)}
+                        height={bar.height}
                         fill={bar.color}
                         stroke={
                           hoveredBarIndices &&
@@ -133,10 +132,16 @@ function VerticalStackedBarChart({
       </svg>
       {tooltipOpen && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
-          <Typography>{tooltipData.key}</Typography>
-          <Typography variant="h3" component="p" color="textPrimary">
-            {tooltipData.bar.data[tooltipData.key]}
-          </Typography>
+          {TooltipContent ? (
+            <TooltipContent tooltipData={tooltipData} />
+          ) : (
+            <>
+              <Typography>{tooltipData.key}</Typography>
+              <Typography variant="h3" component="p" color="textPrimary">
+                {tooltipData.bar.data[tooltipData.key]}
+              </Typography>
+            </>
+          )}
         </TooltipInPortal>
       )}
     </>
