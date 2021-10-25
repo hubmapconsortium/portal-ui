@@ -391,7 +391,7 @@ def _get_image_pyramid_descendants(entity):
 
 def _get_latest_uuid(revisions):
     '''
-    >>> revisions = [{'uuid': 'x', 'revision_number': 1}, {'uuid': 'z', 'revision_number': 10}]
+    >>> revisions = [{'a_uuid': 'x', 'revision_number': 1}, {'a_uuid': 'z', 'revision_number': 10}]
     >>> _get_latest_uuid(revisions)
     'z'
     '''
