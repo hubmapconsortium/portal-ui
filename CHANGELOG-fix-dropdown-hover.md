@@ -1,0 +1,1 @@
+- Fix dropdown hover and focus background color.
