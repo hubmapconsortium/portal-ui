@@ -111,6 +111,13 @@ class ApiClient():
         hits = response_json['hits']['hits']
         return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id)
 
+    def get_latest_entity_uuid(self, uuid, type):
+        lowercase_type = type.lower()
+        route = f'/{lowercase_type}s/{uuid}/revisions'
+        response_json = self._request(
+            current_app.config['ENTITY_API_BASE'] + route)
+        return _get_latest_uuid(response_json)
+
     def get_vitessce_conf_cells_and_lifted_uuid(self, entity):
         '''
         Returns a dataclass with vitessce_conf and is_lifted.
@@ -380,3 +387,20 @@ def _get_image_pyramid_descendants(entity):
         if 'image_pyramid' in d.get('data_types', [])
     ]
     return deepcopy(image_pyramid_descendants)
+
+
+def _get_latest_uuid(revisions):
+    '''
+    >>> revisions = [{'a_uuid': 'x', 'revision_number': 1}, {'a_uuid': 'z', 'revision_number': 10}]
+    >>> _get_latest_uuid(revisions)
+    'z'
+    '''
+    clean_revisions = [
+        {
+            ('uuid' if k.endswith('_uuid') else k): v
+            for k, v in revision.items()
+        }
+        for revision in revisions
+    ]
+    return max(clean_revisions,
+               key=lambda revision: revision['revision_number'])['uuid']
