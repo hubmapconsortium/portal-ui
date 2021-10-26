@@ -14,6 +14,11 @@ const FlexMenuItem = styled(MenuItem)`
   && {
     background-color: #fff;
   }
+
+  &:hover,
+  :focus {
+    background-color: ${(props) => props.theme.palette.action.hover};
+  }
 `;
 
 const CheckIcon = styled(CheckRoundedIcon)`
