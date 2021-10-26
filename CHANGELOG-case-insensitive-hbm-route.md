@@ -1,1 +1,0 @@
-- Handle incorrect casing for HuBMAP ID browse routes.

@@ -1,3 +1,13 @@
+## v0.30.0 - 2021-10-26
+
+- Handle incorrect casing for HuBMAP ID browse routes.
+- Update tooltip for cells cluster chart.
+- Fix vertical stack bar chart bar sizing bug.
+- Fix expression histogram title.
+- Add dropdown to dataset page to enable users to traverse between dataset versions.
+- Fix dropdown hover and focus background color.
+
+
 ## v0.29.1 - 2021-10-19
 
 - Add info to the Organ page section headers.

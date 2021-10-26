@@ -1,3 +1,0 @@
-- Update tooltip for cells cluster chart.
-- Fix vertical stack bar chart bar sizing bug.
-- Fix expression histogram title.
