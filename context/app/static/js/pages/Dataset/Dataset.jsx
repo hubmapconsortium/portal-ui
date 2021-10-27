@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
@@ -13,11 +13,11 @@ import DetailLayout from 'js/components/Detail/DetailLayout';
 import SummaryItem from 'js/components/Detail/SummaryItem';
 import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-import { AppContext } from 'js/components/Providers';
-import useCollectionsData from 'js/hooks/useCollectionsData';
 import CollectionsSection from 'js/components/Detail/CollectionsSection';
 import SupportAlert from 'js/components/Detail/SupportAlert';
 import { DetailPageAlert } from 'js/shared-styles/alerts';
+import { useSearchHits } from 'js/hooks/useSearchData';
+import { getAllCollectionsQuery } from 'js/helpers/queries';
 
 // TODO use this context for components other than FileBrowser
 import DetailContext from 'js/components/Detail/context';
@@ -71,9 +71,7 @@ function DatasetDetail(props) {
 
   const combinedMetadata = combineMetadata(donor, origin_sample, source_sample, metadata);
 
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-
-  const allCollections = useCollectionsData(elasticsearchEndpoint, nexusToken);
+  const { searchHits: allCollections } = useSearchHits(getAllCollectionsQuery);
   const collectionsData = getCollectionsWhichContainDataset(uuid, allCollections);
 
   const shouldDisplaySection = {
