@@ -1,32 +1,13 @@
-import { useState, useEffect } from 'react';
-import { getAuthHeader } from 'js/helpers/functions';
+import { useMemo } from 'react';
+import { useSearchHits } from 'js/hooks/useSearchData';
 
-function useEntityData(uuid, elasticsearchEndpoint, nexusToken) {
-  const [entity, setEntity] = useState(undefined);
-  useEffect(() => {
-    async function getAndSetEntity() {
-      const authHeader = getAuthHeader(nexusToken);
-      const response = await fetch(elasticsearchEndpoint, {
-        method: 'POST',
-        body: JSON.stringify({ query: { ids: { values: [uuid] } } }),
-        headers: {
-          'Content-Type': 'application/json',
-          ...authHeader,
-        },
-      });
-      if (!response.ok) {
-        console.error('Search API failed', response);
-        return;
-      }
-      const results = await response.json();
-      // eslint-disable-next-line no-underscore-dangle
-      const resultEntity = results.hits.hits[0]._source;
-      setEntity(resultEntity);
-    }
-    getAndSetEntity();
-  }, [nexusToken, elasticsearchEndpoint, uuid]);
+function useEntityData(uuid) {
+  const query = useMemo(() => ({ query: { ids: { values: [uuid] } } }), [uuid]);
 
-  return entity;
+  const { searchHits } = useSearchHits(query, false);
+
+  // eslint-disable-next-line no-underscore-dangle
+  return searchHits[0]?._source;
 }
 
 export default useEntityData;
