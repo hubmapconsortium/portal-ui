@@ -82,7 +82,7 @@ export function getDefaultQuery() {
   };
 }
 
-export function getDefaultElasticSearchQuery(query) {
+export function addRestrictionsToQuery(query) {
   const { query: innerQuery, ...rest } = query;
 
   const defaultQuery = getDefaultQuery();

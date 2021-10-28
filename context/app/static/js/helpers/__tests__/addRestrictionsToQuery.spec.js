@@ -1,4 +1,4 @@
-const { getDefaultElasticSearchQuery } = require('../functions');
+const { addRestrictionsToQuery } = require('../functions');
 
 test('it should return the correct query', () => {
   const baseQuery = {
@@ -34,7 +34,7 @@ test('it should return the correct query', () => {
     _source: 'uuid',
   };
 
-  expect(getDefaultElasticSearchQuery(baseQuery)).toStrictEqual(expectedQuery);
+  expect(addRestrictionsToQuery(baseQuery)).toStrictEqual(expectedQuery);
 });
 
 test('it should return the correct query when no inner query is provided', () => {
@@ -63,5 +63,5 @@ test('it should return the correct query when no inner query is provided', () =>
     aggs: { entity_type: { terms: { field: 'entity_type.keyword' } } },
   };
 
-  expect(getDefaultElasticSearchQuery(baseQuery)).toStrictEqual(expectedQuery);
+  expect(addRestrictionsToQuery(baseQuery)).toStrictEqual(expectedQuery);
 });

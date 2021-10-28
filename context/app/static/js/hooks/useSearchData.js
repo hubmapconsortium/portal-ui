@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
-import { getAuthHeader, getDefaultElasticSearchQuery } from 'js/helpers/functions';
+import { getAuthHeader, addRestrictionsToQuery } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
 
 async function fetchSearchData(query, elasticsearchEndpoint, nexusToken, useDefaultQuery = true) {
   const authHeader = getAuthHeader(nexusToken);
   const response = await fetch(elasticsearchEndpoint, {
     method: 'POST',
-    body: JSON.stringify(useDefaultQuery ? getDefaultElasticSearchQuery(query) : query),
+    body: JSON.stringify(useDefaultQuery ? addRestrictionsToQuery(query) : query),
     headers: {
       'Content-Type': 'application/json',
       ...authHeader,
