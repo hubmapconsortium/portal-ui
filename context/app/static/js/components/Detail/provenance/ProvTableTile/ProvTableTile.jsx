@@ -1,21 +1,19 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import useEntityData from 'js/hooks/useEntityData';
 import EntityTile from 'js/components/entity-tile/EntityTile';
 import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/utils';
-import { AppContext } from 'js/components/Providers';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 import { DownIcon } from './style';
 
 function ProvTableTile(props) {
   const { uuid, entity_type, id, isCurrentEntity, isSampleSibling, isFirstTile, isLastTile } = props;
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
   const [descendantCounts, setDescendantCounts] = useState({});
   const [descendantCountsToDisplay, setDescendantCountsToDisplay] = useState({});
 
   // mapped fields are not included in ancestor object
-  const entityData = useEntityData(uuid, elasticsearchEndpoint, nexusToken);
+  const entityData = useEntityData(uuid);
 
   useEffect(() => {
     if (entityData?.descendant_counts) {

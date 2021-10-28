@@ -1,15 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { AppContext } from 'js/components/Providers';
 import PanelList from 'js/components/Collections/PanelList';
-import useCollectionsData from 'js/hooks/useCollectionsData';
+import { useSearchHits } from 'js/hooks/useSearchData';
+import { getAllCollectionsQuery } from 'js/helpers/queries';
 import { PageWrapper, StyledDescription } from './style';
 
 function Collections() {
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-
-  const collectionsData = useCollectionsData(elasticsearchEndpoint, nexusToken);
+  const { searchHits: collectionsData } = useSearchHits(getAllCollectionsQuery);
 
   return (
     <PageWrapper>

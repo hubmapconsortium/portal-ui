@@ -6,7 +6,6 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { getDefaultQuery } from 'js/helpers/functions';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -24,7 +23,6 @@ function Assays(props) {
   const query = useMemo(
     () => ({
       size: 0,
-      query: getDefaultQuery(),
       aggs: {
         mapped_data_types: {
           filter: {

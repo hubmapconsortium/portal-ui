@@ -81,3 +81,20 @@ export function getDefaultQuery() {
     },
   };
 }
+
+export function addRestrictionsToQuery(query) {
+  const { query: innerQuery, ...rest } = query;
+
+  const defaultQuery = getDefaultQuery();
+
+  const combinedQueries = innerQuery ? [innerQuery, defaultQuery] : [defaultQuery];
+
+  return {
+    query: {
+      bool: {
+        must: combinedQueries,
+      },
+    },
+    ...rest,
+  };
+}
