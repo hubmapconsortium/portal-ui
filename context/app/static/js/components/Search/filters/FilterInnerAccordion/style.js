@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
 
-import { StyledAccordionSummary } from '../../styleForSidebar';
+import { StyledAccordionSummary } from 'js/components/Search/filters/style';
 
 const InnerAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;

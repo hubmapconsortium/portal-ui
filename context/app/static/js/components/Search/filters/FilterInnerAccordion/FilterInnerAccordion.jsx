@@ -1,8 +1,8 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
+import { StyledAccordion, StyledExpandMoreIcon } from 'js/components/Search/filters/style';
 import { InnerAccordionDetails, InnerAccordionSummary } from './style';
-import { StyledAccordion, StyledExpandMoreIcon } from '../../styleForSidebar';
 
 function InnerAccordionContainer({ title, children }) {
   if (Array.isArray(children) && children[0].props.items.length === 0) {

@@ -1,7 +1,8 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { OuterAccordion, OuterAccordionSummary, OuterAccordionDetails, StyledExpandMoreIcon } from '../../style';
+import { StyledExpandMoreIcon } from 'js/components/Search/filters/style';
+import { OuterAccordion, OuterAccordionSummary, OuterAccordionDetails } from './style';
 
 function FilterOuterAccordion({ title, isFirst, innerAccordions }) {
   return (
