@@ -9,7 +9,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { SideBar } from 'searchkit';
 
-const InnerAccordion = styled(Accordion)`
+const StyledAccordion = styled(Accordion)`
   box-shadow: none;
   border: none;
   margin: 0 !important; // Override margin on expand.
@@ -19,7 +19,7 @@ const InnerAccordion = styled(Accordion)`
   }
 `;
 
-const OuterAccordion = styled(InnerAccordion)`
+const OuterAccordion = styled(StyledAccordion)`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};
 `;
 
@@ -45,26 +45,9 @@ const OuterAccordionSummary = styled(StyledAccordionSummary)`
   padding: 0px 12px 0px 12px;
 `;
 
-const InnerAccordionSummary = styled(StyledAccordionSummary)`
-  justify-content: left;
-  padding: 0px 16px 0px 16px;
-  & > * {
-    flex-grow: unset;
-    padding: 0;
-    margin: 0;
-    color: #000;
-  }
-  margin: 0;
-`;
-
 const OuterAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;
   padding: 0;
-`;
-
-const InnerAccordionDetails = styled(AccordionDetails)`
-  flex-direction: column;
-  padding: 4px 10px 4px 16px;
 `;
 
 const StyledSideBar = styled(SideBar)`
@@ -78,11 +61,10 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
 
 export {
   OuterAccordionDetails,
-  InnerAccordionDetails,
   OuterAccordionSummary,
-  InnerAccordionSummary,
   StyledSideBar,
-  InnerAccordion,
   OuterAccordion,
   StyledExpandMoreIcon,
+  StyledAccordion,
+  StyledAccordionSummary,
 };

@@ -1,38 +1,12 @@
 import React from 'react';
 import { RefinementListFilter, RangeFilter, CheckboxFilter, HierarchicalMenuFilter } from 'searchkit';
-import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 
-import { InnerAccordion, InnerAccordionSummary, InnerAccordionDetails, StyledExpandMoreIcon } from './style';
-
-function Details(props) {
-  const { title, children } = props;
-  if (Array.isArray(children) && children[0].props.items.length === 0) {
-    // Presumably a list filter...
-    return null;
-  }
-  if (
-    !Array.isArray(children) &&
-    children.props.items?.map((bucket) => bucket.doc_count).every((count) => count === 0)
-  ) {
-    // Presumably a range filter...
-    return null;
-  }
-  return (
-    <InnerAccordion key={title} defaultExpanded>
-      <InnerAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
-        <Typography variant="subtitle2" color="textPrimary">
-          {title}
-        </Typography>
-      </InnerAccordionSummary>
-      <InnerAccordionDetails id={title.replace(/\s/g, '-')}>{children}</InnerAccordionDetails>
-    </InnerAccordion>
-  );
-}
+import FilterInnerAccordion from './filters/FilterInnerAccordion';
 
 function AccordionHierarchicalMenuFilter(props) {
   const innerProps = {
-    containerComponent: Details,
+    containerComponent: FilterInnerAccordion,
     ...props,
   };
   return <HierarchicalMenuFilter {...innerProps} />;
@@ -45,7 +19,7 @@ AccordionHierarchicalMenuFilter.propTypes = {
 
 function AccordionListFilter(props) {
   const innerProps = {
-    containerComponent: Details,
+    containerComponent: FilterInnerAccordion,
     ...props,
   };
   return <RefinementListFilter {...innerProps} />;
@@ -61,7 +35,7 @@ AccordionListFilter.propTypes = {
 
 function AccordionRangeFilter(props) {
   const innerProps = {
-    containerComponent: Details,
+    containerComponent: FilterInnerAccordion,
     ...props,
   };
   return <RangeFilter {...innerProps} />;
@@ -78,7 +52,7 @@ AccordionRangeFilter.propTypes = {
 
 function AccordionCheckboxFilter(props) {
   const innerProps = {
-    containerComponent: Details,
+    containerComponent: FilterInnerAccordion,
     ...props,
   };
   return <CheckboxFilter {...innerProps} />;
