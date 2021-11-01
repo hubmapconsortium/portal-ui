@@ -1,14 +1,8 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 
-import {
-  StyledCheckBoxBlankIcon,
-  StyledCheckBoxIcon,
-  StyledCheckbox,
-  StyledFormControlLabel,
-  Flex,
-  FormLabelText,
-} from './style';
+import FilterLabelAndCount from 'js/components/Search/filters/FilterLabelAndCount';
+
+import { StyledCheckBoxBlankIcon, StyledCheckBoxIcon, StyledCheckbox, StyledFormControlLabel } from './style';
 
 function CheckboxFilterItem(props) {
   const { active, onClick, label, count } = props;
@@ -24,12 +18,7 @@ function CheckboxFilterItem(props) {
           checkedIcon={<StyledCheckBoxIcon />}
         />
       }
-      label={
-        <Flex>
-          <FormLabelText variant="body2">{label}</FormLabelText>
-          <Typography variant="body2">{count}</Typography>
-        </Flex>
-      }
+      label={<FilterLabelAndCount label={label} count={count} active={active} />}
     />
   );
 }
