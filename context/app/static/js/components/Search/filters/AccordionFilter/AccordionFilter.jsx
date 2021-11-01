@@ -3,7 +3,7 @@ import { RefinementListFilter, RangeFilter, CheckboxFilter, HierarchicalMenuFilt
 
 import FilterInnerAccordion from 'js/components/Search/filters/FilterInnerAccordion';
 
-function getFilter(type) {
+export function getFilter(type) {
   switch (type) {
     case 'AccordionListFilter':
       return RefinementListFilter;
