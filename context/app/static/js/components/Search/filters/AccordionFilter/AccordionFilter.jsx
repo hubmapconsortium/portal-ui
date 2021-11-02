@@ -5,6 +5,12 @@ import FilterInnerAccordion from 'js/components/Search/filters/FilterInnerAccord
 import HierarchicalFilterItem from 'js/components/Search/filters/HierarchicalFilterItem';
 import CheckboxFilterItem from 'js/components/Search/filters/CheckboxFilterItem';
 
+export function withTitle(ItemComponent, title) {
+  return function ItemComponentWithTitle(props) {
+    return <ItemComponent {...props} title={title} />;
+  };
+}
+
 export function getFilter(type) {
   switch (type) {
     case 'AccordionListFilter':
@@ -20,10 +26,10 @@ export function getFilter(type) {
   }
 }
 
-function AccordionFilter({ type, ...rest }) {
+function AccordionFilter({ type, title, ...rest }) {
   const { Filter, itemComponent } = getFilter(type);
-  const item = itemComponent ? { itemComponent } : {};
-  return <Filter containerComponent={FilterInnerAccordion} {...rest} {...item} />;
+  const item = itemComponent ? { itemComponent: withTitle(itemComponent, title) } : {};
+  return <Filter containerComponent={FilterInnerAccordion} title={title} {...rest} {...item} />;
 }
 
 export default AccordionFilter;
