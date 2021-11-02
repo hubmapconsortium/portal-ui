@@ -5,6 +5,7 @@ const Flex = styled.div`
   display: flex;
   justify-content: space-between;
   p {
+    font-size: ${(props) => props.theme.typography.subtitle2.fontSize};
     ${(props) =>
       props.$active &&
       css`
