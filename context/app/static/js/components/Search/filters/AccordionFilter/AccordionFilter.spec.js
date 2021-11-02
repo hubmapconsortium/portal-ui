@@ -6,8 +6,9 @@ import ReactGA from 'react-ga';
 
 import HierarchicalFilterItem from 'js/components/Search/filters/HierarchicalFilterItem';
 import CheckboxFilterItem from 'js/components/Search/filters/CheckboxFilterItem';
-
 import AccordionFilter, { withAnalyticsEvent, getFilter } from './AccordionFilter';
+
+jest.mock('react-ga');
 
 test.each([
   ['AccordionListFilter', { Filter: RefinementListFilter, itemComponent: CheckboxFilterItem }],
@@ -33,8 +34,6 @@ test.each([
 ])('%s should render', (filterName) => {
   render(<AccordionFilter type={filterName} />);
 });
-
-jest.mock('react-ga');
 
 test('withAnalyticsEvent passes onClick with ga event and original onClick', () => {
   const originalOnClick = jest.fn();
