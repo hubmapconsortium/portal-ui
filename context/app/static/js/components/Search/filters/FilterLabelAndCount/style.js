@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 const Flex = styled.div`
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
   p {
     font-size: ${(props) => props.theme.typography.subtitle2.fontSize};
     ${(props) =>
