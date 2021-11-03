@@ -8,8 +8,14 @@ import TilesSortDropdown from '../TilesSortDropdown';
 import SelectedFilter from '../SelectedFilter';
 import { Flex, CenteredDiv } from './style';
 
+function withAnalyticsCategory(BaseComponent, analyticsCategory) {
+  return function UpdatedSelectedFilter(props) {
+    return <BaseComponent analyticsCategory={analyticsCategory} {...props} />;
+  };
+}
+
 function SearchBarLayout(props) {
-  const { type, queryFields, sortOptions, isDevSearch } = props;
+  const { type, queryFields, sortOptions, isDevSearch, analyticsCategory } = props;
   return (
     <>
       <Flex>
@@ -20,7 +26,7 @@ function SearchBarLayout(props) {
           <ViewSwitcherToggle listComponent={isDevSearch ? DevSearchViewSwitch : SearchViewSwitch} />
         </CenteredDiv>
       </Flex>
-      <SelectedFilters itemComponent={SelectedFilter} />
+      <SelectedFilters itemComponent={withAnalyticsCategory(SelectedFilter, analyticsCategory)} />
     </>
   );
 }
