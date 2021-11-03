@@ -1,0 +1,1 @@
+- Add analytics tracking for facets on search pages.
