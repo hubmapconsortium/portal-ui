@@ -110,12 +110,7 @@ function Search(props) {
         </>
       )}
       {notesToDisplay.map((note) => (
-        <LookupEntity
-          uuid={searchParams.get(note.urlSearchParam)}
-          key={note.urlSearchParam}
-          elasticsearchEndpoint={elasticsearchEndpoint}
-          nexusToken={nexusToken}
-        >
+        <LookupEntity uuid={searchParams.get(note.urlSearchParam)} key={note.urlSearchParam}>
           <SearchNote label={note.label} />
         </LookupEntity>
       ))}
