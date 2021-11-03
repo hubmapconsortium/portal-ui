@@ -29,6 +29,7 @@ function SearchWrapper(props) {
     isDevSearch,
     defaultQuery,
     resultsComponent: ResultsComponent,
+    pageTitle,
   } = props;
 
   const sortOptions = resultFieldsToSortOptions(resultFields.table);
@@ -55,7 +56,7 @@ function SearchWrapper(props) {
         <SearchBarLayout type={type} queryFields={queryFields} sortOptions={sortOptions} isDevSearch={isDevSearch} />
         <LayoutBody>
           <StyledSideBar>
-            <Filters filters={filters} />
+            <Filters filters={filters} pageTitle={pageTitle} />
           </StyledSideBar>
           <LayoutResults>
             <ResultsComponent

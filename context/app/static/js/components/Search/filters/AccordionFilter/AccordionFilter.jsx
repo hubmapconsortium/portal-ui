@@ -6,11 +6,11 @@ import FilterInnerAccordion from 'js/components/Search/filters/FilterInnerAccord
 import HierarchicalFilterItem from 'js/components/Search/filters/HierarchicalFilterItem';
 import CheckboxFilterItem from 'js/components/Search/filters/CheckboxFilterItem';
 
-export function withAnalyticsEvent(ItemComponent, title) {
+export function withAnalyticsEvent(ItemComponent, title, pageTitle) {
   return function UpdatedItemComponent({ onClick: originalOnClick, label, ...rest }) {
     function updatedOnClick() {
       ReactGA.event({
-        category: 'Search Page Interactions',
+        category: `${pageTitle} Search Page Interactions`,
         action: 'Facet',
         label: `${title}: ${label}`,
       });
@@ -35,9 +35,9 @@ export function getFilter(type) {
   }
 }
 
-function AccordionFilter({ type, title, ...rest }) {
+function AccordionFilter({ type, title, pageTitle, ...rest }) {
   const { Filter, itemComponent } = getFilter(type);
-  const item = itemComponent ? { itemComponent: withAnalyticsEvent(itemComponent, title) } : {};
+  const item = itemComponent ? { itemComponent: withAnalyticsEvent(itemComponent, title, pageTitle) } : {};
   return <Filter containerComponent={FilterInnerAccordion} title={title} {...rest} {...item} />;
 }
 

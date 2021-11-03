@@ -92,7 +92,7 @@ function Search(props) {
     defaultQuery: getDefaultQuery(),
   };
 
-  const wrappedSearch = <SearchWrapper {...searchProps} resultsComponent={Results} />;
+  const wrappedSearch = <SearchWrapper {...searchProps} resultsComponent={Results} pageTitle={title} />;
 
   return (
     <>
