@@ -7,16 +7,17 @@ import HierarchicalFilterItem from 'js/components/Search/filters/HierarchicalFil
 import CheckboxFilterItem from 'js/components/Search/filters/CheckboxFilterItem';
 
 export function withAnalyticsEvent(ItemComponent, title, analyticsCategory) {
-  return function UpdatedItemComponent({ onClick: originalOnClick, label, ...rest }) {
+  return function UpdatedItemComponent({ onClick: originalOnClick, label, active, ...rest }) {
+    const facetAction = active ? 'Unselected' : 'Selected';
     function updatedOnClick() {
       ReactGA.event({
         category: analyticsCategory,
-        action: 'Facet',
+        action: `${facetAction} Facet`,
         label: `${title}: ${label}`,
       });
       originalOnClick();
     }
-    return <ItemComponent onClick={updatedOnClick} label={label} {...rest} />;
+    return <ItemComponent onClick={updatedOnClick} label={label} active={active} {...rest} />;
   };
 }
 
