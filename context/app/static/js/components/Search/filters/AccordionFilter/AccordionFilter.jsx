@@ -35,9 +35,9 @@ export function getFilter(type) {
   }
 }
 
-function AccordionFilter({ type, title, pageTitle, ...rest }) {
+function AccordionFilter({ type, title, analyticsCategory, ...rest }) {
   const { Filter, itemComponent } = getFilter(type);
-  const item = itemComponent ? { itemComponent: withAnalyticsEvent(itemComponent, title, pageTitle) } : {};
+  const item = itemComponent ? { itemComponent: withAnalyticsEvent(itemComponent, title, analyticsCategory) } : {};
   return <Filter containerComponent={FilterInnerAccordion} title={title} {...rest} {...item} />;
 }
 
