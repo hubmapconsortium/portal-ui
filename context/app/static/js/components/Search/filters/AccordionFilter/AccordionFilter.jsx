@@ -8,7 +8,7 @@ import CheckboxFilterItem from 'js/components/Search/filters/CheckboxFilterItem'
 
 export function withAnalyticsEvent(ItemComponent, title, analyticsCategory) {
   return function UpdatedItemComponent({ onClick: originalOnClick, label, active, ...rest }) {
-    const facetAction = active ? 'Unselected' : 'Selected';
+    const facetAction = active ? 'Unselect' : 'Select';
     function updatedOnClick() {
       ReactGA.event({
         category: analyticsCategory,
