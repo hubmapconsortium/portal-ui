@@ -1,1 +1,0 @@
-- Add tracking for view switch on search pages.

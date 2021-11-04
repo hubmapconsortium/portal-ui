@@ -1,1 +1,0 @@
-- Track free text searches on search pages.

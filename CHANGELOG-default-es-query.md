@@ -1,1 +1,0 @@
-- Add default query to search hooks.

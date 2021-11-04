@@ -1,3 +1,16 @@
+## v0.30.1 - 2021-11-04
+
+- Add default query to search hooks.
+- Fix HuBMAP commons install.
+- Refactor search filter components.
+- Track free text searches on search pages.
+- Add analytics tracking for facets on search pages.
+- Add analytics tracking for search page sorting.
+- Add tracking for view switch on search pages.
+- Add analytics tracking for facet chips on search pages.
+- Update facet tracking to specify whether the facet was selected or unselected.
+
+
 ## v0.30.0 - 2021-10-26
 
 - Handle incorrect casing for HuBMAP ID browse routes.

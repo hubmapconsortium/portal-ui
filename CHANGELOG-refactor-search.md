@@ -1,1 +1,0 @@
-- Refactor search filter components.
