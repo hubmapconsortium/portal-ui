@@ -85,6 +85,7 @@ function SearchWrapper(props) {
               idField={idField}
               resultFieldIds={resultFieldIds}
               type={type}
+              analyticsCategory={analyticsCategory}
             />
             <NoHits component={<NoResults isLoggedIn={isLoggedIn} />} errorComponent={SearchError} />
             <PaginationWrapper />

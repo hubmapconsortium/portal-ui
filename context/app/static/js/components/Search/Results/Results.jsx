@@ -9,7 +9,16 @@ import ResultsTiles from '../ResultsTiles';
 import ResultsCCF from '../ResultsCCF';
 
 function Results(props) {
-  const { sortOptions, hitsPerPage, tableResultFields, detailsUrlPrefix, idField, resultFieldIds, type } = props;
+  const {
+    sortOptions,
+    hitsPerPage,
+    tableResultFields,
+    detailsUrlPrefix,
+    idField,
+    resultFieldIds,
+    type,
+    analyticsCategory,
+  } = props;
 
   // one of the sort components must stay mounted to preserve sort history between views.
   return (
@@ -25,6 +34,7 @@ function Results(props) {
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}
               sortOptions={sortOptions}
+              analyticsCategory={analyticsCategory}
             />
           ),
           defaultOption: true,

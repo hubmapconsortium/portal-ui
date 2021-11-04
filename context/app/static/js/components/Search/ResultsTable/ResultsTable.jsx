@@ -2,17 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SortingSelector } from 'searchkit';
 
+import { withAnalyticsCategory } from 'js/components/Search/hooks';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { getByPath } from './utils';
 import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell } from './style';
 import SortingTableHead from '../SortingTableHead';
 
 function ResultsTable(props) {
-  const { hits, resultFields, detailsUrlPrefix, idField, sortOptions } = props;
+  const { hits, resultFields, detailsUrlPrefix, idField, sortOptions, analyticsCategory } = props;
   /* eslint-disable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
   return (
     <StyledTable data-testid="search-results-table">
-      <SortingSelector options={sortOptions} listComponent={SortingTableHead} />
+      <SortingSelector
+        options={sortOptions}
+        listComponent={withAnalyticsCategory(SortingTableHead, analyticsCategory)}
+      />
       {hits.map((hit) => (
         <StyledTableBody key={hit._id}>
           <StyledTableRow className={'highlight' in hit && 'before-highlight'}>
