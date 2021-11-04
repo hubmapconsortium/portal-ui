@@ -65,7 +65,13 @@ function SearchWrapper(props) {
   return (
     <SearchkitProvider searchkit={searchkit}>
       <>
-        <SearchBarLayout type={type} queryFields={queryFields} sortOptions={sortOptions} isDevSearch={isDevSearch} />
+        <SearchBarLayout
+          type={type}
+          queryFields={queryFields}
+          sortOptions={sortOptions}
+          isDevSearch={isDevSearch}
+          analyticsCategory={analyticsCategory}
+        />
         <LayoutBody>
           <StyledSideBar>
             <Filters filters={filters} analyticsCategory={analyticsCategory} />

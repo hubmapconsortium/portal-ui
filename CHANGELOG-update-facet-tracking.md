@@ -1,0 +1,2 @@
+- Add analytics tracking for facet chips on search pages.
+- Update facet tracking to specify whether the facet was selected or unselected.
