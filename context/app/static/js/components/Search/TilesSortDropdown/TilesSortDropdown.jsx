@@ -32,7 +32,7 @@ function TilesSortDropdown(props) {
     ReactGA.event({
       category: analyticsCategory,
       action: `Sort Tile View`,
-      label: pair[0].label,
+      label: `${pair[0].label} ${pair[0].field === 'mapped_last_modified_timestamp.keyword' ? 'desc' : 'asc'}`,
     });
   }
 
