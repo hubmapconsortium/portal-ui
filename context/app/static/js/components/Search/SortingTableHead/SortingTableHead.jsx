@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
+import ReactGA from 'react-ga';
 
 import { getSortPairs } from '../utils';
 import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from './style';
@@ -28,7 +29,7 @@ OrderIcon.propTypes = {
 };
 
 function SortingTableHead(props) {
-  const { items, toggleItem, selectedItems } = props;
+  const { items, toggleItem, selectedItems, analyticsCategory } = props;
 
   const pairs = getSortPairs(items);
   return (
@@ -41,6 +42,11 @@ function SortingTableHead(props) {
               role="button"
               key={pair[0].key}
               onClick={() => {
+                ReactGA.event({
+                  category: analyticsCategory,
+                  action: `Sort Table View`,
+                  label: `${pair[0].label} ${order && order === pair[0].order ? 'asc' : 'desc'}`,
+                });
                 toggleItem(pair[order && order === pair[0].order ? 1 : 0].key);
               }}
             >
