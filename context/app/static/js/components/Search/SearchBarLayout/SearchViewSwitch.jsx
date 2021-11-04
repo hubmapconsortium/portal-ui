@@ -4,6 +4,7 @@ import ListRoundedIcon from '@material-ui/icons/ListRounded';
 import GridOnRoundedIcon from '@material-ui/icons/GridOnRounded';
 import BodyRoundedIcon from '@material-ui/icons/AccessibilityNewRounded';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ReactGA from 'react-ga';
 
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -17,7 +18,7 @@ const searchViewStoreSelector = (state) => ({
 
 function createSearchViewSwitch(labelIconPairs) {
   return function SearchViewSwitch(props) {
-    const { toggleItem } = props;
+    const { toggleItem, analyticsCategory } = props;
     const { searchView, setSearchView, setToggleItem } = useSearchViewStore(searchViewStoreSelector);
 
     useEffect(() => {
@@ -29,6 +30,11 @@ function createSearchViewSwitch(labelIconPairs) {
       if (!validViews.includes(view)) {
         return;
       }
+      ReactGA.event({
+        category: analyticsCategory,
+        action: `Switch Search View`,
+        label: `${view}`,
+      });
       setSearchView(view);
       toggleItem(view);
     }

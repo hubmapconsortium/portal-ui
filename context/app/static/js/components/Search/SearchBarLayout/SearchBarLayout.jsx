@@ -16,6 +16,11 @@ function withAnalyticsCategory(BaseComponent, analyticsCategory) {
 
 function SearchBarLayout(props) {
   const { type, queryFields, sortOptions, isDevSearch, analyticsCategory } = props;
+
+  const SwitchComponent = withAnalyticsCategory(
+    isDevSearch ? DevSearchViewSwitch : SearchViewSwitch,
+    analyticsCategory,
+  );
   return (
     <>
       <Flex>
@@ -23,7 +28,7 @@ function SearchBarLayout(props) {
         <CenteredDiv>
           <SortingSelector options={sortOptions} listComponent={TilesSortDropdown} />
           {!isDevSearch && <DownloadButton type={type} />}
-          <ViewSwitcherToggle listComponent={isDevSearch ? DevSearchViewSwitch : SearchViewSwitch} />
+          <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
         </CenteredDiv>
       </Flex>
       <SelectedFilters itemComponent={withAnalyticsCategory(SelectedFilter, analyticsCategory)} />
