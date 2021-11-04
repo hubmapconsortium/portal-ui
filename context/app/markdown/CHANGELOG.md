@@ -1,3 +1,8 @@
+## v0.30.2 - 2021-11-04
+
+- Fix checkbox facet alignment on search pages.
+
+
 ## v0.30.1 - 2021-11-04
 
 - Add default query to search hooks.
