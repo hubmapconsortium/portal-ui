@@ -1,0 +1,1 @@
+- Fix checkbox facet alignment on search pages.
