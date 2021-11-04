@@ -26,6 +26,7 @@ const StyledFormControlLabel = styled(FormControlLabel)`
   span:nth-child(2) {
     flex-grow: 1;
   }
+  align-items: start;
 `;
 
 export { StyledCheckBoxBlankIcon, StyledCheckBoxIcon, StyledCheckbox, StyledFormControlLabel };
