@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import ReactGA from 'react-ga';
 
 import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
@@ -29,7 +30,7 @@ function SearchWrapper(props) {
     isDevSearch,
     defaultQuery,
     resultsComponent: ResultsComponent,
-    pageTitle,
+    analyticsCategory,
   } = props;
 
   const sortOptions = resultFieldsToSortOptions(resultFields.table);
@@ -41,14 +42,25 @@ function SearchWrapper(props) {
 
   const setSearchHitsCount = useSearchViewStore(searchViewStoreSelector);
 
+  const queryString = useRef(false);
+
   useEffect(() => {
     const removalFn = searchkit.addResultsListener((results) => {
+      const newQueryString = searchkit.state?.q;
+      if (![queryString.current, undefined].includes(newQueryString)) {
+        ReactGA.event({
+          category: analyticsCategory,
+          action: 'Free Text Search',
+          label: newQueryString,
+        });
+      }
+      queryString.current = newQueryString;
       setSearchHitsCount(results.hits.total.value);
     });
     return () => {
       removalFn();
     };
-  }, [searchkit, setSearchHitsCount]);
+  }, [analyticsCategory, searchkit, setSearchHitsCount]);
 
   return (
     <SearchkitProvider searchkit={searchkit}>
@@ -56,7 +68,7 @@ function SearchWrapper(props) {
         <SearchBarLayout type={type} queryFields={queryFields} sortOptions={sortOptions} isDevSearch={isDevSearch} />
         <LayoutBody>
           <StyledSideBar>
-            <Filters filters={filters} pageTitle={pageTitle} />
+            <Filters filters={filters} analyticsCategory={analyticsCategory} />
           </StyledSideBar>
           <LayoutResults>
             <ResultsComponent

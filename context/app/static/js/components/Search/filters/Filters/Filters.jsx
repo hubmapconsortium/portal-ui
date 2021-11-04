@@ -4,10 +4,17 @@ import PropTypes from 'prop-types';
 import AccordionFilter from 'js/components/Search/filters/AccordionFilter';
 import FilterOuterAccordion from 'js/components/Search/filters/FilterOuterAccordion';
 
-function Filters({ filters, pageTitle }) {
+function Filters({ filters, analyticsCategory }) {
   return Object.entries(filters).map(([title, filterGroup], i) => {
     const innerAccordions = filterGroup.map((def) => {
-      return <AccordionFilter type={def.type} {...def.props} key={`title-${def.props.title}`} pageTitle={pageTitle} />;
+      return (
+        <AccordionFilter
+          type={def.type}
+          {...def.props}
+          key={`title-${def.props.title}`}
+          analyticsCategory={analyticsCategory}
+        />
+      );
     });
     if (!title) {
       // We leave the title blank for the group of facets

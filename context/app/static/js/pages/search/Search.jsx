@@ -92,7 +92,13 @@ function Search(props) {
     defaultQuery: getDefaultQuery(),
   };
 
-  const wrappedSearch = <SearchWrapper {...searchProps} resultsComponent={Results} pageTitle={title} />;
+  const wrappedSearch = (
+    <SearchWrapper
+      {...searchProps}
+      resultsComponent={Results}
+      analyticsCategory={`${title} Search Page Interactions`}
+    />
+  );
 
   return (
     <>
