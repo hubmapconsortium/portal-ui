@@ -2,17 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle } from 'searchkit';
 
+import { withAnalyticsCategory } from 'js/components/Search/hooks';
 import SearchViewSwitch, { DevSearchViewSwitch } from './SearchViewSwitch';
 import DownloadButton from '../DownloadButton';
 import TilesSortDropdown from '../TilesSortDropdown';
 import SelectedFilter from '../SelectedFilter';
 import { Flex, CenteredDiv } from './style';
-
-function withAnalyticsCategory(BaseComponent, analyticsCategory) {
-  return function UpdatedSelectedFilter(props) {
-    return <BaseComponent analyticsCategory={analyticsCategory} {...props} />;
-  };
-}
 
 function SearchBarLayout(props) {
   const { type, queryFields, sortOptions, isDevSearch, analyticsCategory } = props;
@@ -26,7 +21,11 @@ function SearchBarLayout(props) {
       <Flex>
         <SearchBox autofocus queryFields={queryFields} />
         <CenteredDiv>
-          <SortingSelector options={sortOptions} listComponent={TilesSortDropdown} />
+          <SortingSelector
+            options={sortOptions}
+            listComponent={withAnalyticsCategory(TilesSortDropdown, analyticsCategory)}
+            analyticsCategory={analyticsCategory}
+          />
           {!isDevSearch && <DownloadButton type={type} />}
           <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
         </CenteredDiv>
