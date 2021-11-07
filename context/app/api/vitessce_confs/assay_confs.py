@@ -227,6 +227,44 @@ class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
             confs.append(conf)
         return ConfCells(confs if len(confs) > 1 else confs[0], None)
 
+class CellDiveSPRMViewConfBuilder(ViewConfBuilder):
+    """Wrapper class for generating multiple "second generation" stitched AnnData-backed SPRM
+    Vitessce configurations via SPRMAnnDataViewConfBuilder,
+    used for datasets with multiple regions.
+    These are from post-August 2020 Cytokit datasets (stitched).
+    """
+
+    def get_conf_cells(self):
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        found_regions = get_matches(file_paths_found, STITCHED_REGEX)
+        if len(found_regions) == 0:
+            raise FileNotFoundError(
+                f"Cell DIVE SPRM assay with uuid {self._uuid} has no matching regions; "
+                f"No file matches for '{STITCHED_REGEX}'."
+            )
+        confs = []
+        for region in sorted(found_regions):
+            print(region)
+            vc = SPRMAnnDataViewConfBuilder(
+                entity=self._entity,
+                nexus_token=self._nexus_token,
+                is_mock=self._is_mock,
+                base_name=region,
+                imaging_path="pipeline_output/expr/region_001",
+                mask_path="pipeline_output/mask/region_001",
+                image_name=f"{region}_expr",
+                mask_name=f"{region}_mask"
+            )
+            conf = vc.get_conf_cells().conf
+            if conf == {}:
+                raise CytokitSPRMViewConfigError(
+                    f"Cytokit SPRM assay with uuid {self._uuid} has empty view\
+                        config for region '{region}'"
+                )
+            confs.append(conf)
+        return ConfCells(confs if len(confs) > 1 else confs[0], None)
+
+
 
 class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
     """Wrapper class for creating a AnnData-backed view configuration
@@ -355,6 +393,8 @@ def get_view_config_builder(entity):
     hints = [hint for assay in assay_objs for hint in assay.vitessce_hints]
     dag_names = [dag['name']
                  for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
+    if "celldive_deepcell" in data_types:
+        return CellDiveSPRMViewConfBuilder
     if "is_image" in hints:
         if "codex" in hints:
             if ('sprm-to-anndata.cwl' in dag_names):

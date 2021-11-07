@@ -240,8 +240,9 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
         """Check whether or not there is a matching SPRM image at a path.
         :param str path_regex: The path to look for the images
         :rtype: str The found image
-        """
+        ""
         file_paths_found = self._get_file_paths()
+        print(path_regex)
         found_image_files = get_matches(file_paths_found, path_regex)
         if len(found_image_files) != 1:
             message = f'Found {len(found_image_files)} image files for SPRM uuid "{self._uuid}".'
