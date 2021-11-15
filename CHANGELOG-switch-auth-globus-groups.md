@@ -1,0 +1,1 @@
+- Switch Globus authentication from Globus Nexus to Globus Groups.
