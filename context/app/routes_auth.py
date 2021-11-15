@@ -23,7 +23,7 @@ def load_app_client():
 
 def has_hubmap_group(groups_token):
     # Mostly copy-and-paste from
-    # https://github.com/hubmapconsortium/commons/blob/dc69f4/hubmap_commons/hm_auth.py#L347-L355
+    # https://github.com/hubmapconsortium/commons/blob/641d03b0dc/hubmap_commons/hm_auth.py#L626-L646
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
