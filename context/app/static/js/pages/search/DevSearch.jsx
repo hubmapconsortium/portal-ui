@@ -10,8 +10,8 @@ import DevResults from 'js/components/Search/DevResults';
 import { SearchHeader } from './style';
 
 function DevSearch() {
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-  const httpHeaders = getAuthHeader(nexusToken);
+  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
+  const httpHeaders = getAuthHeader(groupsToken);
 
   const searchProps = {
     // The default behavior is to add a "_search" path.
@@ -79,7 +79,7 @@ function DevSearch() {
       ],
     },
     queryFields: ['all_text', ...fieldsToHighlight],
-    isLoggedIn: Boolean(nexusToken),
+    isLoggedIn: Boolean(groupsToken),
   };
 
   const allProps = { ...searchProps, apiUrl: elasticsearchEndpoint };

@@ -9,7 +9,7 @@ def get_client():
         return MockApiClient()
     return ApiClient(
         current_app.config['ENTITY_API_BASE'],
-        session['nexus_token']
+        session['groups_token']
     )
 
 

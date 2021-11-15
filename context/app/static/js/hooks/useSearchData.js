@@ -2,8 +2,8 @@ import { useState, useEffect, useContext } from 'react';
 import { getAuthHeader, addRestrictionsToQuery } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
 
-async function fetchSearchData(query, elasticsearchEndpoint, nexusToken, useDefaultQuery = true) {
-  const authHeader = getAuthHeader(nexusToken);
+async function fetchSearchData(query, elasticsearchEndpoint, groupsToken, useDefaultQuery = true) {
+  const authHeader = getAuthHeader(groupsToken);
   const response = await fetch(elasticsearchEndpoint, {
     method: 'POST',
     body: JSON.stringify(useDefaultQuery ? addRestrictionsToQuery(query) : query),
@@ -24,16 +24,16 @@ async function fetchSearchData(query, elasticsearchEndpoint, nexusToken, useDefa
 function useSearchData(query, useDefaultQuery) {
   const [searchData, setSearchData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
 
   useEffect(() => {
     async function getAndSetSearchHits() {
-      const results = await fetchSearchData(query, elasticsearchEndpoint, nexusToken, useDefaultQuery);
+      const results = await fetchSearchData(query, elasticsearchEndpoint, groupsToken, useDefaultQuery);
       setSearchData(results);
       setIsLoading(false);
     }
     getAndSetSearchHits();
-  }, [elasticsearchEndpoint, nexusToken, query, useDefaultQuery]);
+  }, [elasticsearchEndpoint, groupsToken, query, useDefaultQuery]);
 
   return { searchData, isLoading };
 }

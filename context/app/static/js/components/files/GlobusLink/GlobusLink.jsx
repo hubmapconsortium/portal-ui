@@ -11,9 +11,9 @@ function GlobusLink(props) {
   const { uuid, hubmap_id, isSupport } = props;
   const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: '', statusCode: null });
 
-  const { entityEndpoint, nexusToken } = useContext(AppContext);
+  const { entityEndpoint, groupsToken } = useContext(AppContext);
 
-  const requestHeaders = getAuthHeader(nexusToken);
+  const requestHeaders = getAuthHeader(groupsToken);
   useAbortableEffect(
     (status) => {
       async function getAndSetGlobusUrlStatus() {

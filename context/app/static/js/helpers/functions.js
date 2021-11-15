@@ -28,14 +28,14 @@ export function readCookie(name) {
   return null;
 }
 
-export function getTokenParam(nexusToken) {
-  return nexusToken ? `?token=${nexusToken}` : '';
+export function getTokenParam(groupsToken) {
+  return groupsToken ? `?token=${groupsToken}` : '';
 }
 
-export function getAuthHeader(nexusToken) {
-  return nexusToken
+export function getAuthHeader(groupsToken) {
+  return groupsToken
     ? {
-        Authorization: `Bearer ${nexusToken}`,
+        Authorization: `Bearer ${groupsToken}`,
       }
     : {};
 }

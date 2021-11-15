@@ -3,7 +3,7 @@ set -o errexit
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
-[ -z "$NEXUS_TOKEN" ] && die "NEXUS_TOKEN needs to be defined."
+[ -z "$GROUPS_TOKEN" ] && die "GROUPS_TOKEN needs to be defined."
 
 cd `dirname $0`
 

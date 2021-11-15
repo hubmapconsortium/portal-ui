@@ -8,12 +8,12 @@
       "name": "Visualization Files",
       "files": [
         {
-          "url": "https://example.com/210d118a14c8624b6bb9610a9062656e/output/umap_coords_clusters.cells.json?token=nexus_token",
+          "url": "https://example.com/210d118a14c8624b6bb9610a9062656e/output/umap_coords_clusters.cells.json?token=groups_token",
           "type": "cells",
           "fileType": "cells.json"
         },
         {
-          "url": "https://example.com/210d118a14c8624b6bb9610a9062656e/output/umap_coords_clusters.cell-sets.json?token=nexus_token",
+          "url": "https://example.com/210d118a14c8624b6bb9610a9062656e/output/umap_coords_clusters.cell-sets.json?token=groups_token",
           "type": "cell-sets",
           "fileType": "cell-sets.json"
         }

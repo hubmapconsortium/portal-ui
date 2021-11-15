@@ -17,7 +17,7 @@ from .assay_confs import (
     StitchedCytokitSPRMViewConfBuilder
 )
 
-MOCK_NEXUS_TOKEN = "nexus_token"
+MOCK_GROUPS_TOKEN = "groups_token"
 
 FIXTURES_INPUT_DIR = "fixtures/input_entity"
 FIXTURES_EXPECTED_OUTPUT_DIR = "fixtures/output_expected"
@@ -55,7 +55,7 @@ def test_assays():
         if assay in ["sprm", "sprm_anndata"]:
             vc = AssayViewConfClass(
                 entity=entity,
-                nexus_token=MOCK_NEXUS_TOKEN,
+                groups_token=MOCK_GROUPS_TOKEN,
                 is_mock=True,
                 base_name=BASE_NAME_FOR_SPRM,
                 imaging_path="imaging_path",
@@ -65,7 +65,7 @@ def test_assays():
             )
         else:
             vc = AssayViewConfClass(
-                entity=entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True
+                entity=entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
             )
         conf = vc.get_conf_cells().conf
         conf_expected = json.loads(
@@ -81,7 +81,7 @@ def test_assays():
         if assay in ["sprm", "sprm_anndata"]:
             vc = AssayViewConfClass(
                 entity=malformed_entity,
-                nexus_token=MOCK_NEXUS_TOKEN,
+                groups_token=MOCK_GROUPS_TOKEN,
                 is_mock=True,
                 base_name=BASE_NAME_FOR_SPRM,
                 imaging_path="imaging_path",
@@ -91,7 +91,7 @@ def test_assays():
             )
         else:
             vc = AssayViewConfClass(
-                entity=malformed_entity, nexus_token=MOCK_NEXUS_TOKEN, is_mock=True
+                entity=malformed_entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
             )
         with pytest.raises(FileNotFoundError):
             vc.get_conf_cells().conf
