@@ -36,7 +36,8 @@ class ViewConfBuilder:
         :param str groups_token: Groups token for use in authenticating API
         :param bool is_mock: Wether or not this class is being mocked.
 
-        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, groups_token='groups_token', is_mock=True)
+        >>> vc = ViewConfBuilder(
+        ...     entity={"uuid": "uuid"}, groups_token='groups_token', is_mock=True)
 
         """
 
@@ -54,7 +55,8 @@ class ViewConfBuilder:
         :param dict file: File dict which will have its rel_path replaced by url
         :rtype: dict The file with rel_path replaced by url
         >>> from pprint import pprint
-        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, groups_token='groups_token', is_mock=True)
+        >>> vc = ViewConfBuilder(
+        ...     entity={"uuid": "uuid"}, groups_token='groups_token', is_mock=True)
         >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
         >>> pprint(vc._replace_url_in_file(file))
         {'data_type': 'CELLS',\n\
@@ -74,7 +76,8 @@ class ViewConfBuilder:
         :param bool use_token: Whether or not to append a groups token to the URL, default True
         :rtype: dict The file with rel_path replaced by url
 
-        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, groups_token='groups_token', is_mock=True)
+        >>> vc = ViewConfBuilder(
+        ...     entity={"uuid": "uuid"}, groups_token='groups_token', is_mock=True)
         >>> vc._build_assets_url("rel_path/to/clusters.ome.tiff")
         'https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=groups_token'
 
