@@ -67,12 +67,13 @@ const ExpandableDiv = styled.div`
   background-color: ${(props) =>
     props.$theme === 'dark' ? '#333333' : props.theme.palette.white.main}; // TODO: Move to theme.
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   .vitessce-container {
     display: block;
     height: ${(props) => (props.$isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : 'auto')};
     width: 100%;
     position: static;
+    box-sizing: content-box;
   }
 `;
 
