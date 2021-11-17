@@ -22,21 +22,21 @@
               "obs/marker_gene_4"
             ]
           },
-          "requestInit": { "headers": { "Authorization": "Bearer nexus_token" } }
+          "requestInit": { "headers": { "Authorization": "Bearer groups_token" } }
         },
         {
           "type": "cell-sets",
           "fileType": "anndata-cell-sets.zarr",
           "url": "https://example.com/3b066aa664e1a32eaea957927baf92e2/hubmap_ui/anndata-zarr/secondary_analysis.zarr",
           "options": [{ "groupName": "Leiden", "setName": "obs/leiden" }],
-          "requestInit": { "headers": { "Authorization": "Bearer nexus_token" } }
+          "requestInit": { "headers": { "Authorization": "Bearer groups_token" } }
         },
         {
           "type": "expression-matrix",
           "fileType": "anndata-expression-matrix.zarr",
           "url": "https://example.com/3b066aa664e1a32eaea957927baf92e2/hubmap_ui/anndata-zarr/secondary_analysis.zarr",
           "options": { "matrix": "X", "matrixGeneFilter": "var/marker_genes_for_heatmap" },
-          "requestInit": { "headers": { "Authorization": "Bearer nexus_token" } }
+          "requestInit": { "headers": { "Authorization": "Bearer groups_token" } }
         }
       ]
     }

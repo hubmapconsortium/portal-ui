@@ -11,7 +11,7 @@ function LookupEntity({ uuid, children }) {
 LookupEntity.propTypes = {
   uuid: PropTypes.string.isRequired,
   elasticsearchEndpoint: PropTypes.string.isRequired,
-  nexusToken: PropTypes.string.isRequired,
+  groupsToken: PropTypes.string.isRequired,
 };
 
 export default LookupEntity;

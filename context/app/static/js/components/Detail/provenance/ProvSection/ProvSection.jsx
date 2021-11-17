@@ -11,8 +11,8 @@ import ProvTabs from '../ProvTabs';
 function ProvSection(props) {
   const { uuid, assayMetadata } = props;
   const { entity_type } = assayMetadata;
-  const { nexusToken, entityEndpoint } = useContext(AppContext);
-  const { provData, isLoading } = useProvData(uuid, entityEndpoint, nexusToken);
+  const { groupsToken, entityEndpoint } = useContext(AppContext);
+  const { provData, isLoading } = useProvData(uuid, entityEndpoint, groupsToken);
 
   if (isLoading) {
     return (

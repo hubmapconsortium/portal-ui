@@ -130,7 +130,7 @@ class TiledSPRMViewConfBuilder(ViewConfBuilder):
         for tile in sorted(found_tiles):
             vc = SPRMJSONViewConfBuilder(
                 entity=self._entity,
-                nexus_token=self._nexus_token,
+                groups_token=self._groups_token,
                 is_mock=self._is_mock,
                 base_name=tile,
                 imaging_path=CODEX_TILE_DIR
@@ -149,8 +149,8 @@ class RNASeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     from h5ad-to-arrow.cwl (August 2020 release).
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False):
-        super().__init__(entity, nexus_token, is_mock)
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
@@ -172,8 +172,8 @@ class ATACSeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     from h5ad-to-arrow.cwl.
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False):
-        super().__init__(entity, nexus_token, is_mock)
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
@@ -210,7 +210,7 @@ class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
         for region in sorted(found_regions):
             vc = SPRMAnnDataViewConfBuilder(
                 entity=self._entity,
-                nexus_token=self._nexus_token,
+                groups_token=self._groups_token,
                 is_mock=self._is_mock,
                 base_name=region,
                 imaging_path=STITCHED_IMAGE_DIR,
@@ -234,8 +234,8 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False):
-        super().__init__(entity, nexus_token, is_mock)
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
         # Spatially resolved RNA-seq assays require some special handling,
         # and others do not.
         self._is_spatial = False
@@ -290,8 +290,8 @@ class SpatialRNASeqAnnDataZarrViewConfBuilder(RNASeqAnnDataZarrViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False):
-        super().__init__(entity, nexus_token, is_mock)
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
         # Spatially resolved RNA-seq assays require some special handling,
         # and others do not.
         self._is_spatial = True
@@ -322,8 +322,8 @@ class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
     of all the channels separated out.
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False):
-        super().__init__(entity, nexus_token, is_mock)
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
         # Do not show the separated mass-spec images.
         self.image_pyramid_regex = (
             re.escape(IMAGE_PYRAMID_DIR) + r"(?!/ometiffs/separate/)"

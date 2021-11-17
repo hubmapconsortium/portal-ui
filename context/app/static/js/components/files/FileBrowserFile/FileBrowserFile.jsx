@@ -15,9 +15,9 @@ function FileBrowserFile(props) {
   const { fileObj, depth } = props;
   const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
   const { uuid } = useContext(DetailContext);
-  const { assetsEndpoint, nexusToken } = useContext(AppContext);
+  const { assetsEndpoint, groupsToken } = useContext(AppContext);
 
-  const tokenParam = getTokenParam(nexusToken);
+  const tokenParam = getTokenParam(groupsToken);
 
   const fileUrl = `${assetsEndpoint}/${uuid}/${fileObj.rel_path}${tokenParam}`;
 

@@ -19,12 +19,12 @@ class VitessceConfLiftedUUID:
 
 
 class ApiClient():
-    def __init__(self, url_base=None, nexus_token=None):
+    def __init__(self, url_base=None, groups_token=None):
         self.url_base = url_base
-        self.nexus_token = nexus_token
+        self.groups_token = groups_token
 
     def _request(self, url, body_json=None):
-        headers = {'Authorization': 'Bearer ' + self.nexus_token} if self.nexus_token else {}
+        headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
         try:
             response = (
                 requests.post(url, headers=headers, json=body_json)
@@ -109,7 +109,7 @@ class ApiClient():
             body_json=query)
 
         hits = response_json['hits']['hits']
-        return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id)
+        return _get_entity_from_hits(hits, has_token=self.groups_token, uuid=uuid, hbm_id=hbm_id)
 
     def get_latest_entity_uuid(self, uuid, type):
         lowercase_type = type.lower()
@@ -147,7 +147,7 @@ class ApiClient():
             if isinstance(Builder, NullViewConfBuilder):
                 vc = Builder()
             else:
-                vc = Builder(entity, self.nexus_token)
+                vc = Builder(entity, self.groups_token)
             return VitessceConfLiftedUUID(vc.get_conf_cells(), None)
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'

@@ -24,7 +24,7 @@ const searchDatasetTutorialSelector = (state) => ({
 
 function Search(props) {
   const { title } = props;
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
 
   const {
     runSearchDatasetTutorial,
@@ -66,7 +66,7 @@ function Search(props) {
     { urlSearchParam: 'descendant_ids[0]', label: 'Ancestor of' },
   ].filter((note) => searchParams.has(note.urlSearchParam));
 
-  const httpHeaders = getAuthHeader(nexusToken);
+  const httpHeaders = getAuthHeader(groupsToken);
   const resultFields = resultFieldsByType[type];
   const searchProps = {
     // The default behavior is to add a "_search" path.
@@ -87,7 +87,7 @@ function Search(props) {
     // Sidebar facet configuration:
     filters: filtersByType[type],
     queryFields: ['all_text', ...fieldsToHighlight],
-    isLoggedIn: Boolean(nexusToken),
+    isLoggedIn: Boolean(groupsToken),
     apiUrl: elasticsearchEndpoint,
     defaultQuery: getDefaultQuery(),
   };
@@ -127,11 +127,11 @@ function Search(props) {
 
 Search.propTypes = {
   title: PropTypes.string.isRequired,
-  nexusToken: PropTypes.string,
+  groupsToken: PropTypes.string,
 };
 
 Search.defaultProps = {
-  nexusToken: '',
+  groupsToken: '',
 };
 
 export default Search;

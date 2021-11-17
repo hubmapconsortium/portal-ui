@@ -72,7 +72,7 @@ function DatasetsSelectedByExpression({
   setIsLoading,
 }) {
   const [message, setMessage] = useState(null);
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const [genomicModality, setGenomicModality] = useState('rna');
 
   function handleSelectModality(event) {
@@ -99,7 +99,7 @@ function DatasetsSelectedByExpression({
         </>,
       );
       const serviceResults = await new CellsService().getDatasets(queryParams);
-      const searchResults = await fetchSearchData(getSearchQuery(serviceResults), elasticsearchEndpoint, nexusToken);
+      const searchResults = await fetchSearchData(getSearchQuery(serviceResults), elasticsearchEndpoint, groupsToken);
       setResults(searchResults.hits.hits);
       setIsLoading(false);
     } catch (e) {
