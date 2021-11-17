@@ -73,7 +73,6 @@ const ExpandableDiv = styled.div`
     height: ${(props) => (props.$isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : 'auto')};
     width: 100%;
     position: static;
-    box-sizing: content-box;
   }
 `;
 
