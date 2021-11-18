@@ -1,3 +1,8 @@
+## v0.31.0 - 2021-11-17
+
+- Switch Globus authentication from Globus Nexus to Globus Groups.
+
+
 ## v0.30.2 - 2021-11-04
 
 - Fix checkbox facet alignment on search pages.

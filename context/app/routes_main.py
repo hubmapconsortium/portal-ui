@@ -34,9 +34,9 @@ def ccf_eui():
         'pages/ccf-eui.html',
         config=current_app.config,
         url_root=request.url_root,
-        nexus_token=(
-            session['nexus_token']
-            if 'nexus_token' in session
+        groups_token=(
+            session['groups_token']
+            if 'groups_token' in session
             else ''
         )
     )

@@ -13,11 +13,11 @@ export const parameters = {
 }
 
 const mockEndpoints = {};
-const mockNexusToken=""
+const mockGroupsToken=""
 
 export const decorators = [
   (Story) => (
-    <Providers endpoints={mockEndpoints} nexusToken={mockNexusToken}>
+    <Providers endpoints={mockEndpoints} groupsToken={mockGroupsToken}>
       <Story />
     </Providers>
   ),

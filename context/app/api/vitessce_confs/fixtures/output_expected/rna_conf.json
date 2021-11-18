@@ -8,12 +8,12 @@
       "name": "Visualization Files",
       "files": [
         {
-          "url": "https://example.com/14946a8eb12f2d787302f818b72fdc4e/cluster-marker-genes/output/cluster_marker_genes.cells.json?token=nexus_token",
+          "url": "https://example.com/14946a8eb12f2d787302f818b72fdc4e/cluster-marker-genes/output/cluster_marker_genes.cells.json?token=groups_token",
           "type": "cells",
           "fileType": "cells.json"
         },
         {
-          "url": "https://example.com/14946a8eb12f2d787302f818b72fdc4e/cluster-marker-genes/output/cluster_marker_genes.cell-sets.json?token=nexus_token",
+          "url": "https://example.com/14946a8eb12f2d787302f818b72fdc4e/cluster-marker-genes/output/cluster_marker_genes.cell-sets.json?token=groups_token",
           "type": "cell-sets",
           "fileType": "cell-sets.json"
         }

@@ -30,18 +30,19 @@ class NullViewConfBuilder():
 
 
 class ViewConfBuilder:
-    def __init__(self, entity=None, nexus_token=None, is_mock=False):
+    def __init__(self, entity=None, groups_token=None, is_mock=False):
         """Object for building the vitessce configuration.
         :param dict entity: Entity response from search index (from the entity API)
-        :param str nexus_token: Nexus token for use in authenticating API
+        :param str groups_token: Groups token for use in authenticating API
         :param bool is_mock: Wether or not this class is being mocked.
 
-        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(
+        ...     entity={"uuid": "uuid"}, groups_token='groups_token', is_mock=True)
 
         """
 
         self._uuid = entity["uuid"]
-        self._nexus_token = nexus_token
+        self._groups_token = groups_token
         self._entity = entity
         self._is_mock = is_mock
         self._files = []
@@ -54,12 +55,13 @@ class ViewConfBuilder:
         :param dict file: File dict which will have its rel_path replaced by url
         :rtype: dict The file with rel_path replaced by url
         >>> from pprint import pprint
-        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(
+        ...     entity={"uuid": "uuid"}, groups_token='groups_token', is_mock=True)
         >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
         >>> pprint(vc._replace_url_in_file(file))
         {'data_type': 'CELLS',\n\
          'file_type': 'cells.json',\n\
-         'url': 'https://example.com/uuid/cells.json?token=nexus_token'}
+         'url': 'https://example.com/uuid/cells.json?token=groups_token'}
         """
 
         return {
@@ -71,12 +73,13 @@ class ViewConfBuilder:
     def _build_assets_url(self, rel_path, use_token=True):
         """Create a url for an asset.
         :param str rel_path: The path off of which the url should be built
-        :param bool use_token: Whether or not to append a nexus token to the URL, default True
+        :param bool use_token: Whether or not to append a groups token to the URL, default True
         :rtype: dict The file with rel_path replaced by url
 
-        >>> vc = ViewConfBuilder(entity={"uuid": "uuid"}, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(
+        ...     entity={"uuid": "uuid"}, groups_token='groups_token', is_mock=True)
         >>> vc._build_assets_url("rel_path/to/clusters.ome.tiff")
-        'https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=nexus_token'
+        'https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=groups_token'
 
         """
         if not self._is_mock:
@@ -84,7 +87,7 @@ class ViewConfBuilder:
         else:
             assets_endpoint = MOCK_URL
         base_url = urllib.parse.urljoin(assets_endpoint, f"{self._uuid}/{rel_path}")
-        token_param = urllib.parse.urlencode({"token": self._nexus_token})
+        token_param = urllib.parse.urlencode({"token": self._groups_token})
         return f"{base_url}?{token_param}" if use_token else base_url
 
     def _get_request_init(self):
@@ -93,14 +96,14 @@ class ViewConfBuilder:
         not the above _build_assets_url function.
 
         >>> entity = {"uuid": "uuid", "status": "QA"}
-        >>> vc = ViewConfBuilder(entity=entity, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity=entity, groups_token='groups_token', is_mock=True)
         >>> vc._get_request_init()
-        {'headers': {'Authorization': 'Bearer nexus_token'}}
+        {'headers': {'Authorization': 'Bearer groups_token'}}
         >>> entity = {"uuid": "uuid", "status": "Published"}
-        >>> vc = ViewConfBuilder(entity=entity, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity=entity, groups_token='groups_token', is_mock=True)
         >>> assert vc._get_request_init() is None # None because dataset is Published (public)
         """
-        request_init = {"headers": {"Authorization": f"Bearer {self._nexus_token}"}}
+        request_init = {"headers": {"Authorization": f"Bearer {self._groups_token}"}}
         # Extra headers outside of a select few cause extra CORS-preflight requests which
         # can slow down the webpage.  If the dataset is published, we don't need to use
         # heaeder to authenticate access to the assets API.
@@ -113,7 +116,7 @@ class ViewConfBuilder:
 
         >>> files = [{ "rel_path": "path/to/file" }, { "rel_path": "path/to/other_file" }]
         >>> entity = {"uuid": "uuid", "files": files}
-        >>> vc = ViewConfBuilder(entity=entity, nexus_token='nexus_token', is_mock=True)
+        >>> vc = ViewConfBuilder(entity=entity, groups_token='groups_token', is_mock=True)
         >>> vc._get_file_paths()
         ['path/to/file', 'path/to/other_file']
         """
@@ -130,11 +133,11 @@ class AbstractImagingViewConfBuilder(ViewConfBuilder):
 
         >>> from pprint import pprint
         >>> vc = AbstractImagingViewConfBuilder(entity={ "uuid": "uuid" },\
-            nexus_token='nexus_token', is_mock=True)
+            groups_token='groups_token', is_mock=True)
         >>> pprint(vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff",\
             "rel_path/to"))
-        ('https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=nexus_token',\n\
-         'https://example.com/uuid/output_offsets/clusters.offsets.json?token=nexus_token')
+        ('https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=groups_token',\n\
+         'https://example.com/uuid/output_offsets/clusters.offsets.json?token=groups_token')
 
         """
         img_url = self._build_assets_url(img_path)
@@ -159,13 +162,13 @@ class AbstractImagingViewConfBuilder(ViewConfBuilder):
 
 
 class ImagePyramidViewConfBuilder(AbstractImagingViewConfBuilder):
-    def __init__(self, entity, nexus_token, is_mock=False):
+    def __init__(self, entity, groups_token, is_mock=False):
         """Wrapper class for creating a standard view configuration for image pyramids,
         i.e for high resolution viz-lifted imaging datasets like
         https://portal.hubmapconsortium.org/browse/dataset/dc289471333309925e46ceb9bafafaf4
         """
         self.image_pyramid_regex = IMAGE_PYRAMID_DIR
-        super().__init__(entity, nexus_token, is_mock)
+        super().__init__(entity, groups_token, is_mock)
 
     def get_conf_cells(self):
         file_paths_found = self._get_file_paths()
@@ -269,9 +272,9 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/dc31a6d06daa964299224e9c8d6cafb3
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
+    def __init__(self, entity, groups_token, is_mock=False, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
-        super().__init__(entity, nexus_token, is_mock)
+        super().__init__(entity, groups_token, is_mock)
         # These are both something like R001_X009_Y009 because
         # there is no mask used here or shared name with the mask data.
         self._base_name = kwargs["base_name"]
@@ -348,8 +351,8 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
     of the image and mask relative to image_pyramid_regex
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False, **kwargs):
-        super().__init__(entity, nexus_token, is_mock)
+    def __init__(self, entity, groups_token, is_mock=False, **kwargs):
+        super().__init__(entity, groups_token, is_mock)
         self._base_name = kwargs["base_name"]
         self._mask_name = kwargs["mask_name"]
         self._image_name = kwargs["image_name"]

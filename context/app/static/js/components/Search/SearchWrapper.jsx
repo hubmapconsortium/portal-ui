@@ -34,7 +34,7 @@ function SearchWrapper(props) {
     resultsComponent: ResultsComponent,
     analyticsCategory,
     elasticsearchEndpoint,
-    nexusToken,
+    groupsToken,
   } = props;
 
   const sortOptions = resultFieldsToSortOptions(resultFields.table);
@@ -67,7 +67,7 @@ function SearchWrapper(props) {
         const allResults = await fetchSearchData(
           { query, post_filter, _source: false, size: 10000 },
           elasticsearchEndpoint,
-          nexusToken,
+          groupsToken,
         );
         // eslint-disable-next-line no-underscore-dangle
         setAllResultsUUIDs(allResults.hits.hits.map((hit) => hit._id));
@@ -77,7 +77,7 @@ function SearchWrapper(props) {
     return () => {
       removalFn();
     };
-  }, [analyticsCategory, elasticsearchEndpoint, nexusToken, searchkit, setAllResultsUUIDs, setSearchHitsCount]);
+  }, [analyticsCategory, elasticsearchEndpoint, groupsToken, searchkit, setAllResultsUUIDs, setSearchHitsCount]);
 
   return (
     <SearchkitProvider searchkit={searchkit}>

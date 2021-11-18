@@ -26,7 +26,7 @@
           },
           "requestInit": {
             "headers": {
-              "Authorization": "Bearer nexus_token"
+              "Authorization": "Bearer groups_token"
             }
           }
         },
@@ -66,7 +66,7 @@
           ],
           "requestInit": {
             "headers": {
-              "Authorization": "Bearer nexus_token"
+              "Authorization": "Bearer groups_token"
             }
           }
         },
@@ -79,7 +79,7 @@
           },
           "requestInit": {
             "headers": {
-              "Authorization": "Bearer nexus_token"
+              "Authorization": "Bearer groups_token"
             }
           }
         },
@@ -94,19 +94,19 @@
               {
                 "name": "expressions",
                 "type": "ome-tiff",
-                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/imaging_path/expressions.ome.tiff?token=nexus_token",
+                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/imaging_path/expressions.ome.tiff?token=groups_token",
                 "metadata": {
                   "isBitmask": false,
-                  "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/imaging_path/expressions.offsets.json?token=nexus_token"
+                  "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/imaging_path/expressions.offsets.json?token=groups_token"
                 }
               },
               {
                 "name": "mask",
                 "type": "ome-tiff",
-                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/imaging_path/mask.ome.tiff?token=nexus_token",
+                "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/imaging_path/mask.ome.tiff?token=groups_token",
                 "metadata": {
                   "isBitmask": true,
-                  "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/imaging_path/mask.offsets.json?token=nexus_token"
+                  "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/imaging_path/mask.offsets.json?token=groups_token"
                 }
               }
             ]

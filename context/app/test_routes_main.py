@@ -14,7 +14,7 @@ def client():
     app = create_app(testing=True)
     with app.test_client() as client:
         with client.session_transaction() as session:
-            session['nexus_token'] = '{}'
+            session['groups_token'] = '{}'
         yield client
 
 

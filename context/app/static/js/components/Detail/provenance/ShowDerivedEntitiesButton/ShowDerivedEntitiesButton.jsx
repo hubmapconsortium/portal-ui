@@ -14,7 +14,7 @@ function getUniqueNewSteps(steps, newSteps) {
 const useProvenanceStoreSelector = (state) => ({ steps: state.steps, addDescendantSteps: state.addDescendantSteps });
 
 function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }) {
-  const { elasticsearchEndpoint, entityEndpoint, nexusToken } = useContext(AppContext);
+  const { elasticsearchEndpoint, entityEndpoint, groupsToken } = useContext(AppContext);
   const { steps, addDescendantSteps } = useProvenanceStore(useProvenanceStoreSelector);
   const [newSteps, setNewSteps] = useState([]);
 
@@ -22,7 +22,7 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity })
     id,
     elasticsearchEndpoint,
     entityEndpoint,
-    nexusToken,
+    groupsToken,
   );
 
   useEffect(() => {

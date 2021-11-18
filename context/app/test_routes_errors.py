@@ -13,7 +13,7 @@ def client():
     assert 'IS_MOCK' not in app.config
     with app.test_client() as client:
         with client.session_transaction() as session:
-            session['nexus_token'] = '{}'
+            session['groups_token'] = '{}'
         yield client
 
 
@@ -55,7 +55,7 @@ def test_401_html_page(client, mocker):
 def client_not_logged_in():
     app = create_app(testing=True)
     with app.test_client() as client:
-        # No nexus_token!
+        # No groups_token!
         yield client
 
 

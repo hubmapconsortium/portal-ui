@@ -72,15 +72,15 @@ def create_app(testing=False):
     def inject_template_globals():
         return {
             'is_authenticated': session.get('is_authenticated'),
-            'nexus_token': session.get('nexus_token'),
+            'groups_token': session.get('groups_token'),
             'user_email': session.get('user_email')
         }
 
     @app.before_request
-    def set_default_nexus_token():
-        if 'nexus_token' not in session:
+    def set_default_groups_token():
+        if 'groups_token' not in session:
             session.update(
-                nexus_token='',
+                groups_token='',
                 user_email='',
                 is_authenticated=False)
 
