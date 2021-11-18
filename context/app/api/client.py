@@ -69,14 +69,14 @@ class ApiClient():
             raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
 
-    def get_entities(self, plural_lc_entity_type, non_metadata_fields, constraints):
+    def get_entities(self, plural_lc_entity_type, non_metadata_fields, constraints={}, uuids=None):
         entity_type = plural_lc_entity_type[:-1].capitalize()
         query = {
             "size": 10000,  # Default ES limit,
             "post_filter": {
                 "term": {"entity_type.keyword": entity_type}
             },
-            "query": _make_query(constraints),
+            "query": _make_query(constraints, uuids),
             "_source": [*non_metadata_fields, 'mapped_metadata', 'metadata']
         }
         response_json = self._request(
@@ -156,7 +156,7 @@ class ApiClient():
             return VitessceConfLiftedUUID(ConfCells({'error': message}, None), None)
 
 
-def _make_query(constraints):
+def _make_query(constraints, uuids):
     '''
     Given a constraints dict of lists,
     return a ES query that handles all structual variations.
@@ -186,7 +186,10 @@ def _make_query(constraints):
         {'bool': {'should': should}}
         for should in shoulds
     ]
+    if uuids:
+        musts.append({'ids': {'values': uuids}})
     query = {'bool': {'must': musts}}
+
     return query
 
 
