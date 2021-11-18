@@ -50,7 +50,7 @@
     "uuid": "^8.3.2",
     "vega": "^5.13.0",
     "vega-lite": "^4.13.1",
-    "vitessce": "^1.1.15",
+    "vitessce": "^1.1.17",
     "web-vitals": "^1.1.0",
     "whatwg-fetch": "^3.0.0",
     "zustand": "^3.5.9"
