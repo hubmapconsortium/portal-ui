@@ -8,6 +8,8 @@ const useSearchViewStore = create((set) => ({
   setToggleItem: (val) => set({ toggleItem: val }),
   searchHitsCount: 0,
   setSearchHitsCount: (val) => set({ searchHitsCount: val }),
+  allResultsUUIDs: [],
+  setAllResultsUUIDs: (val) => set({ allResultsUUIDs: val }),
 }));
 
 export default useSearchViewStore;
