@@ -41,7 +41,7 @@ function DownloadButton(props) {
   }
 
   return (
-    <SecondaryBackgroundTooltip title="Download a TSV of the table metadata. This will not take into account any filtering done on the search page.">
+    <SecondaryBackgroundTooltip title="Download a TSV of the table metadata.">
       <StyledButton onClick={fetchAndDownloadTSV} variant="outlined" color="primary">
         Download Metadata
       </StyledButton>
