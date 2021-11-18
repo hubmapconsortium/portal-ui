@@ -97,6 +97,8 @@ function Search(props) {
       {...searchProps}
       resultsComponent={Results}
       analyticsCategory={`${title} Search Page Interactions`}
+      elasticsearchEndpoint={elasticsearchEndpoint}
+      nexusToken={nexusToken}
     />
   );
 
