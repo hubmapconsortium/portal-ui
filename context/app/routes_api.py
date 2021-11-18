@@ -19,7 +19,6 @@ def entities_tsv(entity_type):
     else:
         body = request.get_json()
         entities = _get_entities(entity_type, {}, body.get('uuids'))
-    
     return _make_tsv_response(_dicts_to_tsv(entities, _first_fields), f'{entity_type}.tsv')
 
 
