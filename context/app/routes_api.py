@@ -14,7 +14,6 @@ def entities_tsv(entity_type):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
         constraints = {k: all_args[k] for k in all_args.keys() - {'uuids'}}
-        print(request.args.getlist('uuids'))
         entities = _get_entities(entity_type, constraints, request.args.getlist('uuids'))
     else:
         body = request.get_json()
