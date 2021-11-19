@@ -27,7 +27,7 @@ function DownloadButton(props) {
       },
     });
     if (!response.ok) {
-      console.error('Search API failed', response);
+      console.error('Metadata TSV Failed', response);
       return {};
     }
     const results = await response.blob();
