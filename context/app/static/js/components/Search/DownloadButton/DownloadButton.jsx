@@ -1,19 +1,12 @@
 import React from 'react';
-// import ReactGA from 'react-ga';
+import ReactGA from 'react-ga';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { StyledButton } from './style';
 
-/*
-function sendTsvEvent(event) {
-  ReactGA.pageview(event.currentTarget.href);
-}
-*/
-
-function DownloadButton(props) {
-  const { type } = props;
+function DownloadButton({ type, analyticsCategory }) {
   const lcPluralType = `${type.toLowerCase()}s`;
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
@@ -38,6 +31,12 @@ function DownloadButton(props) {
     tempLink.href = downloadUrl;
     tempLink.download = `${lcPluralType}.tsv`;
     tempLink.click();
+
+    ReactGA.event({
+      category: analyticsCategory,
+      action: `Download Metadata`,
+      label: type,
+    });
   }
 
   return (
