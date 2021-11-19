@@ -7,6 +7,7 @@ const alias = {
   'portal-images': resolve(__dirname, '../app/static/portal-images/'),
   'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
   package: resolve(__dirname, '../package.json'),
+  'txml/txml': 'txml/dist/txml'
 };
 
 exports.alias = alias;
