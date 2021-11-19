@@ -38,7 +38,7 @@ def lineup(entity_type):
 _first_fields = ['uuid', 'hubmap_id']
 
 
-def _get_entities(entity_type, constraints, uuids):
+def _get_entities(entity_type, constraints={}, uuids=None):
     if entity_type not in ['donors', 'samples', 'datasets']:
         abort(404)
     client = get_client()
