@@ -4,7 +4,7 @@
     ],
     "metadata": {
         "dag_provenance_list": [
-            { "name": "pipeline.cwl", "origin": "https://github.com/pipeline_not_azimuth" }
+            { "name": "pipeline.cwl", "origin": "https://github.com/azimuth-annotate.cwl" }
         ]  
     },
     "status": "QA",
