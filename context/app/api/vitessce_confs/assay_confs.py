@@ -28,8 +28,7 @@ from .base_confs import (
 )
 from .assays import (
     SEQFISH,
-    MALDI_IMS_NEG,
-    MALDI_IMS_POS,
+    MALDI_IMS
 )
 from .paths import (
     SCRNA_SEQ_DIR,
@@ -362,10 +361,7 @@ def get_view_config_builder(entity):
             return TiledSPRMViewConfBuilder
         if SEQFISH in assay_names:
             return SeqFISHViewConfBuilder
-        if (
-            MALDI_IMS_NEG in assay_names
-            or MALDI_IMS_POS in assay_names
-        ):
+        if MALDI_IMS in assay_names:
             return IMSViewConfBuilder
         return ImagePyramidViewConfBuilder
     if "rna" in hints:

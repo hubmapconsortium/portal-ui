@@ -1,0 +1,1 @@
+- Fix usage of MALDI name in vitessce view configuration generation.
