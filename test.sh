@@ -75,6 +75,17 @@ start lint
 npm run lint
 end lint
 
+start cap-dirs
+DIRS=$(
+  for D in $(
+    find -E context/app/static/js -type d -regex '.*/[A-Z][^/]+'
+  ); do
+    [ -e $D/index.* ] || echo $D
+  done
+)
+[ -z $DIRS ] || die "These directories missing index files: $DIRS"
+end cap-dirs
+
 start npm-test
 npm run test
 end npm-test
