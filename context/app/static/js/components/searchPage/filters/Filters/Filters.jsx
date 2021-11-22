@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import AccordionFilter from 'js/components/Search/filters/AccordionFilter';
-import FilterOuterAccordion from 'js/components/Search/filters/FilterOuterAccordion';
+import AccordionFilter from 'js/components/searchPage/filters/AccordionFilter';
+import FilterOuterAccordion from 'js/components/searchPage/filters/FilterOuterAccordion';
 
 function Filters({ filters, analyticsCategory }) {
   return Object.entries(filters).map(([title, filterGroup], i) => {

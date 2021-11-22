@@ -2,9 +2,9 @@ import React from 'react';
 import { RefinementListFilter, RangeFilter, CheckboxFilter, HierarchicalMenuFilter } from 'searchkit';
 import ReactGA from 'react-ga';
 
-import FilterInnerAccordion from 'js/components/Search/filters/FilterInnerAccordion';
-import HierarchicalFilterItem from 'js/components/Search/filters/HierarchicalFilterItem';
-import CheckboxFilterItem from 'js/components/Search/filters/CheckboxFilterItem';
+import FilterInnerAccordion from 'js/components/searchPage/filters/FilterInnerAccordion';
+import HierarchicalFilterItem from 'js/components/searchPage/filters/HierarchicalFilterItem';
+import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
 
 export function withAnalyticsEvent(ItemComponent, title, analyticsCategory) {
   return function UpdatedItemComponent({ onClick: originalOnClick, label, active, ...rest }) {

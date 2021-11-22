@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FilterLabelAndCount from 'js/components/Search/filters/FilterLabelAndCount';
+import FilterLabelAndCount from 'js/components/searchPage/filters/FilterLabelAndCount';
 
 import { StyledCheckBoxBlankIcon, StyledCheckBoxIcon, StyledCheckbox, StyledFormControlLabel } from './style';
 

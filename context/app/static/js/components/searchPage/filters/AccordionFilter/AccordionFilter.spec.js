@@ -4,8 +4,8 @@ import { RefinementListFilter, RangeFilter, CheckboxFilter, HierarchicalMenuFilt
 import { render, screen, fireEvent } from 'test-utils/functions';
 import ReactGA from 'react-ga';
 
-import HierarchicalFilterItem from 'js/components/Search/filters/HierarchicalFilterItem';
-import CheckboxFilterItem from 'js/components/Search/filters/CheckboxFilterItem';
+import HierarchicalFilterItem from 'js/components/searchPage/filters/HierarchicalFilterItem';
+import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
 import AccordionFilter, { withAnalyticsEvent, getFilter } from './AccordionFilter';
 
 jest.mock('react-ga');

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle } from 'searchkit';
 
-import { withAnalyticsCategory } from 'js/components/Search/hooks';
+import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
 import SearchViewSwitch, { DevSearchViewSwitch } from './SearchViewSwitch';
 import DownloadButton from '../DownloadButton';
 import TilesSortDropdown from '../TilesSortDropdown';

@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { StyledAccordion, StyledExpandMoreIcon } from 'js/components/Search/filters/style';
+import { StyledAccordion, StyledExpandMoreIcon } from 'js/components/searchPage/filters/style';
 import { InnerAccordionDetails, InnerAccordionSummary } from './style';
 
 function InnerAccordionContainer({ title, children }) {
