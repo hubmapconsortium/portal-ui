@@ -9,8 +9,13 @@ from .utils import make_blueprint, get_client, get_default_flask_data
 blueprint = make_blueprint(__name__)
 
 
-def _get_dict_subset(d, keys_to_remove):
-    return {k: d[k] for k in d.keys() - dict.fromkeys(keys_to_remove)}
+def _drop_dict_keys(d, keys_to_remove):
+    '''
+    >>> d = {'apple': 'a', 'pear': 'p'}
+    >>> _drop_dict_keys(d, ['apple'])
+    {'pear': 'p'}
+    '''
+    return {k: d[k] for k in d.keys() - keys_to_remove}
 
 
 def _get_api_json_error(status, message):
@@ -25,13 +30,13 @@ def _get_api_json_error(status, message):
 def entities_tsv(entity_type):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
-        constraints = _get_dict_subset(all_args, ['uuids'])
+        constraints = _drop_dict_keys(all_args, ['uuids'])
         entities = _get_entities(entity_type, constraints, request.args.getlist('uuids'))
     else:
         body = request.get_json()
         if request.args:
             return _get_api_json_error(400, 'POST only accepts a JSON body.')
-        if _get_dict_subset(body, ['uuids']):
+        if _drop_dict_keys(body, ['uuids']):
             return _get_api_json_error(400, 'POST only accepts uuids in JSON body.')
         entities = _get_entities(entity_type, {}, body.get('uuids'))
     return _make_tsv_response(_dicts_to_tsv(entities, _first_fields), f'{entity_type}.tsv')
