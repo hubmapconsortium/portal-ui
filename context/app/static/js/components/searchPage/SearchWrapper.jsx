@@ -6,13 +6,15 @@ import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody 
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import Filters from 'js/components/searchPage/filters/Filters';
+import { fetchSearchData } from 'js/hooks/useSearchData';
 import PaginationWrapper from './PaginationWrapper';
 import SearchBarLayout from './SearchBarLayout';
 import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
 import { NoResults, SearchError } from './noHitsComponents';
 
-const searchViewStoreSelector = (state) => state.setSearchHitsCount;
+const setSearcHitsCountSelector = (state) => state.setSearchHitsCount;
+const setAllResultsUUIDsSelector = (state) => state.setAllResultsUUIDs;
 
 function SearchWrapper(props) {
   const {
@@ -31,6 +33,8 @@ function SearchWrapper(props) {
     defaultQuery,
     resultsComponent: ResultsComponent,
     analyticsCategory,
+    elasticsearchEndpoint,
+    groupsToken,
   } = props;
 
   const sortOptions = resultFieldsToSortOptions(resultFields.table);
@@ -40,10 +44,10 @@ function SearchWrapper(props) {
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
   searchkit.addDefaultQuery((query) => query.addQuery(defaultQuery));
 
-  const setSearchHitsCount = useSearchViewStore(searchViewStoreSelector);
+  const setSearchHitsCount = useSearchViewStore(setSearcHitsCountSelector);
+  const setAllResultsUUIDs = useSearchViewStore(setAllResultsUUIDsSelector);
 
   const queryString = useRef(false);
-
   useEffect(() => {
     const removalFn = searchkit.addResultsListener((results) => {
       const newQueryString = searchkit.state?.q;
@@ -56,11 +60,24 @@ function SearchWrapper(props) {
       }
       queryString.current = newQueryString;
       setSearchHitsCount(results.hits.total.value);
+      async function getAndSetAllUUIDs() {
+        const {
+          query: { query, post_filter },
+        } = searchkit.query;
+        const allResults = await fetchSearchData(
+          { query, post_filter, _source: false, size: 10000 },
+          elasticsearchEndpoint,
+          groupsToken,
+        );
+        // eslint-disable-next-line no-underscore-dangle
+        setAllResultsUUIDs(allResults.hits.hits.map((hit) => hit._id));
+      }
+      getAndSetAllUUIDs();
     });
     return () => {
       removalFn();
     };
-  }, [analyticsCategory, searchkit, setSearchHitsCount]);
+  }, [analyticsCategory, elasticsearchEndpoint, groupsToken, searchkit, setAllResultsUUIDs, setSearchHitsCount]);
 
   return (
     <SearchkitProvider searchkit={searchkit}>

@@ -69,14 +69,17 @@ class ApiClient():
             raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
 
-    def get_entities(self, plural_lc_entity_type, non_metadata_fields, constraints):
+    def get_entities(self,
+                     plural_lc_entity_type=None,
+                     non_metadata_fields=[],
+                     constraints={}, uuids=[]):
         entity_type = plural_lc_entity_type[:-1].capitalize()
         query = {
             "size": 10000,  # Default ES limit,
             "post_filter": {
                 "term": {"entity_type.keyword": entity_type}
             },
-            "query": _make_query(constraints),
+            "query": _make_query(constraints, uuids),
             "_source": [*non_metadata_fields, 'mapped_metadata', 'metadata']
         }
         response_json = self._request(
@@ -156,7 +159,7 @@ class ApiClient():
             return VitessceConfLiftedUUID(ConfCells({'error': message}, None), None)
 
 
-def _make_query(constraints):
+def _make_query(constraints, uuids):
     '''
     Given a constraints dict of lists,
     return a ES query that handles all structual variations.
@@ -164,7 +167,8 @@ def _make_query(constraints):
     Separate keys are AND.
 
     >>> constraints = {'color': ['red', 'green'], 'number': ['42']}
-    >>> query = _make_query(constraints)
+    >>> uuids = ['abc', '123']
+    >>> query = _make_query(constraints, uuids)
     >>> from pprint import pp
     >>> pp(query['bool'])
     {'must': [{'bool': {'should': [{'term': {'metadata.metadata.color.keyword': 'red'}},
@@ -172,7 +176,8 @@ def _make_query(constraints):
                                    {'term': {'metadata.metadata.color.keyword': 'green'}},
                                    {'term': {'mapped_metadata.color.keyword': 'green'}}]}},
               {'bool': {'should': [{'term': {'metadata.metadata.number.keyword': '42'}},
-                                   {'term': {'mapped_metadata.number.keyword': '42'}}]}}]}
+                                   {'term': {'mapped_metadata.number.keyword': '42'}}]}},
+              {'ids': {'values': ['abc', '123']}}]}
     '''
     shoulds = [
         [
@@ -186,7 +191,10 @@ def _make_query(constraints):
         {'bool': {'should': should}}
         for should in shoulds
     ]
+    if uuids:
+        musts.append({'ids': {'values': uuids}})
     query = {'bool': {'must': musts}}
+
     return query
 
 
