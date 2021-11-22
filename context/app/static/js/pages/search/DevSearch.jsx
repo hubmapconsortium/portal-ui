@@ -90,6 +90,8 @@ function DevSearch() {
       resultsComponent={DevResults}
       analyticsCategory="Dev Search Page Interactions"
       isDevSearch
+      elasticsearchEndpoint={elasticsearchEndpoint}
+      groupsToken={groupsToken}
     />
   );
   return (
