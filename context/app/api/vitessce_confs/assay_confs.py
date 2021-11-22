@@ -253,13 +253,20 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
         # https://github.com/hubmapconsortium/portal-containers/blob/master/containers/anndata-to-ui
         # while others come from Matt's standard scanpy pipeline
         # or AnnData default (like X_umap or X).
+        cell_set_obs = ["leiden"]
+        cell_set_obs_names = ["Leiden"]
+        dags = [dag
+                for dag in self._entity['metadata']['dag_provenance_list'] if 'name' in dag]
+        if(any(['azimuth-annotate' in dag['origin'] for dag in dags])):
+            cell_set_obs.append("predicted.ASCT.celltype")
+            cell_set_obs_names.append("Predicted ASCT Cell Type")
         dataset = vc.add_dataset(name=self._uuid).add_object(AnnDataWrapper(
             adata_url=adata_url,
             mappings_obsm=["X_umap"],
             mappings_obsm_names=["UMAP"],
             spatial_centroid_obsm=("X_spatial" if self._is_spatial else None),
-            cell_set_obs=["leiden"],
-            cell_set_obs_names=["Leiden"],
+            cell_set_obs=cell_set_obs,
+            cell_set_obs_names=cell_set_obs_names,
             expression_matrix="X",
             matrix_gene_var_filter="marker_genes_for_heatmap",
             factors_obs=[

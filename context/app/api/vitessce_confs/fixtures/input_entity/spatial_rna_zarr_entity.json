@@ -1,6 +1,9 @@
 {
   "data_types": ["salmon_rnaseq_slideseq"],
   "status": "QA",
+  "metadata": {
+    "dag_provenance_list": [{"name": "pipeline.cwl", "origin": "github.com"}]
+  },
   "files": [
     {
       "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/.zgroup"
