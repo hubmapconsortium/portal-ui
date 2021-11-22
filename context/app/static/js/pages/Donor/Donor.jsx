@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
-import MetadataTable from 'js/components/Detail/MetadataTable';
-import ProvSection from 'js/components/Detail/provenance/ProvSection';
-import Summary from 'js/components/Detail/Summary';
-import Attribution from 'js/components/Detail/Attribution';
-import Protocol from 'js/components/Detail/Protocol';
-import DetailLayout from 'js/components/Detail/DetailLayout';
-import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
+import MetadataTable from 'js/components/detailPage/MetadataTable';
+import ProvSection from 'js/components/detailPage/provenance/ProvSection';
+import Summary from 'js/components/detailPage/Summary';
+import Attribution from 'js/components/detailPage/Attribution';
+import Protocol from 'js/components/detailPage/Protocol';
+import DetailLayout from 'js/components/detailPage/DetailLayout';
+import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import { useDerivedDatasetSearchHits, useDerivedSampleSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 
-import DetailContext from 'js/components/Detail/context';
-import { getSectionOrder } from 'js/components/Detail/utils';
-import DerivedEntitiesSection from 'js/components/Detail/derivedEntities/DerivedEntitiesSection';
+import DetailContext from 'js/components/detailPage/context';
+import { getSectionOrder } from 'js/components/detailPage/utils';
+import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 

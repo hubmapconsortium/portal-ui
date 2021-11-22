@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import SectionItem from 'js/components/Detail/SectionItem';
+import SectionItem from 'js/components/detailPage/SectionItem';
 
 import { StyledSectionPaper, ChartTitle } from './style';
 

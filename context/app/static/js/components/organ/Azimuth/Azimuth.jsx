@@ -5,7 +5,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import OutboundLinkButton from 'js/shared-styles/Links/OutboundLinkButton';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import VisualizationWrapper from 'js/components/Detail/visualization/VisualizationWrapper/VisualizationWrapper';
+import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper/VisualizationWrapper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 

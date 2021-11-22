@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import EntityHeader from 'js/components/Detail/entityHeader/EntityHeader';
+import EntityHeader from 'js/components/detailPage/entityHeader/EntityHeader';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import useEntityStore from 'js/stores/useEntityStore';
 import HeaderAppBar from '../HeaderAppBar';

@@ -2,26 +2,26 @@ import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
-import Files from 'js/components/files/Files';
-import ProvSection from 'js/components/Detail/provenance/ProvSection';
-import Summary from 'js/components/Detail/Summary';
-import Attribution from 'js/components/Detail/Attribution';
-import Protocol from 'js/components/Detail/Protocol';
-import MetadataTable from 'js/components/Detail/MetadataTable';
-import VisualizationWrapper from 'js/components/Detail/visualization/VisualizationWrapper';
-import DetailLayout from 'js/components/Detail/DetailLayout';
-import SummaryItem from 'js/components/Detail/SummaryItem';
-import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
+import Files from 'js/components/detailPage/files/Files';
+import ProvSection from 'js/components/detailPage/provenance/ProvSection';
+import Summary from 'js/components/detailPage/Summary';
+import Attribution from 'js/components/detailPage/Attribution';
+import Protocol from 'js/components/detailPage/Protocol';
+import MetadataTable from 'js/components/detailPage/MetadataTable';
+import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
+import DetailLayout from 'js/components/detailPage/DetailLayout';
+import SummaryItem from 'js/components/detailPage/SummaryItem';
+import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-import CollectionsSection from 'js/components/Detail/CollectionsSection';
-import SupportAlert from 'js/components/Detail/SupportAlert';
+import CollectionsSection from 'js/components/detailPage/CollectionsSection';
+import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/shared-styles/alerts';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getAllCollectionsQuery } from 'js/helpers/queries';
 
 // TODO use this context for components other than FileBrowser
-import DetailContext from 'js/components/Detail/context';
-import { getSectionOrder } from 'js/components/Detail/utils';
+import DetailContext from 'js/components/detailPage/context';
+import { getSectionOrder } from 'js/components/detailPage/utils';
 
 import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
 

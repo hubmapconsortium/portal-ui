@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { entityHeaderHeight } from 'js/components/Detail/entityHeader/EntityHeader';
+import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
 /* Anchor offset for fixed header.
