@@ -21,7 +21,7 @@ function DownloadButton({ type, analyticsCategory }) {
     });
     if (!response.ok) {
       console.error('Metadata TSV Failed', response);
-      return {};
+      return;
     }
     const results = await response.blob();
 
