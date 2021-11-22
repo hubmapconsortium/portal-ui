@@ -1,1 +1,0 @@
-- Update metadata download on search pages to download current set.

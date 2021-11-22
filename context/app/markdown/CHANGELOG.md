@@ -1,3 +1,13 @@
+## v0.32.0 - 2021-11-22
+
+- Add ASCT support for RNA-seq visualizations
+- Update metadata download on search pages to download current set.
+- Fix usage of MALDI name in vitessce view configuration generation.
+- In the JSX, move `Detail/` to `detailPage/`: Only directories containing an index should be capitalized.
+- Move `files/` under `detailPage/`, since it is only used here.
+- Upgrade Vitessce to 1.1.17
+
+
 ## v0.31.0 - 2021-11-17
 
 - Switch Globus authentication from Globus Nexus to Globus Groups.
