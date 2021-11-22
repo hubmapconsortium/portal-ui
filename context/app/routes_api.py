@@ -64,9 +64,9 @@ def _get_entities(entity_type, constraints={}, uuids=None):
     if entity_type in ['samples']:
         extra_fields.append('mapped_specimen_type')
     entities = client.get_entities(
-        entity_type, extra_fields,
-        constraints,
-        uuids
+        plural_lc_entity_type= entity_type, non_metadata_fields=extra_fields,
+        constraints=constraints,
+        uuids=uuids
         # Default "True" would throw away repeated keys after the first.
     )
     return entities

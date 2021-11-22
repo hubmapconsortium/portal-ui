@@ -69,7 +69,7 @@ class ApiClient():
             raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
 
-    def get_entities(self, plural_lc_entity_type, non_metadata_fields, constraints, uuids):
+    def get_entities(self, plural_lc_entity_type=None, non_metadata_fields=[], constraints={}, uuids=[]):
         entity_type = plural_lc_entity_type[:-1].capitalize()
         query = {
             "size": 10000,  # Default ES limit,
