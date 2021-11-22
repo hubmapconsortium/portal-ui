@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import Summary from 'js/components/Detail/Summary';
-import CollectionDatasetsTable from 'js/components/Detail/CollectionDatasetsTable';
-import CollectionsAffiliationsTable from 'js/components/Detail/CollectionsAffiliationsTable';
-import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
+import Summary from 'js/components/detailPage/Summary';
+import CollectionDatasetsTable from 'js/components/detailPage/CollectionDatasetsTable';
+import CollectionsAffiliationsTable from 'js/components/detailPage/CollectionsAffiliationsTable';
+import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 
 import { StyledOpenInNewRoundedIcon } from './style';
 

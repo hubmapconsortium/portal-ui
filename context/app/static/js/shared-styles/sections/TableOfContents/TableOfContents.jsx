@@ -4,7 +4,7 @@ import List from '@material-ui/core/List';
 import { useSpring, animated } from 'react-spring';
 
 import useEntityStore from 'js/stores/useEntityStore';
-import { entityHeaderHeight } from 'js/components/Detail/entityHeader/EntityHeader';
+import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';

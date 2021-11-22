@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import ProvSection from 'js/components/Detail/provenance/ProvSection';
-import Summary from 'js/components/Detail/Summary';
-import Attribution from 'js/components/Detail/Attribution';
-import Protocol from 'js/components/Detail/Protocol';
-import SummaryItem from 'js/components/Detail/SummaryItem';
-import DetailLayout from 'js/components/Detail/DetailLayout';
-import MetadataTable from 'js/components/Detail/MetadataTable';
-import SampleTissue from 'js/components/Detail/SampleTissue';
-import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
+import ProvSection from 'js/components/detailPage/provenance/ProvSection';
+import Summary from 'js/components/detailPage/Summary';
+import Attribution from 'js/components/detailPage/Attribution';
+import Protocol from 'js/components/detailPage/Protocol';
+import SummaryItem from 'js/components/detailPage/SummaryItem';
+import DetailLayout from 'js/components/detailPage/DetailLayout';
+import MetadataTable from 'js/components/detailPage/MetadataTable';
+import SampleTissue from 'js/components/detailPage/SampleTissue';
+import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-import DetailContext from 'js/components/Detail/context';
-import { getSectionOrder } from 'js/components/Detail/utils';
+import DetailContext from 'js/components/detailPage/context';
+import { getSectionOrder } from 'js/components/detailPage/utils';
 import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
-import DerivedDatasetsSection from 'js/components/Detail/derivedEntities/DerivedDatasetsSection';
+import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/DerivedDatasetsSection';
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
 

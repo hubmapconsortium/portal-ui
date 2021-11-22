@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import Markdown from 'js/components/Markdown';
-import VisualizationWrapper from 'js/components/Detail/visualization/VisualizationWrapper';
+import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { StyledPaper } from './style';
 
