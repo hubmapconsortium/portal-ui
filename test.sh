@@ -69,12 +69,6 @@ start pytest
 pytest context/app
 end pytest
 
-cd context
-
-start lint
-npm run lint
-end lint
-
 start cap-dirs
 DIRS=$(
   for D in $(
@@ -83,8 +77,14 @@ DIRS=$(
     [ -e $D/index.* ] || echo $D
   done
 )
-[ -z $DIRS ] || die "These directories missing index files: $DIRS"
+[[ -z $DIRS ]] || die "These directories missing index files: $DIRS"
 end cap-dirs
+
+cd context
+
+start lint
+npm run lint
+end lint
 
 start npm-test
 npm run test
