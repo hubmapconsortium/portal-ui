@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import PanelList from 'js/components/Collections/PanelList';
+import CollectionsPanelList from 'js/components/CollectionsPanelList';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getAllCollectionsQuery } from 'js/helpers/queries';
 import { PageWrapper, StyledDescription } from './style';
@@ -22,7 +22,7 @@ function Collections() {
         organ—or data that has been grouped for other reasons. In the future, it will be possible to reference
         collections through Document Object Identifiers (DOIs).
       </StyledDescription>
-      {collectionsData.length > 0 && <PanelList collectionsData={collectionsData} />}
+      {collectionsData.length > 0 && <CollectionsPanelList collectionsData={collectionsData} />}
     </PageWrapper>
   );
 }

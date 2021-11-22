@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Panel, PanelScrollBox } from 'js/shared-styles/panels';
 
-function PanelList({ collectionsData }) {
+function CollectionsPanelList({ collectionsData }) {
   return (
     <PanelScrollBox>
       {collectionsData.map(({ _source }) => (
@@ -18,4 +18,4 @@ function PanelList({ collectionsData }) {
   );
 }
 
-export default PanelList;
+export default CollectionsPanelList;
