@@ -1,0 +1,2 @@
+- In the JSX, move `Detail/` to `detailPage/`: Only directories containing an index should be capitalized.
+- Move `files/` under `detailPage/`, since it is only used here.
