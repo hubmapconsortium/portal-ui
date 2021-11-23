@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ExistsQuery, BoolMustNot } from 'searchkit';
+import { ExistsQuery, BoolMustNot, TermQuery } from 'searchkit';
 
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
@@ -58,6 +58,7 @@ function DevSearch() {
         listFilter('mapper_metadata.validation_errors.absolute_schema_path', 'Schema Path'),
       ],
       Booleans: [
+        checkboxFilter('is_retracted', 'Is retracted?', TermQuery('sub_status', 'Retracted')),
         checkboxFilter('is_living_donor', 'Is living donor?', ExistsQuery('metadata.living_donor_data')),
         checkboxFilter('is_organ_donor', 'Is organ donor?', ExistsQuery('metadata.organ_donor_data')),
         checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata.metadata')),
