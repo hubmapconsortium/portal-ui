@@ -1,0 +1,1 @@
+- Add descriptions to `donor.*` and `sample.*` metadata fields.
