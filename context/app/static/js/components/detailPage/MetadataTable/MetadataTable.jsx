@@ -126,4 +126,4 @@ MetadataTable.propTypes = {
 };
 
 export default MetadataTable;
-export { tableDataToRows };
+export { tableDataToRows, getDescription };
