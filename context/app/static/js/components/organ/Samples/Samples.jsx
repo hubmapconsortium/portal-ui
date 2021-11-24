@@ -14,6 +14,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { useSearchHits } from 'js/hooks/useSearchData';
 
 import { getSearchURL } from '../utils';
+import { StyledSampleIcon } from '../style';
 
 const columns = [
   { id: 'hubmap_id', label: 'Sample' },
@@ -61,6 +62,7 @@ function Samples(props) {
         leftText={<SectionHeader>Samples</SectionHeader>}
         buttons={
           <Button color="primary" variant="contained" component="a" href={searchUrl}>
+            <StyledSampleIcon />
             View All Samples
           </Button>
         }

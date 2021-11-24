@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { InfoIcon, DatasetIcon } from 'js/shared-styles/icons';
+import { InfoIcon, DatasetIcon, SampleIcon } from 'js/shared-styles/icons';
 
 const Flex = styled.div`
   display: flex;
@@ -20,4 +20,8 @@ const StyledDatasetIcon = styled(DatasetIcon)`
   ${marginRightStyle}
 `;
 
-export { Flex, StyledInfoIcon, StyledDatasetIcon };
+const StyledSampleIcon = styled(SampleIcon)`
+  ${marginRightStyle}
+`;
+
+export { Flex, StyledInfoIcon, StyledDatasetIcon, StyledSampleIcon };
