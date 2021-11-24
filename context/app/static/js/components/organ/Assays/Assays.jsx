@@ -5,6 +5,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
+import { scaleLinear } from '@visx/scale';
+
+import AssayTypeBarChart from 'js/components/home/AssayTypeBarChart'; // TODO: Move!
+
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
@@ -97,6 +101,18 @@ function Assays(props) {
           ))}
         </EntitiesTable>
       </Paper>
+      <AssayTypeBarChart
+        parentWidth={100}
+        parentHeight={100}
+        visxData={[{ 'Fake Organ Name': 42, mapped_data_type: 'Fake Assay', sum: 42 }]}
+        docCountScale={scaleLinear({
+          domain: [0, 42],
+          nice: true,
+        })}
+        keys={['Fake Organ Name']}
+        margin="5"
+        selectedColorFacetName="origin_sample.mapped_organ"
+      />
     </SectionContainer>
   );
 }
