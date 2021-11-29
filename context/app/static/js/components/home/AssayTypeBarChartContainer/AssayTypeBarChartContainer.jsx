@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
-import { LegendOrdinal } from '@visx/legend';
 
+import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import useSearchData from 'js/hooks/useSearchData';
 import { useChartPalette, useAssayTypeBarChartData } from './hooks';
 import { getAssayTypesCompositeAggsQuery } from './utils';
 import AssayTypeBarChart from '../AssayTypeBarChart/AssayTypeBarChart';
-import { Flex, ChartWrapper, LegendWrapper } from './style';
 import AssayTypeBarChartDropdown from '../AssayTypeBarChartDropdown';
+import { ChartArea } from './style';
 
 const organTypesQuery = {
   size: 0,
@@ -78,8 +78,21 @@ function AssayTypeBarChartContainer() {
   const margin = { top: 40, right: 50, bottom: 100, left: 300 };
 
   return (
-    <Flex>
-      <ChartWrapper>
+    <ChartArea>
+      <ChartWrapper
+        chartTitle=""
+        margin={margin}
+        colorScale={colorScale}
+        dropdown={
+          <div>
+            <AssayTypeBarChartDropdown
+              colorDataOptions={colorOptions.map((color) => color.dropdownLabel)}
+              selectedColorDataIndex={selectedColorDataIndex}
+              setSelectedColorDataIndex={selectDropdownItem}
+            />
+          </div>
+        }
+      >
         <AssayTypeBarChart
           visxData={visxData[selectedColorDataIndex]}
           docCountScale={docCountScale}
@@ -90,21 +103,7 @@ function AssayTypeBarChartContainer() {
           margin={margin}
         />
       </ChartWrapper>
-      <LegendWrapper marginTop={margin.top}>
-        <AssayTypeBarChartDropdown
-          colorDataOptions={colorOptions.map((color) => color.dropdownLabel)}
-          selectedColorDataIndex={selectedColorDataIndex}
-          setSelectedColorDataIndex={selectDropdownItem}
-        />
-        <LegendOrdinal
-          scale={colorScale}
-          itemMargin={1.5}
-          shapeStyle={() => ({
-            borderRadius: '3px',
-          })}
-        />
-      </LegendWrapper>
-    </Flex>
+    </ChartArea>
   );
 }
 

@@ -40,7 +40,7 @@ function AssayTypeBarChart({
   const strokeWidth = 1.5;
 
   return (
-    <div>
+    <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
         <GridColumns
           top={margin.top + 1}
@@ -133,7 +133,7 @@ function AssayTypeBarChart({
           </Typography>
         </TooltipInPortal>
       )}
-    </div>
+    </>
   );
 }
 
