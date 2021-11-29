@@ -21,6 +21,24 @@ import {
   StyledInfoIcon,
 } from './style';
 
+function getDescription(field) {
+  const [prefix, stem] = field.split('.');
+  if (!stem) {
+    return metadataFieldDescriptions[field];
+  }
+  const description = metadataFieldDescriptions[stem];
+  if (!description) {
+    return undefined;
+  }
+  if (prefix === 'donor') {
+    return `For the original donor: ${metadataFieldDescriptions[stem]}`;
+  }
+  if (prefix === 'sample') {
+    return `For the original sample: ${metadataFieldDescriptions[stem]}`;
+  }
+  throw new Error(`Unrecognized metadata field prefix: ${prefix}`);
+}
+
 function tableDataToRows(tableData) {
   return (
     Object.entries(tableData)
@@ -32,7 +50,7 @@ function tableDataToRows(tableData) {
       .map((entry) => ({
         key: entry[0],
         value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
-        description: metadataFieldDescriptions[entry[0]],
+        description: getDescription(entry[0]),
       }))
   );
 }
@@ -108,4 +126,4 @@ MetadataTable.propTypes = {
 };
 
 export default MetadataTable;
-export { tableDataToRows };
+export { tableDataToRows, getDescription };
