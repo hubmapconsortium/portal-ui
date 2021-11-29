@@ -35,9 +35,9 @@ function Publication(props) {
         </Typography>
         <b>Corresponding Author:</b>{' '}
         {authors.corresponding.map((author) => (
-          <>
+          <span key={author.name}>
             {author.name} - <a href={`mailto:${author.email}`}>{author.email}</a>
-          </>
+          </span>
         ))}
       </StyledPaper>
       {Boolean(vitessce_conf) && <VisualizationWrapper vitData={vitessce_conf} />}
