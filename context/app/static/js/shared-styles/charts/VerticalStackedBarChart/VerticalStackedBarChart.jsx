@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BarStack } from '@visx/shape';
 import { Group } from '@visx/group';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
-import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { GridRows } from '@visx/grid';
-import { localPoint } from '@visx/event';
 import Typography from '@material-ui/core/Typography';
+
+import { useChartTooltip } from 'js/shared-styles/charts/hooks';
 
 function VerticalStackedBarChart({
   parentWidth,
@@ -22,35 +22,23 @@ function VerticalStackedBarChart({
   yAxisLabel,
   TooltipContent,
 }) {
-  const [hoveredBarIndices, setHoveredBarIndices] = useState();
-
   const xWidth = parentWidth - margin.left - margin.right;
   const yHeight = parentHeight - margin.top - margin.bottom;
 
   yScale.rangeRound([yHeight, 0]);
   xScale.rangeRound([0, xWidth]);
 
-  const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip();
-  const { containerRef, TooltipInPortal } = useTooltipInPortal({
-    detectBounds: true,
-    scroll: true,
-    debounce: 100,
-  });
-
-  function handleMouseEnter(event, bar, barStackIndex) {
-    const coords = localPoint(event.target.ownerSVGElement, event);
-    showTooltip({
-      tooltipLeft: coords.x,
-      tooltipTop: coords.y,
-      tooltipData: bar,
-    });
-    setHoveredBarIndices({ barIndex: bar.index, barStackIndex });
-  }
-
-  function handleMouseLeave() {
-    hideTooltip();
-    setHoveredBarIndices(undefined);
-  }
+  const {
+    hoveredBarIndices,
+    tooltipData,
+    tooltipLeft,
+    tooltipTop,
+    tooltipOpen,
+    containerRef,
+    TooltipInPortal,
+    handleMouseEnter,
+    handleMouseLeave,
+  } = useChartTooltip();
 
   const strokeWidth = 1.5;
 
