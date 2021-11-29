@@ -1,0 +1,1 @@
+- Fix react warnings on the publication page.
