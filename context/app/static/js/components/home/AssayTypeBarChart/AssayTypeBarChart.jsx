@@ -18,7 +18,7 @@ function AssayTypeBarChart({
   colorScale,
   keys,
   margin,
-  selectedColorFacetName,
+  colorFacetName,
 }) {
   const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, margin);
 
@@ -68,7 +68,7 @@ function AssayTypeBarChart({
                       <a
                         href={`/search?entity_type[0]=Dataset&mapped_data_types[0]=${encodeURIComponent(
                           bar.bar.data.mapped_data_type,
-                        )}&${selectedColorFacetName}[0]=${encodeURIComponent(bar.key)}`}
+                        )}&${colorFacetName}[0]=${encodeURIComponent(bar.key)}`}
                         key={`barstack-horizontal-${barStack.index}-${bar.index}`}
                         target="_parent"
                       >

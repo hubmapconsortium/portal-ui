@@ -98,7 +98,7 @@ function AssayTypeBarChartContainer() {
           colorScale={colorScale}
           dataTypeScale={dataTypeScale}
           keys={colorOptions[selectedColorDataIndex].values}
-          selectedColorFacetName={colorOptions[selectedColorDataIndex].facetName}
+          colorFacetName={colorOptions[selectedColorDataIndex].facetName}
           margin={margin}
         />
       </ChartWrapper>
