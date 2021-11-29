@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { InfoIcon } from 'js/shared-styles/icons';
+import styled, { css } from 'styled-components';
+import { InfoIcon, DatasetIcon, SampleIcon } from 'js/shared-styles/icons';
 
 const Flex = styled.div`
   display: flex;
@@ -12,4 +12,16 @@ const StyledInfoIcon = styled(InfoIcon)`
   margin-bottom: ${(props) => props.theme.spacing(1)}px; // To match SectionHeader
 `;
 
-export { Flex, StyledInfoIcon };
+const marginRightStyle = css`
+  margin-right: ${(props) => props.theme.spacing(1)}px;
+`;
+
+const StyledDatasetIcon = styled(DatasetIcon)`
+  ${marginRightStyle}
+`;
+
+const StyledSampleIcon = styled(SampleIcon)`
+  ${marginRightStyle}
+`;
+
+export { Flex, StyledInfoIcon, StyledDatasetIcon, StyledSampleIcon };
