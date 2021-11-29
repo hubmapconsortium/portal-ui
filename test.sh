@@ -70,11 +70,12 @@ pytest context/app
 end pytest
 
 start cap-dirs
+# If there are exceptions, add something like:
+# | grep -v path-to-ignore
+CAP_DIRS=$( find -E context/app/static/js -type d -regex '.*/[A-Z][^/]+' )
 DIRS=$(
-  for D in $(
-    find -E context/app/static/js -type d -regex '.*/[A-Z][^/]+'
-  ); do
-    [ -e "$D/index.*" ] || echo $D
+  for D in $CAP_DIRS; do
+    [ -e $D/index.* ] || echo $D
   done
 )
 [ -z "$DIRS" ] || die "These directories missing index files: $DIRS"
