@@ -80,7 +80,6 @@ function AssayTypeBarChartContainer() {
   return (
     <ChartArea>
       <ChartWrapper
-        chartTitle=""
         margin={margin}
         colorScale={colorScale}
         dropdown={
