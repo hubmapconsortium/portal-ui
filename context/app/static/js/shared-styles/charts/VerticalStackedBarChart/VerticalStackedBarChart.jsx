@@ -7,6 +7,7 @@ import { GridRows } from '@visx/grid';
 import Typography from '@material-ui/core/Typography';
 
 import { useChartTooltip } from 'js/shared-styles/charts/hooks';
+import { getChartDimensions } from 'js/shared-styles/charts/utils';
 
 function VerticalStackedBarChart({
   parentWidth,
@@ -22,8 +23,7 @@ function VerticalStackedBarChart({
   yAxisLabel,
   TooltipContent,
 }) {
-  const xWidth = parentWidth - margin.left - margin.right;
-  const yHeight = parentHeight - margin.top - margin.bottom;
+  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, margin);
 
   yScale.rangeRound([yHeight, 0]);
   xScale.rangeRound([0, xWidth]);

@@ -7,6 +7,7 @@ import { GridColumns } from '@visx/grid';
 import Typography from '@material-ui/core/Typography';
 
 import { useChartTooltip } from 'js/shared-styles/charts/hooks';
+import { getChartDimensions } from 'js/shared-styles/charts/utils';
 
 function AssayTypeBarChart({
   parentWidth,
@@ -19,10 +20,9 @@ function AssayTypeBarChart({
   margin,
   selectedColorFacetName,
 }) {
-  const xHeight = parentWidth - margin.left - margin.right;
-  const yHeight = parentHeight - margin.top - margin.bottom;
+  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, margin);
 
-  docCountScale.rangeRound([0, xHeight]);
+  docCountScale.rangeRound([0, xWidth]);
   dataTypeScale.rangeRound([yHeight, 0]);
 
   const {
