@@ -29,13 +29,13 @@ function SummaryDataChildren(props) {
   return (
     <>
       <SummaryItem>
-        <LightBlueLink variant="h6" href="/docs/assays" underline="none">
+        <LightBlueLink variant="h6" href="/docs/assays">
           {mapped_data_types}
         </LightBlueLink>
       </SummaryItem>
       <VerticalDivider />
       <SummaryItem>
-        <LightBlueLink variant="h6" href="/organ" underline="none">
+        <LightBlueLink variant="h6" href="/organ">
           {origin_sample.mapped_organ}
         </LightBlueLink>
       </SummaryItem>

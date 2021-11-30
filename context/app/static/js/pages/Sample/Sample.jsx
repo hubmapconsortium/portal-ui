@@ -79,7 +79,7 @@ function SampleDetail(props) {
           group_name={group_name}
         >
           <SummaryItem>
-            <LightBlueLink variant="h6" href="/organ" underline="none">
+            <LightBlueLink variant="h6" href="/organ">
               {mapped_organ}
             </LightBlueLink>
           </SummaryItem>
