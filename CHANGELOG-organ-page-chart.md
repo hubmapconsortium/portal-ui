@@ -1,0 +1,2 @@
+- Refactor assay types bar chart.
+- Add assay types chart to organ pages.
