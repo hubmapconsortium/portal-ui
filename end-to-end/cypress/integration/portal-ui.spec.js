@@ -32,7 +32,7 @@ describe('portal-ui', () => {
       cy.contains('login');
       // Don't click! We shouldn't depend on Globus in tests.
 
-      // TODO: nexus_token is now required for search results, so we can pass it
+      // TODO: groups_token is now required for search results, so we can pass it
       // back to the client to make the Elasticsearch request. I don't want to go
       // too far into mocking server state, since it would be tricky,
       // and much of this may be moving to the client, in any case.

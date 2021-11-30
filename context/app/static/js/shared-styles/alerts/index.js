@@ -26,4 +26,11 @@ const StyledAlert = styled(OutlinedAlert)`
   margin-bottom: ${(props) => props.$marginBotton || 0}px;
 `;
 
-export { StyledAlert as Alert };
+const DetailPageAlert = styled(StyledAlert)`
+  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  // Need to put this above the section container on the z-index stack due to the padding/margin offset fix for the anchor links.
+  position: relative;
+  z-index: ${(props) => props.theme.zIndex.interactiveContentAboveDetailSection};
+`;
+
+export { StyledAlert as Alert, DetailPageAlert };

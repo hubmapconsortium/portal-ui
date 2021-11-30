@@ -1,1 +1,0 @@
-- Add a table of contents on the organ page.

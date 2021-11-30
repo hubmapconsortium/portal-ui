@@ -28,14 +28,14 @@ export function readCookie(name) {
   return null;
 }
 
-export function getTokenParam(nexusToken) {
-  return nexusToken ? `?token=${nexusToken}` : '';
+export function getTokenParam(groupsToken) {
+  return groupsToken ? `?token=${groupsToken}` : '';
 }
 
-export function getAuthHeader(nexusToken) {
-  return nexusToken
+export function getAuthHeader(groupsToken) {
+  return groupsToken
     ? {
-        Authorization: `Bearer ${nexusToken}`,
+        Authorization: `Bearer ${groupsToken}`,
       }
     : {};
 }
@@ -79,5 +79,22 @@ export function getDefaultQuery() {
         },
       },
     },
+  };
+}
+
+export function addRestrictionsToQuery(query) {
+  const { query: innerQuery, ...rest } = query;
+
+  const defaultQuery = getDefaultQuery();
+
+  const combinedQueries = innerQuery ? [innerQuery, defaultQuery] : [defaultQuery];
+
+  return {
+    query: {
+      bool: {
+        must: combinedQueries,
+      },
+    },
+    ...rest,
   };
 }

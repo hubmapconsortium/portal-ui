@@ -19,12 +19,12 @@ class VitessceConfLiftedUUID:
 
 
 class ApiClient():
-    def __init__(self, url_base=None, nexus_token=None):
+    def __init__(self, url_base=None, groups_token=None):
         self.url_base = url_base
-        self.nexus_token = nexus_token
+        self.groups_token = groups_token
 
     def _request(self, url, body_json=None):
-        headers = {'Authorization': 'Bearer ' + self.nexus_token} if self.nexus_token else {}
+        headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
         try:
             response = (
                 requests.post(url, headers=headers, json=body_json)
@@ -69,14 +69,17 @@ class ApiClient():
             raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
 
-    def get_entities(self, plural_lc_entity_type, non_metadata_fields, constraints):
+    def get_entities(self,
+                     plural_lc_entity_type=None,
+                     non_metadata_fields=[],
+                     constraints={}, uuids=[]):
         entity_type = plural_lc_entity_type[:-1].capitalize()
         query = {
             "size": 10000,  # Default ES limit,
             "post_filter": {
                 "term": {"entity_type.keyword": entity_type}
             },
-            "query": _make_query(constraints),
+            "query": _make_query(constraints, uuids),
             "_source": [*non_metadata_fields, 'mapped_metadata', 'metadata']
         }
         response_json = self._request(
@@ -109,7 +112,14 @@ class ApiClient():
             body_json=query)
 
         hits = response_json['hits']['hits']
-        return _get_entity_from_hits(hits, has_token=self.nexus_token, uuid=uuid, hbm_id=hbm_id)
+        return _get_entity_from_hits(hits, has_token=self.groups_token, uuid=uuid, hbm_id=hbm_id)
+
+    def get_latest_entity_uuid(self, uuid, type):
+        lowercase_type = type.lower()
+        route = f'/{lowercase_type}s/{uuid}/revisions'
+        response_json = self._request(
+            current_app.config['ENTITY_API_BASE'] + route)
+        return _get_latest_uuid(response_json)
 
     def get_vitessce_conf_cells_and_lifted_uuid(self, entity):
         '''
@@ -140,7 +150,7 @@ class ApiClient():
             if isinstance(Builder, NullViewConfBuilder):
                 vc = Builder()
             else:
-                vc = Builder(entity, self.nexus_token)
+                vc = Builder(entity, self.groups_token)
             return VitessceConfLiftedUUID(vc.get_conf_cells(), None)
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'
@@ -149,7 +159,7 @@ class ApiClient():
             return VitessceConfLiftedUUID(ConfCells({'error': message}, None), None)
 
 
-def _make_query(constraints):
+def _make_query(constraints, uuids):
     '''
     Given a constraints dict of lists,
     return a ES query that handles all structual variations.
@@ -157,7 +167,8 @@ def _make_query(constraints):
     Separate keys are AND.
 
     >>> constraints = {'color': ['red', 'green'], 'number': ['42']}
-    >>> query = _make_query(constraints)
+    >>> uuids = ['abc', '123']
+    >>> query = _make_query(constraints, uuids)
     >>> from pprint import pp
     >>> pp(query['bool'])
     {'must': [{'bool': {'should': [{'term': {'metadata.metadata.color.keyword': 'red'}},
@@ -165,7 +176,8 @@ def _make_query(constraints):
                                    {'term': {'metadata.metadata.color.keyword': 'green'}},
                                    {'term': {'mapped_metadata.color.keyword': 'green'}}]}},
               {'bool': {'should': [{'term': {'metadata.metadata.number.keyword': '42'}},
-                                   {'term': {'mapped_metadata.number.keyword': '42'}}]}}]}
+                                   {'term': {'mapped_metadata.number.keyword': '42'}}]}},
+              {'ids': {'values': ['abc', '123']}}]}
     '''
     shoulds = [
         [
@@ -179,7 +191,10 @@ def _make_query(constraints):
         {'bool': {'should': should}}
         for should in shoulds
     ]
+    if uuids:
+        musts.append({'ids': {'values': uuids}})
     query = {'bool': {'must': musts}}
+
     return query
 
 
@@ -380,3 +395,20 @@ def _get_image_pyramid_descendants(entity):
         if 'image_pyramid' in d.get('data_types', [])
     ]
     return deepcopy(image_pyramid_descendants)
+
+
+def _get_latest_uuid(revisions):
+    '''
+    >>> revisions = [{'a_uuid': 'x', 'revision_number': 1}, {'a_uuid': 'z', 'revision_number': 10}]
+    >>> _get_latest_uuid(revisions)
+    'z'
+    '''
+    clean_revisions = [
+        {
+            ('uuid' if k.endswith('_uuid') else k): v
+            for k, v in revision.items()
+        }
+        for revision in revisions
+    ]
+    return max(clean_revisions,
+               key=lambda revision: revision['revision_number'])['uuid']

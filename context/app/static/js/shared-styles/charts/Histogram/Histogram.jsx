@@ -6,8 +6,11 @@ import { withParentSize } from '@visx/responsive';
 import { GridRows } from '@visx/grid';
 import { scaleLinear } from '@visx/scale';
 import { bin } from 'd3-array';
+import Typography from '@material-ui/core/Typography';
 
-function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxisLabel, yAxisLabel }) {
+import { TitleWrapper } from 'js/shared-styles/charts/style';
+
+function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxisLabel, yAxisLabel, chartTitle }) {
   const xWidth = parentWidth - margin.left - margin.right;
   const yHeight = parentHeight - margin.top - margin.bottom;
 
@@ -35,6 +38,9 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
 
   return (
     <div>
+      <TitleWrapper $leftOffset={margin.left - margin.right}>
+        {chartTitle && <Typography>{chartTitle}</Typography>}
+      </TitleWrapper>
       <svg width={parentWidth} height={parentHeight}>
         <GridRows top={margin.top} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.2} />
         <Group top={margin.top} left={margin.left}>
@@ -56,6 +62,10 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
               textAnchor: 'end',
               dy: '0.33em',
             })}
+            labelProps={{
+              fontSize: 12,
+            }}
+            labelOffset={48}
           />
           <AxisBottom
             hideTicks
@@ -69,6 +79,10 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
               fontSize: 11,
               textAnchor: 'middle',
             })}
+            labelProps={{
+              fontSize: 12,
+              textAnchor: 'middle',
+            }}
           />
         </Group>
       </svg>

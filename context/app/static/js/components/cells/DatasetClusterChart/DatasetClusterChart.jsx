@@ -2,13 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import Button from '@material-ui/core/Button';
 import { useTheme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
-import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalStackedBarChart';
+import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import CellsService from 'js/components/cells/CellsService';
+import ChartLoader from 'js/components/cells/ChartLoader';
+import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
+import DatasetClusterTooltip from 'js/components/cells/DatasetClusterTooltip';
 
-import { StyledSkeleton } from 'js/components/cells/CellsCharts/style';
+import { getOptionLabels } from './utils';
 
 function DatasetClusterChart({
   uuid,
@@ -24,6 +28,14 @@ function DatasetClusterChart({
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useState(0);
   const theme = useTheme();
   const loadedOnce = useRef(false);
+  const [optionLabels, setOptionLabels] = useState({});
+
+  const chartMargin = {
+    top: 25,
+    right: 50,
+    left: 65,
+    bottom: 100, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
+  };
 
   useEffect(() => {
     if (Object.keys(results).length) {
@@ -43,13 +55,14 @@ function DatasetClusterChart({
         yScale,
         xScale,
       });
+      setOptionLabels(getOptionLabels(Object.keys(results), uuid));
       finishLoading(loadingKey);
     }
-  }, [setScales, results, selectedClusterTypeIndex, finishLoading, loadingKey]);
+  }, [setScales, results, selectedClusterTypeIndex, finishLoading, loadingKey, uuid]);
 
   const colorScale = scaleOrdinal({
     domain: ['matched', 'unmatched'],
-    range: [theme.palette.warning.main, theme.palette.warning.light],
+    range: [theme.palette.warning.dark, theme.palette.warning.light],
   });
 
   useEffect(() => {
@@ -75,21 +88,30 @@ function DatasetClusterChart({
   }
 
   if (Object.values(isLoading).some((val) => val)) {
-    return <StyledSkeleton variant="rect" />;
+    return <ChartLoader />;
   }
 
   return (
-    <>
-      <DropdownListbox
-        id="bar-fill-dropdown"
-        optionComponent={DropdownListboxOption}
-        buttonComponent={Button}
-        selectedOptionIndex={selectedClusterTypeIndex}
-        options={Object.keys(results)}
-        selectOnClick={handleSelectClusterType}
-        getOptionLabel={(v) => v}
-        buttonProps={{ variant: 'outlined' }}
-      />
+    <ChartWrapper
+      chartTitle="Cluster Membership"
+      margin={chartMargin}
+      colorScale={colorScale}
+      dropdown={
+        <div>
+          <Typography>Cluster Method</Typography>
+          <DropdownListbox
+            id="bar-fill-dropdown"
+            optionComponent={DropdownListboxOption}
+            buttonComponent={Button}
+            selectedOptionIndex={selectedClusterTypeIndex}
+            options={Object.keys(results)}
+            selectOnClick={handleSelectClusterType}
+            getOptionLabel={(option) => optionLabels[option]}
+            buttonProps={{ variant: 'outlined' }}
+          />
+        </div>
+      }
+    >
       <VerticalStackedBarChart
         visxData={scales.selectedData}
         yScale={scales.yScale}
@@ -97,16 +119,12 @@ function DatasetClusterChart({
         colorScale={colorScale}
         getX={(x) => x.cluster_number}
         keys={['matched', 'unmatched']}
-        margin={{
-          top: 50,
-          right: 50,
-          left: 65,
-          bottom: 75, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
-        }}
+        margin={chartMargin}
         xAxisLabel="Cluster"
         yAxisLabel="Cell Set Size"
+        TooltipContent={DatasetClusterTooltip}
       />
-    </>
+    </ChartWrapper>
   );
 }
 export default DatasetClusterChart;

@@ -2,13 +2,13 @@ import React from 'react';
 
 import { getAuthHeader } from 'js/helpers/functions';
 
-function useProvData(uuid, entityEndpoint, nexusToken) {
+function useProvData(uuid, entityEndpoint, groupsToken) {
   const [provData, setProvData] = React.useState(undefined);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     async function getAndSetProvData() {
-      const headers = getAuthHeader(nexusToken);
+      const headers = getAuthHeader(groupsToken);
 
       const response = await fetch(`${entityEndpoint}/entities/${uuid}/provenance`, { headers });
 
@@ -22,7 +22,7 @@ function useProvData(uuid, entityEndpoint, nexusToken) {
       setIsLoading(false);
     }
     getAndSetProvData();
-  }, [nexusToken, entityEndpoint, uuid]);
+  }, [groupsToken, entityEndpoint, uuid]);
 
   return { provData, isLoading };
 }

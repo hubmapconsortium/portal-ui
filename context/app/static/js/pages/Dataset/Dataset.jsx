@@ -1,27 +1,28 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 
-import { Alert } from 'js/shared-styles/alerts';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import Files from 'js/components/files/Files';
-import ProvSection from 'js/components/Detail/provenance/ProvSection';
-import Summary from 'js/components/Detail/Summary';
-import Attribution from 'js/components/Detail/Attribution';
-import Protocol from 'js/components/Detail/Protocol';
-import MetadataTable from 'js/components/Detail/MetadataTable';
-import VisualizationWrapper from 'js/components/Detail/visualization/VisualizationWrapper';
-import DetailLayout from 'js/components/Detail/DetailLayout';
-import SummaryItem from 'js/components/Detail/SummaryItem';
-import useSendUUIDEvent from 'js/components/Detail/useSendUUIDEvent';
+import Files from 'js/components/detailPage/files/Files';
+import ProvSection from 'js/components/detailPage/provenance/ProvSection';
+import Summary from 'js/components/detailPage/Summary';
+import Attribution from 'js/components/detailPage/Attribution';
+import Protocol from 'js/components/detailPage/Protocol';
+import MetadataTable from 'js/components/detailPage/MetadataTable';
+import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
+import DetailLayout from 'js/components/detailPage/DetailLayout';
+import SummaryItem from 'js/components/detailPage/SummaryItem';
+import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-import { AppContext } from 'js/components/Providers';
-import useCollectionsData from 'js/hooks/useCollectionsData';
-import CollectionsSection from 'js/components/Detail/CollectionsSection';
-import SupportAlert from 'js/components/Detail/SupportAlert';
+import CollectionsSection from 'js/components/detailPage/CollectionsSection';
+import SupportAlert from 'js/components/detailPage/SupportAlert';
+import { DetailPageAlert } from 'js/shared-styles/alerts';
+import { useSearchHits } from 'js/hooks/useSearchData';
+import { getAllCollectionsQuery } from 'js/helpers/queries';
 
 // TODO use this context for components other than FileBrowser
-import DetailContext from 'js/components/Detail/context';
-import { getSectionOrder } from 'js/components/Detail/utils';
+import DetailContext from 'js/components/detailPage/context';
+import { getSectionOrder } from 'js/components/detailPage/utils';
 import VerticalDivider from 'js/shared-styles/VerticalDivider';
+import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
 
 function SummaryDataChildren(props) {
   const { mapped_data_types, origin_sample } = props;
@@ -42,13 +43,6 @@ function SummaryDataChildren(props) {
   );
 }
 
-function getCollectionsWhichContainDataset(uuid, collections) {
-  return collections.filter((collection) => {
-    // eslint-disable-next-line no-underscore-dangle
-    return collection._source.datasets.some((dataset) => dataset.uuid === uuid);
-  });
-}
-
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DatasetDetail(props) {
@@ -57,6 +51,8 @@ function DatasetDetail(props) {
     protocol_url,
     metadata,
     files,
+    donor,
+    source_sample,
     uuid,
     data_types,
     mapped_data_types,
@@ -75,16 +71,16 @@ function DatasetDetail(props) {
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+  const combinedMetadata = combineMetadata(donor, origin_sample, source_sample, metadata);
 
-  const allCollections = useCollectionsData(elasticsearchEndpoint, nexusToken);
+  const { searchHits: allCollections } = useSearchHits(getAllCollectionsQuery);
   const collectionsData = getCollectionsWhichContainDataset(uuid, allCollections);
 
   const shouldDisplaySection = {
     provenance: entity_type !== 'Support',
     visualization: Boolean(vitData),
     protocols: Boolean(protocol_url),
-    metadata: metadata && 'metadata' in metadata,
+    metadata: Boolean(Object.keys(combinedMetadata).length),
     files: true,
     collections: Boolean(collectionsData.length),
   };
@@ -105,16 +101,13 @@ function DatasetDetail(props) {
   return (
     <DetailContext.Provider value={{ hubmap_id, uuid, mapped_data_access_level }}>
       {!isLatest && (
-        <Alert severity="warning" $marginBottom="16">
+        <DetailPageAlert severity="warning" $marginBottom="16">
           <span>
             {/* <span> to override "display: flex" which splits this on to multiple lines. */}
-            You are viewing an older version of this page. Navigate to a{' '}
-            <LightBlueLink href={`/browse/dataset/${assayMetadata.next_revision_uuid}`}>
-              more recent version
-            </LightBlueLink>
-            .
+            You are viewing an older version of this page. Navigate to the{' '}
+            <LightBlueLink href={`/browse/latest/dataset/${uuid}`}>latest version</LightBlueLink>.
           </span>
-        </Alert>
+        </DetailPageAlert>
       )}
       {entity_type === 'Support' && <SupportAlert uuid={uuid} />}
       <DetailLayout sectionOrder={sectionOrder}>
@@ -140,7 +133,7 @@ function DatasetDetail(props) {
         )}
         {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataTable metadata={metadata.metadata} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
         <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         <Attribution

@@ -6,11 +6,11 @@ import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial
 import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
-import SearchWrapper from 'js/components/Search/SearchWrapper';
-import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/Search/config';
-import { listFilter } from 'js/components/Search/utils';
-import SearchNote from 'js/components/Search/SearchNote';
-import Results from 'js/components/Search/Results';
+import SearchWrapper from 'js/components/searchPage/SearchWrapper';
+import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/searchPage/config';
+import { listFilter } from 'js/components/searchPage/utils';
+import SearchNote from 'js/components/searchPage/SearchNote';
+import Results from 'js/components/searchPage/Results';
 import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 import { SearchHeader } from './style';
 
@@ -24,7 +24,7 @@ const searchDatasetTutorialSelector = (state) => ({
 
 function Search(props) {
   const { title } = props;
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
+  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
 
   const {
     runSearchDatasetTutorial,
@@ -66,7 +66,7 @@ function Search(props) {
     { urlSearchParam: 'descendant_ids[0]', label: 'Ancestor of' },
   ].filter((note) => searchParams.has(note.urlSearchParam));
 
-  const httpHeaders = getAuthHeader(nexusToken);
+  const httpHeaders = getAuthHeader(groupsToken);
   const resultFields = resultFieldsByType[type];
   const searchProps = {
     // The default behavior is to add a "_search" path.
@@ -87,7 +87,7 @@ function Search(props) {
     // Sidebar facet configuration:
     filters: filtersByType[type],
     queryFields: ['all_text', ...fieldsToHighlight],
-    isLoggedIn: Boolean(nexusToken),
+    isLoggedIn: Boolean(groupsToken),
     apiUrl: elasticsearchEndpoint,
     defaultQuery: getDefaultQuery(),
   };
@@ -113,7 +113,7 @@ function Search(props) {
         <LookupEntity
           uuid={searchParams.get(note.urlSearchParam)}
           elasticsearchEndpoint={elasticsearchEndpoint}
-          nexusToken={nexusToken}
+          groupsToken={groupsToken}
         >
           <SearchNote label={note.label} />
         </LookupEntity>
@@ -125,11 +125,11 @@ function Search(props) {
 
 Search.propTypes = {
   title: PropTypes.string.isRequired,
-  nexusToken: PropTypes.string,
+  groupsToken: PropTypes.string,
 };
 
 Search.defaultProps = {
-  nexusToken: '',
+  groupsToken: '',
 };
 
 export default Search;

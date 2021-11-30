@@ -35,11 +35,11 @@ function DropdownListbox(props) {
         aria-haspopup="listbox"
         disableElevation
         variant="contained"
-        color="primary"
         onClick={() => setIsOpen(true)}
         {...buttonProps}
       >
-        {getOptionLabel(options[selectedOptionIndex])} {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+        {getOptionLabel(options[selectedOptionIndex], selectedOptionIndex)}
+        {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </SelectionButton>
       <StyledPopper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start">
         <StyledPaper>
@@ -47,13 +47,13 @@ function DropdownListbox(props) {
             <MenuList role="listbox" id={`${id}-options`}>
               {options.map((option, i) => (
                 <Option
-                  onClick={() => selectOption({ option, i })}
+                  onClick={selectedOptionIndex === i ? undefined : () => selectOption({ option, i })}
                   key={getOptionLabel(option)}
                   autoFocus={selectedOptionIndex === i}
                   selected={selectedOptionIndex === i}
                   aria-selected={selectedOptionIndex === i}
                 >
-                  {getOptionLabel(option)}
+                  {getOptionLabel(option, i)}
                 </Option>
               ))}
             </MenuList>

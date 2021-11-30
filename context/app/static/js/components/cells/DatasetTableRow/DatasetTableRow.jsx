@@ -33,12 +33,19 @@ function MetadataCells({ donor: { mapped_metadata } }) {
   );
 }
 
-function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpression }) {
+function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpression, queryType }) {
   const { hubmap_id, uuid, origin_sample, mapped_data_types, donor, last_modified_timestamp } = datasetMetadata;
   return (
     <ExpandableRow
       numCells={numCells}
-      expandedContent={<CellsCharts uuid={uuid} cellVariableName={cellVariableName} minExpression={minExpression} />}
+      expandedContent={
+        <CellsCharts
+          uuid={uuid}
+          cellVariableName={cellVariableName}
+          minExpression={minExpression}
+          queryType={queryType}
+        />
+      }
     >
       <ExpandableRowCell>
         <LightBlueLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</LightBlueLink>

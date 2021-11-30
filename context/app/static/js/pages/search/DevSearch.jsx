@@ -3,15 +3,15 @@ import { ExistsQuery, BoolMustNot } from 'searchkit';
 
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
-import { field, listFilter, checkboxFilter, hierarchicalFilter } from 'js/components/Search/utils';
-import { fieldsToHighlight } from 'js/components/Search/config';
-import SearchWrapper from 'js/components/Search/SearchWrapper';
-import DevResults from 'js/components/Search/DevResults';
+import { field, listFilter, checkboxFilter, hierarchicalFilter } from 'js/components/searchPage/utils';
+import { fieldsToHighlight } from 'js/components/searchPage/config';
+import SearchWrapper from 'js/components/searchPage/SearchWrapper';
+import DevResults from 'js/components/searchPage/DevResults';
 import { SearchHeader } from './style';
 
 function DevSearch() {
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-  const httpHeaders = getAuthHeader(nexusToken);
+  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
+  const httpHeaders = getAuthHeader(groupsToken);
 
   const searchProps = {
     // The default behavior is to add a "_search" path.
@@ -79,12 +79,21 @@ function DevSearch() {
       ],
     },
     queryFields: ['all_text', ...fieldsToHighlight],
-    isLoggedIn: Boolean(nexusToken),
+    isLoggedIn: Boolean(groupsToken),
   };
 
   const allProps = { ...searchProps, apiUrl: elasticsearchEndpoint };
 
-  const wrappedSearch = <SearchWrapper {...allProps} resultsComponent={DevResults} isDevSearch />;
+  const wrappedSearch = (
+    <SearchWrapper
+      {...allProps}
+      resultsComponent={DevResults}
+      analyticsCategory="Dev Search Page Interactions"
+      isDevSearch
+      elasticsearchEndpoint={elasticsearchEndpoint}
+      groupsToken={groupsToken}
+    />
+  );
   return (
     <>
       <SearchHeader component="h1" variant="h2">

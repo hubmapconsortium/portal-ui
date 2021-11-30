@@ -10,7 +10,7 @@ import Header from './Header';
 import { StyledAlert, FlexContainer } from './style';
 
 // Importing Search styles here so the CSS import order is correct.
-import 'js/components/Search/Search.scss';
+import 'js/components/searchPage/Search.scss';
 
 function App(props) {
   const { flaskData } = props;
@@ -20,9 +20,9 @@ function App(props) {
   ReactGA.initialize('UA-133341631-3');
 
   return (
-    // nexus_token is injected as a global in the flask template.
+    // groups_token is injected as a global in the flask template.
     // eslint-disable-next-line no-undef
-    <Providers endpoints={endpoints} nexusToken={nexus_token}>
+    <Providers endpoints={endpoints} groupsToken={groups_token}>
       <Header />
       {globalAlertMd && (
         <FlexContainer>

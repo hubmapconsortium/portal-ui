@@ -1,1 +1,0 @@
-- Validate the organs yaml that we generate, and fetch fresh azimuth data each time.

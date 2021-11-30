@@ -27,7 +27,7 @@
             },
             "requestInit": {
               "headers": {
-                "Authorization": "Bearer nexus_token"
+                "Authorization": "Bearer groups_token"
               }
             }
           },
@@ -67,7 +67,7 @@
             ],
             "requestInit": {
               "headers": {
-                "Authorization": "Bearer nexus_token"
+                "Authorization": "Bearer groups_token"
               }
             }
           },
@@ -80,7 +80,7 @@
             },
             "requestInit": {
               "headers": {
-                "Authorization": "Bearer nexus_token"
+                "Authorization": "Bearer groups_token"
               }
             }
           },
@@ -95,19 +95,19 @@
                 {
                   "name": "reg1_stitched_expressions",
                   "type": "ome-tiff",
-                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/expressions/reg1_stitched_expressions.ome.tiff?token=nexus_token",
+                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/expressions/reg1_stitched_expressions.ome.tiff?token=groups_token",
                   "metadata": {
                     "isBitmask": false,
-                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/expressions/reg1_stitched_expressions.offsets.json?token=nexus_token"
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/expressions/reg1_stitched_expressions.offsets.json?token=groups_token"
                   }
                 },
                 {
                   "name": "reg1_stitched_mask",
                   "type": "ome-tiff",
-                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/mask/reg1_stitched_mask.ome.tiff?token=nexus_token",
+                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/mask/reg1_stitched_mask.ome.tiff?token=groups_token",
                   "metadata": {
                     "isBitmask": true,
-                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/mask/reg1_stitched_mask.offsets.json?token=nexus_token"
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/mask/reg1_stitched_mask.offsets.json?token=groups_token"
                   }
                 }
               ]
@@ -229,7 +229,7 @@
             },
             "requestInit": {
               "headers": {
-                "Authorization": "Bearer nexus_token"
+                "Authorization": "Bearer groups_token"
               }
             }
           },
@@ -269,7 +269,7 @@
             ],
             "requestInit": {
               "headers": {
-                "Authorization": "Bearer nexus_token"
+                "Authorization": "Bearer groups_token"
               }
             }
           },
@@ -282,7 +282,7 @@
             },
             "requestInit": {
               "headers": {
-                "Authorization": "Bearer nexus_token"
+                "Authorization": "Bearer groups_token"
               }
             }
           },
@@ -297,19 +297,19 @@
                 {
                   "name": "reg2_stitched_expressions",
                   "type": "ome-tiff",
-                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/expressions/reg2_stitched_expressions.ome.tiff?token=nexus_token",
+                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/expressions/reg2_stitched_expressions.ome.tiff?token=groups_token",
                   "metadata": {
                     "isBitmask": false,
-                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/expressions/reg2_stitched_expressions.offsets.json?token=nexus_token"
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/expressions/reg2_stitched_expressions.offsets.json?token=groups_token"
                   }
                 },
                 {
                   "name": "reg2_stitched_mask",
                   "type": "ome-tiff",
-                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/mask/reg2_stitched_mask.ome.tiff?token=nexus_token",
+                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/stitched/mask/reg2_stitched_mask.ome.tiff?token=groups_token",
                   "metadata": {
                     "isBitmask": true,
-                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/mask/reg2_stitched_mask.offsets.json?token=nexus_token"
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/stitched/mask/reg2_stitched_mask.offsets.json?token=groups_token"
                   }
                 }
               ]

@@ -6,10 +6,7 @@ import { withParentSize } from '@visx/responsive';
 import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { GridRows } from '@visx/grid';
 import { localPoint } from '@visx/event';
-import { LegendOrdinal } from '@visx/legend';
 import Typography from '@material-ui/core/Typography';
-
-import { TitleAndLegendWrapper, CenteredFlex } from './style';
 
 function VerticalStackedBarChart({
   parentWidth,
@@ -23,7 +20,7 @@ function VerticalStackedBarChart({
   margin,
   xAxisLabel,
   yAxisLabel,
-  chartTitle,
+  TooltipContent,
 }) {
   const [hoveredBarIndices, setHoveredBarIndices] = useState();
 
@@ -34,7 +31,6 @@ function VerticalStackedBarChart({
   xScale.rangeRound([0, xWidth]);
 
   const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip();
-
   const { containerRef, TooltipInPortal } = useTooltipInPortal({
     detectBounds: true,
     scroll: true,
@@ -59,20 +55,7 @@ function VerticalStackedBarChart({
   const strokeWidth = 1.5;
 
   return (
-    <div>
-      <TitleAndLegendWrapper $leftOffset={margin.left - margin.right}>
-        {chartTitle && <Typography>{chartTitle}</Typography>}
-        <CenteredFlex>
-          <LegendOrdinal
-            scale={colorScale}
-            direction="row"
-            labelMargin="0 15px 0 0"
-            shapeStyle={() => ({
-              borderRadius: '3px',
-            })}
-          />
-        </CenteredFlex>
-      </TitleAndLegendWrapper>
+    <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
         <GridRows top={margin.top + 1} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.2} />
         <Group top={margin.top} left={margin.left}>
@@ -86,16 +69,15 @@ function VerticalStackedBarChart({
             color={colorScale}
           >
             {(barStacks) => {
-              return barStacks.map((barStack) =>
+              return barStacks.map((barStack, i) =>
                 barStack.bars.map(
                   (bar) =>
                     bar.width > 0 && (
                       <rect
                         x={bar.x}
-                        y={bar.y}
+                        y={bar.y - strokeWidth * i}
                         width={bar.width}
-                        // TODO: Fix stroke overlap without shrinking bars
-                        height={Math.max(bar.height - strokeWidth, 0.1)}
+                        height={bar.height}
                         fill={bar.color}
                         stroke={
                           hoveredBarIndices &&
@@ -150,13 +132,19 @@ function VerticalStackedBarChart({
       </svg>
       {tooltipOpen && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
-          <Typography>{tooltipData.key}</Typography>
-          <Typography variant="h3" component="p" color="textPrimary">
-            {tooltipData.bar.data[tooltipData.key]}
-          </Typography>
+          {TooltipContent ? (
+            <TooltipContent tooltipData={tooltipData} />
+          ) : (
+            <>
+              <Typography>{tooltipData.key}</Typography>
+              <Typography variant="h3" component="p" color="textPrimary">
+                {tooltipData.bar.data[tooltipData.key]}
+              </Typography>
+            </>
+          )}
         </TooltipInPortal>
       )}
-    </div>
+    </>
   );
 }
 
