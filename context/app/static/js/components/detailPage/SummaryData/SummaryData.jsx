@@ -62,6 +62,7 @@ function SummaryData(props) {
                 <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
                 <VerticalDivider />
                 <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
+                <VerticalDivider />
               </>
             )}
             <FlexEnd>

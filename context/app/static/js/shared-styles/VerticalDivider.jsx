@@ -1,13 +1,12 @@
-import styled from 'styled-components';
-import Divider from '@material-ui/core/Divider';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
 
-const VerticalDivider = styled(Divider)`
-  margin-left: ${(props) => props.theme.spacing(1)}px;
-  margin-right: ${(props) => props.theme.spacing(1)}px;
-  height: 15px;
-  width: 1px;
-  background-color: ${(props) => props.theme.palette.text.primary};
-  align-self: center;
-`;
+function VerticalDivider() {
+  return (
+    <Typography variant="h6" component="p">
+      &nbsp;|&nbsp;
+    </Typography>
+  );
+}
 
 export default VerticalDivider;
