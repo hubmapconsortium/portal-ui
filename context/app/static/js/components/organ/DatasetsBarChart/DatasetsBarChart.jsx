@@ -28,6 +28,8 @@ function DatasetsBarChart({ search }) {
     'organ_type',
   );
 
+  const dataTypes = formattedOrganTypeData.map((b) => b.mapped_data_type);
+
   const colors = useChartPalette();
 
   const docCountScale = scaleLinear({
@@ -41,7 +43,7 @@ function DatasetsBarChart({ search }) {
   });
 
   const dataTypeScale = scaleBand({
-    domain: formattedOrganTypeData.map((b) => b.mapped_data_type),
+    domain: dataTypes,
     padding: 0.2,
   });
 
@@ -59,6 +61,7 @@ function DatasetsBarChart({ search }) {
             keys={search}
             colorFacetName="origin_sample.mapped_organ"
             margin={margin}
+            dataTypes={dataTypes}
           />
         </ChartWrapper>
       ) : (
@@ -70,6 +73,7 @@ function DatasetsBarChart({ search }) {
           keys={search}
           colorFacetName="origin_sample.mapped_organ"
           margin={margin}
+          dataTypes={dataTypes}
         />
       )}
     </ChartArea>

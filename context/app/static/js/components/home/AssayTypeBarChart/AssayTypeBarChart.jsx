@@ -5,6 +5,7 @@ import { AxisTop, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import { GridColumns } from '@visx/grid';
 import Typography from '@material-ui/core/Typography';
+import { getStringWidth } from '@visx/text';
 
 import { useChartTooltip } from 'js/shared-styles/charts/hooks';
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
@@ -19,8 +20,17 @@ function AssayTypeBarChart({
   keys,
   margin,
   colorFacetName,
+  dataTypes,
 }) {
-  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, margin);
+  const longestLabelSize = Math.max(
+    ...dataTypes.map((d) =>
+      getStringWidth(d, { fontSize: '11px', fontFamily: 'Inter Variable, Helvetica, Arial, sans-serif' }),
+    ),
+  );
+
+  const updatedMargin = { ...margin, left: longestLabelSize + 10 };
+
+  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
 
   docCountScale.rangeRound([0, xWidth]);
   dataTypeScale.rangeRound([yHeight, 0]);
@@ -43,14 +53,14 @@ function AssayTypeBarChart({
     <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
         <GridColumns
-          top={margin.top + 1}
-          left={margin.left}
+          top={updatedMargin.top}
+          left={updatedMargin.left}
           scale={docCountScale}
           height={yHeight}
           stroke="black"
           opacity={0.38}
         />
-        <Group top={margin.top} left={margin.left}>
+        <Group top={updatedMargin.top} left={updatedMargin.left}>
           <BarStackHorizontal
             data={visxData}
             keys={keys}

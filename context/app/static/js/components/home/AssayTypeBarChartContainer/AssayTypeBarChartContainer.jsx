@@ -66,8 +66,10 @@ function AssayTypeBarChartContainer() {
     range: colors,
   });
 
+  const dataTypes = visxData[selectedColorDataIndex].map((b) => b.mapped_data_type);
+
   const dataTypeScale = scaleBand({
-    domain: visxData[selectedColorDataIndex].map((b) => b.mapped_data_type),
+    domain: dataTypes,
     padding: 0.2,
   });
 
@@ -96,6 +98,7 @@ function AssayTypeBarChartContainer() {
           keys={colorOptions[selectedColorDataIndex].values}
           colorFacetName={colorOptions[selectedColorDataIndex].facetName}
           margin={margin}
+          dataTypes={dataTypes}
         />
       </ChartWrapper>
     </ChartArea>
