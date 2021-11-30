@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import useSearchData from 'js/hooks/useSearchData';
+import { useSelectedDropdownIndex } from 'js/shared-styles/dropdowns/DropdownListbox';
 import { useChartPalette, useAssayTypeBarChartData } from './hooks';
 import { getAssayTypesCompositeAggsQuery } from './utils';
 import AssayTypeBarChart from '../AssayTypeBarChart/AssayTypeBarChart';
@@ -20,13 +21,8 @@ const assayOrganTypesQuery = getAssayTypesCompositeAggsQuery('origin_sample.mapp
 const assayDonorSexQuery = getAssayTypesCompositeAggsQuery('donor.mapped_metadata.sex.keyword', 'donor_sex');
 
 function AssayTypeBarChartContainer() {
-  const [selectedColorDataIndex, setSelectedColorDataIndex] = useState(0);
-
-  function selectDropdownItem(itemAndIndex) {
-    const { i } = itemAndIndex;
-    setSelectedColorDataIndex(i);
-  }
   const colors = useChartPalette();
+  const [selectedColorDataIndex, setSelectedColorDataIndex] = useSelectedDropdownIndex(0);
 
   const { searchData: organTypesData } = useSearchData(organTypesQuery);
   const organTypes = organTypesData?.aggregations?.organ_types.buckets.map((b) => b.key);
@@ -87,7 +83,7 @@ function AssayTypeBarChartContainer() {
             <AssayTypeBarChartDropdown
               colorDataOptions={colorOptions.map((color) => color.dropdownLabel)}
               selectedColorDataIndex={selectedColorDataIndex}
-              setSelectedColorDataIndex={selectDropdownItem}
+              setSelectedColorDataIndex={setSelectedColorDataIndex}
             />
           </div>
         }
