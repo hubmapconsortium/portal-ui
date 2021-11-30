@@ -10,7 +10,7 @@ import Header from './Header';
 import { StyledAlert, FlexContainer } from './style';
 
 // Importing Search styles here so the CSS import order is correct.
-import 'js/components/Search/Search.scss';
+import 'js/components/searchPage/Search.scss';
 
 function App(props) {
   const { flaskData } = props;

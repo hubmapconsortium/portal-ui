@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import FilterLabelAndCount from 'js/components/Search/filters/FilterLabelAndCount';
+import FilterLabelAndCount from 'js/components/searchPage/filters/FilterLabelAndCount';
 
 const StyledFilterLabelAndCount = styled(FilterLabelAndCount)`
   p {

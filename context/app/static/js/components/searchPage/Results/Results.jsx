@@ -1,15 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ViewSwitcherHits } from 'searchkit';
+import { ViewSwitcherHits } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
-import { customHighlight } from 'js/components/Search/config';
+import { customHighlight } from 'js/components/searchPage/config';
 
 import ResultsTable from '../ResultsTable';
+import ResultsTiles from '../ResultsTiles';
 import ResultsCCF from '../ResultsCCF';
 
-function DevResults(props) {
-  const { sortOptions, hitsPerPage, tableResultFields, detailsUrlPrefix, idField, resultFieldIds } = props;
+function Results(props) {
+  const {
+    sortOptions,
+    hitsPerPage,
+    tableResultFields,
+    detailsUrlPrefix,
+    idField,
+    resultFieldIds,
+    type,
+    analyticsCategory,
+  } = props;
 
+  // one of the sort components must stay mounted to preserve sort history between views.
   return (
     <ViewSwitcherHits
       hitsPerPage={hitsPerPage}
@@ -23,11 +34,13 @@ function DevResults(props) {
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}
               sortOptions={sortOptions}
+              analyticsCategory={analyticsCategory}
             />
           ),
           defaultOption: true,
         },
-        { key: 'ccf', title: 'CCF', listComponent: <ResultsCCF /> },
+        { key: 'tile', title: 'Tile', listComponent: <ResultsTiles type={type} /> },
+        { key: 'ccf', title: 'CCF', listComponent: <ResultsCCF type={type} /> },
       ]}
       sourceFilter={resultFieldIds}
       customHighlight={customHighlight}
@@ -35,13 +48,14 @@ function DevResults(props) {
   );
 }
 
-DevResults.propTypes = {
+Results.propTypes = {
   sortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
   tableResultFields: PropTypes.arrayOf(PropTypes.object).isRequired,
   detailsUrlPrefix: PropTypes.string.isRequired,
   idField: PropTypes.string.isRequired,
   resultFieldIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  type: PropTypes.string.isRequired,
 };
 
-export default DevResults;
+export default Results;

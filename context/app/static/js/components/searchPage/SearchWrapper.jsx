@@ -5,7 +5,7 @@ import ReactGA from 'react-ga';
 import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
-import Filters from 'js/components/Search/filters/Filters';
+import Filters from 'js/components/searchPage/filters/Filters';
 import { fetchSearchData } from 'js/hooks/useSearchData';
 import PaginationWrapper from './PaginationWrapper';
 import SearchBarLayout from './SearchBarLayout';

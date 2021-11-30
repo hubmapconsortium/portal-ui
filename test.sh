@@ -69,6 +69,21 @@ start pytest
 pytest context/app
 end pytest
 
+start cap-dirs
+# If there are exceptions, add something like:
+# | grep -v path-to-ignore
+CAP_DIRS=$(
+  find context/app/static/js -type d \
+  | egrep '/[A-Z][^/]+$'
+)
+NON_INDEX_DIRS=$(
+  for D in $CAP_DIRS; do
+    [ -e $D/index.* ] || echo $D
+  done
+)
+[ -z "$NON_INDEX_DIRS" ] || die "These directories missing index files: $NON_INDEX_DIRS"
+end cap-dirs
+
 cd context
 
 start lint

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SortingSelector } from 'searchkit';
 
-import { withAnalyticsCategory } from 'js/components/Search/hooks';
+import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { getByPath } from './utils';
 import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell } from './style';

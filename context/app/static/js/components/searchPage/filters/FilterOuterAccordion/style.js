@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
 
-import { StyledAccordion, StyledAccordionSummary } from 'js/components/Search/filters/style';
+import { StyledAccordion, StyledAccordionSummary } from 'js/components/searchPage/filters/style';
 
 const OuterAccordion = styled(StyledAccordion)`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};

@@ -6,11 +6,11 @@ import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial
 import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
-import SearchWrapper from 'js/components/Search/SearchWrapper';
-import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/Search/config';
-import { listFilter } from 'js/components/Search/utils';
-import SearchNote from 'js/components/Search/SearchNote';
-import Results from 'js/components/Search/Results';
+import SearchWrapper from 'js/components/searchPage/SearchWrapper';
+import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/searchPage/config';
+import { listFilter } from 'js/components/searchPage/utils';
+import SearchNote from 'js/components/searchPage/SearchNote';
+import Results from 'js/components/searchPage/Results';
 import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 import { SearchHeader } from './style';
 
