@@ -6,7 +6,7 @@ const StyledPaper = styled(Paper)`
   margin-bottom: 16px;
 
   h2 {
-    padding: 20px 0 20px 0;
+    padding: 20px 0px;
   }
 `;
 
