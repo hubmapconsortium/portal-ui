@@ -1,0 +1,1 @@
+- Use no-wrap on table cells to avoid sizing issues.

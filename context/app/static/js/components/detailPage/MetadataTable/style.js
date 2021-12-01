@@ -23,9 +23,8 @@ const StyledSectionHeader = styled(SectionHeader)`
   align-self: flex-end;
 `;
 
-const FlexTableCell = styled(TableCell)`
-  display: flex;
-  align-items: center;
+const NoWrapCell = styled(TableCell)`
+  white-space: nowrap;
 `;
 
 const StyledInfoIcon = styled(InfoIcon)`
@@ -33,4 +32,4 @@ const StyledInfoIcon = styled(InfoIcon)`
   font-size: 14px;
 `;
 
-export { DownloadIcon, Flex, StyledWhiteBackgroundIconButton, StyledSectionHeader, FlexTableCell, StyledInfoIcon };
+export { DownloadIcon, Flex, StyledWhiteBackgroundIconButton, StyledSectionHeader, NoWrapCell, StyledInfoIcon };

@@ -17,7 +17,7 @@ import {
   Flex,
   StyledWhiteBackgroundIconButton,
   StyledSectionHeader,
-  FlexTableCell,
+  NoWrapCell,
   StyledInfoIcon,
 } from './style';
 
@@ -97,14 +97,14 @@ function MetadataTable(props) {
             <TableBody>
               {tableRows.map((row) => (
                 <TableRow key={row.key}>
-                  <FlexTableCell>
+                  <NoWrapCell>
                     {row.key}
                     {row.description && (
                       <SecondaryBackgroundTooltip title={row.description} placement="bottom-start">
                         <StyledInfoIcon color="primary" />
                       </SecondaryBackgroundTooltip>
                     )}
-                  </FlexTableCell>
+                  </NoWrapCell>
                   <TableCell>{row.value}</TableCell>
                 </TableRow>
               ))}
