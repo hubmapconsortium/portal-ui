@@ -49,6 +49,8 @@ function AssayTypeBarChart({
 
   const strokeWidth = 1.5;
 
+  const maxBarHeight = 65; // in a horizontal chart height refers to bar thickness
+
   return (
     <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
@@ -85,9 +87,9 @@ function AssayTypeBarChart({
                         {/* Make target explicit because html base target doesn't apply inside SVG. */}
                         <rect
                           x={bar.x}
-                          y={bar.y}
+                          y={bar.height > maxBarHeight ? bar.y + (bar.height - maxBarHeight) / 2 : bar.y} // align bar with label when its height is reduced
                           width={bar.width - strokeWidth}
-                          height={bar.height}
+                          height={Math.min(bar.height, maxBarHeight)}
                           fill={bar.color}
                           stroke={
                             hoveredBarIndices &&
