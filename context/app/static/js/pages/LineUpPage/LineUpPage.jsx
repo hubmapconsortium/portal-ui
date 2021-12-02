@@ -15,16 +15,17 @@ function LineUpPage(props) {
   const { entities } = props;
   const firstRow = entities[0];
   const notEnumFields = new Set([
+    'uuid',
     // Donors:
     'hubmap_id',
     'medical_history',
-    'uuid',
     // Samples:
     'donor.hubmap_id',
     'sample_id',
     // Datasets:
     'description',
     'library_adapter_sequence',
+    'library_id',
   ]);
   const columns = Object.keys(firstRow).map((key) => {
     if (metadataFieldTypes[key] === 'number' || metadataFieldTypes[key] === 'integer') {
