@@ -9,6 +9,7 @@ import { getStringWidth } from '@visx/text';
 
 import { useChartTooltip } from 'js/shared-styles/charts/hooks';
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
+import StackedBar from '../../../shared-styles/charts/StackedBar';
 
 function AssayTypeBarChart({
   parentWidth,
@@ -47,10 +48,6 @@ function AssayTypeBarChart({
     handleMouseLeave,
   } = useChartTooltip();
 
-  const strokeWidth = 1.5;
-
-  const maxBarHeight = 65; // in a horizontal chart height refers to bar thickness
-
   return (
     <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
@@ -85,22 +82,13 @@ function AssayTypeBarChart({
                         target="_parent"
                       >
                         {/* Make target explicit because html base target doesn't apply inside SVG. */}
-                        <rect
-                          x={bar.x + strokeWidth / 2}
-                          y={bar.height > maxBarHeight ? bar.y + (bar.height - maxBarHeight) / 2 : bar.y} // align bar with label when its height is reduced
-                          width={bar.width - strokeWidth}
-                          height={Math.min(bar.height, maxBarHeight)}
-                          fill={bar.color}
-                          stroke={
-                            hoveredBarIndices &&
-                            bar.index === hoveredBarIndices.barIndex &&
-                            barStack.index === hoveredBarIndices.barStackIndex
-                              ? 'black'
-                              : bar.color
-                          }
-                          strokeWidth={strokeWidth}
-                          onMouseEnter={(event) => handleMouseEnter(event, bar, barStack.index)}
-                          onMouseLeave={handleMouseLeave}
+                        <StackedBar
+                          direction="horizontal"
+                          bar={bar}
+                          barStack={barStack}
+                          hoveredBarIndices={hoveredBarIndices}
+                          handleMouseEnter={handleMouseEnter}
+                          handleMouseLeave={handleMouseLeave}
                         />
                       </a>
                     ),

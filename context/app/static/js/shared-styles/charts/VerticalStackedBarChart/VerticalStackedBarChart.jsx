@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { useChartTooltip } from 'js/shared-styles/charts/hooks';
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
+import StackedBar from 'js/shared-styles/charts/StackedBar';
 
 function VerticalStackedBarChart({
   parentWidth,
@@ -40,8 +41,6 @@ function VerticalStackedBarChart({
     handleMouseLeave,
   } = useChartTooltip();
 
-  const strokeWidth = 1.5;
-
   return (
     <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
@@ -61,22 +60,13 @@ function VerticalStackedBarChart({
                 barStack.bars.map(
                   (bar) =>
                     bar.width > 0 && (
-                      <rect
-                        x={bar.x}
-                        y={bar.y + strokeWidth / 2}
-                        width={bar.width}
-                        height={bar.height - strokeWidth}
-                        fill={bar.color}
-                        stroke={
-                          hoveredBarIndices &&
-                          bar.index === hoveredBarIndices.barIndex &&
-                          barStack.index === hoveredBarIndices.barStackIndex
-                            ? 'black'
-                            : bar.color
-                        }
-                        strokeWidth={strokeWidth}
-                        onMouseEnter={(event) => handleMouseEnter(event, bar, barStack.index)}
-                        onMouseLeave={handleMouseLeave}
+                      <StackedBar
+                        direction="vertical"
+                        bar={bar}
+                        barStack={barStack}
+                        hoveredBarIndices={hoveredBarIndices}
+                        handleMouseEnter={handleMouseEnter}
+                        handleMouseLeave={handleMouseLeave}
                       />
                     ),
                 ),
