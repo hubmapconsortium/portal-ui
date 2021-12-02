@@ -1,11 +1,10 @@
 import React from 'react';
-import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import useSearchData from 'js/hooks/useSearchData';
 import { useSelectedDropdownIndex } from 'js/shared-styles/dropdowns/DropdownListbox';
 import { useChartPalette, useAssayTypeBarChartData } from './hooks';
-import { getAssayTypesCompositeAggsQuery } from './utils';
+import { getAssayTypesCompositeAggsQuery, getColorScale, getDataTypeScale, getDocCountScale } from './utils';
 import AssayTypeBarChart from '../AssayTypeBarChart/AssayTypeBarChart';
 import AssayTypeBarChartDropdown from '../AssayTypeBarChartDropdown';
 import { ChartArea } from './style';
@@ -43,10 +42,7 @@ function AssayTypeBarChartContainer() {
   const visxData = [formattedOrganTypeData, formattedDonorSexData];
   const maxSumDocCount = [maxAssayOrganTypeDocCount, maxAssayDonorSexDocCount];
 
-  const docCountScale = scaleLinear({
-    domain: [0, maxSumDocCount[selectedColorDataIndex]],
-    nice: true,
-  });
+  const docCountScale = getDocCountScale(maxSumDocCount[selectedColorDataIndex]);
 
   const colorOptions = [
     {
@@ -61,17 +57,11 @@ function AssayTypeBarChartContainer() {
     },
   ];
 
-  const colorScale = scaleOrdinal({
-    domain: colorOptions[selectedColorDataIndex].values,
-    range: colors,
-  });
+  const colorScale = getColorScale(colorOptions[selectedColorDataIndex].values, colors);
 
   const dataTypes = visxData[selectedColorDataIndex].map((b) => b.mapped_data_type);
 
-  const dataTypeScale = scaleBand({
-    domain: dataTypes,
-    padding: 0.2,
-  });
+  const dataTypeScale = getDataTypeScale(dataTypes);
 
   const margin = { top: 40, right: 50, bottom: 100, left: 300 };
 

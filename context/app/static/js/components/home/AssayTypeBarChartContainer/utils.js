@@ -1,5 +1,6 @@
 import produce from 'immer';
 /* eslint-disable no-param-reassign */
+import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 
 function formatAssayData(assayData, colorKey) {
   const formattedData = assayData.aggregations.mapped_data_types.buckets.reduce((acc, d) => {
@@ -74,10 +75,33 @@ function getAssayTypesCompositeAggsQuery(esAggsKey, aggsKeyToReturn) {
   };
 }
 
+function getDocCountScale(maxDocCount) {
+  return scaleLinear({
+    domain: [0, maxDocCount * 1.05],
+    nice: true,
+  });
+}
+
+function getColorScale(colorsValues, colors) {
+  return scaleOrdinal({
+    domain: colorsValues,
+    range: colors,
+  });
+}
+
+function getDataTypeScale(dataTypes) {
+  return scaleBand({
+    domain: dataTypes,
+    padding: 0.2,
+  });
+}
 export {
   formatAssayData,
   addSumProperty,
   sortBySumAscending,
   getAssayTypeBarChartData,
   getAssayTypesCompositeAggsQuery,
+  getDocCountScale,
+  getColorScale,
+  getDataTypeScale,
 };
