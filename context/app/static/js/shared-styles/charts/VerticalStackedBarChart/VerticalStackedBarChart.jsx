@@ -45,7 +45,7 @@ function VerticalStackedBarChart({
   return (
     <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
-        <GridRows top={margin.top + 1} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.2} />
+        <GridRows top={margin.top} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.2} />
         <Group top={margin.top} left={margin.left}>
           <BarStack
             data={visxData}
@@ -57,15 +57,15 @@ function VerticalStackedBarChart({
             color={colorScale}
           >
             {(barStacks) => {
-              return barStacks.map((barStack, i) =>
+              return barStacks.map((barStack) =>
                 barStack.bars.map(
                   (bar) =>
                     bar.width > 0 && (
                       <rect
                         x={bar.x}
-                        y={bar.y - strokeWidth * i}
+                        y={bar.y + strokeWidth / 2}
                         width={bar.width}
-                        height={bar.height}
+                        height={bar.height - strokeWidth}
                         fill={bar.color}
                         stroke={
                           hoveredBarIndices &&

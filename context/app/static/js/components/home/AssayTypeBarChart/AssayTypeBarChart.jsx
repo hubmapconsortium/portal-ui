@@ -86,7 +86,7 @@ function AssayTypeBarChart({
                       >
                         {/* Make target explicit because html base target doesn't apply inside SVG. */}
                         <rect
-                          x={bar.x}
+                          x={bar.x + strokeWidth / 2}
                           y={bar.height > maxBarHeight ? bar.y + (bar.height - maxBarHeight) / 2 : bar.y} // align bar with label when its height is reduced
                           width={bar.width - strokeWidth}
                           height={Math.min(bar.height, maxBarHeight)}
