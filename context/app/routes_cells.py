@@ -45,7 +45,7 @@ def timeit(f):
         trunc_args = [arg[:limit] + ('...' if len(arg) > limit else '') for arg in str_args]
 
         current_app.logger.info(
-            f'{request.url} | {round(end - start, 3)} seconds | {f.__name__}({", ".join(trunc_args)})')
+            f'{round(end - start, 3)} seconds | {request.path}?{request.query_string.decode("UTF-8")} | {f.__name__}({", ".join(trunc_args)})')
         return result
     return timed
 
