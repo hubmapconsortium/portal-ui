@@ -43,9 +43,13 @@ def timeit(f):
 
         str_args = [str(arg) for arg in args]
         trunc_args = [arg[:limit] + ('...' if len(arg) > limit else '') for arg in str_args]
+        trunk_kwargs = [f'{k}=...' for k in kwargs]
 
-        current_app.logger.info(
-            f'{round(end - start, 3)} seconds | {request.path}?{request.query_string.decode("UTF-8")} | {f.__name__}({", ".join(trunc_args)})')
+        elapsed = f'{round(end - start, 3)} seconds'
+        url = f'{request.path}?{request.query_string.decode("UTF-8")}'
+        func = f'{f.__name__}({", ".join(trunc_args + trunk_kwargs)})'
+
+        current_app.logger.info(' | '.join([elapsed, url, func]))
         return result
     return timed
 
