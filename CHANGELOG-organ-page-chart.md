@@ -1,2 +1,3 @@
 - Refactor assay types bar chart.
 - Add assay types chart to organ pages.
+- Replace outline with filter hover on stacked bar charts.
