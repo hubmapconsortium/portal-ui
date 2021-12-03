@@ -3,11 +3,16 @@ import React from 'react';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import useSearchData from 'js/hooks/useSearchData';
 import { useSelectedDropdownIndex } from 'js/shared-styles/dropdowns/DropdownListbox';
-import { useChartPalette, useAssayTypeBarChartData } from './hooks';
-import { getAssayTypesCompositeAggsQuery, getColorScale, getDataTypeScale, getDocCountScale } from './utils';
-import AssayTypeBarChart from '../AssayTypeBarChart/AssayTypeBarChart';
+import AssayTypeBarChart from 'js/shared-styles/charts/AssayTypeBarChart/AssayTypeBarChart';
+import { useChartPalette, useAssayTypeBarChartData } from 'js/shared-styles/charts/AssayTypeBarChart/hooks';
+import {
+  getAssayTypesCompositeAggsQuery,
+  getColorScale,
+  getDataTypeScale,
+  getDocCountScale,
+} from 'js/shared-styles/charts/AssayTypeBarChart/utils';
+import { ChartArea } from 'js/shared-styles/charts/AssayTypeBarChart/style';
 import AssayTypeBarChartDropdown from '../AssayTypeBarChartDropdown';
-import { ChartArea } from './style';
 
 const organTypesQuery = {
   size: 0,
@@ -18,6 +23,8 @@ const organTypesQuery = {
 
 const assayOrganTypesQuery = getAssayTypesCompositeAggsQuery('origin_sample.mapped_organ.keyword', 'organ_type');
 const assayDonorSexQuery = getAssayTypesCompositeAggsQuery('donor.mapped_metadata.sex.keyword', 'donor_sex');
+
+const filterDataTypesWithBracket = (bucket) => !bucket.key.mapped_data_type.includes('[');
 
 function AssayTypeBarChartContainer() {
   const colors = useChartPalette();
@@ -32,13 +39,13 @@ function AssayTypeBarChartContainer() {
   const { formattedData: formattedOrganTypeData, maxSumDocCount: maxAssayOrganTypeDocCount } = useAssayTypeBarChartData(
     assayOrganTypeData,
     'organ_type',
-    (bucket) => !bucket.key.mapped_data_type.includes('['),
+    filterDataTypesWithBracket,
   );
 
   const { formattedData: formattedDonorSexData, maxSumDocCount: maxAssayDonorSexDocCount } = useAssayTypeBarChartData(
     assayDonorSexData,
     'donor_sex',
-    (bucket) => !bucket.key.mapped_data_type.includes('['),
+    filterDataTypesWithBracket,
   );
 
   const visxData = [formattedOrganTypeData, formattedDonorSexData];

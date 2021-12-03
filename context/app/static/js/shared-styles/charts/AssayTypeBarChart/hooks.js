@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTheme } from '@material-ui/core/styles';
 
-import { getAssayTypeBarChartData } from './utils';
+import { getAssayTypeBarChartData } from 'js/shared-styles/charts/AssayTypeBarChart/utils';
 
 function useChartPalette() {
   const {
