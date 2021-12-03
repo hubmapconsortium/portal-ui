@@ -32,11 +32,13 @@ function AssayTypeBarChartContainer() {
   const { formattedData: formattedOrganTypeData, maxSumDocCount: maxAssayOrganTypeDocCount } = useAssayTypeBarChartData(
     assayOrganTypeData,
     'organ_type',
+    (bucket) => !bucket.key.mapped_data_type.includes('['),
   );
 
   const { formattedData: formattedDonorSexData, maxSumDocCount: maxAssayDonorSexDocCount } = useAssayTypeBarChartData(
     assayDonorSexData,
     'donor_sex',
+    (bucket) => !bucket.key.mapped_data_type.includes('['),
   );
 
   const visxData = [formattedOrganTypeData, formattedDonorSexData];

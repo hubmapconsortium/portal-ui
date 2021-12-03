@@ -2,15 +2,12 @@ import produce from 'immer';
 /* eslint-disable no-param-reassign */
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 
-function formatAssayData(assayData, colorKey) {
-  const formattedData = assayData.aggregations.mapped_data_types.buckets.reduce((acc, d) => {
+function formatAssayData(assayDataBuckets, colorKey) {
+  const formattedData = assayDataBuckets.reduce((acc, d) => {
     const snakeCaseDataType = d.key.mapped_data_type.replace(/ /g, '_');
     // TODO: Get datasets to display from index, instead of depending on patterns in names.
     // The first step is having a hierarchy for assay types:
     // https://github.com/hubmapconsortium/portal-ui/issues/1688
-    if (snakeCaseDataType.includes('[')) {
-      return acc;
-    }
     return produce(acc, (draft) => {
       if (!(snakeCaseDataType in draft)) {
         draft[snakeCaseDataType] = {};

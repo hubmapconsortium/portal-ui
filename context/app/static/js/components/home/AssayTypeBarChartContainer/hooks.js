@@ -14,13 +14,15 @@ function useChartPalette() {
   return [...colorObjects.map((c) => c.light), ...colorObjects.map((c) => c.main), ...colorObjects.map((c) => c.dark)];
 }
 
-function useAssayTypeBarChartData(rawData, colorKey) {
+function useAssayTypeBarChartData(rawData, colorKey, filterBucketsFunc) {
+  const keepAllBuckets = () => true;
   return useMemo(() => {
     if (Object.keys(rawData).length > 0) {
-      return getAssayTypeBarChartData(rawData, colorKey);
+      const buckets = rawData.aggregations.mapped_data_types.buckets.filter(filterBucketsFunc || keepAllBuckets);
+      return getAssayTypeBarChartData(buckets, colorKey);
     }
     return { formattedData: [], maxSumDocCount: undefined };
-  }, [rawData, colorKey]);
+  }, [rawData, filterBucketsFunc, colorKey]);
 }
 
 export { useChartPalette, useAssayTypeBarChartData };
