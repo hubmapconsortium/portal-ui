@@ -2,19 +2,19 @@ import React, { useMemo } from 'react';
 import useSearchData from 'js/hooks/useSearchData';
 
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
-import AssayTypeBarChart from 'js/components/home/AssayTypeBarChart/';
-import { useChartPalette, useAssayTypeBarChartData } from 'js/components/home/AssayTypeBarChartContainer/hooks';
+import AssayTypeBarChart from 'js/shared-styles/charts/AssayTypeBarChart/AssayTypeBarChart/';
+import { useChartPalette, useAssayTypeBarChartData } from 'js/shared-styles/charts/AssayTypeBarChart/hooks';
 import {
   getAssayTypesCompositeAggsQuery,
   getDocCountScale,
   getColorScale,
   getDataTypeScale,
-} from 'js/components/home/AssayTypeBarChartContainer/utils';
-import { ChartArea } from 'js/components/home/AssayTypeBarChartContainer/style';
+} from 'js/shared-styles/charts/AssayTypeBarChart/utils';
+import { ChartArea } from 'js/shared-styles/charts/AssayTypeBarChart/style';
 
 const assayOrganTypesQuery = getAssayTypesCompositeAggsQuery('origin_sample.mapped_organ.keyword', 'organ_type');
 
-function DatasetsBarChart({ search }) {
+function OrganDatasetsChart({ search }) {
   const updatedQuery = useMemo(
     () =>
       Object.assign(assayOrganTypesQuery, {
@@ -75,4 +75,4 @@ function DatasetsBarChart({ search }) {
   );
 }
 
-export default DatasetsBarChart;
+export default OrganDatasetsChart;
