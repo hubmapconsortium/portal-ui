@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import useSearchData from 'js/hooks/useSearchData';
 
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
-import AssayTypeBarChart from 'js/shared-styles/charts/AssayTypeBarChart/AssayTypeBarChart/';
+import AssayTypeBarChart from 'js/shared-styles/charts/AssayTypeBarChart/';
 import { useChartPalette, useAssayTypeBarChartData } from 'js/shared-styles/charts/AssayTypeBarChart/hooks';
 import {
   getAssayTypesCompositeAggsQuery,

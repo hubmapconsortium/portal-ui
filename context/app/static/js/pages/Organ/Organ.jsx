@@ -10,7 +10,7 @@ import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
 import OrganInfo from 'js/components/organ/OrganInfo';
 import Samples from 'js/components/organ/Samples';
-import DatasetsBarChart from 'js/components/organ/DatasetsBarChart/DatasetsBarChart';
+import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 
 import { FlexRow, Content } from './style';
 
