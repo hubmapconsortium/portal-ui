@@ -12,7 +12,7 @@ import {
   getDocCountScale,
 } from 'js/shared-styles/charts/AssayTypeBarChart/utils';
 import { ChartArea } from 'js/shared-styles/charts/AssayTypeBarChart/style';
-import AssayTypeBarChartDropdown from '../AssayTypeBarChartDropdown';
+import HuBMAPDatasetsChartDropdown from '../HuBMAPDatasetsChartDropdown';
 
 const organTypesQuery = {
   size: 0,
@@ -26,7 +26,7 @@ const assayDonorSexQuery = getAssayTypesCompositeAggsQuery('donor.mapped_metadat
 
 const filterDataTypesWithBracket = (bucket) => !bucket.key.mapped_data_type.includes('[');
 
-function AssayTypeBarChartContainer() {
+function HuBMAPDatasetsChart() {
   const colors = useChartPalette();
   const [selectedColorDataIndex, setSelectedColorDataIndex] = useSelectedDropdownIndex(0);
 
@@ -81,7 +81,7 @@ function AssayTypeBarChartContainer() {
         colorScale={colorScale}
         dropdown={
           <div>
-            <AssayTypeBarChartDropdown
+            <HuBMAPDatasetsChartDropdown
               colorDataOptions={colorOptions.map((color) => color.dropdownLabel)}
               selectedColorDataIndex={selectedColorDataIndex}
               setSelectedColorDataIndex={setSelectedColorDataIndex}
@@ -104,4 +104,4 @@ function AssayTypeBarChartContainer() {
   );
 }
 
-export default AssayTypeBarChartContainer;
+export default HuBMAPDatasetsChart;

@@ -4,7 +4,7 @@ import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { SelectionButton } from './style';
 
-function AssayTypeBarChartDropdown({ colorDataOptions, selectedColorDataIndex, setSelectedColorDataIndex }) {
+function HuBMAPDatasetsChartDropdown({ colorDataOptions, selectedColorDataIndex, setSelectedColorDataIndex }) {
   return (
     <DropdownListbox
       id="bar-fill-dropdown"
@@ -19,4 +19,4 @@ function AssayTypeBarChartDropdown({ colorDataOptions, selectedColorDataIndex, s
   );
 }
 
-export default AssayTypeBarChartDropdown;
+export default HuBMAPDatasetsChartDropdown;

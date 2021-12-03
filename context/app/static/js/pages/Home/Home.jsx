@@ -3,7 +3,7 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Typography from '@material-ui/core/Typography';
 
-import AssayTypeBarChartContainer from 'js/components/home/AssayTypeBarChartContainer';
+import HuBMAPDatasetsChart from 'js/components/home/HuBMAPDatasetsChart';
 import ImageCarouselContainer from 'js/components/home/ImageCarouselContainer';
 import Title from 'js/components/home/Title';
 import HuBMAPDescription from 'js/components/home/HuBMAPDescription';
@@ -56,7 +56,7 @@ function Home() {
             <OffsetDatasetsHeader variant="h4" component="h3" id="hubmap-datasets" ref={scrollToBarChart}>
               HuBMAP Datasets
             </OffsetDatasetsHeader>
-            <AssayTypeBarChartContainer />
+            <HuBMAPDatasetsChart />
           </GridArea>
         )}
         <GridArea $gridAreaTitle="guidelines">
