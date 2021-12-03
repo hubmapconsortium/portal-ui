@@ -7,6 +7,7 @@ import { withParentSize } from '@visx/responsive';
 import { GridColumns } from '@visx/grid';
 import Typography from '@material-ui/core/Typography';
 import { getStringWidth } from '@visx/text';
+import { useTheme } from '@material-ui/core/styles';
 
 import { useChartTooltip } from 'js/shared-styles/charts/hooks';
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
@@ -25,14 +26,17 @@ function AssayTypeBarChart({
   dataTypes,
   showTooltipAndHover,
 }) {
+  const theme = useTheme();
+  const tickLabelSize = 11;
+
   const longestLabelSize = useMemo(
     () =>
       Math.max(
         ...dataTypes.map((d) =>
-          getStringWidth(d, { fontSize: '11px', fontFamily: 'Inter Variable, Helvetica, Arial, sans-serif' }),
+          getStringWidth(d, { fontSize: `${tickLabelSize}px`, fontFamily: theme.typography.fontFamily }),
         ),
       ),
-    [dataTypes],
+    [dataTypes, theme.typography.fontFamily],
   );
 
   const updatedMargin = { ...margin, left: longestLabelSize + 10 };
@@ -104,7 +108,7 @@ function AssayTypeBarChart({
             numTicks={Object.keys(visxData).length}
             tickLabelProps={() => ({
               fill: 'black',
-              fontSize: 11,
+              fontSize: tickLabelSize,
               textAnchor: 'end',
               dy: '0.33em',
             })}
@@ -117,7 +121,7 @@ function AssayTypeBarChart({
             tickStroke="black"
             tickLabelProps={() => ({
               fill: 'black',
-              fontSize: 11,
+              fontSize: tickLabelSize,
               textAnchor: 'middle',
             })}
           />
