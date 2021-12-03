@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
@@ -9,7 +9,7 @@ import { getStringWidth } from '@visx/text';
 
 import { useChartTooltip } from 'js/shared-styles/charts/hooks';
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
-import StackedBar from '../../../shared-styles/charts/StackedBar';
+import StackedBar from 'js/shared-styles/charts/StackedBar';
 
 function AssayTypeBarChart({
   parentWidth,
@@ -23,10 +23,14 @@ function AssayTypeBarChart({
   colorFacetName,
   dataTypes,
 }) {
-  const longestLabelSize = Math.max(
-    ...dataTypes.map((d) =>
-      getStringWidth(d, { fontSize: '11px', fontFamily: 'Inter Variable, Helvetica, Arial, sans-serif' }),
-    ),
+  const longestLabelSize = useMemo(
+    () =>
+      Math.max(
+        ...dataTypes.map((d) =>
+          getStringWidth(d, { fontSize: '11px', fontFamily: 'Inter Variable, Helvetica, Arial, sans-serif' }),
+        ),
+      ),
+    [dataTypes],
   );
 
   const updatedMargin = { ...margin, left: longestLabelSize + 10 };
