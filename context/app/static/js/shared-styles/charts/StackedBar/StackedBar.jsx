@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function StackedBar({ direction, bar, barStack, hoveredBarIndices, handleMouseEnter, handleMouseLeave }) {
   const strokeWidth = 1.5;
@@ -49,5 +50,13 @@ function StackedBar({ direction, bar, barStack, hoveredBarIndices, handleMouseEn
     />
   );
 }
+
+StackedBar.propTypes = {
+  direction: PropTypes.oneOf(['vertical', 'horizontal']),
+};
+
+StackedBar.defaultProps = {
+  direction: 'vertical',
+};
 
 export default StackedBar;
