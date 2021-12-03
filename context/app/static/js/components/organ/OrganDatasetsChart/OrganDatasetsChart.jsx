@@ -44,32 +44,25 @@ function OrganDatasetsChart({ search }) {
 
   const margin = { top: 40, right: 10, bottom: 100, left: 300 };
 
+  const props = {
+    visxData: formattedOrganTypeData,
+    docCountScale,
+    colorScale,
+    dataTypeScale,
+    keys: search,
+    colorFacetName: 'origin_sample.mapped_organ',
+    margin,
+    dataTypes,
+  };
+
   return (
     <ChartArea>
       {search.length > 1 ? (
         <ChartWrapper margin={margin} colorScale={colorScale}>
-          <AssayTypeBarChart
-            visxData={formattedOrganTypeData}
-            docCountScale={docCountScale}
-            colorScale={colorScale}
-            dataTypeScale={dataTypeScale}
-            keys={search}
-            colorFacetName="origin_sample.mapped_organ"
-            margin={margin}
-            dataTypes={dataTypes}
-          />
+          <AssayTypeBarChart {...props} />
         </ChartWrapper>
       ) : (
-        <AssayTypeBarChart
-          visxData={formattedOrganTypeData}
-          docCountScale={docCountScale}
-          colorScale={colorScale}
-          dataTypeScale={dataTypeScale}
-          keys={search}
-          colorFacetName="origin_sample.mapped_organ"
-          margin={margin}
-          dataTypes={dataTypes}
-        />
+        <AssayTypeBarChart {...props} />
       )}
     </ChartArea>
   );
