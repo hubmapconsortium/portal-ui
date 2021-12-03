@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
@@ -22,6 +23,7 @@ function AssayTypeBarChart({
   margin,
   colorFacetName,
   dataTypes,
+  showTooltipAndHover,
 }) {
   const longestLabelSize = useMemo(
     () =>
@@ -51,6 +53,8 @@ function AssayTypeBarChart({
     handleMouseEnter,
     handleMouseLeave,
   } = useChartTooltip();
+
+  const hoverProps = showTooltipAndHover ? { hoveredBarIndices, handleMouseEnter, handleMouseLeave } : {};
 
   return (
     <>
@@ -86,14 +90,7 @@ function AssayTypeBarChart({
                         target="_parent"
                       >
                         {/* Make target explicit because html base target doesn't apply inside SVG. */}
-                        <StackedBar
-                          direction="horizontal"
-                          bar={bar}
-                          barStack={barStack}
-                          hoveredBarIndices={hoveredBarIndices}
-                          handleMouseEnter={handleMouseEnter}
-                          handleMouseLeave={handleMouseLeave}
-                        />
+                        <StackedBar direction="horizontal" bar={bar} barStack={barStack} {...hoverProps} />
                       </a>
                     ),
                 ),
@@ -126,7 +123,7 @@ function AssayTypeBarChart({
           />
         </Group>
       </svg>
-      {tooltipOpen && (
+      {showTooltipAndHover && tooltipOpen && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
           <Typography variant="subtitle2" color="secondary">
             {tooltipData.bar.data.mapped_data_type}
@@ -140,5 +137,13 @@ function AssayTypeBarChart({
     </>
   );
 }
+
+AssayTypeBarChart.propTypes = {
+  showTooltipAndHover: PropTypes.bool,
+};
+
+AssayTypeBarChart.defaultProps = {
+  showTooltipAndHover: true,
+};
 
 export default withParentSize(AssayTypeBarChart);

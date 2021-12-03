@@ -44,7 +44,7 @@ function OrganDatasetsChart({ search }) {
 
   const margin = { top: 40, right: 10, bottom: 100, left: 300 };
 
-  const props = {
+  const sharedProps = {
     visxData: formattedOrganTypeData,
     docCountScale,
     colorScale,
@@ -59,10 +59,10 @@ function OrganDatasetsChart({ search }) {
     <ChartArea>
       {search.length > 1 ? (
         <ChartWrapper margin={margin} colorScale={colorScale}>
-          <AssayTypeBarChart {...props} />
+          <AssayTypeBarChart {...sharedProps} />
         </ChartWrapper>
       ) : (
-        <AssayTypeBarChart {...props} />
+        <AssayTypeBarChart {...sharedProps} showTooltipAndHover={false} />
       )}
     </ChartArea>
   );
