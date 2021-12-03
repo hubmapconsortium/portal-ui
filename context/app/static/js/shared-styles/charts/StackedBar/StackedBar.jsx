@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { StyledRect } from './style';
+
 function StackedBar({ direction, bar, barStack, hoveredBarIndices, handleMouseEnter, handleMouseLeave }) {
-  const strokeWidth = 1.5;
   const maxBarThickness = 65;
 
   // props are inversed for vertical and horizontal charts
@@ -24,8 +25,8 @@ function StackedBar({ direction, bar, barStack, hoveredBarIndices, handleMouseEn
   const { length, thickness, discreteAxis, categoricalAxis } = propMap[direction];
 
   const dimensionsAndPlacementProps = {
-    [length]: bar[length] - strokeWidth,
-    [discreteAxis]: bar[discreteAxis] + strokeWidth / 2,
+    [length]: bar[length],
+    [discreteAxis]: bar[discreteAxis],
     [thickness]: Math.min(bar[thickness], maxBarThickness),
     [categoricalAxis]:
       bar[thickness] > maxBarThickness
@@ -34,16 +35,13 @@ function StackedBar({ direction, bar, barStack, hoveredBarIndices, handleMouseEn
   };
 
   return (
-    <rect
+    <StyledRect
       fill={bar.color}
-      stroke={
+      $isHovered={
         hoveredBarIndices &&
         bar.index === hoveredBarIndices.barIndex &&
         barStack.index === hoveredBarIndices.barStackIndex
-          ? 'black'
-          : bar.color
       }
-      strokeWidth={strokeWidth}
       onMouseEnter={(event) => handleMouseEnter(event, bar, barStack.index)}
       onMouseLeave={handleMouseLeave}
       {...dimensionsAndPlacementProps}
