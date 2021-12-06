@@ -24,7 +24,7 @@ const organTypesQuery = {
 const assayOrganTypesQuery = getAssayTypesCompositeAggsQuery('origin_sample.mapped_organ.keyword', 'organ_type');
 const assayDonorSexQuery = getAssayTypesCompositeAggsQuery('donor.mapped_metadata.sex.keyword', 'donor_sex');
 
-const filterDataTypesWithBracket = (bucket) => !bucket.key.mapped_data_type.includes('[');
+const filterOutDataTypesWithBracket = (bucket) => !bucket.key.mapped_data_type.includes('[');
 
 function HuBMAPDatasetsChart() {
   const colors = useChartPalette();
@@ -39,13 +39,13 @@ function HuBMAPDatasetsChart() {
   const { formattedData: formattedOrganTypeData, maxSumDocCount: maxAssayOrganTypeDocCount } = useAssayTypeBarChartData(
     assayOrganTypeData,
     'organ_type',
-    filterDataTypesWithBracket,
+    filterOutDataTypesWithBracket,
   );
 
   const { formattedData: formattedDonorSexData, maxSumDocCount: maxAssayDonorSexDocCount } = useAssayTypeBarChartData(
     assayDonorSexData,
     'donor_sex',
-    filterDataTypesWithBracket,
+    filterOutDataTypesWithBracket,
   );
 
   const visxData = [formattedOrganTypeData, formattedDonorSexData];
