@@ -432,7 +432,8 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
 class MultiImageSPRMAnndataViewConfigError(Exception):
     """Raised when one of the individual SPRM view configs errors out"""
     pass
-    
+
+
 class MultiImageSPRMAnndataViewConfBuilder(ViewConfBuilder):
     """Wrapper class for generating multiple "second generation" AnnData-backed SPRM
     Vitessce configurations via SPRMAnnDataViewConfBuilder,

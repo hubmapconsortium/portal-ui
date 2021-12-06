@@ -204,8 +204,11 @@ class StitchedCytokitSPRMViewConfBuilder(MultiImageSPRMAnndataViewConfBuilder):
         self._image_id_regex = STITCHED_REGEX
         self._image_pyramid_subdir_regex = STITCHED_IMAGE_DIR
         self._expression_id = 'stitched_expressions'
-        self._mask_pyramid_subdir_regex = STITCHED_IMAGE_DIR.replace('expressions', 'mask')
+        self._mask_pyramid_subdir_regex = STITCHED_IMAGE_DIR.replace(
+            'expressions', 'mask'
+        )
         self._mask_id = 'stitched_mask'
+
 
 class CellDiveViewConfBuilder(MultiImageSPRMAnndataViewConfBuilder):
     """Wrapper class for generating multiple "second generation" AnnData-backed SPRM
@@ -219,7 +222,9 @@ class CellDiveViewConfBuilder(MultiImageSPRMAnndataViewConfBuilder):
         self._expression_id = 'expr'
         self._mask_id = 'mask'
         self._image_pyramid_subdir_regex = CELL_DIVE_PYRAMID_DIR
-        self._mask_pyramid_subdir_regex = CELL_DIVE_PYRAMID_DIR.replace(self._expression_id, self._mask_id)
+        self._mask_pyramid_subdir_regex = CELL_DIVE_PYRAMID_DIR.replace(
+            self._expression_id, self._mask_id
+        )
 
 
 class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):

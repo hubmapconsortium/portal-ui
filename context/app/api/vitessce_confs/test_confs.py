@@ -4,7 +4,11 @@ import re
 
 import pytest
 
-from .base_confs import ImagePyramidViewConfBuilder, SPRMJSONViewConfBuilder, SPRMAnnDataViewConfBuilder
+from .base_confs import (
+    ImagePyramidViewConfBuilder,
+    SPRMJSONViewConfBuilder,
+    SPRMAnnDataViewConfBuilder
+)
 from .assay_confs import (
     SeqFISHViewConfBuilder,
     TiledSPRMViewConfBuilder,
