@@ -3,7 +3,7 @@ import React from 'react';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import useSearchData from 'js/hooks/useSearchData';
 import { useSelectedDropdownIndex } from 'js/shared-styles/dropdowns/DropdownListbox';
-import AssayTypeBarChart from 'js/shared-styles/charts/AssayTypeBarChart/AssayTypeBarChart';
+import AssayTypeBarChart from 'js/shared-styles/charts/AssayTypeBarChart/';
 import { useChartPalette, useAssayTypeBarChartData } from 'js/shared-styles/charts/AssayTypeBarChart/hooks';
 import {
   getAssayTypesCompositeAggsQuery,
