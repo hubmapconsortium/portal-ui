@@ -23,7 +23,7 @@ const xScale = scaleBand({
   padding: 0.2,
 });
 
-export const colorScale = scaleOrdinal({
+const colorScale = scaleOrdinal({
   domain: ['matched', 'unmatched'],
   range: ['#DA348A', '#6C8938'],
 });

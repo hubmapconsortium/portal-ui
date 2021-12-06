@@ -30,7 +30,6 @@ function VerticalStackedBarChart({
   xScale.rangeRound([0, xWidth]);
 
   const {
-    hoveredBarIndices,
     tooltipData,
     tooltipLeft,
     tooltipTop,
@@ -63,10 +62,10 @@ function VerticalStackedBarChart({
                       <StackedBar
                         direction="vertical"
                         bar={bar}
-                        barStack={barStack}
-                        hoveredBarIndices={hoveredBarIndices}
-                        handleMouseEnter={handleMouseEnter}
-                        handleMouseLeave={handleMouseLeave}
+                        hoverProps={{
+                          onMouseEnter: handleMouseEnter(bar, barStack.index),
+                          onMouseLeave: handleMouseLeave,
+                        }}
                       />
                     ),
                 ),
