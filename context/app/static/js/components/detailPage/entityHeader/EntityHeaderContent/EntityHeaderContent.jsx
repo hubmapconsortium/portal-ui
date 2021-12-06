@@ -5,7 +5,6 @@ import { useTransition, animated } from 'react-spring';
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
 import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer, RightDiv } from './style';
-import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 
 const iconMap = {
@@ -28,10 +27,10 @@ function EntityHeaderContent({ hubmap_id, entity_type, data, shouldDisplayHeader
       item && (
         <AnimatedFlexContainer style={props} key={key} maxWidth={vizIsFullscreen ? false : 'lg'}>
           {iconMap[entity_type]}
-          <EntityHeaderItem text={hubmap_id} />
-          {Object.entries(data).map(([k, v]) => (
-            <EntityHeaderItem text={v.value || `undefined ${v.label}`} key={k} />
-          ))}
+          {hubmap_id}
+          {Object.values(data)
+            .map((v) => v.value || `undefined ${v.label}`)
+            .join(' | ')}
           {vizIsFullscreen && (
             <RightDiv>
               <VisualizationShareButtonWrapper />
