@@ -1,10 +1,8 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import VerticalDivider from 'js/shared-styles/VerticalDivider';
 import { Citation } from 'js/components/detailPage/Citation/Citation.stories';
 import Summary from './Summary';
-import SummaryItem from '../SummaryItem';
 
 export default {
   title: 'EntityDetail/Summary/Summary',
@@ -45,11 +43,7 @@ const sampleSharedArgs = {
 
 const SampleTemplate = (args) => (
   <Summary {...args}>
-    <SummaryItem>Fake Organ Type</SummaryItem>
-    <VerticalDivider />
-    <Typography variant="h6" component="p">
-      Fake Specimen Type
-    </Typography>
+    <Typography variant="h6">Fake Organ Type | Fake Specimen Type</Typography>
   </Summary>
 );
 
@@ -66,11 +60,7 @@ SampleWithDescription.args = {
 
 const DatasetTemplate = (args) => (
   <Summary {...args}>
-    <SummaryItem>Fake Data Type</SummaryItem>
-    <VerticalDivider />
-    <Typography variant="h6" component="p">
-      Fake Organ Type
-    </Typography>
+    <Typography variant="h6">Fake Data Type | Fake Organ Type</Typography>
   </Summary>
 );
 

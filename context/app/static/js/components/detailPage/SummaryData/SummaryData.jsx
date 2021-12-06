@@ -6,13 +6,11 @@ import { useInView } from 'react-intersection-observer';
 import 'intersection-observer';
 
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import VerticalDivider from 'js/shared-styles/VerticalDivider';
 import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { FileIcon } from 'js/shared-styles/icons';
 import VersionSelect from 'js/components/detailPage/VersionSelect';
 import { FlexEnd, JsonButton, StyledTypography } from './style';
-import SummaryItem from '../SummaryItem';
 import StatusIcon from '../StatusIcon';
 
 const entityStoreSelector = (state) => state.setSummaryComponentObserver;
@@ -58,12 +56,12 @@ function SummaryData(props) {
         buttons={
           <FlexEnd>
             {['Dataset', 'Support'].includes(entity_type) && (
-              <>
-                <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
-                <VerticalDivider />
-                <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
-                <VerticalDivider />
-              </>
+              <Typography variant="h6" nowrap>
+                <StatusIcon status={status} />
+                {status}
+                {' | '}
+                {mapped_data_access_level} Access |
+              </Typography>
             )}
             <FlexEnd>
               <SecondaryBackgroundTooltip title="View JSON">

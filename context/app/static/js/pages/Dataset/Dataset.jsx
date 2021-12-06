@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
@@ -9,7 +10,6 @@ import Protocol from 'js/components/detailPage/Protocol';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import SummaryItem from 'js/components/detailPage/SummaryItem';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
@@ -21,25 +21,16 @@ import { getAllCollectionsQuery } from 'js/helpers/queries';
 // TODO use this context for components other than FileBrowser
 import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
-import VerticalDivider from 'js/shared-styles/VerticalDivider';
 import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
 
 function SummaryDataChildren(props) {
   const { mapped_data_types, origin_sample } = props;
   return (
-    <>
-      <SummaryItem>
-        <LightBlueLink variant="h6" href="/docs/assays">
-          {mapped_data_types}
-        </LightBlueLink>
-      </SummaryItem>
-      <VerticalDivider />
-      <SummaryItem>
-        <LightBlueLink variant="h6" href="/organ">
-          {origin_sample.mapped_organ}
-        </LightBlueLink>
-      </SummaryItem>
-    </>
+    <Typography variant="h6">
+      <LightBlueLink href="/docs/assays">{mapped_data_types}</LightBlueLink>
+      {' | '}
+      <LightBlueLink href="/organ">{origin_sample.mapped_organ}</LightBlueLink>
+    </Typography>
   );
 }
 

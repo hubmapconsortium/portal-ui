@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
+import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
-import SummaryItem from 'js/components/detailPage/SummaryItem';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import SampleTissue from 'js/components/detailPage/SampleTissue';
@@ -15,7 +15,6 @@ import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
 import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/DerivedDatasetsSection';
-import VerticalDivider from 'js/shared-styles/VerticalDivider';
 import { combineMetadata } from 'js/pages/utils/entity-utils';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
@@ -78,13 +77,11 @@ function SampleDetail(props) {
           description={description}
           group_name={group_name}
         >
-          <SummaryItem>
-            <LightBlueLink variant="h6" href="/organ">
-              {mapped_organ}
-            </LightBlueLink>
-          </SummaryItem>
-          <VerticalDivider />
-          <SummaryItem>{mapped_specimen_type}</SummaryItem>
+          <Typography variant="h6">
+            <LightBlueLink href="/organ">{mapped_organ}</LightBlueLink>
+            {' | '}
+            {mapped_specimen_type}
+          </Typography>
         </Summary>
         {shouldDisplaySection.derived && (
           <DerivedDatasetsSection
