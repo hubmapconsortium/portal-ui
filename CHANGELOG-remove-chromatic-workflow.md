@@ -1,0 +1,1 @@
+- Remove chromatic Github Actions workflow.
