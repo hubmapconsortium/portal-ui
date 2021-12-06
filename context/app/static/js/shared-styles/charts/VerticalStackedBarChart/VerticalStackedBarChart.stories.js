@@ -6,6 +6,7 @@ import VerticalStackedBarChart from './VerticalStackedBarChart';
 export default {
   title: 'Charts/VerticalStackedBarChart',
   component: VerticalStackedBarChart,
+  excludeStories: ['colorScale'],
 };
 
 const Template = (args) => (
@@ -23,7 +24,7 @@ const xScale = scaleBand({
   padding: 0.2,
 });
 
-const colorScale = scaleOrdinal({
+export const colorScale = scaleOrdinal({
   domain: ['matched', 'unmatched'],
   range: ['#DA348A', '#6C8938'],
 });
