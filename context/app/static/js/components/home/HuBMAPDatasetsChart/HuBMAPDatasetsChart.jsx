@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
-import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
-import { LegendOrdinal } from '@visx/legend';
+import React from 'react';
 
+import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import useSearchData from 'js/hooks/useSearchData';
-import { useChartPalette, useAssayTypeBarChartData } from './hooks';
-import { getAssayTypesCompositeAggsQuery } from './utils';
-import AssayTypeBarChart from '../AssayTypeBarChart/AssayTypeBarChart';
-import { Flex, ChartWrapper, LegendWrapper } from './style';
-import AssayTypeBarChartDropdown from '../AssayTypeBarChartDropdown';
+import { useSelectedDropdownIndex } from 'js/shared-styles/dropdowns/DropdownListbox';
+import AssayTypeBarChart from 'js/shared-styles/charts/AssayTypeBarChart/';
+import { useChartPalette, useAssayTypeBarChartData } from 'js/shared-styles/charts/AssayTypeBarChart/hooks';
+import {
+  getAssayTypesCompositeAggsQuery,
+  getColorScale,
+  getDataTypeScale,
+  getDocCountScale,
+} from 'js/shared-styles/charts/AssayTypeBarChart/utils';
+import { ChartArea } from 'js/shared-styles/charts/AssayTypeBarChart/style';
+import HuBMAPDatasetsChartDropdown from '../HuBMAPDatasetsChartDropdown';
 
 const organTypesQuery = {
   size: 0,
@@ -19,14 +24,11 @@ const organTypesQuery = {
 const assayOrganTypesQuery = getAssayTypesCompositeAggsQuery('origin_sample.mapped_organ.keyword', 'organ_type');
 const assayDonorSexQuery = getAssayTypesCompositeAggsQuery('donor.mapped_metadata.sex.keyword', 'donor_sex');
 
-function AssayTypeBarChartContainer() {
-  const [selectedColorDataIndex, setSelectedColorDataIndex] = useState(0);
+const filterOutDataTypesWithBracket = (bucket) => !bucket.key.mapped_data_type.includes('[');
 
-  function selectDropdownItem(itemAndIndex) {
-    const { i } = itemAndIndex;
-    setSelectedColorDataIndex(i);
-  }
+function HuBMAPDatasetsChart() {
   const colors = useChartPalette();
+  const [selectedColorDataIndex, setSelectedColorDataIndex] = useSelectedDropdownIndex(0);
 
   const { searchData: organTypesData } = useSearchData(organTypesQuery);
   const organTypes = organTypesData?.aggregations?.organ_types.buckets.map((b) => b.key);
@@ -37,20 +39,19 @@ function AssayTypeBarChartContainer() {
   const { formattedData: formattedOrganTypeData, maxSumDocCount: maxAssayOrganTypeDocCount } = useAssayTypeBarChartData(
     assayOrganTypeData,
     'organ_type',
+    filterOutDataTypesWithBracket,
   );
 
   const { formattedData: formattedDonorSexData, maxSumDocCount: maxAssayDonorSexDocCount } = useAssayTypeBarChartData(
     assayDonorSexData,
     'donor_sex',
+    filterOutDataTypesWithBracket,
   );
 
   const visxData = [formattedOrganTypeData, formattedDonorSexData];
   const maxSumDocCount = [maxAssayOrganTypeDocCount, maxAssayDonorSexDocCount];
 
-  const docCountScale = scaleLinear({
-    domain: [0, maxSumDocCount[selectedColorDataIndex]],
-    nice: true,
-  });
+  const docCountScale = getDocCountScale(maxSumDocCount[selectedColorDataIndex]);
 
   const colorOptions = [
     {
@@ -65,47 +66,40 @@ function AssayTypeBarChartContainer() {
     },
   ];
 
-  const colorScale = scaleOrdinal({
-    domain: colorOptions[selectedColorDataIndex].values,
-    range: colors,
-  });
+  const colorScale = getColorScale(colorOptions[selectedColorDataIndex].values, colors);
 
-  const dataTypeScale = scaleBand({
-    domain: visxData[selectedColorDataIndex].map((b) => b.mapped_data_type),
-    padding: 0.2,
-  });
+  const dataTypes = visxData[selectedColorDataIndex].map((b) => b.mapped_data_type);
+
+  const dataTypeScale = getDataTypeScale(dataTypes);
 
   const margin = { top: 40, right: 50, bottom: 100, left: 300 };
 
   return (
-    <Flex>
-      <ChartWrapper>
+    <ChartArea>
+      <ChartWrapper
+        margin={margin}
+        colorScale={colorScale}
+        dropdown={
+          <HuBMAPDatasetsChartDropdown
+            colorDataOptions={colorOptions.map((color) => color.dropdownLabel)}
+            selectedColorDataIndex={selectedColorDataIndex}
+            setSelectedColorDataIndex={setSelectedColorDataIndex}
+          />
+        }
+      >
         <AssayTypeBarChart
           visxData={visxData[selectedColorDataIndex]}
           docCountScale={docCountScale}
           colorScale={colorScale}
           dataTypeScale={dataTypeScale}
           keys={colorOptions[selectedColorDataIndex].values}
-          selectedColorFacetName={colorOptions[selectedColorDataIndex].facetName}
+          colorFacetName={colorOptions[selectedColorDataIndex].facetName}
           margin={margin}
+          dataTypes={dataTypes}
         />
       </ChartWrapper>
-      <LegendWrapper marginTop={margin.top}>
-        <AssayTypeBarChartDropdown
-          colorDataOptions={colorOptions.map((color) => color.dropdownLabel)}
-          selectedColorDataIndex={selectedColorDataIndex}
-          setSelectedColorDataIndex={selectDropdownItem}
-        />
-        <LegendOrdinal
-          scale={colorScale}
-          itemMargin={1.5}
-          shapeStyle={() => ({
-            borderRadius: '3px',
-          })}
-        />
-      </LegendWrapper>
-    </Flex>
+    </ChartArea>
   );
 }
 
-export default AssayTypeBarChartContainer;
+export default HuBMAPDatasetsChart;

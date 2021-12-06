@@ -1,15 +1,13 @@
 import produce from 'immer';
 /* eslint-disable no-param-reassign */
+import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 
-function formatAssayData(assayData, colorKey) {
-  const formattedData = assayData.aggregations.mapped_data_types.buckets.reduce((acc, d) => {
+function formatAssayData(assayDataBuckets, colorKey) {
+  const formattedData = assayDataBuckets.reduce((acc, d) => {
     const snakeCaseDataType = d.key.mapped_data_type.replace(/ /g, '_');
     // TODO: Get datasets to display from index, instead of depending on patterns in names.
     // The first step is having a hierarchy for assay types:
     // https://github.com/hubmapconsortium/portal-ui/issues/1688
-    if (snakeCaseDataType.includes('[')) {
-      return acc;
-    }
     return produce(acc, (draft) => {
       if (!(snakeCaseDataType in draft)) {
         draft[snakeCaseDataType] = {};
@@ -74,10 +72,33 @@ function getAssayTypesCompositeAggsQuery(esAggsKey, aggsKeyToReturn) {
   };
 }
 
+function getDocCountScale(maxDocCount) {
+  return scaleLinear({
+    domain: [0, maxDocCount * 1.05],
+    nice: true,
+  });
+}
+
+function getColorScale(colorsValues, colors) {
+  return scaleOrdinal({
+    domain: colorsValues,
+    range: colors,
+  });
+}
+
+function getDataTypeScale(dataTypes) {
+  return scaleBand({
+    domain: dataTypes,
+    padding: 0.2,
+  });
+}
 export {
   formatAssayData,
   addSumProperty,
   sortBySumAscending,
   getAssayTypeBarChartData,
   getAssayTypesCompositeAggsQuery,
+  getDocCountScale,
+  getColorScale,
+  getDataTypeScale,
 };

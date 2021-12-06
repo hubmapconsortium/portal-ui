@@ -15,6 +15,7 @@
     "@visx/responsive": "^1.7.0",
     "@visx/scale": "^1.7.0",
     "@visx/shape": "^1.7.0",
+    "@visx/text": "^2.3.0",
     "@visx/tooltip": "^1.7.2",
     "ajv": "^6.12.3",
     "bowser": "^2.11.0",

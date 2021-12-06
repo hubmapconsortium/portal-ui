@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
-import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { GridColumns } from '@visx/grid';
-import { localPoint } from '@visx/event';
 import Typography from '@material-ui/core/Typography';
+import { getStringWidth } from '@visx/text';
+import { useTheme } from '@material-ui/core/styles';
+
+import { useChartTooltip } from 'js/shared-styles/charts/hooks';
+import { getChartDimensions } from 'js/shared-styles/charts/utils';
+import StackedBar from 'js/shared-styles/charts/StackedBar';
 
 function AssayTypeBarChart({
   parentWidth,
@@ -17,53 +22,53 @@ function AssayTypeBarChart({
   colorScale,
   keys,
   margin,
-  selectedColorFacetName,
+  colorFacetName,
+  dataTypes,
+  showTooltipAndHover,
 }) {
-  const [hoveredBarIndices, setHoveredBarIndices] = useState();
+  const theme = useTheme();
+  const tickLabelSize = 11;
 
-  const xHeight = parentWidth - margin.left - margin.right;
-  const yHeight = parentHeight - margin.top - margin.bottom;
+  const longestLabelSize = useMemo(
+    () =>
+      Math.max(
+        ...dataTypes.map((d) =>
+          getStringWidth(d, { fontSize: `${tickLabelSize}px`, fontFamily: theme.typography.fontFamily }),
+        ),
+      ),
+    [dataTypes, theme.typography.fontFamily],
+  );
 
-  docCountScale.rangeRound([0, xHeight]);
+  const updatedMargin = { ...margin, left: longestLabelSize + 10 };
+
+  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
+
+  docCountScale.rangeRound([0, xWidth]);
   dataTypeScale.rangeRound([yHeight, 0]);
 
-  const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip();
-
-  const { containerRef, TooltipInPortal } = useTooltipInPortal({
-    detectBounds: true,
-    scroll: true,
-    debounce: 100,
-  });
-
-  function handleMouseEnter(event, bar, barStackIndex) {
-    const coords = localPoint(event.target.ownerSVGElement, event);
-    showTooltip({
-      tooltipLeft: coords.x,
-      tooltipTop: coords.y,
-      tooltipData: bar,
-    });
-    setHoveredBarIndices({ barIndex: bar.index, barStackIndex });
-  }
-
-  function handleMouseLeave() {
-    hideTooltip();
-    setHoveredBarIndices(undefined);
-  }
-
-  const strokeWidth = 1.5;
+  const {
+    tooltipData,
+    tooltipLeft,
+    tooltipTop,
+    tooltipOpen,
+    containerRef,
+    TooltipInPortal,
+    handleMouseEnter,
+    handleMouseLeave,
+  } = useChartTooltip();
 
   return (
-    <div>
+    <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
         <GridColumns
-          top={margin.top + 1}
-          left={margin.left}
+          top={updatedMargin.top}
+          left={updatedMargin.left}
           scale={docCountScale}
           height={yHeight}
           stroke="black"
           opacity={0.38}
         />
-        <Group top={margin.top} left={margin.left}>
+        <Group top={updatedMargin.top} left={updatedMargin.left}>
           <BarStackHorizontal
             data={visxData}
             keys={keys}
@@ -81,27 +86,20 @@ function AssayTypeBarChart({
                       <a
                         href={`/search?entity_type[0]=Dataset&mapped_data_types[0]=${encodeURIComponent(
                           bar.bar.data.mapped_data_type,
-                        )}&${selectedColorFacetName}[0]=${encodeURIComponent(bar.key)}`}
+                        )}&${colorFacetName}[0]=${encodeURIComponent(bar.key)}`}
                         key={`barstack-horizontal-${barStack.index}-${bar.index}`}
                         target="_parent"
                       >
                         {/* Make target explicit because html base target doesn't apply inside SVG. */}
-                        <rect
-                          x={bar.x}
-                          y={bar.y}
-                          width={bar.width - strokeWidth}
-                          height={bar.height}
-                          fill={bar.color}
-                          stroke={
-                            hoveredBarIndices &&
-                            bar.index === hoveredBarIndices.barIndex &&
-                            barStack.index === hoveredBarIndices.barStackIndex
-                              ? 'black'
-                              : bar.color
+                        <StackedBar
+                          direction="horizontal"
+                          bar={bar}
+                          barStack={barStack}
+                          hoverProps={
+                            showTooltipAndHover
+                              ? { onMouseEnter: handleMouseEnter(bar, barStack.index), onMouseLeave: handleMouseLeave }
+                              : {}
                           }
-                          strokeWidth={strokeWidth}
-                          onMouseEnter={(event) => handleMouseEnter(event, bar, barStack.index)}
-                          onMouseLeave={handleMouseLeave}
                         />
                       </a>
                     ),
@@ -116,7 +114,7 @@ function AssayTypeBarChart({
             numTicks={Object.keys(visxData).length}
             tickLabelProps={() => ({
               fill: 'black',
-              fontSize: 11,
+              fontSize: tickLabelSize,
               textAnchor: 'end',
               dy: '0.33em',
             })}
@@ -129,13 +127,13 @@ function AssayTypeBarChart({
             tickStroke="black"
             tickLabelProps={() => ({
               fill: 'black',
-              fontSize: 11,
+              fontSize: tickLabelSize,
               textAnchor: 'middle',
             })}
           />
         </Group>
       </svg>
-      {tooltipOpen && (
+      {showTooltipAndHover && tooltipOpen && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
           <Typography variant="subtitle2" color="secondary">
             {tooltipData.bar.data.mapped_data_type}
@@ -146,8 +144,16 @@ function AssayTypeBarChart({
           </Typography>
         </TooltipInPortal>
       )}
-    </div>
+    </>
   );
 }
+
+AssayTypeBarChart.propTypes = {
+  showTooltipAndHover: PropTypes.bool,
+};
+
+AssayTypeBarChart.defaultProps = {
+  showTooltipAndHover: true,
+};
 
 export default withParentSize(AssayTypeBarChart);
