@@ -1,1 +1,0 @@
-- Add a CI test to check that each capitalized directory contains an index file.

@@ -1,1 +1,0 @@
-- Fix warning about invalid element nesting on markdown pages: `publication/*` and `docs/*`. 

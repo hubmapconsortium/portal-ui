@@ -1,1 +1,0 @@
-- Add details logging on Cells API wrapper.

@@ -1,3 +1,16 @@
+## v0.33.0 - 2021-12-06
+
+- Add a CI test to check that each capitalized directory contains an index file.
+- Configure lineup with column types.
+- Add details logging on Cells API wrapper.
+- Fix warning about invalid element nesting on markdown pages: `publication/*` and `docs/*`. 
+- Refactor assay types bar chart.
+- Add assay types chart to organ pages.
+- Replace outline with filter hover on stacked bar charts.
+- Clean up formatting of publications page.
+- Remove chromatic Github Actions workflow.
+
+
 ## v0.32.1 - 2021-11-29
 
 - On the organs page, add Dataset and Sample icons in the respective buttons.

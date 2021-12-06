@@ -1,1 +1,0 @@
-- Configure lineup with column types.
