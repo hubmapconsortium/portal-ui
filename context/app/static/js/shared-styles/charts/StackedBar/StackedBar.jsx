@@ -28,12 +28,8 @@ function StackedBar({ direction, bar, hoverProps }) {
     [length]: bar[length],
     [discreteAxis]: bar[discreteAxis],
     [thickness]: Math.min(bar[thickness], maxBarThickness),
-    [categoricalAxis]:
-      bar[thickness] > maxBarThickness
-        ? bar[categoricalAxis] + (bar[thickness] - maxBarThickness) / 2
-        : bar[categoricalAxis],
+    [categoricalAxis]: bar[categoricalAxis] + Math.max(0, bar[thickness] - maxBarThickness) / 2,
   };
-
   return (
     <StyledRect
       fill={bar.color}
