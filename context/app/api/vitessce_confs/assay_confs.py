@@ -21,7 +21,7 @@ from .base_confs import (
     AbstractScatterplotViewConfBuilder,
     ImagePyramidViewConfBuilder,
     SPRMJSONViewConfBuilder,
-    SPRMAnnDataViewConfBuilder,
+    MultiImageSPRMAnndataViewConfBuilder,
     ViewConfBuilder,
     NullViewConfBuilder,
     ConfCells
@@ -31,6 +31,8 @@ from .assays import (
     MALDI_IMS
 )
 from .paths import (
+    CELL_DIVE_PYRAMID_DIR,
+    CELL_DIVE_REGEX,
     SCRNA_SEQ_DIR,
     SCATAC_SEQ_DIR,
     IMAGE_PYRAMID_DIR,
@@ -105,7 +107,7 @@ class SeqFISHViewConfBuilder(AbstractImagingViewConfBuilder):
 
 
 class CytokitSPRMViewConfigError(Exception):
-    """Raised when one of the individual SPRM view configs errors out"""
+    """Raised when one of the individual SPRM view configs errors out for Cytokit"""
     pass
 
 
@@ -190,41 +192,34 @@ class ATACSeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
         ]
 
 
-class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
+class StitchedCytokitSPRMViewConfBuilder(MultiImageSPRMAnndataViewConfBuilder):
     """Wrapper class for generating multiple "second generation" stitched AnnData-backed SPRM
     Vitessce configurations via SPRMAnnDataViewConfBuilder,
     used for datasets with multiple regions.
     These are from post-August 2020 Cytokit datasets (stitched).
     """
 
-    def get_conf_cells(self):
-        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_regions = get_matches(file_paths_found, STITCHED_REGEX)
-        if len(found_regions) == 0:
-            raise FileNotFoundError(
-                f"Cytokit SPRM assay with uuid {self._uuid} has no matching regions; "
-                f"No file matches for '{STITCHED_REGEX}'."
-            )
-        confs = []
-        for region in sorted(found_regions):
-            vc = SPRMAnnDataViewConfBuilder(
-                entity=self._entity,
-                groups_token=self._groups_token,
-                is_mock=self._is_mock,
-                base_name=region,
-                imaging_path=STITCHED_IMAGE_DIR,
-                mask_path=STITCHED_IMAGE_DIR.replace('expressions', 'mask'),
-                image_name=f"{region}_stitched_expressions",
-                mask_name=f"{region}_stitched_mask"
-            )
-            conf = vc.get_conf_cells().conf
-            if conf == {}:
-                raise CytokitSPRMViewConfigError(
-                    f"Cytokit SPRM assay with uuid {self._uuid} has empty view\
-                        config for region '{region}'"
-                )
-            confs.append(conf)
-        return ConfCells(confs if len(confs) > 1 else confs[0], None)
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
+        self._image_id_regex = STITCHED_REGEX
+        self._image_pyramid_subdir_regex = STITCHED_IMAGE_DIR
+        self._expression_id = 'stitched_expressions'
+        self._mask_pyramid_subdir_regex = STITCHED_IMAGE_DIR.replace('expressions', 'mask')
+        self._mask_id = 'stitched_mask'
+
+class CellDiveViewConfBuilder(MultiImageSPRMAnndataViewConfBuilder):
+    """Wrapper class for generating multiple "second generation" AnnData-backed SPRM
+    Vitessce configurations via SPRMAnnDataViewConfBuilder,
+    used for Cell DIVE datasets with multiple regions.
+    """
+
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
+        self._image_id_regex = CELL_DIVE_REGEX
+        self._expression_id = 'expr'
+        self._mask_id = 'mask'
+        self._image_pyramid_subdir_regex = CELL_DIVE_PYRAMID_DIR
+        self._mask_pyramid_subdir_regex = CELL_DIVE_PYRAMID_DIR.replace(self._expression_id, self._mask_id)
 
 
 class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
@@ -362,6 +357,8 @@ def get_view_config_builder(entity):
     dag_names = [dag['name']
                  for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
     if "is_image" in hints:
+        if "celldive_deepcell" in data_types:
+            return CellDiveViewConfBuilder
         if "codex" in hints:
             if ('sprm-to-anndata.cwl' in dag_names):
                 return StitchedCytokitSPRMViewConfBuilder

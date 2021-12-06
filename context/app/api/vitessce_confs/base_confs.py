@@ -237,7 +237,7 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
     """
 
     def _get_full_image_path(self):
-        return f"{self._imaging_path_regex}/{self._image_name}.ome.tiff?"
+        return f"{self._imaging_path_regex}/{self._image_name}.ome.tif(f?)"
 
     def _check_sprm_image(self, path_regex):
         """Check whether or not there is a matching SPRM image at a path.
@@ -353,7 +353,6 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
 
     def __init__(self, entity, groups_token, is_mock=False, **kwargs):
         super().__init__(entity, groups_token, is_mock)
-        self._base_name = kwargs["base_name"]
         self._mask_name = kwargs["mask_name"]
         self._image_name = kwargs["image_name"]
         self._imaging_path_regex = f"{self.image_pyramid_regex}/{kwargs['imaging_path']}"
@@ -428,3 +427,43 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
             variablesLabelOverride="antigen", transpose=True
         )
         return vc
+
+
+class MultiImageSPRMAnndataViewConfigError(Exception):
+    """Raised when one of the individual SPRM view configs errors out"""
+    pass
+    
+class MultiImageSPRMAnndataViewConfBuilder(ViewConfBuilder):
+    """Wrapper class for generating multiple "second generation" AnnData-backed SPRM
+    Vitessce configurations via SPRMAnnDataViewConfBuilder,
+    used for datasets with multiple regions.
+    """
+
+    def get_conf_cells(self):
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        found_regions = get_matches(file_paths_found, self._image_id_regex)
+        if len(found_regions) == 0:
+            raise FileNotFoundError(
+                f"SPRM analysis of assay with uuid {self._uuid} has no matching regions; "
+                f"No file matches for '{self._image_id_regex}'."
+            )
+        confs = []
+        for region in sorted(found_regions):
+            vc = SPRMAnnDataViewConfBuilder(
+                entity=self._entity,
+                groups_token=self._groups_token,
+                is_mock=self._is_mock,
+                base_name=region,
+                imaging_path=self._image_pyramid_subdir_regex,
+                mask_path=self._mask_pyramid_subdir_regex,
+                image_name=f"{region}_{self._expression_id}",
+                mask_name=f"{region}_{self._mask_id}"
+            )
+            conf = vc.get_conf_cells().conf
+            if conf == {}:
+                raise MultiImageSPRMAnndataViewConfigError(
+                    f"Cytokit SPRM assay with uuid {self._uuid} has empty view\
+                        config for region '{region}'"
+                )
+            confs.append(conf)
+        return ConfCells(confs if len(confs) > 1 else confs[0], None)

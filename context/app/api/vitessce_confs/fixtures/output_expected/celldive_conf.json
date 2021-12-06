@@ -1,0 +1,406 @@
+[
+  {
+    "version": "1.0.2",
+    "name": "reg001_S20030085_region_001_expr",
+    "description": "",
+    "datasets": [
+      {
+        "uid": "A",
+        "name": "SPRM",
+        "files": [
+          {
+            "type": "cells",
+            "fileType": "anndata-cells.zarr",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/reg001_S20030085_region_001_expr-anndata.zarr",
+            "options": {
+              "xy": "obsm/xy",
+              "mappings": { "t-SNE": { "key": "obsm/tsne", "dims": [0, 1] } },
+              "factors": [
+                "obs/Cell K-Means [tSNE_All_Features]",
+                "obs/Cell K-Means [Mean-All-SubRegions] Expression",
+                "obs/Cell K-Means [Mean] Expression",
+                "obs/Cell K-Means [Shape-Vectors]",
+                "obs/Cell K-Means [Texture]",
+                "obs/Cell K-Means [Total] Expression",
+                "obs/Cell K-Means [Covariance] Expression"
+              ]
+            },
+            "requestInit": {
+              "headers": {
+                "Authorization": "Bearer groups_token"
+              }
+            }
+          },
+          {
+            "type": "cell-sets",
+            "fileType": "anndata-cell-sets.zarr",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/reg001_S20030085_region_001_expr-anndata.zarr",
+            "options": [
+              {
+                "groupName": "Cell K-Means [tSNE_All_Features]",
+                "setName": "obs/Cell K-Means [tSNE_All_Features]"
+              },
+              {
+                "groupName": "Cell K-Means [Mean-All-SubRegions] Expression",
+                "setName": "obs/Cell K-Means [Mean-All-SubRegions] Expression"
+              },
+              {
+                "groupName": "Cell K-Means [Mean] Expression",
+                "setName": "obs/Cell K-Means [Mean] Expression"
+              },
+              {
+                "groupName": "Cell K-Means [Shape-Vectors]",
+                "setName": "obs/Cell K-Means [Shape-Vectors]"
+              },
+              {
+                "groupName": "Cell K-Means [Texture]",
+                "setName": "obs/Cell K-Means [Texture]"
+              },
+              {
+                "groupName": "Cell K-Means [Total] Expression",
+                "setName": "obs/Cell K-Means [Total] Expression"
+              },
+              {
+                "groupName": "Cell K-Means [Covariance] Expression",
+                "setName": "obs/Cell K-Means [Covariance] Expression"
+              }
+            ],
+            "requestInit": {
+              "headers": {
+                "Authorization": "Bearer groups_token"
+              }
+            }
+          },
+          {
+            "type": "expression-matrix",
+            "fileType": "anndata-expression-matrix.zarr",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/reg001_S20030085_region_001_expr-anndata.zarr",
+            "options": {
+              "matrix": "X"
+            },
+            "requestInit": {
+              "headers": {
+                "Authorization": "Bearer groups_token"
+              }
+            }
+          },
+          {
+            "type": "raster",
+            "fileType": "raster.json",
+            "options": {
+              "schemaVersion": "0.0.2",
+              "usePhysicalSizeScaling": false,
+              "renderLayers": ["reg001_S20030085_region_001_expr", "reg001_S20030085_region_001_mask"],
+              "images": [
+                {
+                  "name": "reg001_S20030085_region_001_expr",
+                  "type": "ome-tiff",
+                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/pipeline_output/expr/reg001_S20030085_region_001_expr.ome.tif?token=groups_token",
+                  "metadata": {
+                    "isBitmask": false,
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/pipeline_output/expr/reg001_S20030085_region_001_expr.offsets.json?token=groups_token"
+                  }
+                },
+                {
+                  "name": "reg001_S20030085_region_001_mask",
+                  "type": "ome-tiff",
+                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/pipeline_output/mask/reg001_S20030085_region_001_mask.ome.tif?token=groups_token",
+                  "metadata": {
+                    "isBitmask": true,
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/pipeline_output/mask/reg001_S20030085_region_001_mask.offsets.json?token=groups_token"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "coordinationSpace": {
+      "dataset": {
+        "A": "A"
+      },
+      "embeddingType": {
+        "A": "t-SNE"
+      }
+    },
+    "layout": [
+      {
+        "component": "spatial",
+        "coordinationScopes": {
+          "dataset": "A"
+        },
+        "x": 3,
+        "y": 0,
+        "w": 4,
+        "h": 8
+      },
+      {
+        "component": "scatterplot",
+        "coordinationScopes": {
+          "dataset": "A",
+          "embeddingType": "A"
+        },
+        "x": 7,
+        "y": 0,
+        "w": 3,
+        "h": 8
+      },
+      {
+        "component": "description",
+        "coordinationScopes": {
+          "dataset": "A"
+        },
+        "x": 0,
+        "y": 8,
+        "w": 3,
+        "h": 4
+      },
+      {
+        "component": "layerController",
+        "coordinationScopes": {
+          "dataset": "A"
+        },
+        "x": 0,
+        "y": 0,
+        "w": 3,
+        "h": 8
+      },
+      {
+        "component": "cellSets",
+        "coordinationScopes": {
+          "dataset": "A"
+        },
+        "x": 10,
+        "y": 5,
+        "w": 2,
+        "h": 7
+      },
+      {
+        "component": "genes",
+        "props": {
+          "variablesLabelOverride": "antigen"
+        },
+        "coordinationScopes": {
+          "dataset": "A"
+        },
+        "x": 10,
+        "y": 0,
+        "w": 2,
+        "h": 5
+      },
+      {
+        "component": "heatmap",
+        "coordinationScopes": { "dataset": "A" },
+        "h": 4,
+        "props": { "transpose": true, "variablesLabelOverride": "antigen" },
+        "w": 7,
+        "x": 3,
+        "y": 8
+      }
+    ],
+    "initStrategy": "auto"
+  },
+  {
+    "version": "1.0.2",
+    "name": "reg001_S20030086_region_001_expr",
+    "description": "",
+    "datasets": [
+      {
+        "uid": "A",
+        "name": "SPRM",
+        "files": [
+          {
+            "type": "cells",
+            "fileType": "anndata-cells.zarr",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/reg001_S20030086_region_001_expr-anndata.zarr",
+            "options": {
+              "xy": "obsm/xy",
+              "mappings": { "t-SNE": { "key": "obsm/tsne", "dims": [0, 1] } },
+              "factors": [
+                "obs/Cell K-Means [tSNE_All_Features]",
+                "obs/Cell K-Means [Mean-All-SubRegions] Expression",
+                "obs/Cell K-Means [Mean] Expression",
+                "obs/Cell K-Means [Shape-Vectors]",
+                "obs/Cell K-Means [Texture]",
+                "obs/Cell K-Means [Total] Expression",
+                "obs/Cell K-Means [Covariance] Expression"
+              ]
+            },
+            "requestInit": {
+              "headers": {
+                "Authorization": "Bearer groups_token"
+              }
+            }
+          },
+          {
+            "type": "cell-sets",
+            "fileType": "anndata-cell-sets.zarr",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/reg001_S20030086_region_001_expr-anndata.zarr",
+            "options": [
+              {
+                "groupName": "Cell K-Means [tSNE_All_Features]",
+                "setName": "obs/Cell K-Means [tSNE_All_Features]"
+              },
+              {
+                "groupName": "Cell K-Means [Mean-All-SubRegions] Expression",
+                "setName": "obs/Cell K-Means [Mean-All-SubRegions] Expression"
+              },
+              {
+                "groupName": "Cell K-Means [Mean] Expression",
+                "setName": "obs/Cell K-Means [Mean] Expression"
+              },
+              {
+                "groupName": "Cell K-Means [Shape-Vectors]",
+                "setName": "obs/Cell K-Means [Shape-Vectors]"
+              },
+              {
+                "groupName": "Cell K-Means [Texture]",
+                "setName": "obs/Cell K-Means [Texture]"
+              },
+              {
+                "groupName": "Cell K-Means [Total] Expression",
+                "setName": "obs/Cell K-Means [Total] Expression"
+              },
+              {
+                "groupName": "Cell K-Means [Covariance] Expression",
+                "setName": "obs/Cell K-Means [Covariance] Expression"
+              }
+            ],
+            "requestInit": {
+              "headers": {
+                "Authorization": "Bearer groups_token"
+              }
+            }
+          },
+          {
+            "type": "expression-matrix",
+            "fileType": "anndata-expression-matrix.zarr",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/anndata-zarr/reg001_S20030086_region_001_expr-anndata.zarr",
+            "options": {
+              "matrix": "X"
+            },
+            "requestInit": {
+              "headers": {
+                "Authorization": "Bearer groups_token"
+              }
+            }
+          },
+          {
+            "type": "raster",
+            "fileType": "raster.json",
+            "options": {
+              "schemaVersion": "0.0.2",
+              "usePhysicalSizeScaling": false,
+              "renderLayers": ["reg001_S20030086_region_001_expr", "reg001_S20030086_region_001_mask"],
+              "images": [
+                {
+                  "name": "reg001_S20030086_region_001_expr",
+                  "type": "ome-tiff",
+                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/pipeline_output/expr/reg001_S20030086_region_001_expr.ome.tif?token=groups_token",
+                  "metadata": {
+                    "isBitmask": false,
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/pipeline_output/expr/reg001_S20030086_region_001_expr.offsets.json?token=groups_token"
+                  }
+                },
+                {
+                  "name": "reg001_S20030086_region_001_mask",
+                  "type": "ome-tiff",
+                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/ometiff-pyramids/pipeline_output/mask/reg001_S20030086_region_001_mask.ome.tif?token=groups_token",
+                  "metadata": {
+                    "isBitmask": true,
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/pipeline_output/mask/reg001_S20030086_region_001_mask.offsets.json?token=groups_token"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "coordinationSpace": {
+      "dataset": {
+        "A": "A"
+      },
+      "embeddingType": {
+        "A": "t-SNE"
+      }
+    },
+    "layout": [
+      {
+        "component": "spatial",
+        "coordinationScopes": {
+          "dataset": "A"
+        },
+        "x": 3,
+        "y": 0,
+        "w": 4,
+        "h": 8
+      },
+      {
+        "component": "scatterplot",
+        "coordinationScopes": {
+          "dataset": "A",
+          "embeddingType": "A"
+        },
+        "x": 7,
+        "y": 0,
+        "w": 3,
+        "h": 8
+      },
+      {
+        "component": "description",
+        "coordinationScopes": {
+          "dataset": "A"
+        },
+        "x": 0,
+        "y": 8,
+        "w": 3,
+        "h": 4
+      },
+      {
+        "component": "layerController",
+        "coordinationScopes": {
+          "dataset": "A"
+        },
+        "x": 0,
+        "y": 0,
+        "w": 3,
+        "h": 8
+      },
+      {
+        "component": "cellSets",
+        "coordinationScopes": {
+          "dataset": "A"
+        },
+        "x": 10,
+        "y": 5,
+        "w": 2,
+        "h": 7
+      },
+      {
+        "component": "genes",
+        "props": {
+          "variablesLabelOverride": "antigen"
+        },
+        "coordinationScopes": {
+          "dataset": "A"
+        },
+        "x": 10,
+        "y": 0,
+        "w": 2,
+        "h": 5
+      },
+      {
+        "component": "heatmap",
+        "coordinationScopes": { "dataset": "A" },
+        "h": 4,
+        "props": { "transpose": true, "variablesLabelOverride": "antigen" },
+        "w": 7,
+        "x": 3,
+        "y": 8
+      }
+    ],
+    "initStrategy": "auto"
+  }
+]

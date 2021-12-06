@@ -1,0 +1,58 @@
+{
+  "data_types": ["celldive_deepcell"],
+  "files": [
+    {
+      "rel_path": "anndata-zarr/reg001_S20030086_region_001_expr-anndata.zarr/.zgroup"
+    },
+    {
+      "rel_path": "anndata-zarr/reg001_S20030086_region_001_expr-anndata.zarr/obs/.zgroup"
+    },
+    {
+      "rel_path": "anndata-zarr/reg001_S20030086_region_001_expr-anndata.zarr/obsm/.zgroup"
+    },
+    {
+      "rel_path": "anndata-zarr/reg001_S20030086_region_001_expr-anndata.zarr/var/.zgroup"
+    },
+    {
+      "rel_path": "data.json"
+    },
+    {
+      "rel_path": "output_offsets/pipeline_output/expr/reg001_S20030086_region_001_expr.offsets.json"
+    },
+    {
+      "rel_path": "ometiff-pyramids/pipeline_output/expr/reg001_S20030086_region_001_expr.ome.tif"
+    },
+    {
+      "rel_path": "output_offsets/pipeline_output/mask/reg001_S20030086_region_001_mask.offsets.json"
+    },
+    {
+      "rel_path": "ometiff-pyramids/pipeline_output/mask/reg001_S20030086_region_001_mask.ome.tif"
+    },
+    {
+      "rel_path": "anndata-zarr/reg001_S20030085_region_001_expr-anndata.zarr/.zgroup"
+    },
+    {
+      "rel_path": "anndata-zarr/reg001_S20030085_region_001_expr-anndata.zarr/obs/.zgroup"
+    },
+    {
+      "rel_path": "anndata-zarr/reg001_S20030085_region_001_expr-anndata.zarr/obsm/.zgroup"
+    },
+    {
+      "rel_path": "anndata-zarr/reg001_S20030085_region_001_expr-anndata.zarr/var/.zgroup"
+    },
+    {
+      "rel_path": "output_offsets/pipeline_output/expr/reg001_S20030085_region_001_expr.offsets.json"
+    },
+    {
+      "rel_path": "ometiff-pyramids/pipeline_output/expr/reg001_S20030085_region_001_expr.ome.tif"
+    },
+    {
+      "rel_path": "output_offsets/pipeline_output/mask/reg001_S20030085_region_001_mask.offsets.json"
+    },
+    {
+      "rel_path": "ometiff-pyramids/pipeline_output/mask/reg001_S20030085_region_001_mask.ome.tif"
+    }
+  ],
+  "status": "QA",
+  "uuid": "2f8d43199ca3167e991b320038024b77"
+}
