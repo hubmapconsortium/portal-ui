@@ -80,13 +80,11 @@ function HuBMAPDatasetsChart() {
         margin={margin}
         colorScale={colorScale}
         dropdown={
-          <div>
-            <HuBMAPDatasetsChartDropdown
-              colorDataOptions={colorOptions.map((color) => color.dropdownLabel)}
-              selectedColorDataIndex={selectedColorDataIndex}
-              setSelectedColorDataIndex={setSelectedColorDataIndex}
-            />
-          </div>
+          <HuBMAPDatasetsChartDropdown
+            colorDataOptions={colorOptions.map((color) => color.dropdownLabel)}
+            selectedColorDataIndex={selectedColorDataIndex}
+            setSelectedColorDataIndex={setSelectedColorDataIndex}
+          />
         }
       >
         <AssayTypeBarChart
