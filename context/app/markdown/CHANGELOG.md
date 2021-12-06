@@ -1,3 +1,11 @@
+## v0.32.1 - 2021-11-29
+
+- On the organs page, add Dataset and Sample icons in the respective buttons.
+- Display more information about the cells service.
+- Add descriptions to `donor.*` and `sample.*` metadata fields.
+- Fix react warnings on the publication page.
+
+
 ## v0.32.0 - 2021-11-22
 
 - Add ASCT support for RNA-seq visualizations

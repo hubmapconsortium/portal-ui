@@ -11,7 +11,8 @@ function Markdown(props) {
 
   return (
     <StyledPaper>
-      <Typography variant="body1">
+      <Typography variant="body1" component="div">
+        {/* Typography defaults to <p>, which causes invalid element nesting. */}
         {/* eslint-disable-next-line react/no-danger */}
         <div dangerouslySetInnerHTML={{ __html: html }} />
       </Typography>

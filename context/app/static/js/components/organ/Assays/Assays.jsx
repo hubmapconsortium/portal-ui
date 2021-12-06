@@ -13,7 +13,7 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useSearchData from 'js/hooks/useSearchData';
 
-import { Flex, StyledInfoIcon } from '../style';
+import { Flex, StyledInfoIcon, StyledDatasetIcon } from '../style';
 import { getSearchURL } from '../utils';
 
 function Assays(props) {
@@ -71,6 +71,7 @@ function Assays(props) {
         }
         buttons={
           <Button color="primary" variant="contained" component="a" href={searchUrl}>
+            <StyledDatasetIcon />
             View All Datasets
           </Button>
         }

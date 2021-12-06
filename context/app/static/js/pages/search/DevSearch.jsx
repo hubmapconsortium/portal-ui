@@ -3,10 +3,10 @@ import { ExistsQuery, BoolMustNot } from 'searchkit';
 
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
-import { field, listFilter, checkboxFilter, hierarchicalFilter } from 'js/components/Search/utils';
-import { fieldsToHighlight } from 'js/components/Search/config';
-import SearchWrapper from 'js/components/Search/SearchWrapper';
-import DevResults from 'js/components/Search/DevResults';
+import { field, listFilter, checkboxFilter, hierarchicalFilter } from 'js/components/searchPage/utils';
+import { fieldsToHighlight } from 'js/components/searchPage/config';
+import SearchWrapper from 'js/components/searchPage/SearchWrapper';
+import DevResults from 'js/components/searchPage/DevResults';
 import { SearchHeader } from './style';
 
 function DevSearch() {

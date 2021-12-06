@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
-import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalStackedBarChart';
+import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import CellsService from 'js/components/cells/CellsService';
 import ChartLoader from 'js/components/cells/ChartLoader';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';

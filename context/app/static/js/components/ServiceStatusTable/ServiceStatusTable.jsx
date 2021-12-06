@@ -15,7 +15,7 @@ import StatusIcon from './StatusIcon';
 import { useGatewayStatus } from './hooks';
 
 function buildServiceStatus(args) {
-  const { apiName, endpointUrl, response, noteFunction } = args;
+  const { apiName, endpointUrl, githubUrl, response, noteFunction } = args;
   const { build, version: apiVersion, api_auth } = response;
   const isUp = api_auth || apiName === 'gateway';
   // The gateway is implicit: If it's not up, you wouldn't get anything at all,
@@ -23,7 +23,7 @@ function buildServiceStatus(args) {
   return {
     apiName,
     endpointUrl,
-    githubUrl: build ? `https://github.com/hubmapconsortium/${apiName}` : undefined,
+    githubUrl: githubUrl || (build ? `https://github.com/hubmapconsortium/${apiName}` : undefined),
     build,
     apiVersion,
     isUp,
@@ -43,13 +43,13 @@ function ServiceStatusTable(props) {
           response: gatewayStatus.file_assets,
           noteFunction: (api) => `Status: ${api.file_assets_status}`,
         }),
-        {
+        buildServiceStatus({
           apiName: 'cells',
           githubUrl: 'https://github.com/hubmapconsortium/cross_modality_query',
           endpointUrl: xmodalityEndpoint,
-          apiVersion: 'unknown',
-          build: 'unknown',
-        },
+          response: gatewayStatus.cells_api,
+          noteFunction: (api) => `Branch: ${api.branch}; Commit ${api.commit.slice(0, 12)}`,
+        }),
         buildServiceStatus({
           apiName: 'entity-api',
           endpointUrl: entityEndpoint,
