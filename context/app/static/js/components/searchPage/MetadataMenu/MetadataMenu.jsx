@@ -5,8 +5,10 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Link from '@material-ui/core/Link';
 
+import { InfoIcon } from 'js/shared-styles/icons';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { createDownloadUrl } from 'js/helpers/functions';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledButton } from './style';
 
 function MetadataMenu({ type, analyticsCategory }) {
@@ -58,10 +60,6 @@ function MetadataMenu({ type, analyticsCategory }) {
         Metadata
       </StyledButton>
       <Menu
-        id="metadata-menu"
-        MenuListProps={{
-          'aria-labelledby': 'metadata-button',
-        }}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -73,8 +71,16 @@ function MetadataMenu({ type, analyticsCategory }) {
       >
         <MenuItem>
           <Link href={`/lineup/${lcPluralType}`}>Visualize</Link>
+          <SecondaryBackgroundTooltip title="Visualize all available metadata in Lineup." placement="bottom-start">
+            <InfoIcon color="primary" />
+          </SecondaryBackgroundTooltip>
         </MenuItem>
-        <MenuItem onClick={fetchAndDownloadTSV}>Download</MenuItem>
+        <MenuItem onClick={fetchAndDownloadTSV}>
+          Download
+          <SecondaryBackgroundTooltip title="Download a TSV of the table metadata." placement="bottom-start">
+            <InfoIcon color="primary" />
+          </SecondaryBackgroundTooltip>
+        </MenuItem>
       </Menu>
     </>
   );
