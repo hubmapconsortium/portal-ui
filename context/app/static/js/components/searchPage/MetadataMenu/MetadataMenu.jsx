@@ -6,7 +6,7 @@ import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { StyledButton } from './style';
 
-function DownloadButton({ type, analyticsCategory }) {
+function MetadataMenu({ type, analyticsCategory }) {
   const lcPluralType = `${type.toLowerCase()}s`;
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
@@ -42,10 +42,10 @@ function DownloadButton({ type, analyticsCategory }) {
   return (
     <SecondaryBackgroundTooltip title="Download a TSV of the table metadata.">
       <StyledButton onClick={fetchAndDownloadTSV} variant="outlined" color="primary">
-        Download Metadata
+        Metadata
       </StyledButton>
     </SecondaryBackgroundTooltip>
   );
 }
 
-export default DownloadButton;
+export default MetadataMenu;
