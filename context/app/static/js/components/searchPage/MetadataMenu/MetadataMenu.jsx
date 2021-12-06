@@ -67,7 +67,7 @@ function MetadataMenu({ type, analyticsCategory }) {
         onClose={handleClose}
       >
         <MenuItem>
-          <Link href="/lineup/donors">Visualize</Link>
+          <Link href={`/lineup/${lcPluralType}`}>Visualize</Link>
         </MenuItem>
         <MenuItem onClick={fetchAndDownloadTSV}>Download</MenuItem>
       </Menu>
