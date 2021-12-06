@@ -1,0 +1,1 @@
+- Clean up formatting of publications page.

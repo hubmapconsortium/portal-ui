@@ -1,12 +1,44 @@
 import React from 'react';
-import LineUp from 'lineupjsx';
+import LineUp, {
+  LineUpStringColumnDesc,
+  LineUpNumberColumnDesc,
+  LineUpCategoricalColumnDesc,
+  LineUpDateColumnDesc,
+} from 'lineupjsx';
 import 'lineupjsx/build/LineUpJSx.css';
 import Paper from '@material-ui/core/Paper';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import metadataFieldTypes from 'metadata-field-types';
 
 function LineUpPage(props) {
   const { entities } = props;
+  const firstRow = entities[0];
+  const notEnumFields = new Set([
+    'uuid',
+    // Donors:
+    'hubmap_id',
+    'medical_history',
+    // Samples:
+    'donor.hubmap_id',
+    'sample_id',
+    // Datasets:
+    'description',
+    'library_adapter_sequence',
+    'library_id',
+  ]);
+  const columns = Object.keys(firstRow).map((key) => {
+    if (metadataFieldTypes[key] === 'number' || metadataFieldTypes[key] === 'integer') {
+      return <LineUpNumberColumnDesc column={key} key={key} />;
+    }
+    if (metadataFieldTypes[key] === 'datetime') {
+      return <LineUpDateColumnDesc column={key} key={key} />;
+    }
+    if (notEnumFields.has(key)) {
+      return <LineUpStringColumnDesc column={key} key={key} />;
+    }
+    return <LineUpCategoricalColumnDesc column={key} key={key} />;
+  });
 
   return (
     <>
@@ -14,7 +46,7 @@ function LineUpPage(props) {
         LineUp
       </SectionHeader>
       <Paper>
-        <LineUp data={entities} />
+        <LineUp data={entities}>{columns}</LineUp>
       </Paper>
     </>
   );
