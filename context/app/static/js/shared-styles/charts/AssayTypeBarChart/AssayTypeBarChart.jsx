@@ -47,7 +47,6 @@ function AssayTypeBarChart({
   dataTypeScale.rangeRound([yHeight, 0]);
 
   const {
-    hoveredBarIndices,
     tooltipData,
     tooltipLeft,
     tooltipTop,
@@ -57,8 +56,6 @@ function AssayTypeBarChart({
     handleMouseEnter,
     handleMouseLeave,
   } = useChartTooltip();
-
-  const hoverProps = showTooltipAndHover ? { hoveredBarIndices, handleMouseEnter, handleMouseLeave } : {};
 
   return (
     <>
@@ -94,7 +91,16 @@ function AssayTypeBarChart({
                         target="_parent"
                       >
                         {/* Make target explicit because html base target doesn't apply inside SVG. */}
-                        <StackedBar direction="horizontal" bar={bar} barStack={barStack} {...hoverProps} />
+                        <StackedBar
+                          direction="horizontal"
+                          bar={bar}
+                          barStack={barStack}
+                          hoverProps={
+                            showTooltipAndHover
+                              ? { onMouseEnter: handleMouseEnter(bar, barStack.index), onMouseLeave: handleMouseLeave }
+                              : {}
+                          }
+                        />
                       </a>
                     ),
                 ),

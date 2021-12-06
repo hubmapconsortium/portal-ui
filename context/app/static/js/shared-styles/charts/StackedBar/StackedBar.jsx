@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { StyledRect } from './style';
 
-function StackedBar({ direction, bar, barStack, hoveredBarIndices, handleMouseEnter, handleMouseLeave }) {
+function StackedBar({ direction, bar, hoverProps }) {
   const maxBarThickness = 65;
 
   // props are inversed for vertical and horizontal charts
@@ -37,14 +37,9 @@ function StackedBar({ direction, bar, barStack, hoveredBarIndices, handleMouseEn
   return (
     <StyledRect
       fill={bar.color}
-      $isHovered={
-        hoveredBarIndices &&
-        bar.index === hoveredBarIndices.barIndex &&
-        barStack.index === hoveredBarIndices.barStackIndex
-      }
-      onMouseEnter={(event) => handleMouseEnter(event, bar, barStack.index)}
-      onMouseLeave={handleMouseLeave}
       {...dimensionsAndPlacementProps}
+      $showHover={Object.keys(hoverProps).length > 0}
+      {...hoverProps}
     />
   );
 }

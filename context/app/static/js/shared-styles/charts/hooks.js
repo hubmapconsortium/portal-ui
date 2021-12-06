@@ -13,7 +13,7 @@ function useChartTooltip() {
     debounce: 100,
   });
 
-  function handleMouseEnter(event, bar, barStackIndex) {
+  const handleMouseEnter = (bar, barStackIndex) => (event) => {
     const coords = localPoint(event.target.ownerSVGElement, event);
     showTooltip({
       tooltipLeft: coords.x,
@@ -21,7 +21,7 @@ function useChartTooltip() {
       tooltipData: bar,
     });
     setHoveredBarIndices({ barIndex: bar.index, barStackIndex });
-  }
+  };
 
   function handleMouseLeave() {
     hideTooltip();
