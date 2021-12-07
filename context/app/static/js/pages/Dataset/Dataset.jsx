@@ -65,9 +65,12 @@ function DatasetDetail(props) {
     last_modified_timestamp,
     description,
     status,
+    sub_status,
     mapped_data_access_level,
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
+
+  const combinedStatus = sub_status || status;
 
   const combinedMetadata = combineMetadata(donor, origin_sample, source_sample, metadata);
 
@@ -116,7 +119,7 @@ function DatasetDetail(props) {
           created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}
-          status={status}
+          status={combinedStatus}
           mapped_data_access_level={mapped_data_access_level}
           group_name={group_name}
         >
