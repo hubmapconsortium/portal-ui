@@ -250,6 +250,7 @@ Routes.propTypes = {
     vis_lifted_uuid: PropTypes.string,
     organ: PropTypes.object,
     organs: PropTypes.object,
+    metadata: PropTypes.object,
   }),
 };
 

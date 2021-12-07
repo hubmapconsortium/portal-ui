@@ -9,10 +9,10 @@ import { bin } from 'd3-array';
 import Typography from '@material-ui/core/Typography';
 
 import { TitleWrapper } from 'js/shared-styles/charts/style';
+import { getChartDimensions } from 'js/shared-styles/charts/utils';
 
 function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxisLabel, yAxisLabel, chartTitle }) {
-  const xWidth = parentWidth - margin.left - margin.right;
-  const yHeight = parentHeight - margin.top - margin.bottom;
+  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, margin);
 
   const binFunc = bin();
   const chartData = binFunc(visxData);
