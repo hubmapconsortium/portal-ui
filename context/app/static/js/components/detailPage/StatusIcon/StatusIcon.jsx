@@ -11,7 +11,7 @@ function getColor(status) {
     return 'error';
   }
 
-  if (['UNPUBLISHED', 'DEPRECATED', 'Retracted'].includes(status)) {
+  if (['UNPUBLISHED', 'DEPRECATED', 'Retracted' /* sub_status gets title caps. */].includes(status)) {
     return 'warning';
   }
 
