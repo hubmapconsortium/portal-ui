@@ -7,7 +7,8 @@ import pytest
 from .base_confs import (
     ImagePyramidViewConfBuilder,
     SPRMJSONViewConfBuilder,
-    SPRMAnnDataViewConfBuilder
+    SPRMAnnDataViewConfBuilder,
+    MultiImageSPRMAnndataViewConfBuilder
 )
 from .assay_confs import (
     SeqFISHViewConfBuilder,
@@ -17,8 +18,7 @@ from .assay_confs import (
     IMSViewConfBuilder,
     RNASeqAnnDataZarrViewConfBuilder,
     SpatialRNASeqAnnDataZarrViewConfBuilder,
-    StitchedCytokitSPRMViewConfBuilder,
-    CellDiveViewConfBuilder
+    StitchedCytokitSPRMViewConfBuilder
 )
 
 MOCK_GROUPS_TOKEN = "groups_token"
@@ -41,7 +41,7 @@ AssayConfClasses = {
     "spatial_rna_zarr": SpatialRNASeqAnnDataZarrViewConfBuilder,
     "sprm_anndata": SPRMAnnDataViewConfBuilder,
     "cytokit_anndata": StitchedCytokitSPRMViewConfBuilder,
-    "celldive": CellDiveViewConfBuilder
+    "celldive": MultiImageSPRMAnndataViewConfBuilder
 }
 
 

@@ -31,8 +31,6 @@ from .assays import (
     MALDI_IMS
 )
 from .paths import (
-    CELL_DIVE_PYRAMID_DIR,
-    CELL_DIVE_REGEX,
     SCRNA_SEQ_DIR,
     SCATAC_SEQ_DIR,
     IMAGE_PYRAMID_DIR,
@@ -209,22 +207,15 @@ class StitchedCytokitSPRMViewConfBuilder(MultiImageSPRMAnndataViewConfBuilder):
         )
         self._mask_id = 'stitched_mask'
 
-
-class CellDiveViewConfBuilder(MultiImageSPRMAnndataViewConfBuilder):
-    """Wrapper class for generating multiple "second generation" AnnData-backed SPRM
-    Vitessce configurations via SPRMAnnDataViewConfBuilder,
-    used for Cell DIVE datasets with multiple regions.
-    """
-
-    def __init__(self, entity, groups_token, is_mock=False):
-        super().__init__(entity, groups_token, is_mock)
-        self._image_id_regex = CELL_DIVE_REGEX
-        self._expression_id = 'expr'
-        self._mask_id = 'mask'
-        self._image_pyramid_subdir_regex = CELL_DIVE_PYRAMID_DIR
-        self._mask_pyramid_subdir_regex = CELL_DIVE_PYRAMID_DIR.replace(
-            self._expression_id, self._mask_id
-        )
+    def _find_ids(self):
+        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
+        found_id = get_matches(file_paths_found, self._image_id_regex)
+        if len(found_id) == 0:
+            raise FileNotFoundError(
+                f"SPRM analysis of assay with uuid {self._uuid} has no matching regions; "
+                f"No file matches for '{self._image_id_regex}'."
+            )
+        return found_id
 
 
 class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
@@ -363,7 +354,7 @@ def get_view_config_builder(entity):
                  for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
     if "is_image" in hints:
         if "celldive_deepcell" in data_types:
-            return CellDiveViewConfBuilder
+            return MultiImageSPRMAnndataViewConfBuilder
         if "codex" in hints:
             if ('sprm-to-anndata.cwl' in dag_names):
                 return StitchedCytokitSPRMViewConfBuilder

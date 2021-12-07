@@ -15,7 +15,7 @@ from vitessce import (
 )
 
 from .utils import get_matches
-from .paths import SPRM_JSON_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR
+from .paths import SPRM_JSON_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR, SPRM_PYRAMID_DIR
 
 MOCK_URL = "https://example.com"
 
@@ -379,7 +379,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         zarr_path = f"anndata-zarr/{self._image_name}-anndata.zarr"
         # Use the group as a proxy for presence of the rest of the zarr store.
         if f"{zarr_path}/.zgroup" not in file_paths_found:
-            message = f"SPRM assay with uuid {self._uuid} has no matching .zarr store"
+            message = f"SPRM assay with uuid {self._uuid} has no .zarr store at {zarr_path}"
             raise FileNotFoundError(message)
         adata_url = self._build_assets_url(zarr_path, use_token=False)
         # https://github.com/hubmapconsortium/portal-containers/blob/master/containers/sprm-to-anndata
@@ -440,31 +440,46 @@ class MultiImageSPRMAnndataViewConfBuilder(ViewConfBuilder):
     used for datasets with multiple regions.
     """
 
-    def get_conf_cells(self):
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
+        self._expression_id = 'expr'
+        self._mask_id = 'mask'
+        self._image_pyramid_subdir_regex = SPRM_PYRAMID_DIR
+        self._mask_pyramid_subdir_regex = SPRM_PYRAMID_DIR.replace(
+            self._expression_id, self._mask_id
+        )
+
+    def _find_ids(self):
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_regions = get_matches(file_paths_found, self._image_id_regex)
-        if len(found_regions) == 0:
+        full_pyramid_path = IMAGE_PYRAMID_DIR + "/" + self._image_pyramid_subdir_regex
+        pyramid_files = [file for file in file_paths_found if full_pyramid_path in file]
+        found_id = [Path(image_path).name.replace(".ome.tif", "").replace(
+            "_" + self._expression_id, "") for image_path in pyramid_files]
+        if len(found_id) == 0:
             raise FileNotFoundError(
-                f"SPRM analysis of assay with uuid {self._uuid} has no matching regions; "
-                f"No file matches for '{self._image_id_regex}'."
+                f"Could not find images of the SPRM analysis with uuid {self._uuid}"
             )
+        return found_id
+
+    def get_conf_cells(self):
+        found_ids = self._find_ids()
         confs = []
-        for region in sorted(found_regions):
+        for id in sorted(found_ids):
             vc = SPRMAnnDataViewConfBuilder(
                 entity=self._entity,
                 groups_token=self._groups_token,
                 is_mock=self._is_mock,
-                base_name=region,
+                base_name=id,
                 imaging_path=self._image_pyramid_subdir_regex,
                 mask_path=self._mask_pyramid_subdir_regex,
-                image_name=f"{region}_{self._expression_id}",
-                mask_name=f"{region}_{self._mask_id}"
+                image_name=f"{id}_{self._expression_id}",
+                mask_name=f"{id}_{self._mask_id}"
             )
             conf = vc.get_conf_cells().conf
             if conf == {}:
                 raise MultiImageSPRMAnndataViewConfigError(
                     f"Cytokit SPRM assay with uuid {self._uuid} has empty view\
-                        config for region '{region}'"
+                        config for id '{id}'"
                 )
             confs.append(conf)
         return ConfCells(confs if len(confs) > 1 else confs[0], None)
