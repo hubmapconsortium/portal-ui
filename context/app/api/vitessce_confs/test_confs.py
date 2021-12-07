@@ -41,7 +41,7 @@ AssayConfClasses = {
     "spatial_rna_zarr": SpatialRNASeqAnnDataZarrViewConfBuilder,
     "sprm_anndata": SPRMAnnDataViewConfBuilder,
     "cytokit_anndata": StitchedCytokitSPRMViewConfBuilder,
-    "celldive": MultiImageSPRMAnndataViewConfBuilder
+    "multi_image_sprm_anndata": MultiImageSPRMAnndataViewConfBuilder
 }
 
 
