@@ -15,7 +15,7 @@ from vitessce import (
 )
 
 from .utils import get_matches
-from .paths import SPRM_JSON_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR, SPRM_PYRAMID_DIR
+from .paths import SPRM_JSON_DIR, IMAGE_PYRAMID_DIR, OFFSETS_DIR, SPRM_PYRAMID_SUBDIR
 
 MOCK_URL = "https://example.com"
 
@@ -444,8 +444,8 @@ class MultiImageSPRMAnndataViewConfBuilder(ViewConfBuilder):
         super().__init__(entity, groups_token, is_mock)
         self._expression_id = 'expr'
         self._mask_id = 'mask'
-        self._image_pyramid_subdir_regex = SPRM_PYRAMID_DIR
-        self._mask_pyramid_subdir_regex = SPRM_PYRAMID_DIR.replace(
+        self._image_pyramid_subdir_regex = SPRM_PYRAMID_SUBDIR
+        self._mask_pyramid_subdir_regex = SPRM_PYRAMID_SUBDIR.replace(
             self._expression_id, self._mask_id
         )
 
