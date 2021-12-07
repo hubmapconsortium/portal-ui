@@ -450,16 +450,19 @@ class MultiImageSPRMAnndataViewConfBuilder(ViewConfBuilder):
         )
 
     def _find_ids(self):
+        """Search the image pyramid directory for all of the names of OME-TIFF files
+        to use as unique identifiers.
+        """
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
         full_pyramid_path = IMAGE_PYRAMID_DIR + "/" + self._image_pyramid_subdir_regex
         pyramid_files = [file for file in file_paths_found if full_pyramid_path in file]
-        found_id = [Path(image_path).name.replace(".ome.tif", "").replace(
+        found_ids = [re.sub(r".ome.tif(f?)", "", Path(image_path).name).replace(
             "_" + self._expression_id, "") for image_path in pyramid_files]
-        if len(found_id) == 0:
+        if len(found_ids) == 0:
             raise FileNotFoundError(
                 f"Could not find images of the SPRM analysis with uuid {self._uuid}"
             )
-        return found_id
+        return found_ids
 
     def get_conf_cells(self):
         found_ids = self._find_ids()

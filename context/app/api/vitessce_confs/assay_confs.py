@@ -197,25 +197,17 @@ class StitchedCytokitSPRMViewConfBuilder(MultiImageSPRMAnndataViewConfBuilder):
     These are from post-August 2020 Cytokit datasets (stitched).
     """
 
+    # Need to override base class settings due to different directory structure
     def __init__(self, entity, groups_token, is_mock=False):
         super().__init__(entity, groups_token, is_mock)
-        self._image_id_regex = STITCHED_REGEX
         self._image_pyramid_subdir_regex = STITCHED_IMAGE_DIR
+        # The ids don't match exactly with the replacement because all image files have
+        # stitched_expressions appended while the subdirectory only has /stitched/
         self._expression_id = 'stitched_expressions'
         self._mask_pyramid_subdir_regex = STITCHED_IMAGE_DIR.replace(
             'expressions', 'mask'
         )
         self._mask_id = 'stitched_mask'
-
-    def _find_ids(self):
-        file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        found_id = get_matches(file_paths_found, self._image_id_regex)
-        if len(found_id) == 0:
-            raise FileNotFoundError(
-                f"SPRM analysis of assay with uuid {self._uuid} has no matching regions; "
-                f"No file matches for '{self._image_id_regex}'."
-            )
-        return found_id
 
 
 class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
