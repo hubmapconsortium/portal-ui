@@ -11,7 +11,7 @@ function getColor(status) {
     return 'error';
   }
 
-  if (['UNPUBLISHED', 'DEPRECATED'].includes(status)) {
+  if (['UNPUBLISHED', 'DEPRECATED', 'Retracted'].includes(status)) {
     return 'warning';
   }
 
