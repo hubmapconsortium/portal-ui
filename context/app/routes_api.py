@@ -45,7 +45,8 @@ def entities_tsv(entity_type):
     descriptions_path = Path(__name__).absolute().parent.parent / \
         'ingest-validation-tools/docs/field-descriptions.yaml'
     descriptions_dict = safe_load(descriptions_path.read_text())
-    return _make_tsv_response(_dicts_to_tsv(entities, _first_fields, descriptions_dict), f'{entity_type}.tsv')
+    tsv = _dicts_to_tsv(entities, _first_fields, descriptions_dict)
+    return _make_tsv_response(tsv, f'{entity_type}.tsv')
 
 
 @blueprint.route('/lineup/<entity_type>')
