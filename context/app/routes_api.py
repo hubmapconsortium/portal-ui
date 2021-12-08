@@ -104,8 +104,9 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     ...   'extra': 'should be ignored'
     ... }
     >>> from pprint import pp
-    >>> pp(_dicts_to_tsv(data_dicts, ['title']))
+    >>> pp(_dicts_to_tsv(data_dicts, ['title'], descriptions_dict))
     ('title\\tdate\\tsubtitle\\r\\n'
+     '#main title\\tdate released\\t\\r\\n'
      'Star Wars\\t1977\\tA New Hope\\r\\n'
      'The Empire Strikes Back\\t1980\\t\\r\\n'
      'Return of the Jedi\\t1983\\t\\r\\n')
