@@ -1,5 +1,6 @@
 from io import StringIO
 from csv import DictWriter
+from datetime import datetime
 
 from flask import Response, abort, request, render_template, jsonify
 
@@ -41,7 +42,8 @@ def entities_tsv(entity_type):
         constraints = {}
         uuids = body.get('uuids')
     entities = _get_entities(entity_type, constraints, uuids)
-    filename = f'{entity_type}.tsv'
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    filename = f'hubmap-{entity_type}-metadata-{timestamp}.tsv'
     return _make_tsv_response(_dicts_to_tsv(entities, _first_fields), filename)
 
 

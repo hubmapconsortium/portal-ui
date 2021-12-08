@@ -22,7 +22,7 @@
     "chart.js": "^3.5.0",
     "d3": "^5.16.0",
     "d3-array": "^3.0.2",
-    "date-fns": "^2.14.0",
+    "date-fns": "^2.27.0",
     "fromentries": "^1.2.0",
     "html-webpack-plugin": "^4.3.0",
     "immer": "^9.0.6",
