@@ -1,5 +1,8 @@
 from io import StringIO
 from csv import DictWriter
+from pathlib import Path
+
+from yaml import safe_load
 
 from flask import Response, abort, request, render_template, jsonify
 
@@ -39,7 +42,10 @@ def entities_tsv(entity_type):
         if _drop_dict_keys(body, ['uuids']):
             return _get_api_json_error(400, 'POST only accepts uuids in JSON body.')
         entities = _get_entities(entity_type, {}, body.get('uuids'))
-    return _make_tsv_response(_dicts_to_tsv(entities, _first_fields), f'{entity_type}.tsv')
+    descriptions_path = Path(__name__).absolute().parent.parent / \
+        'ingest-validation-tools/docs/field-descriptions.yaml'
+    descriptions_dict = safe_load(descriptions_path.read_text())
+    return _make_tsv_response(_dicts_to_tsv(entities, _first_fields, descriptions_dict), f'{entity_type}.tsv')
 
 
 @blueprint.route('/lineup/<entity_type>')
@@ -85,13 +91,18 @@ def _make_tsv_response(tsv_content, filename):
     )
 
 
-def _dicts_to_tsv(data_dicts, first_fields):
+def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     '''
     >>> data_dicts = [
     ...   {'title': 'Star Wars', 'subtitle': 'A New Hope', 'date': '1977'},
     ...   {'title': 'The Empire Strikes Back', 'date': '1980'},
     ...   {'title': 'Return of the Jedi', 'date': '1983'}
     ... ]
+    >>> descriptions_dict = {
+    ...   'title': 'main title',
+    ...   'date': 'date released',
+    ...   'extra': 'should be ignored'
+    ... }
     >>> from pprint import pp
     >>> pp(_dicts_to_tsv(data_dicts, ['title']))
     ('title\\tdate\\tsubtitle\\r\\n'
@@ -104,7 +115,7 @@ def _dicts_to_tsv(data_dicts, first_fields):
         - set(first_fields)
     )
     output = StringIO()
-    writer = DictWriter(output, first_fields + body_fields, delimiter='\t')
+    writer = DictWriter(output, first_fields + body_fields, delimiter='\t', extrasaction='ignore')
     writer.writeheader()
-    writer.writerows(data_dicts)
+    writer.writerows([descriptions_dict] + data_dicts)
     return output.getvalue()
