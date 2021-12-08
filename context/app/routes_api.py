@@ -118,4 +118,7 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     writer = DictWriter(output, first_fields + body_fields, delimiter='\t', extrasaction='ignore')
     writer.writeheader()
     writer.writerows([descriptions_dict] + data_dicts)
-    return output.getvalue()
+    tsv = output.getvalue()
+    tsv_lines = tsv.split('\n')
+    tsv_lines[1] = '#' + tsv_lines[1]
+    return '\n'.join(tsv_lines)
