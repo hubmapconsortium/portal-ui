@@ -112,6 +112,7 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
      'The Empire Strikes Back\\t1980\\t\\r\\n'
      'Return of the Jedi\\t1983\\t\\r\\n')
     '''
+    # wrap in default dicts that return 'n/a'
     body_fields = sorted(
         set().union(*[d.keys() for d in data_dicts])
         - set(first_fields)
