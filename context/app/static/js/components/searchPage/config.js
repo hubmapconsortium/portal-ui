@@ -24,10 +24,12 @@ const sharedTileFields = [
   field('descendant_counts.entity_type', 'Descendant Counts'),
 ];
 
-const partonomyFilter = hierarchicalFilter(
-  [...Array(5).keys()].map((i) => `anatomy_${i + 1}`),
-  'Anatomy',
-);
+// On hold:
+//
+// const partonomyFilter = hierarchicalFilter(
+//   [...Array(5).keys()].map((i) => `anatomy_${i + 1}`),
+//   'Anatomy',
+// );
 
 const donorConfig = {
   filters: {
@@ -51,7 +53,10 @@ const donorConfig = {
 
 const sampleConfig = {
   filters: {
-    'Sample Metadata': [partonomyFilter, listFilter('mapped_specimen_type', 'Specimen Type')],
+    'Sample Metadata': [
+      listFilter('origin_sample.mapped_organ', 'Organ'),
+      listFilter('mapped_specimen_type', 'Specimen Type'),
+    ],
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
   },
@@ -72,7 +77,7 @@ const datasetConfig = {
   filters: {
     'Dataset Metadata': [
       listFilter('mapped_data_types', 'Data Type'),
-      partonomyFilter,
+      listFilter('origin_sample.mapped_organ', 'Organ'),
       listFilter('source_sample.mapped_specimen_type', 'Specimen Type'),
       hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),
     ],
