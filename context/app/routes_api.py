@@ -117,7 +117,6 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     | Return of the Jedi | 1983 | n/a |
     |  |
     '''
-    # TODO: wrap in default dicts that return 'n/a'
     body_fields = sorted(
         set().union(*[d.keys() for d in data_dicts])
         - set(first_fields)
