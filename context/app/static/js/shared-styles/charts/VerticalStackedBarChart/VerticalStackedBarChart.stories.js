@@ -6,6 +6,7 @@ import VerticalStackedBarChart from './VerticalStackedBarChart';
 export default {
   title: 'Charts/VerticalStackedBarChart',
   component: VerticalStackedBarChart,
+  excludeStories: ['colorScale'],
 };
 
 const Template = (args) => (

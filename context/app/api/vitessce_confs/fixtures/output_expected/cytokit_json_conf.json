@@ -9,17 +9,17 @@
         "name": "SPRM",
         "files": [
           {
-            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y001.cells.json?token=nexus_token",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y001.cells.json?token=groups_token",
             "type": "cells",
             "fileType": "cells.json"
           },
           {
-            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y001.cell-sets.json?token=nexus_token",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y001.cell-sets.json?token=groups_token",
             "type": "cell-sets",
             "fileType": "cell-sets.json"
           },
           {
-            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y001.clusters.json?token=nexus_token",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y001.clusters.json?token=groups_token",
             "type": "expression-matrix",
             "fileType": "clusters.json"
           },
@@ -32,10 +32,10 @@
                 {
                   "name": "R001_X001_Y001",
                   "type": "ome-tiff",
-                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output/extract/expressions/ome-tiff/R001_X001_Y001.ome.tiff?token=nexus_token",
+                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output/extract/expressions/ome-tiff/R001_X001_Y001.ome.tiff?token=groups_token",
                   "metadata": {
                     "isBitmask": false,
-                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/R001_X001_Y001.offsets.json?token=nexus_token"
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/R001_X001_Y001.offsets.json?token=groups_token"
                   }
                 }
               ]
@@ -133,17 +133,17 @@
         "name": "SPRM",
         "files": [
           {
-            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y002.cells.json?token=nexus_token",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y002.cells.json?token=groups_token",
             "type": "cells",
             "fileType": "cells.json"
           },
           {
-            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y002.cell-sets.json?token=nexus_token",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y002.cell-sets.json?token=groups_token",
             "type": "cell-sets",
             "fileType": "cell-sets.json"
           },
           {
-            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y002.clusters.json?token=nexus_token",
+            "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output_json/R001_X001_Y002.clusters.json?token=groups_token",
             "type": "expression-matrix",
             "fileType": "clusters.json"
           },
@@ -156,10 +156,10 @@
                 {
                   "name": "R001_X001_Y002",
                   "type": "ome-tiff",
-                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output/extract/expressions/ome-tiff/R001_X001_Y002.ome.tiff?token=nexus_token",
+                  "url": "https://example.com/2f8d43199ca3167e991b320038024b77/output/extract/expressions/ome-tiff/R001_X001_Y002.ome.tiff?token=groups_token",
                   "metadata": {
                     "isBitmask": false,
-                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/R001_X001_Y002.offsets.json?token=nexus_token"
+                    "omeTiffOffsetsUrl": "https://example.com/2f8d43199ca3167e991b320038024b77/output_offsets/R001_X001_Y002.offsets.json?token=groups_token"
                   }
                 }
               ]

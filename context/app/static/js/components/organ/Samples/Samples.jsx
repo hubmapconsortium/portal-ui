@@ -6,7 +6,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
-import { getDefaultQuery } from 'js/helpers/functions';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -15,6 +14,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { useSearchHits } from 'js/hooks/useSearchData';
 
 import { getSearchURL } from '../utils';
+import { StyledSampleIcon } from '../style';
 
 const columns = [
   { id: 'hubmap_id', label: 'Sample' },
@@ -31,7 +31,6 @@ function Samples(props) {
 
   const query = useMemo(
     () => ({
-      query: getDefaultQuery(),
       post_filter: {
         bool: {
           must: [
@@ -63,6 +62,7 @@ function Samples(props) {
         leftText={<SectionHeader>Samples</SectionHeader>}
         buttons={
           <Button color="primary" variant="contained" component="a" href={searchUrl}>
+            <StyledSampleIcon />
             View All Samples
           </Button>
         }

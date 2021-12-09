@@ -21,24 +21,17 @@ def load_app_client():
         current_app.config['APP_CLIENT_ID'], current_app.config['APP_CLIENT_SECRET'])
 
 
-def has_hubmap_group(nexus_token):
+def has_hubmap_group(groups_token):
     # Mostly copy-and-paste from
-    # https://github.com/hubmapconsortium/commons/blob/dc69f4/hubmap_commons/hm_auth.py#L347-L355
+    # https://github.com/hubmapconsortium/commons/blob/641d03b0dc/hubmap_commons/hm_auth.py#L626-L646
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ' + nexus_token
-    }
-    params = {
-        'fields': 'id,name,description',
-        # I'm not sure what these do, and if they are necessary:
-        'for_all_identities': 'false',
-        'my_statuses': 'active'
+        'Authorization': 'Bearer ' + groups_token
     }
     response = requests.get(
-        'https://nexus.api.globusonline.org/groups',
-        headers=headers,
-        params=params)
+        'https://groups.api.globus.org/v2/groups/my_groups',
+        headers=headers)
     response.raise_for_status()
     groups = response.json()
     return any([group['id'] == current_app.config['GROUP_ID'] for group in groups])
@@ -70,7 +63,7 @@ def login():
                     'openid profile email',
                     'urn:globus:auth:scope:transfer.api.globus.org:all',
                     'urn:globus:auth:scope:auth.globus.org:view_identities',
-                    'urn:globus:auth:scope:nexus.api.globus.org:groups'
+                    'urn:globus:auth:scope:groups.api.globus.org:all'
                 ])
             }
         )
@@ -82,8 +75,8 @@ def login():
     tokens = client.oauth2_exchange_code_for_tokens(code)
     # The repr is deceptive: Looks like a dict, but direct access not possible.
 
-    token_object = tokens.by_resource_server['nexus.api.globus.org']
-    nexus_token = token_object['access_token']
+    token_object = tokens.by_resource_server['groups.api.globus.org']
+    groups_token = token_object['access_token']
 
     auth_token_object = tokens.by_resource_server['auth.globus.org']
     auth_token = auth_token_object['access_token']
@@ -93,12 +86,12 @@ def login():
                              headers=user_info_request_headers).json()
     user_email = user_info['email'] if 'email' in user_info else ''
 
-    if not has_hubmap_group(nexus_token):
+    if not has_hubmap_group(groups_token):
         # Globus institution login worked, but user does not have HuBMAP group!
         return render_template('errors/401-no-hubmap-group.html'), 401
 
     session.update(
-        nexus_token=nexus_token,
+        groups_token=groups_token,
         is_authenticated=True,
         user_email=user_email)
 

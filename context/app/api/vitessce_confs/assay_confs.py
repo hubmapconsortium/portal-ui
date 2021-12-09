@@ -28,8 +28,7 @@ from .base_confs import (
 )
 from .assays import (
     SEQFISH,
-    MALDI_IMS_NEG,
-    MALDI_IMS_POS,
+    MALDI_IMS
 )
 from .paths import (
     SCRNA_SEQ_DIR,
@@ -130,7 +129,7 @@ class TiledSPRMViewConfBuilder(ViewConfBuilder):
         for tile in sorted(found_tiles):
             vc = SPRMJSONViewConfBuilder(
                 entity=self._entity,
-                nexus_token=self._nexus_token,
+                groups_token=self._groups_token,
                 is_mock=self._is_mock,
                 base_name=tile,
                 imaging_path=CODEX_TILE_DIR
@@ -149,8 +148,8 @@ class RNASeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     from h5ad-to-arrow.cwl (August 2020 release).
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False):
-        super().__init__(entity, nexus_token, is_mock)
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
@@ -172,8 +171,8 @@ class ATACSeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     from h5ad-to-arrow.cwl.
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False):
-        super().__init__(entity, nexus_token, is_mock)
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
@@ -210,7 +209,7 @@ class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
         for region in sorted(found_regions):
             vc = SPRMAnnDataViewConfBuilder(
                 entity=self._entity,
-                nexus_token=self._nexus_token,
+                groups_token=self._groups_token,
                 is_mock=self._is_mock,
                 base_name=region,
                 imaging_path=STITCHED_IMAGE_DIR,
@@ -234,8 +233,8 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False):
-        super().__init__(entity, nexus_token, is_mock)
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
         # Spatially resolved RNA-seq assays require some special handling,
         # and others do not.
         self._is_spatial = False
@@ -253,13 +252,20 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
         # https://github.com/hubmapconsortium/portal-containers/blob/master/containers/anndata-to-ui
         # while others come from Matt's standard scanpy pipeline
         # or AnnData default (like X_umap or X).
+        cell_set_obs = ["leiden"]
+        cell_set_obs_names = ["Leiden"]
+        dags = [dag
+                for dag in self._entity['metadata']['dag_provenance_list'] if 'name' in dag]
+        if(any(['azimuth-annotate' in dag['origin'] for dag in dags])):
+            cell_set_obs.append("predicted.ASCT.celltype")
+            cell_set_obs_names.append("Predicted ASCT Cell Type")
         dataset = vc.add_dataset(name=self._uuid).add_object(AnnDataWrapper(
             adata_url=adata_url,
             mappings_obsm=["X_umap"],
             mappings_obsm_names=["UMAP"],
             spatial_centroid_obsm=("X_spatial" if self._is_spatial else None),
-            cell_set_obs=["leiden"],
-            cell_set_obs_names=["Leiden"],
+            cell_set_obs=cell_set_obs,
+            cell_set_obs_names=cell_set_obs_names,
             expression_matrix="X",
             matrix_gene_var_filter="marker_genes_for_heatmap",
             factors_obs=[
@@ -290,8 +296,8 @@ class SpatialRNASeqAnnDataZarrViewConfBuilder(RNASeqAnnDataZarrViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False):
-        super().__init__(entity, nexus_token, is_mock)
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
         # Spatially resolved RNA-seq assays require some special handling,
         # and others do not.
         self._is_spatial = True
@@ -322,8 +328,8 @@ class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
     of all the channels separated out.
     """
 
-    def __init__(self, entity, nexus_token, is_mock=False):
-        super().__init__(entity, nexus_token, is_mock)
+    def __init__(self, entity, groups_token, is_mock=False):
+        super().__init__(entity, groups_token, is_mock)
         # Do not show the separated mass-spec images.
         self.image_pyramid_regex = (
             re.escape(IMAGE_PYRAMID_DIR) + r"(?!/ometiffs/separate/)"
@@ -362,10 +368,7 @@ def get_view_config_builder(entity):
             return TiledSPRMViewConfBuilder
         if SEQFISH in assay_names:
             return SeqFISHViewConfBuilder
-        if (
-            MALDI_IMS_NEG in assay_names
-            or MALDI_IMS_POS in assay_names
-        ):
+        if MALDI_IMS in assay_names:
             return IMSViewConfBuilder
         return ImagePyramidViewConfBuilder
     if "rna" in hints:

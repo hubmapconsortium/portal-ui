@@ -24,7 +24,7 @@ scenarios:
         url: "/portal/search"
         headers:
           'Content-Type': application/json
-          'Authorization': "Bearer {{ $processEnvironment.NEXUS_TOKEN }}"
+          'Authorization': "Bearer {{ $processEnvironment.GROUPS_TOKEN }}"
         body: "{{ $processEnvironment.DATASETS_QUERY }}"
         gzip: true
         afterResponse: "printStatus"

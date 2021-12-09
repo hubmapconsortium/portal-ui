@@ -1,15 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { AppContext } from 'js/components/Providers';
-import PanelList from 'js/components/Collections/PanelList';
-import useCollectionsData from 'js/hooks/useCollectionsData';
+import CollectionsPanelList from 'js/components/CollectionsPanelList';
+import { useSearchHits } from 'js/hooks/useSearchData';
+import { getAllCollectionsQuery } from 'js/helpers/queries';
 import { PageWrapper, StyledDescription } from './style';
 
 function Collections() {
-  const { elasticsearchEndpoint, nexusToken } = useContext(AppContext);
-
-  const collectionsData = useCollectionsData(elasticsearchEndpoint, nexusToken);
+  const { searchHits: collectionsData } = useSearchHits(getAllCollectionsQuery);
 
   return (
     <PageWrapper>
@@ -24,7 +22,7 @@ function Collections() {
         organ—or data that has been grouped for other reasons. In the future, it will be possible to reference
         collections through Document Object Identifiers (DOIs).
       </StyledDescription>
-      {collectionsData.length > 0 && <PanelList collectionsData={collectionsData} />}
+      {collectionsData.length > 0 && <CollectionsPanelList collectionsData={collectionsData} />}
     </PageWrapper>
   );
 }

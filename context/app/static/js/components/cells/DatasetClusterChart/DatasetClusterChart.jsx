@@ -4,9 +4,9 @@ import Button from '@material-ui/core/Button';
 import { useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
+import DropdownListbox, { useSelectedDropdownIndex } from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
-import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalStackedBarChart';
+import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import CellsService from 'js/components/cells/CellsService';
 import ChartLoader from 'js/components/cells/ChartLoader';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
@@ -25,7 +25,7 @@ function DatasetClusterChart({
 }) {
   const [results, setResults] = useState({});
   const [scales, setScales] = useState({});
-  const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useState(0);
+  const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useSelectedDropdownIndex(0);
   const theme = useTheme();
   const loadedOnce = useRef(false);
   const [optionLabels, setOptionLabels] = useState({});
@@ -83,10 +83,6 @@ function DatasetClusterChart({
     }
   }, [cellVariableName, isExpanded, minExpression, uuid]);
 
-  function handleSelectClusterType({ i }) {
-    setSelectedClusterTypeIndex(i);
-  }
-
   if (Object.values(isLoading).some((val) => val)) {
     return <ChartLoader />;
   }
@@ -105,7 +101,7 @@ function DatasetClusterChart({
             buttonComponent={Button}
             selectedOptionIndex={selectedClusterTypeIndex}
             options={Object.keys(results)}
-            selectOnClick={handleSelectClusterType}
+            selectOnClick={setSelectedClusterTypeIndex}
             getOptionLabel={(option) => optionLabels[option]}
             buttonProps={{ variant: 'outlined' }}
           />

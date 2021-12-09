@@ -1,3 +1,57 @@
+## v0.33.0 - 2021-12-06
+
+- Add a CI test to check that each capitalized directory contains an index file.
+- Configure lineup with column types.
+- Add details logging on Cells API wrapper.
+- Fix warning about invalid element nesting on markdown pages: `publication/*` and `docs/*`. 
+- Refactor assay types bar chart.
+- Add assay types chart to organ pages.
+- Replace outline with filter hover on stacked bar charts.
+- Clean up formatting of publications page.
+- Remove chromatic Github Actions workflow.
+
+
+## v0.32.1 - 2021-11-29
+
+- On the organs page, add Dataset and Sample icons in the respective buttons.
+- Display more information about the cells service.
+- Add descriptions to `donor.*` and `sample.*` metadata fields.
+- Fix react warnings on the publication page.
+
+
+## v0.32.0 - 2021-11-22
+
+- Add ASCT support for RNA-seq visualizations
+- Update metadata download on search pages to download current set.
+- Fix usage of MALDI name in vitessce view configuration generation.
+- In the JSX, move `Detail/` to `detailPage/`: Only directories containing an index should be capitalized.
+- Move `files/` under `detailPage/`, since it is only used here.
+- Upgrade Vitessce to 1.1.17
+
+
+## v0.31.0 - 2021-11-17
+
+- Switch Globus authentication from Globus Nexus to Globus Groups.
+
+
+## v0.30.2 - 2021-11-04
+
+- Fix checkbox facet alignment on search pages.
+
+
+## v0.30.1 - 2021-11-04
+
+- Add default query to search hooks.
+- Fix HuBMAP commons install.
+- Refactor search filter components.
+- Track free text searches on search pages.
+- Add analytics tracking for facets on search pages.
+- Add analytics tracking for search page sorting.
+- Add tracking for view switch on search pages.
+- Add analytics tracking for facet chips on search pages.
+- Update facet tracking to specify whether the facet was selected or unselected.
+
+
 ## v0.30.0 - 2021-10-26
 
 - Handle incorrect casing for HuBMAP ID browse routes.

@@ -9,11 +9,17 @@ const Flex = styled.div`
 const DropdownWrapper = styled.div`
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
   max-width: 175px;
+  min-width: 0px;
 `;
 
 const FlexGrowChild = styled.div`
   flex-grow: 1;
   min-height: 0px;
+  min-width: 0px;
 `;
 
-export { Flex, DropdownWrapper, FlexGrowChild };
+const DropdownAndLegendWrapper = styled.div`
+  margin-top: ${(props) => props.$topOffset}px;
+`;
+
+export { Flex, DropdownWrapper, FlexGrowChild, DropdownAndLegendWrapper };
