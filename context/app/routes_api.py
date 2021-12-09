@@ -104,15 +104,17 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     ...   'date': 'date released',
     ...   'extra': 'should be ignored'
     ... }
-    >>> from pprint import pp
-    >>> pp(_dicts_to_tsv(data_dicts, ['title'], descriptions_dict))
-    ('title\\tdate\\tsubtitle\\r\\n'
-     '#main title\\tdate released\\t\\r\\n'
-     'Star Wars\\t1977\\tA New Hope\\r\\n'
-     'The Empire Strikes Back\\t1980\\t\\r\\n'
-     'Return of the Jedi\\t1983\\t\\r\\n')
+    >>> lines = _dicts_to_tsv(data_dicts, ['title'], descriptions_dict).split('\\r\\n')
+    >>> for line in lines:
+    ...   print('| ' + ' | '.join(line.split('\\t')) + ' |')
+    | title | date | subtitle |
+    | #main title | date released |  |
+    | Star Wars | 1977 | A New Hope |
+    | The Empire Strikes Back | 1980 |  |
+    | Return of the Jedi | 1983 |  |
+    |  |
     '''
-    # wrap in default dicts that return 'n/a'
+    # TODO: wrap in default dicts that return 'n/a'
     body_fields = sorted(
         set().union(*[d.keys() for d in data_dicts])
         - set(first_fields)
