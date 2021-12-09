@@ -95,8 +95,11 @@ def _make_tsv_response(tsv_content, filename):
 def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     '''
     >>> data_dicts = [
+    ...   # explicit subtitle
     ...   {'title': 'Star Wars', 'subtitle': 'A New Hope', 'date': '1977'},
-    ...   {'title': 'The Empire Strikes Back', 'date': '1980'},
+    ...   # empty subtitle
+    ...   {'title': 'The Empire Strikes Back', 'subtitle': '', 'date': '1980'},
+    ...   # n/a subtitle
     ...   {'title': 'Return of the Jedi', 'date': '1983'}
     ... ]
     >>> descriptions_dict = {
@@ -111,7 +114,7 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     | #main title | date released |  |
     | Star Wars | 1977 | A New Hope |
     | The Empire Strikes Back | 1980 |  |
-    | Return of the Jedi | 1983 |  |
+    | Return of the Jedi | 1983 | n/a |
     |  |
     '''
     # TODO: wrap in default dicts that return 'n/a'
@@ -119,6 +122,10 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
         set().union(*[d.keys() for d in data_dicts])
         - set(first_fields)
     )
+    for dd in data_dicts:
+        for field in body_fields:
+            if field not in dd:
+                dd[field] = 'n/a'
     output = StringIO()
     writer = DictWriter(output, first_fields + body_fields, delimiter='\t', extrasaction='ignore')
     writer.writeheader()
