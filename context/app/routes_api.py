@@ -99,7 +99,7 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     ...   {'title': 'Star Wars', 'subtitle': 'A New Hope', 'date': '1977'},
     ...   # empty subtitle
     ...   {'title': 'The Empire Strikes Back', 'subtitle': '', 'date': '1980'},
-    ...   # n/a subtitle
+    ...   # N/A subtitle
     ...   {'title': 'Return of the Jedi', 'date': '1983'}
     ... ]
     >>> descriptions_dict = {
@@ -114,7 +114,7 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     | #main title | date released |  |
     | Star Wars | 1977 | A New Hope |
     | The Empire Strikes Back | 1980 |  |
-    | Return of the Jedi | 1983 | n/a |
+    | Return of the Jedi | 1983 | N/A |
     |  |
     '''
     body_fields = sorted(
@@ -124,7 +124,7 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     for dd in data_dicts:
         for field in body_fields:
             if field not in dd:
-                dd[field] = 'n/a'
+                dd[field] = 'N/A'
     output = StringIO()
     writer = DictWriter(output, first_fields + body_fields, delimiter='\t', extrasaction='ignore')
     writer.writeheader()
