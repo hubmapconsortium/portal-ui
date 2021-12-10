@@ -1,0 +1,1 @@
+- Log when Cells API calls start, so if it times out, we have something to go on.
