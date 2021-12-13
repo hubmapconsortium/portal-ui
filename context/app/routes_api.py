@@ -95,8 +95,11 @@ def _make_tsv_response(tsv_content, filename):
 def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     '''
     >>> data_dicts = [
+    ...   # explicit subtitle
     ...   {'title': 'Star Wars', 'subtitle': 'A New Hope', 'date': '1977'},
-    ...   {'title': 'The Empire Strikes Back', 'date': '1980'},
+    ...   # empty subtitle
+    ...   {'title': 'The Empire Strikes Back', 'subtitle': '', 'date': '1980'},
+    ...   # N/A subtitle
     ...   {'title': 'Return of the Jedi', 'date': '1983'}
     ... ]
     >>> descriptions_dict = {
@@ -104,18 +107,24 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     ...   'date': 'date released',
     ...   'extra': 'should be ignored'
     ... }
-    >>> from pprint import pp
-    >>> pp(_dicts_to_tsv(data_dicts, ['title'], descriptions_dict))
-    ('title\\tdate\\tsubtitle\\r\\n'
-     '#main title\\tdate released\\t\\r\\n'
-     'Star Wars\\t1977\\tA New Hope\\r\\n'
-     'The Empire Strikes Back\\t1980\\t\\r\\n'
-     'Return of the Jedi\\t1983\\t\\r\\n')
+    >>> lines = _dicts_to_tsv(data_dicts, ['title'], descriptions_dict).split('\\r\\n')
+    >>> for line in lines:
+    ...   print('| ' + ' | '.join(line.split('\\t')) + ' |')
+    | title | date | subtitle |
+    | #main title | date released |  |
+    | Star Wars | 1977 | A New Hope |
+    | The Empire Strikes Back | 1980 |  |
+    | Return of the Jedi | 1983 | N/A |
+    |  |
     '''
     body_fields = sorted(
         set().union(*[d.keys() for d in data_dicts])
         - set(first_fields)
     )
+    for dd in data_dicts:
+        for field in body_fields:
+            if field not in dd:
+                dd[field] = 'N/A'
     output = StringIO()
     writer = DictWriter(output, first_fields + body_fields, delimiter='\t', extrasaction='ignore')
     writer.writeheader()
