@@ -1,6 +1,7 @@
 from io import StringIO
 from csv import DictWriter
 from pathlib import Path
+from datetime import datetime
 
 from yaml import safe_load
 
@@ -34,19 +35,26 @@ def entities_tsv(entity_type):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
         constraints = _drop_dict_keys(all_args, ['uuids'])
-        entities = _get_entities(entity_type, constraints, request.args.getlist('uuids'))
+        uuids = request.args.getlist('uuids')
     else:
-        body = request.get_json()
         if request.args:
             return _get_api_json_error(400, 'POST only accepts a JSON body.')
+        body = request.get_json()
         if _drop_dict_keys(body, ['uuids']):
             return _get_api_json_error(400, 'POST only accepts uuids in JSON body.')
-        entities = _get_entities(entity_type, {}, body.get('uuids'))
+        constraints = {}
+        uuids = body.get('uuids')
+    entities = _get_entities(entity_type, constraints, uuids)
+
     descriptions_path = Path(__name__).absolute().parent.parent / \
         'ingest-validation-tools/docs/field-descriptions.yaml'
     descriptions_dict = safe_load(descriptions_path.read_text())
     tsv = _dicts_to_tsv(entities, _first_fields, descriptions_dict)
-    return _make_tsv_response(tsv, f'{entity_type}.tsv')
+
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    filename = f'hubmap-{entity_type}-metadata-{timestamp}.tsv'
+
+    return _make_tsv_response(_dicts_to_tsv(entities, _first_fields), filename)
 
 
 @blueprint.route('/lineup/<entity_type>')

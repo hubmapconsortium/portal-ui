@@ -1,0 +1,1 @@
+- Render the react error page for all errors even if there is not an explict handler.

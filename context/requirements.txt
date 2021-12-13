@@ -7,4 +7,4 @@ python-datauri==0.2.8
 python-frontmatter==0.5.0
 vitessce==0.1.0a12
 hubmap-api-py-client==0.0.9
-git+https://github.com/hubmapconsortium/commons.git@v2.0.1#egg=hubmap-commons
+hubmap-commons==2.0.12

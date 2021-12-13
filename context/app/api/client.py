@@ -18,6 +18,16 @@ class VitessceConfLiftedUUID:
     vis_lifted_uuid: str
 
 
+def _get_hits(response_json):
+    '''
+    The repeated key makes error messages ambiguous.
+    Split it into separate calls so we can tell which fails.
+    '''
+    outer_hits = response_json['hits']
+    inner_hits = outer_hits['hits']
+    return inner_hits
+
+
 class ApiClient():
     def __init__(self, url_base=None, groups_token=None):
         self.url_base = url_base
@@ -64,7 +74,7 @@ class ApiClient():
             current_app.config['ELASTICSEARCH_ENDPOINT']
             + current_app.config['PORTAL_INDEX_PATH'],
             body_json=query)
-        uuids = [hit['_id'] for hit in response_json['hits']['hits']]
+        uuids = [hit['_id'] for hit in _get_hits(response_json)]
         if len(uuids) == size:
             raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
@@ -86,7 +96,7 @@ class ApiClient():
             current_app.config['ELASTICSEARCH_ENDPOINT']
             + current_app.config['PORTAL_INDEX_PATH'],
             body_json=query)
-        sources = [hit['_source'] for hit in response_json['hits']['hits']]
+        sources = [hit['_source'] for hit in _get_hits(response_json)]
         total_hits = response_json['hits']['total']['value']
         if len(sources) < total_hits:
             raise Exception('Incomplete results: need to make multiple requests')
@@ -111,7 +121,7 @@ class ApiClient():
             + current_app.config['PORTAL_INDEX_PATH'],
             body_json=query)
 
-        hits = response_json['hits']['hits']
+        hits = _get_hits(response_json)
         return _get_entity_from_hits(hits, has_token=self.groups_token, uuid=uuid, hbm_id=hbm_id)
 
     def get_latest_entity_uuid(self, uuid, type):

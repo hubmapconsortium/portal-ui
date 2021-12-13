@@ -26,6 +26,7 @@ function SummaryData(props) {
     group_name,
     entityCanBeSaved,
     children,
+    mapped_external_group_name,
   } = props;
 
   const setSummaryComponentObserver = useEntityStore(entityStoreSelector);
@@ -60,6 +61,7 @@ function SummaryData(props) {
               <>
                 <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
                 <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
+                {mapped_external_group_name && <SummaryItem>{mapped_external_group_name}</SummaryItem>}
               </>
             )}
             <FlexEnd>
@@ -92,10 +94,12 @@ SummaryData.propTypes = {
   status: PropTypes.string.isRequired,
   mapped_data_access_level: PropTypes.string.isRequired,
   entityCanBeSaved: PropTypes.bool,
+  mapped_external_group_name: PropTypes.string,
 };
 
 SummaryData.defaultProps = {
   entityCanBeSaved: true,
+  mapped_external_group_name: undefined,
 };
 
 export default SummaryData;
