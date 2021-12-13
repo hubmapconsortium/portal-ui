@@ -23,6 +23,7 @@ function Summary(props) {
     doi_url,
     doi,
     collectionName,
+    mapped_external_group_name,
   } = props;
   return (
     <PaddedSectionContainer id="summary">
@@ -34,6 +35,7 @@ function Summary(props) {
         mapped_data_access_level={mapped_data_access_level}
         group_name={group_name}
         entityCanBeSaved={entityCanBeSaved}
+        mapped_external_group_name={mapped_external_group_name}
       >
         {children}
       </SummaryData>
@@ -62,6 +64,7 @@ Summary.propTypes = {
   mapped_data_access_level: PropTypes.string,
   entityCanBeSaved: PropTypes.bool,
   collectionName: PropTypes.string,
+  mapped_external_group_name: PropTypes.string,
 };
 
 Summary.defaultProps = {
@@ -72,6 +75,7 @@ Summary.defaultProps = {
   mapped_data_access_level: '',
   entityCanBeSaved: true,
   collectionName: '',
+  mapped_external_group_name: undefined,
 };
 
 export default Summary;
