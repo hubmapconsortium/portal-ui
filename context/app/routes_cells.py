@@ -35,20 +35,20 @@ gene_symbols = None
 
 def timeit(f):
     def timed(*args, **kwargs):
+        limit = 20
+        str_args = [str(arg) for arg in args]
+        trunc_args = [arg[:limit] + ('...' if len(arg) > limit else '') for arg in str_args]
+        trunk_kwargs = [f'{k}=...' for k in kwargs]
+        url = f'{request.path}?{request.query_string.decode("UTF-8")}'
+        func = f'{f.__name__}({", ".join(trunc_args + trunk_kwargs)})'
+
+        current_app.logger.info(' | '.join(['START', url, func]))
+
         start = time.time()
         result = f(*args, **kwargs)
         end = time.time()
 
-        limit = 20
-
-        str_args = [str(arg) for arg in args]
-        trunc_args = [arg[:limit] + ('...' if len(arg) > limit else '') for arg in str_args]
-        trunk_kwargs = [f'{k}=...' for k in kwargs]
-
         elapsed = f'{round(end - start, 3)} seconds'
-        url = f'{request.path}?{request.query_string.decode("UTF-8")}'
-        func = f'{f.__name__}({", ".join(trunc_args + trunk_kwargs)})'
-
         current_app.logger.info(' | '.join([elapsed, url, func]))
         return result
     return timed
