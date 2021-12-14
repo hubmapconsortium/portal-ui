@@ -1,0 +1,1 @@
+- Handle both dataset_uuid and uuid keys from revisions.
