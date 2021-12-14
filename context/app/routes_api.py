@@ -54,7 +54,7 @@ def entities_tsv(entity_type):
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     filename = f'hubmap-{entity_type}-metadata-{timestamp}.tsv'
 
-    return _make_tsv_response(_dicts_to_tsv(entities, _first_fields), filename)
+    return _make_tsv_response(tsv, filename)
 
 
 @blueprint.route('/lineup/<entity_type>')
