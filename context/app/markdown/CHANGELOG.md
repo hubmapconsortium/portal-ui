@@ -1,3 +1,18 @@
+## v0.33.1 - 2021-12-14
+
+- Log when Cells API calls start, so if it times out, we have something to go on.
+- Use hubmap-commons from pypi.
+- Implement design for external datasets on detail pages.
+- Add a timestamp to the filename of the TSV download.
+- Render the react error page for all errors even if there is not an explict handler.
+- If a `sub_status` is present ("Retracted"), use it instead of the `status`.
+- Add dev-search for retracted.
+- Revert https://github.com/hubmapconsortium/portal-ui/pull/2191:
+  Return to the old organ facet until partonomy is sorted out.
+- Handle both dataset_uuid and uuid keys from revisions.
+- ES response structure has nested instances of `hits` as a key. Split our access across multiple lines of code so we can tell whether it's the inside or the outside that didn't match our expectations.
+
+
 ## v0.33.0 - 2021-12-06
 
 - Add a CI test to check that each capitalized directory contains an index file.

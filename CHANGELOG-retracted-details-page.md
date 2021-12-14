@@ -1,1 +1,0 @@
-- If a `sub_status` is present ("Retracted"), use it instead of the `status`.
