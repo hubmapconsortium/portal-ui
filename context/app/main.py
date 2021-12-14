@@ -43,6 +43,14 @@ def gateway_timeout(e):
     return render_react_error(504, 'Gateway Timeout')
 
 
+def any_other_error(e):
+    '''
+    In debug mode, we will still fall back to the interactive debugger.
+    https://flask.palletsprojects.com/en/2.0.x/errorhandling/#unhandled-exceptions
+    '''
+    return render_react_error(500, 'Internal Server Error')
+
+
 def create_app(testing=False):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(default_config.DefaultConfig)
@@ -67,6 +75,7 @@ def create_app(testing=False):
     app.register_error_handler(403, forbidden)
     app.register_error_handler(404, not_found)
     app.register_error_handler(504, gateway_timeout)
+    app.register_error_handler(500, any_other_error)
 
     @app.context_processor
     def inject_template_globals():
