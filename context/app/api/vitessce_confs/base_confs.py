@@ -237,7 +237,7 @@ class SPRMViewConfBuilder(ImagePyramidViewConfBuilder):
     """
 
     def _get_full_image_path(self):
-        return f"{self._imaging_path_regex}/{self._image_name}.ome.tif(f?)"
+        return f"{self._imaging_path_regex}/{self._image_name}" + r"\.ome\.tiff?"
 
     def _check_sprm_image(self, path_regex):
         """Check whether or not there is a matching SPRM image at a path.
@@ -359,7 +359,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
         self._mask_path_regex = f"{self.image_pyramid_regex}/{kwargs['mask_path']}"
 
     def _get_bitmask_image_path(self):
-        return f"{self._mask_path_regex}/{self._mask_name}.ome.tiff?"
+        return f"{self._mask_path_regex}/{self._mask_name}" + r"\.ome\.tiff?"
 
     def _get_ometiff_mask_wrapper(self, found_bitmask_file):
         bitmask_img_url, bitmask_offsets_url = self._get_img_and_offset_url(
@@ -444,8 +444,8 @@ class MultiImageSPRMAnndataViewConfBuilder(ViewConfBuilder):
         super().__init__(entity, groups_token, is_mock)
         self._expression_id = 'expr'
         self._mask_id = 'mask'
-        self._image_pyramid_subdir_regex = SPRM_PYRAMID_SUBDIR
-        self._mask_pyramid_subdir_regex = SPRM_PYRAMID_SUBDIR.replace(
+        self._image_pyramid_subdir = SPRM_PYRAMID_SUBDIR
+        self._mask_pyramid_subdir = SPRM_PYRAMID_SUBDIR.replace(
             self._expression_id, self._mask_id
         )
 
@@ -454,10 +454,10 @@ class MultiImageSPRMAnndataViewConfBuilder(ViewConfBuilder):
         to use as unique identifiers.
         """
         file_paths_found = [file["rel_path"] for file in self._entity["files"]]
-        full_pyramid_path = IMAGE_PYRAMID_DIR + "/" + self._image_pyramid_subdir_regex
+        full_pyramid_path = IMAGE_PYRAMID_DIR + "/" + self._image_pyramid_subdir
         pyramid_files = [file for file in file_paths_found if full_pyramid_path in file]
-        found_ids = [re.sub(r".ome.tif(f?)", "", Path(image_path).name).replace(
-            "_" + self._expression_id, "") for image_path in pyramid_files]
+        found_ids = [Path(image_path).name.replace('.ome.tiff', '').replace(
+            '.ome.tif', '').replace('_' + self._expression_id, '') for image_path in pyramid_files]
         if len(found_ids) == 0:
             raise FileNotFoundError(
                 f"Could not find images of the SPRM analysis with uuid {self._uuid}"
@@ -473,8 +473,8 @@ class MultiImageSPRMAnndataViewConfBuilder(ViewConfBuilder):
                 groups_token=self._groups_token,
                 is_mock=self._is_mock,
                 base_name=id,
-                imaging_path=self._image_pyramid_subdir_regex,
-                mask_path=self._mask_pyramid_subdir_regex,
+                imaging_path=self._image_pyramid_subdir,
+                mask_path=self._mask_pyramid_subdir,
                 image_name=f"{id}_{self._expression_id}",
                 mask_name=f"{id}_{self._mask_id}"
             )

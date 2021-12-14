@@ -2,6 +2,7 @@ IMAGE_PYRAMID = "image_pyramid"
 CODEX_CYTOKIT = "codex_cytokit"
 SEQFISH = "seqFish"
 MALDI_IMS = "MALDI-IMS"
+CELLDIVE_DEEPCELL = "celldive_deepcell"
 
 SCRNA_SEQ_10X = "salmon_rnaseq_10x"
 SCRNA_SEQ_SCI = "salmon_rnaseq_sciseq"

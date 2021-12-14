@@ -27,6 +27,7 @@ from .base_confs import (
     ConfCells
 )
 from .assays import (
+    CELLDIVE_DEEPCELL,
     SEQFISH,
     MALDI_IMS
 )
@@ -200,11 +201,11 @@ class StitchedCytokitSPRMViewConfBuilder(MultiImageSPRMAnndataViewConfBuilder):
     # Need to override base class settings due to different directory structure
     def __init__(self, entity, groups_token, is_mock=False):
         super().__init__(entity, groups_token, is_mock)
-        self._image_pyramid_subdir_regex = STITCHED_IMAGE_DIR
+        self._image_pyramid_subdir = STITCHED_IMAGE_DIR
         # The ids don't match exactly with the replacement because all image files have
         # stitched_expressions appended while the subdirectory only has /stitched/
         self._expression_id = 'stitched_expressions'
-        self._mask_pyramid_subdir_regex = STITCHED_IMAGE_DIR.replace(
+        self._mask_pyramid_subdir = STITCHED_IMAGE_DIR.replace(
             'expressions', 'mask'
         )
         self._mask_id = 'stitched_mask'
@@ -345,7 +346,7 @@ def get_view_config_builder(entity):
     dag_names = [dag['name']
                  for dag in entity['metadata']['dag_provenance_list'] if 'name' in dag]
     if "is_image" in hints:
-        if "celldive_deepcell" in data_types:
+        if CELLDIVE_DEEPCELL in assay_names:
             return MultiImageSPRMAnndataViewConfBuilder
         if "codex" in hints:
             if ('sprm-to-anndata.cwl' in dag_names):
