@@ -73,11 +73,18 @@ export function createDownloadUrl(fileStr, fileType) {
 export function getDefaultQuery() {
   return {
     bool: {
-      must_not: {
-        exists: {
-          field: 'next_revision_uuid',
+      must_not: [
+        {
+          exists: {
+            field: 'next_revision_uuid',
+          },
         },
-      },
+        {
+          exists: {
+            field: 'sub_status',
+          },
+        },
+      ],
     },
   };
 }
