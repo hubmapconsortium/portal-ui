@@ -50,7 +50,7 @@ non_malformed_entities = set(fixtures_dir.glob("*_entity.json")) - set(
 @pytest.mark.parametrize("entity_file", non_malformed_entities)
 def test_assays(entity_file):
     assay = re.search(
-        str(parent_dir / f"{str(re.escape(FIXTURES_INPUT_DIR))}/(.*)_entity.json"),
+        r'([^/]+)_entity.json',
         str(entity_file),
     )[1]
     entity = json.loads(Path(entity_file).read_text())
