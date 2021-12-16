@@ -51,9 +51,9 @@ non_malformed_entities = set(fixtures_dir.glob("*_entity.json")) - set(
 def test_assays(entity_file):
     assay = re.search(
         r'([^/]+)_entity.json',
-        str(entity_file),
+        entity_file.name,
     )[1]
-    entity = json.loads(Path(entity_file).read_text())
+    entity = json.loads(entity_file.read_text())
     AssayViewConfClass = AssayConfClasses[assay]
     if assay in ["sprm", "sprm_anndata"]:
         vc = AssayViewConfClass(
