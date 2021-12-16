@@ -24,7 +24,7 @@ FIXTURES_EXPECTED_OUTPUT_DIR = "fixtures/output_expected"
 
 BASE_NAME_FOR_SPRM = "BASE_NAME"
 
-AssayConfClasses = {
+builders = {
     "cytokit_json": TiledSPRMViewConfBuilder,
     "rna": RNASeqViewConfBuilder,
     "atac": ATACSeqViewConfBuilder,
@@ -54,7 +54,7 @@ def test_assays(entity_file):
         entity_file.name,
     )[1]
     entity = json.loads(entity_file.read_text())
-    AssayViewConfClass = AssayConfClasses[assay]
+    AssayViewConfClass = builders[assay]
     if assay in ["sprm", "sprm_anndata"]:
         vc = AssayViewConfClass(
             entity=entity,
@@ -80,7 +80,7 @@ def test_assays(entity_file):
     malformed_entity = json.loads(
         Path(str(entity_file).replace(assay, f"malformed_{assay}")).read_text()
     )
-    AssayViewConfClass = AssayConfClasses[assay]
+    AssayViewConfClass = builders[assay]
     if assay in ["sprm", "sprm_anndata"]:
         vc = AssayViewConfClass(
             entity=malformed_entity,
