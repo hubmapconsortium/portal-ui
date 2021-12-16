@@ -40,59 +40,61 @@ AssayConfClasses = {
 }
 
 
-def test_assays():
-    parent_dir = Path(__file__).parent
-    fixtures_dir = parent_dir / FIXTURES_INPUT_DIR
-    non_malformed_entities = set(fixtures_dir.glob("*_entity.json")) - set(
-        fixtures_dir.glob("malformed_*_entity.json")
+parent_dir = Path(__file__).parent
+fixtures_dir = parent_dir / FIXTURES_INPUT_DIR
+non_malformed_entities = set(fixtures_dir.glob("*_entity.json")) - set(
+    fixtures_dir.glob("malformed_*_entity.json")
+)
+
+
+@pytest.mark.parametrize("entity_file", non_malformed_entities)
+def test_assays(entity_file):
+    assay = re.search(
+        str(parent_dir / f"{str(re.escape(FIXTURES_INPUT_DIR))}/(.*)_entity.json"),
+        str(entity_file),
+    )[1]
+    entity = json.loads(Path(entity_file).read_text())
+    AssayViewConfClass = AssayConfClasses[assay]
+    if assay in ["sprm", "sprm_anndata"]:
+        vc = AssayViewConfClass(
+            entity=entity,
+            groups_token=MOCK_GROUPS_TOKEN,
+            is_mock=True,
+            base_name=BASE_NAME_FOR_SPRM,
+            imaging_path="imaging_path",
+            image_name="expressions",
+            mask_name="mask",
+            mask_path="imaging_path"
+        )
+    else:
+        vc = AssayViewConfClass(
+            entity=entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
+        )
+    conf = vc.get_conf_cells().conf
+    conf_expected = json.loads(
+        (
+            parent_dir / f"{FIXTURES_EXPECTED_OUTPUT_DIR}/{assay}_conf.json"
+        ).read_text()
     )
-    for entity_file in non_malformed_entities:
-        assay = re.search(
-            str(parent_dir / f"{str(re.escape(FIXTURES_INPUT_DIR))}/(.*)_entity.json"),
-            str(entity_file),
-        )[1]
-        entity = json.loads(Path(entity_file).read_text())
-        AssayViewConfClass = AssayConfClasses[assay]
-        if assay in ["sprm", "sprm_anndata"]:
-            vc = AssayViewConfClass(
-                entity=entity,
-                groups_token=MOCK_GROUPS_TOKEN,
-                is_mock=True,
-                base_name=BASE_NAME_FOR_SPRM,
-                imaging_path="imaging_path",
-                image_name="expressions",
-                mask_name="mask",
-                mask_path="imaging_path"
-            )
-        else:
-            vc = AssayViewConfClass(
-                entity=entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
-            )
-        conf = vc.get_conf_cells().conf
-        conf_expected = json.loads(
-            (
-                parent_dir / f"{FIXTURES_EXPECTED_OUTPUT_DIR}/{assay}_conf.json"
-            ).read_text()
+    assert conf_expected == conf
+    malformed_entity = json.loads(
+        Path(str(entity_file).replace(assay, f"malformed_{assay}")).read_text()
+    )
+    AssayViewConfClass = AssayConfClasses[assay]
+    if assay in ["sprm", "sprm_anndata"]:
+        vc = AssayViewConfClass(
+            entity=malformed_entity,
+            groups_token=MOCK_GROUPS_TOKEN,
+            is_mock=True,
+            base_name=BASE_NAME_FOR_SPRM,
+            imaging_path="imaging_path",
+            image_name="expressions",
+            mask_name="mask",
+            mask_path="imaging_path"
         )
-        assert conf_expected == conf
-        malformed_entity = json.loads(
-            Path(str(entity_file).replace(assay, f"malformed_{assay}")).read_text()
+    else:
+        vc = AssayViewConfClass(
+            entity=malformed_entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
         )
-        AssayViewConfClass = AssayConfClasses[assay]
-        if assay in ["sprm", "sprm_anndata"]:
-            vc = AssayViewConfClass(
-                entity=malformed_entity,
-                groups_token=MOCK_GROUPS_TOKEN,
-                is_mock=True,
-                base_name=BASE_NAME_FOR_SPRM,
-                imaging_path="imaging_path",
-                image_name="expressions",
-                mask_name="mask",
-                mask_path="imaging_path"
-            )
-        else:
-            vc = AssayViewConfClass(
-                entity=malformed_entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
-            )
-        with pytest.raises(FileNotFoundError):
-            vc.get_conf_cells().conf
+    with pytest.raises(FileNotFoundError):
+        vc.get_conf_cells().conf
