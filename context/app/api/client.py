@@ -157,10 +157,7 @@ class ApiClient():
         # Otherwise, just try to visualize the data for the entity itself:
         try:
             Builder = get_view_config_builder(entity=entity)
-            if isinstance(Builder, NullViewConfBuilder):
-                vc = Builder()
-            else:
-                vc = Builder(entity, self.groups_token)
+            vc = Builder(entity, self.groups_token)
             return VitessceConfLiftedUUID(vc.get_conf_cells(), None)
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'
