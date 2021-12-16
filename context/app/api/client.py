@@ -135,7 +135,7 @@ class ApiClient():
         '''
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
-        vis_lifted_uuid = None # default
+        vis_lifted_uuid = None  # default
         image_pyramid_descendants = _get_image_pyramid_descendants(entity)
 
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
