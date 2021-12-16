@@ -54,9 +54,9 @@ def test_assays(entity_file):
         entity_file.name,
     )[1]
     entity = json.loads(entity_file.read_text())
-    AssayViewConfClass = builders[assay]
+    Builder = builders[assay]
     if assay in ["sprm", "sprm_anndata"]:
-        vc = AssayViewConfClass(
+        builder = Builder(
             entity=entity,
             groups_token=MOCK_GROUPS_TOKEN,
             is_mock=True,
@@ -67,10 +67,10 @@ def test_assays(entity_file):
             mask_path="imaging_path"
         )
     else:
-        vc = AssayViewConfClass(
+        builder = Builder(
             entity=entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
         )
-    conf = vc.get_conf_cells().conf
+    conf = builder.get_conf_cells().conf
     conf_expected = json.loads(
         (
             parent_dir / f"{FIXTURES_EXPECTED_OUTPUT_DIR}/{assay}_conf.json"
@@ -80,9 +80,9 @@ def test_assays(entity_file):
     malformed_entity = json.loads(
         Path(str(entity_file).replace(assay, f"malformed_{assay}")).read_text()
     )
-    AssayViewConfClass = builders[assay]
+    Builder = builders[assay]
     if assay in ["sprm", "sprm_anndata"]:
-        vc = AssayViewConfClass(
+        builder = Builder(
             entity=malformed_entity,
             groups_token=MOCK_GROUPS_TOKEN,
             is_mock=True,
@@ -93,8 +93,8 @@ def test_assays(entity_file):
             mask_path="imaging_path"
         )
     else:
-        vc = AssayViewConfClass(
+        builder = Builder(
             entity=malformed_entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
         )
     with pytest.raises(FileNotFoundError):
-        vc.get_conf_cells().conf
+        builder.get_conf_cells().conf
