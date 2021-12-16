@@ -42,12 +42,12 @@ AssayConfClasses = {
 
 parent_dir = Path(__file__).parent
 fixtures_dir = parent_dir / FIXTURES_INPUT_DIR
-non_malformed_entities = set(fixtures_dir.glob("*_entity.json")) - set(
+entity_paths = set(fixtures_dir.glob("*_entity.json")) - set(
     fixtures_dir.glob("malformed_*_entity.json")
 )
 
 
-@pytest.mark.parametrize("entity_file", non_malformed_entities)
+@pytest.mark.parametrize("entity_file", entity_paths)
 def test_assays(entity_file):
     assay = re.search(
         r'([^/]+)_entity.json',
