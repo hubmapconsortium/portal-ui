@@ -172,9 +172,11 @@ class ImagePyramidViewConfBuilder(AbstractImagingViewConfBuilder):
 
     def get_conf_cells(self):
         file_paths_found = self._get_file_paths()
-        found_images = get_matches(
-            file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
-        )
+        found_images = [
+            path for path in get_matches(
+                file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
+            )
+            if 'separate/' not in path]
         if len(found_images) == 0:
             message = (
                 f"Image pyramid assay with uuid {self._uuid} has no matching files"
