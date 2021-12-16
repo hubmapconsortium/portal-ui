@@ -7,7 +7,7 @@ from flask import abort, current_app
 import requests
 
 from .vitessce_confs import get_view_config_builder
-from .vitessce_confs.base_confs import ConfCells, NullViewConfBuilder
+from .vitessce_confs.base_confs import ConfCells
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
@@ -158,12 +158,12 @@ class ApiClient():
         try:
             Builder = get_view_config_builder(entity=entity)
             vc = Builder(entity, self.groups_token)
-            return VitessceConfLiftedUUID(vc.get_conf_cells(), None)
+            conf_cells = vc.get_conf_cells()
         except Exception:
             message = f'Building vitessce conf threw error: {traceback.format_exc()}'
             current_app.logger.error(message)
-
-            return VitessceConfLiftedUUID(ConfCells({'error': message}, None), None)
+            conf_cells = ConfCells({'error': message}, None)
+        return VitessceConfLiftedUUID(conf_cells, None)
 
 
 def _make_query(constraints, uuids):
