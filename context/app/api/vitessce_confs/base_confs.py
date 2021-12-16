@@ -176,7 +176,8 @@ class ImagePyramidViewConfBuilder(AbstractImagingViewConfBuilder):
             path for path in get_matches(
                 file_paths_found, self.image_pyramid_regex + r".*\.ome\.tiff?$",
             )
-            if 'separate/' not in path]
+            if 'separate/' not in path  # Excluse separate/* in MALDI-IMS
+        ]
         if len(found_images) == 0:
             message = (
                 f"Image pyramid assay with uuid {self._uuid} has no matching files"
