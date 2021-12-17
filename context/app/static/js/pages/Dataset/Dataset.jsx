@@ -30,7 +30,7 @@ function SummaryDataChildren(props) {
   return (
     <>
       <SummaryItem>
-        <LightBlueLink variant="h6" href="/docs/assays" underline="none">
+        <LightBlueLink variant="h6" href="https://software.docs.hubmapconsortium.org/assays" underline="none">
           {mapped_data_types}
         </LightBlueLink>
       </SummaryItem>
