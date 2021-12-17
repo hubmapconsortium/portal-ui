@@ -135,8 +135,10 @@ class ApiClient():
         '''
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
-        # First, try "vis-lifting": Display image pyramids on their parent entity pages.
+        vis_lifted_uuid = None  # default
         image_pyramid_descendants = _get_image_pyramid_descendants(entity)
+
+        # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         if image_pyramid_descendants:
             if len(image_pyramid_descendants) > 1:
                 current_app.logger.error(f'Expected only one descendant on {entity["uuid"]}')
@@ -147,26 +149,25 @@ class ApiClient():
             derived_entity['files'] = derived_entity['metadata']['files']
             vitessce_conf = \
                 self.get_vitessce_conf_cells_and_lifted_uuid(derived_entity).vitessce_conf
-            return VitessceConfLiftedUUID(
-                vis_lifted_uuid=derived_entity['uuid'],
-                vitessce_conf=vitessce_conf)
+            vis_lifted_uuid = derived_entity['uuid']
 
-        if 'files' not in entity or 'data_types' not in entity:
-            return VitessceConfLiftedUUID(ConfCells(None, None), None)
+        elif 'files' not in entity or 'data_types' not in entity:
+            vitessce_conf = ConfCells(None, None)
 
         # Otherwise, just try to visualize the data for the entity itself:
-        try:
-            Builder = get_view_config_builder(entity=entity)
-            if isinstance(Builder, NullViewConfBuilder):
-                vc = Builder()
-            else:
-                vc = Builder(entity, self.groups_token)
-            return VitessceConfLiftedUUID(vc.get_conf_cells(), None)
-        except Exception:
-            message = f'Building vitessce conf threw error: {traceback.format_exc()}'
-            current_app.logger.error(message)
+        else:
+            try:
+                Builder = get_view_config_builder(entity=entity)
+                builder = Builder(entity, self.groups_token)
+                vitessce_conf = builder.get_conf_cells()
+            except Exception:
+                message = f'Building vitessce conf threw error: {traceback.format_exc()}'
+                current_app.logger.error(message)
+                vitessce_conf = ConfCells({'error': message}, None)
 
-            return VitessceConfLiftedUUID(ConfCells({'error': message}, None), None)
+        return VitessceConfLiftedUUID(
+            vitessce_conf=vitessce_conf,
+            vis_lifted_uuid=vis_lifted_uuid)
 
 
 def _make_query(constraints, uuids):
