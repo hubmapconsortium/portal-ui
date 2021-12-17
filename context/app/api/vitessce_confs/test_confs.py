@@ -33,7 +33,6 @@ AssayConfClasses = {
     "seqfish": SeqFISHViewConfBuilder,
     "sprm": SPRMJSONViewConfBuilder,
     "rna_zarr": RNASeqAnnDataZarrViewConfBuilder,
-    "rna_azimuth_zarr": RNASeqAnnDataZarrViewConfBuilder,
     "spatial_rna_zarr": SpatialRNASeqAnnDataZarrViewConfBuilder,
     "sprm_anndata": SPRMAnnDataViewConfBuilder,
     "cytokit_anndata": StitchedCytokitSPRMViewConfBuilder
