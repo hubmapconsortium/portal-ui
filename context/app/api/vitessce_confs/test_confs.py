@@ -4,17 +4,17 @@ import re
 
 import pytest
 
-from .base_confs import ImagePyramidViewConfBuilder, SPRMJSONViewConfBuilder
-from .assay_confs import (
-    SeqFISHViewConfBuilder,
-    TiledSPRMViewConfBuilder,
-    RNASeqViewConfBuilder,
-    ATACSeqViewConfBuilder,
-    IMSViewConfBuilder,
-    RNASeqAnnDataZarrViewConfBuilder,
-    SpatialRNASeqAnnDataZarrViewConfBuilder,
-    SPRMAnnDataViewConfBuilder,
-    StitchedCytokitSPRMViewConfBuilder
+from .sprm_builders import (
+    SPRMAnnDataViewConfBuilder, SPRMJSONViewConfBuilder, StitchedCytokitSPRMViewConfBuilder, TiledSPRMViewConfBuilder
+)
+from .imaging_builders import (
+    SeqFISHViewConfBuilder, IMSViewConfBuilder, ImagePyramidViewConfBuilder
+)
+from .anndata_builders import (
+    SpatialRNASeqAnnDataZarrViewConfBuilder, RNASeqAnnDataZarrViewConfBuilder
+)
+from .scatterplot_builders import (
+    RNASeqViewConfBuilder, ATACSeqViewConfBuilder
 )
 
 MOCK_GROUPS_TOKEN = "groups_token"
