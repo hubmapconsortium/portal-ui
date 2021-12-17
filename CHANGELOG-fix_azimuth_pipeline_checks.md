@@ -1,0 +1,1 @@
+- Fix azimuth checks to use `zarr` directly.
