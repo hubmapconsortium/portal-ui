@@ -1,5 +1,3 @@
-import re
-
 from flask import current_app
 from hubmap_commons.type_client import TypeClient
 

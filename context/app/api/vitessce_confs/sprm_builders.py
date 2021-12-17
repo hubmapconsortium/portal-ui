@@ -1,5 +1,4 @@
 import re
-from collections import namedtuple
 
 from flask import current_app
 from vitessce import (

@@ -1,6 +1,5 @@
 from pathlib import Path
 import re
-from collections import namedtuple
 
 from vitessce import (
     VitessceConfig,

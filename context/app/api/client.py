@@ -7,7 +7,7 @@ from flask import abort, current_app
 import requests
 
 from .vitessce_confs import get_view_config_builder
-from .vitessce_confs.base_confs import ConfCells, NullViewConfBuilder
+from .vitessce_confs.base_builders import ConfCells, NullViewConfBuilder
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 

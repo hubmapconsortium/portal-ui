@@ -5,7 +5,8 @@ import re
 import pytest
 
 from .sprm_builders import (
-    SPRMAnnDataViewConfBuilder, SPRMJSONViewConfBuilder, StitchedCytokitSPRMViewConfBuilder, TiledSPRMViewConfBuilder
+    SPRMAnnDataViewConfBuilder, SPRMJSONViewConfBuilder,
+    StitchedCytokitSPRMViewConfBuilder, TiledSPRMViewConfBuilder
 )
 from .imaging_builders import (
     SeqFISHViewConfBuilder, IMSViewConfBuilder, ImagePyramidViewConfBuilder

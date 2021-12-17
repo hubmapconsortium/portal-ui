@@ -1,5 +1,3 @@
-import re
-
 from vitessce import (
     VitessceConfig,
     AnnDataWrapper,
