@@ -1,8 +1,7 @@
 import re
 
 from flask import current_app
-import requests
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
+import zarr
 from hubmap_commons.type_client import TypeClient
 from vitessce import (
     VitessceConfig,
@@ -42,12 +41,6 @@ from .paths import (
     SEQFISH_FILE_REGEX,
     CODEX_TILE_DIR,
     STITCHED_IMAGE_DIR
-)
-
-# Suppress InsecureRequestWarning warning when requesting
-# status on https with ssl cert verify disabled
-requests.packages.urllib3.disable_warnings(
-    category=InsecureRequestWarning
 )
 
 
@@ -265,19 +258,14 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
         dags = [dag
                 for dag in self._entity['metadata']['dag_provenance_list'] if 'name' in dag]
         if(any(['azimuth-annotate' in dag['origin'] for dag in dags])):
-            # This code should work but does not because the SSL certificate for HuBMAP is bad.
-            # z = zarr.open(
-            #   f'{adata_url}/uns/annotation_metadata/is_annotated',
-            #   mode='r',
-            #   storage_options={
-            #       'client_kwargs': { **self._get_request_init(), 'verify_ssl': False }
-            #   }
-            # )
-            # is_azimuth_annotated = z[()]
-            is_azimuth_annotated = requests.get(
-                f'{adata_url}/uns/annotation_metadata/is_annotated/0?token={self._groups_token}',
-                verify=False
-            ).content == b'\x01'
+            z = zarr.open(
+              f'{adata_url}/uns/annotation_metadata/is_annotated',
+              mode='r',
+              storage_options={
+                  'client_kwargs': self._get_request_init()
+              }
+            )
+            is_azimuth_annotated = z[()]
             if(is_azimuth_annotated):
                 cell_set_obs.append("predicted.ASCT.celltype")
                 cell_set_obs_names.append("Predicted ASCT Cell Type")
