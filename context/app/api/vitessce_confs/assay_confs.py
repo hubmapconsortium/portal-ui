@@ -44,8 +44,11 @@ from .paths import (
     STITCHED_IMAGE_DIR
 )
 
-# Suppress InsecureRequestWarning warning when requesting status on https with ssl cert verify disabled
-requests.packages.urllib3.disable_warnings(category = InsecureRequestWarning)
+# Suppress InsecureRequestWarning warning when requesting
+# status on https with ssl cert verify disabled
+requests.packages.urllib3.disable_warnings(
+    category=InsecureRequestWarning
+)
 
 
 class SeqFISHViewConfBuilder(AbstractImagingViewConfBuilder):
