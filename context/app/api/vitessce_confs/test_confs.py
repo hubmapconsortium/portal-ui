@@ -3,20 +3,10 @@ from pathlib import Path
 import re
 
 import pytest
+from flask import Flask
 
-from .sprm_builders import (
-    SPRMAnnDataViewConfBuilder, SPRMJSONViewConfBuilder,
-    StitchedCytokitSPRMViewConfBuilder, TiledSPRMViewConfBuilder
-)
-from .imaging_builders import (
-    SeqFISHViewConfBuilder, IMSViewConfBuilder, ImagePyramidViewConfBuilder
-)
-from .anndata_builders import (
-    SpatialRNASeqAnnDataZarrViewConfBuilder, RNASeqAnnDataZarrViewConfBuilder
-)
-from .scatterplot_builders import (
-    RNASeqViewConfBuilder, ATACSeqViewConfBuilder
-)
+from .assay_confs import get_view_config_builder
+
 
 MOCK_GROUPS_TOKEN = "groups_token"
 
@@ -24,21 +14,6 @@ FIXTURES_INPUT_DIR = "fixtures/input_entity"
 FIXTURES_EXPECTED_OUTPUT_DIR = "fixtures/output_expected"
 
 BASE_NAME_FOR_SPRM = "BASE_NAME"
-
-builders = {
-    "cytokit_json": TiledSPRMViewConfBuilder,
-    "rna": RNASeqViewConfBuilder,
-    "atac": ATACSeqViewConfBuilder,
-    "ims": IMSViewConfBuilder,
-    "image_pyramid": ImagePyramidViewConfBuilder,
-    "seqfish": SeqFISHViewConfBuilder,
-    "sprm": SPRMJSONViewConfBuilder,
-    "rna_zarr": RNASeqAnnDataZarrViewConfBuilder,
-    "rna_azimuth_zarr": RNASeqAnnDataZarrViewConfBuilder,
-    "spatial_rna_zarr": SpatialRNASeqAnnDataZarrViewConfBuilder,
-    "sprm_anndata": SPRMAnnDataViewConfBuilder,
-    "cytokit_anndata": StitchedCytokitSPRMViewConfBuilder
-}
 
 
 parent_dir = Path(__file__).parent
@@ -50,13 +25,18 @@ entity_paths = set(fixtures_dir.glob("*_entity.json")) - set(
 
 @pytest.mark.parametrize("entity_file", entity_paths)
 def test_assays(entity_file):
-    assay = re.search(
-        r'([^/]+)_entity.json',
-        entity_file.name,
-    )[1]
-    entity = json.loads(entity_file.read_text())
-    Builder = builders[assay]
-    if assay in ["sprm", "sprm_anndata"]:
+    app = Flask(__name__)
+    app.config['TYPE_SERVICE_ENDPOINT'] = 'https://search.api.hubmapconsortium.org'
+    with app.app_context():
+
+        assay = re.search(
+            r'([^/]+)_entity.json',
+            entity_file.name,
+        )[1]
+
+        entity = json.loads(entity_file.read_text())
+        Builder = get_view_config_builder(entity)
+
         builder = Builder(
             entity=entity,
             groups_token=MOCK_GROUPS_TOKEN,
@@ -67,22 +47,20 @@ def test_assays(entity_file):
             mask_name="mask",
             mask_path="imaging_path"
         )
-    else:
-        builder = Builder(
-            entity=entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
+        # except ...:
+        #     builder = Builder(
+        #         entity=entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
+        #     )
+        conf = builder.get_conf_cells().conf
+        conf_expected = json.loads(
+            (
+                parent_dir / f"{FIXTURES_EXPECTED_OUTPUT_DIR}/{assay}_conf.json"
+            ).read_text()
         )
-    conf = builder.get_conf_cells().conf
-    conf_expected = json.loads(
-        (
-            parent_dir / f"{FIXTURES_EXPECTED_OUTPUT_DIR}/{assay}_conf.json"
-        ).read_text()
-    )
-    assert conf_expected == conf
-    malformed_entity = json.loads(
-        Path(str(entity_file).replace(assay, f"malformed_{assay}")).read_text()
-    )
-    Builder = builders[assay]
-    if assay in ["sprm", "sprm_anndata"]:
+        assert conf_expected == conf
+        malformed_entity = json.loads(
+            Path(str(entity_file).replace(assay, f"malformed_{assay}")).read_text()
+        )
         builder = Builder(
             entity=malformed_entity,
             groups_token=MOCK_GROUPS_TOKEN,
@@ -93,9 +71,9 @@ def test_assays(entity_file):
             mask_name="mask",
             mask_path="imaging_path"
         )
-    else:
-        builder = Builder(
-            entity=malformed_entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
-        )
-    with pytest.raises(FileNotFoundError):
-        builder.get_conf_cells().conf
+        # except ...:
+        #     builder = Builder(
+        #         entity=entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
+        #     )
+        with pytest.raises(FileNotFoundError):
+            builder.get_conf_cells().conf
