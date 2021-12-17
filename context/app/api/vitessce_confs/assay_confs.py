@@ -259,11 +259,11 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
                 for dag in self._entity['metadata']['dag_provenance_list'] if 'name' in dag]
         if(any(['azimuth-annotate' in dag['origin'] for dag in dags])):
             z = zarr.open(
-              f'{adata_url}/uns/annotation_metadata/is_annotated',
-              mode='r',
-              storage_options={
-                  'client_kwargs': self._get_request_init()
-              }
+                f'{adata_url}/uns/annotation_metadata/is_annotated',
+                mode='r',
+                storage_options={
+                    'client_kwargs': self._get_request_init()
+                }
             )
             is_azimuth_annotated = z[()]
             if(is_azimuth_annotated):
