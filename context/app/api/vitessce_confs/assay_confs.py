@@ -2,6 +2,7 @@ import re
 
 from flask import current_app
 import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from hubmap_commons.type_client import TypeClient
 from vitessce import (
     VitessceConfig,
@@ -42,6 +43,9 @@ from .paths import (
     CODEX_TILE_DIR,
     STITCHED_IMAGE_DIR
 )
+
+# Suppress InsecureRequestWarning warning when requesting status on https with ssl cert verify disabled
+requests.packages.urllib3.disable_warnings(category = InsecureRequestWarning)
 
 
 class SeqFISHViewConfBuilder(AbstractImagingViewConfBuilder):
