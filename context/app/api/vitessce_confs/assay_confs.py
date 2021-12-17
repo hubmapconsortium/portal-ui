@@ -1,6 +1,7 @@
 import re
 
 from flask import current_app
+import zarr
 from hubmap_commons.type_client import TypeClient
 from vitessce import (
     VitessceConfig,
@@ -257,8 +258,11 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
         dags = [dag
                 for dag in self._entity['metadata']['dag_provenance_list'] if 'name' in dag]
         if(any(['azimuth-annotate' in dag['origin'] for dag in dags])):
-            cell_set_obs.append("predicted.ASCT.celltype")
-            cell_set_obs_names.append("Predicted ASCT Cell Type")
+            z = zarr.open(f'{adata_url}/uns/annotation_metadata/is_annotated', mode='r', storage_options={ 'client_kwargs': self._get_request_init() })
+            is_azimuth_annotated = z[()]
+            if(is_azimuth_annotated):
+                cell_set_obs.append("predicted.ASCT.celltype")
+                cell_set_obs_names.append("Predicted ASCT Cell Type")
         dataset = vc.add_dataset(name=self._uuid).add_object(AnnDataWrapper(
             adata_url=adata_url,
             mappings_obsm=["X_umap"],
