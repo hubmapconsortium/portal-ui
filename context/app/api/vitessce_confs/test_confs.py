@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-import re
 
 import pytest
 from flask import Flask
@@ -28,12 +27,6 @@ def test_assays(entity_file):
     app = Flask(__name__)
     app.config['TYPE_SERVICE_ENDPOINT'] = 'https://search.api.hubmapconsortium.org'
     with app.app_context():
-
-        assay = re.search(
-            r'([^/]+)_entity.json',
-            entity_file.name,
-        )[1]
-
         entity = json.loads(entity_file.read_text())
         Builder = get_view_config_builder(entity)
 
@@ -55,12 +48,17 @@ def test_assays(entity_file):
         conf = builder.get_conf_cells().conf
         conf_expected = json.loads(
             (
-                parent_dir / f"{FIXTURES_EXPECTED_OUTPUT_DIR}/{assay}_conf.json"
+                parent_dir / FIXTURES_EXPECTED_OUTPUT_DIR
+                / entity_file.name.replace('_entity', '_conf')
             ).read_text()
         )
         assert conf_expected == conf
+
         malformed_entity = json.loads(
-            Path(str(entity_file).replace(assay, f"malformed_{assay}")).read_text()
+            (
+                parent_dir / FIXTURES_INPUT_DIR
+                / f'malformed_{entity_file.name}'
+            ).read_text()
         )
         try:
             builder = Builder(
