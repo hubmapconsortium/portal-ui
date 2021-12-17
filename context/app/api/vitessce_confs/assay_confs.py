@@ -271,7 +271,6 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
                 f'{adata_url}/uns/annotation_metadata/is_annotated/0?token={self._groups_token}',
                 verify=False
             ).content == b'\x01'
-            print(is_azimuth_annotated)
             if(is_azimuth_annotated):
                 cell_set_obs.append("predicted.ASCT.celltype")
                 cell_set_obs_names.append("Predicted ASCT Cell Type")
