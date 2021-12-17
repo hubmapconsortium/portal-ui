@@ -28,6 +28,12 @@
     },
     {
       "rel_path": "ometiff-pyramids/imaging_path/mask.ome.tiff"
+    },
+    {
+      "rel_path": "reg12345"
+    },
+    {
+      "rel_path": "output/extract/expressions/ome-tiff/reg12345.ome.tiff"
     }
   ],
   "status": "QA",

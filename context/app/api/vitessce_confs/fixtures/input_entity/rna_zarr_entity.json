@@ -14,6 +14,12 @@
         },
         {
             "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/.zgroup"
+        },
+        {
+            "rel_path": "cluster-marker-genes/output/cluster_marker_genes.cells.json"
+        },
+        {
+            "rel_path": "cluster-marker-genes/output/cluster_marker_genes.cell-sets.json"
         }
     ],
     "uuid": "3b066aa664e1a32eaea957927baf92e2"

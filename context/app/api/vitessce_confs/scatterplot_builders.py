@@ -22,7 +22,8 @@ class AbstractScatterplotViewConfBuilder(ViewConfBuilder):
         # We need to check that the files we expect actually exist.
         # This is due to the volatility of the datasets.
         if not set(file_paths_expected).issubset(set(file_paths_found)):
-            message = f'Files for uuid "{self._uuid}" not found as expected.'
+            message = f'Files for uuid "{self._uuid}" not found as expected: ' \
+                f'Expected: {file_paths_expected}; Found: {file_paths_found}'
             raise FileNotFoundError(message)
         vc = VitessceConfig(name="HuBMAP Data Portal")
         dataset = vc.add_dataset(name="Visualization Files")
