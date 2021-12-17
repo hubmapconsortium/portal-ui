@@ -37,20 +37,21 @@ def test_assays(entity_file):
         entity = json.loads(entity_file.read_text())
         Builder = get_view_config_builder(entity)
 
-        builder = Builder(
-            entity=entity,
-            groups_token=MOCK_GROUPS_TOKEN,
-            is_mock=True,
-            base_name=BASE_NAME_FOR_SPRM,
-            imaging_path="imaging_path",
-            image_name="expressions",
-            mask_name="mask",
-            mask_path="imaging_path"
-        )
-        # except ...:
-        #     builder = Builder(
-        #         entity=entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
-        #     )
+        try:
+            builder = Builder(
+                entity=entity,
+                groups_token=MOCK_GROUPS_TOKEN,
+                is_mock=True,
+                base_name=BASE_NAME_FOR_SPRM,
+                imaging_path="imaging_path",
+                image_name="expressions",
+                mask_name="mask",
+                mask_path="imaging_path"
+            )
+        except TypeError:
+            builder = Builder(
+                entity=entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
+            )
         conf = builder.get_conf_cells().conf
         conf_expected = json.loads(
             (
@@ -61,19 +62,20 @@ def test_assays(entity_file):
         malformed_entity = json.loads(
             Path(str(entity_file).replace(assay, f"malformed_{assay}")).read_text()
         )
-        builder = Builder(
-            entity=malformed_entity,
-            groups_token=MOCK_GROUPS_TOKEN,
-            is_mock=True,
-            base_name=BASE_NAME_FOR_SPRM,
-            imaging_path="imaging_path",
-            image_name="expressions",
-            mask_name="mask",
-            mask_path="imaging_path"
-        )
-        # except ...:
-        #     builder = Builder(
-        #         entity=entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
-        #     )
+        try:
+            builder = Builder(
+                entity=malformed_entity,
+                groups_token=MOCK_GROUPS_TOKEN,
+                is_mock=True,
+                base_name=BASE_NAME_FOR_SPRM,
+                imaging_path="imaging_path",
+                image_name="expressions",
+                mask_name="mask",
+                mask_path="imaging_path"
+            )
+        except TypeError:
+            builder = Builder(
+                entity=malformed_entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
+            )
         with pytest.raises(FileNotFoundError):
             builder.get_conf_cells().conf
