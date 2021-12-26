@@ -12,8 +12,8 @@ from vitessce import (
 )
 
 from .base_builders import ConfCells, ViewConfBuilder
-from .utils import get_matches
-from .paths import SPRM_JSON_DIR, STITCHED_REGEX, CODEX_TILE_DIR, TILE_REGEX, STITCHED_IMAGE_DIR
+from ..utils import get_matches
+from ..paths import SPRM_JSON_DIR, STITCHED_REGEX, CODEX_TILE_DIR, TILE_REGEX, STITCHED_IMAGE_DIR
 from .imaging_builders import ImagePyramidViewConfBuilder
 
 

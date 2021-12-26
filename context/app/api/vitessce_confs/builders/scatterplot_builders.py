@@ -5,7 +5,7 @@ from vitessce import (
     FileType as ft,
 )
 
-from .paths import SCRNA_SEQ_DIR, SCATAC_SEQ_DIR
+from ..paths import SCRNA_SEQ_DIR, SCATAC_SEQ_DIR
 from .base_builders import ViewConfBuilder, ConfCells
 
 

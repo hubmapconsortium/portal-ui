@@ -8,8 +8,8 @@ from vitessce import (
     Component as cm,
 )
 
-from .utils import get_matches, group_by_file_name
-from .paths import IMAGE_PYRAMID_DIR, OFFSETS_DIR, SEQFISH_HYB_CYCLE_REGEX, SEQFISH_FILE_REGEX
+from ..utils import get_matches, group_by_file_name
+from ..paths import IMAGE_PYRAMID_DIR, OFFSETS_DIR, SEQFISH_HYB_CYCLE_REGEX, SEQFISH_FILE_REGEX
 from .base_builders import ViewConfBuilder, ConfCells
 
 

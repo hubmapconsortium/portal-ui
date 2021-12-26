@@ -1,0 +1,1446 @@
+{
+  "anatomy_0": [
+    "body"
+  ], 
+  "anatomy_1": [
+    "kidney"
+  ], 
+  "anatomy_2": [
+    "right kidney"
+  ], 
+  "ancestor_counts": {
+    "entity_type": {
+      "Dataset": 1, 
+      "Donor": 1, 
+      "Sample": 3
+    }
+  }, 
+  "ancestor_ids": [
+    "a2ed51760e451afe1293754f62c00733", 
+    "0a558711c6b9d5b9029717d722a2c31c", 
+    "11d8e126005625ce70414a3c32048b80", 
+    "7219d978053995b9e004321187352519", 
+    "1e0b527a436936050455fe755dfbaba2"
+  ], 
+  "ancestors": [
+    {
+      "contains_human_genetic_sequences": true, 
+      "created_by_user_displayname": "Joel Welling", 
+      "created_by_user_email": "jw1d@andrew.cmu.edu", 
+      "created_timestamp": 1631647245171, 
+      "data_access_level": "protected", 
+      "data_types": [
+        "Slide-seq"
+      ], 
+      "dataset_info": "Slide-seq data from the kidney (right) of a donor of unknown age, race and sex\r\n\r\n19 Slide-seq arrays of the right kidney cortex from donor UCSD0020  : upload/Puck_200903_05", 
+      "description": "19 Slide-seq arrays of the right kidney cortex from donor UCSD0020  : upload/Puck_200903_05", 
+      "entity_type": "Dataset", 
+      "group_uuid": "9c4a56ca-79ac-11ea-8359-0e41da796b5d", 
+      "hubmap_id": "HBM364.JRNL.422", 
+      "last_modified_timestamp": 1633795537743, 
+      "mapped_data_access_level": "Protected", 
+      "mapped_data_types": [
+        "Slide-seq"
+      ], 
+      "mapped_last_modified_timestamp": "2021-10-09 16:05:37", 
+      "mapped_metadata": {}, 
+      "mapped_status": "Published", 
+      "metadata": {
+        "dag_provenance_list": [
+          {
+            "hash": "cb8655c", 
+            "origin": "https://github.com/hubmapconsortium/ingest-pipeline.git"
+          }
+        ], 
+        "extra_metadata": {
+          "collectiontype": "generic_metadatatsv"
+        }, 
+        "metadata": {
+          "acquisition_instrument_model": "NovaSeq 6000", 
+          "acquisition_instrument_vendor": "Illumina", 
+          "analyte_class": "RNA", 
+          "assay_category": "sequence", 
+          "assay_type": "Slide-seq", 
+          "bead_barcode_offset": "1,27", 
+          "bead_barcode_read": "R1", 
+          "bead_barcode_size": "8,6", 
+          "contributors_path": "extras/contributors.tsv", 
+          "description": "Slide-seq on the kidney cortex", 
+          "execution_datetime": "2020-10-15 6:11", 
+          "is_targeted": "FALSE", 
+          "is_technical_replicate": "FALSE", 
+          "library_adapter_sequence": "5'- AAGCAGTGGTATCAACGCAGAGTGAATGGG -3'", 
+          "library_average_fragment_size": "536", 
+          "library_construction_protocols_io_doi": "10.17504/protocols.io.bpgzmjx6", 
+          "library_final_yield_unit": "ng", 
+          "library_final_yield_value": "38.6", 
+          "library_layout": "paired-end", 
+          "library_pcr_cycles": "13", 
+          "library_pcr_cycles_for_sample_index": "12", 
+          "operator": "Evan Murray", 
+          "operator_email": "emurray@broadinstitute.org", 
+          "pi": "Evan Macosko", 
+          "pi_email": "emacokso@broadinstitute.org", 
+          "protocols_io_doi": "10.17504/protocols.io.bpgzmjx6", 
+          "puck_id": "Puck_200903_05", 
+          "rnaseq_assay_method": "Slide-Seq", 
+          "sequencing_phix_percent": "0", 
+          "sequencing_read_format": "42/8/0/60", 
+          "sequencing_read_percent_q30": "0.9", 
+          "sequencing_reagent_kit": "S2"
+        }
+      }, 
+      "published_timestamp": 1633795537743, 
+      "status": "Published", 
+      "title": "Slide-seq data from the kidney (right) of a donor of unknown age, race and sex", 
+      "uuid": "a2ed51760e451afe1293754f62c00733"
+    }, 
+    {
+      "created_by_user_displayname": "Diane Salamon", 
+      "created_by_user_email": "salamond@wustl.edu", 
+      "created_timestamp": 1603994376838, 
+      "data_access_level": "public", 
+      "entity_type": "Sample", 
+      "group_uuid": "03b3d854-ed44-11e8-8bce-0e368f3075e8", 
+      "hubmap_id": "HBM964.XZCR.478", 
+      "lab_tissue_sample_id": "K1900315_2", 
+      "last_modified_timestamp": 1603994376838, 
+      "mapped_data_access_level": "Public", 
+      "mapped_last_modified_timestamp": "2020-10-29 17:59:36", 
+      "mapped_metadata": {}, 
+      "mapped_specimen_type": "Fresh frozen OCT block", 
+      "metadata": {
+        "cold_ischemia_time_unit": "minutes", 
+        "cold_ischemia_time_value": "41", 
+        "health_status": "relatively healthy", 
+        "organ_condition": "healthy", 
+        "pathologist_report": "largely normal, no cancer, no necrosis", 
+        "perfusion_solution": "None", 
+        "procedure_date": "2019-07-01", 
+        "specimen_preservation_temperature": "Freezer (-80 Celsius)", 
+        "specimen_quality_criteria": "H&E", 
+        "specimen_tumor_distance_unit": "", 
+        "specimen_tumor_distance_value": "", 
+        "vital_state": "living", 
+        "warm_ischemia_time_unit": "minutes", 
+        "warm_ischemia_time_value": "30"
+      }, 
+      "protocol_url": "dx.doi.org/10.17504/protocols.io.568g9hw", 
+      "specimen_type": "fresh_frozen_oct_block", 
+      "submission_id": "UCSD0020-RK-1-2", 
+      "uuid": "0a558711c6b9d5b9029717d722a2c31c"
+    }, 
+    {
+      "created_by_user_displayname": "Diane Salamon", 
+      "created_by_user_email": "salamond@wustl.edu", 
+      "created_timestamp": 1603993797861, 
+      "data_access_level": "public", 
+      "description": "Cortex", 
+      "entity_type": "Sample", 
+      "group_uuid": "03b3d854-ed44-11e8-8bce-0e368f3075e8", 
+      "hubmap_id": "HBM347.RXRJ.392", 
+      "lab_tissue_sample_id": "K1900315", 
+      "last_modified_timestamp": 1603994600824, 
+      "mapped_data_access_level": "Public", 
+      "mapped_last_modified_timestamp": "2020-10-29 18:03:20", 
+      "mapped_specimen_type": "Organ piece", 
+      "protocol_url": "dx.doi.org/10.17504/protocols.io.568g9hw", 
+      "specimen_type": "organ_piece", 
+      "submission_id": "UCSD0020-RK-1", 
+      "uuid": "11d8e126005625ce70414a3c32048b80"
+    }, 
+    {
+      "created_by_user_displayname": "Diane Salamon", 
+      "created_by_user_email": "salamond@wustl.edu", 
+      "created_timestamp": 1603993667292, 
+      "data_access_level": "public", 
+      "entity_type": "Sample", 
+      "group_uuid": "03b3d854-ed44-11e8-8bce-0e368f3075e8", 
+      "hubmap_id": "HBM656.RWNC.696", 
+      "lab_tissue_sample_id": "3579", 
+      "last_modified_timestamp": 1603993667292, 
+      "mapped_data_access_level": "Public", 
+      "mapped_last_modified_timestamp": "2020-10-29 17:47:47", 
+      "mapped_organ": "Kidney (Right)", 
+      "mapped_specimen_type": "Organ", 
+      "organ": "RK", 
+      "protocol_url": "dx.doi.org/10.17504/protocols.io.568g9hw", 
+      "specimen_type": "organ", 
+      "submission_id": "UCSD0020-RK", 
+      "uuid": "7219d978053995b9e004321187352519"
+    }, 
+    {
+      "created_by_user_displayname": "Diane Salamon", 
+      "created_by_user_email": "salamond@wustl.edu", 
+      "created_timestamp": 1603993247279, 
+      "data_access_level": "public", 
+      "entity_type": "Donor", 
+      "group_uuid": "03b3d854-ed44-11e8-8bce-0e368f3075e8", 
+      "hubmap_id": "HBM735.QDFT.264", 
+      "lab_donor_id": "KTRC_PPID_3579", 
+      "label": "3579", 
+      "last_modified_timestamp": 1603993247279, 
+      "mapped_data_access_level": "Public", 
+      "mapped_last_modified_timestamp": "2020-10-29 17:40:47", 
+      "mapped_metadata": {
+        "age_unit": [
+          "years"
+        ], 
+        "age_value": [
+          67.0
+        ], 
+        "body_mass_index_unit": [
+          "kg/m^2"
+        ], 
+        "body_mass_index_value": [
+          32.5
+        ], 
+        "height_unit": [
+          "cm"
+        ], 
+        "height_value": [
+          170.0
+        ], 
+        "race": [
+          "White"
+        ], 
+        "sex": [
+          "Male"
+        ], 
+        "social_history": [
+          "Smoker"
+        ], 
+        "weight_unit": [
+          "kg"
+        ], 
+        "weight_value": [
+          93.9
+        ]
+      }, 
+      "metadata": {
+        "living_donor_data": [
+          {
+            "code": "413773004", 
+            "concept_id": "C0007457", 
+            "data_type": "Nominal", 
+            "data_value": "", 
+            "end_datetime": "", 
+            "graph_version": "UMLS2019AA", 
+            "grouping_code": "415229000", 
+            "grouping_concept": "C0034510", 
+            "grouping_concept_preferred_term": "Race", 
+            "grouping_sab": "SNOMEDCT_US", 
+            "numeric_operator": "", 
+            "preferred_term": "White", 
+            "sab": "SNOMEDCT_US", 
+            "start_datetime": "0", 
+            "units": ""
+          }, 
+          {
+            "code": "10052007", 
+            "concept_id": "C0086582", 
+            "data_type": "Nominal", 
+            "data_value": "", 
+            "end_datetime": "", 
+            "graph_version": "UMLS2019AA", 
+            "grouping_code": "57312000", 
+            "grouping_concept": "C1522384", 
+            "grouping_concept_preferred_term": "Sex", 
+            "grouping_sab": "SNOMEDCT_US", 
+            "numeric_operator": "", 
+            "preferred_term": "Male", 
+            "sab": "SNOMEDCT_US", 
+            "start_datetime": "0", 
+            "units": ""
+          }, 
+          {
+            "code": "424144002", 
+            "concept_id": "C0001779", 
+            "data_type": "Numeric", 
+            "data_value": "67", 
+            "end_datetime": "", 
+            "graph_version": "UMLS2019AA", 
+            "grouping_code": "424144002", 
+            "grouping_concept": "C0001779", 
+            "grouping_concept_preferred_term": "Age", 
+            "grouping_sab": "SNOMEDCT_US", 
+            "numeric_operator": "EQ", 
+            "preferred_term": "Age", 
+            "sab": "SNOMEDCT_US", 
+            "start_datetime": "0", 
+            "units": "years"
+          }, 
+          {
+            "code": "27113001", 
+            "concept_id": "C0005910", 
+            "data_type": "Numeric", 
+            "data_value": "93.9", 
+            "end_datetime": "", 
+            "graph_version": "UMLS2019AA", 
+            "grouping_code": "27113001", 
+            "grouping_concept": "C0005910", 
+            "grouping_concept_preferred_term": "Weight", 
+            "grouping_sab": "SNOMEDCT_US", 
+            "numeric_operator": "EQ", 
+            "preferred_term": "Weight", 
+            "sab": "SNOMEDCT_US", 
+            "start_datetime": "0", 
+            "units": "kg"
+          }, 
+          {
+            "code": "50373000", 
+            "concept_id": "C0005890", 
+            "data_type": "Numeric", 
+            "data_value": "170", 
+            "end_datetime": "", 
+            "graph_version": "UMLS2019AA", 
+            "grouping_code": "50373000", 
+            "grouping_concept": "C0005890", 
+            "grouping_concept_preferred_term": "Height", 
+            "grouping_sab": "SNOMEDCT_US", 
+            "numeric_operator": "EQ", 
+            "preferred_term": "Height", 
+            "sab": "SNOMEDCT_US", 
+            "start_datetime": "0", 
+            "units": "cm"
+          }, 
+          {
+            "code": "60621009", 
+            "concept_id": "C1305855", 
+            "data_type": "Numeric", 
+            "data_value": "32.5", 
+            "end_datetime": "", 
+            "graph_version": "UMLS2019AA", 
+            "grouping_code": "60621009", 
+            "grouping_concept": "C1305855", 
+            "grouping_concept_preferred_term": "Body mass index", 
+            "grouping_sab": "SNOMEDCT_US", 
+            "numeric_operator": "EQ", 
+            "preferred_term": "Body mass index", 
+            "sab": "SNOMEDCT_US", 
+            "start_datetime": "0", 
+            "units": "kg/m^2"
+          }, 
+          {
+            "code": "77176002", 
+            "concept_id": "C0337664", 
+            "data_type": "Nominal", 
+            "data_value": "", 
+            "end_datetime": "", 
+            "graph_version": "UMLS2019AA", 
+            "grouping_code": "160476009", 
+            "grouping_concept": "C0424945", 
+            "grouping_concept_preferred_term": "Social history", 
+            "grouping_sab": "SNOMEDCT_US", 
+            "numeric_operator": "", 
+            "preferred_term": "Smoker", 
+            "sab": "SNOMEDCT_US", 
+            "start_datetime": "0", 
+            "units": ""
+          }
+        ]
+      }, 
+      "protocol_url": "dx.doi.org/10.17504/protocols.io.568g9hw", 
+      "submission_id": "UCSD0020", 
+      "uuid": "1e0b527a436936050455fe755dfbaba2"
+    }
+  ], 
+  "contains_human_genetic_sequences": false, 
+  "created_by_user_displayname": "HuBMAP Process", 
+  "created_by_user_email": "hubmap@hubmapconsortium.org", 
+  "created_timestamp": 1632449665029, 
+  "data_access_level": "public", 
+  "data_types": [
+    "salmon_rnaseq_slideseq"
+  ], 
+  "dataset_info": "Slide-seq [Salmon] data from the kidney (right) of a donor of unknown age, race and sex", 
+  "descendant_counts": {}, 
+  "descendant_ids": [], 
+  "descendants": [], 
+  "display_subtype": "salmon_rnaseq_slideseq", 
+  "donor": {
+    "created_by_user_displayname": "Diane Salamon", 
+    "created_by_user_email": "salamond@wustl.edu", 
+    "created_timestamp": 1603993247279, 
+    "data_access_level": "public", 
+    "entity_type": "Donor", 
+    "group_uuid": "03b3d854-ed44-11e8-8bce-0e368f3075e8", 
+    "hubmap_id": "HBM735.QDFT.264", 
+    "lab_donor_id": "KTRC_PPID_3579", 
+    "label": "3579", 
+    "last_modified_timestamp": 1603993247279, 
+    "mapped_data_access_level": "Public", 
+    "mapped_last_modified_timestamp": "2020-10-29 17:40:47", 
+    "mapped_metadata": {
+      "age_unit": [
+        "years"
+      ], 
+      "age_value": [
+        67.0
+      ], 
+      "body_mass_index_unit": [
+        "kg/m^2"
+      ], 
+      "body_mass_index_value": [
+        32.5
+      ], 
+      "height_unit": [
+        "cm"
+      ], 
+      "height_value": [
+        170.0
+      ], 
+      "race": [
+        "White"
+      ], 
+      "sex": [
+        "Male"
+      ], 
+      "social_history": [
+        "Smoker"
+      ], 
+      "weight_unit": [
+        "kg"
+      ], 
+      "weight_value": [
+        93.9
+      ]
+    }, 
+    "metadata": {
+      "living_donor_data": [
+        {
+          "code": "413773004", 
+          "concept_id": "C0007457", 
+          "data_type": "Nominal", 
+          "data_value": "", 
+          "end_datetime": "", 
+          "graph_version": "UMLS2019AA", 
+          "grouping_code": "415229000", 
+          "grouping_concept": "C0034510", 
+          "grouping_concept_preferred_term": "Race", 
+          "grouping_sab": "SNOMEDCT_US", 
+          "numeric_operator": "", 
+          "preferred_term": "White", 
+          "sab": "SNOMEDCT_US", 
+          "start_datetime": "0", 
+          "units": ""
+        }, 
+        {
+          "code": "10052007", 
+          "concept_id": "C0086582", 
+          "data_type": "Nominal", 
+          "data_value": "", 
+          "end_datetime": "", 
+          "graph_version": "UMLS2019AA", 
+          "grouping_code": "57312000", 
+          "grouping_concept": "C1522384", 
+          "grouping_concept_preferred_term": "Sex", 
+          "grouping_sab": "SNOMEDCT_US", 
+          "numeric_operator": "", 
+          "preferred_term": "Male", 
+          "sab": "SNOMEDCT_US", 
+          "start_datetime": "0", 
+          "units": ""
+        }, 
+        {
+          "code": "424144002", 
+          "concept_id": "C0001779", 
+          "data_type": "Numeric", 
+          "data_value": "67", 
+          "end_datetime": "", 
+          "graph_version": "UMLS2019AA", 
+          "grouping_code": "424144002", 
+          "grouping_concept": "C0001779", 
+          "grouping_concept_preferred_term": "Age", 
+          "grouping_sab": "SNOMEDCT_US", 
+          "numeric_operator": "EQ", 
+          "preferred_term": "Age", 
+          "sab": "SNOMEDCT_US", 
+          "start_datetime": "0", 
+          "units": "years"
+        }, 
+        {
+          "code": "27113001", 
+          "concept_id": "C0005910", 
+          "data_type": "Numeric", 
+          "data_value": "93.9", 
+          "end_datetime": "", 
+          "graph_version": "UMLS2019AA", 
+          "grouping_code": "27113001", 
+          "grouping_concept": "C0005910", 
+          "grouping_concept_preferred_term": "Weight", 
+          "grouping_sab": "SNOMEDCT_US", 
+          "numeric_operator": "EQ", 
+          "preferred_term": "Weight", 
+          "sab": "SNOMEDCT_US", 
+          "start_datetime": "0", 
+          "units": "kg"
+        }, 
+        {
+          "code": "50373000", 
+          "concept_id": "C0005890", 
+          "data_type": "Numeric", 
+          "data_value": "170", 
+          "end_datetime": "", 
+          "graph_version": "UMLS2019AA", 
+          "grouping_code": "50373000", 
+          "grouping_concept": "C0005890", 
+          "grouping_concept_preferred_term": "Height", 
+          "grouping_sab": "SNOMEDCT_US", 
+          "numeric_operator": "EQ", 
+          "preferred_term": "Height", 
+          "sab": "SNOMEDCT_US", 
+          "start_datetime": "0", 
+          "units": "cm"
+        }, 
+        {
+          "code": "60621009", 
+          "concept_id": "C1305855", 
+          "data_type": "Numeric", 
+          "data_value": "32.5", 
+          "end_datetime": "", 
+          "graph_version": "UMLS2019AA", 
+          "grouping_code": "60621009", 
+          "grouping_concept": "C1305855", 
+          "grouping_concept_preferred_term": "Body mass index", 
+          "grouping_sab": "SNOMEDCT_US", 
+          "numeric_operator": "EQ", 
+          "preferred_term": "Body mass index", 
+          "sab": "SNOMEDCT_US", 
+          "start_datetime": "0", 
+          "units": "kg/m^2"
+        }, 
+        {
+          "code": "77176002", 
+          "concept_id": "C0337664", 
+          "data_type": "Nominal", 
+          "data_value": "", 
+          "end_datetime": "", 
+          "graph_version": "UMLS2019AA", 
+          "grouping_code": "160476009", 
+          "grouping_concept": "C0424945", 
+          "grouping_concept_preferred_term": "Social history", 
+          "grouping_sab": "SNOMEDCT_US", 
+          "numeric_operator": "", 
+          "preferred_term": "Smoker", 
+          "sab": "SNOMEDCT_US", 
+          "start_datetime": "0", 
+          "units": ""
+        }
+      ]
+    }, 
+    "protocol_url": "dx.doi.org/10.17504/protocols.io.568g9hw", 
+    "submission_id": "UCSD0020", 
+    "uuid": "1e0b527a436936050455fe755dfbaba2"
+  }, 
+  "entity_type": "Dataset", 
+  "files": [
+    {
+      "description": "Disperson plot of gene expression", 
+      "edam_term": "EDAM_1.24.format_3508", 
+      "is_qa_qc": false, 
+      "rel_path": "dispersion_plot.pdf", 
+      "size": 961533, 
+      "type": "pdf"
+    }, 
+    {
+      "description": "Raw gene expression, in HDF5 format, readable with the 'anndata' Python package, intronic counts collapsed to genes", 
+      "edam_term": "EDAM_1.24.format_3590", 
+      "is_qa_qc": false, 
+      "rel_path": "expr.h5ad", 
+      "size": 285501224, 
+      "type": "h5ad"
+    }, 
+    {
+      "description": "FastQC report of input FASTQ file", 
+      "edam_term": "EDAM_1.24.format_2331", 
+      "is_qa_qc": true, 
+      "rel_path": "fastqc_output/hg19.exonic+intronic/fastq/Puck_200903_05.read1_fastqc.html", 
+      "size": 684137, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "FastQC report of input FASTQ file", 
+      "edam_term": "EDAM_1.24.format_2331", 
+      "is_qa_qc": true, 
+      "rel_path": "fastqc_output/hg19.exonic+intronic/fastq/Puck_200903_05.read2_fastqc.html", 
+      "size": 665445, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/layers/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/layers/spliced/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/layers/spliced_unspliced_sum/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/layers/unspliced/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/obs/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/obs/__categories/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/obsm/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/obsp/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/obsp/connectivities/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/obsp/distances/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/leiden/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/leiden/params/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/neighbors/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/neighbors/params/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/neighbors/rp_forest/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/neighbors/rp_forest/children/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/neighbors/rp_forest/hyperplanes/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/neighbors/rp_forest/indices/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/neighbors/rp_forest/offsets/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/pca/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/pca/params/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/recover_dynamics/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/umap/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/umap/params/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/velocity_graph/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/velocity_graph_neg/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/uns/velocity_params/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/var/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/var/__categories/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of velocity analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/scvelo_annotated.zarr/varm/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/layers/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/layers/spliced/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/layers/spliced_unspliced_sum/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/layers/unscaled/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/layers/unspliced/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/obs/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/obs/__categories/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/obsm/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/obsp/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/obsp/connectivities/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/obsp/distances/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/hvg/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/leiden/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/leiden/params/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/neighbors/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/neighbors/params/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/neighbors/rp_forest/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/neighbors/rp_forest/children/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/neighbors/rp_forest/hyperplanes/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/neighbors/rp_forest/indices/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/neighbors/rp_forest/offsets/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/pca/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/pca/params/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/rank_genes_groups/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/rank_genes_groups/params/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/umap/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/umap/params/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/uns/umap_density_params/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/var/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/var/__categories/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/varm/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "Input data relevant for visualization saved in columnar Apache Arrow format.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/output/secondary_analysis.arrow", 
+      "size": 503106, 
+      "type": "arrow"
+    }, 
+    {
+      "description": "JSON-formatted information about the heirarchy scRNA-seq's cells.", 
+      "edam_term": "EDAM_1.24.format_3464", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/output/secondary_analysis.cell-sets.json", 
+      "size": 445823, 
+      "type": "json"
+    }, 
+    {
+      "description": "JSON-formatted information about this scRNA-seq run including scatterplot coordinates and clustering.", 
+      "edam_term": "EDAM_1.24.format_3464", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/output/secondary_analysis.cells.json", 
+      "size": 2236174, 
+      "type": "json"
+    }, 
+    {
+      "description": "Input data relevant for visualization saved in columnar comma-separated-file format.", 
+      "edam_term": "EDAM_1.24.format_3752", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/output/secondary_analysis.csv", 
+      "size": 689134, 
+      "type": "csv"
+    }, 
+    {
+      "description": "JSON-formatted information about this scRNA-seq's clustering.", 
+      "edam_term": "EDAM_1.24.format_3464", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/output/secondary_analysis.factors.json", 
+      "size": 426800, 
+      "type": "json"
+    }, 
+    {
+      "description": "Quality control results from Scanpy, per-cell and per-gene, in HDF5 format", 
+      "edam_term": "EDAM_1.24.format_3590", 
+      "is_qa_qc": true, 
+      "rel_path": "qc_results.hdf5", 
+      "size": 5293972, 
+      "type": "hdf5"
+    }, 
+    {
+      "description": "Quality control report in JSON format", 
+      "edam_term": "EDAM_1.24.format_3464", 
+      "is_qa_qc": true, 
+      "rel_path": "qc_results.json", 
+      "size": 449, 
+      "type": "json"
+    }, 
+    {
+      "description": "Raw gene expression, in HDF5 format, readable with the 'anndata' Python package, intronic counts collapsed to genes", 
+      "edam_term": "EDAM_1.24.format_3590", 
+      "is_qa_qc": false, 
+      "rel_path": "raw_expr.h5ad", 
+      "size": 120904752, 
+      "type": "h5ad"
+    }, 
+    {
+      "description": "RNA velocity results, in HDF5 format, readable with the 'anndata' Python package", 
+      "edam_term": "EDAM_1.24.format_3590", 
+      "is_qa_qc": false, 
+      "rel_path": "scvelo_annotated.h5ad", 
+      "size": 1554606087, 
+      "type": "h5ad"
+    }, 
+    {
+      "description": "scVelo RNA velocity grid plot", 
+      "edam_term": "EDAM_1.24.format_3508", 
+      "is_qa_qc": false, 
+      "rel_path": "scvelo_embedding_grid.pdf", 
+      "size": 311614, 
+      "type": "pdf"
+    }, 
+    {
+      "description": "scVelo RNA velocity stream plot", 
+      "edam_term": "EDAM_1.24.format_3508", 
+      "is_qa_qc": false, 
+      "rel_path": "scvelo_embedding_stream.pdf", 
+      "size": 277735, 
+      "type": "pdf"
+    }, 
+    {
+      "description": "Normalized gene expression with additional metadata, in HDF5 format, readable with the 'anndata' Python package", 
+      "edam_term": "EDAM_1.24.format_3590", 
+      "is_qa_qc": false, 
+      "rel_path": "secondary_analysis.h5ad", 
+      "size": 2764920117, 
+      "type": "h5ad"
+    }, 
+    {
+      "description": "Spatial plot of cells, colored by Leiden cluster ID", 
+      "edam_term": "EDAM_1.24.format_3508", 
+      "is_qa_qc": false, 
+      "rel_path": "spatial_pos_by_leiden_cluster.pdf", 
+      "size": 308321, 
+      "type": "pdf"
+    }, 
+    {
+      "description": "UMAP plot of cells, colored by Leiden cluster ID", 
+      "edam_term": "EDAM_1.24.format_3508", 
+      "is_qa_qc": false, 
+      "rel_path": "umap_by_leiden_cluster.pdf", 
+      "size": 347330, 
+      "type": "pdf"
+    }, 
+    {
+      "description": "UMAP plot of cells, colored by embedding density", 
+      "edam_term": "EDAM_1.24.format_3508", 
+      "is_qa_qc": false, 
+      "rel_path": "umap_embedding_density.pdf", 
+      "size": 3245296, 
+      "type": "pdf"
+    }
+  ], 
+  "group_name": "Broad Institute RTI", 
+  "group_uuid": "9c4a56ca-79ac-11ea-8359-0e41da796b5d", 
+  "hubmap_id": "HBM378.GNLP.786", 
+  "immediate_ancestors": [
+    {
+      "contains_human_genetic_sequences": true, 
+      "created_by_user_displayname": "Joel Welling", 
+      "created_by_user_email": "jw1d@andrew.cmu.edu", 
+      "created_timestamp": 1631647245171, 
+      "data_access_level": "protected", 
+      "data_types": [
+        "Slide-seq"
+      ], 
+      "dataset_info": "Slide-seq data from the kidney (right) of a donor of unknown age, race and sex\r\n\r\n19 Slide-seq arrays of the right kidney cortex from donor UCSD0020  : upload/Puck_200903_05", 
+      "description": "19 Slide-seq arrays of the right kidney cortex from donor UCSD0020  : upload/Puck_200903_05", 
+      "entity_type": "Dataset", 
+      "group_uuid": "9c4a56ca-79ac-11ea-8359-0e41da796b5d", 
+      "hubmap_id": "HBM364.JRNL.422", 
+      "last_modified_timestamp": 1633795537743, 
+      "metadata": {
+        "dag_provenance_list": [
+          {
+            "hash": "cb8655c", 
+            "origin": "https://github.com/hubmapconsortium/ingest-pipeline.git"
+          }
+        ], 
+        "extra_metadata": {
+          "collectiontype": "generic_metadatatsv"
+        }, 
+        "metadata": {
+          "acquisition_instrument_model": "NovaSeq 6000", 
+          "acquisition_instrument_vendor": "Illumina", 
+          "analyte_class": "RNA", 
+          "assay_category": "sequence", 
+          "assay_type": "Slide-seq", 
+          "bead_barcode_offset": "1,27", 
+          "bead_barcode_read": "R1", 
+          "bead_barcode_size": "8,6", 
+          "contributors_path": "extras/contributors.tsv", 
+          "description": "Slide-seq on the kidney cortex", 
+          "execution_datetime": "2020-10-15 6:11", 
+          "is_targeted": "FALSE", 
+          "is_technical_replicate": "FALSE", 
+          "library_adapter_sequence": "5'- AAGCAGTGGTATCAACGCAGAGTGAATGGG -3'", 
+          "library_average_fragment_size": "536", 
+          "library_construction_protocols_io_doi": "10.17504/protocols.io.bpgzmjx6", 
+          "library_final_yield_unit": "ng", 
+          "library_final_yield_value": "38.6", 
+          "library_layout": "paired-end", 
+          "library_pcr_cycles": "13", 
+          "library_pcr_cycles_for_sample_index": "12", 
+          "operator": "Evan Murray", 
+          "operator_email": "emurray@broadinstitute.org", 
+          "pi": "Evan Macosko", 
+          "pi_email": "emacokso@broadinstitute.org", 
+          "protocols_io_doi": "10.17504/protocols.io.bpgzmjx6", 
+          "puck_id": "Puck_200903_05", 
+          "rnaseq_assay_method": "Slide-Seq", 
+          "sequencing_phix_percent": "0", 
+          "sequencing_read_format": "42/8/0/60", 
+          "sequencing_read_percent_q30": "0.9", 
+          "sequencing_reagent_kit": "S2"
+        }
+      }, 
+      "published_timestamp": 1633795537743, 
+      "status": "Published", 
+      "title": "Slide-seq data from the kidney (right) of a donor of unknown age, race and sex", 
+      "uuid": "a2ed51760e451afe1293754f62c00733"
+    }
+  ], 
+  "immediate_descendants": [], 
+  "index_version": "2.2.1", 
+  "last_modified_timestamp": 1633795756179, 
+  "mapped_data_access_level": "Public", 
+  "mapped_data_types": [
+    "Slide-seq [Salmon]"
+  ], 
+  "mapped_last_modified_timestamp": "2021-10-09 16:09:16", 
+  "mapped_metadata": {}, 
+  "mapped_status": "Published", 
+  "mapper_metadata": {
+    "datetime": "2021-12-20 18:43:37.802225", 
+    "size": 45738, 
+    "validation_errors": [
+      {
+        "absolute_path": "/", 
+        "absolute_schema_path": "/additionalProperties", 
+        "message": "Additional properties are not allowed ('created_timestamp', 'index_version', 'dataset_info', 'immediate_descendants', 'hubmap_id', 'immediate_ancestors', 'published_timestamp', 'title', 'display_subtype' were unexpected)"
+      }, 
+      {
+        "absolute_path": "/data_types", 
+        "absolute_schema_path": "/properties/data_types/enum", 
+        "message": "['salmon_rnaseq_slideseq'] is not one of ['AF', 'AF_pyramid', 'ATACseq-bulk', 'CODEX', 'DART-FISH', 'IMC2D', 'IMC2D_pyramid', 'IMC3D', 'IMC3D_pyramid', 'LC-MS', 'LC-MS-untargeted', 'LC-MS_bottom_up', 'LC-MS_top_down', 'Lightsheet', 'MALDI-IMS', 'MALDI-IMS_pyramid', 'MS', 'MS_bottom_up', 'MS_top_down', 'MxIF', 'MxIF_pyramid', 'NanoDESI', 'NanoDESI_pyramid', 'NanoPOTS', 'NanoPOTS_pyramid', 'PAS', 'PAS_pyramid', 'SNARE-ATACseq2', 'SNARE-RNAseq2', 'Slide-seq', 'TMT-LC-MS', 'Targeted-Shotgun-LC-MS', 'WGS', 'bulk-RNA', 'bulk_atacseq', 'cell-dive', 'celldive_deepcell', 'codex_cytokit', 'image_pyramid', 'lc-ms-ms_label-free', 'lc-ms-ms_labeled', 'lc-ms_label-free', 'lc-ms_labeled', 'salmon_rnaseq_10x', 'salmon_rnaseq_bulk', 'salmon_rnaseq_sciseq', 'salmon_rnaseq_slideseq', 'salmon_rnaseq_snareseq', 'salmon_sn_rnaseq_10x', 'scRNAseq-10xGenomics-v2', 'scRNAseq-10xGenomics-v3', 'sc_atac_seq_sci', 'sc_atac_seq_snare', 'sc_atac_seq_snare_lab', 'sc_rna_seq_snare_lab', 'sciATACseq', 'sciRNAseq', 'seqFish', 'seqFish_lab_processed', 'seqFish_pyramid', 'snATACseq', 'snRNAseq-10xGenomics-v2', 'snRNAseq-10xGenomics-v3', 'sn_atac_seq']"
+      }, 
+      {
+        "absolute_path": "/donor", 
+        "absolute_schema_path": "/properties/donor/additionalProperties", 
+        "message": "Additional properties are not allowed ('label', 'hubmap_id', 'created_timestamp', 'submission_id' were unexpected)"
+      }, 
+      {
+        "absolute_path": "/donor", 
+        "absolute_schema_path": "/properties/donor/required", 
+        "message": "'create_timestamp' is a required property"
+      }, 
+      {
+        "absolute_path": "/donor", 
+        "absolute_schema_path": "/properties/donor/required", 
+        "message": "'group_name' is a required property"
+      }, 
+      {
+        "absolute_path": "/origin_sample", 
+        "absolute_schema_path": "/properties/origin_sample/additionalProperties", 
+        "message": "Additional properties are not allowed ('hubmap_id', 'created_timestamp', 'submission_id' were unexpected)"
+      }, 
+      {
+        "absolute_path": "/origin_sample", 
+        "absolute_schema_path": "/properties/origin_sample/required", 
+        "message": "'create_timestamp' is a required property"
+      }, 
+      {
+        "absolute_path": "/origin_sample", 
+        "absolute_schema_path": "/properties/origin_sample/required", 
+        "message": "'group_name' is a required property"
+      }, 
+      {
+        "absolute_path": "/source_sample/0", 
+        "absolute_schema_path": "/properties/source_sample/items/additionalProperties", 
+        "message": "Additional properties are not allowed ('hubmap_id', 'created_timestamp', 'submission_id' were unexpected)"
+      }, 
+      {
+        "absolute_path": "/source_sample/0", 
+        "absolute_schema_path": "/properties/source_sample/items/required", 
+        "message": "'create_timestamp' is a required property"
+      }, 
+      {
+        "absolute_path": "/source_sample/0", 
+        "absolute_schema_path": "/properties/source_sample/items/required", 
+        "message": "'group_name' is a required property"
+      }, 
+      {
+        "absolute_path": "/", 
+        "absolute_schema_path": "/required", 
+        "message": "'create_timestamp' is a required property"
+      }, 
+      {
+        "absolute_path": "/", 
+        "absolute_schema_path": "/required", 
+        "message": "'access_group' is a required property"
+      }
+    ], 
+    "version": "master:8c0fac1"
+  }, 
+  "metadata": {
+    "dag_provenance_list": [
+      {
+        "hash": "cb8655c", 
+        "origin": "https://github.com/hubmapconsortium/ingest-pipeline.git"
+      }, 
+      {
+        "hash": "cb8655c", 
+        "origin": "https://github.com/hubmapconsortium/ingest-pipeline.git"
+      }, 
+      {
+        "hash": "c502823", 
+        "name": "pipeline.cwl", 
+        "origin": "https://github.com/hubmapconsortium/salmon-rnaseq"
+      }, 
+      {
+        "hash": "bb2d9e5", 
+        "name": "anndata-to-ui.cwl", 
+        "origin": "https://github.com/hubmapconsortium/portal-containers"
+      }
+    ]
+  }, 
+  "origin_sample": {
+    "created_by_user_displayname": "Diane Salamon", 
+    "created_by_user_email": "salamond@wustl.edu", 
+    "created_timestamp": 1603993667292, 
+    "data_access_level": "public", 
+    "entity_type": "Sample", 
+    "group_uuid": "03b3d854-ed44-11e8-8bce-0e368f3075e8", 
+    "hubmap_id": "HBM656.RWNC.696", 
+    "lab_tissue_sample_id": "3579", 
+    "last_modified_timestamp": 1603993667292, 
+    "mapped_data_access_level": "Public", 
+    "mapped_last_modified_timestamp": "2020-10-29 17:47:47", 
+    "mapped_organ": "Kidney (Right)", 
+    "mapped_specimen_type": "Organ", 
+    "organ": "RK", 
+    "protocol_url": "dx.doi.org/10.17504/protocols.io.568g9hw", 
+    "specimen_type": "organ", 
+    "submission_id": "UCSD0020-RK", 
+    "uuid": "7219d978053995b9e004321187352519"
+  }, 
+  "published_timestamp": 1633795756179, 
+  "source_sample": [
+    {
+      "created_by_user_displayname": "Diane Salamon", 
+      "created_by_user_email": "salamond@wustl.edu", 
+      "created_timestamp": 1603994376838, 
+      "data_access_level": "public", 
+      "entity_type": "Sample", 
+      "group_uuid": "03b3d854-ed44-11e8-8bce-0e368f3075e8", 
+      "hubmap_id": "HBM964.XZCR.478", 
+      "lab_tissue_sample_id": "K1900315_2", 
+      "last_modified_timestamp": 1603994376838, 
+      "mapped_data_access_level": "Public", 
+      "mapped_last_modified_timestamp": "2020-10-29 17:59:36", 
+      "mapped_metadata": {}, 
+      "mapped_specimen_type": "Fresh frozen OCT block", 
+      "metadata": {
+        "cold_ischemia_time_unit": "minutes", 
+        "cold_ischemia_time_value": "41", 
+        "health_status": "relatively healthy", 
+        "organ_condition": "healthy", 
+        "pathologist_report": "largely normal, no cancer, no necrosis", 
+        "perfusion_solution": "None", 
+        "procedure_date": "2019-07-01", 
+        "specimen_preservation_temperature": "Freezer (-80 Celsius)", 
+        "specimen_quality_criteria": "H&E", 
+        "specimen_tumor_distance_unit": "", 
+        "specimen_tumor_distance_value": "", 
+        "vital_state": "living", 
+        "warm_ischemia_time_unit": "minutes", 
+        "warm_ischemia_time_value": "30"
+      }, 
+      "protocol_url": "dx.doi.org/10.17504/protocols.io.568g9hw", 
+      "specimen_type": "fresh_frozen_oct_block", 
+      "submission_id": "UCSD0020-RK-1-2", 
+      "uuid": "0a558711c6b9d5b9029717d722a2c31c"
+    }
+  ], 
+  "status": "Published", 
+  "title": "Slide-seq [Salmon] data from the kidney (right) of a donor of unknown age, race and sex", 
+  "uuid": "ea4cfecb8495b36694d9a951510dc3c6"
+}
