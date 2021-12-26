@@ -23,7 +23,7 @@ class AbstractImagingViewConfBuilder(ViewConfBuilder):
 
         >>> from pprint import pprint
         >>> vc = AbstractImagingViewConfBuilder(entity={ "uuid": "uuid" },\
-            groups_token='groups_token', is_mock=True)
+            groups_token='groups_token')
         >>> pprint(vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff",\
             "rel_path/to"))
         ('https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=groups_token',\n\
@@ -52,13 +52,13 @@ class AbstractImagingViewConfBuilder(ViewConfBuilder):
 
 
 class ImagePyramidViewConfBuilder(AbstractImagingViewConfBuilder):
-    def __init__(self, entity, groups_token, is_mock=False):
+    def __init__(self, entity, groups_token):
         """Wrapper class for creating a standard view configuration for image pyramids,
         i.e for high resolution viz-lifted imaging datasets like
         https://portal.hubmapconsortium.org/browse/dataset/dc289471333309925e46ceb9bafafaf4
         """
         self.image_pyramid_regex = IMAGE_PYRAMID_DIR
-        super().__init__(entity, groups_token, is_mock)
+        super().__init__(entity, groups_token)
 
     def get_conf_cells(self):
         file_paths_found = self._get_file_paths()
@@ -97,8 +97,8 @@ class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
     of all the channels separated out.
     """
 
-    def __init__(self, entity, groups_token, is_mock=False):
-        super().__init__(entity, groups_token, is_mock)
+    def __init__(self, entity, groups_token):
+        super().__init__(entity, groups_token)
         # Do not show the separated mass-spec images.
         self.image_pyramid_regex = (
             re.escape(IMAGE_PYRAMID_DIR) + r"(?!/ometiffs/separate/)"

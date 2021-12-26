@@ -64,9 +64,9 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/dc31a6d06daa964299224e9c8d6cafb3
     """
 
-    def __init__(self, entity, groups_token, is_mock=False, **kwargs):
+    def __init__(self, entity, groups_token, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
-        super().__init__(entity, groups_token, is_mock)
+        super().__init__(entity, groups_token)
         # These are both something like R001_X009_Y009 because
         # there is no mask used here or shared name with the mask data.
         self._base_name = kwargs["base_name"]
@@ -107,8 +107,7 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
                 path = file["rel_path"]
                 if path not in file_paths_found:
                     message = f'SPRM file {path} with uuid "{self._uuid}" not found as expected.'
-                    if not self._is_mock:
-                        current_app.logger.error(message)
+                    current_app.logger.error(message)
                     raise FileNotFoundError(message)
                 dataset_file = self._replace_url_in_file(file)
                 dataset = dataset.add_file(**(dataset_file))
@@ -143,8 +142,8 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
     of the image and mask relative to image_pyramid_regex
     """
 
-    def __init__(self, entity, groups_token, is_mock=False, **kwargs):
-        super().__init__(entity, groups_token, is_mock)
+    def __init__(self, entity, groups_token, **kwargs):
+        super().__init__(entity, groups_token)
         self._base_name = kwargs["base_name"]
         self._mask_name = kwargs["mask_name"]
         self._image_name = kwargs["image_name"]
@@ -242,7 +241,6 @@ class StitchedCytokitSPRMViewConfBuilder(ViewConfBuilder):
             vc = SPRMAnnDataViewConfBuilder(
                 entity=self._entity,
                 groups_token=self._groups_token,
-                is_mock=self._is_mock,
                 base_name=region,
                 imaging_path=STITCHED_IMAGE_DIR,
                 mask_path=STITCHED_IMAGE_DIR.replace('expressions', 'mask'),
@@ -280,7 +278,6 @@ class TiledSPRMViewConfBuilder(ViewConfBuilder):
             vc = SPRMJSONViewConfBuilder(
                 entity=self._entity,
                 groups_token=self._groups_token,
-                is_mock=self._is_mock,
                 base_name=tile,
                 imaging_path=CODEX_TILE_DIR
             )

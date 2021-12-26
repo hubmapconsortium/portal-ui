@@ -15,6 +15,7 @@ assert len(entity_paths) > 0
 def test_entity_to_vitessce_conf(entity_path):
     app = Flask(__name__)
     app.config['TYPE_SERVICE_ENDPOINT'] = 'https://search.api.hubmapconsortium.org'
+    app.config['ASSETS_ENDPOINT'] = 'https://example.com'
     with app.app_context():
         entity = json.loads(entity_path.read_text())
         Builder = get_view_config_builder(entity)
@@ -24,7 +25,6 @@ def test_entity_to_vitessce_conf(entity_path):
             builder = Builder(
                 entity=entity,
                 groups_token=mock_groups_token,
-                is_mock=True,
                 base_name="BASE_NAME",
                 imaging_path="imaging_path",
                 image_name="expressions",
@@ -35,7 +35,6 @@ def test_entity_to_vitessce_conf(entity_path):
             builder = Builder(
                 entity=entity,
                 groups_token=mock_groups_token,
-                is_mock=True
             )
         assert type(builder).__name__ == entity_path.parent.name
 
