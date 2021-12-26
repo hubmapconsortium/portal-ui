@@ -36,11 +36,16 @@ class ViewConfBuilder:
         """Replace url in incoming file object
         :param dict file: File dict which will have its rel_path replaced by url
         :rtype: dict The file with rel_path replaced by url
+
         >>> from pprint import pprint
-        >>> vc = ViewConfBuilder(
+        >>> from flask import Flask
+        >>> app = Flask(__name__)
+        >>> app.config['ASSETS_ENDPOINT'] = 'https://example.com'
+        >>> with app.app_context():
+        ...   vc = ViewConfBuilder(
         ...     entity={"uuid": "uuid"}, groups_token='groups_token')
-        >>> file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
-        >>> pprint(vc._replace_url_in_file(file))
+        ...   file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
+        ...   pprint(vc._replace_url_in_file(file))
         {'data_type': 'CELLS',\n\
          'file_type': 'cells.json',\n\
          'url': 'https://example.com/uuid/cells.json?token=groups_token'}
@@ -58,9 +63,14 @@ class ViewConfBuilder:
         :param bool use_token: Whether or not to append a groups token to the URL, default True
         :rtype: dict The file with rel_path replaced by url
 
-        >>> vc = ViewConfBuilder(
+        >>> from pprint import pprint
+        >>> from flask import Flask
+        >>> app = Flask(__name__)
+        >>> app.config['ASSETS_ENDPOINT'] = 'https://example.com'
+        >>> with app.app_context():
+        ...   vc = ViewConfBuilder(
         ...     entity={"uuid": "uuid"}, groups_token='groups_token')
-        >>> vc._build_assets_url("rel_path/to/clusters.ome.tiff")
+        ...   vc._build_assets_url("rel_path/to/clusters.ome.tiff")
         'https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=groups_token'
 
         """
