@@ -92,13 +92,13 @@ class ViewConfBuilder:
         >>> vc = ViewConfBuilder(entity=entity, groups_token='groups_token')
         >>> assert vc._get_request_init() is None # None because dataset is Published (public)
         """
-        request_init = {"headers": {"Authorization": f"Bearer {self._groups_token}"}}
-        # Extra headers outside of a select few cause extra CORS-preflight requests which
-        # can slow down the webpage.  If the dataset is published, we don't need to use
-        # heaeder to authenticate access to the assets API.
-        # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests
-        use_request_init = False if self._entity["status"] == "Published" else True
-        return request_init if use_request_init else None
+        if self._entity["status"] == "Published":
+            # Extra headers outside of a select few cause extra CORS-preflight requests which
+            # can slow down the webpage.  If the dataset is published, we don't need to use
+            # header to authenticate access to the assets API.
+            # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests
+            return None
+        return {"headers": {"Authorization": f"Bearer {self._groups_token}"}}
 
     def _get_file_paths(self):
         """Get all rel_path keys from the entity dict.
