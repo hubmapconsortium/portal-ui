@@ -10,55 +10,7 @@
       "rel_path": "anndata-zarr/reg1_stitched_expressions-anndata.zarr/.zgroup", 
       "size": 24, 
       "type": "unknown"
-    }, 
-    {
-      "description": "AnnData Zarr store for storing and visualizing SPRM outputs.", 
-      "edam_term": "EDAM_1.24.format_2333", 
-      "is_qa_qc": false, 
-      "rel_path": "anndata-zarr/reg1_stitched_expressions-anndata.zarr/layers/.zgroup", 
-      "size": 24, 
-      "type": "unknown"
-    }, 
-    {
-      "description": "AnnData Zarr store for storing and visualizing SPRM outputs.", 
-      "edam_term": "EDAM_1.24.format_2333", 
-      "is_qa_qc": false, 
-      "rel_path": "anndata-zarr/reg1_stitched_expressions-anndata.zarr/obs/.zgroup", 
-      "size": 24, 
-      "type": "unknown"
-    }, 
-    {
-      "description": "AnnData Zarr store for storing and visualizing SPRM outputs.", 
-      "edam_term": "EDAM_1.24.format_2333", 
-      "is_qa_qc": false, 
-      "rel_path": "anndata-zarr/reg1_stitched_expressions-anndata.zarr/obsm/.zgroup", 
-      "size": 24, 
-      "type": "unknown"
-    }, 
-    {
-      "description": "AnnData Zarr store for storing and visualizing SPRM outputs.", 
-      "edam_term": "EDAM_1.24.format_2333", 
-      "is_qa_qc": false, 
-      "rel_path": "anndata-zarr/reg1_stitched_expressions-anndata.zarr/var/.zgroup", 
-      "size": 24, 
-      "type": "unknown"
-    }, 
-    {
-      "description": "OME-TIFF pyramid file", 
-      "edam_term": "EDAM_1.24.format_3727", 
-      "is_qa_qc": false, 
-      "rel_path": "ometiff-pyramids/sprm_outputs/reg1_stitched_expressions.ome.tiff-channel_pca.ome.tif", 
-      "size": 167736789, 
-      "type": "unknown"
-    }, 
-    {
-      "description": "OME-TIFF pyramid file", 
-      "edam_term": "EDAM_1.24.format_3727", 
-      "is_qa_qc": false, 
-      "rel_path": "ometiff-pyramids/sprm_outputs/reg1_stitched_expressions.ome.tiff-superpixel.ome.tif", 
-      "size": 4729609, 
-      "type": "unknown"
-    }, 
+    },
     {
       "description": "OME-TIFF pyramid file", 
       "edam_term": "EDAM_1.24.format_3727", 
@@ -74,78 +26,6 @@
       "rel_path": "ometiff-pyramids/stitched/mask/reg1_stitched_mask.ome.tif", 
       "size": 41470943, 
       "type": "unknown"
-    }, 
-    {
-      "description": "JSON-formatted information about each cell's cluster.", 
-      "edam_term": "EDAM_1.24.format_3464", 
-      "is_qa_qc": false, 
-      "rel_path": "output_json/reg1_stitched_expressions.cell-sets.json", 
-      "size": 16565624, 
-      "type": "json"
-    }, 
-    {
-      "description": "JSON-formatted information about each cell segmented and analyzed in SPRM.", 
-      "edam_term": "EDAM_1.24.format_3464", 
-      "is_qa_qc": false, 
-      "rel_path": "output_json/reg1_stitched_expressions.cells.json", 
-      "size": 241665989, 
-      "type": "json"
-    }, 
-    {
-      "description": "JSON-formatted information for a heatmap of each cell's expression level.", 
-      "edam_term": "EDAM_1.24.format_3464", 
-      "is_qa_qc": false, 
-      "rel_path": "output_json/reg1_stitched_expressions.clusters.json", 
-      "size": 69191768, 
-      "type": "json"
-    }, 
-    {
-      "description": "JSON-formatted information about each cell's cluster.", 
-      "edam_term": "EDAM_1.24.format_3464", 
-      "is_qa_qc": false, 
-      "rel_path": "output_json/reg1_stitched_expressions.factors.json", 
-      "size": 12025740, 
-      "type": "json"
-    }, 
-    {
-      "description": "JSON-formatted information about each cell's expression level.", 
-      "edam_term": "EDAM_1.24.format_3464", 
-      "is_qa_qc": false, 
-      "rel_path": "output_json/reg1_stitched_expressions.genes.json", 
-      "size": 82689939, 
-      "type": "json"
-    }, 
-    {
-      "description": "A list of byte-offsets of a TIFF file for quick access in visualization.", 
-      "edam_term": "EDAM_1.24.format_3464", 
-      "is_qa_qc": false, 
-      "rel_path": "output_offsets/sprm_outputs/reg1_stitched_expressions.ome.tiff-channel_pca.offsets.json", 
-      "size": 33, 
-      "type": "json"
-    }, 
-    {
-      "description": "A list of byte-offsets of a TIFF file for quick access in visualization.", 
-      "edam_term": "EDAM_1.24.format_3464", 
-      "is_qa_qc": false, 
-      "rel_path": "output_offsets/sprm_outputs/reg1_stitched_expressions.ome.tiff-superpixel.offsets.json", 
-      "size": 9, 
-      "type": "json"
-    }, 
-    {
-      "description": "A list of byte-offsets of a TIFF file for quick access in visualization.", 
-      "edam_term": "EDAM_1.24.format_3464", 
-      "is_qa_qc": false, 
-      "rel_path": "output_offsets/stitched/expressions/reg1_stitched_expressions.offsets.json", 
-      "size": 348, 
-      "type": "json"
-    }, 
-    {
-      "description": "A list of byte-offsets of a TIFF file for quick access in visualization.", 
-      "edam_term": "EDAM_1.24.format_3464", 
-      "is_qa_qc": false, 
-      "rel_path": "output_offsets/stitched/mask/reg1_stitched_mask.offsets.json", 
-      "size": 40, 
-      "type": "json"
     }
   ],
   "mapped_data_types": [
@@ -153,36 +33,7 @@
   ],
   "metadata": {
     "dag_provenance_list": [
-      {
-        "hash": "882fc6a", 
-        "origin": "https://github.com/hubmapconsortium/ingest-pipeline.git"
-      }, 
-      {
-        "hash": "882fc6a", 
-        "origin": "https://github.com/hubmapconsortium/ingest-pipeline.git"
-      }, 
-      {
-        "hash": "b23af94", 
-        "name": "steps/ometiff_second_stitching.cwl", 
-        "origin": "https://github.com/hubmapconsortium/codex-pipeline"
-      }, 
-      {
-        "hash": "d42d6f5", 
-        "name": "pipeline.cwl", 
-        "origin": "https://github.com/hubmapconsortium/sprm"
-      }, 
-      {
-        "hash": "91d193f", 
-        "name": "pipeline.cwl", 
-        "origin": "https://github.com/hubmapconsortium/create-vis-symlink-archive"
-      }, 
-      {
-        "hash": "b1b40c4", 
-        "name": "pipeline.cwl", 
-        "origin": "https://github.com/hubmapconsortium/ome-tiff-pyramid"
-      }, 
-      {
-        "hash": "bb2d9e5", 
+      { 
         "name": "sprm-to-anndata.cwl", 
         "origin": "https://github.com/hubmapconsortium/portal-containers"
       }
