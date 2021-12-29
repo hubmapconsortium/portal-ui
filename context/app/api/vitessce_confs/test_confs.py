@@ -33,10 +33,13 @@ def test_entity_to_vitessce_conf(entity_path):
                 mask_path="imaging_path"
             )
         except TypeError:
-            builder = Builder(
-                entity=entity,
-                groups_token=mock_groups_token,
-            )
+            try:
+                builder = Builder(
+                    entity=entity,
+                    groups_token=mock_groups_token,
+                )
+            except TypeError:
+                builder = Builder()
 
         conf_path = entity_path.parent / entity_path.name.replace('-entity', '-conf')
         conf_expected = json.loads(conf_path.read_text())
