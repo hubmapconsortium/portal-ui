@@ -11,7 +11,7 @@ entity_paths = list((Path(__file__).parent / 'fixtures').glob("*/*-entity.json")
 assert len(entity_paths) > 0
 
 
-@pytest.mark.parametrize("entity_path", entity_paths)
+@pytest.mark.parametrize("entity_path", entity_paths, ids=lambda path: path.name)
 def test_entity_to_vitessce_conf(entity_path):
     app = Flask(__name__)
     app.config['TYPE_SERVICE_ENDPOINT'] = 'https://search.api.hubmapconsortium.org'
