@@ -19,6 +19,7 @@ def test_entity_to_vitessce_conf(entity_path):
     with app.app_context():
         entity = json.loads(entity_path.read_text())
         Builder = get_view_config_builder(entity)
+        assert Builder.__name__ == entity_path.parent.name
 
         mock_groups_token = "groups_token"
         try:
@@ -36,7 +37,6 @@ def test_entity_to_vitessce_conf(entity_path):
                 entity=entity,
                 groups_token=mock_groups_token,
             )
-        assert type(builder).__name__ == entity_path.parent.name
 
         conf_path = entity_path.parent / entity_path.name.replace('-entity', '-conf')
         conf_expected = json.loads(conf_path.read_text())
