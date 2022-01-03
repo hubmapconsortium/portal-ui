@@ -1,0 +1,1 @@
+- When running docker locally, include a timestamp in the log, and make logging to STDOUT the default.
