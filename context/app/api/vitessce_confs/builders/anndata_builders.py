@@ -13,8 +13,8 @@ class RNASeqAnnDataZarrViewConfBuilder(ViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
 
-    def __init__(self, entity, groups_token, is_mock=False):
-        super().__init__(entity, groups_token, is_mock)
+    def __init__(self, entity, groups_token):
+        super().__init__(entity, groups_token)
         # Spatially resolved RNA-seq assays require some special handling,
         # and others do not.
         self._is_spatial = False
@@ -76,8 +76,8 @@ class SpatialRNASeqAnnDataZarrViewConfBuilder(RNASeqAnnDataZarrViewConfBuilder):
     https://portal.hubmapconsortium.org/browse/dataset/e65175561b4b17da5352e3837aa0e497
     """
 
-    def __init__(self, entity, groups_token, is_mock=False):
-        super().__init__(entity, groups_token, is_mock)
+    def __init__(self, entity, groups_token):
+        super().__init__(entity, groups_token)
         # Spatially resolved RNA-seq assays require some special handling,
         # and others do not.
         self._is_spatial = True

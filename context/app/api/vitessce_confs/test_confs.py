@@ -7,73 +7,42 @@ from flask import Flask
 from .assay_confs import get_view_config_builder
 
 
-MOCK_GROUPS_TOKEN = "groups_token"
-
-FIXTURES_INPUT_DIR = "fixtures/input_entity"
-FIXTURES_EXPECTED_OUTPUT_DIR = "fixtures/output_expected"
-
-BASE_NAME_FOR_SPRM = "BASE_NAME"
+entity_paths = list((Path(__file__).parent / 'fixtures').glob("*/*-entity.json"))
+assert len(entity_paths) > 0
 
 
-parent_dir = Path(__file__).parent
-fixtures_dir = parent_dir / FIXTURES_INPUT_DIR
-entity_paths = set(fixtures_dir.glob("*_entity.json")) - set(
-    fixtures_dir.glob("malformed_*_entity.json")
-)
-
-
-@pytest.mark.parametrize("entity_file", entity_paths)
-def test_assays(entity_file):
+@pytest.mark.parametrize("entity_path", entity_paths, ids=lambda path: path.name)
+def test_entity_to_vitessce_conf(entity_path):
     app = Flask(__name__)
     app.config['TYPE_SERVICE_ENDPOINT'] = 'https://search.api.hubmapconsortium.org'
+    app.config['ASSETS_ENDPOINT'] = 'https://example.com'
     with app.app_context():
-        entity = json.loads(entity_file.read_text())
+        entity = json.loads(entity_path.read_text())
         Builder = get_view_config_builder(entity)
+        assert Builder.__name__ == entity_path.parent.name
 
+        mock_groups_token = "groups_token"
         try:
             builder = Builder(
                 entity=entity,
-                groups_token=MOCK_GROUPS_TOKEN,
-                is_mock=True,
-                base_name=BASE_NAME_FOR_SPRM,
+                groups_token=mock_groups_token,
+                base_name="BASE_NAME",
                 imaging_path="imaging_path",
                 image_name="expressions",
                 mask_name="mask",
                 mask_path="imaging_path"
             )
         except TypeError:
-            builder = Builder(
-                entity=entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
-            )
-        conf = builder.get_conf_cells().conf
-        conf_expected = json.loads(
-            (
-                parent_dir / FIXTURES_EXPECTED_OUTPUT_DIR
-                / entity_file.name.replace('_entity', '_conf')
-            ).read_text()
-        )
-        assert conf_expected == conf
+            try:
+                builder = Builder(
+                    entity=entity,
+                    groups_token=mock_groups_token,
+                )
+            except TypeError:
+                builder = Builder()
 
-        malformed_entity = json.loads(
-            (
-                parent_dir / FIXTURES_INPUT_DIR
-                / f'malformed_{entity_file.name}'
-            ).read_text()
-        )
-        try:
-            builder = Builder(
-                entity=malformed_entity,
-                groups_token=MOCK_GROUPS_TOKEN,
-                is_mock=True,
-                base_name=BASE_NAME_FOR_SPRM,
-                imaging_path="imaging_path",
-                image_name="expressions",
-                mask_name="mask",
-                mask_path="imaging_path"
-            )
-        except TypeError:
-            builder = Builder(
-                entity=malformed_entity, groups_token=MOCK_GROUPS_TOKEN, is_mock=True
-            )
-        with pytest.raises(FileNotFoundError):
-            builder.get_conf_cells().conf
+        conf_path = entity_path.parent / entity_path.name.replace('-entity', '-conf')
+        conf_expected = json.loads(conf_path.read_text())
+
+        conf = builder.get_conf_cells().conf
+        assert conf_expected == conf

@@ -1,17 +1,17 @@
 from flask import current_app
 from hubmap_commons.type_client import TypeClient
 
-from .base_builders import NullViewConfBuilder
-from .sprm_builders import (
+from .builders.base_builders import NullViewConfBuilder
+from .builders.sprm_builders import (
     StitchedCytokitSPRMViewConfBuilder, TiledSPRMViewConfBuilder
 )
-from .imaging_builders import (
+from .builders.imaging_builders import (
     SeqFISHViewConfBuilder, IMSViewConfBuilder, ImagePyramidViewConfBuilder
 )
-from .anndata_builders import (
+from .builders.anndata_builders import (
     SpatialRNASeqAnnDataZarrViewConfBuilder, RNASeqAnnDataZarrViewConfBuilder
 )
-from .scatterplot_builders import (
+from .builders.scatterplot_builders import (
     RNASeqViewConfBuilder, ATACSeqViewConfBuilder
 )
 from .assays import (

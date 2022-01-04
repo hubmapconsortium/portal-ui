@@ -1,0 +1,44 @@
+{
+  "data_types": [
+    "codex_cytokit"
+  ],
+  "files": [
+    {
+      "description": "AnnData Zarr store for storing and visualizing SPRM outputs.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "anndata-zarr/reg1_stitched_expressions-anndata.zarr/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    },
+    {
+      "description": "OME-TIFF pyramid file", 
+      "edam_term": "EDAM_1.24.format_3727", 
+      "is_qa_qc": false, 
+      "rel_path": "ometiff-pyramids/stitched/expressions/reg1_stitched_expressions.ome.tif", 
+      "size": 5179858585, 
+      "type": "unknown"
+    }, 
+    {
+      "description": "OME-TIFF pyramid file", 
+      "edam_term": "EDAM_1.24.format_3727", 
+      "is_qa_qc": false, 
+      "rel_path": "ometiff-pyramids/stitched/mask/reg1_stitched_mask.ome.tif", 
+      "size": 41470943, 
+      "type": "unknown"
+    }
+  ],
+  "mapped_data_types": [
+    "CODEX [Cytokit + SPRM]"
+  ],
+  "metadata": {
+    "dag_provenance_list": [
+      { 
+        "name": "sprm-to-anndata.cwl", 
+        "origin": "https://github.com/hubmapconsortium/portal-containers"
+      }
+    ]
+  }, 
+  "status": "Published", 
+  "uuid": "04e7385339167e541ad42a2636e18398"
+}
