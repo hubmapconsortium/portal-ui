@@ -1,3 +1,12 @@
+## v0.35.0 - 2022-01-04
+
+- In the metadata TSV download, add a second row with the field descriptions.
+- Add retracted datasets to the list of things that are hidden from the default search.
+- Organize vitessce builder classes into related groups.
+- `NullViewConfBuilder` does not need a separate invocation.
+- Refactor the vitessce conf tests for readability.
+
+
 ## v0.33.1 - 2021-12-14
 
 - Log when Cells API calls start, so if it times out, we have something to go on.
