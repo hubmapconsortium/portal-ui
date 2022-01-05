@@ -12,13 +12,10 @@ describe('file-based-routes', () => {
       // Vitessce loads, pulling data from the network.
       // Are incidental network requests ok, as long as tests don't depend on them?
     });
-    it('has working docs pages', () => {
+    it('has working markdown pages', () => {
       cy.visit('/');
-      cy.contains('Documentation').click();
-      cy.contains('FAQ');
-      cy.contains('About');
-      cy.contains('Technical').click();
-      cy.contains('HIVE Software Engineering Principles')
+      cy.contains('APIs').click();
+      cy.contains('APIs and Data Downloads');
     });
     it('has working publication pages', () => {
       // TODO: When we link to it from the menu, follow the link instead.
