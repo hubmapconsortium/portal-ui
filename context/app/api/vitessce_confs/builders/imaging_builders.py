@@ -26,7 +26,8 @@ class AbstractImagingViewConfBuilder(ViewConfBuilder):
         >>> app = Flask(__name__)
         >>> app.config['ASSETS_ENDPOINT'] = 'https://example.com'
         >>> with app.app_context():
-        ...   vc = AbstractImagingViewConfBuilder(entity={ "uuid": "uuid" }, groups_token='groups_token')
+        ...   vc = AbstractImagingViewConfBuilder(
+        ...     entity={ "uuid": "uuid" }, groups_token='groups_token')
         ...   pprint(vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff", "rel_path/to"))
         ('https://example.com/uuid/rel_path/to/clusters.ome.tiff?token=groups_token',\n\
          'https://example.com/uuid/output_offsets/clusters.offsets.json?token=groups_token')
