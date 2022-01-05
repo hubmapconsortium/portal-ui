@@ -5,26 +5,14 @@ import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store'
 import { HeaderCell } from 'js/shared-styles/tables';
 
 function SelectableHeaderCell({ allTableRowKeys }) {
-  const {
-    deselectAllRows,
-    setSelectedRows,
-    headerRowIsSelected,
-    selectHeaderRow,
-    deselectHeaderRow,
-    tableLabel,
-  } = useStore();
+  const { deselectHeaderAndRows, setSelectedRows, headerRowIsSelected, selectHeaderRow, tableLabel } = useStore();
 
-  function checkHeaderRow() {
+  function selectHeaderAndRows() {
     selectHeaderRow();
     setSelectedRows(allTableRowKeys);
   }
-
-  function uncheckHeaderRow() {
-    deselectHeaderRow();
-    deselectAllRows();
-  }
   return (
-    <HeaderCell padding="checkbox" onClick={headerRowIsSelected ? uncheckHeaderRow : checkHeaderRow}>
+    <HeaderCell padding="checkbox" onClick={headerRowIsSelected ? deselectHeaderAndRows : selectHeaderAndRows}>
       <Checkbox checked={headerRowIsSelected} inputProps={{ 'aria-labelledby': `${tableLabel}-header-row-checkbox` }} />
     </HeaderCell>
   );

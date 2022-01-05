@@ -18,6 +18,7 @@ const createStore = (tableLabel) =>
     headerRowIsSelected: false,
     selectHeaderRow: () => set({ headerRowIsSelected: true }),
     deselectHeaderRow: () => set({ headerRowIsSelected: false }),
+    deselectHeaderAndRows: () => set({ headerRowIsSelected: false, selectedRows: new Set([]) }),
     tableLabel,
   }));
 
