@@ -4,11 +4,11 @@ import SaveToListDialog from 'js/components/savedLists/SaveToListDialog';
 import { LeftMarginButton } from 'js/components/savedLists/SavedEntitiesTable/style';
 import { StyledListsIcon } from './style';
 
-function AddItemsToListDialog({ itemsToAddUUIDS, onSaveCallback }) {
+function AddItemsToListDialog({ itemsToAddUUIDS, onSaveCallback, ...rest }) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   return (
     <>
-      <LeftMarginButton color="primary" onClick={() => setDialogIsOpen(true)} variant="contained">
+      <LeftMarginButton color="primary" onClick={() => setDialogIsOpen(true)} variant="contained" {...rest}>
         <StyledListsIcon /> Add To List
       </LeftMarginButton>
       <SaveToListDialog
