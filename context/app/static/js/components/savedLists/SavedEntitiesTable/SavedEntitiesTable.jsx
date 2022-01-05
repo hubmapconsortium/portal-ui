@@ -12,10 +12,10 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
-import SaveToListDialog from 'js/components/savedLists/SaveToListDialog';
 import useStateSet from 'js/hooks/useStateSet';
 import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
-import { LeftMarginButton, LeftMarginIconButton } from './style';
+import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
+import { LeftMarginIconButton } from './style';
 
 const defaultColumns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
@@ -27,7 +27,6 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
   const [selectedRows, addToSelectedRows, removeFromSelectedRows, setSelectedRows] = useStateSet([]);
   const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
-  const [addToDialogIsOpen, setAddToDialogIsOpen] = useState(false);
 
   const columns = isSavedListPage
     ? [...defaultColumns, { id: 'dateAddedToCollection', label: 'Date Added To Collection' }]
@@ -79,18 +78,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
                 deleteSelectedSavedEntities={deleteSelectedSavedEntities}
               />
               {!isSavedListPage && (
-                <>
-                  <LeftMarginButton color="primary" onClick={() => setAddToDialogIsOpen(true)} variant="contained">
-                    Add To
-                  </LeftMarginButton>
-                  <SaveToListDialog
-                    title="Add Items To"
-                    dialogIsOpen={addToDialogIsOpen}
-                    setDialogIsOpen={setAddToDialogIsOpen}
-                    entitiesToAdd={selectedRows}
-                    onSaveCallback={onSaveCallback}
-                  />
-                </>
+                <AddItemsToListDialog itemsToAddUUIDS={selectedRows} onSaveCallback={onSaveCallback} />
               )}
             </div>
           )

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 // NOTE: We are using the rounded icon variants consistently.
 import BubbleChartIcon from '@material-ui/icons/BubbleChartRounded';
 import PersonIcon from '@material-ui/icons/PersonRounded';
@@ -14,61 +14,70 @@ import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import CollectionsBookmarkRoundedIcon from '@material-ui/icons/CollectionsBookmarkRounded';
 import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
+import ListAltRoundedIcon from '@material-ui/icons/ListAltRounded';
+
+const fontSizeStyle = css`
+  font-size: ${(props) => props.fontSize};
+`;
 
 const CenterIcon = styled(AccountBalanceIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const CollectionIcon = styled(CollectionsBookmarkRoundedIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const DonorIcon = styled(PersonIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const SampleIcon = styled(BubbleChartIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const DatasetIcon = styled(TableChartIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const ExternalLinkIcon = styled(LaunchRoundedIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const InfoIcon = styled(InfoRoundedIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const SuccessIcon = styled(CheckCircleRoundedIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const FileIcon = styled(InsertDriveFileRoundedIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const ErrorIcon = styled(ErrorRoundedIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const MoreIcon = styled(MoreHorizRoundedIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const DeleteIcon = styled(DeleteRoundedIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const EditIcon = styled(EditRoundedIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
 `;
 
 const EmailIcon = styled(EmailRoundedIcon)`
-  font-size: ${(props) => props.fontSize};
+  ${fontSizeStyle};
+`;
+
+const ListsIcon = styled(ListAltRoundedIcon)`
+  ${fontSizeStyle}
 `;
 
 export {
@@ -86,4 +95,5 @@ export {
   DeleteIcon,
   EditIcon,
   EmailIcon,
+  ListsIcon,
 };
