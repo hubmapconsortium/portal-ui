@@ -3,7 +3,7 @@ import createContext from 'zustand/context';
 
 const { Provider, useStore } = createContext();
 
-const createStore = () =>
+const createStore = (tableLabel) =>
   create((set) => ({
     selectedRows: new Set([]),
     selectRow: (key) => set((state) => ({ selectedRows: state.selectedRows.add(key) })),
@@ -18,6 +18,7 @@ const createStore = () =>
     headerRowIsSelected: false,
     selectHeaderRow: () => set({ headerRowIsSelected: true }),
     deselectHeaderRow: () => set({ headerRowIsSelected: false }),
+    tableLabel,
   }));
 
 export { Provider, useStore, createStore };
