@@ -55,13 +55,13 @@ class AbstractImagingViewConfBuilder(ViewConfBuilder):
 
 
 class ImagePyramidViewConfBuilder(AbstractImagingViewConfBuilder):
-    def __init__(self, entity, groups_token):
+    def __init__(self, entity, groups_token, **kwargs):
         """Wrapper class for creating a standard view configuration for image pyramids,
         i.e for high resolution viz-lifted imaging datasets like
         https://portal.hubmapconsortium.org/browse/dataset/dc289471333309925e46ceb9bafafaf4
         """
         self.image_pyramid_regex = IMAGE_PYRAMID_DIR
-        super().__init__(entity, groups_token)
+        super().__init__(entity, groups_token, **kwargs)
 
     def get_conf_cells(self):
         file_paths_found = self._get_file_paths()

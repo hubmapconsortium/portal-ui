@@ -45,8 +45,8 @@ class RNASeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     from h5ad-to-arrow.cwl (August 2020 release).
     """
 
-    def __init__(self, entity, groups_token):
-        super().__init__(entity, groups_token)
+    def __init__(self, entity, groups_token, **kwargs):
+        super().__init__(entity, groups_token, **kwargs)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {
@@ -69,7 +69,7 @@ class ATACSeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     """
 
     def __init__(self, entity, groups_token):
-        super().__init__(entity, groups_token)
+        super().__init__(entity, groups_token, **kwargs)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
             {

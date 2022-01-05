@@ -66,7 +66,7 @@ class SPRMJSONViewConfBuilder(SPRMViewConfBuilder):
 
     def __init__(self, entity, groups_token, **kwargs):
         # All "file" Vitessce objects that do not have wrappers.
-        super().__init__(entity, groups_token)
+        super().__init__(entity, groups_token, **kwargs)
         # These are both something like R001_X009_Y009 because
         # there is no mask used here or shared name with the mask data.
         self._base_name = kwargs["base_name"]
@@ -143,7 +143,7 @@ class SPRMAnnDataViewConfBuilder(SPRMViewConfBuilder):
     """
 
     def __init__(self, entity, groups_token, **kwargs):
-        super().__init__(entity, groups_token)
+        super().__init__(entity, groups_token, **kwargs)
         self._base_name = kwargs["base_name"]
         self._mask_name = kwargs["mask_name"]
         self._image_name = kwargs["image_name"]

@@ -8,13 +8,16 @@ ConfCells = namedtuple('ConfCells', ['conf', 'cells'])
 
 
 class NullViewConfBuilder():
+    def __init__(self, entity, groups_token, **kwargs):
+        # Just so it has the same signature as the other builders
+        pass
 
     def get_conf_cells(self):
         return ConfCells(None, None)
 
 
 class ViewConfBuilder:
-    def __init__(self, entity=None, groups_token=None):
+    def __init__(self, entity, groups_token, **kwargs):
         """Object for building the vitessce configuration.
         :param dict entity: Entity response from search index (from the entity API)
         :param str groups_token: Groups token for use in authenticating API
