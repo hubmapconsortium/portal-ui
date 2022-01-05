@@ -4,17 +4,18 @@ import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
-import useStateSet from 'js/hooks/useStateSet';
 import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
+import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
+import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
+import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import DeselectAllRowsButton from 'js/shared-styles/tables/DeselectAllRowsButton';
 import { LeftMarginIconButton } from './style';
 
 const defaultColumns = [
@@ -24,32 +25,21 @@ const defaultColumns = [
 ];
 
 function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySaveAlert, isSavedListPage }) {
-  const [selectedRows, addToSelectedRows, removeFromSelectedRows, setSelectedRows] = useStateSet([]);
-  const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
+  const { selectedRows, deselectHeaderAndRows } = useStore();
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
 
   const columns = isSavedListPage
     ? [...defaultColumns, { id: 'dateAddedToCollection', label: 'Date Added To Collection' }]
     : [...defaultColumns, { id: 'dateSaved', label: 'Date Saved' }];
 
-  function selectAllRows() {
-    setSelectedRows(new Set(Object.keys(savedEntities)));
-    setHeaderRowIsSelected(true);
-  }
-
-  function deselectAllRows() {
-    setSelectedRows(new Set([]));
-    setHeaderRowIsSelected(false);
-  }
-
   function deleteSelectedSavedEntities() {
     deleteCallback(selectedRows);
-    deselectAllRows();
+    deselectHeaderAndRows();
   }
 
   function onSaveCallback() {
     setShouldDisplaySaveAlert(true);
-    deselectAllRows();
+    deselectHeaderAndRows();
   }
   const selectedRowsSize = selectedRows.size;
 
@@ -64,9 +54,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
         buttons={
           selectedRowsSize > 0 && (
             <div>
-              <Button color="primary" onClick={deselectAllRows}>
-                Deselect All ({selectedRowsSize})
-              </Button>
+              <DeselectAllRowsButton />
               <SecondaryBackgroundTooltip title="Delete Items">
                 <LeftMarginIconButton onClick={() => setDeleteDialogIsOpen(true)}>
                   <DeleteRoundedIcon color="primary" />
@@ -89,12 +77,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <HeaderCell padding="checkbox" onClick={headerRowIsSelected ? deselectAllRows : selectAllRows}>
-                  <Checkbox
-                    checked={headerRowIsSelected}
-                    inputProps={{ 'aria-labelledby': 'saved-entities-header-row-checkbox' }}
-                  />
-                </HeaderCell>
+                <SelectableHeaderCell allTableRowKeys={Object.keys(savedEntities)} />
                 {columns.map((column) => (
                   <HeaderCell key={column.id}>{column.label}</HeaderCell>
                 ))}
@@ -102,15 +85,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
             </TableHead>
             <TableBody>
               {Object.entries(savedEntities).map(([key, value], i) => (
-                <SavedEntitiesTableRow
-                  key={key}
-                  uuid={key}
-                  rowData={value}
-                  index={i}
-                  isSelected={selectedRows.has(key)}
-                  addToSelectedRows={addToSelectedRows}
-                  removeFromSelectedRows={removeFromSelectedRows}
-                />
+                <SavedEntitiesTableRow key={key} uuid={key} rowData={value} index={i} />
               ))}
             </TableBody>
           </Table>
@@ -120,4 +95,4 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
   );
 }
 
-export default SavedEntitiesTable;
+export default withSelectableTableProvider(SavedEntitiesTable, 'saved-entities');
