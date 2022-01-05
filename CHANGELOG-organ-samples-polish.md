@@ -1,0 +1,2 @@
+- Add count to samples table on organ pages.
+- Enable users to add samples to saved lists from samples table on organ pages.
