@@ -22,28 +22,10 @@ def test_entity_to_vitessce_conf(entity_path):
         Builder = get_view_config_builder(entity)
         assert Builder.__name__ == entity_path.parent.name
 
-        mock_groups_token = "groups_token"
-        try:
-            builder = Builder(
-                entity=entity,
-                groups_token=mock_groups_token,
-                base_name="BASE_NAME",
-                imaging_path="imaging_path",
-                image_name="expressions",
-                mask_name="mask",
-                mask_path="imaging_path"
-            )
-        except TypeError:
-            try:
-                builder = Builder(
-                    entity=entity,
-                    groups_token=mock_groups_token,
-                )
-            except TypeError:
-                builder = Builder()
-
-        conf_path = entity_path.parent / entity_path.name.replace('-entity', '-conf')
-        conf_expected = json.loads(conf_path.read_text())
-
+        builder = Builder(entity, "groups_token")
         conf = builder.get_conf_cells().conf
+
+        conf_expected_path = entity_path.parent / entity_path.name.replace('-entity', '-conf')
+        conf_expected = json.loads(conf_expected_path.read_text())
+
         assert conf_expected == conf
