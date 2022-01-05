@@ -13,7 +13,7 @@ const createStore = (tableLabel) =>
         setCopy.delete(key);
         return { selectedRows: setCopy };
       }),
-    setSelectedRows: (keys) => set({ selectedRows: keys }),
+    setSelectedRows: (keys) => set({ selectedRows: new Set(keys) }),
     deselectAllRows: () => set({ selectedRows: new Set([]) }),
     headerRowIsSelected: false,
     selectHeaderRow: () => set({ headerRowIsSelected: true }),
