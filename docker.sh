@@ -31,4 +31,4 @@ echo "To visit:   http://localhost:$PORT/"
 echo "To connect: docker exec -it $CONTAINER_NAME /bin/bash"
 echo $reset
 
-docker logs --timestamp --follow $CONTAINER_NAME
+docker logs --timestamps --follow $CONTAINER_NAME
