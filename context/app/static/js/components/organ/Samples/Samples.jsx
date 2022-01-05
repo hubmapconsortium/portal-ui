@@ -5,16 +5,15 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { useSearchHits } from 'js/hooks/useSearchData';
-
+import { StyledSectionHeader } from './style';
 import { getSearchURL } from '../utils';
-import { StyledSampleIcon } from '../style';
 
 const columns = [
   { id: 'hubmap_id', label: 'Sample' },
@@ -59,11 +58,15 @@ function Samples(props) {
   return (
     <SectionContainer>
       <SpacedSectionButtonRow
-        leftText={<SectionHeader>Samples</SectionHeader>}
+        leftText={
+          <div>
+            <StyledSectionHeader>Samples</StyledSectionHeader>
+            <Typography variant="subtitle1">{searchHits.length} Samples</Typography>{' '}
+          </div>
+        }
         buttons={
-          <Button color="primary" variant="contained" component="a" href={searchUrl}>
-            <StyledSampleIcon />
-            View All Samples
+          <Button color="primary" variant="outlined" component="a" href={searchUrl}>
+            View Data on Search Page
           </Button>
         }
       />
