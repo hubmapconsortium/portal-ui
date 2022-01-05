@@ -100,8 +100,8 @@ class IMSViewConfBuilder(ImagePyramidViewConfBuilder):
     of all the channels separated out.
     """
 
-    def __init__(self, entity, groups_token):
-        super().__init__(entity, groups_token)
+    def __init__(self, entity, groups_token, **kwargs):
+        super().__init__(entity, groups_token, **kwargs)
         # Do not show the separated mass-spec images.
         self.image_pyramid_regex = (
             re.escape(IMAGE_PYRAMID_DIR) + r"(?!/ometiffs/separate/)"

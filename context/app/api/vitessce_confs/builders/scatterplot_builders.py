@@ -68,7 +68,7 @@ class ATACSeqViewConfBuilder(AbstractScatterplotViewConfBuilder):
     from h5ad-to-arrow.cwl.
     """
 
-    def __init__(self, entity, groups_token):
+    def __init__(self, entity, groups_token, **kwargs):
         super().__init__(entity, groups_token, **kwargs)
         # All "file" Vitessce objects that do not have wrappers.
         self._files = [
