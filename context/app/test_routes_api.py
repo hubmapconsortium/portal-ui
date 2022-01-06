@@ -19,7 +19,6 @@ def mock_es_post(path, **kwargs):
                 'hits': [{'_source':{}}]
               }
             }
-
         def raise_for_status(self):
             pass
     return MockResponse()
