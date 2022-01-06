@@ -16,7 +16,14 @@ def mock_es_post(path, **kwargs):
             return {
               'hits': {
                 'total': {'value': 1},
-                'hits': [{'_source':{}}]
+                'hits': [{'_source': {
+                  'uuid': 'ABC123',
+                  'hubmap_id': 'HMB123.XYZ',
+                  'mapped_metadata': {
+                    'age_unit': ['eons'],
+                    'age_value': [42]
+                  }
+                }}]
               }
             }
         def raise_for_status(self):
@@ -28,3 +35,7 @@ def test_tsv_get(client, mocker):
     mocker.patch('requests.post', side_effect=mock_es_post)
     response = client.get('/metadata/v0/donors.tsv')
     assert response.status == '200 OK'
+    assert response.get_data(as_text=True) == '''uuid\thubmap_id\tage_unit\tage_value\r
+#\t\tUnit for age measurement.\tThe time elapsed since birth.\r
+ABC123\tHMB123.XYZ\teons\t42\r
+'''
