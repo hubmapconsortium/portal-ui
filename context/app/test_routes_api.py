@@ -38,9 +38,7 @@ def mock_es_post(path, **kwargs):
     return MockResponse()
 
 
-def test_tsv_get(client, mocker):
-    mocker.patch('requests.post', side_effect=mock_es_post)
-    response = client.get('/metadata/v0/donors.tsv')
+def tsv_assertions(response):
     assert response.status == '200 OK'
     assert response.get_data(as_text=True) == mock_tsv
     headers = dict(response.headers)
@@ -48,15 +46,17 @@ def test_tsv_get(client, mocker):
         'attachment; filename=hubmap-donors-metadata-')
     assert headers['Content-Type'] == 'text/tab-separated-values; charset=utf-8'
 
+
+def test_tsv_get(client, mocker):
+    mocker.patch('requests.post', side_effect=mock_es_post)
+    response = client.get('/metadata/v0/donors.tsv')
+    tsv_assertions(response)
+
+
 def test_tsv_post(client, mocker):
     mocker.patch('requests.post', side_effect=mock_es_post)
     response = client.post('/metadata/v0/donors.tsv', json={'uuids': []})
-    assert response.status == '200 OK'
-    assert response.get_data(as_text=True) == mock_tsv
-    headers = dict(response.headers)
-    assert headers['Content-Disposition'].startswith(
-        'attachment; filename=hubmap-donors-metadata-')
-    assert headers['Content-Type'] == 'text/tab-separated-values; charset=utf-8'
+    tsv_assertions(response)
 
 
 def test_unexpected_json_tsv_post(client, mocker):
