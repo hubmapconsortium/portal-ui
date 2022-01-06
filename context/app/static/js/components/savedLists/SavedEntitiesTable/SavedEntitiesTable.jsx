@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+/* eslint-disable no-underscore-dangle */
+import React, { useState, useMemo } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
+import format from 'date-fns/format';
 
+import { LightBlueLink } from 'js/shared-styles/Links';
+import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
 import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
@@ -16,6 +20,8 @@ import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableT
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import DeselectAllRowsButton from 'js/shared-styles/tables/DeselectAllRowsButton';
+import { useSearchHits } from 'js/hooks/useSearchData';
+import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
 import { LeftMarginIconButton } from './style';
 
 const defaultColumns = [
@@ -42,6 +48,20 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
     deselectHeaderAndRows();
   }
   const selectedRowsSize = selectedRows.size;
+
+  const query = useMemo(
+    () => ({
+      query: {
+        ids: {
+          values: Object.keys(savedEntities),
+        },
+      },
+      _source: ['hubmap_id', 'group_name', 'entity_type'],
+    }),
+    [savedEntities],
+  );
+
+  const { searchHits } = useSearchHits(query);
 
   return (
     <>
@@ -84,9 +104,23 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
               </TableRow>
             </TableHead>
             <TableBody>
-              {Object.entries(savedEntities).map(([key, value], i) => (
-                <SavedEntitiesTableRow key={key} uuid={key} rowData={value} index={i} />
-              ))}
+              {searchHits.length ? (
+                searchHits.map(({ _id, _source: { hubmap_id, group_name, entity_type } }, i) => (
+                  <TableRow key={_id}>
+                    <SelectableRowCell rowKey={_id} index={i} />
+                    <TableCell>
+                      <LightBlueLink href={`/browse/${hubmap_id}`}>{hubmap_id}</LightBlueLink>
+                    </TableCell>
+                    <TableCell>{group_name}</TableCell>
+                    <TableCell>{entity_type}</TableCell>
+                    <TableCell>
+                      {format(savedEntities[_id]?.dateSaved || savedEntities[_id]?.dateAddedToList, 'yyyy-MM-dd')}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <LoadingTableRows numberOfRows={Object.keys(savedEntities).length} numberOfCols={5} />
+              )}
             </TableBody>
           </Table>
         </StyledTableContainer>
