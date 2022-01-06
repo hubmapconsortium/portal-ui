@@ -13,8 +13,8 @@ pip install -r $CONTEXT/requirements.txt > /dev/null
 
 ./copy-app-conf.sh
 
-FLASK_ENV=development FLASK_APP="$CONTEXT/app/main.py" python -m flask run &
 cd $CONTEXT
+FLASK_ENV=development FLASK_APP="app/main.py" python -m flask run &
 npm install
 npm run lint || die 'Try "npm run lint:fix"'
 npm run dev-server &
