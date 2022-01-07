@@ -127,7 +127,6 @@ function DatasetDetail(props) {
           description={description}
           status={combinedStatus}
           mapped_data_access_level={mapped_data_access_level}
-          group_name={group_name}
           mapped_external_group_name={mapped_external_group_name}
         >
           <SummaryDataChildren
