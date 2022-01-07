@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -20,8 +20,8 @@ import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableT
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import DeselectAllRowsButton from 'js/shared-styles/tables/DeselectAllRowsButton';
-import { useSearchHits } from 'js/hooks/useSearchData';
 import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
+import useSavedEntityData from 'js/hooks/useSavedEntityData';
 import { LeftMarginIconButton } from './style';
 
 const defaultColumns = [
@@ -29,6 +29,8 @@ const defaultColumns = [
   { id: 'group_name', label: 'Group' },
   { id: 'entity_type', label: 'Entity Type' },
 ];
+
+const source = ['hubmap_id', 'group_name', 'entity_type'];
 
 function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySaveAlert, isSavedListPage }) {
   const { selectedRows, deselectHeaderAndRows } = useStore();
@@ -49,19 +51,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
   }
   const selectedRowsSize = selectedRows.size;
 
-  const query = useMemo(
-    () => ({
-      query: {
-        ids: {
-          values: Object.keys(savedEntities),
-        },
-      },
-      _source: ['hubmap_id', 'group_name', 'entity_type'],
-    }),
-    [savedEntities],
-  );
-
-  const { searchHits } = useSearchHits(query);
+  const searchHits = useSavedEntityData(savedEntities, source);
 
   return (
     <>
