@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
@@ -14,4 +15,10 @@ function SelectableHeaderCell({ allTableRowKeys }) {
   );
 }
 
+SelectableHeaderCell.propTypes = {
+  /**
+   Unique keys for all rows in the table.
+  */
+  allTableRowKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 export default SelectableHeaderCell;
