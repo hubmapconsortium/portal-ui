@@ -1,1 +1,1 @@
-- When running docker locally, include a timestamp in the log, and make logging to STDOUT the default.
+- Simplify `docker.sh`: Run `docker logs` if that's what you need.
