@@ -1,0 +1,1 @@
+- Simplify `docker.sh`: Run `docker logs` if that's what you need.
