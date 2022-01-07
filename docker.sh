@@ -29,6 +29,5 @@ reset=`tput sgr0 || echo ''`
 echo $green
 echo "To visit:   http://localhost:$PORT/"
 echo "To connect: docker exec -it $CONTAINER_NAME /bin/bash"
+echo "For logs:   docker logs --timestamps --follow $CONTAINER_NAME"
 echo $reset
-
-docker logs --timestamps --follow $CONTAINER_NAME
