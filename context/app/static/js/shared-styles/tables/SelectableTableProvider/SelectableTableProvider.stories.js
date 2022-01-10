@@ -15,9 +15,10 @@ export default {
   title: 'Tables/SelectableTableProvider',
   component: SelectableTableProviderComponent,
   subcomponents: { SelectableHeaderCell, SelectableRowCell },
+  excludeStories: ['tableLabel', 'rowKeys'],
 };
 
-const rowKeys = ['A', 'B', 'C'];
+export const rowKeys = ['A', 'B', 'C'];
 
 function ExampleTable() {
   const { selectedRows } = useStore();
@@ -31,9 +32,9 @@ function ExampleTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rowKeys.map((rowKey, i) => (
+          {rowKeys.map((rowKey) => (
             <TableRow key={rowKey}>
-              <SelectableRowCell rowKey={rowKey} index={i} />
+              <SelectableRowCell rowKey={rowKey} />
               <TableCell>{rowKey}</TableCell>
             </TableRow>
           ))}
@@ -49,8 +50,10 @@ export const SelectableTableProvider = (args) => (
     <ExampleTable />
   </SelectableTableProviderComponent>
 );
+
+export const tableLabel = 'selectableTableExample';
 SelectableTableProvider.args = {
-  tableLabel: 'defaultStory',
+  tableLabel,
 };
 
 SelectableTableProvider.storyName = 'SelectableTableProvider'; // needed for single story hoisting for multi word component names
