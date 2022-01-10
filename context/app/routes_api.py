@@ -46,7 +46,7 @@ def entities_tsv(entity_type):
         uuids = body.get('uuids')
     entities = _get_entities(entity_type, constraints, uuids)
 
-    descriptions_path = Path(__name__).absolute().parent.parent / \
+    descriptions_path = Path(__name__).parent.parent / \
         'ingest-validation-tools/docs/field-descriptions.yaml'
     descriptions_dict = safe_load(descriptions_path.read_text())
     tsv = _dicts_to_tsv(entities, _first_fields, descriptions_dict)
