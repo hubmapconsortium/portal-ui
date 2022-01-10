@@ -22,10 +22,8 @@ class AbstractImagingViewConfBuilder(ViewConfBuilder):
         :rtype: tuple The image url and the offsets url
 
         >>> from pprint import pprint
-        >>> from flask import Flask
-        >>> app = Flask(__name__)
-        >>> app.config['ASSETS_ENDPOINT'] = 'https://example.com'
-        >>> with app.app_context():
+        >>> from .doctest_utils import app_context
+        >>> with app_context():
         ...   vc = AbstractImagingViewConfBuilder(
         ...     entity={ "uuid": "uuid" }, groups_token='groups_token')
         ...   pprint(vc._get_img_and_offset_url("rel_path/to/clusters.ome.tiff", "rel_path/to"))

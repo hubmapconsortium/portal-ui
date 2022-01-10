@@ -41,10 +41,8 @@ class ViewConfBuilder:
         :rtype: dict The file with rel_path replaced by url
 
         >>> from pprint import pprint
-        >>> from flask import Flask
-        >>> app = Flask(__name__)
-        >>> app.config['ASSETS_ENDPOINT'] = 'https://example.com'
-        >>> with app.app_context():
+        >>> from .doctest_utils import app_context
+        >>> with app_context():
         ...   vc = ViewConfBuilder(
         ...     entity={"uuid": "uuid"}, groups_token='groups_token')
         ...   file = { 'data_type': 'CELLS', 'file_type': 'cells.json', 'rel_path': 'cells.json' }
@@ -67,10 +65,8 @@ class ViewConfBuilder:
         :rtype: dict The file with rel_path replaced by url
 
         >>> from pprint import pprint
-        >>> from flask import Flask
-        >>> app = Flask(__name__)
-        >>> app.config['ASSETS_ENDPOINT'] = 'https://example.com'
-        >>> with app.app_context():
+        >>> from .doctest_utils import app_context
+        >>> with app_context():
         ...   vc = ViewConfBuilder(
         ...     entity={"uuid": "uuid"}, groups_token='groups_token')
         ...   vc._build_assets_url("rel_path/to/clusters.ome.tiff")
