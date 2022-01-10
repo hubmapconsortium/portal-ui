@@ -1,0 +1,7 @@
+name: Bladder
+uberon: http://purl.obolibrary.org/obo/UBERON_0001255
+uberon_short: UBERON_0001255
+description: Distensible musculomembranous organ situated in the anterior part of
+  the pelvic cavity in which urine collects before excretion.
+has_iu_component: true
+search: []
