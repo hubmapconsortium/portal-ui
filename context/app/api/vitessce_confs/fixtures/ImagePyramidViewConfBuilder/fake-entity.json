@@ -9,6 +9,9 @@
             "rel_path": "ometiff-pyramids/processedMicroscopy/VAN0003-LK-33-2-PAS_FFPE.ome.tif"
         },
         {
+            "rel_path": "ometiff-pyramids/separate/should-be-ignored.ome.tif"
+        },
+        {
             "rel_path": "output_offsets/processedMicroscopy/VAN0003-LK-33-2-PAS_FFPE.offsets.json"
         }
     ],
