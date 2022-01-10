@@ -10,7 +10,7 @@ function SelectableHeaderCell({ allTableRowKeys }) {
 
   return (
     <HeaderCell padding="checkbox" onClick={() => toggleHeaderAndRows(allTableRowKeys)}>
-      <Checkbox checked={headerRowIsSelected} inputProps={{ 'aria-labelledby': `${tableLabel}-header-row-checkbox` }} />
+      <Checkbox checked={headerRowIsSelected} inputProps={{ 'aria-label': `${tableLabel}-header-row-checkbox` }} />
     </HeaderCell>
   );
 }

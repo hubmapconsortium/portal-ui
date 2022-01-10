@@ -6,14 +6,14 @@ import TableCell from '@material-ui/core/TableCell';
 
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 
-function SelectableRowCell({ rowKey, index }) {
+function SelectableRowCell({ rowKey }) {
   const { toggleRow, selectedRows, tableLabel } = useStore();
 
   return (
     <TableCell padding="checkbox" onClick={() => toggleRow(rowKey)}>
       <Checkbox
         checked={selectedRows.has(rowKey)}
-        inputProps={{ 'aria-labelledby': `${tableLabel}-row-${index}-checkbox` }}
+        inputProps={{ 'aria-label': `${tableLabel}-row-${rowKey}-checkbox` }}
       />
     </TableCell>
   );
@@ -24,7 +24,6 @@ SelectableRowCell.propTypes = {
    Unique key representing the table.
   */
   rowKey: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
 };
 
 export default SelectableRowCell;
