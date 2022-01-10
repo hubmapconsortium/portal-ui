@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from flask import Flask
 
-from .assay_confs import get_view_config_builder
+from .builder_factory import get_view_config_builder
 
 
 entity_paths = list((Path(__file__).parent / 'fixtures').glob("*/*-entity.json"))
