@@ -1,0 +1,6 @@
+name: Eye
+uberon: http://purl.obolibrary.org/obo/UBERON_0000970
+uberon_short: UBERON_0000970
+description: An organ that detects light.
+has_iu_component: true
+search: []
