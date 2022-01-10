@@ -109,9 +109,9 @@ function Samples({ searchTerms }) {
                   /* eslint-enable */
                   return hit;
                 })
-                .map(({ _id: uuid, _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp } }, i) => (
+                .map(({ _id: uuid, _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp } }) => (
                   <TableRow key={uuid}>
-                    <SelectableRowCell rowKey={uuid} index={i} />
+                    <SelectableRowCell rowKey={uuid} />
                     <TableCell>
                       <LightBlueLink href={`/browse/sample/${uuid}`} variant="body2">
                         {hubmap_id}

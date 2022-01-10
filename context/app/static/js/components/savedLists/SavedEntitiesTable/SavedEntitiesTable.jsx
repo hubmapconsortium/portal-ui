@@ -95,9 +95,9 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
             </TableHead>
             <TableBody>
               {searchHits.length ? (
-                searchHits.map(({ _id, _source: { hubmap_id, group_name, entity_type } }, i) => (
+                searchHits.map(({ _id, _source: { hubmap_id, group_name, entity_type } }) => (
                   <TableRow key={_id}>
-                    <SelectableRowCell rowKey={_id} index={i} />
+                    <SelectableRowCell rowKey={_id} />
                     <TableCell>
                       <LightBlueLink href={`/browse/${hubmap_id}`}>{hubmap_id}</LightBlueLink>
                     </TableCell>
