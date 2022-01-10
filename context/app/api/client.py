@@ -161,8 +161,8 @@ class ApiClient():
                 builder = Builder(entity, self.groups_token)
                 vitessce_conf = builder.get_conf_cells()
             except Exception:
-                message = f'Building vitessce conf threw error: {traceback.format_exc()}'
-                current_app.logger.error(message)
+                current_app.logger.error(
+                    f'Building vitessce conf threw error: {traceback.format_exc()}')
                 vitessce_conf = ConfCells({
                     'name': 'Error',
                     'version': '1.0.4',
