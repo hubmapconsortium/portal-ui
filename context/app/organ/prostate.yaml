@@ -1,0 +1,8 @@
+name: Prostate
+uberon: http://purl.obolibrary.org/obo/UBERON_0002367
+uberon_short: UBERON_0002367
+description: The prostate gland is a partly muscular, partly glandular body that is
+  situated near the base of the mammalian male urethra and secretes an alkaline viscid
+  fluid which is a major constituent of the ejaculatory fluid.
+has_iu_component: true
+search: []
