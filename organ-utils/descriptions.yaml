@@ -13,6 +13,9 @@ http://purl.obolibrary.org/obo/UBERON_0000948:
 http://purl.obolibrary.org/obo/UBERON_0002113:
   name: Kidney
   description: A paired organ of the urinary tract which has the production of urine as its primary function.
+http://purl.obolibrary.org/obo/UBERON_0001465:
+  name: Knee
+  description: A segment of the hindlimb that corresponds to the joint connecting a hindlimb stylopod and zeugopod.
 http://purl.obolibrary.org/obo/UBERON_0002106:
   name: Spleen
   description: The organ that functions to filter blood and to store red
