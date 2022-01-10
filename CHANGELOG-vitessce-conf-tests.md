@@ -1,1 +1,0 @@
-- Refactor the vitessce conf tests for readability.
