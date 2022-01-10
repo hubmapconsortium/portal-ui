@@ -1,0 +1,35 @@
+{
+    "data_types": [
+        "image_pyramid",
+        "seqFish"
+    ],
+    "status": "QA",
+    "files": [
+        {
+            "rel_path": "ometiff-pyramids/final_mRNA_background/MMStack_Pos12.ome.tif"
+        },
+        {
+            "rel_path": "ometiff-pyramids/final_mRNA_background/MMStack_Pos13.ome.tif"
+        },
+        {
+            "rel_path": "ometiff-pyramids/HybCycle_12/MMStack_Pos12.ome.tif"
+        },
+        {
+            "rel_path": "ometiff-pyramids/HybCycle_12/MMStack_Pos13.ome.tif"
+        },
+        {
+            "rel_path": "output_offsets/final_mRNA_background/MMStack_Pos12.offsets.json"
+        },
+        {
+            "rel_path": "output_offsets/final_mRNA_background/MMStack_Pos13.offsets.json"
+        },
+        {
+            "rel_path": "output_offsets/HybCycle_12/MMStack_Pos12.offsets.json"
+        },
+        {
+            "rel_path": "output_offsets/HybCycle_12/MMStack_Pos13.offsets.json"
+        }
+    ],
+    "uuid": "9db61adfc017670a196ea9b3ca1852a0",
+    "metadata": {"dag_provenance_list": []}
+}
