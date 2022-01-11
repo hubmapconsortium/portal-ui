@@ -10,9 +10,9 @@ function useSavedEntityData(savedEntities, source) {
     }),
     [savedEntities, source],
   );
-  const { searchHits } = useSearchHits(query);
+  const { searchHits, isLoading } = useSearchHits(query);
 
-  return searchHits;
+  return { searchHits, isLoading };
 }
 
 export default useSavedEntityData;
