@@ -67,7 +67,7 @@ function MetadataMenu({ type, analyticsCategory }) {
 
   return (
     <>
-      <StyledButton onClick={openMenu} variant="outlined" color="primary" id="metadata-button">
+      <StyledButton onClick={openMenu} variant="outlined" color="primary" id="metadata-button" ref={menuAnchorEl}>
         Metadata
       </StyledButton>
       <Menu
