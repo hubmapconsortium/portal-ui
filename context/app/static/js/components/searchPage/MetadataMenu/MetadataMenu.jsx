@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import ReactGA from 'react-ga';
 
 import { format } from 'date-fns';
@@ -13,18 +13,27 @@ import { createDownloadUrl } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledButton } from './style';
 
+function useMenu(initialState) {
+  // TODO: Pull out into utilities.
+  const menuAnchorEl = useRef(null);
+  const [menuIsOpen, setMenuIsOpen] = useState(initialState || false);
+
+  function openMenu() {
+    setMenuIsOpen(true);
+  }
+
+  function closeMenu() {
+    setMenuIsOpen(false);
+  }
+
+  return { menuAnchorEl, menuIsOpen, closeMenu, openMenu };
+}
+
 function MetadataMenu({ type, analyticsCategory }) {
   const lcPluralType = `${type.toLowerCase()}s`;
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const { menuAnchorEl, menuIsOpen, closeMenu, openMenu } = useMenu(false);
 
   // eslint-disable-next-line consistent-return
   async function fetchAndDownloadTSV() {
@@ -54,18 +63,18 @@ function MetadataMenu({ type, analyticsCategory }) {
       action: `Download Metadata`,
       label: type,
     });
-    setAnchorEl(null);
+    closeMenu();
   }
 
   return (
     <>
-      <StyledButton onClick={handleClick} variant="outlined" color="primary" id="metadata-button">
+      <StyledButton onClick={openMenu} variant="outlined" color="primary" id="metadata-button">
         Metadata
       </StyledButton>
       <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
+        anchorEl={menuAnchorEl}
+        open={menuIsOpen}
+        onClose={closeMenu}
         getContentAnchorEl={null}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
