@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactGA from 'react-ga';
 
+import { format } from 'date-fns';
+
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Link from '@material-ui/core/Link';
@@ -43,7 +45,8 @@ function MetadataMenu({ type, analyticsCategory }) {
     // need to create link to set file name
     const tempLink = document.createElement('a');
     tempLink.href = downloadUrl;
-    tempLink.download = `${lcPluralType}.tsv`;
+    const timestamp = format(new Date(), 'yyyy-MM-dd_HH-mm-ss');
+    tempLink.download = `hubmap-${lcPluralType}-metadata-${timestamp}.tsv`;
     tempLink.click();
 
     ReactGA.event({

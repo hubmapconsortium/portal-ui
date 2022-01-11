@@ -8,9 +8,8 @@ CONTAINER_NAME=hubmap-portal-ui
 CONTEXT=context
 CONF_PATH=context/instance/app.conf
 PORT=$1
-FOLLOW=$2
 
-[ "$PORT" = 5000 ] || [ "$PORT" = 5001 ] || die "Usage: $0 PORT [--follow]
+[ "$PORT" = 5000 ] || [ "$PORT" = 5001 ] || die "Usage: $0 PORT
 Requires port; On localhost must be 5000 or 5001 to match Globus whitelist."
 [ -e "$CONF_PATH" ] || die "No $CONF_PATH
 Copy example-app.conf and fill in blanks."
@@ -30,9 +29,5 @@ reset=`tput sgr0 || echo ''`
 echo $green
 echo "To visit:   http://localhost:$PORT/"
 echo "To connect: docker exec -it $CONTAINER_NAME /bin/bash"
+echo "For logs:   docker logs --timestamps --follow $CONTAINER_NAME"
 echo $reset
-
-if [ "$FOLLOW" == "--follow" ]; then
-  docker logs --follow $CONTAINER_NAME
-  # This continues to run.
-fi

@@ -1,0 +1,29 @@
+{
+    "data_types": [
+        "image_pyramid",
+        "MALDI-IMS-neg"
+    ],
+    "status": "QA",
+    "files": [
+        {
+            "rel_path": "ometiff-pyramids/ometiffs/separate/VAN0003-LK-32-21-IMS_NegMode_mz909.606.ome.tif"
+        },
+        {
+            "rel_path": "ometiff-pyramids/ometiffs/separate/VAN0003-LK-32-21-IMS_NegMode_mz922.609.ome.tif"
+        },
+        {
+            "rel_path": "ometiff-pyramids/ometiffs/VAN0003-LK-32-21-IMS_NegMode_multilayer.ome.tif"
+        },
+        {
+            "rel_path": "output_offsets/ometiffs/separate/VAN0003-LK-32-21-IMS_NegMode_mz909.606.offsets.json"
+        },
+        {
+            "rel_path": "output_offsets/ometiffs/separate/VAN0003-LK-32-21-IMS_NegMode_mz922.609.offsets.json"
+        },
+        {
+            "rel_path": "output_offsets/ometiffs/VAN0003-LK-32-21-IMS_NegMode_multilayer.offsets.json"
+        }
+    ],
+    "uuid": "954281e9fd8732adfa4479e0d238ce8d",
+    "metadata": {"dag_provenance_list": []}
+}

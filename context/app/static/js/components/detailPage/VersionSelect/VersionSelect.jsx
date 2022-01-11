@@ -5,6 +5,7 @@ import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOpt
 import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
 import { StyledButton, OverflowEllipsis, EmptyFullWidthDiv } from './style';
+import { getCleanVersions } from './utils';
 
 function VersionSelect({ uuid }) {
   const { entityEndpoint, groupsToken } = useContext(AppContext);
@@ -12,7 +13,6 @@ function VersionSelect({ uuid }) {
   const [selectedVersionIndex, setSelectedVersionIndex] = useState(0);
 
   const lowerCaseEntityType = 'dataset';
-  const uuidKey = `${lowerCaseEntityType}_uuid`;
 
   useEffect(() => {
     async function fetchVersions() {
@@ -28,14 +28,15 @@ function VersionSelect({ uuid }) {
         return;
       }
       const results = await response.json();
-      setVersions(results.sort((a, b) => b.revision_number - a.revision_number));
-      setSelectedVersionIndex(results.findIndex((version) => version[uuidKey] === uuid));
+      const cleanResults = getCleanVersions(results);
+      setVersions(cleanResults.sort((a, b) => b.revision_number - a.revision_number));
+      setSelectedVersionIndex(cleanResults.findIndex((version) => version.uuid === uuid));
     }
     fetchVersions();
-  }, [entityEndpoint, uuid, lowerCaseEntityType, uuidKey, groupsToken]);
+  }, [entityEndpoint, uuid, lowerCaseEntityType, groupsToken]);
 
   function visitNewVersion({ i }) {
-    window.location.href = `/browse/dataset/${versions[i][uuidKey]}`;
+    window.location.href = `/browse/dataset/${versions[i].uuid}`;
     // In the future, if it's not a dataset, the url will still redirect.
   }
 

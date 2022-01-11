@@ -1,0 +1,91 @@
+{
+    "data_types": [
+        "sn_atac_seq"
+    ],
+    "status": "QA",
+    "files": [
+        {
+            "rel_path": "alignment_qc.json"
+        },
+        {
+            "rel_path": "B001-A-401_S3_L004_R1_001_fastqc.html"
+        },
+        {
+            "rel_path": "B001-A-401_S3_L004_R1_001_fastqc.zip"
+        },
+        {
+            "rel_path": "B001-A-401_S3_L004_R3_001_fastqc.html"
+        },
+        {
+            "rel_path": "B001-A-401_S3_L004_R3_001_fastqc.zip"
+        },
+        {
+            "rel_path": "BarcodeQualityControlDistributionAfter.pdf"
+        },
+        {
+            "rel_path": "BarcodeQualityControlDistributionBefore.pdf"
+        },
+        {
+            "rel_path": "barcodes.txt"
+        },
+        {
+            "rel_path": "Bins.csv"
+        },
+        {
+            "rel_path": "bins.txt"
+        },
+        {
+            "rel_path": "cell_by_gene.hdf5"
+        },
+        {
+            "rel_path": "cellMotif.csv"
+        },
+        {
+            "rel_path": "chromvar_deviation_scores.csv"
+        },
+        {
+            "rel_path": "chromvar_variability_scores.csv"
+        },
+        {
+            "rel_path": "filtered_cell_by_bin.mtx"
+        },
+        {
+            "rel_path": "frags.sort.bed.gz"
+        },
+        {
+            "rel_path": "GenesRanges.csv"
+        },
+        {
+            "rel_path": "output/umap_coords_clusters.arrow"
+        },
+        {
+            "rel_path": "output/umap_coords_clusters.cell-sets.json"
+        },
+        {
+            "rel_path": "output/umap_coords_clusters.cells.json"
+        },
+        {
+            "rel_path": "output/umap_coords_clusters.csv"
+        },
+        {
+            "rel_path": "output/umap_coords_clusters.factors.json"
+        },
+        {
+            "rel_path": "peaks.combined.bed"
+        },
+        {
+            "rel_path": "PromotorRatioLogPlot.pdf"
+        },
+        {
+            "rel_path": "snaptools.snap"
+        },
+        {
+            "rel_path": "snaptools.snap.qc"
+        },
+        {
+            "rel_path": "umap_coords_clusters.csv"
+        }
+    ],
+    "uuid": "210d118a14c8624b6bb9610a9062656e",
+    "metadata": {"dag_provenance_list": []}
+}
