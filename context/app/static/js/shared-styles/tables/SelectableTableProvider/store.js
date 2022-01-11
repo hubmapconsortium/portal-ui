@@ -18,12 +18,16 @@ function getSetSelectedRowsState(keys) {
   return { selectedRows: new Set(keys) };
 }
 
+function getDeselectRowsState() {
+  return { selectedRows: new Set() };
+}
+
 function getSelectHeaderAndRowsState(keys) {
   return { headerRowIsSelected: true, ...getSetSelectedRowsState(keys) };
 }
 
 function getDeselectHeaderAndRowsState() {
-  return { headerRowIsSelected: false, ...getSetSelectedRowsState([]) };
+  return { headerRowIsSelected: false, ...getDeselectRowsState() };
 }
 
 const types = {
@@ -48,7 +52,7 @@ const reducer = (state, { type, payload }) => {
     case types.setSelectedRows:
       return getSetSelectedRowsState(payload);
     case types.deselectAllRows:
-      return getSetSelectedRowsState([]);
+      return getDeselectRowsState();
     case types.selectHeaderAndRows:
       return getSelectHeaderAndRowsState(payload);
     case types.deselectHeaderAndRows:
@@ -62,7 +66,7 @@ const reducer = (state, { type, payload }) => {
 
 const createStore = (tableLabel) =>
   create((set, get) => ({
-    selectedRows: new Set([]),
+    selectedRows: new Set(),
     headerRowIsSelected: false,
     tableLabel,
     dispatch: (args) => set((state) => reducer(state, args)),
