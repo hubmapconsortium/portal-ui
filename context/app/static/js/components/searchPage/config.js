@@ -80,6 +80,7 @@ const datasetConfig = {
       listFilter('origin_sample.mapped_organ', 'Organ'),
       listFilter('source_sample.mapped_specimen_type', 'Specimen Type'),
       hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),
+      listFilter('mapped_consortium', 'Consortium'),
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
