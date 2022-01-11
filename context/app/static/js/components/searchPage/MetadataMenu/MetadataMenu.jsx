@@ -66,11 +66,8 @@ function MetadataMenu({ type, analyticsCategory }) {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        PaperProps={{
-          style: {
-            transform: 'translateY(45px)',
-          },
-        }}
+        getContentAnchorEl={null}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
         <MenuItem>
           <Link href={`/lineup/${lcPluralType}`}>Visualize</Link>
