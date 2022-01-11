@@ -1,1 +1,0 @@
-- Simplify Vitessce conf testing.

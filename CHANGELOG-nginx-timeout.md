@@ -1,1 +1,0 @@
-- In the NGINX conf, bump the timeout up to 600s, so that requests to the cells API won't time out.

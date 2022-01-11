@@ -1,3 +1,12 @@
+## v0.35.1 - 2022-01-11
+
+- Do not include OME TIFFs that include `separate/` in their paths. This lets us handle the current MALDI-IMS structure.
+- In the NGINX conf, bump the timeout up to 600s, so that requests to the cells API won't time out.
+- Simplify `docker.sh`: Run `docker logs` if that's what you need.
+- Fix TSV download in the Docker environment.
+- Simplify Vitessce conf testing.
+
+
 ## v0.35.0 - 2022-01-04
 
 - In the metadata TSV download, add a second row with the field descriptions.

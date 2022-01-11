@@ -1,1 +1,0 @@
-- Do not include OME TIFFs that include `separate/` in their paths. This lets us handle the current MALDI-IMS structure.
