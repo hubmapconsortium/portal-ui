@@ -1,38 +1,20 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import ReactGA from 'react-ga';
-
 import { format } from 'date-fns';
-
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { InfoIcon } from 'js/shared-styles/icons';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { createDownloadUrl } from 'js/helpers/functions';
+import useMenu from 'js/hooks/useMenu';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { StyledButton, StyledLink } from './style';
-
-function useMenu(initialState) {
-  // TODO: Pull out into utilities.
-  const menuAnchorEl = useRef(null);
-  const [menuIsOpen, setMenuIsOpen] = useState(initialState || false);
-
-  function openMenu() {
-    setMenuIsOpen(true);
-  }
-
-  function closeMenu() {
-    setMenuIsOpen(false);
-  }
-
-  return { menuAnchorEl, menuIsOpen, closeMenu, openMenu };
-}
+import { StyledMenuButton, StyledLink, StyledInfoIcon } from './style';
 
 function MetadataMenu({ type, analyticsCategory }) {
   const lcPluralType = `${type.toLowerCase()}s`;
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
-  const { menuAnchorEl, menuIsOpen, closeMenu, openMenu } = useMenu(false);
+  const { menuRef, menuIsOpen, closeMenu, openMenu } = useMenu(false);
 
   // eslint-disable-next-line consistent-return
   async function fetchAndDownloadTSV() {
@@ -65,28 +47,31 @@ function MetadataMenu({ type, analyticsCategory }) {
     closeMenu();
   }
 
+  const menuID = 'metadata-menu';
+
   return (
     <>
-      <StyledButton onClick={openMenu} variant="outlined" color="primary" id="metadata-button" ref={menuAnchorEl}>
+      <StyledMenuButton onClick={openMenu} menuIsOpen={menuIsOpen} menuID={menuID} menuRef={menuRef}>
         Metadata
-      </StyledButton>
+      </StyledMenuButton>
       <Menu
-        anchorEl={menuAnchorEl.current}
+        anchorEl={menuRef.current}
         open={menuIsOpen}
         onClose={closeMenu}
         getContentAnchorEl={null}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        id={menuID}
       >
         <MenuItem>
           <StyledLink href={`/lineup/${lcPluralType}`}>Visualize</StyledLink>
           <SecondaryBackgroundTooltip title="Visualize all available metadata in Lineup." placement="bottom-start">
-            <InfoIcon color="primary" />
+            <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
         <MenuItem onClick={fetchAndDownloadTSV}>
           Download
           <SecondaryBackgroundTooltip title="Download a TSV of the table metadata." placement="bottom-start">
-            <InfoIcon color="primary" />
+            <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
       </Menu>
