@@ -5,13 +5,12 @@ import { format } from 'date-fns';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import Link from '@material-ui/core/Link';
 
 import { InfoIcon } from 'js/shared-styles/icons';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { StyledButton } from './style';
+import { StyledButton, StyledLink } from './style';
 
 function useMenu(initialState) {
   // TODO: Pull out into utilities.
@@ -72,14 +71,14 @@ function MetadataMenu({ type, analyticsCategory }) {
         Metadata
       </StyledButton>
       <Menu
-        anchorEl={menuAnchorEl}
+        anchorEl={menuAnchorEl.current}
         open={menuIsOpen}
         onClose={closeMenu}
         getContentAnchorEl={null}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
         <MenuItem>
-          <Link href={`/lineup/${lcPluralType}`}>Visualize</Link>
+          <StyledLink href={`/lineup/${lcPluralType}`}>Visualize</StyledLink>
           <SecondaryBackgroundTooltip title="Visualize all available metadata in Lineup." placement="bottom-start">
             <InfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
