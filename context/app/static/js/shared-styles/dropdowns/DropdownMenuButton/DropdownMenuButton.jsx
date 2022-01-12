@@ -1,12 +1,15 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 
+import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
 import { StyledUpIcon, StyledDownIcon } from './style';
 
-function MenuButton({ children, onClick, menuIsOpen, menuID, menuRef, ...rest }) {
+function DropdownMenuButton({ children, menuID, ...rest }) {
+  const { menuRef, menuIsOpen, openMenu } = useStore();
+
   return (
     <Button
-      onClick={onClick}
+      onClick={openMenu}
       variant="outlined"
       color="primary"
       aria-controls={menuIsOpen ? menuID : undefined}
@@ -20,4 +23,4 @@ function MenuButton({ children, onClick, menuIsOpen, menuID, menuRef, ...rest })
   );
 }
 
-export default MenuButton;
+export default DropdownMenuButton;
