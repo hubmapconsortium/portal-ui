@@ -1,4 +1,4 @@
-from flask import Flask, session, render_template
+from flask import Flask, session, render_template, redirect, request
 
 from . import (
     routes_main, routes_browse, routes_api, routes_file_based,
@@ -76,6 +76,19 @@ def create_app(testing=False):
     app.register_error_handler(404, not_found)
     app.register_error_handler(504, gateway_timeout)
     app.register_error_handler(500, any_other_error)
+
+    # Credit to https://stackoverflow.com/a/40365514
+    # for this way to redirect from slash-ending urls to plain.
+    app.url_map.strict_slashes = False
+    @app.before_request
+    def clear_trailing():
+        path = request.path
+        if path.endswith('/') and path != '/':
+            return redirect(path[:-1])
+        # This is a little sketchy, but it's another common typo:
+        # egrep 'route\(.*s['"'"'"]' context/app/routes_*
+        if path.endswith('s') and path not in ['/cells', '/services', '/collections', '/my-lists']:
+            return redirect(path[:-1])
 
     @app.context_processor
     def inject_template_globals():
