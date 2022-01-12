@@ -151,3 +151,14 @@ def test_robots_txt_disallow(client):
 def test_robots_txt_allow(client):
     response = client.get('/robots.txt', headers={'Host': 'portal.hubmapconsortium.org'})
     assert 'Disallow: /search' in response.data.decode('utf8')
+
+
+@pytest.mark.parametrize(
+    'path_status',
+    [('/cells/', '302 FOUND')],
+    ids=lambda path_status: f'{path_status[0]} -> {path_status[1]}'
+)
+def test_truncate_and_redirect(client, path_status):
+    (path, status) = path_status
+    response = client.get(path)
+    assert response.status == status
