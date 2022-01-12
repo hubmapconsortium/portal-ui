@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
 import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
@@ -22,5 +23,9 @@ function DropdownMenuButton({ children, menuID, ...rest }) {
     </Button>
   );
 }
+
+DropdownMenuButton.propTypes = {
+  menuID: PropTypes.string.isRequired,
+};
 
 export default DropdownMenuButton;

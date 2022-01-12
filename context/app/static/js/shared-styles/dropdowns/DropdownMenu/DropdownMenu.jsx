@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Menu from '@material-ui/core/Menu';
 
 import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
@@ -19,5 +20,9 @@ function DropdownMenu({ children, id, ...rest }) {
     </Menu>
   );
 }
+
+DropdownMenu.propTypes = {
+  id: PropTypes.string.isRequired,
+};
 
 export default DropdownMenu;
