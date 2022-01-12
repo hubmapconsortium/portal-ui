@@ -10,18 +10,21 @@ export default {
   title: 'dropdowns/DropdownMenuProvider',
   component: DropdownMenuProviderComponent,
   subcomponents: [DropdownMenu, DropdownMenuButton],
+  excludeStories: ['menuID', 'menuItemText', 'menuButtonText'],
 };
+
+export const menuID = 'example-dropdown';
+export const menuItemText = 'Menu Item';
+export const menuButtonText = 'Click to open';
 
 function ExampleMenuItem() {
   const { closeMenu } = useStore();
-  return <MenuItem onClick={closeMenu}>Menu Item</MenuItem>;
+  return <MenuItem onClick={closeMenu}>{menuItemText}</MenuItem>;
 }
-
-const menuID = 'example-dropdown';
 
 export const DropdownMenuProvider = (args) => (
   <DropdownMenuProviderComponent {...args}>
-    <DropdownMenuButton menuID={menuID}>Click to open</DropdownMenuButton>
+    <DropdownMenuButton menuID={menuID}>{menuButtonText}</DropdownMenuButton>
     <DropdownMenu id={menuID}>
       <ExampleMenuItem />
     </DropdownMenu>
