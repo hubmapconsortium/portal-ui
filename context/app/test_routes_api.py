@@ -65,6 +65,7 @@ def test_unexpected_json_tsv_post(client, mocker):
     mocker.patch('requests.post', side_effect=mock_es_post)
     response = client.post('/metadata/v0/donors.tsv', json={'unexpected': []})
     assert response.status == '200 OK'  # TODO: Should not be 200!
+    # https://github.com/hubmapconsortium/portal-ui/issues/2348
     assert response.get_data(as_text=True).strip() \
         == '{"message":"POST only accepts uuids in JSON body.","status":400}'
 
@@ -73,5 +74,6 @@ def test_unexpected_args_tsv_post(client, mocker):
     mocker.patch('requests.post', side_effect=mock_es_post)
     response = client.post('/metadata/v0/donors.tsv?hello=world')
     assert response.status == '200 OK'  # TODO: Should not be 200!
+    # https://github.com/hubmapconsortium/portal-ui/issues/2348
     assert response.get_data(as_text=True).strip() \
         == '{"message":"POST only accepts a JSON body.","status":400}'
