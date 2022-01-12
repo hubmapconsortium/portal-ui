@@ -1,21 +1,21 @@
 import React from 'react';
 import ReactGA from 'react-ga';
 import { format } from 'date-fns';
-import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { createDownloadUrl } from 'js/helpers/functions';
-import useMenu from 'js/hooks/useMenu';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { StyledMenuButton, StyledLink, StyledInfoIcon } from './style';
+import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
+import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
+import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
+import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon } from './style';
 
 function MetadataMenu({ type, analyticsCategory }) {
   const lcPluralType = `${type.toLowerCase()}s`;
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
-  const { menuRef, menuIsOpen, closeMenu, openMenu } = useMenu(false);
-
+  const { closeMenu } = useStore();
   // eslint-disable-next-line consistent-return
   async function fetchAndDownloadTSV() {
     const response = await fetch(`/metadata/v0/${lcPluralType}.tsv`, {
@@ -27,6 +27,7 @@ function MetadataMenu({ type, analyticsCategory }) {
     });
     if (!response.ok) {
       console.error('Metadata TSV Failed', response);
+      closeMenu();
       return;
     }
     const results = await response.blob();
@@ -44,6 +45,7 @@ function MetadataMenu({ type, analyticsCategory }) {
       action: `Download Metadata`,
       label: type,
     });
+
     closeMenu();
   }
 
@@ -51,17 +53,8 @@ function MetadataMenu({ type, analyticsCategory }) {
 
   return (
     <>
-      <StyledMenuButton onClick={openMenu} menuIsOpen={menuIsOpen} menuID={menuID} menuRef={menuRef}>
-        Metadata
-      </StyledMenuButton>
-      <Menu
-        anchorEl={menuRef.current}
-        open={menuIsOpen}
-        onClose={closeMenu}
-        getContentAnchorEl={null}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        id={menuID}
-      >
+      <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
+      <DropdownMenu id={menuID}>
         <MenuItem>
           <StyledLink href={`/lineup/${lcPluralType}`}>Visualize</StyledLink>
           <SecondaryBackgroundTooltip title="Visualize all available metadata in Lineup." placement="bottom-start">
@@ -74,9 +67,9 @@ function MetadataMenu({ type, analyticsCategory }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
-      </Menu>
+      </DropdownMenu>
     </>
   );
 }
 
-export default MetadataMenu;
+export default withDropdownMenuProvider(MetadataMenu, false);

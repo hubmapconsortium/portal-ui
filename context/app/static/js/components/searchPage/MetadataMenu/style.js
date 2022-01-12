@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import Link from '@material-ui/core/Link';
 
 import { InfoIcon } from 'js/shared-styles/icons';
-import MenuButton from 'js/shared-styles/dropdowns/MenuButton';
+import DropdownMenuButton from 'js/shared-styles/dropdowns/DropdownMenuButton';
 
-const StyledMenuButton = styled(MenuButton)`
+const StyledDropdownMenuButton = styled(DropdownMenuButton)`
   margin: 0 ${(props) => props.theme.spacing(1)}px;
   height: 100%;
 `;
@@ -20,4 +20,4 @@ const StyledInfoIcon = styled(InfoIcon)`
   margin-left: ${(props) => props.theme.spacing(0.5)}px;
 `;
 
-export { StyledMenuButton, StyledLink, StyledInfoIcon };
+export { StyledDropdownMenuButton, StyledLink, StyledInfoIcon };
