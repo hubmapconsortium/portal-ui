@@ -157,6 +157,8 @@ def test_robots_txt_allow(client):
 
 singular_paths = ['/organ', '/publication']
 plural_paths = ['/cells', '/services', '/collections', '/my-lists']
+
+
 @pytest.mark.parametrize(
     'path_status',
     [
