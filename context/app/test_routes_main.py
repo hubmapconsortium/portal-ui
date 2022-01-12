@@ -2,6 +2,8 @@ import re
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
 import json
+from urllib.parse import urlparse
+
 
 import pytest
 
@@ -153,12 +155,30 @@ def test_robots_txt_allow(client):
     assert 'Disallow: /search' in response.data.decode('utf8')
 
 
+singular_paths = ['/organ', '/publication']
+plural_paths = ['/cells', '/services', '/collections', '/my-lists']
 @pytest.mark.parametrize(
     'path_status',
-    [('/cells/', '302 FOUND')],
-    ids=lambda path_status: f'{path_status[0]} -> {path_status[1]}'
+    [
+        ('/', '200 OK'),
+
+        # Redirect for paths which should be singular:
+        *[(path, '200 OK') for path in singular_paths],
+        *[(path + '/', '302 FOUND', path) for path in singular_paths],
+        *[(path + 's', '302 FOUND', path) for path in singular_paths],
+        *[(path + 's/', '302 FOUND', path + 's') for path in singular_paths],
+
+        # Exceptions: Routes that do end in "s" and should not be redirected:
+        *[(path, '200 OK') for path in plural_paths],
+        *[(path + '/', '302 FOUND', path) for path in plural_paths],
+        *[(path[:-1], '404 NOT FOUND') for path in plural_paths]
+    ],
+    ids=lambda path_status: f'{path_status[0]} -> {path_status[1]} {"".join(path_status[2:])}'
 )
 def test_truncate_and_redirect(client, path_status):
-    (path, status) = path_status
+    (path, status, *location) = path_status
+    # Last element of tuple is optional.
     response = client.get(path)
     assert response.status == status
+    if response.status == '302 FOUND':
+        assert [urlparse(response.location).path] == location
