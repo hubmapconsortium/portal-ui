@@ -1,0 +1,1 @@
+- If there is an error during vitessce conf generation, generate a valid conf that just has an error message.
