@@ -1,39 +1,21 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import ReactGA from 'react-ga';
-
 import { format } from 'date-fns';
-
-import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { InfoIcon } from 'js/shared-styles/icons';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { StyledButton, StyledLink } from './style';
-
-function useMenu(initialState) {
-  // TODO: Pull out into utilities.
-  const menuAnchorEl = useRef(null);
-  const [menuIsOpen, setMenuIsOpen] = useState(initialState || false);
-
-  function openMenu() {
-    setMenuIsOpen(true);
-  }
-
-  function closeMenu() {
-    setMenuIsOpen(false);
-  }
-
-  return { menuAnchorEl, menuIsOpen, closeMenu, openMenu };
-}
+import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
+import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
+import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
+import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon } from './style';
 
 function MetadataMenu({ type, analyticsCategory }) {
   const lcPluralType = `${type.toLowerCase()}s`;
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
-  const { menuAnchorEl, menuIsOpen, closeMenu, openMenu } = useMenu(false);
-
+  const { closeMenu } = useStore();
   // eslint-disable-next-line consistent-return
   async function fetchAndDownloadTSV() {
     const response = await fetch(`/metadata/v0/${lcPluralType}.tsv`, {
@@ -45,6 +27,7 @@ function MetadataMenu({ type, analyticsCategory }) {
     });
     if (!response.ok) {
       console.error('Metadata TSV Failed', response);
+      closeMenu();
       return;
     }
     const results = await response.blob();
@@ -62,36 +45,31 @@ function MetadataMenu({ type, analyticsCategory }) {
       action: `Download Metadata`,
       label: type,
     });
+
     closeMenu();
   }
 
+  const menuID = 'metadata-menu';
+
   return (
     <>
-      <StyledButton onClick={openMenu} variant="outlined" color="primary" id="metadata-button">
-        Metadata
-      </StyledButton>
-      <Menu
-        anchorEl={menuAnchorEl.current}
-        open={menuIsOpen}
-        onClose={closeMenu}
-        getContentAnchorEl={null}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      >
+      <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
+      <DropdownMenu id={menuID}>
         <MenuItem>
           <StyledLink href={`/lineup/${lcPluralType}`}>Visualize</StyledLink>
           <SecondaryBackgroundTooltip title="Visualize all available metadata in Lineup." placement="bottom-start">
-            <InfoIcon color="primary" />
+            <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
         <MenuItem onClick={fetchAndDownloadTSV}>
           Download
           <SecondaryBackgroundTooltip title="Download a TSV of the table metadata." placement="bottom-start">
-            <InfoIcon color="primary" />
+            <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
-      </Menu>
+      </DropdownMenu>
     </>
   );
 }
 
-export default MetadataMenu;
+export default withDropdownMenuProvider(MetadataMenu, false);
