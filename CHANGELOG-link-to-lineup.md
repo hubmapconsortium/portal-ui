@@ -1,1 +1,0 @@
-- Add a link to lineup on the search page.

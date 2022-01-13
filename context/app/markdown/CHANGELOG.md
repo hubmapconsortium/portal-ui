@@ -1,3 +1,13 @@
+## v0.35.2 - 2022-01-13
+
+- Add consortium facet.
+- Where there were just TODOs in the code, link to the relevant issue.
+- Add a link to lineup on the search page.
+- Add `/browse/<type>/<uuid>.vitessce.json` to get vitessce confs, with CORS header.
+  If you are developing vitessce locally, it can be passed in as the `url` parameter.
+- If there is an error during vitessce conf generation, generate a valid conf that just has an error message.
+
+
 ## v0.35.1 - 2022-01-11
 
 - Do not include OME TIFFs that include `separate/` in their paths. This lets us handle the current MALDI-IMS structure.
