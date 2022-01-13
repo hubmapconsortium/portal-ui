@@ -8,7 +8,6 @@ import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
-import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
 import { SpacingDiv, PageSpacing, StyledHeader } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
@@ -62,11 +61,7 @@ function SavedList({ listUUID }) {
       <StyledHeader variant="h3" component="h2">
         Items
       </StyledHeader>
-      {Object.keys(listEntities).length === 0 ? (
-        <NoItemsSaved isSavedListPage />
-      ) : (
-        <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
-      )}
+      <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
     </PageSpacing>
   );
 }
