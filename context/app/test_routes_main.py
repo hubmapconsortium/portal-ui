@@ -155,25 +155,18 @@ def test_robots_txt_allow(client):
     assert 'Disallow: /search' in response.data.decode('utf8')
 
 
-singular_paths = ['/organ', '/publication']
-plural_paths = ['/cells', '/services', '/collections', '/my-lists']
+paths = ['/organ', '/publication', '/collections', '/cells']
 
 
 @pytest.mark.parametrize(
     'path_status',
     [
         ('/', '200 OK'),
+        ('/docs', '302 FOUND', '/docs/technical'),
+        ('/docs/technical', '200 OK'),
 
-        # Redirect for paths which should be singular:
-        *[(path, '200 OK') for path in singular_paths],
-        *[(path + '/', '302 FOUND', path) for path in singular_paths],
-        *[(path + 's', '302 FOUND', path) for path in singular_paths],
-        *[(path + 's/', '302 FOUND', path + 's') for path in singular_paths],
-
-        # Exceptions: Routes that do end in "s" and should not be redirected:
-        *[(path, '200 OK') for path in plural_paths],
-        *[(path + '/', '302 FOUND', path) for path in plural_paths],
-        *[(path[:-1], '404 NOT FOUND') for path in plural_paths]
+        *[(path, '200 OK') for path in paths],
+        *[(path + '/', '302 FOUND', path) for path in paths],
     ],
     ids=lambda path_status: f'{path_status[0]} -> {path_status[1]} {"".join(path_status[2:])}'
 )

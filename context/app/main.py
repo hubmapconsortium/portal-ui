@@ -85,10 +85,6 @@ def create_app(testing=False):
         path = request.path
         if path.endswith('/') and path != '/':
             return redirect(path[:-1])
-        # This is a little sketchy, but it's another common typo:
-        # egrep 'route\(.*s['"'"'"]' context/app/routes_*
-        if path.endswith('s') and path not in ['/cells', '/services', '/collections', '/my-lists']:
-            return redirect(path[:-1])
 
     @app.context_processor
     def inject_template_globals():
