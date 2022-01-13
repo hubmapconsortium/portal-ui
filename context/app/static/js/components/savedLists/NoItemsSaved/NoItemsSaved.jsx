@@ -6,7 +6,8 @@ import Description from 'js/shared-styles/sections/Description';
 function NoItemsSaved({ isSavedListPage }) {
   return (
     <Description padding="20px 20px">
-      No items saved. Navigate to <LightBlueLink href="/search?entity_type[0]=Donor">donors</LightBlueLink>,{' '}
+      No items saved. <LightBlueLink href="/login">Login</LightBlueLink> to view additional saved items or navigate to{' '}
+      <LightBlueLink href="/search?entity_type[0]=Donor">donors</LightBlueLink>,{' '}
       <LightBlueLink href="/search?entity_type[0]=Sample">samples</LightBlueLink> or{' '}
       <LightBlueLink href="/search?entity_type[0]=Dataset">datasets</LightBlueLink> search pages to explore data to save
       {isSavedListPage && (
