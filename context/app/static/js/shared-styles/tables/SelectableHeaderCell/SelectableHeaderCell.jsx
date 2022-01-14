@@ -12,7 +12,7 @@ function SelectableHeaderCell({ allTableRowKeys, disabled }) {
     <HeaderCell padding="checkbox">
       <Checkbox
         checked={headerRowIsSelected}
-        inputProps={{ 'aria-labelledby': `${tableLabel}-header-row-checkbox` }}
+        inputProps={{ 'aria-label': `${tableLabel}-header-row-checkbox` }}
         disabled={disabled || allTableRowKeys.length === 0}
         onChange={() => toggleHeaderAndRows(allTableRowKeys)}
       />
