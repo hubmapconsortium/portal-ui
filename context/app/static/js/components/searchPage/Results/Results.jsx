@@ -30,10 +30,10 @@ function Results(props) {
           title: 'Table',
           listComponent: (
             <ResultsTable
-              resultFields={tableResultFields}
+              resultFields={tableResultFields.filter((field) => field.name)}
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}
-              sortOptions={sortOptions}
+              sortOptions={sortOptions.filter((option) => option.label)}
               analyticsCategory={analyticsCategory}
             />
           ),

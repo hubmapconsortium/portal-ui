@@ -31,7 +31,7 @@ OrderIcon.propTypes = {
 function SortingTableHead(props) {
   const { items, toggleItem, selectedItems, analyticsCategory } = props;
 
-  const pairs = getSortPairs(items);
+  const pairs = getSortPairs(items).filter((pair) => pair[0].label);
   return (
     <TableHead>
       <TableRow>
