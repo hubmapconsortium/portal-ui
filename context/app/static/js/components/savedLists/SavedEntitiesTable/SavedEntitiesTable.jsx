@@ -7,6 +7,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
+import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
+
 import format from 'date-fns/format';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
@@ -51,7 +53,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
   }
   const selectedRowsSize = selectedRows.size;
 
-  const searchHits = useSavedEntityData(savedEntities, source);
+  const { searchHits, isLoading } = useSavedEntityData(savedEntities, source);
 
   return (
     <>
@@ -87,32 +89,38 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <SelectableHeaderCell allTableRowKeys={Object.keys(savedEntities)} />
+                <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} disabled={isLoading} />
                 {columns.map((column) => (
                   <HeaderCell key={column.id}>{column.label}</HeaderCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {searchHits.length ? (
-                searchHits.map(({ _id, _source: { hubmap_id, group_name, entity_type } }) => (
-                  <TableRow key={_id}>
-                    <SelectableRowCell rowKey={_id} />
-                    <TableCell>
-                      <LightBlueLink href={`/browse/${hubmap_id}`}>{hubmap_id}</LightBlueLink>
-                    </TableCell>
-                    <TableCell>{group_name}</TableCell>
-                    <TableCell>{entity_type}</TableCell>
-                    <TableCell>
-                      {format(savedEntities[_id]?.dateSaved || savedEntities[_id]?.dateAddedToList, 'yyyy-MM-dd')}
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
+              {isLoading ? (
                 <LoadingTableRows numberOfRows={Object.keys(savedEntities).length} numberOfCols={5} />
+              ) : (
+                searchHits.map(
+                  ({ _id, _source: { hubmap_id, group_name, entity_type } }) =>
+                    _id in savedEntities && ( // on item deletion savedEntites will update before searchHits
+                      <TableRow key={_id}>
+                        <SelectableRowCell rowKey={_id} />
+                        <TableCell>
+                          <LightBlueLink href={`/browse/${hubmap_id}`}>{hubmap_id}</LightBlueLink>
+                        </TableCell>
+                        <TableCell>{group_name}</TableCell>
+                        <TableCell>{entity_type}</TableCell>
+                        <TableCell>
+                          {format(savedEntities[_id]?.dateSaved || savedEntities[_id]?.dateAddedToList, 'yyyy-MM-dd')}
+                        </TableCell>
+                      </TableRow>
+                    ),
+                )
               )}
             </TableBody>
           </Table>
+          {(Object.keys(savedEntities).length === 0 || (searchHits.length === 0 && !isLoading)) && (
+            <NoItemsSaved isSavedListPage={isSavedListPage} />
+          )}
         </StyledTableContainer>
       </Paper>
     </>

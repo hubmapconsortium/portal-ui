@@ -6,14 +6,16 @@ import TableCell from '@material-ui/core/TableCell';
 
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 
-function SelectableRowCell({ rowKey }) {
+function SelectableRowCell({ rowKey, disabled }) {
   const { toggleRow, selectedRows, tableLabel } = useStore();
 
   return (
-    <TableCell padding="checkbox" onClick={() => toggleRow(rowKey)}>
+    <TableCell padding="checkbox">
       <Checkbox
         checked={selectedRows.has(rowKey)}
         inputProps={{ 'aria-label': `${tableLabel}-row-${rowKey}-checkbox` }}
+        onChange={() => toggleRow(rowKey)}
+        disabled={disabled}
       />
     </TableCell>
   );

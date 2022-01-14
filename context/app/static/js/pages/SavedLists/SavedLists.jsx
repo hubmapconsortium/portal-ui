@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import SavedListScrollbox from 'js/components/savedLists/SavedListScrollbox';
-import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
+import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { StyledAlert, StyledHeader, SpacingDiv, PageSpacing } from './style';
 
 const usedSavedEntitiesSelector = (state) => ({
@@ -51,15 +50,11 @@ function SavedLists() {
         <StyledHeader variant="h3" component="h2">
           My Saved Items
         </StyledHeader>
-        {Object.keys(savedEntities).length === 0 ? (
-          <NoItemsSaved />
-        ) : (
-          <SavedEntitiesTable
-            savedEntities={savedEntities}
-            deleteCallback={deleteEntities}
-            setShouldDisplaySaveAlert={setShouldDisplaySaveAlert}
-          />
-        )}
+        <SavedEntitiesTable
+          savedEntities={savedEntities}
+          deleteCallback={deleteEntities}
+          setShouldDisplaySaveAlert={setShouldDisplaySaveAlert}
+        />
       </SpacingDiv>
       <SavedListScrollbox savedLists={savedLists} />
     </PageSpacing>
