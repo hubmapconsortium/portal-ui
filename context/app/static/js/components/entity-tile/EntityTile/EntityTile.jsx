@@ -7,10 +7,12 @@ import { StyledPaper } from './style';
 
 function EntityTile(props) {
   const { uuid, entity_type, id, invertColors, entityData, descendantCounts } = props;
-
+  const { thumbnail_file } = entityData;
+  const thumbnailSrc = thumbnail_file && `http://assets.hubmapconsortium.org/${thumbnail_file.file_uuid}/thumbnail.jpg`;
   return (
     <a href={`/browse/${entity_type.toLowerCase()}/${uuid}`}>
       <StyledPaper $invertColors={invertColors}>
+        {thumbnailSrc && <img src={thumbnailSrc} alt="thumbnail" />}
         <EntityTileBody entity_type={entity_type} id={id} invertColors={invertColors} entityData={entityData} />
         <EntityTileFooter invertColors={invertColors} entityData={entityData} descendantCounts={descendantCounts} />
       </StyledPaper>

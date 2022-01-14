@@ -93,6 +93,7 @@ const datasetConfig = {
       field('origin_sample.mapped_organ', 'Organ'),
       field('mapped_status', 'Status'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
+      field('thumbnail_file.file_uuid'),
     ],
     tile: sharedTileFields,
     ccf: [],
