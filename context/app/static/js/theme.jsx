@@ -120,9 +120,7 @@ const theme = createMuiTheme({
     dropdownOffset: 1001,
     entityHeader: 1000,
     dropdown: 50,
-    visualization: 3,
     fileBrowserHeader: 1,
-    interactiveContentAboveDetailSection: 1, // Puts the component above the section container otherwise the component will not be interactive due to overlap from the section container anchor link offset.
   },
 });
 
