@@ -23,7 +23,7 @@ const StyledSectionHeader = styled(SectionHeader)`
   margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
 `;
 
-const StyledHeaderRight = styled.div`
+const Flex = styled.div`
   display: flex;
 `;
 
@@ -84,7 +84,7 @@ export {
   bodyExpandedCSS,
   StyledHeader,
   StyledSectionHeader,
-  StyledHeaderRight,
+  Flex,
   ExpandButton,
   ErrorSnackbar,
   VitessceInfoSnackbar,

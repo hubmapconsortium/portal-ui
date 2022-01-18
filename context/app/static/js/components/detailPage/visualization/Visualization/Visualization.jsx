@@ -19,7 +19,6 @@ import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import {
   vitessceFixedHeight,
   bodyExpandedCSS,
-  StyledHeaderRight,
   ExpandButton,
   VitessceInfoSnackbar,
   ErrorSnackbar,
@@ -27,6 +26,7 @@ import {
   StyledFooterText,
   SelectionButton,
   StyledSectionHeader,
+  Flex,
 } from './style';
 import { useVitessceConfig } from './hooks';
 import 'vitessce/dist/es/production/static/css/index.css';
@@ -110,6 +110,7 @@ function Visualization(props) {
       window.removeEventListener('keydown', onKeydown);
     };
   }, [collapseViz]);
+
   const isMultiDataset = Array.isArray(vitessceConfig);
 
   return (
@@ -120,7 +121,7 @@ function Visualization(props) {
         <SpacedSectionButtonRow
           leftText={<StyledSectionHeader>Visualization</StyledSectionHeader>}
           buttons={
-            <StyledHeaderRight>
+            <Flex>
               {hasNotebook && <VisualizationNotebookButton uuid={uuid} />}
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
@@ -141,7 +142,7 @@ function Visualization(props) {
                   id="visualization-data"
                 />
               )}
-            </StyledHeaderRight>
+            </Flex>
           }
         />
         <Paper>
