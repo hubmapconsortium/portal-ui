@@ -50,7 +50,13 @@ const visualizationStoreSelector = (state) => ({
   onCopyUrlSnackbarOpen: state.onCopyUrlSnackbarOpen,
   setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
 });
-
+const sharedInfoSnackbarProps = {
+  anchorOrigin: {
+    vertical: 'top',
+    horizontal: 'center',
+  },
+  autoHideDuration: 4000,
+};
 function Visualization(props) {
   const { vitData, uuid, hasNotebook } = props;
 
@@ -141,32 +147,20 @@ function Visualization(props) {
         <Paper>
           <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme}>
             <VitessceInfoSnackbar
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
+              {...sharedInfoSnackbarProps}
               open={isVisibleFirefoxWarning}
-              autoHideDuration={4000}
               onClose={() => setIsVisibleFirefoxWarning(false)}
               message={FIREFOX_WARNING}
             />
             <VitessceInfoSnackbar
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
+              {...sharedInfoSnackbarProps}
               open={vizEscSnackbarIsOpen}
-              autoHideDuration={4000}
               onClose={() => setVizEscSnackbarIsOpen(false)}
               message="Press [esc] to exit full window."
             />
             <VitessceInfoSnackbar
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
+              {...sharedInfoSnackbarProps}
               open={onCopyUrlSnackbarOpen}
-              autoHideDuration={4000}
               $isWarning={onCopyUrlWarning}
               onClose={() => setOnCopyUrlSnackbarOpen(false)}
               message={`Shareable URL copied to clipboard. ${onCopyUrlWarning}`}
