@@ -57,7 +57,7 @@ function SummaryData(props) {
         buttons={
           <FlexEnd>
             {['Dataset', 'Support'].includes(entity_type) && (
-              <Typography variant="h6" nowrap>
+              <Typography variant="h6">
                 <StatusIcon status={status} />
                 {status}
                 {' | '}
