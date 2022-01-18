@@ -15,7 +15,7 @@ import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
-import { DetailPageAlert } from 'js/shared-styles/alerts';
+import { DetailPageAlert } from 'js/components/detailPage/style';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getAllCollectionsQuery } from 'js/helpers/queries';
 
