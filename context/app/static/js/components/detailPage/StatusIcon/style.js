@@ -5,7 +5,7 @@ const ColoredStatusIcon = styled(LensIcon)`
   color: ${(props) => props.theme.palette[props.$iconColor].main};
   font-size: 16px;
   margin-right: 3px;
-  align-self: center;
+  margin-bottom: -2px;
 `;
 
 export { ColoredStatusIcon };
