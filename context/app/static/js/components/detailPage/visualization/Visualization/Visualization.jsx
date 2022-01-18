@@ -9,6 +9,8 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
+import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
+import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
@@ -17,9 +19,6 @@ import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import {
   vitessceFixedHeight,
   bodyExpandedCSS,
-  StyledPaddedSectionContainer,
-  StyledHeader,
-  StyledHeaderText,
   StyledHeaderRight,
   ExpandButton,
   VitessceInfoSnackbar,
@@ -27,6 +26,7 @@ import {
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
+  StyledSectionHeader,
 } from './style';
 import { useVitessceConfig } from './hooks';
 import 'vitessce/dist/es/production/static/css/index.css';
@@ -110,32 +110,34 @@ function Visualization(props) {
     vitessceConfig &&
     // Don't render multi-datasets unless they have a selection from the list of options in vitessceConfig.
     (!isMultiDataset || Number.isInteger(vitessceSelection)) && (
-      <StyledPaddedSectionContainer id="visualization">
-        <StyledHeader>
-          <StyledHeaderText>Visualization</StyledHeaderText>
-          <StyledHeaderRight>
-            {hasNotebook && <VisualizationNotebookButton uuid={uuid} />}
-            <VisualizationShareButton />
-            <VisualizationThemeSwitch />
-            <SecondaryBackgroundTooltip title="Switch to Fullscreen">
-              <ExpandButton size="small" onClick={expandViz} variant="contained">
-                <FullscreenRoundedIcon color="primary" />
-              </ExpandButton>
-            </SecondaryBackgroundTooltip>
-            {isMultiDataset && (
-              <DropdownListbox
-                buttonComponent={SelectionButton}
-                optionComponent={DropdownListboxOption}
-                selectedOptionIndex={vitessceSelection}
-                options={vitessceConfig}
-                selectOnClick={setSelectionAndClearErrors}
-                getOptionLabel={(v) => v.name}
-                buttonProps={{ color: 'primary' }}
-                id="visualization-data"
-              />
-            )}
-          </StyledHeaderRight>
-        </StyledHeader>
+      <PaddedSectionContainer id="visualization">
+        <SpacedSectionButtonRow
+          leftText={<StyledSectionHeader>Visualization</StyledSectionHeader>}
+          buttons={
+            <StyledHeaderRight>
+              {hasNotebook && <VisualizationNotebookButton uuid={uuid} />}
+              <VisualizationShareButton />
+              <VisualizationThemeSwitch />
+              <SecondaryBackgroundTooltip title="Switch to Fullscreen">
+                <ExpandButton size="small" onClick={expandViz} variant="contained">
+                  <FullscreenRoundedIcon color="primary" />
+                </ExpandButton>
+              </SecondaryBackgroundTooltip>
+              {isMultiDataset && (
+                <DropdownListbox
+                  buttonComponent={SelectionButton}
+                  optionComponent={DropdownListboxOption}
+                  selectedOptionIndex={vitessceSelection}
+                  options={vitessceConfig}
+                  selectOnClick={setSelectionAndClearErrors}
+                  getOptionLabel={(v) => v.name}
+                  buttonProps={{ color: 'primary' }}
+                  id="visualization-data"
+                />
+              )}
+            </StyledHeaderRight>
+          }
+        />
         <Paper>
           <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme}>
             <VitessceInfoSnackbar
@@ -197,7 +199,7 @@ function Visualization(props) {
           <OutboundLink href="http://vitessce.io">Vitessce</OutboundLink>
         </StyledFooterText>
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
-      </StyledPaddedSectionContainer>
+      </PaddedSectionContainer>
     )
   );
 }

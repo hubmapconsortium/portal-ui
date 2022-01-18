@@ -1,7 +1,9 @@
 import React, { Suspense } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { StyledPaddedSectionContainer, StyledHeader, StyledHeaderText } from '../Visualization/style';
+import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
+import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
+import { StyledSectionHeader } from '../Visualization/style';
 import { VisualizationBackground } from './style';
 
 const Visualization = React.lazy(() => import('../Visualization'));
@@ -12,14 +14,12 @@ function VisualizationWrapper(props) {
   return (
     <Suspense
       fallback={
-        <StyledPaddedSectionContainer id="visualization">
-          <StyledHeader>
-            <StyledHeaderText>Visualization</StyledHeaderText>
-          </StyledHeader>
+        <PaddedSectionContainer id="visualization">
+          <SpacedSectionButtonRow leftText={<StyledSectionHeader>Visualization</StyledSectionHeader>} />
           <VisualizationBackground>
             <CircularProgress />
           </VisualizationBackground>
-        </StyledPaddedSectionContainer>
+        </PaddedSectionContainer>
       }
     >
       <Visualization vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
