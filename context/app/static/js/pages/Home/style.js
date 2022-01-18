@@ -44,8 +44,7 @@ const SectionHeader = styled(Typography)`
 `;
 
 const OffsetDatasetsHeader = styled(SectionHeader)`
-  padding-top: ${headerHeight + 10}px;
-  margin-top: -${headerHeight + 10}px;
+  scroll-margin-top: ${headerHeight + 10}px;
 `;
 
 export {
