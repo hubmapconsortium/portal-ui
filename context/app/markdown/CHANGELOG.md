@@ -1,3 +1,59 @@
+## v0.35.2 - 2022-01-13
+
+- Add consortium facet.
+- Where there were just TODOs in the code, link to the relevant issue.
+- Add a link to lineup on the search page.
+- Add `/browse/<type>/<uuid>.vitessce.json` to get vitessce confs, with CORS header.
+  If you are developing vitessce locally, it can be passed in as the `url` parameter.
+- If there is an error during vitessce conf generation, generate a valid conf that just has an error message.
+
+
+## v0.35.1 - 2022-01-11
+
+- Do not include OME TIFFs that include `separate/` in their paths. This lets us handle the current MALDI-IMS structure.
+- In the NGINX conf, bump the timeout up to 600s, so that requests to the cells API won't time out.
+- Simplify `docker.sh`: Run `docker logs` if that's what you need.
+- Fix TSV download in the Docker environment.
+- Simplify Vitessce conf testing.
+
+
+## v0.35.0 - 2022-01-04
+
+- In the metadata TSV download, add a second row with the field descriptions.
+- Add retracted datasets to the list of things that are hidden from the default search.
+- Organize vitessce builder classes into related groups.
+- `NullViewConfBuilder` does not need a separate invocation.
+- Refactor the vitessce conf tests for readability.
+
+
+## v0.33.1 - 2021-12-14
+
+- Log when Cells API calls start, so if it times out, we have something to go on.
+- Use hubmap-commons from pypi.
+- Implement design for external datasets on detail pages.
+- Add a timestamp to the filename of the TSV download.
+- Render the react error page for all errors even if there is not an explict handler.
+- If a `sub_status` is present ("Retracted"), use it instead of the `status`.
+- Add dev-search for retracted.
+- Revert https://github.com/hubmapconsortium/portal-ui/pull/2191:
+  Return to the old organ facet until partonomy is sorted out.
+- Handle both dataset_uuid and uuid keys from revisions.
+- ES response structure has nested instances of `hits` as a key. Split our access across multiple lines of code so we can tell whether it's the inside or the outside that didn't match our expectations.
+
+
+## v0.33.0 - 2021-12-06
+
+- Add a CI test to check that each capitalized directory contains an index file.
+- Configure lineup with column types.
+- Add details logging on Cells API wrapper.
+- Fix warning about invalid element nesting on markdown pages: `publication/*` and `docs/*`. 
+- Refactor assay types bar chart.
+- Add assay types chart to organ pages.
+- Replace outline with filter hover on stacked bar charts.
+- Clean up formatting of publications page.
+- Remove chromatic Github Actions workflow.
+
+
 ## v0.32.1 - 2021-11-29
 
 - On the organs page, add Dataset and Sample icons in the respective buttons.

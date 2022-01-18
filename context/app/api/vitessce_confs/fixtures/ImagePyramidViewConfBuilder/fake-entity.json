@@ -1,0 +1,20 @@
+{
+    "data_types": [
+        "image_pyramid",
+        "PAS"
+    ],
+    "status": "QA",
+    "files": [
+        {
+            "rel_path": "ometiff-pyramids/processedMicroscopy/VAN0003-LK-33-2-PAS_FFPE.ome.tif"
+        },
+        {
+            "rel_path": "ometiff-pyramids/separate/should-be-ignored.ome.tif"
+        },
+        {
+            "rel_path": "output_offsets/processedMicroscopy/VAN0003-LK-33-2-PAS_FFPE.offsets.json"
+        }
+    ],
+    "uuid": "f9ae931b8b49252f150d7f8bf1d2d13f",
+    "metadata": {"dag_provenance_list": []}
+}

@@ -3,7 +3,7 @@ import React, { lazy, Suspense } from 'react';
 import Providers from 'js/components/Providers';
 
 const EntityCounts = lazy(() => import('js/components/home/EntityCounts'));
-const AssayTypeBarChartContainer = lazy(() => import('js/components/home/AssayTypeBarChartContainer'));
+const HuBMAPDatasetsChart = lazy(() => import('js/components/home/HuBMAPDatasetsChart'));
 
 function Switch() {
   const { pathname } = window.location;
@@ -14,7 +14,7 @@ function Switch() {
     case '/iframe/entity-counts':
       return <EntityCounts />;
     case '/iframe/assay-barchart':
-      return <AssayTypeBarChartContainer />;
+      return <HuBMAPDatasetsChart />;
     case '/iframe/organ':
       return <ccf-organ-info organ-iri={iri} />;
     default:

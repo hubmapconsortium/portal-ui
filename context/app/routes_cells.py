@@ -1,4 +1,5 @@
 from itertools import islice, groupby
+import time
 
 from flask import render_template, current_app, request
 
@@ -32,6 +33,28 @@ def _get_client(app):
 gene_symbols = None
 
 
+def timeit(f):
+    def timed(*args, **kwargs):
+        limit = 20
+        str_args = [str(arg) for arg in args]
+        trunc_args = [arg[:limit] + ('...' if len(arg) > limit else '') for arg in str_args]
+        trunk_kwargs = [f'{k}=...' for k in kwargs]
+        url = f'{request.path}?{request.query_string.decode("UTF-8")}'
+        func = f'{f.__name__}({", ".join(trunc_args + trunk_kwargs)})'
+
+        current_app.logger.info(' | '.join(['START', url, func]))
+
+        start = time.time()
+        result = f(*args, **kwargs)
+        end = time.time()
+
+        elapsed = f'{round(end - start, 3)} seconds'
+        current_app.logger.info(' | '.join([elapsed, url, func]))
+        return result
+    return timed
+
+
+@timeit
 def _get_gene_symbols(app):
     client = _get_client(app)
     global gene_symbols
@@ -43,6 +66,7 @@ def _get_gene_symbols(app):
 protein_ids = None
 
 
+@timeit
 def _get_protein_ids(app):
     client = _get_client(app)
     global protein_ids
@@ -51,6 +75,7 @@ def _get_protein_ids(app):
     return protein_ids
 
 
+@timeit
 def _first_n_matches(strings, substring, n):
     '''
     >>> strings = [f'fake{n}' for n in range(200)]
@@ -94,6 +119,7 @@ def _get_cluster_name_and_number(cluster_str):
     return Cluster(name=cluster_name, number=cluster_number)
 
 
+@timeit
 def _get_cluster_cells(cells=None, cell_variable_name=None, min_expression=None):
     '''
     >>> cells = _get_cluster_cells(cells=[
@@ -164,6 +190,7 @@ def _get_cluster_cells(cells=None, cell_variable_name=None, min_expression=None)
     return cluster_cells
 
 
+@timeit
 def _get_matched_cell_counts_per_cluster(cells):
     '''
     >>> clusters = _get_matched_cell_counts_per_cluster(cells=[
@@ -231,18 +258,21 @@ def _get_matched_cell_counts_per_cluster(cells):
     return clusters
 
 
+@timeit
 @blueprint.route('/cells/genes-by-substring.json', methods=['POST'])
 def genes_by_substring():
     substring = request.args.get('substring')
     return {'results': _first_n_matches(_get_gene_symbols(current_app), substring, 10)}
 
 
+@timeit
 @blueprint.route('/cells/proteins-by-substring.json', methods=['POST'])
 def proteins_by_substring():
     substring = request.args.get('substring')
     return {'results': _first_n_matches(_get_protein_ids(current_app), substring, 10)}
 
 
+@timeit
 @blueprint.route('/cells/datasets-selected-by-<target_entity>.json', methods=['POST'])
 def datasets_selected_by_level(target_entity):
     cell_variable_names = request.args.getlist('cell_variable_name')
@@ -266,6 +296,7 @@ def datasets_selected_by_level(target_entity):
         return {'message': str(e)}
 
 
+@timeit
 @blueprint.route('/cells/cell-percentages-for-datasets.json', methods=['POST'])
 def cell_percentages_for_datasets():
     # Select a set of datasets where cells express a given gene,
@@ -289,6 +320,7 @@ def cell_percentages_for_datasets():
         return {'message': str(e)}
 
 
+@timeit
 @blueprint.route('/cells/cell-expression-in-dataset.json', methods=['POST'])
 def cell_expression_in_dataset():
     # For a single dataset we want to get the expression level of a given gene for all cells.
@@ -309,6 +341,7 @@ def cell_expression_in_dataset():
         return {'message': str(e)}
 
 
+@timeit
 @blueprint.route('/cells/all-indexed-uuids.json', methods=['POST'])
 def all_indexed_uuids():
     # Get all UUIDs that have been indexed. Because of the delay in indexing,
@@ -325,6 +358,7 @@ def all_indexed_uuids():
         return {'message': str(e)}
 
 
+@timeit
 @blueprint.route('/cells/cells-in-dataset-clusters.json', methods=['POST'])
 def cells_in_dataset_clusters():
     # For a single dataset we want to get the expression level of a given gene for all cells.

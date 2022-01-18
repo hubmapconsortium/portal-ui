@@ -66,7 +66,9 @@ end flake8
 
 
 start pytest
-pytest context/app
+cd context
+pytest app
+cd -
 end pytest
 
 start cap-dirs

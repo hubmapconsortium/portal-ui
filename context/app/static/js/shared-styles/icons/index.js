@@ -14,6 +14,8 @@ import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import CollectionsBookmarkRoundedIcon from '@material-ui/icons/CollectionsBookmarkRounded';
 import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
+import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
+import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 
 const CenterIcon = styled(AccountBalanceIcon)`
   font-size: ${(props) => props.fontSize};
@@ -71,6 +73,14 @@ const EmailIcon = styled(EmailRoundedIcon)`
   font-size: ${(props) => props.fontSize};
 `;
 
+const DownIcon = styled(ArrowDropDownRoundedIcon)`
+  font-size: ${(props) => props.fontSize};
+`;
+
+const UpIcon = styled(ArrowDropUpRoundedIcon)`
+  font-size: ${(props) => props.fontSize};
+`;
+
 export {
   CollectionIcon,
   DonorIcon,
@@ -86,4 +96,6 @@ export {
   DeleteIcon,
   EditIcon,
   EmailIcon,
+  DownIcon,
+  UpIcon,
 };

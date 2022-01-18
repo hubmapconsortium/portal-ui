@@ -1,0 +1,28 @@
+{
+  "data_types": [
+    "salmon_rnaseq_slideseq"
+  ],
+  "files": [
+    {
+      "description": "AnnData Zarr store for storing and visualizing single cell sequencing outputs of UMAP/clustering analysis.", 
+      "edam_term": "EDAM_1.24.format_2333", 
+      "is_qa_qc": false, 
+      "rel_path": "hubmap_ui/anndata-zarr/secondary_analysis.zarr/.zgroup", 
+      "size": 24, 
+      "type": "unknown"
+    }
+  ],
+  "mapped_data_types": [
+    "Slide-seq [Salmon]"
+  ], 
+  "metadata": {
+    "dag_provenance_list": [
+      {
+        "name": "anndata-to-ui.cwl", 
+        "origin": "https://github.com/hubmapconsortium/portal-containers"
+      }
+    ]
+  }, 
+  "status": "Published", 
+  "uuid": "ea4cfecb8495b36694d9a951510dc3c6"
+}

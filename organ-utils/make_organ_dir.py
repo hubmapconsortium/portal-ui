@@ -48,20 +48,14 @@ def main():
         add_vitessce(get_azimuth_yaml(args.azimuth_url)))
 
     merged_data = merge_data(
-        uberon=
-            {uberon_id: uberon_id for uberon_id in descriptions.keys()},
-        uberon_short=
-            {uberon_id: uberon_id.split('/')[-1] for uberon_id in descriptions.keys()},
-        name=
-            {uberon_id: value['name'] for uberon_id, value in descriptions.items()},
-        description=
-            {uberon_id: value['description'] for uberon_id, value in descriptions.items()},
-        has_iu_component=
-            {uberon_id: value.get('has_iu_component', True) for uberon_id, value in descriptions.items()},
-        search=
-            search_organs_by_uberon,
-        azimuth=
-            azimuth_organs_by_uberon
+        uberon={uberon_id: uberon_id for uberon_id in descriptions.keys()},
+        uberon_short={uberon_id: uberon_id.split('/')[-1] for uberon_id in descriptions.keys()},
+        name={uberon_id: value['name'] for uberon_id, value in descriptions.items()},
+        description={uberon_id: value['description'] for uberon_id, value in descriptions.items()},
+        has_iu_component={uberon_id: value.get('has_iu_component', True)
+                          for uberon_id, value in descriptions.items()},
+        search=search_organs_by_uberon,
+        azimuth=azimuth_organs_by_uberon
     )
 
     organs = [
@@ -75,7 +69,6 @@ def main():
     for p in (repo_path / 'context/app/organ').glob('*.yaml'):
         organ = safe_load(p.read_text())
         validate(instance=organ, schema=organ_schema)
-
 
 
 def merge_data(**kwargs):
@@ -116,6 +109,7 @@ def get_azimuth_yaml(url):
     human_azimuth = [v for v in all_azimuth if v['species'] == 'Human']
     return human_azimuth
 
+
 def add_vitessce(azimuth_organs):
     '''
     Given the azimuth references, fetch and integrate the vitessce config for each.
@@ -128,6 +122,7 @@ def add_vitessce(azimuth_organs):
         response.raise_for_status()
         organ['vitessce_conf'] = response.json()
     return azimuth_organs
+
 
 def rekey_azimuth(azimuth_organs):
     return {organ['uberon_iri']: organ for organ in azimuth_organs if 'uberon_iri' in organ}
@@ -174,7 +169,7 @@ def rekey_search(search_organs, uberon_names):
         uberon_id: [
             name for name in search_organs
             if uberon_name in name
-               or uberon_name.rstrip('s') in name]
+            or uberon_name.rstrip('s') in name]
         for uberon_id, uberon_name in uberon_names.items()
     }
 
@@ -216,6 +211,7 @@ class DirectoryWriter():
     def __init__(self, dir, organs):
         self.dir = dir
         self.organs = organs
+
     def write(self):
         for f in self.dir.glob('*'):
             f.unlink()
@@ -223,11 +219,12 @@ class DirectoryWriter():
         (self.dir / 'README.md').write_text(readme_text)
         for organ in self.organs:
             self.write_organ(organ)
+
     def write_organ(self, organ):
         file = self.dir / organ.filename()
         print(f'Writing to {file}...')
         file.write_text(organ.yaml())
-        
+
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover

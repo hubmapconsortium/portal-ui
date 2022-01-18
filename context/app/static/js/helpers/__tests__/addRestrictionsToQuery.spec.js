@@ -21,11 +21,18 @@ test('it should return the correct query', () => {
           },
           {
             bool: {
-              must_not: {
-                exists: {
-                  field: 'next_revision_uuid',
+              must_not: [
+                {
+                  exists: {
+                    field: 'next_revision_uuid',
+                  },
                 },
-              },
+                {
+                  exists: {
+                    field: 'sub_status',
+                  },
+                },
+              ],
             },
           },
         ],
@@ -49,11 +56,18 @@ test('it should return the correct query when no inner query is provided', () =>
         must: [
           {
             bool: {
-              must_not: {
-                exists: {
-                  field: 'next_revision_uuid',
+              must_not: [
+                {
+                  exists: {
+                    field: 'next_revision_uuid',
+                  },
                 },
-              },
+                {
+                  exists: {
+                    field: 'sub_status',
+                  },
+                },
+              ],
             },
           },
         ],
