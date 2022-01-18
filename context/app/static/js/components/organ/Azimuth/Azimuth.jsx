@@ -41,7 +41,8 @@ function Azimuth(props) {
       {/* TODO: Refactor so "Visualization" is not included... */}
       {/* TODO: ... and then remove the <br> as well. */}
       <br />
-      <VisualizationWrapper vitData={config.vitessce_conf} />
+      <a href="/">CANNOT CLICK ME</a>
+      <VisualizationWrapper vitData={config.vitessce_conf} shouldDisplayHeader={false} />
     </SectionContainer>
   );
 }

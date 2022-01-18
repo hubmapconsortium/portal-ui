@@ -9,22 +9,33 @@ import { VisualizationBackground } from './style';
 const Visualization = React.lazy(() => import('../Visualization'));
 
 function VisualizationWrapper(props) {
-  const { vitData, uuid, hasNotebook } = props;
+  const { vitData, uuid, hasNotebook, shouldDisplayHeader } = props;
 
   return (
     <Suspense
       fallback={
         <PaddedSectionContainer id="visualization">
-          <SpacedSectionButtonRow leftText={<StyledSectionHeader>Visualization</StyledSectionHeader>} />
+          <SpacedSectionButtonRow
+            leftText={shouldDisplayHeader && <StyledSectionHeader>Visualization</StyledSectionHeader>}
+          />
           <VisualizationBackground>
             <CircularProgress />
           </VisualizationBackground>
         </PaddedSectionContainer>
       }
     >
-      <Visualization vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
+      <Visualization
+        vitData={vitData}
+        uuid={uuid}
+        hasNotebook={hasNotebook}
+        shouldDisplayHeader={shouldDisplayHeader}
+      />
     </Suspense>
   );
 }
+
+VisualizationWrapper.defaultProps = {
+  shouldDisplayHeader: true,
+};
 
 export default VisualizationWrapper;

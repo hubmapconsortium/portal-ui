@@ -8,7 +8,7 @@ import { Flex } from './style';
 function SectionButtonRow({ leftText, buttons, ...props }) {
   return (
     <Flex {...props}>
-      {leftText}
+      {leftText || <div />}
       <div>{buttons}</div>
     </Flex>
   );

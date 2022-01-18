@@ -57,9 +57,7 @@ const sharedInfoSnackbarProps = {
   },
   autoHideDuration: 4000,
 };
-function Visualization(props) {
-  const { vitData, uuid, hasNotebook } = props;
-
+function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
   const {
     vizIsFullscreen,
     expandViz,
@@ -119,7 +117,7 @@ function Visualization(props) {
     (!isMultiDataset || Number.isInteger(vitessceSelection)) && (
       <PaddedSectionContainer id="visualization">
         <SpacedSectionButtonRow
-          leftText={<StyledSectionHeader>Visualization</StyledSectionHeader>}
+          leftText={shouldDisplayHeader && <StyledSectionHeader>Visualization</StyledSectionHeader>}
           buttons={
             <Flex>
               {hasNotebook && <VisualizationNotebookButton uuid={uuid} />}
