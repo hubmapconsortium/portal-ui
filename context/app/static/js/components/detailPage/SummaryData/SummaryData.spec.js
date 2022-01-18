@@ -35,7 +35,7 @@ test('json button exists and has href', () => {
 test('dataset displays properly', async () => {
   render(<SummaryData entity_type="Dataset" uuid={testUUID} status="QA" mapped_data_access_level="Public" />);
   const textToTest = ['QA', 'Public Access'];
-  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  textToTest.forEach((text) => expect(screen.getByText(text, { exact: false })).toBeInTheDocument());
   expect(screen.getByTestId('status-svg-icon')).toBeInTheDocument();
 
   await screen.findByText('Version 1');
