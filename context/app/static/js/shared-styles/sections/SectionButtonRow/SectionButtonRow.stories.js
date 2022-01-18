@@ -1,10 +1,10 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import SectionButtonRowComponent, { BottomAlignedTypography } from './SectionButtonRow';
+import SectionButtonRow, { BottomAlignedTypography } from './SectionButtonRow';
 
 export default {
   title: 'Sections/SectionButtonRow',
-  component: SectionButtonRowComponent,
+  component: SectionButtonRow,
   parameters: {
     docs: {
       description: {
@@ -22,8 +22,10 @@ export default {
   },
 };
 
-export const SectionButtonRow = (args) => <SectionButtonRowComponent {...args} />;
-SectionButtonRow.args = {
+const Template = (args) => <SectionButtonRow {...args} />;
+
+export const Default = Template.bind({});
+Default.args = {
   buttons: ['Right', 'Aligned', 'Buttons'].map((buttonText) => (
     <Button variant="contained" color="primary">
       {buttonText}
@@ -31,4 +33,12 @@ SectionButtonRow.args = {
   )),
   leftText: <BottomAlignedTypography>Bottom Left Text</BottomAlignedTypography>,
 };
-SectionButtonRow.storyName = 'SectionButtonRow'; // needed for single story hoisting for multi word component names
+
+export const WithoutLeftText = Template.bind({});
+WithoutLeftText.args = {
+  buttons: ['Right', 'Aligned', 'Buttons'].map((buttonText) => (
+    <Button variant="contained" color="primary">
+      {buttonText}
+    </Button>
+  )),
+};
