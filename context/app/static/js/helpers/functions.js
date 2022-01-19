@@ -98,3 +98,30 @@ export function addRestrictionsToQuery(query) {
     ...rest,
   };
 }
+
+export function getSearchHitsEntityCounts(searchHits) {
+  const counts = searchHits.reduce(
+    (acc, { _source: { entity_type } }) => {
+      if (!(entity_type in acc)) {
+        // Support entities may be in the user's list.
+        acc[entity_type] = 0;
+      }
+      const incrementedCount = acc[entity_type] + 1;
+      return { ...acc, [entity_type]: incrementedCount };
+    },
+    { Donor: 0, Sample: 0, Dataset: 0 },
+  );
+
+  return counts;
+}
+
+export function getArrayRange(n) {
+  return [...Array(n).keys()];
+}
+
+export function getDonorAgeString({ age_value, age_unit }) {
+  if (!(age_value && age_unit)) {
+    return '';
+  }
+  return [age_value, age_unit].join(' ');
+}

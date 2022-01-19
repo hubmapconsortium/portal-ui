@@ -53,5 +53,25 @@
 			""
 		],
 		"description": "Create component story skeleton",
+	},
+	"Create Single Story Skeleton": {
+		"prefix": "csss",
+		"body": [
+			"import React from 'react';",
+			"",
+			"import ${TM_FILENAME/(.*)\\.(stories).js/$1/}Component from './${TM_FILENAME/(.*)\\.(stories).js/$1/}';",
+			"",
+			"export default {",
+			"  title: '${TM_FILENAME/(.*)\\.(stories).js/$1/}',",
+			"  component: ${TM_FILENAME/(.*)\\.(stories).js/$1/}Component,",
+			"};",
+			"",
+			"export const ${TM_FILENAME/(.*)\\.(stories).js/$1/} = (args) => <${TM_FILENAME/(.*)\\.(stories).js/$1/}Component {...args} />;",
+			"${TM_FILENAME/(.*)\\.(stories).js/$1/}.args = {};",
+			"",
+			"${TM_FILENAME/(.*)\\.(stories).js/$1/}.storyName = '${TM_FILENAME/(.*)\\.(stories).js/$1/}'; // needed for single story hoisting for multi word component names",
+			""
+		],
+		"description": "Create single story skeleton",
 	}
 }

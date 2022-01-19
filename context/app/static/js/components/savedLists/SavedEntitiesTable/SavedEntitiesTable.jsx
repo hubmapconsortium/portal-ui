@@ -1,21 +1,30 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
+import TableCell from '@material-ui/core/TableCell';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
+import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
 
+import format from 'date-fns/format';
+
+import { LightBlueLink } from 'js/shared-styles/Links';
+import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import SavedEntitiesTableRow from 'js/components/savedLists/SavedEntitiesTableRow';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
-import SaveToListDialog from 'js/components/savedLists/SaveToListDialog';
-import useStateSet from 'js/hooks/useStateSet';
 import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
-import { LeftMarginButton, LeftMarginIconButton } from './style';
+import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
+import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
+import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
+import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import DeselectAllRowsButton from 'js/shared-styles/tables/DeselectAllRowsButton';
+import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
+import useSavedEntityData from 'js/hooks/useSavedEntityData';
+import { LeftMarginIconButton } from './style';
 
 const defaultColumns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
@@ -23,36 +32,28 @@ const defaultColumns = [
   { id: 'entity_type', label: 'Entity Type' },
 ];
 
+const source = ['hubmap_id', 'group_name', 'entity_type'];
+
 function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySaveAlert, isSavedListPage }) {
-  const [selectedRows, addToSelectedRows, removeFromSelectedRows, setSelectedRows] = useStateSet([]);
-  const [headerRowIsSelected, setHeaderRowIsSelected] = useState(false);
+  const { selectedRows, deselectHeaderAndRows } = useStore();
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
-  const [addToDialogIsOpen, setAddToDialogIsOpen] = useState(false);
 
   const columns = isSavedListPage
     ? [...defaultColumns, { id: 'dateAddedToCollection', label: 'Date Added To Collection' }]
     : [...defaultColumns, { id: 'dateSaved', label: 'Date Saved' }];
 
-  function selectAllRows() {
-    setSelectedRows(new Set(Object.keys(savedEntities)));
-    setHeaderRowIsSelected(true);
-  }
-
-  function deselectAllRows() {
-    setSelectedRows(new Set([]));
-    setHeaderRowIsSelected(false);
-  }
-
   function deleteSelectedSavedEntities() {
     deleteCallback(selectedRows);
-    deselectAllRows();
+    deselectHeaderAndRows();
   }
 
   function onSaveCallback() {
     setShouldDisplaySaveAlert(true);
-    deselectAllRows();
+    deselectHeaderAndRows();
   }
   const selectedRowsSize = selectedRows.size;
+
+  const { searchHits, isLoading } = useSavedEntityData(savedEntities, source);
 
   return (
     <>
@@ -65,9 +66,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
         buttons={
           selectedRowsSize > 0 && (
             <div>
-              <Button color="primary" onClick={deselectAllRows}>
-                Deselect All ({selectedRowsSize})
-              </Button>
+              <DeselectAllRowsButton />
               <SecondaryBackgroundTooltip title="Delete Items">
                 <LeftMarginIconButton onClick={() => setDeleteDialogIsOpen(true)}>
                   <DeleteRoundedIcon color="primary" />
@@ -79,18 +78,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
                 deleteSelectedSavedEntities={deleteSelectedSavedEntities}
               />
               {!isSavedListPage && (
-                <>
-                  <LeftMarginButton color="primary" onClick={() => setAddToDialogIsOpen(true)} variant="contained">
-                    Add To
-                  </LeftMarginButton>
-                  <SaveToListDialog
-                    title="Add Items To"
-                    dialogIsOpen={addToDialogIsOpen}
-                    setDialogIsOpen={setAddToDialogIsOpen}
-                    entitiesToAdd={selectedRows}
-                    onSaveCallback={onSaveCallback}
-                  />
-                </>
+                <AddItemsToListDialog itemsToAddUUIDS={selectedRows} onSaveCallback={onSaveCallback} />
               )}
             </div>
           )
@@ -101,35 +89,44 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <HeaderCell padding="checkbox" onClick={headerRowIsSelected ? deselectAllRows : selectAllRows}>
-                  <Checkbox
-                    checked={headerRowIsSelected}
-                    inputProps={{ 'aria-labelledby': 'saved-entities-header-row-checkbox' }}
-                  />
-                </HeaderCell>
+                <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} disabled={isLoading} />
                 {columns.map((column) => (
                   <HeaderCell key={column.id}>{column.label}</HeaderCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {Object.entries(savedEntities).map(([key, value], i) => (
-                <SavedEntitiesTableRow
-                  key={key}
-                  uuid={key}
-                  rowData={value}
-                  index={i}
-                  isSelected={selectedRows.has(key)}
-                  addToSelectedRows={addToSelectedRows}
-                  removeFromSelectedRows={removeFromSelectedRows}
-                />
-              ))}
+              {isLoading ? (
+                <LoadingTableRows numberOfRows={Object.keys(savedEntities).length} numberOfCols={5} />
+              ) : (
+                searchHits.map(
+                  ({ _id, _source: { hubmap_id, group_name, entity_type } }) =>
+                    _id in savedEntities && ( // on item deletion savedEntites will update before searchHits
+                      <TableRow key={_id}>
+                        <SelectableRowCell rowKey={_id} />
+                        <TableCell>
+                          <LightBlueLink href={`/browse/${entity_type.toLowerCase()}/${_id}`}>
+                            {hubmap_id}
+                          </LightBlueLink>
+                        </TableCell>
+                        <TableCell>{group_name}</TableCell>
+                        <TableCell>{entity_type}</TableCell>
+                        <TableCell>
+                          {format(savedEntities[_id]?.dateSaved || savedEntities[_id]?.dateAddedToList, 'yyyy-MM-dd')}
+                        </TableCell>
+                      </TableRow>
+                    ),
+                )
+              )}
             </TableBody>
           </Table>
+          {(Object.keys(savedEntities).length === 0 || (searchHits.length === 0 && !isLoading)) && (
+            <NoItemsSaved isSavedListPage={isSavedListPage} />
+          )}
         </StyledTableContainer>
       </Paper>
     </>
   );
 }
 
-export default SavedEntitiesTable;
+export default withSelectableTableProvider(SavedEntitiesTable, 'saved-entities');

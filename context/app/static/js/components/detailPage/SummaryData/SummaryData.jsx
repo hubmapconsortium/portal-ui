@@ -23,7 +23,6 @@ function SummaryData(props) {
     status,
     mapped_data_access_level,
     hubmap_id,
-    group_name,
     entityCanBeSaved,
     children,
     mapped_external_group_name,
@@ -70,14 +69,7 @@ function SummaryData(props) {
                   <FileIcon color="primary" />
                 </JsonButton>
               </SecondaryBackgroundTooltip>
-              {entityCanBeSaved && (
-                <SaveEditEntityButton
-                  uuid={uuid}
-                  entity_type={entity_type}
-                  group_name={group_name}
-                  hubmap_id={hubmap_id}
-                />
-              )}
+              {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
               {['Dataset', 'Support'].includes(entity_type) && <VersionSelect uuid={uuid} />}
             </FlexEnd>
           </FlexEnd>

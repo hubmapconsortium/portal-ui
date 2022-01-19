@@ -16,7 +16,6 @@ function Summary(props) {
     status,
     children,
     mapped_data_access_level,
-    group_name,
     entityCanBeSaved,
     contributors,
     citationTitle,
@@ -33,7 +32,6 @@ function Summary(props) {
         status={status}
         hubmap_id={hubmap_id}
         mapped_data_access_level={mapped_data_access_level}
-        group_name={group_name}
         entityCanBeSaved={entityCanBeSaved}
         mapped_external_group_name={mapped_external_group_name}
       >
