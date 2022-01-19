@@ -105,7 +105,9 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
                       <TableRow key={_id}>
                         <SelectableRowCell rowKey={_id} />
                         <TableCell>
-                          <LightBlueLink href={`/browse/${hubmap_id}`}>{hubmap_id}</LightBlueLink>
+                          <LightBlueLink href={`/browse/${entity_type.toLowerCase()}/${_id}`}>
+                            {hubmap_id}
+                          </LightBlueLink>
                         </TableCell>
                         <TableCell>{group_name}</TableCell>
                         <TableCell>{entity_type}</TableCell>
