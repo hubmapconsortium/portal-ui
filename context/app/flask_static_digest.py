@@ -34,9 +34,9 @@ class FlaskStaticDigest(object):
         """
         filename = values.get("filename")
         temp_filename = (
-            self.manifest[filename].split('/')[-1]
+            Path(self.manifest[filename]).name
             if self.has_manifest else filename
         )
 
-        values.update({'filename': "/".join(["public", temp_filename])})
+        values.update({'filename': 'public/' + temp_filename})
         return flask_url_for(endpoint, **values)
