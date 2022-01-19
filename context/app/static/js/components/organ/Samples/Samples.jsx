@@ -71,7 +71,7 @@ function Samples({ searchTerms }) {
         leftText={
           <div>
             <StyledSectionHeader>Samples</StyledSectionHeader>
-            <Typography variant="subtitle1">{searchHits.length} Samples</Typography>{' '}
+            <Typography variant="subtitle1">{searchHits.length} Samples</Typography>
           </div>
         }
         buttons={
