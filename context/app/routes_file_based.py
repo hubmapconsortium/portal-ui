@@ -3,6 +3,7 @@ from pathlib import Path
 
 from yaml import safe_load
 from flask import render_template
+from werkzeug.utils import secure_filename
 
 import frontmatter
 
@@ -14,7 +15,7 @@ blueprint = make_blueprint(__name__)
 
 @blueprint.route('/preview/<name>')
 def preview_details_view(name):
-    filename = dirname(__file__) + '/preview/' + name + '.md'
+    filename = dirname(__file__) + '/preview/' + secure_filename(name) + '.md'
     metadata_content = frontmatter.load(filename)
     preview_metadata = metadata_content.metadata
     markdown = metadata_content.content
@@ -53,7 +54,7 @@ def publication_index_view():
 
 @blueprint.route('/publication/<name>')
 def publication_details_view(name):
-    filename = dirname(__file__) + '/publication/' + name + '.md'
+    filename = dirname(__file__) + '/publication/' + secure_filename(name) + '.md'
     metadata_content = frontmatter.load(filename)
     flask_data = {
         **get_default_flask_data(),
@@ -84,7 +85,7 @@ def organ_index_view():
 
 @blueprint.route('/organ/<name>')
 def organ_details_view(name):
-    filename = Path(dirname(__file__)) / 'organ' / f'{name}.yaml'
+    filename = Path(dirname(__file__)) / 'organ' / f'{secure_filename(name)}.yaml'
     organ = safe_load(filename.read_text())
     flask_data = {
         **get_default_flask_data(),
