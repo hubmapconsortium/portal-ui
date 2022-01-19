@@ -118,3 +118,10 @@ export function getSearchHitsEntityCounts(searchHits) {
 export function getArrayRange(n) {
   return [...Array(n).keys()];
 }
+
+export function getDonorAgeString({ age_value, age_unit }) {
+  if (!(age_value && age_unit)) {
+    return '';
+  }
+  return [age_value, age_unit].join(' ');
+}

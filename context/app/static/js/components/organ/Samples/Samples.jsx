@@ -22,6 +22,7 @@ import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
+import { getDonorAgeString } from 'js/helpers/functions';
 
 import { StyledSectionHeader } from './style';
 import { getSearchURL } from '../utils';
@@ -58,7 +59,7 @@ function Samples({ searchTerms }) {
           ],
         },
       },
-      _source: columns.map((column) => column.id),
+      _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
     }),
     [searchTerms],
   );
@@ -117,7 +118,7 @@ function Samples({ searchTerms }) {
                         {hubmap_id}
                       </LightBlueLink>
                     </TableCell>
-                    <TableCell>{donor?.mapped_metadata?.age_value}</TableCell>
+                    <TableCell>{donor?.mapped_metadata && getDonorAgeString(donor.mapped_metadata)}</TableCell>
                     <TableCell>{donor?.mapped_metadata?.sex}</TableCell>
                     <TableCell>{donor?.mapped_metadata?.race}</TableCell>
                     <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
