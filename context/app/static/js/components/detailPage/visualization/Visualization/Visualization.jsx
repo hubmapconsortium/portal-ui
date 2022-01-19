@@ -117,7 +117,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
     (!isMultiDataset || Number.isInteger(vitessceSelection)) && (
       <DetailPageSection id="visualization">
         <SpacedSectionButtonRow
-          leftText={shouldDisplayHeader && <StyledSectionHeader>Visualization</StyledSectionHeader>}
+          leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           buttons={
             <Flex>
               {hasNotebook && <VisualizationNotebookButton uuid={uuid} />}

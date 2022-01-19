@@ -8,8 +8,8 @@ import { Flex } from './style';
 function SectionButtonRow({ leftText, buttons, ...props }) {
   return (
     <Flex {...props}>
-      {leftText || <div />}
-      <div>{buttons}</div>
+      {leftText}
+      {buttons && <div>{buttons}</div>}
     </Flex>
   );
 }
@@ -18,11 +18,16 @@ SectionButtonRow.propTypes = {
   /**
    Text to be displayed in the left most available space. Usually a BottomAlignedTypography component.
   */
-  leftText: PropTypes.element.isRequired,
+  leftText: PropTypes.element,
   /**
    Button(s) to be displayed in the right most available space.
   */
-  buttons: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element, PropTypes.bool]).isRequired,
+  buttons: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]),
+};
+
+SectionButtonRow.defaultProps = {
+  leftText: <div />, // required for spacing
+  buttons: undefined,
 };
 
 const SpacedSectionButtonRow = styled(SectionButtonRow)`

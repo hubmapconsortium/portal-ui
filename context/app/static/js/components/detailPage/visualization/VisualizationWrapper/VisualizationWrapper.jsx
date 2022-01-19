@@ -12,25 +12,27 @@ function VisualizationWrapper(props) {
   const { vitData, uuid, hasNotebook, shouldDisplayHeader } = props;
 
   return (
-    <Suspense
-      fallback={
-        <DetailPageSection id="visualization">
-          <SpacedSectionButtonRow
-            leftText={shouldDisplayHeader && <StyledSectionHeader>Visualization</StyledSectionHeader>}
-          />
-          <VisualizationBackground>
-            <CircularProgress />
-          </VisualizationBackground>
-        </DetailPageSection>
-      }
-    >
-      <Visualization
-        vitData={vitData}
-        uuid={uuid}
-        hasNotebook={hasNotebook}
-        shouldDisplayHeader={shouldDisplayHeader}
-      />
-    </Suspense>
+    <>
+      <Suspense
+        fallback={
+          <DetailPageSection id="visualization">
+            <SpacedSectionButtonRow
+              leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
+            />
+            <VisualizationBackground>
+              <CircularProgress />
+            </VisualizationBackground>
+          </DetailPageSection>
+        }
+      >
+        <Visualization
+          vitData={vitData}
+          uuid={uuid}
+          hasNotebook={hasNotebook}
+          shouldDisplayHeader={shouldDisplayHeader}
+        />
+      </Suspense>
+    </>
   );
 }
 
