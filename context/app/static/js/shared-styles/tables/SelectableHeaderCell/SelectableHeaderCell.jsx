@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
@@ -11,12 +12,24 @@ function SelectableHeaderCell({ allTableRowKeys, disabled }) {
     <HeaderCell padding="checkbox">
       <Checkbox
         checked={headerRowIsSelected}
-        inputProps={{ 'aria-labelledby': `${tableLabel}-header-row-checkbox` }}
+        inputProps={{ 'aria-label': `${tableLabel}-header-row-checkbox` }}
         disabled={disabled || allTableRowKeys.length === 0}
         onChange={() => toggleHeaderAndRows(allTableRowKeys)}
       />
     </HeaderCell>
   );
 }
+
+SelectableHeaderCell.propTypes = {
+  /**
+   Unique keys for all rows in the table.
+  */
+  allTableRowKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
+  disabled: PropTypes.bool,
+};
+
+SelectableHeaderCell.defaultProps = {
+  disabled: false,
+};
 
 export default SelectableHeaderCell;

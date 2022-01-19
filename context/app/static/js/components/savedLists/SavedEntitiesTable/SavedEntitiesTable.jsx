@@ -100,10 +100,10 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
                 <LoadingTableRows numberOfRows={Object.keys(savedEntities).length} numberOfCols={5} />
               ) : (
                 searchHits.map(
-                  ({ _id, _source: { hubmap_id, group_name, entity_type } }, i) =>
+                  ({ _id, _source: { hubmap_id, group_name, entity_type } }) =>
                     _id in savedEntities && ( // on item deletion savedEntites will update before searchHits
                       <TableRow key={_id}>
-                        <SelectableRowCell rowKey={_id} index={i} />
+                        <SelectableRowCell rowKey={_id} />
                         <TableCell>
                           <LightBlueLink href={`/browse/${hubmap_id}`}>{hubmap_id}</LightBlueLink>
                         </TableCell>

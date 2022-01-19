@@ -114,3 +114,7 @@ export function getSearchHitsEntityCounts(searchHits) {
 
   return counts;
 }
+
+export function getArrayRange(n) {
+  return [...Array(n).keys()];
+}
