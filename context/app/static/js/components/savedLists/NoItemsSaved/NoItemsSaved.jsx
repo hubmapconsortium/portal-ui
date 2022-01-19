@@ -4,6 +4,7 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import Description from 'js/shared-styles/sections/Description';
 
 const SearchPagesPrompt = () => (
+  // Inserted in the middle of the message, so it shouldn't be capitalized.
   <>
     navigate to <LightBlueLink href="/search?entity_type[0]=Donor">donors</LightBlueLink>,{' '}
     <LightBlueLink href="/search?entity_type[0]=Sample">samples</LightBlueLink> or{' '}
