@@ -11,7 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
+import { DetailPageSection } from 'js/components/detailPage/style';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { HeaderIconCell, StyledInfoIcon, CenterAlignedFlexRow, StyledOpenInNewRoundedIcon } from './style';
 
@@ -24,7 +24,7 @@ function CollectionsAffiliationsTable(props) {
   ];
 
   return (
-    <PaddedSectionContainer id="datasets-table">
+    <DetailPageSection id="datasets-table">
       <SectionHeader>{title}</SectionHeader>
       <Paper>
         <StyledTableContainer>
@@ -60,7 +60,7 @@ function CollectionsAffiliationsTable(props) {
           </Table>
         </StyledTableContainer>
       </Paper>
-    </PaddedSectionContainer>
+    </DetailPageSection>
   );
 }
 

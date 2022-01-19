@@ -11,7 +11,7 @@ import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
-import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
+import { DetailPageSection } from 'js/components/detailPage/style';
 import {
   DownloadIcon,
   Flex,
@@ -75,7 +75,7 @@ function MetadataTable(props) {
   );
 
   return (
-    <PaddedSectionContainer id="metadata">
+    <DetailPageSection id="metadata">
       <Flex>
         <StyledSectionHeader>Metadata</StyledSectionHeader>
         <SecondaryBackgroundTooltip title="Download">
@@ -112,7 +112,7 @@ function MetadataTable(props) {
           </Table>
         </StyledTableContainer>
       </Paper>
-    </PaddedSectionContainer>
+    </DetailPageSection>
   );
 }
 

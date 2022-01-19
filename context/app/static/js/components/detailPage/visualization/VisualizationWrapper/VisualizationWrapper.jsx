@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
+import { DetailPageSection } from 'js/components/detailPage/style';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { StyledSectionHeader } from '../Visualization/style';
 import { VisualizationBackground } from './style';
@@ -14,14 +14,14 @@ function VisualizationWrapper(props) {
   return (
     <Suspense
       fallback={
-        <PaddedSectionContainer id="visualization">
+        <DetailPageSection id="visualization">
           <SpacedSectionButtonRow
             leftText={shouldDisplayHeader && <StyledSectionHeader>Visualization</StyledSectionHeader>}
           />
           <VisualizationBackground>
             <CircularProgress />
           </VisualizationBackground>
-        </PaddedSectionContainer>
+        </DetailPageSection>
       }
     >
       <Visualization
