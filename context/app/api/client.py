@@ -7,7 +7,7 @@ from flask import abort, current_app
 import requests
 
 from .vitessce_confs import get_view_config_builder
-from .vitessce_confs.base_builders import ConfCells
+from .vitessce_confs.builders.base_builders import ConfCells
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
@@ -161,9 +161,21 @@ class ApiClient():
                 builder = Builder(entity, self.groups_token)
                 vitessce_conf = builder.get_conf_cells()
             except Exception:
-                message = f'Building vitessce conf threw error: {traceback.format_exc()}'
-                current_app.logger.error(message)
-                vitessce_conf = ConfCells({'error': message}, None)
+                current_app.logger.error(
+                    f'Building vitessce conf threw error: {traceback.format_exc()}')
+                vitessce_conf = ConfCells({
+                    'name': 'Error',
+                    'version': '1.0.4',
+                    'datasets': [],
+                    'initStrategy': 'none',
+                    'layout': [{
+                        'component': 'description',
+                        "props": {
+                            "description": 'Error while generating the Vitessce configuration'
+                        },
+                        'x': 0, 'y': 0, 'w': 12, 'h': 1
+                    }],
+                }, None)
 
         return VitessceConfLiftedUUID(
             vitessce_conf=vitessce_conf,

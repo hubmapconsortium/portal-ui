@@ -4,7 +4,7 @@ import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle } from 
 
 import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
 import SearchViewSwitch, { DevSearchViewSwitch } from './SearchViewSwitch';
-import DownloadButton from '../DownloadButton';
+import MetadataMenu from '../MetadataMenu';
 import TilesSortDropdown from '../TilesSortDropdown';
 import SelectedFilter from '../SelectedFilter';
 import { Flex, CenteredDiv } from './style';
@@ -26,7 +26,7 @@ function SearchBarLayout(props) {
             listComponent={withAnalyticsCategory(TilesSortDropdown, analyticsCategory)}
             analyticsCategory={analyticsCategory}
           />
-          {!isDevSearch && <DownloadButton type={type} analyticsCategory={analyticsCategory} />}
+          {!isDevSearch && <MetadataMenu type={type} analyticsCategory={analyticsCategory} />}
           <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
         </CenteredDiv>
       </Flex>

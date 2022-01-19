@@ -1,0 +1,17 @@
+{
+  "data_types": ["salmon_rnaseq_10x"],
+  "files": [
+    {
+      "rel_path": "cluster-marker-genes/output/cluster_marker_genes.cells.json"
+    },
+    {
+      "rel_path": "cluster-marker-genes/output/cluster_marker_genes.cell-sets.json"
+    }
+  ],
+  "mapped_data_types": [], 
+  "metadata": {
+    "dag_provenance_list": []
+  }, 
+  "status": "Published", 
+  "uuid": "based on ea4cfecb8495b36694d9a951510dc3c6"
+}

@@ -1,7 +1,7 @@
 import json
 from urllib.parse import urlparse
 
-from flask import (render_template,
+from flask import (render_template, jsonify,
                    abort, request, redirect, url_for, Response)
 
 import nbformat
@@ -84,6 +84,19 @@ def details_json(type, uuid):
     client = get_client()
     entity = client.get_entity(uuid)
     return entity
+
+
+@blueprint.route('/browse/<type>/<uuid>.vitessce.json')
+def details_vitessce(type, uuid):
+    if type not in entity_types:
+        abort(404)
+    client = get_client()
+    entity = client.get_entity(uuid)
+    vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
+    # Returns a JSON null if there is no visualization.
+    response = jsonify(vitessce_conf.conf)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 
 @blueprint.route('/browse/<type>/<uuid>.ipynb')
