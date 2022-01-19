@@ -4,7 +4,6 @@ import marked from 'marked';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import OutboundLinkButton from 'js/shared-styles/Links/OutboundLinkButton';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper/VisualizationWrapper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -17,7 +16,7 @@ function Azimuth(props) {
   const dataRefHtml = marked.parseInline(config.dataref);
 
   return (
-    <SectionContainer>
+    <>
       <SpacedSectionButtonRow
         leftText={
           <Flex>
@@ -41,9 +40,8 @@ function Azimuth(props) {
       {/* TODO: Refactor so "Visualization" is not included... */}
       {/* TODO: ... and then remove the <br> as well. */}
       <br />
-      <a href="/">CANNOT CLICK ME</a>
       <VisualizationWrapper vitData={config.vitessce_conf} shouldDisplayHeader={false} />
-    </SectionContainer>
+    </>
   );
 }
 
