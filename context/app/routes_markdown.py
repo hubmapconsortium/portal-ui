@@ -3,6 +3,7 @@ from glob import glob
 from os.path import dirname
 
 from flask import render_template, request, redirect
+from werkzeug.utils import secure_filename
 
 from .utils import get_default_flask_data, make_blueprint
 
@@ -10,6 +11,18 @@ from .utils import get_default_flask_data, make_blueprint
 # that handle this, or to pre-render everything when flask starts.
 
 blueprint = make_blueprint(__name__)
+
+
+def _secure_path(unsafe_path):
+    '''
+    >>> _secure_path('../../sneaky path.txt')
+    ???
+
+    >>> _secure_path('a/b/c/one_safe-path.txt')
+    'a/b/c/one_safe-path.txt'
+    '''
+    # TODO: When we don't need to host docs, get rid of this.
+    '/'.join(secure_filename(name) for name in unsafe_path.split('/'))
 
 
 def _title_from_md(md):
@@ -26,7 +39,8 @@ def _title_from_md(md):
 
 
 def markdown_view():
-    with open(dirname(__file__) + '/markdown/' + request.path + '.md') as md_file:
+
+    with open(dirname(__file__) + '/markdown/' + _secure_path(request.path) + '.md') as md_file:
         content_md = md_file.read()
     title = _title_from_md(content_md)
     return render_template(
@@ -40,7 +54,7 @@ def markdown_view():
 
 
 def redirect_view():
-    with open(dirname(__file__) + '/markdown/' + request.path + '.redirect') as redirect_file:
+    with open(dirname(__file__) + '/markdown/' + _secure_path(request.path) + '.redirect') as redirect_file:
         target_url = redirect_file.read().strip()
     return redirect(target_url)
 
