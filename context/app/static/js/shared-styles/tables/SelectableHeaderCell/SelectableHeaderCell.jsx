@@ -25,5 +25,11 @@ SelectableHeaderCell.propTypes = {
    Unique keys for all rows in the table.
   */
   allTableRowKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
+  disabled: PropTypes.bool,
 };
+
+SelectableHeaderCell.defaultProps = {
+  disabled: false,
+};
+
 export default SelectableHeaderCell;

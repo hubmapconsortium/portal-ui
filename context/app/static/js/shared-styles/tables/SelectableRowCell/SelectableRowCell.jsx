@@ -26,6 +26,11 @@ SelectableRowCell.propTypes = {
    Unique key representing the table.
   */
   rowKey: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+};
+
+SelectableRowCell.defaultProps = {
+  disabled: false,
 };
 
 export default SelectableRowCell;
