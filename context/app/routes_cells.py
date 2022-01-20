@@ -285,7 +285,7 @@ def datasets_selected_by_level(target_entity):
     dataset_set = client.select_datasets(
         where=target_entity,
         has=[f'{name} > {min_expression}'
-                for name in cell_variable_names],
+             for name in cell_variable_names],
         genomic_modality=modality,
         min_cell_percentage=min_cell_percentage
     )
@@ -360,5 +360,5 @@ def cells_in_dataset_clusters():
     return {'results':
             _get_matched_cell_counts_per_cluster(
                 cells=_get_cluster_cells(cells=cells_list,
-                                            cell_variable_name=cell_variable_name,
-                                            min_expression=float(min_expression)))}
+                                         cell_variable_name=cell_variable_name,
+                                         min_expression=float(min_expression)))}
