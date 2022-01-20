@@ -1,3 +1,13 @@
+## v0.36.0 - 2022-01-20
+
+- On dev-search, add a facet showing the file descriptions available.
+- Add a comment to each organ file, rather than just a README at the top.
+- Add organ icons to the configuration; Not yet used.
+- Add count to samples table on organ pages.
+- Enable users to add samples to saved lists from samples table on organ pages.
+- Remove trailing '/' and 's' from path and redirect.
+
+
 ## v0.35.2 - 2022-01-13
 
 - Add consortium facet.

@@ -1,1 +1,0 @@
-- Add organ icons to the configuration; Not yet used.

@@ -1,1 +1,0 @@
-- Remove trailing '/' and 's' from path and redirect.
