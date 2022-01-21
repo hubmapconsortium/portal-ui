@@ -7,13 +7,12 @@ import Typography from '@material-ui/core/Typography';
 import DropdownListbox, { useSelectedDropdownIndex } from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
-import ChartLoader from 'js/components/cells/ChartLoader';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import DatasetClusterTooltip from 'js/components/cells/DatasetClusterTooltip';
 
 import { getOptionLabels } from './utils';
 
-function DatasetClusterChart({ uuid, isLoading, results }) {
+function DatasetClusterChart({ uuid, results }) {
   const [scales, setScales] = useState({});
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useSelectedDropdownIndex(0);
   const theme = useTheme();
@@ -52,10 +51,6 @@ function DatasetClusterChart({ uuid, isLoading, results }) {
     domain: ['matched', 'unmatched'],
     range: [theme.palette.warning.dark, theme.palette.warning.light],
   });
-
-  if (isLoading || Object.keys(results).length === 0) {
-    return <ChartLoader />;
-  }
 
   return (
     <ChartWrapper

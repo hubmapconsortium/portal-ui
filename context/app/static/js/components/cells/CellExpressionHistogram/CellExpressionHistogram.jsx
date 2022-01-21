@@ -2,15 +2,10 @@ import React from 'react';
 import { useTheme } from '@material-ui/core/styles';
 
 import Histogram from 'js/shared-styles/charts/Histogram';
-import ChartLoader from 'js/components/cells/ChartLoader';
 import { capitalizeString } from 'js/helpers/functions';
 
-function CellExpressionHistogram({ isLoading, expressionData, queryType }) {
+function CellExpressionHistogram({ expressionData, queryType }) {
   const theme = useTheme();
-
-  if (isLoading || Object.keys(expressionData).length === 0) {
-    return <ChartLoader />;
-  }
 
   return (
     <Histogram
