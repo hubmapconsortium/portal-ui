@@ -16,13 +16,13 @@ blueprint = make_blueprint(__name__)
 def _secure_path(unsafe_path):
     '''
     >>> _secure_path('../../sneaky path.txt')
-    ???
+    '//sneaky_path.txt'
 
     >>> _secure_path('a/b/c/one_safe-path.txt')
     'a/b/c/one_safe-path.txt'
     '''
     # TODO: When we don't need to host docs, get rid of this.
-    '/'.join(secure_filename(name) for name in unsafe_path.split('/'))
+    return '/'.join(secure_filename(name) for name in unsafe_path.split('/'))
 
 
 def _title_from_md(md):
@@ -39,8 +39,8 @@ def _title_from_md(md):
 
 
 def markdown_view():
-
-    with open(dirname(__file__) + '/markdown/' + _secure_path(request.path) + '.md') as md_file:
+    filename = f'{dirname(__file__)}/markdown/{_secure_path(request.path)}.md'
+    with open(filename) as md_file:
         content_md = md_file.read()
     title = _title_from_md(content_md)
     return render_template(
@@ -54,7 +54,8 @@ def markdown_view():
 
 
 def redirect_view():
-    with open(dirname(__file__) + '/markdown/' + _secure_path(request.path) + '.redirect') as redirect_file:
+    filename = f'{dirname(__file__)}/markdown/{_secure_path(request.path)}.redirect'
+    with open(filename) as redirect_file:
         target_url = redirect_file.read().strip()
     return redirect(target_url)
 
