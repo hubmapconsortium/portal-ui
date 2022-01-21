@@ -282,18 +282,14 @@ def datasets_selected_by_level(target_entity):
 
     client = _get_client(current_app)
 
-    try:
-        dataset_set = client.select_datasets(
-            where=target_entity,
-            has=[f'{name} > {min_expression}'
-                 for name in cell_variable_names],
-            genomic_modality=modality,
-            min_cell_percentage=min_cell_percentage
-        )
-        return {'results': list(dataset_set.get_list())}
-
-    except Exception as e:
-        return {'message': str(e)}
+    dataset_set = client.select_datasets(
+        where=target_entity,
+        has=[f'{name} > {min_expression}'
+             for name in cell_variable_names],
+        genomic_modality=modality,
+        min_cell_percentage=min_cell_percentage
+    )
+    return {'results': list(dataset_set.get_list())}
 
 
 @timeit
@@ -308,16 +304,12 @@ def cell_percentages_for_datasets():
 
     client = _get_client(current_app)
 
-    try:
-        dataset_set = client.select_datasets(where='dataset', has=[uuids])
-        results = list(dataset_set.get_list(
-            values_included=[f'{gene_name} > {min_gene_expression}'])
-        )
+    dataset_set = client.select_datasets(where='dataset', has=[uuids])
+    results = list(dataset_set.get_list(
+        values_included=[f'{gene_name} > {min_gene_expression}'])
+    )
 
-        return {'results': results}
-
-    except Exception as e:
-        return {'message': str(e)}
+    return {'results': results}
 
 
 @timeit
@@ -332,13 +324,9 @@ def cell_expression_in_dataset():
 
     client = _get_client(current_app)
 
-    try:
-        cells = client.select_cells(where='dataset', has=[uuid])
-        # list() will call iterator behind the scenes.
-        return {'results': list(cells.get_list(values_included=cell_variable_names))}
-
-    except Exception as e:
-        return {'message': str(e)}
+    cells = client.select_cells(where='dataset', has=[uuid])
+    # list() will call iterator behind the scenes.
+    return {'results': list(cells.get_list(values_included=cell_variable_names))}
 
 
 @timeit
@@ -349,13 +337,9 @@ def all_indexed_uuids():
 
     client = _get_client(current_app)
 
-    try:
-        datasets = client.select_datasets()
-        # list() will call iterator behind the scenes.
-        return {'results': list(datasets.get_list())}
-
-    except Exception as e:
-        return {'message': str(e)}
+    datasets = client.select_datasets()
+    # list() will call iterator behind the scenes.
+    return {'results': list(datasets.get_list())}
 
 
 @timeit
@@ -370,15 +354,11 @@ def cells_in_dataset_clusters():
     min_expression = request.args.get('min_expression')
     client = _get_client(current_app)
 
-    try:
-        cells = client.select_cells(where='dataset', has=[uuid])
-        cells_list = cells.get_list(values_included=cell_variable_name)
+    cells = client.select_cells(where='dataset', has=[uuid])
+    cells_list = cells.get_list(values_included=cell_variable_name)
 
-        return {'results':
-                _get_matched_cell_counts_per_cluster(
-                    cells=_get_cluster_cells(cells=cells_list,
-                                             cell_variable_name=cell_variable_name,
-                                             min_expression=float(min_expression)))}
-
-    except Exception as e:
-        return {'message': str(e)}
+    return {'results':
+            _get_matched_cell_counts_per_cluster(
+                cells=_get_cluster_cells(cells=cells_list,
+                                         cell_variable_name=cell_variable_name,
+                                         min_expression=float(min_expression)))}
