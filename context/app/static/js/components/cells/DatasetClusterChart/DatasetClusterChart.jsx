@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import Button from '@material-ui/core/Button';
 import { useTheme } from '@material-ui/core/styles';
@@ -7,27 +7,16 @@ import Typography from '@material-ui/core/Typography';
 import DropdownListbox, { useSelectedDropdownIndex } from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
-import CellsService from 'js/components/cells/CellsService';
 import ChartLoader from 'js/components/cells/ChartLoader';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import DatasetClusterTooltip from 'js/components/cells/DatasetClusterTooltip';
 
 import { getOptionLabels } from './utils';
 
-function DatasetClusterChart({
-  uuid,
-  cellVariableName,
-  minExpression,
-  isLoading,
-  finishLoading,
-  loadingKey,
-  isExpanded,
-}) {
-  const [results, setResults] = useState({});
+function DatasetClusterChart({ uuid, isLoading, results }) {
   const [scales, setScales] = useState({});
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useSelectedDropdownIndex(0);
   const theme = useTheme();
-  const loadedOnce = useRef(false);
   const [optionLabels, setOptionLabels] = useState({});
 
   const chartMargin = {
@@ -56,34 +45,15 @@ function DatasetClusterChart({
         xScale,
       });
       setOptionLabels(getOptionLabels(Object.keys(results), uuid));
-      finishLoading(loadingKey);
     }
-  }, [setScales, results, selectedClusterTypeIndex, finishLoading, loadingKey, uuid]);
+  }, [setScales, results, selectedClusterTypeIndex, uuid]);
 
   const colorScale = scaleOrdinal({
     domain: ['matched', 'unmatched'],
     range: [theme.palette.warning.dark, theme.palette.warning.light],
   });
 
-  useEffect(() => {
-    async function fetchCellClusterMatches() {
-      const response = await new CellsService().getClusterCellMatchesInDataset({
-        uuid,
-        cellVariableName,
-        minExpression,
-      });
-      setResults(response);
-    }
-    if (loadedOnce.current) {
-      return;
-    }
-    if (isExpanded) {
-      fetchCellClusterMatches();
-      loadedOnce.current = true;
-    }
-  }, [cellVariableName, isExpanded, minExpression, uuid]);
-
-  if (Object.values(isLoading).some((val) => val)) {
+  if (isLoading || Object.keys(results).length === 0) {
     return <ChartLoader />;
   }
 

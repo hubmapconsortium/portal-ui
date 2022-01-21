@@ -1,51 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { useTheme } from '@material-ui/core/styles';
 
 import Histogram from 'js/shared-styles/charts/Histogram';
-import CellsService from 'js/components/cells/CellsService';
 import ChartLoader from 'js/components/cells/ChartLoader';
 import { capitalizeString } from 'js/helpers/functions';
 
-function CellExpressionHistogram({
-  uuid,
-  cellVariableName,
-  isLoading,
-  finishLoading,
-  loadingKey,
-  isExpanded,
-  setDiagnosticInfo,
-  queryType,
-}) {
-  const [expressionData, setExpressionData] = useState([]);
+function CellExpressionHistogram({ isLoading, expressionData, queryType }) {
   const theme = useTheme();
-  const loadedOnce = useRef(false);
 
-  useEffect(() => {
-    async function fetchCellExpression() {
-      const t0 = performance.now();
-
-      const response = await new CellsService().getCellExpressionInDataset({
-        uuid,
-        cellVariableNames: [cellVariableName],
-      });
-      const t1 = performance.now();
-      const timeWaiting = (t1 - t0) / 1000;
-      const numCells = response.length;
-      setDiagnosticInfo({ numCells, timeWaiting });
-      setExpressionData(response.map((d) => d.values[cellVariableName]));
-      finishLoading(loadingKey);
-    }
-    if (loadedOnce.current) {
-      return;
-    }
-
-    if (isExpanded) {
-      fetchCellExpression();
-      loadedOnce.current = true;
-    }
-  }, [uuid, cellVariableName, finishLoading, loadingKey, isExpanded, setDiagnosticInfo]);
-
-  if (Object.values(isLoading).some((val) => val)) {
+  if (isLoading || Object.keys(expressionData).length === 0) {
     return <ChartLoader />;
   }
 
