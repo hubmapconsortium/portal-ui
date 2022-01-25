@@ -23,14 +23,7 @@ const StyledAlert = styled(OutlinedAlert)`
   :not(svg) {
     color: ${(props) => props.theme.palette.text.primary};
   }
-  margin-bottom: ${(props) => props.$marginBotton || 0}px;
+  margin-bottom: ${(props) => props.$marginBottom || 0}px;
 `;
 
-const DetailPageAlert = styled(StyledAlert)`
-  margin-bottom: ${(props) => props.theme.spacing(2)}px;
-  // Need to put this above the section container on the z-index stack due to the padding/margin offset fix for the anchor links.
-  position: relative;
-  z-index: ${(props) => props.theme.zIndex.interactiveContentAboveDetailSection};
-`;
-
-export { StyledAlert as Alert, DetailPageAlert };
+export { StyledAlert as Alert };

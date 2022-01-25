@@ -4,10 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
-import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 
 const totalHeightOffset = window.location.pathname.startsWith('/preview')
   ? headerHeight
@@ -20,19 +19,12 @@ const StyledHeader = styled.div`
   display: flex;
 `;
 
-const StyledHeaderText = styled(SectionHeader)`
-  margin-bottom: 0;
-  display: inline-block;
+const StyledSectionHeader = styled(SectionHeader)`
+  margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
 `;
 
-const StyledHeaderRight = styled.div`
-  margin-left: auto;
+const Flex = styled.div`
   display: flex;
-`;
-
-const StyledPaddedSectionContainer = styled(PaddedSectionContainer)`
-  z-index: ${(props) => props.theme.zIndex.visualization};
-  position: relative;
 `;
 
 const ExpandButton = styled(WhiteBackgroundIconButton)`
@@ -90,10 +82,9 @@ const bodyExpandedCSS = `
 export {
   vitessceFixedHeight,
   bodyExpandedCSS,
-  StyledPaddedSectionContainer,
   StyledHeader,
-  StyledHeaderText,
-  StyledHeaderRight,
+  StyledSectionHeader,
+  Flex,
   ExpandButton,
   ErrorSnackbar,
   VitessceInfoSnackbar,

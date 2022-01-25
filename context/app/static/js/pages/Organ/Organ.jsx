@@ -1,7 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 
@@ -11,6 +10,7 @@ import Description from 'js/components/organ/Description';
 import OrganInfo from 'js/components/organ/OrganInfo';
 import Samples from 'js/components/organ/Samples';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
+import Section from 'js/shared-styles/sections/Section';
 
 import { FlexRow, Content } from './style';
 
@@ -35,33 +35,35 @@ function Organ(props) {
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
       <Content>
-        <Typography variant="subtitle1" color="primary">
+        <Typography variant="subtitle1" component="h1" color="primary">
           Organ
         </Typography>
-        <SectionHeader variant="h1">{organ.name}</SectionHeader>
+        <Typography variant="h1" component="h2">
+          {organ.name}
+        </Typography>
         {shouldDisplaySection[descriptionId] && (
-          <div id={descriptionId}>
+          <Section id={descriptionId}>
             <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short}>
               {organ.description}
             </Description>
-          </div>
+          </Section>
         )}
         {shouldDisplaySection[organInfoId] && (
-          <div id={organInfoId}>
+          <Section id={organInfoId}>
             <OrganInfo uberonIri={organ.uberon} />
-          </div>
+          </Section>
         )}
         {shouldDisplaySection[azimuthId] && (
-          <div id={azimuthId}>
+          <Section id={azimuthId}>
             <Azimuth config={organ.azimuth} />
-          </div>
+          </Section>
         )}
         {shouldDisplaySection[searchId] && (
-          <div id={searchId}>
+          <Section id={searchId}>
             <Assays searchTerms={organ.search} />
             <DatasetsBarChart name={organ.name} search={organ.search} />
             <Samples searchTerms={organ.search} />
-          </div>
+          </Section>
         )}
       </Content>
     </FlexRow>

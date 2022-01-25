@@ -9,7 +9,6 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useSearchData from 'js/hooks/useSearchData';
 
@@ -59,7 +58,7 @@ function Assays(props) {
     : [];
 
   return (
-    <SectionContainer>
+    <>
       <SpacedSectionButtonRow
         leftText={
           <Flex>
@@ -98,7 +97,7 @@ function Assays(props) {
           ))}
         </EntitiesTable>
       </Paper>
-    </SectionContainer>
+    </>
   );
 }
 

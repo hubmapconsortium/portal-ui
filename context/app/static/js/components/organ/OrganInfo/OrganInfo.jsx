@@ -5,7 +5,6 @@ import Paper from '@material-ui/core/Paper';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 
 import { Flex, StyledInfoIcon } from '../style';
 
@@ -13,7 +12,7 @@ function OrganInfo(props) {
   const { uberonIri } = props;
 
   return (
-    <SectionContainer>
+    <>
       <Flex>
         <SectionHeader>Human Reference Atlas</SectionHeader>
         <SecondaryBackgroundTooltip title="Atlas provided by the Common Coordinate Framework (CCF).">
@@ -30,7 +29,7 @@ function OrganInfo(props) {
           scrolling="no"
         />
       </Paper>
-    </SectionContainer>
+    </>
   );
 }
 

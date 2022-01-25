@@ -1,7 +1,7 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
+import { DetailPageSection } from 'js/components/detailPage/style';
 import { StyledCenteredLoaderWrapper, StyledPaper } from './style';
 
 function DerivedEntitiesSectionWrapper({ isLoading, sectionId, children, headerComponent }) {
@@ -10,10 +10,10 @@ function DerivedEntitiesSectionWrapper({ isLoading, sectionId, children, headerC
       <CircularProgress />
     </StyledCenteredLoaderWrapper>
   ) : (
-    <PaddedSectionContainer id={sectionId}>
+    <DetailPageSection id={sectionId}>
       {headerComponent}
       <StyledPaper>{children}</StyledPaper>
-    </PaddedSectionContainer>
+    </DetailPageSection>
   );
 }
 

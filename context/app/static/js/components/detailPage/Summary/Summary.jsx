@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import PaddedSectionContainer from 'js/shared-styles/sections/PaddedSectionContainer';
+import { DetailPageSection } from 'js/components/detailPage/style';
 import SummaryData from '../SummaryData';
 import SummaryBody from '../SummaryBody';
 
@@ -25,7 +25,7 @@ function Summary(props) {
     mapped_external_group_name,
   } = props;
   return (
-    <PaddedSectionContainer id="summary">
+    <DetailPageSection id="summary">
       <SummaryData
         entity_type={entity_type}
         uuid={uuid}
@@ -47,7 +47,7 @@ function Summary(props) {
         doi={doi}
         collectionName={collectionName}
       />
-    </PaddedSectionContainer>
+    </DetailPageSection>
   );
 }
 

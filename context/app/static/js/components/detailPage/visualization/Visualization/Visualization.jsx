@@ -9,6 +9,8 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
+import { DetailPageSection } from 'js/components/detailPage/style';
+import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
@@ -17,16 +19,14 @@ import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import {
   vitessceFixedHeight,
   bodyExpandedCSS,
-  StyledPaddedSectionContainer,
-  StyledHeader,
-  StyledHeaderText,
-  StyledHeaderRight,
   ExpandButton,
   VitessceInfoSnackbar,
   ErrorSnackbar,
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
+  StyledSectionHeader,
+  Flex,
 } from './style';
 import { useVitessceConfig } from './hooks';
 import 'vitessce/dist/es/production/static/css/index.css';
@@ -50,10 +50,14 @@ const visualizationStoreSelector = (state) => ({
   onCopyUrlSnackbarOpen: state.onCopyUrlSnackbarOpen,
   setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
 });
-
-function Visualization(props) {
-  const { vitData, uuid, hasNotebook } = props;
-
+const sharedInfoSnackbarProps = {
+  anchorOrigin: {
+    vertical: 'top',
+    horizontal: 'center',
+  },
+  autoHideDuration: 4000,
+};
+function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
   const {
     vizIsFullscreen,
     expandViz,
@@ -104,67 +108,58 @@ function Visualization(props) {
       window.removeEventListener('keydown', onKeydown);
     };
   }, [collapseViz]);
+
   const isMultiDataset = Array.isArray(vitessceConfig);
 
   return (
     vitessceConfig &&
     // Don't render multi-datasets unless they have a selection from the list of options in vitessceConfig.
     (!isMultiDataset || Number.isInteger(vitessceSelection)) && (
-      <StyledPaddedSectionContainer id="visualization">
-        <StyledHeader>
-          <StyledHeaderText>Visualization</StyledHeaderText>
-          <StyledHeaderRight>
-            {hasNotebook && <VisualizationNotebookButton uuid={uuid} />}
-            <VisualizationShareButton />
-            <VisualizationThemeSwitch />
-            <SecondaryBackgroundTooltip title="Switch to Fullscreen">
-              <ExpandButton size="small" onClick={expandViz} variant="contained">
-                <FullscreenRoundedIcon color="primary" />
-              </ExpandButton>
-            </SecondaryBackgroundTooltip>
-            {isMultiDataset && (
-              <DropdownListbox
-                buttonComponent={SelectionButton}
-                optionComponent={DropdownListboxOption}
-                selectedOptionIndex={vitessceSelection}
-                options={vitessceConfig}
-                selectOnClick={setSelectionAndClearErrors}
-                getOptionLabel={(v) => v.name}
-                buttonProps={{ color: 'primary' }}
-                id="visualization-data"
-              />
-            )}
-          </StyledHeaderRight>
-        </StyledHeader>
+      <DetailPageSection id="visualization">
+        <SpacedSectionButtonRow
+          leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
+          buttons={
+            <Flex>
+              {hasNotebook && <VisualizationNotebookButton uuid={uuid} />}
+              <VisualizationShareButton />
+              <VisualizationThemeSwitch />
+              <SecondaryBackgroundTooltip title="Switch to Fullscreen">
+                <ExpandButton size="small" onClick={expandViz} variant="contained">
+                  <FullscreenRoundedIcon color="primary" />
+                </ExpandButton>
+              </SecondaryBackgroundTooltip>
+              {isMultiDataset && (
+                <DropdownListbox
+                  buttonComponent={SelectionButton}
+                  optionComponent={DropdownListboxOption}
+                  selectedOptionIndex={vitessceSelection}
+                  options={vitessceConfig}
+                  selectOnClick={setSelectionAndClearErrors}
+                  getOptionLabel={(v) => v.name}
+                  buttonProps={{ color: 'primary' }}
+                  id="visualization-data"
+                />
+              )}
+            </Flex>
+          }
+        />
         <Paper>
           <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme}>
             <VitessceInfoSnackbar
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
+              {...sharedInfoSnackbarProps}
               open={isVisibleFirefoxWarning}
-              autoHideDuration={4000}
               onClose={() => setIsVisibleFirefoxWarning(false)}
               message={FIREFOX_WARNING}
             />
             <VitessceInfoSnackbar
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
+              {...sharedInfoSnackbarProps}
               open={vizEscSnackbarIsOpen}
-              autoHideDuration={4000}
               onClose={() => setVizEscSnackbarIsOpen(false)}
               message="Press [esc] to exit full window."
             />
             <VitessceInfoSnackbar
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
+              {...sharedInfoSnackbarProps}
               open={onCopyUrlSnackbarOpen}
-              autoHideDuration={4000}
               $isWarning={onCopyUrlWarning}
               onClose={() => setOnCopyUrlSnackbarOpen(false)}
               message={`Shareable URL copied to clipboard. ${onCopyUrlWarning}`}
@@ -197,7 +192,7 @@ function Visualization(props) {
           <OutboundLink href="http://vitessce.io">Vitessce</OutboundLink>
         </StyledFooterText>
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
-      </StyledPaddedSectionContainer>
+      </DetailPageSection>
     )
   );
 }
