@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-
+const webpack = require('webpack');
 const { resolve } = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { alias } = require('./alias');
@@ -77,7 +77,13 @@ const config = {
       },
     ],
   },
-  plugins: [new CleanWebpackPlugin()],
+  plugins: [
+    new CleanWebpackPlugin(),
+    new webpack.DefinePlugin({
+      // update globals in eslintrc to fix undefined errors
+      IMAGES_CDN_ORIGIN: JSON.stringify('https://d3evp8qu4tjncp.cloudfront.net'),
+    }),
+  ],
 };
 
 module.exports = config;

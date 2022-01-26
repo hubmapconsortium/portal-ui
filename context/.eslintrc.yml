@@ -10,6 +10,8 @@ extends:
   - plugin:import/errors
   - plugin:import/warnings
 parser: "babel-eslint"
+globals:
+  IMAGES_CDN_ORIGIN: readonly
 plugins:
   - react
 settings:
