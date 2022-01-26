@@ -45,6 +45,7 @@ Resources:
           DefaultTTL: 86400
           TargetOriginId: !Sub 's3-origin-${S3Bucket}'
           ViewerProtocolPolicy: 'redirect-to-https'
+          ResponseHeadersPolicyId: !GetAtt CloudFrontResponseHeadersPolicy.Id
         Enabled: true
         HttpVersion: 'http2'
         IPV6Enabled: false
@@ -62,6 +63,17 @@ Resources:
       CloudFrontOriginAccessIdentityConfig:
         Comment: 'Access S3 bucket content only through CloudFront'
     Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
+
+  CloudFrontResponseHeadersPolicy:
+    Properties: 
+      ResponseHeadersPolicyConfig: 
+        Name: !Sub '${AWS::StackName}-response-headers-policy'
+        CustomHeadersConfig:
+          Items:
+            - Header: 'Cache-Control'
+              Value: 'max-age=1555200'
+              Override: false # s3 cache control will override if present
+    Type: AWS::CloudFront::ResponseHeadersPolicy
 
 Outputs:
   S3BucketName:
