@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 
-import { ReactComponent as Logo } from 'portal-images/hubmap-logo.svg';
+import { ReactComponent as Logo } from 'assets/svg/hubmap-logo.svg';
 
 const HubmapLogo = styled(Logo)`
   margin-right: 10px;
