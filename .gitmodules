@@ -4,6 +4,3 @@
 [submodule "context/app/markdown/docs"]
 	path = context/app/markdown/docs
 	url = https://github.com/hubmapconsortium/portal-docs.git
-[submodule "context/app/static/portal-images"]
-	path = context/app/static/portal-images
-	url = https://github.com/hubmapconsortium/portal-images.git
