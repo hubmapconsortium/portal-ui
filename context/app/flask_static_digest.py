@@ -1,5 +1,5 @@
 import json
-import os
+from pathlib import Path
 
 from flask import url_for as flask_url_for
 
@@ -12,21 +12,15 @@ class FlaskStaticDigest(object):
             self.init_app(app)
 
     def init_app(self, app):
-        self.manifest_path = os.path.join(app.static_folder, "public/", "manifest.json")
-        self.has_manifest = os.path.exists(self.manifest_path)
+        self.manifest_path = Path(app.static_folder) / 'public/manifest.json'
+        self.has_manifest = self.manifest_path.exists()
 
-        self.manifest = {}
-
-        if self.has_manifest:
-            self.manifest = self._load_manifest(app)
+        self.manifest = (
+            json.loads(self.manifest_path.read_text())
+            if self.has_manifest else {}
+        )
 
         app.add_template_global(self.static_url_for)
-
-    def _load_manifest(self, app):
-        with app.open_resource(self.manifest_path, "r") as f:
-            manifest_dict = json.load(f)
-
-        return manifest_dict
 
     def static_url_for(self, endpoint, **values):
         """
@@ -39,14 +33,10 @@ class FlaskStaticDigest(object):
         :return: Static file path.
         """
         filename = values.get("filename")
-        new_filename = {}
+        temp_filename = (
+            Path(self.manifest[filename]).name
+            if self.has_manifest else filename
+        )
 
-        if not self.has_manifest:
-            temp_filename = filename
-        else:
-            temp_filename = self.manifest.get(filename).split('/')[-1]
-
-        new_filename["filename"] = "/".join(["public", temp_filename])
-        merged_values = {**values, **new_filename}
-
-        return flask_url_for(endpoint, **merged_values)
+        values.update({'filename': 'public/' + temp_filename})
+        return flask_url_for(endpoint, **values)

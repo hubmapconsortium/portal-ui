@@ -1,0 +1,1 @@
+- Slightly gratuitous refactor in the flask internals.
