@@ -6,7 +6,7 @@ It is deployed at [portal.hubmapconsortium.org](https://portal.hubmapconsortium.
 
 The Data Portal depends, directly or indirectly, on many other HuBMAP repos:
 
-[![Repo diagram](https://docs.google.com/drawings/d/e/2PACX-1vQ1ISVanilVt3vewU6tekVirOxPpTsKMS3zXa8tL0J5JjdT9zS9adgXivm1ZcXxoyC_lctIlHVYhJuI/pub?w=922&amp;h=408)](https://docs.google.com/drawings/d/1q0IvliNTX0Xo9EzHTAoRZ2x1gatG_n0gOoLN7uVMJ4o/edit)
+[![Repo diagram](https://docs.google.com/drawings/d/e/2PACX-1vThwGinlSgVkqf782swQGHL8RAxPJ1JJfVRc4CrXmFJ0LY-ysFXY1yCGaYebWxTlc5ct0hwRlKIWt_D/pub?w=500)](https://docs.google.com/drawings/d/1IWjIlPytwHe5PAQCEwoTQI5mIhIK4EZ4USI6MVGFGNY/edit)
 
 ## Feedback
 
