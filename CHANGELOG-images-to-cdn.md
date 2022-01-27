@@ -1,0 +1,1 @@
+- Move move images to a cloudfront cdn with s3 origin.
