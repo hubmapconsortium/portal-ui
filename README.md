@@ -67,7 +67,7 @@ These are concatenated by `push.sh`.
 
 Images should displayed using the `source srcset` attribute. You should prepare four versions of the image starting at its original size and at 75%, 50% and 25% the original image's size preserving its aspect ratio. If available, you should also provide a 2x resolution for higher density screens. For example, to resize images using Mac's Preview you can visit the 'Tools' menu and select 'Adjust Size', from there you can change the image's width while making sure 'Scale Proportionally' and 'Resample Image' are checked. Once ready, each version of the image should be processed with an image optimizer such as ImgOptim.
 
-Finally after processing, the images should be added to the S3 bucket, `portal-ui-images-s3-origin`, to be delivered by the cloudfront CDN. SVG files larger than 5KB should also be stored in S3 and delivered by the CDN. SVG files smaller than 5KB can be included in the repository in `context/app/static/assets/svg/`.
+Finally after processing, the images should be added to the S3 bucket, `portal-ui-images-s3-origin`, to be delivered by the cloudfront CDN. SVG files larger than 5KB should also be stored in S3 and delivered by the CDN. SVG files smaller than 5KB can be included in the repository in `context/app/static/assets/svg/`. The CDN responds with a `cache-control: max-age=1555200` header for all items, but can be overridden on a per image basis by setting the `cache-control` header for the object in S3.
 
 For the homepage carousel, images should have a 16:9 aspect ratio, a width of at least 1400px, a title, a description, and, if desired, a url to be used for the 'Get Started' button.
 
