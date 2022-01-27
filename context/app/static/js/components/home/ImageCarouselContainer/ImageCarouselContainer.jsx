@@ -8,7 +8,7 @@ import ImageCarouselCallToAction from '../ImageCarouselCallToAction';
 import { Flex, CallToActionWrapper } from './style';
 import { getCarouselImageSrcSet } from './utils';
 
-const getCDNCarouselImageSrcSet = (key) => getCarouselImageSrcSet(key, IMAGES_CDN_ORIGIN);
+const getCDNCarouselImageSrcSet = (key) => getCarouselImageSrcSet(key, CDN_URL);
 
 function ImageCarouselContainer() {
   const slides = [

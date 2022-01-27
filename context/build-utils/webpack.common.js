@@ -81,7 +81,7 @@ const config = {
     new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       // update globals in eslintrc to fix undefined errors
-      IMAGES_CDN_ORIGIN: JSON.stringify('https://d3evp8qu4tjncp.cloudfront.net'),
+      CDN_URL: JSON.stringify('https://d3evp8qu4tjncp.cloudfront.net'),
     }),
   ],
 };

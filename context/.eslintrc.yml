@@ -11,7 +11,7 @@ extends:
   - plugin:import/warnings
 parser: "babel-eslint"
 globals:
-  IMAGES_CDN_ORIGIN: readonly
+  CDN_URL: readonly
 plugins:
   - react
 settings:
