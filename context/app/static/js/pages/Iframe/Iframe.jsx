@@ -16,7 +16,7 @@ function Switch() {
     case '/iframe/assay-barchart':
       return <HuBMAPDatasetsChart />;
     case '/iframe/organ':
-      return <ccf-organ-info organ-iri={iri} />;
+      return <ccf-organ-info organ-iri={iri} use-remote-api="true" />;
     default:
       throw new Error(`No iframe ${pathname}`);
   }
