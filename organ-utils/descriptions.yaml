@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 http://purl.obolibrary.org/obo/UBERON_0000995:
   name: Uterus
   description: The female muscular organ of gestation in which the developing embryo or fetus is nourished until birth
@@ -19,6 +20,11 @@ http://purl.obolibrary.org/obo/UBERON_0002367:
   name: Prostate
   description: The prostate gland is a partly muscular, partly glandular body that is situated near the base of the mammalian male urethra and secretes an alkaline viscid fluid which is a major constituent of the ejaculatory fluid.
 >>>>>>> mccalluc/prostate
+=======
+http://purl.obolibrary.org/obo/UBERON_0000992:
+  name: Ovary
+  description: The gonad of a female organism which contains germ cells.
+>>>>>>> mccalluc/ovary
 http://purl.obolibrary.org/obo/UBERON_0002097:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-skin.svg
   name: Skin
