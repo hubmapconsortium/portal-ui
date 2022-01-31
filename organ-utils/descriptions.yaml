@@ -62,6 +62,9 @@ http://purl.obolibrary.org/obo/UBERON_0002113:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-kidney.svg
   name: Kidney
   description: A paired organ of the urinary tract which has the production of urine as its primary function.
+http://purl.obolibrary.org/obo/UBERON_0001465:
+  name: Knee
+  description: A segment of the hindlimb that corresponds to the joint connecting a hindlimb stylopod and zeugopod.
 http://purl.obolibrary.org/obo/UBERON_0002106:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spleen.svg
   name: Spleen
