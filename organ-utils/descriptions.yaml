@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 http://purl.obolibrary.org/obo/UBERON_0000995:
   name: Uterus
   description: The female muscular organ of gestation in which the developing embryo or fetus is nourished until birth
@@ -7,6 +8,11 @@ http://purl.obolibrary.org/obo/UBERON_0001255:
   name: Bladder
   description: Distensible musculomembranous organ situated in the anterior part of the pelvic cavity in which urine collects before excretion.
 >>>>>>> mccalluc/bladder
+=======
+http://purl.obolibrary.org/obo/UBERON_0000056:
+  name: Ureter
+  description: Muscular duct that propels urine from the kidneys to the urinary bladder, or related organs.
+>>>>>>> mccalluc/ureter
 http://purl.obolibrary.org/obo/UBERON_0002097:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-skin.svg
   name: Skin
