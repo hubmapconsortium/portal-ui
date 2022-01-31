@@ -1,48 +1,27 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 http://purl.obolibrary.org/obo/UBERON_0000995:
   name: Uterus
   description: The female muscular organ of gestation in which the developing embryo or fetus is nourished until birth
-=======
 http://purl.obolibrary.org/obo/UBERON_0001255:
   name: Bladder
   description: Distensible musculomembranous organ situated in the anterior part of the pelvic cavity in which urine collects before excretion.
->>>>>>> mccalluc/bladder
-=======
 http://purl.obolibrary.org/obo/UBERON_0000056:
   name: Ureter
   description: Muscular duct that propels urine from the kidneys to the urinary bladder, or related organs.
->>>>>>> mccalluc/ureter
-=======
 http://purl.obolibrary.org/obo/UBERON_0002367:
   name: Prostate
   description: The prostate gland is a partly muscular, partly glandular body that is situated near the base of the mammalian male urethra and secretes an alkaline viscid fluid which is a major constituent of the ejaculatory fluid.
->>>>>>> mccalluc/prostate
-=======
 http://purl.obolibrary.org/obo/UBERON_0000992:
   name: Ovary
   description: The gonad of a female organism which contains germ cells.
->>>>>>> mccalluc/ovary
-=======
 http://purl.obolibrary.org/obo/UBERON_0002107:
   name: Liver
   description: An exocrine gland which secretes bile and functions in metabolism of protein and carbohydrate and fat, synthesizes substances involved in the clotting of the blood, synthesizes vitamin A, detoxifies poisonous substances, stores glycogen, and breaks down worn-out erythrocytes.
->>>>>>> mccalluc/liver
-=======
 http://purl.obolibrary.org/obo/UBERON_0003889:
   name: Fallopian Tube
   description: Initial section of the oviduct through which the ova pass from the ovary to the uterus.
->>>>>>> mccalluc/fallopian
-=======
 http://purl.obolibrary.org/obo/UBERON_0000970:
   name: Eye
   description: An organ that detects light.
->>>>>>> mccalluc/eye
 http://purl.obolibrary.org/obo/UBERON_0002097:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-skin.svg
   name: Skin
