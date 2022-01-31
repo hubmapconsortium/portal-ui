@@ -1,0 +1,1 @@
+- Remove section in the changelog about deployment to Chromatic: We've dropped that.
