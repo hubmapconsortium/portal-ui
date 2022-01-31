@@ -4,6 +4,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 http://purl.obolibrary.org/obo/UBERON_0000995:
   name: Uterus
   description: The female muscular organ of gestation in which the developing embryo or fetus is nourished until birth
@@ -37,6 +38,11 @@ http://purl.obolibrary.org/obo/UBERON_0003889:
   name: Fallopian Tube
   description: Initial section of the oviduct through which the ova pass from the ovary to the uterus.
 >>>>>>> mccalluc/fallopian
+=======
+http://purl.obolibrary.org/obo/UBERON_0000970:
+  name: Eye
+  description: An organ that detects light.
+>>>>>>> mccalluc/eye
 http://purl.obolibrary.org/obo/UBERON_0002097:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-skin.svg
   name: Skin
