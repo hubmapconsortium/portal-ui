@@ -1,3 +1,11 @@
+## v0.36.1 - 2022-01-27
+
+- Add automated checking for security vulnerabilities in python and js.
+- Slightly gratuitous refactor in the flask internals.
+- Move move images to a cloudfront cdn with s3 origin.
+- Fix table of contents links for organ pages.
+
+
 ## v0.36.0 - 2022-01-20
 
 - On dev-search, add a facet showing the file descriptions available.

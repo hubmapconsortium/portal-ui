@@ -1,1 +1,0 @@
-- Fix table of contents links for organ pages.

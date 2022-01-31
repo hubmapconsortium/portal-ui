@@ -2,6 +2,7 @@
 const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { alias } = require('./alias');
 
 const maintenancePath = './app/static/js/maintenance/';
 
@@ -16,12 +17,7 @@ const config = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml', '.html'],
-    alias: {
-      'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
-      js: resolve(__dirname, '../app/static/js/'),
-      'portal-images': resolve(__dirname, '../app/static/portal-images/'),
-      'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
-    },
+    alias,
   },
   module: {
     rules: [

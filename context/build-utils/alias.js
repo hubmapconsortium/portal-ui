@@ -5,10 +5,10 @@ const alias = {
   'metadata-field-descriptions$': resolve('./ingest-validation-tools/docs/field-descriptions.yaml'),
   'metadata-field-types$': resolve('./ingest-validation-tools/docs/field-types.yaml'),
   js: resolve(__dirname, '../app/static/js/'),
-  'portal-images': resolve(__dirname, '../app/static/portal-images/'),
+  assets: resolve(__dirname, '../app/static/assets/'),
   'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
   package: resolve(__dirname, '../package.json'),
-  'txml/txml': 'txml/dist/txml'
+  'txml/txml': 'txml/dist/txml',
 };
 
 exports.alias = alias;
