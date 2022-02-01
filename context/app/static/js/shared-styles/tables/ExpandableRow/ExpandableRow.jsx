@@ -1,32 +1,38 @@
 import React, { useRef } from 'react';
 import TableRow from '@material-ui/core/TableRow';
-import IconButton from '@material-ui/core/IconButton';
-import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
-import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
+
 import { animated } from 'react-spring';
 
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { useExpandSpring } from 'js/hooks/useExpand';
+import ExpandCollapseIconButton from 'js/shared-styles/buttons/ExpandCollapseIconButton';
+import DisabledButtonTooltip from 'js/shared-styles/tooltips/DisabledButtonTooltip';
 import { Provider, createStore, useStore } from './store';
 import { ExpandedRow, ExpandedCell } from './style';
 
-function ExpandableRowChild({ children, numCells, expandedContent }) {
+function ExpandableRowChild({ children, numCells, expandedContent, disabled, buttonTooltipTitle }) {
   const { isExpanded, toggleIsExpanded } = useStore();
   const heightRef = useRef(null);
   const styles = useExpandSpring(heightRef, 0, isExpanded);
+
+  const iconButtonProps = {
+    onClick: toggleIsExpanded,
+    isExpanded,
+    'aria-label': 'expand row',
+  };
 
   return (
     <>
       <TableRow>
         {children}
         <ExpandableRowCell>
-          <IconButton onClick={toggleIsExpanded} aria-label="expand row">
-            {isExpanded ? (
-              <ArrowDropUpRoundedIcon data-testid="up-arrow-icon" />
-            ) : (
-              <ArrowDropDownRoundedIcon data-testid="down-arrow-icon" />
-            )}
-          </IconButton>
+          {disabled ? (
+            <DisabledButtonTooltip title={buttonTooltipTitle}>
+              <ExpandCollapseIconButton {...iconButtonProps} disabled />
+            </DisabledButtonTooltip>
+          ) : (
+            <ExpandCollapseIconButton {...iconButtonProps} />
+          )}
         </ExpandableRowCell>
       </TableRow>
       <ExpandedRow $isExpanded={isExpanded}>
