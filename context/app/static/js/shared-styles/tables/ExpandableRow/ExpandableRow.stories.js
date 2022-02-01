@@ -1,20 +1,12 @@
 import React from 'react';
 
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
-import ExpandableRowComponent from './ExpandableRow';
+import ExpandableRow from './ExpandableRow';
 
 export default {
   title: 'Tables/ExpandableRow',
-  component: ExpandableRowComponent,
+  component: ExpandableRow,
 };
-
-export const ExpandableRow = (args) => (
-  <ExpandableRowComponent {...args}>
-    <ExpandableRowCell>A</ExpandableRowCell>
-    <ExpandableRowCell>B</ExpandableRowCell>
-    <ExpandableRowCell>C</ExpandableRowCell>
-  </ExpandableRowComponent>
-);
 
 function Content({ heightRef }) {
   return (
@@ -25,9 +17,32 @@ function Content({ heightRef }) {
     </div>
   );
 }
-ExpandableRow.args = {
+const Template = (args) => (
+  <ExpandableRow {...args}>
+    <ExpandableRowCell>A</ExpandableRowCell>
+    <ExpandableRowCell>B</ExpandableRowCell>
+    <ExpandableRowCell>C</ExpandableRowCell>
+  </ExpandableRow>
+);
+
+const sharedArgs = {
   numCells: 4,
   expandedContent: <Content />,
 };
 
-ExpandableRow.storyName = 'ExpandableRow'; // needed for single story hoisting for multi word component names
+export const Default = Template.bind({});
+Default.args = sharedArgs;
+
+export const Disabled = Template.bind({});
+
+Disabled.args = {
+  ...sharedArgs,
+  disabled: true,
+};
+
+export const DisabledWithTooltip = Template.bind({});
+DisabledWithTooltip.args = {
+  ...sharedArgs,
+  disabled: true,
+  buttonTooltipTitle: "Can't open now.",
+};
