@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import CellsService from 'js/components/cells/CellsService';
+import useCellsChartLoadingStore from 'js/stores/useCellsChartLoadingStore';
 
 async function fetchCellsChartsData({ uuid, cellVariableName, minExpression }) {
   const cs = new CellsService();
@@ -32,17 +33,25 @@ async function fetchCellsChartsData({ uuid, cellVariableName, minExpression }) {
   return { expressionData, clusterData };
 }
 
-function useCellsChartsData({ uuid, cellVariableName, minExpression, isExpanded }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [diagnosticInfo, setDiagnosticInfo] = useState();
+const storeSelector = (state) => ({
+  loadingUUID: state.loadingUUID,
+  setLoadingUUID: state.setLoadingUUID,
+  fetchedUUIDs: state.fetchedUUIDs,
+  addFetchedUUID: state.addFetchedUUID,
+});
 
-  const loadedOnce = useRef(false);
+function useCellsChartsData({ uuid, cellVariableName, minExpression, isExpanded }) {
+  const { loadingUUID, setLoadingUUID, addFetchedUUID, fetchedUUIDs } = useCellsChartLoadingStore(storeSelector);
+
+  const [diagnosticInfo, setDiagnosticInfo] = useState();
 
   const [cellsData, setCellsData] = useState({});
 
+  const isLoading = loadingUUID === uuid;
+
   useEffect(() => {
     async function getChartData() {
-      setIsLoading(true);
+      setLoadingUUID(uuid);
       const t0 = performance.now();
       const { expressionData, clusterData } = await fetchCellsChartsData({ uuid, cellVariableName, minExpression });
       const t1 = performance.now();
@@ -50,17 +59,17 @@ function useCellsChartsData({ uuid, cellVariableName, minExpression, isExpanded 
       const numCells = 200; // use actual n
       setDiagnosticInfo({ numCells, timeWaiting });
       setCellsData({ expressionData, clusterData });
-      setIsLoading(false);
-      loadedOnce.current = true;
+      addFetchedUUID(uuid); // state updates aren't batched in promises until react 18. addFetchedUUID must be called before setLoadingUUID to avoid multiple requests.
+      setLoadingUUID(null);
     }
-    if (loadedOnce.current) {
+    if (fetchedUUIDs.has(uuid) || isLoading) {
       return;
     }
 
     if (isExpanded) {
       getChartData();
     }
-  }, [cellVariableName, isExpanded, minExpression, uuid]);
+  }, [addFetchedUUID, cellVariableName, fetchedUUIDs, isExpanded, isLoading, minExpression, setLoadingUUID, uuid]);
 
   return { isLoading, diagnosticInfo, cellsData };
 }

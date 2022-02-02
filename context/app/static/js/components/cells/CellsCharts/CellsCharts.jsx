@@ -17,32 +17,36 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType, heightR
 
   return (
     <div ref={heightRef}>
-      <Flex>
-        <ChartWrapper $flexBasis={45}>
-          <ChartLoader isLoading={isLoading}>
-            <CellExpressionHistogram
-              queryType={queryType}
-              expressionData={
-                'expressionData' in cellsData ? cellsData.expressionData.map((d) => d.values[cellVariableName]) : {}
-              }
-            />
-          </ChartLoader>
-        </ChartWrapper>
-        <ChartWrapper $flexBasis={55}>
-          <ChartLoader isLoading={isLoading}>
-            <DatasetClusterChart uuid={uuid} results={'clusterData' in cellsData ? cellsData.clusterData : {}} />
-          </ChartLoader>
-        </ChartWrapper>
-      </Flex>
-      <StyledTypography>
-        {diagnosticInfo ? (
-          `${diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for ${
-            diagnosticInfo.numCells
-          } cells.`
-        ) : (
-          <Skeleton />
-        )}
-      </StyledTypography>
+      {(isLoading || Object.keys(cellsData).length > 0) && (
+        <>
+          <Flex>
+            <ChartWrapper $flexBasis={45}>
+              <ChartLoader isLoading={isLoading}>
+                <CellExpressionHistogram
+                  queryType={queryType}
+                  expressionData={
+                    'expressionData' in cellsData ? cellsData.expressionData.map((d) => d.values[cellVariableName]) : {}
+                  }
+                />
+              </ChartLoader>
+            </ChartWrapper>
+            <ChartWrapper $flexBasis={55}>
+              <ChartLoader isLoading={isLoading}>
+                <DatasetClusterChart uuid={uuid} results={'clusterData' in cellsData ? cellsData.clusterData : {}} />
+              </ChartLoader>
+            </ChartWrapper>
+          </Flex>
+          <StyledTypography>
+            {diagnosticInfo ? (
+              `${diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for ${
+                diagnosticInfo.numCells
+              } cells.`
+            ) : (
+              <Skeleton />
+            )}
+          </StyledTypography>
+        </>
+      )}
     </div>
   );
 }
