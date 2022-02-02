@@ -1,0 +1,1 @@
+- Update the view conf builder: Details formerly pulled from the Flask context are now provided explicitly.
