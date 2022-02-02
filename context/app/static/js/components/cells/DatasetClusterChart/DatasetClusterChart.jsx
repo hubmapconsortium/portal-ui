@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import Button from '@material-ui/core/Button';
 import { useTheme } from '@material-ui/core/styles';
@@ -13,10 +13,8 @@ import DatasetClusterTooltip from 'js/components/cells/DatasetClusterTooltip';
 import { getOptionLabels } from './utils';
 
 function DatasetClusterChart({ uuid, results }) {
-  const [scales, setScales] = useState({});
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useSelectedDropdownIndex(0);
   const theme = useTheme();
-  const [optionLabels, setOptionLabels] = useState({});
 
   const chartMargin = {
     top: 25,
@@ -25,32 +23,23 @@ function DatasetClusterChart({ uuid, results }) {
     bottom: 100, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
   };
 
-  useEffect(() => {
-    if (Object.keys(results).length) {
-      const selectedData = results[Object.keys(results)[selectedClusterTypeIndex]];
-      const yScale = scaleLinear({
-        domain: [0, Math.max(...selectedData.map((result) => result.matched + result.unmatched))],
-        nice: true,
-      });
+  const selectedData = results[Object.keys(results)[selectedClusterTypeIndex]];
+  const yScale = scaleLinear({
+    domain: [0, Math.max(...selectedData.map((result) => result.matched + result.unmatched))],
+    nice: true,
+  });
 
-      const xScale = scaleBand({
-        domain: selectedData.map((result) => result.cluster_number).sort((a, b) => a - b),
-        padding: 0.2,
-      });
-
-      setScales({
-        selectedData,
-        yScale,
-        xScale,
-      });
-      setOptionLabels(getOptionLabels(Object.keys(results), uuid));
-    }
-  }, [setScales, results, selectedClusterTypeIndex, uuid]);
+  const xScale = scaleBand({
+    domain: selectedData.map((result) => result.cluster_number).sort((a, b) => a - b),
+    padding: 0.2,
+  });
 
   const colorScale = scaleOrdinal({
     domain: ['matched', 'unmatched'],
     range: [theme.palette.warning.dark, theme.palette.warning.light],
   });
+
+  const optionLabels = getOptionLabels(Object.keys(results), uuid);
 
   return (
     <ChartWrapper
@@ -74,9 +63,9 @@ function DatasetClusterChart({ uuid, results }) {
       }
     >
       <VerticalStackedBarChart
-        visxData={scales.selectedData}
-        yScale={scales.yScale}
-        xScale={scales.xScale}
+        visxData={selectedData}
+        yScale={yScale}
+        xScale={xScale}
         colorScale={colorScale}
         getX={(x) => x.cluster_number}
         keys={['matched', 'unmatched']}
