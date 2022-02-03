@@ -19,12 +19,12 @@ async function fetchCellsChartsData({ uuid, cellVariableName, minExpression }) {
     [expressionURL, clusterURL].map(async (url) => {
       const response = await fetch(url, { method: 'POST' });
       if (!response.ok) {
-        throw Error('Expected "message" or "results"');
+        throw Error(`POST failed: ${url}`);
       }
 
       const json = await response.json();
       if ('message' in json) {
-        throw Error(json.message);
+        throw Error(`POST failed: ${url}: ${json.message}`);
       }
       return json.results;
     }),
