@@ -120,6 +120,7 @@ const theme = createMuiTheme({
     dropdownOffset: 1001,
     entityHeader: 1000,
     dropdown: 50,
+    visualization: 3,
     fileBrowserHeader: 1,
   },
 });
