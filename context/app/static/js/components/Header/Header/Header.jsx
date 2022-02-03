@@ -30,7 +30,7 @@ function Header() {
       >
         <HeaderContent anchorRef={anchorRef} />
       </HeaderAppBar>
-      {displayEntityHeader && <EntityHeader />}
+      {(displayEntityHeader || vizIsFullscreen) && <EntityHeader />}
     </>
   );
 }
