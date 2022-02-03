@@ -1,22 +1,14 @@
 ## v0.37.0 - 2022-02-03
 
-- Add liver.
-- Add bladder.
+- Add liver, bladder, eye, fallopian tube, knee, ovary, prostate, ureter, and uterus to the organs list.
 - Updates to support CCF EUI v3.0
 - Remove section in the changelog about deployment to Chromatic: We've dropped that.
 - In dev-search, group the file descriptions by assay type: As the UI develops,
   this will give us a better idea where each description is coming from.
 - Update README diagram.
-- Add eye to the organs list.
-- Add fallopian tube.
-- Add knee to the organs list.
 - Only allow requests for one set of cells charts a time.
-- Add ovary.
-- Add prostate.
 - Update the release protocol.
 - Pull visualization code into submodule.
-- Add ureter.
-- Add uterus.
 
 
 ## v0.36.1 - 2022-01-27
