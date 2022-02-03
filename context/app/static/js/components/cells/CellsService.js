@@ -54,31 +54,36 @@ class CellsService {
     return this.fetchAndParse(`/cells/cell-percentages-for-datasets.json?${urlParams}`);
   }
 
-  async getCellExpressionInDataset(props) {
-    const { uuid, cellVariableNames } = props;
+  getCellExpressionInDatasetURL({ uuid, cellVariableNames }) {
     const urlParams = new URLSearchParams();
 
     urlParams.append('uuid', uuid);
     cellVariableNames.forEach((name) => {
       urlParams.append('cell_variable_names', name);
     });
+    return `/cells/cell-expression-in-dataset.json?${urlParams}`;
+  }
 
-    return this.fetchAndParse(`/cells/cell-expression-in-dataset.json?${urlParams}`);
+  async getCellExpressionInDataset(props) {
+    return this.fetchAndParse(this.getCellExpressionInDatasetURL(props));
   }
 
   async getAllIndexedUUIDs() {
     return this.fetchAndParse(`/cells/all-indexed-uuids.json`);
   }
 
-  async getClusterCellMatchesInDataset(props) {
-    const { uuid, cellVariableName, minExpression } = props;
+  getClusterCellMatchesInDatasetURL({ uuid, cellVariableName, minExpression }) {
     const urlParams = new URLSearchParams();
 
     urlParams.append('uuid', uuid);
     urlParams.append('cell_variable_name', cellVariableName);
     urlParams.append('min_expression', minExpression);
 
-    return this.fetchAndParse(`/cells/cells-in-dataset-clusters.json?${urlParams}`);
+    return `/cells/cells-in-dataset-clusters.json?${urlParams}`;
+  }
+
+  async getClusterCellMatchesInDataset(props) {
+    return this.fetchAndParse(this.getClusterCellMatchesInDatasetURL(props));
   }
 }
 

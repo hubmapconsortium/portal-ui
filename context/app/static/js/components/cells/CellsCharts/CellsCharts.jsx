@@ -1,63 +1,50 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import DatasetClusterChart from 'js/components/cells/DatasetClusterChart';
 import CellExpressionHistogram from 'js/components/cells/CellExpressionHistogram';
-import Skeleton from '@material-ui/lab/Skeleton';
-
+import ChartLoader from 'js/shared-styles/charts/ChartLoader/ChartLoader';
+import { useCellsChartsData } from './hooks';
 import { Flex, ChartWrapper, StyledTypography } from './style';
 
 function CellsCharts({ uuid, cellVariableName, minExpression, queryType, heightRef, isExpanded }) {
-  const histogramKey = 'cell-histogram';
-  const clusterChartKey = 'cluster-bar';
-  const [isLoading, setIsLoading] = useState({ [histogramKey]: true, [clusterChartKey]: true });
-  const [diagnosticInfo, setDiagnosticInfo] = useState();
+  const { isLoading, diagnosticInfo, cellsData } = useCellsChartsData({
+    uuid,
+    cellVariableName,
+    minExpression,
+    isExpanded,
+  });
 
-  const finishLoading = useCallback((key) => {
-    setIsLoading((prevState) => {
-      return {
-        ...prevState,
-        [key]: false,
-      };
-    });
-  }, []);
+  const expressionData = 'expressionData' in cellsData ? cellsData.expressionData : {};
+  const clusterData = 'clusterData' in cellsData ? cellsData.clusterData : {};
 
   return (
     <div ref={heightRef}>
-      <Flex>
-        <ChartWrapper $flexBasis={45}>
-          <CellExpressionHistogram
-            uuid={uuid}
-            cellVariableName={cellVariableName}
-            isLoading={isLoading}
-            finishLoading={finishLoading}
-            loadingKey={histogramKey}
-            isExpanded={isExpanded}
-            setDiagnosticInfo={setDiagnosticInfo}
-            queryType={queryType}
-          />
-        </ChartWrapper>
-        <ChartWrapper $flexBasis={55}>
-          <DatasetClusterChart
-            uuid={uuid}
-            cellVariableName={cellVariableName}
-            minExpression={minExpression}
-            queryType={queryType}
-            isLoading={isLoading}
-            finishLoading={finishLoading}
-            loadingKey={clusterChartKey}
-            isExpanded={isExpanded}
-          />
-        </ChartWrapper>
-      </Flex>
-      <StyledTypography>
-        {diagnosticInfo ? (
-          `${diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for ${
-            diagnosticInfo.numCells
-          } cells.`
-        ) : (
-          <Skeleton />
-        )}
-      </StyledTypography>
+      {(isLoading || Object.keys(cellsData).length > 0) && (
+        <>
+          <Flex>
+            <ChartWrapper $flexBasis={45}>
+              <ChartLoader isLoading={isLoading}>
+                <CellExpressionHistogram queryType={queryType} expressionData={expressionData} />
+              </ChartLoader>
+            </ChartWrapper>
+            <ChartWrapper $flexBasis={55}>
+              <ChartLoader isLoading={isLoading}>
+                <DatasetClusterChart uuid={uuid} results={clusterData} />
+              </ChartLoader>
+            </ChartWrapper>
+          </Flex>
+          <StyledTypography>
+            {diagnosticInfo ? (
+              `${diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for ${
+                diagnosticInfo.numCells
+              } cells.`
+            ) : (
+              <Skeleton />
+            )}
+          </StyledTypography>
+        </>
+      )}
     </div>
   );
 }

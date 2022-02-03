@@ -7,7 +7,7 @@ function useExpandTransition(ref, initialElementHeight, optionalConfig) {
   return useTransition(true, null, {
     from: { opacity: 0, height: initialElementHeight, overflowY: 'hidden' },
     enter: { opacity: 1, height },
-    config: optionalConfig || config.default,
+    config: optionalConfig || { ...config.gentle, clamp: true },
     update: { height },
   });
 }
@@ -18,7 +18,7 @@ function useExpandSpring(ref, initialElementHeight, toggle, optionalConfig) {
     overflowY: 'hidden',
     height: toggle ? height : initialElementHeight,
     opacity: toggle ? 1 : 0,
-    config: optionalConfig || config.default,
+    config: optionalConfig || { ...config.gentle, clamp: true },
   });
 }
 export { useExpandTransition, useExpandSpring };
