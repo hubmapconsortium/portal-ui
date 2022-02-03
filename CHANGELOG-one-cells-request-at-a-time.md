@@ -1,1 +1,0 @@
-- Only allow requests for one set of cells charts a time.
