@@ -14,12 +14,14 @@ const visualizationSelector = (state) => ({
 function Header() {
   const anchorRef = useRef(null);
   const { summaryInView, summaryEntry } = useEntityStore(entityStoreSelector);
-  const displayEntityHeader =
-    summaryEntry &&
-    window.location.pathname.startsWith('/browse') &&
-    !window.location.pathname.startsWith('/browse/collection');
-
   const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
+
+  const displayEntityHeader =
+    (summaryEntry &&
+      window.location.pathname.startsWith('/browse') &&
+      !window.location.pathname.startsWith('/browse/collection')) ||
+    vizIsFullscreen;
+
 
   return (
     <>
@@ -30,7 +32,7 @@ function Header() {
       >
         <HeaderContent anchorRef={anchorRef} />
       </HeaderAppBar>
-      {(displayEntityHeader || vizIsFullscreen) && <EntityHeader />}
+      {displayEntityHeader && <EntityHeader />}
     </>
   );
 }
