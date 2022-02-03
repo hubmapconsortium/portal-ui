@@ -56,7 +56,7 @@ function useCellsChartsData({ uuid, cellVariableName, minExpression, isExpanded 
       const { expressionData, clusterData } = await fetchCellsChartsData({ uuid, cellVariableName, minExpression });
       const t1 = performance.now();
       setDiagnosticInfo({ numCells: expressionData.length, timeWaiting: (t1 - t0) / 1000 });
-      setCellsData({ expressionData, clusterData });
+      setCellsData({ expressionData: expressionData.map((d) => d.values[cellVariableName]), clusterData });
       addFetchedUUID(uuid); // state updates aren't batched in promises until react 18. addFetchedUUID must be called before setLoadingUUID to avoid multiple requests.
       setLoadingUUID(null);
     }

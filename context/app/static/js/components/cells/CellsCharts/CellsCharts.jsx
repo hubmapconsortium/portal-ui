@@ -15,6 +15,9 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType, heightR
     isExpanded,
   });
 
+  const expressionData = 'expressionData' in cellsData ? cellsData.expressionData : {};
+  const clusterData = 'clusterData' in cellsData ? cellsData.clusterData : {};
+
   return (
     <div ref={heightRef}>
       {(isLoading || Object.keys(cellsData).length > 0) && (
@@ -22,17 +25,12 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType, heightR
           <Flex>
             <ChartWrapper $flexBasis={45}>
               <ChartLoader isLoading={isLoading}>
-                <CellExpressionHistogram
-                  queryType={queryType}
-                  expressionData={
-                    'expressionData' in cellsData ? cellsData.expressionData.map((d) => d.values[cellVariableName]) : {}
-                  }
-                />
+                <CellExpressionHistogram queryType={queryType} expressionData={expressionData} />
               </ChartLoader>
             </ChartWrapper>
             <ChartWrapper $flexBasis={55}>
               <ChartLoader isLoading={isLoading}>
-                <DatasetClusterChart uuid={uuid} results={'clusterData' in cellsData ? cellsData.clusterData : {}} />
+                <DatasetClusterChart uuid={uuid} results={clusterData} />
               </ChartLoader>
             </ChartWrapper>
           </Flex>
