@@ -27,11 +27,15 @@ function EntityHeaderContent({ hubmap_id, entity_type, data, shouldDisplayHeader
     ({ item, key, props }) =>
       item && (
         <AnimatedFlexContainer style={props} key={key} maxWidth={vizIsFullscreen ? false : 'lg'}>
-          {iconMap[entity_type]}
-          <EntityHeaderItem text={hubmap_id} />
-          {Object.entries(data).map(([k, v]) => (
-            <EntityHeaderItem text={v.value || `undefined ${v.label}`} key={k} />
-          ))}
+          {entity_type && (
+            <>
+              {iconMap[entity_type]}
+              <EntityHeaderItem text={hubmap_id} />
+              {Object.entries(data).map(([k, v]) => (
+                <EntityHeaderItem text={v.value || `undefined ${v.label}`} key={k} />
+              ))}
+            </>
+          )}
           {vizIsFullscreen && (
             <RightDiv>
               <VisualizationShareButtonWrapper />
