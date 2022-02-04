@@ -9,7 +9,6 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
-import { DetailPageSection } from 'js/components/detailPage/style';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
@@ -27,6 +26,7 @@ import {
   SelectionButton,
   StyledSectionHeader,
   Flex,
+  StyledDetailPageSection,
 } from './style';
 import { useVitessceConfig } from './hooks';
 import 'vitessce/dist/es/production/static/css/index.css';
@@ -115,7 +115,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
     vitessceConfig &&
     // Don't render multi-datasets unless they have a selection from the list of options in vitessceConfig.
     (!isMultiDataset || Number.isInteger(vitessceSelection)) && (
-      <DetailPageSection id="visualization">
+      <StyledDetailPageSection id="visualization" $vizIsFullscreen={vizIsFullscreen}>
         <SpacedSectionButtonRow
           leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           buttons={
@@ -192,7 +192,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
           <OutboundLink href="http://vitessce.io">Vitessce</OutboundLink>
         </StyledFooterText>
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
-      </DetailPageSection>
+      </StyledDetailPageSection>
     )
   );
 }

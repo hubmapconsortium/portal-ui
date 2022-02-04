@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -7,6 +7,7 @@ import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import { DetailPageSection } from 'js/components/detailPage/style';
 
 const totalHeightOffset = window.location.pathname.startsWith('/preview')
   ? headerHeight
@@ -73,7 +74,16 @@ const StyledFooterText = styled(Typography)`
   text-align: right;
 `;
 
-const bodyExpandedCSS = `
+const StyledDetailPageSection = styled(DetailPageSection)`
+  ${(props) =>
+    props.$vizIsFullscreen &&
+    css`
+      z-index: ${props.theme.zIndex.visualization};
+      position: relative;
+    `}
+`;
+
+const bodyExpandedCSS = css`
   body {
     overflow: hidden;
   }
@@ -91,4 +101,5 @@ export {
   ExpandableDiv,
   StyledFooterText,
   SelectionButton,
+  StyledDetailPageSection,
 };
