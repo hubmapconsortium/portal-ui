@@ -1,2 +1,0 @@
-- Fix overlap when viewing Vitessce in fullscreen.
-- Display subheader when Vitessce is fullscreen on any page.

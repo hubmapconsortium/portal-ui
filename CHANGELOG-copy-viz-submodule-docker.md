@@ -1,1 +1,0 @@
-- Copy portal-visualization submodule in dockerfile.

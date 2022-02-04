@@ -1,3 +1,10 @@
+## v0.37.1 - 2022-02-04
+
+- Copy portal-visualization submodule in dockerfile.
+- Fix overlap when viewing Vitessce in fullscreen.
+- Display subheader when Vitessce is fullscreen on any page.
+
+
 ## v0.37.0 - 2022-02-03
 
 - Add liver, bladder, eye, fallopian tube, knee, ovary, prostate, ureter, and uterus to the organs list.
