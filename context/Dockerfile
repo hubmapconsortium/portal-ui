@@ -12,6 +12,7 @@ COPY .babelrc .babelrc
 COPY build-utils build-utils
 COPY app app
 COPY ingest-validation-tools ingest-validation-tools
+COPY portal-visualization portal-visualization
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
