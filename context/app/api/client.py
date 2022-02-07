@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from flask import abort, current_app
 import requests
 
+from hubmap_commons.type_client import TypeClient
+
 from .vitessce_conf_builder.builder_factory import get_view_config_builder
 from .vitessce_conf_builder.builders.base_builders import ConfCells
 
@@ -157,8 +159,11 @@ class ApiClient():
         # Otherwise, just try to visualize the data for the entity itself:
         else:
             try:
-                Builder = get_view_config_builder(entity=entity)
-                builder = Builder(entity, self.groups_token)
+                def get_assay(name):
+                    type_client = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
+                    return type_client.getAssayType(name)
+                Builder = get_view_config_builder(entity=entity, get_assay=get_assay)
+                builder = Builder(entity, self.groups_token, current_app.config["ASSETS_ENDPOINT"])
                 vitessce_conf = builder.get_conf_cells()
             except Exception:
                 current_app.logger.error(
