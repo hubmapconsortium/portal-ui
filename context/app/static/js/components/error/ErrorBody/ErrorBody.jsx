@@ -14,7 +14,7 @@ function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMainten
 
   useEffect(() => {
     async function fetchMessage() {
-      setMessage((await import('./message.json')).default);
+      setMessage((await import(/* webpackChunkName: "message" */ './message.json')).default);
     }
     fetchMessage();
   }, []);
