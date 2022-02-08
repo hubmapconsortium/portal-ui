@@ -21,7 +21,6 @@ test.each([
 test('should display maintenance titles', () => {
   render(<Error isMaintenancePage />);
   expect(screen.getByText('Portal Maintenance')).toBeInTheDocument();
-  expect(screen.getByText('Portal unavailable for scheduled maintenance.')).toBeInTheDocument();
 });
 
 test('should display titles for unexpected error codes', () => {
