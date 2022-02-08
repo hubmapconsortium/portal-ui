@@ -9,7 +9,7 @@ export function getErrorTitleAndSubtitle(errorCode, isMaintenancePage, isErrorBo
   };
 
   if (isMaintenancePage) {
-    return { title: 'Portal Maintenance', subtitle: 'Portal unavailable for scheduled maintenance.' };
+    return { title: 'Portal Maintenance' };
   }
 
   if (isErrorBoundary) {

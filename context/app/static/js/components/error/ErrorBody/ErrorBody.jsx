@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import message from './message.json';
 
 const LoginLink = () => <LightBlueLink href="/login">login</LightBlueLink>;
 const HelpEmailLink = () => (
@@ -13,7 +14,7 @@ function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMainten
   if (isMaintenancePage) {
     return (
       <>
-        While the portal is under maintenance, visit the{' '}
+        {message} While the portal is under maintenance, visit the{' '}
         <OutboundLink href="https://hubmapconsortium.org/">HuBMAP Consortium</OutboundLink> website.
       </>
     );
