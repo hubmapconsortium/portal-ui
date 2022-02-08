@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import marked from 'marked';
+
 import { LightBlueLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 
@@ -10,22 +12,18 @@ const HelpEmailLink = () => (
 );
 
 function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMaintenancePage }) {
-  const [message, setMessage] = useState('');
+  const [messageMarkdown, setMessageMarkdown] = useState('');
 
   useEffect(() => {
     async function fetchMessage() {
-      setMessage((await import(/* webpackChunkName: "message" */ './message.json')).default);
+      setMessageMarkdown((await import(/* webpackChunkName: "message" */ './message.md.yaml')).default);
     }
     fetchMessage();
   }, []);
 
   if (isMaintenancePage) {
-    return (
-      <>
-        {message} While the portal is under maintenance, visit the{' '}
-        <OutboundLink href="https://hubmapconsortium.org/">HuBMAP Consortium</OutboundLink> website.
-      </>
-    );
+    // eslint-disable-next-line react/no-danger
+    return <span dangerouslySetInnerHTML={{ __html: marked(messageMarkdown) }} />;
   }
 
   if (errorCode === 401 && isGlobus401) {
