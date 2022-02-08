@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import message from './message.json';
 
 const LoginLink = () => <LightBlueLink href="/login">login</LightBlueLink>;
 const HelpEmailLink = () => (
@@ -11,6 +10,15 @@ const HelpEmailLink = () => (
 );
 
 function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMaintenancePage }) {
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    async function fetchMessage() {
+      setMessage((await import('./message.json')).default);
+    }
+    fetchMessage();
+  }, []);
+
   if (isMaintenancePage) {
     return (
       <>
