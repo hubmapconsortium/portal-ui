@@ -10,6 +10,7 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 import { WidePopper, WidePaper, DropdownMenuItem } from './style';
 import DropdownLink from '../DropdownLink';
 
+import OtherLinks from '../OtherLinks';
 import ResourceLinks from '../ResourceLinks';
 import AtlasToolsLinks from '../AtlasToolsLinks';
 
@@ -43,17 +44,16 @@ function Menu(props) {
             {['Donor', 'Sample', 'Dataset'].map((type) => (
               <DropdownLink key={type} href={`/search?entity_type[0]=${type}`}>{`${type}s`}</DropdownLink>
             ))}
-            <DropdownLink href="/collections">Collections</DropdownLink>
             {[
-              ['Resources', ResourceLinks],
+              ['Other', OtherLinks],
               ['Atlas & Tools', AtlasToolsLinks],
+              ['Resources', ResourceLinks],
             ].map(([label, Component]) => (
               <DropdownContainer label={label} key={label}>
                 <Component isIndented />
               </DropdownContainer>
             ))}
           </MenuList>
-          <DropdownLink href="/my-lists">My Lists</DropdownLink>
         </WidePaper>
       </WidePopper>
     </>
