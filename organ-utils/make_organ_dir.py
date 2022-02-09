@@ -25,6 +25,10 @@ def main():
         default=repo_path / 'context/app/organ',
         help='Target directory for markdown files')
     parser.add_argument(
+        '--ccf_api_url',
+        default='https://ccf-api.hubmapconsortium.org/v1/reference-organs',
+        help='CCF endpoint for reference organs')
+    parser.add_argument(
         '--elasticsearch_url',
         default='https://search.api.hubmapconsortium.org/portal/search',
         help='ES endpoint to query for organs')
@@ -38,7 +42,21 @@ def main():
     cache_path = Path(__file__).parent / f'cache-{datetime.now().isoformat()}'
     cache_path.mkdir()
 
+    reference_organs = get_reference_organs(args.ccf_api_url)
     descriptions = get_descriptions()
+
+    d_not_r = descriptions.keys() - reference_organs.keys()
+    r_not_d = reference_organs.keys() - descriptions.keys()
+    d_not_r_labelled = {uri: descriptions[uri]['name'] for uri in d_not_r}
+    r_not_d_labelled = {uri: reference_organs[uri]['label'] for uri in r_not_d}
+    from pprint import pformat
+    assert (
+        len(d_not_r_labelled) == 0 and len(r_not_d_labelled) == 0
+    ), (
+        f'Description URIs not in reference organs:\n{pformat(d_not_r_labelled)}'
+        + f'\nReference organ URI not in descriptions:\n{pformat(r_not_d_labelled)}'
+    )
+
     uberon_names = {uberon: value['name'] for uberon, value in descriptions.items()}
 
     search_organs_by_uberon = rekey_search(
@@ -91,6 +109,13 @@ def merge_data(**kwargs):
         for key, value in data.items():
             merged[key][source] = value
     return dict(merged)
+
+
+###### Reference Organs ######
+
+def get_reference_organs(url):
+    organs = requests.get(url).json()
+    return {o['representation_of']: o for o in organs}
 
 
 ###### Descriptions ######
