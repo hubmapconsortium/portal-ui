@@ -1,3 +1,8 @@
+## v0.37.2 - 2022-02-09
+
+- Vitessce conf builder code no longer has access to the flask context, so details must be passed explicitly.
+
+
 ## v0.37.1 - 2022-02-04
 
 - Copy portal-visualization submodule in dockerfile.

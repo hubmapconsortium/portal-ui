@@ -1,1 +1,0 @@
-- Vitessce conf builder code no longer has access to the flask context, so details must be passed explicitly.
