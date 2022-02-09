@@ -12,7 +12,6 @@ import DropdownLink from '../DropdownLink';
 
 import ResourceLinks from '../ResourceLinks';
 import AtlasToolsLinks from '../AtlasToolsLinks';
-import DocumentationLinks from '../DocumentationLinks';
 
 function DropdownContainer(props) {
   const { label, children } = props;
@@ -48,7 +47,6 @@ function Menu(props) {
             {[
               ['Resources', ResourceLinks],
               ['Atlas & Tools', AtlasToolsLinks],
-              ['Documentation', DocumentationLinks],
             ].map(([label, Component]) => (
               <DropdownContainer label={label} key={label}>
                 <Component isIndented />

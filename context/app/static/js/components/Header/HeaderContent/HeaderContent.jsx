@@ -9,7 +9,7 @@ import ResourceLinks from '../ResourceLinks';
 import Dropdown from '../Dropdown';
 import LoginButton from '../LoginButton';
 import AtlasToolsLinks from '../AtlasToolsLinks';
-import DocumentationLinks from '../DocumentationLinks';
+import OtherLinks from '../OtherLinks';
 import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap } from './style';
 
 function HeaderContent({ anchorRef }) {
@@ -29,10 +29,9 @@ function HeaderContent({ anchorRef }) {
                 {`${type}s`}
               </HeaderButton>
             ))}
-            <HeaderButton component={Link} href="/collections">
-              {/* TODO: Move this into the loop above when search works. */}
-              Collections
-            </HeaderButton>
+            <Dropdown title="Other">
+              <OtherLinks />
+            </Dropdown>
           </FlexNoWrap>
           <Spacer />
 
@@ -40,18 +39,12 @@ function HeaderContent({ anchorRef }) {
               If this changes, remember to update Menu.jsx!
           */}
 
-          <Dropdown title="Resources">
-            <ResourceLinks />
-          </Dropdown>
           <Dropdown title="Atlas & Tools">
             <AtlasToolsLinks />
           </Dropdown>
-          <Dropdown title="Documentation">
-            <DocumentationLinks />
+          <Dropdown title="Resources">
+            <ResourceLinks />
           </Dropdown>
-          <HeaderButton component={Link} href="/my-lists">
-            My Lists
-          </HeaderButton>
         </>
       )}
       {shouldDisplayMenu && <Spacer />}
