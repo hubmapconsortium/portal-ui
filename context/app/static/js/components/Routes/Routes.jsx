@@ -27,6 +27,7 @@ const SavedList = lazy(() => import('js/pages/SavedList'));
 const LineUpPage = lazy(() => import('js/pages/LineUpPage'));
 const Organs = lazy(() => import('js/pages/Organs'));
 const Organ = lazy(() => import('js/pages/Organ'));
+const TestSearch = lazy(() => import('js/pages/TestSearch'));
 
 function Routes(props) {
   const { flaskData } = props;
@@ -100,7 +101,14 @@ function Routes(props) {
     );
   }
 
-  /* eslint-disable no-undef */
+  if (urlPath.startsWith('/test-search')) {
+    return (
+      <Route>
+        <TestSearch />
+      </Route>
+    );
+  }
+
   if (urlPath.startsWith('/search')) {
     return (
       <Route>
@@ -124,7 +132,6 @@ function Routes(props) {
       </Route>
     );
   }
-  /* eslint-enable no-undef */
 
   if (urlPath.startsWith('/diversity')) {
     return (
