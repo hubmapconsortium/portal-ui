@@ -2,7 +2,6 @@ import re
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
 import json
-from urllib.parse import urlparse
 
 
 import pytest
