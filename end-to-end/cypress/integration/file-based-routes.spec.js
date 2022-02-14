@@ -14,7 +14,7 @@ describe('file-based-routes', () => {
     });
     it('has working docs pages', () => {
       cy.visit('/');
-      cy.contains('Documentation').click();
+      cy.contains('Resources').click();
       cy.contains('FAQ');
       cy.contains('About');
       cy.contains('Technical').click();

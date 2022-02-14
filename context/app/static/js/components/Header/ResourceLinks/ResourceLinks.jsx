@@ -1,16 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DropdownLink from '../DropdownLink';
-// import { StyledDivider } from '../HeaderContent/style';
+import { StyledDivider } from '../HeaderContent/style';
 
 function ResourceLinks(props) {
   const { isIndented } = props;
   return (
     <>
-      {/* <DropdownLink href="/publication" isIndented={isIndented}>
-        Publications
+      <DropdownLink href="/docs/technical" isIndented={isIndented}>
+        Technical Documentation
       </DropdownLink>
-      <StyledDivider /> */}
+      <DropdownLink href="/docs/faq" isIndented={isIndented}>
+        FAQ
+      </DropdownLink>
+      <DropdownLink href="/docs/about" isIndented={isIndented}>
+        About
+      </DropdownLink>
+      <StyledDivider />
       {['Multimodal Molecular Imaging Data', 'Cell Type Annotations'].map((previewName) => (
         <DropdownLink
           key={previewName}
