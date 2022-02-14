@@ -7,6 +7,7 @@ import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
 
 import { initialDatasetFilters, initialDatasetFields, FILTER_TYPES } from './initialConfig';
+import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
 
 const filterComponents = {
   [FILTER_TYPES.multiList]: MultiList,
@@ -40,21 +41,26 @@ function TestSearch() {
         };
       }}
     >
-      {initialDatasetFilters.map((props) => (
-        <Filter {...props} />
-      ))}
-
-      <ReactiveList
-        componentId="results"
-        size={6}
-        pagination
-        react={{
-          and: initialDatasetFilters.map(({ componentId }) => componentId),
-        }}
-        includeFields={initialDatasetFields.map(({ field }) => field)}
-        dataField="results"
-        render={ResultsTable}
-      />
+      <SearchLayout>
+        <SidebarLayout>
+          {initialDatasetFilters.map((props) => (
+            <Filter {...props} />
+          ))}
+        </SidebarLayout>
+        <ResultsLayout>
+          <ReactiveList
+            componentId="results"
+            size={18}
+            pagination
+            react={{
+              and: initialDatasetFilters.map(({ componentId }) => componentId),
+            }}
+            includeFields={initialDatasetFields.map(({ field }) => field)}
+            dataField="results"
+            render={ResultsTable}
+          />
+        </ResultsLayout>
+      </SearchLayout>
     </ReactiveBase>
   );
 }
