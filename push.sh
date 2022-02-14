@@ -7,16 +7,6 @@ git diff --quiet || die 'Uncommitted changes: Stash or commit'
 git checkout main
 git pull
 
-git submodule foreach '
-  echo "was:" `git rev-parse HEAD`
-  git checkout main
-  git pull
-  echo "now:" `git rev-parse HEAD`
-'
-organ-utils/make_organ_dir.py
-git add .
-git commit -m 'Update submodules and organs' || echo 'Nothing to commit; Continue to git push...'
-
 get_minor_version() {
   REF_MINOR=$1
   REF_DATE=$2
