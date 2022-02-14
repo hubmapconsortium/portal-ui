@@ -164,7 +164,7 @@ paths = ['/organ', '/publication', '/collections', '/cells']
         ('/docs', '302 FOUND', 'https://software.docs.hubmapconsortium.org/'),
 
         *[(path, '200 OK') for path in paths],
-        *[(path + '/', '302 FOUND', path) for path in paths],
+        *[(path + '/', '302 FOUND', f'http://localhost{path}') for path in paths],
     ],
     ids=lambda path_status: f'{path_status[0]} -> {path_status[1]} {"".join(path_status[2:])}'
 )
