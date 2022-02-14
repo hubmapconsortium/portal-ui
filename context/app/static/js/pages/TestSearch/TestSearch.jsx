@@ -1,19 +1,16 @@
 import React, { useContext } from 'react';
 import { ReactiveBase, ReactiveList } from '@appbaseio/reactivesearch';
 
+import ResultsTable from 'js/components/test-search/results/ResultsTable';
 import MultiList from 'js/components/test-search/filters/MultiList';
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
 
-import { initialDatasetFilters, FILTER_TYPES } from './initialConfig';
+import { initialDatasetFilters, initialDatasetFields, FILTER_TYPES } from './initialConfig';
 
 const filterComponents = {
   [FILTER_TYPES.multiList]: MultiList,
 };
-
-function ListItem({ uuid }) {
-  return <div>{uuid}</div>;
-}
 
 function Filter({ filterType, ...rest }) {
   const FilterComponent = filterComponents[filterType];
@@ -54,8 +51,9 @@ function TestSearch() {
         react={{
           and: initialDatasetFilters.map(({ componentId }) => componentId),
         }}
-        includeFields={['uuid']}
-        renderItem={ListItem}
+        includeFields={initialDatasetFields.map(({ field }) => field)}
+        dataField="results"
+        render={ResultsTable}
       />
     </ReactiveBase>
   );
