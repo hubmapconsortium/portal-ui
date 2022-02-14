@@ -5,8 +5,19 @@ import MultiList from 'js/components/test-search/filters/MultiList';
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
 
+import { initialDatasetFilters, FILTER_TYPES } from './initialConfig';
+
+const filterComponents = {
+  [FILTER_TYPES.multiList]: MultiList,
+};
+
 function ListItem({ uuid }) {
   return <div>{uuid}</div>;
+}
+
+function Filter({ filterType, ...rest }) {
+  const FilterComponent = filterComponents[filterType];
+  return <FilterComponent {...rest} />;
 }
 
 function TestSearch() {
@@ -32,13 +43,16 @@ function TestSearch() {
         };
       }}
     >
-      <MultiList componentId="mapped_data_types-filter" dataField="mapped_data_types.keyword" title="Data Type" />
+      {initialDatasetFilters.map((props) => (
+        <Filter {...props} />
+      ))}
+
       <ReactiveList
         componentId="results"
         size={6}
         pagination
         react={{
-          and: ['mapped_data_types-filter'],
+          and: initialDatasetFilters.map(({ componentId }) => componentId),
         }}
         includeFields={['uuid']}
         renderItem={ListItem}
