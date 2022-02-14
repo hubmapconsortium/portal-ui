@@ -7,13 +7,13 @@ function ResourceLinks(props) {
   const { isIndented } = props;
   return (
     <>
-      <DropdownLink href="/docs/technical" isIndented={isIndented}>
+      <DropdownLink href="https://software.docs.hubmapconsortium.org/technical" isIndented={isIndented}>
         Technical Documentation
       </DropdownLink>
-      <DropdownLink href="/docs/faq" isIndented={isIndented}>
+      <DropdownLink href="https://software.docs.hubmapconsortium.org/faq" isIndented={isIndented}>
         FAQ
       </DropdownLink>
-      <DropdownLink href="/docs/about" isIndented={isIndented}>
+      <DropdownLink href="https://software.docs.hubmapconsortium.org/about" isIndented={isIndented}>
         About
       </DropdownLink>
       <StyledDivider />

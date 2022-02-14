@@ -95,7 +95,7 @@ def mock_search_donor_post(path, **kwargs):
 @pytest.mark.parametrize(
     'path',
     ['/', '/browse/donor/fake-uuid', '/ccf-eui',
-     '/docs/technical', '/preview/multimodal-molecular-imaging-data']
+     '/preview/multimodal-molecular-imaging-data']
 )
 def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_prov_get)
@@ -162,8 +162,7 @@ paths = ['/organ', '/publication', '/collections', '/cells']
     'path_status',
     [
         ('/', '200 OK'),
-        ('/docs', '302 FOUND', '/docs/technical'),
-        ('/docs/technical', '200 OK'),
+        ('/docs', '302 FOUND', 'https://software.docs.hubmapconsortium.org/'),
 
         *[(path, '200 OK') for path in paths],
         *[(path + '/', '302 FOUND', path) for path in paths],
