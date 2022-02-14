@@ -175,4 +175,4 @@ def test_truncate_and_redirect(client, path_status):
     response = client.get(path)
     assert response.status == status
     if response.status == '302 FOUND':
-        assert [urlparse(response.location).path] == location
+        assert [response.location] == location
