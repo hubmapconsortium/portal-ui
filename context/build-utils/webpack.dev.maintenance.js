@@ -9,7 +9,7 @@ const envConfig = {
   devServer: {
     contentBase: join(__dirname, '../app/static/js/maintenance/public/'),
     publicPath: '/',
-    port: 5001,
+    port: 5002,
     compress: true,
     stats: 'minimal',
   },
