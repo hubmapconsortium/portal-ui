@@ -18,6 +18,7 @@ def get_default_flask_data():
         'endpoints': {
             'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
             + current_app.config['PORTAL_INDEX_PATH'],
+            'testsearchEndpoint': current_app.config['TESTSEARCH_ENDPOINT'],
             'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
             'entityEndpoint': current_app.config['ENTITY_API_BASE'],
             'xmodalityEndpoint': current_app.config['XMODALITY_ENDPOINT'],
