@@ -1,3 +1,14 @@
+## v0.38.0 - 2022-02-16
+
+- Replace doc submodule with redirect files, so old URLs won't break.
+- Reorganize header menus.
+- Get the maintenance page build working again, and add a cypress test.
+- Submodules are no longer auto-incremented on deploy. This was begun so that documentation updates could be
+  published with the minimum hassle, but with the commitment to move to the github pages, it is no longer needed.
+- Upgrade vitessce-builders: Should handle Azimuth now.
+- Upgrade vitessce.
+
+
 ## v0.37.2 - 2022-02-09
 
 - Vitessce conf builder code no longer has access to the flask context, so details must be passed explicitly.

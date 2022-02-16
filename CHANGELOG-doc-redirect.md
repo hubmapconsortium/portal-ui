@@ -1,1 +1,0 @@
-- Replace doc submodule with redirect files, so old URLs won't break.
