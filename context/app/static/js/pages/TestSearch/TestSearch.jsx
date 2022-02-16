@@ -5,6 +5,7 @@ import ResultsTable from 'js/components/test-search/results/ResultsTable';
 import MultiList from 'js/components/test-search/filters/MultiList';
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
+import { withSearchConfigProvider } from './searchConfig/provider';
 import { initialDatasetFilters, initialDatasetFields, FILTER_TYPES } from './initialConfig';
 import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
 
@@ -48,4 +49,7 @@ function TestSearch() {
   );
 }
 
-export default TestSearch;
+export default withSearchConfigProvider(TestSearch, {
+  filters: initialDatasetFilters.map(({ componentId }) => componentId),
+  fields: initialDatasetFields.map(({ field }) => field),
+});
