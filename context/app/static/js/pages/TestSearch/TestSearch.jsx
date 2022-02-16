@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ReactiveBase, ReactiveList } from '@appbaseio/reactivesearch';
+import { ReactiveBase, ReactiveList, DataSearch } from '@appbaseio/reactivesearch';
 
 import ResultsTable from 'js/components/test-search/results/ResultsTable';
 import MultiList from 'js/components/test-search/filters/MultiList';
@@ -23,6 +23,7 @@ function TestSearch() {
 
   return (
     <ReactiveBase app="hm_public_portal" url={testsearchEndpoint} headers={httpHeaders}>
+      <DataSearch componentId="searchinput" dataField={['all_text']} autosuggest={false} URLParams />
       <SearchLayout>
         <SidebarLayout>
           {initialDatasetFilters.map((props) => (
@@ -35,7 +36,7 @@ function TestSearch() {
             size={18}
             pagination
             react={{
-              and: initialDatasetFilters.map(({ componentId }) => componentId),
+              and: ['searchinput', ...initialDatasetFilters.map(({ componentId }) => componentId)],
             }}
             includeFields={initialDatasetFields.map(({ field }) => field)}
             dataField="results"
