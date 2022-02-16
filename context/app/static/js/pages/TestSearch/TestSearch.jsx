@@ -5,7 +5,6 @@ import ResultsTable from 'js/components/test-search/results/ResultsTable';
 import MultiList from 'js/components/test-search/filters/MultiList';
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
-
 import { initialDatasetFilters, initialDatasetFields, FILTER_TYPES } from './initialConfig';
 import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
 
@@ -19,28 +18,11 @@ function Filter({ filterType, ...rest }) {
 }
 
 function TestSearch() {
-  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
-  const httpHeaders = { ...getAuthHeader(groupsToken), Accept: 'application/json', 'Content-Type': 'application/json' }; // reactivesearch sends ndjson by default
+  const { testsearchEndpoint, groupsToken } = useContext(AppContext);
+  const httpHeaders = { ...getAuthHeader(groupsToken) };
 
   return (
-    <ReactiveBase
-      app="search-api"
-      url={elasticsearchEndpoint}
-      headers={httpHeaders}
-      transformRequest={(props) => {
-        // our es cluster is wrapped in a REST API which only exposes /search
-        return {
-          ...props,
-          body: JSON.stringify(
-            props.body
-              .split('\n')
-              .slice(0, -1)
-              .map((s) => JSON.parse(s))[1],
-          ), // only send query json from ndjson body
-          url: props.url.replace('search-api/_msearch?', ''), // reactivesearch points at /_msearch by default
-        };
-      }}
-    >
+    <ReactiveBase app="hm_public_portal" url={testsearchEndpoint} headers={httpHeaders}>
       <SearchLayout>
         <SidebarLayout>
           {initialDatasetFilters.map((props) => (
