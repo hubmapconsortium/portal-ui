@@ -7,9 +7,17 @@ const filterComponents = {
   [FILTER_TYPES.multiList]: MultiList,
 };
 
-function Filter({ filterType, ...rest }) {
+function Filter({ filterType, componentId, dataField, title, filtersComponentIds, ...rest }) {
   const FilterComponent = filterComponents[filterType];
-  return <FilterComponent {...rest} />;
+  return (
+    <FilterComponent
+      {...rest}
+      react={{ and: filtersComponentIds.filter((id) => componentId !== id) }}
+      componentId={componentId}
+      dataField={dataField}
+      title={title}
+    />
+  );
 }
 
 export default Filter;
