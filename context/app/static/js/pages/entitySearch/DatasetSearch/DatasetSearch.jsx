@@ -1,22 +1,10 @@
-import { FILTER_TYPES } from 'js/components/test-search/filters/Filter/enums';
+import React from 'react';
+import SearchConfigProvider from 'js/pages/entitySearch/searchConfig/provider';
+import EntitySearch from 'js/components/entitySearch/EntitySearch';
+import { getFieldProps, getFilterProps } from 'js/pages/entitySearch/utils';
+import { FILTER_TYPES } from 'js/components/entitySearch/filters/Filter/enums';
 
-function getFilterProps({ field, title, filterType }) {
-  return {
-    componentId: `${field}-filter`,
-    dataField: `${field}.keyword`,
-    title,
-    filterType,
-  };
-}
-
-function getFieldProps({ field, title }) {
-  return {
-    field,
-    title,
-  };
-}
-
-const initialDatasetFilters = [
+const filters = [
   ['mapped_data_types', 'Data Type', FILTER_TYPES.multiList],
   ['origin_sample.mapped_organ', 'Organ', FILTER_TYPES.multiList],
   ['source_sample.mapped_specimen_type', 'Specimen Type', FILTER_TYPES.multiList],
@@ -25,7 +13,7 @@ const initialDatasetFilters = [
   ['mapped_data_access_level', 'Access Level', FILTER_TYPES.multiList],
 ].map(([field, title, filterType]) => getFilterProps({ field, title, filterType }));
 
-const initialDatasetFields = [
+const fields = [
   ['hubmap_id', 'HuBMAP ID'],
   ['group_name', 'Group'],
   ['mapped_data_types', 'Data Types'],
@@ -34,4 +22,14 @@ const initialDatasetFields = [
   ['mapped_last_modified_timestamp', 'Last Modified'],
 ].map(([field, title]) => getFieldProps({ field, title }));
 
-export { initialDatasetFilters, initialDatasetFields, FILTER_TYPES };
+const config = { filters, fields };
+
+function DatasetSearch() {
+  return (
+    <SearchConfigProvider initialConfig={config}>
+      <EntitySearch />
+    </SearchConfigProvider>
+  );
+}
+
+export default DatasetSearch;

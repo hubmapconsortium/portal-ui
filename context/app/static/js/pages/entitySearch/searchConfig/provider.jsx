@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Provider, createStore } from './store';
 
-function SearchConfigProvider({ children, initalConfig }) {
-  return <Provider createStore={() => createStore(initalConfig)}>{children}</Provider>;
+function SearchConfigProvider({ children, initialConfig }) {
+  return <Provider createStore={() => createStore(initialConfig)}>{children}</Provider>;
 }
 
 export const withSearchConfigProvider = (Component, initialConfig) => ({ ...props }) => (
-  <SearchConfigProvider initalConfig={initialConfig}>
+  <SearchConfigProvider initialConfig={initialConfig}>
     <Component {...props} />
   </SearchConfigProvider>
 );

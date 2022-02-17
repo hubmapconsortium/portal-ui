@@ -1,13 +1,11 @@
 import React, { useContext } from 'react';
 import { ReactiveBase, ReactiveList, DataSearch } from '@appbaseio/reactivesearch';
 
-import ResultsTable from 'js/components/test-search/results/ResultsTable';
+import ResultsTable from 'js/components/entitySearch/results/ResultsTable';
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
-import Filter from 'js/components/test-search/filters/Filter';
-import { useStore } from 'js/pages/TestSearch/searchConfig/store';
-import { withSearchConfigProvider } from 'js/pages/TestSearch/searchConfig/provider';
-import { initialDatasetFilters, initialDatasetFields } from './initialConfig';
+import Filter from 'js/components/entitySearch/filters/Filter';
+import { useStore } from 'js/pages/entitySearch/searchConfig/store';
 import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
 
 const searchComponentID = 'searchinput';
@@ -49,7 +47,4 @@ function EntitySearch() {
   );
 }
 
-export default withSearchConfigProvider(EntitySearch, {
-  filters: initialDatasetFilters,
-  fields: initialDatasetFields,
-});
+export default EntitySearch;
