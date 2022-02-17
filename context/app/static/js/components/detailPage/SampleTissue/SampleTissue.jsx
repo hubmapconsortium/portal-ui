@@ -24,7 +24,9 @@ function SampleTissue(props) {
       <SectionHeader>Tissue</SectionHeader>
       <FlexPaper>
         <MetadataItem label="Organ Type" flexBasis="25%">
-          {mapped_organ}
+          <LightBlueLink variant="h6" href="/organ" underline="none">
+            {mapped_organ}
+          </LightBlueLink>
         </MetadataItem>
         <MetadataItem label="Specimen Type" ml={1} flexBasis="25%">
           {mapped_specimen_type}

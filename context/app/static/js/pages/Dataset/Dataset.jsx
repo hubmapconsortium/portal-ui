@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
@@ -34,9 +33,9 @@ function SummaryDataChildren(props) {
           {mapped_data_types}
         </LightBlueLink>
       </SummaryItem>
-      <Typography variant="h6" component="p">
+      <LightBlueLink variant="h6" href="/organ" underline="none">
         {origin_sample.mapped_organ}
-      </Typography>
+      </LightBlueLink>
     </>
   );
 }
