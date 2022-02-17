@@ -6,13 +6,13 @@ import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
 import Filter from 'js/components/test-search/filters/Filter';
 import { useStore } from 'js/pages/TestSearch/searchConfig/store';
-import { withSearchConfigProvider } from './searchConfig/provider';
+import { withSearchConfigProvider } from 'js/pages/TestSearch/searchConfig/provider';
 import { initialDatasetFilters, initialDatasetFields } from './initialConfig';
 import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
 
 const searchComponentID = 'searchinput';
 
-function TestSearch() {
+function EntitySearch() {
   const { testsearchEndpoint, groupsToken } = useContext(AppContext);
   const httpHeaders = { ...getAuthHeader(groupsToken) };
   const { filters, fields } = useStore();
@@ -49,7 +49,7 @@ function TestSearch() {
   );
 }
 
-export default withSearchConfigProvider(TestSearch, {
+export default withSearchConfigProvider(EntitySearch, {
   filters: initialDatasetFilters,
   fields: initialDatasetFields,
 });
