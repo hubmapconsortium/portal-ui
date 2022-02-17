@@ -10,6 +10,8 @@ import { withSearchConfigProvider } from './searchConfig/provider';
 import { initialDatasetFilters, initialDatasetFields } from './initialConfig';
 import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
 
+const searchComponentID = 'searchinput';
+
 function TestSearch() {
   const { testsearchEndpoint, groupsToken } = useContext(AppContext);
   const httpHeaders = { ...getAuthHeader(groupsToken) };
@@ -21,8 +23,12 @@ function TestSearch() {
       <DataSearch componentId="searchinput" dataField={['all_text']} autosuggest={false} URLParams />
       <SearchLayout>
         <SidebarLayout>
-          {filters.map((props) => (
-            <Filter {...props} filtersComponentIds={filtersComponentIds} />
+          {filters.map(({ componentId, ...rest }) => (
+            <Filter
+              componentId={componentId}
+              react={{ and: [searchComponentID, ...filtersComponentIds.filter((id) => componentId !== id)] }}
+              {...rest}
+            />
           ))}
         </SidebarLayout>
         <ResultsLayout>
@@ -31,7 +37,7 @@ function TestSearch() {
             size={18}
             pagination
             react={{
-              and: ['searchinput', ...filters.map(({ componentId }) => componentId)],
+              and: [searchComponentID, ...filters.map(({ componentId }) => componentId)],
             }}
             includeFields={fields.map(({ field }) => field)}
             dataField="results"
