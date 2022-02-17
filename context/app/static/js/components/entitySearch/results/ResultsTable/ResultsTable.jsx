@@ -6,16 +6,18 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
+import { useStore } from 'js/pages/entitySearch/searchConfig/store';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import { initialDatasetFields } from 'js/pages/TestSearch/initialConfig';
 import { StyledTable, StyledTableRow } from './style';
 
 function ResultsTable({ data }) {
+  const { fields } = useStore();
+
   return (
     <StyledTable data-testid="search-results-table">
       <TableHead>
         <TableRow>
-          {initialDatasetFields.map(({ title }) => (
+          {fields.map(({ title }) => (
             <TableCell>{title}</TableCell>
           ))}
         </TableRow>
@@ -23,7 +25,7 @@ function ResultsTable({ data }) {
       <TableBody>
         {data.map((hit) => (
           <StyledTableRow key={hit._id}>
-            {initialDatasetFields.map(({ field }) => (
+            {fields.map(({ field }) => (
               <TableCell key={field}>
                 {field === 'hubmap_id' ? (
                   <LightBlueLink href={`/browse/dataset/${hit._id}`}>{hit.hubmap_id}</LightBlueLink>
