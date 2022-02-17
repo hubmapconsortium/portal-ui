@@ -20,7 +20,7 @@ function TestSearch() {
   const filtersComponentIds = filters.map(({ componentId }) => componentId);
   return (
     <ReactiveBase app="hm_public_portal" url={testsearchEndpoint} headers={httpHeaders}>
-      <DataSearch componentId="searchinput" dataField={['all_text']} autosuggest={false} URLParams />
+      <DataSearch componentId={searchComponentID} dataField={['all_text']} autosuggest={false} URLParams />
       <SearchLayout>
         <SidebarLayout>
           {filters.map(({ componentId, ...rest }) => (
