@@ -2,21 +2,12 @@ import React, { useContext } from 'react';
 import { ReactiveBase, ReactiveList, DataSearch } from '@appbaseio/reactivesearch';
 
 import ResultsTable from 'js/components/test-search/results/ResultsTable';
-import MultiList from 'js/components/test-search/filters/MultiList';
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
+import Filter from 'js/components/test-search/filters/Filter';
 import { withSearchConfigProvider } from './searchConfig/provider';
-import { initialDatasetFilters, initialDatasetFields, FILTER_TYPES } from './initialConfig';
+import { initialDatasetFilters, initialDatasetFields } from './initialConfig';
 import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
-
-const filterComponents = {
-  [FILTER_TYPES.multiList]: MultiList,
-};
-
-function Filter({ filterType, ...rest }) {
-  const FilterComponent = filterComponents[filterType];
-  return <FilterComponent {...rest} />;
-}
 
 function TestSearch() {
   const { testsearchEndpoint, groupsToken } = useContext(AppContext);

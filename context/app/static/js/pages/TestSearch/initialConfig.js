@@ -1,6 +1,4 @@
-const FILTER_TYPES = {
-  multiList: 'multiList',
-};
+import { FILTER_TYPES } from 'js/components/test-search/filters/Filter/enums';
 
 function getFilterProps({ field, title, filterType }) {
   return {
