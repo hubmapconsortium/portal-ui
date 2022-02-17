@@ -41,12 +41,27 @@ def ccf_eui():
         )
     )
 
+
 @blueprint.route('/search')
 @blueprint.route('/cells-search')
-@blueprint.route('/test-search')
 def search():
     entity_type = request.args.get('entity_type[0]')
     title = f'{entity_type}s' if entity_type else 'Search'
+    flask_data = {
+        **get_default_flask_data(),
+        'title': title,
+    }
+    return render_template(
+        'pages/base_react.html',
+        title=title,
+        flask_data=flask_data,
+    )
+
+
+@blueprint.route('/test-search/datasets')
+def test_search():
+    entity_type = request.path.split('/')[-1]
+    title = f'{entity_type.capitalize()}' if entity_type else 'Search'
     flask_data = {
         **get_default_flask_data(),
         'title': title,
