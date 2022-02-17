@@ -1,5 +1,5 @@
 import React from 'react';
-import MultiList from 'js/components/test-search/filters/MultiList';
+import MultiList from 'js/components/entitySearch/filters/MultiList';
 
 import { FILTER_TYPES } from './enums';
 
