@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ReactiveBase, ReactiveList, DataSearch } from '@appbaseio/reactivesearch';
+import { ReactiveBase, ReactiveList, DataSearch, ReactiveComponent } from '@appbaseio/reactivesearch';
 
 import ResultsTable from 'js/components/entitySearch/results/ResultsTable';
 import { getAuthHeader } from 'js/helpers/functions';
@@ -9,8 +9,9 @@ import { useStore } from 'js/pages/entitySearch/searchConfig/store';
 import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
 
 const searchComponentID = 'searchinput';
+const entityTypeFilterID = 'dataset-filter';
 
-function EntitySearch() {
+function EntitySearch({ universalQuery }) {
   const { testsearchEndpoint, groupsToken } = useContext(AppContext);
   const httpHeaders = { ...getAuthHeader(groupsToken) };
   const { filters, fields } = useStore();
@@ -19,12 +20,15 @@ function EntitySearch() {
   return (
     <ReactiveBase app="hm_public_portal" url={testsearchEndpoint} headers={httpHeaders}>
       <DataSearch componentId={searchComponentID} dataField={['all_text']} autosuggest={false} URLParams />
+      <ReactiveComponent componentId={entityTypeFilterID} customQuery={() => universalQuery} />
       <SearchLayout>
         <SidebarLayout>
           {filters.map(({ componentId, ...rest }) => (
             <Filter
               componentId={componentId}
-              react={{ and: [searchComponentID, ...filtersComponentIds.filter((id) => componentId !== id)] }}
+              react={{
+                and: [entityTypeFilterID, searchComponentID, ...filtersComponentIds.filter((id) => componentId !== id)],
+              }}
               {...rest}
             />
           ))}
@@ -35,7 +39,7 @@ function EntitySearch() {
             size={18}
             pagination
             react={{
-              and: [searchComponentID, ...filters.map(({ componentId }) => componentId)],
+              and: [entityTypeFilterID, searchComponentID, ...filters.map(({ componentId }) => componentId)],
             }}
             includeFields={fields.map(({ field }) => field)}
             dataField="results"

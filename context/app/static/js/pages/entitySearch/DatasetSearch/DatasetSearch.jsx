@@ -1,8 +1,10 @@
 import React from 'react';
+
 import SearchConfigProvider from 'js/pages/entitySearch/searchConfig/provider';
 import EntitySearch from 'js/components/entitySearch/EntitySearch';
 import { getFieldProps, getFilterProps } from 'js/pages/entitySearch/utils';
 import { FILTER_TYPES } from 'js/components/entitySearch/filters/Filter/enums';
+import { addRestrictionsToQuery } from 'js/helpers/functions';
 
 const filters = [
   ['mapped_data_types', 'Data Type', FILTER_TYPES.multiList],
@@ -24,10 +26,18 @@ const fields = [
 
 const config = { filters, fields };
 
+const universalQuery = addRestrictionsToQuery({
+  query: {
+    term: {
+      'entity_type.keyword': 'Dataset',
+    },
+  },
+});
+
 function DatasetSearch() {
   return (
     <SearchConfigProvider initialConfig={config}>
-      <EntitySearch />
+      <EntitySearch universalQuery={universalQuery} />
     </SearchConfigProvider>
   );
 }
