@@ -14,6 +14,8 @@ const filters = [
   { field: 'mapped_status', title: 'Status', type: FILTER_TYPES.multiList },
   { field: 'mapped_data_access_level', title: 'Access Level', type: FILTER_TYPES.multiList },
   ...getDonorMetadataFilters(false),
+  { field: 'group_name', title: 'Group', type: FILTER_TYPES.multiList },
+  { field: 'created_by_user_displayname', title: 'Creator', type: FILTER_TYPES.multiList },
 ].map((filterProps) => getFilterProps(filterProps));
 
 const fields = [
