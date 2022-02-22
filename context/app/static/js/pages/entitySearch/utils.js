@@ -1,10 +1,9 @@
 import { FILTER_TYPES } from 'js/components/entitySearch/filters/Filter/enums';
 
-function getFilterProps({ field, type, ...rest }) {
+function getFilterProps({ field, ...rest }) {
   return {
     componentId: `${field}-filter`,
-    dataField: type === FILTER_TYPES.multiList ? `${field}.keyword` : field,
-    type,
+    dataField: field,
     ...rest,
   };
 }
