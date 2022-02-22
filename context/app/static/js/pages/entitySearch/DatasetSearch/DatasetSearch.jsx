@@ -2,18 +2,19 @@ import React from 'react';
 
 import SearchConfigProvider from 'js/pages/entitySearch/searchConfig/provider';
 import EntitySearch from 'js/components/entitySearch/EntitySearch';
-import { getFieldProps, getFilterProps } from 'js/pages/entitySearch/utils';
+import { getFieldProps, getFilterProps, getDonorMetadataFilters } from 'js/pages/entitySearch/utils';
 import { FILTER_TYPES } from 'js/components/entitySearch/filters/Filter/enums';
 import { addRestrictionsToQuery } from 'js/helpers/functions';
 
 const filters = [
-  ['mapped_data_types', 'Data Type', FILTER_TYPES.multiList],
-  ['origin_sample.mapped_organ', 'Organ', FILTER_TYPES.multiList],
-  ['source_sample.mapped_specimen_type', 'Specimen Type', FILTER_TYPES.multiList],
-  ['mapped_consortium', 'Consortium', FILTER_TYPES.multiList],
-  ['mapped_status', 'Status', FILTER_TYPES.multiList],
-  ['mapped_data_access_level', 'Access Level', FILTER_TYPES.multiList],
-].map(([field, title, filterType]) => getFilterProps({ field, title, filterType }));
+  { field: 'mapped_data_types', title: 'Data Type', type: FILTER_TYPES.multiList },
+  { field: 'origin_sample.mapped_organ', title: 'Organ', type: FILTER_TYPES.multiList },
+  { field: 'source_sample.mapped_specimen_type', title: 'Specimen Type', type: FILTER_TYPES.multiList },
+  { field: 'mapped_consortium', title: 'Consortium', type: FILTER_TYPES.multiList },
+  { field: 'mapped_status', title: 'Status', type: FILTER_TYPES.multiList },
+  { field: 'mapped_data_access_level', title: 'Access Level', type: FILTER_TYPES.multiList },
+  ...getDonorMetadataFilters(false),
+].map((filterProps) => getFilterProps(filterProps));
 
 const fields = [
   ['hubmap_id', 'HuBMAP ID'],
