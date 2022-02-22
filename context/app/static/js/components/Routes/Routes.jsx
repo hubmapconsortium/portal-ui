@@ -28,6 +28,7 @@ const LineUpPage = lazy(() => import('js/pages/LineUpPage'));
 const Organs = lazy(() => import('js/pages/Organs'));
 const Organ = lazy(() => import('js/pages/Organ'));
 const DatasetSearch = lazy(() => import('js/pages/entitySearch/DatasetSearch'));
+const DonorSearch = lazy(() => import('js/pages/entitySearch/DonorSearch'));
 
 function Routes(props) {
   const { flaskData } = props;
@@ -105,6 +106,14 @@ function Routes(props) {
     return (
       <Route>
         <DatasetSearch />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/test-search/donors')) {
+    return (
+      <Route>
+        <DonorSearch />
       </Route>
     );
   }

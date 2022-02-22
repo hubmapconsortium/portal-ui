@@ -59,6 +59,7 @@ def search():
 
 
 @blueprint.route('/test-search/datasets')
+@blueprint.route('/test-search/donors')
 def test_search():
     entity_type = request.path.split('/')[-1]
     title = f'{entity_type.capitalize()}' if entity_type else 'Search'
