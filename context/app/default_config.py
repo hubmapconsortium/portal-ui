@@ -22,6 +22,7 @@ class DefaultConfig(object):
 
     GATEWAY_ENDPOINT = 'should-be-overridden'
     ELASTICSEARCH_ENDPOINT = 'should-be-overridden'
+    TESTSEARCH_ENDPOINT = 'should-be-overridden'
     ASSETS_ENDPOINT = 'should-be-overridden'
     XMODALITY_ENDPOINT = 'should-be-overridden'
 
