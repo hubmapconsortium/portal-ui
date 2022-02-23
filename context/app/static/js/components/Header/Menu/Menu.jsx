@@ -10,9 +10,9 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
 import { WidePopper, WidePaper, DropdownMenuItem } from './style';
 import DropdownLink from '../DropdownLink';
 
+import OtherLinks from '../OtherLinks';
 import ResourceLinks from '../ResourceLinks';
 import AtlasToolsLinks from '../AtlasToolsLinks';
-import DocumentationLinks from '../DocumentationLinks';
 
 function DropdownContainer(props) {
   const { label, children } = props;
@@ -44,18 +44,17 @@ function Menu(props) {
             {['Donor', 'Sample', 'Dataset'].map((type) => (
               <DropdownLink key={type} href={`/search?entity_type[0]=${type}`}>{`${type}s`}</DropdownLink>
             ))}
-            <DropdownLink href="/collections">Collections</DropdownLink>
             {[
-              ['Resources', ResourceLinks],
+              ['Other', OtherLinks],
               ['Atlas & Tools', AtlasToolsLinks],
-              ['Documentation', DocumentationLinks],
+              ['Resources', ResourceLinks],
             ].map(([label, Component]) => (
               <DropdownContainer label={label} key={label}>
                 <Component isIndented />
               </DropdownContainer>
             ))}
+            <DropdownLink href="/my-lists">My Lists</DropdownLink>
           </MenuList>
-          <DropdownLink href="/my-lists">My Lists</DropdownLink>
         </WidePaper>
       </WidePopper>
     </>
@@ -63,6 +62,7 @@ function Menu(props) {
 }
 
 Menu.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   anchorRef: PropTypes.shape({ current: PropTypes.object }).isRequired,
 };
 

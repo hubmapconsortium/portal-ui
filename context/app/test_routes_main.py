@@ -2,7 +2,6 @@ import re
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
 import json
-from urllib.parse import urlparse
 
 
 import pytest
@@ -95,7 +94,7 @@ def mock_search_donor_post(path, **kwargs):
 @pytest.mark.parametrize(
     'path',
     ['/', '/browse/donor/fake-uuid', '/ccf-eui',
-     '/docs/technical', '/preview/multimodal-molecular-imaging-data']
+     '/preview/multimodal-molecular-imaging-data']
 )
 def test_200_html_page(client, path, mocker):
     mocker.patch('requests.get', side_effect=mock_prov_get)
@@ -162,11 +161,10 @@ paths = ['/organ', '/publication', '/collections', '/cells']
     'path_status',
     [
         ('/', '200 OK'),
-        ('/docs', '302 FOUND', '/docs/technical'),
-        ('/docs/technical', '200 OK'),
+        ('/docs', '302 FOUND', 'https://software.docs.hubmapconsortium.org/'),
 
         *[(path, '200 OK') for path in paths],
-        *[(path + '/', '302 FOUND', path) for path in paths],
+        *[(path + '/', '302 FOUND', f'http://localhost{path}') for path in paths],
     ],
     ids=lambda path_status: f'{path_status[0]} -> {path_status[1]} {"".join(path_status[2:])}'
 )
@@ -176,4 +174,4 @@ def test_truncate_and_redirect(client, path_status):
     response = client.get(path)
     assert response.status == status
     if response.status == '302 FOUND':
-        assert [urlparse(response.location).path] == location
+        assert [response.location] == location

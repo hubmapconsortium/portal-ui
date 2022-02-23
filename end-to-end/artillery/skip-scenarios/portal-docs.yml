@@ -7,14 +7,6 @@ config:
 scenarios:
   - flow:
     - get:
-        url: "/docs/assays"
-        gzip: true
-        afterResponse: "printStatus"
-    - get:
-        url: "/docs/about"
-        gzip: true
-        afterResponse: "printStatus"
-    - get:
         url: "/CHANGELOG"
         gzip: true
         afterResponse: "printStatus"

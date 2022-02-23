@@ -8,10 +8,6 @@ function AtlasToolsLinks(props) {
   const { isIndented } = props;
   return (
     <>
-      <DropdownLink href="/organ" isIndented={isIndented}>
-        Organs
-      </DropdownLink>
-      <StyledDivider />
       <DropdownLink href="https://hubmapconsortium.github.io/ccf/" isIndented={isIndented}>
         Common Coordinate Framework (CCF) Portal
       </DropdownLink>

@@ -12,7 +12,7 @@ The Data Portal depends, directly or indirectly, on many other HuBMAP repos:
 
 Issues with the Portal can be reported [via email](mailto:help@hubmapconsortium.org).
 More information on how issues are tracked across HuBMAP is available
-[here](https://portal.hubmapconsortium.org/docs/feedback).
+[here](https://software.docs.hubmapconsortium.org/feedback).
 
 ## Design
 

@@ -63,7 +63,7 @@ function Footer(props) {
                 Data Use Agreement
               </OutboundLink>
               {!isMaintenancePage && (
-                <LightBlueLink href="/docs/about#citation" variant="body2">
+                <LightBlueLink href="https://software.docs.hubmapconsortium.org/about#citation" variant="body2">
                   Citing HuBMAP
                 </LightBlueLink>
               )}
