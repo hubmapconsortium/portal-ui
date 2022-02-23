@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 
+import { LightBlueLink } from 'js/shared-styles/Links';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
@@ -78,7 +79,11 @@ function SampleDetail(props) {
           description={description}
           group_name={group_name}
         >
-          <SummaryItem>{mapped_organ}</SummaryItem>
+          <SummaryItem>
+            <LightBlueLink variant="h6" href="/organ" underline="none">
+              {mapped_organ}
+            </LightBlueLink>
+          </SummaryItem>
           <Typography variant="h6" component="p">
             {mapped_specimen_type}
           </Typography>
