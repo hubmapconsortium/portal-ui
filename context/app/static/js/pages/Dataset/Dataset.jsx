@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -24,17 +25,19 @@ import { getSectionOrder } from 'js/components/detailPage/utils';
 
 import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
 
+import { StyledOpenInNewRoundedIcon } from './style';
+
 function SummaryDataChildren(props) {
   const { mapped_data_types, origin_sample, doi_url, registered_doi } = props;
   return (
     <>
-      {doi_url ? (
+      {doi_url && (
         <SummaryItem>
-          <LightBlueLink variant="h6" href={doi_url} underline="none">
-            doi:{registered_doi}
-          </LightBlueLink>
+          <OutboundLink href={doi_url} variant="h6">
+            doi:{registered_doi} <StyledOpenInNewRoundedIcon />
+          </OutboundLink>
         </SummaryItem>
-      ) : null}
+      )}
       <SummaryItem>
         <LightBlueLink variant="h6" href="https://software.docs.hubmapconsortium.org/assays" underline="none">
           {mapped_data_types}
