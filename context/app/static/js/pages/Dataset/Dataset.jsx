@@ -25,9 +25,16 @@ import { getSectionOrder } from 'js/components/detailPage/utils';
 import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
 
 function SummaryDataChildren(props) {
-  const { mapped_data_types, origin_sample } = props;
+  const { mapped_data_types, origin_sample, doi_url, registered_doi } = props;
   return (
     <>
+      {doi_url ? (
+        <SummaryItem>
+          <LightBlueLink variant="h6" href={doi_url} underline="none">
+            doi:{registered_doi}
+          </LightBlueLink>
+        </SummaryItem>
+      ) : null}
       <SummaryItem>
         <LightBlueLink variant="h6" href="https://software.docs.hubmapconsortium.org/assays" underline="none">
           {mapped_data_types}
@@ -67,6 +74,8 @@ function DatasetDetail(props) {
     sub_status,
     mapped_data_access_level,
     mapped_external_group_name,
+    registered_doi,
+    doi_url,
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
@@ -132,6 +141,8 @@ function DatasetDetail(props) {
             data_types={data_types || []}
             mapped_data_types={mapped_data_types || []}
             origin_sample={origin_sample}
+            registered_doi={registered_doi}
+            doi_url={doi_url}
           />
         </Summary>
         {shouldDisplaySection.visualization && (
