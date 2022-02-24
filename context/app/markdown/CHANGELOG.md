@@ -1,3 +1,9 @@
+## v0.38.1 - 2022-02-24
+
+- Link from organ names to the organ list page.
+- Remove stray markdown files that got checked in after the docs submodule was removed. The redirects will now handle these routes.
+
+
 ## v0.38.0 - 2022-02-16
 
 - Replace doc submodule with redirect files, so old URLs won't break.

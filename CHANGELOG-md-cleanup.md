@@ -1,1 +1,0 @@
-- Remove stray markdown files that got checked in after the docs submodule was removed. The redirects will now handle these routes.
