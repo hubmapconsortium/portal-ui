@@ -29,23 +29,28 @@ import { StyledOpenInNewRoundedIcon } from './style';
 
 function SummaryDataChildren(props) {
   const { mapped_data_types, origin_sample, doi_url, registered_doi } = props;
+  const organLink = (
+    <LightBlueLink variant="h6" href="/organ" underline="none">
+      {origin_sample.mapped_organ}
+    </LightBlueLink>
+  );
   return (
     <>
-      {doi_url && (
-        <SummaryItem>
-          <OutboundLink href={doi_url} variant="h6">
-            doi:{registered_doi} <StyledOpenInNewRoundedIcon />
-          </OutboundLink>
-        </SummaryItem>
-      )}
       <SummaryItem>
         <LightBlueLink variant="h6" href="https://software.docs.hubmapconsortium.org/assays" underline="none">
           {mapped_data_types}
         </LightBlueLink>
       </SummaryItem>
-      <LightBlueLink variant="h6" href="/organ" underline="none">
-        {origin_sample.mapped_organ}
-      </LightBlueLink>
+      {doi_url ? (
+        <>
+          <SummaryItem>{organLink}</SummaryItem>
+          <OutboundLink href={doi_url} variant="h6">
+            doi:{registered_doi} <StyledOpenInNewRoundedIcon />
+          </OutboundLink>
+        </>
+      ) : (
+        organLink
+      )}
     </>
   );
 }
