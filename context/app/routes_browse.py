@@ -120,7 +120,6 @@ Visualization for [{entity['hubmap_id']}]({request.base_url.replace('.ipynb','')
 !jupyter nbextension install --py --sys-prefix vitessce
 !jupyter nbextension enable --py --sys-prefix vitessce
         """.strip()),
-        new_code_cell('from vitessce import VitessceConfig')
     ] + vitessce_conf.cells + [
         new_code_cell('conf.widget()')
     ]
