@@ -10,6 +10,8 @@ git config submodule.recurse true # So 'git pull' will update submodules.
 
 CONTEXT=context
 pip install -r $CONTEXT/requirements.txt > /dev/null
+# TODO: Make portal-visualization a package and just use pip's dependency resolution.
+pip install -r $CONTEXT/portal-visualization/requirements.txt > /dev/null
 
 ./copy-app-conf.sh
 
