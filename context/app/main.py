@@ -83,8 +83,10 @@ def create_app(testing=False):
     @app.before_request
     def clear_trailing():
         path = request.path
+        query_wo_mark = request.query_string.decode()
+        query_w_mark = f'?{query_wo_mark}' if query_wo_mark else ''
         if path.endswith('/') and path != '/':
-            return redirect(path[:-1])
+            return redirect(path[:-1] + query_w_mark)
 
     @app.context_processor
     def inject_template_globals():
