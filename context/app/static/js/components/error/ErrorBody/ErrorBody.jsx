@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import { StyledEmailIcon } from './style';
 
 const LoginLink = () => <LightBlueLink href="/login">login</LightBlueLink>;
 const HelpEmailLink = () => (
-  <LightBlueLink href="mailto:help@hubmapconsortium.org">help@hubmapconsortium.org</LightBlueLink>
+  <LightBlueLink href="mailto:help@hubmapconsortium.org">
+    help@hubmapconsortium.org <StyledEmailIcon />
+  </LightBlueLink>
 );
 
 function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMaintenancePage }) {

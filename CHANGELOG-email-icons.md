@@ -1,0 +1,1 @@
+- Add email icons on mailto links.

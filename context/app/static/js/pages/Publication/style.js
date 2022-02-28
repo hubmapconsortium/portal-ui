@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
+import { EmailIcon } from 'js/shared-styles/icons';
 
 const StyledPaper = styled(Paper)`
   padding: 20px 40px 20px 40px;
@@ -10,4 +11,9 @@ const StyledPaper = styled(Paper)`
   }
 `;
 
-export { StyledPaper };
+const StyledEmailIcon = styled(EmailIcon)`
+  font-size: 1rem;
+  vertical-align: middle;
+`;
+
+export { StyledPaper, StyledEmailIcon };

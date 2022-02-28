@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import { FlexPaper } from './style';
+import { FlexPaper, StyledEmailIcon } from './style';
 import SectionItem from '../SectionItem';
 
 function Attribution(props) {
@@ -17,7 +17,9 @@ function Attribution(props) {
         <SectionItem label="Group">{group_name}</SectionItem>
         <SectionItem label="Creator" ml={1}>
           {created_by_user_displayname}
-          <LightBlueLink href={`mailto:${encodeURI(created_by_user_email)}`}>{created_by_user_email}</LightBlueLink>
+          <LightBlueLink href={`mailto:${encodeURI(created_by_user_email)}`}>
+            {created_by_user_email} <StyledEmailIcon />
+          </LightBlueLink>
         </SectionItem>
       </FlexPaper>
     </DetailPageSection>

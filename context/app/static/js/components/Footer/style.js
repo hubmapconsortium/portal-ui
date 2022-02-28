@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
+
+import { EmailIcon } from 'js/shared-styles/icons';
 import { ReactComponent as Logo } from 'assets/svg/hubmap-logo.svg';
 
 const FlexContainer = styled(Container)`
@@ -38,4 +40,9 @@ const Background = styled.div`
   width: 100%;
 `;
 
-export { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background };
+const StyledEmailIcon = styled(EmailIcon)`
+  font-size: 1rem;
+  vertical-align: middle;
+`;
+
+export { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background, StyledEmailIcon };

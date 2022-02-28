@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import FilesContext from '../Files/context';
 import FilesConditionalLink from '../FilesConditionalLink';
-import { StyledExternalLinkIcon } from './style';
+import { StyledExternalLinkIcon, StyledEmailIcon } from './style';
 
 const messages = {
   401: 'Unauthorized access to the Globus Research Management System (bad or expired token). If you believe this to be an error, please contact',
@@ -44,7 +44,7 @@ function GlobusLinkMessage(props) {
       <Typography variant="body2">
         {`${messages[statusCode]} `}
         <LightBlueLink underline="none" variant="body2" href="mailto:help@hubmapconsortium.org">
-          help@hubmapconsortium.org
+          help@hubmapconsortium.org <StyledEmailIcon />
         </LightBlueLink>
         .
       </Typography>
@@ -55,7 +55,7 @@ function GlobusLinkMessage(props) {
     <Typography variant="body2">
       {`Unexpected error ${statusCode}. Report error to `}
       <LightBlueLink underline="none" variant="body2" href="mailto:help@hubmapconsortium.org">
-        help@hubmapconsortium.org
+        help@hubmapconsortium.org <StyledEmailIcon />
       </LightBlueLink>
       .
     </Typography>
