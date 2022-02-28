@@ -9,24 +9,38 @@ The Data Portal depends, directly or indirectly, on many other HuBMAP repos:
 ```mermaid
 graph TD
     gateway
+    click gateway href "https://github.com/hubmapconsortium/gateway"
 
     top[portal-ui] --> commons
+    click top href "https://github.com/hubmapconsortium/portal-ui"
+    click commons href "https://github.com/hubmapconsortium/commons"
     top --> ccf-ui
+    click ccf-ui href "https://github.com/hubmapconsortium/ccf-ui"
     top --> vitessce --> viv
+    click vitessce href "https://github.com/hubmapconsortium/vitessce"
+    click viv href "https://github.com/hms-dbmi/viv"
     top --> valid[ingest-validation-tools]
-    top --> hubmap-api-py-client --> cells-api
+    click valid href "https://github.com/hubmapconsortium/ingest-validation-tools"
+    top --> cells-sdk --> cells-api --> pipe
+    click cells-sdk href "https://github.com/hubmapconsortium/cells-api-py-client"
+    click cells-api href "https://github.com/hubmapconsortium/cross_modality_query"
     top --> entity-api --> pipe[ingest-pipeline]
+    click entity-api href "https://github.com/hubmapconsortium/entity-api"
+    click pipe href "https://github.com/hubmapconsortium/ingest-pipeline"
     top --> assets-api --> pipe
+    %% assets-api is just a file server: There is no repo.
     top --> search-api --> pipe
+    click search-api href "https://github.com/hubmapconsortium/search-api"
 
     pipe --> valid
     pipe --> portal-containers
+    click portal-containers href "https://github.com/hubmapconsortium/portal-containers/"
 
-    subgraph apis
+    subgraph APIs
         entity-api
-        assets-api
         search-api
         cells-api
+        assets-api
     end
 ```
 
