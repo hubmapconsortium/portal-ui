@@ -9,7 +9,7 @@ import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
 import OrganInfo from 'js/components/organ/OrganInfo';
 import Samples from 'js/components/organ/Samples';
-import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
+import OrganDatasetsChart from 'js/components/organ/OrganDatasetsChart';
 import Section from 'js/shared-styles/sections/Section';
 
 import { FlexRow, Content } from './style';
@@ -61,7 +61,7 @@ function Organ(props) {
         {shouldDisplaySection[searchId] && (
           <Section id={searchId}>
             <Assays searchTerms={organ.search} />
-            <DatasetsBarChart name={organ.name} search={organ.search} />
+            <OrganDatasetsChart name={organ.name} search={organ.search} />
             <Samples searchTerms={organ.search} />
           </Section>
         )}
