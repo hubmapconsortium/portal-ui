@@ -9,6 +9,7 @@ const StyledOpenInNewRoundedIcon = styled(OpenInNewRoundedIcon)`
 
 const StyledOutboundLink = styled(OutboundLink)`
   display: flex;
+  align-items: center;
 `;
 
 export { StyledOpenInNewRoundedIcon, StyledOutboundLink };
