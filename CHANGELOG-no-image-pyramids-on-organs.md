@@ -1,0 +1,1 @@
+- Remove the Image Pyramids from the Organ barcharts.

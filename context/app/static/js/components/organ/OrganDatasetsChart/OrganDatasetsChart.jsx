@@ -30,6 +30,7 @@ function OrganDatasetsChart({ search }) {
   const { formattedData: formattedOrganTypeData, maxSumDocCount: maxAssayOrganTypeDocCount } = useAssayTypeBarChartData(
     assayOrganTypeData,
     'organ_type',
+    (bucket) => !bucket.key.mapped_data_type.includes('Image Pyramid'),
   );
 
   const dataTypes = formattedOrganTypeData.map((b) => b.mapped_data_type);
