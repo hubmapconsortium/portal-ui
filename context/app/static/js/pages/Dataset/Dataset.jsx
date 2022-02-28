@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -25,7 +24,7 @@ import { getSectionOrder } from 'js/components/detailPage/utils';
 
 import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
 
-import { StyledOpenInNewRoundedIcon } from './style';
+import { StyledOpenInNewRoundedIcon, StyledOutboundLink } from './style';
 
 function SummaryDataChildren(props) {
   const { mapped_data_types, origin_sample, doi_url, registered_doi } = props;
@@ -44,9 +43,9 @@ function SummaryDataChildren(props) {
       {doi_url ? (
         <>
           <SummaryItem>{organLink}</SummaryItem>
-          <OutboundLink href={doi_url} variant="h6">
+          <StyledOutboundLink href={doi_url} variant="h6">
             doi:{registered_doi} <StyledOpenInNewRoundedIcon />
-          </OutboundLink>
+          </StyledOutboundLink>
         </>
       ) : (
         organLink
