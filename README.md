@@ -6,7 +6,29 @@ It is deployed at [portal.hubmapconsortium.org](https://portal.hubmapconsortium.
 
 The Data Portal depends, directly or indirectly, on many other HuBMAP repos:
 
-[![Repo diagram](https://docs.google.com/drawings/d/e/2PACX-1vThwGinlSgVkqf782swQGHL8RAxPJ1JJfVRc4CrXmFJ0LY-ysFXY1yCGaYebWxTlc5ct0hwRlKIWt_D/pub?w=500)](https://docs.google.com/drawings/d/1IWjIlPytwHe5PAQCEwoTQI5mIhIK4EZ4USI6MVGFGNY/edit)
+```mermaid
+graph TD
+    gateway
+
+    top[portal-ui] --> commons
+    top --> ccf-ui
+    top --> vitessce --> viv
+    top --> valid[ingest-validation-tools]
+    top --> hubmap-api-py-client --> cells-api
+    top --> entity-api --> pipe[ingest-pipeline]
+    top --> assets-api --> pipe
+    top --> search-api --> pipe
+
+    pipe --> valid
+    pipe --> portal-containers
+
+    subgraph apis
+        entity-api
+        assets-api
+        search-api
+        cells-api
+    end
+```
 
 ## Feedback
 

@@ -1,0 +1,1 @@
+- Use mermaid for the README repo diagram.
