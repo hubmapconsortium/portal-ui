@@ -8,7 +8,7 @@ export default {
   component: IconLink,
 };
 
-const icon = <ExternalLinkIcon fontSize="1rem" />;
+const icon = <ExternalLinkIcon $fontSize="1rem" />;
 
 const Template = (args) => <IconLink {...args} />;
 export const Start = Template.bind({});
