@@ -15,7 +15,7 @@ function DataUseGuidelines() {
       </MainText>
       <MainText mt={2} variant="body1">
         Please direct any questions to{' '}
-        <EmailIconLink href="help@hubmapconsortium.org" iconFontSize="1.1rem">
+        <EmailIconLink email="help@hubmapconsortium.org" iconFontSize="1.1rem">
           help@hubmapconsortium.org
         </EmailIconLink>
       </MainText>

@@ -32,7 +32,7 @@ function Footer(props) {
                   </LightBlueLink>
                 </>
               )}
-              <EmailIconLink variant="body2" href="help@hubmapconsortium.org" iconFontSize="1rem">
+              <EmailIconLink variant="body2" email="help@hubmapconsortium.org" iconFontSize="1rem">
                 Submit Feedback
               </EmailIconLink>
             </FlexColumn>

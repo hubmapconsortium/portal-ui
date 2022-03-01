@@ -12,10 +12,10 @@ function sendEmailEvent(event) {
   });
 }
 
-function EmailIconLink({ iconFontSize, href, ...rest }) {
+function EmailIconLink({ iconFontSize, email, ...rest }) {
   return (
     <IconLink
-      href={`mailto:${href}`}
+      href={`mailto:${email}`}
       onCLick={sendEmailEvent}
       icon={<EmailIcon $fontSize={iconFontSize} />}
       {...rest}

@@ -7,7 +7,7 @@ import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 
 const LoginLink = () => <LightBlueLink href="/login">login</LightBlueLink>;
 const HelpEmailLink = () => (
-  <EmailIconLink href="help@hubmapconsortium.org" iconFontSize="1rem">
+  <EmailIconLink email="help@hubmapconsortium.org" iconFontSize="1rem">
     help@hubmapconsortium.org
   </EmailIconLink>
 );
