@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background } from './style';
 
 function Footer(props) {
@@ -31,9 +32,9 @@ function Footer(props) {
                   </LightBlueLink>
                 </>
               )}
-              <LightBlueLink variant="body2" href="mailto:help@hubmapconsortium.org">
+              <EmailIconLink variant="body2" href="help@hubmapconsortium.org" iconFontSize="1rem">
                 Submit Feedback
-              </LightBlueLink>
+              </EmailIconLink>
             </FlexColumn>
             <FlexColumn $mr={1}>
               <Typography variant="subtitle2">Software</Typography>

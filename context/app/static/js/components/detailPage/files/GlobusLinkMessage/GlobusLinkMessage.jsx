@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import FilesContext from '../Files/context';
 import FilesConditionalLink from '../FilesConditionalLink';
 import { StyledExternalLinkIcon } from './style';
@@ -43,9 +43,9 @@ function GlobusLinkMessage(props) {
     return (
       <Typography variant="body2">
         {`${messages[statusCode]} `}
-        <LightBlueLink underline="none" variant="body2" href="mailto:help@hubmapconsortium.org">
+        <EmailIconLink variant="body2" href="help@hubmapconsortium.org" iconFontSize="1rem">
           help@hubmapconsortium.org
-        </LightBlueLink>
+        </EmailIconLink>
         .
       </Typography>
     );
@@ -54,9 +54,9 @@ function GlobusLinkMessage(props) {
   return (
     <Typography variant="body2">
       {`Unexpected error ${statusCode}. Report error to `}
-      <LightBlueLink underline="none" variant="body2" href="mailto:help@hubmapconsortium.org">
+      <EmailIconLink variant="body2" href="help@hubmapconsortium.org" iconFontSize="1rem">
         help@hubmapconsortium.org
-      </LightBlueLink>
+      </EmailIconLink>
       .
     </Typography>
   );

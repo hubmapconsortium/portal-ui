@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { StyledPaper, MainText, StyledEmailIcon } from './style';
 
 function DataUseGuidelines() {
@@ -15,9 +15,9 @@ function DataUseGuidelines() {
       </MainText>
       <MainText mt={2} variant="body1">
         Please direct any questions to{' '}
-        <LightBlueLink href="mailto:help@hubmapconsortium.org">
+        <EmailIconLink href="help@hubmapconsortium.org" iconFontSize="1rem">
           help@hubmapconsortium.org <StyledEmailIcon />
-        </LightBlueLink>
+        </EmailIconLink>
       </MainText>
     </StyledPaper>
   );
