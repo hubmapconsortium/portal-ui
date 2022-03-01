@@ -3,26 +3,26 @@ import PropTypes from 'prop-types';
 
 import { FlexOutboundLink, FlexLightBlueLink, StyledSpan } from './style';
 
-function IconLink({ children, icon, iconPosition, isOutbound, ...rest }) {
+function IconLink({ children, icon, iconOnLeft, isOutbound, ...rest }) {
   const LinkComponent = isOutbound ? FlexOutboundLink : FlexLightBlueLink;
 
   return (
     <LinkComponent {...rest}>
-      {iconPosition === 'start' && icon}
-      <StyledSpan $iconPosition={iconPosition}>{children}</StyledSpan>
-      {iconPosition === 'end' && icon}
+      {iconOnLeft && icon}
+      <StyledSpan $iconMargin={iconOnLeft ? 'left' : 'right'}>{children}</StyledSpan>
+      {!iconOnLeft && icon}
     </LinkComponent>
   );
 }
 
 IconLink.propTypes = {
   icon: PropTypes.element.isRequired,
-  iconPosition: PropTypes.oneOf(['start', 'end']),
+  iconOnLeft: PropTypes.bool,
   isOutbound: PropTypes.bool,
 };
 
 IconLink.defaultProps = {
-  iconPosition: 'end',
+  iconOnLeft: false,
   isOutbound: false,
 };
 

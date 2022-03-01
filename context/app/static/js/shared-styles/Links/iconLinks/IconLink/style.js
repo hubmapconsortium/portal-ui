@@ -15,14 +15,7 @@ const FlexLightBlueLink = styled(LightBlueLink)`
 `;
 
 const StyledSpan = styled.span`
-  ${(props) =>
-    props.$iconPosition === 'start'
-      ? css`
-          margin-left: ${props.theme.spacing(0.5)}px;
-        `
-      : css`
-          margin-right: ${props.theme.spacing(0.5)}px;
-        `};
+  ${(props) => css`margin-${props.$iconMargin}: ${props.theme.spacing(0.5)}px`};
 `;
 
 export { FlexOutboundLink, FlexLightBlueLink, StyledSpan };
