@@ -12,7 +12,7 @@ COPY .babelrc .babelrc
 COPY build-utils build-utils
 COPY app app
 COPY ingest-validation-tools ingest-validation-tools
-COPY portal-visualization portal-visualization
+# portal-visualization is python-only, and not needed for the npm build.
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
@@ -20,6 +20,7 @@ RUN npm run build
 FROM tiangolo/uwsgi-nginx-flask:python3.8
 
 COPY requirements.txt /app
+COPY portal-visualization/requirements.txt /app/portal-visualization/requirements.txt
 RUN pip install -r /app/requirements.txt
 
 # NGINX should serve static content directly.
