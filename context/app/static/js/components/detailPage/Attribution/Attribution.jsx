@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
+import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 
@@ -17,7 +17,9 @@ function Attribution(props) {
         <SectionItem label="Group">{group_name}</SectionItem>
         <SectionItem label="Creator" ml={1}>
           {created_by_user_displayname}
-          <LightBlueLink href={`mailto:${encodeURI(created_by_user_email)}`}>{created_by_user_email}</LightBlueLink>
+          <EmailIconLink email={`mailto:${encodeURI(created_by_user_email)}`} iconFontSize="1.1rem">
+            {created_by_user_email}
+          </EmailIconLink>
         </SectionItem>
       </FlexPaper>
     </DetailPageSection>

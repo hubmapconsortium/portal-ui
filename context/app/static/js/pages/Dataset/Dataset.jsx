@@ -24,9 +24,9 @@ import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
 
 import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
-function SummaryDataChildren(props) {
-  const { mapped_data_types, origin_sample } = props;
+function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, registered_doi }) {
   return (
     <>
       <SummaryItem>
@@ -34,9 +34,16 @@ function SummaryDataChildren(props) {
           {mapped_data_types}
         </LightBlueLink>
       </SummaryItem>
-      <LightBlueLink variant="h6" href="/organ" underline="none">
-        {origin_sample.mapped_organ}
-      </LightBlueLink>
+      <SummaryItem showDivider={Boolean(doi_url)}>
+        <LightBlueLink variant="h6" href="/organ" underline="none">
+          {origin_sample.mapped_organ}
+        </LightBlueLink>
+      </SummaryItem>
+      {doi_url && (
+        <OutboundIconLink isOutbound href={doi_url} variant="h6" iconFontSize="1.1rem">
+          doi:{registered_doi}
+        </OutboundIconLink>
+      )}
     </>
   );
 }
@@ -68,6 +75,8 @@ function DatasetDetail(props) {
     sub_status,
     mapped_data_access_level,
     mapped_external_group_name,
+    registered_doi,
+    doi_url,
     contributors,
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
@@ -145,6 +154,8 @@ function DatasetDetail(props) {
             data_types={data_types || []}
             mapped_data_types={mapped_data_types || []}
             origin_sample={origin_sample}
+            registered_doi={registered_doi}
+            doi_url={doi_url}
           />
         </Summary>
         {shouldDisplaySection.visualization && (

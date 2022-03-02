@@ -1,0 +1,1 @@
+- Add icons to email links.
