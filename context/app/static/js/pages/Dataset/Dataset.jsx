@@ -10,6 +10,7 @@ import MetadataTable from 'js/components/detailPage/MetadataTable';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryItem from 'js/components/detailPage/SummaryItem';
+import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
@@ -76,6 +77,7 @@ function DatasetDetail(props) {
     mapped_external_group_name,
     registered_doi,
     doi_url,
+    contributors,
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
@@ -93,10 +95,21 @@ function DatasetDetail(props) {
     metadata: Boolean(Object.keys(combinedMetadata).length),
     files: true,
     collections: Boolean(collectionsData.length),
+    contributors: contributors && Boolean(contributors.length),
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'visualization', 'provenance', 'protocols', 'metadata', 'files', 'collections', 'attribution'],
+    [
+      'summary',
+      'visualization',
+      'provenance',
+      'protocols',
+      'metadata',
+      'files',
+      'collections',
+      'contributors',
+      'attribution',
+    ],
     shouldDisplaySection,
   );
 
@@ -153,6 +166,7 @@ function DatasetDetail(props) {
         {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
         <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
+        {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}

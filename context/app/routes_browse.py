@@ -111,22 +111,15 @@ def details_notebook(type, uuid):
             or vitessce_conf.cells is None):
         abort(404)
     nb = new_notebook()
+    hubmap_id = entity['hubmap_id']
+    dataset_url = request.base_url.replace('.ipynb', '')
     nb['cells'] = [
-        new_markdown_cell(f"""
-Visualization for [{entity['hubmap_id']}]({request.base_url.replace('.ipynb','')})
-        """.strip()),
-        new_code_cell("""
-!pip install vitessce==0.1.0a9
-!jupyter nbextension install --py --sys-prefix vitessce
-!jupyter nbextension enable --py --sys-prefix vitessce
-        """.strip()),
-        new_code_cell('from vitessce import VitessceConfig')
-    ] + vitessce_conf.cells + [
-        new_code_cell('conf.widget()')
-    ]
+        new_markdown_cell(f"Visualization for [{hubmap_id}]({dataset_url})"),
+        new_code_cell('!pip install vitessce'),
+    ] + vitessce_conf.cells
     return Response(
         response=nbformat.writes(nb),
-        headers={'Content-Disposition': f"attachment; filename={entity['hubmap_id']}.ipynb"},
+        headers={'Content-Disposition': f"attachment; filename={hubmap_id}.ipynb"},
         mimetype='application/x-ipynb+json'
     )
 
