@@ -86,6 +86,7 @@ function DatasetDetail(props) {
     metadata: Boolean(Object.keys(combinedMetadata).length),
     files: true,
     collections: Boolean(collectionsData.length),
+    contributors: contributors && Boolean(contributors.length),
   };
 
   const sectionOrder = getSectionOrder(
@@ -154,7 +155,7 @@ function DatasetDetail(props) {
         {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
         <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
-        <ContributorsTable contributors={contributors} title="Contributors" />
+        {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
