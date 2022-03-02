@@ -38,6 +38,6 @@ from pathlib import Path
 
 package = json.loads(Path('context/package.json').read_text())
 print('```')
-print(json.dumps(package['dependencies'], sort_keys=True, indent=4))
+print(json.dumps(package['dependencies'], sort_keys=True, indent=0))
 print('```')
 EOF

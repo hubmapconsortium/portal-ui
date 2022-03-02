@@ -22,7 +22,8 @@ function Services() {
           <LightBlueLink target="_blank" rel="noopener noreferrer" underline="none" href={gatewayUrl}>
             {new URL(gatewayUrl).hostname}
           </LightBlueLink>
-          .
+          . The HuBMAP Portal software also has a number of{' '}
+          <LightBlueLink href="/dependencies">dependencies</LightBlueLink>.
         </Description>
       </SectionContainer>
       <Paper>
