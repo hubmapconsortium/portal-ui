@@ -4,6 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import Markdown from 'js/components/Markdown';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+
 import { StyledPaper } from './style';
 
 function Publication(props) {
@@ -25,7 +28,7 @@ function Publication(props) {
         <Typography variant="h4" component="h2">
           Manuscript
         </Typography>
-        <b>{journal}</b>: <a href={url}>{url}</a>
+        <b>{journal}</b>: <OutboundLink href={url}>{url}</OutboundLink>
         <Typography variant="h4" component="h2">
           Authors
         </Typography>
@@ -36,7 +39,10 @@ function Publication(props) {
         <b>Corresponding Author:</b>{' '}
         {authors.corresponding.map((author) => (
           <span key={author.name}>
-            {author.name} - <a href={`mailto:${author.email}`}>{author.email}</a>
+            {author.name} -{' '}
+            <EmailIconLink email={`${author.email}`} iconFontSize="1rem">
+              {author.email}
+            </EmailIconLink>
           </span>
         ))}
       </StyledPaper>
