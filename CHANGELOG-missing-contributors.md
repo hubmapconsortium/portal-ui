@@ -1,0 +1,1 @@
+- Make datasets robust against missing `contributors`.

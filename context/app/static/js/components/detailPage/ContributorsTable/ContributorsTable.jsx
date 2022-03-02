@@ -15,8 +15,8 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { HeaderIconCell, StyledInfoIcon, CenterAlignedFlexRow, StyledOpenInNewRoundedIcon } from './style';
 
-function CollectionsAffiliationsTable(props) {
-  const { title, affiliations: tableRows } = props;
+function ContributorsTable(props) {
+  const { title, contributors } = props;
 
   const columns = [
     { id: 'name', label: 'Name' },
@@ -24,7 +24,7 @@ function CollectionsAffiliationsTable(props) {
   ];
 
   return (
-    <DetailPageSection id="datasets-table">
+    <DetailPageSection id="contributors">
       <SectionHeader>{title}</SectionHeader>
       <Paper>
         <StyledTableContainer>
@@ -45,7 +45,7 @@ function CollectionsAffiliationsTable(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tableRows.map((row) => (
+              {contributors.map((row) => (
                 <TableRow key={row.orcid_id}>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.affiliation}</TableCell>
@@ -64,9 +64,9 @@ function CollectionsAffiliationsTable(props) {
   );
 }
 
-CollectionsAffiliationsTable.propTypes = {
+ContributorsTable.propTypes = {
   title: PropTypes.string.isRequired,
-  affiliations: PropTypes.arrayOf(PropTypes.object).isRequired,
+  contributors: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default CollectionsAffiliationsTable;
+export default ContributorsTable;

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import Summary from 'js/components/detailPage/Summary';
 import CollectionDatasetsTable from 'js/components/detailPage/CollectionDatasetsTable';
-import CollectionsAffiliationsTable from 'js/components/detailPage/CollectionsAffiliationsTable';
+import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 
 import { StyledOpenInNewRoundedIcon } from './style';
@@ -53,11 +53,9 @@ function Collection(props) {
               </OutboundLink>
             )}
           </Summary>
-          {'contacts' in collectionData && <CollectionsAffiliationsTable affiliations={contacts} title="Contacts" />}
+          {'contacts' in collectionData && <ContributorsTable contributors={contacts} title="Contacts" />}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
-          {'creators' in collectionData && (
-            <CollectionsAffiliationsTable affiliations={creators} title="Contributors" />
-          )}
+          {'creators' in collectionData && <ContributorsTable contributors={creators} title="Contributors" />}
         </>
       )}
     </div>
