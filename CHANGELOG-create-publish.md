@@ -1,0 +1,1 @@
+- If a publication date is available, use it in preference to the creation date.
