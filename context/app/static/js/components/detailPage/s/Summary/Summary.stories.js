@@ -2,8 +2,8 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { Citation } from 'js/components/detailPage/Citation/Citation.stories';
+import SummaryItem from 'js/components/detailPage/SummaryItem';
 import Summary from './Summary';
-import SummaryItem from '../SummaryItem';
 
 export default {
   title: 'EntityDetail/Summary/Summary',
