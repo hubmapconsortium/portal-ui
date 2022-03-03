@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { Citation } from 'js/components/detailPage/Citation/Citation.stories';
-import SummaryItem from 'js/components/detailPage/SummaryItem';
+import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import Summary from './Summary';
 
 export default {
