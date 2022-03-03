@@ -10,6 +10,7 @@ function Summary(props) {
     hubmap_id,
     entity_type,
     created_timestamp,
+    published_timestamp,
     last_modified_timestamp,
     uuid,
     description,
@@ -43,6 +44,7 @@ function Summary(props) {
         citationTitle={citationTitle}
         last_modified_timestamp={last_modified_timestamp}
         created_timestamp={created_timestamp}
+        published_timestamp={published_timestamp}
         doi_url={doi_url}
         doi={doi}
         collectionName={collectionName}
