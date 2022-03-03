@@ -40,7 +40,8 @@ response = requests.post(
 metadata = list(DictReader(StringIO(response.text), dialect=excel_tab))
 """.strip()),
         new_code_cell('len(metadata)'),
-        new_code_cell('metadata[0].keys()')]
+        new_code_cell('metadata[0].keys()'),
+        new_code_cell(r"field_defs = dict(zip(*[line.split('\t') for line in response.text.split('\n')[:2]]))")]
     return Response(
         response=nbformat.writes(nb),
         headers={'Content-Disposition': f"attachment; filename=metadata.ipynb"},
