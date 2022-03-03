@@ -38,10 +38,9 @@ response = requests.post(
     '{base}/metadata/v0/{entity_type}.tsv',
     json={{'uuids':{json.dumps(uuids)}}})
 metadata = list(DictReader(StringIO(response.text), dialect=excel_tab))
-
-len(metadata)
-metadata[0].keys()
-""".strip())]
+""".strip()),
+        new_code_cell('len(metadata)'),
+        new_code_cell('metadata[0].keys()')]
     return Response(
         response=nbformat.writes(nb),
         headers={'Content-Disposition': f"attachment; filename=metadata.ipynb"},

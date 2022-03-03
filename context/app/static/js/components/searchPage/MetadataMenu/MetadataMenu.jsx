@@ -49,6 +49,40 @@ function MetadataMenu({ type, analyticsCategory }) {
     closeMenu();
   }
 
+  async function fetchAndDownloadNotebook() {
+    // TODO: Clean up the copy and paste if this is accepted.
+    const response = await fetch(`/notebooks/${lcPluralType}.ipynb`, {
+      method: 'POST',
+      body: JSON.stringify({ uuids: allResultsUUIDs }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      console.error('Notebook Failed', response);
+      closeMenu();
+      return;
+    }
+    const results = await response.blob();
+
+    // TODO: Can we get the MIME type from the response?
+    const downloadUrl = createDownloadUrl(results, 'application/x-ipynb+json');
+    // need to create link to set file name
+    const tempLink = document.createElement('a');
+    tempLink.href = downloadUrl;
+    const timestamp = format(new Date(), 'yyyy-MM-dd_HH-mm-ss');
+    tempLink.download = `hubmap-${lcPluralType}-notebook-${timestamp}.ipynb`;
+    tempLink.click();
+
+    ReactGA.event({
+      category: analyticsCategory,
+      action: `Download Notebook`,
+      label: type,
+    });
+
+    closeMenu();
+  }
+
   const menuID = 'metadata-menu';
 
   return (
@@ -64,6 +98,15 @@ function MetadataMenu({ type, analyticsCategory }) {
         <MenuItem onClick={fetchAndDownloadTSV}>
           Download
           <SecondaryBackgroundTooltip title="Download a TSV of the table metadata." placement="bottom-start">
+            <StyledInfoIcon color="primary" />
+          </SecondaryBackgroundTooltip>
+        </MenuItem>
+        <MenuItem onClick={fetchAndDownloadNotebook}>
+          Notebook
+          <SecondaryBackgroundTooltip
+            title="Download a Notebook which demonstrates how to programmatically access metadata."
+            placement="bottom-start"
+          >
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
