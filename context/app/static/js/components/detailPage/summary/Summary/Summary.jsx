@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { DetailPageSection } from 'js/components/detailPage/style';
-import SummaryData from '../SummaryData';
-import SummaryBody from '../SummaryBody';
+import SummaryData from 'js/components/detailPage/summary/SummaryData';
+import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
 
 function Summary(props) {
   const {
