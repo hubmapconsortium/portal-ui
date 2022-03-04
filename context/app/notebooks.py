@@ -5,7 +5,12 @@ import black
 
 
 def _blocks_to_cells(code_blocks):
-    # Running it through black will also catch syntax errors.
+    '''
+    Running code through black formats and catches syntax errors.
+
+    >>> _blocks_to_cells(['-> No good!'])
+    ???
+    '''
     return [
         new_code_cell(black.format_str(code, mode=black.FileMode()).strip())
         for code in code_blocks
