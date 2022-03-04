@@ -1,4 +1,3 @@
-from urllib.parse import urlparse
 import json
 
 from flask import (request, Response)
@@ -6,17 +5,10 @@ from flask import (request, Response)
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
-from .utils import make_blueprint
+from .utils import make_blueprint, get_url_base_from_request
 
 
 blueprint = make_blueprint(__name__)
-
-
-def get_url_base_from_request():
-    parsed = urlparse(request.base_url)
-    scheme = parsed.scheme
-    netloc = parsed.netloc
-    return f'{scheme}://{netloc}'
 
 
 @blueprint.route('/notebooks/<entity_type>.ipynb', methods=['POST'])

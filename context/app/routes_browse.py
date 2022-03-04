@@ -7,19 +7,12 @@ from flask import (render_template, jsonify,
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
-from .utils import get_default_flask_data, make_blueprint, get_client
+from .utils import get_default_flask_data, make_blueprint, get_client, get_url_base_from_request
 
 
 blueprint = make_blueprint(__name__)
 
 entity_types = ['donor', 'sample', 'dataset', 'support', 'collection']
-
-
-def get_url_base_from_request():
-    parsed = urlparse(request.base_url)
-    scheme = parsed.scheme
-    netloc = parsed.netloc
-    return f'{scheme}://{netloc}'
 
 
 @blueprint.route('/browse/<possible_hbm_id>')
