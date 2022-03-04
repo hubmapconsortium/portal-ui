@@ -15,8 +15,13 @@ def _blocks_to_cells(code_blocks):
 
     >>> cells = _blocks_to_cells(['2 + 2'])
     >>> del cells[0]['id']
-    >>> cells[0]
-    {'cell_type': 'code', 'metadata': {}, 'execution_count': None, 'source': '2 + 2', 'outputs': []}
+    >>> from pprint import pprint
+    >>> pprint(cells[0])
+    {'cell_type': 'code',
+     'execution_count': None,
+     'metadata': {},
+     'outputs': [],
+     'source': '2 + 2'}
     '''
     return [
         new_code_cell(black.format_str(code, mode=black.FileMode()).strip())
