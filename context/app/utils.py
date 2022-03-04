@@ -5,6 +5,9 @@ from .api.client import ApiClient
 from .api.mock_client import MockApiClient
 
 
+entity_types = ['donor', 'sample', 'dataset', 'support', 'collection']
+
+
 def get_client():
     if current_app.config.get('IS_MOCK'):
         return MockApiClient()

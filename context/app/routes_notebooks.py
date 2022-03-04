@@ -1,14 +1,46 @@
 import json
 
-from flask import (request, Response)
+from flask import (abort, request, Response)
 import black
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
-from .utils import make_blueprint, get_url_base_from_request
+from .utils import make_blueprint, get_url_base_from_request, entity_types, get_client
 
 
 blueprint = make_blueprint(__name__)
+
+
+def _nb_response(name_stem, cells):
+    nb = new_notebook()
+    nb['cells'] = cells
+    return Response(
+        response=nbformat.writes(nb),
+        headers={'Content-Disposition': f"attachment; filename={name_stem}.ipynb"},
+        mimetype='application/x-ipynb+json'
+    )
+
+@blueprint.route('/browse/<type>/<uuid>.ipynb')
+def details_notebook(type, uuid):
+    if type not in entity_types:
+        abort(404)
+    client = get_client()
+    entity = client.get_entity(uuid)
+    vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
+    if (vitessce_conf is None
+            or vitessce_conf.conf is None
+            or vitessce_conf.cells is None):
+        abort(404)
+
+    hubmap_id = entity['hubmap_id']
+    dataset_url = request.base_url.replace('.ipynb', '')
+    cells = [
+        new_markdown_cell(f"Visualization for [{hubmap_id}]({dataset_url})"),
+        new_code_cell('!pip install vitessce'),
+    ] + vitessce_conf.cells
+
+    return _nb_response(hubmap_id, cells)
+
 
 def _code_cells(code_blocks):
     # Running it through black will also catch syntax errors.
@@ -23,11 +55,10 @@ def notebook(entity_type):
     body = request.get_json()
     uuids = body.get('uuids')
     base = get_url_base_from_request()
-    nb = new_notebook()
-    nb['cells'] = [
+    cells = [
         new_markdown_cell(f'This notebook demonstrates how to work with HuBMAP APIs for {entity_type}:'),
         new_code_cell('!pip install requests'),
-        new_code_cell(
+        *_code_cells([
             f"""
 import json
 from csv import DictReader, excel_tab
@@ -35,9 +66,10 @@ from io import StringIO
 import requests
 
 # These are the UUIDS of the search results when this notebook was created:
+
 uuids = {json.dumps(uuids)}
-""".strip()),
-        *_code_cells([
+
+""",
             f"""
 # Fetch the metadata, and read it into a list of dicts:
 
@@ -98,8 +130,4 @@ files = {
 
 '''])
     ]
-    return Response(
-        response=nbformat.writes(nb),
-        headers={'Content-Disposition': f"attachment; filename={entity_type}.ipynb"},
-        mimetype='application/x-ipynb+json'
-    )
+    return _nb_response(entity_type, cells)
