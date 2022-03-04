@@ -38,7 +38,7 @@ import requests
 uuids = {json.dumps(uuids)}
 """.strip()),
         *_code_cells([
-            r"""
+            f"""
 # Fetch the metadata, and read it into a list of dicts:
 
 response = requests.post(
