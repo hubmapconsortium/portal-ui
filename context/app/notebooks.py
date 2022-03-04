@@ -11,7 +11,7 @@ def _blocks_to_cells(code_blocks):
     >>> _blocks_to_cells(['No good!'])
     Traceback (most recent call last):
     ...
-    black.parsing.InvalidInput: Cannot parse: 1:3: No good!
+    black.parsing.InvalidInput: Cannot parse: 1:3: No good!!!!
 
     >>> cells = _blocks_to_cells(['2 + 2'])
     >>> del cells[0]['id']
