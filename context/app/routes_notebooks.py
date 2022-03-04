@@ -1,6 +1,6 @@
 import json
 
-from flask import (abort, request, Response)
+from flask import (abort, request, Response, current_app)
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
@@ -48,12 +48,15 @@ def details_notebook(type, uuid):
 def notebook(entity_type):
     body = request.get_json()
     uuids = body.get('uuids')
-    base = get_url_base_from_request()
+    url_base = get_url_base_from_request()
+    search_url = (
+        current_app.config['ELASTICSEARCH_ENDPOINT']
+        + current_app.config['PORTAL_INDEX_PATH'])
     cells = [
         new_markdown_cell(
             f'This notebook demonstrates how to work with HuBMAP APIs for {entity_type}:'),
         new_code_cell('!pip install requests'),
-        *get_shared_cells(uuids=uuids, base=base, entity_type=entity_type),
-        *get_file_cells(),
+        *get_shared_cells(uuids=uuids, url_base=url_base, entity_type=entity_type),
+        *get_file_cells(search_url=search_url),
     ]
     return _nb_response(entity_type, cells)

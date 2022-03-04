@@ -12,7 +12,7 @@ def _blocks_to_cells(code_blocks):
     ]
 
 
-def get_shared_cells(uuids=None, base=None, entity_type=None):
+def get_shared_cells(uuids=None, url_base=None, entity_type=None):
     return _blocks_to_cells([
         f"""
 import json
@@ -29,7 +29,7 @@ uuids = {json.dumps(uuids)}
 # Fetch the metadata, and read it into a list of dicts:
 
 response = requests.post(
-             '{base}/metadata/v0/{entity_type}.tsv',
+             '{url_base}/metadata/v0/{entity_type}.tsv',
     json={{'uuids': uuids}})
 metadata = list(DictReader(StringIO(response.text), dialect=excel_tab))
 
@@ -41,9 +41,9 @@ len(metadata)
 
 ''',
         r'''
-# Each dict will have the same keys:
+# Each dict will have the same keys. To see the first 10:
 
-metadata[0].keys()
+list(metadata[0].keys())[:10]
 
 ''',
         r'''
@@ -53,16 +53,20 @@ metadata_key_defs = dict(zip(*[
     line.split('\t') for line in response.text.split('\n')[:2]
 ]))
 
+# To see the first 10:
+
+list(metadata_key_defs.items())[:10]
+
 '''
     ])
 
 
-def get_file_cells():
+def get_file_cells(search_url):
     return _blocks_to_cells([
-        r'''
-# The Search API can give us information about the files in each dataset:
+        f'''
+# The Search API can give us information about the files in processed dataset:
 
-search_api = 'https://search.api.hubmapconsortium.org/portal/search'
+search_api = '{search_url}'
 
 ''',
         r'''
@@ -79,13 +83,17 @@ hits = json.loads(
 
 ''',
         r'''
-# File descriptions are also available for files, if needed: file['description']
+# Only processed datasets have file information.
 
 files = {
-    hit['_id']: [
-        file['rel_path'] for file in hit['_source']['files']
-    ] for hit in hits
+    hit["_id"]: {
+        file['rel_path']: file['description'] for file in hit["_source"].get("files", []) if file
+    } for hit in hits
 }
+
+# For example, the first 10 files from the first dataset:
+
+list(list(files.values())[0].items())[:10]
 
 '''
     ])
