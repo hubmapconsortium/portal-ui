@@ -8,8 +8,15 @@ def _blocks_to_cells(code_blocks):
     '''
     Running code through black formats and catches syntax errors.
 
-    >>> _blocks_to_cells(['-> No good!'])
-    ???
+    >>> _blocks_to_cells(['No good!'])
+    Traceback (most recent call last):
+    ...
+    black.parsing.InvalidInput: Cannot parse: 1:3: No good!
+
+    >>> cells = _blocks_to_cells(['2 + 2'])
+    >>> del cells[0]['id']
+    >>> cells[0]
+    {'cell_type': 'code', 'metadata': {}, 'execution_count': None, 'source': '2 + 2', 'outputs': []}
     '''
     return [
         new_code_cell(black.format_str(code, mode=black.FileMode()).strip())
@@ -18,6 +25,12 @@ def _blocks_to_cells(code_blocks):
 
 
 def get_shared_cells(uuids=None, url_base=None, entity_type=None):
+    '''
+    Return cells that should work for Donors, Samples, or Datasets.
+
+    Confirm that there are no syntax errors:
+    >>> cells = get_shared_cells(uuids=None, url_base=None, entity_type=None)
+    '''
     return _blocks_to_cells([
         f"""
 import json
@@ -67,6 +80,12 @@ list(metadata_key_defs.items())[:10]
 
 
 def get_file_cells(search_url):
+    '''
+    Return cells that only work for some Datasets.
+
+    Confirm that there are no syntax errors:
+    >>> cells = get_file_cells(search_url=None)
+    '''
     return _blocks_to_cells([
         f'''
 # The Search API can give us information about the files in processed dataset:
