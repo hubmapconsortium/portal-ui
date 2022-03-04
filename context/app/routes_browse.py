@@ -1,13 +1,13 @@
 import json
 from urllib.parse import urlparse
 
-from flask import (render_template, jsonify,
-                   abort, request, redirect, url_for, Response)
+from flask import (
+    render_template, jsonify,
+    abort, request, redirect, url_for, Response)
 
-import nbformat
-from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
-
-from .utils import get_default_flask_data, make_blueprint, get_client, get_url_base_from_request, entity_types
+from .utils import (
+    get_default_flask_data, make_blueprint, get_client,
+    get_url_base_from_request, entity_types)
 
 
 blueprint = make_blueprint(__name__)

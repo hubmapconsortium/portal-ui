@@ -20,6 +20,7 @@ def _nb_response(name_stem, cells):
         mimetype='application/x-ipynb+json'
     )
 
+
 @blueprint.route('/browse/<type>/<uuid>.ipynb')
 def details_notebook(type, uuid):
     if type not in entity_types:
@@ -56,7 +57,8 @@ def notebook(entity_type):
     uuids = body.get('uuids')
     base = get_url_base_from_request()
     cells = [
-        new_markdown_cell(f'This notebook demonstrates how to work with HuBMAP APIs for {entity_type}:'),
+        new_markdown_cell(
+            f'This notebook demonstrates how to work with HuBMAP APIs for {entity_type}:'),
         new_code_cell('!pip install requests'),
         *_code_cells([
             f"""

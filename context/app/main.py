@@ -81,6 +81,7 @@ def create_app(testing=False):
     # Credit to https://stackoverflow.com/a/40365514
     # for this way to redirect from slash-ending urls to plain.
     app.url_map.strict_slashes = False
+
     @app.before_request
     def clear_trailing():
         path = request.path
