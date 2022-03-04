@@ -55,6 +55,7 @@ def notebook(entity_type):
             f'This notebook demonstrates how to work with HuBMAP APIs for {entity_type}:'),
         new_code_cell('!pip install requests'),
         *get_shared_cells(uuids=uuids, url_base=url_base, entity_type=entity_type),
-        *get_file_cells(search_url=search_url),
     ]
+    if entity_type == 'datasets':
+        cells += get_file_cells(search_url=search_url)
     return _nb_response(entity_type, cells)

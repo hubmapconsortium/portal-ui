@@ -93,7 +93,7 @@ def get_file_cells(search_url):
     '''
     return _blocks_to_cells([
         f'''
-# The Search API can give us information about the files in processed dataset:
+# The Search API can give us information about the files in processed datasets:
 
 search_api = '{search_url}'
 
