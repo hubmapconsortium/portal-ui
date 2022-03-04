@@ -1,5 +1,3 @@
-import json
-
 from flask import (abort, request, Response, current_app)
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
