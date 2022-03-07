@@ -1,9 +1,11 @@
+import re
+
 from flask import (abort, request, Response, current_app)
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
 from .utils import make_blueprint, get_url_base_from_request, entity_types, get_client
-from .notebooks import get_shared_cells, get_file_cells
+from .notebooks import get_anndata_cells, get_shared_cells, get_file_cells
 
 
 blueprint = make_blueprint(__name__)
@@ -50,12 +52,35 @@ def notebook(entity_type):
     search_url = (
         current_app.config['ELASTICSEARCH_ENDPOINT']
         + current_app.config['PORTAL_INDEX_PATH'])
+
+    # Common to all entities:
     cells = [
         new_markdown_cell(
             f'This notebook demonstrates how to work with HuBMAP APIs for {entity_type}:'),
         new_code_cell('!pip install requests'),
         *get_shared_cells(uuids=uuids, url_base=url_base, entity_type=entity_type),
     ]
+
+    # Only for datasets:
     if entity_type == 'datasets':
         cells += get_file_cells(search_url=search_url)
+
+    # Only for datasets with anndata:
+    uuids_to_zarr_files = _get_uuids_to_zarr_files(uuids)
+    zarr_files = set().union(*uuids_to_zarr_files.values())
+    if zarr_files:
+        cells += get_anndata_cells(uuids_to_zarr_files)
+
     return _nb_response(entity_type, cells)
+
+
+def _get_uuids_to_zarr_files(uuids):
+    client = get_client()
+    uuid_files = client.get_files(uuids)
+    uuids_to_zarr_files = {
+        uuid: set(
+            re.sub(r'\.zarr/.*', '.zarr', f) for f in files
+            if '.zarr' in f)
+        for uuid, files in uuid_files.items()
+    }
+    return uuids_to_zarr_files

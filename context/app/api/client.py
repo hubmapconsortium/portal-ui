@@ -81,6 +81,24 @@ class ApiClient():
             raise Exception('At least 10k datasets: need to make multiple requests')
         return uuids
 
+    def get_files(self, uuids):
+        query = {
+            'size': 10000,
+            'query': {'bool': {
+                'must': [{'ids': {'values': uuids}}]
+            }},
+            '_source': ['files.rel_path']
+        }
+        response_json = self._request(
+            current_app.config['ELASTICSEARCH_ENDPOINT']
+            + current_app.config['PORTAL_INDEX_PATH'],
+            body_json=query)
+        return {
+            hit['_id']: [
+                file['rel_path'] for file in hit['_source']['files']
+            ] for hit in response_json['hits']['hits']
+        }
+
     def get_entities(self,
                      plural_lc_entity_type=None,
                      non_metadata_fields=[],

@@ -1,19 +1,19 @@
 import json
 
-from nbformat.v4 import new_code_cell
+from nbformat.v4 import new_code_cell, new_markdown_cell
 import black
 
 
-def _blocks_to_cells(code_blocks):
+def _blocks_to_cells(title, code_blocks):
     '''
     Running code through black formats and catches syntax errors.
 
-    >>> _blocks_to_cells(['No good!'])
+    >>> _blocks_to_cells('title here', ['No good!'])
     Traceback (most recent call last):
     ...
     black.parsing.InvalidInput: Cannot parse: 1:3: No good!
 
-    >>> cells = _blocks_to_cells(['2 + 2'])
+    >>> cells = _blocks_to_cells('title here', ['2 + 2'])
     >>> del cells[0]['id']
     >>> from pprint import pprint
     >>> pprint(cells[0])
@@ -23,7 +23,7 @@ def _blocks_to_cells(code_blocks):
      'outputs': [],
      'source': '2 + 2'}
     '''
-    return [
+    return [new_markdown_cell(f'## {title}')] + [
         new_code_cell(black.format_str(code, mode=black.FileMode()).strip())
         for code in code_blocks
     ]
@@ -36,7 +36,7 @@ def get_shared_cells(uuids=None, url_base=None, entity_type=None):
     Confirm that there are no syntax errors:
     >>> cells = get_shared_cells(uuids=None, url_base=None, entity_type=None)
     '''
-    return _blocks_to_cells([
+    return _blocks_to_cells('HuBMAP Metadata', [
         f"""
 import json
 from csv import DictReader, excel_tab
@@ -91,7 +91,7 @@ def get_file_cells(search_url):
     Confirm that there are no syntax errors:
     >>> cells = get_file_cells(search_url=None)
     '''
-    return _blocks_to_cells([
+    return _blocks_to_cells('HuBMAP Files', [
         f'''
 # The Search API can give us information about the files in processed datasets:
 
@@ -124,5 +124,21 @@ files = {
 
 list(list(files.values())[0].items())[:10]
 
+'''
+    ])
+
+
+def get_anndata_cells(uuids_to_zarr_files):
+    '''
+    Return cells that explore anndata zarrs, if present.
+
+    Confirm that there are no syntax errors:
+    >>> cells = get_anndata_cells({})
+    '''
+    return _blocks_to_cells('AnnData', [
+        f'''
+# These are just the zarr files from the list above:
+
+uuids_to_zarr_files = {uuids_to_zarr_files}
 '''
     ])
