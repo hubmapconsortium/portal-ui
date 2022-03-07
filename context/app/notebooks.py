@@ -140,5 +140,15 @@ def get_anndata_cells(uuids_to_zarr_files):
 # These are just the zarr files from the list above:
 
 uuids_to_zarr_files = {uuids_to_zarr_files}
+''',
+        r'''
+# We can add the Assets API base URL to get full URLs:
+
+uuids_to_zarr_urls = {
+    uuid: [
+        f'https://assets.hubmapconsortium.org/{uuid}/{file}'
+        for file in files
+    ] for uuid, files in uuids_to_zarr_files.items()
+}
 '''
     ])
