@@ -1,0 +1,1 @@
+- With multi-dataset notebooks, add special handling for anndata assay types.
