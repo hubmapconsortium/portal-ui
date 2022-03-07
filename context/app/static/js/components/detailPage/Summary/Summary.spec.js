@@ -26,6 +26,24 @@ test('timestamps display when defined', () => {
   expect(screen.queryAllByText('Undefined')).toHaveLength(0);
 });
 
+test('publication prefered to creation, if available', () => {
+  render(
+    <Summary
+      hubmap_id="fakedoi"
+      entity_type="Fakeentity"
+      uuid="fakeuuid"
+      created_timestamp={1596724856094}
+      published_timestamp={1596724856094}
+      last_modified_timestamp={1596724856094}
+    />,
+  );
+  const textToTest = ['Publication Date', 'Modification Date'];
+  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+
+  expect(screen.getAllByText('2020-08-06')).toHaveLength(2);
+  expect(screen.queryAllByText('Undefined')).toHaveLength(0);
+});
+
 test('timestamps do not display when undefined', () => {
   render(<Summary hubmap_id="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
 
