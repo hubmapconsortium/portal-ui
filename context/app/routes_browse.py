@@ -1,25 +1,16 @@
 import json
 from urllib.parse import urlparse
 
-from flask import (render_template, jsonify,
-                   abort, request, redirect, url_for, Response)
+from flask import (
+    render_template, jsonify,
+    abort, request, redirect, url_for, Response)
 
-import nbformat
-from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
-
-from .utils import get_default_flask_data, make_blueprint, get_client
+from .utils import (
+    get_default_flask_data, make_blueprint, get_client,
+    get_url_base_from_request, entity_types)
 
 
 blueprint = make_blueprint(__name__)
-
-entity_types = ['donor', 'sample', 'dataset', 'support', 'collection']
-
-
-def get_url_base_from_request():
-    parsed = urlparse(request.base_url)
-    scheme = parsed.scheme
-    netloc = parsed.netloc
-    return f'{scheme}://{netloc}'
 
 
 @blueprint.route('/browse/<possible_hbm_id>')
@@ -97,31 +88,6 @@ def details_vitessce(type, uuid):
     response = jsonify(vitessce_conf.conf)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
-
-
-@blueprint.route('/browse/<type>/<uuid>.ipynb')
-def details_notebook(type, uuid):
-    if type not in entity_types:
-        abort(404)
-    client = get_client()
-    entity = client.get_entity(uuid)
-    vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
-    if (vitessce_conf is None
-            or vitessce_conf.conf is None
-            or vitessce_conf.cells is None):
-        abort(404)
-    nb = new_notebook()
-    hubmap_id = entity['hubmap_id']
-    dataset_url = request.base_url.replace('.ipynb', '')
-    nb['cells'] = [
-        new_markdown_cell(f"Visualization for [{hubmap_id}]({dataset_url})"),
-        new_code_cell('!pip install vitessce'),
-    ] + vitessce_conf.cells
-    return Response(
-        response=nbformat.writes(nb),
-        headers={'Content-Disposition': f"attachment; filename={hubmap_id}.ipynb"},
-        mimetype='application/x-ipynb+json'
-    )
 
 
 @blueprint.route('/browse/<type>/<uuid>.rui.json')
