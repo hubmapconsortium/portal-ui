@@ -73,7 +73,7 @@ pd.DataFrame(metadata[:1]).T.head()
         r'''
 # Or review the data itself:
 
-pd.DataFrame(metadata[1:])
+pd.DataFrame(metadata[1:]).head()
 
 '''
     ])
