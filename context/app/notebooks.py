@@ -122,7 +122,7 @@ files = {
 
 # For example, the first 10 files from the first dataset:
 
-list(list(files.values())[0].items())[:10]
+list(list(files.values())[0].items())[:10] or 'No file information for these datasets.'
 
 '''
     ])
