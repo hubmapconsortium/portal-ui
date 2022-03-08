@@ -25,9 +25,8 @@ function makeDownloader({ urlPath, allResultsUUIDs, closeMenu, analyticsCategory
       return;
     }
     const results = await response.blob();
-    const headers = Object.fromEntries(Array(...response.headers));
-    const name = headers['content-disposition'].split('=')[1];
-    const mime = headers['content-type'];
+    const name = response.headers.get('content-disposition').split('=')[1];
+    const mime = response.headers.get('content-type');
 
     const downloadUrl = createDownloadUrl(results, mime);
     const tempLink = document.createElement('a');
