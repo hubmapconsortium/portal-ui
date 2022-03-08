@@ -2,7 +2,6 @@ from flask import (abort, request, Response, current_app)
 import json
 from pathlib import Path
 from string import Template
-import json
 
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
