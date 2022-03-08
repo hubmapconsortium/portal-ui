@@ -1,3 +1,14 @@
+## v0.39.0 - 2022-03-03
+
+- Add a contributors section to datasets.
+- Use mermaid for the README repo diagram.
+- Add DOI link on dataset pages.
+- Add icons to email links.
+- Make datasets robust against missing `contributors`.
+- Update and simplify the notebook generation code.
+- Submodules: In ingest-validation, update the IMS schema; In portal-visualization, add CellDIVE support, and change function signatures.
+
+
 ## v0.38.1 - 2022-02-24
 
 - Link from organ names to the organ list page.

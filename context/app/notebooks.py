@@ -42,7 +42,10 @@ import json
 from csv import DictReader, excel_tab
 from io import StringIO
 import requests
+<<<<<<< HEAD
 import pandas as pd
+=======
+>>>>>>> main
 
 # These are the UUIDS of the search results when this notebook was created:
 
@@ -65,6 +68,7 @@ len(metadata)
 
 ''',
         r'''
+<<<<<<< HEAD
 # Load it into a DataFrame and see the field definitions:
 
 pd.DataFrame(metadata[:1]).T.head()
@@ -74,6 +78,23 @@ pd.DataFrame(metadata[:1]).T.head()
 # Or review the data itself:
 
 pd.DataFrame(metadata[1:])
+=======
+# Each dict will have the same keys. To see the first 10:
+
+list(metadata[0].keys())[:10]
+
+''',
+        r'''
+# We can get a definition for each of these keys:
+
+metadata_key_defs = dict(zip(*[
+    line.split('\t') for line in response.text.split('\n')[:2]
+]))
+
+# To see the first 10:
+
+list(metadata_key_defs.items())[:10]
+>>>>>>> main
 
 '''
     ])
