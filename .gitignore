@@ -115,9 +115,9 @@ venv.bak/
 !.vscode/portal-ui.code-snippets
 
 # public
-context/app/static/public
+context/app/static/public/*
 context/app/static/js/maintenance/public
-
+!context/app/static/public/mockServiceWorker.js
 # scratch and tmp
 /scratch
 /tmp

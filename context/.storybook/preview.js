@@ -1,6 +1,9 @@
 import React from 'react';
 
 import Providers from '../app/static/js/components/Providers';
+import { initialize, mswDecorator } from 'msw-storybook-addon';
+
+initialize();
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -21,5 +24,6 @@ export const decorators = [
       <Story />
     </Providers>
   ),
+  mswDecorator
 ];
 
