@@ -10,39 +10,36 @@ import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store'
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon } from './style';
 
-function makeDownloader({ urlPath, allResultsUUIDs, closeMenu, analyticsCategory }) {
-  async function fetchAndDownload() {
-    const response = await fetch(urlPath, {
-      method: 'POST',
-      body: JSON.stringify({ uuids: allResultsUUIDs }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) {
-      console.error('Download failed', response);
-      closeMenu();
-      return;
-    }
-    const results = await response.blob();
-    const name = response.headers.get('content-disposition').split('=')[1];
-    const mime = response.headers.get('content-type');
-
-    const downloadUrl = createDownloadUrl(results, mime);
-    const tempLink = document.createElement('a');
-    tempLink.href = downloadUrl;
-    tempLink.download = name;
-    tempLink.click();
-
-    ReactGA.event({
-      category: analyticsCategory,
-      action: `Download ${mime}`,
-      label: urlPath.split('/').pop(),
-    });
-
+async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu, analyticsCategory }) {
+  const response = await fetch(urlPath, {
+    method: 'POST',
+    body: JSON.stringify({ uuids: allResultsUUIDs }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    console.error('Download failed', response);
     closeMenu();
+    return;
   }
-  return fetchAndDownload;
+  const results = await response.blob();
+  const name = response.headers.get('content-disposition').split('=')[1];
+  const mime = response.headers.get('content-type');
+
+  const downloadUrl = createDownloadUrl(results, mime);
+  const tempLink = document.createElement('a');
+  tempLink.href = downloadUrl;
+  tempLink.download = name;
+  tempLink.click();
+
+  ReactGA.event({
+    category: analyticsCategory,
+    action: `Download ${mime}`,
+    label: urlPath.split('/').pop(),
+  });
+
+  closeMenu();
 }
 
 function MetadataMenu({ type, analyticsCategory }) {
@@ -64,12 +61,14 @@ function MetadataMenu({ type, analyticsCategory }) {
           </SecondaryBackgroundTooltip>
         </MenuItem>
         <MenuItem
-          onClick={makeDownloader({
-            urlPath: `/metadata/v0/${lcPluralType}.tsv`,
-            allResultsUUIDs,
-            closeMenu,
-            analyticsCategory,
-          })}
+          onClick={() =>
+            fetchAndDownload({
+              urlPath: `/metadata/v0/${lcPluralType}.tsv`,
+              allResultsUUIDs,
+              closeMenu,
+              analyticsCategory,
+            })
+          }
         >
           Download
           <SecondaryBackgroundTooltip title="Download a TSV of the table metadata." placement="bottom-start">
@@ -77,12 +76,14 @@ function MetadataMenu({ type, analyticsCategory }) {
           </SecondaryBackgroundTooltip>
         </MenuItem>
         <MenuItem
-          onClick={makeDownloader({
-            urlPath: `/notebooks/${lcPluralType}.ipynb`,
-            allResultsUUIDs,
-            closeMenu,
-            analyticsCategory,
-          })}
+          onClick={() =>
+            fetchAndDownload({
+              urlPath: `/notebooks/${lcPluralType}.ipynb`,
+              allResultsUUIDs,
+              closeMenu,
+              analyticsCategory,
+            })
+          }
         >
           Notebook
           <SecondaryBackgroundTooltip
