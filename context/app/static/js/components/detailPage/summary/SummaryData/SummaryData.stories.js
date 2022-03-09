@@ -47,17 +47,3 @@ WithChildren.args = {
   ...sharedArgs,
   entity_type: 'Dataset',
 };
-
-export const WithChildrenOverflow = (args) => (
-  <SummaryData {...args}>
-    <Typography>Child 1</Typography>
-    <Typography>Child 2</Typography>
-    <Typography>Child 3</Typography>
-    <Typography>Child 4</Typography>
-    <Typography>Child 5</Typography>
-  </SummaryData>
-);
-WithChildrenOverflow.args = {
-  ...sharedArgs,
-  entity_type: 'Dataset',
-};
