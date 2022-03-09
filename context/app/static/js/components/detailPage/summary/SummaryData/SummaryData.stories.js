@@ -1,6 +1,7 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import { rest } from 'msw';
+import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
+import { getArrayRange } from 'js/helpers/functions';
 import SummaryData from './SummaryData';
 
 export default {
@@ -40,24 +41,12 @@ Dataset.args = {
 
 export const WithChildren = (args) => (
   <SummaryData {...args}>
-    <Typography>Child</Typography>
+    {getArrayRange(8).map((n) => (
+      <SummaryItem>Child {n}</SummaryItem>
+    ))}{' '}
   </SummaryData>
 );
 WithChildren.args = {
-  ...sharedArgs,
-  entity_type: 'Dataset',
-};
-
-export const WithChildrenOverflow = (args) => (
-  <SummaryData {...args}>
-    <Typography>Child 1</Typography>
-    <Typography>Child 2</Typography>
-    <Typography>Child 3</Typography>
-    <Typography>Child 4</Typography>
-    <Typography>Child 5</Typography>
-  </SummaryData>
-);
-WithChildrenOverflow.args = {
   ...sharedArgs,
   entity_type: 'Dataset',
 };
