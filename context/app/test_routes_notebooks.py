@@ -23,7 +23,7 @@ def test_truncate_and_redirect(client, entity_type):
     assert response.status == '200 OK'
 
 
-@pytest.mark.parameterize(
+@pytest.mark.parametrize(
     'notebook_path',
     (Path(__file__).parent / 'notebook').glob('*.ipynb')
 )
