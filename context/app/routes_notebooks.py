@@ -64,11 +64,11 @@ def notebook(entity_type):
     body = request.get_json()
     uuids = body.get('uuids')
     url_base = get_url_base_from_request()
-    search_url = (
-        current_app.config['ELASTICSEARCH_ENDPOINT']
-        + current_app.config['PORTAL_INDEX_PATH'])
     cells = _get_metadata_cells(uuids=uuids, url_base=url_base, entity_type=entity_type)
     if entity_type == 'datasets':
+        search_url = (
+            current_app.config['ELASTICSEARCH_ENDPOINT']
+            + current_app.config['PORTAL_INDEX_PATH'])
         cells += _get_files_cells(search_url=search_url)
     return _nb_response_from_dicts(entity_type, cells)
 
