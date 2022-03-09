@@ -1,5 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import { rest } from 'msw';
 import SummaryData from './SummaryData';
 
 export default {
@@ -26,6 +27,16 @@ export const Dataset = Template.bind({});
 Dataset.args = {
   ...sharedArgs,
   entity_type: 'Dataset',
+};
+
+Dataset.parameters = {
+  msw: {
+    handlers: [
+      rest.get('http://localhost:6006/undefined/datasets/fakeuuid/revisions', (req, res, ctx) => {
+        return res(ctx.json([{ revision_number: 1, uuid: 'fakeuuid' }]));
+      }),
+    ],
+  },
 };
 
 export const WithChildren = (args) => (

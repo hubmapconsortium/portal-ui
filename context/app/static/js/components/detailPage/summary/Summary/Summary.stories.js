@@ -1,4 +1,5 @@
 import React from 'react';
+import { rest } from 'msw';
 import Typography from '@material-ui/core/Typography';
 
 import { Citation } from 'js/components/detailPage/Citation/Citation.stories';
@@ -79,6 +80,16 @@ DatasetDefault.args = {
   mapped_data_access_level: 'Public',
   description: lorem,
   ...Citation.args,
+};
+
+DatasetDefault.parameters = {
+  msw: {
+    handlers: [
+      rest.get('http://localhost:6006/undefined/datasets/fakeuuid/revisions', (req, res, ctx) => {
+        return res(ctx.json([{ revision_number: 1, uuid: 'fakeuuid' }]));
+      }),
+    ],
+  },
 };
 
 export const CollectionDefault = ChildlessTemplate.bind({});
