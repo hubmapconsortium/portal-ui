@@ -53,7 +53,7 @@ def notebook(entity_type):
     cells = [
         new_markdown_cell(
             f'This notebook demonstrates how to work with HuBMAP APIs for {entity_type}:'),
-        new_code_cell('!pip install requests'),
+        new_code_cell('!pip install requests pandas'),
         *get_shared_cells(uuids=uuids, url_base=url_base, entity_type=entity_type),
     ]
     if entity_type == 'datasets':
