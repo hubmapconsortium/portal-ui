@@ -1,0 +1,1 @@
+- Configure msw for storybook.
