@@ -1,0 +1,1 @@
+- Enable detail summary to wrap when needed.
