@@ -7,15 +7,14 @@ The services the portal relies on are [listed separately](/services).
 ## Git submodules
 
 ```
- 60231e10030dd9dad207d59d50ae6b6c3693c70d context/ingest-validation-tools (v0.0.13-19-g60231e1)
- 1f6b25335356e467d190e710fe362916a38434fb context/portal-visualization (1f6b253)
+ 03feba57d6c2d74a551ed0bc69e7a3585c3e999d context/ingest-validation-tools (v0.0.13-17-g03feba57)
+ f77ddb2299ec2cd19a1d215aa9303905c99465dc context/portal-visualization (heads/main-13-gf77ddb2)
 ```
 
 ## Python packages
 
 `requirements.txt`:
 ```
-nbformat==5.1.2
 Flask==2.0.1
 globus-sdk==2.0.1
 requests==2.27.1
@@ -24,7 +23,8 @@ python-datauri==0.2.8
 python-frontmatter==0.5.0
 hubmap-api-py-client==0.0.9
 hubmap-commons==2.0.12
-vitessce==1.0.5
+
+-r portal-visualization/requirements.txt
 ```
 
 `portal-visualization/requirements.txt`:
@@ -32,6 +32,7 @@ vitessce==1.0.5
 vitessce==1.0.5
 hubmap-commons==2.0.12
 requests==2.27.1
+nbformat==5.1.3
 ```
 
 ## NodeJS packages
