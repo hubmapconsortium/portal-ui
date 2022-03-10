@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactGA from 'react-ga';
-import { format } from 'date-fns';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
@@ -11,43 +10,43 @@ import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store'
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon } from './style';
 
+async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu, analyticsCategory }) {
+  const response = await fetch(urlPath, {
+    method: 'POST',
+    body: JSON.stringify({ uuids: allResultsUUIDs }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    console.error('Download failed', response);
+    closeMenu();
+    return;
+  }
+  const results = await response.blob();
+  const name = response.headers.get('content-disposition').split('=')[1];
+  const mime = response.headers.get('content-type');
+
+  const downloadUrl = createDownloadUrl(results, mime);
+  const tempLink = document.createElement('a');
+  tempLink.href = downloadUrl;
+  tempLink.download = name;
+  tempLink.click();
+
+  ReactGA.event({
+    category: analyticsCategory,
+    action: `Download ${mime}`,
+    label: urlPath.split('/').pop(),
+  });
+
+  closeMenu();
+}
+
 function MetadataMenu({ type, analyticsCategory }) {
   const lcPluralType = `${type.toLowerCase()}s`;
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
   const { closeMenu } = useStore();
-  // eslint-disable-next-line consistent-return
-  async function fetchAndDownloadTSV() {
-    const response = await fetch(`/metadata/v0/${lcPluralType}.tsv`, {
-      method: 'POST',
-      body: JSON.stringify({ uuids: allResultsUUIDs }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) {
-      console.error('Metadata TSV Failed', response);
-      closeMenu();
-      return;
-    }
-    const results = await response.blob();
-
-    const downloadUrl = createDownloadUrl(results, 'text/tab-separated-values');
-    // need to create link to set file name
-    const tempLink = document.createElement('a');
-    tempLink.href = downloadUrl;
-    const timestamp = format(new Date(), 'yyyy-MM-dd_HH-mm-ss');
-    tempLink.download = `hubmap-${lcPluralType}-metadata-${timestamp}.tsv`;
-    tempLink.click();
-
-    ReactGA.event({
-      category: analyticsCategory,
-      action: `Download Metadata`,
-      label: type,
-    });
-
-    closeMenu();
-  }
 
   const menuID = 'metadata-menu';
 
@@ -61,9 +60,36 @@ function MetadataMenu({ type, analyticsCategory }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
-        <MenuItem onClick={fetchAndDownloadTSV}>
+        <MenuItem
+          onClick={() =>
+            fetchAndDownload({
+              urlPath: `/metadata/v0/${lcPluralType}.tsv`,
+              allResultsUUIDs,
+              closeMenu,
+              analyticsCategory,
+            })
+          }
+        >
           Download
           <SecondaryBackgroundTooltip title="Download a TSV of the table metadata." placement="bottom-start">
+            <StyledInfoIcon color="primary" />
+          </SecondaryBackgroundTooltip>
+        </MenuItem>
+        <MenuItem
+          onClick={() =>
+            fetchAndDownload({
+              urlPath: `/notebooks/${lcPluralType}.ipynb`,
+              allResultsUUIDs,
+              closeMenu,
+              analyticsCategory,
+            })
+          }
+        >
+          Notebook
+          <SecondaryBackgroundTooltip
+            title="Download a Notebook which demonstrates how to programmatically access metadata."
+            placement="bottom-start"
+          >
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>

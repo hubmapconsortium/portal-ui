@@ -70,6 +70,7 @@ function DatasetDetail(props) {
     entity_type,
     created_timestamp,
     last_modified_timestamp,
+    published_timestamp,
     description,
     status,
     sub_status,
@@ -145,6 +146,7 @@ function DatasetDetail(props) {
           hubmap_id={hubmap_id}
           created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
+          published_timestamp={published_timestamp}
           description={description}
           status={combinedStatus}
           mapped_data_access_level={mapped_data_access_level}

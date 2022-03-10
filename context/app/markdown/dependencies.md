@@ -1,0 +1,96 @@
+# Dependencies
+
+The portal has many dependencies:
+Git submodules and Python and NodeJS packages are summarized here;
+The services the portal relies on are [listed separately](/services).
+
+## Git submodules
+
+```
+ 03feba57d6c2d74a551ed0bc69e7a3585c3e999d context/ingest-validation-tools (v0.0.13-17-g03feba57)
+ f77ddb2299ec2cd19a1d215aa9303905c99465dc context/portal-visualization (heads/main-13-gf77ddb2)
+```
+
+## Python packages
+
+`requirements.txt`:
+```
+Flask==2.0.1
+globus-sdk==2.0.1
+requests==2.27.1
+pyyaml==5.4
+python-datauri==0.2.8
+python-frontmatter==0.5.0
+hubmap-api-py-client==0.0.9
+hubmap-commons==2.0.12
+
+-r portal-visualization/requirements.txt
+```
+
+`portal-visualization/requirements.txt`:
+```
+vitessce==1.0.5
+hubmap-commons==2.0.12
+requests==2.27.1
+nbformat==5.1.3
+```
+
+## NodeJS packages
+
+```
+{
+"@babel/runtime": "^7.10.4",
+"@hms-dbmi-bgm/react-workflow-viz": "^0.1.4",
+"@material-ui/core": "^4.9.4",
+"@material-ui/icons": "^4.9.1",
+"@material-ui/lab": "^4.0.0-alpha.45",
+"@visx/axis": "^1.7.0",
+"@visx/event": "^1.7.0",
+"@visx/grid": "^1.7.0",
+"@visx/group": "^1.7.0",
+"@visx/legend": "^1.7.0",
+"@visx/responsive": "^1.7.0",
+"@visx/scale": "^1.7.0",
+"@visx/shape": "^1.7.0",
+"@visx/text": "^2.3.0",
+"@visx/tooltip": "^1.7.2",
+"ajv": "^6.12.3",
+"bowser": "^2.11.0",
+"chart.js": "^3.5.0",
+"d3": "^5.16.0",
+"d3-array": "^3.0.2",
+"date-fns": "^2.27.0",
+"fromentries": "^1.2.0",
+"html-webpack-plugin": "^4.3.0",
+"immer": "^9.0.6",
+"intersection-observer": "^0.11.0",
+"lineupjsx": "^4.0.0",
+"lodash": "^4.17.21",
+"marked": "^2.1.3",
+"nuka-carousel": "^4.7.7",
+"pretty-bytes": "^5.3.0",
+"prop-types": "^15.7.2",
+"react": "^16.12.0",
+"react-chartjs-2": "^3.0.4",
+"react-dom": "^16.12.0",
+"react-ga": "^3.1.2",
+"react-intersection-observer": "^8.28.6",
+"react-joyride": "^2.2.1",
+"react-pdf": "^5.3.2",
+"react-spring": "^8.0.27",
+"react-twitter-embed": "^3.0.3",
+"react-vega": "^7.3.0",
+"searchkit": "^2.4.1-alpha.4",
+"styled-components": "^5.1.0",
+"typeface-inter": "^3.12.0",
+"universal-cookie": "^4.0.3",
+"use-resize-observer": "^7.0.0",
+"uuid": "^8.3.2",
+"vega": "^5.17.3",
+"vega-lite": "^4.13.1",
+"vitessce": "^1.1.18",
+"web-vitals": "^1.1.0",
+"whatwg-fetch": "^3.0.0",
+"zustand": "^3.5.9"
+}
+```

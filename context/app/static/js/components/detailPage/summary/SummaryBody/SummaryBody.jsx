@@ -10,6 +10,7 @@ function SummaryBody({
   description,
   collectionName,
   created_timestamp,
+  published_timestamp,
   last_modified_timestamp,
   contributors,
   citationTitle,
@@ -38,7 +39,11 @@ function SummaryBody({
         />
       )}
       <Flex>
-        <StyledCreationDate label="Creation Date" timestamp={created_timestamp} />
+        {published_timestamp ? (
+          <StyledCreationDate label="Publication Date" timestamp={published_timestamp} />
+        ) : (
+          <StyledCreationDate label="Creation Date" timestamp={created_timestamp} />
+        )}
         <StyledModificationDate label="Modification Date" timestamp={last_modified_timestamp} />
       </Flex>
     </SummaryPaper>

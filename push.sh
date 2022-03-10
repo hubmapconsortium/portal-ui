@@ -32,6 +32,8 @@ if [[ $VERSION != $EXPECTED_MINOR* ]]; then
 fi
 echo "Version: $VERSION"
 
+./grab-dependencies.sh
+
 git add .
 git commit -m "Version bump to $VERSION"
 

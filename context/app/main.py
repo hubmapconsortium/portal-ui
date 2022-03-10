@@ -2,7 +2,7 @@ from flask import Flask, session, render_template, redirect, request
 
 from . import (
     routes_main, routes_browse, routes_api, routes_file_based,
-    routes_auth, routes_cells, routes_markdown,
+    routes_auth, routes_cells, routes_markdown, routes_notebooks,
     default_config)
 from .flask_static_digest import FlaskStaticDigest
 flask_static_digest = FlaskStaticDigest()
@@ -69,6 +69,7 @@ def create_app(testing=False):
     app.register_blueprint(routes_cells.blueprint)
     app.register_blueprint(routes_auth.blueprint)
     app.register_blueprint(routes_markdown.blueprint)
+    app.register_blueprint(routes_notebooks.blueprint)
 
     app.register_error_handler(400, bad_request)
     app.register_error_handler(401, unauthorized)
@@ -80,11 +81,14 @@ def create_app(testing=False):
     # Credit to https://stackoverflow.com/a/40365514
     # for this way to redirect from slash-ending urls to plain.
     app.url_map.strict_slashes = False
+
     @app.before_request
     def clear_trailing():
         path = request.path
+        query_wo_mark = request.query_string.decode()
+        query_w_mark = f'?{query_wo_mark}' if query_wo_mark else ''
         if path.endswith('/') and path != '/':
-            return redirect(path[:-1])
+            return redirect(path[:-1] + query_w_mark)
 
     @app.context_processor
     def inject_template_globals():
