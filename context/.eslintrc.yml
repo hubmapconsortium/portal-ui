@@ -33,3 +33,4 @@ rules:
     - 2
     - controlComponents:
       - Switch
+  import/no-extraneous-dependencies: ["error", {"devDependencies": ["**/*.spec.js", "**/*.stories.js"]}]

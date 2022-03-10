@@ -5,6 +5,7 @@ import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 
 const FlexEnd = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
 `;
 
