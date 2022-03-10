@@ -1,1 +1,0 @@
-- In generated notebooks, wrap output in DataFrame to get a table.

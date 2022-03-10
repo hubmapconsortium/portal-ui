@@ -1,3 +1,15 @@
+## v0.39.1 - 2022-03-10
+
+- If a publication date is available, use it in preference to the creation date.
+- Generate a MD page summarizing the dependencies.
+- Keep the query after stripping a trailing slash.
+- Stub multi-dataset notebooks.
+- Organize detail page summary components.
+- Add instructions for authors of publication pages.
+- Check notebook files into version control, rather than assembling them on the fly. Inputs are provided with `$`-templates.
+- In generated notebooks, wrap output in DataFrame to get a table.
+
+
 ## v0.39.0 - 2022-03-03
 
 - Add a contributors section to datasets.

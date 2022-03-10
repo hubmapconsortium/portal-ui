@@ -1,1 +1,0 @@
-- Check notebook files into version control, rather than assembling them on the fly. Inputs are provided with `$`-templates.

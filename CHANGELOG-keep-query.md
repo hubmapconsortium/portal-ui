@@ -1,1 +1,0 @@
-- Keep the query after stripping a trailing slash.

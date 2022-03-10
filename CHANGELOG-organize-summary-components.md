@@ -1,1 +1,0 @@
-- Organize detail page summary components.
