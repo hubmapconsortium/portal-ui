@@ -1,0 +1,1 @@
+- Add instructions for authors of publication pages.
