@@ -1,7 +1,11 @@
-from flask import (current_app, session, Blueprint)
+from urllib.parse import urlparse
+from flask import (current_app, request, session, Blueprint)
 
 from .api.client import ApiClient
 from .api.mock_client import MockApiClient
+
+
+entity_types = ['donor', 'sample', 'dataset', 'support', 'collection']
 
 
 def get_client():
@@ -29,3 +33,10 @@ def get_default_flask_data():
 
 def make_blueprint(name):
     return Blueprint(name.split('.')[-1], name, template_folder='templates')
+
+
+def get_url_base_from_request():
+    parsed = urlparse(request.base_url)
+    scheme = parsed.scheme
+    netloc = parsed.netloc
+    return f'{scheme}://{netloc}'
