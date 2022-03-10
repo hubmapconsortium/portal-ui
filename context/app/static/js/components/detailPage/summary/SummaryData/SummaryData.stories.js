@@ -1,6 +1,7 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import { rest } from 'msw';
+import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
+import { getArrayRange } from 'js/helpers/functions';
 import SummaryData from './SummaryData';
 
 export default {
@@ -40,7 +41,9 @@ Dataset.args = {
 
 export const WithChildren = (args) => (
   <SummaryData {...args}>
-    <Typography>Child</Typography>
+    {getArrayRange(8).map((n) => (
+      <SummaryItem>Child {n}</SummaryItem>
+    ))}{' '}
   </SummaryData>
 );
 WithChildren.args = {
