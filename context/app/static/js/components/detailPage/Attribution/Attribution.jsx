@@ -17,7 +17,7 @@ function Attribution(props) {
         <SectionItem label="Group">{group_name}</SectionItem>
         <SectionItem label="Creator" ml={1}>
           {created_by_user_displayname}
-          <EmailIconLink email={`mailto:${encodeURI(created_by_user_email)}`} iconFontSize="1.1rem">
+          <EmailIconLink email={encodeURI(created_by_user_email)} iconFontSize="1.1rem">
             {created_by_user_email}
           </EmailIconLink>
         </SectionItem>
