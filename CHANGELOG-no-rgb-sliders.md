@@ -1,0 +1,1 @@
+- For assays like PAS, we were adding RGB chanels sliders. Revert back to a single opacit slider.
