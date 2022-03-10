@@ -3,10 +3,10 @@ import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
-import Summary from 'js/components/detailPage/Summary';
+import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
-import SummaryItem from 'js/components/detailPage/SummaryItem';
+import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import SampleTissue from 'js/components/detailPage/SampleTissue';

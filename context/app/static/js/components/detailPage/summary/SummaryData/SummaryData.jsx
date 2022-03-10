@@ -10,9 +10,9 @@ import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { FileIcon } from 'js/shared-styles/icons';
 import VersionSelect from 'js/components/detailPage/VersionSelect';
+import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
+import StatusIcon from 'js/components/detailPage/StatusIcon';
 import { FlexEnd, JsonButton, StyledTypography } from './style';
-import SummaryItem from '../SummaryItem';
-import StatusIcon from '../StatusIcon';
 
 const entityStoreSelector = (state) => state.setSummaryComponentObserver;
 
