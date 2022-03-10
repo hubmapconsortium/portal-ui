@@ -23,7 +23,7 @@ function useVitessceConfig(uuid, groupsToken) {
     getAndSetVitessceConfig();
   }, [uuid, groupsToken]);
 
-  return { vitessceConfig /* , isLoading */ };
+  return vitessceConfig /* , isLoading */;
 }
 
 export default useVitessceConfig;
