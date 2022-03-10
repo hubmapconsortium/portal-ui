@@ -128,7 +128,7 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint -c .eslintrc.yml --ext .js,.jsx app/static/js/",
     "lint:fix": "eslint -c .eslintrc.yml --ext .js,.jsx --fix app/static/js/",
-    "storybook": "start-storybook -p 6006 -s app/static/public/",
+    "storybook": "start-storybook -p 6006 -s app/static/storybook-public/",
     "build-storybook": "build-storybook"
   },
   "lint-staged": {

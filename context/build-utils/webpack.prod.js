@@ -13,7 +13,7 @@ const envConfig = {
     filename: '[name].[hash].js',
     chunkFilename: '[name].[hash].js',
   },
-  plugins: [new CleanWebpackPlugin(), new ManifestPlugin(), new CompressionPlugin()],
+  plugins: [new ManifestPlugin(), new CompressionPlugin()],
 };
 
 module.exports = merge(common, envConfig);

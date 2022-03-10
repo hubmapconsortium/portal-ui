@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { join } = require('path');
 const { merge } = require('webpack-merge');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const common = require('./webpack.common');
 
 const envConfig = {
@@ -24,7 +23,6 @@ const envConfig = {
       },
     },
   },
-  plugins: [new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['**/*', '!mockServiceWorker.js'] })],
 };
 
 module.exports = merge(common, envConfig);
