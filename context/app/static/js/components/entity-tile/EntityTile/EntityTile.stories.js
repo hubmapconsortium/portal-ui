@@ -1,4 +1,5 @@
 import React from 'react';
+import { rest } from 'msw';
 
 import EntityTile from './EntityTile';
 
@@ -82,5 +83,20 @@ OverflowWithImage.args = {
   ...datasetArgs,
   entityData: {
     ...overflowEntityData,
+  },
+};
+
+export const ImageNotFound = Template.bind({});
+ImageNotFound.args = datasetArgs;
+ImageNotFound.parameters = {
+  msw: {
+    handlers: [
+      rest.get(
+        'https://assets.hubmapconsortium.org/7d010185e2163e03da79489140fee0d1/thumbnail.jpg',
+        (req, res, ctx) => {
+          return res(ctx.status(404));
+        },
+      ),
+    ],
   },
 };
