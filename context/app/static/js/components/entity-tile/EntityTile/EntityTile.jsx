@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import { AppContext } from 'js/components/Providers';
 import EntityTileFooter from '../EntityTileFooter';
 import EntityTileBody from '../EntityTileBody';
 import { StyledPaper, Flex, LetterboxedThumbnail } from './style';
@@ -8,6 +9,7 @@ import { StyledPaper, Flex, LetterboxedThumbnail } from './style';
 function EntityTile(props) {
   const { uuid, entity_type, id, invertColors, entityData, descendantCounts } = props;
   const { thumbnail_file } = entityData;
+  const { assetsEndpoint } = useContext(AppContext);
 
   return (
     <a href={`/browse/${entity_type.toLowerCase()}/${uuid}`}>
@@ -15,10 +17,7 @@ function EntityTile(props) {
         <Flex>
           <EntityTileBody entity_type={entity_type} id={id} invertColors={invertColors} entityData={entityData} />
           {thumbnail_file && (
-            <LetterboxedThumbnail
-              src={`https://assets.hubmapconsortium.org/${thumbnail_file.file_uuid}/thumbnail.jpg`}
-              alt="thumbnail"
-            />
+            <LetterboxedThumbnail src={`${assetsEndpoint}/${thumbnail_file.file_uuid}/thumbnail.jpg`} alt="thumbnail" />
           )}
         </Flex>
         <EntityTileFooter invertColors={invertColors} entityData={entityData} descendantCounts={descendantCounts} />
