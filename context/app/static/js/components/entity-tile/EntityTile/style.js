@@ -53,6 +53,7 @@ const Flex = styled.div`
 const LetterboxedThumbnail = styled.img`
   width: 90px;
   height: 90px;
+  min-width: 90px; // immediately takes up 90px when there is text overflow
   object-fit: contain;
   background-color: black;
 `;
