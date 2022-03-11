@@ -52,6 +52,9 @@ const datasetArgs = {
 
     origin_sample: { mapped_organ: 'Organ Type' },
     mapped_data_types: ['Data Type 1', 'Data Type 2'],
+    thumbnail_file: {
+      file_uuid: '7d010185e2163e03da79489140fee0d1',
+    },
   },
   descendantCounts: { Dataset: 2 },
 };
@@ -61,3 +64,23 @@ Dataset.args = datasetArgs;
 
 export const InvertedColors = Template.bind({});
 InvertedColors.args = { ...datasetArgs, invertColors: true };
+
+const overflowEntityData = {
+  ...datasetArgs.entityData,
+  mapped_data_types: ['Data Type 1', 'Data Type 2', 'Data Type 3', 'Data Type 4', 'Data Type 5'],
+};
+
+const { thumbnail_file, ...entityDataWithoutImage } = overflowEntityData;
+export const Overflow = Template.bind({});
+Overflow.args = {
+  ...datasetArgs,
+  entityData: entityDataWithoutImage,
+};
+
+export const OverflowWithImage = Template.bind({});
+OverflowWithImage.args = {
+  ...datasetArgs,
+  entityData: {
+    ...overflowEntityData,
+  },
+};
