@@ -16,7 +16,7 @@ function EmailIconLink({ iconFontSize, email, ...rest }) {
   return (
     <IconLink
       href={`mailto:${email}`}
-      onCLick={sendEmailEvent}
+      onClick={sendEmailEvent}
       icon={<EmailIcon $fontSize={iconFontSize} />}
       {...rest}
     />
