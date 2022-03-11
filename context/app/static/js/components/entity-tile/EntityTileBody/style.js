@@ -3,7 +3,6 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
 import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
-import { invertSectionColors } from '../EntityTile/style';
 
 const iconStyle = css`
   font-size: 1.3rem;
@@ -24,17 +23,9 @@ const StyledDonorIcon = styled(DonorIcon)`
   ${iconStyle};
 `;
 
-// Width needs to be defined in px for text-overflow to work
-const FixedWidthFlex = styled.div`
-  display: flex;
-  padding: 10px 10px;
-
-  ${(props) =>
-    invertSectionColors(props.theme.palette.white.main, props.theme.palette.primary.main, props.$invertColors)}
-`;
-
 const Flex = styled.div`
   display: flex;
+  min-width: 0;
 `;
 
 const TruncatedTypography = styled(Typography)`
@@ -51,16 +42,6 @@ const StyledDivider = styled(Divider)`
 
 const StyledDiv = styled.div`
   min-width: 0;
-  flex-grow: 1;
 `;
 
-export {
-  StyledDatasetIcon,
-  StyledSampleIcon,
-  StyledDonorIcon,
-  FixedWidthFlex,
-  Flex,
-  TruncatedTypography,
-  StyledDivider,
-  StyledDiv,
-};
+export { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, Flex, TruncatedTypography, StyledDivider, StyledDiv };
