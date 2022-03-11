@@ -17,7 +17,10 @@ function EntityTile(props) {
         <Flex>
           <EntityTileBody entity_type={entity_type} id={id} invertColors={invertColors} entityData={entityData} />
           {thumbnail_file && (
-            <LetterboxedThumbnail src={`${assetsEndpoint}/${thumbnail_file.file_uuid}/thumbnail.jpg`} alt="thumbnail" />
+            <LetterboxedThumbnail
+              src={`${assetsEndpoint}/${thumbnail_file.file_uuid}/thumbnail.jpg`}
+              alt={`${entity_type} ${id} thumbnail`}
+            />
           )}
         </Flex>
         <EntityTileFooter invertColors={invertColors} entityData={entityData} descendantCounts={descendantCounts} />
