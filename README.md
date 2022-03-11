@@ -19,8 +19,12 @@ graph TD
     top --> vitessce --> viv
     click vitessce href "https://github.com/hubmapconsortium/vitessce"
     click viv href "https://github.com/hms-dbmi/viv"
-    top --> valid[ingest-validation-tools]
+    top --> portal-visualization --> vitessce-python
+    click portal-visualization href "https://github.com/hubmapconsortium/portal-visualization"
+    click vitessce-python href "https://github.com/vitessce/vitessce-python"
+    top --> valid[ingest-validation-tools] --> ingest-validation-tests
     click valid href "https://github.com/hubmapconsortium/ingest-validation-tools"
+    click ingest-validation-tests href "https://github.com/hubmapconsortium/ingest-validation-tests"
     top --> cells-sdk --> cells-api --> pipe
     click cells-sdk href "https://github.com/hubmapconsortium/cells-api-py-client"
     click cells-api href "https://github.com/hubmapconsortium/cross_modality_query"
@@ -41,6 +45,11 @@ graph TD
         search-api
         cells-api
         assets-api
+    end
+
+    subgraph submodules
+        valid
+        portal-visualization
     end
 ```
 
