@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 
 function buildNLMCitation({ contributors, citationTitle, created_timestamp }) {
   const joinedContributors = contributors
@@ -25,9 +24,14 @@ function Citation({ contributors, citationTitle, created_timestamp, doi_url, doi
       bottomSpacing={1}
     >
       <Typography variant="body1">
-        {citation} Available from: <LightBlueLink href={doi_url}>{doi_url}</LightBlueLink>
+        {citation} Available from:{' '}
+        <OutboundIconLink href={doi_url} iconFontSize="1rem">
+          {doi_url}
+        </OutboundIconLink>
       </Typography>
-      <OutboundLink href={`https://search.datacite.org/works/${doi}`}>View DataCite Page</OutboundLink>
+      <OutboundIconLink href={`https://search.datacite.org/works/${doi}`} iconFontSize="1rem">
+        View DataCite Page
+      </OutboundIconLink>
     </LabelledSectionText>
   );
 }

@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Summary from 'js/components/detailPage/summary/Summary';
 import CollectionDatasetsTable from 'js/components/detailPage/CollectionDatasetsTable';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
-
-import { StyledOpenInNewRoundedIcon } from './style';
 
 function Collection(props) {
   const { collection: collectionData } = props;
@@ -48,9 +46,9 @@ function Collection(props) {
             doi={doi}
           >
             {doi_url && (
-              <OutboundLink href={doi_url} variant="body1">
-                doi:{doi} <StyledOpenInNewRoundedIcon />
-              </OutboundLink>
+              <OutboundIconLink href={doi_url} variant="body1" iconFontSize="1rem">
+                doi:{doi}
+              </OutboundIconLink>
             )}
           </Summary>
           {'contacts' in collectionData && <ContributorsTable contributors={contacts} title="Contacts" />}

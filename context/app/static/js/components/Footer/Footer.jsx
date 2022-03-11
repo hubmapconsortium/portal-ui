@@ -4,6 +4,8 @@ import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background } from './style';
 
@@ -71,9 +73,9 @@ function Footer(props) {
             </FlexColumn>
             <FlexColumn>
               <Typography variant="subtitle2">Funding</Typography>
-              <OutboundLink href="https://commonfund.nih.gov/hubmap" variant="body2">
+              <OutboundIconLink href="https://commonfund.nih.gov/hubmap" variant="body2" iconFontSize="1rem">
                 NIH Common Fund
-              </OutboundLink>
+              </OutboundIconLink>
             </FlexColumn>
           </Flex>
           <Typography variant="body1" color="secondary">
