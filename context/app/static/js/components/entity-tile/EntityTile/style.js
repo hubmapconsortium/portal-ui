@@ -47,7 +47,7 @@ const thumbnailDimension = '90px';
 
 const Flex = styled.div`
   display: flex;
-  padding: 8px;
+  padding: ${(props) => props.theme.spacing(1)}px;
   justify-content: space-between;
   min-height: ${thumbnailDimension};
   box-sizing: content-box;
