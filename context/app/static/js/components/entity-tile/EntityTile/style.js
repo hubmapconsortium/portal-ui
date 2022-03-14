@@ -43,17 +43,20 @@ const StyledPaper = styled(Paper)`
     `}
 `;
 
+const thumbnailDimension = '90px';
+
 const Flex = styled.div`
   display: flex;
   padding: 8px;
   justify-content: space-between;
-  min-height: 106px;
+  min-height: ${thumbnailDimension};
+  box-sizing: content-box;
 `;
 
 const LetterboxedThumbnail = styled.img`
-  width: 90px;
-  height: 90px;
-  min-width: 90px; // immediately takes up 90px when there is text overflow
+  width: ${thumbnailDimension};
+  height: ${thumbnailDimension};
+  min-width: ${thumbnailDimension}; // immediately takes up 90px when there is text overflow
   object-fit: contain;
   background-color: black;
 `;
