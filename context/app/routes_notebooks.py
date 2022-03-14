@@ -55,7 +55,7 @@ def details_notebook(type, uuid):
         new_code_cell(
             '!pip uninstall community flask albumentations -y '
             '# Preinstalled on Colab; Cause version conflicts.\n'
-            '!pip install vitessce'),
+            '!pip install vitessce==1.0.5'),
         *vitessce_conf.cells
     ]
 
