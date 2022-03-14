@@ -19,8 +19,12 @@ graph TD
     top --> vitessce --> viv
     click vitessce href "https://github.com/hubmapconsortium/vitessce"
     click viv href "https://github.com/hms-dbmi/viv"
-    top --> valid[ingest-validation-tools]
+    top --> portal-visualization --> vitessce-python
+    click portal-visualization href "https://github.com/hubmapconsortium/portal-visualization"
+    click vitessce-python href "https://github.com/vitessce/vitessce-python"
+    top --> valid[ingest-validation-tools] --> ingest-validation-tests
     click valid href "https://github.com/hubmapconsortium/ingest-validation-tools"
+    click ingest-validation-tests href "https://github.com/hubmapconsortium/ingest-validation-tests"
     top --> cells-sdk --> cells-api --> pipe
     click cells-sdk href "https://github.com/hubmapconsortium/cells-api-py-client"
     click cells-api href "https://github.com/hubmapconsortium/cross_modality_query"
@@ -41,6 +45,11 @@ graph TD
         search-api
         cells-api
         assets-api
+    end
+
+    subgraph submodules
+        valid
+        portal-visualization
     end
 ```
 
@@ -215,12 +224,13 @@ Within that directory, [`config.yaml`](https://github.com/hubmapconsortium/searc
 
 ### Visualization
 
-Data visualization is an integral part of the portal, allowing users to view the results of analysis pipelines or raw uploaded data easily directly in the browser.  How such data is processed and prepared for visualization in the client-side Javascript via [`vitessce`](https://github.com/hubmapconsortium/vitessce) can be found [here](./visualization-docs/README.md).
+Data visualization is an integral part of the portal, allowing users to view the results of analysis pipelines or raw uploaded data easily directly in the browser.  How such data is processed and prepared for visualization in the client-side Javascript via [`vitessce`](https://github.com/hubmapconsortium/vitessce) can be found [here](https://github.com/hubmapconsortium/portal-visualization#readme).
 
 General-purpose tools:
 - [`vitessce`](https://github.com/hubmapconsortium/vitessce): Visual integration tool for exploration of spatial single-cell experiments. Built on top of [deck.gl](https://deck.gl/).
 - [`vitessce-python`](https://github.com/vitessce/vitessce-python): Python wrapper classes which make it easier to build configurations.
 
 Particular to HuBMAP:
+- [`portal-visualization`](https://github.com/hubmapconsortium/portal-visualization): Given HuBMAP Dataset JSON, creates a Vitessce configuration.
 - [`portal-containers`](https://github.com/hubmapconsortium/portal-containers): Docker containers for visualization preprocessing.
 - [`airflow-dev`](https://github.com/hubmapconsortium/airflow-dev): CWL pipelines wrapping those Docker containers.
