@@ -5,7 +5,7 @@ import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
 import debounce from 'lodash/debounce';
 import Bowser from 'bowser';
 
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
@@ -189,7 +189,9 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
         </Paper>
         <StyledFooterText variant="body2">
           Powered by&nbsp;
-          <OutboundLink href="http://vitessce.io">Vitessce</OutboundLink>
+          <OutboundIconLink href="http://vitessce.io" iconFontSize="1rem">
+            Vitessce
+          </OutboundIconLink>
         </StyledFooterText>
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
       </StyledDetailPageSection>

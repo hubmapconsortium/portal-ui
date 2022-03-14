@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import InfoIcon from '@material-ui/icons/InfoRounded';
-import OpenInNewRoundedIcon from '@material-ui/icons/OpenInNewRounded';
 import { HeaderCell } from 'js/shared-styles/tables';
 
 const HeaderIconCell = styled(HeaderCell)`
@@ -18,9 +17,4 @@ const StyledInfoIcon = styled(InfoIcon)`
   font-size: 1rem;
 `;
 
-const StyledOpenInNewRoundedIcon = styled(OpenInNewRoundedIcon)`
-  font-size: 1.1rem;
-  vertical-align: text-bottom;
-`;
-
-export { HeaderIconCell, CenterAlignedFlexRow, StyledInfoIcon, StyledOpenInNewRoundedIcon };
+export { HeaderIconCell, CenterAlignedFlexRow, StyledInfoIcon };

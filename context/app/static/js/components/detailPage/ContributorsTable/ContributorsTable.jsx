@@ -8,12 +8,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import { HeaderIconCell, StyledInfoIcon, CenterAlignedFlexRow, StyledOpenInNewRoundedIcon } from './style';
+import { HeaderIconCell, StyledInfoIcon, CenterAlignedFlexRow } from './style';
 
 function ContributorsTable(props) {
   const { title, contributors } = props;
@@ -50,9 +50,9 @@ function ContributorsTable(props) {
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.affiliation}</TableCell>
                   <TableCell>
-                    <OutboundLink href={`https://orcid.org/${row.orcid_id}`} variant="body2">
-                      {row.orcid_id} <StyledOpenInNewRoundedIcon />
-                    </OutboundLink>
+                    <OutboundIconLink href={`https://orcid.org/${row.orcid_id}`} variant="body2" iconFontSize="1rem">
+                      {row.orcid_id}
+                    </OutboundIconLink>
                   </TableCell>
                 </TableRow>
               ))}

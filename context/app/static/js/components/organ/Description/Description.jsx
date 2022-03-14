@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
 import { StyledPaper } from './style';
 
@@ -11,7 +11,10 @@ function Description(props) {
     <StyledPaper>
       <p>{children}</p>
       <p>
-        Uberon: <OutboundLink href={uberonIri}>{uberonShort}</OutboundLink>
+        Uberon:{' '}
+        <OutboundIconLink href={uberonIri} iconFontSize="1rem">
+          {uberonShort}
+        </OutboundIconLink>
       </p>
     </StyledPaper>
   );

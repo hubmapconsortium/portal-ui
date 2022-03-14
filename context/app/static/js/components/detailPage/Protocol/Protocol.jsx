@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import useProtocolData from 'js/hooks/useProtocolData';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
@@ -14,7 +14,9 @@ function ProtocolLink(props) {
   return (
     <SectionItem label={title}>
       {resolverHostnameAndDOI ? (
-        <OutboundLink href={`https://${resolverHostnameAndDOI}`}>{resolverHostnameAndDOI}</OutboundLink>
+        <OutboundIconLink href={`https://${resolverHostnameAndDOI}`} iconFontSize="1rem">
+          {resolverHostnameAndDOI}
+        </OutboundIconLink>
       ) : (
         'Please wait...'
       )}
