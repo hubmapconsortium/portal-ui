@@ -52,7 +52,10 @@ def details_notebook(type, uuid):
     dataset_url = request.base_url.replace('.ipynb', '')
     cells = [
         new_markdown_cell(f"Visualization for [{hubmap_id}]({dataset_url})"),
-        new_code_cell('!pip install vitessce'),
+        new_code_cell(
+            '!pip uninstall community flask albumentations -y '
+            '# Preinstalled on Colab; Causes version conflicts.\n'
+            '!pip install vitessce==1.0.5'),
         *vitessce_conf.cells
     ]
 
