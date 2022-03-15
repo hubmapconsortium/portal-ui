@@ -82,19 +82,22 @@ export function getDefaultQuery() {
   };
 }
 
+export function combineQueryClauses(queries) {
+  return {
+    bool: {
+      must: queries,
+    },
+  };
+}
+
 export function addRestrictionsToQuery(query) {
   const { query: innerQuery, ...rest } = query;
 
   const defaultQuery = getDefaultQuery();
-
-  const combinedQueries = innerQuery ? [innerQuery, defaultQuery] : [defaultQuery];
+  const queries = innerQuery ? [innerQuery, defaultQuery] : [defaultQuery];
 
   return {
-    query: {
-      bool: {
-        must: combinedQueries,
-      },
-    },
+    query: { ...combineQueryClauses(queries) },
     ...rest,
   };
 }
