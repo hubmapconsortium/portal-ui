@@ -11,7 +11,7 @@ export function getIDsQuery(ids) {
   };
 }
 
-export const mustNotSupportQueryClause = {
+export const excludeSupportEntitiesClause = {
   bool: {
     must_not: {
       term: {

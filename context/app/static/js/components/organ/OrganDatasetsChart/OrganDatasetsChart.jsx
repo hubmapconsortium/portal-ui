@@ -12,7 +12,7 @@ import {
 } from 'js/shared-styles/charts/AssayTypeBarChart/utils';
 import { ChartArea } from 'js/shared-styles/charts/AssayTypeBarChart/style';
 import { combineQueryClauses } from 'js/helpers/functions';
-import { mustNotSupportQueryClause } from 'js/helpers/queries';
+import { excludeSupportEntitiesClause } from 'js/helpers/queries';
 
 const assayOrganTypesQuery = getAssayTypesCompositeAggsQuery('origin_sample.mapped_organ.keyword', 'organ_type');
 
@@ -22,7 +22,7 @@ function OrganDatasetsChart({ search }) {
       Object.assign(assayOrganTypesQuery, {
         query: combineQueryClauses([
           { bool: { must: { terms: { 'origin_sample.mapped_organ.keyword': search } } } },
-          mustNotSupportQueryClause,
+          excludeSupportEntitiesClause,
         ]),
       }),
     [search],
