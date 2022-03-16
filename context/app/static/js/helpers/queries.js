@@ -10,3 +10,13 @@ export function getIDsQuery(ids) {
     },
   };
 }
+
+export const excludeSupportEntitiesClause = {
+  bool: {
+    must_not: {
+      term: {
+        'entity_type.keyword': 'Support',
+      },
+    },
+  },
+};

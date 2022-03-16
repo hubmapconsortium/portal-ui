@@ -1,0 +1,1 @@
+- Exclude support entities from home and organ page data types charts.
