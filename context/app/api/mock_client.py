@@ -2,7 +2,7 @@ import json
 
 from datauri import DataURI
 
-from .vitessce_conf_builder.builders.base_builders import ConfCells
+from portal_visualization.builders.base_builders import ConfCells
 from .client import ApiClient
 
 
