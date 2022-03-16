@@ -20,7 +20,6 @@ RUN npm run build
 FROM tiangolo/uwsgi-nginx-flask:python3.8
 
 COPY requirements.txt /app
-COPY portal-visualization/requirements.txt /app/portal-visualization/requirements.txt
 RUN pip install -r /app/requirements.txt
 
 # NGINX should serve static content directly.
