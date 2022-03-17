@@ -7,7 +7,7 @@ It is deployed at [portal.hubmapconsortium.org](https://portal.hubmapconsortium.
 The Data Portal depends, directly or indirectly, on many other HuBMAP repos:
 
 ```mermaid
-graph TD
+graph LR
     gateway
     click gateway href "https://github.com/hubmapconsortium/gateway"
 
@@ -22,9 +22,8 @@ graph TD
     top --> portal-visualization --> vitessce-python
     click portal-visualization href "https://github.com/hubmapconsortium/portal-visualization"
     click vitessce-python href "https://github.com/vitessce/vitessce-python"
-    top --> valid[ingest-validation-tools] --> ingest-validation-tests
+    top --> valid[ingest-validation-tools]
     click valid href "https://github.com/hubmapconsortium/ingest-validation-tools"
-    click ingest-validation-tests href "https://github.com/hubmapconsortium/ingest-validation-tests"
     top --> cells-sdk --> cells-api --> pipe
     click cells-sdk href "https://github.com/hubmapconsortium/cells-api-py-client"
     click cells-api href "https://github.com/hubmapconsortium/cross_modality_query"
@@ -47,9 +46,24 @@ graph TD
         assets-api
     end
 
-    subgraph submodules
+    subgraph Git Submodules
         valid
+    end
+
+    subgraph Python Packages
+        commons
         portal-visualization
+        vitessce-python
+        cells-sdk
+    end
+
+    subgraph NPM Packages
+        vitessce
+        viv
+    end
+
+    subgraph cdn.jsdelivr.net
+        ccf-ui
     end
 ```
 
