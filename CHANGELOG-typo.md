@@ -1,1 +1,0 @@
-- Change "onCLick" to "onClick".

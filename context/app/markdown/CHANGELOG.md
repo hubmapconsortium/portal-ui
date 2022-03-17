@@ -1,3 +1,18 @@
+## v0.40.0 - 2022-03-17
+
+- Upgrade ingest-validation: Explain the distinction between the 10X kit versions.
+- Google colab pre-installs libraries with dependencies that conflict with Vitessce: Uninstall, then install vitessce.
+- Exclude support entities from home and organ page data types charts.
+- Fix mailto in attributions.
+- For assays like PAS, we were adding RGB channels sliders. Revert back to a single opacity slider.
+- Organize detail page summary components.
+- Add icons to links going outside HuBMAP.
+- Enable detail summary to wrap when needed.
+- Configure msw for storybook.
+- Change "onCLick" to "onClick".
+- Move visualization docs to submodule.
+
+
 ## v0.39.1 - 2022-03-10
 
 - If a publication date is available, use it in preference to the creation date.

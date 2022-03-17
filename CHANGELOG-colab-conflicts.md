@@ -1,1 +1,0 @@
-- Google colab pre-installs libraries with dependencies that conflict with Vitessce: Uninstall, then install vitessce.

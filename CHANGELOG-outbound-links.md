@@ -1,1 +1,0 @@
-- Add icons to links going outside HuBMAP.

@@ -1,1 +1,0 @@
-- Fix mailto in attributions.

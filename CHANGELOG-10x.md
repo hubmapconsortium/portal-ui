@@ -1,1 +1,0 @@
-- Upgrade ingest-validation: Explain the distinction between the 10X kit versions.
