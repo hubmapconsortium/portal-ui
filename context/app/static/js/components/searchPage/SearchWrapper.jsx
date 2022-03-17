@@ -13,7 +13,7 @@ import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
 import { NoResults, SearchError } from './noHitsComponents';
 
-const setSearcHitsCountSelector = (state) => state.setSearchHitsCount;
+const setSearchHitsCountSelector = (state) => state.setSearchHitsCount;
 const setAllResultsUUIDsSelector = (state) => state.setAllResultsUUIDs;
 
 function SearchWrapper(props) {
@@ -44,7 +44,7 @@ function SearchWrapper(props) {
   const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
   searchkit.addDefaultQuery((query) => query.addQuery(defaultQuery));
 
-  const setSearchHitsCount = useSearchViewStore(setSearcHitsCountSelector);
+  const setSearchHitsCount = useSearchViewStore(setSearchHitsCountSelector);
   const setAllResultsUUIDs = useSearchViewStore(setAllResultsUUIDsSelector);
 
   const queryString = useRef(false);
