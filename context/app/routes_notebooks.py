@@ -2,6 +2,7 @@ from flask import (abort, request, Response, current_app)
 import json
 from pathlib import Path
 from string import Template
+import re
 
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
@@ -67,13 +68,33 @@ def notebook(entity_type):
     body = request.get_json()
     uuids = body.get('uuids')
     url_base = get_url_base_from_request()
+
     cells = _get_cells('metadata.ipynb', uuids=uuids, url_base=url_base, entity_type=entity_type)
+
     if entity_type == 'datasets':
         search_url = (
             current_app.config['ELASTICSEARCH_ENDPOINT']
             + current_app.config['PORTAL_INDEX_PATH'])
         cells += _get_cells('files.ipynb', search_url=search_url)
+
+    uuids_to_zarr_files = _get_uuids_to_zarr_files(uuids)
+    zarr_files = set().union(*uuids_to_zarr_files.values())
+    if zarr_files:
+        cells += _get_cells('anndata.ipynb', uuids_to_zarr_files=uuids_to_zarr_files)
+
     return _nb_response_from_dicts(entity_type, cells)
+
+
+def _get_uuids_to_zarr_files(uuids):
+    client = get_client()
+    uuid_files = client.get_files(uuids)
+    uuids_to_zarr_files = {
+        uuid: set(
+            re.sub(r'\.zarr/.*', '.zarr', f) for f in files
+            if '.zarr' in f)
+        for uuid, files in uuid_files.items()
+    }
+    return uuids_to_zarr_files
 
 
 def _get_cells(filename, **kwargs):

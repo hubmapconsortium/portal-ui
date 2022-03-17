@@ -133,6 +133,24 @@ class ApiClient():
             current_app.config['ENTITY_API_BASE'] + route)
         return _get_latest_uuid(response_json)
 
+    def get_files(self, uuids):
+        query = {
+            'size': 10000,
+            'query': {'bool': {
+                'must': [{'ids': {'values': uuids}}]
+            }},
+            '_source': ['files.rel_path']
+        }
+        response_json = self._request(
+            current_app.config['ELASTICSEARCH_ENDPOINT']
+            + current_app.config['PORTAL_INDEX_PATH'],
+            body_json=query)
+        return {
+            hit['_id']: [
+                file['rel_path'] for file in hit['_source']['files']
+            ] for hit in response_json['hits']['hits']
+        }
+
     def get_vitessce_conf_cells_and_lifted_uuid(self, entity):
         '''
         Returns a dataclass with vitessce_conf and is_lifted.
