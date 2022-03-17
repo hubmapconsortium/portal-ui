@@ -7,11 +7,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 
 const LoginLink = () => <LightBlueLink href="/login">login</LightBlueLink>;
-const HelpEmailLink = () => (
-  <EmailIconLink email="help@hubmapconsortium.org" iconFontSize="1rem">
-    help@hubmapconsortium.org
-  </EmailIconLink>
-);
+const HelpEmailLink = () => <EmailIconLink email="help@hubmapconsortium.org">help@hubmapconsortium.org</EmailIconLink>;
 
 function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMaintenancePage }) {
   if (isMaintenancePage) {
@@ -36,10 +32,7 @@ function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMainten
       <>
         Could not confirm your Globus credentials. You may not have been added to the HuBMAP Group on Globus. Request
         access at <HelpEmailLink />. Or, you may be logged into a different Globus account from the one in the HuBMAP
-        Group. Check{' '}
-        <OutboundIconLink href="http://app.globus.org/" iconFontSize="1rem">
-          http://app.globus.org/
-        </OutboundIconLink>{' '}
+        Group. Check <OutboundIconLink href="http://app.globus.org/">http://app.globus.org/</OutboundIconLink> details
         details on account.
       </>
     );

@@ -11,10 +11,7 @@ function Description(props) {
     <StyledPaper>
       <p>{children}</p>
       <p>
-        Uberon:{' '}
-        <OutboundIconLink href={uberonIri} iconFontSize="1rem">
-          {uberonShort}
-        </OutboundIconLink>
+        Uberon: <OutboundIconLink href={uberonIri}>{uberonShort}</OutboundIconLink>
       </p>
     </StyledPaper>
   );

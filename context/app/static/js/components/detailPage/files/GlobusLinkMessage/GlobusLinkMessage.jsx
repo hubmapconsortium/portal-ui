@@ -43,7 +43,7 @@ function GlobusLinkMessage(props) {
     return (
       <Typography variant="body2">
         {`${messages[statusCode]} `}
-        <EmailIconLink variant="body2" email="help@hubmapconsortium.org" iconFontSize="1rem">
+        <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
           help@hubmapconsortium.org
         </EmailIconLink>
         .
@@ -54,7 +54,7 @@ function GlobusLinkMessage(props) {
   return (
     <Typography variant="body2">
       {`Unexpected error ${statusCode}. Report error to `}
-      <EmailIconLink variant="body2" email="help@hubmapconsortium.org" iconFontSize="1rem">
+      <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
         help@hubmapconsortium.org
       </EmailIconLink>
       .

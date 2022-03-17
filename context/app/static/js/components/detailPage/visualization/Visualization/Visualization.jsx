@@ -189,9 +189,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
         </Paper>
         <StyledFooterText variant="body2">
           Powered by&nbsp;
-          <OutboundIconLink href="http://vitessce.io" iconFontSize="1rem">
-            Vitessce
-          </OutboundIconLink>
+          <OutboundIconLink href="http://vitessce.io">Vitessce</OutboundIconLink>
         </StyledFooterText>
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
       </StyledDetailPageSection>

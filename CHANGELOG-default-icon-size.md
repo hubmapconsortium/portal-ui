@@ -1,0 +1,1 @@
+- Link icons default to `1rem` if unspecified.
