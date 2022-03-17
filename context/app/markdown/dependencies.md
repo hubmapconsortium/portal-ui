@@ -7,8 +7,8 @@ The services the portal relies on are [listed separately](/services).
 ## Git submodules
 
 ```
- 03feba57d6c2d74a551ed0bc69e7a3585c3e999d context/ingest-validation-tools (v0.0.13-17-g03feba57)
- f77ddb2299ec2cd19a1d215aa9303905c99465dc context/portal-visualization (heads/main-13-gf77ddb2)
+ 79cab515ee56184a824c6755ff25fc6e2d1a3a65 context/ingest-validation-tools (v0.0.13-23-g79cab515)
+ d9e924547d970f8469cf74881ce05cc22500b7fc context/portal-visualization (0.0.1~2)
 ```
 
 ## Python packages
