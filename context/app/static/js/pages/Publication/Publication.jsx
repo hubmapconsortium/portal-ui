@@ -39,10 +39,7 @@ function Publication(props) {
         <b>Corresponding Author:</b>{' '}
         {authors.corresponding.map((author) => (
           <span key={author.name}>
-            {author.name} -{' '}
-            <EmailIconLink email={`${author.email}`} iconFontSize="1rem">
-              {author.email}
-            </EmailIconLink>
+            {author.name} - <EmailIconLink email={`${author.email}`}>{author.email}</EmailIconLink>
           </span>
         ))}
       </StyledPaper>

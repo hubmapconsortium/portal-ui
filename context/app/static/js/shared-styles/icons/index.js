@@ -19,7 +19,7 @@ import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 
 const fontSizeStyle = css`
-  font-size: ${(props) => props.$fontSize};
+  font-size: ${(props) => props.$fontSize || '1rem'};
 `;
 
 const CenterIcon = styled(AccountBalanceIcon)`

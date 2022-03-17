@@ -50,7 +50,7 @@ function ContributorsTable(props) {
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.affiliation}</TableCell>
                   <TableCell>
-                    <OutboundIconLink href={`https://orcid.org/${row.orcid_id}`} variant="body2" iconFontSize="1rem">
+                    <OutboundIconLink href={`https://orcid.org/${row.orcid_id}`} variant="body2">
                       {row.orcid_id}
                     </OutboundIconLink>
                   </TableCell>

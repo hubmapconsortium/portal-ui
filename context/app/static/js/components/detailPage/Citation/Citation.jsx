@@ -24,14 +24,9 @@ function Citation({ contributors, citationTitle, created_timestamp, doi_url, doi
       bottomSpacing={1}
     >
       <Typography variant="body1">
-        {citation} Available from:{' '}
-        <OutboundIconLink href={doi_url} iconFontSize="1rem">
-          {doi_url}
-        </OutboundIconLink>
+        {citation} Available from: <OutboundIconLink href={doi_url}>{doi_url}</OutboundIconLink>
       </Typography>
-      <OutboundIconLink href={`https://search.datacite.org/works/${doi}`} iconFontSize="1rem">
-        View DataCite Page
-      </OutboundIconLink>
+      <OutboundIconLink href={`https://search.datacite.org/works/${doi}`}>View DataCite Page</OutboundIconLink>
     </LabelledSectionText>
   );
 }

@@ -34,7 +34,7 @@ function Footer(props) {
                   </LightBlueLink>
                 </>
               )}
-              <EmailIconLink variant="body2" email="help@hubmapconsortium.org" iconFontSize="1rem">
+              <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
                 Submit Feedback
               </EmailIconLink>
             </FlexColumn>
@@ -73,7 +73,7 @@ function Footer(props) {
             </FlexColumn>
             <FlexColumn>
               <Typography variant="subtitle2">Funding</Typography>
-              <OutboundIconLink href="https://commonfund.nih.gov/hubmap" variant="body2" iconFontSize="1rem">
+              <OutboundIconLink href="https://commonfund.nih.gov/hubmap" variant="body2">
                 NIH Common Fund
               </OutboundIconLink>
             </FlexColumn>

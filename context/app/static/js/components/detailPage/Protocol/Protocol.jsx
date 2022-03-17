@@ -14,9 +14,7 @@ function ProtocolLink(props) {
   return (
     <SectionItem label={title}>
       {resolverHostnameAndDOI ? (
-        <OutboundIconLink href={`https://${resolverHostnameAndDOI}`} iconFontSize="1rem">
-          {resolverHostnameAndDOI}
-        </OutboundIconLink>
+        <OutboundIconLink href={`https://${resolverHostnameAndDOI}`}>{resolverHostnameAndDOI}</OutboundIconLink>
       ) : (
         'Please wait...'
       )}

@@ -46,7 +46,7 @@ function Collection(props) {
             doi={doi}
           >
             {doi_url && (
-              <OutboundIconLink href={doi_url} variant="body1" iconFontSize="1rem">
+              <OutboundIconLink href={doi_url} variant="body1">
                 doi:{doi}
               </OutboundIconLink>
             )}
