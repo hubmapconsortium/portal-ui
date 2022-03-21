@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { AppContext } from 'js/components/Providers';
@@ -6,10 +6,10 @@ import EntityTileFooter from '../EntityTileFooter';
 import EntityTileBody from '../EntityTileBody';
 import { StyledPaper, Flex, LetterboxedThumbnail } from './style';
 
-function EntityTile(props) {
-  const { uuid, entity_type, id, invertColors, entityData, descendantCounts } = props;
+function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendantCounts }) {
   const { thumbnail_file } = entityData;
   const { assetsEndpoint } = useContext(AppContext);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <a href={`/browse/${entity_type.toLowerCase()}/${uuid}`}>
@@ -20,6 +20,8 @@ function EntityTile(props) {
             <LetterboxedThumbnail
               src={`${assetsEndpoint}/${thumbnail_file.file_uuid}/thumbnail.jpg`}
               alt={`${entity_type} ${id} thumbnail`}
+              onLoad={() => setImageLoaded(true)}
+              $shouldDisplayImage={imageLoaded}
             />
           )}
         </Flex>

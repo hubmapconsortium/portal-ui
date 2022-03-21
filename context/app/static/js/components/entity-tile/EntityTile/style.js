@@ -59,6 +59,12 @@ const LetterboxedThumbnail = styled.img`
   min-width: ${thumbnailDimension}; // immediately takes up 90px when there is text overflow
   object-fit: contain;
   background-color: black;
+
+  ${(props) =>
+    !props.$shouldDisplayImage &&
+    css`
+      display: none;
+    `}
 `;
 
 export { StyledPaper, invertSectionColors, Flex, LetterboxedThumbnail };
