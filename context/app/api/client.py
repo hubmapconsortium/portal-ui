@@ -9,8 +9,8 @@ import requests
 from hubmap_commons.type_client import TypeClient
 
 from .client_utils import files_from_response
-from .vitessce_conf_builder.builder_factory import get_view_config_builder
-from .vitessce_conf_builder.builders.base_builders import ConfCells
+from portal_visualization.builder_factory import get_view_config_builder
+from portal_visualization.builders.base_builders import ConfCells
 
 Entity = namedtuple('Entity', ['uuid', 'type', 'name'], defaults=['TODO: name'])
 
