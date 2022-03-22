@@ -15,7 +15,7 @@ if __name__ == "__main__":
         startTime=int((datetime.now() - timedelta(days=7)).timestamp()),
         endTime=int(datetime.now().timestamp()),
         queryString="fields @timestamp, @logStream, @message | filter @message like /(?i)(error|exception)/ | sort @timestamp desc",
-        limit=5
+        limit=200
     )
 
     query_id = query['queryId']
