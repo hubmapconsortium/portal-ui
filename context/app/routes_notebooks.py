@@ -2,6 +2,7 @@ from flask import (abort, request, Response, current_app)
 import json
 from pathlib import Path
 from string import Template
+import re
 
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
@@ -67,23 +68,39 @@ def notebook(entity_type):
     body = request.get_json()
     uuids = body.get('uuids')
     url_base = get_url_base_from_request()
-    cells = _get_metadata_cells(uuids=uuids, url_base=url_base, entity_type=entity_type)
+
+    cells = _get_cells('metadata.ipynb', uuids=uuids, url_base=url_base, entity_type=entity_type)
+
     if entity_type == 'datasets':
         search_url = (
             current_app.config['ELASTICSEARCH_ENDPOINT']
             + current_app.config['PORTAL_INDEX_PATH'])
-        cells += _get_files_cells(search_url=search_url)
+        cells += _get_cells('files.ipynb', search_url=search_url)
+
+    uuids_to_files = get_client().get_files(uuids)
+    uuids_to_zarr_files = _limit_to_zarr_files(uuids_to_files)
+    zarr_files = set().union(*uuids_to_zarr_files.values())
+    if zarr_files:
+        cells += _get_cells('anndata.ipynb', uuids_to_zarr_files=uuids_to_zarr_files)
+
     return _nb_response_from_dicts(entity_type, cells)
 
 
-def _get_metadata_cells(uuids=None, url_base=None, entity_type=None):
-    uuids_str = str(uuids)
-    template = Template((Path(__file__).parent / 'notebook/metadata.ipynb').read_text())
-    filled = template.substitute(uuids=uuids_str, url_base=url_base, entity_type=entity_type)
-    return json.loads(filled)['cells']
+def _limit_to_zarr_files(uuids_to_files):
+    '''
+    >>> uuids_to_files = {'1234': ['asdf/.zarr/abc', 'asdf/.zarr/xyz', 'other']}
+    >>> _limit_to_zarr_files(uuids_to_files)
+    {'1234': {'asdf/.zarr'}}
+    '''
+    return {
+        uuid: set(
+            re.sub(r'\.zarr/.*', '.zarr', f) for f in files
+            if '.zarr' in f)
+        for uuid, files in uuids_to_files.items()
+    }
 
 
-def _get_files_cells(search_url):
-    template = Template((Path(__file__).parent / 'notebook/files.ipynb').read_text())
-    filled = template.substitute(search_url=search_url)
+def _get_cells(filename, **kwargs):
+    template = Template((Path(__file__).parent / 'notebook' / filename).read_text())
+    filled = template.substitute(kwargs)
     return json.loads(filled)['cells']

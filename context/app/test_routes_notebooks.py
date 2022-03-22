@@ -14,6 +14,7 @@ def client():
     'entity_type',
     ['donors', 'samples', 'datasets']
 )
-def test_truncate_and_redirect(client, entity_type):
+def test_notebook(client, entity_type, mocker):
+    mocker.patch('app.api.client.ApiClient.get_files')
     response = client.post(f'/notebooks/{entity_type}.ipynb', json={'uuids': ['fake-uuid']})
     assert response.status == '200 OK'

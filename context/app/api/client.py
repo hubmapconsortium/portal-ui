@@ -8,6 +8,7 @@ import requests
 
 from hubmap_commons.type_client import TypeClient
 
+from .client_utils import files_from_response
 from portal_visualization.builder_factory import get_view_config_builder
 from portal_visualization.builders.base_builders import ConfCells
 
@@ -132,6 +133,20 @@ class ApiClient():
         response_json = self._request(
             current_app.config['ENTITY_API_BASE'] + route)
         return _get_latest_uuid(response_json)
+
+    def get_files(self, uuids):
+        query = {
+            'size': 10000,
+            'query': {'bool': {
+                'must': [{'ids': {'values': uuids}}]
+            }},
+            '_source': ['files.rel_path']
+        }
+        response_json = self._request(
+            current_app.config['ELASTICSEARCH_ENDPOINT']
+            + current_app.config['PORTAL_INDEX_PATH'],
+            body_json=query)
+        return files_from_response(response_json)
 
     def get_vitessce_conf_cells_and_lifted_uuid(self, entity):
         '''
