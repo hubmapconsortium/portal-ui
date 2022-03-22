@@ -4,7 +4,7 @@ import boto3
 import time
 from datetime import datetime, timedelta
 from csv import DictWriter
-
+from pathlib import Path
 
 def combine_field_and_value_to_item(d):
     return {d['field']: d['value']}
@@ -35,7 +35,7 @@ if __name__ == "__main__":
         )
 
     if response['status'] == "Complete":
-        with open(f"./portal-logs-errors/errors-{datetime.now().strftime('%d-%m-%Y')}.csv",
+        with open(f"{ Path(__file__).parent}/portal-logs-errors/errors-{datetime.now().strftime('%d-%m-%Y')}.csv",
                   'w', newline='') as csvfile:
             fieldnames = ['first_name', 'last_name']
             writer = DictWriter(csvfile, fieldnames=[
