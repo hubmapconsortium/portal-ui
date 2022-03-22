@@ -1,0 +1,1 @@
+- Add script to query portal ui container logs for errors.

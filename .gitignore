@@ -124,3 +124,6 @@ context/app/static/js/maintenance/public
 
 # pycharm
 .idea/
+
+#log errors
+portal-logs-errors/
