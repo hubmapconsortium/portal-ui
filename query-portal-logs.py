@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     response = None
 
-    while response == None or response['status'] == 'Running':
+    while response is None or response['status'] == 'Running':
         print('Waiting for query to complete')
         time.sleep(5)
         response = client.get_query_results(
