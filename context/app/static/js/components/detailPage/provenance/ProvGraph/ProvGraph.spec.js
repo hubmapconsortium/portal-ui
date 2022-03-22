@@ -109,7 +109,7 @@ test('should display selected node information in detail pane and show immediate
     'Sample - HBM643.FDGT.862',
   ];
 
-  newNodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  await waitFor(() => newNodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument()));
 });
 
 test("should display an asterisk in the current page's node", () => {

@@ -8,6 +8,7 @@
 # Will be filled in by build:
 **/node_modules/
 app/static/public/
+app/static/storybook-public/
 
 # MacOS junk:
 **/.DS_Store

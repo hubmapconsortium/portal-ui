@@ -97,7 +97,7 @@
     "jest": "^26.0.1",
     "js-yaml": "^3.14.0",
     "lint-staged": "^10.2.11",
-    "msw": "^0.19.5",
+    "msw": "^0.39.1",
     "msw-storybook-addon": "^1.6.1",
     "node-sass": "^4.14.1",
     "prettier": "^2.0.5",
@@ -141,5 +141,8 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "msw": {
+    "workerDirectory": "app/static/storybook-public"
   }
 }

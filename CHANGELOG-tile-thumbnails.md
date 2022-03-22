@@ -1,0 +1,1 @@
+- Add thumbnails to entity tiles.

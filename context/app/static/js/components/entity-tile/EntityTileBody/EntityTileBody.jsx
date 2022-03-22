@@ -6,7 +6,6 @@ import {
   StyledDatasetIcon,
   StyledSampleIcon,
   StyledDonorIcon,
-  FixedWidthFlex,
   Flex,
   TruncatedTypography,
   StyledDivider,
@@ -22,7 +21,7 @@ function EntityTileBody(props) {
     Support: <StyledDatasetIcon />,
   };
   return (
-    <FixedWidthFlex $invertColors={invertColors}>
+    <Flex>
       {icons[entity_type] || <StyledDatasetIcon />}
       <StyledDiv>
         <Typography component="h4" variant="h6">
@@ -50,7 +49,7 @@ function EntityTileBody(props) {
           </>
         )}
       </StyledDiv>
-    </FixedWidthFlex>
+    </Flex>
   );
 }
 
