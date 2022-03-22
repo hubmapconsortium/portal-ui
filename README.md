@@ -163,6 +163,8 @@ Then, to redeploy `dev`, `test`, and `stage`:
 
 IEC is responsible for deploying to production.
 
+The portal container cloudwatch logs should be checked for errors and exceptions after each release by running `query-portal-logs.py`.
+
 ### Maintenace page
 
 If the maintence page ever needs to be updated, you'll need to build the bundle,
