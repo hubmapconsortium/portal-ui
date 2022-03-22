@@ -17,8 +17,8 @@ if __name__ == "__main__":
         logGroupName='portal-ui-logs',
         startTime=int((datetime.now() - timedelta(days=7)).timestamp()),
         endTime=int(datetime.now().timestamp()),
-        queryString="""fields @timestamp, @logStream, @message 
-        | filter @message like /(?i)(error|exception)/ 
+        queryString="""fields @timestamp, @logStream, @message
+        | filter @message like /(?i)(error|exception)/
         | sort @timestamp desc""",
         limit=200
     )
