@@ -14,7 +14,7 @@ if __name__ == "__main__":
         logGroupName='portal-ui-logs',
         startTime=int((datetime.now() - timedelta(days=7)).timestamp()),
         endTime=int(datetime.now().timestamp()),
-        queryString="fields @timestamp, @message | filter @message like /(?i)(error|exception)/ | sort @timestamp desc",
+        queryString="fields @timestamp, @logStream, @message | filter @message like /(?i)(error|exception)/ | sort @timestamp desc",
         limit=5
     )
 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     if response['status']=="Complete":
         with open(f"./portal-logs-errors/errors-{datetime.now().strftime('%d-%m-%Y')}.tsv", 'w', newline='') as csvfile:
             fieldnames = ['first_name', 'last_name']
-            writer = DictWriter(csvfile, fieldnames=['@timestamp', '@message', '@ptr'])
+            writer = DictWriter(csvfile, fieldnames=['@timestamp', '@logStream', '@message', '@ptr'])
             writer.writeheader()
 
             for result in response['results']:
