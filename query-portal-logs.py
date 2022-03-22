@@ -37,7 +37,6 @@ if __name__ == "__main__":
     if response['status'] == "Complete":
         with open(f"{ Path(__file__).parent}/portal-logs-errors/errors-{date.today()}.csv",
                   'w', newline='') as csvfile:
-            fieldnames = ['first_name', 'last_name']
             writer = DictWriter(csvfile, fieldnames=[
                                 '@timestamp', '@logStream', '@message', '@ptr'])
             writer.writeheader()
