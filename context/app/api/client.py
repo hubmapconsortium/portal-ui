@@ -8,6 +8,7 @@ import requests
 
 from hubmap_commons.type_client import TypeClient
 
+from .client_utils import files_from_response
 from .vitessce_conf_builder.builder_factory import get_view_config_builder
 from .vitessce_conf_builder.builders.base_builders import ConfCells
 
@@ -145,11 +146,7 @@ class ApiClient():
             current_app.config['ELASTICSEARCH_ENDPOINT']
             + current_app.config['PORTAL_INDEX_PATH'],
             body_json=query)
-        return {
-            hit['_id']: [
-                file['rel_path'] for file in hit['_source']['files']
-            ] for hit in response_json['hits']['hits']
-        }
+        return files_from_response(response_json)
 
     def get_vitessce_conf_cells_and_lifted_uuid(self, entity):
         '''
