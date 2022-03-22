@@ -7,13 +7,10 @@ from csv import DictWriter
 from pathlib import Path
 
 
-def combine_field_and_value_to_item(d):
-    return {d['field']: d['value']}
-
-
 if __name__ == "__main__":
     client = boto3.Session(profile_name='harvarddev').client('logs')
 
+    boto3.client('logs').waiter_names
     query = client.start_query(
         logGroupName='portal-ui-logs',
         startTime=int((datetime.now() - timedelta(days=7)).timestamp()),
@@ -43,7 +40,6 @@ if __name__ == "__main__":
             writer.writeheader()
 
             for result in response['results']:
-                writer.writerow({k: v for d in result for k,
-                                v in combine_field_and_value_to_item(d).items()})
+                writer.writerow({d['field']: d['value'] for d in result})
     else:
         raise Exception('Error retrieving query results.')
