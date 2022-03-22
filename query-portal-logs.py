@@ -6,6 +6,7 @@ from datetime import date, datetime, timedelta
 from csv import DictWriter
 from pathlib import Path
 
+
 def combine_field_and_value_to_item(d):
     return {d['field']: d['value']}
 
