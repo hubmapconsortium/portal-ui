@@ -30,7 +30,7 @@ if __name__ == "__main__":
         )
 
     if response['status']=="Complete":
-        with open(f"./portal-logs-errors/errors-{datetime.now().strftime('%d-%m-%Y')}.tsv", 'w', newline='') as csvfile:
+        with open(f"./portal-logs-errors/errors-{datetime.now().strftime('%d-%m-%Y')}.csv", 'w', newline='') as csvfile:
             fieldnames = ['first_name', 'last_name']
             writer = DictWriter(csvfile, fieldnames=['@timestamp', '@logStream', '@message', '@ptr'])
             writer.writeheader()
