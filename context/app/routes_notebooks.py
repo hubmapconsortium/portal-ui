@@ -77,7 +77,8 @@ def notebook(entity_type):
             + current_app.config['PORTAL_INDEX_PATH'])
         cells += _get_cells('files.ipynb', search_url=search_url)
 
-    uuids_to_zarr_files = _get_uuids_to_zarr_files(uuids)
+    uuids_to_files = get_client().get_files(uuids)
+    uuids_to_zarr_files = _limit_to_zarr_files(uuids_to_files)
     zarr_files = set().union(*uuids_to_zarr_files.values())
     if zarr_files:
         cells += _get_cells('anndata.ipynb', uuids_to_zarr_files=uuids_to_zarr_files)
@@ -85,14 +86,17 @@ def notebook(entity_type):
     return _nb_response_from_dicts(entity_type, cells)
 
 
-def _get_uuids_to_zarr_files(uuids):
-    client = get_client()
-    uuid_files = client.get_files(uuids)
+def _limit_to_zarr_files(uuids_to_files):
+    '''
+    >>> uuids_to_files = {'1234': ['asdf/.zarr/abc', 'asdf/.zarr/xyz', 'other']}
+    >>> _limit_to_zarr_files(uuids_to_files)
+    {'1234': {'asdf/.zarr'}}
+    '''
     uuids_to_zarr_files = {
         uuid: set(
             re.sub(r'\.zarr/.*', '.zarr', f) for f in files
             if '.zarr' in f)
-        for uuid, files in uuid_files.items()
+        for uuid, files in uuids_to_files.items()
     }
     return uuids_to_zarr_files
 
