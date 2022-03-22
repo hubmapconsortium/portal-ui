@@ -92,13 +92,12 @@ def _limit_to_zarr_files(uuids_to_files):
     >>> _limit_to_zarr_files(uuids_to_files)
     {'1234': {'asdf/.zarr'}}
     '''
-    uuids_to_zarr_files = {
+    return {
         uuid: set(
             re.sub(r'\.zarr/.*', '.zarr', f) for f in files
             if '.zarr' in f)
         for uuid, files in uuids_to_files.items()
     }
-    return uuids_to_zarr_files
 
 
 def _get_cells(filename, **kwargs):
