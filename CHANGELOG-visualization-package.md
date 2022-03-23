@@ -1,1 +1,0 @@
-- Use a python package, rather than a git submodule, for `portal-visualization`.

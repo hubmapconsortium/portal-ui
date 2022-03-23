@@ -1,1 +1,0 @@
-- Tiny typo: `SearcHits` -> `SearchHits`

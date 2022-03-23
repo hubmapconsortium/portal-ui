@@ -1,3 +1,15 @@
+## v0.40.1 - 2022-03-23
+
+- Stub out anndata section.
+- Link icons default to `1rem` if unspecified.
+- Add script to query portal ui container logs for errors.
+- Revert to original NGINX timeout setting.
+- Add thumbnails to entity tiles.
+- Tiny typo: `SearcHits` -> `SearchHits`
+- We were getting errors in the log because we tried to get visualizations for everything: Add a conditional to only do it for datasets.
+- Use a python package, rather than a git submodule, for `portal-visualization`.
+
+
 ## v0.40.0 - 2022-03-17
 
 - Upgrade ingest-validation: Explain the distinction between the 10X kit versions.

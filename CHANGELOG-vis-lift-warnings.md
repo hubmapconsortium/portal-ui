@@ -1,1 +1,0 @@
-- We were getting errors in the log because we tried to get visualizations for everything: Add a conditional to only do it for datasets.

@@ -1,1 +1,0 @@
-- Revert to original NGINX timeout setting.
