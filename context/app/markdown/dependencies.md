@@ -8,7 +8,6 @@ The services the portal relies on are [listed separately](/services).
 
 ```
  79cab515ee56184a824c6755ff25fc6e2d1a3a65 context/ingest-validation-tools (v0.0.13-23-g79cab515)
- d9e924547d970f8469cf74881ce05cc22500b7fc context/portal-visualization (0.0.1~2)
 ```
 
 ## Python packages
@@ -23,8 +22,7 @@ python-datauri==0.2.8
 python-frontmatter==0.5.0
 hubmap-api-py-client==0.0.9
 hubmap-commons==2.0.12
-
--r portal-visualization/requirements.txt
+git+https://github.com/hubmapconsortium/portal-visualization.git@0.0.1#egg=portal-visualization
 ```
 
 `portal-visualization/requirements.txt`:
