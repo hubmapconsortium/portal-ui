@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle } from 'searchkit';
+import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle, SimpleQueryString } from 'searchkit';
 
 import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
 import SearchViewSwitch, { DevSearchViewSwitch } from './SearchViewSwitch';
@@ -19,7 +19,13 @@ function SearchBarLayout(props) {
   return (
     <>
       <Flex>
-        <SearchBox autofocus queryFields={queryFields} />
+        <SearchBox
+          autofocus
+          queryFields={queryFields}
+          queryBuilder={(query, options) =>
+            SimpleQueryString(query.match(/^\s*HBM\S+\s*$/i) ? `"${query}"` : query, options)
+          }
+        />
         <CenteredDiv>
           <SortingSelector
             options={sortOptions}
