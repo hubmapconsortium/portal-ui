@@ -17,6 +17,7 @@ import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
 import ListAltRoundedIcon from '@material-ui/icons/ListAltRounded';
 import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
+import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 
 const fontSizeStyle = css`
   font-size: ${(props) => props.$fontSize || '1rem'};
@@ -90,6 +91,9 @@ const UpIcon = styled(ArrowDropUpRoundedIcon)`
   ${fontSizeStyle}
 `;
 
+const SaveIcon = styled(SaveRoundedIcon)`
+  ${fontSizeStyle}
+`;
 export {
   CollectionIcon,
   DonorIcon,
@@ -108,4 +112,5 @@ export {
   ListsIcon,
   DownIcon,
   UpIcon,
+  SaveIcon,
 };
