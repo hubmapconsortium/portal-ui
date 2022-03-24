@@ -1,18 +1,15 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
 import { useInView } from 'react-intersection-observer';
 import 'intersection-observer';
 
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useEntityStore from 'js/stores/useEntityStore';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { FileIcon } from 'js/shared-styles/icons';
 import VersionSelect from 'js/components/detailPage/VersionSelect';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
-import { FlexEnd, JsonButton, StyledTypography } from './style';
+import { FlexEnd, StyledTypography } from './style';
 
 const entityStoreSelector = (state) => state.setSummaryComponentObserver;
 
@@ -23,7 +20,6 @@ function SummaryData(props) {
     status,
     mapped_data_access_level,
     hubmap_id,
-    entityCanBeSaved,
     children,
     mapped_external_group_name,
   } = props;
@@ -63,15 +59,7 @@ function SummaryData(props) {
                 {mapped_external_group_name && <SummaryItem>{mapped_external_group_name}</SummaryItem>}
               </>
             )}
-            <FlexEnd>
-              <SecondaryBackgroundTooltip title="View JSON">
-                <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
-                  <FileIcon color="primary" />
-                </JsonButton>
-              </SecondaryBackgroundTooltip>
-              {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
-              {['Dataset', 'Support'].includes(entity_type) && <VersionSelect uuid={uuid} />}
-            </FlexEnd>
+            <FlexEnd>{['Dataset', 'Support'].includes(entity_type) && <VersionSelect uuid={uuid} />}</FlexEnd>
           </FlexEnd>
         }
       />
@@ -85,12 +73,10 @@ SummaryData.propTypes = {
   uuid: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
   mapped_data_access_level: PropTypes.string.isRequired,
-  entityCanBeSaved: PropTypes.bool,
   mapped_external_group_name: PropTypes.string,
 };
 
 SummaryData.defaultProps = {
-  entityCanBeSaved: true,
   mapped_external_group_name: undefined,
 };
 

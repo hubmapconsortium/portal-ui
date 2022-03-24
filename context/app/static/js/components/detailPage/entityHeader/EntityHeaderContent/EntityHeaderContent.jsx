@@ -4,6 +4,10 @@ import { useTransition, animated } from 'react-spring';
 
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
+import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
+import { FileIcon } from 'js/shared-styles/icons';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
@@ -16,7 +20,7 @@ const iconMap = {
 
 const AnimatedFlexContainer = animated(FlexContainer);
 
-function EntityHeaderContent({ hubmap_id, entity_type, data, shouldDisplayHeader, vizIsFullscreen }) {
+function EntityHeaderContent({ uuid, hubmap_id, entity_type, data, shouldDisplayHeader, vizIsFullscreen }) {
   const transitions = useTransition(shouldDisplayHeader, null, {
     from: { opacity: vizIsFullscreen ? 1 : 0 },
     enter: { opacity: 1 },
@@ -36,13 +40,25 @@ function EntityHeaderContent({ hubmap_id, entity_type, data, shouldDisplayHeader
               ))}
             </>
           )}
-          {vizIsFullscreen && (
-            <RightDiv>
-              <VisualizationShareButtonWrapper />
-              <VizualizationThemeSwitch />
-              <VisualizationCollapseButton />
-            </RightDiv>
-          )}
+          <RightDiv>
+            <SecondaryBackgroundTooltip title="View JSON">
+              <WhiteBackgroundIconButton
+                href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
+                target="_blank"
+                component="a"
+              >
+                <FileIcon color="primary" />
+              </WhiteBackgroundIconButton>
+            </SecondaryBackgroundTooltip>
+            {<SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
+            {vizIsFullscreen && (
+              <>
+                <VisualizationShareButtonWrapper />
+                <VizualizationThemeSwitch />
+                <VisualizationCollapseButton />
+              </>
+            )}
+          </RightDiv>
         </AnimatedFlexContainer>
       ),
   );
