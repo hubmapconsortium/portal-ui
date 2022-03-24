@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialog';
+import { EditIcon } from 'js/shared-styles/icons';
 
 function EditSavedStatusButton({ uuid, entity_type, ...rest }) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   return (
     <>
-      <Button
-        color="primary"
-        variant="contained"
-        onClick={() => {
-          setDialogIsOpen(true);
-        }}
-        {...rest}
-      >
-        Edit Saved Status
-      </Button>
+      <SecondaryBackgroundTooltip title="Edit Saved Status">
+        <WhiteBackgroundIconButton
+          onClick={() => {
+            setDialogIsOpen(true);
+          }}
+          {...rest}
+        >
+          <EditIcon color="primary" />
+        </WhiteBackgroundIconButton>
+      </SecondaryBackgroundTooltip>
       <EditSavedStatusDialog
         dialogIsOpen={dialogIsOpen}
         setDialogIsOpen={setDialogIsOpen}
