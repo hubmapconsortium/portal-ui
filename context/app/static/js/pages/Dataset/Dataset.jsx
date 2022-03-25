@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
@@ -12,7 +12,6 @@ import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
-import useEntityStore from 'js/stores/useEntityStore';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/components/detailPage/style';
@@ -48,8 +47,6 @@ function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, regist
   );
 }
 
-const entityStoreSelector = (state) => state.setAssayMetadata;
-
 function DatasetDetail(props) {
   const { assayMetadata, vitData, hasNotebook, visLiftedUUID } = props;
   const {
@@ -62,7 +59,6 @@ function DatasetDetail(props) {
     data_types,
     mapped_data_types,
     origin_sample,
-    origin_sample: { mapped_organ },
     group_name,
     created_by_user_displayname,
     created_by_user_email,
@@ -115,11 +111,6 @@ function DatasetDetail(props) {
   );
 
   useSendUUIDEvent(entity_type, uuid);
-
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-  useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ });
-  }, [setAssayMetadata, hubmap_id, entity_type, mapped_data_types, mapped_organ]);
 
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
   return (
