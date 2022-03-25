@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { useVisualizationStore } from 'js/stores';
 import { iconButtonHeight } from 'js/shared-styles/buttons';
+import { AppContext } from 'js/components/Providers';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 import { extractHeaderMetadata } from './utils';
@@ -12,12 +13,13 @@ const visualizationSelector = (state) => ({
 
 const entityHeaderHeight = iconButtonHeight;
 
-function Header({ assayMetadata }) {
+function Header() {
   const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
+  const { document } = useContext(AppContext);
 
-  const { hubmap_id, entity_type, uuid } = assayMetadata;
+  const { hubmap_id, entity_type, uuid } = document;
 
-  const data = extractHeaderMetadata(assayMetadata, entity_type);
+  const data = extractHeaderMetadata(document, entity_type);
   return (
     <StyledPaper elevation={4}>
       <EntityHeaderContent

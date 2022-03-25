@@ -22,8 +22,8 @@ function App(props) {
   return (
     // groups_token is injected as a global in the flask template.
     // eslint-disable-next-line no-undef
-    <Providers endpoints={endpoints} groupsToken={groups_token}>
-      <Header assayMetadata={flaskData?.entity} />
+    <Providers endpoints={endpoints} groupsToken={groups_token} document={flaskData?.entity}>
+      <Header />
       {globalAlertMd && (
         <FlexContainer>
           <StyledAlert severity="warning">

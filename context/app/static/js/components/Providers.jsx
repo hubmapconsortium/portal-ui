@@ -17,14 +17,14 @@ const generateClassName = createGenerateClassName({
 const AppContext = React.createContext({});
 
 function Providers(props) {
-  const { endpoints, groupsToken, children } = props;
+  const { endpoints, groupsToken, document, children } = props;
   // injectFirst ensures styled-components takes priority over mui for styling
   return (
     <StylesProvider generateClassName={generateClassName} injectFirst>
       <GlobalFonts />
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
-          <AppContext.Provider value={{ groupsToken, ...endpoints }}>
+          <AppContext.Provider value={{ groupsToken, ...endpoints, document }}>
             <CssBaseline />
             <GlobalStyles />
             {children}

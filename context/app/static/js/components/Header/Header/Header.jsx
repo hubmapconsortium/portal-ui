@@ -9,7 +9,7 @@ const visualizationSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
 
-function Header({ assayMetadata }) {
+function Header() {
   const anchorRef = useRef(null);
   const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
 
@@ -26,7 +26,7 @@ function Header({ assayMetadata }) {
       >
         <HeaderContent anchorRef={anchorRef} />
       </HeaderAppBar>
-      {displayEntityHeader && <EntityHeader assayMetadata={assayMetadata} />}
+      {displayEntityHeader && <EntityHeader />}
     </>
   );
 }
