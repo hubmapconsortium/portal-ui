@@ -14,7 +14,7 @@ function extractHeaderMetadata({
   mapped_metadata: { sex, race, age_value, age_unit } = {},
   origin_sample: { mapped_organ } = {},
 }) {
-  if (entity_type === 'Dataset') {
+  if (['Dataset', 'Support'].includes(entity_type)) {
     return extractAndLabelMetadata({ mapped_organ, mapped_data_types }, ['mapped_organ', 'mapped_data_types']);
   }
 
