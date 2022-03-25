@@ -4,17 +4,6 @@ const savedAlertStatus = 'savedAlert';
 const editedAlertStatus = 'editedAlert';
 
 const useEntityStore = create((set) => ({
-  summaryComponentObserver: {
-    summaryInView: true,
-    summaryEntry: undefined,
-  },
-  setSummaryComponentObserver: (inView, entry) =>
-    set({
-      summaryComponentObserver: {
-        summaryInView: inView,
-        summaryEntry: entry,
-      },
-    }),
   assayMetadata: {},
   setAssayMetadata: (val) => set({ assayMetadata: val }),
   shouldDisplaySavedOrEditedAlert: false,

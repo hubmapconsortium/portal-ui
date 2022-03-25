@@ -9,6 +9,7 @@ const TableContainer = styled.div`
 
 const StickyNav = styled.nav`
   position: sticky;
+  top: ${(props) => props.$topOffset};
 `;
 
 const TableTitle = styled(Typography)`
