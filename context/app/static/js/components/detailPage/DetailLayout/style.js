@@ -1,8 +1,12 @@
 import styled from 'styled-components';
-import { Alert } from 'js/shared-styles/alerts';
+import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 
 const Content = styled.div`
   width: calc(100% - 150px);
+`;
+
+const StyledDiv = styled.div`
+  margin-top: ${(props) => props.theme.spacing(2) + entityHeaderHeight}px;
 `;
 
 const FlexRow = styled.div`
@@ -12,8 +16,4 @@ const FlexRow = styled.div`
   margin-bottom: ${(props) => props.theme.spacing(5)}px;
 `;
 
-const StyledAlert = styled(Alert)`
-  margin-bottom: ${(props) => props.theme.spacing(1.5)}px;
-`;
-
-export { Content, FlexRow, StyledAlert };
+export { Content, FlexRow, StyledDiv };
