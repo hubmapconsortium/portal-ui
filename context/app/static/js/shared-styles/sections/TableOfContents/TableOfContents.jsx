@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 
-import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
-import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
 
@@ -117,11 +115,9 @@ function TableOfContents(props) {
     [],
   );
 
-  const initialHeightOffset = headerHeight + 16;
-
   return (
     <TableContainer>
-      <StickyNav $topOffset={`${initialHeightOffset + entityHeaderHeight}px`}>
+      <StickyNav>
         {items.length > 0 ? (
           <>
             <TableTitle variant="h5" component="h3">
