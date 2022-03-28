@@ -96,17 +96,7 @@ function DatasetDetail(props) {
   };
 
   const sectionOrder = getSectionOrder(
-    [
-      'summary',
-      'visualization',
-      'provenance',
-      'protocols',
-      'metadata',
-      'files',
-      'collections',
-      'contributors',
-      'attribution',
-    ],
+    ['summary', 'visualization', 'provenance', 'protocols', 'metadata', 'files', 'collections', 'contributors'],
     shouldDisplaySection,
   );
 

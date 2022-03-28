@@ -51,7 +51,7 @@ function SampleDetail(props) {
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'derived', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
+    ['summary', 'derived', 'tissue', 'provenance', 'protocols', 'metadata'],
     shouldDisplaySection,
   );
 

@@ -44,7 +44,7 @@ function DonorDetail(props) {
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'metadata', 'derived', 'provenance', 'protocols', 'attribution'],
+    ['summary', 'metadata', 'derived', 'provenance', 'protocols'],
     shouldDisplaySection,
   );
 
