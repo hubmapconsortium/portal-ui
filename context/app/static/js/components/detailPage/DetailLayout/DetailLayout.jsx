@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
-import SharedAlerts from 'js/components/detailPage/SharedAlerts';
+import SharedAlerts from 'js/components/detailPage/alerts/SharedAlerts';
 import { Content, FlexRow, StyledDiv } from './style';
 
 function DetailLayout({ sectionOrder, additionalAlerts, children }) {
