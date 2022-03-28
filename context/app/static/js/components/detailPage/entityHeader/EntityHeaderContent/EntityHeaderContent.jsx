@@ -31,6 +31,7 @@ function EntityHeaderContent({ uuid, hubmap_id, entity_type, data, vizIsFullscre
       )}
       <RightDiv>
         <WorkspaceMenu uuid={uuid} entity_type={entity_type} />
+        <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />
         <SecondaryBackgroundTooltip title="View JSON">
           <WhiteBackgroundIconButton
             href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
@@ -40,7 +41,6 @@ function EntityHeaderContent({ uuid, hubmap_id, entity_type, data, vizIsFullscre
             <FileIcon color="primary" />
           </WhiteBackgroundIconButton>
         </SecondaryBackgroundTooltip>
-        {<SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
         {vizIsFullscreen && (
           <>
             <VisualizationShareButtonWrapper />
