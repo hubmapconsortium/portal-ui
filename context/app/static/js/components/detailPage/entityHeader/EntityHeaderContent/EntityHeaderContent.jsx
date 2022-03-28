@@ -10,6 +10,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
+import WorkspaceMenu from '../WorkspaceMenu';
 
 const iconMap = {
   Dataset: <StyledDatasetIcon />,
@@ -29,6 +30,7 @@ function EntityHeaderContent({ uuid, hubmap_id, entity_type, data, vizIsFullscre
         </>
       )}
       <RightDiv>
+        <WorkspaceMenu uuid={uuid} entity_type={entity_type} />
         <SecondaryBackgroundTooltip title="View JSON">
           <WhiteBackgroundIconButton
             href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
