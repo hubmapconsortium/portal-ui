@@ -122,7 +122,7 @@ function DatasetDetail(props) {
           <>
             {next_revision_uuid && <VersionAlert uuid={uuid} />}
             {['Dataset', 'Support'].includes(mapped_external_group_name) && <ExternalDatasetAlert />}
-            {entity_type === 'Support' && <SupportAlert uuid={uuid} $marginBottom="16" />}
+            {entity_type === 'Support' && <SupportAlert uuid={uuid} />}
           </>
         }
       >

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import useEntityStore, { savedAlertStatus, editedAlertStatus } from 'js/stores/useEntityStore';
-import { Alert } from 'js/shared-styles/alerts';
+import { DetailPageAlert } from '../style';
 
 const entityStoreSelector = (state) => ({
   shouldDisplaySavedOrEditedAlert: state.shouldDisplaySavedOrEditedAlert,
@@ -14,16 +14,24 @@ function SharedAlerts({ additionalAlerts }) {
   return (
     <>
       {shouldDisplaySavedOrEditedAlert === savedAlertStatus && (
-        <Alert severity="success" onClose={() => setShouldDisplaySavedOrEditedAlert(false)} $marginBottom="16">
+        <DetailPageAlert
+          severity="success"
+          onClose={() => setShouldDisplaySavedOrEditedAlert(false)}
+          $marginBottom="16"
+        >
           Successfully added to My Saves List. All lists are currently stored on local storage and are not transferable
           between devices.
-        </Alert>
+        </DetailPageAlert>
       )}
       {shouldDisplaySavedOrEditedAlert === editedAlertStatus && (
-        <Alert severity="success" onClose={() => setShouldDisplaySavedOrEditedAlert(false)} $marginBottom="16">
+        <DetailPageAlert
+          severity="success"
+          onClose={() => setShouldDisplaySavedOrEditedAlert(false)}
+          $marginBottom="16"
+        >
           Successfully updated save status. All lists are currently stored on local storage and are not transferable
           between devices.
-        </Alert>
+        </DetailPageAlert>
       )}
       {additionalAlerts}
     </>
