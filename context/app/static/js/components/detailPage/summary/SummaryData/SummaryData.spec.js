@@ -25,13 +25,6 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test('json button exists and has href', () => {
-  render(<SummaryData entity_type="Fake" uuid={testUUID} status="QA" mapped_data_access_level="Public" />);
-
-  expect(screen.getByRole('link')).not.toBeEmptyDOMElement();
-  expect(screen.getByRole('link')).toHaveAttribute('href', `/browse/fake/fakeuuid.json`);
-});
-
 test('dataset displays properly', async () => {
   render(<SummaryData entity_type="Dataset" uuid={testUUID} status="QA" mapped_data_access_level="Public" />);
   const textToTest = ['QA', 'Public Access'];
