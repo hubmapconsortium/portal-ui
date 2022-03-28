@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
+import SectionItem from 'js/components/detailPage/SectionItem';
 import { FlexPaper } from './style';
-import SectionItem from '../SectionItem';
 
 function Attribution(props) {
   const { group_name, created_by_user_displayname, created_by_user_email } = props;

@@ -21,7 +21,6 @@ test('combines appropiately structured metadata', () => {
   // but metadata is structured differently between Samples and Donors,
   // so it wouldn't simplify things to use that.
   const donor = {
-    created_by_user_displayname: 'John Doe',
     mapped_metadata: {
       age_unit: ['years'],
       age_value: [40],

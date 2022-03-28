@@ -4,7 +4,6 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
-import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
@@ -63,9 +62,6 @@ function DatasetDetail(props) {
     mapped_data_types,
     origin_sample,
     origin_sample: { mapped_organ },
-    group_name,
-    created_by_user_displayname,
-    created_by_user_email,
     hubmap_id,
     entity_type,
     created_timestamp,
@@ -169,11 +165,6 @@ function DatasetDetail(props) {
         <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
-        <Attribution
-          group_name={group_name}
-          created_by_user_displayname={created_by_user_displayname}
-          created_by_user_email={created_by_user_email}
-        />
       </DetailLayout>
     </DetailContext.Provider>
   );

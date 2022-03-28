@@ -19,23 +19,11 @@ test('full', () => {
         medicalHistory: ['ITP', 'melanoma'],
       },
     },
-    created_by_user_displayname: 'Lisa',
-    group_name: 'The Simpsons',
     description: 'too short :(',
   };
   expect(getDatasetLD(entity)).toEqual({
     '@context': 'https://schema.org/',
     '@type': 'Dataset',
-    creator: [
-      {
-        '@type': 'Person',
-        name: 'Lisa',
-      },
-      {
-        '@type': 'Organization',
-        name: 'The Simpsons',
-      },
-    ],
     description:
       'Nifty Assay of Elbow from 6.25 feet, 135 pounds, white male, 44 years old with ITP, melanoma. too short :(',
     name: 'Nifty Assay of Elbow from male, 44 years old',
@@ -51,8 +39,6 @@ test('minimal, with donor', () => {
     donor: {
       mapped_metadata: {},
     },
-    created_by_user_displayname: 'Lisa',
-    group_name: 'The Simpsons',
     description: 'too short :(',
   };
   expect(getDatasetLD(entity)).toEqual({
@@ -80,8 +66,6 @@ test('no donor', () => {
     origin_sample: {
       mapped_organ: 'Elbow',
     },
-    created_by_user_displayname: 'Lisa',
-    group_name: 'The Simpsons',
     description: 'too short :(',
   };
   expect(getDatasetLD(entity)).toEqual({

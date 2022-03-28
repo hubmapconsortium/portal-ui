@@ -17,7 +17,7 @@ function makeDonorMetadataFilters(isDonor) {
   ];
 }
 
-const affiliationFilters = [listFilter('group_name', 'Group'), listFilter('created_by_user_displayname', 'Creator')];
+const contactFilters = [listFilter('contacts.affiliation', 'Group'), listFilter('contacts.name', 'Contact')];
 
 const sharedTileFields = [
   field('last_modified_timestamp', 'Last Modified Unmapped'),
@@ -34,7 +34,7 @@ const sharedTileFields = [
 const donorConfig = {
   filters: {
     'Donor Metadata': makeDonorMetadataFilters(true),
-    Affiliation: affiliationFilters,
+    Affiliation: contactFilters,
   },
   fields: {
     table: [
@@ -58,7 +58,7 @@ const sampleConfig = {
       listFilter('mapped_specimen_type', 'Specimen Type'),
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
-    Affiliation: affiliationFilters,
+    Affiliation: contactFilters,
   },
   fields: {
     table: [
@@ -83,7 +83,7 @@ const datasetConfig = {
       listFilter('mapped_consortium', 'Consortium'),
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
-    Affiliation: affiliationFilters,
+    Affiliation: contactFilters,
   },
   fields: {
     table: [

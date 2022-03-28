@@ -25,18 +25,6 @@ function getDatasetLD(entity) {
       entity.description && entity.description.length >= 50
         ? entity.description
         : `${fallbackDescription}. ${entity.description}`,
-    creator: [
-      {
-        '@type': 'Person',
-        // sameAs: 'http://orcid.org/0000-0000-0000-0001',
-        name: entity.created_by_user_displayname,
-      },
-      {
-        '@type': 'Organization',
-        // TODO: sameAs: 'http://ror.org/xxxxxxxxx',
-        name: entity.group_name,
-      },
-    ],
   };
 }
 

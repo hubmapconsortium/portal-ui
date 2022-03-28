@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
-import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
@@ -30,8 +29,6 @@ function SampleDetail(props) {
     mapped_specimen_type,
     origin_sample: { mapped_organ },
     group_name,
-    created_by_user_displayname,
-    created_by_user_email,
     hubmap_id,
     entity_type,
     created_timestamp,
@@ -105,11 +102,6 @@ function SampleDetail(props) {
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
-        <Attribution
-          group_name={group_name}
-          created_by_user_displayname={created_by_user_displayname}
-          created_by_user_email={created_by_user_email}
-        />
       </DetailLayout>
     </DetailContext.Provider>
   );

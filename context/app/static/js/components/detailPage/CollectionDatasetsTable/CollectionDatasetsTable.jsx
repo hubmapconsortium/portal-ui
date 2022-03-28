@@ -22,7 +22,6 @@ function CollectionDatasetsTable(props) {
     { id: 'organ', label: 'Organ' },
     { id: 'data_types', label: 'Assay Types' },
     { id: 'last_modified_timestamp', label: 'Last Modified' },
-    { id: 'properties.created_by_user_displayname', label: 'Contact' },
     { id: 'status', label: 'Status' },
   ];
 
@@ -53,7 +52,6 @@ function CollectionDatasetsTable(props) {
                   <TableCell />
                   <TableCell>{dataset.data_types}</TableCell>
                   <TableCell>{format(dataset.last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-                  <TableCell>{dataset.created_by_user_displayname}</TableCell>
                   <TableCell>{dataset.status}</TableCell>
                 </TableRow>
               ))}
