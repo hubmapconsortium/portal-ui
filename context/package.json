@@ -7,6 +7,8 @@
     "@material-ui/core": "^4.9.4",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",
+    "@searchkit/client": "^3.0.0-canary.53",
+    "@searchkit/sdk": "^3.0.0-canary.53",
     "@visx/axis": "^1.7.0",
     "@visx/event": "^1.7.0",
     "@visx/grid": "^1.7.0",
