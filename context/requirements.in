@@ -1,3 +1,5 @@
+# Update requirements.txt if this file changes:
+# pip-compile context/requirements.in --generate-hashes --allow-unsafe --output-file context/requirements.txt
 Flask==2.0.1
 globus-sdk==2.0.1
 requests==2.27.1
