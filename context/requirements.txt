@@ -627,9 +627,8 @@ platformdirs==2.5.1 \
     --hash=sha256:7535e70dfa32e84d4b34996ea99c5e432fa29a708d0f4e394bbcb2a8faa4f16d \
     --hash=sha256:bcae7cab893c2d310a711b70b24efb93334febe65f8de776ee320b517471e227
     # via black
-# WARNING: pip install will require the following package to be hashed.
-# Consider using a hashable URL like https://github.com/jazzband/pip-tools/archive/SOMECOMMIT.zip
-portal-visualization @ git+https://github.com/hubmapconsortium/portal-visualization.git@0.0.1
+portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.1.zip \
+    --hash=sha256:5793546c1a554af895eed78985f18204915c7e759d8df4328dbc6f81385ffcbf
     # via -r context/requirements.in
 priority==2.0.0 \
     --hash=sha256:6f8eefce5f3ad59baf2c080a664037bb4725cd0a790d53d59ab4059288faf6aa \
