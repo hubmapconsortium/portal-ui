@@ -1,0 +1,1 @@
+- Upgrade CCF so that it no longer relies on a Heroku server that will fail on initial requests because it's not warmed up.
