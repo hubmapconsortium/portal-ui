@@ -21,7 +21,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityTypeKeyword }) {
     ['group_name', 'Group'],
     ...uniqueFields,
     ['mapped_last_modified_timestamp', 'Last Modified'],
-  ].map(([field, title]) => getFieldProps({ field, title }));
+  ].map(([field, label]) => getFieldProps({ field, label }));
 
   const config = { facets, fields };
 

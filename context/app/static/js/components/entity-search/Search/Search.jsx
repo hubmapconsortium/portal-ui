@@ -8,6 +8,8 @@ import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import useSearchkitSDK from './useSearchkitSDK';
 import RequestTransporter from './RequestTransporter';
 
+import ResultsTable from '../ResultsTable';
+
 function Search() {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const httpHeaders = getAuthHeader(groupsToken);
@@ -42,7 +44,7 @@ function Search() {
   const { results } = useSearchkitSDK(config, variables, transporter);
   // eslint-disable-next-line no-console
   console.log(variables, results);
-  return <div>Search</div>;
+  return results?.hits ? <ResultsTable hits={results.hits} /> : <div>Search</div>;
 }
 
 export default Search;
