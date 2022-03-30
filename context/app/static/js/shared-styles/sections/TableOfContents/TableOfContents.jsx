@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
-import { useSpring, animated } from 'react-spring';
 
-import useEntityStore from 'js/stores/useEntityStore';
-import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
-import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
-
-const AnimatedNav = animated(StickyNav);
-const entityStoreSelector = (state) => state.summaryComponentObserver;
 
 function ItemLink(props) {
   const { item, currentSection, handleClick } = props;
@@ -122,15 +115,9 @@ function TableOfContents(props) {
     [],
   );
 
-  const { summaryInView } = useEntityStore(entityStoreSelector);
-  const initialHeightOffset = headerHeight + 16;
-  const initialProps = { top: `${initialHeightOffset}px` };
-  const [stickyNavAnimationProps, set] = useSpring(() => initialProps);
-  set(summaryInView ? initialProps : { top: `${initialHeightOffset + entityHeaderHeight}px` });
-
   return (
     <TableContainer>
-      <AnimatedNav style={stickyNavAnimationProps}>
+      <StickyNav>
         {items.length > 0 ? (
           <>
             <TableTitle variant="h5" component="h3">
@@ -145,7 +132,7 @@ function TableOfContents(props) {
             </List>
           </>
         ) : null}
-      </AnimatedNav>
+      </StickyNav>
     </TableContainer>
   );
 }

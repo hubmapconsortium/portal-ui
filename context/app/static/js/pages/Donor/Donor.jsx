@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
@@ -6,14 +6,11 @@ import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
-import useEntityStore from 'js/stores/useEntityStore';
 import { useDerivedDatasetSearchHits, useDerivedSampleSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 
 import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
 import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
-
-const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DonorDetail(props) {
   const { assayMetadata } = props;
@@ -34,8 +31,6 @@ function DonorDetail(props) {
     // Unpublished HuBMAP data may also be missing donor metadata.
   } = assayMetadata;
 
-  const { sex, race, age_value, age_unit } = mapped_metadata;
-
   const { searchHits: derivedDatasets, isLoading: derivedDatasetsAreLoading } = useDerivedDatasetSearchHits(uuid);
   const { searchHits: derivedSamples, isLoading: derivedSamplesAreLoading } = useDerivedSampleSearchHits(uuid);
 
@@ -50,12 +45,6 @@ function DonorDetail(props) {
     ['summary', 'metadata', 'derived', 'provenance', 'protocols', 'attribution'],
     shouldDisplaySection,
   );
-
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-
-  useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, sex, race, age_value, age_unit });
-  }, [setAssayMetadata, hubmap_id, entity_type, sex, race, age_value, age_unit]);
 
   useSendUUIDEvent(entity_type, uuid);
 

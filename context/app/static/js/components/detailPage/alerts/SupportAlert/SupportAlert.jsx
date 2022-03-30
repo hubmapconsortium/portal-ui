@@ -3,7 +3,7 @@ import React from 'react';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Typography from '@material-ui/core/Typography';
 
-import { DetailPageAlert } from 'js/components/detailPage/style';
+import { DetailPageAlert } from '../style';
 
 function SupportAlert({ uuid }) {
   // There should usually be only one parent, but this is more robust, and we want to keep it simple.

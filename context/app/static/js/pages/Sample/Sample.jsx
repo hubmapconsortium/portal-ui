@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
@@ -11,15 +11,12 @@ import DetailLayout from 'js/components/detailPage/DetailLayout';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import SampleTissue from 'js/components/detailPage/SampleTissue';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
-import useEntityStore from 'js/stores/useEntityStore';
 import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
 import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/DerivedDatasetsSection';
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
-
-const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function SampleDetail(props) {
   const { assayMetadata } = props;
@@ -57,11 +54,6 @@ function SampleDetail(props) {
     ['summary', 'derived', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
     shouldDisplaySection,
   );
-
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-  useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, mapped_organ, mapped_specimen_type });
-  }, [setAssayMetadata, hubmap_id, entity_type, mapped_organ, mapped_specimen_type]);
 
   useSendUUIDEvent(entity_type, uuid);
 

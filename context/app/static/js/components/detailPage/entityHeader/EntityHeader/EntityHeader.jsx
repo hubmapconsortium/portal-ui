@@ -1,17 +1,12 @@
-import React from 'react';
-import { useTransition, animated } from 'react-spring';
+import React, { useContext } from 'react';
 
-import { useEntityStore, useVisualizationStore } from 'js/stores';
+import { useVisualizationStore } from 'js/stores';
 import { iconButtonHeight } from 'js/shared-styles/buttons';
+import { AppContext } from 'js/components/Providers';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 import { extractHeaderMetadata } from './utils';
 
-const AnimatedPaper = animated(StyledPaper);
-const entityStoreSelector = (state) => ({
-  assayMetadata: state.assayMetadata,
-  summaryComponentObserver: state.summaryComponentObserver,
-});
 const visualizationSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
@@ -19,39 +14,22 @@ const visualizationSelector = (state) => ({
 const entityHeaderHeight = iconButtonHeight;
 
 function Header() {
-  const {
-    assayMetadata,
-    summaryComponentObserver: { summaryInView },
-  } = useEntityStore(entityStoreSelector);
   const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
+  const { document } = useContext(AppContext);
 
-  const shouldDisplayHeader = !summaryInView || vizIsFullscreen;
+  const { hubmap_id, entity_type, uuid } = document;
 
-  const transitionConfig = vizIsFullscreen
-    ? {}
-    : {
-        from: { overflow: 'hidden', height: 0 },
-        enter: { height: entityHeaderHeight },
-        leave: { overflow: 'hidden', height: 0 },
-      };
-  const transitions = useTransition(shouldDisplayHeader, null, transitionConfig);
-  const { hubmap_id, entity_type, uuid } = assayMetadata;
-
-  const data = extractHeaderMetadata(assayMetadata, entity_type);
-  return transitions.map(
-    ({ item, key, props }) =>
-      item && (
-        <AnimatedPaper key={key} style={props} elevation={4}>
-          <EntityHeaderContent
-            uuid={uuid}
-            hubmap_id={hubmap_id}
-            entity_type={entity_type}
-            data={data}
-            shouldDisplayHeader={shouldDisplayHeader}
-            vizIsFullscreen={vizIsFullscreen}
-          />
-        </AnimatedPaper>
-      ),
+  const data = extractHeaderMetadata(document, entity_type);
+  return (
+    <StyledPaper elevation={4}>
+      <EntityHeaderContent
+        uuid={uuid}
+        hubmap_id={hubmap_id}
+        entity_type={entity_type}
+        data={data}
+        vizIsFullscreen={vizIsFullscreen}
+      />
+    </StyledPaper>
   );
 }
 export { entityHeaderHeight };

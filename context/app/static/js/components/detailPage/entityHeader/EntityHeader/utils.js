@@ -7,19 +7,24 @@ function extractAndLabelMetadata(obj, keys) {
   return acc;
 }
 
-function extractHeaderMetadata(assayMetadata, entity_type) {
-  if (entity_type === 'Dataset') {
-    return extractAndLabelMetadata(assayMetadata, ['mapped_organ', 'mapped_data_types']);
+function extractHeaderMetadata({
+  entity_type,
+  mapped_data_types,
+  mapped_specimen_type,
+  mapped_metadata: { sex, race, age_value, age_unit } = {},
+  origin_sample: { mapped_organ } = {},
+}) {
+  if (['Dataset', 'Support'].includes(entity_type)) {
+    return extractAndLabelMetadata({ mapped_organ, mapped_data_types }, ['mapped_organ', 'mapped_data_types']);
   }
+
   if (entity_type === 'Sample') {
-    return extractAndLabelMetadata(assayMetadata, ['mapped_organ', 'mapped_specimen_type']);
+    return extractAndLabelMetadata({ mapped_organ, mapped_specimen_type }, ['mapped_organ', 'mapped_specimen_type']);
   }
+
   if (entity_type === 'Donor') {
-    const donorMetadata = extractAndLabelMetadata(assayMetadata, ['sex', 'race']);
-    if ('age_value' in assayMetadata && 'age_unit' in assayMetadata) {
-      donorMetadata.age = { value: `${assayMetadata.age_value} ${assayMetadata.age_unit}`, label: 'age' };
-    }
-    return donorMetadata;
+    const age = age_value && age_unit ? `${age_value} ${age_unit}` : undefined;
+    return extractAndLabelMetadata({ sex, race, age }, ['sex', 'race', 'age']);
   }
 
   return {};

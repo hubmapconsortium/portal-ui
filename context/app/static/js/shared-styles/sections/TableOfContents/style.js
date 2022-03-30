@@ -2,6 +2,9 @@ import styled, { css } from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
+import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
+import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
+
 const TableContainer = styled.div`
   margin-right: 70px;
   width: 80px;
@@ -9,8 +12,8 @@ const TableContainer = styled.div`
 
 const StickyNav = styled.nav`
   position: sticky;
+  top: ${(props) => props.theme.spacing(2) + headerHeight + entityHeaderHeight}px;
 `;
-
 const TableTitle = styled(Typography)`
   margin-left: 7px;
 `;
