@@ -58,6 +58,20 @@ def search():
     )
 
 
+@blueprint.route('/test-search')
+def test_search():
+    title = 'Test Search'
+    flask_data = {
+        **get_default_flask_data(),
+        'title': title,
+    }
+    return render_template(
+        'pages/base_react.html',
+        title=title,
+        flask_data=flask_data,
+    )
+
+
 @blueprint.route('/dev-search')
 def dev_search():
     title = 'Dev Search'
