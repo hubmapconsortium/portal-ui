@@ -20,7 +20,7 @@ function Search() {
     },
     index: '',
     hits: {
-      fields: ['uuid', 'entity_type.keyword'],
+      fields: ['uuid', 'entity_type'],
     },
     query: new MultiMatchQuery({
       fields: ['all_text'],
