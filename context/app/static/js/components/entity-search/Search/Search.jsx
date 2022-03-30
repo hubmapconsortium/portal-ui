@@ -1,39 +1,40 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
 
 import { MultiMatchQuery, RefinementSelectFacet } from '@searchkit/sdk';
 import { useSearchkitVariables } from '@searchkit/client';
+import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import useSearchkitSDK from './useSearchkitSDK';
 import RequestTransporter from './RequestTransporter';
 
 function Search() {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const httpHeaders = getAuthHeader(groupsToken);
+  const { fields, facets } = useStore();
 
-  const config = {
-    host: elasticsearchEndpoint,
-    connectionOptions: {
-      headers: {
-        httpHeaders,
+  const config = useMemo(
+    () => ({
+      host: elasticsearchEndpoint,
+      connectionOptions: {
+        headers: {
+          httpHeaders,
+        },
       },
-    },
-    index: '',
-    hits: {
-      fields: ['uuid', 'entity_type'],
-    },
-    query: new MultiMatchQuery({
-      fields: ['all_text'],
-    }),
-    facets: [
-      new RefinementSelectFacet({
-        field: 'entity_type.keyword',
-        identifier: 'entity_type',
-        label: 'Entity Type',
-        multipleSelect: true,
+      index: '',
+      hits: {
+        fields: fields.map((field) => field.field),
+      },
+      query: new MultiMatchQuery({
+        fields: ['all_text'],
       }),
-    ],
-  };
+      facets: facets.map(
+        ({ field, identifier, label }) =>
+          new RefinementSelectFacet({ field: `${field}.keyword`, identifier, label, multipleSelect: true }),
+      ),
+    }),
+    [elasticsearchEndpoint, facets, fields, httpHeaders],
+  );
 
   const transporter = new RequestTransporter(config);
 
