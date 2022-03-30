@@ -15,7 +15,7 @@ function Attribution(props) {
       <SectionHeader>Attribution</SectionHeader>
       <FlexPaper>
         <SectionItem label="Group">{group_name}</SectionItem>
-        <SectionItem label="Creator" ml={1}>
+        <SectionItem label="Registered by" ml={1}>
           {created_by_user_displayname}
           <EmailIconLink email={encodeURI(created_by_user_email)} iconFontSize="1.1rem">
             {created_by_user_email}
