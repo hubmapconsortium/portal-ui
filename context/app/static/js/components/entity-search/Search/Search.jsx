@@ -13,7 +13,7 @@ import ResultsTable from '../ResultsTable';
 function Search() {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const httpHeaders = getAuthHeader(groupsToken);
-  const { fields, facets } = useStore();
+  const { fields, facets, filters } = useStore();
 
   const config = useMemo(
     () => ({
@@ -34,16 +34,16 @@ function Search() {
         ({ field, identifier, label }) =>
           new RefinementSelectFacet({ field: `${field}.keyword`, identifier, label, multipleSelect: true }),
       ),
+      filters: filters.map((filter) => filter.definition),
     }),
-    [elasticsearchEndpoint, facets, fields, httpHeaders],
+    [elasticsearchEndpoint, facets, fields, filters, httpHeaders],
   );
 
   const transporter = new RequestTransporter(config);
 
   const variables = useSearchkitVariables();
-  const { results } = useSearchkitSDK(config, variables, transporter);
-  // eslint-disable-next-line no-console
-  console.log(variables, results);
+  const { results } = useSearchkitSDK(config, variables, transporter, filters);
+
   return results?.hits ? <ResultsTable hits={results.hits} /> : <div>Search</div>;
 }
 

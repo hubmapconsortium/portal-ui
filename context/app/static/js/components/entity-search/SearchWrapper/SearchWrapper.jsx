@@ -1,5 +1,6 @@
 import React from 'react';
 import { SearchkitClient, SearchkitProvider } from '@searchkit/client';
+import { TermFilter } from '@searchkit/sdk';
 
 import Search from 'js/components/entity-search/Search';
 import { getFieldProps, getFacetProps, getDonorMetadataFilters } from './utils';
@@ -23,7 +24,18 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityTypeKeyword }) {
     ['mapped_last_modified_timestamp', 'Last Modified'],
   ].map(([field, label]) => getFieldProps({ field, label }));
 
-  const config = { facets, fields };
+  const filters = [
+    {
+      definition: new TermFilter({
+        identifier: 'entity_type.keyword',
+        field: 'entity_type.keyword',
+        label: 'Entity Type',
+      }),
+      value: { identifier: 'entity_type.keyword', value: entityTypeKeyword },
+    },
+  ];
+
+  const config = { facets, fields, filters };
 
   return (
     <SearchConfigProvider initialConfig={config}>
