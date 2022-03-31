@@ -8,7 +8,7 @@ class RequestTransporter {
     const response = await fetch(this.config.host, {
       method: 'POST',
       body: JSON.stringify(requestBody),
-      headers: { 'content-type': 'application/json' },
+      headers: { ...this.config.connectionOptions.headers, 'content-type': 'application/json' },
     });
     const json = await response.json();
     return json;

@@ -12,7 +12,7 @@ import ResultsTable from '../ResultsTable';
 
 function Search() {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
-  const httpHeaders = getAuthHeader(groupsToken);
+  const authHeader = getAuthHeader(groupsToken);
   const { fields, facets, filters } = useStore();
 
   const config = useMemo(
@@ -20,7 +20,7 @@ function Search() {
       host: elasticsearchEndpoint,
       connectionOptions: {
         headers: {
-          httpHeaders,
+          ...authHeader,
         },
       },
       index: '',
@@ -36,7 +36,7 @@ function Search() {
       ),
       filters: filters.map((filter) => filter.definition),
     }),
-    [elasticsearchEndpoint, facets, fields, filters, httpHeaders],
+    [authHeader, elasticsearchEndpoint, facets, fields, filters],
   );
 
   const transporter = new RequestTransporter(config);
