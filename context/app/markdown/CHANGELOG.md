@@ -1,3 +1,11 @@
+## v0.41.0 - 2022-03-31
+
+- Upgrade CCF so that it no longer relies on a Heroku server that will fail on initial requests because it's not warmed up.
+- Fix error for deleted portal-visualization submodule.
+- Pin werkzeug version to fix ci.
+- If search looks like "HBM...", put quotes around it.
+
+
 ## v0.40.1 - 2022-03-23
 
 - Stub out anndata section.
