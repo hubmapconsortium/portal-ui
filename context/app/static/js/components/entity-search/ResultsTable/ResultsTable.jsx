@@ -18,7 +18,7 @@ function ResultsTable({ hits }) {
       <TableHead>
         <TableRow>
           {fields.map(({ label }) => (
-            <TableCell>{label}</TableCell>
+            <TableCell key={label}>{label}</TableCell>
           ))}
         </TableRow>
       </TableHead>
