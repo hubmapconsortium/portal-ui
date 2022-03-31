@@ -1,20 +1,4 @@
-import { facetTypes } from './facetTypes';
-
-function getFacetProps({ field, label, ...rest }) {
-  return {
-    field,
-    identifier: field,
-    label,
-    ...rest,
-  };
-}
-
-function getFieldProps({ field, label }) {
-  return {
-    field,
-    label,
-  };
-}
+import { RefinementSelectFacet } from '@searchkit/sdk';
 
 function getDonorMetadataFilters(isDonor) {
   const pathPrefix = isDonor ? '' : 'donor.';
@@ -24,17 +8,25 @@ function getDonorMetadataFilters(isDonor) {
     {
       field: `${pathPrefix}mapped_metadata.sex`,
       label: `${labelPrefix}Sex`,
-      type: facetTypes.refinementSelectFacet,
     },
     {
       field: `${pathPrefix}mapped_metadata.race`,
-      title: `${labelPrefix}Race`,
-      type: facetTypes.refinementSelectFacet,
+      label: `${labelPrefix}Race`,
     },
   ];
 }
 
-export { getFieldProps, getFacetProps, getDonorMetadataFilters };
+function createFacet({ field, label, ...rest }) {
+  return new RefinementSelectFacet({
+    field: `${field}.keyword`,
+    identifier: field,
+    label,
+    multipleSelect: true,
+    ...rest,
+  });
+}
+
+export { getDonorMetadataFilters, createFacet };
 
 /* 
     const bmiField = 'body_mass_index_value';
