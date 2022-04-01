@@ -3,6 +3,7 @@ set -o errexit
 
 . utils.sh
 
+cd context
 
 start lint
 npm run lint
