@@ -3,24 +3,7 @@ set -o errexit
 
 . utils.sh
 
-
-# TODO: Is this needed for python tests?
-# Should it be moved to ci if so?
-
-# start copy-app-conf
-# if [ ! -z "$GH_ACTIONS" ]; then
-#   echo 'Running on ci...'
-#   ./copy-app-conf.sh || (
-#     echo 'app.conf before:'
-#     cat context/instance/app.conf
-#     echo 'Rewrite conf...'
-#     sed -i 's/TODO/FAKE/' context/instance/app.conf
-#     echo 'app.conf after:'
-#     cat context/instance/app.conf
-#   )
-# fi
-# end copy-app-conf
-
+copy_conf
 
 start flake8
 EXCLUDE=node_modules,ingest-validation-tools,organ-utils
