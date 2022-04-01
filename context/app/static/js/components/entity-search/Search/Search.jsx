@@ -41,7 +41,7 @@ function Search() {
   const variables = useSearchkitVariables();
   const { results } = useSearchkitSDK(config, variables, transporter, filters);
 
-  return results?.hits ? <ResultsTable hits={results.hits} /> : <div>Search</div>;
+  return results?.hits ? <ResultsTable hits={results.hits} /> : null;
 }
 
 export default Search;
