@@ -18,6 +18,15 @@ server_up() {
 
 cd context
 
+./copy-app-conf.sh || (
+  echo 'app.conf before:'
+  cat context/instance/app.conf
+  echo 'Rewrite conf...'
+  sed -i 's/TODO/FAKE/' context/instance/app.conf
+  echo 'app.conf after:'
+  cat context/instance/app.conf
+)
+
 start cypress
 
 npm run build:maintain
