@@ -1,4 +1,4 @@
-name: Portal CI
+name: Misc CI
 
 on: [push, pull_request]
 

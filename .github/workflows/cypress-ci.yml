@@ -1,4 +1,4 @@
-name: Portal CI
+name: Cypress CI
 
 on: [push, pull_request]
 
