@@ -16,7 +16,6 @@ function SelectFacet({ facet: { entries, identifier, label } }) {
             key={`${identifier}.${entryLabel}`}
             label={entryLabel}
             count={count}
-            onClick={() => {}}
             active={api.isFilterSelected({ identifier, value: entryLabel })}
             identifier={identifier}
           />
