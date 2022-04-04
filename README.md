@@ -138,14 +138,13 @@ For the homepage carousel, images should have a 16:9 aspect ratio, a width of at
 </details>
 
 ## Testing
-[`test.sh`](test.sh) wraps all the tests and is run on Travis.
 Python unit tests use Pytest, front end tests use Jest, an end-to-end tests use Cypress.
-Look at the source code of the script to see how to run a particular set of tests.
+Each suite is run separately on Gihub CI.
 
-Load tests [are available](end-to-end/artillery/), but they are not part of `test.sh`.
+Load tests [are available](end-to-end/artillery/), but they are not run as part of CI.
 
 ### Linting and pre-commit hooks
-In addition, `test.sh` lints the codebase, and to save time, we also lint in a pre-commit hook.
+CI lints the codebase, and to save time, we also lint in a pre-commit hook.
 If you want to bypass the hook, set `HUSKY_SKIP_HOOKS=1`.
 
 You can also lint and auto-correct from the command-line:
