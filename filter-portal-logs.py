@@ -6,10 +6,12 @@ from re import subn, MULTILINE
 
 from yaml import dump
 
+
 class Filterer:
     def __init__(self, logs):
         self.logs = logs
         self.report = {}
+
     def _filter_one(self, pattern, issue):
         (logs, count) = subn(rf'^.*{pattern}.*$\n', '', self.logs, flags=MULTILINE)
         self.report[pattern] = {
@@ -17,6 +19,7 @@ class Filterer:
             'issue': issue
         }
         self.logs = logs
+
     def filter_all(self):
         self._filter_one(
             r'Expected only one descendant on',
