@@ -10,6 +10,7 @@ import useSearchkitSDK from './useSearchkitSDK';
 import RequestTransporter from './RequestTransporter';
 
 import ResultsTable from '../ResultsTable';
+import { SearchLayout, ResultsLayout, SidebarLayout } from './style';
 
 function Search() {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
@@ -41,7 +42,12 @@ function Search() {
   const variables = useSearchkitVariables();
   const { results } = useSearchkitSDK(config, variables, transporter, filters);
 
-  return results?.hits ? <ResultsTable hits={results.hits} /> : null;
+  return (
+    <SearchLayout>
+      <SidebarLayout />
+      <ResultsLayout>{results?.hits ? <ResultsTable hits={results.hits} /> : null}</ResultsLayout>
+    </SearchLayout>
+  );
 }
 
 export default Search;
