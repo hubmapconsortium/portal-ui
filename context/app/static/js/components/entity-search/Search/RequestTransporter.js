@@ -1,4 +1,6 @@
-// https://www.searchkit.co/docs/reference/searchkit-sdk#network-transport
+// Copied from https://www.searchkit.co/docs/reference/searchkit-sdk#network-transport
+// Licensed under https://github.com/searchkit/searchkit/blob/next/LICENCE
+// Modified to handle our elasticsearch url
 class RequestTransporter {
   constructor(config) {
     this.config = config;

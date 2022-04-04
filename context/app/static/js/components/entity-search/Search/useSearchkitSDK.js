@@ -2,7 +2,10 @@ import { useState } from 'react';
 import Searchkit from '@searchkit/sdk';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
-// modified from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-sdk/src/react-hooks/index.ts
+// Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-sdk/src/react-hooks/index.ts
+// Licensed under https://github.com/searchkit/searchkit/blob/next/LICENCE
+// Modified to handle initial filters and use our custom transformer
+
 const useSearchkitSDK = (config, variables, transformer, filters) => {
   const [results, setResponse] = useState(null);
   const [loading, setLoading] = useState(true);
