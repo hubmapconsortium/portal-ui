@@ -6,6 +6,7 @@ import { MultiMatchQuery } from '@searchkit/sdk';
 import { useSearchkitVariables } from '@searchkit/client';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { createFacet } from 'js/components/entity-search/SearchWrapper/utils';
+import SelectFacet from 'js/components/entity-search/facets/select/SelectFacet';
 import useSearchkitSDK from './useSearchkitSDK';
 import RequestTransporter from './RequestTransporter';
 
@@ -44,7 +45,9 @@ function Search() {
 
   return (
     <SearchLayout>
-      <SidebarLayout />
+      <SidebarLayout>
+        {results?.facets ? results.facets.map((facet) => <SelectFacet facet={facet} />) : null}{' '}
+      </SidebarLayout>
       <ResultsLayout>{results?.hits ? <ResultsTable hits={results.hits} /> : null}</ResultsLayout>
     </SearchLayout>
   );
