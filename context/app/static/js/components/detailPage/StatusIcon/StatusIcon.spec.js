@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen } from 'test-utils/functions';
 import StatusIcon from './StatusIcon';
 
-const blue = '#3781D1';
+const blue = '#2A6FB8';
 const red = '#DA348A';
 const orange = '#D25435';
 const green = '#6C8938';
