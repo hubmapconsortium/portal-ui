@@ -1,7 +1,7 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 const purple = '#444A65';
-const blue = '#3781D1';
+const blue = '#2A6FB8';
 
 // default HuBMAP color and font theme
 const theme = createMuiTheme({
