@@ -17,8 +17,8 @@ function ResultsTable({ hits }) {
     <StyledTable data-testid="search-results-table">
       <TableHead>
         <TableRow>
-          {fields.map(({ label }) => (
-            <TableCell key={label}>{label}</TableCell>
+          {fields.map(({ label, field }) => (
+            <TableCell key={field}>{label}</TableCell>
           ))}
         </TableRow>
       </TableHead>
