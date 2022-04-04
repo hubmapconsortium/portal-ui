@@ -1,4 +1,4 @@
-name: Cypress CI
+name: 🌲 Cypress CI
 
 on:
   push:
