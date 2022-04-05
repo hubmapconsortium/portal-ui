@@ -1,17 +1,17 @@
 import React, { useContext, useMemo } from 'react';
-import { AppContext } from 'js/components/Providers';
-import { getAuthHeader } from 'js/helpers/functions';
 
 import { MultiMatchQuery } from '@searchkit/sdk';
 import { useSearchkitVariables } from '@searchkit/client';
+
+import { AppContext } from 'js/components/Providers';
+import { getAuthHeader } from 'js/helpers/functions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { createFacet } from 'js/components/entity-search/SearchWrapper/utils';
+import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
+import ResultsTable from 'js/components/entity-search/ResultsTable';
+import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import SelectFacet from 'js/components/entity-search/facets/select/SelectFacet';
-import useSearchkitSDK from './useSearchkitSDK';
-import RequestTransporter from './RequestTransporter';
-
-import ResultsTable from '../ResultsTable';
-import { SearchLayout, ResultsLayout, SidebarLayout } from './style';
+import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
 
 function Search() {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);

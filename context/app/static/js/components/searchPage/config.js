@@ -17,7 +17,10 @@ function makeDonorMetadataFilters(isDonor) {
   ];
 }
 
-const affiliationFilters = [listFilter('group_name', 'Group'), listFilter('created_by_user_displayname', 'Creator')];
+const affiliationFilters = [
+  listFilter('group_name', 'Group'),
+  listFilter('created_by_user_displayname', 'Registered by'),
+];
 
 const sharedTileFields = [
   field('last_modified_timestamp', 'Last Modified Unmapped'),
