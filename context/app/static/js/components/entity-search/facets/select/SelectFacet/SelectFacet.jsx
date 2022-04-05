@@ -2,8 +2,8 @@ import React from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
 
 import { useSearchkit } from '@searchkit/client';
-import CheckboxFilterItem from '../CheckboxFilterItem/CheckboxFilterItem';
-import FacetAccordion from '../../FacetAccordion';
+import SelectFacetItem from 'js/components/entity-search/facets/select/SelectFacetItem';
+import FacetAccordion from 'js/components/entity-search/facets/FacetAccordion';
 
 function SelectFacet({ facet: { entries, identifier, label } }) {
   const api = useSearchkit();
@@ -12,7 +12,7 @@ function SelectFacet({ facet: { entries, identifier, label } }) {
     <FacetAccordion identifier={identifier} label={label}>
       <FormGroup>
         {entries.map(({ label: entryLabel, count }) => (
-          <CheckboxFilterItem
+          <SelectFacetItem
             key={`${identifier}.${entryLabel}`}
             label={entryLabel}
             count={count}

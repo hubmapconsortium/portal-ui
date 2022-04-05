@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { Flex, FormLabelText } from './style';
 
-function FilterLabelAndCount({ label, count, active, ...rest }) {
+function FacetItemLabelCount({ label, count, active, ...rest }) {
   return (
     <Flex {...rest} $active={active}>
       <FormLabelText>{label}</FormLabelText>
@@ -12,4 +12,4 @@ function FilterLabelAndCount({ label, count, active, ...rest }) {
   );
 }
 
-export default FilterLabelAndCount;
+export default FacetItemLabelCount;

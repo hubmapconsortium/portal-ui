@@ -1,11 +1,11 @@
 import React from 'react';
 
-import FilterLabelAndCount from 'js/components/entity-search/facets/select/FilterLabelAndCount';
+import FacetItemLabelCount from 'js/components/entity-search/facets/select/FacetItemLabelCount';
 import useFilterOnClick from 'js/components/entity-search/searchkit-modifications/useFilterOnClick';
 
 import { StyledCheckBoxBlankIcon, StyledCheckBoxIcon, StyledCheckbox, StyledFormControlLabel } from './style';
 
-function CheckboxFilterItem(props) {
+function SelectFacetItem(props) {
   const { identifier, active, label, count } = props;
 
   const onClick = useFilterOnClick({ identifier, value: label });
@@ -21,9 +21,9 @@ function CheckboxFilterItem(props) {
           checkedIcon={<StyledCheckBoxIcon />}
         />
       }
-      label={<FilterLabelAndCount label={label} count={count} active={active} />}
+      label={<FacetItemLabelCount label={label} count={count} active={active} />}
     />
   );
 }
 
-export default CheckboxFilterItem;
+export default SelectFacetItem;
