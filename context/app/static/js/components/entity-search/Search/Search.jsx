@@ -45,10 +45,8 @@ function Search() {
 
   return (
     <SearchLayout>
-      <SidebarLayout>
-        {results?.facets ? results.facets.map((facet) => <SelectFacet facet={facet} />) : null}
-      </SidebarLayout>
-      <ResultsLayout>{results?.hits ? <ResultsTable hits={results.hits} /> : null}</ResultsLayout>
+      <SidebarLayout>{results?.facets && results.facets.map((facet) => <SelectFacet facet={facet} />)}</SidebarLayout>
+      <ResultsLayout>{results?.hits && <ResultsTable hits={results.hits} />}</ResultsLayout>
     </SearchLayout>
   );
 }
