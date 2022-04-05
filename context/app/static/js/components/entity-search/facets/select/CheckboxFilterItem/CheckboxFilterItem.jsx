@@ -1,7 +1,7 @@
 import React from 'react';
 
 import FilterLabelAndCount from 'js/components/entity-search/facets/select/FilterLabelAndCount';
-import { useFilterOnClick } from 'js/components/entity-search/facets/utils';
+import useFilterOnClick from 'js/components/entity-search/searchkit-modifications/useFilterOnClick';
 
 import { StyledCheckBoxBlankIcon, StyledCheckBoxIcon, StyledCheckbox, StyledFormControlLabel } from './style';
 

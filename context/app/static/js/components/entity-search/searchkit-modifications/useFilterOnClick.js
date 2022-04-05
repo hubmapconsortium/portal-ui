@@ -1,3 +1,5 @@
+// Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-client/src/components.tsx
+// Modified FilterLink to be a hook which returns a click handler for facet components.
 import { createSearchState, useSearchkit, useSearchkitRoutingOptions, useSearchkitVariables } from '@searchkit/client';
 
 function isModifiedEvent(event) {
@@ -12,7 +14,7 @@ function isModifiedEvent(event) {
   );
 }
 
-export const useFilterOnClick = (filter, resetPagination = true) => {
+const useFilterOnClick = (filter, resetPagination = true) => {
   const api = useSearchkit();
   const variables = useSearchkitVariables();
   const routingOptions = useSearchkitRoutingOptions();
@@ -55,3 +57,5 @@ export const useFilterOnClick = (filter, resetPagination = true) => {
   };
   return clickHandler;
 };
+
+export default useFilterOnClick;
