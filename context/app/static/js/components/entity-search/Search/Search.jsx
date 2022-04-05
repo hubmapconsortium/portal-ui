@@ -45,7 +45,9 @@ function Search() {
 
   return (
     <SearchLayout>
-      <SidebarLayout>{results?.facets && results.facets.map((facet) => <SelectFacet facet={facet} />)}</SidebarLayout>
+      <SidebarLayout>
+        {results?.facets && results.facets.map((facet) => <SelectFacet key={facet.identifier} facet={facet} />)}
+      </SidebarLayout>
       <ResultsLayout>{results?.hits && <ResultsTable hits={results.hits} />}</ResultsLayout>
     </SearchLayout>
   );
