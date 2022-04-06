@@ -10,7 +10,7 @@ import { createFacet } from 'js/components/entity-search/SearchWrapper/utils';
 import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
 import ResultsTable from 'js/components/entity-search/ResultsTable';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
-import SelectFacet from 'js/components/entity-search/facets/select/SelectFacet';
+import Facets from 'js/components/entity-search/facets/Facets';
 import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
 
 function Search() {
@@ -32,7 +32,7 @@ function Search() {
       query: new MultiMatchQuery({
         fields: ['all_text'],
       }),
-      facets: facets.map((facet) => createFacet(facet)),
+      facets: Object.values(facets).map((facet) => createFacet(facet)),
       filters: filters.map((filter) => filter.definition),
     }),
     [authHeader, elasticsearchEndpoint, facets, fields, filters],
@@ -45,9 +45,7 @@ function Search() {
 
   return (
     <SearchLayout>
-      <SidebarLayout>
-        {results?.facets && results.facets.map((facet) => <SelectFacet key={facet.identifier} facet={facet} />)}
-      </SidebarLayout>
+      <SidebarLayout>{results?.facets && <Facets resultsFacets={results.facets} />}</SidebarLayout>
       <ResultsLayout>{results?.hits && <ResultsTable hits={results.hits} />}</ResultsLayout>
     </SearchLayout>
   );
