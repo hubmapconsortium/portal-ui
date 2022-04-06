@@ -6,7 +6,7 @@ import { useSearchkitVariables } from '@searchkit/client';
 import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import { createFacet } from 'js/components/entity-search/SearchWrapper/utils';
+import { createSearchkitFacet } from 'js/components/entity-search/SearchWrapper/utils';
 import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
 import ResultsTable from 'js/components/entity-search/ResultsTable';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
@@ -32,7 +32,7 @@ function Search() {
       query: new MultiMatchQuery({
         fields: ['all_text'],
       }),
-      facets: Object.values(facets).map((facet) => createFacet(facet)),
+      facets: Object.values(facets).map((facet) => createSearchkitFacet(facet)),
       filters: filters.map((filter) => filter.definition),
     }),
     [authHeader, elasticsearchEndpoint, facets, fields, filters],

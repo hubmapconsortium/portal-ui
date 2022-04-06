@@ -26,7 +26,7 @@ function getDonorMetadataFilters(isDonor) {
   ];
 }
 
-function createFacet({ field, label, ...rest }) {
+function createSearchkitFacet({ field, label, ...rest }) {
   return new RefinementSelectFacet({
     field: `${field}.keyword`,
     identifier: field,
@@ -36,7 +36,7 @@ function createFacet({ field, label, ...rest }) {
   });
 }
 
-export { getDonorMetadataFilters, getDonorFacet, getDatasetFacet, getAffiliationFacet, createFacet };
+export { getDonorMetadataFilters, getDonorFacet, getDatasetFacet, getAffiliationFacet, createSearchkitFacet };
 
 /* 
     const bmiField = 'body_mass_index_value';
