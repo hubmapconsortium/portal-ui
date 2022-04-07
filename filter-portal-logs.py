@@ -7,17 +7,40 @@ from re import subn, MULTILINE
 from yaml import dump
 
 
-class Filterer:
+class Filter:
+    '''
+    >>> logs = """
+    ...     before
+    ...     date, host, OSError: write error, tag
+    ...     middle
+    ...     date, host, Expected only one descendant on ABCD, tag
+    ...     end
+    ... """
+    >>> filter = Filter(logs)
+    >>> filter.filter_all()
+    >>> print(filter.logs.strip())
+    before
+        middle
+        end
+    >>> print(dump(filter.report).strip())
+    Expected only one descendant on:
+      count: 1
+      issue: https://github.com/hubmapconsortium/portal-ui/pull/2522
+    'OSError: write error':
+      count: 1
+      issue: https://github.com/hubmapconsortium/portal-ui/issues/2556
+    '''
     def __init__(self, logs):
         self.logs = logs
         self.report = {}
 
     def _filter_one(self, pattern, issue):
         (logs, count) = subn(rf'^.*{pattern}.*$\n', '', self.logs, flags=MULTILINE)
-        self.report[pattern] = {
-            'count': count,
-            'issue': issue
-        }
+        if count:
+            self.report[pattern] = {
+                'count': count,
+                'issue': issue
+            }
         self.logs = logs
 
     def filter_all(self):
@@ -38,9 +61,9 @@ class Filterer:
 
 if __name__ == "__main__":
     logs = Path(argv[1]).read_text()
-    filterer = Filterer(logs)
-    filterer.filter_all()
+    filter = Filter(logs)
+    filter.filter_all()
 
-    print(filterer.logs)
+    print(filter.logs)
     print('\n\nOld errors:\n')
-    print(dump(filterer.report))
+    print(dump(filter.report))
