@@ -12,9 +12,9 @@ const OuterAccordionSummary = styled(StyledAccordionSummary)`
     padding: 0;
     margin: 0;
   }
-  margin-top: 8px !important;
+  margin-top: 8px !important; // important is necesary because MUI uses it.
   margin-bottom: 8px !important;
-  padding: 0px 12px 0px 12px;
+  padding: ${(props) => `0px ${props.theme.spacing(1.5)}px`};
 `;
 
 const OuterAccordionDetails = styled(AccordionDetails)`
