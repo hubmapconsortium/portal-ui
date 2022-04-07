@@ -1,1 +1,0 @@
-- Add list facet to search page revision.

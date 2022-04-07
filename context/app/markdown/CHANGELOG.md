@@ -1,3 +1,13 @@
+## v0.41.1 - 2022-04-07
+
+- Make the links a darker shade of blue for accessibility.
+- Pin python dependencies.
+- Change "Creator" to "Registered by".
+- Add basic example of a dataset search page using searchkit's newest major version.
+- Add list facet to search page revision.
+- Split CI into several parts: Each will run faster, and a single failure won't stop everything.
+
+
 ## v0.41.0 - 2022-03-31
 
 - Upgrade CCF so that it no longer relies on a Heroku server that will fail on initial requests because it's not warmed up.
