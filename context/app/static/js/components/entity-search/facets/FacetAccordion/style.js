@@ -10,7 +10,7 @@ const InnerAccordionDetails = styled(AccordionDetails)`
 
 const InnerAccordionSummary = styled(StyledAccordionSummary)`
   justify-content: left;
-  padding: 0px 16px 0px 16px;
+  padding: ${(props) => `0px ${props.theme.spacing(2)}px`};
   & > * {
     flex-grow: unset;
     padding: 0;
