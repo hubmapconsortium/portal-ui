@@ -1,0 +1,1 @@
+- Make the links a darker shade of blue for accessibility.
