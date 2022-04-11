@@ -1,0 +1,1 @@
+- Replace the link in the footer that points to “Data Use Agreement” (meant for internal use within HuBMAP) with a link to the “Data Sharing Policy”.
