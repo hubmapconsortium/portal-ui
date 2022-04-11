@@ -52,6 +52,8 @@ function DevSearch() {
         listFilter('mapped_data_types', 'mapped_data_types'),
         listFilter('metadata.metadata.assay_category', 'assay_category'),
         listFilter('metadata.metadata.assay_type', 'assay_type'),
+        hierarchicalFilter(['metadata.metadata.analyte_class', 'mapped_data_types'], 'By analyte'),
+        hierarchicalFilter(['metadata.metadata.assay_category', 'mapped_data_types'], 'By category'),
       ],
       'File Descriptions': [
         listFilter('files.description', 'Flat'),
