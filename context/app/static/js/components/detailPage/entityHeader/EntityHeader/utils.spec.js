@@ -21,3 +21,13 @@ test('should return correct donor age field and unmapped labels', () => {
     age: { value: '50 years', label: 'age' },
   });
 });
+
+test('should join races with comma', () => {
+  const assayMetadata = {
+    race: ['Human', 'Klingon'],
+  };
+  expect(extractHeaderMetadata(assayMetadata, 'Donor')).toEqual({
+    sex: { value: undefined, label: 'sex' },
+    race: { value: 'Human, Klingon', label: 'race' },
+  });
+});

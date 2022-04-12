@@ -16,7 +16,7 @@ function extractHeaderMetadata(assayMetadata, entity_type) {
   }
   if (entity_type === 'Donor') {
     const donorMetadata = extractAndLabelMetadata(assayMetadata, ['sex']);
-    donorMetadata.race = { value: (assayMetadata.race || []).join(', '), label: 'race' };
+    donorMetadata.race = { value: assayMetadata.race ? assayMetadata.race.join(', ') : undefined, label: 'race' };
     if ('age_value' in assayMetadata && 'age_unit' in assayMetadata) {
       donorMetadata.age = { value: `${assayMetadata.age_value} ${assayMetadata.age_unit}`, label: 'age' };
     }
