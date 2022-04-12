@@ -52,6 +52,8 @@ function DevSearch() {
         listFilter('mapped_data_types', 'mapped_data_types'),
         listFilter('metadata.metadata.assay_category', 'assay_category'),
         listFilter('metadata.metadata.assay_type', 'assay_type'),
+        checkboxFilter('is_derived', 'Is derived?', TermQuery('ancestors.entity_type', 'dataset')),
+        checkboxFilter('is_raw', 'Is raw?', BoolMustNot(TermQuery('ancestors.entity_type', 'dataset'))),
       ],
       'File Descriptions': [
         listFilter('files.description', 'Flat'),
@@ -62,8 +64,6 @@ function DevSearch() {
         listFilter('mapper_metadata.validation_errors.absolute_schema_path', 'Schema Path'),
       ],
       Booleans: [
-        checkboxFilter('is_derived', 'Is derived?', TermQuery('ancestors.entity_type', 'dataset')),
-        checkboxFilter('is_raw', 'Is raw?', BoolMustNot(TermQuery('ancestors.entity_type', 'dataset'))),
         checkboxFilter('has_substatus', 'Has substatus?', ExistsQuery('sub_status')),
         checkboxFilter('is_living_donor', 'Is living donor?', ExistsQuery('metadata.living_donor_data')),
         checkboxFilter('is_organ_donor', 'Is organ donor?', ExistsQuery('metadata.organ_donor_data')),
