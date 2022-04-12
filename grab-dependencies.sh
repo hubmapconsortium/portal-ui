@@ -18,14 +18,9 @@ $(git submodule)
 
 ## Python packages
 
-\`requirements.txt\`:
+\`requirements.in\`:
 \`\`\`
-$(cat context/requirements.txt)
-\`\`\`
-
-\`portal-visualization/requirements.txt\`:
-\`\`\`
-$(cat context/portal-visualization/requirements.txt)
+$(cat context/requirements.in)
 \`\`\`
 
 ## NodeJS packages
