@@ -1,5 +1,9 @@
 import { RefinementSelectFacet } from '@searchkit/sdk';
 
+function mergeObjects(objects) {
+  return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+}
+
 function buildFacetWithGroup(facetGroup = 'Additional Facets') {
   return function buildFacet({ field, label }) {
     return { [field]: { field, label, facetGroup } };
@@ -36,7 +40,14 @@ function createSearchkitFacet({ field, label, ...rest }) {
   });
 }
 
-export { getDonorMetadataFilters, getDonorFacet, getDatasetFacet, getAffiliationFacet, createSearchkitFacet };
+export {
+  mergeObjects,
+  getDonorMetadataFilters,
+  getDonorFacet,
+  getDatasetFacet,
+  getAffiliationFacet,
+  createSearchkitFacet,
+};
 
 /* 
     const bmiField = 'body_mass_index_value';

@@ -3,18 +3,18 @@ import { SearchkitClient, SearchkitProvider } from '@searchkit/client';
 import { TermFilter } from '@searchkit/sdk';
 
 import Search from 'js/components/entity-search/Search';
-import { getDonorMetadataFilters, getAffiliationFacet } from './utils';
+import { mergeObjects, getDonorMetadataFilters, getAffiliationFacet } from './utils';
 import SearchConfigProvider from './provider';
 
 const skClient = new SearchkitClient();
 
 function SearchWrapper({ uniqueFacets, uniqueFields, entityTypeKeyword }) {
-  const facets = [
+  const facets = mergeObjects([
     ...uniqueFacets,
     ...getDonorMetadataFilters(entityTypeKeyword === 'Donor'),
     getAffiliationFacet({ field: 'group_name', label: 'Group' }),
     getAffiliationFacet({ field: 'created_by_user_displayname', label: 'Creator' }),
-  ].reduce((acc, curr) => ({ ...acc, ...curr }), {});
+  ]);
 
   const fields = [
     { field: 'hubmap_id', label: 'HuBMAP ID' },
