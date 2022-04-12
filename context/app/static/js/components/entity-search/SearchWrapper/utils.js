@@ -1,22 +1,36 @@
 import { RefinementSelectFacet } from '@searchkit/sdk';
 
+function mergeObjects(objects) {
+  return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+}
+
+function buildFacetWithGroup(facetGroup = 'Additional Facets') {
+  return function buildFacet({ field, label }) {
+    return { [field]: { field, label, facetGroup } };
+  };
+}
+
+const getDonorFacet = buildFacetWithGroup('Donor Metadata');
+const getDatasetFacet = buildFacetWithGroup('Dataset Metadata');
+const getAffiliationFacet = buildFacetWithGroup('Affiliation');
+
 function getDonorMetadataFilters(isDonor) {
   const pathPrefix = isDonor ? '' : 'donor.';
   const labelPrefix = isDonor ? '' : 'Donor ';
 
   return [
-    {
+    getDonorFacet({
       field: `${pathPrefix}mapped_metadata.sex`,
       label: `${labelPrefix}Sex`,
-    },
-    {
+    }),
+    getDonorFacet({
       field: `${pathPrefix}mapped_metadata.race`,
       label: `${labelPrefix}Race`,
-    },
+    }),
   ];
 }
 
-function createFacet({ field, label, ...rest }) {
+function createSearchkitFacet({ field, label, ...rest }) {
   return new RefinementSelectFacet({
     field: `${field}.keyword`,
     identifier: field,
@@ -26,7 +40,14 @@ function createFacet({ field, label, ...rest }) {
   });
 }
 
-export { getDonorMetadataFilters, createFacet };
+export {
+  mergeObjects,
+  getDonorMetadataFilters,
+  getDonorFacet,
+  getDatasetFacet,
+  getAffiliationFacet,
+  createSearchkitFacet,
+};
 
 /* 
     const bmiField = 'body_mass_index_value';
