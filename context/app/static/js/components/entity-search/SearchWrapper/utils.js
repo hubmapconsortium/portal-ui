@@ -1,8 +1,61 @@
 import { RefinementSelectFacet } from '@searchkit/sdk';
+import metadataFieldTypes from 'metadata-field-types';
+import metadataFieldEntities from 'metadata-field-entities';
+
+function getElasticsearchField({ field, type }) {
+  if (type === 'string') {
+    return `${field}.keyword`;
+  }
+
+  return field;
+}
+
+function addMetadataFieldPath({ field, entityType }) {
+  if (entityType === 'donor') return field;
+
+  const fieldEntity = metadataFieldEntities[field];
+
+  const donorMetadataPath = 'donor.mapped_metadata';
+  const paths = {
+    sample: {
+      donor: donorMetadataPath,
+    },
+    dataset: {
+      donor: donorMetadataPath,
+      sample: 'source_sample.metadata',
+      dataset: 'metadata.metadata',
+    },
+  };
+  return `${paths[entityType][fieldEntity]}.${field}`;
+}
+
+function buildFieldConfig({ field, label, type, ...rest }) {
+  const elasticsearchField = getElasticsearchField({ field, type });
+  return { [field]: { field: elasticsearchField, identifier: field, label, ...rest } };
+}
+
+function buildMetadataFieldConfig({ field, label, entityType, ...rest }) {
+  const elasticsearchType = metadataFieldTypes[field];
+  return buildFieldConfig({
+    field: addMetadataFieldPath({ field, entityType }),
+    label,
+    type: elasticsearchType,
+    ...rest,
+  });
+}
+
+function getField(entries) {
+  const { field } = entries;
+  if (field in metadataFieldTypes) {
+    return buildMetadataFieldConfig(entries);
+  }
+
+  return buildFieldConfig(entries);
+}
 
 function getFacetWithGroup(facetGroup = 'Additional Facets') {
-  return function getFacet({ field, label }) {
-    return { [field]: { field, label, facetGroup } };
+  return function getFacet(entries) {
+    return getField({ ...entries, facetGroup });
   };
 }
 
@@ -11,25 +64,26 @@ const getDatasetFacet = getFacetWithGroup('Dataset Metadata');
 const getAffiliationFacet = getFacetWithGroup('Affiliation');
 
 function getDonorMetadataFilters(isDonor) {
-  const pathPrefix = isDonor ? '' : 'donor.';
   const labelPrefix = isDonor ? '' : 'Donor ';
 
   return [
     getDonorFacet({
-      field: `${pathPrefix}mapped_metadata.sex`,
+      field: 'sex',
       label: `${labelPrefix}Sex`,
+      entityType: 'dataset',
     }),
     getDonorFacet({
-      field: `${pathPrefix}mapped_metadata.race`,
+      field: 'race',
       label: `${labelPrefix}Race`,
+      entityType: 'dataset',
     }),
   ];
 }
 
-function createSearchkitFacet({ field, label, ...rest }) {
+function createSearchkitFacet({ field, identifier, label, ...rest }) {
   return new RefinementSelectFacet({
-    field: `${field}.keyword`,
-    identifier: field,
+    field,
+    identifier,
     label,
     multipleSelect: true,
     ...rest,
