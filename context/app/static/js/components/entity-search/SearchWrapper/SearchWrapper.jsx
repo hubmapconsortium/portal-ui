@@ -12,8 +12,8 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityTypeKeyword }) {
   const facets = [
     ...uniqueFacets,
     ...getDonorMetadataFilters(entityTypeKeyword === 'Donor'),
-    getAffiliationFacet({ field: 'group_name', label: 'Group' }),
-    getAffiliationFacet({ field: 'created_by_user_displayname', label: 'Creator' }),
+    getAffiliationFacet({ field: 'group_name', label: 'Group', type: 'string' }),
+    getAffiliationFacet({ field: 'created_by_user_displayname', label: 'Creator', type: 'string' }),
   ].reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
   const fields = [
