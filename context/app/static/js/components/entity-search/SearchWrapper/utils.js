@@ -53,29 +53,19 @@ function getField(entries) {
   return buildFieldConfig(entries);
 }
 
-function getFacetWithGroup(facetGroup = 'Additional Facets') {
+function buildFacetWithGroup(facetGroup = 'Additional Facets') {
   return function getFacet(entries) {
     return getField({ ...entries, facetGroup });
-  };
-}
-
-const getDonorFacet = getFacetWithGroup('Donor Metadata');
-const getDatasetFacet = getFacetWithGroup('Dataset Metadata');
-const getAffiliationFacet = getFacetWithGroup('Affiliation');
-
-function mergeObjects(objects) {
-  return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
-}
-
-function buildFacetWithGroup(facetGroup = 'Additional Facets') {
-  return function buildFacet({ field, label }) {
-    return { [field]: { field, label, facetGroup } };
   };
 }
 
 const getDonorFacet = buildFacetWithGroup('Donor Metadata');
 const getDatasetFacet = buildFacetWithGroup('Dataset Metadata');
 const getAffiliationFacet = buildFacetWithGroup('Affiliation');
+
+function mergeObjects(objects) {
+  return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+}
 
 function getDonorMetadataFilters(isDonor) {
   const labelPrefix = isDonor ? '' : 'Donor ';
