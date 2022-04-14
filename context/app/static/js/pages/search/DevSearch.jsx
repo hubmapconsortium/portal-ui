@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ExistsQuery, BoolMustNot } from 'searchkit';
+import { ExistsQuery, BoolMustNot, TermQuery } from 'searchkit';
 
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
@@ -52,6 +52,8 @@ function DevSearch() {
         listFilter('mapped_data_types', 'mapped_data_types'),
         listFilter('metadata.metadata.assay_category', 'assay_category'),
         listFilter('metadata.metadata.assay_type', 'assay_type'),
+        checkboxFilter('is_derived', 'Is derived?', TermQuery('ancestors.entity_type', 'dataset')),
+        checkboxFilter('is_raw', 'Is raw?', BoolMustNot(TermQuery('ancestors.entity_type', 'dataset'))),
         hierarchicalFilter(['metadata.metadata.analyte_class', 'mapped_data_types'], 'By analyte'),
         hierarchicalFilter(['metadata.metadata.assay_category', 'mapped_data_types'], 'By category'),
       ],
