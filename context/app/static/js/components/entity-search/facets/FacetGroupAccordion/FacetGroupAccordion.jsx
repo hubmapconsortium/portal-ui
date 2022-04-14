@@ -4,9 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import { StyledExpandMoreIcon } from 'js/components/searchPage/filters/style';
 import { OuterAccordion, OuterAccordionSummary, OuterAccordionDetails } from './style';
 
-function FacetGroupAccordion({ label, isFirst, children }) {
+function FacetGroupAccordion({ label, defaultExpanded, children }) {
   return (
-    <OuterAccordion defaultExpanded={isFirst}>
+    <OuterAccordion defaultExpanded={defaultExpanded}>
       <OuterAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
         <Typography variant="subtitle2" color="secondary">
           {label}

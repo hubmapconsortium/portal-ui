@@ -63,6 +63,20 @@ const getDonorFacet = getFacetWithGroup('Donor Metadata');
 const getDatasetFacet = getFacetWithGroup('Dataset Metadata');
 const getAffiliationFacet = getFacetWithGroup('Affiliation');
 
+function mergeObjects(objects) {
+  return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+}
+
+function buildFacetWithGroup(facetGroup = 'Additional Facets') {
+  return function buildFacet({ field, label }) {
+    return { [field]: { field, label, facetGroup } };
+  };
+}
+
+const getDonorFacet = buildFacetWithGroup('Donor Metadata');
+const getDatasetFacet = buildFacetWithGroup('Dataset Metadata');
+const getAffiliationFacet = buildFacetWithGroup('Affiliation');
+
 function getDonorMetadataFilters(isDonor) {
   const labelPrefix = isDonor ? '' : 'Donor ';
 
@@ -90,7 +104,15 @@ function createSearchkitFacet({ field, identifier, label, ...rest }) {
   });
 }
 
-export { getDonorMetadataFilters, getDonorFacet, getDatasetFacet, getAffiliationFacet, createSearchkitFacet, getField };
+export {
+  mergeObjects,
+  getDonorMetadataFilters,
+  getDonorFacet,
+  getDatasetFacet,
+  getAffiliationFacet,
+  createSearchkitFacet,
+  getField,
+};
 
 /* 
     const bmiField = 'body_mass_index_value';

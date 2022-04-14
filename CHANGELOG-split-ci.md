@@ -1,1 +1,0 @@
-- Split CI into several parts: Each will run faster, and a single failure won't stop everything.

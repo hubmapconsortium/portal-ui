@@ -8,7 +8,7 @@ function Facets({ resultsFacets }) {
   const groupedFacets = useGroupedFacets(resultsFacets);
 
   return Object.entries(groupedFacets).map(([groupLabel, facetGroup], i) => (
-    <FacetGroupAccordion label={groupLabel} isFirst={i === 0} key={groupLabel}>
+    <FacetGroupAccordion label={groupLabel} defaultExpanded={i === 0} key={groupLabel}>
       {facetGroup.map((facet) => (
         <SelectFacet key={facet.identifier} facet={facet} />
       ))}

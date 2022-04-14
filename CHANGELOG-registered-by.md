@@ -1,1 +1,0 @@
-- Change "Creator" to "Registered by".

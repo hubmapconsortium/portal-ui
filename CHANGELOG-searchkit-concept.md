@@ -1,1 +1,0 @@
-- Add basic example of a dataset search page using searchkit's newest major version.
