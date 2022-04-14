@@ -27,8 +27,22 @@ function Search() {
         },
       },
       hits: {
-        fields: fields.map((field) => field.field),
+        fields: Object.values(fields).map(({ identifier }) => identifier),
       },
+      sortOptions: Object.values(fields)
+        .map((field) => [
+          {
+            id: `${field.field}.asc`,
+            label: field.label,
+            field: { [field.field]: 'asc' },
+          },
+          {
+            id: `${field.field}.desc`,
+            label: field.label,
+            field: { [field.field]: 'desc' },
+          },
+        ])
+        .flat(),
       query: new MultiMatchQuery({
         fields: ['all_text'],
       }),
