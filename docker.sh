@@ -16,7 +16,10 @@ Copy example-app.conf and fill in blanks."
 
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
-docker build --tag $IMAGE_NAME $CONTEXT
+# Docker BuildKit supports parallelizing multi-stage builds.
+# https://medium.com/@tonistiigi/advanced-multi-stage-build-patterns-6f741b852fae
+# https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds
+DOCKER_BUILDKIT=1 docker build --tag $IMAGE_NAME $CONTEXT
 docker run -d \
   --name $CONTAINER_NAME \
   -p $PORT:80 \
