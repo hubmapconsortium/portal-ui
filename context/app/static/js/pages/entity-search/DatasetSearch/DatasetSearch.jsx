@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SearchWrapper from 'js/components/entity-search/SearchWrapper';
-import { getDatasetFacet } from 'js/components/entity-search/SearchWrapper/utils';
+import { getDatasetFacet, getField } from 'js/components/entity-search/SearchWrapper/utils';
 
 function DatasetSearch() {
   return (
@@ -15,9 +15,9 @@ function DatasetSearch() {
         getDatasetFacet({ field: 'mapped_data_access_level', label: 'Access Level', type: 'string' }),
       ]}
       uniqueFields={[
-        { field: 'mapped_data_types', label: 'Data Types' },
-        { field: 'origin_sample.mapped_organ', label: 'Organ' },
-        { field: 'mapped_status', label: 'Status' },
+        getField({ field: 'mapped_data_types', label: 'Data Types', type: 'string' }),
+        getField({ field: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
+        getField({ field: 'mapped_status', label: 'Status', type: 'string' }),
       ]}
       entityTypeKeyword="Dataset"
     />

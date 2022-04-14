@@ -3,7 +3,7 @@ import { SearchkitClient, SearchkitProvider } from '@searchkit/client';
 import { TermFilter } from '@searchkit/sdk';
 
 import Search from 'js/components/entity-search/Search';
-import { getDonorMetadataFilters, getAffiliationFacet } from './utils';
+import { getDonorMetadataFilters, getAffiliationFacet, getField } from './utils';
 import SearchConfigProvider from './provider';
 
 const skClient = new SearchkitClient();
@@ -17,11 +17,11 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityTypeKeyword }) {
   ].reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
   const fields = [
-    { field: 'hubmap_id', label: 'HuBMAP ID' },
-    { field: 'group_name', label: 'Group' },
+    getField({ field: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
+    getField({ field: 'group_name', label: 'Group', type: 'string' }),
     ...uniqueFields,
-    { field: 'mapped_last_modified_timestamp', label: 'Last Modified' },
-  ];
+    getField({ field: 'mapped_last_modified_timestamp', label: 'Last Modified', type: 'string' }),
+  ].reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
   const filters = [
     {

@@ -90,7 +90,7 @@ function createSearchkitFacet({ field, identifier, label, ...rest }) {
   });
 }
 
-export { getDonorMetadataFilters, getDonorFacet, getDatasetFacet, getAffiliationFacet, createSearchkitFacet };
+export { getDonorMetadataFilters, getDonorFacet, getDatasetFacet, getAffiliationFacet, createSearchkitFacet, getField };
 
 /* 
     const bmiField = 'body_mass_index_value';
