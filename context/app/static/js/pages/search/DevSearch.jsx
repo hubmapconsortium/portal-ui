@@ -54,6 +54,8 @@ function DevSearch() {
         listFilter('metadata.metadata.assay_type', 'assay_type'),
         checkboxFilter('is_derived', 'Is derived?', TermQuery('ancestors.entity_type', 'dataset')),
         checkboxFilter('is_raw', 'Is raw?', BoolMustNot(TermQuery('ancestors.entity_type', 'dataset'))),
+        hierarchicalFilter(['metadata.metadata.analyte_class', 'mapped_data_types'], 'By analyte'),
+        hierarchicalFilter(['metadata.metadata.assay_category', 'mapped_data_types'], 'By category'),
       ],
       'File Descriptions': [
         listFilter('files.description', 'Flat'),
