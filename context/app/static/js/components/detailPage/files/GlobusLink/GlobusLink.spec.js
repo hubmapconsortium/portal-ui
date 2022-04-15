@@ -38,6 +38,7 @@ test('displays info icon with 500 response', async () => {
     }),
   );
 
+  jest.spyOn(global.console, 'error').mockImplementation(() => {});
   render(<GlobusLink uuid={uuid} hubmap_id={hubmap_id} />);
 
   await screen.findByTestId('error-icon');
