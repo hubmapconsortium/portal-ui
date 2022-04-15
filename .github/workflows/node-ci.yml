@@ -21,6 +21,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.16.3'
+        cache: 'npm'
+        cache-dependency-path: context/package-lock.json
    
     - name: Install node dependencies
       run: npm ci --prefix context
