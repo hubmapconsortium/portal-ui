@@ -32,7 +32,17 @@ test.each([
   ['AccordionCheckboxFilter'],
   ['AccordionHierarchicalMenuFilter'],
 ])('%s should render', (filterName) => {
-  render(<AccordionFilter type={filterName} />);
+  render(
+    <AccordionFilter
+      type={filterName}
+      title="placeholder"
+      fields={[]}
+      id="placeholder"
+      filter={{}}
+      label="placeholder"
+      field="placeholder"
+    />,
+  );
 });
 
 test('withAnalyticsEvent passes onClick with ga event and original onClick', () => {
