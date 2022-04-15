@@ -1,0 +1,1 @@
+- Reduce the number of warnings in the Node tests.
