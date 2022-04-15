@@ -38,6 +38,8 @@ test('displays info icon with 500 response', async () => {
     }),
   );
 
+  // error is expected: We don't want to see it in test logs.
+  jest.spyOn(global.console, 'error').mockImplementation(() => {});
   render(<GlobusLink uuid={uuid} hubmap_id={hubmap_id} />);
 
   await screen.findByTestId('error-icon');
