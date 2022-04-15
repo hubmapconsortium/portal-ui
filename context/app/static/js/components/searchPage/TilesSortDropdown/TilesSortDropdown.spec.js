@@ -16,7 +16,7 @@ const items = [
   {
     defaultOption: false,
     label: 'Fake',
-    field: 'Fake.keyword',
+    field: 'fake.keyword',
     order: 'asc',
     key: 'fake.keyword_asc',
   },
