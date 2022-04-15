@@ -10,7 +10,9 @@ function expectLabelsPresent() {
 }
 
 test('text displays properly when all props provided', () => {
-  render(<SampleTissue mapped_organ="Fake Organ" mapped_specimen_type="Fake Specimen Type" hasRUI />);
+  render(
+    <SampleTissue mapped_organ="Fake Organ" mapped_specimen_type="Fake Specimen Type" hasRUI uuid="placeholder" />,
+  );
   expectLabelsPresent();
 
   expect(screen.getByText('Tissue Location')).toBeInTheDocument();
@@ -20,6 +22,8 @@ test('text displays properly when all props provided', () => {
 });
 
 test('displays label not defined when values are undefined', () => {
+  // Supress proptype warnings:
+  jest.spyOn(global.console, 'error').mockImplementation(() => {});
   render(<SampleTissue />);
   expectLabelsPresent();
 
