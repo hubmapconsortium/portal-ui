@@ -23,9 +23,10 @@ function Citation({ contributors, citationTitle, created_timestamp, doi_url, doi
       className={className}
       bottomSpacing={1}
     >
-      <Typography variant="body1">
+      <Typography variant="body1" component="span">
         {citation} Available from: <OutboundIconLink href={doi_url}>{doi_url}</OutboundIconLink>
       </Typography>
+      <br />
       <OutboundIconLink href={`https://search.datacite.org/works/${doi}`}>View DataCite Page</OutboundIconLink>
     </LabelledSectionText>
   );
