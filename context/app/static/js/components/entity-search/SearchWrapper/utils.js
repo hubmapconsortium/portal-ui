@@ -98,6 +98,7 @@ function createSearchkitFacet({ field, identifier, label, ...rest }) {
 }
 
 export {
+  buildElasticSearchField,
   mergeObjects,
   getDonorMetadataFilters,
   createDonorFacet,
