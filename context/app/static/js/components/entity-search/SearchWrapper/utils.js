@@ -2,7 +2,7 @@ import { RefinementSelectFacet } from '@searchkit/sdk';
 import metadataFieldTypes from 'metadata-field-types';
 import metadataFieldEntities from 'metadata-field-entities';
 
-function getElasticsearchField({ field, type }) {
+function buildElasticSearchField({ field, type }) {
   if (type === 'string') {
     return `${field}.keyword`;
   }
@@ -10,7 +10,7 @@ function getElasticsearchField({ field, type }) {
   return field;
 }
 
-function addMetadataFieldPath({ field, entityType }) {
+function getMetadataFieldWithPath({ field, entityType }) {
   if (entityType === 'donor') return field;
 
   const fieldEntity = metadataFieldEntities[field];
@@ -30,38 +30,41 @@ function addMetadataFieldPath({ field, entityType }) {
 }
 
 function buildFieldConfig({ field, label, type, ...rest }) {
-  const elasticsearchField = getElasticsearchField({ field, type });
+  const elasticsearchField = buildElasticSearchField({ field, type });
   return { [field]: { field: elasticsearchField, identifier: field, label, ...rest } };
 }
 
-function buildMetadataFieldConfig({ field, label, entityType, ...rest }) {
+function buildMetadataFieldConfig({ field, entityType, ...rest }) {
   const elasticsearchType = metadataFieldTypes[field];
   return buildFieldConfig({
-    field: addMetadataFieldPath({ field, entityType }),
-    label,
+    field: getMetadataFieldWithPath({ field, entityType }),
     type: elasticsearchType,
     ...rest,
   });
 }
 
-function getField(entries) {
-  const { field } = entries;
+function createField(o) {
+  const { field } = o;
   if (field in metadataFieldTypes) {
-    return buildMetadataFieldConfig(entries);
+    return buildMetadataFieldConfig(o);
   }
 
-  return buildFieldConfig(entries);
+  return buildFieldConfig(o);
 }
 
-function buildFacetWithGroup(facetGroup = 'Additional Facets') {
-  return function getFacet(entries) {
-    return getField({ ...entries, facetGroup });
-  };
+const withFacetGroup = (facetGroup) => (o) =>
+  createField({
+    ...o,
+    facetGroup,
+  });
+
+function createFacet({ facetGroup = 'Additional Facets', ...rest }) {
+  return withFacetGroup(facetGroup)({ ...rest });
 }
 
-const getDonorFacet = buildFacetWithGroup('Donor Metadata');
-const getDatasetFacet = buildFacetWithGroup('Dataset Metadata');
-const getAffiliationFacet = buildFacetWithGroup('Affiliation');
+const createDonorFacet = withFacetGroup('Donor Metadata');
+const createDatasetFacet = withFacetGroup('Dataset Metadata');
+const createAffiliationFacet = withFacetGroup('Affiliation');
 
 function mergeObjects(objects) {
   return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
@@ -71,12 +74,12 @@ function getDonorMetadataFilters(isDonor) {
   const labelPrefix = isDonor ? '' : 'Donor ';
 
   return [
-    getDonorFacet({
+    createDonorFacet({
       field: 'sex',
       label: `${labelPrefix}Sex`,
       entityType: 'dataset',
     }),
-    getDonorFacet({
+    createDonorFacet({
       field: 'race',
       label: `${labelPrefix}Race`,
       entityType: 'dataset',
@@ -97,11 +100,12 @@ function createSearchkitFacet({ field, identifier, label, ...rest }) {
 export {
   mergeObjects,
   getDonorMetadataFilters,
-  getDonorFacet,
-  getDatasetFacet,
-  getAffiliationFacet,
+  createDonorFacet,
+  createDatasetFacet,
+  createAffiliationFacet,
   createSearchkitFacet,
-  getField,
+  createFacet,
+  createField,
 };
 
 /* 
