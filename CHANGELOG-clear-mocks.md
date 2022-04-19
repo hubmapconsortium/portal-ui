@@ -1,0 +1,1 @@
+- Clear mocks after every Jest test: We want to avoid a mock on one test having side effects on another.
