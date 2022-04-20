@@ -70,19 +70,19 @@ function mergeObjects(objects) {
   return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 }
 
-function getDonorMetadataFilters(isDonor) {
-  const labelPrefix = isDonor ? '' : 'Donor ';
+function getDonorMetadataFilters(entityType) {
+  const labelPrefix = entityType === 'donor' ? '' : 'Donor ';
 
   return [
     createDonorFacet({
       field: 'sex',
       label: `${labelPrefix}Sex`,
-      entityType: 'dataset',
+      entityType,
     }),
     createDonorFacet({
       field: 'race',
       label: `${labelPrefix}Race`,
-      entityType: 'dataset',
+      entityType,
     }),
   ];
 }

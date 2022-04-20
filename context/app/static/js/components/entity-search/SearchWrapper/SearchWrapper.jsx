@@ -3,15 +3,16 @@ import { SearchkitClient, SearchkitProvider } from '@searchkit/client';
 import { TermFilter } from '@searchkit/sdk';
 
 import Search from 'js/components/entity-search/Search';
+import { capitalizeString } from 'js/helpers/functions';
 import { mergeObjects, getDonorMetadataFilters, createAffiliationFacet, createField } from './utils';
 import SearchConfigProvider from './provider';
 
 const skClient = new SearchkitClient();
 
-function SearchWrapper({ uniqueFacets, uniqueFields, entityTypeKeyword }) {
+function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   const facets = mergeObjects([
     ...uniqueFacets,
-    ...getDonorMetadataFilters(entityTypeKeyword === 'Donor'),
+    ...getDonorMetadataFilters(entityType),
     createAffiliationFacet({ field: 'group_name', label: 'Group', type: 'string' }),
     createAffiliationFacet({ field: 'created_by_user_displayname', label: 'Creator', type: 'string' }),
   ]);
@@ -30,11 +31,11 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityTypeKeyword }) {
         field: 'entity_type.keyword',
         label: 'Entity Type',
       }),
-      value: { identifier: 'entity_type.keyword', value: entityTypeKeyword },
+      value: { identifier: 'entity_type.keyword', value: capitalizeString(entityType) },
     },
   ];
 
-  const config = { facets, fields, filters };
+  const config = { facets, fields, filters, entityType };
 
   return (
     <SearchConfigProvider initialConfig={config}>

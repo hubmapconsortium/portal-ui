@@ -19,7 +19,7 @@ function DatasetSearch() {
         createField({ field: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
         createField({ field: 'mapped_status', label: 'Status', type: 'string' }),
       ]}
-      entityTypeKeyword="Dataset"
+      entityType="dataset"
     />
   );
 }
