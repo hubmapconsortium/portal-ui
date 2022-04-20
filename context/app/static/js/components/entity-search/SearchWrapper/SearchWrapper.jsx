@@ -16,12 +16,12 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityTypeKeyword }) {
     createAffiliationFacet({ field: 'created_by_user_displayname', label: 'Creator', type: 'string' }),
   ]);
 
-  const fields = [
+  const fields = mergeObjects([
     createField({ field: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
     createField({ field: 'group_name', label: 'Group', type: 'string' }),
     ...uniqueFields,
     createField({ field: 'mapped_last_modified_timestamp', label: 'Last Modified', type: 'string' }),
-  ].reduce((acc, curr) => ({ ...acc, ...curr }), {});
+  ]);
 
   const filters = [
     {
