@@ -1,1 +1,0 @@
-- Add boolean facets to identify raw or derived entities.
