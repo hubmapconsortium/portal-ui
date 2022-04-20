@@ -1,0 +1,1 @@
+- Add sorting for the results table in the search page revision.
