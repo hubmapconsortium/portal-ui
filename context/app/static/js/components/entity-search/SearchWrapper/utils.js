@@ -11,10 +11,6 @@ function buildElasticSearchField({ field, type }) {
 }
 
 function getMetadataFieldWithPath({ field, entityType }) {
-  if (entityType === 'donor') return field;
-
-  const fieldEntity = metadataFieldEntities[field];
-
   const donorMetadataPath = 'donor.mapped_metadata';
   const paths = {
     sample: {
@@ -26,12 +22,16 @@ function getMetadataFieldWithPath({ field, entityType }) {
       dataset: 'metadata.metadata',
     },
   };
+
+  const fieldEntity = metadataFieldEntities?.[field];
+  if (!(entityType in paths && fieldEntity in paths[entityType])) return field;
+
   return `${paths[entityType][fieldEntity]}.${field}`;
 }
 
 function buildFieldConfig({ field, label, type, ...rest }) {
   const elasticsearchField = buildElasticSearchField({ field, type });
-  return { [field]: { field: elasticsearchField, identifier: field, label, ...rest } };
+  return { [field]: { field: elasticsearchField, identifier: field, label, type, ...rest } };
 }
 
 function buildMetadataFieldConfig({ field, entityType, ...rest }) {
@@ -99,6 +99,9 @@ function createSearchkitFacet({ field, identifier, label, ...rest }) {
 
 export {
   buildElasticSearchField,
+  getMetadataFieldWithPath,
+  buildFieldConfig,
+  buildMetadataFieldConfig,
   mergeObjects,
   getDonorMetadataFilters,
   createDonorFacet,
