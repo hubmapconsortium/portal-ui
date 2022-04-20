@@ -10,8 +10,8 @@ import { createSearchkitFacet } from 'js/components/entity-search/SearchWrapper/
 import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
 import ResultsTable from 'js/components/entity-search/ResultsTable';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
-import Facets from 'js/components/entity-search/facets/Facets';
-import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
+import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
+import { SearchLayout, ResultsLayout } from './style';
 import { buildSortPairs } from './utils';
 
 function Search() {
@@ -47,7 +47,7 @@ function Search() {
 
   return (
     <SearchLayout>
-      <SidebarLayout>{results?.facets && <Facets resultsFacets={results.facets} />}</SidebarLayout>
+      <Sidebar results={results} />
       <ResultsLayout>{results?.hits && <ResultsTable hits={results.hits} />}</ResultsLayout>
     </SearchLayout>
   );
