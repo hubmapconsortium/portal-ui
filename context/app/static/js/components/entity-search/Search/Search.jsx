@@ -12,6 +12,7 @@ import ResultsTable from 'js/components/entity-search/ResultsTable';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import Facets from 'js/components/entity-search/facets/Facets';
 import { SearchLayout, SidebarLayout, ResultsLayout } from './style';
+import { buildSortPairs } from './utils';
 
 function Search() {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
@@ -27,8 +28,9 @@ function Search() {
         },
       },
       hits: {
-        fields: fields.map((field) => field.field),
+        fields: Object.values(fields).map(({ identifier }) => identifier),
       },
+      sortOptions: buildSortPairs(Object.values(fields)),
       query: new MultiMatchQuery({
         fields: ['all_text'],
       }),

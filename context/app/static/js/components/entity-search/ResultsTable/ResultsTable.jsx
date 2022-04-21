@@ -8,6 +8,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { LightBlueLink } from 'js/shared-styles/Links';
+import SortingHeaderCell from 'js/components/entity-search/results/SortingHeaderCell';
 import { StyledTable, StyledTableRow } from './style';
 
 function ResultsTable({ hits }) {
@@ -17,20 +18,22 @@ function ResultsTable({ hits }) {
     <StyledTable data-testid="search-results-table">
       <TableHead>
         <TableRow>
-          {fields.map(({ label, field }) => (
-            <TableCell key={field}>{label}</TableCell>
+          {Object.values(fields).map(({ label, field }) => (
+            <SortingHeaderCell key={field} field={field}>
+              {label}
+            </SortingHeaderCell>
           ))}
         </TableRow>
       </TableHead>
       <TableBody>
         {hits.items.map((hit) => (
           <StyledTableRow key={hit.id}>
-            {fields.map(({ field }) => (
+            {Object.values(fields).map(({ field, identifier }) => (
               <TableCell key={field}>
-                {field === 'hubmap_id' ? (
-                  <LightBlueLink href={`/browse/dataset/${hit.id}`}>{hit.fields[field]}</LightBlueLink>
+                {identifier === 'hubmap_id' ? (
+                  <LightBlueLink href={`/browse/dataset/${hit.id}`}>{hit.fields[identifier]}</LightBlueLink>
                 ) : (
-                  get(hit.fields, field)
+                  get(hit.fields, identifier)
                 )}
               </TableCell>
             ))}

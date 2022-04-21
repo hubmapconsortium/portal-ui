@@ -9,6 +9,8 @@ module.exports = {
     '^js/(.*)$': '<rootDir>/app/static/js/$1',
     '^test-utils/(.*)$': '<rootDir>/test-utils/$1',
     'metadata-field-descriptions$': '<rootDir>/ingest-validation-tools/docs/field-descriptions.yaml',
+    'metadata-field-types$': '<rootDir>/ingest-validation-tools/docs/field-types.yaml',
+    'metadata-field-entities$': '<rootDir>/ingest-validation-tools/docs/field-entities.yaml',
     'react-pdf/dist/esm/entry.webpack': 'react-pdf/dist/umd/entry.jest',
   },
   transform: {
