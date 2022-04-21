@@ -2,6 +2,7 @@ import { RefinementSelectFacet } from '@searchkit/sdk';
 import metadataFieldtoTypeMap from 'metadata-field-types';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 
+// appends '.keyword' to field name for elasticsearch string fields
 function appendKeywordToFieldName({ fieldName, type }) {
   if (type === 'string') {
     return `${fieldName}.keyword`;
@@ -10,6 +11,7 @@ function appendKeywordToFieldName({ fieldName, type }) {
   return fieldName;
 }
 
+// gets elasticsearch document path to metadata fields for related entities given an entity type
 function prependMetadataPathToFieldName({ fieldName, entityType }) {
   const donorMetadataPath = 'mapped_metadata';
   const sampleMetdataPath = 'metadata';
@@ -29,6 +31,7 @@ function prependMetadataPathToFieldName({ fieldName, entityType }) {
     },
   };
 
+  // get entity type from ingest-validation-types document which maps fields to their entity type
   const fieldEntityType = metadataFieldtoEntityMap?.[fieldName];
   const prefix = paths?.[entityType]?.[fieldEntityType];
   if (prefix) {
@@ -38,12 +41,15 @@ function prependMetadataPathToFieldName({ fieldName, entityType }) {
   return fieldName;
 }
 
+// builds field config needed for searchkit
 function buildFieldConfig({ fieldName, label, type, ...rest }) {
   const elasticsearchFieldName = appendKeywordToFieldName({ fieldName, type });
   return { [fieldName]: { field: elasticsearchFieldName, identifier: fieldName, label, type, ...rest } };
 }
 
+// builds field config for metadata fields for searchkit
 function buildMetadataFieldConfig({ fieldName, entityType, ...rest }) {
+  // get type from ingest-validation-types document which maps fields to their type
   const elasticsearchType = metadataFieldtoTypeMap[fieldName];
   return buildFieldConfig({
     fieldName: prependMetadataPathToFieldName({ fieldName, entityType }),
