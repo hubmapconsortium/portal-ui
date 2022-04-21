@@ -11,14 +11,20 @@ function buildElasticSearchField({ field, type }) {
 }
 
 function getMetadataFieldWithPath({ field, entityType }) {
-  const donorMetadataPath = 'donor.mapped_metadata';
+  const donorMetadataPath = 'mapped_metadata';
+  const sampleMetdataPath = 'metadata';
+
   const paths = {
-    sample: {
+    donor: {
       donor: donorMetadataPath,
     },
+    sample: {
+      sample: sampleMetdataPath,
+      donor: `donor.${donorMetadataPath}`,
+    },
     dataset: {
-      donor: donorMetadataPath,
-      sample: 'source_sample.metadata',
+      donor: `donor.${donorMetadataPath}`,
+      sample: `source_sample.${sampleMetdataPath}`,
       dataset: 'metadata.metadata',
     },
   };
