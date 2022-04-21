@@ -1,16 +1,16 @@
 import { RefinementSelectFacet } from '@searchkit/sdk';
-import metadataFieldTypes from 'metadata-field-types';
-import metadataFieldEntities from 'metadata-field-entities';
+import metadataFieldtoTypeMap from 'metadata-field-types';
+import metadataFieldtoEntityMap from 'metadata-field-entities';
 
-function buildElasticSearchField({ field, type }) {
+function appendKeywordToFieldName({ fieldName, type }) {
   if (type === 'string') {
-    return `${field}.keyword`;
+    return `${fieldName}.keyword`;
   }
 
-  return field;
+  return fieldName;
 }
 
-function getMetadataFieldWithPath({ field, entityType }) {
+function prependMetadataPathToFieldName({ fieldName, entityType }) {
   const donorMetadataPath = 'mapped_metadata';
   const sampleMetdataPath = 'metadata';
 
@@ -29,29 +29,32 @@ function getMetadataFieldWithPath({ field, entityType }) {
     },
   };
 
-  const fieldEntity = metadataFieldEntities?.[field];
-  if (!(entityType in paths && fieldEntity in paths[entityType])) return field;
+  const fieldEntityType = metadataFieldtoEntityMap?.[fieldName];
+  const prefix = paths?.[entityType]?.[fieldEntityType];
+  if (prefix) {
+    return `${prefix}.${fieldName}`;
+  }
 
-  return `${paths[entityType][fieldEntity]}.${field}`;
+  return fieldName;
 }
 
-function buildFieldConfig({ field, label, type, ...rest }) {
-  const elasticsearchField = buildElasticSearchField({ field, type });
-  return { [field]: { field: elasticsearchField, identifier: field, label, type, ...rest } };
+function buildFieldConfig({ fieldName, label, type, ...rest }) {
+  const elasticsearchFieldName = appendKeywordToFieldName({ fieldName, type });
+  return { [fieldName]: { field: elasticsearchFieldName, identifier: fieldName, label, type, ...rest } };
 }
 
-function buildMetadataFieldConfig({ field, entityType, ...rest }) {
-  const elasticsearchType = metadataFieldTypes[field];
+function buildMetadataFieldConfig({ fieldName, entityType, ...rest }) {
+  const elasticsearchType = metadataFieldtoTypeMap[fieldName];
   return buildFieldConfig({
-    field: getMetadataFieldWithPath({ field, entityType }),
+    fieldName: prependMetadataPathToFieldName({ fieldName, entityType }),
     type: elasticsearchType,
     ...rest,
   });
 }
 
 function createField(o) {
-  const { field } = o;
-  if (field in metadataFieldTypes) {
+  const { fieldName } = o;
+  if (fieldName in metadataFieldtoTypeMap) {
     return buildMetadataFieldConfig(o);
   }
 
@@ -81,12 +84,12 @@ function getDonorMetadataFilters(entityType) {
 
   return [
     createDonorFacet({
-      field: 'sex',
+      fieldName: 'sex',
       label: `${labelPrefix}Sex`,
       entityType,
     }),
     createDonorFacet({
-      field: 'race',
+      fieldName: 'race',
       label: `${labelPrefix}Race`,
       entityType,
     }),
@@ -104,8 +107,8 @@ function createSearchkitFacet({ field, identifier, label, ...rest }) {
 }
 
 export {
-  buildElasticSearchField,
-  getMetadataFieldWithPath,
+  appendKeywordToFieldName,
+  prependMetadataPathToFieldName,
   buildFieldConfig,
   buildMetadataFieldConfig,
   mergeObjects,

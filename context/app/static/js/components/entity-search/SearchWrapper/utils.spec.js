@@ -1,6 +1,6 @@
 import {
-  buildElasticSearchField,
-  getMetadataFieldWithPath,
+  appendKeywordToFieldName,
+  prependMetadataPathToFieldName,
   buildFieldConfig,
   buildMetadataFieldConfig,
   createField,
@@ -8,42 +8,38 @@ import {
   mergeObjects,
 } from './utils';
 
-test('buildElasticSearchField should append .keyword if type is string', () => {
-  expect(buildElasticSearchField({ field: 'animal', type: 'string' })).toBe('animal.keyword');
+test('appendKeywordToFieldName should append .keyword if type is string', () => {
+  expect(appendKeywordToFieldName({ field: 'animal', type: 'string' })).toBe('animal.keyword');
 });
 
-test('buildElasticSearchField should not append .keyword for non-string types', () => {
-  expect(buildElasticSearchField({ field: 'animal', type: 'number' })).toBe('animal');
+test('appendKeywordToFieldName should not append .keyword for non-string types', () => {
+  expect(appendKeywordToFieldName({ field: 'animal', type: 'number' })).toBe('animal');
 });
 
-test('getMetadataFieldWithPath should return the field unaltered if the entity type is not sample or dataset', () => {
-  expect(getMetadataFieldWithPath({ field: 'animal', entityType: 'donor' })).toBe('animal');
+test('prependMetadataPathToFieldName should return the field unaltered if the path for the entity the field belongs to is not defined', () => {
+  expect(prependMetadataPathToFieldName({ field: 'animal', entityType: 'dataset' })).toBe('animal');
 });
 
-test('getMetadataFieldWithPath should return the field unaltered if the path for the entity the field belongs to is not defined', () => {
-  expect(getMetadataFieldWithPath({ field: 'animal', entityType: 'dataset' })).toBe('animal');
-});
-
-test('getMetadataFieldWithPath should return the correct path for donor metadata in samples', () => {
-  expect(getMetadataFieldWithPath({ field: 'age_value', entityType: 'sample' })).toBe(
+test('prependMetadataPathToFieldName should return the correct path for donor metadata in samples', () => {
+  expect(prependMetadataPathToFieldName({ field: 'age_value', entityType: 'sample' })).toBe(
     'donor.mapped_metadata.age_value',
   );
 });
 
-test('getMetadataFieldWithPath should return the correct path for donor metadata in datasets', () => {
-  expect(getMetadataFieldWithPath({ field: 'age_value', entityType: 'dataset' })).toBe(
+test('prependMetadataPathToFieldName should return the correct path for donor metadata in datasets', () => {
+  expect(prependMetadataPathToFieldName({ field: 'age_value', entityType: 'dataset' })).toBe(
     'donor.mapped_metadata.age_value',
   );
 });
 
-test('getMetadataFieldWithPath should return the correct path for sample metadata in datasets', () => {
-  expect(getMetadataFieldWithPath({ field: 'health_status', entityType: 'dataset' })).toBe(
+test('prependMetadataPathToFieldName should return the correct path for sample metadata in datasets', () => {
+  expect(prependMetadataPathToFieldName({ field: 'health_status', entityType: 'dataset' })).toBe(
     'source_sample.metadata.health_status',
   );
 });
 
-test('getMetadataFieldWithPath should return the correct path for dataset metadata in datasets', () => {
-  expect(getMetadataFieldWithPath({ field: 'assay_category', entityType: 'dataset' })).toBe(
+test('prependMetadataPathToFieldName should return the correct path for dataset metadata in datasets', () => {
+  expect(prependMetadataPathToFieldName({ field: 'assay_category', entityType: 'dataset' })).toBe(
     'metadata.metadata.assay_category',
   );
 });
