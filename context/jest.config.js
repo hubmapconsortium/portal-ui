@@ -1,4 +1,5 @@
 module.exports = {
+  restoreMocks: true,
   testPathIgnorePatterns: ['jest.config.js', '/node_modules/', '/cypress/'],
   setupFilesAfterEnv: ['<rootDir>/test-utils/setupTests.js'],
   moduleNameMapper: {

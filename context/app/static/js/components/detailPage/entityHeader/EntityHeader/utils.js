@@ -15,7 +15,8 @@ function extractHeaderMetadata(assayMetadata, entity_type) {
     return extractAndLabelMetadata(assayMetadata, ['mapped_organ', 'mapped_specimen_type']);
   }
   if (entity_type === 'Donor') {
-    const donorMetadata = extractAndLabelMetadata(assayMetadata, ['sex', 'race']);
+    const donorMetadata = extractAndLabelMetadata(assayMetadata, ['sex']);
+    donorMetadata.race = { value: assayMetadata.race ? assayMetadata.race.join(', ') : undefined, label: 'race' };
     if ('age_value' in assayMetadata && 'age_unit' in assayMetadata) {
       donorMetadata.age = { value: `${assayMetadata.age_value} ${assayMetadata.age_unit}`, label: 'age' };
     }

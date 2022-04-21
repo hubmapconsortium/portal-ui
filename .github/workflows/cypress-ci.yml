@@ -18,6 +18,7 @@ jobs:
         submodules: 'recursive'
 
     # TODO: Only being used to serve static assets: Could use node instead?
+    # No pip caching: no "pip install" here.
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
@@ -28,6 +29,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.16.3'
+        cache: 'npm'
+        cache-dependency-path: context/package-lock.json
    
     - name: Install node dependencies
       run: npm ci --prefix context

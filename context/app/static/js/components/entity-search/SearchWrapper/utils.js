@@ -1,51 +1,66 @@
 import { RefinementSelectFacet } from '@searchkit/sdk';
-import metadataFieldTypes from 'metadata-field-types';
-import metadataFieldEntities from 'metadata-field-entities';
+import metadataFieldtoTypeMap from 'metadata-field-types';
+import metadataFieldtoEntityMap from 'metadata-field-entities';
 
-function buildElasticSearchField({ field, type }) {
+// appends '.keyword' to field name for elasticsearch string fields
+function appendKeywordToFieldName({ fieldName, type }) {
   if (type === 'string') {
-    return `${field}.keyword`;
+    return `${fieldName}.keyword`;
   }
 
-  return field;
+  return fieldName;
 }
 
-function getMetadataFieldWithPath({ field, entityType }) {
-  const donorMetadataPath = 'donor.mapped_metadata';
+// gets elasticsearch document path to metadata fields for related entities given an entity type
+function prependMetadataPathToFieldName({ fieldName, entityType }) {
+  const donorMetadataPath = 'mapped_metadata';
+  const sampleMetdataPath = 'metadata';
+
   const paths = {
-    sample: {
+    donor: {
       donor: donorMetadataPath,
     },
+    sample: {
+      sample: sampleMetdataPath,
+      donor: `donor.${donorMetadataPath}`,
+    },
     dataset: {
-      donor: donorMetadataPath,
-      sample: 'source_sample.metadata',
+      donor: `donor.${donorMetadataPath}`,
+      sample: `source_sample.${sampleMetdataPath}`,
       dataset: 'metadata.metadata',
     },
   };
 
-  const fieldEntity = metadataFieldEntities?.[field];
-  if (!(entityType in paths && fieldEntity in paths[entityType])) return field;
+  // get entity type from ingest-validation-types document which maps fields to their entity type
+  const fieldEntityType = metadataFieldtoEntityMap?.[fieldName];
+  const prefix = paths?.[entityType]?.[fieldEntityType];
+  if (prefix) {
+    return `${prefix}.${fieldName}`;
+  }
 
-  return `${paths[entityType][fieldEntity]}.${field}`;
+  return fieldName;
 }
 
-function buildFieldConfig({ field, label, type, ...rest }) {
-  const elasticsearchField = buildElasticSearchField({ field, type });
-  return { [field]: { field: elasticsearchField, identifier: field, label, type, ...rest } };
+// builds field config needed for searchkit
+function buildFieldConfig({ fieldName, label, type, ...rest }) {
+  const elasticsearchFieldName = appendKeywordToFieldName({ fieldName, type });
+  return { [fieldName]: { field: elasticsearchFieldName, identifier: fieldName, label, type, ...rest } };
 }
 
-function buildMetadataFieldConfig({ field, entityType, ...rest }) {
-  const elasticsearchType = metadataFieldTypes[field];
+// builds field config for metadata fields for searchkit
+function buildMetadataFieldConfig({ fieldName, entityType, ...rest }) {
+  // get type from ingest-validation-types document which maps fields to their type
+  const elasticsearchType = metadataFieldtoTypeMap[fieldName];
   return buildFieldConfig({
-    field: getMetadataFieldWithPath({ field, entityType }),
+    fieldName: prependMetadataPathToFieldName({ fieldName, entityType }),
     type: elasticsearchType,
     ...rest,
   });
 }
 
 function createField(o) {
-  const { field } = o;
-  if (field in metadataFieldTypes) {
+  const { fieldName } = o;
+  if (fieldName in metadataFieldtoTypeMap) {
     return buildMetadataFieldConfig(o);
   }
 
@@ -75,12 +90,12 @@ function getDonorMetadataFilters(entityType) {
 
   return [
     createDonorFacet({
-      field: 'sex',
+      fieldName: 'sex',
       label: `${labelPrefix}Sex`,
       entityType,
     }),
     createDonorFacet({
-      field: 'race',
+      fieldName: 'race',
       label: `${labelPrefix}Race`,
       entityType,
     }),
@@ -98,8 +113,8 @@ function createSearchkitFacet({ field, identifier, label, ...rest }) {
 }
 
 export {
-  buildElasticSearchField,
-  getMetadataFieldWithPath,
+  appendKeywordToFieldName,
+  prependMetadataPathToFieldName,
   buildFieldConfig,
   buildMetadataFieldConfig,
   mergeObjects,

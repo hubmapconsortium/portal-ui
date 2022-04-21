@@ -97,7 +97,7 @@ const datasetConfig = {
       field('mapped_status', 'Status'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
-    tile: [...sharedTileFields, field('thumbnail_file.file_uuid')],
+    tile: [...sharedTileFields, field('thumbnail_file.file_uuid', 'Thumbnail UUID')],
     ccf: [],
   },
 };

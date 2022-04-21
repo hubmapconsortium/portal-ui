@@ -59,11 +59,8 @@ function Footer(props) {
               <OutboundLink href="https://hubmapconsortium.org/policies/" variant="body2">
                 Overview
               </OutboundLink>
-              <OutboundLink
-                href="https://hubmapconsortium.org/wp-content/uploads/2020/06/DUA_FINAL_2020_02_03_for_Signature.pdf"
-                variant="body2"
-              >
-                Data Use Agreement
+              <OutboundLink href="https://hubmapconsortium.org/policies/external-data-sharing-policy/" variant="body2">
+                Data Sharing Policy
               </OutboundLink>
               {!isMaintenancePage && (
                 <LightBlueLink href="https://software.docs.hubmapconsortium.org/about#citation" variant="body2">

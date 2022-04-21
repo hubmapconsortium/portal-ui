@@ -1,3 +1,18 @@
+## v0.42.0 - 2022-04-20
+
+- Clear mocks after every Jest test: We want to avoid a mock on one test having side effects on another.
+- Replace the link in the footer that points to “Data Use Agreement” (meant for internal use within HuBMAP) with a link to the “Data Sharing Policy”.
+- Add two hierarchical filters to dev-search; May help us represent assays better.
+- Try to speed up our Docker build.
+- Punctuate the donor ethnicity list in the header.
+- Cache NPM and Python dependencies... though that doesn't really help us much because the slow part is Docker.
+- Add group facets in search page revision.
+- Add a somewhat gratuitous filter on the error-log report.
+- Fix proptypes warning on Dataset page.
+- Add boolean facets to identify raw or derived entities.
+- Shorter summary of python dependencies.
+
+
 ## v0.41.1 - 2022-04-07
 
 - Make the links a darker shade of blue for accessibility.
