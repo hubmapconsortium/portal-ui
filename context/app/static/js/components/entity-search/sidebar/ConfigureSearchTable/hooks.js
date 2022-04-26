@@ -18,7 +18,10 @@ function useMetadataFieldConfigs() {
         return produce(acc, (draft) => {
           const group = `${fieldEntityType} Metadata`;
           // eslint-disable-next-line no-param-reassign
-          return { ...draft, ...createFacet({ fieldName, label: fieldName, entityType, facetGroup: group }) };
+          return {
+            ...draft,
+            ...createFacet({ fieldName, entityType, facetGroup: group }),
+          };
         });
       }
       return acc;
