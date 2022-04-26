@@ -1,0 +1,1 @@
+- Add dialog to search page revision to allow users to specify table fields;
