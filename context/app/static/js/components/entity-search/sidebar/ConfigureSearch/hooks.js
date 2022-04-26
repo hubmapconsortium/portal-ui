@@ -21,7 +21,7 @@ function useSelectedFields() {
   const selectField = (payload) => dispatch({ type: 'selectField', payload });
   const deselectField = (payload) => dispatch({ type: 'deselectField', payload });
 
-  function handleToggleCheckbox(event, fieldConfig) {
+  function handleToggleField(event, fieldConfig) {
     if (event.target.checked) {
       selectField(fieldConfig);
       return;
@@ -29,7 +29,7 @@ function useSelectedFields() {
     deselectField(fieldConfig);
   }
 
-  return { selectedFields, handleToggleCheckbox };
+  return { selectedFields, handleToggleField };
 }
 
 function useConfigureSearch() {
