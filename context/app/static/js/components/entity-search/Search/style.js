@@ -6,6 +6,7 @@ const SearchLayout = styled.div`
 
 const ResultsLayout = styled.div`
   flex-grow: 1;
+  min-width: 0; // needed for horizontal scrolling table
 `;
 
 export { SearchLayout, ResultsLayout };
