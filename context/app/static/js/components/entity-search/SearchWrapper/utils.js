@@ -41,6 +41,7 @@ function prependMetadataPathToFieldName({ fieldName, entityType }) {
   return fieldName;
 }
 
+// prepends entity type to field name for fields that belong to other entities
 function prependEntityTypeToFieldName({ fieldName, entityType }) {
   const fieldEntityType = metadataFieldtoEntityMap[fieldName];
   if (entityType !== fieldEntityType) return `${fieldEntityType}.${fieldName}`;
