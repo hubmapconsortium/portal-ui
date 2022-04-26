@@ -10,14 +10,14 @@ import SearchConfigProvider from './provider';
 const skClient = new SearchkitClient();
 
 function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
-  const facets = mergeObjects([
+  const initialFacets = mergeObjects([
     ...uniqueFacets,
     ...getDonorMetadataFilters(entityType),
     createAffiliationFacet({ fieldName: 'group_name', label: 'Group', type: 'string' }),
     createAffiliationFacet({ fieldName: 'created_by_user_displayname', label: 'Creator', type: 'string' }),
   ]);
 
-  const fields = mergeObjects([
+  const initialFields = mergeObjects([
     createField({ fieldName: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
     createField({ fieldName: 'group_name', label: 'Group', type: 'string' }),
     ...uniqueFields,
@@ -35,7 +35,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
     },
   ];
 
-  const config = { facets, fields, filters, entityType };
+  const config = { initialFacets, initialFields, facets: initialFacets, fields: initialFields, filters, entityType };
 
   return (
     <SearchConfigProvider initialConfig={config}>

@@ -11,17 +11,20 @@ const relatedEntityTypesMap = {
 };
 
 function useMetadataFieldConfigs() {
-  const { entityType } = useStore();
-  return Object.entries(metadataFieldtoEntityMap).reduce((acc, [fieldName, fieldEntityType]) => {
-    if (relatedEntityTypesMap[entityType].includes(fieldEntityType)) {
-      return produce(acc, (draft) => {
-        const group = `${fieldEntityType} metadata`;
-        // eslint-disable-next-line no-param-reassign
-        return { ...draft, ...createFacet({ fieldName, label: fieldName, entityType, facetGroup: group }) };
-      });
-    }
-    return acc;
-  }, {});
+  const { entityType, initialFields, initialFacets } = useStore();
+  return Object.entries(metadataFieldtoEntityMap).reduce(
+    (acc, [fieldName, fieldEntityType]) => {
+      if (relatedEntityTypesMap[entityType].includes(fieldEntityType)) {
+        return produce(acc, (draft) => {
+          const group = `${fieldEntityType} Metadata`;
+          // eslint-disable-next-line no-param-reassign
+          return { ...draft, ...createFacet({ fieldName, label: fieldName, entityType, facetGroup: group }) };
+        });
+      }
+      return acc;
+    },
+    { ...initialFields, ...initialFacets },
+  );
 }
 
 export { useMetadataFieldConfigs };

@@ -5,8 +5,10 @@ import createContext from 'zustand/context';
 
 const { Provider, useStore } = createContext();
 
-const createStore = ({ fields, facets, filters, entityType }) =>
+const createStore = ({ initialFields, initialFacets, fields, facets, filters, entityType }) =>
   create((set) => ({
+    initialFields,
+    initialFacets,
     fields,
     facets,
     filters,
