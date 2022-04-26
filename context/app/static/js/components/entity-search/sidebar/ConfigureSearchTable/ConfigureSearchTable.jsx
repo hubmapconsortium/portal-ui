@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { useMetadataFieldConfigs } from './hooks';
 
-function ConfigureSearchTable({ selectedFields, handleToggleCheckbox }) {
+function ConfigureSearchTable({ selectedFields, handleToggleField }) {
   const metadataFields = useMetadataFieldConfigs();
 
   return (
@@ -33,7 +33,7 @@ function ConfigureSearchTable({ selectedFields, handleToggleCheckbox }) {
                   checked={k in selectedFields}
                   size="small"
                   color="primary"
-                  onChange={(event) => handleToggleCheckbox(event, v)}
+                  onChange={(event) => handleToggleField(event, v)}
                 />
               </TableCell>
             </TableRow>

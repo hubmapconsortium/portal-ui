@@ -1,4 +1,6 @@
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
+
+import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 
 function selectedFieldReducer(state, { type, payload }) {
   const tempState = state;
@@ -30,4 +32,23 @@ function useSelectedFields() {
   return { selectedFields, handleToggleCheckbox };
 }
 
-export { useSelectedFields };
+function useConfigureSearch() {
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const { selectedFields, handleToggleField } = useSelectedFields();
+  const { setFields } = useStore();
+
+  function handleOpen() {
+    setDialogIsOpen(true);
+  }
+  function handleClose() {
+    setDialogIsOpen(false);
+  }
+
+  function handleSave() {
+    setFields(selectedFields);
+    setDialogIsOpen(false);
+  }
+  return { dialogIsOpen, handleOpen, handleClose, handleSave, selectedFields, handleToggleField };
+}
+
+export { useConfigureSearch };
