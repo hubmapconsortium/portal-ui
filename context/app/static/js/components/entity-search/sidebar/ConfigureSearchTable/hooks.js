@@ -3,6 +3,7 @@ import produce from 'immer';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { createFacet } from 'js/components/entity-search/SearchWrapper/utils';
+import { getMetadataFieldsSortedByEntityTypeThenFieldName } from './utils';
 
 const relatedEntityTypesMap = {
   donor: ['donor'],
@@ -10,10 +11,12 @@ const relatedEntityTypesMap = {
   dataset: ['donor', 'sample'],
 };
 
+const sortedMetadataFields = getMetadataFieldsSortedByEntityTypeThenFieldName(metadataFieldtoEntityMap);
+
 function useMetadataFieldConfigs() {
   const { entityType, initialFields, initialFacets } = useStore();
-  return Object.entries(metadataFieldtoEntityMap).reduce(
-    (acc, [fieldName, fieldEntityType]) => {
+  return sortedMetadataFields.reduce(
+    (acc, { fieldName, fieldEntityType }) => {
       if (relatedEntityTypesMap[entityType].includes(fieldEntityType)) {
         return produce(acc, (draft) => {
           const group = `${fieldEntityType} Metadata`;
