@@ -10,16 +10,19 @@ function selectedFieldReducer(state, { type, payload }) {
     case 'deselectField':
       delete tempState[payload.identifier];
       return { ...tempState };
+    case 'setSelectedFields':
+      return payload;
     default:
       return state;
   }
 }
 
-function useSelectedFields() {
-  const [selectedFields, dispatch] = useReducer(selectedFieldReducer, {});
+function useSelectedFields(initialFields) {
+  const [selectedFields, dispatch] = useReducer(selectedFieldReducer, initialFields);
 
   const selectField = (payload) => dispatch({ type: 'selectField', payload });
   const deselectField = (payload) => dispatch({ type: 'deselectField', payload });
+  const setSelectedFields = (payload) => dispatch({ type: 'setSelectedFields', payload });
 
   function handleToggleField(event, fieldConfig) {
     if (event.target.checked) {
@@ -29,19 +32,20 @@ function useSelectedFields() {
     deselectField(fieldConfig);
   }
 
-  return { selectedFields, handleToggleField };
+  return { selectedFields, handleToggleField, setSelectedFields };
 }
 
 function useConfigureSearch() {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
-  const { selectedFields, handleToggleField } = useSelectedFields();
-  const { setFields } = useStore();
+  const { setFields, fields } = useStore();
+  const { selectedFields, handleToggleField, setSelectedFields } = useSelectedFields(fields);
 
   function handleOpen() {
     setDialogIsOpen(true);
   }
   function handleClose() {
     setDialogIsOpen(false);
+    setSelectedFields(fields);
   }
 
   function handleSave() {
