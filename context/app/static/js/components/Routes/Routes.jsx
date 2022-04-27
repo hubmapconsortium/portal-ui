@@ -27,6 +27,8 @@ const SavedList = lazy(() => import('js/pages/SavedList'));
 const LineUpPage = lazy(() => import('js/pages/LineUpPage'));
 const Organs = lazy(() => import('js/pages/Organs'));
 const Organ = lazy(() => import('js/pages/Organ'));
+const DonorSearch = lazy(() => import('js/pages/entity-search/DonorSearch'));
+const SampleSearch = lazy(() => import('js/pages/entity-search/SampleSearch'));
 const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'));
 
 function Routes(props) {
@@ -110,8 +112,23 @@ function Routes(props) {
     );
   }
 
-  /* eslint-disable no-undef */
-  if (urlPath.startsWith('/test-search')) {
+  if (urlPath.startsWith('/test-search/donors')) {
+    return (
+      <Route>
+        <DonorSearch />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/test-search/samples')) {
+    return (
+      <Route>
+        <SampleSearch />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/test-search/datasets')) {
     return (
       <Route>
         <DatasetSearch />
