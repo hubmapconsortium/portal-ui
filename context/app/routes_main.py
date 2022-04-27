@@ -58,9 +58,9 @@ def search():
     )
 
 
-@blueprint.route('/test-search')
-def test_search():
-    title = 'Test Search'
+@blueprint.route('/test-search/<type>')
+def test_search(type):
+    title = f'{type.capitalize()} Test Search'
     flask_data = {
         **get_default_flask_data(),
         'title': title,
