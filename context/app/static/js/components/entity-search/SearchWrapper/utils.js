@@ -94,7 +94,7 @@ function mergeObjects(objects) {
   return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 }
 
-function getDonorMetadataFilters(entityType) {
+function getDonorMetadataFields(entityType) {
   const labelPrefix = entityType === 'donor' ? '' : 'Donor ';
 
   return [
@@ -127,7 +127,7 @@ export {
   buildFieldConfig,
   buildMetadataFieldConfig,
   mergeObjects,
-  getDonorMetadataFilters,
+  getDonorMetadataFields,
   createDonorFacet,
   createDatasetFacet,
   createAffiliationFacet,
