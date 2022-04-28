@@ -5,40 +5,44 @@ import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 function selectedFieldReducer(state, { type, payload }) {
   const tempState = state;
   switch (type) {
-    case 'selectField':
+    case 'selectItem':
       return { ...state, [payload.identifier]: payload };
-    case 'deselectField':
+    case 'deselectItem':
       delete tempState[payload.identifier];
       return { ...tempState };
-    case 'setSelectedFields':
+    case 'setSelectedItems':
       return payload;
     default:
       return state;
   }
 }
 
-function useSelectedFields(initialFields) {
-  const [selectedFields, dispatch] = useReducer(selectedFieldReducer, initialFields);
+function useSelectedItems(reducer, initialItems) {
+  const [selectedItems, dispatch] = useReducer(reducer, initialItems);
 
-  const selectField = (payload) => dispatch({ type: 'selectField', payload });
-  const deselectField = (payload) => dispatch({ type: 'deselectField', payload });
-  const setSelectedFields = (payload) => dispatch({ type: 'setSelectedFields', payload });
+  const selectItem = (payload) => dispatch({ type: 'selectItem', payload });
+  const deselectItem = (payload) => dispatch({ type: 'deselectItem', payload });
+  const setSelectedItems = (payload) => dispatch({ type: 'setSelectedItems', payload });
 
-  function handleToggleField(event, fieldConfig) {
+  function handleToggleItem(event, fieldConfig) {
     if (event.target.checked) {
-      selectField(fieldConfig);
+      selectItem(fieldConfig);
       return;
     }
-    deselectField(fieldConfig);
+    deselectItem(fieldConfig);
   }
 
-  return { selectedFields, handleToggleField, setSelectedFields };
+  return { selectedItems, handleToggleItem, setSelectedItems };
 }
 
 function useConfigureSearch() {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const { setFields, fields } = useStore();
-  const { selectedFields, handleToggleField, setSelectedFields } = useSelectedFields(fields);
+  const {
+    selectedItems: selectedFields,
+    handleToggleItem: handleToggleField,
+    setSelectedItems: setSelectedFields,
+  } = useSelectedItems(selectedFieldReducer, fields);
 
   function handleOpen() {
     setDialogIsOpen(true);
