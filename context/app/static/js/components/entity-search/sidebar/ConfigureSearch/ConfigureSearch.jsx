@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 import DialogModal from 'js/shared-styles/DialogModal';
-import ConfigureSearchTable from 'js/components/entity-search/sidebar/ConfigureSearchTable';
+import DonorSampleConfigureSearchTable from 'js/components/entity-search/sidebar/DonorSampleConfigureSearchTable';
 import { useConfigureSearch } from './hooks';
 
 import { Flex } from './style';
@@ -23,7 +23,7 @@ function ConfigureSearch() {
         maxWidth="md"
         content={
           <Flex>
-            <ConfigureSearchTable selectedFields={selectedFields} handleToggleField={handleToggleField} />
+            <DonorSampleConfigureSearchTable selectedFields={selectedFields} handleToggleField={handleToggleField} />
           </Flex>
         }
         actions={
