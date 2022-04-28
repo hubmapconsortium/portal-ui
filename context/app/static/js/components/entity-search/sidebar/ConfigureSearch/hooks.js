@@ -59,4 +59,4 @@ function useConfigureSearch() {
   return { dialogIsOpen, handleOpen, handleClose, handleSave, selectedFields, handleToggleField };
 }
 
-export { useConfigureSearch };
+export { useConfigureSearch, useSelectedItems };
