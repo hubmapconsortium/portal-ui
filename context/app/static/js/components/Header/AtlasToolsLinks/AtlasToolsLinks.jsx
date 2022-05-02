@@ -24,6 +24,16 @@ function AtlasToolsLinks(props) {
       <DropdownLink href="https://azimuth.hubmapconsortium.org/" isIndented={isIndented}>
         Azimuth: Reference-based single cell mapping
       </DropdownLink>
+      <StyledDivider />
+      <DropdownLink href="https://hubmapconsortium.github.io/hra-previews/pilots/pilot1.html" isIndented={isIndented}>
+        HRA Preview: ASCT+B Reporter Comparison
+      </DropdownLink>
+      <DropdownLink href="https://hubmapconsortium.github.io/hra-previews/pilots/pilot2.html" isIndented={isIndented}>
+        HRA Preview: Vasculature CCF Visualization
+      </DropdownLink>
+      <DropdownLink href="https://hubmapconsortium.github.io/hra-previews/pilots/pilot3.html" isIndented={isIndented}>
+        HRA Preview: HRA vs. Experimental Data
+      </DropdownLink>
     </>
   );
 }
