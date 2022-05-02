@@ -1,4 +1,5 @@
 import React from 'react';
+
 import ConfigureSearchTable from 'js/components/entity-search/sidebar/ConfigureSearchTable';
 import { useMetadataFieldConfigs } from './hooks';
 
