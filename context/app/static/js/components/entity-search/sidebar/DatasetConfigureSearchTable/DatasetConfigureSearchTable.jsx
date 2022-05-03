@@ -3,18 +3,29 @@ import React from 'react';
 import ConfigureSearchTable from 'js/components/entity-search/sidebar/ConfigureSearchTable';
 import DataTypesSelect from 'js/components/entity-search/sidebar/DataTypesSelect';
 import { Flex } from './style';
-import { useSelectedDataTypes } from './hooks';
+import { useDatasetConfigureSearchTable } from './hooks';
 
 function DatasetConfigureSearchTable({ selectedFields, handleToggleField }) {
-  const { dataTypesToFieldsMap, handleToggleDataType, dataTypesFields } = useSelectedDataTypes();
+  const {
+    dataTypesToFieldsMap,
+    handleToggleDataType,
+    groups,
+    handleToggleGroup,
+    availableFieldConfigs,
+  } = useDatasetConfigureSearchTable();
 
   return (
     <Flex>
-      <DataTypesSelect dataTypesToFieldsMap={dataTypesToFieldsMap} handleToggleDataType={handleToggleDataType} />
+      <DataTypesSelect
+        dataTypesToFieldsMap={dataTypesToFieldsMap}
+        handleToggleDataType={handleToggleDataType}
+        groups={groups}
+        handleToggleGroup={handleToggleGroup}
+      />
       <ConfigureSearchTable
         selectedFields={selectedFields}
         handleToggleField={handleToggleField}
-        availableFields={dataTypesFields}
+        availableFields={availableFieldConfigs}
       />
     </Flex>
   );

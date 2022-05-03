@@ -6,11 +6,18 @@ import FormControl from '@material-ui/core/FormControl';
 
 import { StyledPaper } from './style';
 
-function DataTypesSelect({ dataTypesToFieldsMap, handleToggleDataType }) {
+function DataTypesSelect({ dataTypesToFieldsMap, handleToggleDataType, groups, handleToggleGroup }) {
   return (
     <StyledPaper>
       <FormControl component="fieldset">
         <FormGroup aria-label="data-types">
+          {Object.keys(groups).map((group) => (
+            <FormControlLabel
+              value={group}
+              control={<Checkbox color="primary" size="small" onClick={(event) => handleToggleGroup(event, group)} />}
+              label={group}
+            />
+          ))}
           {Object.keys(dataTypesToFieldsMap).map((dataType) => (
             <FormControlLabel
               value={dataType}
