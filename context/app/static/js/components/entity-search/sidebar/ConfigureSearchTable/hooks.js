@@ -3,6 +3,7 @@ import produce from 'immer';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { createFacet } from 'js/components/entity-search/SearchWrapper/utils';
+import { capitalizeString } from 'js/helpers/functions';
 import { getMetadataFieldsSortedByEntityTypeThenFieldName } from './utils';
 
 const relatedEntityTypesMap = {
@@ -19,7 +20,7 @@ function useMetadataFieldConfigs(initialFieldConfigs) {
     (acc, { fieldName, fieldEntityType }) => {
       if (relatedEntityTypesMap[entityType].includes(fieldEntityType)) {
         return produce(acc, (draft) => {
-          const group = `${fieldEntityType} Metadata`;
+          const group = `${capitalizeString(fieldEntityType)} Metadata`;
           // eslint-disable-next-line no-param-reassign
           return {
             ...draft,
