@@ -9,7 +9,7 @@ import { useMetadataFieldConfigs } from '../ConfigureSearchTable/hooks';
 
 const dataTypesToFieldsMap = createDataTypesToFieldsMap(fieldsToAssayMap);
 
-function selectedGroupsReducer(state, { type, payload }) {
+function selectedItemsReducer(state, { type, payload }) {
   const tempState = state;
   switch (type) {
     case 'selectItem':
@@ -49,27 +49,12 @@ function useFieldGroups() {
   const groupedMetadataFieldConfigs = useGroupedMetadataFieldConfigs();
   const groups = { General: { ...initialFields, ...initialFacets }, ...groupedMetadataFieldConfigs };
   const { selectedItems: selectedGroups, handleToggleItem: handleToggleGroup } = useSelectedItems(
-    selectedGroupsReducer,
+    selectedItemsReducer,
     {},
   );
 
   const selectedGroupFieldConfigs = getSelectedGroupsFieldConfigs(groups, selectedGroups);
   return { groups, selectedGroups, handleToggleGroup, selectedGroupFieldConfigs };
-}
-
-function selectedDataTypesReducer(state, { type, payload }) {
-  const tempState = state;
-  switch (type) {
-    case 'selectItem':
-      return { ...state, [payload]: dataTypesToFieldsMap[payload] };
-    case 'deselectItem':
-      delete tempState[payload];
-      return { ...tempState };
-    case 'setSelectedItems':
-      return payload;
-    default:
-      return state;
-  }
 }
 
 function buildFieldConfigs(fieldNames) {
@@ -83,15 +68,15 @@ function buildFieldConfigs(fieldNames) {
 }
 
 function getDataTypesFields(selectedDataTypes) {
-  return Object.values(selectedDataTypes).reduce((acc, dataTypesFieldNames) => {
-    const dataTypeFieldConfigs = buildFieldConfigs(dataTypesFieldNames);
+  return Object.keys(selectedDataTypes).reduce((acc, selectedDataType) => {
+    const dataTypeFieldConfigs = buildFieldConfigs(dataTypesToFieldsMap[selectedDataType]);
     return { ...acc, ...dataTypeFieldConfigs };
   }, {});
 }
 
 function useSelectedDataTypes() {
   const { selectedItems: selectedDataTypes, handleToggleItem: handleToggleDataType } = useSelectedItems(
-    selectedDataTypesReducer,
+    selectedItemsReducer,
     {},
   );
 
