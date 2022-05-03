@@ -1,10 +1,10 @@
 import React from 'react';
 
 import ConfigureSearchTable from 'js/components/entity-search/sidebar/ConfigureSearchTable';
-import { useMetadataFieldConfigs } from './hooks';
+import { useDonorSampleMetadatFieldConfigs } from './hooks';
 
 function DonorSampleConfigureSearchTable({ selectedFields, handleToggleField }) {
-  const metadataFields = useMetadataFieldConfigs();
+  const metadataFields = useDonorSampleMetadatFieldConfigs();
 
   return (
     <ConfigureSearchTable
