@@ -1,0 +1,1 @@
+- Add form to allow users to filter configure search table by data type.
