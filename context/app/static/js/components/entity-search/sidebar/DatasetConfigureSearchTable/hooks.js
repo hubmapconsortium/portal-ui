@@ -13,7 +13,7 @@ function selectedItemsReducer(state, { type, payload }) {
   const tempState = state;
   switch (type) {
     case 'selectItem':
-      return { ...state, [payload]: payload };
+      return { ...state, [payload]: undefined }; // using an object as a set
     case 'deselectItem':
       delete tempState[payload];
       return { ...tempState };
