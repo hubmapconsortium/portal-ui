@@ -21,7 +21,6 @@ function useMetadataFieldConfigs(initialFieldConfigs) {
       if (relatedEntityTypesMap[entityType].includes(fieldEntityType)) {
         return produce(acc, (draft) => {
           const group = `${capitalizeString(fieldEntityType)} Metadata`;
-          // eslint-disable-next-line no-param-reassign
           return {
             ...draft,
             ...createFacet({ fieldName, entityType, facetGroup: group }),
