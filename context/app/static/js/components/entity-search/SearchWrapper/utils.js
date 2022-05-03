@@ -41,6 +41,14 @@ function prependMetadataPathToFieldName({ fieldName, entityType }) {
   return fieldName;
 }
 
+function prependEntityTypeToFieldName({ fieldName, entityType }) {
+  // Prepends entity type to field name for fields that belong to other entities
+  const fieldEntityType = metadataFieldtoEntityMap[fieldName];
+  if (entityType !== fieldEntityType) return `${fieldEntityType}.${fieldName}`;
+
+  return fieldName;
+}
+
 // builds field config needed for searchkit
 function buildFieldConfig({ fieldName, label, type, ...rest }) {
   const elasticsearchFieldName = appendKeywordToFieldName({ fieldName, type });
@@ -53,6 +61,7 @@ function buildMetadataFieldConfig({ fieldName, entityType, ...rest }) {
   const elasticsearchType = metadataFieldtoTypeMap[fieldName];
   return buildFieldConfig({
     fieldName: prependMetadataPathToFieldName({ fieldName, entityType }),
+    label: prependEntityTypeToFieldName({ fieldName, entityType }),
     type: elasticsearchType,
     ...rest,
   });

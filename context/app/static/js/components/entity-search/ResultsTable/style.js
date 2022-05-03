@@ -1,11 +1,5 @@
 import styled from 'styled-components';
-import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
-
-const StyledTable = styled(Table)`
-  background-color: white;
-  box-shadow: ${(props) => props.theme.shadows[1]};
-`;
 
 const StyledTableRow = styled(TableRow)`
   // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.
@@ -16,4 +10,4 @@ const StyledTableRow = styled(TableRow)`
   }
 `;
 
-export { StyledTable, StyledTableRow };
+export { StyledTableRow };
