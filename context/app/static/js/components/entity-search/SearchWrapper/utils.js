@@ -1,6 +1,8 @@
 import { RefinementSelectFacet } from '@searchkit/sdk';
+
 import metadataFieldtoTypeMap from 'metadata-field-types';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
+import { capitalizeString } from 'js/helpers/functions';
 
 // appends '.keyword' to field name for elasticsearch string fields
 function appendKeywordToFieldName({ fieldName, type }) {
@@ -42,27 +44,50 @@ function prependMetadataPathToFieldName({ fieldName, entityType }) {
 }
 
 // prepends entity type to field name for fields that belong to other entities
-function prependEntityTypeToFieldName({ fieldName, entityType }) {
+function prependEntityTypeToFieldName({ fieldName, pageEntityType }) {
   const fieldEntityType = metadataFieldtoEntityMap[fieldName];
-  if (entityType !== fieldEntityType) return `${fieldEntityType}.${fieldName}`;
+  if (pageEntityType !== fieldEntityType) return `${fieldEntityType}.${fieldName}`;
 
   return fieldName;
 }
 
 // builds field config needed for searchkit
-function buildFieldConfig({ fieldName, label, type, ...rest }) {
+function buildFieldConfig({
+  fieldName,
+  label,
+  type,
+  facetGroup = 'Additional Facets',
+  configureGroup = 'General',
+  ...rest
+}) {
   const elasticsearchFieldName = appendKeywordToFieldName({ fieldName, type });
-  return { [fieldName]: { field: elasticsearchFieldName, identifier: fieldName, label, type, ...rest } };
+  return {
+    [fieldName]: {
+      field: elasticsearchFieldName,
+      identifier: fieldName,
+      label,
+      type,
+      facetGroup,
+      configureGroup,
+      ...rest,
+    },
+  };
 }
 
 // builds field config for metadata fields for searchkit
-function buildMetadataFieldConfig({ fieldName, entityType, ...rest }) {
+function buildMetadataFieldConfig({ fieldName, entityType: pageEntityType, ...rest }) {
   // get type from ingest-validation-types document which maps fields to their type
   const elasticsearchType = metadataFieldtoTypeMap[fieldName];
+  const fieldEntityType = metadataFieldtoEntityMap[fieldName];
+
+  const group = `${capitalizeString(fieldEntityType)} Metadata`;
+
   return buildFieldConfig({
-    fieldName: prependMetadataPathToFieldName({ fieldName, entityType }),
-    label: prependEntityTypeToFieldName({ fieldName, entityType }),
+    fieldName: prependMetadataPathToFieldName({ fieldName, pageEntityType }),
+    label: prependEntityTypeToFieldName({ fieldName, pageEntityType }),
     type: elasticsearchType,
+    facetGroup: group,
+    configureGroup: group,
     ...rest,
   });
 }
@@ -81,10 +106,6 @@ const withFacetGroup = (facetGroup) => (o) =>
     ...o,
     facetGroup,
   });
-
-function createFacet({ facetGroup = 'Additional Facets', ...rest }) {
-  return withFacetGroup(facetGroup)({ ...rest });
-}
 
 const createDonorFacet = withFacetGroup('Donor Metadata');
 const createDatasetFacet = withFacetGroup('Dataset Metadata');
@@ -132,7 +153,6 @@ export {
   createDatasetFacet,
   createAffiliationFacet,
   createSearchkitFacet,
-  createFacet,
   createField,
 };
 
