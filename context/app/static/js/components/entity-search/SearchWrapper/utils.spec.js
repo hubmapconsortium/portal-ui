@@ -4,7 +4,6 @@ import {
   buildFieldConfig,
   buildMetadataFieldConfig,
   createField,
-  createFacet,
   mergeObjects,
 } from './utils';
 
@@ -55,6 +54,8 @@ test('buildFieldConfig should build field config', () => {
       identifier: 'animal',
       label: 'Animal',
       type: 'string',
+      configureGroup: 'General',
+      facetGroup: 'Additional Facets',
     },
   });
 });
@@ -63,11 +64,13 @@ test('buildMetadataFieldConfig should build metadata field config', () => {
   expect(
     buildMetadataFieldConfig({ fieldName: 'assay_category', entityType: 'dataset', label: 'Assay Category' }),
   ).toEqual({
-    'metadata.metadata.assay_category': {
-      field: 'metadata.metadata.assay_category.keyword',
-      identifier: 'metadata.metadata.assay_category',
+    assay_category: {
+      field: 'assay_category.keyword',
+      identifier: 'assay_category',
       label: 'Assay Category',
       type: 'string',
+      configureGroup: 'Dataset Metadata',
+      facetGroup: 'Dataset Metadata',
     },
   });
 });
@@ -80,43 +83,21 @@ describe('createField', () => {
         identifier: 'animal',
         label: 'Animal',
         type: 'string',
+        configureGroup: 'General',
+        facetGroup: 'Additional Facets',
       },
     });
   });
 
   test('should create a metadata field config if the field exists in metadata field types', () => {
     expect(createField({ fieldName: 'assay_category', entityType: 'dataset', label: 'Assay Category' })).toEqual({
-      'metadata.metadata.assay_category': {
-        field: 'metadata.metadata.assay_category.keyword',
-        identifier: 'metadata.metadata.assay_category',
+      assay_category: {
+        field: 'assay_category.keyword',
+        identifier: 'assay_category',
         label: 'Assay Category',
         type: 'string',
-      },
-    });
-  });
-});
-
-describe('createFacet', () => {
-  test('should create a field with default "Additional Facets" facet group', () => {
-    expect(createFacet({ fieldName: 'animal', label: 'Animal', type: 'string' })).toEqual({
-      animal: {
-        field: 'animal.keyword',
-        identifier: 'animal',
-        label: 'Animal',
-        type: 'string',
-        facetGroup: 'Additional Facets',
-      },
-    });
-  });
-
-  test('should create a field with facet group if specified', () => {
-    expect(createFacet({ fieldName: 'animal', label: 'Animal', type: 'string', facetGroup: 'main' })).toEqual({
-      animal: {
-        field: 'animal.keyword',
-        identifier: 'animal',
-        label: 'Animal',
-        type: 'string',
-        facetGroup: 'main',
+        configureGroup: 'Dataset Metadata',
+        facetGroup: 'Dataset Metadata',
       },
     });
   });
