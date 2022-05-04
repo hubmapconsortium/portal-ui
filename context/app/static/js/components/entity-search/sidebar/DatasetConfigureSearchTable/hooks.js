@@ -1,7 +1,7 @@
 import produce from 'immer';
 
 import { useSelectedItems } from 'js/components/entity-search/sidebar/ConfigureSearch/hooks';
-import { createDatasetFacet } from 'js/components/entity-search/SearchWrapper/utils';
+import { createField } from 'js/components/entity-search/SearchWrapper/utils';
 import fieldsToAssayMap from 'metadata-field-assays';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { invertKeyToArrayMap as createDataTypesToFieldsMap } from './utils';
@@ -58,13 +58,15 @@ function useFieldGroups() {
 }
 
 function buildFieldConfigs(fieldNames) {
-  return fieldNames.reduce(
-    (acc, fieldName) => ({
+  return fieldNames.reduce((acc, fieldName) => {
+    if (fieldName === 'version') {
+      return acc;
+    }
+    return {
       ...acc,
-      ...createDatasetFacet({ fieldName, entityType: 'dataset' }),
-    }),
-    {},
-  );
+      ...createField({ fieldName, entityType: 'dataset' }),
+    };
+  }, {});
 }
 
 function getDataTypesFields(selectedDataTypes) {
