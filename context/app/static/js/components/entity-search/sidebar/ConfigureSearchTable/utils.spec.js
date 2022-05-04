@@ -1,19 +1,23 @@
-import { getMetadataFieldsSortedByEntityTypeThenFieldName } from './utils';
+import { getFieldEntriesSortedByConfigureGroup } from './utils';
 
-test('should sort by entity type then field name', () => {
+test('should sort by configure group with general on type then alphabetically then field name alphabetically', () => {
   const map = {
-    vital_state: 'sample',
-    assay_type: 'dataset',
-    sex: 'donor',
-    description: 'dataset',
-    blood_type: 'donor',
+    assay_type: { label: 'assay_type', configureGroup: 'Dataset Metadata' },
+    description: { label: 'description', configureGroup: 'Dataset Metadata' },
+    blood_type: { label: 'blood_type', configureGroup: 'Donor Metadata' },
+    date: { label: 'date', configureGroup: 'General' },
+    sex: { label: 'sex', configureGroup: 'Donor Metadata' },
+    vital_state: { label: 'vital_state', configureGroup: 'Sample Metadata' },
+    id: { label: 'id', configureGroup: 'General' },
   };
 
-  expect(getMetadataFieldsSortedByEntityTypeThenFieldName(map)).toEqual([
-    { fieldName: 'assay_type', fieldEntityType: 'dataset' },
-    { fieldName: 'description', fieldEntityType: 'dataset' },
-    { fieldName: 'blood_type', fieldEntityType: 'donor' },
-    { fieldName: 'sex', fieldEntityType: 'donor' },
-    { fieldName: 'vital_state', fieldEntityType: 'sample' },
+  expect(getFieldEntriesSortedByConfigureGroup(map)).toEqual([
+    ['date', { label: 'date', configureGroup: 'General' }],
+    ['id', { label: 'id', configureGroup: 'General' }],
+    ['assay_type', { label: 'assay_type', configureGroup: 'Dataset Metadata' }],
+    ['description', { label: 'description', configureGroup: 'Dataset Metadata' }],
+    ['blood_type', { label: 'blood_type', configureGroup: 'Donor Metadata' }],
+    ['sex', { label: 'sex', configureGroup: 'Donor Metadata' }],
+    ['vital_state', { label: 'vital_state', configureGroup: 'Sample Metadata' }],
   ]);
 });

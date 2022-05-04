@@ -1,12 +1,4 @@
-function getMetadataFieldsSortedByEntityTypeThenFieldName(fields) {
-  return Object.entries(fields)
-    .sort(([fieldNameA, entityTypeA], [fieldNameB, entityTypeB]) => {
-      return entityTypeA.localeCompare(entityTypeB) || fieldNameA.localeCompare(fieldNameB);
-    })
-    .map(([fieldName, fieldEntityType]) => ({ fieldName, fieldEntityType }));
-}
-
-function sortFieldsByConfigureGroup(fields) {
+function getFieldEntriesSortedByConfigureGroup(fields) {
   return Object.entries(fields).sort(
     (
       [, { configureGroup: configureGroupA, label: labelA }],
@@ -25,4 +17,4 @@ function sortFieldsByConfigureGroup(fields) {
   );
 }
 
-export { getMetadataFieldsSortedByEntityTypeThenFieldName, sortFieldsByConfigureGroup };
+export { getFieldEntriesSortedByConfigureGroup };

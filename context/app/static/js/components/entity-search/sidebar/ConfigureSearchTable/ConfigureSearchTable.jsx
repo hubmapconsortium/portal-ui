@@ -8,7 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import { sortFieldsByConfigureGroup } from './utils';
+import { getFieldEntriesSortedByConfigureGroup } from './utils';
 
 function ConfigureSearchTable({ selectedFields, handleToggleField, availableFields }) {
   return (
@@ -22,7 +22,7 @@ function ConfigureSearchTable({ selectedFields, handleToggleField, availableFiel
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortFieldsByConfigureGroup(availableFields).map(([k, v]) => (
+          {getFieldEntriesSortedByConfigureGroup(availableFields).map(([k, v]) => (
             <TableRow key={k}>
               <TableCell>{v.label}</TableCell>
               <TableCell />
