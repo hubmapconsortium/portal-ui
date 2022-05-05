@@ -1,4 +1,4 @@
-from flask import (render_template, current_app,
+from flask import (render_template, current_app, abort,
                    session, request)
 
 from .utils import get_default_flask_data, make_blueprint
@@ -60,6 +60,8 @@ def search():
 
 @blueprint.route('/test-search/<type>')
 def test_search(type):
+    if type not in ['donors', 'samples', 'datasets']:
+        abort(404)
     title = f'{type.capitalize()} Test Search'
     flask_data = {
         **get_default_flask_data(),
