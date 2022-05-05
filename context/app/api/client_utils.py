@@ -1,6 +1,6 @@
 def files_from_response(response_json):
     '''
-    >>> response_json = [
+    >>> response_json = {'hits': {'hits': [
     ...     {
     ...         '_id': '1234',
     ...         '_source': {
@@ -9,12 +9,13 @@ def files_from_response(response_json):
     ...             }]
     ...         }
     ...     }
-    ... ]
+    ... ]}}
     >>> files_from_response(response_json)
     {'1234': ['abc.txt']}
     '''
+    hits = response_json['hits']['hits']
     return {
         hit['_id']: [
-            file['rel_path'] for file in hit['_source']['files']
-        ] for hit in response_json
+            file['rel_path'] for file in hit['_source'].get('files', [])
+        ] for hit in hits
     }

@@ -1,0 +1,1 @@
+- Notebook generation from the search page was broken. Fixed now.
