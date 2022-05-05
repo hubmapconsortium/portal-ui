@@ -14,7 +14,7 @@ function appendKeywordToFieldName({ fieldName, type }) {
 }
 
 // gets elasticsearch document path to metadata fields for related entities given an entity type
-function prependMetadataPathToFieldName({ fieldName, entityType }) {
+function prependMetadataPathToFieldName({ fieldName, pageEntityType }) {
   const donorMetadataPath = 'mapped_metadata';
   const sampleMetdataPath = 'metadata';
 
@@ -35,7 +35,7 @@ function prependMetadataPathToFieldName({ fieldName, entityType }) {
 
   // get entity type from ingest-validation-types document which maps fields to their entity type
   const fieldEntityType = metadataFieldtoEntityMap?.[fieldName];
-  const prefix = paths?.[entityType]?.[fieldEntityType];
+  const prefix = paths?.[pageEntityType]?.[fieldEntityType];
   if (prefix) {
     return `${prefix}.${fieldName}`;
   }

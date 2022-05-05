@@ -23,25 +23,25 @@ describe('appendKeywordToFieldName', () => {
   });
 
   test('should return the correct path for donor metadata in samples', () => {
-    expect(prependMetadataPathToFieldName({ fieldName: 'age_value', entityType: 'sample' })).toBe(
+    expect(prependMetadataPathToFieldName({ fieldName: 'age_value', pageEntityType: 'sample' })).toBe(
       'donor.mapped_metadata.age_value',
     );
   });
 
   test('should return the correct path for donor metadata in datasets', () => {
-    expect(prependMetadataPathToFieldName({ fieldName: 'age_value', entityType: 'dataset' })).toBe(
+    expect(prependMetadataPathToFieldName({ fieldName: 'age_value', pageEntityType: 'dataset' })).toBe(
       'donor.mapped_metadata.age_value',
     );
   });
 
   test('should return the correct path for sample metadata in datasets', () => {
-    expect(prependMetadataPathToFieldName({ fieldName: 'health_status', entityType: 'dataset' })).toBe(
+    expect(prependMetadataPathToFieldName({ fieldName: 'health_status', pageEntityType: 'dataset' })).toBe(
       'source_sample.metadata.health_status',
     );
   });
 
   test('should return the correct path for dataset metadata in datasets', () => {
-    expect(prependMetadataPathToFieldName({ fieldName: 'assay_category', entityType: 'dataset' })).toBe(
+    expect(prependMetadataPathToFieldName({ fieldName: 'assay_category', pageEntityType: 'dataset' })).toBe(
       'metadata.metadata.assay_category',
     );
   });
@@ -64,9 +64,9 @@ test('buildMetadataFieldConfig should build metadata field config', () => {
   expect(
     buildMetadataFieldConfig({ fieldName: 'assay_category', entityType: 'dataset', label: 'Assay Category' }),
   ).toEqual({
-    assay_category: {
-      field: 'assay_category.keyword',
-      identifier: 'assay_category',
+    'metadata.metadata.assay_category': {
+      field: 'metadata.metadata.assay_category.keyword',
+      identifier: 'metadata.metadata.assay_category',
       label: 'Assay Category',
       type: 'string',
       configureGroup: 'Dataset Metadata',
@@ -91,9 +91,9 @@ describe('createField', () => {
 
   test('should create a metadata field config if the field exists in metadata field types', () => {
     expect(createField({ fieldName: 'assay_category', entityType: 'dataset', label: 'Assay Category' })).toEqual({
-      assay_category: {
-        field: 'assay_category.keyword',
-        identifier: 'assay_category',
+      'metadata.metadata.assay_category': {
+        field: 'metadata.metadata.assay_category.keyword',
+        identifier: 'metadata.metadata.assay_category',
         label: 'Assay Category',
         type: 'string',
         configureGroup: 'Dataset Metadata',
