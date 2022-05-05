@@ -4,7 +4,7 @@ function getFieldEntriesSortedByConfigureGroup(fields) {
       [, { configureGroup: configureGroupA, label: labelA }],
       [, { configureGroup: configureGroupB, label: labelB }],
     ) => {
-      // put 'General' configure group at top
+      // Sort 'General' configure group to top:
       if (configureGroupA === 'General' && configureGroupB !== 'General') {
         return -1;
       }

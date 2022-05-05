@@ -28,7 +28,7 @@ function useGroupedFieldConfigs() {
   const { initialFields, initialFacets } = useStore();
   const metadataFieldConfigs = useMetadataFieldConfigs();
 
-  // Order matters. Field configs defined in initialFields/initialFacets will be overwritten
+  // Order matters. Field configs defined in initialFields/initialFacets will be overwritten.
   const allFieldConfigs = { ...initialFields, ...initialFacets, ...metadataFieldConfigs };
   return Object.entries(allFieldConfigs).reduce((acc, [metadataFieldName, metadataFieldConfig]) => {
     return produce(acc, (draft) => {
@@ -61,7 +61,8 @@ function useFieldGroups() {
 
 function buildFieldConfigs(fieldNames) {
   return fieldNames.reduce((acc, fieldName) => {
-    if (fieldName === 'version') {
+    const excludedFieldNames = ['version'];
+    if (excludedFieldNames.includes(fieldName) {
       return acc;
     }
     return {
