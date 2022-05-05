@@ -2,13 +2,15 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 import DialogModal from 'js/shared-styles/DialogModal';
-import ConfigureSearchTable from 'js/components/entity-search/sidebar/ConfigureSearchTable';
+import DonorSampleConfigureSearchTable from 'js/components/entity-search/sidebar/DonorSampleConfigureSearchTable';
+import DatasetConfigureSearchTable from 'js/components/entity-search/sidebar/DatasetConfigureSearchTable';
+import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { useConfigureSearch } from './hooks';
-
-import { Flex } from './style';
 
 function ConfigureSearch() {
   const { dialogIsOpen, handleOpen, handleClose, handleSave, selectedFields, handleToggleField } = useConfigureSearch();
+
+  const { entityType } = useStore();
 
   return (
     <>
@@ -22,9 +24,11 @@ function ConfigureSearch() {
         handleClose={handleClose}
         maxWidth="md"
         content={
-          <Flex>
-            <ConfigureSearchTable selectedFields={selectedFields} handleToggleField={handleToggleField} />
-          </Flex>
+          entityType === 'dataset' ? (
+            <DatasetConfigureSearchTable selectedFields={selectedFields} handleToggleField={handleToggleField} />
+          ) : (
+            <DonorSampleConfigureSearchTable selectedFields={selectedFields} handleToggleField={handleToggleField} />
+          )
         }
         actions={
           <>

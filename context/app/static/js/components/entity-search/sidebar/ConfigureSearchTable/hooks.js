@@ -2,8 +2,7 @@ import produce from 'immer';
 
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import { createFacet } from 'js/components/entity-search/SearchWrapper/utils';
-import { getMetadataFieldsSortedByEntityTypeThenFieldName } from './utils';
+import { createField } from 'js/components/entity-search/SearchWrapper/utils';
 
 const relatedEntityTypesMap = {
   donor: ['donor'],
@@ -11,25 +10,21 @@ const relatedEntityTypesMap = {
   dataset: ['donor', 'sample'],
 };
 
-const sortedMetadataFields = getMetadataFieldsSortedByEntityTypeThenFieldName(metadataFieldtoEntityMap);
-
-function useMetadataFieldConfigs() {
-  const { entityType, initialFields, initialFacets } = useStore();
-  return sortedMetadataFields.reduce(
-    (acc, { fieldName, fieldEntityType }) => {
+function useMetadataFieldConfigs(initialFieldConfigs) {
+  const { entityType } = useStore();
+  return Object.entries(metadataFieldtoEntityMap).reduce(
+    (acc, [fieldName, fieldEntityType]) => {
       if (relatedEntityTypesMap[entityType].includes(fieldEntityType)) {
         return produce(acc, (draft) => {
-          const group = `${fieldEntityType} Metadata`;
-          // eslint-disable-next-line no-param-reassign
           return {
             ...draft,
-            ...createFacet({ fieldName, entityType, facetGroup: group }),
+            ...createField({ fieldName, entityType }),
           };
         });
       }
       return acc;
     },
-    { ...initialFields, ...initialFacets },
+    { ...initialFieldConfigs },
   );
 }
 
