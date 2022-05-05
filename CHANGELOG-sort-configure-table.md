@@ -1,1 +1,0 @@
-- Sort fields in configure search table.

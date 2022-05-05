@@ -1,3 +1,14 @@
+## v0.43.0 - 2022-05-05
+
+- Add form to allow users to filter configure search table by data type.
+- Add dialog to search page revision to allow users to specify table fields;
+- Notebook generation from the search page was broken. Fixed now.
+- Add three preview links for HRA..
+- Add donor and sample pages for search ui revision.
+- Sort fields in configure search table.
+- Add sorting for the results table in the search page revision.
+
+
 ## v0.42.0 - 2022-04-20
 
 - Clear mocks after every Jest test: We want to avoid a mock on one test having side effects on another.
