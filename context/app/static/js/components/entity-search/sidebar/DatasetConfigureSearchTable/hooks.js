@@ -62,7 +62,7 @@ function useFieldGroups() {
 function buildFieldConfigs(fieldNames) {
   return fieldNames.reduce((acc, fieldName) => {
     const excludedFieldNames = ['version'];
-    if (excludedFieldNames.includes(fieldName) {
+    if (excludedFieldNames.includes(fieldName)) {
       return acc;
     }
     return {
