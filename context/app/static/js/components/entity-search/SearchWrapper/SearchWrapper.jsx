@@ -4,7 +4,7 @@ import { TermFilter } from '@searchkit/sdk';
 
 import Search from 'js/components/entity-search/Search';
 import { capitalizeString } from 'js/helpers/functions';
-import { mergeObjects, getDonorMetadataFilters, createAffiliationFacet, createField } from './utils';
+import { mergeObjects, getDonorMetadataFields, createAffiliationFacet, createField } from './utils';
 import SearchConfigProvider from './provider';
 
 const skClient = new SearchkitClient();
@@ -12,7 +12,7 @@ const skClient = new SearchkitClient();
 function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   const initialFacets = mergeObjects([
     ...uniqueFacets,
-    ...getDonorMetadataFilters(entityType),
+    ...getDonorMetadataFields(entityType),
     createAffiliationFacet({ fieldName: 'group_name', label: 'Group', type: 'string' }),
     createAffiliationFacet({ fieldName: 'created_by_user_displayname', label: 'Creator', type: 'string' }),
   ]);
