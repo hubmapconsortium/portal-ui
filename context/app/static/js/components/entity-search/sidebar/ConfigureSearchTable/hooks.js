@@ -12,8 +12,8 @@ const relatedEntityTypesMap = {
 
 function useMetadataFieldConfigs(initialFieldConfigs) {
   const { entityType } = useStore();
-  return Object.keys(metadataFieldtoEntityMap).reduce(
-    (acc, { fieldName, fieldEntityType }) => {
+  return Object.entries(metadataFieldtoEntityMap).reduce(
+    (acc, [fieldName, fieldEntityType]) => {
       if (relatedEntityTypesMap[entityType].includes(fieldEntityType)) {
         return produce(acc, (draft) => {
           return {
