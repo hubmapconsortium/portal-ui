@@ -1,7 +1,7 @@
 import produce from 'immer';
 
 import { useSelectedItems } from 'js/components/entity-search/sidebar/ConfigureSearch/hooks';
-import { createDatasetFacet } from 'js/components/entity-search/SearchWrapper/utils';
+import { createField } from 'js/components/entity-search/SearchWrapper/utils';
 import fieldsToAssayMap from 'metadata-field-assays';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { invertKeyToArrayMap as createDataTypesToFieldsMap } from './utils';
@@ -24,13 +24,17 @@ function selectedItemsReducer(state, { type, payload }) {
   }
 }
 
-function useGroupedMetadataFieldConfigs() {
+function useGroupedFieldConfigs() {
+  const { initialFields, initialFacets } = useStore();
   const metadataFieldConfigs = useMetadataFieldConfigs();
-  return Object.entries(metadataFieldConfigs).reduce((acc, [metadataFieldName, metadataFieldConfig]) => {
+
+  // Order matters. Field configs defined in initialFields/initialFacets will be overwritten.
+  const allFieldConfigs = { ...initialFields, ...initialFacets, ...metadataFieldConfigs };
+  return Object.entries(allFieldConfigs).reduce((acc, [metadataFieldName, metadataFieldConfig]) => {
     return produce(acc, (draft) => {
       // eslint-disable-next-line no-param-reassign
-      draft[metadataFieldConfig.facetGroup] = {
-        ...draft[metadataFieldConfig.facetGroup],
+      draft[metadataFieldConfig.configureGroup] = {
+        ...draft[metadataFieldConfig.configureGroup],
         [metadataFieldName]: metadataFieldConfig,
       };
       return draft;
@@ -45,9 +49,7 @@ function getSelectedGroupsFieldConfigs(groups, selectedGroups) {
 }
 
 function useFieldGroups() {
-  const { initialFields, initialFacets } = useStore();
-  const groupedMetadataFieldConfigs = useGroupedMetadataFieldConfigs();
-  const groups = { General: { ...initialFields, ...initialFacets }, ...groupedMetadataFieldConfigs };
+  const groups = useGroupedFieldConfigs();
   const { selectedItems: selectedGroups, handleToggleItem: handleToggleGroup } = useSelectedItems(
     selectedItemsReducer,
     {},
@@ -58,13 +60,16 @@ function useFieldGroups() {
 }
 
 function buildFieldConfigs(fieldNames) {
-  return fieldNames.reduce(
-    (acc, fieldName) => ({
+  return fieldNames.reduce((acc, fieldName) => {
+    const excludedFieldNames = ['version'];
+    if (excludedFieldNames.includes(fieldName)) {
+      return acc;
+    }
+    return {
       ...acc,
-      ...createDatasetFacet({ fieldName, entityType: 'dataset' }),
-    }),
-    {},
-  );
+      ...createField({ fieldName, entityType: 'dataset' }),
+    };
+  }, {});
 }
 
 function getDataTypesFields(selectedDataTypes) {

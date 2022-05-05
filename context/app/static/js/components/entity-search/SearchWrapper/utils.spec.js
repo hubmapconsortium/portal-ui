@@ -4,7 +4,6 @@ import {
   buildFieldConfig,
   buildMetadataFieldConfig,
   createField,
-  createFacet,
   mergeObjects,
 } from './utils';
 
@@ -24,25 +23,25 @@ describe('appendKeywordToFieldName', () => {
   });
 
   test('should return the correct path for donor metadata in samples', () => {
-    expect(prependMetadataPathToFieldName({ fieldName: 'age_value', entityType: 'sample' })).toBe(
+    expect(prependMetadataPathToFieldName({ fieldName: 'age_value', pageEntityType: 'sample' })).toBe(
       'donor.mapped_metadata.age_value',
     );
   });
 
   test('should return the correct path for donor metadata in datasets', () => {
-    expect(prependMetadataPathToFieldName({ fieldName: 'age_value', entityType: 'dataset' })).toBe(
+    expect(prependMetadataPathToFieldName({ fieldName: 'age_value', pageEntityType: 'dataset' })).toBe(
       'donor.mapped_metadata.age_value',
     );
   });
 
   test('should return the correct path for sample metadata in datasets', () => {
-    expect(prependMetadataPathToFieldName({ fieldName: 'health_status', entityType: 'dataset' })).toBe(
+    expect(prependMetadataPathToFieldName({ fieldName: 'health_status', pageEntityType: 'dataset' })).toBe(
       'source_sample.metadata.health_status',
     );
   });
 
   test('should return the correct path for dataset metadata in datasets', () => {
-    expect(prependMetadataPathToFieldName({ fieldName: 'assay_category', entityType: 'dataset' })).toBe(
+    expect(prependMetadataPathToFieldName({ fieldName: 'assay_category', pageEntityType: 'dataset' })).toBe(
       'metadata.metadata.assay_category',
     );
   });
@@ -55,6 +54,8 @@ test('buildFieldConfig should build field config', () => {
       identifier: 'animal',
       label: 'Animal',
       type: 'string',
+      configureGroup: 'General',
+      facetGroup: 'Additional Facets',
     },
   });
 });
@@ -68,6 +69,8 @@ test('buildMetadataFieldConfig should build metadata field config', () => {
       identifier: 'metadata.metadata.assay_category',
       label: 'Assay Category',
       type: 'string',
+      configureGroup: 'Dataset Metadata',
+      facetGroup: 'Dataset Metadata',
     },
   });
 });
@@ -80,6 +83,8 @@ describe('createField', () => {
         identifier: 'animal',
         label: 'Animal',
         type: 'string',
+        configureGroup: 'General',
+        facetGroup: 'Additional Facets',
       },
     });
   });
@@ -91,32 +96,8 @@ describe('createField', () => {
         identifier: 'metadata.metadata.assay_category',
         label: 'Assay Category',
         type: 'string',
-      },
-    });
-  });
-});
-
-describe('createFacet', () => {
-  test('should create a field with default "Additional Facets" facet group', () => {
-    expect(createFacet({ fieldName: 'animal', label: 'Animal', type: 'string' })).toEqual({
-      animal: {
-        field: 'animal.keyword',
-        identifier: 'animal',
-        label: 'Animal',
-        type: 'string',
-        facetGroup: 'Additional Facets',
-      },
-    });
-  });
-
-  test('should create a field with facet group if specified', () => {
-    expect(createFacet({ fieldName: 'animal', label: 'Animal', type: 'string', facetGroup: 'main' })).toEqual({
-      animal: {
-        field: 'animal.keyword',
-        identifier: 'animal',
-        label: 'Animal',
-        type: 'string',
-        facetGroup: 'main',
+        configureGroup: 'Dataset Metadata',
+        facetGroup: 'Dataset Metadata',
       },
     });
   });
