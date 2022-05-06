@@ -81,6 +81,11 @@ def login():
     auth_token_object = tokens.by_resource_server['auth.globus.org']
     auth_token = auth_token_object['access_token']
 
+    workspaces_response = requests.post(
+        current_app.config['WORKSPACES_ENDPOINT'] + '/tokens/',
+        data={'auth_token': auth_token}).json()
+    workspaces_token = workspaces_response['token']
+
     user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
     user_info = requests.get('https://auth.globus.org/v2/oauth2/userinfo',
                              headers=user_info_request_headers).json()
@@ -93,7 +98,8 @@ def login():
     session.update(
         groups_token=groups_token,
         is_authenticated=True,
-        user_email=user_email)
+        user_email=user_email,
+        workspaces_token=workspaces_token)
 
     previous_url = unquote(request.cookies.get('urlBeforeLogin'))
     response = make_response(
