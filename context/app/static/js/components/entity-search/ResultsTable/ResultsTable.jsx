@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
-import get from 'lodash/get';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,6 +12,7 @@ import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SortingHeaderCell from 'js/components/entity-search/results/SortingHeaderCell';
 import { StyledTableRow } from './style';
+import { getFieldFromHitFields } from './utils';
 
 function ResultsTable({ hits }) {
   const { fields } = useStore();
@@ -37,7 +37,7 @@ function ResultsTable({ hits }) {
                   {identifier === 'hubmap_id' ? (
                     <LightBlueLink href={`/browse/dataset/${hit.id}`}>{hit.fields[identifier]}</LightBlueLink>
                   ) : (
-                    get(hit.fields, identifier)
+                    getFieldFromHitFields(hit.fields, identifier)
                   )}
                 </TableCell>
               ))}
