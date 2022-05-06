@@ -5,7 +5,7 @@ import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumen
 function getFieldFromHitFields(hitFields, identifier) {
   const datasetSamplePath = paths.dataset.sample;
   if (identifier.startsWith(datasetSamplePath)) {
-    // Unlike origin_sample, source_sample is an array and cannot be accessed with lodash/get
+    // Unlike origin_sample, source_sample is an array and cannot be accessed with lodash/get.
     return hitFields?.source_sample?.[0].metadata?.[identifier.replace(`${datasetSamplePath}.`, '')];
   }
 
