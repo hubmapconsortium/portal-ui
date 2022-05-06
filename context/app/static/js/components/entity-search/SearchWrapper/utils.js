@@ -3,6 +3,7 @@ import { RefinementSelectFacet } from '@searchkit/sdk';
 import metadataFieldtoTypeMap from 'metadata-field-types';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { capitalizeString } from 'js/helpers/functions';
+import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumentPaths';
 
 // appends '.keyword' to field name for elasticsearch string fields
 function appendKeywordToFieldName({ fieldName, type }) {
@@ -15,24 +16,6 @@ function appendKeywordToFieldName({ fieldName, type }) {
 
 // gets elasticsearch document path to metadata fields for related entities given an entity type
 function prependMetadataPathToFieldName({ fieldName, pageEntityType }) {
-  const donorMetadataPath = 'mapped_metadata';
-  const sampleMetdataPath = 'metadata';
-
-  const paths = {
-    donor: {
-      donor: donorMetadataPath,
-    },
-    sample: {
-      sample: sampleMetdataPath,
-      donor: `donor.${donorMetadataPath}`,
-    },
-    dataset: {
-      donor: `donor.${donorMetadataPath}`,
-      sample: `source_sample.${sampleMetdataPath}`,
-      dataset: 'metadata.metadata',
-    },
-  };
-
   // get entity type from ingest-validation-types document which maps fields to their entity type
   const fieldEntityType = metadataFieldtoEntityMap?.[fieldName];
   const prefix = paths?.[pageEntityType]?.[fieldEntityType];
