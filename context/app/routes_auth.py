@@ -94,7 +94,16 @@ def login():
     # print('workspaces status:', workspaces_post_resp.status_code)
     # from pathlib import Path
     # Path('/tmp/error.html').write_text(workspaces_post_resp.text)
-    workspaces_token = workspaces_post_resp.json()['token']
+
+    try:
+        workspaces_token = workspaces_post_resp.json()['token']
+    except Exception as e:
+        if not workspaces_post_resp.ok:
+            current_app.logger.error(
+                f'Workspaces auth failed: {workspaces_post_resp.status_code} {workspaces_post_resp.text[:100]}')
+        else:
+            current_app.logger.error('Workspaces auth token read failed: {e}')
+        workspaces_token = None
 
     user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
     user_info = requests.get('https://auth.globus.org/v2/oauth2/userinfo',
