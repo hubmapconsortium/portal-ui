@@ -5,6 +5,7 @@ from flask import (
     request, redirect, render_template, session)
 import requests
 import globus_sdk
+from json import dumps
 
 from .utils import make_blueprint
 
@@ -81,10 +82,19 @@ def login():
     auth_token_object = tokens.by_resource_server['auth.globus.org']
     auth_token = auth_token_object['access_token']
 
-    workspaces_response = requests.post(
-        current_app.config['WORKSPACES_ENDPOINT'] + '/tokens/',
-        data={'auth_token': auth_token}).json()
-    workspaces_token = workspaces_response['token']
+    workspaces_post_url = current_app.config['WORKSPACES_ENDPOINT'] + '/tokens/'
+    workspaces_post_data = dumps({'auth_token': groups_token})
+    workspaces_post_resp = requests.post(
+        workspaces_post_url,
+        data=workspaces_post_data)
+    # TODO: Before merging, when this is stable, just inline it to be concise.
+    #
+    # print('workspaces URL:', workspaces_post_url)
+    # print('workspaces request:', workspaces_post_data)
+    # print('workspaces status:', workspaces_post_resp.status_code)
+    # from pathlib import Path
+    # Path('/tmp/error.html').write_text(workspaces_post_resp.text)
+    workspaces_token = workspaces_post_resp.json()['token']
 
     user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
     user_info = requests.get('https://auth.globus.org/v2/oauth2/userinfo',
@@ -99,7 +109,8 @@ def login():
         groups_token=groups_token,
         is_authenticated=True,
         user_email=user_email,
-        workspaces_token=workspaces_token)
+        workspaces_token=workspaces_token
+    )
 
     previous_url = unquote(request.cookies.get('urlBeforeLogin'))
     response = make_response(
