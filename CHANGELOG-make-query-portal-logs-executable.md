@@ -1,0 +1,1 @@
+- Make query-portal-logs script executable.
