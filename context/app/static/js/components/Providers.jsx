@@ -15,9 +15,21 @@ const generateClassName = createGenerateClassName({
   seed: 'portal',
 });
 
+// siteIds should correspond to the list at:
+// https://hubmapconsortium.matomo.cloud/index.php?module=SitesManager
+
+// eslint-disable-next-line no-restricted-globals
+const { host } = location;
+let siteId = 3;
+if (host === 'portal.hubmapconsortium.org') {
+  siteId = 1;
+} else if (host === 'localhost:5001') {
+  siteId = 2;
+}
+
 const instance = createInstance({
   urlBase: 'https://hubmapconsortium.matomo.cloud/',
-  siteId: 1,
+  siteId,
   // userId: 'UID76903202', // optional, default value: `undefined`.
   // trackerUrl: 'https://LINK.TO.DOMAIN/tracking.php', // optional, default value: `${urlBase}matomo.php`
   // srcUrl: 'https://LINK.TO.DOMAIN/tracking.js', // optional, default value: `${urlBase}matomo.js`
