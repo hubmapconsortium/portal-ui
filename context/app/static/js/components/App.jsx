@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactGA from 'react-ga'; // TODO: Remove when Matomo is up:
-// https://github.com/hubmapconsortium/portal-ui/issues/2636
+import ReactGA from 'react-ga'; // TODO: Remove all react-ga references
+// when Matomo is up: https://github.com/hubmapconsortium/portal-ui/issues/2636
 import marked from 'marked';
 
 import Providers from './Providers';
