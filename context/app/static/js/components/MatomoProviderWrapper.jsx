@@ -7,13 +7,14 @@ function getSiteId(location) {
   // siteIds should correspond to the list at:
   // https://hubmapconsortium.matomo.cloud/index.php?module=SitesManager
 
-  if (host === 'portal.hubmapconsortium.org') {
-    return 1;
+  switch (host) {
+    case 'portal.hubmapconsortium.org':
+      return 1;
+    case 'localhost:5001':
+      return 2;
+    default:
+      return 3;
   }
-  if (host === 'localhost:5001') {
-    return 2;
-  }
-  return 3;
 }
 
 function MatomoProviderWrapper(props) {
