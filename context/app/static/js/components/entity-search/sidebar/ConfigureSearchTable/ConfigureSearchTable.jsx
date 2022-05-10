@@ -10,7 +10,13 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { excludeDateFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
 
-function ConfigureSearchTable({ selectedFields, handleToggleField, availableFields }) {
+function ConfigureSearchTable({
+  selectedFields,
+  selectedFacets,
+  handleToggleField,
+  handleToggleFacet,
+  availableFields,
+}) {
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -22,20 +28,33 @@ function ConfigureSearchTable({ selectedFields, handleToggleField, availableFiel
           </TableRow>
         </TableHead>
         <TableBody>
-          {excludeDateFieldConfigs(getFieldEntriesSortedByConfigureGroup(availableFields)).map(([k, v]) => (
-            <TableRow key={k}>
-              <TableCell>{v.label}</TableCell>
-              <TableCell />
-              <TableCell>
-                <Checkbox
-                  checked={k in selectedFields}
-                  size="small"
-                  color="primary"
-                  onChange={(event) => handleToggleField(event, v)}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
+          {excludeDateFieldConfigs(getFieldEntriesSortedByConfigureGroup(availableFields)).map(
+            ([fieldName, fieldConfig]) => (
+              <TableRow key={fieldName}>
+                <TableCell>{fieldConfig.label}</TableCell>
+                {fieldConfig.type === 'string' ? (
+                  <TableCell>
+                    <Checkbox
+                      checked={fieldName in selectedFacets}
+                      size="small"
+                      color="primary"
+                      onChange={(event) => handleToggleFacet(event, fieldConfig)}
+                    />
+                  </TableCell>
+                ) : (
+                  <TableCell />
+                )}
+                <TableCell>
+                  <Checkbox
+                    checked={fieldName in selectedFields}
+                    size="small"
+                    color="primary"
+                    onChange={(event) => handleToggleField(event, fieldConfig)}
+                  />
+                </TableCell>
+              </TableRow>
+            ),
+          )}
         </TableBody>
       </Table>
     </TableContainer>
