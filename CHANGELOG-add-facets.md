@@ -1,0 +1,1 @@
+- Enable users to configure facets for string type fields in search ui revision.
