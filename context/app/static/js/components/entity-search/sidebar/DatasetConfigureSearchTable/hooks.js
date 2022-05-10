@@ -61,6 +61,7 @@ function useFieldGroups() {
 
 function buildFieldConfigs(fieldNames) {
   return fieldNames.reduce((acc, fieldName) => {
+    // Version must be removed before creating field configs because it does not have a type defined in ingest-validation-tools docs.
     const excludedFieldNames = ['version'];
     if (excludedFieldNames.includes(fieldName)) {
       return acc;
