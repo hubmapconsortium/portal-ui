@@ -1,6 +1,6 @@
-import { getFieldEntriesSortedByConfigureGroup } from './utils';
+import { excludeDateFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
 
-test('should sort by configure group with general on type then alphabetically then field name alphabetically', () => {
+test('getFieldEntriesSortedByConfigureGroup should sort by configure group with general on type then alphabetically then field name alphabetically', () => {
   const map = {
     assay_type: { label: 'assay_type', configureGroup: 'Dataset Metadata' },
     description: { label: 'description', configureGroup: 'Dataset Metadata' },
@@ -20,4 +20,13 @@ test('should sort by configure group with general on type then alphabetically th
     ['sex', { label: 'sex', configureGroup: 'Donor Metadata' }],
     ['vital_state', { label: 'vital_state', configureGroup: 'Sample Metadata' }],
   ]);
+});
+
+test('excludeDateFieldConfigs should remove field configs with date or datetime types', () => {
+  const fieldConfigEntries = [
+    ['start_date', { type: 'date' }],
+    ['name', { type: 'string' }],
+    ['end_date', { type: 'datetime' }],
+  ];
+  expect(excludeDateFieldConfigs(fieldConfigEntries)).toEqual([['name', { type: 'string' }]]);
 });
