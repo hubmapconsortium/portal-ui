@@ -1,6 +1,6 @@
 import { excludeDateFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
 
-test('getFieldEntriesSortedByConfigureGroupshould sort by configure group with general on type then alphabetically then field name alphabetically', () => {
+test('getFieldEntriesSortedByConfigureGroup should sort by configure group with general on type then alphabetically then field name alphabetically', () => {
   const map = {
     assay_type: { label: 'assay_type', configureGroup: 'Dataset Metadata' },
     description: { label: 'description', configureGroup: 'Dataset Metadata' },
