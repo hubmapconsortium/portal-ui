@@ -100,9 +100,10 @@ def login():
     except Exception as e:
         if not workspaces_post_resp.ok:
             current_app.logger.error(
-                f'Workspaces auth failed: {workspaces_post_resp.status_code} {workspaces_post_resp.text[:100]}')
+                'Workspaces auth failed: '
+                f'{workspaces_post_resp.status_code} {workspaces_post_resp.text[:100]}')
         else:
-            current_app.logger.error('Workspaces auth token read failed: {e}')
+            current_app.logger.error(f'Workspaces auth token read failed: {e}')
         workspaces_token = None
 
     user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
