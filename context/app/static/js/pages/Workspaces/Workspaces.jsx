@@ -21,7 +21,8 @@ function Services() {
           view saved workspaces or to begin a new workspace.
         </Description>
       ) : (
-        'TODO'
+        // eslint-disable-next-line no-undef
+        `TODO: Use token "${workspaces_token}" with "${endpoints.workspacesEndpoint}"`
       )}
     </>
   );

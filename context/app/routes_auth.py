@@ -87,13 +87,6 @@ def login():
     workspaces_post_resp = requests.post(
         workspaces_post_url,
         data=workspaces_post_data)
-    # TODO: Before merging, when this is stable, just inline it to be concise.
-    #
-    # print('workspaces URL:', workspaces_post_url)
-    # print('workspaces request:', workspaces_post_data)
-    # print('workspaces status:', workspaces_post_resp.status_code)
-    # from pathlib import Path
-    # Path('/tmp/error.html').write_text(workspaces_post_resp.text)
 
     try:
         workspaces_token = workspaces_post_resp.json()['token']

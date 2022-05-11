@@ -96,7 +96,8 @@ def create_app(testing=False):
         return {
             'is_authenticated': session.get('is_authenticated'),
             'groups_token': session.get('groups_token'),
-            'user_email': session.get('user_email')
+            'user_email': session.get('user_email'),
+            'workspaces_token': session.get('workspaces_token'),
         }
 
     @app.before_request
@@ -105,7 +106,8 @@ def create_app(testing=False):
             session.update(
                 groups_token='',
                 user_email='',
-                is_authenticated=False)
+                is_authenticated=False,
+                workspaces_token='')
 
     return app
 
