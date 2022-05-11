@@ -4,8 +4,9 @@ import { AppContext } from 'js/components/Providers';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import Description from 'js/shared-styles/sections/Description';
 import { LightBlueLink } from 'js/shared-styles/Links';
+import WorkspacesList from 'js/components/workspaces/WorkspacesList';
 
-function Services() {
+function Workspaces() {
   const endpoints = useContext(AppContext);
   // eslint-disable-next-line no-console
   console.log(`TODO: Use ${endpoints.workspacesEndpoint}`);
@@ -21,11 +22,20 @@ function Services() {
           view saved workspaces or to begin a new workspace.
         </Description>
       ) : (
-        // eslint-disable-next-line no-undef
-        `TODO: Use token "${workspaces_token}" with "${endpoints.workspacesEndpoint}"`
+        <>
+          <Description padding="20px">
+            {/*
+              TODO: Add links below.
+              TODO: Not all of these entry points will be functional on first release. Update text accordingly.
+            */}
+            Workspaces are provided through Jupyter notebooks. Navigate to a dataset, collection, dataset search or the
+            My Lists page to begin a new workspace.
+          </Description>
+          <WorkspacesList />
+        </>
       )}
     </>
   );
 }
 
-export default Services;
+export default Workspaces;
