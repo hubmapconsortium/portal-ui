@@ -17,8 +17,7 @@ function getSiteId(location) {
   }
 }
 
-function MatomoProviderWrapper(props) {
-  const { children } = props;
+function MatomoProviderWrapper({ children }) {
 
   const instance = createInstance({
     urlBase: 'https://hubmapconsortium.matomo.cloud/',
