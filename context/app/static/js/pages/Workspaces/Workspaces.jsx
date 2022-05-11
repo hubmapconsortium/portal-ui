@@ -14,10 +14,15 @@ function Services() {
       <SectionHeader variant="h1" component="h1">
         My Workspaces
       </SectionHeader>
-      <Description padding="20px">
-        The workspaces feature is only available if logged in. <LightBlueLink href="/login">Log in</LightBlueLink> to
-        view saved workspaces or to begin a new workspace.
-      </Description>
+      {/* eslint-disable-next-line no-undef */}
+      {!isAuthenticated ? (
+        <Description padding="20px">
+          The workspaces feature is only available if logged in. <LightBlueLink href="/login">Log in</LightBlueLink> to
+          view saved workspaces or to begin a new workspace.
+        </Description>
+      ) : (
+        'TODO'
+      )}
     </>
   );
 }
