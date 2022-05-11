@@ -8,9 +8,25 @@ import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { useConfigureSearch } from './hooks';
 
 function ConfigureSearch() {
-  const { dialogIsOpen, handleOpen, handleClose, handleSave, selectedFields, handleToggleField } = useConfigureSearch();
+  const {
+    dialogIsOpen,
+    handleOpen,
+    handleClose,
+    handleSave,
+    selectedFields,
+    handleToggleField,
+    selectedFacets,
+    handleToggleFacet,
+  } = useConfigureSearch();
 
   const { entityType } = useStore();
+
+  const configureSearchTableProps = {
+    selectedFields,
+    selectedFacets,
+    handleToggleField,
+    handleToggleFacet,
+  };
 
   return (
     <>
@@ -25,9 +41,9 @@ function ConfigureSearch() {
         maxWidth="md"
         content={
           entityType === 'dataset' ? (
-            <DatasetConfigureSearchTable selectedFields={selectedFields} handleToggleField={handleToggleField} />
+            <DatasetConfigureSearchTable {...configureSearchTableProps} />
           ) : (
-            <DonorSampleConfigureSearchTable selectedFields={selectedFields} handleToggleField={handleToggleField} />
+            <DonorSampleConfigureSearchTable {...configureSearchTableProps} />
           )
         }
         actions={

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
 
 import { StyledAccordionSummary } from 'js/components/searchPage/filters/style';
 
@@ -19,4 +20,8 @@ const InnerAccordionSummary = styled(StyledAccordionSummary)`
   margin: 0;
 `;
 
-export { InnerAccordionDetails, InnerAccordionSummary };
+const StyledTypography = styled(Typography)`
+  word-break: break-word;
+`;
+
+export { InnerAccordionDetails, InnerAccordionSummary, StyledTypography };
