@@ -20,9 +20,9 @@ function App(props) {
   ReactGA.initialize('UA-133341631-3');
 
   return (
-    // groups_token is injected as a global in the flask template.
+    // Token are injected as globals in the flask template.
     // eslint-disable-next-line no-undef
-    <Providers endpoints={endpoints} groupsToken={groups_token}>
+    <Providers endpoints={endpoints} groupsToken={groups_token} workspacesToken={workspaces_token}>
       <Header />
       {globalAlertMd && (
         <FlexContainer>
