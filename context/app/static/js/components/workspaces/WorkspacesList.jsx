@@ -57,29 +57,63 @@ function useWorkspacesList() {
   return { workspacesList };
 }
 
-function handleDelete() {
-  // eslint-disable-next-line no-console
-  console.log('TODO');
-}
-
-function handleCreate() {
-  // eslint-disable-next-line no-console
-  console.log('TODO');
-}
-
 function WorkspacesList() {
   const endpoints = useContext(AppContext);
   const { workspacesList } = useWorkspacesList();
+
+  async function handleDelete() {
+    // TODO: Put up modal and get user input.
+    // TODO: Update workspacesList
+    // Waiting on delete to be documented:
+    // https://github.com/hubmapconsortium/user_workspaces_server/issues/36
+  }
+
+  async function handleCreate() {
+    // TODO: Put up modal and get user input.
+    // TODO: Update workspacesList
+
+    // TODO: Pull from context:
+    // eslint-disable-next-line no-undef
+    const workspacesToken = workspaces_token;
+
+    await fetch(`${endpoints.workspacesEndpoint}/workspaces`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'UWS-Authorization': `Token ${workspacesToken}`,
+      },
+      body: JSON.stringify({
+        name: 'workspace_name',
+        description: 'workspace_description',
+        workspace_details: {
+          symlinks: [
+            {
+              name: 'inputs/Symlink_1',
+              source_path: '/bin/',
+              dataset_uuid: '',
+            },
+          ],
+          files: [
+            {
+              name: 'jupyter_notebooks/test.ipynb',
+              content: 'TODO',
+            },
+          ],
+        },
+      }),
+    });
+  }
+
   return (
     <>
       <SeparatedFlexRow>
-        <Typography variant="subtitle1">## Workspaces</Typography>
+        <Typography variant="subtitle1">[TODO: Count] Workspaces</Typography>
         <FlexBottom>
-          <StyledButton>
-            <DeleteIcon color="primary" onClick={handleDelete} />
+          <StyledButton onClick={handleDelete}>
+            <DeleteIcon color="primary" />
           </StyledButton>
-          <StyledButton>
-            <AddIcon color="primary" onClick={handleCreate} />
+          <StyledButton onClick={handleCreate}>
+            <AddIcon color="primary" />
           </StyledButton>
         </FlexBottom>
       </SeparatedFlexRow>
