@@ -93,6 +93,19 @@ function MetadataMenu({ type, analyticsCategory }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
+        {/* eslint-disable-next-line no-undef */}
+        {isAuthenticated && (
+          // eslint-disable-next-line no-console
+          <MenuItem onClick={() => console.log('TODO')}>
+            Workspace
+            <SecondaryBackgroundTooltip
+              title="Create a new HuBMAP workspace and load the load the notebook into it."
+              placement="bottom-start"
+            >
+              <StyledInfoIcon color="primary" />
+            </SecondaryBackgroundTooltip>
+          </MenuItem>
+        )}
       </DropdownMenu>
     </>
   );
