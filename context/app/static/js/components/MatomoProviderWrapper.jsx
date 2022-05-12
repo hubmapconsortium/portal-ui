@@ -18,7 +18,6 @@ function getSiteId(location) {
 }
 
 function MatomoProviderWrapper({ children }) {
-
   const instance = createInstance({
     urlBase: 'https://hubmapconsortium.matomo.cloud/',
     // eslint-disable-next-line no-restricted-globals
