@@ -50,6 +50,9 @@ function MetadataMenu({ type, analyticsCategory }) {
 
   const menuID = 'metadata-menu';
 
+  // eslint-disable-next-line no-undef
+  const workspacesDisabled = !isAuthenticated;
+
   return (
     <>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
@@ -93,19 +96,21 @@ function MetadataMenu({ type, analyticsCategory }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
-        {/* eslint-disable-next-line no-undef */}
-        {isAuthenticated && (
-          // eslint-disable-next-line no-console
-          <MenuItem onClick={() => console.log('TODO')}>
-            Workspace
-            <SecondaryBackgroundTooltip
-              title="Create a new HuBMAP workspace and load the load the notebook into it."
-              placement="bottom-start"
-            >
-              <StyledInfoIcon color="primary" />
-            </SecondaryBackgroundTooltip>
-          </MenuItem>
-        )}
+        <MenuItem
+          disabled={workspacesDisabled}
+          onClick={() => {
+            // eslint-disable-next-line no-console
+            console.log('TODO');
+          }}
+        >
+          Workspace
+          <SecondaryBackgroundTooltip
+            title="Create a new HuBMAP workspace and load the load the notebook into it."
+            placement="bottom-start"
+          >
+            <StyledInfoIcon color="primary" />
+          </SecondaryBackgroundTooltip>
+        </MenuItem>
       </DropdownMenu>
     </>
   );
