@@ -8,6 +8,7 @@ import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 
 import { SeparatedFlexRow, FlexBottom } from './style';
+import { createNotebookWorkspace } from './utils';
 
 // TODO: Copy-and-paste from SummaryData/style
 const StyledButton = styled(WhiteBackgroundIconButton)`
@@ -76,31 +77,12 @@ function WorkspacesList() {
     // eslint-disable-next-line no-undef
     const workspacesToken = workspaces_token;
 
-    await fetch(`${endpoints.workspacesEndpoint}/workspaces`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'UWS-Authorization': `Token ${workspacesToken}`,
-      },
-      body: JSON.stringify({
-        name: 'workspace_name',
-        description: 'workspace_description',
-        workspace_details: {
-          symlinks: [
-            {
-              name: 'inputs/Symlink_1',
-              source_path: '/bin/',
-              dataset_uuid: '',
-            },
-          ],
-          files: [
-            {
-              name: 'jupyter_notebooks/test.ipynb',
-              content: 'TODO',
-            },
-          ],
-        },
-      }),
+    createNotebookWorkspace({
+      workspacesEndpoint: endpoints.workspacesEndpoint,
+      workspacesToken,
+      workspaceName: 'Workspace Timestamp',
+      workspaceDescription: 'TODO: description',
+      notebookContent: 'TODO',
     });
   }
 
