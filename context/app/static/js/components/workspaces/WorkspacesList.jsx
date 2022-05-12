@@ -11,12 +11,15 @@ function useWorkspacesList() {
   // TODO: isLoading:
   // const [isLoading, setIsLoading] = useState(true);
 
-  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
+  const { workspacesEndpoint } = useContext(AppContext);
 
+  // TODO: Pull from context:
+  // eslint-disable-next-line no-undef
+  const workspacesToken = workspaces_token;
   useEffect(() => {
     async function getAndSetWorkspacesList() {
       const response = await fetch(`${workspacesEndpoint}/workspaces`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'UWS-Authorization': `Token ${workspacesToken}`,
