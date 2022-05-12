@@ -1,10 +1,18 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import styled from 'styled-components';
 
 import { AppContext } from 'js/components/Providers';
+import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 
 import { SeparatedFlexRow, FlexBottom } from './style';
+
+// TODO: Copy-and-paste from SummaryData/style
+const StyledButton = styled(WhiteBackgroundIconButton)`
+  height: 36px;
+`;
 
 function useWorkspacesList() {
   const [workspacesList, setWorkspacesList] = useState([]);
@@ -49,6 +57,16 @@ function useWorkspacesList() {
   return { workspacesList };
 }
 
+function handleDelete() {
+  // eslint-disable-next-line no-console
+  console.log('TODO');
+}
+
+function handleCreate() {
+  // eslint-disable-next-line no-console
+  console.log('TODO');
+}
+
 function WorkspacesList() {
   const endpoints = useContext(AppContext);
   const { workspacesList } = useWorkspacesList();
@@ -56,7 +74,14 @@ function WorkspacesList() {
     <>
       <SeparatedFlexRow>
         <Typography variant="subtitle1">## Workspaces</Typography>
-        <FlexBottom>TODO</FlexBottom>
+        <FlexBottom>
+          <StyledButton>
+            <DeleteIcon color="primary" onClick={handleDelete} />
+          </StyledButton>
+          <StyledButton>
+            <AddIcon color="primary" onClick={handleCreate} />
+          </StyledButton>
+        </FlexBottom>
       </SeparatedFlexRow>
       <Paper>
         {
