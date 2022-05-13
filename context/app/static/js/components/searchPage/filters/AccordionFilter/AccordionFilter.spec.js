@@ -2,7 +2,7 @@
 import React from 'react';
 import { RefinementListFilter, RangeFilter, CheckboxFilter, HierarchicalMenuFilter } from 'searchkit';
 import { render, screen, fireEvent } from 'test-utils/functions';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 
 import HierarchicalFilterItem from 'js/components/searchPage/filters/HierarchicalFilterItem';
 import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
@@ -53,7 +53,7 @@ test('withAnalyticsEvent passes onClick with ga event and original onClick', () 
   render(<UpdatedComponent onClick={originalOnClick} somethingElse="World" />);
 
   fireEvent.click(screen.getByText('Click me!'));
-  expect(ReactGA.event).toHaveBeenCalledTimes(1);
+  expect(trackEvent).toHaveBeenCalledTimes(1);
   expect(originalOnClick).toHaveBeenCalledTimes(1);
   expect(screen.getByText('World')).toBeInTheDocument();
 });

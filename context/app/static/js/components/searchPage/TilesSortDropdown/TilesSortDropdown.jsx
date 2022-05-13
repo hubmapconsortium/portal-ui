@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
@@ -29,7 +29,7 @@ function TilesSortDropdown(props) {
     // Sort everything in ascending order except for last modified
     const item = pair[0].field === 'mapped_last_modified_timestamp.keyword' ? pair[0] : pair[1];
     toggleItem(item.key);
-    ReactGA.event({
+    trackEvent({
       category: analyticsCategory,
       action: `Sort Tile View`,
       label: `${pair[0].label} ${pair[0].field === 'mapped_last_modified_timestamp.keyword' ? 'desc' : 'asc'}`,

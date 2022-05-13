@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 import { getCLS, getFID, getLCP, getTTFB } from 'web-vitals';
 
 // copy-and-paste from https://github.com/GoogleChrome/web-vitals#using-analyticsjs
 function sendVitalsToGA({ name, delta, id }) {
-  ReactGA.event({
+  trackEvent({
     category: 'Web Vitals',
     action: name === 'CLS' ? 'CLS * 1000' : name,
     // From web-vitals: The `id` value will be unique to the current page load. When sending

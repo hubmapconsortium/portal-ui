@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 
 function useSendUUIDEvent(entity_type, uuid) {
   useEffect(() => {
-    ReactGA.event({
+    trackEvent({
       category: entity_type,
       action: 'Visited',
       label: uuid,
