@@ -9,7 +9,7 @@ import MaintenanceHeader from './MaintenanceHeader';
 function App() {
   ReactGA.initialize('UA-133341631-3');
   ReactGA.pageview('/maintenance');
-  const { trackPageView } = useMatomo();
+  const { trackPageView } = useMatomo(); // TODO: This is outside provider... probably won't work?
   trackPageView({ href: '/maintenance' });
   return (
     <Providers>
