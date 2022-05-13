@@ -1,0 +1,1 @@
+- Matomo has more specialized handlers for links and searches, so use them.
