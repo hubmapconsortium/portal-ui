@@ -38,7 +38,7 @@ const tracker = new MatomoTracker({
   // }
 });
 
-ReactGA.initialize('UA-133341631-3');
+ReactGA.initialize('UA-133341631-3', { testMode: process.env.NODE_ENV === 'test' });
 
 function trackPageView(path) {
   tracker.trackPageView({ href: path });
