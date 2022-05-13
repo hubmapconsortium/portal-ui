@@ -3,7 +3,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { getCLS, getFID, getLCP, getTTFB } from 'web-vitals';
 
 // copy-and-paste from https://github.com/GoogleChrome/web-vitals#using-analyticsjs
-function sendVitalsToGA({ name, delta, id }) {
+function sendVitals({ name, delta, id }) {
   trackEvent({
     category: 'Web Vitals',
     action: name === 'CLS' ? 'CLS * 1000' : name,
@@ -22,10 +22,10 @@ function sendVitalsToGA({ name, delta, id }) {
 
 function useSendWebVitals() {
   useEffect(() => {
-    getTTFB(sendVitalsToGA);
-    getCLS(sendVitalsToGA);
-    getFID(sendVitalsToGA);
-    getLCP(sendVitalsToGA);
+    getTTFB(sendVitals);
+    getCLS(sendVitals);
+    getFID(sendVitals);
+    getLCP(sendVitals);
   }, []);
 }
 
