@@ -47,7 +47,7 @@ function trackPageView(path) {
 
 function trackEvent(event) {
   tracker.trackEvent(event);
-  ReactGA.trackEvent(event);
+  ReactGA.event(event);
 }
 
 // function trackLink(href) {
