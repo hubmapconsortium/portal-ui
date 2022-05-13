@@ -6,18 +6,26 @@ import Footer from 'js/components/Footer';
 import Error from 'js/pages/Error';
 import MaintenanceHeader from './MaintenanceHeader';
 
-function App() {
+function MaintenancePage() {
   ReactGA.initialize('UA-133341631-3');
   ReactGA.pageview('/maintenance');
-  const { trackPageView } = useMatomo(); // TODO: This is outside provider... probably won't work?
+  const { trackPageView } = useMatomo();
   trackPageView({ href: '/maintenance' });
   return (
-    <Providers>
+    <>
       <MaintenanceHeader />
       <div className="main-content">
         <Error isMaintenancePage />
       </div>
       <Footer isMaintenancePage />
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Providers>
+      <MaintenancePage />
     </Providers>
   );
 }
