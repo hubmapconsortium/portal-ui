@@ -62,10 +62,15 @@ function trackLink(href) {
   });
 }
 
-// function trackSiteSearch(keyword) {
-//   tracker.trackLink({
-//     keyword: 'test',
-//   })
-// }
+function trackSiteSearch(keyword) {
+  tracker.trackSiteSearch({
+    keyword,
+  });
+  ReactGA.trackEvent({
+    // category: analyticsCategory,
+    action: 'Free Text Search',
+    label: keyword,
+  });
+}
 
-export { trackPageView, trackEvent, trackLink };
+export { trackPageView, trackEvent, trackLink, trackSiteSearch };
