@@ -35,6 +35,7 @@ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.1
 ```
 {
 "@babel/runtime": "^7.10.4",
+"@datapunt/matomo-tracker-react": "^0.5.1",
 "@hms-dbmi-bgm/react-workflow-viz": "^0.1.4",
 "@material-ui/core": "^4.9.4",
 "@material-ui/icons": "^4.9.1",
