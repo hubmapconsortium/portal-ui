@@ -50,11 +50,17 @@ function trackEvent(event) {
   ReactGA.trackEvent(event);
 }
 
-// function trackLink(href) {
-//   tracker.trackLink({
-//     href: 'https://link-to-other-website.org',
-//   })
-// }
+function trackLink(href) {
+  tracker.trackLink({
+    href,
+  });
+  ReactGA.trackEvent({
+    category: 'Outbound Link',
+    action: 'Clicked',
+    label: href,
+    nonInteraction: false,
+  });
+}
 
 // function trackSiteSearch(keyword) {
 //   tracker.trackLink({
@@ -62,4 +68,4 @@ function trackEvent(event) {
 //   })
 // }
 
-export { trackPageView, trackEvent };
+export { trackPageView, trackEvent, trackLink };
