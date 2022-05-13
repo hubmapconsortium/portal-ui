@@ -1,5 +1,4 @@
 import MatomoTracker from '@datapunt/matomo-tracker-js';
-import ReactGA from 'react-ga';
 
 function getSiteId(location) {
   const { host } = location;
@@ -38,38 +37,23 @@ const tracker = new MatomoTracker({
   // }
 });
 
-ReactGA.initialize('UA-133341631-3');
-
 function trackPageView(path) {
   tracker.trackPageView({ href: path });
-  ReactGA.pageview(path);
 }
 
 function trackEvent(event) {
   tracker.trackEvent(event);
-  ReactGA.trackEvent(event);
 }
 
 function trackLink(href) {
   tracker.trackLink({
     href,
   });
-  ReactGA.trackEvent({
-    category: 'Outbound Link',
-    action: 'Clicked',
-    label: href,
-    nonInteraction: false,
-  });
 }
 
 function trackSiteSearch(keyword) {
   tracker.trackSiteSearch({
     keyword,
-  });
-  ReactGA.trackEvent({
-    // category: analyticsCategory,
-    action: 'Free Text Search',
-    label: keyword,
   });
 }
 
