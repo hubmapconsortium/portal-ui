@@ -1,1 +1,0 @@
-- Remove date fields from configure search table in search revision ui.

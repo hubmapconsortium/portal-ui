@@ -1,3 +1,13 @@
+## v0.44.0 - 2022-05-13
+
+- Enable users to configure facets for string type fields in search ui revision.
+- Fix how the search results accesses sample metadata from elasticsearch.
+- Make query-portal-logs script executable.
+- Use Matomo React integration.
+- Remove date fields from configure search table in search revision ui.
+- Remove vestigial meta tag and CSS import.
+
+
 ## v0.43.0 - 2022-05-05
 
 - Add form to allow users to filter configure search table by data type.
