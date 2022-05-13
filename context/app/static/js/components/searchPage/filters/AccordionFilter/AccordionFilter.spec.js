@@ -8,7 +8,7 @@ import HierarchicalFilterItem from 'js/components/searchPage/filters/Hierarchica
 import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
 import AccordionFilter, { withAnalyticsEvent, getFilter } from './AccordionFilter';
 
-jest.mock('react-ga');
+jest.mock('js/helpers/trackers');
 
 test.each([
   ['AccordionListFilter', { Filter: RefinementListFilter, itemComponent: CheckboxFilterItem }],
@@ -49,7 +49,7 @@ test('withAnalyticsEvent passes onClick with ga event and original onClick', () 
     );
   }
 
-  const UpdatedComponent = withAnalyticsEvent(originalComponent, 'Click me!');
+  const UpdatedComponent = withAnalyticsEvent(originalComponent, 'Click me!', 'category required');
   render(<UpdatedComponent onClick={originalOnClick} somethingElse="World" />);
 
   fireEvent.click(screen.getByText('Click me!'));
