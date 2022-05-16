@@ -63,7 +63,7 @@ def details(type, uuid):
             'vis_lifted_uuid': conf_cells_uuid.vis_lifted_uuid
         })
 
-    template = 'pages/react-content.html'
+    template = 'base-pages/react-content.html'
     return render_template(
         template,
         type=type,
