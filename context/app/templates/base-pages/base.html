@@ -12,8 +12,8 @@
   <title>{% block title_text %}{{ title }}{% endblock %}{{' | HuBMAP' if not is_home_page}}</title>
   <script>
     const isAuthenticated = {{ 'true' if is_authenticated else 'false' }};
-    const groups_token = '{{ groups_token }}';
-    const user_email = '{{ user_email }}';
+    const groupsToken = '{{ groups_token }}';
+    const userEmail = '{{ user_email }}';
   </script>
 </head>
 
