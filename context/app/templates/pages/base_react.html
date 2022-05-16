@@ -26,9 +26,9 @@
       {% endblock %}
     </section>
 
-    {% block extra_scripts %}
-      <script src="{{ static_url_for('static', filename='main.js') }}"></script>
-      <script src="{{ static_url_for('static', filename='vendors.js') }}"></script>
-    {% endblock %}
+    <script src="{{ static_url_for('static', filename='main.js') }}"></script>
+    <script src="{{ static_url_for('static', filename='vendors.js') }}"></script>
+    
+    {% block extra_scripts %}{% endblock %}
   </body>
 </html>
