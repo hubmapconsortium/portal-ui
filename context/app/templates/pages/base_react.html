@@ -18,13 +18,10 @@
 
   <body>
     <div id="react-content"></div>
-    <section>
-      {% block content %}
-      <script>
-        const flaskData = {{ flask_data | tojson }};
-      </script>
-      {% endblock %}
-    </section>
+
+    <script>
+      const flaskData = {{ flask_data | tojson }};
+    </script>
 
     <script src="{{ static_url_for('static', filename='main.js') }}"></script>
     <script src="{{ static_url_for('static', filename='vendors.js') }}"></script>
