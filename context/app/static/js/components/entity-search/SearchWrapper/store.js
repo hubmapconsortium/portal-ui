@@ -14,6 +14,7 @@ const createStore = ({ initialFields, initialFacets, fields, facets, filters, en
     filters,
     entityType,
     setFields: (selectedFields) => set({ fields: selectedFields }),
+    setFacets: (selectedFacets) => set({ facets: selectedFacets }),
   }));
 
 export { createStore, Provider, useStore };

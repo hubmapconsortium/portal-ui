@@ -5,7 +5,7 @@ import DataTypesSelect from 'js/components/entity-search/sidebar/DataTypesSelect
 import { Flex } from './style';
 import { useDatasetConfigureSearchTable } from './hooks';
 
-function DatasetConfigureSearchTable({ selectedFields, handleToggleField }) {
+function DatasetConfigureSearchTable(props) {
   const {
     dataTypesToFieldsMap,
     handleToggleDataType,
@@ -22,11 +22,7 @@ function DatasetConfigureSearchTable({ selectedFields, handleToggleField }) {
         groups={groups}
         handleToggleGroup={handleToggleGroup}
       />
-      <ConfigureSearchTable
-        selectedFields={selectedFields}
-        handleToggleField={handleToggleField}
-        availableFields={availableFieldConfigs}
-      />
+      <ConfigureSearchTable {...props} availableFields={availableFieldConfigs} />
     </Flex>
   );
 }

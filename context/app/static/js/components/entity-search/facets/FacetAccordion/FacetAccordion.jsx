@@ -1,16 +1,15 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 
 import { StyledAccordion, StyledExpandMoreIcon } from 'js/components/searchPage/filters/style';
-import { InnerAccordionDetails, InnerAccordionSummary } from './style';
+import { InnerAccordionDetails, InnerAccordionSummary, StyledTypography } from './style';
 
 function FacetAccordion({ label, identifier, children }) {
   return (
     <StyledAccordion key={identifier} defaultExpanded>
       <InnerAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
-        <Typography variant="subtitle2" color="textPrimary">
+        <StyledTypography variant="subtitle2" color="textPrimary">
           {label}
-        </Typography>
+        </StyledTypography>
       </InnerAccordionSummary>
       <InnerAccordionDetails id={identifier}>{children}</InnerAccordionDetails>
     </StyledAccordion>
