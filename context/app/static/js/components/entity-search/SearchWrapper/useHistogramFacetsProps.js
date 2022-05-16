@@ -72,9 +72,9 @@ function buildHistogramProps(fieldsStats) {
   }, {});
 }
 
-function useHistogramFieldsProps() {
+function useHistogramFacetsProps() {
   const fieldsStats = useNumericFieldsStats();
   return buildHistogramProps(fieldsStats);
 }
 
-export { useHistogramFieldsProps };
+export { useHistogramFacetsProps };
