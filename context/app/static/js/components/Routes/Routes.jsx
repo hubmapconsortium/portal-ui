@@ -32,7 +32,7 @@ const SampleSearch = lazy(() => import('js/pages/entity-search/SampleSearch'));
 const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'));
 
 function Routes(props) {
-  const { flaskData } = props;
+  const { flaskData, isAuthenticated } = props;
   const {
     entity,
     vitessce_conf,
@@ -55,7 +55,6 @@ function Routes(props) {
   useSetUrlBeforeLogin(url);
 
   if (errorCode !== undefined) {
-    // eslint-disable-next-line no-undef
     return <Error errorCode={errorCode} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
   }
 
@@ -103,7 +102,6 @@ function Routes(props) {
     );
   }
 
-  /* eslint-disable no-undef */
   if (urlPath.startsWith('/search')) {
     return (
       <Route>
@@ -151,7 +149,6 @@ function Routes(props) {
       </Route>
     );
   }
-  /* eslint-enable no-undef */
 
   if (urlPath.startsWith('/diversity')) {
     return (
