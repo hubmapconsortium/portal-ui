@@ -16,7 +16,7 @@ import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap } from './style';
 function HeaderContent({ anchorRef }) {
   const theme = useTheme();
   const shouldDisplayMenu = !useMediaQuery(theme.breakpoints.up('md'));
-  const { isAuthenticated, user_email } = useContext(AppContext);
+  const { isAuthenticated, userEmail } = useContext(AppContext);
   return (
     <>
       {shouldDisplayMenu && <Menu anchorRef={anchorRef} />}
@@ -53,7 +53,7 @@ function HeaderContent({ anchorRef }) {
         </>
       )}
       {shouldDisplayMenu && <Spacer />}
-      <LoginButton isAuthenticated={isAuthenticated} user_email={user_email} />
+      <LoginButton isAuthenticated={isAuthenticated} userEmail={userEmail} />
     </>
   );
 }
