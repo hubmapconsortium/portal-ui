@@ -1,6 +1,7 @@
-import React, { lazy } from 'react';
+import React, { lazy, useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import { AppContext } from 'js/components/Providers';
 import Error from 'js/pages/Error';
 import Route from './Route';
 import useSendPageView from './useSendPageView';
@@ -32,7 +33,7 @@ const SampleSearch = lazy(() => import('js/pages/entity-search/SampleSearch'));
 const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'));
 
 function Routes(props) {
-  const { flaskData, isAuthenticated } = props;
+  const { flaskData } = props;
   const {
     entity,
     vitessce_conf,
@@ -53,6 +54,8 @@ function Routes(props) {
 
   useSendPageView(urlPath);
   useSetUrlBeforeLogin(url);
+
+  const { isAuthenticated } = useContext(AppContext);
 
   if (errorCode !== undefined) {
     return <Error errorCode={errorCode} urlPath={urlPath} isAuthenticated={isAuthenticated} />;

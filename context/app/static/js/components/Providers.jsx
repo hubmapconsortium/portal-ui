@@ -18,7 +18,7 @@ const generateClassName = createGenerateClassName({
 const AppContext = React.createContext({});
 
 function Providers(props) {
-  const { endpoints, groupsToken, children } = props;
+  const { endpoints, groupsToken, isAuthenticated, userEmail, children } = props;
   // injectFirst ensures styled-components takes priority over mui for styling
   return (
     <MatomoProviderWrapper>
@@ -26,7 +26,7 @@ function Providers(props) {
         <GlobalFonts />
         <MuiThemeProvider theme={theme}>
           <ThemeProvider theme={theme}>
-            <AppContext.Provider value={{ groupsToken, ...endpoints }}>
+            <AppContext.Provider value={{ groupsToken, isAuthenticated, userEmail, ...endpoints }}>
               <CssBaseline />
               <GlobalStyles />
               {children}

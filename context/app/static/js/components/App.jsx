@@ -14,14 +14,14 @@ import { StyledAlert, FlexContainer } from './style';
 import 'js/components/searchPage/Search.scss';
 
 function App(props) {
-  const { flaskData, groupsToken, isAuthenticated } = props;
+  const { flaskData, groupsToken, isAuthenticated, userEmail } = props;
   const { endpoints, globalAlertMd } = flaskData;
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
   ReactGA.initialize('UA-133341631-3');
 
   return (
-    <Providers endpoints={endpoints} groupsToken={groupsToken}>
+    <Providers endpoints={endpoints} groupsToken={groupsToken} isAuthenticated={isAuthenticated} userEmail={userEmail}>
       <Header />
       {globalAlertMd && (
         <FlexContainer>
@@ -31,7 +31,7 @@ function App(props) {
           </StyledAlert>
         </FlexContainer>
       )}
-      <Routes flaskData={flaskData} isAuthenticated={isAuthenticated} />
+      <Routes flaskData={flaskData} />
       <Footer />
     </Providers>
   );
