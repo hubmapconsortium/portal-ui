@@ -4,6 +4,15 @@ import metadataFieldtoTypeMap from 'metadata-field-types';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { capitalizeString } from 'js/helpers/functions';
 import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumentPaths';
+import histogramFacetsProps from 'js/components/entity-search/SearchWrapper/histogramFacetsProps';
+
+function getHistogramFacetProps(fieldName) {
+  if (!(fieldName in histogramFacetsProps)) {
+    return {};
+  }
+
+  return histogramFacetsProps[fieldName];
+}
 
 // appends '.keyword' to field name for elasticsearch string fields
 function appendKeywordToFieldName({ fieldName, type }) {
@@ -52,6 +61,7 @@ function buildFieldConfig({
       type,
       facetGroup,
       configureGroup,
+      ...getHistogramFacetProps(fieldName),
       ...rest,
     },
   };
