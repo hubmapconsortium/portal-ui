@@ -31,7 +31,7 @@ def service_status():
 @blueprint.route('/ccf-eui')
 def ccf_eui():
     return render_template(
-        'base-pages/ccf-eui.html',
+        'special-pages/ccf-eui.html',
         config=current_app.config,
         url_root=request.url_root,
         groups_token=(
@@ -141,7 +141,7 @@ def iframe_page(path):
         **get_default_flask_data()
     }
     return render_template(
-        'base-pages/organ.html' if path == 'organ' else 'base-pages/react-content.html',
+        'special-pages/organ.html' if path == 'organ' else 'base-pages/react-content.html',
         title=f'{path} iframe',
         flask_data=flask_data
     )
