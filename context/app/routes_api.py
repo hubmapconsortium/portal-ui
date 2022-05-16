@@ -65,7 +65,7 @@ def lineup(entity_type):
         'entities': entities
     }
     return render_template(
-        'pages/base_react.html',
+        'pages/react-content.html',
         flask_data=flask_data,
         title=f'Lineup {entity_type}'
     )

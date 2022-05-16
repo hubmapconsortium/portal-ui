@@ -9,7 +9,7 @@ flask_static_digest = FlaskStaticDigest()
 
 
 def render_react_error(code, title):
-    return render_template('pages/base_react.html',
+    return render_template('pages/react-content.html',
                            flask_data={'errorCode': code},
                            title=title), code
 

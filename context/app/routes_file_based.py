@@ -31,7 +31,7 @@ def preview_details_view(name):
         'vitessce_conf': preview_metadata.get('vitessce_conf')
     }
     return render_template(
-        'pages/base_react.html',
+        'pages/react-content.html',
         title='Preview',
         flask_data=flask_data
     )
@@ -46,7 +46,7 @@ def publication_index_view():
         'publications': publications
     }
     return render_template(
-        'pages/base_react.html',
+        'pages/react-content.html',
         title='Publications',
         flask_data=flask_data
     )
@@ -62,7 +62,7 @@ def publication_details_view(name):
         'markdown': metadata_content.content,
     }
     return render_template(
-        'pages/base_react.html',
+        'pages/react-content.html',
         title='Publication',
         flask_data=flask_data
     )
@@ -77,7 +77,7 @@ def organ_index_view():
         'organs': organs
     }
     return render_template(
-        'pages/base_react.html',
+        'pages/react-content.html',
         title='Organs',
         flask_data=flask_data
     )
@@ -92,7 +92,7 @@ def organ_details_view(name):
         'organ': organ
     }
     return render_template(
-        'pages/base_react.html',
+        'pages/react-content.html',
         title=organ['name'],
         flask_data=flask_data
     )
