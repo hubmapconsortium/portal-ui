@@ -32,7 +32,7 @@ function ConfigureSearchTable({
             ([fieldName, fieldConfig]) => (
               <TableRow key={fieldName}>
                 <TableCell>{fieldConfig.label}</TableCell>
-                {fieldConfig.type === 'string' ? (
+                {fieldConfig.type === 'string' || fieldConfig?.range ? (
                   <TableCell>
                     <Checkbox
                       checked={fieldName in selectedFacets}
