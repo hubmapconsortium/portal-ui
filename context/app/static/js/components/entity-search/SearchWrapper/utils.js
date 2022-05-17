@@ -109,17 +109,21 @@ function mergeObjects(objects) {
 }
 
 function getDonorMetadataFields(entityType) {
-  const labelPrefix = entityType === 'donor' ? '' : 'Donor ';
-
   return [
     createDonorFacet({
       fieldName: 'sex',
-      label: `${labelPrefix}Sex`,
+      entityType,
+    }),
+    createDonorFacet({
+      fieldName: 'age_value',
       entityType,
     }),
     createDonorFacet({
       fieldName: 'race',
-      label: `${labelPrefix}Race`,
+      entityType,
+    }),
+    createDonorFacet({
+      fieldName: 'body_mass_index_value',
       entityType,
     }),
   ];
@@ -156,20 +160,3 @@ export {
   createSearchkitFacet,
   createField,
 };
-
-/* 
-    const bmiField = 'body_mass_index_value';
-    const ageField = 'age_value';
-    {
-      field: `${pathPrefix}mapped_metadata.${ageField}`,
-      label: `${labelPrefix}Age`,
-      type: FILTER_TYPES.rangeSlider,
-      range: { start: 1, end: 100 },
-    },
-    {
-      field: `${pathPrefix}mapped_metadata.${bmiField}`,
-      title: `${labelPrefix}BMI`,
-      type: FILTER_TYPES.rangeSlider,
-      range: { start: 1, end: 50 },
-    },
-*/
