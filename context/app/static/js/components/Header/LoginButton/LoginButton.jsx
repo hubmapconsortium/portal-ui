@@ -6,9 +6,9 @@ import DropdownLink from '../DropdownLink';
 import { WhiteButton, TruncatedSpan } from './style';
 
 function LoginButton(props) {
-  const { isAuthenticated, user_email } = props;
+  const { isAuthenticated, userEmail } = props;
 
-  const displayName = user_email || 'User';
+  const displayName = userEmail || 'User';
 
   return isAuthenticated ? (
     <Dropdown title={<TruncatedSpan>{displayName}</TruncatedSpan>}>

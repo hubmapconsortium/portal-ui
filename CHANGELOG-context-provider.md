@@ -1,0 +1,1 @@
+- Avoid referencing global variables: Instead get everything from a context provider.

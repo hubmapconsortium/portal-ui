@@ -14,16 +14,14 @@ import { StyledAlert, FlexContainer } from './style';
 import 'js/components/searchPage/Search.scss';
 
 function App(props) {
-  const { flaskData } = props;
+  const { flaskData, groupsToken, isAuthenticated, userEmail } = props;
   const { endpoints, globalAlertMd } = flaskData;
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
   ReactGA.initialize('UA-133341631-3');
 
   return (
-    // groups_token is injected as a global in the flask template.
-    // eslint-disable-next-line no-undef
-    <Providers endpoints={endpoints} groupsToken={groups_token}>
+    <Providers endpoints={endpoints} groupsToken={groupsToken} isAuthenticated={isAuthenticated} userEmail={userEmail}>
       <Header />
       {globalAlertMd && (
         <FlexContainer>
