@@ -1,4 +1,4 @@
-import { RefinementSelectFacet } from '@searchkit/sdk';
+import { RefinementSelectFacet, RangeFacet } from '@searchkit/sdk';
 
 import metadataFieldtoTypeMap from 'metadata-field-types';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
@@ -11,7 +11,7 @@ function getHistogramFacetProps(fieldName) {
     return {};
   }
 
-  return histogramFacetsProps[fieldName];
+  return { range: histogramFacetsProps[fieldName] };
 }
 
 // appends '.keyword' to field name for elasticsearch string fields
@@ -125,11 +125,19 @@ function getDonorMetadataFields(entityType) {
   ];
 }
 
-function createSearchkitFacet({ field, identifier, label, ...rest }) {
-  return new RefinementSelectFacet({
+const typeToSearchKitFacetMap = {
+  integer: RangeFacet,
+  number: RangeFacet,
+  string: RefinementSelectFacet,
+};
+
+function createSearchkitFacet({ field, identifier, label, type, ...rest }) {
+  const Facet = typeToSearchKitFacetMap[type];
+  return new Facet({
     field,
     identifier,
     label,
+    type,
     multipleSelect: true,
     ...rest,
   });
