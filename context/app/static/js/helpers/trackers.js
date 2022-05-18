@@ -24,7 +24,7 @@ const tracker = new MatomoTracker({
   // userId: 'UID76903202', // optional, default value: `undefined`.
   // trackerUrl: 'https://LINK.TO.DOMAIN/tracking.php', // optional, default value: `${urlBase}matomo.php`
   // srcUrl: 'https://LINK.TO.DOMAIN/tracking.js', // optional, default value: `${urlBase}matomo.js`
-  // disabled: false, // optional, false by default. Makes all tracking calls no-ops if set to true.
+  disabled: process.env.NODE_ENV === 'test', // Tracking calls should be no-ops during tests.
   // heartBeat: { // optional, enabled by default
   //   active: true, // optional, default value: true
   //   seconds: 10 // optional, default value: `15
