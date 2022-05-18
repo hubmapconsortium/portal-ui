@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import Link from '@material-ui/core/Link';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+import { AppContext } from 'js/components/Providers';
 import Menu from '../Menu';
 import ResourceLinks from '../ResourceLinks';
 import Dropdown from '../Dropdown';
@@ -15,6 +16,7 @@ import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap } from './style';
 function HeaderContent({ anchorRef }) {
   const theme = useTheme();
   const shouldDisplayMenu = !useMediaQuery(theme.breakpoints.up('md'));
+  const { isAuthenticated, userEmail } = useContext(AppContext);
   return (
     <>
       {shouldDisplayMenu && <Menu anchorRef={anchorRef} />}
@@ -51,8 +53,7 @@ function HeaderContent({ anchorRef }) {
         </>
       )}
       {shouldDisplayMenu && <Spacer />}
-      {/* eslint-disable-next-line no-undef */}
-      <LoginButton isAuthenticated={isAuthenticated} user_email={user_email} />
+      <LoginButton isAuthenticated={isAuthenticated} userEmail={userEmail} />
     </>
   );
 }

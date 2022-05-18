@@ -12,13 +12,16 @@ import { setJsonLD } from './schema.org';
 //   console.warn('Schema validation errors', validation_errors);
 // }
 
+/* eslint-disable no-undef */
 ReactDOM.render(
-  // eslint-disable-next-line no-undef
-  window.location.pathname.startsWith('/iframe/') ? <Iframe flaskData={flaskData} /> : <App flaskData={flaskData} />,
+  window.location.pathname.startsWith('/iframe/') ? (
+    <Iframe flaskData={flaskData} />
+  ) : (
+    <App flaskData={flaskData} groupsToken={groupsToken} isAuthenticated={isAuthenticated} userEmail={userEmail} />
+  ),
   document.getElementById('react-content'),
 );
 
-/* eslint-disable no-undef */
 if (flaskData?.entity?.entity_type === 'Dataset') {
   setJsonLD(flaskData.entity);
 }

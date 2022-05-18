@@ -9,8 +9,8 @@ import ServiceStatusTable from 'js/components/ServiceStatusTable';
 import { LightBlueLink } from 'js/shared-styles/Links';
 
 function Services() {
-  const endpoints = useContext(AppContext);
-  const gatewayUrl = `${endpoints.gatewayEndpoint}/status.json`;
+  const appContext = useContext(AppContext);
+  const gatewayUrl = `${appContext.gatewayEndpoint}/status.json`;
   return (
     <>
       <SectionContainer>
@@ -27,7 +27,7 @@ function Services() {
         </Description>
       </SectionContainer>
       <Paper>
-        <ServiceStatusTable {...endpoints} />
+        <ServiceStatusTable {...appContext} />
       </Paper>
     </>
   );
