@@ -1,7 +1,7 @@
 import { buildNumericFacetsProps } from './hooks';
 
 describe('buildNumericFacetsProps', () => {
-  test('should append .keyword if type is string', () => {
+  test('builds numeric facets props given es aggs', () => {
     const fieldsStats = {
       a: {
         max: 99.5,
