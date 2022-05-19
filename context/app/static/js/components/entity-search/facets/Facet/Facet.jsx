@@ -1,7 +1,7 @@
 import React from 'react';
 
 import FacetAccordion from 'js/components/entity-search/facets/FacetAccordion';
-import { RangeSliderFacet } from 'js/components/entity-search/searchkit-modifications/RangeSliderFacet';
+import RangeSliderFacet from 'js/components/entity-search/searchkit-modifications/RangeSliderFacet';
 import SelectFacet from 'js/components/entity-search/facets/select/SelectFacet';
 
 const facetTypetoComponentMap = {

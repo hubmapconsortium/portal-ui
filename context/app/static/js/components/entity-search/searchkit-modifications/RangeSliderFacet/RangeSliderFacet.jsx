@@ -1,15 +1,17 @@
 // Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-elastic-ui/src/Facets/RangeSliderFacet/index.tsx
-// Modified RangeSliderFacet to customize appearance and optimize rerenders. 
-import React, { useEffect, useState } from 'react';
-import { EuiTitle, EuiDualRange, colorPalette } from '@elastic/eui';
+// Modified RangeSliderFacet to customize appearance and optimize rerenders.
+import React, { useState } from 'react';
+import { EuiDualRange } from '@elastic/eui';
 import { useSearchkit } from '@searchkit/client';
 import { useDebouncedCallback } from 'use-debounce';
 import useDeepCompareEffect from 'use-deep-compare-effect';
-import "@elastic/eui/dist/eui_theme_light.css";
+import '@elastic/eui/dist/eui_theme_light.css';
 import { useTheme } from '@material-ui/core/styles';
 
-export const getLevels = (entries) =>
-  entries.reduce((levels, entry, index, entries) => {
+import { Flex, SliderLabel } from './style';
+
+const getLevels = (e) =>
+  e.reduce((levels, entry, index, entries) => {
     const lastLevel = levels[levels.length - 1];
     const isLast = entries.length === index + 1;
     if (!lastLevel || lastLevel.max) {
@@ -35,8 +37,8 @@ export const getLevels = (entries) =>
     return levels;
   }, []);
 
-export const RangeSliderFacet = ({ facet }) => {
-   // This is the only component that depends on elastic-ui. If removed, @elastic/eui, @elastic/datemath, @emotion/react, and @searchkit/elastic-ui can all be uninstalled.
+function RangeSliderFacet({ facet }) {
+  // This is the only component that depends on elastic-ui. If removed, @elastic/eui, @elastic/datemath, @emotion/react, and @searchkit/elastic-ui can all be uninstalled.
   const api = useSearchkit();
   const levels = getLevels(facet.entries);
   const minBoundary = levels[0].min;
@@ -59,15 +61,18 @@ export const RangeSliderFacet = ({ facet }) => {
   }, [selectedOption, selectedOptions, setDualValue]);
 
   return (
+    <Flex>
+      <SliderLabel component="label" aria-hidden $isLeftLabel>
+        {minBoundary}
+      </SliderLabel>
       <EuiDualRange
         id={facet.identifier}
         value={dualValue}
         min={minBoundary}
         max={maxBoundary}
-        showLabels
         onChange={(v) => {
-            setDualValue(v);
-            debouncedCallback(v)
+          setDualValue(v);
+          debouncedCallback(v);
         }}
         levels={levels.map((level) => ({
           min: level.min,
@@ -75,7 +80,11 @@ export const RangeSliderFacet = ({ facet }) => {
           color: level.hasResults ? theme.palette.success.light : theme.palette.error.light,
         }))}
       />
+      <SliderLabel component="label" aria-hidden $isRightLabel>
+        {maxBoundary}
+      </SliderLabel>
+    </Flex>
   );
-};
+}
 
-RangeSliderFacet.DISPLAY = 'RangeSliderFacet';
+export default RangeSliderFacet;
