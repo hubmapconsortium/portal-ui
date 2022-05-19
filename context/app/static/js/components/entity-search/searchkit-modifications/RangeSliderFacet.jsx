@@ -36,6 +36,7 @@ export const getLevels = (entries) =>
   }, []);
 
 export const RangeSliderFacet = ({ facet }) => {
+   // This is the only component that depends on elastic-ui. If removed, @elastic/eui, @elastic/datemath, @emotion/react, and @searchkit/elastic-ui can all be uninstalled.
   const api = useSearchkit();
   const levels = getLevels(facet.entries);
   const minBoundary = levels[0].min;
