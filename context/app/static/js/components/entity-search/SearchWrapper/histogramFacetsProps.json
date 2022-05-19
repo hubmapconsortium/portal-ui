@@ -1,247 +1,303 @@
 {
-    "donor.mapped_metadata.age_value": {
-        "max": 78,
-        "min": 1,
-        "interval": 3
+    "dataset": {
+        "donor.mapped_metadata.age_value": {
+            "max": 78,
+            "min": 1,
+            "interval": 3
+        },
+        "donor.mapped_metadata.body_mass_index_value": {
+            "max": 50,
+            "min": 16,
+            "interval": 1
+        },
+        "donor.mapped_metadata.height_value": {
+            "max": 193,
+            "min": 68,
+            "interval": 6
+        },
+        "donor.mapped_metadata.kidney_donor_profile_index_value": {
+            "max": 100,
+            "min": 11,
+            "interval": 4
+        },
+        "donor.mapped_metadata.weight_value": {
+            "max": 158,
+            "min": 10,
+            "interval": 7
+        },
+        "metadata.metadata.ablation_distance_between_shots_x_value": {
+            "max": 1,
+            "min": 1,
+            "interval": 1
+        },
+        "metadata.metadata.ablation_distance_between_shots_y_value": {
+            "max": 1,
+            "min": 1,
+            "interval": 1
+        },
+        "metadata.metadata.ablation_frequency_value": {
+            "max": 400,
+            "min": 200,
+            "interval": 10
+        },
+        "metadata.metadata.bulk_rna_isolation_quality_metric_value": {
+            "max": 10,
+            "min": 8,
+            "interval": 1
+        },
+        "metadata.metadata.bulk_rna_yield_value": {
+            "max": 248,
+            "min": 27,
+            "interval": 11
+        },
+        "metadata.metadata.data_precision_bytes": {
+            "max": 4,
+            "min": 4,
+            "interval": 1
+        },
+        "metadata.metadata.dna_assay_input_value": {
+            "max": 2,
+            "min": 1,
+            "interval": 1
+        },
+        "metadata.metadata.dual_count_start": {
+            "max": 1,
+            "min": 1,
+            "interval": 1
+        },
+        "metadata.metadata.increment_z_value": {
+            "max": 2,
+            "min": 1,
+            "interval": 1
+        },
+        "metadata.metadata.lc_flow_rate_value": {
+            "max": 600,
+            "min": 0,
+            "interval": 30
+        },
+        "metadata.metadata.lc_id_value": {
+            "max": 100,
+            "min": 2,
+            "interval": 4
+        },
+        "metadata.metadata.lc_length_value": {
+            "max": 100,
+            "min": 25,
+            "interval": 3
+        },
+        "metadata.metadata.lc_temp_value": {
+            "max": 60,
+            "min": 40,
+            "interval": 1
+        },
+        "metadata.metadata.library_average_fragment_size": {
+            "max": 2196,
+            "min": 150,
+            "interval": 102
+        },
+        "metadata.metadata.library_concentration_value": {
+            "max": 12,
+            "min": 6,
+            "interval": 1
+        },
+        "metadata.metadata.library_final_yield": {
+            "max": 20480,
+            "min": 1,
+            "interval": 1023
+        },
+        "metadata.metadata.library_final_yield_value": {
+            "max": 3115,
+            "min": 8,
+            "interval": 155
+        },
+        "metadata.metadata.library_pcr_cycles": {
+            "max": 19,
+            "min": 7,
+            "interval": 1
+        },
+        "metadata.metadata.library_pcr_cycles_for_sample_index": {
+            "max": 16,
+            "min": 0,
+            "interval": 1
+        },
+        "metadata.metadata.max_x_width_value": {
+            "max": 1000,
+            "min": 1000,
+            "interval": 1
+        },
+        "metadata.metadata.max_y_height_value": {
+            "max": 1000,
+            "min": 1000,
+            "interval": 1
+        },
+        "metadata.metadata.mz_range_high_value": {
+            "max": 2000,
+            "min": 1000,
+            "interval": 50
+        },
+        "metadata.metadata.mz_range_low_value": {
+            "max": 400,
+            "min": 70,
+            "interval": 16
+        },
+        "metadata.metadata.number_of_antibodies": {
+            "max": 52,
+            "min": 1,
+            "interval": 2
+        },
+        "metadata.metadata.number_of_barcode_probes": {
+            "max": 45,
+            "min": 12,
+            "interval": 1
+        },
+        "metadata.metadata.number_of_barcode_regions_per_barcode_probe": {
+            "max": 6,
+            "min": 5,
+            "interval": 1
+        },
+        "metadata.metadata.number_of_channels": {
+            "max": 45,
+            "min": 1,
+            "interval": 2
+        },
+        "metadata.metadata.number_of_cycles": {
+            "max": 22,
+            "min": 4,
+            "interval": 1
+        },
+        "metadata.metadata.number_of_imaging_rounds": {
+            "max": 18,
+            "min": 18,
+            "interval": 1
+        },
+        "metadata.metadata.number_of_pseudocolors_per_channel": {
+            "max": 1,
+            "min": 1,
+            "interval": 1
+        },
+        "metadata.metadata.number_of_readout_probes_per_channel": {
+            "max": 1,
+            "min": 1,
+            "interval": 1
+        },
+        "metadata.metadata.number_of_sections": {
+            "max": 58,
+            "min": 50,
+            "interval": 1
+        },
+        "metadata.metadata.range_z_value": {
+            "max": 2567,
+            "min": 598,
+            "interval": 98
+        },
+        "metadata.metadata.resolution_x_value": {
+            "max": 4680,
+            "min": 0,
+            "interval": 234
+        },
+        "metadata.metadata.resolution_y_value": {
+            "max": 4659,
+            "min": 0,
+            "interval": 232
+        },
+        "metadata.metadata.resolution_z_value": {
+            "max": 1500,
+            "min": 0,
+            "interval": 75
+        },
+        "metadata.metadata.rnaseq_assay_input": {
+            "max": 270000,
+            "min": 407,
+            "interval": 13479
+        },
+        "metadata.metadata.rnaseq_assay_input_value": {
+            "max": 1,
+            "min": 1,
+            "interval": 1
+        },
+        "metadata.metadata.roi_id": {
+            "max": 6,
+            "min": 1,
+            "interval": 1
+        },
+        "metadata.metadata.sc_isolation_cell_number": {
+            "max": 33500000,
+            "min": 1488,
+            "interval": 1674925
+        },
+        "metadata.metadata.sequencing_phix_percent": {
+            "max": 20,
+            "min": 0,
+            "interval": 1
+        },
+        "metadata.metadata.sequencing_read_percent_q30": {
+            "max": 96,
+            "min": 0,
+            "interval": 4
+        },
+        "metadata.metadata.step_z_value": {
+            "max": 2366,
+            "min": 598,
+            "interval": 88
+        },
+        "metadata.metadata.transposition_input": {
+            "max": 4000000,
+            "min": 3000,
+            "interval": 199850
+        }
     },
-    "donor.mapped_metadata.body_mass_index_value": {
-        "max": 50,
-        "min": 16,
-        "interval": 1
+    "donor": {
+        "mapped_metadata.age_value": {
+            "max": 78,
+            "min": 1,
+            "interval": 3
+        },
+        "mapped_metadata.body_mass_index_value": {
+            "max": 50,
+            "min": 16,
+            "interval": 1
+        },
+        "mapped_metadata.height_value": {
+            "max": 193,
+            "min": 68,
+            "interval": 6
+        },
+        "mapped_metadata.kidney_donor_profile_index_value": {
+            "max": 100,
+            "min": 11,
+            "interval": 4
+        },
+        "mapped_metadata.weight_value": {
+            "max": 158,
+            "min": 10,
+            "interval": 7
+        }
     },
-    "donor.mapped_metadata.height_value": {
-        "max": 193,
-        "min": 68,
-        "interval": 6
-    },
-    "donor.mapped_metadata.kidney_donor_profile_index_value": {
-        "max": 100,
-        "min": 11,
-        "interval": 4
-    },
-    "donor.mapped_metadata.weight_value": {
-        "max": 158,
-        "min": 10,
-        "interval": 7
-    },
-    "metadata.metadata.ablation_distance_between_shots_x_value": {
-        "max": 1,
-        "min": 1,
-        "interval": 1
-    },
-    "metadata.metadata.ablation_distance_between_shots_y_value": {
-        "max": 1,
-        "min": 1,
-        "interval": 1
-    },
-    "metadata.metadata.ablation_frequency_value": {
-        "max": 400,
-        "min": 200,
-        "interval": 10
-    },
-    "metadata.metadata.bulk_rna_isolation_quality_metric_value": {
-        "max": 10,
-        "min": 8,
-        "interval": 1
-    },
-    "metadata.metadata.bulk_rna_yield_value": {
-        "max": 248,
-        "min": 27,
-        "interval": 11
-    },
-    "metadata.metadata.data_precision_bytes": {
-        "max": 4,
-        "min": 4,
-        "interval": 1
-    },
-    "metadata.metadata.dna_assay_input_value": {
-        "max": 2,
-        "min": 1,
-        "interval": 1
-    },
-    "metadata.metadata.dual_count_start": {
-        "max": 1,
-        "min": 1,
-        "interval": 1
-    },
-    "metadata.metadata.increment_z_value": {
-        "max": 2,
-        "min": 1,
-        "interval": 1
-    },
-    "metadata.metadata.lc_flow_rate_value": {
-        "max": 600,
-        "min": 0,
-        "interval": 30
-    },
-    "metadata.metadata.lc_id_value": {
-        "max": 100,
-        "min": 2,
-        "interval": 4
-    },
-    "metadata.metadata.lc_length_value": {
-        "max": 100,
-        "min": 25,
-        "interval": 3
-    },
-    "metadata.metadata.lc_temp_value": {
-        "max": 60,
-        "min": 40,
-        "interval": 1
-    },
-    "metadata.metadata.library_average_fragment_size": {
-        "max": 2196,
-        "min": 150,
-        "interval": 102
-    },
-    "metadata.metadata.library_concentration_value": {
-        "max": 12,
-        "min": 6,
-        "interval": 1
-    },
-    "metadata.metadata.library_final_yield": {
-        "max": 20480,
-        "min": 1,
-        "interval": 1023
-    },
-    "metadata.metadata.library_final_yield_value": {
-        "max": 3115,
-        "min": 8,
-        "interval": 155
-    },
-    "metadata.metadata.library_pcr_cycles": {
-        "max": 19,
-        "min": 7,
-        "interval": 1
-    },
-    "metadata.metadata.library_pcr_cycles_for_sample_index": {
-        "max": 16,
-        "min": 0,
-        "interval": 1
-    },
-    "metadata.metadata.max_x_width_value": {
-        "max": 1000,
-        "min": 1000,
-        "interval": 1
-    },
-    "metadata.metadata.max_y_height_value": {
-        "max": 1000,
-        "min": 1000,
-        "interval": 1
-    },
-    "metadata.metadata.mz_range_high_value": {
-        "max": 2000,
-        "min": 1000,
-        "interval": 50
-    },
-    "metadata.metadata.mz_range_low_value": {
-        "max": 400,
-        "min": 70,
-        "interval": 16
-    },
-    "metadata.metadata.number_of_antibodies": {
-        "max": 52,
-        "min": 1,
-        "interval": 2
-    },
-    "metadata.metadata.number_of_barcode_probes": {
-        "max": 45,
-        "min": 12,
-        "interval": 1
-    },
-    "metadata.metadata.number_of_barcode_regions_per_barcode_probe": {
-        "max": 6,
-        "min": 5,
-        "interval": 1
-    },
-    "metadata.metadata.number_of_channels": {
-        "max": 45,
-        "min": 1,
-        "interval": 2
-    },
-    "metadata.metadata.number_of_cycles": {
-        "max": 22,
-        "min": 4,
-        "interval": 1
-    },
-    "metadata.metadata.number_of_imaging_rounds": {
-        "max": 18,
-        "min": 18,
-        "interval": 1
-    },
-    "metadata.metadata.number_of_pseudocolors_per_channel": {
-        "max": 1,
-        "min": 1,
-        "interval": 1
-    },
-    "metadata.metadata.number_of_readout_probes_per_channel": {
-        "max": 1,
-        "min": 1,
-        "interval": 1
-    },
-    "metadata.metadata.number_of_sections": {
-        "max": 58,
-        "min": 50,
-        "interval": 1
-    },
-    "metadata.metadata.range_z_value": {
-        "max": 2567,
-        "min": 598,
-        "interval": 98
-    },
-    "metadata.metadata.resolution_x_value": {
-        "max": 4680,
-        "min": 0,
-        "interval": 234
-    },
-    "metadata.metadata.resolution_y_value": {
-        "max": 4659,
-        "min": 0,
-        "interval": 232
-    },
-    "metadata.metadata.resolution_z_value": {
-        "max": 1500,
-        "min": 0,
-        "interval": 75
-    },
-    "metadata.metadata.rnaseq_assay_input": {
-        "max": 270000,
-        "min": 407,
-        "interval": 13479
-    },
-    "metadata.metadata.rnaseq_assay_input_value": {
-        "max": 1,
-        "min": 1,
-        "interval": 1
-    },
-    "metadata.metadata.roi_id": {
-        "max": 6,
-        "min": 1,
-        "interval": 1
-    },
-    "metadata.metadata.sc_isolation_cell_number": {
-        "max": 33500000,
-        "min": 1488,
-        "interval": 1674925
-    },
-    "metadata.metadata.sequencing_phix_percent": {
-        "max": 20,
-        "min": 0,
-        "interval": 1
-    },
-    "metadata.metadata.sequencing_read_percent_q30": {
-        "max": 96,
-        "min": 0,
-        "interval": 4
-    },
-    "metadata.metadata.step_z_value": {
-        "max": 2366,
-        "min": 598,
-        "interval": 88
-    },
-    "metadata.metadata.transposition_input": {
-        "max": 4000000,
-        "min": 3000,
-        "interval": 199850
+    "sample": {
+        "donor.mapped_metadata.age_value": {
+            "max": 78,
+            "min": 1,
+            "interval": 3
+        },
+        "donor.mapped_metadata.body_mass_index_value": {
+            "max": 50,
+            "min": 16,
+            "interval": 1
+        },
+        "donor.mapped_metadata.height_value": {
+            "max": 193,
+            "min": 68,
+            "interval": 6
+        },
+        "donor.mapped_metadata.kidney_donor_profile_index_value": {
+            "max": 100,
+            "min": 11,
+            "interval": 4
+        },
+        "donor.mapped_metadata.weight_value": {
+            "max": 158,
+            "min": 10,
+            "interval": 7
+        }
     }
 }

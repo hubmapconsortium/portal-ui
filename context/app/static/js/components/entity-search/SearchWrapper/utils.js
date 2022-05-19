@@ -6,12 +6,12 @@ import { capitalizeString } from 'js/helpers/functions';
 import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumentPaths';
 import histogramFacetsProps from 'js/components/entity-search/SearchWrapper/histogramFacetsProps';
 
-function getHistogramFacetProps(fieldName) {
-  if (!(fieldName in histogramFacetsProps)) {
+function getHistogramFacetProps({ fieldName, pageEntityType }) {
+  if (!histogramFacetsProps?.[pageEntityType]?.[fieldName]) {
     return {};
   }
 
-  return { range: histogramFacetsProps[fieldName] };
+  return { range: histogramFacetsProps[pageEntityType][fieldName] };
 }
 
 // appends '.keyword' to field name for elasticsearch string fields
@@ -50,6 +50,7 @@ function buildFieldConfig({
   type,
   facetGroup = 'Additional Facets',
   configureGroup = 'General',
+  entityType: pageEntityType,
   ...rest
 }) {
   const elasticsearchFieldName = appendKeywordToFieldName({ fieldName, type });
@@ -61,7 +62,7 @@ function buildFieldConfig({
       type,
       facetGroup,
       configureGroup,
-      ...getHistogramFacetProps(fieldName),
+      ...getHistogramFacetProps({ fieldName, pageEntityType }),
       ...rest,
     },
   };
@@ -81,6 +82,7 @@ function buildMetadataFieldConfig({ fieldName, entityType: pageEntityType, ...re
     type: elasticsearchType,
     facetGroup: group,
     configureGroup: group,
+    entityType: pageEntityType,
     ...rest,
   });
 }
