@@ -54,7 +54,7 @@ function useNumericFieldsStats() {
   return fieldsStats || {};
 }
 
-function buildHistogramProps(fieldsStats) {
+function buildNumericFacetsProps(fieldsStats) {
   return Object.entries(fieldsStats).reduce((acc, [fieldName, fieldStats]) => {
     if (fieldStats.count === 0) {
       return acc;
@@ -72,9 +72,9 @@ function buildHistogramProps(fieldsStats) {
   }, {});
 }
 
-function useHistogramFacetsProps() {
+function useNumericFacetsProps() {
   const fieldsStats = useNumericFieldsStats();
-  return buildHistogramProps(fieldsStats);
+  return buildNumericFacetsProps(fieldsStats);
 }
 
-export { useHistogramFacetsProps };
+export { useNumericFacetsProps };

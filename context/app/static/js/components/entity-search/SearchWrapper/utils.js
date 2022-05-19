@@ -4,14 +4,14 @@ import metadataFieldtoTypeMap from 'metadata-field-types';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { capitalizeString } from 'js/helpers/functions';
 import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumentPaths';
-import histogramFacetsProps from 'js/components/entity-search/SearchWrapper/histogramFacetsProps';
+import numericFacetsProps from 'js/components/entity-search/SearchWrapper/numericFacetsProps';
 
-function getHistogramFacetProps({ fieldName, pageEntityType }) {
-  if (!histogramFacetsProps?.[pageEntityType]?.[fieldName]) {
+function getNumericFacetProps({ fieldName, pageEntityType }) {
+  if (!numericFacetsProps?.[pageEntityType]?.[fieldName]) {
     return {};
   }
 
-  return { range: histogramFacetsProps[pageEntityType][fieldName] };
+  return { range: numericFacetsProps[pageEntityType][fieldName] };
 }
 
 // appends '.keyword' to field name for elasticsearch string fields
@@ -62,7 +62,7 @@ function buildFieldConfig({
       type,
       facetGroup,
       configureGroup,
-      ...getHistogramFacetProps({ fieldName, pageEntityType }),
+      ...getNumericFacetProps({ fieldName, pageEntityType }),
       ...rest,
     },
   };
