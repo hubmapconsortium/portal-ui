@@ -6,6 +6,7 @@ import { useSearchkit } from '@searchkit/client';
 import { useDebouncedCallback } from 'use-debounce';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import "@elastic/eui/dist/eui_theme_light.css";
+import { useTheme } from '@material-ui/core/styles';
 
 export const getLevels = (entries) =>
   entries.reduce((levels, entry, index, entries) => {
@@ -48,6 +49,8 @@ export const RangeSliderFacet = ({ facet }) => {
     api.search();
   }, 400);
 
+  const theme = useTheme();
+
   useDeepCompareEffect(() => {
     if (selectedOption) {
       setDualValue([selectedOptions[0].min, selectedOptions[0].max]);
@@ -68,7 +71,7 @@ export const RangeSliderFacet = ({ facet }) => {
         levels={levels.map((level) => ({
           min: level.min,
           max: level.max,
-          color: level.hasResults ? '#89a05f' : '#e15ca1',
+          color: level.hasResults ? theme.palette.success.light : theme.palette.error.light,
         }))}
       />
   );
