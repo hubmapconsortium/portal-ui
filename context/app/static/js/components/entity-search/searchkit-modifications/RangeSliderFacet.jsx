@@ -1,3 +1,5 @@
+// Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-elastic-ui/src/Facets/RangeSliderFacet/index.tsx
+// Modified RangeSliderFacet to customize appearance and optimize rerenders. 
 import React, { useEffect, useState } from 'react';
 import { EuiTitle, EuiDualRange, colorPalette } from '@elastic/eui';
 import { useSearchkit } from '@searchkit/client';
