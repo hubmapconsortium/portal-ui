@@ -37,12 +37,19 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   ];
 
   const numericFacetsProps = useNumericFacetsProps(entityType);
-
-  const config = { initialFacets, initialFields, facets: initialFacets, fields: initialFields, filters, entityType };
-
   return (
     Object.keys(numericFacetsProps).length > 0 && (
-      <SearchConfigProvider initialConfig={config}>
+      <SearchConfigProvider
+        initialConfig={{
+          initialFacets,
+          initialFields,
+          facets: initialFacets,
+          fields: initialFields,
+          filters,
+          entityType,
+          numericFacetsProps,
+        }}
+      >
         <SearchkitProvider client={skClient}>
           <Search numericFacetsProps={numericFacetsProps} />
         </SearchkitProvider>

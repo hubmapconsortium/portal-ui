@@ -8,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { excludeDateFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
 
 function ConfigureSearchTable({
@@ -17,6 +18,7 @@ function ConfigureSearchTable({
   handleToggleFacet,
   availableFields,
 }) {
+  const { numericFacetsProps } = useStore();
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -32,7 +34,7 @@ function ConfigureSearchTable({
             ([fieldName, fieldConfig]) => (
               <TableRow key={fieldName}>
                 <TableCell>{fieldConfig.label}</TableCell>
-                {fieldConfig.type === 'string' || fieldConfig?.range ? (
+                {fieldConfig.type === 'string' || numericFacetsProps?.[fieldName] ? (
                   <TableCell>
                     <Checkbox
                       checked={fieldName in selectedFacets}
