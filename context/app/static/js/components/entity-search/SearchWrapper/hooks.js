@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import metadataFieldtoTypeMap from 'metadata-field-types';
 import { createField } from 'js/components/entity-search/SearchWrapper/utils';
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 
 import useSearchData from 'js/hooks/useSearchData';
 
@@ -44,8 +43,7 @@ function getNumericFieldStatsQuery(entityType) {
   );
 }
 
-function useNumericFieldsStats() {
-  const { entityType } = useStore();
+function useNumericFieldsStats(entityType) {
   const query = useMemo(() => getNumericFieldStatsQuery(entityType), [entityType]);
   const {
     searchData: { aggregations: fieldsStats },
@@ -72,8 +70,8 @@ function buildNumericFacetsProps(fieldsStats) {
   }, {});
 }
 
-function useNumericFacetsProps() {
-  const fieldsStats = useNumericFieldsStats();
+function useNumericFacetsProps(entityType) {
+  const fieldsStats = useNumericFieldsStats(entityType);
   return buildNumericFacetsProps(fieldsStats);
 }
 

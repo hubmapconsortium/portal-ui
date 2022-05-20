@@ -6,6 +6,7 @@ import Search from 'js/components/entity-search/Search';
 import { capitalizeString } from 'js/helpers/functions';
 import { mergeObjects, getDonorMetadataFields, createAffiliationFacet, createField } from './utils';
 import SearchConfigProvider from './provider';
+import { useNumericFacetsProps } from './hooks';
 
 const skClient = new SearchkitClient();
 
@@ -35,14 +36,18 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
     },
   ];
 
+  const numericFacetsProps = useNumericFacetsProps(entityType);
+
   const config = { initialFacets, initialFields, facets: initialFacets, fields: initialFields, filters, entityType };
 
   return (
-    <SearchConfigProvider initialConfig={config}>
-      <SearchkitProvider client={skClient}>
-        <Search />
-      </SearchkitProvider>
-    </SearchConfigProvider>
+    Object.keys(numericFacetsProps).length > 0 && (
+      <SearchConfigProvider initialConfig={config}>
+        <SearchkitProvider client={skClient}>
+          <Search numericFacetsProps={numericFacetsProps} />
+        </SearchkitProvider>
+      </SearchConfigProvider>
+    )
   );
 }
 

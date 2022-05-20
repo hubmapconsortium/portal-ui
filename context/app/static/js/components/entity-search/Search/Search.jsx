@@ -12,9 +12,9 @@ import ResultsTable from 'js/components/entity-search/ResultsTable';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import { SearchLayout, ResultsLayout } from './style';
-import { buildSortPairs } from './utils';
+import { buildSortPairs, getNumericFacetProps } from './utils';
 
-function Search() {
+function Search({ numericFacetsProps }) {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const authHeader = getAuthHeader(groupsToken);
   const { fields, facets, filters } = useStore();
@@ -34,10 +34,12 @@ function Search() {
       query: new MultiMatchQuery({
         fields: ['all_text'],
       }),
-      facets: Object.values(facets).map((facet) => createSearchkitFacet(facet)),
+      facets: Object.values(facets).map((facet) =>
+        createSearchkitFacet({ ...facet, ...getNumericFacetProps(facet.field, numericFacetsProps) }),
+      ),
       filters: filters.map((filter) => filter.definition),
     }),
-    [authHeader, elasticsearchEndpoint, facets, fields, filters],
+    [authHeader, elasticsearchEndpoint, facets, fields, filters, numericFacetsProps],
   );
 
   const transporter = new RequestTransporter(config);
