@@ -1,9 +1,9 @@
 import React from 'react';
 import Error from 'js/pages/Error';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 
 function sendError(errorString) {
-  ReactGA.event({
+  trackEvent({
     category: 'Client Error',
     action: 'Routes Error Boundary',
     label: errorString,

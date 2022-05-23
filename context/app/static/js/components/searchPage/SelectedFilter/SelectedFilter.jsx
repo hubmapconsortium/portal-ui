@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 import { Typography } from '@material-ui/core';
 
 import { StyledCancelIcon, SelectedFilterDiv } from './style';
@@ -12,7 +12,7 @@ function SelectedFilter(props) {
   }
 
   function onClickWithTracking() {
-    ReactGA.event({
+    trackEvent({
       category: analyticsCategory,
       action: 'Unselect Facet Chip',
       label: `${labelKey}: ${labelValue}`,

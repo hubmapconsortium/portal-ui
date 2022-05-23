@@ -1,10 +1,10 @@
 import React from 'react';
 import IconLink from 'js/shared-styles/Links/iconLinks/IconLink';
 import { EmailIcon } from 'js/shared-styles/icons';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 
 function sendEmailEvent(event) {
-  ReactGA.event({
+  trackEvent({
     category: 'Email Link',
     action: 'Clicked',
     label: event.target.href,

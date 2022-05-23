@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactGA from 'react-ga'; // TODO: Remove all react-ga references
-// when Matomo is up: https://github.com/hubmapconsortium/portal-ui/issues/2636
 import marked from 'marked';
 
 import Providers from './Providers';
@@ -18,7 +16,6 @@ function App(props) {
   const { endpoints, globalAlertMd } = flaskData;
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
-  ReactGA.initialize('UA-133341631-3');
 
   return (
     <Providers endpoints={endpoints} groupsToken={groupsToken} isAuthenticated={isAuthenticated} userEmail={userEmail}>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 
 import { getSortPairs } from '../utils';
 import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from './style';
@@ -42,7 +42,7 @@ function SortingTableHead(props) {
               role="button"
               key={pair[0].key}
               onClick={() => {
-                ReactGA.event({
+                trackEvent({
                   category: analyticsCategory,
                   action: `Sort Table View`,
                   label: `${pair[0].label} ${order && order === pair[0].order ? 'asc' : 'desc'}`,
