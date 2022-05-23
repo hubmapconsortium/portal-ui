@@ -53,7 +53,12 @@ function Search({ numericFacetsProps }) {
     <SearchLayout>
       <Sidebar results={results} />
       <ResultsLayout>
-        {results?.hits && <ResultsTable hits={results.hits} />} <Pagination data={results} />
+        {results?.hits && (
+          <>
+            <ResultsTable hits={results.hits} />
+            <Pagination pageHits={results.hits.page} />
+          </>
+        )}
       </ResultsLayout>
     </SearchLayout>
   );

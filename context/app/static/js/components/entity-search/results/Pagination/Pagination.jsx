@@ -1,24 +1,29 @@
 import React from 'react';
 import MuiPagination from '@material-ui/lab/Pagination';
-
 import { useSearchkit } from '@searchkit/client';
 
-function Pagination({ data }) {
+import ResultsFound from 'js/components/entity-search/results/ResultsFound/';
+import { Flex } from './style';
+
+function Pagination({ pageHits: { totalPages, pageNumber, size, total } }) {
   const api = useSearchkit();
 
   return (
-    <MuiPagination
-      count={data?.hits.page.totalPages}
-      page={data?.hits.page.pageNumber + 1}
-      defaultPage={1}
-      color="primary"
-      onChange={(e, v) => {
-        api.setPage({ size: data.hits.page.size, from: (v - 1) * data.hits.page.size });
-        api.search();
-      }}
-      variant="outlined"
-      shape="rounded"
-    />
+    <Flex>
+      <MuiPagination
+        count={totalPages}
+        page={pageNumber + 1}
+        defaultPage={1}
+        color="primary"
+        onChange={(e, v) => {
+          api.setPage({ size, from: (v - 1) * size });
+          api.search();
+        }}
+        variant="outlined"
+        shape="rounded"
+      />
+      <ResultsFound totalHits={total} />
+    </Flex>
   );
 }
 
