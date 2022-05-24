@@ -4,15 +4,6 @@ import metadataFieldtoTypeMap from 'metadata-field-types';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { capitalizeString } from 'js/helpers/functions';
 import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumentPaths';
-import numericFacetsProps from 'js/components/entity-search/SearchWrapper/numericFacetsProps';
-
-function getNumericFacetProps({ fieldName, pageEntityType }) {
-  if (!numericFacetsProps?.[pageEntityType]?.[fieldName]) {
-    return {};
-  }
-
-  return { range: numericFacetsProps[pageEntityType][fieldName] };
-}
 
 // appends '.keyword' to field name for elasticsearch string fields
 function appendKeywordToFieldName({ fieldName, type }) {
@@ -62,7 +53,6 @@ function buildFieldConfig({
       type,
       facetGroup,
       configureGroup,
-      ...getNumericFacetProps({ fieldName, pageEntityType }),
       ...rest,
     },
   };
@@ -139,6 +129,7 @@ const typeToSearchKitFacetMap = {
 
 function createSearchkitFacet({ field, identifier, label, type, ...rest }) {
   const Facet = typeToSearchKitFacetMap[type];
+
   return new Facet({
     field,
     identifier,
