@@ -39,24 +39,27 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   ];
 
   const numericFacetsProps = useNumericFacetsProps(entityType);
+
+  if (!Object.keys(numericFacetsProps).length) {
+    return null;
+  }
+
   return (
-    Object.keys(numericFacetsProps).length > 0 && (
-      <SearchConfigProvider
-        initialConfig={{
-          initialFacets,
-          initialFields,
-          facets: initialFacets,
-          fields: initialFields,
-          filters,
-          entityType,
-          numericFacetsProps,
-        }}
-      >
-        <SearchkitProvider client={skClient}>
-          <Search numericFacetsProps={numericFacetsProps} />
-        </SearchkitProvider>
-      </SearchConfigProvider>
-    )
+    <SearchConfigProvider
+      initialConfig={{
+        initialFacets,
+        initialFields,
+        facets: initialFacets,
+        fields: initialFields,
+        filters,
+        entityType,
+        numericFacetsProps,
+      }}
+    >
+      <SearchkitProvider client={skClient}>
+        <Search numericFacetsProps={numericFacetsProps} />
+      </SearchkitProvider>
+    </SearchConfigProvider>
   );
 }
 
