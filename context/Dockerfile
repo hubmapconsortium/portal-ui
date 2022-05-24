@@ -17,7 +17,7 @@ COPY ingest-validation-tools ingest-validation-tools
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
 
-FROM tiangolo/uwsgi-nginx-flask:python3.8
+FROM tiangolo/uwsgi-nginx-flask:python3.9
 
 COPY requirements.txt /app
 RUN pip install -r /app/requirements.txt
