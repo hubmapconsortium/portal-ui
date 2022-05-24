@@ -30,6 +30,7 @@ function getNumericFieldStatsQuery(entityType) {
         numericTypes.has(fieldEsType) &&
         !fieldsWithIncorrectEsType.has(fieldName)
       ) {
+        // createField returns an object with only a single value.
         const { field } = Object.values(createField({ fieldName, entityType }))[0];
         acc.aggs[field] = { stats: { field } };
         return acc;
