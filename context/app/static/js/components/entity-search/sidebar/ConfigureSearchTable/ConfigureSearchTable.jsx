@@ -34,7 +34,7 @@ function ConfigureSearchTable({
             ([fieldName, fieldConfig]) => (
               <TableRow key={fieldName}>
                 <TableCell>{fieldConfig.label}</TableCell>
-                {fieldConfig.type === 'string' || numericFacetsProps?.[fieldName] ? (
+                {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
                   <TableCell>
                     <Checkbox
                       checked={fieldName in selectedFacets}

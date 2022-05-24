@@ -7,7 +7,7 @@ import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumen
 
 // appends '.keyword' to field name for elasticsearch string fields
 function appendKeywordToFieldName({ fieldName, type }) {
-  if (type === 'string') {
+  if (['string', 'boolean'].includes(type)) {
     return `${fieldName}.keyword`;
   }
 
@@ -125,6 +125,7 @@ const typeToSearchKitFacetMap = {
   integer: RangeFacet,
   number: RangeFacet,
   string: RefinementSelectFacet,
+  boolean: RefinementSelectFacet,
 };
 
 function createSearchkitFacet({ field, identifier, label, type, ...rest }) {
