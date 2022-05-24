@@ -14,7 +14,7 @@ import Pagination from 'js/components/entity-search/results/Pagination';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import { SearchLayout, ResultsLayout } from './style';
-import { buildSortPairs, getNumericFacetProps } from './utils';
+import { buildSortPairs, getRangeProps } from './utils';
 
 function Search({ numericFacetsProps }) {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
@@ -37,7 +37,7 @@ function Search({ numericFacetsProps }) {
         fields: ['all_text'],
       }),
       facets: Object.values(facets).map((facet) =>
-        createSearchkitFacet({ ...facet, ...getNumericFacetProps(facet.field, numericFacetsProps) }),
+        createSearchkitFacet({ ...facet, ...getRangeProps(facet.field, numericFacetsProps) }),
       ),
       filters: filters.map((filter) => filter.definition),
     }),

@@ -15,7 +15,7 @@ function buildSortPairs(fields) {
     .flat();
 }
 
-function getNumericFacetProps(fieldName, numericFacetsProps) {
+function getRangeProps(fieldName, numericFacetsProps) {
   if (!numericFacetsProps?.[fieldName]) {
     return {};
   }
@@ -23,4 +23,4 @@ function getNumericFacetProps(fieldName, numericFacetsProps) {
   return { range: numericFacetsProps[fieldName] };
 }
 
-export { buildSortPairs, getNumericFacetProps };
+export { buildSortPairs, getRangeProps };
