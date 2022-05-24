@@ -9,6 +9,8 @@ import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { createSearchkitFacet } from 'js/components/entity-search/SearchWrapper/utils';
 import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
 import ResultsTable from 'js/components/entity-search/ResultsTable';
+import Pagination from 'js/components/entity-search/results/Pagination';
+
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import { SearchLayout, ResultsLayout } from './style';
@@ -50,7 +52,14 @@ function Search({ numericFacetsProps }) {
   return (
     <SearchLayout>
       <Sidebar results={results} />
-      <ResultsLayout>{results?.hits && <ResultsTable hits={results.hits} />}</ResultsLayout>
+      <ResultsLayout>
+        {results?.hits && (
+          <>
+            <ResultsTable hits={results.hits} />
+            <Pagination pageHits={results.hits.page} />
+          </>
+        )}
+      </ResultsLayout>
     </SearchLayout>
   );
 }

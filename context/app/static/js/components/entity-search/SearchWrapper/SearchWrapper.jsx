@@ -8,7 +8,9 @@ import { mergeObjects, getDonorMetadataFields, createAffiliationFacet, createFie
 import SearchConfigProvider from './provider';
 import { useNumericFacetsProps } from './hooks';
 
-const skClient = new SearchkitClient();
+const skClient = new SearchkitClient({
+  itemsPerPage: 18,
+});
 
 function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   const initialFacets = mergeObjects([
