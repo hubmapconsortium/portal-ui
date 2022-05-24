@@ -287,12 +287,12 @@ def datasets_selected_by_level(target_entity):
         dataset_set = client.select_datasets(
             where=target_entity,
             has=[f'{name} > {min_expression}'
-                for name in cell_variable_names],
+                 for name in cell_variable_names],
             genomic_modality=modality,
             min_cell_percentage=min_cell_percentage
         )
     except ClientError as e:
-        # TODO: We want to distinguish the expected errors 
+        # TODO: We want to distinguish the expected errors
         # (like 4xx: "ABALON not present in rna index")
         # from unexpected errors (like any 5xx).
         # That needs to be done upstream in the API Client,
