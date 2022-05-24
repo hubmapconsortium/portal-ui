@@ -4,6 +4,7 @@ import time
 from flask import render_template, current_app, request
 
 from hubmap_api_py_client import Client
+from hubmap_api_py_client.errors import ClientError
 
 from .utils import get_default_flask_data, make_blueprint
 
@@ -282,13 +283,23 @@ def datasets_selected_by_level(target_entity):
 
     client = _get_client(current_app)
 
-    dataset_set = client.select_datasets(
-        where=target_entity,
-        has=[f'{name} > {min_expression}'
-             for name in cell_variable_names],
-        genomic_modality=modality,
-        min_cell_percentage=min_cell_percentage
-    )
+    try:
+        dataset_set = client.select_datasets(
+            where=target_entity,
+            has=[f'{name} > {min_expression}'
+                for name in cell_variable_names],
+            genomic_modality=modality,
+            min_cell_percentage=min_cell_percentage
+        )
+    except ClientError as e:
+        # TODO: We want to distinguish the expected errors 
+        # (like 4xx: "ABALON not present in rna index")
+        # from unexpected errors (like any 5xx).
+        # That needs to be done upstream in the API Client,
+        # but for now, we want to turn something around quickly.
+        # In the long run, we don't want to expose internal error messages in the UI.
+        # https://github.com/hubmapconsortium/hubmap-api-py-client/issues/75
+        return {'message': str(e)}
     return {'results': list(dataset_set.get_list())}
 
 
