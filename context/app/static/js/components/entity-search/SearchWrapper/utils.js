@@ -1,4 +1,4 @@
-import { RefinementSelectFacet } from '@searchkit/sdk';
+import { RefinementSelectFacet, RangeFacet } from '@searchkit/sdk';
 
 import metadataFieldtoTypeMap from 'metadata-field-types';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
@@ -7,7 +7,7 @@ import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumen
 
 // appends '.keyword' to field name for elasticsearch string fields
 function appendKeywordToFieldName({ fieldName, type }) {
-  if (type === 'string') {
+  if (['string', 'boolean'].includes(type)) {
     return `${fieldName}.keyword`;
   }
 
@@ -41,6 +41,7 @@ function buildFieldConfig({
   type,
   facetGroup = 'Additional Facets',
   configureGroup = 'General',
+  entityType: pageEntityType,
   ...rest
 }) {
   const elasticsearchFieldName = appendKeywordToFieldName({ fieldName, type });
@@ -71,6 +72,7 @@ function buildMetadataFieldConfig({ fieldName, entityType: pageEntityType, ...re
     type: elasticsearchType,
     facetGroup: group,
     configureGroup: group,
+    entityType: pageEntityType,
     ...rest,
   });
 }
@@ -99,27 +101,41 @@ function mergeObjects(objects) {
 }
 
 function getDonorMetadataFields(entityType) {
-  const labelPrefix = entityType === 'donor' ? '' : 'Donor ';
-
   return [
     createDonorFacet({
       fieldName: 'sex',
-      label: `${labelPrefix}Sex`,
+      entityType,
+    }),
+    createDonorFacet({
+      fieldName: 'age_value',
       entityType,
     }),
     createDonorFacet({
       fieldName: 'race',
-      label: `${labelPrefix}Race`,
+      entityType,
+    }),
+    createDonorFacet({
+      fieldName: 'body_mass_index_value',
       entityType,
     }),
   ];
 }
 
-function createSearchkitFacet({ field, identifier, label, ...rest }) {
-  return new RefinementSelectFacet({
+const typeToSearchKitFacetMap = {
+  integer: RangeFacet,
+  number: RangeFacet,
+  string: RefinementSelectFacet,
+  boolean: RefinementSelectFacet,
+};
+
+function createSearchkitFacet({ field, identifier, label, type, ...rest }) {
+  const Facet = typeToSearchKitFacetMap[type];
+
+  return new Facet({
     field,
     identifier,
     label,
+    type,
     multipleSelect: true,
     ...rest,
   });
@@ -138,20 +154,3 @@ export {
   createSearchkitFacet,
   createField,
 };
-
-/* 
-    const bmiField = 'body_mass_index_value';
-    const ageField = 'age_value';
-    {
-      field: `${pathPrefix}mapped_metadata.${ageField}`,
-      label: `${labelPrefix}Age`,
-      type: FILTER_TYPES.rangeSlider,
-      range: { start: 1, end: 100 },
-    },
-    {
-      field: `${pathPrefix}mapped_metadata.${bmiField}`,
-      title: `${labelPrefix}BMI`,
-      type: FILTER_TYPES.rangeSlider,
-      range: { start: 1, end: 50 },
-    },
-*/

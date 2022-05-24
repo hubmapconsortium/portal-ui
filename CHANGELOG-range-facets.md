@@ -1,0 +1,1 @@
+- Add range slider components for numeric facets in search ui revision.
