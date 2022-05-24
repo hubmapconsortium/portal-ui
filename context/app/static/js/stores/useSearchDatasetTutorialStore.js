@@ -1,10 +1,10 @@
 import create from 'zustand';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 
 const localStorageKey = 'has_exited_dataset_search_tutorial';
 
 function recordEvent(action, value) {
-  ReactGA.event({
+  trackEvent({
     category: 'Dataset Search Tutorial',
     action,
     value,

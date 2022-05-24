@@ -11,7 +11,7 @@ blueprint = make_blueprint(__name__)
 def index():
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'pages/base_react.html',
+        'base-pages/react-content.html',
         flask_data=flask_data,
         title='HuBMAP Data Portal',
         is_home_page=True
@@ -22,7 +22,7 @@ def index():
 def service_status():
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'pages/base_react.html',
+        'base-pages/react-content.html',
         flask_data=flask_data,
         title='Services'
     )
@@ -31,7 +31,7 @@ def service_status():
 @blueprint.route('/ccf-eui')
 def ccf_eui():
     return render_template(
-        'pages/ccf-eui.html',
+        'special-pages/ccf-eui.html',
         config=current_app.config,
         url_root=request.url_root,
         groups_token=(
@@ -52,7 +52,7 @@ def search():
         'title': title,
     }
     return render_template(
-        'pages/base_react.html',
+        'base-pages/react-content.html',
         title=title,
         flask_data=flask_data,
     )
@@ -68,7 +68,7 @@ def test_search(type):
         'title': title,
     }
     return render_template(
-        'pages/base_react.html',
+        'base-pages/react-content.html',
         title=title,
         flask_data=flask_data,
     )
@@ -82,7 +82,7 @@ def dev_search():
         'title': title,
     }
     return render_template(
-        'pages/base_react.html',
+        'base-pages/react-content.html',
         title=title,
         flask_data=flask_data
     )
@@ -96,7 +96,7 @@ def vis():
         'title': title
     }
     return render_template(
-        'pages/base_react.html',
+        'base-pages/react-content.html',
         title=title,
         flask_data=flask_data
     )
@@ -106,7 +106,7 @@ def vis():
 def collections():
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'pages/base_react.html',
+        'base-pages/react-content.html',
         title='Collections',
         flask_data=flask_data
     )
@@ -116,7 +116,7 @@ def collections():
 def my_lists():
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'pages/base_react.html',
+        'base-pages/react-content.html',
         title='My Lists',
         flask_data=flask_data
     )
@@ -129,7 +129,7 @@ def list_page(saved_list_uuid):
         'list_uuid': saved_list_uuid
     }
     return render_template(
-        'pages/base_react.html',
+        'base-pages/react-content.html',
         title='Saved List',
         flask_data=flask_data
     )
@@ -141,7 +141,7 @@ def iframe_page(path):
         **get_default_flask_data()
     }
     return render_template(
-        'pages/organ.html' if path == 'organ' else 'pages/base_react.html',
+        'special-pages/organ.html' if path == 'organ' else 'base-pages/react-content.html',
         title=f'{path} iframe',
         flask_data=flask_data
     )
