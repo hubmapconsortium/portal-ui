@@ -37,12 +37,18 @@ function useSelectedItems(reducer, initialItems) {
 
 function useConfigureSearch() {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
-  const { setFields, fields } = useStore();
+  const { setFields, setFacets, fields, facets } = useStore();
   const {
     selectedItems: selectedFields,
     handleToggleItem: handleToggleField,
     setSelectedItems: setSelectedFields,
   } = useSelectedItems(selectedFieldReducer, fields);
+
+  const {
+    selectedItems: selectedFacets,
+    handleToggleItem: handleToggleFacet,
+    setSelectedItems: setSelectedFacets,
+  } = useSelectedItems(selectedFieldReducer, facets);
 
   function handleOpen() {
     setDialogIsOpen(true);
@@ -50,13 +56,24 @@ function useConfigureSearch() {
   function handleClose() {
     setDialogIsOpen(false);
     setSelectedFields(fields);
+    setSelectedFacets(facets);
   }
 
   function handleSave() {
     setFields(selectedFields);
+    setFacets(selectedFacets);
     setDialogIsOpen(false);
   }
-  return { dialogIsOpen, handleOpen, handleClose, handleSave, selectedFields, handleToggleField };
+  return {
+    dialogIsOpen,
+    handleOpen,
+    handleClose,
+    handleSave,
+    selectedFields,
+    handleToggleField,
+    selectedFacets,
+    handleToggleFacet,
+  };
 }
 
 export { useConfigureSearch, useSelectedItems };

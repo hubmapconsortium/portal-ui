@@ -1,13 +1,13 @@
 import React from 'react';
-import ReactGA from 'react-ga';
 import Providers from 'js/components/Providers';
 import Footer from 'js/components/Footer';
 import Error from 'js/pages/Error';
+
+import { trackPageView } from 'js/helpers/trackers';
 import MaintenanceHeader from './MaintenanceHeader';
 
 function App() {
-  ReactGA.initialize('UA-133341631-3');
-  ReactGA.pageview('/maintenance');
+  trackPageView('/maintenance');
   return (
     <Providers>
       <MaintenanceHeader />

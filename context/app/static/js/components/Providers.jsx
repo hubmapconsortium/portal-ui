@@ -1,11 +1,11 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import GlobalStyles from 'js/components/globalStyles';
 
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+import GlobalStyles from 'js/components/globalStyles';
 import theme from '../theme';
 import GlobalFonts from '../fonts';
 
@@ -17,14 +17,14 @@ const generateClassName = createGenerateClassName({
 const AppContext = React.createContext({});
 
 function Providers(props) {
-  const { endpoints, groupsToken, children } = props;
+  const { endpoints, groupsToken, isAuthenticated, userEmail, children, workspacesToken } = props;
   // injectFirst ensures styled-components takes priority over mui for styling
   return (
     <StylesProvider generateClassName={generateClassName} injectFirst>
       <GlobalFonts />
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
-          <AppContext.Provider value={{ groupsToken, ...endpoints }}>
+          <AppContext.Provider value={{ groupsToken, workspacesToken, isAuthenticated, userEmail, ...endpoints }}>
             <CssBaseline />
             <GlobalStyles />
             {children}

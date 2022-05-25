@@ -1,6 +1,7 @@
-import React, { lazy } from 'react';
+import React, { lazy, useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import { AppContext } from 'js/components/Providers';
 import Error from 'js/pages/Error';
 import Route from './Route';
 import useSendPageView from './useSendPageView';
@@ -55,8 +56,9 @@ function Routes(props) {
   useSendPageView(urlPath);
   useSetUrlBeforeLogin(url);
 
+  const { isAuthenticated } = useContext(AppContext);
+
   if (errorCode !== undefined) {
-    // eslint-disable-next-line no-undef
     return <Error errorCode={errorCode} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
   }
 
@@ -104,7 +106,6 @@ function Routes(props) {
     );
   }
 
-  /* eslint-disable no-undef */
   if (urlPath.startsWith('/search')) {
     return (
       <Route>
@@ -152,7 +153,6 @@ function Routes(props) {
       </Route>
     );
   }
-  /* eslint-enable no-undef */
 
   if (urlPath.startsWith('/diversity')) {
     return (

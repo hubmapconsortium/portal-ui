@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
@@ -33,7 +33,7 @@ async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu, analytics
   tempLink.download = name;
   tempLink.click();
 
-  ReactGA.event({
+  trackEvent({
     category: analyticsCategory,
     action: `Download ${mime}`,
     label: urlPath.split('/').pop(),

@@ -1,3 +1,9 @@
+function excludeDateFieldConfigs(fieldConfigEntries) {
+  const excludedFieldTypes = ['date', 'datetime'];
+
+  return fieldConfigEntries.filter(([, fieldConfig]) => !excludedFieldTypes.includes(fieldConfig.type));
+}
+
 function getFieldEntriesSortedByConfigureGroup(fields) {
   return Object.entries(fields).sort(
     (
@@ -17,4 +23,4 @@ function getFieldEntriesSortedByConfigureGroup(fields) {
   );
 }
 
-export { getFieldEntriesSortedByConfigureGroup };
+export { excludeDateFieldConfigs, getFieldEntriesSortedByConfigureGroup };

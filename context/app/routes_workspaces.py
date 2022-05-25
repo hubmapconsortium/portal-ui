@@ -10,7 +10,7 @@ blueprint = make_blueprint(__name__)
 def index():
     flask_data = {**get_default_flask_data()}
     return render_template(
-        'pages/base_react.html',
+        'base-pages/react-content.html',
         flask_data=flask_data,
         title='Workspaces'
     )

@@ -40,7 +40,14 @@ test('should handle open and toggling new item', () => {
   const mockToggle = jest.fn();
   const selectedItems = ['mapped_last_modified_timestamp.keyword_desc'];
 
-  render(<TilesSortDropdown toggleItem={mockToggle} items={items} selectedItems={selectedItems} />);
+  render(
+    <TilesSortDropdown
+      toggleItem={mockToggle}
+      items={items}
+      selectedItems={selectedItems}
+      analyticsCategory="this is required"
+    />,
+  );
   userEvent.click(screen.getByText('Last Modified'));
   userEvent.click(screen.getByText('Fake'));
 
@@ -52,7 +59,14 @@ test('should toggle descending order for last modified', async () => {
   const mockToggle = jest.fn();
   const selectedItems = ['fake.keyword_desc'];
 
-  render(<TilesSortDropdown toggleItem={mockToggle} items={items} selectedItems={selectedItems} />);
+  render(
+    <TilesSortDropdown
+      toggleItem={mockToggle}
+      items={items}
+      selectedItems={selectedItems}
+      analyticsCategory="this is required"
+    />,
+  );
   userEvent.click(screen.getByText('Fake'));
   userEvent.click(screen.getByText('Last Modified'));
 

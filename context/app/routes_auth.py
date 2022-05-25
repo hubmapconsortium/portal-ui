@@ -2,7 +2,7 @@ from urllib.parse import urlencode, unquote
 
 from flask import (
     make_response, current_app, url_for,
-    request, redirect, render_template, session)
+    request, redirect, abort, session)
 import requests
 import globus_sdk
 from json import dumps
@@ -106,7 +106,7 @@ def login():
 
     if not has_hubmap_group(groups_token):
         # Globus institution login worked, but user does not have HuBMAP group!
-        return render_template('errors/401-no-hubmap-group.html'), 401
+        abort(401)
 
     session.update(
         groups_token=groups_token,

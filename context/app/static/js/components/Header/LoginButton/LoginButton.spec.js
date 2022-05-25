@@ -12,14 +12,14 @@ test('should be login button when not authenticated', () => {
 });
 
 test('should be logout button when authenticated', () => {
-  render(<LoginButton isAuthenticated user_email="fake@fake.fake" />);
+  render(<LoginButton isAuthenticated userEmail="fake@fake.fake" />);
   expect(screen.getByText('fake@fake.fake')).toBeInTheDocument();
   userEvent.click(screen.getByText('fake@fake.fake'));
   // In drop-down:
   expect(screen.getByText('Log Out')).toHaveAttribute('href', '/logout');
 });
 
-test('should display User when user_email is empty', () => {
-  render(<LoginButton isAuthenticated user_email="" />);
+test('should display User when userEmail is empty', () => {
+  render(<LoginButton isAuthenticated userEmail="" />);
   expect(screen.getByText('User')).toBeInTheDocument();
 });

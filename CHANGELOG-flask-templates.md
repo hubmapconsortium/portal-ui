@@ -1,0 +1,1 @@
+- Clean up flask templates. Should not change behavior.

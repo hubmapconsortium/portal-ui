@@ -20,11 +20,8 @@ function useWorkspacesList() {
   // TODO: isLoading:
   // const [isLoading, setIsLoading] = useState(true);
 
-  const { workspacesEndpoint } = useContext(AppContext);
+  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
 
-  // TODO: Pull from context:
-  // eslint-disable-next-line no-undef
-  const workspacesToken = workspaces_token;
   useEffect(() => {
     async function getAndSetWorkspacesList() {
       const response = await fetch(`${workspacesEndpoint}/workspaces`, {
@@ -59,7 +56,7 @@ function useWorkspacesList() {
 }
 
 function WorkspacesList() {
-  const endpoints = useContext(AppContext);
+  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
   const { workspacesList } = useWorkspacesList();
 
   async function handleDelete() {
@@ -73,12 +70,8 @@ function WorkspacesList() {
     // TODO: Put up modal and get user input.
     // TODO: Update workspacesList
 
-    // TODO: Pull from context:
-    // eslint-disable-next-line no-undef
-    const workspacesToken = workspaces_token;
-
     createNotebookWorkspace({
-      workspacesEndpoint: endpoints.workspacesEndpoint,
+      workspacesEndpoint,
       workspacesToken,
       workspaceName: 'Workspace Timestamp',
       workspaceDescription: 'TODO: description',
@@ -102,7 +95,7 @@ function WorkspacesList() {
       <Paper>
         {
           // eslint-disable-next-line no-undef
-          `TODO: Use token "${workspaces_token}" with "${endpoints.workspacesEndpoint}"`
+          `TODO: Use token "${workspacesToken}" with "${workspacesEndpoint}"`
         }
         <hr />
         {JSON.stringify(workspacesList)}

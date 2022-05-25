@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactGA from 'react-ga';
 import marked from 'marked';
 
 import Providers from './Providers';
@@ -13,16 +12,19 @@ import { StyledAlert, FlexContainer } from './style';
 import 'js/components/searchPage/Search.scss';
 
 function App(props) {
-  const { flaskData } = props;
+  const { flaskData, groupsToken, isAuthenticated, userEmail, workspacesToken } = props;
   const { endpoints, globalAlertMd } = flaskData;
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
-  ReactGA.initialize('UA-133341631-3');
 
   return (
-    // Token are injected as globals in the flask template.
-    // eslint-disable-next-line no-undef
-    <Providers endpoints={endpoints} groupsToken={groups_token} workspacesToken={workspaces_token}>
+    <Providers
+      endpoints={endpoints}
+      groupsToken={groupsToken}
+      isAuthenticated={isAuthenticated}
+      userEmail={userEmail}
+      workspacesToken={workspacesToken}
+    >
       <Header />
       {globalAlertMd && (
         <FlexContainer>

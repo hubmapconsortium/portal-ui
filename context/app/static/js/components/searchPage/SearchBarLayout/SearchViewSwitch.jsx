@@ -4,7 +4,7 @@ import ListRoundedIcon from '@material-ui/icons/ListRounded';
 import GridOnRoundedIcon from '@material-ui/icons/GridOnRounded';
 import BodyRoundedIcon from '@material-ui/icons/AccessibilityNewRounded';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -30,7 +30,7 @@ function createSearchViewSwitch(labelIconPairs) {
       if (!validViews.includes(view)) {
         return;
       }
-      ReactGA.event({
+      trackEvent({
         category: analyticsCategory,
         action: `Switch Search View`,
         label: `${view}`,

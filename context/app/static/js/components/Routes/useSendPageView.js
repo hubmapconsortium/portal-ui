@@ -1,26 +1,28 @@
 import { useEffect } from 'react';
-import ReactGA from 'react-ga';
+import { trackPageView } from 'js/helpers/trackers';
 
 function useSendPageView(path) {
   useEffect(() => {
     if (path.startsWith('/browse')) {
-      const pathWithoutUUID = path.match(/\/browse\/\w+/)[0];
-      ReactGA.pageview(pathWithoutUUID);
+      const trackPath = path.match(/\/browse\/\w+/)[0];
+      trackPageView(trackPath);
       return;
     }
     // send path without ID for specific saved list page
     if (path.startsWith('/my-lists/')) {
       // Distinguished by final slash.
-      ReactGA.pageview('/my-lists/saved-list');
+      const trackPath = '/my-lists/saved-list';
+      trackPageView(trackPath);
       return;
     }
     if (path.startsWith('/search') || path.startsWith('/dev-search')) {
       const urlParams = new URLSearchParams(window.location.search);
       const entityTypeKey = 'entity_type[0]';
-      ReactGA.pageview(`${path}?${entityTypeKey}=${urlParams.get(entityTypeKey)}`);
+      const trackPath = `${path}?${entityTypeKey}=${urlParams.get(entityTypeKey)}`;
+      trackPageView(trackPath);
       return;
     }
-    ReactGA.pageview(path);
+    trackPageView(path);
   }, [path]);
 }
 

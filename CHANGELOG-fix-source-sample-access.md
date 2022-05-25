@@ -1,1 +1,0 @@
-- Fix how the search results accesses sample metadata from elasticsearch.
