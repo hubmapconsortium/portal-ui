@@ -8,7 +8,7 @@ function getSiteId(location) {
   // https://hubmap.matomo.cloud/index.php?module=SitesManager
 
   switch (host) {
-    case 'portal.hubmap.org':
+    case 'portal.hubmapconsortium.org':
       return 1;
     case 'localhost:5001':
       return 2;
