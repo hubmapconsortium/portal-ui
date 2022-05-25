@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { AppContext } from 'js/components/Providers';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -51,8 +50,9 @@ function MetadataMenu({ type, analyticsCategory }) {
 
   const menuID = 'metadata-menu';
 
-  const { isAuthenticated } = useContext(AppContext);
-  const workspacesDisabled = !isAuthenticated;
+  // TODO: Uncomment when workspaces UI is ready.
+  // const { isAuthenticated } = useContext(AppContext);
+  // const workspacesDisabled = !isAuthenticated;
 
   return (
     <>
@@ -97,6 +97,7 @@ function MetadataMenu({ type, analyticsCategory }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
+        {/* TODO: Uncomment when workspace UI is ready.
         <MenuItem
           disabled={workspacesDisabled}
           onClick={() => {
@@ -111,7 +112,7 @@ function MetadataMenu({ type, analyticsCategory }) {
           >
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
-        </MenuItem>
+        </MenuItem> */}
       </DropdownMenu>
     </>
   );

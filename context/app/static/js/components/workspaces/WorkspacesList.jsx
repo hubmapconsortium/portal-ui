@@ -36,13 +36,6 @@ function useWorkspacesList() {
         console.error('Workspaces API failed', response);
         return;
       }
-
-      // Response structure documented here:
-      //   https://docs.google.com/document/d/1W6qJkLoKMqxYtB1p7CpAo-XBkUqCMtTLnT9DogpUErc/edit
-      // (Would prefer documentation in repo or on openAPI.)
-      //
-      // API does not support CORS:
-      //   https://github.com/hubmapconsortium/user_workspaces_server/issues/30
       const results = await response.json();
 
       setWorkspacesList(results);
@@ -62,8 +55,7 @@ function WorkspacesList() {
   async function handleDelete() {
     // TODO: Put up modal and get user input.
     // TODO: Update workspacesList
-    // Waiting on delete to be documented:
-    // https://github.com/hubmapconsortium/user_workspaces_server/issues/36
+    // Waiting on delete to be implemented.
   }
 
   async function handleCreate() {
@@ -93,10 +85,7 @@ function WorkspacesList() {
         </FlexBottom>
       </SeparatedFlexRow>
       <Paper>
-        {
-          // eslint-disable-next-line no-undef
-          `TODO: Use token "${workspacesToken}" with "${workspacesEndpoint}"`
-        }
+        {`TODO: Use token "${workspacesToken}" with "${workspacesEndpoint}"`}
         <hr />
         {JSON.stringify(workspacesList)}
       </Paper>

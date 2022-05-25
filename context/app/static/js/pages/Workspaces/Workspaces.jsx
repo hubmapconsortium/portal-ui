@@ -7,9 +7,7 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import WorkspacesList from 'js/components/workspaces/WorkspacesList';
 
 function Workspaces() {
-  const endpoints = useContext(AppContext);
-  // eslint-disable-next-line no-console
-  console.log(`TODO: Use ${endpoints.workspacesEndpoint}`);
+  const { isAuthenticated } = useContext(AppContext);
   return (
     <>
       <SectionHeader variant="h1" component="h1">
