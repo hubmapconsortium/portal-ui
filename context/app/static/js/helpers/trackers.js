@@ -5,7 +5,7 @@ function getSiteId(location) {
   const { host } = location;
 
   // siteIds should correspond to the list at:
-  // https://hubmapconsortium.matomo.cloud/index.php?module=SitesManager
+  // https://hubmap.matomo.cloud/index.php?module=SitesManager
 
   switch (host) {
     case 'portal.hubmapconsortium.org':
@@ -18,12 +18,12 @@ function getSiteId(location) {
 }
 
 const tracker = new MatomoTracker({
-  urlBase: 'https://hubmapconsortium.matomo.cloud/',
+  urlBase: 'https://hubmap.matomo.cloud/',
   // eslint-disable-next-line no-restricted-globals
   siteId: getSiteId(location),
   // userId: 'UID76903202', // optional, default value: `undefined`.
-  // trackerUrl: 'https://LINK.TO.DOMAIN/tracking.php', // optional, default value: `${urlBase}matomo.php`
-  // srcUrl: 'https://LINK.TO.DOMAIN/tracking.js', // optional, default value: `${urlBase}matomo.js`
+  // trackerUrl: 'https://hubmap.matomo.cloud/tracking.php', // optional, default value: `${urlBase}matomo.php`
+  // srcUrl: 'https://hubmap.matomo.cloud/tracking.js', // optional, default value: `${urlBase}matomo.js`
   disabled: process.env.NODE_ENV === 'test', // Tracking calls should be no-ops during tests.
   // heartBeat: { // optional, enabled by default
   //   active: true, // optional, default value: true
