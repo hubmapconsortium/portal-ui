@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 
-import { MultiMatchQuery } from '@searchkit/sdk';
 import { useSearchkitVariables } from '@searchkit/client';
+import { CustomQuery } from '@searchkit/sdk';
 
 import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
@@ -13,8 +13,26 @@ import Pagination from 'js/components/entity-search/results/Pagination';
 
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
+import SearchBar from 'js/components/entity-search/SearchBar';
 import { SearchLayout, ResultsLayout } from './style';
 import { buildSortPairs, getRangeProps } from './utils';
+
+const query = new CustomQuery({
+  queryFn: (q) => {
+    return {
+      bool: {
+        must: [
+          {
+            simple_query_string: {
+              fields: ['all_text', 'description'],
+              query: q.match(/^\s*HBM\S+\s*$/i) ? `"${q}"` : q,
+            },
+          },
+        ],
+      },
+    };
+  },
+});
 
 function Search({ numericFacetsProps }) {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
@@ -33,9 +51,7 @@ function Search({ numericFacetsProps }) {
         fields: Object.values(fields).map(({ identifier }) => identifier),
       },
       sortOptions: buildSortPairs(Object.values(fields)),
-      query: new MultiMatchQuery({
-        fields: ['all_text'],
-      }),
+      query,
       facets: Object.values(facets).map((facet) =>
         createSearchkitFacet({ ...facet, ...getRangeProps(facet.field, numericFacetsProps) }),
       ),
@@ -50,17 +66,20 @@ function Search({ numericFacetsProps }) {
   const { results } = useSearchkitSDK(config, variables, transporter, filters);
 
   return (
-    <SearchLayout>
-      <Sidebar results={results} />
-      <ResultsLayout>
-        {results?.hits && (
-          <>
-            <ResultsTable hits={results.hits} />
-            <Pagination pageHits={results.hits.page} />
-          </>
-        )}
-      </ResultsLayout>
-    </SearchLayout>
+    <>
+      <SearchBar />
+      <SearchLayout>
+        <Sidebar results={results} />
+        <ResultsLayout>
+          {results?.hits && (
+            <>
+              <ResultsTable hits={results.hits} />
+              <Pagination pageHits={results.hits.page} />
+            </>
+          )}
+        </ResultsLayout>
+      </SearchLayout>
+    </>
   );
 }
 
