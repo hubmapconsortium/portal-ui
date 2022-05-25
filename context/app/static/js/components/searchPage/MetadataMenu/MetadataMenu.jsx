@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import { AppContext } from 'js/components/Providers';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -50,7 +51,7 @@ function MetadataMenu({ type, analyticsCategory }) {
 
   const menuID = 'metadata-menu';
 
-  // eslint-disable-next-line no-undef
+  const { isAuthenticated } = useContext(AppContext);
   const workspacesDisabled = !isAuthenticated;
 
   return (
