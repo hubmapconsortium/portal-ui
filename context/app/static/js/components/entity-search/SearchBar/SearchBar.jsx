@@ -1,5 +1,7 @@
 import React from 'react';
 import { useSearchkit, useSearchkitQueryValue } from '@searchkit/client';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -22,6 +24,13 @@ function SearchBar() {
         fullWidth
         size="small"
         margin="normal"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchRoundedIcon color="primary" />
+            </InputAdornment>
+          ),
+        }}
       />
     </form>
   );
