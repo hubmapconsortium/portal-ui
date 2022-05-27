@@ -14,6 +14,7 @@ import Pagination from 'js/components/entity-search/results/Pagination';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import SearchBar from 'js/components/entity-search/SearchBar';
+import FacetChips from 'js/components/entity-search/facets/facetChips/FacetChips';
 import { SearchLayout, ResultsLayout } from './style';
 import { buildSortPairs, getRangeProps } from './utils';
 
@@ -68,6 +69,7 @@ function Search({ numericFacetsProps }) {
   return (
     <>
       <SearchBar />
+      {results?.summary.appliedFilters && <FacetChips appliedFilters={results.summary.appliedFilters} />}
       <SearchLayout>
         <Sidebar results={results} />
         <ResultsLayout>
