@@ -1,8 +1,9 @@
 import React from 'react';
-import Chip from '@material-ui/core/Chip';
+
+import { StyledChip } from './style';
 
 function FacetChip({ label, value, onDelete }) {
-  return <Chip onDelete={onDelete} label={`${label} : ${value}`} variant="outlined" />;
+  return <StyledChip onDelete={onDelete} label={`${label} : ${value}`} variant="outlined" />;
 }
 
 export default FacetChip;
