@@ -4,6 +4,7 @@ import { useSearchkit } from '@searchkit/client';
 
 import SelectFacetItem from 'js/components/entity-search/facets/select/SelectFacetItem';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { defaultSelectFacetSize } from 'js/components/entity-search/SearchWrapper/utils';
 import { StyledFormGroup } from './style';
 
 const sharedButtonProps = {
@@ -23,7 +24,7 @@ function SelectFacet({ facet: { entries, identifier } }) {
   }
 
   function handleViewLess() {
-    setFacetSize({ identifier, size: 5 });
+    setFacetSize({ identifier, size: defaultSelectFacetSize });
     setIsViewingAll(false);
   }
   return (
