@@ -6,14 +6,22 @@ import immer from 'js/stores/immerMiddleware';
 
 const { Provider, useStore } = createContext();
 
-const createStore = ({ initialFields, initialFacets, fields, facets, filters, entityType, numericFacetsProps }) =>
+const createStore = ({
+  initialFields,
+  initialFacets,
+  fields,
+  facets,
+  defaultFilters,
+  entityType,
+  numericFacetsProps,
+}) =>
   create(
     immer((set) => ({
       initialFields,
       initialFacets,
+      defaultFilters,
       fields,
       facets,
-      filters,
       entityType,
       numericFacetsProps,
       setFields: (selectedFields) => set({ fields: selectedFields }),

@@ -27,7 +27,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
     createField({ fieldName: 'mapped_last_modified_timestamp', label: 'Last Modified', type: 'string' }),
   ]);
 
-  const filters = [
+  const defaultFilters = [
     {
       definition: new TermFilter({
         identifier: 'entity_type.keyword',
@@ -51,7 +51,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
         initialFields,
         facets: initialFacets,
         fields: initialFields,
-        filters,
+        defaultFilters,
         entityType,
         numericFacetsProps,
       }}

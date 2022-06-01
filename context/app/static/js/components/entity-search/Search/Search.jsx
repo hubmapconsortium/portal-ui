@@ -38,7 +38,7 @@ const query = new CustomQuery({
 function Search({ numericFacetsProps }) {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const authHeader = getAuthHeader(groupsToken);
-  const { fields, facets, filters } = useStore();
+  const { fields, facets, defaultFilters } = useStore();
 
   const config = useMemo(
     () => ({
@@ -56,15 +56,15 @@ function Search({ numericFacetsProps }) {
       facets: Object.values(facets).map((facet) =>
         createSearchkitFacet({ ...facet, ...getRangeProps(facet.field, numericFacetsProps) }),
       ),
-      filters: filters.map((filter) => filter.definition),
+      filters: defaultFilters.map((filter) => filter.definition),
     }),
-    [authHeader, elasticsearchEndpoint, facets, fields, filters, numericFacetsProps],
+    [authHeader, defaultFilters, elasticsearchEndpoint, facets, fields, numericFacetsProps],
   );
 
   const transporter = new RequestTransporter(config);
 
   const variables = useSearchkitVariables();
-  const { results } = useSearchkitSDK(config, variables, transporter, filters);
+  const { results } = useSearchkitSDK(config, variables, transporter, defaultFilters);
 
   return (
     <>
