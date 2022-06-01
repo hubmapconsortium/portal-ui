@@ -1,3 +1,5 @@
+import { TermFilter } from '@searchkit/sdk';
+
 import {
   appendKeywordToFieldName,
   prependMetadataPathToFieldName,
@@ -6,6 +8,7 @@ import {
   createField,
   mergeObjects,
   getFieldConfigValue,
+  getTypeFilter,
 } from './utils';
 
 describe('appendKeywordToFieldName', () => {
@@ -111,5 +114,21 @@ test('mergeObjects should merge objects with unique keys', () => {
 test('getFieldConfigValue should return the first value of the object', () => {
   expect(getFieldConfigValue({ animal: { size: 'large' } })).toEqual({
     size: 'large',
+  });
+});
+
+test('getTypeFilter should return an object with definition and value entries', () => {
+  expect(getTypeFilter({ fieldName: 'animal', label: 'Animal', type: 'string', value: 'cat' })).toEqual({
+    animal_cat: {
+      definition: new TermFilter({
+        field: 'animal.keyword',
+        identifier: 'animal',
+        label: 'Animal',
+      }),
+      value: {
+        identifier: 'animal',
+        value: 'cat',
+      },
+    },
   });
 });
