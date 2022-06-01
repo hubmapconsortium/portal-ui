@@ -9,6 +9,7 @@ import {
   mergeObjects,
   getFieldConfigValue,
   getTypeFilter,
+  getEntityTypeFilter,
 } from './utils';
 
 describe('appendKeywordToFieldName', () => {
@@ -128,6 +129,22 @@ test('getTypeFilter should return an object with definition and value entries', 
       value: {
         identifier: 'animal',
         value: 'cat',
+      },
+    },
+  });
+});
+
+test('getEntityTypeFilter should return the a TypeFilter with the value capitalized', () => {
+  expect(getEntityTypeFilter('dataset')).toEqual({
+    entity_type_Dataset: {
+      definition: new TermFilter({
+        field: 'entity_type.keyword',
+        identifier: 'entity_type',
+        label: 'Entity Type',
+      }),
+      value: {
+        identifier: 'entity_type',
+        value: 'Dataset',
       },
     },
   });
