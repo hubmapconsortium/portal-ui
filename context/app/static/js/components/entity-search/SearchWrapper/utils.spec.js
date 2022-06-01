@@ -5,6 +5,7 @@ import {
   buildMetadataFieldConfig,
   createField,
   mergeObjects,
+  getFieldConfigValue,
 } from './utils';
 
 describe('appendKeywordToFieldName', () => {
@@ -105,4 +106,10 @@ describe('createField', () => {
 
 test('mergeObjects should merge objects with unique keys', () => {
   expect(mergeObjects([{ a: 1, b: 2 }, { c: 3 }])).toEqual({ a: 1, b: 2, c: 3 });
+});
+
+test('getFieldConfigValue should return the first value of the object', () => {
+  expect(getFieldConfigValue({ animal: { size: 'large' } })).toEqual({
+    size: 'large',
+  });
 });

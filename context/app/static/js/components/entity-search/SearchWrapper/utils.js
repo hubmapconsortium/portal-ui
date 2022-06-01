@@ -121,13 +121,13 @@ function getDonorMetadataFields(entityType) {
   ];
 }
 
-function getFieldConfigValues(fieldConfig) {
+function getFieldConfigValue(fieldConfig) {
   // createField returns an object with only a single value.
   return Object.values(fieldConfig)[0];
 }
 
 function getTypeFilter({ fieldName, value, ...rest }) {
-  const { field, identifier, label } = getFieldConfigValues(createField({ fieldName, ...rest }));
+  const { field, identifier, label } = getFieldConfigValue(createField({ fieldName, ...rest }));
 
   // TermFilter id as determined by searchkit.
   // https://github.com/searchkit/searchkit/blob/next/packages/searchkit-sdk/src/filters/TermFilter.ts
@@ -189,7 +189,7 @@ export {
   createAffiliationFacet,
   createSearchkitFacet,
   createField,
-  getFieldConfigValues,
+  getFieldConfigValue,
   getTypeFilter,
   getEntityTypeFilter,
   defaultSelectFacetSize,
