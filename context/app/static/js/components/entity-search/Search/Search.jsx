@@ -40,6 +40,7 @@ function Search({ numericFacetsProps }) {
   const authHeader = getAuthHeader(groupsToken);
   const { fields, facets, defaultFilters } = useStore();
 
+  const defaultFilterValues = Object.values(defaultFilters);
   const config = useMemo(
     () => ({
       host: elasticsearchEndpoint,
@@ -56,15 +57,15 @@ function Search({ numericFacetsProps }) {
       facets: Object.values(facets).map((facet) =>
         createSearchkitFacet({ ...facet, ...getRangeProps(facet.field, numericFacetsProps) }),
       ),
-      filters: defaultFilters.map((filter) => filter.definition),
+      filters: defaultFilterValues.map((filter) => filter.definition),
     }),
-    [authHeader, defaultFilters, elasticsearchEndpoint, facets, fields, numericFacetsProps],
+    [authHeader, defaultFilterValues, elasticsearchEndpoint, facets, fields, numericFacetsProps],
   );
 
   const transporter = new RequestTransporter(config);
 
   const variables = useSearchkitVariables();
-  const { results } = useSearchkitSDK(config, variables, transporter, defaultFilters);
+  const { results } = useSearchkitSDK(config, variables, transporter, defaultFilterValues);
 
   return (
     <>
