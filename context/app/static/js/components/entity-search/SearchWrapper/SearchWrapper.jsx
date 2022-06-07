@@ -2,6 +2,7 @@ import React from 'react';
 import { SearchkitClient, SearchkitProvider } from '@searchkit/client';
 
 import Search from 'js/components/entity-search/Search';
+import { getDefaultFilters } from 'js/components/entity-search/searchkit-modifications/getDefaultFilters';
 import {
   mergeObjects,
   getDonorMetadataFields,
@@ -31,7 +32,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
     createField({ fieldName: 'mapped_last_modified_timestamp', label: 'Last Modified', type: 'string' }),
   ]);
 
-  const defaultFilters = getEntityTypeFilter(entityType);
+  const defaultFilters = mergeObjects([getEntityTypeFilter(entityType), getDefaultFilters()]);
 
   const numericFacetsProps = useNumericFacetsProps(entityType);
 

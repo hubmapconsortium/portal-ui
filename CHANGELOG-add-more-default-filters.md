@@ -1,0 +1,1 @@
+- Add default filters used in the existing search page to the search revision.
