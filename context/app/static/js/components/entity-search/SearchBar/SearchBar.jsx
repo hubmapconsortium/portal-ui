@@ -28,7 +28,7 @@ function SearchBar() {
         value={query}
         fullWidth
         size="small"
-        margin="normal"
+        margin="none"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

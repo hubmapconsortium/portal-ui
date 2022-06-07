@@ -15,7 +15,7 @@ import RequestTransporter from 'js/components/entity-search/searchkit-modificati
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import SearchBar from 'js/components/entity-search/SearchBar';
 import FacetChips from 'js/components/entity-search/facets/facetChips/FacetChips';
-import { SearchLayout, ResultsLayout } from './style';
+import { Flex, Grow, ResultsLayout } from './style';
 import { buildSortPairs, getRangeProps } from './utils';
 import { useAllResultsUUIDs } from './hooks';
 import MetadataMenu from '../MetadataMenu/MetadataMenu';
@@ -83,10 +83,14 @@ function Search({ numericFacetsProps }) {
 
   return (
     <>
-      <SearchBar />
-      <MetadataMenu allResultsUUIDs={allResultsUUIDs} entityType={entityType} />
+      <Flex>
+        <Grow>
+          <SearchBar />
+        </Grow>
+        <MetadataMenu allResultsUUIDs={allResultsUUIDs} entityType={entityType} />
+      </Flex>
       {results?.summary.appliedFilters && <FacetChips appliedFilters={results.summary.appliedFilters} />}
-      <SearchLayout>
+      <Flex>
         <Sidebar results={results} />
         <ResultsLayout>
           {results?.hits && (
@@ -96,7 +100,7 @@ function Search({ numericFacetsProps }) {
             </>
           )}
         </ResultsLayout>
-      </SearchLayout>
+      </Flex>
     </>
   );
 }
