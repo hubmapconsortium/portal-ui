@@ -6,7 +6,6 @@ import DropdownMenuButton from 'js/shared-styles/dropdowns/DropdownMenuButton';
 
 const StyledDropdownMenuButton = styled(DropdownMenuButton)`
   margin: 0 ${(props) => props.theme.spacing(1)}px;
-  height: 100%;
 `;
 
 const StyledLink = styled(Link)`
