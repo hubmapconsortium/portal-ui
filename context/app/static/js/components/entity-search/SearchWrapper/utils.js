@@ -128,6 +128,8 @@ const typeToSearchKitFacetMap = {
   boolean: RefinementSelectFacet,
 };
 
+const defaultSelectFacetSize = 5;
+
 function createSearchkitFacet({ field, identifier, label, type, ...rest }) {
   const Facet = typeToSearchKitFacetMap[type];
 
@@ -136,7 +138,9 @@ function createSearchkitFacet({ field, identifier, label, type, ...rest }) {
     identifier,
     label,
     type,
+    // multipleSelect and size props only affect RefinementSelectFacets.
     multipleSelect: true,
+    size: defaultSelectFacetSize,
     ...rest,
   });
 }
@@ -153,4 +157,5 @@ export {
   createAffiliationFacet,
   createSearchkitFacet,
   createField,
+  defaultSelectFacetSize,
 };
