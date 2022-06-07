@@ -1,1 +1,0 @@
-- Use `alert` as a stop-gap so we can understand how Cells API is working.

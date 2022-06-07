@@ -1,1 +1,0 @@
-- Add metadata menu to search revision ui.

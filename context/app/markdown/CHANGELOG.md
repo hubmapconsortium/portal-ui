@@ -1,3 +1,25 @@
+## v0.46.0 - 2022-06-07
+
+- Add default filters used in the existing search page to the search revision.
+- Avoid referencing global variables: Instead get everything from a context provider.
+- Add mapped_last_modified_timestamp as default sort for search revision.
+- Add button to view all/less select facet items in search revision ui.
+- Fix bug when configuring facets in search revision.
+- Fix immer syntax bug in entity-searchs store for search ui revision.
+- Clean up flask templates. Should not change behavior.
+- Use `alert` as a stop-gap so we can understand how Cells API is working.
+- Add the `--silent` option to jest to avoid cluttering the log with expected proptype warnings.
+- Add metadata menu to search revision ui.
+- Matomo React proved awkward: Just use plain JS functions.
+- Migrate to Python 3.9.
+- Add range slider components for numeric facets in search ui revision.
+- Remove references to google analytics.
+- Add search bar to search ui revision.
+- Add facet chips to search revision ui.
+- Add pagination to search ui revision.
+- Update matomo init to reflect the new, paid, account.
+
+
 ## v0.44.0 - 2022-05-13
 
 - Enable users to configure facets for string type fields in search ui revision.

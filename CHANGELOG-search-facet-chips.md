@@ -1,1 +1,0 @@
-- Add facet chips to search revision ui.

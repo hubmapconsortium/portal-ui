@@ -1,1 +1,0 @@
-- Add button to view all/less select facet items in search revision ui.

@@ -1,1 +1,0 @@
-- Add pagination to search ui revision.
