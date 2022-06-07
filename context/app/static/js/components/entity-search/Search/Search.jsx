@@ -65,7 +65,8 @@ function Search({ numericFacetsProps }) {
   const transporter = new RequestTransporter(config);
 
   const variables = useSearchkitVariables();
-  const { results } = useSearchkitSDK(config, variables, transporter, defaultFilterValues);
+  const defaultSort = 'mapped_last_modified_timestamp.keyword.desc';
+  const { results } = useSearchkitSDK(config, variables, transporter, defaultFilterValues, defaultSort);
 
   return (
     <>
