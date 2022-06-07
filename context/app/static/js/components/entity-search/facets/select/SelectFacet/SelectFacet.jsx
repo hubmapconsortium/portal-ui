@@ -46,7 +46,7 @@ function SelectFacet({ facet: { entries, identifier } }) {
         </Button>
       ) : (
         <Button {...sharedButtonProps} onClick={handleViewAll}>
-          View All
+          View all
         </Button>
       )}
     </>
