@@ -24,9 +24,18 @@ const createStore = ({
       facets,
       entityType,
       numericFacetsProps,
-      setFields: (selectedFields) => set({ fields: selectedFields }),
-      setFacets: (selectedFacets) => set({ facets: selectedFacets }),
-      setNumericFacetsProps: (numericFacets) => set({ numericFacetsProps: numericFacets }),
+      setFields: (selectedFields) =>
+        set((state) => {
+          state.fields = selectedFields;
+        }),
+      setFacets: (selectedFacets) =>
+        set((state) => {
+          state.facets = selectedFacets;
+        }),
+      setNumericFacetsProps: (numericFacets) =>
+        set((state) => {
+          state.numericFacetsProps = numericFacets;
+        }),
       setFacetSize: ({ identifier, size }) =>
         set((state) => {
           state.facets[identifier].size = size;
