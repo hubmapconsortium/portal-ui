@@ -15,8 +15,10 @@ import RequestTransporter from 'js/components/entity-search/searchkit-modificati
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import SearchBar from 'js/components/entity-search/SearchBar';
 import FacetChips from 'js/components/entity-search/facets/facetChips/FacetChips';
-import { SearchLayout, ResultsLayout } from './style';
+import { Flex, Grow, ResultsLayout } from './style';
 import { buildSortPairs, getRangeProps } from './utils';
+import { useAllResultsUUIDs } from './hooks';
+import MetadataMenu from '../MetadataMenu/MetadataMenu';
 
 const query = new CustomQuery({
   queryFn: (q) => {
@@ -38,11 +40,14 @@ const query = new CustomQuery({
 function Search({ numericFacetsProps }) {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const authHeader = getAuthHeader(groupsToken);
-  const { fields, facets, defaultFilters } = useStore();
+  const { fields, facets, defaultFilters, entityType } = useStore();
 
   const defaultFilterValues = Object.values(defaultFilters);
-  const config = useMemo(
-    () => ({
+
+  const { allResultsUUIDs, setQueryBodyAndReturnBody } = useAllResultsUUIDs();
+
+  const config = useMemo(() => {
+    return {
       host: elasticsearchEndpoint,
       connectionOptions: {
         headers: {
@@ -58,9 +63,17 @@ function Search({ numericFacetsProps }) {
         createSearchkitFacet({ ...facet, ...getRangeProps(facet.field, numericFacetsProps) }),
       ),
       filters: defaultFilterValues.map((filter) => filter.definition),
-    }),
-    [authHeader, defaultFilterValues, elasticsearchEndpoint, facets, fields, numericFacetsProps],
-  );
+      postProcessRequest: setQueryBodyAndReturnBody,
+    };
+  }, [
+    authHeader,
+    defaultFilterValues,
+    elasticsearchEndpoint,
+    facets,
+    fields,
+    numericFacetsProps,
+    setQueryBodyAndReturnBody,
+  ]);
 
   const transporter = new RequestTransporter(config);
 
@@ -70,9 +83,14 @@ function Search({ numericFacetsProps }) {
 
   return (
     <>
-      <SearchBar />
+      <Flex>
+        <Grow>
+          <SearchBar />
+        </Grow>
+        <MetadataMenu allResultsUUIDs={allResultsUUIDs} entityType={entityType} />
+      </Flex>
       {results?.summary.appliedFilters && <FacetChips appliedFilters={results.summary.appliedFilters} />}
-      <SearchLayout>
+      <Flex>
         <Sidebar results={results} />
         <ResultsLayout>
           {results?.hits && (
@@ -82,7 +100,7 @@ function Search({ numericFacetsProps }) {
             </>
           )}
         </ResultsLayout>
-      </SearchLayout>
+      </Flex>
     </>
   );
 }
