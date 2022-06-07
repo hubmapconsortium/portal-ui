@@ -1,0 +1,1 @@
+- Add mapped_last_modified_timestamp as default sort for search revision.

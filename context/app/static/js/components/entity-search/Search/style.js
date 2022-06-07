@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 
-const SearchLayout = styled.div`
+const Flex = styled.div`
   display: flex;
+  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+`;
+
+const Grow = styled.div`
+  flex-grow: 1;
 `;
 
 const ResultsLayout = styled.div`
@@ -11,4 +16,4 @@ const ResultsLayout = styled.div`
   flex-direction: column;
 `;
 
-export { SearchLayout, ResultsLayout };
+export { Flex, Grow, ResultsLayout };

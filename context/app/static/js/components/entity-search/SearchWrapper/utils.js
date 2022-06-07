@@ -1,4 +1,4 @@
-import { RefinementSelectFacet, RangeFacet } from '@searchkit/sdk';
+import { RefinementSelectFacet, RangeFacet, TermFilter } from '@searchkit/sdk';
 
 import metadataFieldtoTypeMap from 'metadata-field-types';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
@@ -121,6 +121,38 @@ function getDonorMetadataFields(entityType) {
   ];
 }
 
+function getFieldConfigValue(fieldConfig) {
+  // createField returns an object with only a single value.
+  return Object.values(fieldConfig)[0];
+}
+
+function getTypeFilter({ fieldName, value, ...rest }) {
+  const { field, identifier, label } = getFieldConfigValue(createField({ fieldName, ...rest }));
+
+  // TermFilter id as determined by searchkit.
+  // https://github.com/searchkit/searchkit/blob/next/packages/searchkit-sdk/src/filters/TermFilter.ts
+  const id = `${identifier}_${value}`;
+  return {
+    [id]: {
+      definition: new TermFilter({
+        identifier,
+        field,
+        label,
+      }),
+      value: { identifier, value },
+    },
+  };
+}
+
+function getEntityTypeFilter(entityType) {
+  return getTypeFilter({
+    fieldName: 'entity_type',
+    label: 'Entity Type',
+    type: 'string',
+    value: capitalizeString(entityType),
+  });
+}
+
 const typeToSearchKitFacetMap = {
   integer: RangeFacet,
   number: RangeFacet,
@@ -157,5 +189,8 @@ export {
   createAffiliationFacet,
   createSearchkitFacet,
   createField,
+  getFieldConfigValue,
+  getTypeFilter,
+  getEntityTypeFilter,
   defaultSelectFacetSize,
 };

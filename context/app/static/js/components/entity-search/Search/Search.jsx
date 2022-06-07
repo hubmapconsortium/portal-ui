@@ -14,8 +14,11 @@ import Pagination from 'js/components/entity-search/results/Pagination';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import SearchBar from 'js/components/entity-search/SearchBar';
-import { SearchLayout, ResultsLayout } from './style';
+import FacetChips from 'js/components/entity-search/facets/facetChips/FacetChips';
+import { Flex, Grow, ResultsLayout } from './style';
 import { buildSortPairs, getRangeProps } from './utils';
+import { useAllResultsUUIDs } from './hooks';
+import MetadataMenu from '../MetadataMenu/MetadataMenu';
 
 const query = new CustomQuery({
   queryFn: (q) => {
@@ -37,10 +40,14 @@ const query = new CustomQuery({
 function Search({ numericFacetsProps }) {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const authHeader = getAuthHeader(groupsToken);
-  const { fields, facets, filters } = useStore();
+  const { fields, facets, defaultFilters, entityType } = useStore();
 
-  const config = useMemo(
-    () => ({
+  const defaultFilterValues = Object.values(defaultFilters);
+
+  const { allResultsUUIDs, setQueryBodyAndReturnBody } = useAllResultsUUIDs();
+
+  const config = useMemo(() => {
+    return {
       host: elasticsearchEndpoint,
       connectionOptions: {
         headers: {
@@ -55,20 +62,35 @@ function Search({ numericFacetsProps }) {
       facets: Object.values(facets).map((facet) =>
         createSearchkitFacet({ ...facet, ...getRangeProps(facet.field, numericFacetsProps) }),
       ),
-      filters: filters.map((filter) => filter.definition),
-    }),
-    [authHeader, elasticsearchEndpoint, facets, fields, filters, numericFacetsProps],
-  );
+      filters: defaultFilterValues.map((filter) => filter.definition),
+      postProcessRequest: setQueryBodyAndReturnBody,
+    };
+  }, [
+    authHeader,
+    defaultFilterValues,
+    elasticsearchEndpoint,
+    facets,
+    fields,
+    numericFacetsProps,
+    setQueryBodyAndReturnBody,
+  ]);
 
   const transporter = new RequestTransporter(config);
 
   const variables = useSearchkitVariables();
-  const { results } = useSearchkitSDK(config, variables, transporter, filters);
+  const defaultSort = 'mapped_last_modified_timestamp.keyword.desc';
+  const { results } = useSearchkitSDK(config, variables, transporter, defaultFilterValues, defaultSort);
 
   return (
     <>
-      <SearchBar />
-      <SearchLayout>
+      <Flex>
+        <Grow>
+          <SearchBar />
+        </Grow>
+        <MetadataMenu allResultsUUIDs={allResultsUUIDs} entityType={entityType} />
+      </Flex>
+      {results?.summary.appliedFilters && <FacetChips appliedFilters={results.summary.appliedFilters} />}
+      <Flex>
         <Sidebar results={results} />
         <ResultsLayout>
           {results?.hits && (
@@ -78,7 +100,7 @@ function Search({ numericFacetsProps }) {
             </>
           )}
         </ResultsLayout>
-      </SearchLayout>
+      </Flex>
     </>
   );
 }
