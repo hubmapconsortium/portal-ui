@@ -1,13 +1,12 @@
 import React from 'react';
 // import { trackEvent } from 'js/helpers/trackers';
-import MenuItem from '@material-ui/core/MenuItem';
 
 import { createDownloadUrl } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon } from './style';
+import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
 
 async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu }) {
   const response = await fetch(urlPath, {
@@ -53,13 +52,13 @@ function MetadataMenu({ entityType, allResultsUUIDs }) {
     <>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
       <DropdownMenu id={menuID}>
-        <MenuItem>
+        <StyledMenuItem>
           <StyledLink href={`/lineup/${lcPluralType}`}>Visualize</StyledLink>
           <SecondaryBackgroundTooltip title="Visualize all available metadata in Lineup." placement="bottom-start">
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
-        </MenuItem>
-        <MenuItem
+        </StyledMenuItem>
+        <StyledMenuItem
           onClick={() =>
             fetchAndDownload({
               urlPath: `/metadata/v0/${lcPluralType}.tsv`,
@@ -72,8 +71,8 @@ function MetadataMenu({ entityType, allResultsUUIDs }) {
           <SecondaryBackgroundTooltip title="Download a TSV of the table metadata." placement="bottom-start">
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
-        </MenuItem>
-        <MenuItem
+        </StyledMenuItem>
+        <StyledMenuItem
           onClick={() =>
             fetchAndDownload({
               urlPath: `/notebooks/${lcPluralType}.ipynb`,
@@ -89,7 +88,7 @@ function MetadataMenu({ entityType, allResultsUUIDs }) {
           >
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
-        </MenuItem>
+        </StyledMenuItem>
       </DropdownMenu>
     </>
   );
