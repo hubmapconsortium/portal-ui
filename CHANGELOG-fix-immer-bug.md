@@ -1,0 +1,1 @@
+- Fix immer syntax bug in entity-searchs store for search ui revision.
