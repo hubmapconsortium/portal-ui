@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 
 import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
@@ -52,7 +52,7 @@ function SearchWrapper(props) {
     const removalFn = searchkit.addResultsListener((results) => {
       const newQueryString = searchkit.state?.q;
       if (![queryString.current, undefined].includes(newQueryString)) {
-        ReactGA.event({
+        trackEvent({
           category: analyticsCategory,
           action: 'Free Text Search',
           label: newQueryString,

@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 
-import { MultiMatchQuery } from '@searchkit/sdk';
 import { useSearchkitVariables } from '@searchkit/client';
+import { CustomQuery } from '@searchkit/sdk';
 
 import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
@@ -9,18 +9,45 @@ import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { createSearchkitFacet } from 'js/components/entity-search/SearchWrapper/utils';
 import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
 import ResultsTable from 'js/components/entity-search/ResultsTable';
+import Pagination from 'js/components/entity-search/results/Pagination';
+
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
-import { SearchLayout, ResultsLayout } from './style';
-import { buildSortPairs } from './utils';
+import SearchBar from 'js/components/entity-search/SearchBar';
+import FacetChips from 'js/components/entity-search/facets/facetChips/FacetChips';
+import { Flex, Grow, ResultsLayout } from './style';
+import { buildSortPairs, getRangeProps } from './utils';
+import { useAllResultsUUIDs } from './hooks';
+import MetadataMenu from '../MetadataMenu/MetadataMenu';
 
-function Search() {
+const query = new CustomQuery({
+  queryFn: (q) => {
+    return {
+      bool: {
+        must: [
+          {
+            simple_query_string: {
+              fields: ['all_text', 'description'],
+              query: q.match(/^\s*HBM\S+\s*$/i) ? `"${q}"` : q,
+            },
+          },
+        ],
+      },
+    };
+  },
+});
+
+function Search({ numericFacetsProps }) {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const authHeader = getAuthHeader(groupsToken);
-  const { fields, facets, filters } = useStore();
+  const { fields, facets, defaultFilters, entityType } = useStore();
 
-  const config = useMemo(
-    () => ({
+  const defaultFilterValues = Object.values(defaultFilters);
+
+  const { allResultsUUIDs, setQueryBodyAndReturnBody } = useAllResultsUUIDs();
+
+  const config = useMemo(() => {
+    return {
       host: elasticsearchEndpoint,
       connectionOptions: {
         headers: {
@@ -31,25 +58,50 @@ function Search() {
         fields: Object.values(fields).map(({ identifier }) => identifier),
       },
       sortOptions: buildSortPairs(Object.values(fields)),
-      query: new MultiMatchQuery({
-        fields: ['all_text'],
-      }),
-      facets: Object.values(facets).map((facet) => createSearchkitFacet(facet)),
-      filters: filters.map((filter) => filter.definition),
-    }),
-    [authHeader, elasticsearchEndpoint, facets, fields, filters],
-  );
+      query,
+      facets: Object.values(facets).map((facet) =>
+        createSearchkitFacet({ ...facet, ...getRangeProps(facet.field, numericFacetsProps) }),
+      ),
+      filters: defaultFilterValues.map((filter) => filter.definition),
+      postProcessRequest: setQueryBodyAndReturnBody,
+    };
+  }, [
+    authHeader,
+    defaultFilterValues,
+    elasticsearchEndpoint,
+    facets,
+    fields,
+    numericFacetsProps,
+    setQueryBodyAndReturnBody,
+  ]);
 
   const transporter = new RequestTransporter(config);
 
   const variables = useSearchkitVariables();
-  const { results } = useSearchkitSDK(config, variables, transporter, filters);
+  const defaultSort = 'mapped_last_modified_timestamp.keyword.desc';
+  const { results } = useSearchkitSDK(config, variables, transporter, defaultFilterValues, defaultSort);
 
   return (
-    <SearchLayout>
-      <Sidebar results={results} />
-      <ResultsLayout>{results?.hits && <ResultsTable hits={results.hits} />}</ResultsLayout>
-    </SearchLayout>
+    <>
+      <Flex>
+        <Grow>
+          <SearchBar />
+        </Grow>
+        <MetadataMenu allResultsUUIDs={allResultsUUIDs} entityType={entityType} />
+      </Flex>
+      {results?.summary.appliedFilters && <FacetChips appliedFilters={results.summary.appliedFilters} />}
+      <Flex>
+        <Sidebar results={results} />
+        <ResultsLayout>
+          {results?.hits && (
+            <>
+              <ResultsTable hits={results.hits} />
+              <Pagination pageHits={results.hits.page} />
+            </>
+          )}
+        </ResultsLayout>
+      </Flex>
+    </>
   );
 }
 

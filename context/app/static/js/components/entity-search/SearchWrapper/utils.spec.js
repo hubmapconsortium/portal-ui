@@ -1,3 +1,5 @@
+import { TermFilter } from '@searchkit/sdk';
+
 import {
   appendKeywordToFieldName,
   prependMetadataPathToFieldName,
@@ -5,6 +7,9 @@ import {
   buildMetadataFieldConfig,
   createField,
   mergeObjects,
+  getFieldConfigValue,
+  getTypeFilter,
+  getEntityTypeFilter,
 } from './utils';
 
 describe('appendKeywordToFieldName', () => {
@@ -105,4 +110,42 @@ describe('createField', () => {
 
 test('mergeObjects should merge objects with unique keys', () => {
   expect(mergeObjects([{ a: 1, b: 2 }, { c: 3 }])).toEqual({ a: 1, b: 2, c: 3 });
+});
+
+test('getFieldConfigValue should return the first value of the object', () => {
+  expect(getFieldConfigValue({ animal: { size: 'large' } })).toEqual({
+    size: 'large',
+  });
+});
+
+test('getTypeFilter should return an object with definition and value entries', () => {
+  expect(getTypeFilter({ fieldName: 'animal', label: 'Animal', type: 'string', value: 'cat' })).toEqual({
+    animal_cat: {
+      definition: new TermFilter({
+        field: 'animal.keyword',
+        identifier: 'animal',
+        label: 'Animal',
+      }),
+      value: {
+        identifier: 'animal',
+        value: 'cat',
+      },
+    },
+  });
+});
+
+test('getEntityTypeFilter should return the a TypeFilter with the value capitalized', () => {
+  expect(getEntityTypeFilter('dataset')).toEqual({
+    entity_type_Dataset: {
+      definition: new TermFilter({
+        field: 'entity_type.keyword',
+        identifier: 'entity_type',
+        label: 'Entity Type',
+      }),
+      value: {
+        identifier: 'entity_type',
+        value: 'Dataset',
+      },
+    },
+  });
 });

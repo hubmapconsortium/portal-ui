@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 
 import { LightBlueLink } from '.';
 
 function sendOutboundEvent(event) {
-  ReactGA.event({
+  trackEvent({
     category: 'Outbound Link',
     action: 'Clicked',
     label: event.target.href,

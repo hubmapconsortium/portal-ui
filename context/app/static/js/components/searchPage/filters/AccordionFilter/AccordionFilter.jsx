@@ -1,6 +1,6 @@
 import React from 'react';
 import { RefinementListFilter, RangeFilter, CheckboxFilter, HierarchicalMenuFilter } from 'searchkit';
-import ReactGA from 'react-ga';
+import { trackEvent } from 'js/helpers/trackers';
 
 import FilterInnerAccordion from 'js/components/searchPage/filters/FilterInnerAccordion';
 import HierarchicalFilterItem from 'js/components/searchPage/filters/HierarchicalFilterItem';
@@ -10,7 +10,7 @@ export function withAnalyticsEvent(ItemComponent, title, analyticsCategory) {
   return function UpdatedItemComponent({ onClick: originalOnClick, label, active, ...rest }) {
     const facetAction = active ? 'Unselect' : 'Select';
     function updatedOnClick() {
-      ReactGA.event({
+      trackEvent({
         category: analyticsCategory,
         action: `${facetAction} Facet`,
         label: `${title}: ${label}`,
