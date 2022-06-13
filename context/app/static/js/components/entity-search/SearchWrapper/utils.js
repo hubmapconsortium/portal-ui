@@ -1,9 +1,10 @@
-import { RefinementSelectFacet, RangeFacet, TermFilter } from '@searchkit/sdk';
+import { RangeFacet, TermFilter } from '@searchkit/sdk';
 
 import metadataFieldtoTypeMap from 'metadata-field-types';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { capitalizeString } from 'js/helpers/functions';
 import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumentPaths';
+import RefinementSelectFacet from 'js/components/entity-search/searchkit-modifications/RefinementSelectFacet';
 
 // appends '.keyword' to field name for elasticsearch string fields
 function appendKeywordToFieldName({ fieldName, type }) {
