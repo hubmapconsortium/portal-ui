@@ -1,9 +1,7 @@
 import React from 'react';
 import { useSearchkit, useSearchkitQueryValue } from '@searchkit/client';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
-import TextField from '@material-ui/core/TextField';
 
+import SearchBarInput from 'js/shared-styles/inputs/SearchBar';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 
 function SearchBar() {
@@ -21,21 +19,11 @@ function SearchBar() {
       }}
       role="search"
     >
-      <TextField
+      <SearchBarInput
         id={`${entityType}-search`}
-        variant="outlined"
         onChange={(event) => setQuery(event.target.value)}
         value={query}
         fullWidth
-        size="small"
-        margin="none"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchRoundedIcon color="primary" />
-            </InputAdornment>
-          ),
-        }}
       />
     </form>
   );
