@@ -1,1 +1,1 @@
-- Only diplay view all button for select facets in search revision ui when additional aggs exist.
+- Only display view all button for select facets in search revision ui when additional aggs exist.
