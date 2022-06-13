@@ -1,0 +1,1 @@
+- Consolidate search hooks into single hook.
