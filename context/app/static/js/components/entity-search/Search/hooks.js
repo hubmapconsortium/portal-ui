@@ -102,7 +102,7 @@ function useSearch(numericFacetsProps) {
 
   const variables = useSearchkitVariables();
   const defaultSort = 'mapped_last_modified_timestamp.keyword.desc';
-  const { results } = useSearchkitSDK(config, variables, transporter, defaultFilterValues, defaultSort);
+  const { results } = useSearchkitSDK({ config, variables, transporter, filters: defaultFilterValues, defaultSort });
 
   return { results, entityType, allResultsUUIDs };
 }
