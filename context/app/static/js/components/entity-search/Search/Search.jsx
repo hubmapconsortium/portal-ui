@@ -21,8 +21,8 @@ const createSkClient = () =>
     itemsPerPage: defaultPageSize,
   });
 
-function Search({ numericFacetsProps }) {
-  const { results, allResultsUUIDs, entityType } = useSearch(numericFacetsProps);
+function Search() {
+  const { results, allResultsUUIDs, entityType } = useSearch();
   return (
     <>
       <Flex>

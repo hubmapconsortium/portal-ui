@@ -60,10 +60,10 @@ const query = new CustomQuery({
   },
 });
 
-function useSearch(numericFacetsProps) {
+function useSearch() {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const authHeader = getAuthHeader(groupsToken);
-  const { fields, facets, defaultFilters, entityType } = useStore();
+  const { fields, facets, defaultFilters, entityType, numericFacetsProps } = useStore();
 
   const defaultFilterValues = Object.values(defaultFilters);
 
