@@ -1,3 +1,5 @@
+// Copied from https://github.com/searchkit/searchkit/blob/1f3e77f499936af02e182dbc0480878cf0632f6f/packages/searchkit-sdk/src/facets/RefinementSelectFacet.ts
+// Modified to expose sum_other_doc_count from response
 import { createRegexQuery } from '@searchkit/sdk/lib/cjs/facets/utils';
 
 class RefinementSelectFacet {
