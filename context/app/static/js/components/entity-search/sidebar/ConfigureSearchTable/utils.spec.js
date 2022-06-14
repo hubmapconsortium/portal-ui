@@ -1,4 +1,4 @@
-import { excludeDateFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
+import { filterFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
 
 test('getFieldEntriesSortedByConfigureGroup should sort by configure group with general on type then alphabetically then field name alphabetically', () => {
   const map = {
@@ -22,11 +22,19 @@ test('getFieldEntriesSortedByConfigureGroup should sort by configure group with 
   ]);
 });
 
-test('excludeDateFieldConfigs should remove field configs with date or datetime types', () => {
+test('filterFieldConfigs should remove field configs with date or datetime types', () => {
   const fieldConfigEntries = [
-    ['start_date', { type: 'date' }],
-    ['name', { type: 'string' }],
-    ['end_date', { type: 'datetime' }],
+    ['start_date', { type: 'date', label: 'start date' }],
+    ['name', { type: 'string', label: 'name' }],
+    ['end_date', { type: 'datetime', label: 'end date' }],
   ];
-  expect(excludeDateFieldConfigs(fieldConfigEntries)).toEqual([['name', { type: 'string' }]]);
+  expect(filterFieldConfigs(fieldConfigEntries, '')).toEqual([['name', { type: 'string', label: 'name' }]]);
+});
+
+test("filterFieldConfigs should remove field configs with labels which don't include the provided search bar text", () => {
+  const fieldConfigEntries = [
+    ['name', { type: 'string', label: 'name' }],
+    ['group', { type: 'string', label: 'group' }],
+  ];
+  expect(filterFieldConfigs(fieldConfigEntries, 'am')).toEqual([['name', { type: 'string', label: 'name' }]]);
 });
