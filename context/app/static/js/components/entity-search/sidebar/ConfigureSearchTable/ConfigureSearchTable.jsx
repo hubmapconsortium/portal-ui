@@ -72,9 +72,7 @@ function ConfigureSearchTable({
           </Table>
         </TableContainer>
       ) : (
-        <Alert severity="warning">
-          No filters selected. Select a filter to view facets or columns to add to the search page.
-        </Alert>
+        <Alert severity="warning">No results found. Try different search terms or select/deselect filters.</Alert>
       )}
     </FlexGrow>
   );
