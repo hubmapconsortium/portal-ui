@@ -26,6 +26,8 @@ function ConfigureSearchTable({
     setSearchBarFieldName(event.target.value);
   };
 
+  const filteredFields = filterFieldConfigs(getFieldEntriesSortedByConfigureGroup(availableFields), searchBarFieldName);
+
   return (
     <FlexGrow>
       <StyledSearchBar fullWidth value={searchBarFieldName} onChange={handleChange} />
@@ -39,33 +41,31 @@ function ConfigureSearchTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {filterFieldConfigs(getFieldEntriesSortedByConfigureGroup(availableFields), searchBarFieldName).map(
-              ([fieldName, fieldConfig]) => (
-                <TableRow key={fieldName}>
-                  <TableCell>{fieldConfig.label}</TableCell>
-                  {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
-                    <TableCell>
-                      <Checkbox
-                        checked={fieldName in selectedFacets}
-                        size="small"
-                        color="primary"
-                        onChange={(event) => handleToggleFacet(event, fieldConfig)}
-                      />
-                    </TableCell>
-                  ) : (
-                    <TableCell />
-                  )}
+            {filteredFields.map(([fieldName, fieldConfig]) => (
+              <TableRow key={fieldName}>
+                <TableCell>{fieldConfig.label}</TableCell>
+                {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
                   <TableCell>
                     <Checkbox
-                      checked={fieldName in selectedFields}
+                      checked={fieldName in selectedFacets}
                       size="small"
                       color="primary"
-                      onChange={(event) => handleToggleField(event, fieldConfig)}
+                      onChange={(event) => handleToggleFacet(event, fieldConfig)}
                     />
                   </TableCell>
-                </TableRow>
-              ),
-            )}
+                ) : (
+                  <TableCell />
+                )}
+                <TableCell>
+                  <Checkbox
+                    checked={fieldName in selectedFields}
+                    size="small"
+                    color="primary"
+                    onChange={(event) => handleToggleField(event, fieldConfig)}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
