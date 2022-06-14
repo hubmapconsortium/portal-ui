@@ -1,11 +1,12 @@
 import React from 'react';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
-import TextField from '@material-ui/core/TextField';
+
+import { StyledTextField } from './style';
 
 function SearchBar({ onChange, ...rest }) {
   return (
-    <TextField
+    <StyledTextField
       variant="outlined"
       size="small"
       margin="none"
