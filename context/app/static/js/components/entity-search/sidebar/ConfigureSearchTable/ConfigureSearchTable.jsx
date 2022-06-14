@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -8,8 +8,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import SearchBar from 'js/shared-styles/inputs/SearchBar';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import { excludeDateFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
+import { filterFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
+import { FlexGrow } from './style';
 
 function ConfigureSearchTable({
   selectedFields,
@@ -19,47 +21,56 @@ function ConfigureSearchTable({
   availableFields,
 }) {
   const { numericFacetsProps } = useStore();
+  const [searchBarFieldName, setSearchBarFieldName] = useState('');
+
+  const handleChange = (event) => {
+    setSearchBarFieldName(event.target.value);
+  };
+
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Add Facet</TableCell>
-            <TableCell>Add Column</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {excludeDateFieldConfigs(getFieldEntriesSortedByConfigureGroup(availableFields)).map(
-            ([fieldName, fieldConfig]) => (
-              <TableRow key={fieldName}>
-                <TableCell>{fieldConfig.label}</TableCell>
-                {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
+    <FlexGrow>
+      <SearchBar fullWidth value={searchBarFieldName} onChange={handleChange} />
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>Add Facet</TableCell>
+              <TableCell>Add Column</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filterFieldConfigs(getFieldEntriesSortedByConfigureGroup(availableFields), searchBarFieldName).map(
+              ([fieldName, fieldConfig]) => (
+                <TableRow key={fieldName}>
+                  <TableCell>{fieldConfig.label}</TableCell>
+                  {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
+                    <TableCell>
+                      <Checkbox
+                        checked={fieldName in selectedFacets}
+                        size="small"
+                        color="primary"
+                        onChange={(event) => handleToggleFacet(event, fieldConfig)}
+                      />
+                    </TableCell>
+                  ) : (
+                    <TableCell />
+                  )}
                   <TableCell>
                     <Checkbox
-                      checked={fieldName in selectedFacets}
+                      checked={fieldName in selectedFields}
                       size="small"
                       color="primary"
-                      onChange={(event) => handleToggleFacet(event, fieldConfig)}
+                      onChange={(event) => handleToggleField(event, fieldConfig)}
                     />
                   </TableCell>
-                ) : (
-                  <TableCell />
-                )}
-                <TableCell>
-                  <Checkbox
-                    checked={fieldName in selectedFields}
-                    size="small"
-                    color="primary"
-                    onChange={(event) => handleToggleField(event, fieldConfig)}
-                  />
-                </TableCell>
-              </TableRow>
-            ),
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                </TableRow>
+              ),
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </FlexGrow>
   );
 }
 
