@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { Alert } from 'js/shared-styles/alerts';
 import { filterFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
 import { FlexGrow, StyledSearchBar } from './style';
 
@@ -31,44 +32,50 @@ function ConfigureSearchTable({
   return (
     <FlexGrow>
       <StyledSearchBar fullWidth value={searchBarFieldName} onChange={handleChange} />
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>Add Facet</TableCell>
-              <TableCell>Add Column</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredFields.map(([fieldName, fieldConfig]) => (
-              <TableRow key={fieldName}>
-                <TableCell>{fieldConfig.label}</TableCell>
-                {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
+      {filteredFields.length > 0 ? (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                <TableCell>Add Facet</TableCell>
+                <TableCell>Add Column</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredFields.map(([fieldName, fieldConfig]) => (
+                <TableRow key={fieldName}>
+                  <TableCell>{fieldConfig.label}</TableCell>
+                  {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
+                    <TableCell>
+                      <Checkbox
+                        checked={fieldName in selectedFacets}
+                        size="small"
+                        color="primary"
+                        onChange={(event) => handleToggleFacet(event, fieldConfig)}
+                      />
+                    </TableCell>
+                  ) : (
+                    <TableCell />
+                  )}
                   <TableCell>
                     <Checkbox
-                      checked={fieldName in selectedFacets}
+                      checked={fieldName in selectedFields}
                       size="small"
                       color="primary"
-                      onChange={(event) => handleToggleFacet(event, fieldConfig)}
+                      onChange={(event) => handleToggleField(event, fieldConfig)}
                     />
                   </TableCell>
-                ) : (
-                  <TableCell />
-                )}
-                <TableCell>
-                  <Checkbox
-                    checked={fieldName in selectedFields}
-                    size="small"
-                    color="primary"
-                    onChange={(event) => handleToggleField(event, fieldConfig)}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Alert severity="warning">
+          No filters selected. Select a filter to view facets or columns to add to the search page.
+        </Alert>
+      )}
     </FlexGrow>
   );
 }
