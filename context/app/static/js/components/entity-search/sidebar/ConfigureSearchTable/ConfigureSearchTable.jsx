@@ -8,10 +8,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import SearchBar from 'js/shared-styles/inputs/SearchBar';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { filterFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
-import { FlexGrow } from './style';
+import { FlexGrow, StyledSearchBar } from './style';
 
 function ConfigureSearchTable({
   selectedFields,
@@ -29,7 +28,7 @@ function ConfigureSearchTable({
 
   return (
     <FlexGrow>
-      <SearchBar fullWidth value={searchBarFieldName} onChange={handleChange} />
+      <StyledSearchBar fullWidth value={searchBarFieldName} onChange={handleChange} />
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
