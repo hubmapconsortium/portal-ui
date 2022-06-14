@@ -1,0 +1,1 @@
+- Show an alert when no fields in the configure search modal are shown in search revision ui.
