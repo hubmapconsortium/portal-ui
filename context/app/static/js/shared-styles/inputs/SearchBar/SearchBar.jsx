@@ -9,6 +9,7 @@ function SearchBar({ onChange, ...rest }) {
       variant="outlined"
       size="small"
       margin="none"
+      onChange={onChange}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
