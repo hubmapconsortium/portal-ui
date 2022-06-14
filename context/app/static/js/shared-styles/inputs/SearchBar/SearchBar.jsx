@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
 
@@ -23,4 +24,7 @@ function SearchBar({ onChange, ...rest }) {
   );
 }
 
+SearchBar.propTypes = {
+  onChange: PropTypes.func.isRequired,
+};
 export default SearchBar;
