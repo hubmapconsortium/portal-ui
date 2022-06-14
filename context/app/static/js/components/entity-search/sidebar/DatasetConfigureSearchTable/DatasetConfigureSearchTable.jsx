@@ -12,6 +12,8 @@ function DatasetConfigureSearchTable(props) {
     groups,
     handleToggleGroup,
     availableFieldConfigs,
+    selectedGroups,
+    selectedDataTypes,
   } = useDatasetConfigureSearchTable();
 
   return (
@@ -21,6 +23,8 @@ function DatasetConfigureSearchTable(props) {
         handleToggleDataType={handleToggleDataType}
         groups={groups}
         handleToggleGroup={handleToggleGroup}
+        selectedGroups={selectedGroups}
+        selectedDataTypes={selectedDataTypes}
       />
       <ConfigureSearchTable {...props} availableFields={availableFieldConfigs} />
     </Flex>
