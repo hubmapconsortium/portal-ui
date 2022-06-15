@@ -6,9 +6,9 @@ import DataTypesSelectCheckboxes from 'js/components/entity-search/sidebar/DataT
 import { StyledPaper } from './style';
 
 function DataTypesSelect({
+  groups,
   dataTypesToFieldsMap,
   handleToggleDataType,
-  groups,
   handleToggleGroup,
   selectedGroups,
   selectedDataTypes,

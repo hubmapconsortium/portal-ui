@@ -7,11 +7,11 @@ import { useDatasetConfigureSearchTable } from './hooks';
 
 function DatasetConfigureSearchTable(props) {
   const {
+    groups,
+    availableFieldConfigs,
     dataTypesToFieldsMap,
     handleToggleDataType,
-    groups,
     handleToggleGroup,
-    availableFieldConfigs,
     selectedGroups,
     selectedDataTypes,
   } = useDatasetConfigureSearchTable();
