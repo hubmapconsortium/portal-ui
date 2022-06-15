@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ConfigureSearchTable from 'js/components/entity-search/sidebar/ConfigureSearchTable';
+import ConfigureSearchTableWrapper from 'js/components/entity-search/sidebar/ConfigureSearchTableWrapper';
 import DataTypesSelect from 'js/components/entity-search/sidebar/DataTypesSelect';
 import { Flex } from './style';
 import { useDatasetConfigureSearchTable } from './hooks';
@@ -26,7 +26,7 @@ function DatasetConfigureSearchTable(props) {
         selectedGroups={selectedGroups}
         selectedDataTypes={selectedDataTypes}
       />
-      <ConfigureSearchTable {...props} availableFields={availableFieldConfigs} />
+      <ConfigureSearchTableWrapper {...props} availableFields={availableFieldConfigs} />
     </Flex>
   );
 }
