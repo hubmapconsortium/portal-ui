@@ -2,7 +2,7 @@ import React from 'react';
 
 import { SearchkitClient, withSearchkit, withSearchkitRouting } from '@searchkit/client';
 
-import { routeToStateWithDefaultPageSize } from 'js/components/entity-search//searchkit-modifications/routeToState';
+import { routeToStateWithDefaultPageSize } from 'js/components/entity-search/searchkit-modifications/routeToState';
 import ResultsTable from 'js/components/entity-search/ResultsTable';
 import Pagination from 'js/components/entity-search/results/Pagination';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
