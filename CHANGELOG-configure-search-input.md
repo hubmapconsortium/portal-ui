@@ -1,0 +1,1 @@
+- Add search bar to filter rows in search revision configure search table.

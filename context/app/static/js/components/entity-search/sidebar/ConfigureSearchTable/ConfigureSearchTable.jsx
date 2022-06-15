@@ -9,16 +9,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import { excludeDateFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
 
 function ConfigureSearchTable({
   selectedFields,
   selectedFacets,
   handleToggleField,
   handleToggleFacet,
-  availableFields,
+  filteredFields,
 }) {
   const { numericFacetsProps } = useStore();
+
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -30,33 +30,31 @@ function ConfigureSearchTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {excludeDateFieldConfigs(getFieldEntriesSortedByConfigureGroup(availableFields)).map(
-            ([fieldName, fieldConfig]) => (
-              <TableRow key={fieldName}>
-                <TableCell>{fieldConfig.label}</TableCell>
-                {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
-                  <TableCell>
-                    <Checkbox
-                      checked={fieldName in selectedFacets}
-                      size="small"
-                      color="primary"
-                      onChange={(event) => handleToggleFacet(event, fieldConfig)}
-                    />
-                  </TableCell>
-                ) : (
-                  <TableCell />
-                )}
+          {filteredFields.map(([fieldName, fieldConfig]) => (
+            <TableRow key={fieldName}>
+              <TableCell>{fieldConfig.label}</TableCell>
+              {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
                 <TableCell>
                   <Checkbox
-                    checked={fieldName in selectedFields}
+                    checked={fieldName in selectedFacets}
                     size="small"
                     color="primary"
-                    onChange={(event) => handleToggleField(event, fieldConfig)}
+                    onChange={(event) => handleToggleFacet(event, fieldConfig)}
                   />
                 </TableCell>
-              </TableRow>
-            ),
-          )}
+              ) : (
+                <TableCell />
+              )}
+              <TableCell>
+                <Checkbox
+                  checked={fieldName in selectedFields}
+                  size="small"
+                  color="primary"
+                  onChange={(event) => handleToggleField(event, fieldConfig)}
+                />
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

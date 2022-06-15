@@ -1,0 +1,13 @@
+import styled from 'styled-components';
+
+import SearchBar from 'js/shared-styles/inputs/SearchBar';
+
+const FlexGrow = styled.div`
+  flex-grow: 1;
+`;
+
+const StyledSearchBar = styled(SearchBar)`
+  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+`;
+
+export { FlexGrow, StyledSearchBar };
