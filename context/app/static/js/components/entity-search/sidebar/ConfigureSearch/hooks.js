@@ -3,7 +3,7 @@ import { useReducer, useState } from 'react';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 
 function selectedFieldReducer(state, { type, payload }) {
-  const tempState = state;
+  const tempState = { ...state };
   switch (type) {
     case 'selectItem':
       return { ...state, [payload.identifier]: payload };
