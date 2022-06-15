@@ -8,7 +8,7 @@ import { getAuthHeader } from 'js/helpers/functions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { createSearchkitFacet } from 'js/components/entity-search/SearchWrapper/utils';
 import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
-import { routeToStateWithDefaultPageSize } from 'js/components/entity-search//searchkit-modifications/routeToState';
+import { routeToStateWithDefaultPageSize } from 'js/components/entity-search/searchkit-modifications/routeToState';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import ResultsTable from 'js/components/entity-search/ResultsTable';
 import Pagination from 'js/components/entity-search/results/Pagination';
