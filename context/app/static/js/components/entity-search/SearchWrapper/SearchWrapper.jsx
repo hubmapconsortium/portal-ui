@@ -1,5 +1,4 @@
 import React from 'react';
-import { SearchkitClient, SearchkitProvider } from '@searchkit/client';
 
 import Search from 'js/components/entity-search/Search';
 import { getDefaultFilters } from 'js/components/entity-search/searchkit-modifications/getDefaultFilters';
@@ -12,10 +11,6 @@ import {
 } from './utils';
 import SearchConfigProvider from './provider';
 import { useNumericFacetsProps } from './hooks';
-
-const skClient = new SearchkitClient({
-  itemsPerPage: 18,
-});
 
 function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   const initialFacets = mergeObjects([
@@ -52,9 +47,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
         numericFacetsProps,
       }}
     >
-      <SearchkitProvider client={skClient}>
-        <Search numericFacetsProps={numericFacetsProps} />
-      </SearchkitProvider>
+      <Search numericFacetsProps={numericFacetsProps} />
     </SearchConfigProvider>
   );
 }

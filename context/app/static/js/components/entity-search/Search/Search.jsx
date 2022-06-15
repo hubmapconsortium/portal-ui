@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 
-import { useSearchkitVariables } from '@searchkit/client';
+import { SearchkitClient, useSearchkitVariables, withSearchkit, withSearchkitRouting } from '@searchkit/client';
 import { CustomQuery } from '@searchkit/sdk';
 
 import { AppContext } from 'js/components/Providers';
@@ -8,10 +8,10 @@ import { getAuthHeader } from 'js/helpers/functions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { createSearchkitFacet } from 'js/components/entity-search/SearchWrapper/utils';
 import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
+import { routeToStateWithDefaultPageSize } from 'js/components/entity-search/searchkit-modifications/routeToState';
+import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import ResultsTable from 'js/components/entity-search/ResultsTable';
 import Pagination from 'js/components/entity-search/results/Pagination';
-
-import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import SearchBar from 'js/components/entity-search/SearchBar';
 import FacetChips from 'js/components/entity-search/facets/facetChips/FacetChips';
@@ -36,6 +36,15 @@ const query = new CustomQuery({
     };
   },
 });
+
+const defaultPageSize = 18;
+
+const routeToState = routeToStateWithDefaultPageSize(defaultPageSize);
+
+const createSkClient = () =>
+  new SearchkitClient({
+    itemsPerPage: defaultPageSize,
+  });
 
 function Search({ numericFacetsProps }) {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
@@ -105,4 +114,4 @@ function Search({ numericFacetsProps }) {
   );
 }
 
-export default Search;
+export default withSearchkit(withSearchkitRouting(Search, { routeToState }), createSkClient);
