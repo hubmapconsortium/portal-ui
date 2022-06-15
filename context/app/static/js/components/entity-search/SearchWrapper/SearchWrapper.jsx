@@ -47,7 +47,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
         numericFacetsProps,
       }}
     >
-      <Search numericFacetsProps={numericFacetsProps} />
+      <Search />
     </SearchConfigProvider>
   );
 }
