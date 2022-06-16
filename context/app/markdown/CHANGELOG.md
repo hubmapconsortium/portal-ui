@@ -1,3 +1,13 @@
+## v0.46.1 - 2022-06-15
+
+- Add search bar to filter rows in search revision configure search table.
+- Show an alert when no fields in the configure search modal are shown in search revision ui.
+- Consolidate search hooks into single hook.
+- Add url sync for search ui revision.
+- Only display view all button for select facets in search revision ui when additional aggs exist.
+- Upgrade `vitessce` (and dependents) to allow for using an alias for genes.
+
+
 ## v0.46.0 - 2022-06-07
 
 - Add default filters used in the existing search page to the search revision.

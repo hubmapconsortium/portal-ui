@@ -1,1 +1,0 @@
-- Upgrade `vitessce` (and dependents) to allow for using an alias for genes.

@@ -1,1 +1,0 @@
-- Add url sync for search ui revision.
