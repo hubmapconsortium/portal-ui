@@ -27,7 +27,7 @@ hubmap-commons==2.0.12
 Werkzeug==2.0.3  # TODO: This is just a transitive dependency. Remove when https://github.com/hubmapconsortium/portal-ui/issues/2547 is fixed.
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.1.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.3.zip
 ```
 
 ## NodeJS packages
@@ -92,7 +92,7 @@ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.1
 "uuid": "^8.3.2",
 "vega": "^5.17.3",
 "vega-lite": "^4.13.1",
-"vitessce": "^1.1.18",
+"vitessce": "^1.1.20",
 "web-vitals": "^1.1.0",
 "whatwg-fetch": "^3.0.0",
 "zustand": "^3.5.9"
