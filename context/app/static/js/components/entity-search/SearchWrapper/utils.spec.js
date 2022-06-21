@@ -76,6 +76,7 @@ test('buildMetadataFieldConfig should build metadata field config', () => {
       type: 'string',
       configureGroup: 'Dataset Metadata',
       facetGroup: 'Dataset Metadata',
+      ingestValidationToolsName: 'assay_category',
     },
   });
 });
@@ -103,6 +104,7 @@ describe('createField', () => {
         type: 'string',
         configureGroup: 'Dataset Metadata',
         facetGroup: 'Dataset Metadata',
+        ingestValidationToolsName: 'assay_category',
       },
     });
   });

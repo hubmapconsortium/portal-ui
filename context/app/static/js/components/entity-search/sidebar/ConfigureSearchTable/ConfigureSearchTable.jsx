@@ -8,7 +8,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 
 function ConfigureSearchTable({
   selectedFields,
@@ -32,7 +34,9 @@ function ConfigureSearchTable({
         <TableBody>
           {filteredFields.map(([fieldName, fieldConfig]) => (
             <TableRow key={fieldName}>
-              <TableCell>{fieldConfig.label}</TableCell>
+              <IconTooltipCell tooltipTitle={metadataFieldDescriptions[fieldConfig?.ingestValidationToolsName]}>
+                {fieldConfig.label}
+              </IconTooltipCell>
               {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
                 <TableCell>
                   <Checkbox

@@ -74,6 +74,7 @@ function buildMetadataFieldConfig({ fieldName, entityType: pageEntityType, ...re
     facetGroup: group,
     configureGroup: group,
     entityType: pageEntityType,
+    ingestValidationToolsName: fieldName,
     ...rest,
   });
 }
