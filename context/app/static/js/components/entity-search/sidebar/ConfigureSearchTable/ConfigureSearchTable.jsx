@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
+import { StyledIconTooltipCell } from './style';
 
 function ConfigureSearchTable({
   selectedFields,
@@ -34,9 +34,9 @@ function ConfigureSearchTable({
         <TableBody>
           {filteredFields.map(([fieldName, fieldConfig]) => (
             <TableRow key={fieldName}>
-              <IconTooltipCell tooltipTitle={metadataFieldDescriptions[fieldConfig?.ingestValidationToolsName]}>
+              <StyledIconTooltipCell tooltipTitle={metadataFieldDescriptions[fieldConfig?.ingestValidationToolsName]}>
                 {fieldConfig.label}
-              </IconTooltipCell>
+              </StyledIconTooltipCell>
               <TableCell>
                 {(['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName]) && (
                   <Checkbox
