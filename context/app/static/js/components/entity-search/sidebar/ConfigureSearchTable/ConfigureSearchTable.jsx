@@ -37,7 +37,7 @@ function ConfigureSearchTable({
               <StyledIconTooltipCell tooltipTitle={metadataFieldDescriptions[fieldConfig?.ingestValidationToolsName]}>
                 {fieldConfig.label}
               </StyledIconTooltipCell>
-              <TableCell>
+              <TableCell padding="checkbox">
                 {(['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName]) && (
                   <Checkbox
                     checked={fieldName in selectedFacets}
@@ -47,8 +47,7 @@ function ConfigureSearchTable({
                   />
                 )}
               </TableCell>
-
-              <TableCell>
+              <TableCell padding="checkbox">
                 <Checkbox
                   checked={fieldName in selectedFields}
                   size="small"
