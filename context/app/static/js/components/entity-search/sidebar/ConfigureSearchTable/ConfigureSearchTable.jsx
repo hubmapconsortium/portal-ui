@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import { StyledIconTooltipCell } from './style';
+import { NoWrapTableCell, StyledIconTooltipCell } from './style';
 
 function ConfigureSearchTable({
   selectedFields,
@@ -27,8 +27,8 @@ function ConfigureSearchTable({
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Add Facet</TableCell>
-            <TableCell>Add Column</TableCell>
+            <NoWrapTableCell>Add Facet</NoWrapTableCell>
+            <NoWrapTableCell>Add Column</NoWrapTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -37,7 +37,7 @@ function ConfigureSearchTable({
               <StyledIconTooltipCell tooltipTitle={metadataFieldDescriptions[fieldConfig?.ingestValidationToolsName]}>
                 {fieldConfig.label}
               </StyledIconTooltipCell>
-              <TableCell padding="checkbox">
+              <TableCell padding="checkbox" align="center">
                 {(['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName]) && (
                   <Checkbox
                     checked={fieldName in selectedFacets}
@@ -47,7 +47,7 @@ function ConfigureSearchTable({
                   />
                 )}
               </TableCell>
-              <TableCell padding="checkbox">
+              <TableCell padding="checkbox" align="center">
                 <Checkbox
                   checked={fieldName in selectedFields}
                   size="small"
