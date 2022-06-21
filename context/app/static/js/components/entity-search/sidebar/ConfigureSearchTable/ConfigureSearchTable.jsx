@@ -37,18 +37,17 @@ function ConfigureSearchTable({
               <IconTooltipCell tooltipTitle={metadataFieldDescriptions[fieldConfig?.ingestValidationToolsName]}>
                 {fieldConfig.label}
               </IconTooltipCell>
-              {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
-                <TableCell>
+              <TableCell>
+                {(['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName]) && (
                   <Checkbox
                     checked={fieldName in selectedFacets}
                     size="small"
                     color="primary"
                     onChange={(event) => handleToggleFacet(event, fieldConfig)}
                   />
-                </TableCell>
-              ) : (
-                <TableCell />
-              )}
+                )}
+              </TableCell>
+
               <TableCell>
                 <Checkbox
                   checked={fieldName in selectedFields}
