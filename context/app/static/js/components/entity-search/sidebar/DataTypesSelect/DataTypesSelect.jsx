@@ -3,7 +3,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControl from '@material-ui/core/FormControl';
 
 import DataTypesSelectCheckboxes from 'js/components/entity-search/sidebar/DataTypesSelectCheckboxes';
-import { StyledPaper } from './style';
+import { StyledPaper, StyledFormLabel } from './style';
 
 function DataTypesSelect({
   groups,
@@ -16,6 +16,7 @@ function DataTypesSelect({
   return (
     <StyledPaper>
       <FormControl component="fieldset">
+        <StyledFormLabel>Data Types</StyledFormLabel>
         <FormGroup aria-label="data-types">
           <DataTypesSelectCheckboxes
             values={Object.keys(groups)}
