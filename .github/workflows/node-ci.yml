@@ -17,10 +17,10 @@ jobs:
       with:
         submodules: 'recursive'
 
-    - name: Set up Node 12.16.3
+    - name: Set up Node
       uses: actions/setup-node@v1
       with:
-        node-version: '12.16.3'
+        node-version-file: '.nvmrc'
         cache: 'npm'
         cache-dependency-path: context/package-lock.json
    

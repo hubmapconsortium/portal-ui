@@ -13,13 +13,7 @@ REQUIRED_PYTHON_V='v'$(cat .python-version)
   || die "Installed python version ($INSTALLED_PYTHON_V) != required version ($REQUIRED_PYTHON_V) "
 
 INSTALLED_NODE_V=$(node --version)
-REQUIRED_NODE_V='v'$(python -c '
-from yaml import safe_load
-from pathlib import Path
-node_ci = safe_load(Path(".github/workflows/node-ci.yml").read_text())
-steps = node_ci["jobs"]["build"]["steps"]
-print(steps[1]["with"]["node-version"])
-')
+REQUIRED_NODE_V=$(cat .nvmrc)
 
 [[ "$INSTALLED_NODE_V" = "$REQUIRED_NODE_V" ]] \
   || die "Installed node version ($INSTALLED_NODE_V) != required version ($REQUIRED_NODE_V) " 
