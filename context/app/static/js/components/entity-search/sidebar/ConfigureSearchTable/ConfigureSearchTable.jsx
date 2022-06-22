@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
+import { NoWrapIconTooltipCell, StyledIconTooltipCell } from './style';
 
 function ConfigureSearchTable({
   selectedFields,
@@ -27,29 +27,31 @@ function ConfigureSearchTable({
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Add Facet</TableCell>
-            <TableCell>Add Column</TableCell>
+            <NoWrapIconTooltipCell tooltipTitle="Selecting a checkbox will add the term as a facet for the search results.">
+              Add Facet
+            </NoWrapIconTooltipCell>
+            <NoWrapIconTooltipCell tooltipTitle="Selecting a checkbox will add the term as a column for the search results table.">
+              Add Column
+            </NoWrapIconTooltipCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {filteredFields.map(([fieldName, fieldConfig]) => (
             <TableRow key={fieldName}>
-              <IconTooltipCell tooltipTitle={metadataFieldDescriptions[fieldConfig?.ingestValidationToolsName]}>
+              <StyledIconTooltipCell tooltipTitle={metadataFieldDescriptions[fieldConfig?.ingestValidationToolsName]}>
                 {fieldConfig.label}
-              </IconTooltipCell>
-              {['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName] ? (
-                <TableCell>
+              </StyledIconTooltipCell>
+              <TableCell padding="checkbox" align="center">
+                {(['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName]) && (
                   <Checkbox
                     checked={fieldName in selectedFacets}
                     size="small"
                     color="primary"
                     onChange={(event) => handleToggleFacet(event, fieldConfig)}
                   />
-                </TableCell>
-              ) : (
-                <TableCell />
-              )}
-              <TableCell>
+                )}
+              </TableCell>
+              <TableCell padding="checkbox" align="center">
                 <Checkbox
                   checked={fieldName in selectedFields}
                   size="small"
