@@ -6,7 +6,7 @@ import DonorSampleConfigureSearchTable from 'js/components/entity-search/sidebar
 import DatasetConfigureSearchTable from 'js/components/entity-search/sidebar/DatasetConfigureSearchTable';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { useConfigureSearch } from './hooks';
-import { StyledPaper } from './style';
+import { StyledPaper, StyledDialogContent } from './style';
 
 function ConfigureSearch() {
   const {
@@ -54,6 +54,7 @@ function ConfigureSearch() {
           </>
         }
         PaperComponent={StyledPaper}
+        DialogContentComponent={StyledDialogContent}
       />
     </>
   );

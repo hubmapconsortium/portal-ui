@@ -6,6 +6,8 @@ const StyledPaper = styled(Paper)`
   min-width: 300px;
   margin-right: ${(props) => props.theme.spacing(1.5)}px;
   padding: 16px 16px 16px 0px;
+  overflow-y: auto;
+  height: 100%;
 `;
 
 const StyledFormLabel = styled(FormLabel)`
