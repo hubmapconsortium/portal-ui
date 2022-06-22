@@ -85,7 +85,7 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
 
 ### Prerequisites
 - `git`: Suggest [installing Apple XCode](https://developer.apple.com/xcode/).
-- `python 3.9`: Suggest [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands) with Python 3.9.
+- `python 3.9`: Suggest [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands): `conda create -n portal python=$(cat .python-version)`
 - `nodejs/npm`: Suggest [installing nodejs](https://nodejs.org/en/).
 
 Optional:
