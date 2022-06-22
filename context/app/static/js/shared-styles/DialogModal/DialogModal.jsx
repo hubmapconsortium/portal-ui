@@ -1,13 +1,25 @@
 import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
+import MUIDialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Typography from '@material-ui/core/Typography';
 
 import { StyledDivider, StyledDialogTitle } from './style';
 
-function DialogModal({ title, warning, secondaryText, content, actions, isOpen, handleClose, ...props }) {
+function DialogModal({
+  title,
+  warning,
+  secondaryText,
+  content,
+  actions,
+  isOpen,
+  handleClose,
+  DialogContentComponent,
+  ...props
+}) {
+  const DialogContent = DialogContentComponent || MUIDialogContent;
+
   return (
     <Dialog open={isOpen} onClose={handleClose} fullWidth {...props}>
       <StyledDialogTitle disableTypography>
