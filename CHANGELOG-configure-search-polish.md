@@ -1,0 +1,3 @@
+- Style configure search table in search revision ui to prevent column shift as new rows are added.
+- Add form label to data types select form in search revision ui.
+- Put labels before checkboxes in data types seelect form in search revision ui.
