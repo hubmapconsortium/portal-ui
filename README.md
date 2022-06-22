@@ -86,7 +86,7 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
 ### Prerequisites
 - `git`: Suggest [installing Apple XCode](https://developer.apple.com/xcode/).
 - `python 3.9`: Suggest [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands): `conda create -n portal python=$(cat .python-version)`
-- `nodejs/npm`: Suggest [installing nodejs](https://nodejs.org/en/).
+- `nodejs/npm`: Suggest [installing nvm](https://github.com/nvm-sh/nvm#installing-and-updating) and then using it it install the appropriate node version: `nvm install`.
 
 Optional:
 - `VSCode`, with `eslint` and `prettier` plugins
