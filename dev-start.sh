@@ -7,13 +7,7 @@ die() { set +v; echo "$*" 1>&2 ; exit 1; }
 # Check language versions
 
 INSTALLED_PYTHON_V=$(python --version | sed -e 's/.* /v/')
-REQUIRED_PYTHON_V='v'$(python -c '
-from yaml import safe_load
-from pathlib import Path
-python_ci = safe_load(Path(".github/workflows/python-ci.yml").read_text())
-steps = python_ci["jobs"]["build"]["steps"]
-print(steps[1]["with"]["python-version"])
-')
+REQUIRED_PYTHON_V='v'$(cat .python-version)
 
 [[ "$INSTALLED_PYTHON_V" = "$REQUIRED_PYTHON_V" ]] \
   || die "Installed python version ($INSTALLED_PYTHON_V) != required version ($REQUIRED_PYTHON_V) "
