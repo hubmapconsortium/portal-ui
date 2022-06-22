@@ -27,10 +27,10 @@ function ConfigureSearchTable({
         <TableHead>
           <TableRow>
             <TableCell />
-            <NoWrapIconTooltipCell tooltipTitle="Selecting this checkbox will add the term as a facet for the search results.">
+            <NoWrapIconTooltipCell tooltipTitle="Selecting a checkbox will add the term as a facet for the search results.">
               Add Facet
             </NoWrapIconTooltipCell>
-            <NoWrapIconTooltipCell tooltipTitle="Selecting this checkbox will add the term as a column for the search results table.">
+            <NoWrapIconTooltipCell tooltipTitle="Selecting a checkbox will add the term as a column for the search results table.">
               Add Column
             </NoWrapIconTooltipCell>
           </TableRow>
