@@ -23,7 +23,7 @@ function ConfigureSearchTable({
 
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
             <TableCell />
