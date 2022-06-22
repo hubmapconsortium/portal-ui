@@ -4,6 +4,34 @@ trap 'jobs -p | xargs kill' EXIT
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
+# Check language versions
+
+INSTALLED_PYTHON_V=$(python --version | sed -e 's/.* /v/')
+REQUIRED_PYTHON_V='v'$(python -c '
+from yaml import safe_load
+from pathlib import Path
+python_ci = safe_load(Path(".github/workflows/python-ci.yml").read_text())
+steps = python_ci["jobs"]["build"]["steps"]
+print(steps[1]["with"]["python-version"])
+')
+
+[[ "$INSTALLED_PYTHON_V" = "$REQUIRED_PYTHON_V" ]] \
+  || die "Installed python version ($INSTALLED_PYTHON_V) != required version ($REQUIRED_PYTHON_V) "
+
+INSTALLED_NODE_V=$(node --version)
+REQUIRED_NODE_V='v'$(python -c '
+from yaml import safe_load
+from pathlib import Path
+node_ci = safe_load(Path(".github/workflows/node-ci.yml").read_text())
+steps = node_ci["jobs"]["build"]["steps"]
+print(steps[1]["with"]["node-version"])
+')
+
+[[ "$INSTALLED_NODE_V" = "$REQUIRED_NODE_V" ]] \
+  || die "Installed node version ($INSTALLED_NODE_V) != required version ($REQUIRED_NODE_V) " 
+
+# Install
+
 git submodule init
 git submodule update
 git config submodule.recurse true # So 'git pull' will update submodules.
@@ -14,8 +42,12 @@ pip install -r $CONTEXT/requirements.txt > /dev/null
 ./copy-app-conf.sh
 
 cd $CONTEXT
-FLASK_ENV=development FLASK_APP="app/main.py" python -m flask run &
 npm install
+
+# Start subprocesses
+
+FLASK_ENV=development FLASK_APP="app/main.py" python -m flask run &
+
 npm run lint || die 'Try "npm run lint:fix"'
 npm run dev-server &
 npm run storybook &
