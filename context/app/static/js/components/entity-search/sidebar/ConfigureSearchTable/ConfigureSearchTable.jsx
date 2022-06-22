@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import { NoWrapTableCell, StyledIconTooltipCell } from './style';
+import { NoWrapIconTooltipCell, StyledIconTooltipCell } from './style';
 
 function ConfigureSearchTable({
   selectedFields,
@@ -27,8 +27,12 @@ function ConfigureSearchTable({
         <TableHead>
           <TableRow>
             <TableCell />
-            <NoWrapTableCell>Add Facet</NoWrapTableCell>
-            <NoWrapTableCell>Add Column</NoWrapTableCell>
+            <NoWrapIconTooltipCell tooltipTitle="Selecting this checkbox will add the term as a facet for the search results.">
+              Add Facet
+            </NoWrapIconTooltipCell>
+            <NoWrapIconTooltipCell tooltipTitle="Selecting this checkbox will add the term as a column for the search results table.">
+              Add Column
+            </NoWrapIconTooltipCell>
           </TableRow>
         </TableHead>
         <TableBody>
