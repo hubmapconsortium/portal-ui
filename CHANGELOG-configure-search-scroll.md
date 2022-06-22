@@ -1,1 +1,0 @@
-- Modify configure search table in search revision ui so the data types select form and table scroll separately.

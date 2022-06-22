@@ -1,3 +1,15 @@
+## v0.47.0 - 2022-06-22
+
+- Style configure search table in search revision ui to prevent column shift as new rows are added.
+- Add form label to data types select form in search revision ui.
+- Put labels before checkboxes in data types select form in search revision ui.
+- Add tooltips to column cells in configure search table in search revision ui.
+- Modify configure search table in search revision ui so the data types select form and table scroll separately.
+- Add description tooltips to configure search table in search revision ui.
+- Upgrade `portal-visualization` to 0.0.4 to fix validation issue for unpublished `zarr` stores.
+- The Workspaces websocket URL also needs to be provided by the environment: Update the template used when initializing new dev environments.
+
+
 ## v0.46.1 - 2022-06-15
 
 - Add search bar to filter rows in search revision configure search table.

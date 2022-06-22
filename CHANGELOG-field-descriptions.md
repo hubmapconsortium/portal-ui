@@ -1,1 +1,0 @@
-- Add description tooltips to configure search table in search revision ui.

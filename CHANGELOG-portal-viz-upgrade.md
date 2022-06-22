@@ -1,1 +1,0 @@
-- Upgrade `portal-visualization` to 0.0.4 to fix validation issue for unpublished `zarr` stores.

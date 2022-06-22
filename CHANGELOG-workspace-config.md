@@ -1,1 +1,0 @@
-- The Workspaces websocket URL also needs to be provided by the environment: Update the template used when initializing new dev environments.
