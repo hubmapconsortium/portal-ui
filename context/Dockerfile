@@ -1,4 +1,6 @@
 ARG NODE_V
+ARG PYTHON_MINOR_V
+
 FROM node:${NODE_V}-alpine as builder
 
 WORKDIR /work
@@ -19,7 +21,6 @@ COPY ingest-validation-tools ingest-validation-tools
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
 
-ARG PYTHON_MINOR_V
 FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V}
 
 COPY requirements.txt /app
