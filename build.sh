@@ -6,8 +6,8 @@ die() { set +v; echo "$*" 1>&2 ; exit 1; }
 IMAGE_NAME=$1
 [[ ! -z "$IMAGE_NAME" ]] || die "One argument, an image name, is required."
 
-NODE_V=$(cat .nvmrc | perl -pne 's/v//')
-PYTHON_MINOR_V=$(cat .python-version | perl -pne 's/\.\d+$//')
+NODE_V=$(perl -pne 's/v//' .nvmrc )
+PYTHON_MINOR_V=$(perl -pne 's/\.\d+$//' .python-version)
 echo "Building $IMAGE_NAME with Node $NODE_V and Python $PYTHON_MINOR_V..."
 
 # Docker BuildKit supports parallelizing multi-stage builds.
