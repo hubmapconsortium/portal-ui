@@ -4,7 +4,7 @@ ARG PYTHON_MINOR_V
 FROM node:${NODE_V}-alpine as builder
 
 WORKDIR /work
-RUN apk add --no-cache python git
+RUN apk add --no-cache git
 
 # COPY only what is needed so layers can be cached.
 COPY package.json .
