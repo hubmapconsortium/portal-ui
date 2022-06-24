@@ -1,16 +1,16 @@
 import React from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
-import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableBody from '@material-ui/core/TableBody';
+import Paper from '@material-ui/core/Paper';
 
 import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import { NoWrapIconTooltipCell, StyledIconTooltipCell } from './style';
+import { NoWrapIconTooltipCell, StyledIconTooltipCell, StyledTableContainer } from './style';
+import { useTableHeadHeight } from './hooks';
 
 function ConfigureSearchTable({
   selectedFields,
@@ -21,10 +21,11 @@ function ConfigureSearchTable({
 }) {
   const { numericFacetsProps } = useStore();
 
+  const { tableHeadRef, tableHeadHeight } = useTableHeadHeight();
   return (
-    <TableContainer component={Paper}>
+    <StyledTableContainer component={Paper} $tableHeadHeight={tableHeadHeight}>
       <Table stickyHeader>
-        <TableHead>
+        <TableHead ref={tableHeadRef}>
           <TableRow>
             <TableCell />
             <NoWrapIconTooltipCell tooltipTitle="Selecting a checkbox will add the term as a facet for the search results.">
@@ -63,7 +64,7 @@ function ConfigureSearchTable({
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
   );
 }
 
