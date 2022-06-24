@@ -1,6 +1,7 @@
 import { css } from 'styled-components';
 
 // See https://css-tricks.com/scroll-shadows-with-javascript/ for reference.
+// The scroll shadows will not work on iOS Safari.
 
 const sharedStyles = css`
   background-repeat: no-repeat;
