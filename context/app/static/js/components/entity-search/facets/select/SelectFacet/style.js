@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import FormGroup from '@material-ui/core/FormGroup';
 
-import { scrollShadows } from 'js/shared-styles/scrollShadows';
+import { buildScrollShadows } from 'js/shared-styles/scrollShadows';
 
 const StyledFormGroup = styled(FormGroup)`
   max-height: 250px;
@@ -9,7 +9,7 @@ const StyledFormGroup = styled(FormGroup)`
   display: block;
   padding-right: ${(props) => props.theme.spacing(1.5)}px; // Adds space for the scrollbar.
 
-  ${scrollShadows}
+  ${buildScrollShadows()}
 `;
 
 export { StyledFormGroup };

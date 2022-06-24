@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 import FormLabel from '@material-ui/core/FormLabel';
 
-import { scrollShadows } from 'js/shared-styles/scrollShadows';
+import { buildScrollShadows } from 'js/shared-styles/scrollShadows';
 
 const StyledPaper = styled(Paper)`
   min-width: 300px;
@@ -10,7 +10,7 @@ const StyledPaper = styled(Paper)`
   overflow-y: auto;
   height: 100%;
   margin-right: ${(props) => props.theme.spacing(1.5)}px;
-  ${scrollShadows};
+  ${buildScrollShadows()};
 `;
 
 const StyledFormLabel = styled(FormLabel)`

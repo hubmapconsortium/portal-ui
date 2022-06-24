@@ -1,4 +1,5 @@
 import { css } from 'styled-components';
+import { isMobileSafari } from 'react-device-detect';
 
 // See https://css-tricks.com/scroll-shadows-with-javascript/ for reference.
 // The scroll shadows will not work on iOS Safari.
@@ -9,18 +10,28 @@ const sharedStyles = css`
   background-attachment: local, local, scroll, scroll;
 `;
 
-const scrollShadows = css`
-  background:
+function buildScrollShadows() {
+  if (isMobileSafari) {
+    return '';
+  }
+  return css`
+    background:
     /* Shadow Cover TOP */ linear-gradient(white 30%, rgba(255, 255, 255, 0)) center top,
-    /* Shadow Cover BOTTOM */ linear-gradient(rgba(255, 255, 255, 0), white 70%) center bottom,
-    /* Shadow TOP */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) center top,
-    /* Shadow BOTTOM */ radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) center bottom;
+      /* Shadow Cover BOTTOM */ linear-gradient(rgba(255, 255, 255, 0), white 70%) center bottom,
+      /* Shadow TOP */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) center top,
+      /* Shadow BOTTOM */ radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) center bottom;
 
-  ${sharedStyles}
-`;
+    ${sharedStyles};
+  `;
+}
 
 function buildStickyTableScrollShadows(tableHeadHeight) {
   const tableHeadHeightPx = `${tableHeadHeight}px`;
+
+  if (isMobileSafari) {
+    return '';
+  }
+
   return css`
     background:
       /* Shadow Cover TOP */ linear-gradient(white 30%, rgba(255, 255, 255, 0)) center
@@ -34,4 +45,4 @@ function buildStickyTableScrollShadows(tableHeadHeight) {
   `;
 }
 
-export { scrollShadows, buildStickyTableScrollShadows };
+export { buildScrollShadows, buildStickyTableScrollShadows };
