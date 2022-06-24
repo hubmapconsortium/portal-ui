@@ -1,5 +1,7 @@
 import { css } from 'styled-components';
 
+// See https://css-tricks.com/scroll-shadows-with-javascript/ for reference.
+
 const sharedStyles = css`
   background-repeat: no-repeat;
   background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
