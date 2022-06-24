@@ -1,1 +1,0 @@
-- Use Matomo React integration.

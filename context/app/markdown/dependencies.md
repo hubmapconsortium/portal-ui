@@ -27,7 +27,7 @@ hubmap-commons==2.0.12
 Werkzeug==2.0.3  # TODO: This is just a transitive dependency. Remove when https://github.com/hubmapconsortium/portal-ui/issues/2547 is fixed.
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.1.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.4.zip
 ```
 
 ## NodeJS packages
@@ -35,11 +35,16 @@ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.1
 ```
 {
 "@babel/runtime": "^7.10.4",
+"@datapunt/matomo-tracker-js": "^0.5.1",
+"@elastic/datemath": "^5.0.3",
+"@elastic/eui": "^57.0.0",
+"@emotion/react": "^11.9.0",
 "@hms-dbmi-bgm/react-workflow-viz": "^0.1.4",
 "@material-ui/core": "^4.9.4",
 "@material-ui/icons": "^4.9.1",
 "@material-ui/lab": "^4.0.0-alpha.45",
 "@searchkit/client": "^3.0.0-canary.53",
+"@searchkit/elastic-ui": "^3.0.0-canary.53",
 "@searchkit/sdk": "^3.0.0-canary.53",
 "@visx/axis": "^1.7.0",
 "@visx/event": "^1.7.0",
@@ -81,12 +86,13 @@ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.1
 "styled-components": "^5.1.0",
 "typeface-inter": "^3.12.0",
 "universal-cookie": "^4.0.3",
+"use-debounce": "^8.0.1",
 "use-deep-compare-effect": "^1.8.1",
 "use-resize-observer": "^7.0.0",
 "uuid": "^8.3.2",
 "vega": "^5.17.3",
 "vega-lite": "^4.13.1",
-"vitessce": "^1.1.18",
+"vitessce": "^1.1.20",
 "web-vitals": "^1.1.0",
 "whatwg-fetch": "^3.0.0",
 "zustand": "^3.5.9"

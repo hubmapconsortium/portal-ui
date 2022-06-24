@@ -1,16 +1,17 @@
 import React from 'react';
-import FormGroup from '@material-ui/core/FormGroup';
-
 import { useSearchkit } from '@searchkit/client';
-import SelectFacetItem from 'js/components/entity-search/facets/select/SelectFacetItem';
-import FacetAccordion from 'js/components/entity-search/facets/FacetAccordion';
 
-function SelectFacet({ facet: { entries, identifier, label } }) {
+import SelectFacetItem from 'js/components/entity-search/facets/select/SelectFacetItem';
+import SelectFacetViewButton from 'js/components/entity-search/facets/select/SelectFacetViewButton';
+
+import { StyledFormGroup } from './style';
+
+function SelectFacet({ facet: { entries, identifier, sumOtherDocCount } }) {
   const api = useSearchkit();
 
   return (
-    <FacetAccordion identifier={identifier} label={label}>
-      <FormGroup>
+    <>
+      <StyledFormGroup>
         {entries.map(({ label: entryLabel, count }) => (
           <SelectFacetItem
             key={`${identifier}.${entryLabel}`}
@@ -20,8 +21,9 @@ function SelectFacet({ facet: { entries, identifier, label } }) {
             identifier={identifier}
           />
         ))}
-      </FormGroup>
-    </FacetAccordion>
+      </StyledFormGroup>
+      <SelectFacetViewButton identifier={identifier} sumOtherDocCount={sumOtherDocCount} />
+    </>
   );
 }
 

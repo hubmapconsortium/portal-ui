@@ -1,1 +1,0 @@
-- Remove vestigial meta tag and CSS import.

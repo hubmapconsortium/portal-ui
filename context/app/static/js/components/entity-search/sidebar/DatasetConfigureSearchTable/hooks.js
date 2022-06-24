@@ -52,7 +52,7 @@ function useFieldGroups() {
   const groups = useGroupedFieldConfigs();
   const { selectedItems: selectedGroups, handleToggleItem: handleToggleGroup } = useSelectedItems(
     selectedItemsReducer,
-    {},
+    { General: undefined },
   );
 
   const selectedGroupFieldConfigs = getSelectedGroupsFieldConfigs(groups, selectedGroups);
@@ -92,11 +92,19 @@ function useSelectedDataTypes() {
 }
 
 function useDatasetConfigureSearchTable() {
-  const { handleToggleDataType, dataTypesFields } = useSelectedDataTypes();
-  const { groups, handleToggleGroup, selectedGroupFieldConfigs } = useFieldGroups();
+  const { handleToggleDataType, dataTypesFields, selectedDataTypes } = useSelectedDataTypes();
+  const { groups, handleToggleGroup, selectedGroupFieldConfigs, selectedGroups } = useFieldGroups();
 
   const availableFieldConfigs = { ...selectedGroupFieldConfigs, ...dataTypesFields };
-  return { dataTypesToFieldsMap, handleToggleDataType, groups, handleToggleGroup, availableFieldConfigs };
+  return {
+    dataTypesToFieldsMap,
+    handleToggleDataType,
+    groups,
+    handleToggleGroup,
+    availableFieldConfigs,
+    selectedDataTypes,
+    selectedGroups,
+  };
 }
 
 export { useDatasetConfigureSearchTable };

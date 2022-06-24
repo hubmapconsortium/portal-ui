@@ -8,53 +8,59 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import { excludeDateFieldConfigs, getFieldEntriesSortedByConfigureGroup } from './utils';
+import metadataFieldDescriptions from 'metadata-field-descriptions';
+import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { NoWrapIconTooltipCell, StyledIconTooltipCell } from './style';
 
 function ConfigureSearchTable({
   selectedFields,
   selectedFacets,
   handleToggleField,
   handleToggleFacet,
-  availableFields,
+  filteredFields,
 }) {
+  const { numericFacetsProps } = useStore();
+
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Add Facet</TableCell>
-            <TableCell>Add Column</TableCell>
+            <NoWrapIconTooltipCell tooltipTitle="Selecting a checkbox will add the term as a facet for the search results.">
+              Add Facet
+            </NoWrapIconTooltipCell>
+            <NoWrapIconTooltipCell tooltipTitle="Selecting a checkbox will add the term as a column for the search results table.">
+              Add Column
+            </NoWrapIconTooltipCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {excludeDateFieldConfigs(getFieldEntriesSortedByConfigureGroup(availableFields)).map(
-            ([fieldName, fieldConfig]) => (
-              <TableRow key={fieldName}>
-                <TableCell>{fieldConfig.label}</TableCell>
-                {fieldConfig.type === 'string' ? (
-                  <TableCell>
-                    <Checkbox
-                      checked={fieldName in selectedFacets}
-                      size="small"
-                      color="primary"
-                      onChange={(event) => handleToggleFacet(event, fieldConfig)}
-                    />
-                  </TableCell>
-                ) : (
-                  <TableCell />
-                )}
-                <TableCell>
+          {filteredFields.map(([fieldName, fieldConfig]) => (
+            <TableRow key={fieldName}>
+              <StyledIconTooltipCell tooltipTitle={metadataFieldDescriptions[fieldConfig?.ingestValidationToolsName]}>
+                {fieldConfig.label}
+              </StyledIconTooltipCell>
+              <TableCell padding="checkbox" align="center">
+                {(['string', 'boolean'].includes(fieldConfig.type) || numericFacetsProps?.[fieldName]) && (
                   <Checkbox
-                    checked={fieldName in selectedFields}
+                    checked={fieldName in selectedFacets}
                     size="small"
                     color="primary"
-                    onChange={(event) => handleToggleField(event, fieldConfig)}
+                    onChange={(event) => handleToggleFacet(event, fieldConfig)}
                   />
-                </TableCell>
-              </TableRow>
-            ),
-          )}
+                )}
+              </TableCell>
+              <TableCell padding="checkbox" align="center">
+                <Checkbox
+                  checked={fieldName in selectedFields}
+                  size="small"
+                  color="primary"
+                  onChange={(event) => handleToggleField(event, fieldConfig)}
+                />
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

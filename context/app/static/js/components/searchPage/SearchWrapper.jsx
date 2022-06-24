@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { trackSiteSearch } from 'js/helpers/trackers';
+import { trackEvent, trackSiteSearch } from 'js/helpers/trackers';
 
 import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody } from 'searchkit'; // eslint-disable-line import/no-duplicates
 
@@ -52,7 +52,14 @@ function SearchWrapper(props) {
     const removalFn = searchkit.addResultsListener((results) => {
       const newQueryString = searchkit.state?.q;
       if (![queryString.current, undefined].includes(newQueryString)) {
+        // TODO: How is trackSiteSeach reported? Can we use it instead of trackEvent?
         trackSiteSearch(newQueryString);
+        // TODO: Remove trackEvent, eventually?
+        trackEvent({
+          category: analyticsCategory,
+          action: 'Free Text Search',
+          label: newQueryString,
+        });
       }
       queryString.current = newQueryString;
       setSearchHitsCount(results.hits.total.value);

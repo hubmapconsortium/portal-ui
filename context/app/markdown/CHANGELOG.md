@@ -1,3 +1,57 @@
+## v0.47.0 - 2022-06-22
+
+- Style configure search table in search revision ui to prevent column shift as new rows are added.
+- Add form label to data types select form in search revision ui.
+- Put labels before checkboxes in data types select form in search revision ui.
+- Add tooltips to column cells in configure search table in search revision ui.
+- Modify configure search table in search revision ui so the data types select form and table scroll separately.
+- Add description tooltips to configure search table in search revision ui.
+- Upgrade `portal-visualization` to 0.0.4 to fix validation issue for unpublished `zarr` stores.
+- The Workspaces websocket URL also needs to be provided by the environment: Update the template used when initializing new dev environments.
+
+
+## v0.46.1 - 2022-06-15
+
+- Add search bar to filter rows in search revision configure search table.
+- Show an alert when no fields in the configure search modal are shown in search revision ui.
+- Consolidate search hooks into single hook.
+- Add url sync for search ui revision.
+- Only display view all button for select facets in search revision ui when additional aggs exist.
+- Upgrade `vitessce` (and dependents) to allow for using an alias for genes.
+
+
+## v0.46.0 - 2022-06-07
+
+- Add default filters used in the existing search page to the search revision.
+- Avoid referencing global variables: Instead get everything from a context provider.
+- Add mapped_last_modified_timestamp as default sort for search revision.
+- Add button to view all/less select facet items in search revision ui.
+- Fix bug when configuring facets in search revision.
+- Fix immer syntax bug in entity-searchs store for search ui revision.
+- Clean up flask templates. Should not change behavior.
+- Use `alert` as a stop-gap so we can understand how Cells API is working.
+- Add the `--silent` option to jest to avoid cluttering the log with expected proptype warnings.
+- Add metadata menu to search revision ui.
+- Matomo React proved awkward: Just use plain JS functions.
+- Migrate to Python 3.9.
+- Add range slider components for numeric facets in search ui revision.
+- Remove references to google analytics.
+- Add search bar to search ui revision.
+- Add facet chips to search revision ui.
+- Add pagination to search ui revision.
+- Update matomo init to reflect the new, paid, account.
+
+
+## v0.44.0 - 2022-05-13
+
+- Enable users to configure facets for string type fields in search ui revision.
+- Fix how the search results accesses sample metadata from elasticsearch.
+- Make query-portal-logs script executable.
+- Use Matomo React integration.
+- Remove date fields from configure search table in search revision ui.
+- Remove vestigial meta tag and CSS import.
+
+
 ## v0.43.0 - 2022-05-05
 
 - Add form to allow users to filter configure search table by data type.

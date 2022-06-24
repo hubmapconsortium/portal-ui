@@ -1,13 +1,16 @@
 import React from 'react';
-import { SearchkitClient, SearchkitProvider } from '@searchkit/client';
-import { TermFilter } from '@searchkit/sdk';
 
 import Search from 'js/components/entity-search/Search';
-import { capitalizeString } from 'js/helpers/functions';
-import { mergeObjects, getDonorMetadataFields, createAffiliationFacet, createField } from './utils';
+import { getDefaultFilters } from 'js/components/entity-search/searchkit-modifications/getDefaultFilters';
+import {
+  mergeObjects,
+  getDonorMetadataFields,
+  createAffiliationFacet,
+  createField,
+  getEntityTypeFilter,
+} from './utils';
 import SearchConfigProvider from './provider';
-
-const skClient = new SearchkitClient();
+import { useNumericFacetsProps } from './hooks';
 
 function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   const initialFacets = mergeObjects([
@@ -24,24 +27,27 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
     createField({ fieldName: 'mapped_last_modified_timestamp', label: 'Last Modified', type: 'string' }),
   ]);
 
-  const filters = [
-    {
-      definition: new TermFilter({
-        identifier: 'entity_type.keyword',
-        field: 'entity_type.keyword',
-        label: 'Entity Type',
-      }),
-      value: { identifier: 'entity_type.keyword', value: capitalizeString(entityType) },
-    },
-  ];
+  const defaultFilters = mergeObjects([getEntityTypeFilter(entityType), getDefaultFilters()]);
 
-  const config = { initialFacets, initialFields, facets: initialFacets, fields: initialFields, filters, entityType };
+  const numericFacetsProps = useNumericFacetsProps(entityType);
+
+  if (!Object.keys(numericFacetsProps).length) {
+    return null;
+  }
 
   return (
-    <SearchConfigProvider initialConfig={config}>
-      <SearchkitProvider client={skClient}>
-        <Search />
-      </SearchkitProvider>
+    <SearchConfigProvider
+      initialConfig={{
+        initialFacets,
+        initialFields,
+        facets: initialFacets,
+        fields: initialFields,
+        defaultFilters,
+        entityType,
+        numericFacetsProps,
+      }}
+    >
+      <Search />
     </SearchConfigProvider>
   );
 }

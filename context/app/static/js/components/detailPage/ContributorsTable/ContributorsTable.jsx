@@ -10,10 +10,9 @@ import TableRow from '@material-ui/core/TableRow';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import { HeaderIconCell, StyledInfoIcon, CenterAlignedFlexRow } from './style';
 
 function ContributorsTable(props) {
   const { title, contributors } = props;
@@ -34,14 +33,9 @@ function ContributorsTable(props) {
                 {columns.map((column) => (
                   <HeaderCell key={column.id}>{column.label}</HeaderCell>
                 ))}
-                <HeaderIconCell>
-                  <CenterAlignedFlexRow>
-                    ORCID
-                    <SecondaryBackgroundTooltip title="Open Researcher and Contributor ID">
-                      <StyledInfoIcon color="primary" />
-                    </SecondaryBackgroundTooltip>
-                  </CenterAlignedFlexRow>
-                </HeaderIconCell>
+                <IconTooltipCell component={HeaderCell} tooltipTitle="Open Researcher and Contributor ID">
+                  ORCID
+                </IconTooltipCell>
               </TableRow>
             </TableHead>
             <TableBody>

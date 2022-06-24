@@ -6,6 +6,7 @@ import DonorSampleConfigureSearchTable from 'js/components/entity-search/sidebar
 import DatasetConfigureSearchTable from 'js/components/entity-search/sidebar/DatasetConfigureSearchTable';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { useConfigureSearch } from './hooks';
+import { StyledPaper, StyledDialogContent } from './style';
 
 function ConfigureSearch() {
   const {
@@ -52,6 +53,8 @@ function ConfigureSearch() {
             <Button onClick={handleSave}>Save</Button>
           </>
         }
+        PaperComponent={StyledPaper}
+        DialogContentComponent={StyledDialogContent}
       />
     </>
   );

@@ -15,4 +15,12 @@ function buildSortPairs(fields) {
     .flat();
 }
 
-export { buildSortPairs };
+function getRangeProps(fieldName, numericFacetsProps) {
+  if (!numericFacetsProps?.[fieldName]) {
+    return {};
+  }
+
+  return { range: numericFacetsProps[fieldName] };
+}
+
+export { buildSortPairs, getRangeProps };

@@ -44,7 +44,7 @@ def markdown_view():
         content_md = md_file.read()
     title = _title_from_md(content_md)
     return render_template(
-        'pages/base_react.html',
+        'base-pages/react-content.html',
         flask_data={
             **get_default_flask_data(),
             'markdown': content_md
