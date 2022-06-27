@@ -1,0 +1,1 @@
+- Keep vitessce version in notebook automatically up-to-date.
