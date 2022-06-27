@@ -15,9 +15,9 @@ import StatusIcon from './StatusIcon';
 import { useGatewayStatus } from './hooks';
 
 function buildServiceStatus(args) {
-  const { apiName, endpointUrl, githubUrl, response, noteFunction } = args;
+  const { apiName, endpointUrl, githubUrl, response = {}, noteFunction } = args;
   const { build, version: apiVersion, api_auth } = response;
-  const isUp = api_auth || apiName === 'gateway';
+  const isUp = apiName === 'gateway' || api_auth;
   // The gateway is implicit: If it's not up, you wouldn't get anything at all,
   // (and you wouldn't be able to get to the portal in the first place.)
   return {
@@ -39,6 +39,7 @@ function ServiceStatusTable(props) {
     entityEndpoint,
     gatewayEndpoint,
     workspacesEndpoint,
+    workspacesWsEndpoint,
   } = props;
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
@@ -96,8 +97,13 @@ function ServiceStatusTable(props) {
           apiName: 'workspaces-api',
           endpointUrl: workspacesEndpoint,
           githubUrl: 'https://github.com/hubmapconsortium/user_workspaces_server',
-          response: {},
-          noteFunction: () => 'TODO: Status not returned by gateway',
+          noteFunction: () => 'TODO: Waiting for gateway to provide info',
+        }),
+        buildServiceStatus({
+          apiName: 'workspaces-ws-api',
+          endpointUrl: workspacesWsEndpoint,
+          githubUrl: 'https://github.com/hubmapconsortium/user_workspaces_server',
+          noteFunction: () => 'TODO: Waiting for gateway to provide info',
         }),
       ]
     : [];
