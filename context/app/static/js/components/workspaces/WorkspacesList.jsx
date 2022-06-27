@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { AppContext } from 'js/components/Providers';
 import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
+import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 
-import { SeparatedFlexRow, FlexBottom } from './style';
 import { createNotebookWorkspace } from './utils';
 
 // TODO: Copy-and-paste from SummaryData/style
@@ -73,17 +73,19 @@ function WorkspacesList() {
 
   return (
     <>
-      <SeparatedFlexRow>
-        <Typography variant="subtitle1">[TODO: Count] Workspaces</Typography>
-        <FlexBottom>
-          <StyledButton onClick={handleDelete}>
-            <DeleteIcon color="primary" />
-          </StyledButton>
-          <StyledButton onClick={handleCreate}>
-            <AddIcon color="primary" />
-          </StyledButton>
-        </FlexBottom>
-      </SeparatedFlexRow>
+      <SpacedSectionButtonRow
+        leftText={<Typography variant="subtitle1">[TODO: Count] Workspaces</Typography>}
+        buttons={
+          <>
+            <StyledButton onClick={handleDelete}>
+              <DeleteIcon color="primary" />
+            </StyledButton>
+            <StyledButton onClick={handleCreate}>
+              <AddIcon color="primary" />
+            </StyledButton>
+          </>
+        }
+      />
       <Paper>
         {`TODO: Use token "${workspacesToken}" with "${workspacesEndpoint}"`}
         <hr />
