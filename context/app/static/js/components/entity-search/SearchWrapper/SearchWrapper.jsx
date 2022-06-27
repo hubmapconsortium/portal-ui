@@ -45,6 +45,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
         defaultFilters,
         entityType,
         numericFacetsProps,
+        initialView: 'table',
       }}
     >
       <Search />
