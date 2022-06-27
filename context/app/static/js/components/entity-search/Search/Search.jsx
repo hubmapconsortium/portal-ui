@@ -8,9 +8,10 @@ import Pagination from 'js/components/entity-search/results/Pagination';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import SearchBar from 'js/components/entity-search/SearchBar';
 import FacetChips from 'js/components/entity-search/facets/facetChips/FacetChips';
+import MetadataMenu from 'js/components/entity-search/MetadataMenu/';
+import SearchViewSwitch from 'js/components/entity-search/results/SearchViewSwitch';
 import { Flex, Grow, ResultsLayout } from './style';
 import { useSearch } from './hooks';
-import MetadataMenu from '../MetadataMenu/MetadataMenu';
 
 const defaultPageSize = 18;
 
@@ -30,6 +31,7 @@ function Search() {
           <SearchBar />
         </Grow>
         <MetadataMenu allResultsUUIDs={allResultsUUIDs} entityType={entityType} />
+        <SearchViewSwitch />
       </Flex>
       {results?.summary.appliedFilters && <FacetChips appliedFilters={results.summary.appliedFilters} />}
       <Flex>
