@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
@@ -9,44 +9,12 @@ import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 
 import { createNotebookWorkspace } from './utils';
+import { useWorkspacesList } from './hooks';
 
 // TODO: Copy-and-paste from SummaryData/style
 const StyledButton = styled(WhiteBackgroundIconButton)`
   height: 36px;
 `;
-
-function useWorkspacesList() {
-  const [workspacesList, setWorkspacesList] = useState([]);
-  // TODO: isLoading:
-  // const [isLoading, setIsLoading] = useState(true);
-
-  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
-
-  useEffect(() => {
-    async function getAndSetWorkspacesList() {
-      const response = await fetch(`${workspacesEndpoint}/workspaces`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'UWS-Authorization': `Token ${workspacesToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        console.error('Workspaces API failed', response);
-        return;
-      }
-      const results = await response.json();
-
-      setWorkspacesList(results);
-      // TODO:
-      // setIsLoading(false);
-    }
-    getAndSetWorkspacesList();
-  }, [workspacesEndpoint, workspacesToken]);
-
-  return { workspacesList };
-}
 
 function WorkspacesList() {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
