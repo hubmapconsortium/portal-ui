@@ -5,6 +5,7 @@ from flask import (
     request, redirect, abort, session)
 import requests
 import globus_sdk
+from json import dumps
 
 from .utils import make_blueprint
 
@@ -81,6 +82,23 @@ def login():
     auth_token_object = tokens.by_resource_server['auth.globus.org']
     auth_token = auth_token_object['access_token']
 
+    workspaces_post_url = current_app.config['WORKSPACES_ENDPOINT'] + '/tokens/'
+    workspaces_post_data = dumps({'auth_token': groups_token})
+    workspaces_post_resp = requests.post(
+        workspaces_post_url,
+        data=workspaces_post_data)
+
+    try:
+        workspaces_token = workspaces_post_resp.json()['token']
+    except Exception as e:
+        if not workspaces_post_resp.ok:
+            current_app.logger.error(
+                'Workspaces auth failed: '
+                f'{workspaces_post_resp.status_code} {workspaces_post_resp.text[:100]}')
+        else:
+            current_app.logger.error(f'Workspaces auth token read failed: {e}')
+        workspaces_token = None
+
     user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
     user_info = requests.get('https://auth.globus.org/v2/oauth2/userinfo',
                              headers=user_info_request_headers).json()
@@ -93,7 +111,9 @@ def login():
     session.update(
         groups_token=groups_token,
         is_authenticated=True,
-        user_email=user_email)
+        user_email=user_email,
+        workspaces_token=workspaces_token
+    )
 
     previous_url = unquote(request.cookies.get('urlBeforeLogin'))
     response = make_response(

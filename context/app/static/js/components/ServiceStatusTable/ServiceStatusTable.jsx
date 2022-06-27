@@ -32,7 +32,14 @@ function buildServiceStatus(args) {
 }
 
 function ServiceStatusTable(props) {
-  const { elasticsearchEndpoint, assetsEndpoint, xmodalityEndpoint, entityEndpoint, gatewayEndpoint } = props;
+  const {
+    elasticsearchEndpoint,
+    assetsEndpoint,
+    xmodalityEndpoint,
+    entityEndpoint,
+    gatewayEndpoint,
+    workspacesEndpoint,
+  } = props;
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
   const apiStatuses = gatewayStatus
@@ -84,6 +91,13 @@ function ServiceStatusTable(props) {
           apiName: 'uuid-api',
           response: gatewayStatus.uuid_api,
           noteFunction: (api) => `MySQL: ${api.mysql_connection}`,
+        }),
+        buildServiceStatus({
+          apiName: 'workspaces-api',
+          endpointUrl: workspacesEndpoint,
+          githubUrl: 'https://github.com/hubmapconsortium/user_workspaces_server',
+          response: {},
+          noteFunction: () => 'TODO: Status not returned by gateway',
         }),
       ]
     : [];

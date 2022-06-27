@@ -1,0 +1,1 @@
+- Demonstrate how authorization for workspaces will work.

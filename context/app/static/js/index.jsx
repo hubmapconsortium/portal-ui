@@ -17,7 +17,13 @@ ReactDOM.render(
   window.location.pathname.startsWith('/iframe/') ? (
     <Iframe flaskData={flaskData} />
   ) : (
-    <App flaskData={flaskData} groupsToken={groupsToken} isAuthenticated={isAuthenticated} userEmail={userEmail} />
+    <App
+      flaskData={flaskData}
+      groupsToken={groupsToken}
+      isAuthenticated={isAuthenticated}
+      userEmail={userEmail}
+      workspacesToken={workspacesToken}
+    />
   ),
   document.getElementById('react-content'),
 );
