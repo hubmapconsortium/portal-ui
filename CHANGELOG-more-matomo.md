@@ -1,1 +1,0 @@
-- Matomo React proved awkward: Just use plain JS functions.

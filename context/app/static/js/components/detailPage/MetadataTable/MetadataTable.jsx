@@ -11,15 +11,9 @@ import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
+import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import {
-  DownloadIcon,
-  Flex,
-  StyledWhiteBackgroundIconButton,
-  StyledSectionHeader,
-  FlexTableCell,
-  StyledInfoIcon,
-} from './style';
+import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton, StyledSectionHeader } from './style';
 
 function getDescription(field) {
   const [prefix, stem] = field.split('.');
@@ -97,14 +91,7 @@ function MetadataTable(props) {
             <TableBody>
               {tableRows.map((row) => (
                 <TableRow key={row.key}>
-                  <FlexTableCell>
-                    {row.key}
-                    {row.description && (
-                      <SecondaryBackgroundTooltip title={row.description} placement="bottom-start">
-                        <StyledInfoIcon color="primary" />
-                      </SecondaryBackgroundTooltip>
-                    )}
-                  </FlexTableCell>
+                  <IconTooltipCell tooltipTitle={row?.description}>{row.key}</IconTooltipCell>
                   <TableCell>{row.value}</TableCell>
                 </TableRow>
               ))}

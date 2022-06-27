@@ -1,67 +1,50 @@
-import React, { useContext, useMemo } from 'react';
+import React from 'react';
 
-import { MultiMatchQuery } from '@searchkit/sdk';
-import { useSearchkitVariables } from '@searchkit/client';
+import { SearchkitClient, withSearchkit, withSearchkitRouting } from '@searchkit/client';
 
-import { AppContext } from 'js/components/Providers';
-import { getAuthHeader } from 'js/helpers/functions';
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import { createSearchkitFacet } from 'js/components/entity-search/SearchWrapper/utils';
-import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
+import { routeToStateWithDefaultPageSize } from 'js/components/entity-search/searchkit-modifications/routeToState';
 import ResultsTable from 'js/components/entity-search/ResultsTable';
 import Pagination from 'js/components/entity-search/results/Pagination';
-
-import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
-import { SearchLayout, ResultsLayout } from './style';
-import { buildSortPairs, getRangeProps } from './utils';
+import SearchBar from 'js/components/entity-search/SearchBar';
+import FacetChips from 'js/components/entity-search/facets/facetChips/FacetChips';
+import { Flex, Grow, ResultsLayout } from './style';
+import { useSearch } from './hooks';
+import MetadataMenu from '../MetadataMenu/MetadataMenu';
 
-function Search({ numericFacetsProps }) {
-  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
-  const authHeader = getAuthHeader(groupsToken);
-  const { fields, facets, filters } = useStore();
+const defaultPageSize = 18;
 
-  const config = useMemo(
-    () => ({
-      host: elasticsearchEndpoint,
-      connectionOptions: {
-        headers: {
-          ...authHeader,
-        },
-      },
-      hits: {
-        fields: Object.values(fields).map(({ identifier }) => identifier),
-      },
-      sortOptions: buildSortPairs(Object.values(fields)),
-      query: new MultiMatchQuery({
-        fields: ['all_text'],
-      }),
-      facets: Object.values(facets).map((facet) =>
-        createSearchkitFacet({ ...facet, ...getRangeProps(facet.field, numericFacetsProps) }),
-      ),
-      filters: filters.map((filter) => filter.definition),
-    }),
-    [authHeader, elasticsearchEndpoint, facets, fields, filters, numericFacetsProps],
-  );
+const routeToState = routeToStateWithDefaultPageSize(defaultPageSize);
 
-  const transporter = new RequestTransporter(config);
+const createSkClient = () =>
+  new SearchkitClient({
+    itemsPerPage: defaultPageSize,
+  });
 
-  const variables = useSearchkitVariables();
-  const { results } = useSearchkitSDK(config, variables, transporter, filters);
-
+function Search() {
+  const { results, allResultsUUIDs, entityType } = useSearch();
   return (
-    <SearchLayout>
-      <Sidebar results={results} />
-      <ResultsLayout>
-        {results?.hits && (
-          <>
-            <ResultsTable hits={results.hits} />
-            <Pagination pageHits={results.hits.page} />
-          </>
-        )}
-      </ResultsLayout>
-    </SearchLayout>
+    <>
+      <Flex>
+        <Grow>
+          <SearchBar />
+        </Grow>
+        <MetadataMenu allResultsUUIDs={allResultsUUIDs} entityType={entityType} />
+      </Flex>
+      {results?.summary.appliedFilters && <FacetChips appliedFilters={results.summary.appliedFilters} />}
+      <Flex>
+        <Sidebar results={results} />
+        <ResultsLayout>
+          {results?.hits && (
+            <>
+              <ResultsTable hits={results.hits} />
+              <Pagination pageHits={results.hits.page} />
+            </>
+          )}
+        </ResultsLayout>
+      </Flex>
+    </>
   );
 }
 
-export default Search;
+export default withSearchkit(withSearchkitRouting(Search, { routeToState }), createSkClient);

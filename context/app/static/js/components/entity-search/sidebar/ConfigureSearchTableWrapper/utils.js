@@ -1,7 +1,11 @@
-function excludeDateFieldConfigs(fieldConfigEntries) {
+function filterFieldConfigs(fieldConfigEntries, searchBarFieldName) {
   const excludedFieldTypes = ['date', 'datetime'];
 
-  return fieldConfigEntries.filter(([, fieldConfig]) => !excludedFieldTypes.includes(fieldConfig.type));
+  return fieldConfigEntries.filter(
+    ([, fieldConfig]) =>
+      !excludedFieldTypes.includes(fieldConfig.type) &&
+      (fieldConfig.label.toLowerCase().includes(searchBarFieldName.toLowerCase()) || searchBarFieldName === ''),
+  );
 }
 
 function getFieldEntriesSortedByConfigureGroup(fields) {
@@ -23,4 +27,4 @@ function getFieldEntriesSortedByConfigureGroup(fields) {
   );
 }
 
-export { excludeDateFieldConfigs, getFieldEntriesSortedByConfigureGroup };
+export { filterFieldConfigs, getFieldEntriesSortedByConfigureGroup };

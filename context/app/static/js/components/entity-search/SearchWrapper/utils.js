@@ -1,9 +1,10 @@
-import { RefinementSelectFacet, RangeFacet } from '@searchkit/sdk';
+import { RangeFacet, TermFilter } from '@searchkit/sdk';
 
 import metadataFieldtoTypeMap from 'metadata-field-types';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { capitalizeString } from 'js/helpers/functions';
 import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumentPaths';
+import RefinementSelectFacet from 'js/components/entity-search/searchkit-modifications/RefinementSelectFacet';
 
 // appends '.keyword' to field name for elasticsearch string fields
 function appendKeywordToFieldName({ fieldName, type }) {
@@ -73,6 +74,7 @@ function buildMetadataFieldConfig({ fieldName, entityType: pageEntityType, ...re
     facetGroup: group,
     configureGroup: group,
     entityType: pageEntityType,
+    ingestValidationToolsName: fieldName,
     ...rest,
   });
 }
@@ -121,12 +123,46 @@ function getDonorMetadataFields(entityType) {
   ];
 }
 
+function getFieldConfigValue(fieldConfig) {
+  // createField returns an object with only a single value.
+  return Object.values(fieldConfig)[0];
+}
+
+function getTypeFilter({ fieldName, value, ...rest }) {
+  const { field, identifier, label } = getFieldConfigValue(createField({ fieldName, ...rest }));
+
+  // TermFilter id as determined by searchkit.
+  // https://github.com/searchkit/searchkit/blob/next/packages/searchkit-sdk/src/filters/TermFilter.ts
+  const id = `${identifier}_${value}`;
+  return {
+    [id]: {
+      definition: new TermFilter({
+        identifier,
+        field,
+        label,
+      }),
+      value: { identifier, value },
+    },
+  };
+}
+
+function getEntityTypeFilter(entityType) {
+  return getTypeFilter({
+    fieldName: 'entity_type',
+    label: 'Entity Type',
+    type: 'string',
+    value: capitalizeString(entityType),
+  });
+}
+
 const typeToSearchKitFacetMap = {
   integer: RangeFacet,
   number: RangeFacet,
   string: RefinementSelectFacet,
   boolean: RefinementSelectFacet,
 };
+
+const defaultSelectFacetSize = 5;
 
 function createSearchkitFacet({ field, identifier, label, type, ...rest }) {
   const Facet = typeToSearchKitFacetMap[type];
@@ -136,7 +172,9 @@ function createSearchkitFacet({ field, identifier, label, type, ...rest }) {
     identifier,
     label,
     type,
+    // multipleSelect and size props only affect RefinementSelectFacets.
     multipleSelect: true,
+    size: defaultSelectFacetSize,
     ...rest,
   });
 }
@@ -153,4 +191,8 @@ export {
   createAffiliationFacet,
   createSearchkitFacet,
   createField,
+  getFieldConfigValue,
+  getTypeFilter,
+  getEntityTypeFilter,
+  defaultSelectFacetSize,
 };

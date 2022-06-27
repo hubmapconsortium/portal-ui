@@ -1,1 +1,0 @@
-- Fix bug when configuring facets in search revision.

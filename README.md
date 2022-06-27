@@ -85,8 +85,8 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
 
 ### Prerequisites
 - `git`: Suggest [installing Apple XCode](https://developer.apple.com/xcode/).
-- `python 3.9`: Suggest [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands) with Python 3.9.
-- `nodejs/npm`: Suggest [installing nodejs](https://nodejs.org/en/).
+- `python 3.9`: Suggest [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands): `conda create -n portal python=$(cat .python-version)`
+- `nodejs/npm`: Suggest [installing nvm](https://github.com/nvm-sh/nvm#installing-and-updating) and then using it to install the appropriate node version: `nvm install`.
 
 Optional:
 - `VSCode`, with `eslint` and `prettier` plugins
@@ -158,7 +158,7 @@ To start storybook locally you can either run `./dev-start.sh`, or just `npm run
 and after it has started, visit [localhost:6006](http://localhost:6006).
 
 ## Build, tag, and deploy
-We plan to release new images Mondays and Wednesdays, and these are deployed to production the following day. [More details](README-deploy-qa.md#readme).
+We release a new image each Wednesday, and following QA these are deployed to production. [More details](README-deploy-qa.md#readme).
 
 To build a new image for [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
 and tag a release on github, just run:
@@ -174,7 +174,7 @@ Then, to redeploy `dev`, `test`, and `stage`:
 ./redeploy.sh $USERNAME stage
 ```
 
-IEC is responsible for deploying to production.
+After QA, IEC is responsible for deploying to production. We notify them in the `#portal-deployment` Slack channel.
 
 The portal container cloudwatch logs should be checked for errors and exceptions after each release by running `query-portal-logs.py`.
 
@@ -242,6 +242,7 @@ Within that directory, [`config.yaml`](https://github.com/hubmapconsortium/searc
 Data visualization is an integral part of the portal, allowing users to view the results of analysis pipelines or raw uploaded data easily directly in the browser.  How such data is processed and prepared for visualization in the client-side Javascript via [`vitessce`](https://github.com/hubmapconsortium/vitessce) can be found [here](https://github.com/hubmapconsortium/portal-visualization#readme).
 
 General-purpose tools:
+- [`viv`](https://github.com/hms-dbmi/viv): JavaScript library for rendering OME-TIFF and OME-NGFF (Zarr) directly in the browser. Packaged as [deck.gl](https://deck.gl/) layers.
 - [`vitessce`](https://github.com/hubmapconsortium/vitessce): Visual integration tool for exploration of spatial single-cell experiments. Built on top of [deck.gl](https://deck.gl/).
 - [`vitessce-python`](https://github.com/vitessce/vitessce-python): Python wrapper classes which make it easier to build configurations.
 

@@ -1,1 +1,0 @@
-- Add the `--silent` option to jest to avoid cluttering the log with expected proptype warnings.

@@ -1,0 +1,1 @@
+- Check in language version files for python and node, and reference from the README and CI.

@@ -14,6 +14,7 @@ import { StyledDiv, StyledTextField } from './style';
 
 function getSearchQuery(cellsResults) {
   return {
+    size: 10000,
     post_filter: {
       bool: {
         must: [
@@ -104,6 +105,12 @@ function DatasetsSelectedByExpression({
       setIsLoading(false);
     } catch (e) {
       setMessage(e.message);
+      // TODO: The message is displayed in this component...
+      // but after the user submits their data, the component collapses,
+      // so the message is hidden, and the user just sees the please wait.
+      // Not sure what the best long term solution is, but this unblocks Nils.
+      // eslint-disable-next-line no-alert
+      alert(e.message);
     }
   }
 
