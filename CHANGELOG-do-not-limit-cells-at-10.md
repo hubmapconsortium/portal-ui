@@ -1,1 +1,0 @@
-- Cells UI was hitting the Elasticsearch default of 10 results. Increase the limit.
