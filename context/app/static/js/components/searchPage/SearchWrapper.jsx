@@ -52,12 +52,14 @@ function SearchWrapper(props) {
     const removalFn = searchkit.addResultsListener((results) => {
       const newQueryString = searchkit.state?.q;
       if (![queryString.current, undefined].includes(newQueryString)) {
+        const category = 'Free Text Search';
         // TODO: How is trackSiteSeach reported? Can we use it instead of trackEvent?
-        trackSiteSearch(newQueryString);
+        // TODO: Use a range of values for category?
+        trackSiteSearch(newQueryString, category);
         // TODO: Remove trackEvent, eventually?
         trackEvent({
           category: analyticsCategory,
-          action: 'Free Text Search',
+          action: category,
           label: newQueryString,
         });
       }
