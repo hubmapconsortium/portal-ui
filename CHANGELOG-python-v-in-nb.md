@@ -1,0 +1,1 @@
+- Updated Vitessce version in notebook to match requirements.txt.
