@@ -1,20 +1,14 @@
 import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import styled from 'styled-components';
 
 import { AppContext } from 'js/components/Providers';
 import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 
 import { createNotebookWorkspace } from './utils';
 import { useWorkspacesList } from './hooks';
-
-// TODO: Copy-and-paste from SummaryData/style
-const StyledButton = styled(WhiteBackgroundIconButton)`
-  height: 36px;
-`;
+import { StyledButton } from './style';
 
 function WorkspacesList() {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
