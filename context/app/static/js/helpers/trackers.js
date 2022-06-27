@@ -47,14 +47,14 @@ function trackPageView(path) {
 
 function trackEvent(event) {
   tracker.trackEvent(event);
-  ReactGA.trackEvent(event);
+  ReactGA.event(event);
 }
 
 function trackLink(href) {
   tracker.trackLink({
     href,
   });
-  ReactGA.trackEvent({
+  ReactGA.event({
     category: 'Outbound Link',
     action: 'Clicked',
     label: href,
@@ -70,7 +70,7 @@ function trackSiteSearch(keyword) {
   We currently call both trackEvent and trackSiteSearch:
   while that is the case, we don't have to double track the even in GA.
   
-  ReactGA.trackEvent({
+  ReactGA.event({
     // category: analyticsCategory,
     action: 'Free Text Search',
     label: keyword,
