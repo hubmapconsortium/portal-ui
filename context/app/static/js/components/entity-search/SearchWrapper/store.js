@@ -14,6 +14,7 @@ const createStore = ({
   defaultFilters,
   entityType,
   numericFacetsProps,
+  initialView,
 }) =>
   create(
     immer((set) => ({
@@ -24,6 +25,7 @@ const createStore = ({
       facets,
       entityType,
       numericFacetsProps,
+      view: initialView,
       setFields: (selectedFields) =>
         set((state) => {
           state.fields = selectedFields;
@@ -39,6 +41,10 @@ const createStore = ({
       setFacetSize: ({ identifier, size }) =>
         set((state) => {
           state.facets[identifier].size = size;
+        }),
+      setView: (view) =>
+        set((state) => {
+          state.view = view;
         }),
     })),
   );
