@@ -6,7 +6,8 @@ class DefaultConfig(object):
     # Test runs will only see this config and not app.conf.
     #
     # Tests should not make API calls...
-    # but they may expect certain keys to be present.
+    # but they may expect certain keys to be present,
+    # so we provide placeholders here.
 
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=60)
     SESSION_COOKIE_SAMESITE = 'Lax'

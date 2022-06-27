@@ -50,6 +50,10 @@ function MetadataMenu({ type, analyticsCategory }) {
 
   const menuID = 'metadata-menu';
 
+  // TODO: Uncomment when workspaces UI is ready.
+  // const { isAuthenticated } = useContext(AppContext);
+  // const workspacesDisabled = !isAuthenticated;
+
   return (
     <>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
@@ -93,6 +97,22 @@ function MetadataMenu({ type, analyticsCategory }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
+        {/* TODO: Uncomment when workspace UI is ready.
+        <MenuItem
+          disabled={workspacesDisabled}
+          onClick={() => {
+            // eslint-disable-next-line no-console
+            console.log('TODO');
+          }}
+        >
+          Workspace
+          <SecondaryBackgroundTooltip
+            title="Create a new HuBMAP workspace and load the load the notebook into it."
+            placement="bottom-start"
+          >
+            <StyledInfoIcon color="primary" />
+          </SecondaryBackgroundTooltip>
+        </MenuItem> */}
       </DropdownMenu>
     </>
   );

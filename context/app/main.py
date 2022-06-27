@@ -3,7 +3,7 @@ from flask import Flask, session, render_template, redirect, request
 from . import (
     routes_main, routes_browse, routes_api, routes_file_based,
     routes_auth, routes_cells, routes_markdown, routes_notebooks,
-    default_config)
+    routes_workspaces, default_config)
 from .flask_static_digest import FlaskStaticDigest
 flask_static_digest = FlaskStaticDigest()
 
@@ -70,6 +70,7 @@ def create_app(testing=False):
     app.register_blueprint(routes_auth.blueprint)
     app.register_blueprint(routes_markdown.blueprint)
     app.register_blueprint(routes_notebooks.blueprint)
+    app.register_blueprint(routes_workspaces.blueprint)
 
     app.register_error_handler(400, bad_request)
     app.register_error_handler(401, unauthorized)
@@ -95,7 +96,8 @@ def create_app(testing=False):
         return {
             'is_authenticated': session.get('is_authenticated'),
             'groups_token': session.get('groups_token'),
-            'user_email': session.get('user_email')
+            'user_email': session.get('user_email'),
+            'workspaces_token': session.get('workspaces_token'),
         }
 
     @app.before_request
@@ -104,7 +106,8 @@ def create_app(testing=False):
             session.update(
                 groups_token='',
                 user_email='',
-                is_authenticated=False)
+                is_authenticated=False,
+                workspaces_token='')
 
     return app
 

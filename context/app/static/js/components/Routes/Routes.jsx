@@ -31,6 +31,7 @@ const Organ = lazy(() => import('js/pages/Organ'));
 const DonorSearch = lazy(() => import('js/pages/entity-search/DonorSearch'));
 const SampleSearch = lazy(() => import('js/pages/entity-search/SampleSearch'));
 const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'));
+const Workspaces = lazy(() => import('js/pages/Workspaces'));
 
 function Routes(props) {
   const { flaskData } = props;
@@ -237,6 +238,14 @@ function Routes(props) {
     return (
       <Route>
         <SavedList listUUID={list_uuid} />
+      </Route>
+    );
+  }
+
+  if (urlPath === '/workspaces') {
+    return (
+      <Route>
+        <Workspaces />
       </Route>
     );
   }
