@@ -13,7 +13,6 @@ function Workspaces() {
       <SectionHeader variant="h1" component="h1">
         My Workspaces
       </SectionHeader>
-      {/* eslint-disable-next-line no-undef */}
       {!isAuthenticated ? (
         <Description padding="20px">
           The workspaces feature is only available if logged in. <LightBlueLink href="/login">Log in</LightBlueLink> to
