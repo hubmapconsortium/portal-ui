@@ -1,3 +1,11 @@
+## v0.47.1 - 2022-06-27
+
+- Cells UI was hitting the Elasticsearch default of 10 results. Increase the limit.
+- Parameterize the docker build, so that it will also be in sync with the versions used in CI and in dev-start.sh.
+- Updated Vitessce version in notebook to match requirements.txt.
+- Check in language version files for python and node, and reference from the README and CI.
+
+
 ## v0.47.0 - 2022-06-22
 
 - Style configure search table in search revision ui to prevent column shift as new rows are added.
