@@ -27,4 +27,18 @@ async function createNotebookWorkspace({
   });
 }
 
-export { createNotebookWorkspace };
+async function startJob({ workspaceId, workspacesEndpoint, workspacesToken }) {
+  await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'UWS-Authorization': `Token ${workspacesToken}`,
+    },
+    body: JSON.stringify({
+      job_type: 'JupyterLabJob',
+      job_details: {},
+    }),
+  });
+}
+
+export { createNotebookWorkspace, startJob };

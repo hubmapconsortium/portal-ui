@@ -6,31 +6,43 @@ import { AppContext } from 'js/components/Providers';
 import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 
-import { createNotebookWorkspace } from './utils';
-import { useWorkspacesList } from './hooks';
+import { createNotebookWorkspace, startJob } from './utils';
+import { useWorkspacesList, useJobsList } from './hooks';
 import { StyledButton } from './style';
 
 function WorkspacesList() {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
   const { workspacesList } = useWorkspacesList();
+  const { jobsList } = useJobsList();
 
   async function handleDelete() {
+    // eslint-disable-next-line no-alert
+    alert('TODO: API does not yet support deletion.');
     // TODO: Put up modal and get user input.
     // TODO: Update workspacesList
     // Waiting on delete to be implemented.
   }
 
   async function handleCreate() {
-    // TODO: Put up modal and get user input.
-    // TODO: Update workspacesList
+    // TODO: Put up a better modal and get user input.
+    // eslint-disable-next-line no-alert
+    const content = prompt('Intial content for notebook');
 
     createNotebookWorkspace({
       workspacesEndpoint,
       workspacesToken,
       workspaceName: 'Workspace Timestamp',
       workspaceDescription: 'TODO: description',
-      notebookContent: 'TODO',
+      notebookContent: content,
     });
+    // TODO: Update list on page
+  }
+
+  function createHandleStart(workspaceId) {
+    async function handleStart() {
+      startJob({ workspaceId, workspacesEndpoint, workspacesToken });
+    }
+    return handleStart;
   }
 
   return (
@@ -54,7 +66,27 @@ function WorkspacesList() {
       />
       <Paper>
         {workspacesList.map((workspace) => (
-          <div>{JSON.stringify(workspace)}</div>
+          <div key={workspace.id}>
+            <details>
+              <summary>JSON</summary>
+              <pre>{JSON.stringify(workspace, 0, 2)}</pre>
+            </details>
+            <button onClick={createHandleStart(workspace.id)} type="button">
+              Start Jupyter
+            </button>
+          </div>
+        ))}
+      </Paper>
+      <SpacedSectionButtonRow leftText={<Typography variant="subtitle1">Jobs</Typography>} />
+      <Paper>
+        TODO: The current API responses give us no way to connect Workspaces to Jobs.
+        {jobsList.map((job) => (
+          <div key={job.id}>
+            <details>
+              <summary>JSON</summary>
+              <pre>{JSON.stringify(job, 0, 2)}</pre>
+            </details>
+          </div>
         ))}
       </Paper>
     </>
