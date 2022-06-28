@@ -12,14 +12,15 @@ import {
   StyledDiv,
 } from './style';
 
+const icons = {
+  Donor: <StyledDonorIcon />,
+  Sample: <StyledSampleIcon />,
+  Dataset: <StyledDatasetIcon />,
+  Support: <StyledDatasetIcon />,
+};
 function EntityTileBody(props) {
   const { entity_type, id, entityData, invertColors } = props;
-  const icons = {
-    Donor: <StyledDonorIcon />,
-    Sample: <StyledSampleIcon />,
-    Dataset: <StyledDatasetIcon />,
-    Support: <StyledDatasetIcon />,
-  };
+
   return (
     <Flex>
       {icons[entity_type] || <StyledDatasetIcon />}
