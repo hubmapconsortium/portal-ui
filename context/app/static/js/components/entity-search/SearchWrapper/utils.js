@@ -123,6 +123,17 @@ function getDonorMetadataFields(entityType) {
   ];
 }
 
+function getTileFields() {
+  const sharedFields = {
+    ...createField({ fieldName: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
+    ...createField({ fieldName: 'entity_type', label: 'Entity Type', type: 'string' }),
+    ...createField({ fieldName: 'last_modified_timestamp', label: 'Last Modified Timestamp', type: 'number' }),
+    ...createField({ fieldName: 'descendant_counts.entity_type', label: 'Descendant Counts' }),
+  };
+
+  return sharedFields;
+}
+
 function getFieldConfigValue(fieldConfig) {
   // createField returns an object with only a single value.
   return Object.values(fieldConfig)[0];
@@ -194,5 +205,6 @@ export {
   getFieldConfigValue,
   getTypeFilter,
   getEntityTypeFilter,
+  getTileFields,
   defaultSelectFacetSize,
 };
