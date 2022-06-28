@@ -8,6 +8,7 @@ import {
   createAffiliationFacet,
   createField,
   getEntityTypeFilter,
+  getTileFields,
 } from './utils';
 import SearchConfigProvider from './provider';
 import { useNumericFacetsProps } from './hooks';
@@ -46,6 +47,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
         entityType,
         numericFacetsProps,
         initialView: 'table',
+        tileFields: getTileFields(),
       }}
     >
       <Search />
