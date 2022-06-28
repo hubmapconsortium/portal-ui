@@ -71,6 +71,9 @@ function WorkspacesList() {
               <summary>JSON</summary>
               <pre>{JSON.stringify(workspace, 0, 2)}</pre>
             </details>
+            <div>
+              <b>{workspace.name}</b> | Created {workspace.datetime_created.slice(0, 10)}
+            </div>
             <button onClick={createHandleStart(workspace.id)} type="button">
               Start Jupyter
             </button>
