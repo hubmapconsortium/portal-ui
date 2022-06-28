@@ -9,6 +9,7 @@ const { Provider, useStore } = createContext();
 const createStore = ({
   initialFields,
   initialFacets,
+  tileFields,
   fields,
   facets,
   defaultFilters,
@@ -25,6 +26,7 @@ const createStore = ({
       facets,
       entityType,
       numericFacetsProps,
+      tileFields,
       view: initialView,
       setFields: (selectedFields) =>
         set((state) => {
