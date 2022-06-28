@@ -36,7 +36,11 @@ function WorkspacesList() {
   return (
     <>
       <SpacedSectionButtonRow
-        leftText={<Typography variant="subtitle1">[TODO: Count] Workspaces</Typography>}
+        leftText={
+          <Typography variant="subtitle1">
+            {workspacesList.length} Workspace{workspacesList.length === 1 ? '' : 's'}
+          </Typography>
+        }
         buttons={
           <>
             <StyledButton onClick={handleDelete}>
@@ -49,9 +53,9 @@ function WorkspacesList() {
         }
       />
       <Paper>
-        {`TODO: Use token "${workspacesToken}" with "${workspacesEndpoint}"`}
-        <hr />
-        {JSON.stringify(workspacesList)}
+        {workspacesList.map((workspace) => (
+          <div>{JSON.stringify(workspace)}</div>
+        ))}
       </Paper>
     </>
   );

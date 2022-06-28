@@ -25,7 +25,7 @@ function useWorkspacesList() {
       }
       const results = await response.json();
 
-      setWorkspacesList(results);
+      setWorkspacesList(results.data.workspaces);
       // TODO:
       // setIsLoading(false);
     }
