@@ -7,12 +7,12 @@ import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 
 import { createNotebookWorkspace, startJob } from './utils';
-import { useWorkspacesList, useJobsList } from './hooks';
+import { useWorkspaces, useJobsList } from './hooks';
 import { StyledButton } from './style';
 
 function WorkspacesList() {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
-  const { workspacesList } = useWorkspacesList();
+  const { workspaces, updateWorkspaces } = useWorkspaces();
   const { jobsList } = useJobsList();
 
   async function handleDelete() {
@@ -46,11 +46,13 @@ function WorkspacesList() {
   }
 
   return (
+    // TODO: Finish implementing design:
+    // https://www.figma.com/file/NgBjvs0jRbDHhiyn5nicDm/Workspace?node-id=14%3A5427
     <>
       <SpacedSectionButtonRow
         leftText={
           <Typography variant="subtitle1">
-            {workspacesList.length} Workspace{workspacesList.length === 1 ? '' : 's'}
+            {workspaces.length} Workspace{workspaces.length === 1 ? '' : 's'}
           </Typography>
         }
         buttons={
@@ -65,7 +67,7 @@ function WorkspacesList() {
         }
       />
       <Paper>
-        {workspacesList.map((workspace) => (
+        {workspaces.map((workspace) => (
           <div key={workspace.id}>
             <details>
               <summary>JSON</summary>
