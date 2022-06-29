@@ -1,1 +1,0 @@
-- Provide what information we have on workspaces on the services page.
