@@ -4,7 +4,7 @@ import Search from 'js/components/entity-search/Search';
 import { getDefaultFilters } from 'js/components/entity-search/searchkit-modifications/getDefaultFilters';
 import {
   mergeObjects,
-  getDonorMetadataFields,
+  buildDonorFields,
   createAffiliationFacet,
   createField,
   getEntityTypeFilter,
@@ -16,7 +16,7 @@ import { useNumericFacetsProps } from './hooks';
 function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   const initialFacets = mergeObjects([
     ...uniqueFacets,
-    ...getDonorMetadataFields(entityType),
+    ...buildDonorFields(entityType),
     createAffiliationFacet({ fieldName: 'group_name', label: 'Group', type: 'string' }),
     createAffiliationFacet({ fieldName: 'created_by_user_displayname', label: 'Creator', type: 'string' }),
   ]);

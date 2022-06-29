@@ -96,13 +96,14 @@ const withFacetGroup = (facetGroup) => (o) =>
 
 const createDonorFacet = withFacetGroup('Donor Metadata');
 const createDatasetFacet = withFacetGroup('Dataset Metadata');
+const createSampleFacet = withFacetGroup('Sample Metadata');
 const createAffiliationFacet = withFacetGroup('Affiliation');
 
 function mergeObjects(objects) {
   return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 }
 
-function getDonorMetadataFields(entityType) {
+function buildDonorFields(entityType) {
   return [
     createDonorFacet({
       fieldName: 'sex',
@@ -121,6 +122,27 @@ function getDonorMetadataFields(entityType) {
       entityType,
     }),
   ];
+}
+
+function buildDatasetFields() {
+  const tileFields = [
+    createDatasetFacet({ fieldName: 'mapped_data_types', label: 'Data Types', type: 'string' }),
+    createDatasetFacet({ fieldName: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
+  ];
+  const tableFields = [
+    ...tileFields,
+    createDatasetFacet({ fieldName: 'mapped_status', label: 'Status', type: 'string' }),
+  ];
+  return { tableFields, tileFields };
+}
+
+function buildSampleFields() {
+  const tileFields = [
+    createSampleFacet({ fieldName: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
+    createSampleFacet({ fieldName: 'mapped_specimen_type', label: 'Specimen Type', type: 'string' }),
+  ];
+
+  return { tableFields: tileFields, tileFields };
 }
 
 function getTileFields() {
@@ -196,7 +218,9 @@ export {
   buildFieldConfig,
   buildMetadataFieldConfig,
   mergeObjects,
-  getDonorMetadataFields,
+  buildDonorFields,
+  buildDatasetFields,
+  buildSampleFields,
   createDonorFacet,
   createDatasetFacet,
   createAffiliationFacet,
