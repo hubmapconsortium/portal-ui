@@ -1,15 +1,10 @@
 import React from 'react';
-import { trackEvent } from 'js/helpers/trackers';
+import { trackLink } from 'js/helpers/trackers';
 
 import { LightBlueLink } from '.';
 
 function sendOutboundEvent(event) {
-  trackEvent({
-    category: 'Outbound Link',
-    action: 'Clicked',
-    label: event.target.href,
-    nonInteraction: false,
-  });
+  trackLink(event.target.href);
 }
 
 function OutboundLink({ children, ...props }) {
