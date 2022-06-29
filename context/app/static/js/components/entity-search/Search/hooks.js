@@ -63,12 +63,11 @@ const query = new CustomQuery({
 function useSearch() {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const authHeader = getAuthHeader(groupsToken);
-  const { fields, facets, defaultFilters, entityType, numericFacetsProps } = useStore();
+  const { fields, tileFields, facets, defaultFilters, entityType, numericFacetsProps } = useStore();
 
   const defaultFilterValues = Object.values(defaultFilters);
 
   const { allResultsUUIDs, setQueryBodyAndReturnBody } = useAllResultsUUIDs();
-
   const config = useMemo(() => {
     return {
       host: elasticsearchEndpoint,
@@ -78,7 +77,7 @@ function useSearch() {
         },
       },
       hits: {
-        fields: Object.values(fields).map(({ identifier }) => identifier),
+        fields: Object.values({ ...tileFields, ...fields }).map(({ identifier }) => identifier),
       },
       sortOptions: buildSortPairs(Object.values(fields)),
       query,
@@ -96,6 +95,7 @@ function useSearch() {
     fields,
     numericFacetsProps,
     setQueryBodyAndReturnBody,
+    tileFields,
   ]);
 
   const transporter = new RequestTransporter(config);
