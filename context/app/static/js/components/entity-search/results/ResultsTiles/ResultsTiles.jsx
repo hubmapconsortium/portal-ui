@@ -10,7 +10,7 @@ function ResultsTiles({ hits }) {
       {hits.items.map(({ fields, id }) => {
         return (
           <EntityTile
-            key={fields.uuid}
+            key={id}
             entity_type={fields.entity_type}
             uuid={id}
             id={fields.hubmap_id}
