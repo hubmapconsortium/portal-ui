@@ -50,7 +50,7 @@ function WorkspacesList() {
       <SpacedSectionButtonRow
         leftText={
           <Typography variant="subtitle1">
-            {workspacesList.length} Workspace{workspacesList.length === 1 ? '' : 's'}
+            {workspacesList.length} Workspace{workspacesList.length && 's'}
           </Typography>
         }
         buttons={
@@ -69,7 +69,7 @@ function WorkspacesList() {
           <div key={workspace.id}>
             <details>
               <summary>JSON</summary>
-              <pre>{JSON.stringify(workspace, 0, 2)}</pre>
+              <pre>{JSON.stringify(workspace, null, 2)}</pre>
             </details>
             <div>
               <b>{workspace.name}</b> | Created {workspace.datetime_created.slice(0, 10)}
@@ -87,7 +87,7 @@ function WorkspacesList() {
           <div key={job.id}>
             <details>
               <summary>JSON</summary>
-              <pre>{JSON.stringify(job, 0, 2)}</pre>
+              <pre>{JSON.stringify(job, null, 2)}</pre>
             </details>
           </div>
         ))}
