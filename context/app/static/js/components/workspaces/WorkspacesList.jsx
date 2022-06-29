@@ -50,7 +50,7 @@ function WorkspacesList() {
       <SpacedSectionButtonRow
         leftText={
           <Typography variant="subtitle1">
-            {workspacesList.length} Workspace{workspacesList.length && 's'}
+            {workspacesList.length} Workspace{workspacesList.length !== 1 && 's'}
           </Typography>
         }
         buttons={
