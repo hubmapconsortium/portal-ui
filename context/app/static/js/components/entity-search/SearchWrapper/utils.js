@@ -104,48 +104,57 @@ function mergeObjects(objects) {
 }
 
 function buildDonorFields(entityType) {
-  return [
-    createDonorFacet({
+  const tileFields = {
+    ...createDonorFacet({
       fieldName: 'sex',
       entityType,
     }),
-    createDonorFacet({
+    ...createDonorFacet({
       fieldName: 'age_value',
       entityType,
     }),
-    createDonorFacet({
+    ...createDonorFacet({
       fieldName: 'race',
       entityType,
     }),
-    createDonorFacet({
+    ...createDonorFacet({
       fieldName: 'body_mass_index_value',
       entityType,
     }),
-  ];
+  };
+  return { tableFields: tileFields, tileFields };
 }
 
 function buildDatasetFields() {
-  const tileFields = [
-    createDatasetFacet({ fieldName: 'mapped_data_types', label: 'Data Types', type: 'string' }),
-    createDatasetFacet({ fieldName: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
-  ];
-  const tableFields = [
+  const tileFields = {
+    ...createDatasetFacet({ fieldName: 'mapped_data_types', label: 'Data Types', type: 'string' }),
+    ...createDatasetFacet({ fieldName: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
+  };
+  const tableFields = {
     ...tileFields,
-    createDatasetFacet({ fieldName: 'mapped_status', label: 'Status', type: 'string' }),
-  ];
+    ...createDatasetFacet({ fieldName: 'mapped_status', label: 'Status', type: 'string' }),
+  };
   return { tableFields, tileFields };
 }
 
 function buildSampleFields() {
-  const tileFields = [
-    createSampleFacet({ fieldName: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
-    createSampleFacet({ fieldName: 'mapped_specimen_type', label: 'Specimen Type', type: 'string' }),
-  ];
+  const tileFields = {
+    ...createSampleFacet({ fieldName: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
+    ...createSampleFacet({ fieldName: 'mapped_specimen_type', label: 'Specimen Type', type: 'string' }),
+  };
 
   return { tableFields: tileFields, tileFields };
 }
 
-function getTileFields() {
+function getTileFields(entityType) {
+  const entityTypeToBuildFnMap = {
+    donor: buildDonorFields,
+    sample: buildSampleFields,
+    dataset: buildDatasetFields,
+  };
+
+  const { tileFields: entityTypeSpecificFields } = entityTypeToBuildFnMap[entityType]();
+
   const sharedFields = {
     ...createField({ fieldName: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
     ...createField({ fieldName: 'entity_type', label: 'Entity Type', type: 'string' }),
@@ -153,7 +162,7 @@ function getTileFields() {
     ...createField({ fieldName: 'descendant_counts.entity_type', label: 'Descendant Counts' }),
   };
 
-  return sharedFields;
+  return { ...sharedFields, ...entityTypeSpecificFields };
 }
 
 function getFieldConfigValue(fieldConfig) {
