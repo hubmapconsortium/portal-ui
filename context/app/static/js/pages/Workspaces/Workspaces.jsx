@@ -6,6 +6,33 @@ import Description from 'js/shared-styles/sections/Description';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import WorkspacesList from 'js/components/workspaces/WorkspacesList';
 
+function AuthenticatedWorkspaces() {
+  const { workspacesToken } = useContext(AppContext);
+
+  if (!workspacesToken) {
+    return (
+      <Description padding="20px">
+        The workspaces token was not set when you logged in.
+        <a href="https://github.com/hubmapconsortium/user_workspaces_server/issues/58">Github issue</a>
+      </Description>
+    );
+  }
+
+  return (
+    <>
+      <Description padding="20px">
+        {/*
+          TODO: Add links below.
+          TODO: Not all of these entry points will be functional on first release. Update text accordingly.
+        */}
+        Workspaces are provided through Jupyter notebooks. Navigate to a dataset, collection, dataset search or My Lists
+        page to begin a new workspace.
+      </Description>
+      <WorkspacesList />
+    </>
+  );
+}
+
 function Workspaces() {
   const { isAuthenticated } = useContext(AppContext);
   return (
@@ -19,17 +46,7 @@ function Workspaces() {
           view saved workspaces or to begin a new workspace.
         </Description>
       ) : (
-        <>
-          <Description padding="20px">
-            {/*
-              TODO: Add links below.
-              TODO: Not all of these entry points will be functional on first release. Update text accordingly.
-            */}
-            Workspaces are provided through Jupyter notebooks. Navigate to a dataset, collection, dataset search or the
-            My Lists page to begin a new workspace.
-          </Description>
-          <WorkspacesList />
-        </>
+        <AuthenticatedWorkspaces />
       )}
     </>
   );
