@@ -25,7 +25,7 @@ function useWorkspacesList() {
       }
       const results = await response.json();
 
-      setWorkspacesList(results);
+      setWorkspacesList(results.data.workspaces);
       // TODO:
       // setIsLoading(false);
     }
@@ -35,4 +35,36 @@ function useWorkspacesList() {
   return { workspacesList };
 }
 
-export { useWorkspacesList };
+function useJobsList() {
+  // TODO: Right now the API does not support querying, so we just need to get the whole list.
+  const [jobsList, setJobsList] = useState([]);
+
+  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
+
+  useEffect(() => {
+    async function getAndSetJobsList() {
+      const response = await fetch(`${workspacesEndpoint}/jobs`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'UWS-Authorization': `Token ${workspacesToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        console.error('Workspaces API failed', response);
+        return;
+      }
+      const results = await response.json();
+
+      setJobsList(results.data.jobs);
+      // TODO:
+      // setIsLoading(false);
+    }
+    getAndSetJobsList();
+  }, [workspacesEndpoint, workspacesToken]);
+
+  return { jobsList };
+}
+
+export { useWorkspacesList, useJobsList };
