@@ -17,23 +17,15 @@ jobs:
       with:
         submodules: 'recursive'
 
-    # TODO: Only being used to serve static assets: Could use node instead?
-    # No pip caching: no "pip install" here.
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
+    - name: Set up Node
+      uses: actions/setup-node@v3
       with:
-        python-version: '3.9'
-        architecture: 'x64'
-
-    - name: Set up Node 12.16.3
-      uses: actions/setup-node@v1
-      with:
-        node-version: '12.16.3'
+        node-version-file: '.nvmrc'
         cache: 'npm'
-        cache-dependency-path: context/package-lock.json
+        cache-dependency-path: end-to-end/package-lock.json
    
     - name: Install node dependencies
-      run: npm ci --prefix context
+      run: npm ci --prefix end-to-end
 
     - name: Set up git config to make dev-start.sh happy
       run: git config --global submodule.recurse true
