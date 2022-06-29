@@ -74,6 +74,7 @@ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.4
 "prop-types": "^15.7.2",
 "react": "^16.12.0",
 "react-chartjs-2": "^3.0.4",
+"react-device-detect": "^2.2.2",
 "react-dom": "^16.12.0",
 "react-ga": "^3.1.2",
 "react-intersection-observer": "^8.28.6",
