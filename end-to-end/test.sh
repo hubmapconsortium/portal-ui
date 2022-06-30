@@ -2,4 +2,5 @@
 set -o errexit
 
 cd `dirname $0`
-npm run cypress:run
+npm install
+npm run cypress:run -- "$@"
