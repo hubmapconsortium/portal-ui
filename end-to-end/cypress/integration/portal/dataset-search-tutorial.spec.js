@@ -27,7 +27,7 @@ function assertTableView(){
   cy.findByTestId('search-tiles-sort-button').should('not.be.visible');
 }
 
-import { sortTileViewStepTitle, defaultSteps, stepToAddIfViewMoreExists } from '../../../context/app/static/js/components/tutorials/SearchDatasetTutorial/config';
+import { sortTileViewStepTitle, defaultSteps, stepToAddIfViewMoreExists } from '../../../../context/app/static/js/components/tutorials/SearchDatasetTutorial/config';
 describe('dataset search tutorial', () => {
     context('macbook-size', () => {
       beforeEach(() => {
