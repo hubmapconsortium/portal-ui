@@ -1,5 +1,5 @@
-import defaultSearch from '../fixtures/dataset-search/default';
-import limitedDataTypesSearch from '../fixtures/dataset-search/heart-only-5-or-less-data-types';
+import defaultSearch from '../../fixtures/dataset-search/default';
+import limitedDataTypesSearch from '../../fixtures/dataset-search/heart-only-5-or-less-data-types';
 
 
 function traverseSteps(steps){
