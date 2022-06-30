@@ -6,13 +6,13 @@ set -o errexit
 copy_conf
 
 CYPRESS_ARGS=''
+PORT=8000
 
 start cypress
 
 case $1 in
 
   maintenance)
-    PORT=8000
     CYPRESS_ARGS="--spec ./cypress/integration/maintenance/*.spec.js --config baseUrl=http://localhost:${PORT}"
     ./build-maintenance-for-cypress.sh $PORT
     ;;
@@ -24,7 +24,7 @@ case $1 in
     ;;
 
   *)
-    ./build-maintenance-for-cypress.sh
+    ./build-maintenance-for-cypress.sh $PORT
     ./docker.sh 5001
     server_up 5001
     ;;
