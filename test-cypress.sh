@@ -5,19 +5,33 @@ set -o errexit
 
 copy_conf
 
-cd context
+CYPRESS_ARGS=''
 
 start cypress
 
-npm run build:maintain
-( cd app/static/js/maintenance/public/ ; python -m http.server 8000 & )
+case $1 in
 
-cd -
-./docker.sh 5001  # Needs to match port in cypress.json.
-server_up 5001  # Without this, Cypress gets an undefined content-type and immediately fails.
-end-to-end/test.sh
-docker kill hubmap-portal-ui
+  maintenance)
+    PORT=8000
+    CYPRESS_ARGS="--spec ./cypress/integration/maintenance/*.spec.js --config baseUrl=http://localhost:${PORT}"
+    ./build-maintenance-for-cypress.sh $PORT
+    ;;
+
+  portal)
+    CYPRESS_ARGS='--spec ./cypress/integration/portal/*.spec.js'
+    ./docker.sh 5001  # Needs to match port in cypress.json.
+    server_up 5001  # Without this, Cypress gets an undefined content-type and immediately fails.
+    ;;
+
+  *)
+    ./build-maintenance-for-cypress.sh
+    ./docker.sh 5001
+    server_up 5001
+    ;;
+esac
+
+end-to-end/test.sh $CYPRESS_ARGS
+docker kill hubmap-portal-ui || true #Kills docker container if it is running, but does not error if the container is not.
 
 end cypress
-
 
