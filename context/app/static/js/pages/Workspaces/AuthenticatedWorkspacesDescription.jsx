@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { AppContext } from 'js/components/Providers';
 import Description from 'js/shared-styles/sections/Description';
 import WorkspacesList from 'js/components/workspaces/WorkspacesList';
@@ -12,9 +12,9 @@ function AuthenticatedWorkspacesDescription() {
     return (
       <Description padding="20px">
         The workspaces token was not set when you logged in.{' '}
-        <OutboundLink href="https://github.com/hubmapconsortium/user_workspaces_server/issues/58">
+        <OutboundIconLink href="https://github.com/hubmapconsortium/user_workspaces_server/issues/58">
           Github issue
-        </OutboundLink>
+        </OutboundIconLink>
       </Description>
     );
   }
