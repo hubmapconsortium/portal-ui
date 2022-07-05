@@ -97,7 +97,7 @@ def login():
                 f'{workspaces_post_resp.status_code} {workspaces_post_resp.text[:100]}')
         else:
             current_app.logger.error(f'Workspaces auth token read failed: {e}')
-        workspaces_token = None
+        workspaces_token = ''  # UI error message depends on empty string test.
 
     user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
     user_info = requests.get('https://auth.globus.org/v2/oauth2/userinfo',
