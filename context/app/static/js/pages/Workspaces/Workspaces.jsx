@@ -1,19 +1,22 @@
 import React, { useContext } from 'react';
 
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { AppContext } from 'js/components/Providers';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import Description from 'js/shared-styles/sections/Description';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import WorkspacesList from 'js/components/workspaces/WorkspacesList';
 
-function AuthenticatedWorkspaces() {
+function AuthenticatedWorkspacesDescription() {
   const { workspacesToken } = useContext(AppContext);
 
   if (!workspacesToken) {
     return (
       <Description padding="20px">
         The workspaces token was not set when you logged in.
-        <a href="https://github.com/hubmapconsortium/user_workspaces_server/issues/58">Github issue</a>
+        <OutboundLink href="https://github.com/hubmapconsortium/user_workspaces_server/issues/58">
+          Github issue
+        </OutboundLink>
       </Description>
     );
   }
@@ -46,7 +49,7 @@ function Workspaces() {
           view saved workspaces or to begin a new workspace.
         </Description>
       ) : (
-        <AuthenticatedWorkspaces />
+        <AuthenticatedWorkspacesDescription />
       )}
     </>
   );
