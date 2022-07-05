@@ -14,7 +14,10 @@ case $1 in
 
   maintenance)
     CYPRESS_ARGS="--spec ./cypress/integration/maintenance/*.spec.js --config baseUrl=http://localhost:${PORT}"
-    ./build-maintenance-for-cypress.sh $PORT
+    cd context
+    npm run build:maintain
+    ( cd app/static/js/maintenance/public/ ; python -m http.server $PORT & )
+    cd -
     ;;
 
   portal)
@@ -24,9 +27,7 @@ case $1 in
     ;;
 
   *)
-    ./build-maintenance-for-cypress.sh $PORT
-    ./docker.sh 5001
-    server_up 5001
+    die "Unexpected argument: $1"
     ;;
 esac
 
