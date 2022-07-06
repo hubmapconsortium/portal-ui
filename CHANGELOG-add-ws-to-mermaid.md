@@ -1,0 +1,1 @@
+- Add Workspaces API to the mermaid diagram.
