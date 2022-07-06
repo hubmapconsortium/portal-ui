@@ -7,6 +7,8 @@ import re
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
+import vitessce
+
 from .utils import make_blueprint, get_url_base_from_request, entity_types, get_client
 
 
@@ -56,7 +58,7 @@ def details_notebook(type, uuid):
         new_code_cell(
             '!pip uninstall community flask albumentations -y '
             '# Preinstalled on Colab; Causes version conflicts.\n'
-            '!pip install vitessce==1.0.5'),
+            f'!pip install vitessce=={vitessce.__version__}'),
         *vitessce_conf.cells
     ]
 

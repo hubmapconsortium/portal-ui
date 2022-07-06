@@ -1,15 +1,10 @@
 import React from 'react';
 import IconLink from 'js/shared-styles/Links/iconLinks/IconLink';
 import { EmailIcon } from 'js/shared-styles/icons';
-import { trackEvent } from 'js/helpers/trackers';
+import { trackLink } from 'js/helpers/trackers';
 
 function sendEmailEvent(event) {
-  trackEvent({
-    category: 'Email Link',
-    action: 'Clicked',
-    label: event.target.href,
-    nonInteraction: false,
-  });
+  trackLink(event.target.href);
 }
 
 function EmailIconLink({ iconFontSize, email, ...rest }) {

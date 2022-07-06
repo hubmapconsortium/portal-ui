@@ -1,5 +1,5 @@
-import defaultSearch from '../fixtures/dataset-search/default';
-import limitedDataTypesSearch from '../fixtures/dataset-search/heart-only-5-or-less-data-types';
+import defaultSearch from '../../fixtures/dataset-search/default';
+import limitedDataTypesSearch from '../../fixtures/dataset-search/heart-only-5-or-less-data-types';
 
 
 function traverseSteps(steps){
@@ -27,7 +27,7 @@ function assertTableView(){
   cy.findByTestId('search-tiles-sort-button').should('not.be.visible');
 }
 
-import { sortTileViewStepTitle, defaultSteps, stepToAddIfViewMoreExists } from '../../../context/app/static/js/components/tutorials/SearchDatasetTutorial/config';
+import { sortTileViewStepTitle, defaultSteps, stepToAddIfViewMoreExists } from '../../../../context/app/static/js/components/tutorials/SearchDatasetTutorial/config';
 describe('dataset search tutorial', () => {
     context('macbook-size', () => {
       beforeEach(() => {

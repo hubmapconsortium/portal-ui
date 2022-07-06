@@ -50,16 +50,32 @@ function trackEvent(event) {
   ReactGA.event(event);
 }
 
-// function trackLink(href) {
-//   tracker.trackLink({
-//     href: 'https://link-to-other-website.org',
-//   })
-// }
+function trackLink(href) {
+  tracker.trackLink({
+    href,
+  });
+  ReactGA.event({
+    category: 'Outbound Link',
+    action: 'Clicked',
+    label: href,
+    nonInteraction: false,
+  });
+}
 
-// function trackSiteSearch(keyword) {
-//   tracker.trackLink({
-//     keyword: 'test',
-//   })
-// }
+function trackSiteSearch(keyword) {
+  tracker.trackSiteSearch({
+    keyword,
+  });
+  /*
+  We currently call both trackEvent and trackSiteSearch:
+  while that is the case, we don't have to double track the even in GA.
+  
+  ReactGA.event({
+    // category: analyticsCategory,
+    action: 'Free Text Search',
+    label: keyword,
+  });
+  */
+}
 
-export { trackPageView, trackEvent };
+export { trackPageView, trackEvent, trackLink, trackSiteSearch };

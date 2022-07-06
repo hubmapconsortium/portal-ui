@@ -1,6 +1,10 @@
-FROM node:12.16.3-alpine as builder
+ARG NODE_V
+ARG PYTHON_MINOR_V
+
+FROM node:${NODE_V}-alpine as builder
+
 WORKDIR /work
-RUN apk add --no-cache python git
+RUN apk add --no-cache git
 
 # COPY only what is needed so layers can be cached.
 COPY package.json .
@@ -17,7 +21,7 @@ COPY ingest-validation-tools ingest-validation-tools
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
 
-FROM tiangolo/uwsgi-nginx-flask:python3.9
+FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V}
 
 COPY requirements.txt /app
 RUN pip install -r /app/requirements.txt

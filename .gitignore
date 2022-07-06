@@ -77,7 +77,8 @@ target/
 .ipynb_checkpoints
 
 # pyenv
-.python-version
+# Comment out; Github CI will reference this:
+# .python-version
 
 # celery beat schedule file
 celerybeat-schedule

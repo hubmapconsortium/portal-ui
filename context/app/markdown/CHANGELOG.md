@@ -1,3 +1,24 @@
+## v0.47.2 - 2022-06-29
+
+- Matomo React proved awkward: Just use plain JS functions.
+- Matomo has more specialized handlers for links and searches, so use them.
+- Demostrate the Workspaces API to start jobs and collect job information.
+- Updated Vitessce version in notebook to match requirements.txt.
+- Add scroll shadows to configure search table and select facets in search revision ui.
+- Keep vitessce version in notebook automatically up-to-date.
+- Fix plurals in workspace section header.
+- Demonstrate how authorization for workspaces will work.
+- Provide what information we have on workspaces on the services page.
+
+
+## v0.47.1 - 2022-06-27
+
+- Cells UI was hitting the Elasticsearch default of 10 results. Increase the limit.
+- Parameterize the docker build, so that it will also be in sync with the versions used in CI and in dev-start.sh.
+- Updated Vitessce version in notebook to match requirements.txt.
+- Check in language version files for python and node, and reference from the README and CI.
+
+
 ## v0.47.0 - 2022-06-22
 
 - Style configure search table in search revision ui to prevent column shift as new rows are added.

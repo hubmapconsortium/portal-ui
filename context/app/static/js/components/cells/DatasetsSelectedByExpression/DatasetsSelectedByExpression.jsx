@@ -14,6 +14,7 @@ import { StyledDiv, StyledTextField } from './style';
 
 function getSearchQuery(cellsResults) {
   return {
+    size: 10000,
     post_filter: {
       bool: {
         must: [

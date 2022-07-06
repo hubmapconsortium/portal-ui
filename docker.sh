@@ -5,7 +5,6 @@ die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
 IMAGE_NAME=hubmap/portal-ui
 CONTAINER_NAME=hubmap-portal-ui
-CONTEXT=context
 CONF_PATH=context/instance/app.conf
 PORT=$1
 
@@ -16,10 +15,7 @@ Copy example-app.conf and fill in blanks."
 
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
-# Docker BuildKit supports parallelizing multi-stage builds.
-# https://medium.com/@tonistiigi/advanced-multi-stage-build-patterns-6f741b852fae
-# https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds
-DOCKER_BUILDKIT=1 docker build --tag $IMAGE_NAME $CONTEXT
+./build.sh $IMAGE_NAME
 docker run -d \
   --name $CONTAINER_NAME \
   -p $PORT:80 \

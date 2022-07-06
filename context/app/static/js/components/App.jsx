@@ -12,13 +12,19 @@ import { StyledAlert, FlexContainer } from './style';
 import 'js/components/searchPage/Search.scss';
 
 function App(props) {
-  const { flaskData, groupsToken, isAuthenticated, userEmail } = props;
+  const { flaskData, groupsToken, isAuthenticated, userEmail, workspacesToken } = props;
   const { endpoints, globalAlertMd } = flaskData;
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
 
   return (
-    <Providers endpoints={endpoints} groupsToken={groupsToken} isAuthenticated={isAuthenticated} userEmail={userEmail}>
+    <Providers
+      endpoints={endpoints}
+      groupsToken={groupsToken}
+      isAuthenticated={isAuthenticated}
+      userEmail={userEmail}
+      workspacesToken={workspacesToken}
+    >
       <Header />
       {globalAlertMd && (
         <FlexContainer>
