@@ -8,7 +8,7 @@ import {
   createAffiliationFacet,
   createField,
   getEntityTypeFilter,
-  getTileFields,
+  buildTileFields,
 } from './utils';
 import SearchConfigProvider from './provider';
 import { useNumericFacetsProps } from './hooks';
@@ -30,6 +30,8 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
     createField({ fieldName: 'mapped_last_modified_timestamp', label: 'Last Modified', type: 'string' }),
   );
 
+  const tileFields = buildTileFields(entityType);
+
   const defaultFilters = mergeObjects([getEntityTypeFilter(entityType), getDefaultFilters()]);
 
   const numericFacetsProps = useNumericFacetsProps(entityType);
@@ -49,7 +51,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
         entityType,
         numericFacetsProps,
         initialView: 'table',
-        tileFields: getTileFields(entityType),
+        tileFields,
       }}
     >
       <Search />

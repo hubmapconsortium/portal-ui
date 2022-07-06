@@ -146,7 +146,7 @@ function buildSampleFields() {
   return { tableFields: tileFields, tileFields };
 }
 
-function getTileFields(entityType) {
+function buildTileFields(entityType) {
   const entityTypeToBuildFnMap = {
     donor: buildDonorFields,
     sample: buildSampleFields,
@@ -237,6 +237,6 @@ export {
   getFieldConfigValue,
   getTypeFilter,
   getEntityTypeFilter,
-  getTileFields,
+  buildTileFields,
   defaultSelectFacetSize,
 };
