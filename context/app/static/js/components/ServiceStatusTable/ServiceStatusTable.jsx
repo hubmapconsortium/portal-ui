@@ -62,7 +62,7 @@ function ServiceStatusTable(props) {
           apiName: 'entity-api',
           endpointUrl: entityEndpoint,
           response: gatewayStatus.entity_api,
-          noteFunction: (api) => `Neo4j: ${api.neo4j_connection}`,
+          noteFunction: (api) => `Neo4j: ${api.neo4j_connection} [Note: Internally, Entity API depends on UUID API.]`,
         }),
         buildServiceStatus({
           apiName: 'gateway',
