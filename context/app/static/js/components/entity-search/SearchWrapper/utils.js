@@ -155,14 +155,13 @@ function getTileFields(entityType) {
 
   const { tileFields: entityTypeSpecificFields } = entityTypeToBuildFnMap[entityType]();
 
-  const sharedFields = {
-    ...createField({ fieldName: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
-    ...createField({ fieldName: 'entity_type', label: 'Entity Type', type: 'string' }),
-    ...createField({ fieldName: 'last_modified_timestamp', label: 'Last Modified Timestamp', type: 'number' }),
-    ...createField({ fieldName: 'descendant_counts.entity_type', label: 'Descendant Counts' }),
-  };
-
-  return { ...sharedFields, ...entityTypeSpecificFields };
+  return Object.assign(
+    createField({ fieldName: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
+    createField({ fieldName: 'entity_type', label: 'Entity Type', type: 'string' }),
+    createField({ fieldName: 'last_modified_timestamp', label: 'Last Modified Timestamp', type: 'number' }),
+    createField({ fieldName: 'descendant_counts.entity_type', label: 'Descendant Counts' }),
+    entityTypeSpecificFields,
+  );
 }
 
 function getFieldConfigValue(fieldConfig) {
