@@ -4,7 +4,8 @@ This is a Flask app, using React on the front end and primarily Elasticsearch on
 wrapped in a Docker container for deployment using Docker Compose. The front end depends on AWS S3 and CloudFront for the hosting and delivery of images.
 It is deployed at [portal.hubmapconsortium.org](https://portal.hubmapconsortium.org/)
 
-The Data Portal depends, directly or indirectly, on many other HuBMAP repos:
+The Data Portal depends on many [APIs](portal.hubmapconsortium.org/services), 
+and directly or indirectly, on many other HuBMAP repos:
 
 ```mermaid
 graph LR
@@ -34,6 +35,8 @@ graph LR
     %% assets-api is just a file server: There is no repo.
     top --> search-api --> pipe
     click search-api href "https://github.com/hubmapconsortium/search-api"
+    top --> workspaces-api
+    click workspaces-api href "https://github.com/hubmapconsortium/user_workspaces_server"
 
     pipe --> valid
     pipe --> portal-containers
