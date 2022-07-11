@@ -8,10 +8,16 @@ import WorkspacesList from 'js/components/workspaces/WorkspacesList';
 function AuthenticatedWorkspacesDescription() {
   const { workspacesToken } = useContext(AppContext);
 
+  const contact = (
+    <>
+      For any problems, notify Juan Puerto in <code>#workspaces</code>.
+    </>
+  );
+
   if (!workspacesToken) {
     return (
       <Description padding="20px">
-        The workspaces token was not set when you logged in.{' '}
+        The workspaces token request failed at login. {contact}{' '}
         <OutboundIconLink href="https://github.com/hubmapconsortium/user_workspaces_server/issues/58">
           Github issue
         </OutboundIconLink>
@@ -22,6 +28,7 @@ function AuthenticatedWorkspacesDescription() {
   return (
     <>
       <Description padding="20px">
+        <strong>This is not yet ready for production use! {contact}</strong>{' '}
         {/*
           TODO: Add links below.
           TODO: Not all of these entry points will be functional on first release. Update text accordingly.
