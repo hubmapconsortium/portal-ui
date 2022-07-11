@@ -83,6 +83,7 @@ function WorkspacesList() {
       <SpacedSectionButtonRow leftText={<Typography variant="subtitle1">Jobs</Typography>} />
       <Paper>
         TODO: The current API responses give us no way to connect Workspaces to Jobs.
+        <a href="https://github.com/hubmapconsortium/user_workspaces_server/issues/53">Issue</a>
         {jobsList.map((job) => (
           <div key={job.id}>
             <details>
