@@ -1,0 +1,1 @@
+- For workspaces, add a link to Jupyter for each running job.
