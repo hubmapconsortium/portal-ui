@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { AppContext } from 'js/components/Providers';
 import Description from 'js/shared-styles/sections/Description';
-import WorkspacesList from 'js/components/workspaces/WorkspacesList';
+import WorkspacesList from './WorkspacesList';
 
 function AuthenticatedWorkspacesDescription() {
   const { workspacesToken } = useContext(AppContext);

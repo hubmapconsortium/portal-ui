@@ -4,7 +4,7 @@ import { AppContext } from 'js/components/Providers';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import Description from 'js/shared-styles/sections/Description';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import AuthenticatedWorkspacesDescription from './AuthenticatedWorkspacesDescription';
+import AuthenticatedWorkspacesDescription from 'js/components/workspaces/AuthenticatedWorkspacesDescription';
 
 function Workspaces() {
   const { isAuthenticated } = useContext(AppContext);
