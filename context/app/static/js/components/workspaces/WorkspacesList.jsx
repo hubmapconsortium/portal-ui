@@ -10,6 +10,24 @@ import { createNotebookWorkspace, startJob } from './utils';
 import { useWorkspacesList, useJobsList } from './hooks';
 import { StyledButton } from './style';
 
+function JobDetails(props) {
+  const { job } = props;
+  const { status, datetime_created } = job;
+  const details = job.job_details.current_job_details;
+  const { url_path, url_domain } = details.connection_details;
+  return (
+    <div key={job.id}>
+      <a href={`${url_domain}${url_path}`}>
+        Jupyter ({status}, {datetime_created})
+      </a>
+      <details>
+        <summary>JSON</summary>
+        <pre>{JSON.stringify(job, null, 2)}</pre>
+      </details>
+    </div>
+  );
+}
+
 function WorkspacesList() {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
   const { workspacesList } = useWorkspacesList();
@@ -85,12 +103,7 @@ function WorkspacesList() {
         TODO: The current API responses give us no way to connect Workspaces to Jobs.
         <a href="https://github.com/hubmapconsortium/user_workspaces_server/issues/53">Issue</a>
         {jobsList.map((job) => (
-          <div key={job.id}>
-            <details>
-              <summary>JSON</summary>
-              <pre>{JSON.stringify(job, null, 2)}</pre>
-            </details>
-          </div>
+          <JobDetails job={job} />
         ))}
       </Paper>
     </>
