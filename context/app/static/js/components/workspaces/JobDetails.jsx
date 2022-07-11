@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { LightBlueLink } from 'js/shared-styles/Links';
+
 function JobDetails(props) {
   const { job } = props;
   const { status, datetime_created } = job;
@@ -7,9 +9,9 @@ function JobDetails(props) {
   const { url_path, url_domain } = details.connection_details;
   return (
     <div key={job.id}>
-      <a href={`${url_domain}${url_path}`}>
+      <LightBlueLink href={`${url_domain}${url_path}`}>
         Jupyter ({status}, {datetime_created})
-      </a>
+      </LightBlueLink>
       <details>
         <summary>JSON</summary>
         <pre>{JSON.stringify(job, null, 2)}</pre>
