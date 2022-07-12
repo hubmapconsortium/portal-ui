@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import format from 'date-fns/format';
-import Typography from '@material-ui/core/Typography';
 
-import { StyledDivider, StyledDatasetIcon, StyledSampleIcon } from './style';
+import Tile from 'js/shared-styles/tiles/Tile';
+import { StyledDatasetIcon, StyledSampleIcon } from './style';
 
 function EntityTileFooter({ entityData, invertColors, descendantCounts }) {
   return (
@@ -13,11 +13,11 @@ function EntityTileFooter({ entityData, invertColors, descendantCounts }) {
           {k === 'Support' && <StyledDatasetIcon />}
           {k === 'Dataset' && <StyledDatasetIcon />}
           {k === 'Sample' && <StyledSampleIcon />}
-          <Typography variant="body2">{v}</Typography>
-          <StyledDivider flexItem orientation="vertical" $invertColors={invertColors} />
+          <Tile.Text>{v}</Tile.Text>
+          <Tile.Divider invertColors={invertColors} />
         </React.Fragment>
       ))}
-      <Typography variant="body2">Modified {format(entityData.last_modified_timestamp, 'yyyy-MM-dd')}</Typography>
+      <Tile.Text>Modified {format(entityData.last_modified_timestamp, 'yyyy-MM-dd')}</Tile.Text>
     </>
   );
 }
