@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import format from 'date-fns/format';
 import Typography from '@material-ui/core/Typography';
 
-import { FixedWidthFlex, StyledDivider, StyledDatasetIcon, StyledSampleIcon } from './style';
+import { StyledDivider, StyledDatasetIcon, StyledSampleIcon } from './style';
 
-function EntityTileFooter(props) {
-  const { entityData, invertColors, descendantCounts } = props;
-
+function EntityTileFooter({ entityData, invertColors, descendantCounts }) {
   return (
-    <FixedWidthFlex $invertColors={invertColors}>
+    <>
       {Object.entries(descendantCounts).map(([k, v]) => (
         <React.Fragment key={k}>
           {k === 'Support' && <StyledDatasetIcon />}
@@ -20,7 +18,7 @@ function EntityTileFooter(props) {
         </React.Fragment>
       ))}
       <Typography variant="body2">Modified {format(entityData.last_modified_timestamp, 'yyyy-MM-dd')}</Typography>
-    </FixedWidthFlex>
+    </>
   );
 }
 
