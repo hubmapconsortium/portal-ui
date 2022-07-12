@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { StyledPaper, Flex, StyledIcon, TruncatedTypography } from './style';
+import { StyledPaper, Flex, StyledIcon, TruncatedTypography, TileFooter } from './style';
 
-function Tile({ href, icon, invertColors, children }) {
+function Tile({ href, icon, invertColors, bodyContent, footerContent }) {
   return (
     <a href={href}>
       <StyledPaper $invertColors={invertColors}>
         <Flex>
           <StyledIcon component={icon} />
-          <div>{children}</div>
+          <div>{bodyContent}</div>
         </Flex>
+        <TileFooter $invertColors={invertColors}>{footerContent}</TileFooter>
       </StyledPaper>
     </a>
   );
@@ -24,7 +25,7 @@ Tile.Title = function TileTitle({ children }) {
   );
 };
 
-Tile.BodyText = function TileBodyText({ children }) {
+Tile.Text = function TileText({ children }) {
   return <TruncatedTypography variant="body2">{children}</TruncatedTypography>;
 };
 

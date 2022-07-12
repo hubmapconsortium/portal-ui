@@ -67,4 +67,12 @@ const TruncatedTypography = styled(Typography)`
   text-overflow: ellipsis;
 `;
 
-export { StyledPaper, invertSectionColors, Flex, StyledIcon, TruncatedTypography, tileWidth };
+const TileFooter = styled.div`
+  display: flex;
+  padding: 0 ${(props) => props.theme.spacing(1)}px;
+  color: ${(props) => props.theme.palette.white.main};
+  ${(props) =>
+    invertSectionColors(props.theme.palette.primary.main, props.theme.palette.white.main, props.$invertColors)}
+`;
+
+export { StyledPaper, invertSectionColors, Flex, StyledIcon, TruncatedTypography, TileFooter, tileWidth };
