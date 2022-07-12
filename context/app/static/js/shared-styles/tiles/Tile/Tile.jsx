@@ -1,0 +1,42 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import { StyledPaper, Flex, StyledIcon, TruncatedTypography } from './style';
+
+function Tile({ href, icon, invertColors, children }) {
+  return (
+    <a href={href}>
+      <StyledPaper $invertColors={invertColors}>
+        <Flex>
+          <StyledIcon component={icon} />
+          <div>{children}</div>
+        </Flex>
+      </StyledPaper>
+    </a>
+  );
+}
+
+Tile.Title = function TileTitle({ children }) {
+  return (
+    <TruncatedTypography component="h4" variant="h6">
+      {children}
+    </TruncatedTypography>
+  );
+};
+
+Tile.BodyText = function TileBodyText({ children }) {
+  return <TruncatedTypography variant="body2">{children}</TruncatedTypography>;
+};
+
+Tile.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  descendantCounts: PropTypes.shape({ Dataset: PropTypes.number, Sample: PropTypes.number }),
+  invertColors: PropTypes.bool,
+};
+
+Tile.defaultProps = {
+  descendantCounts: {},
+  invertColors: false,
+};
+
+export default Tile;
