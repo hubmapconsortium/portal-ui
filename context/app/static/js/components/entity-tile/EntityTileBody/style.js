@@ -6,7 +6,7 @@ const Flex = styled.div`
 `;
 
 const StyledDiv = styled.div`
-  width: 100%;
+  min-width: 0;
 `;
 
 export { Flex, StyledDiv };
