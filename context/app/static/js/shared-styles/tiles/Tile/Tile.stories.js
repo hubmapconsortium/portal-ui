@@ -8,13 +8,30 @@ export default {
   component: Tile,
 };
 
-export const Default = (args) => (
-  <Tile {...args}>
-    <Tile.Title>Hello</Tile.Title>
-    <Tile.BodyText>World</Tile.BodyText>
-  </Tile>
-);
+const Template = (args) => <Tile {...args} />;
+export const Default = Template.bind({});
 Default.args = {
-  href: '/',
+  href: '',
   icon: DatasetIcon,
+  bodyContent: (
+    <>
+      <Tile.Title>Hello</Tile.Title>
+      <Tile.Text>World</Tile.Text>
+    </>
+  ),
+  footerContent: <Tile.Text>Footer</Tile.Text>,
+};
+
+export const Inverted = Template.bind({});
+Inverted.args = {
+  href: '',
+  icon: DatasetIcon,
+  bodyContent: (
+    <>
+      <Tile.Title>Hello</Tile.Title>
+      <Tile.Text>World</Tile.Text>
+    </>
+  ),
+  footerContent: <Tile.Text>Footer</Tile.Text>,
+  invertColors: true,
 };
