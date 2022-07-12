@@ -52,6 +52,10 @@ const Flex = styled.div`
   display: flex;
   padding: ${(props) => props.theme.spacing(1)}px;
   box-sizing: content-box;
+`;
+
+const FlexGrow = styled.div`
+  flex-grow: 1;
   min-width: 0;
 `;
 
@@ -86,6 +90,7 @@ export {
   StyledPaper,
   invertSectionColors,
   Flex,
+  FlexGrow,
   StyledIcon,
   TruncatedTypography,
   TileFooter,

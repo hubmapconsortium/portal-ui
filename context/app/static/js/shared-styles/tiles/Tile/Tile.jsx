@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { StyledPaper, Flex, StyledIcon, TruncatedTypography, TileFooter, FooterDivider } from './style';
+import { StyledPaper, Flex, FlexGrow, StyledIcon, TruncatedTypography, TileFooter, FooterDivider } from './style';
 
 function Tile({ href, icon, invertColors, bodyContent, footerContent }) {
   return (
@@ -9,7 +9,7 @@ function Tile({ href, icon, invertColors, bodyContent, footerContent }) {
       <StyledPaper $invertColors={invertColors}>
         <Flex>
           <StyledIcon component={icon} />
-          <div>{bodyContent}</div>
+          <FlexGrow>{bodyContent}</FlexGrow>
         </Flex>
         <TileFooter $invertColors={invertColors}>{footerContent}</TileFooter>
       </StyledPaper>
