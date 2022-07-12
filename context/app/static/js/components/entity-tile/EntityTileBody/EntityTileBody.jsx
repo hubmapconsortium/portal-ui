@@ -1,36 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 
-import { Flex, TruncatedTypography, StyledDivider, StyledDiv } from './style';
+import Tile from 'js/shared-styles/tiles/Tile';
+import { Flex, StyledDiv } from './style';
 
-function EntityTileBody(props) {
-  const { entity_type, id, entityData, invertColors } = props;
-
+function EntityTileBody({ entity_type, id, entityData, invertColors }) {
   return (
     <StyledDiv>
-      <Typography component="h4" variant="h6">
-        {id}
-      </Typography>
-      {'origin_sample' in entityData && (
-        <TruncatedTypography variant="body2">{entityData.origin_sample.mapped_organ}</TruncatedTypography>
-      )}
-      {'mapped_specimen_type' in entityData && (
-        <TruncatedTypography variant="body2">{entityData.mapped_specimen_type}</TruncatedTypography>
-      )}
-      {'mapped_data_types' in entityData && (
-        <TruncatedTypography variant="body2">{entityData.mapped_data_types.join(', ')}</TruncatedTypography>
-      )}
+      <Tile.Title>{id}</Tile.Title>
+      {'origin_sample' in entityData && <Tile.Text>{entityData.origin_sample.mapped_organ}</Tile.Text>}
+      {'mapped_specimen_type' in entityData && <Tile.Text>{entityData.mapped_specimen_type}</Tile.Text>}
+      {'mapped_data_types' in entityData && <Tile.Text>{entityData.mapped_data_types.join(', ')}</Tile.Text>}
       {entity_type === 'Donor' && 'mapped_metadata' in entityData && (
         <>
           <Flex>
-            <Typography variant="body2">{entityData.mapped_metadata.sex}</Typography>
-            <StyledDivider flexItem orientation="vertical" $invertColors={invertColors} />
-            <Typography variant="body2">
+            <Tile.Text>{entityData.mapped_metadata.sex}</Tile.Text>
+            <Tile.Divider invertColors={invertColors} />
+            <Tile.Text>
               {entityData.mapped_metadata.age_value} {entityData.mapped_metadata.age_unit}
-            </Typography>
+            </Tile.Text>
           </Flex>
-          <TruncatedTypography variant="body2">{entityData.mapped_metadata.race.join(', ')}</TruncatedTypography>
+          <Tile.Text>{entityData.mapped_metadata.race.join(', ')}</Tile.Text>
         </>
       )}
     </StyledDiv>
