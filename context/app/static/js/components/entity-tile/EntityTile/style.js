@@ -1,49 +1,6 @@
 import styled, { css } from 'styled-components';
-import Paper from '@material-ui/core/Paper';
 
 const tileWidth = '310px';
-
-function invertSectionColors(backgroundColor, color, $invertColors) {
-  return css`
-    background-color: ${backgroundColor};
-    svg {
-      color: ${color};
-    }
-
-    ${() =>
-      $invertColors &&
-      css`
-        background-color: ${color};
-        color: ${backgroundColor};
-
-        svg {
-          color: ${backgroundColor};
-        }
-      `}
-  `;
-}
-
-const StyledPaper = styled(Paper)`
-  margin-bottom: ${(props) => props.theme.spacing(1)}px;
-  box-shadow: ${(props) => props.theme.shadows[1]};
-  width: ${tileWidth};
-
-  ${(props) =>
-    invertSectionColors(props.theme.palette.white.main, props.theme.palette.primary.main, props.$invertColors)}
-
-  &:hover {
-    box-shadow: ${(props) => props.theme.shadows[8]};
-    filter: brightness(96%);
-  }
-
-  ${(props) =>
-    props.$invertColors &&
-    css`
-      &:hover {
-        filter: brightness(108%);
-      }
-    `}
-`;
 
 const thumbnailDimension = '80px';
 
@@ -68,4 +25,4 @@ const LetterboxedThumbnail = styled.img`
     `}
 `;
 
-export { StyledPaper, invertSectionColors, Flex, LetterboxedThumbnail, tileWidth };
+export { Flex, LetterboxedThumbnail, tileWidth };

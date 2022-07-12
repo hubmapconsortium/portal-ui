@@ -63,7 +63,6 @@ const StyledIcon = styled(SvgIcon)`
   font-size: 1.3rem;
   height: 25px;
   margin-right: ${(props) => props.theme.spacing(1)}px;
-  color: ${(props) => (props.$invertColors ? props.theme.palette.white.main : props.theme.palette.primary.main)};
 `;
 
 const TruncatedTypography = styled(Typography)`
