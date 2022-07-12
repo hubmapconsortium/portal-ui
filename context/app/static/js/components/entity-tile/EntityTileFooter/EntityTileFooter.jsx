@@ -3,16 +3,14 @@ import PropTypes from 'prop-types';
 import format from 'date-fns/format';
 
 import Tile from 'js/shared-styles/tiles/Tile';
-import { StyledDatasetIcon, StyledSampleIcon } from './style';
+import { FooterIcon } from './style';
 
-function EntityTileFooter({ entityData, invertColors, descendantCounts }) {
+function EntityTileFooter({ entityData, invertColors, descendantCounts, entityIconMap }) {
   return (
     <>
       {Object.entries(descendantCounts).map(([k, v]) => (
         <React.Fragment key={k}>
-          {k === 'Support' && <StyledDatasetIcon />}
-          {k === 'Dataset' && <StyledDatasetIcon />}
-          {k === 'Sample' && <StyledSampleIcon />}
+          {k in entityIconMap && <FooterIcon component={entityIconMap[k]} />}
           <Tile.Text>{v}</Tile.Text>
           <Tile.Divider invertColors={invertColors} />
         </React.Fragment>

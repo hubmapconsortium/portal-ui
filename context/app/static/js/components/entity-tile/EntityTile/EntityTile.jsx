@@ -8,7 +8,7 @@ import EntityTileFooter from '../EntityTileFooter';
 import EntityTileBody from '../EntityTileBody';
 import { Flex, LetterboxedThumbnail } from './style';
 
-const icons = {
+const entityIconMap = {
   Donor: DonorIcon,
   Sample: SampleIcon,
   Dataset: DatasetIcon,
@@ -23,7 +23,7 @@ function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendan
     <Tile
       href={`/browse/${entity_type.toLowerCase()}/${uuid}`}
       invertColors={invertColors}
-      icon={icons[entity_type] || DatasetIcon}
+      icon={entityIconMap[entity_type] || DatasetIcon}
       bodyContent={
         <Flex>
           <EntityTileBody entity_type={entity_type} id={id} invertColors={invertColors} entityData={entityData} />
@@ -38,7 +38,12 @@ function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendan
         </Flex>
       }
       footerContent={
-        <EntityTileFooter invertColors={invertColors} entityData={entityData} descendantCounts={descendantCounts} />
+        <EntityTileFooter
+          invertColors={invertColors}
+          entityData={entityData}
+          descendantCounts={descendantCounts}
+          entityIconMap={entityIconMap}
+        />
       }
     />
   );
