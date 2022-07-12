@@ -80,7 +80,7 @@ const TileFooter = styled.div`
     invertSectionColors(props.theme.palette.primary.main, props.theme.palette.white.main, props.$invertColors)}
 `;
 
-const FooterDivider = styled(Divider)`
+const StyledDivider = styled(Divider)`
   background-color: ${(props) =>
     props.$invertColors ? props.theme.palette.primary.main : props.theme.palette.white.main};
   margin: 0px ${(props) => props.theme.spacing(0.5)}px;
@@ -95,5 +95,5 @@ export {
   TruncatedTypography,
   TileFooter,
   tileWidth,
-  FooterDivider,
+  StyledDivider,
 };

@@ -49,7 +49,7 @@ FooterDivider.args = {
   footerContent: (
     <>
       <Tile.Text>Footer 1</Tile.Text>
-      <Tile.FooterDivider />
+      <Tile.Divider />
       <Tile.Text>Footer 1</Tile.Text>
     </>
   ),

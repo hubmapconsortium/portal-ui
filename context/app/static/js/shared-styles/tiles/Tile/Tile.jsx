@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { StyledPaper, Flex, FlexGrow, StyledIcon, TruncatedTypography, TileFooter, FooterDivider } from './style';
+import { StyledPaper, Flex, FlexGrow, StyledIcon, TruncatedTypography, TileFooter, StyledDivider } from './style';
 
 function Tile({ href, icon, invertColors, bodyContent, footerContent }) {
   return (
@@ -29,8 +29,8 @@ Tile.Text = function TileText({ children }) {
   return <TruncatedTypography variant="body2">{children}</TruncatedTypography>;
 };
 
-Tile.FooterDivider = function TileFooterDivider({ invertColors }) {
-  return <FooterDivider flexItem orientation="vertical" $invertColors={invertColors} />;
+Tile.Divider = function TileDivider({ invertColors }) {
+  return <StyledDivider flexItem orientation="vertical" $invertColors={invertColors} />;
 };
 
 Tile.propTypes = {
