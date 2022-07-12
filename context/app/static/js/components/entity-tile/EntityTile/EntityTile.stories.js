@@ -54,7 +54,7 @@ const datasetArgs = {
     origin_sample: { mapped_organ: 'Organ Type' },
     mapped_data_types: ['Data Type 1', 'Data Type 2'],
     thumbnail_file: {
-      file_uuid: '7d010185e2163e03da79489140fee0d1',
+      file_uuid: 'ffff0185e2163e03da79489140fee0d1',
     },
   },
   descendantCounts: { Dataset: 2 },
@@ -92,7 +92,7 @@ ImageNotFound.parameters = {
   msw: {
     handlers: [
       rest.get(
-        'https://assets.hubmapconsortium.org/7d010185e2163e03da79489140fee0d1/thumbnail.jpg',
+        'https://assets.hubmapconsortium.org/ffff0185e2163e03da79489140fee0d1/thumbnail.jpg',
         (req, res, ctx) => {
           return res(ctx.status(404));
         },
