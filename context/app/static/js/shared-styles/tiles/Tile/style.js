@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
 const tileWidth = '310px';
 
@@ -75,4 +76,19 @@ const TileFooter = styled.div`
     invertSectionColors(props.theme.palette.primary.main, props.theme.palette.white.main, props.$invertColors)}
 `;
 
-export { StyledPaper, invertSectionColors, Flex, StyledIcon, TruncatedTypography, TileFooter, tileWidth };
+const FooterDivider = styled(Divider)`
+  background-color: ${(props) =>
+    props.$invertColors ? props.theme.palette.primary.main : props.theme.palette.white.main};
+  margin: 0px ${(props) => props.theme.spacing(0.5)}px;
+`;
+
+export {
+  StyledPaper,
+  invertSectionColors,
+  Flex,
+  StyledIcon,
+  TruncatedTypography,
+  TileFooter,
+  tileWidth,
+  FooterDivider,
+};

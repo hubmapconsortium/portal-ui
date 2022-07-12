@@ -35,3 +35,22 @@ Inverted.args = {
   footerContent: <Tile.Text>Footer</Tile.Text>,
   invertColors: true,
 };
+
+export const FooterDivider = Template.bind({});
+FooterDivider.args = {
+  href: '',
+  icon: DatasetIcon,
+  bodyContent: (
+    <>
+      <Tile.Title>Hello</Tile.Title>
+      <Tile.Text>World</Tile.Text>
+    </>
+  ),
+  footerContent: (
+    <>
+      <Tile.Text>Footer 1</Tile.Text>
+      <Tile.FooterDivider />
+      <Tile.Text>Footer 1</Tile.Text>
+    </>
+  ),
+};
