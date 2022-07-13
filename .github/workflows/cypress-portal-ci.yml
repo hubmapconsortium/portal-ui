@@ -23,7 +23,9 @@ jobs:
         node-version-file: '.nvmrc'
         cache: 'npm'
         cache-dependency-path: end-to-end/package-lock.json
-   
+
+    - run: npm --version
+
     - name: Install node dependencies
       run: npm ci --prefix end-to-end
 
