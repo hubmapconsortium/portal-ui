@@ -213,7 +213,9 @@ cryptography==36.0.2 \
     --hash=sha256:ea634401ca02367c1567f012317502ef3437522e2fc44a3ea1844de028fa4b84 \
     --hash=sha256:ec6597aa85ce03f3e507566b8bcdf9da2227ec86c4266bd5e6ab4d9e0cc8dab2 \
     --hash=sha256:f64b232348ee82f13aac22856515ce0195837f6968aeaa94a3d0353ea2ec06a6
-    # via pyjwt
+    # via
+    #   globus-sdk
+    #   pyjwt
 fasteners==0.17.3 \
     --hash=sha256:a9a42a208573d4074c77d041447336cf4e3c1389a256fd3e113ef59cf29b7980 \
     --hash=sha256:cae0772df265923e71435cc5057840138f4e8b6302f888a567d06ed8e1cbca03
@@ -295,9 +297,9 @@ generate-tiff-offsets==0.1.7 \
     --hash=sha256:ba1c90983bc20aed28a02bf1e3fc4e2acbd118c06103ad2d4506c155fbf44ff6 \
     --hash=sha256:f0ad4b002ffdbfd3b218b4f1792fb4ed5c72f3354224328287ad0d01de22d801
     # via vitessce
-globus-sdk==2.0.1 \
-    --hash=sha256:73bc2f0cbde92fa505eda40e7f131d749f55c0d4f6459151e421ab617a5011c8 \
-    --hash=sha256:94225982da7596f5bc8cd3dc30a4746014bf1f501cc8b23fe4dfd230114ae7e6
+globus-sdk==3.9.0 \
+    --hash=sha256:456f707b25a8c502607134f1d699b5970ef1aa9d17877474db73fc6d87c711e9 \
+    --hash=sha256:a196070b549d6af534a7fa8a180eae6ab84c0745959d5ee2d3863705eef9c7fc
     # via
     #   -r context/requirements.in
     #   hubmap-commons
@@ -639,9 +641,9 @@ pycparser==2.21 \
     --hash=sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9 \
     --hash=sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206
     # via cffi
-pyjwt[crypto]==1.7.1 \
-    --hash=sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e \
-    --hash=sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96
+pyjwt[crypto]==2.4.0 \
+    --hash=sha256:72d1d253f32dbd4f5c88eaf1fdc62f3a19f676ccbadb9dbc5d07e951b2b26daf \
+    --hash=sha256:d42908208c699b3b973cbeb01a969ba6a96c821eefb1c5bfe4c390c01d67abba
     # via globus-sdk
 pyparsing==3.0.7 \
     --hash=sha256:18ee9022775d270c55187733956460083db60b37d0d0fb357445f3094eed3eea \
@@ -779,7 +781,9 @@ traitlets==5.1.1 \
 typing-extensions==4.1.1 \
     --hash=sha256:1a9462dcc3347a79b1f1c0271fbe79e844580bb598bafa1ed208b94da3cdcd42 \
     --hash=sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2
-    # via black
+    # via
+    #   black
+    #   globus-sdk
 urllib3==1.26.9 \
     --hash=sha256:44ece4d53fb1706f667c9bd1c648f5469a2ec925fcf3a776667042d645472c14 \
     --hash=sha256:aabaf16477806a5e1dd19aa41f8c2b7950dd3c746362d7e3223dbe6de6ac448e
