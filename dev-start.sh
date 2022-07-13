@@ -30,7 +30,7 @@ pip install -r $CONTEXT/requirements.txt > /dev/null
 ./copy-app-conf.sh
 
 cd $CONTEXT
-npm install
+npm install --legacy-peer-deps
 
 # Start subprocesses
 
