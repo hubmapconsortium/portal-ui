@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { DatasetIcon } from 'js/shared-styles/icons';
+import { StyledIcon } from 'js/components/entity-tile/EntityTile/style';
 import Tile from './Tile';
 
 export default {
@@ -8,11 +9,13 @@ export default {
   component: Tile,
 };
 
+const Icon = <StyledIcon component={DatasetIcon} />;
+
 const Template = (args) => <Tile {...args} />;
 export const Default = Template.bind({});
 Default.args = {
   href: '',
-  icon: DatasetIcon,
+  icon: Icon,
   bodyContent: (
     <>
       <Tile.Title>Hello</Tile.Title>
@@ -25,7 +28,7 @@ Default.args = {
 export const Inverted = Template.bind({});
 Inverted.args = {
   href: '',
-  icon: DatasetIcon,
+  icon: Icon,
   bodyContent: (
     <>
       <Tile.Title>Hello</Tile.Title>
@@ -39,7 +42,7 @@ Inverted.args = {
 export const FooterDivider = Template.bind({});
 FooterDivider.args = {
   href: '',
-  icon: DatasetIcon,
+  icon: Icon,
   bodyContent: (
     <>
       <Tile.Title>Hello</Tile.Title>

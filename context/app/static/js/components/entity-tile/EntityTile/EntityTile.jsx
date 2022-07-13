@@ -6,7 +6,7 @@ import Tile from 'js/shared-styles/tiles/Tile/';
 import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
 import EntityTileFooter from '../EntityTileFooter';
 import EntityTileBody from '../EntityTileBody';
-import { Flex, LetterboxedThumbnail } from './style';
+import { StyledIcon, Flex, LetterboxedThumbnail } from './style';
 
 const entityIconMap = {
   Donor: DonorIcon,
@@ -23,7 +23,7 @@ function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendan
     <Tile
       href={`/browse/${entity_type.toLowerCase()}/${uuid}`}
       invertColors={invertColors}
-      icon={entityIconMap[entity_type] || DatasetIcon}
+      icon={<StyledIcon component={entityIconMap[entity_type] || DatasetIcon} />}
       bodyContent={
         <Flex>
           <EntityTileBody entity_type={entity_type} id={id} invertColors={invertColors} entityData={entityData} />

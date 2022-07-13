@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { StyledPaper, Flex, FlexGrow, StyledIcon, TruncatedTypography, TileFooter, StyledDivider } from './style';
+import { StyledPaper, Flex, FlexGrow, TruncatedTypography, TileFooter, StyledDivider } from './style';
 
 function Tile({ href, icon, invertColors, bodyContent, footerContent }) {
   return (
     <a href={href}>
       <StyledPaper $invertColors={invertColors}>
         <Flex>
-          <StyledIcon component={icon} />
+          {icon}
           <FlexGrow>{bodyContent}</FlexGrow>
         </Flex>
         <TileFooter $invertColors={invertColors}>{footerContent}</TileFooter>

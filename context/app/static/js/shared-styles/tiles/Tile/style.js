@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import Paper from '@material-ui/core/Paper';
-import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
@@ -59,12 +58,6 @@ const FlexGrow = styled.div`
   min-width: 0;
 `;
 
-const StyledIcon = styled(SvgIcon)`
-  font-size: 1.3rem;
-  height: 25px;
-  margin-right: ${(props) => props.theme.spacing(1)}px;
-`;
-
 const TruncatedTypography = styled(Typography)`
   white-space: nowrap;
   overflow: hidden;
@@ -85,14 +78,4 @@ const StyledDivider = styled(Divider)`
   margin: 0px ${(props) => props.theme.spacing(0.5)}px;
 `;
 
-export {
-  StyledPaper,
-  invertSectionColors,
-  Flex,
-  FlexGrow,
-  StyledIcon,
-  TruncatedTypography,
-  TileFooter,
-  tileWidth,
-  StyledDivider,
-};
+export { StyledPaper, invertSectionColors, Flex, FlexGrow, TruncatedTypography, TileFooter, tileWidth, StyledDivider };
