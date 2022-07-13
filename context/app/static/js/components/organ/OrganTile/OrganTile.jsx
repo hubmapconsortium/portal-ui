@@ -2,8 +2,15 @@ import React from 'react';
 
 import Tile from 'js/shared-styles/tiles/Tile/';
 import EntityTileFooter from 'js/components/entity-tile/EntityTileFooter';
+import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
 import { StyledDiv, ColoredImage } from './style';
 
+const entityIconMap = {
+  Donor: DonorIcon,
+  Sample: SampleIcon,
+  Dataset: DatasetIcon,
+  Support: DatasetIcon,
+};
 function OrganTile({ organ: { name, uberon_short, icon, descendantCounts } }) {
   return (
     <Tile
@@ -19,7 +26,7 @@ function OrganTile({ organ: { name, uberon_short, icon, descendantCounts } }) {
           <Tile.Text>{uberon_short}</Tile.Text>
         </>
       }
-      footerContent={<EntityTileFooter descendantCounts={descendantCounts} />}
+      footerContent={<EntityTileFooter descendantCounts={descendantCounts} entityIconMap={entityIconMap} />}
     />
   );
 }
