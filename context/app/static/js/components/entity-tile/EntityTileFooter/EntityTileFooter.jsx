@@ -15,7 +15,9 @@ function EntityTileFooter({ entityData, invertColors, descendantCounts, entityIc
           <Tile.Divider invertColors={invertColors} />
         </React.Fragment>
       ))}
-      <Tile.Text>Modified {format(entityData.last_modified_timestamp, 'yyyy-MM-dd')}</Tile.Text>
+      {entityData?.last_modified_timestamp && (
+        <Tile.Text>Modified {format(entityData.last_modified_timestamp, 'yyyy-MM-dd')}</Tile.Text>
+      )}
     </>
   );
 }
