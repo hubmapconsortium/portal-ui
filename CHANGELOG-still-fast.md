@@ -1,0 +1,1 @@
+- This branch is based on the last commit where Cypress ran in less than 10 minutes... Does it still run fast?
