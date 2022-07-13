@@ -1,0 +1,29 @@
+import React from 'react';
+
+import Tile from 'js/shared-styles/tiles/Tile/';
+import EntityTileFooter from 'js/components/entity-tile/EntityTileFooter';
+import { StyledDiv, ColoredImage } from './style';
+
+function OrganTile({ organ: { name, uberon_short, icon, descendantCounts } }) {
+  return (
+    <Tile
+      href={`/organ/${name}`}
+      icon={
+        <StyledDiv>
+          <ColoredImage icon={icon} role="img" aria-label={`Icon for ${name}`} />
+        </StyledDiv>
+      }
+      bodyContent={
+        <>
+          <Tile.Title>{name}</Tile.Title>
+          <Tile.Text>{uberon_short}</Tile.Text>
+        </>
+      }
+      footerContent={<EntityTileFooter descendantCounts={descendantCounts} />}
+    />
+  );
+}
+
+export default OrganTile;
+
+// alt={``}
