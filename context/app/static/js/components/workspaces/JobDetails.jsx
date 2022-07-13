@@ -2,8 +2,7 @@ import React from 'react';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 
-function JobDetails(props) {
-  const { job } = props;
+function JobDetails({ job }) {
   const { status, datetime_created } = job;
   const details = job.job_details.current_job_details;
   const { url_path, url_domain } = details.connection_details;
