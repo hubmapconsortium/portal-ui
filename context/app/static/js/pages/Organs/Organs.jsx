@@ -29,6 +29,23 @@ function Organs(props) {
                     <LightBlueLink href={`/organ/${path}`}>{organ.name}</LightBlueLink>
                   </Typography>
                   {organ.uberon_short}
+
+                  <dl>
+                    <dt>Icon?</dt>
+                    <dd>
+                      {organ.icon ? (
+                        <img src={organ.icon} style={{ width: '50px' }} alt={`Icon for ${organ.name}`} />
+                      ) : (
+                        'TODO: Ask IU?'
+                      )}
+                    </dd>
+                    <dt>Has IU component?</dt>
+                    <dd>{organ.has_iu_component ? 'yes' : 'no'}</dd>
+                    <dt>Has Azimuth?</dt>
+                    <dd>{organ.azimuth ? 'yes' : 'no'}</dd>
+                    <dt>Has Datasets?</dt>
+                    <dd>{organ.search.length ? 'yes' : 'no'}</dd>
+                  </dl>
                 </TableCell>
               </TableRow>
             ))}

@@ -10,6 +10,8 @@ properties:
     pattern: 'UBERON_\d+'
   description:
     type: string
+  icon:
+    type: string
   has_iu_component:
     type: boolean
   search:
@@ -44,5 +46,5 @@ required:
   - description
   - has_iu_component
   - search
-  # azimuth not required.
+  # icon and azimuth not required.
 additionalProperties: false
