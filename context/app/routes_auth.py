@@ -59,7 +59,7 @@ def login():
     # starting a Globus Auth login flow; Redirect out to Globus Auth:
     if 'code' not in request.args:
         auth_uri = client.oauth2_get_authorize_url(
-            additional_params={
+            query_params={
                 'scope': ' '.join([
                     'openid profile email',
                     'urn:globus:auth:scope:transfer.api.globus.org:all',
