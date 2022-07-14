@@ -5,6 +5,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 
 import { useOrgansDatasetCounts } from './hooks';
+import { Flex } from './style';
 
 function Organs({ organs }) {
   const { isLoading, organsWithDatasetCounts } = useOrgansDatasetCounts(organs);
@@ -17,11 +18,11 @@ function Organs({ organs }) {
       <SectionHeader variant="h1" component="h1">
         Organs
       </SectionHeader>
-      {Object.values(organsWithDatasetCounts).map((organ) => (
-        <>
+      <Flex>
+        {Object.values(organsWithDatasetCounts).map((organ) => (
           <OrganTile key={organ.name} organ={organ} />
-        </>
-      ))}
+        ))}
+      </Flex>
     </SectionContainer>
   );
 }
