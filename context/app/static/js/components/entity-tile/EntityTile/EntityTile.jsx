@@ -3,19 +3,14 @@ import PropTypes from 'prop-types';
 
 import { AppContext } from 'js/components/Providers';
 import Tile from 'js/shared-styles/tiles/Tile/';
-import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
+import { DatasetIcon } from 'js/shared-styles/icons';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import EntityTileFooter from '../EntityTileFooter';
 import EntityTileBody from '../EntityTileBody';
 import { StyledIcon, Flex, LetterboxedThumbnail } from './style';
 
 const tileWidth = 310;
 
-const entityIconMap = {
-  Donor: DonorIcon,
-  Sample: SampleIcon,
-  Dataset: DatasetIcon,
-  Support: DatasetIcon,
-};
 function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendantCounts }) {
   const { thumbnail_file } = entityData;
   const { assetsEndpoint } = useContext(AppContext);
@@ -40,12 +35,7 @@ function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendan
         </Flex>
       }
       footerContent={
-        <EntityTileFooter
-          invertColors={invertColors}
-          entityData={entityData}
-          descendantCounts={descendantCounts}
-          entityIconMap={entityIconMap}
-        />
+        <EntityTileFooter invertColors={invertColors} entityData={entityData} descendantCounts={descendantCounts} />
       }
       tileWidth={tileWidth}
     />

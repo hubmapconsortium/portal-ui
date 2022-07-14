@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import format from 'date-fns/format';
 
 import Tile from 'js/shared-styles/tiles/Tile';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { FooterIcon } from './style';
 
-function EntityTileFooter({ entityData, invertColors, descendantCounts, entityIconMap }) {
+function EntityTileFooter({ entityData, invertColors, descendantCounts }) {
   return (
     <>
       {Object.entries(descendantCounts).map(([k, v]) => (
