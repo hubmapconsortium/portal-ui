@@ -1,1 +1,0 @@
-- Upgrade pytest and dependencies. (We were pinned to a dependancy that was self-vandalized.)

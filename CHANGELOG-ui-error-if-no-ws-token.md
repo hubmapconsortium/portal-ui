@@ -1,1 +1,0 @@
-- Friendlier error if no workspace token.
