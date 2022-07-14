@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import { StyledPaper, Flex, FlexGrow, TruncatedTypography, TileFooter, StyledDivider } from './style';
 
-function Tile({ href, icon, invertColors, bodyContent, footerContent }) {
+function Tile({ href, icon, invertColors, bodyContent, footerContent, tileWidth }) {
   return (
     <a href={href}>
-      <StyledPaper $invertColors={invertColors}>
+      <StyledPaper $invertColors={invertColors} $tileWidth={tileWidth}>
         <Flex>
           {icon}
           <FlexGrow>{bodyContent}</FlexGrow>

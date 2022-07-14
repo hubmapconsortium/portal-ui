@@ -1,3 +1,4 @@
-import OrganTile from './OrganTile';
+import OrganTile, { tileWidth } from './OrganTile';
 
+export { tileWidth };
 export default OrganTile;

@@ -8,6 +8,8 @@ import EntityTileFooter from '../EntityTileFooter';
 import EntityTileBody from '../EntityTileBody';
 import { StyledIcon, Flex, LetterboxedThumbnail } from './style';
 
+const tileWidth = 310;
+
 const entityIconMap = {
   Donor: DonorIcon,
   Sample: SampleIcon,
@@ -45,6 +47,7 @@ function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendan
           entityIconMap={entityIconMap}
         />
       }
+      tileWidth={tileWidth}
     />
   );
 }
@@ -64,4 +67,5 @@ EntityTile.defaultProps = {
   invertColors: false,
 };
 
+export { tileWidth };
 export default EntityTile;

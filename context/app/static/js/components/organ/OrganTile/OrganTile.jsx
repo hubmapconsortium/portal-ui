@@ -5,12 +5,14 @@ import EntityTileFooter from 'js/components/entity-tile/EntityTileFooter';
 import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
 import { StyledDiv, ColoredImage } from './style';
 
+const tileWidth = 225;
 const entityIconMap = {
   Donor: DonorIcon,
   Sample: SampleIcon,
   Dataset: DatasetIcon,
   Support: DatasetIcon,
 };
+
 function OrganTile({ organ: { name, uberon_short, icon, descendantCounts } }) {
   return (
     <Tile
@@ -27,10 +29,10 @@ function OrganTile({ organ: { name, uberon_short, icon, descendantCounts } }) {
         </>
       }
       footerContent={<EntityTileFooter descendantCounts={descendantCounts} entityIconMap={entityIconMap} />}
+      tileWidth={tileWidth}
     />
   );
 }
 
+export { tileWidth };
 export default OrganTile;
-
-// alt={``}
