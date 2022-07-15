@@ -9,4 +9,11 @@ const StyledDiv = styled.div`
   min-width: 0;
 `;
 
-export { Flex, StyledDiv };
+const BodyWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  min-height: ${(props) => props.$thumbmailDimension}px;
+  box-sizing: content-box;
+`;
+
+export { Flex, StyledDiv, BodyWrapper };

@@ -2,28 +2,42 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Tile from 'js/shared-styles/tiles/Tile';
-import { Flex, StyledDiv } from './style';
+import EntityTileThumbnail from 'js/components/entity-tile/EntityTileThumbnail';
+import { Flex, StyledDiv, BodyWrapper } from './style';
 
+const thumbnailDimension = 80;
 function EntityTileBody({ entity_type, id, entityData, invertColors }) {
+  const { thumbnail_file } = entityData;
+
   return (
-    <StyledDiv>
-      <Tile.Title>{id}</Tile.Title>
-      {'origin_sample' in entityData && <Tile.Text>{entityData.origin_sample.mapped_organ}</Tile.Text>}
-      {'mapped_specimen_type' in entityData && <Tile.Text>{entityData.mapped_specimen_type}</Tile.Text>}
-      {'mapped_data_types' in entityData && <Tile.Text>{entityData.mapped_data_types.join(', ')}</Tile.Text>}
-      {entity_type === 'Donor' && 'mapped_metadata' in entityData && (
-        <>
-          <Flex>
-            <Tile.Text>{entityData.mapped_metadata.sex}</Tile.Text>
-            <Tile.Divider invertColors={invertColors} />
-            <Tile.Text>
-              {entityData.mapped_metadata.age_value} {entityData.mapped_metadata.age_unit}
-            </Tile.Text>
-          </Flex>
-          <Tile.Text>{entityData.mapped_metadata.race.join(', ')}</Tile.Text>
-        </>
+    <BodyWrapper $thumbnailDimension={thumbnailDimension}>
+      <StyledDiv>
+        <Tile.Title>{id}</Tile.Title>
+        {'origin_sample' in entityData && <Tile.Text>{entityData.origin_sample.mapped_organ}</Tile.Text>}
+        {'mapped_specimen_type' in entityData && <Tile.Text>{entityData.mapped_specimen_type}</Tile.Text>}
+        {'mapped_data_types' in entityData && <Tile.Text>{entityData.mapped_data_types.join(', ')}</Tile.Text>}
+        {entity_type === 'Donor' && 'mapped_metadata' in entityData && (
+          <>
+            <Flex>
+              <Tile.Text>{entityData.mapped_metadata.sex}</Tile.Text>
+              <Tile.Divider invertColors={invertColors} />
+              <Tile.Text>
+                {entityData.mapped_metadata.age_value} {entityData.mapped_metadata.age_unit}
+              </Tile.Text>
+            </Flex>
+            <Tile.Text>{entityData.mapped_metadata.race.join(', ')}</Tile.Text>
+          </>
+        )}
+      </StyledDiv>
+      {thumbnail_file && (
+        <EntityTileThumbnail
+          thumbnailDimension={thumbnailDimension}
+          id={id}
+          thumbnail_file={thumbnail_file}
+          entity_type={entity_type}
+        />
       )}
-    </StyledDiv>
+    </BodyWrapper>
   );
 }
 
