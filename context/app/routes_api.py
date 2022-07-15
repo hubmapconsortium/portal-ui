@@ -49,6 +49,7 @@ def entities_tsv(entity_type):
     descriptions_path = Path(__name__).parent.parent / \
         'ingest-validation-tools/docs/field-descriptions.yaml'
     descriptions_dict = safe_load(descriptions_path.read_text())
+    print(entities[0])
     tsv = _dicts_to_tsv(entities, _first_fields, descriptions_dict)
 
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
@@ -80,9 +81,41 @@ def _get_entities(entity_type, constraints={}, uuids=None):
     client = get_client()
     extra_fields = _first_fields[:]
     if entity_type in ['samples', 'datasets']:
-        extra_fields.append('donor.hubmap_id')
+        extra_fields += ['donor.hubmap_id']
+    if entity_type in ['datasets']:
+        extra_fields += [
+            # Version number is not in document:
+            # We hit the API at render-time to determine it.
+
+            # Publication Date
+            'published_timestamp',
+
+            # Modification Date
+            'last_modified_timestamp',
+            'mapped_last_modified_timestamp',
+
+            # Creation Date
+            'created_timestamp',
+
+            # Status
+            'status',
+            'mapped_status'
+
+            # Access
+            'data_access_level',
+
+            # Consortium
+            'mapped_consortium',
+
+            # Affiliation - Group
+            'group_name',
+
+            # Affiliation - Registered By
+            'created_by_user_displayname',
+            'created_by_user_email',
+        ]
     if entity_type in ['samples']:
-        extra_fields.append('mapped_specimen_type')
+        extra_fields += ['mapped_specimen_type']
     entities = client.get_entities(
         plural_lc_entity_type=entity_type, non_metadata_fields=extra_fields,
         constraints=constraints,
