@@ -12,8 +12,8 @@ const query = {
   },
 };
 
-function buildOrganToCountMap(aggs) {
-  return aggs.reduce((acc, { key, doc_count }) => {
+function buildOrganToCountMap(aggsBuckets) {
+  return aggsBuckets.reduce((acc, { key, doc_count }) => {
     acc[key] = doc_count;
     return acc;
   }, {});
@@ -23,8 +23,8 @@ function addSearchTermsCount(search, organToCountMap) {
   return search.reduce((sum, searchTerm) => sum + organToCountMap[searchTerm], 0);
 }
 
-function addDatasetCountsToOrgans(organs, searchData) {
-  const organToCountMap = buildOrganToCountMap(searchData.aggregations['origin_sample.mapped_organ'].buckets);
+function addDatasetCountsToOrgans(organs, aggsBuckets) {
+  const organToCountMap = buildOrganToCountMap(aggsBuckets);
   return Object.entries(organs).reduce((acc, [k, { search }]) => {
     acc[k] = { ...acc[k], descendantCounts: { Dataset: addSearchTermsCount(search, organToCountMap) } };
     return acc;
@@ -38,9 +38,12 @@ function useOrgansDatasetCounts(organs) {
     return { isLoading };
   }
 
-  const organsWithDatasetCounts = addDatasetCountsToOrgans(organs, searchData);
+  const organsWithDatasetCounts = addDatasetCountsToOrgans(
+    organs,
+    searchData.aggregations['origin_sample.mapped_organ'].buckets,
+  );
 
   return { organsWithDatasetCounts, isLoading };
 }
 
-export { useOrgansDatasetCounts };
+export { useOrgansDatasetCounts, buildOrganToCountMap, addDatasetCountsToOrgans, addSearchTermsCount };
