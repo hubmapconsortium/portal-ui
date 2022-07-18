@@ -24,9 +24,15 @@ mock_es = {
     }
 }
 
-mock_tsv = '''uuid\thubmap_id\tage_unit\tage_value\tcreated_by_user_displayname\tcreated_by_user_email\tcreated_timestamp\tgroup_name\tlast_modified_timestamp\tmapped_consortium\tmapped_last_modified_timestamp\tmapped_statusdata_access_level\tpublished_timestamp\tstatus\r
-#\t\tUnit for age measurement.\tThe time elapsed since birth.\t\t\t\t\t\t\t\t\t\t\r
-ABC123\tHMB123.XYZ\teons\t42\t\t\t\t\t\t\t\t\t\t\r
+tab = '\t'
+extra_fields = [
+    'created_by_user_displayname', 'created_by_user_email', 'created_timestamp',
+    'group_name', 'last_modified_timestamp', 'mapped_consortium',
+    'mapped_last_modified_timestamp', 'mapped_statusdata_access_level',
+    'published_timestamp', 'status']
+mock_tsv = f'''uuid\thubmap_id\tage_unit\tage_value\t{tab.join(extra_fields)}\r
+#\t\tUnit for age measurement.\tThe time elapsed since birth.{len(extra_fields) * tab}\r
+ABC123\tHMB123.XYZ\teons\t42{len(extra_fields) * tab}\r
 '''
 
 
