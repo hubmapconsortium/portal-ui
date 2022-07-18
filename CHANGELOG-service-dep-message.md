@@ -1,1 +1,0 @@
-- Add a little message to the service page explaining that entity api depends on uuid api.

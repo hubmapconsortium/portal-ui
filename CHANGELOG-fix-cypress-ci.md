@@ -1,1 +1,0 @@
-- Remove unnecessary steps from cypress ci.
