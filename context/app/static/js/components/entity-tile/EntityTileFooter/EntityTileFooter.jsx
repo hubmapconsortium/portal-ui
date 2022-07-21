@@ -6,7 +6,7 @@ import Tile from 'js/shared-styles/tiles/Tile';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { FooterIcon } from './style';
 
-function EntityTileFooter({ entityData, invertColors, descendantCounts }) {
+function EntityTileFooter({ last_modified_timestamp, invertColors, descendantCounts }) {
   return (
     <>
       {Object.entries(descendantCounts).map(([k, v]) => (
@@ -16,21 +16,19 @@ function EntityTileFooter({ entityData, invertColors, descendantCounts }) {
           <Tile.Divider invertColors={invertColors} />
         </React.Fragment>
       ))}
-      {entityData?.last_modified_timestamp && (
-        <Tile.Text>Modified {format(entityData.last_modified_timestamp, 'yyyy-MM-dd')}</Tile.Text>
-      )}
+      {last_modified_timestamp && <Tile.Text>Modified {format(last_modified_timestamp, 'yyyy-MM-dd')}</Tile.Text>}
     </>
   );
 }
 
 EntityTileFooter.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  entityData: PropTypes.object.isRequired,
+  last_modified_timestamp: PropTypes.number,
   descendantCounts: PropTypes.shape({ Dataset: PropTypes.number, Sample: PropTypes.number }),
   invertColors: PropTypes.bool,
 };
 
 EntityTileFooter.defaultProps = {
+  last_modified_timestamp: undefined,
   descendantCounts: {},
   invertColors: false,
 };

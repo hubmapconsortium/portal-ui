@@ -20,7 +20,11 @@ function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendan
         <EntityTileBody entity_type={entity_type} id={id} invertColors={invertColors} entityData={entityData} />
       }
       footerContent={
-        <EntityTileFooter invertColors={invertColors} entityData={entityData} descendantCounts={descendantCounts} />
+        <EntityTileFooter
+          invertColors={invertColors}
+          last_modified_timestamp={entityData?.last_modified_timestamp}
+          descendantCounts={descendantCounts}
+        />
       }
       tileWidth={tileWidth}
     />
