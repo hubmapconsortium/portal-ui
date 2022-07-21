@@ -5,7 +5,7 @@ import { StyledIcon } from 'js/components/entity-tile/EntityTile/style';
 import Tile from './Tile';
 
 export default {
-  title: 'Tile/Tile',
+  title: 'Tiles/Tile',
   component: Tile,
 };
 
