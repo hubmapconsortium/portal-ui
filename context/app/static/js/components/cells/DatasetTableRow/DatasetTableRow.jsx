@@ -56,7 +56,7 @@ function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpre
       buttonTooltipTitle="No additional results can be expanded while detailed data are being retrieved."
     >
       <ExpandableRowCell>
-        <LightBlueLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</LightBlueLink>
+        <LightBlueLink href={`/browse/dataset/${uuid}?gene=${cellVariableName}`}>{hubmap_id}</LightBlueLink>
       </ExpandableRowCell>
       <ExpandableRowCell>{origin_sample.mapped_organ}</ExpandableRowCell>
       <ExpandableRowCell>{mapped_data_types.join(', ')}</ExpandableRowCell>
