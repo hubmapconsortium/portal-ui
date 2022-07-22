@@ -52,6 +52,8 @@ def main():
         uberon_short={uberon_id: uberon_id.split('/')[-1] for uberon_id in descriptions.keys()},
         name={uberon_id: value['name'] for uberon_id, value in descriptions.items()},
         description={uberon_id: value['description'] for uberon_id, value in descriptions.items()},
+        icon={uberon_id: value.get('icon')
+              for uberon_id, value in descriptions.items() if value.get('icon')},
         has_iu_component={uberon_id: value.get('has_iu_component', True)
                           for uberon_id, value in descriptions.items()},
         search=search_organs_by_uberon,

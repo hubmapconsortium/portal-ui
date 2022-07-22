@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 
-import { tileWidth } from 'js/components/entity-tile/EntityTile/style';
-
-const TilesLayout = styled.div`
+const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, ${tileWidth});
+  grid-template-columns: ${(props) => `repeat(auto-fill, ${props.$tileWidth}px)`};
   grid-gap: 0.5rem;
   width: 100%;
   justify-content: space-around;
@@ -14,4 +12,4 @@ const TilesLayout = styled.div`
   }
 `;
 
-export { TilesLayout };
+export { Grid };
