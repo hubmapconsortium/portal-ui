@@ -57,7 +57,7 @@ function AutocompleteEntity(props) {
       }}
       renderInput={(params) => (
         <TextField
-          label="substring"
+          label="marker"
           value={substring}
           name="substring"
           variant="outlined"
