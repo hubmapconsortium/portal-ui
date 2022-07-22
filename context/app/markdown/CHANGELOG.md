@@ -1,3 +1,15 @@
+## v0.48.0 - 2022-07-14
+
+- Add Workspaces API to the mermaid diagram.
+- Remove unnecessary steps from cypress ci.
+- For workspaces, add a link to Jupyter for each running job.
+- Enable marker genes to be high-lighted on load.
+- Upgrade dependency to resolve python dependency warning.
+- Add a little message to the service page explaining that entity api depends on uuid api.
+- Friendlier error if no workspace token.
+- Upgrade pytest and dependencies. (We were pinned to a dependancy that was self-vandalized.)
+
+
 ## v0.47.2 - 2022-06-29
 
 - Matomo React proved awkward: Just use plain JS functions.
