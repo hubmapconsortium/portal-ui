@@ -15,14 +15,14 @@ from .utils import make_blueprint, get_url_base_from_request, entity_types, get_
 blueprint = make_blueprint(__name__)
 
 
-def _nb_response_from_objs(name_stem, cells, ws_name=None):
+def _nb_response_from_objs(name_stem, cells, workspace_name=None):
     nb = new_notebook()
     nb['cells'] = cells
     nb_str = nbformat.writes(nb)
-    return _nb_response(name_stem, nb_str, ws_name)
+    return _nb_response(name_stem, nb_str, workspace_name)
 
 
-def _nb_response_from_dicts(name_stem, cells, ws_name=None):
+def _nb_response_from_dicts(name_stem, cells, workspace_name=None):
     nb = {
         'cells': cells,
         'metadata': {},
@@ -30,11 +30,11 @@ def _nb_response_from_dicts(name_stem, cells, ws_name=None):
         'nbformat_minor': 5
     }
     nb_str = json.dumps(nb)
-    return _nb_response(name_stem, nb_str, ws_name)
+    return _nb_response(name_stem, nb_str, workspace_name)
 
 
-def _nb_response(name_stem, nb_str, ws_name):
-    if ws_name:
+def _nb_response(name_stem, nb_str, workspace_name):
+    if workspace_name:
         # TODO: WS API calls to create workspace
         return redirect('/workspaces')
     return Response(
@@ -44,7 +44,7 @@ def _nb_response(name_stem, nb_str, ws_name):
     )
 
 
-def _get_ws_name(request_args):
+def _get_workspace_name(request_args):
     # TODO: When UI is available, limit to posts.
     params = request_args.keys()
     if (not (params <= set(['name']))):
@@ -56,7 +56,7 @@ def _get_ws_name(request_args):
 def details_notebook(type, uuid):
     if type not in entity_types:
         abort(404)
-    ws_name = _get_ws_name(request.args)
+    workspace_name = _get_workspace_name(request.args)
     client = get_client()
     entity = client.get_entity(uuid)
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
@@ -76,12 +76,12 @@ def details_notebook(type, uuid):
         *vitessce_conf.cells
     ]
 
-    return _nb_response_from_objs(hubmap_id, cells, ws_name=ws_name)
+    return _nb_response_from_objs(hubmap_id, cells, workspace_name=workspace_name)
 
 
 @blueprint.route('/notebooks/<entity_type>.ipynb', methods=['POST'])
 def notebook(entity_type):
-    ws_name = _get_ws_name(request.args)
+    workspace_name = _get_workspace_name(request.args)
     body = request.get_json()
     uuids = body.get('uuids')
     url_base = get_url_base_from_request()
@@ -100,7 +100,7 @@ def notebook(entity_type):
     if zarr_files:
         cells += _get_cells('anndata.ipynb', uuids_to_zarr_files=uuids_to_zarr_files)
 
-    return _nb_response_from_dicts(entity_type, cells, ws_name=ws_name)
+    return _nb_response_from_dicts(entity_type, cells, workspace_name=workspace_name)
 
 
 def _limit_to_zarr_files(uuids_to_files):
