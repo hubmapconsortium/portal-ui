@@ -1,8 +1,10 @@
-from flask import (abort, request, Response, current_app, redirect)
+from flask import (abort, request, Response, current_app, redirect, session)
 import json
 from pathlib import Path
 from string import Template
 import re
+
+from requests import post
 
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
@@ -34,14 +36,35 @@ def _nb_response_from_dicts(name_stem, cells, workspace_name=None):
 
 
 def _nb_response(name_stem, nb_str, workspace_name):
-    if workspace_name:
-        # TODO: WS API calls to create workspace
-        return redirect('/workspaces')
-    return Response(
-        response=nb_str,
-        headers={'Content-Disposition': f"attachment; filename={name_stem}.ipynb"},
-        mimetype='application/x-ipynb+json'
+    if not workspace_name:
+        return Response(
+            response=nb_str,
+            headers={'Content-Disposition': f"attachment; filename={name_stem}.ipynb"},
+            mimetype='application/x-ipynb+json'
+        )
+    # This route will only be exposed in the UI if logged in,
+    # so we don't need to fall back gracefully.
+    if not session['workspaces_token']:
+        raise Exception('No workspaces_token')
+    json = {
+        'name': workspace_name,
+        'description': workspace_name,
+        'workspace_details': {
+            'symlinks': [],
+            'files': [{
+                'name': f'{name_stem}.ipynb',
+                'content': nb_str,
+            }],
+        }
+    }
+    response = post(
+        f'{current_app.config["WORKSPACES_ENDPOINT"]}/workspaces',
+        headers={'UWS-Authorization': f'Token {session["workspaces_token"]}'},
+        json=json
     )
+    response.raise_for_status()
+    workspace_id = response.json()['data']['workspace']['id']
+    return redirect(f'/workspaces#workspace-{workspace_id}')
 
 
 def _get_workspace_name(request_args):
