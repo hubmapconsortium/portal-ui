@@ -49,7 +49,6 @@ def entities_tsv(entity_type):
     descriptions_path = Path(__name__).parent.parent / \
         'ingest-validation-tools/docs/field-descriptions.yaml'
     descriptions_dict = safe_load(descriptions_path.read_text())
-    print(entities[0])
     tsv = _dicts_to_tsv(entities, _first_fields, descriptions_dict)
 
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
@@ -89,7 +88,6 @@ def _get_entities(entity_type, constraints={}, uuids=None):
 
         # Modification Date
         'last_modified_timestamp',
-        'mapped_last_modified_timestamp',
 
         # Creation Date
         'created_timestamp',
