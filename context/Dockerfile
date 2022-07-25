@@ -9,6 +9,7 @@ RUN apk add --no-cache git
 # COPY only what is needed so layers can be cached.
 COPY package.json .
 COPY package-lock.json .
+COPY .npmrc .
 
 RUN npm ci
 

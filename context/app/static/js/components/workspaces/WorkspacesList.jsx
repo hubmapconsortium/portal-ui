@@ -9,6 +9,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { createNotebookWorkspace, startJob } from './utils';
 import { useWorkspacesList, useJobsList } from './hooks';
 import { StyledButton } from './style';
+import JobDetails from './JobDetails';
 
 function WorkspacesList() {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
@@ -83,13 +84,9 @@ function WorkspacesList() {
       <SpacedSectionButtonRow leftText={<Typography variant="subtitle1">Jobs</Typography>} />
       <Paper>
         TODO: The current API responses give us no way to connect Workspaces to Jobs.
+        <a href="https://github.com/hubmapconsortium/user_workspaces_server/issues/53">Issue</a>
         {jobsList.map((job) => (
-          <div key={job.id}>
-            <details>
-              <summary>JSON</summary>
-              <pre>{JSON.stringify(job, null, 2)}</pre>
-            </details>
-          </div>
+          <JobDetails job={job} />
         ))}
       </Paper>
     </>

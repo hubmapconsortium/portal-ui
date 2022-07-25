@@ -23,8 +23,8 @@ function Organs({ organs }) {
         {Object.keys(organs).length} Organs
       </StyledTypography>
       <TileGrid $tileWidth={tileWidth}>
-        {Object.values(organsWithDatasetCounts).map((organ) => (
-          <OrganTile key={organ.name} organ={organ} />
+        {Object.entries(organsWithDatasetCounts).map(([path, organ]) => (
+          <OrganTile key={organ.name} organ={organ} path={path} />
         ))}
       </TileGrid>
     </SectionContainer>

@@ -7,10 +7,10 @@ import { StyledDiv, ColoredImage } from './style';
 
 const tileWidth = 225;
 
-function OrganTile({ organ: { name, uberon_short, icon, descendantCounts } }) {
+function OrganTile({ organ: { name, uberon_short, icon, descendantCounts }, path }) {
   return (
     <Tile
-      href={`/organ/${name}`}
+      href={`/organ/${path}`}
       icon={
         <StyledDiv>
           <ColoredImage icon={icon} role="img" aria-label={`Icon for ${name}`} />
