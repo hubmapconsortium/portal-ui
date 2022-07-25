@@ -54,10 +54,10 @@ def details(type, uuid):
         **get_default_flask_data(),
         'entity': entity,
     }
-    gene = request.args.get('gene')
+    marker = request.args.get('marker')
 
     if type == 'dataset':
-        conf_cells_uuid = client.get_vitessce_conf_cells_and_lifted_uuid(entity, marker_gene=gene)
+        conf_cells_uuid = client.get_vitessce_conf_cells_and_lifted_uuid(entity, marker=marker)
         flask_data.update({
             'vitessce_conf': conf_cells_uuid.vitessce_conf.conf,
             'has_notebook': conf_cells_uuid.vitessce_conf.cells is not None,
