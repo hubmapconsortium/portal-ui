@@ -4,7 +4,7 @@ import { rest } from 'msw';
 import EntityTile from './EntityTile';
 
 export default {
-  title: 'EntityTile/EntityTile',
+  title: 'Tiles/EntityTile',
   component: EntityTile,
 };
 
