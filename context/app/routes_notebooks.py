@@ -1,8 +1,10 @@
-from flask import (abort, request, Response, current_app)
+from flask import (abort, request, Response, current_app, redirect, session)
 import json
 from pathlib import Path
 from string import Template
 import re
+
+from requests import post
 
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
@@ -15,34 +17,69 @@ from .utils import make_blueprint, get_url_base_from_request, entity_types, get_
 blueprint = make_blueprint(__name__)
 
 
-def _nb_response_from_objs(name_stem, cells):
+def _nb_response_from_objs(name_stem, cells, workspace_name=None):
     nb = new_notebook()
     nb['cells'] = cells
-    return _nb_response(name_stem, nbformat.writes(nb))
+    nb_str = nbformat.writes(nb)
+    return _nb_response(name_stem, nb_str, workspace_name)
 
 
-def _nb_response_from_dicts(name_stem, cells):
+def _nb_response_from_dicts(name_stem, cells, workspace_name=None):
     nb = {
         'cells': cells,
         'metadata': {},
         'nbformat': 4,
         'nbformat_minor': 5
     }
-    return _nb_response(name_stem, json.dumps(nb))
+    nb_str = json.dumps(nb)
+    return _nb_response(name_stem, nb_str, workspace_name)
 
 
-def _nb_response(name_stem, nb_str):
-    return Response(
-        response=nb_str,
-        headers={'Content-Disposition': f"attachment; filename={name_stem}.ipynb"},
-        mimetype='application/x-ipynb+json'
+def _nb_response(name_stem, nb_str, workspace_name):
+    if not workspace_name:
+        return Response(
+            response=nb_str,
+            headers={'Content-Disposition': f"attachment; filename={name_stem}.ipynb"},
+            mimetype='application/x-ipynb+json'
+        )
+    # This route will only be exposed in the UI if logged in,
+    # so we don't need to fall back gracefully.
+    if not session['workspaces_token']:
+        raise Exception('No workspaces_token')
+    json = {
+        'name': workspace_name,
+        'description': workspace_name,
+        'workspace_details': {
+            'symlinks': [],
+            'files': [{
+                'name': f'{name_stem}.ipynb',
+                'content': nb_str,
+            }],
+        }
+    }
+    response = post(
+        f'{current_app.config["WORKSPACES_ENDPOINT"]}/workspaces',
+        headers={'UWS-Authorization': f'Token {session["workspaces_token"]}'},
+        json=json
     )
+    response.raise_for_status()
+    workspace_id = response.json()['data']['workspace']['id']
+    return redirect(f'/workspaces#workspace-{workspace_id}')
+
+
+def _get_workspace_name(request_args):
+    # TODO: When UI is available, limit to posts.
+    params = request_args.keys()
+    if (not (params <= set(['name']))):
+        abort(400)
+    return request_args.get('name')
 
 
 @blueprint.route('/browse/<type>/<uuid>.ipynb')
 def details_notebook(type, uuid):
     if type not in entity_types:
         abort(404)
+    workspace_name = _get_workspace_name(request.args)
     client = get_client()
     entity = client.get_entity(uuid)
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
@@ -58,15 +95,16 @@ def details_notebook(type, uuid):
         new_code_cell(
             '!pip uninstall community flask albumentations -y '
             '# Preinstalled on Colab; Causes version conflicts.\n'
-            f'!pip install vitessce=={vitessce.__version__}'),
+            f'!pip install vitessce[all]=={vitessce.__version__}'),
         *vitessce_conf.cells
     ]
 
-    return _nb_response_from_objs(hubmap_id, cells)
+    return _nb_response_from_objs(hubmap_id, cells, workspace_name=workspace_name)
 
 
 @blueprint.route('/notebooks/<entity_type>.ipynb', methods=['POST'])
 def notebook(entity_type):
+    workspace_name = _get_workspace_name(request.args)
     body = request.get_json()
     uuids = body.get('uuids')
     url_base = get_url_base_from_request()
@@ -85,7 +123,7 @@ def notebook(entity_type):
     if zarr_files:
         cells += _get_cells('anndata.ipynb', uuids_to_zarr_files=uuids_to_zarr_files)
 
-    return _nb_response_from_dicts(entity_type, cells)
+    return _nb_response_from_dicts(entity_type, cells, workspace_name=workspace_name)
 
 
 def _limit_to_zarr_files(uuids_to_files):

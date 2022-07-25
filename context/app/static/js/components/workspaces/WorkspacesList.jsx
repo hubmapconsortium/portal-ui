@@ -67,7 +67,8 @@ function WorkspacesList() {
       />
       <Paper>
         {workspacesList.map((workspace) => (
-          <div key={workspace.id}>
+          /* Inbound links have fragments like "#workspace-123" */
+          <div key={workspace.id} id={`workspace-${workspace.id}`}>
             <details>
               <summary>JSON</summary>
               <pre>{JSON.stringify(workspace, null, 2)}</pre>
