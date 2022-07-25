@@ -1,15 +1,14 @@
 import React from 'react';
 
-import OrganTile from './OrganTile';
+import OrganTileComponent from './OrganTile';
 
 export default {
   title: 'Tiles/OrganTile',
-  component: OrganTile,
+  component: OrganTileComponent,
 };
 
-const Template = (args) => <OrganTile {...args} />;
-export const Default = Template.bind({});
-Default.args = {
+export const OrganTile = (args) => <OrganTileComponent {...args} />;
+OrganTile.args = {
   organ: {
     name: 'Spleen',
     uberon_short: 'ABC123',
@@ -17,3 +16,4 @@ Default.args = {
     descendantCounts: { Dataset: 2 },
   },
 };
+OrganTile.storyName = 'OrganTile'; // needed for single story hoisting for multi word component names
