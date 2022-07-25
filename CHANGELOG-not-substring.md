@@ -1,0 +1,1 @@
+- In Cells UI, change from "substring" to something domain specific.
