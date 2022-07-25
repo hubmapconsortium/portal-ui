@@ -21,7 +21,7 @@ blueprint = make_blueprint(__name__)
 def cells_ui():
     return render_template(
         'base-pages/react-content.html',
-        title='Cells API Demo',
+        title='Cells',
         flask_data={**get_default_flask_data()}
     )
 
