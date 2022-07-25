@@ -57,7 +57,7 @@ function AutocompleteEntity(props) {
       }}
       renderInput={(params) => (
         <TextField
-          label="marker"
+          label={`Select ${targetEntity} to query`}
           value={substring}
           name="substring"
           variant="outlined"
