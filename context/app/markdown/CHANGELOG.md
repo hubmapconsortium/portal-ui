@@ -1,3 +1,15 @@
+## v0.49.0 - 2022-07-25
+
+- Add more fields to the downloadable TSV.
+- Bump lxml to resolve security warning.
+- Link from the Cells UI to the Dataset with gene pre-selected.
+- Add new logic to create notebooks, not just download them:  `.ipynb?name=new-notebook`
+- In Cells UI, change from "substring" to something domain specific.
+- Address the `npm ci` slowdow.
+- Redesign organs page to use tiles.
+- Add organ tile story and consolidate entity tile stories.
+
+
 ## v0.48.0 - 2022-07-14
 
 - Add Workspaces API to the mermaid diagram.
