@@ -28,8 +28,7 @@ tab = '\t'
 extra_fields = [
     'created_by_user_displayname', 'created_by_user_email', 'created_timestamp',
     'group_name', 'last_modified_timestamp', 'mapped_consortium',
-    'mapped_last_modified_timestamp', 'mapped_statusdata_access_level',
-    'published_timestamp', 'status']
+    'mapped_statusdata_access_level', 'published_timestamp', 'status']
 mock_tsv = f'''uuid\thubmap_id\tage_unit\tage_value\t{tab.join(extra_fields)}\r
 #\t\tUnit for age measurement.\tThe time elapsed since birth.{len(extra_fields) * tab}\r
 ABC123\tHMB123.XYZ\teons\t42{len(extra_fields) * tab}\r
