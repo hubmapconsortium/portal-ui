@@ -3,7 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 
 import DatasetsTable from 'js/components/cells/DatasetsTable';
-import { CenteredFlex } from './style';
+import { CenteredFlex, FullWidthAlert } from './style';
 
 function CellsResults({ isLoading, results, minExpressionLog, cellVariableNames, queryType, completeStep }) {
   if (isLoading) {
@@ -15,6 +15,13 @@ function CellsResults({ isLoading, results, minExpressionLog, cellVariableNames,
     );
   }
 
+  if (!results.length) {
+    return (
+      <FullWidthAlert severity="info">
+        No results found matching your search. Edit query parameters by returning to the previous step.
+      </FullWidthAlert>
+    );
+  }
   return (
     <DatasetsTable
       datasets={results}
