@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
+import Typography from '@material-ui/core/Typography';
 
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedByExpression';
-import DatasetsTable from 'js/components/cells/DatasetsTable';
 import QuerySelect from 'js/components/cells/QuerySelect';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography';
-
-import { CenteredFlex } from './style';
+import CellsResults from 'js/components/cells/CellsResults';
 
 function Cells() {
   const [results, setResults] = useState([]);
@@ -46,16 +43,12 @@ function Cells() {
           },
           {
             heading: '3. Results',
-            content: isLoading ? (
-              <CenteredFlex>
-                <Typography>Please wait while your results are loading.</Typography>
-                <CircularProgress />
-              </CenteredFlex>
-            ) : (
-              <DatasetsTable
-                datasets={results}
-                minExpression={10 ** minExpressionLog}
-                cellVariableName={cellVariableNames[0]}
+            content: (
+              <CellsResults
+                isLoading={isLoading}
+                results={results}
+                minExpressionLog={minExpressionLog}
+                cellVariableNames={cellVariableNames}
                 queryType={queryType}
               />
             ),

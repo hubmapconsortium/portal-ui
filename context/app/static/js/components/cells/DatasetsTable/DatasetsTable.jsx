@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import { animated } from 'react-spring';
 
 import DatasetTableRow from 'js/components/cells/DatasetTableRow';
-import { initialHeight } from 'js/pages/Cells/style';
+import { initialHeight } from 'js/components/cells/CellsResults/style';
 import { useExpandTransition } from 'js/hooks/useExpand';
 
 const columns = [
