@@ -5,10 +5,9 @@ import { animated } from 'react-spring';
 
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { useExpandSpring } from 'js/hooks/useExpand';
-import ExpandCollapseIconButton from 'js/shared-styles/buttons/ExpandCollapseIconButton';
 import DisabledButtonTooltip from 'js/shared-styles/tooltips/DisabledButtonTooltip';
 import { Provider, createStore, useStore } from './store';
-import { ExpandedRow, ExpandedCell } from './style';
+import { ExpandedRow, ExpandedCell, StyledExpandCollapseIconButton } from './style';
 
 function ExpandableRowChild({ children, numCells, expandedContent, disabled, buttonTooltipTitle }) {
   const { isExpanded, toggleIsExpanded } = useStore();
@@ -28,10 +27,10 @@ function ExpandableRowChild({ children, numCells, expandedContent, disabled, but
         <ExpandableRowCell>
           {disabled ? (
             <DisabledButtonTooltip title={buttonTooltipTitle}>
-              <ExpandCollapseIconButton {...iconButtonProps} disabled />
+              <StyledExpandCollapseIconButton {...iconButtonProps} disabled />
             </DisabledButtonTooltip>
           ) : (
-            <ExpandCollapseIconButton {...iconButtonProps} />
+            <StyledExpandCollapseIconButton {...iconButtonProps} />
           )}
         </ExpandableRowCell>
       </TableRow>
