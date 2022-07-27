@@ -30,7 +30,7 @@ function ExpandableRowChild({ children, numCells, expandedContent, disabled, but
               <StyledExpandCollapseIconButton {...iconButtonProps} disabled />
             </DisabledButtonTooltip>
           ) : (
-            <StyledExpandCollapseIconButton {...iconButtonProps} />
+            <StyledExpandCollapseIconButton {...iconButtonProps} color="primary" />
           )}
         </ExpandableRowCell>
       </TableRow>
