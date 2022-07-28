@@ -1,0 +1,1 @@
+- Log more details of the auth process.
