@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import TableRow from '@material-ui/core/TableRow';
 
 import { animated } from 'react-spring';
 
@@ -7,7 +6,7 @@ import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { useExpandSpring } from 'js/hooks/useExpand';
 import DisabledButtonTooltip from 'js/shared-styles/tooltips/DisabledButtonTooltip';
 import { Provider, createStore, useStore } from './store';
-import { ExpandedRow, ExpandedCell, StyledExpandCollapseIconButton } from './style';
+import { ClickableRow, ExpandedRow, ExpandedCell, StyledExpandCollapseIconButton } from './style';
 
 function ExpandableRowChild({ children, numCells, expandedContent, disabled, buttonTooltipTitle }) {
   const { isExpanded, toggleIsExpanded } = useStore();
@@ -15,14 +14,13 @@ function ExpandableRowChild({ children, numCells, expandedContent, disabled, but
   const styles = useExpandSpring(heightRef, 0, isExpanded);
 
   const iconButtonProps = {
-    onClick: toggleIsExpanded,
     isExpanded,
     'aria-label': 'expand row',
   };
 
   return (
     <>
-      <TableRow>
+      <ClickableRow onClick={toggleIsExpanded}>
         {children}
         <ExpandableRowCell>
           {disabled ? (
@@ -33,7 +31,7 @@ function ExpandableRowChild({ children, numCells, expandedContent, disabled, but
             <StyledExpandCollapseIconButton {...iconButtonProps} color="primary" />
           )}
         </ExpandableRowCell>
-      </TableRow>
+      </ClickableRow>
       <ExpandedRow $isExpanded={isExpanded}>
         <ExpandedCell colSpan={numCells} $isExpanded={isExpanded}>
           <animated.div style={styles}>
