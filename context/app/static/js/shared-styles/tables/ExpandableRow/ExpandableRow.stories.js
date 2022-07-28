@@ -44,5 +44,5 @@ export const DisabledWithTooltip = Template.bind({});
 DisabledWithTooltip.args = {
   ...sharedArgs,
   disabled: true,
-  buttonTooltipTitle: "Can't open now.",
+  disabledTooltipTitle: "Can't open now.",
 };

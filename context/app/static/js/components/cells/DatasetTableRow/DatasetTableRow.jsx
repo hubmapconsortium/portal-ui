@@ -53,7 +53,7 @@ function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpre
         />
       }
       disabled={!(fetchedUUIDs.has(uuid) || loadingUUID === uuid || !loadingUUID)}
-      buttonTooltipTitle="No additional results can be expanded while detailed data are being retrieved."
+      disabledTooltipTitle="No additional results can be expanded while detailed data are being retrieved."
     >
       <ExpandableRowCell>
         <LightBlueLink href={`/browse/dataset/${uuid}?marker=${cellVariableName}`}>{hubmap_id}</LightBlueLink>
