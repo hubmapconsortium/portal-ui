@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Alert } from 'js/shared-styles/alerts';
 
 const initialHeight = 300;
 
@@ -11,4 +12,8 @@ const CenteredFlex = styled.div`
   flex-direction: column;
 `;
 
-export { CenteredFlex, initialHeight };
+const FullWidthAlert = styled(Alert)`
+  width: 100%;
+`;
+
+export { CenteredFlex, FullWidthAlert, initialHeight };
