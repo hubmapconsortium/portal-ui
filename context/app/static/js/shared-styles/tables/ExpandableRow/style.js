@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-import ExpandCollapseIconButton from 'js/shared-styles/buttons/ExpandCollapseIconButton';
+import ExpandCollapseIcon from 'js/shared-styles/icons/ExpandCollapseIcon';
 
 const ClickableRow = styled(TableRow)`
   cursor: pointer;
@@ -26,10 +26,8 @@ const ExpandedCell = styled(TableCell)`
     props.$isExpanded ? ' 1px solid rgba(224, 224, 224, 1)' : 'none'}; // border color taken from MUI table cell
 `;
 
-const StyledExpandCollapseIconButton = styled(ExpandCollapseIconButton)`
-  span > svg {
-    font-size: 2rem;
-  }
+const StyledExpandCollapseIcon = styled(ExpandCollapseIcon)`
+  font-size: 2rem;
 `;
 
-export { ClickableRow, ExpandedRow, ExpandedCell, StyledExpandCollapseIconButton };
+export { ClickableRow, ExpandedRow, ExpandedCell, StyledExpandCollapseIcon };
