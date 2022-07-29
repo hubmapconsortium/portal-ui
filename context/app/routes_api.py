@@ -110,7 +110,7 @@ def _get_entities(entity_type, constraints={}, uuids=None):
         'created_by_user_email',
     ]
     if entity_type in ['samples', 'datasets']:
-        extra_fields += ['donor.hubmap_id']
+        extra_fields += ['donor.hubmap_id', 'origin_sample.mapped_organ']
     if entity_type in ['samples']:
         extra_fields += ['mapped_specimen_type']
     entities = client.get_entities(
