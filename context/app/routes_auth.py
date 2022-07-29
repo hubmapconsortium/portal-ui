@@ -1,5 +1,4 @@
 from urllib.parse import urlencode, unquote
-from webbrowser import get
 
 from flask import (
     make_response, current_app, url_for,
