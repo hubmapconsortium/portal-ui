@@ -75,7 +75,7 @@ function WorkspacesList() {
               Start Jupyter
             </button>
             {workspace.jobs.map((job) => (
-              <JobDetails job={job} />
+              <JobDetails job={job} key={job.id} />
             ))}
           </div>
         ))}

@@ -8,7 +8,7 @@ function JobDetails({ job }) {
   // I would destructure details...
   // except that in some cases connection_details has been missing.
   return (
-    <div key={job.id}>
+    <div>
       {details ? (
         <LightBlueLink href={`${details.url_domain}${details.url_path}`}>
           Jupyter ({status}, {datetime_created})
