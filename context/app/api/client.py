@@ -163,7 +163,7 @@ class ApiClient():
             # TODO: Entity structure will change in the future to be consistent
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
-            derived_entity['files'] = derived_entity['metadata']['files']
+            derived_entity['files'] = derived_entity['metadata'].get('files', [])
             vitessce_conf = self.get_vitessce_conf_cells_and_lifted_uuid(
                 derived_entity, marker=marker
             ).vitessce_conf

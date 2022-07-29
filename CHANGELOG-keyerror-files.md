@@ -1,0 +1,1 @@
+- Instead of failing in python, vitessce load now fails... which is a little better.
