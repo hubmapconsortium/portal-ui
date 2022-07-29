@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedByExpression';
+import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import QuerySelect from 'js/components/cells/QuerySelect';
 import CellsResults from 'js/components/cells/CellsResults';
 
@@ -17,8 +18,12 @@ function Cells() {
   return (
     <>
       <Typography variant="h2" component="h1" color="primary">
-        Cells
+        Datasets
       </Typography>
+      <SectionPaper>
+        Refine datasets to discover genomic and proteomic information including expression distribution and cluster
+        membership. To begin your search, select a query type and the relevant parameters.
+      </SectionPaper>
       <AccordionSteps
         steps={[
           {
