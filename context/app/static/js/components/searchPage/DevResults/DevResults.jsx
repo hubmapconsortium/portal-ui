@@ -23,6 +23,7 @@ function DevResults(props) {
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}
               sortOptions={sortOptions}
+              analyticsCategory="dev-search"
             />
           ),
           defaultOption: true,
