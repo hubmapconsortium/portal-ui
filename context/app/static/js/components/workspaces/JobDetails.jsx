@@ -16,10 +16,6 @@ function JobDetails({ job }) {
       ) : (
         'Jupyter not available'
       )}
-      <details>
-        <summary>JSON</summary>
-        <pre>{JSON.stringify(job, null, 2)}</pre>
-      </details>
     </div>
   );
 }

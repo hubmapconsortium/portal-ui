@@ -11,21 +11,48 @@ function useWorkspacesList() {
 
   useEffect(() => {
     async function getAndSetWorkspacesList() {
-      const response = await fetch(`${workspacesEndpoint}/workspaces`, {
+      const fetchOpts = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'UWS-Authorization': `Token ${workspacesToken}`,
         },
-      });
+      };
+      const [workspacesResponse, jobsResponse] = await Promise.all([
+        fetch(`${workspacesEndpoint}/workspaces`, fetchOpts),
+        fetch(`${workspacesEndpoint}/jobs`, fetchOpts),
+      ]);
 
-      if (!response.ok) {
-        console.error('Workspaces API failed', response);
+      if (!workspacesResponse.ok || !jobsResponse.ok) {
+        console.error('Workspaces API failed. Workspaces:', workspacesResponse, 'Jobs:', jobsResponse);
         return;
       }
-      const results = await response.json();
 
-      setWorkspacesList(results.data.workspaces);
+      // This is could be parallelized too...
+      // but since it's not network-bound, little benefit.
+      const workspaceResults = await workspacesResponse.json();
+      const jobsResults = await jobsResponse.json();
+
+      // console.log(workspaceResults, jobsResults);
+
+      const { workspaces } = workspaceResults.data;
+      const { jobs } = jobsResults.data;
+
+      const wsIdToJobs = {};
+      jobs.forEach((job) => {
+        const { workspace_id } = job;
+        if (!(workspace_id in wsIdToJobs)) {
+          wsIdToJobs[workspace_id] = [];
+        }
+        wsIdToJobs[workspace_id].push(job);
+      });
+
+      workspaces.forEach((workspace) => {
+        // eslint-disable-next-line no-param-reassign
+        workspace.jobs = wsIdToJobs?.[workspace.id] || [];
+      });
+
+      setWorkspacesList(workspaces);
       // TODO:
       // setIsLoading(false);
     }
@@ -35,36 +62,4 @@ function useWorkspacesList() {
   return { workspacesList };
 }
 
-function useJobsList() {
-  // TODO: Right now the API does not support querying, so we just need to get the whole list.
-  const [jobsList, setJobsList] = useState([]);
-
-  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
-
-  useEffect(() => {
-    async function getAndSetJobsList() {
-      const response = await fetch(`${workspacesEndpoint}/jobs`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'UWS-Authorization': `Token ${workspacesToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        console.error('Workspaces API failed', response);
-        return;
-      }
-      const results = await response.json();
-
-      setJobsList(results.data.jobs);
-      // TODO:
-      // setIsLoading(false);
-    }
-    getAndSetJobsList();
-  }, [workspacesEndpoint, workspacesToken]);
-
-  return { jobsList };
-}
-
-export { useWorkspacesList, useJobsList };
+export { useWorkspacesList };

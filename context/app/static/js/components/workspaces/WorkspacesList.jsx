@@ -7,14 +7,13 @@ import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 
 import { createNotebookWorkspace, startJob } from './utils';
-import { useWorkspacesList, useJobsList } from './hooks';
+import { useWorkspacesList } from './hooks';
 import { StyledButton } from './style';
 import JobDetails from './JobDetails';
 
 function WorkspacesList() {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
   const { workspacesList } = useWorkspacesList();
-  const { jobsList } = useJobsList();
 
   async function handleDelete() {
     // eslint-disable-next-line no-alert
@@ -69,25 +68,16 @@ function WorkspacesList() {
         {workspacesList.map((workspace) => (
           /* Inbound links have fragments like "#workspace-123" */
           <div key={workspace.id} id={`workspace-${workspace.id}`}>
-            <details>
-              <summary>JSON</summary>
-              <pre>{JSON.stringify(workspace, null, 2)}</pre>
-            </details>
             <div>
               <b>{workspace.name}</b> | Created {workspace.datetime_created.slice(0, 10)}
             </div>
             <button onClick={createHandleStart(workspace.id)} type="button">
               Start Jupyter
             </button>
+            {workspace.jobs.map((job) => (
+              <JobDetails job={job} />
+            ))}
           </div>
-        ))}
-      </Paper>
-      <SpacedSectionButtonRow leftText={<Typography variant="subtitle1">Jobs</Typography>} />
-      <Paper>
-        TODO: The current API responses give us no way to connect Workspaces to Jobs.
-        <a href="https://github.com/hubmapconsortium/user_workspaces_server/issues/53">Issue</a>
-        {jobsList.map((job) => (
-          <JobDetails job={job} />
         ))}
       </Paper>
     </>
