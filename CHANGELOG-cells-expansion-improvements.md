@@ -1,0 +1,1 @@
+- Enable users to click anywhere in dataset row to expand in cells UI.
