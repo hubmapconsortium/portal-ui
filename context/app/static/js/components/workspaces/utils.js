@@ -41,4 +41,22 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken }) {
   });
 }
 
-export { createNotebookWorkspace, startJob };
+function mergeJobsIntoWorkspaces(jobs, workspaces) {
+  const wsIdToJobs = {};
+  jobs.forEach((job) => {
+    const { workspace_id } = job;
+    if (!(workspace_id in wsIdToJobs)) {
+      wsIdToJobs[workspace_id] = [];
+    }
+    wsIdToJobs[workspace_id].push(job);
+  });
+
+  workspaces.forEach((workspace) => {
+    // eslint-disable-next-line no-param-reassign
+    workspace.jobs = wsIdToJobs?.[workspace.id] || [];
+  });
+
+  return workspaces;
+}
+
+export { createNotebookWorkspace, startJob, mergeJobsIntoWorkspaces };

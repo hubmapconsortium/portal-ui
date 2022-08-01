@@ -2,6 +2,8 @@ import { useContext, useState, useEffect } from 'react';
 
 import { AppContext } from 'js/components/Providers';
 
+import { mergeJobsIntoWorkspaces } from './utils';
+
 function useWorkspacesList() {
   const [workspacesList, setWorkspacesList] = useState([]);
   // TODO: isLoading:
@@ -33,24 +35,7 @@ function useWorkspacesList() {
       const workspaceResults = await workspacesResponse.json();
       const jobsResults = await jobsResponse.json();
 
-      // console.log(workspaceResults, jobsResults);
-
-      const { workspaces } = workspaceResults.data;
-      const { jobs } = jobsResults.data;
-
-      const wsIdToJobs = {};
-      jobs.forEach((job) => {
-        const { workspace_id } = job;
-        if (!(workspace_id in wsIdToJobs)) {
-          wsIdToJobs[workspace_id] = [];
-        }
-        wsIdToJobs[workspace_id].push(job);
-      });
-
-      workspaces.forEach((workspace) => {
-        // eslint-disable-next-line no-param-reassign
-        workspace.jobs = wsIdToJobs?.[workspace.id] || [];
-      });
+      const workspaces = mergeJobsIntoWorkspaces(jobsResults.data.jobs, workspaceResults.data.workspaces);
 
       setWorkspacesList(workspaces);
       // TODO:
