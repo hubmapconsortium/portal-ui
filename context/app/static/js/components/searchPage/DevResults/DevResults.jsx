@@ -8,7 +8,15 @@ import ResultsTable from '../ResultsTable';
 import ResultsCCF from '../ResultsCCF';
 
 function DevResults(props) {
-  const { sortOptions, hitsPerPage, tableResultFields, detailsUrlPrefix, idField, resultFieldIds } = props;
+  const {
+    sortOptions,
+    hitsPerPage,
+    tableResultFields,
+    detailsUrlPrefix,
+    idField,
+    resultFieldIds,
+    analyticsCategory,
+  } = props;
 
   return (
     <ViewSwitcherHits
@@ -23,6 +31,7 @@ function DevResults(props) {
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}
               sortOptions={sortOptions}
+              analyticsCategory={analyticsCategory}
             />
           ),
           defaultOption: true,
