@@ -4,14 +4,6 @@ import TableRow from '@material-ui/core/TableRow';
 
 import ExpandCollapseIcon from 'js/shared-styles/icons/ExpandCollapseIcon';
 
-const ClickableRow = styled(TableRow)`
-  cursor: pointer;
-  background-color: ${(props) => props.theme.palette.white.main};
-  &:hover {
-    filter: ${(props) => props.theme.palette.white.hover};
-  }
-`;
-
 const ExpandedRow = styled(TableRow)`
   ${(props) =>
     !props.$isExpanded &&
@@ -30,4 +22,4 @@ const StyledExpandCollapseIcon = styled(ExpandCollapseIcon)`
   font-size: 2rem;
 `;
 
-export { ClickableRow, ExpandedRow, ExpandedCell, StyledExpandCollapseIcon };
+export { ExpandedRow, ExpandedCell, StyledExpandCollapseIcon };

@@ -5,28 +5,27 @@ import { animated } from 'react-spring';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useExpandSpring } from 'js/hooks/useExpand';
+import ClickableRow from 'js/shared-styles/tables/ClickableRow';
 import { Provider, createStore, useStore } from './store';
-import { ClickableRow, ExpandedRow, ExpandedCell, StyledExpandCollapseIcon } from './style';
+import { ExpandedRow, ExpandedCell, StyledExpandCollapseIcon } from './style';
 
-function ExpandableRowChild({ children, numCells, expandedContent, disabled, disabledTooltipTitle }) {
+function ExpandableRowChild({ children, numCells, disabled, expandedContent, disabledTooltipTitle }) {
   const { isExpanded, toggleIsExpanded } = useStore();
   const heightRef = useRef(null);
   const styles = useExpandSpring(heightRef, 0, isExpanded);
 
   return (
     <>
-      <SecondaryBackgroundTooltip title={disabled ? disabledTooltipTitle : ''}>
-        <ClickableRow onClick={toggleIsExpanded}>
-          {children}
-          <ExpandableRowCell>
-            <StyledExpandCollapseIcon
-              isExpanded={isExpanded}
-              aria-label="expand row"
-              color={disabled ? 'disabled' : 'primary'}
-            />
-          </ExpandableRowCell>
-        </ClickableRow>
-      </SecondaryBackgroundTooltip>
+      <ClickableRow onClick={toggleIsExpanded} disabled={disabled} label="expand row">
+        {children}
+        <ExpandableRowCell>
+          <SecondaryBackgroundTooltip title={disabled ? disabledTooltipTitle : ''}>
+            <span>
+              <StyledExpandCollapseIcon isExpanded={isExpanded} color={disabled ? 'disabled' : 'primary'} />
+            </span>
+          </SecondaryBackgroundTooltip>
+        </ExpandableRowCell>
+      </ClickableRow>
       <ExpandedRow $isExpanded={isExpanded}>
         <ExpandedCell colSpan={numCells} $isExpanded={isExpanded}>
           <animated.div style={styles}>
