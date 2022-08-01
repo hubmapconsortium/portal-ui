@@ -38,6 +38,20 @@ def has_hubmap_group(groups_token):
     return any([group['id'] == current_app.config['GROUP_ID'] for group in groups])
 
 
+def get_ip():
+    # From https://stackoverflow.com/a/49760261
+    if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
+        return f"{request.environ['REMOTE_ADDR']} - direct"
+    else:
+        return f"{request.environ['HTTP_X_FORWARDED_FOR']} - proxied"
+
+
+def log(message):
+    # TODO: Remove logging when issue is understood / fixed.
+    # https://github.com/hubmapconsortium/portal-ui/issues/2518#issuecomment-1195627127
+    current_app.logger.info(f'routes_auth: {message} [IP: {get_ip()}]')
+
+
 @blueprint.route('/login')
 def login():
     '''
@@ -53,11 +67,13 @@ def login():
     redirect_uri = url_for('routes_auth.login', _external=True)
 
     client = load_app_client()
+    log('1/4: oauth2_start_flow')
     client.oauth2_start_flow(redirect_uri)
 
     # If there's no "code" query string parameter, we're in this route
     # starting a Globus Auth login flow; Redirect out to Globus Auth:
     if 'code' not in request.args:
+        log('2: oauth2_get_authorize_url')
         auth_uri = client.oauth2_get_authorize_url(
             query_params={
                 'scope': ' '.join([
@@ -68,11 +84,13 @@ def login():
                 ])
             }
         )
+        log('3: redirect auth_url')
         return redirect(auth_uri)
 
     # If we do have a "code" param, we're coming back from Globus Auth
     # and can start the process of exchanging an auth code for a token.
     code = request.args.get('code')
+    log('5: oauth2_exchange_code_for_tokens')
     tokens = client.oauth2_exchange_code_for_tokens(code)
     # The repr is deceptive: Looks like a dict, but direct access not possible.
 
@@ -103,12 +121,14 @@ def login():
         workspaces_token = ''  # None would serialize to "None" ... which is no longer false-y.
 
     user_info_request_headers = {'Authorization': 'Bearer ' + auth_token}
+    log('6: userinfo')
     user_info = requests.get('https://auth.globus.org/v2/oauth2/userinfo',
                              headers=user_info_request_headers).json()
     user_email = user_info['email'] if 'email' in user_info else ''
 
     if not has_hubmap_group(groups_token):
         # Globus institution login worked, but user does not have HuBMAP group!
+        log('7: 401')
         abort(401)
 
     session.update(
@@ -121,6 +141,7 @@ def login():
     previous_url = unquote(request.cookies.get('urlBeforeLogin'))
     response = make_response(
         redirect(previous_url))
+    log('7: redirect previous_url')
     return response
 
 
