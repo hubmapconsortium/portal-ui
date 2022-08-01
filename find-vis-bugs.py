@@ -51,7 +51,7 @@ def main():
             dataset_url = f'{portal_url}/browse/dataset/{uuid}'
             dataset_json_url = f'{dataset_url}.json'
             dataset = requests.get(dataset_json_url).json()
-            warn(f'{i}/{len(uuids)} ({len(errors)} errors): Checking {dataset_url}...')
+            warn(f'{i}/{len(uuids)} ({len(errors)} errors): Checking {dataset_url} ...')
             try:
                 client.get_vitessce_conf_cells_and_lifted_uuid(dataset, wrap_error=False)
             except Exception as e:
