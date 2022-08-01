@@ -48,13 +48,15 @@ def main():
         uuids = [dataset['uuid'] for dataset in datasets]
         errors = {}
         for (i, uuid) in enumerate(uuids):
-            dataset_url = f'{portal_url}/browse/dataset/{uuid}.json'
-            dataset = requests.get(dataset_url).json()
-            warn(f'{i}/{len(uuids)}: Checking {dataset["uuid"]}...')
+            dataset_url = f'{portal_url}/browse/dataset/{uuid}'
+            dataset_json_url = f'{dataset_url}.json'
+            dataset = requests.get(dataset_json_url).json()
+            warn(f'{i}/{len(uuids)} ({len(errors)} errors): Checking {dataset_url}...')
             try:
                 client.get_vitessce_conf_cells_and_lifted_uuid(dataset, wrap_error=False)
             except Exception as e:
-                errors[uuid] = e
+                warn(f'ERROR: {e}')
+                errors[dataset_url] = e
 
     if not errors:
         print('No errors')
