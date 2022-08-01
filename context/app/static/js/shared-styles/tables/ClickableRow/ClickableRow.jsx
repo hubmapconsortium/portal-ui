@@ -19,7 +19,6 @@ function ClickableRow({ onClick, disabled, children, label, ...rest }) {
 
 ClickableRow.propTypes = {
   onClick: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
   label: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
 };

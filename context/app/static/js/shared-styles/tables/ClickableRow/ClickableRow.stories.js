@@ -15,11 +15,14 @@ const Template = (args) => (
   </ClickableRow>
 );
 
+const sharedArgs = { label: 'onClick label', onClick: () => {} };
+
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = sharedArgs;
 
 export const Disabled = Template.bind({});
 
 Disabled.args = {
+  ...sharedArgs,
   disabled: true,
 };
