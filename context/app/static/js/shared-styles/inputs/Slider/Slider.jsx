@@ -4,12 +4,12 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { StyledFormLabel } from './style';
 
-function Slider({ id, label, helperText, ...rest }) {
+function Slider({ min, max, value, onChange, id, label, helperText, ...rest }) {
   return (
     <>
       <StyledFormLabel id={id}>{label}</StyledFormLabel>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      <MUISLider aria-labelledby={id} {...rest} />
+      <MUISLider min={min} max={max} value={value} onChange={onChange} aria-labelledby={id} {...rest} />
     </>
   );
 }
