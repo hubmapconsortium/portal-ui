@@ -1,48 +1,34 @@
-import React, { useRef } from 'react';
-import TableRow from '@material-ui/core/TableRow';
-
-import { animated } from 'react-spring';
+import React from 'react';
+import Collapse from '@material-ui/core/Collapse';
 
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
-import { useExpandSpring } from 'js/hooks/useExpand';
-import ExpandCollapseIconButton from 'js/shared-styles/buttons/ExpandCollapseIconButton';
-import DisabledButtonTooltip from 'js/shared-styles/tooltips/DisabledButtonTooltip';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import ClickableRow from 'js/shared-styles/tables/ClickableRow';
 import { Provider, createStore, useStore } from './store';
-import { ExpandedRow, ExpandedCell } from './style';
+import { ExpandedRow, ExpandedCell, StyledExpandCollapseIcon } from './style';
 
-function ExpandableRowChild({ children, numCells, expandedContent, disabled, buttonTooltipTitle }) {
+function ExpandableRowChild({ children, numCells, disabled, expandedContent, disabledTooltipTitle }) {
   const { isExpanded, toggleIsExpanded } = useStore();
-  const heightRef = useRef(null);
-  const styles = useExpandSpring(heightRef, 0, isExpanded);
-
-  const iconButtonProps = {
-    onClick: toggleIsExpanded,
-    isExpanded,
-    'aria-label': 'expand row',
-  };
 
   return (
     <>
-      <TableRow>
+      <ClickableRow onClick={toggleIsExpanded} disabled={disabled} label="expand row">
         {children}
         <ExpandableRowCell>
-          {disabled ? (
-            <DisabledButtonTooltip title={buttonTooltipTitle}>
-              <ExpandCollapseIconButton {...iconButtonProps} disabled />
-            </DisabledButtonTooltip>
-          ) : (
-            <ExpandCollapseIconButton {...iconButtonProps} />
-          )}
+          <SecondaryBackgroundTooltip title={disabled ? disabledTooltipTitle : ''}>
+            <span>
+              <StyledExpandCollapseIcon isExpanded={isExpanded} color={disabled ? 'disabled' : 'primary'} />
+            </span>
+          </SecondaryBackgroundTooltip>
         </ExpandableRowCell>
-      </TableRow>
+      </ClickableRow>
       <ExpandedRow $isExpanded={isExpanded}>
         <ExpandedCell colSpan={numCells} $isExpanded={isExpanded}>
-          <animated.div style={styles}>
+          <Collapse in={isExpanded} timeout="auto">
             {React.cloneElement(expandedContent, {
-              heightRef,
               isExpanded,
             })}
-          </animated.div>
+          </Collapse>
         </ExpandedCell>
       </ExpandedRow>
     </>

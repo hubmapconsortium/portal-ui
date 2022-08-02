@@ -1,0 +1,28 @@
+import React from 'react';
+import TableCell from '@material-ui/core/TableCell';
+import ClickableRow from './ClickableRow';
+
+export default {
+  title: 'Tables/ClickableRow',
+  component: ClickableRow,
+};
+
+const Template = (args) => (
+  <ClickableRow {...args}>
+    <TableCell>A</TableCell>
+    <TableCell>B</TableCell>
+    <TableCell>C</TableCell>
+  </ClickableRow>
+);
+
+const sharedArgs = { label: 'onClick label', onClick: () => {} };
+
+export const Default = Template.bind({});
+Default.args = sharedArgs;
+
+export const Disabled = Template.bind({});
+
+Disabled.args = {
+  ...sharedArgs,
+  disabled: true,
+};

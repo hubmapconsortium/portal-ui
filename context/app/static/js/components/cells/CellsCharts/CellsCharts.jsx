@@ -7,7 +7,7 @@ import ChartLoader from 'js/shared-styles/charts/ChartLoader/ChartLoader';
 import { useCellsChartsData } from './hooks';
 import { Flex, ChartWrapper, StyledTypography } from './style';
 
-function CellsCharts({ uuid, cellVariableName, minExpression, queryType, heightRef, isExpanded }) {
+function CellsCharts({ uuid, cellVariableName, minExpression, queryType, isExpanded }) {
   const { isLoading, diagnosticInfo, cellsData } = useCellsChartsData({
     uuid,
     cellVariableName,
@@ -19,7 +19,7 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType, heightR
   const clusterData = 'clusterData' in cellsData ? cellsData.clusterData : {};
 
   return (
-    <div ref={heightRef}>
+    <div>
       {(isLoading || Object.keys(cellsData).length > 0) && (
         <>
           <Flex>
