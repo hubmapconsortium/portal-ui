@@ -146,7 +146,7 @@ function DatasetsSelectedByExpression({
         valueLabelDisplay="auto"
         step={null} /* Constrains choices to the mark values. */
         marks={[0, 1, 2, 5, 10].map((m) => ({ value: m, label: m }))}
-        setter={(e, val) => setMinCellPercentage(val)}
+        onChange={(e, val) => setMinCellPercentage(val)}
         id="min-cell-percentage"
       />
       <br />
