@@ -9,7 +9,15 @@ function Slider({ min, max, value, onChange, id, label, helperText, ...rest }) {
     <>
       <StyledFormLabel id={id}>{label}</StyledFormLabel>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      <MUISLider min={min} max={max} value={value} onChange={onChange} aria-labelledby={id} {...rest} />
+      <MUISLider
+        min={min}
+        max={max}
+        value={value}
+        onChange={onChange}
+        aria-labelledby={id}
+        valueLabelDisplay="auto"
+        {...rest}
+      />
     </>
   );
 }
