@@ -139,6 +139,7 @@ function DatasetsSelectedByExpression({
       />
       <Slider
         label="Minimum cell percentage"
+        helperText="Set the minimum cell percentage for cells in the datasets to represent the minimum expression level."
         value={minCellPercentage}
         min={0}
         max={10}
