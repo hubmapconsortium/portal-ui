@@ -1,12 +1,13 @@
 import React from 'react';
 import MUISLider from '@material-ui/core/Slider';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+
+import { StyledFormLabel } from './style';
 
 function Slider({ id, label, helperText, ...rest }) {
   return (
     <>
-      <FormLabel id={id}>{label}</FormLabel>
+      <StyledFormLabel id={id}>{label}</StyledFormLabel>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
       <MUISLider aria-labelledby={id} {...rest} />
     </>
