@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 
 import Button from '@material-ui/core/Button';
-import Slider from '@material-ui/core/Slider';
 import FormLabel from '@material-ui/core/FormLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -10,6 +9,7 @@ import CellsService from 'js/components/cells/CellsService';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
 import { AppContext } from 'js/components/Providers';
 import { fetchSearchData } from 'js/hooks/useSearchData';
+import Slider from 'js/shared-styles/inputs/Slider';
 import { StyledDiv, StyledTextField } from './style';
 
 function getSearchQuery(cellsResults) {
@@ -40,24 +40,6 @@ function getSearchQuery(cellsResults) {
       'last_modified_timestamp',
     ],
   };
-}
-
-function SliderWrapper(props) {
-  const { value, min, max, marks, setter, labelledby } = props;
-  return (
-    <Slider
-      value={value}
-      min={min}
-      max={max}
-      valueLabelDisplay="auto"
-      step={null} /* Constrains choices to the mark values. */
-      marks={marks.map((m) => ({ value: m, label: m }))}
-      onChange={(e, val) => {
-        setter(val);
-      }}
-      aria-labelledby={labelledby}
-    />
-  );
 }
 
 function DatasetsSelectedByExpression({
@@ -155,14 +137,16 @@ function DatasetsSelectedByExpression({
         setter={setMinExpressionLog}
         labelledby="min-expression-label"
       />
-      <FormLabel id="min-cell-percentage-label">Minimum cell percentage</FormLabel>
-      <SliderWrapper
+      <Slider
+        label="Minimum cell percentage"
         value={minCellPercentage}
         min={0}
         max={10}
-        marks={[0, 1, 2, 5, 10]}
-        setter={setMinCellPercentage}
-        labelledby="min-cell-percentage-label"
+        valueLabelDisplay="auto"
+        step={null} /* Constrains choices to the mark values. */
+        marks={[0, 1, 2, 5, 10].map((m) => ({ value: m, label: m }))}
+        setter={(e, val) => setMinCellPercentage(val)}
+        id="min-cell-percentage"
       />
       <br />
       <Button onClick={handleSubmit} disabled={cellVariableNames.length === 0} variant="contained" color="primary">
