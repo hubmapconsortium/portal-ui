@@ -35,10 +35,10 @@ function ExpandableRowChild({ children, numCells, disabled, expandedContent, dis
   );
 }
 
-function ExpandableRow(props) {
+function ExpandableRow({ isExpandedToStart, ...rest }) {
   return (
-    <Provider createStore={createStore}>
-      <ExpandableRowChild {...props} />
+    <Provider createStore={() => createStore(isExpandedToStart)}>
+      <ExpandableRowChild {...rest} />
     </Provider>
   );
 }
