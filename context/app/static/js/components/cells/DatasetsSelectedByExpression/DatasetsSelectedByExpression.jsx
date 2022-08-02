@@ -142,8 +142,8 @@ function DatasetsSelectedByExpression({
           }}
           helperText="Query measurement refers to Gene Expression (RNA) or DNA Accessibility (ATAC)."
         >
-          <MenuItem value="rna">rna</MenuItem>
-          <MenuItem value="atac">atac</MenuItem>
+          <MenuItem value="rna">Gene Expression (RNA)</MenuItem>
+          <MenuItem value="atac">DNA Accessibility (ATAC)</MenuItem>
         </StyledTextField>
       )}
       <br />
