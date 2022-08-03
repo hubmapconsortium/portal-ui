@@ -27,21 +27,17 @@ function JobDetails({ jobs }) {
     return diplayJob;
   });
 
-  const firstActiveJob = displayJobs.find((job) => job.status === ACTIVE);
-  if (firstActiveJob) {
-    return <LightBlueLink href={getJobUrl(firstActiveJob)}>Status: {firstActiveJob.status}</LightBlueLink>;
-  }
+  const bestJob = [ACTIVE, ACTIVATING, INACTIVE]
+    .map((status) => displayJobs.find((job) => job.status === status))
+    .find((job) => job);
 
-  const firstActivatingJob = displayJobs.find((job) => job.status === ACTIVATING);
-  if (firstActivatingJob) {
-    return `Status: ${firstActivatingJob.status}`;
+  if (!bestJob) {
+    return null;
   }
-
-  const firstInactiveJob = displayJobs.find((job) => job.status === INACTIVE);
-  if (firstInactiveJob) {
-    return `Status: ${firstInactiveJob.status}`;
+  if (bestJob.status === ACTIVE) {
+    return <LightBlueLink href={getJobUrl(bestJob)}>Status: {ACTIVE}</LightBlueLink>;
   }
-  return '';
+  return `Status: ${bestJob.status}`;
 }
 
 export default JobDetails;
