@@ -10,7 +10,7 @@ import { PanelWrapper } from 'js/shared-styles/panels';
 
 import { createNotebookWorkspace, startJob } from './utils';
 import { useWorkspacesList } from './hooks';
-import { StyledButton } from './style';
+import { StyledButton, Left, Right } from './style';
 import JobDetails from './JobDetails';
 
 function WorkspacesList() {
@@ -72,10 +72,10 @@ function WorkspacesList() {
         ) : (
           workspacesList.map((workspace) => (
             /* TODO: Inbound links have fragments like "#workspace-123": Highlight? */
-            <PanelWrapper>
-              <div key={workspace.id} id={`workspace-${workspace.id}`}>
+            <PanelWrapper key={workspace.id}>
+              <Left>
                 <div>
-                  <b>{workspace.name}</b> | Created {workspace.datetime_created.slice(0, 10)}
+                  <b>{workspace.name}</b>
                 </div>
                 <button onClick={createHandleStart(workspace.id)} type="button">
                   Start Jupyter
@@ -83,7 +83,8 @@ function WorkspacesList() {
                 {workspace.jobs.map((job) => (
                   <JobDetails job={job} key={job.id} />
                 ))}
-              </div>
+              </Left>
+              <Right>Created {workspace.datetime_created.slice(0, 10)}</Right>
             </PanelWrapper>
           ))
         )}
