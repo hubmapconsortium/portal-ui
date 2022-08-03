@@ -2,6 +2,15 @@ import React from 'react';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 
+function mapStatus(status) {
+  return (
+    {
+      pending: 'Activating',
+      running: 'Active',
+    }[status] || 'Inactive'
+  );
+}
+
 function JobDetails({ job }) {
   const { status, datetime_created } = job;
   const details = job.job_details.current_job_details.connection_details;
@@ -11,7 +20,7 @@ function JobDetails({ job }) {
     <div>
       {details ? (
         <LightBlueLink href={`${details.url_domain}${details.url_path}`}>
-          Jupyter ({status}, {datetime_created})
+          Jupyter ({mapStatus(status)}, {datetime_created})
         </LightBlueLink>
       ) : (
         'Jupyter not available'
