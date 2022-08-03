@@ -80,9 +80,7 @@ function WorkspacesList() {
                 <button onClick={createHandleStart(workspace.id)} type="button">
                   Start Jupyter
                 </button>
-                {workspace.jobs.map((job) => (
-                  <JobDetails job={job} key={job.id} />
-                ))}
+                <JobDetails jobs={workspace.jobs} />
               </div>
               <div>Created {workspace.datetime_created.slice(0, 10)}</div>
             </PanelWrapper>
