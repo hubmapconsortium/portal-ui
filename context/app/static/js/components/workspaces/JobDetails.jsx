@@ -12,16 +12,14 @@ function mapStatus(status) {
 }
 
 function JobDetails({ job }) {
-  const { status, datetime_created } = job;
+  const { status } = job;
   const details = job.job_details.current_job_details.connection_details;
   // I would destructure details...
   // except that in some cases connection_details has been missing.
   return (
     <div>
       {details ? (
-        <LightBlueLink href={`${details.url_domain}${details.url_path}`}>
-          Jupyter ({mapStatus(status)}, {datetime_created})
-        </LightBlueLink>
+        <LightBlueLink href={`${details.url_domain}${details.url_path}`}>Jupyter ({mapStatus(status)})</LightBlueLink>
       ) : (
         'Jupyter not available'
       )}
