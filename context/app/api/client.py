@@ -148,7 +148,7 @@ class ApiClient():
             body_json=query)
         return files_from_response(response_json)
 
-    def get_vitessce_conf_cells_and_lifted_uuid(self, entity, marker=None):
+    def get_vitessce_conf_cells_and_lifted_uuid(self, entity, marker=None, wrap_error=True):
         '''
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
@@ -165,7 +165,7 @@ class ApiClient():
             # there will be a period of backward compatibility to allow us to migrate.
             derived_entity['files'] = derived_entity['metadata'].get('files', [])
             vitessce_conf = self.get_vitessce_conf_cells_and_lifted_uuid(
-                derived_entity, marker=marker
+                derived_entity, marker=marker, wrap_error=wrap_error
             ).vitessce_conf
             vis_lifted_uuid = derived_entity['uuid']
 
@@ -181,7 +181,9 @@ class ApiClient():
                 Builder = get_view_config_builder(entity=entity, get_assay=get_assay)
                 builder = Builder(entity, self.groups_token, current_app.config["ASSETS_ENDPOINT"])
                 vitessce_conf = builder.get_conf_cells(marker_gene=marker)
-            except Exception:
+            except Exception as e:
+                if not wrap_error:
+                    raise e
                 current_app.logger.error(
                     f'Building vitessce conf threw error: {traceback.format_exc()}')
                 vitessce_conf = ConfCells({
