@@ -27,16 +27,17 @@ function JobDetails({ jobs }) {
     return diplayJob;
   });
 
-  const firstActiveJob = displayJobs.filter((job) => job.status === ACTIVE)[0];
-  const firstActivatingJob = displayJobs.filter((job) => job.status === ACTIVATING)[0];
-  const firstInactiveJob = displayJobs.filter((job) => job.status === INACTIVE)[0];
-
+  const firstActiveJob = displayJobs.find((job) => job.status === ACTIVE);
   if (firstActiveJob) {
     return <LightBlueLink href={getJobUrl(firstActiveJob)}>Status: {firstActiveJob.status}</LightBlueLink>;
   }
+
+  const firstActivatingJob = displayJobs.find((job) => job.status === ACTIVATING);
   if (firstActivatingJob) {
     return `Status: ${firstActivatingJob.status}`;
   }
+
+  const firstInactiveJob = displayJobs.find((job) => job.status === INACTIVE);
   if (firstInactiveJob) {
     return `Status: ${firstInactiveJob.status}`;
   }
