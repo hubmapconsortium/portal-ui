@@ -1,10 +1,9 @@
 import React, { useState, useContext } from 'react';
 
 import Button from '@material-ui/core/Button';
-import FormLabel from '@material-ui/core/FormLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import LogSliderWrapper from 'js/components/cells/LogSliderWrapper';
+import LogSlider from 'js/shared-styles/inputs/LogSlider';
 import CellsService from 'js/components/cells/CellsService';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
 import { AppContext } from 'js/components/Providers';
@@ -129,13 +128,14 @@ function DatasetsSelectedByExpression({
         </StyledTextField>
       )}
       <br />
-      <FormLabel id="min-expression-label">{`Minimum ${queryType} expression`}</FormLabel>
-      <LogSliderWrapper
+      <LogSlider
+        label="Minimum Expression Level"
+        helperText="Set the minimum gene expression level to refine your dataset selections."
         value={minExpressionLog}
         minLog={-4}
         maxLog={5}
-        setter={setMinExpressionLog}
-        labelledby="min-expression-label"
+        onChange={(e, val) => setMinExpressionLog(val)}
+        id="min-expression"
       />
       <Slider
         label="Minimum Cell Percentage (%)"
@@ -143,7 +143,6 @@ function DatasetsSelectedByExpression({
         value={minCellPercentage}
         min={0}
         max={10}
-        step={null} /* Constrains choices to the mark values. */
         marks={[0, 1, 2, 5, 10].map((m) => ({ value: m, label: m }))}
         onChange={(e, val) => setMinCellPercentage(val)}
         id="min-cell-percentage"
