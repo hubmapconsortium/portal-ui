@@ -96,4 +96,4 @@ Panel.defaultProps = {
   entityCounts: {},
 };
 
-export { Panel, PanelScrollBox };
+export { Panel, PanelScrollBox, PanelWrapper };

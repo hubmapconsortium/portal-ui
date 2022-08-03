@@ -2,9 +2,11 @@ import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
+import Description from 'js/shared-styles/sections/Description';
 import { AppContext } from 'js/components/Providers';
 import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
+import { PanelWrapper } from 'js/shared-styles/panels';
 
 import { createNotebookWorkspace, startJob } from './utils';
 import { useWorkspacesList } from './hooks';
@@ -65,20 +67,26 @@ function WorkspacesList() {
         }
       />
       <Paper>
-        {workspacesList.map((workspace) => (
-          /* Inbound links have fragments like "#workspace-123" */
-          <div key={workspace.id} id={`workspace-${workspace.id}`}>
-            <div>
-              <b>{workspace.name}</b> | Created {workspace.datetime_created.slice(0, 10)}
-            </div>
-            <button onClick={createHandleStart(workspace.id)} type="button">
-              Start Jupyter
-            </button>
-            {workspace.jobs.map((job) => (
-              <JobDetails job={job} key={job.id} />
-            ))}
-          </div>
-        ))}
+        {Object.keys(workspacesList).length === 0 ? (
+          <Description padding="20px">No workspaces created yet.</Description>
+        ) : (
+          workspacesList.map((workspace) => (
+            /* TODO: Inbound links have fragments like "#workspace-123": Highlight? */
+            <PanelWrapper>
+              <div key={workspace.id} id={`workspace-${workspace.id}`}>
+                <div>
+                  <b>{workspace.name}</b> | Created {workspace.datetime_created.slice(0, 10)}
+                </div>
+                <button onClick={createHandleStart(workspace.id)} type="button">
+                  Start Jupyter
+                </button>
+                {workspace.jobs.map((job) => (
+                  <JobDetails job={job} key={job.id} />
+                ))}
+              </div>
+            </PanelWrapper>
+          ))
+        )}
       </Paper>
     </>
   );

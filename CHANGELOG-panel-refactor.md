@@ -1,0 +1,1 @@
+- Refactor panel libraries for reuse.
