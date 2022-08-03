@@ -10,7 +10,7 @@ import { PanelWrapper } from 'js/shared-styles/panels';
 
 import { createNotebookWorkspace, startJob } from './utils';
 import { useWorkspacesList } from './hooks';
-import { StyledButton, Left, Right } from './style';
+import { StyledButton } from './style';
 import JobDetails from './JobDetails';
 
 function WorkspacesList() {
@@ -73,7 +73,7 @@ function WorkspacesList() {
           workspacesList.map((workspace) => (
             /* TODO: Inbound links have fragments like "#workspace-123": Highlight? */
             <PanelWrapper key={workspace.id}>
-              <Left>
+              <div>
                 <div>
                   <b>{workspace.name}</b>
                 </div>
@@ -83,8 +83,8 @@ function WorkspacesList() {
                 {workspace.jobs.map((job) => (
                   <JobDetails job={job} key={job.id} />
                 ))}
-              </Left>
-              <Right>Created {workspace.datetime_created.slice(0, 10)}</Right>
+              </div>
+              <div>Created {workspace.datetime_created.slice(0, 10)}</div>
             </PanelWrapper>
           ))
         )}

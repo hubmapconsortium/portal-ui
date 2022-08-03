@@ -8,11 +8,4 @@ const StyledButton = styled(WhiteBackgroundIconButton)`
   height: 36px;
 `;
 
-const Left = styled.div`
-  flex-shrink: 0;
-`;
-const Right = styled.div`
-  flex-shrink: 0;
-`;
-
-export { StyledButton, Left, Right };
+export { StyledButton };
