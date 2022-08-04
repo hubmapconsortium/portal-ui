@@ -41,7 +41,7 @@ test('it should pick one active job if available', () => {
     },
   ];
   const job = condenseJobs(jobs);
-  expect(job).toEqual({ status: 'Active', url: 'http://example.com/this' });
+  expect(job).toEqual({ allowNew: false, status: 'Active', url: 'http://example.com/this' });
 });
 
 test('it should pick an activating job if no active jobs are available', () => {
@@ -54,7 +54,7 @@ test('it should pick an activating job if no active jobs are available', () => {
     },
   ];
   const job = condenseJobs(jobs);
-  expect(job).toEqual({ status: 'Activating' });
+  expect(job).toEqual({ allowNew: false, status: 'Activating' });
 });
 
 test('it should map unknown status codes', () => {
@@ -64,11 +64,11 @@ test('it should map unknown status codes', () => {
     },
   ];
   const job = condenseJobs(jobs);
-  expect(job).toEqual({ status: 'Inactive' });
+  expect(job).toEqual({ allowNew: true, status: 'Inactive' });
 });
 
 test('it should return null for an empty list', () => {
   const jobs = [];
   const job = condenseJobs(jobs);
-  expect(job).toEqual(null);
+  expect(job).toEqual({ allowNew: true, status: undefined });
 });

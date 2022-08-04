@@ -1,0 +1,1 @@
+- Only offer to start jupyter is there is nothing active or pending.

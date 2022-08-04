@@ -78,23 +78,24 @@ function condenseJobs(jobs) {
     return `${url_domain}${url_path}`;
   }
 
-  const displayJobs = jobs.map((job) => {
-    const diplayJob = { ...job };
-    diplayJob.status = getDisplayStatus(job.status);
-    return diplayJob;
-  });
+  const displayStatusJobs = jobs.map((job) => ({ ...job, status: getDisplayStatus(job.status) }));
 
   const bestJob = [ACTIVE, ACTIVATING, INACTIVE]
-    .map((status) => displayJobs.find((job) => job.status === status))
+    .map((status) => displayStatusJobs.find((job) => job.status === status))
     .find((job) => job);
 
-  if (!bestJob) {
-    return null;
+  const status = bestJob?.status;
+  switch (status) {
+    case ACTIVE:
+      return { status, allowNew: false, url: getJobUrl(bestJob) };
+    case ACTIVATING:
+      return { status, allowNew: false };
+    case INACTIVE:
+      return { status, allowNew: true };
+    default:
+      // No jobs of any status.
+      return { status, allowNew: true };
   }
-  if (bestJob.status === ACTIVE) {
-    return { status: ACTIVE, url: getJobUrl(bestJob) };
-  }
-  return { status: bestJob.status };
 }
 
 export { createNotebookWorkspace, startJob, mergeJobsIntoWorkspaces, condenseJobs };
