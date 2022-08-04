@@ -8,7 +8,11 @@ import UserLinks from './UserLinks';
 test('should be "User Profile" when not authenticated', () => {
   render(<UserLinks isAuthenticated={false} />);
   expect(screen.getByText('User Profile')).toBeInTheDocument();
-  // expect(screen.getByRole('link')).toHaveAttribute('href', '/login');
+  userEvent.click(screen.getByText('User Profile'));
+  // In drop-down:
+  expect(screen.getByText('My Lists')).toBeInTheDocument();
+  expect(screen.getByText('Log In')).toBeInTheDocument();
+  expect(screen.queryByText('Log Out')).toBeNull();
 });
 
 test('should be logout button when authenticated', () => {
@@ -16,7 +20,9 @@ test('should be logout button when authenticated', () => {
   expect(screen.getByText('fake@fake.fake')).toBeInTheDocument();
   userEvent.click(screen.getByText('fake@fake.fake'));
   // In drop-down:
-  expect(screen.getByText('Log Out')).toHaveAttribute('href', '/logout');
+  expect(screen.getByText('My Lists')).toBeInTheDocument();
+  expect(screen.getByText('Log Out')).toBeInTheDocument();
+  expect(screen.queryByText('Log In')).toBeNull();
 });
 
 test('should display User when userEmail is empty', () => {
