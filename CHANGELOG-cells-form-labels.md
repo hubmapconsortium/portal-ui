@@ -1,0 +1,1 @@
+- Update query form labels and helper text in cells UI.
