@@ -99,7 +99,7 @@ Optional:
 
 After checking out the project, cd-ing into it, and setting up a Python 3.9 virtual environment,
 - Get `app.conf` from another developer and place it at `context/instance/app.conf`.
-- Run `./dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
+- Run `scripts/dev/dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
 
 You will see an warning about `Cannot find source file '../src/index.ts'`, but just ignore it; [Issue filed](https://github.com/hubmapconsortium/portal-ui/issues/1489).
 
@@ -157,7 +157,7 @@ npm run lint:fix
 ```
 
 ### Storybook
-To start storybook locally you can either run `./dev-start.sh`, or just `npm run storybook`,
+To start storybook locally you can either run `scripts/dev/dev-start.sh`, or just `npm run storybook`,
 and after it has started, visit [localhost:6006](http://localhost:6006).
 
 ## Build, tag, and deploy
@@ -179,7 +179,7 @@ Then, to redeploy `dev`, `test`, and `stage`:
 
 After QA, IEC is responsible for deploying to production. We notify them in the `#portal-deployment` Slack channel.
 
-The portal container cloudwatch logs should be checked for errors and exceptions after each release by running `query-portal-logs.py`.
+The portal container cloudwatch logs should be checked for errors and exceptions after each release by running `etc/query-portal-logs.py`.
 
 ### Maintenace page
 

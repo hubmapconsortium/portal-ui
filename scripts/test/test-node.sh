@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit
 
-. tests/utils.sh
+. scripts/test/utils.sh
 
 cd context
 
