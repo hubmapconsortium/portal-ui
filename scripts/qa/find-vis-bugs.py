@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
 import sys
 import argparse
 import requests
@@ -9,8 +10,8 @@ from time import perf_counter
 
 from flask import Flask
 
-from os import getcwd
-sys.path.append(getcwd())
+# Run from anywhere:
+sys.path.append(str(Path(__file__).parent.parent.parent))
 from context.app.api.client import ApiClient
 
 
