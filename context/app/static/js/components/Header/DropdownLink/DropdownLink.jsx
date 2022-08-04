@@ -16,7 +16,6 @@ function DropdownLink(props) {
 
 DropdownLink.propTypes = {
   isIndented: PropTypes.bool,
-  children: PropTypes.string.isRequired,
 };
 
 DropdownLink.defaultProps = {
