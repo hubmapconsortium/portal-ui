@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 
-import LogSlider from './LogSlider';
+import { Slider } from 'js/shared-styles/inputs/Slider/Slider.stories';
+import LogSliderComponent from './LogSlider';
 
 export default {
   title: 'inputs/LogSlider',
-  component: LogSlider,
+  component: LogSliderComponent,
 };
 
-export const LogSliderStory = (args) => {
+export const LogSlider = (args) => {
   const [logValue, setLogValue] = useState(1);
-  return <LogSlider value={logValue} setter={setLogValue} {...args} />;
+  return <LogSliderComponent value={logValue} onChange={(e, val) => setLogValue(val)} {...args} />;
 };
-LogSliderStory.args = {
+LogSlider.args = {
+  ...Slider.args,
   minLog: -1,
-  maxLog: 3,
+  maxLog: 10,
 };
-LogSliderStory.storyName = 'LogSlider'; // needed for single story hoisting for multi word component names
+LogSlider.storyName = 'LogSlider'; // needed for single story hoisting for multi word component names
