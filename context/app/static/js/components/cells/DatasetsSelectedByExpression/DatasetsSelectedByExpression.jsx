@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
 
 import LogSlider from 'js/shared-styles/inputs/LogSlider';
 import CellsService from 'js/components/cells/CellsService';
@@ -127,32 +128,35 @@ function DatasetsSelectedByExpression({
           <MenuItem value="atac">DNA Accessibility (ATAC)</MenuItem>
         </StyledTextField>
       )}
-      <br />
-      <LogSlider
-        label="Minimum Expression Level"
-        helperText="Set the minimum gene expression level to refine your dataset selections."
-        value={minExpressionLog}
-        minLog={-4}
-        maxLog={5}
-        onChange={(e, val) => setMinExpressionLog(val)}
-        id="min-expression"
-      />
-      <Slider
-        label="Minimum Cell Percentage (%)"
-        helperText="Set the minimum cell percentage for cells in the datasets to represent the minimum expression level."
-        value={minCellPercentage}
-        min={0}
-        max={10}
-        marks={[0, 1, 2, 5, 10].map((m) => ({ value: m, label: m }))}
-        onChange={(e, val) => setMinCellPercentage(val)}
-        id="min-cell-percentage"
-      />
-      <br />
-      <Button onClick={handleSubmit} disabled={cellVariableNames.length === 0} variant="contained" color="primary">
-        Run Query
-      </Button>
-      <br />
-      {message}
+      <div>
+        <LogSlider
+          label="Minimum Expression Level"
+          helperText="Set the minimum gene expression level to refine your dataset selections."
+          value={minExpressionLog}
+          minLog={-4}
+          maxLog={5}
+          onChange={(e, val) => setMinExpressionLog(val)}
+          id="min-expression"
+        />
+      </div>
+      <div>
+        <Slider
+          label="Minimum Cell Percentage (%)"
+          helperText="Set the minimum cell percentage for cells in the datasets to represent the minimum expression level."
+          value={minCellPercentage}
+          min={0}
+          max={10}
+          marks={[0, 1, 2, 5, 10].map((m) => ({ value: m, label: m }))}
+          onChange={(e, val) => setMinCellPercentage(val)}
+          id="min-cell-percentage"
+        />
+      </div>
+      <div>
+        <Button onClick={handleSubmit} disabled={cellVariableNames.length === 0} variant="contained" color="primary">
+          Run Query
+        </Button>
+      </div>
+      <Typography>{message}</Typography>
     </StyledDiv>
   );
 }
