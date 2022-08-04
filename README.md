@@ -110,7 +110,7 @@ Note: Searchkit, our interface to Elasticsearch, has changed significantly in th
 
 ### Changelog files
 Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
-These are concatenated by `push.sh`.
+These are concatenated by `scripts/build/push.sh`.
 
 ### File and directory structure conventions
 
@@ -166,7 +166,7 @@ We release a new image each Wednesday, and following QA these are deployed to pr
 To build a new image for [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
 and tag a release on github, just run:
 ```
-./push.sh
+scripts/build/push.sh
 ```
 
 Then, to redeploy `dev`, `test`, and `stage`:
