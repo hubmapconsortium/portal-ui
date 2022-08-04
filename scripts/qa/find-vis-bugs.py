@@ -12,7 +12,7 @@ from flask import Flask
 
 # Run from anywhere:
 sys.path.append(str(Path(__file__).parent.parent.parent))
-from context.app.api.client import ApiClient
+from context.app.api.client import ApiClient  # noqa: E402
 
 
 client = ApiClient()
