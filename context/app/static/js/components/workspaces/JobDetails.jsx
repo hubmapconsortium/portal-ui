@@ -1,11 +1,35 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
+import { AppContext } from 'js/components/Providers';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import { condenseJobs } from './utils';
+import { condenseJobs, startJob } from './utils';
 
-function JobDetails({ jobs }) {
+function JobDetails({ workspace, jobs }) {
+  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
+
+  function createHandleStart(workspaceId) {
+    async function handleStart() {
+      startJob({ workspaceId, workspacesEndpoint, workspacesToken });
+    }
+    return handleStart;
+  }
+
   const job = condenseJobs(jobs);
 
+  return (
+    <div>
+      <div>
+        <b>{workspace.name}</b>
+      </div>
+      <button onClick={createHandleStart(workspace.id)} type="button">
+        Start Jupyter
+      </button>
+      <JobDetailsDetails job={job} />
+    </div>
+  );
+}
+
+function JobDetailsDetails({ job }) {
   if (!job) {
     return null;
   }
