@@ -215,7 +215,7 @@ The script will generate two files, report.html and stats.html, inside the publi
 
 To build and run the docker image locally:
 ```sh
-./docker.sh 5001 --follow
+scripts/dev/docker.sh 5001 --follow
 ```
 Our base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
 

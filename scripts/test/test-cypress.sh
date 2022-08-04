@@ -22,7 +22,7 @@ case $1 in
 
   portal)
     CYPRESS_ARGS='--spec ./cypress/integration/portal/*.spec.js'
-    ./docker.sh 5001  # Needs to match port in cypress.json.
+    scripts/dev/docker.sh 5001  # Needs to match port in cypress.json.
     server_up 5001  # Without this, Cypress gets an undefined content-type and immediately fails.
     ;;
 
