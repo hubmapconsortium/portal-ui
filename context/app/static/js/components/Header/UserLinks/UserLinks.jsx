@@ -6,7 +6,7 @@ import DropdownLink from '../DropdownLink';
 import { StyledDivider } from '../HeaderContent/style';
 import { TruncatedSpan } from './style';
 
-function LoginMenu(props) {
+function UserLinks(props) {
   const { isAuthenticated, userEmail } = props;
 
   const displayName = userEmail || 'User';
@@ -26,8 +26,8 @@ function LoginMenu(props) {
   );
 }
 
-LoginMenu.propTypes = {
+UserLinks.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
 };
 
-export default LoginMenu;
+export default UserLinks;
