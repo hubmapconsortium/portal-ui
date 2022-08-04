@@ -1,3 +1,18 @@
+## v0.50.0 - 2022-08-04
+
+- Add organ to the downloadable TSVs.
+- Enable users to click anywhere in dataset row to expand in cells UI.
+- Show an alert when no results are returned in Cells UI.
+- Add a description at the top of the cells-ui.
+- Add script to find vis bugs before users hit them.
+- Expand first entry in query results on load in cells UI.
+- Fix column sort on dev-search.
+- Associate each Job with the Workspace it belongs to.
+- Instead of failing in python, vitessce load now fails... which is a little better.
+- Log more details of the auth process.
+- Simplify the homepage description component.
+
+
 ## v0.49.0 - 2022-07-25
 
 - Add more fields to the downloadable TSV.

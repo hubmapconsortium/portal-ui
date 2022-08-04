@@ -1,1 +1,0 @@
-- Show an alert when no results are returned in Cells UI.

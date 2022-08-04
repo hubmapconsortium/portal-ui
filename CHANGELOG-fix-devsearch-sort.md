@@ -1,1 +1,0 @@
-- Fix column sort on dev-search.

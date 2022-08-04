@@ -1,1 +1,0 @@
-- Add script to find vis bugs before users hit them.

@@ -1,1 +1,0 @@
-- Simplify the homepage description component.
