@@ -9,7 +9,7 @@ import CellsService from 'js/components/cells/CellsService';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
 import { AppContext } from 'js/components/Providers';
 import { fetchSearchData } from 'js/hooks/useSearchData';
-import Slider from 'js/shared-styles/inputs/Slider';
+import MarkedSlider from 'js/shared-styles/inputs/MarkedSlider';
 import { StyledDiv, StyledTextField } from './style';
 
 function getSearchQuery(cellsResults) {
@@ -140,7 +140,7 @@ function DatasetsSelectedByExpression({
         />
       </div>
       <div>
-        <Slider
+        <MarkedSlider
           label="Minimum Cell Percentage (%)"
           helperText="Set the minimum cell percentage for cells in the datasets to represent the minimum expression level."
           value={minCellPercentage}
