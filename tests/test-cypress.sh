@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit
 
-. utils.sh
+. tests/utils.sh
 
 copy_conf
 
