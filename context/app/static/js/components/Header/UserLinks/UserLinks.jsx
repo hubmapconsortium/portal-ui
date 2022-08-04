@@ -11,18 +11,23 @@ function UserLinks(props) {
 
   const displayName = userEmail || 'User';
 
-  return isAuthenticated ? (
-    <Dropdown title={<TruncatedSpan>{displayName}</TruncatedSpan>}>
+  const unconditionalLinks = (
+    <>
       <DropdownLink href="/my-lists">My Lists</DropdownLink>
       <StyledDivider />
+    </>
+  );
+
+  return isAuthenticated ? (
+    <Dropdown title={<TruncatedSpan>{displayName}</TruncatedSpan>}>
+      {unconditionalLinks}
       <DropdownLink href="/logout">
         <WarningSpan>Log Out</WarningSpan>
       </DropdownLink>
     </Dropdown>
   ) : (
     <Dropdown title="User Profile">
-      <DropdownLink href="/my-lists">My Lists</DropdownLink>
-      <StyledDivider />
+      {unconditionalLinks}
       <DropdownLink href="/login">Log In</DropdownLink>
     </Dropdown>
   );
