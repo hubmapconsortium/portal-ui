@@ -59,4 +59,43 @@ function mergeJobsIntoWorkspaces(jobs, workspaces) {
   return workspaces;
 }
 
-export { createNotebookWorkspace, startJob, mergeJobsIntoWorkspaces };
+function condenseJobs(jobs) {
+  const ACTIVE = 'Active';
+  const ACTIVATING = 'Activating';
+  const INACTIVE = 'Inactive';
+
+  function getDisplayStatus(status) {
+    return (
+      {
+        pending: ACTIVATING,
+        running: ACTIVE,
+      }[status] || INACTIVE
+    );
+  }
+
+  function getJobUrl(job) {
+    const { url_domain, url_path } = job.job_details.current_job_details.connection_details;
+    return `${url_domain}${url_path}`;
+  }
+
+  const displayStatusJobs = jobs.map((job) => ({ ...job, status: getDisplayStatus(job.status) }));
+
+  const bestJob = [ACTIVE, ACTIVATING, INACTIVE]
+    .map((status) => displayStatusJobs.find((job) => job.status === status))
+    .find((job) => job);
+
+  const status = bestJob?.status;
+  switch (status) {
+    case ACTIVE:
+      return { status, allowNew: false, url: getJobUrl(bestJob) };
+    case ACTIVATING:
+      return { status, allowNew: false };
+    case INACTIVE:
+      return { status, allowNew: true };
+    default:
+      // No jobs of any status.
+      return { status, allowNew: true };
+  }
+}
+
+export { createNotebookWorkspace, startJob, mergeJobsIntoWorkspaces, condenseJobs };

@@ -8,7 +8,7 @@ import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { PanelWrapper } from 'js/shared-styles/panels';
 
-import { createNotebookWorkspace, startJob } from './utils';
+import { createNotebookWorkspace } from './utils';
 import { useWorkspacesList } from './hooks';
 import { StyledButton } from './style';
 import JobDetails from './JobDetails';
@@ -40,13 +40,6 @@ function WorkspacesList() {
     // TODO: Update list on page
   }
 
-  function createHandleStart(workspaceId) {
-    async function handleStart() {
-      startJob({ workspaceId, workspacesEndpoint, workspacesToken });
-    }
-    return handleStart;
-  }
-
   return (
     <>
       <SpacedSectionButtonRow
@@ -73,17 +66,7 @@ function WorkspacesList() {
           workspacesList.map((workspace) => (
             /* TODO: Inbound links have fragments like "#workspace-123": Highlight? */
             <PanelWrapper key={workspace.id}>
-              <div>
-                <div>
-                  <b>{workspace.name}</b>
-                </div>
-                <button onClick={createHandleStart(workspace.id)} type="button">
-                  Start Jupyter
-                </button>
-                {workspace.jobs.map((job) => (
-                  <JobDetails job={job} key={job.id} />
-                ))}
-              </div>
+              <JobDetails workspace={workspace} jobs={workspace.jobs} />
               <div>Created {workspace.datetime_created.slice(0, 10)}</div>
             </PanelWrapper>
           ))
