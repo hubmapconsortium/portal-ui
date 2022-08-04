@@ -172,14 +172,14 @@ scripts/build/push.sh
 Then, to redeploy `dev`, `test`, and `stage`:
 ```
 # PSC will need a ssh public key for USERNAME.
-./redeploy.sh $USERNAME dev
-./redeploy.sh $USERNAME test
-./redeploy.sh $USERNAME stage
+scripts/build/redeploy.sh $USERNAME dev
+scripts/build/redeploy.sh $USERNAME test
+scripts/build/redeploy.sh $USERNAME stage
 ```
 
 After QA, IEC is responsible for deploying to production. We notify them in the `#portal-deployment` Slack channel.
 
-The portal container cloudwatch logs should be checked for errors and exceptions after each release by running `etc/query-portal-logs.py`.
+The portal container cloudwatch logs should be checked for errors and exceptions after each release by running `scripts/qa/query-portal-logs.py`.
 
 ### Maintenace page
 
