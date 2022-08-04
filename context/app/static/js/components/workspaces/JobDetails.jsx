@@ -1,23 +1,44 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
+import { AppContext } from 'js/components/Providers';
 import { LightBlueLink } from 'js/shared-styles/Links';
+import { condenseJobs, startJob } from './utils';
 
-function JobDetails({ job }) {
-  const { status, datetime_created } = job;
-  const details = job.job_details.current_job_details.connection_details;
-  // I would destructure details...
-  // except that in some cases connection_details has been missing.
+function JobDetails({ workspace, jobs }) {
+  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
+
+  function createHandleStart(workspaceId) {
+    async function handleStart() {
+      startJob({ workspaceId, workspacesEndpoint, workspacesToken });
+    }
+    return handleStart;
+  }
+
+  const job = condenseJobs(jobs);
+
   return (
     <div>
-      {details ? (
-        <LightBlueLink href={`${details.url_domain}${details.url_path}`}>
-          Jupyter ({status}, {datetime_created})
-        </LightBlueLink>
-      ) : (
-        'Jupyter not available'
+      <div>
+        <b>{workspace.name}</b>
+      </div>
+      {job.allowNew && (
+        <button onClick={createHandleStart(workspace.id)} type="button">
+          Start Jupyter
+        </button>
       )}
+      <JobDetailsDetails job={job} />
     </div>
   );
+}
+
+function JobDetailsDetails({ job }) {
+  if (!job.status) {
+    return null;
+  }
+  if (job.url) {
+    return <LightBlueLink href={job.url}>Status: {job.status}</LightBlueLink>;
+  }
+  return `Status: ${job.status}`;
 }
 
 export default JobDetails;
