@@ -11,7 +11,8 @@ import Dropdown from '../Dropdown';
 import UserLinks from '../UserLinks';
 import AtlasToolsLinks from '../AtlasToolsLinks';
 import OtherLinks from '../OtherLinks';
-import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap } from './style';
+import { Spacer, HeaderButton, FlexNoWrap } from './style';
+import HubmapLogo from '../HubmapLogo';
 
 function HeaderContent({ anchorRef }) {
   const theme = useTheme();

@@ -5,10 +5,10 @@ import userEvent from '@testing-library/user-event';
 
 import UserLinks from './UserLinks';
 
-test('should be login button when not authenticated', () => {
+test('should be "User Profile" when not authenticated', () => {
   render(<UserLinks isAuthenticated={false} />);
-  expect(screen.getByText('Member Login')).toBeInTheDocument();
-  expect(screen.getByRole('link')).toHaveAttribute('href', '/login');
+  expect(screen.getByText('User Profile')).toBeInTheDocument();
+  // expect(screen.getByRole('link')).toHaveAttribute('href', '/login');
 });
 
 test('should be logout button when authenticated', () => {
