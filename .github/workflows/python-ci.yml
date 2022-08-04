@@ -32,4 +32,4 @@ jobs:
       run: pip install -r context/requirements-dev.txt
 
     - name: Run test script
-      run: tests/test-python.sh
+      run: scripts/test/test-python.sh
