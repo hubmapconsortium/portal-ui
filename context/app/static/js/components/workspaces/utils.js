@@ -78,11 +78,7 @@ function condenseJobs(jobs) {
     return `${url_domain}${url_path}`;
   }
 
-  const displayJobs = jobs.map((job) => {
-    const diplayJob = { ...job };
-    diplayJob.status = getDisplayStatus(job.status);
-    return diplayJob;
-  });
+  const displayJobs = jobs.map((job) => ({ ...job, status: getDisplayStatus(job.status) }));
 
   const bestJob = [ACTIVE, ACTIVATING, INACTIVE]
     .map((status) => displayJobs.find((job) => job.status === status))
