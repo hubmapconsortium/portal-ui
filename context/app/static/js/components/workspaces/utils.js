@@ -84,17 +84,17 @@ function condenseJobs(jobs) {
     .map((status) => displayJobs.find((job) => job.status === status))
     .find((job) => job);
 
-  const justStatus = { status: bestJob?.status };
-  if (bestJob?.status === ACTIVE) {
-    return { ...justStatus, allowNew: false, url: getJobUrl(bestJob) };
+  const status = bestJob?.status;
+  switch (status) {
+    case ACTIVE:
+      return { status, allowNew: false, url: getJobUrl(bestJob) };
+    case ACTIVATING:
+      return { status, allowNew: false };
+    case INACTIVE:
+      return { status, allowNew: true };
+    default:
+      return { status, allowNew: true };
   }
-  if (bestJob?.status === ACTIVATING) {
-    return { ...justStatus, allowNew: false };
-  }
-  if (bestJob?.status === INACTIVE) {
-    return { ...justStatus, allowNew: true };
-  }
-  return { ...justStatus, allowNew: true };
 }
 
 export { createNotebookWorkspace, startJob, mergeJobsIntoWorkspaces, condenseJobs };
