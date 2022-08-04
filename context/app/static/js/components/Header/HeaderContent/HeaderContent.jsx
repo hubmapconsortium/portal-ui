@@ -8,7 +8,7 @@ import { AppContext } from 'js/components/Providers';
 import Menu from '../Menu';
 import ResourceLinks from '../ResourceLinks';
 import Dropdown from '../Dropdown';
-import LoginButton from '../LoginButton';
+import UserLinks from '../UserLinks';
 import AtlasToolsLinks from '../AtlasToolsLinks';
 import OtherLinks from '../OtherLinks';
 import { HubmapLogo, Spacer, HeaderButton, FlexNoWrap } from './style';
@@ -50,7 +50,7 @@ function HeaderContent({ anchorRef }) {
         </>
       )}
       {shouldDisplayMenu && <Spacer />}
-      <LoginButton isAuthenticated={isAuthenticated} userEmail={userEmail} />
+      <UserLinks isAuthenticated={isAuthenticated} userEmail={userEmail} />
     </>
   );
 }
