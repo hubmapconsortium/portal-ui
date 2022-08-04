@@ -21,16 +21,18 @@ function JobDetails({ workspace, jobs }) {
       <div>
         <b>{workspace.name}</b>
       </div>
-      <button onClick={createHandleStart(workspace.id)} type="button">
-        Start Jupyter
-      </button>
+      {job.allowNew && (
+        <button onClick={createHandleStart(workspace.id)} type="button">
+          Start Jupyter
+        </button>
+      )}
       <JobDetailsDetails job={job} />
     </div>
   );
 }
 
 function JobDetailsDetails({ job }) {
-  if (!job) {
+  if (!job.status) {
     return null;
   }
   if (job.url) {
