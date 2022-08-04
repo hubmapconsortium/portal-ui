@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import Dropdown from '../Dropdown';
 import DropdownLink from '../DropdownLink';
-import { WhiteButton, TruncatedSpan } from './style';
+import { StyledDivider } from '../HeaderContent/style';
+import { TruncatedSpan } from './style';
 
 function LoginButton(props) {
   const { isAuthenticated, userEmail } = props;
@@ -12,12 +13,16 @@ function LoginButton(props) {
 
   return isAuthenticated ? (
     <Dropdown title={<TruncatedSpan>{displayName}</TruncatedSpan>}>
+      <DropdownLink href="/my-lists">My Lists</DropdownLink>
+      <StyledDivider />
       <DropdownLink href="/logout">Log Out</DropdownLink>
     </Dropdown>
   ) : (
-    <WhiteButton component="a" href="/login">
-      Member Login
-    </WhiteButton>
+    <Dropdown title="User Profile">
+      <DropdownLink href="/my-lists">My Lists</DropdownLink>
+      <StyledDivider />
+      <DropdownLink href="/login">Log In</DropdownLink>
+    </Dropdown>
   );
 }
 

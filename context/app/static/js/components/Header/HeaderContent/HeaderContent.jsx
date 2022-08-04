@@ -47,9 +47,6 @@ function HeaderContent({ anchorRef }) {
           <Dropdown title="Resources">
             <ResourceLinks />
           </Dropdown>
-          <HeaderButton component={Link} href="/my-lists">
-            My Lists
-          </HeaderButton>
         </>
       )}
       {shouldDisplayMenu && <Spacer />}
