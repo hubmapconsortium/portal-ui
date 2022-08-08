@@ -50,6 +50,7 @@ def _nb_response(name_stem, nb_str, workspace_name):
         'name': workspace_name,
         'description': workspace_name,
         'workspace_details': {
+            'globus_groups_token': session['groups_token'],
             'symlinks': [],
             'files': [{
                 'name': f'{name_stem}.ipynb',
