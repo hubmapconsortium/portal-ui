@@ -40,13 +40,14 @@ def get_context(args):
     search_url = args.search_url
     types_url = args.types_url
     assets_url = args.assets_url
+    portal_index_path = args.portal_index_path
 
     app = Flask(__name__)
     app.config.from_mapping({
         'TYPE_SERVICE_ENDPOINT': types_url,
         'ASSETS_ENDPOINT': assets_url,
         'ELASTICSEARCH_ENDPOINT': search_url,
-        'PORTAL_INDEX_PATH': DefaultConfig.PORTAL_INDEX_PATH
+        'PORTAL_INDEX_PATH': portal_index_path
     })
 
     return app.app_context()
