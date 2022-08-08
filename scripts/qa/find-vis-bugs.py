@@ -33,6 +33,10 @@ def get_parser():
         '--assets_url',
         default='https://assets.hubmapconsortium.org',
         help='Assets endpoint')
+    parser.add_argument(
+        '--uuids',
+        nargs='*',
+        help='Instead of querying all public datasets, use given UUIDs')
     return parser
 
 
@@ -53,10 +57,10 @@ def get_context(args):
     return app.app_context()
 
 
-def get_errors():
+def get_errors(override_uuids):
     errors = {}
     client = ApiClient()
-    uuids = client.get_all_dataset_uuids()
+    uuids = override_uuids or client.get_all_dataset_uuids()
     waiting_for_json = 0
     waiting_for_conf = 0
     for (i, uuid) in enumerate(uuids):
@@ -72,17 +76,17 @@ def get_errors():
                 f'Lifted: {conf_uuid.vis_lifted_uuid} ')
             waiting_for_conf += perf_counter() - before_conf
         except Exception as e:
-            warn(f'ERROR: {e}')
+            warn(f'\tERROR: {e}')
             errors[uuid] = e
         warn(f'\tJSON: {waiting_for_json:.2f}s; Vitessce: {waiting_for_conf:.2f}s')
     return errors
 
 
 def main():
-    parser = get_parser()
+    args = get_parser().parse_args()
 
-    with get_context(parser.parse_args()):
-        errors = get_errors()
+    with get_context(args):
+        errors = get_errors(args.uuids)
 
     if not errors:
         print('No errors')
