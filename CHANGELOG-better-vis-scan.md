@@ -1,0 +1,1 @@
+- Add another parameter to the vis-scan script, so we can target other indices.
