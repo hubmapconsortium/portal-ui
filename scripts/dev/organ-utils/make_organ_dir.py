@@ -17,7 +17,7 @@ import json
 
 
 def main():
-    repo_path = Path(__file__).resolve().parent.parent
+    repo_path = Path(__file__).resolve().parent.parent.parent.parent
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
         '--target',
