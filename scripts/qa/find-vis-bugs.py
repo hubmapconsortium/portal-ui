@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
 import sys
 import argparse
 import requests
 from csv import DictReader, excel_tab
 from io import StringIO
+from time import perf_counter
 
 from flask import Flask
 
-from context.app.api.client import ApiClient
+# Run from anywhere:
+sys.path.append(str(Path(__file__).parent.parent.parent))
+from context.app.api.client import ApiClient  # noqa: E402
 
 
 client = ApiClient()
@@ -46,17 +50,24 @@ def main():
     datasets = list(DictReader(StringIO(tsv), dialect=excel_tab))[1:]
     uuids = [dataset['uuid'] for dataset in datasets]
     errors = {}
+    waiting_for_json = 0
+    waiting_for_conf = 0
     for (i, uuid) in enumerate(uuids):
         dataset_url = f'{portal_url}/browse/dataset/{uuid}'
         dataset_json_url = f'{dataset_url}.json'
+        before_json = perf_counter()
         dataset = requests.get(dataset_json_url).json()
+        waiting_for_json += perf_counter() - before_json
         warn(f'{i}/{len(uuids)} ({len(errors)} errors): Checking {dataset_url} ...')
         try:
+            before_conf = perf_counter()
             with app.app_context():
                 client.get_vitessce_conf_cells_and_lifted_uuid(dataset, wrap_error=False)
+            waiting_for_conf += perf_counter() - before_conf
         except Exception as e:
             warn(f'ERROR: {e}')
             errors[dataset_url] = e
+        warn(f'JSON: {waiting_for_json:.2f}s; Vitessce: {waiting_for_conf:.2f}s')
 
     if not errors:
         print('No errors')

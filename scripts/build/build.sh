@@ -3,6 +3,8 @@ set -o errexit
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
+echo 'starting build.sh'
+
 IMAGE_NAME=$1
 [[ ! -z "$IMAGE_NAME" ]] || die "One argument, an image name, is required."
 

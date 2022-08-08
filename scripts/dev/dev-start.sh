@@ -27,7 +27,7 @@ git config submodule.recurse true # So 'git pull' will update submodules.
 CONTEXT=context
 pip install -r $CONTEXT/requirements.txt > /dev/null
 
-./copy-app-conf.sh
+scripts/dev/copy-app-conf.sh
 
 cd $CONTEXT
 npm install
