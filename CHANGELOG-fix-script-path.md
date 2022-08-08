@@ -1,0 +1,1 @@
+- Fix `make_organ_dir.py` script: Path needed to be adjusted after re-organization
