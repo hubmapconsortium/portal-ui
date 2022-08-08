@@ -10,6 +10,7 @@ from flask import Flask
 # Run from anywhere:
 sys.path.append(str(Path(__file__).parent.parent.parent))
 from context.app.api.client import ApiClient  # noqa: E402
+from context.app.default_config import DefaultConfig  # noqa: E402
 
 
 def get_context(args):
@@ -22,7 +23,7 @@ def get_context(args):
         'TYPE_SERVICE_ENDPOINT': types_url,
         'ASSETS_ENDPOINT': assets_url,
         'ELASTICSEARCH_ENDPOINT': search_url,
-        'PORTAL_INDEX_PATH': '/portal/search'  # TODO: pull from default_config.py
+        'PORTAL_INDEX_PATH': DefaultConfig.PORTAL_INDEX_PATH
     })
 
     return app.app_context()
@@ -41,12 +42,15 @@ def get_errors():
         warn(f'{i}/{len(uuids)} ({len(errors)} errors): Checking {uuid} ...')
         try:
             before_conf = perf_counter()
-            client.get_vitessce_conf_cells_and_lifted_uuid(dataset, wrap_error=False)
+            conf_uuid = client.get_vitessce_conf_cells_and_lifted_uuid(dataset, wrap_error=False)
+            warn(
+                f'\tVis: {conf_uuid.vitessce_conf.conf is not None}; '
+                f'Lifted: {conf_uuid.vis_lifted_uuid} ')
             waiting_for_conf += perf_counter() - before_conf
         except Exception as e:
             warn(f'ERROR: {e}')
             errors[uuid] = e
-        warn(f'JSON: {waiting_for_json:.2f}s; Vitessce: {waiting_for_conf:.2f}s')
+        warn(f'\tJSON: {waiting_for_json:.2f}s; Vitessce: {waiting_for_conf:.2f}s')
     return errors
 
 
