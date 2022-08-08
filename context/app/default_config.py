@@ -12,7 +12,7 @@ class DefaultConfig(object):
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=60)
     SESSION_COOKIE_SAMESITE = 'Lax'
 
-    PORTAL_INDEX_PATH = '/portal/v3'
+    PORTAL_INDEX_PATH = '/v3/portal/search'
     CCF_INDEX_PATH = '/entities/search'
 
     # Everything else should be overridden in app.conf:
