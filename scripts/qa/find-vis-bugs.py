@@ -8,7 +8,9 @@ from time import perf_counter
 from flask import Flask
 
 # Run from anywhere:
-sys.path.append(str(Path(__file__).parent.parent.parent))
+for path in Path(__file__).parents:
+  if (path / '.git').is_dir():
+    sys.path.append(str(path))
 from context.app.api.client import ApiClient  # noqa: E402
 from context.app.default_config import DefaultConfig  # noqa: E402
 
