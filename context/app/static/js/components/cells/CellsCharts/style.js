@@ -13,6 +13,7 @@ const StyledTypography = styled(Typography)`
 const ChartWrapper = styled.div`
   height: 400px;
   width: 100%;
+  margin-bottom: ${(props) => props.theme.spacing(1.5)}px;
 `;
 
 export { PaddedDiv, ChartWrapper, StyledTypography };
