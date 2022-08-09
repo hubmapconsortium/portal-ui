@@ -16,10 +16,8 @@ const unconditionalLinks = (
 function UserLinks(props) {
   const { isAuthenticated, userEmail } = props;
 
-  const displayName = userEmail || 'User';
-
   return isAuthenticated ? (
-    <Dropdown title={<TruncatedSpan>{displayName}</TruncatedSpan>}>
+    <Dropdown title={<TruncatedSpan>{userEmail || 'User'}</TruncatedSpan>}>
       {unconditionalLinks}
       <WarningDropdownLink href="/logout">Log Out</WarningDropdownLink>
     </Dropdown>
