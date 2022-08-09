@@ -30,12 +30,7 @@ function JobLink({ workspace, job, children }) {
 
   if (job.allowNew) {
     const handleStart = createHandleStart(workspace.id);
-    return (
-      // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-      <OutboundIconLink onClick={handleStart} onKeyPress={handleStart}>
-        {children}
-      </OutboundIconLink>
-    );
+    return <OutboundIconLink onClick={handleStart}>{children}</OutboundIconLink>;
   }
   if (job?.url) {
     return <OutboundIconLink href={job.url}>{children}</OutboundIconLink>;
