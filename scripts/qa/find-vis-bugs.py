@@ -3,28 +3,31 @@
 from pathlib import Path
 import sys
 import argparse
-import requests
-from csv import DictReader, excel_tab
-from io import StringIO
 from time import perf_counter
 
 from flask import Flask
 
 # Run from anywhere:
-sys.path.append(str(Path(__file__).parent.parent.parent))
+for path in Path(__file__).parents:
+    if (path / '.git').is_dir():
+        sys.path.append(str(path))
+        break
 from context.app.api.client import ApiClient  # noqa: E402
+from context.app.default_config import DefaultConfig  # noqa: E402
 
 
-client = ApiClient()
-
-
-def main():
+def get_parser():
     parser = argparse.ArgumentParser(
-        description='Scan all datasets for visualization bugs. Exits with status 0 if no errors.')
+        description='Scan all datasets for visualization bugs. Exits with status 0 if no errors.',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
-        '--portal_url',
-        default='https://portal.hubmapconsortium.org',
-        help='Portal instance to download TSV and JSON from')
+        '--search_url',
+        default='https://search.api.hubmapconsortium.org',
+        help='Search API endpoint')
+    parser.add_argument(
+        '--portal_index_path',
+        default=DefaultConfig.PORTAL_INDEX_PATH,
+        help='Under the Search API endpoint, the particular index to use')
     parser.add_argument(
         '--types_url',
         default='https://search.api.hubmapconsortium.org',
@@ -33,41 +36,60 @@ def main():
         '--assets_url',
         default='https://assets.hubmapconsortium.org',
         help='Assets endpoint')
-    args = parser.parse_args()
+    parser.add_argument(
+        '--uuids',
+        nargs='*',
+        help='Instead of querying all public datasets, use given UUIDs')
+    return parser
 
-    portal_url = args.portal_url
+
+def get_context(args):
+    search_url = args.search_url
     types_url = args.types_url
     assets_url = args.assets_url
+    portal_index_path = args.portal_index_path
 
     app = Flask(__name__)
     app.config.from_mapping({
         'TYPE_SERVICE_ENDPOINT': types_url,
-        'ASSETS_ENDPOINT': assets_url
+        'ASSETS_ENDPOINT': assets_url,
+        'ELASTICSEARCH_ENDPOINT': search_url,
+        'PORTAL_INDEX_PATH': portal_index_path
     })
 
-    tsv_url = f'{portal_url}/metadata/v0/datasets.tsv'
-    tsv = requests.get(tsv_url).text
-    datasets = list(DictReader(StringIO(tsv), dialect=excel_tab))[1:]
-    uuids = [dataset['uuid'] for dataset in datasets]
+    return app.app_context()
+
+
+def get_errors(override_uuids):
     errors = {}
+    client = ApiClient()
+    uuids = override_uuids or client.get_all_dataset_uuids()
     waiting_for_json = 0
     waiting_for_conf = 0
     for (i, uuid) in enumerate(uuids):
-        dataset_url = f'{portal_url}/browse/dataset/{uuid}'
-        dataset_json_url = f'{dataset_url}.json'
         before_json = perf_counter()
-        dataset = requests.get(dataset_json_url).json()
+        dataset = client.get_entity(uuid=uuid)
         waiting_for_json += perf_counter() - before_json
-        warn(f'{i}/{len(uuids)} ({len(errors)} errors): Checking {dataset_url} ...')
+        warn(f'{i}/{len(uuids)} ({len(errors)} errors): Checking {uuid} ...')
         try:
             before_conf = perf_counter()
-            with app.app_context():
-                client.get_vitessce_conf_cells_and_lifted_uuid(dataset, wrap_error=False)
+            conf_uuid = client.get_vitessce_conf_cells_and_lifted_uuid(dataset, wrap_error=False)
+            warn(
+                f'\tVis: {conf_uuid.vitessce_conf.conf is not None}; '
+                f'Lifted: {conf_uuid.vis_lifted_uuid} ')
             waiting_for_conf += perf_counter() - before_conf
         except Exception as e:
-            warn(f'ERROR: {e}')
-            errors[dataset_url] = e
-        warn(f'JSON: {waiting_for_json:.2f}s; Vitessce: {waiting_for_conf:.2f}s')
+            warn(f'\tERROR: {e}')
+            errors[uuid] = e
+        warn(f'\tJSON: {waiting_for_json:.2f}s; Vitessce: {waiting_for_conf:.2f}s')
+    return errors
+
+
+def main():
+    args = get_parser().parse_args()
+
+    with get_context(args):
+        errors = get_errors(args.uuids)
 
     if not errors:
         print('No errors')
