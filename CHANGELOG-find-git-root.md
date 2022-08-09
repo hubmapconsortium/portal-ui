@@ -1,0 +1,1 @@
+- Use Trevor's idiom for finding the git root.
