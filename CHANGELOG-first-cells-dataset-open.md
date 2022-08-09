@@ -1,0 +1,1 @@
+- Expand first entry in query results on load in cells UI.
