@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { AppContext } from 'js/components/Providers';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { startJob } from './utils';
+import { LinkButton } from './style';
 
 function JobLink({ workspace, job, children }) {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
@@ -21,9 +22,7 @@ function JobLink({ workspace, job, children }) {
     const handleStart = createHandleStart(workspace.id);
     return (
       <OutboundIconLink>
-        <button onClick={handleStart} type="submit" style={{ all: 'unset', cursor: 'pointer' }}>
-          {children}
-        </button>
+        <LinkButton onClick={handleStart}>{children}</LinkButton>
       </OutboundIconLink>
     );
   }

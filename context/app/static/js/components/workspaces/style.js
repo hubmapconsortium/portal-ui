@@ -8,4 +8,9 @@ const StyledButton = styled(WhiteBackgroundIconButton)`
   height: 36px;
 `;
 
-export { StyledButton };
+const LinkButton = styled.button`
+  all: unset;
+  cursor: pointer;
+`;
+
+export { StyledButton, LinkButton };
