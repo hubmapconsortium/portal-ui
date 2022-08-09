@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -o errexit
 
-. scripts/test/utils.sh
+. etc/test/utils.sh
 
 copy_conf
 
 start flake8
-EXCLUDE=node_modules,ingest-validation-tools,scripts/dev/organ-utils
+EXCLUDE=node_modules,ingest-validation-tools,etc/dev/organ-utils
 # The organ-utils script uses the walrus operator (:=).
 # Latest pycodestyle does support that syntax,
 # but latest flake8 doesn't support the latest pycodestyle,

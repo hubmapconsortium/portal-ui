@@ -56,7 +56,7 @@ fi
 VERSION_IMAGE_NAME=hubmap/portal-ui:$VERSION
 LATEST_IMAGE_NAME=hubmap/portal-ui:latest
 
-scripts/build/build.sh $VERSION_IMAGE_NAME
+etc/build/build.sh $VERSION_IMAGE_NAME
 docker tag $VERSION_IMAGE_NAME $LATEST_IMAGE_NAME
 docker push $VERSION_IMAGE_NAME
 docker push $LATEST_IMAGE_NAME
