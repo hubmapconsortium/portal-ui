@@ -30,4 +30,4 @@ jobs:
       run: npm ci --prefix context
 
     - name: Run test script
-      run: scripts/test/test-node.sh
+      run: etc/test/test-node.sh

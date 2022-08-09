@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit
 
-. scripts/test/utils.sh
+. etc/test/utils.sh
 
 
 start changelog

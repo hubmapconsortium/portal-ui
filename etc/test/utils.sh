@@ -3,7 +3,7 @@ end() { echo "::endgroup::"; }
 die() { set +v; echo "$*" 1>&2 ; sleep 1; exit 1; }
 
 copy_conf() {
-  scripts/dev/copy-app-conf.sh || (
+  etc/dev/copy-app-conf.sh || (
     echo 'app.conf before:'
     cat context/instance/app.conf
     echo 'Rewrite conf...'
