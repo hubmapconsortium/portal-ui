@@ -122,7 +122,7 @@ function DatasetsSelectedByExpression({
               getContentAnchorEl: null,
             },
           }}
-          helperText="Query measurement refers to Gene Expression (RNA) or DNA Accessibility (ATAC)."
+          helperText="Genomic modality refers to Gene Expression (RNA) or DNA Accessibility (ATAC)."
         >
           <MenuItem value="rna">Gene Expression (RNA)</MenuItem>
           <MenuItem value="atac">DNA Accessibility (ATAC)</MenuItem>
