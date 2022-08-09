@@ -6,17 +6,17 @@ import DropdownLink from '../DropdownLink';
 import { StyledDivider } from '../HeaderContent/style';
 import { TruncatedSpan, WarningSpan } from './style';
 
+const unconditionalLinks = (
+  <>
+    <DropdownLink href="/my-lists">My Lists</DropdownLink>
+    <StyledDivider />
+  </>
+);
+
 function UserLinks(props) {
   const { isAuthenticated, userEmail } = props;
 
   const displayName = userEmail || 'User';
-
-  const unconditionalLinks = (
-    <>
-      <DropdownLink href="/my-lists">My Lists</DropdownLink>
-      <StyledDivider />
-    </>
-  );
 
   return isAuthenticated ? (
     <Dropdown title={<TruncatedSpan>{displayName}</TruncatedSpan>}>
