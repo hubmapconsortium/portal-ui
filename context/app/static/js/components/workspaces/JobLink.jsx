@@ -19,10 +19,9 @@ function JobLink({ workspace, job, children }) {
   }
 
   if (job.allowNew) {
-    const handleStart = createHandleStart(workspace.id);
     return (
       <OutboundIconLink>
-        <LinkButton onClick={handleStart}>{children}</LinkButton>
+        <LinkButton onClick={createHandleStart(workspace.id)}>{children}</LinkButton>
       </OutboundIconLink>
     );
   }
