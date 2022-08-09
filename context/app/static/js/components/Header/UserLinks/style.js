@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import DropdownLink from '../DropdownLink';
+
 const TruncatedSpan = styled.span`
   text-transform: none;
   text-overflow: ellipsis;
@@ -7,8 +9,8 @@ const TruncatedSpan = styled.span`
   overflow: hidden;
 `;
 
-const WarningSpan = styled.span`
+const WarningDropdownLink = styled(DropdownLink)`
   color: ${(props) => props.theme.palette.warning.dark};
 `;
 
-export { TruncatedSpan, WarningSpan };
+export { TruncatedSpan, WarningDropdownLink };

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Dropdown from '../Dropdown';
 import DropdownLink from '../DropdownLink';
 import { StyledDivider } from '../HeaderContent/style';
-import { TruncatedSpan, WarningSpan } from './style';
+import { TruncatedSpan, WarningDropdownLink } from './style';
 
 const unconditionalLinks = (
   <>
@@ -21,9 +21,7 @@ function UserLinks(props) {
   return isAuthenticated ? (
     <Dropdown title={<TruncatedSpan>{displayName}</TruncatedSpan>}>
       {unconditionalLinks}
-      <DropdownLink href="/logout">
-        <WarningSpan>Log Out</WarningSpan>
-      </DropdownLink>
+      <WarningDropdownLink href="/logout">Log Out</WarningDropdownLink>
     </Dropdown>
   ) : (
     <Dropdown title="User Profile">
