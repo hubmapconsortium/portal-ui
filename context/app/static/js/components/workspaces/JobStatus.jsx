@@ -1,8 +1,5 @@
 function JobStatus({ job }) {
-  if (!job.status) {
-    return null;
-  }
-  return `Status: ${job.status}`;
+  return `Status: ${job.status || 'No Jobs'}`;
 }
 
 export default JobStatus;
