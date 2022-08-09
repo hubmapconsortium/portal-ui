@@ -5,6 +5,20 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import { condenseJobs, startJob } from './utils';
 
 function JobDetails({ workspace, jobs }) {
+  const job = condenseJobs(jobs);
+
+  return (
+    <div>
+      <JobLink workspace={workspace} job={job}>
+        {workspace.name}
+      </JobLink>
+      {' | '}
+      <JobDetailsDetails job={job} />
+    </div>
+  );
+}
+
+function JobLink({ workspace, job, children }) {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
 
   function createHandleStart(workspaceId) {
@@ -14,29 +28,24 @@ function JobDetails({ workspace, jobs }) {
     return handleStart;
   }
 
-  const job = condenseJobs(jobs);
-
-  return (
-    <div>
-      <div>
-        <b>{workspace.name}</b>
-      </div>
-      {job.allowNew && (
-        <button onClick={createHandleStart(workspace.id)} type="button">
-          Start Jupyter
-        </button>
-      )}
-      <JobDetailsDetails job={job} />
-    </div>
-  );
+  if (job.allowNew) {
+    const handleStart = createHandleStart(workspace.id);
+    return (
+      // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+      <span onClick={handleStart} onKeyPress={handleStart}>
+        {children}
+      </span>
+    );
+  }
+  if (job?.url) {
+    return <LightBlueLink href={job.url}>{children}</LightBlueLink>;
+  }
+  return children;
 }
 
 function JobDetailsDetails({ job }) {
   if (!job.status) {
     return null;
-  }
-  if (job.url) {
-    return <LightBlueLink href={job.url}>Status: {job.status}</LightBlueLink>;
   }
   return `Status: ${job.status}`;
 }
