@@ -24,13 +24,22 @@ function JobLink({ workspace, job, children }) {
   function createHandleStart(workspaceId) {
     async function handleStart() {
       startJob({ workspaceId, workspacesEndpoint, workspacesToken });
+      // TODO: Open new tab
+      // eslint-disable-next-line no-alert
+      alert('TODO: Open a new tab that will poll until the job is started.');
     }
     return handleStart;
   }
 
   if (job.allowNew) {
     const handleStart = createHandleStart(workspace.id);
-    return <OutboundIconLink onClick={handleStart}>{children}</OutboundIconLink>;
+    return (
+      <OutboundIconLink>
+        <button onClick={handleStart} type="submit">
+          {children}
+        </button>
+      </OutboundIconLink>
+    );
   }
   if (job?.url) {
     return <OutboundIconLink href={job.url}>{children}</OutboundIconLink>;

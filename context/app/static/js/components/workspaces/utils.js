@@ -74,8 +74,12 @@ function condenseJobs(jobs) {
   }
 
   function getJobUrl(job) {
-    const { url_domain, url_path } = job.job_details.current_job_details.connection_details;
-    return `${url_domain}${url_path}`;
+    const details = job.job_details.current_job_details;
+    if (details.connection_details) {
+      const { url_domain, url_path } = details.connection_details;
+      return `${url_domain}${url_path}`;
+    }
+    return `/poll-job-${job.id}-until-ready`;
   }
 
   const displayStatusJobs = jobs.map((job) => ({ ...job, status: getDisplayStatus(job.status) }));
