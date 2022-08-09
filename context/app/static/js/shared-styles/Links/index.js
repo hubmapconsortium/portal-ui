@@ -6,7 +6,6 @@ const LinkWithoutUnderline = (props) => <Link {...props} underline="none" />;
 
 const LightBlueLink = styled(LinkWithoutUnderline)`
   color: ${(props) => props.theme.palette.info.main};
-  cursor: pointer;
 `;
 
 export { LightBlueLink };
