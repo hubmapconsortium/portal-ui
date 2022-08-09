@@ -1,20 +1,20 @@
 import React, { useContext } from 'react';
 
 import { AppContext } from 'js/components/Providers';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { condenseJobs, startJob } from './utils';
 
 function JobDetails({ workspace, jobs }) {
   const job = condenseJobs(jobs);
 
   return (
-    <div>
+    <b>
       <JobLink workspace={workspace} job={job}>
         {workspace.name}
       </JobLink>
       {' | '}
       <JobDetailsDetails job={job} />
-    </div>
+    </b>
   );
 }
 
@@ -32,13 +32,13 @@ function JobLink({ workspace, job, children }) {
     const handleStart = createHandleStart(workspace.id);
     return (
       // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-      <span onClick={handleStart} onKeyPress={handleStart}>
+      <OutboundIconLink onClick={handleStart} onKeyPress={handleStart}>
         {children}
-      </span>
+      </OutboundIconLink>
     );
   }
   if (job?.url) {
-    return <LightBlueLink href={job.url}>{children}</LightBlueLink>;
+    return <OutboundIconLink href={job.url}>{children}</OutboundIconLink>;
   }
   return children;
 }
