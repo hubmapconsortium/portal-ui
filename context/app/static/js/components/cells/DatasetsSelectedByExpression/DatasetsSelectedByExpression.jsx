@@ -107,7 +107,7 @@ function DatasetsSelectedByExpression({
       {queryType === 'gene' && (
         <StyledTextField
           id="modality-select"
-          label="Genomic Modaility"
+          label="Genomic Modality"
           value={genomicModality}
           onChange={handleSelectModality}
           variant="outlined"
