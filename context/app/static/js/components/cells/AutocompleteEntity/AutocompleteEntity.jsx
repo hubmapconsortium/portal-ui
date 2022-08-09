@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import CellsService from 'js/components/cells/CellsService';
 
 function buildHelperText(entity) {
-  return `Multiple ${entity} are allowed and currently only 'AND' queries are supported.`;
+  return `Multiple ${entity} are allowed and only 'AND' queries are supported.`;
 }
 
 const labelAndHelperTextProps = {
