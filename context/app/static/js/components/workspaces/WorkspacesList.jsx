@@ -11,7 +11,7 @@ import { PanelWrapper } from 'js/shared-styles/panels';
 import { createNotebookWorkspace } from './utils';
 import { useWorkspacesList } from './hooks';
 import { StyledButton } from './style';
-import JobDetails from './JobDetails';
+import WorkspaceDetails from './WorkspaceDetails';
 
 function WorkspacesList() {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
@@ -66,7 +66,7 @@ function WorkspacesList() {
           workspacesList.map((workspace) => (
             /* TODO: Inbound links have fragments like "#workspace-123": Highlight? */
             <PanelWrapper key={workspace.id}>
-              <JobDetails workspace={workspace} jobs={workspace.jobs} />
+              <WorkspaceDetails workspace={workspace} />
               <div>Created {workspace.datetime_created.slice(0, 10)}</div>
             </PanelWrapper>
           ))

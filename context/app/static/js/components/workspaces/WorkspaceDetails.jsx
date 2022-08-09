@@ -4,8 +4,8 @@ import { AppContext } from 'js/components/Providers';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { condenseJobs, startJob } from './utils';
 
-function JobDetails({ workspace, jobs }) {
-  const job = condenseJobs(jobs);
+function WorkspaceDetails({ workspace }) {
+  const job = condenseJobs(workspace.jobs);
 
   return (
     <b>
@@ -54,4 +54,4 @@ function JobDetailsDetails({ job }) {
   return `Status: ${job.status}`;
 }
 
-export default JobDetails;
+export default WorkspaceDetails;
