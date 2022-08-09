@@ -35,7 +35,7 @@ function JobLink({ workspace, job, children }) {
     const handleStart = createHandleStart(workspace.id);
     return (
       <OutboundIconLink>
-        <button onClick={handleStart} type="submit">
+        <button onClick={handleStart} type="submit" style={{ all: 'unset' }}>
           {children}
         </button>
       </OutboundIconLink>
