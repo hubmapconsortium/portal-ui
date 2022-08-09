@@ -79,6 +79,7 @@ function condenseJobs(jobs) {
       const { url_domain, url_path } = details.connection_details;
       return `${url_domain}${url_path}`;
     }
+    // TODO
     return `/poll-job-${job.id}-until-ready`;
   }
 
