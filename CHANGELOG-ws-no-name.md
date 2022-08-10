@@ -1,0 +1,1 @@
+- Users will not supply a name when creating workspaces from datasets.
