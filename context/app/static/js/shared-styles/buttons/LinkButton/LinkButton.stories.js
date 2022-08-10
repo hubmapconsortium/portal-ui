@@ -6,6 +6,13 @@ import LinkButton from './LinkButton';
 export default {
   title: 'Buttons/LinkButton',
   component: LinkButton,
+  parameters: {
+    docs: {
+      description: {
+        component: 'A button with the appearance of a link.',
+      },
+    },
+  },
 };
 
 const Template = (args) => <LinkButton {...args} />;
