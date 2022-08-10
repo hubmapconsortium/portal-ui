@@ -35,7 +35,7 @@ describe('dataset search tutorial', () => {
       })
 
       it('traverses the steps', () => {
-        cy.intercept('POST', 'https://search*.hubmapconsortium.org/portal/search', {
+        cy.intercept('POST', 'https://search*.hubmapconsortium.org/*/portal/search', {
           statusCode: 200,
           body: defaultSearch,
         });
@@ -48,7 +48,7 @@ describe('dataset search tutorial', () => {
       });
 
       it('shows the correct search view', () => {
-        cy.intercept('POST', 'https://search*.hubmapconsortium.org/portal/search', {
+        cy.intercept('POST', 'https://search*.hubmapconsortium.org/*/portal/search', {
           statusCode: 200,
           body: defaultSearch,
         });
@@ -67,7 +67,7 @@ describe('dataset search tutorial', () => {
       });
 
       it('handles skipping the View More Filters when there are 5 or less data types available to filter', () => {
-        cy.intercept('POST', 'https://search*.hubmapconsortium.org/portal/search', {
+        cy.intercept('POST', 'https://search*.hubmapconsortium.org/*/portal/search', {
           statusCode: 200,
           body: limitedDataTypesSearch,
         });
