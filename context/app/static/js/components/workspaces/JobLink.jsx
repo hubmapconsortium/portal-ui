@@ -5,7 +5,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import LinkButton from 'js/shared-styles/buttons/LinkButton';
 import { startJob } from './utils';
 
-function JobLink({ workspace, job, children }) {
+function JobLink({ workspace, job, typographyVariant, children }) {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
 
   function createHandleStart(workspaceId) {
@@ -20,14 +20,18 @@ function JobLink({ workspace, job, children }) {
 
   if (job.allowNew) {
     return (
-      <LinkButton linkComponent={OutboundIconLink} onClick={createHandleStart(workspace.id)} variant="subtitle1">
+      <LinkButton
+        linkComponent={OutboundIconLink}
+        onClick={createHandleStart(workspace.id)}
+        variant={typographyVariant}
+      >
         {children}
       </LinkButton>
     );
   }
   if (job?.url) {
     return (
-      <OutboundIconLink href={job.url} variant="subtitle1">
+      <OutboundIconLink href={job.url} variant={typographyVariant}>
         {children}
       </OutboundIconLink>
     );
