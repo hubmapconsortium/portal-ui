@@ -1,25 +1,19 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 
-const chartMargin = css`
-  margin: 0px 10px;
-`;
-
-const Flex = styled.div`
-  display: flex;
-  height: 400px;
+const PaddedDiv = styled.div`
+  padding: ${(props) => props.theme.spacing(2)}px;
+  width: 100%;
 `;
 
 const StyledTypography = styled(Typography)`
-  ${chartMargin}
+  margin: 0px 10px;
 `;
 
 const ChartWrapper = styled.div`
-  flex-basis: ${(props) => props.$flexBasis}%;
-  height: 100%;
-  box-sizing: border-box;
-  ${chartMargin}
-  width: 0px;
+  height: 350px;
+  width: 100%;
+  margin-bottom: ${(props) => props.theme.spacing(1.5)}px;
 `;
 
-export { Flex, ChartWrapper, StyledTypography };
+export { PaddedDiv, ChartWrapper, StyledTypography };
