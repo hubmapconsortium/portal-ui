@@ -12,6 +12,9 @@ function LinkButton({ linkComponent: LinkComponent, children, ...rest }) {
 }
 
 LinkButton.propTypes = {
+  /**
+   Either MaterialUI's `Link` component or a component derived from it.
+  */
   linkComponent: PropTypes.node,
 };
 
