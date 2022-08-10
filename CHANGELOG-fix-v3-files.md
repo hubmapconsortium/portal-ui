@@ -1,0 +1,1 @@
+- Handle the empty files array provided by the v3 index correctly.

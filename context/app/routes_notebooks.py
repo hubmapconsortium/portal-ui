@@ -50,6 +50,7 @@ def _nb_response(name_stem, nb_str, workspace_name):
         'name': workspace_name,
         'description': workspace_name,
         'workspace_details': {
+            'globus_groups_token': session['groups_token'],
             'symlinks': [],
             'files': [{
                 'name': f'{name_stem}.ipynb',
@@ -75,13 +76,19 @@ def _get_workspace_name(request_args):
     return request_args.get('name')
 
 
-@blueprint.route('/browse/<type>/<uuid>.ipynb')
-def details_notebook(type, uuid):
+@blueprint.route(
+    '/browse/<type>/<uuid>.ipynb',
+    defaults={'create_workspace': False})
+@blueprint.route(
+    '/browse/<type>/<uuid>.ws.ipynb',
+    defaults={'create_workspace': True})
+# TODO: Change to a single route, and instead make behavior depend on HTTP method
+def details_notebook(type, uuid, create_workspace):
     if type not in entity_types:
         abort(404)
-    workspace_name = _get_workspace_name(request.args)
     client = get_client()
     entity = client.get_entity(uuid)
+    workspace_name = f"{entity['hubmap_id']} Workspace" if create_workspace else None
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
     if (vitessce_conf is None
             or vitessce_conf.conf is None

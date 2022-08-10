@@ -1,0 +1,1 @@
+- mv scripts etc, for better autocompletion.

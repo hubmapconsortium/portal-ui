@@ -5,7 +5,7 @@ import DatasetClusterChart from 'js/components/cells/DatasetClusterChart';
 import CellExpressionHistogram from 'js/components/cells/CellExpressionHistogram';
 import ChartLoader from 'js/shared-styles/charts/ChartLoader/ChartLoader';
 import { useCellsChartsData } from './hooks';
-import { Flex, ChartWrapper, StyledTypography } from './style';
+import { ChartWrapper, StyledTypography, PaddedDiv } from './style';
 
 function CellsCharts({ uuid, cellVariableName, minExpression, queryType, isExpanded }) {
   const { isLoading, diagnosticInfo, cellsData } = useCellsChartsData({
@@ -19,21 +19,21 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType, isExpan
   const clusterData = 'clusterData' in cellsData ? cellsData.clusterData : {};
 
   return (
-    <div>
+    <PaddedDiv>
       {(isLoading || Object.keys(cellsData).length > 0) && (
         <>
-          <Flex>
-            <ChartWrapper $flexBasis={45}>
+          <div>
+            <ChartWrapper>
               <ChartLoader isLoading={isLoading}>
                 <CellExpressionHistogram queryType={queryType} expressionData={expressionData} />
               </ChartLoader>
             </ChartWrapper>
-            <ChartWrapper $flexBasis={55}>
+            <ChartWrapper>
               <ChartLoader isLoading={isLoading}>
                 <DatasetClusterChart uuid={uuid} results={clusterData} />
               </ChartLoader>
             </ChartWrapper>
-          </Flex>
+          </div>
           <StyledTypography>
             {diagnosticInfo ? (
               `${diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for ${
@@ -45,7 +45,7 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType, isExpan
           </StyledTypography>
         </>
       )}
-    </div>
+    </PaddedDiv>
   );
 }
 

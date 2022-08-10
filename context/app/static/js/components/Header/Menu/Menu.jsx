@@ -53,7 +53,6 @@ function Menu(props) {
                 <Component isIndented />
               </DropdownContainer>
             ))}
-            <DropdownLink href="/my-lists">My Lists</DropdownLink>
           </MenuList>
         </WidePaper>
       </WidePopper>
