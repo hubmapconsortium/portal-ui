@@ -4,8 +4,14 @@ import boto3
 import time
 from datetime import date, datetime, timedelta
 from csv import DictWriter
+
+import sys
 from pathlib import Path
 
+for path in Path(__file__).parents:
+    if (path / '.git').is_dir():
+        sys.path.append(str(path))
+        break
 
 if __name__ == "__main__":
     client = boto3.Session(profile_name='harvarddev').client('logs')
@@ -33,7 +39,7 @@ if __name__ == "__main__":
         )
 
     if response['status'] == "Complete":
-        with open(f"{ Path(__file__).parent}/portal-logs-errors/errors-{date.today()}.csv",
+        with open(f"portal-logs-errors/errors-{date.today()}.csv",
                   'w', newline='') as csvfile:
             writer = DictWriter(csvfile, fieldnames=[
                                 '@timestamp', '@logStream', '@message', '@ptr'])
