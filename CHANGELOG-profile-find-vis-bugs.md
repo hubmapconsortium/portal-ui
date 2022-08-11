@@ -1,1 +1,0 @@
-- Profile find-vis-bug.py: Turns out that fetching JSON and generating viewconf are comparable, so it doesn't do much to optimize just one.

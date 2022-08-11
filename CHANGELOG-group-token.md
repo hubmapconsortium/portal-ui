@@ -1,1 +1,0 @@
-- Add globus token to workspace creation call

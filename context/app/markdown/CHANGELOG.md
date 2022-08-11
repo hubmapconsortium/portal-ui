@@ -1,3 +1,24 @@
+## v0.50.1 - 2022-08-11
+
+- Add another parameter to the vis-scan script, so we can target other indices.
+- Update query form labels and helper text in cells UI.
+- Change the display of workspace status to match Tiffany's spec.
+- Use Trevor's idiom for finding the git root.
+- Expand first entry in query results on load in cells UI.
+- Fix `make_organ_dir.py` script: Path needed to be adjusted after re-organization
+- Handle the empty files array provided by the v3 index correctly.
+- Add globus token to workspace creation call
+- Set up directories and move files off the top level.
+- Redo the login menu, in line with new design.
+- Only offer to start jupyter is there is nothing active or pending.
+- Refactor panel libraries for reuse.
+- Profile find-vis-bug.py: Turns out that fetching JSON and generating viewconf are comparable, so it doesn't do much to optimize just one.
+- mv scripts etc, for better autocompletion.
+- Split dataset charts to separate levels in cells UI.
+- Users will not supply a name when creating workspaces from datasets.
+- Bring the Workspaces UI closer to spec.
+
+
 ## v0.50.0 - 2022-08-04
 
 - Add organ to the downloadable TSVs.

@@ -1,1 +1,0 @@
-- Change the display of workspace status to match Tiffany's spec.
