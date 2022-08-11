@@ -13,9 +13,9 @@ function LinkButton({ linkComponent: LinkComponent, children, ...rest }) {
 
 LinkButton.propTypes = {
   /**
-   Either MaterialUI's `Link` component or a component derived from it.
+   Either MaterialUI's `Link` functional component or a component derived from it.
   */
-  linkComponent: PropTypes.node,
+  linkComponent: PropTypes.func,
 };
 
 LinkButton.defaultProps = {
