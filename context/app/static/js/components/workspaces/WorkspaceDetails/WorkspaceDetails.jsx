@@ -1,9 +1,9 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
 
 import { condenseJobs } from 'js/components/workspaces/utils';
 import JobLink from 'js/components/workspaces/JobLink';
 import JobStatus from 'js/components/workspaces/JobStatus';
-import Typography from '@material-ui/core/Typography';
 import { Flex } from './style';
 
 const typographyVariant = 'subtitle1';
@@ -17,7 +17,7 @@ function WorkspaceDetails({ workspace }) {
         {workspace.name}
       </JobLink>
       <Typography variant={typographyVariant}>
-        {' | '}
+        <span>&nbsp;</span>|<span>&nbsp;</span>
         <JobStatus job={job} />
       </Typography>
     </Flex>
