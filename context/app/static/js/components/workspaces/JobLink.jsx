@@ -22,7 +22,7 @@ function JobLink({ workspace, job, typographyVariant, children }) {
     return (
       <LinkButton
         linkComponent={OutboundIconLink}
-        onClick={createHandleStart(workspace.id)}
+        onClick={() => createHandleStart(workspace.id)}
         variant={typographyVariant}
       >
         {children}
