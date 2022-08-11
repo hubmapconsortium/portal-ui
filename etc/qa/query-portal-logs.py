@@ -4,7 +4,6 @@ import boto3
 import time
 from datetime import date, datetime, timedelta
 from csv import DictWriter
-
 import sys
 from pathlib import Path
 
