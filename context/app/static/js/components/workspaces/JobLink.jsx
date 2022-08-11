@@ -8,21 +8,18 @@ import { startJob } from './utils';
 function JobLink({ workspace, job, typographyVariant, children }) {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
 
-  function createHandleStart(workspaceId) {
-    async function handleStart() {
-      startJob({ workspaceId, workspacesEndpoint, workspacesToken });
-      // TODO: Open new tab
-      // eslint-disable-next-line no-alert
-      alert('TODO: Open a new tab that will poll until the job is started.');
-    }
-    return handleStart;
+  async function handleStart(workspaceId) {
+    startJob({ workspaceId, workspacesEndpoint, workspacesToken });
+    // TODO: Open new tab
+    // eslint-disable-next-line no-alert
+    alert('TODO: Open a new tab that will poll until the job is started.');
   }
 
   if (job.allowNew) {
     return (
       <LinkButton
         linkComponent={OutboundIconLink}
-        onClick={() => createHandleStart(workspace.id)}
+        onClick={() => handleStart(workspace.id)}
         variant={typographyVariant}
       >
         {children}
