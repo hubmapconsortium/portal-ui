@@ -19,33 +19,31 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType, isExpan
   const clusterData = 'clusterData' in cellsData ? cellsData.clusterData : {};
 
   return (
-    <PaddedDiv>
-      {(isLoading || Object.keys(cellsData).length > 0) && (
-        <>
-          <div>
-            <ChartWrapper>
-              <ChartLoader isLoading={isLoading}>
-                <CellExpressionHistogram queryType={queryType} expressionData={expressionData} />
-              </ChartLoader>
-            </ChartWrapper>
-            <ChartWrapper>
-              <ChartLoader isLoading={isLoading}>
-                <DatasetClusterChart uuid={uuid} results={clusterData} />
-              </ChartLoader>
-            </ChartWrapper>
-          </div>
-          <StyledTypography>
-            {diagnosticInfo ? (
-              `${diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for ${
-                diagnosticInfo.numCells
-              } cells.`
-            ) : (
-              <Skeleton />
-            )}
-          </StyledTypography>
-        </>
-      )}
-    </PaddedDiv>
+    (isLoading || Object.keys(cellsData).length > 0) && (
+      <PaddedDiv>
+        <div>
+          <ChartWrapper>
+            <ChartLoader isLoading={isLoading}>
+              <CellExpressionHistogram queryType={queryType} expressionData={expressionData} />
+            </ChartLoader>
+          </ChartWrapper>
+          <ChartWrapper>
+            <ChartLoader isLoading={isLoading}>
+              <DatasetClusterChart uuid={uuid} results={clusterData} />
+            </ChartLoader>
+          </ChartWrapper>
+        </div>
+        <StyledTypography>
+          {diagnosticInfo ? (
+            `${diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for ${
+              diagnosticInfo.numCells
+            } cells.`
+          ) : (
+            <Skeleton />
+          )}
+        </StyledTypography>
+      </PaddedDiv>
+    )
   );
 }
 
