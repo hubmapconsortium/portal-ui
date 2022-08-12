@@ -10,7 +10,10 @@ import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
 import { AppContext } from 'js/components/Providers';
 import { fetchSearchData } from 'js/hooks/useSearchData';
 import MarkedSlider from 'js/shared-styles/inputs/MarkedSlider';
+import useCellsChartLoadingStore from 'js/stores/useCellsChartLoadingStore';
 import { StyledDiv, StyledTextField } from './style';
+
+const storeSelector = (state) => state.resetFetchedUUIDs;
 
 function getSearchQuery(cellsResults) {
   return {
@@ -57,6 +60,7 @@ function DatasetsSelectedByExpression({
   const [message, setMessage] = useState(null);
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const [genomicModality, setGenomicModality] = useState('rna');
+  const resetFetchedUUIDs = useCellsChartLoadingStore(storeSelector);
 
   function handleSelectModality(event) {
     setGenomicModality(event.target.value);
@@ -65,6 +69,7 @@ function DatasetsSelectedByExpression({
   async function handleSubmit() {
     setIsLoading(true);
     setResults([]);
+    resetFetchedUUIDs();
     const queryParams = {
       type: queryType,
       cellVariableNames,
