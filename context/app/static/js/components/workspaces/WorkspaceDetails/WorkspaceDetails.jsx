@@ -17,7 +17,7 @@ function WorkspaceDetails({ workspace }) {
         {workspace.name}
       </JobLink>
       <Typography variant={typographyVariant}>
-        <span>&nbsp;</span>|<span>&nbsp;</span>
+        &nbsp;|&nbsp;
         <JobStatus job={job} />
       </Typography>
     </Flex>
