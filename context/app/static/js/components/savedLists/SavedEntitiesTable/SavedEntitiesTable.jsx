@@ -64,7 +64,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
           </BottomAlignedTypography>
         }
         buttons={
-          selectedRowsSize > 0 && (
+          selectedRowsSize === 0 ? null : (
             <div>
               <DeselectAllRowsButton />
               <SecondaryBackgroundTooltip title="Delete Items">
