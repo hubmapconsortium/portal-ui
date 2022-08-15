@@ -4,7 +4,7 @@ from pathlib import Path
 from string import Template
 import re
 
-from requests import post
+from requests import post, put
 
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
@@ -46,26 +46,41 @@ def _nb_response(name_stem, nb_str, workspace_name):
     # so we don't need to fall back gracefully.
     if not session['workspaces_token']:
         raise Exception('No workspaces_token')
-    json = {
-        'name': workspace_name,
-        'description': workspace_name,
-        'workspace_details': {
-            'globus_groups_token': session['groups_token'],
-            'symlinks': [],
-            'files': [{
-                'name': f'{name_stem}.ipynb',
-                'content': nb_str,
-            }],
+
+    auth_headers = {'UWS-Authorization': f'Token {session["workspaces_token"]}'}
+    workspaces_base_url = f'{current_app.config["WORKSPACES_ENDPOINT"]}/workspaces'
+
+    create_workspace_response = post(
+        workspaces_base_url,
+        headers=auth_headers,
+        json={
+            'name': workspace_name,
+            'description': workspace_name,
+            'workspace_details': {
+                'globus_groups_token': session['groups_token'],
+                'symlinks': [],
+                'files': [{
+                    'name': f'{name_stem}.ipynb',
+                    'content': nb_str,
+                }],
+            }
         }
-    }
-    response = post(
-        f'{current_app.config["WORKSPACES_ENDPOINT"]}/workspaces',
-        headers={'UWS-Authorization': f'Token {session["workspaces_token"]}'},
-        json=json
     )
-    response.raise_for_status()
-    workspace_id = response.json()['data']['workspace']['id']
-    return redirect(f'/workspaces#workspace-{workspace_id}')
+    create_workspace_response.raise_for_status()
+    workspace_id = create_workspace_response.json()['data']['workspace']['id']
+
+    start_job_response = put(
+        f'{workspaces_base_url}/{workspace_id}/start',
+        headers=auth_headers,
+        json={
+            'job_type': 'JupyterLabJob',
+            'job_details': {},
+        }
+    )
+    start_job_response.raise_for_status()
+    job_id = start_job_response.json()['data']['job']['id']
+
+    return redirect(f'/workspaces/jobs/{job_id}')
 
 
 def _get_workspace_name(request_args):
