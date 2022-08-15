@@ -252,9 +252,10 @@ function Routes(props) {
   }
 
   if (urlPath.startsWith('/workspaces/jobs/')) {
+    const id = urlPath.split('/').pop();
     return (
       <Route>
-        <WorkspacePleaseWait />
+        <WorkspacePleaseWait id={id} />
       </Route>
     );
   }
