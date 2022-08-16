@@ -2,28 +2,33 @@ import React, { useContext } from 'react';
 
 import { AppContext } from 'js/components/Providers';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import LinkButton from 'js/shared-styles/buttons/LinkButton';
 import { startJob } from './utils';
-import { LinkButton } from './style';
 
-function JobLink({ workspace, job, children }) {
+function JobLink({ workspace, job, typographyVariant, children }) {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
 
-  function createHandleStart(workspaceId) {
-    async function handleStart() {
-      startJob({ workspaceId, workspacesEndpoint, workspacesToken });
-    }
-    return handleStart;
+  async function handleStart(workspaceId) {
+    startJob({ workspaceId, workspacesEndpoint, workspacesToken });
   }
 
   if (job.allowNew) {
     return (
-      <OutboundIconLink>
-        <LinkButton onClick={createHandleStart(workspace.id)}>{children}</LinkButton>
-      </OutboundIconLink>
+      <LinkButton
+        linkComponent={OutboundIconLink}
+        onClick={() => handleStart(workspace.id)}
+        variant={typographyVariant}
+      >
+        {children}
+      </LinkButton>
     );
   }
   if (job?.url) {
-    return <OutboundIconLink href={job.url}>{children}</OutboundIconLink>;
+    return (
+      <OutboundIconLink href={job.url} variant={typographyVariant}>
+        {children}
+      </OutboundIconLink>
+    );
   }
   return children;
 }

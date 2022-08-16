@@ -8,10 +8,10 @@ import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { PanelWrapper } from 'js/shared-styles/panels';
 
+import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
 import { createNotebookWorkspace } from './utils';
 import { useWorkspacesList } from './hooks';
 import { StyledButton } from './style';
-import WorkspaceDetails from './WorkspaceDetails';
 
 function WorkspacesList() {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
