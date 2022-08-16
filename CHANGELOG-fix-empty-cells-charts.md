@@ -1,0 +1,1 @@
+- Fix bug which prevented previously expanded cells charts from being reloaded.

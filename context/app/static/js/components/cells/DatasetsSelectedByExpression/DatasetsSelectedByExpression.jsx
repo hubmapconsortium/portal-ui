@@ -1,46 +1,15 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 
 import LogSlider from 'js/shared-styles/inputs/LogSlider';
-import CellsService from 'js/components/cells/CellsService';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
-import { AppContext } from 'js/components/Providers';
-import { fetchSearchData } from 'js/hooks/useSearchData';
+
 import MarkedSlider from 'js/shared-styles/inputs/MarkedSlider';
 import { StyledDiv, StyledTextField } from './style';
-
-function getSearchQuery(cellsResults) {
-  return {
-    size: 10000,
-    post_filter: {
-      bool: {
-        must: [
-          {
-            term: {
-              'entity_type.keyword': 'Dataset',
-            },
-          },
-          {
-            terms: {
-              uuid: cellsResults.map((result) => result.uuid),
-            },
-          },
-        ],
-      },
-    },
-    _source: [
-      'uuid',
-      'hubmap_id',
-      'mapped_data_types',
-      'origin_sample.mapped_organ',
-      'donor',
-      'last_modified_timestamp',
-    ],
-  };
-}
+import { useDatasetsSelectedByExpression } from './hooks';
 
 function DatasetsSelectedByExpression({
   completeStep,
@@ -54,47 +23,15 @@ function DatasetsSelectedByExpression({
   queryType,
   setIsLoading,
 }) {
-  const [message, setMessage] = useState(null);
-  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
-  const [genomicModality, setGenomicModality] = useState('rna');
-
-  function handleSelectModality(event) {
-    setGenomicModality(event.target.value);
-  }
-
-  async function handleSubmit() {
-    setIsLoading(true);
-    setResults([]);
-    const queryParams = {
-      type: queryType,
-      cellVariableNames,
-      minExpression: 10 ** minExpressionLog,
-      minCellPercentage,
-    };
-    if (queryType === 'gene') {
-      queryParams.modality = genomicModality;
-    }
-    try {
-      completeStep(
-        <>
-          {cellVariableNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
-          Percentage
-        </>,
-      );
-      const serviceResults = await new CellsService().getDatasets(queryParams);
-      const searchResults = await fetchSearchData(getSearchQuery(serviceResults), elasticsearchEndpoint, groupsToken);
-      setResults(searchResults.hits.hits);
-      setIsLoading(false);
-    } catch (e) {
-      setMessage(e.message);
-      // TODO: The message is displayed in this component...
-      // but after the user submits their data, the component collapses,
-      // so the message is hidden, and the user just sees the please wait.
-      // Not sure what the best long term solution is, but this unblocks Nils.
-      // eslint-disable-next-line no-alert
-      alert(e.message);
-    }
-  }
+  const { genomicModality, handleSelectModality, handleSubmit, message } = useDatasetsSelectedByExpression({
+    completeStep,
+    setResults,
+    minExpressionLog,
+    minCellPercentage,
+    cellVariableNames,
+    queryType,
+    setIsLoading,
+  });
 
   return (
     <StyledDiv>
