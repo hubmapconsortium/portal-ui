@@ -57,7 +57,9 @@ function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpre
       isExpandedToStart={isExpandedToStart}
     >
       <ExpandableRowCell>
-        <LightBlueLink href={`/browse/dataset/${uuid}?marker=${cellVariableName}`}>{hubmap_id}</LightBlueLink>
+        <LightBlueLink href={`/browse/dataset/${uuid}?marker=${cellVariableName}`} target="_blank">
+          {hubmap_id}
+        </LightBlueLink>
       </ExpandableRowCell>
       <ExpandableRowCell>{origin_sample.mapped_organ}</ExpandableRowCell>
       <ExpandableRowCell>{mapped_data_types.join(', ')}</ExpandableRowCell>
