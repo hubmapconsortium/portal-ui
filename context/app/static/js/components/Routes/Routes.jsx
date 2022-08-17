@@ -251,7 +251,7 @@ function Routes(props) {
     );
   }
 
-  if (urlPath.startsWith('/workspaces/jobs/')) {
+  if (urlPath.startsWith('/workspaces/')) {
     const id = urlPath.split('/').pop();
     return (
       <Route>
