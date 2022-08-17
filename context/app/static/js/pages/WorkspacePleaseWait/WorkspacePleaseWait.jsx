@@ -4,11 +4,11 @@ import { AppContext } from 'js/components/Providers';
 import { locationIfJobRunning } from 'js/components/workspaces/utils';
 
 function WorkspacePleaseWait({ workspaceId }) {
-  const [status, setStatus] = useState();
+  const [message, setMessage] = useState();
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
 
   async function setLocationOrRetry() {
-    const jobLocation = await locationIfJobRunning({ workspaceId, setStatus, workspacesEndpoint, workspacesToken });
+    const jobLocation = await locationIfJobRunning({ workspaceId, setMessage, workspacesEndpoint, workspacesToken });
     if (jobLocation) {
       document.location = jobLocation;
     } else {
@@ -18,7 +18,7 @@ function WorkspacePleaseWait({ workspaceId }) {
 
   setLocationOrRetry();
 
-  return <>Please wait... {status}</>;
+  return <>Please wait... {message}</>;
 }
 
 export default WorkspacePleaseWait;

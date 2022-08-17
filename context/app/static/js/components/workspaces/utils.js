@@ -83,18 +83,26 @@ function condenseJobs(jobs) {
     return null;
   }
 
-  const displayStatusJobs = jobs.map((job) => ({ ...job, status: getDisplayStatus(job.status) }));
+  function getJobMessage(job) {
+    const details = job.job_details.current_job_details;
+    return details.message;
+  }
+
+  const displayStatusJobs = jobs.map((job) => ({
+    ...job,
+    status: getDisplayStatus(job.status),
+  }));
 
   const bestJob = [ACTIVE, ACTIVATING, INACTIVE]
     .map((status) => displayStatusJobs.find((job) => job.status === status))
-    .find((job) => job);
+    .find((job) => job); // Trivial .find() to just take the job with highest status.
 
   const status = bestJob?.status;
   switch (status) {
     case ACTIVE:
-      return { status, allowNew: false, url: getJobUrl(bestJob) };
+      return { status, allowNew: false, url: getJobUrl(bestJob), message: getJobMessage(bestJob) };
     case ACTIVATING:
-      return { status, allowNew: false };
+      return { status, allowNew: false, message: ACTIVATING };
     case INACTIVE:
       return { status, allowNew: true };
     default:
@@ -103,7 +111,7 @@ function condenseJobs(jobs) {
   }
 }
 
-async function locationIfJobRunning({ workspaceId, setStatus, workspacesEndpoint, workspacesToken }) {
+async function locationIfJobRunning({ workspaceId, setMessage, workspacesEndpoint, workspacesToken }) {
   const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, {
     method: 'GET',
     headers: getApiHeaders(workspacesToken),
@@ -112,7 +120,7 @@ async function locationIfJobRunning({ workspaceId, setStatus, workspacesEndpoint
   const { jobs } = jobsResults.data;
   const jobsForWorkspace = jobs.filter((job) => String(job.workspace_id) === workspaceId);
   const job = condenseJobs(jobsForWorkspace);
-  setStatus(job.status);
+  setMessage(job.message);
   if (job.url) {
     return job.url;
   }
