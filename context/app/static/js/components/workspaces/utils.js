@@ -31,7 +31,7 @@ async function createNotebookWorkspace({
   });
 }
 
-async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage }) {
+async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage, setDead }) {
   const startResponse = await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
     method: 'PUT',
     headers: getApiHeaders(workspacesToken),
@@ -40,6 +40,9 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
       job_details: {},
     }),
   });
+  if (!startResponse.ok) {
+    setDead(true);
+  }
   const start = await startResponse.json();
   setMessage(start.message);
 }
@@ -113,11 +116,15 @@ function condenseJobs(jobs) {
   }
 }
 
-async function locationIfJobRunning({ workspaceId, setMessage, workspacesEndpoint, workspacesToken }) {
+async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspacesEndpoint, workspacesToken }) {
   const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, {
     method: 'GET',
     headers: getApiHeaders(workspacesToken),
   });
+  if (!jobsResponse.ok) {
+    setDead(true);
+    setMessage('API Error; Are you logged in?');
+  }
   const jobsResults = await jobsResponse.json();
   const { jobs } = jobsResults.data;
   const jobsForWorkspace = jobs.filter((job) => String(job.workspace_id) === workspaceId);
@@ -127,7 +134,7 @@ async function locationIfJobRunning({ workspaceId, setMessage, workspacesEndpoin
     return job.url;
   }
   if (job.allowNew) {
-    await startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage });
+    await startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage, setDead });
   }
   return null;
 }
