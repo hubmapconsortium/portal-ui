@@ -18,7 +18,7 @@ function Cells() {
   return (
     <>
       <Typography variant="h2" component="h1" color="primary">
-        Datasets
+        Datasets: Molecular Data Queries
       </Typography>
       <SectionPaper>
         Refine datasets to discover genomic and proteomic information including expression distribution and cluster
