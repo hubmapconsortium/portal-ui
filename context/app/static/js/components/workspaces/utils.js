@@ -124,6 +124,7 @@ async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspac
   if (!jobsResponse.ok) {
     setDead(true);
     setMessage('API Error; Are you logged in?');
+    return null;
   }
   const jobsResults = await jobsResponse.json();
   const { jobs } = jobsResults.data;

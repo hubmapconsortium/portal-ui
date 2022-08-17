@@ -9,6 +9,9 @@ function WorkspacePleaseWait({ workspaceId }) {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
 
   async function setLocationOrRetry() {
+    if (dead) {
+      return;
+    }
     const jobLocation = await locationIfJobRunning({
       workspaceId,
       setMessage,
@@ -23,9 +26,7 @@ function WorkspacePleaseWait({ workspaceId }) {
     }
   }
 
-  if (!dead) {
-    setLocationOrRetry();
-  }
+  setLocationOrRetry();
 
   return <>Please wait... {message}</>;
 }
