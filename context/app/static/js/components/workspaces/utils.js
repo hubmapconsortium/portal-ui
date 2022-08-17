@@ -40,7 +40,8 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken }) {
     }),
   });
   const responseJson = await response.json();
-  window.open(`/workspaces/jobs/${responseJson.data.job.id}`, '_blank');
+  // eslint-disable-next-line no-console
+  console.info('new job', responseJson.data.job);
 }
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {
@@ -81,8 +82,7 @@ function condenseJobs(jobs) {
       const { url_domain, url_path } = details.connection_details;
       return `${url_domain}${url_path}`;
     }
-    // TODO
-    return `/poll-job-${job.id}-until-ready`;
+    return null;
   }
 
   const displayStatusJobs = jobs.map((job) => ({ ...job, status: getDisplayStatus(job.status) }));
@@ -105,4 +105,27 @@ function condenseJobs(jobs) {
   }
 }
 
-export { createNotebookWorkspace, startJob, mergeJobsIntoWorkspaces, condenseJobs };
+async function locationIfJobRunning({ workspaceId, setStatus, workspacesEndpoint, workspacesToken }) {
+  const fetchOpts = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'UWS-Authorization': `Token ${workspacesToken}`,
+    },
+  };
+  const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, fetchOpts);
+  const jobsResults = await jobsResponse.json();
+  const { jobs } = jobsResults.data;
+  const jobsForWorkspace = jobs.filter((job) => String(job.workspace_id) === workspaceId);
+  const job = condenseJobs(jobsForWorkspace);
+  setStatus(job.status);
+  if (job.url) {
+    return job.url;
+  }
+  if (job.allowNew) {
+    await startJob({ workspaceId, workspacesEndpoint, workspacesToken });
+  }
+  return null;
+}
+
+export { createNotebookWorkspace, startJob, mergeJobsIntoWorkspaces, condenseJobs, locationIfJobRunning };

@@ -1,30 +1,25 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import { AppContext } from 'js/components/Providers';
+import { locationIfJobRunning } from 'js/components/workspaces/utils';
 
-function WorkspacePleaseWait({ id }) {
+function WorkspacePleaseWait({ workspaceId }) {
+  const [status, setStatus] = useState();
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
 
-  const [status, setStatus] = useState();
-
-  async function loadIfUp() {
-    const response = await fetch(`${workspacesEndpoint}/jobs/${id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'UWS-Authorization': `Token ${workspacesToken}`,
-      },
-    });
-    const responseJson = await response.json();
-    const { current_job_details } = responseJson.data.jobs[0].job_details;
-    setStatus(current_job_details.message);
-    const { connection_details } = current_job_details;
-    if (connection_details) {
-      const { url_path, url_domain } = connection_details;
-      document.location = `${url_domain}${url_path}`;
+  setTimeout(async () => {
+    const jobLocation = await locationIfJobRunning({ workspaceId, setStatus, workspacesEndpoint, workspacesToken });
+    if (jobLocation) {
+      document.location = jobLocation;
     }
-  }
+  }, 1000);
 
-  setInterval(loadIfUp, 1000);
+  setTimeout(async () => {
+    const jobLocation = await locationIfJobRunning({ workspaceId, setStatus, workspacesEndpoint, workspacesToken });
+    if (jobLocation) {
+      document.location = jobLocation;
+    }
+  }, 10000);
 
   return <>Please wait... {status}</>;
 }
