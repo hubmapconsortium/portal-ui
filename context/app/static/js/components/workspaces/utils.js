@@ -130,4 +130,4 @@ async function locationIfJobRunning({ workspaceId, setMessage, workspacesEndpoin
   return null;
 }
 
-export { createNotebookWorkspace, startJob, mergeJobsIntoWorkspaces, condenseJobs, locationIfJobRunning };
+export { createNotebookWorkspace, mergeJobsIntoWorkspaces, condenseJobs, locationIfJobRunning };
