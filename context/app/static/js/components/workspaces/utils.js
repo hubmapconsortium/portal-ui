@@ -1,3 +1,10 @@
+function getApiHeaders(workspacesToken) {
+  return {
+    'Content-Type': 'application/json',
+    'UWS-Authorization': `Token ${workspacesToken}`,
+  };
+}
+
 async function createNotebookWorkspace({
   workspacesEndpoint,
   workspacesToken,
@@ -7,10 +14,7 @@ async function createNotebookWorkspace({
 }) {
   await fetch(`${workspacesEndpoint}/workspaces`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'UWS-Authorization': `Token ${workspacesToken}`,
-    },
+    headers: getApiHeaders(workspacesToken),
     body: JSON.stringify({
       name: workspaceName,
       description: workspaceDescription,
@@ -28,20 +32,14 @@ async function createNotebookWorkspace({
 }
 
 async function startJob({ workspaceId, workspacesEndpoint, workspacesToken }) {
-  const response = await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
+  await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'UWS-Authorization': `Token ${workspacesToken}`,
-    },
+    headers: getApiHeaders(workspacesToken),
     body: JSON.stringify({
       job_type: 'JupyterLabJob',
       job_details: {},
     }),
   });
-  const responseJson = await response.json();
-  // eslint-disable-next-line no-console
-  console.info('new job', responseJson.data.job);
 }
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {
@@ -106,14 +104,10 @@ function condenseJobs(jobs) {
 }
 
 async function locationIfJobRunning({ workspaceId, setStatus, workspacesEndpoint, workspacesToken }) {
-  const fetchOpts = {
+  const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'UWS-Authorization': `Token ${workspacesToken}`,
-    },
-  };
-  const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, fetchOpts);
+    headers: getApiHeaders(workspacesToken),
+  });
   const jobsResults = await jobsResponse.json();
   const { jobs } = jobsResults.data;
   const jobsForWorkspace = jobs.filter((job) => String(job.workspace_id) === workspaceId);
