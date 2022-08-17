@@ -28,7 +28,7 @@ async function createNotebookWorkspace({
 }
 
 async function startJob({ workspaceId, workspacesEndpoint, workspacesToken }) {
-  await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
+  const response = await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -39,6 +39,8 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken }) {
       job_details: {},
     }),
   });
+  const responseJson = await response.json();
+  window.open(`/workspaces/jobs/${responseJson.data.job.id}`, '_blank');
 }
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {

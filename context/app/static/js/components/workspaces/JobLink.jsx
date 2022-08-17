@@ -10,9 +10,6 @@ function JobLink({ workspace, job, typographyVariant, children }) {
 
   async function handleStart(workspaceId) {
     startJob({ workspaceId, workspacesEndpoint, workspacesToken });
-    // TODO: Open new tab
-    // eslint-disable-next-line no-alert
-    alert('TODO: Open a new tab that will poll until the job is started.');
   }
 
   if (job.allowNew) {

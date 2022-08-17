@@ -32,6 +32,7 @@ const DonorSearch = lazy(() => import('js/pages/entity-search/DonorSearch'));
 const SampleSearch = lazy(() => import('js/pages/entity-search/SampleSearch'));
 const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'));
 const Workspaces = lazy(() => import('js/pages/Workspaces'));
+const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
 
 function Routes(props) {
   const { flaskData } = props;
@@ -246,6 +247,15 @@ function Routes(props) {
     return (
       <Route>
         <Workspaces />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/workspaces/jobs/')) {
+    const id = urlPath.split('/').pop();
+    return (
+      <Route>
+        <WorkspacePleaseWait id={id} />
       </Route>
     );
   }
