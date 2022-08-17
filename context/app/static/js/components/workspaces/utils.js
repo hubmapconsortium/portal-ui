@@ -31,8 +31,8 @@ async function createNotebookWorkspace({
   });
 }
 
-async function startJob({ workspaceId, workspacesEndpoint, workspacesToken }) {
-  await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
+async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage }) {
+  const startResponse = await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
     method: 'PUT',
     headers: getApiHeaders(workspacesToken),
     body: JSON.stringify({
@@ -40,6 +40,8 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken }) {
       job_details: {},
     }),
   });
+  const start = await startResponse.json();
+  setMessage(start.message);
 }
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {
@@ -125,7 +127,7 @@ async function locationIfJobRunning({ workspaceId, setMessage, workspacesEndpoin
     return job.url;
   }
   if (job.allowNew) {
-    await startJob({ workspaceId, workspacesEndpoint, workspacesToken });
+    await startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage });
   }
   return null;
 }
