@@ -24,13 +24,14 @@ function DatasetClusterChart({ uuid, results }) {
   };
 
   const selectedData = results[Object.keys(results)[selectedClusterTypeIndex]];
+
   const yScale = scaleLinear({
     domain: [0, Math.max(...selectedData.map((result) => result.matched + result.unmatched))],
     nice: true,
   });
 
   const xScale = scaleBand({
-    domain: selectedData.map((result) => result.cluster_number).sort((a, b) => a - b),
+    domain: selectedData.map((d) => d.formattedXLabels).sort((a, b) => a - b),
     padding: 0.2,
   });
 
@@ -73,6 +74,7 @@ function DatasetClusterChart({ uuid, results }) {
         xAxisLabel="Cluster"
         yAxisLabel="Cell Set Size"
         TooltipContent={DatasetClusterTooltip}
+        xAxisTickLabels={selectedData.map((d) => d.cluster_number)}
       />
     </ChartWrapper>
   );

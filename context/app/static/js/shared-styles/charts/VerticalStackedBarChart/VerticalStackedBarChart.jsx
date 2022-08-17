@@ -6,7 +6,7 @@ import { withParentSize } from '@visx/responsive';
 import { GridRows } from '@visx/grid';
 import Typography from '@material-ui/core/Typography';
 
-import { useChartTooltip } from 'js/shared-styles/charts/hooks';
+import { useChartTooltip, useLongestLabelSize } from 'js/shared-styles/charts/hooks';
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 
@@ -23,8 +23,13 @@ function VerticalStackedBarChart({
   xAxisLabel,
   yAxisLabel,
   TooltipContent,
+  xAxisTickLabels,
 }) {
-  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, margin);
+  const tickLabelSize = 11;
+  const longestLabelSize = useLongestLabelSize({ labels: xAxisTickLabels, labelFontSize: tickLabelSize });
+  const updatedMargin = { ...margin, bottom: Math.max(margin.bottom, longestLabelSize + 40) };
+
+  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
 
   yScale.rangeRound([yHeight, 0]);
   xScale.rangeRound([0, xWidth]);
@@ -43,8 +48,15 @@ function VerticalStackedBarChart({
   return (
     <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
-        <GridRows top={margin.top} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.2} />
-        <Group top={margin.top} left={margin.left}>
+        <GridRows
+          top={updatedMargin.top}
+          left={updatedMargin.left}
+          scale={yScale}
+          width={xWidth}
+          stroke="black"
+          opacity={0.2}
+        />
+        <Group top={updatedMargin.top} left={updatedMargin.left}>
           <BarStack
             data={visxData}
             keys={keys}
@@ -95,10 +107,10 @@ function VerticalStackedBarChart({
             stroke="black"
             tickStroke="black"
             numTicks={Object.keys(visxData).length}
+            labelOffset={longestLabelSize}
             tickLabelProps={() => ({
               fill: 'black',
-              fontSize: 11,
-              textAnchor: 'middle',
+              fontSize: tickLabelSize,
             })}
             labelProps={{
               fontSize: 12,
