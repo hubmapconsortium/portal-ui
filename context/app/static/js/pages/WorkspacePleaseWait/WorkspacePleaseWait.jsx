@@ -7,19 +7,16 @@ function WorkspacePleaseWait({ workspaceId }) {
   const [status, setStatus] = useState();
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
 
-  setTimeout(async () => {
+  async function setLocationOrRetry() {
     const jobLocation = await locationIfJobRunning({ workspaceId, setStatus, workspacesEndpoint, workspacesToken });
     if (jobLocation) {
       document.location = jobLocation;
+    } else {
+      setTimeout(setLocationOrRetry, 5000);
     }
-  }, 1000);
+  }
 
-  setTimeout(async () => {
-    const jobLocation = await locationIfJobRunning({ workspaceId, setStatus, workspacesEndpoint, workspacesToken });
-    if (jobLocation) {
-      document.location = jobLocation;
-    }
-  }, 10000);
+  setLocationOrRetry();
 
   return <>Please wait... {status}</>;
 }
