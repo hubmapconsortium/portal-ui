@@ -31,7 +31,7 @@ function DatasetClusterChart({ uuid, results }) {
   });
 
   const xScale = scaleBand({
-    domain: selectedData.map((d) => d.formattedXLabels).sort((a, b) => a - b),
+    domain: selectedData.map((d) => d.cluster_number).sort((a, b) => a - b),
     padding: 0.2,
   });
 
