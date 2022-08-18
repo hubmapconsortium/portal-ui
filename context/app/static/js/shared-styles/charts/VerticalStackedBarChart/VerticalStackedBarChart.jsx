@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { Text } from '@visx/text';
 
 import { useChartTooltip, useLongestLabelSize } from 'js/shared-styles/charts/hooks';
-import { getChartDimensions } from 'js/shared-styles/charts/utils';
+import { getChartDimensions, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 
 function VerticalStackedBarChart({
@@ -27,8 +27,11 @@ function VerticalStackedBarChart({
   xAxisTickLabels,
 }) {
   const tickLabelSize = 11;
-  const longestLabelSize = useLongestLabelSize({ labels: xAxisTickLabels, labelFontSize: tickLabelSize });
-  const updatedMargin = { ...margin, bottom: Math.max(margin.bottom, 120 + 40) };
+  const longestLabelSize = useLongestLabelSize({
+    labels: xAxisTickLabels.map((label) => trimStringWithMiddleEllipsis(label)),
+    labelFontSize: tickLabelSize,
+  });
+  const updatedMargin = { ...margin, bottom: Math.max(margin.bottom, longestLabelSize + 40) };
 
   const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
 
@@ -121,7 +124,7 @@ function VerticalStackedBarChart({
                 onMouseLeave={handleMouseLeave}
                 {...tickProps}
               >
-                {formattedValue}
+                {trimStringWithMiddleEllipsis(formattedValue)}
               </Text>
             )}
             labelProps={{
