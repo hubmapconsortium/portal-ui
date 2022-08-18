@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 
+import { AppContext } from 'js/components/Providers';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -26,7 +27,14 @@ import { getSectionOrder } from 'js/components/detailPage/utils';
 import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
-function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, registered_doi }) {
+function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, registered_doi, hasNotebook }) {
+  const { workspacesUsers, userEmail } = useContext(AppContext);
+
+  function createWorkspace() {
+    // TODO: Change to form submission, and set up a different route.
+    document.location = `${document.location}.ws.ipynb`;
+  }
+
   return (
     <>
       <SummaryItem>
@@ -43,6 +51,11 @@ function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, regist
         <OutboundIconLink isOutbound href={doi_url} variant="h6" iconFontSize="1.1rem">
           doi:{registered_doi}
         </OutboundIconLink>
+      )}
+      {workspacesUsers.includes(userEmail) && (
+        <button type="submit" onClick={createWorkspace} disabled={!hasNotebook}>
+          create workspace
+        </button>
       )}
     </>
   );
@@ -158,6 +171,7 @@ function DatasetDetail(props) {
             origin_sample={origin_sample}
             registered_doi={registered_doi}
             doi_url={doi_url}
+            hasNotebook={hasNotebook}
           />
         </Summary>
         {shouldDisplaySection.visualization && (
