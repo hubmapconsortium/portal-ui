@@ -43,7 +43,12 @@ function WorkspacesList() {
         }
         buttons={
           <>
-            <StyledButton onClick={handleDelete}>
+            <StyledButton
+              onClick={() => {
+                // eslint-disable-next-line no-alert
+                alert('TODO: Support deletion of multiple datasets');
+              }}
+            >
               <DeleteIcon color="primary" />
             </StyledButton>
             <StyledButton onClick={handleCreate}>
