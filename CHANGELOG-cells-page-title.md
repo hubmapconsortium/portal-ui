@@ -1,1 +1,0 @@
-- Consistent title on cells page.
