@@ -9,7 +9,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { PanelWrapper } from 'js/shared-styles/panels';
 
 import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
-import { createNotebookWorkspace } from './utils';
+import { createEmptyWorkspace, deleteWorkspace } from './utils';
 import { useWorkspacesList } from './hooks';
 import { StyledButton } from './style';
 
@@ -17,27 +17,20 @@ function WorkspacesList() {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
   const { workspacesList } = useWorkspacesList();
 
-  async function handleDelete() {
-    // eslint-disable-next-line no-alert
-    alert('TODO: API does not yet support deletion.');
-    // TODO: Put up modal and get user input.
-    // TODO: Update workspacesList
-    // Waiting on delete to be implemented.
+  async function handleDelete(workspaceId) {
+    deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken });
+    // TODO: Handle failed deletion
+    // TODO: Update list of workspaces
   }
 
   async function handleCreate() {
-    // TODO: Put up a better modal and get user input.
-    // eslint-disable-next-line no-alert
-    const content = prompt('Intial content for notebook');
-
-    createNotebookWorkspace({
+    createEmptyWorkspace({
       workspacesEndpoint,
       workspacesToken,
       workspaceName: 'Workspace Timestamp',
       workspaceDescription: 'TODO: description',
-      notebookContent: content,
     });
-    // TODO: Update list on page
+    // TODO: Update list of workspaces
   }
 
   return (
@@ -72,10 +65,11 @@ function WorkspacesList() {
                 <button
                   type="submit"
                   onClick={() => {
-                    alert('delete');
+                    handleDelete(workspace.id);
                   }}
                 >
                   Delete
+                  {/* TODO: Checkbox instead of button. */}
                 </button>
               </div>
             </PanelWrapper>

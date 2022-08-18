@@ -1,10 +1,4 @@
-async function createNotebookWorkspace({
-  workspacesEndpoint,
-  workspacesToken,
-  workspaceName,
-  workspaceDescription,
-  notebookContent,
-}) {
+async function createEmptyWorkspace({ workspacesEndpoint, workspacesToken, workspaceName, workspaceDescription }) {
   await fetch(`${workspacesEndpoint}/workspaces`, {
     method: 'POST',
     headers: {
@@ -16,15 +10,44 @@ async function createNotebookWorkspace({
       description: workspaceDescription,
       workspace_details: {
         symlinks: [],
-        files: [
-          {
-            name: 'notebook.ipynb',
-            content: notebookContent,
-          },
-        ],
+        files: [],
       },
     }),
   });
+}
+
+async function stopJob({ jobId, workspacesEndpoint, workspacesToken }) {
+  const headers = {
+    'Content-Type': 'application/json',
+    'UWS-Authorization': `Token ${workspacesToken}`,
+  };
+  await fetch(`${workspacesEndpoint}/jobs/${jobId}/stop/`, { method: 'PUT', headers });
+}
+
+async function deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken }) {
+  const headers = {
+    'Content-Type': 'application/json',
+    'UWS-Authorization': `Token ${workspacesToken}`,
+  };
+  const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, { headers });
+  const jobsResults = await jobsResponse.json();
+  const { jobs } = jobsResults.data;
+  jobs.forEach((job) => {
+    if (String(job.workspace_id) === workspaceId) {
+      stopJob({ jobId: job.id, workspacesEndpoint, workspacesToken });
+    }
+  });
+  async function retryDelete() {
+    const deleteResponse = await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/`, {
+      method: 'DELETE',
+      headers,
+    });
+    // Delete will fail until all jobs are stopped, and this is simpler than checking all the jobs.
+    if (!deleteResponse.ok) {
+      setTimeout(retryDelete, 5000);
+    }
+  }
+  retryDelete();
 }
 
 async function startJob({ workspaceId, workspacesEndpoint, workspacesToken }) {
@@ -105,4 +128,4 @@ function condenseJobs(jobs) {
   }
 }
 
-export { createNotebookWorkspace, startJob, mergeJobsIntoWorkspaces, condenseJobs };
+export { createEmptyWorkspace, deleteWorkspace, startJob, mergeJobsIntoWorkspaces, condenseJobs };
