@@ -84,7 +84,7 @@ function AssayTypeBarChart({
                           barStack={barStack}
                           hoverProps={
                             showTooltipAndHover
-                              ? { onMouseEnter: handleMouseEnter(bar, barStack.index), onMouseLeave: handleMouseLeave }
+                              ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }
                               : {}
                           }
                         />

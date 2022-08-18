@@ -75,7 +75,7 @@ function VerticalStackedBarChart({
                         direction="vertical"
                         bar={bar}
                         hoverProps={{
-                          onMouseEnter: handleMouseEnter(bar, barStack.index),
+                          onMouseEnter: () => handleMouseEnter(bar),
                           onMouseLeave: handleMouseLeave,
                         }}
                       />
