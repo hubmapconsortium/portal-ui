@@ -67,7 +67,17 @@ function WorkspacesList() {
             /* TODO: Inbound links have fragments like "#workspace-123": Highlight? */
             <PanelWrapper key={workspace.id}>
               <WorkspaceDetails workspace={workspace} />
-              <div>Created {workspace.datetime_created.slice(0, 10)}</div>
+              <div>
+                Created {workspace.datetime_created.slice(0, 10)}
+                <button
+                  type="submit"
+                  onClick={() => {
+                    alert('delete');
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
             </PanelWrapper>
           ))
         )}
