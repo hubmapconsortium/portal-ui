@@ -27,7 +27,7 @@ function WorkspacesList() {
     createEmptyWorkspace({
       workspacesEndpoint,
       workspacesToken,
-      workspaceName: 'Workspace Timestamp',
+      workspaceName: 'TODO: prompt for name',
       workspaceDescription: 'TODO: description',
     });
     // TODO: Update list of workspaces
