@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
 import { useInView } from 'react-intersection-observer';
 import 'intersection-observer';
 
+import { AppContext } from 'js/components/Providers';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -42,6 +43,12 @@ function SummaryData(props) {
     }
   }, [setSummaryComponentObserver, entry, inView]);
 
+  const { workspacesUsers, userEmail } = useContext(AppContext);
+
+  function createWorkspace() {
+    document.location = `${document.location}.ws.ipynb`;
+  }
+
   return (
     <>
       <Typography variant="subtitle1" component="h1" color="primary" ref={ref}>
@@ -64,6 +71,11 @@ function SummaryData(props) {
               </>
             )}
             <FlexEnd>
+              {workspacesUsers.includes(userEmail) && (
+                <button type="submit" onClick={createWorkspace}>
+                  create workspace
+                </button>
+              )}
               <SecondaryBackgroundTooltip title="View JSON">
                 <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
                   <FileIcon color="primary" />

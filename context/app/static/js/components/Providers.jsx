@@ -18,13 +18,18 @@ const AppContext = React.createContext({});
 
 function Providers(props) {
   const { endpoints, groupsToken, isAuthenticated, userEmail, children, workspacesToken } = props;
+  // TODO: Delete this when workspaces are publicly released.
+  // If we stay in limbo for a long time, this configuration could be moved out of code.
+  const workspacesUsers = ['chuck_mccallum@hms.harvard.edu'];
   // injectFirst ensures styled-components takes priority over mui for styling
   return (
     <StylesProvider generateClassName={generateClassName} injectFirst>
       <GlobalFonts />
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
-          <AppContext.Provider value={{ groupsToken, workspacesToken, isAuthenticated, userEmail, ...endpoints }}>
+          <AppContext.Provider
+            value={{ groupsToken, workspacesToken, workspacesUsers, isAuthenticated, userEmail, ...endpoints }}
+          >
             <CssBaseline />
             <GlobalStyles />
             {children}
