@@ -77,7 +77,8 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
             tickLabelProps={() => ({
               fill: 'black',
               fontSize: 11,
-              textAnchor: 'middle',
+              textAnchor: 'end',
+              angle: -90,
             })}
             labelProps={{
               fontSize: 12,

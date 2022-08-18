@@ -27,7 +27,7 @@ function VerticalStackedBarChart({
 }) {
   const tickLabelSize = 11;
   const longestLabelSize = useLongestLabelSize({ labels: xAxisTickLabels, labelFontSize: tickLabelSize });
-  const updatedMargin = { ...margin, bottom: Math.max(margin.bottom, longestLabelSize + 40) };
+  const updatedMargin = { ...margin, bottom: Math.max(margin.bottom, 120 + 40) };
 
   const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
 
@@ -111,6 +111,8 @@ function VerticalStackedBarChart({
             tickLabelProps={() => ({
               fill: 'black',
               fontSize: tickLabelSize,
+              textAnchor: 'end',
+              angle: -90,
             })}
             labelProps={{
               fontSize: 12,
