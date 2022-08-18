@@ -5,6 +5,8 @@ import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import { GridRows } from '@visx/grid';
 import Typography from '@material-ui/core/Typography';
+import { mergeRefs } from 'react-merge-refs';
+import { Text } from '@visx/text';
 
 import { useChartTooltip, useLongestLabelSize } from 'js/shared-styles/charts/hooks';
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
@@ -45,9 +47,20 @@ function VerticalStackedBarChart({
     handleMouseLeave,
   } = useChartTooltip();
 
+  const {
+    tooltipData: tickTooltipData,
+    tooltipLeft: tickTooltipLeft,
+    tooltipTop: tickTooltipTop,
+    tooltipOpen: tickTooltipOpen,
+    containerRef: tickContainerRef,
+    TooltipInPortal: TickTooltipInPortal,
+    handleMouseEnter: tickHandleMouseEnter,
+    handleMouseLeave: tickHandleMouseLeave,
+  } = useChartTooltip();
+
   return (
     <>
-      <svg width={parentWidth} height={parentHeight} ref={containerRef}>
+      <svg width={parentWidth} height={parentHeight} ref={mergeRefs([containerRef, tickContainerRef])}>
         <GridRows
           top={updatedMargin.top}
           left={updatedMargin.left}
@@ -75,7 +88,7 @@ function VerticalStackedBarChart({
                         direction="vertical"
                         bar={bar}
                         hoverProps={{
-                          onMouseEnter: () => handleMouseEnter(bar),
+                          onMouseEnter: handleMouseEnter(bar),
                           onMouseLeave: handleMouseLeave,
                         }}
                       />
@@ -114,6 +127,19 @@ function VerticalStackedBarChart({
               textAnchor: 'end',
               angle: -90,
             })}
+            tickComponent={({ formattedValue, x, y, ...tickProps }) => {
+              return (
+                <Text
+                  x={x}
+                  y={y}
+                  onMouseEnter={tickHandleMouseEnter({ key: formattedValue })}
+                  onMouseLeave={tickHandleMouseLeave}
+                  {...tickProps}
+                >
+                  {formattedValue}
+                </Text>
+              );
+            }}
             labelProps={{
               fontSize: 12,
               textAnchor: 'middle',
@@ -128,12 +154,19 @@ function VerticalStackedBarChart({
           ) : (
             <>
               <Typography>{tooltipData.key}</Typography>
-              <Typography variant="h3" component="p" color="textPrimary">
+              <Typography variant="h6" component="p" color="textPrimary">
                 {tooltipData.bar.data[tooltipData.key]}
               </Typography>
             </>
           )}
         </TooltipInPortal>
+      )}
+      {tickTooltipOpen && (
+        <TickTooltipInPortal top={tickTooltipTop} left={tickTooltipLeft}>
+          <Typography variant="h6" component="p" color="textPrimary">
+            {tickTooltipData.key}
+          </Typography>
+        </TickTooltipInPortal>
       )}
     </>
   );
