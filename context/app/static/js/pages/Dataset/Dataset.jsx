@@ -57,8 +57,8 @@ function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, regist
       )}
       {workspacesUsers.includes(userEmail) && (
         <SecondaryBackgroundTooltip title="Launch a new workspace in Jupyter notebook.">
-          <WhiteBackgroundIconButton onClick={createWorkspace} disabled={!hasNotebook}>
-            <SvgIcon color="primary" component={WorkspacesIcon} />
+          <WhiteBackgroundIconButton color="primary" onClick={createWorkspace} disabled={!hasNotebook}>
+            <SvgIcon component={WorkspacesIcon} />
           </WhiteBackgroundIconButton>
         </SecondaryBackgroundTooltip>
       )}
