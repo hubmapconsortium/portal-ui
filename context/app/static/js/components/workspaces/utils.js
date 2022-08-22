@@ -40,6 +40,7 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
       job_details: {},
     }),
   });
+
   if (!startResponse.ok) {
     setDead(true);
   }
@@ -126,11 +127,13 @@ async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspac
     setMessage('API Error; Are you logged in?');
     return null;
   }
+
   const jobsResults = await jobsResponse.json();
   const { jobs } = jobsResults.data;
   const jobsForWorkspace = jobs.filter((job) => String(job.workspace_id) === workspaceId);
   const job = condenseJobs(jobsForWorkspace);
   setMessage(job.message);
+
   if (job.url) {
     return job.url;
   }
