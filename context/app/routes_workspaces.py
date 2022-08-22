@@ -16,8 +16,8 @@ def index():
     )
 
 
-@blueprint.route('/workspaces/jobs/<job_id>')
-def please_wait(job_id):
+@blueprint.route('/workspaces/<workspace_id>')
+def please_wait(workspace_id):
     flask_data = {**get_default_flask_data()}
     return render_template(
         'base-pages/react-content.html',

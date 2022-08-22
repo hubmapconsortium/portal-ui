@@ -4,7 +4,7 @@ from pathlib import Path
 from string import Template
 import re
 
-from requests import post, put
+from requests import post
 
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
@@ -69,18 +69,7 @@ def _nb_response(name_stem, nb_str, workspace_name):
     create_workspace_response.raise_for_status()
     workspace_id = create_workspace_response.json()['data']['workspace']['id']
 
-    start_job_response = put(
-        f'{workspaces_base_url}/{workspace_id}/start',
-        headers=auth_headers,
-        json={
-            'job_type': 'JupyterLabJob',
-            'job_details': {},
-        }
-    )
-    start_job_response.raise_for_status()
-    job_id = start_job_response.json()['data']['job']['id']
-
-    return redirect(f'/workspaces/jobs/{job_id}')
+    return redirect(f'/workspaces/{workspace_id}')
 
 
 def _get_workspace_name(request_args):
