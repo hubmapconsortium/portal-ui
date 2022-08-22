@@ -1,1 +1,0 @@
-- Fix output dir path in query-portal-logs.py

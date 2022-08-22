@@ -1,3 +1,16 @@
+## v0.51.0 - 2022-08-18
+
+- Consistent title on cells page.
+- Consolidate datasets selected by expression hooks in cells ui.
+- From Cells UI, datasets open in new tab.
+- Fix index v3 regression: Only show file browser is there are files.
+- Fix bug which prevented previously expanded cells charts from being reloaded.
+- Fix output dir path in query-portal-logs.py
+- Add reusabe link button component and use in workspaces.
+- Implement a "please-wait" page for workspaces which have not yet started.
+- Fix proptype errors.
+
+
 ## v0.50.1 - 2022-08-11
 
 - Add another parameter to the vis-scan script, so we can target other indices.

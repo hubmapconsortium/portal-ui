@@ -4,7 +4,7 @@ import { AppContext } from 'js/components/Providers';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import Description from 'js/shared-styles/sections/Description';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import AuthenticatedWorkspacesDescription from 'js/components/workspaces/AuthenticatedWorkspacesDescription';
+import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenticated';
 
 function Workspaces() {
   const { isAuthenticated } = useContext(AppContext);
@@ -19,7 +19,7 @@ function Workspaces() {
           view saved workspaces or to begin a new workspace.
         </Description>
       ) : (
-        <AuthenticatedWorkspacesDescription />
+        <WorkspacesAuthenticated />
       )}
     </>
   );
