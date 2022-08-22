@@ -54,7 +54,7 @@ test('it should pick an activating job if no active jobs are available', () => {
     },
   ];
   const job = condenseJobs(jobs);
-  expect(job).toEqual({ allowNew: false, status: 'Activating' });
+  expect(job).toEqual({ allowNew: false, status: 'Activating', message: 'Activating' });
 });
 
 test('it should map unknown status codes', () => {
