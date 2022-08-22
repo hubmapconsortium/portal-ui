@@ -9,7 +9,7 @@ function WorkspacesAuthenticated() {
   const { workspacesToken } = useContext(AppContext);
 
   if (!workspacesToken) {
-    return <Description padding="20px">The workspaces token request failed at login.</Description>;
+    throw Error('The workspaces token request failed at login');
   }
 
   return (
