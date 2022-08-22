@@ -1,4 +1,4 @@
-function getApiHeaders(workspacesToken) {
+function getWorkspacesApiHeaders(workspacesToken) {
   return {
     'Content-Type': 'application/json',
     'UWS-Authorization': `Token ${workspacesToken}`,
@@ -14,7 +14,7 @@ async function createNotebookWorkspace({
 }) {
   await fetch(`${workspacesEndpoint}/workspaces`, {
     method: 'POST',
-    headers: getApiHeaders(workspacesToken),
+    headers: getWorkspacesApiHeaders(workspacesToken),
     body: JSON.stringify({
       name: workspaceName,
       description: workspaceDescription,
@@ -34,7 +34,7 @@ async function createNotebookWorkspace({
 async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage, setDead }) {
   const startResponse = await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
     method: 'PUT',
-    headers: getApiHeaders(workspacesToken),
+    headers: getWorkspacesApiHeaders(workspacesToken),
     body: JSON.stringify({
       job_type: 'JupyterLabJob',
       job_details: {},
@@ -119,7 +119,7 @@ function condenseJobs(jobs) {
 async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspacesEndpoint, workspacesToken }) {
   const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, {
     method: 'GET',
-    headers: getApiHeaders(workspacesToken),
+    headers: getWorkspacesApiHeaders(workspacesToken),
   });
   if (!jobsResponse.ok) {
     setDead(true);
