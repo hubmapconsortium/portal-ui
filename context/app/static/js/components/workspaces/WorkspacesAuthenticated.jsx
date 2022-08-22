@@ -5,30 +5,23 @@ import { AppContext } from 'js/components/Providers';
 import Description from 'js/shared-styles/sections/Description';
 import WorkspacesList from './WorkspacesList';
 
-function AuthenticatedWorkspacesDescription() {
+function WorkspacesAuthenticated() {
   const { workspacesToken } = useContext(AppContext);
 
-  const contact = (
-    <>
-      For any problems, notify Juan Puerto in <code>#workspaces</code>.
-    </>
-  );
-
   if (!workspacesToken) {
-    return (
-      <Description padding="20px">
-        The workspaces token request failed at login. {contact}{' '}
-        <OutboundIconLink href="https://github.com/hubmapconsortium/user_workspaces_server/issues/58">
-          Github issue
-        </OutboundIconLink>
-      </Description>
-    );
+    throw Error('The workspaces token request failed at login');
   }
 
   return (
     <>
       <Description padding="20px">
-        <strong>This is not yet ready for production use! {contact}</strong>{' '}
+        <strong>
+          This is a private beta release, with{' '}
+          <OutboundIconLink href="https://github.com/hubmapconsortium/portal-ui/issues/2799">
+            lots of work
+          </OutboundIconLink>{' '}
+          still to do.
+        </strong>{' '}
         {/*
           TODO: Add links below.
           TODO: Not all of these entry points will be functional on first release. Update text accordingly.
@@ -41,4 +34,4 @@ function AuthenticatedWorkspacesDescription() {
   );
 }
 
-export default AuthenticatedWorkspacesDescription;
+export default WorkspacesAuthenticated;

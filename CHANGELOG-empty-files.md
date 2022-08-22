@@ -1,1 +1,0 @@
-- Fix index v3 regression: Only show file browser is there are files.

@@ -1,10 +1,14 @@
+function getWorkspacesApiHeaders(workspacesToken) {
+  return {
+    'Content-Type': 'application/json',
+    'UWS-Authorization': `Token ${workspacesToken}`,
+  };
+}
+
 async function createEmptyWorkspace({ workspacesEndpoint, workspacesToken, workspaceName, workspaceDescription }) {
   await fetch(`${workspacesEndpoint}/workspaces`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'UWS-Authorization': `Token ${workspacesToken}`,
-    },
+    headers: getWorkspacesApiHeaders(workspacesToken),
     body: JSON.stringify({
       name: workspaceName,
       description: workspaceDescription,
@@ -17,18 +21,14 @@ async function createEmptyWorkspace({ workspacesEndpoint, workspacesToken, works
 }
 
 async function stopJob({ jobId, workspacesEndpoint, workspacesToken }) {
-  const headers = {
-    'Content-Type': 'application/json',
-    'UWS-Authorization': `Token ${workspacesToken}`,
-  };
-  await fetch(`${workspacesEndpoint}/jobs/${jobId}/stop/`, { method: 'PUT', headers });
+  await fetch(`${workspacesEndpoint}/jobs/${jobId}/stop/`, {
+    method: 'PUT',
+    headers: getWorkspacesApiHeaders(workspacesToken),
+  });
 }
 
 async function deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken }) {
-  const headers = {
-    'Content-Type': 'application/json',
-    'UWS-Authorization': `Token ${workspacesToken}`,
-  };
+  const headers = getWorkspacesApiHeaders(workspacesToken);
   const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, { headers });
   const jobsResults = await jobsResponse.json();
   const { jobs } = jobsResults.data;
@@ -50,20 +50,21 @@ async function deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToke
   retryDelete();
 }
 
-async function startJob({ workspaceId, workspacesEndpoint, workspacesToken }) {
-  const response = await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
+async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage, setDead }) {
+  const startResponse = await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'UWS-Authorization': `Token ${workspacesToken}`,
-    },
+    headers: getWorkspacesApiHeaders(workspacesToken),
     body: JSON.stringify({
       job_type: 'JupyterLabJob',
       job_details: {},
     }),
   });
-  const responseJson = await response.json();
-  window.open(`/workspaces/jobs/${responseJson.data.job.id}`, '_blank');
+
+  if (!startResponse.ok) {
+    setDead(true);
+  }
+  const start = await startResponse.json();
+  setMessage(start.message);
 }
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {
@@ -104,22 +105,29 @@ function condenseJobs(jobs) {
       const { url_domain, url_path } = details.connection_details;
       return `${url_domain}${url_path}`;
     }
-    // TODO
-    return `/poll-job-${job.id}-until-ready`;
+    return null;
   }
 
-  const displayStatusJobs = jobs.map((job) => ({ ...job, status: getDisplayStatus(job.status) }));
+  function getJobMessage(job) {
+    const details = job.job_details.current_job_details;
+    return details.message;
+  }
+
+  const displayStatusJobs = jobs.map((job) => ({
+    ...job,
+    status: getDisplayStatus(job.status),
+  }));
 
   const bestJob = [ACTIVE, ACTIVATING, INACTIVE]
     .map((status) => displayStatusJobs.find((job) => job.status === status))
-    .find((job) => job);
+    .find((job) => job); // Trivial .find() to just take the job with highest status.
 
   const status = bestJob?.status;
   switch (status) {
     case ACTIVE:
-      return { status, allowNew: false, url: getJobUrl(bestJob) };
+      return { status, allowNew: false, url: getJobUrl(bestJob), message: getJobMessage(bestJob) };
     case ACTIVATING:
-      return { status, allowNew: false };
+      return { status, allowNew: false, message: ACTIVATING };
     case INACTIVE:
       return { status, allowNew: true };
     default:
@@ -128,4 +136,30 @@ function condenseJobs(jobs) {
   }
 }
 
-export { createEmptyWorkspace, deleteWorkspace, startJob, mergeJobsIntoWorkspaces, condenseJobs };
+async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspacesEndpoint, workspacesToken }) {
+  const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, {
+    method: 'GET',
+    headers: getWorkspacesApiHeaders(workspacesToken),
+  });
+  if (!jobsResponse.ok) {
+    setDead(true);
+    setMessage('API Error; Are you logged in?');
+    return null;
+  }
+
+  const jobsResults = await jobsResponse.json();
+  const { jobs } = jobsResults.data;
+  const jobsForWorkspace = jobs.filter((job) => String(job.workspace_id) === workspaceId);
+  const job = condenseJobs(jobsForWorkspace);
+  setMessage(job.message);
+
+  if (job.url) {
+    return job.url;
+  }
+  if (job.allowNew) {
+    await startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage, setDead });
+  }
+  return null;
+}
+
+export { createEmptyWorkspace, deleteWorkspace, mergeJobsIntoWorkspaces, condenseJobs, locationIfJobRunning };
