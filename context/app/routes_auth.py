@@ -1,4 +1,5 @@
 from urllib.parse import urlencode, unquote
+from datetime import datetime
 
 from flask import (
     make_response, current_app, url_for,
@@ -141,6 +142,10 @@ def login():
     previous_url = unquote(request.cookies.get('urlBeforeLogin'))
     response = make_response(
         redirect(previous_url))
+    response.set_cookie(
+        key='last_login',
+        value=datetime.now().isoformat(),
+        expires=2**31 - 1)
     log('7: redirect previous_url')
     return response
 
