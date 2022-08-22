@@ -142,6 +142,7 @@ def login():
     previous_url = unquote(request.cookies.get('urlBeforeLogin'))
     response = make_response(
         redirect(previous_url))
+    # Cookie read in trackers.js:
     response.set_cookie(
         key='last_login',
         value=datetime.now().isoformat(),
