@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from 'react';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { AppContext } from 'js/components/Providers';
 import { LightBlueLink } from 'js/shared-styles/Links';
@@ -19,7 +20,9 @@ import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/components/detailPage/style';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getAllCollectionsQuery } from 'js/helpers/queries';
-
+import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 // TODO use this context for components other than FileBrowser
 import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
@@ -53,9 +56,11 @@ function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, regist
         </OutboundIconLink>
       )}
       {workspacesUsers.includes(userEmail) && (
-        <button type="submit" onClick={createWorkspace} disabled={!hasNotebook}>
-          create workspace
-        </button>
+        <SecondaryBackgroundTooltip title="Launch a new workspace in Jupyter notebook.">
+          <WhiteBackgroundIconButton color="primary" onClick={createWorkspace} disabled={!hasNotebook}>
+            <SvgIcon component={WorkspacesIcon} />
+          </WhiteBackgroundIconButton>
+        </SecondaryBackgroundTooltip>
       )}
     </>
   );
