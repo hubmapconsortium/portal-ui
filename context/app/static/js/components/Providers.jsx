@@ -20,7 +20,12 @@ function Providers(props) {
   const { endpoints, groupsToken, isAuthenticated, userEmail, children, workspacesToken } = props;
   // TODO: Delete this when workspaces are publicly released.
   // If we stay in limbo for a long time, this configuration could be moved out of code.
-  const workspacesUsers = ['chuck_mccallum@hms.harvard.edu', 'john_conroy@hms.harvard.edu'];
+  const workspacesUsers = [
+    'chuck_mccallum@hms.harvard.edu',
+    'john_conroy@hms.harvard.edu',
+    'pdblood@andrew.cmu.edu',
+    'jpuerto@andrew.cmu.edu'
+  ];
   // injectFirst ensures styled-components takes priority over mui for styling
   return (
     <StylesProvider generateClassName={generateClassName} injectFirst>
