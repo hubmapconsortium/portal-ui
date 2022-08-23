@@ -14,9 +14,7 @@ function UserLinks(props) {
   return (
     <Dropdown title={<TruncatedSpan>{isAuthenticated ? userEmail || 'User' : 'User Profile'}</TruncatedSpan>}>
       <DropdownLink href="/my-lists">My Lists</DropdownLink>
-      {isAuthenticated && workspacesUsers.includes(userEmail) && (
-        <DropdownLink href="/workspaces">My Workspaces</DropdownLink>
-      )}
+      {workspacesUsers.includes(userEmail) && <DropdownLink href="/workspaces">My Workspaces</DropdownLink>}
       <StyledDivider />
       {isAuthenticated ? (
         <WarningDropdownLink href="/logout">Log Out</WarningDropdownLink>
