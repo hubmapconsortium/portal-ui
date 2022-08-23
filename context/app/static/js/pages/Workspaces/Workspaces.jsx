@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import SvgIcon from '@material-ui/core/SvgIcon';
 
+import HeaderIcon from 'js/shared-styles/icons/HeaderIcon';
 import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
 import { AppContext } from 'js/components/Providers';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -13,7 +13,7 @@ function Workspaces() {
   return (
     <>
       <SectionHeader variant="h1" component="h1">
-        <SvgIcon component={WorkspacesIcon} /> My Workspaces
+        <HeaderIcon component={WorkspacesIcon} /> My Workspaces
       </SectionHeader>
       {!isAuthenticated ? (
         <Description padding="20px">
