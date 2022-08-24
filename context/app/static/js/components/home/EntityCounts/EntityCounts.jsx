@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import EntityCount from 'js/components/home/EntityCount';
 import { DatasetIcon, SampleIcon, DonorIcon, CollectionIcon } from 'js/shared-styles/icons';
-import useSearchData from 'js/hooks/useSearchData';
+import { useEntityCounts } from './hooks';
 import { Background, FlexContainer } from './style';
-
-const entityCountsQuery = {
-  size: 0,
-  aggs: { entity_type: { terms: { field: 'entity_type.keyword' } } },
-};
 
 const entities = [
   {
@@ -26,19 +21,7 @@ const entities = [
 ];
 
 function EntityCounts() {
-  const [entityCounts, setEntityCountsData] = useState(undefined);
-  const { searchData: elasticsearchData } = useSearchData(entityCountsQuery);
-  useEffect(() => {
-    if (Object.keys(elasticsearchData).length) {
-      const entityCountsObject = elasticsearchData.aggregations.entity_type.buckets.reduce((acc, entity) => {
-        const accCopy = acc;
-        accCopy[entity.key] = entity.doc_count;
-        return accCopy;
-      }, {});
-      setEntityCountsData(entityCountsObject);
-    }
-  }, [elasticsearchData]);
-
+  const entityCounts = useEntityCounts();
   return (
     <Background>
       <FlexContainer>
