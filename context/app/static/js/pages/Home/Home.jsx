@@ -25,7 +25,7 @@ import {
   UpperGrid,
 } from './style';
 
-function Home() {
+function Home({ organs }) {
   const theme = useTheme();
   const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -46,7 +46,7 @@ function Home() {
           <ImageCarouselContainer />
         </GridAreaContainer>
         <GridArea $gridAreaTitle="counts">
-          <EntityCounts />
+          <EntityCounts organs={organs} />
           <FacetSearch />
         </GridArea>
       </UpperGrid>

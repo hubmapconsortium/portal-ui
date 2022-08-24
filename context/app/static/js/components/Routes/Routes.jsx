@@ -102,7 +102,7 @@ function Routes(props) {
   if (urlPath === '/') {
     return (
       <Route disableWidthConstraint>
-        <Home />
+        <Home organs={organs} />
       </Route>
     );
   }
