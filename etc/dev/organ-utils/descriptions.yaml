@@ -69,6 +69,7 @@ http://purl.obolibrary.org/obo/UBERON_0002113:
   description: A paired organ of the urinary tract which has the production of urine as its primary function.
 http://purl.obolibrary.org/obo/UBERON_0001485:
   # Using UBERON ID and description for "Knee Joint".
+  # CCF says: "Unknown IRI"
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-knee.svg
   name: Knee
   description: "The knee joint joins the thigh with the leg and consists of two articulations:
@@ -115,8 +116,9 @@ http://purl.obolibrary.org/obo/UBERON_0002370:
   description: Anatomical structure of largely lymphoid tissue that functions in
     cell-mediated immunity by being the site where T cells develop.
 http://purl.obolibrary.org/obo/UBERON_0004537:
+  # Uberon and descriptions is more precisely for "Blood Vasculature"
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-vasculature-thick.svg
-  name: Blood Vasculature
+  name: Vasculature
   description: "A vascular network consisting of blood vessels"
 http://purl.obolibrary.org/obo/UBERON_0001264:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-pancreas.svg
@@ -124,11 +126,12 @@ http://purl.obolibrary.org/obo/UBERON_0001264:
   description: "An endoderm derived structure that produces precursors of
     digestive enzymes and blood glucose regulating enzymes[GO]."
 http://purl.obolibrary.org/obo/UBERON_0000178:
-  # TODO: Get a new distict icon.
+  # CCF says: "Unknown IRI"
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-vasculature-thick.svg
   name: Blood
   description: "A fluid that is composed of blood plasma and erythrocytes."
 http://purl.obolibrary.org/obo/UBERON_0001987:
+  # CCF says: "Unknown IRI"
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-placenta.svg
   name: Placenta
   description: "Organ of metabolic interchange between fetus and mother, partly of embryonic origin 
@@ -136,6 +139,7 @@ http://purl.obolibrary.org/obo/UBERON_0001987:
     The maternal portion is known as the decidua basalis. The two portions are held together by anchoring villi 
     that are anchored to the decidua basalis by the cytotrophoblastic shell."
 http://purl.obolibrary.org/obo/UBERON_0002240:
+  # CCF says: "Unknown IRI"
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spinal-cord.svg
   name: Spinal Cord
   description: "Part of the central nervous system located in the vertebral canal continuous with and caudal
@@ -143,6 +147,7 @@ http://purl.obolibrary.org/obo/UBERON_0002240:
     gray matter in which nerve cells predominate, and an outer layer of white matter in which 
     myelinated nerve fibers predominate, and surrounds the central canal."
 http://purl.obolibrary.org/obo/UBERON_0002185:
+  # CCF says: "Unknown IRI"
   # TODO: Get a new distinct icon.
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
   name: Bronchus
@@ -154,6 +159,7 @@ http://purl.obolibrary.org/obo/UBERON_0002108:
     of the digestion and absorption of food takes place (with the exception of ruminants). The mammalian 
     small intestine is long and coiled and can be differentiated histologically into: duodenum, jejunem, ileum"
 http://purl.obolibrary.org/obo/UBERON_0003126:
+  # CCF says: "Unknown IRI"
   # TODO: Get a new distinct icon.
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
   name: Trachea
