@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 
 import frontmatter
 
-from .utils import get_default_flask_data, make_blueprint
+from .utils import get_default_flask_data, make_blueprint, get_organs
 
 
 blueprint = make_blueprint(__name__)
@@ -70,8 +70,7 @@ def publication_details_view(name):
 
 @blueprint.route('/organ')
 def organ_index_view():
-    dir_path = Path(dirname(__file__) + '/organ')
-    organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
+    organs = get_organs()
     flask_data = {
         **get_default_flask_data(),
         'organs': organs
