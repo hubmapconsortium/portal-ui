@@ -1,11 +1,26 @@
+# There is no API that links all the organ information across the different components,
+# so we do it here, and then run make_organ_dir.py to generate the the per-organ yaml files
+# that are used at render time by the organ pages.
+#
+# Links to datasets on the organ pages will not be generated until the datasets are public.
+#
+# Azimuth reference information is pulled from source files on github.
+#
+# Find organ descriptions at
+# https://www.ebi.ac.uk/ols/search?ontology=uberon
+# (These descriptions could plausibly be extracted by the script, but pasting them here gives us more control,
+# and lets us add notes which may apply only for HuBMAP.)
+#
 # Find organ icons at the CCF Reference Library:
 # https://hubmapconsortium.github.io/ccf/pages/ccf-3d-reference-library.html
+
 
 http://purl.obolibrary.org/obo/UBERON_0000995:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-uterus.svg
   name: Uterus
   description: The female muscular organ of gestation in which the developing embryo or fetus is nourished until birth
 http://purl.obolibrary.org/obo/UBERON_0001255:
+  # CCF and Uberon term taken for "Urinary Bladder".
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-bladder.svg
   name: Bladder
   description: Distensible musculomembranous organ situated in the anterior part of the pelvic cavity in which urine collects before excretion.
@@ -52,10 +67,15 @@ http://purl.obolibrary.org/obo/UBERON_0002113:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-kidney.svg
   name: Kidney
   description: A paired organ of the urinary tract which has the production of urine as its primary function.
-http://purl.obolibrary.org/obo/UBERON_0001465:
+http://purl.obolibrary.org/obo/UBERON_0001485:
+  # Using UBERON ID and description for "Knee Joint".
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-knee.svg
   name: Knee
-  description: A segment of the hindlimb that corresponds to the joint connecting a hindlimb stylopod and zeugopod.
+  description: "The knee joint joins the thigh with the leg and consists of two articulations:
+    one between the femur and tibia, and one between the femur and patella. It is the largest 
+    and most complicated joint in the human body. The knee is a mobile trocho-ginglymus 
+    (i.e. a pivotal hinge joint), which permits flexion and extension as well as a slight 
+    medial and lateral rotation[WP,unvetted]."
 http://purl.obolibrary.org/obo/UBERON_0002106:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spleen.svg
   name: Spleen
@@ -71,6 +91,7 @@ http://purl.obolibrary.org/obo/UBERON_0000955:
     head, protected by the skull and close to the primary sensory apparatus of
     vision, hearing, balance, taste, and smell[WP].
 http://purl.obolibrary.org/obo/UBERON_0002048:
+  # CCF has "Lungs"
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
   name: Lung
   description: Respiration organ that develops as an outpocketing of the esophagus.
@@ -81,6 +102,8 @@ http://purl.obolibrary.org/obo/UBERON_0000029:
     a capsule of connective tissue, are distributed along the lymphatic vessels,
     and contain numerous lymphocytes which filter the flow of lymph.
 http://purl.obolibrary.org/obo/UBERON_0001270:
+  # CCF has "Bone Marrow & Blood/Pelvis":
+  # I have no idea what we want to do with that.
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-pelvis-f.svg
   name: Pelvis
   description: A ring of bone formed by the sacrum and the first few coccygeal
@@ -91,15 +114,47 @@ http://purl.obolibrary.org/obo/UBERON_0002370:
   name: Thymus
   description: Anatomical structure of largely lymphoid tissue that functions in
     cell-mediated immunity by being the site where T cells develop.
-http://purl.obolibrary.org/obo/UBERON_0002049:
+http://purl.obolibrary.org/obo/UBERON_0004537:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-vasculature-thick.svg
-  name: Vasculature
-  description: "An interconnected tubular multi-tissue structure contains fluid
-    that is actively transported around the organism[ZFA]. Examples: vasculature
-    of lung, vasculature of face."
+  name: Blood Vasculature
+  description: "A vascular network consisting of blood vessels"
 http://purl.obolibrary.org/obo/UBERON_0001264:
   icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-pancreas.svg
   name: Pancreas
   description: "An endoderm derived structure that produces precursors of
     digestive enzymes and blood glucose regulating enzymes[GO]."
-
+http://purl.obolibrary.org/obo/UBERON_0000178:
+  # TODO: Get a new distict icon.
+  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-vasculature-thick.svg
+  name: Blood
+  description: "A fluid that is composed of blood plasma and erythrocytes."
+http://purl.obolibrary.org/obo/UBERON_0001987:
+  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-placenta.svg
+  name: Placenta
+  description: "Organ of metabolic interchange between fetus and mother, partly of embryonic origin 
+    and partly of maternal origin[GO]. The fetal portion of the placenta is known as the villous chorion. 
+    The maternal portion is known as the decidua basalis. The two portions are held together by anchoring villi 
+    that are anchored to the decidua basalis by the cytotrophoblastic shell."
+http://purl.obolibrary.org/obo/UBERON_0002240:
+  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spinal-cord.svg
+  name: Spinal Cord
+  description: "Part of the central nervous system located in the vertebral canal continuous with and caudal
+    to the brain; demarcated from brain by plane of foramen magnum. It is composed of an inner core of 
+    gray matter in which nerve cells predominate, and an outer layer of white matter in which 
+    myelinated nerve fibers predominate, and surrounds the central canal."
+http://purl.obolibrary.org/obo/UBERON_0002185:
+  # TODO: Get a new distinct icon.
+  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
+  name: Bronchus
+  description: "The upper conducting airways of the lung; these airways arise from the terminus of the trachea."
+http://purl.obolibrary.org/obo/UBERON_0002108:
+  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-small%20intestine.svg
+  name: Small Intestine
+  description: "Subdivision of digestive tract that connects the stomach to the large intestine and is where much
+    of the digestion and absorption of food takes place (with the exception of ruminants). The mammalian 
+    small intestine is long and coiled and can be differentiated histologically into: duodenum, jejunem, ileum"
+http://purl.obolibrary.org/obo/UBERON_0003126:
+  # TODO: Get a new distinct icon.
+  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
+  name: Trachea
+  description: "The trachea is the portion of the airway that attaches to the bronchi as it branches."
