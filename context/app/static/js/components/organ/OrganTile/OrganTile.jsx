@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import Tile from 'js/shared-styles/tiles/Tile/';
 import EntityTileFooter from 'js/components/entity-tile/EntityTileFooter';
-import { StyledDiv, ColoredImage } from './style';
+import URLSvgIcon from 'js/shared-styles/icons/URLSvgIcon';
+import { StyledDiv } from './style';
 
 const tileWidth = 225;
 
@@ -13,7 +14,7 @@ function OrganTile({ organ: { name, uberon_short, icon, descendantCounts }, path
       href={`/organ/${path}`}
       icon={
         <StyledDiv>
-          <ColoredImage icon={icon} role="img" aria-label={`Icon for ${name}`} />
+          <URLSvgIcon iconURL={icon} arialabel={`Icon for ${name}`} />
         </StyledDiv>
       }
       bodyContent={
