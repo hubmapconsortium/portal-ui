@@ -14,7 +14,7 @@ function OrganTile({ organ: { name, uberon_short, icon, descendantCounts }, path
       href={`/organ/${path}`}
       icon={
         <StyledDiv>
-          <URLSvgIcon iconURL={icon} arialabel={`Icon for ${name}`} />
+          <URLSvgIcon iconURL={icon} ariaLabel={`Icon for ${name}`} />
         </StyledDiv>
       }
       bodyContent={
