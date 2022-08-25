@@ -1,1 +1,0 @@
-- Rename component, and update the warning text on the workspace list.

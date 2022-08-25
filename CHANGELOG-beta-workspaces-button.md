@@ -1,1 +1,0 @@
-- Adds an ugly button to access workspace.

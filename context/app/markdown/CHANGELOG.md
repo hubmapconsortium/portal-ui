@@ -1,3 +1,15 @@
+## v0.51.1 - 2022-08-25
+
+- Adds an ugly button to access workspace.
+- special case for "0" on range slider
+- Fix twitter timeline overflow at the cost of scrolling until embedded widget api is fixed.
+- Please-wait based on workspace ID rather than job ID.
+- Rename component, and update the warning text on the workspace list.
+- When a user logs in, add a cookie, and check it during logging, to distinguish internal and external traffic.
+- Support workspace deletion.
+- For beta users, and link to workspaces in menu.
+
+
 ## v0.51.0 - 2022-08-18
 
 - Consistent title on cells page.

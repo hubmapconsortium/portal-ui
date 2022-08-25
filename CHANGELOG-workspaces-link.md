@@ -1,1 +1,0 @@
-- For beta users, and link to workspaces in menu.

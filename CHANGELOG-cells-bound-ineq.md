@@ -1,1 +1,0 @@
-- special case for "0" on range slider
