@@ -1,0 +1,1 @@
+- When a user logs in, add a cookie, and check it during logging, to distinguish internal and external traffic.

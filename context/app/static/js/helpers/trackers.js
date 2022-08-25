@@ -1,5 +1,6 @@
 import MatomoTracker from '@datapunt/matomo-tracker-js';
 import ReactGA from 'react-ga';
+import { readCookie } from 'js/helpers/functions';
 
 function getSiteId(location) {
   const { host } = location;
@@ -15,6 +16,11 @@ function getSiteId(location) {
     default:
       return 3;
   }
+}
+
+function getUserType() {
+  // Set in routes_auth.py:
+  return readCookie('last_login') ? 'internal' : 'external';
 }
 
 const tracker = new MatomoTracker({
@@ -36,6 +42,7 @@ const tracker = new MatomoTracker({
   //   setSecureCookie: true,
   //   setRequestMethod: 'POST'
   // }
+  configurations: { setCustomDimension: [1 /* user_type */, getUserType()] },
 });
 
 ReactGA.initialize('UA-133341631-3', { testMode: process.env.NODE_ENV === 'test' });
