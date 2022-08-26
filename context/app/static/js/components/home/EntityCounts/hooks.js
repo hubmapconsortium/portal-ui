@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import useSearchData from 'js/hooks/useSearchData';
 
 const entityCountsQuery = {
@@ -8,20 +6,14 @@ const entityCountsQuery = {
 };
 
 function useEntityCounts() {
-  const [entityCounts, setEntityCountsData] = useState(undefined);
   const { searchData: elasticsearchData } = useSearchData(entityCountsQuery);
-  useEffect(() => {
-    if (Object.keys(elasticsearchData).length) {
-      const entityCountsObject = elasticsearchData.aggregations.entity_type.buckets.reduce((acc, entity) => {
-        const accCopy = acc;
-        accCopy[entity.key] = entity.doc_count;
-        return accCopy;
-      }, {});
-      setEntityCountsData(entityCountsObject);
-    }
-  }, [elasticsearchData]);
+  if (Object.keys(elasticsearchData).length) {
+    return elasticsearchData.aggregations.entity_type.buckets.reduce((acc, entity) => {
+      return { ...acc, [entity.key]: entity.doc_count };
+    }, {});
+  }
 
-  return entityCounts;
+  return {};
 }
 
 export { useEntityCounts };
