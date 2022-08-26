@@ -35,7 +35,7 @@ function EntityCounts({ organs }) {
           />
         ))}
         <EntityCount
-          icon={<StyledURLSvgIcon iconURL={organs?.kidney.icon} />}
+          icon={<StyledURLSvgIcon iconURL={organs?.kidney.icon} ariaLabel="Organs Icon" />}
           count={Object.keys(organs).length}
           label="Organs"
           href="/organs"
