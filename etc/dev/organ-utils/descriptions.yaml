@@ -1,207 +1,193 @@
-# There is no API that links all the organ information across the different components,
-# so we do it here, and then run make_organ_dir.py to generate the the per-organ yaml files
-# that are used at render time by the organ pages.
-#
-# Links to datasets on the organ pages will not be generated until the datasets are public.
-#
-# Azimuth reference information is pulled from source files on github.
-#
-# Find organ descriptions at
-# https://www.ebi.ac.uk/ols/search?ontology=uberon
-# (These descriptions could plausibly be extracted by the script, but pasting them here gives us more control,
-# and lets us add notes which may apply only for HuBMAP.)
-#
-# Find organ icons at the CCF Reference Library:
-# https://hubmapconsortium.github.io/ccf/pages/ccf-3d-reference-library.html
-
-
-http://purl.obolibrary.org/obo/UBERON_0000995:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-uterus.svg
-  name: Uterus
-  asctb: Uterus-v1.1
-  description: The female muscular organ of gestation in which the developing embryo or fetus is nourished until birth
-http://purl.obolibrary.org/obo/UBERON_0001255:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-bladder.svg
-  name: Urinary Bladder
-  asctb: Urinary_Bladder-v1.0
-  description: Distensible musculomembranous organ situated in the anterior part of the pelvic cavity in which urine collects before excretion.
-http://purl.obolibrary.org/obo/UBERON_0000056:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-ureter-left.svg
-  name: Ureter
-  asctb: Ureter-v1.0
-  description: Muscular duct that propels urine from the kidneys to the urinary bladder, or related organs.
-http://purl.obolibrary.org/obo/UBERON_0002367:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-prostate.svg
-  name: Prostate
-  asctb: Prostate-v1.0
-  description: The prostate gland is a partly muscular, partly glandular body that is situated near the base of the mammalian male urethra and secretes an alkaline viscid fluid which is a major constituent of the ejaculatory fluid.
-http://purl.obolibrary.org/obo/UBERON_0000992:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-ovaries.svg
-  name: Ovary
-  asctb: Ovary-v1.1
-  description: The gonad of a female organism which contains germ cells.
-http://purl.obolibrary.org/obo/UBERON_0002107:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-liver.svg
-  name: Liver
-  asctb: Liver-v1.1
-  description: An exocrine gland which secretes bile and functions in metabolism of protein and carbohydrate and fat, synthesizes substances involved in the clotting of the blood, synthesizes vitamin A, detoxifies poisonous substances, stores glycogen, and breaks down worn-out erythrocytes.
-http://purl.obolibrary.org/obo/UBERON_0003889:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-fallopian-tube-left.svg
-  name: Fallopian Tube
-  asctb: Fallopian_Tube-v1.1
-  description: Initial section of the oviduct through which the ova pass from the ovary to the uterus.
-http://purl.obolibrary.org/obo/UBERON_0000970:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-eye.svg
-  name: Eye
-  asctb: Eye-v1.1
-  description: An organ that detects light.
-http://purl.obolibrary.org/obo/UBERON_0002097:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-skin.svg
-  name: Skin
-  asctb: Skin-v1.2
-  description: The organ covering the body that consists of the dermis and epidermis.
-http://purl.obolibrary.org/obo/UBERON_0000059:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-large-intestine.svg
-  name: Large Intestine
-  asctb: Large_Intestine-v1.2
-  description: A subdivision of the digestive tract that connects the small
-    intestine to the cloaca or anus. Lacks or has few villi[Kardong].
-http://purl.obolibrary.org/obo/UBERON_0000948:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-heart.svg
-  name: Heart
-  asctb: Heart-v1.1
-  description: A myogenic muscular circulatory organ found in the vertebrate
-    cardiovascular system composed of chambers of cardiac muscle. It is the
-    primary circulatory organ.
-http://purl.obolibrary.org/obo/UBERON_0002113:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-kidney.svg
-  name: Kidney
-  asctb: Kidney-v1.2
-  description: A paired organ of the urinary tract which has the production of urine as its primary function.
-http://purl.obolibrary.org/obo/UBERON_0001485:
-  # Using UBERON ID and description for "Knee Joint".
-  # CCF says: "Unknown IRI"
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-knee.svg
-  name: Knee
-  asctb: Knee-v1.1
-  description: "The knee joint joins the thigh with the leg and consists of two articulations:
-    one between the femur and tibia, and one between the femur and patella. It is the largest 
-    and most complicated joint in the human body. The knee is a mobile trocho-ginglymus 
-    (i.e. a pivotal hinge joint), which permits flexion and extension as well as a slight 
-    medial and lateral rotation[WP,unvetted]."
-http://purl.obolibrary.org/obo/UBERON_0002106:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spleen.svg
-  name: Spleen
-  asctb: Spleen-v1.2
-  description: The organ that functions to filter blood and to store red
-    corpuscles and platelets.
-http://purl.obolibrary.org/obo/UBERON_0000955:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-brain.svg
-  name: Brain
-  asctb: Brain-v1.2
-  description: The brain is the center of the nervous system in all vertebrate,
-    and most invertebrate, animals. Some primitive animals such as jellyfish and
-    starfish have a decentralized nervous system without a brain, while sponges
-    lack any nervous system at all. In vertebrates, the brain is located in the
-    head, protected by the skull and close to the primary sensory apparatus of
-    vision, hearing, balance, taste, and smell[WP].
-http://purl.obolibrary.org/obo/UBERON_0002048:
-  # CCF has "Lungs"
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
-  name: Lung
-  asctb: Lung-v1.2
-  description: Respiration organ that develops as an outpocketing of the esophagus.
-http://purl.obolibrary.org/obo/UBERON_0000029:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lymph-nodes.svg
-  name: Lymph Node
-  asctb: Lymph_Nodes-v1.2
-  description: Any of the rounded masses of lymphoid tissue that are surrounded by
-    a capsule of connective tissue, are distributed along the lymphatic vessels,
-    and contain numerous lymphocytes which filter the flow of lymph.
-http://purl.obolibrary.org/obo/UBERON_0001270:
-  # CCF has "Bone Marrow & Blood/Pelvis":
-  # I have no idea what we want to do with that.
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-pelvis-f.svg
-  name: Pelvis
-  description: A ring of bone formed by the sacrum and the first few coccygeal
-    vertebrae as the roof, the pubis and ischia as the floor and the ilia and
-    the acetabular part of the ischia as the walls.
-http://purl.obolibrary.org/obo/UBERON_0002370:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-thymus.svg
-  name: Thymus
-  asctb: Thymus-v1.2
-  description: Anatomical structure of largely lymphoid tissue that functions in
-    cell-mediated immunity by being the site where T cells develop.
-http://purl.obolibrary.org/obo/UBERON_0004537:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-vasculature-thick.svg
-  name: Blood Vasculature
-  asctb: Blood_Vasculature-v1.2
-  description: "A vascular network consisting of blood vessels"
-http://purl.obolibrary.org/obo/UBERON_0001264:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-pancreas.svg
-  name: Pancreas
-  asctb: Pancreas-v1.1
-  description: "An endoderm derived structure that produces precursors of
-    digestive enzymes and blood glucose regulating enzymes[GO]."
 http://purl.obolibrary.org/obo/UBERON_0000178:
-  # CCF says: "Unknown IRI"
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-vasculature-thick.svg
-  name: Blood
-  asctb: Blood-v1.2
-  description: "A fluid that is composed of blood plasma and erythrocytes."
-http://purl.obolibrary.org/obo/UBERON_0001987:
-  # CCF says: "Unknown IRI"
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-placenta.svg
-  name: Placenta
-  asctb: Placenta-v1.0
-  description: "Organ of metabolic interchange between fetus and mother, partly of embryonic origin 
-    and partly of maternal origin[GO]. The fetal portion of the placenta is known as the villous chorion. 
-    The maternal portion is known as the decidua basalis. The two portions are held together by anchoring villi 
-    that are anchored to the decidua basalis by the cytotrophoblastic shell."
-http://purl.obolibrary.org/obo/UBERON_0002240:
-  # CCF says: "Unknown IRI"
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spinal-cord.svg
-  name: Spinal Cord
-  description: "Part of the central nervous system located in the vertebral canal continuous with and caudal
-    to the brain; demarcated from brain by plane of foramen magnum. It is composed of an inner core of 
-    gray matter in which nerve cells predominate, and an outer layer of white matter in which 
-    myelinated nerve fibers predominate, and surrounds the central canal."
-http://purl.obolibrary.org/obo/UBERON_0000010:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spinal-cord.svg
-  name: Peripheral Nervous System
-  asctb: Peripheral_Nervous_System-v1.0
-  description: "A major division of the nervous system that contains nerves which connect
-    the central nervous system (CNS) with sensory organs, other organs, muscles, blood vessels and glands"
-http://purl.obolibrary.org/obo/UBERON_0002185:
-  # CCF says: "Unknown IRI"
-  # TODO: Get a new distinct icon.
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
-  name: Bronchus
-  description: "The upper conducting airways of the lung; these airways arise from the terminus of the trachea."
-http://purl.obolibrary.org/obo/UBERON_0002108:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-small%20intestine.svg
-  name: Small Intestine
-  asctb: Small_Intestine-v1.0
-  description: "Subdivision of digestive tract that connects the stomach to the large intestine and is where much
-    of the digestion and absorption of food takes place (with the exception of ruminants). The mammalian 
-    small intestine is long and coiled and can be differentiated histologically into: duodenum, jejunem, ileum"
-http://purl.obolibrary.org/obo/UBERON_0003126:
-  # CCF says: "Unknown IRI"
-  # TODO: Get a new distinct icon.
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
-  name: Trachea
-  description: "The trachea is the portion of the airway that attaches to the bronchi as it branches."
+    asctb: Blood-v1.2
+    description: A fluid that is composed of blood plasma and erythrocytes.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-vasculature-thick.svg
+    name: Blood
+http://purl.obolibrary.org/obo/UBERON_0004537:
+    asctb: Blood_Vasculature-v1.2
+    description: A vascular network consisting of blood vessels
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-vasculature-thick.svg
+    name: Blood Vasculature
 http://purl.obolibrary.org/obo/UBERON_0002371:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-pelvis-f.svg
-  name: Bone Marrow
-  asctb: Bone_Marrow-v1.2
-  description: The soft tissue that fills the cavities of bones.
+    asctb: Bone_Marrow-v1.2
+    description: The soft tissue that fills the cavities of bones.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-pelvis-f.svg
+    name: Bone Marrow
+http://purl.obolibrary.org/obo/UBERON_0000955:
+    asctb: Brain-v1.2
+    description: The brain is the center of the nervous system in all vertebrate,
+      and most invertebrate, animals. Some primitive animals such as jellyfish and
+      starfish have a decentralized nervous system without a brain, while sponges
+      lack any nervous system at all. In vertebrates, the brain is located in the
+      head, protected by the skull and close to the primary sensory apparatus of vision,
+      hearing, balance, taste, and smell[WP].
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-brain.svg
+    name: Brain
+http://purl.obolibrary.org/obo/UBERON_0002185:
+    description: The upper conducting airways of the lung; these airways arise from
+      the terminus of the trachea.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
+    name: Bronchus
+http://purl.obolibrary.org/obo/UBERON_0000970:
+    asctb: Eye-v1.1
+    description: An organ that detects light.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-eye.svg
+    name: Eye
+http://purl.obolibrary.org/obo/UBERON_0003889:
+    asctb: Fallopian_Tube-v1.1
+    description: Initial section of the oviduct through which the ova pass from the
+      ovary to the uterus.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-fallopian-tube-left.svg
+    name: Fallopian Tube
+http://purl.obolibrary.org/obo/UBERON_0000948:
+    asctb: Heart-v1.1
+    description: A myogenic muscular circulatory organ found in the vertebrate cardiovascular
+      system composed of chambers of cardiac muscle. It is the primary circulatory
+      organ.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-heart.svg
+    name: Heart
+http://purl.obolibrary.org/obo/UBERON_0002113:
+    asctb: Kidney-v1.2
+    description: A paired organ of the urinary tract which has the production of urine
+      as its primary function.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-kidney.svg
+    name: Kidney
+http://purl.obolibrary.org/obo/UBERON_0001485:
+    asctb: Knee-v1.1
+    description: 'The knee joint joins the thigh with the leg and consists of two
+      articulations: one between the femur and tibia, and one between the femur and
+      patella. It is the largest and most complicated joint in the human body. The
+      knee is a mobile trocho-ginglymus (i.e. a pivotal hinge joint), which permits
+      flexion and extension as well as a slight medial and lateral rotation[WP,unvetted].'
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-knee.svg
+    name: Knee
+http://purl.obolibrary.org/obo/UBERON_0000059:
+    asctb: Large_Intestine-v1.2
+    description: A subdivision of the digestive tract that connects the small intestine
+      to the cloaca or anus. Lacks or has few villi[Kardong].
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-large-intestine.svg
+    name: Large Intestine
+http://purl.obolibrary.org/obo/UBERON_0002107:
+    asctb: Liver-v1.1
+    description: An exocrine gland which secretes bile and functions in metabolism
+      of protein and carbohydrate and fat, synthesizes substances involved in the
+      clotting of the blood, synthesizes vitamin A, detoxifies poisonous substances,
+      stores glycogen, and breaks down worn-out erythrocytes.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-liver.svg
+    name: Liver
+http://purl.obolibrary.org/obo/UBERON_0002048:
+    asctb: Lung-v1.2
+    description: Respiration organ that develops as an outpocketing of the esophagus.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
+    name: Lung
+http://purl.obolibrary.org/obo/UBERON_0000029:
+    asctb: Lymph_Nodes-v1.2
+    description: Any of the rounded masses of lymphoid tissue that are surrounded
+      by a capsule of connective tissue, are distributed along the lymphatic vessels,
+      and contain numerous lymphocytes which filter the flow of lymph.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lymph-nodes.svg
+    name: Lymph Node
 http://purl.obolibrary.org/obo/UBERON_0004536:
-  icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lymph-nodes.svg
-  name: Lymph Vasculature
-  description: "A network of blunt ended vessels lacking direct connection to the blood vascular system. 
-    These vessels collect and drain fluids and macromolecules from interstitial spaces throughout the animal. 
-    They derive from a subpopulation of endothelial cells and have walls that are much thinner than 
-    the blood carrying vessels. Lymphatic vessels are usually classified as either superficial or deep."
-
-
+    description: A network of blunt ended vessels lacking direct connection to the
+      blood vascular system. These vessels collect and drain fluids and macromolecules
+      from interstitial spaces throughout the animal. They derive from a subpopulation
+      of endothelial cells and have walls that are much thinner than the blood carrying
+      vessels. Lymphatic vessels are usually classified as either superficial or deep.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lymph-nodes.svg
+    name: Lymph Vasculature
+http://purl.obolibrary.org/obo/UBERON_0000992:
+    asctb: Ovary-v1.1
+    description: The gonad of a female organism which contains germ cells.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-ovaries.svg
+    name: Ovary
+http://purl.obolibrary.org/obo/UBERON_0001264:
+    asctb: Pancreas-v1.1
+    description: An endoderm derived structure that produces precursors of digestive
+      enzymes and blood glucose regulating enzymes[GO].
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-pancreas.svg
+    name: Pancreas
+http://purl.obolibrary.org/obo/UBERON_0001270:
+    description: A ring of bone formed by the sacrum and the first few coccygeal vertebrae
+      as the roof, the pubis and ischia as the floor and the ilia and the acetabular
+      part of the ischia as the walls.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-pelvis-f.svg
+    name: Pelvis
+http://purl.obolibrary.org/obo/UBERON_0000010:
+    asctb: Peripheral_Nervous_System-v1.0
+    description: A major division of the nervous system that contains nerves which
+      connect the central nervous system (CNS) with sensory organs, other organs,
+      muscles, blood vessels and glands
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spinal-cord.svg
+    name: Peripheral Nervous System
+http://purl.obolibrary.org/obo/UBERON_0001987:
+    asctb: Placenta-v1.0
+    description: Organ of metabolic interchange between fetus and mother, partly of
+      embryonic origin and partly of maternal origin[GO]. The fetal portion of the
+      placenta is known as the villous chorion. The maternal portion is known as the
+      decidua basalis. The two portions are held together by anchoring villi that
+      are anchored to the decidua basalis by the cytotrophoblastic shell.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-placenta.svg
+    name: Placenta
+http://purl.obolibrary.org/obo/UBERON_0002367:
+    asctb: Prostate-v1.0
+    description: The prostate gland is a partly muscular, partly glandular body that
+      is situated near the base of the mammalian male urethra and secretes an alkaline
+      viscid fluid which is a major constituent of the ejaculatory fluid.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-prostate.svg
+    name: Prostate
+http://purl.obolibrary.org/obo/UBERON_0002097:
+    asctb: Skin-v1.2
+    description: The organ covering the body that consists of the dermis and epidermis.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-skin.svg
+    name: Skin
+http://purl.obolibrary.org/obo/UBERON_0002108:
+    asctb: Small_Intestine-v1.0
+    description: 'Subdivision of digestive tract that connects the stomach to the
+      large intestine and is where much of the digestion and absorption of food takes
+      place (with the exception of ruminants). The mammalian small intestine is long
+      and coiled and can be differentiated histologically into: duodenum, jejunem,
+      ileum'
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-small%20intestine.svg
+    name: Small Intestine
+http://purl.obolibrary.org/obo/UBERON_0002240:
+    description: Part of the central nervous system located in the vertebral canal
+      continuous with and caudal to the brain; demarcated from brain by plane of foramen
+      magnum. It is composed of an inner core of gray matter in which nerve cells
+      predominate, and an outer layer of white matter in which myelinated nerve fibers
+      predominate, and surrounds the central canal.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spinal-cord.svg
+    name: Spinal Cord
+http://purl.obolibrary.org/obo/UBERON_0002106:
+    asctb: Spleen-v1.2
+    description: The organ that functions to filter blood and to store red corpuscles
+      and platelets.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spleen.svg
+    name: Spleen
+http://purl.obolibrary.org/obo/UBERON_0002370:
+    asctb: Thymus-v1.2
+    description: Anatomical structure of largely lymphoid tissue that functions in
+      cell-mediated immunity by being the site where T cells develop.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-thymus.svg
+    name: Thymus
+http://purl.obolibrary.org/obo/UBERON_0003126:
+    description: The trachea is the portion of the airway that attaches to the bronchi
+      as it branches.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
+    name: Trachea
+http://purl.obolibrary.org/obo/UBERON_0000056:
+    asctb: Ureter-v1.0
+    description: Muscular duct that propels urine from the kidneys to the urinary
+      bladder, or related organs.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-ureter-left.svg
+    name: Ureter
+http://purl.obolibrary.org/obo/UBERON_0001255:
+    asctb: Urinary_Bladder-v1.0
+    description: Distensible musculomembranous organ situated in the anterior part
+      of the pelvic cavity in which urine collects before excretion.
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-bladder.svg
+    name: Urinary Bladder
+http://purl.obolibrary.org/obo/UBERON_0000995:
+    asctb: Uterus-v1.1
+    description: The female muscular organ of gestation in which the developing embryo
+      or fetus is nourished until birth
+    name: Uterus
