@@ -32,6 +32,10 @@ def main():
         '--azimuth_url',
         default='https://raw.githubusercontent.com/satijalab/azimuth_website/master/data/azimuth_references.yaml',
         help='Azimuth references')
+    parser.add_argument(
+        '--ccf_url',
+        default='https://ccf-api.hubmapconsortium.org/v1/reference-organs',
+        help='CCF references')
     args = parser.parse_args()
 
     global cache_path
@@ -46,25 +50,29 @@ def main():
         uberon_names=uberon_names)
     azimuth_organs_by_uberon = rekey_azimuth(
         add_vitessce(get_azimuth_yaml(args.azimuth_url)))
+    ccf_organs_by_uberon = rekey_ccf(
+        requests.get(args.ccf_url).json())
+
+    def small_dict(big_dict, k):
+        return {uberon_id: value[k] for uberon_id, value in big_dict.items() if k in value}
 
     merged_data = merge_data(
         uberon={uberon_id: uberon_id for uberon_id in descriptions.keys()},
         uberon_short={uberon_id: uberon_id.split('/')[-1] for uberon_id in descriptions.keys()},
-        name={uberon_id: value['name'] for uberon_id, value in descriptions.items()},
-        description={uberon_id: value['description'] for uberon_id, value in descriptions.items()},
-        icon={uberon_id: value.get('icon')
-              for uberon_id, value in descriptions.items() if value.get('icon')},
-        has_iu_component={uberon_id: value.get('has_iu_component', True)
-                          for uberon_id, value in descriptions.items()},
+        name=small_dict(descriptions, 'name'),
+        asctb=small_dict(descriptions, 'asctb'),
+        description=small_dict(descriptions, 'description'),
+        icon=small_dict(descriptions, 'icon'),
+        has_iu_component={uberon_id: True for uberon_id in ccf_organs_by_uberon.keys()},
         search=search_organs_by_uberon,
         azimuth=azimuth_organs_by_uberon
     )
 
     organs = [
         Organ(
-            name=data['name'],
+            name=data.get('name'),
             data=data)
-        for data in merged_data.values()
+        for data in merged_data.values() if 'name' in data
     ]
     DirectoryWriter(args.target, organs).write()
     organ_schema = safe_load((Path(__file__).parent / 'organ-schema.yaml').read_text())
@@ -175,6 +183,10 @@ def rekey_search(search_organs, uberon_names):
         for uberon_id, uberon_name in uberon_names.items()
     }
 
+###### CCF ######
+
+def rekey_ccf(api_response):
+    return {organ['representation_of']: organ for organ in api_response}
 
 ###### Utils #######
 

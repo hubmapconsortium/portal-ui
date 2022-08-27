@@ -1,3 +1,19 @@
+# There is no API that links all the organ information across the different components,
+# so we do it here, and then run make_organ_dir.py to generate the the per-organ yaml files
+# that are used at render time by the organ pages.
+#
+# Links to datasets on the organ pages will not be generated until the datasets are public.
+#
+# Azimuth reference information is pulled from source files on github.
+#
+# Find organ descriptions at
+# https://www.ebi.ac.uk/ols/search?ontology=uberon
+# (These descriptions could plausibly be extracted by the script, but pasting them here gives us more control,
+# and lets us add notes which may apply only for HuBMAP.)
+#
+# Find organ icons at the CCF Reference Library:
+# https://hubmapconsortium.github.io/ccf/pages/ccf-3d-reference-library.html
+
 http://purl.obolibrary.org/obo/UBERON_0000178:
     asctb: Blood-v1.2
     description: A fluid that is composed of blood plasma and erythrocytes.
@@ -190,4 +206,5 @@ http://purl.obolibrary.org/obo/UBERON_0000995:
     asctb: Uterus-v1.1
     description: The female muscular organ of gestation in which the developing embryo
       or fetus is nourished until birth
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-uterus.svg
     name: Uterus
