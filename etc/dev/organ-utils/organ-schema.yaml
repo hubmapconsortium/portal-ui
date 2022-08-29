@@ -2,6 +2,9 @@ type: object
 properties:
   name:
     type: string
+  asctb:
+    type: string
+    pattern: '\w+-v.+'
   uberon:
     type: string
     pattern: 'http://purl.obolibrary.org/obo/UBERON_\d+'
@@ -44,7 +47,6 @@ required:
   - uberon
   - uberon_short
   - description
-  - has_iu_component
   - search
   # icon and azimuth not required.
 additionalProperties: false
