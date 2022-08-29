@@ -20,7 +20,7 @@ const entities = [
   },
 ];
 
-function EntityCounts({ organs }) {
+function EntityCounts({ organsCount }) {
   const entityCounts = useEntityCounts();
   return (
     <Background>
@@ -35,8 +35,13 @@ function EntityCounts({ organs }) {
           />
         ))}
         <EntityCount
-          icon={<StyledURLSvgIcon iconURL={organs?.kidney.icon} ariaLabel="Organs Icon" />}
-          count={Object.keys(organs).length}
+          icon={
+            <StyledURLSvgIcon
+              iconURL="https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-kidney.svg"
+              ariaLabel="Organs Icon"
+            />
+          }
+          count={organsCount}
           label="Organs"
           href="/organs"
         />
