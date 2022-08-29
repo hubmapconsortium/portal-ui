@@ -48,6 +48,7 @@ function Routes(props) {
     vis_lifted_uuid,
     entities,
     organs,
+    organs_count,
     organ,
     metadata,
   } = flaskData;
@@ -102,7 +103,7 @@ function Routes(props) {
   if (urlPath === '/') {
     return (
       <Route disableWidthConstraint>
-        <Home />
+        <Home organsCount={organs_count} />
       </Route>
     );
   }

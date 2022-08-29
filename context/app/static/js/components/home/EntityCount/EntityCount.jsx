@@ -2,12 +2,12 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-import { FlexLink, StyledSvgIcon } from './style';
+import { FlexLink, StyledDiv } from './style';
 
 function EntityCount({ icon, count, label, href }) {
   return (
     <FlexLink href={href}>
-      <StyledSvgIcon component={icon} color="primary" />
+      <StyledDiv>{icon}</StyledDiv>
       <div>
         <Typography variant="h2" component="p">
           {count || <Skeleton />}

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import SvgIcon from '@material-ui/core/SvgIcon';
 
 const FlexLink = styled.a`
   display: flex;
@@ -23,12 +22,11 @@ const FlexLink = styled.a`
   }
 `;
 
-const StyledSvgIcon = styled(SvgIcon)`
+const StyledDiv = styled.div`
   margin-right: ${(props) => props.theme.spacing(1)}px;
-  font-size: 4.5rem;
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     margin-right: ${(props) => props.theme.spacing(2)}px;
   }
 `;
 
-export { FlexLink, StyledSvgIcon };
+export { FlexLink, StyledDiv };
