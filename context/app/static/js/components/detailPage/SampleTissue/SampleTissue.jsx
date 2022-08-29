@@ -8,8 +8,7 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 
-function SampleTissue(props) {
-  const { uuid, mapped_organ, mapped_specimen_type, hasRUI } = props;
+function SampleTissue({ uuid, mapped_organ, mapped_specimen_type, hasRUI }) {
   return (
     <DetailPageSection id="tissue">
       <SectionHeader>Tissue</SectionHeader>

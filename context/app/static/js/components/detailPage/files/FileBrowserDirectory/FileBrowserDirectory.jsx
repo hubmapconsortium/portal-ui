@@ -8,8 +8,7 @@ import { StyledTableRow, Directory, StyledFolderIcon, StyledFolderOpenIcon } fro
 
 const filesStoreSelector = (state) => state.displayOnlyQaQc;
 
-function FileBrowserDirectory(props) {
-  const { dirName, children, depth } = props;
+function FileBrowserDirectory({ dirName, children, depth }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const onKeyDownHandler = (e) => {

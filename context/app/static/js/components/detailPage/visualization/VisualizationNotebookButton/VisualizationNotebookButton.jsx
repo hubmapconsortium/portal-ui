@@ -12,8 +12,7 @@ const StyledSecondaryBackgroundTooltip = styled(SecondaryBackgroundTooltip)`
   margin: 0 ${(props) => props.theme.spacing(1)}px;
 `;
 
-function VisualizationNotebookButton(props) {
-  const { uuid } = props;
+function VisualizationNotebookButton({ uuid }) {
   return (
     <StyledSecondaryBackgroundTooltip title="Download Jupyter Notebook">
       <WhiteBackgroundIconButton component="a" href={`${uuid}.ipynb`}>

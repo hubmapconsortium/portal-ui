@@ -8,8 +8,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import ProvTabs from '../ProvTabs';
 
-function ProvSection(props) {
-  const { uuid, assayMetadata } = props;
+function ProvSection({ uuid, assayMetadata }) {
   const { entity_type } = assayMetadata;
   const { groupsToken, entityEndpoint } = useContext(AppContext);
   const { provData, isLoading } = useProvData(uuid, entityEndpoint, groupsToken);

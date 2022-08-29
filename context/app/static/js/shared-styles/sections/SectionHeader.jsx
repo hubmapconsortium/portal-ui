@@ -6,8 +6,7 @@ const StyledTypography = styled(Typography)`
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
 `;
 
-function SectionHeader(props) {
-  const { children, ...rest } = props;
+function SectionHeader({ children, ...rest }) {
   return (
     <StyledTypography variant="h4" component="h2" {...rest}>
       {children}

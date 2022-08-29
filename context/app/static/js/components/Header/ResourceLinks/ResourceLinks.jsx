@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import DropdownLink from '../DropdownLink';
 import { StyledDivider } from '../HeaderContent/style';
 
-function ResourceLinks(props) {
-  const { isIndented } = props;
+function ResourceLinks({ isIndented }) {
   return (
     <>
       <DropdownLink href="https://software.docs.hubmapconsortium.org/technical" isIndented={isIndented}>

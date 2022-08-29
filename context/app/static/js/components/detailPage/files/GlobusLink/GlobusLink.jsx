@@ -7,8 +7,7 @@ import useAbortableEffect from 'js/hooks/useAbortableEffect';
 import { StyledTypography, Flex, StyledErrorIcon, StyledSuccessIcon } from './style';
 import GlobusLinkMessage from '../GlobusLinkMessage';
 
-function GlobusLink(props) {
-  const { uuid, hubmap_id, isSupport } = props;
+function GlobusLink({ uuid, hubmap_id, isSupport }) {
   const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: '', statusCode: null });
 
   const { entityEndpoint, groupsToken } = useContext(AppContext);

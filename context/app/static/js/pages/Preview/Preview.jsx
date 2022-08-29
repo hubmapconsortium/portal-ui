@@ -8,9 +8,7 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import Attribution from 'js/components/detailPage/Attribution';
 import { StyledDescription } from './style';
 
-function Preview(props) {
-  const { vitData, title, assayMetadata, markdown } = props;
-
+function Preview({ vitData, title, assayMetadata, markdown }) {
   const { group_name, created_by_user_displayname, created_by_user_email } = assayMetadata;
 
   return (

@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ColoredStatusIcon } from './style';
 
-function StatusIcon(props) {
-  const { isUp } = props;
+function StatusIcon({ isUp }) {
   const color = isUp ? 'success' : 'error';
   const text = isUp ? 'Up' : 'Down';
   return (

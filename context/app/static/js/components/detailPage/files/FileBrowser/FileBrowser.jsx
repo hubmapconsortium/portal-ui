@@ -17,9 +17,7 @@ const filesStoreSelector = (state) => ({
   toggleDisplayOnlyQaQc: state.toggleDisplayOnlyQaQc,
 });
 
-function FileBrowser(props) {
-  const { files } = props;
-
+function FileBrowser({ files }) {
   const { displayOnlyQaQc, toggleDisplayOnlyQaQc } = useFilesStore(filesStoreSelector);
 
   const fileTrees = useMemo(

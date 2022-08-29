@@ -23,8 +23,7 @@ function getColor(status) {
   return 'error';
 }
 
-function StatusIcon(props) {
-  const { status: irregularCaseStatus } = props;
+function StatusIcon({ status: irregularCaseStatus }) {
   const status = irregularCaseStatus.toUpperCase();
   const color = getColor(status);
 

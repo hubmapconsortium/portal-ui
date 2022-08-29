@@ -59,8 +59,7 @@ const PanelScrollBox = styled(Paper)`
   }
 `;
 
-function Panel(props) {
-  const { title, href, secondaryText, entityCounts } = props;
+function Panel({ title, href, secondaryText, entityCounts }) {
   return (
     <PanelWrapper>
       <TextWrapper>

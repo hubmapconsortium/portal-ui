@@ -4,9 +4,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 
 import { StyledPaper } from './style';
 
-function Description(props) {
-  const { children, uberonIri, uberonShort, asctbId } = props;
-
+function Description({ children, uberonIri, uberonShort, asctbId }) {
   return (
     <StyledPaper>
       <p>{children}</p>

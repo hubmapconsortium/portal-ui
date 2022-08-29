@@ -9,8 +9,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background } from './style';
 
-function Footer(props) {
-  const { isMaintenancePage } = props;
+function Footer({ isMaintenancePage }) {
   return (
     <Background>
       <FlexContainer maxWidth="lg">

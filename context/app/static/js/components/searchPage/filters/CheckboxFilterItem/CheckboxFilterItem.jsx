@@ -4,8 +4,7 @@ import FilterLabelAndCount from 'js/components/searchPage/filters/FilterLabelAnd
 
 import { StyledCheckBoxBlankIcon, StyledCheckBoxIcon, StyledCheckbox, StyledFormControlLabel } from './style';
 
-function CheckboxFilterItem(props) {
-  const { active, onClick, label, count } = props;
+function CheckboxFilterItem({ active, onClick, label, count }) {
   return (
     <StyledFormControlLabel
       control={

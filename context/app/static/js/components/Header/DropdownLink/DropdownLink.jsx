@@ -5,8 +5,7 @@ import Link from '@material-ui/core/Link';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { StyledMenuItem } from './style';
 
-function DropdownLink(props) {
-  const { isIndented, children, isOutboundLink, ...rest } = props;
+function DropdownLink({ isIndented, children, isOutboundLink, ...rest }) {
   return (
     <StyledMenuItem $isIndented={isIndented} {...rest} component={isOutboundLink ? OutboundLink : Link}>
       {children}

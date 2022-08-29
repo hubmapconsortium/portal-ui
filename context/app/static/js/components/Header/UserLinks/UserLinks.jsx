@@ -7,8 +7,7 @@ import DropdownLink from '../DropdownLink';
 import { StyledDivider } from '../HeaderContent/style';
 import { TruncatedSpan, WarningDropdownLink } from './style';
 
-function UserLinks(props) {
-  const { isAuthenticated, userEmail } = props;
+function UserLinks({ isAuthenticated, userEmail }) {
   const { workspacesUsers } = useContext(AppContext);
 
   return (

@@ -6,9 +6,7 @@ import { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle } from './sty
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 
-function ProvTable(props) {
-  const { uuid, typesToSplit, ancestors, assayMetadata } = props;
-
+function ProvTable({ uuid, typesToSplit, ancestors, assayMetadata }) {
   // Make a new list rather modifying old one in place: Caused duplication in UI.
   const entities = [...ancestors, assayMetadata];
 

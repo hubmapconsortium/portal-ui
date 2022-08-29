@@ -68,8 +68,7 @@ function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, regist
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
-function DatasetDetail(props) {
-  const { assayMetadata, vitData, hasNotebook, visLiftedUUID } = props;
+function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
   const {
     protocol_url,
     metadata,

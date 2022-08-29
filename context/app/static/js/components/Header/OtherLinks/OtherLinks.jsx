@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 
 import DropdownLink from '../DropdownLink';
 
-function OtherLinks(props) {
-  const { isIndented } = props;
+function OtherLinks({ isIndented }) {
   return (
     <>
       <DropdownLink href="/collections" isIndented={isIndented}>

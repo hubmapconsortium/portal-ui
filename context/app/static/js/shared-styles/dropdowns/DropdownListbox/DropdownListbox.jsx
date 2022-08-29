@@ -7,17 +7,16 @@ import MenuList from '@material-ui/core/MenuList';
 
 import { StyledPopper, StyledPaper } from './style';
 
-function DropdownListbox(props) {
-  const {
-    selectedOptionIndex,
-    buttonComponent: SelectionButton,
-    optionComponent: Option,
-    buttonProps,
-    options,
-    selectOnClick,
-    getOptionLabel,
-    id,
-  } = props;
+function DropdownListbox({
+  selectedOptionIndex,
+  buttonComponent: SelectionButton,
+  optionComponent: Option,
+  buttonProps,
+  options,
+  selectOnClick,
+  getOptionLabel,
+  id,
+}) {
   const anchorRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 

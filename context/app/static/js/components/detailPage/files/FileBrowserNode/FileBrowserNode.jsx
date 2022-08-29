@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import FileBrowserDirectory from '../FileBrowserDirectory';
 import FileBrowserFile from '../FileBrowserFile';
 
-function FileBrowserNode(props) {
-  const { fileSubTree, depth } = props;
+function FileBrowserNode({ fileSubTree, depth }) {
   return Object.entries(fileSubTree).map(([k, v]) => {
     // if the object contains array of files, display all files
     if (k === 'files') {

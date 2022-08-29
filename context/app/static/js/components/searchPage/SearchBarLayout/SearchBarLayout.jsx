@@ -9,9 +9,7 @@ import TilesSortDropdown from '../TilesSortDropdown';
 import SelectedFilter from '../SelectedFilter';
 import { Flex, CenteredDiv } from './style';
 
-function SearchBarLayout(props) {
-  const { type, queryFields, sortOptions, isDevSearch, analyticsCategory } = props;
-
+function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analyticsCategory }) {
   const SwitchComponent = withAnalyticsCategory(
     isDevSearch ? DevSearchViewSwitch : SearchViewSwitch,
     analyticsCategory,

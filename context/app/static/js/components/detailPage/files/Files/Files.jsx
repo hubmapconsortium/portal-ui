@@ -10,9 +10,7 @@ import FileBrowserDUA from '../FileBrowserDUA';
 import FilesContext from './context';
 import { MarginBottomDiv } from './style';
 
-function Files(props) {
-  const { files, uuid, hubmap_id, visLiftedUUID } = props;
-
+function Files({ files, uuid, hubmap_id, visLiftedUUID }) {
   const { mapped_data_access_level } = useContext(DetailContext);
 
   const localStorageKey = `has_agreed_to_${mapped_data_access_level}_DUA`;

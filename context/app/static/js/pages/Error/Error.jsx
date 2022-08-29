@@ -6,17 +6,15 @@ import ErrorBody from 'js/components/error/ErrorBody';
 import { Background, StyledPaper, StyledTypography } from './style';
 import { getErrorTitleAndSubtitle } from './utils';
 
-function Error(props) {
-  const {
-    errorCode,
-    urlPath,
-    isAuthenticated,
-    isGlobus401,
-    isMaintenancePage,
-    isErrorBoundary,
-    errorBoundaryMessage,
-  } = props;
-
+function Error({
+  errorCode,
+  urlPath,
+  isAuthenticated,
+  isGlobus401,
+  isMaintenancePage,
+  isErrorBoundary,
+  errorBoundaryMessage,
+}) {
   const { title, subtitle } = getErrorTitleAndSubtitle(errorCode, isMaintenancePage, isErrorBoundary);
 
   return (

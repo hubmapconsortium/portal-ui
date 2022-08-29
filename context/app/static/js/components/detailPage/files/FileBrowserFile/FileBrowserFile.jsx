@@ -11,8 +11,7 @@ import PDFViewer from '../PDFViewer';
 import { StyledRow, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon, QaChip } from './style';
 import FilesContext from '../Files/context';
 
-function FileBrowserFile(props) {
-  const { fileObj, depth } = props;
+function FileBrowserFile({ fileObj, depth }) {
   const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
   const { uuid } = useContext(DetailContext);
   const { assetsEndpoint, groupsToken } = useContext(AppContext);
