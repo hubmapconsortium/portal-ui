@@ -93,7 +93,10 @@ class ApiClient():
                 "term": {"entity_type.keyword": entity_type}
             },
             "query": _make_query(constraints, uuids),
-            "_source": [*non_metadata_fields, 'mapped_metadata', 'metadata']
+            "_source": {
+                "include": [*non_metadata_fields, 'mapped_metadata', 'metadata'],
+                "exclude": ['*.files']
+            }
         }
         response_json = self._request(
             current_app.config['ELASTICSEARCH_ENDPOINT']
