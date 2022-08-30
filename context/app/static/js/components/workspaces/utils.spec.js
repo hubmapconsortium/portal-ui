@@ -1,7 +1,13 @@
 import { mergeJobsIntoWorkspaces, condenseJobs } from './utils';
 
+const workspace_details = {
+  request_workspace_details: {
+    files: [{ name: 'workspace.ipynb' }],
+  },
+};
+
 test('it should merge jobs into workspaces', () => {
-  const workspaces = [{ id: 1, other_ws_info: true, status: 'active' }];
+  const workspaces = [{ id: 1, other_ws_info: true, status: 'active', workspace_details }];
   const jobs = [{ id: 42, workspace_id: 1, other_job_info: true }];
   const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
   expect(mergedWorkspaces).toEqual([
@@ -9,28 +15,24 @@ test('it should merge jobs into workspaces', () => {
       id: 1,
       other_ws_info: true,
       status: 'active',
-      jobs: [
-        {
-          id: 42,
-          workspace_id: 1,
-          other_job_info: true,
-        },
-      ],
+      path: 'workspace.ipynb',
+      jobs,
+      workspace_details,
     },
   ]);
 });
 
 test('it should filter out workspaces that are not "active" or "idle"', () => {
   const workspaces = [
-    { id: 1, status: 'active' },
-    { id: 2, status: 'idle' },
-    { id: 3, status: 'other' },
+    { id: 1, status: 'active', workspace_details },
+    { id: 2, status: 'idle', workspace_details },
+    { id: 3, status: 'other', workspace_details },
   ];
   const jobs = [];
   const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
   expect(mergedWorkspaces).toEqual([
-    { id: 1, status: 'active', jobs: [] },
-    { id: 2, status: 'idle', jobs: [] },
+    { id: 1, status: 'active', jobs: [], path: 'workspace.ipynb', workspace_details },
+    { id: 2, status: 'idle', jobs: [], path: 'workspace.ipynb', workspace_details },
   ]);
 });
 
