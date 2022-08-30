@@ -28,8 +28,8 @@ test('it should filter out workspaces that are not "active" or "idle"', () => {
   const jobs = [];
   const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
   expect(mergedWorkspaces).toEqual([
-    { id: 1, status: 'active' },
-    { id: 2, status: 'idle' },
+    { id: 1, status: 'active', jobs: [] },
+    { id: 2, status: 'idle', jobs: [] },
   ]);
 });
 
