@@ -67,6 +67,16 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
   setMessage(start.message);
 }
 
+function getNotebookPath(workspace) {
+  // TODO: Replace with current_workspace_details, when available.
+  const { files } = workspace.workspace_details.request_workspace_details;
+  const nbFiles = files.filter(({ name }) => name.endsWith('.ipynb'));
+  if (nbFiles.length !== 1) {
+    return '';
+  }
+  return nbFiles[0].name;
+}
+
 function mergeJobsIntoWorkspaces(jobs, workspaces) {
   const activeWorkspaces = workspaces.filter(({ status }) => ['active', 'idle'].includes(status));
 
@@ -82,6 +92,8 @@ function mergeJobsIntoWorkspaces(jobs, workspaces) {
   activeWorkspaces.forEach((workspace) => {
     // eslint-disable-next-line no-param-reassign
     workspace.jobs = wsIdToJobs?.[workspace.id] || [];
+    // eslint-disable-next-line no-param-reassign
+    workspace.path = getNotebookPath(workspace);
   });
 
   return activeWorkspaces;
