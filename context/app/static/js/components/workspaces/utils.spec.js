@@ -1,13 +1,14 @@
 import { mergeJobsIntoWorkspaces, condenseJobs } from './utils';
 
 test('it should merge jobs into workspaces', () => {
-  const workspaces = [{ id: 1, other_ws_info: true }];
+  const workspaces = [{ id: 1, other_ws_info: true, status: 'active' }];
   const jobs = [{ id: 42, workspace_id: 1, other_job_info: true }];
   const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
   expect(mergedWorkspaces).toEqual([
     {
       id: 1,
       other_ws_info: true,
+      status: 'active',
       jobs: [
         {
           id: 42,
@@ -16,6 +17,20 @@ test('it should merge jobs into workspaces', () => {
         },
       ],
     },
+  ]);
+});
+
+test('it should filter out workspaces that are not "active" or "idle"', () => {
+  const workspaces = [
+    { id: 1, status: 'active' },
+    { id: 2, status: 'idle' },
+    { id: 3, status: 'other' },
+  ];
+  const jobs = [];
+  const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
+  expect(mergedWorkspaces).toEqual([
+    { id: 1, status: 'active', jobs: [] },
+    { id: 2, status: 'idle', jobs: [] },
   ]);
 });
 
