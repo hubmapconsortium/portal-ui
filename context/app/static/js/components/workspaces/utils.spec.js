@@ -8,6 +8,7 @@ test('it should merge jobs into workspaces', () => {
     {
       id: 1,
       other_ws_info: true,
+      status: 'active',
       jobs: [
         {
           id: 42,
