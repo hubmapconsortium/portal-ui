@@ -36,6 +36,37 @@ test('it should filter out workspaces that are not "active" or "idle"', () => {
   ]);
 });
 
+test('it should only provide a path if there is exactly one notebook', () => {
+  const workspaces = [
+    {
+      id: 0,
+      status: 'active',
+      workspace_details: {
+        request_workspace_details: {
+          files: [], // too few
+        },
+      },
+    },
+    {
+      id: 2,
+      status: 'active',
+      workspace_details: {
+        request_workspace_details: {
+          files: [{ name: 'workspace1.ipynb' }, { name: 'workspace2.ipynb' }], // too many
+        },
+      },
+    },
+    {
+      id: 1,
+      status: 'active',
+      workspace_details, // just right!
+    },
+  ];
+  const jobs = [];
+  const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
+  expect(mergedWorkspaces.map((ws) => ws.path)).toEqual(['', '', 'workspace.ipynb']);
+});
+
 test('it should pick one active job if available', () => {
   const jobs = [
     {
