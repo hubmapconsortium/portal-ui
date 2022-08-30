@@ -68,7 +68,7 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
 }
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {
-  const activeWorkspaces = workspaces.filter(() => true); // TODO
+  const activeWorkspaces = workspaces.filter(({ status }) => status === 'active');
 
   const wsIdToJobs = {};
   jobs.forEach((job) => {
