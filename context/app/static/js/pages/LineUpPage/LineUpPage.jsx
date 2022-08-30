@@ -13,7 +13,7 @@ import metadataFieldTypes from 'metadata-field-types';
 
 function LineUpPage({ entities }) {
   const cleanEntities = entities.map((entity) =>
-    Object.fromEntries(Object.entries(entity).filter(([,v]) => v !== null)),
+    Object.fromEntries(Object.entries(entity).filter(([, value]) => value !== null)),
   );
   const firstRow = cleanEntities[0];
   const notEnumFields = new Set([
