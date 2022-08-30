@@ -68,6 +68,8 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
 }
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {
+  const activeWorkspaces = workspaces.filter(() => true); // TODO
+
   const wsIdToJobs = {};
   jobs.forEach((job) => {
     const { workspace_id } = job;
@@ -77,12 +79,12 @@ function mergeJobsIntoWorkspaces(jobs, workspaces) {
     wsIdToJobs[workspace_id].push(job);
   });
 
-  workspaces.forEach((workspace) => {
+  activeWorkspaces.forEach((workspace) => {
     // eslint-disable-next-line no-param-reassign
     workspace.jobs = wsIdToJobs?.[workspace.id] || [];
   });
 
-  return workspaces;
+  return activeWorkspaces;
 }
 
 function condenseJobs(jobs) {
