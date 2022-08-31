@@ -21,33 +21,47 @@ async function createEmptyWorkspace({ workspacesEndpoint, workspacesToken, works
 }
 
 async function stopJob({ jobId, workspacesEndpoint, workspacesToken }) {
-  await fetch(`${workspacesEndpoint}/jobs/${jobId}/stop/`, {
+  const response = await fetch(`${workspacesEndpoint}/jobs/${jobId}/stop/`, {
     method: 'PUT',
     headers: getWorkspacesApiHeaders(workspacesToken),
   });
+  // When we understand when/why API failures occur, design approapriate UI.
+  if (response.ok) {
+    // eslint-disable-next-line no-alert
+    alert(`Job stop for ${jobId} will begin`);
+  } else {
+    // eslint-disable-next-line no-alert
+    alert(`Job stop for ${jobId} failed`);
+  }
 }
 
 async function deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken }) {
   const headers = getWorkspacesApiHeaders(workspacesToken);
+  const response = await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/`, {
+    method: 'DELETE',
+    headers,
+  });
+  // When we understand when/why API failures occur, design approapriate UI.
+  if (response.ok) {
+    // eslint-disable-next-line no-alert
+    alert(`Workspace deletion for ${workspaceId} will begin`);
+  } else {
+    // eslint-disable-next-line no-alert
+    alert(`Workspace deletion for ${workspaceId} failed`);
+  }
+}
+
+async function stopJobs({ workspaceId, workspacesEndpoint, workspacesToken }) {
+  const headers = getWorkspacesApiHeaders(workspacesToken);
   const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, { headers });
   const jobsResults = await jobsResponse.json();
   const { jobs } = jobsResults.data;
+  // TODO: Filter down to only the jobs that are not already in the process of being stopped.
   jobs.forEach((job) => {
-    if (String(job.workspace_id) === workspaceId) {
+    if (String(job.workspace_id) === String(workspaceId)) {
       stopJob({ jobId: job.id, workspacesEndpoint, workspacesToken });
     }
   });
-  async function retryDelete() {
-    const deleteResponse = await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/`, {
-      method: 'DELETE',
-      headers,
-    });
-    // Delete will fail until all jobs are stopped, and this is simpler than checking all the jobs.
-    if (!deleteResponse.ok) {
-      setTimeout(retryDelete, 5000);
-    }
-  }
-  retryDelete();
 }
 
 async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage, setDead }) {
@@ -72,7 +86,10 @@ function mergeJobsIntoWorkspaces(jobs, workspaces) {
 
   const wsIdToJobs = {};
   jobs.forEach((job) => {
-    const { workspace_id } = job;
+    const { status, workspace_id } = job;
+    if (status === 'complete') {
+      return;
+    }
     if (!(workspace_id in wsIdToJobs)) {
       wsIdToJobs[workspace_id] = [];
     }
@@ -164,4 +181,4 @@ async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspac
   return null;
 }
 
-export { createEmptyWorkspace, deleteWorkspace, mergeJobsIntoWorkspaces, condenseJobs, locationIfJobRunning };
+export { createEmptyWorkspace, deleteWorkspace, stopJobs, mergeJobsIntoWorkspaces, condenseJobs, locationIfJobRunning };

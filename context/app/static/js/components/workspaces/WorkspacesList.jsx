@@ -9,7 +9,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { PanelWrapper } from 'js/shared-styles/panels';
 
 import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
-import { createEmptyWorkspace, deleteWorkspace } from './utils';
+import { createEmptyWorkspace, deleteWorkspace, stopJobs } from './utils';
 import { useWorkspacesList } from './hooks';
 import { StyledButton } from './style';
 
@@ -19,7 +19,11 @@ function WorkspacesList() {
 
   async function handleDelete(workspaceId) {
     deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken });
-    // TODO: Handle failed deletion
+    // TODO: Update list of workspaces
+  }
+
+  async function handleStop(workspaceId) {
+    stopJobs({ workspaceId, workspacesEndpoint, workspacesToken });
     // TODO: Update list of workspaces
   }
 
@@ -67,14 +71,24 @@ function WorkspacesList() {
               <WorkspaceDetails workspace={workspace} />
               <div>
                 Created {workspace.datetime_created.slice(0, 10)}
+                {}
                 <button
                   type="submit"
+                  disabled={workspace.jobs.length > 0 /* TODO: And/or check workspace status? */}
                   onClick={() => {
                     handleDelete(workspace.id);
                   }}
                 >
-                  Delete
-                  {/* TODO: Checkbox instead of button. */}
+                  Delete Workspace
+                </button>
+                <button
+                  type="submit"
+                  disabled={workspace.jobs.length === 0 /* TODO: And/or check workspace status? */}
+                  onClick={() => {
+                    handleStop(workspace.id);
+                  }}
+                >
+                  Stop Jobs
                 </button>
               </div>
             </PanelWrapper>
