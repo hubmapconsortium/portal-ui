@@ -1,0 +1,1 @@
+- Add a second param to record the type of the link.
