@@ -6,17 +6,17 @@ import { MuiThemeProvider, StylesProvider, createGenerateClassName } from '@mate
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import GlobalStyles from 'js/components/globalStyles';
-import theme from '../theme';
-import GlobalFonts from '../fonts';
+import theme from 'js/theme';
+import GlobalFonts from 'js/fonts';
+
+import { AppContext } from './hooks';
 
 const generateClassName = createGenerateClassName({
   disableGlobal: true,
   seed: 'portal',
 });
 
-const AppContext = React.createContext({});
-
-function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, children, workspacesToken }) {
+function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, workspacesToken, flaskData, children }) {
   // TODO: Delete this when workspaces are publicly released.
   // If we stay in limbo for a long time, this configuration could be moved out of code.
   const workspacesUsers = [
@@ -32,7 +32,15 @@ function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, childre
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
           <AppContext.Provider
-            value={{ groupsToken, workspacesToken, workspacesUsers, isAuthenticated, userEmail, ...endpoints }}
+            value={{
+              groupsToken,
+              workspacesToken,
+              workspacesUsers,
+              isAuthenticated,
+              userEmail,
+              ...endpoints,
+              flaskData,
+            }}
           >
             <CssBaseline />
             <GlobalStyles />
