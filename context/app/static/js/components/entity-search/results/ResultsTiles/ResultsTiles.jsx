@@ -1,12 +1,12 @@
 import React from 'react';
 
-import EntityTile from 'js/components/entity-tile/EntityTile';
+import EntityTile, { tileWidth } from 'js/components/entity-tile/EntityTile';
 import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/utils';
-import { TilesLayout } from './style';
+import TileGrid from 'js/shared-styles/tiles/TileGrid';
 
 function ResultsTiles({ hits }) {
   return (
-    <TilesLayout data-testid="search-results-tiles">
+    <TileGrid $tileWidth={tileWidth} data-testid="search-results-tiles">
       {hits.items.map(({ fields, id }) => {
         return (
           <EntityTile
@@ -19,7 +19,7 @@ function ResultsTiles({ hits }) {
           />
         );
       })}
-    </TilesLayout>
+    </TileGrid>
   );
 }
 
