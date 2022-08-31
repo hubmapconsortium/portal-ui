@@ -24,6 +24,7 @@ function App(props) {
       isAuthenticated={isAuthenticated}
       userEmail={userEmail}
       workspacesToken={workspacesToken}
+      flaskData={flaskData}
     >
       <Header />
       {globalAlertMd && (
