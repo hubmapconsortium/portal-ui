@@ -3,9 +3,9 @@ import createContext from 'zustand/context';
 
 const { Provider, useStore } = createContext();
 
-const createStore = () =>
+const createStore = (isExpandedToStart = false) =>
   create((set) => ({
-    isExpanded: false,
+    isExpanded: isExpandedToStart,
     toggleIsExpanded: () => set((state) => ({ isExpanded: !state.isExpanded })),
   }));
 

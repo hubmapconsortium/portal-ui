@@ -5,9 +5,9 @@ import DatasetClusterChart from 'js/components/cells/DatasetClusterChart';
 import CellExpressionHistogram from 'js/components/cells/CellExpressionHistogram';
 import ChartLoader from 'js/shared-styles/charts/ChartLoader/ChartLoader';
 import { useCellsChartsData } from './hooks';
-import { Flex, ChartWrapper, StyledTypography } from './style';
+import { ChartWrapper, StyledTypography, PaddedDiv } from './style';
 
-function CellsCharts({ uuid, cellVariableName, minExpression, queryType, heightRef, isExpanded }) {
+function CellsCharts({ uuid, cellVariableName, minExpression, queryType, isExpanded }) {
   const { isLoading, diagnosticInfo, cellsData } = useCellsChartsData({
     uuid,
     cellVariableName,
@@ -18,34 +18,34 @@ function CellsCharts({ uuid, cellVariableName, minExpression, queryType, heightR
   const expressionData = 'expressionData' in cellsData ? cellsData.expressionData : {};
   const clusterData = 'clusterData' in cellsData ? cellsData.clusterData : {};
 
+  if (!(isLoading || Object.keys(cellsData).length > 0)) {
+    return null;
+  }
+
   return (
-    <div ref={heightRef}>
-      {(isLoading || Object.keys(cellsData).length > 0) && (
-        <>
-          <Flex>
-            <ChartWrapper $flexBasis={45}>
-              <ChartLoader isLoading={isLoading}>
-                <CellExpressionHistogram queryType={queryType} expressionData={expressionData} />
-              </ChartLoader>
-            </ChartWrapper>
-            <ChartWrapper $flexBasis={55}>
-              <ChartLoader isLoading={isLoading}>
-                <DatasetClusterChart uuid={uuid} results={clusterData} />
-              </ChartLoader>
-            </ChartWrapper>
-          </Flex>
-          <StyledTypography>
-            {diagnosticInfo ? (
-              `${diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for ${
-                diagnosticInfo.numCells
-              } cells.`
-            ) : (
-              <Skeleton />
-            )}
-          </StyledTypography>
-        </>
-      )}
-    </div>
+    <PaddedDiv>
+      <div>
+        <ChartWrapper>
+          <ChartLoader isLoading={isLoading}>
+            <CellExpressionHistogram queryType={queryType} expressionData={expressionData} />
+          </ChartLoader>
+        </ChartWrapper>
+        <ChartWrapper>
+          <ChartLoader isLoading={isLoading}>
+            <DatasetClusterChart uuid={uuid} results={clusterData} />
+          </ChartLoader>
+        </ChartWrapper>
+      </div>
+      <StyledTypography>
+        {diagnosticInfo ? (
+          `${diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for ${
+            diagnosticInfo.numCells
+          } cells.`
+        ) : (
+          <Skeleton />
+        )}
+      </StyledTypography>
+    </PaddedDiv>
   );
 }
 

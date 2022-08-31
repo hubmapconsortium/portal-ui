@@ -31,7 +31,9 @@ jobs:
         cache-dependency-path: |
           context/package-lock.json
           end-to-end/package-lock.json
-    
+
+    - run: npm --version
+
     - name: Install maintenance build node dependencies
       run: npm ci --prefix context
    
@@ -42,7 +44,7 @@ jobs:
       run: git config --global submodule.recurse true
 
     - name: Run test script
-      run: ./test-cypress.sh maintenance
+      run: etc/test/test-cypress.sh maintenance
       env:
         GH_ACTIONS_BRANCH: ${{ github.ref }}
         GH_ACTIONS: true

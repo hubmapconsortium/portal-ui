@@ -36,7 +36,7 @@ function MetadataCells({ donor: { mapped_metadata } }) {
   );
 }
 
-function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpression, queryType }) {
+function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpression, queryType, isExpandedToStart }) {
   const { hubmap_id, uuid, origin_sample, mapped_data_types, donor, last_modified_timestamp } = datasetMetadata;
 
   const { loadingUUID, fetchedUUIDs } = useCellsChartLoadingStore(storeSelector);
@@ -53,10 +53,13 @@ function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpre
         />
       }
       disabled={!(fetchedUUIDs.has(uuid) || loadingUUID === uuid || !loadingUUID)}
-      buttonTooltipTitle="No additional results can be expanded while detailed data are being retrieved."
+      disabledTooltipTitle="No additional results can be expanded while detailed data are being retrieved."
+      isExpandedToStart={isExpandedToStart}
     >
       <ExpandableRowCell>
-        <LightBlueLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</LightBlueLink>
+        <LightBlueLink href={`/browse/dataset/${uuid}?marker=${cellVariableName}`} target="_blank">
+          {hubmap_id}
+        </LightBlueLink>
       </ExpandableRowCell>
       <ExpandableRowCell>{origin_sample.mapped_organ}</ExpandableRowCell>
       <ExpandableRowCell>{mapped_data_types.join(', ')}</ExpandableRowCell>

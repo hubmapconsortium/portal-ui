@@ -1,56 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 
-import {
-  StyledDatasetIcon,
-  StyledSampleIcon,
-  StyledDonorIcon,
-  Flex,
-  TruncatedTypography,
-  StyledDivider,
-  StyledDiv,
-} from './style';
+import Tile from 'js/shared-styles/tiles/Tile';
+import EntityTileThumbnail from 'js/components/entity-tile/EntityTileThumbnail';
+import { Flex, StyledDiv, BodyWrapper } from './style';
 
-const icons = {
-  Donor: <StyledDonorIcon />,
-  Sample: <StyledSampleIcon />,
-  Dataset: <StyledDatasetIcon />,
-  Support: <StyledDatasetIcon />,
-};
-function EntityTileBody(props) {
-  const { entity_type, id, entityData, invertColors } = props;
+const thumbnailDimension = 80;
+function EntityTileBody({ entity_type, id, entityData, invertColors }) {
+  const { thumbnail_file } = entityData;
 
   return (
-    <Flex>
-      {icons[entity_type] || <StyledDatasetIcon />}
+    <BodyWrapper $thumbnailDimension={thumbnailDimension}>
       <StyledDiv>
-        <Typography component="h4" variant="h6">
-          {id}
-        </Typography>
-        {'origin_sample' in entityData && (
-          <TruncatedTypography variant="body2">{entityData.origin_sample.mapped_organ}</TruncatedTypography>
-        )}
-        {'mapped_specimen_type' in entityData && (
-          <TruncatedTypography variant="body2">{entityData.mapped_specimen_type}</TruncatedTypography>
-        )}
-        {'mapped_data_types' in entityData && (
-          <TruncatedTypography variant="body2">{entityData.mapped_data_types.join(', ')}</TruncatedTypography>
-        )}
+        <Tile.Title>{id}</Tile.Title>
+        {'origin_sample' in entityData && <Tile.Text>{entityData.origin_sample.mapped_organ}</Tile.Text>}
+        {'mapped_specimen_type' in entityData && <Tile.Text>{entityData.mapped_specimen_type}</Tile.Text>}
+        {'mapped_data_types' in entityData && <Tile.Text>{entityData.mapped_data_types.join(', ')}</Tile.Text>}
         {entity_type === 'Donor' && 'mapped_metadata' in entityData && (
           <>
             <Flex>
-              <Typography variant="body2">{entityData.mapped_metadata.sex}</Typography>
-              <StyledDivider flexItem orientation="vertical" $invertColors={invertColors} />
-              <Typography variant="body2">
+              <Tile.Text>{entityData.mapped_metadata.sex}</Tile.Text>
+              <Tile.Divider invertColors={invertColors} />
+              <Tile.Text>
                 {entityData.mapped_metadata.age_value} {entityData.mapped_metadata.age_unit}
-              </Typography>
+              </Tile.Text>
             </Flex>
-            <TruncatedTypography variant="body2">{entityData.mapped_metadata.race.join(', ')}</TruncatedTypography>
+            <Tile.Text>{entityData.mapped_metadata.race.join(', ')}</Tile.Text>
           </>
         )}
       </StyledDiv>
-    </Flex>
+      {thumbnail_file && (
+        <EntityTileThumbnail
+          thumbnailDimension={thumbnailDimension}
+          id={id}
+          thumbnail_file={thumbnail_file}
+          entity_type={entity_type}
+        />
+      )}
+    </BodyWrapper>
   );
 }
 

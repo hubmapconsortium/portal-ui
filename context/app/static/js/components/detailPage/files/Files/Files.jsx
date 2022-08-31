@@ -40,7 +40,7 @@ function Files(props) {
     <FilesContext.Provider value={{ openDUA, hasAgreedToDUA }}>
       <DetailPageSection id="files">
         <SectionHeader>Files</SectionHeader>
-        {files && (
+        {files.length > 0 && (
           <MarginBottomDiv>
             <FileBrowser files={files} />
           </MarginBottomDiv>

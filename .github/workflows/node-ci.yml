@@ -24,8 +24,10 @@ jobs:
         cache: 'npm'
         cache-dependency-path: context/package-lock.json
    
+    - run: npm --version
+
     - name: Install node dependencies
       run: npm ci --prefix context
 
     - name: Run test script
-      run: ./test-node.sh
+      run: etc/test/test-node.sh

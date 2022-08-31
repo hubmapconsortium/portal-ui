@@ -4,7 +4,8 @@ This is a Flask app, using React on the front end and primarily Elasticsearch on
 wrapped in a Docker container for deployment using Docker Compose. The front end depends on AWS S3 and CloudFront for the hosting and delivery of images.
 It is deployed at [portal.hubmapconsortium.org](https://portal.hubmapconsortium.org/)
 
-The Data Portal depends, directly or indirectly, on many other HuBMAP repos:
+The Data Portal depends on many [APIs](portal.hubmapconsortium.org/services), 
+and directly or indirectly, on many other HuBMAP repos:
 
 ```mermaid
 graph LR
@@ -34,6 +35,8 @@ graph LR
     %% assets-api is just a file server: There is no repo.
     top --> search-api --> pipe
     click search-api href "https://github.com/hubmapconsortium/search-api"
+    top --> workspaces-api
+    click workspaces-api href "https://github.com/hubmapconsortium/user_workspaces_server"
 
     pipe --> valid
     pipe --> portal-containers
@@ -96,7 +99,7 @@ Optional:
 
 After checking out the project, cd-ing into it, and setting up a Python 3.9 virtual environment,
 - Get `app.conf` from another developer and place it at `context/instance/app.conf`.
-- Run `./dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
+- Run `etc/dev/dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
 
 You will see an warning about `Cannot find source file '../src/index.ts'`, but just ignore it; [Issue filed](https://github.com/hubmapconsortium/portal-ui/issues/1489).
 
@@ -107,7 +110,7 @@ Note: Searchkit, our interface to Elasticsearch, has changed significantly in th
 
 ### Changelog files
 Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
-These are concatenated by `push.sh`.
+These are concatenated by `etc/build/push.sh`.
 
 ### File and directory structure conventions
 
@@ -154,7 +157,7 @@ npm run lint:fix
 ```
 
 ### Storybook
-To start storybook locally you can either run `./dev-start.sh`, or just `npm run storybook`,
+To start storybook locally you can either run `etc/dev/dev-start.sh`, or just `npm run storybook`,
 and after it has started, visit [localhost:6006](http://localhost:6006).
 
 ## Build, tag, and deploy
@@ -163,20 +166,20 @@ We release a new image each Wednesday, and following QA these are deployed to pr
 To build a new image for [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
 and tag a release on github, just run:
 ```
-./push.sh
+etc/build/push.sh
 ```
 
 Then, to redeploy `dev`, `test`, and `stage`:
 ```
 # PSC will need a ssh public key for USERNAME.
-./redeploy.sh $USERNAME dev
-./redeploy.sh $USERNAME test
-./redeploy.sh $USERNAME stage
+etc/build/redeploy.sh $USERNAME dev
+etc/build/redeploy.sh $USERNAME test
+etc/build/redeploy.sh $USERNAME stage
 ```
 
 After QA, IEC is responsible for deploying to production. We notify them in the `#portal-deployment` Slack channel.
 
-The portal container cloudwatch logs should be checked for errors and exceptions after each release by running `query-portal-logs.py`.
+The portal container cloudwatch logs should be checked for errors and exceptions after each release by running `etc/qa/query-portal-logs.py`.
 
 ### Maintenace page
 
@@ -212,7 +215,7 @@ The script will generate two files, report.html and stats.html, inside the publi
 
 To build and run the docker image locally:
 ```sh
-./docker.sh 5001 --follow
+etc/dev/docker.sh 5001 --follow
 ```
 Our base image is based on [this template](https://github.com/tiangolo/uwsgi-nginx-flask-docker#quick-start-for-bigger-projects-structured-as-a-python-package).
 

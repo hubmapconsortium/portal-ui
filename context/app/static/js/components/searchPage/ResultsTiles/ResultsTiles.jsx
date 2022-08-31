@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import EntityTile from 'js/components/entity-tile/EntityTile';
+import EntityTile, { tileWidth } from 'js/components/entity-tile/EntityTile';
 import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/utils';
 import { capitalizeString } from 'js/helpers/functions';
-import { TilesLayout } from './style';
+import TileGrid from 'js/shared-styles/tiles/TileGrid';
 
 function ResultsTiles(props) {
   const { hits, type } = props;
@@ -13,7 +13,7 @@ function ResultsTiles(props) {
   const capitalizedType = capitalizeString(type);
 
   return (
-    <TilesLayout data-testid="search-results-tiles">
+    <TileGrid $tileWidth={tileWidth} data-testid="search-results-tiles">
       {hits.map((hit) => (
         <EntityTile
           key={hit._source.uuid}
@@ -24,7 +24,7 @@ function ResultsTiles(props) {
           descendantCounts={getTileDescendantCounts(hit._source, capitalizedType)}
         />
       ))}
-    </TilesLayout>
+    </TileGrid>
   );
   /* eslint-enable no-underscore-dangle */
 }

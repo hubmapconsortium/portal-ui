@@ -1,37 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import format from 'date-fns/format';
-import Typography from '@material-ui/core/Typography';
 
-import { FixedWidthFlex, StyledDivider, StyledDatasetIcon, StyledSampleIcon } from './style';
+import Tile from 'js/shared-styles/tiles/Tile';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { FooterIcon } from './style';
 
-function EntityTileFooter(props) {
-  const { entityData, invertColors, descendantCounts } = props;
-
+function EntityTileFooter({ last_modified_timestamp, invertColors, descendantCounts }) {
   return (
-    <FixedWidthFlex $invertColors={invertColors}>
+    <>
       {Object.entries(descendantCounts).map(([k, v]) => (
         <React.Fragment key={k}>
-          {k === 'Support' && <StyledDatasetIcon />}
-          {k === 'Dataset' && <StyledDatasetIcon />}
-          {k === 'Sample' && <StyledSampleIcon />}
-          <Typography variant="body2">{v}</Typography>
-          <StyledDivider flexItem orientation="vertical" $invertColors={invertColors} />
+          {k in entityIconMap && <FooterIcon component={entityIconMap[k]} />}
+          <Tile.Text>{v}</Tile.Text>
+          <Tile.Divider invertColors={invertColors} />
         </React.Fragment>
       ))}
-      <Typography variant="body2">Modified {format(entityData.last_modified_timestamp, 'yyyy-MM-dd')}</Typography>
-    </FixedWidthFlex>
+      {last_modified_timestamp && <Tile.Text>Modified {format(last_modified_timestamp, 'yyyy-MM-dd')}</Tile.Text>}
+    </>
   );
 }
 
 EntityTileFooter.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  entityData: PropTypes.object.isRequired,
+  last_modified_timestamp: PropTypes.number,
   descendantCounts: PropTypes.shape({ Dataset: PropTypes.number, Sample: PropTypes.number }),
   invertColors: PropTypes.bool,
 };
 
 EntityTileFooter.defaultProps = {
+  last_modified_timestamp: undefined,
   descendantCounts: {},
   invertColors: false,
 };

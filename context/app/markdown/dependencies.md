@@ -16,18 +16,21 @@ The services the portal relies on are [listed separately](/services).
 ```
 # Update requirements.txt if this file changes:
 # pip-compile context/requirements.in --generate-hashes --allow-unsafe --output-file context/requirements.txt
-Flask==2.0.1
-globus-sdk==2.0.1
-requests==2.27.1
-pyyaml==5.4
-python-datauri==0.2.8
-python-frontmatter==0.5.0
-hubmap-api-py-client==0.0.9
-hubmap-commons==2.0.12
-Werkzeug==2.0.3  # TODO: This is just a transitive dependency. Remove when https://github.com/hubmapconsortium/portal-ui/issues/2547 is fixed.
+Flask>=2.0.1
+globus-sdk>=3.9.0
+requests>=2.27.1
+pyyaml>=5.4
+python-datauri>=0.2.8
+python-frontmatter>=0.5.0
+hubmap-api-py-client>=0.0.9
+hubmap-commons>=2.0.12
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.4.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.5.zip
+
+# Security warning for older versions;
+# Can be removed when commons drops prov dependency.
+lxml>=4.9.1
 ```
 
 ## NodeJS packages
@@ -83,6 +86,7 @@ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.4
 "react-spring": "^8.0.27",
 "react-twitter-embed": "^3.0.3",
 "react-vega": "^7.3.0",
+"sass": "^1.53.0",
 "searchkit": "^2.4.1-alpha.4",
 "styled-components": "^5.1.0",
 "typeface-inter": "^3.12.0",

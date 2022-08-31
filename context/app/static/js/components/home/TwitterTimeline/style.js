@@ -7,10 +7,15 @@ const Wrapper = styled(Paper)`
   iframe {
     max-height: 374px;
   }
-
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     height: 100%;
+
+    div {
+      height: 100%;
+    }
+
     iframe {
+      height: 100% !important;
       max-height: 100%;
     }
   }

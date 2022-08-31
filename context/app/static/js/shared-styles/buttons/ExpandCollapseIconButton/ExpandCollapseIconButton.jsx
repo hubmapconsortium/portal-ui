@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 
-import { UpIcon, DownIcon } from 'js/shared-styles/icons';
+import ExpandCollapseIcon from 'js/shared-styles/icons/ExpandCollapseIcon';
 
 function ExpandCollapseIconButton({ isExpanded, onClick, disabled, ...rest }) {
   return (
     <IconButton onClick={onClick} disabled={disabled} {...rest}>
-      {isExpanded ? <UpIcon data-testid="up-arrow-icon" /> : <DownIcon data-testid="down-arrow-icon" />}
+      <ExpandCollapseIcon isExpanded={isExpanded} />
     </IconButton>
   );
 }

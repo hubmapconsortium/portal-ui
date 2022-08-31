@@ -1,3 +1,88 @@
+## v0.51.1 - 2022-08-25
+
+- Adds an ugly button to access workspace.
+- special case for "0" on range slider
+- Fix twitter timeline overflow at the cost of scrolling until embedded widget api is fixed.
+- Please-wait based on workspace ID rather than job ID.
+- Rename component, and update the warning text on the workspace list.
+- When a user logs in, add a cookie, and check it during logging, to distinguish internal and external traffic.
+- Support workspace deletion.
+- For beta users, and link to workspaces in menu.
+
+
+## v0.51.0 - 2022-08-18
+
+- Consistent title on cells page.
+- Consolidate datasets selected by expression hooks in cells ui.
+- From Cells UI, datasets open in new tab.
+- Fix index v3 regression: Only show file browser is there are files.
+- Fix bug which prevented previously expanded cells charts from being reloaded.
+- Fix output dir path in query-portal-logs.py
+- Add reusabe link button component and use in workspaces.
+- Implement a "please-wait" page for workspaces which have not yet started.
+- Fix proptype errors.
+
+
+## v0.50.1 - 2022-08-11
+
+- Add another parameter to the vis-scan script, so we can target other indices.
+- Update query form labels and helper text in cells UI.
+- Change the display of workspace status to match Tiffany's spec.
+- Use Trevor's idiom for finding the git root.
+- Expand first entry in query results on load in cells UI.
+- Fix `make_organ_dir.py` script: Path needed to be adjusted after re-organization
+- Handle the empty files array provided by the v3 index correctly.
+- Add globus token to workspace creation call
+- Set up directories and move files off the top level.
+- Redo the login menu, in line with new design.
+- Only offer to start jupyter is there is nothing active or pending.
+- Refactor panel libraries for reuse.
+- Profile find-vis-bug.py: Turns out that fetching JSON and generating viewconf are comparable, so it doesn't do much to optimize just one.
+- mv scripts etc, for better autocompletion.
+- Split dataset charts to separate levels in cells UI.
+- Users will not supply a name when creating workspaces from datasets.
+- Bring the Workspaces UI closer to spec.
+
+
+## v0.50.0 - 2022-08-04
+
+- Add organ to the downloadable TSVs.
+- Enable users to click anywhere in dataset row to expand in cells UI.
+- Show an alert when no results are returned in Cells UI.
+- Add a description at the top of the cells-ui.
+- Add script to find vis bugs before users hit them.
+- Expand first entry in query results on load in cells UI.
+- Fix column sort on dev-search.
+- Associate each Job with the Workspace it belongs to.
+- Instead of failing in python, vitessce load now fails... which is a little better.
+- Log more details of the auth process.
+- Simplify the homepage description component.
+
+
+## v0.49.0 - 2022-07-25
+
+- Add more fields to the downloadable TSV.
+- Bump lxml to resolve security warning.
+- Link from the Cells UI to the Dataset with gene pre-selected.
+- Add new logic to create notebooks, not just download them:  `.ipynb?name=new-notebook`
+- In Cells UI, change from "substring" to something domain specific.
+- Address the `npm ci` slowdow.
+- Redesign organs page to use tiles.
+- Add organ tile story and consolidate entity tile stories.
+
+
+## v0.48.0 - 2022-07-14
+
+- Add Workspaces API to the mermaid diagram.
+- Remove unnecessary steps from cypress ci.
+- For workspaces, add a link to Jupyter for each running job.
+- Enable marker genes to be high-lighted on load.
+- Upgrade dependency to resolve python dependency warning.
+- Add a little message to the service page explaining that entity api depends on uuid api.
+- Friendlier error if no workspace token.
+- Upgrade pytest and dependencies. (We were pinned to a dependancy that was self-vandalized.)
+
+
 ## v0.47.2 - 2022-06-29
 
 - Matomo React proved awkward: Just use plain JS functions.

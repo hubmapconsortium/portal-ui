@@ -5,9 +5,16 @@ import TextField from '@material-ui/core/TextField';
 
 import CellsService from 'js/components/cells/CellsService';
 
-function AutocompleteEntity(props) {
-  const { targetEntity, setter, setCellVariableNames } = props;
+function buildHelperText(entity) {
+  return `Multiple ${entity} are allowed and only 'AND' queries are supported.`;
+}
 
+const labelAndHelperTextProps = {
+  genes: { label: 'Gene Symbol', helperText: buildHelperText('gene symbols') },
+  proteins: { label: 'Protein', helperText: buildHelperText('proteins') },
+};
+
+function AutocompleteEntity({ targetEntity, setter, setCellVariableNames }) {
   const [substring, setSubstring] = useState('');
   const [options, setOptions] = useState([]);
   const [selected, setSelected] = useState([]);
@@ -55,9 +62,11 @@ function AutocompleteEntity(props) {
         setSelected(value);
         setter(value.map((match) => match.full));
       }}
-      renderInput={(params) => (
+      renderInput={({ InputLabelProps, ...params }) => (
         <TextField
-          label="substring"
+          InputLabelProps={{ shrink: true, ...InputLabelProps }}
+          {...labelAndHelperTextProps[targetEntity]}
+          placeholder={`Select ${targetEntity} to query`}
           value={substring}
           name="substring"
           variant="outlined"

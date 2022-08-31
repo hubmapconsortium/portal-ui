@@ -8,6 +8,7 @@ const useCellsChartLoadingStore = create((set) => ({
     set((state) => {
       state.fetchedUUIDs.add(uuid);
     }),
+  resetFetchedUUIDs: () => set({ fetchedUUIDs: new Set() }),
 }));
 
 export default useCellsChartLoadingStore;

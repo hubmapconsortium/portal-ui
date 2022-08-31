@@ -23,7 +23,9 @@ jobs:
         node-version-file: '.nvmrc'
         cache: 'npm'
         cache-dependency-path: end-to-end/package-lock.json
-   
+
+    - run: npm --version
+
     - name: Install node dependencies
       run: npm ci --prefix end-to-end
 
@@ -31,7 +33,7 @@ jobs:
       run: git config --global submodule.recurse true
 
     - name: Run test script
-      run: ./test-cypress.sh portal
+      run: etc/test/test-cypress.sh portal
       env:
         GH_ACTIONS_BRANCH: ${{ github.ref }}
         GH_ACTIONS: true
