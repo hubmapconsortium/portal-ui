@@ -15,7 +15,6 @@ function Results({ results }) {
         <>
           {view === 'table' && <ResultsTable hits={results.hits} />}
           {view === 'tile' && <ResultsTiles hits={results.hits} />}
-
           <Pagination pageHits={results.hits.page} />
         </>
       )}
