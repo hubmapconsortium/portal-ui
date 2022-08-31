@@ -57,12 +57,13 @@ function trackEvent(event) {
   ReactGA.event(event);
 }
 
-function trackLink(href) {
+function trackLink(href, type) {
   tracker.trackLink({
     href,
+    linkType: type || 'link',
   });
   ReactGA.event({
-    category: 'Outbound Link',
+    category: type || 'Outbound Link',
     action: 'Clicked',
     label: href,
     nonInteraction: false,

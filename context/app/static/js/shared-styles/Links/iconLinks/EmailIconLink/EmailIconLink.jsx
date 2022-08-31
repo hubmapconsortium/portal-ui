@@ -4,7 +4,7 @@ import { EmailIcon } from 'js/shared-styles/icons';
 import { trackLink } from 'js/helpers/trackers';
 
 function sendEmailEvent(event) {
-  trackLink(event.target.href);
+  trackLink(event.target.href, 'email');
 }
 
 function EmailIconLink({ iconFontSize, email, ...rest }) {
