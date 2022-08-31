@@ -25,13 +25,8 @@ async function stopJob({ jobId, workspacesEndpoint, workspacesToken }) {
     method: 'PUT',
     headers: getWorkspacesApiHeaders(workspacesToken),
   });
-  // When we understand when/why API failures occur, design approapriate UI.
-  if (response.ok) {
-    // eslint-disable-next-line no-alert
-    alert(`Job stop for ${jobId} will begin`);
-  } else {
-    // eslint-disable-next-line no-alert
-    alert(`Job stop for ${jobId} failed`);
+  if (!response.ok) {
+    throw Error(`Job stop for job #${jobId} failed`);
   }
 }
 
@@ -41,13 +36,8 @@ async function deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToke
     method: 'DELETE',
     headers,
   });
-  // When we understand when/why API failures occur, design approapriate UI.
-  if (response.ok) {
-    // eslint-disable-next-line no-alert
-    alert(`Workspace deletion for ${workspaceId} will begin`);
-  } else {
-    // eslint-disable-next-line no-alert
-    alert(`Workspace deletion for ${workspaceId} failed`);
+  if (!response.ok) {
+    throw Error(`Workspace deletion for workspace #${workspaceId} failed`);
   }
 }
 
