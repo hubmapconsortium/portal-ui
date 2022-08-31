@@ -15,8 +15,7 @@ import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/Der
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
-function DonorDetail(props) {
-  const { assayMetadata } = props;
+function DonorDetail({ assayMetadata }) {
   const {
     uuid,
     protocol_url,

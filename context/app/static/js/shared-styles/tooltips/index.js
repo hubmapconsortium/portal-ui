@@ -2,8 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 
-function TooltipBase(props) {
-  const { classes, children, ...rest } = props;
+function TooltipBase({ classes, children, ...rest }) {
   return (
     <Tooltip {...rest} classes={classes} arrow>
       {children}

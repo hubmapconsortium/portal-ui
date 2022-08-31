@@ -11,8 +11,7 @@ function renderNodeElement(node, props) {
   return <NodeElement {...props} node={node} />;
 }
 
-export default function ProvVis(props) {
-  const { provData, getNameForActivity, getNameForEntity, renderDetailPane, entity_type } = props;
+export default function ProvVis({ provData, getNameForActivity, getNameForEntity, renderDetailPane, entity_type }) {
   const { steps, setSteps } = useProvenanceStore(useProvenanceStoreSelector);
 
   useEffect(() => {

@@ -21,8 +21,7 @@ import { combineMetadata } from 'js/pages/utils/entity-utils';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
-function SampleDetail(props) {
-  const { assayMetadata } = props;
+function SampleDetail({ assayMetadata }) {
   const {
     uuid,
     donor,

@@ -7,8 +7,7 @@ import CollectionDatasetsTable from 'js/components/detailPage/CollectionDatasets
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 
-function Collection(props) {
-  const { collection: collectionData } = props;
+function Collection({ collection: collectionData }) {
   const {
     uuid,
     entity_type,

@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 
 import { CwlIcon, FlexOutboundLink, PrimaryTextDivider, StyledListItem } from './style';
 
-function ProvAnalysisDetailsLink(props) {
-  const { data } = props;
-
+function ProvAnalysisDetailsLink({ data }) {
   const trimmedOrigin = data.origin.replace(/\.git$/, '');
   const githubUrl =
     'name' in data ? `${trimmedOrigin}/blob/${data.hash}/${data.name}` : `${trimmedOrigin}/tree/${data.hash}`;

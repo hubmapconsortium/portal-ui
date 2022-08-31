@@ -15,8 +15,7 @@ import useSearchData from 'js/hooks/useSearchData';
 import { Flex, StyledInfoIcon, StyledDatasetIcon } from '../style';
 import { getSearchURL } from '../utils';
 
-function Assays(props) {
-  const { searchTerms } = props;
+function Assays({ searchTerms }) {
   const searchUrl = getSearchURL('Dataset', searchTerms);
 
   const query = useMemo(

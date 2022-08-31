@@ -12,8 +12,7 @@ import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
 const AnimatedNav = animated(StickyNav);
 const entityStoreSelector = (state) => state.summaryComponentObserver;
 
-function ItemLink(props) {
-  const { item, currentSection, handleClick } = props;
+function ItemLink({ item, currentSection, handleClick }) {
   return (
     <StyledItemLink
       display="block"
@@ -55,8 +54,7 @@ function useThrottledOnScroll(callback, delay) {
   }, [throttledCallback]);
 }
 
-function TableOfContents(props) {
-  const { items } = props;
+function TableOfContents({ items }) {
   const [currentSection, setCurrentSection] = useState(items[0].hash);
 
   const itemsWithNodeRef = React.useRef([]);

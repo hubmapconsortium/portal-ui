@@ -4,9 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 import { FixedHeightAppBar } from './style';
 
-function HeaderAppBar(props) {
-  const { children, elevation, anchorRef, shouldConstrainWidth } = props;
-
+function HeaderAppBar({ children, elevation, anchorRef, shouldConstrainWidth }) {
   return (
     <FixedHeightAppBar position="sticky" ref={anchorRef} elevation={elevation}>
       <Container maxWidth={shouldConstrainWidth ? 'lg' : false}>

@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { AlignedLink } from './style';
 
-function FilesConditionalLink(props) {
-  const { hasAgreedToDUA, openDUA, href, children, ...rest } = props;
+function FilesConditionalLink({ hasAgreedToDUA, openDUA, href, children, ...rest }) {
   if (hasAgreedToDUA) {
     return (
       <OutboundLink href={href} {...rest}>

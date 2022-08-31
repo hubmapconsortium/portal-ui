@@ -8,8 +8,7 @@ const StyledDiv = styled.div`
   ${(props) => props.flexBasis && `flex-basis: ${props.flexBasis};`}
 `;
 
-function SectionItem(props) {
-  const { children, ml, label, flexBasis, ...rest } = props;
+function SectionItem({ children, ml, label, flexBasis, ...rest }) {
   const childrenArray = Array.isArray(children) ? children : [children];
   return (
     <StyledDiv ml={ml} flexBasis={flexBasis} {...rest}>

@@ -16,8 +16,7 @@ function getOrder(orderPair, selectedItems) {
   return match.length ? match[0].order : undefined;
 }
 
-function OrderIcon(props) {
-  const { order } = props;
+function OrderIcon({ order }) {
   if (order === 'asc') return <ArrowUpOn />;
   if (order === 'desc') return <ArrowDownOn />;
   return <ArrowDownOff />;
@@ -28,9 +27,7 @@ OrderIcon.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
 };
 
-function SortingTableHead(props) {
-  const { items, toggleItem, selectedItems, analyticsCategory } = props;
-
+function SortingTableHead({ items, toggleItem, selectedItems, analyticsCategory }) {
   const pairs = getSortPairs(items);
   return (
     <TableHead>

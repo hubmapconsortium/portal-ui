@@ -14,9 +14,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { StyledLink } from './style';
 
-function CollectionDatasetsTable(props) {
-  const { datasets } = props;
-
+function CollectionDatasetsTable({ datasets }) {
   const columns = [
     { id: 'hubmap_id', label: 'HuBMAP ID' },
     { id: 'organ', label: 'Organ' },

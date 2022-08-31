@@ -13,9 +13,7 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { getDUAText } from './utils';
 import { ObliqueSpan, StyledHeader, StyledDiv } from './style';
 
-function FileBrowserDUA(props) {
-  const { isOpen, handleAgree, handleClose, mapped_data_access_level } = props;
-
+function FileBrowserDUA({ isOpen, handleAgree, handleClose, mapped_data_access_level }) {
   const [isChecked, check] = useState(false);
 
   const { title, appropriateUse } = getDUAText(mapped_data_access_level);

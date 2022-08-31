@@ -16,8 +16,7 @@ const generateClassName = createGenerateClassName({
 
 const AppContext = React.createContext({});
 
-function Providers(props) {
-  const { endpoints, groupsToken, isAuthenticated, userEmail, children, workspacesToken } = props;
+function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, children, workspacesToken }) {
   // TODO: Delete this when workspaces are publicly released.
   // If we stay in limbo for a long time, this configuration could be moved out of code.
   const workspacesUsers = [

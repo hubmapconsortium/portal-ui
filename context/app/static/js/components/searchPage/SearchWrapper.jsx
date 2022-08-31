@@ -16,27 +16,25 @@ import { NoResults, SearchError } from './noHitsComponents';
 const setSearchHitsCountSelector = (state) => state.setSearchHitsCount;
 const setAllResultsUUIDsSelector = (state) => state.setAllResultsUUIDs;
 
-function SearchWrapper(props) {
-  const {
-    apiUrl,
-    filters,
-    detailsUrlPrefix,
-    idField,
-    resultFields,
-    hitsPerPage,
-    httpHeaders,
-    searchUrlPath,
-    queryFields,
-    type,
-    isLoggedIn,
-    isDevSearch,
-    defaultQuery,
-    resultsComponent: ResultsComponent,
-    analyticsCategory,
-    elasticsearchEndpoint,
-    groupsToken,
-  } = props;
-
+function SearchWrapper({
+  apiUrl,
+  filters,
+  detailsUrlPrefix,
+  idField,
+  resultFields,
+  hitsPerPage,
+  httpHeaders,
+  searchUrlPath,
+  queryFields,
+  type,
+  isLoggedIn,
+  isDevSearch,
+  defaultQuery,
+  resultsComponent: ResultsComponent,
+  analyticsCategory,
+  elasticsearchEndpoint,
+  groupsToken,
+}) {
   const sortOptions = resultFieldsToSortOptions(resultFields.table);
   const resultFieldIds = [...resultFields.table, ...resultFields.tile, ...resultFields.ccf]
     .map((field) => field.id)

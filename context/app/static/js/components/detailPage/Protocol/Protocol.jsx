@@ -9,8 +9,7 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 
-function ProtocolLink(props) {
-  const { title, resolverHostnameAndDOI } = props;
+function ProtocolLink({ title, resolverHostnameAndDOI }) {
   return (
     <SectionItem label={title}>
       {resolverHostnameAndDOI ? (
@@ -22,9 +21,7 @@ function ProtocolLink(props) {
   );
 }
 
-function Protocol(props) {
-  const { protocol_url } = props;
-
+function Protocol({ protocol_url }) {
   const matchedDoiSuffix = protocol_url.match(/\w*$/)[0];
 
   const protocolData = useProtocolData(matchedDoiSuffix, 1);

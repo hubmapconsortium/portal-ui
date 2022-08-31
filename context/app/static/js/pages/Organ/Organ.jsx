@@ -14,9 +14,7 @@ import Section from 'js/shared-styles/sections/Section';
 
 import { FlexRow, Content } from './style';
 
-function Organ(props) {
-  const { organ } = props;
-
+function Organ({ organ }) {
   const descriptionId = 'description';
   const organInfoId = 'organ info';
   const azimuthId = 'azimuth';

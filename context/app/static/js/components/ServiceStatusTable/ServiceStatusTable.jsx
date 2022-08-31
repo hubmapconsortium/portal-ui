@@ -31,16 +31,15 @@ function buildServiceStatus(args) {
   };
 }
 
-function ServiceStatusTable(props) {
-  const {
-    elasticsearchEndpoint,
-    assetsEndpoint,
-    xmodalityEndpoint,
-    entityEndpoint,
-    gatewayEndpoint,
-    workspacesEndpoint,
-    workspacesWsEndpoint,
-  } = props;
+function ServiceStatusTable({
+  elasticsearchEndpoint,
+  assetsEndpoint,
+  xmodalityEndpoint,
+  entityEndpoint,
+  gatewayEndpoint,
+  workspacesEndpoint,
+  workspacesWsEndpoint,
+}) {
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
   const apiStatuses = gatewayStatus

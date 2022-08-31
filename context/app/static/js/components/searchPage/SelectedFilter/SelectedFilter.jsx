@@ -5,8 +5,7 @@ import { Typography } from '@material-ui/core';
 
 import { StyledCancelIcon, SelectedFilterDiv } from './style';
 
-function SelectedFilter(props) {
-  const { labelKey, labelValue, removeFilter, filterId, analyticsCategory } = props;
+function SelectedFilter({ labelKey, labelValue, removeFilter, filterId, analyticsCategory }) {
   if (filterId === 'entity_type') {
     return null;
   }

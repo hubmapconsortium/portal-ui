@@ -8,9 +8,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 
 import { Flex, StyledInfoIcon } from '../style';
 
-function OrganInfo(props) {
-  const { uberonIri } = props;
-
+function OrganInfo({ uberonIri }) {
   return (
     <>
       <Flex>

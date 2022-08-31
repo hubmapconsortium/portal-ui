@@ -9,8 +9,7 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 
 import { StyledPaper } from './style';
 
-function Publication(props) {
-  const { metadata, markdown } = props;
+function Publication({ metadata, markdown }) {
   const { vitessce_conf, title, authors, manuscript, abstract } = metadata;
   const { journal, url } = manuscript;
 

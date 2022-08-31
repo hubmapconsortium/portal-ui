@@ -7,17 +7,15 @@ import { customHighlight } from 'js/components/searchPage/config';
 import ResultsTable from '../ResultsTable';
 import ResultsCCF from '../ResultsCCF';
 
-function DevResults(props) {
-  const {
-    sortOptions,
-    hitsPerPage,
-    tableResultFields,
-    detailsUrlPrefix,
-    idField,
-    resultFieldIds,
-    analyticsCategory,
-  } = props;
-
+function DevResults({
+  sortOptions,
+  hitsPerPage,
+  tableResultFields,
+  detailsUrlPrefix,
+  idField,
+  resultFieldIds,
+  analyticsCategory,
+}) {
   return (
     <ViewSwitcherHits
       hitsPerPage={hitsPerPage}

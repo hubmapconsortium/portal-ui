@@ -8,9 +8,7 @@ import { VisualizationBackground } from './style';
 
 const Visualization = React.lazy(() => import('../Visualization'));
 
-function VisualizationWrapper(props) {
-  const { vitData, uuid, hasNotebook, shouldDisplayHeader } = props;
-
+function VisualizationWrapper({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
   return (
     <Suspense
       fallback={

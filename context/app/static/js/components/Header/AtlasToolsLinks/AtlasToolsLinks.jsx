@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import DropdownLink from '../DropdownLink';
 import { StyledDivider } from '../HeaderContent/style';
 
-function AtlasToolsLinks(props) {
-  const { isIndented } = props;
+function AtlasToolsLinks({ isIndented }) {
   return (
     <>
       <DropdownLink href="https://hubmapconsortium.github.io/ccf/" isIndented={isIndented}>

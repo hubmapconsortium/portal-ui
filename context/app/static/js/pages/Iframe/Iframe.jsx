@@ -22,8 +22,7 @@ function Switch() {
   }
 }
 
-function Iframe(props) {
-  const { flaskData } = props;
+function Iframe({ flaskData }) {
   return (
     <Providers endpoints={flaskData.endpoints}>
       <base target="_parent" />

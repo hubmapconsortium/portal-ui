@@ -12,9 +12,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import Description from 'js/shared-styles/sections/Description';
 
-function Publications(props) {
-  const { publications } = props;
-
+function Publications({ publications }) {
   return (
     <>
       <SectionHeader variant="h1" component="h1">

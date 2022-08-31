@@ -34,8 +34,7 @@ const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'))
 const Workspaces = lazy(() => import('js/pages/Workspaces'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
 
-function Routes(props) {
-  const { flaskData } = props;
+function Routes({ flaskData }) {
   const {
     entity,
     vitessce_conf,
