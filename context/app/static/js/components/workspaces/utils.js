@@ -46,7 +46,6 @@ async function stopJobs({ workspaceId, workspacesEndpoint, workspacesToken }) {
   const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, { headers });
   const jobsResults = await jobsResponse.json();
   const { jobs } = jobsResults.data;
-  // TODO: Filter down to only the jobs that are not already in the process of being stopped.
   jobs.forEach((job) => {
     if (String(job.workspace_id) === String(workspaceId)) {
       stopJob({ jobId: job.id, workspacesEndpoint, workspacesToken });

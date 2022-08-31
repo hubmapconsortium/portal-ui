@@ -71,7 +71,6 @@ function WorkspacesList() {
               <WorkspaceDetails workspace={workspace} />
               <div>
                 Created {workspace.datetime_created.slice(0, 10)}
-                {}
                 <button
                   type="submit"
                   disabled={workspace.jobs.length > 0 /* TODO: And/or check workspace status? */}
@@ -83,7 +82,7 @@ function WorkspacesList() {
                 </button>
                 <button
                   type="submit"
-                  disabled={workspace.jobs.length === 0 /* TODO: And/or check workspace status? */}
+                  disabled={workspace.jobs.length === 0}
                   onClick={() => {
                     handleStop(workspace.id);
                   }}
