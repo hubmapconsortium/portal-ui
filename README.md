@@ -28,14 +28,15 @@ graph LR
     top --> cells-sdk --> cells-api --> pipe
     click cells-sdk href "https://github.com/hubmapconsortium/cells-api-py-client"
     click cells-api href "https://github.com/hubmapconsortium/cross_modality_query"
-    top --> entity-api --> pipe[ingest-pipeline]
+    top --> gateway
+    gateway --> entity-api --> pipe[ingest-pipeline]
     click entity-api href "https://github.com/hubmapconsortium/entity-api"
     click pipe href "https://github.com/hubmapconsortium/ingest-pipeline"
-    top --> assets-api --> pipe
+    gateway --> assets-api --> pipe
     %% assets-api is just a file server: There is no repo.
-    top --> search-api --> pipe
+    gateway --> search-api --> pipe
     click search-api href "https://github.com/hubmapconsortium/search-api"
-    top --> workspaces-api
+    gateway --> workspaces-api
     click workspaces-api href "https://github.com/hubmapconsortium/user_workspaces_server"
 
     pipe --> valid
