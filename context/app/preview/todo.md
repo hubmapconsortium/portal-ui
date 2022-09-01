@@ -27,25 +27,76 @@ vitessce_conf:
       ]
     },
     {
-      "name": "TODO 2",
-      "description": "TODO",
-      "version": "1.0.0",
-      "initStrategy": "auto",
-      "datasets": [],
-      "public": true,
-      "coordinationSpace": {},
+      "version": "1.0.7",
+      "name": "psu test",
+      "description": "psu test",
+      "datasets": [
+        {
+          "uid": "A",
+          "name": "psu test",
+          "files": [
+            {
+              "type": "raster",
+              "fileType": "raster.json",
+              "options": {
+                "schemaVersion": "0.0.2",
+                "usePhysicalSizeScaling": true,
+                "images": [
+                  {
+                    "name": "",
+                    "type": "ome-tiff",
+                    "url": "/TODO/raster.pyramid.ome.tiff",
+                    "metadata": {
+                      "isBitmask": false
+                    }
+                  }
+                ],
+                "renderLayers": [
+                  ""
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "coordinationSpace": {
+        "dataset": {
+          "A": "A"
+        }
+      },
       "layout": [
         {
-          "component": "description",
-          "props": {
-            "description": "TODO"
+          "component": "spatial",
+          "coordinationScopes": {
+            "dataset": "A"
+          },
+          "x": 0.0,
+          "y": 0,
+          "w": 6.0,
+          "h": 12
+        },
+        {
+          "component": "status",
+          "coordinationScopes": {
+            "dataset": "A"
           },
           "x": 0,
           "y": 0,
-          "w": 2,
+          "w": 1,
           "h": 1
         },
-      ]
+        {
+          "component": "layerController",
+          "coordinationScopes": {
+            "dataset": "A"
+          },
+          "x": 6.0,
+          "y": 0,
+          "w": 6.0,
+          "h": 12
+        }
+      ],
+      "initStrategy": "auto"
     }
   ]
 ---
