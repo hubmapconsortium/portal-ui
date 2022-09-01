@@ -76,7 +76,7 @@ function mergeJobsIntoWorkspaces(jobs, workspaces) {
   const wsIdToJobs = {};
   jobs.forEach((job) => {
     const { status, workspace_id } = job;
-    if (status === 'complete') {
+    if (['complete', 'failed'].includes(status)) {
       return;
     }
     if (!(workspace_id in wsIdToJobs)) {

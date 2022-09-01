@@ -73,7 +73,7 @@ function WorkspacesList() {
                 Created {workspace.datetime_created.slice(0, 10)}
                 <button
                   type="submit"
-                  disabled={workspace.jobs.length > 0 /* TODO: And/or check workspace status? */}
+                  disabled={workspace.jobs.length > 0 || workspace.status === 'deleting'}
                   onClick={() => {
                     handleDelete(workspace.id);
                   }}
