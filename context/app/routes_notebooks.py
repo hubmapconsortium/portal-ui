@@ -17,14 +17,14 @@ from .utils import make_blueprint, get_url_base_from_request, entity_types, get_
 blueprint = make_blueprint(__name__)
 
 
-def _nb_response_from_objs(name_stem, cells, workspace_name=None):
+def _nb_response_from_objs(name_stem, cells, workspace_name=None, uuids=[]):
     nb = new_notebook()
     nb['cells'] = cells
     nb_str = nbformat.writes(nb)
-    return _nb_response(name_stem, nb_str, workspace_name)
+    return _nb_response(name_stem, nb_str, workspace_name, uuids)
 
 
-def _nb_response_from_dicts(name_stem, cells, workspace_name=None):
+def _nb_response_from_dicts(name_stem, cells, workspace_name=None, uuids=[]):
     nb = {
         'cells': cells,
         'metadata': {},
@@ -32,10 +32,10 @@ def _nb_response_from_dicts(name_stem, cells, workspace_name=None):
         'nbformat_minor': 5
     }
     nb_str = json.dumps(nb)
-    return _nb_response(name_stem, nb_str, workspace_name)
+    return _nb_response(name_stem, nb_str, workspace_name, uuids)
 
 
-def _nb_response(name_stem, nb_str, workspace_name):
+def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
     if not workspace_name:
         return Response(
             response=nb_str,
@@ -58,11 +58,14 @@ def _nb_response(name_stem, nb_str, workspace_name):
             'description': workspace_name,
             'workspace_details': {
                 'globus_groups_token': session['groups_token'],
-                'symlinks': [],
                 'files': [{
                     'name': f'{name_stem}.ipynb',
                     'content': nb_str,
                 }],
+                'symlinks': [{
+                    "name": f"/datasets/{uuid}",
+                    "dataset_uuid": uuid
+                } for uuid in uuids],
             }
         }
     )
@@ -102,7 +105,10 @@ def details_notebook(type, uuid, create_workspace):
     hubmap_id = entity['hubmap_id']
     dataset_url = request.base_url.replace('.ipynb', '')
     cells = [
-        new_markdown_cell(f"Visualization for [{hubmap_id}]({dataset_url})"),
+        new_markdown_cell(f"Visualization for [{hubmap_id}]({dataset_url}); "
+            "If this notebook is running in a HuBMAP workspace, the dataset is symlinked:"),
+        new_code_cell(f'!ls /datasets/{uuid}'),
+        new_markdown_cell('Visualization requires extra code to be installed:'),
         new_code_cell(
             '!pip uninstall community flask albumentations -y '
             '# Preinstalled on Colab; Causes version conflicts.\n'
@@ -110,7 +116,7 @@ def details_notebook(type, uuid, create_workspace):
         *vitessce_conf.cells
     ]
 
-    return _nb_response_from_objs(hubmap_id, cells, workspace_name=workspace_name)
+    return _nb_response_from_objs(hubmap_id, cells, workspace_name=workspace_name, uuids=[uuid])
 
 
 @blueprint.route('/notebooks/<entity_type>.ipynb', methods=['POST'])
