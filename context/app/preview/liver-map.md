@@ -24,7 +24,7 @@ vitessce_conf:
                   {
                     "name": "Human Liver",
                     "type": "ome-tiff",
-                    "url": "http://localhost:8000/human_3d.raster.pyramid.ome.tiff",
+                    "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/human_3d.raster.pyramid.ome.tiff",
                     "metadata": {
                       "isBitmask": false
                     }
@@ -253,7 +253,7 @@ vitessce_conf:
                   {
                     "name": "Mouse Liver",
                     "type": "ome-tiff",
-                    "url": "http://localhost:8000/mouse_2d.raster.pyramid.ome.tiff",
+                    "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/mouse_2d.raster.pyramid.ome.tiff",
                     "metadata": {
                       "isBitmask": false
                     }
@@ -261,7 +261,7 @@ vitessce_conf:
                   {
                     "name": "Cell Segmentations",
                     "type": "ome-tiff",
-                    "url": "http://localhost:8000/mouse_2d.cell_ids.ome.tiff",
+                    "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/mouse_2d.cell_ids.ome.tiff",
                     "metadata": {
                       "isBitmask": true
                     }
@@ -279,13 +279,133 @@ vitessce_conf:
       "coordinationSpace": {
         "dataset": {
           "mouse": "mouse-liver"
+        },
+        "spatialRasterLayers": {
+          "mouse": [
+            {
+              "type": "raster",
+              "index": 0,
+              "visible": true,
+              "colormap": null,
+              "opacity": 1,
+              "domainType": "Min/Max",
+              "transparentColor": null,
+              "renderingMode": "Additive",
+              "use3d": false,
+              "channels": [
+                {
+                  "selection": {
+                    "c": 0,
+                    "t": 0,
+                    "z": 0
+                  },
+                  "color": [
+                    0,
+                    0,
+                    255
+                  ],
+                  "visible": true,
+                  "slider": [
+                    1,
+                    616
+                  ]
+                },
+                {
+                  "selection": {
+                    "c": 1,
+                    "t": 0,
+                    "z": 0
+                  },
+                  "color": [
+                    0,
+                    255,
+                    0
+                  ],
+                  "visible": true,
+                  "slider": [
+                    1,
+                    5916
+                  ]
+                },
+                {
+                  "selection": {
+                    "c": 2,
+                    "t": 0,
+                    "z": 0
+                  },
+                  "color": [
+                    255,
+                    0,
+                    255
+                  ],
+                  "visible": true,
+                  "slider": [
+                    1,
+                    13273
+                  ]
+                },
+                {
+                  "selection": {
+                    "c": 3,
+                    "t": 0,
+                    "z": 0
+                  },
+                  "color": [
+                    255,
+                    255,
+                    0
+                  ],
+                  "visible": true,
+                  "slider": [
+                    25,
+                    57627
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "bitmask",
+              "index": 1,
+              "visible": false,
+              "colormap": null,
+              "opacity": 1,
+              "domainType": "Min/Max",
+              "transparentColor": [
+                0,
+                0,
+                0
+              ],
+              "renderingMode": "Additive",
+              "use3d": false,
+              "channels": [
+                {
+                  "selection": {
+                    "c": 0,
+                    "t": 0,
+                    "z": 0
+                  },
+                  "color": [
+                    255,
+                    255,
+                    255
+                  ],
+                  "visible": true,
+                  "slider": [
+                    2,
+                    957
+                  ]
+                }
+              ]
+            }
+          ]
         }
       },
       "layout": [
         {
           "component": "spatial",
           "coordinationScopes": {
-            "dataset": "mouse"
+            "dataset": "mouse",
+            "spatialRasterLayers": "mouse"
           },
           "x": 0,
           "y": 0,
@@ -295,7 +415,8 @@ vitessce_conf:
         {
           "component": "description",
           "coordinationScopes": {
-            "dataset": "mouse"
+            "dataset": "mouse",
+            "spatialRasterLayers": "mouse"
           },
           "x": 8,
           "y": 9,
@@ -305,7 +426,8 @@ vitessce_conf:
         {
           "component": "layerController",
           "coordinationScopes": {
-            "dataset": "mouse"
+            "dataset": "mouse",
+            "spatialRasterLayers": "mouse"
           },
           "x": 8,
           "y": 0,
