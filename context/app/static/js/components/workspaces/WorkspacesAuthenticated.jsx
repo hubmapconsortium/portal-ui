@@ -27,8 +27,8 @@ function WorkspacesAuthenticated() {
         </p>
         <p>
           Workspaces are provided through Jupyter notebooks. Currently, beta users can create workspaces from datasets
-          with visulizations. Eventually, all users with HuBMAP accounts will be able to create workspaces from any from
-          any dataset, collection, dataset search or list.
+          with visulizations. Eventually, all users with HuBMAP accounts will be able to create workspaces from any
+          dataset, collection, dataset search or list.
         </p>
         <p>
           Workspaces should not be used for long-running batch processes. Contact{' '}
