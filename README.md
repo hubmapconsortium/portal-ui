@@ -77,10 +77,10 @@ graph LR
         not-harvard
     end
 
-    classDef contrib fill:#ddffdd,stroke:#88AA88;
+    classDef contrib fill:#ddffdd,stroke:#88AA88,color:#000;
     class owner,contributor,top,vitessce,viv,portal-visualization,vitessce-python,cells-sdk,portal-containers,valid,search-api contrib
 
-    classDef owner stroke-width:3px,font-style:italic;
+    classDef owner stroke-width:3px,font-style:italic,color:#000;
     class owner,top,vitessce,viv,portal-visualization,vitessce-python,portal-containers owner
 
     style legend fill:#f8f8f8,stroke:#888888;
