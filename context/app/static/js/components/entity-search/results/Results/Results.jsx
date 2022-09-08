@@ -6,15 +6,17 @@ import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import ResultsTiles from 'js/components/entity-search/results/ResultsTiles/';
 import { ResultsLayout } from './style';
 
+const resultsComponents = { table: ResultsTable, tile: ResultsTiles };
+
 function Results({ results }) {
   const { view } = useStore();
 
+  const ResultsComponent = resultsComponents[view];
   return (
     <ResultsLayout>
       {results?.hits && (
         <>
-          {view === 'table' && <ResultsTable hits={results.hits} />}
-          {view === 'tile' && <ResultsTiles hits={results.hits} />}
+          <ResultsComponent hits={results.hits} />
           <Pagination pageHits={results.hits.page} />
         </>
       )}
