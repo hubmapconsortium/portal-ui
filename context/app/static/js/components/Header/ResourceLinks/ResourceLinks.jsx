@@ -17,7 +17,7 @@ function ResourceLinks(props) {
         About
       </DropdownLink>
       <StyledDivider />
-      {['Multimodal Molecular Imaging Data', 'Cell Type Annotations', 'Liver Map'].map((previewName) => (
+      {['Multimodal Molecular Imaging Data', 'Cell Type Annotations'].map((previewName) => (
         <DropdownLink
           key={previewName}
           href={`/preview/${previewName.toLowerCase().replace(/\W+/g, '-')}`}
