@@ -68,8 +68,7 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
 }
 
 function getNotebookPath(workspace) {
-  // TODO: Replace with current_workspace_details, when available.
-  const { files } = workspace.workspace_details.request_workspace_details;
+  const { files } = workspace.workspace_details.current_workspace_details;
   const nbFiles = files.filter(({ name }) => name.endsWith('.ipynb'));
   if (nbFiles.length !== 1) {
     return '';
