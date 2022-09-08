@@ -17,17 +17,15 @@ function ResourceLinks(props) {
         About
       </DropdownLink>
       <StyledDivider />
-      {['Multimodal Molecular Imaging Data', 'Cell Type Annotations', 'Multimodal Mass Spectrometry Imaging Data'].map(
-        (previewName) => (
-          <DropdownLink
-            key={previewName}
-            href={`/preview/${previewName.toLowerCase().replace(/\W+/g, '-')}`}
-            isIndented={isIndented}
-          >
-            Preview: {previewName}
-          </DropdownLink>
-        ),
-      )}
+      {['Multimodal Molecular Imaging Data', 'Cell Type Annotations'].map((previewName) => (
+        <DropdownLink
+          key={previewName}
+          href={`/preview/${previewName.toLowerCase().replace(/\W+/g, '-')}`}
+          isIndented={isIndented}
+        >
+          Preview: {previewName}
+        </DropdownLink>
+      ))}
     </>
   );
 }
