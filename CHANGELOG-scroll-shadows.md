@@ -1,0 +1,1 @@
+- Add scroll shadows to configure search table and select facets in search revision ui.
