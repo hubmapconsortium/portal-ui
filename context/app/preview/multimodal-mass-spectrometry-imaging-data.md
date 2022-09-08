@@ -1,6 +1,6 @@
 ---
-title: Liver Map
-group_name: TODO
+title: Multimodal Mass Spectrometry Imaging Data
+group_name: Penn State University and Columbia University
 created_by_user_displayname: TODO
 created_by_user_email: TODO
 vitessce_conf:
@@ -771,8 +771,9 @@ vitessce_conf:
 
 # Description
 
-Fusion of metabolites, lipids and proteins at the single-cell level.
+Fusion of metabolites, lipids and proteins at the single-cell level in the mammalian liver.
 
+<!--
 ## Experimental Details
 
 TODO
@@ -781,6 +782,20 @@ TODO
 
 **Overall**: [dx.doi.org/10.17504/TODO](https://dx.doi.org/10.17504/TODO)
 
+-->
+
 ## Contributors
 
-- **TODO**: TODO – <TODO@TODO.edu>
+- Hua Tian
+- Presha Rajbhandari
+- Jay Tarolli
+- Aubrianna M. Decker
+- Taruna V. Neelakantan
+- Tina Angerer
+- Fereshteh Zandkarimi
+- Jacob Daniels
+- Helen Remotti
+- Gilles Frache
+- Nicholas Winograd
+- Brent R. Stockwell
+
