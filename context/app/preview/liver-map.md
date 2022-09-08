@@ -199,16 +199,6 @@ vitessce_conf:
           "h": 12
         },
         {
-          "component": "description",
-          "coordinationScopes": {
-            "dataset": "human"
-          },
-          "x": 8,
-          "y": 9,
-          "w": 4,
-          "h": 3
-        },
-        {
           "component": "layerController",
           "coordinationScopes": {
             "dataset": "human",
@@ -229,7 +219,346 @@ vitessce_conf:
           "x": 8,
           "y": 0,
           "w": 4,
-          "h": 9
+          "h": 12
+        }
+      ],
+      "initStrategy": "auto"
+    },
+    {
+      "version": "1.0.7",
+      "name": "3D Human Liver with annotations",
+      "description": "",
+      "datasets": [
+        {
+          "uid": "human-liver-annot",
+          "name": "Human dataset",
+          "files": [
+            {
+              "type": "raster",
+              "fileType": "raster.json",
+              "options": {
+                "schemaVersion": "0.0.2",
+                "usePhysicalSizeScaling": false,
+                "images": [
+                  {
+                    "name": "Human Liver",
+                    "type": "ome-tiff",
+                    "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/human_3d.raster.pyramid.ome.tiff",
+                    "metadata": {
+                      "isBitmask": false
+                    }
+                  },
+                  {
+                    "name": "Cell Segmentations (Sixth slice only)",
+                    "type": "ome-tiff",
+                    "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/human_topslice.cell_ids.ome.tiff",
+                    "metadata": {
+                      "isBitmask": true
+                    }
+                  }
+                ],
+                "renderLayers": [
+                  "Human Liver",
+                  "Cell Segmentations (Sixth slice only)"
+                ]
+              }
+            },
+            {
+              "type": "cells",
+              "fileType": "anndata-cells.zarr",
+              "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/human_topslice.h5ad.zarr",
+              "options": {
+                "xy": "obsm/X_spatial",
+                "mappings": {
+                  "Protein-based t-SNE": {
+                    "key": "obsm/X_protein_tsne",
+                    "dims": [0, 1]
+                  },
+                  "Lipid/metabolite-based t-SNE": {
+                    "key": "obsm/X_lipmet_tsne",
+                    "dims": [0, 1]
+                  }
+                }
+              }
+            },
+            {
+              "type": "cell-sets",
+              "fileType": "anndata-cell-sets.zarr",
+              "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/human_topslice.h5ad.zarr",
+              "options": [
+                {
+                  "groupName": "Protein-based Clustering",
+                  "setName": "obs/Protein Cluster"
+                },
+                {
+                  "groupName": "Lipid/metabolite-based Clustering",
+                  "setName": "obs/Lipmet Cluster"
+                }
+              ]
+            },
+            {
+              "type": "expression-matrix",
+              "fileType": "anndata-expression-matrix.zarr",
+              "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/human_topslice.h5ad.zarr",
+              "options": {
+                "matrix": "layers/X_uint8",
+                "geneAlias": "var/feature_name"
+              }
+            }
+          ]
+        }
+      ],
+      "coordinationSpace": {
+        "dataset": {
+          "human": "human-liver-annot"
+        },
+        "spatialZoom": {
+          "A": -0.7884025211167491
+        },
+        "spatialRotation": {
+          "A": 0
+        },
+        "spatialTargetX": {
+          "A": 494.0703579375883
+        },
+        "spatialTargetY": {
+          "A": 358.7471084680066
+        },
+        "spatialTargetZ": {
+          "A": 18.79732498306471
+        },
+        "spatialRotationX": {
+          "A": -19.113264220037628
+        },
+        "spatialRotationY": {
+          "A": null
+        },
+        "spatialRotationZ": {
+          "A": null
+        },
+        "spatialRotationOrbit": {
+          "A": -14.282115869017636
+        },
+        "spatialOrbitAxis": {
+          "A": null
+        },
+        "spatialAxisFixed": {
+          "A": false
+        },
+        "spatialRasterLayers": {
+          "A": [
+            {
+              "type": "raster",
+              "index": 0,
+              "visible": true,
+              "colormap": null,
+              "opacity": 1,
+              "domainType": "Min/Max",
+              "transparentColor": null,
+              "renderingMode": "Maximum Intensity Projection",
+              "use3d": false,
+              "channels": [
+                {
+                  "selection": {
+                    "c": 0,
+                    "t": 0,
+                    "z": 6
+                  },
+                  "color": [
+                    0,
+                    0,
+                    255
+                  ],
+                  "visible": true,
+                  "slider": [
+                    0.942477822303772,
+                    1.5707963705062866
+                  ]
+                },
+                {
+                  "selection": {
+                    "c": 1,
+                    "t": 0,
+                    "z": 6
+                  },
+                  "color": [
+                    0,
+                    255,
+                    0
+                  ],
+                  "visible": true,
+                  "slider": [
+                    0.9142034876346589,
+                    1.5707963705062866
+                  ]
+                },
+                {
+                  "selection": {
+                    "c": 2,
+                    "t": 0,
+                    "z": 6
+                  },
+                  "color": [
+                    255,
+                    0,
+                    255
+                  ],
+                  "visible": true,
+                  "slider": [
+                    0.942477822303772,
+                    1.5707963705062866
+                  ]
+                },
+                {
+                  "selection": {
+                    "c": 3,
+                    "t": 0,
+                    "z": 6
+                  },
+                  "color": [
+                    255,
+                    255,
+                    0
+                  ],
+                  "visible": true,
+                  "slider": [
+                    0.9487610077857971,
+                    1.5707963705062866
+                  ]
+                }
+              ]
+            },
+            {
+              "channels": [
+                {
+                  "color": [255, 255, 255],
+                  "selection": { "c": 0, "t": 0, "z": 0 },
+                  "slider": [2, 1998],
+                  "visible": true
+                }
+              ],
+              "colormap": null,
+              "domainType": "Min/Max",
+              "index": 1,
+              "opacity": 1,
+              "renderingMode": "Additive",
+              "transparentColor": [0, 0, 0],
+              "type": "bitmask",
+              "use3d": false,
+              "visible": true
+            }
+          ]
+        },
+        "embeddingType": {
+          "A": "Protein-based t-SNE",
+          "B": "Lipid/metabolite-based t-SNE"
+        }
+      },
+      "layout": [
+        {
+          "component": "spatial",
+          "coordinationScopes": {
+            "dataset": "human",
+            "spatialZoom": "A",
+            "spatialRotation": "A",
+            "spatialTargetX": "A",
+            "spatialTargetY": "A",
+            "spatialTargetZ": "A",
+            "spatialRotationX": "A",
+            "spatialRotationY": "A",
+            "spatialRotationZ": "A",
+            "spatialRotationOrbit": "A",
+            "spatialOrbitAxis": "A",
+            "spatialAxisFixed": "A",
+            "spatialRasterLayers": "A",
+            "spatialCellsLayer": "A"
+          },
+          "x": 0,
+          "y": 0,
+          "w": 6,
+          "h": 6
+        },
+        {
+          "component": "layerController",
+          "coordinationScopes": {
+            "dataset": "human",
+            "spatialZoom": "A",
+            "spatialRotation": "A",
+            "spatialTargetX": "A",
+            "spatialTargetY": "A",
+            "spatialTargetZ": "A",
+            "spatialRotationX": "A",
+            "spatialRotationY": "A",
+            "spatialRotationZ": "A",
+            "spatialRotationOrbit": "A",
+            "spatialOrbitAxis": "A",
+            "spatialAxisFixed": "A",
+            "spatialRasterLayers": "A",
+            "spatialCellsLayer": "A"
+          },
+          "x": 6,
+          "y": 0,
+          "w": 2,
+          "h": 6
+        },
+        {
+          "component": "heatmap",
+          "coordinationScopes": {
+            "dataset": "human"
+          },
+          "props": {
+            "transpose": true,
+            "variablesLabelOverride": "feature"
+          },
+          "x": 0,
+          "y": 6,
+          "w": 6,
+          "h": 6
+        },
+        {
+          "component": "cellSets",
+          "coordinationScopes": {
+            "dataset": "human"
+          },
+          "x": 10,
+          "y": 0,
+          "w": 2,
+          "h": 6
+        },
+        {
+          "component": "genes",
+          "coordinationScopes": {
+            "dataset": "human"
+          },
+          "props": {
+            "variablesLabelOverride": "feature"
+          },
+          "x": 8,
+          "y": 0,
+          "w": 2,
+          "h": 6
+        },
+        {
+          "component": "scatterplot",
+          "coordinationScopes": {
+            "dataset": "human",
+            "embeddingType": "A"
+          },
+          "x": 6,
+          "y": 6,
+          "w": 3,
+          "h": 6
+        },
+        {
+          "component": "scatterplot",
+          "coordinationScopes": {
+            "dataset": "human",
+            "embeddingType": "B"
+          },
+          "x": 9,
+          "y": 6,
+          "w": 3,
+          "h": 6
         }
       ],
       "initStrategy": "auto"
