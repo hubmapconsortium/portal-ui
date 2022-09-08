@@ -1,1 +1,1 @@
-- Add a new preview.
+- Add a new preview for multimodal mass spec; Not yet listed in public menu.
