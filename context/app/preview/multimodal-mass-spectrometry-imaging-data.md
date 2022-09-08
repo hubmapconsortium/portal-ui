@@ -1,8 +1,8 @@
 ---
 title: Multimodal Mass Spectrometry Imaging Data
 group_name: Penn State University and Columbia University
-created_by_user_displayname: TODO
-created_by_user_email: TODO
+created_by_user_displayname: Hua Tian
+created_by_user_email: hut3@psu.edu
 vitessce_conf:
   [
     {
