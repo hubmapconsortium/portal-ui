@@ -21,7 +21,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
     ...donorFacets,
     ...createAffiliationFacet({ fieldName: 'group_name', label: 'Group', type: 'string' }),
     ...createAffiliationFacet({ fieldName: 'created_by_user_displayname', label: 'Creator', type: 'string' }),
-  }
+  };
 
   const initialFields = {
     ...createField({ fieldName: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
