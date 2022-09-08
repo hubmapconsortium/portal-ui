@@ -17,6 +17,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   const { tableFields: donorFacets } = buildDonorFields(entityType);
 
   const initialFacets = Object.assign(
+    {},
     uniqueFacets,
     donorFacets,
     createAffiliationFacet({ fieldName: 'group_name', label: 'Group', type: 'string' }),
@@ -24,6 +25,7 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   );
 
   const initialFields = Object.assign(
+    {},
     createField({ fieldName: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
     createField({ fieldName: 'group_name', label: 'Group', type: 'string' }),
     uniqueFields,
