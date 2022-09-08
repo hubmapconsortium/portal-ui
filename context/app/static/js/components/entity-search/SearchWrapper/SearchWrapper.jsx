@@ -16,21 +16,19 @@ import { useNumericFacetsProps } from './hooks';
 function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   const { tableFields: donorFacets } = buildDonorFields(entityType);
 
-  const initialFacets = Object.assign(
-    {},
-    uniqueFacets,
-    donorFacets,
-    createAffiliationFacet({ fieldName: 'group_name', label: 'Group', type: 'string' }),
-    createAffiliationFacet({ fieldName: 'created_by_user_displayname', label: 'Creator', type: 'string' }),
-  );
+  const initialFacets = {
+    ...uniqueFacets,
+    ...donorFacets,
+    ...createAffiliationFacet({ fieldName: 'group_name', label: 'Group', type: 'string' }),
+    ...createAffiliationFacet({ fieldName: 'created_by_user_displayname', label: 'Creator', type: 'string' }),
+  }
 
-  const initialFields = Object.assign(
-    {},
-    createField({ fieldName: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
-    createField({ fieldName: 'group_name', label: 'Group', type: 'string' }),
-    uniqueFields,
-    createField({ fieldName: 'mapped_last_modified_timestamp', label: 'Last Modified', type: 'string' }),
-  );
+  const initialFields = {
+    ...createField({ fieldName: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
+    ...createField({ fieldName: 'group_name', label: 'Group', type: 'string' }),
+    ...uniqueFields,
+    ...createField({ fieldName: 'mapped_last_modified_timestamp', label: 'Last Modified', type: 'string' }),
+  };
 
   const tileFields = buildTileFields(entityType);
 
