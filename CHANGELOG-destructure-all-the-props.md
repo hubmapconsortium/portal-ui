@@ -1,1 +1,0 @@
-- Destructure almost all of the component props.

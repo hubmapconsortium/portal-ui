@@ -1,1 +1,0 @@
-- Add some color-coding to the README diagram.

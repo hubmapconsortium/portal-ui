@@ -1,1 +1,0 @@
-- Only show "active" workspaces.

@@ -1,1 +1,0 @@
-- Make the UI reflect the underlying API more closely. UI should not be responsible for managing state.

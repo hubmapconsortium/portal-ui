@@ -1,3 +1,20 @@
+## v0.52.0 - 2022-09-08
+
+- Destructure almost all of the component props.
+- Only show "active" workspaces.
+- Fix proptype warnings.
+- Add a second param to record the type of the link.
+- Add some color-coding to the README diagram.
+- Add organs to organs page. (No public data yet, but good to be ready.)
+- Add a new preview for multimodal mass spec; Not yet listed in public menu.
+- Add count and link to organs page from homepage.
+- Remove unused ASCT+B preview.
+- Add scroll shadows to configure search table and select facets in search revision ui.
+- Use the Workspace API's mechanism for mounting a data directory into the workspace.
+- Fix bugs in TSV download and Lineup.
+- Make the UI reflect the underlying API more closely. UI should not be responsible for managing state.
+
+
 ## v0.51.1 - 2022-08-25
 
 - Adds an ugly button to access workspace.
