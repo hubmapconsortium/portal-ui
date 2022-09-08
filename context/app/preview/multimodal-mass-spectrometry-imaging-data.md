@@ -765,6 +765,327 @@ vitessce_conf:
         }
       ],
       "initStrategy": "auto"
+    },
+    {
+      "version": "1.0.7",
+      "name": "2D Mouse Liver with annotations",
+      "description": "",
+      "datasets": [
+        {
+          "uid": "mouse-liver-annot",
+          "name": "Mouse dataset",
+          "files": [
+            {
+              "type": "raster",
+              "fileType": "raster.json",
+              "options": {
+                "schemaVersion": "0.0.2",
+                "usePhysicalSizeScaling": true,
+                "images": [
+                  {
+                    "name": "Mouse Liver",
+                    "type": "ome-tiff",
+                    "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/mouse_2d.raster.pyramid.ome.tiff",
+                    "metadata": {
+                      "isBitmask": false
+                    }
+                  },
+                  {
+                    "name": "Cell Segmentations",
+                    "type": "ome-tiff",
+                    "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/mouse_2d.cell_ids.ome.tiff",
+                    "metadata": {
+                      "isBitmask": true
+                    }
+                  }
+                ],
+                "renderLayers": [
+                  "Mouse Liver",
+                  "Cell Segmentations"
+                ]
+              }
+            },
+            {
+              "type": "cells",
+              "fileType": "anndata-cells.zarr",
+              "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/mouse_2d.h5ad.zarr",
+              "options": {
+                "xy": "obsm/X_spatial",
+                "mappings": {
+                  "Protein-based t-SNE": {
+                    "key": "obsm/X_protein_tsne",
+                    "dims": [0, 1]
+                  },
+                  "Lipid/metabolite-based t-SNE": {
+                    "key": "obsm/X_lipmet_tsne",
+                    "dims": [0, 1]
+                  }
+                }
+              }
+            },
+            {
+              "type": "cell-sets",
+              "fileType": "anndata-cell-sets.zarr",
+              "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/mouse_2d.h5ad.zarr",
+              "options": [
+                {
+                  "groupName": "Protein-based Clustering",
+                  "setName": "obs/Protein Cluster"
+                },
+                {
+                  "groupName": "Lipid/metabolite-based Clustering",
+                  "setName": "obs/Lipmet Cluster"
+                }
+              ]
+            },
+            {
+              "type": "expression-matrix",
+              "fileType": "anndata-expression-matrix.zarr",
+              "url": "https://storage.googleapis.com/vitessce-data/0.0.31/master_release/tian/mouse_2d.h5ad.zarr",
+              "options": {
+                "matrix": "layers/X_uint8",
+                "geneAlias": "var/feature_name"
+              }
+            }
+          ]
+        }
+      ],
+      "coordinationSpace": {
+        "dataset": {
+          "mouse": "mouse-liver-annot"
+        },
+        "spatialRasterLayers": {
+          "A": [
+            {
+              "type": "raster",
+              "index": 0,
+              "visible": true,
+              "colormap": null,
+              "opacity": 1,
+              "domainType": "Min/Max",
+              "transparentColor": null,
+              "renderingMode": "Additive",
+              "use3d": false,
+              "channels": [
+                {
+                  "selection": {
+                    "c": 0,
+                    "t": 0,
+                    "z": 0
+                  },
+                  "color": [
+                    0,
+                    0,
+                    255
+                  ],
+                  "visible": true,
+                  "slider": [
+                    1,
+                    616
+                  ]
+                },
+                {
+                  "selection": {
+                    "c": 1,
+                    "t": 0,
+                    "z": 0
+                  },
+                  "color": [
+                    0,
+                    255,
+                    0
+                  ],
+                  "visible": true,
+                  "slider": [
+                    1,
+                    5916
+                  ]
+                },
+                {
+                  "selection": {
+                    "c": 2,
+                    "t": 0,
+                    "z": 0
+                  },
+                  "color": [
+                    255,
+                    0,
+                    255
+                  ],
+                  "visible": true,
+                  "slider": [
+                    1,
+                    13273
+                  ]
+                },
+                {
+                  "selection": {
+                    "c": 3,
+                    "t": 0,
+                    "z": 0
+                  },
+                  "color": [
+                    255,
+                    255,
+                    0
+                  ],
+                  "visible": true,
+                  "slider": [
+                    25,
+                    57627
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "bitmask",
+              "index": 1,
+              "visible": true,
+              "colormap": null,
+              "opacity": 1,
+              "domainType": "Min/Max",
+              "transparentColor": [
+                0,
+                0,
+                0
+              ],
+              "renderingMode": "Additive",
+              "use3d": false,
+              "channels": [
+                {
+                  "selection": {
+                    "c": 0,
+                    "t": 0,
+                    "z": 0
+                  },
+                  "color": [
+                    255,
+                    255,
+                    255
+                  ],
+                  "visible": true,
+                  "slider": [
+                    2,
+                    957
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "embeddingType": {
+          "A": "Protein-based t-SNE",
+          "B": "Lipid/metabolite-based t-SNE"
+        }
+      },
+      "layout": [
+        {
+          "component": "spatial",
+          "coordinationScopes": {
+            "dataset": "mouse",
+            "spatialZoom": "A",
+            "spatialRotation": "A",
+            "spatialTargetX": "A",
+            "spatialTargetY": "A",
+            "spatialTargetZ": "A",
+            "spatialRotationX": "A",
+            "spatialRotationY": "A",
+            "spatialRotationZ": "A",
+            "spatialRotationOrbit": "A",
+            "spatialOrbitAxis": "A",
+            "spatialAxisFixed": "A",
+            "spatialRasterLayers": "A",
+            "spatialCellsLayer": "A"
+          },
+          "x": 0,
+          "y": 0,
+          "w": 6,
+          "h": 6
+        },
+        {
+          "component": "layerController",
+          "coordinationScopes": {
+            "dataset": "mouse",
+            "spatialZoom": "A",
+            "spatialRotation": "A",
+            "spatialTargetX": "A",
+            "spatialTargetY": "A",
+            "spatialTargetZ": "A",
+            "spatialRotationX": "A",
+            "spatialRotationY": "A",
+            "spatialRotationZ": "A",
+            "spatialRotationOrbit": "A",
+            "spatialOrbitAxis": "A",
+            "spatialAxisFixed": "A",
+            "spatialRasterLayers": "A",
+            "spatialCellsLayer": "A"
+          },
+          "x": 6,
+          "y": 0,
+          "w": 2,
+          "h": 6
+        },
+        {
+          "component": "heatmap",
+          "coordinationScopes": {
+            "dataset": "mouse"
+          },
+          "props": {
+            "transpose": true,
+            "variablesLabelOverride": "feature"
+          },
+          "x": 0,
+          "y": 6,
+          "w": 6,
+          "h": 6
+        },
+        {
+          "component": "cellSets",
+          "coordinationScopes": {
+            "dataset": "mouse"
+          },
+          "x": 10,
+          "y": 0,
+          "w": 2,
+          "h": 6
+        },
+        {
+          "component": "genes",
+          "coordinationScopes": {
+            "dataset": "mouse"
+          },
+          "props": {
+            "variablesLabelOverride": "feature"
+          },
+          "x": 8,
+          "y": 0,
+          "w": 2,
+          "h": 6
+        },
+        {
+          "component": "scatterplot",
+          "coordinationScopes": {
+            "dataset": "mouse",
+            "embeddingType": "A"
+          },
+          "x": 6,
+          "y": 6,
+          "w": 3,
+          "h": 6
+        },
+        {
+          "component": "scatterplot",
+          "coordinationScopes": {
+            "dataset": "mouse",
+            "embeddingType": "B"
+          },
+          "x": 9,
+          "y": 6,
+          "w": 3,
+          "h": 6
+        }
+      ],
+      "initStrategy": "auto"
     }
   ]
 ---
