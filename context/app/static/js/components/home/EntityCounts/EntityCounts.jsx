@@ -43,7 +43,7 @@ function EntityCounts({ organsCount }) {
           }
           count={organsCount}
           label="Organs"
-          href="/organs"
+          href="/organ"
         />
         <EntityCount
           icon={<StyledSvgIcon component={CollectionIcon} color="primary" />}
