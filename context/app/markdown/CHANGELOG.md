@@ -1,3 +1,8 @@
+## v0.53.0 - 2022-09-09
+
+- Fix homepage organ link.
+
+
 ## v0.52.0 - 2022-09-08
 
 - Destructure almost all of the component props.
