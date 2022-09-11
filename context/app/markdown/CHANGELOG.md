@@ -1,3 +1,8 @@
+## v0.53.1 - 2022-09-11
+
+- Add a description for the `multimodal-mass-spectrometry-imaging-data` received from the data submitters.
+
+
 ## v0.53.0 - 2022-09-09
 
 - Fix homepage organ link.

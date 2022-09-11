@@ -1,1 +1,0 @@
-- Add a description for the `multimodal-mass-spectrometry-imaging-data` received from the data submitters.
