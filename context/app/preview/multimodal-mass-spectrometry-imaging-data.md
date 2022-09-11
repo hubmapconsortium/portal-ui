@@ -1092,7 +1092,7 @@ vitessce_conf:
 
 # Description
 
-Fusion of metabolites, lipids and proteins at the single-cell level in the mammalian liver.
+The liver atlas demonstrates the first 2D/3D visualization of integrated spatial omics (metabolomics, lipidomics and proteomics) in different types of individual cells. With the pioneering work in cryogenic water cluster ion beam secondary ion mass spectrometry imaging \[(H<sub>2</sub>O)<sub>n</sub>-GCIB-SIMS\] and desorption electrospray ionization (DESI) imaging, we can now view several classes of biomolecules (e.g., 200 metabolites/lipids and 20 cell-type/structure-specific proteins) in the same cells at the spatial resolution of 1 µm. This provides a more comprehensive understanding of cellular/molecular heterogeneity, metabolic states of cell types, and pathway coordination. We found for the first time that lipids and metabolites can classify metabolic zones and cell types beyond histological and protein-marker annotation. We anticipate the multimodal mass spectrometry imaging workflow to dissect the multilevel heterogeneities and health/disease continuum for precision therapies.
 
 <!--
 ## Experimental Details
