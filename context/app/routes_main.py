@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 from flask import (render_template, current_app, abort,
                    session, request)
 
@@ -76,6 +78,8 @@ def test_search(type):
 
 @blueprint.route('/dev-search')
 def dev_search():
+    if urlparse(request.base_url).hostname != 'localhost':
+        abort(404)
     title = 'Dev Search'
     flask_data = {
         **get_default_flask_data(),

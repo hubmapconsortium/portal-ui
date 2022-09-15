@@ -1,0 +1,1 @@
+- To avoid confusion, /dev-search is now 404 if host is anything other than localhost.
