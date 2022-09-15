@@ -52,7 +52,7 @@ test('it should only provide a path if there is exactly one notebook', () => {
       status: 'active',
       workspace_details: {
         request_workspace_details: {
-          files: [{ name: 'workspace1.ipynb' }, { name: 'workspace2.ipynb' }], // too many
+          files: [{ name: 'workspace1.ipynb' }, { name: 'workspace2.ipynb' }], // too many... take first
         },
       },
     },
@@ -64,7 +64,7 @@ test('it should only provide a path if there is exactly one notebook', () => {
   ];
   const jobs = [];
   const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
-  expect(mergedWorkspaces.map((ws) => ws.path)).toEqual(['', '', 'workspace.ipynb']);
+  expect(mergedWorkspaces.map((ws) => ws.path)).toEqual(['', 'workspace1.ipynb', 'workspace.ipynb']);
 });
 
 test('it should pick one active job if available', () => {
