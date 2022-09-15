@@ -71,13 +71,29 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
 }
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {
-  const activeWorkspaces = workspaces.filter(({ status }) => ['active', 'idle'].includes(status));
+  const activeStatuses = ['active', 'idle'];
+  const inactiveStatuses = [];
+  const expectedStatuses = activeStatuses.concat(inactiveStatuses);
+  const unexpectedWorkspaces = workspaces.filter(({ status }) => !expectedStatuses.includes(status));
+  if (unexpectedWorkspaces.length) {
+    throw Error(
+      `Unexpected workspace statuses (${workspaces.map((ws) => ws.status)}); expected one of (${expectedStatuses})`,
+    );
+  }
+  const activeWorkspaces = workspaces.filter(({ status }) => activeStatuses.includes(status));
 
   const wsIdToJobs = {};
   jobs.forEach((job) => {
     const { status, workspace_id } = job;
-    if (['complete', 'failed'].includes(status)) {
+    const doneStatuses = ['complete', 'failed'];
+    const notDoneStatuses = ['pending']; // TODO
+    if (doneStatuses.includes(status)) {
       return;
+    }
+    if (!notDoneStatuses.includes(status)) {
+      throw Error(
+        `Unexpected job status "${status}"; expected done (${doneStatuses}) or not done (${notDoneStatuses})`,
+      );
     }
     if (!(workspace_id in wsIdToJobs)) {
       wsIdToJobs[workspace_id] = [];
@@ -99,12 +115,16 @@ function condenseJobs(jobs) {
   const INACTIVE = 'Inactive';
 
   function getDisplayStatus(status) {
-    return (
-      {
-        pending: ACTIVATING,
-        running: ACTIVE,
-      }[status] || INACTIVE
-    );
+    const displayStatusMap = {
+      pending: ACTIVATING,
+      running: ACTIVE,
+      // TODO
+    };
+    const displayStatus = displayStatusMap[status];
+    if (!displayStatus) {
+      throw Error(`Unexpected job status "${status}"; expected one of (${Object.keys(displayStatusMap)})`);
+    }
+    return displayStatus;
   }
 
   function getJobUrl(job) {
