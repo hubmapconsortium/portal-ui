@@ -1,7 +1,5 @@
 import { mergeJobsIntoWorkspaces, condenseJobs } from './utils';
 
-// mergeJobsIntoWorkspaces:
-
 describe('mergeJobsIntoWorkspaces', () => {
   test('it should merge jobs into workspaces', () => {
     const workspaces = [{ id: 1, other_ws_info: true, status: 'active' }];
