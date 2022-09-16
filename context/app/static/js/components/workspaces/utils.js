@@ -1,3 +1,5 @@
+import { jobStatus, validateJobStatus, workspaceStatus, validateWorkspaceStatus } from './statusCodes';
+
 function getWorkspacesApiHeaders(workspacesToken) {
   return {
     'Content-Type': 'application/json',
@@ -71,29 +73,17 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
 }
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {
-  const activeStatuses = ['active', 'idle'];
-  const inactiveStatuses = ['deleting', 'error'];
-  const expectedStatuses = activeStatuses.concat(inactiveStatuses);
-  const unexpectedWorkspaces = workspaces.filter(({ status }) => !expectedStatuses.includes(status));
-  if (unexpectedWorkspaces.length) {
-    throw Error(
-      `Unexpected workspace statuses (${workspaces.map((ws) => ws.status)}); expected one of (${expectedStatuses})`,
-    );
-  }
-  const activeWorkspaces = workspaces.filter(({ status }) => activeStatuses.includes(status));
+  workspaces.forEach((ws) => {
+    validateWorkspaceStatus(ws.status);
+  });
+  const activeWorkspaces = workspaces.filter(({ status }) => !workspaceStatus[status].isDone);
 
   const wsIdToJobs = {};
   jobs.forEach((job) => {
     const { status, workspace_id } = job;
-    const doneStatuses = ['complete', 'failed'];
-    const notDoneStatuses = ['pending', 'running'];
-    if (doneStatuses.includes(status)) {
+    validateJobStatus(status);
+    if (jobStatus[status].isDone) {
       return;
-    }
-    if (!notDoneStatuses.includes(status)) {
-      throw Error(
-        `Unexpected job status "${status}"; expected done (${doneStatuses}) or not done (${notDoneStatuses})`,
-      );
     }
     if (!(workspace_id in wsIdToJobs)) {
       wsIdToJobs[workspace_id] = [];
@@ -115,17 +105,13 @@ function condenseJobs(jobs) {
   const INACTIVE = 'Inactive';
 
   function getDisplayStatus(status) {
-    const displayStatusMap = {
+    validateJobStatus(status);
+    return {
       pending: ACTIVATING,
       running: ACTIVE,
       complete: INACTIVE,
       failed: INACTIVE,
-    };
-    const displayStatus = displayStatusMap[status];
-    if (!displayStatus) {
-      throw Error(`Unexpected job status "${status}"; expected one of (${Object.keys(displayStatusMap)})`);
-    }
-    return displayStatus;
+    }[status];
   }
 
   function getJobUrl(job) {
@@ -178,7 +164,7 @@ async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspac
 
   const jobsResults = await jobsResponse.json();
   const { jobs } = jobsResults.data;
-  const jobsForWorkspace = jobs.filter((job) => String(job.workspace_id) === workspaceId);
+  const jobsForWorkspace = jobs.filter((job) => String(job.workspace_id) === String(workspaceId));
   const job = condenseJobs(jobsForWorkspace);
   setMessage(job.message);
 
