@@ -72,7 +72,7 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {
   const activeStatuses = ['active', 'idle'];
-  const inactiveStatuses = [];
+  const inactiveStatuses = ['deleting', 'error'];
   const expectedStatuses = activeStatuses.concat(inactiveStatuses);
   const unexpectedWorkspaces = workspaces.filter(({ status }) => !expectedStatuses.includes(status));
   if (unexpectedWorkspaces.length) {
@@ -86,7 +86,7 @@ function mergeJobsIntoWorkspaces(jobs, workspaces) {
   jobs.forEach((job) => {
     const { status, workspace_id } = job;
     const doneStatuses = ['complete', 'failed'];
-    const notDoneStatuses = ['pending']; // TODO
+    const notDoneStatuses = ['pending', 'running'];
     if (doneStatuses.includes(status)) {
       return;
     }
@@ -118,7 +118,8 @@ function condenseJobs(jobs) {
     const displayStatusMap = {
       pending: ACTIVATING,
       running: ACTIVE,
-      // TODO
+      complete: INACTIVE,
+      failed: INACTIVE,
     };
     const displayStatus = displayStatusMap[status];
     if (!displayStatus) {
