@@ -114,12 +114,16 @@ function condenseJobs(jobs) {
 
   function getDisplayStatus(status) {
     validateJobStatus(status);
-    return {
+    const displayStatus = {
       pending: ACTIVATING,
       running: ACTIVE,
       complete: INACTIVE,
       failed: INACTIVE,
     }[status];
+    if (!displayStatus) {
+      throw Error(`No display status found for API status ${status}`);
+    }
+    return displayStatus;
   }
 
   function getJobUrl(job) {
