@@ -8,12 +8,16 @@ import Description from 'js/shared-styles/sections/Description';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenticated';
 
+import { FlexContainer } from './style';
+
 function Workspaces() {
   const { isAuthenticated } = useContext(AppContext);
   return (
     <>
       <SectionHeader variant="h1" component="h1">
-        <HeaderIcon component={WorkspacesIcon} /> My Workspaces
+        <FlexContainer>
+          <HeaderIcon component={WorkspacesIcon} /> My Workspaces
+        </FlexContainer>
       </SectionHeader>
       {!isAuthenticated ? (
         <Description padding="20px">
