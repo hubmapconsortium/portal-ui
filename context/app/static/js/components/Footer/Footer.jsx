@@ -36,6 +36,9 @@ function Footer({ isMaintenancePage }) {
               <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
                 Submit Feedback
               </EmailIconLink>
+              <OutboundIconLink variant="body2" href="https://twitter.com/_hubmap">
+                HuBMAP on Twitter
+              </OutboundIconLink>
             </FlexColumn>
             <FlexColumn $mr={1}>
               <Typography variant="subtitle2">Software</Typography>
