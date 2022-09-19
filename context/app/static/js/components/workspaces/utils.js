@@ -73,9 +73,8 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
 }
 
 function getNotebookPath(workspace) {
-  // TODO: Replace with current_workspace_details, when available.
-  const { files } = workspace.workspace_details.request_workspace_details;
-  return files.find(({ name }) => name.endsWith('.ipynb'))?.name || '';
+  const { files } = workspace.workspace_details.current_workspace_details;
+  return (files || []).find(({ name }) => name.endsWith('.ipynb'))?.name || '';
 }
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {

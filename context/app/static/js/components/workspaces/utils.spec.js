@@ -1,7 +1,7 @@
 import { mergeJobsIntoWorkspaces, condenseJobs } from './utils';
 
 const workspace_details = {
-  request_workspace_details: {
+  current_workspace_details: {
     files: [{ name: 'workspace.ipynb' }],
   },
 };
@@ -47,10 +47,17 @@ describe('mergeJobsIntoWorkspaces', () => {
   test('it should only provide a path if there is exactly one notebook', () => {
     const workspaces = [
       {
+        id: -1,
+        status: 'active',
+        workspace_details: {
+          current_workspace_details: {}, // Response currently not guaranteed to have "files" key.
+        },
+      },
+      {
         id: 0,
         status: 'active',
         workspace_details: {
-          request_workspace_details: {
+          current_workspace_details: {
             files: [], // too few
           },
         },
@@ -59,7 +66,7 @@ describe('mergeJobsIntoWorkspaces', () => {
         id: 2,
         status: 'active',
         workspace_details: {
-          request_workspace_details: {
+          current_workspace_details: {
             files: [{ name: 'workspace1.ipynb' }, { name: 'workspace2.ipynb' }], // too many... take first
           },
         },
