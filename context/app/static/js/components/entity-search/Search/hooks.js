@@ -4,7 +4,6 @@ import { CustomQuery } from '@searchkit/sdk';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
 import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
-import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
@@ -98,11 +97,9 @@ function useSearch() {
     tileFields,
   ]);
 
-  const transporter = new RequestTransporter(config);
-
   const variables = useSearchkitVariables();
   const defaultSort = 'mapped_last_modified_timestamp.keyword.desc';
-  const { results } = useSearchkitSDK({ config, variables, transporter, filters: defaultFilterValues, defaultSort });
+  const { results } = useSearchkitSDK({ config, variables, filters: defaultFilterValues, defaultSort });
 
   return { results, entityType, allResultsUUIDs };
 }

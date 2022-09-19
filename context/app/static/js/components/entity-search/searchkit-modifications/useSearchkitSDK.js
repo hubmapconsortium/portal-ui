@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import Searchkit from '@searchkit/sdk';
 import useDeepCompareEffect from 'use-deep-compare-effect';
+import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 
 // Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-sdk/src/react-hooks/index.ts
 // Modified to handle initial filters and use our custom transformer
 
-const useSearchkitSDK = ({ config, variables, transporter, filters, defaultSort }) => {
+const useSearchkitSDK = ({ config, variables, filters, defaultSort }) => {
   const [results, setResponse] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useDeepCompareEffect(() => {
-    let active = true;
+    const abortController = new AbortController();
+    const transporter = new RequestTransporter(config, abortController);
+
     async function fetchData(v) {
       setLoading(true);
       const request = Searchkit(config, transporter)
@@ -18,24 +21,28 @@ const useSearchkitSDK = ({ config, variables, transporter, filters, defaultSort 
         .setFilters([...filters.map((filter) => filter.value), ...v.filters])
         .setSortBy(v.sortBy || defaultSort);
 
-      const response = await request.execute({
-        facets: true,
-        hits: {
-          size: variables.page.size,
-          from: variables.page.from,
-        },
-      });
-      if (active) {
+      try {
+        const response = await request.execute({
+          facets: true,
+          hits: {
+            size: variables.page.size,
+            from: variables.page.from,
+          },
+        });
         setLoading(false);
         setResponse(response);
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          // Aborting throws an error and will prevent state from being updated.
+        }
       }
     }
 
     if (variables) fetchData(variables);
     return () => {
-      active = false;
+      abortController.abort();
     };
-  }, [config, filters, variables, transporter]);
+  }, [config, filters, variables]);
 
   return { results, loading };
 };
