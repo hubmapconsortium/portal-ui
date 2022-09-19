@@ -79,7 +79,7 @@ describe('mergeJobsIntoWorkspaces', () => {
     ];
     const jobs = [];
     const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
-    expect(mergedWorkspaces.map((ws) => ws.path)).toEqual(['', 'workspace1.ipynb', 'workspace.ipynb']);
+    expect(mergedWorkspaces.map((ws) => ws.path)).toEqual(['', '', 'workspace1.ipynb', 'workspace.ipynb']);
   });
 });
 
