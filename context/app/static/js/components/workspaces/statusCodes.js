@@ -1,6 +1,6 @@
 // Workspaces:
 
-const workspaceStatus = {
+const workspaceStatuses = {
   active: {
     isDone: false,
   },
@@ -16,7 +16,7 @@ const workspaceStatus = {
 };
 
 function validateWorkspaceStatus(status) {
-  const expected = Object.keys(workspaceStatus);
+  const expected = Object.keys(workspaceStatuses);
   if (!expected.includes(status)) {
     throw Error(`Unexpected workspace status "${status}"; expected one of (${expected})`);
   }
@@ -24,7 +24,7 @@ function validateWorkspaceStatus(status) {
 
 // Jobs:
 
-const jobStatus = {
+const jobStatuses = {
   pending: {
     isDone: false,
   },
@@ -40,10 +40,10 @@ const jobStatus = {
 };
 
 function validateJobStatus(status) {
-  const expected = Object.keys(jobStatus);
+  const expected = Object.keys(jobStatuses);
   if (!expected.includes(status)) {
     throw Error(`Unexpected job status "${status}"; expected one of (${expected})`);
   }
 }
 
-export { jobStatus, validateJobStatus, workspaceStatus, validateWorkspaceStatus };
+export { jobStatuses, validateJobStatus, workspaceStatuses, validateWorkspaceStatus };

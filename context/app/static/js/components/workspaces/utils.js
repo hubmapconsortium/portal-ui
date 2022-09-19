@@ -1,4 +1,4 @@
-import { jobStatus, validateJobStatus, workspaceStatus, validateWorkspaceStatus } from './statusCodes';
+import { jobStatuses, validateJobStatus, workspaceStatuses, validateWorkspaceStatus } from './statusCodes';
 
 function getWorkspacesApiHeaders(workspacesToken) {
   return {
@@ -81,13 +81,13 @@ function mergeJobsIntoWorkspaces(jobs, workspaces) {
   workspaces.forEach((ws) => {
     validateWorkspaceStatus(ws.status);
   });
-  const activeWorkspaces = workspaces.filter(({ status }) => !workspaceStatus[status].isDone);
+  const activeWorkspaces = workspaces.filter(({ status }) => !workspaceStatuses[status].isDone);
 
   const wsIdToJobs = {};
   jobs.forEach((job) => {
     const { status, workspace_id } = job;
     validateJobStatus(status);
-    if (jobStatus[status].isDone) {
+    if (jobStatuses[status].isDone) {
       return;
     }
     if (!(workspace_id in wsIdToJobs)) {
