@@ -1,3 +1,5 @@
+import { jobStatuses, validateJobStatus, workspaceStatuses, validateWorkspaceStatus } from './statusCodes';
+
 function getWorkspacesApiHeaders(workspacesToken) {
   return {
     'Content-Type': 'application/json',
@@ -71,18 +73,21 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
 }
 
 function getNotebookPath(workspace) {
-  // TODO: Replace with current_workspace_details, when available.
-  const { files } = workspace.workspace_details.request_workspace_details;
-  return files.find(({ name }) => name.endsWith('.ipynb'))?.name || '';
+  const { files } = workspace.workspace_details.current_workspace_details;
+  return (files || []).find(({ name }) => name.endsWith('.ipynb'))?.name || '';
 }
 
 function mergeJobsIntoWorkspaces(jobs, workspaces) {
-  const activeWorkspaces = workspaces.filter(({ status }) => ['active', 'idle'].includes(status));
+  workspaces.forEach((ws) => {
+    validateWorkspaceStatus(ws.status);
+  });
+  const activeWorkspaces = workspaces.filter(({ status }) => !workspaceStatuses[status].isDone);
 
   const wsIdToJobs = {};
   jobs.forEach((job) => {
     const { status, workspace_id } = job;
-    if (['complete', 'failed'].includes(status)) {
+    validateJobStatus(status);
+    if (jobStatuses[status].isDone) {
       return;
     }
     if (!(workspace_id in wsIdToJobs)) {
@@ -107,12 +112,17 @@ function condenseJobs(jobs) {
   const INACTIVE = 'Inactive';
 
   function getDisplayStatus(status) {
-    return (
-      {
-        pending: ACTIVATING,
-        running: ACTIVE,
-      }[status] || INACTIVE
-    );
+    validateJobStatus(status);
+    const displayStatus = {
+      pending: ACTIVATING,
+      running: ACTIVE,
+      complete: INACTIVE,
+      failed: INACTIVE,
+    }[status];
+    if (!displayStatus) {
+      throw Error(`No display status found for API status ${status}`);
+    }
+    return displayStatus;
   }
 
   function getJobUrl(job) {
@@ -165,7 +175,7 @@ async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspac
 
   const jobsResults = await jobsResponse.json();
   const { jobs } = jobsResults.data;
-  const jobsForWorkspace = jobs.filter((job) => String(job.workspace_id) === workspaceId);
+  const jobsForWorkspace = jobs.filter((job) => String(job.workspace_id) === String(workspaceId));
   const job = condenseJobs(jobsForWorkspace);
   setMessage(job.message);
 
