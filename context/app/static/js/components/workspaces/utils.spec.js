@@ -1,8 +1,14 @@
 import { mergeJobsIntoWorkspaces, condenseJobs } from './utils';
 
+const workspace_details = {
+  request_workspace_details: {
+    files: [{ name: 'workspace.ipynb' }],
+  },
+};
+
 describe('mergeJobsIntoWorkspaces', () => {
   test('it should merge jobs into workspaces', () => {
-    const workspaces = [{ id: 1, other_ws_info: true, status: 'active' }];
+    const workspaces = [{ id: 1, other_ws_info: true, status: 'active', workspace_details }];
     const jobs = [{ id: 42, workspace_id: 1, other_job_info: true, status: 'running' }];
     const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
     expect(mergedWorkspaces).toEqual([
@@ -10,30 +16,25 @@ describe('mergeJobsIntoWorkspaces', () => {
         id: 1,
         other_ws_info: true,
         status: 'active',
-        jobs: [
-          {
-            id: 42,
-            workspace_id: 1,
-            other_job_info: true,
-            status: 'running',
-          },
-        ],
+        path: 'workspace.ipynb',
+        jobs,
+        workspace_details,
       },
     ]);
   });
 
   test('it should filter out workspaces that are not "active" or "idle"', () => {
     const workspaces = [
-      { id: 1, status: 'active' },
-      { id: 2, status: 'idle' },
-      { id: 3, status: 'deleting' },
-      { id: 4, status: 'error' },
+      { id: 1, status: 'active', workspace_details },
+      { id: 2, status: 'idle', workspace_details },
+      { id: 3, status: 'deleting', workspace_details },
+      { id: 4, status: 'error', workspace_details },
     ];
     const jobs = [];
     const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
     expect(mergedWorkspaces).toEqual([
-      { id: 1, status: 'active', jobs: [] },
-      { id: 2, status: 'idle', jobs: [] },
+      { id: 1, status: 'active', jobs: [], path: 'workspace.ipynb', workspace_details },
+      { id: 2, status: 'idle', jobs: [], path: 'workspace.ipynb', workspace_details },
     ]);
   });
 
@@ -41,6 +42,37 @@ describe('mergeJobsIntoWorkspaces', () => {
     const workspaces = [{ id: 1, status: 'unexpected' }];
     const jobs = [];
     expect(() => mergeJobsIntoWorkspaces(jobs, workspaces)).toThrow('Unexpected workspace status');
+  });
+
+  test('it should only provide a path if there is exactly one notebook', () => {
+    const workspaces = [
+      {
+        id: 0,
+        status: 'active',
+        workspace_details: {
+          request_workspace_details: {
+            files: [], // too few
+          },
+        },
+      },
+      {
+        id: 2,
+        status: 'active',
+        workspace_details: {
+          request_workspace_details: {
+            files: [{ name: 'workspace1.ipynb' }, { name: 'workspace2.ipynb' }], // too many... take first
+          },
+        },
+      },
+      {
+        id: 1,
+        status: 'active',
+        workspace_details, // just right!
+      },
+    ];
+    const jobs = [];
+    const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
+    expect(mergedWorkspaces.map((ws) => ws.path)).toEqual(['', 'workspace1.ipynb', 'workspace.ipynb']);
   });
 });
 

@@ -20,7 +20,10 @@ function WorkspacePleaseWait({ workspaceId }) {
       workspacesToken,
     });
     if (jobLocation) {
-      document.location = jobLocation;
+      const [urlBase, urlQuery] = jobLocation.split('?');
+      const workspacePath = document.location.hash.slice(1);
+      const jupyterUrl = `${urlBase}/tree/${workspacePath}?${urlQuery}`;
+      document.location = jupyterUrl;
     } else {
       setTimeout(setLocationOrRetry, 5000);
     }
