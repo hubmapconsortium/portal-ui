@@ -1,0 +1,1 @@
+- Add an icon in the header title.
