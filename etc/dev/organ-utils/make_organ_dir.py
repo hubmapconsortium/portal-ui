@@ -52,6 +52,7 @@ def main():
         add_vitessce(get_azimuth_yaml(args.azimuth_url)))
     ccf_organs_by_uberon = rekey_ccf(
         requests.get(args.ccf_url).json())
+    onto_by_uberon = get_ontology_info(descriptions.keys())
 
     def small_dict(big_dict, k):
         return {uberon_id: value[k] for uberon_id, value in big_dict.items() if k in value}
@@ -61,7 +62,8 @@ def main():
         uberon_short={uberon_id: uberon_id.split('/')[-1] for uberon_id in descriptions.keys()},
         name=small_dict(descriptions, 'name'),
         asctb=small_dict(descriptions, 'asctb'),
-        description=small_dict(descriptions, 'description'),
+        description={uberon_id: onto_info['annotation']['definition'][0]
+                     for (uberon_id, onto_info) in onto_by_uberon.items()},
         icon=small_dict(descriptions, 'icon'),
         has_iu_component={uberon_id: True for uberon_id in ccf_organs_by_uberon.keys()},
         search=search_organs_by_uberon,
@@ -101,6 +103,19 @@ def merge_data(**kwargs):
         for key, value in data.items():
             merged[key][source] = value
     return dict(merged)
+
+###### Ontology ######
+
+def get_ontology_info(ids):
+    ontology_info = {}
+    url_base = 'https://www.ebi.ac.uk/ols/api/ontologies/uberon/terms/'
+    for id in ids:
+        # Plain ASCII encoding ("%2F") doesn't work with this service.
+        url = f"{url_base}{id.replace('/', '%252F')}"
+        response = requests.get(url)
+        response.raise_for_status()
+        ontology_info[id] = response.json()
+    return ontology_info
 
 
 ###### Descriptions ######
