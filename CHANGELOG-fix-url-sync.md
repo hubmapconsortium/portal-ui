@@ -1,0 +1,1 @@
+- Fix url sync bug in new search involving a race condition in fetch which caused state to sometimes not reflect initial url params.
