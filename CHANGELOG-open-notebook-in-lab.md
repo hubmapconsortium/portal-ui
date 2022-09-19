@@ -1,0 +1,1 @@
+- When a workspace is openned, if it contains a single notebook, open it by default.
