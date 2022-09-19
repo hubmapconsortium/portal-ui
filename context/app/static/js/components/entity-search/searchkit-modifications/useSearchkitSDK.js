@@ -10,6 +10,7 @@ const useSearchkitSDK = ({ config, variables, transporter, filters, defaultSort 
   const [loading, setLoading] = useState(true);
 
   useDeepCompareEffect(() => {
+    let active = true;
     async function fetchData(v) {
       setLoading(true);
       const request = Searchkit(config, transporter)
@@ -24,12 +25,17 @@ const useSearchkitSDK = ({ config, variables, transporter, filters, defaultSort 
           from: variables.page.from,
         },
       });
-      setLoading(false);
-      setResponse(response);
+      if (active) {
+        setLoading(false);
+        setResponse(response);
+      }
     }
 
     if (variables) fetchData(variables);
-  }, [config, variables, transporter]);
+    return () => {
+      active = false;
+    };
+  }, [config, filters, variables, transporter]);
 
   return { results, loading };
 };
