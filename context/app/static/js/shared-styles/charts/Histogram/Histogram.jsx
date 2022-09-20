@@ -48,12 +48,19 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
 
   return (
     <div>
-      <TitleWrapper $leftOffset={margin.left - margin.right}>
+      <TitleWrapper $leftOffset={updatedMargin.left - updatedMargin.right}>
         {chartTitle && <Typography>{chartTitle}</Typography>}
       </TitleWrapper>
       <svg width={parentWidth} height={parentHeight}>
-        <GridRows top={margin.top} left={margin.left} scale={yScale} width={xWidth} stroke="black" opacity={0.2} />
-        <Group top={margin.top} left={margin.left}>
+        <GridRows
+          top={updatedMargin.top}
+          left={updatedMargin.left}
+          scale={yScale}
+          width={xWidth}
+          stroke="black"
+          opacity={0.2}
+        />
+        <Group top={updatedMargin.top} left={updatedMargin.left}>
           {chartData.map((d) => {
             const barWidth = Math.max(0, xScale(d.x1) - xScale(d.x0) - 1);
             const barHeight = yScale(0) - yScale(d.length);
