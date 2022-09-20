@@ -10,12 +10,21 @@ import Typography from '@material-ui/core/Typography';
 
 import { TitleWrapper } from 'js/shared-styles/charts/style';
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
+import { useLongestLabelSize } from 'js/shared-styles/charts/hooks';
 
 function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxisLabel, yAxisLabel, chartTitle }) {
-  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, margin);
-
   const binFunc = bin();
   const chartData = binFunc(visxData);
+
+  const tickLabelSize = 11;
+  const longestLabelSize = useLongestLabelSize({
+    labels: chartData.map((d) => [d.x0, d.x1]).flat(),
+    labelFontSize: tickLabelSize,
+  });
+
+  const updatedMargin = { ...margin, bottom: Math.max(margin.bottom, longestLabelSize + 40) };
+
+  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
 
   const xScale = useMemo(
     () =>
@@ -25,6 +34,7 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
       }),
     [chartData, xWidth],
   );
+
   const yScale = useMemo(
     () =>
       scaleLinear({
@@ -58,7 +68,7 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
             stroke="black"
             tickLabelProps={() => ({
               fill: 'black',
-              fontSize: 11,
+              fontSize: tickLabelSize,
               textAnchor: 'end',
               dy: '0.33em',
             })}
@@ -74,9 +84,10 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
             label={xAxisLabel}
             stroke="black"
             tickStroke="black"
+            labelOffset={longestLabelSize}
             tickLabelProps={() => ({
               fill: 'black',
-              fontSize: 11,
+              fontSize: tickLabelSize,
               textAnchor: 'end',
               angle: -90,
             })}
