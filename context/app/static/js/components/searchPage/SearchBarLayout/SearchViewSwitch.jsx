@@ -17,8 +17,7 @@ const searchViewStoreSelector = (state) => ({
 });
 
 function createSearchViewSwitch(labelIconPairs) {
-  return function SearchViewSwitch(props) {
-    const { toggleItem, analyticsCategory } = props;
+  return function SearchViewSwitch({ toggleItem, analyticsCategory }) {
     const { searchView, setSearchView, setToggleItem } = useSearchViewStore(searchViewStoreSelector);
 
     useEffect(() => {

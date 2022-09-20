@@ -14,8 +14,7 @@ import OtherLinks from '../OtherLinks';
 import ResourceLinks from '../ResourceLinks';
 import AtlasToolsLinks from '../AtlasToolsLinks';
 
-function DropdownContainer(props) {
-  const { label, children } = props;
+function DropdownContainer({ label, children }) {
   const [isOpen, toggle] = useReducer((v) => !v, false);
 
   return (
@@ -29,9 +28,8 @@ function DropdownContainer(props) {
   );
 }
 
-function Menu(props) {
+function Menu({ anchorRef }) {
   const [isOpen, toggle] = useReducer((v) => !v, false);
-  const { anchorRef } = props;
 
   return (
     <>

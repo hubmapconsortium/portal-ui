@@ -22,8 +22,7 @@ const searchDatasetTutorialSelector = (state) => ({
   closeSearchDatasetTutorial: state.closeSearchDatasetTutorial,
 });
 
-function Search(props) {
-  const { title } = props;
+function Search({ title }) {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
 
   const {

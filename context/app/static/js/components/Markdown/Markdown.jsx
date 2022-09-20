@@ -5,8 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { StyledPaper } from './style';
 
-function Markdown(props) {
-  const { markdown } = props;
+function Markdown({ markdown }) {
   const html = marked(markdown);
 
   return (

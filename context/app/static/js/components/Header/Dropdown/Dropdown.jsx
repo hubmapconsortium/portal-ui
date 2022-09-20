@@ -9,8 +9,7 @@ import MenuList from '@material-ui/core/MenuList';
 
 import { OffsetPopper } from './style';
 
-function Dropdown(props) {
-  const { title, children, menuListId } = props;
+function Dropdown({ title, children, menuListId }) {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
 
@@ -33,7 +32,6 @@ function Dropdown(props) {
 
 Dropdown.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
 };
 
 export default Dropdown;

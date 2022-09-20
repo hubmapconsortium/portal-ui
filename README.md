@@ -4,8 +4,8 @@ This is a Flask app, using React on the front end and primarily Elasticsearch on
 wrapped in a Docker container for deployment using Docker Compose. The front end depends on AWS S3 and CloudFront for the hosting and delivery of images.
 It is deployed at [portal.hubmapconsortium.org](https://portal.hubmapconsortium.org/)
 
-The Data Portal depends on many [APIs](portal.hubmapconsortium.org/services), 
-and directly or indirectly, on many other HuBMAP repos:
+The Data Portal depends on many [APIs](portal.hubmapconsortium.org/services),
+and directly or indirectly, on many other HuBMAP repos.
 
 ```mermaid
 graph LR
@@ -28,14 +28,15 @@ graph LR
     top --> cells-sdk --> cells-api --> pipe
     click cells-sdk href "https://github.com/hubmapconsortium/cells-api-py-client"
     click cells-api href "https://github.com/hubmapconsortium/cross_modality_query"
-    top --> entity-api --> pipe[ingest-pipeline]
+    top --> gateway
+    gateway --> entity-api --> pipe[ingest-pipeline]
     click entity-api href "https://github.com/hubmapconsortium/entity-api"
     click pipe href "https://github.com/hubmapconsortium/ingest-pipeline"
-    top --> assets-api --> pipe
+    gateway --> assets-api --> pipe
     %% assets-api is just a file server: There is no repo.
-    top --> search-api --> pipe
+    gateway --> search-api --> pipe
     click search-api href "https://github.com/hubmapconsortium/search-api"
-    top --> workspaces-api
+    gateway --> workspaces-api
     click workspaces-api href "https://github.com/hubmapconsortium/user_workspaces_server"
 
     pipe --> valid
@@ -47,6 +48,7 @@ graph LR
         search-api
         cells-api
         assets-api
+        workspaces-api
     end
 
     subgraph Git Submodules
@@ -68,6 +70,20 @@ graph LR
     subgraph cdn.jsdelivr.net
         ccf-ui
     end
+
+    subgraph legend
+        owner
+        contributor
+        not-harvard
+    end
+
+    classDef contrib fill:#ddffdd,stroke:#88AA88,color:#000;
+    class owner,contributor,top,vitessce,viv,portal-visualization,vitessce-python,cells-sdk,portal-containers,valid,search-api contrib
+
+    classDef owner stroke-width:3px,font-style:italic,color:#000;
+    class owner,top,vitessce,viv,portal-visualization,vitessce-python,portal-containers owner
+
+    style legend fill:#f8f8f8,stroke:#888888;
 ```
 
 ## Feedback

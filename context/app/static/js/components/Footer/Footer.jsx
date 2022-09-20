@@ -9,8 +9,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background } from './style';
 
-function Footer(props) {
-  const { isMaintenancePage } = props;
+function Footer({ isMaintenancePage }) {
   return (
     <Background>
       <FlexContainer maxWidth="lg">
@@ -37,6 +36,9 @@ function Footer(props) {
               <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
                 Submit Feedback
               </EmailIconLink>
+              <OutboundIconLink variant="body2" href="https://twitter.com/_hubmap">
+                HuBMAP on Twitter
+              </OutboundIconLink>
             </FlexColumn>
             <FlexColumn $mr={1}>
               <Typography variant="subtitle2">Software</Typography>

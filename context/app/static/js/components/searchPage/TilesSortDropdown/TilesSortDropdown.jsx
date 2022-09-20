@@ -17,8 +17,7 @@ function getSelectedItemIndex(pairs, selectedItems) {
   return pairs.findIndex((item) => [item[0].key, item[1].key].includes(selectedItem));
 }
 
-function TilesSortDropdown(props) {
-  const { items, toggleItem, selectedItems, analyticsCategory } = props;
+function TilesSortDropdown({ items, toggleItem, selectedItems, analyticsCategory }) {
   const pairs = getSortPairs(items);
   const selectedItemIndex = getSelectedItemIndex(pairs, selectedItems);
 

@@ -11,8 +11,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { Flex, StyledInfoIcon } from '../style';
 import { StyledPaper } from './style';
 
-function Azimuth(props) {
-  const { config } = props;
+function Azimuth({ config }) {
   const dataRefHtml = marked.parseInline(config.dataref);
 
   return (

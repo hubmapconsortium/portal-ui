@@ -8,8 +8,7 @@ import ProvTable from '../ProvTable';
 import ProvAnalysisDetails from '../ProvAnalysisDetails';
 import { hasDataTypes } from './utils';
 
-function ProvTabs(props) {
-  const { uuid, assayMetadata, provData } = props;
+function ProvTabs({ uuid, assayMetadata, provData }) {
   const { metadata, entity_type, ancestors, data_types } = assayMetadata;
 
   const [open, setOpen] = React.useState(0);

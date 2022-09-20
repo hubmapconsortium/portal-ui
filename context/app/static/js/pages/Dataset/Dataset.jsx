@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
+import { AppContext } from 'js/components/Providers';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -18,7 +20,9 @@ import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/components/detailPage/style';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getAllCollectionsQuery } from 'js/helpers/queries';
-
+import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 // TODO use this context for components other than FileBrowser
 import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
@@ -26,7 +30,14 @@ import { getSectionOrder } from 'js/components/detailPage/utils';
 import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
-function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, registered_doi }) {
+function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, registered_doi, hasNotebook }) {
+  const { workspacesUsers, userEmail } = useContext(AppContext);
+
+  function createWorkspace() {
+    // TODO: Change to form submission, and set up a different route.
+    document.location = `${document.location}.ws.ipynb`;
+  }
+
   return (
     <>
       <SummaryItem>
@@ -44,14 +55,20 @@ function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, regist
           doi:{registered_doi}
         </OutboundIconLink>
       )}
+      {workspacesUsers.includes(userEmail) && (
+        <SecondaryBackgroundTooltip title="Launch a new workspace in Jupyter notebook.">
+          <WhiteBackgroundIconButton color="primary" onClick={createWorkspace} disabled={!hasNotebook}>
+            <SvgIcon component={WorkspacesIcon} />
+          </WhiteBackgroundIconButton>
+        </SecondaryBackgroundTooltip>
+      )}
     </>
   );
 }
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
-function DatasetDetail(props) {
-  const { assayMetadata, vitData, hasNotebook, visLiftedUUID } = props;
+function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
   const {
     protocol_url,
     metadata,
@@ -158,6 +175,7 @@ function DatasetDetail(props) {
             origin_sample={origin_sample}
             registered_doi={registered_doi}
             doi_url={doi_url}
+            hasNotebook={hasNotebook}
           />
         </Summary>
         {shouldDisplaySection.visualization && (

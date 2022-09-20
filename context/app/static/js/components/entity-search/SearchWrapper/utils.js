@@ -96,31 +96,72 @@ const withFacetGroup = (facetGroup) => (o) =>
 
 const createDonorFacet = withFacetGroup('Donor Metadata');
 const createDatasetFacet = withFacetGroup('Dataset Metadata');
+const createSampleFacet = withFacetGroup('Sample Metadata');
 const createAffiliationFacet = withFacetGroup('Affiliation');
 
 function mergeObjects(objects) {
   return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 }
 
-function getDonorMetadataFields(entityType) {
-  return [
-    createDonorFacet({
+function buildDonorFields(entityType) {
+  const tileFields = {
+    ...createDonorFacet({
       fieldName: 'sex',
       entityType,
     }),
-    createDonorFacet({
+    ...createDonorFacet({
       fieldName: 'age_value',
       entityType,
     }),
-    createDonorFacet({
+    ...createDonorFacet({
       fieldName: 'race',
       entityType,
     }),
-    createDonorFacet({
+    ...createDonorFacet({
       fieldName: 'body_mass_index_value',
       entityType,
     }),
-  ];
+  };
+  return { tableFields: tileFields, tileFields };
+}
+
+function buildDatasetFields() {
+  const tileFields = {
+    ...createDatasetFacet({ fieldName: 'mapped_data_types', label: 'Data Types', type: 'string' }),
+    ...createDatasetFacet({ fieldName: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
+  };
+  const tableFields = {
+    ...tileFields,
+    ...createDatasetFacet({ fieldName: 'mapped_status', label: 'Status', type: 'string' }),
+  };
+  return { tableFields, tileFields };
+}
+
+function buildSampleFields() {
+  const tileFields = {
+    ...createSampleFacet({ fieldName: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
+    ...createSampleFacet({ fieldName: 'mapped_specimen_type', label: 'Specimen Type', type: 'string' }),
+  };
+
+  return { tableFields: tileFields, tileFields };
+}
+
+function buildTileFields(entityType) {
+  const entityTypeToBuildFnMap = {
+    donor: buildDonorFields,
+    sample: buildSampleFields,
+    dataset: buildDatasetFields,
+  };
+
+  const { tileFields: entityTypeSpecificFields } = entityTypeToBuildFnMap[entityType]();
+
+  return Object.assign(
+    createField({ fieldName: 'hubmap_id', label: 'HuBMAP ID', type: 'string' }),
+    createField({ fieldName: 'entity_type', label: 'Entity Type', type: 'string' }),
+    createField({ fieldName: 'last_modified_timestamp', label: 'Last Modified Timestamp', type: 'number' }),
+    createField({ fieldName: 'descendant_counts.entity_type', label: 'Descendant Counts' }),
+    entityTypeSpecificFields,
+  );
 }
 
 function getFieldConfigValue(fieldConfig) {
@@ -185,7 +226,9 @@ export {
   buildFieldConfig,
   buildMetadataFieldConfig,
   mergeObjects,
-  getDonorMetadataFields,
+  buildDonorFields,
+  buildDatasetFields,
+  buildSampleFields,
   createDonorFacet,
   createDatasetFacet,
   createAffiliationFacet,
@@ -194,5 +237,6 @@ export {
   getFieldConfigValue,
   getTypeFilter,
   getEntityTypeFilter,
+  buildTileFields,
   defaultSelectFacetSize,
 };

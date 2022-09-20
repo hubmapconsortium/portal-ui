@@ -7,8 +7,7 @@ import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/ut
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 import { DownIcon } from './style';
 
-function ProvTableTile(props) {
-  const { uuid, entity_type, id, isCurrentEntity, isSampleSibling, isFirstTile, isLastTile } = props;
+function ProvTableTile({ uuid, entity_type, id, isCurrentEntity, isSampleSibling, isFirstTile, isLastTile }) {
   const [descendantCounts, setDescendantCounts] = useState({});
   const [descendantCountsToDisplay, setDescendantCountsToDisplay] = useState({});
 

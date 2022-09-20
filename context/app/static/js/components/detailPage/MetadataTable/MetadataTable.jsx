@@ -49,9 +49,7 @@ function tableDataToRows(tableData) {
   );
 }
 
-function MetadataTable(props) {
-  const { metadata: tableData, hubmap_id } = props;
-
+function MetadataTable({ metadata: tableData, hubmap_id }) {
   const columns = [
     { id: 'key', label: 'Key' },
     { id: 'value', label: 'Value' },

@@ -8,18 +8,16 @@ import ResultsTable from '../ResultsTable';
 import ResultsTiles from '../ResultsTiles';
 import ResultsCCF from '../ResultsCCF';
 
-function Results(props) {
-  const {
-    sortOptions,
-    hitsPerPage,
-    tableResultFields,
-    detailsUrlPrefix,
-    idField,
-    resultFieldIds,
-    type,
-    analyticsCategory,
-  } = props;
-
+function Results({
+  sortOptions,
+  hitsPerPage,
+  tableResultFields,
+  detailsUrlPrefix,
+  idField,
+  resultFieldIds,
+  type,
+  analyticsCategory,
+}) {
   // one of the sort components must stay mounted to preserve sort history between views.
   return (
     <ViewSwitcherHits

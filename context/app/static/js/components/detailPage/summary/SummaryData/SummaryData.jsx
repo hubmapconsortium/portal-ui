@@ -16,18 +16,16 @@ import { FlexEnd, JsonButton, StyledTypography } from './style';
 
 const entityStoreSelector = (state) => state.setSummaryComponentObserver;
 
-function SummaryData(props) {
-  const {
-    entity_type,
-    uuid,
-    status,
-    mapped_data_access_level,
-    hubmap_id,
-    entityCanBeSaved,
-    children,
-    mapped_external_group_name,
-  } = props;
-
+function SummaryData({
+  entity_type,
+  uuid,
+  status,
+  mapped_data_access_level,
+  hubmap_id,
+  entityCanBeSaved,
+  children,
+  mapped_external_group_name,
+}) {
   const setSummaryComponentObserver = useEntityStore(entityStoreSelector);
 
   const { ref, inView, entry } = useInView({

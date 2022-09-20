@@ -14,8 +14,7 @@ const messages = {
   500: 'Unexpected server or other error. Report error to',
 };
 
-function GlobusLinkMessage(props) {
-  const { statusCode, url, hubmap_id, isSupport } = props;
+function GlobusLinkMessage({ statusCode, url, hubmap_id, isSupport }) {
   const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
 
   if (statusCode === null) {

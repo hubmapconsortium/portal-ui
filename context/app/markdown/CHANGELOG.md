@@ -1,3 +1,55 @@
+## v0.53.1 - 2022-09-11
+
+- Add a description for the `multimodal-mass-spectrometry-imaging-data` received from the data submitters.
+
+
+## v0.53.0 - 2022-09-09
+
+- Fix homepage organ link.
+
+
+## v0.52.0 - 2022-09-08
+
+- Destructure almost all of the component props.
+- Only show "active" workspaces.
+- Fix proptype warnings.
+- Add a second param to record the type of the link.
+- Add some color-coding to the README diagram.
+- Add organs to organs page. (No public data yet, but good to be ready.)
+- Add a new preview for multimodal mass spec; Not yet listed in public menu.
+- Add count and link to organs page from homepage.
+- Remove unused ASCT+B preview.
+- Add scroll shadows to configure search table and select facets in search revision ui.
+- Use the Workspace API's mechanism for mounting a data directory into the workspace.
+- Fix bugs in TSV download and Lineup.
+- Make the UI reflect the underlying API more closely. UI should not be responsible for managing state.
+
+
+## v0.51.1 - 2022-08-25
+
+- Adds an ugly button to access workspace.
+- special case for "0" on range slider
+- Fix twitter timeline overflow at the cost of scrolling until embedded widget api is fixed.
+- Please-wait based on workspace ID rather than job ID.
+- Rename component, and update the warning text on the workspace list.
+- When a user logs in, add a cookie, and check it during logging, to distinguish internal and external traffic.
+- Support workspace deletion.
+- For beta users, and link to workspaces in menu.
+
+
+## v0.51.0 - 2022-08-18
+
+- Consistent title on cells page.
+- Consolidate datasets selected by expression hooks in cells ui.
+- From Cells UI, datasets open in new tab.
+- Fix index v3 regression: Only show file browser is there are files.
+- Fix bug which prevented previously expanded cells charts from being reloaded.
+- Fix output dir path in query-portal-logs.py
+- Add reusabe link button component and use in workspaces.
+- Implement a "please-wait" page for workspaces which have not yet started.
+- Fix proptype errors.
+
+
 ## v0.50.1 - 2022-08-11
 
 - Add another parameter to the vis-scan script, so we can target other indices.

@@ -6,12 +6,10 @@ import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/ut
 import { capitalizeString } from 'js/helpers/functions';
 import TileGrid from 'js/shared-styles/tiles/TileGrid';
 
-function ResultsTiles(props) {
-  const { hits, type } = props;
-  /* eslint-disable no-underscore-dangle */
-
+function ResultsTiles({ hits, type }) {
   const capitalizedType = capitalizeString(type);
 
+  /* eslint-disable no-underscore-dangle */
   return (
     <TileGrid $tileWidth={tileWidth} data-testid="search-results-tiles">
       {hits.map((hit) => (

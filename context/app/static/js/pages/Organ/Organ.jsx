@@ -14,10 +14,11 @@ import Section from 'js/shared-styles/sections/Section';
 
 import { FlexRow, Content } from './style';
 
-function Organ(props) {
-  const { organ } = props;
-
-  const [descriptionId, organInfoId, azimuthId, searchId] = ['description', 'organ info', 'azimuth', 'search'];
+function Organ({ organ }) {
+  const descriptionId = 'description';
+  const organInfoId = 'organ info';
+  const azimuthId = 'azimuth';
+  const searchId = 'search';
 
   const shouldDisplaySection = {
     [descriptionId]: Boolean(organ?.description),
@@ -43,7 +44,7 @@ function Organ(props) {
         </Typography>
         {shouldDisplaySection[descriptionId] && (
           <Section id={descriptionId}>
-            <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short}>
+            <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short} asctbId={organ.asctb}>
               {organ.description}
             </Description>
           </Section>

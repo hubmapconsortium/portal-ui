@@ -9,11 +9,13 @@ const { Provider, useStore } = createContext();
 const createStore = ({
   initialFields,
   initialFacets,
+  tileFields,
   fields,
   facets,
   defaultFilters,
   entityType,
   numericFacetsProps,
+  initialView,
 }) =>
   create(
     immer((set) => ({
@@ -24,6 +26,8 @@ const createStore = ({
       facets,
       entityType,
       numericFacetsProps,
+      tileFields,
+      view: initialView,
       setFields: (selectedFields) =>
         set((state) => {
           state.fields = selectedFields;
@@ -39,6 +43,10 @@ const createStore = ({
       setFacetSize: ({ identifier, size }) =>
         set((state) => {
           state.facets[identifier].size = size;
+        }),
+      setView: (view) =>
+        set((state) => {
+          state.view = view;
         }),
     })),
   );

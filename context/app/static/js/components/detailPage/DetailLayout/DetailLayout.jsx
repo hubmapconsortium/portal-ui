@@ -11,9 +11,7 @@ const entityStoreSelector = (state) => ({
   setShouldDisplaySavedOrEditedAlert: state.setShouldDisplaySavedOrEditedAlert,
 });
 
-function DetailLayout(props) {
-  const { sectionOrder, children } = props;
-
+function DetailLayout({ sectionOrder, children }) {
   const { shouldDisplaySavedOrEditedAlert, setShouldDisplaySavedOrEditedAlert } = useEntityStore(entityStoreSelector);
 
   // section hash must match section id in each component

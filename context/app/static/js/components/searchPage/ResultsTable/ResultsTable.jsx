@@ -8,8 +8,7 @@ import { getByPath } from './utils';
 import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell } from './style';
 import SortingTableHead from '../SortingTableHead';
 
-function ResultsTable(props) {
-  const { hits, resultFields, detailsUrlPrefix, idField, sortOptions, analyticsCategory } = props;
+function ResultsTable({ hits, resultFields, detailsUrlPrefix, idField, sortOptions, analyticsCategory }) {
   /* eslint-disable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
   return (
     <StyledTable data-testid="search-results-table">

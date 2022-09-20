@@ -18,8 +18,7 @@ function pretty(str) {
   return str.split('_').map(ucFirst).join(' ');
 }
 
-function DonorChart(props) {
-  const { xAxis, groups } = props;
+function DonorChart({ xAxis, groups }) {
   const xSource = xAxis === 'age' ? makeHistogramSource(xAxis) : makeTermSource(xAxis);
   const ySource = groups === 'age' ? makeHistogramSource(groups) : makeTermSource(groups);
   const donorQuery = makeCompositeQuery(xSource, ySource);
@@ -64,8 +63,7 @@ function BloodTypeDescription() {
   );
 }
 
-function LowLevelDonorChart(props) {
-  const { title, donorQuery, xKey, yKey, colorKeys, description, xAxisLabel } = props;
+function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, description, xAxisLabel }) {
   const { palette } = useTheme();
   const colors = [palette.primary.main, palette.success.main, palette.error.main];
   const { searchData } = useSearchData(donorQuery);

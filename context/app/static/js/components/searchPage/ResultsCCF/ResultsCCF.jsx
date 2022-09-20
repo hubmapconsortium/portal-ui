@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function ReplaceMeWithWebComponent(props) {
+function ReplaceMeWithWebComponent({ spatialResults }) {
   // TODO: This will be replaced with a Web Component from Bruce.
-  const { spatialResults } = props;
   return (
     <div>
       {spatialResults.map((result) => (
@@ -13,9 +12,7 @@ function ReplaceMeWithWebComponent(props) {
   );
 }
 
-function ResultsCCF(props) {
-  // eslint-disable-next-line no-unused-vars
-  const { hits, resultFields, detailsUrlPrefix, idField, sortOptions } = props;
+function ResultsCCF({ hits }) {
   const spatialResults = hits
     // eslint-disable-next-line no-underscore-dangle
     .map((hit) => hit._source)

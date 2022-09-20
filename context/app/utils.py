@@ -3,7 +3,10 @@ from flask import (current_app, request, session, Blueprint)
 
 from .api.client import ApiClient
 from .api.mock_client import MockApiClient
+from os.path import dirname
+from pathlib import Path
 
+from yaml import safe_load
 
 entity_types = ['donor', 'sample', 'dataset', 'support', 'collection']
 
@@ -42,3 +45,9 @@ def get_url_base_from_request():
     scheme = parsed.scheme
     netloc = parsed.netloc
     return f'{scheme}://{netloc}'
+
+
+def get_organs():
+    dir_path = Path(dirname(__file__) + '/organ')
+    organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
+    return organs

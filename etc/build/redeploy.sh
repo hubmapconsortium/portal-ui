@@ -12,10 +12,10 @@ ssh "$USER@ingest.$TARGET.hubmapconsortium.org" << EOF
 echo 'whoami?' \`whoami\`
 sudo -i
 echo 'whoami?' \`whoami\`
-su - centos
+su - hive
 echo 'whoami?' \`whoami\`
 
-cd /home/centos/hubmap/portal-ui/compose
+cd /opt/hubmap/portal-ui/compose
 echo 'portal running?' \`docker ps | grep portal-ui\`
 
 COMPOSE_CONFIG=hubmap.yml

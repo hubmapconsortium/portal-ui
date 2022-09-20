@@ -17,7 +17,6 @@ const numericTypes = new Set(['number', 'integer']);
 // These fields are incorrectly typed as text in ES and cannot be treated as numbers.
 const fieldsWithIncorrectEsType = new Set([
   'cold_ischemia_time_value',
-  'expected_cell_count',
   'specimen_tumor_distance_value',
   'warm_ischemia_time_value',
 ]);

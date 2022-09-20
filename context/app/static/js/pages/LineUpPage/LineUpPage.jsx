@@ -11,9 +11,11 @@ import Paper from '@material-ui/core/Paper';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import metadataFieldTypes from 'metadata-field-types';
 
-function LineUpPage(props) {
-  const { entities } = props;
-  const firstRow = entities[0];
+function LineUpPage({ entities }) {
+  const cleanEntities = entities.map((entity) =>
+    Object.fromEntries(Object.entries(entity).filter(([, value]) => value !== null)),
+  );
+  const firstRow = cleanEntities[0];
   const notEnumFields = new Set([
     'uuid',
     // Donors:
@@ -46,7 +48,7 @@ function LineUpPage(props) {
         LineUp
       </SectionHeader>
       <Paper>
-        <LineUp data={entities}>{columns}</LineUp>
+        <LineUp data={cleanEntities}>{columns}</LineUp>
       </Paper>
     </>
   );

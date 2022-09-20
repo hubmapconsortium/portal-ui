@@ -5,9 +5,7 @@ import useFilterOnClick from 'js/components/entity-search/searchkit-modification
 
 import { StyledCheckBoxBlankIcon, StyledCheckBoxIcon, StyledCheckbox, StyledFormControlLabel } from './style';
 
-function SelectFacetItem(props) {
-  const { identifier, active, label, count } = props;
-
+function SelectFacetItem({ identifier, active, label, count }) {
   const onClick = useFilterOnClick({ identifier, value: label });
   return (
     <StyledFormControlLabel

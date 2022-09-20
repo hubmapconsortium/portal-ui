@@ -7,8 +7,7 @@ import { AsteriskWrapper } from './style';
 
 const provenanceStoreUUIDSelector = (state) => state.uuid;
 
-function NodeElement(props) {
-  const { node, title, columnWidth } = props;
+function NodeElement({ node, title, columnWidth }) {
   const style = node.nodeType === 'input' || node.nodeType === 'output' ? { width: columnWidth || 100 } : null;
 
   const displayTitle = title || node.title || node.name;

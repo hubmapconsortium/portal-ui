@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 
 import ProvAnalysisDetailsList from '../ProvAnalysisDetailsList';
 
-function ProvAnalysisDetails(props) {
-  const { dagListData } = props;
-
+function ProvAnalysisDetails({ dagListData }) {
   const ingestPipelines = dagListData.filter((pipeline) => !('name' in pipeline));
   const cwlPipelines = dagListData.filter((pipeline) => 'name' in pipeline);
 

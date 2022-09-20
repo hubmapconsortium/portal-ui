@@ -32,9 +32,9 @@ const DonorSearch = lazy(() => import('js/pages/entity-search/DonorSearch'));
 const SampleSearch = lazy(() => import('js/pages/entity-search/SampleSearch'));
 const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'));
 const Workspaces = lazy(() => import('js/pages/Workspaces'));
+const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
 
-function Routes(props) {
-  const { flaskData } = props;
+function Routes({ flaskData }) {
   const {
     entity,
     vitessce_conf,
@@ -47,6 +47,7 @@ function Routes(props) {
     vis_lifted_uuid,
     entities,
     organs,
+    organs_count,
     organ,
     metadata,
   } = flaskData;
@@ -101,7 +102,7 @@ function Routes(props) {
   if (urlPath === '/') {
     return (
       <Route disableWidthConstraint>
-        <Home />
+        <Home organsCount={organs_count} />
       </Route>
     );
   }
@@ -250,6 +251,15 @@ function Routes(props) {
     );
   }
 
+  if (urlPath.startsWith('/workspaces/')) {
+    const workspaceId = urlPath.split('/').pop();
+    return (
+      <Route>
+        <WorkspacePleaseWait workspaceId={workspaceId} />
+      </Route>
+    );
+  }
+
   if (urlPath.startsWith('/lineup/')) {
     return (
       <Route>
@@ -287,6 +297,7 @@ Routes.propTypes = {
     organ: PropTypes.object,
     organs: PropTypes.object,
     metadata: PropTypes.object,
+    organs_count: PropTypes.number,
   }),
 };
 
