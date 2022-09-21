@@ -1,0 +1,1 @@
+- The workspaces API responses should be more consistent going forward, so we don't need this duck tape any longer.
