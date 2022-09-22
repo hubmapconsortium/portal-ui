@@ -4,6 +4,8 @@ import { localPoint } from '@visx/event';
 import { getStringWidth } from '@visx/text';
 import { useTheme } from '@material-ui/core/styles';
 
+import { getChartDimensions } from 'js/shared-styles/charts/utils';
+
 function useChartTooltip() {
   const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip();
 
@@ -54,4 +56,16 @@ function useLongestLabelSize({ labels, labelFontSize = 11 }) {
   return longestLabelSize;
 }
 
-export { useChartTooltip, useLongestLabelSize };
+function useVerticalChart({ margin, tickLabelSize, xAxisTickLabels, parentWidth, parentHeight }) {
+  const longestLabelSize = useLongestLabelSize({
+    labels: xAxisTickLabels,
+    labelFontSize: tickLabelSize,
+  });
+  const updatedMargin = { ...margin, bottom: Math.max(margin.bottom, longestLabelSize + 40) };
+
+  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
+
+  return { xWidth, yHeight, updatedMargin, longestLabelSize };
+}
+
+export { useChartTooltip, useLongestLabelSize, useVerticalChart };

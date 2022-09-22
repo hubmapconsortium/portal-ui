@@ -7,8 +7,8 @@ import { bin } from 'd3-array';
 import Typography from '@material-ui/core/Typography';
 
 import { TitleWrapper } from 'js/shared-styles/charts/style';
-import { getChartDimensions } from 'js/shared-styles/charts/utils';
-import { useLongestLabelSize } from 'js/shared-styles/charts/hooks';
+import { useVerticalChart } from 'js/shared-styles/charts/hooks';
+
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts//VerticalChartGridRowsGroup';
 
 function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxisLabel, yAxisLabel, chartTitle }) {
@@ -16,14 +16,14 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
   const chartData = binFunc(visxData);
 
   const tickLabelSize = 11;
-  const longestLabelSize = useLongestLabelSize({
-    labels: chartData.map((d) => [d.x0, d.x1]).flat(),
-    labelFontSize: tickLabelSize,
+
+  const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
+    margin,
+    tickLabelSize,
+    xAxisTickLabels: chartData.map((d) => [d.x0, d.x1]).flat(),
+    parentWidth,
+    parentHeight,
   });
-
-  const updatedMargin = { ...margin, bottom: Math.max(margin.bottom, longestLabelSize + 40) };
-
-  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
 
   const xScale = useMemo(
     () =>
