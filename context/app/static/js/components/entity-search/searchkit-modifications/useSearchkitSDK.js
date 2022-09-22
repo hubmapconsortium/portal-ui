@@ -32,8 +32,8 @@ const useSearchkitSDK = ({ config, variables, filters, defaultSort }) => {
         setLoading(false);
         setResponse(response);
       } catch (error) {
-        if (error.name === 'AbortError') {
-          // Aborting throws an error and will prevent state from being updated.
+        if (error.name !== 'AbortError') {
+          console.error('Search API status failed', error);
         }
       }
     }
