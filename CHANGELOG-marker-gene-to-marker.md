@@ -1,1 +1,0 @@
-- Fix a bug that prevented highlighted genes from displaying.

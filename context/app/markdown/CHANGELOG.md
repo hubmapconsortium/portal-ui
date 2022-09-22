@@ -1,3 +1,23 @@
+## v0.53.2 - 2022-09-22
+
+- List all expected WS states: If we see something unexpected, it's an error.
+- And a infobox to dev-search explaining its limitations.
+- Fix url sync bug in new search involving a race condition in fetch which caused state to sometimes not reflect initial url params.
+- Fix a bug that prevented highlighted genes from displaying.
+- Add link to new preview.
+- When a workspace is openned, if it contains a single notebook, open it by default.
+- Use order of datasets provided by cells service in cells ui.
+- Pull organ definitions from Uberon API. This sets us up to pull more ontology information from the API, if we want.
+- Re-enable job stopping and workspace deletion.
+- Remove twitter from homepage.
+- Rotate x-axis chart labels to 90 degress for vertical bar charts.
+- Serices page: The up-down state of and API is expressed differently now; Handle the current response structure.
+- Workspaces is now included the in the services we have info for.
+- Sort x axis values in cells cluster bar chart by descending y value.
+- Update redeploy script with new user and deployment path.
+- Add an icon in the header title.
+
+
 ## v0.53.1 - 2022-09-11
 
 - Add a description for the `multimodal-mass-spectrometry-imaging-data` received from the data submitters.

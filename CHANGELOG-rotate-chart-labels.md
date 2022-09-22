@@ -1,1 +1,0 @@
-- Rotate x-axis chart labels to 90 degress for vertical bar charts.

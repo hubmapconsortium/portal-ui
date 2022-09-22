@@ -1,2 +1,0 @@
-- Serices page: The up-down state of and API is expressed differently now; Handle the current response structure.
-- Workspaces is now included the in the services we have info for.

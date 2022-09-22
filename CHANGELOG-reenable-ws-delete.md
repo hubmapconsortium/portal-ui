@@ -1,1 +1,0 @@
-- Re-enable job stopping and workspace deletion.

@@ -1,1 +1,0 @@
-- Remove twitter from homepage.
