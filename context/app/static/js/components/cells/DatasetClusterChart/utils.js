@@ -14,4 +14,8 @@ function getOptionLabels(options, uuid) {
   }, {});
 }
 
-export { removeUUIDFromOption, getOptionLabels };
+function addMatchedAndUnmatched({ matched, unmatched }) {
+  return matched + unmatched;
+}
+
+export { removeUUIDFromOption, getOptionLabels, addMatchedAndUnmatched };
