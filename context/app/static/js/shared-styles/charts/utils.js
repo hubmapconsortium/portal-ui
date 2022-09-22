@@ -5,4 +5,8 @@ function getChartDimensions(parentWidth, parentHeight, margin) {
   return { xWidth, yHeight };
 }
 
-export { getChartDimensions };
+function trimStringWithMiddleEllipsis(str) {
+  return str.replace(/^(.{15}).+(.{10})$/, '$1...$2');
+}
+
+export { getChartDimensions, trimStringWithMiddleEllipsis };
