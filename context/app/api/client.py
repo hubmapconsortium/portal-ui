@@ -183,7 +183,7 @@ class ApiClient():
                     return type_client.getAssayType(name)
                 Builder = get_view_config_builder(entity=entity, get_assay=get_assay)
                 builder = Builder(entity, self.groups_token, current_app.config["ASSETS_ENDPOINT"])
-                vitessce_conf = builder.get_conf_cells(marker_gene=marker)
+                vitessce_conf = builder.get_conf_cells(marker=marker)
             except Exception as e:
                 if not wrap_error:
                     raise e
