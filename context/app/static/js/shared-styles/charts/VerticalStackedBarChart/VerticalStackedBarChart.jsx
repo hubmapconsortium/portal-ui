@@ -1,15 +1,14 @@
 import React from 'react';
 import { BarStack } from '@visx/shape';
-import { Group } from '@visx/group';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
-import { GridRows } from '@visx/grid';
 import Typography from '@material-ui/core/Typography';
 import { Text } from '@visx/text';
 
-import { useChartTooltip, useLongestLabelSize } from 'js/shared-styles/charts/hooks';
-import { getChartDimensions, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
+import { useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks';
+import { trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
+import VerticalChartGridRowsGroup from 'js/shared-styles/charts//VerticalChartGridRowsGroup';
 
 function VerticalStackedBarChart({
   parentWidth,
@@ -27,13 +26,14 @@ function VerticalStackedBarChart({
   xAxisTickLabels,
 }) {
   const tickLabelSize = 11;
-  const longestLabelSize = useLongestLabelSize({
-    labels: xAxisTickLabels.map((label) => trimStringWithMiddleEllipsis(label)),
-    labelFontSize: tickLabelSize,
-  });
-  const updatedMargin = { ...margin, bottom: Math.max(margin.bottom, longestLabelSize + 40) };
 
-  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
+  const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
+    margin,
+    tickLabelSize,
+    xAxisTickLabels: xAxisTickLabels.map((label) => trimStringWithMiddleEllipsis(label)),
+    parentWidth,
+    parentHeight,
+  });
 
   yScale.rangeRound([yHeight, 0]);
   xScale.rangeRound([0, xWidth]);
@@ -52,87 +52,81 @@ function VerticalStackedBarChart({
   return (
     <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
-        <GridRows
-          top={updatedMargin.top}
-          left={updatedMargin.left}
-          scale={yScale}
-          width={xWidth}
-          stroke="black"
-          opacity={0.2}
-        />
-        <Group top={updatedMargin.top} left={updatedMargin.left}>
-          <BarStack
-            data={visxData}
-            keys={keys}
-            height={yHeight}
-            x={getX}
-            xScale={xScale}
-            yScale={yScale}
-            color={colorScale}
-          >
-            {(barStacks) => {
-              return barStacks.map((barStack) =>
-                barStack.bars.map(
-                  (bar) =>
-                    bar.width > 0 && (
-                      <StackedBar
-                        direction="vertical"
-                        bar={bar}
-                        hoverProps={{
-                          onMouseEnter: handleMouseEnter(bar),
-                          onMouseLeave: handleMouseLeave,
-                        }}
-                      />
-                    ),
-                ),
-              );
-            }}
-          </BarStack>
-          <AxisLeft
-            hideTicks
-            scale={yScale}
-            label={yAxisLabel}
-            stroke="black"
-            tickLabelProps={() => ({
-              fill: 'black',
-              fontSize: 11,
-              textAnchor: 'end',
-              dy: '0.33em',
-            })}
-            labelProps={{
-              fontSize: 12,
-            }}
-          />
-          <AxisBottom
-            hideTicks
-            top={yHeight}
-            scale={xScale}
-            label={xAxisLabel}
-            stroke="black"
-            tickStroke="black"
-            numTicks={Object.keys(visxData).length}
-            labelOffset={longestLabelSize}
-            tickLabelProps={() => ({
-              fill: 'black',
-              fontSize: tickLabelSize,
-              textAnchor: 'end',
-              angle: -90,
-            })}
-            tickComponent={({ formattedValue, ...tickProps }) => (
-              <Text
-                onMouseEnter={handleMouseEnter({ key: formattedValue })}
-                onMouseLeave={handleMouseLeave}
-                {...tickProps}
-              >
-                {trimStringWithMiddleEllipsis(formattedValue)}
-              </Text>
-            )}
-            labelProps={{
-              fontSize: 12,
-              textAnchor: 'middle',
-            }}
-          />
-        </Group>
+        <VerticalChartGridRowsGroup margin={updatedMargin} yScale={yScale} xWidth={xWidth}>
+          <>
+            <BarStack
+              data={visxData}
+              keys={keys}
+              height={yHeight}
+              x={getX}
+              xScale={xScale}
+              yScale={yScale}
+              color={colorScale}
+            >
+              {(barStacks) => {
+                return barStacks.map((barStack) =>
+                  barStack.bars.map(
+                    (bar) =>
+                      bar.width > 0 && (
+                        <StackedBar
+                          direction="vertical"
+                          bar={bar}
+                          hoverProps={{
+                            onMouseEnter: handleMouseEnter(bar),
+                            onMouseLeave: handleMouseLeave,
+                          }}
+                        />
+                      ),
+                  ),
+                );
+              }}
+            </BarStack>
+            <AxisLeft
+              hideTicks
+              scale={yScale}
+              label={yAxisLabel}
+              stroke="black"
+              tickLabelProps={() => ({
+                fill: 'black',
+                fontSize: 11,
+                textAnchor: 'end',
+                dy: '0.33em',
+              })}
+              labelProps={{
+                fontSize: 12,
+              }}
+            />
+            <AxisBottom
+              hideTicks
+              top={yHeight}
+              scale={xScale}
+              label={xAxisLabel}
+              stroke="black"
+              tickStroke="black"
+              numTicks={Object.keys(visxData).length}
+              labelOffset={longestLabelSize}
+              tickLabelProps={() => ({
+                fill: 'black',
+                fontSize: tickLabelSize,
+                textAnchor: 'end',
+                angle: -90,
+              })}
+              tickComponent={({ formattedValue, ...tickProps }) => (
+                <Text
+                  onMouseEnter={handleMouseEnter({ key: formattedValue })}
+                  onMouseLeave={handleMouseLeave}
+                  {...tickProps}
+                >
+                  {trimStringWithMiddleEllipsis(formattedValue)}
+                </Text>
+              )}
+              labelProps={{
+                fontSize: 12,
+                textAnchor: 'middle',
+              }}
+            />
+          </>
+        </VerticalChartGridRowsGroup>
       </svg>
       {tooltipOpen && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>

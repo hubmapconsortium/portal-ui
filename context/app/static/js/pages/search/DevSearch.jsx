@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { ExistsQuery, BoolMustNot, TermQuery } from 'searchkit';
 
+import { Alert } from 'js/shared-styles/alerts';
 import { getAuthHeader } from 'js/helpers/functions';
 import { AppContext } from 'js/components/Providers';
 import { field, listFilter, checkboxFilter, hierarchicalFilter } from 'js/components/searchPage/utils';
@@ -108,6 +109,10 @@ function DevSearch() {
       <SearchHeader component="h1" variant="h2">
         Dev Search
       </SearchHeader>
+      <Alert severity="info" $marginBottom="16">
+        The data and features provided on this page are for debugging purposes only and no guarantees are made for
+        correctness or completeness of the data shown.
+      </Alert>
       {wrappedSearch}
     </>
   );

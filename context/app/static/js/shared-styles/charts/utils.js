@@ -6,10 +6,7 @@ function getChartDimensions(parentWidth, parentHeight, margin) {
 }
 
 function trimStringWithMiddleEllipsis(str) {
-  if (str.length > 25) {
-    return `${str.substr(0, 15)}...${str.substr(str.length - 10, str.length)}`;
-  }
-  return str;
+  return str.replace(/^(.{15}).+(.{10})$/, '$1...$2');
 }
 
 export { getChartDimensions, trimStringWithMiddleEllipsis };

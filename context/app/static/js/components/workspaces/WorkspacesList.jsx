@@ -9,7 +9,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { PanelWrapper } from 'js/shared-styles/panels';
 
 import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
-import { createEmptyWorkspace /* deleteWorkspace, stopJobs */ } from './utils';
+import { createEmptyWorkspace, deleteWorkspace, stopJobs } from './utils';
 import { useWorkspacesList } from './hooks';
 import { StyledButton } from './style';
 
@@ -17,17 +17,15 @@ function WorkspacesList() {
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
   const { workspacesList } = useWorkspacesList();
 
-  // TODO: Commented out until Juan renables in API.
+  async function handleDelete(workspaceId) {
+    deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken });
+    // TODO: Update list of workspaces
+  }
 
-  // async function handleDelete(workspaceId) {
-  //   deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken });
-  //   // TODO: Update list of workspaces
-  // }
-
-  // async function handleStop(workspaceId) {
-  //   stopJobs({ workspaceId, workspacesEndpoint, workspacesToken });
-  //   // TODO: Update list of workspaces
-  // }
+  async function handleStop(workspaceId) {
+    stopJobs({ workspaceId, workspacesEndpoint, workspacesToken });
+    // TODO: Update list of workspaces
+  }
 
   async function handleCreate() {
     createEmptyWorkspace({
@@ -73,8 +71,6 @@ function WorkspacesList() {
               <WorkspaceDetails workspace={workspace} />
               <div>
                 Created {workspace.datetime_created.slice(0, 10)}
-                [Workspace deletion disabled by Juan]
-                {/* 
                 <button
                   type="submit"
                   disabled={workspace.jobs.length > 0 || workspace.status === 'deleting'}
@@ -93,7 +89,6 @@ function WorkspacesList() {
                 >
                   Stop Jobs
                 </button>
-                */}
               </div>
             </PanelWrapper>
           ))
