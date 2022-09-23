@@ -2,8 +2,7 @@ from datetime import timedelta
 
 # By keeping this in code rather than configuration,
 # we can atomically release changes that uses new service features,
-# rather than requiring backward compatibility from new API versions
-# during the migration window.
+# rather than requiring backward compatibility from new API versions.
 version = 'v3'
 
 class DefaultConfig(object):

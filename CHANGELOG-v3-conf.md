@@ -1,2 +1,1 @@
-- Add `v3` to search and types service URLs in example confs.
-  Configs in all environments will need to be updated as well.
+- Add `v3` to the types service, and at it to the Services page. No change to environment required.
