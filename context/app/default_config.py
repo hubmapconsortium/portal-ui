@@ -19,7 +19,7 @@ class DefaultConfig(object):
 
     # These app-wide configurations do not vary between environments:
 
-    SERVICE_VERSION = version
+    TYPE_SERVICE_PATH = f'/{version}'
     PORTAL_INDEX_PATH = f'/{version}/portal/search'
     CCF_INDEX_PATH = '/entities/search'
 

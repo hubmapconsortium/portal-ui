@@ -91,7 +91,7 @@ function ServiceStatusTable({
           githubUrl: 'https://github.com/dbmi-pitt/search-adaptor',
           endpointUrl: typeServiceEndpoint,
           response: gatewayStatus.search_api,
-          noteFunction: () => 'Incorporated into the search-api machinery for historical reasons.',
+          noteFunction: () => 'Included in search-api for historical reasons.',
         }),
         buildServiceStatus({
           apiName: 'uuid-api',
