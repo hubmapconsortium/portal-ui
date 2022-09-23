@@ -31,6 +31,7 @@ def get_default_flask_data():
             'xmodalityEndpoint': current_app.config['XMODALITY_ENDPOINT'],
             'workspacesEndpoint': current_app.config['WORKSPACES_ENDPOINT'],
             'workspacesWsEndpoint': current_app.config['WORKSPACES_WS_ENDPOINT'],
+            'typeServiceEndpoint': current_app.config['TYPE_SERVICE_ENDPOINT'],
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
     }

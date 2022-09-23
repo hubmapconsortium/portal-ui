@@ -38,6 +38,7 @@ function ServiceStatusTable({
   entityEndpoint,
   gatewayEndpoint,
   workspacesEndpoint,
+  typeServiceEndpoint,
 }) {
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
@@ -84,6 +85,13 @@ function ServiceStatusTable({
           endpointUrl: elasticsearchEndpoint,
           response: gatewayStatus.search_api,
           noteFunction: (api) => `ES: ${api.elasticsearch_connection}; ES Status: ${api.elasticsearch_status}`,
+        }),
+        buildServiceStatus({
+          apiName: 'type-api',
+          githubUrl: 'https://github.com/dbmi-pitt/search-adaptor',
+          endpointUrl: typeServiceEndpoint,
+          response: gatewayStatus.search_api,
+          noteFunction: () => 'Incorporated into the search-api machinery for historical reasons.',
         }),
         buildServiceStatus({
           apiName: 'uuid-api',
