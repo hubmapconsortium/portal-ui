@@ -179,7 +179,9 @@ class ApiClient():
         else:
             try:
                 def get_assay(name):
-                    type_client = TypeClient(current_app.config["TYPE_SERVICE_ENDPOINT"])
+                    type_client = TypeClient(
+                        current_app.config["TYPE_SERVICE_ENDPOINT"]
+                        + '/' + current_app.config["SERVICE_VERSION"])
                     return type_client.getAssayType(name)
                 Builder = get_view_config_builder(entity=entity, get_assay=get_assay)
                 builder = Builder(entity, self.groups_token, current_app.config["ASSETS_ENDPOINT"])
