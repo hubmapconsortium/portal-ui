@@ -1,6 +1,12 @@
 from datetime import timedelta
 
 
+# By keeping this in code rather than configuration,
+# we can atomically release changes that uses new service features,
+# rather than requiring backward compatibility from new API versions.
+version = 'v3'
+
+
 class DefaultConfig(object):
     # This should be updated when app.conf is updated:
     # Test runs will only see this config and not app.conf.
@@ -12,7 +18,10 @@ class DefaultConfig(object):
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=60)
     SESSION_COOKIE_SAMESITE = 'Lax'
 
-    PORTAL_INDEX_PATH = '/v3/portal/search'
+    # These app-wide configurations do not vary between environments:
+
+    TYPE_SERVICE_PATH = f'/{version}'
+    PORTAL_INDEX_PATH = f'/{version}/portal/search'
     CCF_INDEX_PATH = '/entities/search'
 
     # Everything else should be overridden in app.conf:
@@ -23,6 +32,7 @@ class DefaultConfig(object):
 
     GATEWAY_ENDPOINT = 'should-be-overridden'
     ELASTICSEARCH_ENDPOINT = 'should-be-overridden'
+    TYPE_SERVICE_ENDPOINT = 'should-be-overridden'
     ASSETS_ENDPOINT = 'should-be-overridden'
     XMODALITY_ENDPOINT = 'should-be-overridden'
     WORKSPACES_ENDPOINT = 'should-be-overridden'
