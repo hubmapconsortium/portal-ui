@@ -22,7 +22,7 @@ class DefaultConfig(object):
 
     TYPE_SERVICE_PATH = f'/{version}'
     PORTAL_INDEX_PATH = f'/{version}/portal/search'
-    CCF_INDEX_PATH = '/entities/search'
+    CCF_INDEX_PATH = f'{version}/entities/search'
 
     # Everything else should be overridden in app.conf:
 
