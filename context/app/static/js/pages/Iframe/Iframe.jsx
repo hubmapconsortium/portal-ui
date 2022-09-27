@@ -16,7 +16,13 @@ function Switch() {
     case '/iframe/assay-barchart':
       return <HuBMAPDatasetsChart />;
     case '/iframe/organ':
-      return <ccf-organ-info organ-iri={iri} use-remote-api="false" data-sources='["https://ccf-api.hubmapconsortium.org/v1/hubmap/rui_locations.jsonld"]' />;
+      return (
+        <ccf-organ-info
+          organ-iri={iri}
+          use-remote-api="false"
+          data-sources='["https://ccf-api.hubmapconsortium.org/v1/hubmap/rui_locations.jsonld"]'
+        />
+      );
     default:
       throw new Error(`No iframe ${pathname}`);
   }
