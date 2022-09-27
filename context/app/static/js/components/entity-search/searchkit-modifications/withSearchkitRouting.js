@@ -9,7 +9,7 @@ import {
   searchStateEqual,
   SearchkitRoutingOptionsContext,
 } from '@searchkit/client';
-import history, { Router, RouteState, defaultParseURL, defaultCreateURL } from '@searchkit/client/lib/cjs/history';
+import history, { defaultParseURL, defaultCreateURL } from '@searchkit/client/lib/cjs/history';
 
 const sanitiseRouteState = (routeState) => {
   const intKeys = ['size', 'from'];
@@ -67,7 +67,7 @@ export default function withSearchkitRouting(
 ) {
   let routingInstance = router;
 
-  const getRouting = (): Router => {
+  const getRouting = () => {
     if (routingInstance) return routingInstance;
     if (typeof window === 'undefined') {
       return null;
@@ -93,7 +93,7 @@ export default function withSearchkitRouting(
       // eslint-disable-next-line no-shadow
       const router = getRouting();
       if (router) {
-        const routeState: RouteState = stateToRoute(searchkitVariables);
+        const routeState = stateToRoute(searchkitVariables);
         const currentRouteState = {
           size: api.baseSearchState.page?.size,
           ...router.read(),
@@ -108,7 +108,7 @@ export default function withSearchkitRouting(
       // eslint-disable-next-line no-shadow
       const router = getRouting();
       const routeToSearchFn = (routeState) => {
-        const searchState: SearchState = routeToState(routeState);
+        const searchState = routeToState(routeState);
         if (!searchStateEqual(searchState, api.searchState)) {
           api.setSearchState(searchState);
           api.search();
@@ -118,7 +118,7 @@ export default function withSearchkitRouting(
         router.onUpdate(routeToSearchFn);
       }
       const routeState = router.read();
-      const searchState: SearchState = routeToState(routeState);
+      const searchState = routeToState(routeState);
       api.setSearchState(searchState);
       api.search();
 
@@ -150,7 +150,7 @@ export default function withSearchkitRouting(
       search: ctx.asPath.substring(ctx.pathname.length),
     };
 
-    const searchState: SearchState = routeToState(routingOptions.parseURL({ location: mockLocation }));
+    const searchState = routeToState(routingOptions.parseURL({ location: mockLocation }));
     searchkitClient.updateBaseSearchState(searchState);
 
     return {
