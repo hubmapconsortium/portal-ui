@@ -13,11 +13,9 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import useSearchData from 'js/hooks/useSearchData';
 
 import { Flex, StyledInfoIcon, StyledDatasetIcon } from '../style';
-import { getAssaySearchURL, getSearchURL } from '../utils';
+import { getSearchURL } from '../utils';
 
-function Assays({ searchTerms }) {
-  const searchUrl = getSearchURL('Dataset', searchTerms);
-
+function Assays({ organTerms }) {
   const query = useMemo(
     () => ({
       size: 0,
@@ -33,7 +31,7 @@ function Assays({ searchTerms }) {
                 },
                 {
                   bool: {
-                    should: searchTerms.map((searchTerm) => ({
+                    should: organTerms.map((searchTerm) => ({
                       term: { 'origin_sample.mapped_organ.keyword': searchTerm },
                     })),
                   },
@@ -48,7 +46,7 @@ function Assays({ searchTerms }) {
         },
       },
     }),
-    [searchTerms],
+    [organTerms],
   );
 
   const { searchData } = useSearchData(query);
@@ -68,7 +66,12 @@ function Assays({ searchTerms }) {
           </Flex>
         }
         buttons={
-          <Button color="primary" variant="contained" component="a" href={searchUrl}>
+          <Button
+            color="primary"
+            variant="contained"
+            component="a"
+            href={getSearchURL({ entityType: 'Dataset', organTerms })}
+          >
             <StyledDatasetIcon />
             View All Datasets
           </Button>
@@ -84,7 +87,10 @@ function Assays({ searchTerms }) {
           {buckets.map((bucket) => (
             <TableRow key={bucket.key}>
               <TableCell>
-                <LightBlueLink href={getAssaySearchURL('Dataset', searchTerms, bucket.key)} variant="body2">
+                <LightBlueLink
+                  href={getSearchURL({ entityType: 'Dataset', organTerms, assay: bucket.key })}
+                  variant="body2"
+                >
                   {bucket.key}
                 </LightBlueLink>
               </TableCell>

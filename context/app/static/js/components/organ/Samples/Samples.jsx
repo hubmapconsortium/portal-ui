@@ -36,9 +36,9 @@ const columns = [
   { id: 'last_modified_timestamp', label: 'Last Modified' },
 ];
 
-function Samples({ searchTerms }) {
+function Samples({ organTerms }) {
   const { selectedRows, deselectHeaderAndRows } = useStore();
-  const searchUrl = getSearchURL('Sample', searchTerms);
+  const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
   const query = useMemo(
     () => ({
       post_filter: {
@@ -51,7 +51,7 @@ function Samples({ searchTerms }) {
             },
             {
               bool: {
-                should: searchTerms.map((searchTerm) => ({
+                should: organTerms.map((searchTerm) => ({
                   term: { 'origin_sample.mapped_organ.keyword': searchTerm },
                 })),
               },
@@ -61,7 +61,7 @@ function Samples({ searchTerms }) {
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
     }),
-    [searchTerms],
+    [organTerms],
   );
 
   const { searchHits } = useSearchHits(query);
