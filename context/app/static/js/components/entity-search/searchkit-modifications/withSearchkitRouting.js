@@ -1,3 +1,6 @@
+// Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-client/src/withSearchkitRouting.tsx
+// Modified to handle custom route state
+
 /* eslint-disable radix */
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect } from 'react';
