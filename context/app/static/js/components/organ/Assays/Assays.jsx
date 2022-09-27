@@ -13,7 +13,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import useSearchData from 'js/hooks/useSearchData';
 
 import { Flex, StyledInfoIcon, StyledDatasetIcon } from '../style';
-import { getSearchURL } from '../utils';
+import { getAssaySearchURL, getSearchURL } from '../utils';
 
 function Assays({ searchTerms }) {
   const searchUrl = getSearchURL('Dataset', searchTerms);
@@ -84,10 +84,7 @@ function Assays({ searchTerms }) {
           {buckets.map((bucket) => (
             <TableRow key={bucket.key}>
               <TableCell>
-                <LightBlueLink
-                  href={`/search?entity_type[0]=Dataset&mapped_data_types[0]=${encodeURIComponent(bucket.key)}`}
-                  variant="body2"
-                >
+                <LightBlueLink href={getAssaySearchURL('Dataset', searchTerms, bucket.key)} variant="body2">
                   {bucket.key}
                 </LightBlueLink>
               </TableCell>
