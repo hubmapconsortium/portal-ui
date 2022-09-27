@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { SearchkitClient, withSearchkit, withSearchkitRouting } from '@searchkit/client';
+import { SearchkitClient, withSearchkit } from '@searchkit/client';
 
 import { routeToStateWithDefaultPageSize } from 'js/components/entity-search/searchkit-modifications/routeToState';
-
+import withSearchkitRouting from 'js/components/entity-search/searchkit-modifications/withSearchkitRouting';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import SearchBar from 'js/components/entity-search/SearchBar';
 import FacetChips from 'js/components/entity-search/facets/facetChips/FacetChips';
