@@ -70,9 +70,28 @@ def main():
         azimuth=azimuth_organs_by_uberon
     )
 
-    unmatched = ", ".join(u.split("/")[-1] for u in (merged_data.keys() - descriptions.keys()))
-    if unmatched:
-        raise Exception(f'UUIDs in data sources but not in descriptions.yaml: {unmatched}')
+    unmatched = {u.split("/")[-1] for u in merged_data.keys() - descriptions.keys()}
+    expected_unmatched = {
+        # This list should be empty when https://github.com/hubmapconsortium/portal-ui/issues/2945
+        # and https://github.com/hubmapconsortium/portal-ui/issues/2943 are resolved.
+
+        # Why FMA? Resolve paired organs:
+        'FMA_7214', 'FMA_7213',
+        'FMA_24977', 'FMA_24978',
+
+        # Just resolve paired organs:
+        'UBERON_0004549', 'UBERON_0004548',
+        'UBERON_0001222', 'UBERON_0001223',
+        'UBERON_0004539', 'UBERON_0004538',
+        'UBERON_0001303', 'UBERON_0001302',
+
+        # Other data soures are higher or lower level:
+        'UBERON_0002509', 'UBERON_0000079', 'UBERON_0001004',
+    }
+    unexpected_unmatched = unmatched - expected_unmatched
+    if unexpected_unmatched:
+        as_string = ", ".join(unexpected_unmatched)
+        raise Exception(f'Unexpected unmatched IDs: {as_string}')
 
     organs = [
         Organ(
