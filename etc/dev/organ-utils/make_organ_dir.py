@@ -70,12 +70,17 @@ def main():
         azimuth=azimuth_organs_by_uberon
     )
 
+    unmatched = ", ".join(u.split("/")[-1] for u in (merged_data.keys() - descriptions.keys()))
+    if unmatched:
+        raise Exception(f'UUIDs in data sources but not in descriptions.yaml: {unmatched}')
+
     organs = [
         Organ(
             name=data.get('name'),
             data=data)
         for data in merged_data.values() if 'name' in data
     ]
+
     DirectoryWriter(args.target, organs).write()
     organ_schema = safe_load((Path(__file__).parent / 'organ-schema.yaml').read_text())
     for p in (repo_path / 'context/app/organ').glob('*.yaml'):
