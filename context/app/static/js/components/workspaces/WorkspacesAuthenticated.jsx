@@ -17,25 +17,18 @@ function WorkspacesAuthenticated() {
     <>
       <Description padding="20px">
         <p>
-          <strong>
-            This is a private beta release, with{' '}
-            <OutboundIconLink href="https://github.com/hubmapconsortium/portal-ui/issues/2799">
-              lots of work
-            </OutboundIconLink>{' '}
-            still to do.
-          </strong>
-        </p>
-        <p>
-          Workspaces are provided through Jupyter notebooks. Currently, beta users can create workspaces from datasets
-          with visulizations. Eventually, all users with HuBMAP accounts will be able to create workspaces from any
-          dataset, collection, dataset search or list.
+          HuBMAP Workspaces are in{' '}
+          <OutboundIconLink href="https://github.com/hubmapconsortium/portal-ui/issues/2799">
+            beta testing
+          </OutboundIconLink>{' '}
+          and are provided as Jupyter Notebooks that may be instantiated with code blocks to perform basic and advanced
+          operations on user-selected HuBMAP data. Instantiated workspaces can be launched on datasets. Blank workspaces
+          can be launched directly from this page.
         </p>
         <p>
           Workspaces should not be used for long-running batch processes. Contact{' '}
-          <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-            help@hubmapconsortium.org
-          </EmailIconLink>{' '}
-          for information about accessing HuBMAP compute resources.
+          <EmailIconLink email="help@hubmapconsortium.org">help@hubmapconsortium.org</EmailIconLink> for information
+          about accessing HuBMAP compute resources.
         </p>
       </Description>
       <WorkspacesList />
