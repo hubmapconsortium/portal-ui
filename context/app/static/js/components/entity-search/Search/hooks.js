@@ -104,8 +104,12 @@ function useSearch() {
   ]);
 
   const variables = useSearchkitVariables();
-  const defaultSort = 'mapped_last_modified_timestamp.keyword.desc';
-  const { results } = useSearchkitSDK({ config, variables, filters: defaultFilterValues, defaultSort });
+  const { results } = useSearchkitSDK({
+    config,
+    variables,
+    filters: defaultFilterValues,
+    defaultSort: `${lastTimestampConfig.field}.desc`,
+  });
 
   return { results, entityType, allResultsUUIDs };
 }
