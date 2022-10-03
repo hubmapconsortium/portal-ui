@@ -61,9 +61,9 @@ function Organ({ organ }) {
         )}
         {shouldDisplaySection[searchId] && (
           <Section id={searchId}>
-            <Assays searchTerms={organ.search} />
+            <Assays organTerms={organ.search} />
             <DatasetsBarChart name={organ.name} search={organ.search} />
-            <Samples searchTerms={organ.search} />
+            <Samples organTerms={organ.search} />
           </Section>
         )}
       </Content>

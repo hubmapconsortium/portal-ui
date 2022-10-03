@@ -1,0 +1,1 @@
+- Add missing constraints to search links from organ pages.

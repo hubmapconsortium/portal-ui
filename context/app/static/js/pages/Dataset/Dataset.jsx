@@ -35,7 +35,7 @@ function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, regist
 
   function createWorkspace() {
     // TODO: Change to form submission, and set up a different route.
-    document.location = `${document.location}.ws.ipynb`;
+    document.location = `${document.location.pathname}.ws.ipynb`;
   }
 
   return (
