@@ -66,7 +66,7 @@ function useSearch() {
 
   const defaultFilterValues = Object.values(defaultFilters);
 
-  const lastTimestampConfig = availableFields.mapped_last_modified_timestamp;
+  const defaultSortConfig = availableFields.mapped_last_modified_timestamp;
 
   const { allResultsUUIDs, setQueryBodyAndReturnBody } = useAllResultsUUIDs();
   const config = useMemo(() => {
@@ -83,7 +83,7 @@ function useSearch() {
           ...fields,
         }).map(({ identifier }) => identifier),
       },
-      sortOptions: buildSortPairs([...Object.values(fields), lastTimestampConfig]),
+      sortOptions: buildSortPairs([...Object.values(fields), defaultSortConfig]),
       query,
       facets: Object.values(facets).map((facet) =>
         createSearchkitFacet({ ...facet, ...getRangeProps(facet.field, numericFacetsProps) }),
@@ -97,7 +97,7 @@ function useSearch() {
     elasticsearchEndpoint,
     facets,
     fields,
-    lastTimestampConfig,
+    defaultSortConfig,
     numericFacetsProps,
     setQueryBodyAndReturnBody,
     tileFields,
@@ -108,7 +108,7 @@ function useSearch() {
     config,
     variables,
     filters: defaultFilterValues,
-    defaultSort: `${lastTimestampConfig.field}.desc`,
+    defaultSort: `${defaultSortConfig.field}.desc`,
   });
 
   return { results, entityType, allResultsUUIDs };
