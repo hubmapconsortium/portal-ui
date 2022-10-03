@@ -128,9 +128,12 @@ export default function withSearchkitRouting(
       }
       const routeState = router.read();
       const searchState = routeToState(routeState);
-      const fieldConfigs = filterObjectByKeys(availableFields, routeState.fields);
 
-      setFields(fieldConfigs);
+      if (routeState.fields) {
+        const fieldConfigs = filterObjectByKeys(availableFields, routeState.fields);
+        setFields(fieldConfigs);
+      }
+
       api.setSearchState(searchState);
       api.search();
 
