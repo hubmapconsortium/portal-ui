@@ -128,3 +128,14 @@ export function getDonorAgeString({ age_value, age_unit }) {
   }
   return [age_value, age_unit].join(' ');
 }
+
+export function filterObjectByKeys(obj, keys) {
+  return Object.keys(obj)
+    .filter((k) => keys.includes(k))
+    .reduce((acc, k) => {
+      return {
+        ...acc,
+        [k]: obj[k],
+      };
+    }, {});
+}
