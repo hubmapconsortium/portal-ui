@@ -62,9 +62,11 @@ const query = new CustomQuery({
 function useSearch() {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const authHeader = getAuthHeader(groupsToken);
-  const { fields, tileFields, facets, defaultFilters, entityType, numericFacetsProps } = useStore();
+  const { fields, tileFields, facets, defaultFilters, entityType, numericFacetsProps, availableFields } = useStore();
 
   const defaultFilterValues = Object.values(defaultFilters);
+
+  const lastTimestampConfig = availableFields.mapped_last_modified_timestamp;
 
   const { allResultsUUIDs, setQueryBodyAndReturnBody } = useAllResultsUUIDs();
   const config = useMemo(() => {
@@ -76,9 +78,12 @@ function useSearch() {
         },
       },
       hits: {
-        fields: Object.values({ ...tileFields, ...fields }).map(({ identifier }) => identifier),
+        fields: Object.values({
+          ...tileFields,
+          ...fields,
+        }).map(({ identifier }) => identifier),
       },
-      sortOptions: buildSortPairs(Object.values(fields)),
+      sortOptions: buildSortPairs([...Object.values(fields), lastTimestampConfig]),
       query,
       facets: Object.values(facets).map((facet) =>
         createSearchkitFacet({ ...facet, ...getRangeProps(facet.field, numericFacetsProps) }),
@@ -92,6 +97,7 @@ function useSearch() {
     elasticsearchEndpoint,
     facets,
     fields,
+    lastTimestampConfig,
     numericFacetsProps,
     setQueryBodyAndReturnBody,
     tileFields,
