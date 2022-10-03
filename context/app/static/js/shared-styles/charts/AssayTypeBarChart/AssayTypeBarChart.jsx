@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
@@ -6,10 +6,8 @@ import { AxisTop, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import { GridColumns } from '@visx/grid';
 import Typography from '@material-ui/core/Typography';
-import { getStringWidth } from '@visx/text';
-import { useTheme } from '@material-ui/core/styles';
 
-import { useChartTooltip } from 'js/shared-styles/charts/hooks';
+import { useChartTooltip, useLongestLabelSize } from 'js/shared-styles/charts/hooks';
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 
@@ -26,19 +24,8 @@ function AssayTypeBarChart({
   dataTypes,
   showTooltipAndHover,
 }) {
-  const theme = useTheme();
   const tickLabelSize = 11;
-
-  const longestLabelSize = useMemo(
-    () =>
-      Math.max(
-        ...dataTypes.map((d) =>
-          getStringWidth(d, { fontSize: `${tickLabelSize}px`, fontFamily: theme.typography.fontFamily }),
-        ),
-      ),
-    [dataTypes, theme.typography.fontFamily],
-  );
-
+  const longestLabelSize = useLongestLabelSize({ labels: dataTypes, labelFontSize: tickLabelSize });
   const updatedMargin = { ...margin, left: longestLabelSize + 10 };
 
   const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
@@ -97,7 +84,7 @@ function AssayTypeBarChart({
                           barStack={barStack}
                           hoverProps={
                             showTooltipAndHover
-                              ? { onMouseEnter: handleMouseEnter(bar, barStack.index), onMouseLeave: handleMouseLeave }
+                              ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }
                               : {}
                           }
                         />

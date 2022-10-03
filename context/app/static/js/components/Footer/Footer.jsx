@@ -65,9 +65,9 @@ function Footer({ isMaintenancePage }) {
                 Data Sharing Policy
               </OutboundLink>
               {!isMaintenancePage && (
-                <LightBlueLink href="https://software.docs.hubmapconsortium.org/about#citation" variant="body2">
+                <OutboundLink href="https://software.docs.hubmapconsortium.org/about#citation" variant="body2">
                   Citing HuBMAP
-                </LightBlueLink>
+                </OutboundLink>
               )}
             </FlexColumn>
             <FlexColumn>

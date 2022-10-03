@@ -10,7 +10,7 @@ import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarC
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import DatasetClusterTooltip from 'js/components/cells/DatasetClusterTooltip';
 
-import { getOptionLabels } from './utils';
+import { getOptionLabels, addMatchedAndUnmatched } from './utils';
 
 function DatasetClusterChart({ uuid, results }) {
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useSelectedDropdownIndex(0);
@@ -24,13 +24,16 @@ function DatasetClusterChart({ uuid, results }) {
   };
 
   const selectedData = results[Object.keys(results)[selectedClusterTypeIndex]];
+
   const yScale = scaleLinear({
     domain: [0, Math.max(...selectedData.map((result) => result.matched + result.unmatched))],
     nice: true,
   });
 
   const xScale = scaleBand({
-    domain: selectedData.map((result) => result.cluster_number).sort((a, b) => a - b),
+    domain: selectedData
+      .sort((a, b) => addMatchedAndUnmatched(b) - addMatchedAndUnmatched(a))
+      .map((d) => d.cluster_number),
     padding: 0.2,
   });
 
@@ -73,6 +76,7 @@ function DatasetClusterChart({ uuid, results }) {
         xAxisLabel="Cluster"
         yAxisLabel="Cell Set Size"
         TooltipContent={DatasetClusterTooltip}
+        xAxisTickLabels={selectedData.map((d) => d.cluster_number)}
       />
     </ChartWrapper>
   );

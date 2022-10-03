@@ -15,9 +15,9 @@ import StatusIcon from './StatusIcon';
 import { useGatewayStatus } from './hooks';
 
 function buildServiceStatus(args) {
-  const { apiName, endpointUrl, githubUrl, response = {}, noteFunction } = args;
-  const { build, version: apiVersion, api_auth } = response;
-  const isUp = apiName === 'gateway' || api_auth;
+  const { apiName, endpointUrl, githubUrl, response = {}, noteFunction = () => '' } = args;
+  const { build, version: apiVersion } = response;
+  const isUp = Boolean(Object.keys(response).length);
   // The gateway is implicit: If it's not up, you wouldn't get anything at all,
   // (and you wouldn't be able to get to the portal in the first place.)
   return {
@@ -38,7 +38,7 @@ function ServiceStatusTable({
   entityEndpoint,
   gatewayEndpoint,
   workspacesEndpoint,
-  workspacesWsEndpoint,
+  typeServiceEndpoint,
 }) {
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
@@ -67,7 +67,6 @@ function ServiceStatusTable({
           apiName: 'gateway',
           endpointUrl: gatewayEndpoint,
           response: gatewayStatus.gateway,
-          noteFunction: () => '',
         }),
         buildServiceStatus({
           apiName: 'ingest-ui',
@@ -88,21 +87,22 @@ function ServiceStatusTable({
           noteFunction: (api) => `ES: ${api.elasticsearch_connection}; ES Status: ${api.elasticsearch_status}`,
         }),
         buildServiceStatus({
+          apiName: 'type-api',
+          githubUrl: 'https://github.com/dbmi-pitt/search-adaptor',
+          endpointUrl: typeServiceEndpoint,
+          response: gatewayStatus.search_api,
+          noteFunction: () => 'Included in search-api for historical reasons.',
+        }),
+        buildServiceStatus({
           apiName: 'uuid-api',
           response: gatewayStatus.uuid_api,
           noteFunction: (api) => `MySQL: ${api.mysql_connection}`,
         }),
         buildServiceStatus({
           apiName: 'workspaces-api',
+          response: gatewayStatus.workspaces_api,
           endpointUrl: workspacesEndpoint,
           githubUrl: 'https://github.com/hubmapconsortium/user_workspaces_server',
-          noteFunction: () => 'TODO: Waiting for gateway to provide info',
-        }),
-        buildServiceStatus({
-          apiName: 'workspaces-ws-api',
-          endpointUrl: workspacesWsEndpoint,
-          githubUrl: 'https://github.com/hubmapconsortium/user_workspaces_server',
-          noteFunction: () => 'TODO: Waiting for gateway to provide info',
         }),
       ]
     : [];

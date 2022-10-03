@@ -37,6 +37,14 @@ function getSearchQuery(cellsResults) {
   };
 }
 
+function buildHitsMap(hits) {
+  return hits.reduce((acc, hit) => {
+    // eslint-disable-next-line no-underscore-dangle
+    acc[hit._id] = hit;
+    return acc;
+  }, {});
+}
+
 function useDatasetsSelectedByExpression({
   completeStep,
   setResults,
@@ -77,7 +85,9 @@ function useDatasetsSelectedByExpression({
       );
       const serviceResults = await new CellsService().getDatasets(queryParams);
       const searchResults = await fetchSearchData(getSearchQuery(serviceResults), elasticsearchEndpoint, groupsToken);
-      setResults(searchResults.hits.hits);
+
+      const hitsMap = buildHitsMap(searchResults.hits.hits);
+      setResults(serviceResults.map(({ uuid }) => hitsMap[uuid]));
       setIsLoading(false);
     } catch (e) {
       setMessage(e.message);
@@ -93,4 +103,4 @@ function useDatasetsSelectedByExpression({
   return { genomicModality, handleSelectModality, handleSubmit, message };
 }
 
-export { useDatasetsSelectedByExpression };
+export { buildHitsMap, useDatasetsSelectedByExpression };

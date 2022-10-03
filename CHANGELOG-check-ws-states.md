@@ -1,1 +1,0 @@
-- List all expected WS states: If we see something unexpected, it's an error.
