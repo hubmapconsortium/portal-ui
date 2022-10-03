@@ -1,6 +1,6 @@
 // Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-client/src/withSearchkitRouting.tsx
 // Modified to handle custom route state
-
+import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 /* eslint-disable radix */
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect } from 'react';
@@ -28,11 +28,12 @@ const sanitiseRouteState = (routeState) => {
 
 export const routeStateEqual = (a, b) => isEqual(sanitiseRouteState(a), sanitiseRouteState(b));
 
-export const stateToRouteFn = (searchState) => {
+export const stateToRouteFn = (searchState, fields) => {
   const routeState = {
     query: searchState.query,
     sort: searchState.sortBy,
     filters: searchState.filters,
+    fields,
     size: parseInt(searchState.page?.size),
     from: parseInt(searchState.page?.from),
   };
@@ -91,12 +92,14 @@ export default function withSearchkitRouting(
   const withSearchkitRouting = (props) => {
     const searchkitVariables = useSearchkitVariables();
     const api = useSearchkit();
+    const { fields } = useStore();
 
+    const fieldNames = Object.keys(fields);
     useEffect(() => {
       // eslint-disable-next-line no-shadow
       const router = getRouting();
       if (router) {
-        const routeState = stateToRoute(searchkitVariables);
+        const routeState = stateToRoute(searchkitVariables, fieldNames);
         const currentRouteState = {
           size: api.baseSearchState.page?.size,
           ...router.read(),
@@ -105,7 +108,7 @@ export default function withSearchkitRouting(
           router.write(routeState, true);
         }
       }
-    }, [api.baseSearchState.page, searchkitVariables]);
+    }, [api.baseSearchState.page, searchkitVariables, fieldNames]);
 
     useEffect(() => {
       // eslint-disable-next-line no-shadow
