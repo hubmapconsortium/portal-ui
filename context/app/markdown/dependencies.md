@@ -26,7 +26,7 @@ hubmap-api-py-client>=0.0.9
 hubmap-commons>=2.0.12
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.5.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.6.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -84,7 +84,6 @@ lxml>=4.9.1
 "react-joyride": "^2.2.1",
 "react-pdf": "^5.3.2",
 "react-spring": "^8.0.27",
-"react-twitter-embed": "^3.0.3",
 "react-vega": "^7.3.0",
 "sass": "^1.53.0",
 "searchkit": "^2.4.1-alpha.4",

@@ -1,4 +1,4 @@
-import { getOptionLabels, removeUUIDFromOption } from './utils';
+import { getOptionLabels, removeUUIDFromOption, addMatchedAndUnmatched } from './utils';
 
 test.each([
   ['UUID-123-xyz', '123-xyz'],
@@ -14,4 +14,8 @@ test('should ', () => {
     '123-UUID-xyz': '123-xyz',
     'abc-456-UUID': 'abc-456',
   });
+});
+
+test('should add matched and unmatched', () => {
+  expect(addMatchedAndUnmatched({ matched: 2, unmatched: 3 })).toBe(5);
 });
