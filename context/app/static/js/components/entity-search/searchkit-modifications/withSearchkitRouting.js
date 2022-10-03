@@ -14,6 +14,8 @@ import {
 } from '@searchkit/client';
 import history, { defaultParseURL, defaultCreateURL } from '@searchkit/client/lib/cjs/history';
 
+import { filterObjectByKeys } from 'js/helpers/functions';
+
 const sanitiseRouteState = (routeState) => {
   const intKeys = ['size', 'from'];
   // eslint-disable-next-line no-restricted-syntax
@@ -93,7 +95,7 @@ export default function withSearchkitRouting(
   const withSearchkitRouting = (props) => {
     const searchkitVariables = useSearchkitVariables();
     const api = useSearchkit();
-    const { fields } = useStore();
+    const { fields, setFields, availableFields } = useStore();
 
     const fieldNames = Object.keys(fields);
     useEffect(() => {
@@ -126,13 +128,16 @@ export default function withSearchkitRouting(
       }
       const routeState = router.read();
       const searchState = routeToState(routeState);
+      const fieldConfigs = filterObjectByKeys(availableFields, routeState.fields);
+
+      setFields(fieldConfigs);
       api.setSearchState(searchState);
       api.search();
 
       return function cleanup() {
         router.dispose();
       };
-    }, [api]);
+    }, [api, availableFields, setFields]);
 
     return (
       <SearchkitRoutingOptionsContext.Provider value={routingOptions}>
