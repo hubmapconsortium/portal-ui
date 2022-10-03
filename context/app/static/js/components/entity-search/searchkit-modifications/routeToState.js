@@ -5,6 +5,7 @@ export const routeToStateWithDefaultPageSize = (defaultPageSize) => (routeState)
   query: routeState.query || '',
   sortBy: routeState.sort || '',
   filters: routeState.filters || [],
+  fields: routeState.fields || [],
   page: {
     size: Number(routeState.size) || defaultPageSize,
     from: Number(routeState.from) || 0,

@@ -53,6 +53,7 @@ export const routeToStateFn = (routeState) => ({
   query: routeState.query || '',
   sortBy: routeState.sort || '',
   filters: routeState.filters || [],
+  fields: routeState.fields || [],
   page: {
     size: Number(routeState.size) || 10,
     from: Number(routeState.from) || 0,
