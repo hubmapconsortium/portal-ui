@@ -16,7 +16,11 @@ test('should group facets', () => {
     { identifier: 'group_name' },
     { identifier: 'mapped_status' },
   ];
-  const wrapper = ({ children }) => <SearchConfigProvider initialConfig={{ facets }}>{children}</SearchConfigProvider>;
+  const wrapper = ({ children }) => (
+    <SearchConfigProvider initialConfig={{ facets, fields: {}, entityType: 'dataset' }}>
+      {children}
+    </SearchConfigProvider>
+  );
 
   const { result } = renderHook(() => useGroupedFacets(resultsFacets), {
     wrapper,
