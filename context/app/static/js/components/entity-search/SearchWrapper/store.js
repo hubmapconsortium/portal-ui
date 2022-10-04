@@ -6,14 +6,9 @@ import produce from 'immer';
 import immer from 'js/stores/immerMiddleware';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { createField } from 'js/components/entity-search/SearchWrapper/utils';
+import relatedEntityTypesMap from 'js/components/entity-search/SearchWrapper/relatedEntityTypesMap';
 
 const { Provider, useStore } = createContext();
-
-const relatedEntityTypesMap = {
-  donor: ['donor'],
-  sample: ['donor', 'sample'],
-  dataset: ['donor', 'sample', 'dataset'],
-};
 
 const createStore = ({
   initialFields,
