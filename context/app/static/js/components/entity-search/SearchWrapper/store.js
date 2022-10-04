@@ -41,10 +41,6 @@ const createStore = ({
         set((state) => {
           state.fields = selectedFields;
         }),
-      addFields: (selectedFields) =>
-        set((state) => {
-          state.fields = { ...state.fields, ...selectedFields };
-        }),
       setFacets: (selectedFacets) =>
         set((state) => {
           state.facets = selectedFacets;
