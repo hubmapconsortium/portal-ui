@@ -69,7 +69,7 @@ function ServiceStatusTable({
           response: gatewayStatus.gateway,
         }),
         buildServiceStatus({
-          apiName: 'ingest-ui',
+          apiName: 'ingest-api',
           response: gatewayStatus.ingest_api,
           noteFunction: (api) => `Neo4j: ${api.neo4j_connection}`,
         }),
