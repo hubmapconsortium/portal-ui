@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 
+import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { AppContext } from 'js/components/Providers';
 import Description from 'js/shared-styles/sections/Description';
@@ -15,19 +16,20 @@ function WorkspacesAuthenticated() {
   return (
     <>
       <Description padding="20px">
-        <strong>
-          This is a private beta release, with{' '}
+        <p>
+          HuBMAP Workspaces are in{' '}
           <OutboundIconLink href="https://github.com/hubmapconsortium/portal-ui/issues/2799">
-            lots of work
+            beta testing
           </OutboundIconLink>{' '}
-          still to do.
-        </strong>{' '}
-        {/*
-          TODO: Add links below.
-          TODO: Not all of these entry points will be functional on first release. Update text accordingly.
-        */}
-        Workspaces are provided through Jupyter notebooks. Navigate to a dataset, collection, dataset search or My Lists
-        page to begin a new workspace.
+          and are provided as Jupyter Notebooks that may be instantiated with code blocks to perform basic and advanced
+          operations on user-selected HuBMAP data. Instantiated workspaces can be launched on datasets. Blank workspaces
+          can be launched directly from this page.
+        </p>
+        <p>
+          Workspaces should not be used for long-running batch processes. Contact{' '}
+          <EmailIconLink email="help@hubmapconsortium.org">help@hubmapconsortium.org</EmailIconLink> for information
+          about accessing HuBMAP compute resources.
+        </p>
       </Description>
       <WorkspacesList />
     </>
