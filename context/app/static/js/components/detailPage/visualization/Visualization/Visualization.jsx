@@ -5,6 +5,8 @@ import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
 import debounce from 'lodash/debounce';
 import Bowser from 'bowser';
 
+import { dependencies } from 'package';
+
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
@@ -110,6 +112,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
   }, [collapseViz]);
 
   const isMultiDataset = Array.isArray(vitessceConfig);
+  const version = dependencies.vitessce.replace('^', '');
 
   return (
     vitessceConfig &&
@@ -189,7 +192,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
         </Paper>
         <StyledFooterText variant="body2">
           Powered by&nbsp;
-          <OutboundIconLink href="http://vitessce.io">Vitessce</OutboundIconLink>
+          <OutboundIconLink href="http://vitessce.io">Vitessce v{version}</OutboundIconLink>
         </StyledFooterText>
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
       </StyledDetailPageSection>
