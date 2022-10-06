@@ -1,1 +1,0 @@
-- For consistency, make the link for "Citing HuBMAP" outbound.

@@ -1,1 +1,0 @@
-- Upgrade `vitessce` to 1.2.2.

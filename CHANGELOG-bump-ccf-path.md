@@ -1,1 +1,0 @@
-- The CCF uses a separate index, but it should also be bumped to v3.

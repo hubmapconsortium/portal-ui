@@ -1,3 +1,17 @@
+## v0.54.0 - 2022-10-06
+
+- Fix workspace creation flow for dataset URLs with parameters.
+- The CCF uses a separate index, but it should also be bumped to v3.
+- For consistency, make the link for "Citing HuBMAP" outbound.
+- On the status page reference status-api rather than status-ui.
+- No change in behavior, but we'll get an error if we try to regen organs and there is unexpected data.
+- Limit organ-info datasets to HRA-mapped HuBMAP data only
+- Add missing constraints to search links from organ pages.
+- Upgrade `vitessce` to 1.2.2.
+- Add `v3` to the types service, and at it to the Services page. No change to environment required.
+- Update workspaces messaging to better explain what's working, and what it should be used for.
+
+
 ## v0.53.2 - 2022-09-22
 
 - List all expected WS states: If we see something unexpected, it's an error.
