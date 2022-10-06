@@ -1,0 +1,1 @@
+- Add Nils to the hard-coded workspaces beta user list.
