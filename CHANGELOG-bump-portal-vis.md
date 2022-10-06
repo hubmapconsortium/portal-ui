@@ -1,0 +1,1 @@
+- Bump portal-vis to fix a regression in handling of unstiched imagery.
