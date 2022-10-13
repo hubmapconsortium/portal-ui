@@ -2,7 +2,6 @@ import React from 'react';
 
 import { SearchkitClient, withSearchkit } from '@searchkit/client';
 
-import { routeToStateWithDefaultPageSize } from 'js/components/entity-search/searchkit-modifications/routeToState';
 import withSearchkitRouting from 'js/components/entity-search/searchkit-modifications/withSearchkitRouting';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import SearchBar from 'js/components/entity-search/SearchBar';
@@ -14,8 +13,6 @@ import { Flex, Grow } from './style';
 import { useSearch } from './hooks';
 
 const defaultPageSize = 18;
-
-const routeToState = routeToStateWithDefaultPageSize(defaultPageSize);
 
 const createSkClient = () =>
   new SearchkitClient({
@@ -42,4 +39,4 @@ function Search() {
   );
 }
 
-export default withSearchkit(withSearchkitRouting(Search, { routeToState }), createSkClient);
+export default withSearchkit(withSearchkitRouting(Search), createSkClient);

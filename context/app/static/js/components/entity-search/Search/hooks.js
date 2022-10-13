@@ -90,6 +90,7 @@ function useSearch() {
       ),
       filters: defaultFilterValues.map((filter) => filter.definition),
       postProcessRequest: setQueryBodyAndReturnBody,
+      pageSize: 18,
     };
   }, [
     authHeader,

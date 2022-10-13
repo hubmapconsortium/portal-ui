@@ -1,12 +1,12 @@
 import React from 'react';
 
 import ConfigureSearchTableWrapper from 'js/components/entity-search/sidebar/ConfigureSearchTableWrapper';
-import { useDonorSampleMetadatFieldConfigs } from './hooks';
+import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 
 function DonorSampleConfigureSearchTable(props) {
-  const metadataFields = useDonorSampleMetadatFieldConfigs();
+  const { availableFields } = useStore();
 
-  return <ConfigureSearchTableWrapper {...props} availableFields={metadataFields} />;
+  return <ConfigureSearchTableWrapper {...props} availableFields={availableFields} />;
 }
 
 export default DonorSampleConfigureSearchTable;
