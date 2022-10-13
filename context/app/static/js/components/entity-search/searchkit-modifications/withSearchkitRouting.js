@@ -36,7 +36,6 @@ export const stateToRouteFn = (searchState, fields) => {
     sort: searchState.sortBy,
     filters: searchState.filters,
     fields,
-    size: parseInt(searchState.page?.size),
     from: parseInt(searchState.page?.from),
   };
   return Object.keys(routeState).reduce((sum, key) => {
@@ -57,7 +56,6 @@ export const routeToStateFn = (routeState) => ({
   filters: routeState.filters || [],
   fields: routeState.fields || [],
   page: {
-    size: Number(routeState.size) || 10,
     from: Number(routeState.from) || 0,
   },
 });
@@ -104,14 +102,13 @@ export default function withSearchkitRouting(
       if (router) {
         const routeState = stateToRoute(searchkitVariables, fieldNames);
         const currentRouteState = {
-          size: api.baseSearchState.page?.size,
           ...router.read(),
         };
         if (!routeStateEqual(currentRouteState, routeState)) {
           router.write(routeState, true);
         }
       }
-    }, [api.baseSearchState.page, searchkitVariables, fieldNames]);
+    }, [searchkitVariables, fieldNames]);
 
     useEffect(() => {
       // eslint-disable-next-line no-shadow
