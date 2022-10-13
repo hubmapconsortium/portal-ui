@@ -59,7 +59,7 @@ def details(type, uuid):
     if type == 'dataset':
         configs_cells_uuid = client.get_configs_cells_and_lifted_uuid(entity, marker=marker)
         flask_data.update({
-            'vitessce_conf': [
+            'vitessce_conf_list': [
                 config.to_dict() for config in
                 configs_cells_uuid.configs_cells.configs],
             'has_notebook': len(configs_cells_uuid.configs_cells.cells) > 0,

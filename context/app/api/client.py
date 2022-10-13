@@ -154,7 +154,7 @@ class ApiClient():
 
     def get_configs_cells_and_lifted_uuid(self, entity, marker=None, wrap_error=True):
         '''
-        Returns a dataclass with vitessce_conf and is_lifted.
+        Returns a dataclass with configs_cells and vis_lifted_uuid.
         '''
         vis_lifted_uuid = None  # default
         image_pyramid_descendants = _get_image_pyramid_descendants(entity)
