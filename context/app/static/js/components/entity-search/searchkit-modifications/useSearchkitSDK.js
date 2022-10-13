@@ -25,7 +25,7 @@ const useSearchkitSDK = ({ config, variables, filters, defaultSort }) => {
         const response = await request.execute({
           facets: true,
           hits: {
-            size: 18,
+            size: config.pageSize,
             from: variables.page.from,
           },
         });
