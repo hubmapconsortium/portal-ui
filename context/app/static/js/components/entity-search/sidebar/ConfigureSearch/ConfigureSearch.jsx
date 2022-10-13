@@ -8,6 +8,15 @@ import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { useConfigureSearch } from './hooks';
 import { StyledPaper, StyledDialogContent } from './style';
 
+function getTableComponent(entityType) {
+  switch (entityType) {
+    case 'dataset':
+      return DatasetConfigureSearchTable;
+    default:
+      return DonorSampleConfigureSearchTable;
+  }
+}
+
 function ConfigureSearch() {
   const {
     dialogIsOpen,
@@ -18,6 +27,7 @@ function ConfigureSearch() {
     handleToggleField,
     selectedFacets,
     handleToggleFacet,
+    resetSelections,
   } = useConfigureSearch();
 
   const { entityType } = useStore();
@@ -28,6 +38,8 @@ function ConfigureSearch() {
     handleToggleField,
     handleToggleFacet,
   };
+
+  const TableComponent = getTableComponent(entityType);
 
   return (
     <>
@@ -40,13 +52,7 @@ function ConfigureSearch() {
         isOpen={dialogIsOpen}
         handleClose={handleClose}
         maxWidth="md"
-        content={
-          entityType === 'dataset' ? (
-            <DatasetConfigureSearchTable {...configureSearchTableProps} />
-          ) : (
-            <DonorSampleConfigureSearchTable {...configureSearchTableProps} />
-          )
-        }
+        content={<TableComponent {...configureSearchTableProps} />}
         actions={
           <>
             <Button onClick={handleClose}>Cancel</Button>
@@ -55,6 +61,7 @@ function ConfigureSearch() {
         }
         PaperComponent={StyledPaper}
         DialogContentComponent={StyledDialogContent}
+        TransitionProps={{ onEnter: resetSelections }}
       />
     </>
   );

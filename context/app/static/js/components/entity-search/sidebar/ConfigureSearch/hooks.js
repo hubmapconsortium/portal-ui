@@ -50,13 +50,16 @@ function useConfigureSearch() {
     setSelectedItems: setSelectedFacets,
   } = useSelectedItems(selectedFieldReducer, facets);
 
+  function resetSelections() {
+    setSelectedFields(fields);
+    setSelectedFacets(facets);
+  }
   function handleOpen() {
     setDialogIsOpen(true);
   }
   function handleClose() {
     setDialogIsOpen(false);
-    setSelectedFields(fields);
-    setSelectedFacets(facets);
+    resetSelections();
   }
 
   function handleSave() {
@@ -73,6 +76,7 @@ function useConfigureSearch() {
     handleToggleField,
     selectedFacets,
     handleToggleFacet,
+    resetSelections,
   };
 }
 

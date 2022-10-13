@@ -1,8 +1,12 @@
 /* eslint-disable no-param-reassign */
 import create from 'zustand';
 import createContext from 'zustand/context';
+import produce from 'immer';
 
 import immer from 'js/stores/immerMiddleware';
+import metadataFieldtoEntityMap from 'metadata-field-entities';
+import { createField } from 'js/components/entity-search/SearchWrapper/utils';
+import relatedEntityTypesMap from 'js/components/entity-search/SearchWrapper/relatedEntityTypesMap';
 
 const { Provider, useStore } = createContext();
 
@@ -48,6 +52,20 @@ const createStore = ({
         set((state) => {
           state.view = view;
         }),
+      availableFields: Object.entries(metadataFieldtoEntityMap).reduce(
+        (acc, [fieldName, fieldEntityType]) => {
+          if (relatedEntityTypesMap[entityType].includes(fieldEntityType)) {
+            return produce(acc, (draft) => {
+              return {
+                ...draft,
+                ...createField({ fieldName, entityType }),
+              };
+            });
+          }
+          return acc;
+        },
+        { ...fields, ...facets },
+      ),
     })),
   );
 

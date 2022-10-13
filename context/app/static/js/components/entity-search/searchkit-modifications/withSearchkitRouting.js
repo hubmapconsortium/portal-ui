@@ -1,6 +1,6 @@
 // Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-client/src/withSearchkitRouting.tsx
 // Modified to handle custom route state
-
+import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 /* eslint-disable radix */
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect } from 'react';
@@ -13,6 +13,8 @@ import {
   SearchkitRoutingOptionsContext,
 } from '@searchkit/client';
 import history, { defaultParseURL, defaultCreateURL } from '@searchkit/client/lib/cjs/history';
+
+import { filterObjectByKeys } from 'js/helpers/functions';
 
 const sanitiseRouteState = (routeState) => {
   const intKeys = ['size', 'from'];
@@ -28,12 +30,13 @@ const sanitiseRouteState = (routeState) => {
 
 export const routeStateEqual = (a, b) => isEqual(sanitiseRouteState(a), sanitiseRouteState(b));
 
-export const stateToRouteFn = (searchState) => {
+// Modification: remove page size from state to route and add fields.
+export const stateToRouteFn = (searchState, fields) => {
   const routeState = {
     query: searchState.query,
     sort: searchState.sortBy,
     filters: searchState.filters,
-    size: parseInt(searchState.page?.size),
+    fields,
     from: parseInt(searchState.page?.from),
   };
   return Object.keys(routeState).reduce((sum, key) => {
@@ -48,12 +51,13 @@ export const stateToRouteFn = (searchState) => {
   }, {});
 };
 
+// Modification: remove page size from route to state and add fields.
 export const routeToStateFn = (routeState) => ({
   query: routeState.query || '',
   sortBy: routeState.sort || '',
   filters: routeState.filters || [],
+  fields: routeState.fields || [],
   page: {
-    size: Number(routeState.size) || 10,
     from: Number(routeState.from) || 0,
   },
 });
@@ -91,21 +95,22 @@ export default function withSearchkitRouting(
   const withSearchkitRouting = (props) => {
     const searchkitVariables = useSearchkitVariables();
     const api = useSearchkit();
+    const { fields, setFields, availableFields } = useStore();
 
+    const fieldNames = Object.keys(fields);
     useEffect(() => {
       // eslint-disable-next-line no-shadow
       const router = getRouting();
       if (router) {
-        const routeState = stateToRoute(searchkitVariables);
+        const routeState = stateToRoute(searchkitVariables, fieldNames);
         const currentRouteState = {
-          size: api.baseSearchState.page?.size,
           ...router.read(),
         };
         if (!routeStateEqual(currentRouteState, routeState)) {
           router.write(routeState, true);
         }
       }
-    }, [api.baseSearchState.page, searchkitVariables]);
+    }, [searchkitVariables, fieldNames]);
 
     useEffect(() => {
       // eslint-disable-next-line no-shadow
@@ -122,13 +127,20 @@ export default function withSearchkitRouting(
       }
       const routeState = router.read();
       const searchState = routeToState(routeState);
+
+      // Modification: set store fields if they exist in route state.
+      if (routeState.fields) {
+        const fieldConfigs = filterObjectByKeys(availableFields, routeState.fields);
+        setFields(fieldConfigs);
+      }
+
       api.setSearchState(searchState);
       api.search();
 
       return function cleanup() {
         router.dispose();
       };
-    }, [api]);
+    }, [api, availableFields, setFields]);
 
     return (
       <SearchkitRoutingOptionsContext.Provider value={routingOptions}>
