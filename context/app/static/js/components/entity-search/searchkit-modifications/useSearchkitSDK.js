@@ -4,7 +4,7 @@ import useDeepCompareEffect from 'use-deep-compare-effect';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 
 // Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-sdk/src/react-hooks/index.ts
-// Modified to handle initial filters and use our custom transformer
+// Modified to handle initial filters, get page size from config, and use our custom transformer
 
 const useSearchkitSDK = ({ config, variables, filters, defaultSort }) => {
   const [results, setResponse] = useState(null);
@@ -25,7 +25,7 @@ const useSearchkitSDK = ({ config, variables, filters, defaultSort }) => {
         const response = await request.execute({
           facets: true,
           hits: {
-            size: config.pageSize,
+            size: config.pageSize, // Modification: page size is set from our defined config, not searchkit variables.
             from: variables.page.from,
           },
         });

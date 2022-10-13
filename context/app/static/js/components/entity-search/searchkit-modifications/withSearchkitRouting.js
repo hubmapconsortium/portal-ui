@@ -30,6 +30,7 @@ const sanitiseRouteState = (routeState) => {
 
 export const routeStateEqual = (a, b) => isEqual(sanitiseRouteState(a), sanitiseRouteState(b));
 
+// Modification: remove page size from state to route and add fields.
 export const stateToRouteFn = (searchState, fields) => {
   const routeState = {
     query: searchState.query,
@@ -50,6 +51,7 @@ export const stateToRouteFn = (searchState, fields) => {
   }, {});
 };
 
+// Modification: remove page size from route to state and add fields.
 export const routeToStateFn = (routeState) => ({
   query: routeState.query || '',
   sortBy: routeState.sort || '',
@@ -126,6 +128,7 @@ export default function withSearchkitRouting(
       const routeState = router.read();
       const searchState = routeToState(routeState);
 
+      // Modification: set store fields if they exist in route state.
       if (routeState.fields) {
         const fieldConfigs = filterObjectByKeys(availableFields, routeState.fields);
         setFields(fieldConfigs);
