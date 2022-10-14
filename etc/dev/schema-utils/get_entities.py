@@ -25,7 +25,7 @@ def main():
         type=int)
     parser.add_argument(
         '--size',
-        default=1, # Small so we don't choke on a few large documents.
+        default=1,  # Small so we don't choke on a few large documents.
         type=int)
     parser.add_argument(
         '--sort',

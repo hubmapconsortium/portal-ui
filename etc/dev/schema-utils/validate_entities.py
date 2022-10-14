@@ -47,7 +47,7 @@ def main():
         if errors:
             print(entity_path.name[0:2], end='', flush=True)
         else:
-            valid +=1
+            valid += 1
             print('.', end='', flush=True)
         total += 1
     print(f'\nValidated {valid}/{total}')

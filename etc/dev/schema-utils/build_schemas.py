@@ -17,7 +17,7 @@ def main():
     parser.add_argument(
         '--schema_dir',
         default=Path(__file__).parent / 'schema/entities',
-        type=Path)    
+        type=Path)
     args = parser.parse_args()
 
     Path(args.schema_dir).mkdir(exist_ok=True)
