@@ -1,7 +1,0 @@
-$schema: "https://json-schema.org/draft/2020-12/schema"
-type: "object"
-properties: 
-    uuid:
-        type: "string"
-        pattern: "^[0-9a-f]{32}$"        
-required: ["uuid"]

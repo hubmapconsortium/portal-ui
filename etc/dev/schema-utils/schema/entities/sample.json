@@ -1,0 +1,10 @@
+{
+    "type": "object",
+    "properties": {
+        "entity_type": {
+            "type": "string",
+            "enum": ["Sample"]
+        }
+    },
+    "required": ["entity_type"]
+}

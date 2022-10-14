@@ -1,0 +1,10 @@
+{
+    "type": "object",
+    "properties": {
+        "entity_type": {
+            "type": "string",
+            "enum": ["Collection"]
+        }
+    },
+    "required": ["entity_type"]
+}
