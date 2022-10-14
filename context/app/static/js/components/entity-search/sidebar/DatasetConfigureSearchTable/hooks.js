@@ -5,7 +5,6 @@ import { createField } from 'js/components/entity-search/SearchWrapper/utils';
 import fieldsToAssayMap from 'metadata-field-assays';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { invertKeyToArrayMap as createDataTypesToFieldsMap } from './utils';
-import { useMetadataFieldConfigs } from '../ConfigureSearchTable/hooks';
 
 const dataTypesToFieldsMap = createDataTypesToFieldsMap(fieldsToAssayMap);
 
@@ -25,21 +24,24 @@ function selectedItemsReducer(state, { type, payload }) {
 }
 
 function useGroupedFieldConfigs() {
-  const { initialFields, initialFacets } = useStore();
-  const metadataFieldConfigs = useMetadataFieldConfigs();
+  const { availableFields } = useStore();
 
-  // Order matters. Field configs defined in initialFields/initialFacets will be overwritten.
-  const allFieldConfigs = { ...initialFields, ...initialFacets, ...metadataFieldConfigs };
-  return Object.entries(allFieldConfigs).reduce((acc, [metadataFieldName, metadataFieldConfig]) => {
-    return produce(acc, (draft) => {
-      // eslint-disable-next-line no-param-reassign
-      draft[metadataFieldConfig.configureGroup] = {
-        ...draft[metadataFieldConfig.configureGroup],
-        [metadataFieldName]: metadataFieldConfig,
-      };
-      return draft;
-    });
-  }, {});
+  const groupedFieldConfigs = Object.entries(availableFields).reduce(
+    (acc, [metadataFieldName, metadataFieldConfig]) => {
+      return produce(acc, (draft) => {
+        // eslint-disable-next-line no-param-reassign
+        draft[metadataFieldConfig.configureGroup] = {
+          ...draft[metadataFieldConfig.configureGroup],
+          [metadataFieldName]: metadataFieldConfig,
+        };
+        return draft;
+      });
+    },
+    {},
+  );
+  // Return only sample and donor metadata
+  const { 'Dataset Metadata': datasetMetadata, ...rest } = groupedFieldConfigs;
+  return rest;
 }
 
 function getSelectedGroupsFieldConfigs(groups, selectedGroups) {

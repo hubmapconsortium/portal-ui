@@ -3,14 +3,8 @@ import { useMemo } from 'react';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import metadataFieldtoTypeMap from 'metadata-field-types';
 import { createField } from 'js/components/entity-search/SearchWrapper/utils';
-
+import relatedEntityTypesMap from 'js/components/entity-search/SearchWrapper/relatedEntityTypesMap';
 import useSearchData from 'js/hooks/useSearchData';
-
-const relatedEntityTypesMap = {
-  donor: ['donor'],
-  sample: ['donor', 'sample'],
-  dataset: ['donor', 'sample', 'dataset'],
-};
 
 const numericTypes = new Set(['number', 'integer']);
 
