@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 import sys
 import json
+import re
 
 from genson import SchemaBuilder
 import yaml
@@ -35,7 +36,15 @@ def main():
             builder.add_object(entity)
             print(f'.', end='', flush=True)
         schema_path = args.schema_dir / f'{entity_type}.yaml'
-        schema_path.write_text(yaml.dump(builder.to_schema()))
+        schema_yaml_raw = yaml.dump(builder.to_schema())
+        schema_yaml_baked = re.sub(
+            # If we had a field called "properties", this would break,
+            # but apart from that, should be robust.
+            r'^(\s*)(properties:)',
+            r'\1additionalProperties: false\n\1\2',
+            schema_yaml_raw,
+            flags=re.MULTILINE)
+        schema_path.write_text(schema_yaml_baked)
         print(f'\nBuilt {schema_path.name}')
     return 0
 

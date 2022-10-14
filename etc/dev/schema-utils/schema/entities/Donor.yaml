@@ -1,4 +1,5 @@
 $schema: http://json-schema.org/schema#
+additionalProperties: false
 properties:
   ancestor_ids:
     type: array
@@ -18,9 +19,11 @@ properties:
     type: array
   descendants:
     items:
+      additionalProperties: false
       properties:
         contacts:
           items:
+            additionalProperties: false
             properties:
               affiliation:
                 type: string
@@ -53,6 +56,7 @@ properties:
           type: boolean
         contributors:
           items:
+            additionalProperties: false
             properties:
               affiliation:
                 type: string
@@ -101,6 +105,7 @@ properties:
           type: string
         files:
           items:
+            additionalProperties: false
             properties:
               description:
                 type: string
@@ -128,6 +133,7 @@ properties:
           type: string
         image_file_metadata:
           items:
+            additionalProperties: false
             properties:
               description:
                 type: string
@@ -145,6 +151,7 @@ properties:
         last_modified_timestamp:
           type: integer
         metadata:
+          additionalProperties: false
           properties:
             PPID:
               type: string
@@ -158,6 +165,7 @@ properties:
               type: string
             dag_provenance_list:
               items:
+                additionalProperties: false
                 properties:
                   hash:
                     type: string
@@ -171,6 +179,7 @@ properties:
                 type: object
               type: array
             extra_metadata:
+              additionalProperties: false
               properties:
                 collectiontype:
                   type: string
@@ -179,6 +188,7 @@ properties:
               type: object
             files:
               items:
+                additionalProperties: false
                 properties:
                   description:
                     type: string
@@ -205,6 +215,7 @@ properties:
             health_status:
               type: string
             metadata:
+              additionalProperties: false
               properties:
                 _from_metadatatsv:
                   type: boolean
@@ -559,6 +570,7 @@ properties:
           type: string
         portal_metadata_upload_files:
           items:
+            additionalProperties: false
             properties:
               description:
                 type: string
@@ -590,6 +602,7 @@ properties:
         submission_id:
           type: string
         thumbnail_file:
+          additionalProperties: false
           properties:
             file_uuid:
               type: string
@@ -635,6 +648,7 @@ properties:
     type: array
   immediate_descendants:
     items:
+      additionalProperties: false
       properties:
         created_by_user_displayname:
           type: string
@@ -654,6 +668,7 @@ properties:
           type: string
         image_file_metadata:
           items:
+            additionalProperties: false
             properties:
               description:
                 type: string
@@ -669,6 +684,7 @@ properties:
         last_modified_timestamp:
           type: integer
         metadata:
+          additionalProperties: false
           properties:
             cold_ischemia_time_unit:
               type: string
@@ -721,6 +737,7 @@ properties:
           type: string
         portal_metadata_upload_files:
           items:
+            additionalProperties: false
             properties:
               description:
                 type: string
@@ -769,9 +786,11 @@ properties:
   last_modified_timestamp:
     type: integer
   metadata:
+    additionalProperties: false
     properties:
       living_donor_data:
         items:
+          additionalProperties: false
           properties:
             code:
               type: string
@@ -823,6 +842,7 @@ properties:
         type: array
       organ_donor_data:
         items:
+          additionalProperties: false
           properties:
             code:
               type: string
@@ -875,6 +895,7 @@ properties:
     type: object
   portal_metadata_upload_files:
     items:
+      additionalProperties: false
       properties:
         description:
           type: string
