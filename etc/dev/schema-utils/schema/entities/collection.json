@@ -1,10 +1,672 @@
 {
+    "$schema": "http://json-schema.org/schema#",
     "type": "object",
     "properties": {
+        "contacts": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "affiliation": {
+                        "type": "string"
+                    },
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "middle_name_or_initial": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "orcid_id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "affiliation",
+                    "first_name",
+                    "last_name",
+                    "name",
+                    "orcid_id"
+                ]
+            }
+        },
+        "created_by_user_displayname": {
+            "type": "string"
+        },
+        "created_by_user_email": {
+            "type": "string"
+        },
+        "created_timestamp": {
+            "type": "integer"
+        },
+        "creators": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "affiliation": {
+                        "type": "string"
+                    },
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "middle_name_or_initial": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "orcid_id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "affiliation",
+                    "first_name",
+                    "last_name",
+                    "name",
+                    "orcid_id"
+                ]
+            }
+        },
+        "datasets": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "contacts": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "affiliation": {
+                                    "type": "string"
+                                },
+                                "first_name": {
+                                    "type": "string"
+                                },
+                                "last_name": {
+                                    "type": "string"
+                                },
+                                "middle_name_or_initial": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "orc_id": {
+                                    "type": "string"
+                                },
+                                "orcid_id": {
+                                    "type": "string"
+                                },
+                                "version": {
+                                    "type": "string"
+                                },
+                                "is_contact": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "affiliation",
+                                "first_name",
+                                "last_name",
+                                "middle_name_or_initial",
+                                "name"
+                            ]
+                        }
+                    },
+                    "contains_human_genetic_sequences": {
+                        "type": "boolean"
+                    },
+                    "contributors": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "affiliation": {
+                                    "type": "string"
+                                },
+                                "first_name": {
+                                    "type": "string"
+                                },
+                                "last_name": {
+                                    "type": "string"
+                                },
+                                "middle_name_or_initial": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "orc_id": {
+                                    "type": "string"
+                                },
+                                "orcid_id": {
+                                    "type": "string"
+                                },
+                                "is_contact": {
+                                    "type": "string"
+                                },
+                                "version": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "affiliation",
+                                "first_name",
+                                "last_name",
+                                "middle_name_or_initial",
+                                "name"
+                            ]
+                        }
+                    },
+                    "created_by_user_displayname": {
+                        "type": "string"
+                    },
+                    "created_by_user_email": {
+                        "type": "string"
+                    },
+                    "created_timestamp": {
+                        "type": "integer"
+                    },
+                    "data_access_level": {
+                        "type": "string"
+                    },
+                    "data_types": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "dataset_info": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "display_subtype": {
+                        "type": "string"
+                    },
+                    "doi_url": {
+                        "type": "string"
+                    },
+                    "entity_type": {
+                        "type": "string"
+                    },
+                    "files": {
+                        "type": "array"
+                    },
+                    "group_name": {
+                        "type": "string"
+                    },
+                    "group_uuid": {
+                        "type": "string"
+                    },
+                    "hubmap_id": {
+                        "type": "string"
+                    },
+                    "index_version": {
+                        "type": "string"
+                    },
+                    "lab_dataset_id": {
+                        "type": "string"
+                    },
+                    "last_modified_timestamp": {
+                        "type": "integer"
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "properties": {
+                            "dag_provenance_list": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "hash": {
+                                            "type": "string"
+                                        },
+                                        "origin": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "hash",
+                                        "origin"
+                                    ]
+                                }
+                            },
+                            "files": {
+                                "type": "array"
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "_from_metadatatsv": {
+                                        "type": "boolean"
+                                    },
+                                    "acquisition_instrument_model": {
+                                        "type": "string"
+                                    },
+                                    "acquisition_instrument_vendor": {
+                                        "type": "string"
+                                    },
+                                    "analyte_class": {
+                                        "type": "string"
+                                    },
+                                    "assay_category": {
+                                        "type": "string"
+                                    },
+                                    "assay_type": {
+                                        "type": "string"
+                                    },
+                                    "collectiontype": {
+                                        "type": "string"
+                                    },
+                                    "data_collection_mode": {
+                                        "type": "string"
+                                    },
+                                    "data_path": {
+                                        "type": "string"
+                                    },
+                                    "donor_id": {
+                                        "type": "string"
+                                    },
+                                    "execution_datetime": {
+                                        "type": "string"
+                                    },
+                                    "is_targeted": {
+                                        "type": "string"
+                                    },
+                                    "labeling": {
+                                        "type": "string"
+                                    },
+                                    "lc_column_model": {
+                                        "type": "string"
+                                    },
+                                    "lc_column_vendor": {
+                                        "type": "string"
+                                    },
+                                    "lc_flow_rate_unit": {
+                                        "type": "string"
+                                    },
+                                    "lc_flow_rate_value": {
+                                        "type": "string"
+                                    },
+                                    "lc_gradient": {
+                                        "type": "string"
+                                    },
+                                    "lc_id_unit": {
+                                        "type": "string"
+                                    },
+                                    "lc_id_value": {
+                                        "type": "string"
+                                    },
+                                    "lc_instrument_model": {
+                                        "type": "string"
+                                    },
+                                    "lc_instrument_vendor": {
+                                        "type": "string"
+                                    },
+                                    "lc_length_unit": {
+                                        "type": "string"
+                                    },
+                                    "lc_length_value": {
+                                        "type": "string"
+                                    },
+                                    "lc_mobile_phase_a": {
+                                        "type": "string"
+                                    },
+                                    "lc_mobile_phase_b": {
+                                        "type": "string"
+                                    },
+                                    "lc_resin": {
+                                        "type": "string"
+                                    },
+                                    "lc_temp_unit": {
+                                        "type": "string"
+                                    },
+                                    "lc_temp_value": {
+                                        "type": "string"
+                                    },
+                                    "metadata_path": {
+                                        "type": "string"
+                                    },
+                                    "ms_scan_mode": {
+                                        "type": "string"
+                                    },
+                                    "ms_source": {
+                                        "type": "string"
+                                    },
+                                    "mz_range_high_value": {
+                                        "type": "string"
+                                    },
+                                    "mz_range_low_value": {
+                                        "type": "string"
+                                    },
+                                    "operator": {
+                                        "type": "string"
+                                    },
+                                    "operator_email": {
+                                        "type": "string"
+                                    },
+                                    "overall_protocols_io_doi": {
+                                        "type": "string"
+                                    },
+                                    "pi": {
+                                        "type": "string"
+                                    },
+                                    "pi_email": {
+                                        "type": "string"
+                                    },
+                                    "polarity": {
+                                        "type": "string"
+                                    },
+                                    "processing_protocols_io_doi": {
+                                        "type": "string"
+                                    },
+                                    "processing_search": {
+                                        "type": "string"
+                                    },
+                                    "protocols_io_doi": {
+                                        "type": "string"
+                                    },
+                                    "section_prep_protocols_io_doi": {
+                                        "type": "string"
+                                    },
+                                    "tissue_id": {
+                                        "type": "string"
+                                    },
+                                    "number_of_channels": {
+                                        "type": "string"
+                                    },
+                                    "resolution_x_unit": {
+                                        "type": "string"
+                                    },
+                                    "resolution_x_value": {
+                                        "type": "string"
+                                    },
+                                    "resolution_y_unit": {
+                                        "type": "string"
+                                    },
+                                    "resolution_y_value": {
+                                        "type": "string"
+                                    },
+                                    "resolution_z_unit": {
+                                        "type": "string"
+                                    },
+                                    "resolution_z_value": {
+                                        "type": "string"
+                                    },
+                                    "preparation_instrument_model": {
+                                        "type": "string"
+                                    },
+                                    "preparation_instrument_vendor": {
+                                        "type": "string"
+                                    },
+                                    "preparation_maldi_matrix": {
+                                        "type": "string"
+                                    },
+                                    "preparation_type": {
+                                        "type": "string"
+                                    },
+                                    "stain": {
+                                        "type": "string"
+                                    },
+                                    "contributors_path": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "version": {
+                                        "type": "string"
+                                    },
+                                    "antibodies_path": {
+                                        "type": "string"
+                                    },
+                                    "number_of_antibodies": {
+                                        "type": "string"
+                                    },
+                                    "number_of_cycles": {
+                                        "type": "string"
+                                    },
+                                    "number_of_imaging_rounds": {
+                                        "type": "string"
+                                    },
+                                    "cell_barcode_offset": {
+                                        "type": "string"
+                                    },
+                                    "cell_barcode_read": {
+                                        "type": "string"
+                                    },
+                                    "cell_barcode_size": {
+                                        "type": "string"
+                                    },
+                                    "is_technical_replicate": {
+                                        "type": "string"
+                                    },
+                                    "library_adapter_sequence": {
+                                        "type": "string"
+                                    },
+                                    "library_average_fragment_size": {
+                                        "type": "string"
+                                    },
+                                    "library_construction_protocols_io_doi": {
+                                        "type": "string"
+                                    },
+                                    "library_final_yield": {
+                                        "type": "string"
+                                    },
+                                    "library_final_yield_unit": {
+                                        "type": "string"
+                                    },
+                                    "library_id": {
+                                        "type": "string"
+                                    },
+                                    "library_layout": {
+                                        "type": "string"
+                                    },
+                                    "library_pcr_cycles": {
+                                        "type": "string"
+                                    },
+                                    "library_pcr_cycles_for_sample_index": {
+                                        "type": "string"
+                                    },
+                                    "sc_isolation_cell_number": {
+                                        "type": "string"
+                                    },
+                                    "sc_isolation_enrichment": {
+                                        "type": "string"
+                                    },
+                                    "sc_isolation_entity": {
+                                        "type": "string"
+                                    },
+                                    "sc_isolation_protocols_io_doi": {
+                                        "type": "string"
+                                    },
+                                    "sc_isolation_quality_metric": {
+                                        "type": "string"
+                                    },
+                                    "sc_isolation_tissue_dissociation": {
+                                        "type": "string"
+                                    },
+                                    "sequencing_phix_percent": {
+                                        "type": "string"
+                                    },
+                                    "sequencing_read_format": {
+                                        "type": "string"
+                                    },
+                                    "sequencing_read_percent_q30": {
+                                        "type": "string"
+                                    },
+                                    "sequencing_reagent_kit": {
+                                        "type": "string"
+                                    },
+                                    "transposition_input": {
+                                        "type": "string"
+                                    },
+                                    "transposition_method": {
+                                        "type": "string"
+                                    },
+                                    "transposition_transposase_source": {
+                                        "type": "string"
+                                    },
+                                    "library_final_yield_value": {
+                                        "type": "string"
+                                    },
+                                    "rnaseq_assay_input": {
+                                        "type": "string"
+                                    },
+                                    "rnaseq_assay_method": {
+                                        "type": "string"
+                                    },
+                                    "bead_barcode_offset": {
+                                        "type": "string"
+                                    },
+                                    "bead_barcode_read": {
+                                        "type": "string"
+                                    },
+                                    "bead_barcode_size": {
+                                        "type": "string"
+                                    },
+                                    "puck_id": {
+                                        "type": "string"
+                                    },
+                                    "transposition_kit_number": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "acquisition_instrument_model",
+                                    "acquisition_instrument_vendor",
+                                    "assay_category",
+                                    "assay_type",
+                                    "data_path",
+                                    "donor_id",
+                                    "execution_datetime",
+                                    "is_targeted",
+                                    "operator",
+                                    "operator_email",
+                                    "pi",
+                                    "pi_email",
+                                    "protocols_io_doi",
+                                    "tissue_id"
+                                ]
+                            },
+                            "extra_metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "collectiontype": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "collectiontype"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "dag_provenance_list",
+                            "files",
+                            "metadata"
+                        ]
+                    },
+                    "published_timestamp": {
+                        "type": "integer"
+                    },
+                    "registered_doi": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "uuid": {
+                        "type": "string"
+                    },
+                    "provider_info": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "contains_human_genetic_sequences",
+                    "contributors",
+                    "created_by_user_displayname",
+                    "created_by_user_email",
+                    "created_timestamp",
+                    "data_access_level",
+                    "data_types",
+                    "description",
+                    "display_subtype",
+                    "entity_type",
+                    "files",
+                    "group_name",
+                    "group_uuid",
+                    "hubmap_id",
+                    "index_version",
+                    "last_modified_timestamp",
+                    "published_timestamp",
+                    "status",
+                    "title",
+                    "uuid"
+                ]
+            }
+        },
+        "description": {
+            "type": "string"
+        },
+        "doi_url": {
+            "type": "string"
+        },
         "entity_type": {
             "type": "string",
             "enum": ["Collection"]
+        },
+        "hubmap_id": {
+            "type": "string"
+        },
+        "index_version": {
+            "type": "string"
+        },
+        "last_modified_timestamp": {
+            "type": "integer"
+        },
+        "registered_doi": {
+            "type": "string"
+        },
+        "title": {
+            "type": "string"
+        },
+        "uuid": {
+            "type": "string"
         }
     },
-    "required": ["entity_type"]
+    "required": [
+        "contacts",
+        "created_by_user_displayname",
+        "created_by_user_email",
+        "created_timestamp",
+        "creators",
+        "datasets",
+        "description",
+        "doi_url",
+        "entity_type",
+        "hubmap_id",
+        "index_version",
+        "last_modified_timestamp",
+        "registered_doi",
+        "title",
+        "uuid"
+    ]
 }
