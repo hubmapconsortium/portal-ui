@@ -8,19 +8,19 @@ oneOf:
   - properties:
       entity_type:
         enum: [Collection]
-  - $ref: entities/Collection.json
+  - $ref: entities/Collection.yaml
 - allOf:
   - properties:
       entity_type:
         enum: [Dataset]
-  - $ref: entities/Dataset.json
+  - $ref: entities/Dataset.yaml
 - allOf:
   - properties:
       entity_type:
         enum: [Sample]
-  - $ref: entities/Sample.json
+  - $ref: entities/Sample.yaml
 - allOf:
   - properties:
       entity_type:
         enum: [Donor]
-  - $ref: entities/Donor.json
+  - $ref: entities/Donor.yaml

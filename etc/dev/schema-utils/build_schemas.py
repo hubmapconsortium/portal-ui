@@ -6,6 +6,7 @@ import sys
 import json
 
 from genson import SchemaBuilder
+import yaml
 
 
 def main():
@@ -33,8 +34,8 @@ def main():
             entity = json.loads(entity_path.read_text())
             builder.add_object(entity)
             print(f'.', end='', flush=True)
-        schema_path = args.schema_dir / f'{entity_type}.json'
-        schema_path.write_text(builder.to_json(indent=2))
+        schema_path = args.schema_dir / f'{entity_type}.yaml'
+        schema_path.write_text(yaml.dump(builder.to_schema()))
         print(f'\nBuilt {schema_path.name}')
     return 0
 

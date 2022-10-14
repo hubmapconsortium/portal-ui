@@ -4,10 +4,16 @@ import argparse
 import sys
 from pathlib import Path
 import json
+import urllib
 
 import yaml
 from jsonschema.validators import Draft7Validator
 from jsonschema import RefResolver
+
+
+def load_yaml_url(url):
+    text = urllib.request.urlopen(url).read()
+    return yaml.safe_load(text)
 
 
 def main():
@@ -28,6 +34,9 @@ def main():
         resolver=RefResolver(
             base_uri=f"{(Path(__file__).parent / 'schema').as_uri()}/",
             referrer=schema,
+            handlers={
+                'file': load_yaml_url
+            }
         ))
 
     total = 0
