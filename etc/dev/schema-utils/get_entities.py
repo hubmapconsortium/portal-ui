@@ -36,7 +36,7 @@ def main():
         type=int)
     args = parser.parse_args()
 
-    Path(args.dest_dir).mkdir(exist_ok=True)
+    Path(args.doc_dir).mkdir(exist_ok=True)
 
     es_from = args.start
     while(True):
