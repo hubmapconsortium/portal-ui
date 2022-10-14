@@ -16,7 +16,7 @@ def main():
         '--index_url',
         default='https://search.api.hubmapconsortium.org/v3/entities/search')
     parser.add_argument(
-        '--dest_dir',
+        '--doc_dir',
         default=Path(__file__).parent / 'cache',
         type=Path)
     parser.add_argument(
