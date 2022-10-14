@@ -65,7 +65,7 @@ def main():
             created_timestamp = source['created_timestamp']
             iso_date = date.fromtimestamp(created_timestamp / 1000)
             name = f'{entity_type}_{iso_date}_{id}.json'
-            (args.dest_dir / name).write_text(json.dumps(source, indent=2))
+            (args.doc_dir / name).write_text(json.dumps(source, indent=2))
 
         es_from += args.size
         sleep(args.sleep)
