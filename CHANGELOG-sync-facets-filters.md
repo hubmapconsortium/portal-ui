@@ -1,0 +1,1 @@
+- Add filters from url as facets if not included in default facets.
