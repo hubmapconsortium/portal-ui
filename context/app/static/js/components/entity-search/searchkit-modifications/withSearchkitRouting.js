@@ -95,7 +95,7 @@ export default function withSearchkitRouting(
   const withSearchkitRouting = (props) => {
     const searchkitVariables = useSearchkitVariables();
     const api = useSearchkit();
-    const { fields, setFields, availableFields } = useStore();
+    const { fields, setFields, availableFields, addFacets } = useStore();
 
     const fieldNames = Object.keys(fields);
     useEffect(() => {
@@ -134,13 +134,22 @@ export default function withSearchkitRouting(
         setFields(fieldConfigs);
       }
 
+      // Modification: add filters to facets if not already
+      if (routeState.filters) {
+        const facetConfigs = filterObjectByKeys(
+          availableFields,
+          routeState.filters.map((f) => f.identifier),
+        );
+        addFacets(facetConfigs);
+      }
+
       api.setSearchState(searchState);
       api.search();
 
       return function cleanup() {
         router.dispose();
       };
-    }, [api, availableFields, setFields]);
+    }, [addFacets, api, availableFields, setFields]);
 
     return (
       <SearchkitRoutingOptionsContext.Provider value={routingOptions}>

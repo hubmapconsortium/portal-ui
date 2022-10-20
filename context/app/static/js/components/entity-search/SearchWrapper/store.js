@@ -40,6 +40,10 @@ const createStore = ({
         set((state) => {
           state.facets = selectedFacets;
         }),
+      addFacets: (selectedFacets) =>
+        set((state) => {
+          state.facets = { ...state.facets, ...selectedFacets };
+        }),
       setNumericFacetsProps: (numericFacets) =>
         set((state) => {
           state.numericFacetsProps = numericFacets;
