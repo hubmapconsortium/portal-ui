@@ -1,0 +1,1 @@
+- Bump portal vis to 0.0.8 to handle search api v3.
