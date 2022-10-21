@@ -1,1 +1,0 @@
-- Show the Vitessce version number in the powered-by message.

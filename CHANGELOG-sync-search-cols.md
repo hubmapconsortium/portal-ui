@@ -1,1 +1,0 @@
-- Synchronize url with search columns state in updated search.

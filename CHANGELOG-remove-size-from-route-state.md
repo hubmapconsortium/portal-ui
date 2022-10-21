@@ -1,1 +1,0 @@
-- Remove page size from updated search route state.

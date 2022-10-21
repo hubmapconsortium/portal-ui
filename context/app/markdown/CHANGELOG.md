@@ -1,3 +1,16 @@
+## v0.56.0 - 2022-10-21
+
+- Add additional email for Phil Blood to workspaces allow list.
+- Add Nils to workspaces allow list and remove Chuck.
+- Bump portal-vis to 0.0.7 to fix a regression in handling of unstiched imagery.
+- Bump portal vis to 0.0.8 to handle search api v3.
+- Integrate modified searchkit routing from searchkit src.
+- Show the Vitessce version number in the powered-by message.
+- Remove page size from updated search route state.
+- Add filters from url as facets if not included in default facets.
+- Synchronize url with search columns state in updated search.
+
+
 ## v0.54.0 - 2022-10-06
 
 - Fix workspace creation flow for dataset URLs with parameters.

@@ -1,1 +1,0 @@
-- Bump portal-vis to 0.0.7 to fix a regression in handling of unstiched imagery.

@@ -1,1 +1,0 @@
-- Integrate modified searchkit routing from searchkit src.
