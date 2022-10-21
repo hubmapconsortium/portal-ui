@@ -26,7 +26,7 @@ hubmap-api-py-client>=0.0.9
 hubmap-commons>=2.0.12
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.6.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.8.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -65,6 +65,7 @@ lxml>=4.9.1
 "d3": "^5.16.0",
 "d3-array": "^3.0.2",
 "date-fns": "^2.27.0",
+"fast-deep-equal": "^3.1.3",
 "fromentries": "^1.2.0",
 "html-webpack-plugin": "^4.3.0",
 "immer": "^9.0.6",
@@ -75,6 +76,7 @@ lxml>=4.9.1
 "nuka-carousel": "^4.7.7",
 "pretty-bytes": "^5.3.0",
 "prop-types": "^15.7.2",
+"qs": "^6.11.0",
 "react": "^16.12.0",
 "react-chartjs-2": "^3.0.4",
 "react-device-detect": "^2.2.2",
