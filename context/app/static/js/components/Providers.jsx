@@ -20,7 +20,7 @@ function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, childre
   // TODO: Delete this when workspaces are publicly released.
   // If we stay in limbo for a long time, this configuration could be moved out of code.
   const workspacesUsers = [
-    'chuck_mccallum@hms.harvard.edu',
+    'nils@hms.harvard.edu',
     'john_conroy@hms.harvard.edu',
     'pdblood@andrew.cmu.edu',
     'blood@psc.edu',
