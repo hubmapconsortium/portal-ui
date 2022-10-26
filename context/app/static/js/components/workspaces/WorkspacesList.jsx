@@ -1,41 +1,23 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 import Description from 'js/shared-styles/sections/Description';
-import { AppContext } from 'js/components/Providers';
 import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { PanelWrapper } from 'js/shared-styles/panels';
 
 import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
-import { createEmptyWorkspace, deleteWorkspace, stopJobs } from './utils';
 import { useWorkspacesList } from './hooks';
 import { StyledButton } from './style';
 
 function WorkspacesList() {
-  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
-  const { workspacesList } = useWorkspacesList();
-
-  async function handleDelete(workspaceId) {
-    deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken });
-    // TODO: Update list of workspaces
-  }
-
-  async function handleStop(workspaceId) {
-    stopJobs({ workspaceId, workspacesEndpoint, workspacesToken });
-    // TODO: Update list of workspaces
-  }
-
-  async function handleCreate() {
-    createEmptyWorkspace({
-      workspacesEndpoint,
-      workspacesToken,
-      workspaceName: 'TODO: prompt for name',
-      workspaceDescription: 'TODO: description',
-    });
-    // TODO: Update list of workspaces
-  }
+  const {
+    workspacesList,
+    handleDeleteWorkspace: handleDelete,
+    handleCreateWorkspace: handleCreate,
+    handleStopWorkspace: handleStop,
+  } = useWorkspacesList();
 
   return (
     <>
