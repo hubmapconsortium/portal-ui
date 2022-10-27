@@ -48,11 +48,11 @@ function useWorkspacesList() {
     getAndSetWorkspaces();
   }
 
-  async function handleCreateWorkspace() {
+  async function handleCreateWorkspace({ workspaceName }) {
     await createEmptyWorkspace({
       workspacesEndpoint,
       workspacesToken,
-      workspaceName: 'TODO: prompt for name',
+      workspaceName,
       workspaceDescription: 'TODO: description',
     });
     getAndSetWorkspaces();
