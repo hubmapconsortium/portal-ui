@@ -3,11 +3,12 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 import Description from 'js/shared-styles/sections/Description';
-import { DeleteIcon, AddIcon } from 'js/shared-styles/icons';
+import { DeleteIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { PanelWrapper } from 'js/shared-styles/panels';
 
 import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
+import CreateWorkspaceButton from 'js/components/workspaces/CreateWorkspaceButton';
 import { useWorkspacesList } from './hooks';
 import { StyledButton } from './style';
 
@@ -15,7 +16,7 @@ function WorkspacesList() {
   const {
     workspacesList,
     handleDeleteWorkspace: handleDelete,
-    handleCreateWorkspace: handleCreate,
+    handleCreateWorkspace,
     handleStopWorkspace: handleStop,
   } = useWorkspacesList();
 
@@ -37,9 +38,7 @@ function WorkspacesList() {
             >
               <DeleteIcon color="primary" />
             </StyledButton>
-            <StyledButton onClick={handleCreate}>
-              <AddIcon color="primary" />
-            </StyledButton>
+            <CreateWorkspaceButton handleCreateWorkspace={handleCreateWorkspace} />
           </>
         }
       />
