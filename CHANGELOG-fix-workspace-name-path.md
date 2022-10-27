@@ -1,0 +1,1 @@
+- Remove leading slash in workspace symlink name path.
