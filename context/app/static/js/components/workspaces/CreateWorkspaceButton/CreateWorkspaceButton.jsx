@@ -1,19 +1,34 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import CreateWorkspaceInput from 'js/components/workspaces/CreateWorkspaceInput';
 import { AddIcon } from 'js/shared-styles/icons';
 import DialogModal from 'js/shared-styles/DialogModal';
 
+const schema = yup
+  .object({
+    name: yup.string().required().max(10),
+  })
+  .required();
+
 function CreateWorkspaceButton({ handleCreateWorkspace }) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
-  const { handleSubmit, control, reset } = useForm({
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
-      workspaceName: '',
+      name: '',
     },
     mode: 'onChange',
+    resolver: yupResolver(schema),
   });
 
   function handleClose() {
@@ -21,11 +36,12 @@ function CreateWorkspaceButton({ handleCreateWorkspace }) {
     setDialogIsOpen(false);
   }
 
-  function onSubmit({ workspaceName }) {
+  function onSubmit({ name: workspaceName }) {
     handleCreateWorkspace({ workspaceName });
     reset();
     handleClose();
   }
+
   return (
     <>
       <Button onClick={() => setDialogIsOpen(true)}>
@@ -37,10 +53,13 @@ function CreateWorkspaceButton({ handleCreateWorkspace }) {
         handleClose={handleClose}
         maxWidth="md"
         content={
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <CreateWorkspaceInput control={control} name="workspaceName" />
-            <input type="submit" id="create-workspace-input" hidden />
-          </form>
+          <>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <CreateWorkspaceInput control={control} name="name" />
+              <input type="submit" id="create-workspace-input" hidden />
+            </form>
+            <Typography color="error">{errors.name?.message}</Typography>
+          </>
         }
         actions={
           <>
