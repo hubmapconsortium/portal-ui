@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 
 import CreateWorkspaceInput from 'js/components/workspaces/CreateWorkspaceInput';
 import { AddIcon } from 'js/shared-styles/icons';
@@ -25,10 +24,9 @@ function CreateWorkspaceButton({ handleCreateWorkspace }) {
         content={
           <>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <CreateWorkspaceInput control={control} name="name" />
+              <CreateWorkspaceInput control={control} name="name" errors={errors} />
               <input type="submit" id="create-workspace-input" hidden />
             </form>
-            <Typography color="error">{errors.name?.message}</Typography>
           </>
         }
         actions={
