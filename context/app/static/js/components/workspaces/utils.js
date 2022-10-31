@@ -118,6 +118,7 @@ function condenseJobs(jobs) {
     const displayStatus = {
       pending: ACTIVATING,
       running: ACTIVE,
+      stopping: INACTIVE,
       complete: INACTIVE,
       failed: INACTIVE,
     }[status];
