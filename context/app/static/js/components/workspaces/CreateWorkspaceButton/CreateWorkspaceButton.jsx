@@ -1,46 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
 import CreateWorkspaceInput from 'js/components/workspaces/CreateWorkspaceInput';
 import { AddIcon } from 'js/shared-styles/icons';
 import DialogModal from 'js/shared-styles/DialogModal';
-
-const schema = yup
-  .object({
-    name: yup.string().required().max(10),
-  })
-  .required();
+import { useCreateWorkspace } from './hooks';
 
 function CreateWorkspaceButton({ handleCreateWorkspace }) {
-  const [dialogIsOpen, setDialogIsOpen] = useState(false);
-
-  const {
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      name: '',
-    },
-    mode: 'onChange',
-    resolver: yupResolver(schema),
-  });
-
-  function handleClose() {
-    reset();
-    setDialogIsOpen(false);
-  }
-
-  function onSubmit({ name: workspaceName }) {
-    handleCreateWorkspace({ workspaceName });
-    reset();
-    handleClose();
-  }
+  const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace(
+    handleCreateWorkspace,
+  );
 
   return (
     <>
