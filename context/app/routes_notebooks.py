@@ -63,7 +63,7 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
                     'content': nb_str,
                 }],
                 'symlinks': [{
-                    "name": f"/datasets/{uuid}",
+                    "name": f"datasets/{uuid}",
                     "dataset_uuid": uuid
                 } for uuid in uuids],
             }
