@@ -5,7 +5,7 @@ import * as yup from 'yup';
 
 const schema = yup
   .object({
-    name: yup.string().required().max(10),
+    name: yup.string().required().max(150),
   })
   .required();
 
