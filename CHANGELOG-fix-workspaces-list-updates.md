@@ -1,0 +1,1 @@
+- Update workspaces list after workspace create and delete so users no longer have to refresh the page for updates.

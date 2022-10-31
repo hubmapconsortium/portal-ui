@@ -23,13 +23,10 @@ async function createEmptyWorkspace({ workspacesEndpoint, workspacesToken, works
 }
 
 async function stopJob({ jobId, workspacesEndpoint, workspacesToken }) {
-  const response = await fetch(`${workspacesEndpoint}/jobs/${jobId}/stop/`, {
+  return fetch(`${workspacesEndpoint}/jobs/${jobId}/stop/`, {
     method: 'PUT',
     headers: getWorkspacesApiHeaders(workspacesToken),
-  });
-  if (!response.ok) {
-    throw Error(`Job stop for job #${jobId} failed`);
-  }
+  }).catch(() => console.error(`Job stop for job #${jobId} failed`));
 }
 
 async function deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken }) {
@@ -48,11 +45,16 @@ async function stopJobs({ workspaceId, workspacesEndpoint, workspacesToken }) {
   const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, { headers });
   const jobsResults = await jobsResponse.json();
   const { jobs } = jobsResults.data;
-  jobs.forEach((job) => {
-    if (String(job.workspace_id) === String(workspaceId)) {
-      stopJob({ jobId: job.id, workspacesEndpoint, workspacesToken });
-    }
-  });
+
+  const activeWorkspaceJobs = jobs.filter(
+    (job) => String(job.workspace_id) === String(workspaceId) && ['running', 'pending'].includes(job.status),
+  );
+
+  await Promise.all(
+    activeWorkspaceJobs.map((job) => {
+      return stopJob({ jobId: job.id, workspacesEndpoint, workspacesToken });
+    }),
+  );
 }
 
 async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage, setDead }) {
