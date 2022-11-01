@@ -1,1 +1,0 @@
-- Handle stopping workspace jobs.

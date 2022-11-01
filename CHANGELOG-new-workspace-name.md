@@ -1,1 +1,0 @@
-- Add form to allow users to specify a new workspace name.

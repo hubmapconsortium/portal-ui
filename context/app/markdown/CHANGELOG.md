@@ -1,3 +1,14 @@
+## v0.56.1 - 2022-11-01
+
+- Set workspace notebook path as URL param and use to create jupyter URL.
+- Remove leading slash in workspace symlink name path.
+- Update workspaces list after workspace create and delete so users no longer have to refresh the page for updates.
+- Handle stopping workspace jobs.
+- Launch dataset workspace notebook in new tab.
+- Add form to allow users to specify a new workspace name.
+- Pass job_types_id to workspace job start request.
+
+
 ## v0.56.0 - 2022-10-21
 
 - Add additional email for Phil Blood to workspaces allow list.
