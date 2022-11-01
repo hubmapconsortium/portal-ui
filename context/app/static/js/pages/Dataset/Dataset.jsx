@@ -33,11 +33,6 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, registered_doi, hasNotebook }) {
   const { workspacesUsers, userEmail } = useContext(AppContext);
 
-  function createWorkspace() {
-    // TODO: Change to form submission, and set up a different route.
-    document.location = `${document.location.pathname}.ws.ipynb`;
-  }
-
   return (
     <>
       <SummaryItem>
@@ -57,7 +52,13 @@ function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, regist
       )}
       {workspacesUsers.includes(userEmail) && (
         <SecondaryBackgroundTooltip title="Launch a new workspace in Jupyter notebook.">
-          <WhiteBackgroundIconButton color="primary" onClick={createWorkspace} disabled={!hasNotebook}>
+          <WhiteBackgroundIconButton
+            color="primary"
+            disabled={!hasNotebook}
+            component="a"
+            href={`${document.location.pathname}.ws.ipynb`} // TODO: Change to form submission, and set up a different route.
+            target="_blank"
+          >
             <SvgIcon component={WorkspacesIcon} />
           </WhiteBackgroundIconButton>
         </SecondaryBackgroundTooltip>
