@@ -74,7 +74,8 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
     create_workspace_response.raise_for_status()
     workspace_id = create_workspace_response.json()['data']['workspace']['id']
 
-    return redirect(f'/workspaces/{workspace_id}?notebook_path={urllib.parse.quote(notebook_path)}')
+    return redirect(
+        f'/workspaces/{workspace_id}?notebook_path={urllib.parse.quote(notebook_path)}')
 
 
 def _get_workspace_name(request_args):
