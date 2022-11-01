@@ -58,20 +58,21 @@ async function stopJobs({ workspaceId, workspacesEndpoint, workspacesToken }) {
 }
 
 async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage, setDead }) {
-  const startResponse = await fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
-    method: 'PUT',
-    headers: getWorkspacesApiHeaders(workspacesToken),
-    body: JSON.stringify({
-      job_type: 'JupyterLabJob',
-      job_details: {},
-    }),
-  });
-
-  if (!startResponse.ok) {
-    setDead(true);
-  }
-  const start = await startResponse.json();
-  setMessage(start.message);
+  fetch(`${workspacesEndpoint}/job_types`)
+    .then((response) => response.json())
+    .then(({ data: { job_types } }) =>
+      fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
+        method: 'PUT',
+        headers: getWorkspacesApiHeaders(workspacesToken),
+        body: JSON.stringify({
+          job_type: job_types.jupyter_lab.id,
+          job_details: {},
+        }),
+      }),
+    )
+    .then((response) => response.json())
+    .then(({ start }) => setMessage(start.message))
+    .catch(() => setDead(true));
 }
 
 function getNotebookPath(workspace) {
@@ -118,6 +119,7 @@ function condenseJobs(jobs) {
     const displayStatus = {
       pending: ACTIVATING,
       running: ACTIVE,
+      stopping: INACTIVE,
       complete: INACTIVE,
       failed: INACTIVE,
     }[status];
