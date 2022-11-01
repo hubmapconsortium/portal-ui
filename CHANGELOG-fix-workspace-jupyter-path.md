@@ -1,0 +1,1 @@
+- Set workspace notebook path as URL param and use to create jupyter URL.
