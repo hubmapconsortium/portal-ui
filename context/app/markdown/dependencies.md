@@ -43,6 +43,7 @@ lxml>=4.9.1
 "@elastic/eui": "^57.0.0",
 "@emotion/react": "^11.9.0",
 "@hms-dbmi-bgm/react-workflow-viz": "^0.1.4",
+"@hookform/resolvers": "^2.9.10",
 "@material-ui/core": "^4.9.4",
 "@material-ui/icons": "^4.9.1",
 "@material-ui/lab": "^4.0.0-alpha.45",
@@ -82,6 +83,7 @@ lxml>=4.9.1
 "react-device-detect": "^2.2.2",
 "react-dom": "^16.12.0",
 "react-ga": "^3.1.2",
+"react-hook-form": "^7.38.0",
 "react-intersection-observer": "^8.28.6",
 "react-joyride": "^2.2.1",
 "react-pdf": "^5.3.2",
@@ -101,6 +103,7 @@ lxml>=4.9.1
 "vitessce": "^1.2.2",
 "web-vitals": "^1.1.0",
 "whatwg-fetch": "^3.0.0",
+"yup": "^0.32.11",
 "zustand": "^3.5.9"
 }
 ```
