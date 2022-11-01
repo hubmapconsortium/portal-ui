@@ -14,7 +14,10 @@ function WorkspaceDetails({ workspace }) {
 
   return (
     <Flex>
-      <OutboundIconLink href={`/workspaces/${workspace.id}#${workspace.path}`} variant={typographyVariant}>
+      <OutboundIconLink
+        href={`/workspaces/${workspace.id}?notebook_path=${encodeURIComponent(workspace.path)}`}
+        variant={typographyVariant}
+      >
         {workspace.name}
       </OutboundIconLink>
       <Typography variant={typographyVariant}>

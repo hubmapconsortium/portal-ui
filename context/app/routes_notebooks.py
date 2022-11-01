@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from string import Template
 import re
+import urllib.parse
 
 from requests import post
 
@@ -50,6 +51,7 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
     auth_headers = {'UWS-Authorization': f'Token {session["workspaces_token"]}'}
     workspaces_base_url = f'{current_app.config["WORKSPACES_ENDPOINT"]}/workspaces'
 
+    notebook_path = f'{name_stem}.ipynb'
     create_workspace_response = post(
         workspaces_base_url,
         headers=auth_headers,
@@ -59,7 +61,7 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
             'workspace_details': {
                 'globus_groups_token': session['groups_token'],
                 'files': [{
-                    'name': f'{name_stem}.ipynb',
+                    'name': notebook_path,
                     'content': nb_str,
                 }],
                 'symlinks': [{
@@ -72,7 +74,7 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
     create_workspace_response.raise_for_status()
     workspace_id = create_workspace_response.json()['data']['workspace']['id']
 
-    return redirect(f'/workspaces/{workspace_id}')
+    return redirect(f'/workspaces/{workspace_id}?notebook_path={urllib.parse.quote(notebook_path)}')
 
 
 def _get_workspace_name(request_args):
