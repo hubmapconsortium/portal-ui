@@ -26,7 +26,7 @@ def main():
         help='Target directory for markdown files')
     parser.add_argument(
         '--elasticsearch_url',
-        default='https://search.api.hubmapconsortium.org/portal/search',
+        default='https://search.api.hubmapconsortium.org/v3/portal/search',
         help='ES endpoint to query for organs')
     parser.add_argument(
         '--azimuth_url',
@@ -34,7 +34,7 @@ def main():
         help='Azimuth references')
     parser.add_argument(
         '--ccf_url',
-        default='https://ccf-api.hubmapconsortium.org/v1/reference-organs',
+        default='https://grlc.io/api-git/hubmapconsortium/ccf-grlc/subdir/ccf/ref-organ-terms',
         help='CCF references')
     args = parser.parse_args()
 
@@ -51,7 +51,7 @@ def main():
     azimuth_organs_by_uberon = rekey_azimuth(
         add_vitessce(get_azimuth_yaml(args.azimuth_url)))
     ccf_organs_by_uberon = rekey_ccf(
-        requests.get(args.ccf_url).json())
+        requests.get(args.ccf_url, headers={"accept": "application/json"}).json())
     onto_by_uberon = get_ontology_info(descriptions.keys())
 
     def small_dict(big_dict, k):
@@ -86,7 +86,7 @@ def main():
         'UBERON_0001303', 'UBERON_0001302',
 
         # Other data soures are higher or lower level:
-        'UBERON_0002509', 'UBERON_0000079', 'UBERON_0001004',
+        'UBERON_0002509', 'UBERON_0000079', 'UBERON_0001004', 'UBERON_0001465'
     }
     unexpected_unmatched = unmatched - expected_unmatched
     if unexpected_unmatched:
