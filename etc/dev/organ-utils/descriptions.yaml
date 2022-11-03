@@ -44,7 +44,7 @@ http://purl.obolibrary.org/obo/UBERON_0002113:
     asctb: Kidney-v1.2
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-kidney.svg
     name: Kidney
-http://purl.obolibrary.org/obo/UBERON_0001485:
+http://purl.obolibrary.org/obo/UBERON_0001465:
     asctb: Knee-v1.1
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-knee.svg
     name: Knee
