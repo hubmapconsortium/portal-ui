@@ -1,3 +1,9 @@
+## v0.57.0 - 2022-11-09
+
+- Fix path in ls command cell in workspace visualization notebook.
+- Updated the make_organ_dir.py logic to capture more HRA Reference Organs for display
+
+
 ## v0.56.1 - 2022-11-01
 
 - Set workspace notebook path as URL param and use to create jupyter URL.
