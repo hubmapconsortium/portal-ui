@@ -111,7 +111,7 @@ def details_notebook(type, uuid, create_workspace):
         new_markdown_cell(
             f"Visualization for [{hubmap_id}]({dataset_url}); "
             "If this notebook is running in a HuBMAP workspace, the dataset is symlinked:"),
-        new_code_cell(f'!ls /datasets/{uuid}'),
+        new_code_cell(f'!ls datasets/{uuid}'),
         new_markdown_cell('Visualization requires extra code to be installed:'),
         new_code_cell(
             '!pip uninstall community flask albumentations -y '
