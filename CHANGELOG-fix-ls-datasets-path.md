@@ -1,0 +1,1 @@
+- Fix path in ls command cell in workspace visualization notebook.
