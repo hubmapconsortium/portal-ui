@@ -11,6 +11,9 @@ import Paper from '@material-ui/core/Paper';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SortingHeaderCell from 'js/components/entity-search/results/SortingHeaderCell';
+import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
+import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell/';
+import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import { StyledTableRow } from './style';
 import { getFieldFromHitFields } from './utils';
 
@@ -22,6 +25,7 @@ function ResultsTable({ hits }) {
       <Table data-testid="search-results-table">
         <TableHead>
           <TableRow>
+            <SelectableHeaderCell allTableRowKeys={[]} />
             {Object.values(fields).map(({ label, field }) => (
               <SortingHeaderCell key={field} field={field}>
                 {label}
@@ -32,6 +36,7 @@ function ResultsTable({ hits }) {
         <TableBody>
           {hits.items.map((hit) => (
             <StyledTableRow key={hit.id}>
+              <SelectableRowCell rowKey={hit.id} />
               {Object.values(fields).map(({ field, identifier }) => (
                 <TableCell key={field}>
                   {identifier === 'hubmap_id' ? (
@@ -48,4 +53,4 @@ function ResultsTable({ hits }) {
     </TableContainer>
   );
 }
-export default ResultsTable;
+export default withSelectableTableProvider(ResultsTable);
