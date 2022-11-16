@@ -8,7 +8,7 @@ import { ResultsLayout } from './style';
 
 const resultsComponents = { table: ResultsTable, tile: ResultsTiles };
 
-function Results({ results }) {
+function Results({ results, allResultsUUIDs }) {
   const { view } = useStore();
 
   const ResultsComponent = resultsComponents[view];
@@ -16,7 +16,7 @@ function Results({ results }) {
     <ResultsLayout>
       {results?.hits && (
         <>
-          <ResultsComponent hits={results.hits} />
+          <ResultsComponent hits={results.hits} allResultsUUIDs={allResultsUUIDs} />
           <Pagination pageHits={results.hits.page} />
         </>
       )}

@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React from 'react';
+import React, { useEffect } from 'react';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,18 +14,25 @@ import SortingHeaderCell from 'js/components/entity-search/results/SortingHeader
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell/';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
+import { useStore as useSelectedTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { StyledTableRow } from './style';
 import { getFieldFromHitFields } from './utils';
 
-function ResultsTable({ hits }) {
+function ResultsTable({ hits, allResultsUUIDs }) {
   const { fields } = useStore();
+
+  const { deselectHeaderAndRows } = useSelectedTableStore();
+
+  useEffect(() => {
+    deselectHeaderAndRows();
+  }, [allResultsUUIDs, deselectHeaderAndRows]);
 
   return (
     <TableContainer component={Paper}>
       <Table data-testid="search-results-table">
         <TableHead>
           <TableRow>
-            <SelectableHeaderCell allTableRowKeys={[]} />
+            <SelectableHeaderCell allTableRowKeys={allResultsUUIDs} />
             {Object.values(fields).map(({ label, field }) => (
               <SortingHeaderCell key={field} field={field}>
                 {label}

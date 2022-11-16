@@ -33,7 +33,7 @@ function Search() {
       {results?.summary.appliedFilters && <FacetChips appliedFilters={results.summary.appliedFilters} />}
       <Flex>
         <Sidebar results={results} />
-        <Results results={results} />
+        <Results results={results} allResultsUUIDs={allResultsUUIDs} />
       </Flex>
     </>
   );
