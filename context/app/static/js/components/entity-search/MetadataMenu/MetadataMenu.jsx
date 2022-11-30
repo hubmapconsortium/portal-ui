@@ -6,12 +6,13 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
+import { useStore as useSelectedTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
 
-async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu }) {
+async function fetchAndDownload({ urlPath, selectedHits, closeMenu }) {
   const response = await fetch(urlPath, {
     method: 'POST',
-    body: JSON.stringify({ uuids: allResultsUUIDs }),
+    body: JSON.stringify({ uuids: [...selectedHits] }),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -40,13 +41,13 @@ async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu }) {
   */
   closeMenu();
 }
-
-function MetadataMenu({ entityType, allResultsUUIDs }) {
+function MetadataMenu({ entityType }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;
 
   const { closeMenu } = useStore();
 
   const menuID = 'metadata-menu';
+  const { selectedRows: selectedHits } = useSelectedTableStore();
 
   return (
     <>
@@ -62,7 +63,7 @@ function MetadataMenu({ entityType, allResultsUUIDs }) {
           onClick={() =>
             fetchAndDownload({
               urlPath: `/metadata/v0/${lcPluralType}.tsv`,
-              allResultsUUIDs,
+              selectedHits,
               closeMenu,
             })
           }
@@ -76,7 +77,7 @@ function MetadataMenu({ entityType, allResultsUUIDs }) {
           onClick={() =>
             fetchAndDownload({
               urlPath: `/notebooks/${lcPluralType}.ipynb`,
-              allResultsUUIDs,
+              selectedHits,
               closeMenu,
             })
           }
