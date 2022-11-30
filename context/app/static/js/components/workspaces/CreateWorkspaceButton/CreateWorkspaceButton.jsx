@@ -3,26 +3,17 @@ import Button from '@material-ui/core/Button';
 
 import { AddIcon } from 'js/shared-styles/icons';
 import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
-import { useCreateWorkspace } from './hooks';
+
+const AddButton = (props) => (
+  <Button {...props}>
+    <AddIcon color="primary" />
+  </Button>
+);
 
 function CreateWorkspaceButton({ handleCreateWorkspace }) {
-  const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace(
-    handleCreateWorkspace,
-  );
-
   return (
     <>
-      <Button onClick={() => setDialogIsOpen(true)}>
-        <AddIcon color="primary" />
-      </Button>
-      <CreateWorkspaceDialog
-        dialogIsOpen={dialogIsOpen}
-        handleClose={handleClose}
-        handleSubmit={handleSubmit}
-        onSubmit={onSubmit}
-        errors={errors}
-        control={control}
-      />
+      <CreateWorkspaceDialog handleCreateWorkspace={handleCreateWorkspace} buttonComponent={AddButton} />
     </>
   );
 }

@@ -3,31 +3,38 @@ import Button from '@material-ui/core/Button';
 
 import CreateWorkspaceInput from 'js/components/workspaces/CreateWorkspaceInput';
 import DialogModal from 'js/shared-styles/DialogModal';
+import { useCreateWorkspace } from './hooks';
 
-function CreateWorkspaceDialog({ dialogIsOpen, handleClose, handleSubmit, onSubmit, errors, control }) {
+function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonComponent }) {
+  const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace(
+    handleCreateWorkspace,
+  );
   return (
-    <DialogModal
-      title="Create New Workspace"
-      isOpen={dialogIsOpen}
-      handleClose={handleClose}
-      maxWidth="md"
-      content={
-        <>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <CreateWorkspaceInput control={control} name="name" errors={errors} />
-            <input type="submit" id="create-workspace-input" hidden />
-          </form>
-        </>
-      }
-      actions={
-        <>
-          <Button onClick={handleClose}>Cancel</Button>
-          <label htmlFor="create-workspace-input">
-            <Button component="span">Save</Button>
-          </label>
-        </>
-      }
-    />
+    <>
+      <ButtonComponent onClick={() => setDialogIsOpen(true)} />
+      <DialogModal
+        title="Create New Workspace"
+        isOpen={dialogIsOpen}
+        handleClose={handleClose}
+        maxWidth="md"
+        content={
+          <>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <CreateWorkspaceInput control={control} name="name" errors={errors} />
+              <input type="submit" id="create-workspace-input" hidden />
+            </form>
+          </>
+        }
+        actions={
+          <>
+            <Button onClick={handleClose}>Cancel</Button>
+            <label htmlFor="create-workspace-input">
+              <Button component="span">Save</Button>
+            </label>
+          </>
+        }
+      />
+    </>
   );
 }
 
