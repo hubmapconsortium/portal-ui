@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useEffect } from 'react';
+import React from 'react';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,21 +11,13 @@ import Paper from '@material-ui/core/Paper';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SortingHeaderCell from 'js/components/entity-search/results/SortingHeaderCell';
-import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell/';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
-import { useStore as useSelectedTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { StyledTableRow } from './style';
 import { getFieldFromHitFields } from './utils';
 
 function ResultsTable({ hits, allResultsUUIDs }) {
   const { fields } = useStore();
-
-  const { deselectHeaderAndRows } = useSelectedTableStore();
-
-  useEffect(() => {
-    deselectHeaderAndRows();
-  }, [allResultsUUIDs, deselectHeaderAndRows]);
 
   return (
     <TableContainer component={Paper}>
@@ -60,4 +52,4 @@ function ResultsTable({ hits, allResultsUUIDs }) {
     </TableContainer>
   );
 }
-export default withSelectableTableProvider(ResultsTable);
+export default ResultsTable;
