@@ -1,15 +1,14 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 // import { trackEvent } from 'js/helpers/trackers';
 
 import { createDownloadUrl } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
-import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import { useStore as useSelectedTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
 
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
+import { useMetadataMenu } from './hooks';
 
 async function fetchAndDownload({ urlPath, selectedHits, closeMenu }) {
   const response = await fetch(urlPath, {
@@ -58,32 +57,7 @@ const NotebookMenuItem = (props) => (
 
 function MetadataMenu({ entityType }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;
-
-  const { closeMenu } = useStore();
-
-  const { selectedRows: selectedHits } = useSelectedTableStore();
-
-  const createNotebook = useCallback(
-    async ({ workspaceName }) => {
-      const response = await fetch(`/notebooks/${lcPluralType}.ipynb`, {
-        method: 'POST',
-        body: JSON.stringify({ uuids: [...selectedHits], workspace_name: workspaceName }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        console.error('Create workspace failed', response);
-        closeMenu();
-      }
-
-      const json = await response.json();
-      const { workspace_id, notebook_path } = json;
-      document.location = `/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`;
-    },
-    [selectedHits, lcPluralType, closeMenu],
-  );
-
+  const { selectedHits, createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
   const menuID = 'metadata-menu';
 
   return (
