@@ -29,7 +29,7 @@ function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonC
           <>
             <Button onClick={handleClose}>Cancel</Button>
             <label htmlFor="create-workspace-input">
-              <Button component="span">Save</Button>
+              <Button component="span">Submit</Button>
             </label>
           </>
         }
