@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 // import { trackEvent } from 'js/helpers/trackers';
 
 import { createDownloadUrl } from 'js/helpers/functions';
@@ -7,6 +7,8 @@ import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuPro
 import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import { useStore as useSelectedTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
+
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
 
 async function fetchAndDownload({ urlPath, selectedHits, closeMenu }) {
@@ -41,13 +43,48 @@ async function fetchAndDownload({ urlPath, selectedHits, closeMenu }) {
   */
   closeMenu();
 }
+
+const NotebookMenuItem = (props) => (
+  <StyledMenuItem {...props}>
+    Notebook
+    <SecondaryBackgroundTooltip
+      title="Download a Notebook which demonstrates how to programmatically access metadata."
+      placement="bottom-start"
+    >
+      <StyledInfoIcon color="primary" />
+    </SecondaryBackgroundTooltip>
+  </StyledMenuItem>
+);
+
 function MetadataMenu({ entityType }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;
 
   const { closeMenu } = useStore();
 
-  const menuID = 'metadata-menu';
   const { selectedRows: selectedHits } = useSelectedTableStore();
+
+  const createNotebook = useCallback(
+    async ({ workspaceName }) => {
+      const response = await fetch(`/notebooks/${lcPluralType}.ipynb`, {
+        method: 'POST',
+        body: JSON.stringify({ uuids: [...selectedHits], workspace_name: workspaceName }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        console.error('Create workspace failed', response);
+        closeMenu();
+      }
+
+      const json = await response.json();
+      const { workspace_id, notebook_path } = json;
+      document.location = `/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`;
+    },
+    [selectedHits, lcPluralType, closeMenu],
+  );
+
+  const menuID = 'metadata-menu';
 
   return (
     <>
@@ -73,23 +110,7 @@ function MetadataMenu({ entityType }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </StyledMenuItem>
-        <StyledMenuItem
-          onClick={() =>
-            fetchAndDownload({
-              urlPath: `/notebooks/${lcPluralType}.ipynb`,
-              selectedHits,
-              closeMenu,
-            })
-          }
-        >
-          Notebook
-          <SecondaryBackgroundTooltip
-            title="Download a Notebook which demonstrates how to programmatically access metadata."
-            placement="bottom-start"
-          >
-            <StyledInfoIcon color="primary" />
-          </SecondaryBackgroundTooltip>
-        </StyledMenuItem>
+        <CreateWorkspaceDialog handleCreateWorkspace={createNotebook} buttonComponent={NotebookMenuItem} />
       </DropdownMenu>
     </>
   );
