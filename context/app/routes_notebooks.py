@@ -74,9 +74,7 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
     create_workspace_response.raise_for_status()
     workspace_id = create_workspace_response.json()['data']['workspace']['id']
 
-    return redirect(
-        f'/workspaces/{workspace_id}?notebook_path={urllib.parse.quote(notebook_path)}')
-
+    return {'workspace_id': workspace_id, 'notebook_path': notebook_path}
 
 def _get_workspace_name(request_args):
     # TODO: When UI is available, limit to posts.
@@ -125,9 +123,9 @@ def details_notebook(type, uuid, create_workspace):
 
 @blueprint.route('/notebooks/<entity_type>.ipynb', methods=['POST'])
 def notebook(entity_type):
-    workspace_name = _get_workspace_name(request.args)
     body = request.get_json()
     uuids = body.get('uuids')
+    workspace_name = body.get('workspace_name')
     url_base = get_url_base_from_request()
 
     cells = _get_cells('metadata.ipynb', uuids=uuids, url_base=url_base, entity_type=entity_type)
@@ -144,7 +142,7 @@ def notebook(entity_type):
     if zarr_files:
         cells += _get_cells('anndata.ipynb', uuids_to_zarr_files=uuids_to_zarr_files)
 
-    return _nb_response_from_dicts(entity_type, cells, workspace_name=workspace_name)
+    return _nb_response_from_dicts(entity_type, cells, workspace_name=workspace_name, uuids=uuids)
 
 
 def _limit_to_zarr_files(uuids_to_files):
