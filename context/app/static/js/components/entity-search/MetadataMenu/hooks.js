@@ -23,7 +23,7 @@ function useMetadataMenu(lcPluralType) {
 
       const json = await response.json();
       const { workspace_id, notebook_path } = json;
-      document.location = `/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`;
+      window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
     },
     [closeMenu, lcPluralType, selectedHits],
   );
