@@ -31,7 +31,6 @@ import {
   StyledDetailPageSection,
 } from './style';
 import { useVitessceConfig } from './hooks';
-import 'vitessce/dist/es/production/static/css/index.css';
 
 function sniffBrowser() {
   const { browser } = Bowser.parse(window.navigator.userAgent);
