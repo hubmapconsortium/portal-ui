@@ -76,13 +76,6 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
 
     return {'workspace_id': workspace_id, 'notebook_path': notebook_path}
 
-def _get_workspace_name(request_args):
-    # TODO: When UI is available, limit to posts.
-    params = request_args.keys()
-    if (not (params <= set(['name']))):
-        abort(400)
-    return request_args.get('name')
-
 
 @blueprint.route(
     '/notebooks/<entity_type>/<uuid>.ws.ipynb', methods=['POST'])
