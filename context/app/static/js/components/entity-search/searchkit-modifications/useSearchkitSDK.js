@@ -20,7 +20,7 @@ const useSearchkitSDK = ({
   const [results, setResponse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [allResultsUUIDs, setAllResultsUUIDS] = useState([]);
-  const { deselectHeaderAndRows } = useSelectedTableStore();
+  const { deselectHeaderAndRows, setSelectedRows, selectedRows } = useSelectedTableStore();
 
   useDeepCompareEffect(() => {
     const abortController = new AbortController();
@@ -51,12 +51,17 @@ const useSearchkitSDK = ({
         );
 
         // eslint-disable-next-line no-underscore-dangle
-        const resultsUUIDs = allResults.hits.hits.map((hit) => hit._id);
+        const currentResultsUUIDS = allResults.hits.hits.map((hit) => hit._id);
 
-        if (resultsUUIDs.length > allResultsUUIDs.length) {
+        // if the number of new results is larger, reset selections
+        if (currentResultsUUIDS.length > allResultsUUIDs.length) {
           deselectHeaderAndRows();
+        } else {
+          // retain selections included in the new results
+          setSelectedRows(...[currentResultsUUIDS.filter((result) => selectedRows.has(result))]);
         }
-        setAllResultsUUIDS(resultsUUIDs);
+
+        setAllResultsUUIDS(currentResultsUUIDS);
 
         setLoading(false);
         setResponse(response);
