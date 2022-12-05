@@ -2,13 +2,25 @@ import { useState } from 'react';
 import Searchkit from '@searchkit/sdk';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
+import { fetchSearchData } from 'js/hooks/useSearchData';
+import { useStore as useSelectedTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 
 // Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-sdk/src/react-hooks/index.ts
-// Modified to handle initial filters, get page size from config, and use our custom transformer
+// Modified to handle initial filters, get page size from config, use our custom transformer, and send a follow-up request to fetch IDs for all hits.
 
-const useSearchkitSDK = ({ config, variables, filters, defaultSort }) => {
+const useSearchkitSDK = ({
+  config,
+  variables,
+  filters,
+  defaultSort,
+  elasticsearchEndpoint,
+  groupsToken,
+  queryBody,
+}) => {
   const [results, setResponse] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [allResultsUUIDs, setAllResultsUUIDS] = useState([]);
+  const { deselectHeaderAndRows } = useSelectedTableStore();
 
   useDeepCompareEffect(() => {
     const abortController = new AbortController();
@@ -29,6 +41,23 @@ const useSearchkitSDK = ({ config, variables, filters, defaultSort }) => {
             from: variables.page.from,
           },
         });
+
+        // Modification: send follow-up request to fetch uuids for all hits
+        const { query, post_filter } = queryBody;
+        const allResults = await fetchSearchData(
+          { query, post_filter, _source: false, size: 10000 },
+          elasticsearchEndpoint,
+          groupsToken,
+        );
+
+        // eslint-disable-next-line no-underscore-dangle
+        const resultsUUIDs = allResults.hits.hits.map((hit) => hit._id);
+
+        if (resultsUUIDs.length > allResultsUUIDs.length) {
+          deselectHeaderAndRows();
+        }
+        setAllResultsUUIDS(resultsUUIDs);
+
         setLoading(false);
         setResponse(response);
       } catch (error) {
@@ -37,14 +66,14 @@ const useSearchkitSDK = ({ config, variables, filters, defaultSort }) => {
         }
       }
     }
-
     if (variables) fetchData(variables);
+
     return () => {
       abortController.abort();
     };
-  }, [config, filters, variables]);
+  }, [config, filters, variables, queryBody]);
 
-  return { results, loading };
+  return { results, loading, allResultsUUIDs };
 };
 
 export default useSearchkitSDK;
