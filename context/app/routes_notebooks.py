@@ -1,9 +1,8 @@
-from flask import (abort, request, Response, current_app, redirect, session)
+from flask import (abort, request, Response, current_app, session)
 import json
 from pathlib import Path
 from string import Template
 import re
-import urllib.parse
 
 from requests import post
 
