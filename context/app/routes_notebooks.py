@@ -1,9 +1,8 @@
-from flask import (abort, request, Response, current_app, redirect, session)
+from flask import (abort, request, Response, current_app, session)
 import json
 from pathlib import Path
 from string import Template
 import re
-import urllib.parse
 
 from requests import post
 
@@ -74,31 +73,21 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
     create_workspace_response.raise_for_status()
     workspace_id = create_workspace_response.json()['data']['workspace']['id']
 
-    return redirect(
-        f'/workspaces/{workspace_id}?notebook_path={urllib.parse.quote(notebook_path)}')
-
-
-def _get_workspace_name(request_args):
-    # TODO: When UI is available, limit to posts.
-    params = request_args.keys()
-    if (not (params <= set(['name']))):
-        abort(400)
-    return request_args.get('name')
+    return {'workspace_id': workspace_id, 'notebook_path': notebook_path}
 
 
 @blueprint.route(
-    '/browse/<type>/<uuid>.ipynb',
-    defaults={'create_workspace': False})
-@blueprint.route(
-    '/browse/<type>/<uuid>.ws.ipynb',
-    defaults={'create_workspace': True})
+    '/notebooks/<entity_type>/<uuid>.ws.ipynb', methods=['POST'])
 # TODO: Change to a single route, and instead make behavior depend on HTTP method
-def details_notebook(type, uuid, create_workspace):
-    if type not in entity_types:
+def details_notebook(entity_type, uuid):
+    if entity_type not in entity_types:
         abort(404)
+
+    body = request.get_json()
+    workspace_name = body.get('workspace_name')
+
     client = get_client()
     entity = client.get_entity(uuid)
-    workspace_name = f"{entity['hubmap_id']} Workspace" if create_workspace else None
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
     if (vitessce_conf is None
             or vitessce_conf.conf is None
@@ -125,9 +114,9 @@ def details_notebook(type, uuid, create_workspace):
 
 @blueprint.route('/notebooks/<entity_type>.ipynb', methods=['POST'])
 def notebook(entity_type):
-    workspace_name = _get_workspace_name(request.args)
     body = request.get_json()
     uuids = body.get('uuids')
+    workspace_name = body.get('workspace_name')
     url_base = get_url_base_from_request()
 
     cells = _get_cells('metadata.ipynb', uuids=uuids, url_base=url_base, entity_type=entity_type)
@@ -144,7 +133,7 @@ def notebook(entity_type):
     if zarr_files:
         cells += _get_cells('anndata.ipynb', uuids_to_zarr_files=uuids_to_zarr_files)
 
-    return _nb_response_from_dicts(entity_type, cells, workspace_name=workspace_name)
+    return _nb_response_from_dicts(entity_type, cells, workspace_name=workspace_name, uuids=uuids)
 
 
 def _limit_to_zarr_files(uuids_to_files):

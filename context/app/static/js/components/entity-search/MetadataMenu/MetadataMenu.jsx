@@ -4,14 +4,16 @@ import React from 'react';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
-import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
+import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
 
-async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu }) {
+import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
+import { useMetadataMenu } from './hooks';
+
+async function fetchAndDownload({ urlPath, selectedHits, closeMenu }) {
   const response = await fetch(urlPath, {
     method: 'POST',
-    body: JSON.stringify({ uuids: allResultsUUIDs }),
+    body: JSON.stringify({ uuids: [...selectedHits] }),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -41,11 +43,21 @@ async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu }) {
   closeMenu();
 }
 
-function MetadataMenu({ entityType, allResultsUUIDs }) {
+const NotebookMenuItem = (props) => (
+  <StyledMenuItem {...props}>
+    Notebook
+    <SecondaryBackgroundTooltip
+      title="Download a Notebook which demonstrates how to programmatically access metadata."
+      placement="bottom-start"
+    >
+      <StyledInfoIcon color="primary" />
+    </SecondaryBackgroundTooltip>
+  </StyledMenuItem>
+);
+
+function MetadataMenu({ entityType }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;
-
-  const { closeMenu } = useStore();
-
+  const { selectedHits, createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
   const menuID = 'metadata-menu';
 
   return (
@@ -62,7 +74,7 @@ function MetadataMenu({ entityType, allResultsUUIDs }) {
           onClick={() =>
             fetchAndDownload({
               urlPath: `/metadata/v0/${lcPluralType}.tsv`,
-              allResultsUUIDs,
+              selectedHits,
               closeMenu,
             })
           }
@@ -72,23 +84,7 @@ function MetadataMenu({ entityType, allResultsUUIDs }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </StyledMenuItem>
-        <StyledMenuItem
-          onClick={() =>
-            fetchAndDownload({
-              urlPath: `/notebooks/${lcPluralType}.ipynb`,
-              allResultsUUIDs,
-              closeMenu,
-            })
-          }
-        >
-          Notebook
-          <SecondaryBackgroundTooltip
-            title="Download a Notebook which demonstrates how to programmatically access metadata."
-            placement="bottom-start"
-          >
-            <StyledInfoIcon color="primary" />
-          </SecondaryBackgroundTooltip>
-        </StyledMenuItem>
+        <CreateWorkspaceDialog handleCreateWorkspace={createNotebook} buttonComponent={NotebookMenuItem} />
       </DropdownMenu>
     </>
   );

@@ -9,7 +9,7 @@ const schema = yup
   })
   .required();
 
-function useCreateWorkspace(handleCreateWorkspace) {
+function useCreateWorkspace({ handleCreateWorkspace, defaultName }) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   const {
@@ -19,7 +19,7 @@ function useCreateWorkspace(handleCreateWorkspace) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: '',
+      name: '' || defaultName,
     },
     mode: 'onChange',
     resolver: yupResolver(schema),
