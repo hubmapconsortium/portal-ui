@@ -5,13 +5,14 @@ import CreateWorkspaceInput from 'js/components/workspaces/CreateWorkspaceInput'
 import DialogModal from 'js/shared-styles/DialogModal';
 import { useCreateWorkspace } from './hooks';
 
-function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonComponent }) {
-  const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace(
+function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonComponent, defaultName, ...rest }) {
+  const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace({
     handleCreateWorkspace,
-  );
+    defaultName,
+  });
   return (
     <>
-      <ButtonComponent onClick={() => setDialogIsOpen(true)} />
+      <ButtonComponent onClick={() => setDialogIsOpen(true)} {...rest} />
       <DialogModal
         title="Create New Workspace"
         isOpen={dialogIsOpen}
