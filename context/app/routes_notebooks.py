@@ -85,18 +85,17 @@ def _get_workspace_name(request_args):
 
 
 @blueprint.route(
-    '/browse/<type>/<uuid>.ipynb',
-    defaults={'create_workspace': False})
-@blueprint.route(
-    '/browse/<type>/<uuid>.ws.ipynb',
-    defaults={'create_workspace': True})
+    '/notebooks/<entity_type>/<uuid>.ws.ipynb', methods=['POST'])
 # TODO: Change to a single route, and instead make behavior depend on HTTP method
-def details_notebook(type, uuid, create_workspace):
-    if type not in entity_types:
+def details_notebook(entity_type, uuid):
+    if entity_type not in entity_types:
         abort(404)
+
+    body = request.get_json()
+    workspace_name = body.get('workspace_name')
+
     client = get_client()
     entity = client.get_entity(uuid)
-    workspace_name = f"{entity['hubmap_id']} Workspace" if create_workspace else None
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
     if (vitessce_conf is None
             or vitessce_conf.conf is None
