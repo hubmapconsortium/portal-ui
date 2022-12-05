@@ -1,0 +1,1 @@
+- Enable users to select search results in new search ui.
