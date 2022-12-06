@@ -6,15 +6,10 @@ import Typography from '@material-ui/core/Typography';
 
 import LogSlider from 'js/shared-styles/inputs/LogSlider';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
-
+import { queryTypes } from 'js/components/cells/queryTypes';
 import MarkedSlider from 'js/shared-styles/inputs/MarkedSlider';
 import { StyledDiv, StyledTextField } from './style';
 import { useDatasetsSelectedByExpression } from './hooks';
-
-const measurement = {
-  gene: 'Expression Level',
-  protein: 'Abundance',
-};
 
 function DatasetsSelectedByExpression({
   completeStep,
@@ -38,7 +33,7 @@ function DatasetsSelectedByExpression({
     setIsLoading,
   });
 
-  const queryMeasurement = measurement[queryType];
+  const queryMeasurement = queryTypes[queryType].measurement;
 
   return (
     <StyledDiv>
