@@ -11,6 +11,11 @@ import MarkedSlider from 'js/shared-styles/inputs/MarkedSlider';
 import { StyledDiv, StyledTextField } from './style';
 import { useDatasetsSelectedByExpression } from './hooks';
 
+const measurement = {
+  gene: 'Expression Level',
+  protein: 'Abundance',
+};
+
 function DatasetsSelectedByExpression({
   completeStep,
   setResults,
@@ -32,6 +37,8 @@ function DatasetsSelectedByExpression({
     queryType,
     setIsLoading,
   });
+
+  const queryMeasurement = measurement[queryType];
 
   return (
     <StyledDiv>
@@ -67,19 +74,19 @@ function DatasetsSelectedByExpression({
       )}
       <div>
         <LogSlider
-          label="Minimum Expression Level"
-          helperText="Set the minimum gene expression level to refine your dataset selections."
+          label={`Minimum ${queryMeasurement}`}
+          helperText={`Set the minimum ${queryType} ${queryMeasurement.toLowerCase()} to refine your dataset selections.`}
           value={minExpressionLog}
           minLog={-4}
           maxLog={5}
           onChange={(e, val) => setMinExpressionLog(val)}
-          id="min-expression"
+          id="min-measurement"
         />
       </div>
       <div>
         <MarkedSlider
           label="Minimum Cell Percentage (%)"
-          helperText="Set the minimum cell percentage for cells in the datasets to represent the minimum expression level."
+          helperText={`Set the minimum cell percentage for cells in the datasets to represent the minimum ${queryMeasurement.toLowerCase()}.`}
           value={minCellPercentage}
           min={0}
           max={10}
