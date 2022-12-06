@@ -21,6 +21,7 @@ function AutocompleteEntity({ targetEntity, setter, setCellVariableNames }) {
 
   useEffect(() => {
     setSelected([]);
+    setOptions([]);
     setCellVariableNames([]);
   }, [targetEntity, setCellVariableNames]);
 
