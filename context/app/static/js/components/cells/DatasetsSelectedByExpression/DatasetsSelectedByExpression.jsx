@@ -91,7 +91,13 @@ function DatasetsSelectedByExpression({
         />
       </div>
       <div>
-        <Button onClick={handleSubmit} disabled={cellVariableNames.length === 0} variant="contained" color="primary">
+        <Button
+          onClick={handleSubmit}
+          disabled={cellVariableNames.length === 0}
+          variant="contained"
+          color="primary"
+          id="run-query-button"
+        >
           Run Query
         </Button>
       </div>
