@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
-import SearchPrompt from '../SearchPrompt';
+import Prompt from 'js/shared-styles/tutorials/Prompt';
 
 const searchViewStoreSelector = (state) => ({
   setSearchView: state.setSearchView,
@@ -42,7 +42,7 @@ function DatasetSearchPrompt({ setRunTutorial }) {
   }
 
   return isDisplayed ? (
-    <SearchPrompt
+    <Prompt
       headerText="Getting Started"
       descriptionText="Welcome to the HuBMAP Data Portal. Get a quick tour of different sections of the dataset search page."
       buttonText="Begin the Dataset Search Tutorial"

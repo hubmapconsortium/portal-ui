@@ -13,7 +13,7 @@ import {
   StyledButton,
 } from './style';
 
-function SearchPrompt({ headerText, descriptionText, buttonText, buttonOnClick, buttonIsDisabled, closeOnClick }) {
+function Prompt({ headerText, descriptionText, buttonText, buttonOnClick, buttonIsDisabled, closeOnClick }) {
   return (
     <StyledPaper>
       <CenteredDiv>
@@ -37,7 +37,7 @@ function SearchPrompt({ headerText, descriptionText, buttonText, buttonOnClick, 
   );
 }
 
-SearchPrompt.propTypes = {
+Prompt.propTypes = {
   headerText: PropTypes.string.isRequired,
   descriptionText: PropTypes.string.isRequired,
   buttonText: PropTypes.string.isRequired,
@@ -46,4 +46,4 @@ SearchPrompt.propTypes = {
   closeOnClick: PropTypes.func.isRequired,
 };
 
-export default SearchPrompt;
+export default Prompt;
