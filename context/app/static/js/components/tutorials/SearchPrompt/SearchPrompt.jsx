@@ -1,29 +1,36 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import PropTypes from 'prop-types';
 
-import { CenteredDiv, Flex, StyledTypography, StyledPaper, StyledInfoIcon, StyledButton } from './style';
+import {
+  CenteredDiv,
+  Flex,
+  StyledTypography,
+  StyledPaper,
+  StyledInfoIcon,
+  StyledCloseIcon,
+  StyledButton,
+} from './style';
 
 function SearchPrompt({ headerText, descriptionText, buttonText, buttonOnClick, buttonIsDisabled, closeOnClick }) {
   return (
     <StyledPaper>
       <CenteredDiv>
         <Flex>
-          <StyledInfoIcon color="primary" />
+          <StyledInfoIcon />
           <Typography variant="subtitle1" color="textPrimary">
             {headerText}
           </Typography>
         </Flex>
         <StyledTypography>{descriptionText}</StyledTypography>
-        <StyledButton color="primary" variant="contained" onClick={buttonOnClick} disabled={buttonIsDisabled}>
+        <StyledButton variant="contained" onClick={buttonOnClick} disabled={buttonIsDisabled}>
           {buttonText}
         </StyledButton>
       </CenteredDiv>
       <div>
         <IconButton aria-label="close" onClick={closeOnClick}>
-          <CloseRoundedIcon />
+          <StyledCloseIcon />
         </IconButton>
       </div>
     </StyledPaper>
