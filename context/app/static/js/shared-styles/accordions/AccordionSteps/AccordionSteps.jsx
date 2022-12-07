@@ -6,7 +6,7 @@ export function getSpecificObjectEntries(keys, object) {
   return keys.map((key) => [key, object[key]]);
 }
 
-function AccordionSteps({ steps, isFirstStepOpen }) {
+function AccordionSteps({ steps, isFirstStepOpen, id }) {
   const [openedAccordionIndex, setOpenedAccordionIndex] = useState(isFirstStepOpen && 0);
   const [completedStepsText, setCompletedStepsText] = useState({});
 
@@ -30,6 +30,7 @@ function AccordionSteps({ steps, isFirstStepOpen }) {
 
   return steps.map(({ heading, content }, i) => (
     <StepAccordion
+      id={`${id}-${i}`}
       key={heading}
       index={i}
       summaryHeading={heading}

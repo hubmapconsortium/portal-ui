@@ -15,6 +15,7 @@ function StepAccordion({
   isExpanded,
   stepCompletedText,
   getCompleteStepFunction,
+  id,
 }) {
   // memoize to avoid rerenders
   const completeStep = useMemo(() => {
@@ -22,11 +23,12 @@ function StepAccordion({
   }, [getCompleteStepFunction, index]);
 
   return (
-    <Accordion onChange={getHandleExpandFunction(index)} disabled={disabled} expanded={isExpanded}>
+    <Accordion onChange={getHandleExpandFunction(index)} disabled={disabled} expanded={isExpanded} id={id}>
       <StyledAccordionSummary
         expandIcon={<ArrowDropUpRoundedIcon />}
         $isExpanded={isExpanded}
         data-testid={`accordion-summary-${index}`}
+        id={`${id}-summary`}
       >
         <AccordionSummaryHeading variant="subtitle2" $isExpanded={isExpanded}>
           {summaryHeading}

@@ -35,6 +35,7 @@ function Cells() {
         membership. To begin your search, select a query type and the relevant parameters.
       </SectionPaper>
       <AccordionSteps
+        id="cells-steps"
         steps={[
           {
             heading: '1. Query Type',
