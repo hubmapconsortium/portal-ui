@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 
+import { useStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
 import TooltipProgressButton from 'js/shared-styles/tutorials/TooltipProgressButton';
 import { StyledPaper, Flex, FlexEnd, WhiteTypography, WhiteCloseRoundedIcon } from './style';
 
@@ -11,10 +12,10 @@ function TutorialTooltip({
   size,
   step: { title, content, contentIsComponent },
   tooltipProps,
-  decrementStepOnClick,
   closeOnClick,
-  incrementStepOnClick,
 }) {
+  const { incrementStep, decrementStep, closeTutorial } = useStore();
+
   return (
     <StyledPaper {...tooltipProps}>
       <Flex>
@@ -26,16 +27,16 @@ function TutorialTooltip({
       {contentIsComponent ? content : <WhiteTypography variant="body1">{content}</WhiteTypography>}
       <FlexEnd>
         {index > 0 && (
-          <TooltipProgressButton eventHandler={decrementStepOnClick} triggerKeyCode={37}>
+          <TooltipProgressButton eventHandler={decrementStep} triggerKeyCode={37}>
             Back
           </TooltipProgressButton>
         )}
         {isLastStep ? (
-          <TooltipProgressButton eventHandler={closeOnClick} triggerKeyCode={39}>
+          <TooltipProgressButton eventHandler={closeTutorial} triggerKeyCode={39}>
             Finish Tutorial
           </TooltipProgressButton>
         ) : (
-          <TooltipProgressButton eventHandler={incrementStepOnClick} triggerKeyCode={39}>
+          <TooltipProgressButton eventHandler={incrementStep} triggerKeyCode={39}>
             Next
           </TooltipProgressButton>
         )}
