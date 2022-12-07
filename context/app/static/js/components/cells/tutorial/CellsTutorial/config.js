@@ -6,7 +6,6 @@ const steps = [
       'Select your desired query from the list of selections. After making a selection, the “Set Parameters” button will become active for you to proceed.',
     title: 'Select a Query Type',
   },
-  /*
   {
     target: '#run-query-button',
     content:
@@ -14,6 +13,8 @@ const steps = [
     disableBeacon: true,
     title: 'Fill in Parameters',
   },
+  /*
+
   {
     target: '#cells-steps-2-summary', 
     content:

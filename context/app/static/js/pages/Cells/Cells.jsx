@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
@@ -7,6 +7,7 @@ import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import QuerySelect from 'js/components/cells/QuerySelect';
 import CellsResults from 'js/components/cells/CellsResults';
 import { queryTypes } from 'js/components/cells/queryTypes';
+
 import CellsTutorial from 'js/components/cells/tutorial/CellsTutorial';
 
 function Cells() {
@@ -17,9 +18,11 @@ function Cells() {
   const [cellVariableNames, setCellVariableNames] = useState([]);
   const [queryType, setQueryType] = useState(queryTypes.gene.value);
 
+  const setParametersButtonRef = useRef(null);
+
   return (
     <>
-      <CellsTutorial />
+      <CellsTutorial setQueryType={setQueryType} setParametersButtonRef={setParametersButtonRef} />
       <Typography variant="h2" component="h1" color="primary">
         Datasets: Molecular Data Queries
       </Typography>
@@ -32,7 +35,13 @@ function Cells() {
         steps={[
           {
             heading: '1. Query Type',
-            content: <QuerySelect setQueryType={setQueryType} setCellVariableNames={setCellVariableNames} />,
+            content: (
+              <QuerySelect
+                setQueryType={setQueryType}
+                setCellVariableNames={setCellVariableNames}
+                setParametersButtonRef={setParametersButtonRef}
+              />
+            ),
           },
           {
             heading: '2. Parameters',

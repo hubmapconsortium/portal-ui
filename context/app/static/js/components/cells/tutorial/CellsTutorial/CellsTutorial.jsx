@@ -1,19 +1,27 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components';
-import Joyride from 'react-joyride';
+import Joyride, { ACTIONS } from 'react-joyride';
 
 import { useStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
 import TutorialTooltip from 'js/shared-styles/tutorials/TutorialTooltip';
 import Prompt from 'js/shared-styles/tutorials/Prompt';
 import { withTutorialProvider } from 'js/shared-styles/tutorials/TutorialProvider';
+import { queryTypes } from 'js/components/cells/queryTypes';
 
 import { steps } from './config';
 
-function CellsTutorial() {
+function CellsTutorial({ setQueryType, setParametersButtonRef }) {
   const themeContext = useContext(ThemeContext);
   const { tutorialStep, tutorialIsRunning, runTutorial } = useStore();
 
-  const handleJoyrideCallback = () => {};
+  const handleJoyrideCallback = (data) => {
+    const { action, index } = data;
+
+    if (action === ACTIONS.NEXT && index === 0) {
+      setQueryType(queryTypes.gene.value);
+      setParametersButtonRef.current.click();
+    }
+  };
 
   return (
     <>

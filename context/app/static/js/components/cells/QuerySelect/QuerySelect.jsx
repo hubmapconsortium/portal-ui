@@ -6,7 +6,7 @@ import { queryTypes } from 'js/components/cells/queryTypes';
 import { capitalizeString } from 'js/helpers/functions';
 import { StyledTextField } from './style';
 
-function QuerySelect({ completeStep, setQueryType }) {
+function QuerySelect({ completeStep, setQueryType, setParametersButtonRef }) {
   const [selectedQueryType, setSelectedQueryType] = useState(queryTypes.gene.value);
 
   function handleSelect(event) {
@@ -43,7 +43,7 @@ function QuerySelect({ completeStep, setQueryType }) {
           </MenuItem>
         ))}
       </StyledTextField>
-      <Button variant="contained" color="primary" onClick={handleButtonClick}>
+      <Button variant="contained" color="primary" onClick={handleButtonClick} ref={setParametersButtonRef}>
         Set Parameters
       </Button>
     </div>
