@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 
-import TooltipProgressButton from 'js/components/tutorials/TooltipProgressButton';
+import TooltipProgressButton from 'js/shared-styles/tutorials/TooltipProgressButton';
 import { StyledPaper, Flex, FlexEnd, WhiteTypography, WhiteCloseRoundedIcon } from './style';
 
 function TutorialTooltip({

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
-import TutorialTooltip from '../TutorialTooltip';
+import TutorialTooltip from 'js/shared-styles/tutorials/TutorialTooltip';
 
 const searchDatasetTutorialSelector = (state) => ({
   incrementSearchDatasetTutorialStep: state.incrementSearchDatasetTutorialStep,
