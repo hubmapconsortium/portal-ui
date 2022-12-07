@@ -7,7 +7,7 @@ import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import QuerySelect from 'js/components/cells/QuerySelect';
 import CellsResults from 'js/components/cells/CellsResults';
 import { queryTypes } from 'js/components/cells/queryTypes';
-import Prompt from 'js/shared-styles/tutorials/Prompt';
+import CellsTutorial from 'js/components/cells/tutorial/CellsTutorial';
 
 function Cells() {
   const [results, setResults] = useState([]);
@@ -19,14 +19,7 @@ function Cells() {
 
   return (
     <>
-      <Prompt
-        headerText="Getting Started"
-        descriptionText="Get a tutorial of how to explore the genomic and proteomic information in the HuBMAP data portal."
-        buttonText="Take the Molecular Data Queries Tutorial"
-        buttonOnClick={() => {}}
-        buttonIsDisabled={false}
-        closeOnClick={() => {}}
-      />
+      <CellsTutorial />
       <Typography variant="h2" component="h1" color="primary">
         Datasets: Molecular Data Queries
       </Typography>
