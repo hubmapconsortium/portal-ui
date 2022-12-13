@@ -6,6 +6,7 @@ import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedBy
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import QuerySelect from 'js/components/cells/QuerySelect';
 import CellsResults from 'js/components/cells/CellsResults';
+import { queryTypes } from 'js/components/cells/queryTypes';
 
 function Cells() {
   const [results, setResults] = useState([]);
@@ -13,7 +14,7 @@ function Cells() {
   const [minExpressionLog, setMinExpressionLog] = useState(1);
   const [minCellPercentage, setMinCellPercentage] = useState(10);
   const [cellVariableNames, setCellVariableNames] = useState([]);
-  const [queryType, setQueryType] = useState([]);
+  const [queryType, setQueryType] = useState(queryTypes.gene.value);
 
   return (
     <>

@@ -3,9 +3,12 @@ import { useTheme } from '@material-ui/core/styles';
 
 import Histogram from 'js/shared-styles/charts/Histogram';
 import { capitalizeString } from 'js/helpers/functions';
+import { queryTypes } from 'js/components/cells/queryTypes';
 
 function CellExpressionHistogram({ expressionData, queryType }) {
   const theme = useTheme();
+
+  const queryMeasurement = queryTypes[queryType].measurement;
 
   return (
     <Histogram
@@ -17,9 +20,9 @@ function CellExpressionHistogram({ expressionData, queryType }) {
         bottom: 100,
       }}
       barColor={theme.palette.success.main}
-      xAxisLabel="Expression Level"
+      xAxisLabel={queryMeasurement}
       yAxisLabel="Frequency"
-      chartTitle={`${capitalizeString(queryType)} Expression Distribution`}
+      chartTitle={`${capitalizeString(queryType)} ${queryMeasurement} Distribution`}
     />
   );
 }

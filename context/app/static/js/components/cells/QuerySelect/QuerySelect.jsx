@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
+import { queryTypes } from 'js/components/cells/queryTypes';
 import { capitalizeString } from 'js/helpers/functions';
 import { StyledTextField } from './style';
 
 function QuerySelect({ completeStep, setQueryType }) {
-  const [selectedQueryType, setSelectedQueryType] = useState('gene');
+  const [selectedQueryType, setSelectedQueryType] = useState(queryTypes.gene.value);
 
   function handleSelect(event) {
     setSelectedQueryType(event.target.value);
@@ -36,8 +37,11 @@ function QuerySelect({ completeStep, setQueryType }) {
           },
         }}
       >
-        <MenuItem value="gene">Gene</MenuItem>
-        <MenuItem value="protein">Protein</MenuItem>
+        {Object.values(queryTypes).map((type) => (
+          <MenuItem value={type.value} key={type.value}>
+            {capitalizeString(type.value)}
+          </MenuItem>
+        ))}
       </StyledTextField>
       <Button variant="contained" color="primary" onClick={handleButtonClick}>
         Set Parameters
