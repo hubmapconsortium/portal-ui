@@ -1,1 +1,0 @@
-- Update new search ui to only retain selections of hits included in the new results.

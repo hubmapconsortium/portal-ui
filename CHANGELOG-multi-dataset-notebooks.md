@@ -1,1 +1,0 @@
-- Enable users to launch workspace notebooks from dataset selections in new search ui.

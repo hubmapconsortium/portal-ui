@@ -1,3 +1,14 @@
+## v0.59.0 - 2022-12-13
+
+- Correct protein measurement labels to abundance in cells UI.
+- Reset gene symbols/protein options when query type changes in autocomplete input.
+- Update new search ui to only retain selections of hits included in the new results.
+- Updates to support HRA Release 4 (v1.3)
+- Enable users to launch workspace notebooks from dataset selections in new search ui.
+- Enable users to select search results in new search ui.
+- Add disclaimer to top of cells page.
+
+
 ## v0.57.0 - 2022-11-09
 
 - Fix path in ls command cell in workspace visualization notebook.
