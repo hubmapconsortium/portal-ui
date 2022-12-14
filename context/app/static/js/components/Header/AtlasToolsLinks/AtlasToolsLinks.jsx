@@ -7,8 +7,8 @@ import { StyledDivider } from '../HeaderContent/style';
 function AtlasToolsLinks({ isIndented }) {
   return (
     <>
-      <DropdownLink href="https://hubmapconsortium.github.io/ccf/" isIndented={isIndented}>
-        Common Coordinate Framework (CCF) Portal
+      <DropdownLink href="https://humanatlas.io" isIndented={isIndented}>
+        Human Reference Atlas (HRA) Portal
       </DropdownLink>
       <DropdownLink href="https://hubmapconsortium.github.io/ccf-asct-reporter/" isIndented={isIndented}>
         ASCT+B Reporter
@@ -32,6 +32,15 @@ function AtlasToolsLinks({ isIndented }) {
       </DropdownLink>
       <DropdownLink href="https://hubmapconsortium.github.io/hra-previews/pilots/pilot3.html" isIndented={isIndented}>
         HRA Preview: HRA vs. Experimental Data
+      </DropdownLink>
+      <DropdownLink href="https://hubmapconsortium.github.io/hra-previews/pilots/pilot4.html" isIndented={isIndented}>
+        HRA Preview: Scrollytelling Series
+      </DropdownLink>
+      <DropdownLink href="https://hubmapconsortium.github.io/hra-previews/pilots/pilot5.html" isIndented={isIndented}>
+        HRA Preview: Tabula Sapiens Comparison
+      </DropdownLink>
+      <DropdownLink href="https://hubmapconsortium.github.io/hra-previews/pilots/pilot6.html" isIndented={isIndented}>
+        HRA Preview: FTU Segmentation
       </DropdownLink>
     </>
   );
