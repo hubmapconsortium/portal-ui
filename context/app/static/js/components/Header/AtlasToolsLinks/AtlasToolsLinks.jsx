@@ -42,6 +42,9 @@ function AtlasToolsLinks({ isIndented }) {
       <DropdownLink href="https://hubmapconsortium.github.io/hra-previews/pilots/pilot6.html" isIndented={isIndented}>
         HRA Preview: FTU Segmentation
       </DropdownLink>
+      <DropdownLink href="https://hubmapconsortium.github.io/hra-previews/pilots/pilot7.html" isIndented={isIndented}>
+        HRA Preview: Mesh-Level Collision Detection
+      </DropdownLink>
     </>
   );
 }

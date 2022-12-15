@@ -1,2 +1,2 @@
-- Added three more HRA previews
+- Added 4 more HRA previews
 - Updated the CCF Portal to the HRA Portal and it's new home, humanatlas.io
