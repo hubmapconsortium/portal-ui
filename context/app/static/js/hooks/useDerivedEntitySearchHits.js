@@ -42,7 +42,7 @@ function useDerivedSampleSearchHits(ancestorUUID) {
         'uuid',
         'hubmap_id',
         'origin_sample.mapped_organ',
-        'mapped_specimen_type',
+        'sample_category',
         'descendant_counts',
         'last_modified_timestamp',
       ],

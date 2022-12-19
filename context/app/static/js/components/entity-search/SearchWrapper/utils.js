@@ -140,7 +140,7 @@ function buildDatasetFields() {
 function buildSampleFields() {
   const tileFields = {
     ...createSampleFacet({ fieldName: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
-    ...createSampleFacet({ fieldName: 'mapped_specimen_type', label: 'Specimen Type', type: 'string' }),
+    ...createSampleFacet({ fieldName: 'sample_category', label: 'Sample Category', type: 'string' }),
   };
 
   return { tableFields: tileFields, tileFields };
