@@ -8,10 +8,9 @@ The Data Portal depends on many [APIs](portal.hubmapconsortium.org/services),
 and directly or indirectly, on many other HuBMAP repos.
 
 ```mermaid
-%%{init: { "securityLevel": "loose" } }%%
 graph LR
     gateway
-    click gateway href "https://github.com/hubmapconsortium/gateway"
+    click gateway "https://github.com/hubmapconsortium/gateway"
 
     top[portal-ui] --> commons
     click top href "https://github.com/hubmapconsortium/portal-ui"
