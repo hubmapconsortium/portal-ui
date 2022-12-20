@@ -1,1 +1,0 @@
-- Handle change in elasticsearch document from specimen_type and mapped_specimen_type to sample_category.

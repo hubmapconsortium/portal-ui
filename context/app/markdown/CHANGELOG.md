@@ -1,3 +1,10 @@
+## v0.60.0 - 2022-12-20
+
+- Handle change in elasticsearch document from specimen_type and mapped_specimen_type to sample_category.
+- Added 4 more HRA previews
+- Updated the CCF Portal to the HRA Portal and it's new home, humanatlas.io
+
+
 ## v0.59.0 - 2022-12-13
 
 - Correct protein measurement labels to abundance in cells UI.
