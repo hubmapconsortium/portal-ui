@@ -12,7 +12,7 @@ function DerivedSamplesTable({ entities }) {
 
   const sampleColumns = [
     { id: 'origin_sample.mapped_organ', label: 'Organ' },
-    { id: 'mapped_specimen_type', label: 'Specimen' },
+    { id: 'sample_category', label: 'Sample Category' },
   ];
 
   const columns = [displayDOICol, ...sampleColumns, descendantCountsCol, lastModifiedTimestampCol];
@@ -24,7 +24,7 @@ function DerivedSamplesTable({ entities }) {
             uuid: entityUUID,
             hubmap_id,
             origin_sample,
-            mapped_specimen_type,
+            sample_category,
             descendant_counts,
             last_modified_timestamp,
           },
@@ -36,7 +36,7 @@ function DerivedSamplesTable({ entities }) {
               </LightBlueLink>
             </TableCell>
             <TableCell>{origin_sample?.mapped_organ}</TableCell>
-            <TableCell>{mapped_specimen_type}</TableCell>
+            <TableCell>{sample_category}</TableCell>
             <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
             <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
           </TableRow>

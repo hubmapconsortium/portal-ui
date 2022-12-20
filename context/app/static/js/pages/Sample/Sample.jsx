@@ -26,7 +26,7 @@ function SampleDetail({ assayMetadata }) {
     uuid,
     donor,
     protocol_url,
-    mapped_specimen_type,
+    sample_category,
     origin_sample: { mapped_organ },
     group_name,
     created_by_user_displayname,
@@ -59,8 +59,8 @@ function SampleDetail({ assayMetadata }) {
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
   useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, mapped_organ, mapped_specimen_type });
-  }, [setAssayMetadata, hubmap_id, entity_type, mapped_organ, mapped_specimen_type]);
+    setAssayMetadata({ hubmap_id, entity_type, mapped_organ, sample_category });
+  }, [setAssayMetadata, hubmap_id, entity_type, mapped_organ, sample_category]);
 
   useSendUUIDEvent(entity_type, uuid);
 
@@ -84,7 +84,7 @@ function SampleDetail({ assayMetadata }) {
             </LightBlueLink>
           </SummaryItem>
           <Typography variant="h6" component="p">
-            {mapped_specimen_type}
+            {sample_category}
           </Typography>
         </Summary>
         {shouldDisplaySection.derived && (
@@ -95,12 +95,7 @@ function SampleDetail({ assayMetadata }) {
             sectionId="derived"
           />
         )}
-        <SampleTissue
-          uuid={uuid}
-          mapped_specimen_type={mapped_specimen_type}
-          mapped_organ={mapped_organ}
-          hasRUI={hasRUI}
-        />
+        <SampleTissue uuid={uuid} sample_category={sample_category} mapped_organ={mapped_organ} hasRUI={hasRUI} />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}

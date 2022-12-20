@@ -39,7 +39,7 @@ function ProvTable({ uuid, typesToSplit, ancestors, assayMetadata }) {
                         entity_type={item.entity_type}
                         isCurrentEntity={uuid === item.uuid}
                         isSampleSibling={
-                          j > 0 && item.entity_type === 'Sample' && type[j - 1].specimen_type === item.specimen_type
+                          j > 0 && item.entity_type === 'Sample' && type[j - 1].sample_category === item.sample_category
                         }
                         isFirstTile={j === 0}
                         isLastTile={j === type.length - 1}

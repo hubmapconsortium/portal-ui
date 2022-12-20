@@ -37,7 +37,7 @@ Sample.args = {
   invertColors: false,
   entityData: {
     last_modified_timestamp: Date.now(),
-    mapped_specimen_type: 'Specimen Type',
+    sample_category: 'Sample Category',
     origin_sample: { mapped_organ: 'Organ Type' },
   },
   descendantCounts: { Sample: 1, Dataset: 2 },

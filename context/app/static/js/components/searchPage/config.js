@@ -58,7 +58,7 @@ const sampleConfig = {
   filters: {
     'Sample Metadata': [
       listFilter('origin_sample.mapped_organ', 'Organ'),
-      listFilter('mapped_specimen_type', 'Specimen Type'),
+      listFilter('sample_category', 'Sample Category'),
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,
@@ -67,7 +67,7 @@ const sampleConfig = {
     table: [
       field('hubmap_id', 'HuBMAP ID'),
       field('group_name', 'Group'),
-      field('mapped_specimen_type', 'Specimen Type'),
+      field('sample_category', 'Sample Category'),
       field('origin_sample.mapped_organ', 'Organ'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
@@ -81,7 +81,7 @@ const datasetConfig = {
     'Dataset Metadata': [
       listFilter('mapped_data_types', 'Data Type'),
       listFilter('origin_sample.mapped_organ', 'Organ'),
-      listFilter('source_sample.mapped_specimen_type', 'Specimen Type'),
+      listFilter('source_sample.sample_category', 'Sample Category'),
       hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),
       listFilter('mapped_consortium', 'Consortium'),
     ],
