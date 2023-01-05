@@ -21,7 +21,7 @@ function WorkspacePleaseWait({ workspaceId }) {
     });
     if (jobLocation) {
       const [urlBase, urlQuery] = jobLocation.split('?');
-      const workspacePath = document.location.hash.slice(1);
+      const workspacePath = new URLSearchParams(document.location.search).get('notebook_path');
       const jupyterUrl = `${urlBase}/tree/${workspacePath}?${urlQuery}`;
       document.location = jupyterUrl;
     } else {

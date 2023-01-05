@@ -1,5 +1,5 @@
 function extractAndLabelMetadata(obj, keys) {
-  const labels = { mapped_organ: 'organ type', mapped_data_types: 'data type', mapped_specimen_type: 'specimen type' };
+  const labels = { mapped_organ: 'organ type', mapped_data_types: 'data type', sample_category: 'sample category' };
   const acc = {};
   keys.forEach((k) => {
     acc[k] = { value: k in obj ? obj[k] : undefined, label: k in labels ? labels[k] : k };
@@ -12,7 +12,7 @@ function extractHeaderMetadata(assayMetadata, entity_type) {
     return extractAndLabelMetadata(assayMetadata, ['mapped_organ', 'mapped_data_types']);
   }
   if (entity_type === 'Sample') {
-    return extractAndLabelMetadata(assayMetadata, ['mapped_organ', 'mapped_specimen_type']);
+    return extractAndLabelMetadata(assayMetadata, ['mapped_organ', 'sample_category']);
   }
   if (entity_type === 'Donor') {
     const donorMetadata = extractAndLabelMetadata(assayMetadata, ['sex']);

@@ -2,6 +2,7 @@ import React from 'react';
 
 import Search from 'js/components/entity-search/Search';
 import { getDefaultFilters } from 'js/components/entity-search/searchkit-modifications/getDefaultFilters';
+import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import {
   mergeObjects,
   buildDonorFields,
@@ -59,4 +60,4 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   );
 }
 
-export default SearchWrapper;
+export default withSelectableTableProvider(SearchWrapper);

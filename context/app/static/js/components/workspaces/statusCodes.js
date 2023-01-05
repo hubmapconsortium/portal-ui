@@ -31,6 +31,9 @@ const jobStatuses = {
   running: {
     isDone: false,
   },
+  stopping: {
+    isDone: true,
+  },
   complete: {
     isDone: true,
   },

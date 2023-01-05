@@ -10,26 +10,27 @@
 # https://hubmapconsortium.github.io/ccf/pages/ccf-3d-reference-library.html
 
 http://purl.obolibrary.org/obo/UBERON_0000178:
-    asctb: Blood-v1.2
+    asctb: blood-v1.3
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-vasculature-thick.svg
     name: Blood
 http://purl.obolibrary.org/obo/UBERON_0004537:
-    asctb: Blood_Vasculature-v1.2
+    asctb: blood-vasculature-v1.3
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-vasculature-thick.svg
     name: Blood Vasculature
 http://purl.obolibrary.org/obo/UBERON_0002371:
-    asctb: Bone_Marrow-v1.2
+    asctb: bone-marrow-v1.3
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-pelvis-f.svg
     name: Bone Marrow
 http://purl.obolibrary.org/obo/UBERON_0000955:
-    asctb: Brain-v1.2
+    asctb: brain-v1.3
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-brain.svg
     name: Brain
 http://purl.obolibrary.org/obo/UBERON_0002185:
+    asctb: Lung-v1.2
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
     name: Bronchus
 http://purl.obolibrary.org/obo/UBERON_0000970:
-    asctb: Eye-v1.1
+    asctb: eye-v1.2
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-eye.svg
     name: Eye
 http://purl.obolibrary.org/obo/UBERON_0003889:
@@ -37,19 +38,19 @@ http://purl.obolibrary.org/obo/UBERON_0003889:
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-fallopian-tube-left.svg
     name: Fallopian Tube
 http://purl.obolibrary.org/obo/UBERON_0000948:
-    asctb: Heart-v1.1
+    asctb: heart-v1.2
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-heart.svg
     name: Heart
 http://purl.obolibrary.org/obo/UBERON_0002113:
-    asctb: Kidney-v1.2
+    asctb: kidney-v1.2
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-kidney.svg
     name: Kidney
-http://purl.obolibrary.org/obo/UBERON_0001485:
+http://purl.obolibrary.org/obo/UBERON_0001465:
     asctb: Knee-v1.1
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-knee.svg
     name: Knee
 http://purl.obolibrary.org/obo/UBERON_0000059:
-    asctb: Large_Intestine-v1.2
+    asctb: large-intestine-v1.3
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-large-intestine.svg
     name: Large Intestine
 http://purl.obolibrary.org/obo/UBERON_0002107:
@@ -61,18 +62,22 @@ http://purl.obolibrary.org/obo/UBERON_0002048:
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
     name: Lung
 http://purl.obolibrary.org/obo/UBERON_0000029:
-    asctb: Lymph_Nodes-v1.2
+    asctb: lymph_nodes-v1.2
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lymph-nodes.svg
     name: Lymph Node
 http://purl.obolibrary.org/obo/UBERON_0004536:
+    asctb: lymph-vasculature-v1.2
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lymph-nodes.svg
     name: Lymph Vasculature
+http://purl.obolibrary.org/obo/UBERON_0001911:
+    icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-breast.svg
+    name: Mammary Gland
 http://purl.obolibrary.org/obo/UBERON_0000992:
-    asctb: Ovary-v1.1
+    asctb: ovary-v1.2
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-ovaries.svg
     name: Ovary
 http://purl.obolibrary.org/obo/UBERON_0001264:
-    asctb: Pancreas-v1.1
+    asctb: pancreas-v1.2
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-pancreas.svg
     name: Pancreas
 http://purl.obolibrary.org/obo/UBERON_0001270:
@@ -91,25 +96,26 @@ http://purl.obolibrary.org/obo/UBERON_0002367:
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-prostate.svg
     name: Prostate
 http://purl.obolibrary.org/obo/UBERON_0002097:
-    asctb: Skin-v1.2
+    asctb: skin-v1.2
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-skin.svg
     name: Skin
 http://purl.obolibrary.org/obo/UBERON_0002108:
-    asctb: Small_Intestine-v1.0
+    asctb: Small_Intestine-v1.1
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-small%20intestine.svg
     name: Small Intestine
 http://purl.obolibrary.org/obo/UBERON_0002240:
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spinal-cord.svg
     name: Spinal Cord
 http://purl.obolibrary.org/obo/UBERON_0002106:
-    asctb: Spleen-v1.2
+    asctb: spleen-v1.3
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-spleen.svg
     name: Spleen
 http://purl.obolibrary.org/obo/UBERON_0002370:
-    asctb: Thymus-v1.2
+    asctb: thymus-v1.3
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-thymus.svg
     name: Thymus
 http://purl.obolibrary.org/obo/UBERON_0003126:
+    asctb: Lung-v1.2
     icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
     name: Trachea
 http://purl.obolibrary.org/obo/UBERON_0000056:

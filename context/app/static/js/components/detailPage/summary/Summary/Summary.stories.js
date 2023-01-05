@@ -47,7 +47,7 @@ const SampleTemplate = (args) => (
   <Summary {...args}>
     <SummaryItem>Fake Organ Type</SummaryItem>
     <Typography variant="h6" component="p">
-      Fake Specimen Type
+      Fake Sample Category
     </Typography>
   </Summary>
 );

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { AppContext } from 'js/components/Providers';
@@ -26,17 +26,53 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 // TODO use this context for components other than FileBrowser
 import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
+import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
 
 import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
-function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, registered_doi, hasNotebook }) {
+function NotebookButton(props) {
+  return (
+    <SecondaryBackgroundTooltip title="Launch a new workspace in Jupyter notebook.">
+      <WhiteBackgroundIconButton color="primary" {...props}>
+        <SvgIcon component={WorkspacesIcon} />
+      </WhiteBackgroundIconButton>
+    </SecondaryBackgroundTooltip>
+  );
+}
+
+function SummaryDataChildren({
+  mapped_data_types,
+  origin_sample,
+  doi_url,
+  registered_doi,
+  hasNotebook,
+  entity_type,
+  hubmap_id,
+  uuid,
+}) {
   const { workspacesUsers, userEmail } = useContext(AppContext);
 
-  function createWorkspace() {
-    // TODO: Change to form submission, and set up a different route.
-    document.location = `${document.location.pathname}.ws.ipynb`;
-  }
+  const createNotebook = useCallback(
+    async ({ workspaceName }) => {
+      const response = await fetch(`/notebooks/${entity_type.toLowerCase()}/${uuid}.ws.ipynb`, {
+        method: 'POST',
+        body: JSON.stringify({ workspace_name: workspaceName }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        console.error('Create workspace failed', response);
+        return;
+      }
+
+      const json = await response.json();
+      const { workspace_id, notebook_path } = json;
+      window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
+    },
+    [entity_type, uuid],
+  );
 
   return (
     <>
@@ -56,11 +92,14 @@ function SummaryDataChildren({ mapped_data_types, origin_sample, doi_url, regist
         </OutboundIconLink>
       )}
       {workspacesUsers.includes(userEmail) && (
-        <SecondaryBackgroundTooltip title="Launch a new workspace in Jupyter notebook.">
-          <WhiteBackgroundIconButton color="primary" onClick={createWorkspace} disabled={!hasNotebook}>
-            <SvgIcon component={WorkspacesIcon} />
-          </WhiteBackgroundIconButton>
-        </SecondaryBackgroundTooltip>
+        <>
+          <CreateWorkspaceDialog
+            handleCreateWorkspace={createNotebook}
+            buttonComponent={NotebookButton}
+            disabled={!hasNotebook}
+            defaultName={`${hubmap_id} Workspace`}
+          />
+        </>
       )}
     </>
   );
@@ -176,6 +215,9 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
             registered_doi={registered_doi}
             doi_url={doi_url}
             hasNotebook={hasNotebook}
+            entity_type={entity_type}
+            uuid={uuid}
+            hubmap_id={hubmap_id}
           />
         </Summary>
         {shouldDisplaySection.visualization && (

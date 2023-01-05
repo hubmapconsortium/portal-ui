@@ -1,4 +1,4 @@
-from flask import (abort, request, Response, current_app, redirect, session)
+from flask import (abort, request, Response, current_app, session)
 import json
 from pathlib import Path
 from string import Template
@@ -50,6 +50,7 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
     auth_headers = {'UWS-Authorization': f'Token {session["workspaces_token"]}'}
     workspaces_base_url = f'{current_app.config["WORKSPACES_ENDPOINT"]}/workspaces'
 
+    notebook_path = f'{name_stem}.ipynb'
     create_workspace_response = post(
         workspaces_base_url,
         headers=auth_headers,
@@ -59,11 +60,11 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
             'workspace_details': {
                 'globus_groups_token': session['groups_token'],
                 'files': [{
-                    'name': f'{name_stem}.ipynb',
+                    'name': notebook_path,
                     'content': nb_str,
                 }],
                 'symlinks': [{
-                    "name": f"/datasets/{uuid}",
+                    "name": f"datasets/{uuid}",
                     "dataset_uuid": uuid
                 } for uuid in uuids],
             }
@@ -72,30 +73,21 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
     create_workspace_response.raise_for_status()
     workspace_id = create_workspace_response.json()['data']['workspace']['id']
 
-    return redirect(f'/workspaces/{workspace_id}')
-
-
-def _get_workspace_name(request_args):
-    # TODO: When UI is available, limit to posts.
-    params = request_args.keys()
-    if (not (params <= set(['name']))):
-        abort(400)
-    return request_args.get('name')
+    return {'workspace_id': workspace_id, 'notebook_path': notebook_path}
 
 
 @blueprint.route(
-    '/browse/<type>/<uuid>.ipynb',
-    defaults={'create_workspace': False})
-@blueprint.route(
-    '/browse/<type>/<uuid>.ws.ipynb',
-    defaults={'create_workspace': True})
+    '/notebooks/<entity_type>/<uuid>.ws.ipynb', methods=['POST'])
 # TODO: Change to a single route, and instead make behavior depend on HTTP method
-def details_notebook(type, uuid, create_workspace):
-    if type not in entity_types:
+def details_notebook(entity_type, uuid):
+    if entity_type not in entity_types:
         abort(404)
+
+    body = request.get_json()
+    workspace_name = body.get('workspace_name')
+
     client = get_client()
     entity = client.get_entity(uuid)
-    workspace_name = f"{entity['hubmap_id']} Workspace" if create_workspace else None
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
     if (vitessce_conf is None
             or vitessce_conf.conf is None
@@ -108,7 +100,7 @@ def details_notebook(type, uuid, create_workspace):
         new_markdown_cell(
             f"Visualization for [{hubmap_id}]({dataset_url}); "
             "If this notebook is running in a HuBMAP workspace, the dataset is symlinked:"),
-        new_code_cell(f'!ls /datasets/{uuid}'),
+        new_code_cell(f'!ls datasets/{uuid}'),
         new_markdown_cell('Visualization requires extra code to be installed:'),
         new_code_cell(
             '!pip uninstall community flask albumentations -y '
@@ -122,9 +114,9 @@ def details_notebook(type, uuid, create_workspace):
 
 @blueprint.route('/notebooks/<entity_type>.ipynb', methods=['POST'])
 def notebook(entity_type):
-    workspace_name = _get_workspace_name(request.args)
     body = request.get_json()
     uuids = body.get('uuids')
+    workspace_name = body.get('workspace_name')
     url_base = get_url_base_from_request()
 
     cells = _get_cells('metadata.ipynb', uuids=uuids, url_base=url_base, entity_type=entity_type)
@@ -141,7 +133,7 @@ def notebook(entity_type):
     if zarr_files:
         cells += _get_cells('anndata.ipynb', uuids_to_zarr_files=uuids_to_zarr_files)
 
-    return _nb_response_from_dicts(entity_type, cells, workspace_name=workspace_name)
+    return _nb_response_from_dicts(entity_type, cells, workspace_name=workspace_name, uuids=uuids)
 
 
 def _limit_to_zarr_files(uuids_to_files):
