@@ -1,0 +1,1 @@
+- Bump Vitessce NPM package version from `^1.2.2` to `^2.0.2`
