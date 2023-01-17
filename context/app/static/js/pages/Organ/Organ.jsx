@@ -7,7 +7,7 @@ import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
-import OrganInfo from 'js/components/organ/OrganInfo';
+import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import Section from 'js/shared-styles/sections/Section';
@@ -55,7 +55,7 @@ function Organ({ organ }) {
         )}
         {shouldDisplaySection[hraId] && (
           <Section id={hraId}>
-            <OrganInfo uberonIri={organ.uberon} />
+            <HumanReferenceAtlas uberonIri={organ.uberon} />
           </Section>
         )}
         {shouldDisplaySection[referenceId] && (

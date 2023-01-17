@@ -8,7 +8,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 
 import { Flex, StyledInfoIcon } from '../style';
 
-function OrganInfo({ uberonIri }) {
+function HumanReferenceAtlas({ uberonIri }) {
   return (
     <>
       <Flex>
@@ -31,4 +31,4 @@ function OrganInfo({ uberonIri }) {
   );
 }
 
-export default OrganInfo;
+export default HumanReferenceAtlas;
