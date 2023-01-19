@@ -1,3 +1,10 @@
+## v0.62.0 - 2023-01-19
+
+- Add Gesina to workspaces allow list.
+- Fix organ page table of contents to reflect actual section names.
+- Update Vitessce homepage slide.
+
+
 ## v0.60.0 - 2022-12-20
 
 - Handle change in elasticsearch document from specimen_type and mapped_specimen_type to sample_category.

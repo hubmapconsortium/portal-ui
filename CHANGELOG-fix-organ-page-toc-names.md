@@ -1,1 +1,0 @@
-- Fix organ page table of contents to reflect actual section names.

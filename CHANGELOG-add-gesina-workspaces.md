@@ -1,1 +1,0 @@
-- Add Gesina to workspaces allow list.

@@ -1,1 +1,0 @@
-- Update Vitessce homepage slide.
