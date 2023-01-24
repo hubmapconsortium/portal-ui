@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
@@ -6,23 +6,15 @@ import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedBy
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import QuerySelect from 'js/components/cells/QuerySelect';
 import CellsResults from 'js/components/cells/CellsResults';
-import { queryTypes } from 'js/components/cells/queryTypes';
-
 import CellsTutorial from 'js/components/cells/tutorial/CellsTutorial';
 
 function Cells() {
-  const [results, setResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [minExpressionLog, setMinExpressionLog] = useState(1);
-  const [minCellPercentage, setMinCellPercentage] = useState(10);
-  const [cellVariableNames, setCellVariableNames] = useState([]);
-  const [queryType, setQueryType] = useState(queryTypes.gene.value);
-
   const setParametersButtonRef = useRef(null);
+  const runQueryButtonRef = useRef(null);
 
   return (
     <>
-      <CellsTutorial setQueryType={setQueryType} setParametersButtonRef={setParametersButtonRef} />
+      <CellsTutorial setParametersButtonRef={setParametersButtonRef} runQueryButtonRef={runQueryButtonRef} />
       <Typography variant="h2" component="h1" color="primary">
         Datasets: Molecular Data Queries
       </Typography>
@@ -35,41 +27,15 @@ function Cells() {
         steps={[
           {
             heading: '1. Query Type',
-            content: (
-              <QuerySelect
-                setQueryType={setQueryType}
-                setCellVariableNames={setCellVariableNames}
-                setParametersButtonRef={setParametersButtonRef}
-              />
-            ),
+            content: <QuerySelect setParametersButtonRef={setParametersButtonRef} />,
           },
           {
             heading: '2. Parameters',
-            content: (
-              <DatasetsSelectedByExpression
-                setResults={setResults}
-                minExpressionLog={minExpressionLog}
-                setMinExpressionLog={setMinExpressionLog}
-                minCellPercentage={minCellPercentage}
-                setMinCellPercentage={setMinCellPercentage}
-                cellVariableNames={cellVariableNames}
-                setCellVariableNames={setCellVariableNames}
-                queryType={queryType}
-                setIsLoading={setIsLoading}
-              />
-            ),
+            content: <DatasetsSelectedByExpression runQueryButtonRef={runQueryButtonRef} />,
           },
           {
             heading: '3. Results',
-            content: (
-              <CellsResults
-                isLoading={isLoading}
-                results={results}
-                minExpressionLog={minExpressionLog}
-                cellVariableNames={cellVariableNames}
-                queryType={queryType}
-              />
-            ),
+            content: <CellsResults />,
           },
         ]}
         isFirstStepOpen

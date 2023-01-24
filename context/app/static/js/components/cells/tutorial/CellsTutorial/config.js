@@ -13,14 +13,14 @@ const steps = [
     disableBeacon: true,
     title: 'Fill in Parameters',
   },
-  /*
-
   {
-    target: '#cells-steps-2-summary', 
+    target: '#cells-steps-2-summary',
+    disableBeacon: true,
     content:
       'If available, results should load with the first result expanded. If no results are valid with your search, return to the Parameters section by clicking the parameter section to change your selections.',
     title: 'View Results',
   },
+  /*
   {
     target: 'tbody tr:first-of-type td:last-child svg', // update
     content:
