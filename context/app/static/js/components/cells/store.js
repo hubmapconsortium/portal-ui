@@ -8,6 +8,7 @@ const types = {
   setMinCellPercentage: 'SET_MIN_CELL_PERCENTAGE',
   setCellVariableNames: 'SET_CELL_VARIABLE_NAMES',
   setQueryType: 'SET_QUERY_TYPE',
+  setSelectedQueryType: 'SET_SELECTED_QUERY_TYPE',
 };
 
 const reducer = (state, { type, payload }) => {
@@ -24,6 +25,8 @@ const reducer = (state, { type, payload }) => {
       return { cellVariableNames: payload };
     case types.setQueryType:
       return { queryType: payload };
+    case types.setSelectedQueryType:
+      return { selectedQueryType: payload };
     default:
       return state;
   }
@@ -36,6 +39,7 @@ const useStore = create((set, get) => ({
   minCellPercentage: 10,
   cellVariableNames: [],
   queryType: queryTypes.gene.value,
+  selectedQueryType: queryTypes.gene.value,
   dispatch: (args) => set((state) => reducer(state, args)),
   setResults: (results) => get().dispatch({ type: types.setResults, payload: results }),
   setIsLoading: (isLoading) => get().dispatch({ type: types.setIsLoading, payload: isLoading }),
@@ -46,6 +50,8 @@ const useStore = create((set, get) => ({
   setCellVariableNames: (cellVariableNames) =>
     get().dispatch({ type: types.setCellVariableNames, payload: cellVariableNames }),
   setQueryType: (queryType) => get().dispatch({ type: types.setQueryType, payload: queryType }),
+  setSelectedQueryType: (selectedQueryType) =>
+    get().dispatch({ type: types.setSelectedQueryType, payload: selectedQueryType }),
 }));
 
 export { useStore, reducer, types };
