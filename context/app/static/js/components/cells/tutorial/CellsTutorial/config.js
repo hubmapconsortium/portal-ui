@@ -22,29 +22,13 @@ const steps = [
     title: 'View Results',
     placement: 'left',
   },
-  /*
   {
-    target: 'tbody tr:first-of-type td:last-child svg', // update
+    target: '#cells-steps-2 tbody > tr:nth-child(1) > td:nth-child(9)',
     content:
       'The first result will always be automatically expanded to view relevant visualizations. To view or collapse relevant visualizations for other datasets, click the arrow icon. Only one expanded view can be loaded at a time.',
     title: 'Expand Results for Visualizations',
     disableBeacon: true,
   },
-    {
-      target: '#search-tiles-sort-button', // update
-      content:
-        'You can add datasets to a list by checking the checkbox next to a dataset. Select the checkbox in the header to select all datasets on the current page. After making your selection, press the “Add to List” button on the upper right corner of this panel.',
-      disableBeacon: true,
-      title: 'Add Results to List (5/6)',
-    },
-    {
-      target: '#search-tiles-sort-button', // update
-      content:
-        'After your results load, you can navigate to any of the previous steps (dataset selection, query type selection, parameters) to run a new query on different parameters. Your new query will not load immediately. To run a new query, press the “Rerun your query” button in the warning banner or the “Run Query” button in the Parameters step.',
-      disableBeacon: true,
-      title: 'Changing Parameters or Query Type',
-    },
-      */
 ];
 
 export { steps };
