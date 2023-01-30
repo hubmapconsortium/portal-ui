@@ -14,13 +14,11 @@ const labelAndHelperTextProps = {
   proteins: { label: 'Protein', helperText: buildHelperText('proteins') },
 };
 
-function AutocompleteEntity({ targetEntity, setter, setCellVariableNames }) {
+function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVariableNames }) {
   const [substring, setSubstring] = useState('');
   const [options, setOptions] = useState([]);
-  const [selected, setSelected] = useState([]);
 
   useEffect(() => {
-    setSelected([]);
     setOptions([]);
     setCellVariableNames([]);
   }, [targetEntity, setCellVariableNames]);
@@ -50,7 +48,8 @@ function AutocompleteEntity({ targetEntity, setter, setCellVariableNames }) {
     <Autocomplete
       options={options}
       multiple
-      getOptionLabel={(option) => option.full}
+      getOptionLabel={(option) => option}
+      getOptionSelected={(option, value) => option.full === value}
       renderOption={(option) => (
         <>
           {option.pre}
@@ -58,10 +57,10 @@ function AutocompleteEntity({ targetEntity, setter, setCellVariableNames }) {
           {option.post}
         </>
       )}
-      value={selected}
+      value={cellVariableNames}
       onChange={(event, value) => {
-        setSelected(value);
-        setter(value.map((match) => match.full));
+        // Needed to avoid a second list in state of 'selections'.
+        setter(value.map((match) => (match.constructor.name === 'Object' && match?.full ? match.full : match)));
       }}
       renderInput={({ InputLabelProps, ...params }) => (
         <TextField
