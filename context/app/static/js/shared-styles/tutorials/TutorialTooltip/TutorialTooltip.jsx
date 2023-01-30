@@ -14,7 +14,7 @@ function TutorialTooltip({
   tooltipProps,
   closeOnClick,
 }) {
-  const { incrementStep, decrementStep, closeTutorial } = useStore();
+  const { incrementStep, decrementStep, closeTutorial, nextButtonIsDisabled } = useStore();
 
   return (
     <StyledPaper {...tooltipProps}>
@@ -36,7 +36,7 @@ function TutorialTooltip({
             Finish Tutorial
           </TooltipProgressButton>
         ) : (
-          <TooltipProgressButton eventHandler={incrementStep} triggerKeyCode={39}>
+          <TooltipProgressButton eventHandler={incrementStep} triggerKeyCode={39} disabled={nextButtonIsDisabled}>
             Next
           </TooltipProgressButton>
         )}
