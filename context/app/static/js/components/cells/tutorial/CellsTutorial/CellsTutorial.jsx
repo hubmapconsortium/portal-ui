@@ -13,12 +13,13 @@ import { steps } from './config';
 
 const cellsStoreSelector = (state) => ({
   setQueryType: state.setQueryType,
+  setSelectedQueryType: state.setSelectedQueryType,
   setCellVariableNames: state.setCellVariableNames,
 });
 
 function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
   const themeContext = useContext(ThemeContext);
-  const { setQueryType, setCellVariableNames } = useCellsStore(cellsStoreSelector);
+  const { setQueryType, setSelectedQueryType, setCellVariableNames } = useCellsStore(cellsStoreSelector);
   const { tutorialStep, tutorialIsRunning, runTutorial } = useTutorialStore();
 
   const handleJoyrideCallback = (data) => {
@@ -30,6 +31,7 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
 
     if (action === ACTIONS.START && title === 'Select a Query Type') {
       setQueryType(queryTypes.gene.value);
+      setSelectedQueryType(queryTypes.gene.value);
     }
 
     if (action === ACTIONS.NEXT && lifecycle === LIFECYCLE.COMPLETE && title === 'Select a Query Type') {
