@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components';
-import Joyride, { ACTIONS } from 'react-joyride';
+import Joyride, { ACTIONS, LIFECYCLE } from 'react-joyride';
 
 import TutorialTooltip from 'js/shared-styles/tutorials/TutorialTooltip';
 import Prompt from 'js/shared-styles/tutorials/Prompt';
@@ -24,16 +24,20 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
   const handleJoyrideCallback = (data) => {
     const {
       action,
+      lifecycle,
       step: { title },
     } = data;
 
-    if (action === ACTIONS.NEXT && title === 'Fill in Parameters') {
+    if (action === ACTIONS.START && title === 'Select a Query Type') {
       setQueryType(queryTypes.gene.value);
-      setParametersButtonRef.current.click();
     }
 
-    if (action === ACTIONS.NEXT && title === 'View Results') {
+    if (action === ACTIONS.NEXT && lifecycle === LIFECYCLE.COMPLETE && title === 'Select a Query Type') {
+      setParametersButtonRef.current.click();
       setCellVariableNames(['UMOD']);
+    }
+
+    if (action === ACTIONS.NEXT && lifecycle === LIFECYCLE.COMPLETE && title === 'Fill in Parameters') {
       runQueryButtonRef.current.click();
     }
   };
@@ -53,11 +57,18 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
         callback={handleJoyrideCallback}
         run={tutorialIsRunning}
         scrollOffset={100}
+        disableOverlayClose
         floaterProps={{
           disableAnimation: true,
         }}
         tooltipComponent={TutorialTooltip}
-        styles={{ options: { arrowColor: themeContext.palette.info.dark, zIndex: themeContext.zIndex.tutorial } }}
+        styles={{
+          options: {
+            arrowColor: themeContext.palette.info.dark,
+            zIndex: themeContext.zIndex.tutorial,
+            overlayColor: 'rgba(0, 0, 0, 0)',
+          },
+        }}
         stepIndex={tutorialStep}
       />
     </>
