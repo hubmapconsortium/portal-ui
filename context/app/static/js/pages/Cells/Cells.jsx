@@ -7,6 +7,7 @@ import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import QuerySelect from 'js/components/cells/QuerySelect';
 import CellsResults from 'js/components/cells/CellsResults';
 import CellsTutorial from 'js/components/cells/tutorial/CellsTutorial';
+import { withTutorialProvider } from 'js/shared-styles/tutorials/TutorialProvider';
 
 function Cells() {
   const setParametersButtonRef = useRef(null);
@@ -44,4 +45,4 @@ function Cells() {
   );
 }
 
-export default Cells;
+export default withTutorialProvider(Cells, 'has_exited_cells_tutorial');

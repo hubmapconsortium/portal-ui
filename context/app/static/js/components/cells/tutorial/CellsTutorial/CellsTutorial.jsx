@@ -4,7 +4,6 @@ import Joyride, { ACTIONS, LIFECYCLE } from 'react-joyride';
 
 import TutorialTooltip from 'js/shared-styles/tutorials/TutorialTooltip';
 import Prompt from 'js/shared-styles/tutorials/Prompt';
-import { withTutorialProvider } from 'js/shared-styles/tutorials/TutorialProvider';
 import { queryTypes } from 'js/components/cells/queryTypes';
 import { useStore as useCellsStore } from 'js/components/cells/store';
 import { useStore as useTutorialStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
@@ -20,7 +19,7 @@ const cellsStoreSelector = (state) => ({
 function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
   const themeContext = useContext(ThemeContext);
   const { setQueryType, setSelectedQueryType, setCellVariableNames } = useCellsStore(cellsStoreSelector);
-  const { tutorialStep, tutorialIsRunning, runTutorial } = useTutorialStore();
+  const { tutorialStep, tutorialIsRunning, runTutorial, setNextButtonIsDisabled } = useTutorialStore();
 
   const handleJoyrideCallback = (data) => {
     const {
@@ -40,6 +39,7 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
     }
 
     if (action === ACTIONS.NEXT && lifecycle === LIFECYCLE.COMPLETE && title === 'Fill in Parameters') {
+      setNextButtonIsDisabled(true);
       runQueryButtonRef.current.click();
     }
   };
@@ -77,4 +77,4 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
   );
 }
 
-export default withTutorialProvider(CellsTutorial, 'has_exited_cells_tutorial');
+export default CellsTutorial;
