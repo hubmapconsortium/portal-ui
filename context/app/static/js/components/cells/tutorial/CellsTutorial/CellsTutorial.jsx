@@ -16,7 +16,7 @@ const cellsStoreSelector = (state) => ({
   setCellVariableNames: state.setCellVariableNames,
 });
 
-function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
+function CellsTutorial({ setParametersButtonRef, runQueryButtonRef, queryTypeStepRef, parametersStepRef }) {
   const themeContext = useContext(ThemeContext);
   const { setQueryType, setSelectedQueryType, setCellVariableNames } = useCellsStore(cellsStoreSelector);
   const { tutorialStep, tutorialIsRunning, runTutorial, setNextButtonIsDisabled } = useTutorialStore();
@@ -41,6 +41,14 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
     if (action === ACTIONS.NEXT && lifecycle === LIFECYCLE.COMPLETE && title === 'Fill in Parameters') {
       setNextButtonIsDisabled(true);
       runQueryButtonRef.current.click();
+    }
+
+    if (action === ACTIONS.PREV && lifecycle === LIFECYCLE.COMPLETE && title === 'Fill in Parameters') {
+      queryTypeStepRef.current.click();
+    }
+
+    if (action === ACTIONS.PREV && lifecycle === LIFECYCLE.COMPLETE && title === 'View Results') {
+      parametersStepRef.current.click();
     }
   };
 
