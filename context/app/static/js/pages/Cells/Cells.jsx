@@ -10,12 +10,21 @@ import CellsTutorial from 'js/components/cells/tutorial/CellsTutorial';
 import { withTutorialProvider } from 'js/shared-styles/tutorials/TutorialProvider';
 
 function Cells() {
+  // Refs for the step actions used to traverse forwards in the tutorial.
   const setParametersButtonRef = useRef(null);
   const runQueryButtonRef = useRef(null);
 
+  // Refs for the accordion steps used to traverse backwards in the tutorial.
+  const queryTypeStepRef = useRef(null);
+  const parametersStepRef = useRef(null);
   return (
     <>
-      <CellsTutorial setParametersButtonRef={setParametersButtonRef} runQueryButtonRef={runQueryButtonRef} />
+      <CellsTutorial
+        setParametersButtonRef={setParametersButtonRef}
+        runQueryButtonRef={runQueryButtonRef}
+        queryTypeStepRef={queryTypeStepRef}
+        parametersStepRef={parametersStepRef}
+      />
       <Typography variant="h2" component="h1" color="primary">
         Datasets: Molecular Data Queries
       </Typography>
@@ -29,10 +38,12 @@ function Cells() {
           {
             heading: '1. Query Type',
             content: <QuerySelect setParametersButtonRef={setParametersButtonRef} />,
+            ref: queryTypeStepRef,
           },
           {
             heading: '2. Parameters',
             content: <DatasetsSelectedByExpression runQueryButtonRef={runQueryButtonRef} />,
+            ref: parametersStepRef,
           },
           {
             heading: '3. Results',
