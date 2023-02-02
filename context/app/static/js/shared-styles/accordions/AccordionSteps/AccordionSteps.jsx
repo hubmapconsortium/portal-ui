@@ -28,7 +28,7 @@ function AccordionSteps({ steps, isFirstStepOpen, id }) {
     [steps.length],
   );
 
-  return steps.map(({ heading, content }, i) => (
+  return steps.map(({ heading, content, ref }, i) => (
     <StepAccordion
       id={`${id}-${i}`}
       key={heading}
@@ -40,6 +40,7 @@ function AccordionSteps({ steps, isFirstStepOpen, id }) {
       getHandleExpandFunction={getHandleExpandFunction}
       getCompleteStepFunction={getCompleteStepFunction}
       stepCompletedText={completedStepsText[i]}
+      ref={ref}
     />
   ));
 }

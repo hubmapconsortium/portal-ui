@@ -6,54 +6,60 @@ import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 
 import { AccordionSummaryHeading, AccordionText, Flex, StyledAccordionSummary, SuccessIcon } from './style';
 
-function StepAccordion({
-  index,
-  summaryHeading,
-  content,
-  disabled,
-  getHandleExpandFunction,
-  isExpanded,
-  stepCompletedText,
-  getCompleteStepFunction,
-  id,
-}) {
-  // memoize to avoid rerenders
-  const completeStep = useMemo(() => {
-    return getCompleteStepFunction(index);
-  }, [getCompleteStepFunction, index]);
+const StepAccordion = React.forwardRef(
+  (
+    {
+      index,
+      summaryHeading,
+      content,
+      disabled,
+      getHandleExpandFunction,
+      isExpanded,
+      stepCompletedText,
+      getCompleteStepFunction,
+      id,
+    },
+    ref,
+  ) => {
+    // memoize to avoid rerenders
+    const completeStep = useMemo(() => {
+      return getCompleteStepFunction(index);
+    }, [getCompleteStepFunction, index]);
 
-  return (
-    <Accordion onChange={getHandleExpandFunction(index)} disabled={disabled} expanded={isExpanded} id={id}>
-      <StyledAccordionSummary
-        expandIcon={<ArrowDropUpRoundedIcon />}
-        $isExpanded={isExpanded}
-        data-testid={`accordion-summary-${index}`}
-        id={`${id}-summary`}
-      >
-        <AccordionSummaryHeading variant="subtitle2" $isExpanded={isExpanded}>
-          {summaryHeading}
-        </AccordionSummaryHeading>
-        <Flex>
-          {stepCompletedText && (
-            <>
-              <AccordionText variant="body2" $isExpanded={isExpanded}>
-                {stepCompletedText}
-              </AccordionText>
-              <SuccessIcon data-testid={`accordion-success-icon-${index}`} />
-            </>
-          )}
-        </Flex>
-      </StyledAccordionSummary>
-      {content && (
-        <AccordionDetails>
-          {React.cloneElement(content, {
-            completeStep,
-          })}
-        </AccordionDetails>
-      )}
-    </Accordion>
-  );
-}
+    return (
+      <Accordion onChange={getHandleExpandFunction(index)} disabled={disabled} expanded={isExpanded} id={id}>
+        <StyledAccordionSummary
+          expandIcon={<ArrowDropUpRoundedIcon />}
+          $isExpanded={isExpanded}
+          data-testid={`accordion-summary-${index}`}
+          id={`${id}-summary`}
+          ref={ref}
+        >
+          <AccordionSummaryHeading variant="subtitle2" $isExpanded={isExpanded}>
+            {summaryHeading}
+          </AccordionSummaryHeading>
+          <Flex>
+            {stepCompletedText && (
+              <>
+                <AccordionText variant="body2" $isExpanded={isExpanded}>
+                  {stepCompletedText}
+                </AccordionText>
+                <SuccessIcon data-testid={`accordion-success-icon-${index}`} />
+              </>
+            )}
+          </Flex>
+        </StyledAccordionSummary>
+        {content && (
+          <AccordionDetails>
+            {React.cloneElement(content, {
+              completeStep,
+            })}
+          </AccordionDetails>
+        )}
+      </Accordion>
+    );
+  },
+);
 
 StepAccordion.propTypes = {
   index: PropTypes.number.isRequired,
