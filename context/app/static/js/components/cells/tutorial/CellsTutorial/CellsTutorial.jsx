@@ -28,7 +28,7 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef, queryTypeSte
       step: { title },
     } = data;
 
-    if (action === ACTIONS.START && title === 'Select a Query Type') {
+    if (action === ACTIONS.START && lifecycle === LIFECYCLE.INIT && title === 'Select a Query Type') {
       setQueryType(queryTypes.gene.value);
       setSelectedQueryType(queryTypes.gene.value);
     }
