@@ -25,7 +25,7 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
   );
   const { tutorialStep, tutorialIsRunning, runTutorial, setNextButtonIsDisabled } = useTutorialStore();
 
-  const { setOpenStepIndex } = useAccordionStepsStore();
+  const { setOpenStepIndex, resetStore: resetAccordionStepsStore } = useAccordionStepsStore();
 
   const handleJoyrideCallback = (data) => {
     const {
@@ -35,6 +35,7 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
     } = data;
 
     if (action === ACTIONS.START && lifecycle === LIFECYCLE.INIT && title === 'Select a Query Type') {
+      resetAccordionStepsStore();
       resetCellsStore();
       setOpenStepIndex(0);
       setQueryType(queryTypes.gene.value);
