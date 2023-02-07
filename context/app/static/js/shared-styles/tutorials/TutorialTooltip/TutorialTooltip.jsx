@@ -6,21 +6,14 @@ import { useStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
 import TooltipProgressButton from 'js/shared-styles/tutorials/TooltipProgressButton';
 import { StyledPaper, Flex, FlexEnd, WhiteTypography, WhiteCloseRoundedIcon } from './style';
 
-function TutorialTooltip({
-  index,
-  isLastStep,
-  size,
-  step: { title, content, contentIsComponent },
-  tooltipProps,
-  closeOnClick,
-}) {
+function TutorialTooltip({ index, isLastStep, size, step: { title, content, contentIsComponent }, tooltipProps }) {
   const { incrementStep, decrementStep, closeTutorial, nextButtonIsDisabled } = useStore();
 
   return (
     <StyledPaper {...tooltipProps}>
       <Flex>
         <WhiteTypography variant="subtitle1">{`${title} (${index + 1}/${size})`}</WhiteTypography>
-        <IconButton aria-label="close" size="small" onClick={closeOnClick}>
+        <IconButton aria-label="close" size="small" onClick={closeTutorial}>
           <WhiteCloseRoundedIcon />
         </IconButton>
       </Flex>
