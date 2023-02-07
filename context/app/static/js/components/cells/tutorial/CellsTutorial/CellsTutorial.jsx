@@ -7,6 +7,7 @@ import Prompt from 'js/shared-styles/tutorials/Prompt';
 import { queryTypes } from 'js/components/cells/queryTypes';
 import { useStore as useCellsStore } from 'js/components/cells/store';
 import { useStore as useTutorialStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
+import { useStore as useAccordionStepsStore } from 'js/shared-styles/accordions/AccordionSteps/store';
 
 import { steps } from './config';
 
@@ -16,10 +17,12 @@ const cellsStoreSelector = (state) => ({
   setCellVariableNames: state.setCellVariableNames,
 });
 
-function CellsTutorial({ setParametersButtonRef, runQueryButtonRef, queryTypeStepRef, parametersStepRef }) {
+function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
   const themeContext = useContext(ThemeContext);
   const { setQueryType, setSelectedQueryType, setCellVariableNames } = useCellsStore(cellsStoreSelector);
   const { tutorialStep, tutorialIsRunning, runTutorial, setNextButtonIsDisabled } = useTutorialStore();
+
+  const { setOpenStepIndex } = useAccordionStepsStore();
 
   const handleJoyrideCallback = (data) => {
     const {
@@ -29,6 +32,7 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef, queryTypeSte
     } = data;
 
     if (action === ACTIONS.START && lifecycle === LIFECYCLE.INIT && title === 'Select a Query Type') {
+      setOpenStepIndex(0);
       setQueryType(queryTypes.gene.value);
       setSelectedQueryType(queryTypes.gene.value);
     }
@@ -44,11 +48,11 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef, queryTypeSte
     }
 
     if (action === ACTIONS.PREV && lifecycle === LIFECYCLE.COMPLETE && title === 'Fill in Parameters') {
-      queryTypeStepRef.current.click();
+      setOpenStepIndex(0);
     }
 
     if (action === ACTIONS.PREV && lifecycle === LIFECYCLE.COMPLETE && title === 'View Results') {
-      parametersStepRef.current.click();
+      setOpenStepIndex(1);
     }
   };
 

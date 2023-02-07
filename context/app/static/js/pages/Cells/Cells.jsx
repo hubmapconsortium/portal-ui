@@ -15,20 +15,14 @@ function Cells() {
   const setParametersButtonRef = useRef(null);
   const runQueryButtonRef = useRef(null);
 
-  // Refs for the accordion steps used to traverse backwards in the tutorial.
-  const queryTypeStepRef = useRef(null);
-  const parametersStepRef = useRef(null);
-
   const steps = [
     {
       heading: '1. Query Type',
       content: <QuerySelect setParametersButtonRef={setParametersButtonRef} />,
-      ref: queryTypeStepRef,
     },
     {
       heading: '2. Parameters',
       content: <DatasetsSelectedByExpression runQueryButtonRef={runQueryButtonRef} />,
-      ref: parametersStepRef,
     },
     {
       heading: '3. Results',
@@ -38,12 +32,7 @@ function Cells() {
 
   return (
     <AccordionStepsProvider stepsLength={steps.length}>
-      <CellsTutorial
-        setParametersButtonRef={setParametersButtonRef}
-        runQueryButtonRef={runQueryButtonRef}
-        queryTypeStepRef={queryTypeStepRef}
-        parametersStepRef={parametersStepRef}
-      />
+      <CellsTutorial setParametersButtonRef={setParametersButtonRef} runQueryButtonRef={runQueryButtonRef} />
       <Typography variant="h2" component="h1" color="primary">
         Datasets: Molecular Data Queries
       </Typography>

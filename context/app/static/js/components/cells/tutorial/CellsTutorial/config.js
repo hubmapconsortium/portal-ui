@@ -5,7 +5,7 @@ const steps = [
     content:
       'Select your desired query from the list of selections. After making a selection, the “Set Parameters” button will become active for you to proceed.',
     title: 'Select a Query Type',
-    placement: 'bottom-start',
+    placement: 'bottom',
   },
   {
     target: '#cells-steps-1',

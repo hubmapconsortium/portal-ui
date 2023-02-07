@@ -7,7 +7,7 @@ import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 import { useStore } from 'js/shared-styles/accordions/AccordionSteps/store';
 import { AccordionSummaryHeading, AccordionText, Flex, StyledAccordionSummary, SuccessIcon } from './style';
 
-const StepAccordion = React.forwardRef(({ index, summaryHeading, content, id }, ref) => {
+function StepAccordion({ index, summaryHeading, content, id }) {
   const { completeStep, expandStep, openStepIndex, completedStepsText } = useStore();
   // memoize to avoid rerenders
   const handleCompleteStep = useMemo(() => {
@@ -30,7 +30,6 @@ const StepAccordion = React.forwardRef(({ index, summaryHeading, content, id }, 
         $isExpanded={isExpanded}
         data-testid={`accordion-summary-${index}`}
         id={`${id}-summary`}
-        ref={ref}
       >
         <AccordionSummaryHeading variant="subtitle2" $isExpanded={isExpanded}>
           {summaryHeading}
@@ -55,7 +54,7 @@ const StepAccordion = React.forwardRef(({ index, summaryHeading, content, id }, 
       )}
     </Accordion>
   );
-});
+}
 
 StepAccordion.propTypes = {
   index: PropTypes.number.isRequired,
