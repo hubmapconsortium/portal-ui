@@ -8,6 +8,12 @@ const types = {
   expandStep: 'EXPAND_STEP',
   setCompletedStepsText: 'SET_COMPLETED_STEPS_TEXT',
   completeStep: 'COMPLETE_STEP',
+  resetStore: 'RESET_STORE',
+};
+
+const defaultState = {
+  openStepIndex: 0,
+  completedStepsText: {},
 };
 
 export function getSpecificObjectEntries(keys, object) {
@@ -43,6 +49,8 @@ const reducer = (state, { type, payload }) => {
       return { completedStepsText: payload };
     case types.completeStep:
       return handleCompleteStep({ payload, state });
+    case types.resetStore:
+      return defaultState;
     default:
       return state;
   }
@@ -50,9 +58,8 @@ const reducer = (state, { type, payload }) => {
 
 const createStore = (stepsLength) =>
   create((set, get) => ({
-    openStepIndex: 0,
     stepsLength,
-    completedStepsText: {},
+    ...defaultState,
     dispatch: (args) => set((state) => reducer(state, args)),
     setOpenStepIndex: (stepIndex) => get().dispatch({ type: types.setOpenStepIndex, payload: stepIndex }),
     expandStep: (stepIndex) => get().dispatch({ type: types.expandStep, payload: stepIndex }),
@@ -60,6 +67,7 @@ const createStore = (stepsLength) =>
       get().dispatch({ type: types.setCompletedStepsText, payload: completedStepsText }),
     completeStep: (stepIndex, completedStepText) =>
       get().dispatch({ type: types.completeStep, payload: { stepIndex, completedStepText } }),
+    resetStore: () => get().dispatch({ type: types.resetStore }),
   }));
 
 export { useStore, createStore, Provider, reducer, types };
