@@ -25,6 +25,7 @@ function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, childre
     'pdblood@andrew.cmu.edu',
     'blood@psc.edu',
     'jpuerto@andrew.cmu.edu',
+    'gphillip@andrew.cmu.edu',
   ];
   // injectFirst ensures styled-components takes priority over mui for styling
   return (

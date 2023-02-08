@@ -7,7 +7,7 @@ import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
-import OrganInfo from 'js/components/organ/OrganInfo';
+import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import Section from 'js/shared-styles/sections/Section';
@@ -15,16 +15,20 @@ import Section from 'js/shared-styles/sections/Section';
 import { FlexRow, Content } from './style';
 
 function Organ({ organ }) {
-  const descriptionId = 'description';
-  const organInfoId = 'organ info';
-  const azimuthId = 'azimuth';
-  const searchId = 'search';
+  const summaryId = 'Summary';
+  const hraId = 'Human Reference Atlas';
+  const referenceId = 'Reference-Based Analysis';
+  const assaysId = 'Assays';
+  const samplesId = 'Samples';
+
+  const shouldDisplaySearch = organ.search.length > 0;
 
   const shouldDisplaySection = {
-    [descriptionId]: Boolean(organ?.description),
-    [organInfoId]: organ.has_iu_component,
-    [azimuthId]: Boolean(organ?.azimuth),
-    [searchId]: organ.search.length > 0,
+    [summaryId]: Boolean(organ?.description),
+    [hraId]: organ.has_iu_component,
+    [referenceId]: Boolean(organ?.azimuth),
+    [assaysId]: shouldDisplaySearch,
+    [samplesId]: shouldDisplaySearch,
   };
 
   const sectionOrder = Object.entries(shouldDisplaySection)
@@ -42,27 +46,31 @@ function Organ({ organ }) {
         <Typography variant="h1" component="h2">
           {organ.name}
         </Typography>
-        {shouldDisplaySection[descriptionId] && (
-          <Section id={descriptionId}>
+        {shouldDisplaySection[summaryId] && (
+          <Section id={summaryId}>
             <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short} asctbId={organ.asctb}>
               {organ.description}
             </Description>
           </Section>
         )}
-        {shouldDisplaySection[organInfoId] && (
-          <Section id={organInfoId}>
-            <OrganInfo uberonIri={organ.uberon} />
+        {shouldDisplaySection[hraId] && (
+          <Section id={hraId}>
+            <HumanReferenceAtlas uberonIri={organ.uberon} />
           </Section>
         )}
-        {shouldDisplaySection[azimuthId] && (
-          <Section id={azimuthId}>
+        {shouldDisplaySection[referenceId] && (
+          <Section id={referenceId}>
             <Azimuth config={organ.azimuth} />
           </Section>
         )}
-        {shouldDisplaySection[searchId] && (
-          <Section id={searchId}>
+        {shouldDisplaySection[assaysId] && (
+          <Section id={assaysId}>
             <Assays organTerms={organ.search} />
             <DatasetsBarChart name={organ.name} search={organ.search} />
+          </Section>
+        )}
+        {shouldDisplaySection[samplesId] && (
+          <Section id={samplesId}>
             <Samples organTerms={organ.search} />
           </Section>
         )}
