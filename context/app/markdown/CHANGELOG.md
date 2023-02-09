@@ -1,3 +1,8 @@
+## v0.63.0 - 2023-02-09
+
+- Pass organs count to entity counts iframe.
+
+
 ## v0.62.0 - 2023-01-19
 
 - Add Gesina to workspaces allow list.
