@@ -8,7 +8,7 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 
-function SampleTissue({ uuid, mapped_organ, mapped_specimen_type, hasRUI }) {
+function SampleTissue({ uuid, mapped_organ, sample_category, hasRUI }) {
   return (
     <DetailPageSection id="tissue">
       <SectionHeader>Tissue</SectionHeader>
@@ -18,8 +18,8 @@ function SampleTissue({ uuid, mapped_organ, mapped_specimen_type, hasRUI }) {
             {mapped_organ || 'Organ Type not defined'}
           </LightBlueLink>
         </SectionItem>
-        <SectionItem label="Specimen Type" ml={1} flexBasis="25%">
-          {mapped_specimen_type || 'Specimen Type not defined'}
+        <SectionItem label="Sample Category" ml={1} flexBasis="25%">
+          {sample_category || 'Sample Category not defined'}
         </SectionItem>
         {hasRUI && (
           <SectionItem label="Tissue Location" ml={1}>
@@ -41,7 +41,7 @@ function SampleTissue({ uuid, mapped_organ, mapped_specimen_type, hasRUI }) {
 SampleTissue.propTypes = {
   uuid: PropTypes.string.isRequired,
   mapped_organ: PropTypes.string.isRequired,
-  mapped_specimen_type: PropTypes.string.isRequired,
+  sample_category: PropTypes.string.isRequired,
   hasRUI: PropTypes.bool.isRequired,
 };
 

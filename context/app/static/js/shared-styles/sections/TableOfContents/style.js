@@ -3,8 +3,8 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
 const TableContainer = styled.div`
-  margin-right: 70px;
-  width: 80px;
+  margin-right: 30px;
+  width: 120px;
 `;
 
 const StickyNav = styled.nav`

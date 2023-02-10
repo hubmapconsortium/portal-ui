@@ -12,7 +12,7 @@ const baseLabels = {
   'mapped_metadata.sex': 'Sex',
   'mapped_metadata.race': 'Race',
   'origin_sample.mapped_organ': 'Organ',
-  mapped_specimen_type: 'Specimen Type',
+  sample_category: 'Sample Category',
   mapped_data_types: 'Data Type',
 };
 
@@ -20,13 +20,13 @@ const allLabels = {
   ...baseLabels,
   'donor.mapped_metadata.sex': baseLabels['mapped_metadata.sex'],
   'donor.mapped_metadata.race': baseLabels['mapped_metadata.race'],
-  'source_sample.mapped_specimen_type': baseLabels.mapped_specimen_type,
+  'source_sample.sample_category': baseLabels.sample_category,
 };
 
 const donorAggsQuery = getAggsQuery('donor', ['mapped_metadata.sex', 'mapped_metadata.race'], 100);
 const sampleAggsQuery = getAggsQuery(
   'sample',
-  ['donor.mapped_metadata.sex', 'donor.mapped_metadata.race', 'origin_sample.mapped_organ', 'mapped_specimen_type'],
+  ['donor.mapped_metadata.sex', 'donor.mapped_metadata.race', 'origin_sample.mapped_organ', 'sample_category'],
   100,
 );
 
@@ -36,7 +36,7 @@ const datasetAggsQuery = getAggsQuery(
     'donor.mapped_metadata.sex',
     'donor.mapped_metadata.race',
     'origin_sample.mapped_organ',
-    'source_sample.mapped_specimen_type',
+    'source_sample.sample_category',
     'mapped_data_types',
   ],
   100,

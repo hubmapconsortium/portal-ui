@@ -5,7 +5,7 @@ const defaultSteps = [
     target: '#Data-Type div.sk-item-list > label:nth-child(1)',
     disableBeacon: true,
     content:
-      'The Dataset Metadata menu on the left side allows filtering datasets by any combination of metadata categories: Data Type, Organ and Specimen Type. Search results update automatically as you edit the selection of filters.',
+      'The Dataset Metadata menu on the left side allows filtering datasets by any combination of metadata categories: Data Type, Organ and Sample Category. Search results update automatically as you edit the selection of filters.',
     title: 'Filter Your Browsing',
   },
   {

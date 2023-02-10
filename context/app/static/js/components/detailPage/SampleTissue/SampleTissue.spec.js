@@ -5,17 +5,17 @@ import SampleTissue from './SampleTissue';
 
 function expectLabelsPresent() {
   expect(screen.getByText('Tissue')).toBeInTheDocument();
-  const labelsToTest = ['Organ Type', 'Specimen Type'];
+  const labelsToTest = ['Organ Type', 'Sample Category'];
   labelsToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 }
 
 test('text displays properly when all props provided', () => {
-  render(<SampleTissue mapped_organ="Fake Organ" mapped_specimen_type="Fake Specimen Type" hasRUI />);
+  render(<SampleTissue mapped_organ="Fake Organ" sample_category="Fake Sample Category" hasRUI />);
   expectLabelsPresent();
 
   expect(screen.getByText('Tissue Location')).toBeInTheDocument();
 
-  const valuesToTest = ['Fake Organ', 'Fake Specimen Type'];
+  const valuesToTest = ['Fake Organ', 'Fake Sample Category'];
   valuesToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 });
 
@@ -25,6 +25,6 @@ test('displays label not defined when values are undefined', () => {
 
   expect(screen.queryByText('Tissue Location')).not.toBeInTheDocument();
 
-  const valuesToTest = ['Organ Type not defined', 'Specimen Type not defined'];
+  const valuesToTest = ['Organ Type not defined', 'Sample Category not defined'];
   valuesToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 });

@@ -112,7 +112,7 @@ def _get_entities(entity_type, constraints={}, uuids=None):
     if entity_type in ['samples', 'datasets']:
         extra_fields += ['donor.hubmap_id', 'origin_sample.mapped_organ']
     if entity_type in ['samples']:
-        extra_fields += ['mapped_specimen_type']
+        extra_fields += ['sample_category']
     entities = client.get_entities(
         plural_lc_entity_type=entity_type, non_metadata_fields=extra_fields,
         constraints=constraints,

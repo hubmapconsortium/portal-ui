@@ -33,7 +33,7 @@ test('combines appropiately structured metadata', () => {
   };
   const origin_sample = {
     mapped_organ: 'Kidney (Right)',
-    mapped_specimen_type: 'Organ',
+    sample_category: 'Organ',
     // Currently, not seeing any metadata here, but that may change.
   };
   const source_sample = [

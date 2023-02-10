@@ -76,8 +76,10 @@ def main():
         # and https://github.com/hubmapconsortium/portal-ui/issues/2943 are resolved.
 
         # Why FMA? Resolve paired organs:
-        'FMA_7214', 'FMA_7213',
-        'FMA_24977', 'FMA_24978',
+        'fma7214', 'fma7213', 
+        'fma24977', 'fma24978',
+        'fma57991', 'fma57987',
+        'fma323951',
 
         # Just resolve paired organs:
         'UBERON_0004549', 'UBERON_0004548',
@@ -90,7 +92,7 @@ def main():
     }
     unexpected_unmatched = unmatched - expected_unmatched
     if unexpected_unmatched:
-        as_string = ", ".join(unexpected_unmatched)
+        as_string = ", ".join(sorted(unexpected_unmatched))
         raise Exception(f'Unexpected unmatched IDs: {as_string}')
 
     organs = [

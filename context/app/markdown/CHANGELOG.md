@@ -1,3 +1,33 @@
+## v0.63.0 - 2023-02-09
+
+- Pass organs count to entity counts iframe.
+
+
+## v0.62.0 - 2023-01-19
+
+- Add Gesina to workspaces allow list.
+- Fix organ page table of contents to reflect actual section names.
+- Update Vitessce homepage slide.
+
+
+## v0.60.0 - 2022-12-20
+
+- Handle change in elasticsearch document from specimen_type and mapped_specimen_type to sample_category.
+- Added 4 more HRA previews
+- Updated the CCF Portal to the HRA Portal and it's new home, humanatlas.io
+
+
+## v0.59.0 - 2022-12-13
+
+- Correct protein measurement labels to abundance in cells UI.
+- Reset gene symbols/protein options when query type changes in autocomplete input.
+- Update new search ui to only retain selections of hits included in the new results.
+- Updates to support HRA Release 4 (v1.3)
+- Enable users to launch workspace notebooks from dataset selections in new search ui.
+- Enable users to select search results in new search ui.
+- Add disclaimer to top of cells page.
+
+
 ## v0.57.0 - 2022-11-09
 
 - Fix path in ls command cell in workspace visualization notebook.

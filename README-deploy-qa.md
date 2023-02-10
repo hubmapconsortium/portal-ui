@@ -47,7 +47,7 @@ Thursday afternoon:
 
 ### Detail Pages
 
-Confirm the below for a variety of entities spread across assay types for datasets, specimen types for samples, and groups for donors.
+Confirm the below for a variety of entities spread across assay types for datasets, sample categories for samples, and groups for donors.
 
 *   Table of contents sidebar should reflect the sections on the page starting with ‘Summary’. Clicking a link should bring you to the appropriate section.
 *   Scrolling past the summary section should reveal a header below the primary app bar.

@@ -14,7 +14,7 @@ function EntityTileBody({ entity_type, id, entityData, invertColors }) {
       <StyledDiv>
         <Tile.Title>{id}</Tile.Title>
         {'origin_sample' in entityData && <Tile.Text>{entityData.origin_sample.mapped_organ}</Tile.Text>}
-        {'mapped_specimen_type' in entityData && <Tile.Text>{entityData.mapped_specimen_type}</Tile.Text>}
+        {'sample_category' in entityData && <Tile.Text>{entityData.sample_category}</Tile.Text>}
         {'mapped_data_types' in entityData && <Tile.Text>{entityData.mapped_data_types.join(', ')}</Tile.Text>}
         {entity_type === 'Donor' && 'mapped_metadata' in entityData && (
           <>
