@@ -1,2 +1,0 @@
-- Correct protein measurement labels to abundance in cells UI.
-- Reset gene symbols/protein options when query type changes in autocomplete input.
