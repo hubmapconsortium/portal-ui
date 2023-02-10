@@ -56,10 +56,10 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
-const createStore = (stepsLength) =>
+const createStore = ({ stepsLength, initialState }) =>
   create((set, get) => ({
     stepsLength,
-    ...defaultState,
+    ...{ ...defaultState, ...initialState },
     dispatch: (args) => set((state) => reducer(state, args)),
     setOpenStepIndex: (stepIndex) => get().dispatch({ type: types.setOpenStepIndex, payload: stepIndex }),
     expandStep: (stepIndex) => get().dispatch({ type: types.expandStep, payload: stepIndex }),
