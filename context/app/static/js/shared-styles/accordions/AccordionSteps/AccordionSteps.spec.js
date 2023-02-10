@@ -48,8 +48,6 @@ async function clickCompleteStep(step) {
 test('accordions are disabled until previous step is completed', async () => {
   render(
     <AccordionStepsWithProvider
-      isFirstStepOpen={false}
-      // eslint-disable-next-line no-unused-vars
       steps={Array(2)
         .fill()
         .map((a, index) => ({
@@ -70,8 +68,6 @@ test('accordions are disabled until previous step is completed', async () => {
 test("an accordion is closed when step is completed and the next step's accordion is opened", async () => {
   render(
     <AccordionStepsWithProvider
-      isFirstStepOpen={false}
-      // eslint-disable-next-line no-unused-vars
       steps={Array(2)
         .fill()
         .map((a, index) => ({
@@ -80,22 +76,18 @@ test("an accordion is closed when step is completed and the next step's accordio
         }))}
     />,
   );
-  expect(screen.queryByText(step0.contentButton)).not.toBeVisible();
-
-  await clickOpenAccordion(step0);
 
   expect(screen.queryByText(step1.contentButton)).not.toBeVisible();
 
   await clickCompleteStep(step0);
 
   expect(screen.getByText(step1.contentButton)).toBeVisible();
+  expect(screen.queryByText(step0.contentButton)).not.toBeVisible();
 });
 
 test('future steps completed text are reset upon completion', async () => {
   render(
     <AccordionStepsWithProvider
-      isFirstStepOpen={false}
-      // eslint-disable-next-line no-unused-vars
       steps={Array(2)
         .fill()
         .map((a, index) => ({
@@ -132,7 +124,6 @@ test('children useEffect hooks dependent on completeStep are only called once', 
   const spy = jest.fn();
   render(
     <AccordionStepsWithProvider
-      isFirstStepOpen={false}
       steps={[
         {
           heading: 'Heading',
