@@ -7,7 +7,7 @@ import { AccordionStepsProvider } from '../AccordionSteps/provider';
 
 test('should show success icon when step completed text is provided', async () => {
   render(
-    <AccordionStepsProvider stepsLength={1}>
+    <AccordionStepsProvider stepsLength={1} initialState={{ completeStepsText: { 0: 'Completed Step 0' } }}>
       <StepAccordion index={0} summaryHeading="Step 0" content={<div />} />
     </AccordionStepsProvider>,
   );
