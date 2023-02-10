@@ -1,19 +1,22 @@
 import React from 'react';
 
 import PromptComponent from './Prompt';
+import TutorialProvider from '../TutorialProvider';
 
 export default {
   title: 'Tutorials/Prompt',
   component: PromptComponent,
 };
 
-export const Prompt = (args) => <PromptComponent {...args} />;
+export const Prompt = (args) => (
+  <TutorialProvider>
+    <PromptComponent {...args} />
+  </TutorialProvider>
+);
 Prompt.args = {
   headerText: 'Tutorial Title',
   descriptionText: 'Welcome to the tutorial!',
   buttonText: 'Start the tutorial',
-  buttonOnClick: () => {},
   buttonIsDisabled: false,
-  closeOnClick: () => {},
 };
 Prompt.storyName = 'Prompt'; // needed for single story hoisting for multi word component names
