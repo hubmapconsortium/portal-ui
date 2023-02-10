@@ -23,7 +23,7 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
   const { setQueryType, setSelectedQueryType, setCellVariableNames, resetStore: resetCellsStore } = useCellsStore(
     cellsStoreSelector,
   );
-  const { tutorialStep, tutorialIsRunning, runTutorial, setNextButtonIsDisabled } = useTutorialStore();
+  const { tutorialStep, tutorialIsRunning, setNextButtonIsDisabled } = useTutorialStore();
 
   const { setOpenStepIndex, resetStore: resetAccordionStepsStore } = useAccordionStepsStore();
 
@@ -67,9 +67,7 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
         headerText="Getting Started"
         descriptionText="Get a tutorial of how to explore the genomic and proteomic information in the HuBMAP data portal."
         buttonText="Take the Molecular Data Queries Tutorial"
-        buttonOnClick={runTutorial}
         buttonIsDisabled={false}
-        closeOnClick={() => {}}
       />
       <Joyride
         steps={steps}
