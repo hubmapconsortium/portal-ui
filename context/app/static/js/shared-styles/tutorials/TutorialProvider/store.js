@@ -12,12 +12,12 @@ function getDecrementedStep(state) {
 }
 
 function getRunTutorial() {
-  return { tutorialIsRunning: true, isTutorialPromptOpen: false };
+  return { isTutorialRunning: true, isTutorialPromptOpen: false };
 }
 
 function getCloseTutorial(state) {
   localStorage.setItem(state.localStorageKey, true);
-  return { tutorialIsRunning: false, tutorialIsExited: true };
+  return { isTutorialRunning: false, tutorialIsExited: true };
 }
 
 const types = {
@@ -52,7 +52,7 @@ const createStore = (localStorageKey) =>
   create((set, get) => ({
     localStorageKey,
     isPromptOpen: true,
-    tutorialIsRunning: false,
+    isTutorialRunning: false,
     tutorialStep: 0,
     isTutorialPromptOpen: !localStorage.getItem(localStorageKey),
     nextButtonIsDisabled: false,

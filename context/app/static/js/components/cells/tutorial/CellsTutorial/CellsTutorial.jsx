@@ -23,7 +23,7 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
   const { setQueryType, setSelectedQueryType, setCellVariableNames, resetStore: resetCellsStore } = useCellsStore(
     cellsStoreSelector,
   );
-  const { tutorialStep, tutorialIsRunning, setNextButtonIsDisabled } = useTutorialStore();
+  const { tutorialStep, isTutorialRunning, setNextButtonIsDisabled } = useTutorialStore();
 
   const { setOpenStepIndex, resetStore: resetAccordionStepsStore } = useAccordionStepsStore();
 
@@ -72,7 +72,7 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
       <Joyride
         steps={steps}
         callback={handleJoyrideCallback}
-        run={tutorialIsRunning}
+        run={isTutorialRunning}
         scrollOffset={100}
         disableOverlayClose
         floaterProps={{

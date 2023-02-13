@@ -23,7 +23,7 @@ function SearchDatasetTutorial() {
   const themeContext = useContext(ThemeContext);
   const [steps, setSteps] = useState(defaultSteps);
   const { searchView, setSearchView, toggleItem } = useSearchViewStore(searchViewStoreSelector);
-  const { tutorialStep, tutorialIsRunning, closeTutorial } = useTutorialStore();
+  const { tutorialStep, isTutorialRunning, closeTutorial } = useTutorialStore();
 
   const handleJoyrideCallback = (data) => {
     const {
@@ -58,7 +58,7 @@ function SearchDatasetTutorial() {
   };
 
   React.useEffect(() => {
-    if (tutorialIsRunning) {
+    if (isTutorialRunning) {
       const element = document.querySelector(viewMoreSelector);
       if (element) {
         const defaultStepsCopy = [...defaultSteps];
@@ -66,7 +66,7 @@ function SearchDatasetTutorial() {
         setSteps(defaultStepsCopy);
       }
     }
-  }, [tutorialIsRunning]);
+  }, [isTutorialRunning]);
 
   return (
     <>
@@ -74,7 +74,7 @@ function SearchDatasetTutorial() {
       <Joyride
         steps={steps}
         callback={handleJoyrideCallback}
-        run={tutorialIsRunning}
+        run={isTutorialRunning}
         scrollOffset={100}
         floaterProps={{
           disableAnimation: true,
