@@ -12,7 +12,7 @@ function getDecrementedStep(state) {
 }
 
 function getRunTutorial() {
-  return { tutorialIsRunning: true };
+  return { tutorialIsRunning: true, isTutorialPromptOpen: false };
 }
 
 function getCloseTutorial(state) {
@@ -26,6 +26,7 @@ const types = {
   runTutorial: 'RUN_TUTORIAL',
   closeTutorial: 'CLOSE_TUTORIAL',
   setNextButtonIsDisabled: 'SET_NEXT_BUTTON_IS_DISABLED',
+  closePrompt: 'CLOSE_PROMPT',
 };
 
 const reducer = (state, { type, payload }) => {
@@ -40,6 +41,8 @@ const reducer = (state, { type, payload }) => {
       return getCloseTutorial(state);
     case types.setNextButtonIsDisabled:
       return { nextButtonIsDisabled: payload };
+    case types.closePrompt:
+      return { isTutorialPromptOpen: false };
     default:
       return state;
   }
@@ -48,9 +51,10 @@ const reducer = (state, { type, payload }) => {
 const createStore = (localStorageKey) =>
   create((set, get) => ({
     localStorageKey,
+    isPromptOpen: true,
     tutorialIsRunning: false,
     tutorialStep: 0,
-    tutorialIsExited: localStorage.getItem(localStorageKey),
+    isTutorialPromptOpen: localStorage.getItem(localStorageKey),
     nextButtonIsDisabled: false,
     dispatch: (args) => set((state) => reducer(state, args)),
     incrementStep: () => get().dispatch({ type: types.incrementStep }),
@@ -58,6 +62,7 @@ const createStore = (localStorageKey) =>
     runTutorial: () => get().dispatch({ type: types.runTutorial }),
     closeTutorial: () => get().dispatch({ type: types.closeTutorial }),
     setNextButtonIsDisabled: (bool) => get().dispatch({ type: types.setNextButtonIsDisabled, payload: bool }),
+    closePrompt: () => get().dispatch({ type: types.closePrompt }),
   }));
 
 export { Provider, useStore, createStore, reducer, types };
