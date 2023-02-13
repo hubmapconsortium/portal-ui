@@ -54,7 +54,7 @@ const createStore = (localStorageKey) =>
     isPromptOpen: true,
     tutorialIsRunning: false,
     tutorialStep: 0,
-    isTutorialPromptOpen: localStorage.getItem(localStorageKey),
+    isTutorialPromptOpen: !localStorage.getItem(localStorageKey),
     nextButtonIsDisabled: false,
     dispatch: (args) => set((state) => reducer(state, args)),
     incrementStep: () => get().dispatch({ type: types.incrementStep }),
