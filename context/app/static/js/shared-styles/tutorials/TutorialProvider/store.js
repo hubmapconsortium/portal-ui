@@ -6,7 +6,7 @@ const { Provider, useStore } = createContext();
 
 function getIncrementedStep(state) {
   trackEvent({
-    category: state.key,
+    category: state.tutorial_key,
     action: 'Clicked next step',
   });
 
@@ -15,7 +15,7 @@ function getIncrementedStep(state) {
 
 function getDecrementedStep(state) {
   trackEvent({
-    category: state.key,
+    category: state.tutorial_key,
     action: 'Clicked previous step',
   });
   return { tutorialStep: state.tutorialStep - 1 };
@@ -23,7 +23,7 @@ function getDecrementedStep(state) {
 
 function getRunTutorial(state) {
   trackEvent({
-    category: state.key,
+    category: state.tutorial_key,
     action: 'Clicked start tutorial',
   });
   return { isTutorialRunning: true, isTutorialPromptOpen: false };
@@ -31,7 +31,7 @@ function getRunTutorial(state) {
 
 function getCloseTutorial(state) {
   trackEvent({
-    category: state.key,
+    category: state.tutorial_key,
     action: 'Clicked close tutorial',
   });
   localStorage.setItem(state.localStorageKey, true);
@@ -66,10 +66,10 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
-const createStore = (key) => {
-  const localStorageKey = `has_exited_${key}_tutorial`;
+const createStore = (tutorial_key) => {
+  const localStorageKey = `has_exited_${tutorial_key}_tutorial`;
   return create((set, get) => ({
-    key: `${key}_tutorial`,
+    tutorial_key: `${tutorial_key}_tutorial`,
     localStorageKey,
     isPromptOpen: true,
     isTutorialRunning: false,
