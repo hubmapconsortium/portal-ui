@@ -87,4 +87,4 @@ function SearchDatasetTutorial() {
   );
 }
 
-export default withTutorialProvider(SearchDatasetTutorial, 'has_exited_dataset_search_tutorial');
+export default withTutorialProvider(SearchDatasetTutorial, 'dataset_search');

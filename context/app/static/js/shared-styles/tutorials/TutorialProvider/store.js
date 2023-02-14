@@ -1,21 +1,39 @@
 import create from 'zustand';
 import createContext from 'zustand/context';
+import { trackEvent } from 'js/helpers/trackers';
 
 const { Provider, useStore } = createContext();
 
 function getIncrementedStep(state) {
+  trackEvent({
+    category: state.key,
+    action: 'Clicked next step',
+  });
+
   return { tutorialStep: state.tutorialStep + 1 };
 }
 
 function getDecrementedStep(state) {
+  trackEvent({
+    category: state.key,
+    action: 'Clicked previous step',
+  });
   return { tutorialStep: state.tutorialStep - 1 };
 }
 
-function getRunTutorial() {
+function getRunTutorial(state) {
+  trackEvent({
+    category: state.key,
+    action: 'Clicked start tutorial',
+  });
   return { isTutorialRunning: true, isTutorialPromptOpen: false };
 }
 
 function getCloseTutorial(state) {
+  trackEvent({
+    category: state.key,
+    action: 'Clicked close tutorial',
+  });
   localStorage.setItem(state.localStorageKey, true);
   return { isTutorialRunning: false, tutorialIsExited: true };
 }
@@ -36,7 +54,7 @@ const reducer = (state, { type, payload }) => {
     case types.decrementStep:
       return getDecrementedStep(state);
     case types.runTutorial:
-      return getRunTutorial();
+      return getRunTutorial(state);
     case types.closeTutorial:
       return getCloseTutorial(state);
     case types.setNextButtonIsDisabled:
@@ -48,8 +66,10 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
-const createStore = (localStorageKey) =>
-  create((set, get) => ({
+const createStore = (key) => {
+  const localStorageKey = `has_exited_${key}_tutorial`;
+  return create((set, get) => ({
+    key: `${key}_tutorial`,
     localStorageKey,
     isPromptOpen: true,
     isTutorialRunning: false,
@@ -64,5 +84,6 @@ const createStore = (localStorageKey) =>
     setNextButtonIsDisabled: (bool) => get().dispatch({ type: types.setNextButtonIsDisabled, payload: bool }),
     closePrompt: () => get().dispatch({ type: types.closePrompt }),
   }));
+};
 
 export { Provider, useStore, createStore, reducer, types };
