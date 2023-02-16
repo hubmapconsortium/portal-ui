@@ -71,7 +71,6 @@ const createStore = (tutorial_key) => {
   return create((set, get) => ({
     tutorial_key: `${tutorial_key}_tutorial`,
     localStorageKey,
-    isPromptOpen: true,
     isTutorialRunning: false,
     tutorialStep: 0,
     isTutorialPromptOpen: !localStorage.getItem(localStorageKey),
