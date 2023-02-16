@@ -38,6 +38,15 @@ function getCloseTutorial(state) {
   return { isTutorialRunning: false, tutorialIsExited: true };
 }
 
+function getClosePrompt(state) {
+  trackEvent({
+    category: state.tutorial_key,
+    action: 'Clicked closed tutorial prompt',
+  });
+  localStorage.setItem(state.localStorageKey, true);
+  return { isTutorialPromptOpen: false };
+}
+
 const types = {
   incrementStep: 'INCREMENT_STEP',
   decrementStep: 'DECREMENT_STEP',
@@ -60,7 +69,7 @@ const reducer = (state, { type, payload }) => {
     case types.setNextButtonIsDisabled:
       return { nextButtonIsDisabled: payload };
     case types.closePrompt:
-      return { isTutorialPromptOpen: false };
+      return getClosePrompt(state);
     default:
       return state;
   }
