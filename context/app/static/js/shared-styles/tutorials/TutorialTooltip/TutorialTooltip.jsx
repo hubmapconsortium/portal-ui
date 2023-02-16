@@ -2,40 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 
-import TooltipProgressButton from 'js/components/tutorials/TooltipProgressButton';
+import { useStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
+import TooltipProgressButton from 'js/shared-styles/tutorials/TooltipProgressButton';
 import { StyledPaper, Flex, FlexEnd, WhiteTypography, WhiteCloseRoundedIcon } from './style';
 
-function TutorialTooltip({
-  index,
-  isLastStep,
-  size,
-  step: { title, content, contentIsComponent },
-  tooltipProps,
-  decrementStepOnClick,
-  closeOnClick,
-  incrementStepOnClick,
-}) {
+function TutorialTooltip({ index, isLastStep, size, step: { title, content, contentIsComponent }, tooltipProps }) {
+  const { incrementStep, decrementStep, closeTutorial, nextButtonIsDisabled } = useStore();
+
   return (
     <StyledPaper {...tooltipProps}>
       <Flex>
         <WhiteTypography variant="subtitle1">{`${title} (${index + 1}/${size})`}</WhiteTypography>
-        <IconButton aria-label="close" size="small" onClick={closeOnClick}>
+        <IconButton aria-label="close" size="small" onClick={closeTutorial}>
           <WhiteCloseRoundedIcon />
         </IconButton>
       </Flex>
       {contentIsComponent ? content : <WhiteTypography variant="body1">{content}</WhiteTypography>}
       <FlexEnd>
         {index > 0 && (
-          <TooltipProgressButton eventHandler={decrementStepOnClick} triggerKeyCode={37}>
+          <TooltipProgressButton eventHandler={decrementStep} triggerKeyCode={37}>
             Back
           </TooltipProgressButton>
         )}
         {isLastStep ? (
-          <TooltipProgressButton eventHandler={closeOnClick} triggerKeyCode={39}>
+          <TooltipProgressButton eventHandler={closeTutorial} triggerKeyCode={39}>
             Finish Tutorial
           </TooltipProgressButton>
         ) : (
-          <TooltipProgressButton eventHandler={incrementStepOnClick} triggerKeyCode={39}>
+          <TooltipProgressButton eventHandler={incrementStep} triggerKeyCode={39} disabled={nextButtonIsDisabled}>
             Next
           </TooltipProgressButton>
         )}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
@@ -6,19 +6,34 @@ import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedBy
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import QuerySelect from 'js/components/cells/QuerySelect';
 import CellsResults from 'js/components/cells/CellsResults';
-import { queryTypes } from 'js/components/cells/queryTypes';
+import CellsTutorial from 'js/components/cells/tutorial/CellsTutorial';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import { withTutorialProvider } from 'js/shared-styles/tutorials/TutorialProvider';
+import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/provider';
 
 function Cells() {
-  const [results, setResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [minExpressionLog, setMinExpressionLog] = useState(1);
-  const [minCellPercentage, setMinCellPercentage] = useState(10);
-  const [cellVariableNames, setCellVariableNames] = useState([]);
-  const [queryType, setQueryType] = useState(queryTypes.gene.value);
+  // Refs for the step actions used to traverse forwards in the tutorial.
+  const setParametersButtonRef = useRef(null);
+  const runQueryButtonRef = useRef(null);
+
+  const steps = [
+    {
+      heading: '1. Query Type',
+      content: <QuerySelect setParametersButtonRef={setParametersButtonRef} />,
+    },
+    {
+      heading: '2. Parameters',
+      content: <DatasetsSelectedByExpression runQueryButtonRef={runQueryButtonRef} />,
+    },
+    {
+      heading: '3. Results',
+      content: <CellsResults />,
+    },
+  ];
 
   return (
-    <>
+    <AccordionStepsProvider stepsLength={steps.length}>
+      <CellsTutorial setParametersButtonRef={setParametersButtonRef} runQueryButtonRef={runQueryButtonRef} />
       <Typography variant="h2" component="h1" color="primary">
         Datasets: Molecular Data Queries
       </Typography>
@@ -37,45 +52,9 @@ function Cells() {
           .
         </Typography>
       </SectionPaper>
-      <AccordionSteps
-        steps={[
-          {
-            heading: '1. Query Type',
-            content: <QuerySelect setQueryType={setQueryType} setCellVariableNames={setCellVariableNames} />,
-          },
-          {
-            heading: '2. Parameters',
-            content: (
-              <DatasetsSelectedByExpression
-                setResults={setResults}
-                minExpressionLog={minExpressionLog}
-                setMinExpressionLog={setMinExpressionLog}
-                minCellPercentage={minCellPercentage}
-                setMinCellPercentage={setMinCellPercentage}
-                cellVariableNames={cellVariableNames}
-                setCellVariableNames={setCellVariableNames}
-                queryType={queryType}
-                setIsLoading={setIsLoading}
-              />
-            ),
-          },
-          {
-            heading: '3. Results',
-            content: (
-              <CellsResults
-                isLoading={isLoading}
-                results={results}
-                minExpressionLog={minExpressionLog}
-                cellVariableNames={cellVariableNames}
-                queryType={queryType}
-              />
-            ),
-          },
-        ]}
-        isFirstStepOpen
-      />
-    </>
+      <AccordionSteps id="cells-steps" steps={steps} isFirstStepOpen />
+    </AccordionStepsProvider>
   );
 }
 
-export default Cells;
+export default withTutorialProvider(Cells, 'cells');

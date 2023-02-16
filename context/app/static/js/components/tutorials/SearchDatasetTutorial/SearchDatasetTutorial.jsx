@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
-import PropTypes from 'prop-types';
 import { ThemeContext } from 'styled-components';
-import Joyride, { STATUS, ACTIONS } from 'react-joyride';
+import Joyride, { STATUS, ACTIONS, LIFECYCLE } from 'react-joyride';
 
-import DatasetSearchTutorialTooltip from 'js/components/tutorials/DatasetSearchTutorialTooltip';
+import DatasetSearchPrompt from 'js/components/tutorials/DatasetSearchPrompt';
+import TutorialTooltip from 'js/shared-styles/tutorials/TutorialTooltip';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
+import { useStore as useTutorialStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
+import { withTutorialProvider } from 'js/shared-styles/tutorials/TutorialProvider';
 import { sortTileViewStepTitle, defaultSteps, stepToAddIfViewMoreExists } from './config';
 
 const viewMoreSelector = '#Data-Type div.sk-refinement-list__view-more-action';
@@ -15,17 +17,28 @@ const searchViewStoreSelector = (state) => ({
   toggleItem: state.toggleItem,
 });
 
-function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIndex }) {
+const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
+
+function SearchDatasetTutorial() {
   const themeContext = useContext(ThemeContext);
   const [steps, setSteps] = useState(defaultSteps);
   const { searchView, setSearchView, toggleItem } = useSearchViewStore(searchViewStoreSelector);
+  const { tutorialStep, isTutorialRunning, closeTutorial } = useTutorialStore();
 
   const handleJoyrideCallback = (data) => {
     const {
       status,
       action,
+      lifecycle,
       step: { title },
     } = data;
+
+    if (action === ACTIONS.START && lifecycle === LIFECYCLE.INIT && title === 'Filter Your Browsing') {
+      if (searchView === 'tile') {
+        setSearchView('table');
+        toggleItem('table');
+      }
+    }
 
     // If the user selects back after tile view has been toggled, return to table view.
     if (action === ACTIONS.PREV && title === sortTileViewStepTitle && searchView === 'tile') {
@@ -38,16 +51,14 @@ function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIn
       setSearchView('tile');
     }
 
-    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
-
     // If the user clicks the overlay or highlighted element, close the search tutorial.
     if (finishedStatuses.includes(status) || action === ACTIONS.CLOSE) {
-      closeSearchDatasetTutorial();
+      closeTutorial();
     }
   };
 
   React.useEffect(() => {
-    if (runTutorial) {
+    if (isTutorialRunning) {
       const element = document.querySelector(viewMoreSelector);
       if (element) {
         const defaultStepsCopy = [...defaultSteps];
@@ -55,28 +66,25 @@ function SearchDatasetTutorial({ runTutorial, closeSearchDatasetTutorial, stepIn
         setSteps(defaultStepsCopy);
       }
     }
-  }, [runTutorial]);
+  }, [isTutorialRunning]);
 
   return (
-    <Joyride
-      steps={steps}
-      callback={handleJoyrideCallback}
-      run={runTutorial}
-      scrollOffset={100}
-      floaterProps={{
-        disableAnimation: true,
-      }}
-      tooltipComponent={DatasetSearchTutorialTooltip}
-      styles={{ options: { arrowColor: themeContext.palette.info.dark, zIndex: themeContext.zIndex.tutorial } }}
-      stepIndex={stepIndex}
-    />
+    <>
+      <DatasetSearchPrompt />
+      <Joyride
+        steps={steps}
+        callback={handleJoyrideCallback}
+        run={isTutorialRunning}
+        scrollOffset={100}
+        floaterProps={{
+          disableAnimation: true,
+        }}
+        tooltipComponent={TutorialTooltip}
+        styles={{ options: { arrowColor: themeContext.palette.info.dark, zIndex: themeContext.zIndex.tutorial } }}
+        stepIndex={tutorialStep}
+      />
+    </>
   );
 }
 
-SearchDatasetTutorial.propTypes = {
-  runTutorial: PropTypes.bool.isRequired,
-  closeSearchDatasetTutorial: PropTypes.func.isRequired,
-  stepIndex: PropTypes.number.isRequired,
-};
-
-export default SearchDatasetTutorial;
+export default withTutorialProvider(SearchDatasetTutorial, 'dataset_search');

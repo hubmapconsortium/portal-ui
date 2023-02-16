@@ -1,6 +1,7 @@
 import React from 'react';
 
 import TutorialTooltip from './TutorialTooltip';
+import TutorialProvider from '../TutorialProvider';
 
 export default {
   title: 'Tutorials/TutorialTooltip',
@@ -20,7 +21,11 @@ const sharedArgs = {
   incrementStepOnClick: () => {},
 };
 
-const Template = (args) => <TutorialTooltip {...args} />;
+const Template = (args) => (
+  <TutorialProvider>
+    <TutorialTooltip {...args} />
+  </TutorialProvider>
+);
 export const InitialStep = Template.bind({});
 InitialStep.args = {
   index: 0,
