@@ -15,11 +15,6 @@ AccordionSteps.propTypes = {
       content: PropTypes.element,
     }),
   ).isRequired,
-  openFirstStep: PropTypes.bool,
-};
-
-AccordionSteps.defaultProps = {
-  openFirstStep: false,
 };
 
 export default AccordionSteps;
