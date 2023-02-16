@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
@@ -16,11 +16,10 @@ import {
 } from './style';
 
 function Prompt({ headerText, descriptionText, buttonText, buttonIsDisabled }) {
-  const [isOpen, setIsOpen] = useState(true);
-  const { runTutorial } = useStore();
+  const { runTutorial, isTutorialPromptOpen, closePrompt } = useStore();
 
   return (
-    isOpen && (
+    isTutorialPromptOpen && (
       <StyledPaper>
         <CenteredDiv>
           <Flex>
@@ -35,7 +34,7 @@ function Prompt({ headerText, descriptionText, buttonText, buttonIsDisabled }) {
           </StyledButton>
         </CenteredDiv>
         <div>
-          <IconButton aria-label="close" onClick={() => setIsOpen(false)}>
+          <IconButton aria-label="close" onClick={closePrompt}>
             <StyledCloseIcon />
           </IconButton>
         </div>

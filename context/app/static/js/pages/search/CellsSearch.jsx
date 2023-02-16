@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
-import DatasetSearchPrompt from 'js/components/tutorials/DatasetSearchPrompt';
 import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
 import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
@@ -11,27 +10,10 @@ import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/
 import { listFilter } from 'js/components/searchPage/utils';
 import SearchNote from 'js/components/searchPage/SearchNote';
 import Results from 'js/components/searchPage/Results';
-import useSearchDatasetTutorialStore from 'js/stores/useSearchDatasetTutorialStore';
 import { SearchHeader } from './style';
-
-const searchDatasetTutorialSelector = (state) => ({
-  runSearchDatasetTutorial: state.runSearchDatasetTutorial,
-  setRunSearchDatasetTutorial: state.setRunSearchDatasetTutorial,
-  searchDatasetTutorialStep: state.searchDatasetTutorialStep,
-  tutorialHasExited: state.tutorialHasExited,
-  closeSearchDatasetTutorial: state.closeSearchDatasetTutorial,
-});
 
 function Search({ title }) {
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
-
-  const {
-    runSearchDatasetTutorial,
-    setRunSearchDatasetTutorial,
-    searchDatasetTutorialStep,
-    tutorialHasExited,
-    closeSearchDatasetTutorial,
-  } = useSearchDatasetTutorialStore(searchDatasetTutorialSelector);
 
   const hiddenFilters = [
     listFilter('ancestor_ids', 'Ancestor ID'),
@@ -98,14 +80,9 @@ function Search({ title }) {
       <SearchHeader component="h1" variant="h2">
         <b>[Preview]</b> {title}
       </SearchHeader>
-      {!tutorialHasExited && type === 'dataset' && (
+      {type === 'dataset' && (
         <>
-          <DatasetSearchPrompt setRunTutorial={setRunSearchDatasetTutorial} />
-          <SearchDatasetTutorial
-            runTutorial={runSearchDatasetTutorial}
-            closeSearchDatasetTutorial={closeSearchDatasetTutorial}
-            stepIndex={searchDatasetTutorialStep}
-          />
+          <SearchDatasetTutorial />
         </>
       )}
       {notesToDisplay.map((note) => (

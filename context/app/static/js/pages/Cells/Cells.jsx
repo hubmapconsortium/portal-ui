@@ -57,4 +57,4 @@ function Cells() {
   );
 }
 
-export default withTutorialProvider(Cells, 'has_exited_cells_tutorial');
+export default withTutorialProvider(Cells, 'cells');

@@ -3,21 +3,21 @@ import PropTypes from 'prop-types';
 
 import { Provider, createStore } from './store';
 
-function TutorialProvider({ children, localStorageKey }) {
-  return <Provider createStore={() => createStore(localStorageKey)}>{children}</Provider>;
+function TutorialProvider({ children, tutorial_key }) {
+  return <Provider createStore={() => createStore(tutorial_key)}>{children}</Provider>;
 }
 
-export const withTutorialProvider = (Component, localStorageKey) => ({ ...props }) => (
-  <TutorialProvider localStorageKey={localStorageKey}>
+export const withTutorialProvider = (Component, tutorial_key) => ({ ...props }) => (
+  <TutorialProvider tutorial_key={tutorial_key}>
     <Component {...props} />
   </TutorialProvider>
 );
 
 TutorialProvider.propTypes = {
   /**
-     Key for localstorage used to track whether the tutorial prompt should be shown.
+     Key used for tracking. Should match the name of the feature the tutorial is used for.
     */
-  localStorageKey: PropTypes.string.isRequired,
+  tutorial_key: PropTypes.string.isRequired,
 };
 
 export default TutorialProvider;
