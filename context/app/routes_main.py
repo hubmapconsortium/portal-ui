@@ -112,6 +112,16 @@ def collections():
     )
 
 
+@blueprint.route('/publications')
+def publications():
+    flask_data = {**get_default_flask_data()}
+    return render_template(
+        'base-pages/react-content.html',
+        title='Publications',
+        flask_data=flask_data
+    )
+
+
 @blueprint.route('/my-lists')
 def my_lists():
     flask_data = {**get_default_flask_data()}
