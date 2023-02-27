@@ -18,8 +18,7 @@ import useEntityStore from 'js/stores/useEntityStore';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/components/detailPage/style';
-import { useSearchHits } from 'js/hooks/useSearchData';
-import { getAllCollectionsQuery } from 'js/helpers/queries';
+
 import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -28,8 +27,9 @@ import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
 import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
 
-import { combineMetadata, getCollectionsWhichContainDataset } from 'js/pages/utils/entity-utils';
+import { combineMetadata } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import { useDatasetCollections } from './hooks';
 
 function NotebookButton(props) {
   return (
@@ -142,8 +142,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
 
   const combinedMetadata = combineMetadata(donor, origin_sample, source_sample, metadata);
 
-  const { searchHits: allCollections } = useSearchHits(getAllCollectionsQuery);
-  const collectionsData = getCollectionsWhichContainDataset(uuid, allCollections);
+  const collectionsData = useDatasetCollections(uuid);
 
   const shouldDisplaySection = {
     provenance: entity_type !== 'Support',
