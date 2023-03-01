@@ -1,6 +1,3 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-
 function buildAbbreviatedContributors(contributors) {
   switch (contributors.length) {
     case 0:
@@ -24,7 +21,7 @@ function buildPublicationsPanelsProps(collections) {
     href: `/browse/publication/${uuid}`,
     title,
     secondaryText: buildSecondaryText(contributors, publication_venue),
-    rightText: <Typography variant="caption">{`Published: ${publication_date}`}</Typography>,
+    rightText: `Published: ${publication_date}`,
   }));
 }
 
