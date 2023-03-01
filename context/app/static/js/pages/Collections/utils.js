@@ -1,10 +1,10 @@
 function buildCollectionsPanelsProps(collections) {
-  return collections.map(({ _source }) => ({
-    key: _source.uuid,
-    href: `/browse/collection/${_source.uuid}`,
-    title: _source.title,
-    secondaryText: _source.hubmap_id,
-    rightText: `${_source.datasets.length} Datasets`,
+  return collections.map(({ _source: { uuid, title, hubmap_id, datasets } }) => ({
+    key: uuid,
+    href: `/browse/collection/${uuid}`,
+    title,
+    secondaryText: hubmap_id,
+    rightText: `${datasets.length} Datasets`,
   }));
 }
 
