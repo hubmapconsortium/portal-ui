@@ -3,6 +3,7 @@ import React from 'react';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
+import PanelList from 'js/shared-styles/panels/PanelList';
 import { buildPublicationsPanelsProps } from './utils';
 
 export const getAllPublicationsQuery = {
@@ -30,8 +31,9 @@ function Publications() {
       title="Publications"
       subtitle={panelsProps.length > 0 && `${panelsProps.length} Publications`}
       description={<Description />}
-      panelsProps={panelsProps}
-    />
+    >
+      <PanelList panelsProps={panelsProps} />
+    </PanelListLandingPage>
   );
 }
 
