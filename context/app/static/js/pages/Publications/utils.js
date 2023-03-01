@@ -1,14 +1,31 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
+function buildAbbreviatedContributors(contributors) {
+  switch (contributors.length) {
+    case 0:
+      return '';
+    case 1:
+      return contributors[0].name;
+    case 2:
+      return contributors.map((contributor) => contributor.name).join(' and ');
+    default:
+      return `${contributors[0].name}, et al.`;
+  }
+}
+
+function buildSecondaryText(contributors, publication_venue) {
+  return [buildAbbreviatedContributors(contributors), publication_venue].filter((str) => str.length).join(' | ');
+}
+
 function buildPublicationsPanelsProps(collections) {
-  return collections.map(({ _source }) => ({
-    key: _source.uuid,
-    href: `/browse/publication/${_source.uuid}`,
-    title: _source.title,
-    secondaryText: _source.publication_venue,
-    rightText: <Typography variant="caption">{`Published: ${_source.publication_date}`}</Typography>,
+  return collections.map(({ _source: { uuid, title, contributors = [], publication_venue, publication_date } }) => ({
+    key: uuid,
+    href: `/browse/publication/${uuid}`,
+    title,
+    secondaryText: buildSecondaryText(contributors, publication_venue),
+    rightText: <Typography variant="caption">{`Published: ${publication_date}`}</Typography>,
   }));
 }
 
-export { buildPublicationsPanelsProps };
+export { buildPublicationsPanelsProps, buildAbbreviatedContributors, buildSecondaryText };
