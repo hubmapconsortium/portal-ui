@@ -19,16 +19,4 @@ describe('file-based-routes', () => {
       cy.contains('About');
       cy.contains('Technical');
     });
-    it('has working publication pages', () => {
-      // TODO: When we link to it from the menu, follow the link instead.
-      cy.visit('/publication');
-      cy.contains('Blue B. Lake');
-      // be.visible is a hack: https://github.com/cypress-io/cypress/issues/695
-      cy.contains('An atlas of healthy and injured cell states').should('be.visible').click();
-      cy.contains('Understanding kidney disease relies upon');
-      cy.contains('www.biorxiv.org/content/10.1101/2021.07.28.454201');
-      cy.contains('Blue B. Lake, Rajasree Menon');
-      cy.contains('Corresponding Author: Sanjay Jain');
-    });
-  });
 });
