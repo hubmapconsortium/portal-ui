@@ -1,0 +1,1 @@
+- Add detail page for publications.
