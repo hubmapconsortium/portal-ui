@@ -1,0 +1,1 @@
+- Refactor panel components for reuse in upcoming publication pages.
