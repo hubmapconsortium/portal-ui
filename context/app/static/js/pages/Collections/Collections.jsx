@@ -1,6 +1,8 @@
 import React from 'react';
 
 import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
+import PanelList from 'js/shared-styles/panels/PanelList';
+
 import { useCollections } from './hooks';
 
 const description =
@@ -13,8 +15,9 @@ function Collections() {
       title="Collections"
       subtitle={panelsProps.length > 0 && `${panelsProps.length} Collections`}
       description={description}
-      panelsProps={panelsProps}
-    />
+    >
+      <PanelList panelsProps={panelsProps} />
+    </PanelListLandingPage>
   );
 }
 

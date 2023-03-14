@@ -1,55 +1,49 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-
 import { LightBlueLink } from 'js/shared-styles/Links';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import Description from 'js/shared-styles/sections/Description';
+import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
+import PanelList from 'js/shared-styles/panels/PanelList';
+import { Tab } from 'js/shared-styles/tabs';
+import { usePublications } from './hooks';
 
-function Publications({ publications }) {
+import { StyledTabs, StyledTabPanel } from './style';
+
+const Description = () => (
+  <>
+    The following publications are a partial list of published HuBMAP research that uses data available through the
+    HuBMAP Data Portal. The full list of HuBMAP-funded publications is available on{' '}
+    <LightBlueLink href="https://scholar.google.com/citations?user=CtGSN80AAAAJ&hl=en">Google Scholar</LightBlueLink>.
+    Publication pages will have a summary of publication-related information, a list of referenced HuBMAP datasets and
+    vignettes of relevant visualizations.
+  </>
+);
+
+function Publications() {
+  const { publicationsPanelsPropsSeparatedByStatus, publicationsCount, handleChange, openTabIndex } = usePublications();
+
   return (
-    <>
-      <SectionHeader variant="h1" component="h1">
-        Publications
-      </SectionHeader>
-      <SectionContainer>
-        <Description>
-          The following publications are a partial list of published HuBMAP research that uses data available through
-          the HuBMAP Data Portal. The full list of HuBMAP-funded publications is available on{' '}
-          <LightBlueLink href="https://scholar.google.com/citations?user=CtGSN80AAAAJ&hl=en">
-            Google Scholar
-          </LightBlueLink>
-          .
-        </Description>
-      </SectionContainer>
-      <SectionContainer>
-        <Paper>
-          <Table>
-            <TableBody>
-              {Object.entries(publications || [])
-                // eslint-disable-next-line no-unused-vars
-                .filter(([path, publication]) => publication?.is_public)
-                .map(([path, publication]) => (
-                  <TableRow key={path}>
-                    <TableCell>
-                      <Typography variant="subtitle2" component="h3" color="primary">
-                        <LightBlueLink href={`/publication/${path}`}>{publication.title}</LightBlueLink>
-                      </Typography>
-                      {publication.authors.short}
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </Paper>
-      </SectionContainer>
-    </>
+    <PanelListLandingPage
+      title="Publications"
+      subtitle={publicationsCount > 0 && `${publicationsCount} Publications`}
+      description={<Description />}
+    >
+      <StyledTabs value={openTabIndex} onChange={handleChange} aria-label="Published and preprint publications">
+        {Object.entries(publicationsPanelsPropsSeparatedByStatus).map(([publicationStatus, panelsProps], i) => (
+          <Tab
+            label={`${publicationStatus} (${panelsProps.length})`}
+            index={i}
+            key={publicationStatus}
+            disabled={panelsProps.length === 0}
+          />
+        ))}
+      </StyledTabs>
+      {Object.entries(publicationsPanelsPropsSeparatedByStatus).map(([publicationStatus, panelsProps], i) => (
+        <StyledTabPanel value={openTabIndex} index={i} key={publicationStatus}>
+          <PanelList panelsProps={panelsProps} />
+        </StyledTabPanel>
+      ))}
+    </PanelListLandingPage>
   );
 }
 

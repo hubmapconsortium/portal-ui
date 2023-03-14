@@ -39,7 +39,6 @@ function Routes({ flaskData }) {
     entity,
     vitessce_conf,
     title,
-    publications,
     markdown,
     errorCode,
     list_uuid,
@@ -171,10 +170,10 @@ function Routes({ flaskData }) {
     );
   }
 
-  if (urlPath === '/publication') {
+  if (urlPath === '/publications') {
     return (
       <Route>
-        <Publications publications={publications} />
+        <Publications />
       </Route>
     );
   }
