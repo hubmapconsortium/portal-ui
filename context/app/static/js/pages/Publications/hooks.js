@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { buildPublicationPanelProp } from './utils';
+import { buildPublicationPanelProps } from './utils';
 
 const getAllPublicationsQuery = {
   post_filter: { term: { 'entity_type.keyword': 'Publication' } },
@@ -32,7 +32,7 @@ function usePublications() {
         return acc;
       }
 
-      acc[publicationStatusMap[publication_status]].push(buildPublicationPanelProp(publication));
+      acc[publicationStatusMap[publication_status]].push(buildPublicationPanelProps(publication));
       return acc;
     },
     { published: [], preprint: [] },

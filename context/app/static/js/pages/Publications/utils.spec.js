@@ -1,4 +1,4 @@
-import { buildSecondaryText, buildAbbreviatedContributors, buildPublicationsPanelsProps } from './utils';
+import { buildSecondaryText, buildAbbreviatedContributors, buildPublicationPanelProps } from './utils';
 
 const ash = {
   first_name: 'Ash',
@@ -53,28 +53,24 @@ describe('buildSecondaryText', () => {
   });
 });
 
-describe('buildPublicationsPanelsProps', () => {
+describe('buildPublicationsPanelProps', () => {
   test('should return the props require for the panel list', () => {
-    const publications = [
-      {
-        _source: {
-          uuid: 'abc123',
-          title: 'Publication ABC',
-          contributors: [ash],
-          publication_venue,
-          publication_date: '2022-03-02',
-        },
-      },
-    ];
-
-    expect(buildPublicationsPanelsProps(publications)).toEqual([
-      {
-        key: 'abc123',
-        href: '/browse/publication/abc123',
+    const publicationHit = {
+      _source: {
+        uuid: 'abc123',
         title: 'Publication ABC',
-        secondaryText: 'Ash Ketchum | Pallet Town Times',
-        rightText: 'Published: 2022-03-02',
+        contributors: [ash],
+        publication_venue,
+        publication_date: '2022-03-02',
       },
-    ]);
+    };
+
+    expect(buildPublicationPanelProps(publicationHit)).toEqual({
+      key: 'abc123',
+      href: '/browse/publication/abc123',
+      title: 'Publication ABC',
+      secondaryText: 'Ash Ketchum | Pallet Town Times',
+      rightText: 'Published: 2022-03-02',
+    });
   });
 });

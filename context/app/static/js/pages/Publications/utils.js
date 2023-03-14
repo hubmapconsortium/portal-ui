@@ -15,7 +15,7 @@ function buildSecondaryText(contributors, publication_venue) {
   return [buildAbbreviatedContributors(contributors), publication_venue].filter((str) => str.length).join(' | ');
 }
 
-function buildPublicationPanelProp(publicationHit) {
+function buildPublicationPanelProps(publicationHit) {
   const {
     _source: { uuid, title, contributors = [], publication_venue, publication_date },
   } = publicationHit;
@@ -29,4 +29,4 @@ function buildPublicationPanelProp(publicationHit) {
   };
 }
 
-export { buildAbbreviatedContributors, buildSecondaryText, buildPublicationPanelProp };
+export { buildAbbreviatedContributors, buildSecondaryText, buildPublicationPanelProps };
