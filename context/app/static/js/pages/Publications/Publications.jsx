@@ -1,15 +1,13 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
-import { useSearchHits } from 'js/hooks/useSearchData';
 import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
 import PanelList from 'js/shared-styles/panels/PanelList';
-import { buildPublicationsPanelsProps } from './utils';
+import { Tab } from 'js/shared-styles/tabs';
+import { usePublications } from './hooks';
 
-export const getAllPublicationsQuery = {
-  post_filter: { term: { 'entity_type.keyword': 'Publication' } },
-  size: 10000,
-};
+import { StyledTabs, StyledTabPanel } from './style';
 
 const Description = () => (
   <>
@@ -22,17 +20,29 @@ const Description = () => (
 );
 
 function Publications() {
-  const { searchHits: publications } = useSearchHits(getAllPublicationsQuery);
-
-  const panelsProps = buildPublicationsPanelsProps(publications);
+  const { publicationsPanelsPropsSeparatedByStatus, publicationsCount, handleChange, openTabIndex } = usePublications();
 
   return (
     <PanelListLandingPage
       title="Publications"
-      subtitle={panelsProps.length > 0 && `${panelsProps.length} Publications`}
+      subtitle={publicationsCount > 0 && `${publicationsCount} Publications`}
       description={<Description />}
     >
-      <PanelList panelsProps={panelsProps} />
+      <StyledTabs value={openTabIndex} onChange={handleChange} aria-label="Published and preprint publications">
+        {Object.entries(publicationsPanelsPropsSeparatedByStatus).map(([publicationStatus, panelsProps], i) => (
+          <Tab
+            label={`${publicationStatus} (${panelsProps.length})`}
+            index={i}
+            key={publicationStatus}
+            disabled={panelsProps.length === 0}
+          />
+        ))}
+      </StyledTabs>
+      {Object.entries(publicationsPanelsPropsSeparatedByStatus).map(([publicationStatus, panelsProps], i) => (
+        <StyledTabPanel value={openTabIndex} index={i} key={publicationStatus}>
+          <PanelList panelsProps={panelsProps} />
+        </StyledTabPanel>
+      ))}
     </PanelListLandingPage>
   );
 }

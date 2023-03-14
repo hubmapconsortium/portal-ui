@@ -15,14 +15,18 @@ function buildSecondaryText(contributors, publication_venue) {
   return [buildAbbreviatedContributors(contributors), publication_venue].filter((str) => str.length).join(' | ');
 }
 
-function buildPublicationsPanelsProps(collections) {
-  return collections.map(({ _source: { uuid, title, contributors = [], publication_venue, publication_date } }) => ({
+function buildPublicationPanelProps(publicationHit) {
+  const {
+    _source: { uuid, title, contributors = [], publication_venue, publication_date },
+  } = publicationHit;
+
+  return {
     key: uuid,
     href: `/browse/publication/${uuid}`,
     title,
     secondaryText: buildSecondaryText(contributors, publication_venue),
     rightText: `Published: ${publication_date}`,
-  }));
+  };
 }
 
-export { buildPublicationsPanelsProps, buildAbbreviatedContributors, buildSecondaryText };
+export { buildAbbreviatedContributors, buildSecondaryText, buildPublicationPanelProps };
