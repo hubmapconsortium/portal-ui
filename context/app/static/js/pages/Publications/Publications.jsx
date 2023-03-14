@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useState } from 'react';
+import React from 'react';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
@@ -20,13 +20,7 @@ const Description = () => (
 );
 
 function Publications() {
-  const { publicationsPanelsPropsSeparatedByStatus, publicationsCount } = usePublications();
-
-  const [openTabIndex, setOpenTabIndex] = useState(0);
-
-  const handleChange = (event, newIndex) => {
-    setOpenTabIndex(newIndex);
-  };
+  const { publicationsPanelsPropsSeparatedByStatus, publicationsCount, handleChange, openTabIndex } = usePublications();
 
   return (
     <PanelListLandingPage

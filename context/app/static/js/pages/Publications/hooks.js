@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { buildPublicationPanelProp } from './utils';
 
@@ -13,6 +15,12 @@ const publicationStatusMap = {
 
 function usePublications() {
   const { searchHits: publications } = useSearchHits(getAllPublicationsQuery);
+
+  const [openTabIndex, setOpenTabIndex] = useState(0);
+
+  const handleChange = (event, newIndex) => {
+    setOpenTabIndex(newIndex);
+  };
 
   const publicationsPanelsPropsSeparatedByStatus = publications.reduce(
     (acc, publication) => {
@@ -30,7 +38,12 @@ function usePublications() {
     { published: [], preprint: [] },
   );
 
-  return { publicationsPanelsPropsSeparatedByStatus, publicationsCount: publications.length };
+  return {
+    publicationsPanelsPropsSeparatedByStatus,
+    publicationsCount: publications.length,
+    openTabIndex,
+    handleChange,
+  };
 }
 
 export { usePublications };
