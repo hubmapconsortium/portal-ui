@@ -12,6 +12,8 @@ import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
 import { FlexEnd, JsonButton, StyledTypography } from './style';
 
+const datasetEntityTypes = ['Dataset', 'Support', 'Publication'];
+
 function SummaryData({
   entity_type,
   uuid,
@@ -34,7 +36,7 @@ function SummaryData({
         }
         buttons={
           <FlexEnd>
-            {['Dataset', 'Support', 'Publication'].includes(entity_type) && (
+            {datasetEntityTypes.includes(entity_type) && (
               <>
                 <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
                 <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
@@ -48,7 +50,7 @@ function SummaryData({
                 </JsonButton>
               </SecondaryBackgroundTooltip>
               {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
-              {['Dataset', 'Support', 'Publication'].includes(entity_type) && <VersionSelect uuid={uuid} />}
+              {datasetEntityTypes.includes(entity_type) && <VersionSelect uuid={uuid} />}
             </FlexEnd>
           </FlexEnd>
         }
