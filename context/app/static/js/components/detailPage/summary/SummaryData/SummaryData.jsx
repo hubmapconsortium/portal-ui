@@ -1,20 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
-import { useInView } from 'react-intersection-observer';
 import 'intersection-observer';
 
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { FileIcon } from 'js/shared-styles/icons';
 import VersionSelect from 'js/components/detailPage/VersionSelect';
+import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
 import { FlexEnd, JsonButton, StyledTypography } from './style';
-
-const entityStoreSelector = (state) => state.setSummaryComponentObserver;
 
 function SummaryData({
   entity_type,
@@ -26,25 +22,9 @@ function SummaryData({
   children,
   mapped_external_group_name,
 }) {
-  const setSummaryComponentObserver = useEntityStore(entityStoreSelector);
-
-  const { ref, inView, entry } = useInView({
-    /* Optional options */
-    threshold: 0,
-    initialInView: true,
-  });
-
-  useEffect(() => {
-    if (entry) {
-      setSummaryComponentObserver(inView, entry);
-    }
-  }, [setSummaryComponentObserver, entry, inView]);
-
   return (
     <>
-      <Typography variant="subtitle1" component="h1" color="primary" ref={ref}>
-        {entity_type}
-      </Typography>
+      <SummaryTitle>{entity_type}</SummaryTitle>
       <SpacedSectionButtonRow
         leftText={
           <div>
