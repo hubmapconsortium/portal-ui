@@ -3,3 +3,7 @@ export function getSectionOrder(possibleSections, optionalSectionsToInclude) {
     (section) => !(section in optionalSectionsToInclude) || optionalSectionsToInclude[section],
   );
 }
+
+export function getCombinedDatasetStatus({ sub_status, status }) {
+  return sub_status || status;
+}
