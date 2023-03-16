@@ -34,7 +34,7 @@ function SummaryData({
         }
         buttons={
           <FlexEnd>
-            {['Dataset', 'Support'].includes(entity_type) && (
+            {['Dataset', 'Support', 'Publication'].includes(entity_type) && (
               <>
                 <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
                 <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
@@ -48,7 +48,7 @@ function SummaryData({
                 </JsonButton>
               </SecondaryBackgroundTooltip>
               {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
-              {['Dataset', 'Support'].includes(entity_type) && <VersionSelect uuid={uuid} />}
+              {['Dataset', 'Support', 'Publication'].includes(entity_type) && <VersionSelect uuid={uuid} />}
             </FlexEnd>
           </FlexEnd>
         }
