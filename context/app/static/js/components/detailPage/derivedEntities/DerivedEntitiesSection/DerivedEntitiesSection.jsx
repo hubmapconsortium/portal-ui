@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import DerivedEntitiesSectionWrapper from 'js/components/detailPage/derivedEntities/DerivedEntitiesSectionWrapper';
 import DerivedEntitiesTabs from 'js/components/detailPage/derivedEntities/DerivedEntitiesTabs';
 import DerivedEntitiesSectionHeader from 'js/components/detailPage/derivedEntities/DerivedEntitiesSectionHeader';
+import DerivedDatasetsTable from 'js/components/detailPage/derivedEntities/DerivedDatasetsTable';
+import DerivedSamplesTable from 'js/components/detailPage/derivedEntities/DerivedSamplesTable';
 
 function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId, entityType }) {
   const [openIndex, setOpenIndex] = useState(0);
@@ -12,13 +14,16 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId,
       entityType: 'Sample',
       tabLabel: 'Samples',
       data: samples,
+      Component: DerivedSamplesTable,
     },
     {
       entityType: 'Dataset',
       tabLabel: 'Datasets',
       data: datasets,
+      Component: DerivedDatasetsTable,
     },
   ];
+
   return (
     <DerivedEntitiesSectionWrapper
       isLoading={isLoading}
