@@ -4,7 +4,7 @@ import { Tab } from 'js/shared-styles/tabs';
 
 import { StyledTabs, StyledTabPanel, StyledAlert } from './style';
 
-function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex, entityType }) {
+function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex, renderWarningMessage }) {
   const handleChange = (event, newIndex) => {
     setOpenIndex(newIndex);
   };
@@ -12,15 +12,15 @@ function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex, entityType }) 
     <>
       <StyledTabs value={openIndex} onChange={handleChange} aria-label="Derived Datasets and Samples Tabs">
         {entities.map((entity, i) => (
-          <Tab label={entity.tabLabel} index={i} key={entity.tabLabel} />
+          <Tab label={`${entity.tabLabel} (${entity.data.length})`} index={i} key={entity.tabLabel} />
         ))}
       </StyledTabs>
-      {entities.map(({ tabLabel, data, entityType: derivedEntityType, Component }, i) => (
+      {entities.map(({ tabLabel, data, entityType: tableEntityType, Component }, i) => (
         <StyledTabPanel value={openIndex} index={i} key={tabLabel}>
           {data.length > 0 ? (
             <Component entities={data} />
           ) : (
-            <StyledAlert severity="warning">{`No derived ${derivedEntityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`}</StyledAlert>
+            <StyledAlert severity="warning">{renderWarningMessage(tableEntityType)}</StyledAlert>
           )}
         </StyledTabPanel>
       ))}

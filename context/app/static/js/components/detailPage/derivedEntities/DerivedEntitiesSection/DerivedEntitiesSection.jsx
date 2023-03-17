@@ -40,7 +40,9 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId,
         entities={entities}
         openIndex={openIndex}
         setOpenIndex={setOpenIndex}
-        entityType={entityType}
+        renderWarningMessage={(tableEntityType) =>
+          `No derived ${tableEntityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`
+        }
       />
     </DerivedEntitiesSectionWrapper>
   );
