@@ -25,7 +25,7 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId,
   ];
 
   return (
-    <DerivedEntitiesSectionWrapper
+    <RelatedEntitiesSectionWrapper
       isLoading={isLoading}
       sectionId={sectionId}
       headerComponent={
@@ -45,7 +45,7 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId,
           `No derived ${tableEntityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`
         }
       />
-    </DerivedEntitiesSectionWrapper>
+    </RelatedEntitiesSectionWrapper>
   );
 }
 
