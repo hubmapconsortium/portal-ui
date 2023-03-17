@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import DerivedEntitiesSectionWrapper from 'js/components/detailPage/derivedEntities/DerivedEntitiesSectionWrapper';
-import DerivedEntitiesTabs from 'js/components/detailPage/derivedEntities/DerivedEntitiesTabs';
+import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import RelatedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
 import DerivedDatasetsTable from 'js/components/detailPage/derivedEntities/DerivedDatasetsTable';
 import DerivedSamplesTable from 'js/components/detailPage/derivedEntities/DerivedSamplesTable';
@@ -36,7 +36,7 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId,
         />
       }
     >
-      <DerivedEntitiesTabs
+      <RelatedEntitiesTabs
         entities={entities}
         openIndex={openIndex}
         setOpenIndex={setOpenIndex}

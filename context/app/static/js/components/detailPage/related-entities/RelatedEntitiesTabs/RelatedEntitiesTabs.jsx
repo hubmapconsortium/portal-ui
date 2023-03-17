@@ -4,7 +4,7 @@ import { Tab } from 'js/shared-styles/tabs';
 
 import { StyledTabs, StyledTabPanel, StyledAlert } from './style';
 
-function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, renderWarningMessage }) {
+function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, renderWarningMessage }) {
   const handleChange = (event, newIndex) => {
     setOpenIndex(newIndex);
   };
@@ -29,4 +29,4 @@ function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, ren
   );
 }
 
-export default DerivedEntitiesTabs;
+export default RelatedEntitiesTabs;
