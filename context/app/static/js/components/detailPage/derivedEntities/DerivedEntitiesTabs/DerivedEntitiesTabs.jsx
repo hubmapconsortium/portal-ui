@@ -4,13 +4,14 @@ import { Tab } from 'js/shared-styles/tabs';
 
 import { StyledTabs, StyledTabPanel, StyledAlert } from './style';
 
-function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex, renderWarningMessage }) {
+function DerivedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, renderWarningMessage }) {
   const handleChange = (event, newIndex) => {
     setOpenIndex(newIndex);
   };
+
   return (
     <>
-      <StyledTabs value={openIndex} onChange={handleChange} aria-label="Derived Datasets and Samples Tabs">
+      <StyledTabs value={openIndex} onChange={handleChange} aria-label={ariaLabel}>
         {entities.map((entity, i) => (
           <Tab label={`${entity.tabLabel} (${entity.data.length})`} index={i} key={entity.tabLabel} />
         ))}

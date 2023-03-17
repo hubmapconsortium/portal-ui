@@ -40,6 +40,7 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId,
         entities={entities}
         openIndex={openIndex}
         setOpenIndex={setOpenIndex}
+        ariaLabel="Derived Datasets and Samples Tabs"
         renderWarningMessage={(tableEntityType) =>
           `No derived ${tableEntityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`
         }
