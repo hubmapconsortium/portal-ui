@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import DerivedEntitiesSectionWrapper from 'js/components/detailPage/derivedEntities/DerivedEntitiesSectionWrapper';
 import DerivedEntitiesTabs from 'js/components/detailPage/derivedEntities/DerivedEntitiesTabs';
-import DerivedEntitiesSectionHeader from 'js/components/detailPage/derivedEntities/DerivedEntitiesSectionHeader';
+import RelatedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
 import DerivedDatasetsTable from 'js/components/detailPage/derivedEntities/DerivedDatasetsTable';
 import DerivedSamplesTable from 'js/components/detailPage/derivedEntities/DerivedSamplesTable';
 
@@ -29,11 +29,10 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId,
       isLoading={isLoading}
       sectionId={sectionId}
       headerComponent={
-        <DerivedEntitiesSectionHeader
+        <RelatedEntitiesSectionHeader
           header="Derived Samples and Datasets"
-          entityCountsText={`${samples.length} Samples | ${datasets.length} Datasets`}
           uuid={uuid}
-          entityType={entities[openIndex].entityType}
+          searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
       }
     >
