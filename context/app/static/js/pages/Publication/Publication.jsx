@@ -7,6 +7,7 @@ import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 
 function Publication({ publication }) {
   const {
+    title,
     uuid,
     entity_type,
     hubmap_id,
@@ -27,6 +28,7 @@ function Publication({ publication }) {
 
   return (
     <Summary
+      title={title}
       uuid={uuid}
       entity_type={entity_type}
       hubmap_id={hubmap_id}
