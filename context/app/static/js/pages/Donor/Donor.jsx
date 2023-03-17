@@ -64,7 +64,7 @@ function DonorDetail({ assayMetadata }) {
         <Summary
           uuid={uuid}
           entity_type={entity_type}
-          hubmap_id={hubmap_id}
+          title={hubmap_id}
           created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}

@@ -6,7 +6,7 @@ import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
 
 function Summary({
-  hubmap_id,
+  title,
   entity_type,
   created_timestamp,
   published_timestamp,
@@ -27,10 +27,10 @@ function Summary({
   return (
     <DetailPageSection id="summary">
       <SummaryData
+        title={title}
         entity_type={entity_type}
         uuid={uuid}
         status={status}
-        hubmap_id={hubmap_id}
         mapped_data_access_level={mapped_data_access_level}
         entityCanBeSaved={entityCanBeSaved}
         mapped_external_group_name={mapped_external_group_name}
@@ -53,7 +53,7 @@ function Summary({
 }
 
 Summary.propTypes = {
-  hubmap_id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
   created_timestamp: PropTypes.number,
