@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import RelatedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import RelatedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
-import DerivedDatasetsTable from 'js/components/detailPage/derivedEntities/DerivedDatasetsTable';
-import DerivedSamplesTable from 'js/components/detailPage/derivedEntities/DerivedSamplesTable';
+import { lastModifiedTimestampCol } from 'js/components/detailPage/derivedEntities/sharedColumns';
 
 import { useAncestorSearchHits } from './hooks';
 
@@ -31,16 +30,67 @@ function PublicationRelatedEntities({ uuid }) {
 
   const entities = [
     {
+      entityType: 'Donor',
+      tabLabel: 'Donors',
+      data: ancestorsSplitByEntityType.Donor,
+      columns: [
+        {
+          id: 'mapped_metadata.age_value',
+          label: 'Age',
+          renderColumnCell: ({ mapped_metadata }) => mapped_metadata?.age_value,
+        },
+        {
+          id: 'mapped_metadata.body_mass_index_value',
+          label: 'BMI',
+          renderColumnCell: ({ mapped_metadata }) => mapped_metadata?.body_mass_index_value,
+        },
+        {
+          id: 'mapped_metadata.sex',
+          label: 'Sex',
+          renderColumnCell: ({ mapped_metadata }) => mapped_metadata?.sex,
+        },
+        {
+          id: 'mapped_metadata.race',
+          label: 'Race',
+          renderColumnCell: ({ mapped_metadata }) => mapped_metadata?.race,
+        },
+        lastModifiedTimestampCol,
+      ],
+    },
+    {
       entityType: 'Sample',
       tabLabel: 'Samples',
       data: ancestorsSplitByEntityType.Sample,
-      Component: DerivedSamplesTable,
+      columns: [
+        {
+          id: 'origin_samples_unique_mapped_organs.mapped_organ',
+          label: 'Organ',
+          renderColumnCell: ({ origin_samples_unique_mapped_organs }) => origin_samples_unique_mapped_organs.join(', '),
+        },
+        { id: 'sample_category', label: 'Sample Category', renderColumnCell: ({ sample_category }) => sample_category },
+        lastModifiedTimestampCol,
+      ],
     },
+
     {
       entityType: 'Dataset',
       tabLabel: 'Datasets',
       data: ancestorsSplitByEntityType.Dataset,
-      Component: DerivedDatasetsTable,
+      columns: [
+        {
+          id: 'mapped_data_types',
+          label: 'Data Types',
+          renderColumnCell: ({ mapped_data_types }) => mapped_data_types.join(', '),
+        },
+
+        {
+          id: 'origin_samples_unique_mapped_organs.mapped_organ',
+          label: 'Organ',
+          renderColumnCell: ({ origin_samples_unique_mapped_organs }) => origin_samples_unique_mapped_organs.join(', '),
+        },
+        { id: 'status', label: 'Status', renderColumnCell: ({ status }) => status },
+        lastModifiedTimestampCol,
+      ],
     },
   ];
 
