@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Tab } from 'js/shared-styles/tabs';
-
+import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
 import { StyledTabs, StyledTabPanel, StyledAlert } from './style';
 
 function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, renderWarningMessage }) {
@@ -16,10 +16,10 @@ function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, ren
           <Tab label={`${entity.tabLabel} (${entity.data.length})`} index={i} key={entity.tabLabel} />
         ))}
       </StyledTabs>
-      {entities.map(({ tabLabel, data, entityType: tableEntityType, Component }, i) => (
+      {entities.map(({ tabLabel, data, entityType: tableEntityType, columns }, i) => (
         <StyledTabPanel value={openIndex} index={i} key={tabLabel}>
           {data.length > 0 ? (
-            <Component entities={data} />
+            <RelatedEntitiesTable columns={columns} entities={data} />
           ) : (
             <StyledAlert severity="warning">{renderWarningMessage(tableEntityType)}</StyledAlert>
           )}

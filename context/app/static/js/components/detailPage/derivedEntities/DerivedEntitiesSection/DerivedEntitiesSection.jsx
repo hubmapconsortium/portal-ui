@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import RelatedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import RelatedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
-import DerivedDatasetsTable from 'js/components/detailPage/derivedEntities/DerivedDatasetsTable';
-import DerivedSamplesTable from 'js/components/detailPage/derivedEntities/DerivedSamplesTable';
+import { descendantCountsCol, lastModifiedTimestampCol } from 'js/components/detailPage/derivedEntities/sharedColumns';
 
 function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId, entityType }) {
   const [openIndex, setOpenIndex] = useState(0);
@@ -14,13 +13,31 @@ function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId,
       entityType: 'Sample',
       tabLabel: 'Samples',
       data: samples,
-      Component: DerivedSamplesTable,
+      columns: [
+        {
+          id: 'origin_sample.mapped_organ',
+          label: 'Organ',
+          renderColumnCell: ({ origin_sample }) => origin_sample?.mapped_organ,
+        },
+        { id: 'sample_category', label: 'Sample Category', renderColumnCell: ({ sample_category }) => sample_category },
+        descendantCountsCol,
+        lastModifiedTimestampCol,
+      ],
     },
     {
       entityType: 'Dataset',
       tabLabel: 'Datasets',
       data: datasets,
-      Component: DerivedDatasetsTable,
+      columns: [
+        {
+          id: 'mapped_data_types',
+          label: 'Data Types',
+          renderColumnCell: ({ mapped_data_types }) => mapped_data_types.join(', '),
+        },
+        { id: 'status', label: 'Status', renderColumnCell: ({ status }) => status },
+        descendantCountsCol,
+        lastModifiedTimestampCol,
+      ],
     },
   ];
 
