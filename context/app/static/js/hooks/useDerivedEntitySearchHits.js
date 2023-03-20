@@ -25,7 +25,15 @@ function useDerivedDatasetSearchHits(ancestorUUID) {
   const query = useMemo(
     () => ({
       query: getTypeQuery(ancestorUUID, 'dataset'),
-      _source: ['uuid', 'hubmap_id', 'mapped_data_types', 'status', 'descendant_counts', 'last_modified_timestamp'],
+      _source: [
+        'uuid',
+        'hubmap_id',
+        'entity_type',
+        'mapped_data_types',
+        'status',
+        'descendant_counts',
+        'last_modified_timestamp',
+      ],
       size: 10000,
     }),
     [ancestorUUID],
@@ -41,6 +49,7 @@ function useDerivedSampleSearchHits(ancestorUUID) {
       _source: [
         'uuid',
         'hubmap_id',
+        'entity_type',
         'origin_sample.mapped_organ',
         'sample_category',
         'descendant_counts',
