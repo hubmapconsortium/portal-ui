@@ -14,7 +14,7 @@ import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
-import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
+
 import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/DerivedDatasetsSection';
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
@@ -41,7 +41,6 @@ function SampleDetail({ assayMetadata }) {
     descendant_counts,
   } = assayMetadata;
 
-  const { searchHits: derivedDatasets, isLoading: derivedDatsetsAreLoading } = useDerivedDatasetSearchHits(uuid);
 
   const combinedMetadata = combineMetadata(donor, undefined, undefined, metadata);
 
@@ -89,10 +88,7 @@ function SampleDetail({ assayMetadata }) {
         </Summary>
         {shouldDisplaySection.derived && (
           <DerivedDatasetsSection
-            datasets={derivedDatasets}
             uuid={uuid}
-            isLoading={derivedDatsetsAreLoading}
-            sectionId="derived"
           />
         )}
         <SampleTissue uuid={uuid} sample_category={sample_category} mapped_organ={mapped_organ} hasRUI={hasRUI} />
