@@ -50,7 +50,7 @@ function useDerivedSampleSearchHits(ancestorUUID) {
         'uuid',
         'hubmap_id',
         'entity_type',
-        'origin_sample.mapped_organ',
+        'origin_samples_unique_mapped_organs',
         'sample_category',
         'descendant_counts',
         'last_modified_timestamp',

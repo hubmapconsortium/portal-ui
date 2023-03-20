@@ -3,48 +3,17 @@ import React, { useState } from 'react';
 import RelatedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import RelatedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
-import { descendantCountsCol, lastModifiedTimestampCol } from 'js/components/detailPage/derivedEntities/sharedColumns';
+import { useDerivedEntitiesSection } from './hooks';
 
-function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId, entityType }) {
+function DerivedEntitiesSection({ uuid, entityType }) {
   const [openIndex, setOpenIndex] = useState(0);
 
-  const entities = [
-    {
-      entityType: 'Sample',
-      tabLabel: 'Samples',
-      data: samples,
-      columns: [
-        {
-          id: 'origin_sample.mapped_organ',
-          label: 'Organ',
-          renderColumnCell: ({ origin_sample }) => origin_sample?.mapped_organ,
-        },
-        { id: 'sample_category', label: 'Sample Category', renderColumnCell: ({ sample_category }) => sample_category },
-        descendantCountsCol,
-        lastModifiedTimestampCol,
-      ],
-    },
-    {
-      entityType: 'Dataset',
-      tabLabel: 'Datasets',
-      data: datasets,
-      columns: [
-        {
-          id: 'mapped_data_types',
-          label: 'Data Types',
-          renderColumnCell: ({ mapped_data_types }) => mapped_data_types.join(', '),
-        },
-        { id: 'status', label: 'Status', renderColumnCell: ({ status }) => status },
-        descendantCountsCol,
-        lastModifiedTimestampCol,
-      ],
-    },
-  ];
+  const { entities, isLoading } = useDerivedEntitiesSection(uuid);
 
   return (
     <RelatedEntitiesSectionWrapper
       isLoading={isLoading}
-      sectionId={sectionId}
+      sectionId="derived-entities"
       headerComponent={
         <RelatedEntitiesSectionHeader
           header="Derived Samples and Datasets"
