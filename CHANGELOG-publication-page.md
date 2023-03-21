@@ -1,0 +1,1 @@
+- Add detail page stub for publications.

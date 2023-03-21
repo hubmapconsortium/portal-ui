@@ -7,7 +7,6 @@ import Protocol from 'js/components/detailPage/Protocol';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-import { useDerivedDatasetSearchHits, useDerivedSampleSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 
 import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
@@ -35,11 +34,6 @@ function DonorDetail({ assayMetadata }) {
 
   const { sex, race, age_value, age_unit } = mapped_metadata;
 
-  const { searchHits: derivedDatasets, isLoading: derivedDatasetsAreLoading } = useDerivedDatasetSearchHits(uuid);
-  const { searchHits: derivedSamples, isLoading: derivedSamplesAreLoading } = useDerivedSampleSearchHits(uuid);
-
-  const derivedEntitiesAreLoading = derivedDatasetsAreLoading || derivedSamplesAreLoading;
-
   const shouldDisplaySection = {
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(mapped_metadata).length),
@@ -64,22 +58,14 @@ function DonorDetail({ assayMetadata }) {
         <Summary
           uuid={uuid}
           entity_type={entity_type}
-          hubmap_id={hubmap_id}
+          title={hubmap_id}
           created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}
           group_name={group_name}
         />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} hubmap_id={hubmap_id} />}
-        <DerivedEntitiesSection
-          entities={derivedDatasets}
-          samples={derivedSamples}
-          datasets={derivedDatasets}
-          uuid={uuid}
-          isLoading={derivedEntitiesAreLoading}
-          entityType={entity_type}
-          sectionId="derived"
-        />
+        <DerivedEntitiesSection uuid={uuid} entityType={entity_type} sectionId="derived" />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         <Attribution

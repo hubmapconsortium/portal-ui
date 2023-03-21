@@ -24,7 +24,7 @@ import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 // TODO use this context for components other than FileBrowser
 import DetailContext from 'js/components/detailPage/context';
-import { getSectionOrder } from 'js/components/detailPage/utils';
+import { getSectionOrder, getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
@@ -138,7 +138,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
-  const combinedStatus = sub_status || status;
+  const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
   const combinedMetadata = combineMetadata(donor, origin_sample, source_sample, metadata);
 
@@ -196,9 +196,9 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
       {entity_type === 'Support' && <SupportAlert uuid={uuid} />}
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
+          title={hubmap_id}
           uuid={uuid}
           entity_type={entity_type}
-          hubmap_id={hubmap_id}
           created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           published_timestamp={published_timestamp}

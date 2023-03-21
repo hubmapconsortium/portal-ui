@@ -48,7 +48,6 @@ function Routes({ flaskData }) {
     organs,
     organs_count,
     organ,
-    metadata,
   } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
@@ -94,6 +93,14 @@ function Routes({ flaskData }) {
     return (
       <Route>
         <Collection collection={entity} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/browse/publication/')) {
+    return (
+      <Route>
+        <Publication publication={entity} />
       </Route>
     );
   }
@@ -174,14 +181,6 @@ function Routes({ flaskData }) {
     return (
       <Route>
         <Publications />
-      </Route>
-    );
-  }
-
-  if (urlPath.startsWith('/publication/')) {
-    return (
-      <Route>
-        <Publication metadata={metadata} markdown={markdown} />
       </Route>
     );
   }

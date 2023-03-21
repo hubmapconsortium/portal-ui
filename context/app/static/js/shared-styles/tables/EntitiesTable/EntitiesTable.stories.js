@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { HeaderCell } from 'js/shared-styles/tables';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
@@ -10,21 +11,36 @@ export default {
   component: EntitiesTableComponent,
 };
 
-export const EntitiesTable = () => {
-  return (
-    <EntitiesTableComponent columns={['name', 'color', 'stripes'].map((s) => ({ id: s, label: s }))}>
-      <TableRow key="bert">
-        <TableCell>Bert</TableCell>
-        <TableCell>yellow</TableCell>
-        <TableCell>vertical</TableCell>
-      </TableRow>
-      <TableRow key="bert">
-        <TableCell>Ernie</TableCell>
-        <TableCell>orange</TableCell>
-        <TableCell>horizontal</TableCell>
-      </TableRow>
-    </EntitiesTableComponent>
-  );
+const HeaderCells = () => (
+  <>
+    <HeaderCell>name</HeaderCell>
+    <HeaderCell>color</HeaderCell>
+    <HeaderCell>stripes</HeaderCell>
+  </>
+);
+
+const TableRows = () => (
+  <>
+    <TableRow key="bert">
+      <TableCell>Bert</TableCell>
+      <TableCell>yellow</TableCell>
+      <TableCell>vertical</TableCell>
+    </TableRow>
+    <TableRow key="bert">
+      <TableCell>Ernie</TableCell>
+      <TableCell>orange</TableCell>
+      <TableCell>horizontal</TableCell>
+    </TableRow>
+  </>
+);
+
+export const EntitiesTable = (args) => {
+  return <EntitiesTableComponent {...args} />;
+};
+
+EntitiesTable.args = {
+  headerCells: <HeaderCells />,
+  tableRows: <TableRows />,
 };
 
 EntitiesTable.storyName = 'EntitiesTable'; // needed for single story hoisting for multi word component names

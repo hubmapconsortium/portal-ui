@@ -3,22 +3,22 @@ import React, { useState } from 'react';
 import RelatedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import RelatedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
-import { useDerivedEntitiesSection } from './hooks';
 
-function DerivedEntitiesSection({ uuid, entityType }) {
+import { usePublicationsRelatedEntities } from './hooks';
+
+function PublicationRelatedEntities({ uuid }) {
   const [openIndex, setOpenIndex] = useState(0);
 
-  const { entities, isLoading } = useDerivedEntitiesSection(uuid);
-
+  const { isLoading, entities } = usePublicationsRelatedEntities(uuid);
   return (
     <RelatedEntitiesSectionWrapper
       isLoading={isLoading}
-      sectionId="derived-entities"
+      sectionId="publication-entities"
       headerComponent={
         <RelatedEntitiesSectionHeader
-          header="Derived Samples and Datasets"
+          header="Data"
           uuid={uuid}
-          searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
+          searchPageHref={`/search?descendant_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
       }
     >
@@ -26,13 +26,13 @@ function DerivedEntitiesSection({ uuid, entityType }) {
         entities={entities}
         openIndex={openIndex}
         setOpenIndex={setOpenIndex}
-        ariaLabel="Derived Datasets and Samples Tabs"
+        ariaLabel="Publication Entities Tabs"
         renderWarningMessage={(tableEntityType) =>
-          `No derived ${tableEntityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`
+          `No derived ${tableEntityType.toLowerCase()}s for this publication}.`
         }
       />
     </RelatedEntitiesSectionWrapper>
   );
 }
 
-export default DerivedEntitiesSection;
+export default PublicationRelatedEntities;
