@@ -1,25 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import DerivedEntitiesSectionWrapper from 'js/components/detailPage/derivedEntities/DerivedEntitiesSectionWrapper';
-import DerivedDatasetsTable from 'js/components/detailPage/derivedEntities/DerivedDatasetsTable';
-import DerivedEntitiesSectionHeader from 'js/components/detailPage/derivedEntities/DerivedEntitiesSectionHeader';
+import DerivedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
+import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
+import DerivedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
+import { useDerivedDatasetsSection } from './hooks';
 
-function DerivedDatasetsSection({ datasets, uuid, isLoading, sectionId }) {
-  const entityType = 'Dataset';
+function DerivedDatasetsSection({ uuid, entityType }) {
+  const [openIndex, setOpenIndex] = useState(0);
+  const { entities, isLoading } = useDerivedDatasetsSection(uuid);
+
   return (
     <DerivedEntitiesSectionWrapper
       isLoading={isLoading}
-      sectionId={sectionId}
+      sectionId="derived-datasets"
       headerComponent={
         <DerivedEntitiesSectionHeader
           header="Derived Datasets"
-          entityCountsText={`${datasets.length} Datasets`}
           uuid={uuid}
-          entityType={entityType}
+          searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
       }
     >
-      <DerivedDatasetsTable entities={datasets} />
+      <RelatedEntitiesTabs
+        entities={entities}
+        openIndex={openIndex}
+        setOpenIndex={setOpenIndex}
+        ariaLabel="Derived Datasets Tab"
+        renderWarningMessage={(tableEntityType) =>
+          `No derived ${tableEntityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`
+        }
+      />
     </DerivedEntitiesSectionWrapper>
   );
 }

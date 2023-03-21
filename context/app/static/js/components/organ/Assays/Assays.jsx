@@ -11,6 +11,7 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useSearchData from 'js/hooks/useSearchData';
+import { HeaderCell } from 'js/shared-styles/tables';
 
 import { Flex, StyledInfoIcon, StyledDatasetIcon } from '../style';
 import { getSearchURL } from '../utils';
@@ -79,12 +80,13 @@ function Assays({ organTerms }) {
       />
       <Paper>
         <EntitiesTable
-          columns={[
+          headerCells={[
             { id: 'assays', label: 'Assays' },
             { id: 'counts', label: 'Dataset Count' },
-          ]}
-        >
-          {buckets.map((bucket) => (
+          ].map(({ id, label }) => (
+            <HeaderCell key={id}>{label}</HeaderCell>
+          ))}
+          tableRows={buckets.map((bucket) => (
             <TableRow key={bucket.key}>
               <TableCell>
                 <LightBlueLink
@@ -97,7 +99,7 @@ function Assays({ organTerms }) {
               <TableCell>{bucket.doc_count}</TableCell>
             </TableRow>
           ))}
-        </EntitiesTable>
+        />
       </Paper>
     </>
   );
