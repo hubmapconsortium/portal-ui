@@ -1,0 +1,1 @@
+- Add additional users to workspaces allow list.
