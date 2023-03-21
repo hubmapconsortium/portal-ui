@@ -1,19 +1,18 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import DerivedEntitiesSectionWrapper from 'js/components/detailPage/derivedEntities/DerivedEntitiesSectionWrapper';
+import DerivedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
-import DerivedEntitiesSectionHeader from 'js/components/detailPage/derivedEntities/DerivedEntitiesSectionHeader';
+import DerivedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
 import { useDerivedDatasetsSection } from './hooks';
 
 function DerivedDatasetsSection({ uuid, entityType }) {
-  
   const [openIndex, setOpenIndex] = useState(0);
   const { entities, isLoading } = useDerivedDatasetsSection(uuid);
 
   return (
     <DerivedEntitiesSectionWrapper
       isLoading={isLoading}
-      sectionId={'derived-datasets'}
+      sectionId="derived-datasets"
       headerComponent={
         <DerivedEntitiesSectionHeader
           header="Derived Datasets"
@@ -29,8 +28,8 @@ function DerivedDatasetsSection({ uuid, entityType }) {
         ariaLabel="Derived Datasets Tab"
         renderWarningMessage={(tableEntityType) =>
           `No derived ${tableEntityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`
-        } 
-        />    
+        }
+      />
     </DerivedEntitiesSectionWrapper>
   );
 }
