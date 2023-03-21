@@ -1,3 +1,18 @@
+## v0.66.0 - 2023-03-21
+
+- Add additional users to workspaces allow list.
+- Bump portal-visualization to 0.0.9.
+- Refactor cells to use central store.
+- Add reusable tutorial components.
+- Add cells tutorial.
+- Fix organ page table to show all samples belonging to the organ.
+- Refactor panel components for reuse in upcoming publication pages.
+- Add detail page stub for publications.
+- Add data section to publication page.
+- Separate publications on publications page by status.
+- Add landing page for publications.
+
+
 ## v0.63.0 - 2023-02-09
 
 - Pass organs count to entity counts iframe.

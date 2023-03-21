@@ -1,1 +1,0 @@
-- Fix organ page table to show all samples belonging to the organ.
