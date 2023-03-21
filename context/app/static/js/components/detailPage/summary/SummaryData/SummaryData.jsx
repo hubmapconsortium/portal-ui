@@ -1,60 +1,42 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
-import { useInView } from 'react-intersection-observer';
 import 'intersection-observer';
 
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import useEntityStore from 'js/stores/useEntityStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { FileIcon } from 'js/shared-styles/icons';
 import VersionSelect from 'js/components/detailPage/VersionSelect';
+import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
 import { FlexEnd, JsonButton, StyledTypography } from './style';
 
-const entityStoreSelector = (state) => state.setSummaryComponentObserver;
+const datasetEntityTypes = ['Dataset', 'Support', 'Publication'];
 
 function SummaryData({
   entity_type,
   uuid,
   status,
   mapped_data_access_level,
-  hubmap_id,
+  title,
   entityCanBeSaved,
   children,
   mapped_external_group_name,
 }) {
-  const setSummaryComponentObserver = useEntityStore(entityStoreSelector);
-
-  const { ref, inView, entry } = useInView({
-    /* Optional options */
-    threshold: 0,
-    initialInView: true,
-  });
-
-  useEffect(() => {
-    if (entry) {
-      setSummaryComponentObserver(inView, entry);
-    }
-  }, [setSummaryComponentObserver, entry, inView]);
-
   return (
     <>
-      <Typography variant="subtitle1" component="h1" color="primary" ref={ref}>
-        {entity_type}
-      </Typography>
+      <SummaryTitle>{entity_type}</SummaryTitle>
       <SpacedSectionButtonRow
         leftText={
           <div>
-            <StyledTypography variant="h2">{hubmap_id}</StyledTypography>
+            <StyledTypography variant="h2">{title}</StyledTypography>
             {children && <FlexEnd data-testid="summary-data-parent">{children}</FlexEnd>}
           </div>
         }
         buttons={
           <FlexEnd>
-            {['Dataset', 'Support'].includes(entity_type) && (
+            {datasetEntityTypes.includes(entity_type) && (
               <>
                 <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
                 <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
@@ -68,7 +50,7 @@ function SummaryData({
                 </JsonButton>
               </SecondaryBackgroundTooltip>
               {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
-              {['Dataset', 'Support'].includes(entity_type) && <VersionSelect uuid={uuid} />}
+              {datasetEntityTypes.includes(entity_type) && <VersionSelect uuid={uuid} />}
             </FlexEnd>
           </FlexEnd>
         }
@@ -78,7 +60,7 @@ function SummaryData({
 }
 
 SummaryData.propTypes = {
-  hubmap_id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,

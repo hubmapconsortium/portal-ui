@@ -4,21 +4,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 
-import { HeaderCell } from 'js/shared-styles/tables';
 import { StyledDiv } from './style';
 
-function EntitiesTable({ columns, children }) {
+function EntitiesTable({ headerCells, tableRows }) {
   return (
     <StyledDiv>
       <Table stickyHeader>
         <TableHead>
-          <TableRow>
-            {columns.map((column) => (
-              <HeaderCell key={column.id}>{column.label}</HeaderCell>
-            ))}
-          </TableRow>
+          <TableRow>{headerCells}</TableRow>
         </TableHead>
-        <TableBody>{children}</TableBody>
+        <TableBody>{tableRows}</TableBody>
       </Table>
     </StyledDiv>
   );
