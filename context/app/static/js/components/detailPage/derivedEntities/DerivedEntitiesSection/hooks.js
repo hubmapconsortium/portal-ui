@@ -1,5 +1,5 @@
 import { useDerivedDatasetSearchHits, useDerivedSampleSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
-import { descendantCountsCol, lastModifiedTimestampCol } from 'js/components/detailPage/derivedEntities/sharedColumns';
+import { derivedDatasetsColumns, derivedSamplesColumns } from 'js/components/detailPage/derivedEntities/columns';
 
 function useDerivedEntitiesSection(uuid) {
   const { searchHits: datasets, isLoading: derivedDatasetsAreLoading } = useDerivedDatasetSearchHits(uuid);
@@ -12,31 +12,13 @@ function useDerivedEntitiesSection(uuid) {
       entityType: 'Sample',
       tabLabel: 'Samples',
       data: samples,
-      columns: [
-        {
-          id: 'origin_samples_unique_mapped_organs',
-          label: 'Organ',
-          renderColumnCell: ({ origin_samples_unique_mapped_organs }) => origin_samples_unique_mapped_organs.join(', '),
-        },
-        { id: 'sample_category', label: 'Sample Category', renderColumnCell: ({ sample_category }) => sample_category },
-        descendantCountsCol,
-        lastModifiedTimestampCol,
-      ],
+      columns: derivedSamplesColumns,
     },
     {
       entityType: 'Dataset',
       tabLabel: 'Datasets',
       data: datasets,
-      columns: [
-        {
-          id: 'mapped_data_types',
-          label: 'Data Types',
-          renderColumnCell: ({ mapped_data_types }) => mapped_data_types.join(', '),
-        },
-        { id: 'status', label: 'Status', renderColumnCell: ({ status }) => status },
-        descendantCountsCol,
-        lastModifiedTimestampCol,
-      ],
+      columns: derivedDatasetsColumns,
     },
   ];
 

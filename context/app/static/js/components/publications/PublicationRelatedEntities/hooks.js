@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { lastModifiedTimestampCol } from 'js/components/detailPage/derivedEntities/sharedColumns';
+import { lastModifiedTimestampCol } from 'js/components/detailPage/derivedEntities/columns';
 
 function getAncestorsQuery(descendantUUID) {
   return {
