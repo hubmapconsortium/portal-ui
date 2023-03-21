@@ -6,12 +6,12 @@ import TableBody from '@material-ui/core/TableBody';
 
 import { StyledDiv } from './style';
 
-function EntitiesTable({ headerRows, tableRows }) {
+function EntitiesTable({ headerCells, tableRows }) {
   return (
     <StyledDiv>
       <Table stickyHeader>
         <TableHead>
-          <TableRow>{headerRows}</TableRow>
+          <TableRow>{headerCells}</TableRow>
         </TableHead>
         <TableBody>{tableRows}</TableBody>
       </Table>

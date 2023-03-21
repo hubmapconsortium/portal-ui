@@ -24,7 +24,7 @@ function RelatedEntitiesTable({ columns, entities }) {
 
   return (
     <EntitiesTable
-      headerRows={allColumns.map(({ id, label }) => (
+      headerCells={allColumns.map(({ id, label }) => (
         <HeaderCell key={id}>{label}</HeaderCell>
       ))}
       tableRows={entities.map(({ _source }) => (
