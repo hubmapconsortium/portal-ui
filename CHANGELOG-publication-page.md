@@ -1,1 +1,1 @@
-- Add detail page for publications.
+- Add detail page stub for publications.
