@@ -41,7 +41,6 @@ function SampleDetail({ assayMetadata }) {
     descendant_counts,
   } = assayMetadata;
 
-
   const combinedMetadata = combineMetadata(donor, undefined, undefined, metadata);
 
   const shouldDisplaySection = {
@@ -86,11 +85,7 @@ function SampleDetail({ assayMetadata }) {
             {sample_category}
           </Typography>
         </Summary>
-        {shouldDisplaySection.derived && (
-          <DerivedDatasetsSection
-            uuid={uuid}
-          />
-        )}
+        {shouldDisplaySection.derived && <DerivedDatasetsSection uuid={uuid} entityType={entity_type} />}
         <SampleTissue uuid={uuid} sample_category={sample_category} mapped_organ={mapped_organ} hasRUI={hasRUI} />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
