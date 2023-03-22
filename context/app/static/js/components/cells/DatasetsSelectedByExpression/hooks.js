@@ -104,7 +104,15 @@ function useDatasetsSelectedByExpression({ completeStep }) {
       const searchResults = await fetchSearchData(getSearchQuery(serviceResults), elasticsearchEndpoint, groupsToken);
 
       const hitsMap = buildHitsMap(searchResults.hits.hits);
-      setResults(serviceResults.map(({ uuid }) => hitsMap[uuid]));
+      setResults(
+        serviceResults.reduce((acc, { uuid }) => {
+          // The cells api returns all versions of a matching dataset and the search-api query will only return the most recent version.
+          if (uuid in hitsMap) {
+            acc.push(hitsMap[uuid]);
+          }
+          return acc;
+        }, []),
+      );
       setIsLoading(false);
     } catch (e) {
       setMessage(e.message);
