@@ -1,3 +1,10 @@
+## v0.66.1 - 2023-03-23
+
+- Fix bug in cells ui caused by mismatched dataset versions from cells and search api.
+- Fix publications hook to handle support entities.
+- Decrease response size from search api request on publications landing page.
+
+
 ## v0.66.0 - 2023-03-21
 
 - Add additional users to workspaces allow list.

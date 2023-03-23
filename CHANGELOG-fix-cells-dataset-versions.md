@@ -1,1 +1,0 @@
-- Fix bug in cells ui caused by mismatched dataset versions from cells and search api.
