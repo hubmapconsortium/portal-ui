@@ -6,6 +6,7 @@ import { buildPublicationPanelProps } from './utils';
 const getAllPublicationsQuery = {
   post_filter: { term: { 'entity_type.keyword': 'Publication' } },
   size: 10000,
+  _source: ['uuid', 'title', 'contributors', 'publication_status', 'publication_venue', 'publication_date'],
 };
 
 const publicationStatusMap = {

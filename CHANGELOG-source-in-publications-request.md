@@ -1,0 +1,1 @@
+- Decrease response size from search api request on publications landing page.
