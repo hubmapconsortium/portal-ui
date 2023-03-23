@@ -1,0 +1,1 @@
+- Fix publications hook to handle support entities.
