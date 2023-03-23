@@ -1,0 +1,1 @@
+- Fix bug when separating publications by publication status resulting in preprints not being listed.

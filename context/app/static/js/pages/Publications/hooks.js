@@ -9,11 +9,6 @@ const getAllPublicationsQuery = {
   _source: ['uuid', 'title', 'contributors', 'publication_status', 'publication_venue', 'publication_date'],
 };
 
-const publicationStatusMap = {
-  true: 'published',
-  false: 'preprint',
-};
-
 function usePublications() {
   const { searchHits: publications } = useSearchHits(getAllPublicationsQuery);
 
@@ -29,11 +24,18 @@ function usePublications() {
         _source: { publication_status },
       } = publication;
 
-      if (!publication_status) {
+      if (publication_status === undefined) {
         return acc;
       }
 
-      acc[publicationStatusMap[publication_status]].push(buildPublicationPanelProps(publication));
+      const publicationProps = buildPublicationPanelProps(publication);
+
+      if (!publication_status) {
+        acc.preprint.push(publicationProps);
+      }
+
+      acc.published.push(publicationProps);
+
       return acc;
     },
     { published: [], preprint: [] },
