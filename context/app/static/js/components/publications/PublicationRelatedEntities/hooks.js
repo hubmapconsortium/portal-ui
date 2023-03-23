@@ -50,7 +50,7 @@ function usePublicationsRelatedEntities(uuid) {
         _source: { entity_type },
       } = ancestor;
 
-      if (!entity_type) {
+      if (!entity_type || !(entity_type in acc)) {
         return acc;
       }
 
