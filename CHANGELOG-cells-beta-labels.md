@@ -1,2 +1,0 @@
-- Add cells page to header menu other links.
-- Add beta label to cells page title.

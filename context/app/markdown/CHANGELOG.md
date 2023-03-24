@@ -1,3 +1,11 @@
+## v0.67.0 - 2023-03-24
+
+- Add cells page to header menu other links.
+- Add beta label to cells page title.
+- Fix bug when separating publications by publication status resulting in preprints not being listed.
+- Fix download visualization notebook button in vitessce section.
+
+
 ## v0.66.1 - 2023-03-23
 
 - Fix bug in cells ui caused by mismatched dataset versions from cells and search api.
