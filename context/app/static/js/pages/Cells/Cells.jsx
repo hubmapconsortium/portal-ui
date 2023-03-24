@@ -35,7 +35,7 @@ function Cells() {
     <AccordionStepsProvider stepsLength={steps.length}>
       <CellsTutorial setParametersButtonRef={setParametersButtonRef} runQueryButtonRef={runQueryButtonRef} />
       <Typography variant="h2" component="h1" color="primary">
-        Datasets: Molecular Data Queries
+        Datasets: Molecular Data Queries (BETA)
       </Typography>
       <SectionPaper>
         <Typography>
