@@ -1,0 +1,1 @@
+- Fix download visualization notebook button in vitessce section.
