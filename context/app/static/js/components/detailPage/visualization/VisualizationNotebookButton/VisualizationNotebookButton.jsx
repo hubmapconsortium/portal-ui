@@ -1,6 +1,7 @@
 import React from 'react';
 import GetAppRoundedIcon from '@material-ui/icons/GetAppRounded';
 import styled from 'styled-components';
+import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
@@ -15,7 +16,14 @@ const StyledSecondaryBackgroundTooltip = styled(SecondaryBackgroundTooltip)`
 function VisualizationNotebookButton({ uuid }) {
   return (
     <StyledSecondaryBackgroundTooltip title="Download Jupyter Notebook">
-      <WhiteBackgroundIconButton component="a" href={`${uuid}.ipynb`}>
+      <WhiteBackgroundIconButton
+        onClick={() =>
+          postAndDownloadFile({
+            url: `/notebooks/dataset/${uuid}.ws.ipynb`,
+            body: {},
+          })
+        }
+      >
         <GetAppRoundedIcon color="primary" />
       </WhiteBackgroundIconButton>
     </StyledSecondaryBackgroundTooltip>
