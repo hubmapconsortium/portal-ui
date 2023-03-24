@@ -3,7 +3,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
-import { createDownloadUrl } from 'js/helpers/functions';
+import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
@@ -11,31 +11,11 @@ import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon } from './style';
 
 async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu, analyticsCategory }) {
-  const response = await fetch(urlPath, {
-    method: 'POST',
-    body: JSON.stringify({ uuids: allResultsUUIDs }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  if (!response.ok) {
-    console.error('Download failed', response);
-    closeMenu();
-    return;
-  }
-  const results = await response.blob();
-  const name = response.headers.get('content-disposition').split('=')[1];
-  const mime = response.headers.get('content-type');
-
-  const downloadUrl = createDownloadUrl(results, mime);
-  const tempLink = document.createElement('a');
-  tempLink.href = downloadUrl;
-  tempLink.download = name;
-  tempLink.click();
+  await postAndDownloadFile({ url: urlPath, body: { uuids: allResultsUUIDs } });
 
   trackEvent({
     category: analyticsCategory,
-    action: `Download ${mime}`,
+    action: `Download file`,
     label: urlPath.split('/').pop(),
   });
 

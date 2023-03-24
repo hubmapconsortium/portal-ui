@@ -1,37 +1,17 @@
 import React from 'react';
 // import { trackEvent } from 'js/helpers/trackers';
 
-import { createDownloadUrl } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
 
+import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
 import { useMetadataMenu } from './hooks';
 
 async function fetchAndDownload({ urlPath, selectedHits, closeMenu }) {
-  const response = await fetch(urlPath, {
-    method: 'POST',
-    body: JSON.stringify({ uuids: [...selectedHits] }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  if (!response.ok) {
-    console.error('Download failed', response);
-    closeMenu();
-    return;
-  }
-  const results = await response.blob();
-  const name = response.headers.get('content-disposition').split('=')[1];
-  const mime = response.headers.get('content-type');
-
-  const downloadUrl = createDownloadUrl(results, mime);
-  const tempLink = document.createElement('a');
-  tempLink.href = downloadUrl;
-  tempLink.download = name;
-  tempLink.click();
+  await postAndDownloadFile({ url: urlPath, body: { uuids: [...selectedHits] } });
 
   /*
   trackEvent({
