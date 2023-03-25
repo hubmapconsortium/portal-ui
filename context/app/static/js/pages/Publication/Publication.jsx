@@ -4,8 +4,8 @@ import Summary from 'js/components/detailPage/summary/Summary';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
-
 import PublicationRelatedEntities from 'js/components/publications/PublicationRelatedEntities';
+import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 
 function Publication({ publication }) {
   const {
@@ -22,6 +22,7 @@ function Publication({ publication }) {
     mapped_data_access_level,
     mapped_external_group_name,
     doi_url,
+    contributors,
   } = publication;
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
@@ -47,6 +48,7 @@ function Publication({ publication }) {
         {hasDOI && <OutboundIconLink href={doi_url}>{doi_url}</OutboundIconLink>}
       </Summary>
       <PublicationRelatedEntities uuid={uuid} />
+      <ContributorsTable contributors={contributors} title="Authors" />
     </>
   );
 }
