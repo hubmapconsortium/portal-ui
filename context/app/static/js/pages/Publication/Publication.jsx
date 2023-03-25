@@ -4,7 +4,6 @@ import Summary from 'js/components/detailPage/summary/Summary';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
-import PublicationRelatedEntities from 'js/components/publications/PublicationRelatedEntities';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
 
@@ -49,8 +48,7 @@ function Publication({ publication }) {
         <SummaryItem showDivider={hasDOI}>{hubmap_id}</SummaryItem>
         {hasDOI && <OutboundIconLink href={doi_url}>{doi_url}</OutboundIconLink>}
       </Summary>
-      <PublicationRelatedEntities uuid={uuid} />
-      <PublicationsDataSection datasetUUIDs={ancestor_ids} />
+      <PublicationsDataSection uuid={uuid} datasetUUIDs={ancestor_ids} />
       <ContributorsTable contributors={contributors} title="Authors" />
     </>
   );
