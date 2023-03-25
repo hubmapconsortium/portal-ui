@@ -6,6 +6,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import PublicationRelatedEntities from 'js/components/publications/PublicationRelatedEntities';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
+import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
 
 function Publication({ publication }) {
   const {
@@ -23,6 +24,7 @@ function Publication({ publication }) {
     mapped_external_group_name,
     doi_url,
     contributors,
+    ancestor_ids,
   } = publication;
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
@@ -48,6 +50,7 @@ function Publication({ publication }) {
         {hasDOI && <OutboundIconLink href={doi_url}>{doi_url}</OutboundIconLink>}
       </Summary>
       <PublicationRelatedEntities uuid={uuid} />
+      <PublicationsDataSection datasetUUIDs={ancestor_ids} />
       <ContributorsTable contributors={contributors} title="Authors" />
     </>
   );
