@@ -21,7 +21,7 @@ function ContributorsTable({ title, contributors }) {
   ];
 
   return (
-    <DetailPageSection id="contributors">
+    <DetailPageSection id={title}>
       <SectionHeader>{title}</SectionHeader>
       <Paper>
         <StyledTableContainer>
@@ -37,14 +37,16 @@ function ContributorsTable({ title, contributors }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {contributors.map((row) => (
-                <TableRow key={row.orcid_id}>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.affiliation}</TableCell>
+              {contributors.map(({ orcid_id, name, affiliation }) => (
+                <TableRow key={orcid_id}>
+                  <TableCell>{name}</TableCell>
+                  <TableCell>{affiliation}</TableCell>
                   <TableCell>
-                    <OutboundIconLink href={`https://orcid.org/${row.orcid_id}`} variant="body2">
-                      {row.orcid_id}
-                    </OutboundIconLink>
+                    {orcid_id && (
+                      <OutboundIconLink href={`https://orcid.org/${orcid_id}`} variant="body2">
+                        {orcid_id}
+                      </OutboundIconLink>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
