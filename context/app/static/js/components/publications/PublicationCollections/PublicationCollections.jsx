@@ -11,7 +11,7 @@ import { StyledSectionPaper } from './styles';
 function PublicationCollections({ collectionsData }) {
   const panelsProps = buildCollectionsPanelsProps(collectionsData);
   return (
-    <Section>
+    <Section id="collections">
       <StyledSectionPaper>
         <LabelledSectionText label="Collections">
           Data for this publication is available on the associated HuBMAP Data Collection page(s).
