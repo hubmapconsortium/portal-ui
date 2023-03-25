@@ -3,6 +3,10 @@ import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 
+const panelBorderStyles = css`
+  border-bottom: 1px solid ${(props) => props.theme.palette.divider};
+`;
+
 const overflowCss = css`
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -10,8 +14,8 @@ const overflowCss = css`
 `;
 
 const PanelBox = styled.div`
+  ${panelBorderStyles}
   padding: 15px 20px;
-  border-bottom: 1px solid ${(props) => props.theme.palette.divider};
   display: flex;
   flex-direction: column;
 
@@ -44,4 +48,4 @@ const RightTextWrapper = styled.div`
   padding-left: ${(props) => props.theme.spacing(0.5)}px;
 `;
 
-export { PanelBox, LeftTextWrapper, TruncatedText, TruncatedLink, RightTextWrapper };
+export { PanelBox, LeftTextWrapper, TruncatedText, TruncatedLink, RightTextWrapper, panelBorderStyles };

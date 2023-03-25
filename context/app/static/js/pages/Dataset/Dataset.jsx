@@ -29,7 +29,7 @@ import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialo
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import { useDatasetCollections } from './hooks';
+import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 
 function NotebookButton(props) {
   return (
@@ -142,7 +142,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
 
   const combinedMetadata = combineMetadata(donor, origin_sample, source_sample, metadata);
 
-  const collectionsData = useDatasetCollections(uuid);
+  const collectionsData = useDatasetsCollections([uuid]);
 
   const shouldDisplaySection = {
     provenance: entity_type !== 'Support',
