@@ -16,12 +16,10 @@ function ProvTabs({ uuid, assayMetadata, provData }) {
     setOpen(newValue);
   };
 
-  const shouldDisplayTable = !hasDataTypes(data_types, [
-    'sc_rna_seq_snare_lab',
-    'sc_atac_seq_snare_lab',
-    'TMT-LC-MS',
-    'salmon_rnaseq_snareseq',
-  ]);
+  const shouldDisplayTable =
+    entity_type !== 'Publication' &&
+    !hasDataTypes(data_types, ['sc_rna_seq_snare_lab', 'sc_atac_seq_snare_lab', 'TMT-LC-MS', 'salmon_rnaseq_snareseq']);
+
   const shouldDisplayDag =
     ['Dataset', 'Support'].includes(entity_type) && metadata && 'dag_provenance_list' in metadata;
 

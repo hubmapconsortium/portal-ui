@@ -6,6 +6,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
+import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 
 function Publication({ publication }) {
   const {
@@ -50,6 +51,7 @@ function Publication({ publication }) {
       </Summary>
       <PublicationsDataSection uuid={uuid} datasetUUIDs={ancestor_ids} />
       <ContributorsTable contributors={contributors} title="Authors" />
+      <ProvSection uuid={uuid} assayMetadata={publication} />
     </>
   );
 }
