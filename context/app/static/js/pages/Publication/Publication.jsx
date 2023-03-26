@@ -3,10 +3,11 @@ import React from 'react';
 import Summary from 'js/components/detailPage/summary/Summary';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
+import { getCombinedDatasetStatus, getSectionOrder } from 'js/components/detailPage/utils';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
+import DetailLayout from 'js/components/detailPage/DetailLayout';
 
 function Publication({ publication }) {
   const {
@@ -27,12 +28,14 @@ function Publication({ publication }) {
     ancestor_ids,
   } = publication;
 
+  const sectionOrder = getSectionOrder(['summary', 'data', 'authors', 'provenance'], {});
+
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
   const hasDOI = doi_url !== undefined;
 
   return (
-    <>
+    <DetailLayout sectionOrder={sectionOrder}>
       <Summary
         title={title}
         uuid={uuid}
@@ -52,7 +55,7 @@ function Publication({ publication }) {
       <PublicationsDataSection uuid={uuid} datasetUUIDs={ancestor_ids} />
       <ContributorsTable contributors={contributors} title="Authors" />
       <ProvSection uuid={uuid} assayMetadata={publication} />
-    </>
+    </DetailLayout>
   );
 }
 
