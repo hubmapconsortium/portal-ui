@@ -16,12 +16,30 @@ const iconMap = {
 
 const AnimatedFlexContainer = animated(FlexContainer);
 
-function EntityHeaderContent({ hubmap_id, entity_type, data, shouldDisplayHeader, vizIsFullscreen }) {
+const entityToFieldsMap = {
+  Donor: {
+    sex: ({ sex }) => sex,
+    race: ({ race }) => race && race.join(', '),
+    age: ({ age_value, age_unit }) => age_value && age_unit && `${age_value} ${age_unit}`,
+  },
+  Sample: {
+    'organ type': ({ mapped_organ }) => mapped_organ,
+    'sample category': ({ sample_category }) => sample_category,
+  },
+  Dataset: {
+    'organ type': ({ mapped_organ }) => mapped_organ,
+    'data type': ({ mapped_data_types }) => mapped_data_types && mapped_data_types.join(', '),
+  },
+};
+
+function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscreen }) {
   const transitions = useTransition(shouldDisplayHeader, null, {
     from: { opacity: vizIsFullscreen ? 1 : 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
   });
+
+  const { hubmap_id, entity_type } = assayMetadata;
 
   return transitions.map(
     ({ item, key, props }) =>
@@ -31,8 +49,8 @@ function EntityHeaderContent({ hubmap_id, entity_type, data, shouldDisplayHeader
             <>
               {iconMap[entity_type]}
               <EntityHeaderItem text={hubmap_id} />
-              {Object.entries(data).map(([k, v]) => (
-                <EntityHeaderItem text={v.value || `undefined ${v.label}`} key={k} />
+              {Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
+                <EntityHeaderItem text={fn(assayMetadata) || `undefined ${label}`} key={label} />
               ))}
             </>
           )}
