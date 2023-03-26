@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from flask import abort, current_app
 import requests
-
+import frontmatter
 from hubmap_commons.type_client import TypeClient
 
 from .client_utils import files_from_response
@@ -208,6 +208,53 @@ class ApiClient():
         return VitessceConfLiftedUUID(
             vitessce_conf=vitessce_conf,
             vis_lifted_uuid=vis_lifted_uuid)
+    
+    def _file_request(self, url, body_json=None):
+        headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
+
+        if self.groups_token:
+            url += f"?token={self.groups_token}"
+        try:
+            response = (
+                requests.get(url, headers=headers)
+            )
+        except requests.exceptions.ConnectTimeout as error:
+            current_app.logger.error(error)
+            abort(504)
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as error:
+            current_app.logger.error(error.response.text)
+            status = error.response.status_code
+            if status in [400, 404]:
+                # The same 404 page will be returned,
+                # whether it's a missing route in portal-ui,
+                # or a missing entity in the API.
+                abort(status)
+            if status in [401]:
+                # I believe we have 401 errors when the globus credentials
+                # have expired, but are still in the flask session.
+                abort(status)
+            raise
+        return response.text
+
+
+    def get_publication_vignettes(self, uuid):
+        vignettes_path = f"{current_app.config['ASSETS_ENDPOINT']}/{uuid}/vignettes/"
+        vignette_data = {}
+
+        i = 1
+        while True:
+            try:
+                vignette_dir_name = _get_vignette_dir_name(i)
+                description_text = self._file_request(f"{vignettes_path}/{vignette_dir_name}/description.md")
+                metadata_content = frontmatter.loads(description_text)
+                vignette_data[vignette_dir_name] = metadata_content.metadata
+                i += 1
+            except:
+                break        
+        
+        return vignette_data
 
 
 def _make_query(constraints, uuids):
@@ -463,3 +510,7 @@ def _get_latest_uuid(revisions):
     ]
     return max(clean_revisions,
                key=lambda revision: revision['revision_number'])['uuid']
+
+
+def _get_vignette_dir_name(vignette_number):
+    return f"vignette_{vignette_number:02}"
