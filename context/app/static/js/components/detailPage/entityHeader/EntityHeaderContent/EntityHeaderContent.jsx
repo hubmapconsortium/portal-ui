@@ -4,17 +4,10 @@ import { useTransition, animated } from 'react-spring';
 
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
-import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer, RightDiv } from './style';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
-
-const iconMap = {
-  Dataset: <StyledDatasetIcon />,
-  Sample: <StyledSampleIcon />,
-  Donor: <StyledDonorIcon />,
-};
-
-const AnimatedFlexContainer = animated(FlexContainer);
 
 const entityToFieldsMap = {
   Donor: {
@@ -36,6 +29,8 @@ const entityToFieldsMap = {
   },
 };
 
+const AnimatedFlexContainer = animated(FlexContainer);
+
 function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscreen }) {
   const transitions = useTransition(shouldDisplayHeader, null, {
     from: { opacity: vizIsFullscreen ? 1 : 0 },
@@ -51,7 +46,7 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
         <AnimatedFlexContainer style={props} key={key} maxWidth={vizIsFullscreen ? false : 'lg'}>
           {entity_type && (
             <>
-              {iconMap[entity_type]}
+              <StyledSvgIcon component={entityIconMap[entity_type]} />
               <EntityHeaderItem text={hubmap_id} />
               {Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
                 <EntityHeaderItem text={fn(assayMetadata) || `undefined ${label}`} key={label} />

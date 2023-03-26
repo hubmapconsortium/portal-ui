@@ -1,25 +1,12 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
-import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
-
-const iconStyle = css`
+const StyledSvgIcon = styled(SvgIcon)`
   font-size: 1.5rem;
   color: ${(props) => props.theme.palette.primary.main};
   margin-right: ${(props) => props.theme.spacing(1)}px;
-`;
-
-const StyledDatasetIcon = styled(DatasetIcon)`
-  ${iconStyle}
-`;
-
-const StyledSampleIcon = styled(SampleIcon)`
-  ${iconStyle}
-`;
-
-const StyledDonorIcon = styled(DonorIcon)`
-  ${iconStyle}
 `;
 
 const FlexContainer = styled(Container)`
@@ -40,4 +27,4 @@ const RightDiv = styled.div`
   height: 100%;
 `;
 
-export { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer, FullscreenToggleButton, RightDiv };
+export { StyledSvgIcon, FlexContainer, FullscreenToggleButton, RightDiv };
