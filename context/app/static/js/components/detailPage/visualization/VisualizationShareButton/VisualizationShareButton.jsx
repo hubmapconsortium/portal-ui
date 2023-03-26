@@ -16,7 +16,6 @@ import { copyToClipBoard, createEmailWithUrl } from './utils';
 import { DEFAULT_LONG_URL_WARNING } from './constants';
 
 import { StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
-import 'vitessce/dist/es/production/static/css/index.css';
 
 const visualizationStoreSelector = (state) => ({
   vitessceState: state.vitessceState,
