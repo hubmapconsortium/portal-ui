@@ -4,24 +4,41 @@ import { useTransition, animated } from 'react-spring';
 
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
-import { StyledDatasetIcon, StyledSampleIcon, StyledDonorIcon, FlexContainer, RightDiv } from './style';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 
-const iconMap = {
-  Dataset: <StyledDatasetIcon />,
-  Sample: <StyledSampleIcon />,
-  Donor: <StyledDonorIcon />,
+const entityToFieldsMap = {
+  Donor: {
+    sex: ({ sex }) => sex,
+    race: ({ race }) => race && race.join(', '),
+    age: ({ age_value, age_unit }) => age_value && age_unit && `${age_value} ${age_unit}`,
+  },
+  Sample: {
+    'organ type': ({ mapped_organ }) => mapped_organ,
+    'sample category': ({ sample_category }) => sample_category,
+  },
+  Dataset: {
+    'organ type': ({ mapped_organ }) => mapped_organ,
+    'data type': ({ mapped_data_types }) => mapped_data_types && mapped_data_types.join(', '),
+  },
+  Publication: {
+    title: ({ title }) => title,
+    'publication venue': ({ publication_venue }) => publication_venue,
+  },
 };
 
 const AnimatedFlexContainer = animated(FlexContainer);
 
-function EntityHeaderContent({ hubmap_id, entity_type, data, shouldDisplayHeader, vizIsFullscreen }) {
+function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscreen }) {
   const transitions = useTransition(shouldDisplayHeader, null, {
     from: { opacity: vizIsFullscreen ? 1 : 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
   });
+
+  const { hubmap_id, entity_type } = assayMetadata;
 
   return transitions.map(
     ({ item, key, props }) =>
@@ -29,10 +46,10 @@ function EntityHeaderContent({ hubmap_id, entity_type, data, shouldDisplayHeader
         <AnimatedFlexContainer style={props} key={key} maxWidth={vizIsFullscreen ? false : 'lg'}>
           {entity_type && (
             <>
-              {iconMap[entity_type]}
+              <StyledSvgIcon component={entityIconMap[entity_type]} />
               <EntityHeaderItem text={hubmap_id} />
-              {Object.entries(data).map(([k, v]) => (
-                <EntityHeaderItem text={v.value || `undefined ${v.label}`} key={k} />
+              {Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
+                <EntityHeaderItem text={fn(assayMetadata) || `undefined ${label}`} key={label} />
               ))}
             </>
           )}

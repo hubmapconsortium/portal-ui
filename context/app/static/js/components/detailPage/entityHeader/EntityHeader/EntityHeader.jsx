@@ -5,7 +5,6 @@ import { useEntityStore, useVisualizationStore } from 'js/stores';
 import { iconButtonHeight } from 'js/shared-styles/buttons';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
-import { extractHeaderMetadata } from './utils';
 
 const AnimatedPaper = animated(StyledPaper);
 const entityStoreSelector = (state) => ({
@@ -35,17 +34,13 @@ function Header() {
         leave: { overflow: 'hidden', height: 0 },
       };
   const transitions = useTransition(shouldDisplayHeader, null, transitionConfig);
-  const { hubmap_id, entity_type } = assayMetadata;
 
-  const data = extractHeaderMetadata(assayMetadata, entity_type);
   return transitions.map(
     ({ item, key, props }) =>
       item && (
         <AnimatedPaper key={key} style={props} elevation={4}>
           <EntityHeaderContent
-            hubmap_id={hubmap_id}
-            entity_type={entity_type}
-            data={data}
+            assayMetadata={assayMetadata}
             shouldDisplayHeader={shouldDisplayHeader}
             vizIsFullscreen={vizIsFullscreen}
           />
