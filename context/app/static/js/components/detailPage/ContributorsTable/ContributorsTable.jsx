@@ -21,7 +21,7 @@ function ContributorsTable({ title, contributors }) {
   ];
 
   return (
-    <DetailPageSection id={title}>
+    <DetailPageSection id={title.toLowerCase()}>
       <SectionHeader>{title}</SectionHeader>
       <Paper>
         <StyledTableContainer>
