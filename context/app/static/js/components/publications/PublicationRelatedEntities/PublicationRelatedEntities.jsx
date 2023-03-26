@@ -13,7 +13,7 @@ function PublicationRelatedEntities({ uuid }) {
   return (
     <RelatedEntitiesSectionWrapper
       isLoading={isLoading}
-      sectionId="publication-entities"
+      sectionId="data"
       headerComponent={
         <RelatedEntitiesSectionHeader
           header="Data"
