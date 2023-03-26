@@ -39,7 +39,6 @@ function Routes({ flaskData }) {
     entity,
     vitessce_conf,
     title,
-    publications,
     markdown,
     errorCode,
     list_uuid,
@@ -49,7 +48,6 @@ function Routes({ flaskData }) {
     organs,
     organs_count,
     organ,
-    metadata,
   } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
@@ -95,6 +93,14 @@ function Routes({ flaskData }) {
     return (
       <Route>
         <Collection collection={entity} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/browse/publication/')) {
+    return (
+      <Route>
+        <Publication publication={entity} />
       </Route>
     );
   }
@@ -171,18 +177,10 @@ function Routes({ flaskData }) {
     );
   }
 
-  if (urlPath === '/publication') {
+  if (urlPath === '/publications') {
     return (
       <Route>
-        <Publications publications={publications} />
-      </Route>
-    );
-  }
-
-  if (urlPath.startsWith('/publication/')) {
-    return (
-      <Route>
-        <Publication metadata={metadata} markdown={markdown} />
+        <Publications />
       </Route>
     );
   }

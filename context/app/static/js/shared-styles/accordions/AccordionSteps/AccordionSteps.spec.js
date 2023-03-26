@@ -3,8 +3,17 @@ import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import { render, screen, waitFor } from 'test-utils/functions';
 import { fireEvent } from '@testing-library/react';
+import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/provider';
 
 import AccordionSteps from './AccordionSteps';
+
+function AccordionStepsWithProvider({ steps, ...rest }) {
+  return (
+    <AccordionStepsProvider stepsLength={steps.length}>
+      <AccordionSteps steps={steps} {...rest} />
+    </AccordionStepsProvider>
+  );
+}
 
 function getAccordionStepText(stepIndex) {
   return {
@@ -38,9 +47,7 @@ async function clickCompleteStep(step) {
 
 test('accordions are disabled until previous step is completed', async () => {
   render(
-    <AccordionSteps
-      isFirstStepOpen={false}
-      // eslint-disable-next-line no-unused-vars
+    <AccordionStepsWithProvider
       steps={Array(2)
         .fill()
         .map((a, index) => ({
@@ -60,9 +67,7 @@ test('accordions are disabled until previous step is completed', async () => {
 
 test("an accordion is closed when step is completed and the next step's accordion is opened", async () => {
   render(
-    <AccordionSteps
-      isFirstStepOpen={false}
-      // eslint-disable-next-line no-unused-vars
+    <AccordionStepsWithProvider
       steps={Array(2)
         .fill()
         .map((a, index) => ({
@@ -71,22 +76,18 @@ test("an accordion is closed when step is completed and the next step's accordio
         }))}
     />,
   );
-  expect(screen.queryByText(step0.contentButton)).not.toBeVisible();
-
-  await clickOpenAccordion(step0);
 
   expect(screen.queryByText(step1.contentButton)).not.toBeVisible();
 
   await clickCompleteStep(step0);
 
   expect(screen.getByText(step1.contentButton)).toBeVisible();
+  expect(screen.queryByText(step0.contentButton)).not.toBeVisible();
 });
 
 test('future steps completed text are reset upon completion', async () => {
   render(
-    <AccordionSteps
-      isFirstStepOpen={false}
-      // eslint-disable-next-line no-unused-vars
+    <AccordionStepsWithProvider
       steps={Array(2)
         .fill()
         .map((a, index) => ({
@@ -122,8 +123,7 @@ function ContentWithUseEffect({ completeStep, spyFunction }) {
 test('children useEffect hooks dependent on completeStep are only called once', async () => {
   const spy = jest.fn();
   render(
-    <AccordionSteps
-      isFirstStepOpen={false}
+    <AccordionStepsWithProvider
       steps={[
         {
           heading: 'Heading',

@@ -19,7 +19,7 @@ export default {
 };
 
 const sharedArgs = {
-  hubmap_id: 'DOI123',
+  title: 'DOI123',
   entity_type: 'Fake Entity',
   uuid: 'fakeuuid',
   status: 'QA',

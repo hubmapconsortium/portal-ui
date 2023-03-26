@@ -1,3 +1,38 @@
+## v0.67.0 - 2023-03-24
+
+- Add cells page to header menu other links.
+- Add beta label to cells page title.
+- Fix bug when separating publications by publication status resulting in preprints not being listed.
+- Fix download visualization notebook button in vitessce section.
+
+
+## v0.66.1 - 2023-03-23
+
+- Fix bug in cells ui caused by mismatched dataset versions from cells and search api.
+- Fix publications hook to handle support entities.
+- Decrease response size from search api request on publications landing page.
+
+
+## v0.66.0 - 2023-03-21
+
+- Add additional users to workspaces allow list.
+- Bump portal-visualization to 0.0.9.
+- Refactor cells to use central store.
+- Add reusable tutorial components.
+- Add cells tutorial.
+- Fix organ page table to show all samples belonging to the organ.
+- Refactor panel components for reuse in upcoming publication pages.
+- Add detail page stub for publications.
+- Add data section to publication page.
+- Separate publications on publications page by status.
+- Add landing page for publications.
+
+
+## v0.63.0 - 2023-02-09
+
+- Pass organs count to entity counts iframe.
+
+
 ## v0.62.0 - 2023-01-19
 
 - Add Gesina to workspaces allow list.

@@ -37,37 +37,6 @@ def preview_details_view(name):
     )
 
 
-@blueprint.route('/publication')
-def publication_index_view():
-    dir_path = Path(dirname(__file__) + '/publication')
-    publications = {p.stem: dict(frontmatter.load(p)) for p in dir_path.glob('*.md')}
-    flask_data = {
-        **get_default_flask_data(),
-        'publications': publications
-    }
-    return render_template(
-        'base-pages/react-content.html',
-        title='Publications',
-        flask_data=flask_data
-    )
-
-
-@blueprint.route('/publication/<name>')
-def publication_details_view(name):
-    filename = dirname(__file__) + '/publication/' + secure_filename(name) + '.md'
-    metadata_content = frontmatter.load(filename)
-    flask_data = {
-        **get_default_flask_data(),
-        'metadata': metadata_content.metadata,
-        'markdown': metadata_content.content,
-    }
-    return render_template(
-        'base-pages/react-content.html',
-        title='Publication',
-        flask_data=flask_data
-    )
-
-
 @blueprint.route('/organ')
 def organ_index_view():
     organs = get_organs()

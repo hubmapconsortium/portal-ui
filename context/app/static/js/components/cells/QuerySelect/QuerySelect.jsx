@@ -1,22 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
 import { queryTypes } from 'js/components/cells/queryTypes';
 import { capitalizeString } from 'js/helpers/functions';
 import { StyledTextField } from './style';
+import { useQuerySelect } from './hooks';
 
-function QuerySelect({ completeStep, setQueryType }) {
-  const [selectedQueryType, setSelectedQueryType] = useState(queryTypes.gene.value);
-
-  function handleSelect(event) {
-    setSelectedQueryType(event.target.value);
-  }
-
-  function handleButtonClick() {
-    completeStep(`${capitalizeString(selectedQueryType)} Query`);
-    setQueryType(selectedQueryType);
-  }
+function QuerySelect({ completeStep, setParametersButtonRef }) {
+  const { selectedQueryType, handleSelect, handleButtonClick } = useQuerySelect(completeStep);
   return (
     <div>
       <StyledTextField
@@ -43,7 +35,7 @@ function QuerySelect({ completeStep, setQueryType }) {
           </MenuItem>
         ))}
       </StyledTextField>
-      <Button variant="contained" color="primary" onClick={handleButtonClick}>
+      <Button variant="contained" color="primary" onClick={handleButtonClick} ref={setParametersButtonRef}>
         Set Parameters
       </Button>
     </div>

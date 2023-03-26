@@ -1,0 +1,1 @@
+- Add publication collections section to publication page.

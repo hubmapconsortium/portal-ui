@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import CellsService from 'js/components/cells/CellsService';
 import useCellsChartLoadingStore from 'js/stores/useCellsChartLoadingStore';
+import { useStore as useTutorialStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
 
 async function fetchCellsChartsData({ uuid, cellVariableName, minExpression }) {
   const cs = new CellsService();
@@ -42,6 +43,7 @@ const storeSelector = (state) => ({
 
 function useCellsChartsData({ uuid, cellVariableName, minExpression, isExpanded }) {
   const { loadingUUID, setLoadingUUID, addFetchedUUID, fetchedUUIDs } = useCellsChartLoadingStore(storeSelector);
+  const { isTutorialRunning, setNextButtonIsDisabled } = useTutorialStore();
 
   const [diagnosticInfo, setDiagnosticInfo] = useState();
 
@@ -59,6 +61,10 @@ function useCellsChartsData({ uuid, cellVariableName, minExpression, isExpanded 
       setCellsData({ expressionData: expressionData.map((d) => d.values[cellVariableName]), clusterData });
       addFetchedUUID(uuid); // state updates aren't batched in promises until react 18. addFetchedUUID must be called before setLoadingUUID to avoid multiple requests.
       setLoadingUUID(null);
+
+      if (isTutorialRunning) {
+        setNextButtonIsDisabled(false);
+      }
     }
     if (fetchedUUIDs.has(uuid) || isLoading) {
       return;
@@ -67,7 +73,18 @@ function useCellsChartsData({ uuid, cellVariableName, minExpression, isExpanded 
     if (isExpanded) {
       getChartData();
     }
-  }, [addFetchedUUID, cellVariableName, fetchedUUIDs, isExpanded, isLoading, minExpression, setLoadingUUID, uuid]);
+  }, [
+    addFetchedUUID,
+    cellVariableName,
+    fetchedUUIDs,
+    isExpanded,
+    isLoading,
+    minExpression,
+    setLoadingUUID,
+    setNextButtonIsDisabled,
+    isTutorialRunning,
+    uuid,
+  ]);
 
   return { isLoading, diagnosticInfo, cellsData };
 }

@@ -12,6 +12,9 @@ function OtherLinks({ isIndented }) {
       <DropdownLink href="/organ" isIndented={isIndented}>
         Organs
       </DropdownLink>
+      <DropdownLink href="/cells" isIndented={isIndented}>
+        Molecular Data Queries - BETA
+      </DropdownLink>
       {/* TODO: Add publications here, when ready. */}
     </>
   );

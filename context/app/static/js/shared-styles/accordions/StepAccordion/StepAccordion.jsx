@@ -4,38 +4,41 @@ import Accordion from '@material-ui/core/ExpansionPanel';
 import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 
+import { useStore } from 'js/shared-styles/accordions/AccordionSteps/store';
 import { AccordionSummaryHeading, AccordionText, Flex, StyledAccordionSummary, SuccessIcon } from './style';
 
-function StepAccordion({
-  index,
-  summaryHeading,
-  content,
-  disabled,
-  getHandleExpandFunction,
-  isExpanded,
-  stepCompletedText,
-  getCompleteStepFunction,
-}) {
+function StepAccordion({ index, summaryHeading, content, id }) {
+  const { completeStep, expandStep, openStepIndex, completedStepsText } = useStore();
   // memoize to avoid rerenders
-  const completeStep = useMemo(() => {
-    return getCompleteStepFunction(index);
-  }, [getCompleteStepFunction, index]);
+  const handleCompleteStep = useMemo(() => {
+    return (text) => completeStep(index, text);
+  }, [completeStep, index]);
+
+  const isExpanded = openStepIndex === index;
+  const completedStepText = completedStepsText[index];
 
   return (
-    <Accordion onChange={getHandleExpandFunction(index)} disabled={disabled} expanded={isExpanded}>
+    <Accordion
+      onChange={() => expandStep(index)}
+      // The accordion should be disabled if the previous step has not been completed.
+      disabled={index > Object.keys(completedStepsText).length}
+      expanded={isExpanded}
+      id={id}
+    >
       <StyledAccordionSummary
         expandIcon={<ArrowDropUpRoundedIcon />}
         $isExpanded={isExpanded}
         data-testid={`accordion-summary-${index}`}
+        id={`${id}-summary`}
       >
         <AccordionSummaryHeading variant="subtitle2" $isExpanded={isExpanded}>
           {summaryHeading}
         </AccordionSummaryHeading>
         <Flex>
-          {stepCompletedText && (
+          {completedStepText && (
             <>
               <AccordionText variant="body2" $isExpanded={isExpanded}>
-                {stepCompletedText}
+                {completedStepText}
               </AccordionText>
               <SuccessIcon data-testid={`accordion-success-icon-${index}`} />
             </>
@@ -45,7 +48,7 @@ function StepAccordion({
       {content && (
         <AccordionDetails>
           {React.cloneElement(content, {
-            completeStep,
+            completeStep: handleCompleteStep,
           })}
         </AccordionDetails>
       )}
@@ -57,16 +60,10 @@ StepAccordion.propTypes = {
   index: PropTypes.number.isRequired,
   summaryHeading: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   content: PropTypes.element,
-  isExpanded: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  getHandleExpandFunction: PropTypes.func.isRequired,
-  getCompleteStepFunction: PropTypes.func.isRequired,
-  stepCompletedText: PropTypes.string,
 };
 
 StepAccordion.defaultProps = {
   content: undefined,
-  stepCompletedText: undefined,
 };
 
 export default StepAccordion;

@@ -18,6 +18,7 @@ import ListAltRoundedIcon from '@material-ui/icons/ListAltRounded';
 import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 import AddRoundedIcon from '@material-ui/icons/AddRounded';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 
 const fontSizeStyle = css`
   font-size: ${(props) => props.$fontSize || '1rem'};
@@ -41,6 +42,10 @@ const SampleIcon = styled(BubbleChartIcon)`
 
 const DatasetIcon = styled(TableChartIcon)`
   ${fontSizeStyle};
+`;
+
+const PublicationIcon = styled(DescriptionOutlinedIcon)`
+  ${fontSizeStyle}
 `;
 
 const ExternalLinkIcon = styled(LaunchRoundedIcon)`
@@ -100,6 +105,7 @@ export {
   DonorIcon,
   SampleIcon,
   DatasetIcon,
+  PublicationIcon,
   CenterIcon,
   ExternalLinkIcon,
   InfoIcon,

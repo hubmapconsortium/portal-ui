@@ -7,12 +7,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
 
-import { HeaderCell } from 'js/shared-styles/tables';
-import { StyledDiv } from 'js/shared-styles/tables/EntitiesTable/style';
+import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -60,6 +59,7 @@ function Samples({ organTerms }) {
         },
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
+      size: 10000,
     }),
     [organTerms],
   );
@@ -88,47 +88,45 @@ function Samples({ organTerms }) {
           </>
         }
       />
-      <Paper>
-        <StyledDiv>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} />
-                {columns.map((column) => (
-                  <HeaderCell key={column.id}>{column.label}</HeaderCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {searchHits
-                .map((hit) => {
-                  /* eslint-disable no-underscore-dangle */
-                  if (!hit._source.donor) {
-                    // eslint-disable-next-line no-param-reassign
-                    hit._source.donor = {};
-                  }
-                  /* eslint-enable */
-                  return hit;
-                })
-                .map(({ _id: uuid, _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp } }) => (
-                  <TableRow key={uuid}>
-                    <SelectableRowCell rowKey={uuid} />
-                    <TableCell>
-                      <LightBlueLink href={`/browse/sample/${uuid}`} variant="body2">
-                        {hubmap_id}
-                      </LightBlueLink>
-                    </TableCell>
-                    <TableCell>{donor?.mapped_metadata && getDonorAgeString(donor.mapped_metadata)}</TableCell>
-                    <TableCell>{donor?.mapped_metadata?.sex}</TableCell>
-                    <TableCell>{donor?.mapped_metadata?.race}</TableCell>
-                    <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
-                    <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </StyledDiv>
-      </Paper>
+      <StyledTableContainer component={Paper}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} />
+              {columns.map((column) => (
+                <HeaderCell key={column.id}>{column.label}</HeaderCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {searchHits
+              .map((hit) => {
+                /* eslint-disable no-underscore-dangle */
+                if (!hit._source.donor) {
+                  // eslint-disable-next-line no-param-reassign
+                  hit._source.donor = {};
+                }
+                /* eslint-enable */
+                return hit;
+              })
+              .map(({ _id: uuid, _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp } }) => (
+                <TableRow key={uuid}>
+                  <SelectableRowCell rowKey={uuid} />
+                  <TableCell>
+                    <LightBlueLink href={`/browse/sample/${uuid}`} variant="body2">
+                      {hubmap_id}
+                    </LightBlueLink>
+                  </TableCell>
+                  <TableCell>{donor?.mapped_metadata && getDonorAgeString(donor.mapped_metadata)}</TableCell>
+                  <TableCell>{donor?.mapped_metadata?.sex}</TableCell>
+                  <TableCell>{donor?.mapped_metadata?.race}</TableCell>
+                  <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
+                  <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </StyledTableContainer>
     </SectionContainer>
   );
 }

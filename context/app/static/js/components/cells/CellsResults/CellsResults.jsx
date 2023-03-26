@@ -3,9 +3,20 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 
 import DatasetsTable from 'js/components/cells/DatasetsTable';
+import { useStore } from 'js/components/cells/store';
 import { CenteredFlex, FullWidthAlert } from './style';
 
-function CellsResults({ isLoading, results, minExpressionLog, cellVariableNames, queryType, completeStep }) {
+const cellsStoreSelector = (state) => ({
+  isLoading: state.isLoading,
+  results: state.results,
+  minExpressionLog: state.minExpressionLog,
+  cellVariableNames: state.cellVariableNames,
+  queryType: state.queryType,
+});
+
+function CellsResults({ completeStep }) {
+  const { isLoading, results, minExpressionLog, cellVariableNames, queryType } = useStore(cellsStoreSelector);
+
   if (isLoading) {
     return (
       <CenteredFlex>

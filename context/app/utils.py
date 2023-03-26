@@ -8,7 +8,7 @@ from pathlib import Path
 
 from yaml import safe_load
 
-entity_types = ['donor', 'sample', 'dataset', 'support', 'collection']
+entity_types = ['donor', 'sample', 'dataset', 'support', 'collection', 'publication']
 
 
 def get_client():

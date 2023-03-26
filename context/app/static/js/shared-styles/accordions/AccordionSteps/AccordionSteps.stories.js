@@ -2,7 +2,8 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
-import AccordionStepsComponent from './AccordionSteps';
+import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/provider';
+import AccordionStepsComponent from 'js/shared-styles/accordions/AccordionSteps';
 
 export default {
   title: 'Accordions/AccordionSteps',
@@ -27,14 +28,20 @@ function ExampleContent({ completeStep, stepNumber }) {
   return <Button onClick={() => completeStep(`Step ${stepNumber} Completed!`)}>Complete Step</Button>;
 }
 
-export const AccordionSteps = (args) => <AccordionStepsComponent {...args} />;
+const steps = [1, 2, 3].map((stepNumber) => ({
+  heading: `Step ${stepNumber}`,
+  content: <ExampleContent stepNumber={stepNumber} />,
+}));
+
+export const AccordionSteps = (args) => (
+  <AccordionStepsProvider stepsLength={steps.length}>
+    <AccordionStepsComponent {...args} />
+  </AccordionStepsProvider>
+);
 
 AccordionSteps.args = {
   isFirstStepOpen: false,
-  steps: [1, 2, 3].map((stepNumber) => ({
-    heading: `Step ${stepNumber}`,
-    content: <ExampleContent stepNumber={stepNumber} />,
-  })),
+  steps,
 };
 
 AccordionSteps.storyName = 'AccordionSteps'; // needed for single story hoisting for multi word component names

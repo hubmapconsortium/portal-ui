@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
@@ -14,7 +14,7 @@ import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
-import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
+
 import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/DerivedDatasetsSection';
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
@@ -41,8 +41,6 @@ function SampleDetail({ assayMetadata }) {
     descendant_counts,
   } = assayMetadata;
 
-  const { searchHits: derivedDatasets, isLoading: derivedDatsetsAreLoading } = useDerivedDatasetSearchHits(uuid);
-
   const combinedMetadata = combineMetadata(donor, undefined, undefined, metadata);
 
   const shouldDisplaySection = {
@@ -58,9 +56,7 @@ function SampleDetail({ assayMetadata }) {
   );
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
-  useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, mapped_organ, sample_category });
-  }, [setAssayMetadata, hubmap_id, entity_type, mapped_organ, sample_category]);
+  setAssayMetadata({ hubmap_id, entity_type, mapped_organ, sample_category });
 
   useSendUUIDEvent(entity_type, uuid);
 
@@ -72,7 +68,7 @@ function SampleDetail({ assayMetadata }) {
         <Summary
           uuid={uuid}
           entity_type={entity_type}
-          hubmap_id={hubmap_id}
+          title={hubmap_id}
           created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           description={description}
@@ -87,14 +83,7 @@ function SampleDetail({ assayMetadata }) {
             {sample_category}
           </Typography>
         </Summary>
-        {shouldDisplaySection.derived && (
-          <DerivedDatasetsSection
-            datasets={derivedDatasets}
-            uuid={uuid}
-            isLoading={derivedDatsetsAreLoading}
-            sectionId="derived"
-          />
-        )}
+        {shouldDisplaySection.derived && <DerivedDatasetsSection uuid={uuid} entityType={entity_type} />}
         <SampleTissue uuid={uuid} sample_category={sample_category} mapped_organ={mapped_organ} hasRUI={hasRUI} />
         <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}

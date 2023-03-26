@@ -11,26 +11,21 @@ import MarkedSlider from 'js/shared-styles/inputs/MarkedSlider';
 import { StyledDiv, StyledTextField } from './style';
 import { useDatasetsSelectedByExpression } from './hooks';
 
-function DatasetsSelectedByExpression({
-  completeStep,
-  setResults,
-  minExpressionLog,
-  setMinExpressionLog,
-  minCellPercentage,
-  setMinCellPercentage,
-  cellVariableNames,
-  setCellVariableNames,
-  queryType,
-  setIsLoading,
-}) {
-  const { genomicModality, handleSelectModality, handleSubmit, message } = useDatasetsSelectedByExpression({
-    completeStep,
-    setResults,
-    minExpressionLog,
-    minCellPercentage,
-    cellVariableNames,
+function DatasetsSelectedByExpression({ completeStep, runQueryButtonRef }) {
+  const {
+    genomicModality,
+    handleSelectModality,
+    handleSubmit,
+    message,
     queryType,
-    setIsLoading,
+    minExpressionLog,
+    setMinExpressionLog,
+    minCellPercentage,
+    setMinCellPercentage,
+    cellVariableNames,
+    setCellVariableNames,
+  } = useDatasetsSelectedByExpression({
+    completeStep,
   });
 
   const queryMeasurement = queryTypes[queryType].measurement;
@@ -91,7 +86,14 @@ function DatasetsSelectedByExpression({
         />
       </div>
       <div>
-        <Button onClick={handleSubmit} disabled={cellVariableNames.length === 0} variant="contained" color="primary">
+        <Button
+          onClick={handleSubmit}
+          disabled={cellVariableNames.length === 0}
+          variant="contained"
+          color="primary"
+          id="run-query-button"
+          ref={runQueryButtonRef}
+        >
           Run Query
         </Button>
       </div>

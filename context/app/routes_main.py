@@ -112,6 +112,16 @@ def collections():
     )
 
 
+@blueprint.route('/publications')
+def publications():
+    flask_data = {**get_default_flask_data()}
+    return render_template(
+        'base-pages/react-content.html',
+        title='Publications',
+        flask_data=flask_data
+    )
+
+
 @blueprint.route('/my-lists')
 def my_lists():
     flask_data = {**get_default_flask_data()}
@@ -138,7 +148,8 @@ def list_page(saved_list_uuid):
 @blueprint.route('/iframe/<path:path>')
 def iframe_page(path):
     flask_data = {
-        **get_default_flask_data()
+        **get_default_flask_data(),
+        'organs_count': len(get_organs())
     }
     return render_template(
         'special-pages/organ.html' if path == 'organ' else 'base-pages/react-content.html',

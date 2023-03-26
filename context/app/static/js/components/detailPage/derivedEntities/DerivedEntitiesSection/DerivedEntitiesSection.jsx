@@ -1,44 +1,37 @@
 import React, { useState } from 'react';
 
-import DerivedEntitiesSectionWrapper from 'js/components/detailPage/derivedEntities/DerivedEntitiesSectionWrapper';
-import DerivedEntitiesTabs from 'js/components/detailPage/derivedEntities/DerivedEntitiesTabs';
-import DerivedEntitiesSectionHeader from 'js/components/detailPage/derivedEntities/DerivedEntitiesSectionHeader';
+import RelatedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
+import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
+import RelatedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
+import { useDerivedEntitiesSection } from './hooks';
 
-function DerivedEntitiesSection({ samples, datasets, uuid, isLoading, sectionId, entityType }) {
+function DerivedEntitiesSection({ uuid, entityType }) {
   const [openIndex, setOpenIndex] = useState(0);
 
-  const entities = [
-    {
-      entityType: 'Sample',
-      tabLabel: 'Samples',
-      data: samples,
-    },
-    {
-      entityType: 'Dataset',
-      tabLabel: 'Datasets',
-      data: datasets,
-    },
-  ];
+  const { entities, isLoading } = useDerivedEntitiesSection(uuid);
+
   return (
-    <DerivedEntitiesSectionWrapper
+    <RelatedEntitiesSectionWrapper
       isLoading={isLoading}
-      sectionId={sectionId}
+      sectionId="derived-entities"
       headerComponent={
-        <DerivedEntitiesSectionHeader
+        <RelatedEntitiesSectionHeader
           header="Derived Samples and Datasets"
-          entityCountsText={`${samples.length} Samples | ${datasets.length} Datasets`}
           uuid={uuid}
-          entityType={entities[openIndex].entityType}
+          searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
       }
     >
-      <DerivedEntitiesTabs
+      <RelatedEntitiesTabs
         entities={entities}
         openIndex={openIndex}
         setOpenIndex={setOpenIndex}
-        entityType={entityType}
+        ariaLabel="Derived Datasets and Samples Tabs"
+        renderWarningMessage={(tableEntityType) =>
+          `No derived ${tableEntityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`
+        }
       />
-    </DerivedEntitiesSectionWrapper>
+    </RelatedEntitiesSectionWrapper>
   );
 }
 

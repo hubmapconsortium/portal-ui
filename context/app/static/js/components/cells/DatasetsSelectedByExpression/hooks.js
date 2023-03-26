@@ -4,8 +4,21 @@ import CellsService from 'js/components/cells/CellsService';
 import { AppContext } from 'js/components/Providers';
 import { fetchSearchData } from 'js/hooks/useSearchData';
 import useCellsChartLoadingStore from 'js/stores/useCellsChartLoadingStore';
+import { useStore } from 'js/components/cells/store';
 
-const storeSelector = (state) => state.resetFetchedUUIDs;
+const chartsStoreSelector = (state) => state.resetFetchedUUIDs;
+
+const cellsStoreSelector = (state) => ({
+  setResults: state.setResults,
+  minExpressionLog: state.minExpressionLog,
+  setMinExpressionLog: state.setMinExpressionLog,
+  minCellPercentage: state.minCellPercentage,
+  setMinCellPercentage: state.setMinCellPercentage,
+  cellVariableNames: state.cellVariableNames,
+  setCellVariableNames: state.setCellVariableNames,
+  queryType: state.queryType,
+  setIsLoading: state.setIsLoading,
+});
 
 function getSearchQuery(cellsResults) {
   return {
@@ -45,19 +58,23 @@ function buildHitsMap(hits) {
   }, {});
 }
 
-function useDatasetsSelectedByExpression({
-  completeStep,
-  setResults,
-  setIsLoading,
-  queryType,
-  cellVariableNames,
-  minExpressionLog,
-  minCellPercentage,
-}) {
+function useDatasetsSelectedByExpression({ completeStep }) {
   const [message, setMessage] = useState(null);
   const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const [genomicModality, setGenomicModality] = useState('rna');
-  const resetFetchedUUIDs = useCellsChartLoadingStore(storeSelector);
+  const resetFetchedUUIDs = useCellsChartLoadingStore(chartsStoreSelector);
+
+  const {
+    setResults,
+    minExpressionLog,
+    setMinExpressionLog,
+    minCellPercentage,
+    setMinCellPercentage,
+    cellVariableNames,
+    setCellVariableNames,
+    queryType,
+    setIsLoading,
+  } = useStore(cellsStoreSelector);
 
   function handleSelectModality(event) {
     setGenomicModality(event.target.value);
@@ -87,7 +104,15 @@ function useDatasetsSelectedByExpression({
       const searchResults = await fetchSearchData(getSearchQuery(serviceResults), elasticsearchEndpoint, groupsToken);
 
       const hitsMap = buildHitsMap(searchResults.hits.hits);
-      setResults(serviceResults.map(({ uuid }) => hitsMap[uuid]));
+      setResults(
+        serviceResults.reduce((acc, { uuid }) => {
+          // The cells api returns all versions of a matching dataset and the search-api query will only return the most recent version.
+          if (uuid in hitsMap) {
+            acc.push(hitsMap[uuid]);
+          }
+          return acc;
+        }, []),
+      );
       setIsLoading(false);
     } catch (e) {
       setMessage(e.message);
@@ -100,7 +125,19 @@ function useDatasetsSelectedByExpression({
     }
   }
 
-  return { genomicModality, handleSelectModality, handleSubmit, message };
+  return {
+    genomicModality,
+    handleSelectModality,
+    handleSubmit,
+    message,
+    queryType,
+    minExpressionLog,
+    setMinExpressionLog,
+    minCellPercentage,
+    setMinCellPercentage,
+    cellVariableNames,
+    setCellVariableNames,
+  };
 }
 
 export { buildHitsMap, useDatasetsSelectedByExpression };
