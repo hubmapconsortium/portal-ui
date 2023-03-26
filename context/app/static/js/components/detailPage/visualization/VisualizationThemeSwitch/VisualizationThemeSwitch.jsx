@@ -6,7 +6,6 @@ import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledToggleButtonGroup } from './style';
-import 'vitessce/dist/es/production/static/css/index.css';
 
 const visualizationStoreSelector = (state) => ({
   vizTheme: state.vizTheme,
