@@ -6,13 +6,14 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { getCombinedDatasetStatus, getSectionOrder } from 'js/components/detailPage/utils';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
+import PublicationsVisualizationSection from 'js/components/publications/PublicationVisualizationsSection/VisualizationsSection';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import useEntityStore from 'js/stores/useEntityStore';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
-function Publication({ publication }) {
+function Publication({ publication, vignette_data }) {
   const {
     title,
     uuid,
@@ -60,6 +61,7 @@ function Publication({ publication }) {
         {hasDOI && <OutboundIconLink href={doi_url}>{doi_url}</OutboundIconLink>}
       </Summary>
       <PublicationsDataSection uuid={uuid} datasetUUIDs={ancestor_ids} />
+      <PublicationsVisualizationSection vignette_data={vignette_data} uuid={uuid} />
       <ContributorsTable contributors={contributors} title="Authors" />
       <ProvSection uuid={uuid} assayMetadata={publication} />
     </DetailLayout>
