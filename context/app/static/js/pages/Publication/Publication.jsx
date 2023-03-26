@@ -8,6 +8,9 @@ import ContributorsTable from 'js/components/detailPage/ContributorsTable/Contri
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
+import useEntityStore from 'js/stores/useEntityStore';
+
+const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function Publication({ publication }) {
   const {
@@ -26,7 +29,11 @@ function Publication({ publication }) {
     doi_url,
     contributors,
     ancestor_ids,
+    publication_venue,
   } = publication;
+
+  const setAssayMetadata = useEntityStore(entityStoreSelector);
+  setAssayMetadata({ hubmap_id, entity_type, title, publication_venue });
 
   const sectionOrder = getSectionOrder(['summary', 'data', 'authors', 'provenance'], {});
 

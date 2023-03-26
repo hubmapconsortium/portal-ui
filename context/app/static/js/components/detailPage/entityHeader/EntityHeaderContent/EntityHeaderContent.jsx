@@ -30,6 +30,10 @@ const entityToFieldsMap = {
     'organ type': ({ mapped_organ }) => mapped_organ,
     'data type': ({ mapped_data_types }) => mapped_data_types && mapped_data_types.join(', '),
   },
+  Publication: {
+    title: ({ title }) => title,
+    'publication venue': ({ publication_venue }) => publication_venue,
+  },
 };
 
 function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscreen }) {
