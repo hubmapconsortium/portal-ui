@@ -1,0 +1,1 @@
+- Add entity sub header details for publication page.
