@@ -3,19 +3,7 @@ import { useMemo } from 'react';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { lastModifiedTimestampCol } from 'js/components/detailPage/derivedEntities/columns';
 
-function getAncestorsQuery(descendantUUID) {
-  return {
-    bool: {
-      filter: [
-        {
-          term: {
-            descendant_ids: descendantUUID,
-          },
-        },
-      ],
-    },
-  };
-}
+import { getAncestorsQuery } from 'js/helpers/queries';
 
 function useAncestorSearchHits(descendantUUID) {
   const query = useMemo(

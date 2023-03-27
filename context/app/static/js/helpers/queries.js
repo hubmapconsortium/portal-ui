@@ -20,3 +20,17 @@ export const excludeSupportEntitiesClause = {
     },
   },
 };
+
+export function getAncestorsQuery(descendantUUID) {
+  return {
+    bool: {
+      filter: [
+        {
+          term: {
+            descendant_ids: descendantUUID,
+          },
+        },
+      ],
+    },
+  };
+}

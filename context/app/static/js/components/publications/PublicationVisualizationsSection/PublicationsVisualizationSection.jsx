@@ -31,7 +31,7 @@ function PublicationsVisualizationSection({ vignette_data, uuid }) {
               <Typography variant="subtitle1">{`Vignette ${i + 1}: ${v.name}`}</Typography>
             </PrimaryColorAccordionSummary>
             <StyledAccordionDetails>
-              <PublicationVignette vignette={v} uuid={uuid} vignetteDirName={k} />;
+              <PublicationVignette vignette={v} uuid={uuid} vignetteDirName={k} />
             </StyledAccordionDetails>
           </Accordion>
         );
