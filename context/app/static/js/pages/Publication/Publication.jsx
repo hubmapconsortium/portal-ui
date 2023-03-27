@@ -36,7 +36,7 @@ function Publication({ publication, vignette_data }) {
   const setAssayMetadata = useEntityStore(entityStoreSelector);
   setAssayMetadata({ hubmap_id, entity_type, title, publication_venue });
 
-  const sectionOrder = getSectionOrder(['summary', 'data', 'authors', 'provenance'], {});
+  const sectionOrder = getSectionOrder(['summary', 'data', 'visualizations', 'authors', 'provenance'], {});
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
