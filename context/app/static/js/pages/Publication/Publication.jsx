@@ -6,7 +6,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { getCombinedDatasetStatus, getSectionOrder } from 'js/components/detailPage/utils';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
-import PublicationsVisualizationSection from 'js/components/publications/PublicationVisualizationsSection/VisualizationsSection';
+import PublicationsVisualizationSection from 'js/components/publications/PublicationVisualizationsSection/';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import useEntityStore from 'js/stores/useEntityStore';
