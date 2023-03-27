@@ -28,10 +28,21 @@ function PublicationsVisualizationSection({ vignette_data, uuid }) {
   useEffect(() => {
     async function getAndSetVitessceConf() {
       const results = await fetchVitessceConf(assetsEndpoint, uuid, p, groupsToken);
-      const urlHandler = (url) => {
-        return `${url.replace('{{ base_url }}', `${assetsEndpoint}/${uuid}/data`)}?token=${groupsToken}`;
+
+      const urlHandler = (url, isZarr) => {
+        return `${url.replace('{{ base_url }}', `${assetsEndpoint}/${uuid}/data`)}${
+          isZarr ? '' : `?token=${groupsToken}`
+        }`;
       };
-      setV(fillUrls(results, urlHandler));
+
+      const requestInitHandler = () => {
+        return {
+          headers: { Authorization: `Bearer ${groupsToken}` },
+        };
+      };
+
+      const filledConf = fillUrls(results, urlHandler, requestInitHandler);
+      setV(filledConf);
       // setV(JSON.parse(JSON.stringify(results).replaceAll('{{ base_url }}', `${assetsEndpoint}/${uuid}/data`)));
     }
     getAndSetVitessceConf();

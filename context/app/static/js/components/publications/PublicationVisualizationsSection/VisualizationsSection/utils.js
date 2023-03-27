@@ -3,7 +3,7 @@
  * @param {function} handleUrl Function that takes in a (potentially template) URL string and returns a filled-in URL string.
  * @returns {object} The config with handleUrl having been called to process every URL.
  */
-const fillUrls = (config, handleUrl) => {
+const fillUrls = (config, handleUrl, handleRequestInit) => {
   return {
     ...config,
     datasets: config.datasets.map((datasetDef) => {
@@ -14,7 +14,12 @@ const fillUrls = (config, handleUrl) => {
             ...fileDef,
             ...(fileDef.url
               ? {
-                  url: handleUrl(fileDef.url),
+                  url: handleUrl(fileDef.url, fileDef.fileType.includes('zarr')),
+                }
+              : {}),
+            ...(fileDef.fileType.includes('zarr')
+              ? {
+                  requestInit: handleRequestInit(),
                 }
               : {}),
             ...(fileDef.options?.images
@@ -24,12 +29,12 @@ const fillUrls = (config, handleUrl) => {
                     images: fileDef.options.images.map((imageDef) => {
                       return {
                         ...imageDef,
-                        url: handleUrl(imageDef.url),
+                        url: handleUrl(imageDef.url, false),
                         ...(imageDef.metadata?.omeTiffOffsetsUrl
                           ? {
                               metadata: {
                                 ...imageDef.metadata,
-                                omeTiffOffsetsUrl: handleUrl(imageDef.metadata.omeTiffOffsetsUrl),
+                                omeTiffOffsetsUrl: handleUrl(imageDef.metadata.omeTiffOffsetsUrl, false),
                               },
                             }
                           : {}),
