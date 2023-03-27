@@ -252,7 +252,7 @@ class ApiClient():
                 vignette_data[vignette_dir_name] = {
                     **metadata_content.metadata, 'vignette_description_md': metadata_content.content}
                 i += 1
-            except:
+            except Exception:
                 break
 
         return vignette_data
