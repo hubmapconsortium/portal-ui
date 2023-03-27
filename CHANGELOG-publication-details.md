@@ -1,1 +1,0 @@
-- Add details to summary on publication page.

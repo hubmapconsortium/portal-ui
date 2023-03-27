@@ -1,3 +1,8 @@
+## v0.67.2 - 2023-03-27
+
+- Add details to summary on publication page.
+
+
 ## v0.67.1 - 2023-03-27
 
 - Add authors section to publication page.
