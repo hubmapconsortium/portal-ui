@@ -208,7 +208,7 @@ class ApiClient():
         return VitessceConfLiftedUUID(
             vitessce_conf=vitessce_conf,
             vis_lifted_uuid=vis_lifted_uuid)
-    
+
     def _file_request(self, url, body_json=None):
         headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
 
@@ -238,7 +238,6 @@ class ApiClient():
             raise
         return response.text
 
-
     def get_publication_vignettes(self, uuid):
         vignettes_path = f"{current_app.config['ASSETS_ENDPOINT']}/{uuid}/vignettes/"
         vignette_data = {}
@@ -247,13 +246,15 @@ class ApiClient():
         while True:
             try:
                 vignette_dir_name = _get_vignette_dir_name(i)
-                description_text = self._file_request(f"{vignettes_path}/{vignette_dir_name}/description.md")
+                description_text = self._file_request(
+                    f"{vignettes_path}/{vignette_dir_name}/description.md")
                 metadata_content = frontmatter.loads(description_text)
-                vignette_data[vignette_dir_name] = {**metadata_content.metadata, 'vignette_description_md': metadata_content.content}
+                vignette_data[vignette_dir_name] = {
+                    **metadata_content.metadata, 'vignette_description_md': metadata_content.content}
                 i += 1
             except:
-                break        
-        
+                break
+
         return vignette_data
 
 
