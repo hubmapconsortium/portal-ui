@@ -9,7 +9,7 @@ import PublicationVignette from 'js/components/publications/PublicationVignette'
 function PublicationsVisualizationSection({ vignette_data, uuid }) {
   return Object.entries(vignette_data).map(([k, v], i) => {
     return (
-      <Accordion key={k} defaultExpanded={i === 0} TransitionProps={{ unmountOnExit: i !== 0 }}>
+      <Accordion key={k} defaultExpanded={i === 0} TransitionProps={{ mountOnEnter: i !== 0 }}>
         <AccordionSummary>
           <Typography variant="subtitle1">{`Vignette ${i + 1}: ${v.name}`}</Typography>
         </AccordionSummary>
