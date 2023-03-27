@@ -75,12 +75,13 @@ const StyledFooterText = styled(Typography)`
 `;
 
 const StyledDetailPageSection = styled(DetailPageSection)`
+  width: 100%;
   ${(props) =>
     props.$vizIsFullscreen &&
     css`
       z-index: ${props.theme.zIndex.visualization};
       position: relative;
-    `}
+    `};
 `;
 
 const bodyExpandedCSS = css`
