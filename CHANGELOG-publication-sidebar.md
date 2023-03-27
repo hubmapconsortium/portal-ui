@@ -1,1 +1,0 @@
-- Add table of contents sidebar to publication page.

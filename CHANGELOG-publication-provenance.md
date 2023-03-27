@@ -1,1 +1,0 @@
-- Add provenance section to publication page.

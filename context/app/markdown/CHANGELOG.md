@@ -1,3 +1,14 @@
+## v0.67.1 - 2023-03-27
+
+- Add authors section to publication page.
+- Add publication collections section to publication page.
+- Add provenance section to publication page.
+- Add table of contents sidebar to publication page.
+- Add entity sub header details for publication page.
+- Add visualization vignettes section to publication page.
+- Bump Vitessce NPM package version from `^1.2.2` to `^2.0.3`
+
+
 ## v0.67.0 - 2023-03-24
 
 - Add cells page to header menu other links.

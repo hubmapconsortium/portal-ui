@@ -1,1 +1,0 @@
-- Add visualization vignettes section to publication page.

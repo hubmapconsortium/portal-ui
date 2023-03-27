@@ -1,1 +1,0 @@
-- Add authors section to publication page.
