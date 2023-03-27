@@ -249,7 +249,7 @@ class ApiClient():
                 vignette_dir_name = _get_vignette_dir_name(i)
                 description_text = self._file_request(f"{vignettes_path}/{vignette_dir_name}/description.md")
                 metadata_content = frontmatter.loads(description_text)
-                vignette_data[vignette_dir_name] = metadata_content.metadata
+                vignette_data[vignette_dir_name] = {**metadata_content.metadata, 'vignette_description_md': metadata_content.content}
                 i += 1
             except:
                 break        
