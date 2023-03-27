@@ -8,7 +8,7 @@ import PublicationVignette from 'js/components/publications/PublicationVignette'
 function PublicationsVisualizationSection({ vignette_data, uuid }) {
   return Object.entries(vignette_data).map(([k, v], i) => {
     return (
-      <Accordion key={k} TransitionProps={{ unmountOnExit: i !== 0 }}>
+      <Accordion key={k} defaultExpanded={i === 0} TransitionProps={{ unmountOnExit: i !== 0 }}>
         <AccordionSummary>{k}</AccordionSummary>
         <AccordionDetails>
           <PublicationVignette vignette={v} uuid={uuid} vignetteDirName={k} />;
