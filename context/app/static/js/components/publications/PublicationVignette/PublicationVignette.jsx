@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 import { AppContext } from 'js/components/Providers';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
@@ -49,7 +50,16 @@ function PublicationVignette({ vignette, vignetteDirName, uuid }) {
     getAndSetVitessceConf();
   }, [assetsEndpoint, groupsToken, uuid, vignette.figures, vignetteDirName]);
 
-  return vitessceConfs ? <VisualizationWrapper vitData={vitessceConfs[0]} uuid={uuid} hasNotebook={false} /> : null;
+  if (vitessceConfs) {
+    return (
+      <>
+        <ReactMarkdown>{vignette.vignette_description_md}</ReactMarkdown>
+        <VisualizationWrapper vitData={vitessceConfs[0]} uuid={uuid} hasNotebook={false} />
+      </>
+    );
+  }
+
+  return null;
 }
 
 export default PublicationVignette;
