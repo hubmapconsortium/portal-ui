@@ -297,7 +297,7 @@ Routes.propTypes = {
     organs: PropTypes.object,
     metadata: PropTypes.object,
     organs_count: PropTypes.number,
-    vignette_data: PropTypes.string,
+    vignette_data: PropTypes.object,
   }),
 };
 
