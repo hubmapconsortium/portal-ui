@@ -54,7 +54,7 @@ function PublicationVignette({ vignette, vignetteDirName, uuid }) {
     return (
       <>
         <ReactMarkdown>{vignette.vignette_description_md}</ReactMarkdown>
-        <VisualizationWrapper vitData={vitessceConfs[0]} uuid={uuid} hasNotebook={false} />
+        <VisualizationWrapper vitData={vitessceConfs[0]} uuid={uuid} hasNotebook={false} shouldDisplayHeader={false} />
       </>
     );
   }
