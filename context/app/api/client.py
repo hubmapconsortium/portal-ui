@@ -250,7 +250,8 @@ class ApiClient():
                     f"{vignettes_path}/{vignette_dir_name}/description.md")
                 metadata_content = frontmatter.loads(description_text)
                 vignette_data[vignette_dir_name] = {
-                    **metadata_content.metadata, 'vignette_description_md': metadata_content.content}
+                    **metadata_content.metadata,
+                    'vignette_description_md': metadata_content.content}
                 i += 1
             except Exception:
                 break

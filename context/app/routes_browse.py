@@ -63,7 +63,7 @@ def details(type, uuid):
             'has_notebook': conf_cells_uuid.vitessce_conf.cells is not None,
             'vis_lifted_uuid': conf_cells_uuid.vis_lifted_uuid
         })
-    
+
     if type == 'publication':
         flask_data.update({'vignette_data': client.get_publication_vignettes(uuid)})
 
