@@ -8,6 +8,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import CorrespondingAuthorsList from 'js/components/publications/CorrespondingAuthorsList/CorrespondingAuthorsList';
 import AggsList from 'js/components/publications/AggsList';
+import PublicationCitation from 'js/components/publications/PublicationCitation';
 
 function PublicationSummary({
   title,
@@ -20,12 +21,14 @@ function PublicationSummary({
   publication_venue,
   publication_url,
   mapped_external_group_name,
+  contributors,
   contacts,
-  hasDOI,
-  doi_url,
+  publication_doi,
   hubmap_id,
   publication_date,
 }) {
+  const doiURL = `https://doi.org/${publication_doi}`;
+
   return (
     <DetailPageSection id="summary">
       <SummaryData
@@ -37,8 +40,12 @@ function PublicationSummary({
         entityCanBeSaved={entityCanBeSaved}
         mapped_external_group_name={mapped_external_group_name}
       >
-        <SummaryItem showDivider={hasDOI}>{hubmap_id}</SummaryItem>
-        {hasDOI && <OutboundIconLink href={doi_url}>{doi_url}</OutboundIconLink>}
+        <SummaryItem showDivider={doiURL}>{hubmap_id}</SummaryItem>
+        {doiURL && (
+          <SummaryItem showDivider={doiURL}>
+            <OutboundIconLink href={doiURL}>{doiURL}</OutboundIconLink>
+          </SummaryItem>
+        )}
       </SummaryData>
       <SectionPaper>
         <LabelledSectionText label="Abstract" bottomSpacing={2}>
@@ -47,16 +54,23 @@ function PublicationSummary({
         <LabelledSectionText label="Manuscript" bottomSpacing={2}>
           {publication_venue}: <OutboundIconLink href={publication_url}>{publication_url}</OutboundIconLink>
         </LabelledSectionText>
-        <LabelledSectionText label="Corresponding Authors" bottomSpacing={1}>
+        <PublicationCitation
+          contributors={contributors}
+          publication_date={publication_date}
+          publication_venue={publication_venue}
+          title={title}
+          doiURL={doiURL}
+        />
+        <LabelledSectionText label="Corresponding Authors" bottomSpacing={2}>
           <CorrespondingAuthorsList contacts={contacts} />
         </LabelledSectionText>
-        <LabelledSectionText label="Data Types" bottomSpacing={1}>
+        <LabelledSectionText label="Data Types" bottomSpacing={2}>
           <AggsList uuid={uuid} field="mapped_data_types" />
         </LabelledSectionText>
-        <LabelledSectionText label="Organs" bottomSpacing={1}>
+        <LabelledSectionText label="Organs" bottomSpacing={2}>
           <AggsList uuid={uuid} field="mapped_organ" />
         </LabelledSectionText>
-        <LabelledSectionText label="Publication Date" bottomSpacing={1}>
+        <LabelledSectionText label="Publication Date" bottomSpacing={2}>
           {publication_date}
         </LabelledSectionText>
       </SectionPaper>
