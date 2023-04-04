@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from flask import abort, current_app
 import requests
 import frontmatter
+import json
 from hubmap_commons.type_client import TypeClient
 
 from .client_utils import files_from_response
@@ -62,6 +63,12 @@ class ApiClient():
                 # have expired, but are still in the flask session.
                 abort(status)
             raise
+        status = response.status_code
+        # HuBMAP APIs behind AWS API Gateway will redirect to s3 if the payload over 10 MB.
+        if status in [303]:
+            s3_url = response.content # Amazon S3 bucket url.
+            s3_json = requests.get(s3_url).content
+            return json.loads(s3_json)
         return response.json()
 
     def get_all_dataset_uuids(self):
