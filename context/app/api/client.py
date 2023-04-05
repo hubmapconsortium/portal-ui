@@ -31,30 +31,32 @@ def _get_hits(response_json):
     inner_hits = outer_hits['hits']
     return inner_hits
 
-def _request_decorator(request_fn):
-    def wrapper(*args):
-        try:
-            response = request_fn(*args)
-        except requests.exceptions.ConnectTimeout as error:
-            current_app.logger.error(error)
-            abort(504)
-        try:
-            response.raise_for_status()
-        except requests.exceptions.HTTPError as error:
-            current_app.logger.error(error.response.text)
-            status = error.response.status_code
-            if status in [400, 404]:
-                # The same 404 page will be returned,
-                # whether it's a missing route in portal-ui,
-                # or a missing entity in the API.
-                abort(status)
-            if status in [401]:
-                # I believe we have 401 errors when the globus credentials
-                # have expired, but are still in the flask session.
-                abort(status)
-            raise
-        return response
-    return wrapper
+def _handle_request(url, headers=None, body_json=None):
+    try:
+        response = (
+            requests.post(url, headers=headers, json=body_json)
+            if body_json
+            else requests.get(url, headers=headers)
+    )
+    except requests.exceptions.ConnectTimeout as error:
+        current_app.logger.error(error)
+        abort(504)
+    try:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as error:
+        current_app.logger.error(error.response.text)
+        status = error.response.status_code
+        if status in [400, 404]:
+            # The same 404 page will be returned,
+            # whether it's a missing route in portal-ui,
+            # or a missing entity in the API.
+            abort(status)
+        if status in [401]:
+            # I believe we have 401 errors when the globus credentials
+            # have expired, but are still in the flask session.
+            abort(status)
+        raise
+    return response
 
 
 class ApiClient():
@@ -63,30 +65,16 @@ class ApiClient():
         self.groups_token = groups_token
 
 
-    @_request_decorator
-    def _hubmap_request(self, url, body_json=None):
-        headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
-        response = (
-            requests.post(url, headers=headers, json=body_json)
-            if body_json
-            else requests.get(url, headers=headers)
-        )
-        return response
-
-
-    @_request_decorator
-    def _s3_redirect_request(self, s3_bucket_url):
-        return requests.get(s3_bucket_url)
-
-    
     def _request(self, url, body_json=None):
-        response = self._hubmap_request(url, body_json)
+        headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
+        response = _handle_request(url, headers, body_json)
         status = response.status_code
         # HuBMAP APIs behind AWS API Gateway will redirect to s3 if the payload over 10 MB.
         if status in [303]:
-            s3_resp = self._s3_redirect_request(response.content).content
+            s3_resp = _handle_request(response.content).content
             return json.loads(s3_resp)
         return response.json()
+
 
     def get_all_dataset_uuids(self):
         size = 10000  # Default ES limit
