@@ -1,0 +1,1 @@
+- Handle flask side redirect for search, entity and uuid apis.
