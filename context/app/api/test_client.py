@@ -19,7 +19,7 @@ mock_es = {
     }
 }
 
-def mock_post_303():
+def mock_post_303(path, **kwargs):
     class MockResponse():
         def __init__(self):
             self.status_code = 303
@@ -29,7 +29,7 @@ def mock_post_303():
             pass
     return MockResponse()
 
-def mock_get_s3_json_file():
+def mock_get_s3_json_file(path, **kwargs):
     class MockResponse():
         def __init__(self):
             self.status_code = 200
