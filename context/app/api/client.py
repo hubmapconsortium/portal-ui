@@ -72,7 +72,7 @@ class ApiClient():
         headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
         response = _handle_request(url, headers, body_json)
         status = response.status_code
-        # HuBMAP APIs behind AWS API Gateway will redirect to s3 if the response payload over 10 MB.
+        # HuBMAP APIs will redirect to s3 if the response payload over 10 MB.
         if status in [303]:
             s3_resp = _handle_request(response.content).content
             return json.loads(s3_resp)
