@@ -37,6 +37,10 @@ ABC123\tHMB123.XYZ\teons\t42{len(extra_fields) * tab}\r
 
 def mock_es_post(path, **kwargs):
     class MockResponse():
+        def __init__(self):
+            self.status_code = 0 # _request requires a status code
+            self.text = 'Logger call requires this'
+
         def json(self):
             return mock_es
 
