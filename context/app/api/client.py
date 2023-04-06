@@ -31,13 +31,14 @@ def _get_hits(response_json):
     inner_hits = outer_hits['hits']
     return inner_hits
 
+
 def _handle_request(url, headers=None, body_json=None):
     try:
         response = (
             requests.post(url, headers=headers, json=body_json)
             if body_json
             else requests.get(url, headers=headers)
-    )
+        )
     except requests.exceptions.ConnectTimeout as error:
         current_app.logger.error(error)
         abort(504)
@@ -63,7 +64,6 @@ class ApiClient():
     def __init__(self, url_base=None, groups_token=None):
         self.url_base = url_base
         self.groups_token = groups_token
-
 
     def _request(self, url, body_json=None):
         '''
@@ -228,7 +228,7 @@ class ApiClient():
 
         if self.groups_token:
             url += f"?token={self.groups_token}"
-        
+
         return _handle_request(url, headers).text
 
     def get_publication_vignettes(self, uuid):
