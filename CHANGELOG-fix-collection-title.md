@@ -1,0 +1,1 @@
+- Update prop name to fix missing collection page title.
