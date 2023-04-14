@@ -1,3 +1,10 @@
+## v0.68.0 - 2023-04-14
+
+- Update prop name to fix missing collection page title.
+- Fix organ icon over on the homepage.
+- Add entire portal ui team to workspace allow list.
+
+
 ## v0.67.2 - 2023-03-27
 
 - Add details to summary on publication page.

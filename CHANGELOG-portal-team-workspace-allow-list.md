@@ -1,1 +1,0 @@
-- Add entire portal ui team to workspace allow list.
