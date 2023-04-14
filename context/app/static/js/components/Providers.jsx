@@ -31,7 +31,6 @@ function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, childre
     'blood@psc.edu',
     'jpuerto@andrew.cmu.edu',
     'gphillip@andrew.cmu.edu',
-    'tsmits@hms.harvard.edu',
     'ivlachos@bidmc.harvard.edu',
     'geremy.clair@pnnl.gov',
   ];
