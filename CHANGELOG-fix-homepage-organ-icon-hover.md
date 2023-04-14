@@ -1,0 +1,1 @@
+- Fix organ icon over on the homepage.
