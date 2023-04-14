@@ -19,6 +19,10 @@ const FlexLink = styled.a`
     svg {
       color: #fff;
     }
+
+    [role='img'] {
+      background-color: #fff;
+    }
   }
 `;
 
