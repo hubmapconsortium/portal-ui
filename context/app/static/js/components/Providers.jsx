@@ -22,6 +22,10 @@ function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, childre
   const workspacesUsers = [
     'nils@hms.harvard.edu',
     'john_conroy@hms.harvard.edu',
+    'tiffany_liaw@hms.harvard.edu',
+    'tony_hsiao@hms.harvard.edu',
+    'morgan_turner@hms.harvard.edu',
+    'lisa_choy@hms.harvard.edu',
     'pdblood@andrew.cmu.edu',
     'blood@psc.edu',
     'jpuerto@andrew.cmu.edu',
