@@ -1,0 +1,1 @@
+- Update dataset collections hook to better use es query to return collections which contain dataset.
