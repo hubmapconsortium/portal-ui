@@ -23,7 +23,7 @@ def load_app_client():
         current_app.config['APP_CLIENT_ID'], current_app.config['APP_CLIENT_SECRET'])
 
 
-def has_hubmap_group(groups_token):
+def get_globus_groups(groups_token):
     # Mostly copy-and-paste from
     # https://github.com/hubmapconsortium/commons/blob/641d03b0dc/hubmap_commons/hm_auth.py#L626-L646
     headers = {
@@ -36,7 +36,11 @@ def has_hubmap_group(groups_token):
         headers=headers)
     response.raise_for_status()
     groups = response.json()
-    return any([group['id'] == current_app.config['GROUP_ID'] for group in groups])
+    return groups
+
+
+def has_globus_group(groups, group_id):
+    return any([group['id'] == group_id for group in groups])
 
 
 def get_ip():
@@ -127,16 +131,21 @@ def login():
                              headers=user_info_request_headers).json()
     user_email = user_info['email'] if 'email' in user_info else ''
 
-    if not has_hubmap_group(groups_token):
+    user_globus_groups = get_globus_groups(groups_token)
+
+    if not has_globus_group(user_globus_groups, current_app.config['GROUP_ID']):
         # Globus institution login worked, but user does not have HuBMAP group!
         log('7: 401')
         abort(401)
+
+    permissions_groups = {'Workspaces' : current_app.config['WORKSPACE_GROUP_ID']}
 
     session.update(
         groups_token=groups_token,
         is_authenticated=True,
         user_email=user_email,
-        workspaces_token=workspaces_token
+        workspaces_token=workspaces_token,
+        user_permissions=[k for k, group_id in permissions_groups.items() if has_globus_group(user_globus_groups, group_id)]
     )
 
     previous_url = unquote(request.cookies.get('urlBeforeLogin'))
