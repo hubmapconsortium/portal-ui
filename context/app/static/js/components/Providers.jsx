@@ -16,26 +16,15 @@ const generateClassName = createGenerateClassName({
 
 const AppContext = React.createContext({});
 
-function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, children, workspacesToken, userGroups }) {
-  // TODO: Delete this when workspaces are publicly released.
-  // If we stay in limbo for a long time, this configuration could be moved out of code.
-  const workspacesUsers = [
-    'nils@hms.harvard.edu',
-    'john_conroy@hms.harvard.edu',
-    'tiffany_liaw@hms.harvard.edu',
-    'tony_hsiao@hms.harvard.edu',
-    'morgan_turner@hms.harvard.edu',
-    'lisa_choy@hms.harvard.edu',
-    'tsmits@hms.harvard.edu',
-    'pdblood@andrew.cmu.edu',
-    'blood@psc.edu',
-    'jpuerto@andrew.cmu.edu',
-    'gphillip@andrew.cmu.edu',
-    'ivlachos@bidmc.harvard.edu',
-    'geremy.clair@pnnl.gov',
-  ];
-
-  const isWorkspacesUser = userGroups.includes('Workspaces') || workspacesUsers.includes(userEmail);
+function Providers({
+  endpoints,
+  groupsToken,
+  isAuthenticated,
+  userEmail,
+  children,
+  workspacesToken,
+  isWorkspacesUser,
+}) {
   // injectFirst ensures styled-components takes priority over mui for styling
   return (
     <StylesProvider generateClassName={generateClassName} injectFirst>
