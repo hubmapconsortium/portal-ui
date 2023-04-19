@@ -16,7 +16,7 @@ const generateClassName = createGenerateClassName({
 
 const AppContext = React.createContext({});
 
-function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, children, workspacesToken }) {
+function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, children, workspacesToken, userGroups }) {
   // TODO: Delete this when workspaces are publicly released.
   // If we stay in limbo for a long time, this configuration could be moved out of code.
   const workspacesUsers = [
@@ -34,6 +34,8 @@ function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, childre
     'ivlachos@bidmc.harvard.edu',
     'geremy.clair@pnnl.gov',
   ];
+
+  const isWorkspacesUser = userGroups.includes('Workspaces') || workspacesUsers.includes(userEmail);
   // injectFirst ensures styled-components takes priority over mui for styling
   return (
     <StylesProvider generateClassName={generateClassName} injectFirst>
@@ -41,7 +43,7 @@ function Providers({ endpoints, groupsToken, isAuthenticated, userEmail, childre
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
           <AppContext.Provider
-            value={{ groupsToken, workspacesToken, workspacesUsers, isAuthenticated, userEmail, ...endpoints }}
+            value={{ groupsToken, workspacesToken, isWorkspacesUser, isAuthenticated, userEmail, ...endpoints }}
           >
             <CssBaseline />
             <GlobalStyles />

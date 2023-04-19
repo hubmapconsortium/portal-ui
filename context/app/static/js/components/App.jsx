@@ -13,7 +13,7 @@ import 'js/components/searchPage/Search.scss';
 
 function App(props) {
   const { flaskData, groupsToken, isAuthenticated, userEmail, workspacesToken } = props;
-  const { endpoints, globalAlertMd } = flaskData;
+  const { endpoints, globalAlertMd, userGroups } = flaskData;
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
 
@@ -24,6 +24,7 @@ function App(props) {
       isAuthenticated={isAuthenticated}
       userEmail={userEmail}
       workspacesToken={workspacesToken}
+      userGroups={userGroups}
     >
       <Header />
       {globalAlertMd && (
