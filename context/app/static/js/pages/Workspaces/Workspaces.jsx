@@ -11,7 +11,7 @@ import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenti
 import { FlexContainer } from './style';
 
 function Workspaces() {
-  const { isAuthenticated } = useContext(AppContext);
+  const { isAuthenticated, isWorkspacesUser } = useContext(AppContext);
   return (
     <>
       <SectionHeader variant="h1" component="h1">
@@ -19,7 +19,7 @@ function Workspaces() {
           <HeaderIcon component={WorkspacesIcon} /> My Workspaces
         </FlexContainer>
       </SectionHeader>
-      {!isAuthenticated ? (
+      {!(isAuthenticated && isWorkspacesUser) ? (
         <Description padding="20px">
           The workspaces feature is only available if logged in. <LightBlueLink href="/login">Log in</LightBlueLink> to
           view saved workspaces or to begin a new workspace.
