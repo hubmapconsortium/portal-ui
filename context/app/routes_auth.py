@@ -138,14 +138,15 @@ def login():
         log('7: 401')
         abort(401)
 
-    additional_groups = {'Workspaces' : current_app.config['WORKSPACE_GROUP_ID']}
+    additional_groups = {'Workspaces': current_app.config['WORKSPACE_GROUP_ID']}
 
     session.update(
         groups_token=groups_token,
         is_authenticated=True,
         user_email=user_email,
         workspaces_token=workspaces_token,
-        user_groups=[k for k, group_id in additional_groups.items() if has_globus_group(user_globus_groups, group_id)]
+        user_groups=[k for k, group_id in additional_groups.items(
+        ) if has_globus_group(user_globus_groups, group_id)]
     )
 
     previous_url = unquote(request.cookies.get('urlBeforeLogin'))
