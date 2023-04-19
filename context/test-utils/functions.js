@@ -10,11 +10,12 @@ const appProviderEndpoints = {
   assetsEndpoint: 'fakeAssetsEndpoint',
 };
 
+const userGroups = [];
 const appProviderToken = 'fakeGroupsToken';
 
 const AllTheProviders = ({ children }) => {
   return (
-    <Providers endpoints={appProviderEndpoints} groupsToken={appProviderToken}>
+    <Providers endpoints={appProviderEndpoints} groupsToken={appProviderToken} userGroups={userGroups}>
       {children}
     </Providers>
   );
