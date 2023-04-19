@@ -15,6 +15,7 @@ import 'js/components/searchPage/Search.scss';
 // If we stay in limbo for a long time, this configuration could be moved out of code.
 const workspacesUsers = [
   'nils@hms.harvard.edu',
+  'john_conroy@hms.harvard.edu',
   'tiffany_liaw@hms.harvard.edu',
   'tony_hsiao@hms.harvard.edu',
   'morgan_turner@hms.harvard.edu',
