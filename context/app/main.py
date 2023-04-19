@@ -98,6 +98,7 @@ def create_app(testing=False):
             'groups_token': session.get('groups_token'),
             'user_email': session.get('user_email'),
             'workspaces_token': session.get('workspaces_token'),
+            'user_groups': session.get('user_groups'),
         }
 
     @app.before_request
@@ -107,8 +108,8 @@ def create_app(testing=False):
                 groups_token='',
                 user_email='',
                 is_authenticated=False,
-                workspaces_token='')
-
+                workspaces_token='',
+                user_groups=[])
     return app
 
 

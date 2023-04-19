@@ -15,7 +15,6 @@ import 'js/components/searchPage/Search.scss';
 // If we stay in limbo for a long time, this configuration could be moved out of code.
 const workspacesUsers = [
   'nils@hms.harvard.edu',
-  'john_conroy@hms.harvard.edu',
   'tiffany_liaw@hms.harvard.edu',
   'tony_hsiao@hms.harvard.edu',
   'morgan_turner@hms.harvard.edu',
@@ -30,8 +29,8 @@ const workspacesUsers = [
 ];
 
 function App(props) {
-  const { flaskData = {}, groupsToken, isAuthenticated, userEmail, workspacesToken } = props;
-  const { endpoints, globalAlertMd, userGroups = [] } = flaskData;
+  const { flaskData, groupsToken, isAuthenticated, userEmail, workspacesToken, userGroups = [] } = props;
+  const { endpoints, globalAlertMd } = flaskData;
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
 

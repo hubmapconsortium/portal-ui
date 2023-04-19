@@ -34,7 +34,6 @@ def get_default_flask_data():
             'workspacesEndpoint': current_app.config['WORKSPACES_ENDPOINT'],
             'workspacesWsEndpoint': current_app.config['WORKSPACES_WS_ENDPOINT'],
         },
-        'userGroups': session.get('user_groups'),
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
     }
 

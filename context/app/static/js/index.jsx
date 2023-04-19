@@ -23,6 +23,7 @@ ReactDOM.render(
       isAuthenticated={isAuthenticated}
       userEmail={userEmail}
       workspacesToken={workspacesToken}
+      userGroups={userGroups}
     />
   ),
   document.getElementById('react-content'),
