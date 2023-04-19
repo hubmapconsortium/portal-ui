@@ -13,7 +13,7 @@ import 'js/components/searchPage/Search.scss';
 
 function App(props) {
   const { flaskData, groupsToken, isAuthenticated, userEmail, workspacesToken } = props;
-  const { endpoints, globalAlertMd, userGroups } = flaskData;
+  const { endpoints, globalAlertMd, userGroups = [] } = flaskData;
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
 
