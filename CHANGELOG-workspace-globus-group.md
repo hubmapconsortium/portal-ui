@@ -1,0 +1,1 @@
+- Allow access to workspaces to users in workspaces globus group.

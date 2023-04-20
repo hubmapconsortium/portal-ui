@@ -51,7 +51,7 @@ function SummaryDataChildren({
   hubmap_id,
   uuid,
 }) {
-  const { workspacesUsers, userEmail } = useContext(AppContext);
+  const { isWorkspacesUser } = useContext(AppContext);
 
   const createNotebook = useCallback(
     async ({ workspaceName }) => {
@@ -91,7 +91,7 @@ function SummaryDataChildren({
           doi:{registered_doi}
         </OutboundIconLink>
       )}
-      {workspacesUsers.includes(userEmail) && (
+      {isWorkspacesUser && (
         <>
           <CreateWorkspaceDialog
             handleCreateWorkspace={createNotebook}
