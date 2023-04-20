@@ -10,12 +10,12 @@ const appProviderEndpoints = {
   assetsEndpoint: 'fakeAssetsEndpoint',
 };
 
-const userGroups = [];
+const isWorkspacesUser = false;
 const appProviderToken = 'fakeGroupsToken';
 
 const AllTheProviders = ({ children }) => {
   return (
-    <Providers endpoints={appProviderEndpoints} groupsToken={appProviderToken} userGroups={userGroups}>
+    <Providers endpoints={appProviderEndpoints} groupsToken={appProviderToken} isWorkspacesUser={isWorkspacesUser}>
       {children}
     </Providers>
   );
