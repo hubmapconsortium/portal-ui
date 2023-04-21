@@ -71,7 +71,7 @@ async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setM
       }),
     )
     .then((response) => response.json())
-    .then(({ start }) => setMessage(start.message))
+    .then(({ message }) => setMessage(message))
     .catch(() => setDead(true));
 }
 
