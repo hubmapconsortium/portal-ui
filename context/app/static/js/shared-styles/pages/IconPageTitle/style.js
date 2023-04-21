@@ -5,7 +5,6 @@ import { pageTitleBottomMargin } from 'js/shared-styles/pages/PageTitle/style';
 
 const FlexContainer = styled.div`
   display: flex;
-  height: 100%;
   align-items: center;
   ${pageTitleBottomMargin}
 `;
