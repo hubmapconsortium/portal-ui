@@ -4,8 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { AppContext } from 'js/components/Providers';
-import Description from 'js/shared-styles/sections/Description';
 import WorkspacesList from './WorkspacesList';
+
+import { StyledDescription } from './style';
 
 function WorkspacesAuthenticated() {
   const { workspacesToken } = useContext(AppContext);
@@ -16,7 +17,7 @@ function WorkspacesAuthenticated() {
 
   return (
     <>
-      <Description padding="20px">
+      <StyledDescription>
         <Typography gutterBottom>
           HuBMAP Workspaces are in{' '}
           <OutboundIconLink href="https://github.com/hubmapconsortium/portal-ui/issues/2799">
@@ -31,7 +32,7 @@ function WorkspacesAuthenticated() {
           <EmailIconLink email="help@hubmapconsortium.org">help@hubmapconsortium.org</EmailIconLink> for information
           about accessing HuBMAP compute resources.
         </Typography>
-      </Description>
+      </StyledDescription>
       <WorkspacesList />
     </>
   );
