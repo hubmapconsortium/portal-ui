@@ -1,7 +1,9 @@
 import React, { useState, useContext } from 'react';
+import Typography from '@material-ui/core/Typography';
 
 import { AppContext } from 'js/components/Providers';
 import { locationIfJobRunning } from 'js/components/workspaces/utils';
+import WorkspacesTitle from 'js/components/workspaces/WorkspacesTitle';
 
 function WorkspacePleaseWait({ workspaceId }) {
   const [message, setMessage] = useState();
@@ -31,7 +33,12 @@ function WorkspacePleaseWait({ workspaceId }) {
 
   setLocationOrRetry();
 
-  return <>Please wait... {message}</>;
+  return (
+    <>
+      <WorkspacesTitle />
+      <Typography>Please wait... {message}</Typography>
+    </>
+  );
 }
 
 export default WorkspacePleaseWait;
