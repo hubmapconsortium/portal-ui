@@ -1,0 +1,1 @@
+- Update workspaces logo color to reflect design.

@@ -1,21 +1,24 @@
 import React from 'react';
 
-import IconPageTitleComponent from 'js/shared-styles/pages/IconPageTitle';
+import IconPageTitle from 'js/shared-styles/pages/IconPageTitle';
 import PageTitle from 'js/shared-styles/pages/PageTitle';
 import { DatasetIcon } from 'js/shared-styles/icons';
 
 export default {
   title: 'Pages/IconPageTitle',
-  component: IconPageTitleComponent,
+  component: IconPageTitle,
   subcomponents: { PageTitle },
 };
 
-export const IconPageTitle = (args) => (
-  <IconPageTitleComponent icon={args.icon}>{args.children}</IconPageTitleComponent>
-);
-IconPageTitle.args = {
+const sharedArgs = {
   icon: DatasetIcon,
   children: 'Page Title',
 };
 
-IconPageTitle.storyName = 'IconPageTitle'; // needed for single story hoisting for multi word component names
+const Template = (args) => <IconPageTitle {...args}>{args.children}</IconPageTitle>;
+
+export const Default = Template.bind({});
+Default.args = sharedArgs;
+
+export const WithIconProps = Template.bind({});
+WithIconProps.args = { ...sharedArgs, iconProps: { color: 'secondary' } };
