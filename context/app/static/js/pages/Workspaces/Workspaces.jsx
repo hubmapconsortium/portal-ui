@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 
-import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
 import { AppContext } from 'js/components/Providers';
+import WorkspacesTitle from 'js/components/workspaces/WorkspacesTitle';
 import { LightBlueLink } from 'js/shared-styles/Links';
-import IconPageTitle from 'js/shared-styles/pages/IconPageTitle';
 import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenticated';
 
 import { StyledDescription } from './style';
@@ -12,7 +11,7 @@ function Workspaces() {
   const { isAuthenticated, isWorkspacesUser } = useContext(AppContext);
   return (
     <>
-      <IconPageTitle icon={WorkspacesIcon}>My Workspaces</IconPageTitle>
+      <WorkspacesTitle />
       {!(isAuthenticated && isWorkspacesUser) ? (
         <StyledDescription>
           The workspaces feature is only available if logged in. <LightBlueLink href="/login">Log in</LightBlueLink> to

@@ -1,37 +1,26 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { AppContext } from 'js/components/Providers';
-import { locationIfJobRunning } from 'js/components/workspaces/utils';
+import WorkspacesTitle from 'js/components/workspaces/WorkspacesTitle';
+import useWorkspacesPleaseWait from './hooks';
+import { FlexColumn, CenteredFlexItem, StyledAlert } from './style';
 
 function WorkspacePleaseWait({ workspaceId }) {
-  const [message, setMessage] = useState();
-  const [dead, setDead] = useState();
-  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
+  const { message } = useWorkspacesPleaseWait(workspaceId);
 
-  async function setLocationOrRetry() {
-    if (dead) {
-      return;
-    }
-    const jobLocation = await locationIfJobRunning({
-      workspaceId,
-      setMessage,
-      setDead,
-      workspacesEndpoint,
-      workspacesToken,
-    });
-    if (jobLocation) {
-      const [urlBase, urlQuery] = jobLocation.split('?');
-      const workspacePath = new URLSearchParams(document.location.search).get('notebook_path');
-      const jupyterUrl = `${urlBase}/tree/${workspacePath}?${urlQuery}`;
-      document.location = jupyterUrl;
-    } else {
-      setTimeout(setLocationOrRetry, 5000);
-    }
-  }
-
-  setLocationOrRetry();
-
-  return <>Please wait... {message}</>;
+  return (
+    <FlexColumn>
+      <div>
+        <StyledAlert severity="info">Workspaces are loading. Workspaces can take a few minutes to load.</StyledAlert>
+        <WorkspacesTitle />
+      </div>
+      <CenteredFlexItem>
+        <CircularProgress size="3rem" />
+        <Typography>{message}</Typography>
+      </CenteredFlexItem>
+    </FlexColumn>
+  );
 }
 
 export default WorkspacePleaseWait;
