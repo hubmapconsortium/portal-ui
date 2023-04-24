@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
+import Description from 'js/shared-styles/sections/Description';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 // Copy-and-paste from js/components/savedLists/SavedListScrollbox/style.js
@@ -18,4 +19,9 @@ const Bold = styled(Typography)`
   font-weight: bold;
 `;
 
-export { StyledButton, LinkButton, Bold };
+const StyledDescription = styled(Description)`
+  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  padding: ${(props) => props.theme.spacing(2.5)}px;
+`;
+
+export { StyledButton, LinkButton, Bold, StyledDescription };

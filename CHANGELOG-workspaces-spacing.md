@@ -1,0 +1,1 @@
+- Fix spacing on workspaces page to reflect design.
