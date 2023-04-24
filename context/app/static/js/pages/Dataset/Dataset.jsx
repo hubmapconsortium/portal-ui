@@ -30,6 +30,7 @@ import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialo
 import { combineMetadata } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
+import { createAndLaunchWorkspace } from 'js/components/workspaces/utils';
 
 function NotebookButton(props) {
   return (
@@ -55,21 +56,10 @@ function SummaryDataChildren({
 
   const createNotebook = useCallback(
     async ({ workspaceName }) => {
-      const response = await fetch(`/notebooks/${entity_type.toLowerCase()}/${uuid}.ws.ipynb`, {
-        method: 'POST',
-        body: JSON.stringify({ workspace_name: workspaceName }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      await createAndLaunchWorkspace({
+        path: `${entity_type.toLowerCase()}/${uuid}.ws.ipynb`,
+        body: { workspace_name: workspaceName },
       });
-      if (!response.ok) {
-        console.error('Create workspace failed', response);
-        return;
-      }
-
-      const json = await response.json();
-      const { workspace_id, notebook_path } = json;
-      window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
     },
     [entity_type, uuid],
   );

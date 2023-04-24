@@ -2,7 +2,7 @@ import { useContext, useState, useEffect, useCallback } from 'react';
 
 import { AppContext } from 'js/components/Providers';
 
-import { mergeJobsIntoWorkspaces, createEmptyWorkspace, deleteWorkspace, stopJobs } from './utils';
+import { mergeJobsIntoWorkspaces, createWorkspaceAndNotebook, deleteWorkspace, stopJobs } from './utils';
 
 function useWorkspacesList() {
   const [workspacesList, setWorkspacesList] = useState([]);
@@ -49,12 +49,7 @@ function useWorkspacesList() {
   }
 
   async function handleCreateWorkspace({ workspaceName }) {
-    await createEmptyWorkspace({
-      workspacesEndpoint,
-      workspacesToken,
-      workspaceName,
-      workspaceDescription: 'TODO: description',
-    });
+    await createWorkspaceAndNotebook({ path: 'blank.ipynb', body: { workspace_name: workspaceName } });
     getAndSetWorkspaces();
   }
 

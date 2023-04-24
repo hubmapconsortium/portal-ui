@@ -22,6 +22,30 @@ async function createEmptyWorkspace({ workspacesEndpoint, workspacesToken, works
   });
 }
 
+async function createWorkspaceAndNotebook({ path, body }) {
+  const response = await fetch(`/notebooks/${path}`, {
+    method: 'POST',
+    body: JSON.stringify(body),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    console.error('Create workspace failed', response);
+  }
+  const json = await response.json();
+  const { workspace_id, notebook_path } = json;
+  return { workspace_id, notebook_path };
+}
+
+async function createAndLaunchWorkspace({ path, body }) {
+  const { workspace_id, notebook_path } = await createWorkspaceAndNotebook({ path, body });
+
+  if (workspace_id && notebook_path) {
+    window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
+  }
+}
+
 async function stopJob({ jobId, workspacesEndpoint, workspacesToken }) {
   return fetch(`${workspacesEndpoint}/jobs/${jobId}/stop/`, {
     method: 'PUT',
@@ -192,4 +216,13 @@ async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspac
   return null;
 }
 
-export { createEmptyWorkspace, deleteWorkspace, stopJobs, mergeJobsIntoWorkspaces, condenseJobs, locationIfJobRunning };
+export {
+  createEmptyWorkspace,
+  createWorkspaceAndNotebook,
+  createAndLaunchWorkspace,
+  deleteWorkspace,
+  stopJobs,
+  mergeJobsIntoWorkspaces,
+  condenseJobs,
+  locationIfJobRunning,
+};
