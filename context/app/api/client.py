@@ -67,7 +67,7 @@ class ApiClient():
 
     def _request(self, url, body_json=None):
         '''
-        Makes request to HuBMAP APIs.
+        Makes request to HuBMAP APIs behind API Gateway (Search, Entity, UUID).
         '''
         headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
         response = _handle_request(url, headers, body_json)
