@@ -1,3 +1,14 @@
+## v0.69.0 - 2023-04-28
+
+- Change dependencies in useDatasetsCollections hooks to fix infinite loop.
+- Handle flask side redirect for search, entity and uuid apis.
+- Update workspace loading page to reflect design.
+- Update dataset collections hook to better use es query to return collections which contain dataset.
+- Allow access to workspaces to users in workspaces globus group.
+- Update workspaces logo color to reflect design.
+- Fix spacing on workspaces page to reflect design.
+
+
 ## v0.68.0 - 2023-04-14
 
 - Update prop name to fix missing collection page title.
