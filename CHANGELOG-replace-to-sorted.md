@@ -1,1 +1,0 @@
-- Replace toSorted which firefox does not support.

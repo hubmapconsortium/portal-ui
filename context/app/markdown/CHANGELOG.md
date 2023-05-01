@@ -1,3 +1,8 @@
+## v0.69.1 - 2023-05-01
+
+- Replace toSorted which firefox does not support.
+
+
 ## v0.69.0 - 2023-04-28
 
 - Change dependencies in useDatasetsCollections hooks to fix infinite loop.
