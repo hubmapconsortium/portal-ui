@@ -7,21 +7,6 @@ function getWorkspacesApiHeaders(workspacesToken) {
   };
 }
 
-async function createEmptyWorkspace({ workspacesEndpoint, workspacesToken, workspaceName, workspaceDescription }) {
-  await fetch(`${workspacesEndpoint}/workspaces`, {
-    method: 'POST',
-    headers: getWorkspacesApiHeaders(workspacesToken),
-    body: JSON.stringify({
-      name: workspaceName,
-      description: workspaceDescription,
-      workspace_details: {
-        symlinks: [],
-        files: [],
-      },
-    }),
-  });
-}
-
 async function createWorkspaceAndNotebook({ path, body }) {
   const response = await fetch(`/notebooks/${path}`, {
     method: 'POST',
@@ -217,7 +202,6 @@ async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspac
 }
 
 export {
-  createEmptyWorkspace,
   createWorkspaceAndNotebook,
   createAndLaunchWorkspace,
   deleteWorkspace,
