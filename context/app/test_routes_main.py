@@ -69,6 +69,10 @@ def mock_prov_get(path, **kwargs):
 
 def mock_search_donor_post(path, **kwargs):
     class MockResponse():
+        def __init__(self):
+            self.status_code = 0  # _request requires a status code
+            self.text = 'Logger call requires this'
+
         def json(self):
             return {
                 'hits': {

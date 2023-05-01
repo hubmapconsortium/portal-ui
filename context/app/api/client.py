@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from flask import abort, current_app
 import requests
 import frontmatter
+import json
 from hubmap_commons.type_client import TypeClient
 
 from .client_utils import files_from_response
@@ -31,37 +32,50 @@ def _get_hits(response_json):
     return inner_hits
 
 
+def _handle_request(url, headers=None, body_json=None):
+    try:
+        response = (
+            requests.post(url, headers=headers, json=body_json)
+            if body_json
+            else requests.get(url, headers=headers)
+        )
+    except requests.exceptions.ConnectTimeout as error:
+        current_app.logger.error(error)
+        abort(504)
+    try:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as error:
+        current_app.logger.error(error.response.text)
+        status = error.response.status_code
+        if status in [400, 404]:
+            # The same 404 page will be returned,
+            # whether it's a missing route in portal-ui,
+            # or a missing entity in the API.
+            abort(status)
+        if status in [401]:
+            # I believe we have 401 errors when the globus credentials
+            # have expired, but are still in the flask session.
+            abort(status)
+        raise
+    return response
+
+
 class ApiClient():
     def __init__(self, url_base=None, groups_token=None):
         self.url_base = url_base
         self.groups_token = groups_token
 
     def _request(self, url, body_json=None):
+        '''
+        Makes request to HuBMAP APIs behind API Gateway (Search, Entity, UUID).
+        '''
         headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
-        try:
-            response = (
-                requests.post(url, headers=headers, json=body_json)
-                if body_json
-                else requests.get(url, headers=headers)
-            )
-        except requests.exceptions.ConnectTimeout as error:
-            current_app.logger.error(error)
-            abort(504)
-        try:
-            response.raise_for_status()
-        except requests.exceptions.HTTPError as error:
-            current_app.logger.error(error.response.text)
-            status = error.response.status_code
-            if status in [400, 404]:
-                # The same 404 page will be returned,
-                # whether it's a missing route in portal-ui,
-                # or a missing entity in the API.
-                abort(status)
-            if status in [401]:
-                # I believe we have 401 errors when the globus credentials
-                # have expired, but are still in the flask session.
-                abort(status)
-            raise
+        response = _handle_request(url, headers, body_json)
+        status = response.status_code
+        # HuBMAP APIs will redirect to s3 if the response payload over 10 MB.
+        if status in [303]:
+            s3_resp = _handle_request(response.content).content
+            return json.loads(s3_resp)
         return response.json()
 
     def get_all_dataset_uuids(self):
@@ -209,34 +223,13 @@ class ApiClient():
             vitessce_conf=vitessce_conf,
             vis_lifted_uuid=vis_lifted_uuid)
 
-    def _file_request(self, url, body_json=None):
+    def _file_request(self, url):
         headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
 
         if self.groups_token:
             url += f"?token={self.groups_token}"
-        try:
-            response = (
-                requests.get(url, headers=headers)
-            )
-        except requests.exceptions.ConnectTimeout as error:
-            current_app.logger.error(error)
-            abort(504)
-        try:
-            response.raise_for_status()
-        except requests.exceptions.HTTPError as error:
-            current_app.logger.error(error.response.text)
-            status = error.response.status_code
-            if status in [400, 404]:
-                # The same 404 page will be returned,
-                # whether it's a missing route in portal-ui,
-                # or a missing entity in the API.
-                abort(status)
-            if status in [401]:
-                # I believe we have 401 errors when the globus credentials
-                # have expired, but are still in the flask session.
-                abort(status)
-            raise
-        return response.text
+
+        return _handle_request(url, headers).text
 
     def get_publication_vignettes(self, uuid):
         vignettes_path = f"{current_app.config['ASSETS_ENDPOINT']}/{uuid}/vignettes/"

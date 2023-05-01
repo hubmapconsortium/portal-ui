@@ -1,1 +1,0 @@
-- Update workspace loading page to reflect design.

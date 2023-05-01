@@ -3,16 +3,18 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 import { getAllCollectionsQuery } from 'js/helpers/queries';
 
 function useDatasetsCollections(datasetUUIDs) {
-  const collectionsWithDatasetQuery = useMemo(() => {
-    return {
+  const datasetUUIDsString = JSON.stringify(datasetUUIDs.toSorted());
+  const collectionsWithDatasetQuery = useMemo(
+    () => ({
       ...getAllCollectionsQuery,
       query: {
         terms: {
-          'datasets.uuid': datasetUUIDs,
+          'datasets.uuid': JSON.parse(datasetUUIDsString),
         },
       },
-    };
-  }, [datasetUUIDs]);
+    }),
+    [datasetUUIDsString],
+  );
 
   const { searchHits: collections } = useSearchHits(collectionsWithDatasetQuery);
   return collections;
