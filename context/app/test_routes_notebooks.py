@@ -16,5 +16,5 @@ def client():
 )
 def test_notebook(client, entity_type, mocker):
     mocker.patch('app.api.client.ApiClient.get_files')
-    response = client.post(f'/notebooks/{entity_type}.ipynb', json={'uuids': ['fake-uuid']})
+    response = client.post(f'/notebooks/entities/{entity_type}.ipynb', json={'uuids': ['fake-uuid']})
     assert response.status == '200 OK'
