@@ -19,7 +19,7 @@ function VisualizationNotebookButton({ uuid }) {
       <WhiteBackgroundIconButton
         onClick={() =>
           postAndDownloadFile({
-            url: `entities/notebooks/dataset/${uuid}.ws.ipynb`,
+            url: `notebooks/entities/dataset/${uuid}.ws.ipynb`,
             body: {},
           })
         }

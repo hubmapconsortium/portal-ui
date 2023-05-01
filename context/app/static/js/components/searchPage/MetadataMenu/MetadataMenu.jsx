@@ -62,7 +62,7 @@ function MetadataMenu({ type, analyticsCategory }) {
         <MenuItem
           onClick={() =>
             fetchAndDownload({
-              urlPath: `entities/notebooks/${lcPluralType}.ipynb`,
+              urlPath: `notebooks/entities/${lcPluralType}.ipynb`,
               allResultsUUIDs,
               closeMenu,
               analyticsCategory,
