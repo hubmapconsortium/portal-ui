@@ -149,7 +149,6 @@ def blank_notebook():
                 f"## {workspace_name}"
             ]
         }]
-    print(cells)
     return _nb_response_from_dicts('notebook', cells, workspace_name=workspace_name)
 
 
