@@ -18,8 +18,7 @@ async function createWorkspaceAndNotebook({ path, body }) {
   if (!response.ok) {
     console.error('Create workspace failed', response);
   }
-  const json = await response.json();
-  const { workspace_id, notebook_path } = json;
+  const { workspace_id, notebook_path } = await response.json();
   return { workspace_id, notebook_path };
 }
 
