@@ -77,9 +77,9 @@ def _nb_response(name_stem, nb_str, workspace_name, uuids=[]):
 
 
 @blueprint.route(
-    '/notebooks/<entity_type>/<uuid>.ws.ipynb', methods=['POST'])
+    '/notebooks/entities/<entity_type>/<uuid>.ws.ipynb', methods=['POST'])
 # TODO: Change to a single route, and instead make behavior depend on HTTP method
-def details_notebook(entity_type, uuid):
+def entity_notebook(entity_type, uuid):
     if entity_type not in entity_types:
         abort(404)
 
@@ -112,8 +112,8 @@ def details_notebook(entity_type, uuid):
     return _nb_response_from_objs(hubmap_id, cells, workspace_name=workspace_name, uuids=[uuid])
 
 
-@blueprint.route('/notebooks/<entity_type>.ipynb', methods=['POST'])
-def notebook(entity_type):
+@blueprint.route('/notebooks/entities/<entity_type>.ipynb', methods=['POST'])
+def entities_notebook(entity_type):
     body = request.get_json()
     uuids = body.get('uuids')
     workspace_name = body.get('workspace_name')
@@ -134,6 +134,22 @@ def notebook(entity_type):
         cells += _get_cells('anndata.ipynb', uuids_to_zarr_files=uuids_to_zarr_files)
 
     return _nb_response_from_dicts(entity_type, cells, workspace_name=workspace_name, uuids=uuids)
+
+
+@blueprint.route('/notebooks/blank.ipynb', methods=['POST'])
+def blank_notebook():
+    body = request.get_json()
+    workspace_name = body.get('workspace_name')
+
+    cells = [
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                f"## {workspace_name}"
+            ]
+        }]
+    return _nb_response_from_dicts('notebook', cells, workspace_name=workspace_name)
 
 
 def _limit_to_zarr_files(uuids_to_files):

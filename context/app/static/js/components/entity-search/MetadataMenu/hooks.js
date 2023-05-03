@@ -2,28 +2,19 @@ import { useCallback } from 'react';
 
 import { useStore as useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
 import { useStore as useSelectedTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { createAndLaunchWorkspace } from 'js/components/workspaces/utils';
 
 function useMetadataMenu(lcPluralType) {
   const { selectedRows: selectedHits } = useSelectedTableStore();
   const { closeMenu } = useDropdownMenuStore();
+
   const createNotebook = useCallback(
     async ({ workspaceName }) => {
-      const response = await fetch(`/notebooks/${lcPluralType}.ipynb`, {
-        method: 'POST',
-        body: JSON.stringify({ uuids: [...selectedHits], workspace_name: workspaceName }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      await createAndLaunchWorkspace({
+        path: `entities/${lcPluralType}.ipynb`,
+        body: { uuids: [...selectedHits], workspace_name: workspaceName },
       });
-      if (!response.ok) {
-        console.error('Create workspace failed', response);
-        closeMenu();
-        return;
-      }
-
-      const json = await response.json();
-      const { workspace_id, notebook_path } = json;
-      window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
+      closeMenu();
     },
     [closeMenu, lcPluralType, selectedHits],
   );
