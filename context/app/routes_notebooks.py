@@ -141,14 +141,7 @@ def blank_notebook():
     body = request.get_json()
     workspace_name = body.get('workspace_name')
 
-    cells = [
-        {
-            "cell_type": "markdown",
-            "metadata": {},
-            "source": [
-                f"## {workspace_name}"
-            ]
-        }]
+    cells = [new_markdown_cell(f"## {workspace_name}")]
     return _nb_response_from_dicts('notebook', cells, workspace_name=workspace_name)
 
 
