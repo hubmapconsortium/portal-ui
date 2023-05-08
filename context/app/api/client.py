@@ -170,7 +170,7 @@ class ApiClient():
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
         vis_lifted_uuid = None  # default
-        image_pyramid_descendants = _get_image_pyramid_descendants(entity)
+        image_pyramid_descendants = _get_descendants_of_data_type(entity, 'image_pyramid')
 
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         if image_pyramid_descendants:
@@ -250,6 +250,29 @@ class ApiClient():
                 break
 
         return vignette_data
+    
+    def get_publication_ancillary_json(self, entity):
+        '''
+        Returns a dataclass with vitessce_conf and is_lifted.
+        '''
+        publication_json = {}
+        publication_ancillary_descendants = _get_descendants_of_data_type(entity, 'publication_ancillary')
+        if publication_ancillary_descendants:
+            if len(publication_ancillary_descendants) < 1: #> 1:
+                current_app.logger.error(f'Expected only one descendant on {entity["uuid"]}')
+            else: 
+                derived_entity = publication_ancillary_descendants[0]
+                # publication_json_path = f"{current_app.config['ASSETS_ENDPOINT']}/{derived_entity.uuid}/publication_ancillary.json"
+                publication_json_path = f"{current_app.config['ASSETS_ENDPOINT']}/c3569defca7d83c27f16d06556be4905/publication_ancillary.json"
+                try:
+                    publication_resp = self._file_request(publication_json_path)
+                    publication_json = json.loads(publication_resp)
+                except:
+                    current_app.logger.error(
+                        f'Fetching publication ancillary json threw error: {traceback.format_exc()}')
+       
+        return publication_json
+
 
 
 def _make_query(constraints, uuids):
@@ -436,48 +459,54 @@ def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
     return entity
 
 
-def _get_image_pyramid_descendants(entity):
+def _get_descendants_of_data_type(entity, data_type):
     '''
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': []
+    >>> _get_descendants_of_data_type({
+    ...     'descendants': [], 
+    ...     'image_pyramid'
     ... })
     []
 
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': [{'no_data_types': 'should not error!'}]
+    >>> _get_descendants_of_data_type({
+    ...     'descendants': [{'no_data_types': 'should not error!'}],
+    ...     'image_pyramid'
     ... })
     []
 
-    >>> _get_image_pyramid_descendants({
+    >>> _get_descendants_of_data_type({
     ...     'descendants': [{'data_types': ['not_a_pyramid']}]
+    ...     'image_pyramid'
     ... })
     []
 
     >>> doc = {'data_types': ['image_pyramid']}
-    >>> descendants = _get_image_pyramid_descendants({
+    >>> descendants = _get_descendants_of_data_type({
     ...     'descendants': [doc]
+    ...     'image_pyramid'
     ... })
     >>> descendants
     [{'data_types': ['image_pyramid']}]
     >>> assert doc == descendants[0]
     >>> assert id(doc) != id(descendants[0])
 
-    >>> _get_image_pyramid_descendants({
+    >>> _get_descendants_of_data_type({
     ...     'descendants': [
     ...         {'data_types': ['not_a_pyramid']},
     ...         {'data_types': ['image_pyramid']}
-    ...     ]
+    ...     ],
+    ...     'image_pyramid'
     ... })
     [{'data_types': ['image_pyramid']}]
 
     There shouldn't be multiple image pyramids, but if there are, we should capture all of them:
 
-    >>> _get_image_pyramid_descendants({
+    >>> _get_descendants_of_data_type({
     ...     'descendants': [
     ...         {'id': 'A', 'data_types': ['image_pyramid']},
     ...         {'id': 'B', 'data_types': ['not_a_pyramid']},
     ...         {'id': 'C', 'data_types': ['image_pyramid']}
-    ...     ]
+    ...     ],
+    ...     'image_pyramid'
     ... })
     [{'id': 'A', 'data_types': ['image_pyramid']}, {'id': 'C', 'data_types': ['image_pyramid']}]
 
@@ -485,7 +514,7 @@ def _get_image_pyramid_descendants(entity):
     descendants = entity.get('descendants', [])
     image_pyramid_descendants = [
         d for d in descendants
-        if 'image_pyramid' in d.get('data_types', [])
+        if data_type in d.get('data_types', [])
     ]
     return deepcopy(image_pyramid_descendants)
 
@@ -509,3 +538,4 @@ def _get_latest_uuid(revisions):
 
 def _get_vignette_dir_name(vignette_number):
     return f"vignette_{vignette_number:02}"
+
