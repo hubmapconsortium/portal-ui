@@ -48,7 +48,7 @@ function Routes({ flaskData }) {
     organs,
     organs_count,
     organ,
-    vignette_data,
+    vignette_json,
   } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
@@ -101,7 +101,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/browse/publication/')) {
     return (
       <Route>
-        <Publication publication={entity} vignette_data={vignette_data} />
+        <Publication publication={entity} vignette_json={vignette_json} />
       </Route>
     );
   }

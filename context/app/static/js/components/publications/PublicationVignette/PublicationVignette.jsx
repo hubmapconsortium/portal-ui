@@ -53,7 +53,7 @@ function PublicationVignette({ vignette, vignetteDirName, uuid }) {
   if (vitessceConfs) {
     return (
       <>
-        <ReactMarkdown>{vignette.vignette_description_md}</ReactMarkdown>
+        <ReactMarkdown>{vignette.description}</ReactMarkdown>
         <VisualizationWrapper
           vitData={vitessceConfs.length === 1 ? vitessceConfs[0] : vitessceConfs}
           uuid={uuid}

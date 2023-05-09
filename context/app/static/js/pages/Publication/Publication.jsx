@@ -11,7 +11,7 @@ import useEntityStore from 'js/stores/useEntityStore';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
-function Publication({ publication, vignette_data }) {
+function Publication({ publication, vignette_json }) {
   const {
     title,
     uuid,
@@ -38,7 +38,7 @@ function Publication({ publication, vignette_data }) {
     <DetailLayout sectionOrder={sectionOrder}>
       <PublicationSummary {...publication} status={combinedStatus} hasDOI={hasDOI} />
       <PublicationsDataSection uuid={uuid} datasetUUIDs={ancestor_ids} />
-      <PublicationsVisualizationSection vignette_data={vignette_data} uuid={uuid} />
+      <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
       <ContributorsTable contributors={contributors} title="Authors" />
       <ProvSection uuid={uuid} assayMetadata={publication} />
     </DetailLayout>
