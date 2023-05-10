@@ -28,7 +28,14 @@ function Publication({ publication, vignette_json }) {
   const setAssayMetadata = useEntityStore(entityStoreSelector);
   setAssayMetadata({ hubmap_id, entity_type, title, publication_venue });
 
-  const sectionOrder = getSectionOrder(['summary', 'data', 'visualizations', 'authors', 'provenance'], {});
+  const shouldDisplaySection = {
+    visualizations: Boolean(Object.keys(vignette_json).length),
+  };
+
+  const sectionOrder = getSectionOrder(
+    ['summary', 'data', 'visualizations', 'authors', 'provenance'],
+    shouldDisplaySection,
+  );
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
@@ -38,7 +45,9 @@ function Publication({ publication, vignette_json }) {
     <DetailLayout sectionOrder={sectionOrder}>
       <PublicationSummary {...publication} status={combinedStatus} hasDOI={hasDOI} />
       <PublicationsDataSection uuid={uuid} datasetUUIDs={ancestor_ids} />
-      <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
+      {shouldDisplaySection.visualizations && (
+        <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
+      )}
       <ContributorsTable contributors={contributors} title="Authors" />
       <ProvSection uuid={uuid} assayMetadata={publication} />
     </DetailLayout>

@@ -292,8 +292,12 @@ class ApiClient():
         }
         response_json = self._request(current_app.config['ELASTICSEARCH_ENDPOINT']
                                       + current_app.config['PORTAL_INDEX_PATH'], body_json=query)
-        hits = _get_hits(response_json)
-        return _get_entity_from_hits(hits)["uuid"]
+        try:
+            hits = _get_hits(response_json)
+            publication_ancillary_uuid = _get_entity_from_hits(hits)["uuid"]
+        except:
+            publication_ancillary_uuid = None
+        return publication_ancillary_uuid
 
     def get_publication_ancillary_json(self, entity):
         '''
