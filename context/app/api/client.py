@@ -310,7 +310,8 @@ class ApiClient():
         publication_json = {}
         publication_ancillary_uuid = self.get_publication_ancillary_uuid(entity["uuid"])
         if publication_ancillary_uuid:
-            publication_json_path = f"{current_app.config['ASSETS_ENDPOINT']}/{publication_ancillary_uuid}/publication_ancillary.json"
+            publication_json_path = (f"{current_app.config['ASSETS_ENDPOINT']}/"
+                                     f"{publication_ancillary_uuid}/publication_ancillary.json")
             try:
                 publication_resp = self._file_request(publication_json_path)
                 publication_json = json.loads(publication_resp)
@@ -508,7 +509,7 @@ def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
 def _get_descendants_of_data_type(entity, data_type):
     '''
     >>> _get_descendants_of_data_type({
-    ...     'descendants': [], 
+    ...     'descendants': [],
     ...     'image_pyramid'
     ... })
     []
