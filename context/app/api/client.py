@@ -5,7 +5,6 @@ from dataclasses import dataclass
 
 from flask import abort, current_app
 import requests
-import frontmatter
 import json
 from werkzeug.exceptions import HTTPException
 from hubmap_commons.type_client import TypeClient
