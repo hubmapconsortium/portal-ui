@@ -250,29 +250,67 @@ class ApiClient():
                 break
 
         return vignette_data
-    
+
+    def get_publication_ancillary_uuid(self, uuid):
+        '''
+        Returns the uuid of the most recent publication ancillary dataset for a publication that is in QA or Published status.
+        '''
+        query = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "term": {
+                                "data_types": "publication_ancillary"
+                            }
+                        },
+                        {
+                            "term": {
+                                "ancestor_ids": uuid
+                            }
+                        },
+                        {
+                            "terms": {
+                                "mapped_status.keyword": [
+                                    "QA",
+                                    "Published"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            "sort": [
+                {
+                    "last_modified_timestamp": {
+                        "order": "desc"
+                    }
+                }
+            ],
+            "_source": "uuid",
+            "size": 1
+        }
+        response_json = self._request(current_app.config['ELASTICSEARCH_ENDPOINT']
+                                      + current_app.config['PORTAL_INDEX_PATH'], body_json=query)
+        hits = _get_hits(response_json)
+        return _get_entity_from_hits(hits)["uuid"]
+
     def get_publication_ancillary_json(self, entity):
         '''
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
         publication_json = {}
-        publication_ancillary_descendants = _get_descendants_of_data_type(entity, 'publication_ancillary')
-        if publication_ancillary_descendants:
-            if len(publication_ancillary_descendants) < 1: #> 1:
-                current_app.logger.error(f'Expected only one descendant on {entity["uuid"]}')
-            else: 
-                derived_entity = publication_ancillary_descendants[0]
-                # publication_json_path = f"{current_app.config['ASSETS_ENDPOINT']}/{derived_entity.uuid}/publication_ancillary.json"
-                publication_json_path = f"{current_app.config['ASSETS_ENDPOINT']}/c3569defca7d83c27f16d06556be4905/publication_ancillary.json"
-                try:
-                    publication_resp = self._file_request(publication_json_path)
-                    publication_json = json.loads(publication_resp)
-                except:
-                    current_app.logger.error(
-                        f'Fetching publication ancillary json threw error: {traceback.format_exc()}')
-       
-        return publication_json
+        publication_ancillary_uuid = self.get_publication_ancillary_uuid(entity["uuid"])
+        if publication_ancillary_uuid:
+            publication_json_path = f"{current_app.config['ASSETS_ENDPOINT']}/{publication_ancillary_uuid}/publication_ancillary.json"
+            try:
+                publication_resp = self._file_request(publication_json_path)
+                publication_json = json.loads(publication_resp)
+            except:
+                current_app.logger.error(
+                    f'Fetching publication ancillary json threw error: {traceback.format_exc()}')
 
+        return publication_json
 
 
 def _make_query(constraints, uuids):
@@ -538,4 +576,3 @@ def _get_latest_uuid(revisions):
 
 def _get_vignette_dir_name(vignette_number):
     return f"vignette_{vignette_number:02}"
-
