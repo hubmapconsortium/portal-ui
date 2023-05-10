@@ -232,26 +232,6 @@ class ApiClient():
 
         return _handle_request(url, headers).text
 
-    def get_publication_vignettes(self, uuid):
-        vignettes_path = f"{current_app.config['ASSETS_ENDPOINT']}/{uuid}/vignettes/"
-        vignette_data = {}
-
-        i = 1
-        while True:
-            try:
-                vignette_dir_name = _get_vignette_dir_name(i)
-                description_text = self._file_request(
-                    f"{vignettes_path}/{vignette_dir_name}/description.md")
-                metadata_content = frontmatter.loads(description_text)
-                vignette_data[vignette_dir_name] = {
-                    **metadata_content.metadata,
-                    'vignette_description_md': metadata_content.content}
-                i += 1
-            except Exception:
-                break
-
-        return vignette_data
-
     def get_publication_ancillary_uuid(self, uuid):
         '''
         Given a publication uuid,
@@ -582,6 +562,3 @@ def _get_latest_uuid(revisions):
     return max(clean_revisions,
                key=lambda revision: revision['revision_number'])['uuid']
 
-
-def _get_vignette_dir_name(vignette_number):
-    return f"vignette_{vignette_number:02}"
