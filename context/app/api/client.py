@@ -7,6 +7,7 @@ from flask import abort, current_app
 import requests
 import frontmatter
 import json
+from werkzeug.exceptions import HTTPException
 from hubmap_commons.type_client import TypeClient
 
 from .client_utils import files_from_response
@@ -253,7 +254,9 @@ class ApiClient():
 
     def get_publication_ancillary_uuid(self, uuid):
         '''
-        Returns the uuid of the most recent publication ancillary dataset for a publication that is in QA or Published status.
+        Given a publication uuid,
+        returns the uuid of the most recent publication ancillary dataset
+        for a publication that is in QA or Published status.
         '''
         query = {
             "query": {
@@ -292,10 +295,11 @@ class ApiClient():
         }
         response_json = self._request(current_app.config['ELASTICSEARCH_ENDPOINT']
                                       + current_app.config['PORTAL_INDEX_PATH'], body_json=query)
+
         try:
             hits = _get_hits(response_json)
-            publication_ancillary_uuid = _get_entity_from_hits(hits)["uuid"]
-        except:
+            publication_ancillary_uuid = hits[0]["_source"]["uuid"]
+        except IndexError:
             publication_ancillary_uuid = None
         return publication_ancillary_uuid
 
@@ -310,7 +314,7 @@ class ApiClient():
             try:
                 publication_resp = self._file_request(publication_json_path)
                 publication_json = json.loads(publication_resp)
-            except:
+            except HTTPException:
                 current_app.logger.error(
                     f'Fetching publication ancillary json threw error: {traceback.format_exc()}')
 
