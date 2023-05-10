@@ -489,12 +489,12 @@ def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
 def _get_image_pyramid_descendants(entity):
     '''
     >>> _get_image_pyramid_descendants({
-    ...     'descendants': [],
+    ...     'descendants': []
     ... })
     []
 
     >>> _get_image_pyramid_descendants({
-    ...     'descendants': [{'no_data_types': 'should not error!'}],
+    ...     'descendants': [{'no_data_types': 'should not error!'}]
     ... })
     []
 
@@ -516,7 +516,7 @@ def _get_image_pyramid_descendants(entity):
     ...     'descendants': [
     ...         {'data_types': ['not_a_pyramid']},
     ...         {'data_types': ['image_pyramid']}
-    ...     ],
+    ...     ]
     ... })
     [{'data_types': ['image_pyramid']}]
 
@@ -527,7 +527,7 @@ def _get_image_pyramid_descendants(entity):
     ...         {'id': 'A', 'data_types': ['image_pyramid']},
     ...         {'id': 'B', 'data_types': ['not_a_pyramid']},
     ...         {'id': 'C', 'data_types': ['image_pyramid']}
-    ...     ],
+    ...     ]
     ... })
     [{'id': 'A', 'data_types': ['image_pyramid']}, {'id': 'C', 'data_types': ['image_pyramid']}]
 
