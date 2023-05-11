@@ -233,9 +233,9 @@ class ApiClient():
 
     def get_descendant_to_lift(self, data_type, uuid):
         '''
-        Given a publication uuid,
-        returns the uuid of the most recent publication ancillary dataset
-        for a publication that is in QA or Published status.
+        Given the data type of the descendant and a uuid,
+        returns the doc of the most recent descendant
+        that is in QA or Published status.
         '''
         query = {
             "query": {
