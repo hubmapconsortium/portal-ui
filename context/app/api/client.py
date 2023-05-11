@@ -231,7 +231,7 @@ class ApiClient():
 
         return _handle_request(url, headers).text
 
-    def get_publication_ancillary_uuid(self, uuid):
+    def get_descendant_to_lift(self, data_type, uuid):
         '''
         Given a publication uuid,
         returns the uuid of the most recent publication ancillary dataset
@@ -243,7 +243,7 @@ class ApiClient():
                     "must": [
                         {
                             "term": {
-                                "data_types": "publication_ancillary"
+                                "data_types": data_type
                             }
                         },
                         {
@@ -277,7 +277,7 @@ class ApiClient():
 
         try:
             hits = _get_hits(response_json)
-            publication_ancillary_uuid = hits[0]["_source"]["uuid"]
+            publication_ancillary_uuid = hits[0]["_source"]
         except IndexError:
             publication_ancillary_uuid = None
         return publication_ancillary_uuid
@@ -287,8 +287,9 @@ class ApiClient():
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
         publication_json = {}
-        publication_ancillary_uuid = self.get_publication_ancillary_uuid(entity["uuid"])
-        if publication_ancillary_uuid:
+        publication_ancillary_descendant = self.get_descendant_to_lift('publication_ancillary', entity["uuid"])
+        if publication_ancillary_descendant:
+            publication_ancillary_uuid = publication_ancillary_descendant["uuid"]
             publication_json_path = (f"{current_app.config['ASSETS_ENDPOINT']}/"
                                      f"{publication_ancillary_uuid}/publication_ancillary.json")
             try:
