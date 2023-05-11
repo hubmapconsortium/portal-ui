@@ -170,13 +170,11 @@ class ApiClient():
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
         vis_lifted_uuid = None  # default
-        image_pyramid_descendants = _get_image_pyramid_descendants(entity)
+        image_pyramid_descendants = self.get_descendant_to_lift('image_pyramid', entity["uuid"])
 
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         if image_pyramid_descendants:
-            if len(image_pyramid_descendants) > 1:
-                current_app.logger.error(f'Expected only one descendant on {entity["uuid"]}')
-            derived_entity = image_pyramid_descendants[0]
+            derived_entity = image_pyramid_descendants
             # TODO: Entity structure will change in the future to be consistent
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
@@ -483,60 +481,6 @@ def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
         raise Exception(f'ID not unique; got {len(hits)} matches')
     entity = hits[0]['_source']
     return entity
-
-
-def _get_image_pyramid_descendants(entity):
-    '''
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': []
-    ... })
-    []
-
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': [{'no_data_types': 'should not error!'}]
-    ... })
-    []
-
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': [{'data_types': ['not_a_pyramid']}]
-    ... })
-    []
-
-    >>> doc = {'data_types': ['image_pyramid']}
-    >>> descendants = _get_image_pyramid_descendants({
-    ...     'descendants': [doc]
-    ... })
-    >>> descendants
-    [{'data_types': ['image_pyramid']}]
-    >>> assert doc == descendants[0]
-    >>> assert id(doc) != id(descendants[0])
-
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': [
-    ...         {'data_types': ['not_a_pyramid']},
-    ...         {'data_types': ['image_pyramid']}
-    ...     ]
-    ... })
-    [{'data_types': ['image_pyramid']}]
-
-    There shouldn't be multiple image pyramids, but if there are, we should capture all of them:
-
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': [
-    ...         {'id': 'A', 'data_types': ['image_pyramid']},
-    ...         {'id': 'B', 'data_types': ['not_a_pyramid']},
-    ...         {'id': 'C', 'data_types': ['image_pyramid']}
-    ...     ]
-    ... })
-    [{'id': 'A', 'data_types': ['image_pyramid']}, {'id': 'C', 'data_types': ['image_pyramid']}]
-
-    '''
-    descendants = entity.get('descendants', [])
-    image_pyramid_descendants = [
-        d for d in descendants
-        if 'image_pyramid' in d.get('data_types', [])
-    ]
-    return deepcopy(image_pyramid_descendants)
 
 
 def _get_latest_uuid(revisions):
