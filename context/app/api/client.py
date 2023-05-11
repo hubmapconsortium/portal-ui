@@ -283,7 +283,7 @@ class ApiClient():
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
         publication_json = {}
-        publication_ancillary_descendant = self.get_descendant_to_lift('publication_ancillary', 
+        publication_ancillary_descendant = self.get_descendant_to_lift('publication_ancillary',
                                                                        entity["uuid"])
         if publication_ancillary_descendant:
             publication_ancillary_uuid = publication_ancillary_descendant["uuid"]
