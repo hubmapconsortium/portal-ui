@@ -277,10 +277,10 @@ class ApiClient():
 
         try:
             hits = _get_hits(response_json)
-            publication_ancillary_uuid = hits[0]["_source"]
+            source = hits[0]["_source"]
         except IndexError:
-            publication_ancillary_uuid = None
-        return publication_ancillary_uuid
+            source = None
+        return source
 
     def get_publication_ancillary_json(self, entity):
         '''
