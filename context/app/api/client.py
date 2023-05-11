@@ -269,7 +269,6 @@ class ApiClient():
                     }
                 }
             ],
-            "_source": "uuid",
             "size": 1
         }
         response_json = self._request(current_app.config['ELASTICSEARCH_ENDPOINT']
