@@ -107,4 +107,4 @@ def test_get_descendant_to_lift_error(app, mocker):
     with app.app_context():
         api_client = ApiClient()
         descendant = api_client.get_descendant_to_lift('image_pyramid', 'uuid123')
-    assert descendant == None
+    assert descendant is None

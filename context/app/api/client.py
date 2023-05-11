@@ -1,6 +1,5 @@
 from collections import namedtuple
 import traceback
-from copy import deepcopy
 from dataclasses import dataclass
 
 from flask import abort, current_app
@@ -284,7 +283,8 @@ class ApiClient():
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
         publication_json = {}
-        publication_ancillary_descendant = self.get_descendant_to_lift('publication_ancillary', entity["uuid"])
+        publication_ancillary_descendant = self.get_descendant_to_lift('publication_ancillary', 
+                                                                       entity["uuid"])
         if publication_ancillary_descendant:
             publication_ancillary_uuid = publication_ancillary_descendant["uuid"]
             publication_json_path = (f"{current_app.config['ASSETS_ENDPOINT']}/"
