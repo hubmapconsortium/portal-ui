@@ -174,26 +174,34 @@ function condenseJobs(jobs) {
   }
 }
 
-async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspacesEndpoint, workspacesToken }) {
+async function getWorkspaceJob({ workspaceId, setMessage, setDead, workspacesEndpoint, workspacesToken }) {
   const jobsResponse = await fetch(`${workspacesEndpoint}/jobs`, {
     method: 'GET',
     headers: getWorkspacesApiHeaders(workspacesToken),
   });
+
   if (!jobsResponse.ok) {
     setDead(true);
     setMessage('API Error; Are you logged in?');
     return null;
   }
 
-  const jobsResults = await jobsResponse.json();
-  const { jobs } = jobsResults.data;
+  const {
+    data: { jobs },
+  } = await jobsResponse.json();
   const jobsForWorkspace = jobs.filter((job) => String(job.workspace_id) === String(workspaceId));
   const job = condenseJobs(jobsForWorkspace);
   setMessage(job.message);
+  return job;
+}
+
+async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspacesEndpoint, workspacesToken }) {
+  const job = await getWorkspaceJob({ workspaceId, setMessage, setDead, workspacesEndpoint, workspacesToken });
 
   if (job.url) {
     return job.url;
   }
+
   if (job.allowNew) {
     await startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage, setDead });
   }
