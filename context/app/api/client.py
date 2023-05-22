@@ -1,12 +1,11 @@
 from collections import namedtuple
 import traceback
-from copy import deepcopy
 from dataclasses import dataclass
 
 from flask import abort, current_app
 import requests
-import frontmatter
 import json
+from werkzeug.exceptions import HTTPException
 from hubmap_commons.type_client import TypeClient
 
 from .client_utils import files_from_response
@@ -170,13 +169,11 @@ class ApiClient():
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
         vis_lifted_uuid = None  # default
-        image_pyramid_descendants = _get_image_pyramid_descendants(entity)
+        image_pyramid_descendants = self.get_descendant_to_lift('image_pyramid', entity["uuid"])
 
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         if image_pyramid_descendants:
-            if len(image_pyramid_descendants) > 1:
-                current_app.logger.error(f'Expected only one descendant on {entity["uuid"]}')
-            derived_entity = image_pyramid_descendants[0]
+            derived_entity = image_pyramid_descendants
             # TODO: Entity structure will change in the future to be consistent
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
@@ -231,25 +228,75 @@ class ApiClient():
 
         return _handle_request(url, headers).text
 
-    def get_publication_vignettes(self, uuid):
-        vignettes_path = f"{current_app.config['ASSETS_ENDPOINT']}/{uuid}/vignettes/"
-        vignette_data = {}
+    def get_descendant_to_lift(self, data_type, uuid):
+        '''
+        Given the data type of the descendant and a uuid,
+        returns the doc of the most recent descendant
+        that is in QA or Published status.
+        '''
+        query = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "term": {
+                                "data_types": data_type
+                            }
+                        },
+                        {
+                            "term": {
+                                "ancestor_ids": uuid
+                            }
+                        },
+                        {
+                            "terms": {
+                                "mapped_status.keyword": [
+                                    "QA",
+                                    "Published"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            "sort": [
+                {
+                    "last_modified_timestamp": {
+                        "order": "desc"
+                    }
+                }
+            ],
+            "size": 1
+        }
+        response_json = self._request(current_app.config['ELASTICSEARCH_ENDPOINT']
+                                      + current_app.config['PORTAL_INDEX_PATH'], body_json=query)
 
-        i = 1
-        while True:
+        try:
+            hits = _get_hits(response_json)
+            source = hits[0]["_source"]
+        except IndexError:
+            source = None
+        return source
+
+    def get_publication_ancillary_json(self, entity):
+        '''
+        Returns a dataclass with vitessce_conf and is_lifted.
+        '''
+        publication_json = {}
+        publication_ancillary_descendant = self.get_descendant_to_lift('publication_ancillary',
+                                                                       entity["uuid"])
+        if publication_ancillary_descendant:
+            publication_ancillary_uuid = publication_ancillary_descendant["uuid"]
+            publication_json_path = (f"{current_app.config['ASSETS_ENDPOINT']}/"
+                                     f"{publication_ancillary_uuid}/publication_ancillary.json")
             try:
-                vignette_dir_name = _get_vignette_dir_name(i)
-                description_text = self._file_request(
-                    f"{vignettes_path}/{vignette_dir_name}/description.md")
-                metadata_content = frontmatter.loads(description_text)
-                vignette_data[vignette_dir_name] = {
-                    **metadata_content.metadata,
-                    'vignette_description_md': metadata_content.content}
-                i += 1
-            except Exception:
-                break
+                publication_resp = self._file_request(publication_json_path)
+                publication_json = json.loads(publication_resp)
+            except HTTPException:
+                current_app.logger.error(
+                    f'Fetching publication ancillary json threw error: {traceback.format_exc()}')
 
-        return vignette_data
+        return publication_json
 
 
 def _make_query(constraints, uuids):
@@ -436,60 +483,6 @@ def _get_entity_from_hits(hits, has_token=None, uuid=None, hbm_id=None):
     return entity
 
 
-def _get_image_pyramid_descendants(entity):
-    '''
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': []
-    ... })
-    []
-
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': [{'no_data_types': 'should not error!'}]
-    ... })
-    []
-
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': [{'data_types': ['not_a_pyramid']}]
-    ... })
-    []
-
-    >>> doc = {'data_types': ['image_pyramid']}
-    >>> descendants = _get_image_pyramid_descendants({
-    ...     'descendants': [doc]
-    ... })
-    >>> descendants
-    [{'data_types': ['image_pyramid']}]
-    >>> assert doc == descendants[0]
-    >>> assert id(doc) != id(descendants[0])
-
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': [
-    ...         {'data_types': ['not_a_pyramid']},
-    ...         {'data_types': ['image_pyramid']}
-    ...     ]
-    ... })
-    [{'data_types': ['image_pyramid']}]
-
-    There shouldn't be multiple image pyramids, but if there are, we should capture all of them:
-
-    >>> _get_image_pyramid_descendants({
-    ...     'descendants': [
-    ...         {'id': 'A', 'data_types': ['image_pyramid']},
-    ...         {'id': 'B', 'data_types': ['not_a_pyramid']},
-    ...         {'id': 'C', 'data_types': ['image_pyramid']}
-    ...     ]
-    ... })
-    [{'id': 'A', 'data_types': ['image_pyramid']}, {'id': 'C', 'data_types': ['image_pyramid']}]
-
-    '''
-    descendants = entity.get('descendants', [])
-    image_pyramid_descendants = [
-        d for d in descendants
-        if 'image_pyramid' in d.get('data_types', [])
-    ]
-    return deepcopy(image_pyramid_descendants)
-
-
 def _get_latest_uuid(revisions):
     '''
     >>> revisions = [{'a_uuid': 'x', 'revision_number': 1}, {'a_uuid': 'z', 'revision_number': 10}]
@@ -505,7 +498,3 @@ def _get_latest_uuid(revisions):
     ]
     return max(clean_revisions,
                key=lambda revision: revision['revision_number'])['uuid']
-
-
-def _get_vignette_dir_name(vignette_number):
-    return f"vignette_{vignette_number:02}"

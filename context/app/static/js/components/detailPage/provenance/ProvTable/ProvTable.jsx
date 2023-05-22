@@ -6,51 +6,47 @@ import { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle } from './sty
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 
-function ProvTable({ uuid, typesToSplit, ancestors, assayMetadata }) {
+function ProvTable({ uuid, ancestors, assayMetadata }) {
   // Make a new list rather modifying old one in place: Caused duplication in UI.
-  const entities = [...ancestors, assayMetadata];
+  const ancestorsAndSelf = [...ancestors, assayMetadata];
 
-  const types = entities.reduce(
-    (acc, item) => {
-      acc[typesToSplit.indexOf(item.entity_type)].push(item);
+  const ancestorsAndSelfByType = ancestorsAndSelf.reduce(
+    (acc, entity) => {
+      if (acc?.[entity.entity_type]) {
+        acc[entity.entity_type].push(entity);
+      }
       return acc;
     },
-    typesToSplit.map(() => []),
+    { Donor: [], Sample: [], Dataset: [] },
   );
 
-  const descendantCounts = assayMetadata.descendant_counts.entity_type || {};
+  const descendantEntityCounts = assayMetadata.descendant_counts.entity_type || {};
 
   return (
     <FlexContainer>
-      {types.map((type, i) => (
-        <TableColumn key={`provenance-list-${typesToSplit[i].toLowerCase()}`}>
-          {(type.length > 0 || descendantCounts[typesToSplit[i]] > 0) && (
-            <>
-              <EntityColumnTitle variant="h5">{typesToSplit[i]}s</EntityColumnTitle>
-              <FlexColumn>
-                {type.length > 0 ? (
-                  type
-                    .sort((a, b) => a.created_timestamp - b.created_timestamp)
-                    .map((item, j) => (
-                      <ProvTableTile
-                        key={item.uuid}
-                        uuid={item.uuid}
-                        id={item.hubmap_id}
-                        entity_type={item.entity_type}
-                        isCurrentEntity={uuid === item.uuid}
-                        isSampleSibling={
-                          j > 0 && item.entity_type === 'Sample' && type[j - 1].sample_category === item.sample_category
-                        }
-                        isFirstTile={j === 0}
-                        isLastTile={j === type.length - 1}
-                      />
-                    ))
-                ) : (
-                  <ProvTableDerivedLink uuid={uuid} type={[typesToSplit[i]]} />
-                )}
-              </FlexColumn>
-            </>
-          )}
+      {Object.entries(ancestorsAndSelfByType).map(([type, entities]) => (
+        <TableColumn key={`provenance-list-${type.toLowerCase()}`}>
+          <EntityColumnTitle variant="h5">{type}s</EntityColumnTitle>
+          <FlexColumn>
+            {entities.length > 0 &&
+              entities
+                .sort((a, b) => a.created_timestamp - b.created_timestamp)
+                .map((item, j) => (
+                  <ProvTableTile
+                    key={item.uuid}
+                    uuid={item.uuid}
+                    id={item.hubmap_id}
+                    entity_type={item.entity_type}
+                    isCurrentEntity={uuid === item.uuid}
+                    isSampleSibling={
+                      j > 0 && item.entity_type === 'Sample' && type[j - 1].sample_category === item.sample_category
+                    }
+                    isFirstTile={j === 0}
+                    isLastTile={j === type.length - 1}
+                  />
+                ))}
+            {descendantEntityCounts?.[type] && <ProvTableDerivedLink uuid={uuid} type={type} />}
+          </FlexColumn>
         </TableColumn>
       ))}
     </FlexContainer>
@@ -59,7 +55,6 @@ function ProvTable({ uuid, typesToSplit, ancestors, assayMetadata }) {
 
 ProvTable.propTypes = {
   uuid: PropTypes.string.isRequired,
-  typesToSplit: PropTypes.arrayOf(PropTypes.string).isRequired,
   ancestors: PropTypes.arrayOf(PropTypes.object).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   assayMetadata: PropTypes.object.isRequired,

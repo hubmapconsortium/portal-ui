@@ -61,9 +61,11 @@ function PublicationSummary({
           title={title}
           doiURL={doiURL}
         />
-        <LabelledSectionText label="Corresponding Authors" bottomSpacing={2}>
-          <CorrespondingAuthorsList contacts={contacts} />
-        </LabelledSectionText>
+        {contacts && (
+          <LabelledSectionText label="Corresponding Authors" bottomSpacing={2}>
+            <CorrespondingAuthorsList contacts={contacts} />
+          </LabelledSectionText>
+        )}
         <LabelledSectionText label="Data Types" bottomSpacing={2}>
           <AggsList uuid={uuid} field="mapped_data_types" />
         </LabelledSectionText>

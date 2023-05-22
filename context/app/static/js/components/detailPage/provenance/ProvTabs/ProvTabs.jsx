@@ -35,12 +35,7 @@ function ProvTabs({ uuid, assayMetadata, provData }) {
       </Tabs>
       {shouldDisplayTable && (
         <TabPanel value={open} index={0} pad={1}>
-          <ProvTable
-            uuid={uuid}
-            typesToSplit={['Donor', 'Sample', 'Dataset']}
-            ancestors={ancestors}
-            assayMetadata={assayMetadata}
-          />
+          <ProvTable uuid={uuid} ancestors={ancestors} assayMetadata={assayMetadata} />
         </TabPanel>
       )}
       <TabPanel value={open} index={graphIndex}>
