@@ -3,7 +3,7 @@ import useSWR from 'swr';
 
 import { AppContext } from 'js/components/Providers';
 
-import { mergeJobsIntoWorkspaces, createWorkspaceAndNotebook, deleteWorkspace, stopJobs } from './utils';
+import { mergeJobsIntoWorkspaces, createWorkspaceAndNotebook, deleteWorkspace, stopJobs, startJob } from './utils';
 
 async function fetchWorkspaces(workspacesEndpoint, workspacesToken) {
   const fetchOpts = {
@@ -54,7 +54,20 @@ function useWorkspacesList() {
     await createWorkspaceAndNotebook({ path: 'blank.ipynb', body: { workspace_name: workspaceName } });
     mutate();
   }
+
   return { workspacesList, handleDeleteWorkspace, handleCreateWorkspace, handleStopWorkspace };
 }
 
-export { useWorkspacesList };
+function useCreateAndLaunchWorkspace() {
+  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
+  return async function createAndLaunchWorkspace({ path, body }) {
+    const { workspace_id, notebook_path } = await createWorkspaceAndNotebook({ path, body });
+    await startJob({ workspaceId: workspace_id, workspacesEndpoint, workspacesToken });
+
+    if (workspace_id && notebook_path) {
+      window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
+    }
+  };
+}
+
+export { useWorkspacesList, useCreateAndLaunchWorkspace };

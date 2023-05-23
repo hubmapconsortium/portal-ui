@@ -7,6 +7,22 @@ function getWorkspacesApiHeaders(workspacesToken) {
   };
 }
 
+async function startJob({ workspaceId, workspacesEndpoint, workspacesToken }) {
+  fetch(`${workspacesEndpoint}/job_types`)
+    .then((response) => response.json())
+    .then(({ data: { job_types } }) =>
+      fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
+        method: 'PUT',
+        headers: getWorkspacesApiHeaders(workspacesToken),
+        body: JSON.stringify({
+          job_type: job_types.jupyter_lab.id,
+          job_details: {},
+        }),
+      }),
+    )
+    .then((response) => response.json());
+}
+
 async function createWorkspaceAndNotebook({ path, body }) {
   const response = await fetch(`/notebooks/${path}`, {
     method: 'POST',
@@ -20,14 +36,6 @@ async function createWorkspaceAndNotebook({ path, body }) {
   }
   const { workspace_id, notebook_path } = await response.json();
   return { workspace_id, notebook_path };
-}
-
-async function createAndLaunchWorkspace({ path, body }) {
-  const { workspace_id, notebook_path } = await createWorkspaceAndNotebook({ path, body });
-
-  if (workspace_id && notebook_path) {
-    window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
-  }
 }
 
 async function stopJob({ jobId, workspacesEndpoint, workspacesToken }) {
@@ -63,24 +71,6 @@ async function stopJobs({ workspaceId, workspacesEndpoint, workspacesToken }) {
       return stopJob({ jobId: job.id, workspacesEndpoint, workspacesToken });
     }),
   );
-}
-
-async function startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage, setDead }) {
-  fetch(`${workspacesEndpoint}/job_types`)
-    .then((response) => response.json())
-    .then(({ data: { job_types } }) =>
-      fetch(`${workspacesEndpoint}/workspaces/${workspaceId}/start`, {
-        method: 'PUT',
-        headers: getWorkspacesApiHeaders(workspacesToken),
-        body: JSON.stringify({
-          job_type: job_types.jupyter_lab.id,
-          job_details: {},
-        }),
-      }),
-    )
-    .then((response) => response.json())
-    .then(({ message }) => setMessage(message))
-    .catch(() => setDead(true));
 }
 
 function getNotebookPath(workspace) {
@@ -202,18 +192,15 @@ async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspac
     return job.url;
   }
 
-  if (job.allowNew) {
-    await startJob({ workspaceId, workspacesEndpoint, workspacesToken, setMessage, setDead });
-  }
   return null;
 }
 
 export {
   createWorkspaceAndNotebook,
-  createAndLaunchWorkspace,
   deleteWorkspace,
   stopJobs,
   mergeJobsIntoWorkspaces,
   condenseJobs,
   locationIfJobRunning,
+  startJob,
 };
