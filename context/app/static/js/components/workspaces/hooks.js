@@ -55,7 +55,12 @@ function useWorkspacesList() {
     mutate();
   }
 
-  return { workspacesList, handleDeleteWorkspace, handleCreateWorkspace, handleStopWorkspace };
+  async function handleStartWorkspace(workspaceId) {
+    await startJob({ workspaceId, workspacesEndpoint, workspacesToken });
+    mutate();
+  }
+
+  return { workspacesList, handleDeleteWorkspace, handleCreateWorkspace, handleStopWorkspace, handleStartWorkspace };
 }
 
 function useCreateAndLaunchWorkspace() {
