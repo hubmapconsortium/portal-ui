@@ -6,7 +6,7 @@ import VisualizationWrapper from 'js/components/detailPage/visualization/Visuali
 
 import { fillUrls } from './utils';
 
-async function fetchVitessceConf({ assetsEndpoint, uuid, filePath, groupsToken, vignetteDirName }) {
+async function fetchVitessceConf({ assetsEndpoint, uuid, filePath, groupsToken, vignetteDirName, signal }) {
   const urlHandler = (url, isZarr) => {
     return `${url.replace('{{ base_url }}', `${assetsEndpoint}/${uuid}/data`)}${isZarr ? '' : `?token=${groupsToken}`}`;
   };
@@ -19,6 +19,7 @@ async function fetchVitessceConf({ assetsEndpoint, uuid, filePath, groupsToken, 
   const response = await fetch(
     `${assetsEndpoint}/${uuid}/vignettes/${vignetteDirName}/${filePath}?token=${groupsToken}`,
     {
+      signal,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -33,22 +34,46 @@ async function fetchVitessceConf({ assetsEndpoint, uuid, filePath, groupsToken, 
   return fillUrls(conf, urlHandler, requestInitHandler);
 }
 
-function PublicationVignette({ vignette, vignetteDirName, uuid }) {
+function PublicationVignette({ vignette, vignetteDirName, uuid, mounted }) {
   const { assetsEndpoint, groupsToken } = useContext(AppContext);
 
   const [vitessceConfs, setVitessceConfs] = useState(undefined);
 
+  // Workaround to make the visualization render only after the accordion section has been expanded while
+  // still letting the prerequisites for the visualizations prefetch
+  const [hasBeenMounted, setHasBeenMounted] = useState(false);
   useEffect(() => {
+    if (mounted) {
+      setHasBeenMounted(true);
+    }
+  }, [mounted]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
     async function getAndSetVitessceConf() {
       const figuresConfs = await Promise.all(
         vignette.figures.map((figure) => {
-          return fetchVitessceConf({ assetsEndpoint, uuid, filePath: figure.file, groupsToken, vignetteDirName });
+          return fetchVitessceConf({
+            assetsEndpoint,
+            uuid,
+            filePath: figure.file,
+            groupsToken,
+            vignetteDirName,
+            signal: abortController.signal,
+          });
         }),
       );
       setVitessceConfs(figuresConfs);
     }
-    getAndSetVitessceConf();
-  }, [assetsEndpoint, groupsToken, uuid, vignette.figures, vignetteDirName]);
+    // Only fetch the vitessce confs if they haven't been fetched yet
+    if (!vitessceConfs) {
+      getAndSetVitessceConf();
+      return () => {
+        abortController.abort();
+      };
+    }
+    return () => {};
+  }, [assetsEndpoint, groupsToken, uuid, vignette.figures, vignetteDirName, vitessceConfs]);
 
   if (vitessceConfs) {
     return (
@@ -59,6 +84,7 @@ function PublicationVignette({ vignette, vignetteDirName, uuid }) {
           uuid={uuid}
           hasNotebook={false}
           shouldDisplayHeader={false}
+          hasBeenMounted={hasBeenMounted}
         />
       </>
     );

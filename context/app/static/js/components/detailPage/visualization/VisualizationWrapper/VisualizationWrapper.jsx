@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import React, { Suspense } from 'react';
 
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -8,11 +8,11 @@ import { VisualizationBackground } from './style';
 
 const Visualization = React.lazy(() => import('../Visualization'));
 
-function VisualizationWrapper({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
+function VisualizationWrapper({ vitData, uuid, hasNotebook, shouldDisplayHeader, hasBeenMounted }) {
   return (
     <Suspense
       fallback={
-        <DetailPageSection id="visualization">
+        <DetailPageSection id={`visualization-${uuid}`}>
           <SpacedSectionButtonRow
             leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           />
@@ -27,6 +27,7 @@ function VisualizationWrapper({ vitData, uuid, hasNotebook, shouldDisplayHeader 
         uuid={uuid}
         hasNotebook={hasNotebook}
         shouldDisplayHeader={shouldDisplayHeader}
+        shouldMountVitessce={hasBeenMounted}
       />
     </Suspense>
   );
