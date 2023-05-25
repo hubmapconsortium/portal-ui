@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 
 import { AppContext } from 'js/components/Providers';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
+import useStickyToggle from 'js/hooks/useStickyToggle';
 
 import { fillUrls } from './utils';
 
@@ -34,19 +35,8 @@ async function fetchVitessceConf({ assetsEndpoint, uuid, filePath, groupsToken, 
   return fillUrls(conf, urlHandler, requestInitHandler);
 }
 
-function PublicationVignette({ vignette, vignetteDirName, uuid, mounted }) {
-  const { assetsEndpoint, groupsToken } = useContext(AppContext);
-
+function useVitessceConfs(assetsEndpoint, groupsToken, uuid, vignette, vignetteDirName) {
   const [vitessceConfs, setVitessceConfs] = useState(undefined);
-
-  // Workaround to make the visualization render only after the accordion section has been expanded while
-  // still letting the prerequisites for the visualizations prefetch
-  const [hasBeenMounted, setHasBeenMounted] = useState(false);
-  useEffect(() => {
-    if (mounted) {
-      setHasBeenMounted(true);
-    }
-  }, [mounted]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -74,6 +64,18 @@ function PublicationVignette({ vignette, vignetteDirName, uuid, mounted }) {
     }
     return () => {};
   }, [assetsEndpoint, groupsToken, uuid, vignette.figures, vignetteDirName, vitessceConfs]);
+
+  return vitessceConfs;
+}
+
+function PublicationVignette({ vignette, vignetteDirName, uuid, mounted }) {
+  const { assetsEndpoint, groupsToken } = useContext(AppContext);
+
+  const vitessceConfs = useVitessceConfs(assetsEndpoint, groupsToken, uuid, vignette, vignetteDirName);
+
+  // Workaround to make the visualization render only after the accordion section has been expanded while
+  // still letting the prerequisites for the visualizations prefetch
+  const hasBeenMounted = useStickyToggle(mounted);
 
   if (vitessceConfs) {
     return (
