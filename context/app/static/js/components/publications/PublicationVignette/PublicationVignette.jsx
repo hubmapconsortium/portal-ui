@@ -85,6 +85,7 @@ function PublicationVignette({ vignette, vignetteDirName, uuid, mounted }) {
           hasNotebook={false}
           shouldDisplayHeader={false}
           hasBeenMounted={hasBeenMounted}
+          isPublicationPage
         />
       </>
     );

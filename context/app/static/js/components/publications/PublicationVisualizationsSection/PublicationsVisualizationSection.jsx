@@ -1,7 +1,7 @@
 import Accordion from '@material-ui/core/ExpansionPanel';
 import Typography from '@material-ui/core/Typography';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { DetailPageSection } from 'js/components/detailPage/style';
 import PublicationVignette from 'js/components/publications/PublicationVignette';
@@ -51,4 +51,4 @@ function PublicationsVisualizationSection({ vignette_json: { vignettes }, uuid }
   );
 }
 
-export default memo(PublicationsVisualizationSection);
+export default PublicationsVisualizationSection;

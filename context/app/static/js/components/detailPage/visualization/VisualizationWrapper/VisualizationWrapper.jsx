@@ -8,11 +8,11 @@ import { VisualizationBackground } from './style';
 
 const Visualization = React.lazy(() => import('../Visualization'));
 
-function VisualizationWrapper({ vitData, uuid, hasNotebook, shouldDisplayHeader, hasBeenMounted }) {
+function VisualizationWrapper({ vitData, uuid, hasNotebook, shouldDisplayHeader, hasBeenMounted, isPublicationPage }) {
   return (
     <Suspense
       fallback={
-        <DetailPageSection id={`visualization-${uuid}`}>
+        <DetailPageSection id={isPublicationPage ? `visualization-${uuid}` : 'visualization'}>
           <SpacedSectionButtonRow
             leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           />
