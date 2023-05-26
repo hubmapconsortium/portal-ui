@@ -4,7 +4,9 @@ import { useTransition, animated } from 'react-spring';
 
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
+import VisualizationNotebookButton from 'js/components/detailPage/visualization/VisualizationNotebookButton';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
@@ -31,6 +33,8 @@ const entityToFieldsMap = {
 
 const AnimatedFlexContainer = animated(FlexContainer);
 
+const vizNotebookIdSelector = (state) => state.vizNotebookId;
+
 function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscreen }) {
   const transitions = useTransition(shouldDisplayHeader, null, {
     from: { opacity: vizIsFullscreen ? 1 : 0 },
@@ -39,6 +43,8 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
   });
 
   const { hubmap_id, entity_type } = assayMetadata;
+
+  const vizNotebookId = useVisualizationStore(vizNotebookIdSelector);
 
   return transitions.map(
     ({ item, key, props }) =>
@@ -55,6 +61,7 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
           )}
           {vizIsFullscreen && (
             <RightDiv>
+              {vizNotebookId && <VisualizationNotebookButton uuid={vizNotebookId} />}
               <VisualizationShareButtonWrapper />
               <VizualizationThemeSwitch />
               <VisualizationCollapseButton />
