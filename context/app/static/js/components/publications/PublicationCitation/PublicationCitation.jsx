@@ -1,5 +1,4 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
@@ -17,9 +16,7 @@ function PublicationCitation({ contributors, title, publication_date, publicatio
 
   return (
     <LabelledSectionText label="Citation" iconTooltipText="Citation is provided in NLM format." bottomSpacing={1}>
-      <Typography variant="body1">
-        {citation} DOI: <OutboundIconLink href={doiURL}>{doiURL}</OutboundIconLink>
-      </Typography>
+      {citation} DOI: <OutboundIconLink href={doiURL}>{doiURL}</OutboundIconLink>
     </LabelledSectionText>
   );
 }
