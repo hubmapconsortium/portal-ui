@@ -1,0 +1,6 @@
+- Update from deprecated createMuiTheme function to createTheme
+- Add propTypes entry for vignette_json
+- Fix proptypes error with DOI string being passed as boolean
+- Fix semantically invalid HTML nesting errors (ul inside of p, p inside of p)
+- Import Accordion instead of deprecated ExpansionPanel
+- Add handling for SUBMITTED status to StatusIcon
