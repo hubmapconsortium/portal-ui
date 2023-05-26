@@ -63,14 +63,14 @@ function PublicationSummary({
           doiURL={doiURL}
         />
         {contacts && (
-          <LabelledSectionText label="Corresponding Authors" bottomSpacing={2}>
+          <LabelledSectionText label="Corresponding Authors" bottomSpacing={2} childContainerComponent="div">
             <CorrespondingAuthorsList contacts={contacts} />
           </LabelledSectionText>
         )}
-        <LabelledSectionText label="Data Types" bottomSpacing={2}>
+        <LabelledSectionText label="Data Types" bottomSpacing={2} childContainerComponent="div">
           <AggsList uuid={uuid} field="mapped_data_types" />
         </LabelledSectionText>
-        <LabelledSectionText label="Organs" bottomSpacing={2}>
+        <LabelledSectionText label="Organs" bottomSpacing={2} childContainerComponent="div">
           <AggsList uuid={uuid} field="mapped_organ" />
         </LabelledSectionText>
         <LabelledSectionText label="Publication Date" bottomSpacing={2}>
