@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { withStyles } from '@material-ui/core/styles';
 
-// In the latest version, "ExpansionPanel" is renamed to "Accordion".
-import AccordionSummary from '@material-ui/core/ExpansionPanelSummary';
-import Accordion from '@material-ui/core/ExpansionPanel';
+// In the latest version, "Accordion" is renamed to "Accordion".
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import Accordion from '@material-ui/core/Accordion';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const StyledAccordion = styled(Accordion)`

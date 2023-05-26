@@ -30,7 +30,7 @@ import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialo
 import { combineMetadata } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
-import { createAndLaunchWorkspace } from 'js/components/workspaces/utils';
+import { useDatasetWorkspace } from './hooks';
 
 function NotebookButton(props) {
   return (
@@ -54,15 +54,7 @@ function SummaryDataChildren({
 }) {
   const { isWorkspacesUser } = useContext(AppContext);
 
-  const createNotebook = useCallback(
-    async ({ workspaceName }) => {
-      await createAndLaunchWorkspace({
-        path: `${entity_type.toLowerCase()}/${uuid}.ws.ipynb`,
-        body: { workspace_name: workspaceName },
-      });
-    },
-    [entity_type, uuid],
-  );
+  const createDatasetWorkspace = useDatasetWorkspace({ entity_type, uuid });
 
   return (
     <>
@@ -84,7 +76,7 @@ function SummaryDataChildren({
       {isWorkspacesUser && (
         <>
           <CreateWorkspaceDialog
-            handleCreateWorkspace={createNotebook}
+            handleCreateWorkspace={createDatasetWorkspace}
             buttonComponent={NotebookButton}
             disabled={!hasNotebook}
             defaultName={`${hubmap_id} Workspace`}

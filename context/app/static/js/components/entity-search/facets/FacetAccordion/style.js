@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 
 import { StyledAccordionSummary } from 'js/components/searchPage/filters/style';
