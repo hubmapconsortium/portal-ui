@@ -1,4 +1,4 @@
-import Accordion from '@material-ui/core/ExpansionPanel';
+import Accordion from '@material-ui/core/Accordion';
 import Typography from '@material-ui/core/Typography';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 import React, { useCallback, useMemo, useState } from 'react';

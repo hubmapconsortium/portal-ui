@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import Accordion from '@material-ui/core/ExpansionPanel';
-import AccordionDetails from '@material-ui/core/ExpansionPanelDetails';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 
 import { useStore } from 'js/shared-styles/accordions/AccordionSteps/store';
