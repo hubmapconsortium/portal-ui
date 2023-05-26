@@ -18,6 +18,7 @@ function WorkspacesList() {
     handleDeleteWorkspace: handleDelete,
     handleCreateWorkspace,
     handleStopWorkspace: handleStop,
+    handleStartWorkspace,
   } = useWorkspacesList();
 
   return (
@@ -49,7 +50,7 @@ function WorkspacesList() {
           workspacesList.map((workspace) => (
             /* TODO: Inbound links have fragments like "#workspace-123": Highlight? */
             <PanelWrapper key={workspace.id}>
-              <WorkspaceDetails workspace={workspace} />
+              <WorkspaceDetails workspace={workspace} handleStartWorkspace={handleStartWorkspace} />
               <div>
                 Created {workspace.datetime_created.slice(0, 10)}
                 <button

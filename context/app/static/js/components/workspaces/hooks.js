@@ -1,61 +1,78 @@
-import { useContext, useState, useEffect, useCallback } from 'react';
+import { useContext } from 'react';
+import useSWR from 'swr';
 
 import { AppContext } from 'js/components/Providers';
 
-import { mergeJobsIntoWorkspaces, createWorkspaceAndNotebook, deleteWorkspace, stopJobs } from './utils';
+import { mergeJobsIntoWorkspaces, createWorkspaceAndNotebook, deleteWorkspace, stopJobs, startJob } from './utils';
+
+async function fetchWorkspaces(workspacesEndpoint, workspacesToken) {
+  const fetchOpts = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'UWS-Authorization': `Token ${workspacesToken}`,
+    },
+  };
+
+  const [workspacesResponse, jobsResponse] = await Promise.all([
+    fetch(`${workspacesEndpoint}/workspaces`, fetchOpts),
+    fetch(`${workspacesEndpoint}/jobs`, fetchOpts),
+  ]);
+
+  if (!workspacesResponse.ok || !jobsResponse.ok) {
+    console.error('Workspaces API failed. Workspaces:', workspacesResponse, 'Jobs:', jobsResponse);
+  }
+
+  // This is could be parallelized too...
+  // but since it's not network-bound, little benefit.
+  const workspaceResults = await workspacesResponse.json();
+  const jobsResults = await jobsResponse.json();
+
+  return mergeJobsIntoWorkspaces(jobsResults.data.jobs, workspaceResults.data.workspaces);
+}
 
 function useWorkspacesList() {
-  const [workspacesList, setWorkspacesList] = useState([]);
-  // TODO: isLoading:
-  // const [isLoading, setIsLoading] = useState(true);
-
   const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
-  const getAndSetWorkspaces = useCallback(async () => {
-    const fetchOpts = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'UWS-Authorization': `Token ${workspacesToken}`,
-      },
-    };
-    const [workspacesResponse, jobsResponse] = await Promise.all([
-      fetch(`${workspacesEndpoint}/workspaces`, fetchOpts),
-      fetch(`${workspacesEndpoint}/jobs`, fetchOpts),
-    ]);
 
-    if (!workspacesResponse.ok || !jobsResponse.ok) {
-      console.error('Workspaces API failed. Workspaces:', workspacesResponse, 'Jobs:', jobsResponse);
-      return;
-    }
-
-    // This is could be parallelized too...
-    // but since it's not network-bound, little benefit.
-    const workspaceResults = await workspacesResponse.json();
-    const jobsResults = await jobsResponse.json();
-
-    const workspaces = mergeJobsIntoWorkspaces(jobsResults.data.jobs, workspaceResults.data.workspaces);
-
-    setWorkspacesList(workspaces);
-  }, [workspacesEndpoint, workspacesToken]);
+  const { data: workspacesList, mutate } = useSWR(
+    ['workspaces', workspacesToken],
+    ([, token]) => fetchWorkspaces(workspacesEndpoint, token),
+    { fallbackData: [] },
+  );
 
   async function handleDeleteWorkspace(workspaceId) {
     await deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken });
-    getAndSetWorkspaces();
+    mutate();
   }
 
   async function handleStopWorkspace(workspaceId) {
     await stopJobs({ workspaceId, workspacesEndpoint, workspacesToken });
-    getAndSetWorkspaces();
+    mutate();
   }
 
   async function handleCreateWorkspace({ workspaceName }) {
     await createWorkspaceAndNotebook({ path: 'blank.ipynb', body: { workspace_name: workspaceName } });
-    getAndSetWorkspaces();
+    mutate();
   }
 
-  useEffect(() => getAndSetWorkspaces(), [getAndSetWorkspaces]);
+  async function handleStartWorkspace(workspaceId) {
+    await startJob({ workspaceId, workspacesEndpoint, workspacesToken });
+    mutate();
+  }
 
-  return { workspacesList, handleDeleteWorkspace, handleCreateWorkspace, handleStopWorkspace };
+  return { workspacesList, handleDeleteWorkspace, handleCreateWorkspace, handleStopWorkspace, handleStartWorkspace };
 }
 
-export { useWorkspacesList };
+function useCreateAndLaunchWorkspace() {
+  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
+  return async function createAndLaunchWorkspace({ path, body }) {
+    const { workspace_id, notebook_path } = await createWorkspaceAndNotebook({ path, body });
+    await startJob({ workspaceId: workspace_id, workspacesEndpoint, workspacesToken });
+
+    if (workspace_id && notebook_path) {
+      window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
+    }
+  };
+}
+
+export { useWorkspacesList, useCreateAndLaunchWorkspace };
