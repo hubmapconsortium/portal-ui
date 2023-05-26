@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
@@ -26,7 +26,9 @@ function Publication({ publication, vignette_json }) {
   } = publication;
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
-  setAssayMetadata({ hubmap_id, entity_type, title, publication_venue });
+  useEffect(() => {
+    setAssayMetadata({ hubmap_id, entity_type, title, publication_venue });
+  }, [hubmap_id, entity_type, title, publication_venue, setAssayMetadata]);
 
   const shouldDisplaySection = {
     visualizations: Boolean(Object.keys(vignette_json).length),
