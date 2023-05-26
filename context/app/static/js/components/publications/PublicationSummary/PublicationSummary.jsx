@@ -27,6 +27,7 @@ function PublicationSummary({
   hubmap_id,
   publication_date,
 }) {
+  const hasDOI = Boolean(publication_doi);
   const doiURL = `https://doi.org/${publication_doi}`;
 
   return (
@@ -40,9 +41,9 @@ function PublicationSummary({
         entityCanBeSaved={entityCanBeSaved}
         mapped_external_group_name={mapped_external_group_name}
       >
-        <SummaryItem showDivider={doiURL}>{hubmap_id}</SummaryItem>
-        {doiURL && (
-          <SummaryItem showDivider={doiURL}>
+        <SummaryItem showDivider={hasDOI}>{hubmap_id}</SummaryItem>
+        {hasDOI && (
+          <SummaryItem showDivider={hasDOI}>
             <OutboundIconLink href={doiURL}>{doiURL}</OutboundIconLink>
           </SummaryItem>
         )}
