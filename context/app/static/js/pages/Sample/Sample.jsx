@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
@@ -56,7 +56,9 @@ function SampleDetail({ assayMetadata }) {
   );
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
-  setAssayMetadata({ hubmap_id, entity_type, mapped_organ, sample_category });
+  useEffect(() => {
+    setAssayMetadata({ hubmap_id, entity_type, mapped_organ, sample_category });
+  }, [hubmap_id, entity_type, mapped_organ, sample_category, setAssayMetadata]);
 
   useSendUUIDEvent(entity_type, uuid);
 

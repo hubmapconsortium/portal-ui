@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Vitessce } from 'vitessce';
 import Paper from '@material-ui/core/Paper';
 import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
-import debounce from 'lodash/debounce';
 import Bowser from 'bowser';
+import debounce from 'lodash/debounce';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Vitessce } from 'vitessce';
 
 import { dependencies } from 'package';
 
@@ -14,23 +14,23 @@ import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOpt
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
-import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
-import VisualizationShareButton from '../VisualizationShareButton';
 import VisualizationNotebookButton from '../VisualizationNotebookButton';
-import {
-  vitessceFixedHeight,
-  bodyExpandedCSS,
-  ExpandButton,
-  VitessceInfoSnackbar,
-  ErrorSnackbar,
-  ExpandableDiv,
-  StyledFooterText,
-  SelectionButton,
-  StyledSectionHeader,
-  Flex,
-  StyledDetailPageSection,
-} from './style';
+import VisualizationShareButton from '../VisualizationShareButton';
+import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import { useVitessceConfig } from './hooks';
+import {
+  ErrorSnackbar,
+  ExpandButton,
+  ExpandableDiv,
+  Flex,
+  SelectionButton,
+  StyledDetailPageSection,
+  StyledFooterText,
+  StyledSectionHeader,
+  VitessceInfoSnackbar,
+  bodyExpandedCSS,
+  vitessceFixedHeight,
+} from './style';
 
 function sniffBrowser() {
   const { browser } = Bowser.parse(window.navigator.userAgent);
@@ -58,7 +58,7 @@ const sharedInfoSnackbarProps = {
   },
   autoHideDuration: 4000,
 };
-function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
+function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, shouldMountVitessce = true }) {
   const {
     vizIsFullscreen,
     expandViz,
@@ -180,13 +180,15 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader }) {
                 </Alert>
               </ErrorSnackbar>
             )}
-            <Vitessce
-              config={vitessceConfig[vitessceSelection] || vitessceConfig}
-              theme={vizTheme}
-              onConfigChange={handleVitessceConfigDebounced}
-              height={vizIsFullscreen ? null : vitessceFixedHeight}
-              onWarn={addError}
-            />
+            {shouldMountVitessce && (
+              <Vitessce
+                config={vitessceConfig[vitessceSelection] || vitessceConfig}
+                theme={vizTheme}
+                onConfigChange={handleVitessceConfigDebounced}
+                height={vizIsFullscreen ? null : vitessceFixedHeight}
+                onWarn={addError}
+              />
+            )}
           </ExpandableDiv>
         </Paper>
         <StyledFooterText variant="body2">

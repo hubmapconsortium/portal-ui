@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
@@ -45,7 +46,9 @@ function DonorDetail({ assayMetadata }) {
   );
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
-  setAssayMetadata({ hubmap_id, entity_type, sex, race, age_value, age_unit });
+  useEffect(() => {
+    setAssayMetadata({ hubmap_id, entity_type, sex, race, age_value, age_unit });
+  }, [hubmap_id, entity_type, sex, race, age_value, age_unit, setAssayMetadata]);
 
   useSendUUIDEvent(entity_type, uuid);
 
