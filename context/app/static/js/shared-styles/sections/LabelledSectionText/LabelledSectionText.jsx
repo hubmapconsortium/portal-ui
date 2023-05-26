@@ -6,7 +6,14 @@ import Typography from '@material-ui/core/Typography';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledDiv, Flex, StyledInfoIcon } from './style';
 
-function LabelledSectionText({ children, label, iconTooltipText, bottomSpacing, className, childContainerComponent }) {
+function LabelledSectionText({
+  children,
+  label,
+  iconTooltipText,
+  bottomSpacing,
+  className,
+  childContainerComponent = 'p',
+}) {
   return (
     <StyledDiv className={className} $bottomSpacing={bottomSpacing}>
       <Flex>
