@@ -75,13 +75,12 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
   } = useVisualizationStore(visualizationStoreSelector);
 
   // Propagate UUID to the store if there is a notebook so we can display the download button when the visualization is expanded
+  // Reruns every time vizIsFullscreen changes to ensure the proper notebook's UUID is used
   useEffect(() => {
     if (hasNotebook) {
       setVizNotebookId(uuid);
-    } else {
-      setVizNotebookId(null);
     }
-  }, [hasNotebook, setVizNotebookId, uuid]);
+  }, [hasNotebook, vizIsFullscreen, setVizNotebookId, uuid]);
 
   const [vitessceErrors, setVitessceErrors] = useState([]);
   const [isVisibleFirefoxWarning, setIsVisibleFirefoxWarning] = useState(sniffBrowser() === 'Firefox');
