@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { AppContext } from 'js/components/Providers';
