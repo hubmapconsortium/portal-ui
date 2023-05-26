@@ -1,1 +1,1 @@
-- Add Jupyter Notebook download button to expanded visualization view
+- Add Jupyter Notebook download button to expanded visualization view.
