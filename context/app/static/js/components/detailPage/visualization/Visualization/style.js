@@ -9,9 +9,7 @@ import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/Entity
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 
-const totalHeightOffset = window.location.pathname.startsWith('/preview')
-  ? headerHeight
-  : headerHeight + entityHeaderHeight;
+const totalHeightOffset = headerHeight + entityHeaderHeight;
 
 const vitessceFixedHeight = 600;
 
