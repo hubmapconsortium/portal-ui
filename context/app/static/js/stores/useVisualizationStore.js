@@ -27,6 +27,8 @@ const useVisualizationStore = create((set) => ({
   setOnCopyUrlWarning: (val) => set({ onCopyUrlWarning: val }),
   onCopyUrlSnackbarOpen: false,
   setOnCopyUrlSnackbarOpen: (val) => set({ onCopyUrlSnackbarOpen: val }),
+  vizNotebookId: null,
+  setVizNotebookId: (val) => set({ vizNotebookId: val }),
 }));
 
 export default useVisualizationStore;

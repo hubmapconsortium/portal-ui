@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { AppContext } from 'js/components/Providers';
@@ -154,7 +154,9 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
   useSendUUIDEvent(entity_type, uuid);
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
-  setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ });
+  useEffect(() => {
+    setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ });
+  }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, setAssayMetadata]);
 
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
   return (
