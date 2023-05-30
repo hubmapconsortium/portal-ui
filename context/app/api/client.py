@@ -500,11 +500,12 @@ def _create_vitessce_error(error):
         'version': '1.0.4',
         'datasets': [],
         'initStrategy': 'none',
-        'layout': [{
-                        'component': 'description',
-                        "props": {
-                            "description": format('Error while generating the Vitessce configuration: ' + error),
-                        },
-            'x': 0, 'y': 0, 'w': 12, 'h': 1
-        }],
+        'layout': [
+            {
+                'component': 'description',
+                "props": {
+                    "description": 'Error while generating the Vitessce configuration: ' + error,
+                },
+                'x': 0, 'y': 0, 'w': 12, 'h': 1
+            }],
     }, None)
