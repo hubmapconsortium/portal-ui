@@ -21,6 +21,13 @@ class VitessceConfLiftedUUID:
     vis_lifted_uuid: str
 
 
+@dataclass
+class PublicationJSONLiftedUUID:
+    publication_json: dict
+    vis_lifted_uuid: str
+
+
+
 def _get_hits(response_json):
     '''
     The repeated key makes error messages ambiguous.
@@ -283,6 +290,7 @@ class ApiClient():
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
         publication_json = {}
+        publication_ancillary_uuid= None
         publication_ancillary_descendant = self.get_descendant_to_lift('publication_ancillary',
                                                                        entity["uuid"])
         if publication_ancillary_descendant:
@@ -296,7 +304,9 @@ class ApiClient():
                 current_app.logger.error(
                     f'Fetching publication ancillary json threw error: {traceback.format_exc()}')
 
-        return publication_json
+        return PublicationJSONLiftedUUID(
+            publication_json=publication_json, 
+            vis_lifted_uuid=publication_ancillary_uuid)
 
 
 def _make_query(constraints, uuids):

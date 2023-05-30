@@ -65,7 +65,10 @@ def details(type, uuid):
         })
 
     if type == 'publication':
-        flask_data.update({'vignette_json': client.get_publication_ancillary_json(entity)})
+        publication_anicillary_data = client.get_publication_ancillary_json(entity)
+        flask_data.update({'vignette_json': publication_anicillary_data.publication_json,
+                           'vis_lifted_uuid': publication_anicillary_data.vis_lifted_uuid
+                           })
 
     template = 'base-pages/react-content.html'
     return render_template(
