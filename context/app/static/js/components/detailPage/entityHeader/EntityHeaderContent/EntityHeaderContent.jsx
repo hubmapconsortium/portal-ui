@@ -29,6 +29,7 @@ const entityToFieldsMap = {
     title: ({ title }) => title,
     'publication venue': ({ publication_venue }) => publication_venue,
   },
+  Support: {},
 };
 
 const AnimatedFlexContainer = animated(FlexContainer);
@@ -54,9 +55,11 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
             <>
               <StyledSvgIcon component={entityIconMap[entity_type]} />
               <EntityHeaderItem text={hubmap_id} />
-              {Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
-                <EntityHeaderItem text={fn(assayMetadata) || `undefined ${label}`} key={label} />
-              ))}
+              {entity_type in entityToFieldsMap
+                ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
+                    <EntityHeaderItem text={fn(assayMetadata) || `undefined ${label}`} key={label} />
+                  ))
+                : `No fields defined for entity type ${entity_type}`}
             </>
           )}
           {vizIsFullscreen && (
