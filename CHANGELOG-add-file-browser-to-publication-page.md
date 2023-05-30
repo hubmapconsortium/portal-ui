@@ -1,0 +1,1 @@
+- Add files section to publication page.

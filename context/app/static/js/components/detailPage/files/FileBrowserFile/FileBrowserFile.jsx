@@ -20,6 +20,7 @@ function FileBrowserFile({ fileObj, depth }) {
 
   const fileUrl = `${assetsEndpoint}/${uuid}/${fileObj.rel_path}${tokenParam}`;
 
+  // colSpan in FileBrowserDirectory should match the number of cells in the row.
   return (
     <StyledRow>
       <td>

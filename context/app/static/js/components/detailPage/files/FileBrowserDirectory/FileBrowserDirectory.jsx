@@ -31,7 +31,8 @@ function FileBrowserDirectory({ dirName, children, depth }) {
         role="button"
         tabIndex="0"
       >
-        <td>
+        <td colSpan={4}>
+          {/* colSpan should match the number of cells in a FileBrowserFile row. */}
           <Directory $depth={depth}>
             {isExpanded ? (
               <>
@@ -47,8 +48,6 @@ function FileBrowserDirectory({ dirName, children, depth }) {
             {dirName}
           </Directory>
         </td>
-        <td />
-        <td />
       </StyledTableRow>
       {isExpanded && children}
     </>
