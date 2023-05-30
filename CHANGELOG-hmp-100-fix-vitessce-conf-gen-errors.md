@@ -1,0 +1,3 @@
+- Fixed support page entity header so the application doesn't crash to a white screen when scrolling down on Support entities' pages.
+- Add error handling for cases where the image pyramid descendants are missing file metadata.
+- Add more informative error messages on vitessce conf gen failures
