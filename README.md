@@ -111,6 +111,7 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
         - ```brew install pyenv```
         - ```brew install pyenv-virtualenv```
         - ```pyenv install `cat .python-version` ```
+        - ```pyenv virtualenv `cat .python-version` portal```
         - ```pyenv activate portal```
     
 - `nodejs/npm`: Suggest [installing nvm](https://github.com/nvm-sh/nvm#installing-and-updating) and then using it to install the appropriate node version: `nvm install`.
