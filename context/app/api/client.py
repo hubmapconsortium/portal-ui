@@ -177,18 +177,17 @@ class ApiClient():
             # TODO: Entity structure will change in the future to be consistent
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
-            
 
             metadata = derived_entity.get('metadata', {})
 
             if (metadata.get('files')):
                 derived_entity['files'] = metadata.get('files', [])
                 vitessce_conf = self.get_vitessce_conf_cells_and_lifted_uuid(
-                    derived_entity, marker=marker, wrap_error=wrap_error
-                ).vitessce_conf
-                vis_lifted_uuid = derived_entity['uuid'] 
-            else: # no files
-                vitessce_conf = _create_vitessce_error('No files found in lifted image pyramid descendants metadata.')
+                    derived_entity, marker=marker, wrap_error=wrap_error).vitessce_conf
+                vis_lifted_uuid = derived_entity['uuid']
+            else:  # no files
+                vitessce_conf = _create_vitessce_error(
+                    'No files found in lifted image pyramid descendants metadata.')
 
         elif not entity.get('files') or not entity.get('data_types'):
             vitessce_conf = ConfCells(None, None)
@@ -494,17 +493,18 @@ def _get_latest_uuid(revisions):
     return max(clean_revisions,
                key=lambda revision: revision['revision_number'])['uuid']
 
+
 def _create_vitessce_error(error):
     return ConfCells({
-                    'name': 'Error',
-                    'version': '1.0.4',
-                    'datasets': [],
-                    'initStrategy': 'none',
-                    'layout': [{
+        'name': 'Error',
+        'version': '1.0.4',
+        'datasets': [],
+        'initStrategy': 'none',
+        'layout': [{
                         'component': 'description',
                         "props": {
                             "description": format('Error while generating the Vitessce configuration: ' + error),
                         },
-                        'x': 0, 'y': 0, 'w': 12, 'h': 1
-                    }],
-                }, None)
+            'x': 0, 'y': 0, 'w': 12, 'h': 1
+        }],
+    }, None)
