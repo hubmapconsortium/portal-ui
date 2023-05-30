@@ -1,1 +1,0 @@
-- Update workspace creation on workspaces page to create a blank notebook.

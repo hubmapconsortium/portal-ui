@@ -1,3 +1,22 @@
+## v0.71.0 - 2023-05-30
+
+- Add files section to publication page.
+- Update from deprecated createMuiTheme function to createTheme.
+- Add propTypes entry for vignette_json.
+- Fix proptypes error with DOI string being passed as boolean.
+- Fix semantically invalid HTML nesting errors (ul inside of p, p inside of p).
+- Import Accordion instead of deprecated ExpansionPanel.
+- Add handling for SUBMITTED status to StatusIcon.
+- Update workspace creation on workspaces page to create a blank notebook.
+- Fix issues switching between different visualizations on the Publication page
+- Fix overlap between expanded preview visualization and its header.
+- Add Jupyter Notebook download button to expanded visualization view.
+- Lift publication vignette data from publication ancillary dataset.
+- Update development setup in README.
+- Start workspace jobs on workspaces page not loading page.
+- Update portal-visualization to 0.0.10.
+
+
 ## v0.69.1 - 2023-05-01
 
 - Replace toSorted which firefox does not support.

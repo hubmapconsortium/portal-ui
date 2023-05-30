@@ -1,1 +1,0 @@
-- Lift publication vignette data from publication ancillary dataset.

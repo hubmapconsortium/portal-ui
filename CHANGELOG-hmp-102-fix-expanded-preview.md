@@ -1,1 +1,0 @@
-- Fix overlap between expanded preview visualization and its header.

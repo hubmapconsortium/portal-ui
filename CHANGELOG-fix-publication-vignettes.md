@@ -1,1 +1,0 @@
-- Fix issues switching between different visualizations on the Publication page
