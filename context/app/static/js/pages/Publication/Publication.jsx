@@ -7,6 +7,7 @@ import { getCombinedDatasetStatus, getSectionOrder } from 'js/components/detailP
 import PublicationSummary from 'js/components/publications/PublicationSummary';
 import PublicationsVisualizationSection from 'js/components/publications/PublicationVisualizationsSection/';
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
+import Files from 'js/components/detailPage/files/Files';
 import useEntityStore from 'js/stores/useEntityStore';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
@@ -23,6 +24,7 @@ function Publication({ publication, vignette_json }) {
     contributors,
     ancestor_ids,
     publication_venue,
+    files,
   } = publication;
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
@@ -32,10 +34,11 @@ function Publication({ publication, vignette_json }) {
 
   const shouldDisplaySection = {
     visualizations: Boolean(Object.keys(vignette_json).length),
+    files: true,
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'data', 'visualizations', 'authors', 'provenance'],
+    ['summary', 'data', 'visualizations', 'files', 'authors', 'provenance'],
     shouldDisplaySection,
   );
 
@@ -50,6 +53,7 @@ function Publication({ publication, vignette_json }) {
       {shouldDisplaySection.visualizations && (
         <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
       )}
+      <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />
       <ContributorsTable contributors={contributors} title="Authors" />
       <ProvSection uuid={uuid} assayMetadata={publication} />
     </DetailLayout>
