@@ -173,7 +173,7 @@ class ApiClient():
 
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         if image_pyramid_descendants:
-            derived_entity = {} # image_pyramid_descendants
+            derived_entity = image_pyramid_descendants
             # TODO: Entity structure will change in the future to be consistent
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
