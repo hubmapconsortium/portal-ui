@@ -11,7 +11,7 @@ function CollectionsSection({ collectionsData }) {
   return (
     <DetailPageSection id="collections">
       <SectionHeader>Collections</SectionHeader>
-      <PanelList panelsProps={panelsProps} />;
+      <PanelList panelsProps={panelsProps} />
     </DetailPageSection>
   );
 }
