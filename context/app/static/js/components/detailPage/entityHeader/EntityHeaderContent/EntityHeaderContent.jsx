@@ -29,6 +29,7 @@ const entityToFieldsMap = {
     title: ({ title }) => title,
     'publication venue': ({ publication_venue }) => publication_venue,
   },
+  // Don't display any header items for Support entities
   Support: {},
 };
 
