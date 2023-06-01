@@ -180,14 +180,15 @@ class ApiClient():
 
             metadata = derived_entity.get('metadata', {})
 
-            if (metadata.get('files')):
+            if metadata.get('files'):
                 derived_entity['files'] = metadata.get('files', [])
                 vitessce_conf = self.get_vitessce_conf_cells_and_lifted_uuid(
                     derived_entity, marker=marker, wrap_error=wrap_error).vitessce_conf
                 vis_lifted_uuid = derived_entity['uuid']
             else:  # no files
-                vitessce_conf = _create_vitessce_error(
-                    'No files found in lifted image pyramid descendants metadata.')
+                error = f'Related entity {derived_entity["uuid"]} is missing files information in its metadata.'
+                current_app.logger.info(f'Missing metadata error encountered in dataset {entity["uuid"]}: {error}')
+                vitessce_conf = _create_vitessce_error(error)
 
         elif not entity.get('files') or not entity.get('data_types'):
             vitessce_conf = ConfCells(None, None)
