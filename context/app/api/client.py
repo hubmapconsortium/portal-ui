@@ -186,8 +186,8 @@ class ApiClient():
                     derived_entity, marker=marker, wrap_error=wrap_error).vitessce_conf
                 vis_lifted_uuid = derived_entity['uuid']
             else:  # no files
-                error = f'Related entity {derived_entity["uuid"]} \
-                    is missing files information in its metadata.'
+                error = f'Related image entity {derived_entity["uuid"]} \
+                    is missing file information (no "files" key found in its metadata).'
                 current_app.logger.info(
                     f'Missing metadata error encountered in dataset \
                         {entity["uuid"]}: {error}')
