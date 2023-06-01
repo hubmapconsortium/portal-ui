@@ -29,8 +29,6 @@ const entityToFieldsMap = {
     title: ({ title }) => title,
     'publication venue': ({ publication_venue }) => publication_venue,
   },
-  // Don't display any header items for Support entities
-  Support: {},
 };
 
 const AnimatedFlexContainer = animated(FlexContainer);
@@ -60,7 +58,7 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
                 ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
                     <EntityHeaderItem text={fn(assayMetadata) || `undefined ${label}`} key={label} />
                   ))
-                : `No fields defined for entity type ${entity_type}`}
+                : null}
             </>
           )}
           {vizIsFullscreen && (
