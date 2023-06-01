@@ -54,9 +54,11 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
             <>
               <StyledSvgIcon component={entityIconMap[entity_type]} />
               <EntityHeaderItem text={hubmap_id} />
-              {Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
-                <EntityHeaderItem text={fn(assayMetadata) || `undefined ${label}`} key={label} />
-              ))}
+              {entity_type in entityToFieldsMap
+                ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
+                    <EntityHeaderItem text={fn(assayMetadata) || `undefined ${label}`} key={label} />
+                  ))
+                : null}
             </>
           )}
           {vizIsFullscreen && (

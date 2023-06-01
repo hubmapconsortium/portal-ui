@@ -183,11 +183,21 @@ class ApiClient():
             # TODO: Entity structure will change in the future to be consistent
             # about "files". Bill confirms that when the new structure comes in
             # there will be a period of backward compatibility to allow us to migrate.
-            derived_entity['files'] = derived_entity['metadata'].get('files', [])
-            vitessce_conf = self.get_vitessce_conf_cells_and_lifted_uuid(
-                derived_entity, marker=marker, wrap_error=wrap_error
-            ).vitessce_conf
-            vis_lifted_uuid = derived_entity['uuid']
+
+            metadata = derived_entity.get('metadata', {})
+
+            if metadata.get('files'):
+                derived_entity['files'] = metadata.get('files', [])
+                vitessce_conf = self.get_vitessce_conf_cells_and_lifted_uuid(
+                    derived_entity, marker=marker, wrap_error=wrap_error).vitessce_conf
+                vis_lifted_uuid = derived_entity['uuid']
+            else:  # no files
+                error = f'Related image entity {derived_entity["uuid"]} \
+                    is missing file information (no "files" key found in its metadata).'
+                current_app.logger.info(
+                    f'Missing metadata error encountered in dataset \
+                        {entity["uuid"]}: {error}')
+                vitessce_conf = _create_vitessce_error(error)
 
         elif not entity.get('files') or not entity.get('data_types'):
             vitessce_conf = ConfCells(None, None)
@@ -208,19 +218,7 @@ class ApiClient():
                     raise e
                 current_app.logger.error(
                     f'Building vitessce conf threw error: {traceback.format_exc()}')
-                vitessce_conf = ConfCells({
-                    'name': 'Error',
-                    'version': '1.0.4',
-                    'datasets': [],
-                    'initStrategy': 'none',
-                    'layout': [{
-                        'component': 'description',
-                        "props": {
-                            "description": 'Error while generating the Vitessce configuration'
-                        },
-                        'x': 0, 'y': 0, 'w': 12, 'h': 1
-                    }],
-                }, None)
+                vitessce_conf = _create_vitessce_error(str(e))
 
         return VitessceConfLiftedUUID(
             vitessce_conf=vitessce_conf,
@@ -507,3 +505,20 @@ def _get_latest_uuid(revisions):
     ]
     return max(clean_revisions,
                key=lambda revision: revision['revision_number'])['uuid']
+
+
+def _create_vitessce_error(error):
+    return ConfCells({
+        'name': 'Error',
+        'version': '1.0.4',
+        'datasets': [],
+        'initStrategy': 'none',
+        'layout': [
+            {
+                'component': 'description',
+                "props": {
+                    "description": 'Error while generating the Vitessce configuration: ' + error,
+                },
+                'x': 0, 'y': 0, 'w': 12, 'h': 1
+            }],
+    }, None)
