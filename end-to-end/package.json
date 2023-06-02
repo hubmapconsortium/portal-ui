@@ -3,11 +3,10 @@
   "version": "0.0.1",
   "description": "This segregates the test-only dependencies from those required for the build.",
   "main": "index.js",
-  "dependencies": {},
   "devDependencies": {
-    "@testing-library/cypress": "^7.0.3",
+    "@testing-library/cypress": "^9.0.0",
     "artillery": "^1.6.1",
-    "cypress": "^6.2.1"
+    "cypress": "^12.13.0"
   },
   "scripts": {
     "cypress:open": "cypress open",
