@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-
+import React, { useEffect, useContext } from 'react';
+import { FlaskDataContext } from 'js/components/App';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
@@ -15,7 +15,10 @@ import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/Der
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
-function DonorDetail({ assayMetadata }) {
+function DonorDetail() {
+  const { entity } = useContext(FlaskDataContext);
+  const assayMetadata = entity;
+
   const {
     uuid,
     protocol_url,

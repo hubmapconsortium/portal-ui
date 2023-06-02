@@ -29,6 +29,8 @@ const workspacesUsers = [
   'geremy.clair@pnnl.gov',
 ];
 
+const FlaskDataContext = React.createContext({});
+
 function App(props) {
   const { flaskData, groupsToken, isAuthenticated, userEmail, workspacesToken, userGroups = [] } = props;
   const { endpoints, globalAlertMd } = flaskData;
@@ -55,10 +57,12 @@ function App(props) {
           </StyledAlert>
         </FlexContainer>
       )}
-      <Routes flaskData={flaskData} />
+      <FlaskDataContext.Provider value={flaskData}>
+        <Routes flaskData={flaskData} />
+      </FlaskDataContext.Provider>
       <Footer />
     </Providers>
   );
 }
-
+export { FlaskDataContext };
 export default App;
