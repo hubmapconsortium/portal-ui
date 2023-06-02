@@ -32,9 +32,9 @@ function usePublications() {
 
       if (!publication_status) {
         acc.preprint.push(publicationProps);
+      } else {
+        acc.published.push(publicationProps);
       }
-
-      acc.published.push(publicationProps);
 
       return acc;
     },

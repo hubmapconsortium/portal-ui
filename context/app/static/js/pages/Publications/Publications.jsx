@@ -28,9 +28,15 @@ function Publications() {
       subtitle={publicationsCount > 0 && `${publicationsCount} Publications`}
       description={<Description />}
     >
-      <StyledTabs value={openTabIndex} onChange={handleChange} aria-label="Published and preprint publications">
+      <StyledTabs
+        data-testid="publication-tabs"
+        value={openTabIndex}
+        onChange={handleChange}
+        aria-label="Published and preprint publications"
+      >
         {Object.entries(publicationsPanelsPropsSeparatedByStatus).map(([publicationStatus, panelsProps], i) => (
           <Tab
+            data-testid={`publication-tab-${publicationStatus.toLowerCase()}`}
             label={`${publicationStatus} (${panelsProps.length})`}
             index={i}
             key={publicationStatus}
