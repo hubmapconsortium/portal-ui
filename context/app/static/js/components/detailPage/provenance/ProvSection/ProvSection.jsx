@@ -29,7 +29,7 @@ function ProvSection() {
     <DetailPageSection id="provenance">
       <SectionHeader>Provenance</SectionHeader>
       {provData ? (
-        <ProvTabs uuid={uuid} assayMetadata={assayMetadata} provData={provData} />
+        <ProvTabs provData={provData} />
       ) : (
         <Alert severity="warning">
           {`We were unable to retrieve provenance information for this ${entity_type.toLowerCase()}.`}

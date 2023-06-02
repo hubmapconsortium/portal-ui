@@ -1,18 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import { FlaskDataContext } from 'js/components/App';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
 
 function Summary({
-  title,
-  entity_type,
-  created_timestamp,
   published_timestamp,
-  last_modified_timestamp,
-  uuid,
-  description,
   status,
   children,
   mapped_data_access_level,
@@ -24,6 +19,12 @@ function Summary({
   collectionName,
   mapped_external_group_name,
 }) {
+  const { entity } = useContext(FlaskDataContext);
+  const assayMetadata = entity;
+
+  const { uuid, entity_type, hubmap_id, created_timestamp, last_modified_timestamp, description } = assayMetadata;
+  const title = hubmap_id;
+
   return (
     <DetailPageSection id="summary">
       <SummaryData
@@ -53,12 +54,6 @@ function Summary({
 }
 
 Summary.propTypes = {
-  title: PropTypes.string.isRequired,
-  entity_type: PropTypes.string.isRequired,
-  uuid: PropTypes.string.isRequired,
-  created_timestamp: PropTypes.number,
-  last_modified_timestamp: PropTypes.number,
-  description: PropTypes.string,
   status: PropTypes.string,
   mapped_data_access_level: PropTypes.string,
   entityCanBeSaved: PropTypes.bool,
@@ -67,9 +62,6 @@ Summary.propTypes = {
 };
 
 Summary.defaultProps = {
-  created_timestamp: undefined,
-  last_modified_timestamp: undefined,
-  description: '',
   status: '',
   mapped_data_access_level: '',
   entityCanBeSaved: true,
