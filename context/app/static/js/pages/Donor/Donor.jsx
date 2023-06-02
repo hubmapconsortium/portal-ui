@@ -28,9 +28,6 @@ function DonorDetail() {
     created_by_user_email,
     hubmap_id,
     entity_type,
-    created_timestamp,
-    last_modified_timestamp,
-    description,
     mapped_metadata = {},
     // As data comes in from other consortia, we won't be able
     // to rely on donor metadata always being available.
@@ -59,15 +56,7 @@ function DonorDetail() {
   return (
     <DetailContext.Provider value={{ hubmap_id, uuid }}>
       <DetailLayout sectionOrder={sectionOrder}>
-        <Summary
-          uuid={uuid}
-          entity_type={entity_type}
-          title={hubmap_id}
-          created_timestamp={created_timestamp}
-          last_modified_timestamp={last_modified_timestamp}
-          description={description}
-          group_name={group_name}
-        />
+        <Summary />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} hubmap_id={hubmap_id} />}
         <DerivedEntitiesSection uuid={uuid} entityType={entity_type} sectionId="derived" />
         <ProvSection />
