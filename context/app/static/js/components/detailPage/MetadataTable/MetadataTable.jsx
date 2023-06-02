@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { FlaskDataContext } from 'js/components/App';
+import React from 'react';
+import { useFlaskDataContext } from 'js/components/Providers';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -50,8 +50,9 @@ function tableDataToRows(tableData) {
 }
 
 function MetadataTable() {
-  const { entity: assayMetadata } = useContext(FlaskDataContext);
-  const { mapped_metadata, hubmap_id } = assayMetadata;
+  const {
+    entity: { mapped_metadata, hubmap_id },
+  } = useFlaskDataContext();
   const tableData = mapped_metadata || {};
 
   const columns = [

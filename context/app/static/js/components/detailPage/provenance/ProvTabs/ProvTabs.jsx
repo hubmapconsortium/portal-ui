@@ -1,8 +1,6 @@
-import React, { useContext } from 'react';
-
+import React from 'react';
 import Paper from '@material-ui/core/Paper';
-
-import { FlaskDataContext } from 'js/components/App';
+import { useFlaskDataContext } from 'js/components/Providers';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
@@ -10,10 +8,7 @@ import ProvAnalysisDetails from '../ProvAnalysisDetails';
 import { hasDataTypes } from './utils';
 
 function ProvTabs({ provData }) {
-  const { entity } = useContext(FlaskDataContext);
-  const assayMetadata = entity;
-
-  const { uuid, metadata, entity_type, ancestors, data_types } = assayMetadata;
+  const { uuid, metadata, entity_type, ancestors, data_types } = useFlaskDataContext();
 
   const [open, setOpen] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -39,7 +34,7 @@ function ProvTabs({ provData }) {
       </Tabs>
       {shouldDisplayTable && (
         <TabPanel value={open} index={0} pad={1}>
-          <ProvTable uuid={uuid} ancestors={ancestors} assayMetadata={assayMetadata} />
+          <ProvTable uuid={uuid} ancestors={ancestors} />
         </TabPanel>
       )}
       <TabPanel value={open} index={graphIndex}>
