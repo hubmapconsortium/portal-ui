@@ -1,3 +1,2 @@
 - Context was set up in the App file to begin transition of prop drilling to context.
 - Prop drilling to context was completed for Donor page.
-- Refactored AppContext for code consistency. 
