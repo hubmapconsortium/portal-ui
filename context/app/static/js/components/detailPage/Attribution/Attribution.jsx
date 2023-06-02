@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
-import { FlaskDataContext } from 'js/components/App';
+import { useFlaskDataContext } from 'js/components/Providers';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
@@ -8,8 +8,9 @@ import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 
 function Attribution() {
-  const { entity: assayMetadata } = useContext(FlaskDataContext);
-  const { group_name, created_by_user_displayname, created_by_user_email } = assayMetadata;
+  const {
+    entity: { group_name, created_by_user_displayname, created_by_user_email },
+  } = useFlaskDataContext();
 
   return (
     <DetailPageSection id="attribution">
