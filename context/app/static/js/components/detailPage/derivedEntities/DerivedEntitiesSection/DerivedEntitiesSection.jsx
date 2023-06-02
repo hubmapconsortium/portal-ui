@@ -10,7 +10,6 @@ function DerivedEntitiesSection() {
   const { entity: assayMetadata } = useContext(FlaskDataContext);
   const { uuid, entityType } = assayMetadata;
   const [openIndex, setOpenIndex] = useState(0);
-
   const { entities, isLoading } = useDerivedEntitiesSection(uuid);
 
   return (

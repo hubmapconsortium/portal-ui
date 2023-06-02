@@ -9,7 +9,6 @@ import SectionItem from '../SectionItem';
 
 function Attribution() {
   const { entity: assayMetadata } = useContext(FlaskDataContext);
-
   const { group_name, created_by_user_displayname, created_by_user_email } = assayMetadata;
 
   return (

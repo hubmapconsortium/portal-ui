@@ -18,7 +18,6 @@ const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DonorDetail() {
   const { entity: assayMetadata } = useContext(FlaskDataContext);
-
   const {
     uuid,
     protocol_url,
