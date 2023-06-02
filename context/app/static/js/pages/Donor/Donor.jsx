@@ -1,6 +1,6 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 
-import { FlaskDataContext } from 'js/components/App';
+import { useFlaskDataContext } from 'js/components/Providers';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
@@ -17,17 +17,9 @@ import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/Der
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DonorDetail() {
-  const { entity: assayMetadata } = useContext(FlaskDataContext);
   const {
-    uuid,
-    protocol_url,
-    hubmap_id,
-    entity_type,
-    mapped_metadata = {},
-    // As data comes in from other consortia, we won't be able
-    // to rely on donor metadata always being available.
-    // Unpublished HuBMAP data may also be missing donor metadata.
-  } = assayMetadata;
+    entity: { uuid, protocol_url, hubmap_id, entity_type, mapped_metadata = {} },
+  } = useFlaskDataContext();
 
   const { sex, race, age_value, age_unit } = mapped_metadata;
 

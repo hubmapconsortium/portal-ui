@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ThemeProvider } from 'styled-components';
 
 import PropTypes from 'prop-types';
@@ -15,6 +15,8 @@ const generateClassName = createGenerateClassName({
 });
 
 const AppContext = React.createContext({});
+const FlaskDataContext = React.createContext({});
+FlaskDataContext.displayName = 'FlaskDataContext';
 
 function Providers({
   endpoints,
@@ -24,6 +26,7 @@ function Providers({
   children,
   workspacesToken,
   isWorkspacesUser,
+  flaskData,
 }) {
   // injectFirst ensures styled-components takes priority over mui for styling
   return (
@@ -34,9 +37,11 @@ function Providers({
           <AppContext.Provider
             value={{ groupsToken, workspacesToken, isWorkspacesUser, isAuthenticated, userEmail, ...endpoints }}
           >
-            <CssBaseline />
-            <GlobalStyles />
-            {children}
+            <FlaskDataContext.Provider value={flaskData}>
+              <CssBaseline />
+              <GlobalStyles />
+              {children}
+            </FlaskDataContext.Provider>
           </AppContext.Provider>
         </ThemeProvider>
       </MuiThemeProvider>
@@ -49,4 +54,5 @@ Providers.propTypes = {
 };
 
 export { AppContext };
+export const useFlaskDataContext = () => useContext(FlaskDataContext);
 export default Providers;

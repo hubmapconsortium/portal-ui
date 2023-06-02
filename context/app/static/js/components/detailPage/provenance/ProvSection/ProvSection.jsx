@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 
-import { AppContext } from 'js/components/Providers';
-import { FlaskDataContext } from 'js/components/App';
+import { AppContext, useFlaskDataContext } from 'js/components/Providers';
 import useProvData from 'js/hooks/useProvData';
 import { Alert } from 'js/shared-styles/alerts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -9,8 +8,9 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import ProvTabs from '../ProvTabs';
 
 function ProvSection() {
-  const { entity: assayMetadata } = useContext(FlaskDataContext);
-  const { uuid, entity_type } = assayMetadata;
+  const {
+    entity: { uuid, entity_type },
+  } = useFlaskDataContext();
   const { groupsToken, entityEndpoint } = useContext(AppContext);
   const { provData, isLoading } = useProvData(uuid, entityEndpoint, groupsToken);
 

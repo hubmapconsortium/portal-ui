@@ -1,14 +1,15 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 
-import { FlaskDataContext } from 'js/components/App';
+import { useFlaskDataContext } from 'js/components/Providers';
 import RelatedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import RelatedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
 import { useDerivedEntitiesSection } from './hooks';
 
 function DerivedEntitiesSection() {
-  const { entity: assayMetadata } = useContext(FlaskDataContext);
-  const { uuid, entityType } = assayMetadata;
+  const {
+    entity: { uuid, entityType },
+  } = useFlaskDataContext();
   const [openIndex, setOpenIndex] = useState(0);
   const { entities, isLoading } = useDerivedEntitiesSection(uuid);
 

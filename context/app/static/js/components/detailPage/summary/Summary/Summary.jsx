@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-import { FlaskDataContext } from 'js/components/App';
+import { useFlaskDataContext } from 'js/components/Providers';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
@@ -19,8 +19,9 @@ function Summary({
   collectionName,
   mapped_external_group_name,
 }) {
-  const { entity: assayMetadata } = useContext(FlaskDataContext);
-  const { uuid, entity_type, hubmap_id, created_timestamp, last_modified_timestamp, description } = assayMetadata;
+  const {
+    entity: { uuid, entity_type, hubmap_id, created_timestamp, last_modified_timestamp, description },
+  } = useFlaskDataContext();
   const title = hubmap_id;
 
   return (

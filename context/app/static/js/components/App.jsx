@@ -47,6 +47,7 @@ function App(props) {
       userEmail={userEmail}
       workspacesToken={workspacesToken}
       isWorkspacesUser={isWorkspacesUser}
+      flaskData={flaskData}
     >
       <Header />
       {globalAlertMd && (
