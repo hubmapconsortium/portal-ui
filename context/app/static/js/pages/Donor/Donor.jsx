@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-
 import { useFlaskDataContext } from 'js/components/Providers';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -9,7 +8,6 @@ import Protocol from 'js/components/detailPage/Protocol';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-
 import DetailContext from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
 import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
@@ -18,9 +16,18 @@ const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DonorDetail() {
   const {
-    entity: { uuid, protocol_url, hubmap_id, entity_type, mapped_metadata = {} },
+    entity: {
+      uuid,
+      protocol_url,
+      hubmap_id,
+      entity_type,
+      mapped_metadata = {},
+      created_timestamp,
+      last_modified_timestamp,
+      description,
+      group_name,
+    },
   } = useFlaskDataContext();
-
   const { sex, race, age_value, age_unit } = mapped_metadata;
 
   const shouldDisplaySection = {
@@ -35,7 +42,14 @@ function DonorDetail() {
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
   useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, sex, race, age_value, age_unit });
+    setAssayMetadata({
+      hubmap_id,
+      entity_type,
+      sex,
+      race,
+      age_value,
+      age_unit,
+    });
   }, [hubmap_id, entity_type, sex, race, age_value, age_unit, setAssayMetadata]);
 
   useSendUUIDEvent(entity_type, uuid);
@@ -43,7 +57,15 @@ function DonorDetail() {
   return (
     <DetailContext.Provider value={{ hubmap_id, uuid }}>
       <DetailLayout sectionOrder={sectionOrder}>
-        <Summary />
+        <Summary
+          uuid={uuid}
+          entity_type={entity_type}
+          title={hubmap_id}
+          created_timestamp={created_timestamp}
+          last_modified_timestamp={last_modified_timestamp}
+          description={description}
+          group_name={group_name}
+        />
         {shouldDisplaySection.metadata && <MetadataTable />}
         <DerivedEntitiesSection sectionId="derived" />
         <ProvSection />

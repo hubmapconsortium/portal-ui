@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useFlaskDataContext } from 'js/components/Providers';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';

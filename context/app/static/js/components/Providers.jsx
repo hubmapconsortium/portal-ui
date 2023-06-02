@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
 import { ThemeProvider } from 'styled-components';
-
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
 import GlobalStyles from 'js/components/globalStyles';
 import theme from '../theme';
 import GlobalFonts from '../fonts';

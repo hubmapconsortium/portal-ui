@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import { useFlaskDataContext } from 'js/components/Providers';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
 
 function Summary({
+  title,
+  entity_type,
+  created_timestamp,
   published_timestamp,
+  last_modified_timestamp,
+  uuid,
+  description,
   status,
   children,
   mapped_data_access_level,
@@ -19,11 +23,6 @@ function Summary({
   collectionName,
   mapped_external_group_name,
 }) {
-  const {
-    entity: { uuid, entity_type, hubmap_id, created_timestamp, last_modified_timestamp, description },
-  } = useFlaskDataContext();
-  const title = hubmap_id;
-
   return (
     <DetailPageSection id="summary">
       <SummaryData

@@ -9,7 +9,6 @@ function ProvTable() {
   // Make a new list rather modifying old one in place: Caused duplication in UI.
   const { entity: assayMetadata } = useFlaskDataContext();
   const { ancestors, uuid } = assayMetadata;
-
   const ancestorsAndSelf = [...ancestors, assayMetadata];
 
   const ancestorsAndSelfByType = ancestorsAndSelf.reduce(
