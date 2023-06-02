@@ -22,9 +22,6 @@ function DonorDetail() {
   const {
     uuid,
     protocol_url,
-    group_name,
-    created_by_user_displayname,
-    created_by_user_email,
     hubmap_id,
     entity_type,
     mapped_metadata = {},
@@ -57,14 +54,10 @@ function DonorDetail() {
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary />
         {shouldDisplaySection.metadata && <MetadataTable />}
-        <DerivedEntitiesSection uuid={uuid} entityType={entity_type} sectionId="derived" />
+        <DerivedEntitiesSection sectionId="derived" />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        <Attribution
-          group_name={group_name}
-          created_by_user_displayname={created_by_user_displayname}
-          created_by_user_email={created_by_user_email}
-        />
+        <Attribution />
       </DetailLayout>
     </DetailContext.Provider>
   );

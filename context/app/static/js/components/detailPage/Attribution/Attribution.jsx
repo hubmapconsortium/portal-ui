@@ -1,13 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 
+import { FlaskDataContext } from 'js/components/App';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 
-function Attribution({ group_name, created_by_user_displayname, created_by_user_email }) {
+function Attribution() {
+  const { entity: assayMetadata } = useContext(FlaskDataContext);
+
+  const { group_name, created_by_user_displayname, created_by_user_email } = assayMetadata;
+
   return (
     <DetailPageSection id="attribution">
       <SectionHeader>Attribution</SectionHeader>
@@ -23,11 +27,5 @@ function Attribution({ group_name, created_by_user_displayname, created_by_user_
     </DetailPageSection>
   );
 }
-
-Attribution.propTypes = {
-  group_name: PropTypes.string.isRequired,
-  created_by_user_displayname: PropTypes.string.isRequired,
-  created_by_user_email: PropTypes.string.isRequired,
-};
 
 export default React.memo(Attribution);

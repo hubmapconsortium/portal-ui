@@ -10,8 +10,7 @@ import ProvTabs from '../ProvTabs';
 
 function ProvSection() {
   const { entity: assayMetadata } = useContext(FlaskDataContext);
-  const { uuid } = assayMetadata;
-  const { entity_type } = assayMetadata;
+  const { uuid, entity_type } = assayMetadata;
   const { groupsToken, entityEndpoint } = useContext(AppContext);
   const { provData, isLoading } = useProvData(uuid, entityEndpoint, groupsToken);
 
