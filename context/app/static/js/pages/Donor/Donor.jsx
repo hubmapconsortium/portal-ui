@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from 'react';
+
 import { FlaskDataContext } from 'js/components/App';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -69,7 +70,7 @@ function DonorDetail() {
         />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} hubmap_id={hubmap_id} />}
         <DerivedEntitiesSection uuid={uuid} entityType={entity_type} sectionId="derived" />
-        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
+        <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         <Attribution
           group_name={group_name}

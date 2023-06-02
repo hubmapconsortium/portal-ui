@@ -1,14 +1,18 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 
 import { AppContext } from 'js/components/Providers';
+import { FlaskDataContext } from 'js/components/App';
 import useProvData from 'js/hooks/useProvData';
 import { Alert } from 'js/shared-styles/alerts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import ProvTabs from '../ProvTabs';
 
-function ProvSection({ uuid, assayMetadata }) {
+function ProvSection() {
+  const { entity } = useContext(FlaskDataContext);
+  const assayMetadata = entity;
+
+  const { uuid } = assayMetadata;
   const { entity_type } = assayMetadata;
   const { groupsToken, entityEndpoint } = useContext(AppContext);
   const { provData, isLoading } = useProvData(uuid, entityEndpoint, groupsToken);
@@ -34,11 +38,5 @@ function ProvSection({ uuid, assayMetadata }) {
     </DetailPageSection>
   );
 }
-
-ProvSection.propTypes = {
-  uuid: PropTypes.string.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  assayMetadata: PropTypes.object.isRequired,
-};
 
 export default ProvSection;
