@@ -9,9 +9,7 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import ProvTabs from '../ProvTabs';
 
 function ProvSection() {
-  const { entity } = useContext(FlaskDataContext);
-  const assayMetadata = entity;
-
+  const { entity: assayMetadata } = useContext(FlaskDataContext);
   const { uuid } = assayMetadata;
   const { entity_type } = assayMetadata;
   const { groupsToken, entityEndpoint } = useContext(AppContext);

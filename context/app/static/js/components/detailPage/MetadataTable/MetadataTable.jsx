@@ -50,9 +50,7 @@ function tableDataToRows(tableData) {
 }
 
 function MetadataTable() {
-  const { entity } = useContext(FlaskDataContext);
-  const assayMetadata = entity;
-
+  const { entity: assayMetadata } = useContext(FlaskDataContext);
   const { mapped_metadata, hubmap_id } = assayMetadata;
   const tableData = mapped_metadata || {};
 

@@ -17,8 +17,7 @@ import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/Der
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DonorDetail() {
-  const { entity } = useContext(FlaskDataContext);
-  const assayMetadata = entity;
+  const { entity: assayMetadata } = useContext(FlaskDataContext);
 
   const {
     uuid,
@@ -57,7 +56,7 @@ function DonorDetail() {
     <DetailContext.Provider value={{ hubmap_id, uuid }}>
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary />
-        {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.metadata && <MetadataTable />}
         <DerivedEntitiesSection uuid={uuid} entityType={entity_type} sectionId="derived" />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}

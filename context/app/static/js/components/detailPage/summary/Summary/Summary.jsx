@@ -19,9 +19,7 @@ function Summary({
   collectionName,
   mapped_external_group_name,
 }) {
-  const { entity } = useContext(FlaskDataContext);
-  const assayMetadata = entity;
-
+  const { entity: assayMetadata } = useContext(FlaskDataContext);
   const { uuid, entity_type, hubmap_id, created_timestamp, last_modified_timestamp, description } = assayMetadata;
   const title = hubmap_id;
 
