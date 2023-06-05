@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { AppContext, FlaskDataContext } from 'js/components/Contexts';
 import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
@@ -11,10 +12,6 @@ const generateClassName = createGenerateClassName({
   disableGlobal: true,
   seed: 'portal',
 });
-
-const AppContext = React.createContext({});
-const FlaskDataContext = React.createContext({});
-FlaskDataContext.displayName = 'FlaskDataContext';
 
 function Providers({
   endpoints,
@@ -51,6 +48,4 @@ Providers.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
 };
 
-export { AppContext };
-export const useFlaskDataContext = () => useContext(FlaskDataContext);
 export default Providers;
