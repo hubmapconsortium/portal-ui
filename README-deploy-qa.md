@@ -2,19 +2,19 @@
 
 ## Deployment
 
-Wednesday, before 5pm:
-*   **John** will review warnings from the portal in CloudWatch, and triage as appropriate. There should be no errors we get used to ignoring.
-*   **John** will look at [portal PRs](https://github.com/hubmapconsortium/portal-ui/pulls), and nudge people to merge approved PRs, or get approvals on older PRs. 
+Wednesday, before release:
+*   Review warnings from the portal in CloudWatch, and triage as appropriate. There should be no errors we get used to ignoring.
+*   Look at [portal PRs](https://github.com/hubmapconsortium/portal-ui/pulls), and nudge people to merge approved PRs, or get approvals on older PRs. 
 
-Wednesday, after 5pm: (Or any time that Nils asks for a release...)
-*   Harvard TC (**John**) makes a new Docker image from portal-ui main.
+Wednesday: (Or any time that Nils asks for a release...)
+*   Harvard TC (**John/Lisa**) makes a new Docker image from portal-ui main.
 *   Harvard TC announces on [`#portal-deployment`](https://hubmapconsortium.slack.com/archives/C016TK0APV2) that DEV/TEST/STAGE will be redeployed.
 *   Harvard TC redeploys to DEV/TEST/STAGE, makes sure the homepage loads, and announces redeployment.
 
 Thursday testing:
-*   Harvard TC (**Tiffany/Chuck**) runs through a brief manual QA test on [`https://portal-prod.stage.hubmapconsortium.org/`](https://portal-prod.stage.hubmapconsortium.org/); Details below.
+*   Harvard TC (**Tiffany/Team**) runs through a brief manual QA test on [`https://portal-prod.stage.hubmapconsortium.org/`](https://portal-prod.stage.hubmapconsortium.org/); Details below.
 *   Small quirks are filed as issues.
-*   If there are big problems, ping Chuck, and decide whether production release can just wait till the next regularly scheduled release, or if a redeploy is needed sooner. Post an update to `#portal-deployment`.
+*   If there are big problems, ping [`#hdv_hubmap_ui`], and decide whether production release can just wait till the next regularly scheduled release, or if a redeploy is needed sooner. Post an update to `#portal-deployment`.
 
 Thursday hand-off:
 *   Tester posts to `#portal-deployment` that the image `v#.#.#` has been tested, and is ready for deployment. Flag `@Zhou (Joe) Yuan`.
