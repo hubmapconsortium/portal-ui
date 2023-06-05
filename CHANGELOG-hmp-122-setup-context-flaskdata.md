@@ -1,2 +1,2 @@
-- Context was set up in the App file to begin transition of prop drilling to context.
-- Prop drilling to context was completed for Donor page.
+- Add a context provider to pass flask data to react components.
+- Pass flask data to Donor page components by context.
