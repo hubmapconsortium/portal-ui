@@ -26,6 +26,8 @@ function DonorDetail() {
       last_modified_timestamp,
       description,
       group_name,
+      created_by_user_displayname,
+      created_by_user_email,
     },
   } = useFlaskDataContext();
   const { sex, race, age_value, age_unit } = mapped_metadata;
@@ -50,7 +52,7 @@ function DonorDetail() {
       age_value,
       age_unit,
     });
-  }, [hubmap_id, entity_type, sex, race, age_value, age_unit, setAssayMetadata]);
+  }, [hubmap_id, entity_type, sex, race, age_value, age_unit, setAssayMetadata, group_name]);
 
   useSendUUIDEvent(entity_type, uuid);
 
@@ -70,7 +72,11 @@ function DonorDetail() {
         <DerivedEntitiesSection sectionId="derived" />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        <Attribution />
+        <Attribution
+          group_name={group_name}
+          created_by_user_displayname={created_by_user_displayname}
+          created_by_user_email={created_by_user_email}
+        />
       </DetailLayout>
     </DetailContext.Provider>
   );

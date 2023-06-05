@@ -1,16 +1,11 @@
 import React from 'react';
-import { useFlaskDataContext } from 'js/components/Providers';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 
-function Attribution() {
-  const {
-    entity: { group_name, created_by_user_displayname, created_by_user_email },
-  } = useFlaskDataContext();
-
+function Attribution(group_name, created_by_user_displayname, created_by_user_email) {
   return (
     <DetailPageSection id="attribution">
       <SectionHeader>Attribution</SectionHeader>
