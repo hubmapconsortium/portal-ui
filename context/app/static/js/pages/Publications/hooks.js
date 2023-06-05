@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { buildPublicationPanelProps } from './utils';
+import { buildPublicationsSeparatedByStatus } from './utils';
 
 const getAllPublicationsQuery = {
   post_filter: { term: { 'entity_type.keyword': 'Publication' } },
@@ -18,28 +18,7 @@ function usePublications() {
     setOpenTabIndex(newIndex);
   };
 
-  const publicationsPanelsPropsSeparatedByStatus = publications.reduce(
-    (acc, publication) => {
-      const {
-        _source: { publication_status },
-      } = publication;
-
-      if (publication_status === undefined) {
-        return acc;
-      }
-
-      const publicationProps = buildPublicationPanelProps(publication);
-
-      if (!publication_status) {
-        acc.preprint.push(publicationProps);
-      }
-
-      acc.published.push(publicationProps);
-
-      return acc;
-    },
-    { published: [], preprint: [] },
-  );
+  const publicationsPanelsPropsSeparatedByStatus = buildPublicationsSeparatedByStatus(publications);
 
   return {
     publicationsPanelsPropsSeparatedByStatus,
