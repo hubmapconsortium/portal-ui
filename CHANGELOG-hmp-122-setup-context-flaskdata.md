@@ -1,2 +1,2 @@
 - Add a context provider to pass flask data to react components.
-- Prop drilling to context was completed for Donor page.
+- Pass flask data to Donor page components by context.
