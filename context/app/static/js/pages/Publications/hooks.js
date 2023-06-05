@@ -30,11 +30,11 @@ function usePublications() {
 
       const publicationProps = buildPublicationPanelProps(publication);
 
-      if (!publication_status) {
+      if (publication_status) {
+        acc.published.push(publicationProps);
+      } else {
         acc.preprint.push(publicationProps);
       }
-
-      acc.published.push(publicationProps);
 
       return acc;
     },
