@@ -1,6 +1,7 @@
 // This test was written against a existing publication in the dev/test env and will need to be updated if that publication is deleted
 
 const publicationId = "cd03fa15322492f4173cdbdc30c74a62";
+const title = "sdarfg";
 
 describe("Publication page", () => {
   context("macbook-size", () => {
@@ -9,7 +10,7 @@ describe("Publication page", () => {
       cy.visit(`/browse/publication/${publicationId}`);
     });
     it("has a title, abstract, manuscript link, citation, data types, organs, and publication date listed", () => {
-      cy.findByTestId("entity-title").contains("sdarfg");
+      cy.findByTestId("entity-title").contains(title);
       cy.findByTestId("publication-abstract").should("exist");
       cy.findByTestId("publication-manuscript-link").should("exist");
       cy.findByTestId("publication-citation").should("exist");
@@ -96,6 +97,14 @@ describe("Publication page", () => {
             })
           );
       });
+    });
+
+    it("has a visible Entity Header when the user scrolls down the page", () => {
+      cy.findByTestId("entity-header").should("not.exist");
+      cy.scrollTo("bottom");
+      cy.findByTestId("entity-header")
+        .should("be.visible")
+        .and("contain", title);
     });
   });
 });

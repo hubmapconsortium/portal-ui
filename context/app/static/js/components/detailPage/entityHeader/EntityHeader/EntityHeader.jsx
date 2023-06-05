@@ -38,7 +38,7 @@ function Header() {
   return transitions.map(
     ({ item, key, props }) =>
       item && (
-        <AnimatedPaper key={key} style={props} elevation={4}>
+        <AnimatedPaper key={key} style={props} elevation={4} data-testid="entity-header">
           <EntityHeaderContent
             assayMetadata={assayMetadata}
             shouldDisplayHeader={shouldDisplayHeader}
