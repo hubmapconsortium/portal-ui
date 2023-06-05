@@ -21,8 +21,5 @@
   "bugs": {
     "url": "https://github.com/hubmapconsortium/portal-ui/issues"
   },
-  "homepage": "https://github.com/hubmapconsortium/portal-ui#readme",
-  "dependencies": {
-    "cypress-real-events": "^1.8.1"
-  }
+  "homepage": "https://github.com/hubmapconsortium/portal-ui#readme"
 }
