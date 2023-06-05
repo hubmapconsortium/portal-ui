@@ -31,7 +31,7 @@ function ProvTable({ uuid, ancestors, assayMetadata }) {
             {entities.length > 0 &&
               entities
                 .sort((a, b) => a.created_timestamp - b.created_timestamp)
-                .map((item, j) => (
+                .map((item, j, items) => (
                   <ProvTableTile
                     key={item.uuid}
                     uuid={item.uuid}
@@ -39,7 +39,7 @@ function ProvTable({ uuid, ancestors, assayMetadata }) {
                     entity_type={item.entity_type}
                     isCurrentEntity={uuid === item.uuid}
                     isSampleSibling={
-                      j > 0 && item.entity_type === 'Sample' && type[j - 1].sample_category === item.sample_category
+                      j > 0 && item.entity_type === 'Sample' && items[j - 1]?.sample_category === item.sample_category
                     }
                     isFirstTile={j === 0}
                     isLastTile={j === type.length - 1}
