@@ -27,5 +27,16 @@ describe("publications list page", () => {
         });
       });
     });
+    it("has clickable publication links", () => {
+      const publishedTab = cy.findByTestId("publication-tab-published");
+      const preprintTab = cy.findByTestId("publication-tab-preprint");
+      publishedTab.should("exist").then(($pubTab) => {
+        if ($pubTab.text().includes("(0)")) {
+          preprintTab.click();
+          cy.wait(1000);
+        }
+      });
+      cy.findAllByTestId("panel-title").should("exist");
+    });
   });
 });

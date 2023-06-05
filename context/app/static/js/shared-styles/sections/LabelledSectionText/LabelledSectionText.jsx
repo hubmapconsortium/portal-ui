@@ -13,9 +13,10 @@ function LabelledSectionText({
   bottomSpacing,
   className,
   childContainerComponent = 'p',
+  ...props // mainly for data-testid
 }) {
   return (
-    <StyledDiv className={className} $bottomSpacing={bottomSpacing}>
+    <StyledDiv className={className} $bottomSpacing={bottomSpacing} {...props}>
       <Flex>
         <Typography variant="subtitle2" component="h3" color="primary">
           {label}

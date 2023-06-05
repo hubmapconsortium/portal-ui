@@ -18,7 +18,12 @@ function PublicationCitation({ contributors = [], title, publication_date, publi
   const citation = buildNLMCitation({ contributors, title, publication_date, publication_venue });
 
   return (
-    <LabelledSectionText label="Citation" iconTooltipText="Citation is provided in NLM format." bottomSpacing={1}>
+    <LabelledSectionText
+      label="Citation"
+      iconTooltipText="Citation is provided in NLM format."
+      bottomSpacing={1}
+      data-testid="publication-citation"
+    >
       {citation} DOI: <OutboundIconLink href={doiURL}>{doiURL}</OutboundIconLink>
     </LabelledSectionText>
   );

@@ -12,7 +12,7 @@ const renderHubmapIdCell = ({ hubmap_id, entity_type, uuid }) => (
   </LightBlueLink>
 );
 
-function RelatedEntitiesTable({ columns, entities }) {
+function RelatedEntitiesTable({ columns, entities, entityType }) {
   const allColumns = [
     {
       label: 'HuBMAP ID',
@@ -25,10 +25,12 @@ function RelatedEntitiesTable({ columns, entities }) {
   return (
     <EntitiesTable
       headerCells={allColumns.map(({ id, label }) => (
-        <HeaderCell key={id}>{label}</HeaderCell>
+        <HeaderCell data-testid={`${entityType}-${label}-header`} key={id}>
+          {label}
+        </HeaderCell>
       ))}
       tableRows={entities.map(({ _source }) => (
-        <TableRow key={_source.hubmap_id}>
+        <TableRow key={_source.hubmap_id} data-testid={`${entityType}-row`}>
           {allColumns.map(({ renderColumnCell }) => (
             <TableCell>{renderColumnCell(_source)}</TableCell>
           ))}

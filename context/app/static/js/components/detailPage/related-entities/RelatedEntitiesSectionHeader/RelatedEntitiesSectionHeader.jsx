@@ -13,7 +13,13 @@ function RelatedEntitiesSectionHeader({ header, searchPageHref }) {
         </div>
       }
       buttons={
-        <Button variant="contained" color="primary" component="a" href={searchPageHref}>
+        <Button
+          variant="contained"
+          color="primary"
+          component="a"
+          href={searchPageHref}
+          data-testid="view-related-data-button"
+        >
           View Data on Search Page
         </Button>
       }
