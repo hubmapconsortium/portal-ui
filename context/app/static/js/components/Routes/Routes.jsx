@@ -273,10 +273,10 @@ function Routes({ flaskData }) {
     throw Error('Intentional client-side-error');
   }
 
-  // if (urlPath === '/cells') {
+  // if (urlPath.startsWith('/organ/')) {
   //   return (
   //     <Route>
-  //       <Cells />
+  //       <Organ organ={organ} />
   //     </Route>
   //   );
   // }
@@ -284,7 +284,7 @@ function Routes({ flaskData }) {
   if (urlPath === '/genes') {
     return (
       <Route>
-        <Genes />
+        <Genes organ={organ} />
       </Route>
     );
   }
@@ -292,7 +292,7 @@ function Routes({ flaskData }) {
   if (urlPath === '/proteins') {
     return (
       <Route>
-        <Proteins />
+        <Proteins organ={organ} />
       </Route>
     );
   }
