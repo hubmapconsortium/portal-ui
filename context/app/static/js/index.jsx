@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import App from './components/App';
 import Iframe from './pages/Iframe';
@@ -12,8 +12,12 @@ import { setJsonLD } from './schema.org';
 //   console.warn('Schema validation errors', validation_errors);
 // }
 
+const container = document.getElementById('react-content');
+
+const root = createRoot(container);
+
 /* eslint-disable no-undef */
-ReactDOM.render(
+root.render(
   window.location.pathname.startsWith('/iframe/') ? (
     <Iframe flaskData={flaskData} />
   ) : (
@@ -26,7 +30,6 @@ ReactDOM.render(
       userGroups={userGroups}
     />
   ),
-  document.getElementById('react-content'),
 );
 
 if (flaskData?.entity?.entity_type === 'Dataset') {

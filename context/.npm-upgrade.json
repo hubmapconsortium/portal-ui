@@ -1,0 +1,8 @@
+{
+  "ignore": {
+    "@searchkit/client": {
+      "versions": "",
+      "reason": ""
+    }
+  }
+}
