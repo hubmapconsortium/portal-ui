@@ -21,11 +21,13 @@ const sharedArgs = {
   incrementStepOnClick: () => {},
 };
 
-const Template = (args) => (
-  <TutorialProvider>
-    <TutorialTooltip {...args} />
-  </TutorialProvider>
-);
+function Template(args) {
+  return (
+    <TutorialProvider>
+      <TutorialTooltip {...args} />
+    </TutorialProvider>
+  );
+}
 export const InitialStep = Template.bind({});
 InitialStep.args = {
   index: 0,

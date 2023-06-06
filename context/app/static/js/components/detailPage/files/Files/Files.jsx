@@ -29,13 +29,16 @@ function Files({ files, uuid, hubmap_id, visLiftedUUID }) {
     setDialogOpen(false);
   }
 
-  function openDUA(linkUrl) {
-    setDialogOpen(true);
-    setUrlClickedBeforeDUA(linkUrl);
-  }
+  const filesContext = useMemo(() => {
+    function openDUA(linkUrl) {
+      setDialogOpen(true);
+      setUrlClickedBeforeDUA(linkUrl);
+    }
+    return { openDUA, hasAgreedToDUA };
+  }, [hasAgreedToDUA]);
 
   return (
-    <FilesContext.Provider value={{ openDUA, hasAgreedToDUA }}>
+    <FilesContext.Provider value={filesContext}>
       <DetailPageSection id="files">
         <SectionHeader>Files</SectionHeader>
         {files.length > 0 && (

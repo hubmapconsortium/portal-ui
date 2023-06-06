@@ -10,19 +10,20 @@ import FilesContext from '../Files/context';
 const fakeOpenDUA = jest.fn();
 
 const uuid = 'fakeuuid';
+const detailContext = { uuid };
+const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' };
 
-const FilesProviders = ({ children }) => {
+function FilesProviders({ children }) {
   return (
-    <DetailContext.Provider value={{ uuid }}>
-      <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
-        {children}
-      </FilesContext.Provider>
+    <DetailContext.Provider value={detailContext}>
+      <FilesContext.Provider value={filesContext}>{children}</FilesContext.Provider>
     </DetailContext.Provider>
   );
-};
+}
 
 const expectArrayOfStringsToExist = (arr) => arr.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-const expectArrayOfStringsToNotExist = (arr) => arr.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+const expectArrayOfStringsToNotExist = (arr) =>
+  arr.forEach((text) => expect(screen.queryByText(text)).not.toBeInTheDocument());
 
 test('displays files and directories', () => {
   const sharedEntries = {

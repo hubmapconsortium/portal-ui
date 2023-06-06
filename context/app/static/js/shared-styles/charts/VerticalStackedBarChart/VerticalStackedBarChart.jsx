@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BarStack } from '@visx/shape';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
@@ -48,6 +48,11 @@ function VerticalStackedBarChart({
     handleMouseEnter,
     handleMouseLeave,
   } = useChartTooltip();
+
+  const TickComponent = useMemo(
+    ({ ...props }) => <Tick {...props} handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave} />,
+    [handleMouseEnter, handleMouseLeave],
+  );
 
   return (
     <>
@@ -111,15 +116,7 @@ function VerticalStackedBarChart({
                 textAnchor: 'end',
                 angle: -90,
               })}
-              tickComponent={({ formattedValue, ...tickProps }) => (
-                <Text
-                  onMouseEnter={handleMouseEnter({ key: formattedValue })}
-                  onMouseLeave={handleMouseLeave}
-                  {...tickProps}
-                >
-                  {trimStringWithMiddleEllipsis(formattedValue)}
-                </Text>
-              )}
+              tickComponent={TickComponent}
               labelProps={{
                 fontSize: 12,
                 textAnchor: 'middle',
@@ -145,6 +142,14 @@ function VerticalStackedBarChart({
         </TooltipInPortal>
       )}
     </>
+  );
+}
+
+function Tick({ formattedValue, handleMouseEnter, handleMouseLeave, ...tickProps }) {
+  return (
+    <Text onMouseEnter={handleMouseEnter({ key: formattedValue })} onMouseLeave={handleMouseLeave} {...tickProps}>
+      {trimStringWithMiddleEllipsis(formattedValue)}
+    </Text>
   );
 }
 

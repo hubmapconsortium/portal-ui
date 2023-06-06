@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
@@ -65,7 +65,7 @@ function SampleDetail({ assayMetadata }) {
   const hasRUI = Boolean(rui_location);
 
   return (
-    <DetailContext.Provider value={{ hubmap_id, uuid }}>
+    <DetailContext.Provider value={useMemo(() => ({ hubmap_id, uuid }), [hubmap_id, uuid])}>
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}

@@ -12,7 +12,7 @@ test('should be "User Profile" when not authenticated', () => {
   // In drop-down:
   expect(screen.getByText('My Lists')).toBeInTheDocument();
   expect(screen.getByText('Log In')).toBeInTheDocument();
-  expect(screen.queryByText('Log Out')).toBeNull();
+  expect(screen.queryByText('Log Out')).not.toBeInTheDocument();
 });
 
 test('should be logout button when authenticated', () => {
@@ -22,7 +22,7 @@ test('should be logout button when authenticated', () => {
   // In drop-down:
   expect(screen.getByText('My Lists')).toBeInTheDocument();
   expect(screen.getByText('Log Out')).toBeInTheDocument();
-  expect(screen.queryByText('Log In')).toBeNull();
+  expect(screen.queryByText('Log In')).not.toBeInTheDocument();
 });
 
 test('should display User when userEmail is empty', () => {

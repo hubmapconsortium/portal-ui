@@ -79,7 +79,7 @@ function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, descript
     return filtered.length ? filtered[0].doc_count : 0;
   }
 
-  const { buckets } = searchData?.aggregations.composite_data;
+  const { buckets } = searchData?.aggregations?.composite_data ?? { buckets: [] };
   const labels = xKey === 'mapped_metadata.age' ? getAgeLabels(buckets, xKey) : getKeyValues(buckets, xKey);
   const graphdata = {
     labels,

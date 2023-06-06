@@ -7,11 +7,14 @@ function TutorialProvider({ children, tutorial_key }) {
   return <Provider createStore={() => createStore(tutorial_key)}>{children}</Provider>;
 }
 
-export const withTutorialProvider = (Component, tutorial_key) => ({ ...props }) => (
-  <TutorialProvider tutorial_key={tutorial_key}>
-    <Component {...props} />
-  </TutorialProvider>
-);
+export const withTutorialProvider = (Component, tutorial_key) =>
+  function ({ ...props }) {
+    return (
+      <TutorialProvider tutorial_key={tutorial_key}>
+        <Component {...props} />
+      </TutorialProvider>
+    );
+  };
 
 TutorialProvider.propTypes = {
   /**

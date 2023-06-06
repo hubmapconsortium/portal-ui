@@ -19,7 +19,9 @@ const sharedArgs = {
   children: <BasicVerticalStackedBarChart {...BasicVerticalStackedBarChart.args} />,
 };
 
-export const Default = (args) => <ChartWrapper {...args} />;
+export function Default(args) {
+  return <ChartWrapper {...args} />;
+}
 
 Default.args = { ...sharedArgs, chartTitle: 'Chart With Legend' };
 
@@ -44,7 +46,9 @@ function Container(props) {
   );
 }
 
-export const WithDropdown = (args) => <Container {...args} />;
+export function WithDropdown(args) {
+  return <Container {...args} />;
+}
 WithDropdown.args = {
   ...sharedArgs,
 };

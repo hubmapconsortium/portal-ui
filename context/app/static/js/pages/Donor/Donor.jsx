@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -53,7 +53,7 @@ function DonorDetail({ assayMetadata }) {
   useSendUUIDEvent(entity_type, uuid);
 
   return (
-    <DetailContext.Provider value={{ hubmap_id, uuid }}>
+    <DetailContext.Provider value={useMemo(() => ({ hubmap_id, uuid }), [hubmap_id, uuid])}>
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}

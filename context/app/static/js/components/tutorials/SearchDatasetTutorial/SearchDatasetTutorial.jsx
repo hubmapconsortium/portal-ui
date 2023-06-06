@@ -20,7 +20,7 @@ const searchViewStoreSelector = (state) => ({
 const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
 
 function SearchDatasetTutorial() {
-  const themeContext = useContext(ThemeContext);
+  const { palette, zIndex } = useContext(ThemeContext);
   const [steps, setSteps] = useState(defaultSteps);
   const { searchView, setSearchView, toggleItem } = useSearchViewStore(searchViewStoreSelector);
   const { tutorialStep, isTutorialRunning, closeTutorial } = useTutorialStore();
@@ -80,7 +80,7 @@ function SearchDatasetTutorial() {
           disableAnimation: true,
         }}
         tooltipComponent={TutorialTooltip}
-        styles={{ options: { arrowColor: themeContext.palette.info.dark, zIndex: themeContext.zIndex.tutorial } }}
+        styles={{ options: { arrowColor: palette.info.dark, zIndex: zIndex.tutorial } }}
         stepIndex={tutorialStep}
       />
     </>

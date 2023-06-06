@@ -43,7 +43,7 @@ test('dataset displays properly', async () => {
 
 test('non-dataset displays properly', () => {
   render(<SummaryData entity_type="fake" uuid={testUUID} status="QA" mapped_data_access_level="Public" />);
-  expect(screen.queryByTestId('status-svg-icon')).toBeNull();
+  expect(screen.queryByTestId('status-svg-icon')).not.toBeInTheDocument();
 });
 
 test('children display when provided', () => {
@@ -62,5 +62,5 @@ test('children display when provided', () => {
 
 test('children do not display when undefined', () => {
   render(<SummaryData entity_type="fake" uuid={testUUID} status="QA" mapped_data_access_level="Public" />);
-  expect(screen.queryByTestId('summary-data-parent')).toBeNull();
+  expect(screen.queryByTestId('summary-data-parent')).not.toBeInTheDocument();
 });

@@ -4,12 +4,12 @@ extends:
   - plugin:react/recommended
   - airbnb
   - plugin:jest-dom/recommended
-  - plugin:testing-library/recommended
+  - plugin:testing-library/react
   - plugin:prettier/recommended
-  - prettier/react
+  - prettier
   - plugin:import/errors
   - plugin:import/warnings
-parser: "babel-eslint"
+parser: '@babel/eslint-parser'
 globals:
   CDN_URL: readonly
 plugins:
@@ -21,16 +21,17 @@ settings:
     webpack:
       config: './build-utils/webpack.common.js'
 rules:
-  camelcase: [0]  # Preserving original name will make searching across codebase easier.
-  no-console: ["error", { allow: ["warn", "error"] }]
-  react/jsx-filename-extension: [0]  # Imports don't work if I change extension.
-  react/sort-comp: [0]  # Non-alphabetical groupings can make more sense.
-  react/jsx-one-expression-per-line: [0]  # Makes punctuation after tab awkward.
+  camelcase: [0] # Preserving original name will make searching across codebase easier.
+  no-console: ['error', { allow: ['warn', 'error'] }]
+  react/jsx-filename-extension: [0] # Imports don't work if I change extension.
+  react/sort-comp: [0] # Non-alphabetical groupings can make more sense.
+  react/jsx-one-expression-per-line: [0] # Makes punctuation after tab awkward.
   react/prop-types: [0]
-  import/prefer-default-export: [0]  # Hit eslint error: SyntaxError: Unexpected token, expected {
+  import/prefer-default-export: [0] # Hit eslint error: SyntaxError: Unexpected token, expected {
   react/jsx-props-no-spreading: [0]
+  react/forbid-prop-types: [0] # we can address providing more accurate types via TypeScript
   jsx-a11y/label-has-associated-control:
     - 2
     - controlComponents:
-      - Switch
-  import/no-extraneous-dependencies: ["error", {"devDependencies": ["**/*.spec.js", "**/*.stories.js"]}]
+        - Switch
+  import/no-extraneous-dependencies: ['error', { 'devDependencies': ['**/*.spec.js', '**/*.stories.js'] }]

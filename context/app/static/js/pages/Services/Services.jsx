@@ -10,7 +10,8 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 
 function Services() {
   const appContext = useContext(AppContext);
-  const gatewayUrl = `${appContext.gatewayEndpoint}/status.json`;
+  const { gatewayEndpoint } = appContext;
+  const gatewayUrl = `${gatewayEndpoint}/status.json`;
   return (
     <>
       <SectionContainer>

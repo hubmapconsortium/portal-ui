@@ -13,7 +13,9 @@ export default {
   },
 };
 
-export const SearchBar = (args) => <SearchBarComponent {...args} />;
+export function SearchBar(args) {
+  return <SearchBarComponent {...args} />;
+}
 SearchBar.args = {
   onChange: () => {},
 };

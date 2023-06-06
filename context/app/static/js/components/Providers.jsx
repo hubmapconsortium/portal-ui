@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ThemeProvider } from 'styled-components';
 
 import PropTypes from 'prop-types';
@@ -25,15 +25,24 @@ function Providers({
   workspacesToken,
   isWorkspacesUser,
 }) {
-  // injectFirst ensures styled-components takes priority over mui for styling
+  const appContext = useMemo(
+    () => ({
+      groupsToken,
+      workspacesToken,
+      isWorkspacesUser,
+      isAuthenticated,
+      userEmail,
+      ...endpoints,
+    }),
+    [endpoints, groupsToken, isAuthenticated, isWorkspacesUser, userEmail, workspacesToken],
+  );
   return (
+    // injectFirst ensures styled-components takes priority over mui for styling
     <StylesProvider generateClassName={generateClassName} injectFirst>
       <GlobalFonts />
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
-          <AppContext.Provider
-            value={{ groupsToken, workspacesToken, isWorkspacesUser, isAuthenticated, userEmail, ...endpoints }}
-          >
+          <AppContext.Provider value={appContext}>
             <CssBaseline />
             <GlobalStyles />
             {children}

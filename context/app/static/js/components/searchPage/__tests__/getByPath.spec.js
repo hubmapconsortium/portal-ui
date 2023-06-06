@@ -14,6 +14,6 @@ test('concatenate array values', () => {
 
 test('look up translations', () => {
   const document = { a: { b: { c: '42' } } };
-  const field = { id: 'a.b.c', translations: { '42': 'The Answer' } };
+  const field = { id: 'a.b.c', translations: { 42: 'The Answer' } };
   expect(getByPath(document, field)).toEqual('The Answer');
 });

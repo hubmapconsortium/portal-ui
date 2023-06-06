@@ -2,7 +2,7 @@ import Paper from '@material-ui/core/Paper';
 import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
 import Bowser from 'bowser';
 import debounce from 'lodash/debounce';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Vitessce } from 'vitessce';
 
 import { dependencies } from 'package';
@@ -93,7 +93,10 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
   });
 
   // The application is very slow without debouncing since state can be quite large.
-  const handleVitessceConfigDebounced = useCallback(debounce(setVitessceState, 250, { trailing: true }), []);
+  const handleVitessceConfigDebounced = useMemo(
+    () => debounce(setVitessceState, 250, { trailing: true }),
+    [setVitessceState],
+  );
   function removeError(message) {
     setVitessceErrors((prev) => prev.filter((d) => d !== message));
   }

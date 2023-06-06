@@ -10,7 +10,9 @@ export default {
 
 const uuid = 'abc123';
 
-const Template = (args) => <EntityTile {...args} />;
+function Template(args) {
+  return <EntityTile {...args} />;
+}
 export const Donor = Template.bind({});
 Donor.args = {
   uuid,

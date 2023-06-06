@@ -8,10 +8,14 @@ export default {
   component: SectionPaper,
 };
 
-export const Default = () => <SectionPaper />;
+export function Default() {
+  return <SectionPaper />;
+}
 
-export const WithExampleText = () => (
-  <SectionPaper>
-    <DefaultLabelledSectionText {...DefaultLabelledSectionText.args} />
-  </SectionPaper>
-);
+export function WithExampleText() {
+  return (
+    <SectionPaper>
+      <DefaultLabelledSectionText {...DefaultLabelledSectionText.args} />
+    </SectionPaper>
+  );
+}

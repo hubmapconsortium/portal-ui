@@ -15,7 +15,9 @@ export default {
   },
 };
 
-const Template = (args) => <LinkButton {...args} />;
+function Template(args) {
+  return <LinkButton {...args} />;
+}
 
 const sharedArgs = {
   onClick: () => {},

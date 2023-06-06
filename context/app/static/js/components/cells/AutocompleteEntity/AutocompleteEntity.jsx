@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
@@ -23,7 +23,7 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     setCellVariableNames([]);
   }, [targetEntity, setCellVariableNames]);
 
-  async function handleChange(event) {
+  const handleChange = useCallback(async function handleChange(event) {
     const { target } = event;
     setSubstring(target.value);
 
@@ -42,7 +42,7 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     } catch (e) {
       console.warn(e.message);
     }
-  }
+  }, []);
 
   return (
     <Autocomplete

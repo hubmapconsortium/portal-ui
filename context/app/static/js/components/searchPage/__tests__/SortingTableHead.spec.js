@@ -1,6 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line import/no-unresolved
-import { render } from 'test-utils/functions';
+import { render, screen } from 'test-utils/functions';
 
 import SortingTableHead from '../SortingTableHead';
 
@@ -23,11 +23,11 @@ test('SortingTableHead renders', () => {
   ];
   const selectedItems = [];
 
-  const { getByText } = render(
+  render(
     // Wrap with <table> to avoid DOM nesting error:
     <table>
       <SortingTableHead items={items} toggleItem={() => {}} selectedItems={selectedItems} />
     </table>,
   );
-  expect(getByText('LABEL')).toBeInTheDocument();
+  expect(screen.getByText('LABEL')).toBeInTheDocument();
 });
