@@ -17,4 +17,5 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest',
     '^.+\\.ya?ml$': '<rootDir>/test-utils/loaders/ymlLoader.js',
   },
+  testEnvironment: 'jsdom',
 };

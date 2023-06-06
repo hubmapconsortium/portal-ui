@@ -5,6 +5,9 @@ import App from './components/App';
 import Iframe from './pages/Iframe';
 import { setJsonLD } from './schema.org';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+import '@fontsource-variable/inter/index.css';
+
 // TODO: Re-enable. https://github.com/hubmapconsortium/portal-ui/issues/1426
 // eslint-disable-next-line no-undef
 // const validation_errors = flaskData.entity?.mapper_metadata?.validation_errors;
