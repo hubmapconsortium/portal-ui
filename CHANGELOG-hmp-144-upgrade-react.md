@@ -1,0 +1,1 @@
+- Updated ReactJS and other front-end dependencies
