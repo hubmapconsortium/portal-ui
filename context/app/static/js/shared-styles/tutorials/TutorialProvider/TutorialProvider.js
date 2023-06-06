@@ -8,7 +8,7 @@ function TutorialProvider({ children, tutorial_key }) {
 }
 
 export const withTutorialProvider = (Component, tutorial_key) =>
-  function ({ ...props }) {
+  function WithTutorialProvider({ ...props }) {
     return (
       <TutorialProvider tutorial_key={tutorial_key}>
         <Component {...props} />

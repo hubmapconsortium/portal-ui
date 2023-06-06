@@ -33,12 +33,12 @@ function Header() {
         enter: { height: entityHeaderHeight },
         leave: { overflow: 'hidden', height: 0 },
       };
-  const transitions = useTransition(shouldDisplayHeader, null, transitionConfig);
+  const transitions = useTransition(shouldDisplayHeader, transitionConfig);
 
-  return transitions.map(
-    ({ item, key, props }) =>
+  return transitions(
+    ({ item, key, style }) =>
       item && (
-        <AnimatedPaper key={key} style={props} elevation={4}>
+        <AnimatedPaper key={key} style={style} elevation={4}>
           <EntityHeaderContent
             assayMetadata={assayMetadata}
             shouldDisplayHeader={shouldDisplayHeader}

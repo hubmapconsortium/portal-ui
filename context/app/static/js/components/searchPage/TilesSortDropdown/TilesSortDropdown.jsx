@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { trackEvent } from 'js/helpers/trackers';
 
@@ -23,17 +23,20 @@ function TilesSortDropdown({ items, toggleItem, selectedItems, analyticsCategory
 
   const searchView = useSearchViewStore(searchViewStoreSelector);
 
-  function selectSortItem(itemAndIndex) {
-    const pair = itemAndIndex.option;
-    // Sort everything in ascending order except for last modified
-    const item = pair[0].field === 'mapped_last_modified_timestamp.keyword' ? pair[0] : pair[1];
-    toggleItem(item.key);
-    trackEvent({
-      category: analyticsCategory,
-      action: `Sort Tile View`,
-      label: `${pair[0].label} ${pair[0].field === 'mapped_last_modified_timestamp.keyword' ? 'desc' : 'asc'}`,
-    });
-  }
+  const selectSortItem = useCallback(
+    function selectSortItem(itemAndIndex) {
+      const pair = itemAndIndex.option;
+      // Sort everything in ascending order except for last modified
+      const item = pair[0].field === 'mapped_last_modified_timestamp.keyword' ? pair[0] : pair[1];
+      toggleItem(item.key);
+      trackEvent({
+        category: analyticsCategory,
+        action: `Sort Tile View`,
+        label: `${pair[0].label} ${pair[0].field === 'mapped_last_modified_timestamp.keyword' ? 'desc' : 'asc'}`,
+      });
+    },
+    [analyticsCategory, toggleItem],
+  );
 
   return (
     <DropdownListbox

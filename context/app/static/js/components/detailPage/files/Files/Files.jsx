@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import DetailContext from 'js/components/detailPage/context';
@@ -18,16 +18,19 @@ function Files({ files, uuid, hubmap_id, visLiftedUUID }) {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [urlClickedBeforeDUA, setUrlClickedBeforeDUA] = useState('');
 
-  function handleDUAAgree() {
-    agreeToDUA(true);
-    localStorage.setItem(localStorageKey, true);
-    setDialogOpen(false);
-    window.open(urlClickedBeforeDUA, '_blank');
-  }
+  const handleDUAAgree = useCallback(
+    function handleDUAAgree() {
+      agreeToDUA(true);
+      localStorage.setItem(localStorageKey, true);
+      setDialogOpen(false);
+      window.open(urlClickedBeforeDUA, '_blank');
+    },
+    [urlClickedBeforeDUA, localStorageKey],
+  );
 
-  function handleDUAClose() {
+  const handleDUAClose = useCallback(function handleDUAClose() {
     setDialogOpen(false);
-  }
+  }, []);
 
   const filesContext = useMemo(() => {
     function openDUA(linkUrl) {

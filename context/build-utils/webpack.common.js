@@ -10,11 +10,14 @@ const config = {
     path: resolve('./app/static/public'),
     publicPath: `${resolve('/static/public/')}/`,
   },
+  stats: {
+    preset: 'minimal',
+  },
   optimization: {
     splitChunks: {
       cacheGroups: {
         commons: {
-          test: RegExp('/node_modules/'),
+          test: /\/node_modules\//,
           name: 'vendors',
           chunks: 'initial',
         },
@@ -31,7 +34,7 @@ const config = {
         test: /\.js$/,
         use: ['source-map-loader'],
         enforce: 'pre',
-        exclude: [/node_modules\/lineupjsx?/],
+        exclude: [/node_modules\/lineupjsx?/, /node_modules\/@datapunt?/],
       },
       {
         test: /\.(js|jsx)$/,
@@ -67,7 +70,6 @@ const config = {
       },
       {
         test: /\.ya?ml$/,
-        type: 'json', // Required by Webpack v4
         use: 'yaml-loader',
       },
       {

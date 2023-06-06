@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Vitessce } from 'vitessce';
 
-import { dependencies } from 'package';
+import packageInfo from 'package';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { Alert } from 'js/shared-styles/alerts';
@@ -97,19 +97,27 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
     () => debounce(setVitessceState, 250, { trailing: true }),
     [setVitessceState],
   );
-  function removeError(message) {
-    setVitessceErrors((prev) => prev.filter((d) => d !== message));
-  }
+  const removeError = useCallback(
+    function removeError(message) {
+      setVitessceErrors((prev) => prev.filter((d) => d !== message));
+    },
+    [setVitessceErrors],
+  );
+  const addError = useCallback(
+    function addError(message) {
+      setVitessceErrors((prev) => (prev.includes(message) ? prev : [...prev, message]));
+    },
+    [setVitessceErrors],
+  );
 
-  function addError(message) {
-    setVitessceErrors((prev) => (prev.includes(message) ? prev : [...prev, message]));
-  }
-
-  function setSelectionAndClearErrors(itemAndIndex) {
-    const { i } = itemAndIndex;
-    setVitessceErrors([]);
-    setVitessceSelection(i);
-  }
+  const setSelectionAndClearErrors = useCallback(
+    function setSelectionAndClearErrors(itemAndIndex) {
+      const { i } = itemAndIndex;
+      setVitessceErrors([]);
+      setVitessceSelection(i);
+    },
+    [setVitessceSelection],
+  );
 
   useEffect(() => {
     function onKeydown(event) {
@@ -124,7 +132,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
   }, [collapseViz]);
 
   const isMultiDataset = Array.isArray(vitessceConfig);
-  const version = dependencies.vitessce.replace('^', '');
+  const version = packageInfo.dependencies.vitessce.replace('^', '');
 
   return (
     vitessceConfig &&

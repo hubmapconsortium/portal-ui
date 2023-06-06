@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 
 import { AppContext } from 'js/components/Providers';
 import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
@@ -28,14 +28,18 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity })
   useEffect(() => {
     if (immediateDescendantsProvData) {
       const immediateDescendantSteps = immediateDescendantsProvData
-        .map((result) => new ProvData(result, getNameForActivity, getNameForEntity).toCwl())
+        .map((result) => new ProvData(result, undefined, getNameForActivity, getNameForEntity).toCwl())
         .flat();
       setNewSteps(getUniqueNewSteps(steps, immediateDescendantSteps));
     }
   }, [immediateDescendantsProvData, steps, getNameForActivity, getNameForEntity]);
-  function handleShowDescendants() {
-    addDescendantSteps(newSteps);
-  }
+
+  const handleShowDescendants = useCallback(
+    function handleShowDescendants() {
+      addDescendantSteps(newSteps);
+    },
+    [addDescendantSteps, newSteps],
+  );
   return (
     <OptDisabledButton
       color="primary"

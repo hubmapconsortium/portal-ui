@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Button from '@material-ui/core/Button';
 
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
@@ -14,15 +14,21 @@ function SelectFacetViewButton({ identifier, sumOtherDocCount }) {
   const { setFacetSize } = useStore();
   const [isViewingAll, setIsViewingAll] = useState(false);
 
-  function handleViewAll() {
-    setFacetSize({ identifier, size: 10000 });
-    setIsViewingAll(true);
-  }
+  const handleViewAll = useCallback(
+    function handleViewAll() {
+      setFacetSize({ identifier, size: 10000 });
+      setIsViewingAll(true);
+    },
+    [identifier, setFacetSize],
+  );
 
-  function handleViewLess() {
-    setFacetSize({ identifier, size: defaultSelectFacetSize });
-    setIsViewingAll(false);
-  }
+  const handleViewLess = useCallback(
+    function handleViewLess() {
+      setFacetSize({ identifier, size: defaultSelectFacetSize });
+      setIsViewingAll(false);
+    },
+    [identifier, setFacetSize],
+  );
 
   if (!isViewingAll && sumOtherDocCount === 0) {
     return null;

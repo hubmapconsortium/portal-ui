@@ -25,8 +25,10 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
+const detailContext = { uuid, mapped_data_access_level };
+
 function DetailProvider({ children }) {
-  return <DetailContext.Provider value={{ uuid, mapped_data_access_level }}>{children}</DetailContext.Provider>;
+  return <DetailContext.Provider value={detailContext}>{children}</DetailContext.Provider>;
 }
 
 test('handles DUA flow', async () => {

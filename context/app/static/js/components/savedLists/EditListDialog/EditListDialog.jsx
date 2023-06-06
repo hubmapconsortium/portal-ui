@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
@@ -18,31 +18,40 @@ function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTi
 
   const { editList, savedLists } = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
 
-  function handleTitleChange(event) {
-    setTitle(event.target.value);
-    if (shouldDisplayWarning) {
-      setShouldDisplayWarning(false);
-    }
-  }
+  const handleTitleChange = useCallback(
+    function handleTitleChange(event) {
+      setTitle(event.target.value);
+      if (shouldDisplayWarning) {
+        setShouldDisplayWarning(false);
+      }
+    },
+    [shouldDisplayWarning],
+  );
 
-  function handleDescriptionChange(event) {
+  const handleDescriptionChange = useCallback(function handleDescriptionChange(event) {
     setDescription(event.target.value);
-  }
+  }, []);
 
-  const handleClose = () => {
-    setDialogIsOpen(false);
-    setTitle(listTitle);
-    setDescription(listDescription);
-  };
-
-  function handleSubmit() {
-    if (!(title in savedLists)) {
-      editList({ listUUID, title, description });
+  const handleClose = useCallback(
+    function handleClose() {
       setDialogIsOpen(false);
-    } else {
-      setShouldDisplayWarning(true);
-    }
-  }
+      setTitle(listTitle);
+      setDescription(listDescription);
+    },
+    [listTitle, listDescription, setDialogIsOpen],
+  );
+
+  const handleSubmit = useCallback(
+    function handleSubmit() {
+      if (!(title in savedLists)) {
+        editList({ listUUID, title, description });
+        setDialogIsOpen(false);
+      } else {
+        setShouldDisplayWarning(true);
+      }
+    },
+    [description, editList, listUUID, savedLists, setDialogIsOpen, title],
+  );
 
   return (
     <DialogModal

@@ -36,7 +36,7 @@ const AnimatedFlexContainer = animated(FlexContainer);
 const vizNotebookIdSelector = (state) => state.vizNotebookId;
 
 function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscreen }) {
-  const transitions = useTransition(shouldDisplayHeader, null, {
+  const transitions = useTransition(shouldDisplayHeader, {
     from: { opacity: vizIsFullscreen ? 1 : 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
@@ -46,7 +46,7 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
 
   const vizNotebookId = useVisualizationStore(vizNotebookIdSelector);
 
-  return transitions.map(
+  return transitions(
     ({ item, key, props }) =>
       item && (
         <AnimatedFlexContainer style={props} key={key} maxWidth={vizIsFullscreen ? false : 'lg'}>

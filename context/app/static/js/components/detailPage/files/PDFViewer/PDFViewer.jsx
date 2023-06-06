@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Document, Page } from 'react-pdf';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
@@ -21,10 +21,10 @@ function PDFViewer({ pdfUrl }) {
   const [pdf, setPdf] = useState();
   const [isProcessingPDF, setIsProcessingPDF] = useState(false);
 
-  function onDocumentLoadSuccess(pdfObj) {
+  const onDocumentLoadSuccess = useCallback(function onDocumentLoadSuccess(pdfObj) {
     setOpen(true);
     setPdf(pdfObj);
-  }
+  }, []);
 
   const handleClose = () => {
     setOpen(false);

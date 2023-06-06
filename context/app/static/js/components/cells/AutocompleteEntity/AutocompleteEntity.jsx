@@ -23,26 +23,29 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     setCellVariableNames([]);
   }, [targetEntity, setCellVariableNames]);
 
-  const handleChange = useCallback(async function handleChange(event) {
-    const { target } = event;
-    setSubstring(target.value);
+  const handleChange = useCallback(
+    async function handleChange(event) {
+      const { target } = event;
+      setSubstring(target.value);
 
-    if (target.value === '') {
-      setOptions([]);
-      return;
-    }
+      if (target.value === '') {
+        setOptions([]);
+        return;
+      }
 
-    try {
-      setOptions(
-        await new CellsService().searchBySubstring({
-          targetEntity,
-          substring: target.value,
-        }),
-      );
-    } catch (e) {
-      console.warn(e.message);
-    }
-  }, []);
+      try {
+        setOptions(
+          await new CellsService().searchBySubstring({
+            targetEntity,
+            substring: target.value,
+          }),
+        );
+      } catch (e) {
+        console.warn(e.message);
+      }
+    },
+    [targetEntity],
+  );
 
   return (
     <Autocomplete

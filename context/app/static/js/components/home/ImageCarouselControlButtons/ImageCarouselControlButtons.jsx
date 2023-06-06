@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import ChevronLeftRoundedIcon from '@material-ui/icons/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
 import PanoramaFishEyeRoundedIcon from '@material-ui/icons/PanoramaFishEyeRounded';
@@ -18,13 +18,19 @@ function SelectImageButton({ isSelectedImageIndex, onClick }) {
 }
 
 function ImageCarouselControlButtons({ numImages, selectedImageIndex, setSelectedImageIndex }) {
-  function setNextSelectedImageIndex() {
-    setSelectedImageIndex((selectedImageIndex + 1) % numImages);
-  }
+  const setNextSelectedImageIndex = useCallback(
+    function setNextSelectedImageIndex() {
+      setSelectedImageIndex((selectedImageIndex + 1) % numImages);
+    },
+    [numImages, selectedImageIndex, setSelectedImageIndex],
+  );
 
-  function setPreviousSelectedImageIndex() {
-    setSelectedImageIndex((selectedImageIndex - 1 + numImages) % numImages); // In JS, "%" is remainder, not modulus.
-  }
+  const setPreviousSelectedImageIndex = useCallback(
+    function setPreviousSelectedImageIndex() {
+      setSelectedImageIndex((selectedImageIndex - 1 + numImages) % numImages); // In JS, "%" is remainder, not modulus.
+    },
+    [numImages, selectedImageIndex, setSelectedImageIndex],
+  );
 
   return (
     <FlexList aria-hidden="true">

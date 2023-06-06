@@ -1,5 +1,5 @@
 import React from 'react';
-import marked from 'marked';
+import { marked } from 'marked';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import OutboundLinkButton from 'js/shared-styles/Links/OutboundLinkButton';

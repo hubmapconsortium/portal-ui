@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
@@ -35,18 +35,21 @@ function VersionSelect({ uuid }) {
     fetchVersions();
   }, [entityEndpoint, uuid, lowerCaseEntityType, groupsToken]);
 
-  function visitNewVersion({ i }) {
-    window.location.href = `/browse/dataset/${versions[i].uuid}`;
-    // In the future, if it's not a dataset, the url will still redirect.
-  }
+  const visitNewVersion = useCallback(
+    function visitNewVersion({ i }) {
+      window.location.href = `/browse/dataset/${versions[i].uuid}`;
+      // In the future, if it's not a dataset, the url will still redirect.
+    },
+    [versions],
+  );
 
-  function getOptionDisplay(option) {
+  const getOptionDisplay = useCallback(function getOptionDisplay(option) {
     return option?.revision_number ? (
       <OverflowEllipsis>Version {option.revision_number}</OverflowEllipsis>
     ) : (
       <EmptyFullWidthDiv />
     );
-  }
+  }, []);
 
   return (
     <DropdownListbox

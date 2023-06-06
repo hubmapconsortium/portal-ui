@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
-import InterVariable from 'typeface-inter/Inter (web)/Inter.var.woff2';
+import InterVariable from 'typeface-inter';
 
 export default createGlobalStyle`
     @supports (font-variation-settings: normal) {

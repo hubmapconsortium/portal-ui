@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
@@ -25,9 +25,12 @@ function SavedList({ listUUID }) {
 
   const { title, description } = savedList;
 
-  function deleteCallback(uuids) {
-    removeEntitiesFromList(listUUID, uuids);
-  }
+  const deleteCallback = useCallback(
+    function deleteCallback(uuids) {
+      removeEntitiesFromList(listUUID, uuids);
+    },
+    [listUUID, removeEntitiesFromList],
+  );
 
   return (
     <PageSpacing>

@@ -6,9 +6,9 @@ extends:
   - plugin:jest-dom/recommended
   - plugin:testing-library/react
   - plugin:prettier/recommended
-  - prettier
   - plugin:import/errors
   - plugin:import/warnings
+  - prettier
 parser: '@babel/eslint-parser'
 globals:
   CDN_URL: readonly

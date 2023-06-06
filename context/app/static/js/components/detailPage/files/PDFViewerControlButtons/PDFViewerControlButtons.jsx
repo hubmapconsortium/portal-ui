@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import ChevronLeftRoundedIcon from '@material-ui/icons/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
 import Typography from '@material-ui/core/Typography';
@@ -9,17 +9,23 @@ function PDFViewerControlButtons({ numPages, currentPageNum, setPageNum }) {
   const atMaxPageNum = currentPageNum === numPages;
   const atMinPageNum = currentPageNum === 1;
 
-  function incrementPageNum() {
-    if (!atMaxPageNum) {
-      setPageNum(currentPageNum + 1);
-    }
-  }
+  const incrementPageNum = useCallback(
+    function incrementPageNum() {
+      if (!atMaxPageNum) {
+        setPageNum(currentPageNum + 1);
+      }
+    },
+    [atMaxPageNum, currentPageNum, setPageNum],
+  );
 
-  function decrementPageNum() {
-    if (!atMinPageNum) {
-      setPageNum(currentPageNum - 1);
-    }
-  }
+  const decrementPageNum = useCallback(
+    function decrementPageNum() {
+      if (!atMinPageNum) {
+        setPageNum(currentPageNum - 1);
+      }
+    },
+    [atMinPageNum, currentPageNum, setPageNum],
+  );
   return (
     <CenteredFlex>
       <StyledPaper>

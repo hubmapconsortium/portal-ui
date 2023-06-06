@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { trackLink } from 'js/helpers/trackers';
 
 import { LightBlueLink } from '.';
@@ -8,12 +8,15 @@ function sendOutboundEvent(event) {
 }
 
 function OutboundLink({ children, onClick, ...props }) {
-  function handleClick(event) {
-    if (onClick) {
-      onClick();
-    }
-    sendOutboundEvent(event);
-  }
+  const handleClick = useCallback(
+    function handleClick(event) {
+      if (onClick) {
+        onClick();
+      }
+      sendOutboundEvent(event);
+    },
+    [onClick],
+  );
   return (
     <LightBlueLink {...props} onClick={handleClick} rel="noopener noreferrer" target="_blank">
       {children}

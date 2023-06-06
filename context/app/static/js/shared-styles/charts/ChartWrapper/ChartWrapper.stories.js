@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
@@ -28,9 +28,9 @@ Default.args = { ...sharedArgs, chartTitle: 'Chart With Legend' };
 function Container(props) {
   const [chartTitle, setChartTitle] = useState('Chart with Dropdown A');
 
-  function handleChange(event) {
+  const handleChange = useCallback(function handleChange(event) {
     setChartTitle(event.target.value);
-  }
+  }, []);
 
   return (
     <ChartWrapper

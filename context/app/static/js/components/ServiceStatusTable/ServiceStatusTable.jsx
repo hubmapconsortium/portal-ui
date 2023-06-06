@@ -6,7 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import { version } from 'package';
+import packageInfo from 'package';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { StyledExternalLinkIcon } from 'js/components/detailPage/files/GlobusLinkMessage/style';
 import { HeaderCell } from 'js/shared-styles/tables';
@@ -77,7 +77,7 @@ function ServiceStatusTable({
           apiName: 'portal-ui',
           githubUrl: 'https://github.com/hubmapconsortium/portal-ui',
           // build: Not distinct from version.
-          apiVersion: version,
+          apiVersion: packageInfo.version,
           isUp: true,
         },
         buildServiceStatus({

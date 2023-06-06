@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import produce from 'immer';
+import { produce } from 'immer';
 
 function invertKeyToArrayMap(map) {
   return Object.entries(map).reduce((acc, [key, valuesArray]) => {

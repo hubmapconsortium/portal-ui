@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
@@ -19,10 +19,10 @@ function DeleteListButton({ listUUID }) {
 
   const queueListToBeDeleted = useSavedEntitiesStore(useSavedEnitiesSelector);
 
-  function closeMenuAndDeleteDialog() {
+  const closeMenuAndDeleteDialog = useCallback(function closeMenuAndDeleteDialog() {
     setMenuIsOpen(false);
     setDeleteListDialogIsOpen(false);
-  }
+  }, []);
 
   return (
     <>

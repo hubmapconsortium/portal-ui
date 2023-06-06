@@ -1,8 +1,15 @@
 {
-  "eslint.workingDirectories": ["./context"],
+  "eslint.workingDirectories": [
+    "./context"
+  ],
   "[javascriptreact]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
+  // Runs Prettier, then ESLint
+  "editor.codeActionsOnSave": [
+    "source.formatDocument",
+    "source.fixAll.eslint"
+  ],
   "[python]": {
     "editor.defaultFormatter": "ms-python.autopep8"
   },

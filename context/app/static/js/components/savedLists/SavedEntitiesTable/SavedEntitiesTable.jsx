@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -42,15 +42,21 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
     ? [...defaultColumns, { id: 'dateAddedToCollection', label: 'Date Added To Collection' }]
     : [...defaultColumns, { id: 'dateSaved', label: 'Date Saved' }];
 
-  function deleteSelectedSavedEntities() {
-    deleteCallback(selectedRows);
-    deselectHeaderAndRows();
-  }
+  const deleteSelectedSavedEntities = useCallback(
+    function deleteSelectedSavedEntities() {
+      deleteCallback(selectedRows);
+      deselectHeaderAndRows();
+    },
+    [deleteCallback, deselectHeaderAndRows, selectedRows],
+  );
 
-  function onSaveCallback() {
-    setShouldDisplaySaveAlert(true);
-    deselectHeaderAndRows();
-  }
+  const onSaveCallback = useCallback(
+    function onSaveCallback() {
+      setShouldDisplaySaveAlert(true);
+      deselectHeaderAndRows();
+    },
+    [setShouldDisplaySaveAlert, deselectHeaderAndRows],
+  );
   const selectedRowsSize = selectedRows.size;
 
   const { searchHits, isLoading } = useSavedEntityData(savedEntities, source);

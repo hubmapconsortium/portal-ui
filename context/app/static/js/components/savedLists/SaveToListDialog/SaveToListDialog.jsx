@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
@@ -18,15 +18,21 @@ function SaveToListDialog({ title, dialogIsOpen, setDialogIsOpen, entitiesToAdd,
 
   const { addEntitiesToList, savedLists } = useSavedEntitiesStore(useSavedEntitiesSelector);
 
-  function addSavedEntitiesToList() {
-    selectedLists.forEach((list) => addEntitiesToList(list, entitiesToAdd));
-  }
+  const addSavedEntitiesToList = useCallback(
+    function addSavedEntitiesToList() {
+      selectedLists.forEach((list) => addEntitiesToList(list, entitiesToAdd));
+    },
+    [addEntitiesToList, entitiesToAdd, selectedLists],
+  );
 
-  function handleSubmit() {
-    addSavedEntitiesToList();
-    setDialogIsOpen(false);
-    onSaveCallback();
-  }
+  const handleSubmit = useCallback(
+    function handleSubmit() {
+      addSavedEntitiesToList();
+      setDialogIsOpen(false);
+      onSaveCallback();
+    },
+    [addSavedEntitiesToList, onSaveCallback, setDialogIsOpen],
+  );
 
   return Object.keys(savedLists).length ? (
     <DialogModal

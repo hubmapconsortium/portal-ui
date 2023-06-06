@@ -2,13 +2,14 @@
 const { merge } = require('webpack-merge');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+// eslint-disable-next-line no-unused-vars
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const common = require('./webpack.common');
 
 const envConfig = {
   mode: 'production',
-  devtool: 'cheap-source-map',
+  devtool: 'source-map',
   output: {
     filename: '[name].[hash].js',
     chunkFilename: '[name].[hash].js',

@@ -7,15 +7,16 @@ import FileBrowserNode from './FileBrowserNode';
 import FilesContext from '../Files/context';
 
 const fakeOpenDUA = jest.fn();
+const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' };
 
 const uuid = 'fakeuuid';
 
+const detailContext = { uuid };
+
 function FilesProviders({ children }) {
   return (
-    <DetailContext.Provider value={{ uuid }}>
-      <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
-        {children}
-      </FilesContext.Provider>
+    <DetailContext.Provider value={detailContext}>
+      <FilesContext.Provider value={filesContext}>{children}</FilesContext.Provider>
     </DetailContext.Provider>
   );
 }

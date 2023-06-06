@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Button from '@material-ui/core/Button';
 
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
@@ -13,27 +13,33 @@ function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }) {
   const [description, setDescription] = useState('');
   const createList = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
 
-  function handleTitleChange(event) {
+  const handleTitleChange = useCallback(function handleTitleChange(event) {
     setTitle(event.target.value);
-  }
+  }, []);
 
-  function handleDescriptionChange(event) {
+  const handleDescriptionChange = useCallback(function handleDescriptionChange(event) {
     setDescription(event.target.value);
-  }
+  }, []);
 
-  const handleClose = () => {
-    setDialogIsOpen(false);
-  };
+  const handleClose = useCallback(
+    function handleClose() {
+      setDialogIsOpen(false);
+    },
+    [setDialogIsOpen],
+  );
 
-  function handleExit() {
+  const handleExit = useCallback(function handleExit() {
     setTitle('');
     setDescription('');
-  }
+  }, []);
 
-  function handleSubmit() {
-    createList({ title, description });
-    setDialogIsOpen(false);
-  }
+  const handleSubmit = useCallback(
+    function handleSubmit() {
+      createList({ title, description });
+      setDialogIsOpen(false);
+    },
+    [createList, title, description, setDialogIsOpen],
+  );
 
   return (
     <DialogModal

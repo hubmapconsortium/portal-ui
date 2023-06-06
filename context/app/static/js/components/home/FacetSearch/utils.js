@@ -1,11 +1,11 @@
-/* eslint-disable no-param-reassign */
-import produce from 'immer';
+import { produce } from 'immer';
 
 function getMatchingTerms(aggsData, searchTerm) {
   return Object.entries(aggsData.aggregations).reduce((acc, [k, v]) => {
     return produce(acc, (draft) => {
       const matches = v.buckets.filter((b) => b.key.toLowerCase().includes(searchTerm.toLowerCase()));
       if (matches.length > 0) {
+        // eslint-disable-next-line no-param-reassign
         draft[k] = matches;
       }
     });

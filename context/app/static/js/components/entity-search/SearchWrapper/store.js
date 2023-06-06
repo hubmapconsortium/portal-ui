@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import create from 'zustand';
 import createContext from 'zustand/context';
-import produce from 'immer';
+import { produce } from 'immer';
 
 import immer from 'js/stores/immerMiddleware';
 import metadataFieldtoEntityMap from 'metadata-field-entities';

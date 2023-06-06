@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { RefinementListFilter, RangeFilter, CheckboxFilter, HierarchicalMenuFilter } from 'searchkit';
 import { trackEvent } from 'js/helpers/trackers';
 
@@ -9,14 +9,17 @@ import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterI
 export function withAnalyticsEvent(ItemComponent, title, analyticsCategory) {
   return function UpdatedItemComponent({ onClick: originalOnClick, label, active, ...rest }) {
     const facetAction = active ? 'Unselect' : 'Select';
-    function updatedOnClick() {
-      trackEvent({
-        category: analyticsCategory,
-        action: `${facetAction} Facet`,
-        label: `${title}: ${label}`,
-      });
-      originalOnClick();
-    }
+    const updatedOnClick = useCallback(
+      function updatedOnClick() {
+        trackEvent({
+          category: analyticsCategory,
+          action: `${facetAction} Facet`,
+          label: `${title}: ${label}`,
+        });
+        originalOnClick();
+      },
+      [facetAction, label, originalOnClick],
+    );
     return <ItemComponent onClick={updatedOnClick} label={label} active={active} {...rest} />;
   };
 }

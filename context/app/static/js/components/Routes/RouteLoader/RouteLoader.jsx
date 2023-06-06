@@ -13,11 +13,11 @@ const transitionConfig = {
 };
 
 function RouteLoader() {
-  const transitions = useTransition(true, null, transitionConfig);
+  const transitions = useTransition(true, transitionConfig);
   return (
     <LoadingWrapper>
-      {transitions.map(({ key, props }) => (
-        <AnimatedCircularProgress key={key} style={props} />
+      {transitions((style) => (
+        <AnimatedCircularProgress style={style} />
       ))}
     </LoadingWrapper>
   );

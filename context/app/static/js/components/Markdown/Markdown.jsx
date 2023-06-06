@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import marked from 'marked';
+import { marked } from 'marked';
 import Typography from '@material-ui/core/Typography';
 
 import { StyledPaper } from './style';

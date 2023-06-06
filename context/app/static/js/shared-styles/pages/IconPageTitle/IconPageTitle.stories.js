@@ -15,8 +15,8 @@ const sharedArgs = {
   children: 'Page Title',
 };
 
-function Template(args) {
-  return <IconPageTitle {...args}>{args.children}</IconPageTitle>;
+function Template({ children, ...args }) {
+  return <IconPageTitle {...args}>{children}</IconPageTitle>;
 }
 
 export const Default = Template.bind({});

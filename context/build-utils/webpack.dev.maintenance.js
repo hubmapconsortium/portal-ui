@@ -8,10 +8,10 @@ const envConfig = {
   devtool: 'inline-source-map',
   devServer: {
     contentBase: join(__dirname, '../app/static/js/maintenance/public/'),
-    publicPath: '/',
+    // publicPath: '/',
     port: 5002,
     compress: true,
-    stats: 'minimal',
+    // stats: 'minimal',
   },
 };
 

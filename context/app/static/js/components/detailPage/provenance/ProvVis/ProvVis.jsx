@@ -15,7 +15,7 @@ export default function ProvVis({ provData, getNameForActivity, getNameForEntity
   const { steps, setSteps } = useProvenanceStore(useProvenanceStoreSelector);
 
   useEffect(() => {
-    setSteps(new ProvData(provData, getNameForActivity, getNameForEntity, entity_type).toCwl());
+    setSteps(new ProvData(provData, entity_type, getNameForActivity, getNameForEntity).toCwl());
   }, [provData, getNameForActivity, getNameForEntity, setSteps, entity_type]);
   return (
     <GraphParser

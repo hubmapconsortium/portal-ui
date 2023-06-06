@@ -20,6 +20,7 @@ const cellsStoreSelector = (state) => ({
 
 function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
   const themeContext = useContext(ThemeContext);
+  const { zIndex, palette } = themeContext;
   const {
     setQueryType,
     setSelectedQueryType,
@@ -84,8 +85,8 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
         tooltipComponent={TutorialTooltip}
         styles={{
           options: {
-            arrowColor: themeContext.palette.info.dark,
-            zIndex: themeContext.zIndex.tutorial,
+            arrowColor: palette.info.dark,
+            zIndex: zIndex.tutorial,
             overlayColor: 'rgba(0, 0, 0, 0)',
           },
         }}

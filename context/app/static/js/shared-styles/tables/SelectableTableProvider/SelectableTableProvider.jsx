@@ -8,7 +8,7 @@ function SelectableTableProvider({ children, tableLabel }) {
 }
 
 export const withSelectableTableProvider = (Component, tableLabel) =>
-  function ({ ...props }) {
+  function WithSelectableTableProvider({ ...props }) {
     return (
       <SelectableTableProvider tableLabel={tableLabel}>
         <Component {...props} />
