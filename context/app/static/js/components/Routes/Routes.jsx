@@ -33,6 +33,8 @@ const SampleSearch = lazy(() => import('js/pages/entity-search/SampleSearch'));
 const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'));
 const Workspaces = lazy(() => import('js/pages/Workspaces'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
+const Genes = lazy(() => import('js/pages/Genes'));
+const Proteins = lazy(() => import('js/pages/Proteins'));
 
 function Routes({ flaskData }) {
   const {
@@ -269,6 +271,22 @@ function Routes({ flaskData }) {
 
   if (urlPath === '/client-side-error') {
     throw Error('Intentional client-side-error');
+  }
+
+  if (urlPath.startsWith('/genes')) {
+    return (
+      <Route>
+        <Genes entities={entities} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/proteins/')) {
+    return (
+      <Route>
+        <Proteins entities={entities} />
+      </Route>
+    );
   }
 
   if ('markdown' in flaskData) {
