@@ -1,5 +1,5 @@
 import MatomoTracker from '@datapunt/matomo-tracker-js';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { readCookie } from 'js/helpers/functions';
 
 function getSiteId(location) {
@@ -45,11 +45,16 @@ const tracker = new MatomoTracker({
   configurations: { setCustomDimension: [1 /* user_type */, getUserType()] },
 });
 
-ReactGA.initialize('UA-133341631-3', { testMode: process.env.NODE_ENV === 'test' });
+ReactGA.initialize('G-Q1QJYZHM1D', {
+  testMode: process.env.NODE_ENV === 'test', // Disables calls to GA during testing.
+  gaOptions: {
+    debug_mode: process.env.NODE_ENV === 'development', // Sends calls to GA in debug mode while developing locally.
+  },
+});
 
 function trackPageView(path) {
   tracker.trackPageView({ href: path });
-  ReactGA.pageview(path);
+  ReactGA.send({ hitType: 'pageview', page: path });
 }
 
 function trackEvent(event) {

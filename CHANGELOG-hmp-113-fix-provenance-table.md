@@ -1,0 +1,1 @@
+- Fix provenance table sample sorting calculation

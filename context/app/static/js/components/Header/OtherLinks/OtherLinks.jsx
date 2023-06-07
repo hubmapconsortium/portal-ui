@@ -3,21 +3,31 @@ import PropTypes from 'prop-types';
 
 import DropdownLink from '../DropdownLink';
 
+const links = [
+  {
+    href: '/collections',
+    label: 'Data Collections',
+  },
+  {
+    href: '/organ',
+    label: 'Organs',
+  },
+  {
+    href: '/publications',
+    label: 'Publications',
+  },
+  {
+    href: '/cells',
+    label: 'Molecular Data Queries - BETA',
+  },
+];
+
 function OtherLinks({ isIndented }) {
-  return (
-    <>
-      <DropdownLink href="/collections" isIndented={isIndented}>
-        Data Collections
-      </DropdownLink>
-      <DropdownLink href="/organ" isIndented={isIndented}>
-        Organs
-      </DropdownLink>
-      <DropdownLink href="/cells" isIndented={isIndented}>
-        Molecular Data Queries - BETA
-      </DropdownLink>
-      {/* TODO: Add publications here, when ready. */}
-    </>
-  );
+  return links.map(({ href, label }) => (
+    <DropdownLink href={href} isIndented={isIndented}>
+      {label}
+    </DropdownLink>
+  ));
 }
 
 OtherLinks.propTypes = {

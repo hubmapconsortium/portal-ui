@@ -1,4 +1,9 @@
-import { buildSecondaryText, buildAbbreviatedContributors, buildPublicationPanelProps } from './utils';
+import {
+  buildSecondaryText,
+  buildAbbreviatedContributors,
+  buildPublicationPanelProps,
+  buildPublicationsSeparatedByStatus,
+} from './utils';
 
 const ash = {
   first_name: 'Ash',
@@ -19,6 +24,28 @@ const brock = {
 };
 
 const publication_venue = 'Pallet Town Times';
+
+const preprintPublicationHit = {
+  _source: {
+    uuid: 'abc123',
+    title: 'Publication ABC',
+    contributors: [ash],
+    publication_status: false,
+    publication_venue,
+    publication_date: '2022-03-02',
+  },
+};
+
+const publishedPublicationHit = {
+  _source: {
+    uuid: 'def456',
+    title: 'Publication DEF',
+    contributors: [professorOak],
+    publication_status: true,
+    publication_venue,
+    publication_date: '2022-03-02',
+  },
+};
 
 describe('buildAbbreviatedContributors', () => {
   test("should return the contributor's name if there is only a single contributor", () => {
@@ -55,22 +82,37 @@ describe('buildSecondaryText', () => {
 
 describe('buildPublicationsPanelProps', () => {
   test('should return the props require for the panel list', () => {
-    const publicationHit = {
-      _source: {
-        uuid: 'abc123',
-        title: 'Publication ABC',
-        contributors: [ash],
-        publication_venue,
-        publication_date: '2022-03-02',
-      },
-    };
-
-    expect(buildPublicationPanelProps(publicationHit)).toEqual({
+    expect(buildPublicationPanelProps(preprintPublicationHit)).toEqual({
       key: 'abc123',
       href: '/browse/publication/abc123',
       title: 'Publication ABC',
       secondaryText: 'Ash Ketchum | Pallet Town Times',
       rightText: 'Published: 2022-03-02',
+    });
+  });
+});
+
+describe('buildPublicationsSeparatedByStatus', () => {
+  test('should return sorted publications', () => {
+    expect(buildPublicationsSeparatedByStatus([preprintPublicationHit, publishedPublicationHit])).toEqual({
+      preprint: [
+        {
+          key: 'abc123',
+          href: '/browse/publication/abc123',
+          title: 'Publication ABC',
+          secondaryText: 'Ash Ketchum | Pallet Town Times',
+          rightText: 'Published: 2022-03-02',
+        },
+      ],
+      published: [
+        {
+          key: 'def456',
+          href: '/browse/publication/def456',
+          title: 'Publication DEF',
+          secondaryText: 'Professor Oak | Pallet Town Times',
+          rightText: 'Published: 2022-03-02',
+        },
+      ],
     });
   });
 });
