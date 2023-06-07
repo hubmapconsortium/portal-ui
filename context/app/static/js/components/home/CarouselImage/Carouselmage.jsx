@@ -9,7 +9,7 @@ import { StyledImage } from './style';
 // Setting height and width: https://www.smashingmagazine.com/2020/03/setting-height-width-images-important-again/
 // 1392 was the max resolution provided by the designer.
 
-function Carouselmage({ src320w, src640w, src1280w, src1392w, alt }) {
+function CarouselImage({ src320w, src640w, src1280w, src1392w, alt }) {
   const theme = useTheme();
   const mdBreakpoint = theme.breakpoints.values.md;
 
@@ -29,4 +29,4 @@ function Carouselmage({ src320w, src640w, src1280w, src1392w, alt }) {
   );
 }
 
-export default Carouselmage;
+export default CarouselImage;

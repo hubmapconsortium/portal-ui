@@ -27,7 +27,7 @@ describe('ProvData errors', () => {
     } catch (e) {
       message = e.message;
     }
-    expect(message).toContain("should have required property 'prefix'");
+    expect(message).toContain("must have required property 'prefix'");
   });
 });
 

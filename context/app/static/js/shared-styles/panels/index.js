@@ -22,7 +22,7 @@ const PanelWrapper = styled.div`
   &:hover {
     background-color: ${(props) => props.theme.palette.hoverShadow.main};
   }
-  @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
+  @media (min-width: ${(props) => props.theme.breakpoints.values.md}) {
     flex-direction: row;
     justify-content: space-between;
   }
@@ -52,7 +52,7 @@ const StyledTypography = styled(Typography)`
 `;
 
 const PanelScrollBox = styled(Paper)`
-  @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
+  @media (min-width: ${(props) => props.theme.breakpoints.values.md}) {
     flex-grow: 1;
     overflow-y: scroll;
     margin-top: ${(props) => props.theme.spacing(1)};

@@ -2,7 +2,8 @@ import React, { useMemo } from 'react';
 import { ThemeProvider } from 'styled-components';
 
 import PropTypes from 'prop-types';
-import { ThemeProvider as MuiThemeProvider, StylesProvider, createGenerateClassName } from '@mui/material/styles';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import { createGenerateClassName, StylesProvider } from '@mui/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import GlobalStyles from 'js/components/globalStyles';

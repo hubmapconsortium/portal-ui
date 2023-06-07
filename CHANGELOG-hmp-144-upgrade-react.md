@@ -1,1 +1,3 @@
-- Updated ReactJS and other front-end dependencies
+- Updated to React v18
+- Updated to MUI v5
+- Updated to Webpack v5

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { BarStack } from '@visx/shape';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
@@ -49,8 +49,8 @@ function VerticalStackedBarChart({
     handleMouseLeave,
   } = useChartTooltip();
 
-  const TickComponent = useMemo(
-    ({ ...props }) => <Tick {...props} handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave} />,
+  const TickComponent = useCallback(
+    (props) => <Tick {...props} handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave} />,
     [handleMouseEnter, handleMouseLeave],
   );
 
