@@ -1,14 +1,11 @@
 import React from 'react';
 import { DetailPageSection } from 'js/components/detailPage/style';
-// import SummaryData from 'js/components/detailPage/summary/SummaryData';
-// import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
+import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
 
 function Summary() {
   return (
     <DetailPageSection id="summary">
-      Hello
-      {/* <SummaryData />
-      <SummaryBody /> */}
+      <SummaryBody />
     </DetailPageSection>
   );
 }
