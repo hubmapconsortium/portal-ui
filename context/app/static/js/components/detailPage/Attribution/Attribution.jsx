@@ -22,6 +22,6 @@ function Attribution({ group_name, created_by_user_displayname, created_by_user_
   );
 }
 
-Attribution.propTypes = {};
+// Attribution.propTypes = {};
 
 export default React.memo(Attribution);

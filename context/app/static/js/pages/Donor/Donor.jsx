@@ -82,4 +82,6 @@ function DonorDetail() {
   );
 }
 
+// DonorDetail.propTypes = {};
+
 export default DonorDetail;

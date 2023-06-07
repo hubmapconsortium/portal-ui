@@ -49,4 +49,6 @@ function ProvTabs({ provData }) {
   );
 }
 
+// ProvTabs.propTypes = {};
+
 export default ProvTabs;

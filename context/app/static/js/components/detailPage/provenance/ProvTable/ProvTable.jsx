@@ -54,4 +54,6 @@ function ProvTable() {
   );
 }
 
+// ProvTable.propTypes = {}
+
 export default ProvTable;

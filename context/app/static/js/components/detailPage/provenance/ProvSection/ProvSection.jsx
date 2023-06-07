@@ -36,4 +36,6 @@ function ProvSection() {
   );
 }
 
+// ProvSection.propTypes = {};
+
 export default ProvSection;

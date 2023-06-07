@@ -105,5 +105,7 @@ function MetadataTable() {
   );
 }
 
+// MetadataTable.prototype = {};
+
 export default MetadataTable;
 export { tableDataToRows, getDescription };

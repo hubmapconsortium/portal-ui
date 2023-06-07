@@ -37,4 +37,6 @@ function DerivedEntitiesSection() {
   );
 }
 
+// DerivedEntitiesSection.propTypes = {};
+
 export default DerivedEntitiesSection;
