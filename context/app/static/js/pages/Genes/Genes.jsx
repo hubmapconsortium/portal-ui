@@ -1,17 +1,14 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
-
 import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
-import Description from 'js/components/organ/Description';
 import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
+import Summary from 'js/components/detailPage/summary/Summary';
 import Section from 'js/shared-styles/sections/Section';
-
 import { FlexRow, Content } from './style';
 
 function Organ({ organ }) {
@@ -46,13 +43,7 @@ function Organ({ organ }) {
         <Typography variant="h1" component="h2">
           {organ.name}
         </Typography>
-        {shouldDisplaySection[summaryId] && (
-          <Section id={summaryId}>
-            <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short} asctbId={organ.asctb}>
-              {organ.description}
-            </Description>
-          </Section>
-        )}
+        <Summary />
         {shouldDisplaySection[hraId] && (
           <Section id={hraId}>
             <HumanReferenceAtlas uberonIri={organ.uberon} />

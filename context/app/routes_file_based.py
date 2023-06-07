@@ -71,8 +71,9 @@ def genes(name):
     organ = safe_load(filename.read_text())
     flask_data = {
         **get_default_flask_data(),
-        'organ': organ
+        'organ': organ,
     }
+    print('FLASK DATAAAAAA', flask_data)
     return render_template(
         'base-pages/react-content.html',
         title='genes',
