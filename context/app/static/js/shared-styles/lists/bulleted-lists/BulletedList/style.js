@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import List from '@material-ui/core/List';
+import List from '@mui/material/List';
 
 const StyledList = styled(List)`
   list-style: 'disc';
-  padding-left: ${(props) => props.theme.spacing(2.5)}px;
+  padding-left: ${(props) => props.theme.spacing(2.5)};
 `;
 
 export { StyledList };

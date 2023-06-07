@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 
@@ -31,7 +31,7 @@ const PanelBox = styled.div`
 const LeftTextWrapper = styled.div`
   white-space: nowrap;
   min-width: 0px; // needed to handle overflow
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const TruncatedText = styled(Typography)`
@@ -45,7 +45,7 @@ const TruncatedLink = styled(LightBlueLink)`
 
 const RightTextWrapper = styled.div`
   flex-shrink: 0;
-  padding-left: ${(props) => props.theme.spacing(0.5)}px;
+  padding-left: ${(props) => props.theme.spacing(0.5)};
 `;
 
 export { PanelBox, LeftTextWrapper, TruncatedText, TruncatedLink, RightTextWrapper, panelBorderStyles };

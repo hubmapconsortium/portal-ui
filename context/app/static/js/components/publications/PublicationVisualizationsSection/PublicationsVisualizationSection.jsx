@@ -1,6 +1,6 @@
-import Accordion from '@material-ui/core/Accordion';
-import Typography from '@material-ui/core/Typography';
-import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
+import Accordion from '@mui/material/Accordion';
+import Typography from '@mui/material/Typography';
+import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { DetailPageSection } from 'js/components/detailPage/style';

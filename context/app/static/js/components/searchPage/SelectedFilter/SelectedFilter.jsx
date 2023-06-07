@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { trackEvent } from 'js/helpers/trackers';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 
 import { StyledCancelIcon, SelectedFilterDiv } from './style';
 

@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import Container from '@mui/material/Container';
+import ToggleButton from '@mui/material/ToggleButton';
+import SvgIcon from '@mui/material/SvgIcon';
 
 const StyledSvgIcon = styled(SvgIcon)`
   font-size: 1.5rem;
   color: ${(props) => props.theme.palette.primary.main};
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const FlexContainer = styled(Container)`

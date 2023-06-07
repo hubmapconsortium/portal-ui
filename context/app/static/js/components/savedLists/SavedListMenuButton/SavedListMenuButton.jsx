@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';

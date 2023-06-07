@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import useStateSet from 'js/hooks/useStateSet';

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 
 import { useStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
 import TooltipProgressButton from 'js/shared-styles/tutorials/TooltipProgressButton';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { rest } from 'msw';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import { Citation } from 'js/components/detailPage/Citation/Citation.stories';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';

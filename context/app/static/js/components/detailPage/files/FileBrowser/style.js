@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
 
 const ChipWrapper = styled.div`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};

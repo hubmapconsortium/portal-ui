@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import Skeleton from '@material-ui/lab/Skeleton';
-import Typography from '@material-ui/core/Typography';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
 
 import { Alert } from 'js/shared-styles/alerts';
 import { inputPadding } from 'js/components/home/FacetSearch/style';
 
 const StyledPaper = styled(Paper)`
-  margin-top: ${(props) => props.theme.spacing(1)}px;
+  margin-top: ${(props) => props.theme.spacing(1)};
   max-height: 260px; // 250px in the mockup, but added 10px so it's clearly scrollable
   overflow-y: scroll;
   width: 100%;

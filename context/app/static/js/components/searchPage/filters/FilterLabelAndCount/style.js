@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 const Flex = styled.div`
   display: flex;

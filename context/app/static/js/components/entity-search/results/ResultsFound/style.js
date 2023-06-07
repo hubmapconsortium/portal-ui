@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 const StyledTypography = styled(Typography)`
   margin-left: auto;

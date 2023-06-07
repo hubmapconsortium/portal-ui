@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { InfoIcon } from 'js/shared-styles/icons';
@@ -10,7 +10,7 @@ const FlexPaper = styled(Paper)`
 
 const Flex = styled.div`
   display: flex;
-  margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(0.5)};
 `;
 
 const FlexRight = styled.div`
@@ -19,7 +19,7 @@ const FlexRight = styled.div`
 `;
 
 const StyledInfoIcon = styled(InfoIcon)`
-  margin-left: ${(props) => props.theme.spacing(0.5)}px;
+  margin-left: ${(props) => props.theme.spacing(0.5)};
 `;
 
 const StyledSectionHeader = styled(SectionHeader)`

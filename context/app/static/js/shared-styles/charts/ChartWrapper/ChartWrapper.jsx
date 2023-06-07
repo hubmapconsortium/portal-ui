@@ -1,6 +1,6 @@
 import React from 'react';
 import { LegendOrdinal } from '@visx/legend';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import { TitleWrapper } from 'js/shared-styles/charts/style';
 import { Flex, FlexGrowChild, DropdownWrapper, DropdownAndLegendWrapper } from './style';

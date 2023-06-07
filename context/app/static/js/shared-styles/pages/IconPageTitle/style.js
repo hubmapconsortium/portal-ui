@@ -10,7 +10,7 @@ const FlexContainer = styled.div`
 `;
 
 const StyledHeaderIcon = styled(HeaderIcon)`
-  margin-right: ${(props) => props.theme.spacing(1.5)}px;
+  margin-right: ${(props) => props.theme.spacing(1.5)};
 `;
 
 export { FlexContainer, StyledHeaderIcon };

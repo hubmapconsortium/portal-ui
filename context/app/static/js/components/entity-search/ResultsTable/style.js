@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import TableRow from '@material-ui/core/TableRow';
+import TableRow from '@mui/material/TableRow';
 
 const StyledTableRow = styled(TableRow)`
   // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.

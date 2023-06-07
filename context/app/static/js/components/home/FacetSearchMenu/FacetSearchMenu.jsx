@@ -1,7 +1,7 @@
 import React from 'react';
-import Skeleton from '@material-ui/lab/Skeleton';
-import List from '@material-ui/core/List';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Skeleton from '@mui/material/Skeleton';
+import List from '@mui/material/List';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 import FacetSearchEntityListItems from 'js/components/home/FacetSearchEntityListItems';
 import { StyledPaper, StyledPopper, StyledAlert, StyledTypography, HeaderSkeleton } from './style';

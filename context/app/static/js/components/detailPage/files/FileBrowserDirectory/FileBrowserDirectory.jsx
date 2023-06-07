@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import ArrowRightRoundedIcon from '@material-ui/icons/ArrowRightRounded';
-import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
+import ArrowRightRoundedIcon from '@mui/icons-material/ArrowRightRounded';
+import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 
 import useFilesStore from 'js/stores/useFilesStore';
 import { StyledTableRow, Directory, StyledFolderIcon, StyledFolderOpenIcon } from './style';

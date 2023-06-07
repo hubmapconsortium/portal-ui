@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import { ReactComponent as Logo } from 'assets/svg/hubmap-logo.svg';
 
 const FlexContainer = styled(Container)`
-  margin-top: ${(props) => props.theme.spacing(4)}px;
-  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  margin-top: ${(props) => props.theme.spacing(4)};
+  margin-bottom: ${(props) => props.theme.spacing(2)};
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -13,7 +13,7 @@ const FlexContainer = styled(Container)`
 
 const Flex = styled.div`
   display: flex;
-  margin-bottom: ${(props) => props.theme.spacing(4)}px;
+  margin-bottom: ${(props) => props.theme.spacing(4)};
   flex-wrap: wrap;
 `;
 

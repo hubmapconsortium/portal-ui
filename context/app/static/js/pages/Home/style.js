@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
 const GridAreaContainer = styled(Container)`
@@ -22,16 +22,16 @@ const FlexGrowDiv = styled.div`
 
 const UpperGrid = styled.div`
   display: grid;
-  grid-gap: ${(props) => props.theme.spacing(5)}px;
+  grid-gap: ${(props) => props.theme.spacing(5)};
   grid-template-areas: 'title' 'carousel' 'counts';
-  margin-bottom: ${(props) => props.theme.spacing(5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(5)};
 `;
 
 const LowerContainerGrid = styled(Container)`
   display: grid;
-  grid-gap: ${(props) => props.theme.spacing(3)}px;
+  grid-gap: ${(props) => props.theme.spacing(3)};
   grid-template-areas: 'guidelines' 'external-links';
-  margin-bottom: ${(props) => props.theme.spacing(5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(5)};
 
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     grid-template-areas: 'bar-chart' 'guidelines' 'external-links';
@@ -39,7 +39,7 @@ const LowerContainerGrid = styled(Container)`
 `;
 
 const SectionHeader = styled(Typography)`
-  margin-bottom: ${(props) => props.theme.spacing(1.5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1.5)};
 `;
 
 const OffsetDatasetsHeader = styled(SectionHeader)`

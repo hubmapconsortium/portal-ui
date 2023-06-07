@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import format from 'date-fns/format';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import Typography from '@material-ui/core/Typography';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import Typography from '@mui/material/Typography';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';

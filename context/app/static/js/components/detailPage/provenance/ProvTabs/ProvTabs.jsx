@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import ProvGraph from '../ProvGraph';

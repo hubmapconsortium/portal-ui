@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 import useResizeObserver from 'use-resize-observer/polyfilled';
 
 import useSearchData from 'js/hooks/useSearchData';

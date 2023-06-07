@@ -14,7 +14,7 @@ const FlexForm = styled.form`
 `;
 
 const StyledLabel = styled.label`
-  margin-right: ${(props) => props.theme.spacing(5)}px;
+  margin-right: ${(props) => props.theme.spacing(5)};
 `;
 
 const inputPadding = 8;

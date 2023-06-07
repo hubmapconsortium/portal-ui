@@ -1,5 +1,5 @@
-import Paper from '@material-ui/core/Paper';
-import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
+import Paper from '@mui/material/Paper';
+import FullscreenRoundedIcon from '@mui/icons-material/FullscreenRounded';
 import Bowser from 'bowser';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';

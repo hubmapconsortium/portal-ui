@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 
 import LogSlider from 'js/shared-styles/inputs/LogSlider';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';

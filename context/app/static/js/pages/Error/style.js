@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 const Background = styled.div`
   background-color: ${(props) =>
@@ -20,7 +20,7 @@ const StyledPaper = styled(Paper)`
 `;
 
 const StyledTypography = styled(Typography)`
-  margin-bottom: ${(props) => props.theme.spacing(props.$mb)}px;
+  margin-bottom: ${(props) => props.theme.spacing(props.$mb)};
 `;
 
 export { Background, StyledPaper, StyledTypography };

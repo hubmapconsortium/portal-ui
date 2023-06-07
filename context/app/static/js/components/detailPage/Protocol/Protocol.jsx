@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Divider from '@material-ui/core/Divider';
+import Divider from '@mui/material/Divider';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import useProtocolData from 'js/hooks/useProtocolData';

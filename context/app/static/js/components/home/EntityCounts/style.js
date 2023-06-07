@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import Container from '@mui/material/Container';
+import SvgIcon from '@mui/material/SvgIcon';
 import URLSvgIcon from 'js/shared-styles/icons/URLSvgIcon';
 
 const Background = styled.div`

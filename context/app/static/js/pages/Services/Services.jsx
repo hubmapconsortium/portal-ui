@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 
 import { AppContext } from 'js/components/Providers';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';

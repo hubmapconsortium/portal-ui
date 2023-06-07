@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
 
 const StyledList = styled(List)`
   padding: 0px;

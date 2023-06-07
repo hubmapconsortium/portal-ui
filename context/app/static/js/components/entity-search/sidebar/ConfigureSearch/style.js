@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
-import DialogContent from '@material-ui/core/DialogContent';
+import Paper from '@mui/material/Paper';
+import DialogContent from '@mui/material/DialogContent';
 
 const Flex = styled.div`
   display: flex;

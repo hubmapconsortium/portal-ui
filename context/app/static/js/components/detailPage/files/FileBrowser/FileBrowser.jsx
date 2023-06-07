@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import DoneIcon from '@material-ui/icons/Done';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
-import Chip from '@material-ui/core/Chip';
+import DoneIcon from '@mui/icons-material/Done';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableRow from '@mui/material/TableRow';
+import TableBody from '@mui/material/TableBody';
+import Chip from '@mui/material/Chip';
 
 import useFilesStore from 'js/stores/useFilesStore';
 import { relativeFilePathsToTree } from './utils';

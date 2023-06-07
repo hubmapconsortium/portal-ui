@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import FilesContext from '../Files/context';

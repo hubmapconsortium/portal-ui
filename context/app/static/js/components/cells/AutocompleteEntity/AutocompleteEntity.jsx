@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 import CellsService from 'js/components/cells/CellsService';
 
@@ -52,7 +52,7 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
       options={options}
       multiple
       getOptionLabel={(option) => option}
-      getOptionSelected={(option, value) => option.full === value}
+      isOptionEqualToValue={(option, value) => option.full === value}
       renderOption={(option) => (
         <>
           {option.pre}

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo } from 'react';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import SvgIcon from '@mui/material/SvgIcon';
 
 import { AppContext } from 'js/components/Providers';
 import { LightBlueLink } from 'js/shared-styles/Links';

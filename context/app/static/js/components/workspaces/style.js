@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import Description from 'js/shared-styles/sections/Description';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
@@ -20,8 +20,8 @@ const Bold = styled(Typography)`
 `;
 
 const StyledDescription = styled(Description)`
-  margin-bottom: ${(props) => props.theme.spacing(2)}px;
-  padding: ${(props) => props.theme.spacing(2.5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(2)};
+  padding: ${(props) => props.theme.spacing(2.5)};
 `;
 
 export { StyledButton, LinkButton, Bold, StyledDescription };

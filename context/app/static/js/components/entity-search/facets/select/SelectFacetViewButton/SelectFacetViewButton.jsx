@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { defaultSelectFacetSize } from 'js/components/entity-search/SearchWrapper/utils';

@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import Link from '@material-ui/core/Link';
-import MenuItem from '@material-ui/core/MenuItem';
+import Link from '@mui/material/Link';
+import MenuItem from '@mui/material/MenuItem';
 
 import { InfoIcon } from 'js/shared-styles/icons';
 import DropdownMenuButton from 'js/shared-styles/dropdowns/DropdownMenuButton';
 
 const StyledDropdownMenuButton = styled(DropdownMenuButton)`
-  margin: 0 ${(props) => props.theme.spacing(1)}px;
+  margin: 0 ${(props) => props.theme.spacing(1)};
 `;
 
 const StyledLink = styled(Link)`
@@ -17,7 +17,7 @@ const StyledLink = styled(Link)`
 
 const StyledInfoIcon = styled(InfoIcon)`
   font-size: 1rem;
-  margin-left: ${(props) => props.theme.spacing(0.5)}px;
+  margin-left: ${(props) => props.theme.spacing(0.5)};
 `;
 
 const StyledMenuItem = styled(MenuItem)`

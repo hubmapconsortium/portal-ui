@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { useInView } from 'react-intersection-observer';
 
 import useEntityStore from 'js/stores/useEntityStore';

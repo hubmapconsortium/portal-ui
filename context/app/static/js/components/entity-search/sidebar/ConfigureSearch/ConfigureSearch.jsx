@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 import DialogModal from 'js/shared-styles/DialogModal';
 import DonorSampleConfigureSearchTable from 'js/components/entity-search/sidebar/DonorSampleConfigureSearchTable';

@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 // In the latest version, "Accordion" is renamed to "Accordion".
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import Accordion from '@material-ui/core/Accordion';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Accordion from '@mui/material/Accordion';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const StyledAccordion = styled(Accordion)`
   box-shadow: none;

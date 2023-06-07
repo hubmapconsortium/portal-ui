@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import LensIcon from '@material-ui/icons/LensRounded';
+import LensIcon from '@mui/icons-material/LensRounded';
 
 // Default font-size is too large, and causes vertical misalignment
 // of text in this cell. 0.8rem works, but somewhat arbitrary.

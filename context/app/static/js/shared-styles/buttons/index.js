@@ -1,8 +1,8 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import IconButton from '@material-ui/core/IconButton';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import Button from '@material-ui/core/Button';
+import IconButton from '@mui/material/IconButton';
+import ToggleButton from '@mui/material/ToggleButton';
+import Button from '@mui/material/Button';
 
 const iconButtonHeight = 40;
 
