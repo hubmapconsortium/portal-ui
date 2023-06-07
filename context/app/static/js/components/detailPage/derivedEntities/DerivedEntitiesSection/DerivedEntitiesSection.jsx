@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useFlaskDataContext } from 'js/components/Providers';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import RelatedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import RelatedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';

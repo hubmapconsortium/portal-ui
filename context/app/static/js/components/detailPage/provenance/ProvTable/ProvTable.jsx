@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-import { useFlaskDataContext } from 'js/components/Providers';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';

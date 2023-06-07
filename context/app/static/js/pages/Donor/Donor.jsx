@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useFlaskDataContext } from 'js/components/Providers';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
