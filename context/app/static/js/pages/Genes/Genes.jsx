@@ -14,29 +14,21 @@ import Section from 'js/shared-styles/sections/Section';
 
 import { FlexRow, Content } from './style';
 
-function Organ() {
+function Organ({ organ }) {
   const summaryId = 'Summary';
   const hraId = 'Human Reference Atlas';
   const referenceId = 'Reference-Based Analysis';
   const assaysId = 'Assays';
   const samplesId = 'Samples';
 
-  //   const shouldDisplaySearch = organ.search.length > 0;
-
-  //   const shouldDisplaySection = {
-  //     [summaryId]: Boolean(organ?.description),
-  //     [hraId]: organ.has_iu_component,
-  //     [referenceId]: Boolean(organ?.azimuth),
-  //     [assaysId]: shouldDisplaySearch,
-  //     [samplesId]: shouldDisplaySearch,
-  //   };
+  const shouldDisplaySearch = organ.search.length > 0;
 
   const shouldDisplaySection = {
-    [summaryId]: 'Boolean(organ?.description)',
-    [hraId]: 'organ.has_iu_component',
-    [referenceId]: 'Boolean(organ?.azimuth)',
-    [assaysId]: 'shouldDisplaySearch',
-    [samplesId]: 'shouldDisplaySearch',
+    [summaryId]: Boolean(organ?.description),
+    [hraId]: organ.has_iu_component,
+    [referenceId]: Boolean(organ?.azimuth),
+    [assaysId]: shouldDisplaySearch,
+    [samplesId]: shouldDisplaySearch,
   };
 
   const sectionOrder = Object.entries(shouldDisplaySection)
@@ -52,30 +44,36 @@ function Organ() {
           Organ
         </Typography>
         <Typography variant="h1" component="h2">
-          {/* {organ.name} */}
+          {organ.name}
         </Typography>
-        <Section id={summaryId}>
-          {/* <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short} asctbId={organ.asctb}> */}
-          <Description>{/* {organ.description} */}</Description>
-        </Section>
-        <Section id={hraId}>
-          {/* <HumanReferenceAtlas uberonIri={organ.uberon} /> */}
-          <HumanReferenceAtlas />
-        </Section>
-        <Section id={referenceId}>
-          {/* <Azimuth config={organ.azimuth} /> */}
-          <Azimuth />
-        </Section>
-        <Section id={assaysId}>
-          {/* <Assays organTerms={organ.search} /> */}
-          <Assays />
-          {/* <DatasetsBarChart name={organ.name} search={organ.search} /> */}
-          <DatasetsBarChart />
-        </Section>
-        <Section id={samplesId}>
-          {/* <Samples organTerms={organ.search} /> */}
-          <Samples />
-        </Section>
+        {shouldDisplaySection[summaryId] && (
+          <Section id={summaryId}>
+            <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short} asctbId={organ.asctb}>
+              {organ.description}
+            </Description>
+          </Section>
+        )}
+        {shouldDisplaySection[hraId] && (
+          <Section id={hraId}>
+            <HumanReferenceAtlas uberonIri={organ.uberon} />
+          </Section>
+        )}
+        {shouldDisplaySection[referenceId] && (
+          <Section id={referenceId}>
+            <Azimuth config={organ.azimuth} />
+          </Section>
+        )}
+        {shouldDisplaySection[assaysId] && (
+          <Section id={assaysId}>
+            <Assays organTerms={organ.search} />
+            <DatasetsBarChart name={organ.name} search={organ.search} />
+          </Section>
+        )}
+        {shouldDisplaySection[samplesId] && (
+          <Section id={samplesId}>
+            <Samples organTerms={organ.search} />
+          </Section>
+        )}
       </Content>
     </FlexRow>
   );
