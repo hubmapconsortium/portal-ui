@@ -7,7 +7,7 @@ import Assays from 'js/components/organ/Assays';
 import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
-import Summary from 'js/components/detailPage/summary/Summary';
+import Summary from 'js/components/detailPage/Genes/Summary';
 import Section from 'js/shared-styles/sections/Section';
 import { FlexRow, Content } from './style';
 
