@@ -36,7 +36,7 @@ describe("publications list page", () => {
           cy.wait(1000);
         }
       });
-      cy.findAllByTestId("panel-title").should("exist");
+      cy.findAllByTestId("panel-title").should("exist").and.should("have.attr", "href)
     });
   });
 });
