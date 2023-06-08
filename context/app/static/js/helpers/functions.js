@@ -141,5 +141,7 @@ export function filterObjectByKeys(obj, keys) {
 }
 
 export function getOriginSamplesOrgan(entity) {
+  // Until we have multi-assay datasets, we expect there to only be one unique organ across origin samples.
+  // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
   return entity?.origin_samples_unique_mapped_organs?.[0];
 }
