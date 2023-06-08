@@ -65,6 +65,7 @@ def organ_details_view(name):
         flask_data=flask_data
     )
 
+
 @blueprint.route('/genes/<name>')
 def genes(name):
     filename = Path(dirname(__file__)) / 'organ' / f'{secure_filename(name)}.yaml'
@@ -79,6 +80,7 @@ def genes(name):
         title='genes',
         flask_data=flask_data
     )
+
 
 @blueprint.route('/proteins')
 def proteins():
