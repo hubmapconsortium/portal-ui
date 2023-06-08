@@ -2,16 +2,16 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
-import Azimuth from 'js/components/organ/Azimuth';
-import Assays from 'js/components/organ/Assays';
-import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
-import Samples from 'js/components/organ/Samples';
-import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
+// import Azimuth from 'js/components/organ/Azimuth';
+// import Assays from 'js/components/organ/Assays';
+// import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
+// import Samples from 'js/components/organ/Samples';
+// import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import Summary from 'js/components/detailPage/Genes/Summary';
-import Section from 'js/shared-styles/sections/Section';
+// import Section from 'js/shared-styles/sections/Section';
 import { FlexRow, Content } from './style';
 
-function Organ({ organ }) {
+function Genes({ organ }) {
   const summaryId = 'Summary';
   const hraId = 'Human Reference Atlas';
   const referenceId = 'Reference-Based Analysis';
@@ -44,7 +44,7 @@ function Organ({ organ }) {
           {organ.name}
         </Typography>
         <Summary />
-        {shouldDisplaySection[hraId] && (
+        {/* {shouldDisplaySection[hraId] && (
           <Section id={hraId}>
             <HumanReferenceAtlas uberonIri={organ.uberon} />
           </Section>
@@ -64,10 +64,10 @@ function Organ({ organ }) {
           <Section id={samplesId}>
             <Samples organTerms={organ.search} />
           </Section>
-        )}
+        )} */}
       </Content>
     </FlexRow>
   );
 }
 
-export default Organ;
+export default Genes;
