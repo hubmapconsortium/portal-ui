@@ -52,7 +52,7 @@ function ImageCarouselControlButtons({ numImages, selectedImageIndex, setSelecte
         ))}
 
       <li>
-        <StyledIconButton tabIndex="-1" color="primary" onClick={setNextSelectedImageIndex}>
+        <StyledIconButton tabIndex={-1} color="primary" onClick={setNextSelectedImageIndex}>
           <ChevronRightRoundedIcon />
         </StyledIconButton>
       </li>
