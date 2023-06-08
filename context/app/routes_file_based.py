@@ -74,7 +74,6 @@ def genes(name):
         **get_default_flask_data(),
         'organ': organ,
     }
-    print('FLASK DATAAAAAA', flask_data)
     return render_template(
         'base-pages/react-content.html',
         title='genes',
