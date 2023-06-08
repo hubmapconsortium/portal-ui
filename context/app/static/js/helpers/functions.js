@@ -139,3 +139,7 @@ export function filterObjectByKeys(obj, keys) {
       };
     }, {});
 }
+
+export function getOriginSamplesOrgan(entity) {
+  return entity?.origin_samples_unique_mapped_organs?.[0];
+}
