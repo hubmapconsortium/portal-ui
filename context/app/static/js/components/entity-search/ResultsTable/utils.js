@@ -1,12 +1,21 @@
 import get from 'lodash/get';
 
-import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumentPaths';
+const samplePaths = ['origin_samples', 'source_samples'];
+
+function matchSamplePath(fieldIdentifier) {
+  return samplePaths.reduce((matchedPath, path) => {
+    if (fieldIdentifier.startsWith(path)) {
+      return path;
+    }
+    return matchedPath;
+  }, '');
+}
 
 function getFieldFromHitFields(hitFields, identifier) {
-  const datasetSamplePath = paths.dataset.sample;
-  if (identifier.startsWith(datasetSamplePath)) {
-    // Unlike origin_sample, source_sample is an array and cannot be accessed with lodash/get.
-    return hitFields?.source_sample?.[0].metadata?.[identifier.replace(`${datasetSamplePath}.`, '')];
+  const matchedSamplePath = matchSamplePath(identifier);
+  if (matchedSamplePath.length > 0) {
+    // source_samples and origin_samples are arrays and must be handled accordingly.
+    return get(hitFields, [matchedSamplePath, '0', identifier.replace(`${matchedSamplePath}.`, '')]);
   }
 
   return get(hitFields, identifier);
