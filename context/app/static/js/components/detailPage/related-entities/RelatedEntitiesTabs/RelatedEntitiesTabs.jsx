@@ -29,4 +29,6 @@ function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, ren
   );
 }
 
+// RelatedEntitiesTabs.propTypes = {};
+
 export default RelatedEntitiesTabs;
