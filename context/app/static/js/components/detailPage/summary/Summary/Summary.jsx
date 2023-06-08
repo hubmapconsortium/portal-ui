@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { DetailPageSection } from 'js/components/detailPage/style';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
@@ -53,12 +52,6 @@ function Summary({
 }
 
 Summary.propTypes = {
-  title: PropTypes.string.isRequired,
-  entity_type: PropTypes.string.isRequired,
-  uuid: PropTypes.string.isRequired,
-  created_timestamp: PropTypes.number,
-  last_modified_timestamp: PropTypes.number,
-  description: PropTypes.string,
   status: PropTypes.string,
   mapped_data_access_level: PropTypes.string,
   entityCanBeSaved: PropTypes.bool,
@@ -67,9 +60,6 @@ Summary.propTypes = {
 };
 
 Summary.defaultProps = {
-  created_timestamp: undefined,
-  last_modified_timestamp: undefined,
-  description: '',
   status: '',
   mapped_data_access_level: '',
   entityCanBeSaved: true,
