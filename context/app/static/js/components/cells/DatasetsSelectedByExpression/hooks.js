@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import CellsService from 'js/components/cells/CellsService';
 import { useAppContext } from 'js/components/Contexts';
 import { fetchSearchData } from 'js/hooks/useSearchData';

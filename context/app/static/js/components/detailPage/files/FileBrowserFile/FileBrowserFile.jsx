@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import prettyBytes from 'pretty-bytes';
-
 import { useAppContext } from 'js/components/Contexts';
 import { getTokenParam } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';

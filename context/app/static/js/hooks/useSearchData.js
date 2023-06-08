@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { getAuthHeader, addRestrictionsToQuery } from 'js/helpers/functions';
-import { AppContext } from 'js/components/Providers';
+import { useAppContext } from 'js/components/Contexts';
 
 async function fetchSearchData(query, elasticsearchEndpoint, groupsToken, useDefaultQuery = true) {
   const authHeader = getAuthHeader(groupsToken);
@@ -24,7 +24,7 @@ async function fetchSearchData(query, elasticsearchEndpoint, groupsToken, useDef
 function useSearchData(query, useDefaultQuery) {
   const [searchData, setSearchData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
+  const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
   useEffect(() => {
     async function getAndSetSearchHits() {
