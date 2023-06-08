@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTransition, animated } from 'react-spring';
+import { animated, useSpring } from 'react-spring';
 
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
@@ -36,41 +36,36 @@ const AnimatedFlexContainer = animated(FlexContainer);
 const vizNotebookIdSelector = (state) => state.vizNotebookId;
 
 function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscreen }) {
-  const transitions = useTransition(shouldDisplayHeader, {
-    from: { opacity: vizIsFullscreen ? 1 : 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-  });
-
   const { hubmap_id, entity_type } = assayMetadata;
 
   const vizNotebookId = useVisualizationStore(vizNotebookIdSelector);
 
-  return transitions(
-    ({ item, key, props }) =>
-      item && (
-        <AnimatedFlexContainer style={props} key={key} maxWidth={vizIsFullscreen ? false : 'lg'}>
-          {entity_type && (
-            <>
-              <StyledSvgIcon component={entityIconMap[entity_type]} />
-              <EntityHeaderItem text={hubmap_id} />
-              {entity_type in entityToFieldsMap
-                ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
-                    <EntityHeaderItem text={fn(assayMetadata) || `undefined ${label}`} key={label} />
-                  ))
-                : null}
-            </>
-          )}
-          {vizIsFullscreen && (
-            <RightDiv>
-              {vizNotebookId && <VisualizationNotebookButton uuid={vizNotebookId} />}
-              <VisualizationShareButtonWrapper />
-              <VizualizationThemeSwitch />
-              <VisualizationCollapseButton />
-            </RightDiv>
-          )}
-        </AnimatedFlexContainer>
-      ),
+  const styles = useSpring({
+    opacity: shouldDisplayHeader || vizIsFullscreen ? 1 : 0,
+  });
+
+  return (
+    <AnimatedFlexContainer style={styles} maxWidth={vizIsFullscreen ? false : 'lg'}>
+      {entity_type && (
+        <>
+          <StyledSvgIcon component={entityIconMap[entity_type]} />
+          <EntityHeaderItem text={hubmap_id} />
+          {entity_type in entityToFieldsMap
+            ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
+                <EntityHeaderItem text={fn(assayMetadata) || `undefined ${label}`} key={label} />
+              ))
+            : null}
+        </>
+      )}
+      {vizIsFullscreen && (
+        <RightDiv>
+          {vizNotebookId && <VisualizationNotebookButton uuid={vizNotebookId} />}
+          <VisualizationShareButtonWrapper />
+          <VizualizationThemeSwitch />
+          <VisualizationCollapseButton />
+        </RightDiv>
+      )}
+    </AnimatedFlexContainer>
   );
 }
 

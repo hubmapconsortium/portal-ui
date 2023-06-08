@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import createContext from 'zustand/context';
 
 const { Provider, useStore } = createContext();

@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { trackEvent } from 'js/helpers/trackers';
 
 const localStorageKey = 'has_exited_dataset_search_tutorial';

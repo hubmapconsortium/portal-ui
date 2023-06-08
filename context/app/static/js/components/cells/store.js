@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { queryTypes } from 'js/components/cells/queryTypes';
 
 const types = {
