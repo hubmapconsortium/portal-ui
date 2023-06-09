@@ -79,13 +79,3 @@ def genes(name):
         title='genes',
         flask_data=flask_data
     )
-
-
-@blueprint.route('/proteins')
-def proteins():
-    flask_data = {**get_default_flask_data()}
-    return render_template(
-        'base-pages/react-content.html',
-        title='proteins',
-        flask_data=flask_data
-    )

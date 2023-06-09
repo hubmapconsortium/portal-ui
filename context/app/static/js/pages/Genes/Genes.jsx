@@ -7,7 +7,7 @@ import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 // import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 // import Samples from 'js/components/organ/Samples';
 // import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
-import Summary from 'js/components/detailPage/Genes/Summary';
+import Summary from 'js/components/genes/Summary';
 // import Section from 'js/shared-styles/sections/Section';
 import { FlexRow, Content } from './style';
 

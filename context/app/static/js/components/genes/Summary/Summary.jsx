@@ -1,6 +1,6 @@
 import React from 'react';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import SummaryBody from 'js/components/detailPage/genes/SummaryBody/SummaryBody';
+import SummaryBody from 'js/components/genes/SummaryBody/SummaryBody';
 
 function Summary() {
   return (
