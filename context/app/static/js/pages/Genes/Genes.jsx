@@ -7,11 +7,16 @@ import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 // import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 // import Samples from 'js/components/organ/Samples';
 // import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
-import Summary from 'js/components/detailPage/Genes/Summary';
+import Summary from 'js/components/detailPage/genes/Summary';
 // import Section from 'js/shared-styles/sections/Section';
 import { FlexRow, Content } from './style';
+import { useGeneCommonName } from './hooks';
 
 function Genes({ organ }) {
+  const commonName = useGeneCommonName('CD4');
+
+  console.log('commonName>>>>>>', commonName); //eslint-disable-line
+
   const summaryId = 'Summary';
   const hraId = 'Human Reference Atlas';
   const referenceId = 'Reference-Based Analysis';
