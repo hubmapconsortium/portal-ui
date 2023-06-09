@@ -1,6 +1,6 @@
-import React, { lazy, useContext } from 'react';
+import React, { lazy } from 'react';
 import PropTypes from 'prop-types';
-import { AppContext } from 'js/components/Providers';
+import { useAppContext } from 'js/components/Contexts';
 import Error from 'js/pages/Error';
 import Route from './Route';
 import useSendPageView from './useSendPageView';
@@ -55,7 +55,7 @@ function Routes({ flaskData }) {
   useSendPageView(urlPath);
   useSetUrlBeforeLogin(url);
 
-  const { isAuthenticated } = useContext(AppContext);
+  const { isAuthenticated } = useAppContext();
 
   if (errorCode !== undefined) {
     return <Error errorCode={errorCode} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
