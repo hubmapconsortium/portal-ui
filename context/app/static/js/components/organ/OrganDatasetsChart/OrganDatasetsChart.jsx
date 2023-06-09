@@ -21,7 +21,7 @@ function OrganDatasetsChart({ search }) {
     () =>
       Object.assign(assayOrganTypesQuery, {
         query: combineQueryClauses([
-          { bool: { must: { terms: { 'origin_sample.mapped_organ.keyword': search } } } },
+          { bool: { must: { terms: { 'origin_samples.mapped_organ.keyword': search } } } },
           excludeSupportEntitiesClause,
         ]),
       }),
