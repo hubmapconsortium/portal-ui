@@ -158,10 +158,11 @@ def iframe_page(path):
     )
 
 
-@blueprint.route('/genes')
-def genes():
+@blueprint.route('/genes/<name>')
+def genes(name):
     flask_data = {
         **get_default_flask_data(),
+        'gene_name': name
     }
     return render_template(
         'base-pages/react-content.html',
