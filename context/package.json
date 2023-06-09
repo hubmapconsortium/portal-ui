@@ -66,7 +66,7 @@
     "uuid": "^8.3.2",
     "vega": "^5.17.3",
     "vega-lite": "^4.13.1",
-    "vitessce": "^2.0.3",
+    "vitessce": "^3.0.0",
     "web-vitals": "^1.1.0",
     "whatwg-fetch": "^3.0.0",
     "yup": "^0.32.11",
