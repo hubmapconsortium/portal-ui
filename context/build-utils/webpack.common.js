@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const webpack = require('webpack');
 const { resolve } = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { alias } = require('./alias');
 
 const config = {
@@ -9,6 +8,7 @@ const config = {
   output: {
     path: resolve('./app/static/public'),
     publicPath: `${resolve('/static/public/')}/`,
+    clean: true,
   },
   optimization: {
     splitChunks: {
@@ -77,7 +77,6 @@ const config = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       // update globals in eslintrc to fix undefined errors
       CDN_URL: JSON.stringify('https://d3evp8qu4tjncp.cloudfront.net'),
