@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-// TODO: Move to shared-styles?
 const FlexRow = styled.div`
   flex-grow: 1;
   display: flex;

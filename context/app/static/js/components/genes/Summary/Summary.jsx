@@ -10,17 +10,4 @@ function Summary() {
   );
 }
 
-Summary.propTypes = {};
-
-Summary.defaultProps = {
-  created_timestamp: undefined,
-  last_modified_timestamp: undefined,
-  description: '',
-  status: '',
-  mapped_data_access_level: '',
-  entityCanBeSaved: true,
-  collectionName: '',
-  mapped_external_group_name: undefined,
-};
-
 export default Summary;
