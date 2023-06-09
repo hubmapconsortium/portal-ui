@@ -1,9 +1,6 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-// import Citation from 'js/components/detailPage/Citation';
-// import { StyledTypography, Flex, StyledCreationDate, StyledModificationDate } from './style';
 
 function SummaryBody() {
   return (
@@ -19,33 +16,6 @@ function SummaryBody() {
         first time in history. Hoping to become one of the world’s largest collaborative biological projects, HuBMAP
         aims to be an open map of the human body at the cellular level.
       </LabelledSectionText>
-      {/* {collectionName && (
-        <StyledTypography variant="h6" component="h3">
-          {collectionName}
-        </StyledTypography>
-      )}
-      {description && (
-        <LabelledSectionText label="Description" bottomSpacing={1}>
-          {description}
-        </LabelledSectionText>
-      )}
-      {doi && (
-        <Citation
-          contributors={contributors}
-          citationTitle={citationTitle}
-          created_timestamp={created_timestamp}
-          doi_url={doi_url}
-          doi={doi}
-        />
-      )} */}
-      {/* <Flex>
-        {published_timestamp ? (
-          <StyledCreationDate label="Publication Date" timestamp={published_timestamp} />
-        ) : (
-          <StyledCreationDate label="Creation Date" timestamp={created_timestamp} />
-        )}
-        <StyledModificationDate label="Modification Date" timestamp={last_modified_timestamp} />
-      </Flex> */}
     </SummaryPaper>
   );
 }

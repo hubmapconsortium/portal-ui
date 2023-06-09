@@ -272,14 +272,6 @@ function Routes({ flaskData }) {
     throw Error('Intentional client-side-error');
   }
 
-  // if (urlPath.startsWith('/organ/')) {
-  //   return (
-  //     <Route>
-  //       <Organ organ={organ} />
-  //     </Route>
-  //   );
-  // }
-
   if (urlPath.startsWith('/genes/')) {
     return (
       <Route>
