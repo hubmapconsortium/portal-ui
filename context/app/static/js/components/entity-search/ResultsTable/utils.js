@@ -15,6 +15,7 @@ function getFieldFromHitFields(hitFields, identifier) {
   const matchedSamplePath = matchSamplePath(identifier);
   if (matchedSamplePath.length > 0) {
     // source_samples and origin_samples are arrays and must be handled accordingly.
+    // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
     return get(hitFields, [matchedSamplePath, '0', ...identifier.split('.').slice(1)]);
   }
 
