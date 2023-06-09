@@ -15,7 +15,7 @@ function getFieldFromHitFields(hitFields, identifier) {
   const matchedSamplePath = matchSamplePath(identifier);
   if (matchedSamplePath.length > 0) {
     // source_samples and origin_samples are arrays and must be handled accordingly.
-    return get(hitFields, [matchedSamplePath, '0', identifier.replace(`${matchedSamplePath}.`, '')]);
+    return get(hitFields, [matchedSamplePath, '0', ...identifier.split('.').slice(1)]);
   }
 
   return get(hitFields, identifier);
