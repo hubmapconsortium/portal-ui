@@ -70,6 +70,7 @@
     "vitessce": "^2.0.3",
     "web-vitals": "^1.1.0",
     "whatwg-fetch": "^3.0.0",
+    "xml2js": "^0.6.0",
     "yup": "^0.32.11",
     "zustand": "^3.5.9"
   },
