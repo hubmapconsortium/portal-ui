@@ -31,7 +31,7 @@ const config = {
         test: /\.js$/,
         use: ['source-map-loader'],
         enforce: 'pre',
-        exclude: [/node_modules\/lineupjsx?/],
+        exclude: [/node_modules\/(lineupjsx|@datapunt)?/],
       },
       {
         test: /\.(js|jsx)$/,
@@ -67,7 +67,6 @@ const config = {
       },
       {
         test: /\.ya?ml$/,
-        type: 'json', // Required by Webpack v4
         use: 'yaml-loader',
       },
       {

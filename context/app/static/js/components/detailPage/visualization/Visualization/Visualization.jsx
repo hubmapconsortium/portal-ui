@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Vitessce } from 'vitessce';
 
-import { dependencies } from 'package';
+import packageInfo from 'package';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { Alert } from 'js/shared-styles/alerts';
@@ -121,7 +121,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
   }, [collapseViz]);
 
   const isMultiDataset = Array.isArray(vitessceConfig);
-  const version = dependencies.vitessce.replace('^', '');
+  const version = packageInfo.dependencies.vitessce.replace('^', '');
 
   return (
     vitessceConfig &&
