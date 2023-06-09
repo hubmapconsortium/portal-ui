@@ -28,17 +28,17 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: ['source-map-loader'],
-        enforce: 'pre',
-        exclude: [/node_modules\/(lineupjsx|@datapunt)?/],
-      },
-      {
-        test: /\.(js|jsx)$/,
-        use: {
-          loader: 'babel-loader',
-        },
+        test: /\.[tj]sx?$/,
         exclude: /node_modules/,
+        use: {
+          loader: 'swc-loader',
+          options: {
+            sync: true,
+            jsc: {
+              target: 'es2019',
+            },
+          },
+        },
       },
       {
         test: /\.css$/i,
@@ -63,7 +63,7 @@ const config = {
       },
       {
         test: /\.(png|jpg|gif)$/,
-        use: [{ loader: 'url-loader' }],
+        use: { loader: 'url-loader' },
       },
       {
         test: /\.ya?ml$/,

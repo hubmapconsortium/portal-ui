@@ -27,9 +27,9 @@ const config = {
         enforce: 'pre',
       },
       {
-        test: /\.(js|jsx)$/,
+        test: /\.[tj]sx?$/,
         use: {
-          loader: 'babel-loader',
+          loader: 'swc-loader',
         },
         exclude: /node_modules/,
       },
