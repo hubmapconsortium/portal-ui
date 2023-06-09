@@ -10,12 +10,14 @@ import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Summary from 'js/components/detailPage/genes/Summary';
 // import Section from 'js/shared-styles/sections/Section';
 import { FlexRow, Content } from './style';
-import { useGeneCommonName } from './hooks';
+import { useGeneCommonName, useGeneData } from './hooks';
 
 function Genes({ organ }) {
   const commonName = useGeneCommonName('CD4');
+  const geneData = useGeneData(920);
 
   console.log('commonName>>>>>>', commonName); //eslint-disable-line
+  console.log('geneData>>>>>>', geneData); //eslint-disable-line
 
   const summaryId = 'Summary';
   const hraId = 'Human Reference Atlas';
