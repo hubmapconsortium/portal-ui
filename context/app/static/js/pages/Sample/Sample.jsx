@@ -27,7 +27,7 @@ function SampleDetail({ assayMetadata }) {
     donor,
     protocol_url,
     sample_category,
-    origin_sample: { mapped_organ },
+    origin_samples,
     group_name,
     created_by_user_displayname,
     created_by_user_email,
@@ -40,6 +40,10 @@ function SampleDetail({ assayMetadata }) {
     rui_location,
     descendant_counts,
   } = assayMetadata;
+
+  // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
+  const origin_sample = origin_samples[0];
+  const { mapped_organ } = origin_sample;
 
   const combinedMetadata = combineMetadata(donor, undefined, undefined, metadata);
 
