@@ -274,7 +274,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/genes/')) {
     return (
       <Route>
-        <Genes organ={organ} collection={entity} />
+        <Genes />
       </Route>
     );
   }

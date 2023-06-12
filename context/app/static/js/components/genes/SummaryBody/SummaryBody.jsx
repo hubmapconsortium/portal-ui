@@ -6,6 +6,7 @@ function SummaryBody() {
   return (
     <SummaryPaper>
       <LabelledSectionText label="Description" bottomSpacing={1}>
+        {/* Temporarily hard coded summary text. */}
         Our best estimates show there are over 7 billion people on the planet and 300 billion stars in the Milky Way
         galaxy. By comparison, the adult human body contains 37 trillion cells. To determine the function and
         relationship among these cells is a monumental undertaking. Many areas of human health would be impacted if we
