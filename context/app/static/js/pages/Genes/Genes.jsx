@@ -7,17 +7,9 @@ import { FlexRow, Content } from './style';
 
 function Genes() {
   const summaryId = 'Summary';
-  const hraId = 'Human Reference Atlas';
-  const referenceId = 'Reference-Based Analysis';
-  const assaysId = 'Assays';
-  const samplesId = 'Samples';
 
   const shouldDisplaySection = {
     [summaryId]: true,
-    [hraId]: true,
-    [referenceId]: true,
-    [assaysId]: true,
-    [samplesId]: true,
   };
 
   const sectionOrder = Object.entries(shouldDisplaySection)
