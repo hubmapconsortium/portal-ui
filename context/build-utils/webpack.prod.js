@@ -9,8 +9,8 @@ const envConfig = {
   mode: 'production',
   devtool: 'cheap-source-map',
   output: {
-    filename: '[name].[hash].js',
-    chunkFilename: '[name].[hash].js',
+    filename: '[name].[contenthash].js',
+    chunkFilename: '[name].[contenthash].js',
   },
   plugins: [new WebpackManifestPlugin(), new CompressionPlugin()],
 };
