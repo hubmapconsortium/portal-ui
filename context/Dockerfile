@@ -14,6 +14,7 @@ COPY .npmrc .
 RUN npm ci
 
 COPY .babelrc .babelrc
+COPY .swcrc .swcrc
 COPY build-utils build-utils
 COPY app app
 COPY ingest-validation-tools ingest-validation-tools
