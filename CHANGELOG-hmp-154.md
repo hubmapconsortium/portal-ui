@@ -1,0 +1,4 @@
+- Upgrade from Webpack 4 -> 5
+- Upgrade from Storybook 6 -> 7
+- Migrate from babel-loader -> swc-loader
+- Migrate to @swc/jest test runner
