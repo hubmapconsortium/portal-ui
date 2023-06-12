@@ -73,7 +73,7 @@ def genes(name):
     flask_data = {
         **get_default_flask_data(),
         'organ': organ,
-        
+        'symbol': 'CD4'
     }
     return render_template(
         'base-pages/react-content.html',

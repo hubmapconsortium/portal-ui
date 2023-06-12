@@ -4,6 +4,7 @@ import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Summary from 'js/components/genes/Summary';
 import { FlexRow, Content } from './style';
+// import { useGeneCommonName } from './hooks';
 
 const summaryId = 'Summary';
 
