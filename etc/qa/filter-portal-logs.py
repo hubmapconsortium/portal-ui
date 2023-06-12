@@ -30,6 +30,7 @@ class Filter:
       count: 1
       issue: https://github.com/hubmapconsortium/portal-ui/issues/2556
     '''
+
     def __init__(self, logs):
         self.logs = logs
         self.report = {}
