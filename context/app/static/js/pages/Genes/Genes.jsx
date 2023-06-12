@@ -5,9 +5,9 @@ import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Summary from 'js/components/genes/Summary';
 import { FlexRow, Content } from './style';
 
-function Genes() {
-  const summaryId = 'Summary';
+const summaryId = 'Summary';
 
+function Genes() {
   const shouldDisplaySection = {
     [summaryId]: true,
   };
