@@ -21,11 +21,6 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: ['source-map-loader'],
-        enforce: 'pre',
-      },
-      {
         test: /\.[tj]sx?$/,
         use: {
           loader: 'swc-loader',
