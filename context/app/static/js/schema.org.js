@@ -1,6 +1,6 @@
 function getDatasetLD(entity) {
   // Based on https://developers.google.com/search/docs/data-types/dataset#guidelines
-  const assayOrganString = `${entity.mapped_data_types} of ${entity.origin_sample.mapped_organ}`;
+  const assayOrganString = `${entity.mapped_data_types} of ${entity.origin_samples_unique_mapped_organs.join(', ')}`;
   let name = `${assayOrganString} from unknown donor`;
   let fallbackDescription = name;
 
