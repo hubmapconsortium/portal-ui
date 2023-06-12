@@ -1,0 +1,2 @@
+- Add a context provider to pass flask data to react components.
+- Pass flask data to Donor page components by context.

@@ -1,7 +1,6 @@
-import React, { lazy, useContext } from 'react';
+import React, { lazy } from 'react';
 import PropTypes from 'prop-types';
-
-import { AppContext } from 'js/components/Providers';
+import { useAppContext } from 'js/components/Contexts';
 import Error from 'js/pages/Error';
 import Route from './Route';
 import useSendPageView from './useSendPageView';
@@ -34,7 +33,6 @@ const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'))
 const Workspaces = lazy(() => import('js/pages/Workspaces'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
 const Genes = lazy(() => import('js/pages/Genes'));
-const Proteins = lazy(() => import('js/pages/Proteins'));
 
 function Routes({ flaskData }) {
   const {
@@ -58,7 +56,7 @@ function Routes({ flaskData }) {
   useSendPageView(urlPath);
   useSetUrlBeforeLogin(url);
 
-  const { isAuthenticated } = useContext(AppContext);
+  const { isAuthenticated } = useAppContext();
 
   if (errorCode !== undefined) {
     return <Error errorCode={errorCode} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
@@ -67,7 +65,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/browse/donor/')) {
     return (
       <Route>
-        <Donor assayMetadata={entity} vitData={vitessce_conf} />
+        <Donor />
       </Route>
     );
   }
@@ -273,26 +271,10 @@ function Routes({ flaskData }) {
     throw Error('Intentional client-side-error');
   }
 
-  // if (urlPath.startsWith('/organ/')) {
-  //   return (
-  //     <Route>
-  //       <Organ organ={organ} />
-  //     </Route>
-  //   );
-  // }
-
   if (urlPath.startsWith('/genes/')) {
     return (
       <Route>
-        <Genes organ={organ} collection={entity} />
-      </Route>
-    );
-  }
-
-  if (urlPath.startsWith('/proteins/')) {
-    return (
-      <Route>
-        <Proteins organ={organ} />
+        <Genes />
       </Route>
     );
   }
