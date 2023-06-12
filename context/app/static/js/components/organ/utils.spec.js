@@ -6,8 +6,8 @@ test('construct search url w/o assay', () => {
   expect(path).toEqual('/search');
   expect(decodeURI(query).split('&')).toEqual([
     'entity_type[0]=Whatever',
-    'origin_sample.mapped_organ[0]=Elbow+(Left)',
-    'origin_sample.mapped_organ[1]=Elbow+(Right)',
+    'origin_samples.mapped_organ[0]=Elbow+(Left)',
+    'origin_samples.mapped_organ[1]=Elbow+(Right)',
   ]);
 });
 
@@ -17,7 +17,7 @@ test('construct search url w/ assay', () => {
   expect(path).toEqual('/search');
   expect(decodeURI(query).split('&')).toEqual([
     'entity_type[0]=Whatever',
-    'origin_sample.mapped_organ[0]=Nose',
+    'origin_samples.mapped_organ[0]=Nose',
     'mapped_data_types[0]=something+FISH',
   ]);
 });
