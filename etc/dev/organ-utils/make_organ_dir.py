@@ -192,7 +192,7 @@ def get_search_response(es_url):
             "aggs": {
                 agg_name: {
                     "terms": {
-                        "field": "origin_sample.mapped_organ.keyword",
+                        "field": "origin_samples.mapped_organ.keyword",
                         "size": 100
                     }
                 }
