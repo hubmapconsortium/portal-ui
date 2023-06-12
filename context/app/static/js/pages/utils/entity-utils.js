@@ -7,17 +7,17 @@ function prefixDonorMetadata(donor) {
   return addPrefix('donor.', donorMetadata);
 }
 
-function prefixSampleMetadata(source_sample) {
-  const sampleMetadatas = (source_sample || []).filter((sample) => sample?.metadata).map((sample) => sample.metadata);
+function prefixSampleMetadata(source_samples) {
+  const sampleMetadatas = (source_samples || []).filter((sample) => sample?.metadata).map((sample) => sample.metadata);
   return sampleMetadatas.map((sampleMetadata) => addPrefix('sample.', sampleMetadata));
 }
 
-function combineMetadata(donor, origin_sample, source_sample, metadata) {
+function combineMetadata(donor, origin_sample, source_samples, metadata) {
   const combinedMetadata = {
     ...(metadata?.metadata || {}),
     ...prefixDonorMetadata(donor),
   };
-  prefixSampleMetadata(source_sample).forEach((sampleMetadata) => {
+  prefixSampleMetadata(source_samples).forEach((sampleMetadata) => {
     Object.assign(combinedMetadata, sampleMetadata);
   });
 

@@ -95,7 +95,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     metadata,
     files,
     donor,
-    source_sample,
+    source_samples,
     uuid,
     data_types,
     mapped_data_types,
@@ -125,7 +125,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
-  const combinedMetadata = combineMetadata(donor, origin_sample, source_sample, metadata);
+  const combinedMetadata = combineMetadata(donor, origin_sample, source_samples, metadata);
 
   const collectionsData = useDatasetsCollections([uuid]);
 
