@@ -1,12 +1,14 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import Description from '../../shared-styles/sections/Description';
-import { PageContainer, PageSectionContainer, OrganTilesContainer, ResetOrganFiltersButton } from './style';
-import theme from '../../theme';
-import { useFlaskDataContext } from '../../components/Contexts';
-import OrganTile from '../../components/organ/OrganTile';
-import { Refresh } from '../../shared-styles/icons';
+import theme from 'js/theme';
+import SearchBarInput from 'js/shared-styles/inputs/SearchBar';
+import Description from 'js/shared-styles/sections/Description';
+import { useFlaskDataContext } from 'js/components/Contexts';
+import OrganTile from 'js/components/organ/OrganTile';
+import { Refresh, FilterList } from 'js/shared-styles/icons';
+
+import { PageContainer, PageSectionContainer, OrganTilesContainer, CellTypesButton } from './style';
 
 const CellTypes = () => {
   const { organs } = useFlaskDataContext();
@@ -30,14 +32,17 @@ const CellTypes = () => {
         </Description>
       </PageSectionContainer>
       <PageSectionContainer>
-        <ResetOrganFiltersButton startIcon={<Refresh />}>Reset Filters</ResetOrganFiltersButton>
+        <CellTypesButton startIcon={<Refresh />}>Reset Filters</CellTypesButton>
         <OrganTilesContainer>
           {Object.values(organs).map((organ) => (
             <OrganTile organ={organ} />
           ))}
         </OrganTilesContainer>
       </PageSectionContainer>
-      <div>Cell Type search table placeholder</div>
+      <PageSectionContainer>
+        <CellTypesButton startIcon={<FilterList />}>Additional Filters</CellTypesButton>
+        <SearchBarInput placeholder="Search Cell Type" />
+      </PageSectionContainer>
     </PageContainer>
   );
 };

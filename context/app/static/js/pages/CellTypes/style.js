@@ -31,11 +31,12 @@ export const OrganTilesContainer = styled.div`
   }
 `;
 
-export const ResetOrganFiltersButton = styled(Button)`
+export const CellTypesButton = styled(Button)`
   margin-left: auto;
   width: max-content;
   flex: 0 0 auto;
   background-color: ${(props) => props.theme.palette.primary.main};
   color: #fff;
   border-radius: 4px;
+  padding: ${(props) => props.theme.spacing(1)}px ${(props) => props.theme.spacing(2)}px;
 `;
