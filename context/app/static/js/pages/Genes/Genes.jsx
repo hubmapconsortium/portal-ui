@@ -29,7 +29,7 @@ function Genes({ geneSymbol }) {
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
       <Content>
-        <Typography variant="subtitle1" component="h1" color="primary">
+        <Typography variant="subtitle1" component="h2" color="primary">
           Gene
         </Typography>
         <Typography variant="h1" component="h2">
