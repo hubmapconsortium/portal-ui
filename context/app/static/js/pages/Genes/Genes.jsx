@@ -1,14 +1,18 @@
 import React from 'react';
+
 import Typography from '@material-ui/core/Typography';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Summary from 'js/components/genes/Summary';
 import { FlexRow, Content } from './style';
-// import { useGeneCommonName } from './hooks';
+import { useGeneCommonName } from './hooks';
 
 const summaryId = 'Summary';
 
-function Genes() {
+function Genes({ flaskData }) {
+  const geneSymbol = flaskData.symbol;
+  const commonName = useGeneCommonName(geneSymbol);
+
   const shouldDisplaySection = {
     [summaryId]: true,
   };
@@ -26,7 +30,7 @@ function Genes() {
           Gene
         </Typography>
         <Typography variant="h1" component="h2">
-          CD4
+          {`CD4 (${commonName})`}
         </Typography>
         <Summary />
       </Content>

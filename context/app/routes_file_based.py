@@ -64,28 +64,3 @@ def organ_details_view(name):
         title=organ['name'],
         flask_data=flask_data
     )
-
-
-@blueprint.route('/genes/<name>')
-def genes(name):
-    filename = Path(dirname(__file__)) / 'organ' / f'{secure_filename(name)}.yaml'
-    organ = safe_load(filename.read_text())
-    flask_data = {
-        **get_default_flask_data(),
-        'symbol': 'CD4'
-    }
-    return render_template(
-        'base-pages/react-content.html',
-        title='genes',
-        flask_data=flask_data
-    )
-
-
-@blueprint.route('/proteins')
-def proteins():
-    flask_data = {**get_default_flask_data()}
-    return render_template(
-        'base-pages/react-content.html',
-        title='proteins',
-        flask_data=flask_data
-    )

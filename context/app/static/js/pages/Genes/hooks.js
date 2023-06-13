@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import useSWR from 'swr';
 
 async function fetchGeneCommonName(geneNamesURL) {
@@ -9,20 +10,27 @@ async function fetchGeneCommonName(geneNamesURL) {
 
   const results = await response.json();
 
-  // drill down in response
   return results;
 }
 
 function useGeneCommonName(geneSymbol) {
+  const [commonName, setCommonName] = useState('');
+
   const { data: geneCommonName } = useSWR(
     `https://rest.genenames.org/fetch/symbol/${geneSymbol}`,
-    (url) => fetchGeneCommonName(url),
+    fetchGeneCommonName,
     {
       fallbackData: '',
     },
   );
 
-  return geneCommonName;
+  useEffect(() => {
+    if (geneCommonName && geneCommonName.response && geneCommonName.response.docs[0]) {
+      setCommonName(geneCommonName.response.docs[0].name);
+    }
+  }, [geneCommonName]);
+
+  return commonName;
 }
 
 export { useGeneCommonName };
