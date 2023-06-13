@@ -162,7 +162,7 @@ def iframe_page(path):
 def genes(geneSymbol):
     flask_data = {
         **get_default_flask_data(),
-        'symbol': geneSymbol
+        'geneSymbol': geneSymbol
     }
     return render_template(
         'base-pages/react-content.html',
