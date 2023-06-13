@@ -9,8 +9,7 @@ import { useGeneCommonName } from './hooks';
 
 const summaryId = 'Summary';
 
-function Genes({ flaskData }) {
-  const geneSymbol = flaskData.symbol;
+function Genes({ geneSymbol }) {
   const commonName = useGeneCommonName(geneSymbol);
 
   const shouldDisplaySection = {
