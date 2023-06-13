@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 
 import Tile from 'js/shared-styles/tiles/Tile';
 import EntityTileThumbnail from 'js/components/entity-tile/EntityTileThumbnail';
+import { getOriginSamplesOrgan } from 'js/helpers/functions';
 import { Flex, StyledDiv, BodyWrapper } from './style';
 
 const thumbnailDimension = 80;
 function EntityTileBody({ entity_type, id, entityData, invertColors }) {
   const { thumbnail_file } = entityData;
-
   return (
     <BodyWrapper $thumbnailDimension={thumbnailDimension}>
       <StyledDiv>
         <Tile.Title>{id}</Tile.Title>
-        {'origin_sample' in entityData && <Tile.Text>{entityData.origin_sample.mapped_organ}</Tile.Text>}
+        {'origin_samples' in entityData && <Tile.Text>{getOriginSamplesOrgan(entityData)}</Tile.Text>}
         {'sample_category' in entityData && <Tile.Text>{entityData.sample_category}</Tile.Text>}
         {'mapped_data_types' in entityData && <Tile.Text>{entityData.mapped_data_types.join(', ')}</Tile.Text>}
         {entity_type === 'Donor' && 'mapped_metadata' in entityData && (

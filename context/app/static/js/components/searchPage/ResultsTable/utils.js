@@ -1,22 +1,17 @@
-function getByPath(nested, field) {
-  const path = field.id;
-  let current = nested;
-  const pathEls = path.split('.');
-  while (pathEls.length) {
-    const nextEl = pathEls.shift();
-    if (typeof current === 'object' && nextEl in current) {
-      current = current[nextEl];
-    } else {
-      return null;
-    }
-  }
+import { getFieldFromHitFields } from 'js/components/entity-search/ResultsTable/utils';
+
+function getByPath(hitSource, field) {
+  const fieldValue = getFieldFromHitFields(hitSource, field.id);
+
   if ('translations' in field) {
-    return field.translations[current];
+    return field.translations[fieldValue];
   }
-  if (Array.isArray(current)) {
-    return current.join(' / ');
+
+  if (Array.isArray(fieldValue)) {
+    return fieldValue.join(' / ');
   }
-  return current;
+
+  return fieldValue;
 }
 
 export { getByPath };

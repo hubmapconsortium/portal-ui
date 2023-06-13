@@ -3,17 +3,17 @@ import { combineMetadata } from './entity-utils';
 test('robust against undefined data', () => {
   const donor = undefined;
   const origin_sample = undefined;
-  const source_sample = undefined;
+  const source_samples = undefined;
   const metadata = undefined;
-  expect(combineMetadata(donor, origin_sample, source_sample, metadata)).toEqual({});
+  expect(combineMetadata(donor, origin_sample, source_samples, metadata)).toEqual({});
 });
 
 test('robust against empty objects', () => {
   const donor = {};
   const origin_sample = {};
-  const source_sample = [];
+  const source_samples = [];
   const metadata = {};
-  expect(combineMetadata(donor, origin_sample, source_sample, metadata)).toEqual({});
+  expect(combineMetadata(donor, origin_sample, source_samples, metadata)).toEqual({});
 });
 
 test('combines appropiately structured metadata', () => {
@@ -36,7 +36,7 @@ test('combines appropiately structured metadata', () => {
     sample_category: 'Organ',
     // Currently, not seeing any metadata here, but that may change.
   };
-  const source_sample = [
+  const source_samples = [
     {
       // mapped_metadata seems to be empty.
       mapped_metadata: {},
@@ -55,7 +55,7 @@ test('combines appropiately structured metadata', () => {
       assay_type: 'PAS microscopy',
     },
   };
-  expect(combineMetadata(donor, origin_sample, source_sample, metadata)).toEqual({
+  expect(combineMetadata(donor, origin_sample, source_samples, metadata)).toEqual({
     analyte_class: 'polysaccharides',
     assay_category: 'imaging',
     assay_type: 'PAS microscopy',
