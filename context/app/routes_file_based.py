@@ -72,7 +72,6 @@ def genes(name):
     organ = safe_load(filename.read_text())
     flask_data = {
         **get_default_flask_data(),
-        'organ': organ,
         'symbol': 'CD4'
     }
     return render_template(
