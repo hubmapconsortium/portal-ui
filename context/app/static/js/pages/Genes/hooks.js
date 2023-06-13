@@ -19,6 +19,7 @@ function useGeneCommonName(geneSymbol) {
     fetchGeneCommonName,
     {
       fallbackData: '',
+      revalidateOnFocus: false,
     },
   );
 
