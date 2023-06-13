@@ -12,7 +12,7 @@ function PanelListLandingPage({ title, subtitle, description, children }) {
       <Typography variant="subtitle1" color="primary">
         {subtitle}
       </Typography>
-      <StyledDescription>{description}</StyledDescription>
+      {description && <StyledDescription>{description}</StyledDescription>}
       {children}
     </PageWrapper>
   );

@@ -5,6 +5,7 @@ import Error from 'js/pages/Error';
 import Route from './Route';
 import useSendPageView from './useSendPageView';
 import useSetUrlBeforeLogin from './useSetUrlBeforeLogin';
+import CellTypes from '../../pages/CellTypes';
 
 const Donor = lazy(() => import('js/pages/Donor'));
 const Dataset = lazy(() => import('js/pages/Dataset'));
@@ -275,6 +276,14 @@ function Routes({ flaskData }) {
     return (
       <Route>
         <Genes />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/cell-types')) {
+    return (
+      <Route>
+        <CellTypes />
       </Route>
     );
   }
