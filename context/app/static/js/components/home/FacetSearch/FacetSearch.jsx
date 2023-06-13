@@ -20,7 +20,7 @@ const allLabels = {
   ...baseLabels,
   'donor.mapped_metadata.sex': baseLabels['mapped_metadata.sex'],
   'donor.mapped_metadata.race': baseLabels['mapped_metadata.race'],
-  'source_sample.sample_category': baseLabels.sample_category,
+  'source_samples.sample_category': baseLabels.sample_category,
 };
 
 const donorAggsQuery = getAggsQuery('donor', ['mapped_metadata.sex', 'mapped_metadata.race'], 100);
@@ -36,7 +36,7 @@ const datasetAggsQuery = getAggsQuery(
     'donor.mapped_metadata.sex',
     'donor.mapped_metadata.race',
     'origin_samples.mapped_organ',
-    'source_sample.sample_category',
+    'source_samples.sample_category',
     'mapped_data_types',
   ],
   100,
