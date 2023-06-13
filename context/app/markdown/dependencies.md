@@ -7,7 +7,7 @@ The services the portal relies on are [listed separately](/services).
 ## Git submodules
 
 ```
- 79cab515ee56184a824c6755ff25fc6e2d1a3a65 context/ingest-validation-tools (v0.0.13-23-g79cab515)
+ 79cab515ee56184a824c6755ff25fc6e2d1a3a65 context/ingest-validation-tools (v0.0.13-23-g79cab51)
 ```
 
 ## Python packages
@@ -83,7 +83,7 @@ lxml>=4.9.1
 "react-chartjs-2": "^3.0.4",
 "react-device-detect": "^2.2.2",
 "react-dom": "^16.12.0",
-"react-ga": "^3.1.2",
+"react-ga4": "^2.1.0",
 "react-hook-form": "^7.38.0",
 "react-intersection-observer": "^8.28.6",
 "react-joyride": "^2.2.1",

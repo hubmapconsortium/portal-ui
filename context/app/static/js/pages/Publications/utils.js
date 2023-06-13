@@ -29,4 +29,34 @@ function buildPublicationPanelProps(publicationHit) {
   };
 }
 
-export { buildAbbreviatedContributors, buildSecondaryText, buildPublicationPanelProps };
+function buildPublicationsSeparatedByStatus(publications) {
+  return publications.reduce(
+    (acc, publication) => {
+      const {
+        _source: { publication_status },
+      } = publication;
+
+      if (publication_status === undefined) {
+        return acc;
+      }
+
+      const publicationProps = buildPublicationPanelProps(publication);
+
+      if (publication_status) {
+        acc.published.push(publicationProps);
+      } else {
+        acc.preprint.push(publicationProps);
+      }
+
+      return acc;
+    },
+    { published: [], preprint: [] },
+  );
+}
+
+export {
+  buildAbbreviatedContributors,
+  buildSecondaryText,
+  buildPublicationPanelProps,
+  buildPublicationsSeparatedByStatus,
+};

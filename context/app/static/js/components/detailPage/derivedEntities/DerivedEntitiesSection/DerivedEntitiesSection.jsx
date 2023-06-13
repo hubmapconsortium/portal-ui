@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-
+import { useFlaskDataContext } from 'js/components/Contexts';
 import RelatedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import RelatedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
 import { useDerivedEntitiesSection } from './hooks';
 
-function DerivedEntitiesSection({ uuid, entityType }) {
+function DerivedEntitiesSection() {
+  const {
+    entity: { uuid, entityType },
+  } = useFlaskDataContext();
   const [openIndex, setOpenIndex] = useState(0);
-
   const { entities, isLoading } = useDerivedEntitiesSection(uuid);
 
   return (
@@ -34,5 +36,7 @@ function DerivedEntitiesSection({ uuid, entityType }) {
     </RelatedEntitiesSectionWrapper>
   );
 }
+
+// DerivedEntitiesSection.propTypes = {};
 
 export default DerivedEntitiesSection;
