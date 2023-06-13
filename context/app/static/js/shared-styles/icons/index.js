@@ -19,6 +19,7 @@ import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 import AddRoundedIcon from '@material-ui/icons/AddRounded';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 const fontSizeStyle = css`
   font-size: ${(props) => props.$fontSize || '1rem'};
@@ -100,6 +101,10 @@ const AddIcon = styled(AddRoundedIcon)`
   ${fontSizeStyle}
 `;
 
+const Refresh = styled(RefreshIcon)`
+  ${fontSizeStyle}
+`
+
 export {
   CollectionIcon,
   DonorIcon,
@@ -120,4 +125,5 @@ export {
   DownIcon,
   UpIcon,
   AddIcon,
+  Refresh,
 };

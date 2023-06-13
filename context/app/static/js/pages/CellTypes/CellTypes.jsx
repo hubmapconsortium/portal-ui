@@ -2,13 +2,17 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import Description from '../../shared-styles/sections/Description';
-import { PageContainer, PageHeadContainer } from './style';
+import { PageContainer, PageSectionContainer, OrganTilesContainer, ResetOrganFiltersButton } from './style';
 import theme from '../../theme';
+import { useFlaskDataContext } from '../../components/Contexts';
+import OrganTile from '../../components/organ/OrganTile';
+import { Refresh } from '../../shared-styles/icons';
 
 const CellTypes = () => {
+  const { organs } = useFlaskDataContext();
   return (
     <PageContainer>
-      <PageHeadContainer>
+      <PageSectionContainer>
         <Typography variant="h2" component="h1">
           Cell Types
         </Typography>
@@ -24,8 +28,15 @@ const CellTypes = () => {
           to that cell type page with additional information about the cell type including visualizations and a list of
           HuBMAP data affiliated with that cell type.
         </Description>
-      </PageHeadContainer>
-      <div>Organ tiles placeholder</div>
+      </PageSectionContainer>
+      <PageSectionContainer>
+        <ResetOrganFiltersButton startIcon={<Refresh />}>Reset Filters</ResetOrganFiltersButton>
+        <OrganTilesContainer>
+          {Object.values(organs).map((organ) => (
+            <OrganTile organ={organ} />
+          ))}
+        </OrganTilesContainer>
+      </PageSectionContainer>
       <div>Cell Type search table placeholder</div>
     </PageContainer>
   );
