@@ -10,7 +10,7 @@ import { useGeneCommonName } from './hooks';
 const summaryId = 'Summary';
 
 function Genes({ geneSymbol }) {
-  const commonName = useGeneCommonName(geneSymbol);
+  const { geneCommonName, isLoading } = useGeneCommonName(geneSymbol);
 
   const shouldDisplaySection = {
     [summaryId]: true,
@@ -21,6 +21,10 @@ function Genes({ geneSymbol }) {
     .map(([sectionName]) => sectionName);
   const sections = new Map(getSections(sectionOrder));
 
+  if (isLoading) {
+    return null;
+  }
+
   return (
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
@@ -29,7 +33,7 @@ function Genes({ geneSymbol }) {
           Gene
         </Typography>
         <Typography variant="h1" component="h2">
-          {`CD4 (${commonName})`}
+          {`${geneSymbol.toUpperCase()} (${geneCommonName})`}
         </Typography>
         <Summary />
       </Content>
