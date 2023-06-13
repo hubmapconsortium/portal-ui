@@ -1,3 +1,15 @@
+## v0.72.0 - 2023-06-07
+
+- Add link to publications landing page in 'Other' dropdown menu.
+- Fix duplication of publications as both published and pre-print.
+- Fixed support page entity header so the application doesn't crash to a white screen when scrolling down on Support entities' pages.
+- Add error handling for cases where the image pyramid descendants are missing file metadata.
+- Add more informative error messages on vitessce conf gen failures
+- Fix provenance table sample sorting calculation
+- Remove semicolon in the collections component for datasets.
+- Upgrade google analytics to ga4.
+
+
 ## v0.71.0 - 2023-05-30
 
 - Add files section to publication page.

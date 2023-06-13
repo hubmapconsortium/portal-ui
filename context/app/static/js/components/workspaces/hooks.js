@@ -1,8 +1,6 @@
-import { useContext } from 'react';
 import useSWR from 'swr';
 
-import { AppContext } from 'js/components/Providers';
-
+import { useAppContext } from 'js/components/Contexts';
 import { mergeJobsIntoWorkspaces, createWorkspaceAndNotebook, deleteWorkspace, stopJobs, startJob } from './utils';
 
 async function fetchWorkspaces(workspacesEndpoint, workspacesToken) {
@@ -32,7 +30,7 @@ async function fetchWorkspaces(workspacesEndpoint, workspacesToken) {
 }
 
 function useWorkspacesList() {
-  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
+  const { workspacesEndpoint, workspacesToken } = useAppContext();
 
   const { data: workspacesList, mutate } = useSWR(
     ['workspaces', workspacesToken],
@@ -64,7 +62,7 @@ function useWorkspacesList() {
 }
 
 function useCreateAndLaunchWorkspace() {
-  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
+  const { workspacesEndpoint, workspacesToken } = useAppContext();
   return async function createAndLaunchWorkspace({ path, body }) {
     const { workspace_id, notebook_path } = await createWorkspaceAndNotebook({ path, body });
     await startJob({ workspaceId: workspace_id, workspacesEndpoint, workspacesToken });

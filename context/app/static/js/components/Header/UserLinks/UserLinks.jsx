@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-import { AppContext } from 'js/components/Providers';
+import { useAppContext } from 'js/components/Contexts';
 import Dropdown from '../Dropdown';
 import DropdownLink from '../DropdownLink';
 import { StyledDivider } from '../HeaderContent/style';
 import { TruncatedSpan, WarningDropdownLink } from './style';
 
 function UserLinks({ isAuthenticated, userEmail }) {
-  const { isWorkspacesUser } = useContext(AppContext);
+  const { isWorkspacesUser } = useAppContext();
 
   return (
     <Dropdown title={<TruncatedSpan>{isAuthenticated ? userEmail || 'User' : 'User Profile'}</TruncatedSpan>}>

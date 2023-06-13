@@ -40,4 +40,6 @@ function RelatedEntitiesTable({ columns, entities, entityType }) {
   );
 }
 
+// RelatedEntitiesTable.prototype = {};
+
 export default RelatedEntitiesTable;

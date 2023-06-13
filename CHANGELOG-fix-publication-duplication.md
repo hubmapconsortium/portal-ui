@@ -1,1 +1,0 @@
-- Fix duplication of publications as both published and pre-print.

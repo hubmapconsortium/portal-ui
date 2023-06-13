@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { ExistsQuery, BoolMustNot, TermQuery } from 'searchkit';
 
 import { Alert } from 'js/shared-styles/alerts';
 import { getAuthHeader } from 'js/helpers/functions';
-import { AppContext } from 'js/components/Providers';
+import { useAppContext } from 'js/components/Contexts';
 import { field, listFilter, checkboxFilter, hierarchicalFilter } from 'js/components/searchPage/utils';
 import { fieldsToHighlight } from 'js/components/searchPage/config';
 import SearchWrapper from 'js/components/searchPage/SearchWrapper';
@@ -11,7 +11,7 @@ import DevResults from 'js/components/searchPage/DevResults';
 import { SearchHeader } from './style';
 
 function DevSearch() {
-  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
+  const { elasticsearchEndpoint, groupsToken } = useAppContext();
   const httpHeaders = getAuthHeader(groupsToken);
 
   const searchProps = {
