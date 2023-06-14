@@ -2,10 +2,10 @@ import React from 'react';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import SummaryBody from 'js/components/genes/SummaryBody/SummaryBody';
 
-function Summary() {
+function Summary({ geneSummary }) {
   return (
     <DetailPageSection id="summary">
-      <SummaryBody />
+      <SummaryBody geneSummary={geneSummary} />
     </DetailPageSection>
   );
 }

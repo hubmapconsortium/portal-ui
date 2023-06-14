@@ -11,10 +11,10 @@ const summaryId = 'Summary';
 
 function Genes({ geneSymbol }) {
   const { geneCommonName, isLoading } = useGeneCommonName(geneSymbol);
-  const geneData = useGeneData(920);
+  const geneSummary = useGeneData(920);
 
   console.log('commonName>>>>>>', geneCommonName); //eslint-disable-line
-  console.log('geneData>>>>>>', geneData); //eslint-disable-line
+  console.log('geneSummary>>>>>>', geneSummary); //eslint-disable-line
 
   const shouldDisplaySection = {
     [summaryId]: true,
@@ -39,7 +39,7 @@ function Genes({ geneSymbol }) {
         <Typography variant="h1" component="h1">
           {`${geneSymbol.toUpperCase()} (${geneCommonName})`}
         </Typography>
-        <Summary />
+        <Summary geneSummary={geneSummary} />
       </Content>
     </FlexRow>
   );
