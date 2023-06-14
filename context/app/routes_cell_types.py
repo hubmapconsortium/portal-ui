@@ -29,7 +29,6 @@ def cell_types_ui():
 def cell_types_list():
     celltype_token = requests.post(
         'https://cells.api.hubmapconsortium.org/api/celltype/', {}).json()['results'][0]['query_handle']
-    print(celltype_token)
     celltype_list = [result['grouping_name'] for result in requests.post('https://cells.api.hubmapconsortium.org/api/celltypeevaluation/', {
         'key': celltype_token, 'set_type': 'cell_type', 'limit': 500}).json()['results']]
     return jsonify(celltype_list)

@@ -1,5 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import TableHead from '@material-ui/core/TableHead';
 
 import theme from 'js/theme';
 import SearchBarInput from 'js/shared-styles/inputs/SearchBar';
@@ -7,11 +8,19 @@ import Description from 'js/shared-styles/sections/Description';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import OrganTile from 'js/components/organ/OrganTile';
 import { Refresh, FilterList } from 'js/shared-styles/icons';
+import {
+  StyledTable,
+  StyledTableBody,
+  StyledTableRow,
+  StyledTableCell,
+} from 'js/components/searchPage/ResultsTable/style';
 
 import { PageContainer, PageSectionContainer, OrganTilesContainer, CellTypesButton } from './style';
+import { useCellTypesList } from './hooks';
 
 const CellTypes = () => {
   const { organs } = useFlaskDataContext();
+  const { cellTypes } = useCellTypesList();
   return (
     <PageContainer>
       <PageSectionContainer>
@@ -34,14 +43,28 @@ const CellTypes = () => {
       <PageSectionContainer>
         <CellTypesButton startIcon={<Refresh />}>Reset Filters</CellTypesButton>
         <OrganTilesContainer>
-          {Object.values(organs).map((organ) => (
-            <OrganTile organ={organ} />
+          {Object.entries(organs).map(([name, organ]) => (
+            <OrganTile key={name} organ={organ} />
           ))}
         </OrganTilesContainer>
       </PageSectionContainer>
       <PageSectionContainer>
         <CellTypesButton startIcon={<FilterList />}>Additional Filters</CellTypesButton>
         <SearchBarInput placeholder="Search Cell Type" />
+        <StyledTable>
+          <TableHead>
+            <StyledTableRow>
+              <StyledTableCell>Cell Type</StyledTableCell>
+            </StyledTableRow>
+          </TableHead>
+          <StyledTableBody>
+            {cellTypes?.map((cellType) => (
+              <StyledTableRow key={cellType}>
+                <StyledTableCell>{cellType}</StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </StyledTableBody>
+        </StyledTable>
       </PageSectionContainer>
     </PageContainer>
   );
