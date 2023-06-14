@@ -5,12 +5,16 @@ import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Summary from 'js/components/genes/Summary';
 import { FlexRow, Content } from './style';
-import { useGeneCommonName } from './hooks';
+import { useGeneCommonName, useGeneData } from './hooks';
 
 const summaryId = 'Summary';
 
 function Genes({ geneSymbol }) {
   const { geneCommonName, isLoading } = useGeneCommonName(geneSymbol);
+  const geneData = useGeneData(920);
+
+  console.log('commonName>>>>>>', geneCommonName); //eslint-disable-line
+  console.log('geneData>>>>>>', geneData); //eslint-disable-line
 
   const shouldDisplaySection = {
     [summaryId]: true,
