@@ -1,3 +1,3 @@
 - Built gene data API.
 - Built gene id API. 
-- Rendered gene summary from gene data API on the summary section.
+- Rendered summary on summary section from gene data API.
