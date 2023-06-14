@@ -32,7 +32,7 @@ function Genes({ geneSymbol }) {
         <Typography variant="subtitle1" component="h2" color="primary">
           Gene
         </Typography>
-        <Typography variant="h1" component="h2">
+        <Typography variant="h1" component="h1">
           {`${geneSymbol.toUpperCase()} (${geneCommonName})`}
         </Typography>
         <Summary />
