@@ -59,7 +59,7 @@ const sharedInfoSnackbarProps = {
   },
   autoHideDuration: 4000,
 };
-function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, shouldMountVitessce = true }) {
+function Visualization({ vitData, uuid, uuidSuffix, hasNotebook, shouldDisplayHeader, shouldMountVitessce = true }) {
   const {
     vizIsFullscreen,
     expandViz,
@@ -122,6 +122,8 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
 
   const isMultiDataset = Array.isArray(vitessceConfig);
   const version = dependencies.vitessce.replace('^', '');
+
+  const vitessceUid = `${uuid}${uuidSuffix || ''}${isMultiDataset ? vitessceSelection : ''}`;
 
   return (
     vitessceConfig &&
@@ -197,6 +199,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
                 onConfigChange={handleVitessceConfigDebounced}
                 height={vizIsFullscreen ? null : vitessceFixedHeight}
                 onWarn={addError}
+                uid={vitessceUid}
               />
             )}
           </ExpandableDiv>

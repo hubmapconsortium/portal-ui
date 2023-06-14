@@ -8,7 +8,15 @@ import { VisualizationBackground } from './style';
 
 const Visualization = React.lazy(() => import('../Visualization'));
 
-function VisualizationWrapper({ vitData, uuid, hasNotebook, shouldDisplayHeader, hasBeenMounted, isPublicationPage }) {
+function VisualizationWrapper({
+  vitData,
+  uuid,
+  uuidSuffix,
+  hasNotebook,
+  shouldDisplayHeader,
+  hasBeenMounted,
+  isPublicationPage,
+}) {
   return (
     <Suspense
       fallback={
@@ -25,6 +33,7 @@ function VisualizationWrapper({ vitData, uuid, hasNotebook, shouldDisplayHeader,
       <Visualization
         vitData={vitData}
         uuid={uuid}
+        uuidSuffix={uuidSuffix}
         hasNotebook={hasNotebook}
         shouldDisplayHeader={shouldDisplayHeader}
         shouldMountVitessce={hasBeenMounted}
