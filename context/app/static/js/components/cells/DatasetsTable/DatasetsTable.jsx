@@ -12,7 +12,7 @@ import { useExpandTransition } from 'js/hooks/useExpand';
 
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
-  { id: 'origin_sample.mapped_organ', label: 'Organ' },
+  { id: 'origin_samples_unique_mapped_organs', label: 'Organ' },
   { id: 'mapped_data_types', label: 'Mapped Data Types' },
   { id: 'donor.mapped_metadata.age_value', label: 'Donor Age' },
   { id: 'donor.mapped_metadata.body_mass_index_value', label: 'Donor BMI' },

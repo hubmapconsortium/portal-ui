@@ -10,7 +10,6 @@ async function fetchGeneCommonName(geneNamesURL) {
 
   const results = await response.json();
   const commonName = results.response.docs[0].name;
-
   return commonName;
 }
 

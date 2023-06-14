@@ -128,7 +128,7 @@ function buildDonorFields(entityType) {
 function buildDatasetFields() {
   const tileFields = {
     ...createDatasetFacet({ fieldName: 'mapped_data_types', label: 'Data Types', type: 'string' }),
-    ...createDatasetFacet({ fieldName: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
+    ...createDatasetFacet({ fieldName: 'origin_samples.mapped_organ', label: 'Organ', type: 'string' }),
   };
   const tableFields = {
     ...tileFields,
@@ -139,7 +139,7 @@ function buildDatasetFields() {
 
 function buildSampleFields() {
   const tileFields = {
-    ...createSampleFacet({ fieldName: 'origin_sample.mapped_organ', label: 'Organ', type: 'string' }),
+    ...createSampleFacet({ fieldName: 'origin_samples.mapped_organ', label: 'Organ', type: 'string' }),
     ...createSampleFacet({ fieldName: 'sample_category', label: 'Sample Category', type: 'string' }),
   };
 

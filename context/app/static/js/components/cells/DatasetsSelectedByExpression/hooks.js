@@ -42,7 +42,7 @@ function getSearchQuery(cellsResults) {
       'uuid',
       'hubmap_id',
       'mapped_data_types',
-      'origin_sample.mapped_organ',
+      'origin_samples_unique_mapped_organs',
       'donor',
       'last_modified_timestamp',
     ],
