@@ -10,14 +10,6 @@ const StyledTable = styled(Table)`
 `;
 
 const StyledTableBody = styled(TableBody)`
-  // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.
-  // What looks white is actually transparent and brightness() has no effect.
-  background-color: ${(props) => props.theme.palette.white.main};
-
-  :hover {
-    filter: ${(props) => props.theme.palette.white.hover};
-  }
-
   // Material would apply this on TD, but we override, so there is no internal border above the highlight.
   border: 1px solid ${(props) => props.theme.palette.divider};
 
@@ -30,6 +22,14 @@ const sidePadding = '64px';
 
 const StyledTableRow = styled(TableRow)`
   border: 0;
+
+  // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.
+  // What looks white is actually transparent and brightness() has no effect.
+  background-color: ${(props) => props.theme.palette.white.main};
+
+  :hover {
+    filter: ${(props) => props.theme.palette.white.hover};
+  }
 
   &.before-highlight td {
     padding-bottom: 0px;

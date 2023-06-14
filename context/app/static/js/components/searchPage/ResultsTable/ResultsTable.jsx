@@ -16,34 +16,36 @@ function ResultsTable({ hits, resultFields, detailsUrlPrefix, idField, sortOptio
         options={sortOptions}
         listComponent={withAnalyticsCategory(SortingTableHead, analyticsCategory)}
       />
-      {hits.map((hit) => (
-        <StyledTableBody key={hit._id}>
-          <StyledTableRow className={'highlight' in hit && 'before-highlight'}>
-            {resultFields.map((field) => (
-              <StyledTableCell key={field.id}>
-                {field.id === 'hubmap_id' ? (
-                  <LightBlueLink href={detailsUrlPrefix + hit._source[idField]}>
-                    {getByPath(hit._source, field)}
-                  </LightBlueLink>
-                ) : (
-                  getByPath(hit._source, field)
-                )}
-              </StyledTableCell>
-            ))}
-          </StyledTableRow>
-          {'highlight' in hit && (
-            <StyledTableRow className="highlight">
-              <StyledTableCell colSpan={resultFields.length}>
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: Object.values(hit.highlight).join(' ... '),
-                  }}
-                />
-              </StyledTableCell>
+      <StyledTableBody>
+        {hits.map((hit) => (
+          <React.Fragment key={hit._id}>
+            <StyledTableRow className={'highlight' in hit && 'before-highlight'}>
+              {resultFields.map((field) => (
+                <StyledTableCell key={field.id}>
+                  {field.id === 'hubmap_id' ? (
+                    <LightBlueLink href={detailsUrlPrefix + hit._source[idField]}>
+                      {getByPath(hit._source, field)}
+                    </LightBlueLink>
+                  ) : (
+                    getByPath(hit._source, field)
+                  )}
+                </StyledTableCell>
+              ))}
             </StyledTableRow>
-          )}
-        </StyledTableBody>
-      ))}
+            {'highlight' in hit && (
+              <StyledTableRow className="highlight">
+                <StyledTableCell colSpan={resultFields.length}>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: Object.values(hit.highlight).join(' ... '),
+                    }}
+                  />
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </React.Fragment>
+        ))}
+      </StyledTableBody>
     </StyledTable>
   );
   /* eslint-enable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
