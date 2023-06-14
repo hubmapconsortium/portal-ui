@@ -1,3 +1,11 @@
+## v0.72.3 - 2023-06-13
+
+- Add a context provider to pass flask data to react components.
+- Pass flask data to Donor page components by context.
+- refactor AppContext to useAppContext from Context.js.
+- Use `origin_samples` field instead of `origin_sample` throughout.
+
+
 ## v0.72.0 - 2023-06-07
 
 - Add link to publications landing page in 'Other' dropdown menu.

@@ -38,7 +38,7 @@ Sample.args = {
   entityData: {
     last_modified_timestamp: Date.now(),
     sample_category: 'Sample Category',
-    origin_sample: { mapped_organ: 'Organ Type' },
+    origin_samples: [{ mapped_organ: 'Organ Type' }, { mapped_organ: 'Organ Type 2' }],
   },
   descendantCounts: { Sample: 1, Dataset: 2 },
 };
@@ -51,7 +51,7 @@ const datasetArgs = {
   entityData: {
     last_modified_timestamp: Date.now(),
 
-    origin_sample: { mapped_organ: 'Organ Type' },
+    origin_samples: [{ mapped_organ: 'Organ Type' }, { mapped_organ: 'Organ Type 2' }],
     mapped_data_types: ['Data Type 1', 'Data Type 2'],
     thumbnail_file: {
       file_uuid: 'ffff0185e2163e03da79489140fee0d1',

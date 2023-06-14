@@ -57,7 +57,7 @@ const donorConfig = {
 const sampleConfig = {
   filters: {
     'Sample Metadata': [
-      listFilter('origin_sample.mapped_organ', 'Organ'),
+      listFilter('origin_samples.mapped_organ', 'Organ'),
       listFilter('sample_category', 'Sample Category'),
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
@@ -68,7 +68,7 @@ const sampleConfig = {
       field('hubmap_id', 'HuBMAP ID'),
       field('group_name', 'Group'),
       field('sample_category', 'Sample Category'),
-      field('origin_sample.mapped_organ', 'Organ'),
+      field('origin_samples.mapped_organ', 'Organ'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
     tile: sharedTileFields,
@@ -80,8 +80,8 @@ const datasetConfig = {
   filters: {
     'Dataset Metadata': [
       listFilter('mapped_data_types', 'Data Type'),
-      listFilter('origin_sample.mapped_organ', 'Organ'),
-      listFilter('source_sample.sample_category', 'Sample Category'),
+      listFilter('origin_samples.mapped_organ', 'Organ'),
+      listFilter('source_samples.sample_category', 'Sample Category'),
       hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),
       listFilter('mapped_consortium', 'Consortium'),
     ],
@@ -93,7 +93,7 @@ const datasetConfig = {
       field('hubmap_id', 'HuBMAP ID'),
       field('group_name', 'Group'),
       field('mapped_data_types', 'Data Types'),
-      field('origin_sample.mapped_organ', 'Organ'),
+      field('origin_samples.mapped_organ', 'Organ'),
       field('mapped_status', 'Status'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
