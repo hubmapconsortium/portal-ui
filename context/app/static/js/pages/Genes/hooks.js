@@ -79,5 +79,3 @@ const useGeneId = (geneSymbol) => {
 };
 
 export { useGeneCommonName, useGeneData, useGeneId };
-
-// https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gene&term=CD4[Preferred%20Symbol]&api_key=8ce52d016d70ec1d76542d3b87b85b2b4408
