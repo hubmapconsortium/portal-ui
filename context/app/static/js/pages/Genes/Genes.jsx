@@ -11,10 +11,8 @@ const summaryId = 'Summary';
 
 function Genes({ geneSymbol }) {
   const { geneCommonName, isLoading } = useGeneCommonName(geneSymbol);
-  const geneSummary = useGeneData(920);
   const geneId = useGeneId(geneSymbol);
-
-  console.log('geneId>>>>>>', geneId); //eslint-disable-line
+  const geneSummary = useGeneData(geneId);
 
   const shouldDisplaySection = {
     [summaryId]: true,
