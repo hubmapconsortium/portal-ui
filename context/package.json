@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "0.72.3",
+  "version": "0.72.4",
   "dependencies": {
     "@babel/runtime": "^7.10.4",
     "@datapunt/matomo-tracker-js": "^0.5.1",
