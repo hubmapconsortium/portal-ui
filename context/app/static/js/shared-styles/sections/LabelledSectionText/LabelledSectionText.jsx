@@ -13,11 +13,12 @@ function LabelledSectionText({
   bottomSpacing,
   className,
   childContainerComponent = 'p',
+  fontWeight = 400,
 }) {
   return (
     <StyledDiv className={className} $bottomSpacing={bottomSpacing}>
       <Flex>
-        <Typography variant="subtitle2" component="h3" color="primary">
+        <Typography variant="subtitle2" component="h3" color="primary" style={{ fontWeight }}>
           {label}
         </Typography>
         {iconTooltipText && (
@@ -38,12 +39,14 @@ LabelledSectionText.propTypes = {
   iconTooltipText: PropTypes.string,
   bottomSpacing: PropTypes.number,
   childContainerComponent: PropTypes.elementType,
+  fontWeight: PropTypes.number,
 };
 
 LabelledSectionText.defaultProps = {
   iconTooltipText: undefined,
   bottomSpacing: undefined,
   childContainerComponent: undefined,
+  fontWeight: undefined,
 };
 
 export default LabelledSectionText;
