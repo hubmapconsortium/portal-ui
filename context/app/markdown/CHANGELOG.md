@@ -1,3 +1,10 @@
+## v0.72.4 - 2023-06-15
+
+- Built two custom hooks to call third party API in order to retrieve the common name to render it next to the gene symbol. 
+- Restore metadata table display
+- Add uids to places in which multiple Vitessce configurations are listed in a dropdown
+
+
 ## v0.72.3 - 2023-06-13
 
 - Add a context provider to pass flask data to react components.

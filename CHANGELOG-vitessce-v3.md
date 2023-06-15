@@ -1,1 +1,0 @@
-- Add uids to places in which multiple Vitessce configurations are listed in a dropdown
