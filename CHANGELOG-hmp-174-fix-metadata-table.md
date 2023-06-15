@@ -1,0 +1,1 @@
+- Restore metadata table display
