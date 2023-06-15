@@ -12,3 +12,36 @@ export const useCellTypesList = () => {
     isError: error,
   };
 };
+
+export const useCellTypeDescription = (cellType, shouldFetch) => {
+  const { data, error } = useSWR(shouldFetch ? `/cell-types/${cellType}/description.json` : null, fetcher, {
+    revalidateOnFocus: false,
+  });
+  return {
+    description: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+};
+
+export const useCellTypeOrgans = (cellType, shouldFetch) => {
+  const { data, error } = useSWR(shouldFetch ? `/cell-types/${cellType}/organs.json` : null, fetcher, {
+    revalidateOnFocus: false,
+  });
+  return {
+    organs: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+};
+
+export const useCellTypeDatasets = (cellType) => {
+  const { data, error } = useSWR(`/cell-types/${cellType}/datasets.json`, fetcher, {
+    revalidateOnFocus: false,
+  });
+  return {
+    datasets: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+};

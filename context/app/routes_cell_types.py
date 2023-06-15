@@ -35,6 +35,22 @@ def cell_types_list():
     return jsonify(celltype_list)
 
 
+# Fetches cell type description
+@blueprint.route('/cell-types/<cell_type>/description.json')
+def cell_type_description(cell_type):
+    headers = {"accept": 'application/json'}
+    celltype_concepts = requests.get(
+        f'https://ontology.api.hubmapconsortium.org/terms/{cell_type}/concepts', headers=headers).json()
+    if (len(celltype_concepts) == 0):
+        return jsonify('No description available')
+    concept = celltype_concepts[0]
+    description = requests.get(
+        f'https://ontology.api.hubmapconsortium.org/concepts/{concept}/definitions', headers=headers).json()
+    if (len(description) == 0):
+        return jsonify('No description available')
+    return jsonify(description[0]['definition'])
+
+
 # Fetches dataset UUIDs for a given cell type
 @blueprint.route('/cell-types/<cell_type>/datasets.json')
 def cell_type_datasets(cell_type):
@@ -51,25 +67,6 @@ def cell_type_organs(cell_type):
     client = _get_client(current_app)
     organs = [organ['grouping_name']
               for organ in client.select_organs(where='celltype', has=[cell_type]).get_list()]
-    organs = [dataset for dataset in list(organs)]
+    organs = ','.join([dataset for dataset in list(organs)])
 
     return jsonify(organs)
-
-
-# Fetches list of genes for a given cell type
-@blueprint.route('/cell-types/<cell_type>/genes.json')
-def cell_type_genes(cell_type):
-    client = _get_client(current_app)
-    genes = [gene['grouping_name']
-             for gene in client.select_genes(where='celltype', has=[cell_type]).get_list()]
-    genes = [dataset for dataset in list(genes)]
-
-    return jsonify(genes)
-
-
-@blueprint.route('/cell-types/test.json')
-def cell_types_test():
-    client = _get_client(current_app)
-    cells = client.select_cells(where='celltype', has=['Fibroblast']).get_list()[0:100]
-
-    return jsonify(cells)

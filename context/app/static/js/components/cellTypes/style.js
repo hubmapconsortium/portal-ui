@@ -34,3 +34,9 @@ export const CellTypesButton = styled(Button)`
   border-radius: 4px;
   padding: ${(props) => props.theme.spacing(1)}px ${(props) => props.theme.spacing(2)}px;
 `;
+
+export const ViewDatasetsButton = styled(Button)`
+  background-color: ${(props) => props.theme.palette.white};
+  color: ${(props) => props.theme.palette.primary.main};
+  border-radius: 4px;
+`;

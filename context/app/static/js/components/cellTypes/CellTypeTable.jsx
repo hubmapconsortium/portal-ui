@@ -1,5 +1,6 @@
 import React from 'react';
 import TableHead from '@material-ui/core/TableHead';
+import Typography from '@material-ui/core/Typography';
 
 import {
   StyledTable,
@@ -10,8 +11,10 @@ import {
 import SearchBarInput from 'js/shared-styles/inputs/SearchBar';
 import { FilterList } from 'js/shared-styles/icons';
 
+import Skeleton from '@material-ui/lab/Skeleton/Skeleton';
 import { useCellTypesList } from './hooks';
 import { PageSectionContainer, CellTypesButton } from './style';
+import CellTypeRow from './CellTypeRow';
 
 const CellTypesTable = () => {
   const { cellTypes } = useCellTypesList();
@@ -23,18 +26,31 @@ const CellTypesTable = () => {
         <TableHead>
           <StyledTableRow>
             <StyledTableCell>Cell Type</StyledTableCell>
+            <StyledTableCell>Description</StyledTableCell>
+            <StyledTableCell>Organs</StyledTableCell>
+            <StyledTableCell>
+              <Typography variant="srOnly">Datasets</Typography>
+            </StyledTableCell>
           </StyledTableRow>
         </TableHead>
         <StyledTableBody>
           {cellTypes?.map((cellType) => (
-            <StyledTableRow key={cellType}>
-              <StyledTableCell>{cellType}</StyledTableCell>
-            </StyledTableRow>
+            <CellTypeRow key={cellType} cellType={cellType} />
           ))}
+          {!cellTypes && <TablePlaceholder />}
         </StyledTableBody>
       </StyledTable>
     </PageSectionContainer>
   );
 };
+
+const placeholderArray = new Array(10).fill(0);
+
+const TablePlaceholder = () =>
+  placeholderArray.map((_, index) => (
+    <StyledTableRow key={index}>
+      <Skeleton variant="text" width="100%" />
+    </StyledTableRow>
+  ));
 
 export default CellTypesTable;
