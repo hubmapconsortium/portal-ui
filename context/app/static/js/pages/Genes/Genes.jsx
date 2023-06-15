@@ -1,17 +1,13 @@
 import React from 'react';
-
 import Typography from '@material-ui/core/Typography';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Summary from 'js/components/genes/Summary';
 import { FlexRow, Content } from './style';
-import { useGeneCommonName } from './hooks';
 
 const summaryId = 'Summary';
 
-function Genes({ geneSymbol }) {
-  const { geneCommonName, isLoading } = useGeneCommonName(geneSymbol);
-
+function Genes() {
   const shouldDisplaySection = {
     [summaryId]: true,
   };
@@ -21,19 +17,15 @@ function Genes({ geneSymbol }) {
     .map(([sectionName]) => sectionName);
   const sections = new Map(getSections(sectionOrder));
 
-  if (isLoading) {
-    return null;
-  }
-
   return (
     <FlexRow>
       <TableOfContents items={[...sections.values()]} />
       <Content>
-        <Typography variant="subtitle1" component="h2" color="primary">
+        <Typography variant="subtitle1" component="h1" color="primary">
           Gene
         </Typography>
-        <Typography variant="h1" component="h1">
-          {`${geneSymbol.toUpperCase()} (${geneCommonName})`}
+        <Typography variant="h1" component="h2">
+          CD4
         </Typography>
         <Summary />
       </Content>

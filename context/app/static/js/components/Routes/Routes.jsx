@@ -49,7 +49,6 @@ function Routes({ flaskData }) {
     organs_count,
     organ,
     vignette_json,
-    geneSymbol,
   } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
@@ -275,7 +274,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/genes/')) {
     return (
       <Route>
-        <Genes geneSymbol={geneSymbol} />
+        <Genes />
       </Route>
     );
   }
@@ -307,7 +306,6 @@ Routes.propTypes = {
     metadata: PropTypes.object,
     organs_count: PropTypes.number,
     vignette_json: PropTypes.object,
-    geneSymbol: PropTypes.string,
   }),
 };
 
