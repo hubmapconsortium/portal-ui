@@ -48,6 +48,7 @@ const placeholderArray = new Array(10).fill(0);
 
 const TablePlaceholder = () =>
   placeholderArray.map((_, index) => (
+    // eslint-disable-next-line react/no-array-index-key
     <StyledTableRow key={index}>
       <Skeleton variant="text" width="100%" />
     </StyledTableRow>
