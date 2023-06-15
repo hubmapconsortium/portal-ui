@@ -76,7 +76,7 @@ def main():
         # and https://github.com/hubmapconsortium/portal-ui/issues/2943 are resolved.
 
         # Why FMA? Resolve paired organs:
-        'fma7214', 'fma7213',
+        'fma7214', 'fma7213', 
         'fma24977', 'fma24978',
         'fma57991', 'fma57987',
         'fma323951',
@@ -131,7 +131,6 @@ def merge_data(**kwargs):
     return dict(merged)
 
 ###### Ontology ######
-
 
 def get_ontology_info(ids):
     ontology_info = {}
@@ -227,12 +226,10 @@ def rekey_search(search_organs, uberon_names):
 
 ###### CCF ######
 
-
 def rekey_ccf(api_response):
     return {organ['representation_of']: organ for organ in api_response}
 
 ###### Utils #######
-
 
 @dataclass
 class Organ:
