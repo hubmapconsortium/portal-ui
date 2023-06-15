@@ -5,14 +5,13 @@ import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Summary from 'js/components/genes/Summary';
 import { FlexRow, Content } from './style';
-import { useGeneCommonName, useGeneData, useGeneId } from './hooks';
+import { useGeneCommonName, useGeneData } from './hooks';
 
 const summaryId = 'Summary';
 
 function Genes({ geneSymbol }) {
   const { geneCommonName, isLoading } = useGeneCommonName(geneSymbol);
-  const geneId = useGeneId(geneSymbol);
-  const geneSummary = useGeneData(geneId);
+  const geneSummary = useGeneData(geneSymbol);
 
   const shouldDisplaySection = {
     [summaryId]: true,

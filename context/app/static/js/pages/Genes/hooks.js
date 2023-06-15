@@ -26,32 +26,6 @@ function useGeneCommonName(geneSymbol) {
   return { geneCommonName, isLoading };
 }
 
-async function fetchGeneData(geneDataURL) {
-  const response = await fetch(geneDataURL);
-
-  if (!response.ok) {
-    console.error('Gene data API failed.', response);
-  }
-
-  const responseText = await response.text();
-  const result = await parseStringPromise(responseText);
-  const geneSummary = result['Entrezgene-Set'].Entrezgene[0].Entrezgene_summary[0];
-  return geneSummary;
-}
-
-const useGeneData = (geneID) => {
-  const { data: geneData } = useSWR(
-    `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=gene&id=${geneID}&retmode=xml`,
-    fetchGeneData,
-    {
-      fallbackData: '',
-      revalidateOnFocus: false,
-    },
-  );
-
-  return geneData;
-};
-
 async function fetchGeneId(geneIdURL) {
   const response = await fetch(geneIdURL);
 
@@ -75,6 +49,34 @@ const useGeneId = (geneSymbol) => {
     },
   );
   return geneId;
+};
+
+async function fetchGeneData(geneDataURL) {
+  const response = await fetch(geneDataURL);
+
+  if (!response.ok) {
+    console.error('Gene data API failed.', response);
+  }
+
+  const responseText = await response.text();
+  const result = await parseStringPromise(responseText);
+  const geneSummary = result['Entrezgene-Set'].Entrezgene[0].Entrezgene_summary[0];
+  return geneSummary;
+}
+
+const useGeneData = (geneSymbol) => {
+  const geneId = useGeneId(geneSymbol);
+
+  const { data: geneData } = useSWR(
+    geneId ? `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=gene&id=${geneId}&retmode=xml` : null,
+    fetchGeneData,
+    {
+      fallbackData: '',
+      revalidateOnFocus: false,
+    },
+  );
+
+  return geneData;
 };
 
 export { useGeneCommonName, useGeneData, useGeneId };
