@@ -1,14 +1,13 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-import { useFlaskDataContext } from 'js/components/Contexts';
+import PropTypes from 'prop-types';
+
 import { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 
-function ProvTable() {
+function ProvTable({ uuid, ancestors, assayMetadata }) {
   // Make a new list rather modifying old one in place: Caused duplication in UI.
-  const { entity: assayMetadata } = useFlaskDataContext();
-  const { ancestors, uuid } = assayMetadata;
   const ancestorsAndSelf = [...ancestors, assayMetadata];
 
   const ancestorsAndSelfByType = ancestorsAndSelf.reduce(
@@ -54,6 +53,11 @@ function ProvTable() {
   );
 }
 
-// ProvTable.propTypes = {}
+ProvTable.propTypes = {
+  uuid: PropTypes.string.isRequired,
+  ancestors: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  assayMetadata: PropTypes.object.isRequired,
+};
 
 export default ProvTable;

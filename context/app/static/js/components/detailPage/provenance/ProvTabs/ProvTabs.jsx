@@ -1,14 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
-import { useFlaskDataContext } from 'js/components/Contexts';
+
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
 import ProvAnalysisDetails from '../ProvAnalysisDetails';
 import { hasDataTypes } from './utils';
 
-function ProvTabs({ provData }) {
-  const { uuid, metadata, entity_type, ancestors, data_types } = useFlaskDataContext();
+function ProvTabs({ uuid, assayMetadata, provData }) {
+  const { metadata, entity_type, ancestors, data_types } = assayMetadata;
 
   const [open, setOpen] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -34,7 +35,7 @@ function ProvTabs({ provData }) {
       </Tabs>
       {shouldDisplayTable && (
         <TabPanel value={open} index={0} pad={1}>
-          <ProvTable uuid={uuid} ancestors={ancestors} />
+          <ProvTable uuid={uuid} ancestors={ancestors} assayMetadata={assayMetadata} />
         </TabPanel>
       )}
       <TabPanel value={open} index={graphIndex}>
@@ -49,6 +50,11 @@ function ProvTabs({ provData }) {
   );
 }
 
-// ProvTabs.propTypes = {};
+ProvTabs.propTypes = {
+  uuid: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  assayMetadata: PropTypes.object.isRequired,
+  provData: PropTypes.objectOf(PropTypes.object).isRequired,
+};
 
 export default ProvTabs;

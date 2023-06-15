@@ -1,5 +1,6 @@
 import React, { lazy, useContext } from 'react';
 import PropTypes from 'prop-types';
+
 import { AppContext } from 'js/components/Providers';
 import Error from 'js/pages/Error';
 import Route from './Route';
@@ -64,7 +65,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/browse/donor/')) {
     return (
       <Route>
-        <Donor />
+        <Donor assayMetadata={entity} vitData={vitessce_conf} />
       </Route>
     );
   }

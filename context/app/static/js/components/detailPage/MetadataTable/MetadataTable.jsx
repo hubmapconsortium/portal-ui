@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFlaskDataContext } from 'js/components/Contexts';
+import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -49,11 +49,7 @@ function tableDataToRows(tableData) {
   );
 }
 
-function MetadataTable() {
-  const {
-    entity: { mapped_metadata: tableData = {}, hubmap_id },
-  } = useFlaskDataContext();
-
+function MetadataTable({ metadata: tableData, hubmap_id }) {
   const columns = [
     { id: 'key', label: 'Key' },
     { id: 'value', label: 'Value' },
@@ -105,7 +101,14 @@ function MetadataTable() {
   );
 }
 
-// MetadataTable.prototype = {};
+// Metadata values are usually strings
+// ... but placeholder metadata.metadata is an object
+// ... and for donors, all the values are wrapped in arrays.
+MetadataTable.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  metadata: PropTypes.object.isRequired,
+  hubmap_id: PropTypes.string.isRequired,
+};
 
 export default MetadataTable;
 export { tableDataToRows, getDescription };

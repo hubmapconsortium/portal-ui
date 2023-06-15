@@ -1,9 +1,10 @@
 import React from 'react';
-import { FlaskDataContext } from 'js/components/Contexts';
 import { ThemeProvider } from 'styled-components';
+
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+
 import GlobalStyles from 'js/components/globalStyles';
 import theme from '../theme';
 import GlobalFonts from '../fonts';
@@ -23,7 +24,6 @@ function Providers({
   children,
   workspacesToken,
   isWorkspacesUser,
-  flaskData,
 }) {
   // injectFirst ensures styled-components takes priority over mui for styling
   return (
@@ -34,11 +34,9 @@ function Providers({
           <AppContext.Provider
             value={{ groupsToken, workspacesToken, isWorkspacesUser, isAuthenticated, userEmail, ...endpoints }}
           >
-            <FlaskDataContext.Provider value={flaskData}>
-              <CssBaseline />
-              <GlobalStyles />
-              {children}
-            </FlaskDataContext.Provider>
+            <CssBaseline />
+            <GlobalStyles />
+            {children}
           </AppContext.Provider>
         </ThemeProvider>
       </MuiThemeProvider>

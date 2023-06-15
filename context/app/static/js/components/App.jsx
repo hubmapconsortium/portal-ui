@@ -1,10 +1,13 @@
 import React from 'react';
 import marked from 'marked';
+
 import Providers from './Providers';
 import Routes from './Routes';
 import Footer from './Footer';
 import Header from './Header';
+
 import { StyledAlert, FlexContainer } from './style';
+
 // Importing Search styles here so the CSS import order is correct.
 import 'js/components/searchPage/Search.scss';
 
@@ -31,6 +34,7 @@ function App(props) {
   const { endpoints, globalAlertMd } = flaskData;
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
+
   const isWorkspacesUser = userGroups.includes('Workspaces') || workspacesUsers.includes(userEmail);
 
   return (
@@ -41,7 +45,6 @@ function App(props) {
       userEmail={userEmail}
       workspacesToken={workspacesToken}
       isWorkspacesUser={isWorkspacesUser}
-      flaskData={flaskData}
     >
       <Header />
       {globalAlertMd && (
@@ -57,4 +60,5 @@ function App(props) {
     </Providers>
   );
 }
+
 export default App;

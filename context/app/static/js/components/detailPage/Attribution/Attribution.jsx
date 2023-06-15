@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
@@ -22,6 +24,10 @@ function Attribution({ group_name, created_by_user_displayname, created_by_user_
   );
 }
 
-// Attribution.propTypes = {};
+Attribution.propTypes = {
+  group_name: PropTypes.string.isRequired,
+  created_by_user_displayname: PropTypes.string.isRequired,
+  created_by_user_email: PropTypes.string.isRequired,
+};
 
 export default React.memo(Attribution);
