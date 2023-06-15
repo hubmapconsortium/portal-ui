@@ -1,8 +1,9 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useContext, useMemo } from 'react';
 import { useSearchkitVariables } from '@searchkit/client';
 import { CustomQuery } from '@searchkit/sdk';
+
 import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
-import { useAppContext } from 'js/components/Contexts';
+import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
 import { createSearchkitFacet } from 'js/components/entity-search/SearchWrapper/utils';
@@ -41,7 +42,7 @@ const query = new CustomQuery({
 });
 
 function useSearch() {
-  const { elasticsearchEndpoint, groupsToken } = useAppContext();
+  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const authHeader = getAuthHeader(groupsToken);
   const { fields, tileFields, facets, defaultFilters, entityType, numericFacetsProps, availableFields } = useStore();
 

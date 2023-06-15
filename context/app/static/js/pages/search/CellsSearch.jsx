@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
-import { useAppContext } from 'js/components/Contexts';
+import { AppContext } from 'js/components/Providers';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/searchPage/SearchWrapper';
@@ -13,7 +13,7 @@ import Results from 'js/components/searchPage/Results';
 import { SearchHeader } from './style';
 
 function Search({ title }) {
-  const { elasticsearchEndpoint, groupsToken } = useAppContext();
+  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
 
   const hiddenFilters = [
     listFilter('ancestor_ids', 'Ancestor ID'),

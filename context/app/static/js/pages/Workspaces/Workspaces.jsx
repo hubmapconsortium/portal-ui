@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { useAppContext } from 'js/components/Contexts';
+import { AppContext } from 'js/components/Providers';
 import WorkspacesTitle from 'js/components/workspaces/WorkspacesTitle';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenticated';
@@ -8,7 +8,7 @@ import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenti
 import { StyledDescription } from './style';
 
 function Workspaces() {
-  const { isAuthenticated, isWorkspacesUser } = useAppContext();
+  const { isAuthenticated, isWorkspacesUser } = useContext(AppContext);
   return (
     <>
       <WorkspacesTitle />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlaskDataContext, AppContext } from 'js/components/Contexts';
+import { FlaskDataContext } from 'js/components/Contexts';
 import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
@@ -12,6 +12,8 @@ const generateClassName = createGenerateClassName({
   disableGlobal: true,
   seed: 'portal',
 });
+
+const AppContext = React.createContext({});
 
 function Providers({
   endpoints,

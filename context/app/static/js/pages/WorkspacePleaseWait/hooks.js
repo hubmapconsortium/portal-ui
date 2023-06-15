@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
-import { useAppContext } from 'js/components/Contexts';
+import { AppContext } from 'js/components/Providers';
 import { locationIfJobRunning } from 'js/components/workspaces/utils';
 import useInterval from 'js/hooks/useInterval';
 
 function useWorkspacesPleaseWait(workspaceId) {
   const [message, setMessage] = useState();
   const [dead, setDead] = useState();
-  const { workspacesEndpoint, workspacesToken } = useAppContext();
+  const { workspacesEndpoint, workspacesToken } = useContext(AppContext);
 
   async function setLocationOrRetry() {
     if (dead) {

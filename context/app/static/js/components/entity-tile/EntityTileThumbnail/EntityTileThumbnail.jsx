@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
-import { useAppContext } from 'js/components/Contexts';
+import { AppContext } from 'js/components/Providers';
 import { LetterboxedThumbnail } from './style';
 
 function EntityTileThumbnail({ thumbnail_file, entity_type, id, thumbnailDimension }) {
-  const { assetsEndpoint } = useAppContext();
+  const { assetsEndpoint } = useContext(AppContext);
   const [imageLoaded, setImageLoaded] = useState(false);
   return (
     <LetterboxedThumbnail

@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import prettyBytes from 'pretty-bytes';
-import { useAppContext } from 'js/components/Contexts';
+
+import { AppContext } from 'js/components/Providers';
 import { getTokenParam } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import DetailContext from 'js/components/detailPage/context';
@@ -13,7 +14,7 @@ import FilesContext from '../Files/context';
 function FileBrowserFile({ fileObj, depth }) {
   const { hasAgreedToDUA, openDUA } = useContext(FilesContext);
   const { uuid } = useContext(DetailContext);
-  const { assetsEndpoint, groupsToken } = useAppContext();
+  const { assetsEndpoint, groupsToken } = useContext(AppContext);
 
   const tokenParam = getTokenParam(groupsToken);
 

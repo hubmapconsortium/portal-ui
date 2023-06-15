@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import Link from '@material-ui/core/Link';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-import { useAppContext } from 'js/components/Contexts';
+import { AppContext } from 'js/components/Providers';
 import Menu from '../Menu';
 import ResourceLinks from '../ResourceLinks';
 import Dropdown from '../Dropdown';
@@ -17,7 +17,7 @@ import HubmapLogo from '../HubmapLogo';
 function HeaderContent({ anchorRef }) {
   const theme = useTheme();
   const shouldDisplayMenu = !useMediaQuery(theme.breakpoints.up('md'));
-  const { isAuthenticated, userEmail } = useAppContext();
+  const { isAuthenticated, userEmail } = useContext(AppContext);
   return (
     <>
       {shouldDisplayMenu && <Menu anchorRef={anchorRef} />}

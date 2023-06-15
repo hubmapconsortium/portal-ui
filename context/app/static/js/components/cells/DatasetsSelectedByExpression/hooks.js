@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+
 import CellsService from 'js/components/cells/CellsService';
-import { useAppContext } from 'js/components/Contexts';
+import { AppContext } from 'js/components/Providers';
 import { fetchSearchData } from 'js/hooks/useSearchData';
 import useCellsChartLoadingStore from 'js/stores/useCellsChartLoadingStore';
 import { useStore } from 'js/components/cells/store';
@@ -59,7 +60,7 @@ function buildHitsMap(hits) {
 
 function useDatasetsSelectedByExpression({ completeStep }) {
   const [message, setMessage] = useState(null);
-  const { elasticsearchEndpoint, groupsToken } = useAppContext();
+  const { elasticsearchEndpoint, groupsToken } = useContext(AppContext);
   const [genomicModality, setGenomicModality] = useState('rna');
   const resetFetchedUUIDs = useCellsChartLoadingStore(chartsStoreSelector);
 

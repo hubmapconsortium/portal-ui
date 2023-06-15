@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import { useAppContext } from 'js/components/Contexts';
+import { AppContext } from 'js/components/Providers';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -52,7 +52,7 @@ function SummaryDataChildren({
   hubmap_id,
   uuid,
 }) {
-  const { isWorkspacesUser } = useAppContext();
+  const { isWorkspacesUser } = useContext(AppContext);
 
   const createDatasetWorkspace = useDatasetWorkspace({ entity_type, uuid });
 

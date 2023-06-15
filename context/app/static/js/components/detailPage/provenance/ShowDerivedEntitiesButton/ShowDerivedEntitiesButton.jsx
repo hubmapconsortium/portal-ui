@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useAppContext } from 'js/components/Contexts';
+import React, { useContext, useEffect, useState } from 'react';
+
+import { AppContext } from 'js/components/Providers';
 import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
@@ -13,7 +14,7 @@ function getUniqueNewSteps(steps, newSteps) {
 const useProvenanceStoreSelector = (state) => ({ steps: state.steps, addDescendantSteps: state.addDescendantSteps });
 
 function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }) {
-  const { elasticsearchEndpoint, entityEndpoint, groupsToken } = useAppContext();
+  const { elasticsearchEndpoint, entityEndpoint, groupsToken } = useContext(AppContext);
   const { steps, addDescendantSteps } = useProvenanceStore(useProvenanceStoreSelector);
   const [newSteps, setNewSteps] = useState([]);
 

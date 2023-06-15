@@ -1,5 +1,5 @@
-import React from 'react';
-import { useAppContext } from 'js/components/Contexts';
+import React, { useContext } from 'react';
+import { AppContext } from 'js/components/Providers';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import useProvData from 'js/hooks/useProvData';
 import { Alert } from 'js/shared-styles/alerts';
@@ -11,7 +11,7 @@ function ProvSection() {
   const {
     entity: { uuid, entity_type },
   } = useFlaskDataContext();
-  const { groupsToken, entityEndpoint } = useAppContext();
+  const { groupsToken, entityEndpoint } = useContext(AppContext);
   const { provData, isLoading } = useProvData(uuid, entityEndpoint, groupsToken);
 
   if (isLoading) {

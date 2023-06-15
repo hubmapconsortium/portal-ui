@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import { useAppContext } from 'js/components/Contexts';
+import { AppContext } from 'js/components/Providers';
 import WorkspacesList from './WorkspacesList';
 
 import { StyledDescription } from './style';
 
 function WorkspacesAuthenticated() {
-  const { workspacesToken } = useAppContext();
+  const { workspacesToken } = useContext(AppContext);
 
   if (!workspacesToken) {
     throw Error('The workspaces token request failed at login');

@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
-import { useAppContext } from 'js/components/Contexts';
+import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
 import { StyledButton, OverflowEllipsis, EmptyFullWidthDiv } from './style';
 import { getCleanVersions } from './utils';
 
 function VersionSelect({ uuid }) {
-  const { entityEndpoint, groupsToken } = useAppContext();
+  const { entityEndpoint, groupsToken } = useContext(AppContext);
   const [versions, setVersions] = useState([]);
   const [selectedVersionIndex, setSelectedVersionIndex] = useState(0);
 

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import { useAppContext } from 'js/components/Contexts';
+import { AppContext } from 'js/components/Providers';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import useStickyToggle from 'js/hooks/useStickyToggle';
 
@@ -69,7 +69,7 @@ function useVitessceConfs(assetsEndpoint, groupsToken, uuid, vignette, vignetteD
 }
 
 function PublicationVignette({ vignette, vignetteDirName, uuid, mounted }) {
-  const { assetsEndpoint, groupsToken } = useAppContext();
+  const { assetsEndpoint, groupsToken } = useContext(AppContext);
 
   const vitessceConfs = useVitessceConfs(assetsEndpoint, groupsToken, uuid, vignette, vignetteDirName);
 

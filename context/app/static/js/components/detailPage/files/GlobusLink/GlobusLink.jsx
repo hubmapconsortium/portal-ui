@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useAppContext } from 'js/components/Contexts';
+
+import { AppContext } from 'js/components/Providers';
 import { getAuthHeader } from 'js/helpers/functions';
 import useAbortableEffect from 'js/hooks/useAbortableEffect';
 import { StyledTypography, Flex, StyledErrorIcon, StyledSuccessIcon } from './style';
@@ -9,7 +10,7 @@ import GlobusLinkMessage from '../GlobusLinkMessage';
 function GlobusLink({ uuid, hubmap_id, isSupport }) {
   const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: '', statusCode: null });
 
-  const { entityEndpoint, groupsToken } = useAppContext();
+  const { entityEndpoint, groupsToken } = useContext(AppContext);
 
   const requestHeaders = getAuthHeader(groupsToken);
   useAbortableEffect(
