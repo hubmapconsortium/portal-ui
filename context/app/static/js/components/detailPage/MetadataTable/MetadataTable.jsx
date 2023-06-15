@@ -49,11 +49,7 @@ function tableDataToRows(tableData) {
   );
 }
 
-function MetadataTable() {
-  const {
-    entity: { mapped_metadata: tableData = {}, hubmap_id },
-  } = useFlaskDataContext();
-
+function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
   const columns = [
     { id: 'key', label: 'Key' },
     { id: 'value', label: 'Value' },
