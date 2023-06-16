@@ -1,0 +1,3 @@
+- Update portal-visualization version to 0.0.11.
+- Add automatic conversion from HUGO to ENSEMBL ID's for marker gene URL parameters.
+- Fix spatial view disconnect from other views when marker gene URL parameters are provided.

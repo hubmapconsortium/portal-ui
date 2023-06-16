@@ -1,1 +1,0 @@
-- Built two custom hooks to call third party API in order to retrieve the common name to render it next to the gene symbol. 
