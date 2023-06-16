@@ -1,0 +1,2 @@
+- Added first pass implementation of cell types page.
+- Added initial implementations of individual cell-type description, assays, dataset, and organ lookups.
