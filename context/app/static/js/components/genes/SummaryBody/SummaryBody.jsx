@@ -5,7 +5,7 @@ import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
-function SummaryBody({ geneSummary, geneId }) {
+function SummaryBody({ geneSummary, NCBIgeneId, HUGOgeneId }) {
   return (
     <SummaryPaper>
       <LabelledSectionText label="Description" bottomSpacing={1} fontWeight={500}>
@@ -15,9 +15,11 @@ function SummaryBody({ geneSummary, geneId }) {
       </LabelledSectionText>
       <LabelledSectionText label="Known References" fontWeight={500}>
         <Typography variant="body2" component="p">
-          <OutboundIconLink href={`https://www.ncbi.nlm.nih.gov/gene/${geneId}`}>NCBI Gene</OutboundIconLink>
+          <OutboundIconLink href={`https://www.ncbi.nlm.nih.gov/gene/${NCBIgeneId}`}>NCBI Gene</OutboundIconLink>
           <br />
-          <OutboundIconLink href={`https://www.ncbi.nlm.nih.gov/gene/${geneId}`}>HUGO HGNC:</OutboundIconLink>
+          <OutboundIconLink href={`https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:${HUGOgeneId}`}>
+            HUGO HGNC: {HUGOgeneId}
+          </OutboundIconLink>
         </Typography>
       </LabelledSectionText>
     </SummaryPaper>

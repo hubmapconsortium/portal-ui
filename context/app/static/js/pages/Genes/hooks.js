@@ -26,8 +26,8 @@ function useGeneCommonName(geneSymbol) {
   return { geneCommonName, isLoading };
 }
 
-async function fetchGeneId(geneIdURL) {
-  const response = await fetch(geneIdURL);
+async function fetchNCBIGeneId(NCIBgeneIdURL) {
+  const response = await fetch(NCIBgeneIdURL);
 
   if (!response.ok) {
     console.error('Gene Id API failed.', response);
@@ -35,20 +35,20 @@ async function fetchGeneId(geneIdURL) {
 
   const responseText = await response.text();
   const result = await parseStringPromise(responseText);
-  const geneId = result.eSearchResult.IdList[0].Id[0];
-  return geneId;
+  const NCBIgeneId = result.eSearchResult.IdList[0].Id[0];
+  return NCBIgeneId;
 }
 
-const useGeneId = (geneSymbol) => {
-  const { data: geneId } = useSWR(
+const useNCBIGeneId = (geneSymbol) => {
+  const { data: NCBIgeneId } = useSWR(
     `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gene&term=${geneSymbol}[Preferred%20Symbol]&api_key=8ce52d016d70ec1d76542d3b87b85b2b4408`,
-    fetchGeneId,
+    fetchNCBIGeneId,
     {
       fallbackData: '',
       revalidateOnFocus: false,
     },
   );
-  return geneId;
+  return NCBIgeneId;
 };
 
 async function fetchGeneData(geneDataURL) {
@@ -65,7 +65,7 @@ async function fetchGeneData(geneDataURL) {
 }
 
 const useGeneData = (geneSymbol) => {
-  const geneId = useGeneId(geneSymbol);
+  const geneId = useNCBIGeneId(geneSymbol);
 
   const { data: geneData } = useSWR(
     geneId ? `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=gene&id=${geneId}&retmode=xml` : null,
@@ -79,4 +79,28 @@ const useGeneData = (geneSymbol) => {
   return geneData;
 };
 
-export { useGeneCommonName, useGeneData, useGeneId };
+async function fetchHUGOGeneId(HUGOgeneIdURL) {
+  const response = await fetch(HUGOgeneIdURL);
+  if (!response.ok) {
+    console.error('Gene Id API failed.', response);
+  }
+
+  const responseText = await response.text();
+  const result = await parseStringPromise(responseText);
+  const HUGOgeneId = result[0][1][0];
+  return HUGOgeneId;
+}
+
+const useHUGOGeneId = (geneSymbol) => {
+  const { data: HUGOgeneId } = useSWR(
+    `https://clinicaltables.nlm.nih.gov/api/genes/v4/search?df=${geneSymbol}&terms=${geneSymbol}`,
+    fetchHUGOGeneId,
+    {
+      fallbackData: '',
+      revalidateOnFocus: false,
+    },
+  );
+  return HUGOgeneId;
+};
+
+export { useGeneCommonName, useGeneData, useNCBIGeneId, useHUGOGeneId };
