@@ -3,17 +3,14 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
-import Summary from 'js/components/genes/Summary';
+import Summary from './Summary';
 import { FlexRow, Content } from './style';
-import { useGeneCommonName, useGeneData, useNCBIGeneId, useHUGOGeneId } from './hooks';
+import { useGeneCommonName } from './hooks';
 
 const summaryId = 'Summary';
 
 function Genes({ geneSymbol }) {
   const { geneCommonName, isLoading } = useGeneCommonName(geneSymbol);
-  const geneSummary = useGeneData(geneSymbol);
-  const NCBIgeneId = useNCBIGeneId(geneSymbol);
-  const HUGOgeneId = useHUGOGeneId(geneSymbol);
 
   const shouldDisplaySection = {
     [summaryId]: true,
@@ -38,7 +35,7 @@ function Genes({ geneSymbol }) {
         <Typography variant="h1" component="h1">
           {`${geneSymbol.toUpperCase()} (${geneCommonName})`}
         </Typography>
-        <Summary geneSummary={geneSummary} NCBIgeneId={NCBIgeneId} HUGOgeneId={HUGOgeneId} />
+        <Summary geneSymbol={geneSymbol} />
       </Content>
     </FlexRow>
   );
