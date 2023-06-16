@@ -35,10 +35,7 @@ const CellTypesTable = () => {
           </StyledTableRow>
         </TableHead>
         <StyledTableBody>
-          {cellTypes?.map((cellType) => (
-            <CellTypeRow key={cellType} cellType={cellType} />
-          ))}
-          {!cellTypes && <TablePlaceholder />}
+          {cellTypes?.map((cellType) => <CellTypeRow key={cellType} cellType={cellType} />) ?? <TablePlaceholder />}
         </StyledTableBody>
       </StyledTable>
     </PageSectionContainer>

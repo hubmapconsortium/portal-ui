@@ -15,7 +15,7 @@ import CellTypeDatasetsModal from './CellTypeDatasetsModal';
 const CellTypeRow = ({ cellType }) => {
   // Delay loading description/organ information until row is in view
   const { ref, inView } = useInView({
-    threshold: 0,
+    threshold: 0.1,
     initialInView: false,
     triggerOnce: true,
   });

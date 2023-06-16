@@ -14,7 +14,7 @@ export const useCellTypesList = () => {
 };
 
 export const useCellTypeDescription = (cellType, shouldFetch) => {
-  const { data, error } = useSWR(shouldFetch ? `/cell-types/${cellType}/description.json` : null, fetcher, {
+  const { data, error } = useSWR(() => (shouldFetch ? `/cell-types/${cellType}/description.json` : null), fetcher, {
     revalidateOnFocus: false,
   });
   return {
@@ -25,7 +25,7 @@ export const useCellTypeDescription = (cellType, shouldFetch) => {
 };
 
 export const useCellTypeOrgans = (cellType, shouldFetch) => {
-  const { data, error } = useSWR(shouldFetch ? `/cell-types/${cellType}/organs.json` : null, fetcher, {
+  const { data, error } = useSWR(() => (shouldFetch ? `/cell-types/${cellType}/organs.json` : null), fetcher, {
     revalidateOnFocus: false,
   });
   return {
@@ -35,8 +35,8 @@ export const useCellTypeOrgans = (cellType, shouldFetch) => {
   };
 };
 
-export const useCellTypeDatasets = (cellType) => {
-  const { data, error } = useSWR(`/cell-types/${cellType}/datasets.json`, fetcher, {
+export const useCellTypeDatasets = (cellType, shouldFetch) => {
+  const { data, error } = useSWR(() => (shouldFetch ? `/cell-types/${cellType}/datasets.json` : null), fetcher, {
     revalidateOnFocus: false,
   });
   return {
@@ -46,8 +46,8 @@ export const useCellTypeDatasets = (cellType) => {
   };
 };
 
-export const useCellTypeAssays = (cellType) => {
-  const { data, error } = useSWR(`/cell-types/${cellType}/assays.json`, fetcher, {
+export const useCellTypeAssays = (cellType, shouldFetch) => {
+  const { data, error } = useSWR(() => (shouldFetch ? `/cell-types/${cellType}/assays.json` : null), fetcher, {
     revalidateOnFocus: false,
   });
   return {
