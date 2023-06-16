@@ -23,7 +23,7 @@ const CellTypeDatasetsModal = ({ cellType }) => {
   return (
     <>
       <ViewDatasetsButton onClick={() => setIsOpen(true)} startIcon={<DatasetIcon />} variant="outlined">
-        View Datasets
+        View&nbsp;Datasets
       </ViewDatasetsButton>
       <DialogModal
         isOpen={isOpen}
