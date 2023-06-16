@@ -1,0 +1,5 @@
+- Restructured directories for Summary.
+- Renamed API variables for more clarity.
+- Styled Summary Section.
+- Built API for HUGO Link.
+- Built links for HUGO and NCBI page that links to current gene. 
