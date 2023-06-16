@@ -40,7 +40,7 @@ async function fetchNCBIGeneId(NCIBgeneIdURL) {
 
 const useNCBIGeneId = (geneSymbol) => {
   const { data: NCBIgeneId } = useSWR(
-    `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gene&term=${geneSymbol}[Preferred%20Symbol]&api_key=8ce52d016d70ec1d76542d3b87b85b2b4408`,
+    `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gene&term=${geneSymbol}[Preferred%20Symbol]+AND+Homo+sapiens[Organism]&api_key=8ce52d016d70ec1d76542d3b87b85b2b4408`,
     fetchNCBIGeneId,
     {
       fallbackData: '',
