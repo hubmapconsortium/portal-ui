@@ -65,8 +65,22 @@ def cell_type_datasets(cell_type):
 @blueprint.route('/cell-types/<cell_type>/organs.json')
 def cell_type_organs(cell_type):
     client = _get_client(current_app)
-    organs = [organ['grouping_name']
-              for organ in client.select_organs(where='celltype', has=[cell_type]).get_list()]
-    organs = ','.join([dataset for dataset in list(organs)])
+    organs = client.select_organs(where='celltype', has=[cell_type]).get_list()
+    organs = [organ['grouping_name'] for organ in list(organs)]
+    organs = ','.join([organ for organ in list(organs)])
 
     return jsonify(organs)
+
+
+# Fetches list of assays for a given cell type
+@blueprint.route('/cell-types/<cell_type>/assays.json')
+def cell_type_assays(cell_type):
+    # TODO: Uncomment when assays are available
+    # client = _get_client(current_app)
+    # assays = [assay['grouping_name']
+    #           for assay in client.select_assays(where='celltype', has=[cell_type]).get_list()]
+    # assays = ','.join([dataset for dataset in list(assays)])
+
+    assays = ','.join(['TBD'])
+
+    return jsonify(assays)

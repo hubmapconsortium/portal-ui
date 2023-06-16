@@ -28,6 +28,7 @@ const CellTypesTable = () => {
             <StyledTableCell>Cell Type</StyledTableCell>
             <StyledTableCell>Description</StyledTableCell>
             <StyledTableCell>Organs</StyledTableCell>
+            <StyledTableCell>Assays</StyledTableCell>
             <StyledTableCell>
               <Typography variant="srOnly">Datasets</Typography>
             </StyledTableCell>
@@ -50,7 +51,9 @@ const TablePlaceholder = () =>
   placeholderArray.map((_, index) => (
     // eslint-disable-next-line react/no-array-index-key
     <StyledTableRow key={index}>
-      <Skeleton variant="text" width="100%" />
+      <StyledTableCell colSpan={5}>
+        <Skeleton variant="text" width="100%" />
+      </StyledTableCell>
     </StyledTableRow>
   ));
 

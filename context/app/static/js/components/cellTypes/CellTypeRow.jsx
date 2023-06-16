@@ -5,7 +5,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import { useInView } from 'react-intersection-observer';
 
 import { StyledTableRow, StyledTableCell } from 'js/components/searchPage/ResultsTable/style';
-import { useCellTypeDescription, useCellTypeOrgans } from './hooks';
+import { useCellTypeDescription, useCellTypeOrgans, useCellTypeAssays } from './hooks';
 import CellTypeDatasetsModal from './CellTypeDatasetsModal';
 
 // type CellTypeRowProps = {
@@ -22,13 +22,15 @@ const CellTypeRow = ({ cellType }) => {
 
   const { description, isLoading: descriptionIsLoading } = useCellTypeDescription(cellType, inView);
   const { organs, isLoading: organsAreLoading } = useCellTypeOrgans(cellType, inView);
+  const { assays, isLoading: assaysAreLoading } = useCellTypeAssays(cellType, inView);
 
   return (
     <StyledTableRow ref={ref}>
       <StyledTableCell>{cellType}</StyledTableCell>
       <StyledTableCell>{descriptionIsLoading ? <Skeleton /> : description}</StyledTableCell>
       <StyledTableCell>{organsAreLoading ? <Skeleton /> : organs}</StyledTableCell>
-      <StyledTableCell>
+      <StyledTableCell>{assaysAreLoading ? <Skeleton /> : assays}</StyledTableCell>
+      <StyledTableCell align="right">
         <CellTypeDatasetsModal cellType={cellType} />
       </StyledTableCell>
     </StyledTableRow>

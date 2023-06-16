@@ -45,3 +45,14 @@ export const useCellTypeDatasets = (cellType) => {
     isError: error,
   };
 };
+
+export const useCellTypeAssays = (cellType) => {
+  const { data, error } = useSWR(`/cell-types/${cellType}/assays.json`, fetcher, {
+    revalidateOnFocus: false,
+  });
+  return {
+    assays: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+};
