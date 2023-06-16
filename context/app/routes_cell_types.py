@@ -67,7 +67,7 @@ def cell_type_organs(cell_type):
     client = _get_client(current_app)
     organs = client.select_organs(where='celltype', has=[cell_type]).get_list()
     organs = [organ['grouping_name'] for organ in list(organs)]
-    organs = ','.join([organ for organ in list(organs)])
+    organs = ', '.join([organ for organ in list(organs)])
 
     return jsonify(organs)
 
@@ -81,6 +81,6 @@ def cell_type_assays(cell_type):
     #           for assay in client.select_assays(where='celltype', has=[cell_type]).get_list()]
     # assays = ','.join([dataset for dataset in list(assays)])
 
-    assays = ','.join(['TBD'])
+    assays = ', '.join(['TBD'])
 
     return jsonify(assays)
