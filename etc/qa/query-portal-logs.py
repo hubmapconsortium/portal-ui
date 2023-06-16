@@ -42,7 +42,7 @@ if __name__ == "__main__":
     if response['status'] == "Complete":
         if os.path.isdir(log_dir) is False:
             os.mkdir(log_dir)
-        with open(f"portal-logs-errors/errors-{date.today()}.csv",
+        with open(f"{log_dir}/errors-{date.today()}.csv",
                   'w', newline='') as csvfile:
             writer = DictWriter(csvfile, fieldnames=[
                                 '@timestamp', '@logStream', '@message', '@ptr'])
