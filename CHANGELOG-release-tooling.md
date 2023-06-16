@@ -1,0 +1,2 @@
+- Fix errors with query-portal-logs script.
+- Release and QA instructions have been migrated to Confluence.
