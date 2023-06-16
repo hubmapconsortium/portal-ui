@@ -46,7 +46,7 @@ LabelledSectionText.defaultProps = {
   iconTooltipText: undefined,
   bottomSpacing: undefined,
   childContainerComponent: undefined,
-  fontWeight: undefined,
+  fontWeight: 400,
 };
 
 export default LabelledSectionText;
