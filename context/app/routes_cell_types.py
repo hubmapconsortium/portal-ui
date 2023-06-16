@@ -1,9 +1,6 @@
-from itertools import islice, groupby
-
-from flask import render_template, current_app, request, jsonify
+from flask import render_template, current_app, jsonify
 
 from hubmap_api_py_client import Client
-from hubmap_api_py_client.errors import ClientError
 import requests
 
 from .utils import get_default_flask_data, make_blueprint, get_organs
@@ -29,9 +26,15 @@ def cell_types_ui():
 @blueprint.route('/cell-types/list.json')
 def cell_types_list():
     celltype_token = requests.post(
-        'https://cells.api.hubmapconsortium.org/api/celltype/', {}).json()['results'][0]['query_handle']
-    celltype_list = [result['grouping_name'] for result in requests.post('https://cells.api.hubmapconsortium.org/api/celltypeevaluation/', {
-        'key': celltype_token, 'set_type': 'cell_type', 'limit': 500}).json()['results']]
+        'https://cells.api.hubmapconsortium.org/api/celltype/',
+        {}).json()['results'][0]['query_handle']
+    celltype_list = [
+        result['grouping_name'] for
+        result in
+        requests.post('https://cells.api.hubmapconsortium.org/api/celltypeevaluation/', {
+            'key': celltype_token,
+            'set_type': 'cell_type',
+            'limit': 500}).json()['results']]
     return jsonify(celltype_list)
 
 
@@ -40,12 +43,14 @@ def cell_types_list():
 def cell_type_description(cell_type):
     headers = {"accept": 'application/json'}
     celltype_concepts = requests.get(
-        f'https://ontology.api.hubmapconsortium.org/terms/{cell_type}/concepts', headers=headers).json()
+        f'https://ontology.api.hubmapconsortium.org/terms/{cell_type}/concepts',
+        headers=headers).json()
     if (len(celltype_concepts) == 0):
         return jsonify('No description available')
     concept = celltype_concepts[0]
     description = requests.get(
-        f'https://ontology.api.hubmapconsortium.org/concepts/{concept}/definitions', headers=headers).json()
+        f'https://ontology.api.hubmapconsortium.org/concepts/{concept}/definitions',
+        headers=headers).json()
     if (len(description) == 0):
         return jsonify('No description available')
     return jsonify(description[0]['definition'])
@@ -78,7 +83,8 @@ def cell_type_assays(cell_type):
     # TODO: Uncomment when assays are available
     # client = _get_client(current_app)
     # assays = [assay['grouping_name']
-    #           for assay in client.select_assays(where='celltype', has=[cell_type]).get_list()]
+    #           for assay
+    #           in client.select_assays(where='celltype', has=[cell_type]).get_list()]
     # assays = ','.join([dataset for dataset in list(assays)])
 
     assays = ', '.join(['TBD'])
