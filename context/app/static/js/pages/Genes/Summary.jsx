@@ -24,8 +24,8 @@ function SummaryBody({ geneSymbol }) {
           <Typography variant="body2" component="p">
             <OutboundIconLink href={`https://www.ncbi.nlm.nih.gov/gene/${NCBIgeneId}`}>NCBI Gene</OutboundIconLink>
             <br />
-            <OutboundIconLink href={`https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:${HUGOgeneId}`}>
-              HUGO HGNC: {HUGOgeneId}
+            <OutboundIconLink href={`https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/${HUGOgeneId}`}>
+              HUGO {HUGOgeneId}
             </OutboundIconLink>
           </Typography>
         </LabelledSectionText>

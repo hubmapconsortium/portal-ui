@@ -22,7 +22,6 @@ function useGeneCommonName(geneSymbol) {
       revalidateOnFocus: false,
     },
   );
-
   return { geneCommonName, isLoading };
 }
 
@@ -75,20 +74,18 @@ const useGeneData = (geneSymbol) => {
       revalidateOnFocus: false,
     },
   );
-
   return geneData;
 };
 
 async function fetchHUGOGeneId(HUGOgeneIdURL) {
-  const response = await fetch(HUGOgeneIdURL);
+  const response = await fetch(HUGOgeneIdURL, { headers: { Accept: 'application/json' } });
+
   if (!response.ok) {
     console.error('Gene Id API failed.', response);
   }
 
-  const responseText = await response.text();
-  const result = await parseStringPromise(responseText);
-  const HUGOgeneId = result[0][1][0];
-  return HUGOgeneId;
+  const responseJSON = await response.json();
+  return responseJSON[1][0];
 }
 
 const useHUGOGeneId = (geneSymbol) => {
