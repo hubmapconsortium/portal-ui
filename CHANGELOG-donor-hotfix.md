@@ -1,1 +1,1 @@
-- Fix donor metadata table as well
+- Fix donor metadata table display.
