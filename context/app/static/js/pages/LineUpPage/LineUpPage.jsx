@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import LineUp, {
   LineUpStringColumnDesc,
   LineUpNumberColumnDesc,
@@ -12,10 +12,29 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import metadataFieldTypes from 'metadata-field-types';
 
 function LineUpPage({ entities }) {
-  const cleanEntities = entities.map((entity) =>
-    Object.fromEntries(Object.entries(entity).filter(([, value]) => value !== null)),
-  );
-  const firstRow = cleanEntities[0];
+  const { dataKeys, normalizedEntities } = useMemo(() => {
+    // Remove any `undefined` or `null` fields from the entities
+    const cleanEntities = entities.map((entity) =>
+      Object.fromEntries(Object.entries(entity).filter(([, value]) => value !== null && value !== undefined)),
+    );
+    // Get keys of first row
+    const firstRow = cleanEntities[0];
+    const entityKeys = Object.keys(firstRow);
+
+    // Make sure entities have all necessary keys
+    const completeEntities = cleanEntities.filter((entity) =>
+      entityKeys.every((key) => {
+        if (key in entity) {
+          return true;
+        }
+        // Filter out and report entities that are missing keys in browser console
+        console.error(`Entity ${entity?.uuid ?? JSON.stringify(entity)} is missing key ${key}`);
+        return false;
+      }),
+    );
+    return { dataKeys: entityKeys, normalizedEntities: completeEntities };
+  }, [entities]);
+
   const notEnumFields = new Set([
     'uuid',
     // Donors:
@@ -29,7 +48,8 @@ function LineUpPage({ entities }) {
     'library_adapter_sequence',
     'library_id',
   ]);
-  const columns = Object.keys(firstRow).map((key) => {
+
+  const columns = dataKeys.map((key) => {
     if (metadataFieldTypes[key] === 'number' || metadataFieldTypes[key] === 'integer') {
       return <LineUpNumberColumnDesc column={key} key={key} />;
     }
@@ -48,7 +68,7 @@ function LineUpPage({ entities }) {
         LineUp
       </SectionHeader>
       <Paper>
-        <LineUp data={cleanEntities}>{columns}</LineUp>
+        <LineUp data={normalizedEntities}>{columns}</LineUp>
       </Paper>
     </>
   );
