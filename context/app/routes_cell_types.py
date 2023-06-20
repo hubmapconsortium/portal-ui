@@ -1,4 +1,4 @@
-from flask import render_template, current_app, jsonify
+from flask import render_template, current_app, jsonify, escape
 
 from hubmap_api_py_client import Client
 import requests
@@ -43,13 +43,13 @@ def cell_types_list():
 def cell_type_description(cell_type):
     headers = {"accept": 'application/json'}
     celltype_concepts = requests.get(
-        f'https://ontology.api.hubmapconsortium.org/terms/{cell_type}/concepts',
+        f'https://ontology.api.hubmapconsortium.org/terms/%s/concepts' % escape(cell_type),
         headers=headers).json()
     if (len(celltype_concepts) == 0):
         return jsonify('No description available')
     concept = celltype_concepts[0]
     description = requests.get(
-        f'https://ontology.api.hubmapconsortium.org/concepts/{concept}/definitions',
+        f'https://ontology.api.hubmapconsortium.org/concepts/%s/definitions' % escape(concept),
         headers=headers).json()
     if (len(description) == 0):
         return jsonify('No description available')
