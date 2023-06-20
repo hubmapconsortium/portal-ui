@@ -6,14 +6,14 @@ function Panel({ title, href, secondaryText, rightText }) {
   return (
     <PanelBox>
       <LeftTextWrapper>
-        <TruncatedLink variant="subtitle1" href={href}>
+        <TruncatedLink variant="subtitle1" href={href} data-testid="panel-title">
           {title}
         </TruncatedLink>
-        <TruncatedText variant="body2" color="secondary">
+        <TruncatedText variant="body2" color="secondary" data-testid="panel-secondary">
           {secondaryText}
         </TruncatedText>
       </LeftTextWrapper>
-      <RightTextWrapper>{rightText}</RightTextWrapper>
+      <RightTextWrapper data-testid="panel-right-text">{rightText}</RightTextWrapper>
     </PanelBox>
   );
 }

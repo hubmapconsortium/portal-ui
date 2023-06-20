@@ -26,11 +26,13 @@ function SummaryData({
 }) {
   return (
     <>
-      <SummaryTitle>{entity_type}</SummaryTitle>
+      <SummaryTitle data-testid="entity-type">{entity_type}</SummaryTitle>
       <SpacedSectionButtonRow
         leftText={
           <div>
-            <StyledTypography variant="h2">{title}</StyledTypography>
+            <StyledTypography variant="h2" data-testid="entity-title">
+              {title}
+            </StyledTypography>
             {children && <FlexEnd data-testid="summary-data-parent">{children}</FlexEnd>}
           </div>
         }

@@ -127,7 +127,7 @@ function TableOfContents({ items }) {
   set(summaryInView ? initialProps : { top: `${initialHeightOffset + entityHeaderHeight}px` });
 
   return (
-    <TableContainer>
+    <TableContainer data-testid="table-of-contents">
       <AnimatedNav style={stickyNavAnimationProps}>
         {items.length > 0 ? (
           <>

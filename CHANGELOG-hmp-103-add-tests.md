@@ -1,0 +1,2 @@
+- Update Cypress testing suite.
+- Add end-to-end tests for publication pages.

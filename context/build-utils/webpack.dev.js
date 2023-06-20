@@ -5,7 +5,7 @@ const common = require('./webpack.common');
 
 const envConfig = {
   mode: 'development',
-  devtool: 'inline-source-map',
+  devtool: 'eval-source-map',
   output: {
     filename: '[name].js',
     chunkFilename: '[name].js',
