@@ -1,1 +1,0 @@
-- Set up template for Biomarkers Gene Page. 
