@@ -33,7 +33,7 @@ function Assays({ organTerms }) {
                 {
                   bool: {
                     should: organTerms.map((searchTerm) => ({
-                      term: { 'origin_sample.mapped_organ.keyword': searchTerm },
+                      term: { 'origin_samples.mapped_organ.keyword': searchTerm },
                     })),
                   },
                 },

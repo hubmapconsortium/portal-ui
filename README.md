@@ -188,46 +188,7 @@ To start storybook locally you can either run `etc/dev/dev-start.sh`, or just `n
 and after it has started, visit [localhost:6006](http://localhost:6006).
 
 ## Build, tag, and deploy
-We release a new image each Wednesday, and following QA these are deployed to production. [More details](README-deploy-qa.md#readme).
-
-To build a new image for [dockerhub](https://hub.docker.com/repository/docker/hubmap/portal-ui),
-and tag a release on github, just run:
-```
-etc/build/push.sh
-```
-
-Then, to redeploy `dev`, `test`, and `stage`:
-```
-# PSC will need a ssh public key for USERNAME.
-etc/build/redeploy.sh $USERNAME dev
-etc/build/redeploy.sh $USERNAME test
-etc/build/redeploy.sh $USERNAME stage
-```
-
-After QA, IEC is responsible for deploying to production. We notify them in the `#portal-deployment` Slack channel.
-
-The portal container cloudwatch logs should be checked for errors and exceptions after each release by running `etc/qa/query-portal-logs.py`.
-
-### Maintenace page
-
-If the maintence page ever needs to be updated, you'll need to build the bundle,
-and then make a PR against the `gateway` repo:
-
-<details>
-
-```
-cd context/
-npm run build:maintain
-cd ${YOUR_HUBMAP_REPOS}/gateway
-git checkout main; git pull
-git checkout -b update-portal-ui-maintenance
-cp ${YOUR_HUBMAP_REPOS}/portal-ui/context/app/static/js/maintenance/public/* \
-   nginx/html/portal-ui-maintenance/
-git add .; git commit -m 'Update portal-ui maintenance'
-git push --set-upstream origin update-portal-ui-maintenance
-```
-
-</details>
+The build, tag, deploy, and QA procedures are [detailed here](https://hms-dbmi.atlassian.net/wiki/spaces/GL/pages/3009282049/Deployment).
 
 ### Understanding the build
 

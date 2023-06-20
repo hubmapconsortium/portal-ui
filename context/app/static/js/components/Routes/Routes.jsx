@@ -1,6 +1,6 @@
-import React, { lazy, useContext } from 'react';
+import React, { lazy } from 'react';
 import PropTypes from 'prop-types';
-import { AppContext } from 'js/components/Providers';
+import { useAppContext } from 'js/components/Contexts';
 import Error from 'js/pages/Error';
 import Route from './Route';
 import useSendPageView from './useSendPageView';
@@ -32,6 +32,7 @@ const SampleSearch = lazy(() => import('js/pages/entity-search/SampleSearch'));
 const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'));
 const Workspaces = lazy(() => import('js/pages/Workspaces'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
+const Genes = lazy(() => import('js/pages/Genes'));
 
 function Routes({ flaskData }) {
   const {
@@ -48,6 +49,7 @@ function Routes({ flaskData }) {
     organs_count,
     organ,
     vignette_json,
+    geneSymbol,
   } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
@@ -55,7 +57,7 @@ function Routes({ flaskData }) {
   useSendPageView(urlPath);
   useSetUrlBeforeLogin(url);
 
-  const { isAuthenticated } = useContext(AppContext);
+  const { isAuthenticated } = useAppContext();
 
   if (errorCode !== undefined) {
     return <Error errorCode={errorCode} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
@@ -270,6 +272,14 @@ function Routes({ flaskData }) {
     throw Error('Intentional client-side-error');
   }
 
+  if (urlPath.startsWith('/genes/')) {
+    return (
+      <Route>
+        <Genes geneSymbol={geneSymbol} />
+      </Route>
+    );
+  }
+
   if ('markdown' in flaskData) {
     return (
       <Route>
@@ -297,6 +307,7 @@ Routes.propTypes = {
     metadata: PropTypes.object,
     organs_count: PropTypes.number,
     vignette_json: PropTypes.object,
+    geneSymbol: PropTypes.string,
   }),
 };
 

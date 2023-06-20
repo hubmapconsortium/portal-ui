@@ -2,6 +2,7 @@
 
 import boto3
 import time
+import os
 from datetime import date, datetime, timedelta
 from csv import DictWriter
 import sys
@@ -13,7 +14,7 @@ for path in Path(__file__).parents:
         break
 
 if __name__ == "__main__":
-    client = boto3.Session(profile_name='harvarddev').client('logs')
+    client = boto3.Session(profile_name='harvarddev', region_name='us-east-1').client('logs')
 
     boto3.client('logs').waiter_names
     query = client.start_query(
@@ -37,8 +38,11 @@ if __name__ == "__main__":
             queryId=query_id
         )
 
+    log_dir = 'portal-logs-errors'
     if response['status'] == "Complete":
-        with open(f"portal-logs-errors/errors-{date.today()}.csv",
+        if os.path.isdir(log_dir) is False:
+            os.mkdir(log_dir)
+        with open(f"{log_dir}/errors-{date.today()}.csv",
                   'w', newline='') as csvfile:
             writer = DictWriter(csvfile, fieldnames=[
                                 '@timestamp', '@logStream', '@message', '@ptr'])

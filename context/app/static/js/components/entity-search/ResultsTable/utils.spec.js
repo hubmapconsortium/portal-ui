@@ -13,9 +13,17 @@ test('returns nested non source_sample fields', () => {
 test('returns metadata field from source_sample', () => {
   const hitFields = {
     a: { b: 'c' },
-    source_sample: [{ metadata: { animal: 'cat' } }],
+    source_samples: [{ metadata: { animal: 'cat' } }],
   };
   expect(getFieldFromHitFields(hitFields, `${datasetSamplePath}.animal`)).toBe('cat');
+});
+
+test('returns top level field from source_sample', () => {
+  const hitFields = {
+    a: { b: 'c' },
+    source_samples: [{ animal: 'cat' }],
+  };
+  expect(getFieldFromHitFields(hitFields, 'source_samples.animal')).toBe('cat');
 });
 
 test('returns undefined if source_sample does not exist', () => {
@@ -28,7 +36,7 @@ test('returns undefined if source_sample does not exist', () => {
 test('returns undefined if source_sample exists, but the field does not', () => {
   const hitFields = {
     a: { b: 'c' },
-    source_sample: [{ metadata: { animal: 'cat' } }],
+    source_samples: [{ metadata: { animal: 'cat' } }],
   };
   expect(getFieldFromHitFields(hitFields, `${datasetSamplePath}.fruit`)).toBeUndefined();
 });

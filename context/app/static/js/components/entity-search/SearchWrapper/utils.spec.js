@@ -41,7 +41,7 @@ describe('appendKeywordToFieldName', () => {
 
   test('should return the correct path for sample metadata in datasets', () => {
     expect(prependMetadataPathToFieldName({ fieldName: 'health_status', pageEntityType: 'dataset' })).toBe(
-      'source_sample.metadata.health_status',
+      'source_samples.metadata.health_status',
     );
   });
 

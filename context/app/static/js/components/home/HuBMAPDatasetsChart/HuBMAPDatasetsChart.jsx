@@ -12,22 +12,22 @@ import {
   getDocCountScale,
 } from 'js/shared-styles/charts/AssayTypeBarChart/utils';
 import { ChartArea } from 'js/shared-styles/charts/AssayTypeBarChart/style';
-import { excludeSupportEntitiesClause } from 'js/helpers/queries';
+import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 import HuBMAPDatasetsChartDropdown from '../HuBMAPDatasetsChartDropdown';
 
 const organTypesQuery = {
   size: 0,
   aggs: {
-    organ_types: { terms: { field: 'origin_sample.mapped_organ.keyword', size: 10000 } },
+    organ_types: { terms: { field: 'origin_samples.mapped_organ.keyword', size: 10000 } },
   },
 };
 
 const assayOrganTypesQuery = {
-  query: excludeSupportEntitiesClause,
-  ...getAssayTypesCompositeAggsQuery('origin_sample.mapped_organ.keyword', 'organ_type'),
+  query: includeOnlyDatasetsClause,
+  ...getAssayTypesCompositeAggsQuery('origin_samples.mapped_organ.keyword', 'organ_type'),
 };
 const assayDonorSexQuery = {
-  query: excludeSupportEntitiesClause,
+  query: includeOnlyDatasetsClause,
   ...getAssayTypesCompositeAggsQuery('donor.mapped_metadata.sex.keyword', 'donor_sex'),
 };
 
@@ -63,7 +63,7 @@ function HuBMAPDatasetsChart() {
   const colorOptions = [
     {
       dropdownLabel: { name: 'Organ Type' },
-      facetName: 'origin_sample.mapped_organ',
+      facetName: 'origin_samples.mapped_organ',
       values: organTypes,
     },
     {

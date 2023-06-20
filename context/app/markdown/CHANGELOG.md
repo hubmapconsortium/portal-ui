@@ -1,3 +1,30 @@
+## v0.73.0 - 2023-06-20
+
+- Fix donor metadata table display.
+- Set up template for Biomarkers Gene Page. 
+- Built gene data API.
+- Built gene id API. 
+- Rendered summary on summary section from gene data API.
+- Fix type error on donor pages with no derived samples.
+- Fix errors with query-portal-logs script.
+- Release and QA instructions have been migrated to Confluence.
+
+
+## v0.72.4 - 2023-06-15
+
+- Built two custom hooks to call third party API in order to retrieve the common name to render it next to the gene symbol. 
+- Restore metadata table display
+- Add uids to places in which multiple Vitessce configurations are listed in a dropdown
+
+
+## v0.72.3 - 2023-06-13
+
+- Add a context provider to pass flask data to react components.
+- Pass flask data to Donor page components by context.
+- refactor AppContext to useAppContext from Context.js.
+- Use `origin_samples` field instead of `origin_sample` throughout.
+
+
 ## v0.72.0 - 2023-06-07
 
 - Add link to publications landing page in 'Other' dropdown menu.

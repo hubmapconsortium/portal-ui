@@ -27,7 +27,7 @@ hubmap-api-py-client>=0.0.9
 hubmap-commons>=2.0.12
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.10.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.11.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -103,9 +103,10 @@ lxml>=4.9.1
 "uuid": "^8.3.2",
 "vega": "^5.17.3",
 "vega-lite": "^4.13.1",
-"vitessce": "^2.0.3",
+"vitessce": "^3.0.0",
 "web-vitals": "^1.1.0",
 "whatwg-fetch": "^3.0.0",
+"xml2js": "^0.6.0",
 "yup": "^0.32.11",
 "zustand": "^3.5.9"
 }

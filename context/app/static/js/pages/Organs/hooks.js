@@ -8,7 +8,7 @@ const query = {
     },
   },
   aggs: {
-    'origin_sample.mapped_organ': { terms: { field: 'origin_sample.mapped_organ.keyword', size: 10000 } },
+    'origin_samples.mapped_organ': { terms: { field: 'origin_samples.mapped_organ.keyword', size: 10000 } },
   },
 };
 
@@ -40,7 +40,7 @@ function useOrgansDatasetCounts(organs) {
 
   const organsWithDatasetCounts = addDatasetCountsToOrgans(
     organs,
-    searchData.aggregations['origin_sample.mapped_organ'].buckets,
+    searchData.aggregations['origin_samples.mapped_organ'].buckets,
   );
 
   return { organsWithDatasetCounts, isLoading };

@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import { AppContext } from 'js/components/Providers';
+import { useAppContext } from 'js/components/Contexts';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import useStickyToggle from 'js/hooks/useStickyToggle';
 
@@ -69,7 +69,7 @@ function useVitessceConfs(assetsEndpoint, groupsToken, uuid, vignette, vignetteD
 }
 
 function PublicationVignette({ vignette, vignetteDirName, uuid, mounted }) {
-  const { assetsEndpoint, groupsToken } = useContext(AppContext);
+  const { assetsEndpoint, groupsToken } = useAppContext();
 
   const vitessceConfs = useVitessceConfs(assetsEndpoint, groupsToken, uuid, vignette, vignetteDirName);
 
@@ -84,6 +84,7 @@ function PublicationVignette({ vignette, vignetteDirName, uuid, mounted }) {
         <VisualizationWrapper
           vitData={vitessceConfs.length === 1 ? vitessceConfs[0] : vitessceConfs}
           uuid={uuid}
+          uuidSuffix={vignetteDirName}
           hasNotebook={false}
           shouldDisplayHeader={false}
           hasBeenMounted={hasBeenMounted}
