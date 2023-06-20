@@ -21,6 +21,8 @@ function LineUpPage({ entities }) {
     const firstRow = cleanEntities[0];
     const entityKeys = Object.keys(firstRow);
 
+    const errors = new Map();
+
     // Make sure entities have all necessary keys
     const completeEntities = cleanEntities.filter((entity) =>
       entityKeys.every((key) => {
@@ -28,10 +30,14 @@ function LineUpPage({ entities }) {
           return true;
         }
         // Filter out and report entities that are missing keys in browser console
-        console.error(`Entity ${entity?.uuid ?? JSON.stringify(entity)} is missing key ${key}`);
+        errors.set(key, [...(errors.get(key) ?? []), entity.uuid]);
         return false;
       }),
     );
+
+    if (errors.size > 0) {
+      console.error('Entities with missing keys', Object.fromEntries(errors));
+    }
     return { dataKeys: entityKeys, normalizedEntities: completeEntities };
   }, [entities]);
 
