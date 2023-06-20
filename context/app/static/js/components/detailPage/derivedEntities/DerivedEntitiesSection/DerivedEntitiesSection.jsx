@@ -7,7 +7,7 @@ import { useDerivedEntitiesSection } from './hooks';
 
 function DerivedEntitiesSection() {
   const {
-    entity: { uuid, entityType },
+    entity: { uuid, entity_type: entityType },
   } = useFlaskDataContext();
   const [openIndex, setOpenIndex] = useState(0);
   const { entities, isLoading } = useDerivedEntitiesSection(uuid);

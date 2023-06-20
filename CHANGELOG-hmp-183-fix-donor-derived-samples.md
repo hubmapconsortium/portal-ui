@@ -1,0 +1,1 @@
+- Fix type error on donor pages with no derived samples.
