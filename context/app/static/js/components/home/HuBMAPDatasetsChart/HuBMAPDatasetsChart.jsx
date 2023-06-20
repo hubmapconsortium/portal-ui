@@ -12,7 +12,7 @@ import {
   getDocCountScale,
 } from 'js/shared-styles/charts/AssayTypeBarChart/utils';
 import { ChartArea } from 'js/shared-styles/charts/AssayTypeBarChart/style';
-import { excludeSupportEntitiesClause } from 'js/helpers/queries';
+import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 import HuBMAPDatasetsChartDropdown from '../HuBMAPDatasetsChartDropdown';
 
 const organTypesQuery = {
@@ -23,11 +23,11 @@ const organTypesQuery = {
 };
 
 const assayOrganTypesQuery = {
-  query: excludeSupportEntitiesClause,
+  query: includeOnlyDatasetsClause,
   ...getAssayTypesCompositeAggsQuery('origin_samples.mapped_organ.keyword', 'organ_type'),
 };
 const assayDonorSexQuery = {
-  query: excludeSupportEntitiesClause,
+  query: includeOnlyDatasetsClause,
   ...getAssayTypesCompositeAggsQuery('donor.mapped_metadata.sex.keyword', 'donor_sex'),
 };
 
