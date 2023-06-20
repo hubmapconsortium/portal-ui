@@ -21,7 +21,7 @@ function Publication({ publication, vignette_json, visLiftedUUID }) {
     status,
     sub_status,
     doi_url,
-    contributors,
+    contributors = [],
     ancestor_ids,
     publication_venue,
     files,

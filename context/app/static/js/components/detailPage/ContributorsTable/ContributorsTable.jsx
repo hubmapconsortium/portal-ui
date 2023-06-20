@@ -14,7 +14,7 @@ import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 
-function ContributorsTable({ title, contributors }) {
+function ContributorsTable({ title, contributors = [] }) {
   const columns = [
     { id: 'name', label: 'Name' },
     { id: 'affiliation', label: 'Affiliation' },

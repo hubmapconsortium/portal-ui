@@ -21,6 +21,16 @@ export const excludeSupportEntitiesClause = {
   },
 };
 
+export const includeOnlyDatasetsClause = {
+  bool: {
+    must: {
+      term: {
+        'entity_type.keyword': 'Dataset',
+      },
+    },
+  },
+};
+
 export function getAncestorsQuery(descendantUUID) {
   return {
     bool: {

@@ -49,10 +49,10 @@ function PublicationSummary({
         )}
       </SummaryData>
       <SectionPaper>
-        <LabelledSectionText label="Abstract" bottomSpacing={2}>
+        <LabelledSectionText label="Abstract" bottomSpacing={2} data-testid="publication-abstract">
           {description}
         </LabelledSectionText>
-        <LabelledSectionText label="Manuscript" bottomSpacing={2}>
+        <LabelledSectionText label="Manuscript" bottomSpacing={2} data-testid="publication-manuscript-link">
           {publication_venue}: <OutboundIconLink href={publication_url}>{publication_url}</OutboundIconLink>
         </LabelledSectionText>
         <PublicationCitation
@@ -67,13 +67,23 @@ function PublicationSummary({
             <CorrespondingAuthorsList contacts={contacts} />
           </LabelledSectionText>
         )}
-        <LabelledSectionText label="Data Types" bottomSpacing={2} childContainerComponent="div">
+        <LabelledSectionText
+          label="Data Types"
+          bottomSpacing={2}
+          childContainerComponent="div"
+          data-testid="publication-data-types"
+        >
           <AggsList uuid={uuid} field="mapped_data_types" />
         </LabelledSectionText>
-        <LabelledSectionText label="Organs" bottomSpacing={2} childContainerComponent="div">
+        <LabelledSectionText
+          label="Organs"
+          bottomSpacing={2}
+          childContainerComponent="div"
+          data-testid="publication-organs"
+        >
           <AggsList uuid={uuid} field="mapped_organ" />
         </LabelledSectionText>
-        <LabelledSectionText label="Publication Date" bottomSpacing={2}>
+        <LabelledSectionText label="Publication Date" bottomSpacing={2} data-testid="publication-date">
           {publication_date}
         </LabelledSectionText>
       </SectionPaper>

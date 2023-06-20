@@ -59,7 +59,9 @@ def entities_tsv(entity_type):
 
 @blueprint.route('/lineup/<entity_type>')
 def lineup(entity_type):
-    entities = _get_entities(entity_type, request.args.to_dict(flat=False))
+    entities = _get_entities(entity_type, request.args.to_dict(
+        flat=False))
+    entities.sort(key=lambda e: e['uuid'])
     flask_data = {
         **get_default_flask_data(),
         'entities': entities
