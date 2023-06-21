@@ -10,7 +10,7 @@ function EntityCount({ icon, count, label, href }) {
       <StyledDiv>{icon}</StyledDiv>
       <div>
         <Typography variant="h2" component="p">
-          {count || <Skeleton />}
+          {count > 9999 ? `${(count / 1000).toFixed(1)}k+` : count || <Skeleton />}
         </Typography>
         <Typography variant="h6" component="p">
           {label}
