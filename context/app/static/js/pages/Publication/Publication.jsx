@@ -12,7 +12,7 @@ import useEntityStore from 'js/stores/useEntityStore';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
-function Publication({ publication, vignette_json, visLiftedUUID }) {
+function Publication({ publication, vignette_json }) {
   const {
     title,
     uuid,
@@ -53,7 +53,7 @@ function Publication({ publication, vignette_json, visLiftedUUID }) {
       {shouldDisplaySection.visualizations && (
         <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
       )}
-      <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
+      <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />
       <ContributorsTable contributors={contributors} title="Authors" />
       <ProvSection uuid={uuid} assayMetadata={publication} />
     </DetailLayout>
