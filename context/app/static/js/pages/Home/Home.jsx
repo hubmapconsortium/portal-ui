@@ -9,7 +9,6 @@ import HuBMAPDescription from 'js/components/home/HuBMAPDescription';
 import EntityCounts from 'js/components/home/EntityCounts';
 import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
 import ExternalLinks from 'js/components/home/ExternalLinks';
-import FacetSearch from 'js/components/home/FacetSearch';
 
 import {
   GridAreaContainer,
@@ -42,7 +41,6 @@ function Home({ organsCount }) {
         </GridAreaContainer>
         <GridArea $gridAreaTitle="counts">
           <EntityCounts organsCount={organsCount} />
-          <FacetSearch />
         </GridArea>
       </UpperGrid>
       <LowerContainerGrid maxWidth="lg">
