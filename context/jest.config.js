@@ -14,7 +14,19 @@ module.exports = {
     'react-pdf/dist/esm/entry.webpack': 'react-pdf/dist/umd/entry.jest',
   },
   transform: {
-    '^.+\\.jsx?$': 'babel-jest',
+    '^.+\\.(t|j)sx?$': [
+      '@swc/jest',
+      {
+        jsc: {
+          parser: {
+            syntax: 'ecmascript',
+            jsx: true,
+            decorators: false,
+            dynamicImport: false,
+          },
+        },
+      },
+    ],
     '^.+\\.ya?ml$': '<rootDir>/test-utils/loaders/ymlLoader.js',
   },
 };

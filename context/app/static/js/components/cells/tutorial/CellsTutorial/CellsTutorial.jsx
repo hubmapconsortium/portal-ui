@@ -20,9 +20,12 @@ const cellsStoreSelector = (state) => ({
 
 function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
   const themeContext = useContext(ThemeContext);
-  const { setQueryType, setSelectedQueryType, setCellVariableNames, resetStore: resetCellsStore } = useCellsStore(
-    cellsStoreSelector,
-  );
+  const {
+    setQueryType,
+    setSelectedQueryType,
+    setCellVariableNames,
+    resetStore: resetCellsStore,
+  } = useCellsStore(cellsStoreSelector);
   const { tutorialStep, isTutorialRunning, setNextButtonIsDisabled } = useTutorialStore();
 
   const { setOpenStepIndex, resetStore: resetAccordionStepsStore } = useAccordionStepsStore();

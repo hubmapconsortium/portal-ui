@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const webpack = require('webpack');
 const { resolve } = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { alias } = require('./alias');
 
 const config = {
@@ -9,6 +8,7 @@ const config = {
   output: {
     path: resolve('./app/static/public'),
     publicPath: `${resolve('/static/public/')}/`,
+    clean: true,
   },
   optimization: {
     splitChunks: {
@@ -23,22 +23,27 @@ const config = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml', '.json'],
+    fallback: {
+      // Now necessary because webpack 5 doesn't include these polyfills by default
+      timers: require.resolve('timers-browserify'),
+      stream: require.resolve('stream-browserify'),
+    },
     alias,
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: ['source-map-loader'],
-        enforce: 'pre',
-        exclude: [/node_modules\/lineupjsx?/],
-      },
-      {
-        test: /\.(js|jsx)$/,
-        use: {
-          loader: 'babel-loader',
-        },
+        test: /\.[tj]sx?$/,
         exclude: /node_modules/,
+        use: {
+          loader: 'swc-loader',
+          options: {
+            sync: true,
+            jsc: {
+              target: 'es2019',
+            },
+          },
+        },
       },
       {
         test: /\.css$/i,
@@ -63,11 +68,10 @@ const config = {
       },
       {
         test: /\.(png|jpg|gif)$/,
-        use: [{ loader: 'url-loader' }],
+        type: 'asset/inline',
       },
       {
         test: /\.ya?ml$/,
-        type: 'json', // Required by Webpack v4
         use: 'yaml-loader',
       },
       {
@@ -78,7 +82,6 @@ const config = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       // update globals in eslintrc to fix undefined errors
       CDN_URL: JSON.stringify('https://d3evp8qu4tjncp.cloudfront.net'),

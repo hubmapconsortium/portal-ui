@@ -26,9 +26,8 @@ const visualizationStoreSelector = (state) => ({
 function VisualizationShareButton() {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
-  const { vitessceState, setOnCopyUrlWarning, setOnCopyUrlSnackbarOpen } = useVisualizationStore(
-    visualizationStoreSelector,
-  );
+  const { vitessceState, setOnCopyUrlWarning, setOnCopyUrlSnackbarOpen } =
+    useVisualizationStore(visualizationStoreSelector);
 
   return (
     <>

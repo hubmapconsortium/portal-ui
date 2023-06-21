@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { alias } = require('./alias');
 
 const maintenancePath = './app/static/js/maintenance/';
@@ -22,14 +21,9 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: ['source-map-loader'],
-        enforce: 'pre',
-      },
-      {
-        test: /\.(js|jsx)$/,
+        test: /\.[tj]sx?$/,
         use: {
-          loader: 'babel-loader',
+          loader: 'swc-loader',
         },
         exclude: /node_modules/,
       },
@@ -65,10 +59,7 @@ const config = {
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({ template: `${maintenancePath}/index.html`, favicon: './app/static/favicon.ico' }),
-    new CleanWebpackPlugin(),
-  ],
+  plugins: [new HtmlWebpackPlugin({ template: `${maintenancePath}/index.html`, favicon: './app/static/favicon.ico' })],
 };
 
 module.exports = config;

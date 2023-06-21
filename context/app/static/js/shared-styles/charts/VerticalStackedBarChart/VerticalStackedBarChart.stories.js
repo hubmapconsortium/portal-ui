@@ -74,6 +74,7 @@ const sharedArgs = {
   },
   getX: (d) => d.cluster,
   xAxisLabel: 'Cluster',
+  xAxisTickLabels: ['1', '2', '3', '4', '5'],
   yAxisLabel: 'Cell Count',
   chartTitle: 'Cluster Membership',
 };

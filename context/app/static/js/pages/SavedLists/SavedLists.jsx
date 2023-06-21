@@ -15,9 +15,8 @@ const usedSavedEntitiesSelector = (state) => ({
 });
 
 function SavedLists() {
-  const { savedLists, savedEntities, listsToBeDeleted, deleteQueuedLists, deleteEntities } = useSavedEntitiesStore(
-    usedSavedEntitiesSelector,
-  );
+  const { savedLists, savedEntities, listsToBeDeleted, deleteQueuedLists, deleteEntities } =
+    useSavedEntitiesStore(usedSavedEntitiesSelector);
   const [shouldDisplayDeleteAlert, setShouldDisplayDeleteAlert] = useState(false);
   const [shouldDisplaySaveAlert, setShouldDisplaySaveAlert] = useState(false);
 
