@@ -11,7 +11,6 @@ const FlexContainer = styled(Container)`
   @media (min-width: ${(props) => props.theme.breakpoints.values.sm}px) {
     display: flex;
     flex-wrap: wrap;
-    padding: 10px 0;
   }
 `;
 
