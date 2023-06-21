@@ -100,4 +100,32 @@ const useHUGOGeneId = (geneSymbol) => {
   return HUGOgeneId;
 };
 
-export { useGeneCommonName, useGeneData, useNCBIGeneId, useHUGOGeneId };
+async function fetchOrgansByHubmapConsortium(hubmapconsortiumURL) {
+  const response = await fetch(hubmapconsortiumURL);
+
+  if (!response.ok) {
+    console.error('Fetching organs by Hubmap Consortium API failed.', response);
+  }
+
+  const responseText = await response.text();
+  const result = await parseStringPromise(responseText);
+  console.log('result', result); // eslint-disable-line no-console
+}
+
+const useOrgansbyGene = (geneSymbol) => {
+  const HUGOIdentifier = useHUGOGeneId(geneSymbol);
+  const HUGOGeneId = HUGOIdentifier.split(':')[1];
+  const HUGOLink = `http://identifiers.org/hgnc/${HUGOGeneId}`;
+
+  const { data: organsList } = useSWR(
+    `http://grlc.io/api-git/hubmapconsortium/ccf-grlc/subdir/ccf//organ-by-bm?biomarker=${HUGOLink}`,
+    fetchOrgansByHubmapConsortium,
+    {
+      fallbackData: '',
+      revalidateOnFocus: false,
+    },
+  );
+  return organsList;
+};
+
+export { useGeneCommonName, useGeneData, useNCBIGeneId, useHUGOGeneId, useOrgansbyGene };

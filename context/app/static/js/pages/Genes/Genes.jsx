@@ -5,12 +5,14 @@ import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Summary from './Summary';
 import { FlexRow, Content } from './style';
-import { useGeneCommonName } from './hooks';
+import { useGeneCommonName, useOrgansbyGene } from './hooks';
 
 const summaryId = 'Summary';
 
 function Genes({ geneSymbol }) {
   const { geneCommonName, isLoading } = useGeneCommonName(geneSymbol);
+  const organs = useOrgansbyGene(geneSymbol);
+  console.log('organs', organs); // eslint-disable-line no-console
 
   const shouldDisplaySection = {
     [summaryId]: true,
