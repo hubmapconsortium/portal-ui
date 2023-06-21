@@ -5,9 +5,18 @@ import Typography from '@material-ui/core/Typography';
 import { VerticalDivider } from './style';
 
 function EntityHeaderItem({ text }) {
+  const textTrimmer = (inputText) => {
+    if (inputText.length > 100) {
+      return `${inputText.slice(0, 100)}...`;
+    }
+    return inputText;
+  };
+
+  const trimmedText = textTrimmer(text);
+
   return (
     <>
-      <Typography variant="body1">{text}</Typography>
+      <Typography variant="body1">{trimmedText}</Typography>
       <VerticalDivider orientation="vertical" flexItem />
     </>
   );
