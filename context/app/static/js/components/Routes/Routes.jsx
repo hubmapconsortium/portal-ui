@@ -102,7 +102,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/browse/publication/')) {
     return (
       <Route>
-        <Publication publication={entity} vignette_json={vignette_json} visLiftedUUID={vis_lifted_uuid} />
+        <Publication publication={entity} vignette_json={vignette_json} />
       </Route>
     );
   }
