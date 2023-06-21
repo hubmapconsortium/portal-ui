@@ -1,0 +1,1 @@
+- Remove globus link for lifted publication ancillary entities on publication pages.
