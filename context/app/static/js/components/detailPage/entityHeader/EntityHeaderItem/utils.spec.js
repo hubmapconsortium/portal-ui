@@ -5,7 +5,7 @@ test('truncateText function should correctly truncate text', () => {
     'This is a long string of text that is definitely longer than one hundred characters. It goes on and on, seemingly without end.';
 
   expect(truncateText(longText, 100)).toEqual(
-    'This is a long string of text that is definitely longer than one hundred characters. It goes on and...',
+    'This is a long string of text that is definitely longer than one hundred characters. It goes on and ...',
   );
 
   const exactLengthText =
