@@ -8,7 +8,7 @@ import { formatCount } from './utils';
 
 function EntityCount({ icon, count, label, href }) {
   return (
-    <SecondaryBackgroundTooltip title={`${count} ${label}`} placement="bottom-end">
+    <SecondaryBackgroundTooltip title={`${count} ${label}`} placement="bottom-center">
       <FlexLink href={href}>
         <StyledDiv>{icon}</StyledDiv>
         <div>
