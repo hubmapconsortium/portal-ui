@@ -18,6 +18,7 @@ import useEntityStore from 'js/stores/useEntityStore';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/components/detailPage/style';
+import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 
 import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
@@ -213,6 +214,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
+        <BulkDataTransfer />
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
