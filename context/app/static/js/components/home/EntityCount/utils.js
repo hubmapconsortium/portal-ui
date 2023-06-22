@@ -1,6 +1,7 @@
 const formatCount = (inputCount) => {
   if (inputCount > 9999) {
-    return `${(inputCount / 1000).toFixed(1)}k+`;
+    const countInThousands = inputCount / 1000;
+    return `${(Math.floor(countInThousands * 10) / 10).toFixed(1)}k`;
   }
   return inputCount;
 };
