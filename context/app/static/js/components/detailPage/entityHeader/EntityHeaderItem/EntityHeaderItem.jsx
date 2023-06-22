@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 
-import { VerticalDivider } from './style';
-import { truncateText } from './utils';
+import { VerticalDivider, EntityName } from './style';
 
 function EntityHeaderItem({ text }) {
   return (
     <>
-      <Typography variant="body1">{truncateText(text)}</Typography>
+      <EntityName variant="body1">{text}</EntityName>
       <VerticalDivider orientation="vertical" flexItem />
     </>
   );
