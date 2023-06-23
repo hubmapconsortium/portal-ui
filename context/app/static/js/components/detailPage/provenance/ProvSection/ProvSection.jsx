@@ -1,6 +1,5 @@
 import React from 'react';
-import { useAppContext } from 'js/components/Contexts';
-import { useFlaskDataContext } from 'js/components/Contexts';
+import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import useProvData from 'js/hooks/useProvData';
 import { Alert } from 'js/shared-styles/alerts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';

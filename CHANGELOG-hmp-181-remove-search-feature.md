@@ -1,0 +1,4 @@
+- Removed search feature from home page.
+- Added vertical padding to the count section.
+- Formatted 10k+ homepage entity counts to nearest thousands place. (10,500 -> 10.5k)
+- Added tooltip hover feature on count entities.  
