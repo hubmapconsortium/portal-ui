@@ -2,13 +2,13 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import InfoIcon from '@material-ui/icons/Info';
+import Paper from '@material-ui/core/Paper';
 
-import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { ExternalLink } from './style';
 
 function GlobusAccess() {
   return (
-    <DetailSectionPaper>
+    <Paper>
       <ExternalLink>
         <Typography variant="body1">
           <a href="/">dbGaP Study</a>
@@ -46,7 +46,7 @@ function GlobusAccess() {
           </a>
         </Typography>
       </ExternalLink>
-    </DetailSectionPaper>
+    </Paper>
   );
 }
 

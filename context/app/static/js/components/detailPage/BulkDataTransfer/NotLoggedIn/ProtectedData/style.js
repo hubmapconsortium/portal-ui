@@ -23,6 +23,7 @@ const LoginButton = styled(Button)`
 `;
 
 const ExternalLink = styled.div`
+  padding: 16px;
   border-bottom: 2px solid #ccc;
 `;
 
