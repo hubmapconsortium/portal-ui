@@ -1,11 +1,15 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
+
+import { DetailSectionPaper } from 'js/shared-styles/surfaces';
+import { StyledTypography } from './style';
 
 function ProtectedData() {
   return (
-    <div>
-      <h1>Bulk Data Transfer</h1>
-      <p>This data is protected and requires you to be logged in to access it.</p>
-    </div>
+    <DetailSectionPaper>
+      <StyledTypography variant="h6">Bulk Data Transfer</StyledTypography>
+      <Typography variant="body2">This data is protected and requires you to be logged in to access it.</Typography>
+    </DetailSectionPaper>
   );
 }
 
