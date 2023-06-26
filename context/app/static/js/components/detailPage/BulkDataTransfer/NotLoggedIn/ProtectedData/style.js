@@ -22,4 +22,8 @@ const LoginButton = styled(Button)`
   margin-top: 10px;
 `;
 
-export { StyledContainer, StyledTypography, LoginButton };
+const ExternalLink = styled.div`
+  border-bottom: 2px solid #ccc;
+`;
+
+export { StyledContainer, StyledTypography, LoginButton, ExternalLink };
