@@ -158,6 +158,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
   useSendUUIDEvent(entity_type, uuid);
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
+
   useEffect(() => {
     setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ });
   }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, setAssayMetadata]);
@@ -214,7 +215,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
-        <BulkDataTransfer />
+        <BulkDataTransfer accessType={mapped_data_access_level} />
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
