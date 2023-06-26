@@ -1,19 +1,36 @@
 extends:
-  - react-app
   - eslint:recommended
-  - plugin:react/recommended
   - airbnb
+  - airbnb/hooks
+  - prettier
+  - plugin:@typescript-eslint/recommended
+  - plugin:react/recommended
   - plugin:jest-dom/recommended
-  - plugin:testing-library/recommended
+  - plugin:testing-library/react
   - plugin:prettier/recommended
-  - prettier/react
   - plugin:import/errors
   - plugin:import/warnings
-parser: "babel-eslint"
+parser: "@typescript-eslint/parser"
 globals:
   CDN_URL: readonly
+  flaskData: readonly
+  groupsToken: readonly
+  isAuthenticated: readonly
+  userEmail: readonly
+  workspacesToken: readonly
+  userGroups: readonly
+env:
+  browser: true
+  node: true
+  jest: true
 plugins:
   - react
+  - "@typescript-eslint"
+  - testing-library
+  - jest
+  - jest-dom
+  - prettier
+  - import
 settings:
   react:
     version: detect

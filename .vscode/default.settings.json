@@ -2,6 +2,7 @@
     "eslint.workingDirectories": [
         "./context"
     ],
+    "eslint.format.enable": true,
     "[javascriptreact]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },

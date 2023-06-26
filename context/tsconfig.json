@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./app/static/js"
+  },
+  "include": ["app/static/js/**/*"],
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Recommended"
+}

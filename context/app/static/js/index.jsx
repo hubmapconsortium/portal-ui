@@ -12,9 +12,6 @@ import { setJsonLD } from './schema.org';
 //   console.warn('Schema validation errors', validation_errors);
 // }
 
-// Define global values for eslint https://eslint.org/docs/latest/use/configure/language-options#specifying-globals
-// Since they're propagated into a context from here, we don't need to define them in every file/in the main config
-/* global flaskData, groupsToken, isAuthenticated, userEmail, workspacesToken, userGroups */
 ReactDOM.render(
   window.location.pathname.startsWith('/iframe/') ? (
     <Iframe flaskData={flaskData} />
