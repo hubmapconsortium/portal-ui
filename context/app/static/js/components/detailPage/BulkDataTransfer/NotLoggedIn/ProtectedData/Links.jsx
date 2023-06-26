@@ -1,11 +1,10 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-// import InfoIcon from '@material-ui/icons/Info';
 import Paper from '@material-ui/core/Paper';
 
 import { InfoIcon } from 'js/shared-styles/icons';
-import { ExternalLink, StyledLink } from './style';
+import { ExternalLink, StyledLink, StyledAnchorTag } from './style';
 
 function GlobusAccess() {
   return (
@@ -28,9 +27,9 @@ function GlobusAccess() {
         </StyledLink>
         <Typography variant="body2">
           Select the &quot;Run&quot; link on the page to download the dataset information.Here is{' '}
-          <a href="/">
+          <StyledAnchorTag href="/">
             additional documentation <OutboundIconLink />.
-          </a>
+          </StyledAnchorTag>
         </Typography>
       </ExternalLink>
       <ExternalLink>
@@ -42,9 +41,9 @@ function GlobusAccess() {
         <Typography variant="body2">
           The Bioproject is used in the SRA Run Selector to allow you to download a manifest to bulk download datasets.
           Here is{' '}
-          <a href="/">
+          <StyledAnchorTag href="/">
             additional documentation <OutboundIconLink />.
-          </a>
+          </StyledAnchorTag>
         </Typography>
       </ExternalLink>
     </Paper>

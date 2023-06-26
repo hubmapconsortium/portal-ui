@@ -23,6 +23,8 @@ const LoginButton = styled(Button)`
 `;
 
 const ExternalLink = styled.div`
+  display: flex;
+  align-items: center;
   padding: 16px;
   border-bottom: 1px solid #e0e0e0;
 `;
@@ -30,6 +32,17 @@ const ExternalLink = styled.div`
 const StyledLink = styled(Typography)`
   display: flex;
   align-items: center;
+  white-space: nowrap;
+  margin-right: 10px;
+
+  svg {
+    margin-right: 4px;
+  }
 `;
 
-export { StyledContainer, Header, LoginButton, ExternalLink, StyledLink };
+const StyledAnchorTag = styled.a`
+  display: flex;
+  align-items: center;
+`;
+
+export { StyledContainer, Header, LoginButton, ExternalLink, StyledLink, StyledAnchorTag };
