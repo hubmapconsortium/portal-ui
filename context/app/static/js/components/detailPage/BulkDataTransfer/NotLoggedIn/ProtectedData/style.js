@@ -7,7 +7,7 @@ const StyledContainer = styled.div`
     margin-bottom: 10px;
   }
 `;
-const StyledTypography = styled(Typography)`
+const Header = styled(Typography)`
   margin: 0px ${(props) => props.theme.spacing(1)}px ${(props) => props.theme.spacing(1)}px 0px;
   display: flex;
   align-items: center;
@@ -24,7 +24,12 @@ const LoginButton = styled(Button)`
 
 const ExternalLink = styled.div`
   padding: 16px;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 1px solid #e0e0e0;
 `;
 
-export { StyledContainer, StyledTypography, LoginButton, ExternalLink };
+const StyledLink = styled(Typography)`
+  display: flex;
+  align-items: center;
+`;
+
+export { StyledContainer, Header, LoginButton, ExternalLink, StyledLink };

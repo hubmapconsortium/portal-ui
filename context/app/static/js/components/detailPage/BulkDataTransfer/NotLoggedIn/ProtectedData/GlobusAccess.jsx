@@ -4,16 +4,16 @@ import BlockIcon from '@material-ui/icons/Block';
 import InfoIcon from '@material-ui/icons/Info';
 
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
-import { StyledTypography, LoginButton } from './style';
+import { Header, LoginButton } from './style';
 
 function GlobusAccess() {
   return (
     <DetailSectionPaper>
-      <StyledTypography variant="h5">
+      <Header variant="h5">
         HuBMAP Consortium Members: Globus Access
         <BlockIcon color="error" />
-        <InfoIcon />
-      </StyledTypography>
+        <InfoIcon fontSize="small" />
+      </Header>
       <Typography variant="body2">
         Please{' '}
         <a href="https://app.globus.org" target="_blank" rel="noopener noreferrer">
