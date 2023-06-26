@@ -1,0 +1,1 @@
+- Adjust error display to prevent error messages from overflowing.
