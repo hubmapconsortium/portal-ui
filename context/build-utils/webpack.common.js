@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const webpack = require('webpack');
 const { resolve } = require('path');
 const { alias } = require('./alias');
@@ -14,7 +13,7 @@ const config = {
     splitChunks: {
       cacheGroups: {
         commons: {
-          test: RegExp('/node_modules/'),
+          test: /\/node_modules\//,
           name: 'vendors',
           chunks: 'initial',
         },
@@ -22,7 +21,7 @@ const config = {
     },
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml', '.json'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml', '.json'],
     fallback: {
       // Now necessary because webpack 5 doesn't include these polyfills by default
       timers: require.resolve('timers-browserify'),
