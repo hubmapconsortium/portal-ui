@@ -16,8 +16,8 @@ const VisualizationErrorBoundaryBackground = styled(Paper)`
   ${height}
   white-space: pre-line;
   overflow-y: auto;
-  padding: 16px;
-  font-zie: 16px;
+  padding: ${(props) => props.theme.spacing(2)}px;
+  font-size: ${(props) => props.theme.typography.body1.fontSize}};
 `;
 
 export { VisualizationBackground, VisualizationErrorBoundaryBackground };
