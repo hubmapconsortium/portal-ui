@@ -58,6 +58,7 @@ overrides:
       jest/globals: true
     rules:
       import/no-extraneous-dependencies: [0]
+      "@typescript-eslint/no-var-requires": [0] # allow use of require in jest tests
   - files: ["**/*.stories.{js,jsx,ts,tsx}"]
     extends: 
       - plugin:storybook/recommended
