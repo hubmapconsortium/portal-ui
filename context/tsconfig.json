@@ -6,9 +6,6 @@
       "dom.iterable",
       "esnext"
     ],
-    "types": [
-      "node"
-    ],
     "module": "commonjs",
     "resolveJsonModule": true,
     "isolatedModules": true,
