@@ -1,1 +1,2 @@
-- Adjust error display to prevent error messages from overflowing.
+- Adjust page-wide error boundary to prevent error messages from overflowing
+- Add error boundary around Vitessce visualization to keep Vitessce errors from crashing full page
