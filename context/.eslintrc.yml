@@ -79,3 +79,8 @@ overrides:
     rules:
       "@typescript-eslint/no-var-requires": [0] # allow use of require
       import/no-extraneous-dependencies: [0] # Allow devDependencies in webpack config
+  - files: ["**/__tests__/**/*.{js,jsx,ts,tsx}"] # Allow the "test" global in test fixtures
+    globals:
+      test: readonly
+    rules:
+      import/no-extraneous-dependencies: [0] # Allow devDependencies in test fixtures
