@@ -1,7 +1,6 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { render, screen } from 'test-utils/functions';
+import { render, screen } from '@/../../test-utils/functions';
 
 import DetailContext from 'js/components/detailPage/context';
 import FileBrowser from './FileBrowser';
@@ -11,12 +10,13 @@ const fakeOpenDUA = jest.fn();
 
 const uuid = 'fakeuuid';
 
+const detailContext = { uuid };
+const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' };
+
 function FilesProviders({ children }) {
   return (
-    <DetailContext.Provider value={{ uuid }}>
-      <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
-        {children}
-      </FilesContext.Provider>
+    <DetailContext.Provider value={detailContext}>
+      <FilesContext.Provider value={filesContext}>{children}</FilesContext.Provider>
     </DetailContext.Provider>
   );
 }

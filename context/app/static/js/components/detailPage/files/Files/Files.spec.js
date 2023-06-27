@@ -11,6 +11,8 @@ import Files from './Files';
 const uuid = 'fakeuuid';
 const mapped_data_access_level = 'fakeaccess';
 
+const detailContext = { uuid, mapped_data_access_level };
+
 const globusUrlResponse = {
   url: 'fakeglobusurl',
 };
@@ -26,7 +28,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 function DetailProvider({ children }) {
-  return <DetailContext.Provider value={{ uuid, mapped_data_access_level }}>{children}</DetailContext.Provider>;
+  return <DetailContext.Provider value={detailContext}>{children}</DetailContext.Provider>;
 }
 
 test('handles DUA flow', async () => {
