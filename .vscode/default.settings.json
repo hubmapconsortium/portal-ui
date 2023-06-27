@@ -3,7 +3,7 @@
         "./context"
     ],
     "eslint.format.enable": true,
-    "[javascriptreact]": {
+    "[javascript,javascriptreact,typescript,typescriptreact]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "[python]": {
