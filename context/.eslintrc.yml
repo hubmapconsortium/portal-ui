@@ -74,4 +74,5 @@ overrides:
       import/no-extraneous-dependencies: [0]
   - files: ["**/webpack.*.js"]
     rules:
-      "@typescript-eslint/no-var-requires": [0] # allow require for webpack config
+      "@typescript-eslint/no-var-requires": [0] # allow use of require
+      import/no-extraneous-dependencies: [0] # Allow devDependencies in webpack config
