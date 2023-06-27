@@ -1,0 +1,3 @@
+- Updated project ESLint configuration and dependencies
+- Removed Babel
+- Introduced TypeScript
