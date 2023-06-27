@@ -33,11 +33,13 @@ const steps = [1, 2, 3].map((stepNumber) => ({
   content: <ExampleContent stepNumber={stepNumber} />,
 }));
 
-export const AccordionSteps = (args) => (
-  <AccordionStepsProvider stepsLength={steps.length}>
-    <AccordionStepsComponent {...args} />
-  </AccordionStepsProvider>
-);
+export function AccordionSteps(args) {
+  return (
+    <AccordionStepsProvider stepsLength={steps.length}>
+      <AccordionStepsComponent {...args} />
+    </AccordionStepsProvider>
+  );
+}
 
 AccordionSteps.args = {
   isFirstStepOpen: false,

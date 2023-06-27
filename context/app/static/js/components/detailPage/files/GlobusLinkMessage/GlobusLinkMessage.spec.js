@@ -9,7 +9,7 @@ import FilesContext from '../Files/context';
 const fakeOpenDUA = jest.fn();
 const uuid = 'fakeuuid';
 
-const FilesProviders = ({ children }) => {
+function FilesProviders({ children }) {
   return (
     <DetailContext.Provider value={{ uuid }}>
       <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
@@ -17,7 +17,7 @@ const FilesProviders = ({ children }) => {
       </FilesContext.Provider>
     </DetailContext.Provider>
   );
-};
+}
 
 const url = 'fakeurl';
 const hubmap_id = 'fake_doi';

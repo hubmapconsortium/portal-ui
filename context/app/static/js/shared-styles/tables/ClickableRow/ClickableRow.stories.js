@@ -7,13 +7,15 @@ export default {
   component: ClickableRow,
 };
 
-const Template = (args) => (
-  <ClickableRow {...args}>
-    <TableCell>A</TableCell>
-    <TableCell>B</TableCell>
-    <TableCell>C</TableCell>
-  </ClickableRow>
-);
+function Template(args) {
+  return (
+    <ClickableRow {...args}>
+      <TableCell>A</TableCell>
+      <TableCell>B</TableCell>
+      <TableCell>C</TableCell>
+    </ClickableRow>
+  );
+}
 
 const sharedArgs = { label: 'onClick label', onClick: () => {} };
 

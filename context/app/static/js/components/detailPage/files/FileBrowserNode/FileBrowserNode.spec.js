@@ -10,7 +10,7 @@ const fakeOpenDUA = jest.fn();
 
 const uuid = 'fakeuuid';
 
-const FilesProviders = ({ children }) => {
+function FilesProviders({ children }) {
   return (
     <DetailContext.Provider value={{ uuid }}>
       <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
@@ -18,7 +18,7 @@ const FilesProviders = ({ children }) => {
       </FilesContext.Provider>
     </DetailContext.Provider>
   );
-};
+}
 
 function FakeFileObject(i) {
   this.rel_path = `fakepath${i}`;

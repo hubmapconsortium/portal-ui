@@ -15,7 +15,7 @@ test('the element is a link when dua has been agreed to', () => {
   );
   expect(screen.getByRole('link')).toHaveAttribute('href', `fakeref`);
   expect(screen.getByRole('link')).toHaveTextContent('child');
-  expect(screen.queryByRole('button')).toBeNull();
+  expect(screen.queryByRole('button')).not.toBeInTheDocument();
 });
 
 test('the element is button when dua has not been agreed to', () => {
@@ -26,7 +26,7 @@ test('the element is button when dua has not been agreed to', () => {
   );
   expect(screen.getByRole('button')).toBeInTheDocument();
   expect(screen.getByRole('button')).toHaveTextContent('child');
-  expect(screen.queryByRole('link')).toBeNull();
+  expect(screen.queryByRole('link')).not.toBeInTheDocument();
 });
 
 test('the button has on click works', () => {

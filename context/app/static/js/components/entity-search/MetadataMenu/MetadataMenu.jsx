@@ -23,17 +23,19 @@ async function fetchAndDownload({ urlPath, selectedHits, closeMenu }) {
   closeMenu();
 }
 
-const NotebookMenuItem = (props) => (
-  <StyledMenuItem {...props}>
-    Notebook
-    <SecondaryBackgroundTooltip
-      title="Download a Notebook which demonstrates how to programmatically access metadata."
-      placement="bottom-start"
-    >
-      <StyledInfoIcon color="primary" />
-    </SecondaryBackgroundTooltip>
-  </StyledMenuItem>
-);
+function NotebookMenuItem(props) {
+  return (
+    <StyledMenuItem {...props}>
+      Notebook
+      <SecondaryBackgroundTooltip
+        title="Download a Notebook which demonstrates how to programmatically access metadata."
+        placement="bottom-start"
+      >
+        <StyledInfoIcon color="primary" />
+      </SecondaryBackgroundTooltip>
+    </StyledMenuItem>
+  );
+}
 
 function MetadataMenu({ entityType }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;

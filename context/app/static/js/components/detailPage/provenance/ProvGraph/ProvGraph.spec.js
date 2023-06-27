@@ -74,7 +74,7 @@ test('should display the correct initial nodes for a sample', () => {
   render(<ProvGraph provData={sampleProv} />);
 
   nodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-  notIncludedNodesText.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+  notIncludedNodesText.forEach((text) => expect(screen.queryByText(text)).not.toBeInTheDocument());
 });
 
 test('should display selected node information in detail pane and show immediate descendants when "Show Derived Entities" button is clicked', async () => {

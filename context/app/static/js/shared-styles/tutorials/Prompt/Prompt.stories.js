@@ -8,11 +8,13 @@ export default {
   component: PromptComponent,
 };
 
-export const Prompt = (args) => (
-  <TutorialProvider>
-    <PromptComponent {...args} />
-  </TutorialProvider>
-);
+export function Prompt(args) {
+  return (
+    <TutorialProvider>
+      <PromptComponent {...args} />
+    </TutorialProvider>
+  );
+}
 Prompt.args = {
   headerText: 'Tutorial Title',
   descriptionText: 'Welcome to the tutorial!',

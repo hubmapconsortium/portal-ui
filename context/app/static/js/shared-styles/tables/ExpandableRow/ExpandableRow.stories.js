@@ -17,13 +17,15 @@ function Content({ heightRef }) {
     </div>
   );
 }
-const Template = (args) => (
-  <ExpandableRow {...args}>
-    <ExpandableRowCell>A</ExpandableRowCell>
-    <ExpandableRowCell>B</ExpandableRowCell>
-    <ExpandableRowCell>C</ExpandableRowCell>
-  </ExpandableRow>
-);
+function Template(args) {
+  return (
+    <ExpandableRow {...args}>
+      <ExpandableRowCell>A</ExpandableRowCell>
+      <ExpandableRowCell>B</ExpandableRowCell>
+      <ExpandableRowCell>C</ExpandableRowCell>
+    </ExpandableRow>
+  );
+}
 
 const sharedArgs = {
   numCells: 4,

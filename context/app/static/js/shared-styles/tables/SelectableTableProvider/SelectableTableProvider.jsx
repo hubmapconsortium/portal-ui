@@ -7,14 +7,14 @@ function SelectableTableProvider({ children, tableLabel }) {
   return <Provider createStore={() => createStore(tableLabel)}>{children}</Provider>;
 }
 
-export const withSelectableTableProvider =
-  (Component, tableLabel) =>
-  ({ ...props }) =>
-    (
+export const withSelectableTableProvider = (Component, tableLabel) =>
+  function ({ ...props }) {
+    return (
       <SelectableTableProvider tableLabel={tableLabel}>
         <Component {...props} />
       </SelectableTableProvider>
     );
+  };
 
 SelectableTableProvider.propTypes = {
   /**

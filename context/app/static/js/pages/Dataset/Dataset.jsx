@@ -74,14 +74,12 @@ function SummaryDataChildren({
         </OutboundIconLink>
       )}
       {isWorkspacesUser && (
-        <>
-          <CreateWorkspaceDialog
-            handleCreateWorkspace={createDatasetWorkspace}
-            buttonComponent={NotebookButton}
-            disabled={!hasNotebook}
-            defaultName={`${hubmap_id} Workspace`}
-          />
-        </>
+        <CreateWorkspaceDialog
+          handleCreateWorkspace={createDatasetWorkspace}
+          buttonComponent={NotebookButton}
+          disabled={!hasNotebook}
+          defaultName={`${hubmap_id} Workspace`}
+        />
       )}
     </>
   );
