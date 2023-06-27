@@ -1,12 +1,10 @@
 extends:
   - eslint:recommended
+  - plugin:react/recommended
   - airbnb
   - airbnb/hooks
   - prettier
   - plugin:@typescript-eslint/recommended
-  - plugin:react/recommended
-  - plugin:jest-dom/recommended
-  - plugin:testing-library/react
   - plugin:prettier/recommended
   - plugin:import/errors
   - plugin:import/warnings
@@ -22,13 +20,9 @@ globals:
 env:
   browser: true
   node: true
-  jest: true
 plugins:
   - react
   - "@typescript-eslint"
-  - testing-library
-  - jest
-  - jest-dom
   - prettier
   - import
 settings:
@@ -36,18 +30,48 @@ settings:
     version: detect
   import/resolver:
     webpack:
-      config: './build-utils/webpack.common.js'
+      config: "./build-utils/webpack.common.js"
 rules:
   camelcase: [0]  # Preserving original name will make searching across codebase easier.
   no-console: ["error", { allow: ["warn", "error"] }]
-  react/jsx-filename-extension: [0]  # Imports don't work if I change extension.
+  react/jsx-filename-extension: [0]  # Imports don"t work if I change extension.
   react/sort-comp: [0]  # Non-alphabetical groupings can make more sense.
   react/jsx-one-expression-per-line: [0]  # Makes punctuation after tab awkward.
   react/prop-types: [0]
+  react/forbid-prop-types: [0]
   import/prefer-default-export: [0]  # Hit eslint error: SyntaxError: Unexpected token, expected {
-  react/jsx-props-no-spreading: [0]
+  react/jsx-props-no-spreading: [0]  # common pattern, with TypeScript it"s pretty safe
   jsx-a11y/label-has-associated-control:
     - 2
     - controlComponents:
       - Switch
-  import/no-extraneous-dependencies: ["error", {"devDependencies": ["**/*.spec.js", "**/*.stories.js"]}]
+overrides:
+  - files: ["**/*.spec.{js,jsx,ts,tsx}"]
+    plugins: 
+      - jest
+    extends:
+      - plugin:jest/recommended
+      - plugin:jest-dom/recommended
+      - plugin:testing-library/react
+    env:
+      jest: true    
+      jest/globals: true
+    rules:
+      import/no-extraneous-dependencies: [0]
+  - files: ["**/*.stories.{js,jsx,ts,tsx}"]
+    extends: 
+      - plugin:storybook/recommended
+    rules:
+      import/no-extraneous-dependencies: [0]
+  - files: ["**/*.cy.{js,jsx,ts,tsx}"]
+    plugins: 
+      - cypress
+    extends: 
+      - plugin:cypress/recommended
+    env:
+      cypress/globals: true
+    rules:
+      import/no-extraneous-dependencies: [0]
+  - files: ["**/webpack.*.js"]
+    rules:
+      "@typescript-eslint/no-var-requires": [0] # allow require for webpack config
