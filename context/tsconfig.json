@@ -1,14 +1,37 @@
 {
   "compilerOptions": {
     "target": "ES2019",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "types": [
+      "node"
+    ],
     "module": "commonjs",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./app/static/js"
+    "incremental": true,
+    "jsx": "react",
+    "allowJs": true,
+    "baseUrl": "./app/static/js",
+    "sourceMap": true,
+    "noEmit": true
   },
-  "include": ["app/static/js/**/*"],
+  "include": [
+    "./app/"
+  ],
+  "exclude": [
+    "node_modules",
+    "app/static/js/**/*.spec.{ts,tsx,js,jsx}",
+    "app/static/js/**/*.stories.{ts,tsx,js,jsx}",
+    "app/static/js/**/*.cy.{ts,tsx,js,jsx}"
+  ],
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended"
 }
