@@ -1,0 +1,1 @@
+- Bump `portal-visualization` to 0.0.12.
