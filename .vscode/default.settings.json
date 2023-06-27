@@ -1,13 +1,14 @@
 {
-    "eslint.workingDirectories": [
-        "./context"
-    ],
-    "eslint.format.enable": true,
-    "[javascript,javascriptreact,typescript,typescriptreact]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.autopep8"
-    },
-    "python.formatting.provider": "autopep8"
+  "eslint.workingDirectories": ["./context"],
+  "eslint.format.enable": true,
+  "[javascript,javascriptreact,typescript,typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.autopep8"
+  },
+  "python.formatting.provider": "autopep8",
+  "optional": {
+    "editor.formatOnSave": true
+  }
 }
