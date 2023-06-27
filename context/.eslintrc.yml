@@ -72,7 +72,7 @@ overrides:
       cypress/globals: true
     rules:
       import/no-extraneous-dependencies: [0]
-  - files: ["**/webpack.*.js"]
+  - files: ["**/build-utils/*.js"]
     rules:
       "@typescript-eslint/no-var-requires": [0] # allow use of require
       import/no-extraneous-dependencies: [0] # Allow devDependencies in webpack config
