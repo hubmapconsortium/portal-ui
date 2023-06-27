@@ -13,7 +13,7 @@ COPY .npmrc .
 
 RUN npm ci
 
-COPY .babelrc .babelrc
+COPY tsconfig.json tsconfig.json
 COPY .swcrc .swcrc
 COPY build-utils build-utils
 COPY app app
