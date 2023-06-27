@@ -15,8 +15,8 @@ const Background = styled.div`
 const StyledPaper = styled(Paper)`
   width: 100%;
   max-width: 880px;
-  margin: 0 1rem;
-  padding: 1rem;
+  margin: 0 16px;
+  padding: 16px;
   word-break: break-all;
 `;
 
