@@ -6,8 +6,8 @@ import SelectedFilter from '../SelectedFilter';
 
 test('SelectedFilter renders "key: value"', () => {
   render(<SelectedFilter labelKey="key" labelValue="value" removeFilter={() => {}} filterId="not_entity_type" />);
-  expect(screen.queryByText(/key/)).toBeInTheDocument();
-  expect(screen.queryByText(/value/)).toBeInTheDocument();
+  expect(screen.getByText(/key/)).toBeInTheDocument();
+  expect(screen.getByText(/value/)).toBeInTheDocument();
 });
 
 test('but SelectedFilter does not render entity_type', () => {
