@@ -15,7 +15,7 @@ const config = {
     filename: '[name].bundle.js',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml', '.html'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml', '.html'],
     alias,
   },
   module: {
@@ -24,6 +24,12 @@ const config = {
         test: /\.[tj]sx?$/,
         use: {
           loader: 'swc-loader',
+          options: {
+            sync: true,
+            jsc: {
+              target: 'es2019',
+            },
+          },
         },
         exclude: /node_modules/,
       },
