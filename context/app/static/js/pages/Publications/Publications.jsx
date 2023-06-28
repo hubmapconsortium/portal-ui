@@ -21,7 +21,7 @@ const Description = () => (
 
 function Publications() {
   const {
-    publicationsStatusAggs: { statuses, publicationsCount = 0 },
+    publicationsCounts: { statuses, publicationsCount = 0 },
     handleChange,
     openTabIndex,
   } = usePublications();
