@@ -18,35 +18,6 @@ function pretty(str) {
   return str.split('_').map(ucFirst).join(' ');
 }
 
-function DonorChart({ xAxis, groups }) {
-  const xSource = xAxis === 'age' ? makeHistogramSource(xAxis) : makeTermSource(xAxis);
-  const ySource = groups === 'age' ? makeHistogramSource(groups) : makeTermSource(groups);
-  const donorQuery = makeCompositeQuery(xSource, ySource);
-  const xKey = `mapped_metadata.${xAxis}`;
-  const yKey = `mapped_metadata.${groups}`;
-  const colorKeysMap = {
-    race: ['White', 'Black or African American', 'Hispanic'],
-    sex: ['Male', 'Female'],
-    blood_type: ['A', 'B', 'AB', 'O'],
-  };
-  const colorKeys = colorKeysMap[groups];
-  const xAxisLabel = pretty(xAxis);
-  const title = `${pretty(xAxis)} & ${pretty(groups)}`;
-  const description = [xAxis, groups].includes('blood_type') ? <BloodTypeDescription /> : null;
-
-  return (
-    <LowLevelDonorChart
-      donorQuery={donorQuery}
-      xKey={xKey}
-      yKey={yKey}
-      colorKeys={colorKeys}
-      title={title}
-      xAxisLabel={xAxisLabel}
-      description={description}
-    />
-  );
-}
-
 function BloodTypeDescription() {
   return (
     <>
@@ -79,7 +50,7 @@ function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, descript
     return filtered.length ? filtered[0].doc_count : 0;
   }
 
-  const { buckets } = searchData?.aggregations.composite_data;
+  const { buckets } = searchData?.aggregations?.composite_data || {};
   const labels = xKey === 'mapped_metadata.age' ? getAgeLabels(buckets, xKey) : getKeyValues(buckets, xKey);
   const graphdata = {
     labels,
@@ -125,6 +96,35 @@ function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, descript
         <Bar data={graphdata} options={options} />
       </ChartPaper>
     </>
+  );
+}
+
+function DonorChart({ xAxis, groups }) {
+  const xSource = xAxis === 'age' ? makeHistogramSource(xAxis) : makeTermSource(xAxis);
+  const ySource = groups === 'age' ? makeHistogramSource(groups) : makeTermSource(groups);
+  const donorQuery = makeCompositeQuery(xSource, ySource);
+  const xKey = `mapped_metadata.${xAxis}`;
+  const yKey = `mapped_metadata.${groups}`;
+  const colorKeysMap = {
+    race: ['White', 'Black or African American', 'Hispanic'],
+    sex: ['Male', 'Female'],
+    blood_type: ['A', 'B', 'AB', 'O'],
+  };
+  const colorKeys = colorKeysMap[groups];
+  const xAxisLabel = pretty(xAxis);
+  const title = `${pretty(xAxis)} & ${pretty(groups)}`;
+  const description = [xAxis, groups].includes('blood_type') ? <BloodTypeDescription /> : null;
+
+  return (
+    <LowLevelDonorChart
+      donorQuery={donorQuery}
+      xKey={xKey}
+      yKey={yKey}
+      colorKeys={colorKeys}
+      title={title}
+      xAxisLabel={xAxisLabel}
+      description={description}
+    />
   );
 }
 
