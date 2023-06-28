@@ -7,7 +7,7 @@ function SearchConfigProvider({ children, initialConfig }) {
 }
 
 export const withSearchConfigProvider = (Component, initialConfig) =>
-  function ({ ...props }) {
+  function ComponentWithSearchConfigProvider({ ...props }) {
     return (
       <SearchConfigProvider initialConfig={initialConfig}>
         <Component {...props} />
