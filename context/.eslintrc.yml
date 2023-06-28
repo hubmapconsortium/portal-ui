@@ -64,11 +64,13 @@ overrides:
       import/no-extraneous-dependencies: [0]
       "@typescript-eslint/no-var-requires": [0] # allow use of require in jest tests
       jest/expect-expect: ["error", { "assertFunctionNames": ["expect*"] }] # allow expect calls to be contained within helper functions that start with expect
+      "@typescript-eslint/no-empty-function": [0] # allow empty function placeholders in jest tests
   - files: ["**/*.stories.{js,jsx,ts,tsx}"]
     extends: 
       - plugin:storybook/recommended
     rules:
       import/no-extraneous-dependencies: [0]
+      "@typescript-eslint/no-empty-function": [0] # allow empty function placeholders in stories
   - files: ["**/*.cy.{js,jsx,ts,tsx}"]
     plugins: 
       - cypress
@@ -87,3 +89,4 @@ overrides:
       test: readonly
     rules:
       import/no-extraneous-dependencies: [0] # Allow devDependencies in test fixtures
+      "@typescript-eslint/no-empty-function": [0] # allow empty function placeholders in test fixtures
