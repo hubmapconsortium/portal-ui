@@ -23,7 +23,7 @@ function PublicationsVisualizationSection({ vignette_json: { vignettes }, uuid }
   const handleChange = useCallback((i) => (event, isExpanded) => setExpandedIndex(isExpanded ? i : false), []);
 
   return (
-    <DetailPageSection id="visualizations">
+    <DetailPageSection id="visualizations" data-testid="vignettes">
       <SectionHeader>Visualizations</SectionHeader>
       {sortedVignettes.map((vignette, i) => {
         return (
@@ -32,6 +32,7 @@ function PublicationsVisualizationSection({ vignette_json: { vignettes }, uuid }
             expanded={i === expandedIndex}
             TransitionProps={{ onEntered: () => setDisplayedVignettes((prev) => ({ ...prev, [i]: true })) }}
             onChange={handleChange(i)}
+            data-testid="vignette"
           >
             <PrimaryColorAccordionSummary $isExpanded={i === expandedIndex} expandIcon={<ArrowDropUpRoundedIcon />}>
               <Typography variant="subtitle1">{`Vignette ${i + 1}: ${vignette.name}`}</Typography>
