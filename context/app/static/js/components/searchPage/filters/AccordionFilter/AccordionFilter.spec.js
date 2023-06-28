@@ -33,6 +33,7 @@ test.each([
   ['AccordionHierarchicalMenuFilter'],
 ])('%s should render', (filterName) => {
   render(<AccordionFilter type={filterName} />);
+  expect(screen.getByText(filterName)).toBeInTheDocument();
 });
 
 test('withAnalyticsEvent passes onClick with ga event and original onClick', () => {
