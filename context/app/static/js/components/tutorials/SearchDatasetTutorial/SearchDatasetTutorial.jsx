@@ -68,6 +68,13 @@ function SearchDatasetTutorial() {
     }
   }, [isTutorialRunning]);
 
+  const {
+    palette: {
+      info: { dark: arrowColor },
+    },
+    zIndex: { tutorial: zIndex },
+  } = themeContext;
+
   return (
     <>
       <DatasetSearchPrompt />
@@ -80,7 +87,7 @@ function SearchDatasetTutorial() {
           disableAnimation: true,
         }}
         tooltipComponent={TutorialTooltip}
-        styles={{ options: { arrowColor: themeContext.palette.info.dark, zIndex: themeContext.zIndex.tutorial } }}
+        styles={{ options: { arrowColor, zIndex } }}
         stepIndex={tutorialStep}
       />
     </>
