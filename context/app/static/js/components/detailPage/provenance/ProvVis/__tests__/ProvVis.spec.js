@@ -22,7 +22,7 @@ describe('ProvVis', () => {
   it('renders React component', () => {
     render(<ProvVis provData={simple.prov} />, node, () => {
       // TODO: Just getting empty div.
-      // expect(node.innerHTML).toContain('svg')
+      expect(node.innerHTML).toContain('svg');
     });
   });
 });
