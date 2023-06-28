@@ -95,24 +95,30 @@ describe('buildPublicationsPanelProps', () => {
 describe('buildPublicationsSeparatedByStatus', () => {
   test('should return sorted publications', () => {
     expect(buildPublicationsSeparatedByStatus([preprintPublicationHit, publishedPublicationHit])).toEqual({
-      preprint: [
-        {
-          key: 'abc123',
-          href: '/browse/publication/abc123',
-          title: 'Publication ABC',
-          secondaryText: 'Ash Ketchum | Pallet Town Times',
-          rightText: 'Published: 2022-03-02',
-        },
-      ],
-      published: [
-        {
-          key: 'def456',
-          href: '/browse/publication/def456',
-          title: 'Publication DEF',
-          secondaryText: 'Professor Oak | Pallet Town Times',
-          rightText: 'Published: 2022-03-02',
-        },
-      ],
+      preprint: {
+        category: 'Preprint',
+        entities: [
+          {
+            key: 'abc123',
+            href: '/browse/publication/abc123',
+            title: 'Publication ABC',
+            secondaryText: 'Ash Ketchum | Pallet Town Times',
+            rightText: 'Published: 2022-03-02',
+          },
+        ],
+      },
+      published: {
+        category: 'Peer Reviewed',
+        entities: [
+          {
+            key: 'def456',
+            href: '/browse/publication/def456',
+            title: 'Publication DEF',
+            secondaryText: 'Professor Oak | Pallet Town Times',
+            rightText: 'Published: 2022-03-02',
+          },
+        ],
+      },
     });
   });
 });
