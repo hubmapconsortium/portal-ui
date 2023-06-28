@@ -22,7 +22,7 @@ describe('appendKeywordToFieldName', () => {
   });
 });
 
-describe('appendKeywordToFieldName', () => {
+describe('prependKeywordToFieldName', () => {
   test('should return the field unaltered if the path for the entity the field belongs to is not defined', () => {
     expect(prependMetadataPathToFieldName({ fieldName: 'animal', entityType: 'dataset' })).toBe('animal');
   });
