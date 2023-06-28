@@ -29,7 +29,14 @@ const WhiteBackgroundToggleButton = styled(ToggleButton)`
   }
 `;
 
-function TooltipToggleButton({ children, tooltipComponent, tooltipTitle, buttonComponent, id, ...rest }) {
+function TooltipToggleButton({
+  children,
+  tooltipComponent,
+  tooltipTitle,
+  buttonComponent: _buttonComponent,
+  id,
+  ...rest
+}) {
   const Tooltip = tooltipComponent;
 
   return (
