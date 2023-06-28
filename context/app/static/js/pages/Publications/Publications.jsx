@@ -3,11 +3,11 @@ import React from 'react';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
-import PanelList from 'js/shared-styles/panels/PanelList';
 import { Tab } from 'js/shared-styles/tabs';
 import { usePublications } from './hooks';
 
 import { StyledTabs, StyledTabPanel } from './style';
+import PublicationsPanelList from '../../components/publications/PublicationsPanelList/PublicationsPanelList';
 
 const Description = () => (
   <>
@@ -20,7 +20,15 @@ const Description = () => (
 );
 
 function Publications() {
-  const { publicationsPanelsPropsSeparatedByStatus, publicationsCount, handleChange, openTabIndex } = usePublications();
+  const {
+    publicationsStatusAggs: { statuses, publicationsCount = 0 },
+    handleChange,
+    openTabIndex,
+  } = usePublications();
+
+  const sortedPublicationStatusEntries = Object.entries(statuses).sort(([statusA], [statusB]) =>
+    statusB.localeCompare(statusA),
+  );
 
   return (
     <PanelListLandingPage
@@ -34,19 +42,22 @@ function Publications() {
         onChange={handleChange}
         aria-label="Published and preprint publications"
       >
-        {Object.values(publicationsPanelsPropsSeparatedByStatus).map(({ category, entities }, i) => (
-          <Tab
-            data-testid={`publication-tab-${category.toLowerCase()}`}
-            label={`${category} (${entities.length})`}
-            index={i}
-            key={category}
-            disabled={entities.length === 0}
-          />
-        ))}
+        {sortedPublicationStatusEntries.map(([, { category, count }], i) => {
+          return (
+            <Tab
+              data-testid={`publication-tab-${category.toLowerCase()}`}
+              label={`${category} (${count})`}
+              index={i}
+              key={category}
+              disabled={count === 0}
+            />
+          );
+        })}
       </StyledTabs>
-      {Object.values(publicationsPanelsPropsSeparatedByStatus).map(({ category, entities }, i) => (
+
+      {sortedPublicationStatusEntries.map(([status, { category }], i) => (
         <StyledTabPanel value={openTabIndex} index={i} key={category}>
-          <PanelList panelsProps={entities} />
+          <PublicationsPanelList status={status} />
         </StyledTabPanel>
       ))}
     </PanelListLandingPage>

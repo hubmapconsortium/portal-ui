@@ -29,34 +29,4 @@ function buildPublicationPanelProps(publicationHit) {
   };
 }
 
-function buildPublicationsSeparatedByStatus(publications) {
-  return publications.reduce(
-    (acc, publication) => {
-      const {
-        _source: { publication_status },
-      } = publication;
-
-      if (publication_status === undefined) {
-        return acc;
-      }
-
-      const publicationProps = buildPublicationPanelProps(publication);
-
-      if (publication_status) {
-        acc.published.entities.push(publicationProps);
-      } else {
-        acc.preprint.entities.push(publicationProps);
-      }
-
-      return acc;
-    },
-    { published: { category: 'Peer Reviewed', entities: [] }, preprint: { category: 'Preprint', entities: [] } },
-  );
-}
-
-export {
-  buildAbbreviatedContributors,
-  buildSecondaryText,
-  buildPublicationPanelProps,
-  buildPublicationsSeparatedByStatus,
-};
+export { buildAbbreviatedContributors, buildSecondaryText, buildPublicationPanelProps };

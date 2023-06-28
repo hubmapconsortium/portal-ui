@@ -1,9 +1,4 @@
-import {
-  buildSecondaryText,
-  buildAbbreviatedContributors,
-  buildPublicationPanelProps,
-  buildPublicationsSeparatedByStatus,
-} from './utils';
+import { buildSecondaryText, buildAbbreviatedContributors, buildPublicationPanelProps } from './utils';
 
 const ash = {
   first_name: 'Ash',
@@ -31,17 +26,6 @@ const preprintPublicationHit = {
     title: 'Publication ABC',
     contributors: [ash],
     publication_status: false,
-    publication_venue,
-    publication_date: '2022-03-02',
-  },
-};
-
-const publishedPublicationHit = {
-  _source: {
-    uuid: 'def456',
-    title: 'Publication DEF',
-    contributors: [professorOak],
-    publication_status: true,
     publication_venue,
     publication_date: '2022-03-02',
   },
@@ -88,37 +72,6 @@ describe('buildPublicationsPanelProps', () => {
       title: 'Publication ABC',
       secondaryText: 'Ash Ketchum | Pallet Town Times',
       rightText: 'Published: 2022-03-02',
-    });
-  });
-});
-
-describe('buildPublicationsSeparatedByStatus', () => {
-  test('should return sorted publications', () => {
-    expect(buildPublicationsSeparatedByStatus([preprintPublicationHit, publishedPublicationHit])).toEqual({
-      preprint: {
-        category: 'Preprint',
-        entities: [
-          {
-            key: 'abc123',
-            href: '/browse/publication/abc123',
-            title: 'Publication ABC',
-            secondaryText: 'Ash Ketchum | Pallet Town Times',
-            rightText: 'Published: 2022-03-02',
-          },
-        ],
-      },
-      published: {
-        category: 'Peer Reviewed',
-        entities: [
-          {
-            key: 'def456',
-            href: '/browse/publication/def456',
-            title: 'Publication DEF',
-            secondaryText: 'Professor Oak | Pallet Town Times',
-            rightText: 'Published: 2022-03-02',
-          },
-        ],
-      },
     });
   });
 });
