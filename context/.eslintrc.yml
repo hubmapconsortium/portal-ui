@@ -71,6 +71,7 @@ overrides:
     rules:
       import/no-extraneous-dependencies: [0]
       "@typescript-eslint/no-empty-function": [0] # allow empty function placeholders in stories
+      storybook/no-redundant-story-name: [0] # Some are needed for single story hoisting for multi word component names per comments - may need to be revisited/retested for the highlighted cases
   - files: ["**/*.cy.{js,jsx,ts,tsx}"]
     plugins: 
       - cypress
