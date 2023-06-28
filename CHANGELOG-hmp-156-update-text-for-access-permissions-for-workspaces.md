@@ -1,1 +1,3 @@
-- Update text for workspaces access permissions.
+- Render "The workspaces feature is only available if logged in and is part of the allowed Globus group." for workspaces page if user is not logged in.
+- Render "You must be a member of the allowed Globus group to access this feature. " if user is logged in but not a member of the allowed Globus group.
+- Render Workspace page if user is logged in and is a member of the allowed Globus group.
