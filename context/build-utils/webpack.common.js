@@ -26,6 +26,7 @@ const config = {
       // Now necessary because webpack 5 doesn't include these polyfills by default
       timers: require.resolve('timers-browserify'),
       stream: require.resolve('stream-browserify'),
+      buffer: require.resolve('buffer'),
     },
     alias,
   },
