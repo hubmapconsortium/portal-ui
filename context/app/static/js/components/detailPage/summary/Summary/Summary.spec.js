@@ -4,9 +4,9 @@ import { render, screen } from 'test-utils/functions';
 import Summary from './Summary';
 
 test('displays correctly with required props', () => {
-  const { getByText } = render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
+  render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
   const textToTest = ['fakedoi', 'Fakeentity'];
-  textToTest.forEach((text) => expect(getByText(text)).toBeInTheDocument());
+  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 });
 
 test('timestamps display when defined', () => {
