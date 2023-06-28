@@ -47,7 +47,10 @@ rules:
     - controlComponents:
       - Switch
   react/jsx-no-bind: [0]  # We can revisit this later if we detect performance issues from unstable functions
-  "@typescript-eslint/no-unused-vars": [2, { argsIgnorePattern: "^_" }] # Allow unused variables that start with _
+  "@typescript-eslint/no-unused-vars": 
+    - 2 # Error on unmarked unused variables
+    - argsIgnorePattern: "^_" # Allow unused variables that start with _
+      ignoreRestSiblings: true # Allow unused variables when using destructuring to remove keys from an object
 
 overrides:
   - files: ["**/*.spec.{js,jsx,ts,tsx}"]
