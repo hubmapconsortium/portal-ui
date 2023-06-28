@@ -49,4 +49,5 @@ const DevSearchViewSwitch = createSearchViewSwitch([
   { label: 'CCF', Icon: BodyRoundedIcon },
 ]);
 
-export { SearchViewSwitch as default, DevSearchViewSwitch };
+export default SearchViewSwitch;
+export { DevSearchViewSwitch };
