@@ -41,11 +41,13 @@ rules:
   react/prop-types: [0]
   react/forbid-prop-types: [0]
   import/prefer-default-export: [0]  # Hit eslint error: SyntaxError: Unexpected token, expected {
-  react/jsx-props-no-spreading: [0]  # common pattern, with TypeScript it"s pretty safe
+  react/jsx-props-no-spreading: [0]  # common pattern, but with TypeScript it"s pretty safe
   jsx-a11y/label-has-associated-control:
     - 2
     - controlComponents:
       - Switch
+  react/jsx-no-bind: [0]  # We can revisit this later if we detect performance issues from unstable functions
+
 overrides:
   - files: ["**/*.spec.{js,jsx,ts,tsx}"]
     plugins: 
