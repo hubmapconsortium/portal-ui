@@ -34,19 +34,19 @@ function Publications() {
         onChange={handleChange}
         aria-label="Published and preprint publications"
       >
-        {Object.entries(publicationsPanelsPropsSeparatedByStatus).map(([publicationStatus, panelsProps], i) => (
+        {Object.values(publicationsPanelsPropsSeparatedByStatus).map(({ category, entities }, i) => (
           <Tab
-            data-testid={`publication-tab-${publicationStatus.toLowerCase()}`}
-            label={`${publicationStatus} (${panelsProps.length})`}
+            data-testid={`publication-tab-${category.toLowerCase()}`}
+            label={`${category} (${entities.length})`}
             index={i}
-            key={publicationStatus}
-            disabled={panelsProps.length === 0}
+            key={category}
+            disabled={entities.length === 0}
           />
         ))}
       </StyledTabs>
-      {Object.entries(publicationsPanelsPropsSeparatedByStatus).map(([publicationStatus, panelsProps], i) => (
-        <StyledTabPanel value={openTabIndex} index={i} key={publicationStatus}>
-          <PanelList panelsProps={panelsProps} />
+      {Object.values(publicationsPanelsPropsSeparatedByStatus).map(({ category, entities }, i) => (
+        <StyledTabPanel value={openTabIndex} index={i} key={category}>
+          <PanelList panelsProps={entities} />
         </StyledTabPanel>
       ))}
     </PanelListLandingPage>

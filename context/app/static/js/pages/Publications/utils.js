@@ -43,14 +43,14 @@ function buildPublicationsSeparatedByStatus(publications) {
       const publicationProps = buildPublicationPanelProps(publication);
 
       if (publication_status) {
-        acc.published.push(publicationProps);
+        acc.published.entities.push(publicationProps);
       } else {
-        acc.preprint.push(publicationProps);
+        acc.preprint.entities.push(publicationProps);
       }
 
       return acc;
     },
-    { published: [], preprint: [] },
+    { published: { category: 'Peer Reviewed', entities: [] }, preprint: { category: 'Preprint', entities: [] } },
   );
 }
 
