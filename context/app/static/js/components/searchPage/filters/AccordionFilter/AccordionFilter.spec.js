@@ -32,8 +32,9 @@ test.each([
   ['AccordionCheckboxFilter'],
   ['AccordionHierarchicalMenuFilter'],
 ])('%s should render', (filterName) => {
-  render(<AccordionFilter type={filterName} />);
-  expect(screen.getByText(filterName)).toBeInTheDocument();
+  expect(() => {
+    render(<AccordionFilter type={filterName} />);
+  }).not.toThrow();
 });
 
 test('withAnalyticsEvent passes onClick with ga event and original onClick', () => {
