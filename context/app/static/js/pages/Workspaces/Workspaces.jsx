@@ -9,19 +9,49 @@ import { StyledDescription } from './style';
 
 function Workspaces() {
   const { isAuthenticated, isWorkspacesUser } = useAppContext();
-  return (
-    <>
-      <WorkspacesTitle />
-      {!(isAuthenticated && isWorkspacesUser) ? (
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <WorkspacesTitle />
         <StyledDescription>
           The workspaces feature is only available if logged in and is part of the allowed Globus group.{' '}
           <LightBlueLink href="/login">Log in</LightBlueLink> to view saved workspaces or to begin a new workspace.
         </StyledDescription>
-      ) : (
-        <WorkspacesAuthenticated />
-      )}
+      </>
+    );
+  }
+
+  if (!isWorkspacesUser) {
+    return (
+      <>
+        <WorkspacesTitle />
+        <StyledDescription>
+          The workspaces feature is only available if logged in and is part of the allowed Globus group.{' '}
+          <LightBlueLink href="/login">Log in</LightBlueLink> to view saved workspaces or to begin a new workspace.
+        </StyledDescription>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <WorkspacesTitle />
+      <WorkspacesAuthenticated />
     </>
   );
 }
 
 export default Workspaces;
+
+// <>
+//       <WorkspacesTitle />
+//       {!(isAuthenticated && isWorkspacesUser) ? (
+//         <StyledDescription>
+//           The workspaces feature is only available if logged in and is part of the allowed Globus group.{' '}
+//           <LightBlueLink href="/login">Log in</LightBlueLink> to view saved workspaces or to begin a new workspace.
+//         </StyledDescription>
+//       ) : (
+//         <WorkspacesAuthenticated />
+//       )}
+//     </>
