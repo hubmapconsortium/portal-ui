@@ -34,10 +34,14 @@ function PublicationsVisualizationSection({ vignette_json: { vignettes }, uuid }
             onChange={handleChange(i)}
             data-testid="vignette"
           >
-            <PrimaryColorAccordionSummary $isExpanded={i === expandedIndex} expandIcon={<ArrowDropUpRoundedIcon />}>
+            <PrimaryColorAccordionSummary
+              $isExpanded={i === expandedIndex}
+              expandIcon={<ArrowDropUpRoundedIcon />}
+              data-testid={`vignette-${i}-button`}
+            >
               <Typography variant="subtitle1">{`Vignette ${i + 1}: ${vignette.name}`}</Typography>
             </PrimaryColorAccordionSummary>
-            <StyledAccordionDetails>
+            <StyledAccordionDetails data-testid={`vignette-${i}-content`}>
               <PublicationVignette
                 vignette={vignette}
                 uuid={uuid}

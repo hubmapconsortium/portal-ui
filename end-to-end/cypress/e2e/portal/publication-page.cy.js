@@ -9,8 +9,8 @@ describe("Publication page", () => {
       cy.viewport("macbook-15");
       cy.intercept(
         {
-          hostname: "assets.test.hubmapconsortium.org",
-          url: "*data*",
+          hostname: "hubmapconsortium.org",
+          url: new RegExp(`.*${publicationId}\/data.*`),
         },
         (res) => res.destroy()
       ).then(() => {
@@ -156,6 +156,35 @@ describe("Publication page", () => {
 
     it("has six vignettes", () => {
       cy.findAllByTestId("vignette").should("have.length", 6);
+    });
+
+    it("has the first vignette expanded by default", () => {
+      cy.findByTestId("vignette-0-button").should(
+        "have.attr",
+        "aria-expanded",
+        "true"
+      );
+      cy.findByTestId("vignette-0-content").should("be.visible");
+      ["1", "2", "3", "4", "5"].forEach((i) => {
+        cy.findByTestId(`vignette-${i}-button`).should(
+          "have.attr",
+          "aria-expanded",
+          "false"
+        );
+        cy.findByTestId(`vignette-${i}-content`).should("not.be.visible");
+      });
+    });
+
+    it("expands other vignettes when they're clicked", () => {
+      ["1", "2", "3", "4", "5"].forEach((i) => {
+        cy.findByTestId(`vignette-${i}-button`).click();
+        cy.findByTestId(`vignette-${i}-button`).should(
+          "have.attr",
+          "aria-expanded",
+          "true"
+        );
+        cy.findByTestId(`vignette-${i}-content`).should("be.visible");
+      });
     });
 
     it("has a link to the files in Globus", () => {
