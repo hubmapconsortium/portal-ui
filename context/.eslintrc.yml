@@ -8,7 +8,7 @@ extends:
   - plugin:prettier/recommended
   - plugin:import/errors
   - plugin:import/warnings
-parser: "@typescript-eslint/parser"
+parser: '@typescript-eslint/parser'
 globals:
   CDN_URL: readonly
   flaskData: readonly
@@ -22,7 +22,7 @@ env:
   node: true
 plugins:
   - react
-  - "@typescript-eslint"
+  - '@typescript-eslint'
   - prettier
   - import
 settings:
@@ -30,49 +30,67 @@ settings:
     version: detect
   import/resolver:
     webpack:
-      config: "./build-utils/webpack.common.js"
+      config: './build-utils/webpack.common.js'
 rules:
-  camelcase: [0]  # Preserving original name will make searching across codebase easier.
-  no-console: ["error", { allow: ["warn", "error"] }]
-  react/jsx-filename-extension: [0]  # Imports don"t work if I change extension.
-  react/sort-comp: [0]  # Non-alphabetical groupings can make more sense.
-  react/jsx-one-expression-per-line: [0]  # Makes punctuation after tab awkward.
+  camelcase: [0] # Preserving original name will make searching across codebase easier.
+  no-console: ['error', { allow: ['warn', 'error'] }]
+  react/jsx-filename-extension: [0] # Imports don"t work if I change extension.
+  import/extensions: [0] # Same as above; we can eventually remove these rules to convert to ESM
+  react/sort-comp: [0] # Non-alphabetical groupings can make more sense.
+  react/jsx-one-expression-per-line: [0] # Makes punctuation after tab awkward.
   react/prop-types: [0]
   react/forbid-prop-types: [0]
-  import/prefer-default-export: [0]  # Hit eslint error: SyntaxError: Unexpected token, expected {
-  react/jsx-props-no-spreading: [0]  # common pattern, with TypeScript it"s pretty safe
+  import/prefer-default-export: [0] # Hit eslint error: SyntaxError: Unexpected token, expected {
+  react/jsx-props-no-spreading: [0] # common pattern, but with TypeScript it"s pretty safe
   jsx-a11y/label-has-associated-control:
     - 2
     - controlComponents:
-      - Switch
+        - Switch
+  react/jsx-no-bind: [0] # We can revisit this later if we detect performance issues from unstable functions
+  '@typescript-eslint/no-unused-vars':
+    - 2 # Error on unmarked unused variables
+    - argsIgnorePattern: '^_' # Allow unused variables that start with _
+      ignoreRestSiblings: true # Allow unused variables when using destructuring to remove keys from an object
+
 overrides:
-  - files: ["**/*.spec.{js,jsx,ts,tsx}"]
-    plugins: 
+  - files: ['**/*.spec.{js,jsx,ts,tsx}']
+    plugins:
       - jest
     extends:
       - plugin:jest/recommended
       - plugin:jest-dom/recommended
       - plugin:testing-library/react
     env:
-      jest: true    
+      jest: true
       jest/globals: true
     rules:
       import/no-extraneous-dependencies: [0]
-  - files: ["**/*.stories.{js,jsx,ts,tsx}"]
-    extends: 
+      '@typescript-eslint/no-var-requires': [0] # allow use of require in jest tests
+      jest/expect-expect: ['error', { 'assertFunctionNames': ['expect*'] }] # allow expect calls to be contained within helper functions that start with expect
+      '@typescript-eslint/no-empty-function': [0] # allow empty function placeholders in jest tests
+  - files: ['**/*.stories.{js,jsx,ts,tsx}']
+    extends:
       - plugin:storybook/recommended
     rules:
       import/no-extraneous-dependencies: [0]
-  - files: ["**/*.cy.{js,jsx,ts,tsx}"]
-    plugins: 
+      '@typescript-eslint/no-empty-function': [0] # allow empty function placeholders in stories
+      storybook/no-redundant-story-name: [0] # Some are needed for single story hoisting for multi word component names per comments - may need to be revisited/retested for the highlighted cases
+  - files: ['**/*.cy.{js,jsx,ts,tsx}']
+    plugins:
       - cypress
-    extends: 
+    extends:
       - plugin:cypress/recommended
     env:
       cypress/globals: true
     rules:
       import/no-extraneous-dependencies: [0]
-  - files: ["**/build-utils/*.js"]
+  - files: ['**/build-utils/*.js']
     rules:
-      "@typescript-eslint/no-var-requires": [0] # allow use of require
+      '@typescript-eslint/no-var-requires': [0] # allow use of require
       import/no-extraneous-dependencies: [0] # Allow devDependencies in webpack config
+  - files: ['**/__tests__/**/*.{js,jsx,ts,tsx}'] # Allow the "test" global in test fixtures
+    globals:
+      test: readonly
+    rules:
+      import/no-extraneous-dependencies: [0] # Allow devDependencies in test fixtures
+      '@typescript-eslint/no-empty-function': [0] # allow empty function placeholders in test fixtures
