@@ -49,7 +49,7 @@ describe("Publication page", () => {
     it("has a publication date", () => {
       cy.findByTestId("publication-date").contains("2021-10-18");
     });
-    it("has a table of contents with links to the publication summary, data, visualizations, files, authors, and provenance", () => {
+    it("has a table of contents with links to the summary, data, visualizations, files, authors, and provenance sections", () => {
       cy.findByTestId("table-of-contents")
         .should("contain", "Summary")
         .and("contain", "Data")
@@ -69,19 +69,30 @@ describe("Publication page", () => {
       // Samples tab needs to be clicked to activate
       cy.findByTestId("samples-tab")
         .should("exist")
+        .and("have.attr", "aria-selected", "false")
         .and("contain", "Samples")
         .and("contain", "(7)")
         .click();
-      cy.wait(100);
+      cy.findByTestId("samples-tab").should(
+        "have.attr",
+        "aria-selected",
+        "true"
+      );
       cy.findAllByTestId("sample-row").should("have.length", 7);
 
       // Datasets tab needs to be clicked to activate
       cy.findByTestId("datasets-tab")
         .should("exist")
+        .and("have.attr", "aria-selected", "false")
         .and("contain", "Datasets")
         .and("contain", "(3)")
         .click();
-      cy.wait(100);
+
+      cy.findByTestId("datasets-tab").should(
+        "have.attr",
+        "aria-selected",
+        "true"
+      );
       cy.findAllByTestId("dataset-row").should("have.length", 3);
     });
 
@@ -102,7 +113,11 @@ describe("Publication page", () => {
         .should("exist")
         .and("have.attr", "aria-selected", "false")
         .click();
-      cy.wait(100);
+      cy.findByTestId("samples-tab").should(
+        "have.attr",
+        "aria-selected",
+        "true"
+      );
       cy.findByTestId("view-related-data-button")
         .invoke("attr", "href")
         .then((href) =>
@@ -117,7 +132,11 @@ describe("Publication page", () => {
         .should("exist")
         .and("have.attr", "aria-selected", "false")
         .click();
-      cy.wait(100);
+      cy.findByTestId("datasets-tab").should(
+        "have.attr",
+        "aria-selected",
+        "true"
+      );
       cy.findByTestId("view-related-data-button")
         .invoke("attr", "href")
         .then((href) =>
@@ -139,16 +158,50 @@ describe("Publication page", () => {
       cy.findAllByTestId("vignette").should("have.length", 6);
     });
 
-    if (
-      ("has a link to the files in Globus",
-      () => {
-        cy.findByTestId("files")
-          .should("contain", "Bulk Data Transfer")
-          .and(
-            "contain",
-            "Files are available through the Globus Research Data Management System"
-          );
-      })
-    );
+    it("has a link to the files in Globus", () => {
+      cy.findByTestId("files")
+        .should("contain", "Bulk Data Transfer")
+        .and(
+          "contain",
+          "Files are available through the Globus Research Data Management System"
+        );
+    });
+
+    it('has a "Authors" section with a list of author names, affiliations, and ORCIDs', () => {
+      cy.findByTestId("authors").should("exist");
+      cy.findByTestId("authors-name-header").should("exist");
+      cy.findByTestId("authors-affiliation-header").should("exist");
+      cy.findByTestId("authors-orcid-header").should("exist");
+      cy.findAllByTestId("contributor-row").should("have.length", 6);
+    });
+
+    it('has a "Provenance" section with toggleable "table" and "graph" tabs', () => {
+      cy.get("#provenance")
+        .should("exist")
+        .and("contain", "Provenance")
+        .and("contain", "Table")
+        .and("contain", "Graph");
+      cy.findByTestId("prov-table-tab").should(
+        "have.attr",
+        "aria-selected",
+        "true"
+      );
+      cy.findByTestId("prov-graph-tab").should(
+        "have.attr",
+        "aria-selected",
+        "false"
+      );
+      cy.findByTestId("prov-graph-tab").click();
+      cy.findByTestId("prov-table-tab").should(
+        "have.attr",
+        "aria-selected",
+        "false"
+      );
+      cy.findByTestId("prov-graph-tab").should(
+        "have.attr",
+        "aria-selected",
+        "true"
+      );
+    });
   });
 });

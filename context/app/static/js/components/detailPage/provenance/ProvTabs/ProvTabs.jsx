@@ -28,9 +28,9 @@ function ProvTabs({ provData }) {
   return (
     <Paper>
       <Tabs value={open} onChange={handleChange} aria-label="Provenance Tabs">
-        {shouldDisplayTable && <Tab label="Table" index={0} />}
-        <Tab label="Graph" index={graphIndex} />
-        {shouldDisplayDag && <Tab label="Analysis Details" index={dagIndex} />}
+        {shouldDisplayTable && <Tab label="Table" index={0} data-testid="prov-table-tab" />}
+        <Tab label="Graph" index={graphIndex} data-testid="prov-graph-tab" />
+        {shouldDisplayDag && <Tab label="Analysis Details" index={dagIndex} data-testid="prov-dag-tab" />}
       </Tabs>
       {shouldDisplayTable && (
         <TabPanel value={open} index={0} pad={1}>
