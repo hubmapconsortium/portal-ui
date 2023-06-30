@@ -84,7 +84,6 @@ function PublicationVignette({ vignette, vignetteDirName, uuid, mounted }) {
         <VisualizationWrapper
           vitData={vitessceConfs.length === 1 ? vitessceConfs[0] : vitessceConfs}
           uuid={uuid}
-          uuidSuffix={vignetteDirName}
           hasNotebook={false}
           shouldDisplayHeader={false}
           hasBeenMounted={hasBeenMounted}

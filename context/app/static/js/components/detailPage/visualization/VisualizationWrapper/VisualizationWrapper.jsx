@@ -9,15 +9,7 @@ import VisualizationErrorBoundary from './VisualizationError';
 
 const Visualization = React.lazy(() => import('../Visualization'));
 
-function VisualizationWrapper({
-  vitData,
-  uuid,
-  uuidSuffix,
-  hasNotebook,
-  shouldDisplayHeader,
-  hasBeenMounted,
-  isPublicationPage,
-}) {
+function VisualizationWrapper({ vitData, uuid, hasNotebook, shouldDisplayHeader, hasBeenMounted, isPublicationPage }) {
   return (
     <VisualizationErrorBoundary
       uuid={uuid}
@@ -39,7 +31,6 @@ function VisualizationWrapper({
         <Visualization
           vitData={vitData}
           uuid={uuid}
-          uuidSuffix={uuidSuffix}
           hasNotebook={hasNotebook}
           shouldDisplayHeader={shouldDisplayHeader}
           shouldMountVitessce={hasBeenMounted}
