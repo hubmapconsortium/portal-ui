@@ -5,6 +5,7 @@ import { render, screen, waitForElementToBeRemoved, appProviderEndpoints } from 
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
+import { FlaskDataContext } from 'js/components/contexts';
 import DetailContext from 'js/components/detailPage/context';
 import Files from './Files';
 
@@ -64,9 +65,11 @@ test('handles DUA flow', async () => {
   ];
 
   render(
-    <DetailProvider>
-      <Files files={testFiles} uuid={uuid} hubmap_id="fakedoi" />
-    </DetailProvider>,
+    <FlaskDataContext.Provider value={{ entity: { entity_type: 'Dataset' } }}>
+      <DetailProvider>
+        <Files files={testFiles} uuid={uuid} hubmap_id="fakedoi" />
+      </DetailProvider>
+    </FlaskDataContext.Provider>,
   );
 
   userEvent.click(screen.getByRole('button', { name: 'fake5.txt' }));

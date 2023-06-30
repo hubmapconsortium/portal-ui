@@ -3,6 +3,7 @@ import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from 'test-utils/functions';
 
+import { FlaskDataContext } from 'js/components/contexts';
 import DetailContext from 'js/components/detailPage/context';
 import FileBrowser from './FileBrowser';
 import FilesContext from '../Files/context';
@@ -13,11 +14,13 @@ const uuid = 'fakeuuid';
 
 const FilesProviders = ({ children }) => {
   return (
-    <DetailContext.Provider value={{ uuid }}>
-      <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
-        {children}
-      </FilesContext.Provider>
-    </DetailContext.Provider>
+    <FlaskDataContext.Provider value={{ entity: { entity_type: 'Dataset' } }}>
+      <DetailContext.Provider value={{ uuid }}>
+        <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
+          {children}
+        </FilesContext.Provider>
+      </DetailContext.Provider>
+    </FlaskDataContext.Provider>
   );
 };
 
