@@ -15,7 +15,7 @@ function Workspaces() {
       <>
         <WorkspacesTitle />
         <StyledDescription>
-          The workspaces feature is only available if logged in and is part of the allowed Globus group.{' '}
+          The workspaces feature is only available if you are logged in and part of the allowed Globus group.{' '}
           <LightBlueLink href="/login">Log in</LightBlueLink> to view saved workspaces or to begin a new workspace.
         </StyledDescription>
       </>
