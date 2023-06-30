@@ -5,7 +5,7 @@ import { render, screen, waitForElementToBeRemoved, appProviderEndpoints } from 
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
-import { FlaskDataContext } from 'js/components/contexts';
+import { FlaskDataContext } from 'js/components/Contexts';
 import DetailContext from 'js/components/detailPage/context';
 import Files from './Files';
 
