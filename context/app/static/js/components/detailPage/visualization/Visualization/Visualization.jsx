@@ -1,5 +1,6 @@
 import Paper from '@material-ui/core/Paper';
 import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
+import Typography from '@material-ui/core/Typography';
 import Bowser from 'bowser';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -12,8 +13,10 @@ import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
+import SectionFooter from 'js/shared-styles/sections/SectionFooter';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
+import AboutThisDataCaption from 'js/components/detailPage/files/AboutThisDataCaption';
 import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import VisualizationShareButton from '../VisualizationShareButton';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
@@ -25,7 +28,6 @@ import {
   Flex,
   SelectionButton,
   StyledDetailPageSection,
-  StyledFooterText,
   StyledSectionHeader,
   VitessceInfoSnackbar,
   bodyExpandedCSS,
@@ -204,10 +206,13 @@ function Visualization({ vitData, uuid, uuidSuffix, hasNotebook, shouldDisplayHe
             )}
           </ExpandableDiv>
         </Paper>
-        <StyledFooterText variant="body2">
-          Powered by&nbsp;
-          <OutboundIconLink href="http://vitessce.io">Vitessce v{version}</OutboundIconLink>
-        </StyledFooterText>
+        <SectionFooter>
+          <Typography variant="caption">
+            Powered by&nbsp;
+            <OutboundIconLink href="http://vitessce.io">Vitessce v{version}</OutboundIconLink>
+          </Typography>
+          <AboutThisDataCaption />
+        </SectionFooter>
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
       </StyledDetailPageSection>
     )
