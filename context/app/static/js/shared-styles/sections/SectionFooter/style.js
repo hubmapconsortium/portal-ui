@@ -3,6 +3,13 @@ import styled, { css } from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 
+import Typography from '@material-ui/core/Typography';
+
+const StyledTypography = styled(Typography)`
+  display: flex;
+  align-items: center;
+`;
+
 const StyledDivider = styled(Divider)`
   ${({ theme: { spacing, palette } }) => css`
     margin: 0 ${spacing(1)}px;
@@ -22,4 +29,4 @@ const StyledPaper = styled(Paper)`
   border-radius: 0px 0px 4px 4px;
 `;
 
-export { StyledDivider, StyledPaper };
+export { StyledDivider, StyledPaper, StyledTypography };
