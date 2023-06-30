@@ -1,1 +1,1 @@
-- Adjust publication header to appear on one line only.
+- Adjusted publication header to appear on one line only.
