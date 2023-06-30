@@ -70,33 +70,24 @@ function ProvGraph({ provData, entity_type, uuid }) {
     setUUID(uuid);
   }, [setUUID, uuid]);
 
-  const getNameForActivity = useCallback(
-    function getNameForActivity(id, prov) {
-      const activity = prov.activity[id];
-      return `${activity['hubmap:creation_action']} - ${activity[idKey]}`;
-    },
-    [idKey],
-  );
+  function getNameForActivity(id, prov) {
+    const activity = prov.activity[id];
+    return `${activity['hubmap:creation_action']} - ${activity[idKey]}`;
+  }
 
-  const getNameForEntity = useCallback(
-    function getNameForEntity(id, prov) {
-      const entity = prov.entity[id];
-      // NOTE: The initial entity node was not included in the sample data;
-      // Fallback to ID, if needed. https://github.com/hubmapconsortium/prov-vis/issues/15
-      return entity ? `${entity[typeKey]} - ${entity[idKey]}` : id;
-    },
-    [idKey, typeKey],
-  );
+  function getNameForEntity(id, prov) {
+    const entity = prov.entity[id];
+    // NOTE: The initial entity node was not included in the sample data;
+    // Fallback to ID, if needed. https://github.com/hubmapconsortium/prov-vis/issues/15
+    return entity ? `${entity[typeKey]} - ${entity[idKey]}` : id;
+  }
 
-  const renderDetailPane = useCallback(
-    function renderDetailPane(node) {
-      if (node?.meta?.prov) {
-        return <DetailPanel node={node} timeKey={timeKey} uuid={uuid} idKey={idKey} typeKey={typeKey} />;
-      }
-      return null;
-    },
-    [idKey, timeKey, typeKey, uuid],
-  );
+  function renderDetailPane(node) {
+    if (node?.meta?.prov) {
+      return <DetailPanel node={node} timeKey={timeKey} uuid={uuid} idKey={idKey} typeKey={typeKey} />;
+    }
+    return null;
+  }
 
   return (
     <ProvVis
