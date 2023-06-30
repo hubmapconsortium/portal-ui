@@ -1,5 +1,4 @@
 import React from 'react';
-// eslint-disable-next-line import/no-unresolved
 import { render } from 'test-utils/functions';
 
 import ProvVis from '../ProvVis';

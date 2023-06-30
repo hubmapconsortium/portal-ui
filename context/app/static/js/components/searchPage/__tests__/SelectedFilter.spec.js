@@ -1,5 +1,5 @@
 import React from 'react';
-// eslint-disable-next-line import/no-unresolved
+// eslint-disable-next-line
 import { render, screen } from 'test-utils/functions';
 
 import SelectedFilter from '../SelectedFilter';

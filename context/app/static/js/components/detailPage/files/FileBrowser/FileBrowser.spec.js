@@ -1,6 +1,6 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { render, screen } from '@/../../test-utils/functions';
+import { render, screen } from 'test-utils/functions';
 
 import DetailContext from 'js/components/detailPage/context';
 import FileBrowser from './FileBrowser';
