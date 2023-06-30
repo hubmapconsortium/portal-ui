@@ -8,7 +8,7 @@ const tooltipText =
 
 function AboutThisDataCaption() {
   return (
-    <StyledTypography variant="caption" align="center">
+    <StyledTypography variant="caption">
       About this Data
       <SecondaryBackgroundTooltip title={tooltipText}>
         <StyledInfoIcon color="primary" />
