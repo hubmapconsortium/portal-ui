@@ -1,16 +1,15 @@
-import React, { Children } from 'react';
+import React, { Fragment } from 'react';
 
 import { StyledPaper, StyledDivider, StyledTypography } from './style';
 
-function SectionFooter({ children }) {
-  const arrayChildren = Children.toArray(children);
+function SectionFooter({ items }) {
   return (
     <StyledPaper>
-      {arrayChildren.map((child, index) => (
-        <>
+      {items.map(({ key, component }, index) => (
+        <Fragment key={key}>
           {index !== 0 && <StyledDivider orientation="vertical" flexItem />}
-          <StyledTypography variant="caption">{child}</StyledTypography>
-        </>
+          <StyledTypography variant="caption">{component}</StyledTypography>
+        </Fragment>
       ))}
     </StyledPaper>
   );
