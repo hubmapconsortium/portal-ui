@@ -41,27 +41,6 @@ function GlobusAccess() {
           </StyledAnchorTag>
         </Typography>
       </ExternalLink>
-      <ExternalLink>
-        <StyledLink variant="body1">
-          <OutboundIconLink href="/" target="_blank" rel="noopener noreferrer">
-            SRA Bioproject
-          </OutboundIconLink>
-          <SecondaryBackgroundTooltip title="The SRA Run Selector selects runs from one or more studies to download or analyze with the SRA Toolkit.">
-            <InfoIcon />
-          </SecondaryBackgroundTooltip>
-        </StyledLink>
-        <Typography variant="body2">
-          The Bioproject is used in the SRA Run Selector to allow you to download a manifest to bulk download datasets.
-          Here is{' '}
-          <StyledAnchorTag
-            href="https://www.ncbi.nlm.nih.gov/sra/docs/sradownload/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            additional documentation <OutboundIconLink />.
-          </StyledAnchorTag>
-        </Typography>
-      </ExternalLink>
     </Paper>
   );
 }
