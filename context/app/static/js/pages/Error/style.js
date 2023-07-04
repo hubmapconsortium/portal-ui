@@ -15,8 +15,11 @@ const Background = styled.div`
 const StyledPaper = styled(Paper)`
   width: 100%;
   max-width: 880px;
-  margin: 0px 16px;
-  padding: 16px;
+  ${({ theme: { spacing } }) => `
+    margin: 0 ${spacing(2)}px;
+    padding: ${spacing(2)}px;
+  `}
+  word-break: break-all;
 `;
 
 const StyledTypography = styled(Typography)`

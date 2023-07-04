@@ -8,7 +8,9 @@ import ProvAnalysisDetails from '../ProvAnalysisDetails';
 import { hasDataTypes } from './utils';
 
 function ProvTabs({ provData }) {
-  const { uuid, metadata, entity_type, ancestors, data_types } = useFlaskDataContext();
+  const {
+    entity: { uuid, metadata, entity_type, ancestors, data_types },
+  } = useFlaskDataContext();
 
   const [open, setOpen] = React.useState(0);
   const handleChange = (event, newValue) => {
