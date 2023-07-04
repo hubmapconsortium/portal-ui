@@ -139,6 +139,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(combinedMetadata).length),
     files: isAuthenticated && accessType === 'Protected',
+    bulkDataTransfer: true,
     collections: Boolean(collectionsData.length),
     contributors: contributors && Boolean(contributors.length),
   };
@@ -151,6 +152,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
       'protocols',
       'metadata',
       'files',
+      'bulkDataTransfer',
       'collections',
       'contributors',
       'attribution',
@@ -218,7 +220,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         {shouldDisplaySection.files && (
           <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         )}
-        <BulkDataTransfer accessType={mapped_data_access_level} />
+        {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer accessType={mapped_data_access_level} />}
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
         <Attribution
