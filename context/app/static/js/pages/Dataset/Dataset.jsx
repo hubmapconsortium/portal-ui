@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import { useAppContext } from 'js/components/Contexts';
+import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -54,7 +54,6 @@ function SummaryDataChildren({
   uuid,
 }) {
   const { isWorkspacesUser } = useAppContext();
-
   const createDatasetWorkspace = useDatasetWorkspace({ entity_type, uuid });
 
   return (
@@ -121,6 +120,10 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
   // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
+  const { isAuthenticated } = useAppContext();
+  const {
+    entity: { mapped_data_access_level: accessType },
+  } = useFlaskDataContext();
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;
 
@@ -212,7 +215,9 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
-        <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
+        {isAuthenticated && accessType === 'Protected' && (
+          <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
+        )}
         <BulkDataTransfer accessType={mapped_data_access_level} />
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}

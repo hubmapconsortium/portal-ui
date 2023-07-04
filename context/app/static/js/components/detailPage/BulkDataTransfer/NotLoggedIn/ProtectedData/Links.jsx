@@ -1,21 +1,24 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Paper from '@material-ui/core/Paper';
 
+import { useFlaskDataContext } from 'js/components/Contexts';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { InfoIcon } from 'js/shared-styles/icons';
 import { ExternalLink, StyledLink, StyledAnchorTag } from './style';
 
 function GlobusAccess() {
+  const {
+    entity: { dbgap_study_url, dbgap_sra_experiment_url },
+  } = useFlaskDataContext();
   return (
     <Paper>
       <ExternalLink>
         <StyledLink variant="body1">
-          <a href="/" target="_blank" rel="noopener noreferrer">
+          <OutboundIconLink href={dbgap_study_url} target="_blank" rel="noopener noreferrer">
             dbGaP Study
-          </a>
-          <OutboundIconLink />
+          </OutboundIconLink>
           <InfoIcon />
         </StyledLink>
         <Typography variant="body2">
@@ -24,10 +27,9 @@ function GlobusAccess() {
       </ExternalLink>
       <ExternalLink>
         <StyledLink variant="body1">
-          <a href="/" target="_blank" rel="noopener noreferrer">
+          <OutboundIconLink href={dbgap_sra_experiment_url} target="_blank" rel="noopener noreferrer">
             SRA Experiment
-          </a>
-          <OutboundIconLink />
+          </OutboundIconLink>
           <SecondaryBackgroundTooltip title="SRA data, available through multiple cloud providers and NCBI servers, is the largest publicly available repository of high throughput sequencing data.">
             <InfoIcon />
           </SecondaryBackgroundTooltip>
@@ -41,10 +43,9 @@ function GlobusAccess() {
       </ExternalLink>
       <ExternalLink>
         <StyledLink variant="body1">
-          <a href="/" target="_blank" rel="noopener noreferrer">
+          <OutboundIconLink href="/" target="_blank" rel="noopener noreferrer">
             SRA Bioproject
-          </a>
-          <OutboundIconLink />
+          </OutboundIconLink>
           <SecondaryBackgroundTooltip title="The SRA Run Selector selects runs from one or more studies to download or analyze with the SRA Toolkit.">
             <InfoIcon />
           </SecondaryBackgroundTooltip>
