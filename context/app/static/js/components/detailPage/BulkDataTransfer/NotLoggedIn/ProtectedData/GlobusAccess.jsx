@@ -12,7 +12,7 @@ function GlobusAccess() {
     <DetailSectionPaper>
       <Header variant="h5">
         HuBMAP Consortium Members: Globus Access
-        <BlockIcon color="error" />
+        <BlockIcon color="error" fontSize="small" />
         <InfoIcon fontSize="small" />
       </Header>
       <Typography variant="body2">
