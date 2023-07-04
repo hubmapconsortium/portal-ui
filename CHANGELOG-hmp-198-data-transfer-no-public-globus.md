@@ -1,0 +1,2 @@
+- Implemented conditional logic for each scenario of DbGap (whether user is authenticated and whether data is public or private).
+- Built out the UI for Protected Data when user is not logged in.
