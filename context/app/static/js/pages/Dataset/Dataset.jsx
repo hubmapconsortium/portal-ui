@@ -138,7 +138,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     visualization: Boolean(vitData),
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(combinedMetadata).length),
-    files: true,
+    files: isAuthenticated && accessType === 'Protected',
     collections: Boolean(collectionsData.length),
     contributors: contributors && Boolean(contributors.length),
   };
@@ -215,7 +215,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
-        {isAuthenticated && accessType === 'Protected' && (
+        {shouldDisplaySection.files && (
           <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         )}
         <BulkDataTransfer accessType={mapped_data_access_level} />
