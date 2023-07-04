@@ -20,7 +20,15 @@ function GlobusAccess() {
       <Typography variant="body2">
         This dataset contains protected-access human sequence data. If you are not a Consortium meber, you must access
         these data through dbGaP if available. dbGaP authentication is required for downloading through these links.
-        View <a href="/">documentation</a> on how to attain dbGaP access.
+        View{' '}
+        <a
+          href="https://sharing.nih.gov/accessing-data/accessing-genomic-data/how-to-request-and-access-datasets-from-dbgap#block-bootstrap5-subtheme-page-title"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          documentation
+        </a>{' '}
+        on how to attain dbGaP access.
       </Typography>
     </DetailSectionPaper>
   );

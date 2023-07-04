@@ -26,7 +26,13 @@ function GlobusAccess() {
         </EmailIconLink>{' '}
         with the dataset ID about the files you are trying to access.
       </Typography>
-      <LoginButton href="https://app.globus.org" target="_blank" variant="contained" color="primary">
+      <LoginButton
+        href="https://app.globus.org"
+        target="_blank"
+        rel="noopener noreferrer"
+        variant="contained"
+        color="primary"
+      >
         Member Login
       </LoginButton>
     </DetailSectionPaper>

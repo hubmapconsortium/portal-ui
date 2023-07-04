@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Paper from '@material-ui/core/Paper';
 
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { InfoIcon } from 'js/shared-styles/icons';
 import { ExternalLink, StyledLink, StyledAnchorTag } from './style';
 
@@ -11,7 +12,9 @@ function GlobusAccess() {
     <Paper>
       <ExternalLink>
         <StyledLink variant="body1">
-          <a href="/">dbGaP Study</a>
+          <a href="/" target="_blank" rel="noopener noreferrer">
+            dbGaP Study
+          </a>
           <OutboundIconLink />
           <InfoIcon />
         </StyledLink>
@@ -21,27 +24,39 @@ function GlobusAccess() {
       </ExternalLink>
       <ExternalLink>
         <StyledLink variant="body1">
-          <a href="/">SRA Experiment</a>
+          <a href="/" target="_blank" rel="noopener noreferrer">
+            SRA Experiment
+          </a>
           <OutboundIconLink />
-          <InfoIcon />
+          <SecondaryBackgroundTooltip title="SRA data, available through multiple cloud providers and NCBI servers, is the largest publicly available repository of high throughput sequencing data.">
+            <InfoIcon />
+          </SecondaryBackgroundTooltip>
         </StyledLink>
         <Typography variant="body2">
           Select the &quot;Run&quot; link on the page to download the dataset information.Here is{' '}
-          <StyledAnchorTag href="/">
+          <StyledAnchorTag href="https://www.ncbi.nlm.nih.gov/sra/docs/" target="_blank" rel="noopener noreferrer">
             additional documentation <OutboundIconLink />.
           </StyledAnchorTag>
         </Typography>
       </ExternalLink>
       <ExternalLink>
         <StyledLink variant="body1">
-          <a href="/">SRA Bioproject</a>
+          <a href="/" target="_blank" rel="noopener noreferrer">
+            SRA Bioproject
+          </a>
           <OutboundIconLink />
-          <InfoIcon />
+          <SecondaryBackgroundTooltip title="The SRA Run Selector selects runs from one or more studies to download or analyze with the SRA Toolkit.">
+            <InfoIcon />
+          </SecondaryBackgroundTooltip>
         </StyledLink>
         <Typography variant="body2">
           The Bioproject is used in the SRA Run Selector to allow you to download a manifest to bulk download datasets.
           Here is{' '}
-          <StyledAnchorTag href="/">
+          <StyledAnchorTag
+            href="https://www.ncbi.nlm.nih.gov/sra/docs/sradownload/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             additional documentation <OutboundIconLink />.
           </StyledAnchorTag>
         </Typography>
