@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { render, screen, appProviderEndpoints, appProviderToken } from 'test-utils/functions';
 // import userEvent from '@testing-library/user-event';
