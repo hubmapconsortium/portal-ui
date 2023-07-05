@@ -11,7 +11,7 @@ export const Basic = {
   args: {
     items: [
       { key: '1', component: <>Item 1</> },
-      { key: 2, component: <>Item 2</> },
+      { key: '2', component: <>Item 2</> },
     ],
   },
 };
