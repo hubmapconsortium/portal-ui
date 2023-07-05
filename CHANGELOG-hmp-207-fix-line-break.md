@@ -1,0 +1,1 @@
+- Adjusted publication header to appear on one line only.

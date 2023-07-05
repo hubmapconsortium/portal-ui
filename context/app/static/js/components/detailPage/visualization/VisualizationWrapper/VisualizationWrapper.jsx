@@ -5,6 +5,7 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { StyledSectionHeader } from '../Visualization/style';
 import { VisualizationBackground } from './style';
+import VisualizationErrorBoundary from './VisualizationError';
 
 const Visualization = React.lazy(() => import('../Visualization'));
 
@@ -18,27 +19,33 @@ function VisualizationWrapper({
   isPublicationPage,
 }) {
   return (
-    <Suspense
-      fallback={
-        <DetailPageSection id={isPublicationPage ? `visualization-${uuid}` : 'visualization'}>
-          <SpacedSectionButtonRow
-            leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
-          />
-          <VisualizationBackground>
-            <CircularProgress />
-          </VisualizationBackground>
-        </DetailPageSection>
-      }
+    <VisualizationErrorBoundary
+      uuid={uuid}
+      shouldDisplayHeader={shouldDisplayHeader}
+      isPublicationPage={isPublicationPage}
     >
-      <Visualization
-        vitData={vitData}
-        uuid={uuid}
-        uuidSuffix={uuidSuffix}
-        hasNotebook={hasNotebook}
-        shouldDisplayHeader={shouldDisplayHeader}
-        shouldMountVitessce={hasBeenMounted}
-      />
-    </Suspense>
+      <Suspense
+        fallback={
+          <DetailPageSection id={isPublicationPage ? `visualization-${uuid}` : 'visualization'}>
+            <SpacedSectionButtonRow
+              leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
+            />
+            <VisualizationBackground>
+              <CircularProgress />
+            </VisualizationBackground>
+          </DetailPageSection>
+        }
+      >
+        <Visualization
+          vitData={vitData}
+          uuid={uuid}
+          uuidSuffix={uuidSuffix}
+          hasNotebook={hasNotebook}
+          shouldDisplayHeader={shouldDisplayHeader}
+          shouldMountVitessce={hasBeenMounted}
+        />
+      </Suspense>
+    </VisualizationErrorBoundary>
   );
 }
 

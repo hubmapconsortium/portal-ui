@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
@@ -67,11 +66,6 @@ const ExpandableDiv = styled.div`
   }
 `;
 
-const StyledFooterText = styled(Typography)`
-  line-height: 1.5;
-  text-align: right;
-`;
-
 const StyledDetailPageSection = styled(DetailPageSection)`
   width: 100%;
   ${(props) =>
@@ -98,7 +92,6 @@ export {
   ErrorSnackbar,
   VitessceInfoSnackbar,
   ExpandableDiv,
-  StyledFooterText,
   SelectionButton,
   StyledDetailPageSection,
 };

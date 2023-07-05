@@ -7,7 +7,6 @@ import { Vitessce } from 'vitessce';
 
 import packageInfo from 'package';
 
-import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
@@ -17,6 +16,8 @@ import useVisualizationStore from 'js/stores/useVisualizationStore';
 import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import VisualizationShareButton from '../VisualizationShareButton';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
+import VisualizationFooter from '../VisualizationFooter';
+
 import { useVitessceConfig } from './hooks';
 import {
   ErrorSnackbar,
@@ -25,7 +26,6 @@ import {
   Flex,
   SelectionButton,
   StyledDetailPageSection,
-  StyledFooterText,
   StyledSectionHeader,
   VitessceInfoSnackbar,
   bodyExpandedCSS,
@@ -204,10 +204,7 @@ function Visualization({ vitData, uuid, uuidSuffix, hasNotebook, shouldDisplayHe
             )}
           </ExpandableDiv>
         </Paper>
-        <StyledFooterText variant="body2">
-          Powered by&nbsp;
-          <OutboundIconLink href="http://vitessce.io">Vitessce v{version}</OutboundIconLink>
-        </StyledFooterText>
+        <VisualizationFooter version={version} />
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
       </StyledDetailPageSection>
     )
