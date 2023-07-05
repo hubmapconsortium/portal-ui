@@ -23,7 +23,7 @@ describe('ProvData errors', () => {
   it('has expected error message', () => {
     let message;
     try {
-      new ProvData({}); // eslint-disable-line no-new
+      new ProvData({ prov: {} }); // eslint-disable-line no-new
     } catch (e) {
       message = e.message;
     }
@@ -32,7 +32,7 @@ describe('ProvData errors', () => {
 });
 
 describe('ProvData methods', () => {
-  const prov = new ProvData(fixtures.complex.prov);
+  const prov = new ProvData({ prov: fixtures.complex.prov });
 
   it('getParentEntityNames', () => {
     expect(prov.getParentEntityNames('hubmap:act-4')).toEqual(['hubmap:ent-1', 'hubmap:ent-3', 'hubmap:ent-4']);

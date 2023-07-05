@@ -27,7 +27,7 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity })
   useEffect(() => {
     if (immediateDescendantsProvData) {
       const immediateDescendantSteps = immediateDescendantsProvData
-        .map((result) => new ProvData(result, null, getNameForActivity, getNameForEntity).toCwl())
+        .map((result) => new ProvData({ prov: result, getNameForActivity, getNameForEntity }).toCwl())
         .flat();
       setNewSteps(getUniqueNewSteps(steps, immediateDescendantSteps));
     }

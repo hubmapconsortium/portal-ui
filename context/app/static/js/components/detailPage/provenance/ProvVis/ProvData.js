@@ -54,7 +54,7 @@ export function makeCwlOutput(name, steps, extras, isReference) {
 }
 
 export default class ProvData {
-  constructor(prov, entity_type, getNameForActivity = (id) => id, getNameForEntity = (id) => id) {
+  constructor({ prov, entity_type, getNameForActivity = (id) => id, getNameForEntity = (id) => id }) {
     this.getNameForActivity = getNameForActivity;
     this.getNameForEntity = getNameForEntity;
     this.entity_type = entity_type;
