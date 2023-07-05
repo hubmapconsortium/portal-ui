@@ -7,7 +7,9 @@ export default {
   component: PanelComponent,
 };
 
-export const Panel = (args) => <PanelComponent {...args} />;
+export function Panel(args) {
+  return <PanelComponent {...args} />;
+}
 Panel.args = {
   title: 'Title',
   secondaryText: 'Secondary Text',

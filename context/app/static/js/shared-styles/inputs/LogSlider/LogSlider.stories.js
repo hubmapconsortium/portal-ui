@@ -8,10 +8,10 @@ export default {
   component: LogSliderComponent,
 };
 
-export const LogSlider = (args) => {
+export function LogSlider(args) {
   const [logValue, setLogValue] = useState(1);
   return <LogSliderComponent value={logValue} onChange={(e, val) => setLogValue(val)} {...args} />;
-};
+}
 LogSlider.args = {
   ...Slider.args,
   minLog: -1,

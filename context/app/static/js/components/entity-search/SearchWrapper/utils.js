@@ -42,7 +42,7 @@ function buildFieldConfig({
   type,
   facetGroup = 'Additional Facets',
   configureGroup = 'General',
-  entityType: pageEntityType,
+  entityType: _pageEntityType,
   ...rest
 }) {
   const elasticsearchFieldName = appendKeywordToFieldName({ fieldName, type });

@@ -9,7 +9,9 @@ export default {
   subcomponents: { Panel },
 };
 
-export const PanelList = (args) => <PanelListComponent {...args} />;
+export function PanelList(args) {
+  return <PanelListComponent {...args} />;
+}
 PanelList.args = {
   panelsProps: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, i) => ({
     title: `Title ${i}`,

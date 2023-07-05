@@ -63,6 +63,12 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
       setOpenStepIndex(1);
     }
   };
+  const {
+    palette: {
+      info: { dark: arrowColor },
+    },
+    zIndex: { tutorial: zIndex },
+  } = themeContext;
 
   return (
     <>
@@ -84,8 +90,8 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
         tooltipComponent={TutorialTooltip}
         styles={{
           options: {
-            arrowColor: themeContext.palette.info.dark,
-            zIndex: themeContext.zIndex.tutorial,
+            arrowColor,
+            zIndex,
             overlayColor: 'rgba(0, 0, 0, 0)',
           },
         }}

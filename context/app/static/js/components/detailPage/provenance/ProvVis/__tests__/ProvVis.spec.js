@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
+import { render } from 'test-utils/functions';
 
 import ProvVis from '../ProvVis';
 
@@ -15,14 +15,9 @@ describe('ProvVis', () => {
     document.body.appendChild(node);
   });
 
-  afterEach(() => {
-    unmountComponentAtNode(node);
-  });
-
   it('renders React component', () => {
     render(<ProvVis provData={simple.prov} />, node, () => {
-      // TODO: Just getting empty div.
-      // expect(node.innerHTML).toContain('svg')
+      expect(node.innerHTML).toContain('svg');
     });
   });
 });

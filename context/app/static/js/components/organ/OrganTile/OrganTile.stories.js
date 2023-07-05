@@ -7,7 +7,9 @@ export default {
   component: OrganTileComponent,
 };
 
-export const OrganTile = (args) => <OrganTileComponent {...args} />;
+export function OrganTile(args) {
+  return <OrganTileComponent {...args} />;
+}
 OrganTile.args = {
   organ: {
     name: 'Spleen',

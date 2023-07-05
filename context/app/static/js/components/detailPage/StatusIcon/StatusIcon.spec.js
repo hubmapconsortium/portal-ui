@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
 import StatusIcon from './StatusIcon';

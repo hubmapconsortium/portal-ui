@@ -73,5 +73,6 @@ SearchViewSwitch.propTypes = {
 DevSearchViewSwitch.propTypes = {
   toggleItem: PropTypes.func.isRequired,
 };
+export default SearchViewSwitch;
 
-export { SearchViewSwitch as default, DevSearchViewSwitch };
+export { DevSearchViewSwitch };

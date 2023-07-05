@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 
@@ -33,7 +32,7 @@ test('does not display when isOpen prop is false', () => {
     />,
   );
 
-  expect(screen.queryByRole('dialog')).toBeNull();
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 });
 
 test('displays correct text for protected access level', () => {

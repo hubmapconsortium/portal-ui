@@ -11,6 +11,53 @@ import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 
 const provenanceStoreSelector = (state) => state.setUUID;
 
+function DetailPanel({ node, timeKey, uuid, typeKey, idKey, getNameForActivity, getNameForEntity }) {
+  const { prov } = node.meta;
+
+  const typeEl =
+    typeKey in prov ? (
+      <SectionItem label="Type">{prov[typeKey]}</SectionItem>
+    ) : (
+      <SectionItem label="Type">{prov['prov:type']}</SectionItem>
+    );
+  const entityTypes = ['Donor', 'Sample', 'Dataset', 'Support'];
+  const idEl =
+    typeKey in prov && entityTypes.includes(prov[typeKey]) ? (
+      <SectionItem label="ID" ml>
+        <LightBlueLink href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}>
+          {prov[idKey]}
+        </LightBlueLink>
+      </SectionItem>
+    ) : null;
+  const createdEl =
+    timeKey in prov ? (
+      <SectionItem label="Created" ml>
+        {prov[timeKey]}
+      </SectionItem>
+    ) : null;
+  const actionsEl =
+    typeKey in prov && entityTypes.includes(prov[typeKey]) ? (
+      <SectionItem ml>
+        <ShowDerivedEntitiesButton
+          id={prov[idKey]}
+          getNameForActivity={getNameForActivity}
+          getNameForEntity={getNameForEntity}
+        />
+      </SectionItem>
+    ) : null;
+  return (
+    <StyledPaper>
+      <Flex>
+        {typeEl}
+        {idEl}
+        {createdEl}
+        {actionsEl}
+      </Flex>
+      {uuid === node.meta.prov['hubmap:uuid'] && <StyledTypography>* Indicates Current Entity Node</StyledTypography>}
+    </StyledPaper>
+  );
+}
+
 function ProvGraph({ provData, entity_type, uuid }) {
   const isOld = 'ex' in provData.prefix;
   const idKey = isOld ? 'hubmap:displayDOI' : 'hubmap:hubmap_id';
@@ -36,55 +83,10 @@ function ProvGraph({ provData, entity_type, uuid }) {
   }
 
   function renderDetailPane(node) {
-    function DetailPanel() {
-      const { prov } = node.meta;
-
-      const typeEl =
-        typeKey in prov ? (
-          <SectionItem label="Type">{prov[typeKey]}</SectionItem>
-        ) : (
-          <SectionItem label="Type">{prov['prov:type']}</SectionItem>
-        );
-      const entityTypes = ['Donor', 'Sample', 'Dataset', 'Support'];
-      const idEl =
-        typeKey in prov && entityTypes.includes(prov[typeKey]) ? (
-          <SectionItem label="ID" ml>
-            <LightBlueLink href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}>
-              {prov[idKey]}
-            </LightBlueLink>
-          </SectionItem>
-        ) : null;
-      const createdEl =
-        timeKey in prov ? (
-          <SectionItem label="Created" ml>
-            {prov[timeKey]}
-          </SectionItem>
-        ) : null;
-      const actionsEl =
-        typeKey in prov && entityTypes.includes(prov[typeKey]) ? (
-          <SectionItem ml>
-            <ShowDerivedEntitiesButton
-              id={prov[idKey]}
-              getNameForActivity={getNameForActivity}
-              getNameForEntity={getNameForEntity}
-            />
-          </SectionItem>
-        ) : null;
-      return (
-        <StyledPaper>
-          <Flex>
-            {typeEl}
-            {idEl}
-            {createdEl}
-            {actionsEl}
-          </Flex>
-          {uuid === node.meta.prov['hubmap:uuid'] && (
-            <StyledTypography>* Indicates Current Entity Node</StyledTypography>
-          )}
-        </StyledPaper>
-      );
+    if (node?.meta?.prov) {
+      return <DetailPanel node={node} timeKey={timeKey} uuid={uuid} idKey={idKey} typeKey={typeKey} />;
     }
-    return node?.meta?.prov && <DetailPanel />;
+    return null;
   }
 
   return (

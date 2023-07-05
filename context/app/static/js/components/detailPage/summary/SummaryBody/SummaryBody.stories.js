@@ -16,7 +16,9 @@ const sharedArgs = {
 const description =
   'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.';
 
-const Template = (args) => <SummaryBody {...args} />;
+function Template(args) {
+  return <SummaryBody {...args} />;
+}
 export const Default = Template.bind({});
 Default.args = sharedArgs;
 

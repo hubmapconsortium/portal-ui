@@ -13,7 +13,9 @@ export default {
   },
 };
 
-export const OutlinedAlert = (args) => <Alert {...args} />;
+export function OutlinedAlert(args) {
+  return <Alert {...args} />;
+}
 OutlinedAlert.args = {
   severity: 'warning',
   children: 'Alert, intruders!',

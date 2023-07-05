@@ -1,12 +1,11 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
 import Summary from './Summary';
 
 test('displays correctly with required props', () => {
-  const { getByText } = render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
+  render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
   const textToTest = ['fakedoi', 'Fakeentity'];
-  textToTest.forEach((text) => expect(getByText(text)).toBeInTheDocument());
+  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 });
 
 test('timestamps display when defined', () => {
@@ -23,7 +22,7 @@ test('timestamps display when defined', () => {
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 
   expect(screen.getAllByText('2020-08-06')).toHaveLength(2);
-  expect(screen.queryAllByText('Undefined')).toHaveLength(0);
+  expect(screen.queryByText('Undefined')).not.toBeInTheDocument();
 });
 
 test('publication prefered to creation, if available', () => {
@@ -41,7 +40,7 @@ test('publication prefered to creation, if available', () => {
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 
   expect(screen.getAllByText('2020-08-06')).toHaveLength(2);
-  expect(screen.queryAllByText('Undefined')).toHaveLength(0);
+  expect(screen.queryByText('Undefined')).not.toBeInTheDocument();
 });
 
 test('timestamps do not display when undefined', () => {
@@ -62,7 +61,7 @@ test('collection name displays when defined', () => {
 test('collection name does not display when undefined', () => {
   render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
 
-  expect(screen.queryByText('Fake Collection Name')).toBeNull();
+  expect(screen.queryByText('Fake Collection Name')).not.toBeInTheDocument();
 });
 
 test('description displays when defined', () => {
@@ -74,5 +73,5 @@ test('description displays when defined', () => {
 test('description name does not display when undefined', () => {
   render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
 
-  expect(screen.queryByText('fake description')).toBeNull();
+  expect(screen.queryByText('fake description')).not.toBeInTheDocument();
 });

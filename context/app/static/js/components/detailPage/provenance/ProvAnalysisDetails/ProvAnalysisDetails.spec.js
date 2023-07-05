@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
 
@@ -23,6 +22,6 @@ test('should not display pipelines when pipelines do not exist', () => {
   const dagListData = [];
   render(<ProvAnalysisDetails dagListData={dagListData} />);
 
-  expect(screen.queryByText('Ingest Pipelines')).toBeNull();
-  expect(screen.queryByText('CWL Pipelines')).toBeNull();
+  expect(screen.queryByText('Ingest Pipelines')).not.toBeInTheDocument();
+  expect(screen.queryByText('CWL Pipelines')).not.toBeInTheDocument();
 });
