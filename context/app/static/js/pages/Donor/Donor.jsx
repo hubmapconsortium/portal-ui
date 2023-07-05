@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -56,8 +56,10 @@ function DonorDetail() {
 
   useSendUUIDEvent(entity_type, uuid);
 
+  const detailContext = useMemo(() => ({ hubmap_id, uuid }), [hubmap_id, uuid]);
+
   return (
-    <DetailContext.Provider value={{ hubmap_id, uuid }}>
+    <DetailContext.Provider value={detailContext}>
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           uuid={uuid}

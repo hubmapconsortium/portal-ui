@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { RefinementListFilter, RangeFilter, CheckboxFilter, HierarchicalMenuFilter } from 'searchkit';
 import { render, screen, fireEvent } from 'test-utils/functions';
@@ -32,7 +31,9 @@ test.each([
   ['AccordionCheckboxFilter'],
   ['AccordionHierarchicalMenuFilter'],
 ])('%s should render', (filterName) => {
-  render(<AccordionFilter type={filterName} />);
+  expect(() => {
+    render(<AccordionFilter type={filterName} />);
+  }).not.toThrow();
 });
 
 test('withAnalyticsEvent passes onClick with ga event and original onClick', () => {

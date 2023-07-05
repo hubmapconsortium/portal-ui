@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from 'test-utils/functions';
@@ -12,20 +11,23 @@ const fakeOpenDUA = jest.fn();
 
 const uuid = 'fakeuuid';
 
-const FilesProviders = ({ children }) => {
+const detailContext = { uuid };
+const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' };
+const flaskDataContext = { entity: { entity_type: 'Dataset' } };
+
+function FilesProviders({ children }) {
   return (
-    <FlaskDataContext.Provider value={{ entity: { entity_type: 'Dataset' } }}>
-      <DetailContext.Provider value={{ uuid }}>
-        <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
-          {children}
-        </FilesContext.Provider>
+    <FlaskDataContext.Provider value={flaskDataContext}>
+      <DetailContext.Provider value={detailContext}>
+        <FilesContext.Provider value={filesContext}>{children}</FilesContext.Provider>
       </DetailContext.Provider>
     </FlaskDataContext.Provider>
   );
-};
+}
 
 const expectArrayOfStringsToExist = (arr) => arr.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-const expectArrayOfStringsToNotExist = (arr) => arr.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+const expectArrayOfStringsToNotExist = (arr) =>
+  arr.forEach((text) => expect(screen.queryByText(text)).not.toBeInTheDocument());
 
 test('displays files and directories', () => {
   const sharedEntries = {

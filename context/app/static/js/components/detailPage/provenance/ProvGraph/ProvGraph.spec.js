@@ -3,7 +3,7 @@ import { fireEvent, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
-// eslint-disable-next-line import/no-unresolved
+// eslint-disable-next-line
 import { render, screen, appProviderEndpoints } from 'test-utils/functions';
 import sampleProv, { sampleDescendantsProv } from './fixtures/sample_prov';
 import donorProv from './fixtures/donor_prov';
@@ -74,7 +74,7 @@ test('should display the correct initial nodes for a sample', () => {
   render(<ProvGraph provData={sampleProv} />);
 
   nodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-  notIncludedNodesText.forEach((text) => expect(screen.queryByText(text)).toBeNull());
+  notIncludedNodesText.forEach((text) => expect(screen.queryByText(text)).not.toBeInTheDocument());
 });
 
 test('should display selected node information in detail pane and show immediate descendants when "Show Derived Entities" button is clicked', async () => {

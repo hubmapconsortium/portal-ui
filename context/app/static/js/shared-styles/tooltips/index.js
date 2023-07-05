@@ -17,10 +17,10 @@ const useRoundedSecondaryBackgroundTooltipStyles = makeStyles((theme) => ({
   },
 }));
 
-const SecondaryBackgroundTooltip = (props) => {
+function SecondaryBackgroundTooltip(props) {
   const secondaryClasses = useRoundedSecondaryBackgroundTooltipStyles();
 
   return <TooltipBase {...props} classes={secondaryClasses} />;
-};
+}
 
 export { SecondaryBackgroundTooltip };

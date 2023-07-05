@@ -13,10 +13,10 @@ export default {
   },
 };
 
-export const Slider = (args) => {
+export function Slider(args) {
   const [height, setHeight] = useState(1);
   return <SliderComponent value={height} onChange={(e, val) => setHeight(val)} {...args} />;
-};
+}
 Slider.args = {
   label: 'Height inches',
   helperText: 'Set height in inches',

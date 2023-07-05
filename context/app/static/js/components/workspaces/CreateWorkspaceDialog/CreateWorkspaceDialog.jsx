@@ -19,12 +19,10 @@ function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonC
         handleClose={handleClose}
         maxWidth="md"
         content={
-          <>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <CreateWorkspaceInput control={control} name="name" errors={errors} />
-              <input type="submit" id="create-workspace-input" hidden />
-            </form>
-          </>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <CreateWorkspaceInput control={control} name="name" errors={errors} />
+            <input type="submit" id="create-workspace-input" hidden />
+          </form>
         }
         actions={
           <>

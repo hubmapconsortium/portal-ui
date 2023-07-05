@@ -1,8 +1,7 @@
 import Paper from '@material-ui/core/Paper';
 import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
 import Bowser from 'bowser';
-import debounce from 'lodash/debounce';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Vitessce } from 'vitessce';
 
 import packageInfo from 'package';
@@ -68,6 +67,7 @@ function Visualization({ vitData, uuid, uuidSuffix, hasNotebook, shouldDisplayHe
     vizEscSnackbarIsOpen,
     setVizEscSnackbarIsOpen,
     setVitessceState,
+    setVitessceStateDebounced,
     onCopyUrlWarning,
     onCopyUrlSnackbarOpen,
     setOnCopyUrlSnackbarOpen,
@@ -92,8 +92,6 @@ function Visualization({ vitData, uuid, uuidSuffix, hasNotebook, shouldDisplayHe
     setVitessceErrors,
   });
 
-  // The application is very slow without debouncing since state can be quite large.
-  const handleVitessceConfigDebounced = useCallback(debounce(setVitessceState, 250, { trailing: true }), []);
   function removeError(message) {
     setVitessceErrors((prev) => prev.filter((d) => d !== message));
   }
@@ -196,7 +194,7 @@ function Visualization({ vitData, uuid, uuidSuffix, hasNotebook, shouldDisplayHe
               <Vitessce
                 config={vitessceConfig[vitessceSelection] || vitessceConfig}
                 theme={vizTheme}
-                onConfigChange={handleVitessceConfigDebounced}
+                onConfigChange={setVitessceStateDebounced}
                 height={vizIsFullscreen ? null : vitessceFixedHeight}
                 onWarn={addError}
                 uid={vitessceUid}

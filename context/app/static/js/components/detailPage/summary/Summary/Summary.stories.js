@@ -26,7 +26,9 @@ const donorSharedArgs = {
   entity_type: 'Donor',
 };
 
-const ChildlessTemplate = (args) => <Summary {...args} />;
+function ChildlessTemplate(args) {
+  return <Summary {...args} />;
+}
 export const DonorDefault = ChildlessTemplate.bind({});
 DonorDefault.args = {
   ...donorSharedArgs,
@@ -43,14 +45,16 @@ const sampleSharedArgs = {
   entity_type: 'Sample',
 };
 
-const SampleTemplate = (args) => (
-  <Summary {...args}>
-    <SummaryItem>Fake Organ Type</SummaryItem>
-    <Typography variant="h6" component="p">
-      Fake Sample Category
-    </Typography>
-  </Summary>
-);
+function SampleTemplate(args) {
+  return (
+    <Summary {...args}>
+      <SummaryItem>Fake Organ Type</SummaryItem>
+      <Typography variant="h6" component="p">
+        Fake Sample Category
+      </Typography>
+    </Summary>
+  );
+}
 
 export const SampleDefault = SampleTemplate.bind({});
 SampleDefault.args = {
@@ -63,14 +67,16 @@ SampleWithDescription.args = {
   description: lorem,
 };
 
-const DatasetTemplate = (args) => (
-  <Summary {...args}>
-    <SummaryItem>Fake Data Type</SummaryItem>
-    <Typography variant="h6" component="p">
-      Fake Organ Type
-    </Typography>
-  </Summary>
-);
+function DatasetTemplate(args) {
+  return (
+    <Summary {...args}>
+      <SummaryItem>Fake Data Type</SummaryItem>
+      <Typography variant="h6" component="p">
+        Fake Organ Type
+      </Typography>
+    </Summary>
+  );
+}
 
 export const DatasetDefault = DatasetTemplate.bind({});
 DatasetDefault.args = {

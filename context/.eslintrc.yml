@@ -60,6 +60,10 @@ overrides:
       - plugin:jest/recommended
       - plugin:jest-dom/recommended
       - plugin:testing-library/react
+    settings:
+      'import/resolver':
+        jest:
+          jestConfigFile: ./jest.config.js
     env:
       jest: true
       jest/globals: true

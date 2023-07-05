@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen, waitForElementToBeRemoved, appProviderEndpoints } from 'test-utils/functions';
@@ -11,6 +10,8 @@ import Files from './Files';
 
 const uuid = 'fakeuuid';
 const mapped_data_access_level = 'fakeaccess';
+
+const detailContext = { uuid, mapped_data_access_level };
 
 const globusUrlResponse = {
   url: 'fakeglobusurl',
@@ -26,9 +27,9 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-const DetailProvider = ({ children }) => {
-  return <DetailContext.Provider value={{ uuid, mapped_data_access_level }}>{children}</DetailContext.Provider>;
-};
+function DetailProvider({ children }) {
+  return <DetailContext.Provider value={detailContext}>{children}</DetailContext.Provider>;
+}
 
 test('handles DUA flow', async () => {
   const open = jest.fn();
@@ -93,5 +94,5 @@ test('does not display file browser when files prop is undefined', async () => {
     </DetailProvider>,
   );
 
-  expect(screen.queryByTestId('file-browser')).toBeNull();
+  expect(screen.queryByTestId('file-browser')).not.toBeInTheDocument();
 });

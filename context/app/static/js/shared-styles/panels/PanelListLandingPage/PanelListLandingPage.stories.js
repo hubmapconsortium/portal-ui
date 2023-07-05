@@ -14,11 +14,13 @@ export default {
 const lorem =
   'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.';
 
-export const PanelListLandingPage = (args) => (
-  <PanelListLandingPageComponent {...args}>
-    <PanelListStory {...PanelListStory.args} />
-  </PanelListLandingPageComponent>
-);
+export function PanelListLandingPage(args) {
+  return (
+    <PanelListLandingPageComponent {...args}>
+      <PanelListStory {...PanelListStory.args} />
+    </PanelListLandingPageComponent>
+  );
+}
 
 PanelListLandingPage.args = {
   title: 'Landing Page Title',

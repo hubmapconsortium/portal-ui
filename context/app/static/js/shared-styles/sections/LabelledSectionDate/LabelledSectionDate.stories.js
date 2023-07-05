@@ -14,7 +14,9 @@ const sharedArgs = {
   timestamp: Date.now(),
 };
 
-const Template = (args) => <LabelledSectionDate {...args} />;
+function Template(args) {
+  return <LabelledSectionDate {...args} />;
+}
 export const Default = Template.bind({});
 Default.args = sharedArgs;
 

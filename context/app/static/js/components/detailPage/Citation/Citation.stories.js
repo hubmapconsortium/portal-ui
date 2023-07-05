@@ -7,7 +7,9 @@ export default {
   component: CitationComponent,
 };
 
-export const Citation = (args) => <CitationComponent {...args} />;
+export function Citation(args) {
+  return <CitationComponent {...args} />;
+}
 Citation.args = {
   contributors: [
     { last_name: 'Aanders', first_name: 'Aanne' },

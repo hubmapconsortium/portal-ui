@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
@@ -23,15 +23,25 @@ function Providers({
   isWorkspacesUser,
   flaskData,
 }) {
-  // injectFirst ensures styled-components takes priority over mui for styling
+  const appContext = useMemo(
+    () => ({
+      groupsToken,
+      workspacesToken,
+      isWorkspacesUser,
+      isAuthenticated,
+      userEmail,
+      ...endpoints,
+    }),
+    [groupsToken, workspacesToken, isWorkspacesUser, isAuthenticated, userEmail, endpoints],
+  );
+
   return (
+    // injectFirst ensures styled-components takes priority over mui for styling
     <StylesProvider generateClassName={generateClassName} injectFirst>
       <GlobalFonts />
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
-          <AppContext.Provider
-            value={{ groupsToken, workspacesToken, isWorkspacesUser, isAuthenticated, userEmail, ...endpoints }}
-          >
+          <AppContext.Provider value={appContext}>
             <FlaskDataContext.Provider value={flaskData}>
               <CssBaseline />
               <GlobalStyles />

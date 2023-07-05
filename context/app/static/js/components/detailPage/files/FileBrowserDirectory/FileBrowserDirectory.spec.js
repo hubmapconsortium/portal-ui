@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 
@@ -23,7 +22,7 @@ test('handles click', () => {
     </FileBrowserDirectory>,
   );
 
-  expect(screen.queryByText('directory child')).toBeNull();
+  expect(screen.queryByText('directory child')).not.toBeInTheDocument();
   userEvent.click(screen.getByRole('button'));
   expect(screen.getByText('directory child')).toBeInTheDocument();
 });
@@ -35,7 +34,7 @@ test('handles key down', () => {
     </FileBrowserDirectory>,
   );
 
-  expect(screen.queryByText('directory child')).toBeNull();
+  expect(screen.queryByText('directory child')).not.toBeInTheDocument();
   fireEvent.keyDown(screen.getByRole('button'), { key: 'Enter', code: 'Enter', keyCode: 13 });
   expect(screen.getByText('directory child')).toBeInTheDocument();
 });

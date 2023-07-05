@@ -80,11 +80,7 @@ function Search({ title }) {
       <SearchHeader component="h1" variant="h2">
         <b>[Preview]</b> {title}
       </SearchHeader>
-      {type === 'dataset' && (
-        <>
-          <SearchDatasetTutorial />
-        </>
-      )}
+      {type === 'dataset' && <SearchDatasetTutorial />}
       {notesToDisplay.map((note) => (
         <LookupEntity
           uuid={searchParams.get(note.urlSearchParam)}
