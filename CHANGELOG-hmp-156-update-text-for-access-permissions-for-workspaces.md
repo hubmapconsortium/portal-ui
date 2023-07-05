@@ -1,0 +1,1 @@
+- Update workspaces landing page messaging to instruct users without membership in the workspaces Globus group to request access.
