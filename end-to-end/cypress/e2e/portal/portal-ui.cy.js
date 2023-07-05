@@ -28,9 +28,11 @@ describe('portal-ui', () => {
 
       // Static pages are tested separately.
 
+      cy.findByTestId('user-profile-dropdown').contains('User Profile').click();
+
       // login
-      cy.contains('login');
       // Don't click! We shouldn't depend on Globus in tests.
+      cy.findByTestId('login-link').contains('Log In')
 
       // TODO: groups_token is now required for search results, so we can pass it
       // back to the client to make the Elasticsearch request. I don't want to go

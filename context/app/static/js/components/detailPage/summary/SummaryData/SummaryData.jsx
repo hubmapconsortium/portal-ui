@@ -24,17 +24,19 @@ function SummaryData({
   children,
   mapped_external_group_name,
 }) {
+  const isPublication = entity_type === 'Publication';
+  const LeftTextContainer = isPublication ? React.Fragment : 'div';
   return (
     <>
       <SummaryTitle data-testid="entity-type">{entity_type}</SummaryTitle>
       <SpacedSectionButtonRow
         leftText={
-          <div>
+          <LeftTextContainer>
             <StyledTypography variant="h2" data-testid="entity-title">
               {title}
             </StyledTypography>
             {children && <FlexEnd data-testid="summary-data-parent">{children}</FlexEnd>}
-          </div>
+          </LeftTextContainer>
         }
         buttons={
           <FlexEnd>

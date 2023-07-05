@@ -1,3 +1,24 @@
+## v0.73.1 - 2023-06-28
+
+- Adjust page-wide error boundary to prevent error messages from overflowing
+- Add error boundary around Vitessce visualization to keep Vitessce errors from crashing full page
+- Update Cypress testing suite.
+- Add end-to-end tests for publication pages.
+- Upgrade from Webpack 4 -> 5
+- Upgrade from Storybook 6 -> 7
+- Migrate from babel-loader -> swc-loader
+- Migrate to @swc/jest test runner
+- Removed search feature from home page.
+- Added vertical padding to the count section.
+- Formatted 10k+ homepage entity counts to nearest thousands place. (10,500 -> 10.5k)
+- Added tooltip hover feature on count entities.  
+ - Ensure that lineup pages' data all have necessary keys and report any incomplete metadata in console
+- Trim publication sub header characters to 100 max with trailing ellisis.
+- Bump `portal-visualization` to 0.0.12.
+- Remove publications and other dataset subtypes from dataset charts.
+- Remove globus link for lifted publication ancillary entities on publication pages.
+
+
 ## v0.73.0 - 2023-06-20
 
 - Fix donor metadata table display.
