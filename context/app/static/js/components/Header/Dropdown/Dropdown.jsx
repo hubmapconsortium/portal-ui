@@ -9,13 +9,13 @@ import MenuList from '@material-ui/core/MenuList';
 
 import { OffsetPopper } from './style';
 
-function Dropdown({ title, children, menuListId }) {
+function Dropdown({ title, children, menuListId, ...rest }) {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
 
   return (
     <>
-      <Button ref={anchorRef} onClick={toggle} style={{ color: 'white' }}>
+      <Button ref={anchorRef} onClick={toggle} style={{ color: 'white' }} {...rest}>
         {title}
         {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </Button>
