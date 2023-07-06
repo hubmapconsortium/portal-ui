@@ -13,7 +13,7 @@ function DbGaP() {
       <Header variant="h5">
         Non-Consortium Members: Database of Genotypes and Phenotypes (dbGaP)
         <CheckCircleIcon style={{ color: '#6c8938' }} fontSize="small" />
-        <SecondaryBackgroundTooltip title="The database of Genotypes and Phenotypes archive and distribute data and results from studies that have investigated the interaction of genotype and phenotype in humans">
+        <SecondaryBackgroundTooltip title="The database of Genotypes and Phenotypes archive and distribute data and results from studies that have investigated the interaction of genotype and phenotype in humans.">
           <InfoIcon fontSize="small" />
         </SecondaryBackgroundTooltip>
       </Header>
