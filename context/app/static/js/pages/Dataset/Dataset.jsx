@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
+import { useAppContext } from 'js/components/Contexts';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -119,11 +119,6 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
-  const { isAuthenticated } = useAppContext();
-  const {
-    entity: { mapped_data_access_level: accessType },
-  } = useFlaskDataContext();
-
   // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;
@@ -139,7 +134,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     visualization: Boolean(vitData),
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(combinedMetadata).length),
-    files: !isAuthenticated && accessType === 'Public',
+    files: Boolean(files?.length),
     // files rendering logic will be worked on at the end after all 6 scenarios are done,
     // for not logged in, protected data scenario: files should not be displayed, isAuthenticated is false and accessType is Protected,
     // for not logged in, public data scenario: files should be displayed, isAuthenticated is false and accessType is Public,
