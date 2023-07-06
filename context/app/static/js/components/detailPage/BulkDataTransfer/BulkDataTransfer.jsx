@@ -10,7 +10,7 @@ function BulkDataTransfer() {
   return (
     <DetailPageSection id="bulk-data-transfer">
       <SectionHeader>Bulk Data Transfer</SectionHeader>
-      {isAuthenticated === true ? <LoggedIn /> : <NotLoggedIn />}
+      {isAuthenticated ? <LoggedIn /> : <NotLoggedIn />}
     </DetailPageSection>
   );
 }
