@@ -13,7 +13,10 @@ function countPublicationAggs(aggsBuckets) {
       return acc;
     },
     {
-      statuses: { true: { category: 'Peer Reviewed', count: 0 }, false: { category: 'Preprint', count: 0 } },
+      statuses: {
+        true: { category: 'Peer Reviewed', id: 'peer-reviewed', count: 0 },
+        false: { category: 'Preprint', id: 'preprint', count: 0 },
+      },
       publicationsCount: 0,
     },
   );

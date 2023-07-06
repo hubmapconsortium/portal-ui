@@ -44,10 +44,10 @@ function Publications() {
         onChange={handleChange}
         aria-label="Published and preprint publications"
       >
-        {sortedPublicationStatusEntries.map(([, { category, count }], i) => {
+        {sortedPublicationStatusEntries.map(([, { category, id, count }], i) => {
           return (
             <Tab
-              data-testid={`publication-tab-${category.toLowerCase()}`}
+              data-testid={`publication-tab-${id.toLowerCase()}`}
               label={`${category} (${count})`}
               index={i}
               key={category}
