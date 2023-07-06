@@ -1,0 +1,2 @@
+- Upgraded to React 18.
+- Upgraded various dependencies to work with React 18.
