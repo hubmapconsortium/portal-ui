@@ -13,7 +13,7 @@ function GlobusAccess() {
     entity: { dbgap_study_url, dbgap_sra_experiment_url },
   } = useFlaskDataContext();
 
-  const LinksContentArray = [
+  const linksContentArray = [
     {
       title: 'dbGaP Study',
       url: dbgap_study_url,
@@ -33,7 +33,7 @@ function GlobusAccess() {
 
   return (
     <Paper>
-      {LinksContentArray.map((link) => (
+      {linksContentArray.map((link) => (
         <LinkContainer>
           <StyledLink variant="body1">
             {link.url ? (
