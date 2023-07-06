@@ -204,28 +204,11 @@ describe("Publication page", () => {
       cy.findAllByTestId("contributor-row").should("have.length", 6);
     });
 
-    it('has a "Provenance" section with toggleable "table" and "graph" tabs', () => {
+    it('has a "Provenance" section with a "graph" tab', () => {
       cy.get("#provenance")
         .should("exist")
         .and("contain", "Provenance")
-        .and("contain", "Table")
         .and("contain", "Graph");
-      cy.findByTestId("prov-table-tab").should(
-        "have.attr",
-        "aria-selected",
-        "true"
-      );
-      cy.findByTestId("prov-graph-tab").should(
-        "have.attr",
-        "aria-selected",
-        "false"
-      );
-      cy.findByTestId("prov-graph-tab").click();
-      cy.findByTestId("prov-table-tab").should(
-        "have.attr",
-        "aria-selected",
-        "false"
-      );
       cy.findByTestId("prov-graph-tab").should(
         "have.attr",
         "aria-selected",
