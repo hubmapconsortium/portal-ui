@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { render, screen, appProviderEndpoints } from 'test-utils/functions';
 import { rest } from 'msw';

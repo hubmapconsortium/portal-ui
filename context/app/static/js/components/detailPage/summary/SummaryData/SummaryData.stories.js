@@ -26,7 +26,9 @@ const sharedArgs = {
   mapped_data_access_level: 'Public',
 };
 
-const Template = (args) => <SummaryData {...args} />;
+function Template(args) {
+  return <SummaryData {...args} />;
+}
 export const Default = Template.bind({});
 Default.args = {
   ...sharedArgs,
@@ -39,13 +41,15 @@ Dataset.args = {
   entity_type: 'Dataset',
 };
 
-export const WithChildren = (args) => (
-  <SummaryData {...args}>
-    {getArrayRange(8).map((n) => (
-      <SummaryItem>Child {n}</SummaryItem>
-    ))}{' '}
-  </SummaryData>
-);
+export function WithChildren(args) {
+  return (
+    <SummaryData {...args}>
+      {getArrayRange(8).map((n) => (
+        <SummaryItem>Child {n}</SummaryItem>
+      ))}{' '}
+    </SummaryData>
+  );
+}
 WithChildren.args = {
   ...sharedArgs,
   entity_type: 'Dataset',

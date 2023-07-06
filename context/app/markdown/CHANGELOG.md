@@ -1,3 +1,16 @@
+## v0.74.0 - 2023-07-06
+
+- Add messaging for fair data principles to homepage, vitessce, and the dataset file browser.
+- Fixed homepage Vitessce demonstration link.
+- Fix flask data context destructuring to restore provenance features.
+- Update workspaces landing page messaging to instruct users without membership in the workspaces Globus group to request access.
+- Adjusted publication header to appear on one line only.
+- Fixed changelog file format.
+- Update project ESLint configuration and dependencies.
+- Remove Babel.
+- Introduce TypeScript.
+
+
 ## v0.73.1 - 2023-06-28
 
 - Adjust page-wide error boundary to prevent error messages from overflowing

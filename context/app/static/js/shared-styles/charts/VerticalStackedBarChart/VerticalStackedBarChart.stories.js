@@ -9,11 +9,13 @@ export default {
   excludeStories: ['colorScale'],
 };
 
-const Template = (args) => (
-  <div style={{ height: 500, width: 500 }}>
-    <VerticalStackedBarChart {...args} />
-  </div>
-);
+function Template(args) {
+  return (
+    <div style={{ height: 500, width: 500 }}>
+      <VerticalStackedBarChart {...args} />
+    </div>
+  );
+}
 const yScale = scaleLinear({
   domain: [0, 13],
   nice: true,

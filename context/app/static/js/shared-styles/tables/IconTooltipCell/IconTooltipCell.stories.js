@@ -12,18 +12,20 @@ export default {
   title: 'Tables/IconTooltipCell',
   component: IconTooltipCell,
 };
-const Template = (args) => (
-  <Table>
-    <TableHead>
-      <TableRow>
-        <TableCell>Col A</TableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      <IconTooltipCell {...args}>Hello</IconTooltipCell>
-    </TableBody>
-  </Table>
-);
+function Template(args) {
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Col A</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <IconTooltipCell {...args}>Hello</IconTooltipCell>
+      </TableBody>
+    </Table>
+  );
+}
 export const Default = Template.bind({});
 Default.args = { tooltipTitle: 'More info' };
 

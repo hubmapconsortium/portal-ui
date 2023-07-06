@@ -22,7 +22,9 @@ export default {
   },
 };
 
-const Template = (args) => <SectionButtonRow {...args} />;
+function Template(args) {
+  return <SectionButtonRow {...args} />;
+}
 
 export const Default = Template.bind({});
 Default.args = {

@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved */
-
 import { tableDataToRows, getDescription } from './MetadataTable';
 
 test('should handle plain fields', () => {

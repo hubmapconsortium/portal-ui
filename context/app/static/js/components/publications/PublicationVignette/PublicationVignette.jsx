@@ -62,7 +62,9 @@ function useVitessceConfs(assetsEndpoint, groupsToken, uuid, vignette, vignetteD
         abortController.abort();
       };
     }
-    return () => {};
+    return () => {
+      // Do nothing if the vitessce confs have already been fetched
+    };
   }, [assetsEndpoint, groupsToken, uuid, vignette.figures, vignetteDirName, vitessceConfs]);
 
   return vitessceConfs;

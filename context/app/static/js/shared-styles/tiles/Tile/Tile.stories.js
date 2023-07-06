@@ -11,7 +11,9 @@ export default {
 
 const Icon = <StyledIcon component={DatasetIcon} />;
 
-const Template = (args) => <Tile {...args} />;
+function Template(args) {
+  return <Tile {...args} />;
+}
 export const Default = Template.bind({});
 Default.args = {
   href: '',

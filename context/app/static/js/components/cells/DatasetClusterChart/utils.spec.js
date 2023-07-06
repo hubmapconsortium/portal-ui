@@ -9,7 +9,7 @@ test.each([
   expect(removeUUIDFromOption(option, 'UUID')).toEqual(expected);
 });
 
-test('should ', () => {
+test('should', () => {
   expect(getOptionLabels(['123-UUID-xyz', 'abc-456-UUID'], 'UUID')).toStrictEqual({
     '123-UUID-xyz': '123-xyz',
     'abc-456-UUID': 'abc-456',

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
 import { render, screen } from 'test-utils/functions';

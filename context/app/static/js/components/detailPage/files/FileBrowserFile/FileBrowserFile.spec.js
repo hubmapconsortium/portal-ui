@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { render, screen, appProviderEndpoints, appProviderToken } from 'test-utils/functions';
 // import userEvent from '@testing-library/user-event';
@@ -11,15 +10,16 @@ const fakeOpenDUA = jest.fn();
 
 const uuid = 'fakeuuid';
 
-const FilesProviders = ({ children }) => {
+const detailContext = { uuid };
+const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' };
+
+function FilesProviders({ children }) {
   return (
-    <DetailContext.Provider value={{ uuid }}>
-      <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
-        {children}
-      </FilesContext.Provider>
+    <DetailContext.Provider value={detailContext}>
+      <FilesContext.Provider value={filesContext}>{children}</FilesContext.Provider>
     </DetailContext.Provider>
   );
-};
+}
 
 test('displays a link with correct href when dua is agreed to', () => {
   const fileObj = {
@@ -104,7 +104,7 @@ test('does not display QA chip when is_qa_qc is not provided', () => {
     </FilesProviders>,
   );
 
-  expect(screen.queryByText('QA')).toBeNull();
+  expect(screen.queryByText('QA')).not.toBeInTheDocument();
 });
 
 test('does not display QA chip when is_qa_qc is false', () => {
@@ -125,5 +125,5 @@ test('does not display QA chip when is_qa_qc is false', () => {
     </FilesProviders>,
   );
 
-  expect(screen.queryByText('QA')).toBeNull();
+  expect(screen.queryByText('QA')).not.toBeInTheDocument();
 });

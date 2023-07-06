@@ -1,13 +1,11 @@
 import Paper from '@material-ui/core/Paper';
 import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
 import Bowser from 'bowser';
-import debounce from 'lodash/debounce';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Vitessce } from 'vitessce';
 
 import packageInfo from 'package';
 
-import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
@@ -17,6 +15,8 @@ import useVisualizationStore from 'js/stores/useVisualizationStore';
 import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import VisualizationShareButton from '../VisualizationShareButton';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
+import VisualizationFooter from '../VisualizationFooter';
+
 import { useVitessceConfig } from './hooks';
 import {
   ErrorSnackbar,
@@ -25,7 +25,6 @@ import {
   Flex,
   SelectionButton,
   StyledDetailPageSection,
-  StyledFooterText,
   StyledSectionHeader,
   VitessceInfoSnackbar,
   bodyExpandedCSS,
@@ -68,6 +67,7 @@ function Visualization({ vitData, uuid, uuidSuffix, hasNotebook, shouldDisplayHe
     vizEscSnackbarIsOpen,
     setVizEscSnackbarIsOpen,
     setVitessceState,
+    setVitessceStateDebounced,
     onCopyUrlWarning,
     onCopyUrlSnackbarOpen,
     setOnCopyUrlSnackbarOpen,
@@ -92,8 +92,6 @@ function Visualization({ vitData, uuid, uuidSuffix, hasNotebook, shouldDisplayHe
     setVitessceErrors,
   });
 
-  // The application is very slow without debouncing since state can be quite large.
-  const handleVitessceConfigDebounced = useCallback(debounce(setVitessceState, 250, { trailing: true }), []);
   function removeError(message) {
     setVitessceErrors((prev) => prev.filter((d) => d !== message));
   }
@@ -196,7 +194,7 @@ function Visualization({ vitData, uuid, uuidSuffix, hasNotebook, shouldDisplayHe
               <Vitessce
                 config={vitessceConfig[vitessceSelection] || vitessceConfig}
                 theme={vizTheme}
-                onConfigChange={handleVitessceConfigDebounced}
+                onConfigChange={setVitessceStateDebounced}
                 height={vizIsFullscreen ? null : vitessceFixedHeight}
                 onWarn={addError}
                 uid={vitessceUid}
@@ -204,10 +202,7 @@ function Visualization({ vitData, uuid, uuidSuffix, hasNotebook, shouldDisplayHe
             )}
           </ExpandableDiv>
         </Paper>
-        <StyledFooterText variant="body2">
-          Powered by&nbsp;
-          <OutboundIconLink href="http://vitessce.io">Vitessce v{version}</OutboundIconLink>
-        </StyledFooterText>
+        <VisualizationFooter version={version} />
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
       </StyledDetailPageSection>
     )

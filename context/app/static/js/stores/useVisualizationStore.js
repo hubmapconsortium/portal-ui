@@ -1,3 +1,4 @@
+import { debounce } from 'lodash';
 import create from 'zustand';
 
 const useVisualizationStore = create((set) => ({
@@ -23,6 +24,8 @@ const useVisualizationStore = create((set) => ({
   },
   vitessceState: null,
   setVitessceState: (val) => set({ vitessceState: val }),
+  // TODO: change this debounce to use react 18 suspense transitions instead?
+  setVitessceStateDebounced: debounce((val) => set({ vitessceState: val }), 250, { trailing: true }),
   onCopyUrlWarning: '',
   setOnCopyUrlWarning: (val) => set({ onCopyUrlWarning: val }),
   onCopyUrlSnackbarOpen: false,

@@ -40,6 +40,10 @@ const theme = createTheme({
       light: '#89a05f',
       dark: '#4b5f27',
     },
+    caption: {
+      background: '#EEEEFF',
+      link: '#3781D1',
+    },
     white: {
       main: '#fff',
       hover: 'brightness(96%)',

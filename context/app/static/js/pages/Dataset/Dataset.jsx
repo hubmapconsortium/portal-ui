@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { useAppContext } from 'js/components/Contexts';
@@ -74,14 +74,12 @@ function SummaryDataChildren({
         </OutboundIconLink>
       )}
       {isWorkspacesUser && (
-        <>
-          <CreateWorkspaceDialog
-            handleCreateWorkspace={createDatasetWorkspace}
-            buttonComponent={NotebookButton}
-            disabled={!hasNotebook}
-            defaultName={`${hubmap_id} Workspace`}
-          />
-        </>
+        <CreateWorkspaceDialog
+          handleCreateWorkspace={createDatasetWorkspace}
+          buttonComponent={NotebookButton}
+          disabled={!hasNotebook}
+          defaultName={`${hubmap_id} Workspace`}
+        />
       )}
     </>
   );
@@ -164,9 +162,14 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ });
   }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, setAssayMetadata]);
 
+  const detailContextValue = useMemo(
+    () => ({ hubmap_id, uuid, mapped_data_access_level }),
+    [hubmap_id, mapped_data_access_level, uuid],
+  );
+
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
   return (
-    <DetailContext.Provider value={{ hubmap_id, uuid, mapped_data_access_level }}>
+    <DetailContext.Provider value={detailContextValue}>
       {!isLatest && (
         <DetailPageAlert severity="warning" $marginBottom="16">
           <span>

@@ -112,9 +112,10 @@ venv.bak/
 
 # vscode
 .vscode/*
-!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
 !.vscode/extensions.json
-!.vscode/portal-ui.code-snippets
+!.vscode/default.settings.json
 
 # public
 context/app/static/public

@@ -11,32 +11,36 @@ export default {
   component: EntitiesTableComponent,
 };
 
-const HeaderCells = () => (
-  <>
-    <HeaderCell>name</HeaderCell>
-    <HeaderCell>color</HeaderCell>
-    <HeaderCell>stripes</HeaderCell>
-  </>
-);
+function HeaderCells() {
+  return (
+    <>
+      <HeaderCell>name</HeaderCell>
+      <HeaderCell>color</HeaderCell>
+      <HeaderCell>stripes</HeaderCell>
+    </>
+  );
+}
 
-const TableRows = () => (
-  <>
-    <TableRow key="bert">
-      <TableCell>Bert</TableCell>
-      <TableCell>yellow</TableCell>
-      <TableCell>vertical</TableCell>
-    </TableRow>
-    <TableRow key="bert">
-      <TableCell>Ernie</TableCell>
-      <TableCell>orange</TableCell>
-      <TableCell>horizontal</TableCell>
-    </TableRow>
-  </>
-);
+function TableRows() {
+  return (
+    <>
+      <TableRow key="bert">
+        <TableCell>Bert</TableCell>
+        <TableCell>yellow</TableCell>
+        <TableCell>vertical</TableCell>
+      </TableRow>
+      <TableRow key="bert">
+        <TableCell>Ernie</TableCell>
+        <TableCell>orange</TableCell>
+        <TableCell>horizontal</TableCell>
+      </TableRow>
+    </>
+  );
+}
 
-export const EntitiesTable = (args) => {
+export function EntitiesTable(args) {
   return <EntitiesTableComponent {...args} />;
-};
+}
 
 EntitiesTable.args = {
   headerCells: <HeaderCells />,

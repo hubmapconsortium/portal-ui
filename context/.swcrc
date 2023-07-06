@@ -1,8 +1,8 @@
 {
     "jsc": {
         "parser": {
-            "syntax": "ecmascript",
-            "jsx": true,
+            "syntax": "typescript",
+            "tsx": true,
             "numericSeparator": false,
             "classPrivateProperty": false,
             "privateMethod": false,
@@ -11,6 +11,7 @@
             "decorators": false,
             "decoratorsBeforeExport": false
         },
+        "externalHelpers": true,
         "target": "es2019",
         "loose": false,
         "experimental": {

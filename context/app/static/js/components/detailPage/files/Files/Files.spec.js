@@ -1,15 +1,17 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen, waitForElementToBeRemoved, appProviderEndpoints } from 'test-utils/functions';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
+import { FlaskDataContext } from 'js/components/Contexts';
 import DetailContext from 'js/components/detailPage/context';
 import Files from './Files';
 
 const uuid = 'fakeuuid';
 const mapped_data_access_level = 'fakeaccess';
+
+const detailContext = { uuid, mapped_data_access_level };
 
 const globusUrlResponse = {
   url: 'fakeglobusurl',
@@ -25,9 +27,9 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-const DetailProvider = ({ children }) => {
-  return <DetailContext.Provider value={{ uuid, mapped_data_access_level }}>{children}</DetailContext.Provider>;
-};
+function DetailProvider({ children }) {
+  return <DetailContext.Provider value={detailContext}>{children}</DetailContext.Provider>;
+}
 
 test('handles DUA flow', async () => {
   const open = jest.fn();
@@ -64,9 +66,11 @@ test('handles DUA flow', async () => {
   ];
 
   render(
-    <DetailProvider>
-      <Files files={testFiles} uuid={uuid} hubmap_id="fakedoi" />
-    </DetailProvider>,
+    <FlaskDataContext.Provider value={{ entity: { entity_type: 'Dataset' } }}>
+      <DetailProvider>
+        <Files files={testFiles} uuid={uuid} hubmap_id="fakedoi" />
+      </DetailProvider>
+    </FlaskDataContext.Provider>,
   );
 
   userEvent.click(screen.getByRole('button', { name: 'fake5.txt' }));
@@ -90,5 +94,5 @@ test('does not display file browser when files prop is undefined', async () => {
     </DetailProvider>,
   );
 
-  expect(screen.queryByTestId('file-browser')).toBeNull();
+  expect(screen.queryByTestId('file-browser')).not.toBeInTheDocument();
 });
