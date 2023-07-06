@@ -19,7 +19,6 @@ function GlobusAccess() {
           <OutboundIconLink href={dbgap_study_url} target="_blank" rel="noopener noreferrer">
             dbGaP Study
           </OutboundIconLink>
-          <InfoIcon />
         </StyledLink>
         <Typography variant="body2">
           Navigate to the &quot;Bioproject&quot; or &quot;Sequencing Read Archive&quot; links to access the datasets.
