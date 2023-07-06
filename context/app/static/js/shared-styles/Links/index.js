@@ -1,3 +1,3 @@
 import { StyledOpenInNewRoundedIcon, LightBlueLink } from './style';
 
-export default { StyledOpenInNewRoundedIcon, LightBlueLink };
+export { StyledOpenInNewRoundedIcon, LightBlueLink };
