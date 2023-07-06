@@ -1,7 +1,3 @@
-import React from 'react';
-
-function LoggedIn() {
-  return <div>Private</div>;
-}
+import LoggedIn from './LoggedIn';
 
 export default LoggedIn;
