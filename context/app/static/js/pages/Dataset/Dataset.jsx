@@ -123,7 +123,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
   const {
     entity: { mapped_data_access_level: accessType },
   } = useFlaskDataContext();
-  
+
   // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;

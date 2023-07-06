@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import BlockIcon from '@material-ui/icons/Block';
 import InfoIcon from '@material-ui/icons/Info';
 
+import { LightBlueLink } from 'js/shared-styles/Links';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
@@ -19,25 +20,13 @@ function GlobusAccess() {
         </SecondaryBackgroundTooltip>
       </Header>
       <Typography variant="body2">
-        Please{' '}
-        <a href="https://app.globus.org" target="_blank" rel="noopener noreferrer">
-          log in
-        </a>{' '}
-        for Globus access or email{' '}
+        Please <LightBlueLink href="/login">log in</LightBlueLink> for Globus access or email{' '}
         <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
           help@hubmapconsortium.org
         </EmailIconLink>{' '}
         with the dataset ID about the files you are trying to access.
       </Typography>
-      <LoginButton
-        href="https://app.globus.org"
-        target="_blank"
-        rel="noopener noreferrer"
-        variant="contained"
-        color="primary"
-      >
-        Member Login
-      </LoginButton>
+      <LoginButton href="/login">Member Login</LoginButton>
     </DetailSectionPaper>
   );
 }
