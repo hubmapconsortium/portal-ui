@@ -23,8 +23,8 @@ env:
 plugins:
   - react
   - '@typescript-eslint'
-  - prettier
   - import
+  - prettier
 settings:
   react:
     version: detect
