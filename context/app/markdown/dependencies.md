@@ -38,7 +38,6 @@ lxml>=4.9.1
 
 ```
 {
-"@babel/runtime": "^7.10.4",
 "@datapunt/matomo-tracker-js": "^0.5.1",
 "@elastic/datemath": "^5.0.3",
 "@elastic/eui": "^57.0.0",
@@ -63,6 +62,7 @@ lxml>=4.9.1
 "@visx/tooltip": "^1.7.2",
 "ajv": "^6.12.3",
 "bowser": "^2.11.0",
+"buffer": "^6.0.3",
 "chart.js": "^3.5.0",
 "d3": "^5.16.0",
 "d3-array": "^3.0.2",
