@@ -6,7 +6,7 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { InfoIcon } from 'js/shared-styles/icons';
-import { LinkContainer, StyledLink, LinkTitle } from './style';
+import { LinkContainer, StyledLink } from './style';
 
 function GlobusAccess() {
   const {
@@ -31,16 +31,14 @@ function GlobusAccess() {
     },
   ];
 
+  const filteredLinksContentArray = linksContentArray.filter((link) => link.url);
+
   return (
     <Paper>
-      {linksContentArray.map((link) => (
+      {filteredLinksContentArray.map((link) => (
         <LinkContainer>
           <StyledLink variant="body1">
-            {link.url ? (
-              <OutboundIconLink href={link.url}>{link.title}</OutboundIconLink>
-            ) : (
-              <LinkTitle variant="body1">{link.title}</LinkTitle>
-            )}
+            <OutboundIconLink href={link.url}>{link.title}</OutboundIconLink>
             {link.toolTip && (
               <SecondaryBackgroundTooltip title={link.toolTip}>
                 <InfoIcon />

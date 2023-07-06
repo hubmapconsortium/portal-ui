@@ -49,21 +49,8 @@ const StyledLink = styled(Typography)`
   }
 `;
 
-const LinkTitle = styled(Typography)`
-  margin-right: ${(props) => props.theme.spacing(0.5)}px;
-`;
-
 const GreenCheckCircleIcon = styled(CheckCircleIcon)`
   color: ${(props) => props.theme.palette.success.main};
 `;
 
-export {
-  StyledContainer,
-  Header,
-  ContentText,
-  LoginButton,
-  LinkContainer,
-  StyledLink,
-  LinkTitle,
-  GreenCheckCircleIcon,
-};
+export { StyledContainer, Header, ContentText, LoginButton, LinkContainer, StyledLink, GreenCheckCircleIcon };
