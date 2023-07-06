@@ -6,7 +6,7 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { InfoIcon } from 'js/shared-styles/icons';
-import { ExternalLink, StyledLink, StyledAnchorTag } from './style';
+import { ExternalLink, StyledLink } from './style';
 
 function GlobusAccess() {
   const {
@@ -36,9 +36,9 @@ function GlobusAccess() {
         </StyledLink>
         <Typography variant="body2">
           Select the &quot;Run&quot; link on the page to download the dataset information. Here is{' '}
-          <StyledAnchorTag href="https://www.ncbi.nlm.nih.gov/sra/docs/" target="_blank" rel="noopener noreferrer">
-            additional documentation. <OutboundIconLink />
-          </StyledAnchorTag>
+          <OutboundIconLink href="https://www.ncbi.nlm.nih.gov/sra/docs/" target="_blank" rel="noopener noreferrer">
+            additional documentation.
+          </OutboundIconLink>
         </Typography>
       </ExternalLink>
     </Paper>

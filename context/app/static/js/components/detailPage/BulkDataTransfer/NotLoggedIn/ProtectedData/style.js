@@ -40,9 +40,4 @@ const StyledLink = styled(Typography)`
   }
 `;
 
-const StyledAnchorTag = styled.a`
-  display: flex;
-  align-items: center;
-`;
-
-export { StyledContainer, Header, LoginButton, ExternalLink, StyledLink, StyledAnchorTag };
+export { StyledContainer, Header, LoginButton, ExternalLink, StyledLink };
