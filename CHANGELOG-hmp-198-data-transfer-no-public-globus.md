@@ -1,2 +1,2 @@
-- Implemented conditional logic for each scenario of DbGap (whether user is authenticated and whether data is public or private).
+- Added links to access dataset information in dbGaP.
 - Built out the UI for Protected Data when user is not logged in.
