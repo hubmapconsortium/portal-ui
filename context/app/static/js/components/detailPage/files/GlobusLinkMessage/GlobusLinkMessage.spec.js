@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
 
@@ -9,15 +8,16 @@ import FilesContext from '../Files/context';
 const fakeOpenDUA = jest.fn();
 const uuid = 'fakeuuid';
 
-const FilesProviders = ({ children }) => {
+const detailContext = { uuid };
+const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' };
+
+function FilesProviders({ children }) {
   return (
-    <DetailContext.Provider value={{ uuid }}>
-      <FilesContext.Provider value={{ openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' }}>
-        {children}
-      </FilesContext.Provider>
+    <DetailContext.Provider value={detailContext}>
+      <FilesContext.Provider value={filesContext}>{children}</FilesContext.Provider>
     </DetailContext.Provider>
   );
-};
+}
 
 const url = 'fakeurl';
 const hubmap_id = 'fake_doi';

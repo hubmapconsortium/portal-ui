@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import { render, screen, waitFor } from 'test-utils/functions';

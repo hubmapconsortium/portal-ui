@@ -45,11 +45,13 @@ function ExampleTable() {
   );
 }
 
-export const SelectableTableProvider = (args) => (
-  <SelectableTableProviderComponent {...args}>
-    <ExampleTable />
-  </SelectableTableProviderComponent>
-);
+export function SelectableTableProvider(args) {
+  return (
+    <SelectableTableProviderComponent {...args}>
+      <ExampleTable />
+    </SelectableTableProviderComponent>
+  );
+}
 
 export const tableLabel = 'selectableTableExample';
 SelectableTableProvider.args = {

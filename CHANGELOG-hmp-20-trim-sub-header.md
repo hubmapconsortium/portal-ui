@@ -1,1 +1,0 @@
-- Trim publication sub header characters to 100 max with trailing ellisis.

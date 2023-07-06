@@ -7,6 +7,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import Chip from '@material-ui/core/Chip';
 
+import HubmapDataFooter from 'js/components/detailPage/files/HubmapDataFooter';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import useFilesStore from 'js/stores/useFilesStore';
 import { relativeFilePathsToTree } from './utils';
 import FileBrowserNode from '../FileBrowserNode';
@@ -19,6 +21,9 @@ const filesStoreSelector = (state) => ({
 
 function FileBrowser({ files }) {
   const { displayOnlyQaQc, toggleDisplayOnlyQaQc } = useFilesStore(filesStoreSelector);
+  const {
+    entity: { entity_type },
+  } = useFlaskDataContext();
 
   const fileTrees = useMemo(
     () => ({
@@ -29,31 +34,34 @@ function FileBrowser({ files }) {
   );
 
   return (
-    <StyledTableContainer component={Paper}>
-      <ChipWrapper>
-        <Chip
-          label="Show QA Files Only"
-          clickable
-          onClick={toggleDisplayOnlyQaQc}
-          color={displayOnlyQaQc ? 'primary' : undefined}
-          icon={displayOnlyQaQc ? <DoneIcon /> : undefined}
-          component="button"
-          disabled={Object.keys(fileTrees.qa).length === 0}
-        />
-      </ChipWrapper>
-      <Table data-testid="file-browser">
-        <HiddenTableHead>
-          <TableRow>
-            <td>Name</td>
-            <td>Type</td>
-            <td>Size</td>
-          </TableRow>
-        </HiddenTableHead>
-        <TableBody>
-          <FileBrowserNode fileSubTree={displayOnlyQaQc ? fileTrees.qa : fileTrees.all} depth={0} />
-        </TableBody>
-      </Table>
-    </StyledTableContainer>
+    <>
+      <StyledTableContainer component={Paper}>
+        <ChipWrapper>
+          <Chip
+            label="Show QA Files Only"
+            clickable
+            onClick={toggleDisplayOnlyQaQc}
+            color={displayOnlyQaQc ? 'primary' : undefined}
+            icon={displayOnlyQaQc ? <DoneIcon /> : undefined}
+            component="button"
+            disabled={Object.keys(fileTrees.qa).length === 0}
+          />
+        </ChipWrapper>
+        <Table data-testid="file-browser">
+          <HiddenTableHead>
+            <TableRow>
+              <td>Name</td>
+              <td>Type</td>
+              <td>Size</td>
+            </TableRow>
+          </HiddenTableHead>
+          <TableBody>
+            <FileBrowserNode fileSubTree={displayOnlyQaQc ? fileTrees.qa : fileTrees.all} depth={0} />
+          </TableBody>
+        </Table>
+      </StyledTableContainer>
+      {['Dataset', 'Support'].includes(entity_type) && <HubmapDataFooter />}
+    </>
   );
 }
 

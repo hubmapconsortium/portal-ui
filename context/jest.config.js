@@ -19,10 +19,20 @@ module.exports = {
       {
         jsc: {
           parser: {
-            syntax: 'ecmascript',
-            jsx: true,
+            syntax: 'typescript',
+            tsx: true,
             decorators: false,
-            dynamicImport: false,
+          },
+          experimental: {
+            plugins: [
+              [
+                '@swc/plugin-styled-components',
+                {
+                  displayName: true,
+                  ssr: false,
+                },
+              ],
+            ],
           },
         },
       },

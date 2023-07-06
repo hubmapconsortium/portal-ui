@@ -7,7 +7,9 @@ export default {
   component: ExpandCollapseIconButton,
 };
 
-const Template = (args) => <ExpandCollapseIconButton {...args} />;
+function Template(args) {
+  return <ExpandCollapseIconButton {...args} />;
+}
 export const Expanded = Template.bind({});
 Expanded.args = { isExpanded: true };
 

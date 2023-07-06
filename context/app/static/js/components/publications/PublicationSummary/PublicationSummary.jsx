@@ -43,7 +43,7 @@ function PublicationSummary({
       >
         <SummaryItem showDivider={hasDOI}>{hubmap_id}</SummaryItem>
         {hasDOI && (
-          <SummaryItem showDivider={hasDOI}>
+          <SummaryItem showDivider={false}>
             <OutboundIconLink href={doiURL}>{doiURL}</OutboundIconLink>
           </SummaryItem>
         )}

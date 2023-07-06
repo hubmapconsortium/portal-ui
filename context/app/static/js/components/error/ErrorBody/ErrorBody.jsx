@@ -6,8 +6,12 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 
-const LoginLink = () => <LightBlueLink href="/login">login</LightBlueLink>;
-const HelpEmailLink = () => <EmailIconLink email="help@hubmapconsortium.org">help@hubmapconsortium.org</EmailIconLink>;
+function LoginLink() {
+  return <LightBlueLink href="/login">login</LightBlueLink>;
+}
+function HelpEmailLink() {
+  return <EmailIconLink email="help@hubmapconsortium.org">help@hubmapconsortium.org</EmailIconLink>;
+}
 
 function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMaintenancePage }) {
   if (isMaintenancePage) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { BarStack } from '@visx/shape';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
@@ -9,6 +9,20 @@ import { useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks
 import { trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts//VerticalChartGridRowsGroup';
+
+function TickComponentWithHandlers({ handleMouseEnter, handleMouseLeave }) {
+  // use a callback to avoid creating a new component on every render
+  return useCallback(
+    ({ formattedValue, ...tickProps }) => {
+      return (
+        <Text onMouseEnter={handleMouseEnter({ key: formattedValue })} onMouseLeave={handleMouseLeave} {...tickProps}>
+          {trimStringWithMiddleEllipsis(formattedValue)}
+        </Text>
+      );
+    },
+    [handleMouseEnter, handleMouseLeave],
+  );
+}
 
 function VerticalStackedBarChart({
   parentWidth,
@@ -111,15 +125,7 @@ function VerticalStackedBarChart({
                 textAnchor: 'end',
                 angle: -90,
               })}
-              tickComponent={({ formattedValue, ...tickProps }) => (
-                <Text
-                  onMouseEnter={handleMouseEnter({ key: formattedValue })}
-                  onMouseLeave={handleMouseLeave}
-                  {...tickProps}
-                >
-                  {trimStringWithMiddleEllipsis(formattedValue)}
-                </Text>
-              )}
+              tickComponent={TickComponentWithHandlers({ handleMouseEnter, handleMouseLeave })}
               labelProps={{
                 fontSize: 12,
                 textAnchor: 'middle',

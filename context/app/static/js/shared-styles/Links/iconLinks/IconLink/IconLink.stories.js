@@ -10,7 +10,9 @@ export default {
 
 const icon = <ExternalLinkIcon $fontSize="1rem" />;
 
-const Template = (args) => <IconLink {...args} />;
+function Template(args) {
+  return <IconLink {...args} />;
+}
 export const Start = Template.bind({});
 Start.args = { icon, iconPosition: 'start', children: 'Start' };
 

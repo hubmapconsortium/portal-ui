@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { trackEvent, trackSiteSearch } from 'js/helpers/trackers';
 
@@ -39,7 +39,10 @@ function SearchWrapper({
   const resultFieldIds = [...resultFields.table, ...resultFields.tile, ...resultFields.ccf]
     .map((field) => field.id)
     .concat(idField);
-  const searchkit = new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath });
+  const searchkit = useMemo(
+    () => new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath }),
+    [apiUrl, httpHeaders, searchUrlPath],
+  );
   searchkit.addDefaultQuery((query) => query.addQuery(defaultQuery));
 
   const setSearchHitsCount = useSearchViewStore(setSearchHitsCountSelector);

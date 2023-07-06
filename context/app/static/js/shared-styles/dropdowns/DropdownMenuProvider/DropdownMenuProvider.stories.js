@@ -22,14 +22,16 @@ function ExampleMenuItem() {
   return <MenuItem onClick={closeMenu}>{menuItemText}</MenuItem>;
 }
 
-export const DropdownMenuProvider = (args) => (
-  <DropdownMenuProviderComponent {...args}>
-    <DropdownMenuButton menuID={menuID}>{menuButtonText}</DropdownMenuButton>
-    <DropdownMenu id={menuID}>
-      <ExampleMenuItem />
-    </DropdownMenu>
-  </DropdownMenuProviderComponent>
-);
+export function DropdownMenuProvider(args) {
+  return (
+    <DropdownMenuProviderComponent {...args}>
+      <DropdownMenuButton menuID={menuID}>{menuButtonText}</DropdownMenuButton>
+      <DropdownMenu id={menuID}>
+        <ExampleMenuItem />
+      </DropdownMenu>
+    </DropdownMenuProviderComponent>
+  );
+}
 DropdownMenuProvider.args = {
   isOpenToStart: false,
 };

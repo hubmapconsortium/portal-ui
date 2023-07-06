@@ -7,7 +7,9 @@ export default {
   component: HistogramComponent,
 };
 
-export const Histogram = (args) => <HistogramComponent {...args} />;
+export function Histogram(args) {
+  return <HistogramComponent {...args} />;
+}
 Histogram.args = {
   parentWidth: 500,
   parentHeight: 500,

@@ -1,6 +1,6 @@
 import React from 'react';
-// eslint-disable-next-line import/no-unresolved
-import { render } from 'test-utils/functions';
+// eslint-disable-next-line
+import { render, screen } from 'test-utils/functions';
 
 import SearchNote from '../SearchNote';
 
@@ -10,8 +10,8 @@ test('SearchNote renders', () => {
     entity_type: 'FAKE_TYPE',
     hubmap_id: 'FAKE_DOI',
   };
-  const { getByText } = render(<SearchNote entity={entity} label="Derived from" />);
-  expect(getByText('Derived from fake_type')).toBeInTheDocument();
-  const link = getByText('FAKE_DOI');
+  render(<SearchNote entity={entity} label="Derived from" />);
+  expect(screen.getByText('Derived from fake_type')).toBeInTheDocument();
+  const link = screen.getByText('FAKE_DOI');
   expect(link.href).toBe('http://localhost/browse/fake_type/FAKE_UUID');
 });

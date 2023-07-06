@@ -6,18 +6,20 @@ import InfoRoundedIcon from '@material-ui/icons/InfoRounded';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
-const OutlinedAlert = (props) => (
-  <Alert
-    {...props}
-    variant="outlined"
-    iconMapping={{
-      error: <ErrorRoundedIcon />,
-      info: <InfoRoundedIcon />,
-      success: <CheckCircleRoundedIcon />,
-      warning: <WarningRoundedIcon />,
-    }}
-  />
-);
+function OutlinedAlert(props) {
+  return (
+    <Alert
+      {...props}
+      variant="outlined"
+      iconMapping={{
+        error: <ErrorRoundedIcon />,
+        info: <InfoRoundedIcon />,
+        success: <CheckCircleRoundedIcon />,
+        warning: <WarningRoundedIcon />,
+      }}
+    />
+  );
+}
 
 const StyledAlert = styled(OutlinedAlert)`
   :not(svg) {
