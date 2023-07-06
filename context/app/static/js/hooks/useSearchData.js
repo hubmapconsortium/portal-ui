@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import useSWR from 'swr';
 import { getAuthHeader, addRestrictionsToQuery } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 
@@ -21,25 +21,20 @@ async function fetchSearchData(query, elasticsearchEndpoint, groupsToken, useDef
   return results;
 }
 
-function useSearchData(query, useDefaultQuery) {
-  const [searchData, setSearchData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+function useSearchData(query, useDefaultQuery, fetcher = fetchSearchData, fallbackData = {}) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
-  useEffect(() => {
-    async function getAndSetSearchHits() {
-      const results = await fetchSearchData(query, elasticsearchEndpoint, groupsToken, useDefaultQuery);
-      setSearchData(results);
-      setIsLoading(false);
-    }
-    getAndSetSearchHits();
-  }, [elasticsearchEndpoint, groupsToken, query, useDefaultQuery]);
+  const { data: searchData, isLoading } = useSWR(
+    [query, elasticsearchEndpoint, groupsToken, useDefaultQuery],
+    (args) => fetcher(...args),
+    { fallbackData },
+  );
 
   return { searchData, isLoading };
 }
 
-function useSearchHits(query, useDefaultQuery) {
-  const { searchData, isLoading } = useSearchData(query, useDefaultQuery);
+function useSearchHits(query, useDefaultQuery, fetcher = fetchSearchData) {
+  const { searchData, isLoading } = useSearchData(query, useDefaultQuery, fetcher, []);
   const searchHits = searchData?.hits?.hits || [];
   return { searchHits, isLoading };
 }

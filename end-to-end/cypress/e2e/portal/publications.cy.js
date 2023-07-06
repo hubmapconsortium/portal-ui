@@ -12,7 +12,7 @@ describe("publications list page", () => {
     });
     it("has tabs for published and preprint entities", () => {
       cy.findByTestId("publication-tabs").should("exist");
-      const publishedTab = cy.findByTestId("publication-tab-published");
+      const publishedTab = cy.findByTestId("publication-tab-peer-reviewed");
       const preprintTab = cy.findByTestId("publication-tab-preprint");
       const tabs = [publishedTab, preprintTab];
       // publishedTab.should("have.attr", "aria-selected", "true");
@@ -28,7 +28,7 @@ describe("publications list page", () => {
       });
     });
     it("has clickable publication links", () => {
-      const publishedTab = cy.findByTestId("publication-tab-published");
+      const publishedTab = cy.findByTestId("publication-tab-peer-reviewed");
       const preprintTab = cy.findByTestId("publication-tab-preprint");
       publishedTab.should("exist").then(($pubTab) => {
         if ($pubTab.text().includes("(0)")) {
