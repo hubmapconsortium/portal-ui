@@ -18,7 +18,7 @@ function DbGaP() {
         </SecondaryBackgroundTooltip>
       </Header>
       <Typography variant="body2">
-        This dataset contains protected-access human sequence data. If you are not a Consortium meber, you must access
+        This dataset contains protected-access human sequence data. If you are not a Consortium member, you must access
         these data through dbGaP if available. dbGaP authentication is required for downloading through these links.
         View{' '}
         <a

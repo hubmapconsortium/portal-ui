@@ -20,7 +20,7 @@ function GlobusAccess() {
         <a href="https://app.globus.org" target="_blank" rel="noopener noreferrer">
           log in
         </a>{' '}
-        for Globus access or email
+        for Globus access or email{' '}
         <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
           help@hubmapconsortium.org
         </EmailIconLink>{' '}
