@@ -8,7 +8,10 @@ const aggsBuckets = [
 describe('countPublicationAggs', () => {
   test('should provide counts for expected buckets', () => {
     expect(countPublicationAggs(aggsBuckets)).toEqual({
-      statuses: { true: { category: 'Peer Reviewed', count: 10 }, false: { category: 'Preprint', count: 5 } },
+      statuses: {
+        true: { category: 'Peer Reviewed', id: 'peer-reviewed', count: 10 },
+        false: { category: 'Preprint', id: 'preprint', count: 5 },
+      },
       publicationsCount: 15,
     });
   });
