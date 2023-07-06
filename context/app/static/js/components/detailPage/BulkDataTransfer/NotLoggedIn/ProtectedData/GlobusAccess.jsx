@@ -4,6 +4,7 @@ import BlockIcon from '@material-ui/icons/Block';
 import InfoIcon from '@material-ui/icons/Info';
 
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { Header, LoginButton } from './style';
 
@@ -13,7 +14,9 @@ function GlobusAccess() {
       <Header variant="h5">
         HuBMAP Consortium Members: Globus Access
         <BlockIcon color="error" fontSize="small" />
-        <InfoIcon fontSize="small" />
+        <SecondaryBackgroundTooltip title="Global research data management system">
+          <InfoIcon fontSize="small" />
+        </SecondaryBackgroundTooltip>
       </Header>
       <Typography variant="body2">
         Please{' '}
