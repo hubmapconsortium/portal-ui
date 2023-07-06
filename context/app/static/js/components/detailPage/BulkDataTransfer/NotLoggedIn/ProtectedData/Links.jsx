@@ -35,9 +35,9 @@ function GlobusAccess() {
           </SecondaryBackgroundTooltip>
         </StyledLink>
         <Typography variant="body2">
-          Select the &quot;Run&quot; link on the page to download the dataset information.Here is{' '}
+          Select the &quot;Run&quot; link on the page to download the dataset information. Here is{' '}
           <StyledAnchorTag href="https://www.ncbi.nlm.nih.gov/sra/docs/" target="_blank" rel="noopener noreferrer">
-            additional documentation <OutboundIconLink />.
+            additional documentation. <OutboundIconLink />
           </StyledAnchorTag>
         </Typography>
       </ExternalLink>
