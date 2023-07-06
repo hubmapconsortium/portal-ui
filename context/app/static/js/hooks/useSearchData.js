@@ -21,20 +21,20 @@ async function fetchSearchData(query, elasticsearchEndpoint, groupsToken, useDef
   return results;
 }
 
-function useSearchData(query, useDefaultQuery) {
+function useSearchData(query, useDefaultQuery, fetcher = fetchSearchData, fallbackData = {}) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
   const { data: searchData, isLoading } = useSWR(
     [query, elasticsearchEndpoint, groupsToken, useDefaultQuery],
-    (args) => fetchSearchData(...args),
-    { fallbackData: {} },
+    (args) => fetcher(...args),
+    { fallbackData },
   );
 
   return { searchData, isLoading };
 }
 
-function useSearchHits(query, useDefaultQuery) {
-  const { searchData, isLoading } = useSearchData(query, useDefaultQuery);
+function useSearchHits(query, useDefaultQuery, fetcher = fetchSearchData) {
+  const { searchData, isLoading } = useSearchData(query, useDefaultQuery, fetcher, []);
   const searchHits = searchData?.hits?.hits || [];
   return { searchHits, isLoading };
 }

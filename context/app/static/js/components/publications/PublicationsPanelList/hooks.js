@@ -1,6 +1,4 @@
-import { useMemo } from 'react';
-
-import { useSearchHits } from 'js/hooks/useSearchData';
+import useSearchData, { fetchSearchData } from 'js/hooks/useSearchData';
 import { buildPublicationPanelProps } from './utils';
 
 const getPublicationsByStatusQuery = (publicationStatus) => ({
@@ -24,12 +22,15 @@ const getPublicationsByStatusQuery = (publicationStatus) => ({
   _source: ['uuid', 'title', 'contributors', 'publication_status', 'publication_venue', 'publication_date'],
 });
 
+async function fetchPublicationsPanelData(...args) {
+  const results = await fetchSearchData(...args);
+  return results?.hits?.hits.map((publicationHit) => buildPublicationPanelProps(publicationHit));
+}
+
 function usePublicationsPanelList(publicationStatus) {
-  const query = useMemo(() => getPublicationsByStatusQuery(publicationStatus), [publicationStatus]);
+  const query = getPublicationsByStatusQuery(publicationStatus);
 
-  const { searchHits, isLoading } = useSearchHits(query);
-
-  const publicationPanelsProps = searchHits.map((publicationHit) => buildPublicationPanelProps(publicationHit));
+  const { searchData: publicationPanelsProps, isLoading } = useSearchData(query, true, fetchPublicationsPanelData, []);
 
   return { publicationPanelsProps, isLoading };
 }
