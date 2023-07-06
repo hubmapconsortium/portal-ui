@@ -1,1 +1,0 @@
- - Ensure that lineup pages' data all have necessary keys and report any incomplete metadata in console
