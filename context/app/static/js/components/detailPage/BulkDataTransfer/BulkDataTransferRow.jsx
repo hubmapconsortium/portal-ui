@@ -1,14 +1,14 @@
 import React from 'react';
 import InfoIcon from '@material-ui/icons/Info';
+import BlockIcon from '@material-ui/icons/Block';
 
-// import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { Header, ContentText, GreenCheckCircleIcon } from './style';
 
 const statusIcons = {
   success: <GreenCheckCircleIcon fontSize="small" />,
-  // error: <BlockIcon color="error" fontSize="small" />,
+  error: <BlockIcon color="error" fontSize="small" />,
 };
 
 function BulkDataTransferRow({ title, status, tooltipText, children, addOns }) {

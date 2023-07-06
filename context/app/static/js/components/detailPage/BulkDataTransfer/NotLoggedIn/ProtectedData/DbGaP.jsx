@@ -1,10 +1,6 @@
 import React from 'react';
-// import InfoIcon from '@material-ui/icons/Info';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-// import { DetailSectionPaper } from 'js/shared-styles/surfaces';
-// import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-// import { Header, ContentText, GreenCheckCircleIcon } from './style';
 import BulkDataTransferRow from '../../BulkDataTransferRow';
 
 function DbGaP() {
