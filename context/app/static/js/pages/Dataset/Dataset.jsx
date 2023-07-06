@@ -156,7 +156,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
       'protocols',
       'metadata',
       'files',
-      'bulkDataTransfer',
+      'bulk-data-transfer',
       'collections',
       'contributors',
       'attribution',
