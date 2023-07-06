@@ -6,34 +6,53 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { InfoIcon } from 'js/shared-styles/icons';
-import { LinkContainer, StyledLink } from './style';
+import { LinkContainer, StyledLink, LinkTitle } from './style';
 
 function GlobusAccess() {
   const {
     entity: { dbgap_study_url, dbgap_sra_experiment_url },
   } = useFlaskDataContext();
+
+  const LinksContentArray = [
+    {
+      title: 'dbGaP Study',
+      url: dbgap_study_url,
+      toolTip: '',
+      description: 'Navigate to the "Bioproject" or "Sequencing Read Archive" links to access the datasets.',
+      outBoundLink: '',
+    },
+    {
+      title: 'SRA Experiment',
+      url: dbgap_sra_experiment_url,
+      toolTip:
+        'SRA data, available through multiple cloud providers and NCBI servers, is the largest publicly available repository of high throughput sequencing data.',
+      description: 'Select the "Run" link on the page to download the dataset information.',
+      outBoundLink: 'https://www.ncbi.nlm.nih.gov/sra/docs/',
+    },
+  ];
+
   return (
     <Paper>
-      <LinkContainer>
-        <StyledLink variant="body1">
-          <OutboundIconLink href={dbgap_study_url}>dbGaP Study</OutboundIconLink>
-        </StyledLink>
-        <Typography variant="body2">
-          Navigate to the &quot;Bioproject&quot; or &quot;Sequencing Read Archive&quot; links to access the datasets.
-        </Typography>
-      </LinkContainer>
-      <LinkContainer>
-        <StyledLink variant="body1">
-          <OutboundIconLink href={dbgap_sra_experiment_url}>SRA Experiment</OutboundIconLink>
-          <SecondaryBackgroundTooltip title="SRA data, available through multiple cloud providers and NCBI servers, is the largest publicly available repository of high throughput sequencing data.">
-            <InfoIcon />
-          </SecondaryBackgroundTooltip>
-        </StyledLink>
-        <Typography variant="body2">
-          Select the &quot;Run&quot; link on the page to download the dataset information. Here is{' '}
-          <OutboundIconLink href="https://www.ncbi.nlm.nih.gov/sra/docs/">additional documentation.</OutboundIconLink>
-        </Typography>
-      </LinkContainer>
+      {LinksContentArray.map((link) => (
+        <LinkContainer>
+          <StyledLink variant="body1">
+            {link.url ? (
+              <OutboundIconLink href={link.url}>{link.title}</OutboundIconLink>
+            ) : (
+              <LinkTitle variant="body1">{link.title}</LinkTitle>
+            )}
+            {link.toolTip && (
+              <SecondaryBackgroundTooltip title={link.toolTip}>
+                <InfoIcon />
+              </SecondaryBackgroundTooltip>
+            )}
+          </StyledLink>
+          <Typography variant="body2">{link.description}</Typography>
+          {link.outBoundLink && (
+            <OutboundIconLink href={link.outBoundLink}> Here is additional documentation.</OutboundIconLink>
+          )}
+        </LinkContainer>
+      ))}
     </Paper>
   );
 }

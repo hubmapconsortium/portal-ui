@@ -1,7 +1,6 @@
 import React from 'react';
 import { trackLink } from 'js/helpers/trackers';
-
-import { LightBlueLink } from '.';
+import { LightBlueLink } from 'js/shared-styles/Links';
 
 function sendOutboundEvent(event) {
   trackLink(event.target.href);
