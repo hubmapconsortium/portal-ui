@@ -70,13 +70,17 @@ function SearchWrapper({
         const {
           query: { query, post_filter },
         } = searchkit.query;
-        const allResults = await fetchSearchData(
-          { query, post_filter, _source: false, size: 10000 },
-          elasticsearchEndpoint,
-          groupsToken,
-        );
-        // eslint-disable-next-line no-underscore-dangle
-        setAllResultsUUIDs(allResults.hits.hits.map((hit) => hit._id));
+        try {
+          const allResults = await fetchSearchData(
+            { query, post_filter, _source: false, size: 10000 },
+            elasticsearchEndpoint,
+            groupsToken,
+          );
+          // eslint-disable-next-line no-underscore-dangle
+          setAllResultsUUIDs(allResults.hits.hits.map((hit) => hit._id));
+        } catch (error) {
+          console.error('Error fetching result UUIDs', error);
+        }
       }
       getAndSetAllUUIDs();
     });
