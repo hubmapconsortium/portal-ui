@@ -8,7 +8,7 @@ import LoggedIn from './LoggedIn';
 function BulkDataTransfer() {
   const { isAuthenticated } = useAppContext();
   return (
-    <DetailPageSection id="bulkDataTransfer">
+    <DetailPageSection id="bulk-data-transfer">
       <SectionHeader>Bulk Data Transfer</SectionHeader>
       {isAuthenticated === true ? <LoggedIn /> : <NotLoggedIn />}
     </DetailPageSection>
