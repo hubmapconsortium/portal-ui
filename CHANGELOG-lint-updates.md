@@ -1,3 +1,0 @@
-- Update project ESLint configuration and dependencies.
-- Remove Babel.
-- Introduce TypeScript.
