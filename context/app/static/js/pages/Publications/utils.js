@@ -1,62 +1,25 @@
-function buildAbbreviatedContributors(contributors) {
-  switch (contributors.length) {
-    case 0:
-      return '';
-    case 1:
-      return contributors[0].name;
-    case 2:
-      return contributors.map((contributor) => contributor.name).join(' and ');
-    default:
-      return `${contributors[0].name}, et al.`;
-  }
-}
-
-function buildSecondaryText(contributors, publication_venue) {
-  return [buildAbbreviatedContributors(contributors), publication_venue].filter((str) => str.length).join(' | ');
-}
-
-function buildPublicationPanelProps(publicationHit) {
-  const {
-    _source: { uuid, title, contributors = [], publication_venue, publication_date },
-  } = publicationHit;
-
-  return {
-    key: uuid,
-    href: `/browse/publication/${uuid}`,
-    title,
-    secondaryText: buildSecondaryText(contributors, publication_venue),
-    rightText: `Published: ${publication_date}`,
-  };
-}
-
-function buildPublicationsSeparatedByStatus(publications) {
-  return publications.reduce(
-    (acc, publication) => {
-      const {
-        _source: { publication_status },
-      } = publication;
-
-      if (publication_status === undefined) {
+function countPublicationAggs(aggsBuckets) {
+  return aggsBuckets.reduce(
+    (acc, { key_as_string, doc_count }) => {
+      if (!['false', 'true'].includes(key_as_string)) {
         return acc;
       }
 
-      const publicationProps = buildPublicationPanelProps(publication);
-
-      if (publication_status) {
-        acc.published.push(publicationProps);
-      } else {
-        acc.preprint.push(publicationProps);
-      }
+      /* eslint-disable operator-assignment */
+      acc.statuses[key_as_string].count = acc.statuses[key_as_string].count + doc_count;
+      acc.publicationsCount = acc.publicationsCount + doc_count;
+      /* eslint-enable operator-assignment */
 
       return acc;
     },
-    { published: [], preprint: [] },
+    {
+      statuses: {
+        true: { category: 'Peer Reviewed', id: 'peer-reviewed', count: 0 },
+        false: { category: 'Preprint', id: 'preprint', count: 0 },
+      },
+      publicationsCount: 0,
+    },
   );
 }
 
-export {
-  buildAbbreviatedContributors,
-  buildSecondaryText,
-  buildPublicationPanelProps,
-  buildPublicationsSeparatedByStatus,
-};
+export { countPublicationAggs };

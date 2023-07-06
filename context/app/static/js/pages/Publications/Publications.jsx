@@ -3,11 +3,11 @@ import React from 'react';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
-import PanelList from 'js/shared-styles/panels/PanelList';
 import { Tab } from 'js/shared-styles/tabs';
 import { usePublications } from './hooks';
 
 import { StyledTabs, StyledTabPanel } from './style';
+import PublicationsPanelList from '../../components/publications/PublicationsPanelList/PublicationsPanelList';
 
 function Description() {
   return (
@@ -22,7 +22,15 @@ function Description() {
 }
 
 function Publications() {
-  const { publicationsPanelsPropsSeparatedByStatus, publicationsCount, handleChange, openTabIndex } = usePublications();
+  const {
+    publicationsCounts: { statuses, publicationsCount = 0 },
+    handleChange,
+    openTabIndex,
+  } = usePublications();
+
+  const sortedPublicationStatusEntries = Object.entries(statuses).sort(([statusA], [statusB]) =>
+    statusB.localeCompare(statusA),
+  );
 
   return (
     <PanelListLandingPage
@@ -36,19 +44,22 @@ function Publications() {
         onChange={handleChange}
         aria-label="Published and preprint publications"
       >
-        {Object.entries(publicationsPanelsPropsSeparatedByStatus).map(([publicationStatus, panelsProps], i) => (
-          <Tab
-            data-testid={`publication-tab-${publicationStatus.toLowerCase()}`}
-            label={`${publicationStatus} (${panelsProps.length})`}
-            index={i}
-            key={publicationStatus}
-            disabled={panelsProps.length === 0}
-          />
-        ))}
+        {sortedPublicationStatusEntries.map(([, { category, id, count }], i) => {
+          return (
+            <Tab
+              data-testid={`publication-tab-${id.toLowerCase()}`}
+              label={`${category} (${count})`}
+              index={i}
+              key={category}
+              disabled={count === 0}
+            />
+          );
+        })}
       </StyledTabs>
-      {Object.entries(publicationsPanelsPropsSeparatedByStatus).map(([publicationStatus, panelsProps], i) => (
-        <StyledTabPanel value={openTabIndex} index={i} key={publicationStatus}>
-          <PanelList panelsProps={panelsProps} />
+
+      {sortedPublicationStatusEntries.map(([status, { category }], i) => (
+        <StyledTabPanel value={openTabIndex} index={i} key={category}>
+          <PublicationsPanelList status={status} />
         </StyledTabPanel>
       ))}
     </PanelListLandingPage>
