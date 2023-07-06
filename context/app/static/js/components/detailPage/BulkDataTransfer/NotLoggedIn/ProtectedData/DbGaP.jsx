@@ -7,7 +7,7 @@ import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { Header } from './style';
 
-function GlobusAccess() {
+function DbGaP() {
   return (
     <DetailSectionPaper>
       <Header variant="h5">
@@ -34,4 +34,4 @@ function GlobusAccess() {
   );
 }
 
-export default GlobusAccess;
+export default DbGaP;
