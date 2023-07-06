@@ -1,19 +1,18 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import InfoIcon from '@material-ui/icons/Info';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { Header } from './style';
+import { Header, GreenCheckCircleIcon } from './style';
 
 function DbGaP() {
   return (
     <DetailSectionPaper>
       <Header variant="h5">
         Non-Consortium Members: Database of Genotypes and Phenotypes (dbGaP)
-        <CheckCircleIcon style={{ color: '#6c8938' }} fontSize="small" />
+        <GreenCheckCircleIcon fontSize="small" />
         <SecondaryBackgroundTooltip title="The database of Genotypes and Phenotypes archive and distribute data and results from studies that have investigated the interaction of genotype and phenotype in humans.">
           <InfoIcon fontSize="small" />
         </SecondaryBackgroundTooltip>

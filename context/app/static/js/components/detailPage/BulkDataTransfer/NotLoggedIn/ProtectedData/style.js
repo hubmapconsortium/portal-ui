@@ -1,12 +1,14 @@
-import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import styled from 'styled-components';
 
 const StyledContainer = styled.div`
   > div {
     margin-bottom: 10px;
   }
 `;
+
 const Header = styled(Typography)`
   margin: 0px ${(props) => props.theme.spacing(1)}px ${(props) => props.theme.spacing(1)}px 0px;
   display: flex;
@@ -40,4 +42,8 @@ const StyledLink = styled(Typography)`
   }
 `;
 
-export { StyledContainer, Header, LoginButton, ExternalLink, StyledLink };
+const GreenCheckCircleIcon = styled(CheckCircleIcon)`
+  color: ${(props) => props.theme.palette.success.main};
+`;
+
+export { StyledContainer, Header, LoginButton, ExternalLink, StyledLink, GreenCheckCircleIcon };
