@@ -1,3 +1,4 @@
 - Upgraded to React 18.
 - Upgraded various dependencies to work with React 18.
-- Fixed undefined count tooltips popping up for entity counts on homepage
+- Fixed undefined count tooltips popping up for entity counts on homepage.
+- Upgraded React-PDF to speed up display of PDF attachments.

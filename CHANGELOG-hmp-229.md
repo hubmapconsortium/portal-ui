@@ -1,1 +1,0 @@
-- Upgrade React-PDF to use worker thread
