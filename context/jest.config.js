@@ -11,7 +11,6 @@ module.exports = {
     'metadata-field-descriptions$': '<rootDir>/ingest-validation-tools/docs/field-descriptions.yaml',
     'metadata-field-types$': '<rootDir>/ingest-validation-tools/docs/field-types.yaml',
     'metadata-field-entities$': '<rootDir>/ingest-validation-tools/docs/field-entities.yaml',
-    'react-pdf/dist/esm/entry.webpack': 'react-pdf/dist/umd/entry.jest',
   },
   transform: {
     '^.+\\.(t|j)sx?$': [
