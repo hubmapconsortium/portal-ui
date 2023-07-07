@@ -149,6 +149,7 @@ describe("Publication page", () => {
     it("has a visible Entity Header when the user scrolls down the page", () => {
       cy.findByTestId("entity-header").should("not.exist");
       cy.scrollTo("bottom");
+      cy.wait(50);
       cy.findByTestId("entity-header")
         .should("be.visible")
         .and("contain", title);
