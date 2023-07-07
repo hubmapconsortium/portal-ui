@@ -2,6 +2,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import styled, { css } from 'styled-components';
+import { LightBlueLink } from 'js/shared-styles/Links';
+import { ExternalLinkIcon } from 'js/shared-styles/icons';
 
 const StyledContainer = styled.div`
   > div {
@@ -53,4 +55,38 @@ const GreenCheckCircleIcon = styled(CheckCircleIcon)`
   color: ${(props) => props.theme.palette.success.main};
 `;
 
-export { StyledContainer, Header, ContentText, LoginButton, LinkContainer, StyledLink, GreenCheckCircleIcon };
+const AlignedLink = styled(LightBlueLink)`
+  vertical-align: baseline;
+`;
+
+const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
+  font-size: 1rem;
+  vertical-align: top;
+`;
+
+const ObliqueSpan = styled.span`
+  font-style: oblique 10deg;
+`;
+
+const StyledHeader = styled(Typography)`
+  margin: ${(props) => props.theme.spacing(2)}px 0px;
+`;
+
+const StyledDiv = styled.div`
+  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+`;
+
+export {
+  StyledContainer,
+  Header,
+  ContentText,
+  LoginButton,
+  LinkContainer,
+  StyledLink,
+  GreenCheckCircleIcon,
+  AlignedLink,
+  StyledExternalLinkIcon,
+  ObliqueSpan,
+  StyledHeader,
+  StyledDiv,
+};
