@@ -6,7 +6,7 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { InfoIcon } from 'js/shared-styles/icons';
-import { LinkContainer, StyledLink } from './NotLoggedIn/ProtectedData/style';
+import { LinkContainer, StyledLink } from './style';
 
 function GlobusAccess() {
   const {

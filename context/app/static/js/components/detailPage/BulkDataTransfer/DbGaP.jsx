@@ -11,7 +11,7 @@ const statusIcons = {
   error: <BlockIcon color="error" fontSize="small" />,
 };
 
-function BulkDataTransferRow({ title, status, tooltipText, children, addOns }) {
+function DbGaP({ title, status, tooltipText, children, addOns }) {
   return (
     <DetailSectionPaper>
       <Header variant="h5">
@@ -27,4 +27,4 @@ function BulkDataTransferRow({ title, status, tooltipText, children, addOns }) {
   );
 }
 
-export default BulkDataTransferRow;
+export default DbGaP;
