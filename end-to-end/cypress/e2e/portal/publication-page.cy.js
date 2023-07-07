@@ -178,7 +178,9 @@ describe("Publication page", () => {
 
     it("expands other vignettes when they're clicked", () => {
       ["1", "2", "3", "4", "5"].forEach((i) => {
-        cy.findByTestId(`vignette-${i}-button`).click();
+        // Force it to allow clicking while the button is animating since this is a bit flaky
+        // Once we switch to `createRoot` this action should be performant enough to remove the { force: true }
+        cy.findByTestId(`vignette-${i}-button`).click({ force: true });
         cy.findByTestId(`vignette-${i}-button`).should(
           "have.attr",
           "aria-expanded",
