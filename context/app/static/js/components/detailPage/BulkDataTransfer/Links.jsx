@@ -1,6 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
@@ -36,20 +37,23 @@ function GlobusAccess() {
   return (
     <Paper>
       {filteredLinksContentArray.map((link) => (
-        <LinkContainer>
-          <StyledLink variant="body1">
-            <OutboundIconLink href={link.url}>{link.title}</OutboundIconLink>
-            {link.toolTip && (
-              <SecondaryBackgroundTooltip title={link.toolTip}>
-                <InfoIcon />
-              </SecondaryBackgroundTooltip>
+        <>
+          <Divider />
+          <LinkContainer>
+            <StyledLink variant="body1">
+              <OutboundIconLink href={link.url}>{link.title}</OutboundIconLink>
+              {link.toolTip && (
+                <SecondaryBackgroundTooltip title={link.toolTip}>
+                  <InfoIcon />
+                </SecondaryBackgroundTooltip>
+              )}
+            </StyledLink>
+            <Typography variant="body2">{link.description}</Typography>
+            {link.outBoundLink && (
+              <OutboundIconLink href={link.outBoundLink}> Here is additional documentation.</OutboundIconLink>
             )}
-          </StyledLink>
-          <Typography variant="body2">{link.description}</Typography>
-          {link.outBoundLink && (
-            <OutboundIconLink href={link.outBoundLink}> Here is additional documentation.</OutboundIconLink>
-          )}
-        </LinkContainer>
+          </LinkContainer>
+        </>
       ))}
     </Paper>
   );

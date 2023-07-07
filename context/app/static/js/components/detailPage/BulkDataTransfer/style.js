@@ -1,6 +1,8 @@
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import Box from '@material-ui/core/Box';
+
 import styled, { css } from 'styled-components';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { ExternalLinkIcon } from 'js/shared-styles/icons';
@@ -33,11 +35,10 @@ const LoginButton = styled(Button)`
   `}
 `;
 
-const LinkContainer = styled.div`
+const LinkContainer = styled(Box)`
   display: flex;
   align-items: center;
   padding: ${(props) => props.theme.spacing(2)}px;
-  border-bottom: 1px solid #e0e0e0;
 `;
 
 const StyledLink = styled(Typography)`
