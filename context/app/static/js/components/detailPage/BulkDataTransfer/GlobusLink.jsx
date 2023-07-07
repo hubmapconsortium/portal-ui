@@ -1,7 +1,7 @@
 import React from 'react';
-import Paper from '@material-ui/core/Paper';
 import { useAppContext, useFlaskDataContext, useFilesContext } from 'js/components/Contexts';
 
+import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { getAuthHeader } from 'js/helpers/functions';
 import useAbortableEffect from 'js/hooks/useAbortableEffect';
 import { StyledExternalLinkIcon } from './style';
@@ -50,12 +50,13 @@ function GlobusLink() {
   const { statusCode, url } = globusUrlStatus;
 
   return statusCode ? (
-    <Paper>
+    <DetailSectionPaper>
       {hubmap_id}
       <FilesConditionalLink href={url} hasAgreedToDUA={hasAgreedToDUA} openDUA={() => openDUA(url)} variant="body2">
+        {' '}
         Globus <StyledExternalLinkIcon />
       </FilesConditionalLink>
-    </Paper>
+    </DetailSectionPaper>
   ) : null;
 }
 

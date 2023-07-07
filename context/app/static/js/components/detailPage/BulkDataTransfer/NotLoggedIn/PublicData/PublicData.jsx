@@ -1,6 +1,6 @@
 import React from 'react';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import GlobusLink from '../../BulkDataGlobusLink';
+import GlobusLink from '../../GlobusLink';
 import GlobusAccess from '../../GlobusAccess';
 import { StyledContainer } from '../../style';
 
