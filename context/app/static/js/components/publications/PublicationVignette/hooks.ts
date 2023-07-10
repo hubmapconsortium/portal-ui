@@ -28,17 +28,19 @@ export function usePublicationVignetteConfs({ uuid, vignetteDirName, vignette }:
 
   if (data) {
     const urlHandler = (url: string, isZarr: boolean) => {
-      return `${url.replace('{{ base_url }}', `${assetsEndpoint}/${uuid}/data`)}${isZarr ? '' : `?token=${groupsToken}`}`;
+      return `${url.replace('{{ base_url }}', `${assetsEndpoint}/${uuid}/data`)}${
+        isZarr ? '' : `?token=${groupsToken}`
+      }`;
     };
-  
+
     const requestInitHandler = () => {
       return {
         headers: { Authorization: `Bearer ${groupsToken}` },
       };
     };
     // Formats the vitessce config data to replace the {{ base_url }} placeholder with the actual url.
-    // TODO: Fix this any; I couldn't figure out how to import the appropriate type from Vitessce.
-    const formattedData: any[] = data.map(d => fillUrls(d, urlHandler, requestInitHandler));
+    // TODO: Improve this `unknown`; I couldn't figure out how to import the appropriate `VitessceConfig` type from Vitessce.
+    const formattedData: unknown[] = data.map((d) => fillUrls(d, urlHandler, requestInitHandler));
     return formattedData;
   }
   return undefined;
