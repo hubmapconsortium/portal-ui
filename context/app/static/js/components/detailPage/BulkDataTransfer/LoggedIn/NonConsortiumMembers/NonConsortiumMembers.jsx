@@ -1,10 +1,10 @@
 import React from 'react';
+
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import { StyledContainer } from '../../style';
-
 import DbGaP from '../../DbGaP';
 import Links from '../../Links';
+import { StyledContainer } from '../../style';
 
 function NonConsortiumMembers() {
   return (

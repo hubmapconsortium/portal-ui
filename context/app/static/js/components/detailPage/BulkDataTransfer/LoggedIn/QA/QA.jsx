@@ -1,8 +1,8 @@
 import React from 'react';
 
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import { StyledContainer } from '../../style';
 import NoAccess from '../../NoAccess';
+import { StyledContainer } from '../../style';
 
 function QA() {
   return (

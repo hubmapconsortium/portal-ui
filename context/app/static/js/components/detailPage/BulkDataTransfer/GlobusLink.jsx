@@ -1,11 +1,11 @@
 import React from 'react';
-import { useAppContext, useFlaskDataContext, useFilesContext } from 'js/components/Contexts';
 
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { getAuthHeader } from 'js/helpers/functions';
 import useAbortableEffect from 'js/hooks/useAbortableEffect';
-import { StyledExternalLinkIcon } from './style';
+import { useAppContext, useFlaskDataContext, useFilesContext } from 'js/components/Contexts';
 import FilesConditionalLink from './FilesConditionalLink';
+import { StyledExternalLinkIcon } from './style';
 
 function GlobusLink() {
   const [globusUrlStatus, setGlobusUrlStatus] = React.useState({ url: '', statusCode: null });

@@ -1,8 +1,9 @@
 import React from 'react';
+
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import { StyledContainer } from '../../style';
 import GlobusAccess from '../../GlobusAccess';
 import GlobusLink from '../../GlobusLink';
+import { StyledContainer } from '../../style';
 
 function ProtectedAccess() {
   return (

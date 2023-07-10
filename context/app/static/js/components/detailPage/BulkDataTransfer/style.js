@@ -1,9 +1,10 @@
+import styled, { css } from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Box from '@material-ui/core/Box';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
-import styled, { css } from 'styled-components';
+
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { ExternalLinkIcon } from 'js/shared-styles/icons';
 

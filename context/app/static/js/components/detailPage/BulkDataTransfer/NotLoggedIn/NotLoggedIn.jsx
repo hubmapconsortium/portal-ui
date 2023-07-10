@@ -1,6 +1,6 @@
 import React from 'react';
-import { useFlaskDataContext } from 'js/components/Contexts';
 
+import { useFlaskDataContext } from 'js/components/Contexts';
 import ProtectedData from './ProtectedData';
 import PublicData from './PublicData';
 

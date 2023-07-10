@@ -1,12 +1,12 @@
 import React from 'react';
+
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import { StyledContainer } from '../../style';
 import GlobusAccess from '../../GlobusAccess';
-
 import DbGaP from '../../DbGaP';
 import Links from '../../Links';
+import { StyledContainer } from '../../style';
 
 function ProtectedData() {
   return (
