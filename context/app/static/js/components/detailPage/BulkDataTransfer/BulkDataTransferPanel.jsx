@@ -11,13 +11,13 @@ const statusIcons = {
   error: <BlockIcon color="error" fontSize="small" />,
 };
 
-function DbGaP({ title, status, tooltipText, children, addOns }) {
+function BulkDataTransferPanel({ title, status, tooltip, children, addOns }) {
   return (
     <DetailSectionPaper>
       <Header variant="h5">
         {title}
         {status ? statusIcons[status] : null}
-        <SecondaryBackgroundTooltip title={tooltipText}>
+        <SecondaryBackgroundTooltip title={tooltip}>
           <InfoIcon fontSize="small" />
         </SecondaryBackgroundTooltip>
       </Header>
@@ -27,4 +27,4 @@ function DbGaP({ title, status, tooltipText, children, addOns }) {
   );
 }
 
-export default DbGaP;
+export default BulkDataTransferPanel;

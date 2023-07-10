@@ -18,14 +18,14 @@ function GlobusAccess() {
     {
       title: 'dbGaP Study',
       url: dbgap_study_url,
-      toolTip: '',
+      tooltip: '',
       description: 'Navigate to the "Bioproject" or "Sequencing Read Archive" links to access the datasets.',
       outBoundLink: '',
     },
     {
       title: 'SRA Experiment',
       url: dbgap_sra_experiment_url,
-      toolTip:
+      tooltip:
         'SRA data, available through multiple cloud providers and NCBI servers, is the largest publicly available repository of high throughput sequencing data.',
       description: 'Select the "Run" link on the page to download the dataset information.',
       outBoundLink: 'https://www.ncbi.nlm.nih.gov/sra/docs/',
