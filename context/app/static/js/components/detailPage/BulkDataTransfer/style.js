@@ -2,7 +2,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Box from '@material-ui/core/Box';
-
+import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import styled, { css } from 'styled-components';
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { ExternalLinkIcon } from 'js/shared-styles/icons';
@@ -77,6 +77,20 @@ const StyledDiv = styled.div`
   margin-bottom: ${(props) => props.theme.spacing(2)}px;
 `;
 
+const StyledWarningIcon = styled(WarningRoundedIcon)`
+  color: ${(props) => props.theme.palette.warning.main};
+`;
+
+const WarningIconContainer = styled.div`
+  float: left;
+  margin-right: ${(props) => props.theme.spacing(1)}px;
+`;
+
+const NoAccessContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export {
   StyledContainer,
   Header,
@@ -90,4 +104,7 @@ export {
   ObliqueSpan,
   StyledHeader,
   StyledDiv,
+  StyledWarningIcon,
+  WarningIconContainer,
+  NoAccessContainer,
 };
