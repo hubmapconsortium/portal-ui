@@ -1,2 +1,5 @@
-- Added links to access dataset information in dbGaP.
-- Built out the UI for Protected Data when user is not logged in.
+- Created Login section for Consortium members for Globus Access.
+- Created links to dbGap study, SRA Experiment, and SRA Bioproject for dbGaP datasets. 
+- Created links to Globus for dbGaP datasets.
+- Wire up consent modal for Globus link to dbGaP datasets.
+- Handled scenarios for user access for dbGaP datasets.
