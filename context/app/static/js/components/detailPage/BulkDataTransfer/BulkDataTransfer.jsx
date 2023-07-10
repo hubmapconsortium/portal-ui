@@ -12,6 +12,7 @@ import BulkDataTransferPanel from './BulkDataTransferPanel';
 import Link from './Link';
 import GlobusLink from './GlobusLink';
 import NoAccess from './NoAccess';
+import { useIsProtectedFile } from './hooks';
 
 const dbGaPTooltip =
   'The database of Genotypes and Phenotypes archive and distribute data and results from studies that have investigated the interaction of genotype and phenotype in humans.';
@@ -168,20 +169,23 @@ const DATASET_NOT_FINALIZED = {
 };
 
 const useBulkDataTransferPanels = () => {
-  const { isAuthenticated } = useAppContext();
+  const { isAuthenticated, isHubmapUser } = useAppContext();
   const {
-    entity: { mapped_data_access_level: accessType },
+    entity: { mapped_data_access_level: accessType, mapped_status: status, uuid },
   } = useFlaskDataContext();
+  const hasNoAccess = useIsProtectedFile(uuid);
   if (isAuthenticated) {
-    const hasNoAccess = false;
     if (hasNoAccess) {
       return NO_ACCESS_TO_PROTECTED_DATA;
     }
-    const isNonConsortium = false;
+    // Non-consortium case if user is not in HuBMAP Globus group
+    const isNonConsortium = !isHubmapUser;
     if (isNonConsortium) {
       return NON_CONSORTIUM_MEMBERS;
     }
-    const isNotFinalized = false;
+    // If dataset status is `New`, `Error`, `QA`, `Processing`, then data is not yet available
+    const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing'];
+    const isNotFinalized = unfinalizedStatuses.includes(status);
     if (isNotFinalized) {
       return DATASET_NOT_FINALIZED;
     }

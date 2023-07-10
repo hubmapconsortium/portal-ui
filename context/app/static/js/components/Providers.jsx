@@ -21,6 +21,7 @@ function Providers({
   children,
   workspacesToken,
   isWorkspacesUser,
+  isHubmapUser,
   flaskData,
 }) {
   const appContext = useMemo(
@@ -28,11 +29,12 @@ function Providers({
       groupsToken,
       workspacesToken,
       isWorkspacesUser,
+      isHubmapUser,
       isAuthenticated,
       userEmail,
       ...endpoints,
     }),
-    [groupsToken, workspacesToken, isWorkspacesUser, isAuthenticated, userEmail, endpoints],
+    [groupsToken, workspacesToken, isWorkspacesUser, isHubmapUser, isAuthenticated, userEmail, endpoints],
   );
 
   return (
