@@ -1,0 +1,1 @@
+- Added support for text-only publication vignettes without Vitessce visualizations.
