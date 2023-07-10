@@ -1,11 +1,17 @@
 import React from 'react';
+// import ProtectedAccess from './ProtectedAccess';
+// import NoProtectedAccess from './NoProtectedAccess';
+import NonConsortiumMembers from './NonConsortiumMembers';
+// import QA from './QA';
 
 function LoggedIn() {
   return (
-    <div>
-      This is the LoggedIn scenario. In this current implementation (subject to change) there will be conditional logic
-      for 4 other scenarios (access to protected, no access to protected, non-consortium, QA/New/Processing/Error).{' '}
-    </div>
+    <>
+      {/* <ProtectedAccess />
+      <NoProtectedAccess /> */}
+      <NonConsortiumMembers />
+      {/* <QA /> */}
+    </>
   );
 }
 
