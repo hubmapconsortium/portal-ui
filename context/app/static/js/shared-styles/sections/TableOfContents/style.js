@@ -21,6 +21,7 @@ const StyledItemLink = styled(Link)`
   padding-left: 4px;
   border-left: 3px solid transparent;
   margin-bottom: ${(props) => props.theme.spacing(0.25)}px;
+  white-space: nowrap;
 
   &:hover {
     border-left: 3px solid #c4c4c4; // TODO: Move to theme.
