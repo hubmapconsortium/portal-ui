@@ -51,10 +51,8 @@ function GlobusLink() {
 
   return statusCode ? (
     <DetailSectionPaper>
-      {hubmap_id}
       <FilesConditionalLink href={url} hasAgreedToDUA={hasAgreedToDUA} openDUA={() => openDUA(url)} variant="body2">
-        {' '}
-        Globus <StyledExternalLinkIcon />
+        {hubmap_id} Globus <StyledExternalLinkIcon />
       </FilesConditionalLink>
     </DetailSectionPaper>
   ) : null;
