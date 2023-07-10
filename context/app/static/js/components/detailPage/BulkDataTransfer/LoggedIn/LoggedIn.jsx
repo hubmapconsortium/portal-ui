@@ -1,16 +1,16 @@
 import React from 'react';
 // import ProtectedAccess from './ProtectedAccess';
-import NoProtectedAccess from './NoProtectedAccess';
+// import NoProtectedAccess from './NoProtectedAccess';
 // import NonConsortiumMembers from './NonConsortiumMembers';
-// import QA from './QA';
+import QA from './QA';
 
 function LoggedIn() {
   return (
     <>
-      {/* <ProtectedAccess /> */}
+      {/* <ProtectedAccess />
       <NoProtectedAccess />
-      {/* <NonConsortiumMembers />
-      <QA /> */}
+      <NonConsortiumMembers /> */}
+      <QA />
     </>
   );
 }
