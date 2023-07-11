@@ -6,6 +6,6 @@ export type VignetteFigure = {
 export type PublicationVignette = {
   name: string;
   description: string;
-  figures: VignetteFigure[];
+  figures?: VignetteFigure[];
   directory_name: string;
 };

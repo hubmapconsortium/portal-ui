@@ -1,13 +1,8 @@
 import useSWR from 'swr';
 import { useAppContext } from 'js/components/Contexts';
+import { multiFetcher } from 'js/helpers/multiFetcher';
 import { fillUrls } from './utils';
 import { PublicationVignette } from '../types';
-
-// Fetcher function that lets SWR fetch multiple urls at once
-const multiFetcher = (...urls: string[]) => {
-  const f = (url: string) => fetch(url).then((response) => response.json());
-  return Promise.all(urls.map((url) => f(url)));
-};
 
 type PublicationVignetteConfsInput = {
   uuid: string;
@@ -18,9 +13,10 @@ type PublicationVignetteConfsInput = {
 export function usePublicationVignetteConfs({ uuid, vignetteDirName, vignette }: PublicationVignetteConfsInput) {
   const { assetsEndpoint, groupsToken } = useAppContext();
   // Extract file paths from the vignette object to form the urls to fetch for this vignette
-  const urls = vignette.figures.map(
-    ({ file }) => `${assetsEndpoint}/${uuid}/vignettes/${vignetteDirName}/${file}?token=${groupsToken}`,
-  );
+  const urls =
+    vignette.figures?.map(
+      ({ file }) => `${assetsEndpoint}/${uuid}/vignettes/${vignetteDirName}/${file}?token=${groupsToken}`,
+    ) ?? [];
   const { data } = useSWR(urls, multiFetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
