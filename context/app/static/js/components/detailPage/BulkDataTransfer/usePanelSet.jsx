@@ -28,30 +28,47 @@ const sraExperimentLink = {
   key: 'SRA Experiment',
 };
 
+const loginPanel = {
+  title: 'HuBMAP Consortium Members: Globus Access',
+  status: 'error',
+  tooltip:
+    'The database of Genotypes and Phenotypes archive and distribute data and results from studies that have investigated the interaction of genotype and phenotype in humans.',
+  children: (
+    <>
+      This dataset contains protected-access human sequence data. If you are not a Consortium member, you must access
+      these data through dbGaP if available. dbGaP authentication is required for downloading through these links. View{' '}
+      <OutboundLink href="https://sharing.nih.gov/accessing-data/accessing-genomic-data/how-to-request-and-access-datasets-from-dbgap#block-bootstrap5-subtheme-page-title">
+        documentation
+      </OutboundLink>{' '}
+      on how to attain dbGaP access.
+    </>
+  ),
+  addOns: (
+    <LoginButton href="/login" variant="contained" color="primary">
+      Member Login
+    </LoginButton>
+  ),
+};
+
+const noDbGaPPanel = {
+  title: 'Non-Consortium Members: Database of Genotypes and Phenotypes (dbGaP)',
+  status: 'error',
+  tooltip: 'Global research data management system.',
+  children: (
+    <>
+      This dataset contains protected-access human sequence data. Data is not yet available through dbGaP, but will be
+      available soon. Please contact{' '}
+      <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+        help@hubmapconsortium.org
+      </EmailIconLink>{' '}
+      with any questions regarding this data.
+    </>
+  ),
+};
+
 const PROTECTED_DATA = {
   panels: [
-    {
-      title: 'HuBMAP Consortium Members: Globus Access',
-      status: 'error',
-      tooltip:
-        'The database of Genotypes and Phenotypes archive and distribute data and results from studies that have investigated the interaction of genotype and phenotype in humans.',
-      children: (
-        <>
-          This dataset contains protected-access human sequence data. If you are not a Consortium member, you must
-          access these data through dbGaP if available. dbGaP authentication is required for downloading through these
-          links. View{' '}
-          <OutboundLink href="https://sharing.nih.gov/accessing-data/accessing-genomic-data/how-to-request-and-access-datasets-from-dbgap#block-bootstrap5-subtheme-page-title">
-            documentation
-          </OutboundLink>{' '}
-          on how to attain dbGaP access.
-        </>
-      ),
-      addOns: (
-        <LoginButton href="/login" variant="contained" color="primary">
-          Member Login
-        </LoginButton>
-      ),
-    },
+    loginPanel,
     {
       title: 'Non-Consortium Members: Database of Genotypes and Phenotypes (dbGaP)',
       status: 'success',
@@ -71,6 +88,11 @@ const PROTECTED_DATA = {
     },
   ],
   links: [dbGaPLink, sraExperimentLink],
+};
+
+const PROTECTED_DATA_NO_DBGAP = {
+  panels: [loginPanel, noDbGaPPanel],
+  links: [],
 };
 
 const PUBLIC_DATA = {
@@ -149,6 +171,11 @@ const NON_CONSORTIUM_MEMBERS = {
   links: [dbGaPLink, sraExperimentLink],
 };
 
+const NON_CONSORTIUM_MEMBERS_NO_DBGAP = {
+  panels: [noDbGaPPanel],
+  links: [],
+};
+
 const DATASET_NOT_FINALIZED = {
   error: (
     <div>
@@ -162,8 +189,15 @@ const DATASET_NOT_FINALIZED = {
   ),
 };
 
-export const useBulkDataTransferPanels = () => {
+export const usePanelSet = () => {
   const { isAuthenticated, isHubmapUser } = useAppContext();
+
+  const {
+    entity: { dbgap_study_url },
+  } = useFlaskDataContext();
+
+  const hasDbGaPStudyURL = Boolean(dbgap_study_url);
+
   const {
     entity: { mapped_data_access_level: accessType, mapped_status: status, uuid },
   } = useFlaskDataContext();
@@ -179,7 +213,10 @@ export const useBulkDataTransferPanels = () => {
   if (isAuthenticated) {
     // Non-consortium case if user is not in HuBMAP Globus group
     if (isNonConsortium) {
-      return NON_CONSORTIUM_MEMBERS;
+      if (hasDbGaPStudyURL) {
+        return NON_CONSORTIUM_MEMBERS;
+      }
+      return NON_CONSORTIUM_MEMBERS_NO_DBGAP;
     }
 
     // If file is protected and request against the file returns 403, user has no access to protected data
@@ -196,5 +233,9 @@ export const useBulkDataTransferPanels = () => {
   }
 
   // Unauthenticated cases
-  return PROTECTED_DATA;
+  if (hasDbGaPStudyURL) {
+    return PROTECTED_DATA;
+  }
+
+  return PROTECTED_DATA_NO_DBGAP;
 };

@@ -6,14 +6,14 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import BulkDataTransferPanel from './BulkDataTransferPanel';
 import Link from './Link';
 import NoAccess from './NoAccess';
-import { useBulkDataTransferPanels } from './useBulkDataPanels';
+import { usePanelSet } from './usePanelSet';
 
 function BulkDataTransferPanels() {
-  const panelsToUse = useBulkDataTransferPanels();
-
   const {
     entity: { dbgap_study_url, dbgap_sra_experiment_url },
   } = useFlaskDataContext();
+
+  const panelsToUse = usePanelSet();
 
   // Assign dynamic URL's to each type of link
   const linkTitleUrlMap = {
