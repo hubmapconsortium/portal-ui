@@ -1,2 +1,1 @@
 - Add links to Globus, dbGap study, SRA Experiment, and SRA Bioproject for dbGaP datasets. 
-- Trigger consent modal for Globus link to dbGaP datasets.
