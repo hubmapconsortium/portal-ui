@@ -108,8 +108,9 @@ const ACCESS_TO_PROTECTED_DATA = {
       children: (
         <>
           You are authorized to access protected-access human sequence data through the Globus Research Data Management
-          System. Please review and follow all policies related to the use of these protected data. If you require
-          additional help, email{' '}
+          System. Please review and follow all{' '}
+          <OutboundLink href="https://hubmapconsortium.org/policies/">policies</OutboundLink> related to the use of
+          these protected data. If you require additional help, email{' '}
           <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
             help@hubmapconsortium.org
           </EmailIconLink>{' '}
