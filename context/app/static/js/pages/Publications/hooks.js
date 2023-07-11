@@ -1,16 +1,31 @@
 import { useState } from 'react';
 
-import { useSearchHits } from 'js/hooks/useSearchData';
-import { buildPublicationsSeparatedByStatus } from './utils';
+import useSearchData from 'js/hooks/useSearchData';
+import { countPublicationAggs } from './utils';
 
-const getAllPublicationsQuery = {
-  post_filter: { term: { 'entity_type.keyword': 'Publication' } },
-  size: 10000,
-  _source: ['uuid', 'title', 'contributors', 'publication_status', 'publication_venue', 'publication_date'],
+const publicationsStatusAggsQuery = {
+  query: { term: { 'entity_type.keyword': 'Publication' } },
+  aggs: {
+    publication_status: {
+      terms: {
+        field: 'publication_status',
+      },
+    },
+  },
+  size: 0,
 };
 
+function usePublicationStatusAggs() {
+  const { searchData, isLoading } = useSearchData(publicationsStatusAggsQuery);
+  const publicationsStatusBuckets = searchData?.aggregations?.publication_status?.buckets || [];
+
+  const publicationsCounts = countPublicationAggs(publicationsStatusBuckets);
+
+  return { publicationsCounts, isLoading };
+}
+
 function usePublications() {
-  const { searchHits: publications } = useSearchHits(getAllPublicationsQuery);
+  const { publicationsCounts } = usePublicationStatusAggs();
 
   const [openTabIndex, setOpenTabIndex] = useState(0);
 
@@ -18,11 +33,8 @@ function usePublications() {
     setOpenTabIndex(newIndex);
   };
 
-  const publicationsPanelsPropsSeparatedByStatus = buildPublicationsSeparatedByStatus(publications);
-
   return {
-    publicationsPanelsPropsSeparatedByStatus,
-    publicationsCount: publications.length,
+    publicationsCounts,
     openTabIndex,
     handleChange,
   };

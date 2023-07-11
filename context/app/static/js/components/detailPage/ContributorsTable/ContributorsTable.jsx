@@ -21,7 +21,7 @@ function ContributorsTable({ title, contributors = [] }) {
   ];
 
   return (
-    <DetailPageSection id={title.toLowerCase()}>
+    <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
       <SectionHeader>{title}</SectionHeader>
       <Paper>
         <StyledTableContainer>
@@ -29,16 +29,25 @@ function ContributorsTable({ title, contributors = [] }) {
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
-                  <HeaderCell key={column.id}>{column.label}</HeaderCell>
+                  <HeaderCell
+                    key={column.id}
+                    data-testid={`${title.toLowerCase()}-${column.label.toLowerCase()}-header`}
+                  >
+                    {column.label}
+                  </HeaderCell>
                 ))}
-                <IconTooltipCell component={HeaderCell} tooltipTitle="Open Researcher and Contributor ID">
+                <IconTooltipCell
+                  component={HeaderCell}
+                  tooltipTitle="Open Researcher and Contributor ID"
+                  data-testid={`${title.toLowerCase()}-orcid-header`}
+                >
                   ORCID
                 </IconTooltipCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {contributors.map(({ orcid_id, name, affiliation }) => (
-                <TableRow key={orcid_id}>
+                <TableRow key={orcid_id} data-testid="contributor-row">
                   <TableCell>{name}</TableCell>
                   <TableCell>{affiliation}</TableCell>
                   <TableCell>

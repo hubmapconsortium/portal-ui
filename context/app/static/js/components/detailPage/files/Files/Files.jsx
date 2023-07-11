@@ -38,7 +38,7 @@ function Files({ files }) {
 
   return (
     <FilesContext.Provider value={filesContext}>
-      <DetailPageSection id="files">
+      <DetailPageSection id="files" data-testid="files">
         <SectionHeader>Files</SectionHeader>
         {files.length > 0 && (
           <MarginBottomDiv>
