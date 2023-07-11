@@ -22,19 +22,16 @@ function ProtocolLink({ title, resolverHostnameAndDOI }) {
 }
 
 function Protocol({ protocol_url }) {
-  const matchedDoiSuffix = protocol_url.match(/\w*$/)[0];
-
-  const protocolData = useProtocolData(matchedDoiSuffix, 1);
-
-  const title = protocolData?.protocol?.title;
-  const resolverHostnameAndDOI = protocolData?.protocol?.doi;
+  const protocolData = useProtocolData(protocol_url, 1);
 
   return (
     <DetailPageSection id="protocols">
       <SectionHeader>Protocols</SectionHeader>
       <Divider />
       <StyledPaper>
-        <ProtocolLink title={title} resolverHostnameAndDOI={resolverHostnameAndDOI} />
+        {protocolData.map(({ title, resolverHostnameAndDOI }) => (
+          <ProtocolLink key={title} title={title} resolverHostnameAndDOI={resolverHostnameAndDOI} />
+        ))}
       </StyledPaper>
     </DetailPageSection>
   );
