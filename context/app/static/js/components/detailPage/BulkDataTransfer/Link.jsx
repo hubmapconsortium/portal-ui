@@ -8,7 +8,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { InfoIcon } from 'js/shared-styles/icons';
 import { LinkContainer, StyledLink } from './style';
 
-function Link({ url, title, description, tooltip, outBoundLink }) {
+function Link({ url, title, description, tooltip, outboundLink }) {
   return (
     <>
       <Divider />
@@ -22,7 +22,7 @@ function Link({ url, title, description, tooltip, outBoundLink }) {
           )}
         </StyledLink>
         <Typography variant="body2">{description}</Typography>
-        {outBoundLink && <OutboundIconLink href={outBoundLink}> Here is additional documentation.</OutboundIconLink>}
+        {outboundLink && <OutboundIconLink href={outboundLink}> Here is additional documentation.</OutboundIconLink>}
       </LinkContainer>
     </>
   );

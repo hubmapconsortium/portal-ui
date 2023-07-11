@@ -23,7 +23,7 @@ const dbGaPLink = {
   title: 'dbGaP Study',
   tooltip: dbGaPTooltip,
   description: 'Navigate to the "Bioproject" or "Sequencing Read Archive" links to access the datasets.',
-  outBoundLink: '',
+  outboundLink: '',
   key: 'dbGaP',
 };
 
@@ -31,7 +31,7 @@ const sraExperimentLink = {
   title: 'SRA Experiment',
   tooltip: sraExpTooltip,
   description: 'Select the "Run" link on the page to download the dataset information.',
-  outBoundLink: 'https://www.ncbi.nlm.nih.gov/sra/docs/',
+  outboundLink: 'https://www.ncbi.nlm.nih.gov/sra/docs/',
   key: 'SRA Experiment',
 };
 
@@ -179,11 +179,13 @@ const useBulkDataTransferPanels = () => {
     if (hasNoAccess) {
       return NO_ACCESS_TO_PROTECTED_DATA;
     }
+
     // Non-consortium case if user is not in HuBMAP Globus group
     const isNonConsortium = !isHubmapUser;
     if (isNonConsortium) {
       return NON_CONSORTIUM_MEMBERS;
     }
+
     // If dataset status is `New`, `Error`, `QA`, `Processing`, then data is not yet available
     const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing'];
     const isNotFinalized = unfinalizedStatuses.includes(status);
@@ -192,6 +194,7 @@ const useBulkDataTransferPanels = () => {
     }
     return ACCESS_TO_PROTECTED_DATA;
   }
+
   // Unauthenticated cases
   if (accessType === 'Protected') {
     return PROTECTED_DATA;
