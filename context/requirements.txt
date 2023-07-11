@@ -220,11 +220,11 @@ fasteners==0.17.3 \
     --hash=sha256:a9a42a208573d4074c77d041447336cf4e3c1389a256fd3e113ef59cf29b7980 \
     --hash=sha256:cae0772df265923e71435cc5057840138f4e8b6302f888a567d06ed8e1cbca03
     # via zarr
-flask==2.0.1 \
-    --hash=sha256:1c4c257b1892aec1398784c63791cbaa43062f1f7aeb555c4da961b20ee68f55 \
-    --hash=sha256:a6209ca15eb63fc9385f38e452704113d679511d9574d09b2cf9183ae7d20dc9
+flask==2.2.5 \
+    --hash=sha256:58107ed83443e86067e41eff4631b058178191a355886f8e479e347fa1285fdf \
+    --hash=sha256:edee9b0a7ff26621bd5a8c10ff484ae28737a2410d99b0bb9a6850c7fb977aa0
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   hubmap-commons
 frozenlist==1.3.0 \
     --hash=sha256:006d3595e7d4108a12025ddf415ae0f6c9e736e726a5db0183326fd191b14c5e \
@@ -301,17 +301,17 @@ globus-sdk==3.9.0 \
     --hash=sha256:456f707b25a8c502607134f1d699b5970ef1aa9d17877474db73fc6d87c711e9 \
     --hash=sha256:a196070b549d6af534a7fa8a180eae6ab84c0745959d5ee2d3863705eef9c7fc
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   hubmap-commons
 hubmap-api-py-client==0.0.9 \
     --hash=sha256:8af6df46374ed838d3aeb5fb7298d7212145eb0f8dca01c095147fb05e304ee2 \
     --hash=sha256:9a4601d8d3df9c56d6803cee2678844589808bd9df71657ac459a2559c0a3ccd
-    # via -r context/requirements.in
+    # via -r requirements.in
 hubmap-commons==2.0.12 \
     --hash=sha256:2812bfd553c8a8a0fc4cac581dec7ebff00e35bb887f6cf8810a0dfa91a1fde8 \
     --hash=sha256:c808010e716d5460b44fd18123965212113911b06b3b9cd9868c0740e800d4f1
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   portal-visualization
 idna==3.3 \
     --hash=sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff \
@@ -319,6 +319,10 @@ idna==3.3 \
     # via
     #   requests
     #   yarl
+importlib-metadata==6.8.0 \
+    --hash=sha256:3ebb78df84a805d7698245025b975d9d67053cd94c79245ba4b3eb694abe68bb \
+    --hash=sha256:dbace7892d8c0c4ac1ad096662232f831d4e64f4c4545bd53016a3e9d4654743
+    # via flask
 ipython-genutils==0.2.0 \
     --hash=sha256:72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8 \
     --hash=sha256:eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8
@@ -421,7 +425,7 @@ lxml==4.9.1 \
     --hash=sha256:fe17d10b97fdf58155f858606bddb4e037b805a60ae023c009f760d8361a4eb8 \
     --hash=sha256:fe749b052bb7233fe5d072fcb549221a8cb1a16725c47c37e42b0b9cb3ff2c3f
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   prov
 markupsafe==2.1.1 \
     --hash=sha256:0212a68688482dc52b2d45013df70d169f542b7394fc744c02a57374a4207003 \
@@ -464,7 +468,9 @@ markupsafe==2.1.1 \
     --hash=sha256:efc1913fd2ca4f334418481c7e595c00aad186563bbc1ec76067848c7ca0a933 \
     --hash=sha256:f121a1420d4e173a5d96e47e9a0c0dcff965afdf1626d28de1460815f7c4ee7a \
     --hash=sha256:fc7b548b17d238737688817ab67deebb30e8073c95749d55538ed473130ec0c7
-    # via jinja2
+    # via
+    #   jinja2
+    #   werkzeug
 multidict==6.0.2 \
     --hash=sha256:0327292e745a880459ef71be14e709aaea2f783f3537588fb4ed09b6c01bca60 \
     --hash=sha256:041b81a5f6b38244b34dc18c7b6aba91f9cdaf854d9a39e5ff0b58e2b5773b9c \
@@ -640,7 +646,7 @@ platformdirs==2.5.1 \
     # via black
 portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.12.zip \
     --hash=sha256:c00b21f842cf8d06c25580581ccefa6e722121f18a7b06fa10dd113edbe94fb0
-    # via -r context/requirements.in
+    # via -r requirements.in
 property==2.2 \
     --hash=sha256:d25e4da4e415408b9eb39b6521c088e4e2b8a9e2f9f96fb2d91680e97207ea19
     # via hubmap-commons
@@ -686,7 +692,7 @@ pyrsistent==0.18.1 \
 python-datauri==0.2.8 \
     --hash=sha256:5d6062ff85bc785a2230c40151d5aded80f1ce8652d5a31e3a64c78aa6e52a20 \
     --hash=sha256:68e8699cf2754a66f185f486c8d4c73e7ee5304aa53253bad0434fdbbde3f0b7
-    # via -r context/requirements.in
+    # via -r requirements.in
 python-dateutil==2.8.2 \
     --hash=sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86 \
     --hash=sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
@@ -696,7 +702,7 @@ python-dateutil==2.8.2 \
 python-frontmatter==0.5.0 \
     --hash=sha256:a7dcdfdaf498d488dce98bfa9452f8b70f803a923760ceab1ebd99291d98d28a \
     --hash=sha256:a9c2e90fc38e9f0c68d8b82299040f331ca3b8525ac7fa5f6beffef52b26c426
-    # via -r context/requirements.in
+    # via -r requirements.in
 pytz==2022.1 \
     --hash=sha256:1e760e2fe6a8163bc0b3d9a19c4f84342afa0a2affebfaa84b01b978a02ecaa7 \
     --hash=sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c
@@ -727,7 +733,7 @@ pyyaml==5.4 \
     --hash=sha256:f7a21e3d99aa3095ef0553e7ceba36fb693998fbb1226f1392ce33681047465f \
     --hash=sha256:fdc6b2cb4b19e431994f25a9160695cc59a4e861710cc6fc97161c5e845fc579
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   hubmap-commons
     #   python-frontmatter
 rdflib==6.1.1 \
@@ -738,7 +744,7 @@ requests==2.27.1 \
     --hash=sha256:68d7c56fd5a8999887728ef304a6d12edc7be74f1cfa47714fc8b414525c9a61 \
     --hash=sha256:f22fa1e554c9ddfd16e6e41ac79759e17be9e492b3587efa038054674760e72d
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   globus-sdk
     #   hubmap-api-py-client
     #   hubmap-commons
@@ -803,9 +809,9 @@ vitessce==1.0.9 \
     --hash=sha256:1efc3961ecdc9518f672e0635cb8b2215ad627d9d631e61ecabc9d8e0dcd575a \
     --hash=sha256:e06a7df7aabdb24fb2aad49d3df7eb7230e6ad7b364748e8a8d3df186cfc1e06
     # via portal-visualization
-werkzeug==2.0.3 \
-    --hash=sha256:1421ebfc7648a39a5c58c601b154165d05cf47a3cd0ccb70857cbdacf6c8f2b8 \
-    --hash=sha256:b863f8ff057c522164b6067c9e28b041161b4be5ba4d0daceeaa50a163822d3c
+werkzeug==2.3.6 \
+    --hash=sha256:935539fa1413afbb9195b24880778422ed620c0fc09670945185cce4d91a8890 \
+    --hash=sha256:98c774df2f91b05550078891dee5f0eb0cb797a522c757a2452b9cee5b202330
     # via flask
 yarl==1.7.2 \
     --hash=sha256:044daf3012e43d4b3538562da94a88fb12a6490652dbc29fb19adfa02cf72eac \
@@ -887,6 +893,10 @@ zarr==2.8.3 \
     # via
     #   portal-visualization
     #   vitessce
+zipp==3.16.0 \
+    --hash=sha256:1876cb065531855bbe83b6c489dcf69ecc28f1068d8e95959fe8bbc77774c941 \
+    --hash=sha256:5dadc3ad0a1f825fe42ce1bce0f2fc5a13af2e6b2d386af5b0ff295bc0a287d3
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==61.2.0 \
