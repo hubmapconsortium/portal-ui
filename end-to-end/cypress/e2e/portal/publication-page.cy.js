@@ -191,7 +191,7 @@ describe("Publication page", () => {
     });
 
     it("has a link to the files in Globus", () => {
-      cy.findByTestId("files")
+      cy.findByTestId("bulk-data-transfer")
         .should("contain", "Bulk Data Transfer")
         .and(
           "contain",
