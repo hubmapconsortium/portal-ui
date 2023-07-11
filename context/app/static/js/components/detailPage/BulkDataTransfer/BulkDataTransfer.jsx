@@ -241,7 +241,7 @@ function BulkDataTransfer() {
 
   return (
     <FilesContext.Provider value={filesContext}>
-      <DetailPageSection id="bulk-data-transfer">
+      <DetailPageSection id="bulk-data-transfer" data-testid="bulk-data-transfer">
         <SectionHeader>Bulk Data Transfer</SectionHeader>
         <StyledContainer>
           {panelsToUse.error ? (
