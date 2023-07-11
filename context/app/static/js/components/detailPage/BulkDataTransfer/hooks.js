@@ -1,7 +1,7 @@
+import useSWR from 'swr';
+
 import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
-
-import useSWR from 'swr';
 
 const fetcher = async (entityEndpoint, uuid, groupsToken) => {
   const requestHeaders = getAuthHeader(groupsToken);
