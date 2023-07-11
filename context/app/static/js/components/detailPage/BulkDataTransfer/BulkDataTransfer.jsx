@@ -179,28 +179,31 @@ const useBulkDataTransferPanels = () => {
   const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing'];
   const isNotFinalized = unfinalizedStatuses.includes(status);
 
-  if (isAuthenticated) {
-    if (hasNoAccess) {
-      return NO_ACCESS_TO_PROTECTED_DATA;
-    }
+  if (accessType === 'Public') {
+    return PUBLIC_DATA;
+  }
 
+  if (isAuthenticated) {
     // Non-consortium case if user is not in HuBMAP Globus group
     if (isNonConsortium) {
       return NON_CONSORTIUM_MEMBERS;
+    }
+
+    // If file is protected and request against the file returns 403, user has no access to protected data
+    if (hasNoAccess) {
+      return NO_ACCESS_TO_PROTECTED_DATA;
     }
 
     // If dataset status is `New`, `Error`, `QA`, `Processing`, then data is not yet available
     if (isNotFinalized) {
       return DATASET_NOT_FINALIZED;
     }
+
     return ACCESS_TO_PROTECTED_DATA;
   }
 
   // Unauthenticated cases
-  if (accessType === 'Protected') {
-    return PROTECTED_DATA;
-  }
-  return PUBLIC_DATA;
+  return PROTECTED_DATA;
 };
 
 function BulkDataTransfer() {
