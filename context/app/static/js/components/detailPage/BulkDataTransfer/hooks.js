@@ -1,5 +1,5 @@
-import { useAppContext } from 'js/components/Contexts';
 import { getAuthHeader } from 'js/helpers/functions';
+import { useAppContext } from 'js/components/Contexts';
 
 import useSWR from 'swr';
 

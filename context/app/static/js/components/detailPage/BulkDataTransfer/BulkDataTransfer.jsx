@@ -1,18 +1,18 @@
 import React, { useState, useMemo, useCallback } from 'react';
+import Paper from '@material-ui/core/Paper';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { FilesContext, useAppContext, useDetailContext, useFlaskDataContext } from 'js/components/Contexts';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import Paper from '@material-ui/core/Paper';
-import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import FileBrowserDUA from './FileBrowserDUA';
-import { LoginButton, StyledContainer } from './style';
 import BulkDataTransferPanel from './BulkDataTransferPanel';
 import Link from './Link';
 import GlobusLink from './GlobusLink';
 import NoAccess from './NoAccess';
 import { useIsProtectedFile } from './hooks';
+import { LoginButton, StyledContainer } from './style';
 
 const dbGaPTooltip =
   'The database of Genotypes and Phenotypes archive and distribute data and results from studies that have investigated the interaction of genotype and phenotype in humans.';
@@ -240,7 +240,6 @@ function BulkDataTransfer() {
       <DetailPageSection id="bulk-data-transfer">
         <SectionHeader>Bulk Data Transfer</SectionHeader>
         <StyledContainer>
-          {/* {isAuthenticated ? <LoggedIn /> : <NotLoggedIn />} */}
           {panelsToUse.error ? (
             <NoAccess>{panelsToUse.error}</NoAccess>
           ) : (
