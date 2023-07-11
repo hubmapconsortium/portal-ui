@@ -175,20 +175,21 @@ const useBulkDataTransferPanels = () => {
     entity: { mapped_data_access_level: accessType, mapped_status: status, uuid },
   } = useFlaskDataContext();
   const hasNoAccess = useIsProtectedFile(uuid);
+  const isNonConsortium = !isHubmapUser;
+  const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing'];
+  const isNotFinalized = unfinalizedStatuses.includes(status);
+
   if (isAuthenticated) {
     if (hasNoAccess) {
       return NO_ACCESS_TO_PROTECTED_DATA;
     }
 
     // Non-consortium case if user is not in HuBMAP Globus group
-    const isNonConsortium = !isHubmapUser;
     if (isNonConsortium) {
       return NON_CONSORTIUM_MEMBERS;
     }
 
     // If dataset status is `New`, `Error`, `QA`, `Processing`, then data is not yet available
-    const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing'];
-    const isNotFinalized = unfinalizedStatuses.includes(status);
     if (isNotFinalized) {
       return DATASET_NOT_FINALIZED;
     }
