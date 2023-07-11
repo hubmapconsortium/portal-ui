@@ -138,7 +138,10 @@ def login():
         log('7: 401')
         abort(401)
 
-    additional_groups = {'HuBMAP': current_app.config['GROUP_ID'], 'Workspaces': current_app.config['WORKSPACES_GROUP_ID']}
+    additional_groups = {
+        'HuBMAP': current_app.config['GROUP_ID'],
+        'Workspaces': current_app.config['WORKSPACES_GROUP_ID']
+    }
 
     session.update(
         groups_token=groups_token,
