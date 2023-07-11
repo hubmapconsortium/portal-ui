@@ -49,15 +49,18 @@ describe("Publication page", () => {
     it("has a publication date", () => {
       cy.findByTestId("publication-date").contains("2021-10-18");
     });
-    it("has a table of contents with links to the summary, data, visualizations, files, authors, and provenance sections", () => {
+    it("has a table of contents with links to the summary, data, visualizations, bulk data transfer, authors, and provenance sections", () => {
       cy.findByTestId("table-of-contents")
         .should("contain", "Summary")
         .and("contain", "Data")
         .and("contain", "Visualizations")
-        .and("contain", "Files")
+        .and("contain", "Bulk Data Transfer")
         .and("contain", "Authors")
         .and("contain", "Provenance");
     });
+    it('does not have a "files" section due to the lack of files to display', () => {
+      cy.findByTestId("table-of-contents").should("not.contain", "Files");
+    })
     it('has a "Data" section with tabs for tables of donors, samples, and datasets', () => {
       // Donors tab is active by default
       cy.findByTestId("donors-tab")
