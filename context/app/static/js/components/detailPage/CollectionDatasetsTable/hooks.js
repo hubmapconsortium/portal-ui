@@ -7,6 +7,7 @@ function useCollectionsDatasets({ ids, sourceFields }) {
       ...getIDsQuery(ids),
     },
     _source: sourceFields,
+    size: 10000,
   };
 
   const { searchHits: datasets } = useSearchHits(query);

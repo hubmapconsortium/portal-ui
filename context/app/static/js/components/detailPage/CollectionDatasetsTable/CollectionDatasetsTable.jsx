@@ -1,31 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import format from 'date-fns/format';
 import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
 import Typography from '@material-ui/core/Typography';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 
-import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
+import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
+import { lastModifiedTimestampCol } from 'js/components/detailPage/derivedEntities/columns';
 import { useCollectionsDatasets } from './hooks';
-import { StyledLink } from './style';
 
+const columns = [
+  {
+    id: 'origin_samples_unique_mapped_organs',
+    label: 'Organ',
+    renderColumnCell: ({ origin_samples_unique_mapped_organs }) => origin_samples_unique_mapped_organs.join(', '),
+  },
+  {
+    id: 'mapped_data_types',
+    label: 'Assay Types',
+    renderColumnCell: ({ mapped_data_types }) => mapped_data_types.join(', '),
+  },
+  lastModifiedTimestampCol,
+  {
+    id: 'created_by_user_displayname',
+    label: 'Contact',
+    renderColumnCell: ({ created_by_user_displayname }) => created_by_user_displayname,
+  },
+  { id: 'mapped_status', label: 'Status', renderColumnCell: ({ mapped_status }) => mapped_status },
+];
 function CollectionDatasetsTable({ datasets }) {
-  const columns = [
-    { id: 'hubmap_id', label: 'HuBMAP ID' },
-    { id: 'origin_samples_unique_mapped_organs', label: 'Organ' },
-    { id: 'mapped_data_types', label: 'Assay Types' },
-    { id: 'last_modified_timestamp', label: 'Last Modified' },
-    { id: 'created_by_user_displayname', label: 'Contact' },
-    { id: 'mapped_status', label: 'Status' },
-  ];
-
-  const data = useCollectionsDatasets({ ids: datasets.map((d) => d.uuid), sourceFields: columns.map((c) => c.id) });
+  const data = useCollectionsDatasets({
+    ids: datasets.map((d) => d.uuid),
+    sourceFields: ['hubmap_id', 'entity_type', ...columns.map((c) => c.id)],
+  });
 
   return (
     <DetailPageSection id="datasets-table">
@@ -34,33 +41,7 @@ function CollectionDatasetsTable({ datasets }) {
         {datasets.length} Datasets
       </Typography>
       <Paper>
-        <StyledTableContainer>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <HeaderCell key={column.id}>{column.label}</HeaderCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.map(({ _source: dataset }) => (
-                <TableRow key={dataset.hubmap_id}>
-                  <TableCell>
-                    <StyledLink href={`/browse/dataset/${dataset.uuid}`} variant="body2">
-                      {dataset.hubmap_id}
-                    </StyledLink>
-                  </TableCell>
-                  <TableCell>{dataset.origin_samples_unique_mapped_organs.join(' ')} </TableCell>
-                  <TableCell>{dataset.mapped_data_types}</TableCell>
-                  <TableCell>{format(dataset.last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-                  <TableCell>{dataset.created_by_user_displayname}</TableCell>
-                  <TableCell>{dataset.mapped_status}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </StyledTableContainer>
+        <RelatedEntitiesTable columns={columns} entities={data} entityType="dataset" />
       </Paper>
     </DetailPageSection>
   );
