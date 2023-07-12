@@ -16,7 +16,7 @@ function PublicationsDataSection({ datasetUUIDs, uuid, associated_collection, is
   const { searchHits: collectionsData } = useSearchHits(query);
 
   return (
-    <DetailPageSection>
+    <DetailPageSection id="data">
       {isCollectionPublication && <SectionHeader>Data</SectionHeader>}
       {!isCollectionPublication && <PublicationRelatedEntities uuid={uuid} />}
       {Boolean(collectionsData) && (
