@@ -20,8 +20,8 @@
     "sourceMap": true,
     "noEmit": true,
     "paths": {
-      "@/*": [
-        "./app/static/js/*"
+      "js/*": [
+        "./*"
       ]
     }
   },

@@ -1,7 +1,12 @@
 import { useMemo } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { lastModifiedTimestampCol } from 'js/components/detailPage/derivedEntities/columns';
+import {
+  lastModifiedTimestampCol,
+  organCol,
+  dataTypesCol,
+  statusCol,
+} from 'js/components/detailPage/derivedEntities/columns';
 
 import { getAncestorsQuery } from 'js/helpers/queries';
 
@@ -14,7 +19,7 @@ function useAncestorSearchHits(descendantUUID) {
         'hubmap_id',
         'entity_type',
         'mapped_data_types',
-        'status',
+        'mapped_status',
         'descendant_counts',
         'last_modified_timestamp',
         'mapped_metadata',
@@ -82,11 +87,7 @@ function usePublicationsRelatedEntities(uuid) {
       tabLabel: 'Samples',
       data: ancestorsSplitByEntityType.Sample,
       columns: [
-        {
-          id: 'origin_samples_unique_mapped_organs.mapped_organ',
-          label: 'Organ',
-          renderColumnCell: ({ origin_samples_unique_mapped_organs }) => origin_samples_unique_mapped_organs.join(', '),
-        },
+        organCol,
         { id: 'sample_category', label: 'Sample Category', renderColumnCell: ({ sample_category }) => sample_category },
         lastModifiedTimestampCol,
       ],
@@ -96,21 +97,7 @@ function usePublicationsRelatedEntities(uuid) {
       entityType: 'Dataset',
       tabLabel: 'Datasets',
       data: ancestorsSplitByEntityType.Dataset,
-      columns: [
-        {
-          id: 'mapped_data_types',
-          label: 'Data Types',
-          renderColumnCell: ({ mapped_data_types }) => mapped_data_types.join(', '),
-        },
-
-        {
-          id: 'origin_samples_unique_mapped_organs.mapped_organ',
-          label: 'Organ',
-          renderColumnCell: ({ origin_samples_unique_mapped_organs }) => origin_samples_unique_mapped_organs.join(', '),
-        },
-        { id: 'status', label: 'Status', renderColumnCell: ({ status }) => status },
-        lastModifiedTimestampCol,
-      ],
+      columns: [dataTypesCol, organCol, statusCol, lastModifiedTimestampCol],
     },
   ];
 

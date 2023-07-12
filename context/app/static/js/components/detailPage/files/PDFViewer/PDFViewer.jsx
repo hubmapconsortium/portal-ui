@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import { Document, Page } from 'react-pdf';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -56,7 +56,9 @@ function PDFViewer({ pdfUrl }) {
       )}
       <Modal open={open} onClose={handleClose} aria-labelledby="pdf-viewer-modal" aria-describedby="pdf-viewer-modal">
         <ModalContentWrapper>
-          <Page pageNumber={currentPageNum} pdf={pdf} renderTextLayer={false} />
+          <Document file={pdfUrl}>
+            <Page pageNumber={currentPageNum} renderTextLayer={false} />
+          </Document>
           {pdf && (
             <PDFViewerControlButtons
               numPages={pdf.numPages}

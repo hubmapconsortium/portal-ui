@@ -1,1 +1,0 @@
-- Expand test suite for Publication pages.
