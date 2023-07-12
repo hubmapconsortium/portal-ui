@@ -14,7 +14,7 @@ function PublicationCollections({ collectionsData, isCollectionPublication }) {
       <>
         <StyledSectionPaper $isCollectionPublication={isCollectionPublication}>
           <LabelledSectionText label="Collections">
-            Datasets associated with this publication are included in the collections listed below.
+            Datasets associated with this publication are included in the Collections listed below.
           </LabelledSectionText>
         </StyledSectionPaper>
         <PanelList panelsProps={panelsProps} />
