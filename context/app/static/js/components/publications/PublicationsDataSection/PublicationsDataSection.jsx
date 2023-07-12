@@ -5,6 +5,8 @@ import PublicationCollections from 'js/components/publications/PublicationCollec
 import { buildCollectionsWithDatasetQuery } from 'js/hooks/useDatasetsCollections';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery } from 'js/helpers/queries';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import { DetailPageSection } from 'js/components/detailPage/style';
 
 function PublicationsDataSection({ datasetUUIDs, uuid, associated_collection, isCollectionPublication }) {
   const query = isCollectionPublication
@@ -14,10 +16,13 @@ function PublicationsDataSection({ datasetUUIDs, uuid, associated_collection, is
   const { searchHits: collectionsData } = useSearchHits(query);
 
   return (
-    <>
+    <DetailPageSection>
+      {isCollectionPublication && <SectionHeader>Data</SectionHeader>}
       {!isCollectionPublication && <PublicationRelatedEntities uuid={uuid} />}
-      {Boolean(collectionsData) && <PublicationCollections collectionsData={collectionsData} />}
-    </>
+      {Boolean(collectionsData) && (
+        <PublicationCollections collectionsData={collectionsData} isCollectionPublication={isCollectionPublication} />
+      )}
+    </DetailPageSection>
   );
 }
 
