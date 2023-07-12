@@ -8,20 +8,25 @@ const fetcher = async ([entityEndpoint, uuid, groupsToken]) => {
   const response = await fetch(`${entityEndpoint}/entities/dataset/globus-url/${uuid}`, {
     headers: requestHeaders,
   });
+  let responseUrl;
   if (!response.ok) {
     if (response.status === 403) {
       // eslint-disable-next-line no-console
       console.info('No error: 403 is an expected API response');
-      return true;
+    } else {
+      console.error('Entities API failed with status', response.status);
     }
+  } else {
+    responseUrl = await response.text();
   }
-  return false;
+
+  return { status: response.status, responseUrl };
 };
 
-export const useIsProtectedFile = (uuid) => {
+export const useFetchProtectedFile = (uuid) => {
   const { entityEndpoint, groupsToken } = useAppContext();
 
-  const { data } = useSWR([entityEndpoint, uuid, groupsToken], fetcher);
+  const { data: result } = useSWR([entityEndpoint, uuid, groupsToken], fetcher);
 
-  return data;
+  return result ?? { status: undefined, responseUrl: undefined };
 };

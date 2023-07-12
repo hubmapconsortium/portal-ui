@@ -4,7 +4,7 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import GlobusLink from './GlobusLink';
-import { useIsProtectedFile } from './hooks';
+import { useFetchProtectedFile } from './hooks';
 import { LoginButton } from './style';
 
 const dbGaPTooltip =
@@ -197,7 +197,8 @@ export const usePanelSet = () => {
   } = useFlaskDataContext();
 
   const hasDbGaPStudyURL = Boolean(dbgap_study_url);
-  const hasNoAccess = useIsProtectedFile(uuid);
+  const file = useFetchProtectedFile(uuid);
+  const hasNoAccess = file?.status === 403;
   const isNonConsortium = !isHubmapUser;
   const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing', 'Invalid'];
   const isNotFinalized = unfinalizedStatuses.includes(status);

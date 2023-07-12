@@ -219,7 +219,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         {shouldDisplaySection.files && (
           <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         )}
-        {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer accessType={mapped_data_access_level} />}
+        {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer visLiftedUUID={visLiftedUUID} />}
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
         <Attribution
