@@ -12,28 +12,6 @@ const lastModifiedTimestampCol = {
   renderColumnCell: ({ last_modified_timestamp }) => format(last_modified_timestamp, 'yyyy-MM-dd'),
 };
 
-const derivedSamplesColumns = [
-  {
-    id: 'origin_samples_unique_mapped_organs',
-    label: 'Organ',
-    renderColumnCell: ({ origin_samples_unique_mapped_organs }) => origin_samples_unique_mapped_organs.join(', '),
-  },
-  { id: 'sample_category', label: 'Sample Category', renderColumnCell: ({ sample_category }) => sample_category },
-  descendantCountsCol,
-  lastModifiedTimestampCol,
-];
-
-const derivedDatasetsColumns = [
-  {
-    id: 'mapped_data_types',
-    label: 'Data Types',
-    renderColumnCell: ({ mapped_data_types }) => mapped_data_types.join(', '),
-  },
-  { id: 'status', label: 'Status', renderColumnCell: ({ status }) => status },
-  descendantCountsCol,
-  lastModifiedTimestampCol,
-];
-
 const organCol = {
   id: 'origin_samples_unique_mapped_organs',
   label: 'Organ',
@@ -47,5 +25,14 @@ const dataTypesCol = {
 };
 
 const statusCol = { id: 'mapped_status', label: 'Status', renderColumnCell: ({ mapped_status }) => mapped_status };
+
+const derivedSamplesColumns = [
+  organCol,
+  { id: 'sample_category', label: 'Sample Category', renderColumnCell: ({ sample_category }) => sample_category },
+  descendantCountsCol,
+  lastModifiedTimestampCol,
+];
+
+const derivedDatasetsColumns = [dataTypesCol, statusCol, descendantCountsCol, lastModifiedTimestampCol];
 
 export { derivedSamplesColumns, derivedDatasetsColumns, lastModifiedTimestampCol, organCol, dataTypesCol, statusCol };
