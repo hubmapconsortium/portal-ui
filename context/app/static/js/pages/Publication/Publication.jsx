@@ -25,6 +25,7 @@ function Publication({ publication, vignette_json }) {
     ancestor_ids,
     publication_venue,
     files,
+    associated_collection,
   } = publication;
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
@@ -32,8 +33,11 @@ function Publication({ publication, vignette_json }) {
     setAssayMetadata({ hubmap_id, entity_type, title, publication_venue });
   }, [hubmap_id, entity_type, title, publication_venue, setAssayMetadata]);
 
+  const isCollectionPublication = Boolean(associated_collection);
+
   const shouldDisplaySection = {
     visualizations: Boolean(Object.keys(vignette_json).length),
+    provenance: !isCollectionPublication,
     files: true,
   };
 
@@ -49,13 +53,18 @@ function Publication({ publication, vignette_json }) {
   return (
     <DetailLayout sectionOrder={sectionOrder}>
       <PublicationSummary {...publication} status={combinedStatus} hasDOI={hasDOI} />
-      <PublicationsDataSection uuid={uuid} datasetUUIDs={ancestor_ids} />
+      <PublicationsDataSection
+        uuid={uuid}
+        datasetUUIDs={ancestor_ids}
+        associated_collection={associated_collection}
+        isCollectionPublication={isCollectionPublication}
+      />
       {shouldDisplaySection.visualizations && (
         <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
       )}
       <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />
       <ContributorsTable contributors={contributors} title="Authors" />
-      <ProvSection uuid={uuid} assayMetadata={publication} />
+      {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={publication} />}
     </DetailLayout>
   );
 }
