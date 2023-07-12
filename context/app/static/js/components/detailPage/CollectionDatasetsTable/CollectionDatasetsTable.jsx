@@ -6,29 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
-import {
-  lastModifiedTimestampCol,
-  organCol,
-  dataTypesCol,
-  statusCol,
-} from 'js/components/detailPage/derivedEntities/columns';
+
 import { useCollectionsDatasets } from './hooks';
 
-const columns = [
-  organCol,
-  dataTypesCol,
-  lastModifiedTimestampCol,
-  {
-    id: 'created_by_user_displayname',
-    label: 'Contact',
-    renderColumnCell: ({ created_by_user_displayname }) => created_by_user_displayname,
-  },
-  statusCol,
-];
 function CollectionDatasetsTable({ datasets }) {
-  const data = useCollectionsDatasets({
+  const { datasets: data, columns } = useCollectionsDatasets({
     ids: datasets.map((d) => d.uuid),
-    sourceFields: ['hubmap_id', 'entity_type', ...columns.map((c) => c.id)],
   });
 
   return (
