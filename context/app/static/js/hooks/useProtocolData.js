@@ -13,7 +13,7 @@ export function useFormattedProtocolUrls(protocolUrls, lastVersion) {
     const noHttpPrefix = protocols.map((url) => url.replace(/^(?:https?:\/\/)?/i, ''));
     // Strip `dx.doi.org/` from the beginning of the URL if it exists
     // dx.doi.org/10.17504/protocols.io.btnfnmbn -> 10.17504/protocols.io.btnfnmbn
-    const noDomainPrefix = noHttpPrefix.map((url) => url.replace(/^dx.doi.org\//i, ''));
+    const noDomainPrefix = noHttpPrefix.map((url) => url.replace(/^dx\.doi\.org\//i, ''));
     // Strip version number from end of the URL if it exists
     // 10.17504/protocols.io.btnfnmbn/v1 -> 10.17504/protocols.io.btnfnmbn
     const noVersionSuffix = noDomainPrefix.map((url) => url.replace(/\/v\d+$/, ''));
