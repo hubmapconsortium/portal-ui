@@ -1,3 +1,0 @@
-- Use swr in search-api fetch hooks.
-- Split publications landing page requests.
-- Change label of published publications tab to peer reviewed on publications landing page.

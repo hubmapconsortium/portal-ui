@@ -1,3 +1,20 @@
+## v0.74.1 - 2023-07-12
+
+- Upgrade Vitessce to v3.0.1.
+- Remove extra UUID suffix logic added when bumping from v2.x to v3.0.0, which is no longer required.
+- Get collection datasets from separate search-api query instead of the collection es document.
+- Expand test suite for Publication pages.
+- Add support for text-only publication vignettes without Vitessce visualizations.
+- Restore footer HuBMAP logo visibility.
+- Use swr in search-api fetch hooks.
+- Split publications landing page requests.
+- Change label of published publications tab to peer reviewed on publications landing page.
+- Upgraded to React 18.
+- Upgraded various dependencies to work with React 18.
+- Fixed undefined count tooltips popping up for entity counts on homepage.
+- Upgraded React-PDF to speed up display of PDF attachments.
+
+
 ## v0.74.0 - 2023-07-06
 
 - Add messaging for fair data principles to homepage, vitessce, and the dataset file browser.

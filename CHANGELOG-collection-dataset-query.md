@@ -1,1 +1,0 @@
-- Get collection datasets from separate search-api query instead of the collection es document.

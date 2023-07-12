@@ -1,2 +1,0 @@
-- Upgrade Vitessce to v3.0.1.
-- Remove extra UUID suffix logic added when bumping from v2.x to v3.0.0, which is no longer required.
