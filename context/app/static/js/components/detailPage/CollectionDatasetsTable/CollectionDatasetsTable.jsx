@@ -12,17 +12,20 @@ import TableRow from '@material-ui/core/TableRow';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
+import { useCollectionsDatasets } from './hooks';
 import { StyledLink } from './style';
 
 function CollectionDatasetsTable({ datasets }) {
   const columns = [
     { id: 'hubmap_id', label: 'HuBMAP ID' },
-    { id: 'organ', label: 'Organ' },
-    { id: 'data_types', label: 'Assay Types' },
+    { id: 'origin_samples_unique_mapped_organs', label: 'Organ' },
+    { id: 'mapped_data_types', label: 'Assay Types' },
     { id: 'last_modified_timestamp', label: 'Last Modified' },
-    { id: 'properties.created_by_user_displayname', label: 'Contact' },
-    { id: 'status', label: 'Status' },
+    { id: 'created_by_user_displayname', label: 'Contact' },
+    { id: 'mapped_status', label: 'Status' },
   ];
+
+  const data = useCollectionsDatasets({ ids: datasets.map((d) => d.uuid), sourceFields: columns.map((c) => c.id) });
 
   return (
     <DetailPageSection id="datasets-table">
@@ -41,18 +44,18 @@ function CollectionDatasetsTable({ datasets }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {datasets.map((dataset) => (
+              {data.map(({ _source: dataset }) => (
                 <TableRow key={dataset.hubmap_id}>
                   <TableCell>
                     <StyledLink href={`/browse/dataset/${dataset.uuid}`} variant="body2">
                       {dataset.hubmap_id}
                     </StyledLink>
                   </TableCell>
-                  <TableCell />
-                  <TableCell>{dataset.data_types}</TableCell>
+                  <TableCell>{dataset.origin_samples_unique_mapped_organs.join(' ')} </TableCell>
+                  <TableCell>{dataset.mapped_data_types}</TableCell>
                   <TableCell>{format(dataset.last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
                   <TableCell>{dataset.created_by_user_displayname}</TableCell>
-                  <TableCell>{dataset.status}</TableCell>
+                  <TableCell>{dataset.mapped_status}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
