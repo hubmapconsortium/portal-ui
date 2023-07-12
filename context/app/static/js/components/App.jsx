@@ -1,4 +1,5 @@
 import React from 'react';
+import { pdfjs } from 'react-pdf';
 import marked from 'marked';
 import Providers from './Providers';
 import Routes from './Routes';
@@ -25,6 +26,9 @@ const workspacesUsers = [
   'ivlachos@bidmc.harvard.edu',
   'geremy.clair@pnnl.gov',
 ];
+
+// Set up worker for react-pdf
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 function App(props) {
   const { flaskData, groupsToken, isAuthenticated, userEmail, workspacesToken, userGroups = [] } = props;
