@@ -193,17 +193,13 @@ export const usePanelSet = () => {
   const { isAuthenticated, isHubmapUser } = useAppContext();
 
   const {
-    entity: { dbgap_study_url },
+    entity: { dbgap_study_url, mapped_data_access_level: accessType, mapped_status: status, uuid },
   } = useFlaskDataContext();
 
   const hasDbGaPStudyURL = Boolean(dbgap_study_url);
-
-  const {
-    entity: { mapped_data_access_level: accessType, mapped_status: status, uuid },
-  } = useFlaskDataContext();
   const hasNoAccess = useIsProtectedFile(uuid);
   const isNonConsortium = !isHubmapUser;
-  const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing'];
+  const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing', 'Invalid'];
   const isNotFinalized = unfinalizedStatuses.includes(status);
 
   if (accessType === 'Public') {

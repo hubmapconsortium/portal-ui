@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 
-const fetcher = async (entityEndpoint, uuid, groupsToken) => {
+const fetcher = async ([entityEndpoint, uuid, groupsToken]) => {
   const requestHeaders = getAuthHeader(groupsToken);
   const response = await fetch(`${entityEndpoint}/entities/dataset/globus-url/${uuid}`, {
     headers: requestHeaders,
