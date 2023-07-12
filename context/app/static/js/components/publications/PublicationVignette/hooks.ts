@@ -13,10 +13,9 @@ type PublicationVignetteConfsInput = {
 export function usePublicationVignetteConfs({ uuid, vignetteDirName, vignette }: PublicationVignetteConfsInput) {
   const { assetsEndpoint, groupsToken } = useAppContext();
   // Extract file paths from the vignette object to form the urls to fetch for this vignette
-  const urls =
-    vignette.figures?.map(
-      ({ file }) => `${assetsEndpoint}/${uuid}/vignettes/${vignetteDirName}/${file}?token=${groupsToken}`,
-    ) ?? [];
+  const urls = vignette.figures?.map(
+    ({ file }) => `${assetsEndpoint}/${uuid}/vignettes/${vignetteDirName}/${file}?token=${groupsToken}`,
+  );
   const { data } = useSWR(urls, multiFetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
