@@ -15,7 +15,7 @@ function PublicationCollections({ collectionsData }) {
       <Section id="collections">
         <StyledSectionPaper>
           <LabelledSectionText label="Collections">
-            Data for this publication is available on the associated HuBMAP Data Collection page(s).
+            Datasets associated with this publication are included in the collections listed below.
           </LabelledSectionText>
         </StyledSectionPaper>
         <PanelList panelsProps={panelsProps} />
