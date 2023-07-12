@@ -6,27 +6,24 @@ import Typography from '@material-ui/core/Typography';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
-import { lastModifiedTimestampCol } from 'js/components/detailPage/derivedEntities/columns';
+import {
+  lastModifiedTimestampCol,
+  organCol,
+  dataTypesCol,
+  statusCol,
+} from 'js/components/detailPage/derivedEntities/columns';
 import { useCollectionsDatasets } from './hooks';
 
 const columns = [
-  {
-    id: 'origin_samples_unique_mapped_organs',
-    label: 'Organ',
-    renderColumnCell: ({ origin_samples_unique_mapped_organs }) => origin_samples_unique_mapped_organs.join(', '),
-  },
-  {
-    id: 'mapped_data_types',
-    label: 'Assay Types',
-    renderColumnCell: ({ mapped_data_types }) => mapped_data_types.join(', '),
-  },
+  organCol,
+  dataTypesCol,
   lastModifiedTimestampCol,
   {
     id: 'created_by_user_displayname',
     label: 'Contact',
     renderColumnCell: ({ created_by_user_displayname }) => created_by_user_displayname,
   },
-  { id: 'mapped_status', label: 'Status', renderColumnCell: ({ mapped_status }) => mapped_status },
+  statusCol,
 ];
 function CollectionDatasetsTable({ datasets }) {
   const data = useCollectionsDatasets({

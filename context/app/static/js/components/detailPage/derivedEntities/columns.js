@@ -34,4 +34,18 @@ const derivedDatasetsColumns = [
   lastModifiedTimestampCol,
 ];
 
-export { derivedSamplesColumns, derivedDatasetsColumns, lastModifiedTimestampCol };
+const organCol = {
+  id: 'origin_samples_unique_mapped_organs',
+  label: 'Organ',
+  renderColumnCell: ({ origin_samples_unique_mapped_organs }) => origin_samples_unique_mapped_organs.join(', '),
+};
+
+const dataTypesCol = {
+  id: 'mapped_data_types',
+  label: 'Data Types',
+  renderColumnCell: ({ mapped_data_types }) => mapped_data_types.join(', '),
+};
+
+const statusCol = { id: 'mapped_status', label: 'Status', renderColumnCell: ({ mapped_status }) => mapped_status };
+
+export { derivedSamplesColumns, derivedDatasetsColumns, lastModifiedTimestampCol, organCol, dataTypesCol, statusCol };
