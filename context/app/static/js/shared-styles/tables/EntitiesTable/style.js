@@ -5,6 +5,7 @@ const StyledDiv = styled.div`
   width: 100%;
   overflow-y: auto;
   min-height: 0px; // flex overflow fix
+  max-height: 340px; // Cuts off the last row partially to cue users to scroll.
 `;
 
 export { StyledDiv };
