@@ -8,9 +8,11 @@ function RelatedEntitiesSectionHeader({ header, searchPageHref }) {
   return (
     <SpacedSectionButtonRow
       leftText={
-        <div>
-          <SectionHeader>{header}</SectionHeader>
-        </div>
+        header && (
+          <div>
+            <SectionHeader>{header}</SectionHeader>
+          </div>
+        )
       }
       buttons={
         <Button
