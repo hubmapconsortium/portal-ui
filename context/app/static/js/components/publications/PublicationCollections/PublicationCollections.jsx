@@ -11,14 +11,16 @@ import { StyledSectionPaper } from './styles';
 function PublicationCollections({ collectionsData }) {
   const panelsProps = buildCollectionsPanelsProps(collectionsData);
   return (
-    <Section id="collections">
-      <StyledSectionPaper>
-        <LabelledSectionText label="Collections">
-          Data for this publication is available on the associated HuBMAP Data Collection page(s).
-        </LabelledSectionText>
-      </StyledSectionPaper>
-      <PanelList panelsProps={panelsProps} />
-    </Section>
+    collectionsData.length > 0 && (
+      <Section id="collections">
+        <StyledSectionPaper>
+          <LabelledSectionText label="Collections">
+            Data for this publication is available on the associated HuBMAP Data Collection page(s).
+          </LabelledSectionText>
+        </StyledSectionPaper>
+        <PanelList panelsProps={panelsProps} />
+      </Section>
+    )
   );
 }
 
