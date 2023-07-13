@@ -44,7 +44,7 @@ function SummaryBody({
         ) : (
           <StyledCreationDate label="Creation Date" timestamp={created_timestamp} />
         )}
-        <StyledModificationDate label="Modification Date" timestamp={last_modified_timestamp} />
+        <StyledModificationDate label="Last Modified" timestamp={last_modified_timestamp} />
       </Flex>
     </SummaryPaper>
   );
