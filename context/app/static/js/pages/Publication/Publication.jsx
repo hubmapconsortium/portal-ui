@@ -62,8 +62,18 @@ function Publication({ publication, vignette_json }) {
         <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
       )}
       <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />
-      <ContributorsTable contributors={contributors} title="Authors" />
-      {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={publication} />}
+      <ContributorsTable
+        contributors={contributors}
+        title="Authors"
+        iconTooltipText="The authors are listed in the same sequence as the author list of the publication."
+      />
+      {shouldDisplaySection.provenance && (
+        <ProvSection
+          uuid={uuid}
+          assayMetadata={publication}
+          iconTooltipText="The provenance shows the sequence of events and actions that led to this page creation."
+        />
+      )}
     </DetailLayout>
   );
 }

@@ -9,7 +9,7 @@ function RelatedEntitiesSectionHeader({ header, searchPageHref }) {
     <SpacedSectionButtonRow
       leftText={
         <div>
-          <SectionHeader>{header}</SectionHeader>
+          <SectionHeader iconTooltipText="HuBMAP data created or used by the publication.">{header}</SectionHeader>
         </div>
       }
       buttons={
