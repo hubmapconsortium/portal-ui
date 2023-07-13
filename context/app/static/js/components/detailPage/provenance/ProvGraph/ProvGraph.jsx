@@ -6,7 +6,7 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import ShowDerivedEntitiesButton from 'js/components/detailPage/provenance/ShowDerivedEntitiesButton';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
 import ProvVis from '../ProvVis';
-import { StyledPaper, Flex, StyledTypography, StyledDiv, maxGraphHeight } from './style';
+import { StyledPaper, Flex, StyledTypography, ScrollDiv, maxGraphHeight } from './style';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 
 const setUUIDSelector = (state) => state.setUUID;
@@ -103,7 +103,7 @@ function ProvGraph({ provData, entity_type, uuid }) {
   }, [hasRendered, scrollDivRef]);
 
   return (
-    <StyledDiv ref={scrollDivRef}>
+    <ScrollDiv ref={scrollDivRef}>
       <ProvVis
         provData={provData}
         getNameForActivity={getNameForActivity}
@@ -111,7 +111,7 @@ function ProvGraph({ provData, entity_type, uuid }) {
         renderDetailPane={renderDetailPane}
         entity_type={entity_type}
       />
-    </StyledDiv>
+    </ScrollDiv>
   );
 }
 

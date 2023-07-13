@@ -14,4 +14,14 @@ const StyledTypography = styled(Typography)`
   margin-top: ${(props) => props.theme.spacing(2)}px;
 `;
 
-export { StyledPaper, Flex, StyledTypography };
+const maxGraphHeight = 500;
+const ScrollDiv = styled.div`
+  max-height: ${maxGraphHeight}px;
+  overflow-x: auto;
+  overflow-y: auto;
+  .scroll-container-wrapper {
+    overflow: visible !important; // Override react-workflow-viz styles.
+  }
+`;
+
+export { StyledPaper, Flex, StyledTypography, ScrollDiv, maxGraphHeight };
