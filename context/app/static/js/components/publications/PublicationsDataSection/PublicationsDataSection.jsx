@@ -19,7 +19,7 @@ function PublicationsDataSection({ datasetUUIDs, uuid, associated_collection, is
     <DetailPageSection id="data">
       {isCollectionPublication && <SectionHeader>Data</SectionHeader>}
       {!isCollectionPublication && <PublicationRelatedEntities uuid={uuid} />}
-      {Boolean(collectionsData) && (
+      {collectionsData.length > 0 && (
         <PublicationCollections collectionsData={collectionsData} isCollectionPublication={isCollectionPublication} />
       )}
     </DetailPageSection>
