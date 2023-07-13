@@ -5,6 +5,6 @@ const DetailContext = React.createContext({});
 
 DetailContext.displayName = 'DetailContext';
 
-export { DetailContext };
+export default DetailContext;
 
 export const useDetailContext = () => useContext(DetailContext);

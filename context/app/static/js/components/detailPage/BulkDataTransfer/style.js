@@ -92,6 +92,16 @@ const NoAccessContainer = styled.div`
   align-items: center;
 `;
 
+const GlobusLinks = styled.div`
+  > div {
+    margin-bottom: ${(props) => props.theme.spacing(1.25)}px;
+  }
+`;
+
+const GlobusSectionPaper = styled.div`
+  padding: ${(props) => props.theme.spacing(2)}px;
+`;
+
 export {
   StyledContainer,
   Header,
@@ -108,4 +118,6 @@ export {
   StyledWarningIcon,
   WarningIconContainer,
   NoAccessContainer,
+  GlobusLinks,
+  GlobusSectionPaper,
 };
