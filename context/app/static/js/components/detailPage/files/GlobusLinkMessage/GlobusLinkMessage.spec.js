@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
 
-import DetailContext from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/context';
 import GlobusLinkMessage from './GlobusLinkMessage';
-import FilesContext from '../Files/context';
+import { FilesContext } from '../Files/context';
 
 const fakeOpenDUA = jest.fn();
 const uuid = 'fakeuuid';
