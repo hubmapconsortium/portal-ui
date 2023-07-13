@@ -9,10 +9,10 @@ const StyledCenteredLoaderWrapper = styled(CenteredLoaderWrapper)`
   height: ${sectionHeight}px;
 `;
 
-const StyledPaper = styled(Paper)`
+const RelatedEntitiesPaper = styled(Paper)`
   height: ${sectionHeight}px;
   display: flex;
   flex-direction: column;
 `;
 
-export { StyledCenteredLoaderWrapper, StyledPaper };
+export { StyledCenteredLoaderWrapper, RelatedEntitiesPaper };
