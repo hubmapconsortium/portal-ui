@@ -1,7 +1,7 @@
-import React, { useState, useContext, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import { DetailContext } from 'js/components/detailPage/context';
+import { useDetailContext } from 'js/components/detailPage/context';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import FileBrowser from '../FileBrowser';
@@ -11,7 +11,7 @@ import { MarginBottomDiv } from './style';
 
 // These props were removed but may be used in the future: uuid, hubmap_id, visLiftedUUID
 function Files({ files }) {
-  const { mapped_data_access_level } = useContext(DetailContext);
+  const { mapped_data_access_level } = useDetailContext();
 
   const localStorageKey = `has_agreed_to_${mapped_data_access_level}_DUA`;
   const [hasAgreedToDUA, agreeToDUA] = useState(localStorage.getItem(localStorageKey));
