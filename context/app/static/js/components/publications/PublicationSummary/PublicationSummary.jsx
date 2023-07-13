@@ -26,6 +26,7 @@ function PublicationSummary({
   publication_doi,
   hubmap_id,
   publication_date,
+  publication_status: isPublished,
 }) {
   const hasDOI = Boolean(publication_doi);
   const doiURL = `https://doi.org/${publication_doi}`;
@@ -34,7 +35,7 @@ function PublicationSummary({
     <DetailPageSection id="summary">
       <SummaryData
         title={title}
-        entity_type={entity_type}
+        entity_type={isPublished ? entity_type : 'Preprint'}
         uuid={uuid}
         status={status}
         mapped_data_access_level={mapped_data_access_level}
@@ -83,7 +84,11 @@ function PublicationSummary({
         >
           <AggsList uuid={uuid} field="mapped_organ" />
         </LabelledSectionText>
-        <LabelledSectionText label="Publication Date" bottomSpacing={2} data-testid="publication-date">
+        <LabelledSectionText
+          label={isPublished ? 'Publication Date' : 'Preprint Date'}
+          bottomSpacing={2}
+          data-testid="publication-date"
+        >
           {publication_date}
         </LabelledSectionText>
       </SectionPaper>
