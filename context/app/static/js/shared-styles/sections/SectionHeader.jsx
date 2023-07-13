@@ -10,7 +10,6 @@ const StyledTypography = styled(Typography)`
 `;
 
 function SectionHeader({ children, iconTooltipText, ...rest }) {
-  console.log(iconTooltipText);
   return (
     <StyledTypography variant="h4" component="h2" {...rest}>
       {children}
