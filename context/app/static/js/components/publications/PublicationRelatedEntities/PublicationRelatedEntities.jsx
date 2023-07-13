@@ -26,9 +26,7 @@ function PublicationRelatedEntities({ uuid }) {
         openIndex={openIndex}
         setOpenIndex={setOpenIndex}
         ariaLabel="Publication Entities Tabs"
-        renderWarningMessage={(tableEntityType) =>
-          `No derived ${tableEntityType.toLowerCase()}s for this publication}.`
-        }
+        renderWarningMessage={(tableEntityType) => `No derived ${tableEntityType.toLowerCase()}s for this publication.`}
       />
     </RelatedEntitiesSectionWrapper>
   );
