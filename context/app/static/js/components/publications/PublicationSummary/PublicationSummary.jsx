@@ -1,5 +1,7 @@
 import React from 'react';
 
+import format from 'date-fns/format';
+
 import { DetailPageSection } from 'js/components/detailPage/style';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
@@ -9,6 +11,11 @@ import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import CorrespondingAuthorsList from 'js/components/publications/CorrespondingAuthorsList/CorrespondingAuthorsList';
 import AggsList from 'js/components/publications/AggsList';
 import PublicationCitation from 'js/components/publications/PublicationCitation';
+
+import { DateContainer } from './style';
+
+const publishedTooltip = 'Date when article was published in the journal.';
+const preprintTooltip = 'Date when article was posted as a preprint.';
 
 function PublicationSummary({
   title,
@@ -27,6 +34,7 @@ function PublicationSummary({
   hubmap_id,
   publication_date,
   publication_status: isPublished,
+  last_modified_timestamp,
 }) {
   const hasDOI = Boolean(publication_doi);
   const doiURL = `https://doi.org/${publication_doi}`;
@@ -64,12 +72,18 @@ function PublicationSummary({
           doiURL={doiURL}
         />
         {contacts && (
-          <LabelledSectionText label="Corresponding Authors" bottomSpacing={2} childContainerComponent="div">
+          <LabelledSectionText
+            iconTooltipText="The author(s) responsible for handling all correspondence about this article. Contact this author for any inquiries about this publication."
+            label="Corresponding Authors"
+            bottomSpacing={2}
+            childContainerComponent="div"
+          >
             <CorrespondingAuthorsList contacts={contacts} />
           </LabelledSectionText>
         )}
         <LabelledSectionText
           label="Data Types"
+          iconTooltipText="The assays involved in this publication."
           bottomSpacing={2}
           childContainerComponent="div"
           data-testid="publication-data-types"
@@ -84,13 +98,22 @@ function PublicationSummary({
         >
           <AggsList uuid={uuid} field="mapped_organ" />
         </LabelledSectionText>
-        <LabelledSectionText
-          label={isPublished ? 'Publication Date' : 'Preprint Date'}
-          bottomSpacing={2}
-          data-testid="publication-date"
-        >
-          {publication_date}
-        </LabelledSectionText>
+        <DateContainer bottomSpacing={2}>
+          <LabelledSectionText
+            label={isPublished ? 'Publication Date' : 'Preprint Date'}
+            iconTooltipText={isPublished ? publishedTooltip : preprintTooltip}
+            data-testid="publication-date"
+          >
+            {publication_date}
+          </LabelledSectionText>
+          <LabelledSectionText
+            label="Last Modified Date"
+            iconTooltipText="Date when this page was last updated."
+            data-testid="last-modified-date"
+          >
+            {format(last_modified_timestamp, 'yyyy-MM-dd')}
+          </LabelledSectionText>
+        </DateContainer>
       </SectionPaper>
     </DetailPageSection>
   );
