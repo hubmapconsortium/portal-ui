@@ -15,13 +15,10 @@ const StyledTypography = styled(Typography)`
 `;
 
 const maxGraphHeight = 500;
-const ScrollDiv = styled.div`
-  max-height: ${maxGraphHeight}px;
-  overflow-x: auto;
-  overflow-y: auto;
+const StyledDiv = styled.div`
   .scroll-container-wrapper {
-    overflow: visible !important; // Override react-workflow-viz styles.
+    max-height: ${maxGraphHeight}px;
   }
 `;
 
-export { StyledPaper, Flex, StyledTypography, ScrollDiv, maxGraphHeight };
+export { StyledPaper, Flex, StyledTypography, StyledDiv, maxGraphHeight };
