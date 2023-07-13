@@ -31,6 +31,17 @@ const preprintPublicationHit = {
   },
 };
 
+const peerReviewedPublicationHit = {
+  _source: {
+    uuid: 'abc234',
+    title: 'Publication DEF',
+    contributors: [professorOak],
+    publication_status: true,
+    publication_venue,
+    publication_date: '2022-03-02',
+  },
+};
+
 describe('buildAbbreviatedContributors', () => {
   test("should return the contributor's name if there is only a single contributor", () => {
     const contributors = [ash];
@@ -65,12 +76,21 @@ describe('buildSecondaryText', () => {
 });
 
 describe('buildPublicationsPanelProps', () => {
-  test('should return the props require for the panel list', () => {
+  test('should return the props require for the panel list for a preprint', () => {
     expect(buildPublicationPanelProps(preprintPublicationHit)).toEqual({
       key: 'abc123',
       href: '/browse/publication/abc123',
       title: 'Publication ABC',
       secondaryText: 'Ash Ketchum | Pallet Town Times',
+      rightText: 'Preprint Date: 2022-03-02',
+    });
+  });
+  test('should return the props required for the panel list of a peer reviewed paper', () => {
+    expect(buildPublicationPanelProps(peerReviewedPublicationHit)).toEqual({
+      key: 'abc123',
+      href: '/browse/publication/abc234',
+      title: 'Publication DEF',
+      secondaryText: 'Professor Oak | Pallet Town Times',
       rightText: 'Published: 2022-03-02',
     });
   });
