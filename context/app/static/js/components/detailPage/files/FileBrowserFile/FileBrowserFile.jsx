@@ -4,11 +4,11 @@ import prettyBytes from 'pretty-bytes';
 import { useAppContext } from 'js/components/Contexts';
 import { getTokenParam } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import DetailContext from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/context';
 import FilesConditionalLink from '../FilesConditionalLink';
 import PDFViewer from '../PDFViewer';
 import { StyledRow, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon, QaChip } from './style';
-import FilesContext from '../Files/context';
+import { FilesContext } from '../Files/context';
 
 function FileBrowserFile({ fileObj, depth }) {
   const { hasAgreedToDUA, openDUA } = useContext(FilesContext);

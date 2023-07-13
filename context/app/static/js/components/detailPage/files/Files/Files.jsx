@@ -1,12 +1,12 @@
 import React, { useState, useContext, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import DetailContext from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/context';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../FileBrowserDUA';
-import FilesContext from './context';
+import { FilesContext } from './context';
 import { MarginBottomDiv } from './style';
 
 // These props were removed but may be used in the future: uuid, hubmap_id, visLiftedUUID

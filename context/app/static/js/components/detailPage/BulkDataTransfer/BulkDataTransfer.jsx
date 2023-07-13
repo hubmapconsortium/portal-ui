@@ -3,7 +3,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { useDetailContext } from 'js/components/detailPage/context';
-import FilesContext from 'js/components/detailPage/files/Files/context';
+import { FilesContext } from 'js/components/detailPage/files/Files/context';
 import FileBrowserDUA from './FileBrowserDUA';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { StyledContainer } from './style';

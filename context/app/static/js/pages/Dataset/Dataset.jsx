@@ -24,7 +24,7 @@ import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 // TODO use this context for components other than FileBrowser
-import DetailContext from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/context';
 import { getSectionOrder, getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
 

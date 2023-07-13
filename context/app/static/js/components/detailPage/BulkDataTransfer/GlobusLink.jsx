@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
-import { useFlaskDataContext, useFilesContext } from 'js/components/Contexts';
+import { useFlaskDataContext } from 'js/components/Contexts';
+import { useFilesContext } from 'js/components/detailPage/files/Files/context';
 import FilesConditionalLink from './FilesConditionalLink';
 import { StyledExternalLinkIcon } from './style';
 import { useFetchProtectedFile } from './hooks';
