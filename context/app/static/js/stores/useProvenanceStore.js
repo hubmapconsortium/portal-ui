@@ -7,6 +7,14 @@ import immer from './immerMiddleware';
 const useProvenanceStore = create(
   immer((set, get) => ({
     uuid: '',
+    hasRendered: false,
+    setHasRendered: () => {
+      if (get().hasRendered === false) {
+        set((state) => {
+          state.hasRendered = true;
+        });
+      }
+    },
     setUUID: (uuid) =>
       set((state) => {
         state.uuid = uuid;
