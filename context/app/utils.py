@@ -33,6 +33,8 @@ def get_default_flask_data():
             'xmodalityEndpoint': current_app.config['XMODALITY_ENDPOINT'],
             'workspacesEndpoint': current_app.config['WORKSPACES_ENDPOINT'],
             'workspacesWsEndpoint': current_app.config['WORKSPACES_WS_ENDPOINT'],
+            'protocolsClientId': current_app.config['PROTOCOLS_IO_CLIENT_ID'],
+            'protocolsClientToken': current_app.config['PROTOCOLS_IO_CLIENT_AUTH_TOKEN'],
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
     }
