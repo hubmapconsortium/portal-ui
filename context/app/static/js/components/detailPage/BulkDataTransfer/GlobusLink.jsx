@@ -23,16 +23,17 @@ function GlobusLink({ uuid, isSupport }) {
   return (
     <DetailSectionPaper>
       {isSupport && 'Support Dataset: '}
-      <SecondaryBackgroundTooltip title="Data generated for visualization of this dataset are also available on Globus.">
-        <FilesConditionalLink
-          href={responseUrl}
-          hasAgreedToDUA={hasAgreedToDUA}
-          openDUA={() => openDUA(responseUrl)}
-          variant="body2"
-        >
-          {isSupport ? '' : hubmap_id} Globus <StyledExternalLinkIcon />
-        </FilesConditionalLink>
-      </SecondaryBackgroundTooltip>
+      <FilesConditionalLink
+        href={responseUrl}
+        hasAgreedToDUA={hasAgreedToDUA}
+        openDUA={() => openDUA(responseUrl)}
+        variant="body2"
+      >
+        {isSupport ? '' : hubmap_id} Globus
+        <SecondaryBackgroundTooltip title="Data generated for visualization of this dataset are also available on Globus.">
+          <StyledExternalLinkIcon />
+        </SecondaryBackgroundTooltip>
+      </FilesConditionalLink>
     </DetailSectionPaper>
   );
 }
