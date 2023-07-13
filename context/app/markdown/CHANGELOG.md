@@ -1,3 +1,8 @@
+## v0.74.2 - 2023-07-13
+
+- Add support for publications with associated collections.
+
+
 ## v0.74.1 - 2023-07-12
 
 - Upgrade Vitessce to v3.0.1.
