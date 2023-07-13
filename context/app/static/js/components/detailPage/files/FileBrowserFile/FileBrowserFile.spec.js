@@ -10,7 +10,7 @@ const fakeOpenDUA = jest.fn();
 
 const uuid = 'fakeuuid';
 
-const { detailContext } = { uuid };
+const detailContext = { uuid };
 const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' };
 
 function FilesProviders({ children }) {
