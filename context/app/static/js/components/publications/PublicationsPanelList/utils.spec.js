@@ -33,7 +33,7 @@ const preprintPublicationHit = {
 
 const peerReviewedPublicationHit = {
   _source: {
-    uuid: 'abc234',
+    uuid: 'def234',
     title: 'Publication DEF',
     contributors: [professorOak],
     publication_status: true,
@@ -87,8 +87,8 @@ describe('buildPublicationsPanelProps', () => {
   });
   test('should return the props required for the panel list of a peer reviewed paper', () => {
     expect(buildPublicationPanelProps(peerReviewedPublicationHit)).toEqual({
-      key: 'abc123',
-      href: '/browse/publication/abc234',
+      key: 'def234',
+      href: '/browse/publication/def234',
       title: 'Publication DEF',
       secondaryText: 'Professor Oak | Pallet Town Times',
       rightText: 'Published: 2022-03-02',
