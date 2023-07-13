@@ -33,11 +33,11 @@ function Publication({ publication, vignette_json }) {
     setAssayMetadata({ hubmap_id, entity_type, title, publication_venue });
   }, [hubmap_id, entity_type, title, publication_venue, setAssayMetadata]);
 
-  const isCollectionPublication = Boolean(associated_collection);
+  const associatedCollectionUUID = associated_collection?.uuid;
 
   const shouldDisplaySection = {
     visualizations: Boolean(Object.keys(vignette_json).length),
-    provenance: !isCollectionPublication,
+    provenance: Boolean(associatedCollectionUUID),
     files: true,
   };
 
@@ -56,8 +56,7 @@ function Publication({ publication, vignette_json }) {
       <PublicationsDataSection
         uuid={uuid}
         datasetUUIDs={ancestor_ids}
-        associated_collection={associated_collection}
-        isCollectionPublication={isCollectionPublication}
+        associatedCollectionUUID={associatedCollectionUUID}
       />
       {shouldDisplaySection.visualizations && (
         <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
