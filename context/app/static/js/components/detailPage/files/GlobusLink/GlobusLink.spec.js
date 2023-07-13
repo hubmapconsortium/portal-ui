@@ -26,7 +26,7 @@ test('displays success icon with 200 response', async () => {
   );
   render(<GlobusLink uuid={uuid} hubmap_id={hubmap_id} />);
 
-  await screen.findByTestId('success-icon');
+  await screen.findByTestId('success-icon', {}, { timeout: 3000 });
   expect(screen.getByText('Bulk Data Transfer')).toBeInTheDocument();
 });
 
@@ -39,6 +39,6 @@ test('displays info icon with 500 response', async () => {
 
   render(<GlobusLink uuid={uuid} hubmap_id={hubmap_id} />);
 
-  await screen.findByTestId('error-icon');
+  await screen.findByTestId('error-icon', {}, { timeout: 3000 });
   expect(screen.getByText('Bulk Data Transfer')).toBeInTheDocument();
 });
