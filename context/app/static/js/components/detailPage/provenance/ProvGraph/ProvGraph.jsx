@@ -91,6 +91,7 @@ function ProvGraph({ provData, entity_type, uuid }) {
     return null;
   }
 
+  // Set vertical scroll position to halfway.
   useEffect(() => {
     if (hasRendered) {
       const scrollEl = document.getElementsByClassName('scroll-container-wrapper')[0];
