@@ -3,6 +3,7 @@ import React from 'react';
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useFilesContext } from 'js/components/detailPage/files/Files/context';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import FilesConditionalLink from './FilesConditionalLink';
 import { StyledExternalLinkIcon, GlobusLinks } from './style';
 import { useFetchProtectedFile } from './hooks';
@@ -22,14 +23,16 @@ function GlobusLink({ uuid, isSupport }) {
   return (
     <DetailSectionPaper>
       {isSupport && 'Support Dataset: '}
-      <FilesConditionalLink
-        href={responseUrl}
-        hasAgreedToDUA={hasAgreedToDUA}
-        openDUA={() => openDUA(responseUrl)}
-        variant="body2"
-      >
-        {isSupport ? '' : hubmap_id} Globus <StyledExternalLinkIcon />
-      </FilesConditionalLink>
+      <SecondaryBackgroundTooltip title="Data generated for visualization of this dataset are also available on Globus.">
+        <FilesConditionalLink
+          href={responseUrl}
+          hasAgreedToDUA={hasAgreedToDUA}
+          openDUA={() => openDUA(responseUrl)}
+          variant="body2"
+        >
+          {isSupport ? '' : hubmap_id} Globus <StyledExternalLinkIcon />
+        </FilesConditionalLink>
+      </SecondaryBackgroundTooltip>
     </DetailSectionPaper>
   );
 }
