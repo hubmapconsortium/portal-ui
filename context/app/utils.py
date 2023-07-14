@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
 from flask import (current_app, request, session, Blueprint)
+from datetime import datetime
 
 from .api.client import ApiClient
 from .api.mock_client import MockApiClient
@@ -53,3 +54,11 @@ def get_organs():
     dir_path = Path(dirname(__file__) + '/organ')
     organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
     return organs
+
+
+def get_enable_publications():
+    current_timestamp = datetime.now().timestamp()
+    # 2023-07-19 at 15:00:00 UTC
+    publication_embargo_end_timestamp = 1689778800
+    return current_app.config.get('ENABLE_PUBLICATIONS') or \
+        current_timestamp > publication_embargo_end_timestamp
