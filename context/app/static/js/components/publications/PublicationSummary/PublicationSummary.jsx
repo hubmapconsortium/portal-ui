@@ -27,6 +27,7 @@ function PublicationSummary({
   hubmap_id,
   publication_date,
   publication_status: isPublished,
+  associatedCollectionUUID,
 }) {
   const hasDOI = Boolean(publication_doi);
   const doiURL = `https://doi.org/${publication_doi}`;
@@ -74,7 +75,7 @@ function PublicationSummary({
           childContainerComponent="div"
           data-testid="publication-data-types"
         >
-          <AggsList uuid={uuid} field="mapped_data_types" />
+          <AggsList uuid={uuid} field="mapped_data_types" associatedCollectionUUID={associatedCollectionUUID} />
         </LabelledSectionText>
         <LabelledSectionText
           label="Organs"
@@ -82,7 +83,11 @@ function PublicationSummary({
           childContainerComponent="div"
           data-testid="publication-organs"
         >
-          <AggsList uuid={uuid} field="mapped_organ" />
+          <AggsList
+            uuid={uuid}
+            field="origin_samples.mapped_organ"
+            associatedCollectionUUID={associatedCollectionUUID}
+          />
         </LabelledSectionText>
         <LabelledSectionText
           label={isPublished ? 'Publication Date' : 'Preprint Date'}

@@ -2,10 +2,14 @@ import React from 'react';
 
 import BulletedList from 'js/shared-styles/lists/bulleted-lists/BulletedList';
 import BulletedListItem from 'js/shared-styles/lists/bulleted-lists/BulletedListItem';
-import { useAncestorSearchAggs } from './hooks';
+import { usePublicationDatasetsAggs } from './hooks';
 
-function AggsList({ uuid, field }) {
-  const { searchData } = useAncestorSearchAggs(uuid, field);
+function AggsList({ uuid, field, associatedCollectionUUID }) {
+  const { searchData } = usePublicationDatasetsAggs({
+    descendantUUID: uuid,
+    aggsField: field,
+    associatedCollectionUUID,
+  });
 
   const buckets = searchData?.aggregations?.[field]?.buckets;
 
