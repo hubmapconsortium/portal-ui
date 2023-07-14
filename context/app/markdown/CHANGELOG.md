@@ -1,3 +1,13 @@
+## v0.75.0 - 2023-07-14
+
+- Adjust display of information for preprints to explicitly label them as preprints where appropriate.
+- Add explanatory tooltips to publication page.
+- Add publication slide to homepage.
+- Get publication summary data types and organs from associated collection if applicable.
+- Set max vertical height and enable vertical scrolling for provenance graph.
+- Set initial vertical scroll position in provenance graph to halfway.
+
+
 ## v0.74.2 - 2023-07-13
 
 - Add support for publications with associated collections.

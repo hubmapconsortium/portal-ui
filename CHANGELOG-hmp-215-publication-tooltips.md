@@ -1,1 +1,0 @@
-- Add explanatory tooltips to publication page.

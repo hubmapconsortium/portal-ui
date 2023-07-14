@@ -1,1 +1,0 @@
-- Get publication summary data types and organs from associated collection if applicable.
