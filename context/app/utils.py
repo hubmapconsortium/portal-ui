@@ -58,4 +58,6 @@ def get_organs():
 
 def get_enable_publications():
     current_timestamp = datetime.now().timestamp()
-    return current_timestamp > 1689778800  # 2023-07-19 at 15:00:00 UTC
+    # 2023-07-19 at 15:00:00 UTC
+    publication_embargo_end_timestamp = 1689778800
+    return current_app.config.get('ENABLE_PUBLICATIONS') or current_timestamp > publication_embargo_end_timestamp
