@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import BlockIcon from '@material-ui/icons/Block';
 import Box from '@material-ui/core/Box';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
@@ -57,6 +58,10 @@ const GreenCheckCircleIcon = styled(CheckCircleIcon)`
   color: ${(props) => props.theme.palette.success.main};
 `;
 
+const StyledBlockIcon = styled(BlockIcon)`
+  color: ${(props) => props.theme.palette.warning.main};
+`;
+
 const AlignedLink = styled(LightBlueLink)`
   vertical-align: baseline;
 `;
@@ -100,6 +105,7 @@ export {
   LinkContainer,
   StyledLink,
   GreenCheckCircleIcon,
+  StyledBlockIcon,
   AlignedLink,
   StyledExternalLinkIcon,
   ObliqueSpan,
