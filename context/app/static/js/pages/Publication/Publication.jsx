@@ -62,11 +62,7 @@ function Publication({ publication, vignette_json }) {
         <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
       )}
       <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />
-      <ContributorsTable
-        contributors={contributors}
-        title="Authors"
-        iconTooltipText="The authors are listed in the same sequence as the author list of the publication."
-      />
+      <ContributorsTable contributors={contributors} title="Authors" />
       {shouldDisplaySection.provenance && (
         <ProvSection
           uuid={uuid}
