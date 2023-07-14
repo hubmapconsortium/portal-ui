@@ -11,7 +11,7 @@ function buildNLMCitation({ contributors, title, publication_date, publication_v
   const author = contributors.length > 1 ? `${firstAuthorName}, et al` : firstAuthorName;
 
   const year = publication_date.slice(0, 4);
-  return `${author}. ${title} [Internet]. ${publication_venue}; ${year}.`;
+  return `${author}. ${title}. ${publication_venue}; ${year}.`;
 }
 
 function PublicationCitation({ contributors = [], title, publication_date, publication_venue, doiURL }) {
