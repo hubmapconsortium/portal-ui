@@ -1,0 +1,2 @@
+- Set max vertical height and enable vertical scrolling for provenance graph.
+- Set initial vertical scroll position in provenance graph to halfway.
