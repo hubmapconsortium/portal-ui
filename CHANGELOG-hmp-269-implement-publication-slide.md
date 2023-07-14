@@ -1,0 +1,1 @@
+- Add publication slide to homepage.
