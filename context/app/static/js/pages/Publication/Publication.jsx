@@ -39,7 +39,7 @@ function Publication({ publication, vignette_json }) {
   const shouldDisplaySection = {
     visualizations: Boolean(Object.keys(vignette_json).length),
     provenance: !associatedCollectionUUID,
-    files: true,
+    files: Boolean(files?.length),
   };
 
   const sectionOrder = getSectionOrder(
