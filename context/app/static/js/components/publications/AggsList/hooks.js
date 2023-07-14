@@ -1,26 +1,46 @@
-import { useMemo } from 'react';
+import useSearchData, { useSearchHits } from 'js/hooks/useSearchData';
+import { getAncestorsQuery, getIDsQuery } from 'js/helpers/queries';
 
-import useSearchData from 'js/hooks/useSearchData';
-import { getAncestorsQuery } from 'js/helpers/queries';
-
-function useAncestorSearchAggs(descendantUUID, aggsField) {
-  const query = useMemo(
-    () => ({
-      query: getAncestorsQuery(descendantUUID, 'dataset'),
-      aggs: {
-        [aggsField]: {
-          terms: {
-            field: `${aggsField}.keyword`,
-            size: 10000,
-          },
+function getAggsClause(aggsField) {
+  return {
+    aggs: {
+      [aggsField]: {
+        terms: {
+          field: `${aggsField}.keyword`,
+          size: 10000,
         },
       },
-      size: 0,
-    }),
-    [aggsField, descendantUUID],
-  );
+    },
+    size: 0,
+  };
+}
+
+function getCollectionDatasetsQuery(collectionUUID) {
+  return {
+    query: getIDsQuery(collectionUUID),
+    _source: 'datasets.uuid',
+    size: 10000,
+  };
+}
+
+function usePublicationDatasetsAggs({ descendantUUID, aggsField, associatedCollectionUUID }) {
+  const { searchHits: collectionDatasets } = useSearchHits(getCollectionDatasetsQuery(associatedCollectionUUID));
+
+  const collectionDatasetsUUIDs =
+    // eslint-disable-next-line no-underscore-dangle
+    collectionDatasets.length > 0 ? collectionDatasets[0]?._source?.datasets.map(({ uuid }) => uuid) : [];
+
+  const query = associatedCollectionUUID
+    ? {
+        query: getIDsQuery(collectionDatasetsUUIDs),
+        ...getAggsClause(aggsField),
+      }
+    : {
+        query: getAncestorsQuery(descendantUUID, 'dataset'),
+        ...getAggsClause(aggsField),
+      };
 
   return useSearchData(query);
 }
 
-export { useAncestorSearchAggs };
+export { usePublicationDatasetsAggs };
