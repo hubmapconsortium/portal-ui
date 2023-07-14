@@ -17,7 +17,9 @@ function PublicationsDataSection({ datasetUUIDs, uuid, associatedCollectionUUID 
 
   return (
     <DetailPageSection id="data">
-      {associatedCollectionUUID && <SectionHeader>Data</SectionHeader>}
+      {associatedCollectionUUID && (
+        <SectionHeader iconTooltipText="HuBMAP data created or used by the publication.">Data</SectionHeader>
+      )}
       {!associatedCollectionUUID && <PublicationRelatedEntities uuid={uuid} />}
       {collectionsData.length > 0 && (
         <PublicationCollections collectionsData={collectionsData} isCollectionPublication={associatedCollectionUUID} />

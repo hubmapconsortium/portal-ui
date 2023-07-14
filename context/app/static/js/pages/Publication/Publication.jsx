@@ -68,7 +68,13 @@ function Publication({ publication, vignette_json }) {
       )}
       <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />
       <ContributorsTable contributors={contributors} title="Authors" />
-      {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={publication} />}
+      {shouldDisplaySection.provenance && (
+        <ProvSection
+          uuid={uuid}
+          assayMetadata={publication}
+          iconTooltipText="The provenance shows the sequence of events and actions that led to this page creation."
+        />
+      )}
     </DetailLayout>
   );
 }

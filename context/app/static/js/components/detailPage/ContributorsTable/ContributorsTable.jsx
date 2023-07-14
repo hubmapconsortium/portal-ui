@@ -14,7 +14,7 @@ import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 
-function ContributorsTable({ title, contributors = [] }) {
+function ContributorsTable({ title, contributors = [], iconTooltipText }) {
   const columns = [
     { id: 'name', label: 'Name' },
     { id: 'affiliation', label: 'Affiliation' },
@@ -22,7 +22,7 @@ function ContributorsTable({ title, contributors = [] }) {
 
   return (
     <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
-      <SectionHeader>{title}</SectionHeader>
+      <SectionHeader iconTooltipText={iconTooltipText}>{title}</SectionHeader>
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
