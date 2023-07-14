@@ -40,6 +40,7 @@ function Publication({ publication, vignette_json }) {
     visualizations: Boolean(Object.keys(vignette_json).length),
     provenance: !associatedCollectionUUID,
     files: Boolean(files?.length),
+    bulkDataTransfer: true
   };
 
   const sectionOrder = getSectionOrder(
