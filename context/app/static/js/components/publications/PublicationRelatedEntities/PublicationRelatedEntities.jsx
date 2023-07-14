@@ -17,6 +17,7 @@ function PublicationRelatedEntities({ uuid }) {
         <RelatedEntitiesSectionHeader
           header="Data"
           uuid={uuid}
+          iconTooltipText="HuBMAP data created or used by the publication."
           searchPageHref={`/search?descendant_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
       }

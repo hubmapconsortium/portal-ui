@@ -1,0 +1,1 @@
+- Fix publication tooltip errantly appearing on other pages
