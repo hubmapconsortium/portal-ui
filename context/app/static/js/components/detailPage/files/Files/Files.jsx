@@ -9,7 +9,6 @@ import FileBrowserDUA from '../FileBrowserDUA';
 import { FilesContext } from './context';
 import { MarginBottomDiv } from './style';
 
-// These props were removed but may be used in the future: uuid, hubmap_id, visLiftedUUID
 function Files({ files }) {
   const { mapped_data_access_level } = useDetailContext();
 
