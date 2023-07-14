@@ -10,6 +10,13 @@ import donorProv from './fixtures/donor_prov';
 
 import ProvGraph from './ProvGraph';
 
+// eslint-disable-next-line testing-library/no-node-access
+document.getElementsByClassName = () => [
+  {
+    scroll: jest.fn(),
+  },
+];
+
 const server = setupServer(
   rest.post(`/${appProviderEndpoints.elasticsearchEndpoint}`, (req, res, ctx) => {
     const descendantData = {
