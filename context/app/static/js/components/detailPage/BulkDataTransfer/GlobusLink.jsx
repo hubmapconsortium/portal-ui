@@ -33,9 +33,14 @@ function GlobusLink({ uuid, isSupport }) {
             openDUA={() => openDUA(responseUrl)}
             variant="body2"
           >
+            {isSupport ? ': ' : hubmap_id}
             <SecondaryBackgroundTooltip title="Data generated for visualization of this dataset are also available on Globus.">
-              {isSupport ? ': ' : hubmap_id} Globus
-              <StyledExternalLinkIcon />
+              <span>
+                {' '}
+                Globus
+                <StyledExternalLinkIcon />
+              </span>
+              {/*  */}
             </SecondaryBackgroundTooltip>
           </FilesConditionalLink>
         </StyledLink>
