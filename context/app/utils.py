@@ -60,4 +60,5 @@ def get_enable_publications():
     current_timestamp = datetime.now().timestamp()
     # 2023-07-19 at 15:00:00 UTC
     publication_embargo_end_timestamp = 1689778800
-    return current_app.config.get('ENABLE_PUBLICATIONS') or current_timestamp > publication_embargo_end_timestamp
+    return current_app.config.get('ENABLE_PUBLICATIONS') or \
+        current_timestamp > publication_embargo_end_timestamp
