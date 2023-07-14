@@ -1,1 +1,0 @@
-- Fix spacing of derived entities sections.

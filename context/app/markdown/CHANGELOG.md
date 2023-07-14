@@ -1,3 +1,10 @@
+## v0.75.1 - 2023-07-14
+
+- Fix spacing of derived entities sections.
+- Fix publication tooltip errantly appearing on other pages
+- Remove 'Internet' from publication citations.
+
+
 ## v0.75.0 - 2023-07-14
 
 - Adjust display of information for preprints to explicitly label them as preprints where appropriate.
