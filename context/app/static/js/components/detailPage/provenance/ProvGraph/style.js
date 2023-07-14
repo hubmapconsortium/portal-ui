@@ -14,4 +14,11 @@ const StyledTypography = styled(Typography)`
   margin-top: ${(props) => props.theme.spacing(2)}px;
 `;
 
-export { StyledPaper, Flex, StyledTypography };
+const maxGraphHeight = 500;
+const StyledDiv = styled.div`
+  .scroll-container-wrapper {
+    max-height: ${maxGraphHeight}px;
+  }
+`;
+
+export { StyledPaper, Flex, StyledTypography, StyledDiv, maxGraphHeight };
