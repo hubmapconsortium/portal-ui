@@ -1,1 +1,1 @@
-- Add links to Globus, dbGap study, SRA Experiment, and SRA Bioproject for dbGaP datasets. 
+- Add links to Globus, dbGap study, and SRA Experiment for dbGaP datasets. 
