@@ -36,7 +36,7 @@ const slides = [
 const publicationSlide = {
   title: 'Discover the publications reporting the breakthroughs of  mapping the human body with HuBMAP data',
   body: 'Explore publications authored by scientists in the consortium involving HuBMAP data. Additional publications will be coming in the future as the consortium continue to create mappings of the human body. View the press release reporting on these publications.',
-  image: <CarouselImage {...getCDNCarouselImageSrcSet('publications')} alt="HuBMAP Publications" key="Publications" />,
+  image: <CarouselImage {...getCDNCarouselImageSrcSet('publication')} alt="HuBMAP Publications" key="Publications" />,
   buttonHref: '/publications',
 };
 
