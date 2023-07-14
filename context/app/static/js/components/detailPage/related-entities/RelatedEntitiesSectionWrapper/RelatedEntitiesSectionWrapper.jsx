@@ -6,7 +6,7 @@ import { StyledCenteredLoaderWrapper, RelatedEntitiesPaper } from './style';
 
 function Wrapper({ sectionId, children }) {
   if (sectionId) {
-    <DetailPageSection id={sectionId}>{children}</DetailPageSection>;
+    return <DetailPageSection id={sectionId}>{children}</DetailPageSection>;
   }
 
   return children;
