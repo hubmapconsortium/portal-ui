@@ -46,8 +46,10 @@ describe("Publication page", () => {
         .should("contain", "Kidney (Left)")
         .and("contain", "Spleen");
     });
-    it("has a publication date", () => {
-      cy.findByTestId("publication-date").contains("2021-10-18");
+    it("has a publication date, which is labeled as a preprint date", () => {
+      cy.findByTestId("publication-date")
+        .should("contain", "2021-10-18")
+        .and("contain", "Preprint");
     });
     it("has a table of contents with links to the summary, data, visualizations, files, authors, and provenance sections", () => {
       cy.findByTestId("table-of-contents")
