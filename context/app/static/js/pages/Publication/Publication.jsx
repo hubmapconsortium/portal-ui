@@ -64,7 +64,7 @@ function Publication({ publication, vignette_json }) {
         <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
       )}
       {shouldDisplaySection.files && <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />}
-      <BulkDataTransfer files={files} uuid={uuid} hubmap_id={hubmap_id} />
+      {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer files={files} uuid={uuid} hubmap_id={hubmap_id} />}
       <ContributorsTable contributors={contributors} title="Authors" />
       {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={publication} />}
     </DetailLayout>
