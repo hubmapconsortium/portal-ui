@@ -52,7 +52,12 @@ function Publication({ publication, vignette_json }) {
 
   return (
     <DetailLayout sectionOrder={sectionOrder}>
-      <PublicationSummary {...publication} status={combinedStatus} hasDOI={hasDOI} />
+      <PublicationSummary
+        {...publication}
+        status={combinedStatus}
+        hasDOI={hasDOI}
+        associatedCollectionUUID={associatedCollectionUUID}
+      />
       <PublicationsDataSection
         uuid={uuid}
         datasetUUIDs={ancestor_ids}
