@@ -1,1 +1,0 @@
-- Restore display of publication status for preprints.

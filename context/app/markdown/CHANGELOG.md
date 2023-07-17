@@ -1,3 +1,9 @@
+## v0.75.2 - 2023-07-17
+
+- Fix links in collection page datasets table.
+- Restore display of publication status for preprints.
+
+
 ## v0.75.1 - 2023-07-14
 
 - Fix spacing of derived entities sections.
