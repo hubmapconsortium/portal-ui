@@ -24,7 +24,7 @@ function Summary({
   return (
     <DetailPageSection id="summary">
       <SummaryData
-        hubmap_id={hubmap_id}
+        title={hubmap_id}
         entity_type={entity_type}
         uuid={uuid}
         status={status}
