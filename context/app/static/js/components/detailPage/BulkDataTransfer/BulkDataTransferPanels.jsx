@@ -32,7 +32,7 @@ function BulkDataTransferPanels() {
       {panelsToUse.links.length > 0 && (
         <Paper>
           {panelsToUse.links.map((link) =>
-            React.isValidElement(link) ? link : <Link {...link} key={link.key} url={linkTitleUrlMap[link.title]} />,
+            React.isValidElement(link) ? link : <Link {...link} key={link.key} url={linkTitleUrlMap[link.key]} />,
           )}
         </Paper>
       )}
