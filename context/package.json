@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "0.75.3",
+  "version": "0.75.4",
   "dependencies": {
     "@datapunt/matomo-tracker-js": "^0.5.1",
     "@elastic/datemath": "^5.0.3",
