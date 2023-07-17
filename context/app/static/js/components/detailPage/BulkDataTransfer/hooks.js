@@ -26,7 +26,9 @@ const fetcher = async ([entityEndpoint, uuid, groupsToken]) => {
 export const useFetchProtectedFile = (uuid) => {
   const { entityEndpoint, groupsToken } = useAppContext();
 
-  const { data: result } = useSWR([entityEndpoint, uuid, groupsToken], fetcher);
+  const { data: result, isLoading } = useSWR([entityEndpoint, uuid, groupsToken], fetcher, {
+    fallbackData: { status: undefined, responseUrl: undefined },
+  });
 
-  return result ?? { status: undefined, responseUrl: undefined };
+  return { ...result, isLoading };
 };

@@ -189,6 +189,30 @@ const DATASET_NOT_FINALIZED = {
   ),
 };
 
+const ENTITY_API_ERROR = {
+  error: (
+    <div>
+      The API failed to retrieve the link to Globus. Please report this issue to&nbsp;
+      <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+        help@hubmapconsortium.org
+      </EmailIconLink>
+      &nbsp;with the dataset ID and information about the files you are trying to access.
+    </div>
+  ),
+};
+
+function getGlobusPanel({ status, isLoading, panel }) {
+  if (isLoading) {
+    return panel;
+  }
+
+  if (status !== 200) {
+    return ENTITY_API_ERROR;
+  }
+
+  return panel;
+}
+
 export const usePanelSet = () => {
   const { isAuthenticated, isHubmapUser } = useAppContext();
 
@@ -197,14 +221,14 @@ export const usePanelSet = () => {
   } = useFlaskDataContext();
 
   const hasDbGaPStudyURL = Boolean(dbgap_study_url);
-  const file = useFetchProtectedFile(uuid);
-  const hasNoAccess = file?.status === 403;
+  const { status: globusURLStatus, isLoading: globusURLIsLoading } = useFetchProtectedFile(uuid);
+  const hasNoAccess = globusURLStatus === 403;
   const isNonConsortium = !isHubmapUser;
   const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing', 'Invalid'];
   const isNotFinalized = unfinalizedStatuses.includes(status);
 
   if (accessType === 'Public') {
-    return PUBLIC_DATA;
+    return getGlobusPanel({ status: globusURLStatus, panel: PUBLIC_DATA, isLoading: globusURLIsLoading });
   }
 
   if (isAuthenticated) {
@@ -226,7 +250,7 @@ export const usePanelSet = () => {
       return DATASET_NOT_FINALIZED;
     }
 
-    return ACCESS_TO_PROTECTED_DATA;
+    return getGlobusPanel({ status: globusURLStatus, panel: ACCESS_TO_PROTECTED_DATA, isLoading: globusURLIsLoading });
   }
 
   // Unauthenticated cases
