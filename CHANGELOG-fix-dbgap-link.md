@@ -1,0 +1,1 @@
+- Fix dbGaP study link in bulk data transfer section.
