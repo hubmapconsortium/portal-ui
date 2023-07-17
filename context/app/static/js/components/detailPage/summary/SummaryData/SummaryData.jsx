@@ -19,7 +19,7 @@ function SummaryData({
   uuid,
   status,
   mapped_data_access_level,
-  title,
+  hubmap_id,
   entityCanBeSaved,
   children,
   mapped_external_group_name,
@@ -33,7 +33,7 @@ function SummaryData({
         leftText={
           <LeftTextContainer>
             <StyledTypography variant="h2" data-testid="entity-title">
-              {title}
+              {hubmap_id}
             </StyledTypography>
             {children && <FlexEnd data-testid="summary-data-parent">{children}</FlexEnd>}
           </LeftTextContainer>
@@ -64,7 +64,7 @@ function SummaryData({
 }
 
 SummaryData.propTypes = {
-  title: PropTypes.string.isRequired,
+  hubmap_id: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,

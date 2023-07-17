@@ -10,6 +10,7 @@ function Attribution() {
   const {
     entity: { group_name, created_by_user_displayname, created_by_user_email },
   } = useFlaskDataContext();
+
   return (
     <DetailPageSection id="attribution">
       <SectionHeader>Attribution</SectionHeader>
