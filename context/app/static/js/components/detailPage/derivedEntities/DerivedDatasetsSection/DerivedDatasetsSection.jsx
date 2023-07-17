@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 
+import { useFlaskDataContext } from 'js/components/Contexts';
 import DerivedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import DerivedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
 import { useDerivedDatasetsSection } from './hooks';
 
-function DerivedDatasetsSection({ uuid, entityType }) {
+function DerivedDatasetsSection() {
+  const {
+    entity: { uuid, entity_type },
+  } = useFlaskDataContext();
+
   const [openIndex, setOpenIndex] = useState(0);
   const { entities, isLoading } = useDerivedDatasetsSection(uuid);
 
@@ -17,7 +22,7 @@ function DerivedDatasetsSection({ uuid, entityType }) {
         <DerivedEntitiesSectionHeader
           header="Derived Datasets"
           uuid={uuid}
-          searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
+          searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entity_type}`}
         />
       }
     >
@@ -27,7 +32,7 @@ function DerivedDatasetsSection({ uuid, entityType }) {
         setOpenIndex={setOpenIndex}
         ariaLabel="Derived Datasets Tab"
         renderWarningMessage={(tableEntityType) =>
-          `No derived ${tableEntityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`
+          `No derived ${tableEntityType.toLowerCase()}s for this ${entity_type.toLowerCase()}.`
         }
       />
     </DerivedEntitiesSectionWrapper>

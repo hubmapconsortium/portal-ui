@@ -1,14 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { LightBlueLink } from 'js/shared-styles/Links';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 
-function SampleTissue({ uuid, mapped_organ, sample_category, hasRUI }) {
+function SampleTissue() {
+  const {
+    entity: { uuid, sample_category, origin_samples, rui_location },
+  } = useFlaskDataContext();
+
+  const origin_sample = origin_samples[0];
+  const { mapped_organ } = origin_sample;
+  const hasRUI = Boolean(rui_location);
+
   return (
     <DetailPageSection id="tissue">
       <SectionHeader>Tissue</SectionHeader>
@@ -37,12 +45,5 @@ function SampleTissue({ uuid, mapped_organ, sample_category, hasRUI }) {
     </DetailPageSection>
   );
 }
-
-SampleTissue.propTypes = {
-  uuid: PropTypes.string.isRequired,
-  mapped_organ: PropTypes.string.isRequired,
-  sample_category: PropTypes.string.isRequired,
-  hasRUI: PropTypes.bool.isRequired,
-};
 
 export default SampleTissue;

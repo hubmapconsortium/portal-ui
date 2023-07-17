@@ -30,16 +30,9 @@ function SampleDetail() {
       protocol_url,
       sample_category,
       origin_samples,
-      group_name,
-      created_by_user_displayname,
-      created_by_user_email,
       hubmap_id,
       entity_type,
-      created_timestamp,
-      last_modified_timestamp,
-      description,
       metadata,
-      rui_location,
       descendant_counts,
     },
   } = useFlaskDataContext();
@@ -69,22 +62,12 @@ function SampleDetail() {
 
   useSendUUIDEvent(entity_type, uuid);
 
-  const hasRUI = Boolean(rui_location);
-
   const detailContext = useMemo(() => ({ hubmap_id, uuid }), [hubmap_id, uuid]);
 
   return (
     <DetailContext.Provider value={detailContext}>
       <DetailLayout sectionOrder={sectionOrder}>
-        <Summary
-          uuid={uuid}
-          entity_type={entity_type}
-          title={hubmap_id}
-          created_timestamp={created_timestamp}
-          last_modified_timestamp={last_modified_timestamp}
-          description={description}
-          group_name={group_name}
-        >
+        <Summary>
           <SummaryItem>
             <LightBlueLink variant="h6" href="/organ" underline="none">
               {mapped_organ}
@@ -95,15 +78,11 @@ function SampleDetail() {
           </Typography>
         </Summary>
         {shouldDisplaySection.derived && <DerivedDatasetsSection uuid={uuid} entityType={entity_type} />}
-        <SampleTissue uuid={uuid} sample_category={sample_category} mapped_organ={mapped_organ} hasRUI={hasRUI} />
+        <SampleTissue />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
-        <Attribution
-          group_name={group_name}
-          created_by_user_displayname={created_by_user_displayname}
-          created_by_user_email={created_by_user_email}
-        />
+        <Attribution />
       </DetailLayout>
     </DetailContext.Provider>
   );
