@@ -6,7 +6,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import ProvTabs from '../ProvTabs';
 
-function ProvSection() {
+function ProvSection({ iconTooltipText }) {
   const {
     entity: { uuid, entity_type },
   } = useFlaskDataContext();
@@ -23,7 +23,7 @@ function ProvSection() {
 
   return (
     <DetailPageSection id="provenance">
-      <SectionHeader>Provenance</SectionHeader>
+      <SectionHeader iconTooltipText={iconTooltipText}>Provenance</SectionHeader>
       {provData ? (
         <ProvTabs provData={provData} />
       ) : (

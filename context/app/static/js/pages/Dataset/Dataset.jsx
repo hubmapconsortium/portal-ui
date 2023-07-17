@@ -18,12 +18,13 @@ import useEntityStore from 'js/stores/useEntityStore';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/components/detailPage/style';
+import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 
 import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 // TODO use this context for components other than FileBrowser
-import DetailContext from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/context';
 import { getSectionOrder, getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
 
@@ -53,7 +54,6 @@ function SummaryDataChildren({
   uuid,
 }) {
   const { isWorkspacesUser } = useAppContext();
-
   const createDatasetWorkspace = useDatasetWorkspace({ entity_type, uuid });
 
   return (
@@ -132,7 +132,8 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     visualization: Boolean(vitData),
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(combinedMetadata).length),
-    files: true,
+    files: Boolean(files?.length),
+    bulkDataTransfer: true,
     collections: Boolean(collectionsData.length),
     contributors: contributors && Boolean(contributors.length),
   };
@@ -145,6 +146,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
       'protocols',
       'metadata',
       'files',
+      'bulk-data-transfer',
       'collections',
       'contributors',
       'attribution',
@@ -155,6 +157,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
   useSendUUIDEvent(entity_type, uuid);
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
+
   useEffect(() => {
     setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ });
   }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, setAssayMetadata]);
@@ -213,7 +216,10 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
-        <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
+        {shouldDisplaySection.files && (
+          <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
+        )}
+        {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer visLiftedUUID={visLiftedUUID} />}
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
         <Attribution

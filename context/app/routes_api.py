@@ -88,7 +88,7 @@ def _get_entities(entity_type, constraints={}, uuids=None):
         # Publication Date
         'published_timestamp',
 
-        # Modification Date
+        # Last Modified
         'last_modified_timestamp',
 
         # Creation Date

@@ -1,3 +1,54 @@
+## v0.75.3 - 2023-07-17
+
+- Create bulk data transfer section.
+- Add links to Globus, dbGap study, and SRA Experiment for dbGaP datasets. 
+
+
+## v0.75.2 - 2023-07-17
+
+- Fix links in collection page datasets table.
+- Restore display of publication status for preprints.
+
+
+## v0.75.1 - 2023-07-14
+
+- Fix spacing of derived entities sections.
+- Fix publication tooltip errantly appearing on other pages
+- Remove 'Internet' from publication citations.
+
+
+## v0.75.0 - 2023-07-14
+
+- Adjust display of information for preprints to explicitly label them as preprints where appropriate.
+- Add explanatory tooltips to publication page.
+- Add publication slide to homepage.
+- Get publication summary data types and organs from associated collection if applicable.
+- Set max vertical height and enable vertical scrolling for provenance graph.
+- Set initial vertical scroll position in provenance graph to halfway.
+
+
+## v0.74.2 - 2023-07-13
+
+- Add support for publications with associated collections.
+
+
+## v0.74.1 - 2023-07-12
+
+- Upgrade Vitessce to v3.0.1.
+- Remove extra UUID suffix logic added when bumping from v2.x to v3.0.0, which is no longer required.
+- Get collection datasets from separate search-api query instead of the collection es document.
+- Expand test suite for Publication pages.
+- Add support for text-only publication vignettes without Vitessce visualizations.
+- Restore footer HuBMAP logo visibility.
+- Use swr in search-api fetch hooks.
+- Split publications landing page requests.
+- Change label of published publications tab to peer reviewed on publications landing page.
+- Upgraded to React 18.
+- Upgraded various dependencies to work with React 18.
+- Fixed undefined count tooltips popping up for entity counts on homepage.
+- Upgraded React-PDF to speed up display of PDF attachments.
+
+
 ## v0.74.0 - 2023-07-06
 
 - Add messaging for fair data principles to homepage, vitessce, and the dataset file browser.

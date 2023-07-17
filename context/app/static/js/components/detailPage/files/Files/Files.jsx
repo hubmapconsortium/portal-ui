@@ -1,17 +1,16 @@
-import React, { useState, useContext, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import DetailContext from 'js/components/detailPage/context';
+import { useDetailContext } from 'js/components/detailPage/context';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import GlobusSection from '../GlobusSection';
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../FileBrowserDUA';
-import FilesContext from './context';
+import { FilesContext } from './context';
 import { MarginBottomDiv } from './style';
 
-function Files({ files, uuid, hubmap_id, visLiftedUUID }) {
-  const { mapped_data_access_level } = useContext(DetailContext);
+function Files({ files }) {
+  const { mapped_data_access_level } = useDetailContext();
 
   const localStorageKey = `has_agreed_to_${mapped_data_access_level}_DUA`;
   const [hasAgreedToDUA, agreeToDUA] = useState(localStorage.getItem(localStorageKey));
@@ -45,7 +44,6 @@ function Files({ files, uuid, hubmap_id, visLiftedUUID }) {
             <FileBrowser files={files} />
           </MarginBottomDiv>
         )}
-        <GlobusSection uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         <FileBrowserDUA
           isOpen={isDialogOpen}
           handleAgree={handleDUAAgree}
@@ -58,9 +56,6 @@ function Files({ files, uuid, hubmap_id, visLiftedUUID }) {
 }
 
 Files.propTypes = {
-  uuid: PropTypes.string.isRequired,
-  hubmap_id: PropTypes.string.isRequired,
-  visLiftedUUID: PropTypes.string,
   files: PropTypes.arrayOf(
     PropTypes.shape({
       rel_path: PropTypes.string.isRequired,
@@ -75,7 +70,6 @@ Files.propTypes = {
 
 Files.defaultProps = {
   files: undefined,
-  visLiftedUUID: undefined,
 };
 
 export default Files;

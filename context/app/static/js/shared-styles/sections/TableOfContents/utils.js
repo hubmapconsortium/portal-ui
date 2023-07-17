@@ -1,7 +1,7 @@
-import { capitalizeString } from 'js/helpers/functions';
+import { capitalizeAndReplaceDashes } from 'js/helpers/functions';
 
 function getSectionFromString(s) {
-  return [s, { text: capitalizeString(s), hash: s }];
+  return [s, { text: capitalizeAndReplaceDashes(s), hash: s }];
 }
 
 function getSections(sectionOrder) {

@@ -4,12 +4,12 @@ import Button from '@material-ui/core/Button';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 
-function RelatedEntitiesSectionHeader({ header, searchPageHref }) {
+function RelatedEntitiesSectionHeader({ header, searchPageHref, iconTooltipText }) {
   return (
     <SpacedSectionButtonRow
       leftText={
         <div>
-          <SectionHeader>{header}</SectionHeader>
+          <SectionHeader iconTooltipText={iconTooltipText}>{header}</SectionHeader>
         </div>
       }
       buttons={

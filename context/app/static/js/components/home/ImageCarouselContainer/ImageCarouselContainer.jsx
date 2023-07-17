@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import CarouselImage from 'js/components/home/CarouselImage';
 
+import { useFlaskDataContext } from 'js/components/Contexts';
 import ImageCarousel from '../ImageCarousel';
 import ImageCarouselControlButtons from '../ImageCarouselControlButtons';
 import ImageCarouselCallToAction from '../ImageCarouselCallToAction';
@@ -32,10 +33,25 @@ const slides = [
   },
 ];
 
+const publicationSlide = {
+  title: 'Discover the publications reporting the breakthroughs of  mapping the human body with HuBMAP data',
+  body: 'Explore publications authored by scientists in the consortium involving HuBMAP data. Additional publications will be coming in the future as the consortium continue to create mappings of the human body. View the press release reporting on these publications.',
+  image: <CarouselImage {...getCDNCarouselImageSrcSet('publication')} alt="HuBMAP Publications" key="Publications" />,
+  buttonHref: '/publications',
+};
+
+const slidesWithPublications = [publicationSlide, ...slides];
+
 function ImageCarouselContainer() {
-  // Set random intial image index:
-  const [selectedImageIndex, setSelectedImageIndex] = useState(Math.floor(Math.random() * slides.length));
-  const { title, body, buttonHref } = slides[selectedImageIndex];
+  const { enable_publications: enablePublications } = useFlaskDataContext();
+  const slidesToUse = enablePublications ? slidesWithPublications : slides;
+  // Set random intial image index if publications are not yet enabled
+  // If publications are enabled, use publication slide first
+  const [selectedImageIndex, setSelectedImageIndex] = useState(
+    enablePublications ? 0 : Math.floor(Math.random() * slidesToUse.length),
+  );
+
+  const { title, body, buttonHref } = slidesToUse[selectedImageIndex];
   return (
     <Flex>
       <CallToActionWrapper>
@@ -43,13 +59,13 @@ function ImageCarouselContainer() {
         <ImageCarouselControlButtons
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
-          numImages={slides.length}
+          numImages={slidesToUse.length}
         />
       </CallToActionWrapper>
       <ImageCarousel
         selectedImageIndex={selectedImageIndex}
         setSelectedImageIndex={setSelectedImageIndex}
-        images={slides.map((slide) => slide.image)}
+        images={slidesToUse.map((slide) => slide.image)}
       />
     </Flex>
   );

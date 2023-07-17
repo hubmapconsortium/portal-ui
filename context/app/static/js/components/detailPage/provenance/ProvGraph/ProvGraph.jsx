@@ -6,10 +6,11 @@ import { LightBlueLink } from 'js/shared-styles/Links';
 import ShowDerivedEntitiesButton from 'js/components/detailPage/provenance/ShowDerivedEntitiesButton';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
 import ProvVis from '../ProvVis';
-import { StyledPaper, Flex, StyledTypography } from './style';
+import { StyledPaper, Flex, StyledTypography, StyledDiv, maxGraphHeight } from './style';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 
-const provenanceStoreSelector = (state) => state.setUUID;
+const setUUIDSelector = (state) => state.setUUID;
+const hasRenderedSelector = (state) => state.hasRendered;
 
 function DetailPanel({ node, timeKey, uuid, typeKey, idKey, getNameForActivity, getNameForEntity }) {
   const { prov } = node.meta;
@@ -64,7 +65,8 @@ function ProvGraph({ provData, entity_type, uuid }) {
   const timeKey = isOld ? 'prov:generatedAtTime' : 'hubmap:created_timestamp';
   const typeKey = isOld ? 'prov:type' : 'hubmap:entity_type';
 
-  const setUUID = useProvenanceStore(provenanceStoreSelector);
+  const setUUID = useProvenanceStore(setUUIDSelector);
+  const hasRendered = useProvenanceStore(hasRenderedSelector);
 
   useEffect(() => {
     setUUID(uuid);
@@ -89,14 +91,27 @@ function ProvGraph({ provData, entity_type, uuid }) {
     return null;
   }
 
+  // Set vertical scroll position to halfway.
+  useEffect(() => {
+    if (hasRendered) {
+      const scrollEl = document.getElementsByClassName('scroll-container-wrapper')[0];
+      scrollEl.scroll({
+        top: Math.floor((scrollEl.scrollHeight - maxGraphHeight) / 2),
+        behavior: 'instant',
+      });
+    }
+  }, [hasRendered]);
+
   return (
-    <ProvVis
-      provData={provData}
-      getNameForActivity={getNameForActivity}
-      getNameForEntity={getNameForEntity}
-      renderDetailPane={renderDetailPane}
-      entity_type={entity_type}
-    />
+    <StyledDiv>
+      <ProvVis
+        provData={provData}
+        getNameForActivity={getNameForActivity}
+        getNameForEntity={getNameForEntity}
+        renderDetailPane={renderDetailPane}
+        entity_type={entity_type}
+      />
+    </StyledDiv>
   );
 }
 

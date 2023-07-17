@@ -17,7 +17,7 @@ function buildSecondaryText(contributors, publication_venue) {
 
 function buildPublicationPanelProps(publicationHit) {
   const {
-    _source: { uuid, title, contributors = [], publication_venue, publication_date },
+    _source: { uuid, title, contributors = [], publication_venue, publication_date, publication_status },
   } = publicationHit;
 
   return {
@@ -25,7 +25,7 @@ function buildPublicationPanelProps(publicationHit) {
     href: `/browse/publication/${uuid}`,
     title,
     secondaryText: buildSecondaryText(contributors, publication_venue),
-    rightText: `Published: ${publication_date}`,
+    rightText: `${publication_status ? 'Published' : 'Preprint Date'}: ${publication_date}`,
   };
 }
 

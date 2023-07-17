@@ -18,7 +18,7 @@ test('timestamps display when defined', () => {
       last_modified_timestamp={1596724856094}
     />,
   );
-  const textToTest = ['Creation Date', 'Modification Date'];
+  const textToTest = ['Creation Date', 'Last Modified'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 
   expect(screen.getAllByText('2020-08-06')).toHaveLength(2);
@@ -36,7 +36,7 @@ test('publication prefered to creation, if available', () => {
       last_modified_timestamp={1596724856094}
     />,
   );
-  const textToTest = ['Publication Date', 'Modification Date'];
+  const textToTest = ['Publication Date', 'Last Modified'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 
   expect(screen.getAllByText('2020-08-06')).toHaveLength(2);
@@ -46,7 +46,7 @@ test('publication prefered to creation, if available', () => {
 test('timestamps do not display when undefined', () => {
   render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
 
-  const textToTest = ['Creation Date', 'Modification Date'];
+  const textToTest = ['Creation Date', 'Last Modified'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 
   expect(screen.getAllByText('Undefined')).toHaveLength(2);

@@ -9,6 +9,7 @@ import PublicationsVisualizationSection from 'js/components/publications/Publica
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
 import Files from 'js/components/detailPage/files/Files';
 import useEntityStore from 'js/stores/useEntityStore';
+import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -25,6 +26,7 @@ function Publication({ publication, vignette_json }) {
     ancestor_ids,
     publication_venue,
     files,
+    associated_collection,
   } = publication;
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
@@ -32,13 +34,17 @@ function Publication({ publication, vignette_json }) {
     setAssayMetadata({ hubmap_id, entity_type, title, publication_venue });
   }, [hubmap_id, entity_type, title, publication_venue, setAssayMetadata]);
 
+  const associatedCollectionUUID = associated_collection?.uuid;
+
   const shouldDisplaySection = {
     visualizations: Boolean(Object.keys(vignette_json).length),
-    files: true,
+    provenance: !associatedCollectionUUID,
+    files: Boolean(files?.length),
+    bulkDataTransfer: true,
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'data', 'visualizations', 'files', 'authors', 'provenance'],
+    ['summary', 'data', 'visualizations', 'files', 'bulk-data-transfer', 'authors', 'provenance'],
     shouldDisplaySection,
   );
 
@@ -48,14 +54,30 @@ function Publication({ publication, vignette_json }) {
 
   return (
     <DetailLayout sectionOrder={sectionOrder}>
-      <PublicationSummary {...publication} status={combinedStatus} hasDOI={hasDOI} />
-      <PublicationsDataSection uuid={uuid} datasetUUIDs={ancestor_ids} />
+      <PublicationSummary
+        {...publication}
+        status={combinedStatus}
+        hasDOI={hasDOI}
+        associatedCollectionUUID={associatedCollectionUUID}
+      />
+      <PublicationsDataSection
+        uuid={uuid}
+        datasetUUIDs={ancestor_ids}
+        associatedCollectionUUID={associatedCollectionUUID}
+      />
       {shouldDisplaySection.visualizations && (
         <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
       )}
-      <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />
+      {shouldDisplaySection.files && <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />}
+      {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer files={files} uuid={uuid} hubmap_id={hubmap_id} />}
       <ContributorsTable contributors={contributors} title="Authors" />
-      <ProvSection uuid={uuid} assayMetadata={publication} />
+      {shouldDisplaySection.provenance && (
+        <ProvSection
+          uuid={uuid}
+          assayMetadata={publication}
+          iconTooltipText="The provenance shows the sequence of events and actions that led to this page creation."
+        />
+      )}
     </DetailLayout>
   );
 }
