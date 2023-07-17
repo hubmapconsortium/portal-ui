@@ -8,7 +8,7 @@ import Protocol from 'js/components/detailPage/Protocol';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-import DetailContext from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/context';
 import { getSectionOrder } from 'js/components/detailPage/utils';
 import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
 

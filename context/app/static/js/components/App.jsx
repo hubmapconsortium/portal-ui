@@ -32,10 +32,12 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 function App(props) {
   const { flaskData, groupsToken, isAuthenticated, userEmail, workspacesToken, userGroups = [] } = props;
+
   const { endpoints, globalAlertMd } = flaskData;
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
   const isWorkspacesUser = userGroups?.includes('Workspaces') || workspacesUsers.includes(userEmail);
+  const isHubmapUser = userGroups?.includes('HuBMAP');
 
   return (
     <Providers
@@ -45,6 +47,7 @@ function App(props) {
       userEmail={userEmail}
       workspacesToken={workspacesToken}
       isWorkspacesUser={isWorkspacesUser}
+      isHubmapUser={isHubmapUser}
       flaskData={flaskData}
     >
       <Header />

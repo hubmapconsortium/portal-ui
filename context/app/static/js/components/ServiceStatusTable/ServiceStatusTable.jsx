@@ -8,10 +8,10 @@ import TableRow from '@material-ui/core/TableRow';
 
 import packageInfo from 'package';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import { StyledExternalLinkIcon } from 'js/components/detailPage/files/GlobusLinkMessage/style';
 import { HeaderCell } from 'js/shared-styles/tables';
 
 import StatusIcon from './StatusIcon';
+import { StyledExternalLinkIcon } from './style';
 import { useGatewayStatus } from './hooks';
 
 function buildServiceStatus(args) {
