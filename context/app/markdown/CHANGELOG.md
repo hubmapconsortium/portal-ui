@@ -1,3 +1,8 @@
+## v0.75.5 - 2023-07-17
+
+- Update bulk data transfer section tooltips.
+
+
 ## v0.75.4 - 2023-07-17
 
 - Fix bug causing the outbound link icon to not display in Globus links before the DUA has been agreed upon.
