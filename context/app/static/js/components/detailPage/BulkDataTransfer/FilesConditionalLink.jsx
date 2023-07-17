@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
-import { AlignedLink } from './style';
-
 function getOutboundLinkComponent(hasIcon) {
   if (hasIcon) {
     return OutboundIconLink;
@@ -24,7 +22,7 @@ function FilesConditionalLink({ hasAgreedToDUA, openDUA, href, children, hasIcon
   }
 
   return (
-    <AlignedLink
+    <Link
       onClick={() => {
         openDUA();
       }}
@@ -33,7 +31,7 @@ function FilesConditionalLink({ hasAgreedToDUA, openDUA, href, children, hasIcon
       {...rest}
     >
       {children}
-    </AlignedLink>
+    </Link>
   );
 }
 

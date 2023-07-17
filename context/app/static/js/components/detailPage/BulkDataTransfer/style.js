@@ -6,8 +6,6 @@ import BlockIcon from '@material-ui/icons/Block';
 import Box from '@material-ui/core/Box';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
-
 const StyledContainer = styled.div`
   > div {
     margin-bottom: ${(props) => props.theme.spacing(1.25)}px;
@@ -61,10 +59,6 @@ const StyledBlockIcon = styled(BlockIcon)`
   color: ${(props) => props.theme.palette.warning.main};
 `;
 
-const AlignedLink = styled(LightBlueLink)`
-  vertical-align: baseline;
-`;
-
 const ObliqueSpan = styled.span`
   font-style: oblique 10deg;
 `;
@@ -100,7 +94,6 @@ export {
   StyledLink,
   GreenCheckCircleIcon,
   StyledBlockIcon,
-  AlignedLink,
   ObliqueSpan,
   StyledHeader,
   StyledDiv,
