@@ -12,7 +12,10 @@ import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
 import { FlexEnd, JsonButton, StyledTypography } from './style';
 
-const datasetEntityTypes = ['Dataset', 'Support', 'Publication'];
+const datasetEntityTypes = ['Dataset', 'Support', 'Publication', 'Preprint'];
+const publicationEntityTypes = ['Publication', 'Preprint'];
+
+const entitiesWithStatus = datasetEntityTypes.concat(...publicationEntityTypes);
 
 function SummaryData({
   entity_type,
@@ -24,7 +27,7 @@ function SummaryData({
   children,
   mapped_external_group_name,
 }) {
-  const isPublication = entity_type === 'Publication';
+  const isPublication = publicationEntityTypes.includes(entity_type);
   const LeftTextContainer = isPublication ? React.Fragment : 'div';
   return (
     <>
@@ -40,7 +43,7 @@ function SummaryData({
         }
         buttons={
           <FlexEnd>
-            {datasetEntityTypes.includes(entity_type) && (
+            {entitiesWithStatus.includes(entity_type) && (
               <>
                 <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
                 <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
