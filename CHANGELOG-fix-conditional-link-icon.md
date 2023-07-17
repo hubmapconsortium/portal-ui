@@ -1,1 +1,0 @@
-- Fix bug causing the outbound link icon to not display in Globus links before the DUA has been agreed upon.

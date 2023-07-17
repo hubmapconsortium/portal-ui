@@ -1,3 +1,9 @@
+## v0.75.4 - 2023-07-17
+
+- Fix bug causing the outbound link icon to not display in Globus links before the DUA has been agreed upon.
+- Fix dbGaP study link in bulk data transfer section.
+
+
 ## v0.75.3 - 2023-07-17
 
 - Create bulk data transfer section.
