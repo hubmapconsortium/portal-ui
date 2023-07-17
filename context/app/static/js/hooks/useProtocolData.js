@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import useSWR from 'swr';
 
-import { multiFetcher } from 'js/helpers/multiFetcher';
+import { multiFetcherWithToken } from 'js/helpers/multiFetcher';
+import { useAppContext } from 'js/components/Contexts';
 
 export function useFormattedProtocolUrls(protocolUrls, lastVersion) {
   return useMemo(() => {
@@ -20,21 +21,21 @@ export function useFormattedProtocolUrls(protocolUrls, lastVersion) {
     // Format into the API call URL
     // 10.17504/protocols.io.btnfnmbn -> https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=1
     const formattedUrls = noVersionSuffix.map(
-      // TODO: Update to v4 API (see HMP-254)
-      (doi) => `https://www.protocols.io/api/v3/protocols/${doi}?last_version=${lastVersion}`,
+      (doi) => `https://www.protocols.io/api/v4/protocols/${doi}?last_version=${lastVersion}`,
     );
     return formattedUrls;
   }, [protocolUrls, lastVersion]);
 }
 
 function useProtocolData(protocolUrls, lastVersion = 1) {
+  const { protocolsClientToken } = useAppContext();
   const urls = useFormattedProtocolUrls(protocolUrls, lastVersion);
 
-  const protocols = useSWR(urls, multiFetcher, {
+  const protocols = useSWR([protocolsClientToken, urls], ([token, apiUrls]) => multiFetcherWithToken(token, apiUrls), {
     revalidateOnFocus: false,
   });
 
-  return protocols.data ?? [];
+  return protocols.data;
 }
 
 export default useProtocolData;

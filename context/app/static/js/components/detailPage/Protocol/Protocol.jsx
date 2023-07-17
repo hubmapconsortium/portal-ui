@@ -29,7 +29,7 @@ function Protocol({ protocol_url }) {
       <SectionHeader>Protocols</SectionHeader>
       <Divider />
       <StyledPaper>
-        {protocolData.map(({ title, resolverHostnameAndDOI }) => (
+        {protocolData?.map(({ title, resolverHostnameAndDOI }) => (
           <ProtocolLink key={title} title={title} resolverHostnameAndDOI={resolverHostnameAndDOI} />
         ))}
       </StyledPaper>
