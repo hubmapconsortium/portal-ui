@@ -17,7 +17,7 @@ function BulkDataTransferPanel({ title, status, tooltip, children, addOns }) {
         {title}
         {status ? statusIcons[status] : null}
         <SecondaryBackgroundTooltip title={tooltip}>
-          <InfoIcon fontSize="small" />
+          <InfoIcon fontSize="small" color="primary" />
         </SecondaryBackgroundTooltip>
       </Header>
       <ContentText variant="body2">{children}</ContentText>
