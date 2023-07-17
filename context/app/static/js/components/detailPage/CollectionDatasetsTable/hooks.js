@@ -24,7 +24,7 @@ function useCollectionsDatasets({ ids }) {
     query: {
       ...getIDsQuery(ids),
     },
-    _source: ['hubmap_id', 'entity_type', ...columns.map((c) => c.id)],
+    _source: ['hubmap_id', 'entity_type', 'uuid', ...columns.map((c) => c.id)],
     size: 10000,
   };
 
