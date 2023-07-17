@@ -8,14 +8,23 @@ import GlobusLink from './GlobusLink';
 import { useFetchProtectedFile } from './hooks';
 import { LoginButton } from './style';
 
-const dbGaPTooltip =
-  'The database of Genotypes and Phenotypes archive and distribute data and results from studies that have investigated the interaction of genotype and phenotype in humans.';
+const dbGaPText = {
+  title: 'Non-Consortium Members: Database of Genotypes and Phenotypes (dbGaP)',
+  tooltip:
+    'The database of Genotypes and Phenotypes archives and distributes data and results from studies that have investigated the interaction of genotype and phenotype in humans.',
+};
+
+const globusText = {
+  title: 'HuBMAP Consortium Members: Globus Access',
+  tooltip: 'Global research data management system.',
+};
+
 const sraExpTooltip =
   'SRA data, available through multiple cloud providers and NCBI servers, is the largest publicly available repository of high throughput sequencing data.';
 
 const dbGaPLink = {
   title: 'dbGaP Study',
-  tooltip: dbGaPTooltip,
+  tooltip: dbGaPText.tooltip,
   description: 'Navigate to the "Bioproject" or "Sequencing Read Archive" links to access the datasets.',
   outboundLink: '',
   key: 'dbGaP',
@@ -30,10 +39,8 @@ const sraExperimentLink = {
 };
 
 const loginPanel = {
-  title: 'HuBMAP Consortium Members: Globus Access',
+  ...globusText,
   status: 'error',
-  tooltip:
-    'The database of Genotypes and Phenotypes archive and distribute data and results from studies that have investigated the interaction of genotype and phenotype in humans.',
   children: (
     <>
       Please <LightBlueLink href="/login">log in</LightBlueLink> for Globus access or email{' '}
@@ -51,9 +58,8 @@ const loginPanel = {
 };
 
 const noDbGaPPanel = {
-  title: 'Non-Consortium Members: Database of Genotypes and Phenotypes (dbGaP)',
+  ...dbGaPText,
   status: 'error',
-  tooltip: 'Global research data management system.',
   children: (
     <>
       This dataset contains protected-access human sequence data. Data is not yet available through dbGaP, but will be
@@ -70,10 +76,8 @@ const PROTECTED_DATA = {
   panels: [
     loginPanel,
     {
-      title: 'Non-Consortium Members: Database of Genotypes and Phenotypes (dbGaP)',
+      ...dbGaPText,
       status: 'success',
-      tooltip:
-        'The database of Genotypes and Phenotypes archive and distribute data and results from studies that have investigated the interaction of genotype and phenotype in humans.',
       children: (
         <>
           This dataset contains protected-access human sequence data. If you are not a Consortium member, you must
@@ -98,9 +102,9 @@ const PROTECTED_DATA_NO_DBGAP = {
 const PUBLIC_DATA = {
   panels: [
     {
-      title: 'HuBMAP Consortium Members: Globus Access',
+      title: 'HuBMAP Globus Access',
+      tooltip: globusText.tooltip,
       status: 'success',
-      tooltip: 'Global research data management system.',
       children: (
         <>
           Files are available through the Globus Research Data Management System. If you require additional help, email{' '}
@@ -118,7 +122,7 @@ const PUBLIC_DATA = {
 const ACCESS_TO_PROTECTED_DATA = {
   panels: [
     {
-      title: 'HuBMAP Consortium Members: Globus Access',
+      ...globusText,
       status: 'success',
       children: (
         <>
@@ -152,9 +156,8 @@ const NO_ACCESS_TO_PROTECTED_DATA = {
 const NON_CONSORTIUM_MEMBERS = {
   panels: [
     {
-      title: 'Non-Consortium Members: Database of Genotypes and Phenotypes (dbGaP)',
+      ...dbGaPText,
       status: 'success',
-      tooltip: 'Global research data management system.',
       children: (
         <>
           This dataset contains protected-access human sequence data. If you are not a Consortium member, you must
