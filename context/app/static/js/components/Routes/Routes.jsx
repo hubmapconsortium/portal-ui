@@ -73,7 +73,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/browse/sample/')) {
     return (
       <Route>
-        <Sample vitData={vitessce_conf} />
+        <Sample />
       </Route>
     );
   }
