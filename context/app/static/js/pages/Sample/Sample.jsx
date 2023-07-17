@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
@@ -21,25 +22,27 @@ import { combineMetadata } from 'js/pages/utils/entity-utils';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
-function SampleDetail({ assayMetadata }) {
+function SampleDetail() {
   const {
-    uuid,
-    donor,
-    protocol_url,
-    sample_category,
-    origin_samples,
-    group_name,
-    created_by_user_displayname,
-    created_by_user_email,
-    hubmap_id,
-    entity_type,
-    created_timestamp,
-    last_modified_timestamp,
-    description,
-    metadata,
-    rui_location,
-    descendant_counts,
-  } = assayMetadata;
+    entity: {
+      uuid,
+      donor,
+      protocol_url,
+      sample_category,
+      origin_samples,
+      group_name,
+      created_by_user_displayname,
+      created_by_user_email,
+      hubmap_id,
+      entity_type,
+      created_timestamp,
+      last_modified_timestamp,
+      description,
+      metadata,
+      rui_location,
+      descendant_counts,
+    },
+  } = useFlaskDataContext();
 
   // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
   const origin_sample = origin_samples[0];
@@ -93,7 +96,7 @@ function SampleDetail({ assayMetadata }) {
         </Summary>
         {shouldDisplaySection.derived && <DerivedDatasetsSection uuid={uuid} entityType={entity_type} />}
         <SampleTissue uuid={uuid} sample_category={sample_category} mapped_organ={mapped_organ} hasRUI={hasRUI} />
-        <ProvSection uuid={uuid} assayMetadata={assayMetadata} />
+        <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
         <Attribution

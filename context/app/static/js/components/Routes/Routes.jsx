@@ -73,7 +73,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/browse/sample/')) {
     return (
       <Route>
-        <Sample assayMetadata={entity} vitData={vitessce_conf} />
+        <Sample vitData={vitessce_conf} />
       </Route>
     );
   }
