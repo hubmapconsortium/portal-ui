@@ -27,6 +27,4 @@ function Attribution() {
   );
 }
 
-// Attribution.propTypes = {};
-
 export default React.memo(Attribution);
