@@ -13,7 +13,7 @@ function Link({ url, title, description, tooltip, outboundLink }) {
     <>
       <Divider />
       <LinkContainer>
-        <StyledLink variant="body1">
+        <StyledLink variant="subtitle2">
           <OutboundIconLink href={url}>{title}</OutboundIconLink>
           {tooltip && (
             <SecondaryBackgroundTooltip title={tooltip}>
@@ -22,7 +22,12 @@ function Link({ url, title, description, tooltip, outboundLink }) {
           )}
         </StyledLink>
         <Typography variant="body2">{description}</Typography>
-        {outboundLink && <OutboundIconLink href={outboundLink}> Here is additional documentation.</OutboundIconLink>}
+        {outboundLink && (
+          <>
+            &nbsp;Here is&nbsp;
+            <OutboundIconLink href={outboundLink}>additional documentation</OutboundIconLink>.
+          </>
+        )}
       </LinkContainer>
     </>
   );
