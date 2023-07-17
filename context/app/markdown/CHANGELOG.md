@@ -1,3 +1,9 @@
+## v0.75.3 - 2023-07-17
+
+- Create bulk data transfer section.
+- Add links to Globus, dbGap study, and SRA Experiment for dbGaP datasets. 
+
+
 ## v0.75.2 - 2023-07-17
 
 - Fix links in collection page datasets table.
