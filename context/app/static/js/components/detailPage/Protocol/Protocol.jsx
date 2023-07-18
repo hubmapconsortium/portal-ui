@@ -19,7 +19,6 @@ function ProtocolLink({ url }) {
   if (loading || !data) {
     <SectionItem label="Loading protocol info">Please wait...</SectionItem>;
   }
-  console.log(data?.payload);
   return (
     <SectionItem label={data?.payload?.title}>
       <OutboundIconLink href={data?.payload?.url}>{data?.payload?.url}</OutboundIconLink>
