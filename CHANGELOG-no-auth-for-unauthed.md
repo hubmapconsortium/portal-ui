@@ -1,0 +1,1 @@
+- Disable auth header/token inclusion for unauthenticated users.
