@@ -21,7 +21,7 @@ export function useFormattedProtocolUrls(protocolUrls, lastVersion) {
     // 10.17504/protocols.io.btnfnmbn/v1 -> 10.17504/protocols.io.btnfnmbn
     const noVersionSuffix = noDomainPrefix.map((url) => url.replace(/\/v\d+$/, ''));
     // Format into the API call URL
-    // 10.17504/protocols.io.btnfnmbn -> https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=1
+    // 10.17504/protocols.io.btnfnmbn -> https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=1
     const formattedUrls = noVersionSuffix.map(
       (doi) => `https://www.protocols.io/api/v4/protocols/${doi}?last_version=${lastVersion}`,
     );

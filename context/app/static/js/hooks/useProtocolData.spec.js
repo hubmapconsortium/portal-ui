@@ -7,7 +7,7 @@ describe('useFormattedProtocolUrls', () => {
     const protocolUrls = 'https://dx.doi.org/10.17504/protocols.io.btnfnmbn';
     const lastVersion = 1;
     const { result } = renderHook(useFormattedProtocolUrls(protocolUrls, lastVersion));
-    expect(result).toEqual(['https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=1']);
+    expect(result).toEqual(['https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=1']);
   });
 
   it('should format multiple URLs with version numbers', () => {
@@ -16,8 +16,8 @@ describe('useFormattedProtocolUrls', () => {
     const lastVersion = 1;
     const { result } = renderHook(useFormattedProtocolUrls(protocolUrls, lastVersion));
     expect(result).toEqual([
-      'https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=1',
-      'https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.7d5h6en?last_version=1',
+      'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=1',
+      'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.7d5h6en?last_version=1',
     ]);
   });
 
@@ -25,21 +25,21 @@ describe('useFormattedProtocolUrls', () => {
     const protocolUrls = 'http://dx.doi.org/10.17504/protocols.io.btnfnmbn';
     const lastVersion = 1;
     const { result } = renderHook(useFormattedProtocolUrls(protocolUrls, lastVersion));
-    expect(result).toEqual(['https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=1']);
+    expect(result).toEqual(['https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=1']);
   });
 
   it('should handle URLs with https:// prefix', () => {
     const protocolUrls = 'https://dx.doi.org/10.17504/protocols.io.btnfnmbn';
     const lastVersion = 1;
     const { result } = renderHook(useFormattedProtocolUrls(protocolUrls, lastVersion));
-    expect(result).toEqual(['https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=1']);
+    expect(result).toEqual(['https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=1']);
   });
 
   it('should handle URLs with dx.doi.org/ prefix', () => {
     const protocolUrls = 'dx.doi.org/10.17504/protocols.io.btnfnmbn';
     const lastVersion = 1;
     const { result } = renderHook(useFormattedProtocolUrls(protocolUrls, lastVersion));
-    expect(result).toEqual(['https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=1']);
+    expect(result).toEqual(['https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=1']);
   });
 
   it('should handle URLs with multiple prefixes', () => {
@@ -48,8 +48,8 @@ describe('useFormattedProtocolUrls', () => {
     const lastVersion = 2;
     const { result } = renderHook(useFormattedProtocolUrls(protocolUrls, lastVersion));
     expect(result).toEqual([
-      'https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=2',
-      'https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.7d5h6en?last_version=2',
+      'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=2',
+      'https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.7d5h6en?last_version=2',
     ]);
   });
 
@@ -57,14 +57,14 @@ describe('useFormattedProtocolUrls', () => {
     const protocolUrls = 'dx.doi.org/10.17504/protocols.io.btnfnmbn/v1';
     const lastVersion = 1;
     const { result } = renderHook(useFormattedProtocolUrls(protocolUrls, lastVersion));
-    expect(result).toEqual(['https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=1']);
+    expect(result).toEqual(['https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=1']);
   });
 
   it('should handle URLs with no version number', () => {
     const protocolUrls = 'https://dx.doi.org/10.17504/protocols.io.btnfnmbn';
     const lastVersion = 2;
     const { result } = renderHook(useFormattedProtocolUrls(protocolUrls, lastVersion));
-    expect(result).toEqual(['https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=2']);
+    expect(result).toEqual(['https://www.protocols.io/api/v4/protocols/10.17504/protocols.io.btnfnmbn?last_version=2']);
   });
 
   it('should handle empty input', () => {
