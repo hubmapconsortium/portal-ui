@@ -230,36 +230,26 @@ export const usePanelSet = () => {
   const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing', 'Invalid'];
   const isNotFinalized = unfinalizedStatuses.includes(status);
 
-  if (accessType === 'Public') {
-    return getGlobusPanel({ status: globusURLStatus, panel: PUBLIC_DATA, isLoading: globusURLIsLoading });
+  // Non-authenticated cases
+  if (!isAuthenticated) {
+    return hasDbGaPStudyURL ? PROTECTED_DATA : PROTECTED_DATA_NO_DBGAP;
   }
 
-  if (isAuthenticated) {
-    // Non-consortium case if user is not in HuBMAP Globus group
-    if (isNonConsortium) {
-      if (hasDbGaPStudyURL) {
-        return NON_CONSORTIUM_MEMBERS;
-      }
-      return NON_CONSORTIUM_MEMBERS_NO_DBGAP;
-    }
-
-    // If file is protected and request against the file returns 403, user has no access to protected data
-    if (hasNoAccess) {
-      return NO_ACCESS_TO_PROTECTED_DATA;
-    }
-
-    // If dataset status is `New`, `Error`, `QA`, `Processing`, then data is not yet available
-    if (isNotFinalized) {
-      return DATASET_NOT_FINALIZED;
-    }
-
-    return getGlobusPanel({ status: globusURLStatus, panel: ACCESS_TO_PROTECTED_DATA, isLoading: globusURLIsLoading });
+  // Non-consortium case if user is not in HuBMAP Globus group
+  if (isNonConsortium) {
+    return hasDbGaPStudyURL ? NON_CONSORTIUM_MEMBERS : NON_CONSORTIUM_MEMBERS_NO_DBGAP;
   }
 
-  // Unauthenticated cases
-  if (hasDbGaPStudyURL) {
-    return PROTECTED_DATA;
+  // If file is protected and request against the file returns 403, user has no access to protected data
+  if (hasNoAccess) {
+    return NO_ACCESS_TO_PROTECTED_DATA;
   }
 
-  return PROTECTED_DATA_NO_DBGAP;
+  // If dataset status is `New`, `Error`, `QA`, `Processing`, then data is not yet available
+  if (isNotFinalized) {
+    return DATASET_NOT_FINALIZED;
+  }
+
+  const panel = accessType === 'Public' ? PUBLIC_DATA : ACCESS_TO_PROTECTED_DATA;
+  return getGlobusPanel({ status: globusURLStatus, panel, isLoading: globusURLIsLoading });
 };
