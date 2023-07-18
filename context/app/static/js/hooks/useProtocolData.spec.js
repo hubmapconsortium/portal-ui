@@ -12,12 +12,12 @@ describe('useFormattedProtocolUrls', () => {
 
   it('should format multiple URLs with version numbers', () => {
     const protocolUrls =
-      'https://dx.doi.org/10.17504/protocols.io.btnfnmbn/v1,https://dx.doi.org/10.17504/protocols.io.7d5h6en/v2';
-    const lastVersion = 2;
+      'https://dx.doi.org/10.17504/protocols.io.btnfnmbn/v1, https://dx.doi.org/10.17504/protocols.io.7d5h6en/v2';
+    const lastVersion = 1;
     const { result } = renderHook(useFormattedProtocolUrls(protocolUrls, lastVersion));
     expect(result).toEqual([
-      'https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=2',
-      'https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.7d5h6en?last_version=2',
+      'https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.btnfnmbn?last_version=1',
+      'https://www.protocols.io/api/v3/protocols/10.17504/protocols.io.7d5h6en?last_version=1',
     ]);
   });
 
