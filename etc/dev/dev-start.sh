@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-set -o errexit
-trap 'jobs -p | xargs kill' EXIT
-
-die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
 # Check language versions
 
@@ -22,9 +18,15 @@ REQUIRED_NODE_V=$(cat .nvmrc)
 # Check whether to run NPM/PIP install
 NO_NPM=0
 NO_PIP=0
-optspec=":np-:"
+optspec=":hnp-:"
 while getopts "$optspec" optchar; do
     case "${optchar}" in
+        h) echo "usage: $0 [-h] [-n | --no-npm-install] [-p | --no-pip-install]"
+           echo "  -h: show this help message"
+           echo "  -n: skip npm install"
+           echo "  -p: skip pip install"
+           exit 0
+           ;;
         -)
             case "${OPTARG}" in
                 no-npm-install)
@@ -56,6 +58,11 @@ while getopts "$optspec" optchar; do
             ;;
     esac
 done
+
+set -o errexit
+trap 'jobs -p | xargs kill' EXIT
+
+die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
 # Install
 
