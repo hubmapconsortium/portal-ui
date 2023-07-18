@@ -50,6 +50,7 @@ const visualizationStoreSelector = (state) => ({
   onCopyUrlSnackbarOpen: state.onCopyUrlSnackbarOpen,
   setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
   setVizNotebookId: state.setVizNotebookId,
+  vitessceState: state.vitessceState,
 });
 const sharedInfoSnackbarProps = {
   anchorOrigin: {
@@ -192,9 +193,14 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
               <Vitessce
                 config={vitessceConfig[vitessceSelection] || vitessceConfig}
                 theme={vizTheme}
-                onConfigChange={setVitessceStateDebounced}
+                onConfigChange={(c) => {
+                  // eslint-disable-next-line no-console
+                  console.log(c);
+                  setVitessceStateDebounced?.(c);
+                }}
                 height={vizIsFullscreen ? null : vitessceFixedHeight}
                 onWarn={addError}
+                debug
               />
             )}
           </ExpandableDiv>

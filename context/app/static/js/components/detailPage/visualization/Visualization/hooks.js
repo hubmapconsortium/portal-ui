@@ -1,15 +1,36 @@
 import { useState, useEffect } from 'react';
 import { decodeURLParamsToConf } from 'vitessce';
 
+const guaranteeUidForConfig = (vData) => {
+  if (Array.isArray(vData)) {
+    return vData.map((v, index) => {
+      if (!v.uid) {
+        return {
+          ...v,
+          uid: `vitessce-${v.name || index}`,
+        };
+      }
+      return v;
+    });
+  }
+  if (!vData.uid) {
+    return {
+      ...vData,
+      uid: 'vitessce-0',
+    };
+  }
+  return vData;
+};
+
 export function useVitessceConfig({ vitData, setVitessceState, setVitessceErrors }) {
-  const [vitessceSelection, setVitessceSelection] = useState(null);
+  const [vitessceSelection, setVitessceSelection] = useState(0);
   const [vitessceConfig, setVitessceConfig] = useState(null);
 
   useEffect(() => {
     function setVitessceDefaults(vData) {
       setVitessceState(Array.isArray(vData) ? vData[0] : vData);
       setVitessceSelection(0);
-      setVitessceConfig(vData);
+      setVitessceConfig(guaranteeUidForConfig(vData));
     }
 
     if (setVitessceState && vitData) {
@@ -30,7 +51,7 @@ export function useVitessceConfig({ vitData, setVitessceState, setVitessceErrors
       }
       let initializedVitDataFromUrl = vitData;
       let initialSelectionFromUrl;
-      // If these is a url conf and the we have a multidataset, use the url conf to find the initial selection of the multi-dataset.
+      // If these is a url conf and we have a multidataset, use the url conf to find the initial selection of the multi-dataset.
       if (Array.isArray(vitData)) {
         initialSelectionFromUrl = Math.max(0, vitData.map(({ name }) => name).indexOf(vitessceURLConf?.name));
         initializedVitDataFromUrl[initialSelectionFromUrl] = vitessceURLConf || vitData[initialSelectionFromUrl];
@@ -39,8 +60,9 @@ export function useVitessceConfig({ vitData, setVitessceState, setVitessceErrors
       }
       setVitessceState(initializedVitDataFromUrl[initialSelectionFromUrl]);
       setVitessceSelection(initialSelectionFromUrl);
-      setVitessceConfig(initializedVitDataFromUrl);
+      setVitessceConfig(guaranteeUidForConfig(initializedVitDataFromUrl));
     }
   }, [setVitessceState, vitData, setVitessceErrors]);
+
   return { vitessceConfig, vitessceSelection, setVitessceSelection };
 }
