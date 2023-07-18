@@ -18,6 +18,45 @@ REQUIRED_NODE_V=$(cat .nvmrc)
 [[ "$INSTALLED_NODE_V" = "$REQUIRED_NODE_V" ]] \
   || die "Installed node version ($INSTALLED_NODE_V) != required version ($REQUIRED_NODE_V) " 
 
+
+# Check whether to run NPM/PIP install
+NO_NPM=0
+NO_PIP=0
+optspec=":np-:"
+while getopts "$optspec" optchar; do
+    case "${optchar}" in
+        -)
+            case "${OPTARG}" in
+                no-npm-install)
+                    NO_NPM=1
+                    echo "Skipping npm install due to arg: '--${OPTARG}'";
+                    ;;
+                no-pip-install)
+                    NO_PIP=1
+                    echo "Skipping pip install due to arg: '--${OPTARG}'";
+                    ;;
+                *)
+                    if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
+                        echo "Unknown option --${OPTARG}" >&2
+                    fi
+                    ;;
+            esac;;
+        p)
+            NO_PIP=1
+            echo "Skipping pip install due to arg: '-${optchar}'"
+            ;;
+        n)
+            NO_NPM=1
+            echo "Skipping npm install due to arg: '-${optchar}'"
+            ;;
+        *)
+            if [ "$OPTERR" != 1 ] || [ "${optspec:0:1}" = ":" ]; then
+                echo "Non-option argument: '-${OPTARG}'" >&2
+            fi
+            ;;
+    esac
+done
+
 # Install
 
 git submodule init
@@ -25,12 +64,17 @@ git submodule update
 git config submodule.recurse true # So 'git pull' will update submodules.
 
 CONTEXT=context
-pip install -r $CONTEXT/requirements.txt > /dev/null
+
+if [ "$NO_PIP" -lt 1 ] ; then 
+  pip install -r $CONTEXT/requirements.txt > /dev/null
+fi
 
 etc/dev/copy-app-conf.sh
 
 cd $CONTEXT
-npm install
+if [ "$NO_NPM" -lt 1 ] ; then 
+  npm install
+fi
 
 # Start subprocesses
 
