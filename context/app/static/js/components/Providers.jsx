@@ -39,7 +39,7 @@ function Providers({
   );
 
   const protocolsContext = useMemo(
-    () => ({ protocolsClientId: flaskData.protocolsClientId, clientAuthToken: flaskData.protocolsClientToken }),
+    () => ({ protocolsClientId: flaskData?.protocolsClientId, clientAuthToken: flaskData?.protocolsClientToken }),
     [flaskData],
   );
 
