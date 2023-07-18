@@ -6,11 +6,11 @@ import { useAppContext } from 'js/components/Contexts';
 
 export function useFormattedProtocolUrls(protocolUrls, lastVersion) {
   return useMemo(() => {
-    // Handle case with multiple URLs provided in one string
+    // Handle case with multiple URLs provided in one string and remove leading/trailing whitespace
     // If only one string is provided, it will be returned as an array
     // "dx.doi.org/10.17504/protocols.io.5qpvob93dl4o/v1, dx.doi.org/10.17504/protocols.io.dm6gpb7p5lzp/v1" ->
     // ["dx.doi.org/10.17504/protocols.io.5qpvob93dl4o/v1", "dx.doi.org/10.17504/protocols.io.dm6gpb7p5lzp/v1"]
-    const protocols = protocolUrls.split(',');
+    const protocols = protocolUrls.split(',').map((url) => url.trim());
     // Strip `http://` and `https://` from the beginning of the URL if it exists
     // https://dx.doi.org/10.17504/protocols.io.btnfnmbn -> dx.doi.org/10.17504/protocols.io.btnfnmbn
     const noHttpPrefix = protocols.map((url) => url.replace(/^(?:https?:\/\/)?/i, ''));
