@@ -230,6 +230,11 @@ export const usePanelSet = () => {
   const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing', 'Invalid'];
   const isNotFinalized = unfinalizedStatuses.includes(status);
 
+  // Data is available to anyone
+  if (accessType === 'Public') {
+    return PUBLIC_DATA;
+  }
+
   // Non-authenticated cases
   if (!isAuthenticated) {
     return hasDbGaPStudyURL ? PROTECTED_DATA : PROTECTED_DATA_NO_DBGAP;
@@ -250,6 +255,5 @@ export const usePanelSet = () => {
     return DATASET_NOT_FINALIZED;
   }
 
-  const panel = accessType === 'Public' ? PUBLIC_DATA : ACCESS_TO_PROTECTED_DATA;
-  return getGlobusPanel({ status: globusURLStatus, panel, isLoading: globusURLIsLoading });
+  return getGlobusPanel({ status: globusURLStatus, panel: ACCESS_TO_PROTECTED_DATA, isLoading: globusURLIsLoading });
 };
