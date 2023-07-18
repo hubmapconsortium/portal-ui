@@ -18,17 +18,23 @@ REQUIRED_NODE_V=$(cat .nvmrc)
 # Check whether to run NPM/PIP install
 NO_NPM=0
 NO_PIP=0
-optspec=":hnp-:"
+optspec=":hnps-:"
 while getopts "$optspec" optchar; do
     case "${optchar}" in
-        h) echo "usage: $0 [-h] [-n | --no-npm-install] [-p | --no-pip-install]"
+        h) echo "usage: $0 [-h] [-n | --no-npm-install] [-p | --no-pip-install] [-s | --skip-install]"
            echo "  -h: show this help message"
            echo "  -n: skip npm install"
            echo "  -p: skip pip install"
+           echo "  -s: skip both installs"
            exit 0
            ;;
         -)
             case "${OPTARG}" in
+                skip-install)
+                    NO_NPM=1
+                    NO_PIP=1
+                    echo "Skipping both installs due to arg: '--${OPTARG}'";
+                    ;;
                 no-npm-install)
                     NO_NPM=1
                     echo "Skipping npm install due to arg: '--${OPTARG}'";
@@ -50,6 +56,11 @@ while getopts "$optspec" optchar; do
         n)
             NO_NPM=1
             echo "Skipping npm install due to arg: '-${optchar}'"
+            ;;
+        s)
+            NO_NPM=1
+            NO_PIP=1
+            echo "Skipping both installs due to arg: '-${optchar}'"
             ;;
         *)
             if [ "$OPTERR" != 1 ] || [ "${optspec:0:1}" = ":" ]; then
