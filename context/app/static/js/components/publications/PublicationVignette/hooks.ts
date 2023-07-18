@@ -24,14 +24,18 @@ export function usePublicationVignetteConfs({ uuid, vignetteDirName, vignette }:
   if (data) {
     const urlHandler = (url: string, isZarr: boolean) => {
       return `${url.replace('{{ base_url }}', `${assetsEndpoint}/${uuid}/data`)}${
-        isZarr ? '' : `?token=${groupsToken}`
+        isZarr || !groupsToken ? '' : `?token=${groupsToken}`
       }`;
     };
 
     const requestInitHandler = () => {
-      return {
-        headers: { Authorization: `Bearer ${groupsToken}` },
-      };
+      // Only include the Authorization header if the user is logged in/has a groups token
+      if (groupsToken) {
+        return {
+          headers: { Authorization: `Bearer ${groupsToken}` },
+        };
+      }
+      return {};
     };
     // Formats the vitessce config data to replace the {{ base_url }} placeholder with the actual url.
     // TODO: Improve this `unknown`; I couldn't figure out how to import the appropriate `VitessceConfig` type from Vitessce.
