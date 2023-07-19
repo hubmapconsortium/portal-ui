@@ -20,9 +20,9 @@ test('text displays properly from Flask Context', () => {
   };
 
   render(
-    <FlaskDataContext value={flaskDataContext}>
+    <FlaskDataContext.Provider value={flaskDataContext}>
       <SampleTissue />
-    </FlaskDataContext>,
+    </FlaskDataContext.Provider>,
   );
   expectLabelsPresent();
 
