@@ -13,9 +13,9 @@ test('displays correctly with required props', () => {
   };
 
   render(
-    <FlaskDataContext value={flaskDataContext}>
+    <FlaskDataContext.Provider value={flaskDataContext}>
       <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />
-    </FlaskDataContext>,
+    </FlaskDataContext.Provider>,
   );
   const textToTest = ['fakedoi', 'Fakeentity'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
