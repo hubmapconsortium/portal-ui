@@ -9,7 +9,7 @@ function expectLabelsPresent() {
   labelsToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 }
 
-test('text displays properly when all props provided', () => {
+test('text displays properly from Flask Context', () => {
   const flaskDataContext = {
     entity: {
       uuid: 'fakeUUID',

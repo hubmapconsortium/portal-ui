@@ -1,9 +1,22 @@
 import React from 'react';
+import { FlaskDataContext } from 'js/components/Contexts';
 import { render, screen } from 'test-utils/functions';
 import Summary from './Summary';
 
 test('displays correctly with required props', () => {
-  render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
+  const flaskDataContext = {
+    entity: {
+      uuid: 'fakeUUID',
+      hubmap_id: 'fakeTitle',
+      entity_type: 'Fakeentity',
+    },
+  };
+
+  render(
+    <FlaskDataContext value={flaskDataContext}>
+      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />
+    </FlaskDataContext>,
+  );
   const textToTest = ['fakedoi', 'Fakeentity'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 });
