@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
+import { FlaskDataContext } from 'js/components/Contexts';
 import SampleTissue from './SampleTissue';
 
 function expectLabelsPresent() {
@@ -9,7 +10,20 @@ function expectLabelsPresent() {
 }
 
 test('text displays properly when all props provided', () => {
-  render(<SampleTissue mapped_organ="Fake Organ" sample_category="Fake Sample Category" hasRUI />);
+  const flaskDataContext = {
+    entity: {
+      uuid: 'fakeUUID',
+      sample_category: 'Fake Sample Category',
+      origin_samples: { mapped_organ: 'Fake Origin Sample' },
+      rui_location: 'Fake RUI Location',
+    },
+  };
+
+  render(
+    <FlaskDataContext value={flaskDataContext}>
+      <SampleTissue />
+    </FlaskDataContext>,
+  );
   expectLabelsPresent();
 
   expect(screen.getByText('Tissue Location')).toBeInTheDocument();
@@ -19,7 +33,20 @@ test('text displays properly when all props provided', () => {
 });
 
 test('displays label not defined when values are undefined', () => {
-  render(<SampleTissue />);
+  const flaskDataContext = {
+    entity: {
+      uuid: 'fakeUUID',
+      sample_category: 'Fake Sample Category',
+      origin_samples: { mapped_organ: 'Fake Origin Sample' },
+      rui_location: 'Fake RUI Location',
+    },
+  };
+
+  render(
+    <FlaskDataContext value={flaskDataContext}>
+      <SampleTissue />
+    </FlaskDataContext>,
+  );
   expectLabelsPresent();
 
   expect(screen.queryByText('Tissue Location')).not.toBeInTheDocument();
