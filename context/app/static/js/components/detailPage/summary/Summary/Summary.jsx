@@ -23,9 +23,6 @@ function Summary({
   } = useFlaskDataContext();
   return (
     <DetailPageSection id="summary">
-      {uuid}
-      {hubmap_id}
-      {entity_type}
       <SummaryData
         title={hubmap_id}
         entity_type={entity_type}
