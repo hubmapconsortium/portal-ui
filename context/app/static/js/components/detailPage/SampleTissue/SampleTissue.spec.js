@@ -43,9 +43,9 @@ test('displays label not defined when values are undefined', () => {
   };
 
   render(
-    <FlaskDataContext value={flaskDataContext}>
+    <FlaskDataContext.Provider value={flaskDataContext}>
       <SampleTissue />
-    </FlaskDataContext>,
+    </FlaskDataContext.Provider>,
   );
   expectLabelsPresent();
 
