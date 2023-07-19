@@ -152,7 +152,19 @@ test('description displays when defined', () => {
 });
 
 test('description name does not display when undefined', () => {
-  render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
+  const flaskDataContext = {
+    entity: {
+      uuid: 'fakeUUID',
+      hubmap_id: 'fakeTitle',
+      entity_type: 'Fakeentity',
+    },
+  };
+
+  render(
+    <FlaskDataContext.Provider value={flaskDataContext}>
+      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />
+    </FlaskDataContext.Provider>,
+  );
 
   expect(screen.queryByText('fake description')).not.toBeInTheDocument();
 });
