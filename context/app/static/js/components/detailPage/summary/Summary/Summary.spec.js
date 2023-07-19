@@ -77,7 +77,19 @@ test('publication prefered to creation, if available', () => {
 });
 
 test('timestamps do not display when undefined', () => {
-  render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
+  const flaskDataContext = {
+    entity: {
+      uuid: 'fakeUUID',
+      hubmap_id: 'fakeTitle',
+      entity_type: 'Fakeentity',
+    },
+  };
+
+  render(
+    <FlaskDataContext.Provider value={flaskDataContext}>
+      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />
+    </FlaskDataContext.Provider>,
+  );
 
   const textToTest = ['Creation Date', 'Last Modified'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
@@ -86,19 +98,55 @@ test('timestamps do not display when undefined', () => {
 });
 
 test('collection name displays when defined', () => {
-  render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" collectionName="Fake Collection Name" />);
+  const flaskDataContext = {
+    entity: {
+      uuid: 'fakeUUID',
+      hubmap_id: 'fakeTitle',
+      entity_type: 'Fakeentity',
+    },
+  };
+
+  render(
+    <FlaskDataContext.Provider value={flaskDataContext}>
+      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" collectionName="Fake Collection Name" />
+    </FlaskDataContext.Provider>,
+  );
 
   expect(screen.getByText('Fake Collection Name')).toBeInTheDocument();
 });
 
 test('collection name does not display when undefined', () => {
-  render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />);
+  const flaskDataContext = {
+    entity: {
+      uuid: 'fakeUUID',
+      hubmap_id: 'fakeTitle',
+      entity_type: 'Fakeentity',
+    },
+  };
+
+  render(
+    <FlaskDataContext.Provider value={flaskDataContext}>
+      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />
+    </FlaskDataContext.Provider>,
+  );
 
   expect(screen.queryByText('Fake Collection Name')).not.toBeInTheDocument();
 });
 
 test('description displays when defined', () => {
-  render(<Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" description="fake description" />);
+  const flaskDataContext = {
+    entity: {
+      uuid: 'fakeUUID',
+      hubmap_id: 'fakeTitle',
+      entity_type: 'Fakeentity',
+    },
+  };
+
+  render(
+    <FlaskDataContext.Provider value={flaskDataContext}>
+      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" description="fake description" />
+    </FlaskDataContext.Provider>,
+  );
 
   expect(screen.getByText('fake description')).toBeInTheDocument();
 });
