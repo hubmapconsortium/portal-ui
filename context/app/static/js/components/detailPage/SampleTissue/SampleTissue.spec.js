@@ -14,7 +14,7 @@ test('text displays properly from Flask Context', () => {
     entity: {
       uuid: 'fakeUUID',
       sample_category: 'Fake Sample Category',
-      origin_samples: { mapped_organ: 'Fake Origin Sample' },
+      origin_samples: [{ mapped_organ: 'Fake Origin Sample' }],
       rui_location: 'Fake RUI Location',
     },
   };

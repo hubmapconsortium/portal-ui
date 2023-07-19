@@ -7,7 +7,7 @@ test('displays correctly with required props', () => {
   const flaskDataContext = {
     entity: {
       uuid: 'fakeUUID',
-      hubmap_id: 'fakeTitle',
+      title: 'fakeTitle',
       entity_type: 'Fakeentity',
     },
   };
@@ -27,6 +27,8 @@ test('timestamps display when defined', () => {
       uuid: 'fakeUUID',
       hubmap_id: 'fakeTitle',
       entity_type: 'Fakeentity',
+      created_timestamp: 1596724856094,
+      last_modified_timestamp: 1596724856094,
     },
   };
 
@@ -54,6 +56,9 @@ test('publication prefered to creation, if available', () => {
       uuid: 'fakeUUID',
       hubmap_id: 'fakeTitle',
       entity_type: 'Fakeentity',
+      created_timestamp: 1596724856094,
+      published_timestamp: 1596724856094,
+      last_modified_timestamp: 1596724856094,
     },
   };
 
@@ -139,6 +144,7 @@ test('description displays when defined', () => {
       uuid: 'fakeUUID',
       hubmap_id: 'fakeTitle',
       entity_type: 'Fakeentity',
+      description: 'fake description',
     },
   };
 
