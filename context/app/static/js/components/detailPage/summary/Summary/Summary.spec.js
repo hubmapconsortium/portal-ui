@@ -22,14 +22,24 @@ test('displays correctly with required props', () => {
 });
 
 test('timestamps display when defined', () => {
+  const flaskDataContext = {
+    entity: {
+      uuid: 'fakeUUID',
+      hubmap_id: 'fakeTitle',
+      entity_type: 'Fakeentity',
+    },
+  };
+
   render(
-    <Summary
-      title="fakedoi"
-      entity_type="Fakeentity"
-      uuid="fakeuuid"
-      created_timestamp={1596724856094}
-      last_modified_timestamp={1596724856094}
-    />,
+    <FlaskDataContext.Provider value={flaskDataContext}>
+      <Summary
+        title="fakedoi"
+        entity_type="Fakeentity"
+        uuid="fakeuuid"
+        created_timestamp={1596724856094}
+        last_modified_timestamp={1596724856094}
+      />
+    </FlaskDataContext.Provider>,
   );
   const textToTest = ['Creation Date', 'Last Modified'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
@@ -39,15 +49,25 @@ test('timestamps display when defined', () => {
 });
 
 test('publication prefered to creation, if available', () => {
+  const flaskDataContext = {
+    entity: {
+      uuid: 'fakeUUID',
+      hubmap_id: 'fakeTitle',
+      entity_type: 'Fakeentity',
+    },
+  };
+
   render(
-    <Summary
-      title="fakedoi"
-      entity_type="Fakeentity"
-      uuid="fakeuuid"
-      created_timestamp={1596724856094}
-      published_timestamp={1596724856094}
-      last_modified_timestamp={1596724856094}
-    />,
+    <FlaskDataContext.Provider value={flaskDataContext}>
+      <Summary
+        title="fakedoi"
+        entity_type="Fakeentity"
+        uuid="fakeuuid"
+        created_timestamp={1596724856094}
+        published_timestamp={1596724856094}
+        last_modified_timestamp={1596724856094}
+      />
+    </FlaskDataContext.Provider>,
   );
   const textToTest = ['Publication Date', 'Last Modified'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
