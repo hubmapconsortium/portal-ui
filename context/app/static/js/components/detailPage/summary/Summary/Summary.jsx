@@ -19,12 +19,15 @@ function Summary({
   mapped_external_group_name,
 }) {
   const {
-    entity: { uuid, hubmap_id: title, entity_type, created_timestamp, last_modified_timestamp, description },
+    entity: { uuid, hubmap_id, entity_type, created_timestamp, last_modified_timestamp, description },
   } = useFlaskDataContext();
   return (
     <DetailPageSection id="summary">
+      {uuid}
+      {hubmap_id}
+      {entity_type}
       <SummaryData
-        title={title}
+        title={hubmap_id}
         entity_type={entity_type}
         uuid={uuid}
         status={status}

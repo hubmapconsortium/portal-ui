@@ -14,7 +14,7 @@ test('text displays properly from Flask Context', () => {
     entity: {
       uuid: 'fakeUUID',
       sample_category: 'Fake Sample Category',
-      origin_samples: [{ mapped_organ: 'Fake Origin Sample' }],
+      origin_samples: [{ mapped_organ: 'Fake Organ' }],
       rui_location: 'Fake RUI Location',
     },
   };
@@ -36,9 +36,9 @@ test('displays label not defined when values are undefined', () => {
   const flaskDataContext = {
     entity: {
       uuid: 'fakeUUID',
-      sample_category: 'Fake Sample Category',
-      origin_samples: { mapped_organ: 'Fake Origin Sample' },
-      rui_location: 'Fake RUI Location',
+      sample_category: undefined,
+      origin_samples: [{ mapped_organ: undefined }],
+      rui_location: false,
     },
   };
 

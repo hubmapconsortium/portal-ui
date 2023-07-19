@@ -7,17 +7,17 @@ test('displays correctly with required props', () => {
   const flaskDataContext = {
     entity: {
       uuid: 'fakeUUID',
-      title: 'fakeTitle',
+      hubmap_id: 'fakeTitle',
       entity_type: 'Fakeentity',
     },
   };
 
   render(
     <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />
+      <Summary />
     </FlaskDataContext.Provider>,
   );
-  const textToTest = ['fakedoi', 'Fakeentity'];
+  const textToTest = ['fakeUUID', 'fakeTitle', 'Fakeentity'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 });
 
@@ -34,13 +34,7 @@ test('timestamps display when defined', () => {
 
   render(
     <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary
-        title="fakedoi"
-        entity_type="Fakeentity"
-        uuid="fakeuuid"
-        created_timestamp={1596724856094}
-        last_modified_timestamp={1596724856094}
-      />
+      <Summary />
     </FlaskDataContext.Provider>,
   );
   const textToTest = ['Creation Date', 'Last Modified'];
@@ -64,14 +58,7 @@ test('publication prefered to creation, if available', () => {
 
   render(
     <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary
-        title="fakedoi"
-        entity_type="Fakeentity"
-        uuid="fakeuuid"
-        created_timestamp={1596724856094}
-        published_timestamp={1596724856094}
-        last_modified_timestamp={1596724856094}
-      />
+      <Summary />
     </FlaskDataContext.Provider>,
   );
   const textToTest = ['Publication Date', 'Last Modified'];
@@ -92,7 +79,7 @@ test('timestamps do not display when undefined', () => {
 
   render(
     <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />
+      <Summary />
     </FlaskDataContext.Provider>,
   );
 
@@ -113,7 +100,7 @@ test('collection name displays when defined', () => {
 
   render(
     <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" collectionName="Fake Collection Name" />
+      <Summary collectionName="Fake Collection Name" />
     </FlaskDataContext.Provider>,
   );
 
@@ -131,7 +118,7 @@ test('collection name does not display when undefined', () => {
 
   render(
     <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />
+      <Summary />
     </FlaskDataContext.Provider>,
   );
 
@@ -150,7 +137,7 @@ test('description displays when defined', () => {
 
   render(
     <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" description="fake description" />
+      <Summary />
     </FlaskDataContext.Provider>,
   );
 
@@ -168,7 +155,7 @@ test('description name does not display when undefined', () => {
 
   render(
     <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary title="fakedoi" entity_type="Fakeentity" uuid="fakeuuid" />
+      <Summary />
     </FlaskDataContext.Provider>,
   );
 
