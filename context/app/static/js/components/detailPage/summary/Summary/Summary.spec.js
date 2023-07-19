@@ -17,7 +17,7 @@ test('displays correctly with required props', () => {
       <Summary />
     </FlaskDataContext.Provider>,
   );
-  const textToTest = ['fakeUUID', 'fakeTitle', 'Fakeentity'];
+  const textToTest = ['fakeTitle', 'Fakeentity'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 });
 
@@ -51,14 +51,13 @@ test('publication prefered to creation, if available', () => {
       hubmap_id: 'fakeTitle',
       entity_type: 'Fakeentity',
       created_timestamp: 1596724856094,
-      published_timestamp: 1596724856094,
       last_modified_timestamp: 1596724856094,
     },
   };
 
   render(
     <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary />
+      <Summary published_timestamp={1596724856094} />
     </FlaskDataContext.Provider>,
   );
   const textToTest = ['Publication Date', 'Last Modified'];

@@ -26,6 +26,7 @@ function SummaryData({
 }) {
   const isPublication = entity_type === 'Publication';
   const LeftTextContainer = isPublication ? React.Fragment : 'div';
+
   return (
     <>
       <SummaryTitle data-testid="entity-type">{entity_type}</SummaryTitle>

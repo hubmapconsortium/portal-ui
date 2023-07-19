@@ -21,6 +21,7 @@ function Summary({
   const {
     entity: { uuid, hubmap_id, entity_type, created_timestamp, last_modified_timestamp, description },
   } = useFlaskDataContext();
+
   return (
     <DetailPageSection id="summary">
       <SummaryData
