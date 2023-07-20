@@ -50,11 +50,13 @@ def organ_index_view():
         flask_data=flask_data
     )
 
+
 def redirect_to_organ_from_search(name, organs):
-    for k,v in organs.items():
+    for k, v in organs.items():
         if name in v.get('search'):
-             return redirect(url_for('routes_file_based.organ_details_view', name=k))
+            return redirect(url_for('routes_file_based.organ_details_view', name=k))
     abort(404)
+
 
 @blueprint.route('/organ/<name>')
 def organ_details_view(name):
