@@ -4,7 +4,7 @@ import Tab from '@material-ui/core/Tab';
 const StyledTab = styled(Tab)`
   min-height: 45px;
 
-  .portal-MuiTab-wrapper-220 {
+  span {
     flex-direction: row;
   }
 

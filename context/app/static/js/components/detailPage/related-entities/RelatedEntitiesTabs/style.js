@@ -28,6 +28,7 @@ const EntityHeader = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  border: red 2px solid;
 `;
 
 export { StyledTabPanel, StyledTabs, StyledAlert, StyledSvgIcon, EntityHeader };
