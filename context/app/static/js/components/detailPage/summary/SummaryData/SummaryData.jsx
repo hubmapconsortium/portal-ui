@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
 import 'intersection-observer';
 
+import { DonorIcon, FileIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { FileIcon } from 'js/shared-styles/icons';
 import VersionSelect from 'js/components/detailPage/VersionSelect';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
-import { FlexEnd, JsonButton, StyledTypography } from './style';
+import { FlexEnd, JsonButton, StyledTypography, StyledSvgIcon, EntityHeader } from './style';
 
 const datasetEntityTypes = ['Dataset', 'Support', 'Publication', 'Preprint'];
 const publicationEntityTypes = ['Publication', 'Preprint'];
@@ -31,7 +31,12 @@ function SummaryData({
   const LeftTextContainer = isPublication ? React.Fragment : 'div';
   return (
     <>
-      <SummaryTitle data-testid="entity-type">{entity_type}</SummaryTitle>
+      <SummaryTitle data-testid="entity-type">
+        <EntityHeader>
+          <StyledSvgIcon component={DonorIcon} color="primary" />
+          {entity_type}
+        </EntityHeader>
+      </SummaryTitle>
       <SpacedSectionButtonRow
         leftText={
           <LeftTextContainer>
