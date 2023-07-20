@@ -1,7 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
+
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle } from './style';
+import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
+import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, EntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 
@@ -21,13 +24,22 @@ function ProvTable() {
     { Donor: [], Sample: [], Dataset: [] },
   );
 
+  const entiitesIcons = {
+    Donor: DonorIcon,
+    Sample: SampleIcon,
+    Dataset: DatasetIcon,
+  };
+
   const descendantEntityCounts = assayMetadata.descendant_counts.entity_type || {};
 
   return (
     <FlexContainer>
       {Object.entries(ancestorsAndSelfByType).map(([type, entities]) => (
         <TableColumn key={`provenance-list-${type.toLowerCase()}`}>
-          <EntityColumnTitle variant="h5">{type}s</EntityColumnTitle>
+          <EntityHeader>
+            <StyledSvgIcon component={entiitesIcons[type]} color="primary" />
+            <Typography variant="h5">{type}s</Typography>
+          </EntityHeader>
           <FlexColumn>
             {entities.length > 0 &&
               entities

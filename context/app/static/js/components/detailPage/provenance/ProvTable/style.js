@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -11,11 +11,7 @@ const FlexContainer = styled.div`
 const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-`;
-
-const EntityColumnTitle = styled(Typography)`
-  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  // align-items: center;
 `;
 
 // 300 = size of tile
@@ -23,4 +19,15 @@ const TableColumn = styled.div`
   min-width: 300px;
 `;
 
-export { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle };
+const StyledSvgIcon = styled(SvgIcon)`
+  font-size: 1.25rem;
+  margin-right: ${(props) => props.theme.spacing(1)}px;
+`;
+
+const EntityHeader = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+`;
+
+export { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, EntityHeader };
