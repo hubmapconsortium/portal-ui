@@ -61,7 +61,7 @@
             "label": "Install dependencies",
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "dependsOn": [
                 "Init submodules",
@@ -165,6 +165,10 @@
                 "Install dependencies",
                 "dev-start (no install)"
             ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "dependsOrder": "sequence",
             "problemMatcher": [
                 "$eslint-stylish"
