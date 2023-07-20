@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
 import 'intersection-observer';
 
-import { DonorIcon, FileIcon } from 'js/shared-styles/icons';
+import { DatasetIcon, SampleIcon, DonorIcon, FileIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import VersionSelect from 'js/components/detailPage/VersionSelect';
@@ -29,11 +29,18 @@ function SummaryData({
 }) {
   const isPublication = publicationEntityTypes.includes(entity_type);
   const LeftTextContainer = isPublication ? React.Fragment : 'div';
+
+  const entiitesIcons = {
+    Donor: DonorIcon,
+    Sample: SampleIcon,
+    Dataset: DatasetIcon,
+  };
+
   return (
     <>
       <SummaryTitle data-testid="entity-type">
         <EntityHeader>
-          <StyledSvgIcon component={DonorIcon} color="primary" />
+          <StyledSvgIcon component={entiitesIcons[entity_type]} color="primary" />
           {entity_type}
         </EntityHeader>
       </SummaryTitle>
