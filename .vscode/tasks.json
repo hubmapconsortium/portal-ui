@@ -175,7 +175,7 @@
             ]
         },
         {
-            "label": "dev-start (no storybook)",
+            "label": "dev-start (no storybook, no install)",
             "dependsOn": [
                 "Flask Server",
                 "React Dev Server (+ lint)"
@@ -184,7 +184,16 @@
             "problemMatcher": []
         },
         {
-            "label": "dev-start (no storybook, no lint)",
+            "label": "dev-start (no storybook)",
+            "dependsOn": [
+                "Install dependencies",
+                "dev-start (no storybook, no install)"
+            ],
+            "dependsOrder": "sequence",
+            "problemMatcher": []
+        },
+        {
+            "label": "dev-start (no storybook, no install, no lint)",
             "dependsOn": [
                 "Flask Server",
                 "React Dev Server"
