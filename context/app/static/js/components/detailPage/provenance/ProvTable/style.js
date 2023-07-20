@@ -11,7 +11,6 @@ const FlexContainer = styled.div`
 const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
-  // align-items: center;
 `;
 
 // 300 = size of tile

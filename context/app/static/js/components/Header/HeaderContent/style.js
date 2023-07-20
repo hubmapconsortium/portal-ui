@@ -9,7 +9,6 @@ const Spacer = styled.div`
 
 const HeaderButton = styled(Button)`
   color: ${(props) => props.theme.palette.white.main};
-  // border: 1px pink solid;
 
   button {
     padding: 0px;

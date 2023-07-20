@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import { TabPanel, Tabs } from 'js/shared-styles/tabs';
 import { Alert } from 'js/shared-styles/alerts';
 
@@ -18,4 +19,15 @@ const StyledAlert = styled(Alert)`
   flex-grow: 1;
 `;
 
-export { StyledTabPanel, StyledTabs, StyledAlert };
+const StyledSvgIcon = styled(SvgIcon)`
+  font-size: 1.25rem;
+  margin-right: ${(props) => props.theme.spacing(1)}px;
+`;
+
+const EntityHeader = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+`;
+
+export { StyledTabPanel, StyledTabs, StyledAlert, StyledSvgIcon, EntityHeader };
