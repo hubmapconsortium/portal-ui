@@ -1,3 +1,8 @@
+## v0.75.6 - 2023-07-18
+
+- Disable auth header/token inclusion for unauthenticated users.
+
+
 ## v0.75.5 - 2023-07-17
 
 - Update bulk data transfer section tooltips.

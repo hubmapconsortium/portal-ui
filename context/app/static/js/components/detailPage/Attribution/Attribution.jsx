@@ -1,13 +1,18 @@
 import React from 'react';
 import InfoIcon from '@material-ui/icons/Info';
 
+import { useFlaskDataContext } from 'js/components/Contexts';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { FlexPaper, StyledSectionHeader } from './style';
 import SectionItem from '../SectionItem';
 
-function Attribution({ group_name, created_by_user_displayname, created_by_user_email }) {
+function Attribution() {
+  const {
+    entity: { group_name, created_by_user_displayname, created_by_user_email },
+  } = useFlaskDataContext();
+
   return (
     <DetailPageSection id="attribution">
       <StyledSectionHeader>
@@ -28,7 +33,5 @@ function Attribution({ group_name, created_by_user_displayname, created_by_user_
     </DetailPageSection>
   );
 }
-
-// Attribution.propTypes = {};
 
 export default React.memo(Attribution);
