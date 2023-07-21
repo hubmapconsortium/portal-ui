@@ -18,7 +18,11 @@ const StyledWhiteBackgroundIconButton = styled(WhiteBackgroundIconButton)`
 `;
 
 const StyledSectionHeader = styled(SectionHeader)`
-  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  svg {
+    margin-left: ${(props) => props.theme.spacing(0.5)}px;
+  }
 `;
 
 export { DownloadIcon, Flex, StyledWhiteBackgroundIconButton, StyledSectionHeader };

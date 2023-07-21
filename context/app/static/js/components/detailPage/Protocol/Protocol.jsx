@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import InfoIcon from '@material-ui/icons/Info';
 import Divider from '@material-ui/core/Divider';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useProtocolData from 'js/hooks/useProtocolData';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import { StyledPaper } from './style';
+import { StyledSectionHeader, StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 
 function ProtocolLink({ title, resolverHostnameAndDOI }) {
@@ -31,7 +32,12 @@ function Protocol({ protocol_url }) {
 
   return (
     <DetailPageSection id="protocols">
-      <SectionHeader>Protocols</SectionHeader>
+      <StyledSectionHeader>
+        Protocols
+        <SecondaryBackgroundTooltip title="Protocols provided by protocol.io for the given donor.">
+          <InfoIcon fontSize="small" color="primary" />
+        </SecondaryBackgroundTooltip>
+      </StyledSectionHeader>
       <Divider />
       <StyledPaper>
         <ProtocolLink title={title} resolverHostnameAndDOI={resolverHostnameAndDOI} />

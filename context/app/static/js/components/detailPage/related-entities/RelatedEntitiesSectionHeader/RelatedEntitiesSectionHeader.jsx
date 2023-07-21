@@ -1,15 +1,22 @@
 import React from 'react';
+import InfoIcon from '@material-ui/icons/Info';
 import Button from '@material-ui/core/Button';
 
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
+import { StyledSectionHeader } from './style';
 
 function RelatedEntitiesSectionHeader({ header, searchPageHref, iconTooltipText }) {
   return (
     <SpacedSectionButtonRow
       leftText={
         <div>
-          <SectionHeader iconTooltipText={iconTooltipText}>{header}</SectionHeader>
+          <StyledSectionHeader iconTooltipText={iconTooltipText}>
+            {header}
+            <SecondaryBackgroundTooltip title="Samples and datasets derived from this donor.">
+              <InfoIcon fontSize="small" color="primary" />
+            </SecondaryBackgroundTooltip>
+          </StyledSectionHeader>
         </div>
       }
       buttons={

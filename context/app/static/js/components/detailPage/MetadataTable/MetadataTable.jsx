@@ -1,4 +1,5 @@
 import React from 'react';
+import InfoIcon from '@material-ui/icons/Info';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -68,7 +69,12 @@ function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
   return (
     <DetailPageSection id="metadata">
       <Flex>
-        <StyledSectionHeader>Metadata</StyledSectionHeader>
+        <StyledSectionHeader>
+          Metadata
+          <SecondaryBackgroundTooltip title="Data provided for the given donor.">
+            <InfoIcon fontSize="small" color="primary" />
+          </SecondaryBackgroundTooltip>
+        </StyledSectionHeader>
         <SecondaryBackgroundTooltip title="Download">
           <StyledWhiteBackgroundIconButton href={downloadUrl} download={`${hubmap_id}.tsv`}>
             <DownloadIcon color="primary" />
