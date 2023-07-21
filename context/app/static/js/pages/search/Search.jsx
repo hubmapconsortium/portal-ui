@@ -93,9 +93,8 @@ function Search({ title }) {
   return (
     <>
       <SearchHeader component="h1" variant="h2">
-        <EntityHeader>
+        <EntityHeader data-testid="entity-header">
           <StyledSvgIcon component={entiitesIcons[title]} color="primary" />
-
           {title}
         </EntityHeader>
       </SearchHeader>
