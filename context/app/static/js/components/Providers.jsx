@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { SWRConfig } from 'swr';
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
@@ -45,22 +46,28 @@ function Providers({
 
   return (
     // injectFirst ensures styled-components takes priority over mui for styling
-    <StylesProvider generateClassName={generateClassName} injectFirst>
-      <GlobalFonts />
-      <MuiThemeProvider theme={theme}>
-        <ThemeProvider theme={theme}>
-          <AppContext.Provider value={appContext}>
-            <FlaskDataContext.Provider value={flaskData}>
-              <ProtocolAPIContext.Provider value={protocolsContext}>
-                <CssBaseline />
-                <GlobalStyles />
-                {children}
-              </ProtocolAPIContext.Provider>
-            </FlaskDataContext.Provider>
-          </AppContext.Provider>
-        </ThemeProvider>
-      </MuiThemeProvider>
-    </StylesProvider>
+    <SWRConfig
+      value={{
+        revalidateOnFocus: false,
+      }}
+    >
+      <StylesProvider generateClassName={generateClassName} injectFirst>
+        <GlobalFonts />
+        <MuiThemeProvider theme={theme}>
+          <ThemeProvider theme={theme}>
+            <AppContext.Provider value={appContext}>
+              <FlaskDataContext.Provider value={flaskData}>
+                <ProtocolAPIContext.Provider value={protocolsContext}>
+                  <CssBaseline />
+                  <GlobalStyles />
+                  {children}
+                </ProtocolAPIContext.Provider>
+              </FlaskDataContext.Provider>
+            </AppContext.Provider>
+          </ThemeProvider>
+        </MuiThemeProvider>
+      </StylesProvider>
+    </SWRConfig>
   );
 }
 
