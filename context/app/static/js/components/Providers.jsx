@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
-import { MuiThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
+import { ThemeProvider as MuiThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import GlobalStyles from 'js/components/globalStyles';
 import theme from '../theme';
