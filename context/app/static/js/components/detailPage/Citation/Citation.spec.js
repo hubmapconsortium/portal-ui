@@ -22,7 +22,7 @@ test('Displays correct text', () => {
   expect(screen.getByText((content) => content.startsWith(defaultCitation))).toBeInTheDocument();
   expect(screen.getByRole('link', { name: 'View DataCite Page' })).toHaveAttribute(
     'href',
-    `https://search.datacite.org/works/${doi}`,
+    `https://commons.datacite.org/doi.org/${doi}`,
   );
   expect(screen.getByRole('link', { name: doi_url })).toHaveAttribute('href', doi_url);
 });

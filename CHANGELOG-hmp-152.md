@@ -1,0 +1,3 @@
+ - Add support for multiple comma-separated protocols.io links.
+ - Improve parsing of protocols.io links.
+ - Restore display of public protocols.io links.

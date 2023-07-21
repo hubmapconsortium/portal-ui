@@ -41,3 +41,7 @@ class DefaultConfig(object):
     SECRET_KEY = 'should-be-overridden'
     APP_CLIENT_ID = 'should-be-overridden'
     APP_CLIENT_SECRET = 'should-be-overridden'
+
+    PROTOCOLS_IO_CLIENT_ID = 'should-be-overridden'
+    PROTOCOLS_IO_CLIENT_SECRET = 'should-be-overridden'
+    PROTOCOLS_IO_CLIENT_AUTH_TOKEN = 'should-be-overridden'

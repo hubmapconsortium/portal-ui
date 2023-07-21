@@ -22,7 +22,7 @@ function SampleTissue() {
       <SectionHeader>Tissue</SectionHeader>
       <FlexPaper>
         <SectionItem label="Organ Type" flexBasis="25%">
-          <LightBlueLink variant="h6" href="/organ" underline="none">
+          <LightBlueLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
             {mapped_organ || 'Organ Type not defined'}
           </LightBlueLink>
         </SectionItem>
