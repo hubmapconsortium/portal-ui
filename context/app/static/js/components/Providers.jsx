@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 import { MuiThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import GlobalStyles from 'js/components/globalStyles';
+import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAPIContext';
 import theme from '../theme';
 import GlobalFonts from '../fonts';
-import { ProtocolAPIContext } from './detailPage/Protocol/ProtocolAPIContext';
 
 const generateClassName = createGenerateClassName({
   disableGlobal: true,
