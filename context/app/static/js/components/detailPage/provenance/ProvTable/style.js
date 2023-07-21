@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ const FlexColumn = styled.div`
 `;
 
 const EntityColumnTitle = styled(Typography)`
-  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1)};
 `;
 
 // 300 = size of tile

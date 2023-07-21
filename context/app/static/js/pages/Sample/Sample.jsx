@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
 import { useFlaskDataContext } from 'js/components/Contexts';

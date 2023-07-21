@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { render, screen, waitFor } from 'test-utils/functions';
 import { fireEvent } from '@testing-library/react';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/provider';

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { LightBlueLink } from 'js/shared-styles/Links';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import { DetailPageAlert } from 'js/components/detailPage/style';
 

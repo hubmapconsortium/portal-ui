@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTransition, animated, config } from 'react-spring';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { LoadingWrapper } from './style';
 

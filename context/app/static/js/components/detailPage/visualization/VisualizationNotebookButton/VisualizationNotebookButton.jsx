@@ -1,5 +1,5 @@
 import React from 'react';
-import GetAppRoundedIcon from '@material-ui/icons/GetAppRounded';
+import GetAppRoundedIcon from '@mui/icons-material/GetAppRounded';
 import styled from 'styled-components';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 
@@ -10,7 +10,7 @@ import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 // so all the buttons would use it?
 // Individual buttons padding on the left and right seems fragile, if they get rearranged.
 const StyledSecondaryBackgroundTooltip = styled(SecondaryBackgroundTooltip)`
-  margin: 0 ${(props) => props.theme.spacing(1)}px;
+  margin: 0 ${(props) => props.theme.spacing(1)};
 `;
 
 function VisualizationNotebookButton({ uuid }) {

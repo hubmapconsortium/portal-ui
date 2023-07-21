@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableCell from '@mui/material/TableCell';
 
 const StyledTableContainer = styled(TableContainer)`
   max-height: 340px; // Height lands in the middle of a row, to show that div can scroll.

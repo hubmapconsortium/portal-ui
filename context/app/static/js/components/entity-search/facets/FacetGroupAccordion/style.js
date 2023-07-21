@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionDetails from '@mui/material/AccordionDetails';
 
 import { StyledAccordion, StyledAccordionSummary } from 'js/components/searchPage/filters/style';
 
@@ -12,8 +12,8 @@ const OuterAccordionSummary = styled(StyledAccordionSummary)`
     padding: 0;
     margin: 0;
   }
-  margin: ${(props) => `${props.theme.spacing(1)}px 0px`} !important; // important is necesary because MUI uses it.
-  padding: ${(props) => `0px ${props.theme.spacing(1.5)}px`};
+  margin: ${(props) => `${props.theme.spacing(1)} 0px`} !important; // important is necesary because MUI uses it.
+  padding: ${(props) => `0px ${props.theme.spacing(1.5)}`};
 `;
 
 const OuterAccordionDetails = styled(AccordionDetails)`

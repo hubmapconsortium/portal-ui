@@ -1,6 +1,6 @@
 import React from 'react';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import FormControl from '@mui/material/FormControl';
 
 import DataTypesSelectCheckboxes from 'js/components/entity-search/sidebar/DataTypesSelectCheckboxes';
 import { StyledPaper, StyledFormLabel } from './style';

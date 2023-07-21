@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFileRounded';
-import InfoIcon from '@material-ui/icons/InfoRounded';
-import TableRow from '@material-ui/core/TableRow';
-import Chip from '@material-ui/core/Chip';
+import Typography from '@mui/material/Typography';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFileRounded';
+import InfoIcon from '@mui/icons-material/InfoRounded';
+import TableRow from '@mui/material/TableRow';
+import Chip from '@mui/material/Chip';
 
 const StyledRow = styled(TableRow)`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};
@@ -21,16 +21,16 @@ const IndentedDiv = styled.div`
 `;
 
 const StyledFileIcon = styled(InsertDriveFileIcon)`
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)};
   font-size: ${(props) => props.theme.typography.body1.fontSize}px;
 `;
 
 const FileSize = styled(Typography)`
-  margin-left: ${(props) => props.theme.spacing(1)}px;
+  margin-left: ${(props) => props.theme.spacing(1)};
 `;
 
 const StyledInfoIcon = styled(InfoIcon)`
-  margin-left: ${(props) => props.theme.spacing(1)}px;
+  margin-left: ${(props) => props.theme.spacing(1)};
   font-size: 1rem;
 `;
 

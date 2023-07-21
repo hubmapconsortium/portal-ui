@@ -1,12 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useState } from 'react';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableHead from '@mui/material/TableHead';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
 
 import format from 'date-fns/format';

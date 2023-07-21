@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import SvgIcon from '@mui/material/SvgIcon';
 
 const Flex = styled.div`
   display: flex;
@@ -7,7 +7,7 @@ const Flex = styled.div`
 `;
 
 const StyledSvgIcon = styled(SvgIcon)`
-  margin-left: ${(props) => props.theme.spacing(0.5)}px;
+  margin-left: ${(props) => props.theme.spacing(0.5)};
 `;
 
 export { Flex, StyledSvgIcon };

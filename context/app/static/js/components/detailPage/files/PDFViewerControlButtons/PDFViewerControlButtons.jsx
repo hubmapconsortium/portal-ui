@@ -1,7 +1,7 @@
 import React from 'react';
-import ChevronLeftRoundedIcon from '@material-ui/icons/ChevronLeftRounded';
-import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
-import Typography from '@material-ui/core/Typography';
+import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
+import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
+import Typography from '@mui/material/Typography';
 
 import { CenteredFlex, StyledPaper, StyledIconButton, FlexButtonsWrapper } from './style';
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import MUISLider from '@material-ui/core/Slider';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import MUISLider from '@mui/material/Slider';
+import FormHelperText from '@mui/material/FormHelperText';
 
 import { StyledFormLabel } from './style';
 

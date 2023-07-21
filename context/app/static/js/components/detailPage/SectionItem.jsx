@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 const StyledDiv = styled.div`
   margin-left: ${(props) => (props.ml ? '75px' : '0px')};

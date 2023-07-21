@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import MenuItem from '@material-ui/core/MenuItem';
+import MenuItem from '@mui/material/MenuItem';
 
 // default padding for a MenuItem is 16px or spacing(2)
 const StyledMenuItem = styled(MenuItem)`

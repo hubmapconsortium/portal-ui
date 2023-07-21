@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 
 const StyledTypography = styled(Typography)`
   margin: 2px 0px 2px 0px;

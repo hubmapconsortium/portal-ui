@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import { Flex } from './style';
 
@@ -31,7 +31,7 @@ SectionButtonRow.defaultProps = {
 };
 
 const SpacedSectionButtonRow = styled(SectionButtonRow)`
-  margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(0.5)};
   min-height: 40px;
 `;
 

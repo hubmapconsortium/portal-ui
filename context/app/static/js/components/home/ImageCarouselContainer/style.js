@@ -16,7 +16,7 @@ const CallToActionWrapper = styled.div`
   align-items: center;
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     box-sizing: border-box;
-    width: ${(props) => callToActionMdOrLargerWidth - props.theme.spacing(1)}px;
+    width: ${(props) => callToActionMdOrLargerWidth - props.theme.spacing(1)};
     flex-shrink: 0;
     justify-content: space-between;
     align-items: flex-start;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 
 // TODO: Copied and pasted the padding.
 // Should find a way to manage it in one place.

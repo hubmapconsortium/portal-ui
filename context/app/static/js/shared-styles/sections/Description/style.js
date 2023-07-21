@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import InfoIcon from '@material-ui/icons/Info';
-import Paper from '@material-ui/core/Paper';
+import InfoIcon from '@mui/icons-material/Info';
+import Paper from '@mui/material/Paper';
 
 const StyledPaper = styled(Paper)`
   display: flex;
@@ -8,7 +8,7 @@ const StyledPaper = styled(Paper)`
 `;
 
 const StyledInfoIcon = styled(InfoIcon)`
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 export { StyledPaper, StyledInfoIcon };
