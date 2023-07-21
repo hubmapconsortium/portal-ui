@@ -1,0 +1,1 @@
+- Added tooltips and icons throughout the project. 
