@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import { useFlaskDataContext } from 'js/components/Contexts';
 import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
@@ -50,6 +51,16 @@ function tableDataToRows(tableData) {
 }
 
 function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
+  const {
+    entity: { entity_type },
+  } = useFlaskDataContext();
+
+  const tooltipTexts = {
+    Sample: 'Data provided for the given sample.',
+    Dataset: 'Data provided for the given dataset.',
+    Donor: 'Data provided for the given donor.',
+  };
+
   const columns = [
     { id: 'key', label: 'Key' },
     { id: 'value', label: 'Value' },
@@ -71,7 +82,7 @@ function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
       <Flex>
         <StyledSectionHeader>
           Metadata
-          <SecondaryBackgroundTooltip title="Data provided for the given donor.">
+          <SecondaryBackgroundTooltip title={tooltipTexts[entity_type]}>
             <InfoIcon fontSize="small" color="primary" />
           </SecondaryBackgroundTooltip>
         </StyledSectionHeader>

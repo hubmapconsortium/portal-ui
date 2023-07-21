@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import InfoIcon from '@material-ui/icons/Info';
 import Divider from '@material-ui/core/Divider';
 
+import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useProtocolData from 'js/hooks/useProtocolData';
@@ -23,6 +24,16 @@ function ProtocolLink({ title, resolverHostnameAndDOI }) {
 }
 
 function Protocol({ protocol_url }) {
+  const {
+    entity: { entity_type },
+  } = useFlaskDataContext();
+
+  const tooltipTexts = {
+    Donor: 'Protocols provided by protocol.io for the given donor.',
+    Sample: 'Protocols provided by protocol.io for the given sample.',
+    Dataset: 'Protocols provided by protocol.io for the given dataset.',
+  };
+
   const matchedDoiSuffix = protocol_url.match(/\w*$/)[0];
 
   const protocolData = useProtocolData(matchedDoiSuffix, 1);
@@ -34,7 +45,7 @@ function Protocol({ protocol_url }) {
     <DetailPageSection id="protocols">
       <StyledSectionHeader>
         Protocols
-        <SecondaryBackgroundTooltip title="Protocols provided by protocol.io for the given donor.">
+        <SecondaryBackgroundTooltip title={tooltipTexts[entity_type]}>
           <InfoIcon fontSize="small" color="primary" />
         </SecondaryBackgroundTooltip>
       </StyledSectionHeader>
