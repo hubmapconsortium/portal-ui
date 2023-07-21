@@ -26,7 +26,7 @@ function Citation({ contributors, citationTitle, created_timestamp, doi_url, doi
       <Typography variant="body1">
         {citation} Available from: <OutboundIconLink href={doi_url}>{doi_url}</OutboundIconLink>
       </Typography>
-      <OutboundIconLink href={`https://search.datacite.org/works/${doi}`}>View DataCite Page</OutboundIconLink>
+      <OutboundIconLink href={`https://commons.datacite.org/doi.org/${doi}`}>View DataCite Page</OutboundIconLink>
     </LabelledSectionText>
   );
 }
