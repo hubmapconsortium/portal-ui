@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
+import { SWRConfig } from 'swr';
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import GlobalStyles from 'js/components/globalStyles';
+import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAPIContext';
 import theme from '../theme';
 import GlobalFonts from '../fonts';
 
@@ -37,22 +39,35 @@ function Providers({
     [groupsToken, workspacesToken, isWorkspacesUser, isHubmapUser, isAuthenticated, userEmail, endpoints],
   );
 
+  const protocolsContext = useMemo(
+    () => ({ protocolsClientId: flaskData?.protocolsClientId, clientAuthToken: flaskData?.protocolsClientToken }),
+    [flaskData],
+  );
+
   return (
     // injectFirst ensures styled-components takes priority over mui for styling
-    <StylesProvider generateClassName={generateClassName} injectFirst>
-      <GlobalFonts />
-      <MuiThemeProvider theme={theme}>
-        <ThemeProvider theme={theme}>
-          <AppContext.Provider value={appContext}>
-            <FlaskDataContext.Provider value={flaskData}>
-              <CssBaseline />
-              <GlobalStyles />
-              {children}
-            </FlaskDataContext.Provider>
-          </AppContext.Provider>
-        </ThemeProvider>
-      </MuiThemeProvider>
-    </StylesProvider>
+    <SWRConfig
+      value={{
+        revalidateOnFocus: false,
+      }}
+    >
+      <StylesProvider generateClassName={generateClassName} injectFirst>
+        <GlobalFonts />
+        <MuiThemeProvider theme={theme}>
+          <ThemeProvider theme={theme}>
+            <AppContext.Provider value={appContext}>
+              <FlaskDataContext.Provider value={flaskData}>
+                <ProtocolAPIContext.Provider value={protocolsContext}>
+                  <CssBaseline />
+                  <GlobalStyles />
+                  {children}
+                </ProtocolAPIContext.Provider>
+              </FlaskDataContext.Provider>
+            </AppContext.Provider>
+          </ThemeProvider>
+        </MuiThemeProvider>
+      </StylesProvider>
+    </SWRConfig>
   );
 }
 
