@@ -1,14 +1,21 @@
 import React from 'react';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import InfoIcon from '@material-ui/icons/Info';
+
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import { FlexPaper } from './style';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { FlexPaper, StyledSectionHeader } from './style';
 import SectionItem from '../SectionItem';
 
 function Attribution({ group_name, created_by_user_displayname, created_by_user_email }) {
   return (
     <DetailPageSection id="attribution">
-      <SectionHeader>Attribution</SectionHeader>
+      <StyledSectionHeader>
+        Attribution
+        <SecondaryBackgroundTooltip title="Information about the group registering this donor.">
+          <InfoIcon fontSize="small" color="primary" />
+        </SecondaryBackgroundTooltip>
+      </StyledSectionHeader>
       <FlexPaper>
         <SectionItem label="Group">{group_name}</SectionItem>
         <SectionItem label="Registered by" ml={1}>
