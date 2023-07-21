@@ -64,7 +64,7 @@ function SummaryDataChildren({
         </LightBlueLink>
       </SummaryItem>
       <SummaryItem showDivider={Boolean(doi_url)}>
-        <LightBlueLink variant="h6" href="/organ" underline="none">
+        <LightBlueLink variant="h6" href={`/organ/${origin_sample.mapped_organ}`} underline="none">
           {origin_sample.mapped_organ}
         </LightBlueLink>
       </SummaryItem>

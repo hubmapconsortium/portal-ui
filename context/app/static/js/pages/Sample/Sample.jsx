@@ -69,7 +69,7 @@ function SampleDetail() {
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary>
           <SummaryItem>
-            <LightBlueLink variant="h6" href="/organ" underline="none">
+            <LightBlueLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
               {mapped_organ}
             </LightBlueLink>
           </SummaryItem>
