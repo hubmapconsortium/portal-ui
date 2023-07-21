@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { useAppContext } from 'js/components/Contexts';
-import { multiFetcher } from 'js/helpers/multiFetcher';
+import { multiFetcher } from 'js/helpers/swr';
 import { fillUrls } from './utils';
 import { PublicationVignette } from '../types';
 
@@ -16,10 +16,7 @@ export function usePublicationVignetteConfs({ uuid, vignetteDirName, vignette }:
   const urls = vignette.figures?.map(
     ({ file }) => `${assetsEndpoint}/${uuid}/vignettes/${vignetteDirName}/${file}?token=${groupsToken}`,
   );
-  const { data } = useSWR(urls, multiFetcher, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+  const { data } = useSWR(urls, multiFetcher);
 
   if (data) {
     const urlHandler = (url: string, isZarr: boolean) => {
@@ -34,8 +31,8 @@ export function usePublicationVignetteConfs({ uuid, vignetteDirName, vignette }:
       };
     };
     // Formats the vitessce config data to replace the {{ base_url }} placeholder with the actual url.
-    // TODO: Improve this `unknown`; I couldn't figure out how to import the appropriate `VitessceConfig` type from Vitessce.
-    const formattedData: unknown[] = data.map((d) => fillUrls(d, urlHandler, requestInitHandler));
+    // TODO: Improve this `object` type; I couldn't figure out how to import the appropriate `VitessceConfig` type from Vitessce.
+    const formattedData: object[] = data.map((d) => fillUrls(d as object, urlHandler, requestInitHandler));
     return formattedData;
   }
   return undefined;

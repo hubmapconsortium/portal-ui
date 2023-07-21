@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import useSWR from 'swr';
 
-import { fetcherWithToken } from 'js/helpers/fetcher';
+import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
 
 export function useFormattedProtocolUrls(protocolUrls, lastVersion) {
@@ -34,9 +34,9 @@ export function useFormattedProtocolUrls(protocolUrls, lastVersion) {
 
 function useProtocolData(protocolUrl) {
   const { protocolsClientToken } = useAppContext();
-  const result = useSWR([protocolsClientToken, protocolUrl], ([token, url]) => fetcherWithToken(token, url), {
-    revalidateOnFocus: false,
-  });
+  const result = useSWR([protocolUrl, protocolsClientToken], ([url, token]) =>
+    fetcher(url, { headers: { Authorization: `Bearer ${token}` } }),
+  );
   return result;
 }
 
