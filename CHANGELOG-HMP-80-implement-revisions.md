@@ -1,1 +1,1 @@
-- Added tooltips and icons throughout the project. 
+- Add tooltips and icons throughout the project. 
