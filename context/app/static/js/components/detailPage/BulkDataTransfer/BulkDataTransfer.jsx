@@ -42,7 +42,7 @@ function BulkDataTransfer() {
     <FilesContext.Provider value={filesContext}>
       <DetailPageSection id="bulk-data-transfer" data-testid="bulk-data-transfer">
         <SectionHeader
-          iconTooltipText={`Information about how to bulk download all files related to this ${entity_type.toLowerCase()}.`}
+          iconTooltipText={`Information about how to bulk download all files related to this ${entity_type?.toLowerCase()}.`}
         >
           Bulk Data Transfer
         </SectionHeader>

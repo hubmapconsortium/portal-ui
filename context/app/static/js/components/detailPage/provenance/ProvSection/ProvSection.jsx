@@ -31,7 +31,7 @@ function ProvSection() {
         <ProvTabs provData={provData} />
       ) : (
         <Alert severity="warning">
-          {`We were unable to retrieve provenance information for this ${entity_type.toLowerCase()}.`}
+          {`We were unable to retrieve provenance information for this ${entity_type?.toLowerCase()}.`}
         </Alert>
       )}
     </DetailPageSection>

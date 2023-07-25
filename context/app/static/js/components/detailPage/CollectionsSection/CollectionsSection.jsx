@@ -15,7 +15,7 @@ function CollectionsSection({ collectionsData }) {
 
   return (
     <DetailPageSection id="collections">
-      <SectionHeader iconTooltipText={`List of collections that contain this ${entity_type.toLowerCase()}.`}>
+      <SectionHeader iconTooltipText={`List of collections that contain this ${entity_type?.toLowerCase()}.`}>
         Collections
       </SectionHeader>
       <PanelList panelsProps={panelsProps} />
