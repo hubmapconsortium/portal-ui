@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, EntityHeader } from './style';
+import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 
@@ -30,10 +30,10 @@ function ProvTable() {
     <FlexContainer>
       {Object.entries(ancestorsAndSelfByType).map(([type, entities]) => (
         <TableColumn key={`provenance-list-${type.toLowerCase()}`}>
-          <EntityHeader>
+          <ProvTableEntityHeader>
             <StyledSvgIcon component={entityIconMap[type]} color="primary" />
             <Typography variant="h5">{type}s</Typography>
-          </EntityHeader>
+          </ProvTableEntityHeader>
           <FlexColumn>
             {entities.length > 0 &&
               entities

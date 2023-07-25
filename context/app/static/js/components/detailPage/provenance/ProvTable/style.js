@@ -23,10 +23,10 @@ const StyledSvgIcon = styled(SvgIcon)`
   margin-right: ${(props) => props.theme.spacing(1)}px;
 `;
 
-const EntityHeader = styled.div`
+const ProvTableEntityHeader = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
 `;
 
-export { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, EntityHeader };
+export { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader };
