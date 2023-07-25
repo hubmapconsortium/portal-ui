@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import useProvData from 'js/hooks/useProvData';
 import { Alert } from 'js/shared-styles/alerts';
@@ -6,24 +7,25 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import ProvTabs from '../ProvTabs';
 
-function ProvSection({ iconTooltipText }) {
+function ProvSection() {
   const {
     entity: { uuid, entity_type },
   } = useFlaskDataContext();
   const { groupsToken, entityEndpoint } = useAppContext();
   const { provData, isLoading } = useProvData(uuid, entityEndpoint, groupsToken);
+  const provenanceTooltipText = `The provenance shows the sequence of events and actions that led to this page creation.`;
 
   if (isLoading) {
     return (
       <DetailPageSection id="provenance">
-        <SectionHeader>Provenance</SectionHeader>
+        <SectionHeader iconTooltipText={provenanceTooltipText}>Provenance</SectionHeader>
       </DetailPageSection>
     );
   }
 
   return (
     <DetailPageSection id="provenance">
-      <SectionHeader iconTooltipText={iconTooltipText}>Provenance</SectionHeader>
+      <SectionHeader iconTooltipText={provenanceTooltipText}>Provenance</SectionHeader>
       {provData ? (
         <ProvTabs provData={provData} />
       ) : (
@@ -34,7 +36,5 @@ function ProvSection({ iconTooltipText }) {
     </DetailPageSection>
   );
 }
-
-// ProvSection.propTypes = {};
 
 export default ProvSection;
