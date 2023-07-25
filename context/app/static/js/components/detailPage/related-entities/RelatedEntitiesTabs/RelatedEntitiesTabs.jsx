@@ -19,7 +19,12 @@ function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, ren
             index={i}
             key={entity.tabLabel}
             data-testid={`${entity.tabLabel.toLowerCase()}-tab`}
-            icon={<StyledSvgIcon component={entityIconMap[`${entity.tabLabel}'s`]} color="white" />}
+            icon={
+              <StyledSvgIcon
+                component={entityIconMap[`${entity.tabLabel.slice(0, entity.tabLabel.length - 1)}`]}
+                color="white"
+              />
+            }
           />
         ))}
       </StyledTabs>

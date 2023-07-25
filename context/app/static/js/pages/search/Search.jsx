@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
 import { useAppContext } from 'js/components/Contexts';
-import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/searchPage/SearchWrapper';
@@ -11,7 +11,7 @@ import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/
 import { listFilter } from 'js/components/searchPage/utils';
 import SearchNote from 'js/components/searchPage/SearchNote';
 import Results from 'js/components/searchPage/Results';
-import { SearchHeader, StyledSvgIcon, EntityHeader } from './style';
+import { SearchHeader, StyledSvgIcon, SearchEntityHeader } from './style';
 
 function Search({ title }) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
@@ -32,12 +32,6 @@ function Search({ title }) {
     donor: donorConfig.fields,
     sample: sampleConfig.fields,
     dataset: datasetConfig.fields,
-  };
-
-  const entiitesIcons = {
-    Donors: DonorIcon,
-    Samples: SampleIcon,
-    Datasets: DatasetIcon,
   };
 
   const searchParams = new URLSearchParams(window.location.search);
@@ -93,10 +87,10 @@ function Search({ title }) {
   return (
     <>
       <SearchHeader component="h1" variant="h2">
-        <EntityHeader data-testid="entity-header">
-          <StyledSvgIcon component={entiitesIcons[title]} color="primary" />
+        <SearchEntityHeader data-testid="entity-header">
+          <StyledSvgIcon component={entityIconMap[`${title.slice(0, title.length - 1)}`]} color="primary" />
           {title}
-        </EntityHeader>
+        </SearchEntityHeader>
       </SearchHeader>
       {type === 'dataset' && <SearchDatasetTutorial />}
       {notesToDisplay.map((note) => (
