@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import InfoIcon from '@material-ui/icons/Info';
 import Divider from '@material-ui/core/Divider';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import useProtocolData, { useFormattedProtocolUrls } from 'js/hooks/useProtocolData';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import { StyledSectionHeader, StyledPaper } from './style';
+import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 
 function ProtocolLink({ url, index }) {
@@ -42,22 +41,13 @@ function Protocol({ protocol_url }) {
     entity: { entity_type },
   } = useFlaskDataContext();
 
-  const tooltipTexts = {
-    Donor: 'Protocols provided by protocol.io for the given donor.',
-    Sample: 'Protocols provided by protocol.io for the given sample.',
-    Dataset: 'Protocols provided by protocol.io for the given dataset.',
-  };
-
   const protocolUrls = useFormattedProtocolUrls(protocol_url, 1);
 
   return (
     <DetailPageSection id="protocols">
-      <StyledSectionHeader>
+      <SectionHeader iconTooltipText={`Protocols provided by protocols.io for the given ${entity_type}`}>
         Protocols
-        <SecondaryBackgroundTooltip title={tooltipTexts[entity_type]}>
-          <InfoIcon fontSize="small" color="primary" />
-        </SecondaryBackgroundTooltip>
-      </StyledSectionHeader>
+      </SectionHeader>
       <Divider />
       <StyledPaper>
         {protocolUrls.map((url, index) => (
