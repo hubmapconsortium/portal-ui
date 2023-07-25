@@ -1,18 +1,13 @@
 import React from 'react';
 
 import { Tab } from 'js/shared-styles/tabs';
-import { DatasetIcon, SampleIcon } from 'js/shared-styles/icons';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
 import { StyledTabs, StyledTabPanel, StyledAlert, StyledSvgIcon } from './style';
 
 function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, renderWarningMessage }) {
   const handleChange = (event, newIndex) => {
     setOpenIndex(newIndex);
-  };
-
-  const entiitesIcons = {
-    Samples: SampleIcon,
-    Datasets: DatasetIcon,
   };
 
   return (
@@ -24,7 +19,7 @@ function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, ren
             index={i}
             key={entity.tabLabel}
             data-testid={`${entity.tabLabel.toLowerCase()}-tab`}
-            icon={<StyledSvgIcon component={entiitesIcons[entity.tabLabel]} color="white" />}
+            icon={<StyledSvgIcon component={entityIconMap[`${entity.tabLabel}'s`]} color="white" />}
           />
         ))}
       </StyledTabs>
