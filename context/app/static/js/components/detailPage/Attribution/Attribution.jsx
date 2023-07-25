@@ -1,11 +1,11 @@
 import React from 'react';
-import InfoIcon from '@material-ui/icons/Info';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { FlexPaper, StyledSectionHeader } from './style';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+
+import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 
 function Attribution() {
@@ -15,12 +15,9 @@ function Attribution() {
 
   return (
     <DetailPageSection id="attribution">
-      <StyledSectionHeader>
+      <SectionHeader iconTooltipText={`Information about the group registering this ${entity_type}`}>
         Attribution
-        <SecondaryBackgroundTooltip title={`Information about the group registering this ${entity_type}`}>
-          <InfoIcon fontSize="small" color="primary" />
-        </SecondaryBackgroundTooltip>
-      </StyledSectionHeader>
+      </SectionHeader>
       <FlexPaper>
         <SectionItem label="Group">{group_name}</SectionItem>
         <SectionItem label="Registered by" ml={1}>
