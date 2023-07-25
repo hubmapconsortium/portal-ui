@@ -31,9 +31,7 @@ function HeaderContent({ anchorRef }) {
           <FlexNoWrap>
             {['Donor', 'Sample', 'Dataset'].map((type) => (
               <HeaderType>
-                <div>
-                  <StyledSvgIcon component={entityIconMap[type]} />
-                </div>
+                <StyledSvgIcon component={entityIconMap[type]} />
                 <HeaderButton key={type} href={`/search?entity_type[0]=${type}`} component={Link}>
                   {`${type}s`}
                 </HeaderButton>

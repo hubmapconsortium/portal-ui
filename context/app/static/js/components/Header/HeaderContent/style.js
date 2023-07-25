@@ -9,10 +9,6 @@ const Spacer = styled.div`
 
 const HeaderButton = styled(Button)`
   color: ${(props) => props.theme.palette.white.main};
-
-  button {
-    padding: 0px;
-  }
 `;
 
 const FlexNoWrap = styled.div`
@@ -31,7 +27,6 @@ const HeaderType = styled.div`
 `;
 
 const StyledSvgIcon = styled(SvgIcon)`
-  margin-top: ${(props) => props.theme.spacing(0.5)}px;
   font-size: 1.25rem;
 `;
 

@@ -13,17 +13,11 @@ function Attribution() {
     entity: { group_name, created_by_user_displayname, created_by_user_email, entity_type },
   } = useFlaskDataContext();
 
-  const tooltipTexts = {
-    Donor: 'Information about the group registering this donor.',
-    Sample: 'Information about the group registering this sample.',
-    Dataset: 'Information about the group registering this dataset.',
-  };
-
   return (
     <DetailPageSection id="attribution">
       <StyledSectionHeader>
         Attribution
-        <SecondaryBackgroundTooltip title={tooltipTexts[entity_type]}>
+        <SecondaryBackgroundTooltip title={`Information about the group registering this ${entity_type}`}>
           <InfoIcon fontSize="small" color="primary" />
         </SecondaryBackgroundTooltip>
       </StyledSectionHeader>
