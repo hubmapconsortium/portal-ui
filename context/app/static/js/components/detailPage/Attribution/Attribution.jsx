@@ -15,7 +15,7 @@ function Attribution() {
 
   return (
     <DetailPageSection id="attribution">
-      <SectionHeader iconTooltipText={`Information about the group registering this ${entity_type}`}>
+      <SectionHeader iconTooltipText={`Information about the group registering this ${entity_type.toLowerCase()}.`}>
         Attribution
       </SectionHeader>
       <FlexPaper>

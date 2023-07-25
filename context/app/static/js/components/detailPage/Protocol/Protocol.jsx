@@ -45,7 +45,7 @@ function Protocol({ protocol_url }) {
 
   return (
     <DetailPageSection id="protocols">
-      <SectionHeader iconTooltipText={`Protocols provided by protocols.io for the given ${entity_type}`}>
+      <SectionHeader iconTooltipText={`Protocols uploaded to protocols.io for the given ${entity_type}.`}>
         Protocols
       </SectionHeader>
       <Divider />
