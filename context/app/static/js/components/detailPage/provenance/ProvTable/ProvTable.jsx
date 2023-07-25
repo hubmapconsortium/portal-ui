@@ -3,7 +3,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, EntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
@@ -24,12 +24,6 @@ function ProvTable() {
     { Donor: [], Sample: [], Dataset: [] },
   );
 
-  const entiitesIcons = {
-    Donor: DonorIcon,
-    Sample: SampleIcon,
-    Dataset: DatasetIcon,
-  };
-
   const descendantEntityCounts = assayMetadata.descendant_counts.entity_type || {};
 
   return (
@@ -37,7 +31,7 @@ function ProvTable() {
       {Object.entries(ancestorsAndSelfByType).map(([type, entities]) => (
         <TableColumn key={`provenance-list-${type.toLowerCase()}`}>
           <EntityHeader>
-            <StyledSvgIcon component={entiitesIcons[type]} color="primary" />
+            <StyledSvgIcon component={entityIconMap[type]} color="primary" />
             <Typography variant="h5">{type}s</Typography>
           </EntityHeader>
           <FlexColumn>
