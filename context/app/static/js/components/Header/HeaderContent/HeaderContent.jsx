@@ -4,8 +4,8 @@ import Link from '@material-ui/core/Link';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { useAppContext } from 'js/components/Contexts';
-import { DatasetIcon, SampleIcon, DonorIcon } from 'js/shared-styles/icons';
 import Menu from '../Menu';
 import ResourceLinks from '../ResourceLinks';
 import Dropdown from '../Dropdown';
@@ -20,21 +20,6 @@ function HeaderContent({ anchorRef }) {
   const shouldDisplayMenu = !useMediaQuery(theme.breakpoints.up('md'));
   const { isAuthenticated, userEmail } = useAppContext();
 
-  const types = [
-    {
-      icon: DonorIcon,
-      name: 'Donor',
-    },
-    {
-      icon: SampleIcon,
-      name: 'Sample',
-    },
-    {
-      icon: DatasetIcon,
-      name: 'Dataset',
-    },
-  ];
-
   return (
     <>
       {shouldDisplayMenu && <Menu anchorRef={anchorRef} />}
@@ -44,13 +29,13 @@ function HeaderContent({ anchorRef }) {
       {!shouldDisplayMenu && (
         <>
           <FlexNoWrap>
-            {types.map((type) => (
+            {['Donor', 'Sample', 'Dataset'].map((type) => (
               <HeaderType>
                 <div>
-                  <StyledSvgIcon component={type.icon} />
+                  <StyledSvgIcon component={entityIconMap[type]} />
                 </div>
-                <HeaderButton key={type.name} href={`/search?entity_type[0]=${type.name}`} component={Link}>
-                  {`${type.name}s`}
+                <HeaderButton key={type} href={`/search?entity_type[0]=${type}`} component={Link}>
+                  {`${type}s`}
                 </HeaderButton>
               </HeaderType>
             ))}
