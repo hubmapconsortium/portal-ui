@@ -1,19 +1,23 @@
 import React from 'react';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+
 import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 
 function Attribution() {
   const {
-    entity: { group_name, created_by_user_displayname, created_by_user_email },
+    entity: { group_name, created_by_user_displayname, created_by_user_email, entity_type },
   } = useFlaskDataContext();
 
   return (
     <DetailPageSection id="attribution">
-      <SectionHeader>Attribution</SectionHeader>
+      <SectionHeader iconTooltipText={`Information about the group registering this ${entity_type}`}>
+        Attribution
+      </SectionHeader>
       <FlexPaper>
         <SectionItem label="Group">{group_name}</SectionItem>
         <SectionItem label="Registered by" ml={1}>
