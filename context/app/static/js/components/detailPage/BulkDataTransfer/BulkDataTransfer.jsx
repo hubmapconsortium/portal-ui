@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import { useDetailContext } from 'js/components/detailPage/context';
 import { FilesContext } from 'js/components/detailPage/files/Files/context';
 import FileBrowserDUA from './FileBrowserDUA';
@@ -14,6 +15,10 @@ function BulkDataTransfer() {
   const [hasAgreedToDUA, agreeToDUA] = useState(localStorage.getItem(localStorageKey));
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [urlClickedBeforeDUA, setUrlClickedBeforeDUA] = useState('');
+
+  const {
+    entity: { entity_type },
+  } = useFlaskDataContext();
 
   const handleDUAAgree = useCallback(() => {
     agreeToDUA(true);
@@ -36,7 +41,9 @@ function BulkDataTransfer() {
   return (
     <FilesContext.Provider value={filesContext}>
       <DetailPageSection id="bulk-data-transfer" data-testid="bulk-data-transfer">
-        <SectionHeader iconTooltipText="Information about how to bulk download all files related to this dataset.">
+        <SectionHeader
+          iconTooltipText={`Information about how to bulk download all files related to this ${entity_type}.`}
+        >
           Bulk Data Transfer
         </SectionHeader>
         <StyledContainer>
