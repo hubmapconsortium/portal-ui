@@ -10,7 +10,7 @@ function CollectionsSection({ collectionsData }) {
   const panelsProps = buildCollectionsPanelsProps(collectionsData);
   return (
     <DetailPageSection id="collections">
-      <SectionHeader>Collections</SectionHeader>
+      <SectionHeader iconTooltipText="List of collections that contain this dataset.">Collections</SectionHeader>
       <PanelList panelsProps={panelsProps} />
     </DetailPageSection>
   );
