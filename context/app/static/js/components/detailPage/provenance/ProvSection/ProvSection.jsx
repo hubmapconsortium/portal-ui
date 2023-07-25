@@ -7,13 +7,14 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import ProvTabs from '../ProvTabs';
 
+const provenanceTooltipText = `The provenance shows the sequence of events and actions that led to this page creation.`;
+
 function ProvSection() {
   const {
     entity: { uuid, entity_type },
   } = useFlaskDataContext();
   const { groupsToken, entityEndpoint } = useAppContext();
   const { provData, isLoading } = useProvData(uuid, entityEndpoint, groupsToken);
-  const provenanceTooltipText = `The provenance shows the sequence of events and actions that led to this page creation.`;
 
   if (isLoading) {
     return (
