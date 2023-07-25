@@ -1,1 +1,1 @@
-- Add tooltips for Swedlow feedback response. 
+- Add tooltips for donor, sample, and dataset pages.
