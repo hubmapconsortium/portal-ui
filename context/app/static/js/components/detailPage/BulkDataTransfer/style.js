@@ -6,8 +6,6 @@ import BlockIcon from '@material-ui/icons/Block';
 import Box from '@material-ui/core/Box';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-
 const StyledContainer = styled.div`
   > div {
     margin-bottom: ${(props) => props.theme.spacing(1.25)}px;
@@ -87,14 +85,6 @@ const NoAccessContainer = styled.div`
   align-items: center;
 `;
 
-const StyledSectionHeader = styled(SectionHeader)`
-  display: flex;
-  align-items: center;
-  svg {
-    margin-left: ${(props) => props.theme.spacing(0.5)}px;
-  }
-`;
-
 export {
   StyledContainer,
   Header,
@@ -110,5 +100,4 @@ export {
   StyledWarningIcon,
   WarningIconContainer,
   NoAccessContainer,
-  StyledSectionHeader,
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import InfoIcon from '@material-ui/icons/Info';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,12 +8,13 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import metadataFieldDescriptions from 'metadata-field-descriptions';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton, StyledSectionHeader } from './style';
+import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton } from './style';
 
 function getDescription(field) {
   const [prefix, stem] = field.split('.');
@@ -55,12 +55,6 @@ function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
     entity: { entity_type },
   } = useFlaskDataContext();
 
-  const tooltipTexts = {
-    Sample: 'Data provided for the given sample.',
-    Dataset: 'Data provided for the given dataset.',
-    Donor: 'Data provided for the given donor.',
-  };
-
   const columns = [
     { id: 'key', label: 'Key' },
     { id: 'value', label: 'Value' },
@@ -80,12 +74,7 @@ function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
   return (
     <DetailPageSection id="metadata">
       <Flex>
-        <StyledSectionHeader>
-          Metadata
-          <SecondaryBackgroundTooltip title={tooltipTexts[entity_type]}>
-            <InfoIcon fontSize="small" color="primary" />
-          </SecondaryBackgroundTooltip>
-        </StyledSectionHeader>
+        <SectionHeader iconTooltipText={`Data provided for the given ${entity_type}`}>Metadata</SectionHeader>
         <SecondaryBackgroundTooltip title="Download">
           <StyledWhiteBackgroundIconButton href={downloadUrl} download={`${hubmap_id}.tsv`}>
             <DownloadIcon color="primary" />
