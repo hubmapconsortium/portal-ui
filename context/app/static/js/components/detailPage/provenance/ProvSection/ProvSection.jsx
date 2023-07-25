@@ -13,22 +13,19 @@ function ProvSection() {
   } = useFlaskDataContext();
   const { groupsToken, entityEndpoint } = useAppContext();
   const { provData, isLoading } = useProvData(uuid, entityEndpoint, groupsToken);
+  const provenanceTooltipText = `The provenance shows the sequence of events and actions that led to this page creation.`;
 
   if (isLoading) {
     return (
       <DetailPageSection id="provenance">
-        <SectionHeader iconTooltipText="The provenance shows the sequence of events and actions that led to this page creation.">
-          Provenance
-        </SectionHeader>
+        <SectionHeader iconTooltipText={provenanceTooltipText}>Provenance</SectionHeader>
       </DetailPageSection>
     );
   }
 
   return (
     <DetailPageSection id="provenance">
-      <SectionHeader iconTooltipText="The provenance shows the sequence of events and actions that led to this page creation.">
-        Provenance
-      </SectionHeader>
+      <SectionHeader iconTooltipText={provenanceTooltipText}>Provenance</SectionHeader>
       {provData ? (
         <ProvTabs provData={provData} />
       ) : (
