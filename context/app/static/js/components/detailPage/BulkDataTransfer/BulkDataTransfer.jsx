@@ -36,7 +36,9 @@ function BulkDataTransfer() {
   return (
     <FilesContext.Provider value={filesContext}>
       <DetailPageSection id="bulk-data-transfer" data-testid="bulk-data-transfer">
-        <SectionHeader>Bulk Data Transfer</SectionHeader>
+        <SectionHeader iconTooltipText="Information about how to bulk download all files related to this dataset.">
+          Bulk Data Transfer
+        </SectionHeader>
         <StyledContainer>
           <BulkDataTransferPanels />
         </StyledContainer>
