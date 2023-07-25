@@ -23,10 +23,10 @@ const StyledSvgIcon = styled(SvgIcon)`
   margin-right: ${(props) => props.theme.spacing(0.5)}px;
 `;
 
-const EntityHeader = styled.div`
+const SummaryDataHeader = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: ${(props) => props.theme.spacing(1)}px;
 `;
 
-export { FlexEnd, JsonButton, StyledTypography, StyledSvgIcon, EntityHeader };
+export { FlexEnd, JsonButton, StyledTypography, StyledSvgIcon, SummaryDataHeader };

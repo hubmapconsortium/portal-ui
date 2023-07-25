@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
 import 'intersection-observer';
 
-import { DatasetIcon, SampleIcon, DonorIcon, FileIcon } from 'js/shared-styles/icons';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { FileIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import VersionSelect from 'js/components/detailPage/VersionSelect';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
-import { FlexEnd, JsonButton, StyledTypography, StyledSvgIcon, EntityHeader } from './style';
+import { FlexEnd, JsonButton, StyledTypography, StyledSvgIcon, SummaryDataHeader } from './style';
 
 const datasetEntityTypes = ['Dataset', 'Support', 'Publication', 'Preprint'];
 const publicationEntityTypes = ['Publication', 'Preprint'];
@@ -30,19 +31,13 @@ function SummaryData({
   const isPublication = publicationEntityTypes.includes(entity_type);
   const LeftTextContainer = isPublication ? React.Fragment : 'div';
 
-  const entiitesIcons = {
-    Donor: DonorIcon,
-    Sample: SampleIcon,
-    Dataset: DatasetIcon,
-  };
-
   return (
     <>
       <SummaryTitle data-testid="entity-type">
-        <EntityHeader>
-          <StyledSvgIcon component={entiitesIcons[entity_type]} color="primary" />
+        <SummaryDataHeader>
+          <StyledSvgIcon component={entityIconMap[entity_type]} color="primary" />
           {entity_type}
-        </EntityHeader>
+        </SummaryDataHeader>
       </SummaryTitle>
       <SpacedSectionButtonRow
         leftText={
