@@ -74,7 +74,9 @@ function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
   return (
     <DetailPageSection id="metadata">
       <Flex>
-        <SectionHeader iconTooltipText={`Data provided for the given ${entity_type}`}>Metadata</SectionHeader>
+        <SectionHeader iconTooltipText={`Data provided for the given ${entity_type?.toLowerCase()}.`}>
+          Metadata
+        </SectionHeader>
         <SecondaryBackgroundTooltip title="Download">
           <StyledWhiteBackgroundIconButton href={downloadUrl} download={`${hubmap_id}.tsv`}>
             <DownloadIcon color="primary" />
