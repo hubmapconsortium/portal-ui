@@ -1,12 +1,10 @@
 import React from 'react';
-import InfoIcon from '@material-ui/icons/Info';
 
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import useProvData from 'js/hooks/useProvData';
 import { Alert } from 'js/shared-styles/alerts';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import { StyledSectionHeader } from './style';
 import ProvTabs from '../ProvTabs';
 
 function ProvSection() {
@@ -19,24 +17,18 @@ function ProvSection() {
   if (isLoading) {
     return (
       <DetailPageSection id="provenance">
-        <StyledSectionHeader>
+        <SectionHeader iconTooltipText="The provenance shows the sequence of events and actions that led to this page creation.">
           Provenance
-          <SecondaryBackgroundTooltip title="The provenance shows the sequence of events and actions that led to this page creation.">
-            <InfoIcon fontSize="small" color="primary" />
-          </SecondaryBackgroundTooltip>
-        </StyledSectionHeader>
+        </SectionHeader>
       </DetailPageSection>
     );
   }
 
   return (
     <DetailPageSection id="provenance">
-      <StyledSectionHeader>
+      <SectionHeader iconTooltipText="The provenance shows the sequence of events and actions that led to this page creation.">
         Provenance
-        <SecondaryBackgroundTooltip title="The provenance shows the sequence of events and actions that led to this page creation.">
-          <InfoIcon fontSize="small" color="primary" />
-        </SecondaryBackgroundTooltip>
-      </StyledSectionHeader>
+      </SectionHeader>
       {provData ? (
         <ProvTabs provData={provData} />
       ) : (
