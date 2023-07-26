@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 
+import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import useProtocolData, { useFormattedProtocolUrls } from 'js/hooks/useProtocolData';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
@@ -36,11 +37,19 @@ function ProtocolLink({ url, index }) {
 }
 
 function Protocol({ protocol_url }) {
+  const {
+    entity: { entity_type },
+  } = useFlaskDataContext();
+
   const protocolUrls = useFormattedProtocolUrls(protocol_url, 1);
 
   return (
     <DetailPageSection id="protocols">
-      <SectionHeader>Protocols</SectionHeader>
+      <SectionHeader
+        iconTooltipText={`Protocols uploaded to protocols.io for the given ${entity_type?.toLowerCase()}.`}
+      >
+        Protocols
+      </SectionHeader>
       <Divider />
       <StyledPaper>
         {protocolUrls.map((url, index) => (
