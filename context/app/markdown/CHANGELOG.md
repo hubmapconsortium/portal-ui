@@ -1,3 +1,8 @@
+## v0.75.8 - 2023-07-26
+
+- Display message when protocols.io requests fail in protocols section.
+
+
 ## v0.75.7 - 2023-07-26
 
 - Refactor props in Sample page to use context. 

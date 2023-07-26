@@ -1,1 +1,0 @@
-- Display message when protocols.io requests fail in protocols section.
