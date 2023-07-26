@@ -35,7 +35,7 @@ export function useFormattedProtocolUrls(protocolUrls, lastVersion) {
 function useProtocolData(protocolUrl) {
   const { protocolsClientToken } = useAppContext();
   const result = useSWR([protocolUrl, protocolsClientToken], ([url, token]) =>
-    fetcher(url, { headers: { Authorization: `Bearer ${token}` } }),
+    fetcher({ url, requestInit: { headers: { Authorization: `Bearer ${token}` } } }),
   );
   return result;
 }
