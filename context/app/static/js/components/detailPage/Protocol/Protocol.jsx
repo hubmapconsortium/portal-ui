@@ -14,6 +14,7 @@ import SectionItem from '../SectionItem';
 function ProtocolMessage({ precedingText }) {
   return (
     <SectionItem>
+      {/* Extra `div` wrapper is necessary to prevent the email icon link from taking up the full width and breaking text. */}
       <div>
         {precedingText}
         <HelpLink /> about this issue and mention the HuBMAP ID.
@@ -32,7 +33,6 @@ function ProtocolLink({ url, index }) {
     }
 
     if (isLoading && !error) {
-      // Extra `div` wrapper is necessary to prevent the email icon link from taking up the full width and breaking text
       return (
         <ProtocolMessage precedingText="Protocols are loading. If protocols take a significant time to load, please contact " />
       );
