@@ -24,4 +24,14 @@ const StyledSvgIcon = styled(SvgIcon)`
   margin-right: ${(props) => props.theme.spacing(1)}px;
 `;
 
-export { StyledTabPanel, StyledTabs, StyledAlert, StyledSvgIcon };
+const StyledIconTab = styled.span`
+  span {
+    display: contents;
+  }
+
+  svg {
+    margin-bottom: 0 !important;
+  }
+`;
+
+export { StyledTabPanel, StyledTabs, StyledAlert, StyledSvgIcon, StyledIconTab };
