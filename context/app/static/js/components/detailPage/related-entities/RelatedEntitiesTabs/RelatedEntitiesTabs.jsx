@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { Tab } from 'js/shared-styles/tabs';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
-import { StyledTabs, StyledTabPanel, StyledAlert } from './style';
+import { StyledTabs, StyledTabPanel, StyledAlert, StyledSvgIcon } from './style';
 
 function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, renderWarningMessage }) {
   const handleChange = (event, newIndex) => {
@@ -18,6 +19,12 @@ function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, ren
             index={i}
             key={entity.tabLabel}
             data-testid={`${entity.tabLabel.toLowerCase()}-tab`}
+            icon={
+              <StyledSvgIcon
+                component={entityIconMap[`${entity.tabLabel.slice(0, entity.tabLabel.length - 1)}`]}
+                color="white"
+              />
+            }
           />
         ))}
       </StyledTabs>
