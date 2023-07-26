@@ -1,0 +1,1 @@
+- Add icons to header of entity pages.
