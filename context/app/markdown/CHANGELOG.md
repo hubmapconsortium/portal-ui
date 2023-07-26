@@ -1,3 +1,16 @@
+## v0.75.7 - 2023-07-26
+
+- Refactor props in Sample page to use context. 
+- Add tooltips for donor, sample, and dataset pages.
+- Add arguments to dev-start script to skip installing dependencies.
+- Update DataCite links to use DataCite Commons.
+- Update sample and dataset organ links to visit specific organ page not organs landing page.
+ - Add support for multiple comma-separated protocols.io links.
+ - Improve parsing of protocols.io links.
+ - Restore display of public protocols.io links.
+- Reverse no-wrap styles causing table of contents to overflow.
+
+
 ## v0.75.6 - 2023-07-18
 
 - Disable auth header/token inclusion for unauthenticated users.

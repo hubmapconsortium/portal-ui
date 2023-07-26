@@ -1,1 +1,0 @@
-- Reverse no-wrap styles causing table of contents to overflow.
