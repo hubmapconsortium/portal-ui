@@ -1,7 +1,7 @@
 type fetchOptionsType = {
   urls: string;
-  requestInit: RequestInit;
-  expectedStatusCodes: number[];
+  requestInit?: RequestInit;
+  expectedStatusCodes?: number[];
 };
 
 /**
