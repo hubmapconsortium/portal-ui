@@ -1,1 +1,1 @@
-- renamed lightbluelink to internallink.
+- Renamed lightbluelink to internallink.
