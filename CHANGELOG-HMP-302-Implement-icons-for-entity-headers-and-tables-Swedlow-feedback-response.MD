@@ -1,1 +1,4 @@
-- Add icons to header of entity pages.
+- Add icons to header links.
+- Add icons to headers of provenance table. 
+- Add icons to tabs in "Derived Sample and Datasets" table.
+-
