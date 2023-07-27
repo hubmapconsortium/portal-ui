@@ -1,0 +1,1 @@
+- Configure storybook to build with swc instead of babel and compile typescript.
