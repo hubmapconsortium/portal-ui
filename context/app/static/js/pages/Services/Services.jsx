@@ -6,7 +6,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import Description from 'js/shared-styles/sections/Description';
 import ServiceStatusTable from 'js/components/ServiceStatusTable';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 
 function Services() {
   const appContext = useAppContext();
@@ -19,11 +19,11 @@ function Services() {
         </SectionHeader>
         <Description>
           {'HuBMAP is powered by a number of APIs. Status information provided by '}
-          <LightBlueLink target="_blank" rel="noopener noreferrer" underline="none" href={gatewayUrl}>
+          <InternalLink target="_blank" rel="noopener noreferrer" underline="none" href={gatewayUrl}>
             {new URL(gatewayUrl).hostname}
-          </LightBlueLink>
+          </InternalLink>
           . The HuBMAP Portal software also has a number of{' '}
-          <LightBlueLink href="/dependencies">dependencies</LightBlueLink>.
+          <InternalLink href="/dependencies">dependencies</InternalLink>.
         </Description>
       </SectionContainer>
       <Paper>

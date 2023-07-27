@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 
 function SearchNote({ entity, label }) {
   let message = '...';
@@ -14,7 +14,7 @@ function SearchNote({ entity, label }) {
     message = (
       <>
         {`${label} ${dataTypes} ${lcType} `}
-        <LightBlueLink href={`/browse/${lcType}/${uuid}`}>{hubmap_id}</LightBlueLink>
+        <InternalLink href={`/browse/${lcType}/${uuid}`}>{hubmap_id}</InternalLink>
       </>
     );
   }

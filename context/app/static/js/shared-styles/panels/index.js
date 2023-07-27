@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
 import { capitalizeString } from 'js/helpers/functions';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 
 const overflowCss = css`
   white-space: nowrap;
@@ -38,7 +38,7 @@ const TruncatedText = styled(Typography)`
   ${overflowCss};
 `;
 
-const TruncatedLink = styled(LightBlueLink)`
+const TruncatedLink = styled(InternalLink)`
   ${overflowCss};
   display: block; //text-overflow only applies to block elements
 `;

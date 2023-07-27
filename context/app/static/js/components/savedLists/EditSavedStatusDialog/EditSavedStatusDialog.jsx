@@ -8,7 +8,7 @@ import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import useEntityStore, { editedAlertStatus } from 'js/stores/useEntityStore';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 
 const useSavedEntitiesSelector = (state) => ({
   addEntityToList: state.addEntityToList,
@@ -64,7 +64,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_typ
         ) : (
           <Typography>
             {`You don't have any lists. To assign this ${entity_type.toLowerCase()} to one or more lists, create a list in `}
-            <LightBlueLink href="/my-lists">My Lists</LightBlueLink>.
+            <InternalLink href="/my-lists">My Lists</InternalLink>.
           </Typography>
         )
       }

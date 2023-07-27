@@ -11,7 +11,7 @@ import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
 
 import format from 'date-fns/format';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -105,9 +105,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySav
                       <TableRow key={_id}>
                         <SelectableRowCell rowKey={_id} />
                         <TableCell>
-                          <LightBlueLink href={`/browse/${entity_type.toLowerCase()}/${_id}`}>
-                            {hubmap_id}
-                          </LightBlueLink>
+                          <InternalLink href={`/browse/${entity_type.toLowerCase()}/${_id}`}>{hubmap_id}</InternalLink>
                         </TableCell>
                         <TableCell>{group_name}</TableCell>
                         <TableCell>{entity_type}</TableCell>

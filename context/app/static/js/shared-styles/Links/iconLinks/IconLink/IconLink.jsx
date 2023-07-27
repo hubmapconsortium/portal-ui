@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { FlexOutboundLink, FlexLightBlueLink, StyledSpan } from './style';
+import { FlexOutboundLink, FlexInternalLink, StyledSpan } from './style';
 
 function IconLink({ children, icon, iconOnLeft, isOutbound, ...rest }) {
-  const LinkComponent = isOutbound ? FlexOutboundLink : FlexLightBlueLink;
+  const LinkComponent = isOutbound ? FlexOutboundLink : FlexInternalLink;
 
   return (
     <LinkComponent {...rest}>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
@@ -22,9 +22,9 @@ function SampleTissue() {
       <SectionHeader>Tissue</SectionHeader>
       <FlexPaper>
         <SectionItem label="Organ Type" flexBasis="25%">
-          <LightBlueLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
+          <InternalLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
             {mapped_organ || 'Organ Type not defined'}
-          </LightBlueLink>
+          </InternalLink>
         </SectionItem>
         <SectionItem label="Sample Category" ml={1} flexBasis="25%">
           {sample_category || 'Sample Category not defined'}
@@ -33,9 +33,9 @@ function SampleTissue() {
           <SectionItem label="Tissue Location" ml={1}>
             <>
               The{' '}
-              <LightBlueLink href={`/browse/sample/${uuid}.rui.json`} target="_blank" rel="noopener noreferrer">
+              <InternalLink href={`/browse/sample/${uuid}.rui.json`} target="_blank" rel="noopener noreferrer">
                 spatial coordinates of this sample
-              </LightBlueLink>{' '}
+              </InternalLink>{' '}
               have been registered and it can be found in the{' '}
               <OutboundLink href="/ccf-eui">Common Coordinate Framework Exploration User Interface</OutboundLink>.
             </>

@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 
 const panelBorderStyles = css`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};
@@ -38,7 +38,7 @@ const TruncatedText = styled(Typography)`
   ${overflowCss};
 `;
 
-const TruncatedLink = styled(LightBlueLink)`
+const TruncatedLink = styled(InternalLink)`
   ${overflowCss};
   display: block; //text-overflow only applies to block elements
 `;

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 
 function LoginLink() {
-  return <LightBlueLink href="/login">login</LightBlueLink>;
+  return <InternalLink href="/login">login</InternalLink>;
 }
 function HelpEmailLink() {
   return <EmailIconLink email="help@hubmapconsortium.org">help@hubmapconsortium.org</EmailIconLink>;

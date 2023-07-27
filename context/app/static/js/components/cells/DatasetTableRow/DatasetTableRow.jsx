@@ -1,7 +1,7 @@
 import React from 'react';
 import format from 'date-fns/format';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import CellsCharts from 'js/components/cells/CellsCharts';
@@ -58,9 +58,9 @@ function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpre
       isExpandedToStart={isExpandedToStart}
     >
       <ExpandableRowCell>
-        <LightBlueLink href={`/browse/dataset/${uuid}?marker=${cellVariableName}`} target="_blank">
+        <InternalLink href={`/browse/dataset/${uuid}?marker=${cellVariableName}`} target="_blank">
           {hubmap_id}
-        </LightBlueLink>
+        </InternalLink>
       </ExpandableRowCell>
       <ExpandableRowCell>{getOriginSamplesOrgan(datasetMetadata)}</ExpandableRowCell>
       <ExpandableRowCell>{mapped_data_types.join(', ')}</ExpandableRowCell>

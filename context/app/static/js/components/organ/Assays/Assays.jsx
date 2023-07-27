@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useSearchData from 'js/hooks/useSearchData';
@@ -89,12 +89,12 @@ function Assays({ organTerms }) {
           tableRows={buckets.map((bucket) => (
             <TableRow key={bucket.key}>
               <TableCell>
-                <LightBlueLink
+                <InternalLink
                   href={getSearchURL({ entityType: 'Dataset', organTerms, assay: bucket.key })}
                   variant="body2"
                 >
                   {bucket.key}
-                </LightBlueLink>
+                </InternalLink>
               </TableCell>
               <TableCell>{bucket.doc_count}</TableCell>
             </TableRow>

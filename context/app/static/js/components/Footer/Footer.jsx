@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
@@ -25,12 +25,12 @@ function Footer({ isMaintenancePage }) {
               </OutboundLink>
               {!isMaintenancePage && (
                 <>
-                  <LightBlueLink href="/docs" variant="body2">
+                  <InternalLink href="/docs" variant="body2">
                     Documentation
-                  </LightBlueLink>
-                  <LightBlueLink href="/diversity" variant="body2">
+                  </InternalLink>
+                  <InternalLink href="/diversity" variant="body2">
                     Diversity
-                  </LightBlueLink>
+                  </InternalLink>
                 </>
               )}
               <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
@@ -47,12 +47,12 @@ function Footer({ isMaintenancePage }) {
               </OutboundLink>
               {!isMaintenancePage && (
                 <>
-                  <LightBlueLink variant="body2" href="/services">
+                  <InternalLink variant="body2" href="/services">
                     Services
-                  </LightBlueLink>
-                  <LightBlueLink variant="body2" href="/apis">
+                  </InternalLink>
+                  <InternalLink variant="body2" href="/apis">
                     APIs
-                  </LightBlueLink>
+                  </InternalLink>
                 </>
               )}
             </FlexColumn>

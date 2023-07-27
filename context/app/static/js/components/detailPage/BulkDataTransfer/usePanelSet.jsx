@@ -1,7 +1,7 @@
 import React from 'react';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import GlobusLink from './GlobusLink';
@@ -43,7 +43,7 @@ const loginPanel = {
   status: 'error',
   children: (
     <>
-      Please <LightBlueLink href="/login">log in</LightBlueLink> for Globus access or email{' '}
+      Please <InternalLink href="/login">log in</InternalLink> for Globus access or email{' '}
       <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
         help@hubmapconsortium.org
       </EmailIconLink>{' '}

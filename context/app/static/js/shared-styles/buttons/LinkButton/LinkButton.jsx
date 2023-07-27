@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 
 function LinkButton({ linkComponent: LinkComponent, children, ...rest }) {
   return (
@@ -19,7 +19,7 @@ LinkButton.propTypes = {
 };
 
 LinkButton.defaultProps = {
-  linkComponent: LightBlueLink,
+  linkComponent: InternalLink,
 };
 
 export default LinkButton;
