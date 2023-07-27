@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import SectionItem from 'js/components/detailPage/SectionItem';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import ShowDerivedEntitiesButton from 'js/components/detailPage/provenance/ShowDerivedEntitiesButton';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
 import ProvVis from '../ProvVis';
@@ -25,9 +25,9 @@ function DetailPanel({ node, timeKey, uuid, typeKey, idKey, getNameForActivity, 
   const idEl =
     typeKey in prov && entityTypes.includes(prov[typeKey]) ? (
       <SectionItem label="ID" ml>
-        <LightBlueLink href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}>
+        <InternalLink href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}>
           {prov[idKey]}
-        </LightBlueLink>
+        </InternalLink>
       </SectionItem>
     ) : null;
   const createdEl =

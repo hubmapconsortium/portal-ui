@@ -9,7 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
 
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import SortingHeaderCell from 'js/components/entity-search/results/SortingHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell/';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
@@ -39,7 +39,7 @@ function ResultsTable({ hits, allResultsUUIDs }) {
               {Object.values(fields).map(({ field, identifier }) => (
                 <TableCell key={field}>
                   {identifier === 'hubmap_id' ? (
-                    <LightBlueLink href={`/browse/dataset/${hit.id}`}>{hit.fields[identifier]}</LightBlueLink>
+                    <InternalLink href={`/browse/dataset/${hit.id}`}>{hit.fields[identifier]}</InternalLink>
                   ) : (
                     getFieldFromHitFields(hit.fields, identifier)
                   )}

@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
 import { Tab } from 'js/shared-styles/tabs';
 import { usePublications } from './hooks';
@@ -14,7 +14,7 @@ function Description() {
     <>
       The following publications are a partial list of published HuBMAP research that uses data available through the
       HuBMAP Data Portal. The full list of HuBMAP-funded publications is available on{' '}
-      <LightBlueLink href="https://scholar.google.com/citations?user=CtGSN80AAAAJ&hl=en">Google Scholar</LightBlueLink>.
+      <InternalLink href="https://scholar.google.com/citations?user=CtGSN80AAAAJ&hl=en">Google Scholar</InternalLink>.
       Publication pages will have a summary of publication-related information, a list of referenced HuBMAP datasets and
       vignettes of relevant visualizations.
     </>

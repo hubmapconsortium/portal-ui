@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
@@ -69,9 +69,9 @@ function SampleDetail() {
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary>
           <SummaryItem>
-            <LightBlueLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
+            <InternalLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
               {mapped_organ}
-            </LightBlueLink>
+            </InternalLink>
           </SummaryItem>
           <Typography variant="h6" component="p">
             {sample_category}

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { useAppContext } from 'js/components/Contexts';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
@@ -59,14 +59,14 @@ function SummaryDataChildren({
   return (
     <>
       <SummaryItem>
-        <LightBlueLink variant="h6" href="https://software.docs.hubmapconsortium.org/assays" underline="none">
+        <InternalLink variant="h6" href="https://software.docs.hubmapconsortium.org/assays" underline="none">
           {mapped_data_types}
-        </LightBlueLink>
+        </InternalLink>
       </SummaryItem>
       <SummaryItem showDivider={Boolean(doi_url)}>
-        <LightBlueLink variant="h6" href={`/organ/${origin_sample.mapped_organ}`} underline="none">
+        <InternalLink variant="h6" href={`/organ/${origin_sample.mapped_organ}`} underline="none">
           {origin_sample.mapped_organ}
-        </LightBlueLink>
+        </InternalLink>
       </SummaryItem>
       {doi_url && (
         <OutboundIconLink isOutbound href={doi_url} variant="h6" iconFontSize="1.1rem">
@@ -175,7 +175,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
           <span>
             {/* <span> to override "display: flex" which splits this on to multiple lines. */}
             You are viewing an older version of this page. Navigate to the{' '}
-            <LightBlueLink href={`/browse/latest/dataset/${uuid}`}>latest version</LightBlueLink>.
+            <InternalLink href={`/browse/latest/dataset/${uuid}`}>latest version</InternalLink>.
           </span>
         </DetailPageAlert>
       )}

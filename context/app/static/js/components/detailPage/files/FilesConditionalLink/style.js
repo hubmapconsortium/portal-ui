@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 
-const AlignedLink = styled(LightBlueLink)`
+const AlignedLink = styled(InternalLink)`
   vertical-align: baseline;
 `;
 

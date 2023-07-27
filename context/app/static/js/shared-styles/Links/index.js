@@ -7,7 +7,7 @@ function LinkWithoutUnderline(props) {
   return <Link {...props} underline="none" />;
 }
 
-const LightBlueLink = styled(LinkWithoutUnderline)`
+const InternalLink = styled(LinkWithoutUnderline)`
   color: ${(props) => props.theme.palette.info.main};
 `;
 
@@ -17,4 +17,4 @@ const StyledOpenInNewRoundedIcon = styled(OpenInNewRoundedIcon)`
   margin-left: ${(props) => props.theme.spacing(0.5)}px;
 `;
 
-export { StyledOpenInNewRoundedIcon, LightBlueLink };
+export { StyledOpenInNewRoundedIcon, InternalLink };
