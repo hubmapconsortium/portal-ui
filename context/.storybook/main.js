@@ -4,7 +4,7 @@ const {
 } = require('../build-utils/alias');
 module.exports = {
   "stories": ['../app/static/js/shared-styles/**/*.stories.js', '../app/static/js/components/**/*.stories.js'],
-  "addons": ["@storybook/addon-links", "@storybook/addon-essentials"],
+  "addons": ["@storybook/addon-links", "@storybook/addon-essentials", 'storybook-addon-swc'],
   "webpackFinal": async config => {
     config.resolve.alias = {
       // extend alias with our own
