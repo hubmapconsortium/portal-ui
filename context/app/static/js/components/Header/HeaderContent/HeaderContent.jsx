@@ -12,7 +12,7 @@ import Dropdown from '../Dropdown';
 import UserLinks from '../UserLinks';
 import AtlasToolsLinks from '../AtlasToolsLinks';
 import OtherLinks from '../OtherLinks';
-import { Spacer, HeaderButton, FlexNoWrap, StyledSvgIcon, HeaderType } from './style';
+import { Spacer, HeaderButton, FlexNoWrap, StyledSvgIcon } from './style';
 import HubmapLogo from '../HubmapLogo';
 
 function HeaderContent({ anchorRef }) {
@@ -30,12 +30,14 @@ function HeaderContent({ anchorRef }) {
         <>
           <FlexNoWrap>
             {['Donor', 'Sample', 'Dataset'].map((type) => (
-              <HeaderType>
-                <StyledSvgIcon component={entityIconMap[type]} />
-                <HeaderButton key={type} href={`/search?entity_type[0]=${type}`} component={Link}>
-                  {`${type}s`}
-                </HeaderButton>
-              </HeaderType>
+              <HeaderButton
+                key={type}
+                href={`/search?entity_type[0]=${type}`}
+                component={Link}
+                startIcon={<StyledSvgIcon component={entityIconMap[type]} />}
+              >
+                {`${type}s`}
+              </HeaderButton>
             ))}
             <Dropdown title="Other">
               <OtherLinks />

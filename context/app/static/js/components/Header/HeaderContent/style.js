@@ -20,14 +20,8 @@ const StyledDivider = styled(Divider)`
   margin: ${(props) => props.theme.spacing(0.5)}px 0px;
 `;
 
-const HeaderType = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0 ${(props) => props.theme.spacing(1)}px;
-`;
-
 const StyledSvgIcon = styled(SvgIcon)`
   font-size: 1.25rem;
 `;
 
-export { Spacer, HeaderButton, FlexNoWrap, StyledDivider, StyledSvgIcon, HeaderType };
+export { Spacer, HeaderButton, FlexNoWrap, StyledDivider, StyledSvgIcon };
