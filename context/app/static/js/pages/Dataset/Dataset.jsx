@@ -87,8 +87,8 @@ function SummaryDataChildren({
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
-function DatasetDetail({ vitData, hasNotebook, visLiftedUUID }) {
-  const { entity } = useFlaskDataContext();
+function DatasetDetail({ hasNotebook, visLiftedUUID }) {
+  const { entity, vitessce_conf: vitData } = useFlaskDataContext();
 
   const {
     protocol_url,

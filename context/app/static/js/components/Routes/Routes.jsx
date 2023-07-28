@@ -81,12 +81,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/browse/dataset/') || urlPath.startsWith('/browse/support/')) {
     return (
       <Route>
-        <Dataset
-          assayMetadata={entity}
-          vitData={vitessce_conf}
-          hasNotebook={has_notebook}
-          visLiftedUUID={vis_lifted_uuid}
-        />
+        <Dataset hasNotebook={has_notebook} visLiftedUUID={vis_lifted_uuid} />
       </Route>
     );
   }
