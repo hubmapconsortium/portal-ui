@@ -36,8 +36,8 @@ function Search({ title }) {
 
   const searchParams = new URLSearchParams(window.location.search);
   const typeParam = 'entity_type[0]';
-  const type = (searchParams.get(typeParam) || '').toLowerCase();
-  const entityType = type.charAt(0).toUpperCase() + type.slice(1);
+  const capitalizedType = searchParams.get(typeParam) || '';
+  const type = capitalizedType.toLowerCase();
 
   if (!(type in resultFieldsByType)) {
     throw Error(
@@ -90,7 +90,7 @@ function Search({ title }) {
     <>
       <SearchHeader component="h1" variant="h2">
         <SearchEntityHeader data-testid="entity-header">
-          <StyledSvgIcon component={entityIconMap[entityType]} color="primary" />
+          <StyledSvgIcon component={entityIconMap[capitalizedType]} color="primary" />
           {title}
         </SearchEntityHeader>
       </SearchHeader>
