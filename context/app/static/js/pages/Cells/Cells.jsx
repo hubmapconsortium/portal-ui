@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
-import PageTitle from 'js/shared-styles/pages/PageTitle';
 import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedByExpression';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import QuerySelect from 'js/components/cells/QuerySelect';
@@ -35,7 +34,9 @@ function Cells() {
   return (
     <AccordionStepsProvider stepsLength={steps.length}>
       <CellsTutorial setParametersButtonRef={setParametersButtonRef} runQueryButtonRef={runQueryButtonRef} />
-      <PageTitle color="primary">Datasets: Molecular Data Queries (BETA)</PageTitle>
+      <Typography variant="h2" component="h1" color="primary">
+        Datasets: Molecular Data Queries (BETA)
+      </Typography>
       <SectionPaper>
         <Typography>
           Retrieve datasets based on the abundance of transcriptomic, epigenomic, and proteomic biomarkers across cells.

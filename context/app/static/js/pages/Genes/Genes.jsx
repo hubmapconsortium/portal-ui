@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
-import PageTitle from 'js/shared-styles/pages/PageTitle';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Summary from 'js/components/genes/Summary';
@@ -34,7 +33,9 @@ function Genes({ geneSymbol }) {
         <Typography variant="subtitle1" component="h2" color="primary">
           Gene
         </Typography>
-        <PageTitle>{`${geneSymbol.toUpperCase()} (${geneCommonName})`}</PageTitle>
+        <Typography variant="h1" component="h1">
+          {`${geneSymbol.toUpperCase()} (${geneCommonName})`}
+        </Typography>
         <Summary geneSummary={geneSummary} />
       </Content>
     </FlexRow>
