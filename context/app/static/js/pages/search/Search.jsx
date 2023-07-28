@@ -37,6 +37,8 @@ function Search({ title }) {
   const searchParams = new URLSearchParams(window.location.search);
   const typeParam = 'entity_type[0]';
   const type = (searchParams.get(typeParam) || '').toLowerCase();
+  const entityType = type.charAt(0).toUpperCase() + type.slice(1);
+
   if (!(type in resultFieldsByType)) {
     throw Error(
       `Unexpected URL param "${typeParam}=${type}"; Should be one of {${Object.keys(resultFieldsByType).join(', ')}}`,
@@ -88,7 +90,7 @@ function Search({ title }) {
     <>
       <SearchHeader component="h1" variant="h2">
         <SearchEntityHeader data-testid="entity-header">
-          <StyledSvgIcon component={entityIconMap[`${title.slice(0, title.length - 1)}`]} color="primary" />
+          <StyledSvgIcon component={entityIconMap[entityType]} color="primary" />
           {title}
         </SearchEntityHeader>
       </SearchHeader>
