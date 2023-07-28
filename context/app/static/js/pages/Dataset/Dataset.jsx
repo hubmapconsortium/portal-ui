@@ -87,7 +87,7 @@ function SummaryDataChildren({
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
-function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
+function DatasetDetail({ vitData, hasNotebook, visLiftedUUID }) {
   const { entity } = useFlaskDataContext();
 
   const {
@@ -216,7 +216,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         {shouldDisplaySection.visualization && (
           <VisualizationWrapper vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
         )}
-        {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
+        {shouldDisplaySection.provenance && <ProvSection />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
         {shouldDisplaySection.files && (
