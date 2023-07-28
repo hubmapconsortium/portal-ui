@@ -3,7 +3,7 @@ import React from 'react';
 import { Tab } from 'js/shared-styles/tabs';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
-import { StyledTabs, StyledTabPanel, StyledAlert, StyledSvgIcon, StyledIconTab } from './style';
+import { StyledTabs, StyledTabPanel, StyledAlert, StyledSvgIcon } from './style';
 
 function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, renderWarningMessage }) {
   const handleChange = (event, newIndex) => {
@@ -12,19 +12,17 @@ function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, ren
 
   return (
     <>
-      <StyledIconTab>
-        <StyledTabs value={openIndex} onChange={handleChange} aria-label={ariaLabel}>
-          {entities.map((entity, i) => (
-            <Tab
-              label={`${entity.tabLabel} (${entity.data.length})`}
-              index={i}
-              key={entity.tabLabel}
-              data-testid={`${entity.tabLabel.toLowerCase()}-tab`}
-              icon={<StyledSvgIcon component={entityIconMap[entity.entityType]} color="white" />}
-            />
-          ))}
-        </StyledTabs>
-      </StyledIconTab>
+      <StyledTabs value={openIndex} onChange={handleChange} aria-label={ariaLabel}>
+        {entities.map((entity, i) => (
+          <Tab
+            label={`${entity.tabLabel} (${entity.data.length})`}
+            index={i}
+            key={entity.tabLabel}
+            data-testid={`${entity.tabLabel.toLowerCase()}-tab`}
+            icon={<StyledSvgIcon component={entityIconMap[entity.entityType]} color="white" />}
+          />
+        ))}
+      </StyledTabs>
       {entities.map(({ tabLabel, data, entityType: tableEntityType, columns }, i) => (
         <StyledTabPanel value={openIndex} index={i} key={tabLabel} data-testid={`${tabLabel.toLowerCase()}-panel`}>
           {data.length > 0 ? (
