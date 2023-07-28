@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import SvgIcon from '@material-ui/core/SvgIcon';
+
 import { TabPanel, Tabs } from 'js/shared-styles/tabs';
 import { Alert } from 'js/shared-styles/alerts';
 
@@ -12,6 +13,14 @@ const StyledTabPanel = styled(TabPanel)`
 
 const StyledTabs = styled(Tabs)`
   flex: none;
+
+  span {
+    display: contents;
+  }
+
+  &&& svg {
+    margin-bottom: 0;
+  }
 `;
 
 const StyledAlert = styled(Alert)`
