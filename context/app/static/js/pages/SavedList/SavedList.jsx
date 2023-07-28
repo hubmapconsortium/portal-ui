@@ -19,6 +19,8 @@ function SavedList({ listUUID }) {
   const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
   const savedList = savedLists[listUUID];
 
+  if (!savedList) return <div>This list does not exist.</div>;
+
   const { savedEntities: listEntities } = savedList;
 
   const entitiesLength = Object.keys(listEntities).length;
