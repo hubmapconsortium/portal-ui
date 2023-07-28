@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import { useAppContext } from 'js/components/Contexts';
+import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { InternalLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -88,6 +88,8 @@ function SummaryDataChildren({
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
+  const { entity } = useFlaskDataContext();
+
   const {
     protocol_url,
     metadata,
@@ -114,8 +116,9 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     registered_doi,
     doi_url,
     contributors,
-  } = assayMetadata;
-  const isLatest = !('next_revision_uuid' in assayMetadata);
+  } = entity || {};
+
+  const isLatest = !('next_revision_uuid' in entity);
 
   // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
   const origin_sample = origin_samples[0];
