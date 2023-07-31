@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
-import { ThemeProvider, StyledEngineProvider } from 'styled-components';
-import PropTypes from 'prop-types';
-import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from 'styled-components';
+import MuiThemeProvider from '@mui/material/styles/ThemeProvider';
 import StylesProvider from '@mui/styles/StylesProvider';
 import createGenerateClassName from '@mui/styles/createGenerateClassName';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -43,26 +42,20 @@ function Providers({
     // injectFirst ensures styled-components takes priority over mui for styling
     <StylesProvider generateClassName={generateClassName} injectFirst>
       <GlobalFonts />
-      <StyledEngineProvider injectFirst>
-        <MuiThemeProvider theme={theme}>
-          <ThemeProvider theme={theme}>
-            <AppContext.Provider value={appContext}>
-              <FlaskDataContext.Provider value={flaskData}>
-                <CssBaseline />
-                <GlobalStyles />
-                {children}
-              </FlaskDataContext.Provider>
-            </AppContext.Provider>
-          </ThemeProvider>
-        </MuiThemeProvider>
-      </StyledEngineProvider>
+      <MuiThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+          <AppContext.Provider value={appContext}>
+            <FlaskDataContext.Provider value={flaskData}>
+              <CssBaseline />
+              <GlobalStyles />
+              {children}
+            </FlaskDataContext.Provider>
+          </AppContext.Provider>
+        </ThemeProvider>
+      </MuiThemeProvider>
     </StylesProvider>
   );
 }
-
-Providers.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
-};
 
 export { AppContext };
 export default Providers;
