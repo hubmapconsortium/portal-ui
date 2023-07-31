@@ -19,53 +19,70 @@ function SavedList({ listUUID }) {
   const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
   const savedList = savedLists[listUUID];
 
-  if (!savedList) return <div>This list does not exist.</div>;
-
-  const { savedEntities: listEntities } = savedList;
-
-  const entitiesLength = Object.keys(listEntities).length;
-
-  const { title, description } = savedList;
-
   function deleteCallback(uuids) {
     removeEntitiesFromList(listUUID, uuids);
   }
 
-  return (
-    <PageSpacing>
-      <Typography variant="subtitle1" component="h1" color="primary">
-        List
-      </Typography>
-      <Typography variant="h2">{title}</Typography>
-      <SpacedSectionButtonRow
-        leftText={
-          <BottomAlignedTypography variant="body1" color="primary">
-            {entitiesLength} {entitiesLength === 1 ? 'Item' : 'Items'}
-          </BottomAlignedTypography>
-        }
-        buttons={
-          <>
-            <EditListButton listDescription={description} listTitle={title} listUUID={listUUID} />
-            <SavedListMenuButton listUUID={listUUID} />
-          </>
-        }
-      />
-      <SpacingDiv>
-        <LocalStorageDescription />
-      </SpacingDiv>
-      <SpacingDiv>
-        <SummaryBody
-          description={savedList.description}
-          created_timestamp={savedList.dateSaved}
-          last_modified_timestamp={savedList.dateLastModified}
+  try {
+    const { savedEntities: listEntities } = savedList;
+    const entitiesLength = Object.keys(listEntities).length;
+    const { title, description } = savedList;
+
+    return (
+      <PageSpacing>
+        <Typography variant="subtitle1" component="h1" color="primary">
+          List
+        </Typography>
+        <Typography variant="h2">{title}</Typography>
+        <SpacedSectionButtonRow
+          leftText={
+            <BottomAlignedTypography variant="body1" color="primary">
+              {entitiesLength} {entitiesLength === 1 ? 'Item' : 'Items'}
+            </BottomAlignedTypography>
+          }
+          buttons={
+            <>
+              <EditListButton listDescription={description} listTitle={title} listUUID={listUUID} />
+              <SavedListMenuButton listUUID={listUUID} />
+            </>
+          }
         />
-      </SpacingDiv>
-      <StyledHeader variant="h3" component="h2">
-        Items
-      </StyledHeader>
-      <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
-    </PageSpacing>
-  );
+        <SpacingDiv>
+          <LocalStorageDescription />
+        </SpacingDiv>
+        <SpacingDiv>
+          <SummaryBody
+            description={savedList.description}
+            created_timestamp={savedList.dateSaved}
+            last_modified_timestamp={savedList.dateLastModified}
+          />
+        </SpacingDiv>
+        <StyledHeader variant="h3" component="h2">
+          Items
+        </StyledHeader>
+        <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
+      </PageSpacing>
+    );
+  } catch (error) {
+    throw new Error('This list does not exist.');
+  }
 }
 
 export default SavedList;
+
+// function SavedList({ listUUID }) {
+//   const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
+//   const savedList = savedLists[listUUID];
+
+//   // if (!savedList) return <div>This list does not exist.</div>;
+//   // “This list does not exist. If this list should exist, please message help@hubmapconsortium.org <emailIcon> about this issue.“
+
+//   const { savedEntities: listEntities } = savedList;
+
+//   const entitiesLength = Object.keys(listEntities).length;
+
+//   const { title, description } = savedList;
+
+//   function deleteCallback(uuids) {
+//     removeEntitiesFromList(listUUID, uuids);
+//   }
