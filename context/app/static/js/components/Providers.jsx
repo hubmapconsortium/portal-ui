@@ -52,8 +52,8 @@ function Providers({
   return (
     // injectFirst ensures styled-components takes priority over mui for styling
     <SWRConfig value={swrConfig}>
-      <GlobalFonts />
       <MuiStylesProvider generateClassName={generateClassName} injectFirst>
+        <GlobalFonts />
         <MuiThemeProvider theme={theme}>
           <SCThemeProvider theme={theme}>
             <AppContext.Provider value={appContext}>
