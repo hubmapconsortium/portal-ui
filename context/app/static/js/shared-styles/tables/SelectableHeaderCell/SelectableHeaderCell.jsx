@@ -11,6 +11,7 @@ function SelectableHeaderCell({ allTableRowKeys, disabled }) {
   return (
     <HeaderCell padding="checkbox">
       <Checkbox
+        color="secondary"
         checked={headerRowIsSelected}
         inputProps={{ 'aria-label': `${tableLabel}-header-row-checkbox` }}
         disabled={disabled || allTableRowKeys.length === 0}

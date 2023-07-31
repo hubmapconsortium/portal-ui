@@ -13,6 +13,7 @@ function AddToListItem({ isSelected, addToSelectedLists, removeFromSelectedLists
     <ListItem onClick={() => handleClick(listUUID)}>
       <ListItemIcon>
         <Checkbox
+          color="secondary"
           edge="start"
           checked={isSelected}
           tabIndex={-1}

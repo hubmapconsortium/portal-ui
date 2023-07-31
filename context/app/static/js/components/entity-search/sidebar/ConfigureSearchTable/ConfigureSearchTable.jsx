@@ -47,7 +47,6 @@ function ConfigureSearchTable({
                   <Checkbox
                     checked={fieldName in selectedFacets}
                     size="small"
-                    color="primary"
                     onChange={(event) => handleToggleFacet(event, fieldConfig)}
                   />
                 )}
@@ -56,7 +55,6 @@ function ConfigureSearchTable({
                 <Checkbox
                   checked={fieldName in selectedFields}
                   size="small"
-                  color="primary"
                   onChange={(event) => handleToggleField(event, fieldConfig)}
                 />
               </TableCell>

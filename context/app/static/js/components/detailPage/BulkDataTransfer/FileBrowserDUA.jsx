@@ -63,6 +63,7 @@ function FileBrowserDUA({ isOpen, handleAgree, handleClose, mapped_data_access_l
         <FormControlLabel
           control={
             <Checkbox
+              color="secondary"
               checked={isChecked}
               onChange={() => {
                 check(!isChecked);

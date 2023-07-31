@@ -12,6 +12,7 @@ function SelectableRowCell({ rowKey, disabled }) {
   return (
     <TableCell padding="checkbox">
       <Checkbox
+        color="secondary"
         checked={selectedRows.has(rowKey)}
         inputProps={{ 'aria-label': `${tableLabel}-row-${rowKey}-checkbox` }}
         onChange={() => toggleRow(rowKey)}
