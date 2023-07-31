@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 
 const flexStyle = css`
   display: inline-flex;
@@ -10,7 +10,7 @@ const flexStyle = css`
 const FlexOutboundLink = styled(OutboundLink)`
   ${flexStyle};
 `;
-const FlexLightBlueLink = styled(LightBlueLink)`
+const FlexInternalLink = styled(InternalLink)`
   ${flexStyle}
 `;
 
@@ -18,4 +18,4 @@ const StyledSpan = styled.span`
   ${(props) => css`margin-${props.$iconMargin}: ${props.theme.spacing(0.5)}`};
 `;
 
-export { FlexOutboundLink, FlexLightBlueLink, StyledSpan };
+export { FlexOutboundLink, FlexInternalLink, StyledSpan };

@@ -4,12 +4,12 @@ import TableRow from '@mui/material/TableRow';
 
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { HeaderCell } from 'js/shared-styles/tables';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 
 const renderHubmapIdCell = ({ hubmap_id, entity_type, uuid }) => (
-  <LightBlueLink href={`/browse/${entity_type.toLowerCase()}/${uuid}`} variant="body2">
+  <InternalLink href={`/browse/${entity_type.toLowerCase()}/${uuid}`} variant="body2">
     {hubmap_id}
-  </LightBlueLink>
+  </InternalLink>
 );
 
 function RelatedEntitiesTable({ columns, entities, entityType }) {

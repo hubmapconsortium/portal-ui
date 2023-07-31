@@ -6,13 +6,15 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
+import { useFlaskDataContext } from 'js/components/Contexts';
 import metadataFieldDescriptions from 'metadata-field-descriptions';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton, StyledSectionHeader } from './style';
+import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton } from './style';
 
 function getDescription(field) {
   const [prefix, stem] = field.split('.');
@@ -49,6 +51,10 @@ function tableDataToRows(tableData) {
 }
 
 function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
+  const {
+    entity: { entity_type },
+  } = useFlaskDataContext();
+
   const columns = [
     { id: 'key', label: 'Key' },
     { id: 'value', label: 'Value' },
@@ -68,7 +74,9 @@ function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
   return (
     <DetailPageSection id="metadata">
       <Flex>
-        <StyledSectionHeader>Metadata</StyledSectionHeader>
+        <SectionHeader iconTooltipText={`Data provided for the given ${entity_type?.toLowerCase()}.`}>
+          Metadata
+        </SectionHeader>
         <SecondaryBackgroundTooltip title="Download">
           <StyledWhiteBackgroundIconButton href={downloadUrl} download={`${hubmap_id}.tsv`}>
             <DownloadIcon color="primary" />
@@ -99,8 +107,6 @@ function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
     </DetailPageSection>
   );
 }
-
-// MetadataTable.prototype = {};
 
 export default MetadataTable;
 export { tableDataToRows, getDescription };

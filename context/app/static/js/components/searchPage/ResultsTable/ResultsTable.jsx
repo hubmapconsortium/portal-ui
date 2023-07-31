@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { SortingSelector } from 'searchkit';
 
 import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import { getByPath } from './utils';
 import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell } from './style';
 import SortingTableHead from '../SortingTableHead';
@@ -22,9 +22,9 @@ function ResultsTable({ hits, resultFields, detailsUrlPrefix, idField, sortOptio
             {resultFields.map((field) => (
               <StyledTableCell key={field.id}>
                 {field.id === 'hubmap_id' ? (
-                  <LightBlueLink href={detailsUrlPrefix + hit._source[idField]}>
+                  <InternalLink href={detailsUrlPrefix + hit._source[idField]}>
                     {getByPath(hit._source, field)}
-                  </LightBlueLink>
+                  </InternalLink>
                 ) : (
                   getByPath(hit._source, field)
                 )}

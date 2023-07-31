@@ -1,6 +1,6 @@
 import React from 'react';
 import { trackLink } from 'js/helpers/trackers';
-import { LightBlueLink } from './index';
+import { InternalLink } from './index';
 
 function sendOutboundEvent(event) {
   trackLink(event.target.href);
@@ -14,9 +14,9 @@ function OutboundLink({ children, onClick, ...props }) {
     sendOutboundEvent(event);
   }
   return (
-    <LightBlueLink {...props} onClick={handleClick} rel="noopener noreferrer" target="_blank">
+    <InternalLink {...props} onClick={handleClick} rel="noopener noreferrer" target="_blank">
       {children}
-    </LightBlueLink>
+    </InternalLink>
   );
 }
 

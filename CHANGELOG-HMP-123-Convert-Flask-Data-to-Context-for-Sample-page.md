@@ -1,1 +1,0 @@
-- Refactor props in Sample page to use context. 

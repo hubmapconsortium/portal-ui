@@ -3,7 +3,7 @@ import React from 'react';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { useAppContext } from 'js/components/Contexts';
 import WorkspacesTitle from 'js/components/workspaces/WorkspacesTitle';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenticated';
 import { StyledDescription } from './style';
 
@@ -14,7 +14,7 @@ function WorkspacesContent() {
     return (
       <StyledDescription>
         The workspaces feature is only available if you are logged in and part of the allowed Globus group.{' '}
-        <LightBlueLink href="/login">Log in</LightBlueLink> to view saved workspaces or to begin a new workspace.
+        <InternalLink href="/login">Log in</InternalLink> to view saved workspaces or to begin a new workspace.
       </StyledDescription>
     );
   }

@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { useSearchHits } from 'js/hooks/useSearchData';
@@ -113,9 +113,9 @@ function Samples({ organTerms }) {
                 <TableRow key={uuid}>
                   <SelectableRowCell rowKey={uuid} />
                   <TableCell>
-                    <LightBlueLink href={`/browse/sample/${uuid}`} variant="body2">
+                    <InternalLink href={`/browse/sample/${uuid}`} variant="body2">
                       {hubmap_id}
-                    </LightBlueLink>
+                    </InternalLink>
                   </TableCell>
                   <TableCell>{donor?.mapped_metadata && getDonorAgeString(donor.mapped_metadata)}</TableCell>
                   <TableCell>{donor?.mapped_metadata?.sex}</TableCell>

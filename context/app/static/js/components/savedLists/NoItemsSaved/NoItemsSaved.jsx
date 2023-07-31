@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { LightBlueLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import Description from 'js/shared-styles/sections/Description';
 
 function SearchPagesPrompt() {
   // Inserted in the middle of the message, so it shouldn't be capitalized.
   return (
     <>
-      navigate to <LightBlueLink href="/search?entity_type[0]=Donor">donors</LightBlueLink>,{' '}
-      <LightBlueLink href="/search?entity_type[0]=Sample">samples</LightBlueLink> or{' '}
-      <LightBlueLink href="/search?entity_type[0]=Dataset">datasets</LightBlueLink> search pages
+      navigate to <InternalLink href="/search?entity_type[0]=Donor">donors</InternalLink>,{' '}
+      <InternalLink href="/search?entity_type[0]=Sample">samples</InternalLink> or{' '}
+      <InternalLink href="/search?entity_type[0]=Dataset">datasets</InternalLink> search pages
     </>
   );
 }
@@ -17,7 +17,7 @@ function SearchPagesPrompt() {
 function LoginPrompt() {
   return (
     <>
-      <LightBlueLink href="/login">Login</LightBlueLink> to view additional saved items
+      <InternalLink href="/login">Login</InternalLink> to view additional saved items
     </>
   );
 }
@@ -26,7 +26,7 @@ function SavedListMessage() {
   return (
     <>
       <LoginPrompt />. To explore data to add to this list, <SearchPagesPrompt />, or add items from{' '}
-      <LightBlueLink href="/my-lists">My Lists</LightBlueLink>{' '}
+      <InternalLink href="/my-lists">My Lists</InternalLink>{' '}
     </>
   );
 }
