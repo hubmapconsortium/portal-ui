@@ -15,7 +15,7 @@ const StyledRow = styled(TableRow)`
 // 24px the width of the directory arrow icon and is used to keep the file icon aligned with the directory icon
 const IndentedDiv = styled.div`
   padding: 10px 40px;
-  margin-left: ${(props) => props.theme.spacing(props.$depth * 1.5) + 24}px;
+  margin-left: calc(${(props) => props.theme.spacing(props.$depth * 1.5)} + 24px);
   display: flex;
   align-items: center;
 `;

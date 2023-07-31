@@ -12,7 +12,7 @@ const StyledTableRow = styled(TableRow)`
 `;
 
 const Directory = styled.div`
-  padding: 10px 0px 10px ${(props) => props.theme.spacing(props.$depth * 1.5) + 40}px;
+  padding: 10px 0px 10px calc(${(props) => props.theme.spacing(props.$depth * 1.5)} + 40px);
   font-size: ${(props) => props.theme.typography.body1.fontSize};
   display: flex;
   align-items: center;
