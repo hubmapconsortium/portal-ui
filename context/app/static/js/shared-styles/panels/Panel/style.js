@@ -46,6 +46,7 @@ const TruncatedLink = styled(InternalLink)`
 const RightTextWrapper = styled.div`
   flex-shrink: 0;
   padding-left: ${(props) => props.theme.spacing(0.5)};
+  font-size: ${(props) => props.theme.typography.body2.fontSize};
 `;
 
 export { PanelBox, LeftTextWrapper, TruncatedText, TruncatedLink, RightTextWrapper, panelBorderStyles };
