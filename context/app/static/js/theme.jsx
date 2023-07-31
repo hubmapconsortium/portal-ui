@@ -60,6 +60,9 @@ const theme = createTheme({
     transparentGray: {
       main: 'rgba(144, 144, 144, 0.1)',
     },
+    background: {
+      default: '#fafafa',
+    },
     type: 'light',
   },
   typography: {
@@ -126,6 +129,15 @@ const theme = createTheme({
     dropdown: 50,
     visualization: 3,
     fileBrowserHeader: 1,
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1280,
+      xl: 1536,
+    },
   },
 });
 
