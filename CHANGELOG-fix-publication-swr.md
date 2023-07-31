@@ -1,1 +1,0 @@
-- Fix bug in hook to request publication vignettes files.

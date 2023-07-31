@@ -1,1 +1,0 @@
-- Renamed lightbluelink to internallink.
