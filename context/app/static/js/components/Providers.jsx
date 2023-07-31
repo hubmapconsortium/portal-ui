@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { SWRConfig } from 'swr';
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider as SCThemeProvider } from 'styled-components';
 import MuiThemeProvider from '@mui/material/styles/ThemeProvider';
-import StylesProvider from '@mui/styles/StylesProvider';
+import { StylesProvider as MuiStylesProvider } from '@mui/styles';
 import createGenerateClassName from '@mui/styles/createGenerateClassName';
 import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from 'js/components/globalStyles';
@@ -15,6 +15,10 @@ const generateClassName = createGenerateClassName({
   disableGlobal: true,
   seed: 'portal',
 });
+
+const swrConfig = {
+  revalidateOnFocus: false,
+};
 
 function Providers({
   endpoints,
@@ -47,15 +51,11 @@ function Providers({
 
   return (
     // injectFirst ensures styled-components takes priority over mui for styling
-    <SWRConfig
-      value={{
-        revalidateOnFocus: false,
-      }}
-    >
-      <StylesProvider generateClassName={generateClassName} injectFirst>
-        <GlobalFonts />
+    <SWRConfig value={swrConfig}>
+      <GlobalFonts />
+      <MuiStylesProvider generateClassName={generateClassName} injectFirst>
         <MuiThemeProvider theme={theme}>
-          <ThemeProvider theme={theme}>
+          <SCThemeProvider theme={theme}>
             <AppContext.Provider value={appContext}>
               <FlaskDataContext.Provider value={flaskData}>
                 <ProtocolAPIContext.Provider value={protocolsContext}>
@@ -65,12 +65,11 @@ function Providers({
                 </ProtocolAPIContext.Provider>
               </FlaskDataContext.Provider>
             </AppContext.Provider>
-          </ThemeProvider>
+          </SCThemeProvider>
         </MuiThemeProvider>
-      </StylesProvider>
+      </MuiStylesProvider>
     </SWRConfig>
   );
 }
 
-export { AppContext };
 export default Providers;
