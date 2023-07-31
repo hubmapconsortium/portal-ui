@@ -69,20 +69,3 @@ function SavedList({ listUUID }) {
 }
 
 export default SavedList;
-
-// function SavedList({ listUUID }) {
-//   const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
-//   const savedList = savedLists[listUUID];
-
-//   // if (!savedList) return <div>This list does not exist.</div>;
-//   // “This list does not exist. If this list should exist, please message help@hubmapconsortium.org <emailIcon> about this issue.“
-
-//   const { savedEntities: listEntities } = savedList;
-
-//   const entitiesLength = Object.keys(listEntities).length;
-
-//   const { title, description } = savedList;
-
-//   function deleteCallback(uuids) {
-//     removeEntitiesFromList(listUUID, uuids);
-//   }
