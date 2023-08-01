@@ -4,6 +4,7 @@ import Link from '@mui/material/Link';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { useAppContext } from 'js/components/Contexts';
 import Menu from '../Menu';
 import ResourceLinks from '../ResourceLinks';
@@ -11,13 +12,14 @@ import Dropdown from '../Dropdown';
 import UserLinks from '../UserLinks';
 import AtlasToolsLinks from '../AtlasToolsLinks';
 import OtherLinks from '../OtherLinks';
-import { Spacer, HeaderButton, FlexNoWrap } from './style';
+import { Spacer, HeaderButton, FlexNoWrap, StyledSvgIcon } from './style';
 import HubmapLogo from '../HubmapLogo';
 
 function HeaderContent({ anchorRef }) {
   const theme = useTheme();
   const shouldDisplayMenu = !useMediaQuery(theme.breakpoints.up('md'));
   const { isAuthenticated, userEmail } = useAppContext();
+
   return (
     <>
       {shouldDisplayMenu && <Menu anchorRef={anchorRef} />}
@@ -28,7 +30,12 @@ function HeaderContent({ anchorRef }) {
         <>
           <FlexNoWrap>
             {['Donor', 'Sample', 'Dataset'].map((type) => (
-              <HeaderButton key={type} href={`/search?entity_type[0]=${type}`} component={Link}>
+              <HeaderButton
+                key={type}
+                href={`/search?entity_type[0]=${type}`}
+                component={Link}
+                startIcon={<StyledSvgIcon component={entityIconMap[type]} />}
+              >
                 {`${type}s`}
               </HeaderButton>
             ))}

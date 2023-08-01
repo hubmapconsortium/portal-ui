@@ -9,9 +9,7 @@ function Diversity() {
   return (
     <>
       <PageTitleWrapper>
-        <PageTitle variant="h2" component="h1">
-          HuBMAP Donor Diversity
-        </PageTitle>
+        <PageTitle>HuBMAP Donor Diversity</PageTitle>
         <DescriptionPaper>
           <Typography>
             The goal of HuBMAP is to develop an open and global platform to map healthy cells in the human body. To

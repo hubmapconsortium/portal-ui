@@ -44,7 +44,8 @@ function PublicationSummary({
     <DetailPageSection id="summary">
       <SummaryData
         title={title}
-        entity_type={isPublished ? entity_type : 'Preprint'}
+        entity_type={entity_type}
+        entityTypeDisplay={isPublished ? 'Publication' : 'Preprint'}
         uuid={uuid}
         status={status}
         mapped_data_access_level={mapped_data_access_level}
