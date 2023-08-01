@@ -60,12 +60,9 @@ test('has correct left margin', () => {
     </FilesProviders>,
   );
 
-  // depth * indentation multiplier * 8px spacing unit
-  const expectedMargin = depth * 1.5 * 8;
-  const arrowIconOffset = 24;
-  expect(screen.getByTestId('file-indented-div')).toHaveStyle(
-    `margin-left: calc(${expectedMargin}px + ${arrowIconOffset}px)`,
-  );
+  // depth * indentation multiplier * 8px spacing unit + 24px arrow icon offset
+  const expectedMargin = depth * 1.5 * 8 + 24;
+  expect(screen.getByTestId('file-indented-div')).toHaveStyle(`margin-left: ${expectedMargin}px`);
 });
 
 test('displays QA chip when is_qa_qc is true', () => {
