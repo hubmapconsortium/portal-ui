@@ -20,6 +20,7 @@ const entitiesWithStatus = datasetEntityTypes.concat(...publicationEntityTypes);
 
 function SummaryData({
   entity_type,
+  entityTypeDisplay,
   uuid,
   status,
   mapped_data_access_level,
@@ -36,7 +37,7 @@ function SummaryData({
       <SummaryTitle data-testid="entity-type">
         <SummaryDataHeader>
           <StyledSvgIcon component={entityIconMap[entity_type]} color="primary" />
-          {entity_type}
+          {entityTypeDisplay ?? entity_type}
         </SummaryDataHeader>
       </SummaryTitle>
       <SpacedSectionButtonRow
