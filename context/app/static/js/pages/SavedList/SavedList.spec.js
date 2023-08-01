@@ -10,16 +10,32 @@ describe('SavedList component', () => {
     useSavedEntitiesStore.mockClear(); // Clear all instances and calls to the mock
   });
 
-  test('renders without crash when savedLists is empty', () => {
+  test('throws error when listUUID is not in savedLists', () => {
     // Setup the mock to return savedLists as an empty object
     useSavedEntitiesStore.mockImplementation(() => ({
       savedLists: {},
       removeEntitiesFromList: jest.fn(),
     }));
 
-    // Here you need to provide a listUUID that would exist in the savedLists.
-    // Since the mock returns an empty savedLists object, it could be any string.
     const listUUID = 'any-uuid';
+
+    // Suppress console.error for this test since we're testing an error scenario
+    const originalConsoleError = console.error;
+    console.error = jest.fn();
+
+    expect(() => render(<SavedList listUUID={listUUID} />)).toThrow('This list does not exist.');
+
+    // Restore console.error
+    console.error = originalConsoleError;
+  });
+
+  test('renders without error when listUUID is in savedLists', () => {
+    const listUUID = 'any-uuid';
+
+    useSavedEntitiesStore.mockImplementation(() => ({
+      savedLists: { [listUUID]: { savedEntities: {} } }, // Setup the mock to return savedLists with a list
+      removeEntitiesFromList: jest.fn(),
+    }));
 
     const { container } = render(<SavedList listUUID={listUUID} />);
 
