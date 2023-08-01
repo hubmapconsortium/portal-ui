@@ -19,53 +19,55 @@ function SavedList({ listUUID }) {
   const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
   const savedList = savedLists[listUUID];
 
+  if (!savedList) {
+    throw new Error('This list does not exist.');
+  }
+
+  const { savedEntities: listEntities } = savedList;
+
+  const entitiesLength = Object.keys(listEntities).length;
+
+  const { title, description } = savedList;
+
   function deleteCallback(uuids) {
     removeEntitiesFromList(listUUID, uuids);
   }
 
-  try {
-    const { savedEntities: listEntities } = savedList;
-    const entitiesLength = Object.keys(listEntities).length;
-    const { title, description } = savedList;
-
-    return (
-      <PageSpacing>
-        <Typography variant="subtitle1" component="h1" color="primary">
-          List
-        </Typography>
-        <Typography variant="h2">{title}</Typography>
-        <SpacedSectionButtonRow
-          leftText={
-            <BottomAlignedTypography variant="body1" color="primary">
-              {entitiesLength} {entitiesLength === 1 ? 'Item' : 'Items'}
-            </BottomAlignedTypography>
-          }
-          buttons={
-            <>
-              <EditListButton listDescription={description} listTitle={title} listUUID={listUUID} />
-              <SavedListMenuButton listUUID={listUUID} />
-            </>
-          }
+  return (
+    <PageSpacing>
+      <Typography variant="subtitle1" component="h1" color="primary">
+        List
+      </Typography>
+      <Typography variant="h2">{title}</Typography>
+      <SpacedSectionButtonRow
+        leftText={
+          <BottomAlignedTypography variant="body1" color="primary">
+            {entitiesLength} {entitiesLength === 1 ? 'Item' : 'Items'}
+          </BottomAlignedTypography>
+        }
+        buttons={
+          <>
+            <EditListButton listDescription={description} listTitle={title} listUUID={listUUID} />
+            <SavedListMenuButton listUUID={listUUID} />
+          </>
+        }
+      />
+      <SpacingDiv>
+        <LocalStorageDescription />
+      </SpacingDiv>
+      <SpacingDiv>
+        <SummaryBody
+          description={savedList.description}
+          created_timestamp={savedList.dateSaved}
+          last_modified_timestamp={savedList.dateLastModified}
         />
-        <SpacingDiv>
-          <LocalStorageDescription />
-        </SpacingDiv>
-        <SpacingDiv>
-          <SummaryBody
-            description={savedList.description}
-            created_timestamp={savedList.dateSaved}
-            last_modified_timestamp={savedList.dateLastModified}
-          />
-        </SpacingDiv>
-        <StyledHeader variant="h3" component="h2">
-          Items
-        </StyledHeader>
-        <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
-      </PageSpacing>
-    );
-  } catch (error) {
-    throw new Error('This list does not exist.');
-  }
+      </SpacingDiv>
+      <StyledHeader variant="h3" component="h2">
+        Items
+      </StyledHeader>
+      <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
+    </PageSpacing>
+  );
 }
 
 export default SavedList;
