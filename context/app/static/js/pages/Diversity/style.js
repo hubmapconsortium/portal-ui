@@ -2,12 +2,13 @@ import styled from 'styled-components';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
+import Title from 'js/shared-styles/pages/PageTitle';
 
 const PageTitleWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
-const PageTitle = styled(Typography)`
+const PageTitle = styled(Title)`
   margin-bottom: 10px;
 `;
 
