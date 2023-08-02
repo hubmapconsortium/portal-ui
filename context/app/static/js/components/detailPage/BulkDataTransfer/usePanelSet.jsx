@@ -200,8 +200,7 @@ const ENTITY_API_ERROR = {
       status: 'success',
       children: (
         <>
-          Fffiles are available through the Globus Research Data Management System. If you require additional help,
-          email{' '}
+          The API failed to retrieve the link to Globus. Please report this issue to{' '}
           <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
             help@hubmapconsortium.org
           </EmailIconLink>{' '}
