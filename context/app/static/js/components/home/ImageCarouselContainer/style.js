@@ -5,6 +5,12 @@ const Flex = styled.div`
   flex-direction: column-reverse;
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     flex-direction: row;
+    & > .slider-container {
+      max-width: 66%;
+      & > .slider-frame > .slider-list > .slide > img {
+        width: 100%;
+      }
+    }
   }
 `;
 
@@ -16,8 +22,7 @@ const CallToActionWrapper = styled.div`
   align-items: center;
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     box-sizing: border-box;
-    width: ${(props) => callToActionMdOrLargerWidth - props.theme.spacing(1)}px;
-    flex-shrink: 0;
+    min-width: 25%;
     justify-content: space-between;
     align-items: flex-start;
   }

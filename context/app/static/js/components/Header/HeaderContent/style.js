@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import SvgIcon from '@mui/material/SvgIcon';
 
 const Spacer = styled.div`
   flex-grow: 1;
@@ -17,7 +17,7 @@ const FlexNoWrap = styled.div`
 `;
 
 const StyledDivider = styled(Divider)`
-  margin: ${(props) => props.theme.spacing(0.5)}px 0px;
+  margin: ${(props) => props.theme.spacing(0.5)} 0px;
 `;
 
 const StyledSvgIcon = styled(SvgIcon)`

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import Typography from '@mui/material/Typography';
+import SvgIcon from '@mui/material/SvgIcon';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 
@@ -15,7 +15,7 @@ const JsonButton = styled(WhiteBackgroundIconButton)`
 `;
 
 const StyledTypography = styled(Typography)`
-  margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(0.5)};
 `;
 
 const StyledSvgIcon = styled(SvgIcon)`

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import PageTitle from 'js/shared-styles/pages/PageTitle';

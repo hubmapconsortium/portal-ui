@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
 
 import Histogram from 'js/shared-styles/charts/Histogram';
 import { capitalizeString } from 'js/helpers/functions';

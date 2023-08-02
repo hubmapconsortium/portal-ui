@@ -1,13 +1,13 @@
 import React, { useReducer, useRef } from 'react';
 
-import ShareIcon from '@material-ui/icons/Share';
-import Popper from '@material-ui/core/Popper';
-import Paper from '@material-ui/core/Paper';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Link from '@material-ui/core/Link';
+import ShareIcon from '@mui/icons-material/Share';
+import Popper from '@mui/material/Popper';
+import Paper from '@mui/material/Paper';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Link from '@mui/material/Link';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';

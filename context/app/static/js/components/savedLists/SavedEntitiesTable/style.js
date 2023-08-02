@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 
 const buttonSpacing = css`
-  margin-left: ${(props) => props.theme.spacing(1)}px;
+  margin-left: ${(props) => props.theme.spacing(1)};
 `;
 
 const Flex = styled.div`

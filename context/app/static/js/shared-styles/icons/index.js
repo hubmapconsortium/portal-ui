@@ -1,24 +1,24 @@
 import styled, { css } from 'styled-components';
 // NOTE: We are using the rounded icon variants consistently.
-import BubbleChartIcon from '@material-ui/icons/BubbleChartRounded';
-import PersonIcon from '@material-ui/icons/PersonRounded';
-import TableChartIcon from '@material-ui/icons/TableChartRounded';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalanceRounded';
-import LaunchRoundedIcon from '@material-ui/icons/LaunchRounded';
-import InfoRoundedIcon from '@material-ui/icons/InfoRounded';
-import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
-import InsertDriveFileRoundedIcon from '@material-ui/icons/InsertDriveFileRounded';
-import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
-import MoreHorizRoundedIcon from '@material-ui/icons/MoreHorizRounded';
-import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
-import EditRoundedIcon from '@material-ui/icons/EditRounded';
-import CollectionsBookmarkRoundedIcon from '@material-ui/icons/CollectionsBookmarkRounded';
-import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
-import ListAltRoundedIcon from '@material-ui/icons/ListAltRounded';
-import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
-import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
-import AddRoundedIcon from '@material-ui/icons/AddRounded';
-import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import BubbleChartIcon from '@mui/icons-material/BubbleChartRounded';
+import PersonIcon from '@mui/icons-material/PersonRounded';
+import TableChartIcon from '@mui/icons-material/TableChartRounded';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalanceRounded';
+import LaunchRoundedIcon from '@mui/icons-material/LaunchRounded';
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import CollectionsBookmarkRoundedIcon from '@mui/icons-material/CollectionsBookmarkRounded';
+import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import ListAltRoundedIcon from '@mui/icons-material/ListAltRounded';
+import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
+import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 
 const fontSizeStyle = css`
   font-size: ${(props) => props.$fontSize || '1rem'};

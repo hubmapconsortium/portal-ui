@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import SvgIcon from '@mui/material/SvgIcon';
 
-import { Tab, TabPanel, Tabs } from 'js/shared-styles/tabs';
+import { TabPanel, Tabs } from 'js/shared-styles/tabs';
 import { Alert } from 'js/shared-styles/alerts';
 
 const StyledTabPanel = styled(TabPanel)`
@@ -25,14 +25,4 @@ const StyledSvgIcon = styled(SvgIcon)`
   margin-right: ${(props) => props.theme.spacing(1)}px;
 `;
 
-const StyledTab = styled(Tab)`
-  span {
-    display: contents;
-  }
-
-  &&& svg {
-    margin-bottom: 0;
-  }
-`;
-
-export { StyledTabPanel, StyledTabs, StyledAlert, StyledSvgIcon, StyledTab };
+export { StyledTabPanel, StyledTabs, StyledAlert, StyledSvgIcon };

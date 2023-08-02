@@ -1,5 +1,5 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { Flex, StyledExternalIcon, ImageWrapper } from './style';

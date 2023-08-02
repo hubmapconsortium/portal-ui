@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import MenuItem from '@material-ui/core/MenuItem';
-import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
+import MenuItem from '@mui/material/MenuItem';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 
 const iconSize = '1.25rem';
 
@@ -23,12 +23,12 @@ const FlexMenuItem = styled(MenuItem)`
 
 const CheckIcon = styled(CheckRoundedIcon)`
   font-size: ${iconSize};
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const StyledSpan = styled.span`
-  ${(props) => !props.isSelected && `padding-left: calc(${iconSize} + ${props.theme.spacing(1)}px)`};
-  padding-right: ${(props) => `calc(${iconSize} + ${props.theme.spacing(1)}px)`};
+  ${(props) => !props.isSelected && `padding-left: calc(${iconSize} + ${props.theme.spacing(1)})`};
+  padding-right: ${(props) => `calc(${iconSize} + ${props.theme.spacing(1)})`};
 `;
 
 export { FlexMenuItem, CheckIcon, StyledSpan };

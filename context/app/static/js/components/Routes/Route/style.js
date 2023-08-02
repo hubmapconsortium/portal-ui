@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 
 const StyledContainer = styled(Container)`
-  margin-top: ${(props) => props.theme.spacing(2)}px;
+  margin-top: ${(props) => props.theme.spacing(2)};
   background-color: ${(props) => props.theme.palette.background.default};
   display: flex;
   flex-grow: 1;

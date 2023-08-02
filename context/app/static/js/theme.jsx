@@ -1,4 +1,4 @@
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material/styles';
 
 const purple = '#444A65';
 const blue = '#2A6FB8';
@@ -59,6 +59,9 @@ const theme = createTheme({
     },
     transparentGray: {
       main: 'rgba(144, 144, 144, 0.1)',
+    },
+    background: {
+      default: '#fafafa',
     },
     type: 'light',
   },
@@ -126,6 +129,16 @@ const theme = createTheme({
     dropdown: 50,
     visualization: 3,
     fileBrowserHeader: 1,
+  },
+  breakpoints: {
+    values: {
+      // keeping defaults from v4
+      xs: 0,
+      sm: 600,
+      md: 960, // v5 default = 900
+      lg: 1280, // v5 default = 1200
+      xl: 1920, // v5 default = 1536
+    },
   },
 });
 

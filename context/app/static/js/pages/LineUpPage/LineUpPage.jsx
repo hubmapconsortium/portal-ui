@@ -6,7 +6,7 @@ import LineUp, {
   LineUpDateColumnDesc,
 } from 'lineupjsx';
 import 'lineupjsx/build/LineUpJSx.css';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import metadataFieldTypes from 'metadata-field-types';

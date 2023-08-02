@@ -1,5 +1,5 @@
 import React from 'react';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 
 import FacetGroupAccordion from 'js/components/entity-search/facets/FacetGroupAccordion';
 import Facet from 'js/components/entity-search/facets/Facet';

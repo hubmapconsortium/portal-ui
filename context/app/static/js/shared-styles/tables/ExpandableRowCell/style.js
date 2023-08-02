@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import TableCell from '@material-ui/core/TableCell';
+import TableCell from '@mui/material/TableCell';
 
 const StyledTableCell = styled(TableCell)`
   ${(props) => props.$removeBorder && `border-bottom: none`};

@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import MenuList from '@material-ui/core/MenuList';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDownRounded';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUpRounded';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import MenuList from '@mui/material/MenuList';
 
 import { StyledPopper, StyledPaper } from './style';
 

@@ -60,9 +60,8 @@ test('has correct left margin', () => {
     </FilesProviders>,
   );
 
-  // depth * indentation multiplier * 8px spacing unit + width of dir arrow icon
+  // depth * indentation multiplier * 8px spacing unit + 24px arrow icon offset
   const expectedMargin = depth * 1.5 * 8 + 24;
-
   expect(screen.getByTestId('file-indented-div')).toHaveStyle(`margin-left: ${expectedMargin}px`);
 });
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionDetails from '@mui/material/AccordionDetails';
 
 const StyledAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;

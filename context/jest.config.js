@@ -1,7 +1,8 @@
 module.exports = {
   restoreMocks: true,
-  testPathIgnorePatterns: ['jest.config.js', '/node_modules/', '/cypress/'],
+  testPathIgnorePatterns: ['jest.config.js', '/cypress/'],
   setupFilesAfterEnv: ['<rootDir>/test-utils/setupTests.js'],
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/test-utils/__mocks__/file.js',
@@ -11,7 +12,9 @@ module.exports = {
     'metadata-field-descriptions$': '<rootDir>/ingest-validation-tools/docs/field-descriptions.yaml',
     'metadata-field-types$': '<rootDir>/ingest-validation-tools/docs/field-types.yaml',
     'metadata-field-entities$': '<rootDir>/ingest-validation-tools/docs/field-entities.yaml',
+    '@mui/styled-engine': '@mui/styled-engine-sc',
   },
+  transformIgnorePatterns: ['node_modules/(?!(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel)/)'],
   transform: {
     '^.+\\.(t|j)sx?$': [
       '@swc/jest',

@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/provider';

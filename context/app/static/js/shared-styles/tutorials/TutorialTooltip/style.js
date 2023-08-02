@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 const StyledPaper = styled(Paper)`
   max-width: 450px;
@@ -12,7 +12,7 @@ const StyledPaper = styled(Paper)`
 const Flex = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1)};
 `;
 
 const FlexEnd = styled.div`

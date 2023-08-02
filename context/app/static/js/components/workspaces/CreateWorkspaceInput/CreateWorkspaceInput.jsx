@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 import { useController } from 'react-hook-form';
 
 function CreateWorkspaceInput({ control, name, errors }) {

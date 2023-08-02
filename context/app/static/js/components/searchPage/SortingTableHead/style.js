@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import ArrowUpward from '@material-ui/icons/ArrowUpwardRounded';
-import ArrowDownward from '@material-ui/icons/ArrowDownwardRounded';
+import ArrowUpward from '@mui/icons-material/ArrowUpwardRounded';
+import ArrowDownward from '@mui/icons-material/ArrowDownwardRounded';
 
 import { HeaderCell } from 'js/shared-styles/tables';
 
