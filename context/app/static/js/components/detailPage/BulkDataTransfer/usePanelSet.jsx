@@ -193,18 +193,36 @@ const DATASET_NOT_FINALIZED = {
 };
 
 const ENTITY_API_ERROR = {
-  error: (
-    <div>
-      The API failed to retrieve the link to Globus. Please report this issue to&nbsp;
-      <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-        help@hubmapconsortium.org
-      </EmailIconLink>
-      &nbsp;with the dataset ID and information about the files you are trying to access.
-    </div>
-  ),
+  panels: [
+    {
+      title: 'HuBMAP Globus Access',
+      tooltip: globusText.tooltip,
+      status: 'success',
+      children: (
+        <>
+          Files are available through the Globus Research Data Management System. If you require additional help, email{' '}
+          <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+            help@hubmapconsortium.org
+          </EmailIconLink>{' '}
+          with the dataset ID and information about the files you are trying to access.
+        </>
+      ),
+    },
+  ],
+  links: [<GlobusLink />],
+
+  // error: (
+  //   <div>
+  //     The API failed to retrieve the link to Globus. Please report this issue to&nbsp;
+  //     <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+  //       help@hubmapconsortium.org
+  //     </EmailIconLink>
+  //     &nbsp;with the dataset ID and information about the files you are trying to access.
+  //   </div>
+  // ),
 };
 
-function getGlobusPanel({ status, isLoading, panel }) {
+function getGlobusPanel({ status, panel, isLoading }) {
   if (isLoading) {
     return panel;
   }
@@ -231,7 +249,7 @@ export const usePanelSet = () => {
   const isNotFinalized = unfinalizedStatuses.includes(status);
 
   if (accessType === 'Public') {
-    return getGlobusPanel({ status: globusURLStatus, panel: PUBLIC_DATA, isLoading: globusURLIsLoading });
+    return getGlobusPanel({ status: 400, panel: PUBLIC_DATA, isLoading: globusURLIsLoading });
   }
 
   if (isAuthenticated) {
