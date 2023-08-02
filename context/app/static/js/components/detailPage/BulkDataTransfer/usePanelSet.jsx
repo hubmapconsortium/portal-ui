@@ -210,16 +210,6 @@ const ENTITY_API_ERROR = {
     },
   ],
   links: [],
-
-  // error: (
-  //   <div>
-  //     The API failed to retrieve the link to Globus. Please report this issue to&nbsp;
-  //     <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-  //       help@hubmapconsortium.org
-  //     </EmailIconLink>
-  //     &nbsp;with the dataset ID and information about the files you are trying to access.
-  //   </div>
-  // ),
 };
 
 function getGlobusPanel({ status, panel, isLoading }) {
