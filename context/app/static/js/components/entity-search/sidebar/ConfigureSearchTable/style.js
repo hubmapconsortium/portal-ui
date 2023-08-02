@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import TableContainer from '@material-ui/core/TableContainer';
+import TableContainer from '@mui/material/TableContainer';
 
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 

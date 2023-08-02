@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Typography from '@material-ui/core/Typography';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
 
 import { StyledAccordionSummary } from 'js/components/searchPage/filters/style';
 
@@ -11,7 +11,7 @@ const InnerAccordionDetails = styled(AccordionDetails)`
 
 const InnerAccordionSummary = styled(StyledAccordionSummary)`
   justify-content: left;
-  padding: ${(props) => `0px ${props.theme.spacing(2)}px`};
+  padding: ${(props) => `0px ${props.theme.spacing(2)}`};
   & > * {
     flex-grow: unset;
     padding: 0;

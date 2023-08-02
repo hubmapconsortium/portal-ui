@@ -1,6 +1,6 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 
 import { useStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
@@ -34,7 +34,7 @@ function Prompt({ headerText, descriptionText, buttonText, buttonIsDisabled }) {
           </StyledButton>
         </CenteredDiv>
         <div>
-          <IconButton aria-label="close" onClick={closePrompt}>
+          <IconButton aria-label="close" onClick={closePrompt} size="large">
             <StyledCloseIcon />
           </IconButton>
         </div>

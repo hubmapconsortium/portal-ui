@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import HuBMAPDatasetsChart from 'js/components/home/HuBMAPDatasetsChart';
 import ImageCarouselContainer from 'js/components/home/ImageCarouselContainer';

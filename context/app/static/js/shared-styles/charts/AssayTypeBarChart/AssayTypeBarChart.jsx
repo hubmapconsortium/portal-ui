@@ -5,7 +5,7 @@ import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import { GridColumns } from '@visx/grid';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import { useChartTooltip, useLongestLabelSize } from 'js/shared-styles/charts/hooks';
 import { getChartDimensions } from 'js/shared-styles/charts/utils';

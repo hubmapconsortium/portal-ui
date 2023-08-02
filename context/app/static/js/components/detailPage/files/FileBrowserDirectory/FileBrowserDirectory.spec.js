@@ -47,7 +47,7 @@ test('has correct left padding', () => {
     </FileBrowserDirectory>,
   );
 
-  // depth * indentation multiplier * 8px spacing unit + base padding
+  // depth * indentation multiplier * 8px spacing unit + 40px base
   const expectedPadding = depth * 1.5 * 8 + 40;
 
   expect(screen.getByText('fakedir')).toHaveStyle(`padding-left: ${expectedPadding}px`);

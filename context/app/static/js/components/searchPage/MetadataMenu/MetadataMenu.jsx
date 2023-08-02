@@ -1,6 +1,6 @@
 import React from 'react';
 import { trackEvent } from 'js/helpers/trackers';
-import MenuItem from '@material-ui/core/MenuItem';
+import MenuItem from '@mui/material/MenuItem';
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';

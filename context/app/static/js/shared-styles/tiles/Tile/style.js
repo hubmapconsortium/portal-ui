@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
 function invertSectionColors(backgroundColor, color, $invertColors) {
   return css`
@@ -24,7 +24,7 @@ function invertSectionColors(backgroundColor, color, $invertColors) {
 }
 
 const StyledPaper = styled(Paper)`
-  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1)};
   box-shadow: ${(props) => props.theme.shadows[1]};
   width: ${(props) => props.$tileWidth}px;
 
@@ -47,7 +47,7 @@ const StyledPaper = styled(Paper)`
 
 const Flex = styled.div`
   display: flex;
-  padding: ${(props) => props.theme.spacing(1)}px;
+  padding: ${(props) => props.theme.spacing(1)};
   box-sizing: content-box;
 `;
 
@@ -64,7 +64,7 @@ const TruncatedTypography = styled(Typography)`
 
 const TileFooter = styled.div`
   display: flex;
-  padding: 0 ${(props) => props.theme.spacing(1)}px;
+  padding: 0 ${(props) => props.theme.spacing(1)};
   color: ${(props) => props.theme.palette.white.main};
   ${(props) =>
     invertSectionColors(props.theme.palette.primary.main, props.theme.palette.white.main, props.$invertColors)}
@@ -73,7 +73,7 @@ const TileFooter = styled.div`
 const StyledDivider = styled(Divider)`
   background-color: ${(props) =>
     props.$invertColors ? props.theme.palette.primary.main : props.theme.palette.white.main};
-  margin: 0px ${(props) => props.theme.spacing(0.5)}px;
+  margin: 0px ${(props) => props.theme.spacing(0.5)};
 `;
 
 export { StyledPaper, invertSectionColors, Flex, FlexGrow, TruncatedTypography, TileFooter, StyledDivider };

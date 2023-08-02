@@ -4,7 +4,7 @@ import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/Entity
 import Section, { baseOffset } from 'js/shared-styles/sections/Section';
 
 const DetailPageAlert = styled(Alert)`
-  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
 const DetailPageSection = styled(Section)`

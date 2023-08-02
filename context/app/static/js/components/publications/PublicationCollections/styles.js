@@ -7,7 +7,7 @@ const StyledSectionPaper = styled(SectionPaper)`
   ${(props) =>
     !props.$isCollectionPublication &&
     css`
-      margin-top: ${props.theme.spacing(3)}px;
+      margin-top: ${props.theme.spacing(3)};
     `}
   ${panelBorderStyles}
 `;

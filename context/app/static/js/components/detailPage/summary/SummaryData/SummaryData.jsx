@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
 import 'intersection-observer';
 
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { FileIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { FileIcon } from 'js/shared-styles/icons';
 import VersionSelect from 'js/components/detailPage/VersionSelect';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
-import { FlexEnd, JsonButton, StyledTypography } from './style';
+import { FlexEnd, JsonButton, StyledTypography, StyledSvgIcon, SummaryDataHeader } from './style';
 
 const datasetEntityTypes = ['Dataset', 'Support', 'Publication', 'Preprint'];
 const publicationEntityTypes = ['Publication', 'Preprint'];
@@ -19,6 +20,7 @@ const entitiesWithStatus = datasetEntityTypes.concat(...publicationEntityTypes);
 
 function SummaryData({
   entity_type,
+  entityTypeDisplay,
   uuid,
   status,
   mapped_data_access_level,
@@ -32,7 +34,12 @@ function SummaryData({
 
   return (
     <>
-      <SummaryTitle data-testid="entity-type">{entity_type}</SummaryTitle>
+      <SummaryTitle data-testid="entity-type">
+        <SummaryDataHeader>
+          <StyledSvgIcon component={entityIconMap[entity_type]} color="primary" />
+          {entityTypeDisplay ?? entity_type}
+        </SummaryDataHeader>
+      </SummaryTitle>
       <SpacedSectionButtonRow
         leftText={
           <LeftTextContainer>

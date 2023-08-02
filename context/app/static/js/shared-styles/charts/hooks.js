@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { localPoint } from '@visx/event';
 import { getStringWidth } from '@visx/text';
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
 
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
 

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFileRounded';
-import InfoIcon from '@material-ui/icons/InfoRounded';
-import TableRow from '@material-ui/core/TableRow';
-import Chip from '@material-ui/core/Chip';
+import Typography from '@mui/material/Typography';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFileRounded';
+import InfoIcon from '@mui/icons-material/InfoRounded';
+import TableRow from '@mui/material/TableRow';
+import Chip from '@mui/material/Chip';
 
 const StyledRow = styled(TableRow)`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};
@@ -15,22 +15,22 @@ const StyledRow = styled(TableRow)`
 // 24px the width of the directory arrow icon and is used to keep the file icon aligned with the directory icon
 const IndentedDiv = styled.div`
   padding: 10px 40px;
-  margin-left: ${(props) => props.theme.spacing(props.$depth * 1.5) + 24}px;
+  margin-left: ${(props) => parseInt(props.theme.spacing(props.$depth * 1.5), 10) + 24}px;
   display: flex;
   align-items: center;
 `;
 
 const StyledFileIcon = styled(InsertDriveFileIcon)`
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)};
   font-size: ${(props) => props.theme.typography.body1.fontSize}px;
 `;
 
 const FileSize = styled(Typography)`
-  margin-left: ${(props) => props.theme.spacing(1)}px;
+  margin-left: ${(props) => props.theme.spacing(1)};
 `;
 
 const StyledInfoIcon = styled(InfoIcon)`
-  margin-left: ${(props) => props.theme.spacing(1)}px;
+  margin-left: ${(props) => props.theme.spacing(1)};
   font-size: 1rem;
 `;
 

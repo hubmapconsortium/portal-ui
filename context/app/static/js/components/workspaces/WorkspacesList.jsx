@@ -1,6 +1,6 @@
 import React from 'react';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 import Description from 'js/shared-styles/sections/Description';
 import { DeleteIcon } from 'js/shared-styles/icons';

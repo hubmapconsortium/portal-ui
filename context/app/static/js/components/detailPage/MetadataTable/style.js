@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import GetAppIcon from '@material-ui/icons/GetAppRounded';
+import GetAppIcon from '@mui/icons-material/GetAppRounded';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -14,7 +14,7 @@ const Flex = styled.div`
 `;
 
 const StyledWhiteBackgroundIconButton = styled(WhiteBackgroundIconButton)`
-  margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(0.5)};
 `;
 
 const StyledSectionHeader = styled(SectionHeader)`
