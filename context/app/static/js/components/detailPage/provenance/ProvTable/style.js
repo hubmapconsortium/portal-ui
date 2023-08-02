@@ -21,13 +21,13 @@ const TableColumn = styled.div`
 
 const StyledSvgIcon = styled(SvgIcon)`
   font-size: 1.25rem;
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1.5)};
 `;
 
 const ProvTableEntityHeader = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1)};
 `;
 
 export { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader };

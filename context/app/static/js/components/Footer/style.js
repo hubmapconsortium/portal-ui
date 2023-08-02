@@ -20,7 +20,7 @@ const Flex = styled.div`
 const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
-  margin-right: ${(props) => (props.$mr ? props.theme.spacing(10) : '0')}px;
+  margin-right: ${(props) => (props.$mr ? props.theme.spacing(10) : '0')};
 `;
 
 const HubmapLogo = styled(Logo)`
