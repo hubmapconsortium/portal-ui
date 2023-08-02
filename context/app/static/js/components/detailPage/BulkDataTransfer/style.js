@@ -9,46 +9,46 @@ import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 
 const StyledContainer = styled.div`
   > div {
-    margin-bottom: ${(props) => props.theme.spacing(1.25)}px;
+    margin-bottom: ${(props) => props.theme.spacing(1.25)};
   }
 `;
 
 const Header = styled(Typography)`
   ${({ theme: { spacing } }) => css`
-    margin: 0px, ${spacing(1)}px, ${spacing(1)}px, 0px;
+    margin: ${spacing(0, 1, 1, 0)};
     display: flex;
     align-items: center;
 
     svg {
-      margin-left: ${spacing(0.5)}px;
+      margin-left: ${spacing(0.5)};
     }
   `}
 `;
 
 const ContentText = styled(Typography)`
-  padding: ${(props) => props.theme.spacing(1.25)}px 0;
+  padding: ${(props) => props.theme.spacing(1.25)} 0;
 `;
 
 const LoginButton = styled(Button)`
   ${({ theme: { spacing } }) => css`
-    border-radius: ${spacing(0.5)}px;
+    border-radius: ${spacing(0.5)};
   `}
 `;
 
 const LinkContainer = styled(Box)`
   display: flex;
   align-items: center;
-  padding: ${(props) => props.theme.spacing(2)}px;
+  padding: ${(props) => props.theme.spacing(2)};
 `;
 
 const StyledLink = styled(Typography)`
   display: flex;
   align-items: center;
   white-space: nowrap;
-  margin-right: ${(props) => props.theme.spacing(1.25)}px;
+  margin-right: ${(props) => props.theme.spacing(1.25)};
 
   svg {
-    margin-right: ${(props) => props.theme.spacing(0.5)}px;
+    margin-right: ${(props) => props.theme.spacing(0.5)};
   }
 `;
 
@@ -69,11 +69,11 @@ const ObliqueSpan = styled.span`
 `;
 
 const StyledHeader = styled(Typography)`
-  margin: ${(props) => props.theme.spacing(2)}px 0px;
+  margin: ${(props) => props.theme.spacing(2)} 0px;
 `;
 
 const StyledDiv = styled.div`
-  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
 const StyledWarningIcon = styled(WarningRoundedIcon)`
@@ -82,7 +82,7 @@ const StyledWarningIcon = styled(WarningRoundedIcon)`
 
 const WarningIconContainer = styled.div`
   float: left;
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const NoAccessContainer = styled.div`
