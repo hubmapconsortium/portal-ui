@@ -200,7 +200,8 @@ const ENTITY_API_ERROR = {
       status: 'success',
       children: (
         <>
-          Files are available through the Globus Research Data Management System. If you require additional help, email{' '}
+          Fffiles are available through the Globus Research Data Management System. If you require additional help,
+          email{' '}
           <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
             help@hubmapconsortium.org
           </EmailIconLink>{' '}
@@ -209,7 +210,7 @@ const ENTITY_API_ERROR = {
       ),
     },
   ],
-  links: [<GlobusLink />],
+  links: [],
 
   // error: (
   //   <div>
