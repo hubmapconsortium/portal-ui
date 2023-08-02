@@ -180,36 +180,48 @@ const NON_CONSORTIUM_MEMBERS_NO_DBGAP = {
 };
 
 const DATASET_NOT_FINALIZED = {
-  error: (
-    <div>
-      These data are still being prepared, processed, or curated and will only be available to members of the team who
-      submitted the data. For additional help, email
-      <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-        help@hubmapconsortium.org
-      </EmailIconLink>
-      .
-    </div>
-  ),
+  error: {
+    status: 'warning',
+    childern: (
+      <div>
+        These data are still being prepared, processed, or curated and will only be available to members of the team who
+        submitted the data. For additional help, email
+        <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+          help@hubmapconsortium.org
+        </EmailIconLink>
+        .
+      </div>
+    ),
+  },
 };
 
 const ENTITY_API_ERROR = {
-  panels: [
-    {
-      title: 'HuBMAP Globus Access',
-      tooltip: globusText.tooltip,
-      status: 'exclamation',
-      children: (
-        <>
-          The API failed to retrieve the link to Globus. Please report this issue to{' '}
-          <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-            help@hubmapconsortium.org
-          </EmailIconLink>{' '}
-          with the dataset ID and information about the files you are trying to access.
-        </>
-      ),
-    },
-  ],
-  links: [],
+  error: (
+    <div>
+      The API failed to retrieve the link to Globus. Please report this issue to&nbsp;
+      <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+        help@hubmapconsortium.org
+      </EmailIconLink>
+      &nbsp;with the dataset ID and information about the files you are trying to access.
+    </div>
+  ),
+  // panels: [
+  //   {
+  //     title: 'HuBMAP Globus Access',
+  //     tooltip: globusText.tooltip,
+  //     status: 'exclamation',
+  //     children: (
+  //       <>
+  //         The API failed to retrieve the link to Globus. Please report this issue to{' '}
+  //         <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+  //           help@hubmapconsortium.org
+  //         </EmailIconLink>{' '}
+  //         with the dataset ID and information about the files you are trying to access.
+  //       </>
+  //     ),
+  //   },
+  // ],
+  // links: [],
 };
 
 function getGlobusPanel({ status, panel, isLoading }) {
@@ -239,7 +251,7 @@ export const usePanelSet = () => {
   const isNotFinalized = unfinalizedStatuses.includes(status);
 
   if (accessType === 'Public') {
-    return getGlobusPanel({ status: globusURLStatus, panel: PUBLIC_DATA, isLoading: globusURLIsLoading });
+    return getGlobusPanel({ status: 500, panel: PUBLIC_DATA, isLoading: globusURLIsLoading });
   }
 
   if (isAuthenticated) {

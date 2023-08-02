@@ -80,7 +80,7 @@ const StyledWarningIcon = styled(WarningRoundedIcon)`
   color: ${(props) => props.theme.palette.warning.main};
 `;
 
-const WarningIconContainer = styled.div`
+const IconContainer = styled.div`
   float: left;
   margin-right: ${(props) => props.theme.spacing(1)};
 `;
@@ -104,6 +104,6 @@ export {
   StyledHeader,
   StyledDiv,
   StyledWarningIcon,
-  WarningIconContainer,
+  IconContainer,
   NoAccessContainer,
 };

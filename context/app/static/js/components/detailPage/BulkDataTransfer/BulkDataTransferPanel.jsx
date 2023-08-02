@@ -3,12 +3,11 @@ import InfoIcon from '@mui/icons-material/Info';
 
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { Header, ContentText, GreenCheckCircleIcon, StyledBlockIcon, StyledExclamationIcon } from './style';
+import { Header, ContentText, GreenCheckCircleIcon, StyledBlockIcon } from './style';
 
 const statusIcons = {
   success: <GreenCheckCircleIcon fontSize="small" />,
   error: <StyledBlockIcon color="error" fontSize="small" />,
-  exclamation: <StyledExclamationIcon color="error" fontSize="small" />,
 };
 
 function BulkDataTransferPanel({ title, status, tooltip, children, addOns }) {
