@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import BlockIcon from '@material-ui/icons/Block';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import ErrorIcon from '@material-ui/icons/Error';
 import Box from '@material-ui/core/Box';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
@@ -60,8 +60,8 @@ const StyledBlockIcon = styled(BlockIcon)`
   color: ${(props) => props.theme.palette.warning.main};
 `;
 
-const StyledExclamationIcon = styled(ErrorOutlineIcon)`
-  color: ${(props) => props.theme.palette.warning.main};
+const StyledExclamationIcon = styled(ErrorIcon)`
+  color: ${(props) => props.theme.palette.error.main};
 `;
 
 const ObliqueSpan = styled.span`

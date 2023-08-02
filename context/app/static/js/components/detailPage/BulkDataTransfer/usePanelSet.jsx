@@ -197,7 +197,7 @@ const ENTITY_API_ERROR = {
     {
       title: 'HuBMAP Globus Access',
       tooltip: globusText.tooltip,
-      status: 'success',
+      status: 'exclamation',
       children: (
         <>
           The API failed to retrieve the link to Globus. Please report this issue to{' '}
