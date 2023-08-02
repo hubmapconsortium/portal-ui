@@ -1,5 +1,5 @@
 import React from 'react';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
 
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
