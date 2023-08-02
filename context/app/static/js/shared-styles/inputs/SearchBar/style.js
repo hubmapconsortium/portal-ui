@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 const StyledTextField = styled(TextField)`
   & > :first-child {

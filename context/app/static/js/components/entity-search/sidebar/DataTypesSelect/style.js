@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import Paper from '@material-ui/core/Paper';
-import FormLabel from '@material-ui/core/FormLabel';
+import Paper from '@mui/material/Paper';
+import FormLabel from '@mui/material/FormLabel';
 
 import { buildScrollShadows } from 'js/shared-styles/scrollShadows';
 
@@ -9,7 +9,7 @@ const StyledPaper = styled(Paper)`
   padding: 16px 16px 16px 0px;
   overflow-y: auto;
   height: 100%;
-  margin-right: ${(props) => props.theme.spacing(1.5)}px;
+  margin-right: ${(props) => props.theme.spacing(1.5)};
   ${buildScrollShadows()};
 `;
 
@@ -18,8 +18,8 @@ const StyledFormLabel = styled(FormLabel)`
     font-weight: ${typography.subtitle1.fontWeight};
     font-size: ${typography.subtitle1.fontSize};
     color: ${palette.text.primary};
-    margin-left: ${spacing(2)}px;
-    margin-bottom: ${spacing(0.5)}px;
+    margin-left: ${spacing(2)};
+    margin-bottom: ${spacing(0.5)};
   `}
 `;
 

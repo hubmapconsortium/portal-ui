@@ -1,5 +1,5 @@
 import React from 'react';
-import MuiPagination from '@material-ui/lab/Pagination';
+import MuiPagination from '@mui/material/Pagination';
 import { useSearchkit } from '@searchkit/client';
 
 import ResultsFound from 'js/components/entity-search/results/ResultsFound/';

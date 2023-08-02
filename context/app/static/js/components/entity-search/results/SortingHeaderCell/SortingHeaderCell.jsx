@@ -1,6 +1,6 @@
 import React from 'react';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import TableCell from '@material-ui/core/TableCell';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import TableCell from '@mui/material/TableCell';
 
 import { useSortField } from './hooks';
 

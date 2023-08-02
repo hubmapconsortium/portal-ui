@@ -10,7 +10,7 @@ const FlexGrow = styled.div`
 `;
 
 const StyledSearchBar = styled(SearchBar)`
-  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1)};
 `;
 
 export { FlexGrow, StyledSearchBar };

@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';

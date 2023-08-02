@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { useFlaskDataContext } from 'js/components/Contexts';

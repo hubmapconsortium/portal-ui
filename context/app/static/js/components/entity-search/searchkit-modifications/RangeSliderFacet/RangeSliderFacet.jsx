@@ -6,7 +6,7 @@ import { useSearchkit } from '@searchkit/client';
 import { useDebouncedCallback } from 'use-debounce';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import '@elastic/eui/dist/eui_theme_light.css';
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
 
 import { Flex, SliderLabel } from './style';
 

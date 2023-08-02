@@ -11,6 +11,7 @@ const alias = {
   'shared-styles': resolve(__dirname, '../app/static/js/shared-styles/'),
   package: resolve(__dirname, '../package.json'),
   'txml/txml': 'txml/dist/txml',
+  '@mui/styled-engine': '@mui/styled-engine-sc',
 };
 
 exports.alias = alias;

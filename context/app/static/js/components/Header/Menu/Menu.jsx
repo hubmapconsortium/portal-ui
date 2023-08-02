@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/MenuRounded';
-import CloseIcon from '@material-ui/icons/CloseRounded';
-import MenuList from '@material-ui/core/MenuList';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/MenuRounded';
+import CloseIcon from '@mui/icons-material/CloseRounded';
+import MenuList from '@mui/material/MenuList';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDownRounded';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUpRounded';
 
 import { WidePopper, WidePaper, DropdownMenuItem } from './style';
 import DropdownLink from '../DropdownLink';
@@ -33,7 +33,7 @@ function Menu({ anchorRef }) {
 
   return (
     <>
-      <IconButton color="inherit" aria-describedby="main-menu" aria-haspopup="true" onClick={toggle}>
+      <IconButton color="inherit" aria-describedby="main-menu" aria-haspopup="true" onClick={toggle} size="large">
         {isOpen ? <CloseIcon /> : <MenuIcon />}
       </IconButton>
       <WidePopper id="main-menu" open={isOpen} anchorEl={anchorRef.current}>

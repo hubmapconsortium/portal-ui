@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import ErrorBody from 'js/components/error/ErrorBody';
 import { Background, StyledPaper, StyledTypography } from './style';

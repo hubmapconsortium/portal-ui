@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import Alert from '@material-ui/lab/Alert';
-import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
-import InfoRoundedIcon from '@material-ui/icons/InfoRounded';
-import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
+import Alert from '@mui/material/Alert';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 
 function OutlinedAlert(props) {
   return (

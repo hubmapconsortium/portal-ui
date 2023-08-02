@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import CancelIcon from '@material-ui/icons/CancelRounded';
+import CancelIcon from '@mui/icons-material/CancelRounded';
 
 const StyledCancelIcon = styled(CancelIcon)`
   font-size: 1.2rem;

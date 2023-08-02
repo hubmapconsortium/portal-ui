@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
@@ -13,12 +13,12 @@ const totalHeightOffset = headerHeight + entityHeaderHeight;
 const vitessceFixedHeight = 600;
 
 const StyledHeader = styled.div`
-  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1)};
   display: flex;
 `;
 
 const StyledSectionHeader = styled(SectionHeader)`
-  margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(0.5)};
 `;
 
 const Flex = styled.div`
@@ -30,7 +30,7 @@ const ExpandButton = styled(WhiteBackgroundIconButton)`
 `;
 
 const SelectionButton = styled(Button)`
-  margin-left: ${(props) => props.theme.spacing(1)}px;
+  margin-left: ${(props) => props.theme.spacing(1)};
   color: white;
   border-radius: 3px;
 `;

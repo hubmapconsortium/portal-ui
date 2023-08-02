@@ -1,5 +1,5 @@
 import React from 'react';
-import FullscreenExitRoundedIcon from '@material-ui/icons/FullscreenExitRounded';
+import FullscreenExitRoundedIcon from '@mui/icons-material/FullscreenExitRounded';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';

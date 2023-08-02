@@ -1,14 +1,13 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
+import PageTitle from 'js/shared-styles/pages/PageTitle';
 import { PageWrapper, StyledDescription } from './style';
 
 function PanelListLandingPage({ title, subtitle, description, children }) {
   return (
     <PageWrapper>
-      <Typography variant="h2" component="h1" data-testid="landing-page-title">
-        {title}
-      </Typography>
+      <PageTitle data-testid="landing-page-title">{title}</PageTitle>
       <Typography variant="subtitle1" color="primary" data-testid="landing-page-subtitle">
         {subtitle}
       </Typography>

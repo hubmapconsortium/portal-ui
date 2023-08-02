@@ -87,6 +87,17 @@
             "presentation": {
                 "panel": "dedicated",
                 "reveal": "always"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "",
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Serving Flask app",
+                    "endsPattern": "Debugger is active"
+                }
             }
         },
         {
@@ -123,9 +134,19 @@
                 "panel": "dedicated",
                 "reveal": "always"
             },
+            "isBackground": true,
             "problemMatcher": [
-                "$eslint-stylish"
-            ]
+                {
+                    "pattern": {
+                        "regexp": "",
+                    },
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "portal-ui",
+                        "endsPattern": "compiled"
+                    }
+                }
+            ],
         },
         {
             "label": "React Dev Server (+ lint)",
@@ -147,6 +168,17 @@
             },
             "presentation": {
                 "panel": "dedicated",
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "",
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "storybook dev",
+                    "endsPattern": "react-webpack5 started"
+                }
             }
         },
         {
@@ -181,7 +213,9 @@
                 "React Dev Server (+ lint)"
             ],
             "dependsOrder": "parallel",
-            "problemMatcher": []
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
         },
         {
             "label": "dev-start (no storybook)",
@@ -190,7 +224,9 @@
                 "dev-start (no storybook, no install)"
             ],
             "dependsOrder": "sequence",
-            "problemMatcher": []
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
         },
         {
             "label": "dev-start (no storybook, no install, no lint)",
@@ -199,7 +235,9 @@
                 "React Dev Server"
             ],
             "dependsOrder": "parallel",
-            "problemMatcher": []
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
         },
         {
             "label": "Kill project ports",

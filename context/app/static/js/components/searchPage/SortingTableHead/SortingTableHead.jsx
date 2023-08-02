@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TableRow from '@material-ui/core/TableRow';
-import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableHead from '@mui/material/TableHead';
 import { trackEvent } from 'js/helpers/trackers';
 
 import { getSortPairs } from '../utils';

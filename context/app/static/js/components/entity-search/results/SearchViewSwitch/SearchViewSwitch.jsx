@@ -1,8 +1,8 @@
 import React from 'react';
-import ListRoundedIcon from '@material-ui/icons/ListRounded';
-import GridOnRoundedIcon from '@material-ui/icons/GridOnRounded';
-import BodyRoundedIcon from '@material-ui/icons/AccessibilityNewRounded';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ListRoundedIcon from '@mui/icons-material/ListRounded';
+import GridOnRoundedIcon from '@mui/icons-material/GridOnRounded';
+import BodyRoundedIcon from '@mui/icons-material/AccessibilityNewRounded';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';

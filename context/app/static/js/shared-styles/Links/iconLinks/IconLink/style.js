@@ -15,7 +15,7 @@ const FlexInternalLink = styled(InternalLink)`
 `;
 
 const StyledSpan = styled.span`
-  ${(props) => css`margin-${props.$iconMargin}: ${props.theme.spacing(0.5)}px`};
+  ${(props) => css`margin-${props.$iconMargin}: ${props.theme.spacing(0.5)}`};
 `;
 
 export { FlexOutboundLink, FlexInternalLink, StyledSpan };

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { BarStack } from '@visx/shape';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { Text } from '@visx/text';
 
 import { useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks';

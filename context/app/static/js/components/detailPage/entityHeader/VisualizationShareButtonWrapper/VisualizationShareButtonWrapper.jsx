@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import ShareIcon from '@material-ui/icons/Share';
+import ShareIcon from '@mui/icons-material/Share';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';

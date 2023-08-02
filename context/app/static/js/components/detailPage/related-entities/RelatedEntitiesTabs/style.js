@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import SvgIcon from '@mui/material/SvgIcon';
+
 import { TabPanel, Tabs } from 'js/shared-styles/tabs';
 import { Alert } from 'js/shared-styles/alerts';
 
@@ -18,4 +20,9 @@ const StyledAlert = styled(Alert)`
   flex-grow: 1;
 `;
 
-export { StyledTabPanel, StyledTabs, StyledAlert };
+const StyledSvgIcon = styled(SvgIcon)`
+  font-size: 1.25rem;
+  margin-right: ${(props) => props.theme.spacing(1)}px;
+`;
+
+export { StyledTabPanel, StyledTabs, StyledAlert, StyledSvgIcon };

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Document, Page } from 'react-pdf';
-import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 import PDFViewerControlButtons from '../PDFViewerControlButtons';
 import {

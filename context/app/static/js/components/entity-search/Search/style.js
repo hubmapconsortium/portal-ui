@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Flex = styled.div`
   display: flex;
-  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1)};
 `;
 
 const Grow = styled.div`

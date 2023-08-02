@@ -1,8 +1,8 @@
 import React from 'react';
-import ChevronLeftRoundedIcon from '@material-ui/icons/ChevronLeftRounded';
-import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
-import PanoramaFishEyeRoundedIcon from '@material-ui/icons/PanoramaFishEyeRounded';
-import Brightness1RoundedIcon from '@material-ui/icons/Brightness1Rounded';
+import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
+import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
+import PanoramaFishEyeRoundedIcon from '@mui/icons-material/PanoramaFishEyeRounded';
+import Brightness1RoundedIcon from '@mui/icons-material/Brightness1Rounded';
 import { FlexList, StyledIconButton } from './style';
 
 function SelectImageButton({ isSelectedImageIndex, onClick }) {

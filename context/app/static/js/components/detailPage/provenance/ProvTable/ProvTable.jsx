@@ -1,7 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
+import Typography from '@mui/material/Typography';
+
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { FlexContainer, FlexColumn, TableColumn, EntityColumnTitle } from './style';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 
@@ -27,7 +30,10 @@ function ProvTable() {
     <FlexContainer>
       {Object.entries(ancestorsAndSelfByType).map(([type, entities]) => (
         <TableColumn key={`provenance-list-${type.toLowerCase()}`}>
-          <EntityColumnTitle variant="h5">{type}s</EntityColumnTitle>
+          <ProvTableEntityHeader>
+            <StyledSvgIcon component={entityIconMap[type]} color="primary" />
+            <Typography variant="h5">{type}s</Typography>
+          </ProvTableEntityHeader>
           <FlexColumn>
             {entities.length > 0 &&
               entities
@@ -53,7 +59,5 @@ function ProvTable() {
     </FlexContainer>
   );
 }
-
-// ProvTable.propTypes = {}
 
 export default ProvTable;

@@ -95,10 +95,13 @@ function ProvGraph({ provData, entity_type, uuid }) {
   useEffect(() => {
     if (hasRendered) {
       const scrollEl = document.getElementsByClassName('scroll-container-wrapper')[0];
-      scrollEl.scroll({
-        top: Math.floor((scrollEl.scrollHeight - maxGraphHeight) / 2),
-        behavior: 'instant',
-      });
+      // Prevent crash when switching between ProvTabs quickly
+      if (scrollEl) {
+        scrollEl.scroll({
+          top: Math.floor((scrollEl.scrollHeight - maxGraphHeight) / 2),
+          behavior: 'instant',
+        });
+      }
     }
   }, [hasRendered]);
 

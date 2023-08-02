@@ -1,53 +1,53 @@
 import styled, { css } from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import BlockIcon from '@material-ui/icons/Block';
-import Box from '@material-ui/core/Box';
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import BlockIcon from '@mui/icons-material/Block';
+import Box from '@mui/material/Box';
+import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 
 const StyledContainer = styled.div`
   > div {
-    margin-bottom: ${(props) => props.theme.spacing(1.25)}px;
+    margin-bottom: ${(props) => props.theme.spacing(1.25)};
   }
 `;
 
 const Header = styled(Typography)`
   ${({ theme: { spacing } }) => css`
-    margin: 0px, ${spacing(1)}px, ${spacing(1)}px, 0px;
+    margin: 0px, ${spacing(1)}, ${spacing(1)}, 0px;
     display: flex;
     align-items: center;
 
     svg {
-      margin-left: ${spacing(0.5)}px;
+      margin-left: ${spacing(0.5)};
     }
   `}
 `;
 
 const ContentText = styled(Typography)`
-  padding: ${(props) => props.theme.spacing(1.25)}px 0;
+  padding: ${(props) => props.theme.spacing(1.25)} 0;
 `;
 
 const LoginButton = styled(Button)`
   ${({ theme: { spacing } }) => css`
-    border-radius: ${spacing(0.5)}px;
+    border-radius: ${spacing(0.5)};
   `}
 `;
 
 const LinkContainer = styled(Box)`
   display: flex;
   align-items: center;
-  padding: ${(props) => props.theme.spacing(2)}px;
+  padding: ${(props) => props.theme.spacing(2)};
 `;
 
 const StyledLink = styled(Typography)`
   display: flex;
   align-items: center;
   white-space: nowrap;
-  margin-right: ${(props) => props.theme.spacing(1.25)}px;
+  margin-right: ${(props) => props.theme.spacing(1.25)};
 
   svg {
-    margin-right: ${(props) => props.theme.spacing(0.5)}px;
+    margin-right: ${(props) => props.theme.spacing(0.5)};
   }
 `;
 
@@ -64,11 +64,11 @@ const ObliqueSpan = styled.span`
 `;
 
 const StyledHeader = styled(Typography)`
-  margin: ${(props) => props.theme.spacing(2)}px 0px;
+  margin: ${(props) => props.theme.spacing(2)} 0px;
 `;
 
 const StyledDiv = styled.div`
-  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
 const StyledWarningIcon = styled(WarningRoundedIcon)`
@@ -77,7 +77,7 @@ const StyledWarningIcon = styled(WarningRoundedIcon)`
 
 const WarningIconContainer = styled.div`
   float: left;
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const NoAccessContainer = styled.div`

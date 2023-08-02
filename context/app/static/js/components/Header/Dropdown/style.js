@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Popper from '@material-ui/core/Popper';
+import Popper from '@mui/material/Popper';
 
 const OffsetPopper = styled(Popper)`
   margin-top: 14px;

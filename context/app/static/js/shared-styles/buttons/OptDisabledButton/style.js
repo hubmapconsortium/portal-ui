@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 // Ensure font color update after being disabled
 const StyledButton = styled(Button)`

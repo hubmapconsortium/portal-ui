@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import IconButton from '@material-ui/core/IconButton';
-import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
-import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import IconButton from '@mui/material/IconButton';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const ModalContentWrapper = styled.div`
   position: absolute;
@@ -37,7 +37,7 @@ const Flex = styled.div`
 const ErrorIcon = styled(ErrorRoundedIcon)`
   color: ${(props) => props.theme.palette.error.main};
   font-size: 1.25rem;
-  margin-right: ${(props) => props.theme.spacing(0.5)}px;
+  margin-right: ${(props) => props.theme.spacing(0.5)};
 `;
 
 const StyledLinearProgress = styled(LinearProgress)`

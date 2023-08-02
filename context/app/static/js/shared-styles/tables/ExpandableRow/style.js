@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 
 import ExpandCollapseIcon from 'js/shared-styles/icons/ExpandCollapseIcon';
 
