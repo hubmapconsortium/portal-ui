@@ -1,11 +1,11 @@
 import styled, { css } from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import BlockIcon from '@material-ui/icons/Block';
-import ErrorIcon from '@material-ui/icons/Error';
-import Box from '@material-ui/core/Box';
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import BlockIcon from '@mui/icons-material/Block';
+import ErrorIcon from '@mui/icons-material/Error';
+import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 
 const StyledContainer = styled.div`
   > div {
