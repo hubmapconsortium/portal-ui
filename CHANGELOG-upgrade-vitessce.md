@@ -1,0 +1,1 @@
+- Upgrade to Vitessce v3.1.1.
