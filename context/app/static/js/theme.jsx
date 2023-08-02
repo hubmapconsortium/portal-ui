@@ -140,6 +140,18 @@ const theme = createTheme({
       xl: 1920, // v5 default = 1536
     },
   },
+  components: {
+    MuiCssBaseline: {
+      // use body2 style like v4 instead of body1
+      styleOverrides: {
+        body: {
+          fontSize: '0.8rem',
+          lineHeight: 1.43,
+          letterSpacing: '0.01071em',
+        },
+      },
+    },
+  },
 });
 
 export default theme;
