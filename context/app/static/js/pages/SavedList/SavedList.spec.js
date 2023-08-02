@@ -33,7 +33,15 @@ describe('SavedList component', () => {
     const listUUID = 'any-uuid';
 
     useSavedEntitiesStore.mockImplementation(() => ({
-      savedLists: { [listUUID]: { savedEntities: {} } }, // Setup the mock to return savedLists with a list
+      savedLists: {
+        [listUUID]: {
+          title: 'test title',
+          description: 'test description',
+          savedEntities: {},
+          dateSaved: Date.now(),
+          dateLastModified: Date.now(),
+        },
+      }, // Setup the mock to return savedLists with a list
       removeEntitiesFromList: jest.fn(),
     }));
 
