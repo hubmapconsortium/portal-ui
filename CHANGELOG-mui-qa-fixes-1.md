@@ -1,0 +1,1 @@
+- Restore MUI v4 font size.
