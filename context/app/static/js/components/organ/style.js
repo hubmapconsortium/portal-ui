@@ -7,13 +7,13 @@ const Flex = styled.div`
 `;
 
 const StyledInfoIcon = styled(InfoIcon)`
-  margin-left: ${(props) => props.theme.spacing(0.5)}px;
+  margin-left: ${(props) => props.theme.spacing(0.5)};
   font-size: 1.1rem;
-  margin-bottom: ${(props) => props.theme.spacing(1)}px; // To match SectionHeader
+  margin-bottom: ${(props) => props.theme.spacing(1)}; // To match SectionHeader
 `;
 
 const marginRightStyle = css`
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const StyledDatasetIcon = styled(DatasetIcon)`

@@ -1,5 +1,5 @@
-import Paper from '@material-ui/core/Paper';
-import FullscreenRoundedIcon from '@material-ui/icons/FullscreenRounded';
+import Paper from '@mui/material/Paper';
+import FullscreenRoundedIcon from '@mui/icons-material/FullscreenRounded';
 import Bowser from 'bowser';
 import React, { useEffect, useState } from 'react';
 import { Vitessce } from 'vitessce';

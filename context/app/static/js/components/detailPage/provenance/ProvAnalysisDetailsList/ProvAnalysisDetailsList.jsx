@@ -1,8 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
 
 import ProvAnalysisDetailsLink from '../ProvAnalysisDetailsLink';
 

@@ -27,9 +27,9 @@ const FlexLink = styled.a`
 `;
 
 const StyledDiv = styled.div`
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)};
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
-    margin-right: ${(props) => props.theme.spacing(2)}px;
+    margin-right: ${(props) => props.theme.spacing(2)};
   }
 `;
 

@@ -5,7 +5,7 @@ import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
 // 88px = header height + header margin
 const PageWrapper = styled.div`
-  margin-bottom: ${(props) => props.theme.spacing(5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(5)};
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     height: calc(100vh - ${headerHeight + 24}px);
     display: flex;
@@ -14,7 +14,7 @@ const PageWrapper = styled.div`
 `;
 
 const StyledDescription = styled(Description)`
-  margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
 export { PageWrapper, StyledDescription };

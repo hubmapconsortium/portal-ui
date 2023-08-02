@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 import { AddIcon } from 'js/shared-styles/icons';
 import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
 
 const CenteredFlex = styled.div`
   margin-top: 5px;

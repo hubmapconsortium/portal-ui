@@ -16,7 +16,7 @@ export function usePublicationVignetteConfs({ uuid, vignetteDirName, vignette }:
   const urls = vignette.figures?.map(
     ({ file }) => `${assetsEndpoint}/${uuid}/vignettes/${vignetteDirName}/${file}?token=${groupsToken}`,
   );
-  const { data } = useSWR(urls, multiFetcher);
+  const { data } = useSWR(urls, (u) => multiFetcher({ urls: u }));
 
   if (data) {
     const urlHandler = (url: string, isZarr: boolean) => {

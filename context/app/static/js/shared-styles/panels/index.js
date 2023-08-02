@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 
 import { capitalizeString } from 'js/helpers/functions';
 import { InternalLink } from 'js/shared-styles/Links';
@@ -31,7 +31,7 @@ const PanelWrapper = styled.div`
 const TextWrapper = styled.div`
   white-space: nowrap;
   min-width: 0px; // needed to handle overflow
-  margin-right: ${(props) => props.theme.spacing(1)}px;
+  margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const TruncatedText = styled(Typography)`
@@ -48,14 +48,14 @@ const CountsWrapper = styled.div`
 `;
 
 const StyledTypography = styled(Typography)`
-  margin-left: ${(props) => props.theme.spacing(0.5)}px;
+  margin-left: ${(props) => props.theme.spacing(0.5)};
 `;
 
 const PanelScrollBox = styled(Paper)`
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     flex-grow: 1;
     overflow-y: scroll;
-    margin-top: ${(props) => props.theme.spacing(1)}px;
+    margin-top: ${(props) => props.theme.spacing(1)};
   }
 `;
 

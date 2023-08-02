@@ -1,3 +1,10 @@
+## v0.76.0 - 2023-07-31
+
+- Renamed lightbluelink to internallink.
+- Fix bug in hook to request publication vignettes files.
+- Configure storybook to build with swc instead of babel and compile typescript.
+
+
 ## v0.75.8 - 2023-07-26
 
 - Display message when protocols.io requests fail in protocols section.

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
+import Typography from '@mui/material/Typography';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
 const iconHeight = '1.5rem';
 

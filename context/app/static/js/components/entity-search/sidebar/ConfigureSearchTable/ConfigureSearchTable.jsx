@@ -1,11 +1,11 @@
 import React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import Table from '@material-ui/core/Table';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
-import Paper from '@material-ui/core/Paper';
+import Checkbox from '@mui/material/Checkbox';
+import Table from '@mui/material/Table';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableBody from '@mui/material/TableBody';
+import Paper from '@mui/material/Paper';
 
 import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
@@ -47,7 +47,6 @@ function ConfigureSearchTable({
                   <Checkbox
                     checked={fieldName in selectedFacets}
                     size="small"
-                    color="primary"
                     onChange={(event) => handleToggleFacet(event, fieldConfig)}
                   />
                 )}
@@ -56,7 +55,6 @@ function ConfigureSearchTable({
                 <Checkbox
                   checked={fieldName in selectedFields}
                   size="small"
-                  color="primary"
                   onChange={(event) => handleToggleField(event, fieldConfig)}
                 />
               </TableCell>

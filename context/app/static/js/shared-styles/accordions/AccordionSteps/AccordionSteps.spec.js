@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { render, screen, waitFor } from 'test-utils/functions';
 import { fireEvent } from '@testing-library/react';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/provider';
@@ -61,7 +61,7 @@ test('accordions are disabled until previous step is completed', async () => {
   await clickCompleteStep(step0);
 
   expect(screen.getByText(step1.contentButton)).toBeVisible();
-  expect(screen.getByTestId('accordion-summary-1')).toHaveAttribute('aria-disabled', 'false');
+  expect(screen.getByTestId('accordion-summary-1')).not.toHaveAttribute('aria-disabled');
 });
 
 test("an accordion is closed when step is completed and the next step's accordion is opened", async () => {

@@ -4,7 +4,7 @@ import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import { scaleLinear } from '@visx/scale';
 import { bin } from 'd3-array';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import { TitleWrapper } from 'js/shared-styles/charts/style';
 import { useVerticalChart } from 'js/shared-styles/charts/hooks';

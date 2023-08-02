@@ -1,8 +1,8 @@
 import React from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
-import Button from '@material-ui/core/Button';
-import { useTheme } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
 import DropdownListbox, { useSelectedDropdownIndex } from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';

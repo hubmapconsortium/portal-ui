@@ -1,8 +1,8 @@
 import React from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
 
 function AddToListItem({ isSelected, addToSelectedLists, removeFromSelectedLists, title, listUUID }) {
   const labelId = `checkbox-list-${title}`;
@@ -13,6 +13,7 @@ function AddToListItem({ isSelected, addToSelectedLists, removeFromSelectedLists
     <ListItem onClick={() => handleClick(listUUID)}>
       <ListItemIcon>
         <Checkbox
+          color="secondary"
           edge="start"
           checked={isSelected}
           tabIndex={-1}

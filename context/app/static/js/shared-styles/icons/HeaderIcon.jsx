@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import SvgIcon from '@mui/material/SvgIcon';
 
 const HeaderIcon = styled(SvgIcon)`
   vertical-align: -12%;

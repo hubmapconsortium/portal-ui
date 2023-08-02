@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import List from '@material-ui/core/List';
+import List from '@mui/material/List';
 import { useSpring, animated } from 'react-spring';
 
 import useEntityStore from 'js/stores/useEntityStore';

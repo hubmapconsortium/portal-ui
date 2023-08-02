@@ -1,0 +1,1 @@
+- Replace h1 Typography with PageTitle styled component. 

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 const PaddedDiv = styled.div`
-  padding: ${(props) => props.theme.spacing(2)}px;
+  padding: ${(props) => props.theme.spacing(2)};
   width: 100%;
 `;
 
@@ -13,7 +13,7 @@ const StyledTypography = styled(Typography)`
 const ChartWrapper = styled.div`
   height: 350px;
   width: 100%;
-  margin-bottom: ${(props) => props.theme.spacing(1.5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1.5)};
 `;
 
 export { PaddedDiv, ChartWrapper, StyledTypography };

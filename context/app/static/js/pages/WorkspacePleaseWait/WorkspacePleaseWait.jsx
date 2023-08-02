@@ -1,6 +1,6 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import WorkspacesTitle from 'js/components/workspaces/WorkspacesTitle';
 import useWorkspacesPleaseWait from './hooks';

@@ -5,7 +5,7 @@ import { PanelScrollBox } from 'js/shared-styles/panels';
 const SeparatedFlexRow = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: ${(props) => props.theme.spacing(0.5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(0.5)};
 `;
 
 const FlexBottom = styled.div`

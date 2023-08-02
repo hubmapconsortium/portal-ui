@@ -1,11 +1,11 @@
 import React, { useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownRounded';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpRounded';
-import Paper from '@material-ui/core/Paper';
-import MenuList from '@material-ui/core/MenuList';
+import Button from '@mui/material/Button';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDownRounded';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUpRounded';
+import Paper from '@mui/material/Paper';
+import MenuList from '@mui/material/MenuList';
 
 import { OffsetPopper } from './style';
 

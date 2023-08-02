@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionSummary from '@mui/material/AccordionSummary';
 
 const PrimaryColorAccordionSummary = styled(AccordionSummary)`
   ${(props) =>

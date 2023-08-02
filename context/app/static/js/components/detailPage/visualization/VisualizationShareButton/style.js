@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import LinkIcon from '@material-ui/icons/Link';
-import Typography from '@material-ui/core/Typography';
-import EmailIcon from '@material-ui/icons/Email';
+import LinkIcon from '@mui/icons-material/Link';
+import Typography from '@mui/material/Typography';
+import EmailIcon from '@mui/icons-material/Email';
 
 const StyledLinkIcon = styled(LinkIcon)`
   margin-left: auto;

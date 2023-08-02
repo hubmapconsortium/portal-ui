@@ -4,7 +4,7 @@ const FlexRow = styled.div`
   flex-grow: 1;
   display: flex;
   justify-content: center;
-  margin-bottom: ${(props) => props.theme.spacing(5)}px;
+  margin-bottom: ${(props) => props.theme.spacing(5)};
 `;
 
 const Content = styled.div`

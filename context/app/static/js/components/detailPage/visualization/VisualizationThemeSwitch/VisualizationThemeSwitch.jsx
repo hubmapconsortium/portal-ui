@@ -1,6 +1,6 @@
 import React from 'react';
-import WbSunnyIcon from '@material-ui/icons/WbSunnyRounded';
-import Brightness2Icon from '@material-ui/icons/Brightness2Rounded';
+import WbSunnyIcon from '@mui/icons-material/WbSunnyRounded';
+import Brightness2Icon from '@mui/icons-material/Brightness2Rounded';
 
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { TooltipToggleButton } from 'js/shared-styles/buttons';

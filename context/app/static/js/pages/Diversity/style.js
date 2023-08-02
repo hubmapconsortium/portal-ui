@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 
 const PageTitleWrapper = styled.div`

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 
 const TableContainer = styled.div`
   margin-right: 30px;
@@ -20,7 +20,7 @@ const StyledItemLink = styled(Link)`
   line-height: 2;
   padding-left: 4px;
   border-left: 3px solid transparent;
-  margin-bottom: ${(props) => props.theme.spacing(0.25)}px;
+  margin-bottom: ${(props) => props.theme.spacing(0.25)};
 
   &:hover {
     border-left: 3px solid #c4c4c4; // TODO: Move to theme.
