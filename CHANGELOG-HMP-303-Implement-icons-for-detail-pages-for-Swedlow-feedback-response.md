@@ -1,3 +1,0 @@
-- Add icons to header of donor, sample, and dataset detail pages. 
-- Add icons to tab in "Derived Datasets" table. 
-- Add icons to headers of donor, sample, and dataset search pages. 

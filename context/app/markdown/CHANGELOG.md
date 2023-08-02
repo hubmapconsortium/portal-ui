@@ -1,3 +1,12 @@
+## v0.76.1 - 2023-08-02
+
+- Add icons to header of donor, sample, and dataset detail pages. 
+- Add icons to tab in "Derived Datasets" table. 
+- Add icons to headers of donor, sample, and dataset search pages. 
+- Replace h1 Typography with PageTitle styled component. 
+- Upgrade from Material UI v4 to Material UI v5.
+
+
 ## v0.76.0 - 2023-07-31
 
 - Renamed lightbluelink to internallink.

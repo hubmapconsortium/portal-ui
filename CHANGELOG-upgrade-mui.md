@@ -1,1 +1,0 @@
-- Upgrade from Material UI v4 to Material UI v5.
