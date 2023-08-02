@@ -19,7 +19,19 @@ function Dropdown({ title, children, menuListId, ...rest }) {
         {title}
         {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </Button>
-      <OffsetPopper open={open} anchorEl={anchorRef.current} placement="bottom-start">
+      <OffsetPopper
+        open={open}
+        anchorEl={anchorRef.current}
+        placement="bottom-start"
+        modifiers={[
+          {
+            name: 'offset',
+            options: {
+              offset: [0, 14],
+            },
+          },
+        ]}
+      >
         <Paper>
           <ClickAwayListener onClickAway={toggle}>
             <MenuList id={menuListId}>{children}</MenuList>
