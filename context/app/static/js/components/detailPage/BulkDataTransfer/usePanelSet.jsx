@@ -198,6 +198,8 @@ const DATASET_NOT_FINALIZED = {
 const ENTITY_API_ERROR = {
   error: {
     status: 'exclamation',
+    title: 'HuBMAP Globus Access',
+    tooltip: globusText.tooltip,
     children: (
       <>
         The API failed to retrieve the link to Globus. Please report this issue to{' '}
