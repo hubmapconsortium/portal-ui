@@ -22,7 +22,8 @@ function BulkDataTransferPanels() {
   };
 
   if (panelsToUse.error) {
-    return <NoAccess {...panelsToUse.error} />;
+    // console.log('panels to use', { ...panelsToUse.error });
+    return <NoAccess panelToUse={panelsToUse.error} />;
   }
 
   return (

@@ -142,15 +142,19 @@ const ACCESS_TO_PROTECTED_DATA = {
 };
 
 const NO_ACCESS_TO_PROTECTED_DATA = {
-  error: (
-    <div>
-      This dataset contains protected-access human sequence data. Please ask the PI of your HuBMAP award to email{' '}
-      <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-        help@hubmapconsortium.org
-      </EmailIconLink>{' '}
-      to get you access to protected HuBMAP data through Globus.
-    </div>
-  ),
+  error: {
+    status: 'warning',
+    children: (
+      <div>
+        These data are still being prepared, processed, or curated and will only be available to members of the team who
+        submitted the data. For additional help, email
+        <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+          help@hubmapconsortium.org
+        </EmailIconLink>
+        .
+      </div>
+    ),
+  },
 };
 
 const NON_CONSORTIUM_MEMBERS = {
@@ -182,7 +186,7 @@ const NON_CONSORTIUM_MEMBERS_NO_DBGAP = {
 const DATASET_NOT_FINALIZED = {
   error: {
     status: 'warning',
-    childern: (
+    children: (
       <div>
         These data are still being prepared, processed, or curated and will only be available to members of the team who
         submitted the data. For additional help, email
@@ -210,14 +214,6 @@ const ENTITY_API_ERROR = {
       </>
     ),
   },
-  // panels: [
-  //   {
-  //     title: 'HuBMAP Globus Access',
-  //     tooltip: globusText.tooltip,
-  //
-  //   },
-  // ],
-  // links: [],
 };
 
 function getGlobusPanel({ status, panel, isLoading }) {

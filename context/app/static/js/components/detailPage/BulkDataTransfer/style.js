@@ -86,7 +86,7 @@ const IconContainer = styled.div`
 `;
 
 const NoAccessContainer = styled.div`
-  // display: flex;
+  display: ${(props) => (props.status === 'exclamation' ? 'block' : 'flex')};
   align-items: center;
 `;
 
