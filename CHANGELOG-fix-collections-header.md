@@ -1,1 +1,0 @@
-- Add missing Collections icon to header.

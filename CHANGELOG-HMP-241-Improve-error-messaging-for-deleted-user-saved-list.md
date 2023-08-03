@@ -1,1 +1,0 @@
-- Update error message when user attempts to access deleted list. 

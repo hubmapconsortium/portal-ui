@@ -1,2 +1,0 @@
-- Fix various styles broken during MUI 5 upgrade.
-- Update desktop dropdown popper to use Popper v2 offset API.

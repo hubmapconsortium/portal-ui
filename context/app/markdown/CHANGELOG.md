@@ -1,3 +1,14 @@
+## v0.76.2 - 2023-08-03
+
+- Update error message when user attempts to access deleted list. 
+- Add missing Collections icon to header.
+- Fix various styles broken during MUI 5 upgrade.
+- Update desktop dropdown popper to use Popper v2 offset API.
+- Restore MUI v4 font size.
+- Fix Diversity page title size.
+- Upgrade to Vitessce v3.1.1.
+
+
 ## v0.76.1 - 2023-08-02
 
 - Add icons to header of donor, sample, and dataset detail pages. 

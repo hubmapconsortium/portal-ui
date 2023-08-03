@@ -1,2 +1,0 @@
-- Restore MUI v4 font size.
-- Fix Diversity page title size.
