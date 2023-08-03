@@ -243,7 +243,7 @@ export const usePanelSet = () => {
   const isNotFinalized = unfinalizedStatuses.includes(status);
 
   if (accessType === 'Public') {
-    return getGlobusPanel({ status: 500, panel: PUBLIC_DATA, isLoading: globusURLIsLoading });
+    return getGlobusPanel({ status: globusURLStatus, panel: PUBLIC_DATA, isLoading: globusURLIsLoading });
   }
 
   if (isAuthenticated) {
