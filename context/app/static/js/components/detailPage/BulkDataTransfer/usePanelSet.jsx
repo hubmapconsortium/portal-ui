@@ -196,29 +196,23 @@ const DATASET_NOT_FINALIZED = {
 };
 
 const ENTITY_API_ERROR = {
-  error: (
-    <div>
-      The API failed to retrieve the link to Globus. Please report this issue to&nbsp;
-      <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-        help@hubmapconsortium.org
-      </EmailIconLink>
-      &nbsp;with the dataset ID and information about the files you are trying to access.
-    </div>
-  ),
+  error: {
+    status: 'exclamation',
+    children: (
+      <>
+        The API failed to retrieve the link to Globus. Please report this issue to{' '}
+        <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+          help@hubmapconsortium.org
+        </EmailIconLink>{' '}
+        with the dataset ID and information about the files you are trying to access.
+      </>
+    ),
+  },
   // panels: [
   //   {
   //     title: 'HuBMAP Globus Access',
   //     tooltip: globusText.tooltip,
-  //     status: 'exclamation',
-  //     children: (
-  //       <>
-  //         The API failed to retrieve the link to Globus. Please report this issue to{' '}
-  //         <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-  //           help@hubmapconsortium.org
-  //         </EmailIconLink>{' '}
-  //         with the dataset ID and information about the files you are trying to access.
-  //       </>
-  //     ),
+  //
   //   },
   // ],
   // links: [],

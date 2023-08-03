@@ -5,14 +5,14 @@ import { StyledWarningIcon, IconContainer, NoAccessContainer, StyledExclamationI
 
 const statusIcons = {
   warning: <StyledWarningIcon />,
-  error: <StyledExclamationIcon color="error" fontSize="small" />,
+  exclamation: <StyledExclamationIcon color="error" fontSize="small" />,
 };
 
-function NoAccess({ children, status }) {
+function NoAccess({ status, children }) {
   return (
     <DetailSectionPaper>
       <NoAccessContainer>
-        <IconContainer>{status ? statusIcons[status] : null}</IconContainer>
+        {status === 'warning' && <IconContainer>{statusIcons[status]}</IconContainer>}
         {children}
       </NoAccessContainer>
     </DetailSectionPaper>
