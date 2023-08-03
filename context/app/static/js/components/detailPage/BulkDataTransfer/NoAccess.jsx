@@ -10,8 +10,7 @@ const statusIcons = {
   exclamation: <StyledExclamationIcon color="error" fontSize="small" />,
 };
 
-function NoAccess({ panelToUse }) {
-  const { status, children, title, tooltip } = panelToUse;
+function NoAccess({ status, children, title, tooltip }) {
   return (
     <DetailSectionPaper>
       {status === 'exclamation' && (
