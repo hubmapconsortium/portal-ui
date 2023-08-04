@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 import CreateWorkspaceInput from 'js/components/workspaces/CreateWorkspaceInput';
 import DialogModal from 'js/shared-styles/DialogModal';
@@ -16,16 +17,20 @@ function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonC
       <ButtonComponent onClick={() => setDialogIsOpen(true)} {...rest} />
       <DialogModal
         title="Launch New Workspace"
-        // title={`Launch New Workspace: `}
         isOpen={dialogIsOpen}
         handleClose={handleClose}
         maxWidth="md"
         content={
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <br />
-            <CreateWorkspaceInput control={control} name="name" errors={errors} />
-            <input type="submit" id="create-workspace-input" hidden />
-          </form>
+          <Box
+            sx={{
+              marginTop: 1,
+            }}
+          >
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <CreateWorkspaceInput control={control} name="name" errors={errors} />
+              <input type="submit" id="create-workspace-input" hidden />
+            </form>
+          </Box>
         }
         actions={
           <>
