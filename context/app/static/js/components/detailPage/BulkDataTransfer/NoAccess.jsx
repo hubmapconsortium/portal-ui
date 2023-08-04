@@ -22,7 +22,7 @@ function NoAccess({ status, children, title, tooltip }) {
           </SecondaryBackgroundTooltip>
         </Header>
       )}
-      <NoAccessContainer displayValue={status === 'exclamation' ? 'display' : 'flex'}>
+      <NoAccessContainer displayValue={status === 'exclamation' ? 'block' : 'flex'}>
         {status === 'warning' && <IconContainer>{statusIcons[status]}</IconContainer>}
         {children}
       </NoAccessContainer>
