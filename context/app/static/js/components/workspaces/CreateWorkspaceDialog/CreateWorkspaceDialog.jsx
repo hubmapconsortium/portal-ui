@@ -19,7 +19,7 @@ function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonC
         // title={`Launch New Workspace: `}
         isOpen={dialogIsOpen}
         handleClose={handleClose}
-        maxWidth="sm"
+        maxWidth="md"
         content={
           <form onSubmit={handleSubmit(onSubmit)}>
             <br />

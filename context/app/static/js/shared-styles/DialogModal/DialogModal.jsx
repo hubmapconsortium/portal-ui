@@ -5,6 +5,7 @@ import MUIDialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Typography from '@mui/material/Typography';
 
+import { Alert } from 'js/shared-styles/alerts';
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { StyledDivider, StyledDialogTitle } from './style';
 
@@ -27,7 +28,8 @@ function DialogModal({
       <StyledDialogTitle disableTypography>
         <Typography variant="h3" component="h2">
           {title}
-          {selectedRows.size}
+
+          <Alert severity="error">{`You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`}</Alert>
         </Typography>
       </StyledDialogTitle>
       <DialogContent>
