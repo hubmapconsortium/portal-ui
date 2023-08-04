@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Provider, createStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import SearchWrapper from 'js/components/entity-search/SearchWrapper';
 import { createDatasetFacet, buildDatasetFields } from 'js/components/entity-search/SearchWrapper/utils';
 
@@ -15,7 +16,11 @@ const facets = Object.assign(
 );
 
 function DatasetSearch() {
-  return <SearchWrapper uniqueFacets={facets} uniqueFields={tableFields} entityType="dataset" />;
+  return (
+    <Provider createStore={() => createStore()}>
+      <SearchWrapper uniqueFacets={facets} uniqueFields={tableFields} entityType="dataset" />;
+    </Provider>
+  );
 }
 
 export default DatasetSearch;
