@@ -14,12 +14,13 @@ function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonC
     <>
       <ButtonComponent onClick={() => setDialogIsOpen(true)} {...rest} />
       <DialogModal
-        title="Create New Workspace"
+        title="Launch New Workspace"
         isOpen={dialogIsOpen}
         handleClose={handleClose}
-        maxWidth="md"
+        maxWidth="sm"
         content={
           <form onSubmit={handleSubmit(onSubmit)}>
+            <br />
             <CreateWorkspaceInput control={control} name="name" errors={errors} />
             <input type="submit" id="create-workspace-input" hidden />
           </form>
