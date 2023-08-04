@@ -28,11 +28,12 @@ function DialogModal({
       <StyledDialogTitle disableTypography>
         <Typography variant="h3" component="h2">
           {title}
-
-          <Alert severity="error">{`You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`}</Alert>
         </Typography>
       </StyledDialogTitle>
       <DialogContent>
+        {selectedRows.size > 10 && (
+          <Alert severity="error">{`You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`}</Alert>
+        )}
         {secondaryText && (
           <DialogContentText color="primary" variant="subtitle2">
             {secondaryText}
