@@ -13,4 +13,4 @@ const StyledInfoIcon = styled(InfoIcon)`
   margin-left: ${(props) => props.theme.spacing(0.5)};
 `;
 
-export { StyledDropdownMenuButton, StyledLink, StyledInfoIcon };
+export { StyledDropdownMenuButton, StyledInfoIcon };
