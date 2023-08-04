@@ -60,7 +60,7 @@ const StyledBlockIcon = styled(BlockIcon)`
   color: ${(props) => props.theme.palette.warning.main};
 `;
 
-const StyledExclamationIcon = styled(ErrorIcon)`
+const StyledErrorIcon = styled(ErrorIcon)`
   color: ${(props) => props.theme.palette.error.main};
 `;
 
@@ -99,7 +99,7 @@ export {
   StyledLink,
   GreenCheckCircleIcon,
   StyledBlockIcon,
-  StyledExclamationIcon,
+  StyledErrorIcon,
   ObliqueSpan,
   StyledHeader,
   StyledDiv,

@@ -3,17 +3,17 @@ import InfoIcon from '@mui/icons-material/Info';
 
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { Header, StyledWarningIcon, IconContainer, NoAccessContainer, StyledExclamationIcon } from './style';
+import { Header, StyledWarningIcon, IconContainer, NoAccessContainer, StyledErrorIcon } from './style';
 
 const statusIcons = {
   warning: <StyledWarningIcon />,
-  exclamation: <StyledExclamationIcon color="error" fontSize="small" />,
+  error: <StyledErrorIcon color="error" fontSize="small" />,
 };
 
 function NoAccess({ status, children, title, tooltip }) {
   return (
     <DetailSectionPaper>
-      {status === 'exclamation' && (
+      {status === 'error' && (
         <Header variant="h5">
           {title}
           {statusIcons[status]}
@@ -22,7 +22,7 @@ function NoAccess({ status, children, title, tooltip }) {
           </SecondaryBackgroundTooltip>
         </Header>
       )}
-      <NoAccessContainer displayValue={status === 'exclamation' ? 'block' : 'flex'}>
+      <NoAccessContainer displayValue={status === 'error' ? 'block' : 'flex'}>
         {status === 'warning' && <IconContainer>{statusIcons[status]}</IconContainer>}
         {children}
       </NoAccessContainer>

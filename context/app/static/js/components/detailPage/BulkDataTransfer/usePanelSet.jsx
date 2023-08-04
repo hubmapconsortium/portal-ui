@@ -201,7 +201,7 @@ const DATASET_NOT_FINALIZED = {
 
 const ENTITY_API_ERROR = {
   error: {
-    status: 'exclamation',
+    status: 'error',
     title: 'HuBMAP Globus Access',
     tooltip: globusText.tooltip,
     children: (
