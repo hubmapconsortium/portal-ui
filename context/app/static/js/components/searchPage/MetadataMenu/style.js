@@ -10,9 +10,7 @@ const StyledDropdownMenuButton = styled(DropdownMenuButton)`
 `;
 
 const StyledLink = styled(Link)`
-  &:hover {
-    text-decoration: none;
-  }
+  text-decoration: none;
 `;
 
 const StyledInfoIcon = styled(InfoIcon)`
