@@ -21,7 +21,7 @@ function CreateWorkspaceInput({ control, name, errors }) {
       name={name}
       {...field}
       error={Object.keys(errors).length > 0}
-      helperText={errors.name?.message || ' '}
+      helperText={errors.name?.message || ''}
     />
   );
 }
