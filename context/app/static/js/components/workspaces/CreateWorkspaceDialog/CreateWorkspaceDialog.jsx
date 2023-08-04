@@ -22,14 +22,14 @@ function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonC
         maxWidth="md"
         content={
           <Box
+            component="form"
             sx={{
               marginTop: 1,
             }}
+            onSubmit={handleSubmit(onSubmit)}
           >
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <CreateWorkspaceInput control={control} name="name" errors={errors} />
-              <input type="submit" id="create-workspace-input" hidden />
-            </form>
+            <CreateWorkspaceInput control={control} name="name" errors={errors} />
+            <input type="submit" id="create-workspace-input" hidden />
           </Box>
         }
         actions={
