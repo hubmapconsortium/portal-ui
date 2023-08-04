@@ -16,7 +16,7 @@ function NoAccess({ status, children, title, tooltip }) {
       {status === 'exclamation' && (
         <Header variant="h5">
           {title}
-          {status ? statusIcons[status] : null}
+          {statusIcons[status]}
           <SecondaryBackgroundTooltip title={tooltip}>
             <InfoIcon fontSize="small" color="primary" />
           </SecondaryBackgroundTooltip>
