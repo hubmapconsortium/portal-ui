@@ -142,15 +142,19 @@ const ACCESS_TO_PROTECTED_DATA = {
 };
 
 const NO_ACCESS_TO_PROTECTED_DATA = {
-  error: (
-    <div>
-      This dataset contains protected-access human sequence data. Please ask the PI of your HuBMAP award to email{' '}
-      <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-        help@hubmapconsortium.org
-      </EmailIconLink>{' '}
-      to get you access to protected HuBMAP data through Globus.
-    </div>
-  ),
+  error: {
+    status: 'warning',
+    children: (
+      <div>
+        These data are still being prepared, processed, or curated and will only be available to members of the team who
+        submitted the data. For additional help, email
+        <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+          help@hubmapconsortium.org
+        </EmailIconLink>
+        .
+      </div>
+    ),
+  },
 };
 
 const NON_CONSORTIUM_MEMBERS = {
@@ -180,31 +184,39 @@ const NON_CONSORTIUM_MEMBERS_NO_DBGAP = {
 };
 
 const DATASET_NOT_FINALIZED = {
-  error: (
-    <div>
-      These data are still being prepared, processed, or curated and will only be available to members of the team who
-      submitted the data. For additional help, email
-      <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-        help@hubmapconsortium.org
-      </EmailIconLink>
-      .
-    </div>
-  ),
+  error: {
+    status: 'warning',
+    children: (
+      <div>
+        These data are still being prepared, processed, or curated and will only be available to members of the team who
+        submitted the data. For additional help, email
+        <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+          help@hubmapconsortium.org
+        </EmailIconLink>
+        .
+      </div>
+    ),
+  },
 };
 
 const ENTITY_API_ERROR = {
-  error: (
-    <div>
-      The API failed to retrieve the link to Globus. Please report this issue to&nbsp;
-      <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-        help@hubmapconsortium.org
-      </EmailIconLink>
-      &nbsp;with the dataset ID and information about the files you are trying to access.
-    </div>
-  ),
+  error: {
+    status: 'error',
+    title: 'HuBMAP Globus Access',
+    tooltip: globusText.tooltip,
+    children: (
+      <>
+        The API failed to retrieve the link to Globus. Please report this issue to{' '}
+        <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
+          help@hubmapconsortium.org
+        </EmailIconLink>{' '}
+        with the dataset ID and information about the files you are trying to access.
+      </>
+    ),
+  },
 };
 
-function getGlobusPanel({ status, isLoading, panel }) {
+function getGlobusPanel({ status, panel, isLoading }) {
   if (isLoading) {
     return panel;
   }
