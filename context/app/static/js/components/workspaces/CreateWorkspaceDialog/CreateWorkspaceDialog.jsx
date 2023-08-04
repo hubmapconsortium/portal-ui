@@ -10,11 +10,13 @@ function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonC
     handleCreateWorkspace,
     defaultName,
   });
+
   return (
     <>
       <ButtonComponent onClick={() => setDialogIsOpen(true)} {...rest} />
       <DialogModal
         title="Launch New Workspace"
+        // title={`Launch New Workspace: `}
         isOpen={dialogIsOpen}
         handleClose={handleClose}
         maxWidth="sm"

@@ -5,6 +5,7 @@ import MUIDialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Typography from '@mui/material/Typography';
 
+import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { StyledDivider, StyledDialogTitle } from './style';
 
 function DialogModal({
@@ -19,12 +20,14 @@ function DialogModal({
   ...props
 }) {
   const DialogContent = DialogContentComponent || MUIDialogContent;
+  const { selectedRows } = useStore();
 
   return (
     <Dialog open={isOpen} onClose={handleClose} fullWidth {...props}>
       <StyledDialogTitle disableTypography>
         <Typography variant="h3" component="h2">
           {title}
+          {selectedRows.size}
         </Typography>
       </StyledDialogTitle>
       <DialogContent>
