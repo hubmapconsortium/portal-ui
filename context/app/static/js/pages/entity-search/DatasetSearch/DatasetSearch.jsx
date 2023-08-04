@@ -18,7 +18,7 @@ const facets = Object.assign(
 function DatasetSearch() {
   return (
     <Provider createStore={() => createStore()}>
-      <SearchWrapper uniqueFacets={facets} uniqueFields={tableFields} entityType="dataset" />;
+      <SearchWrapper uniqueFacets={facets} uniqueFields={tableFields} entityType="dataset" />
     </Provider>
   );
 }
