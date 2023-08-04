@@ -4,7 +4,6 @@ import DialogActions from '@mui/material/DialogActions';
 import MUIDialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
 import { Alert } from 'js/shared-styles/alerts';
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
@@ -33,13 +32,10 @@ function DialogModal({
       </StyledDialogTitle>
       <DialogContent>
         {selectedRows.size > 10 && (
-          <Box
-            sx={{
-              marginBottom: 2,
-            }}
-          >
-            <Alert severity="error">{`You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`}</Alert>
-          </Box>
+          <Alert
+            $marginBottom={20}
+            severity="error"
+          >{`You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`}</Alert>
         )}
         {secondaryText && (
           <DialogContentText color="primary" variant="subtitle2">
