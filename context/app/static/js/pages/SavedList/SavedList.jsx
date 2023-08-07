@@ -1,7 +1,6 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-// import { Provider, createStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
@@ -35,7 +34,6 @@ function SavedList({ listUUID }) {
   }
 
   return (
-    // <Provider createStore={() => createStore()}>
     <PageSpacing>
       <Typography variant="subtitle1" component="h1" color="primary">
         List
@@ -69,7 +67,6 @@ function SavedList({ listUUID }) {
       </StyledHeader>
       <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
     </PageSpacing>
-    // </Provider>
   );
 }
 
