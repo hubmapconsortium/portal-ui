@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import { Provider, createStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+// import { Provider, createStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
@@ -31,41 +31,41 @@ function SavedList({ listUUID }) {
   }
 
   return (
-    <Provider createStore={() => createStore()}>
-      <PageSpacing>
-        <Typography variant="subtitle1" component="h1" color="primary">
-          List
-        </Typography>
-        <Typography variant="h2">{title}</Typography>
-        <SpacedSectionButtonRow
-          leftText={
-            <BottomAlignedTypography variant="body1" color="primary">
-              {entitiesLength} {entitiesLength === 1 ? 'Item' : 'Items'}
-            </BottomAlignedTypography>
-          }
-          buttons={
-            <>
-              <EditListButton listDescription={description} listTitle={title} listUUID={listUUID} />
-              <SavedListMenuButton listUUID={listUUID} />
-            </>
-          }
+    // <Provider createStore={() => createStore()}>
+    <PageSpacing>
+      <Typography variant="subtitle1" component="h1" color="primary">
+        List
+      </Typography>
+      <Typography variant="h2">{title}</Typography>
+      <SpacedSectionButtonRow
+        leftText={
+          <BottomAlignedTypography variant="body1" color="primary">
+            {entitiesLength} {entitiesLength === 1 ? 'Item' : 'Items'}
+          </BottomAlignedTypography>
+        }
+        buttons={
+          <>
+            <EditListButton listDescription={description} listTitle={title} listUUID={listUUID} />
+            <SavedListMenuButton listUUID={listUUID} />
+          </>
+        }
+      />
+      <SpacingDiv>
+        <LocalStorageDescription />
+      </SpacingDiv>
+      <SpacingDiv>
+        <SummaryBody
+          description={savedList.description}
+          created_timestamp={savedList.dateSaved}
+          last_modified_timestamp={savedList.dateLastModified}
         />
-        <SpacingDiv>
-          <LocalStorageDescription />
-        </SpacingDiv>
-        <SpacingDiv>
-          <SummaryBody
-            description={savedList.description}
-            created_timestamp={savedList.dateSaved}
-            last_modified_timestamp={savedList.dateLastModified}
-          />
-        </SpacingDiv>
-        <StyledHeader variant="h3" component="h2">
-          Items
-        </StyledHeader>
-        <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
-      </PageSpacing>
-    </Provider>
+      </SpacingDiv>
+      <StyledHeader variant="h3" component="h2">
+        Items
+      </StyledHeader>
+      <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
+    </PageSpacing>
+    // </Provider>
   );
 }
 
