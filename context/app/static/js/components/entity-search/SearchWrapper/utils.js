@@ -220,6 +220,8 @@ function createSearchkitFacet({ field, identifier, label, type, ...rest }) {
   });
 }
 
+const defaultFields = createField({ fieldName: 'mapped_data_access_level', label: 'mapped_data_access_level' });
+
 export {
   appendKeywordToFieldName,
   prependMetadataPathToFieldName,
@@ -239,4 +241,5 @@ export {
   getEntityTypeFilter,
   buildTileFields,
   defaultSelectFacetSize,
+  defaultFields,
 };
