@@ -17,6 +17,7 @@ function WorkspacesContent() {
         The workspaces feature is only available if you are logged in and part of the allowed Globus group.{' '}
         <InternalLink href="/login">Log in</InternalLink> to view saved workspaces or to begin a new workspace.
       </StyledDescription>
+      // test
     );
   }
 
