@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Provider, createStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider/store';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { useAppContext } from 'js/components/Contexts';
 import WorkspacesTitle from 'js/components/workspaces/WorkspacesTitle';
@@ -37,10 +37,10 @@ function WorkspacesContent() {
 
 function Workspaces() {
   return (
-    <Provider createStore={() => createStore()}>
+    <SelectableTableProvider>
       <WorkspacesTitle />
       <WorkspacesContent />
-    </Provider>
+    </SelectableTableProvider>
   );
 }
 
