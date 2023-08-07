@@ -13,7 +13,10 @@ function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonC
     defaultName,
   });
   const { selectedRows } = useStore();
-  const errorMessage = selectedRows.size > 10 ? 'you have selected ...' : null;
+  const errorMessage =
+    selectedRows.size > 10
+      ? `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`
+      : null;
 
   return (
     <>
