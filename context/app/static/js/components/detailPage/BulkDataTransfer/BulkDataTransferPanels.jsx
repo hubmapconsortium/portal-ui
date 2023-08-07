@@ -22,13 +22,13 @@ function BulkDataTransferPanels() {
   };
 
   if (panelsToUse.error) {
-    return <NoAccess>{panelsToUse.error}</NoAccess>;
+    return <NoAccess {...panelsToUse.error} />;
   }
 
   return (
     <>
       {panelsToUse.panels.length > 0 &&
-        panelsToUse.panels.map((props) => <BulkDataTransferPanel {...props} key={props.title} />)}
+        panelsToUse.panels.map((panel) => <BulkDataTransferPanel {...panel} key={panel.title} />)}
       {panelsToUse.links.length > 0 && (
         <Paper>
           {panelsToUse.links.map((link) =>

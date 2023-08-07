@@ -1,9 +1,10 @@
 import styled, { css } from 'styled-components';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import BlockIcon from '@mui/icons-material/Block';
-import Box from '@mui/material/Box';
+import ErrorIcon from '@mui/icons-material/Error';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 
 const StyledContainer = styled.div`
@@ -14,7 +15,7 @@ const StyledContainer = styled.div`
 
 const Header = styled(Typography)`
   ${({ theme: { spacing } }) => css`
-    margin: 0px, ${spacing(1)}, ${spacing(1)}, 0px;
+    margin: ${spacing(0, 1, 1, 0)};
     display: flex;
     align-items: center;
 
@@ -59,6 +60,10 @@ const StyledBlockIcon = styled(BlockIcon)`
   color: ${(props) => props.theme.palette.warning.main};
 `;
 
+const StyledErrorIcon = styled(ErrorIcon)`
+  color: ${(props) => props.theme.palette.error.main};
+`;
+
 const ObliqueSpan = styled.span`
   font-style: oblique 10deg;
 `;
@@ -75,13 +80,13 @@ const StyledWarningIcon = styled(WarningRoundedIcon)`
   color: ${(props) => props.theme.palette.warning.main};
 `;
 
-const WarningIconContainer = styled.div`
+const IconContainer = styled.div`
   float: left;
   margin-right: ${(props) => props.theme.spacing(1)};
 `;
 
 const NoAccessContainer = styled.div`
-  display: flex;
+  display: ${(props) => props.displayValue};
   align-items: center;
 `;
 
@@ -94,10 +99,11 @@ export {
   StyledLink,
   GreenCheckCircleIcon,
   StyledBlockIcon,
+  StyledErrorIcon,
   ObliqueSpan,
   StyledHeader,
   StyledDiv,
   StyledWarningIcon,
-  WarningIconContainer,
+  IconContainer,
   NoAccessContainer,
 };

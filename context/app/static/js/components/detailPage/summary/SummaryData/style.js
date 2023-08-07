@@ -20,13 +20,13 @@ const StyledTypography = styled(Typography)`
 
 const StyledSvgIcon = styled(SvgIcon)`
   font-size: 1.25rem;
-  margin-right: ${(props) => props.theme.spacing(0.5)}px;
+  margin-right: ${(props) => props.theme.spacing(0.5)};
 `;
 
 const SummaryDataHeader = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: ${(props) => props.theme.spacing(1)}px;
+  margin-bottom: ${(props) => props.theme.spacing(1)};
 `;
 
 export { FlexEnd, JsonButton, StyledTypography, StyledSvgIcon, SummaryDataHeader };

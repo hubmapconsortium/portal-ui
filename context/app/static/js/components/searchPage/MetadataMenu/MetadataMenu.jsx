@@ -8,7 +8,8 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon } from './style';
+import { Link } from '@mui/material';
+import { StyledDropdownMenuButton, StyledInfoIcon } from './style';
 
 async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu, analyticsCategory }) {
   await postAndDownloadFile({ url: urlPath, body: { uuids: allResultsUUIDs } });
@@ -39,7 +40,9 @@ function MetadataMenu({ type, analyticsCategory }) {
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
       <DropdownMenu id={menuID}>
         <MenuItem>
-          <StyledLink href={`/lineup/${lcPluralType}`}>Visualize</StyledLink>
+          <Link underline="none" href={`/lineup/${lcPluralType}`}>
+            Visualize
+          </Link>
           <SecondaryBackgroundTooltip title="Visualize all available metadata in Lineup." placement="bottom-start">
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>

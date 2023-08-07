@@ -20,6 +20,10 @@ function SavedList({ listUUID }) {
   const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
   const savedList = savedLists[listUUID];
 
+  if (!savedList) {
+    throw new Error('This list does not exist.');
+  }
+
   const { savedEntities: listEntities } = savedList;
 
   const entitiesLength = Object.keys(listEntities).length;

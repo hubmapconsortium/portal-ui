@@ -1,0 +1,1 @@
+- Remove underline from Visualize link.

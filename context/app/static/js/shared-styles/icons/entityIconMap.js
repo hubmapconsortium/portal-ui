@@ -1,4 +1,4 @@
-import { DatasetIcon, SampleIcon, DonorIcon, PublicationIcon } from 'js/shared-styles/icons';
+import { DatasetIcon, SampleIcon, DonorIcon, PublicationIcon, CollectionIcon } from 'js/shared-styles/icons';
 
 export const entityIconMap = {
   Donor: DonorIcon,
@@ -6,4 +6,5 @@ export const entityIconMap = {
   Dataset: DatasetIcon,
   Support: DatasetIcon,
   Publication: PublicationIcon,
+  Collection: CollectionIcon,
 };
