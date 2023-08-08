@@ -45,6 +45,7 @@ function MetadataMenu({ entityType }) {
   return (
     <>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
+
       <DropdownMenu id={menuID}>
         <StyledMenuItem>
           <StyledLink href={`/lineup/${lcPluralType}`}>Visualize</StyledLink>
@@ -52,6 +53,7 @@ function MetadataMenu({ entityType }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </StyledMenuItem>
+
         <StyledMenuItem
           onClick={() =>
             fetchAndDownload({
@@ -66,6 +68,7 @@ function MetadataMenu({ entityType }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </StyledMenuItem>
+
         <CreateWorkspaceDialog handleCreateWorkspace={createNotebook} buttonComponent={NotebookMenuItem} />
       </DropdownMenu>
     </>

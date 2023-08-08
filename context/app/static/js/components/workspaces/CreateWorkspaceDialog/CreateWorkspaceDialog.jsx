@@ -13,14 +13,30 @@ function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonC
     defaultName,
   });
   const { selectedRows } = useStore();
+
+  // console.log('selectedRows is', selectedRows);
+
   const errorMessage =
     selectedRows.size > 10
       ? `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`
       : null;
 
+  // const triggerDialog = () => {
+  //   setDialogIsOpen(true);
+
+  // function will iterate through selected row and check if any are protected.
+  // If any are prtoected, set errorMessage to something.
+  // };
+
   return (
     <>
-      <ButtonComponent onClick={() => setDialogIsOpen(true)} {...rest} />
+      <ButtonComponent
+        onClick={() => {
+          setDialogIsOpen(true);
+          // insert function to check if any rows have protected.
+        }}
+        {...rest}
+      />
       <DialogModal
         title="Launch New Workspace"
         isOpen={dialogIsOpen}

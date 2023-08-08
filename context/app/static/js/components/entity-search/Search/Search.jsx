@@ -21,6 +21,7 @@ const createSkClient = () =>
 
 function Search() {
   const { results, allResultsUUIDs, entityType } = useSearch();
+
   return (
     <>
       <Flex>
