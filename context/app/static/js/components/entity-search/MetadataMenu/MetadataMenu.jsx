@@ -37,7 +37,7 @@ function NotebookMenuItem(props) {
   );
 }
 
-function MetadataMenu({ entityType }) {
+function MetadataMenu({ entityType, results }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;
   const { selectedHits, createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
   const menuID = 'metadata-menu';
@@ -69,7 +69,11 @@ function MetadataMenu({ entityType }) {
           </SecondaryBackgroundTooltip>
         </StyledMenuItem>
 
-        <CreateWorkspaceDialog handleCreateWorkspace={createNotebook} buttonComponent={NotebookMenuItem} />
+        <CreateWorkspaceDialog
+          handleCreateWorkspace={createNotebook}
+          buttonComponent={NotebookMenuItem}
+          results={results}
+        />
       </DropdownMenu>
     </>
   );

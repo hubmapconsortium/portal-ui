@@ -28,7 +28,7 @@ function Search() {
         <Grow>
           <SearchBar />
         </Grow>
-        <MetadataMenu allResultsUUIDs={allResultsUUIDs} entityType={entityType} />
+        <MetadataMenu allResultsUUIDs={allResultsUUIDs} entityType={entityType} results={results} />
         <SearchViewSwitch />
       </Flex>
       {results?.summary.appliedFilters && <FacetChips appliedFilters={results.summary.appliedFilters} />}

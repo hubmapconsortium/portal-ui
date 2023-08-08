@@ -7,33 +7,36 @@ import DialogModal from 'js/shared-styles/DialogModal';
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { useCreateWorkspace } from './hooks';
 
-function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonComponent, defaultName, ...rest }) {
+function CreateWorkspaceDialog({
+  handleCreateWorkspace,
+  buttonComponent: ButtonComponent,
+  defaultName,
+  results,
+  ...rest
+}) {
   const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace({
     handleCreateWorkspace,
     defaultName,
   });
   const { selectedRows } = useStore();
 
-  // console.log('selectedRows is', selectedRows);
+  const containsProtectedDataset = results?.hits?.items?.some((item) => item?.fields?.mapped_status === 'Protected');
 
-  const errorMessage =
-    selectedRows.size > 10
-      ? `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`
-      : null;
+  let errorMessage;
 
-  // const triggerDialog = () => {
-  //   setDialogIsOpen(true);
-
-  // function will iterate through selected row and check if any are protected.
-  // If any are prtoected, set errorMessage to something.
-  // };
+  if (selectedRows.size > 10) {
+    errorMessage = `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`;
+  } else if (containsProtectedDataset) {
+    errorMessage = 'You have selected a protected dataset. Please unselect the protected dataset.';
+  } else {
+    errorMessage = null;
+  }
 
   return (
     <>
       <ButtonComponent
         onClick={() => {
           setDialogIsOpen(true);
-          // insert function to check if any rows have protected.
         }}
         {...rest}
       />
