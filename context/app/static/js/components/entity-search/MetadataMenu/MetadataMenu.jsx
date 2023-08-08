@@ -1,7 +1,8 @@
 import React from 'react';
 // import { trackEvent } from 'js/helpers/trackers';
 
-import SelectableTableProvider, { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider/SelectableTableProvider';
+import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
