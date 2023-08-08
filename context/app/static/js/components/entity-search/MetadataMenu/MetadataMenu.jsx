@@ -1,6 +1,7 @@
 import React from 'react';
 // import { trackEvent } from 'js/helpers/trackers';
 
+import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
@@ -43,7 +44,7 @@ function MetadataMenu({ entityType }) {
   const menuID = 'metadata-menu';
 
   return (
-    <>
+    <SelectableTableProvider>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
       <DropdownMenu id={menuID}>
         <StyledMenuItem>
@@ -68,7 +69,7 @@ function MetadataMenu({ entityType }) {
         </StyledMenuItem>
         <CreateWorkspaceDialog handleCreateWorkspace={createNotebook} buttonComponent={NotebookMenuItem} />
       </DropdownMenu>
-    </>
+    </SelectableTableProvider>
   );
 }
 
