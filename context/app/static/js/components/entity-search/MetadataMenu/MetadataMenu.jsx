@@ -1,7 +1,7 @@
 import React from 'react';
 // import { trackEvent } from 'js/helpers/trackers';
 
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider/store';
+import SelectableTableProvider, { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
@@ -43,6 +43,12 @@ function MetadataMenu({ entityType }) {
   const { selectedHits, createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
   const menuID = 'metadata-menu';
 
+  const { selectedRows } = useStore();
+  const errorMessage =
+    selectedRows.size > 10
+      ? `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`
+      : null;
+
   return (
     <SelectableTableProvider>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
@@ -67,7 +73,11 @@ function MetadataMenu({ entityType }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </StyledMenuItem>
-        <CreateWorkspaceDialog handleCreateWorkspace={createNotebook} buttonComponent={NotebookMenuItem} />
+        <CreateWorkspaceDialog
+          handleCreateWorkspace={createNotebook}
+          buttonComponent={NotebookMenuItem}
+          errorMessage={errorMessage}
+        />
       </DropdownMenu>
     </SelectableTableProvider>
   );

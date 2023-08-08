@@ -4,19 +4,19 @@ import Box from '@mui/material/Box';
 
 import CreateWorkspaceInput from 'js/components/workspaces/CreateWorkspaceInput';
 import DialogModal from 'js/shared-styles/DialogModal';
-import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { useCreateWorkspace } from './hooks';
 
-function CreateWorkspaceDialog({ handleCreateWorkspace, buttonComponent: ButtonComponent, defaultName, ...rest }) {
+function CreateWorkspaceDialog({
+  handleCreateWorkspace,
+  buttonComponent: ButtonComponent,
+  defaultName,
+  errorMessage,
+  ...rest
+}) {
   const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace({
     handleCreateWorkspace,
     defaultName,
   });
-  const { selectedRows } = useStore();
-  const errorMessage =
-    selectedRows.size > 10
-      ? `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`
-      : null;
 
   return (
     <>
