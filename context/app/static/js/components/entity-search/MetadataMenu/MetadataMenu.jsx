@@ -46,10 +46,16 @@ function MetadataMenu({ entityType, results }) {
 
   const { selectedRows } = useStore();
 
-  const containsProtectedDataset = results?.hits?.items?.some((item) => item?.fields?.mapped_status === 'Protected');
+  // array that contains all the datasets from current pagination where mapped_data_access_level === 'Protected'.
+  const filteredDataset = results?.hits?.items?.filter(
+    (item) => item?.fields?.mapped_data_access_level === 'Protected',
+  );
 
-  // console.log('results', results)
-  // console.log('containsProtectedDataset', containsProtectedDataset);
+  const containsProtectedDataset = filteredDataset?.some((item) => {
+    const filteredDatasetIds = item?.id;
+    // spreading out the selectedRows Set to convert to an array then checking to see if any contains mapped_data_access_level === 'Protected'.
+    return [...selectedRows].some((selectedRowId) => filteredDatasetIds.includes(selectedRowId));
+  });
 
   let errorMessage;
 
