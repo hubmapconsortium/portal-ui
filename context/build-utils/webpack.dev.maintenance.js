@@ -8,8 +8,7 @@ const envConfig = {
   devtool: 'eval-cheap-source-map',
   stats: 'minimal',
   devServer: {
-    contentBase: join(__dirname, '../app/static/js/maintenance/public/'),
-    publicPath: '/',
+    static: join(__dirname, '../app/static/js/maintenance/public/'),
     port: 5002,
     compress: true,
   },
