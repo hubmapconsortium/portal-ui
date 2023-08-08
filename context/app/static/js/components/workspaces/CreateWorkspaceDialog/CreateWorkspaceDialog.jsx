@@ -22,6 +22,9 @@ function CreateWorkspaceDialog({
 
   const containsProtectedDataset = results?.hits?.items?.some((item) => item?.fields?.mapped_status === 'Protected');
 
+  // console.log('results', results)
+  // console.log('containsProtectedDataset', containsProtectedDataset);
+
   let errorMessage;
 
   if (selectedRows.size > 10) {
