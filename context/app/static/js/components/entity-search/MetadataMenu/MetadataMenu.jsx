@@ -1,6 +1,7 @@
 import React from 'react';
 // import { trackEvent } from 'js/helpers/trackers';
 
+import SelectableTableProvider, { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
@@ -42,8 +43,25 @@ function MetadataMenu({ entityType, results }) {
   const { selectedHits, createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
   const menuID = 'metadata-menu';
 
+  const { selectedRows } = useStore();
+
+  const containsProtectedDataset = results?.hits?.items?.some((item) => item?.fields?.mapped_status === 'Protected');
+
+  // console.log('results', results)
+  // console.log('containsProtectedDataset', containsProtectedDataset);
+
+  let errorMessage;
+
+  if (selectedRows.size > 10) {
+    errorMessage = `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`;
+  } else if (containsProtectedDataset) {
+    errorMessage = 'You have selected a protected dataset. Please unselect the protected dataset.';
+  } else {
+    errorMessage = null;
+  }
+
   return (
-    <>
+    <SelectableTableProvider>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
 
       <DropdownMenu id={menuID}>
@@ -72,10 +90,11 @@ function MetadataMenu({ entityType, results }) {
         <CreateWorkspaceDialog
           handleCreateWorkspace={createNotebook}
           buttonComponent={NotebookMenuItem}
+          errorMessage={errorMessage}
           results={results}
         />
       </DropdownMenu>
-    </>
+    </SelectableTableProvider>
   );
 }
 
