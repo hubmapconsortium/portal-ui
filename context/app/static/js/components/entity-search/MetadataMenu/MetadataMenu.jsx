@@ -62,7 +62,8 @@ function MetadataMenu({ entityType, results }) {
   if (selectedRows.size > 10) {
     errorMessage = `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`;
   } else if (containsProtectedDataset) {
-    errorMessage = 'You have selected a protected dataset. Please unselect the protected dataset.';
+    errorMessage =
+      'You have selected protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.';
   } else {
     errorMessage = null;
   }
@@ -70,7 +71,6 @@ function MetadataMenu({ entityType, results }) {
   return (
     <SelectableTableProvider>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
-
       <DropdownMenu id={menuID}>
         <StyledMenuItem>
           <StyledLink href={`/lineup/${lcPluralType}`}>Visualize</StyledLink>
@@ -78,7 +78,6 @@ function MetadataMenu({ entityType, results }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </StyledMenuItem>
-
         <StyledMenuItem
           onClick={() =>
             fetchAndDownload({
@@ -93,7 +92,6 @@ function MetadataMenu({ entityType, results }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </StyledMenuItem>
-
         <CreateWorkspaceDialog
           handleCreateWorkspace={createNotebook}
           buttonComponent={NotebookMenuItem}
