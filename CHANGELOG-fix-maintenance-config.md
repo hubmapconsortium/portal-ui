@@ -1,0 +1,1 @@
+- Fix maintenance page config
