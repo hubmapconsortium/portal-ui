@@ -5,4 +5,10 @@ const StyledPaper = styled(Paper)`
   padding: 20px 40px 20px 40px;
 `;
 
-export { StyledPaper };
+const StyledLink = styled.span`
+  a {
+    color: rgb(42, 111, 184);
+  }
+`;
+
+export { StyledPaper, StyledLink };
