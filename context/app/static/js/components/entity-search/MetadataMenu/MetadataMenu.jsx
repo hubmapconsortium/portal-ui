@@ -45,11 +45,9 @@ function MetadataMenu({ entityType, results }) {
   const menuID = 'metadata-menu';
 
   const { selectedRows } = useStore();
-  const selectedRowsArray = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
+  const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
 
-  const containsProtectedDataset = selectedRowsArray.some((item) => {
-    return item._source.mapped_data_access_level === 'Protected'; //eslint-disable-line
-  });
+  const containsProtectedDataset = protectedRows.length > 0;
 
   let errorMessage;
 
