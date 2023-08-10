@@ -48,14 +48,14 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     <Autocomplete
       options={options}
       multiple
-      getOptionLabel={(option) => option}
+      getOptionLabel={(option) => option.full}
       isOptionEqualToValue={(option, value) => option.full === value}
-      renderOption={(option) => (
-        <>
+      renderOption={(props, option) => (
+        <li {...props}>
           {option.pre}
           <b>{option.match}</b>
           {option.post}
-        </>
+        </li>
       )}
       value={cellVariableNames}
       onChange={(event, value) => {
