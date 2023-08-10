@@ -7,7 +7,7 @@ const StyledPaper = styled(Paper)`
 
 const StyledLink = styled.span`
   a {
-    color: rgb(42, 111, 184);
+    color: ${(props) => props.theme.palette.info.main};
   }
 `;
 
