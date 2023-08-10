@@ -58,6 +58,7 @@ function MetadataMenu({ entityType, results }) {
   if (containsProtectedDataset) {
     errorMessages.push(
       'You have selected protected datasets. Workspaces currently only supports published public datasets. Please unselect protected datasets.',
+      // The commented out messaging is for version 2 when the protected datasets are displayed along with the error messages for Protected Datasets.
       // 'You have selected protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.',
     );
   }
