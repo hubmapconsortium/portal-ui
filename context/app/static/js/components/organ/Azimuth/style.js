@@ -5,10 +5,4 @@ const StyledPaper = styled(Paper)`
   padding: 20px 40px 20px 40px;
 `;
 
-const StyledLink = styled.span`
-  a {
-    color: ${(props) => props.theme.palette.info.main};
-  }
-`;
-
-export { StyledPaper, StyledLink };
+export { StyledPaper };
