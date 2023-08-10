@@ -46,9 +46,7 @@ function MetadataMenu({ entityType, results }) {
 
   const { selectedRows } = useStore();
   const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
-
   const containsProtectedDataset = protectedRows.length > 0;
-
   const errorMessages = [];
 
   if (selectedRows.size > 10) {
@@ -59,7 +57,8 @@ function MetadataMenu({ entityType, results }) {
 
   if (containsProtectedDataset) {
     errorMessages.push(
-      'You have selected protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.',
+      'You have selected protected datasets. Workspaces currently only supports published public datasets. Please unselect protected datasets.',
+      // 'You have selected protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.',
     );
   }
 
