@@ -1,3 +1,10 @@
+## v0.76.3 - 2023-08-10
+
+- Implemented new panel design when entity api for globus link returns an error. 
+- Fix maintenance page config
+- Remove underline from Visualize link.
+
+
 ## v0.76.2 - 2023-08-03
 
 - Update error message when user attempts to access deleted list. 
