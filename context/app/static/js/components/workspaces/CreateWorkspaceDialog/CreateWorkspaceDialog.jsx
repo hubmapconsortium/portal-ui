@@ -10,7 +10,7 @@ function CreateWorkspaceDialog({
   handleCreateWorkspace,
   buttonComponent: ButtonComponent,
   defaultName,
-  errorMessage,
+  errorMessages,
   ...rest
 }) {
   const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace({
@@ -51,7 +51,7 @@ function CreateWorkspaceDialog({
             </label>
           </>
         }
-        errorMessage={errorMessage}
+        errorMessages={errorMessages}
       />
     </>
   );

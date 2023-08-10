@@ -49,15 +49,18 @@ function MetadataMenu({ entityType, results }) {
 
   const containsProtectedDataset = protectedRows.length > 0;
 
-  let errorMessage;
+  const errorMessages = [];
 
   if (selectedRows.size > 10) {
-    errorMessage = `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`;
-  } else if (containsProtectedDataset) {
-    errorMessage =
-      'You have selected protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.';
-  } else {
-    errorMessage = null;
+    errorMessages.push(
+      `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
+    );
+  }
+
+  if (containsProtectedDataset) {
+    errorMessages.push(
+      'You have selected protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.',
+    );
   }
 
   return (
@@ -87,7 +90,7 @@ function MetadataMenu({ entityType, results }) {
         <CreateWorkspaceDialog
           handleCreateWorkspace={createNotebook}
           buttonComponent={NotebookMenuItem}
-          errorMessage={errorMessage}
+          errorMessages={errorMessages}
           results={results}
         />
       </DropdownMenu>
