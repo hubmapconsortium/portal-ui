@@ -10,7 +10,7 @@ import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialo
 
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
-import { useMetadataMenu } from './hooks';
+import { useMetadataMenu, useDatasetsAccessLevel } from './hooks';
 
 async function fetchAndDownload({ urlPath, selectedHits, closeMenu }) {
   await postAndDownloadFile({ url: urlPath, body: { uuids: [...selectedHits] } });
@@ -45,16 +45,10 @@ function MetadataMenu({ entityType, results }) {
   const menuID = 'metadata-menu';
 
   const { selectedRows } = useStore();
+  const selectedRowsArray = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
 
-  // array that contains all the datasets from current pagination where mapped_data_access_level === 'Protected'.
-  const filteredDataset = results?.hits?.items?.filter(
-    (item) => item?.fields?.mapped_data_access_level === 'Protected',
-  );
-
-  const containsProtectedDataset = filteredDataset?.some((item) => {
-    const filteredDatasetIds = item?.id;
-    // spreading out the selectedRows Set to convert to an array then checking to see if any contains mapped_data_access_level === 'Protected'.
-    return [...selectedRows].some((selectedRowId) => filteredDatasetIds.includes(selectedRowId));
+  const containsProtectedDataset = selectedRowsArray.some((item) => {
+    return item._source.mapped_data_access_level === 'Protected'; //eslint-disable-line
   });
 
   let errorMessage;

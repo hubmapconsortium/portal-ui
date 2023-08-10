@@ -25,7 +25,7 @@ function useMetadataMenu(lcPluralType) {
   return { createNotebook, selectedHits, closeMenu };
 }
 
-function useDatasets({ ids }) {
+function useDatasetsAccessLevel(ids) {
   const query = {
     query: {
       ...getIDsQuery(ids),
@@ -38,4 +38,4 @@ function useDatasets({ ids }) {
   return { datasets };
 }
 
-export { useMetadataMenu, useDatasets };
+export { useMetadataMenu, useDatasetsAccessLevel };
