@@ -1,7 +1,5 @@
 import { useCallback } from 'react';
 
-import { useSearchHits } from 'js/hooks/useSearchData';
-import { getIDsQuery } from 'js/helpers/queries';
 import { useStore as useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
 import { useStore as useSelectedTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { useCreateAndLaunchWorkspace } from 'js/components/workspaces/hooks';
@@ -25,17 +23,4 @@ function useMetadataMenu(lcPluralType) {
   return { createNotebook, selectedHits, closeMenu };
 }
 
-function useDatasets({ ids }) {
-  const query = {
-    query: {
-      ...getIDsQuery(ids),
-    },
-    _source: ['mapped_data_access_level'],
-    size: ids.length,
-  };
-
-  const { searchHits: datasets } = useSearchHits(query);
-  return { datasets };
-}
-
-export { useMetadataMenu, useDatasets };
+export { useMetadataMenu };
