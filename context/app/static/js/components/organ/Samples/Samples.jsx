@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
-import { StyledTableContainer } from 'js/shared-styles/tables';
+import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -21,7 +21,6 @@ import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
-import SortingHeaderCell from 'js/components/entity-search/results/SortingHeaderCell';
 import { getDonorAgeString } from 'js/helpers/functions';
 
 import { StyledSectionHeader } from './style';
@@ -95,17 +94,9 @@ function Samples({ organTerms }) {
             <TableRow>
               <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} />
               {columns.map((column) => (
-                <SortingHeaderCell key={column.id} field={column.label}>
-                  {column.label}
-                </SortingHeaderCell>
-              ))}
-            </TableRow>
-            {/* <TableRow>
-              <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} />
-              {columns.map((column) => (
                 <HeaderCell key={column.id}>{column.label}</HeaderCell>
               ))}
-            </TableRow> */}
+            </TableRow>
           </TableHead>
           <TableBody>
             {searchHits
