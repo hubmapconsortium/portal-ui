@@ -41,8 +41,7 @@ const slides = [
 const disableRandomImage = true;
 
 function ImageCarouselContainer() {
-  // Set random intial image index if publications are not yet enabled
-  // If publications are enabled, use publication slide first
+  // In order to keep highlighting publications, the shuffle functionality is currently disabled.
   const [selectedImageIndex, setSelectedImageIndex] = useState(
     disableRandomImage ? 0 : Math.floor(Math.random() * slides.length),
   );
