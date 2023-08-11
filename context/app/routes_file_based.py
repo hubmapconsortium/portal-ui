@@ -2,7 +2,7 @@ from os.path import dirname
 from pathlib import Path
 
 from yaml import safe_load
-from flask import render_template, redirect, url_for, abort
+from flask import render_template, redirect, url_for, request
 from werkzeug.utils import secure_filename
 
 import frontmatter
@@ -38,8 +38,9 @@ def preview_details_view(name):
 
 
 @blueprint.route('/organ')
-def organ_index_view(redirected_from=None):
+def organ_index_view():
     organs = get_organs()
+    redirected_from = request.args.get('redirected_from') or None
     flask_data = {
         **get_default_flask_data(),
         'organs': organs,
@@ -57,7 +58,7 @@ def redirect_to_organ_from_search(name, organs):
         if name in v.get('search'):
             return redirect(url_for('routes_file_based.organ_details_view', name=k))
     # If organ is not found, redirect to the organ index page with a message.
-    return redirect(url_for('routes_file_based.organ_index_view', redirected_from=name))
+    return redirect(url_for('routes_file_based.organ_index_view', redirected_from=name), code=308)
 
 
 @blueprint.route('/organ/<name>')

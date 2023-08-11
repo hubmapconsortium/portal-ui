@@ -38,7 +38,7 @@ function App(props) {
   delete flaskData.globalAlertMd;
   const isWorkspacesUser = userGroups?.includes('Workspaces') || workspacesUsers.includes(userEmail);
   const isHubmapUser = userGroups?.includes('HuBMAP');
-
+  
   return (
     <Providers
       endpoints={endpoints}
