@@ -40,15 +40,14 @@ function CreateWorkspaceDialog({
             onSubmit={handleSubmit(onSubmit)}
           >
             <CreateWorkspaceInput control={control} name="name" errors={errors} />
-            <input type="submit" id="create-workspace-input" hidden />
           </Box>
         }
         actions={
           <>
             <Button onClick={handleClose}>Cancel</Button>
-            <label htmlFor="create-workspace-input">
-              <Button component="span">Submit</Button>
-            </label>
+            <Button component="span" disabled={errorMessages.length > 0}>
+              Submit
+            </Button>
           </>
         }
         errorMessages={errorMessages}

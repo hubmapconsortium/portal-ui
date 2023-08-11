@@ -34,7 +34,7 @@ function DialogModal({
         {errorMessages && (
           <Box sx={{ marginBottom: 3 }}>
             {errorMessages.map((errorMessage) => (
-              <Alert $marginBottom={10} severity="error">
+              <Alert key={errorMessage} $marginBottom={10} severity="error">
                 {errorMessage}
               </Alert>
             ))}
