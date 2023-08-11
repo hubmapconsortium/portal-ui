@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import CarouselImage from 'js/components/home/CarouselImage';
 
-import { useFlaskDataContext } from 'js/components/Contexts';
 import ImageCarousel from '../ImageCarousel';
 import ImageCarouselControlButtons from '../ImageCarouselControlButtons';
 import ImageCarouselCallToAction from '../ImageCarouselCallToAction';
@@ -12,6 +11,12 @@ import { getCarouselImageSrcSet } from './utils';
 const getCDNCarouselImageSrcSet = (key) => getCarouselImageSrcSet(key, CDN_URL);
 
 const slides = [
+  {
+    title: 'Discover the publications reporting the breakthroughs of  mapping the human body with HuBMAP data',
+    body: 'Explore publications authored by scientists in the consortium involving HuBMAP data. Additional publications will be coming in the future as the consortium continue to create mappings of the human body. View the press release reporting on these publications.',
+    image: <CarouselImage {...getCDNCarouselImageSrcSet('publication')} alt="HuBMAP Publications" key="Publications" />,
+    buttonHref: '/publications',
+  },
   {
     title: 'Explore spatial single-cell data with Vitessce visualizations',
     body: 'View multi-modal single-cell resolution measurements with reusable interactive components such as a scatterplot, spatial+imaging plot, genome browser tracks, statistical plots, and controller components.',
@@ -33,25 +38,15 @@ const slides = [
   },
 ];
 
-const publicationSlide = {
-  title: 'Discover the publications reporting the breakthroughs of  mapping the human body with HuBMAP data',
-  body: 'Explore publications authored by scientists in the consortium involving HuBMAP data. Additional publications will be coming in the future as the consortium continue to create mappings of the human body. View the press release reporting on these publications.',
-  image: <CarouselImage {...getCDNCarouselImageSrcSet('publication')} alt="HuBMAP Publications" key="Publications" />,
-  buttonHref: '/publications',
-};
-
-const slidesWithPublications = [publicationSlide, ...slides];
+const disableRandomImage = true;
 
 function ImageCarouselContainer() {
-  const { enable_publications: enablePublications } = useFlaskDataContext();
-  const slidesToUse = enablePublications ? slidesWithPublications : slides;
-  // Set random intial image index if publications are not yet enabled
-  // If publications are enabled, use publication slide first
+  // In order to keep highlighting publications, the shuffle functionality is currently disabled.
   const [selectedImageIndex, setSelectedImageIndex] = useState(
-    enablePublications ? 0 : Math.floor(Math.random() * slidesToUse.length),
+    disableRandomImage ? 0 : Math.floor(Math.random() * slides.length),
   );
 
-  const { title, body, buttonHref } = slidesToUse[selectedImageIndex];
+  const { title, body, buttonHref } = slides[selectedImageIndex];
   return (
     <Flex>
       <CallToActionWrapper>
@@ -59,13 +54,13 @@ function ImageCarouselContainer() {
         <ImageCarouselControlButtons
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
-          numImages={slidesToUse.length}
+          numImages={slides.length}
         />
       </CallToActionWrapper>
       <ImageCarousel
         selectedImageIndex={selectedImageIndex}
         setSelectedImageIndex={setSelectedImageIndex}
-        images={slidesToUse.map((slide) => slide.image)}
+        images={slides.map((slide) => slide.image)}
       />
     </Flex>
   );

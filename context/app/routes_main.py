@@ -1,7 +1,7 @@
 from flask import (render_template, current_app, abort,
                    session, request)
 
-from .utils import get_default_flask_data, make_blueprint, get_organs, get_enable_publications
+from .utils import get_default_flask_data, make_blueprint, get_organs
 
 
 blueprint = make_blueprint(__name__)
@@ -9,8 +9,7 @@ blueprint = make_blueprint(__name__)
 
 @blueprint.route('/')
 def index():
-    flask_data = {**get_default_flask_data(), 'organs_count': len(get_organs()),
-                  'enable_publications': get_enable_publications()}
+    flask_data = {**get_default_flask_data(), 'organs_count': len(get_organs())}
     return render_template(
         'base-pages/react-content.html',
         flask_data=flask_data,
