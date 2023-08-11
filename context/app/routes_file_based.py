@@ -4,7 +4,6 @@ from pathlib import Path
 from yaml import safe_load
 from flask import render_template, redirect, url_for, abort
 from werkzeug.utils import secure_filename
-import json
 
 import frontmatter
 
@@ -39,11 +38,12 @@ def preview_details_view(name):
 
 
 @blueprint.route('/organ')
-def organ_index_view():
+def organ_index_view(redirected_from=None):
     organs = get_organs()
     flask_data = {
         **get_default_flask_data(),
-        'organs': organs
+        'organs': organs,
+        'redirected_from': redirected_from
     }
     return render_template(
         'base-pages/react-content.html',
@@ -56,7 +56,8 @@ def redirect_to_organ_from_search(name, organs):
     for k, v in organs.items():
         if name in v.get('search'):
             return redirect(url_for('routes_file_based.organ_details_view', name=k))
-    abort(404)
+    # If organ is not found, redirect to the organ index page with a message.
+    return redirect(url_for('routes_file_based.organ_index_view', redirected_from=name))
 
 
 @blueprint.route('/organ/<name>')
