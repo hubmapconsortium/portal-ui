@@ -26,6 +26,11 @@ const StyledAlert = styled(OutlinedAlert)`
     color: ${(props) => props.theme.palette.text.primary};
   }
   margin-bottom: ${(props) => props.$marginBottom || 0}px;
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
 `;
 
 export { StyledAlert as Alert };

@@ -10,7 +10,7 @@ function CreateWorkspaceDialog({
   handleCreateWorkspace,
   buttonComponent: ButtonComponent,
   defaultName,
-  errorMessage,
+  errorMessages,
   ...rest
 }) {
   const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace({
@@ -20,7 +20,12 @@ function CreateWorkspaceDialog({
 
   return (
     <>
-      <ButtonComponent onClick={() => setDialogIsOpen(true)} {...rest} />
+      <ButtonComponent
+        onClick={() => {
+          setDialogIsOpen(true);
+        }}
+        {...rest}
+      />
       <DialogModal
         title="Launch New Workspace"
         isOpen={dialogIsOpen}
@@ -28,6 +33,7 @@ function CreateWorkspaceDialog({
         maxWidth="md"
         content={
           <Box
+            id="create-workspace-form"
             component="form"
             sx={{
               marginTop: 1,
@@ -35,18 +41,17 @@ function CreateWorkspaceDialog({
             onSubmit={handleSubmit(onSubmit)}
           >
             <CreateWorkspaceInput control={control} name="name" errors={errors} />
-            <input type="submit" id="create-workspace-input" hidden />
           </Box>
         }
         actions={
           <>
             <Button onClick={handleClose}>Cancel</Button>
-            <label htmlFor="create-workspace-input">
-              <Button component="span">Submit</Button>
-            </label>
+            <Button type="submit" form="create-workspace-form" disabled={errorMessages.length > 0}>
+              Submit
+            </Button>
           </>
         }
-        errorMessage={errorMessage}
+        errorMessages={errorMessages}
       />
     </>
   );

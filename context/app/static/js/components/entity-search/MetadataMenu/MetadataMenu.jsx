@@ -10,7 +10,7 @@ import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialo
 
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
-import { useMetadataMenu } from './hooks';
+import { useMetadataMenu, useDatasetsAccessLevel } from './hooks';
 
 async function fetchAndDownload({ urlPath, selectedHits, closeMenu }) {
   await postAndDownloadFile({ url: urlPath, body: { uuids: [...selectedHits] } });
@@ -39,16 +39,29 @@ function NotebookMenuItem(props) {
   );
 }
 
-function MetadataMenu({ entityType }) {
+function MetadataMenu({ entityType, results }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;
   const { selectedHits, createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
   const menuID = 'metadata-menu';
 
   const { selectedRows } = useStore();
-  const errorMessage =
-    selectedRows.size > 10
-      ? `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`
-      : null;
+  const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
+  const containsProtectedDataset = protectedRows.length > 0;
+  const errorMessages = [];
+
+  if (selectedRows.size > 10) {
+    errorMessages.push(
+      `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
+    );
+  }
+
+  if (containsProtectedDataset) {
+    errorMessages.push(
+      'You have selected protected datasets. Workspaces currently only supports published public datasets. Please unselect protected datasets.',
+      // The commented out messaging is for version 2 when the protected datasets are displayed along with the error messages for Protected Datasets.
+      // 'You have selected protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.',
+    );
+  }
 
   return (
     <SelectableTableProvider>
@@ -77,7 +90,8 @@ function MetadataMenu({ entityType }) {
         <CreateWorkspaceDialog
           handleCreateWorkspace={createNotebook}
           buttonComponent={NotebookMenuItem}
-          errorMessage={errorMessage}
+          errorMessages={errorMessages}
+          results={results}
         />
       </DropdownMenu>
     </SelectableTableProvider>
