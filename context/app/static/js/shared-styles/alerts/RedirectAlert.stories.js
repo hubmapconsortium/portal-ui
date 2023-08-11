@@ -1,7 +1,10 @@
-import { RedirectAlert } from './RedirectAlert';
+import React from 'react';
+
+import { FlaskDataContext } from 'js/components/Contexts';
 
 import { organNotFoundMessageTemplate } from '../../pages/Organs/hooks';
-import { FlaskDataContext } from 'js/components/Contexts';
+
+import { RedirectAlert } from './RedirectAlert';
 
 const templates = {
   default: undefined,
@@ -39,8 +42,9 @@ export default {
 };
 
 export function RedirectAlertStory({ redirected_from, ...args }) {
+  const value = useMemo(() => ({ redirected_from }), [redirected_from]);
   return (
-    <FlaskDataContext.Provider value={{ redirected_from }}>
+    <FlaskDataContext.Provider value={value}>
       <RedirectAlert {...args} />
     </FlaskDataContext.Provider>
   );
