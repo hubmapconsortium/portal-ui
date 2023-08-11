@@ -33,6 +33,7 @@ function CreateWorkspaceDialog({
         maxWidth="md"
         content={
           <Box
+            id="create-workspace-form"
             component="form"
             sx={{
               marginTop: 1,
@@ -45,7 +46,7 @@ function CreateWorkspaceDialog({
         actions={
           <>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button component="span" disabled={errorMessages.length > 0}>
+            <Button type="submit" form="create-workspace-form" disabled={errorMessages.length > 0}>
               Submit
             </Button>
           </>
