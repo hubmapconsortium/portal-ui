@@ -4,6 +4,7 @@ from pathlib import Path
 from yaml import safe_load
 from flask import render_template, redirect, url_for, abort
 from werkzeug.utils import secure_filename
+import json
 
 import frontmatter
 
@@ -61,9 +62,10 @@ def redirect_to_organ_from_search(name, organs):
 @blueprint.route('/organ/<name>')
 def organ_details_view(name):
     organs = get_organs()
-    if name not in organs:
+    normalized_name = name.lower().replace(' ', '-').replace('_', '-')
+    if normalized_name not in organs:
         return redirect_to_organ_from_search(name, organs)
-    filename = Path(dirname(__file__)) / 'organ' / f'{secure_filename(name)}.yaml'
+    filename = Path(dirname(__file__)) / 'organ' / f'{secure_filename(normalized_name)}.yaml'
     organ = safe_load(filename.read_text())
     flask_data = {
         **get_default_flask_data(),

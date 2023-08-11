@@ -14,7 +14,9 @@ def client():
     'name,status',
     [('Kidney (Left)', '302 FOUND'), ('Small Intestine', '302 FOUND'),
      ('kidney', '200 OK'), ('small-intestine', '200 OK'),
-     ('turtle', '404 NOT FOUND')]
+     ('turtle', '404 NOT FOUND'), ('', '404 NOT FOUND'),
+     ('Placenta', '200 OK'), ('PLACENTA', '200 OK'),
+     ('Blood Vasculature', '200 OK'), ('Blood_vasculature', '200 OK'),]
 )
 def test_organ(client, name, status):
     response = client.get(f'/organ/{name}')
