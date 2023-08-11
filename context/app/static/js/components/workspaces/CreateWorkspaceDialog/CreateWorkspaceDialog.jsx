@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-import CreateWorkspaceInput from 'js/components/workspaces/CreateWorkspaceInput';
+import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { useCreateWorkspace } from './hooks';
 
@@ -11,6 +11,7 @@ function CreateWorkspaceDialog({
   buttonComponent: ButtonComponent,
   defaultName,
   errorMessages,
+  protectedHubmapIds,
   ...rest
 }) {
   const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace({
@@ -36,11 +37,22 @@ function CreateWorkspaceDialog({
             id="create-workspace-form"
             component="form"
             sx={{
+              display: 'grid',
+              gap: 2,
               marginTop: 1,
             }}
             onSubmit={handleSubmit(onSubmit)}
           >
-            <CreateWorkspaceInput control={control} name="name" errors={errors} />
+            {protectedHubmapIds.length > 0 && (
+              <WorkspaceField
+                control={control}
+                name="Protected Datasets"
+                errors={errors}
+                // eslint-disable-next-line no-underscore-dangle
+                value={protectedHubmapIds}
+              />
+            )}
+            <WorkspaceField control={control} name="name" label="Name" errors={errors} />
           </Box>
         }
         actions={

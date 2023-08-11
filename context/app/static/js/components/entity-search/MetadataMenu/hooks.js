@@ -32,7 +32,7 @@ function useDatasetsAccessLevel(ids) {
         must: [getIDsQuery(ids), getTermClause('mapped_data_access_level.keyword', 'Protected')],
       },
     },
-    _source: ['mapped_data_access_level'],
+    _source: ['mapped_data_access_level', 'hubmap_id'],
     size: ids.length,
   };
   const { searchHits: datasets } = useSearchHits(query);

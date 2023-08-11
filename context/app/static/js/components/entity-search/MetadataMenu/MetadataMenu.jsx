@@ -47,6 +47,9 @@ function MetadataMenu({ entityType, results }) {
   const { selectedRows } = useStore();
   const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
   const containsProtectedDataset = protectedRows.length > 0;
+  // eslint-disable-next-line no-underscore-dangle
+  const protectedHubmapIds = protectedRows.map((row) => row._source.hubmap_id).join(', ');
+
   const errorMessages = [];
 
   if (selectedRows.size > 10) {
@@ -57,9 +60,7 @@ function MetadataMenu({ entityType, results }) {
 
   if (containsProtectedDataset) {
     errorMessages.push(
-      'You have selected protected datasets. Workspaces currently only supports published public datasets. Please unselect protected datasets.',
-      // The commented out messaging is for version 2 when the protected datasets are displayed along with the error messages for Protected Datasets.
-      // 'You have selected protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.',
+      `You have selected ${protectedRows.length} protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.`,
     );
   }
 
@@ -92,6 +93,7 @@ function MetadataMenu({ entityType, results }) {
           buttonComponent={NotebookMenuItem}
           errorMessages={errorMessages}
           results={results}
+          protectedHubmapIds={protectedHubmapIds}
         />
       </DropdownMenu>
     </SelectableTableProvider>
