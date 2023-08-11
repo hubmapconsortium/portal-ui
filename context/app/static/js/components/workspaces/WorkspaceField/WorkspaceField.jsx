@@ -46,6 +46,20 @@ function WorkspaceField({ control, name, label, errors, value }) {
               }
             : null
         }
+        sx={
+          name === 'Protected Datasets'
+            ? {
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'primary.main',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'primary.main',
+                  },
+                },
+              }
+            : null
+        }
       />
     </div>
   );
