@@ -36,6 +36,6 @@ test('should add dataset counts to organ objects', () => {
 
 test('organNotFoundMessageTemplate should format the passed organ string into an error message', () => {
   expect(organNotFoundMessageTemplate('A')).toBe(
-    "The organ 'A' was not found. You have been redirected to the list of available organs.",
+    'The organ "A" was not found. You have been redirected to the list of available organs.',
   );
 });
