@@ -33,15 +33,19 @@ function WorkspaceField({ control, name, label, errors, value }) {
         {...field}
         error={Object.keys(errors).length > 0}
         helperText={errors.name?.message || ''}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={handleCopyClick}>
-                <ContentCopyIcon />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
+        InputProps={
+          name === 'Protected Datasets'
+            ? {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleCopyClick}>
+                      <ContentCopyIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }
+            : null
+        }
       />
     </div>
   );
