@@ -7,7 +7,7 @@ The services the portal relies on are [listed separately](/services).
 ## Git submodules
 
 ```
- 79cab515ee56184a824c6755ff25fc6e2d1a3a65 context/ingest-validation-tools (v0.0.13-23-g79cab51)
+ 79cab515ee56184a824c6755ff25fc6e2d1a3a65 context/ingest-validation-tools (v0.0.13-23-g79cab515)
 ```
 
 ## Python packages
@@ -27,7 +27,7 @@ hubmap-api-py-client>=0.0.9
 hubmap-commons>=2.0.12
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.12.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.13.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
