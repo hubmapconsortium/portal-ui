@@ -308,6 +308,7 @@ Routes.propTypes = {
     organs_count: PropTypes.number,
     vignette_json: PropTypes.object,
     geneSymbol: PropTypes.string,
+    redirected_from: PropTypes.string,
   }),
 };
 
