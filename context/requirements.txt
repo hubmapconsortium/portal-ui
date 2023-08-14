@@ -146,9 +146,9 @@ cachetools==5.0.0 \
     --hash=sha256:486471dfa8799eb7ec503a8059e263db000cdda20075ce5e48903087f79d5fd6 \
     --hash=sha256:8fecd4203a38af17928be7b90689d8083603073622229ca7077b72d8e5a976e4
     # via hubmap-commons
-certifi==2021.10.8 \
-    --hash=sha256:78884e7c1d4b00ce3cea67b44566851c4343c120abd683433ce934a68ea58872 \
-    --hash=sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569
+certifi==2023.7.22 \
+    --hash=sha256:539cc1d13202e33ca466e88b2807e29f4c13049d6d87031a3c110744495cb082 \
+    --hash=sha256:92d6037539857d8206b8f6ae472e8b77db8058fec5937a1ef3f54304089edbb9
     # via requests
 cffi==1.15.0 \
     --hash=sha256:00c878c90cb53ccfaae6b8bc18ad05d2036553e6d9d1d9dbcf323bbe83854ca3 \
@@ -300,7 +300,7 @@ flask==2.0.1 \
     --hash=sha256:1c4c257b1892aec1398784c63791cbaa43062f1f7aeb555c4da961b20ee68f55 \
     --hash=sha256:a6209ca15eb63fc9385f38e452704113d679511d9574d09b2cf9183ae7d20dc9
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   hubmap-commons
 fonttools==4.42.0 \
     --hash=sha256:01cfe02416b6d416c5c8d15e30315cbcd3e97d1b50d3b34b0ce59f742ef55258 \
@@ -413,7 +413,7 @@ globus-sdk==3.9.0 \
     --hash=sha256:456f707b25a8c502607134f1d699b5970ef1aa9d17877474db73fc6d87c711e9 \
     --hash=sha256:a196070b549d6af534a7fa8a180eae6ab84c0745959d5ee2d3863705eef9c7fc
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   hubmap-commons
 h5py==3.9.0 \
     --hash=sha256:12aa556d540f11a2cae53ea7cfb94017353bd271fb3962e1296b342f6550d1b8 \
@@ -443,12 +443,12 @@ h5py==3.9.0 \
 hubmap-api-py-client==0.0.9 \
     --hash=sha256:8af6df46374ed838d3aeb5fb7298d7212145eb0f8dca01c095147fb05e304ee2 \
     --hash=sha256:9a4601d8d3df9c56d6803cee2678844589808bd9df71657ac459a2559c0a3ccd
-    # via -r context/requirements.in
+    # via -r requirements.in
 hubmap-commons==2.0.12 \
     --hash=sha256:2812bfd553c8a8a0fc4cac581dec7ebff00e35bb887f6cf8810a0dfa91a1fde8 \
     --hash=sha256:c808010e716d5460b44fd18123965212113911b06b3b9cd9868c0740e800d4f1
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   portal-visualization
 idna==3.3 \
     --hash=sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff \
@@ -688,7 +688,7 @@ lxml==4.9.1 \
     --hash=sha256:fe17d10b97fdf58155f858606bddb4e037b805a60ae023c009f760d8361a4eb8 \
     --hash=sha256:fe749b052bb7233fe5d072fcb549221a8cb1a16725c47c37e42b0b9cb3ff2c3f
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   prov
 markupsafe==2.1.1 \
     --hash=sha256:0212a68688482dc52b2d45013df70d169f542b7394fc744c02a57374a4207003 \
@@ -1095,7 +1095,7 @@ platformdirs==2.5.1 \
     # via black
 portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.13.zip \
     --hash=sha256:535aae34a790942445bf67b54f1df8c64adfd4cdd813599791005264cd7834a9
-    # via -r context/requirements.in
+    # via -r requirements.in
 property==2.2 \
     --hash=sha256:d25e4da4e415408b9eb39b6521c088e4e2b8a9e2f9f96fb2d91680e97207ea19
     # via hubmap-commons
@@ -1146,7 +1146,7 @@ pyrsistent==0.18.1 \
 python-datauri==0.2.8 \
     --hash=sha256:5d6062ff85bc785a2230c40151d5aded80f1ce8652d5a31e3a64c78aa6e52a20 \
     --hash=sha256:68e8699cf2754a66f185f486c8d4c73e7ee5304aa53253bad0434fdbbde3f0b7
-    # via -r context/requirements.in
+    # via -r requirements.in
 python-dateutil==2.8.2 \
     --hash=sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86 \
     --hash=sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
@@ -1158,7 +1158,7 @@ python-dateutil==2.8.2 \
 python-frontmatter==0.5.0 \
     --hash=sha256:a7dcdfdaf498d488dce98bfa9452f8b70f803a923760ceab1ebd99291d98d28a \
     --hash=sha256:a9c2e90fc38e9f0c68d8b82299040f331ca3b8525ac7fa5f6beffef52b26c426
-    # via -r context/requirements.in
+    # via -r requirements.in
 pytz==2022.1 \
     --hash=sha256:1e760e2fe6a8163bc0b3d9a19c4f84342afa0a2affebfaa84b01b978a02ecaa7 \
     --hash=sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c
@@ -1216,7 +1216,7 @@ pyyaml==5.4 \
     --hash=sha256:f7a21e3d99aa3095ef0553e7ceba36fb693998fbb1226f1392ce33681047465f \
     --hash=sha256:fdc6b2cb4b19e431994f25a9160695cc59a4e861710cc6fc97161c5e845fc579
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   dask
     #   hubmap-commons
     #   python-frontmatter
@@ -1228,7 +1228,7 @@ requests==2.27.1 \
     --hash=sha256:68d7c56fd5a8999887728ef304a6d12edc7be74f1cfa47714fc8b414525c9a61 \
     --hash=sha256:f22fa1e554c9ddfd16e6e41ac79759e17be9e492b3587efa038054674760e72d
     # via
-    #   -r context/requirements.in
+    #   -r requirements.in
     #   globus-sdk
     #   hubmap-api-py-client
     #   hubmap-commons
