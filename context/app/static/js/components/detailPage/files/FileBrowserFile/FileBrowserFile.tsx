@@ -4,13 +4,19 @@ import prettyBytes from 'pretty-bytes';
 import { useAppContext } from 'js/components/Contexts';
 import { getTokenParam } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { useDetailContext } from 'js/components/detailPage/context';
+import { useDetailContext } from 'js/components/detailPage/DetailContext';
 import FilesConditionalLink from '../FilesConditionalLink';
 import PDFViewer from '../PDFViewer';
 import { StyledRow, StyledFileIcon, IndentedDiv, FileSize, StyledInfoIcon, QaChip } from './style';
-import { useFilesContext } from '../Files/context';
+import { useFilesContext } from '../Files/FilesContext';
+import { DatasetFile } from '../types';
 
-function FileBrowserFile({ fileObj, depth }) {
+type FileBrowserFileProps = {
+  fileObj: DatasetFile[];
+  depth: number;
+};
+
+function FileBrowserFile({ fileObj, depth }: FileBrowserFileProps) {
   const { hasAgreedToDUA, openDUA } = useFilesContext();
   const { uuid } = useDetailContext();
   const { assetsEndpoint, groupsToken } = useAppContext();

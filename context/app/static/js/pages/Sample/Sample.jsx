@@ -13,7 +13,7 @@ import MetadataTable from 'js/components/detailPage/MetadataTable';
 import SampleTissue from 'js/components/detailPage/SampleTissue';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-import { DetailContext } from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/DetailContext';
 import { getSectionOrder } from 'js/components/detailPage/utils';
 
 import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/DerivedDatasetsSection';

@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import { useDetailContext } from 'js/components/detailPage/context';
+import { useDetailContext } from 'js/components/detailPage/DetailContext';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../FileBrowserDUA';
-import { FilesContext } from './context';
+import { FilesContext } from './FilesContext';
 import { MarginBottomDiv } from './style';
 
 function Files({ files }) {

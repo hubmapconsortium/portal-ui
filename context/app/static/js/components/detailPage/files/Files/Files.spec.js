@@ -5,7 +5,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
 import { FlaskDataContext } from 'js/components/Contexts';
-import { DetailContext } from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/DetailContext';
 import Files from './Files';
 
 const uuid = 'fakeuuid';

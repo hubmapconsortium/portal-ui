@@ -9,7 +9,7 @@ import Chip from '@mui/material/Chip';
 
 import HubmapDataFooter from 'js/components/detailPage/files/HubmapDataFooter';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import useFilesStore, {FileDisplayOption, FilesStore} from 'js/stores/useFilesStore';
+import useFilesStore, { FileDisplayOption, FilesStore } from 'js/stores/useFilesStore';
 import { relativeFilePathsToTree } from './utils';
 import FileBrowserNode from '../FileBrowserNode';
 import { ChipWrapper, StyledTableContainer, HiddenTableHead } from './style';
@@ -25,20 +25,22 @@ const filesStoreSelector = (state: FilesStore) => ({
 
 type FileBrowserProps = {
   files: DatasetFile[];
-}
+};
 
 function FileBrowser({ files }: FileBrowserProps) {
-  const { displayOnlyQaQc, displayOnlyDataProducts, filesToDisplay, toggleDisplayOnlyQaQc } = useFilesStore(filesStoreSelector);
+  const { displayOnlyQaQc, displayOnlyDataProducts, filesToDisplay, toggleDisplayOnlyQaQc } =
+    useFilesStore(filesStoreSelector);
   const {
     entity: { entity_type },
   } = useFlaskDataContext();
 
   const fileTrees = useMemo(
-    () => ({
-      all: relativeFilePathsToTree(files),
-      ['qa/qc']: relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc)),
-      'data products': relativeFilePathsToTree(files.filter((file) => file?.is_data_product)),
-    } as Record<FileDisplayOption, DatasetFile[]>),
+    () =>
+      ({
+        all: relativeFilePathsToTree(files),
+        'qa/qc': relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc)),
+        'data products': relativeFilePathsToTree(files.filter((file) => file?.is_data_product)),
+      } as Record<FileDisplayOption, DatasetFile[]>),
     [files],
   );
 
@@ -60,7 +62,7 @@ function FileBrowser({ files }: FileBrowserProps) {
             clickable
             onClick={toggleDisplayOnlyQaQc}
             color={displayOnlyDataProducts ? 'primary' : undefined}
-            icon={displayOnlyQaQc ? <DoneIcon /> : undefined}
+            icon={displayOnlyDataProducts ? <DoneIcon /> : undefined}
             component="button"
             disabled={Object.keys(fileTrees['data products']).length === 0}
           />

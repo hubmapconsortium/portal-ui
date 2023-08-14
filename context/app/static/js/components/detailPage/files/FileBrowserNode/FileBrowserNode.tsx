@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 
 import FileBrowserDirectory from '../FileBrowserDirectory';
 import FileBrowserFile from '../FileBrowserFile';
+import { DatasetFile } from '../types';
 
 type FileBrowserNodeProps = {
-  
-}
+  fileSubTree: {
+    files: DatasetFile[];
+  };
+};
 
-function FileBrowserNode({ fileSubTree, depth }) {
+function FileBrowserNode({ fileSubTree, depth }: FileBrowserNodeProps) {
   return Object.entries(fileSubTree).map(([k, v]) => {
     // if the object contains array of files, display all files
     if (k === 'files') {

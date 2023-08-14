@@ -3,9 +3,9 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from 'test-utils/functions';
 
 import { FlaskDataContext } from 'js/components/Contexts';
-import { DetailContext } from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/DetailContext';
 import FileBrowser from './FileBrowser';
-import { FilesContext } from '../Files/context';
+import { FilesContext } from '../Files/FilesContext';
 
 const fakeOpenDUA = jest.fn();
 
