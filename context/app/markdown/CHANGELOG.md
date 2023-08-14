@@ -1,3 +1,13 @@
+## v0.77.0 - 2023-08-14
+
+- Fix Reference dataset link color on organ page.
+- Fix molecular data queries beta page select and autocomplete components.
+- Remove extra logic to determine whether to display publication slide.
+- Make individual organs' routes case insensitive
+- Handle spaces and underscores sent as part of organ name
+- Upgrade portal-visualization to 0.0.13.
+
+
 ## v0.76.3 - 2023-08-10
 
 - Implemented new panel design when entity api for globus link returns an error. 

@@ -1,1 +1,0 @@
-- Fix molecular data queries beta page select and autocomplete components.
