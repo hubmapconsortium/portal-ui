@@ -1,1 +1,0 @@
-- Remove extra logic to determine whether to display publication slide.

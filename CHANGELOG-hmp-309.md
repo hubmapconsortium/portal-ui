@@ -1,2 +1,0 @@
-- Make individual organs' routes case insensitive
-- Handle spaces and underscores sent as part of organ name
