@@ -4,6 +4,9 @@ import { useContext, createContext } from 'js/helpers/context';
 
 type FlaskDataContextType = {
   redirected_from: string;
+  entity: {
+    entity_type: string;
+  };
   [key: string]: unknown;
 };
 

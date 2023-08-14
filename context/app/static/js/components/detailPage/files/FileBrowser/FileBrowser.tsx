@@ -9,18 +9,26 @@ import Chip from '@mui/material/Chip';
 
 import HubmapDataFooter from 'js/components/detailPage/files/HubmapDataFooter';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import useFilesStore from 'js/stores/useFilesStore';
+import useFilesStore, {FileDisplayOption, FilesStore} from 'js/stores/useFilesStore';
 import { relativeFilePathsToTree } from './utils';
 import FileBrowserNode from '../FileBrowserNode';
 import { ChipWrapper, StyledTableContainer, HiddenTableHead } from './style';
+import { DatasetFile } from '../types';
 
-const filesStoreSelector = (state) => ({
-  displayOnlyQaQc: state.displayOnlyQaQc,
+const filesStoreSelector = (state: FilesStore) => ({
+  displayOnlyQaQc: state.filesToDisplay === 'qa/qc',
+  displayOnlyDataProducts: state.filesToDisplay === 'data products',
+  filesToDisplay: state.filesToDisplay,
   toggleDisplayOnlyQaQc: state.toggleDisplayOnlyQaQc,
+  toggleDisplayOnlyDataProducts: state.toggleDisplayOnlyDataProducts,
 });
 
-function FileBrowser({ files }) {
-  const { displayOnlyQaQc, toggleDisplayOnlyQaQc } = useFilesStore(filesStoreSelector);
+type FileBrowserProps = {
+  files: DatasetFile[];
+}
+
+function FileBrowser({ files }: FileBrowserProps) {
+  const { displayOnlyQaQc, displayOnlyDataProducts, filesToDisplay, toggleDisplayOnlyQaQc } = useFilesStore(filesStoreSelector);
   const {
     entity: { entity_type },
   } = useFlaskDataContext();
@@ -28,8 +36,9 @@ function FileBrowser({ files }) {
   const fileTrees = useMemo(
     () => ({
       all: relativeFilePathsToTree(files),
-      qa: relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc)),
-    }),
+      ['qa/qc']: relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc)),
+      'data products': relativeFilePathsToTree(files.filter((file) => file?.is_data_product)),
+    } as Record<FileDisplayOption, DatasetFile[]>),
     [files],
   );
 
@@ -44,7 +53,16 @@ function FileBrowser({ files }) {
             color={displayOnlyQaQc ? 'primary' : undefined}
             icon={displayOnlyQaQc ? <DoneIcon /> : undefined}
             component="button"
-            disabled={Object.keys(fileTrees.qa).length === 0}
+            disabled={Object.keys(fileTrees['qa/qc']).length === 0}
+          />
+          <Chip
+            label="Show Data Products Files"
+            clickable
+            onClick={toggleDisplayOnlyQaQc}
+            color={displayOnlyDataProducts ? 'primary' : undefined}
+            icon={displayOnlyQaQc ? <DoneIcon /> : undefined}
+            component="button"
+            disabled={Object.keys(fileTrees['data products']).length === 0}
           />
         </ChipWrapper>
         <Table data-testid="file-browser">
@@ -56,7 +74,7 @@ function FileBrowser({ files }) {
             </TableRow>
           </HiddenTableHead>
           <TableBody>
-            <FileBrowserNode fileSubTree={displayOnlyQaQc ? fileTrees.qa : fileTrees.all} depth={0} />
+            <FileBrowserNode fileSubTree={fileTrees[filesToDisplay]} depth={0} />
           </TableBody>
         </Table>
       </StyledTableContainer>
