@@ -12,11 +12,11 @@ const useFilesStore = create<FilesStore>((set) => ({
   filesToDisplay: 'all',
   toggleDisplayOnlyQaQc: () =>
     set((state) => ({
-      filesToDisplay: state.filesToDisplay === 'all' ? 'qa/qc' : 'all',
+      filesToDisplay: state.filesToDisplay !== 'qa/qc' ? 'qa/qc' : 'all',
     })),
   toggleDisplayOnlyDataProducts: () =>
     set((state) => ({
-      filesToDisplay: state.filesToDisplay === 'all' ? 'data products' : 'all',
+      filesToDisplay: state.filesToDisplay !== 'data products' ? 'data products' : 'all',
     })),
 }));
 
