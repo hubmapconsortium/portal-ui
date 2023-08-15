@@ -18,6 +18,7 @@ globals:
   userEmail: readonly
   workspacesToken: readonly
   userGroups: readonly
+  sentryEnv: readonly
 env:
   browser: true
   node: true
