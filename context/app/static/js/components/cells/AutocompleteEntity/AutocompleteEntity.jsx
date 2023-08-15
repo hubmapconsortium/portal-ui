@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import Chip from '@mui/material/Chip';
 
 import CellsService from 'js/components/cells/CellsService';
 
@@ -48,11 +49,15 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     }
   }
 
+  console.log(cellVariableNames);
+
   return (
     <Autocomplete
       options={options}
       multiple
-      getOptionLabel={(option) => option.full}
+      getOptionLabel={(option) => {
+        return option.full;
+      }}
       isOptionEqualToValue={(option, value) => option.full === value}
       loading={loading.current}
       renderOption={(props, option) => (
@@ -62,6 +67,11 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
           {option.post}
         </li>
       )}
+      renderTags={(value, getTagProps) =>
+        value.map((option, index) => {
+          return <Chip key={option} label={option} {...getTagProps({ index })} />;
+        })
+      }
       value={cellVariableNames}
       onChange={(event, value) => {
         // Needed to avoid a second list in state of 'selections'.
