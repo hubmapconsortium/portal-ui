@@ -31,7 +31,7 @@ function DialogModal({
         </Typography>
       </StyledDialogTitle>
       <DialogContent>
-        {errorMessages && (
+        {errorMessages?.length > 0 && (
           <Box sx={{ display: 'grid', gap: 1, marginBottom: 3 }}>
             {errorMessages.map((errorMessage) => (
               <Alert key={errorMessage} severity="error">
