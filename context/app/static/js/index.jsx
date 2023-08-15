@@ -13,9 +13,12 @@ import { setJsonLD } from './schema.org';
 //   console.warn('Schema validation errors', validation_errors);
 // }
 
+const sentryEnvironment = flaskData?.sentryEnv;
+
 Sentry.init({
   dsn: 'https://291ecc6dd41c7f9f94e5be5aefba35b2@o4505670253084672.ingest.sentry.io/4505709697892352',
-  enabled: ['prod', 'prod-stage', 'local'].includes(flaskData?.sentryEnv),
+  environment: sentryEnvironment,
+  enabled: ['prod', 'prod-stage', 'local'].includes(sentryEnvironment),
   release: `portal-ui-react@${PACKAGE_VERSION}`,
 });
 
