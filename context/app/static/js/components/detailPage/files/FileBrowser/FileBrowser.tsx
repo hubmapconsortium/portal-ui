@@ -14,7 +14,7 @@ import { TableCell, TableContainer, TableHead } from '@mui/material';
 import { relativeFilePathsToTree } from './utils';
 import FileBrowserNode from '../FileBrowserNode';
 import { ChipWrapper } from './style';
-import { DatasetFile } from '../types';
+import { DatasetFile, FileTree } from '../types';
 
 const filesStoreSelector = (state: FilesStore) => ({
   displayOnlyQaQc: state.filesToDisplay === 'qa/qc',
@@ -61,13 +61,13 @@ function FileBrowser({ files }: FileBrowserProps) {
     entity: { entity_type },
   } = useFlaskDataContext();
 
-  const fileTrees = useMemo(
+  const fileTrees: Record<FileDisplayOption, FileTree> = useMemo(
     () =>
       ({
         all: relativeFilePathsToTree(files),
         'qa/qc': relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc)),
         'data products': relativeFilePathsToTree(files.filter((file) => file?.is_data_product)),
-      } as Record<FileDisplayOption, DatasetFile[]>),
+      }),
     [files],
   );
 
@@ -105,18 +105,5 @@ function FileBrowser({ files }: FileBrowserProps) {
     </>
   );
 }
-
-FileBrowser.propTypes = {
-  files: PropTypes.arrayOf(
-    PropTypes.shape({
-      rel_path: PropTypes.string.isRequired,
-      edam_term: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      size: PropTypes.number.isRequired,
-      type: PropTypes.string.isRequired,
-      is_qa_qc: PropTypes.bool,
-    }),
-  ).isRequired,
-};
 
 export default FileBrowser;

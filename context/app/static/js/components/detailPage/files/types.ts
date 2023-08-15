@@ -9,3 +9,11 @@ export type DatasetFile = {
   size: number;
   type: string;
 };
+
+export type UnprocessedFile = Omit<DatasetFile, 'file'>;
+
+export type FileTree = {
+  [key: string]: FileTree;
+} & {
+  files: DatasetFile[];
+};

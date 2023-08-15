@@ -1,15 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import FileBrowserDirectory from '../FileBrowserDirectory';
 import FileBrowserFile from '../FileBrowserFile';
-import { DatasetFile } from '../types';
+import { FileTree } from '../types';
 
 type FileBrowserNodeProps = {
-  fileSubTree: {
-    files?: DatasetFile[];
-    [key: string]: FileBrowserNodeProps['fileSubTree'];
-  };
+  fileSubTree: FileTree;
   depth: number;
 };
 
@@ -17,15 +13,13 @@ function FileBrowserNode({ fileSubTree, depth }: FileBrowserNodeProps) {
   return (
     <>
       {Object.entries(fileSubTree).map(([k, v]) => {
-        // if the object contains array of files, display all files
-        if (k === 'files' && Array.isArray(v)) {
-          return (
-            <>
-              {v.map((file) => (
-                <FileBrowserFile key={file.rel_path} fileObj={file} depth={depth} />
-              ))}
-            </>
-          );
+        if (Array.isArray(v)) {
+          // if the object contains array of files, display all files
+          if (k === 'files') {
+            return v.map((file) => <FileBrowserFile key={file.rel_path} fileObj={file} depth={depth} />);
+          }
+          // If non-"files" key contains an array, throw an error
+          throw new Error('FileBrowserNode: fileSubTree should not contain arrays in non-"files" keys.');
         }
         // if the object contains additional directories, display dir and continue down
         return (
@@ -37,10 +31,5 @@ function FileBrowserNode({ fileSubTree, depth }: FileBrowserNodeProps) {
     </>
   );
 }
-
-FileBrowserNode.propTypes = {
-  fileSubTree: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.array])).isRequired,
-  depth: PropTypes.number.isRequired,
-};
 
 export default FileBrowserNode;
