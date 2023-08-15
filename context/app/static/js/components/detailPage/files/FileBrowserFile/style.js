@@ -12,10 +12,9 @@ const StyledRow = styled(TableRow)`
   }
 `;
 
-// 24px the width of the directory arrow icon and is used to keep the file icon aligned with the directory icon
 const IndentedDiv = styled.div`
   padding: 10px 40px;
-  margin-left: ${(props) => parseInt(props.theme.spacing(props.$depth * 1.5), 10) + 24}px;
+  margin-left: ${(props) => props.theme.spacing(props.$depth)};
   display: flex;
   align-items: center;
 `;
@@ -34,10 +33,10 @@ const StyledInfoIcon = styled(InfoIcon)`
   font-size: 1rem;
 `;
 
-const QaChip = styled(Chip)`
+const FileTypeChip = styled(Chip)`
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 8px;
 `;
 
-export { StyledRow, IndentedDiv, StyledFileIcon, FileSize, StyledInfoIcon, QaChip };
+export { StyledRow, IndentedDiv, StyledFileIcon, FileSize, StyledInfoIcon, FileTypeChip };

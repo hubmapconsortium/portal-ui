@@ -7,23 +7,35 @@ import { DatasetFile } from '../types';
 
 type FileBrowserNodeProps = {
   fileSubTree: {
-    files: DatasetFile[];
+    files?: DatasetFile[];
+    [key: string]: FileBrowserNodeProps['fileSubTree'];
   };
+  depth: number;
 };
 
 function FileBrowserNode({ fileSubTree, depth }: FileBrowserNodeProps) {
-  return Object.entries(fileSubTree).map(([k, v]) => {
-    // if the object contains array of files, display all files
-    if (k === 'files') {
-      return v.map((file) => <FileBrowserFile key={file.rel_path} fileObj={file} depth={depth} />);
-    }
-    // if the object contains additional directories, display dir and continue down
-    return (
-      <FileBrowserDirectory key={`${k}-${depth}`} dirName={k.slice(0, -1)} depth={depth}>
-        <FileBrowserNode fileSubTree={v} depth={depth + 1} />
-      </FileBrowserDirectory>
-    );
-  });
+  return (
+    <>
+      {Object.entries(fileSubTree).map(([k, v]) => {
+        // if the object contains array of files, display all files
+        if (k === 'files' && Array.isArray(v)) {
+          return (
+            <>
+              {v.map((file) => (
+                <FileBrowserFile key={file.rel_path} fileObj={file} depth={depth} />
+              ))}
+            </>
+          );
+        }
+        // if the object contains additional directories, display dir and continue down
+        return (
+          <FileBrowserDirectory key={`${k}-${depth}`} dirName={k.slice(0, -1)} depth={depth}>
+            <FileBrowserNode fileSubTree={v} depth={depth + 1} />
+          </FileBrowserDirectory>
+        );
+      })}
+    </>
+  );
 }
 
 FileBrowserNode.propTypes = {

@@ -2,7 +2,7 @@ import { styled } from '@mui/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 const ChipWrapper = styled('div')(({ theme }) => ({
-  padding: '12px 15px',
+  padding: theme.spacing(1.5, 2),
   position: 'sticky',
   top: 0,
   borderBottom: `1px solid ${theme.palette.divider}`,
@@ -12,9 +12,9 @@ const ChipWrapper = styled('div')(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const StyledTableContainer = styled(TableContainer)`
-  max-height: 600px;
-  overflow-y: auto;
-`;
+const StyledTableContainer = styled(TableContainer)(() => ({
+  maxHeight: 600,
+  overflowY: 'auto',
+}));
 
 export { ChipWrapper, StyledTableContainer };

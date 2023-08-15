@@ -5,14 +5,15 @@ import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
-import Chip from '@mui/material/Chip';
+import Chip, { ChipProps } from '@mui/material/Chip';
 
 import HubmapDataFooter from 'js/components/detailPage/files/HubmapDataFooter';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import useFilesStore, { FileDisplayOption, FilesStore } from 'js/stores/useFilesStore';
+import { TableCell, TableContainer, TableHead } from '@mui/material';
 import { relativeFilePathsToTree } from './utils';
 import FileBrowserNode from '../FileBrowserNode';
-import { ChipWrapper, StyledTableContainer, HiddenTableHead } from './style';
+import { ChipWrapper } from './style';
 import { DatasetFile } from '../types';
 
 const filesStoreSelector = (state: FilesStore) => ({
@@ -27,9 +28,35 @@ type FileBrowserProps = {
   files: DatasetFile[];
 };
 
+type FileControlChipProps = Pick<ChipProps<'button'>, 'label' | 'onClick' | 'disabled'> & {
+  selected: boolean;
+};
+
+function ControlChip({ label, onClick, disabled, selected }: FileControlChipProps) {
+  return (
+    <Chip
+      label={label}
+      clickable
+      onClick={onClick}
+      component="button"
+      disabled={disabled}
+      color={selected ? 'primary' : undefined}
+      icon={selected ? <DoneIcon /> : undefined}
+      sx={{
+        px: selected ? 0 : 1.5,
+      }}
+    />
+  );
+}
+
 function FileBrowser({ files }: FileBrowserProps) {
-  const { displayOnlyQaQc, displayOnlyDataProducts, filesToDisplay, toggleDisplayOnlyQaQc } =
-    useFilesStore(filesStoreSelector);
+  const {
+    displayOnlyQaQc,
+    displayOnlyDataProducts,
+    filesToDisplay,
+    toggleDisplayOnlyQaQc,
+    toggleDisplayOnlyDataProducts,
+  } = useFilesStore(filesStoreSelector);
   const {
     entity: { entity_type },
   } = useFlaskDataContext();
@@ -46,40 +73,34 @@ function FileBrowser({ files }: FileBrowserProps) {
 
   return (
     <>
-      <StyledTableContainer component={Paper}>
+      <TableContainer sx={{ maxHeight: 600, overflowY: 'auto' }} component={Paper}>
         <ChipWrapper>
-          <Chip
-            label="Show QA Files Only"
-            clickable
+          <ControlChip
+            label="Show QA Files"
             onClick={toggleDisplayOnlyQaQc}
-            color={displayOnlyQaQc ? 'primary' : undefined}
-            icon={displayOnlyQaQc ? <DoneIcon /> : undefined}
-            component="button"
+            selected={displayOnlyQaQc}
             disabled={Object.keys(fileTrees['qa/qc']).length === 0}
           />
-          <Chip
+          <ControlChip
             label="Show Data Products Files"
-            clickable
-            onClick={toggleDisplayOnlyQaQc}
-            color={displayOnlyDataProducts ? 'primary' : undefined}
-            icon={displayOnlyDataProducts ? <DoneIcon /> : undefined}
-            component="button"
+            onClick={toggleDisplayOnlyDataProducts}
+            selected={displayOnlyDataProducts}
             disabled={Object.keys(fileTrees['data products']).length === 0}
           />
         </ChipWrapper>
         <Table data-testid="file-browser">
-          <HiddenTableHead>
+          <TableHead>
             <TableRow>
-              <td>Name</td>
-              <td>Type</td>
-              <td>Size</td>
+              <TableCell>Name</TableCell>
+              <TableCell colSpan={2}>Type</TableCell>
+              <TableCell>Size</TableCell>
             </TableRow>
-          </HiddenTableHead>
+          </TableHead>
           <TableBody>
             <FileBrowserNode fileSubTree={fileTrees[filesToDisplay]} depth={0} />
           </TableBody>
         </Table>
-      </StyledTableContainer>
+      </TableContainer>
       {['Dataset', 'Support'].includes(entity_type) && <HubmapDataFooter />}
     </>
   );
