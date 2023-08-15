@@ -19,7 +19,7 @@ function WorkspaceField({ control, name, label, errors, value }) {
 
   const handleCopyClick = () => {
     navigator.clipboard.writeText(field.value).then(() => {
-      openSnackbar();
+      openSnackbar('Copied to clipboard.');
     });
   };
 
