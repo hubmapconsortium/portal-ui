@@ -2,6 +2,7 @@ import React from 'react';
 
 import Search from 'js/components/entity-search/Search';
 import { getDefaultFilters } from 'js/components/entity-search/searchkit-modifications/getDefaultFilters';
+import { SnackbarProvider, createStore } from 'js/shared-styles/snackbars';
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import {
   mergeObjects,
@@ -41,6 +42,8 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
     return null;
   }
 
+  const snackbarStore = createStore();
+
   return (
     <SearchConfigProvider
       initialConfig={{
@@ -55,7 +58,9 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
         tileFields,
       }}
     >
-      <Search />
+      <SnackbarProvider createStore={() => snackbarStore}>
+        <Search />
+      </SnackbarProvider>
     </SearchConfigProvider>
   );
 }

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { SearchkitClient, withSearchkit } from '@searchkit/client';
 
-import { SuccessSnackbar, useSnackbarStore, SnackbarProvider, createStore } from 'js/shared-styles/snackbars';
+import { SuccessSnackbar, useSnackbarStore } from 'js/shared-styles/snackbars';
 import withSearchkitRouting from 'js/components/entity-search/searchkit-modifications/withSearchkitRouting';
 import Sidebar from 'js/components/entity-search/sidebar/Sidebar';
 import SearchBar from 'js/components/entity-search/SearchBar';
@@ -14,7 +14,6 @@ import { Flex, Grow } from './style';
 import { useSearch } from './hooks';
 
 const defaultPageSize = 18;
-const snackbarStore = createStore();
 
 const createSkClient = () =>
   new SearchkitClient({
@@ -26,7 +25,7 @@ function Search() {
   const { snackbarOpen, closeSnackbar } = useSnackbarStore();
 
   return (
-    <SnackbarProvider createStore={() => snackbarStore}>
+    <>
       <Flex>
         <Grow>
           <SearchBar />
@@ -46,7 +45,7 @@ function Search() {
         autoHideDuration={1000}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       />
-    </SnackbarProvider>
+    </>
   );
 }
 
