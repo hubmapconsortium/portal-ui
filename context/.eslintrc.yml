@@ -11,6 +11,7 @@ extends:
 parser: '@typescript-eslint/parser'
 globals:
   CDN_URL: readonly
+  PACKAGE_VERSION: readonly
   flaskData: readonly
   groupsToken: readonly
   isAuthenticated: readonly
