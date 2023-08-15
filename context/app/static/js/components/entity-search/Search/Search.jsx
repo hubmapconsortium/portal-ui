@@ -22,7 +22,7 @@ const createSkClient = () =>
 
 function Search() {
   const { results, allResultsUUIDs, entityType } = useSearch();
-  const { snackbarOpen, closeSnackbar } = useSnackbarStore();
+  const { snackbarOpen, closeSnackbar, message } = useSnackbarStore();
 
   return (
     <>
@@ -41,7 +41,7 @@ function Search() {
       <SuccessSnackbar
         open={snackbarOpen}
         onClose={closeSnackbar}
-        message="Copied to clipboard."
+        message={message}
         autoHideDuration={2000}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       />

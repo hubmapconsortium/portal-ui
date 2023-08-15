@@ -5,6 +5,7 @@ const { Provider, useStore } = createContext();
 
 const createStore = () =>
   create((set) => ({
+    message: '',
     snackbarOpen: false,
     openSnackbar: () => set({ snackbarOpen: true }),
     closeSnackbar: () => set({ snackbarOpen: false }),
