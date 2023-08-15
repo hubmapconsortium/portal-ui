@@ -19,7 +19,7 @@ function DialogModal({
   isOpen,
   handleClose,
   DialogContentComponent,
-  selectedRowsError,
+  selectedRowsErrors,
   ...props
 }) {
   const DialogContent = DialogContentComponent || MUIDialogContent;
@@ -32,18 +32,18 @@ function DialogModal({
         </Typography>
       </StyledDialogTitle>
       <DialogContent>
-        {selectedRowsError?.length > 0 && (
+        {selectedRowsErrors?.length > 0 && (
           <Box sx={{ display: 'grid', gap: 1, marginBottom: 3 }}>
-            {selectedRowsError.map((errorMessage) => {
+            {selectedRowsErrors.map((selectedRowsError) => {
               return (
-                <div key={errorMessage.errorType}>
-                  <Alert key={errorMessage} severity="error">
-                    {errorMessage.message}
+                <div key={selectedRowsError.errorType}>
+                  <Alert key={selectedRowsError} severity="error">
+                    {selectedRowsError.message}
                   </Alert>
-                  {errorMessage.type === 'protected' && (
+                  {selectedRowsError.type === 'protected' && (
                     <Box sx={{ marginTop: 1 }}>
                       <Button variant="contained" color="primary" onClick={() => alert('button clicked')}>
-                        Create New List
+                        Remove Protected Datasets ({selectedRowsError.size})
                       </Button>
                     </Box>
                   )}

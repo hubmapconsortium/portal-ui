@@ -10,7 +10,7 @@ function CreateWorkspaceDialog({
   handleCreateWorkspace,
   buttonComponent: ButtonComponent,
   defaultName,
-  selectedRowsError,
+  selectedRowsErrors,
   protectedHubmapIds,
   ...rest
 }) {
@@ -58,12 +58,12 @@ function CreateWorkspaceDialog({
         actions={
           <>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit" form="create-workspace-form" disabled={selectedRowsError.length > 0}>
+            <Button type="submit" form="create-workspace-form" disabled={selectedRowsErrors.length > 0}>
               Submit
             </Button>
           </>
         }
-        selectedRowsError={selectedRowsError}
+        selectedRowsErrors={selectedRowsErrors}
       />
     </>
   );

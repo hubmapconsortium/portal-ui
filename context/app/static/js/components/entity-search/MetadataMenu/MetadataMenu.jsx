@@ -50,19 +50,20 @@ function MetadataMenu({ entityType, results }) {
   // eslint-disable-next-line no-underscore-dangle
   const protectedHubmapIds = protectedRows.map((row) => row._source.hubmap_id).join(', ');
 
-  const selectedRowsError = [];
+  const selectedRowsErrors = [];
 
   if (selectedRows.size > 10) {
-    selectedRowsError.push({
+    selectedRowsErrors.push({
       type: 'overLimit',
       message: `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
     });
   }
 
   if (containsProtectedDataset) {
-    selectedRowsError.push({
+    selectedRowsErrors.push({
       type: 'protected',
       message: `You have selected ${protectedRows.length} protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.`,
+      size: protectedRows.length,
     });
   }
 
@@ -93,7 +94,7 @@ function MetadataMenu({ entityType, results }) {
         <CreateWorkspaceDialog
           handleCreateWorkspace={createNotebook}
           buttonComponent={NotebookMenuItem}
-          selectedRowsError={selectedRowsError}
+          selectedRowsErrors={selectedRowsErrors}
           results={results}
           protectedHubmapIds={protectedHubmapIds}
         />
