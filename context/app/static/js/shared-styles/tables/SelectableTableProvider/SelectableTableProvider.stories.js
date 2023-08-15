@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell/';
 import SelectableTableProviderComponent from './SelectableTableProvider';
-import { useStore } from './store';
+import { useSelectableTableStore } from './store';
 
 export default {
   title: 'Tables/SelectableTableProvider',
@@ -21,7 +21,7 @@ export default {
 export const rowKeys = ['A', 'B', 'C'];
 
 function ExampleTable() {
-  const { selectedRows } = useStore();
+  const { selectedRows } = useSelectableTableStore();
   return (
     <div>
       <Table>

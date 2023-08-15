@@ -50,7 +50,7 @@ function DialogModal({
           <Box sx={{ display: 'grid', gap: 1, marginBottom: 3 }}>
             {selectedRowsErrors.map((selectedRowsError) => {
               return (
-                <div key={selectedRowsError.errorType}>
+                <div key={selectedRowsError.message}>
                   <Alert key={selectedRowsError} severity="error">
                     {selectedRowsError.message}
                   </Alert>
