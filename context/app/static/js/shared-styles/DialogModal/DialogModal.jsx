@@ -27,7 +27,7 @@ function DialogModal({
   const { openSnackbar } = useSnackbarStore();
 
   const removeProctedDatasets = () => {
-    openSnackbar();
+    openSnackbar('Protected datasets successfully removed from selection.');
   };
 
   return (
