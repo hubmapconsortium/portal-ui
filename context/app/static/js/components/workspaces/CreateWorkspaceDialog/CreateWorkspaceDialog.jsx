@@ -2,8 +2,10 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import DialogModal from 'js/shared-styles/DialogModal';
+import { useSnackbarStore } from 'js/shared-styles/snackbars';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useCreateWorkspace } from './hooks';
 
 function CreateWorkspaceDialog({
@@ -21,6 +23,17 @@ function CreateWorkspaceDialog({
 
   // eslint-disable-next-line no-underscore-dangle
   const protectedHubmapIds = protectedRows.map((row) => row._source.hubmap_id).join(', ');
+  const { openSnackbar } = useSnackbarStore();
+  const { deselectRow } = useSelectableTableStore();
+
+  const removeProctedDatasets = () => {
+    protectedRows.forEach((row) => {
+      // eslint-disable-next-line no-underscore-dangle
+      deselectRow(row._id);
+    });
+
+    openSnackbar('Protected datasets successfully removed from selection.');
+  };
 
   return (
     <>
@@ -49,13 +62,20 @@ function CreateWorkspaceDialog({
             onSubmit={handleSubmit(onSubmit)}
           >
             {protectedHubmapIds.length > 0 && (
-              <WorkspaceField
-                control={control}
-                name="Protected Datasets"
-                errors={errors}
-                // eslint-disable-next-line no-underscore-dangle
-                value={protectedHubmapIds}
-              />
+              <Box>
+                <WorkspaceField
+                  control={control}
+                  name="Protected Datasets"
+                  errors={errors}
+                  // eslint-disable-next-line no-underscore-dangle
+                  value={protectedHubmapIds}
+                />
+                {/* <Box> */}
+                <Button variant="contained" color="primary" onClick={() => removeProctedDatasets()}>
+                  Remove Protected Datasets ({protectedRows.length})
+                </Button>
+                {/* </Box> */}
+              </Box>
             )}
             <WorkspaceField control={control} name="name" label="Name" errors={errors} />
           </Box>

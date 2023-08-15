@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import MUIDialogContent from '@mui/material/DialogContent';
@@ -8,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import { Alert } from 'js/shared-styles/alerts';
-import { useSnackbarStore } from 'js/shared-styles/snackbars';
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+// import { useSnackbarStore } from 'js/shared-styles/snackbars';
+// import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { StyledDivider, StyledDialogTitle } from './style';
 
 function DialogModal({
@@ -26,17 +25,6 @@ function DialogModal({
   ...props
 }) {
   const DialogContent = DialogContentComponent || MUIDialogContent;
-  const { openSnackbar } = useSnackbarStore();
-  const { deselectRow } = useSelectableTableStore();
-
-  const removeProctedDatasets = () => {
-    protectedRows.forEach((row) => {
-      // eslint-disable-next-line no-underscore-dangle
-      deselectRow(row._id);
-    });
-
-    openSnackbar('Protected datasets successfully removed from selection.');
-  };
 
   return (
     <Dialog open={isOpen} onClose={handleClose} fullWidth {...props}>
@@ -54,13 +42,6 @@ function DialogModal({
                   <Alert key={selectedRowsError} severity="error">
                     {selectedRowsError.message}
                   </Alert>
-                  {selectedRowsError.type === 'protected' && (
-                    <Box sx={{ marginTop: 1 }}>
-                      <Button variant="contained" color="primary" onClick={() => removeProctedDatasets()}>
-                        Remove Protected Datasets ({selectedRowsError.size})
-                      </Button>
-                    </Box>
-                  )}
                 </div>
               );
             })}
