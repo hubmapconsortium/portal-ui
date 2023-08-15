@@ -35,6 +35,8 @@ def get_default_flask_data():
             'workspacesWsEndpoint': current_app.config['WORKSPACES_WS_ENDPOINT'],
             'protocolsClientId': current_app.config['PROTOCOLS_IO_CLIENT_ID'],
             'protocolsClientToken': current_app.config['PROTOCOLS_IO_CLIENT_AUTH_TOKEN'],
+            'sentryEnv': current_app.config['SENTRY_ENV'],
+
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
     }
