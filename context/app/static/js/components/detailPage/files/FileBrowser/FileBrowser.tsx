@@ -91,9 +91,9 @@ function FileBrowser({ files }: FileBrowserProps) {
         <Table data-testid="file-browser">
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell colSpan={2}>Type</TableCell>
-              <TableCell>Size</TableCell>
+              <TableCell sx={{pl: 3}}>Name</TableCell>
+              <TableCell padding="none" colSpan={2}>Type</TableCell>
+              <TableCell sx={{pl: 1}}>Size</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
