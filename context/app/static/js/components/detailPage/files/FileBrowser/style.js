@@ -1,23 +1,20 @@
-import styled from 'styled-components';
+import { styled } from '@mui/styles';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 
-const ChipWrapper = styled.div`
-  border-bottom: 1px solid ${(props) => props.theme.palette.divider};
-  padding: 12px 15px;
-  position: sticky;
-  top: 0;
-  background-color: ${(props) => props.theme.palette.white.main};
-  z-index: ${(props) => props.theme.zIndex.fileBrowserHeader};
-`;
+const ChipWrapper = styled('div')(({ theme }) => ({
+  padding: '12px 15px',
+  position: 'sticky',
+  top: 0,
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  backgroundColor: theme.palette.white.main,
+  zIndex: theme.zIndex.fileBrowserHeader,
+  display: 'flex',
+  gap: theme.spacing(1),
+}));
 
 const StyledTableContainer = styled(TableContainer)`
   max-height: 600px;
   overflow-y: auto;
 `;
 
-const HiddenTableHead = styled(TableHead)`
-  display: none;
-`;
-
-export { ChipWrapper, StyledTableContainer, HiddenTableHead };
+export { ChipWrapper, StyledTableContainer };
