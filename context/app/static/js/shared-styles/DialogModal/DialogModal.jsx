@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import MUIDialogContent from '@mui/material/DialogContent';
@@ -18,7 +19,7 @@ function DialogModal({
   isOpen,
   handleClose,
   DialogContentComponent,
-  errorMessages,
+  selectedRowsError,
   ...props
 }) {
   const DialogContent = DialogContentComponent || MUIDialogContent;
@@ -31,13 +32,24 @@ function DialogModal({
         </Typography>
       </StyledDialogTitle>
       <DialogContent>
-        {errorMessages?.length > 0 && (
+        {selectedRowsError?.length > 0 && (
           <Box sx={{ display: 'grid', gap: 1, marginBottom: 3 }}>
-            {errorMessages.map((errorMessage) => (
-              <Alert key={errorMessage} severity="error">
-                {errorMessage}
-              </Alert>
-            ))}
+            {selectedRowsError.map((errorMessage) => {
+              return (
+                <div key={errorMessage.errorType}>
+                  <Alert key={errorMessage} severity="error">
+                    {errorMessage.message}
+                  </Alert>
+                  {errorMessage.type === 'protected' && (
+                    <Box sx={{ marginTop: 1 }}>
+                      <Button variant="contained" color="primary" onClick={() => alert('button clicked')}>
+                        Create New List
+                      </Button>
+                    </Box>
+                  )}
+                </div>
+              );
+            })}
           </Box>
         )}
         {secondaryText && (
