@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import { Alert } from 'js/shared-styles/alerts';
+import { useSnackbarStore } from 'js/shared-styles/snackbars';
 import { StyledDivider, StyledDialogTitle } from './style';
 
 function DialogModal({
@@ -23,6 +24,11 @@ function DialogModal({
   ...props
 }) {
   const DialogContent = DialogContentComponent || MUIDialogContent;
+  const { openSnackbar } = useSnackbarStore();
+
+  const removeProctedDatasets = () => {
+    openSnackbar();
+  };
 
   return (
     <Dialog open={isOpen} onClose={handleClose} fullWidth {...props}>
@@ -42,7 +48,7 @@ function DialogModal({
                   </Alert>
                   {selectedRowsError.type === 'protected' && (
                     <Box sx={{ marginTop: 1 }}>
-                      <Button variant="contained" color="primary" onClick={() => alert('button clicked')}>
+                      <Button variant="contained" color="primary" onClick={() => removeProctedDatasets()}>
                         Remove Protected Datasets ({selectedRowsError.size})
                       </Button>
                     </Box>
