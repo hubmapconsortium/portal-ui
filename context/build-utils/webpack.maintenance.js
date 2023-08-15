@@ -11,7 +11,6 @@ const config = {
   entry: { maintenance: `./app/static/js/maintenance/index.jsx` },
   output: {
     path: resolve('./app/static/js/maintenance/public'),
-    publicPath: `/`,
     filename: '[name].bundle.js',
   },
   resolve: {

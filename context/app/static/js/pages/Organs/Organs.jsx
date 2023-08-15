@@ -5,8 +5,9 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 
 import TileGrid from 'js/shared-styles/tiles/TileGrid';
+import { RedirectAlert } from 'js/shared-styles/alerts/RedirectAlert';
 import { StyledTypography } from './style';
-import { useOrgansDatasetCounts } from './hooks';
+import { useOrgansDatasetCounts, organNotFoundMessageTemplate } from './hooks';
 
 function Organs({ organs }) {
   const { isLoading, organsWithDatasetCounts } = useOrgansDatasetCounts(organs);
@@ -14,8 +15,10 @@ function Organs({ organs }) {
   if (isLoading) {
     return null;
   }
+
   return (
     <SectionContainer>
+      <RedirectAlert messageTemplate={organNotFoundMessageTemplate} />
       <SectionHeader variant="h1" component="h1">
         Organs
       </SectionHeader>

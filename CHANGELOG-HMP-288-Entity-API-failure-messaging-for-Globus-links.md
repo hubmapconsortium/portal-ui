@@ -1,1 +1,0 @@
-- Implemented new panel design when entity api for globus link returns an error. 

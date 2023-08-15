@@ -46,4 +46,14 @@ function useOrgansDatasetCounts(organs) {
   return { organsWithDatasetCounts, isLoading };
 }
 
-export { useOrgansDatasetCounts, buildOrganToCountMap, addDatasetCountsToOrgans, addSearchTermsCount };
+function organNotFoundMessageTemplate(redirectedOrganName) {
+  return `The organ "${redirectedOrganName}" was not found. You have been redirected to the list of available organs.`;
+}
+
+export {
+  useOrgansDatasetCounts,
+  buildOrganToCountMap,
+  addDatasetCountsToOrgans,
+  addSearchTermsCount,
+  organNotFoundMessageTemplate,
+};
