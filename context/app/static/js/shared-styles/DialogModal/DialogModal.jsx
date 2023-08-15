@@ -7,8 +7,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import { Alert } from 'js/shared-styles/alerts';
-// import { useSnackbarStore } from 'js/shared-styles/snackbars';
-// import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { StyledDivider, StyledDialogTitle } from './style';
 
 function DialogModal({
@@ -20,7 +18,7 @@ function DialogModal({
   isOpen,
   handleClose,
   DialogContentComponent,
-  selectedRowsErrors,
+  errorMessages,
   protectedRows,
   ...props
 }) {
@@ -34,13 +32,13 @@ function DialogModal({
         </Typography>
       </StyledDialogTitle>
       <DialogContent>
-        {selectedRowsErrors?.length > 0 && (
+        {errorMessages?.length > 0 && (
           <Box sx={{ display: 'grid', gap: 1, marginBottom: 3 }}>
-            {selectedRowsErrors.map((selectedRowsError) => {
+            {errorMessages.map((errorMessage) => {
               return (
-                <div key={selectedRowsError.message}>
-                  <Alert key={selectedRowsError} severity="error">
-                    {selectedRowsError.message}
+                <div key={errorMessage}>
+                  <Alert key={errorMessage} severity="error">
+                    {errorMessage}
                   </Alert>
                 </div>
               );

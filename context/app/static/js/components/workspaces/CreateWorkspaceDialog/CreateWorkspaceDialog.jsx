@@ -12,7 +12,7 @@ function CreateWorkspaceDialog({
   handleCreateWorkspace,
   buttonComponent: ButtonComponent,
   defaultName,
-  selectedRowsErrors,
+  errorMessages,
   protectedRows,
   ...rest
 }) {
@@ -48,7 +48,7 @@ function CreateWorkspaceDialog({
         isOpen={dialogIsOpen}
         handleClose={handleClose}
         maxWidth="md"
-        selectedRowsErrors={selectedRowsErrors}
+        errorMessages={errorMessages}
         protectedRows={protectedRows}
         content={
           <Box
@@ -62,7 +62,7 @@ function CreateWorkspaceDialog({
             onSubmit={handleSubmit(onSubmit)}
           >
             {protectedHubmapIds.length > 0 && (
-              <Box sx={{ marginBottom: 1 }}>
+              <Box>
                 <WorkspaceField
                   control={control}
                   name="Protected Datasets"
@@ -86,7 +86,7 @@ function CreateWorkspaceDialog({
         actions={
           <>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit" form="create-workspace-form" disabled={selectedRowsErrors.length > 0}>
+            <Button type="submit" form="create-workspace-form" disabled={errorMessages.length > 0}>
               Submit
             </Button>
           </>

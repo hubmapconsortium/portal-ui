@@ -47,21 +47,18 @@ function MetadataMenu({ entityType, results }) {
   const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
   const containsProtectedDataset = protectedRows.length > 0;
 
-  const selectedRowsErrors = [];
+  const errorMessages = [];
 
   if (selectedRows.size > 10) {
-    selectedRowsErrors.push({
-      type: 'overLimit',
-      message: `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
-    });
+    errorMessages.push(
+      `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
+    );
   }
 
   if (containsProtectedDataset) {
-    selectedRowsErrors.push({
-      type: 'protected',
-      message: `You have selected ${protectedRows.length} protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.`,
-      size: protectedRows.length,
-    });
+    errorMessages.push(
+      `You have selected ${protectedRows.length} protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.`,
+    );
   }
 
   return (
@@ -91,7 +88,7 @@ function MetadataMenu({ entityType, results }) {
         <CreateWorkspaceDialog
           handleCreateWorkspace={createNotebook}
           buttonComponent={NotebookMenuItem}
-          selectedRowsErrors={selectedRowsErrors}
+          errorMessages={errorMessages}
           results={results}
           protectedRows={protectedRows}
         />
