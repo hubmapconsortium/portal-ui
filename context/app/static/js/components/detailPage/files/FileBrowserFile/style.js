@@ -14,7 +14,7 @@ const StyledRow = styled(TableRow)`
 
 const IndentedDiv = styled.div`
   padding: 10px 40px;
-  margin-left: ${(props) => props.theme.spacing(props.$depth)};
+  margin-left: ${(props) => props.theme.spacing(props.$depth * 4)};
   display: flex;
   align-items: center;
 `;
