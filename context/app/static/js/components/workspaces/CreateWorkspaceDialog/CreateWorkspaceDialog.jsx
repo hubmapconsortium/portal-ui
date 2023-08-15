@@ -62,7 +62,7 @@ function CreateWorkspaceDialog({
             onSubmit={handleSubmit(onSubmit)}
           >
             {protectedHubmapIds.length > 0 && (
-              <Box>
+              <Box sx={{ marginBottom: 1 }}>
                 <WorkspaceField
                   control={control}
                   name="Protected Datasets"
@@ -70,11 +70,14 @@ function CreateWorkspaceDialog({
                   // eslint-disable-next-line no-underscore-dangle
                   value={protectedHubmapIds}
                 />
-                {/* <Box> */}
-                <Button variant="contained" color="primary" onClick={() => removeProctedDatasets()}>
+                <Button
+                  sx={{ marginTop: 1 }}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => removeProctedDatasets()}
+                >
                   Remove Protected Datasets ({protectedRows.length})
                 </Button>
-                {/* </Box> */}
               </Box>
             )}
             <WorkspaceField control={control} name="name" label="Name" errors={errors} />
