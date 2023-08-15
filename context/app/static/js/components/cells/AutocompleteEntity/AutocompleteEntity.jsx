@@ -55,9 +55,7 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     <Autocomplete
       options={options}
       multiple
-      getOptionLabel={(option) => {
-        return option.full;
-      }}
+      getOptionLabel={(option) => option.full}
       isOptionEqualToValue={(option, value) => option.full === value}
       loading={loading.current}
       renderOption={(props, option) => (
