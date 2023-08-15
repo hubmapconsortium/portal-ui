@@ -5,7 +5,7 @@ const { Provider, useStore } = createContext();
 
 const createStore = () =>
   create((set) => ({
-    snackbarOpen: true,
+    snackbarOpen: false,
     openSnackbar: () => set({ snackbarOpen: true }),
     closeSnackbar: () => set({ snackbarOpen: false }),
   }));

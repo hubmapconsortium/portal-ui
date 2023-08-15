@@ -42,7 +42,7 @@ function Search() {
         open={snackbarOpen}
         onClose={closeSnackbar}
         message="Copied to clipboard."
-        autoHideDuration={1000}
+        autoHideDuration={2000}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       />
     </>

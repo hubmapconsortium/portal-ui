@@ -1,12 +1,14 @@
 import React from 'react';
+import { useController } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { useController } from 'react-hook-form';
+import { useSnackbarStore } from 'js/shared-styles/snackbars';
 
 function WorkspaceField({ control, name, label, errors, value }) {
+  const { openSnackbar } = useSnackbarStore();
   const { field } = useController({
     name,
     label,
@@ -17,7 +19,7 @@ function WorkspaceField({ control, name, label, errors, value }) {
 
   const handleCopyClick = () => {
     navigator.clipboard.writeText(field.value).then(() => {
-      alert('Text copied to clipboard!');
+      openSnackbar();
     });
   };
 
