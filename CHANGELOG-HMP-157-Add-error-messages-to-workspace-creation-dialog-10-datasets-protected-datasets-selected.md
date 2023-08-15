@@ -1,1 +1,3 @@
-- Display error when more than 10 datasets are selected for workspaces. 
+- Render error message when protected datasets are selected.
+- Render list of protected datasets in input field. 
+- Implement copy functionality with snackbar notification.  
