@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFileRounded';
 import InfoIcon from '@mui/icons-material/InfoRounded';
@@ -10,13 +10,6 @@ const StyledRow = styled(TableRow)`
   &:hover {
     background-color: ${(props) => props.theme.palette.hoverShadow.main};
   }
-`;
-
-const IndentedDiv = styled.div`
-  padding: 10px 40px;
-  margin-left: ${(props) => props.theme.spacing(props.$depth * 4)};
-  display: flex;
-  align-items: center;
 `;
 
 const StyledFileIcon = styled(InsertDriveFileIcon)`
@@ -39,4 +32,4 @@ const FileTypeChip = styled(Chip)`
   border-radius: 8px;
 `;
 
-export { StyledRow, IndentedDiv, StyledFileIcon, FileSize, StyledInfoIcon, FileTypeChip };
+export { StyledRow, StyledFileIcon, FileSize, StyledInfoIcon, FileTypeChip };

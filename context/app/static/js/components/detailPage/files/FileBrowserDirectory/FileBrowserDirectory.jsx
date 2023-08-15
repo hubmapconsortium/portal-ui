@@ -6,7 +6,7 @@ import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import useFilesStore from 'js/stores/useFilesStore';
 import { StyledTableRow, Directory, StyledFolderIcon, StyledFolderOpenIcon } from './style';
 
-const filesStoreSelector = (state) => state.displayOnlyQaQc;
+const filesStoreSelector = (state) => state.filesToDisplay;
 
 function FileBrowserDirectory({ dirName, children, depth }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -17,11 +17,11 @@ function FileBrowserDirectory({ dirName, children, depth }) {
     }
   };
 
-  const displayOnlyQaQc = useFilesStore(filesStoreSelector);
+  const allFilesVisible = useFilesStore(filesStoreSelector) === 'all';
 
   useEffect(() => {
-    setIsExpanded(displayOnlyQaQc);
-  }, [displayOnlyQaQc]);
+    setIsExpanded(!allFilesVisible);
+  }, [allFilesVisible]);
 
   return (
     <>
