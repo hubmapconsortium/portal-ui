@@ -49,8 +49,6 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     }
   }
 
-  console.log(cellVariableNames);
-
   return (
     <Autocomplete
       options={options}
