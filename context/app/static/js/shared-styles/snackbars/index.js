@@ -10,9 +10,4 @@ const SuccessSnackbar = styled(Snackbar)`
   }
 `;
 
-const ErrorSnackbar = styled(Snackbar)`
-  position: absolute;
-  background-color: ${(props) => props.theme.palette.white.main};
-`;
-
-export { ErrorSnackbar, SuccessSnackbar, useSnackbarStore, SnackbarProvider, createStore };
+export { SuccessSnackbar, useSnackbarStore, SnackbarProvider, createStore };
