@@ -1,4 +1,9 @@
-import { buildOrganToCountMap, addSearchTermsCount, addDatasetCountsToOrgans } from './hooks';
+import {
+  buildOrganToCountMap,
+  addSearchTermsCount,
+  addDatasetCountsToOrgans,
+  organNotFoundMessageTemplate,
+} from './hooks';
 
 const mockAggsBuckets = [
   { key: 'A1', doc_count: 5 },
@@ -27,4 +32,10 @@ test('should add dataset counts to organ objects', () => {
     A: { search: ['A1', 'A2'], descendantCounts: { Dataset: 12 } },
     B: { search: ['B'], descendantCounts: { Dataset: 10 } },
   });
+});
+
+test('organNotFoundMessageTemplate should format the passed organ string into an error message', () => {
+  expect(organNotFoundMessageTemplate('A')).toBe(
+    'The organ "A" was not found. You have been redirected to the list of available organs.',
+  );
 });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -23,6 +23,8 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     setCellVariableNames([]);
   }, [targetEntity, setCellVariableNames]);
 
+  const loading = useRef(false);
+
   async function handleChange(event) {
     const { target } = event;
     setSubstring(target.value);
@@ -33,13 +35,15 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     }
 
     try {
-      setOptions(
-        await new CellsService().searchBySubstring({
-          targetEntity,
-          substring: target.value,
-        }),
-      );
+      loading.current = true;
+      const newOptions = await new CellsService().searchBySubstring({
+        targetEntity,
+        substring: target.value,
+      });
+      loading.current = false;
+      setOptions(newOptions);
     } catch (e) {
+      loading.current = false;
       console.warn(e.message);
     }
   }
@@ -48,14 +52,15 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     <Autocomplete
       options={options}
       multiple
-      getOptionLabel={(option) => option}
+      getOptionLabel={(option) => option.full}
       isOptionEqualToValue={(option, value) => option.full === value}
-      renderOption={(option) => (
-        <>
+      loading={loading.current}
+      renderOption={(props, option) => (
+        <li {...props}>
           {option.pre}
           <b>{option.match}</b>
           {option.post}
-        </>
+        </li>
       )}
       value={cellVariableNames}
       onChange={(event, value) => {

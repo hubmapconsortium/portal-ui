@@ -19,15 +19,6 @@ function QuerySelect({ completeStep, setParametersButtonRef }) {
         variant="outlined"
         select
         fullWidth
-        SelectProps={{
-          MenuProps: {
-            anchorOrigin: {
-              vertical: 'bottom',
-              horizontal: 'left',
-            },
-            getContentAnchorEl: null,
-          },
-        }}
       >
         {Object.values(queryTypes).map((type) => (
           <MenuItem value={type.value} key={type.value}>

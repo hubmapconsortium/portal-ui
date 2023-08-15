@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 // NOTE: We are using the rounded icon variants consistently.
 import BubbleChartIcon from '@mui/icons-material/BubbleChartRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import PersonIcon from '@mui/icons-material/PersonRounded';
 import TableChartIcon from '@mui/icons-material/TableChartRounded';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalanceRounded';
@@ -25,6 +26,10 @@ const fontSizeStyle = css`
 `;
 
 const CenterIcon = styled(AccountBalanceIcon)`
+  ${fontSizeStyle};
+`;
+
+const CloseIcon = styled(CloseRoundedIcon)`
   ${fontSizeStyle};
 `;
 
@@ -101,6 +106,7 @@ const AddIcon = styled(AddRoundedIcon)`
 `;
 
 export {
+  CloseIcon,
   CollectionIcon,
   DonorIcon,
   SampleIcon,

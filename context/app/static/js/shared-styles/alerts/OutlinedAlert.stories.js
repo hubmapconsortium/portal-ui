@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alert } from './index';
+import { Alert } from './Alert';
 
 export default {
   title: 'Alerts/OutlinedAlert',

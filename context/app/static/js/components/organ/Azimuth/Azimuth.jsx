@@ -1,5 +1,6 @@
 import React from 'react';
 import marked from 'marked';
+import Box from '@mui/material/Box';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import OutboundLinkButton from 'js/shared-styles/Links/OutboundLinkButton';
@@ -32,7 +33,11 @@ function Azimuth({ config }) {
         <LabelledSectionText label="Nuclei in reference">{config.nunit}</LabelledSectionText>
         {/* eslint-disable react/no-danger */}
         <LabelledSectionText label="Reference dataset">
-          <span dangerouslySetInnerHTML={{ __html: dataRefHtml }} />
+          <Box
+            component="span"
+            sx={(theme) => ({ '&>a': { color: theme.palette.info.main } })}
+            dangerouslySetInnerHTML={{ __html: dataRefHtml }}
+          />
         </LabelledSectionText>
       </StyledPaper>
 
