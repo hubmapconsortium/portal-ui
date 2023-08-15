@@ -32,6 +32,7 @@ function CreateWorkspaceDialog({
         isOpen={dialogIsOpen}
         handleClose={handleClose}
         maxWidth="md"
+        selectedRowsErrors={selectedRowsErrors}
         content={
           <Box
             id="create-workspace-form"
@@ -63,7 +64,6 @@ function CreateWorkspaceDialog({
             </Button>
           </>
         }
-        selectedRowsErrors={selectedRowsErrors}
       />
     </>
   );
