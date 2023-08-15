@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 
 import { Alert } from 'js/shared-styles/alerts';
 import { useSnackbarStore } from 'js/shared-styles/snackbars';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { StyledDivider, StyledDialogTitle } from './style';
 
 function DialogModal({
@@ -21,12 +22,19 @@ function DialogModal({
   handleClose,
   DialogContentComponent,
   selectedRowsErrors,
+  protectedRows,
   ...props
 }) {
   const DialogContent = DialogContentComponent || MUIDialogContent;
   const { openSnackbar } = useSnackbarStore();
+  const { deselectRow } = useSelectableTableStore();
 
   const removeProctedDatasets = () => {
+    protectedRows.forEach((row) => {
+      // eslint-disable-next-line no-underscore-dangle
+      deselectRow(row._id);
+    });
+
     openSnackbar('Protected datasets successfully removed from selection.');
   };
 

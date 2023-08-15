@@ -80,4 +80,4 @@ const createStore = (tableLabel) =>
     toggleHeaderAndRows: (rowKeys) => get().dispatch({ type: types.toggleHeaderAndRows, payload: rowKeys }),
   }));
 
-export { Provider, useStore, createStore, reducer, types };
+export { Provider, useStore as useSelectableTableStore, createStore, reducer, types };

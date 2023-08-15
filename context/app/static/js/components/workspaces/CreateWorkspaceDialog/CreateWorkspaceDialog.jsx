@@ -11,13 +11,16 @@ function CreateWorkspaceDialog({
   buttonComponent: ButtonComponent,
   defaultName,
   selectedRowsErrors,
-  protectedHubmapIds,
+  protectedRows,
   ...rest
 }) {
   const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace({
     handleCreateWorkspace,
     defaultName,
   });
+
+  // eslint-disable-next-line no-underscore-dangle
+  const protectedHubmapIds = protectedRows.map((row) => row._source.hubmap_id).join(', ');
 
   return (
     <>
@@ -33,6 +36,7 @@ function CreateWorkspaceDialog({
         handleClose={handleClose}
         maxWidth="md"
         selectedRowsErrors={selectedRowsErrors}
+        protectedRows={protectedRows}
         content={
           <Box
             id="create-workspace-form"

@@ -1,8 +1,7 @@
 import React from 'react';
 // import { trackEvent } from 'js/helpers/trackers';
 
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider/SelectableTableProvider';
-import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
@@ -44,11 +43,9 @@ function MetadataMenu({ entityType, results }) {
   const { selectedHits, createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
   const menuID = 'metadata-menu';
 
-  const { selectedRows } = useStore();
+  const { selectedRows } = useSelectableTableStore();
   const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
   const containsProtectedDataset = protectedRows.length > 0;
-  // eslint-disable-next-line no-underscore-dangle
-  const protectedHubmapIds = protectedRows.map((row) => row._source.hubmap_id).join(', ');
 
   const selectedRowsErrors = [];
 
@@ -68,7 +65,7 @@ function MetadataMenu({ entityType, results }) {
   }
 
   return (
-    <SelectableTableProvider>
+    <>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
       <DropdownMenu id={menuID}>
         <StyledMenuItem>
@@ -96,10 +93,10 @@ function MetadataMenu({ entityType, results }) {
           buttonComponent={NotebookMenuItem}
           selectedRowsErrors={selectedRowsErrors}
           results={results}
-          protectedHubmapIds={protectedHubmapIds}
+          protectedRows={protectedRows}
         />
       </DropdownMenu>
-    </SelectableTableProvider>
+    </>
   );
 }
 
