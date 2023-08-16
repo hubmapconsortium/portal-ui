@@ -12,6 +12,24 @@ type FileBrowserDirectoryProps = PropsWithChildren<{
   depth: number;
 }>;
 
+function ExpandedIcons() {
+  return (
+    <>
+      <ArrowDropDownRoundedIcon color="secondary" />
+      <StyledFolderOpenIcon color="primary" />
+    </>
+  );
+}
+
+function CollapsedIcons() {
+  return (
+    <>
+      <ArrowRightRoundedIcon color="secondary" />
+      <StyledFolderIcon color="primary" />
+    </>
+  );
+}
+
 function FileBrowserDirectory({ dirName, children, depth }: FileBrowserDirectoryProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -38,17 +56,7 @@ function FileBrowserDirectory({ dirName, children, depth }: FileBrowserDirectory
         {/* colSpan should match the number of cells in a FileBrowserFile row. */}
         <td colSpan={4}>
           <Directory ml={(theme) => theme.spacing(4 * depth)}>
-            {isExpanded ? (
-              <>
-                <ArrowDropDownRoundedIcon color="secondary" />
-                <StyledFolderOpenIcon color="primary" />
-              </>
-            ) : (
-              <>
-                <ArrowRightRoundedIcon color="secondary" />
-                <StyledFolderIcon color="primary" />
-              </>
-            )}
+            {isExpanded ? <ExpandedIcons /> : <CollapsedIcons />}
             {dirName}
           </Directory>
         </td>

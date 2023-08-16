@@ -9,7 +9,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useDetailContext } from 'js/components/detailPage/DetailContext';
 
 import { useFilesContext } from '../FilesContext';
-import FilesConditionalLink from '../FilesConditionalLink';
+import FilesConditionalLink from '../../BulkDataTransfer/FilesConditionalLink';
 import PDFViewer from '../PDFViewer';
 import { StyledRow, StyledFileIcon, FileSize, StyledInfoIcon, FileTypeChip } from './style';
 import { DatasetFile } from '../types';

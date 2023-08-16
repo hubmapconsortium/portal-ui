@@ -6,7 +6,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 
 import FileBrowser from '../FileBrowser';
-import FileBrowserDUA from '../FileBrowserDUA';
+import FileBrowserDUA from '../../BulkDataTransfer/FileBrowserDUA';
 import { FilesContext } from '../FilesContext';
 import { MarginBottomDiv } from './style';
 
