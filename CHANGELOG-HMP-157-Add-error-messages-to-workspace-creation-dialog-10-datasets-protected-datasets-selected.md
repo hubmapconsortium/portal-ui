@@ -1,3 +1,1 @@
-- Render error message when protected datasets are selected.
-- Render list of protected datasets in input field. 
-- Implement copy functionality with snackbar notification.  
+- Added button in workspace dialog to deselect protected datasets.
