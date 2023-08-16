@@ -43,9 +43,6 @@ const file = {
   get dataProductChip() {
     return screen.queryByText('Data Product');
   },
-  get qaDataProductChip() {
-    return screen.queryByText('QA / Data Product');
-  },
   get link() {
     return screen.getByRole('link');
   },
@@ -109,9 +106,10 @@ describe('FileBrowserFile', () => {
     expect(file.dataProductChip).not.toBeInTheDocument();
   });
 
-  it('displays "QA / Data Product" chip when is_qa_qc and is_data_product are true', () => {
+  it('displays "QA" and "Data Product" chips when is_qa_qc and is_data_product are true', () => {
     render(<RenderFileTest fileObjOverrides={{ is_qa_qc: true, is_data_product: true }} />);
 
-    expect(file.qaDataProductChip).toBeInTheDocument();
+    expect(file.qaChip).toBeInTheDocument();
+    expect(file.dataProductChip).toBeInTheDocument();
   });
 });

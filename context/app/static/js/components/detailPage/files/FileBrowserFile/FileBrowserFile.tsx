@@ -28,14 +28,11 @@ function FileBrowserFile({ fileObj, depth }: FileBrowserFileProps) {
 
   const fileUrl = `${assetsEndpoint}/${uuid}/${fileObj.rel_path}${tokenParam}`;
 
-  const chipLabel = useMemo(() => {
+  const chipLabels = useMemo(() => {
     const labels = [fileObj.is_qa_qc ? 'QA' : null, fileObj.is_data_product ? 'Data Product' : null].filter(
       (l) => l !== null,
-    );
-    if (labels.length === 0) {
-      return null;
-    }
-    return labels.join(' / ');
+    ) as string[];
+    return labels;
   }, [fileObj.is_qa_qc, fileObj.is_data_product]);
 
   // colSpan in FileBrowserDirectory should match the number of cells in the row.
@@ -44,7 +41,7 @@ function FileBrowserFile({ fileObj, depth }: FileBrowserFileProps) {
       <td>
         <Box
           sx={(theme) => ({
-            padding: '10px 40px',
+            padding: theme.spacing(1, 5),
             marginLeft: theme.spacing(depth * 4),
             display: 'flex',
             alignItems: 'center',
@@ -68,7 +65,11 @@ function FileBrowserFile({ fileObj, depth }: FileBrowserFileProps) {
           )}
         </Box>
       </td>
-      <td>{chipLabel ? <FileTypeChip label={chipLabel} variant="outlined" /> : null}</td>
+      <td>
+        {chipLabels.map((fileType) => (
+          <FileTypeChip key={fileType} label={fileType} variant="outlined" />
+        ))}
+      </td>
       <td>{fileObj?.file.endsWith('.pdf') ? <PDFViewer pdfUrl={fileUrl} /> : null}</td>
       <td>
         <FileSize variant="body1">{prettyBytes(fileObj.size)}</FileSize>

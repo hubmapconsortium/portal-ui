@@ -26,10 +26,11 @@ const StyledInfoIcon = styled(InfoIcon)`
   font-size: 1rem;
 `;
 
-const FileTypeChip = styled(Chip)`
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 8px;
-`;
+const FileTypeChip = styled(Chip)(({ theme }) => ({
+  px: theme.spacing(2),
+  py: theme.spacing(1),
+  borderRadius: theme.spacing(1),
+  
+}));
 
 export { StyledRow, StyledFileIcon, FileSize, StyledInfoIcon, FileTypeChip };
