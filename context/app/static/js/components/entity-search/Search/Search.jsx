@@ -39,7 +39,7 @@ function Search() {
         <Results results={results} allResultsUUIDs={allResultsUUIDs} />
       </Flex>
       <SuccessSnackbar
-        // This key forces a re-render when the message changes and resets the timer for autoHideDuration
+        // Line 43: This key forces a re-render when the message changes and resets the timer for autoHideDuration
         key={messages[0]}
         open={snackbarOpen}
         onClose={closeSnackbar}
