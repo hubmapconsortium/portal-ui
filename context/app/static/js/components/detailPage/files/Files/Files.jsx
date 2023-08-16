@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import { useDetailContext } from 'js/components/detailPage/DetailContext';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
+
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../FileBrowserDUA';
-import { FilesContext } from './FilesContext';
+import { FilesContext } from '../FilesContext';
 import { MarginBottomDiv } from './style';
 
 function Files({ files }) {
@@ -64,6 +65,7 @@ Files.propTypes = {
       size: PropTypes.number.isRequired,
       type: PropTypes.string.isRequired,
       is_qa_qc: PropTypes.bool,
+      is_data_product: PropTypes.bool,
     }),
   ),
 };

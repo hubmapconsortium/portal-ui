@@ -3,7 +3,7 @@ import { render, screen, appProviderEndpoints, appProviderToken } from 'test-uti
 
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 
-import { FilesContext } from '../Files/FilesContext';
+import { FilesContext } from '../FilesContext';
 
 import FileBrowserFile from './FileBrowserFile';
 

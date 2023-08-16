@@ -5,7 +5,7 @@ import { render, screen } from 'test-utils/functions';
 import { FlaskDataContext } from 'js/components/Contexts';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import FileBrowser from './FileBrowser';
-import { FilesContext } from '../Files/FilesContext';
+import { FilesContext } from '../FilesContext';
 
 const fakeOpenDUA = jest.fn();
 

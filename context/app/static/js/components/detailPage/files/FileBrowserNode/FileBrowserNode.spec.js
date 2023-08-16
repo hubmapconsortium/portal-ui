@@ -3,7 +3,7 @@ import { render, screen } from 'test-utils/functions';
 
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import FileBrowserNode from './FileBrowserNode';
-import { FilesContext } from '../Files/FilesContext';
+import { FilesContext } from '../FilesContext';
 
 const fakeOpenDUA = jest.fn();
 

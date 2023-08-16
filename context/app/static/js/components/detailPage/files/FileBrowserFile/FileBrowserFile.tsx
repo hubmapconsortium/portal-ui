@@ -8,7 +8,7 @@ import { getTokenParam } from 'js/helpers/functions';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useDetailContext } from 'js/components/detailPage/DetailContext';
 
-import { useFilesContext } from '../Files/FilesContext';
+import { useFilesContext } from '../FilesContext';
 import FilesConditionalLink from '../FilesConditionalLink';
 import PDFViewer from '../PDFViewer';
 import { StyledRow, StyledFileIcon, FileSize, StyledInfoIcon, FileTypeChip } from './style';

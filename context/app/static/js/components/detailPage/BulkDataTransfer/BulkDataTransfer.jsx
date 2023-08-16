@@ -4,7 +4,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useDetailContext } from 'js/components/detailPage/DetailContext';
-import { FilesContext } from 'js/components/detailPage/files/Files/FilesContext';
+import { FilesContext } from 'js/components/detailPage/files/FilesContext';
 import FileBrowserDUA from './FileBrowserDUA';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { StyledContainer } from './style';
