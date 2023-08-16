@@ -22,7 +22,7 @@ const createSkClient = () =>
 
 function Search() {
   const { results, allResultsUUIDs, entityType } = useSearch();
-  const { snackbarOpen, closeSnackbar, message } = useSnackbarStore();
+  const { snackbarOpen, closeSnackbar, messages } = useSnackbarStore();
 
   return (
     <>
@@ -39,10 +39,12 @@ function Search() {
         <Results results={results} allResultsUUIDs={allResultsUUIDs} />
       </Flex>
       <SuccessSnackbar
+        // This key forces a re-render when the message changes and resets the timer for autoHideDuration
+        key={messages[0]}
         open={snackbarOpen}
         onClose={closeSnackbar}
-        message={message}
-        autoHideDuration={2000}
+        message={messages[0]}
+        autoHideDuration={3000}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       />
     </>
