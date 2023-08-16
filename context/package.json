@@ -149,9 +149,9 @@
   "license": "MIT",
   "repository": "https://github.com/hubmapconsortium/portal-ui/",
   "scripts": {
-    "build": "env-cmd -f ./instace/app.conf webpack --config build-utils/webpack.prod.js",
-    "build:dev": "webpack --config build-utils/webpack.dev.js",
-    "build:analyze": "webpack --progress --config build-utils/webpack.analyze.js",
+    "build": "env-cmd -f ./instance/app.conf webpack --config build-utils/webpack.prod.js",
+    "build:dev": "env-cmd -f ./instance/app.conf webpack --config build-utils/webpack.dev.js",
+    "build:analyze": "env-cmd -f ./instance/app.conf webpack --progress --config build-utils/webpack.analyze.js",
     "build:maintain": "webpack --config build-utils/webpack.maintenance.js",
     "dev-server": "webpack-dev-server --config build-utils/webpack.dev.js --hot",
     "dev-server:maintain": "webpack-dev-server --config build-utils/webpack.dev.maintenance.js --hot",
