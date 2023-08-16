@@ -1,11 +1,13 @@
 import React, { useMemo } from 'react';
 import { SWRConfig } from 'swr';
-import { FlaskDataContext, AppContext } from 'js/components/Contexts';
+import { captureException } from '@sentry/react';
 import { ThemeProvider as SCThemeProvider } from 'styled-components';
 import MuiThemeProvider from '@mui/material/styles/ThemeProvider';
 import { StylesProvider as MuiStylesProvider } from '@mui/styles';
 import createGenerateClassName from '@mui/styles/createGenerateClassName';
 import CssBaseline from '@mui/material/CssBaseline';
+
+import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import GlobalStyles from 'js/components/globalStyles';
 import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAPIContext';
 import theme from '../theme';
@@ -18,6 +20,9 @@ const generateClassName = createGenerateClassName({
 
 const swrConfig = {
   revalidateOnFocus: false,
+  onError: (error) => {
+    captureException(error);
+  },
 };
 
 function Providers({
