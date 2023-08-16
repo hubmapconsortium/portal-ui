@@ -1,27 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, PropsWithChildren, KeyboardEvent } from 'react';
 import ArrowRightRoundedIcon from '@mui/icons-material/ArrowRightRounded';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 
-import useFilesStore from 'js/stores/useFilesStore';
+import useFilesStore, { FilesStore } from 'js/stores/useFilesStore';
 import { StyledTableRow, Directory, StyledFolderIcon, StyledFolderOpenIcon } from './style';
 
-const filesStoreSelector = (state) => state.filesToDisplay;
+const filesStoreSelector = (state: FilesStore) => state.filesToDisplay;
 
-function FileBrowserDirectory({ dirName, children, depth }) {
+type FileBrowserDirectoryProps = PropsWithChildren<{
+  dirName: string;
+  depth: number;
+}>;
+
+function FileBrowserDirectory({ dirName, children, depth }: FileBrowserDirectoryProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const onKeyDownHandler = (e) => {
+  const onKeyDownHandler = (e: KeyboardEvent) => {
     if (e.keyCode === 13 /* carriage return */) {
       setIsExpanded(!isExpanded);
     }
   };
 
-  const allFilesVisible = useFilesStore(filesStoreSelector) === 'all';
+  const allFilesAreVisible = useFilesStore(filesStoreSelector) === 'all';
 
   useEffect(() => {
-    setIsExpanded(!allFilesVisible);
-  }, [allFilesVisible]);
+    setIsExpanded(!allFilesAreVisible);
+  }, [allFilesAreVisible]);
 
   return (
     <>
@@ -29,11 +33,11 @@ function FileBrowserDirectory({ dirName, children, depth }) {
         onClick={() => setIsExpanded(!isExpanded)}
         onKeyDown={onKeyDownHandler}
         role="button"
-        tabIndex="0"
+        tabIndex={0}
       >
+        {/* colSpan should match the number of cells in a FileBrowserFile row. */}
         <td colSpan={4}>
-          {/* colSpan should match the number of cells in a FileBrowserFile row. */}
-          <Directory $depth={depth}>
+          <Directory ml={(theme) => theme.spacing(4 * depth)}>
             {isExpanded ? (
               <>
                 <ArrowDropDownRoundedIcon color="secondary" />
@@ -53,11 +57,5 @@ function FileBrowserDirectory({ dirName, children, depth }) {
     </>
   );
 }
-
-FileBrowserDirectory.propTypes = {
-  dirName: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  depth: PropTypes.number.isRequired,
-};
 
 export default FileBrowserDirectory;
