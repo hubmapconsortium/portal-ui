@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 
+import { Box } from '@mui/material';
+
 import { useDetailContext } from 'js/components/detailPage/DetailContext';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
@@ -7,7 +9,6 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../../BulkDataTransfer/FileBrowserDUA';
 import { FilesContext } from '../FilesContext';
-import { MarginBottomDiv } from './style';
 import { UnprocessedFile } from '../types';
 
 type FilesProps = {
@@ -49,9 +50,9 @@ function Files({ files }: FilesProps) {
       <DetailPageSection id="files" data-testid="files">
         <SectionHeader>Files</SectionHeader>
         {files.length > 0 && (
-          <MarginBottomDiv>
+          <Box mb={2}>
             <FileBrowser files={files} />
-          </MarginBottomDiv>
+          </Box>
         )}
         <FileBrowserDUA
           isOpen={isDialogOpen}
