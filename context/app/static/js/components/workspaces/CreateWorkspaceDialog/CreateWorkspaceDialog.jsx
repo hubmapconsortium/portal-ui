@@ -26,7 +26,7 @@ function CreateWorkspaceDialog({
   const { openSnackbar } = useSnackbarStore();
   const { deselectRow } = useSelectableTableStore();
 
-  const removeProctedDatasets = () => {
+  const removeProtectedDatasets = () => {
     protectedRows.forEach((row) => {
       // eslint-disable-next-line no-underscore-dangle
       deselectRow(row._id);
@@ -74,7 +74,7 @@ function CreateWorkspaceDialog({
                   sx={{ marginTop: 1 }}
                   variant="contained"
                   color="primary"
-                  onClick={() => removeProctedDatasets()}
+                  onClick={() => removeProtectedDatasets()}
                 >
                   Remove Protected Datasets ({protectedRows.length})
                 </Button>
