@@ -30,6 +30,9 @@ const FileTypeChip = styled(Chip)(({ theme }) => ({
   px: theme.spacing(2),
   py: theme.spacing(1),
   borderRadius: theme.spacing(1),
+  '&:not(:first-child)': {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 export { StyledRow, StyledFileIcon, FileSize, StyledInfoIcon, FileTypeChip };
