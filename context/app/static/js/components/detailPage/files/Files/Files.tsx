@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
 
 import { useDetailContext } from 'js/components/detailPage/DetailContext';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -9,18 +8,27 @@ import FileBrowser from '../FileBrowser';
 import FileBrowserDUA from '../../BulkDataTransfer/FileBrowserDUA';
 import { FilesContext } from '../FilesContext';
 import { MarginBottomDiv } from './style';
+import { UnprocessedFile } from '../types';
 
-function Files({ files }) {
+type FilesProps = {
+  files: UnprocessedFile[];
+};
+
+function Files({ files }: FilesProps) {
   const { mapped_data_access_level } = useDetailContext();
 
+  if (!mapped_data_access_level) {
+    throw new Error('Data access level information was not found.')
+  }
+
   const localStorageKey = `has_agreed_to_${mapped_data_access_level}_DUA`;
-  const [hasAgreedToDUA, agreeToDUA] = useState(localStorage.getItem(localStorageKey));
+  const [hasAgreedToDUA, agreeToDUA] = useState<boolean>(Boolean(localStorage.getItem(localStorageKey)));
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [urlClickedBeforeDUA, setUrlClickedBeforeDUA] = useState('');
 
   const handleDUAAgree = useCallback(() => {
     agreeToDUA(true);
-    localStorage.setItem(localStorageKey, true);
+    localStorage.setItem(localStorageKey, 'true');
     setDialogOpen(false);
     window.open(urlClickedBeforeDUA, '_blank');
   }, [agreeToDUA, localStorageKey, setDialogOpen, urlClickedBeforeDUA]);
@@ -55,23 +63,5 @@ function Files({ files }) {
     </FilesContext.Provider>
   );
 }
-
-Files.propTypes = {
-  files: PropTypes.arrayOf(
-    PropTypes.shape({
-      rel_path: PropTypes.string.isRequired,
-      edam_term: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      size: PropTypes.number.isRequired,
-      type: PropTypes.string.isRequired,
-      is_qa_qc: PropTypes.bool,
-      is_data_product: PropTypes.bool,
-    }),
-  ),
-};
-
-Files.defaultProps = {
-  files: undefined,
-};
 
 export default Files;

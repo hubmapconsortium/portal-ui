@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen, waitForElementToBeRemoved, appProviderEndpoints } from 'test-utils/functions';
 import { rest } from 'msw';
@@ -8,91 +8,123 @@ import { FlaskDataContext } from 'js/components/Contexts';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import Files from './Files';
 
-const uuid = 'fakeuuid';
+const testUuid = 'fakeuuid';
 const mapped_data_access_level = 'fakeaccess';
-
-const detailContext = { uuid, mapped_data_access_level };
 
 const globusUrlResponse = {
   url: 'fakeglobusurl',
 };
 
 const server = setupServer(
-  rest.get(`/${appProviderEndpoints.entityEndpoint}/entities/dataset/globus-url/${uuid}`, (req, res, ctx) => {
+  rest.get(`/${appProviderEndpoints.entityEndpoint}/entities/dataset/globus-url/${testUuid}`, (req, res, ctx) => {
     return res(ctx.json(globusUrlResponse), ctx.status(200));
   }),
 );
+
+const sharedEntries = {
+  edam_term: 'faketerm',
+  description: 'fakedescription',
+  size: 1000,
+  type: 'faketype',
+};
+
+const testFiles = [
+  {
+    rel_path: 'path1/path2/fake1.txt',
+    ...sharedEntries,
+  },
+  {
+    rel_path: 'path1/path2/fake2.txt',
+    ...sharedEntries,
+  },
+  {
+    rel_path: 'path1/fake3.txt',
+    ...sharedEntries,
+  },
+  {
+    rel_path: 'path3/fake4.txt',
+    ...sharedEntries,
+  },
+  {
+    rel_path: 'fake5.txt',
+    ...sharedEntries,
+  },
+];
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-function DetailProvider({ children }) {
-  return <DetailContext.Provider value={detailContext}>{children}</DetailContext.Provider>;
+const flaskDataContext = { entity: { entity_type: 'Dataset' } };
+function TestFiles({ files = testFiles, uuid = testUuid }) {
+  const detailContext = useMemo(
+    () => ({
+      uuid,
+      mapped_data_access_level,
+    }),
+    [uuid],
+  );
+  return (
+    <FlaskDataContext.Provider value={flaskDataContext}>
+      <DetailContext.Provider value={detailContext}>
+        <Files files={files} />
+      </DetailContext.Provider>
+    </FlaskDataContext.Provider>
+  );
 }
+
+const files = {
+  get browser() {
+    return screen.queryByTestId('file-browser');
+  },
+  targetFile: {
+    get button() {
+      return screen.getByRole('button', { name: 'fake5.txt' });
+    },
+    get link() {
+      return screen.findByRole('link', { name: 'fake5.txt' });
+    },
+  },
+  get duaCheckbox() {
+    return screen.getByRole('checkbox');
+  },
+  get duaCheckboxByLabel() {
+    return screen.getByLabelText('I have read and agree to the above data use guidelines.');
+  },
+  get duaCheckboxLabel() {
+    return screen.queryByText('I have read and agree to the above data use guidelines.');
+  },
+  get duaDisagree() {
+    return screen.getByRole('button', { name: 'Disagree' });
+  },
+  get duaAgree() {
+    return screen.getByRole('button', { name: 'Agree' });
+  },
+};
 
 test('handles DUA flow', async () => {
   const open = jest.fn();
   Object.defineProperty(window, 'open', { value: open });
 
-  const sharedEntries = {
-    edam_term: 'faketerm',
-    description: 'fakedescription',
-    size: 1000,
-    type: 'faketype',
-  };
+  render(<TestFiles />);
 
-  const testFiles = [
-    {
-      rel_path: 'path1/path2/fake1.txt',
-      ...sharedEntries,
-    },
-    {
-      rel_path: 'path1/path2/fake2.txt',
-      ...sharedEntries,
-    },
-    {
-      rel_path: 'path1/fake3.txt',
-      ...sharedEntries,
-    },
-    {
-      rel_path: 'path3/fake4.txt',
-      ...sharedEntries,
-    },
-    {
-      rel_path: 'fake5.txt',
-      ...sharedEntries,
-    },
-  ];
+  userEvent.click(files.targetFile.button);
+  expect(files.duaCheckboxByLabel).toBeInTheDocument();
 
-  render(
-    <FlaskDataContext.Provider value={{ entity: { entity_type: 'Dataset' } }}>
-      <DetailProvider>
-        <Files files={testFiles} uuid={uuid} hubmap_id="fakedoi" />
-      </DetailProvider>
-    </FlaskDataContext.Provider>,
-  );
+  userEvent.click(files.duaDisagree);
+  await waitForElementToBeRemoved(() => files.duaCheckboxLabel);
 
-  userEvent.click(screen.getByRole('button', { name: 'fake5.txt' }));
-  expect(screen.getByLabelText('I have read and agree to the above data use guidelines.')).toBeInTheDocument();
-
-  userEvent.click(screen.getByRole('button', { name: 'Disagree' }));
-  await waitForElementToBeRemoved(() => screen.queryByText('I have read and agree to the above data use guidelines.'));
-
-  userEvent.click(screen.getByRole('button', { name: 'fake5.txt' }));
-  userEvent.click(screen.getByRole('checkbox'));
-  userEvent.click(screen.getByRole('button', { name: 'Agree' }));
+  userEvent.click(files.targetFile.button);
+  userEvent.click(files.duaCheckbox);
+  userEvent.click(files.duaAgree);
 
   expect(open).toHaveBeenCalled();
-  await screen.findByRole('link', { name: 'fake5.txt' });
+
+  await files.targetFile.link;
 });
 
 test('does not display file browser when files prop is undefined', async () => {
-  render(
-    <DetailProvider>
-      <Files files={[]} uuid={uuid} hubmap_id="fakedoi" />
-    </DetailProvider>,
-  );
+  render(<TestFiles files={[]} />);
 
-  expect(screen.queryByTestId('file-browser')).not.toBeInTheDocument();
+  expect(files.browser).not.toBeInTheDocument();
 });

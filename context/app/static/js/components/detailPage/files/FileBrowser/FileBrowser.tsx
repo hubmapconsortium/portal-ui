@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import DoneIcon from '@mui/icons-material/Done';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -14,7 +13,7 @@ import { TableCell, TableContainer, TableHead } from '@mui/material';
 import { relativeFilePathsToTree } from './utils';
 import FileBrowserNode from '../FileBrowserNode';
 import { ChipWrapper } from './style';
-import { DatasetFile, FileTree } from '../types';
+import { FileTree, UnprocessedFile } from '../types';
 
 const filesStoreSelector = (state: FilesStore) => ({
   displayOnlyQaQc: state.filesToDisplay === 'qa/qc',
@@ -25,7 +24,7 @@ const filesStoreSelector = (state: FilesStore) => ({
 });
 
 type FileBrowserProps = {
-  files: DatasetFile[];
+  files: UnprocessedFile[];
 };
 
 type FileControlChipProps = Pick<ChipProps<'button'>, 'label' | 'onClick' | 'disabled'> & {
